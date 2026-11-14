@@ -5,9 +5,9 @@
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
 import * as D from './engine.mjs?v=72624b3636';
 import * as space from '../space/space.mjs?v=f98ca4dd42';
-import { splitThings } from '../acts/acts.mjs?v=cb1424f8ca';
+import { splitThings } from '../acts/acts.mjs?v=42287200fd';
 import { partsOf, kindKey, kindName } from './scene.mjs?v=0882bbcd68';
-import * as P from './plan.mjs?v=7f128c7d59';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
+import * as P from './plan.mjs?v=2f2214af90';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const TAIL = new Set(['there', 'here', 'now', 'added', 'drawn', 'too', 'also', 'please', 'pls', 'plz', 'thx', 'thanks', 'are', 'is', 'again', 'exactly', 'go']);   // words a role slot took that belong to the frame ("how many trees there are")
@@ -137,7 +137,19 @@ function tryPlan(ctx, act, r) {
   return res;
 }
 
+/**
+ * What the dice may draw from the knowledge catalog (spec 25): the lemmas of the catalog's vocabulary that have a drawing (a shard of k.objects) and are plain singular words.
+ * Empty while the catalog is not attached or its vocabulary not loaded (the dice then draws the built-in nouns).
+ */
+function sampleKnowledge(ctx) {
+  const v = ctx?.knowledge?.peekVocab?.();
+  if (!v) return {};
+  const things = Object.entries(v).filter(([w, shards]) => /^[a-z]{3,}$/.test(w) && shards.some((s) => /^k\.objects\//.test(s)) && !/(?:s|ae)$/.test(w))
+    .map(([w]) => `${/^[aeiou]/.test(w) ? 'an' : 'a'} ${w}`);
+  return { things };
+}
 export const hooks = {
+  sampleKnowledge,
   thingsOf,
   before: (ctx, act, req) => { if (typeof req.thing === 'string') { req.said = req.thing; if (P.goalWord(req.thing)) req.keep = true; } },   // the knowledge tier may rewrite the thing to the kind it is of ("farm" -> "thing"): a plan needs the words as said
   afterGroup: (st) => { st.prev = st.history.at(-1) ?? null; },   // one undo step per message: the picture before the newest step is the one the grouped step left

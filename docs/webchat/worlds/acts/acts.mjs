@@ -24,12 +24,12 @@ import { ACT_VERBS } from './verbs.generated.mjs?v=b363aaaa66';
 import { FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=75b22014a6';
 import { FLAGS_DATA } from './forms.data.mjs?v=54c931cc9e';   // more forms (flags `valued`, `ordered`): named values said without their name
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
-import { createEffects, EFFECT_ACTS } from './effects.mjs?v=6e66f89116';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
+import { createEffects, EFFECT_ACTS } from './effects.mjs?v=017e672ea5';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
 import { en } from '../../lib/lang/en.mjs?v=061a6ba9b3';
-import { resolvePhrase } from './np-lib.mjs?v=ee98a42367';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
+import { resolvePhrase } from './np-lib.mjs?v=6addaafea1';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
 import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=e6ea6f1de7';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
@@ -95,6 +95,7 @@ export function parseSchema(wires) {
   if (Object.keys(flags).length) schema.flags = flags;   // self: the world is a character ("yourself"); dir: direction words for place; be: "be / look X"; has: "do you have X"; bare: a bare thing is a request
   if (val(sw, 'boost')) schema.boost = Number(val(sw, 'boost'));
   if (val(sw, 'sample')) schema.sample = val(sw, 'sample');
+  if (vals(sw, 'thing').length) schema.things = vals(sw, 'thing').map((t) => { const [path, kind, id, name, only] = String(t).split(':'); return { path, kind, ...(id ? { id } : {}), ...(name ? { name } : {}), ...(String(only ?? '').split('+').includes('dice') ? { diceOnly: true } : {}), ...(/(?:^|\+)active=(\w+)/.exec(only ?? '') ? { active: /(?:^|\+)active=(\w+)/.exec(only)[1] } : {}) }; });   // thing=<state path>:<kind>[:<id key>[:<name key>]]: where the world keeps the things a person can point at when they are not `state.items` (spec 25: the referents are derived from the schema and the state, the same way in every world)
   if (vals(sw, 'canonical').length) schema.canonical = vals(sw, 'canonical');   // frame-id prefixes whose examples are offered as help (a reader's "Add a document." is a true but useless example): `canonical=r.` marks the frames of the set that names its own
   if (val(sw, 'hooks')) schema.hooks = val(sw, 'hooks');   // a sibling module with the world's hooks (knowledge, domain effects, projection): host code the schema cannot say
   if (vals(sw, 'own').length) schema.own = vals(sw, 'own');   // "<export>:<action>": operations of the world that are not acts (a name, a moment of the stage), exported by own.mjs
@@ -102,7 +103,7 @@ export function parseSchema(wires) {
   if (vw) schema.view = { aspects: vals(vw, 'aspects'), words: vals(vw, 'word') };
   for (const w of wires.filter((x) => x.type === 'acts.kind')) {
     const name = w.id.slice(sw.id.length + 1);
-    schema.kinds[name] = { name, plural: val(w, 'plural') ?? `${name}s`, numbered: yes(val(w, 'numbered')), named: yes(val(w, 'named')), max: val(w, 'max') ? Number(val(w, 'max')) : null, in: val(w, 'in') ?? null, capacity: val(w, 'capacity') ?? null, acts: vals(w, 'acts'), any: val(w, 'any') === 'knowledge', words: vals(w, 'word'), ...(vals(w, 'catalog').length ? { catalog: vals(w, 'catalog') } : {}), ...(vals(w, 'aspect').length ? { aspects: vals(w, 'aspect') } : {}), ...(vals(w, 'dice.not').length ? { diceNot: vals(w, 'dice.not') } : {}) };   // aspect=: what a thing of this kind has (spec 23); dice.not=<act>: acts the dice (std.sample) must not frame for this kind (it needs words, a second thing, data: spec 25)
+    schema.kinds[name] = { name, plural: val(w, 'plural') ?? `${name}s`, numbered: yes(val(w, 'numbered')), named: yes(val(w, 'named')), max: val(w, 'max') ? Number(val(w, 'max')) : null, in: val(w, 'in') ?? null, capacity: val(w, 'capacity') ?? null, acts: vals(w, 'acts'), any: val(w, 'any') === 'knowledge', words: vals(w, 'word'), ...(vals(w, 'catalog').length ? { catalog: vals(w, 'catalog') } : {}), ...(vals(w, 'aspect').length ? { aspects: vals(w, 'aspect') } : {}), ...(vals(w, 'dice.not').length ? { diceNot: vals(w, 'dice.not') } : {}), ...(vals(w, 'know').length ? { know: vals(w, 'know').map((t) => { const [list, verb] = String(t).split(':'); return { list, ...(verb ? { verb } : {}) }; }) } : {}) };   // know=<list>[:<verb>]: the dice names this kind from the knowledge list the world (or the host) publishes under that name (spec 25): "Show Lima." (verb show), "Add a giraffe." (no verb); verb * = the entries are whole sentences   // aspect=: what a thing of this kind has (spec 23); dice.not=<act>: acts the dice (std.sample) must not frame for this kind (it needs words, a second thing, data: spec 25)
   }
   for (const w of wires.filter((x) => x.type === 'acts.attr')) {
     const name = w.id.slice(sw.id.length + 1);
@@ -110,6 +111,7 @@ export function parseSchema(wires) {
     if (!['number', 'enum', 'colour', 'text', 'bool'].includes(a.type)) throw new Error(`attribute ${name}: unknown type '${a.type}'`);
     if (a.type === 'enum' && !a.values.length) throw new Error(`attribute ${name}: an enum needs values`);
     for (const k of a.of) if (!schema.kinds[k]) throw new Error(`attribute ${name}: unknown kind '${k}'`);
+    if (val(w, 'know')) a.know = val(w, 'know');   // the values of the attribute come from this knowledge list (colours of k.values), not from a list of ours
     schema.attrs[name] = a;
   }
   for (const k of Object.values(schema.kinds)) {
@@ -904,10 +906,37 @@ export function createExecutor(schema, hooks = {}) {
   function referents(ctx) {
     if (hooks.referents) return hooks.referents(ctx);   // a world whose things are not `state.items` (the drawing board) names its own
     const st = ctx.state;   // a reading never changes the state: no init here
+    if (schema.things?.length) return [...stateItems(st), ...schema.things.flatMap((d) => thingsAt(st, d))];
+    return stateItems(st);
+  }
+  /** The things at one `thing=` declaration of the schema: an array (or one object) of the state; the kind is the entry's own `kind` when the schema has it; the attributes are the schema's, taken from the entry. */
+  function thingsAt(st, d) {
+    const at = d.path.split('.').reduce((o, k) => (o == null ? o : o[k]), st);
+    const list = Array.isArray(at) ? at : at && typeof at === 'object' ? [at] : [];
+    const out = [];
+    const only = d.active ? st[d.active] : null;   // a world that works on one of its things at a time (the open chart): only that one is pointed at
+    const single = list.length === 1;
+    for (const [i, e] of list.entries()) {
+      budget.tick('acts.things');
+      if (!e || typeof e !== 'object') continue;
+      const kind = schema.kinds[e.kind] ? e.kind : d.kind;
+      const name = schema.kinds[kind]?.named ? (d.name ? e[d.name] : e.name ?? e.title) : null;   // a numbered kind is pointed at by its number
+      const id = String(e[d.id ?? 'id'] ?? name ?? kind);
+      const attrs = {};
+      for (const a of Object.values(schema.attrs)) if (a.of.includes(kind) && ['string', 'number', 'boolean'].includes(typeof e[a.name])) attrs[a.name] = e[a.name];
+      out.push({ id, kind, noun: kind, n: i + 1, words: [kind, schema.kinds[kind]?.plural].filter(Boolean), name: name ? String(name) : undefined, ...(d.diceOnly ? { pointer: false } : {}), ...(d.active && String(e[d.id ?? 'id']) !== String(only) ? { nodice: true } : {}), ...(single && !schema.kinds[kind]?.numbered ? { say: `the ${kind}` } : {}), attrs, salient: false, sig: JSON.stringify(e) });
+    }
+    const act = out.filter((x) => !x.nodice);
+    if (d.active && act.length === 1) act[0].say = `the ${act[0].kind}`;   // the one thing the world works on is "the chart", not a number; the others stay pointable ("the second one") but the dice does not name them
+    return out;
+  }
+  function stateItems(st) {
     const sal = new Set(st.focus?.ids ?? []);
     return (st.items ?? []).map((i) => ({ id: i.id, kind: i.kind, noun: schema.kinds[i.kind]?.name ?? i.kind, words: [i.kind, schema.kinds[i.kind]?.plural].filter(Boolean), attrs: {}, salient: sal.has(i.id), sig: JSON.stringify([i.kind, i.n, i.name, i.attrs, i.place]) }));
   }
   /** Does the world take a coordination in the thing of this reading as ONE act ("show Paris and Rome", "pin Paris, Rome and Madrid")? Then the formalizer keeps the whole reading and does not distribute the act clause by clause. */
   const coordinates = (info) => !!hooks.coordinates?.(info);
-  return { run, operation, group: actGroup, interceptInput, lastResort, outOfScope, accepts, coordinates, init, resolve, labels, schema, referents };
+  /** The knowledge lists the world names things from, for the dice (spec 25): { list: [text | { text, act }] }, from the world's own knowledge (its hook `sampleKnowledge`). Read-only. */
+  const sampleKnowledge = (ctx) => { try { return hooks.sampleKnowledge?.(ctx) ?? {}; } catch { return {}; } };
+  return { run, operation, group: actGroup, sampleKnowledge, interceptInput, lastResort, outOfScope, accepts, coordinates, init, resolve, labels, schema, referents };
 }

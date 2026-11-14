@@ -12,7 +12,10 @@ import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 import { tokenize } from './normalize.mjs?v=6d473eb091';
 import { analyze, analyzeRaw, parseNumberAt, placeOf, pluralEn, isKnownName } from './morphology.ro.mjs?v=957828c2e5';
 
-let RAWS = [];   // the raw tokens of the sentence being read (diacritics decide "casă" / "casa")
+let RAWS = [], KEYS = [];
+// The lexicon: how a word is analysed. Default: the translator's own (lexicon.ro-en.mjs, morphology.ro.mjs); src/lang/ro.mjs gives one made from the catalog's w.lang.ro with the library's std.morph.
+const TRANSLATOR_LEXICON = { analyse: (key, raw) => (raw ? analyzeRaw(raw, true) : analyze(key)), loose: (key) => analyze(key) };
+let LEX = TRANSLATOR_LEXICON;   // the raw tokens of the sentence being read (diacritics decide "casă" / "casa")
 
 // ---- closed classes (data of the language world) ---------------------------------------------------------------------------------------------
 const LEAD = ['poti sa', 'ai putea sa', 'mi ai putea', 'puteti sa', 'vreau sa', 'as vrea sa', 'vrei sa', 'poti', 'ai putea'];
@@ -32,8 +35,8 @@ const STORY_VERB = new Map([['mai primeste', ['gets', true]], ['primeste', ['get
 
 // ---- analysis ---------------------------------------------------------------------------------------------------------------------------------
 const best = (list, pos) => list.find((a) => a.pos === pos);
-const analyses = (key) => analyze(key);
-const rawAnalyses = (keys, i) => (RAWS[i] ? analyzeRaw(RAWS[i], true) : analyses(keys[i]));
+const analyses = (key) => (LEX.loose ? LEX.loose(key) : LEX.analyse(key, RAWS[KEYS.indexOf(key)] ?? null));
+const rawAnalyses = (keys, i) => LEX.analyse(keys[i], RAWS[i] ?? null);
 const take = (keys, i, table) => {   // longest key of `table` (1-3 words) at i
   for (const n of [3, 2, 1]) { const k = keys.slice(i, i + n).join(' '); if (keys.length >= i + n && table.has(k)) return { en: table.get(k), len: n }; }
   return null;
@@ -118,9 +121,9 @@ function verbAt(keys, i) {
 const colourOf = (k) => { const a = best(analyses(k), 'adj'); if (a) return a.entry.en; const m = /^(.*?)(ul|le)$/.exec(k); if (!m) return null; const b = best(analyses(m[1]), 'adj') ?? best(analyses(`${m[1]}u`), 'adj'); return b ? b.entry.en : null; };
 
 /** Reads one Romanian sentence into a frame; ok false when the grammar does not cover its shape. */
-export function parseRo(text) {
+export function parseRo(text, { lexicon = null } = {}) {
   const { keys, raws } = cleanKeys(tokenize(String(text ?? '')));
-  RAWS = raws;
+  RAWS = raws; KEYS = keys; LEX = lexicon ?? TRANSLATOR_LEXICON;
   if (!keys.length) return { ok: false, frame: null, notes: ['empty'] };
   const f = parseStory(keys) ?? parseQuestion(keys) ?? parseRequest(keys);
   return f ? { ok: true, frame: f, notes: [] } : { ok: false, frame: null, notes: ['no frame'] };
@@ -281,11 +284,11 @@ export function realiseEn(frame) {
   }
 }
 
-export function grammarRoEn(text) {
+export function grammarRoEn(text, opts = {}) {
   const parts = String(text ?? '').trim().split(/(?<=[.!?])\s+|,\s+iar\s+/).map((x) => x.trim()).filter(Boolean);
   const out = [], frames = [];
   for (const part of parts) {
-    const p = parseRo(part);
+    const p = parseRo(part, opts);
     if (!p.ok) return { text: '', ok: false, frame: null, notes: p.notes };
     frames.push(p.frame);
     out.push(realiseEn(p.frame) + (QUESTION_ACTS.test(p.frame.act) ? '?' : '.'));

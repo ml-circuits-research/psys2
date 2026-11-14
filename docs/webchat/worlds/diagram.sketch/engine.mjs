@@ -408,6 +408,7 @@ function execute(ctx, s, nodes) {
     const text = summarize({ steps: result.steps.filter((st) => !st.error) }, s);
     const said = shortNames(s, /^What should change about /.test(err?.message ?? '') ? plainIds(s, err.message) : (err?.message ?? 'I could not do that.'));
     const clarify = err && err.name === 'Clarify';
+    if (result.partial && /^Done\.?$/.test(text.trim())) return no(said, 'missing');   // nothing was done: the reply is the question, not "Done. But: ..."
     if (result.partial) return ok(`${shortNames(s, text)} But: ${said}`);
     return no(said, clarify ? 'missing' : 'unsupported');
   }

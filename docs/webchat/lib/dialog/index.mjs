@@ -9,13 +9,13 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { installTextGen } from './textgen.mjs?v=608e0dec93';
+import { installTextGen } from './textgen.mjs?v=0b7670dd68';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=17a2e17459';
 import { loadWorlds } from '../worlds/index.mjs?v=3987c25362';
 import { validateWorldSet } from '../worlds/validate.mjs?v=89e5c10d75';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=3e5e6bf7a2';
 import { createInterpreter } from '../interpreter/index.mjs?v=380fbd270b';
-import { createReasoner } from '../reasoner/index.mjs?v=2c5a758e8b';
+import { createReasoner } from '../reasoner/index.mjs?v=40b199eb34';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=38e18f6efa';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=f09f8f1b7c';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
@@ -34,16 +34,16 @@ import { checkValues } from './value-check.mjs?v=b3a588044a';
 import { attachValues } from '../knowledge/values.mjs?v=a137742733';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3eed01f9f5';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f6a995963d';
-import { Discourse } from './discourse.mjs?v=d68a0c92de';
+import { Discourse } from './discourse.mjs?v=c4d0e3392b';
 import { Dialogue } from './dialogue.mjs?v=0bf48252ef';
 import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=8aa026e5a5';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=fa66944ff4';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=7521b5c12f';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=22eb27fb91';
 import { repairFromScene } from './scene-referents.mjs?v=254873c6b5';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=fd0af8d306';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=151e66e1d6';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=6285db489e';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=2d90e58e5f';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=8516bdca23';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=c90b072e06';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -1412,7 +1412,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=52204c8f93').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=87403676e9').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.reader (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)

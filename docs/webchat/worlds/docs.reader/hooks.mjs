@@ -311,6 +311,7 @@ function accepts({ action, mode, roles = {}, state, tab, text }) {
   if (act === 'compose' || act === 'digest') {   // spec 26: a world that cannot act does not claim a reading another world can execute; the open tab owns its acts (spec 20)
     const g = globalThis[Symbol.for('psys2.textgen')]?.[act === 'compose' ? 'composer' : 'summarizer'];
     if (tab === 'docs.reader') return true;   // in its own tab the reader answers, and declines plainly while the library lacks the generator
+    if (act === 'compose' && !g?.supports?.(text)) return false;   // a type whose genre the knowledge lacks is not this world's to claim outside its own tab
     return !!g?.available && (!tab || tab === 'talk' || /\b(?:documents? tab|reader)\b/i.test(String(text ?? '')));
   }
   if (!Object.hasOwn(domain, act)) return true;   // the operations that are not acts (who did what, where did it happen, a count of a name, a search step ...) are read by patterns that name the reader's own frames
@@ -374,4 +375,14 @@ function intercept(ctx, text) {
   if (r?.handled && /^\s*(?:what|who|whom|whose|where|when|why|how|which|did|does|do|is|was|are|were|can|could|has|have|had)\b/i.test(String(text))) { const s = st(ctx); s.asked.push(note(text).slice(0, 120)); if (s.asked.length > 20) s.asked.shift(); }
   return r;
 }
-export const hooks = { domain, accepts, noState: true, intercept };
+/**
+ * What the dice may ask of the open document (spec 25): its characters, its keywords, its sections, read from the analysed document (entities, keywords, sections), never listed here.
+ */
+function sampleKnowledge(ctx) {
+  let d; try { d = R.docOfState(ctx?.state ?? {}); } catch { return {}; }
+  if (!d) return {};
+  const search = (d.keywords ?? []).filter((k) => /^[a-z]+$/.test(k.term) && k.count >= 2).slice(0, 40).map((k) => ({ text: `Search for ${k.term}.`, act: 'make' }));
+  const sections = d.sections.flatMap((s, i) => [{ text: `Read section ${i + 1}.`, act: 'pick' }, { text: `Summarize section ${i + 1}.`, act: 'ask' }]);
+  return { search, sections };
+}
+export const hooks = { domain, accepts, noState: true, intercept, sampleKnowledge };

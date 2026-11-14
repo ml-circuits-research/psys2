@@ -340,4 +340,16 @@ function coordinates({ action, mode, roles = {} }) {
   return /\band\b|,/i.test(said) && !roles.attribute && placesIn(said).length > 1 && isPlace(said);
 }
 
-export const hooks = { domain, accepts, coordinates, noState: true };
+/**
+ * What the dice may name from the knowledge of the map (spec 25): the countries and the biggest cities of the catalog (the bundled subset offline) and the distances between capitals.
+ * Read from the place index, never listed here.
+ */
+function sampleKnowledge() {
+  const D = peekIndex();
+  if (!D) return {};
+  const caps = [...D.capitalOf.values()].map((l) => l[0]).filter((c) => c?.name);
+  const pairs = [];
+  for (let i = 0; i < caps.length && pairs.length < 80; i++) { const b = caps[(i * 7 + 3) % caps.length]; if (b !== caps[i]) pairs.push({ text: `How far is ${caps[i].name} from ${b.name}?`, act: 'ask' }); }
+  return { places: [...D.countries.map((c) => c.name), ...[...D.cities].sort((a, b) => b.pop - a.pop).slice(0, 400).map((c) => c.name)].filter((n) => /^[A-Za-z][A-Za-z .'-]*$/.test(n)), distances: pairs };
+}
+export const hooks = { domain, accepts, coordinates, noState: true, sampleKnowledge };

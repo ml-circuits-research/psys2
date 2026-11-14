@@ -2,10 +2,10 @@
 // diagram.sketch (spec 21): what the schema cannot say and other code needs from this world: the engine's lazy loading (the dialog layer awaits `prepare`), its start state
 // and `create` (other worlds hand a sentence to the diagram: ctx.request('diagram.create')). The engine itself and its wrapper (engine.mjs: renderer, layouts, the Datalog
 // questions, the 24 templates) execute the acts; the generated grammar reads them.
-export { prepare, initialState, engineReady, loadEngine, create } from './engine.mjs?v=eeb6f1fa97';
+export { prepare, initialState, engineReady, loadEngine, create } from './engine.mjs?v=7501f4f044';
 /** Other worlds (Talk's undo of the last turn of a tab) and the tab's undo button call the diagram by its old action names. */
-export { undo as diagramUndo, redo as diagramRedo } from './engine.mjs?v=eeb6f1fa97';
-import { checkReferents as engineCheck } from './engine.mjs?v=eeb6f1fa97';
+export { undo as diagramUndo, redo as diagramRedo } from './engine.mjs?v=7501f4f044';
+import { checkReferents as engineCheck } from './engine.mjs?v=7501f4f044';
 const ENGINE_OP = { make: 'create', remove: 'delete', change: 'set', place: 'move', connect: 'connect', pick: 'select', copy: 'duplicate' };
 /** The read-only referent check the dialog layer calls before an act runs (world-aware veto): a name the diagram does not have is a missing referent, with the offer to add it for a connection. The engine reads the words of the clause (`args.text`). */
 export function checkReferents(ctx, { action, args = {} } = {}) {

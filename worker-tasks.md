@@ -4150,3 +4150,22 @@ Standing rule from now on: when the knowledge repository or the library needs a 
 6. **Stories**: a permissively licensed set of short stories (e.g. TinyStories, check its licence on the dataset card: take it only if it is CDLA or CC), 1,000 stories — examples to check k.story's structure against.
 7. **ConceptNet 5 English assertions** (CC-BY-SA 4.0) for relations UsedFor, CapableOf, HasPrerequisite, HasSubevent, AtLocation, MadeOf: filtered to English, ≤ 20 MB — candidate facts for composition procedures and k.commonsense (imported only with review).
 Report in worker-log what you fetched and what you skipped for licence.
+
+## Reviewer 2026-11-14 18:20 — grid v3 / paraphrases / learning curve and Q13 measured: accepted as measurements; what follows
+
+Reviewer ran `npm run test:smoke` on 8c8ee622: 89/89 pass, exit 0 (510 s: the machine was loaded). Read both worker-log entries. Accepted as honest measurements:
+- **Learning curve flat on unseen formulations** (paraphrases meaning kept 12 → 14 of 85; schema-alone world ~51 %). The two largest general causes go to the library (its 18:20 block): the question of a story keeping the arithmetic focus, and a relation from knowledge read in any word order. Grid v3 "is easy" for the same reason the dice is generic: it improves with the sampler's catalog option (17:30), not separately.
+- **Q13:** w.lang.ro grammar alone keeps 12.2 % (right 81.8 % when it answers); chain 56.3 % vs shipped 55.7 %; no MT replaced: correct. The missing parts are knowledge (a Romanian syntax/frames layer and a bigger dictionary) and the library's Romanian reading; both asked. Vendor sopworld ≥0.63 (Q51 is fixed there) and delete your Q51 workaround.
+Queue unchanged: 17:30 RANDOM content, 17:55 data fetches (BillSum first), compose when 0.64+ is vendored (std.compose first version is out, toy catalog; real worlds arriving).
+
+## Reviewer 2026-11-14 18:45 — RANDOM from knowledge accepted (905789b0, d24961c1)
+
+Reviewer ran `npm run test:smoke` on d24961c1: 89/89 pass, exit 0; read the 30 new samples. Accepted: distinct 192/207, 8 acts, 81 kinds, 19 attributes, round trip 205/207, undo 5. Remaining defects, by cause (ledger, not point fixes):
+1. **Realisation:** "What is the seats of table 1?", "Set the dog fill to outlined.", "What is the instrument of the chord?": agreement and attribute-specific phrasing come from w.lang.en's act templates (the knowledge repository is writing them) through the library's generation; switch when published.
+2. **"Set the circle colour to cherry." → "Done. But: What should change about circle 3?…"** was judged ok: a reply that both acts and asks back is a defect of the reply (or of the judge). Check the judge: a counter-question after "Done" must not count as executed-clean.
+3. **art.draw objects from the catalog** ("Draw a giraffe") when the catalog is reachable (the live demo): measure once with the catalog route on.
+Next: 17:55 data fetches (BillSum first: the library waits), vendor ≥0.65 and wire compose, then the queue.
+
+## Reviewer 2026-11-14 19:05 — data fetches and compose step B accepted; k.genres is published
+
+Reviewer ran `npm run test:smoke` on 557c8898: 89/89 pass, exit 0. Accepted: BillSum 200, arXiv (CC0), TinyStories (CDLA-Sharing), UniMorph ron (CC BY-SA), wordfreq (CC BY-SA), ConceptNet en (CC BY-SA), each with SOURCE.md; Q51 workaround deleted; compose wired (essays traced, no repetition, but **all "short"**: the knowledge was too thin). Still to fetch: **Wikidata typical numbers** (17:55 item 2). The knowledge repository published **k.genres** (366975e: 5 genres, moves, registers); k.story, w.document, composition procedures and register templates follow. Pull the catalog when each lands; attach one composition of each type to the landing note when the types are available.

@@ -3,8 +3,9 @@
 // the chart state of chart.mjs (the renderer, the readers of the other worlds, the statistics). The roles of an act are mapped onto those operations here; the words of the user are not read again:
 // the one thing read from the sentence is the data ("bikes 4 scooters 9"), which is the world's own parser (parseData). Nothing here names a verb, a colour or a type: values come from the
 // colour reader (values.mjs) and the schema's enums, kinds from the schema (executor.schema), bars by the label lookup of the chart.
-import * as C from './chart.mjs?v=227346af84';
-import * as G from './ops.mjs?v=7a2a25209e';   // circular on purpose: only used inside functions, when the executor exists
+import * as C from './chart.mjs?v=241c531da1';
+import * as G from './ops.mjs?v=8a285a49c9';
+import { animals } from '../../lib/knowledge/animals.mjs?v=7ef6dd8b71';   // circular on purpose: only used inside functions, when the executor exists
 
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_']+/).filter(Boolean);
 const PRONOUN = /^(?:it|them|that|this|those|these|everything|all|each|every|one|ones|this one|that one|em)$/;
@@ -140,6 +141,7 @@ const domain = {
     if (r.mode === 'count' && !k) { const p = pointsOf(ctx, r.thing); if (p.c && p.idx.length === 1 && !p.all) return C.valueOf(ctx, { l: p.label }); }
     if (r.mode === 'count') return k?.name === 'chart' ? C.listCharts(ctx, {}) : C.countItems(ctx, {});
     if (k?.name === 'chart' && !r.attribute) return C.listCharts(ctx, {});
+    if (k?.name === 'chart' && r.attribute) { const s = C.settingOf(ctx, { attr: attrName(r.attribute) }); if (s) return s; }   // a setting of the chart, not a bar called "chart"
     const { c, label } = pointsOf(ctx, r.thing);
     if (!c) return no(C.NONE);
     return C.valueOf(ctx, { l: label });
@@ -173,4 +175,19 @@ function accepts({ action, mode, roles = {}, state, tab, text }) {
 }
 
 if (globalThis.process?.env?.CH_DEBUG) for (const k of Object.keys(domain)) { const f = domain[k]; domain[k] = (ctx, r) => { console.error('DOMAIN', k, JSON.stringify({ ...r, request: undefined })); return f(ctx, r); }; }
-export const hooks = { domain, accepts };
+/**
+ * What the dice may chart from the knowledge of animals (k.animals, the bundled subset offline): the legs of the animals of a class, and a bar for one animal with its legs (spec 25).
+ */
+function sampleKnowledge(ctx) {
+  const all = [...animals().values()];
+  const g = C.legGroups();
+  const classes = g.classes.filter((c) => all.some((a) => a.class.includes(c)));
+  const habitats = g.habitats.filter((h) => all.some((a) => a.habitat.includes(h)));
+  const plural = (c) => (/(?:fish|sheep)$/.test(c) ? c : /s$/.test(c) ? c : `${c}s`);
+  const groups = [...classes.map((c) => `the ${plural(c)}`), ...habitats.map((h) => `the ${h} animals`)];
+  return {
+    charts: groups.flatMap((c) => ['bar', 'pie'].map((t) => `Make a ${t} chart of the legs of ${c}.`)),
+    bars: !(ctx?.state?.charts?.length) ? [] : all.filter((a) => a.legs[0] != null && /^\d+$/.test(a.legs[0]) && /^[a-z]+$/.test(a.name)).map((a) => `Add ${a.name} ${a.legs[0]}.`),
+  };
+}
+export const hooks = { domain, accepts, sampleKnowledge };

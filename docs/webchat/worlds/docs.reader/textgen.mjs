@@ -30,8 +30,9 @@ export function digest(ctx, { t, k } = {}) {
 export function compose(ctx, { type, topic, chapters, subchapters, words, seed } = {}) {
   const g = textGen()?.composer;
   if (!g?.available) return no('unsupported', UNAVAILABLE_COMPOSE);
-  const c = g.compose({ type, topic, chapters: chapters === undefined || chapters === '' ? undefined : num(chapters, 3), subchapters: subchapters === undefined || subchapters === '' ? undefined : Number(NUM[String(subchapters).toLowerCase()] ?? subchapters), words: words === undefined || words === '' ? undefined : num(words, 600), seed });
-  if (!c) return no('unsupported', 'I could not write that composition so that every sentence traces to what I know, so I wrote nothing.');
+  const r = g.compose({ type, topic, chapters: chapters === undefined || chapters === '' ? undefined : num(chapters, 3), subchapters: subchapters === undefined || subchapters === '' ? undefined : Number(NUM[String(subchapters).toLowerCase()] ?? subchapters), words: words === undefined || words === '' ? undefined : num(words, 600), seed });
+  if (!r?.composition) return no('unsupported', `I cannot write that: ${r?.why ?? 'the composer gave nothing'}.`);
+  const c = r.composition;
   const out = c.chapters.map((ch) => `## ${ch.title}\n\n${ch.subchapters.map((sc) => `${sc.title ? `### ${sc.title}\n\n` : ''}${sc.sentences.map((s) => s.text).join(' ')}`).join('\n\n')}`);
   const flat = c.chapters.flatMap((ch) => ch.subchapters.flatMap((sc) => sc.sentences));
   const doc = makeDocument(`# ${c.title}\n\n${out.join('\n\n')}`, { name: `${c.title}.md`, title: c.title, format: 'md', origin: 'composed' });
@@ -41,5 +42,5 @@ export function compose(ctx, { type, topic, chapters, subchapters, words, seed }
   for (const s of doc.sentences) { const f = flat[j]; if (f && s.text.replace(/\s+/g, ' ').includes(f.text.replace(/\s+/g, ' ').slice(0, 30))) doc.provenance[s.i] = f.source, j++; }
   Object.assign(ctx.state, withDocument(ctx.state, doc));
   const d = ctx.state.docs.find((x) => x.id === ctx.state.active);
-  return ok(`I wrote the ${String(c.type ?? 'essay').replace(/-/g, ' ')} "${c.title}": ${doc.words} words in ${c.chapters.length} ${c.chapters.length === 1 ? 'chapter' : 'chapters'}. It is open in the Documents tab; ask "why" about any sentence to see where it comes from.`, { data: { doc: d?.id, composed: true } });
+  return ok(`I wrote the ${String(c.type ?? 'essay').replace(/-/g, ' ')} "${c.title}": ${doc.words} words in ${c.chapters.length} ${c.chapters.length === 1 ? 'chapter' : 'chapters'}. ${c.short?.length ? `My knowledge was short of what you asked (${c.short[0]}), so it is smaller and not padded. ` : ''}It is open in the Documents tab; ask "why" about any sentence to see where it comes from.`, { data: { doc: d?.id, composed: true } });
 }

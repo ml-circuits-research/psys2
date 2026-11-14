@@ -643,7 +643,7 @@ export class Discourse {
   _refs(world, stateJson = null) {
     const d = this.dialog;
     const r = d.engine.interp.hook(d.isession, world, 'referents', {}, { state: stateJson ? JSON.parse(stateJson) : null });
-    return Array.isArray(r) ? r : [];
+    return Array.isArray(r) ? r.filter((x) => x?.pointer !== false) : [];   // `pointer:false`: a thing the dice may name but a pronoun does not resolve to (the reader's documents: "the last one" is its search result)
   }
 
   /** The world whose objects "the red one" points at: the open tab, the last frame, the recent topics (the first that has referents). */

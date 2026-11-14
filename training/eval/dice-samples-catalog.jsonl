@@ -1,0 +1,40 @@
+{"world":"art.draw","i":0,"text":"Add a sky.","act":"make","kind":"sky","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a light blue sky behind everything."}
+{"world":"art.draw","i":1,"text":"Add a ground.","act":"make","kind":"ground","attr":null,"judged":"ok","roundTrip":true,"reply":"I added grass to the ground."}
+{"world":"art.draw","i":2,"text":"Add a lake.","act":"make","kind":"lake","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a lake: a sun, 2 clouds, 2 birds, 2 mountains, 5 evergreen trees, a lake, a pier, a tent, 2 people, 3 rocks, a frog, a rowing boat, a sailboat, 2 swans, "}
+{"world":"art.draw","i":3,"text":"Set the lake fill to scribbled.","act":"change","kind":null,"attr":"fill","judged":"ok","roundTrip":true,"reply":"The lake is colored in with crayon now."}
+{"world":"art.draw","i":4,"text":"Copy the sun.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I made a copy of the sun."}
+{"world":"art.draw","i":5,"text":"Set the pier size to normal.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"The pier is normal now."}
+{"world":"art.draw","i":6,"text":"Remove the rowing boat.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":false,"reply":"I can not find a boat in your picture."}
+{"world":"art.draw","i":7,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I undid it (made it normal)."}
+{"world":"art.draw","i":8,"text":"Redo that.","act":"redo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I did it again (made it normal)."}
+{"world":"art.draw","i":9,"text":"Copy the sailboat.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I made a copy of the sailboat."}
+{"world":"art.draw","i":10,"text":"Set the lake size to huge.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"The lake is huge now."}
+{"world":"art.draw","i":11,"text":"Add a road.","act":"make","kind":"road","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a grey road. (There is usually only one sun.)"}
+{"world":"art.draw","i":12,"text":"Add a thermometer.","act":"make","kind":"a_thermometer","attr":null,"judged":"fail","roundTrip":false,"reply":"I did not understand \"Add a thermometer\". For example: \"Add a house.\" or \"What is the colour of house?\""}
+{"world":"art.draw","i":13,"text":"What is the size of the pier?","act":"ask","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"The pier is a normal size."}
+{"world":"art.draw","i":14,"text":"Remove the tent.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I took away the tent."}
+{"world":"art.draw","i":15,"text":"Add a kitty.","act":"make","kind":"kitty","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a kitty. (a kitty, drawn as a money bag.)"}
+{"world":"art.draw","i":16,"text":"Add an ellipse.","act":"make","kind":"ellipse","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a purple oval."}
+{"world":"art.draw","i":17,"text":"Remove the road.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I took away the grey road."}
+{"world":"art.draw","i":18,"text":"Add a boat.","act":"make","kind":"boat","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a red boat. I put the boat in the pond."}
+{"world":"art.draw","i":19,"text":"Set the boat fill to crayon.","act":"change","kind":null,"attr":"fill","judged":"ok","roundTrip":true,"reply":"The boat is colored in with crayon now."}
+{"world":"art.draw","i":20,"text":"What is the colour of the boat?","act":"ask","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"The boat is red."}
+{"world":"art.draw","i":21,"text":"What is the size of the oval?","act":"ask","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"The oval is a normal size."}
+{"world":"art.draw","i":22,"text":"What is the size of the kitty?","act":"ask","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"The kitty is a normal size."}
+{"world":"art.draw","i":23,"text":"Copy the oval.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I made a copy of the oval."}
+{"world":"art.draw","i":24,"text":"Add a sun.","act":"make","kind":"sun","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a yellow sun."}
+{"world":"art.draw","i":25,"text":"Set the rowing boat colour to green.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"The boat is green now."}
+{"world":"art.draw","i":26,"text":"Copy the pier.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I made a copy of the pier."}
+{"world":"art.draw","i":27,"text":"Set the frog fill to scribbled.","act":"change","kind":null,"attr":"fill","judged":"ok","roundTrip":true,"reply":"The frog is colored in with crayon now."}
+{"world":"art.draw","i":28,"text":"What is the fill of the rowing boat?","act":"ask","kind":null,"attr":"fill","judged":"ok","roundTrip":true,"reply":"The boat is filled in with crayon."}
+{"world":"art.draw","i":29,"text":"Remove the lake.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I took away the huge blue lake."}
+{"world":"art.draw","i":30,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I undid it (removed something)."}
+{"world":"art.draw","i":31,"text":"Redo that.","act":"redo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I did it again (removed something)."}
+{"world":"art.draw","i":32,"text":"Add a man.","act":"make","kind":"man","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a pink man. (a man, drawn as a person.)"}
+{"world":"art.draw","i":33,"text":"Copy the frog.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I made a copy of the frog."}
+{"world":"art.draw","i":34,"text":"Add a hill.","act":"make","kind":"hill","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a green hill."}
+{"world":"art.draw","i":35,"text":"What is the colour of the hill?","act":"ask","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"The hill is green."}
+{"world":"art.draw","i":36,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I undid it (drew a green hill)."}
+{"world":"art.draw","i":37,"text":"Redo that.","act":"redo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I did it again (drew a green hill)."}
+{"world":"art.draw","i":38,"text":"Add an arrow.","act":"make","kind":"arrow","attr":null,"judged":"fail","roundTrip":true,"reply":"That was too complex for me — try a shorter sentence."}
+{"world":"art.draw","i":39,"text":"Remove the boat.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I took away the green boat."}

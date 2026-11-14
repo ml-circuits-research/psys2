@@ -2054,3 +2054,63 @@ Checks: tests run one file at a time; full `npm test` run three times (31 -> 12 
 ## 2026-11-14 16:30 std.summarize switched to the real library (0.61)
 - `createSummarizer` uses `summarizeLog` / `summarizeText`; frames are rendered by `renderFrames` (temporary); `turnRecord` carries `acts`; Talk paragraph and Documents "Summarise" button show when available; `docr.digest` cites the picked sentences. Measurement on owner logs b and c: 2/2 pass (all worlds and taught facts named, <= 3 sentences). Compose still unavailable.
 - Correction (coordinator): the paragraph no longer reads the user's words. `acts` = `executedActs(reply)` (world, act, kind from the executed operation and the world's state); failed turns only counted; taught facts only when `narratable`. Outputs of the b/c replays are in specs/26.
+
+## 2026-11-14 referents of every schema world (worker; RANDOM follow-up item 2)
+- **Mechanism:** `thing=<state path>:<kind>[:<id key>[:<name key>[:dice]]]` in `schema.sop`; the executor's default `referents` derives id, kind, name (named kinds), `n` (position in the list), schema attributes from the state (`worlds/acts/acts.mjs` `thingsAt`, loop-guarded with `budget.tick('acts.things')`). Declared for data.charts (charts), geo.map (markers = pin, highlighted = place), media.music (current = song), docs.reader (docs = document, `dice` flag: `pointer:false`, filtered out of `discourse._refs` because "the last one" in the reader is its search result: the first try broke ctx1c/f/g). Spec 25 updated.
+- **Editor cause:** `docs.editor` referents took the number of a block from the digits of its id; "list 2" is the second list. Referents now carry `n` = position among the blocks of the kind; sampler prefers `r.n` and passes `name` through (the label of a named kind was "document undefined").
+- `dice.not` added: chart.point make, reader.document change/remove, map.pin change, music song change/remove, music scale remove.
+- **Measurement (25 presses per world, same seeds):** before -> after (ok; acts/kinds/attrs/distinct texts): data.charts 25/25; 2/1/0/2 -> 24/25; 5/1/3/6. geo.map 25/25; 2/1/0/2 -> 25/25; 4/1/1/4. media.music 25/25; 1/2/0/2 -> 25/25; 3/2/3/15. docs.reader no sample (falls back) -> 25/25; 1/0/2/2. docs.editor 24/25 -> 25/25. All 9 worlds 224/225 = 99.6 %; acts 6, kinds 19, attrs 13.
+- `test-world`: data.charts 267/277 (was 266), geo.map 452/454, media.music 399/401, docs.reader 207/209, docs.editor 208/222 (all equal or better). Ledger: two new open rows (attribute of an empty chart; `pitch` of a song), the editor row marked fixed.
+- **Not done in this step** (reviewer's scope extension, items 1, 3, 4): filling roles from knowledge, weights, the 200-press measurement with round trip.
+## 2026-11-14 Q13 W.LANG.RO LIBRARY: the published w.lang.ro read with std.morph, grammar path on it, measured on the meaning set
+Merged origin/main (sopworld 0.62). `scripts/build-lang-ro.mjs` bundles the catalog world (src/lang/ro.facts.generated.mjs, lazy), `src/lang/ro.mjs` is the host side over std.morph (Q51 workaround labelled, deletable), `grammar-ro.mjs` takes a lexicon option (kept: the library has no Romanian reader, no g.rule grammar in w.lang.ro). Measured on the 9,328 rows (README in training/eval/ro-en-meaning): w.lang.ro grammar alone 12.2 % kept (answers 14.9 %, right 81.8 % when it answers; the library as it is 8.7 %), translator-lexicon grammar 16.9 %, chain with M4+model 56.3 % against the shipped 55.7 %. No MT path replaced. Tests: lang-ro 5, grammar-ro 12, loop-guard. Asks: Romanian g.rule grammar + read function (library/knowledge), Q51, a bigger dictionary.
+
+## 2026-11-14 RANDOM from knowledge, weights, round trip (worker; reviewer 17:30 items 1, 3, 4)
+- **Mechanism (spec 25 updated):** `know=<list>[:<verb>]` on a kind in `schema.sop`, `hooks.sampleKnowledge(ctx)` per world (read from the world's own knowledge: place index, songs.mjs/theory.mjs, k.animals through the chart reader's groups, the open document's keywords and sections), colours from k.values for every colour attribute. The library has one open-kind declaration per world (`std.schema.kinds`, a second one is a conflict) and takes plain tokens as names: entries are named by slug, the host keeps the text. Seeded subsets of 30 entries per list per press.
+- **Weights:** undo only after the dice's own change and about 1 in 10 (a seeded roll; the plain hash of neighbouring seeds was correlated, so the roll hashes twice); redo right after its own undo; kind/act novelty counted double; a sentence shown is not repeated while tries remain. Editor referents carry `say` ("the second paragraph"), single things say "the document" / "the chart" (the id `b4` was used as a label and is not a sentence).
+- **Found and fixed on the way:** data.charts could not answer "What is the type / axis / sort / palette / legend of the chart?" for a chart with data (it looked for a bar called "chart"): `chart.settingOf`. A chart is addressed only while open (`thing=...:active=active`).
+- **Measurement (`node scripts/measure-dice.mjs --per 23`, 207 presses over 9 tab worlds, rows in `training/eval/dice-samples.jsonl`):** executed 205/207 = 99.0 % (target 95), round trip (`dryRead` complete) 205/207, distinct 192/207 (about 185/200; target 150), acts 8 (make 70, ask 43, change 44, remove 21, copy 17, undo 5, redo 5, pick 2), kinds 81 (target 60), attributes 19 (target 15). Before (first RANDOM report): distinct 72/207, acts 6, kinds 22, attributes 9.
+- **`test-world`:** data.charts 266/277, geo.map 452/454, media.music 399/401, docs.reader 207/209, docs.editor 208/222, art.draw 571/600, diagram.sketch 755/771, plan.seating 7/7, plan.timeline 4/4 (all equal to origin/main). `tests/sampler.test.mjs` 10/10.
+- **Not done / limits:** art.draw objects ("Draw a giraffe") need the knowledge catalog, absent here: it still draws its built-in nouns with colours from k.values; seating guests by name (no name source); the library's `read` stays unused (synchronous) and the round trip is measured host-side. Ledger rows added (pitch of a song, table order at its bound, unread chord forms, reader context; chart settings fixed).
+
+**30 new random dice samples:**
+- [geo.map] "Show Moldova." -> ok: Moldova is a country in Eastern Europe (47.43 N, 28.49 E). Its capital is Chișinău.
+- [diagram.sketch] "Set the circle colour to cherry." -> ok: Done. But: What should change about circle 3? Try a color, size, shape, outline or label.
+- [docs.reader] "Search for house." -> ok: 8 results for "house": 1. sentence 27: It led them to a little house in a clearing. | 2. s
+- [plan.timeline] "Add a timeline." -> ok: I added timeline 5.
+- [media.music] "What is the instrument of the chord?" -> ok: I am playing the piano.
+- [docs.reader] "Search for piece." -> ok: 1 result for "piece": 1. sentence 30: Hansel ate a piece of the roof and Gretel ate a piec
+- [plan.seating] "What is the colour of table 3?" -> ok: The colour of table 3 is white.
+- [plan.timeline] "Remove event 1." -> ok: I removed event 1.
+- [art.draw] "Set the dog fill to outlined." -> ok: The dog is just an outline now.
+- [plan.timeline] "Copy timeline 6." -> ok: I copied timeline 6: the copy is timeline 7.
+- [data.charts] "What is the palette of the chart?" -> ok: The chart "Legs of savanna animals" uses the forest palette.
+- [data.charts] "Add parrot 2." -> ok: OK, I added parrot (2).
+- [plan.timeline] "Remove timeline 3." -> ok: I removed timeline 3.
+- [art.draw] "Add a child." -> ok: I drew a blue person.
+- [docs.editor] "Add a break." -> ok: OK, I added a page break.
+- [art.draw] "Add a circle." -> ok: I drew a red circle.
+- [art.draw] "Add an ellipse." -> ok: I drew a purple oval.
+- [media.music] "Set the chord volume to 39." -> ok: OK, the volume is 39 percent.
+- [plan.timeline] "Remove event 2." -> ok: I removed event 2.
+- [plan.seating] "What is the seats of table 1?" -> ok: Table 1 has 40 seats.
+- [media.music] "Set the scale volume to 22." -> ok: OK, the volume is 22 percent.
+- [art.draw] "What is the colour of the dog?" -> ok: The dog is brown.
+- [geo.map] "How far is Moroni from Bishkek?" -> ok: Moroni and Bishkek are about 6,855 km (4,260 miles) apart, as the crow flies.
+- [docs.reader] "Summarize section 3." -> ok: Section 3, "The Witch's Oven": Hansel held out a thin bone instead of his finger. The witc
+- [data.charts] "Make a pie chart of the legs of the jungle animals." -> ok: OK, here is a pie chart of the legs of jungle animals with 9 items. It is open in the Char
+- [plan.seating] "Copy table 3." -> ok: I copied table 3: the copy is table 4.
+- [art.draw] "Remove the oval." -> ok: I took away the purple oval.
+- [plan.seating] "Add a seat." -> ok: I added the seat at table 1. (I put it at table 1, the only table with room.)
+- [data.charts] "Set the chart axis to horizontal." -> ok: OK, the bar chart is horizontal now. I switched to a bar chart because only bar and line c
+- [art.draw] "Add a boy." -> ok: I drew a boy.
+- 2026-11-14 18:20 step A: sopworld 0.65.0 vendored byte for byte (commit 3d68ee5, build e6a9bf96ca14; scan-loops, build-bundle, knowledge, LICENSE copied), LICENSES.md and the pin in tests/reasoner.test.mjs updated; the Q51 workaround in src/lang/ro.mjs deleted (test now asserts the library alone analyses desenează / deseneaza). std.compose 0.65 has a different interface (compose(world, topic, { genre, size, seed, realise }) -> frames with cites): the composer adapter is unavailable until step B, 3 fake-interface tests skipped with that reason.
+
+## 2026-11-14 step B: std.compose (0.65) wired
+- `createComposer` over the real library (type -> genre when held; sections = subchapters; sentences from words; random topic by interest; `short` kept), `src/dialog/compose-world.mjs` (knowledge world from the bundled subset, genre lookup, English realisation of animal facts), `src/knowledge/bundled-interest.mjs` + `scripts/build-bundled-interest.mjs`, op `docr.compose` reports the reason it declines and says when the knowledge was short. Tests rewritten against the real interface (12/12). Measurement: `node scripts/measure-compose.mjs`: essay 10/10, 13 claims all traced, 0 repeated, all short; the other four types unavailable (no k.genres).
+
+## 2026-11-14 stricter judge, act-and-ask cause, catalog route (worker; reviewer 18:45 items 2 and 3)
+- **Judge:** a changing act with a question anywhere in the reply, or "Done. But:", is not executed-clean (`scripts/measure-dice.mjs`). It flagged 13 diagram.sketch presses of the previous run.
+- **Cause of "Done. But: What should change about circle 3?":** (a) `schema.sop` said size is a number 1..10 while the engine only knows tiny, small, medium, large, huge: fixed in the schema (an enum of the engine's words); (b) the dice named colours of k.values the diagram palette does not have (mauve, ruby, cherry): diagram.sketch now publishes its palette (`sampleKnowledge.colours`, which wins over the generic list), and the generic list is the colours the readers take (`colourLexiconWords`, not fruit colours like cherry); (c) the engine worded a partial result with nothing done as "Done. But: ...": now a plain question (status missing). `test-world diagram.sketch` 755/771, unchanged.
+- **Catalog route:** the page attaches the Pages catalog in `engine-worker.mjs` (`createFacts` over `createKnowledgeSource(https://ml-circuits-research.github.io/sop-knowledge-worlds/worlds)` layered on the bundled subset, `engine.setKnowledge`). `measure-dice.mjs --catalog <url>` does the same in node (this machine reaches it: vocabulary 24763 lemmas). art.draw has `sampleKnowledge.things` (the lemmas of the vocabulary with a k.objects shard) and `know=things` on its open kind; thing labels lose the `composite:` prefix. Result, 40 presses on art.draw: 38/40 executed (95.0 %), round trip 38/40, 36 distinct; it drew lake, road, pier, tent, hill, kitty, boat, frog ...; failures "Add a thermometer." and "Add an arrow." (lemmas with no drawing of their own; ledgered).
+- **200-press measurement, stricter judge, no catalog (207 presses, 9 worlds):** executed 205/207 = 99.0 %, round trip 205/207, distinct 190/207 (about 184/200), acts 8, kinds 81, attributes 19. Remaining failures: data.charts "Redo that." (already up to date) and media.music "pitch of the song" (both ledgered).

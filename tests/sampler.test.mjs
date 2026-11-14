@@ -20,7 +20,7 @@ test('the vendored library has the sampler (0.59), and it is seeded', () => {
   assert.equal(typeof lib.sample, 'function');
   const s = open('draw'), sm = engineSampler(lib, engine, () => s);
   assert.ok(sm.available);
-  const a = sm.dice({ worldId: 'art.draw', seed: 11 }), b = sm.dice({ worldId: 'art.draw', seed: 11 });
+  const a = sm.dice({ worldId: 'art.draw', seed: 11 }), b = engineSampler(lib, engine, () => s).dice({ worldId: 'art.draw', seed: 11 });   // a fresh sampler: one sampler does not repeat a sentence it showed
   assert.ok(a?.text);
   assert.equal(a.text, b.text);
   assert.match(a.text, /^[A-Z][^<>{}$]*[.?]$/, 'a sentence, no placeholder');
@@ -59,6 +59,39 @@ test('actions for a selected thing name acts that fit it, examples are three or 
   assert.ok(acts.length >= 2 && acts.every((x) => x.frame.args.thing === things[0].id || x.frame.action === 'undo'), JSON.stringify(acts.map((x) => x.text)));
   const few = sm.examples({ worldId: 'art.draw', seed: 3 });
   assert.ok(few.length >= 3 && few.length <= 4, `${few.length}`);
+});
+
+test('every schema world publishes its referents from its state (thing= in schema.sop): charts, pins, documents, list numbers', async () => {
+  const s = open('charts'); await s.send('Add a chart.', { language: 'en', formalizer: 'rules', tab: 'data.charts' });
+  const refs = (w, st) => engine.set.list().find((y) => y.id === w).ops.referents({ state: st ?? s.state(w) ?? {} });
+  assert.deepEqual(refs('data.charts').map((r) => `${r.kind}${r.n}`), ['chart1']);
+  assert.ok(refs('docs.reader', { docs: [{ id: 'd1', title: 'Tale' }] }).some((r) => r.kind === 'document' && r.name === 'Tale'), 'the reader publishes its documents');
+  assert.ok(refs('geo.map', { markers: [{ id: 'm1', name: 'Point 1' }], highlighted: [] }).some((r) => r.kind === 'pin' && r.n === 1));
+  const ed = refs('docs.editor', { blocks: [{ id: 'b7', kind: 'list' }, { id: 'b9', kind: 'paragraph' }, { id: 'b12', kind: 'list' }] });
+  assert.deepEqual(ed.map((r) => r.n), [1, 1, 2], 'list 2 is the second list, not the digits of an id');
+});
+
+test('roles come from knowledge: places, songs, scales, animals of the worlds, colours of k.values; no hand-written example', () => {
+  const texts = (tab, world, n = 30) => { const s = open(tab), sm = engineSampler(lib, engine, () => s); const out = new Set(); for (let i = 0; i < n; i++) { const d = sm.dice({ worldId: world, seed: 500 + i }); if (d) out.add(d.text); } return [...out]; };
+  assert.ok(texts('map', 'geo.map').some((t) => /^Show [A-Z]/.test(t)) && texts('map', 'geo.map').some((t) => /^How far is .+ from .+\?$/.test(t)), 'the map names places and asks distances');
+  assert.ok(texts('music', 'media.music').some((t) => /^Play (the .+ scale|a .+ chord|[A-Z].+)\.$/.test(t)));
+  assert.ok(texts('charts', 'data.charts').some((t) => /^Make a (bar|pie) chart of the legs of the .+\.$/.test(t)));
+  assert.ok(texts('reader', 'docs.reader').some((t) => /^(Search for|Read section|Summarize section) /.test(t)));
+});
+
+test('undo only after a change of the dice itself and rarely; redo right after its own undo', async () => {
+  const s = open('draw'), sm = engineSampler(lib, engine, () => s);
+  assert.ok(!sm.dice({ worldId: 'art.draw', seed: 3 }) || sm.dice({ worldId: 'art.draw', seed: 3 }).frame.action !== 'undo', 'nothing to undo at the start');
+  const acts = [];
+  for (let i = 0; i < 60; i++) { const d = sm.dice({ worldId: 'art.draw', seed: 2000 + i }); if (!d) continue; acts.push(d.frame.action); await s.send(d.text, { language: 'en', formalizer: 'rules', tab: 'art.draw' }); }
+  assert.ok(acts.filter((a) => a === 'undo').length <= 9, `undo at most about one in ten: ${acts.filter((a) => a === 'undo').length}`);
+  acts.forEach((a, i) => { if (a === 'redo') assert.equal(acts[i - 1], 'undo', 'a redo follows the dice undo'); });
+});
+
+test('a schema `know=<list>[:<verb>]` is read for kinds and the executor publishes its lists', () => {
+  const x = engine.set.list().find((y) => y.id === 'geo.map').ops.executor;
+  assert.deepEqual(x.schema.kinds.place.know, [{ list: 'places', verb: 'show' }]);
+  assert.ok(x.sampleKnowledge({ state: {} }).places.length > 100);
 });
 
 test('a frame without a sentence (a place is needed) is not rendered', () => {
