@@ -29,7 +29,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 
 /** The general mechanisms now in the repository (the x of the curve). */
 export async function mechanisms() {
-  const schemaWorlds = readdirSync(join(REPO, 'worlds')).filter((d) => existsSync(join(REPO, 'worlds', d, 'schema.sop'))).length;
+  const schemaWorlds = readdirSync(join(REPO, 'worlds')).filter((d) => existsSync(join(REPO, 'worlds', d, 'schema.sop')) && !/^\s*declare=yes/m.test(readFileSync(join(REPO, 'worlds', d, 'schema.sop'), 'utf8'))).length;   // a declaration-only schema (declare=yes) is not a mechanism
   let acts = 0, verbGroups = 0;
   try { const A = await import(pathToFileURL(join(REPO, 'worlds/acts/acts.mjs')).href); acts = Object.keys(A.ACTS).length; verbGroups = Object.keys(A.ACT_VERBS ?? {}).length; } catch { /* no acts module */ }
   return { schemaWorlds, acts, verbGroups, total: schemaWorlds + acts + verbGroups };
