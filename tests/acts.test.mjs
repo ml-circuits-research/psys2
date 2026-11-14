@@ -323,3 +323,16 @@ test('domain effects through the library: the difference of an act, all-or-nothi
   const bad = X.operation(ctx, 'make', { thing: 'a moon, a star and a ghost' });
   assert.notEqual(bad.status, 'supported'); assert.equal(board.objects.length, 3, 'a ghost is refused: the moon and the star that were drawn are undone');
 });
+
+test('a name said for a kind that is not named is never dropped silently: it is kept or the reply says it was not', async () => {
+  for (const reasoner of ['ops', 'matrix']) {
+    const loader = createFsLoader({ roots: [DEFAULT_ROOT] });
+    const e = await createEngine({ loader, options: { reasoner } });
+    const s = e.createSession({ language: 'en' });
+    assert.equal((await s.send('Put a cat named Tom in the sky.')).text, 'I drew an orange cat in the sky; I did not keep the name Tom.', reasoner);
+    assert.match((await s.send('Draw 2 cats called Rex.')).text, /I did not keep the name Rex\.$/, reasoner);
+    assert.doesNotMatch((await s.send('Draw a house.')).text, /did not keep/, reasoner);
+    const d = e.createSession({ language: 'en' });
+    assert.doesNotMatch((await d.send('Add a box named Foo.')).text, /did not keep/, 'a named kind keeps its name');
+  }
+});
