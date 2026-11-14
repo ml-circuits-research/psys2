@@ -9,6 +9,7 @@
  * the user is `session.learned.own kind= name= owner=user`.
  */
 import { parseFact, lemmaCandidates } from './facts.mjs';
+import { parseTeachTyped } from './teach-typed.mjs';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 // TEMPORARY (until k.actions / k.commonsense carry the abilities of kinds): the verbs read as an ability when a bare plural says them ("ducks float"). Other forms need no list.
@@ -25,14 +26,17 @@ const properName = (raw, lower) => { const i = String(raw).toLowerCase().lastInd
  * Reads one taught sentence: `{ form, subject, object, line (a wire without its id), say }` or null when the sentence teaches nothing in the forms known.
  * Forms: "X is a kind of Y" / "a X is a Y"; "my X is called N" / "I have a X called N"; "X can / cannot V"; "X V" with V an ability (seed list); "X live in Y"; "X is made of Y".
  */
-export function parseTeach(text) {
+export function parseTeach(text, typing = null) {
   const raw = String(text ?? '').trim(), t = clean(raw);
   if (!t || t.length > 120 || /\?$/.test(raw)) return null;
   let m;
   if ((m = /^my (.+?) (?:is|was) (?:called|named) (.+)$/.exec(t)) || (m = /^i have an? (.+?) (?:called|named) (.+)$/.exec(t)) || (m = /^my (.+?)(?:'s| s)? name is (.+)$/.exec(t))) {
     const kind = lemmaOf(m[1]), name = properName(raw, m[2].trim());
-    return { form: 'own', subject: kind, object: name, line: `session.learned.own kind=${q(kind)} name=${q(name)} owner=user`, say: `OK, I will remember that your ${kind} is called ${name}.` };
+    return { form: 'own', subject: kind, object: name, line: `session.learned.own kind=${q(kind)} name=${q(name)} owner=user`, say: `Nice! Your ${kind} is called ${name}. I will remember that.` };
   }
+  // a statement read BY TYPE (src/knowledge/teach-typed.mjs): a wire of the catalog's own type, read by every reader of the catalog at the taught tier
+  const typed = typing ? parseTeachTyped(raw, { ...typing, lemma: (w) => typing.lemma?.(w) ?? lemmaOf(w) }) : null;
+  if (typed) return { ...typed, line: typed.lines[0] };
   if ((m = /^(.+?) (?:is|are) (?:a |an )?(?:kind|type|sort) of (.+)$/.exec(t)) || (m = /^an? (.+?) is an? (.+)$/.exec(t))) {
     const a = lemmaOf(m[1]), b = lemmaOf(m[2]);
     if (!a || !b || a === b || /\b(?:and|or)\b/.test(a + b)) return null;
@@ -41,8 +45,10 @@ export function parseTeach(text) {
   if ((m = /^(.+?) (?:can't|cant|cannot|can not) (\w+)$/.exec(t)) && !/^(?:what|who|which|how|where|when|why)\b/.test(m[1])) { const a = lemmaOf(m[1]); return { form: 'cannot', subject: a, object: m[2], line: `k.commonsense.thing name=${q(a)} cannot=${q(m[2])}`, say: `OK, ${m[1]} cannot ${m[2]}.` }; }
   if ((m = /^(.+?) can (\w+(?: \w+)?)$/.exec(t)) && !/^(?:what|who|which|how|where|when|why|you|i|we|can)\b/.test(m[1])) { const a = lemmaOf(m[1]); return { form: 'can', subject: a, object: m[2], line: `k.commonsense.thing name=${q(a)} can=${q(m[2])}`, say: `OK, ${m[1]} can ${m[2]}.` }; }
   if ((m = /^(.+?) (?:live|lives|stay|stays|sleep|sleeps|stand|stands|grow|grows|float|floats|swim|swims|fly|flies|drive|drives|run|runs) (?:in|on|at|under|near) (.+)$/.exec(t)) && !/^(?:where|who|what|which|how|do|does|i|we|you)\b/.test(m[1])) { const a = lemmaOf(m[1]), b = strip(m[2]); return { form: 'at', subject: a, object: b, line: `k.commonsense.thing name=${q(a)} at=${q(b)}`, say: `OK, ${m[0]}.` }; }
+  // a count with no schema to type it (no catalog): kept as a commonsense fact of the thing, `has="4 legs"`, which the count reader of the overlay also reads
+  if ((m = /^(?:an? |the )?([a-z]+(?: [a-z]+)?) (?:has|have|has got|have got) (\d+) ([a-z]+)$/.exec(t)) && !/^(?:i|you|we|they|he|she|it|my|your)\b/.test(m[1])) { const a = lemmaOf(m[1]); return { form: 'count', subject: a, object: `${m[2]} ${m[3]}`, line: `k.commonsense.thing name=${q(a)} has=${q(`${m[2]} ${m[3]}`)}`, say: `OK, ${t}.`}; }
   if ((m = /^(.+?) (?:is|are) made (?:of|from|out of) (.+)$/.exec(t))) { const a = lemmaOf(m[1]), b = strip(m[2]); return { form: 'made_of', subject: a, object: b, line: `k.commonsense.thing name=${q(a)} made_of=${q(b)}`, say: `OK, ${m[1]} is made of ${b}.` }; }
-  if ((m = new RegExp(`^(.+?s|\\w+) (${ABILITY_SEED.join('|')})s?$`).exec(t)) && !/^(?:i|you|we|they|it|he|she|what|who|do|does|can|please|let|lets)\b/.test(m[1])) { const a = lemmaOf(m[1]); return { form: 'can', subject: a, object: m[2], line: `k.commonsense.thing name=${q(a)} can=${q(m[2])}`, say: `OK, ${m[1]} ${m[2]}.` }; }
+  if ((m = new RegExp(`^(.+?s|\\w+) (${ABILITY_SEED.join('|')})s?$`).exec(t)) && !/[,;]|\b(?:it|he|she|they|is|are|eats?|has|have)\b/.test(m[1]) && !/^(?:i|you|we|they|it|he|she|what|who|do|does|can|please|let|lets)\b/.test(m[1])) { const a = lemmaOf(m[1]); return { form: 'can', subject: a, object: m[2], line: `k.commonsense.thing name=${q(a)} can=${q(m[2])}`, say: `OK, ${m[1]} ${m[2]}.` }; }
   return null;
 }
 
@@ -50,21 +56,30 @@ const lineOf = (text, n) => `@learned.${n} ${text} core.source="user"`;
 /** Appends the wire of a taught sentence to `lines` (the session's learned wires, text in the wire format); returns the wire line, or the existing one when the same fact is already there (null: nothing to learn). */
 export function learn(lines, taught) {
   if (!taught?.line) return null;
-  const body = taught.line;
-  const dup = lines.find((l) => l.replace(/^@learned\.\d+ /, '').replace(/ core\.source="user"$/, '') === body);
-  if (dup) return { line: dup, existing: true };
-  const line = lineOf(body, lines.length + 1);
-  lines.push(line);
-  return { line, existing: false };
+  const bodies = taught.lines?.length ? taught.lines : [taught.line];
+  const body = (l) => l.replace(/^@learned\.\d+ /, '').replace(/ core\.source="user"$/, '');
+  const dups = bodies.map((b) => lines.find((l) => body(l) === b));
+  if (dups.every(Boolean)) return { line: dups[0], existing: true };
+  const n = (lines.map((l) => Number(/^@learned\.(\d+) /.exec(l)?.[1] ?? 0)).reduce((a, b) => Math.max(a, b), 0)) + 1;
+  const added = bodies.filter((b, i) => !dups[i]).map((b, i) => lineOf(b, n + i));
+  lines.push(...added);
+  return { line: added[0], lines: added, existing: false };
+}
+
+/** Takes back the newest lesson (its wires): returns the lines removed, or [] when nothing was taught. A lesson of several wires was written together and goes together. */
+export function forgetLast(lines, count = 1) {
+  if (!lines.length) return [];
+  return lines.splice(lines.length - Math.max(1, count), Math.max(1, count));
 }
 
 /** The knowledge catalog with the learned wires of a session overlaid. `read()` returns the wire lines (text); the overlay is rebuilt only when they change. */
 export function withLearned(base, read, readMem = null) {
   if (!base) return base;
-  let seen = -1, wires = [];
+  let seen = '', wires = [];
   const all = () => {
     const lines = read() ?? [];
-    if (lines.length !== seen) { seen = lines.length; wires = lines.map((l) => parseFact(l)).filter(Boolean); }
+    const key = `${lines.length}|${lines.at(-1) ?? ''}`;   // a lesson taken back and another taught keep the length: the newest line tells them apart
+    if (key !== seen) { seen = key; wires = lines.map((l) => parseFact(l)).filter(Boolean); }
     return wires;
   };
   const one = (r, k) => r.f[k]?.[0];
@@ -93,18 +108,22 @@ export function withLearned(base, read, readMem = null) {
   const forWord = (word) => {
     const cands = lemmaCandidates(word).map((c) => c.replace(/_/g, ' '));
     const mine = all().filter((w) => (w.type === 'k.words.sense' && cands.includes(String(one(w, 'word')).toLowerCase())) || (w.type === 'k.commonsense.thing' && cands.includes(String(one(w, 'name')).toLowerCase())));
+    // a statement taught by type (`k.animals.animal name="zebra" legs="4"`, `k.attributes.thing name="zebra" colour="black"`): a record of the thing at the TAUGHT tier, before the catalog's own
+    const typed = all().filter((w) => /^k\./.test(w.type) && w.type !== 'k.words.sense' && w.type !== 'k.commonsense.thing' && cands.includes(String(one(w, 'name') ?? '').toLowerCase()));
     const own = all().filter((w) => w.type === 'session.learned.own' && cands.includes(String(one(w, 'name')).toLowerCase()));
-    return { cands, mine, own, mem: memWires(cands) };
+    return { cands, mine, own, typed, mem: memWires(cands) };
   };
   /** The things the user told a world about by name (a wire with a `kind` and a `called`: a pet, a relative), whatever the world. */
   const ownFromMemory = () => memWiresAll().filter((w) => w.f.kind?.[0] && w.f.called?.[0]).map((w) => ({ kind: w.f.kind[0].toLowerCase().replace(/_/g, ' '), name: w.f.called[0] }));
   const merge = (word, th, parentOf) => {
     budget.tick('learned.merge');
-    const { cands, mine, own, mem } = forWord(word);
-    if (!mine.length && !own.length && !mem.length) return th;
+    const { cands, mine, own, typed, mem } = forWord(word);
+    if (!mine.length && !own.length && !mem.length && !typed.length) return th;
     const out = th ? { ...th, senses: [...(th.senses ?? [])], objects: [...(th.objects ?? [])] } : { name: cands[0], word, shards: [], loaded: [], objects: [], commonsense: null, senses: [], wires: [], learned: true };
     out.learned = true;
-    if (mem.length) { out.wires = [...(out.wires ?? []), ...mem]; out.fromSession = true; }
+    // the TAUGHT tier: what the user taught in this session (newest first) and what the session's worlds were told come before the catalog's records, so a reader that takes the first
+    // record with a slot (a count, a colour, a class) answers with the lesson: "a square has 5 sides" then "how many sides does a square have" says 5 in this session
+    if (typed.length || mem.length) { out.wires = [...typed.slice().reverse().map((w) => ({ ...w, shard: 'session.learned', source: 'user' })), ...mem, ...(out.wires ?? [])]; out.fromSession = true; }
     for (const w of mem) for (const [k, vs] of Object.entries(w.f)) {   // an ability a world keeps as a flag (can_swim=true) is an ability of the kind
       const m = /^can_(.+)$/.exec(k);
       if (!m || !/^(?:true|false)$/.test(vs[0])) continue;
@@ -143,15 +162,19 @@ export function withLearned(base, read, readMem = null) {
   };
   const o = Object.create(base);
   o.base = base;
-  o.peek = (word) => { const th = base.peek(word); return (() => { const f = forWord(word); return f.mine.length || f.own.length || f.mem.length; })() ? merge(word, th ?? null, (p) => o.peek(p)) : th; };
+  const any = (f) => f.mine.length || f.own.length || f.mem.length || f.typed.length;
+  o.peek = (word) => { const th = base.peek(word); return any(forWord(word)) ? merge(word, th ?? null, (p) => o.peek(p)) : th; };
   o.thing = async (word) => {
     const th = await base.thing(word);
     const f = forWord(word);
-    if (!f.mine.length && !f.own.length && !f.mem.length) return th;
+    if (!any(f)) return th;
     for (const p of [...f.mine, ...f.own].flatMap((w) => w.f.is_a ?? (w.f.kind ?? []))) await base.thing(p).catch(() => null);
     return merge(word, th, (p) => o.peek(p));
   };
-  o.wires = async (type, opts) => [...await base.wires(type, opts), ...all().filter((w) => w.type === type).map((w) => ({ ...w, shard: 'session.learned', source: 'user' }))];
+  const taughtOf = (type) => all().filter((w) => w.type === type).reverse().map((w) => ({ ...w, shard: 'session.learned', source: 'user' }));
+  o.wires = async (type, opts) => [...taughtOf(type), ...await base.wires(type, opts)];   // the taught tier first (a mix the user taught answers before the catalog's)
+  /** The loaded wires of a type with the session's lessons first (the taught tier); undefined when neither the catalog nor the session has any. */
+  o.peekWires = (type) => { const mine = taughtOf(type), cat = base.peekWires?.(type); return mine.length ? [...mine, ...(cat ?? [])] : cat; };
   /** The things the user named, optionally of one kind: [{ kind, name }]. */
   o.own = (kindWord) => [...all().filter((w) => w.type === 'session.learned.own').map((w) => ({ kind: one(w, 'kind'), name: one(w, 'name') })), ...ownFromMemory()]
     .filter((x) => !kindWord || lemmaCandidates(kindWord).map((c) => c.replace(/_/g, ' ')).includes(x.kind));
@@ -172,6 +195,19 @@ export function withLearned(base, read, readMem = null) {
       up = next;
     }
     return out;
+  };
+  /**
+   * How many `kind` a thing has: a numeric slot of its records named by the word (legs, sides), the taught records first (the taught tier), then what the catalog says (a sense's gloss, the
+   * parts of its picture). `{ n, from }` or null.
+   */
+  o.countOf = (th, kind) => {
+    const cands = new Set([kind, ...lemmaCandidates(kind)].map((c) => String(c).toLowerCase().replace(/ /g, '_')));
+    for (const w of th?.wires ?? []) {
+      if (!w?.type || /^core\./.test(w.type)) continue;
+      for (const [k, vs] of Object.entries(w.f ?? {})) if ((cands.has(k) || cands.has(`${k}s`) || cands.has(k.replace(/s$/, ''))) && /^\d+(?:\.\d+)?$/.test(String(vs?.[0] ?? ''))) return { n: Number(vs[0]), from: 'gloss', taught: w.shard === 'session.learned' };
+    }
+    for (const h of th?.commonsense?.has ?? []) { const m = /^(\d+) (.+)$/.exec(String(h)); if (m && cands.has(m[2].replace(/ /g, '_'))) return { n: Number(m[1]), from: 'gloss', taught: true }; }   // a count taught with no schema
+    return base.countOf ? base.countOf(th, kind) : null;
   };
   o.learnedCount = () => all().length;
   return o;

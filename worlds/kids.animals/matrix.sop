@@ -1,2 +1,0 @@
-# kids.animals as a matrix: no questions here any more. The animals and their facts are the knowledge catalog's (k.animals), answered by the Talk tab's ask frames and read by the games by lookup
-# (src/knowledge/animals.mjs). What a child teaches (a fact, a pet) is told as wires and is undone with the rest (undo, "that's wrong"); `fns.mjs` says in the world's words what was taken back.

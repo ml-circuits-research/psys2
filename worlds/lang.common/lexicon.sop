@@ -4721,3 +4721,65 @@
     alt=does
     alt=do
     alt=is_able_to
+
+@phrase.lang.teach.lead core.phrase
+    frame=false
+    doc="Lead-ins of a lesson the user gives (remember that a zebra has 4 legs; note that zebras eat grass): optional before the statement session.things reads by type."
+    alt=remember
+    alt=remember_that
+    alt=note
+    alt=note_that
+    alt=please_remember
+    alt=please_remember_that
+    alt=you_should_know_that
+    alt=did_you_know_that
+    alt=i_tell_you_that
+    alt=fun_fact
+
+@phrase.lang.teach.make core.phrase
+    frame=false
+    doc="The verb of a mix taught as a fact (black and red make brown; red and blue give purple)."
+    alt=make
+    alt=makes
+    alt=give
+    alt=gives
+    alt=become
+    alt=becomes
+    alt=make_a
+    alt=makes_a
+
+@phrase.lang.teach.eat core.phrase
+    frame=false
+    doc="The verb of what a kind eats, taught as a fact (zebras eat grass); the slot comes from the catalog's schemas (eats)."
+    alt=eat
+    alt=eats
+    alt=feed_on
+    alt=feeds_on
+
+@phrase.lang.teach.say core.phrase
+    frame=false
+    doc="The verb of the sound a kind makes, taught as a fact (ducks say quack); the slot comes from the catalog's schemas (sound)."
+    alt=say
+    alt=says
+    alt=go
+    alt=goes
+
+@phrase.lang.own.called core.phrase
+    frame=false
+    doc="How the name of a thing of the user is asked after its noun (what is my dog called / named)."
+    alt=called
+    alt=named
+    alt=called_again
+    alt=named_again
+
+@phrase.lang.own.recall core.phrase
+    frame=false
+    doc="Lead-ins of a question about something the user told before (remind me my pet's name; can you tell me what my pet is called; do you remember my dog's name)."
+    alt=remind_me
+    alt=remind_me_of
+    alt=tell_me
+    alt=can_you_tell_me
+    alt=could_you_tell_me
+    alt=do_you_remember
+    alt=can_you_remember
+    alt=do_you_know

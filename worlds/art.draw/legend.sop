@@ -3,7 +3,6 @@
     version=0.1.0
     imports=core
     imports=kids.common
-    imports=kids.shapes
     imports=common.sense
     doc="The drawing board: a scene graph of shapes and things on a fixed canvas"
 

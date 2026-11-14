@@ -36,11 +36,11 @@ test('a segmentation alternative wins when the top one cannot be read', async ()
   const a = 'What is 20 divided by 4.', b = 'A zebra has 4 legs.';
   const r = await validator.validate(msg(t, [
     { score: -0.1, segments: [piece(t, W(['kids.arith', 0.9]))] },
-    { score: -0.8, segments: [piece(a, W(['kids.arith', 0.9])), piece(b, W(['kids.animals', 0.8]), {}, t.indexOf(b))] },
+    { score: -0.8, segments: [piece(a, W(['kids.arith', 0.9])), piece(b, W(['session.things', 0.8]), {}, t.indexOf(b))] },
   ]));
   assert.equal(r.status, 'understood');
   assert.equal(r.winner.index, 1);
-  assert.deepEqual(winnerWorlds(r), ['kids.arith', 'kids.animals']);
+  assert.deepEqual(winnerWorlds(r), ['kids.arith', 'session.things']);
   assert.equal(r.trace.segmentations[0].valid, false);
   assert.match(r.why, /beats the dispatcher's top segmentation/);
 });

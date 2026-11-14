@@ -1,6 +1,0 @@
-# Hand-written: what the keys of this world join in the knowledge catalog (read by scripts/build-typed-worlds.mjs; spec 16 section 13).
-@join.name core.typed.join
-    slot=kids.animals.animal.name
-    type=k.animals.animal
-    by=name
-    open=yes

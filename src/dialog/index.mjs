@@ -1871,3 +1871,11 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   attachTyped(engine, set);
   return engine;
 }
+
+// The names of the bundled animals are real words for the speller with or without a catalog attached (spec 23 section 11): "cow" is never "corrected" into "wow". A small generated list
+// (src/knowledge/bundled-names.mjs), registered under a symbol so that the formalizer imports nothing of the knowledge layer.
+import { BUNDLED_NAMES } from '../knowledge/bundled-names.mjs';
+{
+  const names = new Set(BUNDLED_NAMES);
+  globalThis[Symbol.for('psys2.bundledWords')] = (w) => { const x = String(w).toLowerCase(); return names.has(x) || (x.endsWith('s') && names.has(x.slice(0, -1))); };
+}

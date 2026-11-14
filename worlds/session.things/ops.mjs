@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Operations of session.things (spec 23): learn (session.learned), sync (a view publishes its things), show (select things into a view), list. Browser-safe.
-import { parseTeach, learn as learnWire } from '../../src/knowledge/learned.mjs';
+import { parseTeach, learn as learnWire, forgetLast } from '../../src/knowledge/learned.mjs';
+import { lemmaCandidates } from '../../src/knowledge/facts.mjs';
 import { ASPECTS, aspectsOf, ensure, labelOf, select, sync as syncStore, viewByWords, whyNot } from './things.mjs';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
@@ -25,12 +26,23 @@ function aspectsFor(ctx) {
 }
 
 /** The user teaches a fact (arg.text is the sentence): the wire is stored in the session, a thing of the user also enters the store. */
+/** What the statement reader by type needs: the schemas of the catalog and the types of the records the catalog has for a word (settled lookups; the host loaded them, `openSlots`). */
+function typingOf(ctx) {
+  const k = ctx.knowledge, sc = k?.peekSchema?.();
+  if (!sc) return null;
+  const typesOf = (w) => [...new Set((k?.peek?.(w)?.wires ?? []).filter((x) => [...(x.f?.name ?? []), ...(x.f?.word ?? [])].some((n) => String(n).toLowerCase() === String(w).toLowerCase())).map((x) => x.type))];
+  // the singular the catalog knows ("rhombus", not "rhombu"): the first lemma candidate with records, else the reader's own singular
+  const lemma = (w) => { const s = String(w).toLowerCase().trim(); const c = lemmaCandidates(s.replace(/ /g, '_')).map((x) => x.replace(/_/g, ' ')); return [s, ...c].find((x) => typesOf(x).length) ?? (/(?:us|ss|is)$/.test(s) ? s : null); };
+  return { sc, typesOf, lemma };
+}
+
 export function learn(ctx, { text } = {}) {
   const st = ensure(ctx.state);
-  const taught = parseTeach(text ?? ctx.segment?.text);
+  const taught = parseTeach(text ?? ctx.segment?.text, typingOf(ctx));
   if (!taught) return no('unsupported', 'I did not catch what to remember. You can say "a villa is a kind of house", "my dog is called Rex", "ducks can float" or "fish live in water".');
   const r = learnWire(st.learned, taught);
-  if (r.existing) return ok(`I already know that. ${taught.say.replace(/^OK, /, '')}`);
+  if (r.existing) return ok(`I already know that. ${taught.say.replace(/^(?:OK|Nice!), /, '').replace(/ I will remember that\.$/, '')}`);
+  (st.lessons ??= []).push({ n: r.lines?.length ?? 1, form: taught.form, subject: taught.subject, object: taught.object, own: taught.form === 'own' ? `th${st.n + 1}` : null, say: taught.say });
   const base = ctx.knowledge?.base ?? ctx.knowledge;
   for (const word of [taught.object, taught.subject]) { try { base?.thing?.(String(word).toLowerCase())?.catch?.(() => null); } catch { /* the catalog is optional */ } }   // fill the settled cache for the next turn
   if (taught.form === 'own') {
@@ -40,6 +52,79 @@ export function learn(ctx, { text } = {}) {
     t.aspects = { ...aspectsFor(ctx)(t), social: 'schema' };
   }
   return ok(taught.say, { form: taught.form, wire: r.line });
+}
+
+/**
+ * "Undo that" / "forget that" after a lesson: the newest lesson goes (its wires, and the thing of the user it made). The reply names what was forgotten.
+ */
+export function forget(ctx) {
+  const st = ensure(ctx.state);
+  const last = st.lessons?.pop();
+  if (!last) return no('missing', 'There is nothing you taught me to take back yet.');
+  forgetLast(st.learned, last.n);
+  if (last.own) st.things = st.things.filter((t) => t.id !== last.own);
+  if (last.form === 'own') return ok(`OK, I forgot your ${last.subject} ${last.object}.`);
+  if (last.form === 'mix') return ok(`OK, I forgot that ${String(last.say ?? '').replace(/^OK, /, '').replace(/\.$/, '')}.`);
+  const who = String(last.subject ?? '').replace(/_/g, ' ');
+  return ok(`OK, I forgot what you taught me about ${/s$/.test(who) ? who : `${who}s`}.`);
+}
+
+/** The things of the user (what they named: "my dog is called Rex"), [{ kind, name }], newest last; from the lessons and from what the session's worlds were told. */
+const ownOf = (ctx) => {
+  const seen = new Set();
+  const fromLessons = () => (ensure(ctx.state).learned ?? []).map((l) => /session\.learned\.own kind="([^"]*)" name="([^"]*)"/.exec(l)).filter(Boolean).map((m) => ({ kind: m[1], name: m[2] }));
+  return (ctx.knowledge?.own ? ctx.knowledge.own() : fromLessons()).filter((x) => { const k = `${x.kind}|${x.name}`; if (seen.has(k)) return false; seen.add(k); return true; });
+};
+/** A pet is a thing of the user whose kind the catalog keeps as an animal (a record of an animal type, or "animal" up its is-a chain); with no catalog every named thing counts. */
+function isAnimal(ctx, kind) {
+  const k = ctx.knowledge;
+  if (!k?.peek) return true;
+  const th = k.peek(kind);
+  if ((th?.wires ?? []).some((w) => /\.animals?\./.test(w.type) || (w.f?.kind ?? []).includes('animal'))) return true;
+  return (k.ancestors?.(kind) ?? []).some((a) => /^(?:animal|pet|mammal|bird|fish|reptile)$/.test(a));
+}
+const PET = /^(?:pet|pets|animal|animals)$/;
+const kinds = (xs) => list(xs.map((x) => an(x.kind)));
+/**
+ * Questions about the things of the user: `seek` = called (what is my dog called), kind (who is Rex, what pet is Rex), list (what pets do I have), exists (do I have a dog, is Rex a dog).
+ * `kind` may be a kind word (dog), or pet / animal (every animal of the user); `called` a name.
+ */
+export function own(ctx, { seek = 'called', kind = '', called = '' } = {}) {
+  const k = String(kind ?? '').toLowerCase().trim().replace(/^(?:a|an|the|my|our)\s+/, ''), n = String(called ?? '').trim();
+  const lemma = (w) => (/ies$/.test(w) ? `${w.slice(0, -3)}y` : /(?:ses|xes|ches|shes)$/.test(w) ? w.slice(0, -2) : /s$/.test(w) && !/ss$/.test(w) ? w.slice(0, -1) : w);
+  const all = ownOf(ctx), pets = all.filter((x) => isAnimal(ctx, x.kind));
+  const ofKind = !k ? pets : PET.test(k) ? pets : all.filter((x) => x.kind === k || x.kind === lemma(k));
+  const word = !k || PET.test(k) ? 'pet' : lemma(k);
+  if (seek === 'called') {
+    if (!ofKind.length) return no('missing', word === 'pet' ? "I don't know your pet's name yet. You can tell me: My dog is called Rex." : `I don't know what your ${word} is called. You can tell me: My ${word} is called Rex.`);
+    if (ofKind.length > 1 && word === 'pet') return { status: 'conflicting', alternatives: ofKind.map((x) => `${x.name} (your ${x.kind})`) };
+    const x = ofKind.at(-1);
+    return ok(`Your ${word} is called ${x.name}.`, { values: [x.name] });
+  }
+  if (seek === 'list') {
+    if (!pets.length) return ok('You have not told me about any pets yet. You can say: I have a cat called Tom.', { values: [] });
+    return ok(`You have ${kinds(pets)}.`, { values: pets.map((x) => x.kind) });
+  }
+  if (seek === 'kind') {
+    const x = all.find((y) => y.name.toLowerCase() === n.toLowerCase());
+    if (!x) return no('missing', `I don't know who ${n} is yet. You can tell me: My dog is called ${n || 'Rex'}.`);
+    if (k && !PET.test(k)) return ok(x.kind === lemma(k) ? `Yes, ${x.name} is your ${x.kind}.` : `No, ${x.name} is your ${x.kind}.`, { values: [x.kind === lemma(k) ? 'yes' : 'no'] });
+    return ok(`${x.name} is your ${x.kind}.`, { values: [x.kind] });
+  }
+  // exists
+  if (ofKind.length) return ok(`Yes, you have ${an(word === 'pet' ? ofKind[0].kind : word)}.`, { values: ['yes'] });
+  return no('missing', `I don't know whether you have ${an(word)}. You can tell me: I have ${an(word)} called Rex.`);
+}
+
+/** Host hook (spec 17): the words of a lesson the catalog should have loaded before `learn` reads it by type (the thing and the values it is said to have or be). */
+export function openSlots(ctx, { action, args = {} } = {}) {
+  if (action !== 'things.learn') return [];
+  const t = String(args.text ?? '').toLowerCase().replace(/[.!?]+$/, '');
+  const words = t.match(/[a-z]+/g) ?? [];
+  const SKIP = /^(?:a|an|the|is|are|has|have|got|and|or|of|my|i|we|it|its|can|cannot|cant|not|make|makes|give|gives|called|named|remember|note|that|please|kind|type|sort|baby|covered|in|on|at|with)$/;
+  const out = [];
+  for (const w of words) if (!SKIP.test(w) && !/^\d+$/.test(w) && !out.includes(w)) out.push(w);
+  return out.slice(0, 6);
 }
 
 /** A view publishes its things: `view` (its id) and `items` (the whole list). Returns { ids: { key: thingId } }. */
