@@ -51,7 +51,7 @@ import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
 import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=c86e84c873';
 
-export { runWorldTests } from './test-runner.mjs?v=1758180027';
+export { runWorldTests } from './test-runner.mjs?v=635e001b3e';
 
 const plainSegment = (s) => ({
   text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, routing: s.routing, match: s.match,

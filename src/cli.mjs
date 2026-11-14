@@ -5,7 +5,7 @@
  * --jobs N (test-world all): worlds run in min(N, worlds) worker threads, default os.availableParallelism(); output stays in world order
  * and the exit code is unchanged (--jobs 1 runs in-process).
  */
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import readline from 'node:readline/promises';
 import { createFsLoader, DEFAULT_ROOT } from './loaders/fs-loader.mjs';
 import { createEngine, runWorldTests } from './dialog/index.mjs';
@@ -63,7 +63,7 @@ async function testOne(eng, id) {
   let r;
   try { r = await runWorldTests(eng, id); } finally { if (needsCatalog) eng.setKnowledge(null); }
   const note = r.skipped.length ? `, ${r.skipped.length} skipped (${r.skipped[0].reason})` : '';
-  return { lines: [`${id}: ${r.passed}/${r.total - r.skipped.length} passed${note}`, ...r.failed.map((f) => `  FAIL ${f.id}: ${f.message}`)], bad: r.failed.length };
+  return { lines: [`${id}: ${r.passed}/${r.total - r.skipped.length} passed${note}`, ...r.failed.map((f) => `  FAIL ${f.id}${f.follower ? ' (follower)' : ''}: ${f.message}`)], bad: r.failed.length, first: r.failed.filter((f) => !f.follower).length };
 }
 
 async function cmdTestWorld(roots, target) {
@@ -77,7 +77,10 @@ async function cmdTestWorld(roots, target) {
   const results = jobs > 1
     ? await runSharded({ file: SELF, items: ids, jobs, chunk: 1, workerData: { roots } })
     : await (async () => { const out = []; for (const id of ids) out.push(await testOne(engine, id)); return out; })();
-  for (const r of results) { for (const l of r.lines) console.log(l); bad += r.bad; }
+  let first = 0;
+  for (const r of results) { for (const l of r.lines) console.log(l); bad += r.bad; first += r.first ?? r.bad; }
+  console.log(`failing rows: ${bad}; first failures per session: ${first} (a session's later failing rows are followers)`);
+  if (!target || target === 'all') { try { await writeFile(path.join(DEFAULT_ROOT, '../training/eval/test-world-last.json'), JSON.stringify({ date: new Date().toISOString().slice(0, 10), rawFailingRows: bad, firstFailures: first }) + '\n'); } catch { /* optional */ } }
   return bad ? 1 : 0;
 }
 
