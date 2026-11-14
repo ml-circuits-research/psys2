@@ -1,0 +1,4065 @@
+{
+ "generated": "2026-11-14T13:58:35.111Z",
+ "n": 71,
+ "k": 5,
+ "classes": {
+  "word problem: the question part of a story is not routed": {
+   "n": 10,
+   "original_right": 9
+  },
+  "other single paraphrase": {
+   "n": 25,
+   "original_right": 12
+  },
+  "animal sound question not read": {
+   "n": 13,
+   "original_right": 0
+  },
+  "word problem: currency word changed by the translation": {
+   "n": 11,
+   "original_right": 11
+  },
+  "music or chess notation in loose wording": {
+   "n": 9,
+   "original_right": 9
+  },
+  "arithmetic or time question in loose wording": {
+   "n": 3,
+   "original_right": 3
+  }
+ },
+ "arms": {
+  "minilm.A": {
+   "tally": {
+    "rescued": 14,
+    "all proposals rejected by the checker": 28,
+    "wrong meaning (accepted, read as something else)": 10,
+    "accepted but not read (nu/asked)": 11,
+    "no proposal": 8
+   },
+   "rescued_first_accepted": 14,
+   "rescued_any_of_k": 17,
+   "checker_rejected_a_right_one": 13,
+   "perClass": {
+    "word problem: the question part of a story is not routed": {
+     "n": 10,
+     "rescued": 6,
+     "rescued_at_k": 6,
+     "original_right": 9
+    },
+    "other single paraphrase": {
+     "n": 25,
+     "rescued": 4,
+     "rescued_at_k": 5,
+     "original_right": 12
+    },
+    "animal sound question not read": {
+     "n": 13,
+     "rescued": 0,
+     "rescued_at_k": 0,
+     "original_right": 0
+    },
+    "word problem: currency word changed by the translation": {
+     "n": 11,
+     "rescued": 2,
+     "rescued_at_k": 2,
+     "original_right": 11
+    },
+    "music or chess notation in loose wording": {
+     "n": 9,
+     "rescued": 0,
+     "rescued_at_k": 2,
+     "original_right": 9
+    },
+    "arithmetic or time question in loose wording": {
+     "n": 3,
+     "rescued": 2,
+     "rescued_at_k": 2,
+     "original_right": 3
+    }
+   }
+  },
+  "minilm.B": {
+   "tally": {
+    "rescued": 14,
+    "all proposals rejected by the checker": 28,
+    "wrong meaning (accepted, read as something else)": 10,
+    "accepted but not read (nu/asked)": 11,
+    "no proposal": 8
+   },
+   "rescued_first_accepted": 14,
+   "rescued_any_of_k": 17,
+   "checker_rejected_a_right_one": 13,
+   "perClass": {
+    "word problem: the question part of a story is not routed": {
+     "n": 10,
+     "rescued": 6,
+     "rescued_at_k": 6,
+     "original_right": 9
+    },
+    "other single paraphrase": {
+     "n": 25,
+     "rescued": 4,
+     "rescued_at_k": 5,
+     "original_right": 12
+    },
+    "animal sound question not read": {
+     "n": 13,
+     "rescued": 0,
+     "rescued_at_k": 0,
+     "original_right": 0
+    },
+    "word problem: currency word changed by the translation": {
+     "n": 11,
+     "rescued": 2,
+     "rescued_at_k": 2,
+     "original_right": 11
+    },
+    "music or chess notation in loose wording": {
+     "n": 9,
+     "rescued": 0,
+     "rescued_at_k": 2,
+     "original_right": 9
+    },
+    "arithmetic or time question in loose wording": {
+     "n": 3,
+     "rescued": 2,
+     "rescued_at_k": 2,
+     "original_right": 3
+    }
+   }
+  },
+  "tfidf.A": {
+   "tally": {
+    "rescued": 14,
+    "all proposals rejected by the checker": 41,
+    "wrong meaning (accepted, read as something else)": 5,
+    "no proposal": 6,
+    "accepted but not read (nu/asked)": 5
+   },
+   "rescued_first_accepted": 14,
+   "rescued_any_of_k": 15,
+   "checker_rejected_a_right_one": 14,
+   "perClass": {
+    "word problem: the question part of a story is not routed": {
+     "n": 10,
+     "rescued": 6,
+     "rescued_at_k": 6,
+     "original_right": 9
+    },
+    "other single paraphrase": {
+     "n": 25,
+     "rescued": 2,
+     "rescued_at_k": 2,
+     "original_right": 12
+    },
+    "animal sound question not read": {
+     "n": 13,
+     "rescued": 0,
+     "rescued_at_k": 0,
+     "original_right": 0
+    },
+    "word problem: currency word changed by the translation": {
+     "n": 11,
+     "rescued": 2,
+     "rescued_at_k": 2,
+     "original_right": 11
+    },
+    "music or chess notation in loose wording": {
+     "n": 9,
+     "rescued": 2,
+     "rescued_at_k": 3,
+     "original_right": 9
+    },
+    "arithmetic or time question in loose wording": {
+     "n": 3,
+     "rescued": 2,
+     "rescued_at_k": 2,
+     "original_right": 3
+    }
+   }
+  },
+  "tfidf.B": {
+   "tally": {
+    "rescued": 11,
+    "all proposals rejected by the checker": 42,
+    "wrong meaning (accepted, read as something else)": 6,
+    "no proposal": 7,
+    "accepted but not read (nu/asked)": 5
+   },
+   "rescued_first_accepted": 11,
+   "rescued_any_of_k": 12,
+   "checker_rejected_a_right_one": 12,
+   "perClass": {
+    "word problem: the question part of a story is not routed": {
+     "n": 10,
+     "rescued": 4,
+     "rescued_at_k": 4,
+     "original_right": 9
+    },
+    "other single paraphrase": {
+     "n": 25,
+     "rescued": 2,
+     "rescued_at_k": 2,
+     "original_right": 12
+    },
+    "animal sound question not read": {
+     "n": 13,
+     "rescued": 0,
+     "rescued_at_k": 0,
+     "original_right": 0
+    },
+    "word problem: currency word changed by the translation": {
+     "n": 11,
+     "rescued": 1,
+     "rescued_at_k": 1,
+     "original_right": 11
+    },
+    "music or chess notation in loose wording": {
+     "n": 9,
+     "rescued": 2,
+     "rescued_at_k": 3,
+     "original_right": 9
+    },
+    "arithmetic or time question in loose wording": {
+     "n": 3,
+     "rescued": 2,
+     "rescued_at_k": 2,
+     "original_right": 3
+    }
+   }
+  }
+ },
+ "original_reads_right": {},
+ "original_reads_right_total": 44,
+ "detail": {
+  "minilm.A": [
+   {
+    "id": "rt#003",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Ana has 13 stickers. Tom gives an Ana 1 sticker. How many stickers does Ana have?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": {
+     "text": "Ana has 13 stickers. Tom gives Ana 1 stickers. how many stickers does Ana have?",
+     "from": "mia has 10 stickers. tom gives mia 3 stickers. how many stickers does mia have?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#004",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "The color of the body should be red",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#005",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Wearing a hat",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Put on a hat.",
+     "from": "Put on a hat.",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#007",
+    "cls": "other single paraphrase",
+    "world": "kids.tasks",
+    "text": "How much is left on my list of things to do",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "How many things are on my list?",
+     "from": "How many things are on my list?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#008",
+    "cls": "other single paraphrase",
+    "world": "kids.common",
+    "text": "Thank you, the bye",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "you helped a the, thanks",
+     "from": "you helped a lot, thanks",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#009",
+    "cls": "other single paraphrase",
+    "world": "art.draw",
+    "text": "Move the house upsides",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#017",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe has 14 marbles. Zoe eats 8. How many marbles did Zoe leave?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": {
+     "text": "Zoe has 14 marbles. Zoe eats 8. how many marbles does Zoe have left?",
+     "from": "sam has 6 marbles. sam eats 1. how many marbles does sam have left?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#018",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Ana has 6 apples. Ana eats 5. How many apples did Ana leave?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Ana has 6 apples. Ana eats 5. How many apples does Ana have left?",
+     "from": "Ben has 9 apples. Ben eats 6. How many apples does Ben have left?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#019",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Hey what a sound makes a cow",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Is a whale a what makes a cow?",
+     "from": "Is a whale a mammal or a fish?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#023",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I Have 12 She. A pencil costs 2 she. How much money do I have left after buying 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#024",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I Have 14 She. A kite costs 4. How much money do I have left after I buy 3 kites?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "I have 14 lei. A kite costs 4 lei. How much money do I have left after I buy 3 kites?",
+     "from": "I have 17 lei. A kite costs 4 lei. How much money do I have left after I buy 2 kites?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#025",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "A ball costs 5 her. if I give 17 she for a ball what is my change",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#026",
+    "cls": "other single paraphrase",
+    "world": "media.music",
+    "text": "What is the C E G agreement",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#027",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "Play the main scale G",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Play the to main",
+     "from": "Play Ode to Joy",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#028",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "set the time to 120 and play the major D scale",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 1,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#029",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Put your eyes back as if they were",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Put on a hat.",
+     "from": "Put on a hat.",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#031",
+    "cls": "other single paraphrase",
+    "world": "ui.shell",
+    "text": "Going back",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "back pls",
+     "from": "back pls",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#034",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have completely?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 4,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#035",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe has 4 bulbs. Zoe buys 1 more. How many bulbs does Zoe have?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#040",
+    "cls": "music or chess notation in loose wording",
+    "world": "games.chess",
+    "text": "Knight of c3",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Bishop to c3.",
+     "from": "Bishop to c4.",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#041",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I got 12 bored. Pencil costs 2 rents. How much money do I have left after I buy 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#042",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I got 14 sorry. A kite costs 4 rents. How much money do I have left after I buy 3 kits?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#043",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "A ball costs 5 rented. if I give 17 sorry for a ball what my change",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#044",
+    "cls": "other single paraphrase",
+    "world": "kids.shapes",
+    "text": "Please, what makes red and yellow",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#046",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "What Cord is C E G",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "What is Cord C",
+     "from": "what is middle C",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#048",
+    "cls": "other single paraphrase",
+    "world": "docs.editor",
+    "text": "Add a subhead details",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#050",
+    "cls": "arithmetic or time question in loose wording",
+    "world": "kids.arith",
+    "text": "4 and 8 add",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "and is 4 plus 8",
+     "from": "what is 0.5 plus 0.25",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#052",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Hey, what sound makes a cow",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "what is makes cow called?",
+     "from": "What is my dog called?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#055",
+    "cls": "animal sound question not read",
+    "world": "kids.time",
+    "text": "How many days is in a week. what noise does a cow make and how many legs then has a spider",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#056",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Wat-Sound Makes a Cow",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#057",
+    "cls": "music or chess notation in loose wording",
+    "world": "games.chess",
+    "text": "Knights of c3",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Bishop to c3.",
+     "from": "Bishop to c4.",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#063",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Never, never, never mind",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#064",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": {
+     "text": "Tom has 11 pencils. Leo has 1 pencils. how many pencils do they have altogether?",
+     "from": "ben has 6 pencils. tom has 8 pencils. how many pencils do they have altogether?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#065",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "being a human and then calling yourself Anna",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#066",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Um what makes noise a cow also is Egypt in Africa",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#067",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Um what sound does a cow make what 7 plus 5",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#068",
+    "cls": "animal sound question not read",
+    "world": "geo.map",
+    "text": "Is Egypt in Africa, what sound does a cow make whatever is 20 min 8?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#069",
+    "cls": "animal sound question not read",
+    "world": "kids.time",
+    "text": "how many days are in a week. what sound makes a cow and then how many legs does a spider have",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#070",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have 12 slate. A pencil costs 2 slates. How much money do I have left after I have bought 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#071",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have 14 slates. A kite costs 4 slates. How much money do I have left after I buy 3 kites?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 4,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#075",
+    "cls": "other single paraphrase",
+    "world": "data.charts",
+    "text": "plums divide by two",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "drop plums from two",
+     "from": "drop plums from it",
+     "source": "tests.sop",
+     "rank": 1,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#076",
+    "cls": "other single paraphrase",
+    "world": "data.charts",
+    "text": "add bananas on 4 and make a pie chart of it",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#080",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Red going",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Red is your name",
+     "from": "what is your name",
+     "source": "operational",
+     "rank": 2,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#082",
+    "cls": "other single paraphrase",
+    "world": "kids.time",
+    "text": "What's the day after tomorrow when it's Monday today",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "What day is the in it days if today is Monday",
+     "from": "what day is it in two days if today is Thursday",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#085",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe's 14 marbles. Zoe eats 8. How many marbles on Zoe left?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": {
+     "text": "Zoe has 14 marbles. Zoe eats 8. how many marbles does Zoe have left?",
+     "from": "ana has 14 marbles. ana eats 8. how many marbles does ana have left?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#086",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Anah has 13 stickers. Tom gives Ana 1 sticker. How many stickers does Ana have?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#088",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.shapes",
+    "text": "How many sides does a hexagon have that which is 20 minus 8",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#089",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "A ball costs 5 lei. if I give 17 a pass for the ball what is my change",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#090",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Can you what sound makes a duck do",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "is a bat a bird what a makes",
+     "from": "is a bat a bird or a mammal",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#098",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe has 4 pears. Zoe buys another 1. How many pears does Zoe have?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Zoe has 4 pears. Zoe buys 1 more. How many pears does Zoe have?",
+     "from": "Ben has 2 pears. Ben buys 4 more. How many pears does Ben have?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#101",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "to be human, then call yourself Anna",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "from now on your name is Anna",
+     "from": "from now on your name is Luna",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#103",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have a 14-lei. A kite costs 4 lei. How much money do I have left after buying 3 kites?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "I have 14 lei. A kite costs 4 lei. How much money will I have left after buying 3 kites?",
+     "from": "I have 10 lei. A kite costs 4 lei. How much money will I have left after buying 2 kites?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#106",
+    "cls": "other single paraphrase",
+    "world": "data.charts",
+    "text": "add bananas on 4 and make it a circle chart",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#107",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "I want to know what key there are 5 sharp",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "what tempo should be 5",
+     "from": "the tempo should be 140",
+     "source": "operational",
+     "rank": 4,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#109",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "What kind of chord is C E G",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "is C E G a chord, which What",
+     "from": "is C E G a chord, which one",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#114",
+    "cls": "arithmetic or time question in loose wording",
+    "world": "kids.arith",
+    "text": "What do I get for 10 plus 6 for myself",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "What do i get for 10 plus 6",
+     "from": "what do i get for 4 plus 3",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#115",
+    "cls": "arithmetic or time question in loose wording",
+    "world": "kids.arith",
+    "text": "9 and 6 is it added?",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": {
+     "text": "quick and: it is 9 plus 6",
+     "from": "quick one: what is 6 plus 7",
+     "source": "tests.sop",
+     "rank": 3,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#116",
+    "cls": "other single paraphrase",
+    "world": "geo.map",
+    "text": "One quick: what is the capital of Japan",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "One is what capital of the Japan?",
+     "from": "What is the capital of South Africa?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#117",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "um What sound does a cow make is Egypt in Africa too",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#118",
+    "cls": "animal sound question not read",
+    "world": "geo.map",
+    "text": "Is Egypt in Africa what sound a cow makes also what is 20 minus 8?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#119",
+    "cls": "animal sound question not read",
+    "world": "kids.time",
+    "text": "How many days there are in a week. What sound does a cow make and then how many legs does a spider have",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#121",
+    "cls": "other single paraphrase",
+    "world": "art.draw",
+    "text": "Put the house in 200, 300",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "move the house to x 200 y 300",
+     "from": "move the house to x 600 y 150",
+     "source": "tests.sop",
+     "rank": 1,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#123",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "Play the G's major scale",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "play the D major scale",
+     "from": "play the D major scale",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#125",
+    "cls": "other single paraphrase",
+    "world": "docs.editor",
+    "text": "make the paragraph in italics",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "make the last paragraph bold",
+     "from": "make the last paragraph bold",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#128",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Give me plus eyes in the shape of",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#129",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Um what sounds makes a cow, also is Egypt in Africa",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#133",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have 12 lions. A pencil costs 2 lei. How much money do I have left after buying 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#135",
+    "cls": "other single paraphrase",
+    "world": "art.draw",
+    "text": "Put the house in the 200, 300",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 1,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#139",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "I want to know what key is 5 sharps",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "what tempo should be 5",
+     "from": "the tempo should be 140",
+     "source": "operational",
+     "rank": 4,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#144",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "I think you're looking better with your square eye",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#145",
+    "cls": "other single paraphrase",
+    "world": "kids.time",
+    "text": "What is the day after tomorrow if it's Monday today",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "What day is the in it days if today is Monday",
+     "from": "what day is it in two days if today is Thursday",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   }
+  ],
+  "minilm.B": [
+   {
+    "id": "rt#003",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Ana has 13 stickers. Tom gives an Ana 1 sticker. How many stickers does Ana have?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": {
+     "text": "Ana has 13 stickers. Tom gives Ana 1 stickers. how many stickers does Ana have?",
+     "from": "mia has 10 stickers. tom gives mia 3 stickers. how many stickers does mia have?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#004",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "The color of the body should be red",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#005",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Wearing a hat",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Put on a hat.",
+     "from": "Put on a hat.",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#007",
+    "cls": "other single paraphrase",
+    "world": "kids.tasks",
+    "text": "How much is left on my list of things to do",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "How many things are on my list?",
+     "from": "How many things are on my list?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#008",
+    "cls": "other single paraphrase",
+    "world": "kids.common",
+    "text": "Thank you, the bye",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "you helped a the, thanks",
+     "from": "you helped a lot, thanks",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#009",
+    "cls": "other single paraphrase",
+    "world": "art.draw",
+    "text": "Move the house upsides",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#017",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe has 14 marbles. Zoe eats 8. How many marbles did Zoe leave?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": {
+     "text": "Zoe has 14 marbles. Zoe eats 8. how many marbles does Zoe have left?",
+     "from": "sam has 6 marbles. sam eats 1. how many marbles does sam have left?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#018",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Ana has 6 apples. Ana eats 5. How many apples did Ana leave?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Ana has 6 apples. Ana devoured 5 apples. How many apples does Ana have?",
+     "from": "Tom has 9 apples. tom devoured 3 apples. How many apples does Tom have?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#019",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Hey what a sound makes a cow",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Is a whale a what makes a cow?",
+     "from": "Is a whale a mammal or a fish?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#023",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I Have 12 She. A pencil costs 2 she. How much money do I have left after buying 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#024",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I Have 14 She. A kite costs 4. How much money do I have left after I buy 3 kites?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "I have 14 lei. A sandwich costs 4 lei. How much money do I have left after I buy 3 sandwiches?",
+     "from": "I have 23 lei. A sandwich costs 6 lei. How much money do I have left after I buy 2 sandwiches?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#025",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "A ball costs 5 her. if I give 17 she for a ball what is my change",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#026",
+    "cls": "other single paraphrase",
+    "world": "media.music",
+    "text": "What is the C E G agreement",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#027",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "Play the main scale G",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Play the to main",
+     "from": "Play Ode to Joy",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#028",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "set the time to 120 and play the major D scale",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 1,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#029",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Put your eyes back as if they were",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Put on a hat.",
+     "from": "Put on a hat.",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#031",
+    "cls": "other single paraphrase",
+    "world": "ui.shell",
+    "text": "Going back",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "back pls",
+     "from": "back pls",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#034",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have completely?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 4,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#035",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe has 4 bulbs. Zoe buys 1 more. How many bulbs does Zoe have?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#040",
+    "cls": "music or chess notation in loose wording",
+    "world": "games.chess",
+    "text": "Knight of c3",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Bishop to c3.",
+     "from": "Bishop to c4.",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#041",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I got 12 bored. Pencil costs 2 rents. How much money do I have left after I buy 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#042",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I got 14 sorry. A kite costs 4 rents. How much money do I have left after I buy 3 kits?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#043",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "A ball costs 5 rented. if I give 17 sorry for a ball what my change",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#044",
+    "cls": "other single paraphrase",
+    "world": "kids.shapes",
+    "text": "Please, what makes red and yellow",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#046",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "What Cord is C E G",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "What is Cord C",
+     "from": "what is middle C",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#048",
+    "cls": "other single paraphrase",
+    "world": "docs.editor",
+    "text": "Add a subhead details",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#050",
+    "cls": "arithmetic or time question in loose wording",
+    "world": "kids.arith",
+    "text": "4 and 8 add",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "and is 4 plus 8",
+     "from": "what is 0.5 plus 0.25",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#052",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Hey, what sound makes a cow",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "what is makes cow called?",
+     "from": "What is my dog called?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#055",
+    "cls": "animal sound question not read",
+    "world": "kids.time",
+    "text": "How many days is in a week. what noise does a cow make and how many legs then has a spider",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#056",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Wat-Sound Makes a Cow",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#057",
+    "cls": "music or chess notation in loose wording",
+    "world": "games.chess",
+    "text": "Knights of c3",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Bishop to c3.",
+     "from": "Bishop to c4.",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#063",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Never, never, never mind",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#064",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": {
+     "text": "Tom has 11 pencils. Leo has 1 pencils. how many pencils do they have altogether?",
+     "from": "ben has 6 pencils. tom has 8 pencils. how many pencils do they have altogether?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#065",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "being a human and then calling yourself Anna",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#066",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Um what makes noise a cow also is Egypt in Africa",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#067",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Um what sound does a cow make what 7 plus 5",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#068",
+    "cls": "animal sound question not read",
+    "world": "geo.map",
+    "text": "Is Egypt in Africa, what sound does a cow make whatever is 20 min 8?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#069",
+    "cls": "animal sound question not read",
+    "world": "kids.time",
+    "text": "how many days are in a week. what sound makes a cow and then how many legs does a spider have",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#070",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have 12 slate. A pencil costs 2 slates. How much money do I have left after I have bought 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#071",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have 14 slates. A kite costs 4 slates. How much money do I have left after I buy 3 kites?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 4,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#075",
+    "cls": "other single paraphrase",
+    "world": "data.charts",
+    "text": "plums divide by two",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "drop plums from two",
+     "from": "drop plums from it",
+     "source": "tests.sop",
+     "rank": 1,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#076",
+    "cls": "other single paraphrase",
+    "world": "data.charts",
+    "text": "add bananas on 4 and make a pie chart of it",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#080",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Red going",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Red is your name",
+     "from": "what is your name",
+     "source": "operational",
+     "rank": 2,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#082",
+    "cls": "other single paraphrase",
+    "world": "kids.time",
+    "text": "What's the day after tomorrow when it's Monday today",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "What day is the in it days if today is Monday",
+     "from": "what day is it in two days if today is Thursday",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#085",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe's 14 marbles. Zoe eats 8. How many marbles on Zoe left?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": {
+     "text": "Zoe has 14 marbles. Zoe eats 8. how many marbles does Zoe have left?",
+     "from": "ana has 14 marbles. ana eats 8. how many marbles does ana have left?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#086",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Anah has 13 stickers. Tom gives Ana 1 sticker. How many stickers does Ana have?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#088",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.shapes",
+    "text": "How many sides does a hexagon have that which is 20 minus 8",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#089",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "A ball costs 5 lei. if I give 17 a pass for the ball what is my change",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#090",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Can you what sound makes a duck do",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "is a bat a bird what a makes",
+     "from": "is a bat a bird or a mammal",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#098",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe has 4 pears. Zoe buys another 1. How many pears does Zoe have?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Zoe has 4 pears. Zoe gets 1 more. How many pears does Zoe have?",
+     "from": "Mia has 10 pears. Mia gets 7 more. How many pears does Mia have?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#101",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "to be human, then call yourself Anna",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "from now on your name is Anna",
+     "from": "from now on your name is Luna",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#103",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have a 14-lei. A kite costs 4 lei. How much money do I have left after buying 3 kites?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "I have 14 lei. A kite costs 4 lei. How much money will I have left after buying 3 kites?",
+     "from": "I have 10 lei. A kite costs 4 lei. How much money will I have left after buying 2 kites?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#106",
+    "cls": "other single paraphrase",
+    "world": "data.charts",
+    "text": "add bananas on 4 and make it a circle chart",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#107",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "I want to know what key there are 5 sharp",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "what tempo should be 5",
+     "from": "the tempo should be 140",
+     "source": "operational",
+     "rank": 4,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#109",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "What kind of chord is C E G",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "is C E G a chord, which What",
+     "from": "is C E G a chord, which one",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#114",
+    "cls": "arithmetic or time question in loose wording",
+    "world": "kids.arith",
+    "text": "What do I get for 10 plus 6 for myself",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "What do i get for 10 plus 6",
+     "from": "what do i get for 4 plus 3",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#115",
+    "cls": "arithmetic or time question in loose wording",
+    "world": "kids.arith",
+    "text": "9 and 6 is it added?",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": {
+     "text": "quick and: it is 9 plus 6",
+     "from": "quick one: what is 6 plus 7",
+     "source": "tests.sop",
+     "rank": 3,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#116",
+    "cls": "other single paraphrase",
+    "world": "geo.map",
+    "text": "One quick: what is the capital of Japan",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "One is what capital of the Japan?",
+     "from": "What is the capital of South Africa?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#117",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "um What sound does a cow make is Egypt in Africa too",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#118",
+    "cls": "animal sound question not read",
+    "world": "geo.map",
+    "text": "Is Egypt in Africa what sound a cow makes also what is 20 minus 8?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#119",
+    "cls": "animal sound question not read",
+    "world": "kids.time",
+    "text": "How many days there are in a week. What sound does a cow make and then how many legs does a spider have",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#121",
+    "cls": "other single paraphrase",
+    "world": "art.draw",
+    "text": "Put the house in 200, 300",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "move the house to x 200 y 300",
+     "from": "move the house to x 600 y 150",
+     "source": "tests.sop",
+     "rank": 1,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#123",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "Play the G's major scale",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "play the D major scale",
+     "from": "play the D major scale",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#125",
+    "cls": "other single paraphrase",
+    "world": "docs.editor",
+    "text": "make the paragraph in italics",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "make the last paragraph bold",
+     "from": "make the last paragraph bold",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#128",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Give me plus eyes in the shape of",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#129",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Um what sounds makes a cow, also is Egypt in Africa",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#133",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have 12 lions. A pencil costs 2 lei. How much money do I have left after buying 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#135",
+    "cls": "other single paraphrase",
+    "world": "art.draw",
+    "text": "Put the house in the 200, 300",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 1,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#139",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "I want to know what key is 5 sharps",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "what tempo should be 5",
+     "from": "the tempo should be 140",
+     "source": "operational",
+     "rank": 4,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#144",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "I think you're looking better with your square eye",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#145",
+    "cls": "other single paraphrase",
+    "world": "kids.time",
+    "text": "What is the day after tomorrow if it's Monday today",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "What day is the in it days if today is Monday",
+     "from": "what day is it in two days if today is Thursday",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   }
+  ],
+  "tfidf.A": [
+   {
+    "id": "rt#003",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Ana has 13 stickers. Tom gives an Ana 1 sticker. How many stickers does Ana have?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": {
+     "text": "Ana has 13 stickers. Tom gives Ana 1 stickers. how many stickers does Ana have?",
+     "from": "mia has 10 stickers. tom gives mia 3 stickers. how many stickers does mia have?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#004",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "The color of the body should be red",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#005",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Wearing a hat",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Put on a hat.",
+     "from": "Put on a hat.",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#007",
+    "cls": "other single paraphrase",
+    "world": "kids.tasks",
+    "text": "How much is left on my list of things to do",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#008",
+    "cls": "other single paraphrase",
+    "world": "kids.common",
+    "text": "Thank you, the bye",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "gotta the, bye",
+     "from": "gotta go, bye",
+     "source": "tests.sop",
+     "rank": 3,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#009",
+    "cls": "other single paraphrase",
+    "world": "art.draw",
+    "text": "Move the house upsides",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#017",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe has 14 marbles. Zoe eats 8. How many marbles did Zoe leave?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Zoe has 14 marbles. Zoe eats 8. how many marbles does Zoe have left?",
+     "from": "ana has 14 marbles. ana eats 8. how many marbles does ana have left?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#018",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Ana has 6 apples. Ana eats 5. How many apples did Ana leave?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Ana has 6 apples. Ana eats 5. How many apples does Ana have left?",
+     "from": "Ben has 9 apples. Ben eats 6. How many apples does Ben have left?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#019",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Hey what a sound makes a cow",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Is a whale a what makes a cow?",
+     "from": "Is a whale a mammal or a fish?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#023",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I Have 12 She. A pencil costs 2 she. How much money do I have left after buying 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#024",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I Have 14 She. A kite costs 4. How much money do I have left after I buy 3 kites?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "I have 14 lei. A kite costs 4 lei. How much money do I have left after I buy 3 kites?",
+     "from": "I have 17 lei. A kite costs 4 lei. How much money do I have left after I buy 2 kites?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#025",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "A ball costs 5 her. if I give 17 she for a ball what is my change",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#026",
+    "cls": "other single paraphrase",
+    "world": "media.music",
+    "text": "What is the C E G agreement",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#027",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "Play the main scale G",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Play the main.",
+     "from": "Play Frere Jacques.",
+     "source": "tests.sop",
+     "rank": 2,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#028",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "set the time to 120 and play the major D scale",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#029",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Put your eyes back as if they were",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "put on glasses",
+     "from": "put on glasses",
+     "source": "operational",
+     "rank": 2,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#031",
+    "cls": "other single paraphrase",
+    "world": "ui.shell",
+    "text": "Going back",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "back pls",
+     "from": "back pls",
+     "source": "tests.sop",
+     "rank": 2,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#034",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have completely?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#035",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe has 4 bulbs. Zoe buys 1 more. How many bulbs does Zoe have?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 5,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#040",
+    "cls": "music or chess notation in loose wording",
+    "world": "games.chess",
+    "text": "Knight of c3",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "I would like to play knight to c3.",
+     "from": "I would like to play knight to c3.",
+     "source": "tests.sop",
+     "rank": 1,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#041",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I got 12 bored. Pencil costs 2 rents. How much money do I have left after I buy 2 pencils?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#042",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I got 14 sorry. A kite costs 4 rents. How much money do I have left after I buy 3 kits?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 1,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#043",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "A ball costs 5 rented. if I give 17 sorry for a ball what my change",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#044",
+    "cls": "other single paraphrase",
+    "world": "kids.shapes",
+    "text": "Please, what makes red and yellow",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#046",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "What Cord is C E G",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#048",
+    "cls": "other single paraphrase",
+    "world": "docs.editor",
+    "text": "Add a subhead details",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#050",
+    "cls": "arithmetic or time question in loose wording",
+    "world": "kids.arith",
+    "text": "4 and 8 add",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "can u add 4 and 8 for me",
+     "from": "can u add 7 and 5 for me",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#052",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Hey, what sound makes a cow",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Is a whale a what makes a cow?",
+     "from": "Is a whale a mammal or a fish?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#055",
+    "cls": "animal sound question not read",
+    "world": "kids.time",
+    "text": "How many days is in a week. what noise does a cow make and how many legs then has a spider",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#056",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Wat-Sound Makes a Cow",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#057",
+    "cls": "music or chess notation in loose wording",
+    "world": "games.chess",
+    "text": "Knights of c3",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Bishop to c3.",
+     "from": "Bishop to c4.",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#063",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Never, never, never mind",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#064",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": {
+     "text": "Tom has 11 pencils. Leo has 1 pencils. how many pencils do they have altogether?",
+     "from": "ben has 6 pencils. tom has 8 pencils. how many pencils do they have altogether?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#065",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "being a human and then calling yourself Anna",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#066",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Um what makes noise a cow also is Egypt in Africa",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#067",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Um what sound does a cow make what 7 plus 5",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#068",
+    "cls": "animal sound question not read",
+    "world": "geo.map",
+    "text": "Is Egypt in Africa, what sound does a cow make whatever is 20 min 8?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#069",
+    "cls": "animal sound question not read",
+    "world": "kids.time",
+    "text": "how many days are in a week. what sound makes a cow and then how many legs does a spider have",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#070",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have 12 slate. A pencil costs 2 slates. How much money do I have left after I have bought 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#071",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have 14 slates. A kite costs 4 slates. How much money do I have left after I buy 3 kites?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 1,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#075",
+    "cls": "other single paraphrase",
+    "world": "data.charts",
+    "text": "plums divide by two",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 1,
+    "original_right": true,
+    "chosen": {
+     "text": "cut two plums by half",
+     "from": "cut the plums by half",
+     "source": "tests.sop",
+     "rank": 1,
+     "outcome": "asked"
+    }
+   },
+   {
+    "id": "rt#076",
+    "cls": "other single paraphrase",
+    "world": "data.charts",
+    "text": "add bananas on 4 and make a pie chart of it",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#080",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Red going",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Red is your name",
+     "from": "what is your name",
+     "source": "operational",
+     "rank": 1,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#082",
+    "cls": "other single paraphrase",
+    "world": "kids.time",
+    "text": "What's the day after tomorrow when it's Monday today",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#085",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe's 14 marbles. Zoe eats 8. How many marbles on Zoe left?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Zoe has 14 marbles. Zoe eats 8. how many marbles does Zoe have left?",
+     "from": "ana has 14 marbles. ana eats 8. how many marbles does ana have left?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#086",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Anah has 13 stickers. Tom gives Ana 1 sticker. How many stickers does Ana have?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 4,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#088",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.shapes",
+    "text": "How many sides does a hexagon have that which is 20 minus 8",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#089",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "A ball costs 5 lei. if I give 17 a pass for the ball what is my change",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#090",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Can you what sound makes a duck do",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#098",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe has 4 pears. Zoe buys another 1. How many pears does Zoe have?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Zoe has 4 pears. Zoe buys 1 more. How many pears does Zoe have?",
+     "from": "Ben has 2 pears. Ben buys 4 more. How many pears does Ben have?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#101",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "to be human, then call yourself Anna",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Call yourself Anna.",
+     "from": "Call yourself Pixel.",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#103",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have a 14-lei. A kite costs 4 lei. How much money do I have left after buying 3 kites?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "I have 14 lei. A kite costs 4 lei. How much money will I have left after buying 3 kites?",
+     "from": "I have 10 lei. A kite costs 4 lei. How much money will I have left after buying 2 kites?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#106",
+    "cls": "other single paraphrase",
+    "world": "data.charts",
+    "text": "add bananas on 4 and make it a circle chart",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#107",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "I want to know what key there are 5 sharp",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#109",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "What kind of chord is C E G",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 1,
+    "original_right": true,
+    "chosen": {
+     "text": "What chord is C E G?",
+     "from": "What chord is C E G?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#114",
+    "cls": "arithmetic or time question in loose wording",
+    "world": "kids.arith",
+    "text": "What do I get for 10 plus 6 for myself",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "What do i get for 10 plus 6",
+     "from": "what do i get for 4 plus 3",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#115",
+    "cls": "arithmetic or time question in loose wording",
+    "world": "kids.arith",
+    "text": "9 and 6 is it added?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#116",
+    "cls": "other single paraphrase",
+    "world": "geo.map",
+    "text": "One quick: what is the capital of Japan",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#117",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "um What sound does a cow make is Egypt in Africa too",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#118",
+    "cls": "animal sound question not read",
+    "world": "geo.map",
+    "text": "Is Egypt in Africa what sound a cow makes also what is 20 minus 8?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#119",
+    "cls": "animal sound question not read",
+    "world": "kids.time",
+    "text": "How many days there are in a week. What sound does a cow make and then how many legs does a spider have",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#121",
+    "cls": "other single paraphrase",
+    "world": "art.draw",
+    "text": "Put the house in 200, 300",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#123",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "Play the G's major scale",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "play the D major scale",
+     "from": "play the D major scale",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#125",
+    "cls": "other single paraphrase",
+    "world": "docs.editor",
+    "text": "make the paragraph in italics",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#128",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Give me plus eyes in the shape of",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#129",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Um what sounds makes a cow, also is Egypt in Africa",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#133",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have 12 lions. A pencil costs 2 lei. How much money do I have left after buying 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#135",
+    "cls": "other single paraphrase",
+    "world": "art.draw",
+    "text": "Put the house in the 200, 300",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#139",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "I want to know what key is 5 sharps",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 1,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#144",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "I think you're looking better with your square eye",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#145",
+    "cls": "other single paraphrase",
+    "world": "kids.time",
+    "text": "What is the day after tomorrow if it's Monday today",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   }
+  ],
+  "tfidf.B": [
+   {
+    "id": "rt#003",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Ana has 13 stickers. Tom gives an Ana 1 sticker. How many stickers does Ana have?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": {
+     "text": "Ana has 13 stickers. Tom gives Ana 1 stickers. how many stickers does Ana have?",
+     "from": "mia has 10 stickers. tom gives mia 3 stickers. how many stickers does mia have?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#004",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "The color of the body should be red",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#005",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Wearing a hat",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Put on a hat.",
+     "from": "Put on a hat.",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#007",
+    "cls": "other single paraphrase",
+    "world": "kids.tasks",
+    "text": "How much is left on my list of things to do",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#008",
+    "cls": "other single paraphrase",
+    "world": "kids.common",
+    "text": "Thank you, the bye",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "gotta the, bye",
+     "from": "gotta go, bye",
+     "source": "tests.sop",
+     "rank": 3,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#009",
+    "cls": "other single paraphrase",
+    "world": "art.draw",
+    "text": "Move the house upsides",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#017",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe has 14 marbles. Zoe eats 8. How many marbles did Zoe leave?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Zoe has 14 marbles. Zoe eats 8. how many marbles does Zoe have left?",
+     "from": "ana has 14 marbles. ana eats 8. how many marbles does ana have left?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#018",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Ana has 6 apples. Ana eats 5. How many apples did Ana leave?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#019",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Hey what a sound makes a cow",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Is a whale a what makes a cow?",
+     "from": "Is a whale a mammal or a fish?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#023",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I Have 12 She. A pencil costs 2 she. How much money do I have left after buying 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#024",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I Have 14 She. A kite costs 4. How much money do I have left after I buy 3 kites?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#025",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "A ball costs 5 her. if I give 17 she for a ball what is my change",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#026",
+    "cls": "other single paraphrase",
+    "world": "media.music",
+    "text": "What is the C E G agreement",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#027",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "Play the main scale G",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Play the main.",
+     "from": "Play Frere Jacques.",
+     "source": "tests.sop",
+     "rank": 2,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#028",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "set the time to 120 and play the major D scale",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#029",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Put your eyes back as if they were",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "put on glasses",
+     "from": "put on glasses",
+     "source": "operational",
+     "rank": 2,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#031",
+    "cls": "other single paraphrase",
+    "world": "ui.shell",
+    "text": "Going back",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "back pls",
+     "from": "back pls",
+     "source": "tests.sop",
+     "rank": 2,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#034",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have completely?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#035",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe has 4 bulbs. Zoe buys 1 more. How many bulbs does Zoe have?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 5,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#040",
+    "cls": "music or chess notation in loose wording",
+    "world": "games.chess",
+    "text": "Knight of c3",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "I would like to play knight to c3.",
+     "from": "I would like to play knight to c3.",
+     "source": "tests.sop",
+     "rank": 1,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#041",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I got 12 bored. Pencil costs 2 rents. How much money do I have left after I buy 2 pencils?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#042",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I got 14 sorry. A kite costs 4 rents. How much money do I have left after I buy 3 kits?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#043",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "A ball costs 5 rented. if I give 17 sorry for a ball what my change",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#044",
+    "cls": "other single paraphrase",
+    "world": "kids.shapes",
+    "text": "Please, what makes red and yellow",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#046",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "What Cord is C E G",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#048",
+    "cls": "other single paraphrase",
+    "world": "docs.editor",
+    "text": "Add a subhead details",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#050",
+    "cls": "arithmetic or time question in loose wording",
+    "world": "kids.arith",
+    "text": "4 and 8 add",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "can u add 4 and 8 for me",
+     "from": "can u add 7 and 5 for me",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#052",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Hey, what sound makes a cow",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Is a whale a what makes a cow?",
+     "from": "Is a whale a mammal or a fish?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#055",
+    "cls": "animal sound question not read",
+    "world": "kids.time",
+    "text": "How many days is in a week. what noise does a cow make and how many legs then has a spider",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#056",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Wat-Sound Makes a Cow",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#057",
+    "cls": "music or chess notation in loose wording",
+    "world": "games.chess",
+    "text": "Knights of c3",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Bishop to c3.",
+     "from": "Bishop to c4.",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#063",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Never, never, never mind",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#064",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 2,
+    "original_right": true,
+    "chosen": {
+     "text": "Tom has 11 pencils. Leo has 1 pencils. how many pencils do they have altogether?",
+     "from": "ben has 6 pencils. tom has 8 pencils. how many pencils do they have altogether?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#065",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "being a human and then calling yourself Anna",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#066",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Um what makes noise a cow also is Egypt in Africa",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#067",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Um what sound does a cow make what 7 plus 5",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#068",
+    "cls": "animal sound question not read",
+    "world": "geo.map",
+    "text": "Is Egypt in Africa, what sound does a cow make whatever is 20 min 8?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#069",
+    "cls": "animal sound question not read",
+    "world": "kids.time",
+    "text": "how many days are in a week. what sound makes a cow and then how many legs does a spider have",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#070",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have 12 slate. A pencil costs 2 slates. How much money do I have left after I have bought 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#071",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have 14 slates. A kite costs 4 slates. How much money do I have left after I buy 3 kites?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#075",
+    "cls": "other single paraphrase",
+    "world": "data.charts",
+    "text": "plums divide by two",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 1,
+    "original_right": true,
+    "chosen": {
+     "text": "cut two plums by half",
+     "from": "cut the plums by half",
+     "source": "tests.sop",
+     "rank": 1,
+     "outcome": "asked"
+    }
+   },
+   {
+    "id": "rt#076",
+    "cls": "other single paraphrase",
+    "world": "data.charts",
+    "text": "add bananas on 4 and make a pie chart of it",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#080",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Red going",
+    "verdict": "accepted but not read (nu/asked)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Red is your name",
+     "from": "what is your name",
+     "source": "operational",
+     "rank": 1,
+     "outcome": "nu"
+    }
+   },
+   {
+    "id": "rt#082",
+    "cls": "other single paraphrase",
+    "world": "kids.time",
+    "text": "What's the day after tomorrow when it's Monday today",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#085",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe's 14 marbles. Zoe eats 8. How many marbles on Zoe left?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Zoe has 14 marbles. Zoe eats 8. how many marbles does Zoe have left?",
+     "from": "ana has 14 marbles. ana eats 8. how many marbles does ana have left?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#086",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Anah has 13 stickers. Tom gives Ana 1 sticker. How many stickers does Ana have?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 4,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#088",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.shapes",
+    "text": "How many sides does a hexagon have that which is 20 minus 8",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#089",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "A ball costs 5 lei. if I give 17 a pass for the ball what is my change",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#090",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Can you what sound makes a duck do",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#098",
+    "cls": "word problem: the question part of a story is not routed",
+    "world": "kids.arith",
+    "text": "Zoe has 4 pears. Zoe buys another 1. How many pears does Zoe have?",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "Zoe has 4 pears. Zoe eats 1. how many pears does Zoe have left?",
+     "from": "tom has 6 pears. tom eats 1. how many pears does tom have left?",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#101",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "to be human, then call yourself Anna",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": {
+     "text": "Call yourself Anna.",
+     "from": "Call yourself Pixel.",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#103",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have a 14-lei. A kite costs 4 lei. How much money do I have left after buying 3 kites?",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "I have 14 lei. A kite costs 4 lei. How much money will I have left after buying 3 kites?",
+     "from": "I have 10 lei. A kite costs 4 lei. How much money will I have left after buying 2 kites?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#106",
+    "cls": "other single paraphrase",
+    "world": "data.charts",
+    "text": "add bananas on 4 and make it a circle chart",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#107",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "I want to know what key there are 5 sharp",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#109",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "What kind of chord is C E G",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 1,
+    "original_right": true,
+    "chosen": {
+     "text": "What chord is C E G?",
+     "from": "What chord is C E G?",
+     "source": "tests.sop",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#114",
+    "cls": "arithmetic or time question in loose wording",
+    "world": "kids.arith",
+    "text": "What do I get for 10 plus 6 for myself",
+    "verdict": "rescued",
+    "rescued_at_k": true,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "What do i get for 10 plus 6",
+     "from": "what do i get for 4 plus 3",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "right"
+    }
+   },
+   {
+    "id": "rt#115",
+    "cls": "arithmetic or time question in loose wording",
+    "world": "kids.arith",
+    "text": "9 and 6 is it added?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 3,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#116",
+    "cls": "other single paraphrase",
+    "world": "geo.map",
+    "text": "One quick: what is the capital of Japan",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#117",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "um What sound does a cow make is Egypt in Africa too",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#118",
+    "cls": "animal sound question not read",
+    "world": "geo.map",
+    "text": "Is Egypt in Africa what sound a cow makes also what is 20 minus 8?",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#119",
+    "cls": "animal sound question not read",
+    "world": "kids.time",
+    "text": "How many days there are in a week. What sound does a cow make and then how many legs does a spider have",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#121",
+    "cls": "other single paraphrase",
+    "world": "art.draw",
+    "text": "Put the house in 200, 300",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#123",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "Play the G's major scale",
+    "verdict": "wrong meaning (accepted, read as something else)",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": {
+     "text": "play the D major scale",
+     "from": "play the D major scale",
+     "source": "operational",
+     "rank": 0,
+     "outcome": "wrong"
+    }
+   },
+   {
+    "id": "rt#125",
+    "cls": "other single paraphrase",
+    "world": "docs.editor",
+    "text": "make the paragraph in italics",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#128",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "Give me plus eyes in the shape of",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#129",
+    "cls": "animal sound question not read",
+    "world": "kids.animals",
+    "text": "Um what sounds makes a cow, also is Egypt in Africa",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#133",
+    "cls": "word problem: currency word changed by the translation",
+    "world": "kids.shop",
+    "text": "I have 12 lions. A pencil costs 2 lei. How much money do I have left after buying 2 pencils?",
+    "verdict": "no proposal",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#135",
+    "cls": "other single paraphrase",
+    "world": "art.draw",
+    "text": "Put the house in the 200, 300",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#139",
+    "cls": "music or chess notation in loose wording",
+    "world": "media.music",
+    "text": "I want to know what key is 5 sharps",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 1,
+    "original_right": true,
+    "chosen": null
+   },
+   {
+    "id": "rt#144",
+    "cls": "other single paraphrase",
+    "world": "ui.avatar",
+    "text": "I think you're looking better with your square eye",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": false,
+    "chosen": null
+   },
+   {
+    "id": "rt#145",
+    "cls": "other single paraphrase",
+    "world": "kids.time",
+    "text": "What is the day after tomorrow if it's Monday today",
+    "verdict": "all proposals rejected by the checker",
+    "rescued_at_k": false,
+    "checker_rejected_would_be_right": 0,
+    "original_right": true,
+    "chosen": null
+   }
+  ]
+ }
+}

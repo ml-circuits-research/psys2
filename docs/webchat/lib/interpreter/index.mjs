@@ -13,7 +13,7 @@
  *  - `ctx.worlds()` lists the loaded worlds (used by the chat capability);
  *  - `ctx.emit` accepts `{_}` / `{_1}` fresh-id placeholders like pattern emit templates.
  */
-import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
+import { guard, TurnAborted } from '../formalizer/guard.mjs?v=f0c7a6e6b5';
 import { budget, isBudgetExceeded } from '../dialog/budget.mjs?v=00bce6e369';
 import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=c57881f705';
 import { Memory, WireStore } from './memory.mjs?v=8f815b84fc';

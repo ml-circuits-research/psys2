@@ -934,3 +934,15 @@ export function summary(ctx) {
   if (!n) return 'The game has not started yet: it is white to move.';
   return `The chess game has ${n} ${n === 1 ? 'move' : 'moves'} so far${s.status === 'playing' ? `, and it is ${s.turn} to move` : `, and it is over (${s.reason ?? s.result})`}.`;
 }
+
+// ---- the declared schema (schema.sop, declare=yes): the legal moves of the user, said as `sayMove` says them (the words the world reads)
+import { declaredExecutor } from '../acts/acts.mjs';
+import { SCHEMA } from './schema.declared.mjs';
+export const executor = declaredExecutor(SCHEMA, {
+  sampleKnowledge: ({ state }) => {
+    const s = state?.fen ? state : initialState();
+    if (s.status !== 'playing' || s.turn !== s.user || s.pendingEngine) return { moves: [] };
+    const say = (m) => cap1(sayMove(m)) + '.';
+    return { moves: [...new Set(new Chess(s.fen).moves({ verbose: true }).map(say))] };
+  },
+});

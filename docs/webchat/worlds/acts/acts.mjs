@@ -90,7 +90,7 @@ export function parseSchema(wires) {
   const sw = wires.find((w) => w.type === 'acts.schema');
   if (!sw) throw new Error('schema.sop has no acts.schema wire');
   const flags = Object.fromEntries(['self', 'dir', 'be', 'has', 'bare', 'name', 'layout', 'rel', 'thingask', 'matrix', 'reader', 'tabUndo', 'claim', 'signal', 'opencolour', ...FLAGS_MORE, ...FLAGS_DATA].filter((f) => yes(val(sw, f))).map((f) => [f, true]));
-  const schema = { id: sw.id, noun: val(sw, 'noun') ?? sw.id, acts: new Set(vals(sw, 'acts')), limits: { items: 100, history: 30, ...Object.fromEntries(sw.entries.filter((e) => e.key.startsWith('limit.')).map((e) => [e.key.slice(6), Number(e.value.v)])) }, kinds: {}, attrs: {}, doc: val(sw, 'doc') ?? '', tabOnly: val(sw, 'tabOnly') === 'yes' };
+  const schema = { id: sw.id, noun: val(sw, 'noun') ?? sw.id, acts: new Set(vals(sw, 'acts')), limits: { items: 100, history: 30, ...Object.fromEntries(sw.entries.filter((e) => e.key.startsWith('limit.')).map((e) => [e.key.slice(6), Number(e.value.v)])) }, kinds: {}, attrs: {}, doc: val(sw, 'doc') ?? '', tabOnly: val(sw, 'tabOnly') === 'yes', ...(val(sw, 'declare') === 'yes' ? { declared: true } : {}) };   // declare=yes: a DECLARATION ONLY (spec 21 section 6, spec 25): the world keeps its own patterns and operations; the schema serves the dice, the example chips and the action buttons
   for (const a of schema.acts) if (!Object.hasOwn(ACTS, a)) throw new Error(`unknown act '${a}' in ${sw.id}`);
   if (Object.keys(flags).length) schema.flags = flags;   // self: the world is a character ("yourself"); dir: direction words for place; be: "be / look X"; has: "do you have X"; bare: a bare thing is a request
   if (val(sw, 'boost')) schema.boost = Number(val(sw, 'boost'));
@@ -204,6 +204,15 @@ export function generate(schema, ns, actsUrl = '../acts/acts.mjs', isCanon = () 
 }
 export const serializeSchema = (s) => ({ ...s, acts: [...s.acts] });
 export const deserializeSchema = (j) => ({ ...j, acts: new Set(j.acts) });
+/**
+ * The executor of a DECLARED schema (`declare=yes`): no acts are run (the world keeps its own operations), it only states what the sampler needs (spec 25): the schema, the things of the
+ * session (`hooks.referents(ctx)`, default none) and the knowledge lists (`hooks.sampleKnowledge(ctx)`: whole sentences read from the world's own state).
+ */
+export const declaredExecutor = (json, hooks = {}) => ({
+  schema: deserializeSchema(json),
+  referents: (ctx) => { try { return hooks.referents?.(ctx) ?? []; } catch { return []; } },
+  sampleKnowledge: (ctx) => { try { return hooks.sampleKnowledge?.(ctx) ?? {}; } catch { return {}; } },
+});
 
 /** Help examples of a world, one per form it has (the canonical examples of its generated patterns). */
 /** The example of a form for this world: the forms are written about tables; `sample=<kind>` says which kind a world uses in its examples. */

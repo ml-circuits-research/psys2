@@ -200,7 +200,7 @@ export function engineSampler(lib, engine, session) {
       const lists = {};
       try { const readable = new Set(colourLexiconWords()); lists.colours = [...colourWordSet()].filter((c) => readable.has(c)); }   // the colours the readers take as colour words (not "cherry", a fruit)
       catch { /* no colours: the schema's own */ }
-      try { Object.assign(lists, schemaWorld(id)?.sampleKnowledge?.({ state: session().state(id) ?? {}, knowledge: engine.knowledge }) ?? {}); } catch { /* the world's lists are optional */ }
+      try { Object.assign(lists, schemaWorld(id)?.sampleKnowledge?.({ state: session().state(id) ?? {}, knowledge: engine.knowledge, world: engine.set.get(id) }) ?? {}); } catch { /* the world's lists are optional */ }
       return lists;
     },
     thingsOf: (id) => {

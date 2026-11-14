@@ -4,6 +4,7 @@
  * Browser-safe: no `node:*` imports.
  *
  * `DialogSession.send` installs a guard for the outermost send of a turn (`guard.install({ signal, hardMs, softMs })`).
+ * `install` takes an optional `clock` (a function returning milliseconds; default performance.now) so tests can run a turn on a fake clock.
  * Every stage of the pipeline then calls
  *   guard.check(stage)   throws TurnAborted when the signal fired or the hard deadline passed (sticky: once tripped, every check throws);
  *   guard.soft()         true when the turn is aborted (stopped or hard deadline; no clock of its own): loops that search for a better reading stop and
@@ -37,9 +38,9 @@ export const guard = {
    * or null when it joined the guard in place. `force` replaces the guard in place (a host turn with its own signal and deadline).
    * The caller of a non-null token must `release(token)`.
    */
-  install({ signal = null, hardMs = Infinity, softMs = Infinity, t0 = now(), force = false } = {}) {
+  install({ signal = null, hardMs = Infinity, softMs = Infinity, clock = now, t0 = clock(), force = false } = {}) {
     if (cur && !force) return null;
-    cur = { signal, hardAt: t0 + hardMs, softAt: t0 + softMs, stage: 'start', tripped: null, trippedStage: null, waiters: new Set() };
+    cur = { clock, signal, hardAt: t0 + hardMs, softAt: t0 + softMs, stage: 'start', tripped: null, trippedStage: null, waiters: new Set() };
     return cur;
   },
   /** Releases the guard of `token` (a no-op when another guard replaced it in the meantime: a stale turn must not release the new turn's guard). */
@@ -56,7 +57,7 @@ export const guard = {
     if (stage) c.stage = stage;
     if (!c.tripped) {
       if (c.signal?.aborted) c.tripped = c.signal.reason?.name === 'TimeoutError' ? 'timeout' : 'stopped';
-      else if (now() > c.hardAt) c.tripped = 'timeout';
+      else if (c.clock() > c.hardAt) c.tripped = 'timeout';
       if (c.tripped) c.trippedStage = c.stage;
     }
     if (c.tripped) throw new TurnAborted(c.tripped, c.trippedStage);
@@ -68,7 +69,7 @@ export const guard = {
     return !!c.tripped || !!c.signal?.aborted;   // never the clock: what a search loop keeps must not depend on machine speed (step budgets bound the work)
   },
   /** Remaining milliseconds until the hard deadline (Infinity outside a turn). */
-  remaining() { return cur ? cur.hardAt - now() : Infinity; },
+  remaining() { return cur ? cur.hardAt - cur.clock() : Infinity; },
   /** `promise` settles with the first of: its own outcome, the abort signal, the hard deadline. */
   abortable(promise, stage) {
     const c = cur;
@@ -82,7 +83,7 @@ export const guard = {
       c.waiters.add(cleanup);
       if (c.signal?.aborted) return onAbort();
       c.signal?.addEventListener?.('abort', onAbort, { once: true });
-      if (Number.isFinite(c.hardAt)) timer = setTimeout(() => fail('timeout'), Math.max(0, c.hardAt - now()));
+      if (Number.isFinite(c.hardAt)) timer = setTimeout(() => fail('timeout'), Math.max(0, c.hardAt - c.clock()));
       Promise.resolve(promise).then((v) => { cleanup(); resolve(v); }, (e) => { cleanup(); reject(e); });
     });
   },
