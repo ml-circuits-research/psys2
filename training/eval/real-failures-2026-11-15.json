@@ -342,7 +342,7 @@
     {
      "text": "create a diagram",
      "tab": "diagram",
-     "happened": "I drew a random mind map diagram with seven shapes. It is about beagle. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:sha"
+     "happened": "I drew a random tree diagram with nine shapes. It is about Canada. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:shapes.l"
     },
     {
      "text": "add a box",

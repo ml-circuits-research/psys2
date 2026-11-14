@@ -9,45 +9,46 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
+import { reviewForeign } from './foreign-reading.mjs?v=6359cdf945';
 import { installTextGen } from './textgen.mjs?v=c5b4f3a539';
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=4426ef371b';
-import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=30e904a4da';
-import { validateWorldSet } from '../worlds/validate.mjs?v=f8d7edb820';
-import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=4426ef371b';
-import { createInterpreter } from '../interpreter/index.mjs?v=11de5d0957';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=4b583c611f';
+import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=49bebb37ba';
+import { validateWorldSet } from '../worlds/validate.mjs?v=03047c41f7';
+import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=4b583c611f';
+import { createInterpreter } from '../interpreter/index.mjs?v=66f693ce3d';
 import { createReasoner } from '../reasoner/index.mjs?v=40652bed1f';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=3a4dce838f';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=dd1c99b98e';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=4ccea2d3b2';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=c15f0afbf6';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=41e7c944b4';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=abd2fb76d3';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=0d561bcbe0';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=2517739c78';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=2711a43136';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=1794f7417d';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=4426ef371b';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=4b583c611f';
 import { lexIndex } from '../worlds/lexicon.mjs?v=c39cd0a3df';
 import { perf } from '../formalizer/perf.mjs?v=b81e032a17';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=82a55329d9';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=ff8a32e83d';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=c6e777e46f';
-import { checkValues } from './value-check.mjs?v=0b1e4a0a04';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=ac8d967cdd';
+import { checkValues } from './value-check.mjs?v=6652372364';
 import { attachValues } from '../knowledge/values.mjs?v=a137742733';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=d99ff8a97b';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=cf4f1fcab5';
-import { Discourse } from './discourse.mjs?v=206132d65a';
-import { Dialogue } from './dialogue.mjs?v=7f2dcbd129';
+import { Discourse } from './discourse.mjs?v=9bcf61d3a8';
+import { Dialogue } from './dialogue.mjs?v=6995d397f8';
 import { turnSteps } from './steps.mjs?v=44af51b084';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=7d650c59d9';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=634f8bf3c8';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=37e63aae52';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=fd2c5383e5';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=6010e50c2d';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=33b89e903d';
 import { proposeByTypes } from './typed-reader.mjs?v=7812db5b24';
-import { withVariants } from './variants.mjs?v=495b631f3b';
-import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=4426ef371b';
-import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=4426ef371b';
-import { repairFromScene } from './scene-referents.mjs?v=4169ce12be';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=132aebf41c';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=61e3713844';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=f76f52152a';
+import { withVariants } from './variants.mjs?v=ab00515a8d';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=4b583c611f';
+import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=4b583c611f';
+import { repairFromScene } from './scene-referents.mjs?v=1656464c5a';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=a59ab71d30';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=5fe000522a';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=6021de2bd2';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=970c7b26f1';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -1556,7 +1557,8 @@ export class DialogSession {
     }
     const { wires, dispatch, encoderError } = formal;
     const waMode = normalizeWorldAware(worldAware ?? this.worldAware);
-    const segments = !icpt && !pre && !meta && waMode !== 'off' ? await reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
+    let segments = !icpt && !pre && !meta && waMode !== 'off' ? await reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
+    if (!icpt && !pre && !meta && segments.length) segments = reviewForeign(this, segments, { english: formalText });   // spec 16 section 14: a world other than the open tab's acts only on a full reading; a first-person statement is not a command
     if (this.engine.knowledge && segments.length) { try { await perf.time('knowledge', () => preloadThings(this, segments)); } catch { /* no knowledge is no change */ } }   // spec 17: the open slots of the readings, looked up before the operations run
     this._noteWorlds(segments);
     const tInterp = perf.active ? performance.now() : 0;
@@ -1647,7 +1649,9 @@ export class DialogSession {
               if (textOf(r) && !r.unknown?.length && !r.untranslatable?.length && !(translator.leftovers?.(textOf(r), lang) ?? []).length) done.push(textOf(r).trim());
             } catch { /* this example stays untranslated */ }
           }
-          exShown = done.length === ex.length ? done : ex;
+          // no machine translator to try them later (not the app's fallback chain): examples the rules cannot translate are left out, so that the not-understood line itself
+          // is shown in the user's language instead of the whole reply reverting to English (RD5: a reply is fully translated or English)
+          exShown = done.length === ex.length ? done : translator.fallbackMode?.() === 'fallback' ? ex : [];
         }
         if (exShown.length) {
           line.push(dym.length ? T(' Did you mean ', { fallback: ' You can say: ' }) : T(' For example: ', { fallback: ' You can say: ' }));

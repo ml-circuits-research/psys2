@@ -18,6 +18,7 @@
  */
 import { FUNCTION_WORDS } from '../formalizer/spell.mjs';
 import { lexIndex } from '../worlds/lexicon.mjs';
+import { tabOfWorld } from '../worlds/index.mjs';
 
 export const foreignOn = () => globalThis.process?.env?.PSYS2_FOREIGN !== 'off';
 
@@ -90,7 +91,7 @@ export function reviewForeign(dialog, segments, { english }) {
   const ctx = dialog.context(), set = dialog.engine.set, lang = dialog.engine.interp?.lang;
   const tabWorld = ctx.tabWorld;
   const ambient = new Set(ctx.ambientWorlds ?? []);
-  const hasTab = (id) => { const w = set.get(id); return !!(w?.tab?.id) || id === 'docs.editor'; };
+  const hasTab = (id) => !!tabOfWorld(set, id);   // a world with a tab of its own (manifest `tab=` or the built-in tab table)
   let named = null;
   const isNamed = (id) => (named ??= dialog._worldsNamedIn?.(english) ?? new Set()).has(id);
   const out = [];
