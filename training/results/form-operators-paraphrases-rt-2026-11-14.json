@@ -1,0 +1,863 @@
+{
+ "pairs": 85,
+ "train": 61,
+ "heldOut": 24,
+ "source": "paraphrases-rt",
+ "coverage": {
+  "pairs": 61,
+  "operators": 60,
+  "at80": 48,
+  "at95": 57
+ },
+ "unaligned": 0,
+ "operators": [
+  {
+   "name": "op1",
+   "from": "{x1} {x2} {x3}",
+   "to": "{x2} {x1} {x3}",
+   "support": 2,
+   "heldOut": {
+    "pass": 0,
+    "of": 23
+   },
+   "admitted": true,
+   "examples": [
+    "plums divide by two",
+    "One quick: what is the capital of Japan"
+   ]
+  },
+  {
+   "name": "op2",
+   "from": "the {x1} of the {x2} {x3}",
+   "to": "{x2} {x1} {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "The color of the body should be red"
+   ]
+  },
+  {
+   "name": "op3",
+   "from": "wearing {x1}",
+   "to": "wear {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Wearing a hat"
+   ]
+  },
+  {
+   "name": "op4",
+   "from": "{x1} much is {x2} {x3} of {x4} to do",
+   "to": "{x1} many {x4} are {x2} to-do {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "How much is left on my list of things to do"
+   ]
+  },
+  {
+   "name": "op5",
+   "from": "thank you the {x1}",
+   "to": "thanks {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Thank you, the bye"
+   ]
+  },
+  {
+   "name": "op6",
+   "from": "{x1} upsides",
+   "to": "{x1} up",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Move the house upsides"
+   ]
+  },
+  {
+   "name": "op7",
+   "from": "{x1} {x2} {x3} {x4} {x5}",
+   "to": "{x2} {x1} {x3} {x5} {x4}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 21
+   },
+   "admitted": false,
+   "examples": [
+    "Blue house and red tree"
+   ]
+  },
+  {
+   "name": "op8",
+   "from": "{x1} did {x2} leave",
+   "to": "{x1} does {x2} have left",
+   "support": 1,
+   "heldOut": {
+    "pass": 1,
+    "of": 1
+   },
+   "admitted": true,
+   "examples": [
+    "Zoe has 14 marbles. Zoe eats 8. How many marbles did Zoe leave?"
+   ]
+  },
+  {
+   "name": "op9",
+   "from": "{x1} a {x2} makes {x3}",
+   "to": "{x1} {x2} does {x3} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Hey what a sound makes a cow"
+   ]
+  },
+  {
+   "name": "op10",
+   "from": "{x1} she {x2} she {x3} buying {x4}",
+   "to": "{x1} lei {x2} lei {x3} i buy {x4}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I Have 12 She. A pencil costs 2 she. How much money do I have left after buying 2 pencils?"
+   ]
+  },
+  {
+   "name": "op11",
+   "from": "{x1} she {x2} {x3}",
+   "to": "{x1} lei {x2} lei {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I Have 14 She. A kite costs 4. How much money do I have left after I buy 3 kites?"
+   ]
+  },
+  {
+   "name": "op12",
+   "from": "{x1} her {x2} she {x3} what is {x4}",
+   "to": "{x1} lei {x2} lei {x3} whats {x4}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "A ball costs 5 her. if I give 17 she for a ball what is my change"
+   ]
+  },
+  {
+   "name": "op13",
+   "from": "{x1} main {x2} {x3}",
+   "to": "{x1} {x3} major {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Play the main scale G"
+   ]
+  },
+  {
+   "name": "op14",
+   "from": "going {x1}",
+   "to": "go {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Going back"
+   ]
+  },
+  {
+   "name": "op15",
+   "from": "{x1} in {x2}",
+   "to": "{x1} {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 3
+   },
+   "admitted": false,
+   "examples": [
+    "make the last paragraph in bold"
+   ]
+  },
+  {
+   "name": "op16",
+   "from": "{x1} bulbs {x2} bulbs {x3}",
+   "to": "{x1} pears {x2} pears {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Zoe has 4 bulbs. Zoe buys 1 more. How many bulbs does Zoe have?"
+   ]
+  },
+  {
+   "name": "op17",
+   "from": "{x1} of {x2}",
+   "to": "{x1} to {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 2
+   },
+   "admitted": false,
+   "examples": [
+    "Knight of c3"
+   ]
+  },
+  {
+   "name": "op18",
+   "from": "{x1} got {x2} bored {x3} rents {x4}",
+   "to": "{x1} have {x2} lei a {x3} lei {x4}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I got 12 bored. Pencil costs 2 rents. How much money do I have left after I buy 2 pencils?"
+   ]
+  },
+  {
+   "name": "op19",
+   "from": "{x1} rented {x2} sorry {x3} what {x4}",
+   "to": "{x1} lei {x2} lei {x3} whats {x4}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "A ball costs 5 rented. if I give 17 sorry for a ball what my change"
+   ]
+  },
+  {
+   "name": "op20",
+   "from": "{x1} makes {x2}",
+   "to": "{x1} do {x2} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 1
+   },
+   "admitted": false,
+   "examples": [
+    "Please, what makes red and yellow"
+   ]
+  },
+  {
+   "name": "op21",
+   "from": "{x1} cord {x2}",
+   "to": "{x1} chord {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "What Cord is C E G"
+   ]
+  },
+  {
+   "name": "op22",
+   "from": "{x1} anything",
+   "to": "{x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Why didn't you understand anything?"
+   ]
+  },
+  {
+   "name": "op23",
+   "from": "{x1} subhead {x2}",
+   "to": "{x1} subheading {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Add a subhead details"
+   ]
+  },
+  {
+   "name": "op24",
+   "from": "{x1} {x2}",
+   "to": "{x2} {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 24
+   },
+   "admitted": false,
+   "examples": [
+    "4 and 8 add"
+   ]
+  },
+  {
+   "name": "op25",
+   "from": "{x1} makes {x2}",
+   "to": "{x1} does {x2} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 1
+   },
+   "admitted": false,
+   "examples": [
+    "Hey, what sound makes a cow"
+   ]
+  },
+  {
+   "name": "op26",
+   "from": "{x1} is {x2} noise {x3} {x4} {x5} has {x6}",
+   "to": "{x1} are {x2} sound {x3} {x5} {x4} does {x6} have",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "How many days is in a week. what noise does a cow make and how many legs then has a spider"
+   ]
+  },
+  {
+   "name": "op27",
+   "from": "knights of {x1}",
+   "to": "knight to {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Knights of c3"
+   ]
+  },
+  {
+   "name": "op28",
+   "from": "scratching {x1}",
+   "to": "scratch {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Scratching the last thing I added"
+   ]
+  },
+  {
+   "name": "op29",
+   "from": "{x1}",
+   "to": "{x1} altogether",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 24
+   },
+   "admitted": false,
+   "examples": [
+    "Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have?"
+   ]
+  },
+  {
+   "name": "op30",
+   "from": "being {x1} and {x2} calling {x3}",
+   "to": "be {x1} {x2} call {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "being a human and then calling yourself Anna"
+   ]
+  },
+  {
+   "name": "op31",
+   "from": "{x1} makes noise {x2} {x3}",
+   "to": "{x1} sound does {x2} make {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Um what makes noise a cow also is Egypt in Africa"
+   ]
+  },
+  {
+   "name": "op32",
+   "from": "{x1} {x2} {x3}",
+   "to": "{x1} then {x2} is {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 24
+   },
+   "admitted": false,
+   "examples": [
+    "Um what sound does a cow make what 7 plus 5"
+   ]
+  },
+  {
+   "name": "op33",
+   "from": "{x1} makes {x2} {x3}",
+   "to": "{x1} does {x2} make {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 1
+   },
+   "admitted": false,
+   "examples": [
+    "how many days are in a week. what sound makes a cow and then how many legs does a spider have"
+   ]
+  },
+  {
+   "name": "op34",
+   "from": "{x1} slate {x2} slates {x3} have bought {x4}",
+   "to": "{x1} lei {x2} lei {x3} buy {x4}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I have 12 slate. A pencil costs 2 slates. How much money do I have left after I have bought 2 pencils?"
+   ]
+  },
+  {
+   "name": "op35",
+   "from": "clearing {x1}",
+   "to": "clear {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Clearing my shopping list"
+   ]
+  },
+  {
+   "name": "op36",
+   "from": "{x1} going",
+   "to": "go {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Red going"
+   ]
+  },
+  {
+   "name": "op37",
+   "from": "what's {x1} when it's {x2} {x3}",
+   "to": "what is {x1} if {x3} is {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "What's the day after tomorrow when it's Monday today"
+   ]
+  },
+  {
+   "name": "op38",
+   "from": "zoe's {x1} on {x2} {x3}",
+   "to": "{x2} has {x1} does zoe have {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Zoe's 14 marbles. Zoe eats 8. How many marbles on Zoe left?"
+   ]
+  },
+  {
+   "name": "op39",
+   "from": "{x1} {x2} pass {x3} the {x4} what is {x5}",
+   "to": "{x1} lei {x3} {x2} {x4} whats {x5}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "A ball costs 5 lei. if I give 17 a pass for the ball what is my change"
+   ]
+  },
+  {
+   "name": "op40",
+   "from": "{x1} makes {x2} do",
+   "to": "{x1} does {x2} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Can you what sound makes a duck do"
+   ]
+  },
+  {
+   "name": "op41",
+   "from": "{x1} another {x2} {x3}",
+   "to": "{x1} {x2} more {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Zoe has 4 pears. Zoe buys another 1. How many pears does Zoe have?"
+   ]
+  },
+  {
+   "name": "op42",
+   "from": "to {x1} {x2}",
+   "to": "{x1} a {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "to be human, then call yourself Anna"
+   ]
+  },
+  {
+   "name": "op43",
+   "from": "{x1} a 14-lei {x2} buying {x3}",
+   "to": "{x1} 14 lei {x2} i buy {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I have a 14-lei. A kite costs 4 lei. How much money do I have left after buying 3 kites?"
+   ]
+  },
+  {
+   "name": "op44",
+   "from": "{x1} there are {x2} sharp",
+   "to": "{x1} has {x2} sharps",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I want to know what key there are 5 sharp"
+   ]
+  },
+  {
+   "name": "op45",
+   "from": "{x1} the {x2}",
+   "to": "{x1} a {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 4
+   },
+   "admitted": false,
+   "examples": [
+    "Add the sun"
+   ]
+  },
+  {
+   "name": "op46",
+   "from": "{x1} myself",
+   "to": "{x1} me",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "What do I get for 10 plus 6 for myself"
+   ]
+  },
+  {
+   "name": "op47",
+   "from": "{x1} is it {x2}",
+   "to": "{x1} {x2} up",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "9 and 6 is it added?"
+   ]
+  },
+  {
+   "name": "op48",
+   "from": "{x1} {x2} too",
+   "to": "{x1} also {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "um What sound does a cow make is Egypt in Africa too"
+   ]
+  },
+  {
+   "name": "op49",
+   "from": "{x1} {x2} makes {x3}",
+   "to": "{x1} does {x2} make {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Is Egypt in Africa what sound a cow makes also what is 20 minus 8?"
+   ]
+  },
+  {
+   "name": "op50",
+   "from": "{x1} in {x2}",
+   "to": "{x1} at {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 3
+   },
+   "admitted": false,
+   "examples": [
+    "Put the house in 200, 300"
+   ]
+  },
+  {
+   "name": "op51",
+   "from": "{x1} g's {x2}",
+   "to": "{x1} g {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Play the G's major scale"
+   ]
+  },
+  {
+   "name": "op52",
+   "from": "{x1} in italics",
+   "to": "{x1} italic",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "make the paragraph in italics"
+   ]
+  },
+  {
+   "name": "op53",
+   "from": "{x1} {x2} in the shape of",
+   "to": "{x1} shaped {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Give me plus eyes in the shape of"
+   ]
+  },
+  {
+   "name": "op54",
+   "from": "{x1} sounds makes {x2} {x3}",
+   "to": "{x1} sound does {x2} make {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Um what sounds makes a cow, also is Egypt in Africa"
+   ]
+  },
+  {
+   "name": "op55",
+   "from": "{x1} lions {x2} buying {x3}",
+   "to": "{x1} lei {x2} i buy {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I have 12 lions. A pencil costs 2 lei. How much money do I have left after buying 2 pencils?"
+   ]
+  },
+  {
+   "name": "op56",
+   "from": "{x1} is {x2}",
+   "to": "{x1} has {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 4
+   },
+   "admitted": false,
+   "examples": [
+    "I want to know what key is 5 sharps"
+   ]
+  },
+  {
+   "name": "op57",
+   "from": "{x1} {x2} on a {x3}",
+   "to": "{x1} the {x2} {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Play G on a major scale"
+   ]
+  },
+  {
+   "name": "op58",
+   "from": "{x1}",
+   "to": "the {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 24
+   },
+   "admitted": false,
+   "examples": [
+    "Tempo is too slow."
+   ]
+  },
+  {
+   "name": "op59",
+   "from": "{x1} you're looking {x2} your {x3} eye",
+   "to": "{x1} you would look {x2} {x3} eyes",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I think you're looking better with your square eye"
+   ]
+  },
+  {
+   "name": "op60",
+   "from": "{x1} it's {x2} {x3}",
+   "to": "{x1} {x3} is {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "What is the day after tomorrow if it's Monday today"
+   ]
+  }
+ ],
+ "admitted": 2,
+ "step": {
+  "heldOutPairsWithAskFrame": 3,
+  "readAlone": 2,
+  "readWithOperators": 2,
+  "readOnlyThroughOperators": 0
+ }
+}

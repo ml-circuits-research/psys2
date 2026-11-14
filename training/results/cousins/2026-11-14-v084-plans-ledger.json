@@ -1,0 +1,225 @@
+{
+ "both": true,
+ "runs": [
+  {
+   "reasoner": "ops",
+   "library": "vendored",
+   "degree": 3,
+   "facts": "k.animals",
+   "cases": 9,
+   "perCase": [
+    {
+     "text": "draw a king on the throne",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "build a house from parts",
+     "frame": {
+      "is": "find",
+      "key": "habitat",
+      "of": null
+     },
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "make a chart of the animals I drew",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "put the things from the drawing into a document",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "put a scarf on the girl",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "draw a queen with a crown",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "make a family photo",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "draw a table setting for four",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "put the house and the tree together as a village",
+     "frame": {
+      "is": "find",
+      "key": "habitat",
+      "of": null
+     },
+     "generated": 0,
+     "valid": 0
+    }
+   ],
+   "skippedWorlds": [],
+   "noFrame": [
+    {
+     "id": null,
+     "text": "draw a king on the throne",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    },
+    {
+     "id": null,
+     "text": "make a chart of the animals I drew",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    },
+    {
+     "id": null,
+     "text": "put the things from the drawing into a document",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    },
+    {
+     "id": null,
+     "text": "put a scarf on the girl",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    },
+    {
+     "id": null,
+     "text": "draw a queen with a crown",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    },
+    {
+     "id": null,
+     "text": "make a family photo",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    },
+    {
+     "id": null,
+     "text": "draw a table setting for four",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    }
+   ],
+   "rows": []
+  },
+  {
+   "reasoner": "matrix",
+   "library": "vendored",
+   "degree": 3,
+   "facts": "k.animals",
+   "cases": 9,
+   "perCase": [
+    {
+     "text": "draw a king on the throne",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "build a house from parts",
+     "frame": {
+      "is": "find",
+      "key": "habitat",
+      "of": null
+     },
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "make a chart of the animals I drew",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "put the things from the drawing into a document",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "put a scarf on the girl",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "draw a queen with a crown",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "make a family photo",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "draw a table setting for four",
+     "frame": null,
+     "generated": 0,
+     "valid": 0
+    },
+    {
+     "text": "put the house and the tree together as a village",
+     "frame": {
+      "is": "find",
+      "key": "habitat",
+      "of": null
+     },
+     "generated": 0,
+     "valid": 0
+    }
+   ],
+   "skippedWorlds": [],
+   "noFrame": [
+    {
+     "id": null,
+     "text": "draw a king on the throne",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    },
+    {
+     "id": null,
+     "text": "make a chart of the animals I drew",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    },
+    {
+     "id": null,
+     "text": "put the things from the drawing into a document",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    },
+    {
+     "id": null,
+     "text": "put a scarf on the girl",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    },
+    {
+     "id": null,
+     "text": "draw a queen with a crown",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    },
+    {
+     "id": null,
+     "text": "make a family photo",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    },
+    {
+     "id": null,
+     "text": "draw a table setting for four",
+     "why": "no typed frame: readByTypes does not read the sentence in this world"
+    }
+   ],
+   "rows": []
+  }
+ ]
+}

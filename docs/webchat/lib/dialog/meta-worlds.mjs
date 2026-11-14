@@ -62,7 +62,7 @@ export const DEFAULT_PRIOR = Object.freeze({ max: 60, min: 8, span: 45 });
 export async function loadMetaWorlds(set, { lib = null, priorWeight = DEFAULT_PRIOR } = {}) {
   const w = set.get('meta.worlds');
   if (!w?.raw?.legend || !w.raw.kb || !w.raw.matrix) return null;
-  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=0f9769b0bd');
+  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=f356067868');
   const base = new lib.World({});
   for (const [what, text] of [['legend', w.raw.legend], ['kb', w.raw.kb], ['matrix', w.raw.matrix]]) {
     const r = base.load(text);

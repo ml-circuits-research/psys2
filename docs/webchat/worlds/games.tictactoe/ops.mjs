@@ -252,7 +252,7 @@ export function undo(ctx) {
 }
 
 // ---- the declared schema (schema.sop, declare=yes): the dice, the example chips and the action buttons read the moves that are legal now, from the board
-import { declaredExecutor } from '../acts/acts.mjs?v=375ef91ba0';
+import { declaredExecutor } from '../acts/acts.mjs?v=24119144eb';
 import { SCHEMA } from './schema.declared.mjs?v=ac4a32aa44';
 export const executor = declaredExecutor(SCHEMA, {
   sampleKnowledge: ({ state }) => {
