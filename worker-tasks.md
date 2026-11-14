@@ -4227,3 +4227,13 @@ Reviewer ran `npm run test:smoke` on 7874bb7c: 90/90 pass, exit 0. Accepted: cou
 ## Reviewer 2026-11-15 00:05 — vendor 0.80/0.84 and first learnRules/learnFormOperators runs accepted
 
 Reviewer ran `npm run test:smoke` on 3b3181f3: 90/90 pass, exit 0. Accepted: honest negative results (0 rules admitted; 242 operators for 407 pairs, 0 gained). Forwarded to the library: operators must be learned over types, not surface words; learnRules slot/over-generality bugs; composition quality (repeats, metadata narrated, attribute phrasing). Next: rerun both when the library fixes them; the injected clock; the slowest-tests report.
+
+## Reviewer 2026-11-15 00:50 — PSys2 work that does not wait for the library (owner, 17:10: DGX says it has nothing to do)
+
+General mechanisms go to sopworld; PSys2 wires, thins and measures. In order:
+1. **Thinning audit (hand-over):** list every host module that is general (not UI, not this app's rendering): the typed-reader step, the sampler adapter's realise templates, `renderFrames`, the composer's world builder, compose/summary adapters' glue, src/lang/* helpers, value lists, cousins host helpers. For each: (a) delete it if the vendored library (0.89) already does it — do so now; (b) else write a [LIB] hand-over item (what, why general, its tests) in questions.md. Report lines removed and what was handed over.
+2. **Measure 0.89's typed operators now**: vendor 0.89; with `liftTokens` + `learnFormOperators({ world })` on form-pairs.jsonl, apply the admitted operators as a normalisation step before reading (behind `PSYS2_FORMOPS=on`), measure paraphrases-rt, cousins-real (with 0.88's per-clause judge) and schema-alone, on and off. This is the first possible generalisation signal; report it whatever it shows.
+3. **Q13 again with the new Romanian knowledge**: w.lang.ro now has 3,466 UniMorph-derived lemmas (19ca312) and the article (8741e52); re-measure the grammar path on ro-en-meaning (meaning kept, not words) and wire Romanian replies with the article where the grammar path answers.
+4. **Live demo check** in Chrome (the reviewer cannot reach github.io): the five composition types from the Documents form, the dice with the catalog route (art.draw objects from the catalog), the avatar popup on a phone viewport; screenshots in the landing note.
+5. **Latency**: the vendored library grew (623 → 814 KB); measure boot (requests/bytes/time) and turn latency p50/p95 on 100 operational messages before/after 0.89; anything slower than this morning by > 20 % goes to the library as a [LIB] performance item.
+6. Held-out real messages: still empty — the reviewer has asked the owner for a phrase-log export; ingest it when it comes.
