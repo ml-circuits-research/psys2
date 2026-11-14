@@ -1,5 +1,5 @@
 {
-  "version": "ef082da5b0",
+  "version": "4ca5eed1ec",
   "worlds": [
     "acts",
     "art.draw",
@@ -72,7 +72,7 @@
     "lib/dialog/encoder-dispatch.mjs": "09569f6be1ec8410",
     "lib/dialog/followup.mjs": "a0ef77d024f0e067",
     "lib/dialog/form-operators.mjs": "6f0035cdf57d4500",
-    "lib/dialog/index.mjs": "f83266c8c0f056ad",
+    "lib/dialog/index.mjs": "4887ca8aeb193fb7",
     "lib/dialog/knowledge-lookup.mjs": "d2c11cfe7ea6e749",
     "lib/dialog/meta-worlds.mjs": "507d6fc9e058c46e",
     "lib/dialog/meta.mjs": "5314f650e6529b5d",
@@ -84,7 +84,7 @@
     "lib/dialog/scene-referents.mjs": "0b447143c2e991c8",
     "lib/dialog/steps.mjs": "d202d74cf9aae3df",
     "lib/dialog/symbolic-router.mjs": "778df3bee5fcada8",
-    "lib/dialog/test-runner.mjs": "3871af0ce1a3894d",
+    "lib/dialog/test-runner.mjs": "f95238b734d04941",
     "lib/dialog/textgen.mjs": "41052e8d9b9fcfac",
     "lib/dialog/time-limits.mjs": "1709dafdeaa245d3",
     "lib/dialog/typed-reader.mjs": "dd4aa6e941dc9fef",
@@ -800,8 +800,8 @@
     "worlds/words/zo.json": "3761b1887d22fef8",
     "worlds/words.bloom.json": "e6e3b4bec7f87e94"
   },
-  "builtAt": "2026-11-14T17:14:49.482Z",
-  "commit": "89839a48",
+  "builtAt": "2026-11-14T18:31:35.975Z",
+  "commit": "16f4e7a0-dirty",
   "assets": {
     "app.mjs": "5f0d043632",
     "coverage-grid.json": "dc56813858",
@@ -826,7 +826,7 @@
     "lib/dialog/encoder-dispatch.mjs": "486a0e443b",
     "lib/dialog/followup.mjs": "88af56c068",
     "lib/dialog/form-operators.mjs": "4807498111",
-    "lib/dialog/index.mjs": "0dd6a03f2d",
+    "lib/dialog/index.mjs": "3b026b2d94",
     "lib/dialog/knowledge-lookup.mjs": "15c9e71851",
     "lib/dialog/meta-worlds.mjs": "c3c84220ce",
     "lib/dialog/meta.mjs": "aa6dfcad14",
@@ -838,7 +838,7 @@
     "lib/dialog/scene-referents.mjs": "edd4fbba48",
     "lib/dialog/steps.mjs": "cfff076267",
     "lib/dialog/symbolic-router.mjs": "5925f8d14a",
-    "lib/dialog/test-runner.mjs": "1758180027",
+    "lib/dialog/test-runner.mjs": "635e001b3e",
     "lib/dialog/textgen.mjs": "f341e11a13",
     "lib/dialog/time-limits.mjs": "3dc818f0e6",
     "lib/dialog/typed-reader.mjs": "7812db5b24",

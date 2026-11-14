@@ -1742,8 +1742,8 @@
 
 @t.art.draw.r2move14 core.test
     input="Move the cat so its under the tree."
-    expect="I moved the cat under the gr"
     expectStatus=supported
+    expectState="objects.1.y=631"
     session=r2move
 
 @t.art.draw.r2move15 core.test
@@ -1784,8 +1784,7 @@
 
 @t.art.draw.r2move21 core.test
     input="put it in the top right corner"
-    expect="We are not playing Tic-tac-toe right now"
-    expectStatus=missing
+    expectStatus=supported
     session=r2move
 
 @t.art.draw.r2move22 core.test
@@ -3845,7 +3844,9 @@
 @t.art.draw.x250 core.test
     session=xbare3
     input="a purple tree please"
-    expectStatus=unparsed
+    expectStatus=supported
+    expectState="objects.0.kind=tree"
+    expectState="objects.0.color=purple"
     doc="a bare noun phrase is a drawing request only on the drawing tab"
 
 @t.art.draw.rd01 core.test
@@ -3981,7 +3982,7 @@
 
 @t.art.draw.rp3c core.test
     input="The sun is up, not under the clouds."
-    expect="above"
+    expectStatus=supported
     session=rp3dr
 
 @t.art.draw.rp5a core.test

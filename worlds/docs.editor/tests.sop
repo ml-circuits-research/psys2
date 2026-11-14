@@ -477,12 +477,12 @@
 
 @t.docs.editor.r05 core.test
     input="Read the 2nd paragraph"
-    expect="reading paragraph"
+    expect="Two."
     session=re1
 
 @t.docs.editor.r06 core.test
     input="second paragraph read please"
-    expect="reading paragraph"
+    expect="Two."
     session=re1
 
 @t.docs.editor.r07 core.test
@@ -775,7 +775,7 @@
 
 @t.docs.editor.sh02 core.test
     input="Type hello world. I want to delete paragraph 1."
-    expect="I deleted the first paragraph."
+    expectState="blocks.length=0"
     session=esh2
 
 @t.docs.editor.sh03 core.test

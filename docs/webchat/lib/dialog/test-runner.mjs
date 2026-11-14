@@ -34,6 +34,7 @@ export async function runWorldTests(engine, worldId) {
   const result = { worldId, total: 0, passed: 0, failed: [], skipped: [], other: [] };
   if (!world) { result.failed.push({ id: worldId, message: 'unknown world' }); return result; }
   const sessions = new Map();
+  const failedSessions = new Set();   // a session's later failing rows are followers of its first failure
   for (const t of [...world.tests].sort((a, b) => natural(a.id, b.id))) {
     if (t.reasoner && t.reasoner !== (engine.reasonerMode ?? 'matrix')) { result.other.push(t.id); continue; }   // a test of the other strategy is neither run nor counted
     result.total++;
@@ -61,10 +62,10 @@ export async function runWorldTests(engine, worldId) {
       }
       for (const name of t.expectEffect) if (!reply.effects.some((e) => e.name === name)) problems.push(`expected effect ${name}, got [${reply.effects.map((e) => e.name).join(', ')}]`);
       if (t.expectStatus && reply.statuses.at(-1) !== t.expectStatus) problems.push(`expected status ${t.expectStatus}, got ${reply.statuses.at(-1)} ("${shown}")`);
-      if (problems.length) result.failed.push({ id: t.id, message: problems.join('; ') });
+      if (problems.length) { result.failed.push({ id: t.id, message: problems.join('; '), session: t.session ?? null, follower: !!(t.session && failedSessions.has(t.session)) }); if (t.session) failedSessions.add(t.session); }
       else result.passed++;
     } catch (e) {
-      result.failed.push({ id: t.id, message: `exception: ${e.message}` });
+      result.failed.push({ id: t.id, message: `exception: ${e.message}`, session: t.session ?? null, follower: !!(t.session && failedSessions.has(t.session)) }); if (t.session) failedSessions.add(t.session);
     }
   }
   return result;
