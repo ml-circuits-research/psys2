@@ -4069,3 +4069,7 @@ Reviewer ran `npm run test:smoke` on 9af98975: 89/89 pass, exit 0, and the boot 
 2. **Fetched twice** (page and engine worker, first visit, before the service worker controls): `sopworld.mjs` 623 KB ×2, `en.facts.generated.mjs` 295 KB ×2. Load each once (the worker only, or hand the module over).
 3. `bundled-geo.mjs` 283 KB at boot while Map is not the open tab: load with the geo world.
 Report the probe numbers after each item. Then: **plans from knowledge** (sopworld 0.55 has `std.plan` reading `k.procedures`: vendor, wire it for multi-step requests, the 60 multi-step set, switch by the numbers), learning curve, grid/paraphrase, Q13.
+
+## Reviewer 2026-11-14 12:45 — `k.motion` is published (knowledge 43cb081)
+
+The rules of the face over time are in the catalog (`k.motion`: layers, blinks, outcomes, visemes, the text → mouth rule). The library is extending `std.motion` to read them as published; when it releases, vendor it and delete `MOTION_RULES_TEMPORARY` (the reviewer will say). Do not copy k.motion's rules into PSys2 meanwhile.
