@@ -653,6 +653,14 @@
     tabPriority=26
     example="Anything next to the cloud?"
 
+@pat.geo.map.make.name.place.p core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} [called|named] {value:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=geo.map.make arg.thing=\"{thing}\" arg.value=\"{value}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=20
+    tabPriority=28
+    example="Put a guest named Maria at pin."
+
 @pat.geo.map.ask.what.does core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which] {attribute:lex.geo.map.attrs} [does|do] [$acts.det]? {thing:words} [use|have|speak|got|own|call_its|spend]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=geo.map.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""

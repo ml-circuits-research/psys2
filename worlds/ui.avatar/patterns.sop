@@ -616,3 +616,11 @@
     priority=3
     tabPriority=11
     example="Glasses."
+
+@pat.ui.avatar.make.name.place.p core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} [called|named] {value:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=ui.avatar.make arg.thing=\"{thing}\" arg.value=\"{value}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=15
+    tabPriority=23
+    example="Put a guest named Maria at hat."

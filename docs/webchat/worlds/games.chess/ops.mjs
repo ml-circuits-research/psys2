@@ -936,7 +936,7 @@ export function summary(ctx) {
 }
 
 // ---- the declared schema (schema.sop, declare=yes): the legal moves of the user, said as `sayMove` says them (the words the world reads)
-import { declaredExecutor } from '../acts/acts.mjs?v=48543cb2a7';
+import { declaredExecutor } from '../acts/acts.mjs?v=0343ce7af3';
 import { SCHEMA } from './schema.declared.mjs?v=f9d8365892';
 export const executor = declaredExecutor(SCHEMA, {
   sampleKnowledge: ({ state }) => {

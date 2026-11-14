@@ -28,9 +28,9 @@ import { createEffects, EFFECT_ACTS } from './effects.mjs?v=4ceef67d39';   // so
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=061a6ba9b3';
-import { resolvePhrase } from './np-lib.mjs?v=5166e2bd76';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
-import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=e6ea6f1de7';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { en } from '../../lib/lang/en.mjs?v=1f848688df';
+import { resolvePhrase } from './np-lib.mjs?v=d99cb092e4';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
+import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=3a5eabe2ae';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------

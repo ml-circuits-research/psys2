@@ -4241,3 +4241,15 @@
     input="Keep the road."
     expect="still there as before"
     session=places1
+
+@t.art.draw.named.place.p core.test
+    session=namedplace
+    input="Put a cat named Tom in the sky."
+    expect="I drew an orange cat in the sky."
+    expectState="objects.length=1"
+
+@t.art.draw.named.place.called core.test
+    session=namedplace2
+    input="Add a cat called Tom in the sky."
+    expect="I drew an orange cat in the sky."
+    expectState="objects.length=1"
