@@ -13,7 +13,7 @@ import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42
 import * as space from '../space/space.mjs?v=f98ca4dd42';
 import { habitatSentence } from '../../lib/knowledge/commonsense.mjs?v=7fdbc6c294';
 import { colourName, numberValue } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
-import * as R from './records.mjs?v=6446c6beb3';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
+import * as R from './records.mjs?v=87050cf562';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
 
 export const MAX_CARDS = 40;
 const MAX_PARTS = 60;
