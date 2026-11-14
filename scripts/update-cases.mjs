@@ -120,7 +120,7 @@ if (sources.has('grid')) {
 
 const replayedCount = cand.length;
 if (sources.has('ledger')) {
-  for (const l of readFileSync(join(REPO, 'training/eval/failures.jsonl'), 'utf8').split('\n').filter(Boolean)) {
+  for (const l of readFileSync(arg('ledger', join(REPO, 'training/eval/failures.jsonl')), 'utf8').split('\n').filter(Boolean)) {
     const r = JSON.parse(l);
     const id = caseId(r.source, r.text, r.tab);
     if (last.has(id)) continue;   // the ledger is imported once; a replay observes the case after it (its history is kept: wrong, then right)
