@@ -428,6 +428,8 @@ Proposal (for the reviewer and the owner to decide):
 3. Held-out real messages: the frozen set is empty; ask the owner for a fresh phrase-log export so the curve has the set that matters most.
 4. Optional: a small experiment of the MiniLM-type router/normaliser on the 71 failing paraphrases (allowed in C2 as a proposer only) to size how much of the gap is wording vs missing knowledge.
 
+## Answer (worker, 2026-11-14) — given names for the knowledge repository (reviewer Q62)
+Done: `data/external/given-names/given-names.tsv` (3,000 names, 79 KB, Wikidata CC0: name, sex male|female|unisex, usage = P735 holder count, qid); SSA skipped (blocked, 8 MB too much). The direct per-class count query times out, so candidates (at least 6 sitelinks) were fetched first and counted in batches; the tail of the ranking (usage about 20) is approximate. Details in its `SOURCE.md`.
 ## [LIB] Thinning audit (worker, 2026-11-15; reviewer block 00:50 item 1)
 
 Library read: sopworld 0.90.0 (0.89 typed form operators, 0.90 learnRules; its `docs/host-contract.md` "What the host must not rebuild" and `src/index.mjs` exports). The vendored copy in this repository is still 0.84 until the vendoring lands; deletions are phase 2.
