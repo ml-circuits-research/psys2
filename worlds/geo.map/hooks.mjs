@@ -3,12 +3,14 @@
 // operations of map.mjs (the projection and zoom fitting, the view state, the distances). The roles of an act are mapped onto those operations here; the places named in them come by lookup from
 // the catalog (places.mjs), never from a table of this world. Nothing here lists a place, a verb or a colour: kinds and attributes come from the schema, place words from the catalog vocabulary.
 import * as M from './map.mjs';
-import { knowsPlace } from '../../src/knowledge/open-words.mjs';
+import { knowsPlace, provideBundledGeo } from '../../src/knowledge/open-words.mjs';
+import { BUNDLED_GEO } from '../../src/knowledge/bundled-geo.mjs';
 import { keyOf, lookup, peekIndex } from './places.mjs';
 import * as G from './ops.mjs';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 import { ACT_VERBS } from '../../worlds/acts/acts.mjs';   // circular on purpose: only used inside functions, when the executor exists
 
+provideBundledGeo(BUNDLED_GEO);   // the open-words reader knows the bundled places once this world is loaded (LAZY-LOAD-3)
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_'’-]+/).filter(Boolean);
 const DET = /^(?:the|a|an|my|our|this|that|these|those|another|new|all|some|any)\s+/;
 const PRONOUN = /^(?:it|them|that|this|those|these|everything|all|each|every|one|ones|here|there|(?:whole|entire|complete) (?:thing|lot|map|view)|all of it|the lot)$/;   // a reference with no name: the whole of what is on the map

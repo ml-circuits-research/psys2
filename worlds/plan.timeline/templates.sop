@@ -13,8 +13,20 @@
     for=action.plan.timeline.change
     text="{note}"
 
+@tpl.plan.timeline.connect core.template
+    for=action.plan.timeline.connect
+    text="{note}"
+
+@tpl.plan.timeline.group core.template
+    for=action.plan.timeline.group
+    text="{note}"
+
 @tpl.plan.timeline.send core.template
     for=action.plan.timeline.send
+    text="{note}"
+
+@tpl.plan.timeline.pick core.template
+    for=action.plan.timeline.pick
     text="{note}"
 
 @tpl.plan.timeline.copy core.template
@@ -31,4 +43,12 @@
 
 @tpl.plan.timeline.redo core.template
     for=action.plan.timeline.redo
+    text="{note}"
+
+@tpl.plan.timeline.save core.template
+    for=action.plan.timeline.save
+    text="{note}"
+
+@tpl.plan.timeline.load core.template
+    for=action.plan.timeline.load
     text="{note}"

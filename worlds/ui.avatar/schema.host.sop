@@ -1,0 +1,53 @@
+# The host's own part of the avatar schema (truly own): what the published world schema w.face cannot say. The rest of schema.sop is generated from the catalog
+# (scripts/import-w-schema.mjs <catalog> w.face worlds/ui.avatar --id face). The effects (variants, presets, expressions, size and place) are the face logic over k.faces (hooks.mjs).
+@face acts.schema
+    noun="face"
+    hooks=hooks.mjs
+    acts=undo
+    acts=redo
+    acts=save
+    acts=load
+    acts=send
+    own=animate:avatar.animate
+    own=setName:avatar.setName
+    own=askName:avatar.askName
+    own=nameOf:avatar.nameOf
+    own=setPartUnknown:avatar.setPartUnknown
+    sample=hat
+    self=yes
+    be=yes
+    has=yes
+    dir=yes
+    bare=yes
+    name=yes
+    limit.items=40
+    limit.history=40
+
+@face.view acts.view
+    aspects=visual
+    aspects=spatial
+    word=avatar
+    word=face
+    word=robot
+
+@face.moment acts.kind
+    plural=moments
+    word=wink
+    word=nod
+    word=dance
+    word=wave
+    word=spin
+    word=jump
+    word=bounce
+    word=wiggle
+    word=blink
+
+@face.size acts.attr
+    more=bigger
+    more=larger
+    more=longer
+    more=wider
+    less=smaller
+    less=tinier
+    less=shorter
+    less=narrower

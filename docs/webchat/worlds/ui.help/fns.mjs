@@ -4,7 +4,7 @@
 // the library answers from the knowledge base (kb.sop). The library is the record: `toState` derives the state ops.mjs keeps from the wire, `adopt` says which value to
 // set for a state the operations (or the dialog layer, after a sentence it did not understand) changed, `undoWords` says what an undo took back. Browser-safe; it imports
 // its sibling ops.mjs for the initial state.
-import { initialState } from './ops.mjs?v=d7c1d8827a';
+import { initialState } from './ops.mjs?v=b403960299';
 
 const dec = (t) => (typeof t === 'string' && t.startsWith('"') ? JSON.parse(t) : t);
 const str = (v) => JSON.stringify(String(v));

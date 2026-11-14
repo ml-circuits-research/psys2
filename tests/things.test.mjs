@@ -167,7 +167,7 @@ for (const reasoner of ['ops', 'matrix']) {
     tab('talk');
     await s.send('What is Monday?');
     r = await s.send('send it to the timeline');
-    assert.match(r.text, /I put moment Monday in the timeline/, r.text);
+    assert.match(r.text, /I put event Monday in the timeline/, r.text);
     await s.send('What does a bicycle look like?');
     r = await s.send('send it to the timeline');
     assert.match(r.text, /A bicycle has no time to show in the timeline/, r.text);

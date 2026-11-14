@@ -10,7 +10,7 @@
 // The schemas they need come along.
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { createCatalog } from '../src/knowledge.mjs?v=07f0da1bb8';
+import { createCatalog } from '../src/knowledge.mjs?v=0ef86832f0';
 
 const [dir, out, ...wanted] = process.argv.slice(2);
 if (!dir || !out || !wanted.length) { console.error('usage: node tools/build-bundle.mjs <catalog dir> <out.json> <word|shard|world> ...'); process.exit(1); }

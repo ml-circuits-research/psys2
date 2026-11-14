@@ -55,7 +55,7 @@ test('undo and redo belong to the diagram only while its tab is open', async () 
 });
 
 test('a sentence of another world is not taken by the diagram (typo and routing safety)', async () => {
-  assert.equal((await say(null, 'hey can u search for oven pls')).out[0].world, 'docs.reader');
+  assert.equal((await say('timeline', 'hey can u search for oven pls')).out[0].world, 'docs.reader');
   assert.notEqual((await say('robot', 'make your body green')).out[0].world, WORLD);
 });
 

@@ -1,20 +1,20 @@
 @t.ui.shell.n01 core.test
     input="Which tab am I on?"
-    expect="Avatar"
-    expectState="activeTab=robot"
+    expect="Talk"
+    expectState="activeTab=talk"
     session=s
 
 @t.ui.shell.n02 core.test
     input="Open the editor."
     expect="Editor"
     expectState="activeTab=editor"
-    expectState="previousTab=robot"
+    expectState="previousTab=talk"
     session=s
 
 @t.ui.shell.n03 core.test
     input="Go back."
-    expect="Avatar"
-    expectState="activeTab=robot"
+    expect="Talk"
+    expectState="activeTab=talk"
     expectState="previousTab=editor"
     session=s
 
@@ -128,7 +128,7 @@
 
 @t.ui.shell.n26 core.test
     input="Open the robot"
-    expectState="activeTab=robot"
+    expectState="activeTab=talk"
     session=s4
 
 @t.ui.shell.n27 core.test
@@ -173,6 +173,7 @@
     input="What day comes after Monday?"
     expectStatus=supported
     session=s10
+    given="ui.shell:activeTab=timeline"   # the Talk tab answers this from the catalog, which a test session does not load; the time words are read by the shell world
 
 @t.ui.shell.r01 core.test
     input="hangman pls"
@@ -189,12 +190,12 @@
 @t.ui.shell.r03 core.test
     input="i want the editor"
     expectState="activeTab=editor"
-    expectState="previousTab=robot"
+    expectState="previousTab=talk"
     session=rs2
 
 @t.ui.shell.r04 core.test
     input="back pls"
-    expectState="activeTab=robot"
+    expectState="activeTab=talk"
     session=rs2
 
 @t.ui.shell.r05 core.test
@@ -204,7 +205,7 @@
 
 @t.ui.shell.r06 core.test
     input="previous screen"
-    expectState="activeTab=robot"
+    expectState="activeTab=talk"
     session=rs2
 
 @t.ui.shell.r07 core.test

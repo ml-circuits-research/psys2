@@ -1,5 +1,5 @@
 // GENERATED from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand.
-import { createExecutor, deserializeSchema } from '../acts/acts.mjs?v=8aabc6df53';
+import { createExecutor, deserializeSchema } from '../acts/acts.mjs?v=2e82ece514';
 import { withView, viewOps } from '../session.things/view.mjs?v=4fceb26000';
 import { hooks } from './hooks.mjs?v=7773a53fdd';
 export * from './own.mjs?v=d8c082d2e5';

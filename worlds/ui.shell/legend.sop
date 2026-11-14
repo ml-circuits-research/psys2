@@ -7,7 +7,7 @@
 
 @ui.shell.tab core.type
     extends=core.state
-    doc="One tab of the app: robot, editor, tictactoe, guess or hangman. The world state holds activeTab, previousTab, speaker, listening, handsFree, rate and language."
+    doc="One tab of the app: talk, editor, tictactoe, guess or hangman (any tab a world declares). The world state holds activeTab, previousTab, speaker, listening, handsFree, rate and language."
     example="Open the editor."
 
 @ui.shell.tab.id core.key

@@ -4,31 +4,56 @@
 @lex.plan.timeline.kinds core.lexicon
     class=noun
     doc="Kinds of things of this world (from schema.sop)"
-    word=moment
-    word=moments
+    word=timeline
+    word=timelines
     word=event
     word=events
-    word=day
-    word=days
-    word=weekday
-    word=weekdays
-    word=month
-    word=months
-    word=season
-    word=seasons
-    word=holiday
-    word=holidays
-    word=birthday
-    word=birthdays
+    word=milestone
+    word=milestones
+    word=happened
 
 @lex.plan.timeline.attrs core.lexicon
     class=modifier
     doc="Attributes (from schema.sop)"
-    word=when
-    word=year
-    word=hour
+    word=unit
+    word=counted
+    word=from
+    word=starts
+    word=start
+    word=begins
+    word=to
+    word=ends
+    word=end
+    word=title
+    word=called
+    word=at
     word=date
+    word=year
     word=time
+    word=until
+    word=till
+    word=ended
+    word=lasted
+    word=sort
+    word=kind
+    word=type
+    word=about
+    word=more
+    word=certain
+    word=sure
+    word=exact
+
+@lex.plan.timeline.values core.lexicon
+    class=modifier
+    doc="Values the attributes take (from schema.sop; a colour attribute with no listed values takes the shared colour lexicon)"
+    word=year
+    word=month
+    word=week
+    word=day
+    word=hour
+    word=minute
+    word=on
+    word=off
 
 @lex.plan.timeline.more core.lexicon
     class=modifier

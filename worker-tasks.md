@@ -4050,3 +4050,26 @@ Checked (owner asked where the avatar's shapes come from): `facedraw.mjs` holds 
 5. Smoke + the avatar part of the quick suite at landing; screenshot of the input bar, the popup and the Talk summary after a replayed log, in the landing note.
 
 ## Reviewer 2026-11-14 11:05 — correction to 10:50 item 3 (owner, 06:38): mouth shapes come from `k.motion` only, not from a language world. The text → mouth rule is one general rule in the animation world.
+
+## Reviewer 2026-11-14 11:50 — avatar icon / Talk summary landing accepted; follow-ups
+
+Reviewer ran `npm run test:smoke` on f2ff2e48: 79/79 pass, exit 0; read the six screenshots. Accepted. Follow-ups, small:
+1. **sopworld 0.54 has `std.motion`** (pure, seeded plan + run, priorities, cancel, per-unit streams). Vendor it and make `motion.mjs` a thin call; keep `MOTION_RULES_TEMPORARY` only until `k.motion` is published (a knowledge worker is writing it now; the reviewer will say when).
+2. **Phone popup:** the description under the big face is cut off by the input bar (avatar-icon-phone-popup.png); the popup must fit above the input bar or scroll inside itself.
+3. Then continue the queue: LAZY LOADING next.
+
+## Reviewer 2026-11-14 12:05 — LEARN FROM USE stage 1 accepted (08c0dbd6)
+
+Reviewer ran `npm run test:smoke` on bb4eedf1: 86/86 pass, exit 0; read the dislike screenshot (reasons as chips under the reply). Accepted: failures kept apart, failures-only download, sending off by default, ingest freezes the held-out set first. Next, in order: the 11:50 follow-ups (vendor std.motion 0.54, phone popup clipped), then LAZY LOADING (it has waited longest; the owner reported slow loading).
+
+## Reviewer 2026-11-14 12:25 — LAZY LOADING accepted; residuals measured; std.plan is out
+
+Reviewer ran `npm run test:smoke` on 9af98975: 89/89 pass, exit 0, and the boot probe (25 s, local server, no network to the catalog in the reviewer's sandbox): **223 requests / 21.4 MB, from 366 / 31.5 MB** after BOOT-CACHE and 361 / 35.8 MB before. Accepted (with the 11:50 follow-ups and the THIN LIVE WORLDS step). What still loads at boot, by size:
+1. **onnxruntime wasm 14.5 MB = 68 % of the boot bytes** (11.7 s / 8.7 s in two runs). The rules reader is the default; measure whether the first message needs the neural dispatcher at all. If not: load it in the background after the input is enabled (or on the first message the rules cannot read), never before.
+2. **Fetched twice** (page and engine worker, first visit, before the service worker controls): `sopworld.mjs` 623 KB ×2, `en.facts.generated.mjs` 295 KB ×2. Load each once (the worker only, or hand the module over).
+3. `bundled-geo.mjs` 283 KB at boot while Map is not the open tab: load with the geo world.
+Report the probe numbers after each item. Then: **plans from knowledge** (sopworld 0.55 has `std.plan` reading `k.procedures`: vendor, wire it for multi-step requests, the 60 multi-step set, switch by the numbers), learning curve, grid/paraphrase, Q13.
+
+## Reviewer 2026-11-14 12:45 — `k.motion` is published (knowledge 43cb081)
+
+The rules of the face over time are in the catalog (`k.motion`: layers, blinks, outcomes, visemes, the text → mouth rule). The library is extending `std.motion` to read them as published; when it releases, vendor it and delete `MOTION_RULES_TEMPORARY` (the reviewer will say). Do not copy k.motion's rules into PSys2 meanwhile.

@@ -254,7 +254,7 @@ async function docFor(name, viewport, o) {
   const tag = name;
   try {
     const t = await pg.evaluate(() => ({
-      greeting: document.querySelector('.p2-msg.is-hint .p2-bubble')?.childNodes[0]?.textContent ?? '', header: document.querySelector('.p2-title span')?.textContent, title: document.title,
+      greeting: document.querySelector('.p2-msg.is-hint .p2-bubble')?.childNodes[0]?.textContent ?? '', header: document.querySelector('.p2-title span:not(.p2-head-face)')?.textContent, title: document.title,
       meta: document.querySelector('meta[name=description]')?.content,
     }));
     check(`${tag}: the greeting says neurosymbolic, in the browser, small neural models, symbolic worlds, formal rules`, /neurosymbolic assistant that runs entirely in your browser/.test(t.greeting) && /Small neural models/.test(t.greeting) && /symbolic worlds/.test(t.greeting) && /formal rules/.test(t.greeting) && !/explicit rules/.test(t.greeting), t.greeting.slice(0, 80));
@@ -368,7 +368,7 @@ async function feedbackFor(name, viewport, o) {
     check(`${tag}: up is stored in the phrase log record`, (await rec()).feedback?.vote === 'up', JSON.stringify((await rec()).feedback));
     await clickVote('down');
     const open = await pg.evaluate(() => { const f = [...document.querySelectorAll('.p2-msg.is-bot')].at(-1).querySelector('.p2-fb-form'); return { hidden: f.hidden, chips: f.querySelectorAll('.p2-fb-chip').length, ph: f.querySelector('textarea')?.placeholder, undo: !!f.querySelector('.p2-fb-undo') }; });
-    check(`${tag}: the vote changes to down and the form opens (9 reason chips, "What did you want?", undo offered)`, !open.hidden && open.chips === 9 && /What did you want/.test(open.ph) && open.undo, JSON.stringify(open));
+    check(`${tag}: the vote changes to down and the form opens (9 reason chips, "What did you expect?", undo offered)`, !open.hidden && open.chips === 9 && /What did you expect/.test(open.ph) && open.undo, JSON.stringify(open));
     await pg.evaluate(() => { const f = [...document.querySelectorAll('.p2-msg.is-bot')].at(-1).querySelector('.p2-fb-form'); f.querySelector('[data-reason="wrong-value"]').click(); });
     await pg.evaluate(() => { const f = [...document.querySelectorAll('.p2-msg.is-bot')].at(-1).querySelector('.p2-fb-form'); const t = f.querySelector('textarea'); t.value = 'green eyes'; t.dispatchEvent(new Event('change')); });
     const fb1 = (await rec()).feedback;
@@ -395,7 +395,7 @@ async function feedbackFor(name, viewport, o) {
     await pg.waitForSelector('.p2-plog-item');
     await pg.evaluate(() => { const s = document.querySelector('select[aria-label="Filter phrases"]'); s.value = 'down'; s.dispatchEvent(new Event('change')); });
     const hist = await pg.$$eval('.p2-plog-item', (e) => e.map((x) => [x.querySelector('.p2-plog-vote')?.textContent.trim(), x.textContent]));
-    check(`${tag}: history shows the down marks and the filter "Not what I wanted" keeps only those`, hist.length >= 1 && hist.every((x) => x[0] === '▼') && /wanted/.test(hist.map((x) => x[1]).join()), JSON.stringify(hist).slice(0, 200));
+    check(`${tag}: history shows the down marks and the filter "Not what I wanted" keeps only those`, hist.length >= 1 && hist.every((x) => x[0] === '▼') && /expected/.test(hist.map((x) => x[1]).join()), JSON.stringify(hist).slice(0, 200));
     const labels = await pg.$$eval('.p2-plog-actions button', (b) => b.map((x) => x.textContent));
     check(`${tag}: "Copy as text" is gone, "Export JSON" is there`, !labels.includes('Copy as text') && labels.includes('Export JSON'), labels.join('|'));
     await pg.evaluate(() => [...document.querySelectorAll('.p2-plog-actions button')].find((b) => b.textContent === 'Export JSON').click());
@@ -407,6 +407,69 @@ async function feedbackFor(name, viewport, o) {
   } finally { await c.close(); }
 }
 
+
+/** LEARN FROM USE: like / dislike on the reply of every tab, the failure filter, "Download failures only", and nothing sent while the setting is off. */
+async function failuresFor(name, viewport, o) {
+  const c = await openChat({ ...o, throttle: 1, viewport });
+  const pg = c.pg, tag = `failures ${name}`;
+  const requests = [];
+  pg.on('request', (r) => { if (/sink\.invalid/.test(r.url())) requests.push(`${r.method()} ${r.url()}`); });
+  try {
+    await pg.evaluate(() => { window.__blobs = []; const orig = URL.createObjectURL.bind(URL); URL.createObjectURL = (b) => { window.__blobs.push(b); return orig(b); }; });
+    const tabs = await pg.$$eval('[role="tablist"] .p2-tab:not(.p2-modal-tab)', (b) => b.map((x) => x.id.replace(/^p2-tab-/, '')));
+    check(`${tag}: there are tabs to try`, tabs.length >= 3, tabs.join());
+    const lacking = [];
+    for (const id of tabs) {
+      await pg.evaluate((i) => window.psys2.showTab(i), id);
+      const n0 = await pg.$$eval('.p2-msg.is-bot:not(.is-typing)', (e) => e.length);
+      await c.say('hello there');
+      const got = await pg.evaluate(() => { const m = [...document.querySelectorAll('.p2-msg.is-bot:not(.is-typing)')].at(-1); const b = [...m.querySelectorAll('.p2-fb-btn')]; return { n: document.querySelectorAll('.p2-msg.is-bot:not(.is-typing)').length, votes: b.map((x) => [x.tagName, x.dataset.vote, x.getAttribute('aria-label'), x.getAttribute('aria-pressed'), x.tabIndex]) }; });
+      if (got.n <= n0 || got.votes.length !== 2 || got.votes[0][1] !== 'up' || got.votes[1][1] !== 'down' || got.votes.some((v) => v[0] !== 'BUTTON' || !v[2] || v[3] == null || v[4] < 0)) lacking.push(`${id}: ${JSON.stringify(got)}`);
+    }
+    check(`${tag}: every reply, in every tab, has a labelled like and dislike button (keyboard reachable)`, lacking.length === 0, lacking.join(' | ').slice(0, 300));
+    // keyboard: the dislike button opens the line "what did you expect?" with Enter; a typed expectation is stored with the turn's full record
+    await pg.evaluate(() => window.psys2.showTab('draw'));
+    await c.say('draw a red house');
+    await pg.evaluate(() => [...document.querySelectorAll('.p2-msg.is-bot:not(.is-typing)')].at(-1).querySelector('.p2-fb-btn[data-vote="down"]').focus());
+    await pg.keyboard.press('Enter');
+    const form = await pg.evaluate(() => { const f = [...document.querySelectorAll('.p2-msg.is-bot')].at(-1).querySelector('.p2-fb-form'); return { hidden: f.hidden, ph: f.querySelector('textarea')?.placeholder, mic: !!f.querySelector('.p2-fb-mic') }; });
+    check(`${tag}: Enter on the dislike opens "What did you expect?"`, !form.hidden && /What did you expect/.test(form.ph), JSON.stringify(form));
+    await pg.evaluate(() => { const t = [...document.querySelectorAll('.p2-msg.is-bot')].at(-1).querySelector('.p2-fb-wanted'); t.value = 'a blue house'; t.dispatchEvent(new Event('change')); });
+    const rec = (i = -1) => pg.evaluate((i) => { const a = JSON.parse(localStorage.getItem('psys2.webchat.phrases') ?? '[]'); return a.at(i) ?? null; }, i);
+    const r = await rec();
+    check(`${tag}: the expectation is stored with the turn's full record (reading, tab, reply, changes)`, r.feedback?.vote === 'down' && r.feedback.wanted === 'a blue house' && !!r.detail?.readings?.length && r.tab === 'draw' && !!r.happened && !!r.replyOutcome, JSON.stringify({ fb: r.feedback, tab: r.tab, o: r.replyOutcome }));
+    await shot(c, o, `failures-dislike-${name}`);
+    // a message nobody reads, then a rephrasing: a failure of the second kind
+    await c.say('zorp the flibberjib');
+    await c.say('draw a tree');
+    // the history: filter and download
+    await pg.click('button[aria-label="Settings"]'); await pg.click('#p2-st-privacy'); await pg.waitForSelector('.p2-plog-item');
+    await pg.evaluate(() => { const s = document.querySelector('select[aria-label="Filter phrases"]'); s.value = 'failures'; s.dispatchEvent(new Event('change')); });
+    const items = await pg.$$eval('.p2-plog-item', (e) => e.map((x) => [x.querySelector('.p2-plog-text')?.textContent, x.querySelector('.p2-plog-fail')?.textContent ?? '']));
+    check(`${tag}: the Failures filter keeps the disliked turn and the not-understood-then-rephrased turn, each with its reason`, items.some((x) => x[0] === 'draw a red house' && /disliked/.test(x[1])) && items.some((x) => x[0] === 'zorp the flibberjib' && /rephrased/.test(x[1])) && items.every((x) => x[1]), JSON.stringify(items));
+    await shot(c, o, `failures-history-${name}`);
+    const total = await pg.evaluate(() => JSON.parse(localStorage.getItem('psys2.webchat.phrases')).length);
+    await pg.evaluate(() => [...document.querySelectorAll('.p2-plog-actions button')].find((b) => b.textContent === 'Download failures only').click());
+    const body = JSON.parse(await pg.evaluate(() => window.__blobs.at(-1).text()));
+    const fails = body.records.filter((x) => x.failure), ctx = body.records.filter((x) => x.context);
+    check(`${tag}: the download is format 3 with only failures (+ context turns, marked)`, body.format === 'psys2-phrase-log/3' && fails.length >= 2 && body.records.length === fails.length + ctx.length && body.records.length <= total && fails.every((x) => x.failure.reasons.length), `${fails.length} failures, ${ctx.length} context, ${body.records.length} of ${total} records`);
+    // sending: off by default; no request while off, not even for a manual attempt; a request only after turning it on
+    const sec = await pg.evaluate(() => { const s = document.querySelector('[data-section="send-failures"]'); return { on: s.querySelector('input[type=checkbox]').checked, text: s.textContent, send: s.querySelector('.p2-btn-text')?.disabled, preview: !!s.querySelector('details') }; });
+    check(`${tag}: "Send failures to improve the system" is off by default, says what is sent, offers a preview and a disabled "Send now"`, sec.on === false && /Send failures to improve the system/.test(sec.text) && /Only the turns that failed/.test(sec.text) && /No other history/.test(sec.text) && sec.send === true && sec.preview, JSON.stringify(sec).slice(0, 200));
+    await shot(c, o, `failures-sending-${name}`);
+    await new Promise((r2) => setTimeout(r2, 800));
+    check(`${tag}: nothing was requested while sending is off`, requests.length === 0, requests.join());
+    await pg.type('#p2-f-sendFailuresUrl', 'https://sink.invalid/in'); await pg.keyboard.press('Tab');
+    await new Promise((r2) => setTimeout(r2, 300));
+    check(`${tag}: an address alone sends nothing`, requests.length === 0, requests.join());
+    await pg.evaluate(() => { const c2 = document.querySelector('#p2-c-sendFailures'); c2.checked = true; c2.dispatchEvent(new Event('change')); });
+    await pg.waitForSelector('[data-section="send-failures"] .p2-btn-text:not([disabled])');
+    await pg.evaluate(() => document.querySelector('[data-section="send-failures"] .p2-btn-text').click());
+    await new Promise((r2) => setTimeout(r2, 800));
+    check(`${tag}: after turning it on, "Send now" makes one POST to the address (plus the browser preflight)`, requests.filter((x) => x.startsWith("POST")).length === 1, requests.join());
+    check(`${tag}: no horizontal overflow`, await pg.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  } finally { await c.close(); }
+}
 
 /** DBG: the debug view per tab in developer mode (and its zero cost when off). */
 async function debugFor(name, viewport, o) {
@@ -508,6 +571,7 @@ async function debugFor(name, viewport, o) {
 export const SCENARIOS = {
   async debug(o) { await debugFor('phone', VIEWPORTS.phone, o); await debugFor('desktop', VIEWPORTS.desktop, o); },
   async feedback(o) { await feedbackFor('phone', VIEWPORTS.phone ?? Object.values(VIEWPORTS)[0], o); await feedbackFor('desktop', VIEWPORTS.desktop ?? Object.values(VIEWPORTS).at(-1), o); },
+  async failures(o) { await failuresFor('phone', VIEWPORTS.phone, o); await failuresFor('desktop', VIEWPORTS.desktop, o); },
   async surprise(o) { for (const [name, vp] of Object.entries(VIEWPORTS)) await surpriseFor(name, vp, o); },
   async bubble(o) { for (const w of [390, 360, 320]) await bubbleFor(w, o); },
 

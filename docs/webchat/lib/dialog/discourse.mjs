@@ -14,7 +14,7 @@
  *     formalizer, restricted to the frame's world. It is accepted only when the result is fully understood there.
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
-import { restrictedSet } from '../formalizer/spell.mjs?v=5333809212';
+import { restrictedSet } from '../formalizer/spell.mjs?v=8f090882f1';
 import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=3ec9167cca';
 import { lastUnfinished } from '../astra/where.mjs?v=72e99182f4';
 import { runDiscussionCommand } from '../astra/session.mjs?v=65217ad31a';
@@ -31,7 +31,7 @@ const NO_FRAME = (w) => !w || w === 'ui.shell' || w === 'kids.common' || w === '
 /** Worlds that never count as a conversation topic and whose state changes are not "actions" (navigation, help, shared vocabulary). */
 const NO_TOPIC = new Set(['ui.shell', 'ui.help', 'kids.common', 'core']);
 /** Tabs of worlds that do not declare one in their manifest (the built-in tabs of the demo page). */
-const BUILTIN_TAB = { 'ui.avatar': 'robot', 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
+const BUILTIN_TAB = { 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
 /** First words of an utterance that is a real command or question, not a list item. */
 const UNDO = /^(?:undo|undo that|undo it|take that back|take it back|revert that|cancel that purchase)$/;
 const META_SKIP = new Set(['add', 'remove', 'delete', 'show', 'open', 'what', 'who', 'where', 'when', 'why', 'how', 'undo', 'redo', 'draw', 'play', 'tell', 'is', 'are', 'can', 'do', 'does', 'please', 'make', 'go', 'clear', 'cross', 'check']);

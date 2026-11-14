@@ -14,7 +14,7 @@ await mkdir(shots, { recursive: true });
 let bad = 0;
 const check = (name, ok, detail = '') => { if (!ok) bad++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? `  (${detail})` : ''}`); };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const VIEWPORTS = { desktop: { width: 1440, height: 900, deviceScaleFactor: 1 }, phone: { width: 390, height: 844, deviceScaleFactor: 1, isMobile: true, hasTouch: true } };
+const VIEWPORTS = { desktop: { width: 1440, height: 900, deviceScaleFactor: 1 }, phone: { width: 390, height: 844, deviceScaleFactor: 1, isMobile: true, hasTouch: true }, 'phone-small': { width: 360, height: 640, deviceScaleFactor: 1, isMobile: true, hasTouch: true } };
 
 for (const [name, viewport] of Object.entries(VIEWPORTS)) {
   const c = await openChat({ throttle: 1, viewport });
@@ -22,7 +22,7 @@ for (const [name, viewport] of Object.entries(VIEWPORTS)) {
   const tabs = await pg.$$eval('.p2-tab', (b) => b.map((x) => x.textContent.trim()));
   check(`${name}: tab order starts Talk, Drawing, Diagram; no Avatar tab`, tabs.slice(0, 3).join() === 'Talk,Drawing,Diagram' && !tabs.includes('Avatar'), tabs.join(','));
   check(`${name}: Talk is open at a fresh start`, await pg.$eval('.p2-tab[aria-selected="true"]', (b) => b.textContent.trim()) === 'Talk');
-  if (name === 'phone') {
+  if (name === 'phone' || name === 'phone-small') {
     const vis = await pg.$$eval('.p2-tab', (b) => b.slice(0, 3).map((x) => { const r = x.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth; }));
     check('phone: the first three tabs are visible without scrolling', vis.every(Boolean), vis.join());
   }
@@ -39,6 +39,10 @@ for (const [name, viewport] of Object.entries(VIEWPORTS)) {
   await sleep(500);
   check(`${name}: click opens the popup with the big face, chips and cards`, await pg.$eval('.p2-avpop', (p) => !p.hidden) && !!(await pg.$('.p2-avpop .p2-avatar-stage svg')) && (await pg.$$('.p2-avpop .p2-avatar-chip')).length >= 5 && (await pg.$$('.p2-avpop .p2-avatar-card')).length >= 1);
   await pg.screenshot({ path: path.join(shots, `${name}-popup.png`) });
+  const geo = await pg.evaluate(() => { const b = (s) => document.querySelector(s).getBoundingClientRect(), p = b('.p2-avpop'), f = b('.p2-form'), body = document.querySelector('.p2-avpop-body');
+    return { popBottom: Math.round(p.bottom), formTop: Math.round(f.top), popTop: Math.round(p.top), stage: Math.round(b('.p2-avpop .p2-avatar-stage').height), scrolls: body.scrollHeight > body.clientHeight + 1, within: p.left >= 0 && p.right <= innerWidth }; });
+  check(`${name}: the popup rests above the input bar (it never covers it) and inside the screen`, geo.popBottom <= geo.formTop && geo.popTop >= 0 && geo.within, JSON.stringify(geo));
+  check(`${name}: the big face is shown whole, and what does not fit scrolls inside the popup`, geo.stage > 100 && (await pg.$eval('.p2-avpop-body', (e) => { const cap = e.querySelector('.p2-avatar-caption'); e.scrollTop = e.scrollHeight; const r = cap.getBoundingClientRect(), pr = e.getBoundingClientRect(); return r.bottom <= pr.bottom + 1; })));
   await pg.click('.p2-avpop .p2-avatar-chip:nth-child(1)');
   await sleep(1500);
   check(`${name}: a chip in the popup is typed into the chat`, !!(await pg.$$eval('.p2-msg.is-user', (m) => m.some((x) => /look|wink/i.test(x.innerText)))));

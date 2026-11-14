@@ -125,7 +125,7 @@ export const SCENARIOS = {
       // LAZY LOADING invariants: the start fetches no vendor asset of another tab, only the bundles of the always-loaded worlds and the open tab's, no 4.6 MB index, no reading-model runtime
       const vend = s.log.map((x) => pathOf(x.url)).filter((u) => VENDOR_RE.test(u));
       check('cold: no vendor asset of a tab is fetched at start (stockfish, map shapes, tiptap, Chart.js ...)', vend.length === 0, vend.slice(0, 4).join(', '));
-      const allowed = await startSet(site, 'ui.avatar'), got = bundlesOf(s.log);
+      const allowed = await startSet(site, 'ui.avatar'); allowed.add('talk'); const got = bundlesOf(s.log);   // `talk`: the warm-up reads "hello" after the input is enabled (the greeting is the most likely first message)
       check('cold: only the bundles of the always-loaded worlds and the open tab\'s world are fetched', got.every((id) => allowed.has(id)) && got.length > 5, `fetched ${got.length}: ${got.filter((id) => !allowed.has(id)).join(', ')}`);
       check('cold: no world bundle bigger than the index (worlds/index.json is the small routing index)', s.log.filter((x) => /^\/worlds\/index\.json/.test(x.url)).every((x) => x.bytes < 60000));
       const modelRt = s.log.map((x) => pathOf(x.url)).filter((u) => /ort-wasm|\/models\/dispatcher\/model/.test(u));
@@ -170,6 +170,39 @@ export const SCENARIOS = {
       check('lazy: the popup said what loads, in plain words', popups.every(plainSentence), JSON.stringify(popups.slice(0, 5)));
       await pg.close(); s.srv.close(); await browser.close(); await rm(tmp, { recursive: true, force: true });
     } catch (e) { check('lazy: runs', false, String(e?.stack ?? e).slice(0, 400)); try { await browser.close(); } catch { /* gone */ } s.srv.close(); }
+  },
+
+  /** FIRST VISIT without a service worker (LAZY-LOAD-3), the default settings (the reading model is on): the big shared modules (sopworld 623 KB, en.facts 295 KB; the page and the
+   *  engine worker both import them) reach the server once each; the geo data (283 KB) is not fetched while Map is not the open tab; the reading model and onnxruntime are
+   *  not fetched before a message needs them: a message the rules read cleanly leaves them alone, one they cannot read asks for them. */
+  async first({ chrome } = {}) {
+    const tmp = await mkdtemp(path.join(os.tmpdir(), 'psys2-boot-'));
+    const site = path.join(tmp, 'site'); await copySite(site);
+    await cp(path.join(WEB, 'models'), path.join(site, 'models'), { recursive: true, filter: (f) => !/\.(onnx|bin|data)$/.test(f) && !/models-mt/.test(f) });   // the dispatcher's small files, so the page has a reading model to ask for (the weights themselves are not served: a request for them is counted, then fails)
+    const s = makeServer(() => site);
+    const browser = await launch(chrome);
+    try {
+      const pg = await openPage(browser, `http://localhost:${s.port()}/index.html`, { query: '?psys2nosw=1', settings: JSON.stringify({ settingsVersion: 2, normalizer: false }) });
+      await ready(pg); await settle(pg); await sleep(2500);
+      const once = (re) => s.log.filter((x) => x.status !== 404 && re.test(pathOf(x.url))).map((x) => `${x.status} ${x.url}`);
+      for (const [name, re] of [['sopworld.mjs', /\/sopworld\.mjs$/], ['en.facts.generated.mjs', /\/en\.facts\.generated\.mjs$/]]) {
+        const got = once(re);
+        check(`first: ${name} reaches the server exactly once on a first visit (no service worker)`, got.length === 1, got.join(' | ') || 'never');
+      }
+      const count = {}; for (const x of s.log.filter((r) => r.status !== 404)) count[x.url] = (count[x.url] ?? 0) + 1;
+      const twice = Object.entries(count).filter(([u, n]) => n > 1 && !/^\/(sw\.js|index\.html)?(\?.*)?$/.test(u) && !/^\/build-info\.json/.test(u)).map(([u, n]) => `${n}x ${u}`);
+      check('first: no file reaches the server twice on a first visit', twice.length === 0, twice.slice(0, 5).join(', '));
+      check('first: bundled-geo.mjs is not fetched while Map is not the open tab', once(/bundled-geo\.mjs$/).length === 0, once(/bundled-geo\.mjs$/).join(' | '));
+      const rt = () => s.log.map((x) => pathOf(x.url)).filter((u) => /ort-wasm|ort-worker\.mjs|\/models\/dispatcher\/model/.test(u));
+      check('first: the input is enabled and neither the reading model nor onnxruntime was fetched', rt().length === 0 && await pg.evaluate(() => !document.querySelector('input.p2-text')?.disabled), rt().join(', '));
+      const say = async (text) => { await pg.type('input.p2-text', text, { delay: 0 }); await pg.keyboard.press('Enter'); await pg.waitForFunction(() => !window.psys2.busy && !document.querySelector('.p2-msg.is-typing'), { timeout: 60000, polling: 100 }).catch(() => {}); await sleep(600); };
+      await say('what is 3 plus 4');
+      check('first: a message the rules read cleanly does not fetch the reading model', rt().length === 0, rt().join(', '));
+      await say('qzx vlorp wibble snarf');
+      await sleep(2500);
+      check('first: a message the rules cannot read asks for the reading model', rt().length > 0, rt().join(', ') || 'nothing');
+      await pg.close(); s.srv.close(); await browser.close(); await rm(tmp, { recursive: true, force: true });
+    } catch (e) { check('first: runs', false, String(e?.stack ?? e).slice(0, 400)); try { await browser.close(); } catch { /* gone */ } s.srv.close(); }
   },
 
   async warm({ chrome } = {}) {

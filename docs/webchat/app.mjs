@@ -29,6 +29,7 @@ import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLi
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
 import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf, exportRecord } from './ui/phrase-log.mjs';
 import { createFeedback } from './ui/feedback.mjs';
+import { failureReasons, filterFailures, toFailuresJSON, failuresFilename, createFailureSender, validEndpoint, FAILURE_REASON_TEXT } from './ui/failures.mjs';
 import { createProgress } from './ui/progress.mjs';
 import { startAssets, assetUrl, manifest as assetManifest } from './ui/assets.mjs';
 import { createEventLog, describeTarget, tapKind } from './ui/action-log.mjs';
@@ -85,6 +86,7 @@ const ICON = {
 };
 const icon = (name) => { const s = document.createElement('span'); s.className = 'p2-icon'; s.innerHTML = ICON[name]; return s; };
 const time = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+const MODEL_IDLE_MS = 30000;   // idle time before the reading model (65 MB + onnxruntime 14.5 MB) is fetched when no message needed it (LAZY-LOAD-3)
 const NORMALIZER_IDLE_MS = 30000;   // idle time before the normalizer is fetched on a fast link
 const QUIET_MS = 500;   // background work (rule compilation, warm-up, model loading) waits this long after a turn
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -276,11 +278,18 @@ export async function mountPsys2(element, options = {}) {
     showTab(id, via);
     if (tabBtns[id] && lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); }
   }
+  /** The popup rests on the input bar: its bottom is the height of the form and the footer below the chat's content (measured, since they wrap on a phone and scale with the font). */
+  function placeAvatarPopup() {
+    const c = chat.getBoundingClientRect(), f = form.getBoundingClientRect();
+    if (c.height > 0 && f.height > 0) avPop.style.setProperty('--avpop-bottom', `${Math.ceil(c.bottom - f.top) + 6}px`);
+  }
+  window.addEventListener('resize', () => { if (avatarOpen) placeAvatarPopup(); });
   /** The avatar popup: opens or closes; closing keeps the state (the avatar world and its face are untouched). */
   function openAvatar(on = !avatarOpen) {
     if (!avatarUI) return;
     avatarOpen = !!on;
     avPop.hidden = !avatarOpen; avBtn.setAttribute('aria-expanded', String(avatarOpen)); root.classList.toggle('p2-avpop-open', avatarOpen);
+    if (avatarOpen) placeAvatarPopup();
     avatarUI.setVisible(avatarOpen);
     if (avatarOpen) events.add('avatar', 'open', { zone: 'input-bar' });
   }
@@ -482,6 +491,7 @@ export async function mountPsys2(element, options = {}) {
       return { ok: false, detail: `unknown phrase log command "${what}"` };
     },
     'settings': async ({ action, tab }) => { if (action === 'close') closeSettings(); else openSettings(tab); return { ok: true }; },
+    'ui.openView': async ({ view }) => { if (view === 'avatar') openAvatar(true); return { ok: view === 'avatar' }; },   // a view that is not a tab (the avatar popup), asked for by the shell world
     'avatar.animate': async (args) => { robotUI()?.animate?.(args); return { ok: !!robotUI() }; },
     'chat.surprise': async () => {   // the voice equivalent of the die button; waits for the current turn (the one that carries this effect) to end
       let tries = 0;
@@ -746,6 +756,7 @@ export async function mountPsys2(element, options = {}) {
     // PROGRESS 5: the unreachable catalog is said once in the panel; a reply repeats the world's line only the first time
     if (OFFLINE_LINE.test(answer)) { const rest = answer.replace(OFFLINE_LINE, '').trim(); if (offlineSaid && rest) answer = rest; offlineSaid = true; }
     const notUnderstood = mode === 'voice' && (reply.statuses ?? []).length > 0 && !(reply.statuses ?? []).includes('supported') && (reply.segments ?? []).some((sg) => sg.unparsed);
+    if (!modelsStarted && ((reply.statuses ?? []).length === 0 || !(reply.statuses ?? []).includes('supported') || (reply.segments ?? []).some((sg) => sg.unparsed))) startModels();   // LAZY-LOAD-3: the rules did not read it cleanly: the reading model is wanted now
     const botMsg = addMessage('bot', answer);
     if (notUnderstood) {   // MOBILE-VOICE: repeated not-understood voice replies within 20 s are collapsed into one (the first gets a count)
       const nowT = performance.now();
@@ -917,6 +928,7 @@ export async function mountPsys2(element, options = {}) {
     const ref = { recId, botMsg, undo, ui: null, local: null, warned: false };
     ref.ui = createFeedback({
       feedback: null, uid: recId ?? String(Math.random()).slice(2, 8),
+      dictation: { lang: speechLangTag, available: () => !mic.listening && !settings.handsFree },
       onChange: (patch) => rateAnswer(ref, patch), canUndo: () => !!ref.undo && lastAnswer === ref && !turn, onUndo: () => undoAnswer(ref),
     });
     botMsg.meta.append(ref.ui.el); botMsg.msg.append(ref.ui.form);
@@ -946,7 +958,7 @@ export async function mountPsys2(element, options = {}) {
     if (!settings.logPhrases) return;
     try {
       const tabWorld = tabDefs.find((t) => t.id === view)?.world ?? null;   // item 7: the world of the open tab, for the wrong-world analysis
-      if (recId) phrases.update(recId, (r) => ({ ...completeRecord(r, reply, { language: language.get() }), ...(tabWorld ? { tabWorld } : {}), ...(detail ? { detail } : {}), ...(happened ? { happened } : {}) }));
+      if (recId) phrases.update(recId, (r) => ({ ...completeRecord(r, reply, { language: language.get() }), replyOutcome: outcomeOf(reply), turnKind: reply?.trace?.discourse?.meta?.dialogue ?? reply?.trace?.discourse?.resolved?.dialogue ?? null, ...(tabWorld ? { tabWorld } : {}), ...(detail ? { detail } : {}), ...(happened ? { happened } : {}) }));
       else phrases.add({ ...buildRecord({ text, mode, language: language.get(), recLang: mode === 'voice' ? speech?.recLang?.() ?? null : null, tab: view, reply }), ...(tabWorld ? { tabWorld } : {}) });
     } catch (e) { console.warn('phrase log failed', e); }
     if (!settingsEl.hidden) renderPhraseLog();
@@ -1540,7 +1552,7 @@ export async function mountPsys2(element, options = {}) {
   }
   function readingBody() {
     return [
-      optCheck('helperModel', settings.helperModel !== false, (v) => { settings.helperModel = v; applyReading(settings); applyEngineSettings(); save(); renderSettings(); }, { status: readingStatus() }),
+      optCheck('helperModel', settings.helperModel !== false, (v) => { settings.helperModel = v; applyReading(settings); applyEngineSettings(); if (v) startModels(); save(); renderSettings(); }, { status: readingStatus() }),
       ...optionsOf('reading').filter((o) => o.id !== 'helperModel').map((o) => {
         if (o.id === 'normalizer') return optCheck('normalizer', settings.normalizer === true, (v) => { settings.normalizer = v; if (v) normalizerHost?.prepare().catch(() => {}); save(); renderSettings(); }, { disabledWhy: normalizerHost ? '' : 'no model in this build', status: normalizerText() });
         return optCheck(o.id, o.id === 'spellcheck' ? settings.spellcheck : settings[o.key] !== false && !!settings[o.key], (v) => { settings[o.key] = v; applyEngineSettings(); save(); });
@@ -1594,7 +1606,31 @@ export async function mountPsys2(element, options = {}) {
     ];
   }
   function privacyBody() {
-    return [phraseLogSection()];
+    return [phraseLogSection(), sendingSection()];
+  }
+  // ---------- send failures (LEARN FROM USE): OFF by default; nothing leaves the device before the person turns it on ----------
+  const failureSender = createFailureSender({ settings: () => settings, records: () => phrases.all(), events: () => events.all(), storage: options.persist !== false ? globalThis.localStorage : null, build: null, onResult: () => { if (!settingsEl.hidden && settingsTab === 'privacy') renderSettings(); } });
+  failureSender.start();
+  cleanups.push(() => failureSender.stop());
+  function sendingSection() {
+    const o = optionById('sendFailures');
+    const on = settings.sendFailures === true;
+    const url = h('input', { type: 'url', id: 'p2-f-sendFailuresUrl', placeholder: 'https://example.org/psys2/failures', autocomplete: 'off', 'aria-label': 'Where to send failures (web address)', value: settings.sendFailuresUrl ?? '' });
+    url.addEventListener('change', () => { settings.sendFailuresUrl = url.value.trim(); save(); renderSettings(); });
+    const name = h('input', { type: 'text', id: 'p2-f-sendFailuresName', placeholder: 'Optional: a name or contact, only if you want to be reachable', autocomplete: 'off', maxlength: '120', 'aria-label': 'Optional name or contact sent with failures', value: settings.sendFailuresName ?? '' });
+    name.addEventListener('change', () => { settings.sendFailuresName = name.value.trim(); save(); renderSettings(); });
+    const check = optCheck('sendFailures', on, (v) => { settings.sendFailures = v; save(); renderSettings(); });
+    const bad = on && !validEndpoint(settings.sendFailuresUrl);
+    const batch = failureSender.preview();
+    const last = failureSender.last;
+    const preview = h('details', { class: 'p2-plog-previewbox' }, h('summary', {}, `Preview of the next batch (${batch.count} ${batch.count === 1 ? 'failure' : 'failures'})`), h('pre', { class: 'p2-plog-preview', tabindex: '0', 'aria-label': 'Next batch to send' }, batch.count ? JSON.stringify(batch, null, 1) : 'Nothing waiting: no new failure since the last batch.'));
+    const sendBtn = h('button', { class: 'p2-btn-text', type: 'button', disabled: on && !bad && batch.count ? null : true, onclick: async () => { const r = await failureSender.sendNow(); toast(r.reason === 'ok' ? `Sent ${r.sent} ${r.sent === 1 ? 'failure' : 'failures'}` : r.reason === 'nothing' ? 'Nothing to send' : `Not sent: ${r.error ?? r.reason}`); renderSettings(); } }, 'Send now');
+    return h('div', { class: 'p2-plog-sending', 'data-section': 'send-failures' }, check,
+      h('label', { for: 'p2-f-sendFailuresUrl' }, 'Address that receives the batches'), url,
+      h('label', { for: 'p2-f-sendFailuresName' }, 'Name or contact (optional)'), name,
+      bad ? h('small', { role: 'alert' }, 'Nothing is sent: the address must start with https:// (or http://localhost for a receiver on this machine).') : null,
+      preview, h('div', { class: 'p2-plog-actions' }, sendBtn),
+      h('small', { class: 'p2-opt-status', role: 'status' }, on ? `On. A batch goes out every 10 minutes when there is a new failure. ${failureSender.sentCount()} sent so far.${last ? (last.ok ? ` Last: ${last.count} sent at ${last.at.slice(11, 16)}.` : ` Last try failed: ${last.error}.`) : ''}` : 'Off: nothing is sent; failures stay in this browser.'));
   }
   function renderSettings() {
     if (settingsEl.hidden) return;
@@ -1625,27 +1661,36 @@ export async function mountPsys2(element, options = {}) {
     saveFile(exportFilename(), body);
     return n;
   }
+  /** "Download failures only": export format 3 with only the failure turns, two turns before and after each, and the events that belong to them. */
+  function exportFailures() {
+    const body = toFailuresJSON(phrases.all(), { events: events.all(), diagnostics: diagnostics() });
+    const n = JSON.parse(body).failureCount;
+    if (!n) { toast('No failures to download yet'); return 0; }
+    saveFile(failuresFilename(), body);
+    return n;
+  }
   function renderPhraseLog() {
-    const all = phrases.all(), shown = filterRecords(all, logFilter).slice().reverse();
+    const all = phrases.all(), reasonsOf = failureReasons(all, events.all()), shown = (logFilter === 'failures' ? all.filter((r) => reasonsOf.has(r.id)) : filterRecords(all, logFilter)).slice().reverse();
     const human = all.filter((r) => r.source !== 'chip').length;
     plogCount.textContent = `${all.length} ${all.length === 1 ? 'entry' : 'entries'} (${human} typed or spoken by you, ${all.length - human} from buttons). ${settings.exportButtons === true ? 'Buttons are included in exports.' : 'Buttons are left out of exports unless you tick the box below.'}`;
     plogList.replaceChildren(...(shown.length ? shown : [null]).map((r) => {
       if (!r) return h('li', { class: 'p2-plog-empty' }, all.length ? 'Nothing matches this filter.' : settings.logPhrases ? 'Nothing logged yet. Say or type something.' : 'The log is switched off.');
       const status = summaryStatus(r), worlds = summaryWorlds(r).join(', '), vote = voteOf(r);
-      return h('li', { class: `p2-plog-item is-${status}${vote ? ` has-vote-${vote}` : ''}` },
+      const why = reasonsOf.get(r.id) ?? [];
+      return h('li', { class: `p2-plog-item is-${status}${vote ? ` has-vote-${vote}` : ''}${why.length ? ' is-failure' : ''}` },
         h('span', { class: 'p2-plog-mode', title: MODE_NAME[r.mode], role: 'img', 'aria-label': MODE_NAME[r.mode] }, MODE_ICON[r.mode]),
         h('span', { class: 'p2-plog-body' }, h('span', { class: 'p2-plog-text' }, r.text),
-          h('small', {}, vote ? h('b', { class: `p2-plog-vote v-${vote}`, title: vote === 'up' ? 'Good answer' : 'Not what I wanted', 'aria-label': vote === 'up' ? 'Good answer' : 'Not what I wanted' }, vote === 'up' ? '▲ ' : '▼ ') : null, `${worlds || 'no world'} · `, h('b', { class: `p2-plog-status s-${status}` }, status), r.lang && r.lang !== 'en' ? ` · ${r.lang}` : '', vote === 'down' && r.feedback.wanted ? ` · wanted: ${r.feedback.wanted}` : '')),
+          h('small', {}, vote ? h('b', { class: `p2-plog-vote v-${vote}`, title: vote === 'up' ? 'Good answer' : 'Not what I wanted', 'aria-label': vote === 'up' ? 'Good answer' : 'Not what I wanted' }, vote === 'up' ? '▲ ' : '▼ ') : null, `${worlds || 'no world'} · `, h('b', { class: `p2-plog-status s-${status}` }, status), r.lang && r.lang !== 'en' ? ` · ${r.lang}` : '', vote === 'down' && r.feedback.wanted ? ` · expected: ${r.feedback.wanted}` : '', why.length ? [' · ', h('b', { class: 'p2-plog-fail' }, `failure: ${why.map((x) => FAILURE_REASON_TEXT[x] ?? x).join(', ')}`)] : null)),
         settings.devMode === true ? h('button', { class: 'p2-linkbtn p2-plog-dump', type: 'button', 'aria-label': `Debug dump: ${r.text}`, title: 'Download a debug dump of this message', onclick: () => saveFile(`psys2-debug-dump-${r.id}.json`, `${JSON.stringify({ record: exportRecord(r), turn: dbg?.turnFor?.(r.id) ?? null }, null, 1)}\n`) }, 'debug dump') : null,
         h('button', { class: 'p2-linkbtn', type: 'button', 'aria-label': `Delete: ${r.text}`, title: `Delete: ${r.text}`, onclick: () => { phrases.remove(r.id); renderPhraseLog(); } }, 'Delete'));
     }));
     const btn = (label, fn, cls = 'p2-btn-text') => h('button', { class: cls, type: 'button', onclick: fn }, label);
     plogActions.replaceChildren(...(confirmClear
       ? [h('span', { class: 'p2-plog-confirm', role: 'alert' }, `Delete all ${all.length} entries?`), btn('Yes, clear', () => { phrases.clear(); events.clear(); confirmClear = false; renderPhraseLog(); }, 'p2-btn-text is-danger'), btn('Keep them', () => { confirmClear = false; renderPhraseLog(); })]
-      : [btn('Export JSON', exportPhrases), btn('Clear', () => { if (all.length) { confirmClear = true; renderPhraseLog(); } })]));
+      : [btn('Export JSON', exportPhrases), btn('Download failures only', exportFailures), btn('Clear', () => { if (all.length) { confirmClear = true; renderPhraseLog(); } })]));
   }
   function phraseLogSection() {
-    const fsel = select([['all', 'All'], ['misses', 'Not understood only'], ['voice', 'Voice only'], ['down', 'Not what I wanted'], ['up', 'Good answers']], logFilter, (v) => { logFilter = v; renderPhraseLog(); });
+    const fsel = select([['all', 'All'], ['misses', 'Not understood only'], ['voice', 'Voice only'], ['down', 'Not what I wanted'], ['up', 'Good answers'], ['failures', 'Failures']], logFilter, (v) => { logFilter = v; renderPhraseLog(); });
     fsel.setAttribute('aria-label', 'Filter phrases');
     confirmClear = false;
     renderPhraseLog();
@@ -1655,6 +1700,7 @@ export async function mountPsys2(element, options = {}) {
       plogCount, h('div', { class: 'p2-field' }, h('label', {}, 'Show '), fsel), plogList, plogActions);
   }
   let modelsAllowed = false;   // the models load after the page is usable (PERF): the rules answer meanwhile
+  let modelsStarted = null, startModels = () => null;   // LAZY-LOAD-3: set once by startModels (below): a message the rules cannot read, idle time or the Settings switch
   function applyEngineSettings() {
     if (!session) return;
     session.applySettings(settings, { prepare: !!dispatcherEnc && modelsAllowed });   // the engine worker keeps its own copy; every turn also carries the current settings
@@ -1879,19 +1925,31 @@ export async function mountPsys2(element, options = {}) {
       await sleep(250);
     }
   };
+  /** Starts the reading model (once): on an idle CPU, then its warm-up, then the normalizer's idle timer. */
+  startModels = () => {
+    if (modelsStarted) return modelsStarted;
+    if (destroyed || !dispatcherEnc || settings.formalizer !== 'encoder') return null;
+    return modelsStarted = (async () => {
+      try {
+        await idleCpu(); if (destroyed) return;
+        modelsAllowed = true;   // the dispatcher first, then the normalizer (about 95 MB, cached by sha256)
+        await dispatcherEnc.prepare(); mark('dispatcher-ready');
+        if (!destroyed) await engineClient.warm({ phase: 'model' });
+        scheduleNormalizerIdle();
+      } catch { modelsStarted = null; /* best effort: the next trigger tries again */ }
+    })();
+  };
+  const scheduleModelIdle = () => { setTimeout(() => { if (!destroyed) startModels(); }, MODEL_IDLE_MS); };
   const warm = async () => {
     mark('warm-start');
     try {
       await engineClient.warm({ phase: 'rules' });   // in the worker: the rules and the translator tables; a user turn goes first
       if (destroyed) return;
-      // the models start on an idle CPU, after the first paint and only when the setting is on (the rules answer meanwhile): no long task for a second and no turn running (bounded wait)
-      if (dispatcherEnc && settings.formalizer === 'encoder') { await idleCpu(); if (destroyed) return; }
-      modelsAllowed = true;   // now the models: the dispatcher first, then the normalizer (about 95 MB, cached by sha256)
-      if (dispatcherEnc && settings.formalizer === 'encoder') {
-        await dispatcherEnc.prepare(); mark('dispatcher-ready');
-        if (!destroyed) await engineClient.warm({ phase: 'model' });
-        scheduleNormalizerIdle();
-      } else progress.end('model', { ms: 0, label: 'Reading model: not used (the rules read)' });
+      // LAZY-LOAD-3: the reading model (65 MB) and onnxruntime (14.5 MB) are NOT fetched at start. The rules read the first message (the model only adds
+      // a hint to the world choice and rescues garbled sentences); they load (1) the first time a message is not read cleanly, (2) after MODEL_IDLE_MS
+      // of idle time, (3) when the person switches the helper model on or asks in Settings > Models. The input is enabled long before.
+      if (dispatcherEnc && settings.formalizer === 'encoder') { progress.end('model', { ms: 0, label: 'Reading model: loads when a message needs it' }); scheduleModelIdle(); }
+      else { modelsAllowed = true; progress.end('model', { ms: 0, label: 'Reading model: not used (the rules read)' }); }
     } catch { /* warm-up is best effort */ }
     if (destroyed) return;
     // PROGRESS: the knowledge catalog's index (cached by version; the vocabulary is read by buckets, per message): the last start-up step, and the place where an unreachable catalog is said once

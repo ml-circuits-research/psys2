@@ -61,11 +61,29 @@
     action=ui.avatar.change
     doc="The act 'change' (spec 21), applied by the generic executor to this world's schema."
 
+@op.ui.avatar.place core.operation
+    impl=place
+    semantics=action
+    action=ui.avatar.place
+    doc="The act 'place' (spec 21), applied by the generic executor to this world's schema."
+
 @op.ui.avatar.send core.operation
     impl=send
     semantics=action
     action=ui.avatar.send
     doc="The act 'send' (spec 21), applied by the generic executor to this world's schema."
+
+@op.ui.avatar.pick core.operation
+    impl=pick
+    semantics=action
+    action=ui.avatar.pick
+    doc="The act 'pick' (spec 21), applied by the generic executor to this world's schema."
+
+@op.ui.avatar.copy core.operation
+    impl=copy
+    semantics=action
+    action=ui.avatar.copy
+    doc="The act 'copy' (spec 21), applied by the generic executor to this world's schema."
 
 @op.ui.avatar.ask core.operation
     impl=ask
@@ -96,9 +114,3 @@
     semantics=action
     action=ui.avatar.load
     doc="The act 'load' (spec 21), applied by the generic executor to this world's schema."
-
-@op.ui.avatar.place core.operation
-    impl=place
-    semantics=action
-    action=ui.avatar.place
-    doc="The act 'place' (spec 21), applied by the generic executor to this world's schema."

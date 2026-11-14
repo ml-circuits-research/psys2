@@ -125,7 +125,7 @@ async function init(m) {
   await worldLoader.init();
   // `?psys2lazy=0` (tests, a comparison with the full set) and a saved language other than English: every world is loaded at start (a Romanian message is read through English candidates that a
   // partial world set can mistake for understood: a session that starts in Romanian must read like the full set, from its first message)
-  const startIds = (m.lazyWorlds === false || (m.settings?.language && lang.normalize(m.settings.language) !== 'en') ? worldLoader.ids() : [...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] })]).filter((id) => allowed(id));
+  const startIds = (m.lazyWorlds === false || m.settings?.lazyWorlds === false || (m.settings?.language && lang.normalize(m.settings.language) !== 'en') ? worldLoader.ids() : [...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] })]).filter((id) => allowed(id));
   await worldLoader.bundles(startIds);
   for (const id of startIds) loadedIds.add(id);
   const bundle = worldLoader.bundleOf(startIds, absModule);
@@ -189,7 +189,7 @@ async function init(m) {
 
 function restoreStates(state, meta) {
   if (state && typeof state === 'object') {
-    session.isession.state = structuredClone(state);
+    session.isession.state = { ...session.isession.state, ...structuredClone(state) };   // over the fresh session's initial states: a world loaded since the record was made has none in it (lazy loading)
     if (meta) {
       session._msg = meta.msg ?? session._msg; session._sessionLang = meta.lang ?? session._sessionLang; session._weakRo = meta.weakRo ?? 0;
       if (meta.memory) { try { session.restoreMemory(meta.memory); } catch (e) { console.warn('memory not restored', e); } }
@@ -222,14 +222,17 @@ async function ensureRun(ids, why) {
   evt('world-load', { id: stepId, op: 'start', label, why, ids: missing });
   try {
     try { await worldLoader.bundles(want); } catch (e) { evt('world-load', { id: stepId, op: 'fail', label, message: String(e?.message ?? e) }); return []; }
-    const st = stateOf(), meta = metaOf();
     const next = [...loadedIds, ...missing];
     await engine.reload(loaders.createBundleLoader(worldLoader.bundleOf(next, absModule)));
+    // the session is read HERE, after the awaits and with none between this and the new session: a state the page set while the worlds were loading (a tab click, a setting) is in it, and is not lost
+    const st = stateOf(), meta = metaOf();
+    const old = session, portable = [...snaps].map(([k, sn]) => { try { return [k, old.portableSnapshot(sn)]; } catch { return null; } }).filter(Boolean);   // the undo snapshots as plain data: they survive the reload
     for (const id of missing) loadedIds.add(id);
     session = engine.createSession({ language: mods.lang.normalize(settings.language) });
     applySettings(null);
     restoreStates(st, meta);
-    snaps.clear();   // the old snapshots belong to the old interpreter session: an undo of an earlier turn goes through the page's state record
+    snaps.clear();
+    for (const [k, rec] of portable) { try { snaps.set(k, session.adoptSnapshot(rec)); } catch { /* that turn's undo goes through the page's state record */ } }
     if (testHooks) installFaults();
     Promise.resolve(engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); while (turnRunning()) await sleep(20); } })).catch(() => {});
     const bytes = missing.reduce((s, id) => s + (worldLoader.info(id)?.bytes ?? 0), 0);
@@ -241,7 +244,7 @@ async function ensureRun(ids, why) {
 }
 const allLoaded = () => worldLoader.ids().filter(allowed).every((id) => loadedIds.has(id));
 /** A reading is complete when something was understood and nothing was left out or guessed: otherwise a world that is not loaded might have read it (the worker then reads it again with every world). */
-const incomplete = (reply) => !reply.segments?.length || reply.segments.some((x) => x.unparsed || x.corrections?.length || x.ignored?.length) || (reply.statuses ?? []).some((x) => x !== 'supported');
+const incomplete = (reply) => wordMod.readingIncomplete(reply);
 
 // ---------- requests ----------
 const handlers = {
@@ -265,10 +268,18 @@ const handlers = {
       const translator = engine.translator; translator.resetUsage?.();
       let reply;
       const read = async () => {
+        session.takeMissed?.();
         try { return await session.send(m.text, { ...m.opts, language: mods.lang.normalize(m.opts?.language ?? m.settings?.language), signal: ctl.signal, undo: snap, ...(budget ? { budget } : {}) }); }
         catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded' || ctl.signal.aborted) { try { session.restore(snap); } catch { /* keep */ } } if (budget && e && typeof e === 'object') e.bySite = { ...budget.bySite }; throw e; }
       };
       reply = await read();
+      // a turn that asked for an action of a world that is not loaded (kids.common asks user.profile to keep a name): load that world and read the turn again
+      const lacking = worldLoader.ofActions(session.takeMissed?.()).filter((id) => !loadedIds.has(id) && allowed(id));
+      if (lacking.length) {
+        try { session.restore(snap); } catch { /* keep */ }
+        const added = await ensureWorlds(lacking, 'action');
+        if (added.length) { snap = session.snapshot(); if (m.undoId != null) snaps.set(m.undoId, snap); budget = newBudget(); translator.resetUsage?.(); reply = await read(); } else reply = await read();
+      }
       if (incomplete(reply) && !allLoaded()) {   // not understood, or understood with words guessed or left out: read it again with every world (the reading is then the one a full start gives)
         try { session.restore(snap); } catch { /* keep */ }
         const added = await ensureWorlds(worldLoader.ids(), 'second reading');

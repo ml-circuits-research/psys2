@@ -5,13 +5,13 @@
 
 @t.timeline.n1 core.test
     session=tl
-    input="add a day called Monday"
-    expect="I added moment Monday."
+    input="add an event called Monday"
+    expect="I added event Monday."
 
 @t.timeline.n2 core.test
     session=tl
-    input="add a birthday called Ann"
-    expect="I added moment Ann."
+    input="add an event called Ann"
+    expect="I added event Ann."
 
 @t.timeline.n3 core.test
     session=tl
