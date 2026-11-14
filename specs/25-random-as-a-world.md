@@ -47,3 +47,7 @@ The avatar world has no sampleable kind; its dice falls back to another world.
 
 ## Declared schemas (2026-11-14)
 Worlds with their own patterns and operations (user.profile, games.chess, games.guess, games.hangman, games.tictactoe) declare a schema with `declare=yes` (spec 21 section 6) and publish whole sentences with `sampleKnowledge` from their own state; the dice, the chips and the buttons serve them like any schema world. The states in which a game has nothing to play (a finished game, not the user's turn) give no sentence, and the dice falls back to another world.
+
+## The Diagram tab (2026-11-15)
+The dice of the Diagram tab no longer says only "Add a circle.": the `text` kind carries `know=diagrams:*` and the world's `sampleKnowledge` publishes `diagrams`, whole sentences "Make a <kind> of <topic>." for each kind x topic the knowledge can draw (`diagramSentences`, spec 14 section 9: the library's `diagramTopics`, kept when the request composes and reads back). 30 presses on the tab: 30/30 executed, 30 distinct sentences, 23 kinds of thing (`scripts/measure-dice.mjs --world diagram.sketch --per 30`). Repeated presses draw on top of what is there (undo takes the last one away).
+

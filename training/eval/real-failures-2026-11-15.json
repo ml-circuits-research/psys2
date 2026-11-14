@@ -1,0 +1,601 @@
+{
+ "date": "2026-11-15",
+ "set": 649,
+ "tables": {
+  "matrix": {
+   "turns": 649,
+   "judged": 253,
+   "right": 201,
+   "partly": 17,
+   "wrong": 35,
+   "open": 17,
+   "changed": 49,
+   "unjudged": 330,
+   "outcome": {
+    "executed": 440,
+    "refused": 5,
+    "asked": 24,
+    "not_understood": 142,
+    "other_world": 38
+   },
+   "by_source": {
+    "owner-log-2026-11-13": {
+     "turns": 69,
+     "judged": 55,
+     "right": 44
+    },
+    "owner-log-2026-11-13b": {
+     "turns": 63,
+     "judged": 11,
+     "right": 8
+    },
+    "owner-log-2026-11-13c": {
+     "turns": 33,
+     "judged": 19,
+     "right": 16
+    },
+    "real-phrases-2026-11-09c": {
+     "turns": 68,
+     "judged": 0,
+     "right": 0
+    },
+    "real-phrases-2026-11-09d": {
+     "turns": 10,
+     "judged": 0,
+     "right": 0
+    },
+    "real-phrases-2026-11-09e": {
+     "turns": 67,
+     "judged": 0,
+     "right": 0
+    },
+    "real-phrases-2026-11-09f-mobile": {
+     "turns": 108,
+     "judged": 0,
+     "right": 0
+    },
+    "real-dialogue-2026-11-09": {
+     "turns": 49,
+     "judged": 0,
+     "right": 0
+    },
+    "real-dialogue-2026-11-09b": {
+     "turns": 14,
+     "judged": 0,
+     "right": 0
+    },
+    "real dialogues": {
+     "turns": 168,
+     "judged": 168,
+     "right": 133
+    }
+   }
+  },
+  "ops": {
+   "turns": 649,
+   "judged": 253,
+   "right": 201,
+   "partly": 17,
+   "wrong": 35,
+   "open": 17,
+   "changed": 49,
+   "unjudged": 330,
+   "outcome": {
+    "executed": 440,
+    "refused": 5,
+    "asked": 25,
+    "not_understood": 142,
+    "other_world": 37
+   },
+   "by_source": {
+    "owner-log-2026-11-13": {
+     "turns": 69,
+     "judged": 55,
+     "right": 44
+    },
+    "owner-log-2026-11-13b": {
+     "turns": 63,
+     "judged": 11,
+     "right": 8
+    },
+    "owner-log-2026-11-13c": {
+     "turns": 33,
+     "judged": 19,
+     "right": 16
+    },
+    "real-phrases-2026-11-09c": {
+     "turns": 68,
+     "judged": 0,
+     "right": 0
+    },
+    "real-phrases-2026-11-09d": {
+     "turns": 10,
+     "judged": 0,
+     "right": 0
+    },
+    "real-phrases-2026-11-09e": {
+     "turns": 67,
+     "judged": 0,
+     "right": 0
+    },
+    "real-phrases-2026-11-09f-mobile": {
+     "turns": 108,
+     "judged": 0,
+     "right": 0
+    },
+    "real-dialogue-2026-11-09": {
+     "turns": 49,
+     "judged": 0,
+     "right": 0
+    },
+    "real-dialogue-2026-11-09b": {
+     "turns": 14,
+     "judged": 0,
+     "right": 0
+    },
+    "real dialogues": {
+     "turns": 168,
+     "judged": 168,
+     "right": 133
+    }
+   }
+  }
+ },
+ "failing_matrix": 190,
+ "failing_ops": 190,
+ "ops_only": 0,
+ "causes": [
+  {
+   "cause": "Romanian turn not read (translation or reader)",
+   "count": 46,
+   "both_reasoners": 46,
+   "examples": [
+    {
+     "text": "muta crocodilii mai jos",
+     "tab": "draw",
+     "happened": "the crocodile can not go there: it is in the lake. [outcome: executed; wrong; reply_any:moved the crocodiles]"
+    },
+    {
+     "text": "pune si un lac",
+     "tab": "draw",
+     "happened": "Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\". [outcome: execu"
+    },
+    {
+     "text": "muta capra mai jos",
+     "tab": "draw",
+     "happened": "There is nothing to transpose yet. Play something first, for example \"play Ode to Joy\". [outcome: asked; wrong]"
+    },
+    {
+     "text": "muta capra mai in dreapta",
+     "tab": "draw",
+     "happened": "I did not understand \"muta capra mai in dreapta\". For example: \"Add a house.\" or \"What is the colour of house?\" [outcome: not_understood; wrong]"
+    }
+   ]
+  },
+  {
+   "cause": "translation residue / wrong sense / source typo",
+   "count": 31,
+   "both_reasoners": 31,
+   "examples": [
+    {
+     "text": "she knows what their grandma could trade charcoal Chicago",
+     "tab": "diagram",
+     "happened": "I did not understand \"she knows what their grandma could trade charcoal Chicago\". For example: \"Add a circle.\" or \"What is the colour of circle?\" I did not know"
+    },
+    {
+     "text": "an old woman",
+     "tab": "robot",
+     "happened": "I did not understand \"an old woman\". Did you mean \"Am 34 de ani.\"? I did not know the words: old, woman. [outcome: not_understood; wrong; reply_not:did not unde"
+    },
+    {
+     "text": "capra zoboara, fixeaza",
+     "tab": "draw",
+     "happened": "I did not understand \"capra zoboara, fixeaza\". For example: \"Add a house.\" or \"What is the colour of house?\" I did not know the words: zoboara, fixeaza. [outcom"
+    },
+    {
+     "text": "muta capra linga rata",
+     "tab": "draw",
+     "happened": "Which way: up or down, by an octave or an interval, or to a key? For example \"transpose it up a fifth\". [outcome: refused; open]"
+    }
+   ]
+  },
+  {
+   "cause": "sentence not read by any world (no cause key)",
+   "count": 17,
+   "both_reasoners": 17,
+   "examples": [
+    {
+     "text": "now be a human",
+     "tab": "robot",
+     "happened": "I did not understand \"now be a human\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
+    },
+    {
+     "text": "Become an emoji",
+     "tab": "robot",
+     "happened": "I did not understand \"Become an emoji\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
+    },
+    {
+     "text": "how many legs has a cow",
+     "tab": "robot",
+     "happened": "I did not understand \"how many legs has a cow\". Did you mean \"A zebra has 4 legs.\" or \"How many days has April?\"? [outcome: not_understood]"
+    },
+    {
+     "text": "i want a human as avatar",
+     "tab": "robot",
+     "happened": "I did not catch what to do with face. I can add, remove, change, copy, select and tell; for example \"Add a hat.\". [outcome: not_understood]"
+    }
+   ]
+  },
+  {
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
+   "count": 15,
+   "both_reasoners": 15,
+   "examples": [
+    {
+     "text": "make the avatar an emoji",
+     "tab": "robot",
+     "happened": "I have a long head now. [outcome: executed; wrong; state:character=emoji]"
+    },
+    {
+     "text": "mcdavatara human",
+     "tab": "robot",
+     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; wrong; state:character=person forbi"
+    },
+    {
+     "text": "make the avatar an emoji",
+     "tab": "robot",
+     "happened": "I have a wide head now. [outcome: executed; wrong; state:character=emoji]"
+    },
+    {
+     "text": "make the avatar a person make the avatar a person send",
+     "tab": "robot",
+     "happened": "I have a long head now. [outcome: executed; partly; state:character=person]"
+    }
+   ]
+  },
+  {
+   "cause": "fragment / list split",
+   "count": 13,
+   "both_reasoners": 13,
+   "examples": [
+    {
+     "text": "eyeglasses",
+     "tab": "robot",
+     "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; open]"
+    },
+    {
+     "text": "tata",
+     "tab": "draw",
+     "happened": "I am not sure how “A father” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+    },
+    {
+     "text": "enervant da",
+     "tab": "draw",
+     "happened": "I am not sure how “yes but only on Enervant” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+    },
+    {
+     "text": "da",
+     "tab": "draw",
+     "happened": "I am not sure how “Yes” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+    }
+   ]
+  },
+  {
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.real",
+   "count": 11,
+   "both_reasoners": 11,
+   "examples": [
+    {
+     "text": "Sînică",
+     "tab": "robot",
+     "happened": "I did not understand \"Sînică\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; wrong; state:user.profile:fields.name.v==Sîni"
+    },
+    {
+     "text": "coming back to knowing me, what questions do you have?",
+     "tab": "robot",
+     "happened": "Great, let us play \"get to know me\"! I will ask one thing at a time. Say \"skip\" for anything you would rather not answer, or \"stop\" whenever you like. What shou"
+    },
+    {
+     "text": "draw a red circle",
+     "tab": "diagram",
+     "happened": "Drew a circle. [outcome: executed; partly; answer:c1]"
+    },
+    {
+     "text": "create a diagram",
+     "tab": "diagram",
+     "happened": "I drew a random cycle diagram with four shapes. It is about water cycle. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:sh"
+    }
+   ]
+  },
+  {
+   "cause": "a world other than the open tab took the turn",
+   "count": 9,
+   "both_reasoners": 9,
+   "examples": [
+    {
+     "text": "a women",
+     "tab": "robot",
+     "happened": "I drew a woman. (I read \"women\" as \"woman\") [outcome: other_world]"
+    },
+    {
+     "text": "Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?",
+     "tab": "robot",
+     "happened": "OK, Tom has 15 apples. OK, Tom gave Ana 12 apples. Tom has 3 apples. [outcome: other_world]"
+    },
+    {
+     "text": "Tom has 5 apples. He gives 8 to Ana. How many apples does Tom have?",
+     "tab": "robot",
+     "happened": "OK, Tom has 5 apples. That does not add up. Tom only had 5 apples, so Tom cannot give away 8. Tom has 5 apples. [outcome: other_world]"
+    },
+    {
+     "text": "Tom has 10 bees. One flyes away. How many bee Tom has ?",
+     "tab": "robot",
+     "happened": "OK, Tom has 10 bees. OK, Tom lost 1 bee. Tom has 9 bees. [outcome: other_world]"
+    }
+   ]
+  },
+  {
+   "cause": "continuation / correction / why-question",
+   "count": 8,
+   "both_reasoners": 8,
+   "examples": [
+    {
+     "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
+     "tab": "draw",
+     "happened": "I understood \"ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum\" but I did not do it, because I did not understand \"ar trebui sa schimbi a"
+    },
+    {
+     "text": "cum ai ajuns a deschisi joculd e sah? e ridicol",
+     "tab": "chess",
+     "happened": "I did not understand \"cum ai ajuns a deschisi joculd e sah\". Did you mean \"Începe un joc nou de șah.\"? I did not understand \"e ridicol\". For example: \"Pot captu"
+    },
+    {
+     "text": "mai jos, sta pe leagan nu pe el",
+     "tab": "draw",
+     "happened": "OK, more down, stay on leagan not him. [outcome: other_world; open]"
+    },
+    {
+     "text": "nu ai desenat o feita tu mai inainte?",
+     "tab": "draw",
+     "happened": "I did not understand \"nu ai desenat o feita tu mai inainte\". For example: \"Add a house.\" or \"What is the colour of house?\" I did not know the word: feita. [outc"
+    }
+   ]
+  },
+  {
+   "cause": "foreign-world reading",
+   "count": 6,
+   "both_reasoners": 6,
+   "examples": [
+    {
+     "text": "an old woman",
+     "tab": "robot",
+     "happened": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; wrong; reply_not:did not understand]"
+    },
+    {
+     "text": "ce",
+     "tab": "tictactoe",
+     "happened": "New game of tic-tac-toe. You are X and you go first. I play at the easy level. Say a place like \"center\" or \"top left\", or a coordinate like B2 (letter for the "
+    },
+    {
+     "text": "b1",
+     "tab": "robot",
+     "happened": "B1 looks like a game move. Do you want to play tic-tac-toe or chess? [outcome: not_understood]"
+    },
+    {
+     "text": "c3",
+     "tab": "robot",
+     "happened": "C3 looks like a game move. Do you want to play tic-tac-toe or chess? [outcome: not_understood]"
+    }
+   ]
+  },
+  {
+   "cause": "bare word or two-word fragment not read",
+   "count": 6,
+   "both_reasoners": 6,
+   "examples": [
+    {
+     "text": "mcdavatara human",
+     "tab": "robot",
+     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
+    },
+    {
+     "text": "20",
+     "tab": "profile",
+     "happened": "I did not understand \"20\". For example: \"I work as a designer.\" or \"Where do I live?\" [outcome: not_understood]"
+    },
+    {
+     "text": "What?",
+     "tab": "profile",
+     "happened": "I don't know how many bees Nothing had at the start. Please tell me the starting number. [outcome: not_understood]"
+    },
+    {
+     "text": "becoming emoji",
+     "tab": "robot",
+     "happened": "I did not understand \"becoming emoji\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
+    }
+   ]
+  },
+  {
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.gaps",
+   "count": 6,
+   "both_reasoners": 6,
+   "examples": [
+    {
+     "text": "would you say you are happy",
+     "tab": "robot",
+     "happened": "I could not find \"you are happy\" in the document. [outcome: other_world; partly; answer:happy]"
+    },
+    {
+     "text": "would you say you are sad",
+     "tab": "robot",
+     "happened": "I could not find \"you are say\" in the document. (I read \"sad\" as \"say\") [outcome: asked; wrong; answer:sad]"
+    },
+    {
+     "text": "whats on u",
+     "tab": "robot",
+     "happened": "There is no you here. (I read \"whats\" as \"what is\" and \"u\" as \"you\") [outcome: executed; partly; answer:wear]"
+    },
+    {
+     "text": "what is on you",
+     "tab": "robot",
+     "happened": "There is no you here. [outcome: executed; partly; answer:wear]"
+    }
+   ]
+  },
+  {
+   "cause": "acted on a partly understood sentence",
+   "count": 5,
+   "both_reasoners": 5,
+   "examples": [
+    {
+     "text": "fă un layout mai frumos",
+     "tab": "diagram",
+     "happened": "Drew a circle. [outcome: executed; wrong; state:shapes.length=$+0 reply_not:Drew]"
+    },
+    {
+     "text": "make a better layout",
+     "tab": "diagram",
+     "happened": "Drew a circle. [outcome: executed; wrong; state:shapes.length=$+0 reply_not:Drew]"
+    },
+    {
+     "text": "paint three new nodes",
+     "tab": "diagram",
+     "happened": "What should change about circle 1, square 1, square 2, square 3, square 4, circle 2 and circle 3? Try a color, size, shape, outline or label. [outcome: executed"
+    },
+    {
+     "text": "what character is on screen",
+     "tab": "robot",
+     "happened": "I did not understand \"what character is on screen\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
+    }
+   ]
+  },
+  {
+   "cause": "amount / relation / set distribution",
+   "count": 4,
+   "both_reasoners": 4,
+   "examples": [
+    {
+     "text": "muta si mai la stinga",
+     "tab": "draw",
+     "happened": "I did not understand \"muta si mai la stinga\". For example: \"Add a house.\" or \"What is the colour of house?\" [outcome: not_understood; wrong; reply_not:did not u"
+    },
+    {
+     "text": "nu prima acasa, cea din mijloc",
+     "tab": "draw",
+     "happened": "I drew a yellow house. I did not understand \"nu prima acasa, cea din mijloc\". Did you mean \"Cum sună do central?\" or \"Câți herți are do central?\"? [outcome: exe"
+    },
+    {
+     "text": "muta capra mai jos , si mai in stinga",
+     "tab": "draw",
+     "happened": "There is nothing to transpose yet. Play something first, for example \"play Ode to Joy\". [outcome: asked; open]"
+    },
+    {
+     "text": "muta vaca si mai jos si mai in dreapta",
+     "tab": "draw",
+     "happened": "There is nothing to transpose yet. Play something first, for example \"play Ode to Joy\". [outcome: asked; open]"
+    }
+   ]
+  },
+  {
+   "cause": "Talk: no fact in the catalog / frame not read",
+   "count": 3,
+   "both_reasoners": 3,
+   "examples": [
+    {
+     "text": "what is a monster?",
+     "tab": "talk",
+     "happened": "I can't reach the picture catalog right now, so I can only show the basic things. [outcome: asked; wrong]"
+    },
+    {
+     "text": "what is an elephant?",
+     "tab": "talk",
+     "happened": "I can't reach the picture catalog right now, so I can only show the basic things. [outcome: asked; wrong]"
+    },
+    {
+     "text": "draw 2 elephants",
+     "tab": "talk",
+     "happened": "I cannot draw an elephant yet. I can draw a cat, a dog, a fish or a bird. What would you like? [outcome: other_world; wrong]"
+    }
+   ]
+  },
+  {
+   "cause": "unknown word (a word of the request is not known)",
+   "count": 3,
+   "both_reasoners": 3,
+   "examples": [
+    {
+     "text": "face un caca",
+     "tab": "draw",
+     "happened": "I did not understand \"face un caca\". For example: \"Add a house.\" or \"What is the colour of house?\" I did not know the word: caca. [outcome: not_understood]"
+    },
+    {
+     "text": "desene asta",
+     "tab": "map",
+     "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
+    },
+    {
+     "text": "desene asta o",
+     "tab": "map",
+     "happened": "I did not understand \"desene asta o\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not"
+    }
+   ]
+  },
+  {
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.cb-c",
+   "count": 3,
+   "both_reasoners": 3,
+   "examples": [
+    {
+     "text": "I have two kids",
+     "tab": "draw",
+     "happened": "I drew 3 blue people. [outcome: executed; wrong; state:art.draw:objects.length=1 state:user.profile:fields.children.v=2 forbid:answer without \"blue people\"]"
+    },
+    {
+     "text": "I have a daughter",
+     "tab": "draw",
+     "happened": "Noted: children, 1. [outcome: executed; partly; state:art.draw:objects.length=1]"
+    },
+    {
+     "text": "make your eyes blue",
+     "tab": "draw",
+     "happened": "The eyes of the sun are blue now. There are 3 suns, so I took the last one. You can say \"the first sun\" or \"all the suns\". [outcome: executed; wrong; forbid:ans"
+    }
+   ]
+  },
+  {
+   "cause": "unknown kind (no drawing / stand-in)",
+   "count": 2,
+   "both_reasoners": 2,
+   "examples": [
+    {
+     "text": "deseneaza o minge",
+     "tab": "robot",
+     "happened": "I drew a red circle. [outcome: executed; wrong; reply_not:red circle]"
+    },
+    {
+     "text": "fa un bunic linga rata",
+     "tab": "draw",
+     "happened": "I did not understand \"fa un bunic linga rata\". Did you mean \"Ce face o rață?\"? I did not know the word: linga. [outcome: not_understood; open]"
+    }
+   ]
+  },
+  {
+   "cause": "session as content (about the discussion)",
+   "count": 2,
+   "both_reasoners": 2,
+   "examples": [
+    {
+     "text": "create a chart about the current discussion",
+     "tab": "charts",
+     "happened": "OK, here is a bar chart of the discussion with 7 items: faces 1, hair backs 1, cheekses 1, glasseses 1, hair fronts 1, hats 1 and cars 26. It is open in the Cha"
+    },
+    {
+     "text": "Create a docuemnt about the current discussion",
+     "tab": "editor",
+     "happened": "I do not know a place called \"docuemnt\" to show things in. I can show things in the drawing, the chart, the document, the story, the map, the seating plan, the "
+    }
+   ]
+  }
+ ],
+ "ledger_real_extra": 1
+}

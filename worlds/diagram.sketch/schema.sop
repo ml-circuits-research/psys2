@@ -70,6 +70,7 @@
 
 @dg.text acts.kind
     dice.not=make
+    know=diagrams:*
     plural=texts
     word=label
     word=labels

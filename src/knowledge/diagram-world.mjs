@@ -1,0 +1,291 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// DIAGRAMS FROM KNOWLEDGE, the host side (spec 14 section 9). A diagram kind (`k.diagrams.kind`) says what structure it shows and how it is laid out; its fills (`k.diagrams.fill`) say which
+// knowledge has that structure; the library's `composeDiagram` / `sampleDiagram` (sopworld 0.112) draw a kind x a topic and lay it out with `arrange`. This file does what a host owes the
+// library: builds the World it reads (the bundled subset of the catalog, `bundled-diagrams.mjs`, with the live catalog laid over it when reachable), reads a request into a kind and a topic
+// (the kinds' words come from the knowledge, not from a list here), tries the candidate topics, and says what was composed in plain words. No template, no sample labels. Browser-safe: no `node:*`.
+import { BUNDLED_DIAGRAMS } from './bundled-diagrams.mjs';
+import { BUNDLED_GEO } from './bundled-geo.mjs';
+
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
+const words = (s) => String(s ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
+const low = (s) => String(s ?? '').toLowerCase();
+const bare = (v) => String(v ?? '').replace(/^"|"$/g, '');
+const esc = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+let libraryPromise = null;
+/** The library module, loaded once (lazily: the vendored file is 900 kB). */
+export const diagramLibrary = () => (libraryPromise ??= import('../vendor/sopworld/sopworld.mjs'));
+
+/** The kinds the bundled catalog has: [{ name, form, words }], read from its text (a request can be read before the library is loaded); `words` are the other names a request uses ("hierarchy" for a tree: `core.word of=k.diagrams.kind.name`). */
+export function kindNames() {
+  const text = BUNDLED_DIAGRAMS.files['k.diagrams'];
+  const words = new Map();
+  for (const m of text.matchAll(/^@\S+ core\.word ((?:text=(?:"[^"]*"|\S+) )+)means=("[^"]*"|\S+) of=k\.diagrams\.kind\.name/gm)) words.set(bare(m[2]), [...m[1].matchAll(/text=("[^"]*"|\S+)/g)].map((x) => bare(x[1])));
+  return [...text.matchAll(/^@\S+ k\.diagrams\.kind name=("[^"]*"|\S+) form=(\S+)/gm)].map((m) => ({ name: bare(m[1]), form: m[2], words: words.get(bare(m[1])) ?? [] }));
+}
+/** The ways to say a kind: its name, its form, the name without "diagram"/"chart", its other words; one word or two ("mind map", "mindmap", "mind-map", "flow chart"). */
+function kindPhrases({ name, form, words = [] }) {
+  const out = new Set();
+  for (const raw of [name, form.replace(/_/g, ' '), name.replace(/\s+(?:diagram|chart)$/i, ''), ...words]) {
+    const w = raw.trim().split(/[\s-]+/);
+    if (w.length === 1) out.add(esc(w[0]));
+    else out.add(w.map(esc).join('[\\s-]?'));
+  }
+  return [...out];
+}
+let kindRx = null;
+const kindAlternatives = () => (kindRx ??= (() => {
+  const by = new Map();
+  for (const k of kindNames()) for (const p of kindPhrases(k)) by.set(p, k);
+  return { by, alt: [...by.keys()].sort((a, b) => b.length - a.length).join('|') };
+})());
+
+const VERB = '(?:draw|make|create|build|generate|show|give|sketch|produce|display|prepare|compose)';
+const POLITE = '(?:please\\s+)?(?:(?:can|could|would|will)\\s+you\\s+)?(?:please\\s+)?';
+const ART = '(?:an?|the|some|one|another)?\\s*';
+const ADJ = '(?:(?:random|sample|simple|quick|small|new|nice|little|example)\\s+)*';
+const NOUN = '(?:\\s+(?:diagram|chart|graph))?';
+const OF = '(?:\\s+(?:of|about|for|on|showing|that shows|to show|describing|depicting|with))';
+/**
+ * A request for a diagram of a kind: { kind, topic } ("a flowchart of making tea", "a cycle diagram of the four seasons", "draw the planets on a timeline"),
+ * { kind, random: true } ("a random mind map"), { random: true } ("make a random diagram", "draw a diagram", "a sample diagram"); null when the text is not one.
+ * A kind alone ("draw a tree", "a cycle") is not a request here: the engine's own reader draws the shape or the template.
+ */
+export function parseDiagramRequest(text) {
+  const t = String(text ?? '').trim().replace(/\s+/g, ' ');
+  const { by, alt } = kindAlternatives();
+  const kindOf = (s) => { for (const [p, k] of by) if (new RegExp(`^${p}$`, 'i').test(s)) return k; return null; };
+  let m = new RegExp(`^${POLITE}(?:${VERB}(?:\\s+me)?\\s+)?${ART}${ADJ}(${alt})${NOUN}${OF}\\s+(.+?)\\s*[.!?]*$`, 'i').exec(t);
+  if (m) return { kind: kindOf(m[1].toLowerCase())?.name, topic: m[2], said: m[1] };
+  m = new RegExp(`^${POLITE}${VERB}(?:\\s+me)?\\s+(.+?)\\s+(?:on|as|in|using)\\s+(?:an?|the)\\s+(${alt})${NOUN}\\s*[.!?]*$`, 'i').exec(t);
+  if (m) return { kind: kindOf(m[2].toLowerCase())?.name, topic: m[1], said: m[2], weak: true };   // "draw a circle in a tree" is not a request for a diagram of a circle: when nothing is known, the engine reads it
+  m = new RegExp(`^${POLITE}${VERB}(?:\\s+me)?\\s+${ART}((?:(?:random|sample|simple|quick|small|new|nice|little|example)\\s+)*)(${alt}|diagram|chart|picture)\\s*(?:for\\s+me|please)?[.!?]*$`, 'i').exec(t);
+  if (m) {
+    const k = kindOf(m[2].toLowerCase()), asked = /\b(?:random|sample|example)\b/i.test(m[1]);
+    if (!k) return { random: true };   // "draw a diagram", "make a sample diagram": any kind
+    return asked ? { kind: k.name, random: true, said: m[2] } : null;   // "make a random mind map" is one; "draw a tree" is the engine's own (the shape, the template)
+  }
+  return null;
+}
+
+// ---- the topic of a request: candidates, longest first -----------------------------------------------------------------------------------------------
+const FUNCTION_WORDS = new Set('a an the of in on at to for from by with and or about as is are was were its their his her this that these those some all any my your our how what which who do does did can will shall'.split(' '));
+const sing = (w) => (/ies$/.test(w) && w.length > 4 ? w.replace(/ies$/, 'y') : /(?:ches|shes|sses|xes|zes)$/.test(w) ? w.replace(/es$/, '') : /[^s]s$/.test(w) && !/(?:ss|us|is)$/.test(w) ? w.replace(/s$/, '') : w);
+const base = (w) => (/ing$/.test(w) && w.length > 5 ? [w.replace(/ing$/, ''), w.replace(/ing$/, 'e'), w.replace(/(.)\1ing$/, '$1')] : []);
+/** The phrasings of a topic to try: the topic as said, then the windows of its words (not starting or ending in a function word), longest first and later ones first; each as said, in the singular, and as the base of an -ing word. */
+export function topicCandidates(topicText) {
+  const w = words(topicText).filter((x) => x !== "'");
+  const out = [], seen = new Set();
+  const add = (x) => { const k = x.trim(); if (k && !seen.has(k)) { seen.add(k); out.push(k); } };
+  const wins = [];
+  add(w.join(' '));   // the topic as it was said (a topic of the knowledge may begin with an article: "a face of a role")
+  if (/^(?:a|an|the)$/.test(w[0] ?? '')) add(w.slice(1).join(' '));
+  for (let n = Math.min(4, w.length); n >= 1; n--) for (let i = w.length - n; i >= 0; i--) {
+    const s = w.slice(i, i + n);
+    if (FUNCTION_WORDS.has(s[0]) || FUNCTION_WORDS.has(s.at(-1))) continue;
+    wins.push(s);
+  }
+  for (const s of wins) {
+    const last = s.length - 1;
+    add(s.join(' '));
+    add([...s.slice(0, last), sing(s[last])].join(' '));
+    for (const b of base(s[0])) add([b, ...s.slice(1)].join(' '));
+    if (s.length > 1) add([sing(s[0]), ...s.slice(1)].join(' '));
+  }
+  return out;
+}
+
+// ---- the World ------------------------------------------------------------------------------------------------------------------------------------
+const worlds = new WeakMap();
+/** The library World of the bundled subset: the kinds, w.diagram's schema, the cycles of nature and the calendar, the usual parts, the steps of methods, the elements of a story, and the countries (k.geo, shared with the composer). */
+export function bundledDiagramWorld(lib) {
+  if (worlds.has(lib)) return worlds.get(lib);
+  const w = new lib.World();
+  for (const text of Object.values(BUNDLED_DIAGRAMS.files)) w.tell(text);
+  w.tell(BUNDLED_GEO.text);
+  worlds.set(lib, w);
+  return w;
+}
+
+/**
+ * The live catalog's part of the diagram knowledge (one host per catalog): the worlds the fills of k.diagrams read, a small world whole and a big one by the shards whose keys name a word of
+ * the request (the catalog's index lists the keys), told into the same World as the bundled subset. `world()` is that World once something was loaded, else null.
+ */
+const hosts = new WeakMap();
+export function diagramHostOf(cat0) {
+  const cat = cat0?.base ?? cat0;
+  if (!cat) return null;
+  if (!hosts.has(cat)) hosts.set(cat, createDiagramHost(cat));
+  return hosts.get(cat);
+}
+const SMALL_WORLD_SHARDS = 8;
+export function createDiagramHost(cat) {
+  let world = null, lib = null;
+  const told = new Set(), texts = new Map(), fillTypes = new Set();
+  const read = async (p) => { if (!texts.has(p)) texts.set(p, (await cat.readText?.(p)) ?? ''); return texts.get(p); };
+  const tell = async (p) => { if (told.has(p)) return; told.add(p); const t = await read(p); if (t) world.tell(t); };
+  async function loadWorld(id, wanted) {
+    const w = await cat.world?.(id);
+    if (!w) return;
+    if (w.schema) await tell(w.schema);
+    const shards = w.shards ?? [];
+    const pick = shards.length <= SMALL_WORLD_SHARDS ? shards : shards.filter((s) => (s.keys ?? []).some((k) => wanted.has(String(k).toLowerCase())));
+    for (const s of pick) await tell(s.path);
+  }
+  return {
+    /** Loads what a request can touch: the diagram kinds and fills first (they name the worlds), then those worlds for the words. Resolves to true when the World has the kinds. */
+    async load(wordList = []) {
+      try {
+        lib ??= await diagramLibrary();
+        world ??= bundledDiagramWorld(lib);
+        const wanted = new Set(wordList.flatMap((x) => { const l = low(x); return [l, sing(l)]; }));
+        await loadWorld('k.diagrams', wanted);
+        for (const f of world.ofType('k.diagrams.fill')) fillTypes.add(bare(f.attrs.type[0]));
+        const ids = [...new Set([...fillTypes].map((t) => t.split('.').slice(0, 2).join('.')))];
+        for (const id of ids) await loadWorld(id, wanted);
+        return true;
+      } catch { return false; }
+    },
+    world: () => (told.size ? world : null),
+  };
+}
+/** The World a diagram is composed from: the live catalog's when it loaded something, else the bundled subset. */
+export const diagramWorldOf = (lib, cat) => diagramHostOf(cat)?.world() ?? bundledDiagramWorld(lib);
+
+// ---- composing ------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * The knowledge's own spelling of the topic when what the fill read is ABOUT it, exactly, else null: a fill looked up by a topic key has a fact whose value of that key is the topic (the method "make tea", the cycle "seasons",
+ * the kind "bird"), and a fill with none has a fact named the topic (the country France). The library also takes a fact that merely contains the topic as a word, and a fill with no topic key for any
+ * topic (the elements of a story, the aspects of a thing); a request names its topic, so those are not enough.
+ */
+function aboutTopic(world, lib, r, topic) {
+  const kind = lib.diagramKinds(world).find((k) => k.name === r.kind);
+  const fill = kind?.fills.find((f) => `${f.type}.${f.key}` === r.fill);
+  if (!fill || (!fill.topic && fill.gives === 'order')) return null;   // an ordered list with no topic key is not about any topic (the elements of a story)
+  const t = low(topic);
+  for (const f of world.ofType(fill.type)) for (const v of fill.topic ? (f.attrs[fill.topic] ?? []) : (f.attrs.name ?? [])) if (low(bare(v)) === t) return bare(v);
+  return null;
+}
+
+/** Whether the kind's edges are arrows (`edges=directed`) or plain lines; the diagram carries it for the engine. */
+const withDirection = (lib, world, d) => ({ ...d, directed: lib.diagramKinds(world).find((k) => k.name === d.kind)?.edges === 'directed' });
+
+/**
+ * The size `composeDiagram` lays a node out with, in the units of its frame (its boxes: 6 + 1.6 per letter, at most 30, 8 high). A layer with more nodes than the frame is wide enough for is
+ * laid out wider than the frame (the layout never overlaps or squeezes them), so the canvas shows the whole extent of the nodes, not the frame: `extent` is the width and the height in units
+ * (at least the frame's 100) that the nodes need.
+ */
+export const unitBox = (label) => ({ w: Math.min(30, 6 + String(label).length * 1.6), h: 8 });
+const fitted = (lib, world, opts) => {
+  const r = lib.composeDiagram(world, opts);
+  if (r.why) return r;
+  return { ...r, extent: { w: Math.max(100, ...r.nodes.map((n) => n.x + unitBox(n.label).w)), h: Math.max(100, ...r.nodes.map((n) => n.y + unitBox(n.label).h)) } };
+};
+
+/**
+ * A kind can be filled from several knowledge types (a tree of "car": its kinds, its parts); the library takes one by a seed. The request says which it means ("the parts of a car", "the cities of
+ * France", "the kinds of mammals"): the fill whose type or key names a word of the request (in the singular) is the one asked for. Returns the number of such words.
+ */
+const FILLS_TRIED = 6;
+const askedFor = (r, requestWords) => {
+  const named = new Set(String(r.fill).split(/[._]/).map((x) => sing(x.toLowerCase())));
+  return requestWords.filter((w) => w.length > 2 && !FUNCTION_WORDS.has(w) && named.has(sing(w))).length;
+};
+/** A diagram of a kind about the topic of a request, from knowledge: { diagram, topic } or { why }. The candidate topics are tried in order; the first the knowledge has the structure for wins. */
+export function composeForRequest(lib, world, { kind, topic }, { seed = 1, max = 9 } = {}) {
+  const tried = [], asked = words(topic);
+  for (const c of topicCandidates(topic)) {
+    tried.push(c);
+    const found = new Map();   // fill -> composed diagram: the fills the library takes for the topic, over a few seeds
+    for (let k = 0; k < FILLS_TRIED; k++) {
+      const r = fitted(lib, world, { kind, topic: c, seed: seed + k, max });
+      if (r.why || !r.nodes?.length || found.has(r.fill)) continue;
+      const said = aboutTopic(world, lib, r, c);
+      if (said) found.set(r.fill, { r, said, seed: seed + k });
+    }
+    if (!found.size) continue;
+    const best = [...found.values()].sort((a, b) => askedFor(b.r, asked) - askedFor(a.r, asked))[0];
+    const spelt = best.said === c ? best.r : fitted(lib, world, { kind, topic: best.said, seed: best.seed, max });   // the topic as the knowledge writes it (France, not france)
+    return { diagram: withDirection(lib, world, spelt.why ? best.r : spelt), topic: best.said };
+  }
+  return { why: `no knowledge of the structure of a ${kind} about ${topic} (tried ${tried.slice(0, 6).join(', ')})` };
+}
+/** A random diagram: the library's kind x topic sample (seeded), with at least `min` shapes and a topic its knowledge is about (a walk over seeds; the first that qualifies). */
+export function sampleDiagrams(lib, world, { seed = 1, kinds, min = 4, tries = 24, max = 9 } = {}) {
+  for (let i = 0; i < tries; i++) {
+    const s = (seed + i * 7919) >>> 0, r = lib.sampleDiagram(world, { seed: s, max, ...(kinds ? { kinds: [kinds] } : {}) });
+    if (r.why || r.nodes.length < min || String(r.topic).length < 3 || !aboutTopic(world, lib, r, r.topic)) continue;   // (the sampled topic is the knowledge's own spelling)
+    const f = fitted(lib, world, { kind: r.kind, topic: r.topic, seed: s, max });   // the same diagram with its extent
+    if (!f.why) return { diagram: withDirection(lib, world, f), topic: r.topic };
+  }
+  return { why: 'no diagram kind has a topic with enough in this knowledge' };
+}
+
+// ---- onto the diagram engine ----------------------------------------------------------------------------------------------------------------------
+/** The engine's primitive for a shape of k.diagrams.shape (the engine draws circles, rectangles, squares, diamonds, ellipses, triangles, hexagons, stars). */
+export const ENGINE_SHAPE = { oval: 'ellipse', ellipse: 'ellipse', circle: 'circle', dot: 'ellipse', rectangle: 'rectangle', rounded_rectangle: 'rectangle', double_rectangle: 'rectangle', document: 'rectangle', parallelogram: 'rectangle', diamond: 'diamond', chevron: 'hexagon' };
+const CANVAS = { w: 800, h: 500 };
+const slug = (label) => String(label).normalize('NFKD').replace(/[^\p{L}\p{N}]+/gu, '_').replace(/^_+|_+$/g, '');
+/**
+ * The engine's commands for a composed diagram: a `create` per node (named after its label, put where the layout put it: the extent of the nodes, `d.extent` units, is the 800 x 500 canvas) and a
+ * `connect` per edge; a group (the sets of a Venn diagram) is an ellipse drawn first, round the place its members were laid out in. `taken` are the names already on the canvas.
+ */
+export function engineNodes(d, taken = new Set()) {
+  const used = new Set([...taken].map(low)), nameOf = new Map(), nodes = [];
+  const unique = (label) => { let b = slug(label) || 'node', n = b, i = 1; while (used.has(low(n)) || /^[crsdetxhk]\d+$/i.test(n)) { budget.tick('diagram.name'); n = `${b}_${++i}`; } used.add(low(n)); return n; };
+  const sx = CANVAS.w / (d.extent?.w ?? 100), sy = CANVAS.h / (d.extent?.h ?? 100);
+  const place = (n) => {
+    const u = unitBox(n.label), w = Math.round(Math.max(44, u.w * sx)), h = 44;
+    return { x: Math.round(Math.min(CANVAS.w - w / 2 - 4, Math.max(w / 2 + 4, (n.x + u.w / 2) * sx))), y: Math.round(Math.min(CANVAS.h - h / 2 - 4, Math.max(h / 2 + 4, (n.y + u.h / 2) * sy))), w, h };
+  };
+  for (const g of d.groups ?? []) {
+    const ms = d.nodes.filter((n) => g.members.includes(n.id));
+    if (!ms.length) continue;
+    const ps = ms.map(place), cx = ps.reduce((a, p) => a + p.x, 0) / ps.length, cy = ps.reduce((a, p) => a + p.y, 0) / ps.length;
+    const name = unique(g.label);
+    nameOf.set(g.id, name);
+    nodes.push({ id: `g${nodes.length}`, type: 'command', args: { action: 'create', shape: 'ellipse', name, label: g.label, width: 44 * sx, height: 44 * sy, at: `${Math.round(cx)},${Math.round(cy)}` } });
+  }
+  for (const n of d.nodes) {
+    const name = unique(n.label), { x, y, w, h } = place(n);
+    nameOf.set(n.id, name);
+    const shape = ENGINE_SHAPE[n.shape] ?? 'rectangle';
+    nodes.push({ id: `n${nodes.length}`, type: 'command', args: { action: 'create', shape, name, label: n.label, width: shape === 'circle' ? Math.max(w, 72) : w, height: shape === 'circle' ? Math.max(w, 72) : shape === 'diamond' ? h + 24 : h, at: `${x},${y}` } });
+  }
+  for (const e of d.edges ?? []) {
+    nodes.push({ id: `e${nodes.length}`, type: 'command', args: { action: 'connect', from: nameOf.get(e.from), to: nameOf.get(e.to), arrow: d.directed ? 'forward' : 'none' } });
+  }
+  return nodes;
+}
+
+/** What was drawn, in plain words (the English the reply translator reads): "I drew a cycle diagram about the seasons with four shapes." */
+const COUNT = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
+export const countWord = (n) => COUNT[n] ?? String(n);
+export const formName = (d) => String(d.kind).replace(/\s+diagram$/i, '');
+export function say(d, topic, { random = false } = {}) {
+  const n = d.nodes.length, unit = n === 1 ? 'shape' : 'shapes';
+  return `I drew a ${random ? 'random ' : ''}${formName(d)} diagram with ${countWord(n)} ${unit}.${topic ? ` It is about ${topic}.` : ''}`;
+}
+
+// ---- the dice -------------------------------------------------------------------------------------------------------------------------------------
+const sentenceCache = new WeakMap();
+/**
+ * What the dice of the Diagram tab may say (spec 25 knowledge lists): a request for each kind x topic the knowledge can draw, whole sentences ("Make a mind map of bee.") that the same reader
+ * the person's own sentences go through reads back. The topics are the library's (`diagramTopics`), kept only when the request composes. Cached per World and size.
+ */
+export function diagramSentences(lib, world, { perKind = 6 } = {}) {
+  const c = sentenceCache.get(world);
+  if (c && c.size === world.wires.size) return c.list;
+  const list = [];
+  for (const k of lib.diagramKinds(world)) {
+    let n = 0;
+    for (const t of lib.diagramTopics(world, k.name, { limit: 24 })) {
+      if (n >= perKind) break;
+      if (!/^[\p{L}\p{N} '-]+$/u.test(t.topic) || t.topic.length > 40 || composeForRequest(lib, world, { kind: k.name, topic: t.topic }).why) continue;
+      list.push(`Make a ${k.name} of ${t.topic}.`);
+      n++;
+    }
+  }
+  sentenceCache.set(world, { size: world.wires.size, list });
+  return list;
+}

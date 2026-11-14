@@ -162,7 +162,11 @@ function causeOf(row, r) {
   if (/raise the|Which part should move|which way: for example "raise/.test(rep)) return 'wrong world: "put them in a ..." is read by the avatar world (arrange/align verbs other than "arrange" are not layout)';
   if (/already connects/.test(rep)) return 'layout phrase read as an arrow command (connect), not as an arrangement of arrows';
   if (/rename/.test(rep) && row.group === 'edits') return 'edit verb "call the arrow X" read as renaming a shape';
+  if (/I do not know enough/.test(rep) && /\(I read "(\w+)" as "(\w+)"\)/.test(rep)) return `the spell checker changed a word of the topic before the diagram world read it (${/\(I read [^)]*\)/.exec(rep)[0]}): the offline vocabulary lacks the word`;
+  if (/I do not know enough/.test(rep)) return `the knowledge has no structure for the topic of this ${g.split(' ')[0]} (the fills of k.diagrams find no fact about it in the bundled subset or the catalog): a knowledge item, not code`;
+  if (row.group === 'arrangements' && /already connects/.test(rep)) return 'layout direction of arrows ("go left to right") is read as connecting: the direction frame belongs to w.lang.en (arrangement phrases) and the engine';
   if (row.group === 'kinds') {
+    if (/^Drew (a circle|Tree)\.$/.test(rep) && /hierarchy|on a timeline/.test(row.request)) return 'the kind is said by a word or a frame k.diagrams does not know ("a hierarchy of", "X on a timeline"): synonyms of kind names are a knowledge item';
     if (/could not find a command|I understood only part/.test(rep)) return `kind frame "a ${g.split(' ')[0]} of how to ..." not read by any pattern`;
     if (/placeholder/.test(rep)) return 'template named by the kind but the topic is taken as the items (or placeholders): no knowledge of the topic';
     if (/Idea 1/.test(rep)) return 'template drawn with placeholder labels: the topic is ignored';
@@ -210,10 +214,10 @@ async function main() {
     const out = [];
     for (const mode of modes) for (const r of all[mode]) {
       if (r.outcome === 'right') continue;
-      const src = 'DIAG-GAP scripts/measure-diagram-gap.mjs (diagram.sketch)';
+      const src = arg('source', 'DIAG-KNOW scripts/measure-diagram-gap.mjs (diagram.sketch, composed from knowledge, sopworld 0.113)');
       if (have.has(`${src}|${r.request}|${mode}`)) continue;
       const row = byId[r.id];
-      out.push(JSON.stringify({ text: r.request, tab: 'diagram', language: 'en', happened: `${r.reply} [${r.outcome}: ${r.why ?? 'state unchanged'}; ${r.shapes} shapes, ${r.edges} arrows]`, expected: row.expect, class: `diagram-gap:${row.group}:${row.kind}`, cause: causeOf(row, r), reasoner: mode, source: src, first_seen: '2026-11-14', build }));
+      out.push(JSON.stringify({ text: r.request, tab: 'diagram', language: 'en', happened: `${r.reply} [${r.outcome}: ${r.why ?? 'state unchanged'}; ${r.shapes} shapes, ${r.edges} arrows]`, expected: row.expect, class: `diagram-gap:${row.group}:${row.kind}`, cause: causeOf(row, r), reasoner: mode, source: src, first_seen: new Date().toISOString().slice(0, 10), build }));
     }
     if (out.length) appendFileSync(LEDGER, `${out.join('\n')}\n`);
     console.log(`ledger: ${out.length} rows appended to training/eval/failures.jsonl`);

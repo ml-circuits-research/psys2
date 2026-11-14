@@ -12,3 +12,12 @@ export function checkReferents(ctx, { action, args = {} } = {}) {
   const op = ENGINE_OP[String(action ?? '').split('.').pop()];
   return op ? engineCheck(ctx, { action: `diagram.${op}`, args }) : undefined;
 }
+/**
+ * Discourse hook (spec 14 section 9): a request for a diagram of a kind about a topic, or a random one ("make a mind map about bees"): the words the live catalog is asked about before the
+ * request runs, { words } (the candidate topics' words; none for a random diagram), or null for any other sentence.
+ */
+import { parseDiagramRequest, topicCandidates } from '../../src/knowledge/diagram-world.mjs';
+export function diagramGoal(ctx, { args = {} } = {}) {
+  const req = parseDiagramRequest(args.text);
+  return req ? { words: req.topic ? [...new Set(topicCandidates(req.topic).flatMap((c) => c.split(' ')))] : [] } : null;
+}

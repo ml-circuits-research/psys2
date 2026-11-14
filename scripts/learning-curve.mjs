@@ -20,11 +20,14 @@ import { spawnSync } from 'node:child_process';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { summary as heldoutSummary } from './freeze-heldout.mjs';
+import { headline as realHeadline } from './real-set.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const FILE = join(REPO, 'training/eval/learning-curve.jsonl');
 const jsonl = (f) => (existsSync(f) ? readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : []);
-export const history = () => jsonl(FILE);
+/** Points recorded before the rename (0.111: cousins -> related cases) carry the series as `cousinsReal`: it is the same series, read as `relatedReal`. */
+export const renamed = (pts) => pts.map((p) => (p.cousinsReal && !p.relatedReal ? { ...p, relatedReal: p.cousinsReal } : p));
+export const history = () => renamed(jsonl(FILE));
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
 /** The general mechanisms now in the repository (the x of the curve). */
@@ -37,11 +40,19 @@ export async function mechanisms() {
 
 /** The share of every curve for a point: { key: { right, total } | null }. */
 export const SERIES = [
-  { key: 'heldout', label: 'Held-out real messages (frozen, judged)', color: 'var(--k-fill)' },
-  { key: 'paraphrasesSame', label: 'Paraphrases, meaning kept', color: 'var(--k-ask)' },
-  { key: 'seating60', label: 'New world from a schema alone', color: 'var(--k-view)' },
-  // cousins of real cases (scripts/cousins.mjs --record-real; spec 16): shown only once a point has it, which needs the vendored library to export `cousins`
-  { key: 'cousinsReal', label: 'Cousins of real cases', color: 'var(--k-act)', optional: true },
+  // HEADLINE (owner decision 2026-11-14 22:10): real user turns first. `real` = share right of the JUDGED turns of the real set (scripts/real-set.mjs, matrix reasoner); the held-out real messages are real too.
+  { key: 'real', label: 'REAL turns (owner logs, phrase logs, real dialogues; judged)', color: 'var(--k-act)', headline: true, optional: true },
+  { key: 'heldout', label: 'Held-out real messages (frozen, judged)', color: 'var(--k-fill)', headline: true },
+  // SECONDARY DIAGNOSTICS: synthetic sets, kept (data principle) but not targets
+  { key: 'paraphrasesSame', label: 'Paraphrases-rt, meaning kept (synthetic)', color: 'var(--k-ask)' },
+  { key: 'looseWords', label: 'Loose words (synthetic)', color: 'var(--mut)', optional: true },
+  { key: 'typos', label: 'Typos (synthetic)', color: 'var(--mut)', optional: true },
+  { key: 'seating60', label: 'New world from a schema alone (judged by hand)', color: 'var(--k-view)' },
+  // related cases of real cases (scripts/related-cases.mjs --record-real; spec 16): shown only once a point has it, which needs the vendored library to export `relatedCases`
+  { key: 'relatedReal', label: 'Related cases of real cases', color: 'var(--k-act)', optional: true },
+  // dice (scripts/measure-dice.mjs) and the coverage grid (scripts/coverage-grid.mjs): shown only once a point carries them
+  { key: 'dice', label: 'Dice (synthetic)', color: 'var(--mut)', optional: true },
+  { key: 'grid', label: 'Coverage grid (synthetic)', color: 'var(--mut)', optional: true },
 ];
 /** The series to draw: the optional ones only when some point has a value (a "gap" row for a measure that cannot exist yet is noise). */
 const active = (pts) => SERIES.filter((s) => !s.optional || pts.some((p) => p[s.key]));
@@ -51,18 +62,25 @@ const share = (m) => (m && m.total ? m.right / m.total : null);
 export async function currentPoint(note = '') {
   const ind = JSON.parse(readFileSync(join(REPO, 'training/eval/indicators.json'), 'utf8'));
   const h = heldoutSummary();
-  const cf = join(REPO, 'training/eval/cousins-real.json'), cousins = existsSync(cf) ? JSON.parse(readFileSync(cf, 'utf8')) : null;   // written only from a vendored library (cousins.mjs --record-real)
+  const cf = ['related-real.json', 'cousins-real.json'].map((f) => join(REPO, 'training/eval', f)).find(existsSync), related = cf ? JSON.parse(readFileSync(cf, 'utf8')) : null;   // written only from a vendored library (related-cases.mjs --record-real); the old file name is still read
   const build = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: REPO, encoding: 'utf8' }).stdout.trim();
   const same = ind.robustness?.paraphrasesDate ? ind.robustness['paraphrases-rt'] : null;   // only after the re-judging (meaning kept) does the set mean "paraphrases"
+  let real = null;
+  try { const h = realHeadline(); real = h.total ? { right: h.right, total: h.total, turns: h.turns } : null; } catch { /* the real set was not run yet (node scripts/real-set.mjs run) */ }
+  const rb = ind.robustness?.paraphrasesDate ? ind.robustness : null;
   return { date: new Date().toISOString().slice(0, 10), build, mechanisms: await mechanisms(),
+    ...(real ? { real } : {}),
+    ...(rb?.['loose-words'] ? { looseWords: { right: rb['loose-words'].right, total: rb['loose-words'].total } } : {}),
+    ...(rb?.typos ? { typos: { right: rb.typos.right, total: rb.typos.total } } : {}),
     heldout: h.judged ? { right: h.right, total: h.judged, frozen: h.total } : null,
     paraphrasesSame: same ? { right: same.right, total: same.total } : null,
     seating60: ind.seating60 ? { right: ind.seating60.right, total: ind.seating60.total } : null,
-    ...(cousins ? { cousinsReal: { right: cousins.right, total: cousins.total } } : {}), note };
+    ...(related ? { relatedReal: { right: related.right, total: related.total } } : {}), note };
 }
 
 /** Slope of each series at each point: percentage points per added mechanism since the previous point that had the measure (null = first point or a gap). */
-export function slopes(pts = history()) {
+export function slopes(pts0 = history()) {
+  const pts = renamed(pts0);
   return pts.map((p, i) => {
     const out = {};
     for (const s of SERIES) {
@@ -84,19 +102,21 @@ const pctText = (m) => (share(m) == null ? 'gap' : `${Math.round(share(m) * 1000
 const slopeText = (x) => (x.state === 'gap' ? 'gap' : x.state === 'first' ? 'first point' : x.perMech == null ? `${x.dPP >= 0 ? '+' : ''}${x.dPP} pp, no mechanism added` : `${x.dPP >= 0 ? '+' : ''}${x.dPP} pp over +${x.dMech} mechanisms = ${x.perMech} pp each`);
 
 /** Rows for the landing table: one per curve, with the latest value and the slope at the latest landing. */
-export function tableRows(pts = history()) {
+export function tableRows(pts0 = history()) {
+  const pts = renamed(pts0);
   if (!pts.length) return [];
   const sl = slopes(pts), last = pts.at(-1), lastS = sl.at(-1), m = last.mechanisms;
   return active(pts).map((s) => {
     const v = last[s.key];
-    return { label: `Learning curve: ${s.label}`, value: v ? `${Math.round(share(v) * 1000) / 10}%` : 'gap',
+    return { label: `Learning curve${s.headline ? ' (headline)' : ' (secondary diagnostic)'}: ${s.label}`, value: v ? `${Math.round(share(v) * 1000) / 10}%` : 'gap',
       detail: `${v ? `${v.right} of ${v.total}` : s.key === 'heldout' ? `no judged messages yet (${heldoutSummary().total} frozen)` : 'not measured at this landing'}; at ${last.date} ${last.build} with ${m.total} general mechanisms (${m.schemaWorlds} schema worlds + ${m.acts} acts + ${m.verbGroups} verb groups); slope at this landing: ${slopeText(lastS[s.key])}; ${pts.length} landings in training/eval/learning-curve.jsonl` };
   });
 }
 
 /** Inline SVG of the two curves (x = landing, labelled date and mechanisms; y = share right); colours from the page's CSS variables, so light and dark both work. */
-export function svg(pts = history()) {
-  const W = 680, H = 300, L = 46, R = 16, T = 18, B = 72, pw = W - L - R, ph = H - T - B;
+export function svg(pts0 = history()) {
+  const pts = renamed(pts0);
+  const W = 680, H = 330, L = 46, R = 16, T = 18, B = 100, pw = W - L - R, ph = H - T - B;
   const n = pts.length, X = (i) => L + (n <= 1 ? pw / 2 : (pw * i) / (n - 1)), Y = (f) => T + ph * (1 - f);
   const g = [];
   for (const t of [0, 0.25, 0.5, 0.75, 1]) g.push(`<line x1="${L}" x2="${W - R}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)" stroke-width="1"/><text x="${L - 6}" y="${Y(t) + 4}" text-anchor="end" font-size="11" fill="var(--mut)">${t * 100}%</text>`);
@@ -104,20 +124,21 @@ export function svg(pts = history()) {
   for (const s of active(pts)) {
     let d = '', pen = false;
     pts.forEach((p, i) => { const f = share(p[s.key]); if (f == null) { pen = false; return; } d += `${pen ? 'L' : 'M'}${X(i).toFixed(1)} ${Y(f).toFixed(1)} `; pen = true; });
-    if (d) g.push(`<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2"/>`);
-    pts.forEach((p, i) => { const f = share(p[s.key]); if (f != null) g.push(`<circle cx="${X(i)}" cy="${Y(f)}" r="4" fill="${s.color}"><title>${esc(s.label)} ${p.date} ${p.build}: ${esc(pctText(p[s.key]))}</title></circle>`); });
+    if (d) g.push(`<path d="${d}" fill="none" stroke="${s.color}" stroke-width="${s.headline ? 3 : 1.5}"${s.headline ? '' : ' stroke-dasharray="5 3"'}/>`);
+    pts.forEach((p, i) => { const f = share(p[s.key]); if (f != null) g.push(`<circle cx="${X(i)}" cy="${Y(f)}" r="${s.headline ? 5 : 3}" fill="${s.color}"><title>${esc(s.label)} ${p.date} ${p.build}: ${esc(pctText(p[s.key]))}</title></circle>`); });
   }
-  active(pts).forEach((s, k) => g.push(`<rect x="${L + k * 205}" y="${H - 26}" width="10" height="10" fill="${s.color}"/><text x="${L + k * 205 + 15}" y="${H - 17}" font-size="11" fill="var(--fg)">${esc(s.label)}${pts.some((p) => p[s.key]) ? '' : ' (no data yet)'}</text>`));
+  active(pts).forEach((s, k) => g.push(`<rect x="${L + (k % 3) * 205}" y="${H - 26 + Math.floor(k / 3) * 14}" width="10" height="10" fill="${s.color}"/><text x="${L + (k % 3) * 205 + 15}" y="${H - 17 + Math.floor(k / 3) * 14}" font-size="11" fill="var(--fg)">${esc(s.label)}${pts.some((p) => p[s.key]) ? '' : ' (no data yet)'}</text>`));
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Learning curve: share right over landings, x = landing date and number of general mechanisms" style="max-width:100%;height:auto;font-family:inherit">${g.join('')}</svg>`;
 }
 
 /** The section for docs/system-map.html (called by landing-table's toHtml). */
-export function html(pts = history()) {
+export function html(pts0 = history()) {
+  const pts = renamed(pts0);
   if (!pts.length) return '';
   const sl = slopes(pts);
   const rowsHtml = pts.map((p, i) => `<tr><td>${esc(p.date)} <code>${esc(p.build)}</code></td><td class="num">${p.mechanisms.total}</td>${active(pts).map((s) => `<td style="white-space:normal">${esc(pctText(p[s.key]))}<br><small>${esc(slopeText(sl[i][s.key]))}</small></td>`).join('')}</tr>`).join('\n');
   return `<h3>Learning curve</h3>
-<p>Does each general mechanism keep generalising? x = landing, labelled with the count of general mechanisms (schema worlds + acts + verb groups); y = share right. Curves that rise with the additions: the symbolic approach generalises. Flat curves while the per-case sets rise: we are fitting cases, and the learned fallback must take more load. History: <code>training/eval/learning-curve.jsonl</code> (<code>scripts/learning-curve.mjs</code>); the held-out messages are frozen at arrival (<code>scripts/freeze-heldout.mjs</code>) and never used to write a rule.</p>
+<p><strong>Headline: REAL turns</strong> (what real users typed, <code>scripts/real-set.mjs</code>); the synthetic sets (paraphrases-rt, loose words, typos, related cases, dice, grid) are secondary diagnostics, kept but not targets. Does each general mechanism keep generalising? x = landing, labelled with the count of general mechanisms (schema worlds + acts + verb groups); y = share right. Curves that rise with the additions: the symbolic approach generalises. Flat curves while the per-case sets rise: we are fitting cases, and the learned fallback must take more load. History: <code>training/eval/learning-curve.jsonl</code> (<code>scripts/learning-curve.mjs</code>); the held-out messages are frozen at arrival (<code>scripts/freeze-heldout.mjs</code>) and never used to write a rule.</p>
 ${svg(pts)}
 <div class="scroll"><table><thead><tr><th>landing</th><th class="num">mechanisms</th>${active(pts).map((s) => `<th>${esc(s.label)}</th>`).join('')}</tr></thead><tbody>
 ${rowsHtml}</tbody></table></div>
