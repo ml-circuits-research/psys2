@@ -1,0 +1,38 @@
+# w.lang.ro dictionary, lemmas starting with d: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+da	verb:irregular		k.actions.verb.send.give	pres=dau dai dă dăm dați dau	give
+dansa	verb:v.az		k.words.dance.verb.1		dance
+deget	noun:n.n._-e	n	k.words.finger.noun.1		finger
+delfin	noun:n.m._-i	m	k.words.dolphin.noun.1		dolphin
+depăși	verb:v.is		k.words.exceed.verb.1		exceed
+deplasa	verb:v.az		k.actions.verb.place.move		move
+deplasare	noun:n.f.are-ări	f	k.words.movement.noun.1		movement
+descărca	verb:v.a		k.actions.verb.save.download		download
+deschide	verb:irregular		k.actions.verb.change.open	pres=deschid deschizi deschide deschidem deschideți deschid	open
+deschis	adj:irregular			forms=deschis,deschisă,deschiși,deschise	open
+descrescător	adj:irregular			forms=descrescător,descrescătoare,descrescători,descrescătoare	descending
+desen	noun:n.n._-e	n	k.words.drawing.noun.1		drawing
+desena	verb:v.az		k.actions.verb.make.draw		draw
+deveni	verb:irregular		k.words.become.verb.1	pres=devin devii devine devenim deveniți devin	become
+diagramă	noun:n.f.ă-e	f	k.words.diagram.noun.1		diagram
+diez	noun:n.m._-i	m	k.words.sharp.noun.1		sharp
+diferit	adj:a.t-tă-ți-te				different
+dificultate	noun:irregular	f	k.words.difficulty.noun.1	pl=dificultăți	difficulty
+difuzor	noun:n.n.r-are	n	k.words.speaker.noun.1		speaker
+dimineață	noun:irregular	f	k.words.morning.noun.1	pl=dimineți	morning
+dinte	noun:irregular	m	k.words.tooth.noun.1	pl=dinți	tooth
+disponibil	adj:a._-ă-i-e				available
+distanță	noun:n.f.ă-e	f	k.words.distance.noun.1		distance
+distribuție	noun:n.f.ie-ii	f	k.words.cast.noun.1		cast
+document	noun:n.n._-e	n	k.words.document.noun.1		document
+dormi	verb:irregular		k.words.sleep.verb.1	pres=dorm dormi doarme dormim dormiți dorm	sleep
+dragon	noun:n.m._-i	m	k.words.dragon.noun.1		dragon
+drept	adj:irregular			forms=drept,dreaptă,drepți,drepte	right
+dreptunghi	noun:n.n._-uri	n	k.words.rectangle.noun.1		rectangle
+drum	noun:n.n._-uri	n	k.words.road.noun.1		road
+dubla	verb:v.az		k.words.double.verb.1		double
+dublat	adj:a.t-tă-ți-te				doubled
+duce	verb:irregular		k.actions.verb.place.carry	pres=duc duci duce ducem duceți duc	carry
+duplica	verb:v.a		k.actions.verb.copy.duplicate		duplicate
+duzină	noun:n.f.ă-i	f	k.words.dozen.noun.1		dozen

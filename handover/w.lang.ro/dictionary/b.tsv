@@ -1,0 +1,28 @@
+# w.lang.ro dictionary, lemmas starting with b: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+băiat	noun:irregular	m	k.words.boy.noun.1	pl=băieți	boy
+balanță	noun:n.f.ă-e	f	k.words.balance.noun.1		balance
+balenă	noun:n.f.ă-e	f	k.words.whale.noun.1		whale
+balon	noun:n.n.n-ane	n	k.words.balloon.noun.1		balloon
+banană	noun:n.f.ă-e	f	k.words.banana.noun.1		banana
+bani	noun:n.m._-_	m	k.words.money.noun.1		money
+bară	noun:n.f.ă-e	f	k.words.bar.noun.1		bar
+barbă	noun:irregular	f	k.words.beard.noun.1	pl=bărbi	beard
+barcă	noun:irregular	f	k.words.boat.noun.1	pl=bărci	boat
+basm	noun:n.n._-e	n			fairy tale
+bază	noun:n.f.ă-e	f	k.words.base.noun.1		base
+bemol	noun:n.m._-i	m	k.words.flat.noun.1		flat
+bicicletă	noun:n.f.ă-e	f	k.words.bicycle.noun.1		bicycle
+bilă	noun:n.f.ă-e	f	k.words.marble.noun.1		marble
+bilet	noun:n.n._-e	n	k.words.ticket.noun.1		ticket
+biscuit	noun:n.m.t-ți	m	k.words.cookie.noun.1		cookie
+bomboană	noun:n.f.ă-e	f	k.words.candy.noun.1		candy
+brânză	noun:irregular	f	k.words.cheese.noun.1	pl=brânzeturi	cheese
+broască	noun:irregular	f	k.words.frog.noun.1	pl=broaște	frog
+bucurie	noun:n.f.ie-ii	f	k.words.joy.noun.1		joy
+bucuros	adj:a.s-asă-și-ase				glad
+bufniță	noun:n.f.ă-e	f	k.words.owl.noun.1		owl
+bun	adj:a._-ă-i-e				good
+bunic	noun:n.m._-i	m	k.words.grandfather.noun.1		grandfather
+bunică	noun:n.f.ă-e	f	k.words.grandmother.noun.1		grandmother

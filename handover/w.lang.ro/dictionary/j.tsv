@@ -1,0 +1,7 @@
+# w.lang.ro dictionary, lemmas starting with j: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+joc	noun:n.n._-uri	n	k.words.game.noun.1		game
+juca	verb:irregular		k.words.play.verb.1	pres=joc joci joacă jucăm jucați joacă	play
+jumătate	noun:irregular	f	k.words.half.noun.1	pl=jumătăți	half
+jurnal	noun:n.n._-e	n	k.words.log.noun.1		log

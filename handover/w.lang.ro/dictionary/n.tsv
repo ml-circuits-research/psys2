@@ -1,0 +1,19 @@
+# w.lang.ro dictionary, lemmas starting with n: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+nas	noun:n.n._-uri	n	k.words.nose.noun.1		nose
+negru	adj:irregular		k.colours.psys2.black	forms=negru,neagră,negri,negre	black
+nervos	adj:a.s-asă-și-ase				angry
+nisip	noun:n.n._-_	n	k.words.sand.noun.1		sand
+nivel	noun:n.n._-uri	n	k.words.level.noun.1		level
+noapte	noun:irregular	f	k.words.night.noun.1	pl=nopți	night
+nor	noun:n.m._-i	m	k.words.cloud.noun.1		cloud
+nord	noun:n.n._-_	n	k.words.north.noun.1		north
+notă	noun:n.f.ă-e	f	k.words.note.noun.1		note
+notiță	noun:n.f.ă-e	f	k.words.note.noun.1		note
+nou	adj:irregular			forms=nou,nouă,noi,noi	new
+număr	noun:irregular	n	k.words.number.noun.1	pl=numere	number
+număra	verb:v.a		k.actions.verb.ask.count		count
+nume	noun:n.n._-_	n	k.words.name.noun.1		name
+numerotat	adj:a.t-tă-ți-te				numbered
+numi	verb:v.is		k.actions.verb.change.call		call

@@ -1,0 +1,48 @@
+# w.lang.ro dictionary, lemmas starting with m: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+maimuță	noun:n.f.ă-e	f	k.words.monkey.noun.1		monkey
+major	adj:a._-ă-i-e				major
+mamă	noun:n.f.ă-e	f	k.words.mother.noun.1		mother
+mamifer	noun:n.n._-e	n	k.words.mammal.noun.1		mammal
+mână	noun:irregular	f	k.words.hand.noun.1	pl=mâini	hand
+mânca	verb:irregular		k.words.eat.verb.1	pres=mănânc mănânci mănâncă mâncăm mâncați mănâncă	eat
+mâncare	noun:irregular	f	k.words.food.noun.1	pl=mâncăruri	food
+măr	noun:irregular	n	k.words.apple.noun.1	pl=mere	apple
+marca	verb:v.az		k.actions.verb.pick.mark		mark
+marcaj	noun:n.n._-e	n	k.words.marker.noun.1		marker
+mare	noun:n.f.are-ări	f	k.words.sea.noun.1		sea
+mare	adj:irregular			forms=mare,mare,mari,mari	big
+mări	verb:v.is		k.actions.verb.change.enlarge		enlarge
+mărime	noun:n.f.e-i	f	k.words.size.noun.1		size
+maro	adj:a._-_-_-_				brown
+masă	noun:irregular	f	k.words.table.noun.1	pl=mese	table
+mască	noun:irregular	f	k.words.mask.noun.1	pl=măști	mask
+mașină	noun:n.f.ă-i	f	k.words.car.noun.1		car
+mașinuță	noun:n.f.ă-e	f	k.words.car.noun.1		car
+material	noun:n.n._-e	n	k.words.material.noun.1		material
+medical	adj:a._-ă-i-e				medical
+medie	noun:n.f.ie-ii	f	k.words.average.noun.1		average
+melodie	noun:n.f.ie-ii	f	k.words.melody.noun.1		melody
+memento	noun:irregular	n	k.words.reminder.noun.1	pl=memento-uri	reminder
+menționa	verb:v.az		k.words.mention.verb.1		mention
+merge	verb:irregular		k.words.go.verb.1	pres=merg mergi merge mergem mergeți merg	go
+mesaj	noun:n.n._-e	n	k.words.message.noun.1		message
+metru	noun:n.m.u-i	m	k.words.meter.noun.1		meter
+mic	adj:irregular			forms=mic,mică,mici,mici	small
+microfon	noun:n.n.n-ane	n	k.words.microphone.noun.1		microphone
+micșora	verb:v.az		k.actions.verb.change.shrink		shrink
+mijloc	noun:irregular	n	k.words.middle.noun.1	pl=mijloace	middle
+minge	noun:n.f.e-i	f	k.words.ball.noun.1		ball
+minor	adj:a._-ă-i-e				minor
+minut	noun:n.n._-e	n	k.words.minute.noun.1		minute
+mod	noun:n.n._-uri	n	k.words.mode.noun.1		mode
+modificare	noun:n.f.are-ări	f	k.words.change.noun.1		change
+monedă	noun:n.f.ă-e	f	k.words.coin.noun.1		coin
+morcov	noun:n.m._-i	m	k.words.carrot.noun.1		carrot
+mov	adj:a._-_-_-_		k.colours.psys2.purple		purple
+mulțumi	verb:v.is		k.words.thank.verb.1		thank
+mustață	noun:irregular	f	k.words.mustache.noun.1	pl=mustăți	mustache
+muta	verb:v.a		k.actions.verb.place.move		move
+mutare	noun:n.f.are-ări	f	k.words.move.noun.1		move
+muzică	noun:n.f._-_	f	k.words.music.noun.1		music

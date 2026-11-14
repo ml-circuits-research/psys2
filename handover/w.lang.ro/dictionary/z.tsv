@@ -1,0 +1,11 @@
+# w.lang.ro dictionary, lemmas starting with z: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+zăpadă	noun:irregular	f	k.words.snow.noun.1	pl=zăpezi	snow
+zbura	verb:irregular		k.words.fly.verb.1	pres=zbor zbori zboară zburăm zburați zboară	fly
+zebră	noun:n.f.ă-e	f	k.words.zebra.noun.1		zebra
+zgomot	noun:n.n._-e	n	k.words.noise.noun.1		noise
+zi	noun:irregular	f	k.words.day.noun.1	pl=zile	day
+zice	verb:irregular		k.words.say.verb.1	pres=zic zici zice zicem ziceți zic	say
+zmeu	noun:irregular	m	k.words.kite.noun.1	pl=zmeie	kite
+zoom	noun:n.n._-uri	n	k.words.zoom.noun.1		zoom

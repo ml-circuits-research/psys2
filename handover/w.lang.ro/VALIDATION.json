@@ -1,0 +1,146 @@
+{
+ "perClass": {
+  "n.n._-uri": {
+   "lemmas": 50,
+   "forms": 300,
+   "ok": 300,
+   "lemmasAllOk": 50,
+   "miss": []
+  },
+  "a.t-tă-ți-te": {
+   "lemmas": 25,
+   "forms": 100,
+   "ok": 100,
+   "lemmasAllOk": 25,
+   "miss": []
+  },
+  "n.f.e-i": {
+   "lemmas": 16,
+   "forms": 96,
+   "ok": 96,
+   "lemmasAllOk": 16,
+   "miss": []
+  },
+  "v.a": {
+   "lemmas": 30,
+   "forms": 240,
+   "ok": 240,
+   "lemmasAllOk": 30,
+   "miss": []
+  },
+  "a._-ă-i-e": {
+   "lemmas": 30,
+   "forms": 120,
+   "ok": 120,
+   "lemmasAllOk": 30,
+   "miss": []
+  },
+  "n.f.ă-e": {
+   "lemmas": 70,
+   "forms": 420,
+   "ok": 420,
+   "lemmasAllOk": 70,
+   "miss": []
+  },
+  "n.n._-e": {
+   "lemmas": 49,
+   "forms": 294,
+   "ok": 294,
+   "lemmasAllOk": 49,
+   "miss": []
+  },
+  "v.is": {
+   "lemmas": 25,
+   "forms": 200,
+   "ok": 200,
+   "lemmasAllOk": 25,
+   "miss": []
+  },
+  "n.m._-i": {
+   "lemmas": 20,
+   "forms": 120,
+   "ok": 120,
+   "lemmasAllOk": 20,
+   "miss": []
+  },
+  "v.az": {
+   "lemmas": 26,
+   "forms": 208,
+   "ok": 197,
+   "lemmasAllOk": 23,
+   "miss": [
+    "copia:copiează",
+    "copia:copiează",
+    "copia:copiează",
+    "evidenția:evidențiează"
+   ]
+  },
+  "n.n.n-ane": {
+   "lemmas": 6,
+   "forms": 36,
+   "ok": 36,
+   "lemmasAllOk": 6,
+   "miss": []
+  },
+  "n.f.ie-ii": {
+   "lemmas": 18,
+   "forms": 108,
+   "ok": 108,
+   "lemmasAllOk": 18,
+   "miss": []
+  },
+  "a.s-asă-și-ase": {
+   "lemmas": 6,
+   "forms": 24,
+   "ok": 24,
+   "lemmasAllOk": 6,
+   "miss": []
+  },
+  "n.f.ă-i": {
+   "lemmas": 22,
+   "forms": 132,
+   "ok": 114,
+   "lemmasAllOk": 4,
+   "miss": [
+    "captură:capturii",
+    "coafură:coafurii",
+    "duzină:duzinii",
+    "găină:găinii"
+   ]
+  },
+  "n.f.are-ri": {
+   "lemmas": 5,
+   "forms": 30,
+   "ok": 25,
+   "lemmasAllOk": 0,
+   "miss": [
+    "culoare:culorii",
+    "floare:florii",
+    "spânzurătoare:spânzurătorii",
+    "tunsoare:tunsorii"
+   ]
+  },
+  "n.f.are-ări": {
+   "lemmas": 8,
+   "forms": 48,
+   "ok": 48,
+   "lemmasAllOk": 8,
+   "miss": []
+  },
+  "n.m.u-i": {
+   "lemmas": 4,
+   "forms": 24,
+   "ok": 24,
+   "lemmasAllOk": 4,
+   "miss": []
+  }
+ },
+ "total": {
+  "forms": 2500,
+  "ok": 2466,
+  "lemmas": 410,
+  "all": 384,
+  "formAgreementPct": 98.6,
+  "lemmaAllFormsPct": 93.7
+ }
+}

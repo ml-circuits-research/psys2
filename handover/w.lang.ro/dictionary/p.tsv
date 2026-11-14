@@ -1,0 +1,70 @@
+# w.lang.ro dictionary, lemmas starting with p: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+pagină	noun:n.f.ă-i	f	k.words.page.noun.1		page
+pahar	noun:n.n._-e	n	k.words.glass.noun.1		glass
+păianjen	noun:n.m._-i	m	k.words.spider.noun.1		spider
+pâine	noun:n.f.e-i	f	k.words.bread.noun.1		bread
+pălărie	noun:n.f.ie-ii	f	k.words.hat.noun.1		hat
+pământ	noun:n.n._-uri	n	k.words.ground.noun.1		ground
+pană	noun:irregular	f	k.words.feather.noun.1	pl=pene	feather
+pară	noun:irregular	f	k.words.pear.noun.1	pl=pere	pear
+paragraf	noun:n.n._-e	n	k.words.paragraph.noun.1		paragraph
+parte	noun:irregular	f	k.words.part.noun.1	pl=părți	part
+partidă	noun:n.f.ă-e	f	k.words.game.noun.1		game
+pasăre	noun:irregular	f	k.words.bird.noun.1	pl=păsări	bird
+pătrat	noun:n.n._-e	n	k.words.square.noun.1		square
+pătrat	adj:a.t-tă-ți-te				square
+pentagon	noun:n.n.n-ane	n	k.words.pentagon.noun.1		pentagon
+pereche	noun:n.f.e-i	f	k.words.pair.noun.1		pair
+perfect	adj:a.t-tă-ți-te				perfect
+permite	verb:irregular		k.words.allow.verb.1	pres=permit permiți permite permitem permiteți permit	allow
+persoană	noun:n.f.ă-e	f	k.words.person.noun.1		person
+personaj	noun:n.n._-e	n	k.words.character.noun.1		character
+pește	noun:n.m.e-i	m	k.words.fish.noun.1		fish
+peștișor	noun:n.m._-i	m			little fish
+petrecere	noun:n.f.e-i	f	k.words.party.noun.1		party
+pian	noun:n.n._-e	n	k.words.piano.noun.1		piano
+piață	noun:irregular	f	k.words.market.noun.1	pl=piețe	market
+picior	noun:n.n.r-are	n	k.words.leg.noun.1		leg
+picta	verb:v.az		k.actions.verb.change.paint		paint
+piept	noun:n.n._-uri	n	k.words.chest.noun.1		chest
+pierde	verb:irregular		k.words.lose.verb.1	pres=pierd pierzi pierde pierdem pierdeți pierd	lose
+piesă	noun:n.f.ă-e	f	k.words.piece.noun.1		piece
+pinguin	noun:n.m._-i	m	k.words.penguin.noun.1		penguin
+pion	noun:n.m._-i	m	k.words.pawn.noun.1		pawn
+pisică	noun:n.f.ă-i	f	k.words.cat.noun.1		cat
+pix	noun:n.n._-uri	n	k.words.pen.noun.1		pen
+plăcea	verb:irregular		k.words.like.verb.1	pres=plac placi place plăcem plăceți plac	like
+plan	noun:n.n._-uri	n	k.words.plan.noun.1		plan
+plantă	noun:n.f.ă-e	f	k.words.plant.noun.1		plant
+plată	noun:irregular	f	k.words.payment.noun.1	pl=plăți	payment
+plăti	verb:v.is		k.words.pay.verb.1		pay
+pleca	verb:irregular		k.words.leave.verb.1	pres=plec pleci pleacă plecăm plecați pleacă	leave
+plin	adj:a._-ă-i-e				full
+pod	noun:n.n._-uri	n	k.words.bridge.noun.1		bridge
+porc	noun:n.m._-i	m	k.words.pig.noun.1		pig
+porni	verb:v.is		k.words.start.verb.1		start
+portocaliu	adj:irregular		k.colours.psys2.orange	forms=portocaliu,portocalie,portocalii,portocalii	orange
+portofel	noun:n.n._-e	n	k.words.wallet.noun.1		wallet
+posibil	adj:a._-ă-i-e				possible
+poveste	noun:irregular	f	k.words.story.noun.1	pl=povești	story
+poziție	noun:n.f.ie-ii	f	k.words.position.noun.1		position
+prăjitură	noun:n.f.ă-i	f	k.words.pastry.noun.1		pastry
+prefera	verb:v.az		k.actions.verb.pick.prefer		prefer
+preț	noun:n.n._-uri	n	k.words.price.noun.1		price
+prietenă	noun:n.f.ă-e	f	k.words.friend.noun.1		friend
+prim	adj:a._-ă-i-e				first
+primar	adj:a._-ă-i-e				primary
+primăvară	noun:irregular	f	k.words.spring.noun.1	pl=primăveri	spring
+primi	verb:v.is		k.words.receive.verb.1		receive
+principal	adj:a._-ă-i-e				main
+probă	noun:n.f.ă-e	f	k.words.sample.noun.1		sample
+procent	noun:n.n._-e	n	k.words.percent.noun.1		percent
+propoziție	noun:n.f.ie-ii	f	k.words.sentence.noun.1		sentence
+prună	noun:n.f.ă-e	f	k.words.plum.noun.1		plum
+pui	noun:n.m._-_	m	k.words.chick.noun.1		chick
+punct	noun:n.n._-e	n	k.words.point.noun.1		point
+pune	verb:irregular		k.actions.verb.place.put	pres=pun pui pune punem puneți pun	put
+putea	verb:irregular		k.words.can.verb.1	pres=pot poți poate putem puteți pot	can
+puzzle	noun:irregular	n	k.words.puzzle.noun.1	pl=puzzle-uri	puzzle

@@ -1,0 +1,111 @@
+# w.lang.ro/shards/closed: the closed word classes of Romanian that the app's requests and questions use: determiners and articles, pronouns (strong and clitic), prepositions as relations
+# (with the case they govern), numerals, question words, negation, the words a request skips. `same_as` / `rel` join to w.lang.en by name (the shared vocabulary).
+# source: hand-core 1; PSys2 src/translate/lexicon.ro-en.mjs (word rows) and phrases.commands.ro-en.mjs
+# license: CC0-1.0
+# NOTE: the enclitic definite article is NOT a word: it is the `def=yes` cell of the noun classes (shards/morphology.sop): casă -> casa, copac -> copacul, florile.
+
+# ---- determiners: the indefinite article agrees in gender, the demonstratives and possessives in gender, number and case ----
+@w.lang.ro.det.un w.lang.ro.det text=un kind=article definite=no gender=m gender=n number=sg same_as=w.lang.en.det.a core.source="hand-core 1"
+@w.lang.ro.det.o w.lang.ro.det text=o kind=article definite=no gender=f number=sg same_as=w.lang.en.det.a core.source="hand-core 1"
+@w.lang.ro.det.niste w.lang.ro.det text=niște kind=quantifier definite=no number=pl same_as=w.lang.en.det.some core.source="hand-core 1"
+@w.lang.ro.det.acest w.lang.ro.det text=acest kind=demonstrative gender=m gender=n number=sg same_as=w.lang.en.det.this core.source="hand-core 1"
+@w.lang.ro.det.aceasta w.lang.ro.det text=această kind=demonstrative gender=f number=sg same_as=w.lang.en.det.this core.source="hand-core 1"
+@w.lang.ro.det.acel w.lang.ro.det text=acel kind=demonstrative gender=m gender=n number=sg same_as=w.lang.en.det.that core.source="hand-core 1"
+@w.lang.ro.det.acea w.lang.ro.det text=acea kind=demonstrative gender=f number=sg same_as=w.lang.en.det.that core.source="hand-core 1"
+@w.lang.ro.det.meu w.lang.ro.det text=meu kind=possessive gender=m gender=n number=sg same_as=w.lang.en.det.my core.source="hand-core 1"
+@w.lang.ro.det.mea w.lang.ro.det text=mea kind=possessive gender=f number=sg same_as=w.lang.en.det.my core.source="hand-core 1"
+@w.lang.ro.det.tau w.lang.ro.det text=tău kind=possessive gender=m gender=n number=sg same_as=w.lang.en.det.your core.source="hand-core 1"
+@w.lang.ro.det.ta w.lang.ro.det text=ta kind=possessive gender=f number=sg same_as=w.lang.en.det.your core.source="hand-core 1"
+@w.lang.ro.det.tai w.lang.ro.det text=tăi kind=possessive gender=m number=pl same_as=w.lang.en.det.your core.source="hand-core 1"
+@w.lang.ro.det.tale w.lang.ro.det text=tale kind=possessive gender=f number=pl same_as=w.lang.en.det.your core.source="hand-core 1"
+@w.lang.ro.det.alt w.lang.ro.det text=alt kind=quantifier gender=m gender=n number=sg same_as=w.lang.en.det.another core.source="hand-core 1"
+@w.lang.ro.det.alta w.lang.ro.det text=altă kind=quantifier gender=f number=sg same_as=w.lang.en.det.another core.source="hand-core 1"
+
+# ---- pronouns: the clitics (mi, ți, îl, o, îi) attach to the verb with a hyphen in the imperative (fă-mi, arată-mi, pune-ți) and before it elsewhere (îmi dă) ----
+@w.lang.ro.pron.eu w.lang.ro.pron text=eu case=nomacc person=1 number=sg refers=user same_as=w.lang.en.pron.i core.source="hand-core 1"
+@w.lang.ro.pron.tu w.lang.ro.pron text=tu case=nomacc person=2 number=sg refers=assistant core.source="hand-core 1"
+@w.lang.ro.pron.el w.lang.ro.pron text=el case=nomacc person=3 number=sg gender=m refers=m refers=thing same_as=w.lang.en.pron.he core.source="hand-core 1"
+@w.lang.ro.pron.ea w.lang.ro.pron text=ea case=nomacc person=3 number=sg gender=f refers=f refers=thing same_as=w.lang.en.pron.she core.source="hand-core 1"
+@w.lang.ro.pron.mi w.lang.ro.pron text=mi case=dat person=1 number=sg clitic=yes refers=user same_as=w.lang.en.pron.i core.source="hand-core 1"
+@w.lang.ro.pron.imi w.lang.ro.pron text=îmi case=dat person=1 number=sg clitic=yes refers=user core.source="hand-core 1"
+@w.lang.ro.pron.ti w.lang.ro.pron text=ți case=dat person=2 number=sg clitic=yes refers=assistant core.source="hand-core 1"
+@w.lang.ro.pron.iti w.lang.ro.pron text=îți case=dat person=2 number=sg clitic=yes refers=assistant core.source="hand-core 1"
+@w.lang.ro.pron.l w.lang.ro.pron text=l case=acc person=3 number=sg gender=m clitic=yes refers=thing core.source="hand-core 1"
+@w.lang.ro.pron.o_acc w.lang.ro.pron text=o case=acc person=3 number=sg gender=f clitic=yes refers=thing core.source="hand-core 1"
+@w.lang.ro.pron.le w.lang.ro.pron text=le case=acc case=dat person=3 number=pl clitic=yes refers=thing core.source="hand-core 1"
+@w.lang.ro.pron.i_dat w.lang.ro.pron text=i case=dat person=3 number=sg clitic=yes refers=m refers=f core.source="hand-core 1"
+
+# ---- prepositions as relations (rel / space as in w.lang.en.prep; `govern` the case of the noun phrase that follows) ----
+@w.lang.ro.prep.langa w.lang.ro.prep text=lângă rel=near space=static govern=acc same_as=w.lang.en.prep.next_to core.source="hand-core 1"
+@w.lang.ro.prep.deasupra w.lang.ro.prep text=deasupra rel=above space=static govern=gen same_as=w.lang.en.prep.above core.source="hand-core 1"
+@w.lang.ro.prep.sub w.lang.ro.prep text=sub rel=below space=static govern=acc same_as=w.lang.en.prep.under core.source="hand-core 1"
+@w.lang.ro.prep.pe w.lang.ro.prep text=pe rel=on space=static govern=acc same_as=w.lang.en.prep.on core.source="hand-core 1"
+@w.lang.ro.prep.in w.lang.ro.prep text=în rel=in space=static govern=acc same_as=w.lang.en.prep.in.word core.source="hand-core 1"
+@w.lang.ro.prep.la w.lang.ro.prep text=la rel=at space=static govern=acc same_as=w.lang.en.prep.at core.source="hand-core 1"
+@w.lang.ro.prep.spre w.lang.ro.prep text=spre rel=to space=direction govern=acc same_as=w.lang.en.prep.to core.source="hand-core 1"
+@w.lang.ro.prep.intre w.lang.ro.prep text=între rel=between space=static govern=acc same_as=w.lang.en.prep.between core.source="hand-core 1"
+@w.lang.ro.prep.din w.lang.ro.prep text=din rel=from space=source govern=acc same_as=w.lang.en.prep.from core.source="hand-core 1"
+@w.lang.ro.prep.in_spatele w.lang.ro.prep text="în spatele" rel=behind space=static govern=gen same_as=w.lang.en.prep.behind core.source="hand-core 1"
+@w.lang.ro.prep.in_fata w.lang.ro.prep text="în fața" rel=front space=static govern=gen core.source="hand-core 1"
+@w.lang.ro.prep.in_jurul w.lang.ro.prep text="în jurul" rel=around space=static govern=gen core.source="hand-core 1"
+@w.lang.ro.prep.dupa w.lang.ro.prep text=după rel=after space=static role=time govern=acc core.source="hand-core 1"
+@w.lang.ro.prep.inainte_de w.lang.ro.prep text="înainte de" rel=before space=static role=time govern=acc core.source="hand-core 1"
+@w.lang.ro.prep.cu w.lang.ro.prep text=cu rel=with role=with govern=acc core.source="hand-core 1"
+@w.lang.ro.prep.fara w.lang.ro.prep text=fără rel=without role=without govern=acc core.source="hand-core 1"
+@w.lang.ro.prep.de w.lang.ro.prep text=de rel=of role=of govern=acc core.source="hand-core 1"
+# relative directions are adverbs in Romanian: la stânga = left, la dreapta = right, sus = up, jos = down, mai sus = higher, mai jos = lower: relation words, not prepositions of a noun
+@w.lang.ro.prep.la_stanga w.lang.ro.prep text="la stânga" rel=left space=direction govern=gen core.source="hand-core 1"
+@w.lang.ro.prep.la_dreapta w.lang.ro.prep text="la dreapta" rel=right space=direction govern=gen core.source="hand-core 1"
+
+# ---- numerals: the gender of "unu / doi / două" follows the noun; from 20 up the noun takes "de" ----
+@w.lang.ro.numeral.doi w.lang.ro.numeral text=doi value=2 gender=m core.source="hand-core 1"
+@w.lang.ro.numeral.doua w.lang.ro.numeral text=două value=2 gender=f gender=n core.source="hand-core 1"
+@w.lang.ro.numeral.trei w.lang.ro.numeral text=trei value=3 core.source="hand-core 1"
+@w.lang.ro.numeral.patru w.lang.ro.numeral text=patru value=4 core.source="hand-core 1"
+@w.lang.ro.numeral.cinci w.lang.ro.numeral text=cinci value=5 core.source="hand-core 1"
+@w.lang.ro.numeral.sase w.lang.ro.numeral text=șase value=6 core.source="hand-core 1"
+@w.lang.ro.numeral.sapte w.lang.ro.numeral text=șapte value=7 core.source="hand-core 1"
+@w.lang.ro.numeral.opt w.lang.ro.numeral text=opt value=8 core.source="hand-core 1"
+@w.lang.ro.numeral.noua w.lang.ro.numeral text=nouă value=9 core.source="hand-core 1"
+@w.lang.ro.numeral.zece w.lang.ro.numeral text=zece value=10 core.source="hand-core 1"
+
+# ---- question words (the frame decides the question; the word says what is asked) ----
+@w.lang.ro.wh.ce w.lang.ro.wh text=ce asks=thing same_as=w.lang.en.wh.what core.source="hand-core 1"
+@w.lang.ro.wh.care w.lang.ro.wh text=care asks=thing-of-a-set agrees=number same_as=w.lang.en.wh.which core.source="hand-core 1"
+@w.lang.ro.wh.cine w.lang.ro.wh text=cine asks=person same_as=w.lang.en.wh.who core.source="hand-core 1"
+@w.lang.ro.wh.unde w.lang.ro.wh text=unde asks=place same_as=w.lang.en.wh.where core.source="hand-core 1"
+@w.lang.ro.wh.cand w.lang.ro.wh text=când asks=time same_as=w.lang.en.wh.when core.source="hand-core 1"
+@w.lang.ro.wh.de_ce w.lang.ro.wh text="de ce" asks=reason same_as=w.lang.en.wh.why core.source="hand-core 1"
+@w.lang.ro.wh.cum w.lang.ro.wh text=cum asks=manner same_as=w.lang.en.wh.how core.source="hand-core 1"
+@w.lang.ro.wh.cate w.lang.ro.wh text=câte asks=count agrees=gender agrees=number same_as=w.lang.en.wh.howmany core.source="hand-core 1"
+@w.lang.ro.wh.cati w.lang.ro.wh text=câți asks=count agrees=gender agrees=number same_as=w.lang.en.wh.howmany core.source="hand-core 1"
+@w.lang.ro.wh.cat w.lang.ro.wh text=cât asks=amount agrees=gender agrees=number same_as=w.lang.en.wh.howmuch core.source="hand-core 1"
+@w.lang.ro.wh.cum_arata w.lang.ro.wh text="cum arată" asks=look core.source="hand-core 1"
+
+# ---- negation: "nu" negates the verb phrase and stands directly before the verb ("nu muta casa"); "fără" negates a noun phrase; "niciodată" a time ----
+@w.lang.ro.neg.nu w.lang.ro.neg text=nu scope=verb scope=answer same_as=w.lang.en.neg.words core.source="hand-core 1"
+@w.lang.ro.neg.fara w.lang.ro.neg text=fără scope=noun core.source="hand-core 1"
+@w.lang.ro.neg.niciodata w.lang.ro.neg text=niciodată scope=time core.source="hand-core 1"
+@w.lang.ro.neg.nici w.lang.ro.neg text=nici scope=noun core.source="hand-core 1"
+
+# ---- the words a request skips (politeness, desire, ability, filler, greeting) ----
+@w.lang.ro.lead.te_rog w.lang.ro.lead text="te rog" kind=polite core.source="hand-core 1"
+@w.lang.ro.lead.va_rog w.lang.ro.lead text="vă rog" kind=polite core.source="hand-core 1"
+@w.lang.ro.lead.multumesc w.lang.ro.lead text=mulțumesc kind=polite core.source="hand-core 1"
+@w.lang.ro.lead.vreau_sa w.lang.ro.lead text="vreau să" kind=desire core.source="hand-core 1"
+@w.lang.ro.lead.as_vrea_sa w.lang.ro.lead text="aș vrea să" kind=desire core.source="hand-core 1"
+@w.lang.ro.lead.poti_sa w.lang.ro.lead text="poți să" kind=ability core.source="hand-core 1"
+@w.lang.ro.lead.ai_putea_sa w.lang.ro.lead text="ai putea să" kind=ability core.source="hand-core 1"
+@w.lang.ro.lead.hai w.lang.ro.lead text=hai kind=filler core.source="hand-core 1"
+@w.lang.ro.lead.deci w.lang.ro.lead text=deci kind=filler core.source="hand-core 1"
+@w.lang.ro.lead.atunci w.lang.ro.lead text=atunci kind=filler core.source="hand-core 1"
+@w.lang.ro.lead.salut w.lang.ro.lead text=salut kind=greeting core.source="hand-core 1"
+@w.lang.ro.lead.buna w.lang.ro.lead text=bună kind=greeting core.source="hand-core 1"
+
+# ---- conjunctions ----
+@w.lang.ro.conj.si w.lang.ro.conj text=și kind=and core.source="hand-core 1"
+@w.lang.ro.conj.sau w.lang.ro.conj text=sau kind=or core.source="hand-core 1"
+@w.lang.ro.conj.iar w.lang.ro.conj text=iar kind=and core.source="hand-core 1"
+@w.lang.ro.conj.dar w.lang.ro.conj text=dar kind=but core.source="hand-core 1"
+@w.lang.ro.conj.apoi w.lang.ro.conj text=apoi kind=then core.source="hand-core 1"
+@w.lang.ro.conj.de_asemenea w.lang.ro.conj text="de asemenea" kind=and-also core.source="hand-core 1"

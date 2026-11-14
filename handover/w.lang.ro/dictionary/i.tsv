@@ -1,0 +1,35 @@
+# w.lang.ro dictionary, lemmas starting with i: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+iarbă	noun:irregular	f	k.words.grass.noun.1	pl=ierburi	grass
+iarnă	noun:irregular	f	k.words.winter.noun.1	pl=ierni	winter
+iaz	noun:n.n._-uri	n	k.words.pond.noun.1		pond
+idee	noun:n.f.e-i	f	k.words.idea.noun.1		idea
+iepure	noun:n.m.e-i	m	k.words.rabbit.noun.1		rabbit
+ieși	verb:irregular			pres=ies ieși iese ieșim ieșiți ies	go out
+împărți	verb:irregular		k.actions.verb.send.share	pres=împart împarți împarte împărțim împărțiți împart	share
+implicit	adj:a.t-tă-ți-te				default
+încărca	verb:v.a		k.actions.verb.load.load		load
+începe	verb:irregular		k.words.begin.verb.1	pres=încep începi începe începem începeți încep	begin
+încerca	verb:irregular		k.words.try.verb.1	pres=încerc încerci încearcă încercăm încercați încearcă	try
+încercare	noun:n.f.are-ări	f	k.words.attempt.noun.1		attempt
+încetini	verb:v.is				slow down
+închide	verb:irregular		k.actions.verb.change.close	pres=închid închizi închide închidem închideți închid	close
+închis	adj:irregular			forms=închis,închisă,închiși,închise	closed
+îngroșat	adj:a.t-tă-ți-te				bold
+inimă	noun:n.f.ă-i	f	k.words.heart.noun.1		heart
+înjumătățit	adj:a.t-tă-ți-te				halved
+înmulți	verb:v.is		k.words.multiply.verb.1		multiply
+înota	verb:irregular		k.words.swim.verb.1	pres=înot înoți înoată înotăm înotați înoată	swim
+însemna	verb:irregular		k.words.mean.verb.1	pres=înseamnă înseamnă înseamnă înseamnă înseamnă înseamnă	mean
+instrument	noun:n.n._-e	n	k.words.instrument.noun.1		instrument
+întâlni	verb:v.is		k.words.meet.verb.1		meet
+înțelege	verb:irregular		k.words.understand.verb.1	pres=înțeleg înțelegi înțelege înțelegem înțelegeți înțeleg	understand
+interesant	adj:a.t-tă-ți-te				interesting
+interval	noun:n.n._-e	n	k.words.interval.noun.1		interval
+întoarce	verb:irregular		k.actions.verb.change.turn	pres=întorc întorci întoarce întoarcem întoarceți întorc	turn
+intra	verb:irregular		k.words.enter.verb.1	pres=intru intri intră intrăm intrați intră	enter
+întreba	verb:v.a		k.actions.verb.ask.ask		ask
+întrebare	noun:n.f.are-ări	f	k.words.question.noun.1		question
+întreg	adj:irregular			forms=întreg,întreagă,întregi,întregi	whole
+învăța	verb:irregular		k.words.learn.verb.1	pres=învăț înveți învață învățăm învățați învață	learn
