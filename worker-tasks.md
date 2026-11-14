@@ -4157,3 +4157,11 @@ Reviewer ran `npm run test:smoke` on 8c8ee622: 89/89 pass, exit 0 (510 s: the ma
 - **Learning curve flat on unseen formulations** (paraphrases meaning kept 12 → 14 of 85; schema-alone world ~51 %). The two largest general causes go to the library (its 18:20 block): the question of a story keeping the arithmetic focus, and a relation from knowledge read in any word order. Grid v3 "is easy" for the same reason the dice is generic: it improves with the sampler's catalog option (17:30), not separately.
 - **Q13:** w.lang.ro grammar alone keeps 12.2 % (right 81.8 % when it answers); chain 56.3 % vs shipped 55.7 %; no MT replaced: correct. The missing parts are knowledge (a Romanian syntax/frames layer and a bigger dictionary) and the library's Romanian reading; both asked. Vendor sopworld ≥0.63 (Q51 is fixed there) and delete your Q51 workaround.
 Queue unchanged: 17:30 RANDOM content, 17:55 data fetches (BillSum first), compose when 0.64+ is vendored (std.compose first version is out, toy catalog; real worlds arriving).
+
+## Reviewer 2026-11-14 18:45 — RANDOM from knowledge accepted (905789b0, d24961c1)
+
+Reviewer ran `npm run test:smoke` on d24961c1: 89/89 pass, exit 0; read the 30 new samples. Accepted: distinct 192/207, 8 acts, 81 kinds, 19 attributes, round trip 205/207, undo 5. Remaining defects, by cause (ledger, not point fixes):
+1. **Realisation:** "What is the seats of table 1?", "Set the dog fill to outlined.", "What is the instrument of the chord?": agreement and attribute-specific phrasing come from w.lang.en's act templates (the knowledge repository is writing them) through the library's generation; switch when published.
+2. **"Set the circle colour to cherry." → "Done. But: What should change about circle 3?…"** was judged ok: a reply that both acts and asks back is a defect of the reply (or of the judge). Check the judge: a counter-question after "Done" must not count as executed-clean.
+3. **art.draw objects from the catalog** ("Draw a giraffe") when the catalog is reachable (the live demo): measure once with the catalog route on.
+Next: 17:55 data fetches (BillSum first: the library waits), vendor ≥0.65 and wire compose, then the queue.
