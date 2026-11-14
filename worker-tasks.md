@@ -4061,3 +4061,20 @@ Reviewer ran `npm run test:smoke` on f2ff2e48: 79/79 pass, exit 0; read the six 
 ## Reviewer 2026-11-14 12:05 — LEARN FROM USE stage 1 accepted (08c0dbd6)
 
 Reviewer ran `npm run test:smoke` on bb4eedf1: 86/86 pass, exit 0; read the dislike screenshot (reasons as chips under the reply). Accepted: failures kept apart, failures-only download, sending off by default, ingest freezes the held-out set first. Next, in order: the 11:50 follow-ups (vendor std.motion 0.54, phone popup clipped), then LAZY LOADING (it has waited longest; the owner reported slow loading).
+
+## Reviewer 2026-11-14 12:25 — LAZY LOADING accepted; residuals measured; std.plan is out
+
+Reviewer ran `npm run test:smoke` on 9af98975: 89/89 pass, exit 0, and the boot probe (25 s, local server, no network to the catalog in the reviewer's sandbox): **223 requests / 21.4 MB, from 366 / 31.5 MB** after BOOT-CACHE and 361 / 35.8 MB before. Accepted (with the 11:50 follow-ups and the THIN LIVE WORLDS step). What still loads at boot, by size:
+1. **onnxruntime wasm 14.5 MB = 68 % of the boot bytes** (11.7 s / 8.7 s in two runs). The rules reader is the default; measure whether the first message needs the neural dispatcher at all. If not: load it in the background after the input is enabled (or on the first message the rules cannot read), never before.
+2. **Fetched twice** (page and engine worker, first visit, before the service worker controls): `sopworld.mjs` 623 KB ×2, `en.facts.generated.mjs` 295 KB ×2. Load each once (the worker only, or hand the module over).
+3. `bundled-geo.mjs` 283 KB at boot while Map is not the open tab: load with the geo world.
+Report the probe numbers after each item. Then: **plans from knowledge** (sopworld 0.55 has `std.plan` reading `k.procedures`: vendor, wire it for multi-step requests, the 60 multi-step set, switch by the numbers), learning curve, grid/paraphrase, Q13.
+
+## Reviewer 2026-11-14 12:45 — `k.motion` is published (knowledge 43cb081)
+
+The rules of the face over time are in the catalog (`k.motion`: layers, blinks, outcomes, visemes, the text → mouth rule). The library is extending `std.motion` to read them as published; when it releases, vendor it and delete `MOTION_RULES_TEMPORARY` (the reviewer will say). Do not copy k.motion's rules into PSys2 meanwhile.
+
+## Reviewer 2026-11-14 13:15 — LAZY-LOAD-3 accepted; std.motion 0.56 reads k.motion
+
+Reviewer ran `npm run test:smoke` on fb7783e3: 89/89 pass, exit 0; boot probe (25 s, local, unthrottled): **214 requests / 5.9 MB** (from 223 / 21.4 MB; 366 / 31.5 MB this morning). The reviewer's probe still lists `sopworld.mjs` and `en.facts` twice (page and worker targets); your server-side count says one fetch each, the second from the HTTP cache: accepted as measured at the server. One small residual: `lib/translate/ro-en.mjs` (89 KB) loads at boot in an English session; load it with the Romanian path.
+**Now:** sopworld 0.56 reads the published `k.motion` (its Q39: same changes as the knowledge oracle on 12 plans). Vendor 0.56, read k.motion from the catalog, delete `MOTION_RULES_TEMPORARY` and the local scheduler parts (motion.mjs becomes a thin call or goes). Then plans from knowledge (std.plan 0.55), learning curve, grid/paraphrase, Q13.
