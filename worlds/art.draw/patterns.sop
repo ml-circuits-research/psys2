@@ -486,7 +486,7 @@
     canonical="Give the house a blue door."
 
 @pat.art.draw.make.have core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [could|can|would|should|may|must] [$acts.det]? {place:words} [have] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [could|can|would|should|may|must] [$acts.det]? {place:words} have [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.make arg.rel=\"to\" arg.place=\"{place}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
