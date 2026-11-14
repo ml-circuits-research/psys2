@@ -2,7 +2,7 @@
 // The cousins host adapter (scripts/lib/cousins-host.mjs), driven by a FAKE library: the interface of sopworld 0.73 `cousins(world, case, opts)` / `readByTypes(world, text, opts)`.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { resolveLibrary, expand, expectedOf, judge, tabulate, tableText, dimensionOf, formsOf } from '../scripts/lib/cousins-host.mjs';
+import { resolveLibrary, expand, expectedOf, judge, dimensionOf, formsOf } from '../scripts/lib/cousins-host.mjs';
 
 const world = { get: (id) => ({ attrs: { name: [id.split('.').pop()] } }) };
 const frame = { is: 'ask', key: 'legs', of: { id: 'k.cow' }, answer: ['4'] };
@@ -45,10 +45,3 @@ test('judge: by reply and by state; a question must not change a world; number w
   assert.deepEqual(expectedOf({ get: () => null }, find).all, [['cow']]);
 });
 
-test('tabulate: degree x dimension, ordered; table text names empty sets', () => {
-  const rows = [{ degree: 2, dimension: 'filler kind', outcome: 'right' }, { degree: 1, dimension: 'aspect', outcome: 'wrong' }, { degree: 1, dimension: 'aspect', outcome: 'right' }];
-  const t = tabulate(rows);
-  assert.deepEqual(t.map((e) => `${e.degree}${e.dimension}${e.right}/${e.of}`), ['1aspect1/2', '2filler kind1/1']);
-  assert.match(tableText(t, { title: 'x' }), /1 \/ 2 {2}\(50%\)/);
-  assert.match(tableText([]), /no valid cousins/);
-});
