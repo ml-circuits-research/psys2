@@ -306,6 +306,9 @@ function fixNodes(nodes, text, s) {
     if (n.type === 'mention' || !n.args) { out.push(n); continue; }
     for (const k of ['target', 'anchor', 'anchor2', 'linked', 'from', 'to', 'members']) if (n.args[k] != null && !(typeof n.args[k] === 'object' && !Array.isArray(n.args[k]))) n.args[k] = canonNames(s, n.args[k]);
     const a = n.args, toEdge = (a.from != null || a.to != null || a.kind === 'edge');
+    // the verb says bring / send but the end of the stack is named by the place: "send Sun to the front" brings it to the front, "bring Sun to the back" sends it back
+    if (a.action === 'toBack' && /\b(?:front|top)\b/i.test(text) && !/\b(?:back|bottom|behind)\b/i.test(text)) a.action = 'toFront';
+    else if (a.action === 'toFront' && /\b(?:back|bottom)\b/i.test(text) && !/\b(?:front|top)\b/i.test(text)) a.action = 'toBack';
     if (a.action === 'connect' && a.from == null && a.to == null && a.target == null && a.members == null && a.pairing == null) {   // "connect them with a dashed arrow": the last two shapes
       const last = s.shapes.filter((x) => !x.layer).slice().sort((p, q) => (p.order ?? 0) - (q.order ?? 0)).slice(-2);
       if (last.length < 2) return { clarify: 'I need two shapes to connect. Draw them first, or name them, for example: connect c1 to r1.' };

@@ -683,6 +683,8 @@ export function status(ctx, { what }) {
     case 'instrument': return ok(`I am playing ${withThe(s.instrument)}.`);
     case 'volume': return ok(`The volume is ${s.volume} percent.`);
     case 'key': return ok(`The key is ${s.key}.`);
+    // the pitch is the key of what is played: there is no separate pitch setting, a song is moved with "transpose it up 2 semitones"
+    case 'pitch': return ok(`The pitch follows the key, and the key is ${s.key}. You can move it with "transpose it up 2 semitones".`);
     case 'loop': return ok(s.loop ? 'Yes, the loop is on.' : 'No, the loop is off.');
     case 'isplaying': return ok(s.playing ? `Yes, I am playing ${s.current?.title ?? 'something'}.` : 'No, nothing is playing right now.');
     case 'playing':

@@ -5,4 +5,4 @@ export {
   initialState, onObservation, topicSummary, melodyShow, showNotes, showScore, listSongs, listInstruments, listTypes, scaleNotes, chordNotes, chordName, keySig, keyWith, interval, above, relative, keyChords,
   frequency, enharmonic, status, songInfo, askWhat,
   instrument, key, melodySet, octave, playAny, playChord, playNote, playScale, random, replay, stop, tempo, transpose, transposeTo, volume,
-} from './music.mjs?v=6960887c40';
+} from './music.mjs?v=7844697f58';
