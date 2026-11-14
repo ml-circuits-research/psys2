@@ -1124,7 +1124,7 @@ function _interceptInput(ctx, text) {
   return { handled: true, reply: added ? 'Added.' : '' };
 }
 
-function createDoc(ctx, title, blocks) {
+export function createDoc(ctx, title, blocks) {
   const s = ctx.state;
   commit(s);
   s.title = title; s.titleMarks = []; s.titleAlign = 'left'; s.titleSize = 0; s.blocks = []; s.dictBlock = null; s.selection = null;

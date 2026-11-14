@@ -27,6 +27,8 @@
     own=view:docs.editor.view
     own=adopt:docs.editor.adopt
     own=makeDocument:doc.make
+    own=digest:doc.digest
+    own=compose:doc.compose
     sample=document
     list=yes
     say=yes

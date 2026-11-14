@@ -151,6 +151,18 @@
     action=doc.make
     doc="An operation of this world that is not an act (own.mjs: makeDocument)."
 
+@op.docs.editor.digest core.operation
+    impl=digest
+    semantics=action
+    action=doc.digest
+    doc="An operation of this world that is not an act (own.mjs: digest)."
+
+@op.docs.editor.compose core.operation
+    impl=compose
+    semantics=action
+    action=doc.compose
+    doc="An operation of this world that is not an act (own.mjs: compose)."
+
 @op.docs.editor.make core.operation
     impl=make
     semantics=action
