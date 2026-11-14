@@ -3,7 +3,7 @@
 // releases them, `available` is false, every call returns null and the UI hides what needs them: there is NO local generator and NO fallback text here.
 // Browser-safe: no `node:*` imports; the library module is passed in.
 
-import { knowledgeWorld, genreOf, randomTopics, realiseFrame, chapterTitle } from './compose-world.mjs';
+import { knowledgeWorld, genreOf, randomTopics, topicIndex, realiseFrame, chapterTitle } from './compose-world.mjs';
 
 const pick = (lib, name) => (typeof lib?.[name] === 'function' ? lib[name] : typeof lib?.std?.[name] === 'function' ? lib.std[name] : null);
 const clip = (n, lo, hi, def) => { const v = Math.round(Number(n)); return Math.min(hi, Math.max(lo, Number.isFinite(v) ? v : def)); };
@@ -102,6 +102,16 @@ export function composeRequest({ type, topic = '', chapters, subchapters, words,
  */
 export function createComposer(lib, world = null) {
   const fn = pick(lib, 'compose');
+  const works = new Map();
+  /** Does the library's composer apply the published genre of a type? (probed once: 0.65 reads `move=` on a genre and throws on the published parts and steps.) */
+  const genreWorks = (type) => {
+    if (works.has(type)) return works.get(type);
+    const kw = world ?? knowledgeWorld(lib), genre = genreOf(kw, type);
+    let ok = false;
+    if (genre) { try { fn(kw, topicIndex(kw).values().next().value?.name ?? 'x', { genre, size: { chapters: 1, sections: 1, sentences: 1 } }); ok = true; } catch { ok = false; } }
+    works.set(type, ok);
+    return ok;
+  };
   const TYPE_RE = /\b(scientific[ _-]article|research[ _-]article|scientific[ _-]paper|presentation|slideshow|essay|composition|article|story|tale|report|piece|text)\b/i;
   return {
     available: Boolean(fn),
@@ -109,34 +119,41 @@ export function createComposer(lib, world = null) {
     supports(text) {
       if (!fn) return false;
       const t = docTypeOf(TYPE_RE.exec(String(text ?? ''))?.[1]?.replace(/[ -]/g, '_'));
-      return t === 'essay' || !!genreOf(world ?? knowledgeWorld(lib), t);
+      return t === 'essay' || genreWorks(t);
     },
     compose(input = {}) {
       if (!fn) return { why: 'the library has no composer' };
       const req = composeRequest(input);
       const kw = world ?? knowledgeWorld(lib);
       const genre = genreOf(kw, req.type);
-      if (!genre && req.type !== 'essay') return { why: `the knowledge has no genre for a ${DOC_TYPES[req.type].label.toLowerCase()} yet (no k.genres.genre ${req.type}), so I cannot write one by the book` };
-      const topics = req.topic ? [req.topic] : randomTopics(lib, kw, req.seed ?? Date.now() % 100000);
+      if (!genre) return { why: `the knowledge has no genre for a ${DOC_TYPES[req.type].label.toLowerCase()} (no k.genres.genre ${req.type})` };
+      const known = req.topic ? topicIndex(kw).get(req.topic.toLowerCase().replace(/^the\s+/, ''))?.name : null;
+      const topics = req.topic ? [known ?? req.topic] : randomTopics(lib, kw, req.seed ?? Date.now() % 100000);
       if (!topics.length) return { why: 'the knowledge has no subject to write about' };
       const sections = Math.max(1, req.subchapters);
       const sentences = clip(req.words / (req.chapters * sections * 16), 1, 8, 3);
       let c = null, topic = null;
       for (const t of topics) {   // a random topic is the best by interest that the knowledge can fill
         topic = t;
-        c = fn(kw, t, { ...(genre ? { genre } : {}), size: { chapters: req.chapters, sections, sentences }, seed: Number(req.seed) || 1, realise: realiseFrame });
-        if (c?.why || c?.chapters?.length) break;
+        const opts = { size: { chapters: req.chapters, sections, sentences }, seed: Number(req.seed) || 1, realise: realiseFrame };
+        try { c = fn(kw, t, { genre, ...opts }); } catch (e) {
+          // sopworld 0.65 reads `move=` on a genre; the published k.genres has parts and steps (the library's procedure from a genre is not there yet). The genre is named in the
+          // result as not applied; the essay is composed by the library's own default moves, the other types are declined (no invented procedure).
+          if (req.type !== 'essay') return { why: `the library's composer does not read the published ${req.type} genre yet (${String(e?.message ?? e).slice(0, 60)}), so I cannot write one by the book` };
+          c = fn(kw, t, opts); if (c && !c.why) c.genre = null, c.genreNotApplied = genre;
+        }
+        if (c?.why || (c?.chapters?.length && (req.topic || checkComposition(c, req).ok))) break;   // a random topic is the best the knowledge can fill and realise
       }
       if (c?.why) return { why: c.why };
       const chk = checkComposition(c, req);
       if (!chk.ok) return { why: c?.chapters?.length ? `I could not write that so that every sentence reads and traces to what I know (${chk.problems[0]})` : `I know nothing about ${topic} in my knowledge yet` };
-      return { composition: normalise(c, req, topic) };
+      return { composition: normalise(c, req, topic, kw) };
     },
   };
 }
 
-function normalise(c, req, topic) {
-  return { title: `All about the ${topic}`, topic, type: req.type, genre: c.genre ?? null, short: c.short ?? [], chapters: c.chapters.map((ch) => ({ title: chapterTitle(ch.title),
+function normalise(c, req, topic, kw) {
+  return { title: `All about ${topicIndex(kw).get(String(topic).toLowerCase())?.type === 'k.animals.animal' ? 'the ' : ''}${topic}`, genreNotApplied: c.genreNotApplied ?? null, topic, type: req.type, genre: c.genre ?? null, short: c.short ?? [], chapters: c.chapters.map((ch) => ({ title: chapterTitle(ch.title), interest: ch.interest,
     subchapters: ch.sections.map((sc, i) => ({ title: req.subchapters ? `Part ${i + 1}` : '', sentences: sc.sentences.map((s) => ({ text: s.text.trim(), source: s.cites, move: s.move })) })) })) };
 }
 

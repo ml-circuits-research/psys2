@@ -14,3 +14,7 @@ Spec: `specs/26-summary-and-composition.md`. The host adapters are `src/dialog/t
 - Knowledge: `k.genres.genre` for scientific article, presentation, story (with `k.story`), report (names the host will look for: `scientific_article` / `scientific-article`, `presentation`, `story`, `report`); today the catalog has none, so those types are declined.
 - Knowledge: facts beyond k.animals (k.geo places, k.objects, ...) for topics such as volcanoes, the moon, bees; the host has only the animal facts bundled, and a topic with no fact is declined ("I know nothing about X").
 - Library: a frame renderer in the language world (the host's `realiseFrame` is a temporary clause-per-attribute table for animal facts); sentences per section from a word budget; `short` as data rather than text.
+
+## After k.genres was published (2026-11-14 19:05)
+- Library (blocking): `compose` reads `k.genres.genre ... move=` (0.65: `g.attrs.move.map` throws); the published genres have `k.genres.part` and `k.genres.step` wires (26 parts, 72 steps over 43 moves) and a `register`. Read parts and steps (and registers), then four of the five types become composable; the host maps the types to the genre names already (`essay`, `presentation`, `story`, `report`, `scientific article`).
+- Library: realise frames by the genre's register (templates by move) in the language world; the host's `realiseFrame` writes clauses for animal and geo facts only.
