@@ -24,6 +24,7 @@ import { createEngineClient } from './ui/engine-client.mjs';
 import { normalizeNxStrategy } from './lib/formalizer/nx.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings, applyReading } from './ui/settings.mjs';
 import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
+import { turnRecord, summarize, outcomeOf } from './lib/dialog/conversation.mjs';
 import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
 import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf, exportRecord } from './ui/phrase-log.mjs';
@@ -35,8 +36,9 @@ import { snapshotState, describeChanges } from './ui/state-diff.mjs';
 
 const HERE = new URL('.', import.meta.url);
 
+/** The order of the tabs (owner, 2026-11-14): Talk first, then Drawing and Diagram, the rest as listed. The avatar is not a tab: it is the icon in the input bar. */
+export const TAB_ORDER = ['talk', 'draw', 'diagram', 'map', 'charts', 'editor', 'music', 'chess', 'seating', 'timeline', 'guess', 'hangman', 'tictactoe', 'documents'];
 export const TABS = [
-  { id: 'robot', label: 'Avatar', world: 'ui.avatar', make: createAvatar },
   { id: 'editor', label: 'Editor', world: 'docs.editor', make: createEditor },
   { id: 'tictactoe', label: 'Tic-tac-toe', world: 'games.tictactoe', make: createTicTacToe },
   { id: 'guess', label: 'Guess the animal', world: 'games.guess', make: createGuess },
@@ -103,14 +105,22 @@ export async function mountPsys2(element, options = {}) {
   const save = () => { if (options.persist !== false) try { localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...settings, handsFree: false })); } catch { /* storage unavailable */ } };
   const plugins = await loadTabPlugins(base);
   const builtin = TABS.map((t, i) => ({ order: (i + 1) * 10, ...t }));
-  const allTabs = [...builtin.filter((t) => !plugins.some((p) => p.id === t.id)), ...plugins].sort((a, b) => (a.order ?? 100) - (b.order ?? 100));
+  const byOrder = [...builtin.filter((t) => !plugins.some((p) => p.id === t.id)), ...plugins].sort((a, b) => (a.order ?? 100) - (b.order ?? 100));
+  // the owner's order (2026-11-14); a tab not listed goes to the end in its current order
+  const rank = (t) => { const i = TAB_ORDER.indexOf(t.id); return i < 0 ? TAB_ORDER.length : i; };
+  const allTabs = byOrder.map((t, i) => ({ t, i })).sort((a, b) => rank(a.t) - rank(b.t) || a.i - b.i).map((x) => x.t);
   const tabDefs = allTabs.filter((t) => !options.tabs || options.tabs.includes(t.id));
   const states = {};           // world id -> latest state snapshot
   const panelUI = {};          // tab id -> { ui, present }
   let engine = null, session = null, translator = null, speech = null, engineClient = null, browserBackend = null;
   const stageLog = [], longTasks = [];   // COMPUTE-BUDGET: host stage transitions and every main-thread task over 200 ms (PerformanceObserver 'longtask')
   const hostStage = (stage, recId = null) => { stageLog.push({ at: performance.now(), stage, recId }); if (stageLog.length > 400) stageLog.splice(0, 200); };
-  let view = tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
+  const LAST_TAB_KEY = 'psys2.lastTab';
+  const savedTab = (() => { try { const t = options.persist !== false ? globalThis.localStorage?.getItem(LAST_TAB_KEY) : null; return tabDefs.some((d) => d.id === t) ? t : null; } catch { return null; } })();
+  let view = savedTab ?? tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};   // a fresh start opens the first tab (Talk), a later one the tab the person left open
+  const turnLog = []; let turnCount = 0;   // the turns of this conversation, for the summary of the Talk tab
+  const refreshSummary = () => { try { panelUI.talk?.ui?.setSummary?.(summarize({ turns: turnLog, states, labelOf: (id) => engine?.worlds?.().find((w) => w.id === id)?.title })); } catch (e) { console.warn('summary failed', e); } };
+  let avatarUI = null, avatarOpen = false, lastAnswerText = '';   // the avatar is not a tab: an icon in the input bar and its popup
   const queue = [], micLog = [];   // MIC2: waiting messages { id, text, mode, voice, queuedAt }; the mic click log
   // BUSY: one source of truth. The host is busy while a turn runs (`turn`; the queue of MIC2 only holds waiting messages), while its host effects run (`effectsPending`) and while the answer is spoken (`mic.speaking`).
   // A speech that never ends must not hold the tabs forever: the veil is lifted after a cap that grows with the text (the speech itself goes on).
@@ -175,12 +185,18 @@ export async function mountPsys2(element, options = {}) {
   const setBody = h('div', { class: 'p2-modal-body', role: 'tabpanel', id: 'p2-set-panel', tabindex: '0' });
   const settingsEl = h('div', { class: 'p2-modal', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'p2-set-title', hidden: true },
     h('div', { class: 'p2-modal-head' }, h('h2', { class: 'p2-modal-title', id: 'p2-set-title' }, 'Settings'), setClose), setTabsEl, setBody);
-  const form = h('form', { class: 'p2-form' }, micBtn, speakerBtn, input, dieBtn, sendBtn);
+  // AVATAR ICON: always visible beside the input; a click opens the popup with the big face and the same manipulation the Avatar tab had
+  const avFace = h('span', { class: 'p2-avicon-face', 'aria-hidden': 'true' });
+  const avBtn = h('button', { class: 'p2-btn p2-avicon', type: 'button', id: 'p2-avicon', title: 'Avatar', 'aria-label': 'Avatar: show the face', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'aria-controls': 'p2-avpop' }, avFace);
+  const avClose = h('button', { class: 'p2-btn-text p2-avpop-close', type: 'button', 'aria-label': 'Close the avatar' }, 'Close');
+  const avBody = h('div', { class: 'p2-avpop-body' });
+  const avPop = h('div', { class: 'p2-avpop', id: 'p2-avpop', role: 'dialog', 'aria-label': 'Avatar', hidden: true }, h('div', { class: 'p2-avpop-head' }, h('strong', {}, 'Avatar'), avClose), avBody);
+  const form = h('form', { class: 'p2-form' }, avBtn, micBtn, speakerBtn, input, dieBtn, sendBtn);
   const chat = h('section', { class: 'p2-chat', 'aria-label': 'Chat' },
     h('header', { class: 'p2-head' },
       h('div', { class: 'p2-title' }, h('strong', {}, options.title ?? 'PSys2'), h('span', {}, TAGLINE)),
       h('div', { class: 'p2-tools' }, langSel, gearBtn)),
-    statusEl, progress.element, log, queueEl, dictBar, form,
+    statusEl, progress.element, log, queueEl, dictBar, avPop, form,
     h('footer', { class: 'p2-foot' }, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'footer' }, 'Source code (AGPL-3.0)')));
   const tabsEl = h('div', { class: 'p2-tabs', role: 'tablist', 'aria-label': 'Tools' });
   const panelsEl = h('div', { class: 'p2-panels' });
@@ -221,9 +237,20 @@ export async function mountPsys2(element, options = {}) {
   /** The user opened a tab (click or arrow keys): the dialog engine must know it too (routing tier T, tab-bound questions), RP5b. */
   function userTab(id, via = 'tap') {
     showTab(id, via);
+    if (tabBtns[id]) { try { if (options.persist !== false) globalThis.localStorage?.setItem(LAST_TAB_KEY, id); } catch { /* storage unavailable */ } }
     if (tabBtns[id] && lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); }
   }
+  /** The avatar popup: opens or closes; closing keeps the state (the avatar world and its face are untouched). */
+  function openAvatar(on = !avatarOpen) {
+    if (!avatarUI) return;
+    avatarOpen = !!on;
+    avPop.hidden = !avatarOpen; avBtn.setAttribute('aria-expanded', String(avatarOpen)); root.classList.toggle('p2-avpop-open', avatarOpen);
+    avatarUI.setVisible(avatarOpen);
+    if (avatarOpen) events.add('avatar', 'open', { zone: 'input-bar' });
+  }
   function showTab(id, via = 'command') {
+    // "open the avatar" shows the popup (the avatar is not a tab any more); an avatar command that only used to switch to the Avatar tab does not: the icon shows the face live
+    if (id === 'robot' && !tabBtns[id]) { if (via === 'card' || via === 'tap' || (via === 'message' && /\b(open|show|go to|switch to|see)\b.*\b(avatar|face|robot)\b/i.test(turn?.text ?? ''))) openAvatar(true); return; }
     if (!tabBtns[id]) return;
     if (id !== view) events.add('tab', id, { via, tabAfter: id });   // USER-ACTIONS: how the tab was opened (tap | key | message | card | example | command)
     view = id;
@@ -356,13 +383,14 @@ export async function mountPsys2(element, options = {}) {
     const changed = [];
     for (const [id, st] of Object.entries(snapshot)) { states[id] = st; changed.push(id); }
     for (const t of tabDefs) if (changed.includes(t.world)) panelUI[t.id]?.ui?.update(states[t.world]);
+    if (changed.includes('ui.avatar')) avatarUI?.update(states['ui.avatar']);
     if (changed.includes(SHELL)) applyShell(states[SHELL]);
     if (changed.includes('docs.editor')) syncDictation();
     options.onState?.(states, changed);
   }
   function applyShell(sh) {
     if (!sh) return;
-    if (!shellSeen) { shellSeen = true; lastShell = { ...sh }; if (sh.activeTab) { lastShellTab = sh.activeTab; showTab(sh.activeTab, 'start'); } return; } // startup snapshot: do not override saved host settings
+    if (!shellSeen) { shellSeen = true; lastShell = { ...sh }; if (sh.activeTab && tabBtns[sh.activeTab]) { lastShellTab = sh.activeTab; showTab(sh.activeTab, 'start'); } return; }   // the world's first tab 'robot' is no tab: the host's own first tab (Talk) is shown and told to the world after the start // startup snapshot: do not override saved host settings
     if (sh.activeTab && sh.activeTab !== lastShellTab) { lastShellTab = sh.activeTab; showTab(sh.activeTab, turn ? 'message' : 'command'); }
     if (sh.speaker !== undefined && sh.speaker !== lastShell.speaker) setSpeaker(!!sh.speaker, false);
     if (sh.handsFree !== undefined && sh.handsFree !== lastShell.handsFree) setHandsFree(!!sh.handsFree, false);
@@ -491,7 +519,7 @@ export async function mountPsys2(element, options = {}) {
   }
 
   // ---------- sending ----------
-  const robotUI = () => panelUI.robot?.ui;
+  const robotUI = () => avatarUI;
   function serializeWires(wires) {
     const shaped = wires.map((w) => ({ ...w, entries: w.entries.map((e, i) => ({ key: w.sk?.[i] ?? e.key, value: e.value })) }));   // the engine worker adds `sk` (short keys): the legends stay there
     return lib.serialize(shaped);
@@ -538,6 +566,7 @@ export async function mountPsys2(element, options = {}) {
     const tn = turn = { ctl, t0: tPress, text, correction, reason: null, undo: null, mode, recId, shown: [], tabBefore: view, killsBefore: engineClient?.stats.kills.length ?? 0 };
     busy++; setStatus();
     restAvatar(true);
+    tn.thinkT = setTimeout(() => avatarUI?.emit('thinking', { on: true }), 300);   // a turn that takes longer than 300 ms shows the thinking face (motion rules)
     const thinkingLabel = h('span', { class: 'p2-thinking-label' }, 'thinking… 0.0 s');
     const typing = addMessage('bot', h('span', { class: 'p2-thinking' }, thinkingLabel), { className: 'is-typing' });
     typing.msg.removeAttribute('aria-live');
@@ -599,7 +628,7 @@ export async function mountPsys2(element, options = {}) {
         addMessage('bot', `Something went wrong while processing that: ${e?.message ?? e}`, { className: 'is-error' });
       }
     } finally {
-      clearTimeout(watchdog); clearTimeout(backstopTimer); clearInterval(ticker); clearInputStage();
+      clearTimeout(watchdog); clearTimeout(backstopTimer); clearInterval(ticker); clearInputStage(); clearTimeout(tn.thinkT); avatarUI?.emit('thinking', { on: false });
       if (typing.msg.isConnected) typing.msg.remove();
       if (turn === tn) { turn = null; lastTurnEnd = performance.now(); hostStage('idle'); restAvatar(false); }
       effectsPending = 0;
@@ -692,16 +721,16 @@ export async function mountPsys2(element, options = {}) {
     if (mode === 'typed' && language.get() === sentLang && !reply.knownBad) hintLanguage(text, user);   // not after a switch command
     if (reply.lang && reply.lang !== 'en') user.meta.prepend(h('span', { class: 'p2-lang' }, `${reply.lang.toUpperCase()} → EN`));
 
-    const avatarChanged = !!reply.state?.['ui.avatar'];
     if (!notUnderstood) applyState(reply.state);   // noise never switches the tab
-    const expressions = reply.statuses ?? [];
-    if (!avatarChanged && robotUI()) {
-      const mood = tabDefs.find((x) => x.id === view)?.mood?.(reply, answer);   // a tab may react to the kind of its own turn (Talk: found, not found, a big number)
-      if (mood) robotUI().express(mood);
-      else if (expressions.includes('missing')) robotUI().express('surprised');
-      else if (expressions.includes('supported')) robotUI().express('smile');
-    }
-    lastAnswerLen = String(answer).length;
+    // MOTION: the reply starts (its text and how it went) and the face moves by the motion rules; a tab may add its own mood (Talk: a big number is surprising)
+    clearTimeout(tn.thinkT);
+    const tabMood = tabDefs.find((x) => x.id === view)?.mood?.(reply, answer);
+    const outcome = outcomeOf(reply);
+    avatarUI?.emit('reply', { text: answer, outcome, mood: tabMood === 'surprised' ? 'surprised' : undefined });
+    // the live summary of the Talk tab: one record per turn, the summary rebuilt from them and the world states
+    turnLog.push(turnRecord(++turnCount, text, reply, { tab: view })); if (turnLog.length > 400) turnLog.splice(0, 100);
+    refreshSummary();
+    lastAnswerLen = String(answer).length; lastAnswerText = String(answer);
     if (settings.speaker && speech && speechSupport.synthesis) speech.speak(answer, { lang: speechLangTag() });
     const tEffects = performance.now();
     hostStage('effects', recId); setInputStage('effects');
@@ -992,6 +1021,7 @@ export async function mountPsys2(element, options = {}) {
   });
   on(sendBtn, 'click', (e) => { if (turn) { e.preventDefault(); stopTurn(); askDrop(); } else if (sendBtn.classList.contains('is-stop')) { e.preventDefault(); stopTurn(); } });
   on(input, 'input', syncSendButton);
+  on(input, 'input', () => avatarUI?.emit('typing'));   // MOTION: the person is typing
 
   // ---------- speech ----------
   function startSpeakCap() {
@@ -1045,7 +1075,7 @@ export async function mountPsys2(element, options = {}) {
       flashHint('Microphone off.');
       localized('Microphone off.').then((msg) => { if (msg !== 'Microphone off.') flashHint(msg); if (settings.speaker && speechSupport.synthesis) speech.speak(msg, { lang: speechLangTag() }); });   // the sentence of the selected language, translated once (cached)
     },
-    onState: (s) => { const was = mic.speaking; mic = s; if (s.speaking && !was) startSpeakCap(); else if (!s.speaking) endSpeakCap(); robotUI()?.setSpeaking(s.speaking); setStatus(); },
+    onState: (s) => { const was = mic.speaking; mic = s; if (s.speaking && !was) startSpeakCap(); else if (!s.speaking) endSpeakCap(); robotUI()?.setSpeaking(s.speaking, s.speaking ? lastAnswerText : undefined); setStatus(); },
     onError: (msg) => { note(msg); if (!speech.isListening() && !speech.isPaused()) { settings.handsFree = false; syncMic(); } },
   });
   if (!speechSupport.recognition) {
@@ -1713,9 +1743,16 @@ export async function mountPsys2(element, options = {}) {
       tabBtns[t.id].btn.classList.add('is-soon');
     }
   }
+  // the avatar loads with its icon (a small bundled face first, the catalog's set when it arrives)
+  if (loaded.has('ui.avatar') || options.renderAllTabs) { avatarUI = createAvatar(avBody, hostApi); avatarUI.mirror(avFace, 34); }
+  else avBtn.hidden = true;
+  on(avBtn, 'click', () => openAvatar());
+  on(avClose, 'click', () => { openAvatar(false); avBtn.focus(); });
+  on(avPop, 'keydown', (e) => { if (e.key === 'Escape') { e.stopPropagation(); openAvatar(false); avBtn.focus(); } });
   try { applyState(session.state?.()); } catch (e) { console.warn('session.state() failed', e); }
   for (const t of tabDefs) if (panelUI[t.id] && !states[t.world]) panelUI[t.id].ui.update(undefined);
-  if (!lastShellTab) showTab(view);
+  if (avatarUI && !states['ui.avatar']) avatarUI.update(undefined);
+  if (!lastShellTab) { showTab(view, 'start'); lastShellTab = view; session?.setWorldState?.(SHELL, { activeTab: view }); }   // the engine knows the tab the person sees
   applyEngineSettings();
   setStatus();
 
@@ -1762,7 +1799,7 @@ export async function mountPsys2(element, options = {}) {
     get micLog() { return micLog; }, micClick,
     /** USER-ACTIONS hook for other features: `actions.record(kind, target, extra)`; `actions.recall(text)` is called by the arrow-key message history (INPUT-HISTORY). */
     actions: { record: (kind, target, extra) => events.add(kind, target, extra), recall: (text) => events.add('recall', text), events: () => events.all() }, progress,
-    destroy() { destroyed = true; engineClient?.destroy(); cleanups.forEach((f) => f()); modalHost.remove(); dbg?.destroy?.(); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
+    destroy() { destroyed = true; engineClient?.destroy(); cleanups.forEach((f) => f()); modalHost.remove(); dbg?.destroy?.(); avatarUI?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
   };
   // FREEZE: the listening state is never restored; the microphone starts only with a click
   if (settings.devMode === true) { syncDebugButton(); loadDebug(); }   // DBG: developer mode is remembered

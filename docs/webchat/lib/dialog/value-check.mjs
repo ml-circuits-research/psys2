@@ -16,10 +16,10 @@
  *     of the candidate has a counterpart in the source. A word the world knows may be dropped or added (that is the point of simplifying).
  * `{ ok, reason }`; with `vocab` absent only the first four checks run.
  */
-import { isNumberWord, parseNumberRun } from '../formalizer/rules/numbers.mjs?v=41a682c1f6';
-import { isColourWord } from '../knowledge/values.mjs?v=ebf19b103c';
-import { editDistance } from '../formalizer/rules/normalize.mjs?v=3f42845f50';
-import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=1d1dd1da2f';
+import { isNumberWord, parseNumberRun } from '../formalizer/rules/numbers.mjs?v=e4898df942';
+import { isColourWord } from '../knowledge/values.mjs?v=a137742733';
+import { editDistance } from '../formalizer/rules/normalize.mjs?v=26e548acf9';
+import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=b48182725e';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 export const COLORS = { has: (w) => isColourWord(w) };   // the colour names of the catalog (the one reader, k.values), single words

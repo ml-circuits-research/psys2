@@ -6,9 +6,9 @@
 //
 // Synchronous by design (the matcher is): the host loads the vocabulary before reading (`ready()`, called by the dialogue at the start of a turn); until then nothing is open and the
 // lexicon is its closed list. Browser-safe: no node imports.
-import { lemmaCandidates } from './facts.mjs?v=279aa43ecc';
+import { lemmaCandidates } from './facts.mjs?v=43f5d6d9fc';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
-import { colourName, isCoreColour } from './values.mjs?v=ebf19b103c';
+import { colourName, isCoreColour } from './values.mjs?v=a137742733';
 import { BUNDLED_GEO } from './bundled-geo.mjs?v=69830abbea';
 
 let attached = null;

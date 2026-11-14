@@ -14,13 +14,13 @@
  *     formalizer, restricted to the frame's world. It is accepted only when the result is fully understood there.
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
-import { restrictedSet } from '../formalizer/spell.mjs?v=1d1dd1da2f';
-import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=3f42845f50';
+import { restrictedSet } from '../formalizer/spell.mjs?v=b48182725e';
+import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=26e548acf9';
 import { lastUnfinished } from '../astra/where.mjs?v=72e99182f4';
 import { runDiscussionCommand } from '../astra/session.mjs?v=65217ad31a';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=aa6dfcad14';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { en } from '../lang/en.mjs?v=d1aa2d992b';
+import { en } from '../lang/en.mjs?v=eeaa2a6b1f';
 import { touchedCount } from './followup.mjs?v=88af56c068';
 
 export const FRAME_LIMIT = 5;

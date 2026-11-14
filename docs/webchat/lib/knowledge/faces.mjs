@@ -3,7 +3,7 @@
  * The knowledge world `k.faces` (slots of a face with anchor boxes, variants with plain features and drawable parts, presets, expressions, colours) read through the
  * generic catalog access of facts.mjs (`wires`: the index says which shards hold a type; no path or slot name is written here). Browser-safe: no `node:*`.
  *
- *   const data = await buildFaces(facts);   // null when the catalog has no k.faces (offline, first visit): the avatar then says so, there is no local copy
+ *   const data = await buildFaces(facts);   // null when the catalog has no k.faces (offline, first visit): the avatar then says so; a small bundled fallback (worlds/ui.avatar/default-face.mjs) holds the drawings of the default preset, the expressions and the motion only
  *   data = { frame, style, slots: [{ name, x, y, w, h, z, mirror, optional, variants: [{ name, features, parts }] }], presets, expressions, colours, aliases }
  *
  * One style is used (a face does not mix styles): the style of the presets. Its shards are the shards of the world with the same `sources` as the presets' shard (the
