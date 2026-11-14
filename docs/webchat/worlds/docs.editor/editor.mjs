@@ -13,10 +13,10 @@
 import {
   DEFAULT_TITLE, highlightHex, colorName, TITLE_SIZE_MIN, TITLE_SIZE_MAX, titleBlock, containers, getText, blockText, addMark, cutMark, covered, anyMark,
   sliceMarks, spliceText, remapMarks, hiddenTitle, normalizeMarks, sentencesOf, findAll, toDoc, toText, toHtml, stats as computeStats, documentWords, setText, wordsIn,
-} from './model.mjs?v=18dd2e9fcc';
+} from './model.mjs?v=25e2bbdf20';
 import { ask as askAnimals } from '../../lib/knowledge/animals.mjs?v=7ef6dd8b71';   // the animals of the catalog (k.animals), read by lookup from a bundle generated from it
-import { basicColourNames } from '../../lib/knowledge/values.mjs?v=ebf19b103c';   // the one colour reader (k.values)
-import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs?v=7870b6127e';
+import { basicColourNames } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
+import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs?v=2e56adb60b';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const MAX_HISTORY = 50;

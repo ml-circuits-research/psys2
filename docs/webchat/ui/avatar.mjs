@@ -1,8 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// Avatar tab: the one avatar, a face drawn by one renderer (worlds/ui.avatar/facedraw.mjs) from the data of the knowledge world `k.faces` (read from the catalog like any other
-// knowledge, cached by the browser; there is no local copy of the faces). The world holds the state (state.face: a variant for each slot, colours, size and place, expression);
-// this module only draws it: the stage, the header avatar, the expression chips, the faces of the catalog and the saved ones, and the variants of a part as small pictures to
-// tap (a tap is typed into the chat like any other command). The mouth alternates the talking pair while the voice speaks.
+// The avatar: the one avatar, a face drawn by one renderer (worlds/ui.avatar/facedraw.mjs) from the data of the knowledge world `k.faces` (read from the catalog like any other
+// knowledge, cached by the browser). The first paint uses a small bundled fallback (worlds/ui.avatar/default-face.mjs: the drawings of the default preset, the expressions and the
+// motion only, generated from the catalog); the full set replaces it when it arrives. The world holds the state (state.face: a variant for each slot, colours, size and place,
+// expression); this module only draws it: the big face (in the popup of the icon in the input bar), the small face of the icon, the expression chips, the faces of the catalog and
+// the saved ones, and the variants of a part as small pictures to tap (a tap is typed into the chat like any other command).
+// The face MOVES by rules: the host emits events (reply with its text and outcome, thinking, typing, the voice speaking) and worlds/ui.avatar/motion.mjs (TEMPORARY, until
+// k.motion and std.motion exist) answers which eyes, brows and mouth to lay over the face now. Nothing moves while the page is hidden, and prefers-reduced-motion is honoured.
 const KNOWLEDGE_URL = 'https://ml-circuits-research.github.io/sop-knowledge-worlds/worlds';
 const FADE_MS = 380;
 const plain = (t) => String(t).replace(/_/g, ' ');
@@ -39,9 +42,6 @@ const CSS = `
 .p2-avatar-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; width: 100%; max-width: 460px; }
 .p2-avatar-chips[hidden] { display: none; }
 .p2-avatar-note { margin: 0; font-size: 11px; opacity: .65; text-align: center; max-width: 460px; }
-.p2-head-face { display: inline-block; width: 34px; height: 34px; border-radius: 50%; overflow: hidden; vertical-align: middle; margin-right: 8px; background: #e8edf5; flex: none; }
-.p2-head-face[hidden] { display: none; }
-.p2-head-face svg { display: block; width: 100%; height: 100%; }
 @keyframes p2-av-dance { 0%, 100% { transform: rotate(0) translateY(0); } 25% { transform: rotate(-5deg) translateY(-8px); } 75% { transform: rotate(5deg) translateY(-8px); } }
 @keyframes p2-av-nod { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(12px); } }
 @keyframes p2-av-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-14px); } 75% { transform: translateX(14px); } }
@@ -63,8 +63,9 @@ function ensureCss() {
 export const variantSay = (slot, name) => (name === 'none' ? `remove the ${nounOf(slot)}` : `swap the ${nounOf(slot)} for ${plain(name)}`);
 
 /**
- * Tab renderer. Returns { update(state), express('smile'|'surprised'), setSpeaking(bool), animate({ name }), destroy() }.
- * `host.asset(path)` locates the modules of the page (the renderer, the catalog reader).
+ * Renderer. Returns { update(state), emit(type, payload), setSpeaking(bool, text), setVisible(bool), mirror(el, px), animate({ name }), destroy() }.
+ * `host.asset(path)` locates the modules of the page (the renderer, the motion rules, the catalog reader). `mirror(el, px)` keeps a small copy of the face in `el` (the icon).
+ * `host.motionSeed` fixes the blink generator (tests); `host.now()` is the clock.
  */
 export function createAvatar(container, host = null) {
   ensureCss();
@@ -80,28 +81,31 @@ export function createAvatar(container, host = null) {
   container.append(stage, caption, chipsEl, optsEl, facesEl, noteEl);
   optsEl.hidden = true; facesEl.hidden = true;
 
-  let full = false, state = null, data = null, mods = null, loading = null, retry = 0, destroyed = false, headEl = null, lastSvg = '', shown = '';
-  let transient = null, transientTimer = 0, fxTimer = 0, talkTimer = 0, talkPhase = false, speaking = false;
+  let full = false, state = null, data = null, mods = null, loading = null, retry = 0, destroyed = false, lastSvg = '', shown = '';
+  let fxTimer = 0, visible = false, motion = null, motionTimer = 0, frame = { over: null, talking: false }, frameKey = '';
+  const mirrors = [];   // { el, px, svg }: the small copies of the face (the icon)
+  const now = () => (host?.now ? host.now() : performance.now());
+  const reducedQuery = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
   const say = (text) => { try { host?.send?.(text); } catch (e) { console.warn('avatar: could not send', e); } };
   const asset = (p) => (host?.asset ? host.asset(p) : new URL(`../${p}`, import.meta.url).href);
 
-  /** The renderer and the faces of the catalog, loaded once; a catalog that cannot be reached is asked again later (the avatar then says so). */
+  /** The renderer, the motion rules and the faces of the catalog, loaded once; a catalog that cannot be reached is asked again later (the avatar then says so). */
   function load() {
     if (loading || destroyed || full) return;
     loading = (async () => {
       try {
-        const [draw, logic, { DEFAULT_FACE }, { createFacts }, { createKnowledgeSource }, { createCachedSource }] = await Promise.all(['worlds/ui.avatar/facedraw.mjs', 'worlds/ui.avatar/facelogic.mjs', 'worlds/ui.avatar/default-face.mjs', 'lib/knowledge/facts.mjs', 'lib/loaders/knowledge-source.mjs', 'lib/loaders/knowledge-cache.mjs'].map((p) => import(asset(p))));
+        const [draw, logic, { DEFAULT_FACE }, motionMod, { createFacts }, { createKnowledgeSource }, { createCachedSource }] = await Promise.all(['worlds/ui.avatar/facedraw.mjs', 'worlds/ui.avatar/facelogic.mjs', 'worlds/ui.avatar/default-face.mjs', 'worlds/ui.avatar/motion.mjs', 'lib/knowledge/facts.mjs', 'lib/loaders/knowledge-source.mjs', 'lib/loaders/knowledge-cache.mjs'].map((p) => import(asset(p))));
         const src = createCachedSource({ source: createKnowledgeSource(host?.knowledgeUrl?.() || KNOWLEDGE_URL), caches: globalThis.caches });
         const facts = createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((r) => setTimeout(() => r(null), 6000))]) } });
-        mods = { draw, logic }; data = DEFAULT_FACE; shown = ''; draw_();   // the bundled default face first: the tab never waits for the network
-        host?.progress?.start?.('faces', 'Loading the face set', { quiet: true });   // PROGRESS: recorded, never shown while it loads (the bundled face is already drawn and works: this is an upgrade); said only when it cannot be had
+        mods = { draw, logic, motionMod }; data = DEFAULT_FACE; shown = ''; startMotion(); draw_();   // the bundled fallback face first: the avatar never waits for the network
+        host?.progress?.start?.('faces', 'Loading the face set', { quiet: true });   // PROGRESS: recorded, never shown while it loads (the fallback face is already drawn: this is an upgrade); said only when it cannot be had
         const d = await facts.faces();
         if (!d) throw new Error('no faces in the catalog');
         data = d; full = true; shown = '';
         host?.progress?.end?.('faces', { label: 'Face set loaded' });
       } catch (e) {
-        console.warn('avatar: the faces of the catalog could not be loaded; the default face stays', e);
-        host?.progress?.fail?.('faces', 'The face set could not be loaded', 'the bundled face works: every part can be added, removed and coloured, with fewer variants');
+        console.warn('avatar: the faces of the catalog could not be loaded; the fallback face stays', e);
+        host?.progress?.fail?.('faces', 'The face set could not be loaded', 'the fallback face works: its parts can be added, removed and coloured, with fewer variants');
         if (!destroyed) retry = setTimeout(() => { loading = null; load(); }, 30000);
         loading = null;
         if (mods) { draw_(); return; }
@@ -109,14 +113,33 @@ export function createAvatar(container, host = null) {
         return;
       }
       loading = null;
-      draw();
+      draw_();
     })();
   }
 
+  // ---- motion: events in, a frame of variants over the face out; one timer, none while hidden --------------------------------------------------------------------
+  const has = (slot, name) => !!data?.slots.find((s) => s.name === slot)?.variants.some((v) => v.name === name && v.parts?.length !== 0);
+  function startMotion() {
+    if (!mods?.motionMod || motion) return;
+    motion = mods.motionMod.createMotion({ seed: host?.motionSeed ?? (Math.floor(Math.random() * 1e9) | 1), has, reduced: !!reducedQuery?.matches, t0: now() });
+    tick();
+  }
+  reducedQuery?.addEventListener?.('change', () => { motion = null; frameKey = ''; startMotion(); });   // the preference changed: a new scheduler
+  const awake = () => !destroyed && (typeof document === 'undefined' || document.visibilityState !== 'hidden');
+  function tick() {
+    clearTimeout(motionTimer); motionTimer = 0;
+    if (!motion || !data || !awake()) return;
+    const t = now();
+    frame = motion.frame(t);
+    const key = JSON.stringify(frame);
+    if (key !== frameKey) { frameKey = key; draw_(); }
+    const ms = motion.nextChange(t);
+    if (Number.isFinite(ms)) motionTimer = setTimeout(tick, ms);
+  }
+  if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') tick(); else clearTimeout(motionTimer); });
+
   const faceOf = () => (state?.face?.v === 2 ? state.face : mods.logic.newFace(data));
-  const over = () => (talkPhase && speaking ? { mouth: talkPhase === 'alt' ? data.expressions.talking?.mouthAlt : data.expressions.talking?.over.mouth } : null);
-  const exprOf = (face) => mods.draw.shownExpression(face, transient) || null;   // the render model: the state's expression wins over the flash
-  const svgOf = (face, size) => mods.draw.renderFace(data, exprOf(face) && data.expressions[exprOf(face)] ? { ...face, expression: exprOf(face) } : face, { size, over: over(), bg: size ? undefined : '#e8edf5', label: `${state?.name ?? 'Avatar'}, a drawn face with ${mods.logic.describeFace(data, face)}` });
+  const svgOf = (face, size) => mods.draw.renderFace(data, face, { size, over: mods.draw.shownOver(face, frame), bg: size ? undefined : '#e8edf5', label: `${state?.name ?? 'Avatar'}, a drawn face with ${mods.logic.describeFace(data, face)}` });
 
   function paint(svg, fade) {
     if (svg === lastSvg) return;
@@ -138,11 +161,13 @@ export function createAvatar(container, host = null) {
     return b;
   };
   function rows(face) {
-    const sig = JSON.stringify([face.options, face.base, face.name, Object.keys(face.saved ?? {})]);
+    const sig = JSON.stringify([face.options, face.base, face.name, Object.keys(face.saved ?? {}), full]);
     if (sig === shown) return;
     shown = sig;
     const thumb = (f, label) => mods.draw.renderFace(data, f, { label, bg: '#e8edf5' });
-    const cards = Object.keys(data.presets).map((n) => card(plain(n)[0].toUpperCase() + plain(n).slice(1), `become ${/^[aeiou]/.test(n) ? 'an' : 'a'} ${plain(n)}`, thumb(mods.logic.newFace(data, n), n), face.base === n && !face.name));
+    // the fallback draws only the default preset: the catalog's other faces are cards once it has arrived
+    const names = Object.keys(data.presets).filter((n) => full || n === 'girl');
+    const cards = names.map((n) => card(plain(n)[0].toUpperCase() + plain(n).slice(1), `become ${/^[aeiou]/.test(n) ? 'an' : 'a'} ${plain(n)}`, thumb(mods.logic.newFace(data, n), n), face.base === n && !face.name));
     for (const v of Object.values(face.saved ?? {})) cards.push(card(v.name, `be ${v.name}`, thumb({ ...mods.logic.newFace(data, v.base), slots: v.slots, colours: v.colours, paint: v.paint, adj: v.adj }, v.name), face.name === v.name));
     facesEl.replaceChildren(...cards); facesEl.hidden = !cards.length;
     chipsEl.replaceChildren(...Object.keys(data.expressions).filter((e) => e !== 'talking').map((e) => { const b = el('button', 'p2-avatar-chip', { type: 'button', title: `Say: look ${e}` }); b.textContent = e[0].toUpperCase() + e.slice(1); b.addEventListener('click', () => say(e === 'wink' ? 'wink' : `look ${e}`)); return b; }));
@@ -150,8 +175,7 @@ export function createAvatar(container, host = null) {
     if (o) { optsEl.replaceChildren(...o.variants.map((n) => card(n === 'none' ? 'None' : plain(n), variantSay(o.slot, n), n === 'none' ? '' : mods.draw.variantSvg(data, face, o.slot, n, { size: 52 }), face.slots[o.slot] === n))); optsEl.hidden = false; } else { optsEl.replaceChildren(); optsEl.hidden = true; }
   }
 
-  const draw_ = () => draw();
-  function draw() {
+  function draw_() {
     if (destroyed) return;
     nameEl.textContent = state?.name ?? 'PSys2';
     if (!data) {
@@ -160,35 +184,28 @@ export function createAvatar(container, host = null) {
       return;
     }
     const face = faceOf();
+    for (const m of mirrors) { const svg = svgOf(face, m.px).replace(/ width="[\d.]+" height="[\d.]+"/, ''); if (svg !== m.svg) { m.svg = svg; m.el.innerHTML = svg; } }
+    if (!visible) return;   // the big face and its rows are drawn while the popup is open
     partsEl.textContent = mods.logic.describeFace(data, face);
-    noteEl.textContent = 'Faces: parts of the k.faces knowledge world (hand-written, CC0 1.0).';
+    noteEl.textContent = full ? 'Faces: parts of the k.faces knowledge world (hand-written, CC0 1.0).' : 'Showing the small built-in face; the full set of faces is loading.';
     stage.setAttribute('aria-label', `${nameEl.textContent}, a drawn face with ${partsEl.textContent}`);
     rows(face);
-    paint(svgOf(face), !(talkPhase && speaking));
-    if (!headEl) {
-      const title = document.querySelector('.p2-head .p2-title');
-      if (title) { headEl = el('span', 'p2-head-face', { 'aria-hidden': 'true' }); title.prepend(headEl); }
-    }
-    if (headEl) { headEl.hidden = false; headEl.innerHTML = svgOf(face, 34).replace(/ width="34" height="[\d.]+"/, ''); }
+    paint(svgOf(face), !frame.talking);
   }
 
   load();
-  draw();
+  draw_();
   return {
-    update(next) { state = next ?? state; if (state?.face?.expression) { clearTimeout(transientTimer); transient = null; } draw(); },
-    /** Short-lived mood from the status of a reply (not stored): 'smile' or 'surprised'. */
-    express(kind, ms = 2200) {
-      if (!['smile', 'surprised'].includes(kind) || !data) return;
-      clearTimeout(transientTimer);
-      transient = kind; draw();
-      transientTimer = setTimeout(() => { transient = null; draw(); }, ms);
-    },
-    setSpeaking(on) {
-      speaking = !!on;
-      clearInterval(talkTimer); talkTimer = 0; talkPhase = false;
-      if (on && data) talkTimer = setInterval(() => { talkPhase = talkPhase === 'alt' ? 'open' : 'alt'; draw(); }, 170);
-      draw();
-    },
+    update(next) { state = next ?? state; draw_(); },
+    /** An event of the host: 'reply' { text, outcome, mood }, 'thinking' { on }, 'typing', 'reset'. Moves the face by the motion rules. */
+    emit(type, payload = {}) { if (!motion) return; motion.emit(type, payload, now()); tick(); },
+    setSpeaking(on, text) { if (!motion) return; motion.emit('speaking', { on: !!on, text }, now()); tick(); },
+    /** The popup opens or closes: the big face is drawn only while it is open; closing keeps the state. */
+    setVisible(on) { visible = !!on; if (visible) { shown = ''; lastSvg = ''; } draw_(); },
+    /** Keeps a small copy of the face in `target` (the icon in the input bar). */
+    mirror(target, px = 36) { mirrors.push({ el: target, px, svg: '' }); draw_(); },
+    /** The motion's current frame (tests and the debug view). */
+    frame: () => frame,
     /** Effect avatar.animate { name }. */
     animate({ name } = {}) {
       if (!/^[a-z]+$/.test(String(name ?? ''))) return;
@@ -198,6 +215,6 @@ export function createAvatar(container, host = null) {
       stage.classList.add(`fx-${name}`);
       fxTimer = setTimeout(() => { stage.className = stage.className.replace(/\bfx-\w+/g, '').trim(); }, 2800);
     },
-    destroy() { destroyed = true; clearInterval(talkTimer); clearTimeout(retry); clearTimeout(transientTimer); clearTimeout(fxTimer); headEl?.remove(); },
+    destroy() { destroyed = true; clearTimeout(retry); clearTimeout(motionTimer); clearTimeout(fxTimer); },
   };
 }

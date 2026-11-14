@@ -32,6 +32,17 @@ export function variantFor(data, face, slotName, side = 'left', over = null) {
  */
 export const shownExpression = (face, transient = null) => face?.expression || (transient === 'surprised' ? 'surprised' : transient === 'smile' ? 'happy' : '');
 
+/**
+ * RENDER MODEL, motion half: the variants the view lays over the face at one moment (worlds/ui.avatar/motion.mjs: blinks, the mouth of the words, the face after a reply).
+ * The state is the only source of what the face IS: while it holds an expression (a wink, angry ...) nothing but the talking mouth is laid over it, so the picture never
+ * disagrees with "already winking". `frame` is `{ over, talking }` of the scheduler. The view and tests/live-state.test.mjs both call this.
+ */
+export const shownOver = (face, frame) => {
+  if (!frame?.over) return null;
+  if (!face?.expression) return frame.over;
+  return frame.talking && frame.over.mouth ? { mouth: frame.over.mouth } : null;
+};
+
 const colourEntry = (data, of, name) => data.colours[of]?.[name] ?? Object.values(data.colours[of] ?? {})[0];
 
 /** The colour a part is drawn with: the face colour its tint names, a colour chosen for the slot (`paint`) when the part offers it, else its own rgb or colour name. */

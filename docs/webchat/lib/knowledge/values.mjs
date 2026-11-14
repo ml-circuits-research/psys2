@@ -19,7 +19,16 @@ import { parseLine } from './catalog.mjs?v=0372695257';
 import { BUNDLED_VALUES } from './bundled-values.mjs?v=d9555c35e1';
 
 const lc = (s) => String(s ?? '').toLowerCase().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
-const state = { colours: new Map(), numbers: new Map(), from: 'none', loading: null };
+const state = { colours: new Map(), numbers: new Map(), comparatives: [], from: 'none', loading: null };
+/**
+ * TEMPORARY seed of the comparatives of k.values (`k.values.comparative text= scale= way=`): the bundled subset (bundled-values.mjs) does not carry them yet and the catalog's are read on the first
+ * use. Same wires as the catalog's scales shard (distance and width); `together` and `apart` are not in the catalog (asked of the knowledge repository: adverbs of the scales distance and width).
+ */
+const COMPARATIVES_SEED_TEMPORARY = [['closer', 'distance', 'down'], ['nearer', 'distance', 'down'], ['farther', 'distance', 'up'], ['further', 'distance', 'up'], ['narrower', 'width', 'down'], ['wider', 'width', 'up'], ['together', 'distance', 'down'], ['apart', 'distance', 'up']]
+  .map(([text, scale, way]) => ({ text, scale, way }));
+state.comparatives = COMPARATIVES_SEED_TEMPORARY;
+/** The words that move a quantity down or up on the scales of `scales` ("closer" is down on distance, "wider" is up on width): comparativeWords(['distance', 'width'], 'down') -> ['closer', ...]. */
+export const comparativeWords = (scales, way) => state.comparatives.filter((c) => scales.includes(c.scale) && c.way === way).map((c) => c.text);
 
 function absorb(wires) {
   const colours = new Map(), numbers = new Map();
@@ -53,6 +62,7 @@ export function loadValues(facts) {
   const promise = (async () => {
     try {
       const wires = [...await facts.wires('k.values.colour'), ...await facts.wires('k.values.number')];
+      try { const cmp = (await facts.wires('k.values.comparative')).filter((w) => w.f.text?.[0] && w.f.scale?.[0] && w.f.way?.[0]).map((w) => ({ text: lc(w.f.text[0]), scale: w.f.scale[0], way: w.f.way[0], degree: w.f.degree?.[0] })); if (cmp.length) state.comparatives = [...cmp.filter((c) => c.degree !== 'superlative'), ...COMPARATIVES_SEED_TEMPORARY.filter((s) => !cmp.some((c) => c.text === s.text))]; } catch { /* the seed stays */ }
       if (wires.length) {
         const got = absorb(wires);
         if (got.colours.size) { for (const [n, c] of got.colours) { const old = state.colours.get(n); if (old) { c.thing = old.thing; c.core = old.core; } } state.colours = got.colours; }   // thing and core are derived once, at build time: the catalog's own colour wires do not carry them

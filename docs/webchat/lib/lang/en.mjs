@@ -30,7 +30,7 @@
  */
 import { parse } from '../soplang/index.mjs?v=c57881f705';
 import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=b2645dfa61';
-import { LANG_EN_LOCAL } from './en.local.mjs?v=cf19aabaab';
+import { LANG_EN_LOCAL } from './en.local.mjs?v=9607ea63b3';
 
 const all = (w, k) => w.attrs[k] ?? [];
 const one = (w, k) => all(w, k)[0];

@@ -355,3 +355,15 @@
 .p2-pg-steps .is-failed { color: #c0392b; } .p2-pg-steps .is-active { color: var(--ink); }
 .p2-pg-ms { font-variant-numeric: tabular-nums; }
 .p2-text.is-acting { opacity: .75; }
+
+/* AVATAR ICON in the input bar and its popup (the avatar is not a tab): the icon shows the live face; the popup holds the big face and the same chips, parts, colours and saved faces */
+.p2-avicon { overflow: hidden; padding: 0; background: #e8edf5; box-shadow: inset 0 0 0 1px var(--line); }
+.p2-avicon:hover, .p2-avicon[aria-expanded="true"] { box-shadow: inset 0 0 0 2px var(--accent); }
+.p2-avicon:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.p2-avicon-face { display: block; width: 34px; height: 34px; }
+.p2-avicon-face svg { display: block; width: 100%; height: 100%; }
+.p2-avpop { position: absolute; left: 8px; right: 8px; bottom: 62px; z-index: 6; max-height: calc(100% - 120px); overflow-y: auto; border-radius: 16px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line), 0 14px 40px -12px rgba(20, 30, 60, .35); padding: 8px 12px 14px; }
+.p2-avpop[hidden] { display: none; }
+.p2-avpop-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.p2-avpop-body .p2-avatar-stage { max-height: 40vh; }
+@media (max-width: 720px) { .p2-avpop { left: 4px; right: 4px; } }

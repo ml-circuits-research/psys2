@@ -12,7 +12,7 @@
  */
 
 import { parseLine, parseShard } from './catalog.mjs?v=0372695257';
-import { buildFaces } from './faces.mjs?v=a8975fe028';
+import { buildFaces } from './faces.mjs?v=ecd8800111';
 
 const NUMBER_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12 };
 /** The kinds tried when a thing has no drawing of its own (a word can have dozens of senses with a kind each). */

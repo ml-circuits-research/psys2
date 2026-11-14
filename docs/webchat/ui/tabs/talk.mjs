@@ -14,6 +14,14 @@ export const CHIPS = [
 const CSS = `
 .tk-root { display: grid; gap: 14px; max-width: 1080px; }
 .tk-card-panel { background: var(--surface); border-radius: 16px; box-shadow: inset 0 0 0 1px var(--line), 0 10px 30px -16px rgba(20, 40, 50, .28); padding: 16px 18px; }
+.tk-sum { padding: 12px 16px; }
+.tk-sum h3 { margin: 0 0 6px; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.tk-sum-empty { margin: 0; font-size: 13.5px; color: var(--muted); font-style: italic; }
+.tk-sum-sec { margin: 8px 0 0; }
+.tk-sum-sec h4 { margin: 0 0 2px; font-size: 12px; font-weight: 700; color: var(--ink); }
+.tk-sum-sec ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 1px; font-size: 13px; color: var(--ink); }
+.tk-sum-sec li { overflow-wrap: anywhere; }
+.tk-sum-sec li::before { content: '\\2022'; margin-right: .45em; color: var(--muted); }
 .tk-open { margin: 0 0 10px; font-size: 15px; line-height: 1.5; color: var(--ink); }
 .tk-priv { margin: 8px 0 0; font-size: 12.5px; color: var(--muted); }
 .tk-chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -94,6 +102,8 @@ function make(holder, host) {
   const firstOfTopic = new Map(); // topic id -> the first card element of the topic
   const send = (text) => host.send(text);
 
+  // the live summary: what this conversation is about, rebuilt by the host after each turn (src/dialog/conversation.mjs: topics, worlds used, what was taught, what failed, what is open)
+  const sum = el('section', 'tk-card-panel tk-sum'); sum.setAttribute('aria-label', 'What this conversation is about');
   const open = el('section', 'tk-card-panel');
   open.append(el('p', 'tk-open', esc(OPENING)));
   const chips = el('div', 'tk-chips');
@@ -108,7 +118,18 @@ function make(holder, host) {
   boardSec.append(head, boardWrap, list);
   const toggle = el('button', 'tk-btn tk-toggle', 'Show the topic board'); toggle.type = 'button';
   toggle.addEventListener('click', () => { const on = holder.classList.toggle('is-board'); toggle.textContent = on ? 'Hide the topic board' : 'Show the topic board'; });
-  holder.append(open, toggle, boardSec);
+  function renderSummary(model) {
+    sum.replaceChildren(el('h3', null, 'What we are talking about'));
+    if (!model?.sections?.length) { sum.append(el('p', 'tk-sum-empty', 'Nothing yet. Ask or tell me something and it is listed here.')); return; }
+    for (const sec of model.sections) {
+      const box = el('div', 'tk-sum-sec'); box.dataset.section = sec.id;
+      box.append(el('h4', null, esc(sec.title)));
+      const ul = el('ul'); for (const l of sec.lines) ul.append(el('li', null, esc(l.text)));
+      box.append(ul); sum.append(box);
+    }
+  }
+  renderSummary(null);
+  holder.append(sum, open, toggle, boardSec);
 
   const ready = import(host.asset(CARDS)).then((m) => { cards = m; if (!destroyed) render(); }, (e) => { console.warn('talk tab: cards module failed to load', e); });
 
@@ -189,6 +210,8 @@ function make(holder, host) {
   }
 
   return {
+    /** The summary of the conversation (src/dialog/conversation.mjs `summarize`), set by the host after each turn. */
+    setSummary: renderSummary,
     update(next) { state = next && typeof next === 'object' ? next : state; if (cards) render(); },
     show() { if (cards) render(); },
     destroy() { destroyed = true; void ready; },
@@ -232,7 +255,7 @@ export function mood(reply, answer) {
 }
 
 export default {
-  id: 'talk', mood, label: 'Talk', world: WORLD, order: 95, make,
+  id: 'talk', mood, label: 'Talk', world: WORLD, order: 1, make,
   effects: {
     'talk.card': async ({ id, update }, { ui }) => { const ok = await ui?.showCard?.(String(id), !!update); return ok ? { ok: true } : { ok: false, detail: 'the card could not be shown' }; },
     'talk.board': async (_args, { ui }) => { ui?.showBoard?.(); return { ok: !!ui }; },
