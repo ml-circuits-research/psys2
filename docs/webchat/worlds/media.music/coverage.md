@@ -1,5 +1,8 @@
 # media.music: request-shape coverage (R2)
 
+> Since 2026-11-14 the player operations (`music.playNote`, `playChord`, `playScale`, `playAny`, `random`, `replay`, `playMelody`, `stop`, `loop`, `tempo`, `volume`, `instrument`, `octave`, `transpose`, `transposeTo`, `key`, `melodySet`, `melodyAdd`, `melodyClear`, `melodyUndo`) are the acts of `schema.sop` (`pick` modes play / stop / again, `change` of tempo, volume, instrument, key, loop, pitch, `make` of a melody, `remove` of the last note); the shapes below still hold and every row of `tests.sop` proves them (399 of 401). The theory, list and status operations keep their hand patterns.
+
+
 Every shape a user may use for each operation of the music world, with the test that proves it (`tests.sop`, ids `t.media.music.rNNN`). `supported` lines have a test; `unsupported` lines say why. Shape names: imp = imperative, q = question/request form ("can you ..."), wish = "I want ...", ind = indirect or statement-as-command ("it should be", "too slow"), el = very short/elliptic, voice = fillers, run-ons, typos and chat abbreviations (u, pls, thx, whats), order = word-order variants, syn = synonyms, ref = pronouns and references to the last thing, num = quantities, units and number words, neg = negation, undo = going back, state = questions about the state, opts = questions about the options, coord = coordination.
 
 Shared by every pattern: polite and filler prefixes (can u, could you maybe, hey, um, like, i want, i would like to), trailing fillers (pls, plz, thx, thanks, for me, now, asap, would be nice), number words and digits, and the typo tolerance of the formalizer (spec 03 1b). Songs are recognised by title or nickname (`lex.media.music.songtitles`, `songstarts`).

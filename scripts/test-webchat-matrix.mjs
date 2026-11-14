@@ -505,21 +505,16 @@ export const SCENARIOS = {
     try {
       const a = await say(c, 'Open the music tab');
       check('music: the tab is open', /Music tab/.test(a), a.slice(0, 60));
+      // media.music is a schema world on the acts since 2026-11-14 (no matrix: the refusals, assumptions and why-answers of the rules are gone, spec 21 section 13)
       const f = await say(c, 'Set the tempo to 300');
-      check('music: a tempo the player cannot play is refused with the limit', f === 'That tempo is too fast: at most 240 beats per minute.', f.slice(0, 80));
-      const k = await say(c, 'Set the key to G sharp major');
-      check('music: a key that does not exist is refused with the reason', k === 'There is no G# major.', k.slice(0, 80));
+      check('music: a tempo the player cannot play is refused with the limit', f === 'I can play between 30 and 240 beats per minute.', f.slice(0, 80));
       const s = await say(c, 'What tempo is it?');
-      check('music: the default tempo is an assumption, said once', s === 'The tempo is 100 beats per minute. I assumed 100 beats per minute: nobody has set it yet.', s.slice(0, 120));
-      const s2 = await say(c, 'What tempo is it?');
-      check('music: asked again, it does not repeat the assumption', s2 === 'The tempo is 100 beats per minute.', s2.slice(0, 80));
+      check('music: the tempo is told', s === 'The tempo is 100 beats per minute.', s.slice(0, 120));
       const p = await say(c, 'Play Ode to Joy');
       check('music: a song plays (the host got the sound to play)', /^Playing "Ode to Joy"/.test(p), p.slice(0, 80));
-      const w = await say(c, 'Why is it so slow?');
-      check('music: "why?" says where the tempo came from', /because that is how "Ode to Joy" goes\.$/.test(w), w.slice(0, 120));
       await say(c, 'Make it 150 beats per minute');
       const u = await say(c, 'undo');
-      check('music: "undo" says what it took back, in the world\'s words', /^OK, the tempo is back to 108 beats per minute\./.test(u), u.slice(0, 100));
+      check('music: "undo" says what it took back, in the world\'s words', /^OK, I undid that: the tempo is 108 beats per minute/.test(u), u.slice(0, 100));
       const st = await c.pg.evaluate(() => JSON.parse(JSON.stringify(window.psys2.session.state()['media.music'])));
       check('music: the state of the tab follows (tempo 108)', st.tempo === 108, String(st.tempo));
       check('music: no page errors', c.errors.length === 0, c.errors[0] ?? '');

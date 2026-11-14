@@ -1,9 +1,37 @@
+@gen.media.music.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@tpl.media.music.make core.template
+    for=action.media.music.make
+    text="{note}"
+
+@tpl.media.music.remove core.template
+    for=action.media.music.remove
+    text="{note}"
+
+@tpl.media.music.change core.template
+    for=action.media.music.change
+    text="{note}"
+
+@tpl.media.music.pick core.template
+    for=action.media.music.pick
+    text="{note}"
+
+@tpl.media.music.ask core.template
+    for=action.media.music.ask
+    text="{note}"
+
+@tpl.media.music.undo core.template
+    for=action.media.music.undo
+    text="{note}"
+
+@tpl.media.music.redo core.template
+    for=action.media.music.redo
+    text="{note}"
+
+# ---- templates.extra.sop (hand-written, appended by the generator)
 @tpl.media.music.playNote core.template
     for=action.music.playNote
-    text="{value}"
-
-@tpl.media.music.playChord core.template
-    for=action.music.playChord
     text="{value}"
 
 @tpl.media.music.playScale core.template
@@ -22,16 +50,8 @@
     for=action.music.replay
     text="{value}"
 
-@tpl.media.music.playMelody core.template
-    for=action.music.playMelody
-    text="{value}"
-
 @tpl.media.music.stop core.template
     for=action.music.stop
-    text="{value}"
-
-@tpl.media.music.loop core.template
-    for=action.music.loop
     text="{value}"
 
 @tpl.media.music.tempo core.template
@@ -64,18 +84,6 @@
 
 @tpl.media.music.melodySet core.template
     for=action.music.melodySet
-    text="{value}"
-
-@tpl.media.music.melodyAdd core.template
-    for=action.music.melodyAdd
-    text="{value}"
-
-@tpl.media.music.melodyClear core.template
-    for=action.music.melodyClear
-    text="{value}"
-
-@tpl.media.music.melodyUndo core.template
-    for=action.music.melodyUndo
     text="{value}"
 
 @tpl.media.music.melodyShow core.template
@@ -152,4 +160,8 @@
 
 @tpl.media.music.songInfo core.template
     for=action.music.songInfo
+    text="{value}"
+
+@tpl.media.music.playChord core.template
+    for=action.music.playChord
     text="{value}"
