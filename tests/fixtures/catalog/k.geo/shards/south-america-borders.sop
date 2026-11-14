@@ -3,4 +3,16 @@
 # license: ODbL-1.0
 # script: tools/import/geo.mjs
 
+@k.geo.borders.ARG k.geo.country name=Argentina neighbour=Bolivia neighbour=Brazil neighbour=Chile neighbour=Paraguay neighbour=Uruguay area=2780400 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.BOL k.geo.country name=Bolivia neighbour=Argentina neighbour=Brazil neighbour=Chile neighbour=Paraguay neighbour=Peru area=1098581 landlocked=true core.source="countries 5.1.0"
 @k.geo.borders.BRA k.geo.country name=Brazil neighbour=Argentina neighbour=Bolivia neighbour=Colombia neighbour=Guyana neighbour=Paraguay neighbour=Peru neighbour=Suriname neighbour=Uruguay neighbour=Venezuela area=8515767 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.CHL k.geo.country name=Chile neighbour=Argentina neighbour=Bolivia neighbour=Peru area=756102 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.COL k.geo.country name=Colombia neighbour=Brazil neighbour=Ecuador neighbour=Panama neighbour=Peru neighbour=Venezuela area=1141748 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.ECU k.geo.country name=Ecuador neighbour=Colombia neighbour=Peru area=276841 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.FLK k.geo.country name="Falkland Islands" capital=Stanley area=12173 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.GUY k.geo.country name=Guyana neighbour=Brazil neighbour=Suriname neighbour=Venezuela area=214969 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.PRY k.geo.country name=Paraguay neighbour=Argentina neighbour=Bolivia neighbour=Brazil area=406752 landlocked=true core.source="countries 5.1.0"
+@k.geo.borders.PER k.geo.country name=Peru neighbour=Bolivia neighbour=Brazil neighbour=Chile neighbour=Colombia neighbour=Ecuador area=1285216 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.SUR k.geo.country name=Suriname neighbour=Brazil neighbour=Guyana area=163820 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.URY k.geo.country name=Uruguay neighbour=Argentina neighbour=Brazil area=181034 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.VEN k.geo.country name=Venezuela neighbour=Brazil neighbour=Colombia neighbour=Guyana area=916445 landlocked=false core.source="countries 5.1.0"

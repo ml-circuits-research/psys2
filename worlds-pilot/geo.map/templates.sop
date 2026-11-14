@@ -1,0 +1,38 @@
+@gen.geo.map.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@tpl.geo.map.make core.template
+    for=action.geo.map.make
+    text="{note}"
+
+@tpl.geo.map.remove core.template
+    for=action.geo.map.remove
+    text="{note}"
+
+@tpl.geo.map.change core.template
+    for=action.geo.map.change
+    text="{note}"
+
+@tpl.geo.map.place core.template
+    for=action.geo.map.place
+    text="{note}"
+
+@tpl.geo.map.send core.template
+    for=action.geo.map.send
+    text="{note}"
+
+@tpl.geo.map.pick core.template
+    for=action.geo.map.pick
+    text="{note}"
+
+@tpl.geo.map.ask core.template
+    for=action.geo.map.ask
+    text="{note}"
+
+@tpl.geo.map.undo core.template
+    for=action.geo.map.undo
+    text="{note}"
+
+@tpl.geo.map.redo core.template
+    for=action.geo.map.redo
+    text="{note}"

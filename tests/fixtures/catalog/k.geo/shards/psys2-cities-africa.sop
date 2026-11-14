@@ -1,0 +1,37 @@
+# k.geo/shards/psys2-cities-africa: Africa: 31 more cities with country, population and place, that the continent shard does not have.
+# sources: geonames all-the-cities-3.1.0 (GeoNames, CC-BY-4.0, https://www.geonames.org), as carried by the PSys2 world geo.map
+# sources: psys2-worlds 6b63b2ba (the selection: the largest cities and the capitals)
+# license: CC-BY-4.0
+# script: tools/import/psys2.mjs
+
+@k.geo.psys2.city.CD.Kisangani k.geo.city name=Kisangani country="Democratic Republic of the Congo" population=539158 lat=0.52 lon=25.19 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.CI.Abobo k.geo.city name=Abobo country="Côte d'Ivoire" population=900000 lat=5.42 lon=-4.02 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.DZ.Boumerdas k.geo.city name=Boumerdas country=Algeria population=786499 lat=36.77 lon=3.48 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.DZ.Tebessa k.geo.city name=Tébessa country=Algeria population=634332 lat=35.4 lon=8.12 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.MA.Meknes k.geo.city name=Meknès country=Morocco population=545705 lat=33.89 lon=-5.55 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.MA.Tangier k.geo.city name=Tangier country=Morocco population=688356 lat=35.77 lon=-5.8 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Aba k.geo.city name=Aba country=Nigeria population=897560 lat=5.11 lon=7.37 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Abeokuta k.geo.city name=Abeokuta country=Nigeria population=593100 lat=7.16 lon=3.35 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Benin_City k.geo.city name="Benin City" country=Nigeria population=1125058 lat=6.34 lon=5.63 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Ebute_Ikorodu k.geo.city name="Ebute Ikorodu" country=Nigeria population=535619 lat=6.6 lon=3.49 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Enugu k.geo.city name=Enugu country=Nigeria population=688862 lat=6.44 lon=7.5 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Ilorin k.geo.city name=Ilorin country=Nigeria population=814192 lat=8.5 lon=4.54 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Jos k.geo.city name=Jos country=Nigeria population=816824 lat=9.93 lon=8.89 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Maiduguri k.geo.city name=Maiduguri country=Nigeria population=1112449 lat=11.85 lon=13.16 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Onitsha k.geo.city name=Onitsha country=Nigeria population=561066 lat=6.15 lon=6.79 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Oyo k.geo.city name=Oyo country=Nigeria population=736072 lat=7.85 lon=3.93 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Port_Harcourt k.geo.city name="Port Harcourt" country=Nigeria population=1148665 lat=4.78 lon=7.01 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Sokoto k.geo.city name=Sokoto country=Nigeria population=563861 lat=13.06 lon=5.24 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Warri k.geo.city name=Warri country=Nigeria population=536023 lat=5.52 lon=5.75 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NG.Zaria k.geo.city name=Zaria country=Nigeria population=975153 lat=11.11 lon=7.72 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.RE.Saint-Denis k.geo.city name=Saint-Denis country=Réunion capital_of=Réunion population=137195 lat=-20.88 lon=55.45 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.SD.Nyala k.geo.city name=Nyala country=Sudan population=565734 lat=12.05 lon=24.88 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.SH.Jamestown k.geo.city name=Jamestown country="Saint Helena" population=637 lat=-15.94 lon=-5.72 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.SN.Pikine k.geo.city name=Pikine country=Senegal population=874062 lat=14.76 lon=-17.39 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.SN.Touba k.geo.city name=Touba country=Senegal population=529176 lat=14.85 lon=-15.88 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.SS.Juba k.geo.city name=Juba country="South Sudan" population=450000 lat=4.85 lon=31.58 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.YT.Mamoudzou k.geo.city name=Mamoudzou country=Mayotte capital_of=Mayotte population=54831 lat=-12.78 lon=45.23 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.ZA.Pietermaritzburg k.geo.city name=Pietermaritzburg country="South Africa" population=750845 lat=-29.62 lon=30.39 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.ZA.Port_Elizabeth k.geo.city name="Port Elizabeth" country="South Africa" population=967677 lat=-33.96 lon=25.61 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.ZA.Soweto k.geo.city name=Soweto country="South Africa" population=1695047 lat=-26.27 lon=27.86 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.ZA.Tembisa k.geo.city name=Tembisa country="South Africa" population=511655 lat=-26 lon=28.23 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"

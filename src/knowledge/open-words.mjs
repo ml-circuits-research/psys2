@@ -52,5 +52,36 @@ export class OpenWords extends Set {
 }
 export { lemmaCandidates };
 
+const foldOf = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+let foldedFor = null, foldedMap = null;
+/** The accent-free spellings of the vocabulary's lemmas that have accents (built once per loaded vocabulary): folded lemma -> shard ids. */
+function foldedVocab(vocab) {
+  if (foldedFor !== vocab) {
+    foldedMap = new Map();
+    for (const k of Object.keys(vocab)) { const f = foldOf(k); if (f !== k && !Object.hasOwn(vocab, f)) foldedMap.set(f, vocab[k]); }
+    foldedFor = vocab;
+  }
+  return foldedMap;
+}
+
+/**
+ * True when `word` (underscores for spaces) is the name of a place of the catalog's geography (`open=place`, worlds `catalog=k.geo`): the vocabulary lists it for a shard of those worlds
+ * (not only for the doc of the schema: "river", "north" are words of the schema), it is not a colour or a number, and it has no digit (a lexicon word is lower-case ASCII with `_`).
+ * Names of several words ("new york", "cape town") are looked up with spaces. A place word read here is only a reading of the sentence; the facts come by lookup (worlds/geo.map/places.mjs).
+ */
+export function knowsPlace(word, catalogs) {
+  if (!attached?.peekVocab) return false;
+  const w = String(word).replace(/_/g, ' ');
+  if (w.length < 3 || !/^[a-z][a-z .'-]*$/.test(w)) return false;
+  const vocab = attached.peekVocab();
+  if (!vocab) return false;
+  const rel = /^(?:the )?capital(?: city)? of (.+)$/.exec(w) ?? /^(.+?)(?:['’]s)? capital(?: city)?$/.exec(w);   // a place by the relation k.geo states: "the capital of Sudan", "sudan capital"
+  if (rel && rel[1] !== 'the') return knowsPlace(rel[1].replace(/^the /, '').replace(/ /g, '_'), catalogs);
+  const folded = foldedVocab(vocab);   // the vocabulary lists "são paulo" and "chișinău"; people type "sao paulo" and "chisinau"
+  const sh = [w, w.endsWith('s') ? null : `${w}s`].map((k) => (k && (Object.hasOwn(vocab, k) ? vocab[k] : folded.get(k)))).find(Boolean);
+  if (!sh?.some((x) => catalogs.includes(String(x).split('/')[0]) && !/\/schema\.sop$/.test(x))) return false;
+  return !colourName(w);
+}
+
 /** The probe of an open lexicon: `open=knowledge` + catalogs (kinds of the catalog) or `open=colour` (any colour the one colour reader knows, with its spellings and shorthand). */
-export const probeOf = (open, catalogs) => (open === 'colour' ? (w) => w.length >= 2 && !!colourName(String(w).replace(/_/g, ' ')) : (w) => knowsKind(w, catalogs));
+export const probeOf = (open, catalogs) => open === 'place' ? (w) => knowsPlace(w, catalogs) : (open === 'colour' ? (w) => w.length >= 2 && !!colourName(String(w).replace(/_/g, ' ')) : (w) => knowsKind(w, catalogs));

@@ -1,0 +1,21 @@
+# k.geo/shards/psys2-city-words: 15 other spellings of cities we have, from the names PSys2 used (Saint Petersburg for St. Petersburg, Sevilla for Seville): a city of PSys2 within 5 km of ours whose name is spelt alike.
+# sources: geonames all-the-cities-3.1.0 (GeoNames, CC-BY-4.0, https://www.geonames.org), as carried by the PSys2 world geo.map
+# sources: psys2-worlds 6b63b2ba (the selection)
+# license: CC-BY-4.0
+# script: tools/import/psys2.mjs
+
+@k.geo.psys2.cityword.AD.Andorra_la_Vella core.word text="Andorra la Vella" means=Andorra of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.JO.Zarqa core.word text=Zarqa means="Az Zarqa" of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.LY.Benghazi core.word text=Benghazi means=Banghazi of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.IQ.Basrah core.word text=Basrah means=Basra of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.MA.Fes core.word text=Fès means=Fez of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.DE.Frankfurt_am_Main core.word text="Frankfurt am Main" means=Frankfurt of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.IQ.Erbil core.word text=Erbil means=Irbil of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.US.New_York_City core.word text="New York City" means="New York" of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.RU.Nizhniy_Novgorod core.word text="Nizhniy Novgorod" means="Nizhny Novgorod" of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.GD.St_George_s core.word text="St. George's" means="Saint George's" of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.SM.City_of_San_Marino core.word text="City of San Marino" means="San Marino" of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.YE.Sana_a core.word text=Sana'a means=Sanaa of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.ES.Sevilla core.word text=Sevilla means=Seville of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.RU.Saint_Petersburg core.word text="Saint Petersburg" means="St. Petersburg" of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.cityword.YE.Ta_izz core.word text=Ta‘izz means=Taizz of=k.geo.city.name core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"

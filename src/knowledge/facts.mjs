@@ -276,6 +276,8 @@ export function createFacts({ source, name = 'catalog' }) {
     name, find, thing, stats, loadVocab, world, wires, schema, series,
     /** The schema and the series already built, or undefined (synchronous reads for operations: \`ctx.knowledge.peekSchema()\`, \`peekSeries()\`). */
     peekSchema: () => schemaData ?? undefined, peekSeries: () => seriesData ?? undefined,
+    /** The wires of a whole type once `wires(type)` settled (a world's `needs` entry `wires:<type>[@<world>]`), else undefined: a synchronous read for operations that rank or count a collection (the map's cities of a country). */
+    peekWires: (type, world = null) => wireMemo.get(`${type}|null|${world ?? ''}`),
     /** The faces of k.faces (src/knowledge/faces.mjs), built once from the catalog; null when it has none (and asked again later). */
     faces() {
       facesLoading ??= buildFaces(api).then((d) => { facesData = d; if (!d) { facesLoading = null; } return d; });

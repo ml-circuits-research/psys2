@@ -55,7 +55,7 @@ put('k.layouts/shards/names', `# fixture: the names of the layouts of k.layouts\
 const actionsReal = real.worlds.find((w) => w.id === 'k.actions');
 files['k.actions/schema.sop'] = readFileSync(path.join(src, 'k.actions/schema.sop'), 'utf8');
 for (const sh of actionsReal.shards) put(sh.id, readFileSync(path.join(src, sh.path), 'utf8'), sh.keys, sh.sources);
-// The worlds Talk reads generically (E-T1): the small ones whole (animals, body, commonsense, feelings, food, people, space, time, units); the big ones (k.words, k.geo, k.scenes) keep only the
+// The worlds Talk reads generically (E-T1): the small ones whole (animals, body, commonsense, feelings, food, people, space, time, units); the big ones (k.words, k.scenes) keep only the
 // wires that name a word the Talk experiment asks about (scripts/exp-talk.mjs). Each world's schema.sop is copied too: its core.word wires say which words mean which slot.
 const wanted = new Set([...readFileSync(path.join(import.meta.dirname, 'exp-talk.mjs'), 'utf8').matchAll(/'([^'\n]{2,40})'/g)].flatMap((m) => m[1].toLowerCase().replace(/[^a-z' -]/g, ' ').split(/\s+/)).filter((w) => w.length > 2));
 const realIndex = new Map(real.worlds.map((w) => [w.id, w]));
@@ -73,7 +73,7 @@ for (const id of ['k.animals', 'k.body', 'k.colours', 'k.commonsense', 'k.feelin
   const rw = realIndex.get(id);
   if (!rw) continue;
   files[`${id}/schema.sop`] = readFileSync(path.join(src, id, 'schema.sop'), 'utf8');
-  const big = ['k.words', 'k.geo', 'k.scenes'].includes(id);
+  const big = ['k.words', 'k.scenes'].includes(id);   // k.geo whole: the map (worlds/geo.map) reads places by lookup
   for (const sh of rw.shards) {
     let text = readFileSync(path.join(src, `${sh.id}.sop`), 'utf8');
     let keys = sh.keys;
