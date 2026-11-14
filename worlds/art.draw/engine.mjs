@@ -288,6 +288,21 @@ const guard = (fn) => (ctx, args = {}) => {
   }
 };
 
+/**
+ * ONE REQUEST, ONE UNDO STEP (specs/15 "one step per request", specs/24): `fn(s)` runs several operations of the board, each remembering a step. When it does not return a supported
+ * result the picture is restored as it was and no step is left (all or nothing); otherwise the steps collapse into the first one, labelled `label`, so one "undo" takes the request back.
+ */
+export function oneStep(ctx, label, fn) {
+  const s = ensure(ctx), base = s.history.length, snap = snapshot(s, label);
+  let r;
+  try { r = fn(s); } catch (e) { r = no(`Oops, I could not do that (${e?.message ?? e}).`, 'error'); }
+  if (r?.status !== 'supported') { restore(s, snap); s.history.length = Math.min(s.history.length, base); s.prev = s.history.at(-1) ?? null; return r; }
+  if (s.history.length > base + 1) s.history.splice(base + 1);
+  if (s.history[base]) s.history[base].label = label;
+  s.prev = s.history.at(-1) ?? null;
+  return r;
+}
+
 // ---- describing things ------------------------------------------------------------------------------------------------
 const sizeWord = (o) => {
   const f = o.size / (KINDS[kindKey(o)]?.size ?? o.size);

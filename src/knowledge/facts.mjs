@@ -323,6 +323,8 @@ export function createFacts({ source, name = 'catalog' }) {
     /** The wires of a type that `preloadWires` loaded, or undefined (a synchronous read for operations: `ctx.knowledge.peekWires(type)`). */
     peekWires: (type, world = null) => listed.get(type) ?? wireMemo.get(`${type}|null|${world ?? ''}`),   // also the whole-type wires a world's `needs` entry `wires:<type>[@<world>]` settled (the map's countries and cities)
     name, find, thing, stats, loadVocab, loadVocabFor, world, wires, schema, series,
+    /** The text of a catalog file (a shard, a schema) through the same source, for hosts that read worlds whole (the planner: src/plan/host.mjs). */
+    readText: (path) => source.text(path),
     /**
      * Loads a typed need (`std.schema.needs of= type= from=?`, sopworld 0.39) so that an operation reads it synchronously: the wires of the type (`peekWires`), in the world `from` when it is named; the
      * types the host builds a model from are the models: `k.faces.*` the faces (`peekFaces`), `core.slot` and `core.word` of no world the schemas of the knowledge worlds and the ordered series (`peekSchema`, `peekSeries`).

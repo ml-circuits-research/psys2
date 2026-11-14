@@ -27,7 +27,7 @@ import path from 'node:path';
 import { slotDeclarations } from '../src/worlds/describe.mjs';
 
 const REPO = fileURLToPath(new URL('..', import.meta.url));
-const LIB_DIRS = ['soplang', 'legends', 'worlds', 'formalizer', 'interpreter', 'dialog', 'translate', 'astra', 'reasoner', 'knowledge', 'lang', 'vendor'];
+const LIB_DIRS = ['soplang', 'legends', 'worlds', 'formalizer', 'interpreter', 'dialog', 'translate', 'astra', 'reasoner', 'knowledge', 'lang', 'plan', 'vendor'];
 const LIB_FILES = ['loaders/bundle-loader.mjs', 'loaders/knowledge-source.mjs', 'loaders/knowledge-cache.mjs'];
 const WORLD_TEXT = /\.(sop|json|txt|md)$/;
 // Files the browser never reads (the loader treats a missing tests.sop as empty; coverage.md is a human catalogue): left out of worlds/index.json to keep it small (L10).
