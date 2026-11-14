@@ -397,6 +397,12 @@
     ask="true or false?"
     doc="With reasoner=matrix: true for a world whose state follows the other worlds (the shell's tab: an editor brings its tab forward). What another world's request changed in it is not a step of the turn, so undoing that turn leaves it alone; only a turn of the world's own undoes its changes."
 
+@core.world.ambient core.key
+    value=atom
+    card=one
+    ask="true or false?"
+    doc="true for a world shown in an always-visible view that is not a tab (the avatar in the input bar). For routing it is present on every tab: its own fully read sentences win over the generic frame of a tab world, and its undo and redo answer when it made the newest step of the timeline (specs/07-dialogue-layer.md, routing)."
+
 @core.world.untold core.key
     value=atom
     card=many

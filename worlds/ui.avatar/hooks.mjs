@@ -50,8 +50,8 @@ function accepts({ action, mode, roles, state, claim, tab, text }) {
   if (act === 'save') return /\b(?:face|avatar|yourself|myself)\b/.test(said0) || /^(?:please\s+)?(?:save|store|keep|remember)\s+(?:this|it|me)\b/.test(said0);   // "save this as Grandma", "save this face as X"; "write down milk" and "remember that I am 34" are not
   if (['random', 'all', 'describe', 'state'].includes(mode)) return true;   // no thing is said: "surprise me", "reset", "describe yourself"
   if (['why', 'last'].includes(mode)) return false;                        // the discourse layer explains what was done; the avatar does not take every why
-  if (/^name$/i.test(roles.attribute ?? '') || mode === 'what' && !roles.thing && !roles.attribute) return true;   // the name of the avatar
-  const said = (act === 'place' ? [roles.thing] : [roles.pre, roles.thing, roles.value, roles.attribute, roles.rest]).filter(Boolean).join(' ');
+  if (/^name$/i.test(roles.attribute ?? '') || mode === 'what' && !roles.thing && !roles.attribute && !roles.place) return true;   // the name of the avatar
+  const said = (act === 'place' ? [roles.thing] : [roles.pre, roles.thing, roles.value, roles.attribute, roles.rest, roles.place]).filter(Boolean).join(' ');
   if (!said) return true;
   if (act === 'load') { const k = Object.keys(state?.face?.saved ?? {}); if (!(k.some((n) => said.toLowerCase().includes(n)) || F.clausesOf(DEFAULT_FACE, F.tokens(said)).some((c) => c.preset))) return false; }   // "open the weather tab" is not a face
   if (roles.thing && PRONOUN.test(String(roles.thing).trim()) && state?.face?.lastThing && F.read(DEFAULT_FACE, F.tokens(said)).some((m) => m.type === 'colour' || m.type === 'feature' || m.type === 'slot')) return 'focus';   // "make it red" right after the hat: the avatar holds the focus, it does not yield

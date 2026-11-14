@@ -195,7 +195,7 @@ test('a story that fits the previous follow-up is stored there as a note', async
 
 test('"call me X" is the user\'s name (one fact in user.profile and kids.common), "call yourself X" is the avatar; "I live in X" is the profile city', async () => {
   const s = engine.createSession({ language: 'en' });
-  assert.equal(s.state('ui.shell')?.activeTab ?? 'robot', 'robot');
+  assert.equal(s.state('ui.shell')?.activeTab ?? 'talk', 'talk');   // the shell starts on Talk; the avatar is a view, and its commands ("call yourself Bolt") work on any tab
   assert.match((await s.send('call me Andy')).text, /Andy/);
   assert.deepEqual(s.state('user.profile').fields.name.v, 'Andy');
   assert.match((await s.send('what is my name')).text, /Your name is Andy/);

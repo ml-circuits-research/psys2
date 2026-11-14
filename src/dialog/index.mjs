@@ -513,7 +513,9 @@ export class DialogSession {
     if (tabWorld?.startsWith('games.')) this._lastGame = tabWorld;   // opening a game tab ("lets play tic tac toe") makes it the game this session plays
     const gameWorld = st['ui.shell']?.activeGame ?? runningGame(st, this._lastGame);
     const recentWorlds = [...(this._recentWorlds ?? [])];
-    return { activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld: recentWorlds[0] ?? null, states: st, asked: this.discourse?.pending?.world ?? null, lastAction: this.discourse?.frames?.[0]?.world ?? null };   // asked and lastAction: what meta.worlds reads (a question the world asked; the world of the last request)
+    const ambientWorlds = this.engine.set.list().filter((w) => w.ambient).map((w) => w.id);   // worlds of an always-visible view (the avatar): present on every tab
+    const stepWorlds = this.discourse?.actions?.[0]?.worlds ?? [], redoWorlds = this.discourse?.redoStack?.at?.(-1)?.worlds ?? [];   // the worlds of the newest step on the timeline, and of the newest undone step: "undo" / "redo" follow them whichever tab is open
+    return { activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld: recentWorlds[0] ?? null, ambientWorlds, stepWorlds, redoWorlds, states: st, asked: this.discourse?.pending?.world ?? null, lastAction: this.discourse?.frames?.[0]?.world ?? null };   // asked and lastAction: what meta.worlds reads (a question the world asked; the world of the last request)
   }
 
   /** Legacy focus map derived from the context: +3 for the tab world, +1 for each recent world. */
@@ -539,7 +541,9 @@ export class DialogSession {
   }
 
   _noteWorlds(segments) {
-    const ids = segments.map((s) => s.match?.worldId).filter((w) => w && w !== 'ui.shell' && w !== 'kids.common');
+    // an undo / redo moves along the timeline, it does not put its world in charge of the conversation ("undo that" answered by the tab's world with "nothing to take back"
+    // must not make that world the one that reads the next question)
+    const ids = segments.filter((s) => !/\.(?:undo|redo)(?:\.|$)/.test(s.match?.patternId ?? '')).map((s) => s.match?.worldId).filter((w) => w && w !== 'ui.shell' && w !== 'kids.common');
     const game = ids.find((w) => w.startsWith('games.'));
     if (game) this._lastGame = game;   // the last game this session played: while its state says it is running, bare coordinates are its moves (context().gameWorld)
     this._recentWorlds = [...new Set([...ids.reverse(), ...(this._recentWorlds ?? [])])].slice(0, 3);

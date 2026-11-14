@@ -226,8 +226,8 @@ export async function mountPsys2(element, options = {}) {
     h('div', { class: 'p2-modal-head' }, h('h2', { class: 'p2-modal-title', id: 'p2-set-title' }, 'Settings'), setClose), setTabsEl, setBody);
   // AVATAR ICON: always visible beside the input; a click opens the popup with the big face and the same manipulation the Avatar tab had
   const avFace = h('span', { class: 'p2-avicon-face', 'aria-hidden': 'true' });
-  const avBtn = h('button', { class: 'p2-btn p2-avicon', type: 'button', id: 'p2-avicon', title: 'Avatar', 'aria-label': 'Avatar: show the face', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'aria-controls': 'p2-avpop' }, avFace);
-  const avClose = h('button', { class: 'p2-btn-text p2-avpop-close', type: 'button', 'aria-label': 'Close the avatar' }, 'Close');
+  const avBtn = h('button', { class: 'p2-btn p2-avicon', type: 'button', id: 'p2-avicon', title: 'Avatar: show the face', 'aria-label': 'Avatar: show the face', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'aria-controls': 'p2-avpop' }, avFace);
+  const avClose = h('button', { class: 'p2-btn-text p2-avpop-close', type: 'button', title: 'Close the avatar', 'aria-label': 'Close the avatar' }, 'Close');
   const avBody = h('div', { class: 'p2-avpop-body' });
   const avPop = h('div', { class: 'p2-avpop', id: 'p2-avpop', role: 'dialog', 'aria-label': 'Avatar', hidden: true }, h('div', { class: 'p2-avpop-head' }, h('strong', {}, 'Avatar'), avClose), avBody);
   const form = h('form', { class: 'p2-form' }, avBtn, micBtn, speakerBtn, input, dieBtn, sendBtn);

@@ -78,13 +78,14 @@ test('dialog with a catalog: the frame decides, the hit supplies the words', asy
   try {
     let r = await send('what is a comet?');
     assert.match(r.text, /small icy body/);
-    assert.equal(r.trace.discourse.meta.kind, 'knowledge');
+    // the default tab is Talk now: its ask frame reads the question and the lookup supplies the words (no discourse meta); on another tab the discourse layer answers
+    assert.ok(r.trace.discourse.meta?.kind === 'knowledge' || r.segments.some((x) => x.match?.worldId === 'talk'), 'answered by the Talk frame or by the knowledge lookup of the discourse layer');
     r = await send('what is a blorp?');
-    assert.equal(r.text, "I don't know what a blorp is.");
+    assert.match(r.text, /^I don't know (?:what a blorp is|that yet)\.$/);   // the discourse layer names the thing; the Talk frame (the default tab) says it does not know yet
     r = await send('what is a tree made of');
-    assert.equal(r.text, 'A tree is made of wood.');
+    assert.match(r.text, /^A tree is made of wood\./);   // Talk adds what else it knows
     r = await send('what can a bird do');
-    assert.equal(r.text, 'A bird can fly and sing.');
+    assert.match(r.text, /^A bird can fly and sing\./);
     // a hit alone moves nothing: a message another world reads whole is not touched
     r = await send('how much is 2 plus 3');
     assert.equal(r.text, '2 plus 3 is 5.');

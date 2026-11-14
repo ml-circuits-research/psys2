@@ -114,7 +114,8 @@ test('dialog: multi-command, the readable clause runs and the other is reported'
   const r = await engine.createSession({ partial: true }).send('um whats 3 plus 4 and also what day comes after monday');
   assert.match(r.text, /3 plus 4 is 7/);
   assert.match(r.text, /day after Monday is Tuesday/);
-  const mix = await engine.createSession({ partial: true }).send('What is 20 divided by 4? blorp frazzle wibble');
+  const chatS = engine.createSession({ partial: true }); chatS.setWorldState('ui.shell', { activeTab: 'chat' });   // chat only: on Talk (the default tab) an unread clause gets Talk's own "I cannot talk about that here"
+  const mix = await chatS.send('What is 20 divided by 4? blorp frazzle wibble');
   assert.match(mix.text, /20 divided by 4 is 5/);
   assert.match(mix.text, /I did not understand "blorp frazzle wibble"/);
 });

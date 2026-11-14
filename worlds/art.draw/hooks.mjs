@@ -82,6 +82,9 @@ function acceptsWords({ action, mode, roles, text, state, kindWord, tab }) {
     const head = words(said).filter((w) => !DET.has(w)); const end = head.findIndex((w) => /^(?:can|could|may|do|does|are|is|will|would|i|you|we|u|there|available|have|list|options)$/.test(w));   // only the words before the question's own auxiliaries name what is listed
     if (!(end < 0 ? head : head.slice(0, end)).filter((w) => !/^(?:all|your|any|some|every|of|in|for|to|me|us|what|which|whats|more|other|different|the|my)$/.test(w)).every(known)) return false;
   }
+  // a thing that holds a question auxiliary is a clause the free slot swallowed ("how many legs does a zebra have" is a knowledge question about a kind, not a count of things in the drawing):
+  // outside the board's own tab the question is left to the worlds and the catalog that know kinds (Talk, the knowledge lookup)
+  if (act === 'ask' && tab !== 'art.draw' && said && words(said).some((w) => /^(?:does|do|did|has|have|had|can|could|will|would|should)$/.test(w))) return false;
   if (act === 'ask' && ['describe', 'options'].includes(mode)) return true;
   if (act === 'ask' && !said && !roles.place) return false;
   if ((act === 'make' || act === 'change') && !roles.place && TIMES.has(words(said).at(-1) ?? '') && words(said).every((x) => TIMES.has(x) || DET.has(x) || /^(?:it|its|so|be|bright|nice|sunny|a|the)$/.test(x))) return true;   // "make it a sunny day", "change it so its day"

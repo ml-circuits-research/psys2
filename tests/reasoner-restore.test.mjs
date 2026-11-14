@@ -83,7 +83,7 @@ test('a record that cannot be read is refused and changes nothing', () => {
 
 test('measure: a 40-turn session (record size and restore time)', async () => {
   const s = engine.createSession({ language: 'en' });
-  for (let k = 0; k < 14; k++) for (const m of [`Ana buys ${k + 1} balls`, 'Draw a house', 'Make the house red']) await s.send(m);
+  for (let k = 0; k < 14; k++) for (const m of [`Ana buys ${k + 1} balls`, `Tom has ${k + 2} apples`, 'Ana gives 1 ball to Tom']) await s.send(m);   // matrix worlds only: the drawing is no matrix world any more, so its steps are not on the library timeline
   const t0 = performance.now(); const rec = s.memoryJSON().rs; const t1 = performance.now();
   const wire = JSON.parse(JSON.stringify(rec));
   const fresh = engine.createSession({ language: 'en' });

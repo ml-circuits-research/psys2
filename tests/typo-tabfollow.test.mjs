@@ -60,7 +60,7 @@ test('typo tolerance does not invent readings for nonsense', async () => {
 
 test('avatar: undo walks back through the changes of the face, with nothing to undo it says so', async () => {
   const s = engine.createSession();
-  assert.match((await s.send('undo')).text, /nothing to undo/);
+  assert.match((await s.send('undo')).text, /nothing to (?:undo|take back)/);   // Talk, the default tab, answers an undo with an empty timeline
   await s.send('take off the hat');
   const hat = s.state('ui.avatar').face.slots.hat;
   assert.equal(hat, 'none');
@@ -84,26 +84,26 @@ test('tab follow: a world with a tab answers while another tab is shown -> its t
     await f('ops.mjs', "export const ping = () => ({ status: 'supported', value: 'Pong.' });\nexport const pong = () => ({ status: 'missing', note: 'Which one?' });\nexport const nope = () => ({ status: 'unsupported', note: 'I cannot.' });\n");
     const eng = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT, dir] }) });
     const s = eng.createSession();
-    assert.equal(s.state('ui.shell').activeTab, 'robot');
+    assert.equal(s.state('ui.shell').activeTab, 'talk');   // the shell starts on Talk
     await s.send('Pong the tabby.');
-    assert.equal(s.state('ui.shell').activeTab, 'robot', 'a clarification does not switch');
+    assert.equal(s.state('ui.shell').activeTab, 'talk', 'a clarification does not switch');
     await s.send('Nope the tabby.');
-    assert.equal(s.state('ui.shell').activeTab, 'robot', 'an unsupported answer does not switch');
+    assert.equal(s.state('ui.shell').activeTab, 'talk', 'an unsupported answer does not switch');
     await s.send('Ping the tabby.');
     assert.equal(s.state('ui.shell').activeTab, 'tabby');
-    await s.send('Give yourself a hat.');   // the avatar brings its own tab forward
-    assert.equal(s.state('ui.shell').activeTab, 'robot');
+    await s.send('Give yourself a hat.');   // the avatar is a view (the popup of the input bar), not a tab: it answers and leaves the tab alone
+    assert.equal(s.state('ui.shell').activeTab, 'tabby');
     await s.send('Open the editor.');   // ui.shell has no tab of its own: it does what it says
     assert.equal(s.state('ui.shell').activeTab, 'editor');
-    await s.send('Give yourself a hat.');   // the avatar answered again: its tab follows
-    assert.equal(s.state('ui.shell').activeTab, 'robot');
+    await s.send('Give yourself a hat.');
+    assert.equal(s.state('ui.shell').activeTab, 'editor');
   } finally { await rm(dir, { recursive: true, force: true }); }
 });
 
-test('tab follow on the real worlds: "Show me Bucharest" asked on the avatar tab opens the Map', async () => {
+test('tab follow on the real worlds: "Show me Bucharest" asked after a face change opens the Map', async () => {
   const s = engine.createSession();
   await s.send('Become a person.');
-  assert.equal(s.state('ui.shell').activeTab, 'robot');
+  assert.equal(s.state('ui.shell').activeTab, 'talk');   // the avatar is a view: the face change opens no tab
   await s.send('Show me Bucharest');
   assert.equal(s.state('ui.shell').activeTab, 'map');
 });

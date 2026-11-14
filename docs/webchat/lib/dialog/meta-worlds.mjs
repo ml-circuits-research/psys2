@@ -15,9 +15,9 @@
  * weight and never outvotes a block.
  */
 import { GRAMMAR, PERSON } from './continuation.mjs?v=a6bf1ddc16';
-import { sceneThings } from './scene-referents.mjs?v=6ae6918765';
+import { sceneThings } from './scene-referents.mjs?v=254873c6b5';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { slipDistance, stemsOf } from './scene-referents.mjs?v=6ae6918765';
+import { slipDistance, stemsOf } from './scene-referents.mjs?v=254873c6b5';
 
 /** The forms a word can have besides its lemma: plural and case endings (scene referents), and -ing / -ed ("splitting", "coloured", "dividing"). */
 const stemForms = (w) => {

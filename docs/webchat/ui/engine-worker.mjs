@@ -305,7 +305,13 @@ const handlers = {
     try {
       const budget = budgetMod.createBudget ? (() => { try { return budgetMod.createBudget(m.limits ?? undefined); } catch { return null; } })() : null;
       if (mods.lang.normalize(m.opts?.language ?? settings.language) !== 'en') await mods.translate.loadRoEn?.();
-      const res = await session.dryRead(m.text, { ...m.opts, language: mods.lang.normalize(m.opts?.language ?? settings.language), signal: ctl.signal, ...(budget ? { budget } : {}) });
+      const language = mods.lang.normalize(m.opts?.language ?? settings.language);
+      const read = () => session.dryRead(m.text, { ...m.opts, language, signal: ctl.signal, ...(budget ? { budget } : {}) });
+      // LAZY LOADING: a dry run reads like a turn does: the worlds the words need (every world for another language) are loaded first, and an incomplete reading is read again with every world;
+      // loading a world changes no reading and no state (it is skipped while a real turn runs: that turn loads what it needs itself)
+      if (!turnRunning()) { try { if (language !== 'en') await ensureWorlds(worldLoader.ids(), 'dry language'); else { const plan = await worldLoader.plan(m.text); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'dry message'); } } catch { /* the loaded worlds read */ } }
+      let res = await read();
+      if (!res.complete && res.reason === 'incomplete' && !allLoaded() && !turnRunning()) { try { if ((await ensureWorlds(worldLoader.ids(), 'dry second reading')).length) res = await read(); } catch { /* the first reading stands */ } }
       return annotateWires(res);
     } finally { active.delete(m.id); faultNow = null; }
   },

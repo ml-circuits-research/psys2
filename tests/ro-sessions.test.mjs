@@ -76,13 +76,13 @@ test('RD9: "more X" with a plural adds two or three and says how many', async ()
 
 test('RD9: a loose word does not trigger a second tab reply', async () => {
   const s = engine.createSession(sessionOptions(settings, { language: 'en' }));
-  s.setWorldState('ui.shell', { activeTab: 'robot' });
+  s.setWorldState('ui.shell', { activeTab: 'talk' });   // the avatar is a view, not a tab: the loose word "robot" must not open or name any tab
   for (const text of ['wear a hat robot pls', 'wear a hat, robot']) {
     const r = await s.send(text);
-    assert.ok(!/already on the/.test(r.text), `${text}: ${r.text}`);
+    assert.ok(!/already on the|no avatar tab/i.test(r.text), `${text}: ${r.text}`);
   }
   // an explicit request to open the tab still answers
-  assert.match((await s.send('open the avatar tab')).text, /already on the Avatar tab/);
+  assert.match((await s.send('open the talk tab')).text, /already on the Talk tab/);
 });
 
 // The spell items of RD9 belong to RD10 (spell vocabulary per world); they are checked in tests/rd-real-dialogue.test.mjs as well.
