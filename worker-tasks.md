@@ -4304,3 +4304,23 @@ Accepted c3d964a9 + 0bdc7ed7 (vendor 0.104, LIB-1..8 host copies replaced, alter
 3. Then list the 56 unread clauses by kind (word problem, notation, talk, unknown word, …) — that list decides the next knowledge/library items.
 
 **06:20:** sopworld 0.112 has `composeDiagram` / `sampleDiagram` (kind × topic from k.diagrams, laid out by `arrange`) and the renamed API (0.111: relatedCases, judgeOnRelated, generalisationTest, delexicalise, learnRanking, resolveEllipsis, paraphrasesOf; old names deprecated). After the 06:15 items: vendor 0.112, delete the canned random diagram templates, wire composeDiagram for the diagram kinds and the dice, rerun the 60-request gap set; do the renames.
+
+## Reviewer 2026-11-15 06:35 — OWNER (21:13): MOBILE LAYOUT, and the tab cut is still not done
+
+Order now: (1) the 06:15 wiring you are on (completeness, arbitration by coverage, splitRunOn, resolveEllipsis) — finish and land it; (2) **the tab cut (04:25)** — the owner checked the live demo and Chess and Tic-tac-toe are still there: do it right after (1), build and deploy; (3) **mobile layout** (below); (4) diagrams (06:20); (5) renames (Q68: the library keeps the old names until you rename).
+**Mobile layout (phone widths only; desktop stays as it is: the chat always visible, the current page changes beside it):**
+- No vertical split of the screen into chat + tab. The **chat history is one page** among the others; each page takes the full screen.
+- **No tab bar**: a **hamburger menu** lists the pages (Chat, Talk, Drawing, Diagram, Map, Charts, Seating, Timeline, Documents, Music, Settings); the current page's name in the header.
+- The **input bar stays at the bottom on every page** (with the avatar icon and the dice), so a command can be typed from the Drawing page and its result is seen there; the reply appears as a short toast/bubble on non-chat pages with a tap to open the chat page.
+- Keep the URL/state per page (back button returns to the previous page), lazy loading per page unchanged.
+- Screenshots on a 390×844 viewport of the chat page, the menu open, the drawing page after a command; the phone part of the live check again after deploy.
+
+## Reviewer 2026-11-15 06:45 — OWNER (21:24): a subtle link from each reply to its page; Talk page merged into the chat (part of the mobile-layout item)
+
+1. **Reply → page link:** every chat reply produced by a world carries a small, subtle link/chip naming the page it belongs to ("Drawing", "Seating", "Documents"…); a tap opens that page (on a phone: switches page; on desktop: switches the page beside the chat). Replies of the conversation itself (greetings, help) carry none. The world comes from the executed act (the same source the Talk summary uses), never from keywords.
+2. **Talk page removed as a page; what is useful moves into the chat:** the "what we are talking about" summary (std.summarize paragraph + worlds used, taught facts, open threads) becomes a collapsible panel at the top of the chat (or a "Summary" item opened from the chat header); the context examples become the suggestion chips above the input; the topic board and cards go unless a measurement shows use. Remove the Talk tab/page, its world's UI parts that are no longer shown, and their tests; keep the summary tests (owner logs b/c: every world used and every taught fact named, ≤ 3 sentences).
+Do both together with the mobile layout (06:35 item 3); screenshots on desktop and on 390×844.
+
+## Reviewer 2026-11-15 06:55 — Q16 answered: the library builds typed worlds; you do the UI items now
+
+Accepted the negative measurement (completeness on untyped readings: 0 rows in paraphrases, holds elsewhere; default off — right). **Q16:** the library builds `typedWorldFor(schemaWorld, knowledge)` (its 06:55 block); you call it at build time per world (bundled, lazy per page) and at runtime for session things, then re-measure completeness / arbitration / ensemble. While it is built, do now: (2) the **tab cut** + deploy, (3) the **mobile layout** with the reply→page link and Talk merged into the chat (06:35, 06:45), then (4) diagrams (composeDiagram 0.112; the knowledge repository published the diagram edit frames f45f12c).
