@@ -29,8 +29,8 @@
  *   oneAnaphora(ct, anchor, env)  "and a yellow one" repeats the previous command with its noun and the new modifiers
  */
 import { parse } from '../soplang/index.mjs?v=c57881f705';
-import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=58023ee6a5';
-import { LANG_EN_LOCAL } from './en.local.mjs?v=4352e8ad75';
+import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=23e6ac344a';
+import { LANG_EN_LOCAL } from './en.local.mjs?v=38d1132d3b';
 
 const all = (w, k) => w.attrs[k] ?? [];
 const one = (w, k) => all(w, k)[0];
@@ -38,7 +38,7 @@ const isWord = (t) => t.kind === 'word' || t.kind === 'number';
 const span = (toks) => [Math.min(...toks.map((t) => t.start)), Math.max(...toks.map((t) => t.end))];
 
 /** The shards of the catalog world `w.lang.en` this module reads. `core-plurals`, `hand-morphology` (lemmas: analyses -> analysis) and `hand-grammar` (copula was / were) were accepted 2026-11-14 after the corpus run (docs/lessons.md); `hand-joins` and `phrases` are not read (no view uses them). */
-export const LANG_EN_SHARDS = ['determiners', 'pronouns', 'prepositions', 'numbers', 'morphology', 'ellipsis', 'clauses', 'grammar', 'frames-acts', 'frames-acts-more', 'frames-acts-data', 'core-plurals', 'hand-morphology', 'hand-grammar', 'hand-frames', 'alternations'];
+export const LANG_EN_SHARDS = ['determiners', 'pronouns', 'prepositions', 'numbers', 'morphology', 'ellipsis', 'clauses', 'grammar', 'frames-acts', 'frames-acts-more', 'frames-acts-data', 'core-plurals', 'hand-morphology', 'hand-grammar', 'hand-frames', 'alternations', 'role-frames', 'diagram-frames'];
 /** The catalog's act names of the verb groups of the act grammar: the act `change` is the group `set`, `take apart` is `apart`. */
 const VERB_GROUP = { change: 'set', 'take apart': 'apart' };
 /** The lexicons a schema world generates (`lexicon=attribute` is its ATTR); the shared lexicons are the catalog's `w.lang.en.lex` names. */
@@ -66,7 +66,8 @@ function patternOf(parts, lex) {
       case 'verb': return `V.${VERB_GROUP[one(p, 'act')] ?? one(p, 'act')}`;
       case 'phrase': return `[$lang.${one(p, 'phrase')}]${opt}`;
       case 'lexicon': return `${lexical(one(p, 'lexicon'))}${opt}`;
-      case 'word': { const ws = all(p, 'word').map(chunk); return ws.length === 1 && !opt ? ws[0] : `[${ws.join('|')}]${opt}`; }
+      case 'word': { const ws = all(p, 'word').map(chunk); if (one(p, 'act')) ws.unshift(`V.${VERB_GROUP[one(p, 'act')] ?? one(p, 'act')}`);   // a word part that names an act (`act=change`) also takes the verbs of that act, as the frames did before the catalog dropped the V.<group> pseudo-word from the list
+        return ws.length === 1 && !opt ? ws[0] : `[${ws.join('|')}]${opt}`; }
       case 'role': {
         const takes = one(p, 'takes');
         if (takes === 'prep' && one(p, 'role') === 'rel') return 'REL';
@@ -97,6 +98,11 @@ export function createLangEn(source = LANG_EN_FACTS, local = LANG_EN_LOCAL) {
       for (const f of fixedOf.get(name) ?? []) w.attrs[`lit.${one(f, 'role')}`] = [one(f, 'value')];
       w.id = `lang.en.frame.${name}`;
     }
+  }
+  // `lang.en.tune` (en.local.mjs): this application's priority for a frame of the catalog (`frame=<name> priority=N tab-priority=N`): the catalog's priorities are its own order, the readers here depend on theirs
+  for (const tu of norm.filter((w) => w.type === 'lang.en.tune')) {
+    const fr = norm.find((w) => w.type === 'lang.en.frame' && one(w, 'name') === one(tu, 'frame'));
+    if (fr) for (const k of ['priority', 'tab-priority']) if (one(tu, k) != null) fr.attrs[k] = [one(tu, k)];
   }
   const placed = [];
   for (const w of norm) {

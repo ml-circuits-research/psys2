@@ -28,9 +28,9 @@ import { createEffects, EFFECT_ACTS } from './effects.mjs?v=f3538e76e5';   // so
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=c93f946ea8';
-import { resolvePhrase } from './np-lib.mjs?v=b16f41c41d';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
-import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=cc531195e0';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { en } from '../../lib/lang/en.mjs?v=136be736fc';
+import { resolvePhrase } from './np-lib.mjs?v=e3ca6126cf';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
+import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=0a6979f5b7';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------
@@ -93,6 +93,8 @@ export function parseSchema(wires) {
   const schema = { id: sw.id, noun: val(sw, 'noun') ?? sw.id, acts: new Set(vals(sw, 'acts')), limits: { items: 100, history: 30, ...Object.fromEntries(sw.entries.filter((e) => e.key.startsWith('limit.')).map((e) => [e.key.slice(6), Number(e.value.v)])) }, kinds: {}, attrs: {}, doc: val(sw, 'doc') ?? '', tabOnly: val(sw, 'tabOnly') === 'yes', ...(val(sw, 'declare') === 'yes' ? { declared: true } : {}) };   // declare=yes: a DECLARATION ONLY (spec 21 section 6, spec 25): the world keeps its own patterns and operations; the schema serves the dice, the example chips and the action buttons
   for (const a of schema.acts) if (!Object.hasOwn(ACTS, a)) throw new Error(`unknown act '${a}' in ${sw.id}`);
   if (Object.keys(flags).length) schema.flags = flags;   // self: the world is a character ("yourself"); dir: direction words for place; be: "be / look X"; has: "do you have X"; bare: a bare thing is a request
+  if (vals(sw, 'reads').length) schema.reads = vals(sw, 'reads');   // roles beyond CORE_ROLES the world's hooks understand (frames that carry them are generated)
+  if (vals(sw, 'lex').length) schema.lexicons = vals(sw, 'lex');   // shared lexicons beyond acts / space / lang the world defines itself (lexicon.extra.sop)
   if (val(sw, 'boost')) schema.boost = Number(val(sw, 'boost'));
   if (val(sw, 'sample')) schema.sample = val(sw, 'sample');
   if (vals(sw, 'thing').length) schema.things = vals(sw, 'thing').map((t) => { const [path, kind, id, name, only] = String(t).split(':'); return { path, kind, ...(id ? { id } : {}), ...(name ? { name } : {}), ...(String(only ?? '').split('+').includes('dice') ? { diceOnly: true } : {}), ...(/(?:^|\+)active=(\w+)/.exec(only ?? '') ? { active: /(?:^|\+)active=(\w+)/.exec(only)[1] } : {}) }; });   // thing=<state path>:<kind>[:<id key>[:<name key>]]: where the world keeps the things a person can point at when they are not `state.items` (spec 25: the referents are derived from the schema and the state, the same way in every world)
@@ -150,10 +152,21 @@ function conditions(s) {
 const attrWords = (s) => [...new Set(Object.values(s.attrs).flatMap((a) => [a.name, ...a.words]))];
 // the reader looks a plural up by its singular, so the lexicon carries the singular of every word (cheeks -> cheek)
 const kindWords = (s) => [...new Set(Object.values(s.kinds).flatMap((k) => [k.name, k.plural, ...k.words]).flatMap((w) => [w, singular(w)]))];
-/** The forms a world gets: those whose condition the schema meets and whose act the world declares. */
+/**
+ * The roles every schema world carries (the generic executor reads them) and the shared lexicons every schema world has (the modules acts, space, lang.common). A frame of the catalog that names another role
+ * ("make a boat out of paper": material) or another shared lexicon (lex.diagram.edge) is generated only for a world that says it reads it (schema lines `reads=<role>` and `lex=<lexicon name>`):
+ * otherwise the pattern would claim a sentence that no executor of that world can run, and the sentence would end in "did not understand" (spec 21).
+ */
+export const CORE_ROLES = new Set(['thing', 'rel', 'place', 'amount', 'amount2', 'value', 'attribute', 'rest', 'pre', 'post', 'm1', 'm2', 'kind']);
+/** Catalog frames that carry core roles only but that no executor runs (the act takes no such role): "Undo the colour change" (undo takes none, and its verbs include "reset" and "go back"), "Copy the star to the corner", "Save the drawing to my files". A world that runs one says `reads=` for it, which is not possible for these: they wait for an executor. */
+const NO_EXECUTOR = new Set(['undo.thing', 'copy.place', 'save.place', 'save.thing', 'load.from']);
+const SHARED_LEXICONS = /^(acts|space|lang)\./;
+/** The forms a world gets: those whose condition the schema meets, whose act the world declares, whose verb group k.actions has (a frame for "redo the colour change" has no verb of k.actions), whose roles and shared lexicons the world reads. */
 export function formsFor(schema) {
   const c = conditions(schema);
-  return en.frames().filter((f) => schema.acts.has(f.act) && (!f.if || c[f.if]));
+  const reads = new Set(schema.reads ?? []), lexes = new Set(schema.lexicons ?? []);
+  const readable = (f) => [...f.match.matchAll(/\bV\.(\w+)/g)].every((m) => ACT_VERBS[m[1]]) && !NO_EXECUTOR.has(f.id) && f.args.every((r) => CORE_ROLES.has(r) || reads.has(r)) && [...f.match.matchAll(/\blex\.([\w.]+)/g)].every((m) => SHARED_LEXICONS.test(m[1]) || lexes.has(m[1]));
+  return en.frames().filter((f) => schema.acts.has(f.act) && (!f.if || c[f.if]) && readable(f));
 }
 // every form may start with a filler ("pls", "so") and end with one ("please", "from now on"): a free capture at the end stops before the tail
 /** Forms whose words say "yourself" / "the avatar" themselves: they claim the sentence for their world on any tab (pattern tabClaim). */

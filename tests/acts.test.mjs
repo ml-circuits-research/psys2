@@ -40,7 +40,7 @@ test('the act words of worlds/acts are generated from the k.actions verbs, and t
 test('the twelve acts and the six roles are declared; every form belongs to a declared act and role', () => {
   assert.equal(Object.keys(A.ACTS).length, 15);   // twelve acts, undo / redo and save / load counted as two each, and `own` (the world's own reader, flag `reader`)
   assert.deepEqual(A.ROLES, ['thing', 'set', 'attribute', 'value', 'place', 'amount']);
-  for (const f of A.FORMS) { assert.ok(A.ACTS[f.act], f.id); for (const a of f.args) assert.ok([...A.ROLES, 'rel', 'rest', 'pre', 'post'].includes(a), `${f.id}: ${a}`); }
+  for (const f of A.FORMS) { assert.ok(A.ACTS[f.act], f.id); for (const a of f.args) assert.ok([...A.ROLES, ...A.CORE_ROLES, 'part', 'material', 'topic', 'old', 'replacement', 'direction', 'source', 'tool', 'target', 'group', 'criterion', 'parts', 'other', 'means', 'format', 'number', 'state', 'name', 'link', 'ends'].includes(a), `${f.id}: ${a}`); }   // the extra roles are read only by a world that says `reads=` (formsFor)
 });
 
 test('the schema world has no pattern of its own: a schema of under 60 lines, everything else generated', () => {
@@ -335,4 +335,17 @@ test('a name said for a kind that is not named is never dropped silently: it is 
     const d = e.createSession({ language: 'en' });
     assert.doesNotMatch((await d.send('Add a box named Foo.')).text, /did not keep/, 'a named kind keeps its name');
   }
+});
+
+test('formsFor: a frame with a role or a shared lexicon the world does not read, or a verb group k.actions lacks, is not generated (the catalog grows faster than the executors)', () => {
+  const plain = A.parseSchema(parse(readFileSync(path.join(SEAT, 'schema.sop'), 'utf8')).wires);
+  const ids = (s) => new Set(A.formsFor(s).map((f) => f.id));
+  const p = ids(plain);
+  for (const id of ['make.part', 'make.material', 'change.from', 'ask.compare', 'redo.thing', 'deselect', 'place.layout.go', 'change.label.edge']) assert.ok(!p.has(id), id);
+  assert.ok(p.has('make') && p.has('undo') && !p.has('undo.thing') && !p.has('copy.place'));
+  // a world that says it reads the role and defines the lexicons gets the frames
+  const dia = A.parseSchema(parse(readFileSync(path.join(DEFAULT_ROOT, 'diagram.sketch/schema.sop'), 'utf8')).wires);
+  const d = ids(dia);
+  for (const id of ['place.layout.go', 'place.layout.flow', 'change.label.edge', 'change.label.edge.ends', 'change.label.edge.on']) assert.ok(d.has(id), id);
+  assert.ok(!d.has('make.part'));
 });

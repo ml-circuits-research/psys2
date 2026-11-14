@@ -8,6 +8,11 @@
     sample=circle
     dir=yes
     layout=yes
+    reads=link
+    reads=ends
+    lex=diagram.edge
+    lex=diagram.edge.from
+    lex=diagram.direction
     rel=yes
     thingask=yes
     bare=yes

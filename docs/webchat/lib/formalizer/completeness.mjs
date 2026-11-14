@@ -4,7 +4,7 @@
  * slot, or a free-text role. The words a pattern's `...` skipped, and the content words of a free-text capture that are words of the readers themselves (question words, the verbs of
  * other acts), are UNREAD. Browser-safe. `PSYS2_COMPLETE=off` turns the consequences off for A/B runs (the measurement is still recorded on the segment).
  */
-import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs?v=a0baba0c86';
+import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs?v=de48569a01';
 
 const word = (t) => (t.kind === 'word' || t.kind === 'number') && !t.filler;
 /** Content words (not function words, not fillers) of a token list. */

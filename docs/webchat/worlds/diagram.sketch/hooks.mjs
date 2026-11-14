@@ -21,6 +21,20 @@ const domain = {};
 for (const [act, op] of Object.entries(by)) domain[act] = (ctx, r) => run(E[op], act === 'connect')(ctx, r);
 // "Place a medium white ellipse named Cloud at 198, 98": the verb of placing, but a thing that is named is a thing that is made
 domain.place = (ctx, r) => run(/\b(?:named|called)\b/i.test(String(r.text)) ? E.create : E.move)(ctx, r);
+/**
+ * The frames of shard diagram-frames (w.lang.en): "make the arrows go left to right" (act place, mode layout, role rel = the direction) and "call the arrow yes" / "label the arrow from A to B no" / "write yes on the arrow"
+ * (act change, attribute label, roles thing = the arrow word, value, link + ends). The engine reads its own phrasings of the same two requests ("arrange them left to right", "label the arrow from A to B yes"),
+ * so the roles of the frame are said to it in those words; a sentence the engine already read keeps its own text.
+ */
+const DIRECTION = /\b(?:left|right|top|bottom|up|down|across|upwards|downwards|sideways|horizontal|vertical)/i;
+const engineAction = (text, state) => { const n = engineNode(text, state); return n?.type === 'command' && typeof E[n.args?.action] === 'function' ? E[n.args.action] : null; };
+const viaEngine = (ctx, text, fallback) => run(engineAction(text, ctx.state) ?? fallback)(ctx, { text });
+const placeFrame = domain.place;
+domain.place = (ctx, r) => (r.mode === 'layout' && r.rel && DIRECTION.test(String(r.rel)) ? viaEngine(ctx, `arrange them ${String(r.rel).replace(/_/g, ' ')}`, E.move) : placeFrame(ctx, r));
+const changeFrame = domain.change;
+const EDGE_WORD = /^(?:the |an? )?(?:arrow|line|link|edge|connector)s?$/i;   // lex.diagram.edge
+domain.change = (ctx, r) => (r.attribute === 'label' && r.value && EDGE_WORD.test(String(r.thing ?? '').trim())
+  ? viaEngine(ctx, r.link && r.ends ? `label the arrow ${String(r.link).replace(/_/g, ' ')} ${r.ends} ${r.value}` : `label the arrow ${r.value}`, E.set) : changeFrame(ctx, r));
 domain.group = (ctx, r) => run(r.mode === 'apart' ? E.ungroup : E.group)(ctx, r);
 // every question is the engine's to answer (it reads the sentence: path, extreme, cycle, rules, members ...); only "why" and "what did you do" are the executor's own log
 domain.ask = (ctx, r) => (['why', 'last'].includes(r.mode) ? undefined : run(E.ask_describe)(ctx, r));
