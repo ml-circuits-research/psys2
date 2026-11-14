@@ -9,40 +9,40 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=6eba878a92';
-import { loadWorlds } from '../worlds/index.mjs?v=4fbc4853d8';
-import { validateWorldSet } from '../worlds/validate.mjs?v=7c5d3bc8b7';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=e5f5a09ad7';
+import { loadWorlds } from '../worlds/index.mjs?v=a5353099d1';
+import { validateWorldSet } from '../worlds/validate.mjs?v=e5b1246d37';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=cb930d49f5';
-import { createInterpreter } from '../interpreter/index.mjs?v=a5a3574e7e';
-import { createReasoner } from '../reasoner/index.mjs?v=d9ff890f4f';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=fad7e60f85';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=7a7cbc3225';
+import { createInterpreter } from '../interpreter/index.mjs?v=368cf7ff3c';
+import { createReasoner } from '../reasoner/index.mjs?v=4d026bac6d';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=d8a424d538';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=1330c21bd6';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=3ec9167cca';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=eaddb63e61';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=66eccae92e';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=91ac92057c';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=67532e5183';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=4b39ead121';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=8f090882f1';
-import { lexIndex } from '../worlds/lexicon.mjs?v=61e0641801';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=d2e6487e96';
+import { lexIndex } from '../worlds/lexicon.mjs?v=cb7100c2a4';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=14d5d2cbdd';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=7ae04ef9c4';
-import { checkValues } from './value-check.mjs?v=f3a1cd7758';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=67aac7049e';
+import { checkValues } from './value-check.mjs?v=2329f96cf6';
 import { attachValues } from '../knowledge/values.mjs?v=a137742733';
-import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=6b68e8f85f';
+import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=e7f0886c6c';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f6a995963d';
-import { Discourse } from './discourse.mjs?v=c050be125a';
-import { Dialogue } from './dialogue.mjs?v=62402884f2';
+import { Discourse } from './discourse.mjs?v=cc9d2fb8db';
+import { Dialogue } from './dialogue.mjs?v=f4ae97a1d6';
 import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=541c53eec9';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=6e597f8a6e';
-import { repairFromScene } from './scene-referents.mjs?v=2c0e6725b5';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=6cd5eed84f';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=9918077f67';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=970c281127';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=427386de08';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=7ee6b860fa';
+import { repairFromScene } from './scene-referents.mjs?v=584c34d354';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=526874c732';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=883d4e847b';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=41b24b7986';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -1407,7 +1407,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=d358daf8ad').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=73565c063f').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
     { const v = cleanVoice(text, { voice: this._voice }); if (v.corrections.length && v.text.trim()) text = v.text; }

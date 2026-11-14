@@ -4,7 +4,7 @@
 // the one thing read from the sentence is the data ("bikes 4 scooters 9"), which is the world's own parser (parseData). Nothing here names a verb, a colour or a type: values come from the
 // colour reader (values.mjs) and the schema's enums, kinds from the schema (executor.schema), bars by the label lookup of the chart.
 import * as C from './chart.mjs?v=227346af84';
-import * as G from './ops.mjs?v=9b6ce63520';   // circular on purpose: only used inside functions, when the executor exists
+import * as G from './ops.mjs?v=ada3f85787';   // circular on purpose: only used inside functions, when the executor exists
 
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_']+/).filter(Boolean);
 const PRONOUN = /^(?:it|them|that|this|those|these|everything|all|each|every|one|ones|this one|that one|em)$/;
