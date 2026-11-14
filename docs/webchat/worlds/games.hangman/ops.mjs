@@ -150,7 +150,7 @@ export function status(ctx) {
 }
 
 // ---- the declared schema (schema.sop, declare=yes): the letters not asked yet while a game is on; the start when there is none
-import { declaredExecutor } from '../acts/acts.mjs?v=653c455ef8';
+import { declaredExecutor } from '../acts/acts.mjs?v=48543cb2a7';
 import { SCHEMA } from './schema.declared.mjs?v=e511a0dc30';
 export const executor = declaredExecutor(SCHEMA, {
   sampleKnowledge: ({ state }) => {
