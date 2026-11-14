@@ -11,7 +11,7 @@ const word = (t) => (t.kind === 'word' || t.kind === 'number') && !t.filler;
 export const contentWordsOf = (tokens) => tokens.filter(word).map((t) => t.lower ?? String(t.raw).toLowerCase()).filter((w) => !FUNCTION_WORDS.has(w));
 
 /**
- * The switch (PSYS2_COMPLETE): `off` (no consequence: the earlier behaviour), `hold` (the voices run on an incomplete reading, a destructive one is not executed, arbitration is by coverage),
+ * The switch (PSYS2_COMPLETE): `off` (no consequence: the earlier behaviour), `hold` (the readers run on an incomplete reading, a destructive one is not executed, arbitration is by coverage),
  * `ask` (as `hold`, and an incomplete reading no voice completed is not executed: a clarifying ask). Default: DEFAULT_MODE.
  */
 export const DEFAULT_MODE = 'off';

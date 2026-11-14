@@ -1,56 +1,57 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
- * Host adapter for the library's `cousins(world, case, { degree })` (spec 16, "Cousins of a case"). Measurement only: nothing under src/ imports this.
+ * Host adapter for the library's `relatedCases(world, case, { distance, axes })` (spec 16, "Related cases of a case"; called cousins before sopworld 0.111). Measurement only: nothing under src/ imports this.
  * Pure helpers (no node:* imports except the lib resolver) so that a test can drive them with a fake library.
  *
- *   resolveLibrary({ vendored, libPath })   the library to take `cousins` from: the vendored one when it exports it, else the sopworld checkout at `libPath`
- *   expand(lib, world, kase, { degree })    the cases of a case: [{ frame, text, degree, dims, valid, why, dimension }]  (no hand-written lists: every cousin comes from the library)
- *   expectedOf(world, cousin)               what a correct reply must say: { all: [word...] } from the frame's answer (an ask: the values; a find: the names of the holders)
- *   judge(cousin, expected, run)            right | wrong | no_reply, by the reply AND the state (a question must not change the state)
- *   (tabulate and tableText: the library's, 0.103; scripts/cousins.mjs calls them)
+ *   resolveLibrary({ vendored, libPath })   the library to take `relatedCases` from: the vendored one when it exports it, else the sopworld checkout at `libPath`
+ *   expand(lib, world, kase, { distance })  the related cases of a case: [{ frame, text, distance, axes, valid, why, dimension }]  (no hand-written lists: every related case comes from the library)
+ *   expectedOf(world, related)             what a correct reply must say: { all: [word...] } from the frame's answer (an ask: the values; a find: the names of the holders)
+ *   judge(related, expected, run)          right | wrong | no_reply, by the reply AND the state (a question must not change the state)
+ *   (tabulate and tableText: the library's, 0.103; scripts/related-cases.mjs calls them)
  */
 import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-/** The five dimensions the owner named, and which of them the library (0.73) generates: `filler` = the filler kind, `key` = the aspect. The others are listed as "not generated" so the table says so. */
-export const DIMENSIONS = Object.freeze({ filler: 'filler kind', key: 'aspect', act: 'act family', alternation: 'alternation', structure: 'world structure' });
-/** 0.80 names a lifted-filler cousin by the EDGE it came by (`kind`, `class`, the host's), 0.73 as `filler`; `key` is the aspect. Any other name is a new dimension and is shown as it is. */
+/** The five dimensions the owner named, and which of them the library generates (its `axes`): `filler` = the filler kind, `key` = the aspect, `wording` = the language world's rewordings. The others are listed as "not generated" so the table says so. */
+export const DIMENSIONS = Object.freeze({ filler: 'filler kind', key: 'aspect', wording: 'wording', act: 'act family', alternation: 'alternation', structure: 'world structure' });
+/** A related case of the filler axis is named by the EDGE it came by (`kind`, `class`, the host's) or as `filler`; `key` is the aspect. Any other name is a new axis and is shown as it is. */
 export const dimensionOf = (c) => {
-  const d = (c.dims ?? [])[0];
+  const d = (c.axes ?? [])[0];
   if (d === 'key') return DIMENSIONS.key;
+  if (d === 'wording') return DIMENSIONS.wording;
   if (d === 'filler') return DIMENSIONS.filler;
   return d ? `${DIMENSIONS.filler} (edge ${d})` : '';
 };
 
-const hasCousins = (m) => typeof m?.cousins === 'function' && typeof m?.readByTypes === 'function';
+const hasRelated = (m) => typeof m?.relatedCases === 'function' && typeof m?.readByTypes === 'function';
 
-/** `{ lib, source }`: `source` is 'vendored' or the path. A library that lacks `cousins` is an error naming where it looked (never a silent fallback to a hand-written list). */
+/** `{ lib, source }`: `source` is 'vendored' or the path. A library that lacks `relatedCases` is an error naming where it looked (never a silent fallback to a hand-written list). */
 export async function resolveLibrary({ vendored, libPath } = {}) {
-  if (hasCousins(vendored)) return { lib: vendored, source: 'vendored' };
+  if (hasRelated(vendored)) return { lib: vendored, source: 'vendored' };
   if (libPath) {
     const root = resolve(libPath);
     for (const rel of ['docs/sopworld.mjs', 'src/index.mjs']) {
       const f = join(root, rel);
       if (!existsSync(f)) continue;
       const m = await import(pathToFileURL(f).href);
-      if (hasCousins(m)) return { lib: m, source: `${root} (${rel})` };
+      if (hasRelated(m)) return { lib: m, source: `${root} (${rel})` };
     }
-    throw new Error(`no cousins() in ${root} (looked at docs/sopworld.mjs and src/index.mjs)`);
+    throw new Error(`no relatedCases() in ${root} (looked at docs/sopworld.mjs and src/index.mjs)`);
   }
-  throw new Error('the vendored sopworld has no cousins() yet: pass --lib <sopworld checkout> (measurement only)');
+  throw new Error('the vendored sopworld has no relatedCases() (before 0.111 it was cousins()): pass --lib <sopworld checkout> (measurement only)');
 }
 
 /** The reading options a host gives readByTypes: question words and function words (English). */
 export const READ = Object.freeze({ question: ['what', 'which', 'how', 'many', 'much', 'does', 'do', 'is', 'are', 'who', 'where'], skip: ['a', 'an', 'the', 'of', 'in', 'to'] });
 
-/** The case's frame (read by the library from the sentence) and its cousins. A sentence the types do not read gives `{ frame: null }` (a class the library cannot expand). */
-export function expand(lib, world, kase, { degree = 2, n = 50, seed = 1 } = {}) {
+/** The case's frame (read by the library from the sentence) and its related cases. A sentence the types do not read gives `{ frame: null }` (a class the library cannot expand). */
+export function expand(lib, world, kase, { distance = 2, n = 50, seed = 1 } = {}) {
   const text = kase.text;
   const frame = kase.frame ?? lib.readByTypes(world, text, READ).best;
-  if (!frame) return { frame: null, cousins: [], why: 'no typed frame: readByTypes does not read the sentence in this world' };
-  const cs = lib.cousins(world, { text, frame }, { degree, read: READ, known: [text], n, seed });
-  return { frame, cousins: cs.map((c) => ({ ...c, dimension: dimensionOf(c) })) };
+  if (!frame) return { frame: null, related: [], why: 'no typed frame: readByTypes does not read the sentence in this world' };
+  const cs = lib.relatedCases(world, { text, frame }, { distance, read: READ, known: [text], n, seed });
+  return { frame, related: cs.map((c) => ({ ...c, dimension: dimensionOf(c) })) };
 }
 
 const bare = (v) => String(v).replace(/^"|"$/g, '').replace(/^\$/, '');
@@ -72,7 +73,7 @@ export function expectedOf(world, c) {
 }
 
 /**
- * Per-clause judge (library 0.88 `tools/cousins-test.mjs`: "a compound text passes only when the host's answer holds every clause's answer"): the answer of each clause the system cut
+ * Per-clause judge (library `tools/generalisation-test.mjs`, 0.88 as `cousins-test`: "a compound text passes only when the host's answer holds every clause's answer"): the answer of each clause the system cut
  * the text into, from the world as oracle. `clauses` = the texts of the segments of the run. A clause's answer is, in this order: the answer of the frame `readByTypes` reads in it (an ask or a
  * find of the typed world), an arithmetic clause ("what is 20 minus 8", "what 7 plus 5"), a yes/no question about a place ("is Egypt in Africa": yes), a count of the calendar ("how many days are in
  * a week": 7); a clause none of these answer is not judged (counted in `skipped`). Returns `{ all: [forms...], skipped }` to ADD to `expectedOf`; values already expected are not repeated.

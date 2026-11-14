@@ -93,7 +93,7 @@ const LOOSE = '2026-11-14-paraphrases-animal-sound.json', CLEAN = '2026-11-14-cl
 export function build() {
   const all = [...paraphrasePairs(jsonl(`${EV}/paraphrases-rt-2026-11-12.jsonl`))];
   for (const f of readdirSync(resolve(REPO, EV)).filter((n) => /^owner-log-.*\.jsonl$/.test(n)).sort()) all.push(...ownerPairs(jsonl(`${EV}/${f}`), f));
-  const cdir = resolve(REPO, 'training/results/cousins');
+  const cdir = resolve(REPO, 'training/results/cousins');   // result files keep the names they were written under (the rename to related cases came later)
   const clean = JSON.parse(readFileSync(resolve(cdir, CLEAN), 'utf8'));
   const { pairs, dropped } = cousinPairs(JSON.parse(readFileSync(resolve(cdir, LOOSE), 'utf8')), clean, LOOSE);
   all.push(...pairs);

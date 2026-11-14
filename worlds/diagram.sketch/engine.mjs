@@ -19,7 +19,8 @@
 import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs';
 import { routeEdges, segBoxDist, boxOf } from './arrows.mjs';
 import * as space from '../space/space.mjs';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
-import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs';   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
+import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs';
+import * as DG from '../../src/knowledge/diagram-world.mjs';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const TAB = 'diagram';
@@ -33,7 +34,9 @@ export function loadEngine() {
 }
 export const engineReady = () => !!K;
 /** Async hook called by the dialog layer before this world's operations run (spec 04): the first sentence waits for the engine instead of being refused. */
-export const prepare = () => loadEngine();
+let DL = null;   // the library module, once loaded: composing a diagram needs it (spec 14 section 9)
+if (typeof process !== 'undefined' && process.versions?.node) DL = await DG.diagramLibrary().catch(() => null);   // under Node at once; a browser fetches it with the engine
+export const prepare = () => Promise.all([loadEngine(), DG.diagramLibrary().then((l) => { DL = l; return l; }).catch(() => null)]);
 if (typeof process !== 'undefined' && process.versions?.node) await loadEngine();
 
 export function initialState() {
@@ -387,7 +390,7 @@ function placeFree(s, names) {
 }
 
 /** Runs nodes on the state; returns the reply envelope. `changesPicture` brings the tab forward. */
-function execute(ctx, s, nodes) {
+function execute(ctx, s, nodes, { place = true } = {}) {
   const system = systemFor(s);
   const before = system.world.state.shapes.length;
   let result;
@@ -400,7 +403,7 @@ function execute(ctx, s, nodes) {
   if (made.length) s.last = made; else if (named.length) s.last = [...new Set(named)];
   s.last = (s.last ?? []).filter((n) => s.shapes.some((x) => x.name === n));
   widenTrunks(s, made);
-  if (made.length && made.length <= 4) placeFree(s, made);
+  if (place && made.length && made.length <= 4) placeFree(s, made);   // (a composed diagram has its own layout: its places are explicit)
   if (made.length) { s.rev = (s.rev ?? 0) + 1; }
   // only a selection or the answer of a question marks shapes: what a template or a command made is not highlighted
   const hl = [...result.steps].reverse().find((st) => st.highlight && !st.error && !st.node?.args?.template)?.highlight;
@@ -419,32 +422,31 @@ function execute(ctx, s, nodes) {
   return ok(`${s.keptNote ? `${s.keptNote} ` : ''}${shortNames(s, summarize(result, s))}`);
 }
 
-/** Sample diagrams for "make a random diagram": a template word the engine reads, sample labels, and what one box is called in plain words. */
-export const RANDOM_DIAGRAMS = [
-  { form: 'cycle', items: ['Plan', 'Do', 'Check', 'Act'], unit: 'step' },
-  { form: 'cycle', items: ['Spring', 'Summer', 'Autumn', 'Winter'], unit: 'season' },
-  { form: 'process', items: ['Idea', 'Draft', 'Review', 'Publish'], unit: 'step' },
-  { form: 'process', items: ['Wash', 'Chop', 'Cook', 'Serve'], unit: 'step' },
-  { form: 'hierarchy', items: ['Team', 'Design', 'Build', 'Test'], unit: 'box', units: 'boxes' },
-  { form: 'pyramid', items: ['Basics', 'Practice', 'Skill', 'Mastery'], unit: 'level' },
-  { form: 'timeline', items: ['Plan', 'Build', 'Launch', 'Learn'], unit: 'stage' },
-  { form: 'funnel', items: ['Visitors', 'Sign-ups', 'Buyers'], unit: 'stage' },
-  { form: 'hub', items: ['School', 'Math', 'Art', 'Music', 'Sport'], unit: 'box', units: 'boxes' },
-  { form: 'list', items: ['Milk', 'Bread', 'Eggs', 'Apples'], unit: 'item' },
-];
+/** What the dice may say on this tab: a diagram of each kind about a topic the knowledge can draw (src/knowledge/diagram-world.mjs); nothing until the library is loaded. */
+export function diagramSentences(ctx) {
+  if (!DL) return [];
+  try { return DG.diagramSentences(DL, DG.diagramWorldOf(DL, ctx?.knowledge)); } catch { return []; }
+}
 const NUMBER_WORD = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
-/** A bare "diagram" request ("draw a diagram", "make a random diagram", "a sample diagram"): no form, no labels. */
-const BARE_DIAGRAM = /^(?:please\s+)?(?:can\s+you\s+|could\s+you\s+)?(?:draw|make|create|build|generate|show|give|sketch)(?:\s+me)?\s+(?:a|an|any|some|one)?\s*(?:(?:random|sample|example|simple|quick|small|little|new|any)\s+)*(?:diagram|chart|flowchart|picture)\s*(?:for\s+me|please)?[.!?]*$/i;
-/** Draws a sample diagram: picks a template, fills it with sample labels and says so in plain words. */
-function randomDiagram(ctx, s, pick = Math.floor(Math.random() * RANDOM_DIAGRAMS.length)) {
-  const r = RANDOM_DIAGRAMS[pick % RANDOM_DIAGRAMS.length];
-  const text = `Draw a ${r.form} of ${r.items.slice(0, -1).join(', ')} and ${r.items[r.items.length - 1]}.`;
-  const f = systemFor(s).formalize(prepareText(text, s), readerCtx(s));
-  const res = f.nodes.length ? execute(ctx, s, f.nodes) : null;
-  if (!res || res.status !== 'supported') return res ?? no('I could not draw a sample diagram.', 'unsupported');
-  const n = r.items.length;
-  const reply = `I drew a random ${r.form} diagram with ${NUMBER_WORD[n] ?? n} ${n === 1 ? r.unit : (r.units ?? r.unit + 's')}.`;
-  return { ...res, value: `${s.keptNote ? `${s.keptNote} ` : ''}${reply}` };
+/**
+ * A diagram of a kind about a topic, or a random one, composed from knowledge by the library (`composeDiagram`, `sampleDiagram`: a kind of k.diagrams x a topic whose knowledge has that
+ * structure, laid out by `arrange`; spec 14 section 9) and drawn here as shapes and arrows. Nothing is canned: when the knowledge has no such structure the reply says so.
+ * `req` is `parseDiagramRequest`'s: { kind, topic } | { kind?, random }. Returns null when the sentence is not the diagram's to refuse (a list of labels, a weak reading): the engine reads it.
+ */
+function composedDiagram(ctx, s, req, args = {}) {
+  if (!DL) return no('The diagram knowledge is still loading. Please say that again in a moment.', 'missing');
+  const world = DG.diagramWorldOf(DL, ctx.knowledge);
+  const seed = Number.isFinite(Number(args.seed)) ? Number(args.seed) : Math.floor(Math.random() * 2 ** 31);
+  const got = req.random ? DG.sampleDiagrams(DL, world, { seed, kinds: req.kind }) : DG.composeForRequest(DL, world, req, { seed });
+  if (got.why) {
+    if (!req.random && (req.weak || /,|\band\b/i.test(req.topic))) return null;   // "a flowchart of Start, Process and End" lists its own labels; "draw a circle in a tree" is not a diagram request
+    return no(req.random ? `I do not know enough to draw a ${req.kind ?? 'random'} diagram yet.` : `I do not know enough about ${String(req.topic).replace(/^(?:the|a|an)\s+/i, '')} to draw a ${req.said} of it yet.`, 'unsupported');
+  }
+  const taken = new Set(s.shapes.flatMap((x) => [x.name, x.id].filter(Boolean))), had = s.shapes.length;
+  const res = execute(ctx, s, DG.engineNodes(got.diagram, taken), { place: false });
+  if (res.status !== 'supported') return res;
+  s.composed = { kind: got.diagram.kind, topic: got.topic, fill: got.diagram.fill };   // what the last composed diagram was (for "why")
+  return { ...res, value: `${s.keptNote ? `${s.keptNote} ` : ''}${DG.say(got.diagram, got.topic, { random: !!req.random })}${had ? ' It is on top of what was there; undo takes it away.' : ''}` };
 }
 
 const NOT_READY = () => { loadEngine(); return no('The diagram engine is still loading. Please say that again in a moment.', 'missing'); };
@@ -524,7 +526,10 @@ const make = (kind) => (ctx, args = {}) => {
   const text = args.text != null ? String(args.text).trim() : '';
   s.keptNote = s.pending === 'new' ? 'Keeping the current diagram.' : '';   // any other command answers the pending "keep or start empty?" as keep
   s.pending = null;
-  if (text && kind.name === 'create' && BARE_DIAGRAM.test(text)) return randomDiagram(ctx, s, args.pick);
+  if (text && kind.type === 'command') {   // a diagram request with no verb ("a tree of the parts of a house") is read as a layout, a move or a creation
+    const req = DG.parseDiagramRequest(text);   // "a flowchart of making tea", "a cycle of the seasons", "make a random diagram"
+    if (req) { const r = composedDiagram(ctx, s, req, args); if (r) return r; }
+  }
   if (text) {
     const prepared = prepareText(text, s);
     if (typeof process !== 'undefined' && process.env?.DIAG_DEBUG) console.error('[diagram]', JSON.stringify(text), '->', JSON.stringify(prepared));

@@ -67,7 +67,7 @@ domain.undo = (ctx) => E.undo(ctx, {});
 domain.redo = (ctx) => E.redo(ctx, {});
 
 /** The colours this world draws (the names of its palette): the dice names these, not every colour of k.values (a colour the palette lacks is a question back). */
-const sampleKnowledge = () => ({ colours: Object.keys(SOPKit.COLOR_HEX).filter((c) => /^[a-z]+$/.test(c)) });
+const sampleKnowledge = (ctx) => ({ colours: Object.keys(SOPKit.COLOR_HEX).filter((c) => /^[a-z]+$/.test(c)), diagrams: E.diagramSentences(ctx) });   // and a diagram of a kind about a topic of the knowledge (spec 14 section 9)
 /**
  * COORDINATION AS ONE ACT (spec 03): a layout or a grouping is done to the named shapes together ("arrange Problem, Solution and Market in a row" is one arrangement of three shapes,
  * not an arrangement of two followed by one of the third). Also the engine's own acts that take a list of shapes (snap, align, distribute ...), when the engine reads the whole sentence as one.

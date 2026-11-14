@@ -38,7 +38,7 @@
  */
 
 import { en } from '../lang/en.mjs?v=c93f946ea8';
-import { completeOn } from './completeness.mjs?v=50ff331b8a';
+import { completeOn } from './completeness.mjs?v=7f9ce6a7a2';
 
 /**
  * The library's decision for several worlds that read one sentence (sopworld 0.104 `arbitrate` decides with std.decide kind `world`: coverage, then the open tab, then priority). The host

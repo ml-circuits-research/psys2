@@ -24,7 +24,9 @@ import { summary as heldoutSummary } from './freeze-heldout.mjs';
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const FILE = join(REPO, 'training/eval/learning-curve.jsonl');
 const jsonl = (f) => (existsSync(f) ? readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : []);
-export const history = () => jsonl(FILE);
+/** Points recorded before the rename (0.111: cousins -> related cases) carry the series as `cousinsReal`: it is the same series, read as `relatedReal`. */
+export const renamed = (pts) => pts.map((p) => (p.cousinsReal && !p.relatedReal ? { ...p, relatedReal: p.cousinsReal } : p));
+export const history = () => renamed(jsonl(FILE));
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
 /** The general mechanisms now in the repository (the x of the curve). */
@@ -40,8 +42,8 @@ export const SERIES = [
   { key: 'heldout', label: 'Held-out real messages (frozen, judged)', color: 'var(--k-fill)' },
   { key: 'paraphrasesSame', label: 'Paraphrases, meaning kept', color: 'var(--k-ask)' },
   { key: 'seating60', label: 'New world from a schema alone', color: 'var(--k-view)' },
-  // cousins of real cases (scripts/cousins.mjs --record-real; spec 16): shown only once a point has it, which needs the vendored library to export `cousins`
-  { key: 'cousinsReal', label: 'Cousins of real cases', color: 'var(--k-act)', optional: true },
+  // related cases of real cases (scripts/related-cases.mjs --record-real; spec 16): shown only once a point has it, which needs the vendored library to export `relatedCases`
+  { key: 'relatedReal', label: 'Related cases of real cases', color: 'var(--k-act)', optional: true },
 ];
 /** The series to draw: the optional ones only when some point has a value (a "gap" row for a measure that cannot exist yet is noise). */
 const active = (pts) => SERIES.filter((s) => !s.optional || pts.some((p) => p[s.key]));
@@ -51,18 +53,19 @@ const share = (m) => (m && m.total ? m.right / m.total : null);
 export async function currentPoint(note = '') {
   const ind = JSON.parse(readFileSync(join(REPO, 'training/eval/indicators.json'), 'utf8'));
   const h = heldoutSummary();
-  const cf = join(REPO, 'training/eval/cousins-real.json'), cousins = existsSync(cf) ? JSON.parse(readFileSync(cf, 'utf8')) : null;   // written only from a vendored library (cousins.mjs --record-real)
+  const cf = ['related-real.json', 'cousins-real.json'].map((f) => join(REPO, 'training/eval', f)).find(existsSync), related = cf ? JSON.parse(readFileSync(cf, 'utf8')) : null;   // written only from a vendored library (related-cases.mjs --record-real); the old file name is still read
   const build = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: REPO, encoding: 'utf8' }).stdout.trim();
   const same = ind.robustness?.paraphrasesDate ? ind.robustness['paraphrases-rt'] : null;   // only after the re-judging (meaning kept) does the set mean "paraphrases"
   return { date: new Date().toISOString().slice(0, 10), build, mechanisms: await mechanisms(),
     heldout: h.judged ? { right: h.right, total: h.judged, frozen: h.total } : null,
     paraphrasesSame: same ? { right: same.right, total: same.total } : null,
     seating60: ind.seating60 ? { right: ind.seating60.right, total: ind.seating60.total } : null,
-    ...(cousins ? { cousinsReal: { right: cousins.right, total: cousins.total } } : {}), note };
+    ...(related ? { relatedReal: { right: related.right, total: related.total } } : {}), note };
 }
 
 /** Slope of each series at each point: percentage points per added mechanism since the previous point that had the measure (null = first point or a gap). */
-export function slopes(pts = history()) {
+export function slopes(pts0 = history()) {
+  const pts = renamed(pts0);
   return pts.map((p, i) => {
     const out = {};
     for (const s of SERIES) {
@@ -84,7 +87,8 @@ const pctText = (m) => (share(m) == null ? 'gap' : `${Math.round(share(m) * 1000
 const slopeText = (x) => (x.state === 'gap' ? 'gap' : x.state === 'first' ? 'first point' : x.perMech == null ? `${x.dPP >= 0 ? '+' : ''}${x.dPP} pp, no mechanism added` : `${x.dPP >= 0 ? '+' : ''}${x.dPP} pp over +${x.dMech} mechanisms = ${x.perMech} pp each`);
 
 /** Rows for the landing table: one per curve, with the latest value and the slope at the latest landing. */
-export function tableRows(pts = history()) {
+export function tableRows(pts0 = history()) {
+  const pts = renamed(pts0);
   if (!pts.length) return [];
   const sl = slopes(pts), last = pts.at(-1), lastS = sl.at(-1), m = last.mechanisms;
   return active(pts).map((s) => {
@@ -95,7 +99,8 @@ export function tableRows(pts = history()) {
 }
 
 /** Inline SVG of the two curves (x = landing, labelled date and mechanisms; y = share right); colours from the page's CSS variables, so light and dark both work. */
-export function svg(pts = history()) {
+export function svg(pts0 = history()) {
+  const pts = renamed(pts0);
   const W = 680, H = 300, L = 46, R = 16, T = 18, B = 72, pw = W - L - R, ph = H - T - B;
   const n = pts.length, X = (i) => L + (n <= 1 ? pw / 2 : (pw * i) / (n - 1)), Y = (f) => T + ph * (1 - f);
   const g = [];
@@ -112,7 +117,8 @@ export function svg(pts = history()) {
 }
 
 /** The section for docs/system-map.html (called by landing-table's toHtml). */
-export function html(pts = history()) {
+export function html(pts0 = history()) {
+  const pts = renamed(pts0);
   if (!pts.length) return '';
   const sl = slopes(pts);
   const rowsHtml = pts.map((p, i) => `<tr><td>${esc(p.date)} <code>${esc(p.build)}</code></td><td class="num">${p.mechanisms.total}</td>${active(pts).map((s) => `<td style="white-space:normal">${esc(pctText(p[s.key]))}<br><small>${esc(slopeText(sl[i][s.key]))}</small></td>`).join('')}</tr>`).join('\n');

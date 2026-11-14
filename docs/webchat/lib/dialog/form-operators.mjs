@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
- * FORM OPERATORS AT READ TIME (spec 16 section 11; sopworld 0.89 `liftTokens`, `learnFormOperators({ world })`).
+ * FORM OPERATORS AT READ TIME (spec 16 section 11; sopworld 0.89 `liftTokens`, `delexicalise` since 0.111, `learnFormOperators({ world })`).
  * An operator is a rule `from => to` over the TYPED tokens of a sentence (a thing becomes `<its type>`, a number `<num>`, function words stay) with variables `{x1}..` for the
  * shared runs. Learnt from aligned pairs (a variant and its canonical sentence), admitted by the library only when it brings held-out variants back to their canonical sentences.
  * Here an admitted operator is APPLIED: the clause is lifted, the rule matches the lifted tokens, and the output is written with the clause's own words (a variable is the original
@@ -35,8 +35,8 @@ export function applyOperator(op, lt, ot) {
  * An operator whose output is the clause's own words again is no candidate.
  */
 export function formOperatorTexts(fo, text) {
-  if (!fo?.lib?.liftTokens || !fo.world || !fo.operators?.length) return [];
-  const ot = toksOf(text), lt = fo.lib.liftTokens(fo.world, text);
+  if (!fo?.lib?.delexicalise || !fo.world || !fo.operators?.length) return [];
+  const ot = toksOf(text), lt = fo.lib.delexicalise(fo.world, text);
   if (!ot.length || lt.length !== ot.length) return [];
   const own = ot.join(' '), out = new Set();
   for (const op of fo.operators) {

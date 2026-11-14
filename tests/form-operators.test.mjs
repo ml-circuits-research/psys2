@@ -12,7 +12,7 @@ world.tell('@cow k.animal name=cow kind=bovine\n@dog k.animal name=dog kind=cani
 
 test('an operator over lifted tokens is written back with the clause\'s own words', () => {
   const op = { from: 'hey {x1} a {x2} makes {x3}', to: '{x1} {x2} does {x3} make', admitted: true };
-  const ot = ['hey', 'what', 'a', 'sound', 'makes', 'a', 'cow'], lt = lib.liftTokens(world, 'hey what a sound makes a cow');
+  const ot = ['hey', 'what', 'a', 'sound', 'makes', 'a', 'cow'], lt = lib.delexicalise(world, 'hey what a sound makes a cow');
   assert.deepEqual(applyOperator(op, lt, ot).includes('what sound does a cow make'), true);
 });
 
