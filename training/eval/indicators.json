@@ -1,12 +1,12 @@
 {
  "robustness": {
   "date": "2026-11-14",
-  "build": "66d79ae4",
+  "build": "cceb5841",
   "config": "rules-C",
   "paraphrasesDate": "2026-11-14",
   "typos": {
    "right": 689,
-   "total": 937
+   "total": 933
   },
   "loose-words": {
    "right": 240,
@@ -32,9 +32,9 @@
  },
  "seating60": {
   "date": "2026-11-14",
-  "build": "66d79ae4",
-  "right": 30,
+  "build": "cceb5841",
+  "right": 32,
   "total": 60,
-  "note": "re-judged by hand 2026-11-14 after the sampler landing: 30 of 60 (was 31); the seating world is unchanged, 4 more schema worlds"
+  "note": "by hand 2026-11-14 on cceb5841: diff of replies against 66d79ae4: 'put a guest named Maria at table 1' (name Maria, guest at table 1) and 'who sits at table 1?' now right (+2); everything else identical"
  }
 }
