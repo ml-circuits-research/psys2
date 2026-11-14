@@ -5,17 +5,39 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { en } from '../src/lang/en.mjs';
 import { readNounPhrase } from '../src/lang/np-resolve.mjs';
+import path from 'node:path';
+import { createFacts } from '../src/knowledge/facts.mjs';
+import { createKnowledgeSource } from '../src/loaders/knowledge-source.mjs';
+import { compareTimes, loadTime, timeFrom, timePosition } from '../src/knowledge/time.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
 
-test('timeComparison: an order of two moments of the same or different kinds, nothing else', () => {
-  for (const [t, kinds] of [['is Monday before Friday', ['day']], ['Is December after November?', ['month']], ['does spring come after winter', ['season']], ["is 3 o'clock before 5pm", ['clock']], ['is Monday before March', ['day', 'month']]]) {
-    const r = en.timeComparison(t);
-    assert.deepEqual(r?.kinds, kinds, t);
+test('timeComparison: the shape of a question about two moments; the calendar (k.time) says whether they are moments', () => {
+  for (const [t, rel] of [['is Monday before Friday', 'before'], ['Is December after November?', 'after'], ['does spring come after winter', 'after'], ["is 3 o'clock before 5pm", 'before'], ['is March during the summer', 'during']]) assert.equal(en.timeComparison(t)?.rel, rel, t);
+  assert.equal(en.timeComparison('is July during the summer in the southern hemisphere').hemisphere, 'south');
+  for (const t of ['what day is before Friday', 'how many days from Monday to Friday', 'before Friday']) assert.equal(en.timeComparison(t), null, t);
+});
+
+test('compareTimes: an order or a containment by lookup in k.time, offline from the bundled subset and from the catalog alike', async () => {
+  const facts = createFacts({ source: createKnowledgeSource(path.join(DEFAULT_ROOT, '../tests/fixtures/catalog')) });
+  for (const from of ['bundled', 'catalog']) {
+    if (from === 'catalog') assert.equal(await loadTime(facts), 'catalog');
+    else assert.equal(timeFrom(), 'bundled');
+    const c = (a, b, rel, o) => compareTimes(a, b, rel, o);
+    for (const [a, b, rel, answer, o] of [
+      ['Monday', 'Friday', 'before', 'yes'], ['Friday', 'Monday', 'before', 'no'], ['Friday', 'Monday', 'after', 'yes'], ['Jan', 'March', 'before', 'yes'], ['June', 'March', 'before', 'no'],
+      ['winter', 'spring', 'before', 'yes'], ['spring', 'winter', 'after', 'yes'], ['the morning', 'the night', 'before', 'yes'],
+      ["3 o'clock", '5pm', 'before', 'yes'], ['noon', '9 am', 'before', 'no'], ['15:30', '9 pm', 'before', 'yes'],
+      ['July', 'the summer', 'during', 'yes'], ['March', 'the summer', 'during', 'no'], ['January', 'summer', 'during', 'yes', { hemisphere: 'south' }], ['July', 'summer', 'during', 'no', { hemisphere: 'south' }],
+      ['3 pm', 'the afternoon', 'during', 'yes'], ['Monday', 'March', 'before', 'unknown'], ['Monday', 'the summer', 'during', 'unknown'],
+    ]) assert.equal(c(a, b, rel, o)?.answer, answer, `${from}: ${a} ${rel} ${b}`);
+    assert.equal(compareTimes('the red house', 'the blue one', 'before'), null, 'a phrase that is no time is not a question about time');
+    assert.match(compareTimes('July', 'the summer', 'during').text, /southern hemisphere it is winter/, 'the other hemisphere is said');
+    assert.match(compareTimes("3 o'clock", '5 o\'clock', 'before').text, /am or pm/, 'an ambiguous hour is said to be');
+    assert.deepEqual(timePosition('March'), { cycle: 'year', n: 3, kind: 'month' });
   }
-  for (const t of ['what day is before Friday', 'is the red house before the blue one', 'is March during the summer', 'how many days from Monday to Friday']) assert.equal(en.timeComparison(t), null, t);
 });
 
 test('readNounPhrase: the one resolver reads choice and part of a set, a plain phrase goes back to the domain', () => {
@@ -37,7 +59,7 @@ for (const reasoner of ['ops', 'matrix']) {
   test(`${reasoner}: an order in time is not a distance`, async () => {
     const s = session();
     s.setWorldState('ui.shell', { activeTab: 'time' });
-    for (const t of ['is Monday before Friday', 'is Friday after Monday', 'is June before March']) assert.match((await s.send(t)).text, /can not compare .* in time yet/, t);
+    for (const t of ['is Monday before Friday', 'is Friday after Monday', 'is June before March', 'is July during the summer']) assert.match((await s.send(t)).text, /^(?:Yes|No), /, t);
   });
 
   test(`${reasoner}: a thing that is not in the open tab but in a list the user works in is that list's`, async () => {

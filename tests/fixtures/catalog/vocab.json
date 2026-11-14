@@ -1480,8 +1480,8 @@
  "march": [
   "k.words/shards/ma",
   "k.actions/shards/actions-move",
-  "k.time/shards/calendar",
-  "k.words/shards/ma"
+  "k.words/shards/ma",
+  "k.time/shards/calendar"
  ],
  "mars": [
   "k.words/shards/ma",
@@ -1495,8 +1495,8 @@
  ],
  "may": [
   "k.words/shards/ma",
-  "k.time/shards/calendar",
-  "k.words/shards/ma"
+  "k.words/shards/ma",
+  "k.time/shards/calendar"
  ],
  "spectacles": [
   "k.words/shards/sp",
@@ -1675,7 +1675,8 @@
  "clock": [
   "k.words/shards/cl",
   "k.words/shards/cl",
-  "k.scenes/shards/things-c"
+  "k.scenes/shards/things-c",
+  "k.time/shards/calendar"
  ],
  "come": [
   "k.words/shards/co-1",
@@ -1715,9 +1716,10 @@
  ],
  "day": [
   "k.words/shards/da",
-  "k.time/shards/calendar",
   "k.units/shards/core",
-  "k.words/shards/da"
+  "k.words/shards/da",
+  "k.time/shards/calendar",
+  "k.time/shards/psys2"
  ],
  "days": [
   "k.words/shards/da",
@@ -1725,8 +1727,8 @@
  ],
  "december": [
   "k.words/shards/de",
-  "k.time/shards/calendar",
-  "k.words/shards/de"
+  "k.words/shards/de",
+  "k.time/shards/calendar"
  ],
  "duck": [
   "k.words/shards/du",
@@ -1812,8 +1814,8 @@
  ],
  "friday": [
   "k.words/shards/fr",
-  "k.time/shards/calendar",
-  "k.words/shards/fr"
+  "k.words/shards/fr",
+  "k.time/shards/calendar"
  ],
  "frog": [
   "k.words/shards/fr",
@@ -1857,9 +1859,9 @@
  ],
  "hour": [
   "k.words/shards/ho",
-  "k.time/shards/calendar",
   "k.units/shards/core",
-  "k.words/shards/ho"
+  "k.words/shards/ho",
+  "k.time/shards/calendar"
  ],
  "index": [
   "k.words/shards/in",
@@ -1893,8 +1895,8 @@
  ],
  "january": [
   "k.words/shards/ja",
-  "k.time/shards/calendar",
-  "k.words/shards/ja"
+  "k.words/shards/ja",
+  "k.time/shards/calendar"
  ],
  "japan": [
   "k.words/shards/ja",
@@ -1910,8 +1912,8 @@
  ],
  "july": [
   "k.words/shards/ju",
-  "k.time/shards/calendar",
-  "k.words/shards/ju"
+  "k.words/shards/ju",
+  "k.time/shards/calendar"
  ],
  "jupiter": [
   "k.words/shards/ju",
@@ -2002,9 +2004,9 @@
  ],
  "minute": [
   "k.words/shards/mi",
-  "k.time/shards/calendar",
   "k.units/shards/core",
-  "k.words/shards/mi"
+  "k.words/shards/mi",
+  "k.time/shards/calendar"
  ],
  "minutes": [
   "k.words/shards/mi",
@@ -2012,12 +2014,13 @@
  ],
  "monday": [
   "k.words/shards/mo",
-  "k.time/shards/calendar",
-  "k.words/shards/mo"
+  "k.words/shards/mo",
+  "k.time/shards/calendar"
  ],
  "month": [
   "k.words/shards/mo",
-  "k.words/shards/mo"
+  "k.words/shards/mo",
+  "k.time/shards/calendar"
  ],
  "mount": [
   "k.words/shards/mo",
@@ -2036,8 +2039,8 @@
  ],
  "november": [
   "k.words/shards/no",
-  "k.time/shards/calendar",
-  "k.words/shards/no"
+  "k.words/shards/no",
+  "k.time/shards/calendar"
  ],
  "octopus": [
   "k.words/shards/oc",
@@ -2156,8 +2159,8 @@
  ],
  "september": [
   "k.words/shards/se",
-  "k.time/shards/calendar",
-  "k.words/shards/se"
+  "k.words/shards/se",
+  "k.time/shards/calendar"
  ],
  "seventh": [
   "k.words/shards/se",
@@ -2201,8 +2204,8 @@
  ],
  "sunday": [
   "k.words/shards/su",
-  "k.time/shards/calendar",
-  "k.words/shards/su"
+  "k.words/shards/su",
+  "k.time/shards/calendar"
  ],
  "talk": [
   "k.words/shards/ta",
@@ -2288,14 +2291,14 @@
  ],
  "wednesday": [
   "k.words/shards/we",
-  "k.time/shards/calendar",
-  "k.words/shards/we"
+  "k.words/shards/we",
+  "k.time/shards/calendar"
  ],
  "week": [
   "k.words/shards/we",
-  "k.time/shards/calendar",
   "k.units/shards/core",
-  "k.words/shards/we"
+  "k.words/shards/we",
+  "k.time/shards/calendar"
  ],
  "whale": [
   "k.words/shards/wh",
@@ -2314,9 +2317,9 @@
  ],
  "winter": [
   "k.words/shards/wi",
-  "k.time/shards/calendar",
   "k.words/shards/wi",
-  "k.scenes/shards/scenes-other"
+  "k.scenes/shards/scenes-other",
+  "k.time/shards/calendar"
  ],
  "word": [
   "k.words/shards/wo",
@@ -2328,9 +2331,9 @@
  ],
  "year": [
   "k.words/shards/ye",
-  "k.time/shards/calendar",
   "k.units/shards/core",
-  "k.words/shards/ye"
+  "k.words/shards/ye",
+  "k.time/shards/calendar"
  ],
  "face": [
   "k.layouts/shards/layouts",
@@ -7070,16 +7073,16 @@
   "k.time/shards/calendar"
  ],
  "quarter": [
-  "k.time/shards/calendar",
-  "k.values/shards/numbers"
+  "k.values/shards/numbers",
+  "k.time/shards/calendar"
  ],
  "saturday": [
   "k.time/shards/calendar"
  ],
  "second": [
-  "k.time/shards/calendar",
   "k.units/shards/core",
-  "k.values/shards/numbers"
+  "k.values/shards/numbers",
+  "k.time/shards/calendar"
  ],
  "summer": [
   "k.time/shards/calendar"
@@ -20832,5 +20835,95 @@
  ],
  "yapacani": [
   "k.geo/shards/south-america"
+ ],
+ "seasons": [
+  "k.time/shards/calendar"
+ ],
+ "1 am": [
+  "k.time/shards/clock"
+ ],
+ "1 pm": [
+  "k.time/shards/clock"
+ ],
+ "10 am": [
+  "k.time/shards/clock"
+ ],
+ "10 pm": [
+  "k.time/shards/clock"
+ ],
+ "11 am": [
+  "k.time/shards/clock"
+ ],
+ "11 pm": [
+  "k.time/shards/clock"
+ ],
+ "2 am": [
+  "k.time/shards/clock"
+ ],
+ "2 pm": [
+  "k.time/shards/clock"
+ ],
+ "3 am": [
+  "k.time/shards/clock"
+ ],
+ "3 pm": [
+  "k.time/shards/clock"
+ ],
+ "4 am": [
+  "k.time/shards/clock"
+ ],
+ "4 pm": [
+  "k.time/shards/clock"
+ ],
+ "5 am": [
+  "k.time/shards/clock"
+ ],
+ "5 pm": [
+  "k.time/shards/clock"
+ ],
+ "6 am": [
+  "k.time/shards/clock"
+ ],
+ "6 pm": [
+  "k.time/shards/clock"
+ ],
+ "7 am": [
+  "k.time/shards/clock"
+ ],
+ "7 pm": [
+  "k.time/shards/clock"
+ ],
+ "8 am": [
+  "k.time/shards/clock"
+ ],
+ "8 pm": [
+  "k.time/shards/clock"
+ ],
+ "9 am": [
+  "k.time/shards/clock"
+ ],
+ "9 pm": [
+  "k.time/shards/clock"
+ ],
+ "afternoon": [
+  "k.time/shards/clock"
+ ],
+ "evening": [
+  "k.time/shards/clock"
+ ],
+ "midnight": [
+  "k.time/shards/clock"
+ ],
+ "morning": [
+  "k.time/shards/clock"
+ ],
+ "night": [
+  "k.time/shards/clock"
+ ],
+ "noon": [
+  "k.time/shards/clock"
+ ],
+ "weekend": [
+  "k.time/shards/psys2"
  ]
 }

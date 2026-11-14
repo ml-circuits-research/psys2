@@ -16,3 +16,11 @@
     tabOrder=95
     tabKind=tool
     doc="A chat about things where an answer can come with a small picture made from knowledge, and where the conversation itself is a board of topics. The question frame (what is X, what does X look like, parts of X, how many P does X have, which is bigger, the order of the months, seasons, days and planets) decides the card; the things come from the knowledge catalog by lookup (spec 17) and the picture is drawn from their parts. A plain sentence always comes with a card; no fact means a plain I do not know that yet and no card. How do you know shows the path of the last answer in plain words. Honest scope: the opening line and the suggestions come from the example questions of this world, and a message outside it gets a plain refusal with the two nearest suggestions. State lives in ctx.state (cards, topics, current topic); the Talk tab renders it (spec 18). Hand-built platform fixture, not produced by the C1 workflow."
+
+# Typed needs (sopworld 0.39.0, std.schema.needs): the schemas of the knowledge worlds (the words that mean a slot, the ordered series) are loaded before an operation of this world runs.
+@need.talk.slots std.schema.needs
+    of=talk
+    type=core.slot
+@need.talk.words std.schema.needs
+    of=talk
+    type=core.word

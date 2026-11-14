@@ -9,7 +9,7 @@
  *   (no veto hook: an action on a referent that must exist in the world - delete, move, color, connect, select - is refused in the world's plain words whatever the catalog knows; a hit never replaces that refusal with a gloss)
  * The catalog is `engine.knowledge` (`createEngine({ options: { knowledge } })`); without it every function here does nothing and the dialog is as it was.
  */
-import { leftOut, requestOf } from './world-aware.mjs?v=650f982a99';
+import { leftOut, requestOf } from './world-aware.mjs?v=f10fec7bb1';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 const wordsOf = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}-]+/gu) ?? [];
@@ -139,10 +139,22 @@ async function noticeIfSlow(dialog, lookup, name) {
   } catch { /* no notice */ }
 }
 
+/**
+ * The typed needs of a world (sopworld 0.39 `std.schema.needs of=<world> type=<type> from=<knowledge world>?`, declared in the world's own world.sop): what the catalog must have loaded before an
+ * operation of the world runs, as [{ of, type, from? }] (the library's `needsOf` shape, without `loaded`: the host's cache knows that). The host loads them (`loadNeed`) before the operations of
+ * a reading, as `turn(world, readings, { load })` of the library calls `load(need, world)`.
+ */
+export function needsOf(world) {
+  const val = (w, k) => w.entries?.find((e) => e.key === k)?.value?.v;
+  return (world?.wires ?? []).filter((w) => w.type === 'std.schema.needs' && val(w, 'of') === world.id)
+    .map((w) => ({ of: String(val(w, 'of')), type: String(val(w, 'type')), ...(val(w, 'from') ? { from: String(val(w, 'from')) } : {}) }));
+}
+const needKey = (n) => `${n.type}@${n.from ?? ''}`;
+
 export async function preloadThings(dialog, segments) {
   const cat = knowledgeOf(dialog);
   if (!cat) return [];
-  const names = new Set(), drawNames = new Set(), needs = new Set(), lists = new Set();
+  const names = new Set(), drawNames = new Set(), needs = new Map(), lists = new Set();
   const foreign = !!dialog._waLang && dialog._waLang !== 'en';
   for (const seg of segments ?? []) {
     if (seg.unparsed) continue;
@@ -150,8 +162,7 @@ export async function preloadThings(dialog, segments) {
       const rq = requestOf(seg);
       // the reading's world says which slots of its action are open (a thing it has no picture of); `thing` is the generic argument of the same idea
       if (rq?.world) {
-        const need = dialog.engine.interp.hook(dialog.isession, rq.world, 'needs', { action: rq.action, args: rq.args }, { state: dialog.isession.state[rq.world] ?? {} });   // catalog models the world reads synchronously (the avatar's faces); `wires:<type>`: every wire of a type (the map's cities)
-        for (const n of Array.isArray(need) ? need : []) if (['faces', 'schema', 'series'].includes(n) || /^wires:[a-z][a-z0-9_.]*(?:@[a-z][a-z0-9_.]*)?$/i.test(n)) needs.add(n);
+        for (const n of needsOf(dialog.engine.set.get(rq.world))) needs.set(needKey(n), n);   // the typed needs of the reading's world (catalog models it reads synchronously: the avatar's faces, Talk's schemas)
         const slots = dialog.engine.interp.hook(dialog.isession, rq.world, 'openSlots', { action: rq.action, args: rq.args }, { state: dialog.isession.state[rq.world] ?? {} });
         for (const n of Array.isArray(slots) ? slots : []) if (n && String(n).split(/\s+/).length <= 3) { names.add(String(n)); drawNames.add(String(n)); }
         // the words of the types whose wires the operation lists or looks up ("animals", "mix"): the catalog loads the wires of the types the schemas' words mean (`preloadWires`)
@@ -159,15 +170,16 @@ export async function preloadThings(dialog, segments) {
         for (const n of Array.isArray(listWords) ? listWords : []) if (n && String(n).split(/\s+/).length <= 2) lists.add(String(n).toLowerCase());
         if (rq.args.thing) names.add(String(rq.args.thing).toLowerCase());
       }
-      // a request that hands things to a VIEW (`things.show ... to=map`) is read by the store's world: the view's own `needs` (the map's places) are loaded before it adopts them
+      // a request that hands things to a VIEW (`things.show ... to=map`) is read by the store's world: the view's own typed needs (the map's places) are loaded before it adopts them
       if (rq?.args?.to) {
         const to = String(rq.args.to).toLowerCase();
         for (const w of dialog.engine.set.list()) {
-          if (typeof w.ops?.needs !== 'function' || typeof w.ops?.view !== 'function' || w.id === rq.world) continue;
+          if (typeof w.ops?.view !== 'function' || w.id === rq.world) continue;
+          const ns = needsOf(w);
+          if (!ns.length) continue;
           const v = dialog.engine.interp.hook(dialog.isession, w.id, 'view', {}, { state: dialog.isession.state[w.id] ?? {} })?.value;
           if (!(v?.words ?? []).some((x) => to.includes(String(x).toLowerCase()))) continue;
-          const need = dialog.engine.interp.hook(dialog.isession, w.id, 'needs', { action: 'view', args: {} }, { state: dialog.isession.state[w.id] ?? {} });
-          for (const n of Array.isArray(need) ? need : []) if (['faces', 'schema', 'series'].includes(n) || /^wires:[a-z][a-z0-9_.]*(?:@[a-z][a-z0-9_.]*)?$/i.test(n)) needs.add(n);
+          for (const n of ns) needs.set(needKey(n), n);
         }
       }
       for (const w of leftOut(seg, foreign).slice(0, 3)) names.add(w);
@@ -175,7 +187,7 @@ export async function preloadThings(dialog, segments) {
   }
   const done = [];
   const all = (async () => {
-    for (const n of needs) { try { if (n.startsWith('wires:')) { const [t, w] = n.slice(6).split('@'); await cat.wires?.(t, w ? { world: w } : {}); } else await cat[n]?.(); } catch { /* no model is no change */ } }
+    for (const n of needs.values()) { try { await cat.load?.(n); } catch { /* no model is no change */ } }
     for (const n of [...lists].slice(0, 3)) { try { await cat.preloadWires?.(n); } catch { /* no list is no answer */ } }
     for (const n of [...names].slice(0, 6)) {
       try {

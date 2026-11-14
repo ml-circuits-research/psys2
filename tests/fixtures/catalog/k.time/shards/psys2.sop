@@ -1,0 +1,6 @@
+# k.time/shards/psys2: from the PSys2 world kids.time: 1 length of time that was missing (a weekend has two days).
+# sources: psys2-worlds 6b63b2ba (the hand-written knowledge of the PSys2 tab worlds, the project's own data)
+# license: CC0-1.0
+# script: tools/import/psys2.mjs
+
+@k.time.psys2.weekend k.time.duration name=weekend count=2 unit=day core.source="psys2-worlds 6b63b2ba"
