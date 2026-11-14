@@ -101,9 +101,9 @@
     act=tldr act=gist act=reference act=result act=appearance act=whom act=instance act=summary
     act=unfold act=present act=digest act=saying act=conclude act=scene act=conclusion act=condense
     act=heroine act=keyword act=synopsis act=abridge act=event act=main act=narrate act=relation
-    act=telling act=compose act=quote act=perform act=scan
-    actshared=who actshared=about actshared=read actshared=tell actshared=where actshared=close actshared=bee actshared=describe
-    actshared=say actshared=contain actshared=feature actshared=match actshared=explain actshared=include actshared=highlight
+    act=telling act=compose act=quote act=perform
+    actshared=who actshared=about actshared=read actshared=doe actshared=tell actshared=where actshared=close actshared=bee
+    actshared=describe actshared=say actshared=contain actshared=feature actshared=match actshared=explain actshared=include actshared=highlight
     thing=article thing=essay thing=paper thing=story thing=tale thing=narrative thing=page thing=chapter
     thing=section thing=part thing=paragraph thing=para thing=paras thing=sentence thing=word thing=term
     thing=character thing=hero thing=heroe thing=protagonist thing=cast thing=question thing=query thing=bookmark

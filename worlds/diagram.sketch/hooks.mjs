@@ -4,6 +4,7 @@
 // The act only says which engine command family the sentence belongs to. `unread`: when no form of the grammar read a sentence in the open Diagram tab, the engine's own
 // reader gets it (its legend knows layouts, templates, queries, facts and rules that the act grammar does not have yet: those are the holes the coverage grid lists).
 import * as E from './engine.mjs';
+import SOPKit from './engine/logic.mjs';
 
 const by = { make: 'create', remove: 'delete', change: 'set', place: 'move', connect: 'connect', pick: 'select', copy: 'duplicate' };
 /** A clause that depends on the one before it ("... and connect A to it", cut at the "and"): the pronoun is the thing the last command made or named (state.last, the engine's own "it"). */
@@ -63,7 +64,10 @@ function accepts({ action, text, state, tab }) {
 domain.undo = (ctx) => E.undo(ctx, {});
 domain.redo = (ctx) => E.redo(ctx, {});
 
+/** The colours this world draws (the names of its palette): the dice names these, not every colour of k.values (a colour the palette lacks is a question back). */
+const sampleKnowledge = () => ({ colours: Object.keys(SOPKit.COLOR_HEX).filter((c) => /^[a-z]+$/.test(c)) });
 export const hooks = {
+  sampleKnowledge,
   domain,
   accepts,
   referents: (ctx) => E.referents(ctx),   // the shapes a person can point at (the dice and the pronouns read them)

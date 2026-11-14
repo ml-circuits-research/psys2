@@ -86,10 +86,13 @@
 
 @dg.size acts.attr
     of=shape
-    type=number
-    min=1
-    max=10
-    default=3
+    type=enum
+    values=tiny
+    values=small
+    values=medium
+    values=large
+    values=huge
+    default=medium
     more=bigger
     more=larger
     less=smaller

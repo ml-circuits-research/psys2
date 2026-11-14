@@ -57,7 +57,11 @@
     class=modifier
     doc="Values the attributes take (from schema.sop; a colour attribute with no listed values takes the shared colour lexicon)"
     extends=$lex.lang.colour
-
+    word=tiny
+    word=small
+    word=medium
+    word=large
+    word=huge
 
 @lex.diagram.sketch.more core.lexicon
     class=modifier
