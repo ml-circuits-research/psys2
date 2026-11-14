@@ -86,6 +86,7 @@ const ICON = {
 };
 const icon = (name) => { const s = document.createElement('span'); s.className = 'p2-icon'; s.innerHTML = ICON[name]; return s; };
 const time = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+const MODEL_IDLE_MS = 30000;   // idle time before the reading model (65 MB + onnxruntime 14.5 MB) is fetched when no message needed it (LAZY-LOAD-3)
 const NORMALIZER_IDLE_MS = 30000;   // idle time before the normalizer is fetched on a fast link
 const QUIET_MS = 500;   // background work (rule compilation, warm-up, model loading) waits this long after a turn
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -755,6 +756,7 @@ export async function mountPsys2(element, options = {}) {
     // PROGRESS 5: the unreachable catalog is said once in the panel; a reply repeats the world's line only the first time
     if (OFFLINE_LINE.test(answer)) { const rest = answer.replace(OFFLINE_LINE, '').trim(); if (offlineSaid && rest) answer = rest; offlineSaid = true; }
     const notUnderstood = mode === 'voice' && (reply.statuses ?? []).length > 0 && !(reply.statuses ?? []).includes('supported') && (reply.segments ?? []).some((sg) => sg.unparsed);
+    if (!modelsStarted && ((reply.statuses ?? []).length === 0 || !(reply.statuses ?? []).includes('supported') || (reply.segments ?? []).some((sg) => sg.unparsed))) startModels();   // LAZY-LOAD-3: the rules did not read it cleanly: the reading model is wanted now
     const botMsg = addMessage('bot', answer);
     if (notUnderstood) {   // MOBILE-VOICE: repeated not-understood voice replies within 20 s are collapsed into one (the first gets a count)
       const nowT = performance.now();
@@ -1550,7 +1552,7 @@ export async function mountPsys2(element, options = {}) {
   }
   function readingBody() {
     return [
-      optCheck('helperModel', settings.helperModel !== false, (v) => { settings.helperModel = v; applyReading(settings); applyEngineSettings(); save(); renderSettings(); }, { status: readingStatus() }),
+      optCheck('helperModel', settings.helperModel !== false, (v) => { settings.helperModel = v; applyReading(settings); applyEngineSettings(); if (v) startModels(); save(); renderSettings(); }, { status: readingStatus() }),
       ...optionsOf('reading').filter((o) => o.id !== 'helperModel').map((o) => {
         if (o.id === 'normalizer') return optCheck('normalizer', settings.normalizer === true, (v) => { settings.normalizer = v; if (v) normalizerHost?.prepare().catch(() => {}); save(); renderSettings(); }, { disabledWhy: normalizerHost ? '' : 'no model in this build', status: normalizerText() });
         return optCheck(o.id, o.id === 'spellcheck' ? settings.spellcheck : settings[o.key] !== false && !!settings[o.key], (v) => { settings[o.key] = v; applyEngineSettings(); save(); });
@@ -1698,6 +1700,7 @@ export async function mountPsys2(element, options = {}) {
       plogCount, h('div', { class: 'p2-field' }, h('label', {}, 'Show '), fsel), plogList, plogActions);
   }
   let modelsAllowed = false;   // the models load after the page is usable (PERF): the rules answer meanwhile
+  let modelsStarted = null, startModels = () => null;   // LAZY-LOAD-3: set once by startModels (below): a message the rules cannot read, idle time or the Settings switch
   function applyEngineSettings() {
     if (!session) return;
     session.applySettings(settings, { prepare: !!dispatcherEnc && modelsAllowed });   // the engine worker keeps its own copy; every turn also carries the current settings
@@ -1922,19 +1925,31 @@ export async function mountPsys2(element, options = {}) {
       await sleep(250);
     }
   };
+  /** Starts the reading model (once): on an idle CPU, then its warm-up, then the normalizer's idle timer. */
+  startModels = () => {
+    if (modelsStarted) return modelsStarted;
+    if (destroyed || !dispatcherEnc || settings.formalizer !== 'encoder') return null;
+    return modelsStarted = (async () => {
+      try {
+        await idleCpu(); if (destroyed) return;
+        modelsAllowed = true;   // the dispatcher first, then the normalizer (about 95 MB, cached by sha256)
+        await dispatcherEnc.prepare(); mark('dispatcher-ready');
+        if (!destroyed) await engineClient.warm({ phase: 'model' });
+        scheduleNormalizerIdle();
+      } catch { modelsStarted = null; /* best effort: the next trigger tries again */ }
+    })();
+  };
+  const scheduleModelIdle = () => { setTimeout(() => { if (!destroyed) startModels(); }, MODEL_IDLE_MS); };
   const warm = async () => {
     mark('warm-start');
     try {
       await engineClient.warm({ phase: 'rules' });   // in the worker: the rules and the translator tables; a user turn goes first
       if (destroyed) return;
-      // the models start on an idle CPU, after the first paint and only when the setting is on (the rules answer meanwhile): no long task for a second and no turn running (bounded wait)
-      if (dispatcherEnc && settings.formalizer === 'encoder') { await idleCpu(); if (destroyed) return; }
-      modelsAllowed = true;   // now the models: the dispatcher first, then the normalizer (about 95 MB, cached by sha256)
-      if (dispatcherEnc && settings.formalizer === 'encoder') {
-        await dispatcherEnc.prepare(); mark('dispatcher-ready');
-        if (!destroyed) await engineClient.warm({ phase: 'model' });
-        scheduleNormalizerIdle();
-      } else progress.end('model', { ms: 0, label: 'Reading model: not used (the rules read)' });
+      // LAZY-LOAD-3: the reading model (65 MB) and onnxruntime (14.5 MB) are NOT fetched at start. The rules read the first message (the model only adds
+      // a hint to the world choice and rescues garbled sentences); they load (1) the first time a message is not read cleanly, (2) after MODEL_IDLE_MS
+      // of idle time, (3) when the person switches the helper model on or asks in Settings > Models. The input is enabled long before.
+      if (dispatcherEnc && settings.formalizer === 'encoder') { progress.end('model', { ms: 0, label: 'Reading model: loads when a message needs it' }); scheduleModelIdle(); }
+      else { modelsAllowed = true; progress.end('model', { ms: 0, label: 'Reading model: not used (the rules read)' }); }
     } catch { /* warm-up is best effort */ }
     if (destroyed) return;
     // PROGRESS: the knowledge catalog's index (cached by version; the vocabulary is read by buckets, per message): the last start-up step, and the place where an unreachable catalog is said once
