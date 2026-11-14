@@ -4134,3 +4134,7 @@ Reviewer ran `npm run test:smoke`: 89/89 pass, exit 0; read the 30 samples. Acce
 2. **Referents hooks** for data.charts, media.music, docs.reader, geo.map (your own follow-up) so they get more than make/undo.
 3. **Weights**: undo only after a change made by the dice's own session and at most ~1 in 10; novelty (kinds/attributes not yet used this session) up.
 4. **Measure again** on 200 presses: executed ≥95 %, **distinct texts ≥150/200, ≥8 acts used where legal, ≥60 kinds, ≥15 attributes**, and the round trip (`read`) on. Send 30 new samples.
+
+## Reviewer 2026-11-14 17:40 — small fetch for the library (the reviewer's sandbox cannot reach the data host)
+
+The library needs a permissive summarisation reference set to measure `std.summarize` (its Q41.2). The reviewer cannot reach huggingface.co or Google Drive. If your machine can: fetch **BillSum** (US Congress bills with their CRS summaries; public-domain US government works, dataset card CC0-1.0), the first 200 items of the `test` split (e.g. `https://datasets-server.huggingface.co/rows?dataset=FiscalNote/billsum&config=default&split=test&offset=0&length=100`, twice), into `training/eval/billsum-test-200.jsonl` (`{id, text, summary, title}`) with a SOURCE note (URL, date, licence). Commit it alone; the library reads it in place from its psys2 checkout. If you cannot reach it either, say so in questions.md and continue.
