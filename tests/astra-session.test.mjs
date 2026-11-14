@@ -13,19 +13,19 @@ const shapes = (s) => s.state('art.draw').objects.map((o) => `${o.color ?? ''} $
 
 test('each tab gets its own discussion with the message id on the act; user scope is never a discussion', async () => {
   const s = fresh();
-  await run(s, 'open the chess tab', 'e4', 'open the drawing tab', 'draw a red house');
+  await run(s, 'open the map tab', 'show paris', 'open the drawing tab', 'draw a red house');
   const all = s.discussions();
-  assert.deepEqual(all.map((c) => c.tab).sort(), ['chess', 'draw']);
+  assert.deepEqual(all.map((c) => c.tab).sort(), ['draw', 'map']);
   assert.ok(all.every((c) => c.worlds.every((w) => w !== 'ui.shell')));
-  const chess = s.astra.list({ tab: 'chess' })[0];
-  assert.ok(s.astra.log.of(chess.id).some((e) => e.type === 'act' && /^msg\d+$/.test(e.msg) && e.data.worlds.includes('games.chess')));
+  const mapD = s.astra.list({ tab: 'map' })[0];
+  assert.ok(s.astra.log.of(mapD.id).some((e) => e.type === 'act' && /^msg\d+$/.test(e.msg) && e.data.worlds.includes('geo.map')));
   assert.equal(s.discussions({ tab: 'draw' })[0].worlds[0], 'art.draw');
 });
 
 test('two drawings: new discussion, back to the first, state follows, other world untouched', async () => {
   const s = fresh();
-  await run(s, 'open the chess tab', 'e4', 'open the drawing tab', 'draw a red house');
-  const chessMoves = JSON.stringify(s.state('games.chess'));
+  await run(s, 'open the map tab', 'show paris', 'open the drawing tab', 'draw a red house');
+  const mapState = JSON.stringify(s.state('geo.map'));
   const n = await s.send('new discussion');
   assert.match(n.text, /^OK, a new discussion: /);
   assert.deepEqual(s.state('art.draw').objects, []);
@@ -38,7 +38,7 @@ test('two drawings: new discussion, back to the first, state follows, other worl
   assert.match(b.text, /^Back to Drawing board\./);
   assert.match(shapes(s)[0], /red/);
   assert.equal(shapes(s).length, 1);
-  assert.equal(JSON.stringify(s.state('games.chess')), chessMoves);
+  assert.equal(JSON.stringify(s.state('geo.map')), mapState);
   assert.equal(b.state['ui.shell']?.activeTab ?? 'draw', 'draw');
   const b2 = await s.send('back to the second drawing');
   assert.match(shapes(s)[0], /blue/);
@@ -47,7 +47,7 @@ test('two drawings: new discussion, back to the first, state follows, other worl
 
 test('a single discussion per world: "back to the drawing" and "the first chart" are not discussion commands', async () => {
   const s = fresh();
-  await run(s, 'open the drawing tab', 'draw a red house', 'open the chess tab', 'e4');
+  await run(s, 'open the drawing tab', 'draw a red house', 'open the map tab', 'show paris');
   const r = await s.send('back to the drawing');
   assert.equal(r.trace.discourse.meta.kind, 'topic');
   assert.match(r.text, /^Back to Drawing board\. In your picture/);
@@ -58,10 +58,10 @@ test('a single discussion per world: "back to the drawing" and "the first chart"
 
 test('where were we: the most recent unfinished activity left for a digression (ASTRA owns the definition)', async () => {
   const s = fresh();
-  await run(s, 'open the drawing tab', 'Draw a red house.', 'open the chess tab', 'e4');
-  assert.match((await s.send('where were we?')).text, /^Back to Drawing board/);   // out of the chess digression: the drawing
+  await run(s, 'open the drawing tab', 'Draw a red house.', 'open the map tab', 'show paris');
+  assert.match((await s.send('where were we?')).text, /^Back to Drawing board/);   // out of the map digression: the drawing
   const t = fresh();
-  await run(t, 'open the chess tab', 'e4', 'open the drawing tab', 'Draw a red house.', 'open the charts tab');
+  await run(t, 'open the map tab', 'show paris', 'open the drawing tab', 'Draw a red house.', 'open the charts tab');
   assert.match((await t.send('where were we?')).text, /^Back to Drawing board/);
 });
 
@@ -70,13 +70,13 @@ test('the turn guard rolls ASTRA back with the session', async () => {
   await run(s, 'open the drawing tab', 'draw a red house');
   const n = s.astra.discussions.size, log = s.astra.log.length;
   const ctl = new AbortController();
-  const p = s.send('open the chess tab and play e4', { signal: ctl.signal, hardMs: 8000 });
+  const p = s.send('open the map tab and show paris', { signal: ctl.signal, hardMs: 8000 });
   ctl.abort(new DOMException('stopped', 'AbortError'));
   await p.catch(() => {});
   assert.equal(s.astra.discussions.size >= n, true);
   // an undo snapshot taken by the host restores the registry as well
   const snap = s.snapshot();
-  await run(s, 'open the chess tab', 'e4');
+  await run(s, 'open the map tab', 'show paris');
   assert.ok(s.astra.discussions.size > n);
   s.restore(snap);
   assert.equal(s.astra.discussions.size, n);

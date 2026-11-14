@@ -35,7 +35,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
   assert.equal(ops.reasonerMode, 'ops');
   assert.equal(ops.reasoner, null);
   assert.equal(ops.createSession({ language: 'en' }).isession.rs, null);
-  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time', 'kids.animals', 'user.profile', 'games.chess']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);   // (geo.map, media.music and docs.reader are schema worlds since their switches: no matrix)
+  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'kids.shapes', 'kids.time', 'kids.animals']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);   // (geo.map, media.music and docs.reader are schema worlds since their switches: no matrix)
   assert.equal(ops.set.get('ui.shell').reasoner, 'matrix');
   assert.equal(ops.set.get('kids.shop').patterns.some((p) => p.id.includes('.m.')), false, 'the matrix-only patterns are not loaded in ops mode');
   assert.deepEqual(ops.problems(), []);
@@ -43,7 +43,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
 
 test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.buildAll(), []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['common.sense', 'games.chess', 'games.guess', 'games.hangman', 'games.tictactoe', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'ui.help', 'ui.shell', 'user.profile']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['common.sense', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'ui.help', 'ui.shell']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
@@ -51,11 +51,11 @@ test('matrix mode: the worlds that opt in, the library loads without problems, t
 const LEDGERED_DIAGRAM = ["t.diagram.sketch.b.align.k05.b", "t.diagram.sketch.b.arrange.k06.b", "t.diagram.sketch.b.ask_path.k02.b", "t.diagram.sketch.b.create.k06.b", "t.diagram.sketch.b.delete.k04.b", "t.diagram.sketch.b.disconnect.k04.b", "t.diagram.sketch.b.group.k02.b", "t.diagram.sketch.b.group.k05.b", "t.diagram.sketch.b.move.k03.b", "t.diagram.sketch.b.rule.k06.b", "t.diagram.sketch.b.snap.k06.b", "t.diagram.sketch.b.undo.k04.b", "t.diagram.sketch.ex.star.n001", "t.diagram.sketch.b.label.k05.b", "t.diagram.sketch.b.redo.k03.b", "t.diagram.sketch.b.redo.k04.b", "t.diagram.sketch.b.redo.k05.b", "t.diagram.sketch.b.toback.k03.b", "t.diagram.sketch.b.toback.k06.b", "t.diagram.sketch.b.ungroup.k02.b"];
 const LEDGERED_DRAW = ["t.art.draw.dm304","t.art.draw.dm307","t.art.draw.ellipsis2","t.art.draw.f4r03","t.art.draw.f4r04","t.art.draw.f4r05","t.art.draw.f4r07","t.art.draw.p5a05","t.art.draw.p5a06","t.art.draw.pl07","t.art.draw.pl09","t.art.draw.pl10","t.art.draw.r2fill07","t.art.draw.r2help11","t.art.draw.r2help12","t.art.draw.r2move09","t.art.draw.r2move14","t.art.draw.r2move19","t.art.draw.r2move20","t.art.draw.r2move21","t.art.draw.r2move22","t.art.draw.r2move23","t.art.draw.r2recolor19","t.art.draw.r2scene01","t.art.draw.r2scene02","t.art.draw.r2scene03","t.art.draw.r2scene04","t.art.draw.r2scene05","t.art.draw.r2scene06","t.art.draw.r2scene07","t.art.draw.rd08","t.art.draw.rd09","t.art.draw.rd10","t.art.draw.rd11","t.art.draw.rd17","t.art.draw.rp3c","t.art.draw.sh03","t.art.draw.x250"];   // the rows of the art.draw switch on the ledger (training/eval/failures.jsonl, build art-draw-switch): the world's own tests, both reasoners
 const LEDGERED_CHARTS = ["t.data.charts.m04", "t.data.charts.n22", "t.data.charts.n35", "t.data.charts.n90", "t.data.charts.r2033", "t.data.charts.r2086", "t.data.charts.r2087", "t.data.charts.r2105", "t.data.charts.x203", "t.data.charts.x205", "t.data.charts.r2110"];
-test('parity gate (switch on): kids.shop 168, kids.tasks 241, kids.arith 243, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 9, kids.time 227, kids.animals 46, user.profile 144 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 168], ['kids.tasks', 241], ['kids.arith', 243], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 9], ['kids.time', 227], ['kids.animals', 46], ['user.profile', 144], ['data.charts', 277], ['art.draw', 602], ['diagram.sketch', 773]]) {
+test('parity gate (switch on): kids.shop 168, kids.tasks 241, kids.arith 243, kids.shapes 9, kids.time 227, kids.animals 45 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
+  for (const [id, n] of [['kids.shop', 168], ['kids.tasks', 241], ['kids.arith', 243], ['kids.shapes', 9], ['kids.time', 227], ['kids.animals', 45], ['data.charts', 277], ['art.draw', 603], ['diagram.sketch', 773]]) {
     const r = await runWorldTests(matrix, id);
     // the 13 rows of the diagram switch and the 10 rows of the data.charts switch are on the ledger (training/eval/failures.jsonl, source "bug-batch diagram switch"); every other row of every world passes
-    assert.deepEqual(r.failed.map((f) => f.id).filter((x) => (id !== 'diagram.sketch' || !LEDGERED_DIAGRAM.includes(x)) && (id !== 'data.charts' || !LEDGERED_CHARTS.includes(x)) && (id !== 'art.draw' || !LEDGERED_DRAW.includes(x)) && !(id === 'user.profile' && x === 't.user.profile.dlg04')), [], id);   /* dlg04: on the ledger since KNOWLEDGE-OUT step 5 (spelling: vocabulary counts lost with deleted patterns) */ assert.equal(r.total, n);
+    assert.deepEqual(r.failed.map((f) => f.id).filter((x) => (id !== 'diagram.sketch' || !LEDGERED_DIAGRAM.includes(x)) && (id !== 'data.charts' || !LEDGERED_CHARTS.includes(x)) && (id !== 'art.draw' || !LEDGERED_DRAW.includes(x))), [], id);   /* dlg04: on the ledger since KNOWLEDGE-OUT step 5 (spelling: vocabulary counts lost with deleted patterns) */ assert.equal(r.total, n);
   }
 });
 
@@ -207,25 +207,6 @@ test('one undo: "undo that" and the undo of the dialogue layer are the same rewi
   redo();
   assert.equal(bal(), '15'); assert.equal(c.s.isession.memory.find('kids.shop.purchase').length, 1);
   sameAsLibrary(c.s, ['kids.shop']);
-});
-
-test('the switch does not touch a world without reasoner=matrix: the same messages give the same replies, statuses and state under both settings', async () => {
-  const run = async (e) => {
-    const s = e.createSession({ language: 'en' });
-    s.setWorldState('ui.shell', { activeTab: 'guess' });
-    const rows = [];
-    for (const m of ['I am thinking of an animal', 'Sigur, bine.', 'yes', 'is it big?', 'what is the answer to life']) {
-      const before = JSON.stringify(Object.fromEntries(Object.entries(s.state()).filter(([k]) => !['ui.help'].includes(k))));
-      const r = await s.send(m, m === 'Sigur, bine.' ? { language: 'auto' } : {});
-      const after = JSON.stringify(Object.fromEntries(Object.entries(s.state()).filter(([k]) => !['ui.help'].includes(k))));
-      rows.push({ m, text: r.text, statuses: r.statuses, changed: before !== after, guess: s.state()['games.guess'] });
-    }
-    return rows;
-  };
-  const off = await run(ops), on = await run(matrix);
-  assert.deepEqual(on, off);
-  // the case that once differed (games.guess#030.ro): a world that is not a matrix world must be read and answered alike; the lazily created state of the world that read the sentence counts as a change in both
-  assert.equal(on[1].changed, true);
 });
 
 test('the setting is part of the webchat defaults: matrix, a saved ops of an older version is migrated once, a later explicit ops is kept', async () => {
@@ -452,7 +433,7 @@ const PROFILE = ['What do you know about me?', 'I am a nurse.', 'yes', 'Call me 
   'I am 12 years old.', "I've been teaching for 20 years.", 'I have 50 kids', 'Remember that I am 34 years old.', 'Delete my profile.', 'no', 'undo that'];
 const PROFILE_GAINS = new Set([16, 17, 18, 19, 20, 21, 22]);   // an age the user then contradicts and a number of children nobody has are refused with the reason; undo says it in the world's words
 
-test('one instance per group (user decision 2026-11-11): created on first use, the conversation worlds in one, every game in its own, the shared wires copied, undo rewinds the instance of the world that changed', async () => {
+test('one instance per group (user decision 2026-11-11): created on first use, the conversation worlds in one, every other matrix world in its own, the shared wires copied, undo rewinds the instance of the world that changed', async () => {
   const s = matrix.createSession({ language: 'en' }), rs = s.isession.rs;
   assert.equal(rs.insts.size, 0, 'a fresh session holds no World');
   await s.send('A ball costs 5 lei.', {});
@@ -462,31 +443,29 @@ test('one instance per group (user decision 2026-11-11): created on first use, t
   assert.equal(rs.of('kids.arith').ofType('kids.arith.holding').length, 1);
   assert.ok(rs.of('kids.arith').ofType('kids.shop.price').length > 0, 'the arithmetic rules see the shop facts (the same World)');
   assert.ok(rs.sharedLog.every((x) => rs.reasoner.route(x.w.type).shared), 'only wires several worlds know are in the shared log');
-  await s.send("Let's play tic tac toe", {});
-  await s.send('center', {});
-  assert.deepEqual([...rs.insts.keys()].sort(), ['games.tictactoe', 'session.conversation', 'ui.shell']);
-  assert.equal(rs.of('games.tictactoe').ofType('kids.shop.price').length, 0, 'the game holds nothing of the conversation worlds');
-  assert.equal(rs.turns.at(-1).mark.marks.has('games.tictactoe'), true, 'the last turn is the game\'s');
+  await s.send('speak faster', {});
+  assert.deepEqual([...rs.insts.keys()].sort(), ['session.conversation', 'ui.shell']);
+  assert.equal(rs.of('ui.shell').ofType('kids.shop.price').length, 0, 'the shell holds nothing of the conversation worlds');
+  assert.equal(rs.turns.at(-1).mark.marks.has('ui.shell'), true, 'the last turn is the shell\'s');
   assert.equal(rs.turns.at(-1).mark.marks.has('session.conversation'), false, 'and does not touch the conversation instance');
   await s.send('undo that', {});
-  assert.equal(rs.of('games.tictactoe').ofType('ttt.move').length, 0);
-  assert.equal(rs.of('kids.arith').ofType('kids.arith.holding').length, 1, 'the conversation instance is not rewound by the game turn');
+  assert.equal(rs.of('kids.arith').ofType('kids.arith.holding').length, 1, 'the conversation instance is not rewound by the shell turn');
   const fork = rs.fork();
-  assert.deepEqual([...fork.insts.keys()].sort(), ['games.tictactoe', 'session.conversation', 'ui.shell']);
+  assert.deepEqual([...fork.insts.keys()].sort(), ['session.conversation', 'ui.shell']);
 });
 
 test('composite world: compose= builds one instance from the legends and matrices of the worlds it names; reads= only their legends and facts', async () => {
   const e = await engineWith('matrix');
   const r = e.reasoner;
-  assert.deepEqual(r.matrixWorlds('session.conversation').sort(), ['kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'user.profile']);
+  assert.deepEqual(r.matrixWorlds('session.conversation').sort(), ['kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation']);
   assert.ok(r.schemaWorlds('session.conversation').includes('kids.shop'));
-  assert.ok(!r.schemaWorlds('games.hangman').includes('kids.shop'), 'a game holds the legends of its own imports only');
-  Object.defineProperty(e.set.get('games.guess'), 'reads', { get: () => ['kids.shop'] });   // a world may still read another's facts (the light form of sharing)
-  assert.ok(r.schemaWorlds('games.guess').includes('kids.shop'), 'reads=');
-  assert.deepEqual(r.matrixWorlds('games.guess'), ['games.guess'], 'reads= loads no matrix');
+  assert.ok(!r.schemaWorlds('ui.help').includes('kids.shop'), 'a world outside the conversation holds the legends of its own imports only');
+  Object.defineProperty(e.set.get('ui.shell'), 'reads', { get: () => ['kids.shop'] });   // a world may still read another's facts (the light form of sharing)
+  assert.ok(r.schemaWorlds('ui.shell').includes('kids.shop'), 'reads=');
+  assert.deepEqual(r.matrixWorlds('ui.shell'), ['ui.shell'], 'reads= loads no matrix');
   assert.deepEqual(r.buildAll(), []);
   const rs = r.session();
   assert.ok(rs.of('kids.tasks').schema('kids.shop.purchase'), 'the composite knows the shop types');
-  assert.ok(rs.of('kids.tasks').matrix.size > rs.of('games.tictactoe').matrix.size, 'and holds the matrices of all its worlds');
+  assert.ok(rs.of('kids.tasks').matrix.size > rs.of('ui.help').matrix.size, 'and holds the matrices of all its worlds');
   assert.equal(rs.of('kids.tasks'), rs.of('kids.shop'));
 });

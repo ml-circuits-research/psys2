@@ -102,7 +102,7 @@ test('session.observe records a core.observation wire', async () => {
 
 test('test runner: expectState (own world and world:path) and expectEffect', async () => {
   const e = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
-  for (const id of ['ui.shell', 'ui.avatar', 'docs.editor', 'games.tictactoe', 'games.guess', 'games.hangman']) {
+  for (const id of ['ui.shell', 'ui.avatar', 'docs.editor']) {
     const r = await runWorldTests(e, id);
     assert.deepEqual(r.failed, [], id);
     assert.ok(r.passed >= 10, id);
@@ -193,7 +193,7 @@ test('rest slot captures the remaining tokens, with commas, as free text', async
 
 // ---- the tool worlds ------------------------------------------------------------------------------
 const real = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
-const TOOL_WORLDS = ['ui.shell', 'ui.avatar', 'docs.editor', 'games.tictactoe', 'games.guess', 'games.hangman'];
+const TOOL_WORLDS = ['ui.shell', 'ui.avatar', 'docs.editor'];
 
 test('every pattern example of a tool world is understood', async () => {
   for (const id of TOOL_WORLDS) {

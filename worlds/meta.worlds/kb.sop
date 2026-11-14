@@ -28,12 +28,12 @@
     id=data.charts kind=tab run=none tab=charts
     name=chart name=graph
     act=data act=figure act=fruit act=leg act=spreadsheet act=compare act=plum act=legend
-    act=kiwis act=table act=percent act=percentage act=content act=visualize act=amount act=average
-    act=prepare act=mean act=image act=paste act=result act=report act=bananas act=csv
+    act=kiwis act=table act=percent act=percentage act=content act=visualize act=amount act=prepare
+    act=average act=mean act=image act=paste act=result act=report act=bananas act=csv
     act=editor act=gdoc act=entry act=express act=fraction act=pct act=proportion act=text
     act=capture act=clipboard act=dog act=gsheet act=outrun act=photo act=represent act=screenshot
     actshared=make actshared=house actshared=show actshared=download actshared=draw actshared=copy actshared=send actshared=stacking
-    actshared=against actshared=versus actshared=vs actshared=update actshared=include actshared=create actshared=build actshared=rename
+    actshared=against actshared=versus actshared=vs actshared=update actshared=create actshared=include actshared=build actshared=rename
     actshared=hide actshared=export actshared=scale actshared=convert
     thing=plot thing=point thing=bar thing=slice thing=segment thing=pie thing=doughnut thing=donut
     thing=radar thing=polar thing=scatter thing=aquamarine thing=chartreuse thing=terracotta thing=burlywood thing=firebrick
@@ -75,14 +75,14 @@
     core.source="generated:meta.worlds/cards"
     id=docs.editor kind=module run=none
     act=dictation act=pear act=shopping act=selected act=bread act=bar act=checkbox act=numbered
-    act=world act=compose act=fox act=plan act=reopen act=selection act=uncheck act=whale
+    act=world act=fox act=compose act=plan act=reopen act=selection act=uncheck act=whale
     act=unmark act=untick act=food act=italic act=krill act=statistic act=condense act=dictating
-    act=hyperlink act=lived
+    act=hyperlink act=lived act=nd
     actshared=house actshared=write actshared=undo actshared=new actshared=turn actshared=read actshared=stop actshared=start
-    actshared=milk actshared=insert actshared=download actshared=select actshared=animal actshared=apple actshared=legend actshared=plum
-    actshared=stacking actshared=kiwis actshared=scale actshared=create actshared=rename actshared=shrink actshared=exchange actshared=resize
-    actshared=convert actshared=invert actshared=recolor actshared=recolour actshared=straighten actshared=transform actshared=reverse actshared=revert
-    actshared=egg actshared=hello
+    actshared=milk actshared=insert actshared=download actshared=select actshared=apple actshared=legend actshared=plum actshared=stacking
+    actshared=kiwis actshared=scale actshared=create actshared=rename actshared=shrink actshared=exchange actshared=resize actshared=convert
+    actshared=invert actshared=recolor actshared=recolour actshared=straighten actshared=transform actshared=reverse actshared=revert actshared=egg
+    actshared=hello
     thing=section thing=chapter thing=subsection thing=subheading thing=freetext thing=text thing=word thing=something
     thing=paragraph thing=para thing=paras thing=graf thing=heading thing=header thing=headline thing=hed
     thing=title thing=checklist thing=bullet thing=entry thing=todo thing=quote thing=blockquote thing=cell
@@ -122,7 +122,7 @@
     act=pet act=companion act=baby act=live act=nicknamed act=adopted act=love act=numbat
     act=kitty act=body act=doggie act=doggo act=doggy act=feet act=taught act=chose
     act=introduced act=teach act=titled act=covered
-    actshared=called actshared=named actshared=animal actshared=nickname actshared=leg actshared=friend actshared=addressed actshared=class
+    actshared=called actshared=animal actshared=named actshared=nickname actshared=leg actshared=friend actshared=addressed actshared=class
     actshared=recall actshared=cannot actshared=told
     thing=hamster thing=goldfish thing=parrot thing=tortoise thing=cow thing=pig thing=horse thing=goat
     thing=goose thing=donkey thing=lion thing=tiger thing=elephant thing=giraffe thing=zebra thing=monkey

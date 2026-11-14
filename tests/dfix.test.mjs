@@ -41,24 +41,14 @@ test('hesitation words and a dangling connective never reach a world; "back to X
 
 test('topic return counts navigation as a topic, "where were we" goes back to it, and the summary hooks speak', async () => {
   const s = session('robot');
-  await say(s, 'Open the charts tab.', "Let's play hangman.", 'Where were we?');
+  await say(s, 'Open the charts tab.', 'What is 7 plus 5?', 'Where were we?');
   assert.equal(s.state()['ui.shell'].activeTab, 'charts');
   const m = await say(session('music'), 'Play Ode to Joy.', "let's change the instrument to the flute", 'where were we?');
   assert.match(m[2].text, /Ode to Joy/); assert.match(m[2].text, /flute/);
-  const d = await say(session('documents'), 'Open the fairy tale story.', 'Summarize the first section.', "Let's draw a cat.", 'Back to the story.', 'Where were we?');
-  assert.match(d[4].text, /Poor Woodcutter/);
 });
 
 test('"what did you do?" names the last change, not a later question; a modal interceptor turn is explained like any other', async () => {
   const rs = await say(session('map'), 'Mark Paris and Rome.', 'How far is Paris from Rome?', 'Clear the lines.', 'How many markers are there?', 'What did you do?');
   assert.match(rs[4].text, /clear the lines/i); assert.match(rs[4].text, /so I did it/);
-  const d = await say(session('documents'), 'Open the fairy tale story.', 'Search for father.', 'What did you do?');
-  assert.match(d[2].text, /search for father/i); assert.match(d[2].text, /so I did it/);
-  const q = await say(session('documents'), 'Open the fairy tale story.', 'Who is the witch?', 'What did she do?', 'What did you do?');
-  assert.match(q[3].text, /What did she do/); assert.match(q[3].text, /answered it/);
 });
 
-test('docs.reader search matches the singular and the plural of a word', async () => {
-  const [, r] = await say(session('documents'), 'Open the fairy tale story.', 'Search for pebbles.');
-  assert.match(r.text, /4 results/);
-});

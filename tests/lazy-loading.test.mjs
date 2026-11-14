@@ -94,7 +94,7 @@ test('a start loads the always-loaded worlds and the open tab\'s world, and no o
   const c = await setup();
   const wl = createWorldLoader({ indexHash: null, fetchJson: c.fetchJson, bag: c.bag });
   await wl.init();
-  for (const tab of ['ui.avatar', 'geo.map', 'games.chess']) {
+  for (const tab of ['ui.avatar', 'geo.map', 'media.music']) {
     const ids = [...wl.startIds({ tabWorld: tab })];
     for (const id of ids) assert.ok(c.index.always.includes(id) || wl.closure([tab]).has(id), `${id} is not part of the start with ${tab} open`);
     const withVendor = ids.filter((id) => (VENDOR_OF[id] ?? []).length);
@@ -110,10 +110,10 @@ test('the words of a message name the worlds it needs; the name of a tab loads i
   await wl.init();
   const need = async (t) => [...(await wl.plan(t)).ids];
   assert.ok((await need('open the map')).includes('geo.map'));
-  assert.ok((await need('let us play chess')).includes('games.chess'));
+  assert.ok((await need('play a song on the piano')).includes('media.music'));
   assert.ok((await need('open the drawing board')).includes('art.draw'));
   const hello = await need('hello');
-  assert.ok(hello.length <= 2 && !hello.includes('games.chess'), `hello needs ${hello.join(',')}`);
+  assert.ok(hello.length <= 2 && !hello.includes('media.music'), `hello needs ${hello.join(',')}`);
   const before = c.fetched.length;
   await wl.plan('open the map');
   assert.equal(c.fetched.length, before, 'a bucket is fetched once');

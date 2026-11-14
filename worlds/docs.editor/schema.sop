@@ -12,7 +12,6 @@
     own=whatIs:doc.whatIs
     own=say:doc.say
     own=fromList:doc.fromList
-    own=report:doc.report
     own=whatSelected:doc.whatSelected
     own=fillTable:doc.fillTable
     own=checkTask:doc.checkTask

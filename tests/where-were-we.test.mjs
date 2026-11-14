@@ -21,7 +21,7 @@ test('dlg.mpc#009: after an explicit return to the map, the unfinished activity 
 
 test('a digression out of a digression: "where were we" is the activity just left, not the oldest one', async () => {
   const s = session('map');
-  await say(s, 'Mark Paris.', 'Open the charts tab.', "Let's play hangman.");
+  await say(s, 'Mark Paris.', 'Open the charts tab.', 'What is 7 plus 5?');
   await say(s, 'Where were we?');
   assert.equal(tab(s), 'charts');
 });

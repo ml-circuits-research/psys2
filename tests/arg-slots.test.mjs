@@ -18,10 +18,6 @@ test('slot= of core.describe.arg is read; only the declarations of a describe.so
   const { wires } = parse('@describe.x core.describe\n    op=x.go\n    intent=command\n\n@describe.x.n core.describe.arg\n    of=$describe.x\n    name=n\n    slot=a.b.c\n');
   const read = readDescriptionWires(wires);
   assert.equal(read.descriptions.get('describe.x').args[0].slot, 'a.b.c');
-  const chess = engine.set.get('games.chess');
-  assert.equal(chess.argSlots.get('chess.level').get('n'), 'chess.game.level');
-  assert.deepEqual(chess.errors, []);
-  assert.ok(chess.descriptions.length === 1 && chess.descriptions.every((d) => d.words.size === 0), 'only the description that has a slot is loaded, without its wording');
   const cut = slotDeclarations('@describe.a core.describe\n    op=a\n\n@describe.a.x core.describe.arg\n    of=$describe.a\n    name=x\n    slot=t.k\n\n@describe.a.en core.describe.words\n    of=$describe.a\n    lang=en\n\n@describe.b core.describe\n    op=b\n\n@describe.b.y core.describe.arg\n    of=$describe.b\n    name=y\n    class=number\n');
   assert.match(cut, /describe\.a core\.describe/);
   assert.match(cut, /slot=t\.k/);
@@ -29,17 +25,4 @@ test('slot= of core.describe.arg is read; only the declarations of a describe.so
   assert.equal(slotDeclarations('@x core.describe\n    op=x\n'), '');
   // a described world with wording keeps the old rule: not read unless the generator or the reader asks
   assert.equal(engine.set.get('kids.shop').descriptions.length, 0);
-});
-
-test('a host-run action is judged by the library through the type derived from its declaration', () => {
-  const s = session();
-  const ok = judge(s, 'chess.level', { n: 3 });
-  assert.equal(ok.judged, true);
-  assert.equal(ok.judgedBy, 'fallback');
-  assert.equal(ok.ok, true);
-  const bad = judge(s, 'chess.level', { n: 12 });
-  assert.equal(bad.judged, true);
-  assert.equal(bad.ok, false, 'a value outside the range of the slot is not a reading the world can take');
-  // an action with no declaration stays unjudged, as before
-  assert.equal(judge(s, 'music.volume', { v: 50 }).judged, false);
 });

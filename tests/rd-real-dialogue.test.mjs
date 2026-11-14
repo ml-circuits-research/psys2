@@ -22,15 +22,11 @@ const NAMED = [
   ['charts', 'Turn the avatar blue.', 'ui.avatar'],
   ['draw', 'Turn the avatar blue.', 'ui.avatar'],
   ['music', 'Turn the avatar blue.', 'ui.avatar'],
-  ['chess', 'Turn the avatar blue.', 'ui.avatar'],
   ['charts', 'Clear the map.', 'geo.map'],
   ['editor', 'Can you change the map to street?', 'geo.map'],
   ['charts', 'Clear the picture.', 'art.draw'],
   ['music', 'Wipe the canvas.', 'art.draw'],
-  ['tictactoe', 'Describe my picture.', 'art.draw'],
-  ['music', 'Describe the story.', 'docs.reader'],
-  ['charts', 'Read the story aloud.', 'docs.reader'],
-  ['draw', 'Can u rotate the chess board?', 'games.chess'],
+  ['charts', 'Describe my picture.', 'art.draw'],
 ];
 test('a message that names a world routes to it whatever tab is open', async () => {
   for (const [tab, text, world] of NAMED) {

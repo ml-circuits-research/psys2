@@ -61,12 +61,6 @@
     action=doc.fromList
     doc="An operation of this world that is not an act (own.mjs: fromList)."
 
-@op.docs.editor.report core.operation
-    impl=report
-    semantics=action
-    action=doc.report
-    doc="An operation of this world that is not an act (own.mjs: report)."
-
 @op.docs.editor.whatSelected core.operation
     impl=whatSelected
     semantics=action

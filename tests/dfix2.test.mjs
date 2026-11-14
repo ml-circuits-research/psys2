@@ -29,28 +29,11 @@ test('gibberish with no marker is not text for a free slot of the last request',
   assert.equal(e.state()['docs.editor'].blocks.length, 2);
 });
 
-test('"no, I meant the outline" changes the kind of request; "no, I meant how do I play chess" restates it', async () => {
-  const rs = await say(session('documents'), 'Open the fairy tale story.', 'Summarize the story.', 'No, I meant the outline.', 'What did you do?');
-  assert.match(rs[2].text, /4 sections/); assert.match(rs[3].text, /so I did it/);
-  const s = await say(session('documents'), 'Open the fairy tale story.', 'Go to the second section.', 'No, I meant the third section.');
-  assert.match(s[2].text, /Witch/);
-  assert.equal(s[2].state['docs.reader'].focus.sentences.length, 21);
-});
-
 test('"the G major one" stands for the last noun of the request', async () => {
   const m = session('music');
   await say(m, 'Play the C major scale.', 'and the G major one?');
   assert.equal(m.state()['media.music'].current.key, 'G major');
   assert.equal(m.state()['media.music'].current.kind, 'scale');
-});
-
-test('docs.reader: sections have statistics, the longest and shortest section, a search is spelled after the document, "how long is it in words"', async () => {
-  const rs = await say(session('documents'), 'Open the fairy tale story.', 'Which section is the longest?', 'How many words in that one?', 'And the shortest?', 'How many words are in section 2?', 'how long is it in words');
-  assert.match(rs[1].text, /Witch/); assert.match(rs[2].text, /209/); assert.match(rs[3].text, /Home Again/); assert.match(rs[4].text, /183/); assert.match(rs[5].text, /685/);
-  const q = await say(session('documents'), 'open the fairy tale story pls', 'srch fr bred', 'and the one after that?');
-  assert.match(q[1].text, /4 results for "bread"/); assert.match(q[2].text, /Result 2 of 4/);
-  const b = await say(session('documents'), 'Open the fairy tale story.', 'Search for oven.', "Let's play tic-tac-toe.", 'Back to the story.', 'Next result.');
-  assert.match(b[3].text, /search for "oven"/); assert.match(b[4].text, /Result 2 of 3/);
 });
 
 test('trailing softeners, hesitation and chat spellings', async () => {

@@ -90,10 +90,6 @@
     for=action.doc.fromList
     text="{value}"
 
-@tpl.docs.editor.own_report core.template
-    for=action.doc.report
-    text="{value}"
-
 @tpl.docs.editor.own_holdings core.template
     for=action.doc.holdings
     text="{value}"

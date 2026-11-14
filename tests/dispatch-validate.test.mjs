@@ -68,25 +68,13 @@ test('simplified text validates when the original does not', async () => {
   assert.equal(without.status, 'not_understood');
 });
 
-test('a tie between worlds is broken by the routing policy tiers (active tab)', async () => {
-  const t = 'Play B3';
-  const run = (tab) => validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['games.tictactoe', 0.5], ['media.music', 0.5]))] }], { tab }), { tabTier: false });   // this test is about the tie-break; tier T would settle it before
-  const onMusic = await run('music'), onGame = await run('tictactoe');
-  assert.deepEqual(winnerWorlds(onMusic), ['media.music']);
-  assert.deepEqual(winnerWorlds(onGame), ['games.tictactoe']);
-  const tie = onMusic.trace.segmentations[0].pieces[0].tie;
-  assert.deepEqual(tie.worlds.sort(), ['games.tictactoe', 'media.music']);
-  assert.equal(tie.decision.tierName, 'active-tab');
-  assert.match(onMusic.why, /broken by routing policy/);
-});
-
 test('a piece the rules parse but the interpreter refuses is accepted by default and invalid with acceptRefused:false', async () => {
-  const t = 'Move the pawn on d two to a3.';   // parsed by games.chess, refused as an illegal move
-  const pred = msg(t, [{ score: -0.1, segments: [piece(t, W(['games.chess', 0.9]))] }]);
+  const t = 'What is 5 divided by 0?';   // parsed by kids.arith, refused (division by zero)
+  const pred = msg(t, [{ score: -0.1, segments: [piece(t, W(['kids.arith', 0.9]))] }]);
   assert.equal(DEFAULT_POLICY.acceptRefused, true);
   const lenient = await validator.validate(pred);
   assert.equal(lenient.status, 'understood');
-  assert.equal(lenient.produced[0].world, 'games.chess');
+  assert.equal(lenient.produced[0].world, 'kids.arith');
   const strict = await validator.validate(pred, { acceptRefused: false });
   assert.equal(strict.status, 'not_understood');
   assert.equal(strict.trace.segmentations[0].pieces[0].attempts[0].refused, true);

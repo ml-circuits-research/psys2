@@ -3,7 +3,7 @@
 // global once the library is loaded; without them these operations decline plainly. There is no local generator and no fallback text. Browser-safe.
 // (Moved here from docs.reader when the document-analysis tab was removed: one Documents tab, the editor with the composition and the summary.)
 import { allTexts } from './model.mjs?v=25e2bbdf20';
-import { createDoc, finish } from './editor.mjs?v=b0e1295bdb';
+import { createDoc, finish } from './editor.mjs?v=56824fea28';
 
 const textGen = () => globalThis[Symbol.for('psys2.textgen')] ?? null;
 const no = (status, note) => ({ status, note });

@@ -108,15 +108,6 @@
     tabPriority=25
     example="Turn my shopping list into a document."
 
-@pat.docs.editor.report core.pattern
-    canonical="Make a document about farm animals."
-    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [write|make|create|prepare|compose|build] [me]? [a|the]? [document|doc|summary|page] [about|on] {t:rest}"
-    emit="@{_} core.request action=doc.report arg.topic=\"{t}\""
-    kind=request
-    priority=12
-    tabPriority=28
-    example="Make a document about farm animals."
-
 @pat.docs.editor.holdings core.pattern
     canonical="Write down what Tom and Ana have."
     canonical="Write down what everyone has."
@@ -394,7 +385,7 @@
 
 # ---- the summary and the composition (spec 26), moved from docs.reader
 @pat.docs.editor.digest.doc core.pattern
-    match="[can_you|could_you]? [condense|digest|abridge|summarize|summarise] [the|this|that|my] [open]? {d:lex.docs.editor.docwords} [in_a_paragraph|in_a_few_sentences]"
+    match="[can_you|could_you]? [condense|digest|abridge|summarize|summarise] [the|this|that|my] [open]? {d:lex.docs.editor.docwords} [in_a_paragraph|in_a_few_sentences]?"
     emit="@{_} core.request action=doc.digest"
     kind=request
     priority=11
