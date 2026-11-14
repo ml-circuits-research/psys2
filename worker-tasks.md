@@ -4185,3 +4185,7 @@ Reviewer ran `npm run test:smoke` on 5a1ad4fe: 89/89 pass, exit 0; read tales-pd
 ## Reviewer 2026-11-14 20:20 — periodic batch 4 accepted (77ad606c … 6337bbf6)
 
 Reviewer ran `npm run test:smoke` on 6337bbf6: 89/89 pass, exit 0. Accepted (coordination of shapes as one act, send to front, why-question routing, seating named add through lang.named.call). The catalog frame question is forwarded to the knowledge repository (w.lang.en place-verb named add); delete the local patterns.extra.sop when it lands.
+
+## Reviewer 2026-11-14 20:45 — f122ae1b, 2f59fe07 accepted; one load-sensitive invariant test
+
+Reviewer ran `npm run test:smoke` on 2f59fe07: 88/89 — `turn-guard.test.mjs` "softMs is accepted but has no clock" hit the 20 s hard limit (TurnAborted: time limit) with machine load ~8.5; alone it passes (1/1). Accepted, but an invariant test must not depend on machine load: give the guard an injected clock in that test (or a much larger limit for it). sopworld 0.67 is out (compose on k.genres, choice points); the remaining composition worlds are published; vendor when 0.68 pins them.
