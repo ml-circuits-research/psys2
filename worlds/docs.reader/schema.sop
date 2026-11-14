@@ -41,6 +41,7 @@
     own=more:docr.more
     own=sectionExtreme:docr.sectionExtreme
     sample=document
+    thing=docs:document::title:dice
     readable=yes
     canonical=r.
     list=yes
@@ -60,6 +61,8 @@
 
 @reader.document acts.kind
     dice.not=make
+    dice.not=change
+    dice.not=remove
     plural=documents
     named=yes
     word=doc

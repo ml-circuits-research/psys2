@@ -36,6 +36,8 @@
     own=mapUndo:geo.undo
     own=mapRedo:geo.redo
     sample=pin
+    thing=markers:pin
+    thing=highlighted:place:cc:name
     boost=5
     say=yes
     list=yes
@@ -86,6 +88,7 @@
     word=seas
 
 @map.pin acts.kind
+    dice.not=change
     plural=pins
     in=view
     word=marker

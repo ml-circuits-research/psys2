@@ -24,30 +24,30 @@
 {"world":"art.draw","i":23,"text":"What is the colour of the oval?","act":"ask","kind":null,"attr":"colour","judged":"ok","reply":"The oval is purple."}
 {"world":"art.draw","i":24,"text":"Set the oval size to small.","act":"change","kind":null,"attr":"size","judged":"ok","reply":"The oval is small now."}
 {"world":"data.charts","i":0,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":1,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":2,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":1,"text":"Remove chart 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"OK, I deleted the chart \"Chart 1\". There are no charts left."}
+{"world":"data.charts","i":2,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
 {"world":"data.charts","i":3,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
 {"world":"data.charts","i":4,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":5,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":6,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":7,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":8,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":9,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":10,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":11,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":12,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":5,"text":"What is the sort of chart 1?","act":"ask","kind":null,"attr":"sort","judged":"fail","reply":"The chart \"Chart 1\" is empty. Add something, for example: \"add bananas 4\"."}
+{"world":"data.charts","i":6,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":7,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":8,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":9,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":10,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":11,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":12,"text":"Set chart 1 colour to brown.","act":"change","kind":null,"attr":"colour","judged":"ok","reply":"OK, here is a bar chart with 1 item: colour to brown 1."}
 {"world":"data.charts","i":13,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 2\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":14,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":14,"text":"Set chart 2 palette to default.","act":"change","kind":null,"attr":"palette","judged":"ok","reply":"OK, here is a bar chart with 1 item: palette to default 2."}
 {"world":"data.charts","i":15,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":16,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":17,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":18,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":19,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 2\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":16,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":17,"text":"Remove chart 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"OK, I deleted the chart \"Chart 2\". There are no charts left."}
+{"world":"data.charts","i":18,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":19,"text":"Remove chart 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"OK, I deleted the chart \"Chart 2\". There are no charts left."}
 {"world":"data.charts","i":20,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
 {"world":"data.charts","i":21,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":22,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":23,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":24,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":22,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":23,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":24,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
 {"world":"diagram.sketch","i":0,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","reply":"Drew a circle."}
 {"world":"diagram.sketch","i":1,"text":"Set the circle colour to yellow.","act":"change","kind":null,"attr":"colour","judged":"ok","reply":"the circle is now yellow."}
 {"world":"diagram.sketch","i":2,"text":"Copy the circle.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"Drew a circle."}
@@ -91,32 +91,57 @@
 {"world":"docs.editor","i":15,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the rule you added is gone."}
 {"world":"docs.editor","i":16,"text":"Add a break.","act":"make","kind":"break","attr":null,"judged":"ok","reply":"OK, I added a page break."}
 {"world":"docs.editor","i":17,"text":"Add a list.","act":"make","kind":"list","attr":null,"judged":"ok","reply":"OK, I added an empty list. You can change its style or tell me what goes on it."}
-{"world":"docs.editor","i":18,"text":"What is the order of list 2?","act":"ask","kind":null,"attr":"order","judged":"fail","reply":"There is no second list; the document has one."}
+{"world":"docs.editor","i":18,"text":"What is the order of list 1?","act":"ask","kind":null,"attr":"order","judged":"ok","reply":"The list says: "}
 {"world":"docs.editor","i":19,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the list you added is gone."}
 {"world":"docs.editor","i":20,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the rule you added is gone."}
 {"world":"docs.editor","i":21,"text":"Add a task.","act":"make","kind":"task","attr":null,"judged":"ok","reply":"OK, I added an empty task list. You can change its style or tell me what goes on it."}
 {"world":"docs.editor","i":22,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the list you added is gone."}
 {"world":"docs.editor","i":23,"text":"Add a rule.","act":"make","kind":"rule","attr":null,"judged":"ok","reply":"OK, I inserted a horizontal line."}
 {"world":"docs.editor","i":24,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","reply":"OK, I added a table with 3 columns: Column 1, Column 2 and Column 3."}
+{"world":"docs.reader","i":0,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":1,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":2,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":3,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":4,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":5,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":6,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":7,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":8,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":9,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":10,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":11,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":12,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
+{"world":"docs.reader","i":13,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":14,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
+{"world":"docs.reader","i":15,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
+{"world":"docs.reader","i":16,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
+{"world":"docs.reader","i":17,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":18,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
+{"world":"docs.reader","i":19,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
+{"world":"docs.reader","i":20,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
+{"world":"docs.reader","i":21,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":22,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
+{"world":"docs.reader","i":23,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
+{"world":"docs.reader","i":24,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
 {"world":"geo.map","i":0,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
 {"world":"geo.map","i":1,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
 {"world":"geo.map","i":2,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
 {"world":"geo.map","i":3,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
 {"world":"geo.map","i":4,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"geo.map","i":5,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":6,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"geo.map","i":7,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":8,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"geo.map","i":9,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":10,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":5,"text":"What is the colour of the pin?","act":"ask","kind":null,"attr":"colour","judged":"ok","reply":"There is 1 marker: Point 1."}
+{"world":"geo.map","i":6,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":7,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":8,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":9,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":10,"text":"What is the colour of the pin?","act":"ask","kind":null,"attr":"colour","judged":"ok","reply":"There is 1 marker: Point 1."}
 {"world":"geo.map","i":11,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
 {"world":"geo.map","i":12,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
 {"world":"geo.map","i":13,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
 {"world":"geo.map","i":14,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"geo.map","i":15,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":15,"text":"Remove the pin.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"OK, I removed the marker."}
 {"world":"geo.map","i":16,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":17,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":18,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":17,"text":"Remove the pin.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"OK, I removed the marker."}
+{"world":"geo.map","i":18,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
 {"world":"geo.map","i":19,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
 {"world":"geo.map","i":20,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
 {"world":"geo.map","i":21,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
@@ -124,30 +149,30 @@
 {"world":"geo.map","i":23,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
 {"world":"geo.map","i":24,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
 {"world":"media.music","i":0,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":1,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Mary Had a Little Lamb\" on the piano at 110 beats per minute. It is in C major."}
-{"world":"media.music","i":2,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"London Bridge Is Falling Down\" on the piano at 110 beats per minute. It is in C major."}
-{"world":"media.music","i":3,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":4,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Mary Had a Little Lamb\" on the piano at 110 beats per minute. It is in C major."}
-{"world":"media.music","i":5,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":6,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":7,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Brahms' Lullaby\" on the piano at 80 beats per minute. It is in D major."}
-{"world":"media.music","i":8,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Happy Birthday to You\" on the piano at 100 beats per minute. It is in G major."}
-{"world":"media.music","i":9,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major."}
-{"world":"media.music","i":10,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":11,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":12,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Frère Jacques\" on the piano at 120 beats per minute. It is in C major."}
-{"world":"media.music","i":13,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Old MacDonald Had a Farm\" on the piano at 110 beats per minute. It is in C major."}
-{"world":"media.music","i":14,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Ode to Joy\" on the piano at 108 beats per minute. It is in C major."}
-{"world":"media.music","i":15,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":16,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":17,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":1,"text":"Set the scale instrument to violin.","act":"change","kind":null,"attr":"instrument","judged":"ok","reply":"OK, now playing on the strings."}
+{"world":"media.music","i":2,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Twinkle, Twinkle, Little Star\" on the strings at 100 beats per minute. It is in C major."}
+{"world":"media.music","i":3,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the strings."}
+{"world":"media.music","i":4,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Frère Jacques\" on the strings at 120 beats per minute. It is in C major."}
+{"world":"media.music","i":5,"text":"What is the volume of song Frère Jacques?","act":"ask","kind":null,"attr":"volume","judged":"ok","reply":"The volume is 70 percent."}
+{"world":"media.music","i":6,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the strings."}
+{"world":"media.music","i":7,"text":"Set the scale volume to 43.","act":"change","kind":null,"attr":"volume","judged":"ok","reply":"OK, the volume is 43 percent."}
+{"world":"media.music","i":8,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the strings."}
+{"world":"media.music","i":9,"text":"What is the instrument of the scale?","act":"ask","kind":null,"attr":"instrument","judged":"ok","reply":"I am playing the strings."}
+{"world":"media.music","i":10,"text":"Set the scale volume to 32.","act":"change","kind":null,"attr":"volume","judged":"ok","reply":"OK, the volume is 32 percent."}
+{"world":"media.music","i":11,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Twinkle, Twinkle, Little Star\" on the strings at 100 beats per minute. It is in C major."}
+{"world":"media.music","i":12,"text":"What is the volume of song Twinkle, Twinkle, Little Star?","act":"ask","kind":null,"attr":"volume","judged":"ok","reply":"The volume is 32 percent."}
+{"world":"media.music","i":13,"text":"What is the tempo of song Twinkle, Twinkle, Little Star?","act":"ask","kind":null,"attr":"tempo","judged":"ok","reply":"\"Twinkle, Twinkle, Little Star\" is usually played at 100 beats per minute."}
+{"world":"media.music","i":14,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the strings."}
+{"world":"media.music","i":15,"text":"Set the scale volume to 54.","act":"change","kind":null,"attr":"volume","judged":"ok","reply":"OK, the volume is 54 percent."}
+{"world":"media.music","i":16,"text":"What is the volume of the scale?","act":"ask","kind":null,"attr":"volume","judged":"ok","reply":"The volume is 54 percent."}
+{"world":"media.music","i":17,"text":"Set the scale instrument to piano.","act":"change","kind":null,"attr":"instrument","judged":"ok","reply":"OK, now playing on the piano."}
 {"world":"media.music","i":18,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":19,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":20,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Row, Row, Row Your Boat\" on the piano at 100 beats per minute. It is in C major."}
-{"world":"media.music","i":21,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major."}
-{"world":"media.music","i":22,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":23,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":24,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Frère Jacques\" on the piano at 120 beats per minute. It is in C major."}
+{"world":"media.music","i":19,"text":"What is the volume of the scale?","act":"ask","kind":null,"attr":"volume","judged":"ok","reply":"The volume is 54 percent."}
+{"world":"media.music","i":20,"text":"What is the volume of the scale?","act":"ask","kind":null,"attr":"volume","judged":"ok","reply":"The volume is 54 percent."}
+{"world":"media.music","i":21,"text":"Set the scale volume to 9.","act":"change","kind":null,"attr":"volume","judged":"ok","reply":"OK, the volume is 9 percent."}
+{"world":"media.music","i":22,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Old MacDonald Had a Farm\" on the piano at 110 beats per minute. It is in C major."}
+{"world":"media.music","i":23,"text":"What is the tempo of song Old MacDonald Had a Farm?","act":"ask","kind":null,"attr":"tempo","judged":"ok","reply":"\"Old MacDonald Had a Farm\" is usually played at 110 beats per minute."}
+{"world":"media.music","i":24,"text":"What is the instrument of song Old MacDonald Had a Farm?","act":"ask","kind":null,"attr":"instrument","judged":"ok","reply":"I am playing the piano."}
 {"world":"plan.seating","i":0,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","reply":"I added table 1."}
 {"world":"plan.seating","i":1,"text":"Set table 1 shape to round.","act":"change","kind":null,"attr":"shape","judged":"ok","reply":"Table 1 is already shape round; nothing changed."}
 {"world":"plan.seating","i":2,"text":"Add a seat.","act":"make","kind":"seat","attr":null,"judged":"ok","reply":"I added the seat at table 1. (I put it at table 1, the only table with room.)"}

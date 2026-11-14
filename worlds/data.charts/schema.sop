@@ -30,6 +30,7 @@
     own=chartUndo:chart.undo
     own=chartRedo:chart.redo
     sample=chart
+    thing=charts:chart
     list=yes
     say=yes
     scale=yes
@@ -59,6 +60,7 @@
     word=diagram
 
 @chart.point acts.kind
+    dice.not=make
     plural=points
     named=yes
     in=chart

@@ -1297,8 +1297,9 @@ export function interceptInput(ctx, text) { const r = _interceptInput(ctx, text)
 /** Blocks a person can point at ("the second paragraph", "the last one"): [{ id, kind, noun, words, attrs, salient }]. */
 export function referents(ctx) {
   const s = ctx.state;
+  const seen = {};   // "list 2" is the second list of the document: the number counts the blocks of the kind, not the block's id
   return (s.blocks ?? []).map((b, i) => ({
-    id: b.id, kind: b.kind ?? 'paragraph', noun: b.kind ?? 'paragraph', words: [b.kind ?? 'paragraph'], attrs: { align: b.align ?? 'left' },
+    id: b.id, kind: b.kind ?? 'paragraph', noun: b.kind ?? 'paragraph', n: (seen[b.kind ?? 'paragraph'] = (seen[b.kind ?? 'paragraph'] ?? 0) + 1), words: [b.kind ?? 'paragraph'], attrs: { align: b.align ?? 'left' },
     salient: i === s.cursor, sig: JSON.stringify(b),
   }));
 }

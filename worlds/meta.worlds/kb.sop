@@ -8,8 +8,8 @@
     act=door act=roof act=wheel act=corner act=night act=dark act=three act=art
     act=degree act=doodle act=organise act=upside act=deselect act=organize act=distribute act=masterpiece
     act=painting
-    actshared=draw actshared=everything actshared=nice actshared=look actshared=surprise actshared=um actshared=blow actshared=mind
-    actshared=anything actshared=arrange actshared=png actshared=memorize actshared=preserve actshared=sized actshared=archive actshared=landscape
+    actshared=draw actshared=everything actshared=nice actshared=look actshared=surprise actshared=um actshared=anything actshared=blow
+    actshared=mind actshared=arrange actshared=png actshared=memorize actshared=preserve actshared=sized actshared=archive actshared=landscape
     actshared=twin actshared=unpick actshared=unselected actshared=whatever actshared=bundle actshared=click actshared=compress actshared=deflate
     actshared=detach actshared=disconnect actshared=inflate actshared=minimise actshared=minimize actshared=mirror actshared=press actshared=puff
     actshared=pump actshared=sever actshared=swivel actshared=tap actshared=ungroup actshared=unhook actshared=unlink actshared=unselect
@@ -79,7 +79,7 @@
     act=krill act=selection act=unmark act=statistic act=dictating act=hyperlink act=lived act=owl
     act=period act=wordcount act=dictate act=party act=underline act=aligned act=alignment act=non
     act=populate act=strip act=un act=unset
-    actshared=house actshared=write actshared=undo actshared=stop actshared=milk actshared=new actshared=selected actshared=insert
+    actshared=house actshared=undo actshared=write actshared=stop actshared=milk actshared=new actshared=selected actshared=insert
     actshared=download actshared=apple actshared=legend actshared=plum actshared=stacking actshared=kiwis actshared=scale actshared=egg
     actshared=hello actshared=revert actshared=report actshared=complete actshared=dog actshared=stat actshared=scratch actshared=continue
     thing=section thing=chapter thing=subsection thing=subheading thing=freetext thing=word thing=something thing=paragraph
@@ -97,12 +97,12 @@
     name=document name=reader name=document_reader name=my_document name=library name=story name=doc name=file
     name=my_file
     act=happen act=mention act=mentioned act=related act=dragon act=lock act=helped act=happened
-    act=recap act=occur act=appear act=summarize act=search act=summarise act=discuss act=occurrence
+    act=recap act=occur act=summarize act=appear act=search act=summarise act=discuss act=occurrence
     act=tldr act=gist act=reference act=result act=appearance act=whom act=instance act=summary
-    act=unfold act=present act=saying act=conclude act=scene act=conclusion act=heroine act=keyword
-    act=synopsis act=event act=main act=narrate act=relation act=telling act=digest act=quote
-    act=perform act=scan act=abridge act=actor act=answered
-    actshared=who actshared=read actshared=about actshared=tell actshared=where actshared=close actshared=bee actshared=describe
+    act=unfold act=present act=digest act=saying act=conclude act=scene act=conclusion act=condense
+    act=heroine act=keyword act=synopsis act=abridge act=event act=main act=narrate act=relation
+    act=telling act=compose act=quote act=perform act=scan
+    actshared=who actshared=about actshared=read actshared=tell actshared=where actshared=close actshared=bee actshared=describe
     actshared=say actshared=contain actshared=feature actshared=match actshared=explain actshared=include actshared=highlight
     thing=article thing=essay thing=paper thing=story thing=tale thing=narrative thing=page thing=chapter
     thing=section thing=part thing=paragraph thing=para thing=paras thing=sentence thing=word thing=term
