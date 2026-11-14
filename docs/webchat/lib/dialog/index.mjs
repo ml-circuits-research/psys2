@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { installTextGen } from './textgen.mjs?v=d19c62ab6d';
+import { installTextGen } from './textgen.mjs?v=f341e11a13';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=6a1453c398';
 import { loadWorlds } from '../worlds/index.mjs?v=a56b7c0a0f';
 import { validateWorldSet } from '../worlds/validate.mjs?v=b422872e56';
