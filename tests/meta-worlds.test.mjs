@@ -52,12 +52,6 @@ test('every vote has its rule and a reason in plain words', () => {
   for (const x of r.ranked[0].reasons) { assert.ok(x.rule && x.say && !/[{}?]/.test(x.say), x.say); }
 });
 
-test('naming a world: a message that names the chess game is for chess whatever tab is open', () => {
-  const d = mw.decide({ text: 'rotate the chess board', live: live({ active: 'art.draw' }) });
-  assert.equal(d.world, 'games.chess');
-  assert.match(d.ranked[0].reasons[0].say, /named the chess/);
-});
-
 test('a referent in a scene is strong evidence: "the crocodiles" on another tab are the drawing\'s', () => {
   const d = mw.decide({ text: 'move the crocodiles', live: live({ active: 'games.chess', scene: { 'art.draw': ['crocodile', 'house'] } }) });
   assert.equal(d.world, 'art.draw');
@@ -77,16 +71,6 @@ test('SCENE-NATURAL P1 is the first rule set: a piece without a verb continues t
   assert.ok(!r2.blocked['diagram.sketch']);
   // nothing said before: nothing to continue, nothing is blocked
   assert.equal(Object.keys(mw.route({ text: 'the water', catalog: ['water'], live: live({ active: 'art.draw' }) }).blocked).filter((x) => !x.startsWith('games.')).length, 0);
-});
-
-test('a world that needs something running cannot take a message that does not start it, and no encoder prior outvotes a block', () => {
-  const l = live({ active: 'art.draw' });
-  const move = mw.route({ text: 'knight to f3', live: l, prior: { 'games.chess': 1 } });
-  assert.ok(move.blocked['games.chess']?.some((b) => b.rule === 'notrunning'));
-  assert.ok(!move.ranked.some((x) => x.world === 'games.chess'), 'blocked, so not in the ranking, whatever the prior says');
-  assert.ok(!mw.route({ text: 'knight to f3', live: live({ active: 'art.draw', running: ['games.chess'] }) }).blocked['games.chess']);
-  assert.ok(!mw.route({ text: 'let us play chess', live: l }).blocked['games.chess'], 'a message that names or starts it is not blocked');
-  assert.ok(!mw.route({ text: 'e4', live: live() }).blocked['games.chess'], 'with no tab open a move is how a game starts');
 });
 
 test('the encoder is one prior with a weight: it adds, and it never reaches a referent', () => {

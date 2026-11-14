@@ -7,7 +7,7 @@ import { addArgs, tOf } from './hooks.mjs';
 import { goalOf, goalFromText, goalWord, goalWords, layoutGoal, liveOf, whyPlan as whyOfPlan } from './plan.mjs';
 
 export { initialState, summary } from './engine.mjs';
-/** Other worlds ask the board by its old action names: Talk draws with draw.add, the chess tab and Talk undo with draw.undo, the tab has "new" and "open". */
+/** Other worlds ask the board by its old action names: Talk draws with draw.add, Talk undo with draw.undo, the tab has "new" and "open". */
 export const add = D.add;
 export const drawUndo = D.undo;
 export const drawRedo = D.redo;

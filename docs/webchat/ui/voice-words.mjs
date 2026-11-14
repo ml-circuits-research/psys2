@@ -23,7 +23,7 @@ export const SOURCE = Object.freeze({
   commandVerbs: ['draw', 'make', 'add', 'put', 'move', 'delete', 'remove', 'show', 'open', 'close', 'play', 'start', 'set', 'change', 'turn', 'go', 'find', 'search', 'tell', 'give', 'create', 'write', 'rename', 'select', 'undo', 'redo', 'clear', 'erase', 'paint', 'color', 'fill', 'rotate', 'resize', 'zoom', 'list', 'display', 'become', 'sing', 'stop', 'next', 'cancel', 'please', 'switch', 'pick', 'choose', 'guess', 'read', 'say'],
   fragments: ['a', 'an', 'the', 'this', 'that', 'these', 'those', 'it', 'he', 'she', 'we', 'they', 'you', 'i', 'me', 'my', 'is', 'are', 'was', 'be', 'do', 'does', 'did', 'to', 'of', 'in', 'on', 'at', 'for', 'and', 'or', 'but', 'so', 'if', 'where', 'which', 'there', 'here', 'well', 'yes', 'no', 'ok', 'sure'],
   knownOneWord: ['undo', 'redo', 'help', 'next', 'back', 'again', 'reset', 'clear', 'pause', 'resume'],
-  nouns: ['house', 'heart', 'tree', 'sun', 'cloud', 'fish', 'flower', 'map', 'music', 'song', 'chess', 'game', 'hangman', 'diagram', 'chart', 'document', 'title', 'chapter', 'robot', 'avatar', 'circle', 'square', 'triangle', 'animal', 'cow'],
+  nouns: ['house', 'heart', 'tree', 'sun', 'cloud', 'fish', 'flower', 'map', 'music', 'song', 'game', 'diagram', 'chart', 'document', 'title', 'chapter', 'robot', 'avatar', 'circle', 'square', 'triangle', 'animal', 'cow'],
 });
 /** The lists whose translated entries are matched on a word stem (inflected languages), not only exactly. */
 const STEMMED = new Set(['commandVerbs', 'nouns', 'openVerbs']);

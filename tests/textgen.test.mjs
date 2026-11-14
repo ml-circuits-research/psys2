@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// Summary and composition (specs/26): the adapters, the commands readable through docs.reader, and the plain decline while the library has no std.summarize / std.compose.
+// Summary and composition (specs/26): the adapters, the commands readable through docs.editor (the Documents tab), and the plain decline while the library has no std.summarize / std.compose.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as lib from '../src/vendor/sopworld/sopworld.mjs';
@@ -66,7 +66,7 @@ test('a type is composed by the book when the knowledge holds its genre (k.genre
 });
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
-const docs = () => { const s = engine.createSession({ language: 'en' }); s.setWorldState('ui.shell', { activeTab: 'documents' }); return s; };
+const docs = () => { const s = engine.createSession({ language: 'en' }); s.setWorldState('ui.shell', { activeTab: 'editor' }); return s; };
 
 test('while the adapter has no composer the commands decline plainly', async () => {
   installTextGen({}, null);
@@ -82,8 +82,10 @@ test('std.summarize (real library): pasted text and the open document are summar
     const s = docs();
     const t = await s.send('summarize the following: Volcanoes form where hot rock reaches the surface. Magma rises through cracks. Volcanoes can erupt for years. Some volcanoes are under the sea. Ash can travel around the world.');
     assert.match(t.text, /^In short: .*Volcanoes/);
+    assert.match((await s.send('condense the document')).text, /no document open/);
+    await s.send('add a paragraph: Volcanoes form where hot rock reaches the surface. Magma rises through cracks. Volcanoes can erupt for years. Some volcanoes are under the sea. Ash can travel around the world.');
     const d = await s.send('condense the document');
-    assert.match(d.text, /^In short: /); assert.match(d.text, /\(sentences? \d/);
+    assert.match(d.text, /^In short: .*[Vv]olcano/);
   } finally { delete globalThis[TEXTGEN_GLOBAL]; }
 });
 
@@ -93,10 +95,11 @@ test('with the real composer the essay commands write a new document that keeps 
     const s = docs();
     const r = await s.send('write an essay about penguin with 1 chapters of 1 subchapters, about 40 words');
     assert.match(r.text, /I wrote the essay "All about the penguin"/);
-    const w = s.state()['docs.reader'];
-    const d = w.docs.find((x) => x.id === w.active);
-    assert.equal(d.origin, 'composed'); assert.ok(Object.keys(d.provenance).length >= 1);
-    assert.ok(Object.values(d.provenance).filter(Boolean).every((x) => /^k\.(animals|commonsense|attributes|parts)\./.test(x)), JSON.stringify(d.provenance));
+    const w = s.state()['docs.editor'];
+    assert.equal(w.title, 'All about the penguin');
+    const wires = w.blocks.flatMap((b) => b.from ?? []);
+    assert.ok(wires.length >= 1, 'the paragraphs keep the wires of their claims');
+    assert.ok(wires.every((x) => /^k\.(animals|commonsense|attributes|parts)\./.test(x)), JSON.stringify(wires));
     const a = await s.send('write a composition about anything');
     assert.match(a.text, /I wrote the essay "All about /);
     for (const [text, type] of [['make a presentation about penguin with 5 sections', 'presentation'], ['write a report about owl', 'report']]) {
@@ -108,12 +111,11 @@ test('with the real composer the essay commands write a new document that keeps 
   } finally { delete globalThis[TEXTGEN_GLOBAL]; }
 });
 
-test('arbitration: the open editor tab owns "write a report ..."; the reader yields without a composer and stays out of another tab with one', async () => {
-  const ed = () => { const s = engine.createSession({ language: 'en' }); s.setWorldState('ui.shell', { activeTab: 'editor' }); return s; };
-  delete globalThis[TEXTGEN_GLOBAL];
-  assert.doesNotMatch((await ed().send('Write a report about sea animals')).text, /cannot write compositions/);
+test('arbitration: "write a report about ..." on the Documents tab is the composition (the animal report of the editor went with the cut); without a composer it declines plainly', async () => {
+  installTextGen({}, null);
+  assert.match((await docs().send('Write a report about sea animals')).text, /cannot write compositions yet/);
   installTextGen(lib, null);
-  try { assert.doesNotMatch((await ed().send('Write a report about sea animals')).text, /I wrote the report/); } finally { delete globalThis[TEXTGEN_GLOBAL]; }
+  try { assert.match((await docs().send('Write a report about owl')).text, /I wrote the report/); } finally { delete globalThis[TEXTGEN_GLOBAL]; }
 });
 
 // ---- the measurement (reviewer 14:45 item 3, summaries): owner-log b and c replayed; the paragraph names every world used and every taught fact in at most 3 sentences

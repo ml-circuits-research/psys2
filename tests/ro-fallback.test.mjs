@@ -43,9 +43,7 @@ for (const reasoner of ['matrix', 'ops']) {
     const s = await session(tr, reasoner);
     await s.send('mă cheamă Ana', { language: 'ro' }).catch(() => {});
     for (const [msg, re, en] of [
-      ['câți ani am?', /age|ani|vârst/i, 'How old am I?'],
       ['cum mă numesc?', /./, 'What is my name?'],
-      ['deschide jocul de ghicit', /Ghicește/, 'Open the guess the animal tab.'],
       ['e ora 25', /oră|ora/i, "It is 25 o'clock."],
       ['deschide magazinul', /cumpărături/, 'Open the shopping list.'],
     ]) {
@@ -106,7 +104,7 @@ test('input: a Translator that is absent, switched off, wrong or late leaves the
 test('input: a second reading that is no better is dropped and the session is as the first reading left it', async () => {
   const tr = mk(weakRules(), backendOf(async () => 'Qwerty zxcv blorp.'));
   const s = await session(tr);
-  const r = await s.send('câți ani am?', { language: 'ro' });
+  const r = await s.send('cum mă numesc?', { language: 'ro' });
   assert.notEqual(r.trace.via, 'translator-in');
   assert.equal(r.lang, 'ro');
   assert.equal(s._msg, 1);

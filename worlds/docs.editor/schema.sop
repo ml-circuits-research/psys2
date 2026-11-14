@@ -12,7 +12,6 @@
     own=whatIs:doc.whatIs
     own=say:doc.say
     own=fromList:doc.fromList
-    own=report:doc.report
     own=whatSelected:doc.whatSelected
     own=fillTable:doc.fillTable
     own=checkTask:doc.checkTask
@@ -27,6 +26,8 @@
     own=view:docs.editor.view
     own=adopt:docs.editor.adopt
     own=makeDocument:doc.make
+    own=digest:doc.digest
+    own=compose:doc.compose
     sample=document
     list=yes
     say=yes

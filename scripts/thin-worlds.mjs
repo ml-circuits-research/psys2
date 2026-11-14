@@ -83,7 +83,7 @@ export function verdictOf(cls, id, file) {
 /** One row per tab world: counts, imports, reuse, verdict per part. `worlds` is collectWorlds().worlds (group, reuse); `ids` limits the list. */
 export function thinRows(worlds, ids) {
   const cls = classes();
-  const BUILTIN_TABS = ['docs.editor', 'games.guess', 'games.hangman', 'games.tictactoe'];   // tabs the shell declares itself (worlds/ui.shell/ops.mjs)
+  const BUILTIN_TABS = ['docs.editor'];   // tabs the shell declares itself (worlds/ui.shell/ops.mjs)
   const tabs = ids ?? [...BUILTIN_TABS, ...readdirSync(join(REPO, 'worlds')).filter((d) => existsSync(join(REPO, 'worlds', d, 'world.sop')) && /^\s+tab=/m.test(readFileSync(join(REPO, 'worlds', d, 'world.sop'), 'utf8')))];
   if (!tabs.includes('ui.avatar') && existsSync(join(REPO, 'worlds/ui.avatar'))) tabs.push('ui.avatar');   // an icon with a popup, not a tab, but a live world with a face
   return tabs.sort().map((id) => {

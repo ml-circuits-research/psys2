@@ -213,22 +213,22 @@ export const SCENARIOS = {
       check('busy: 0 console errors', c.consoleErrors.length === 0 && c.errors.length === 0, [...c.consoleErrors, ...c.errors][0] ?? '');
     } finally { await c.close(); }
   },
-  async busyChess(o) {
+  async busyDraw(o) {
     const c = await openChat({ ...o, settings: { formalizer: 'rules', normalizer: false, showTrace: false } });
     try {
-      await c.pg.evaluate(() => window.psys2.showTab('chess'));
-      // the engine thinks: a slow chess.engine.bestmove effect
-      await c.pg.type('input.p2-text', 'new chess game', { delay: 0 }); await c.pg.keyboard.press('Enter');
+      await c.pg.evaluate(() => window.psys2.showTab('draw'));
+      // a slow turn on the Drawing tab (the session answers late)
+      await c.pg.type('input.p2-text', 'draw a cat', { delay: 0 }); await c.pg.keyboard.press('Enter');
       await c.pg.waitForFunction(() => !window.psys2.busy, { timeout: 12000, polling: 50 });
       await c.pg.evaluate(() => { const s = window.psys2.session; if (!s.__orig) s.__orig = s.send.bind(s); s.send = async (...a) => { const r = await s.__orig(...a); await new Promise((x) => setTimeout(x, 1500)); return r; }; });
-      await c.pg.type('input.p2-text', 'e4', { delay: 0 }); await c.pg.keyboard.press('Enter');
+      await c.pg.type('input.p2-text', 'draw a red house', { delay: 0 }); await c.pg.keyboard.press('Enter');
       await c.pg.waitForFunction(() => window.psys2.veiled, { timeout: 5000, polling: 20 });
-      const mid = await c.pg.evaluate(() => { const p = document.querySelector('#p2-panel-chess'); return { veil: p.classList.contains('is-busy'), inert: p.inert }; });
-      check('busy: chess panel is veiled and inert while the move is processed', mid.veil && mid.inert, JSON.stringify(mid));
+      const mid = await c.pg.evaluate(() => { const p = document.querySelector('#p2-panel-draw'); return { veil: p.classList.contains('is-busy'), inert: p.inert }; });
+      check('busy: drawing panel is veiled and inert while the turn is processed', mid.veil && mid.inert, JSON.stringify(mid));
       await c.pg.evaluate(() => window.psys2.stop());
       await new Promise((r) => setTimeout(r, 120));
-      check('busy: Stop lifts the chess veil at once', !(await c.pg.evaluate(() => window.psys2.veiled)));
-      check('busy: chess 0 console errors', c.consoleErrors.length === 0 && c.errors.length === 0, [...c.consoleErrors, ...c.errors][0] ?? '');
+      check('busy: Stop lifts the drawing veil at once', !(await c.pg.evaluate(() => window.psys2.veiled)));
+      check('busy: drawing 0 console errors', c.consoleErrors.length === 0 && c.errors.length === 0, [...c.consoleErrors, ...c.errors][0] ?? '');
     } finally { await c.close(); }
   },
 };
@@ -237,7 +237,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const argv = process.argv.slice(2);
   const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 ? argv[i + 1] : d; };
   const o = { throttle: Number(opt('throttle', 4)), chrome: opt('chrome'), random: Number(opt('random', 200)), seed: Number(opt('seed', 7)) };
-  const only = opt('only', 'repro,stop,enter,watchdog,random,busy,busyChess').split(',');
+  const only = opt('only', 'repro,stop,enter,watchdog,random,busy,busyDraw').split(',');
   for (const name of only) { console.log(`\n== ${name} (cpu ${o.throttle}x)`); try { await SCENARIOS[name](o); } catch (e) { check(`${name}: scenario ran`, false, e.message); } }
   const failed = results.filter((r) => !r.ok).length;
   console.log(`\n${results.length - failed}/${results.length} checks passed`);

@@ -25,7 +25,7 @@ const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ?
 const per = Number(arg('per', 25)), seed0 = Number(arg('seed', 1)), only = arg('world', null), outFile = arg('out', null);
 const REFUSAL = /did not understand|did not catch|I can't find|I can not find|I cannot|There is no|Where should it go|is empty|not sure how|I do not know|Something went wrong|nothing to|not possible|can't do/i;
 // The state a change is judged by: every world's state except the conversation's own bookkeeping (the turn log, the dialogue focus, the shell, the speech settings), which changes on every turn whatever was said.
-const META = new Set(['session.conversation', 'session.dialogue', 'ui.shell', 'talk', 'ui.help', 'user.profile', 'meta.worlds', 'session.things']);
+const META = new Set(['session.conversation', 'session.dialogue', 'ui.shell', 'talk', 'ui.help', 'meta.worlds', 'session.things']);
 const stateOf = (s) => JSON.stringify(Object.fromEntries(Object.entries(s.state() ?? {}).filter(([k]) => !META.has(k))));
 const CHANGES = new Set(['make', 'remove', 'change', 'copy', 'undo', 'redo']);
 

@@ -58,10 +58,6 @@
     for=action.talk.drawn
     text="{value}"
 
-@tpl.talk.moves core.template
-    for=action.talk.moves
-    text="{value}"
-
 @tpl.talk.undo core.template
     for=action.talk.undo
     text="{value}"

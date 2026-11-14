@@ -118,12 +118,6 @@ test('what kind of thing: a tree from the is-a facts; session cards say "nothing
   const f = s.state('talk').cards.at(-1);
   assert.equal(f.kind, 'facts');
   assert.ok(factsHtml(f).includes('tree'));
-  tab(s, 'chess');
-  await s.send('e4'); await s.send('knight to f6');
-  tab(s, 'talk');
-  r = await s.send('How many moves did I make in chess?');
-  assert.match(r.text, /You made [12] moves? in chess/);
-  assert.equal(s.state('talk').cards.at(-1).kind, 'icons');
   assert.doesNotMatch(drawingSvg([{ name: 'a', shape: 'circle', x: 0, y: 0, w: 5, h: 5, colour: ['red'] }]), /<script/);
 });
 

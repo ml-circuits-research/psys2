@@ -86,24 +86,6 @@
     expect="circle"
     session=a
 
-@t.ui.help.n16 core.test
-    input="How do I play?"
-    expect="There is no game open on the Talk tab"
-    expect="hangman"
-    session=a
-
-@t.ui.help.n17 core.test
-    input="How do I play chess?"
-    expect="Chess:"
-    expect="knight to f3"
-    session=a
-
-@t.ui.help.n18 core.test
-    input="What are the rules of tic tac toe?"
-    expect="Tic-tac-toe:"
-    expect="Three in a row"
-    session=a
-
 @t.ui.help.n19 core.test
     input="Why did you not understand?"
     expect="I have understood everything"
@@ -129,12 +111,6 @@
     expectEffect=chat.suggest
     session=a2
 
-@t.ui.help.n22b core.test
-    input="Hangmn"
-    expect="let's play hangman"
-    expectStatus=supported
-    session=sp1
-
 @t.ui.help.n23 core.test
     input="What did I do wrong?"
     expect="Did you mean"
@@ -147,125 +123,23 @@
 
 @t.ui.help.n25 core.test
     input="What can I say here?"
-    expect="On the Editor tab"
+    expect="On the Documents tab"
     session=b
 
 @t.ui.help.n26 core.test
     input="What can I do on this tab?"
-    expect="On the Editor tab"
+    expect="On the Documents tab"
     session=b
 
 @t.ui.help.n27 core.test
     input="What does this tab do?"
-    expect="The Editor tab lets you edit documents"
+    expect="The Documents tab lets you edit documents"
     session=b
 
 @t.ui.help.n28 core.test
     input="Help me"
-    expect="The Editor tab lets you edit documents"
+    expect="The Documents tab lets you edit documents"
     session=b
-
-@t.ui.help.n30 core.test
-    input="Open the hangman tab"
-    expectState="ui.shell:activeTab=hangman"
-    session=c
-
-@t.ui.help.n31 core.test
-    input="How do I play?"
-    expect="Hangman:"
-    expect="No game is running yet"
-    session=c
-
-@t.ui.help.n32 core.test
-    input="Play hangman with the word zebra"
-    expect="Hangman"
-    expectState="games.hangman:word=zebra"
-    session=c
-
-@t.ui.help.n33 core.test
-    input="Is there an E?"
-    expect="Yes"
-    session=c
-
-@t.ui.help.n34 core.test
-    input="How do I play?"
-    expect="Hangman:"
-    expect="Right now the word looks like"
-    expect="- e - - -"
-    expect="6 wrong guesses left"
-    session=c
-
-@t.ui.help.n35 core.test
-    input="What can I say here?"
-    expect="On the Hangman tab"
-    session=c
-
-@t.ui.help.n36 core.test
-    input="What does this tab do?"
-    expect="The Hangman tab lets you play hangman"
-    expect="Right now the word looks like"
-    session=c
-
-@t.ui.help.n37 core.test
-    input="How do I play tic tac toe?"
-    expect="Tic-tac-toe:"
-    session=c
-
-@t.ui.help.n38 core.test
-    input="What are the rules?"
-    expect="Hangman:"
-    session=c
-
-@t.ui.help.n39 core.test
-    input="Open the tic tac toe tab"
-    expectState="ui.shell:activeTab=tictactoe"
-    session=d
-
-@t.ui.help.n40 core.test
-    input="What can I say here?"
-    expect="On the Tic-tac-toe tab"
-    session=d
-
-@t.ui.help.n41 core.test
-    input="How do I play?"
-    expect="Tic-tac-toe:"
-    expect="You play X"
-    session=d
-
-@t.ui.help.n42 core.test
-    input="Open the guess tab"
-    expectState="ui.shell:activeTab=guess"
-    session=d
-
-@t.ui.help.n43 core.test
-    input="How do I play?"
-    expect="twenty yes/no questions"
-    session=d
-
-@t.ui.help.n44 core.test
-    input="What can I say here?"
-    expect="On the Guess the animal tab"
-    session=d
-
-@t.ui.help.n45 core.test
-    input="Open the chess board"
-    expectState="ui.shell:activeTab=chess"
-    session=e
-
-@t.ui.help.n46 core.test
-    input="What can I say here?"
-    expect="On the Chess tab"
-    session=e
-
-@t.ui.help.n47 core.test
-    input="How do I play?"
-    expect="Chess:"
-    session=e
-
-@t.ui.help.n48 core.test
-    input="What does this tab do?"
-    expect="The Chess tab lets you play chess"
-    session=e
 
 @t.ui.help.r01 core.test
     input="examples pls"
@@ -297,26 +171,6 @@
     input="tell me what you can do"
     expect="I can chat"
     session=rh3
-
-@t.ui.help.r07 core.test
-    input="chess rules pls"
-    expect="Chess:"
-    session=rh4
-
-@t.ui.help.r08 core.test
-    input="how u play chess"
-    expect="Chess:"
-    session=rh4
-
-@t.ui.help.r09 core.test
-    input="could you explain how i play tic tac toe"
-    expect="Tic-tac-toe:"
-    session=rh4
-
-@t.ui.help.r10 core.test
-    input="how do i play twenty questions"
-    expect="twenty yes/no questions"
-    session=rh4
 
 @t.ui.help.r11 core.test
     input="im lost"
@@ -415,16 +269,6 @@
     expect="dispatcher"
     session=hid9
 
-@t.ui.help.gaps1 core.test
-    input="what are tic tac toe's rules"
-    expect="Three in a row wins"
-    doc="GAPS-1"
-
-@t.ui.help.gaps2 core.test
-    input="what are hangman's rules"
-    expect="secret word"
-    doc="GAPS-1"
-
 @t.ui.help.area1 core.test
     input="What can you do in the map?"
     expect="To show places on a map, you can say, for example:"
@@ -434,11 +278,6 @@
 @t.ui.help.area2 core.test
     input="What can I do with charts?"
     expect="To draw charts, you can say, for example:"
-    expectStatus=supported
-
-@t.ui.help.area3 core.test
-    input="What can you do on the chess tab?"
-    expect="To play chess, you can say, for example:"
     expectStatus=supported
 
 @t.ui.help.area4 core.test

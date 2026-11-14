@@ -443,7 +443,7 @@
 @core.world.tab core.key
     value=atom
     card=one
-    ask="Which tab does the world show in the app (an id such as chess)?"
+    ask="Which tab does the world show in the app (an id such as draw)?"
 
 @core.world.tabTitle core.key
     value=string

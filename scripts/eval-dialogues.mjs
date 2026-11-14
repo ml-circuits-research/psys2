@@ -54,7 +54,7 @@ export function pathKnown(state, path) {
     const key = m ? m[1] : part;
     if (Array.isArray(v)) { if (key === 'length' || /^\d+$/.test(key)) { v = key === 'length' ? 0 : v[Number(key)]; if (v === undefined) return true; continue; } return false; }
     if (!isObj(v)) return false;
-    if (!(key in v)) return Object.keys(v).length === 0;   // a key of an empty map is dynamic content (user.profile fields.name), anything else is a typo
+    if (!(key in v)) return Object.keys(v).length === 0;   // a key of an empty map is dynamic content (a world's own map), anything else is a typo
     v = v[key];
     if (m) { if (!Array.isArray(v)) return false; v = v[0] ?? undefined; if (v === undefined) return true; }
   }

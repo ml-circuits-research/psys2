@@ -30,8 +30,8 @@ const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 &
 const flag = (k) => process.argv.includes(`--${k}`);
 const L = (f) => readFileSync(join(REPO, f), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
 const rng = (seed) => () => { seed |= 0; seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-const HOLDOUT = ['art.draw', 'diagram.sketch', 'geo.map', 'games.chess'];
-const ENCODER_CKPT_NOTE = 'training/runs/dispatcher-v5s2-c3265 (21 worlds incl. diagram.sketch; none of talk, user.profile)';
+const HOLDOUT = ['art.draw', 'diagram.sketch', 'geo.map', 'media.music'];
+const ENCODER_CKPT_NOTE = 'training/runs/dispatcher-v5s2-c3265 (21 worlds incl. diagram.sketch; none of talk)';
 
 async function makeEngine() {
   return createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });
@@ -102,7 +102,7 @@ async function build(dir) {
     const R = rng(20261113);
     const worlds = engine.set.list().filter((w) => w.patterns?.length && !['kids.common', 'meta.worlds'].includes(w.id));
     const tabs = engine.set.list().filter((w) => w.tab).map((w) => w.tab.id).concat(['robot', 'editor', 'tictactoe', 'guess', 'hangman']);
-    const ownTab = (w) => w.tab?.id ?? ({ 'ui.avatar': 'robot', 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' })[w.id] ?? null;
+    const ownTab = (w) => w.tab?.id ?? ({ 'ui.avatar': 'robot', 'docs.editor': 'editor' })[w.id] ?? null;
     const per = Math.floor(160 / worlds.length), extra = 160 - per * worlds.length;
     let n = 0;
     for (const [wi, w] of worlds.entries()) {

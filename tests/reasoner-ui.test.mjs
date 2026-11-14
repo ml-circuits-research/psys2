@@ -53,17 +53,14 @@ test('ui.shell: a tab that does not exist is refused by the rules with the reaso
   assert.equal(guard(m, 'ui.shell', 'ui.openTab', { tab: 'weather' }).reason, 'unknown_argument');
 });
 
-test('ui.shell: the language, the Settings tab, the game and "go back" are asked to the rules, with the operations\' sentences', async () => {
+test('ui.shell: the language, the Settings tab and "go back" are asked to the rules, with the operations\' sentences', async () => {
   const s = session(matrix);
   assert.equal(guard(s, 'ui.shell', 'ui.language', { lang: 'french' }).note, 'I do not speak french yet.');
   assert.equal(guard(s, 'ui.shell', 'ui.language', { lang: 'romanian' }), null);
   assert.equal(guard(s, 'ui.shell', 'ui.settings', { what: 'open', tab: 'colors' }).note, 'I do not have a settings tab called colors. The tabs are Understanding, Language, Voice, Phrase log, Models, Developer and About.');
   assert.equal(guard(s, 'ui.shell', 'ui.settings', { what: 'open', tab: 'speech' }), null);
   assert.equal(guard(s, 'ui.shell', 'ui.back', {}).note, 'There is no previous tab to go back to.');
-  assert.equal(guard(s, 'ui.shell', 'ui.newGame', {}).note, 'There is no game open on the Talk tab. You can say, for example, "let\'s play hangman".');
-  assert.equal(guard(s, 'ui.shell', 'ui.hint', {}).status, 'missing');
-  await say(s, ["Let's play hangman"]);
-  assert.equal(guard(s, 'ui.shell', 'ui.newGame', {}), null, 'the hangman tab has a game');
+  await say(s, ['Open the charts tab']);
   assert.equal(guard(s, 'ui.shell', 'ui.back', {}), null, 'there is a tab to go back to now');
 });
 
@@ -95,13 +92,13 @@ test('ui.shell: a tab another world brings forward is not a step of that world\'
 
 test('ui.shell: a host click on a tab (setWorldState) is taken over without being a step; "undo that" does not undo it', async () => {
   const s = session(matrix);
-  s.setWorldState('ui.shell', { activeTab: 'tictactoe', handsFree: true });
+  s.setWorldState('ui.shell', { activeTab: 'charts', handsFree: true });
   await say(s, ['How many legs does a spider have?']);
   const v = s.isession.rs.of('ui.shell').ofType('ui.shell.view')[0];
-  assert.equal(v.attrs.tab[0], 'tictactoe');
+  assert.equal(v.attrs.tab[0], 'charts');
   assert.equal(v.attrs.handsfree[0], 'true');
   const u = await say(s, ['undo that']);
-  assert.equal(s.isession.state['ui.shell'].activeTab, 'tictactoe');
+  assert.equal(s.isession.state['ui.shell'].activeTab, 'charts');
   assert.ok(u[0].text.length > 0);
   s.setWorldState('ui.shell', { activeTab: 'avatar' });
   await say(s, ['How many legs does a dog have?']);
@@ -109,7 +106,7 @@ test('ui.shell: a host click on a tab (setWorldState) is taken over without bein
 });
 
 test('ui.shell: ops and matrix say the same on a scripted session (words, statuses, state), except the sentences the rules say', async () => {
-  const lines = ['Which tab am I on?', 'Open the editor.', 'Go back.', 'speak faster', 'speak faster', 'speak faster', 'speak faster', 'turn the speaker on', "Let's play hangman", 'New game', 'Give me a hint', 'Show me the settings'];
+  const lines = ['Which tab am I on?', 'Open the editor.', 'Go back.', 'speak faster', 'speak faster', 'speak faster', 'speak faster', 'turn the speaker on', 'Open the map', 'Go back', 'Show me the settings'];
   const a = session(matrix), b = session(ops);
   const ra = await say(a, lines), rb = await say(b, lines);
   assert.deepEqual(ra, rb);
@@ -145,7 +142,6 @@ test('ui.help: "what can you do in the map?" is answered from the knowledge base
   assert.equal(a.text, 'To show places on a map, you can say, for example: "Show latitude 48.8 longitude 2.3", "Is Paris the capital of France" or "Zoom all the way out".');
   assert.deepEqual(a, b);
   assert.equal(a.statuses[0], 'supported');
-  assert.equal((await say(m, ['what can I do with the chess tab']))[0].text.startsWith('To play chess, you can say, for example: "'), true);
   assert.equal((await say(m, ['What can you do in the avatar area?']))[0].text.startsWith('To change my face, you can say'), true);
   const areas = m.isession.rs.of('ui.help').ofType('ui.help.area');
   assert.ok(areas.length > 40, 'the areas are wires of the help instance');

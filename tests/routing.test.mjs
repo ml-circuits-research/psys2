@@ -99,31 +99,6 @@ test('tier 1: modal input is reported as the deciding tier in the trace', async 
   if (r.trace.intercepted) assert.equal(r.trace.routing[0].tier, 1);
 });
 
-test('"Play B3" is a move on the tic-tac-toe tab and a note on the music tab', async () => {
-  const ttt = await onTab('tictactoe', 'Play B3');
-  assert.equal(ttt.d.winner.worldId, 'games.tictactoe'); assert.equal(ttt.d.tier, 3);
-  assert.equal(ttt.d.runnerUp.worldId, 'media.music');
-  const mus = await onTab('music', 'Play B3');
-  assert.equal(mus.d.winner.worldId, 'media.music'); assert.equal(mus.d.tier, 3);
-  assert.equal(mus.d.runnerUp.worldId, 'games.tictactoe');
-});
-
-test('"Repeat that" goes to the open tab: music replays, twenty questions repeats the question', async () => {
-  assert.equal((await onTab('music', 'Repeat that')).d.winner.worldId, 'media.music');
-  const g = await onTab('guess', 'Repeat that');
-  assert.equal(g.d.winner.worldId, 'games.guess'); assert.equal(g.d.tier, 3);
-});
-
-test('"Start over" restarts the game of a game tab and resets the robot on the robot tab', async () => {
-  const t = await onTab('tictactoe', 'Start over');
-  assert.equal(t.d.winner.patternId, 'pat.ui.shell.new'); assert.equal(t.d.tier, 3);
-  assert.match(t.r.text, /New game of tic-tac-toe/);
-  const h = await onTab('hangman', 'Start over');
-  assert.equal(h.d.winner.patternId, 'pat.ui.shell.new');
-  const rb = await onTab('robot', 'Start over');
-  assert.equal(rb.d.winner.worldId, 'ui.avatar'); assert.equal(rb.d.tier, 3);
-});
-
 test('"Make it bigger" is a drawing command on the drawing tab, not a map zoom', async () => {
   const d = await onTab('draw', 'Make it bigger');
   assert.equal(d.d.winner.worldId, 'art.draw'); assert.equal(d.d.tier, 3);

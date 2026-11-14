@@ -89,14 +89,6 @@ test('a pending expectation expires after one turn and yields to a full command'
   assert.notEqual(s.state('art.draw').objects.at(-1).kind, 'cat');
 });
 
-test('bare "Draw": the drawing tab keeps it, elsewhere it stays the chess draw offer', async () => {
-  const a = engine.createSession({ language: 'en' });
-  await a.send('open the drawing tab');
-  assert.equal((await a.send('Draw')).segments[0].match.worldId, 'art.draw');
-  const b = engine.createSession({ language: 'en' });
-  assert.equal((await b.send('Draw')).segments[0].match.worldId, 'games.chess');
-});
-
 test('coordination distributes the verb over a noun phrase another world would claim', async () => {
   const s = engine.createSession({ language: 'en' });
   await s.send('open the robot tab');

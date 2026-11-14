@@ -140,11 +140,6 @@
     expect="I don't know who Rex is yet. You can tell me: My dog is called Rex."
     doc="rule sweep probe: seek=kind"
 
-@t.animals.s108 core.test
-    input="what is a baby cow called and what is it?"
-    expect="You are white. You have king on e1, queen on d1, rooks on a1 and h1, bishops on c1 and f1, knights on b1 and g1, eight pawns on the second rank. I have king on e8, queen on d8, rooks on a8 and h8, bishops on c8 and f8, knights on b8 and g8, eight pawns on the seventh rank."
-    doc="rule sweep: heldout wording that the rules did not read before"
-
 @t.animals.s126 core.test
     input="My dog is called Rex. whats my pets name"
     expect="Your pet is called Rex."

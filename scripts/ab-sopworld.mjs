@@ -35,7 +35,7 @@ const IDS = arg('ids') ? new Set(arg('ids').split(',')) : null;   // only these 
 const DATE = new Date().toISOString().slice(0, 10);
 const jsonl = (f) => readFileSync(f, 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l));
 const E = (f) => join(REPO, 'training/eval', f);
-const FOUR = new Set(['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe']);
+const FOUR = new Set(['kids.shop', 'kids.arith', 'kids.tasks']);
 const RANK = { right: 3, partly: 2, not_understood: 1, wrong: 0 };
 
 const settings = settingsForMode('rules');

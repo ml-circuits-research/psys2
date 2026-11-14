@@ -9,7 +9,6 @@ import { h } from './ui/util.mjs';
 import { createInputHistory } from './ui/input-history.mjs';
 import { createAvatar } from './ui/avatar.mjs';
 import { createEditor } from './ui/editor.mjs';
-import { createTicTacToe, createGuess, createHangman } from './ui/games.mjs';
 import { createSpeech, createMicLock, measureSpeed, speechSupport } from './ui/speech.mjs';
 import { createLanguage, hintText, LANG_TAGS, langName, langTag, tagOf, normalize as normLang } from './ui/language.mjs';
 import { createTranslationLayer, QUALITY_GATE } from './ui/translation-ui.mjs';
@@ -37,13 +36,10 @@ import { snapshotState, describeChanges } from './ui/state-diff.mjs';
 
 const HERE = new URL('.', import.meta.url);
 
-/** The order of the pages (owner, 2026-11-15): Drawing and Diagram first, the rest as listed (the phone menu lists Chat, then these). The avatar is not a tab: it is the icon in the input bar; Talk is not a page: its summary is a panel of the chat. */
-export const TAB_ORDER = ['draw', 'diagram', 'map', 'charts', 'seating', 'timeline', 'documents', 'music', 'editor', 'chess', 'guess', 'hangman', 'tictactoe'];
+/** The order of the pages (owner, 2026-11-15; tab cut ADR-010): Drawing and Diagram first, the rest as listed; Documents is the editor (the phone menu lists Chat, then these). The avatar is not a tab: it is the icon in the input bar; Talk is not a page: its summary is a panel of the chat. */
+export const TAB_ORDER = ['draw', 'diagram', 'map', 'charts', 'seating', 'timeline', 'editor', 'music'];
 export const TABS = [
-  { id: 'editor', label: 'Editor', world: 'docs.editor', make: createEditor },
-  { id: 'tictactoe', label: 'Tic-tac-toe', world: 'games.tictactoe', make: createTicTacToe },
-  { id: 'guess', label: 'Guess the animal', world: 'games.guess', make: createGuess },
-  { id: 'hangman', label: 'Hangman', world: 'games.hangman', make: createHangman },
+  { id: 'editor', label: 'Documents', world: 'docs.editor', make: createEditor },
 ];
 /**
  * Tab plugins (spec 07 §6): every module listed in ui/tabs/index.json (written by scripts/build-webchat.mjs from
@@ -123,7 +119,7 @@ export async function mountPsys2(element, options = {}) {
   const tabKnown = new Set(), tabMade = new Map();   // LAZY LOADING: tab ids whose world exists in this build; tab id -> Promise of its UI (made once)
   /**
    * The tab's UI, made on first use: the tab opens, a message makes its world act, or an effect of the tab arrives. Making it loads the tab's world (the engine adds it) and its vendor assets
-   * (a chess engine, map shapes, the editor, the chart library): none of them is fetched at boot except the open tab's.
+   * (map shapes, the editor, the chart library): none of them is fetched at boot except the open tab's.
    */
   function makeTab(t) {
     if (!tabKnown.has(t.id)) return Promise.resolve(null);
@@ -629,7 +625,7 @@ export async function mountPsys2(element, options = {}) {
     /** Subscribe to busy changes: fn(busy). Returns the unsubscribe function. */
     onBusy: (fn) => { busyListeners.add(fn); return () => busyListeners.delete(fn); },
   };
-  // Effects declared by tab plugins: the tab's UI executes them (a chess engine, a synthesizer, a map...).
+  // Effects declared by tab plugins: the tab's UI executes them (a synthesizer, a map...).
   for (const t of tabDefs) for (const name of [...Object.keys(t.effects ?? {}), ...(t.effectNames ?? [])]) {
     if (!Object.hasOwn(ALLOW, name)) ALLOW[name] = async (args, signal) => { if (!panelUI[t.id]) await makeTab(t); return t.effects[name](args, { ui: panelUI[t.id]?.ui, host: hostApi, signal }); };
   }
@@ -1221,7 +1217,7 @@ export async function mountPsys2(element, options = {}) {
   }
   function disable(btn, why) { btn.disabled = true; label(btn, `${btn.getAttribute('aria-label')} (unavailable: ${why})`); }
   const mobileUA = (() => { try { return navigator.userAgentData?.mobile === true || /Android|iPhone|iPad|Mobi/i.test(navigator.userAgent ?? ''); } catch { return false; } })();
-  const GAME_VIEWS = new Set(['hangman', 'chess', 'tictactoe', 'games', 'guess', 'arith', 'tasks']);
+  const GAME_VIEWS = new Set(['arith', 'tasks']);
   const micLock = options.micLock === false || options.persist === false && options.micLock !== true ? null : createMicLock({ onLost: () => speech?.lost() });   // FREEZE: only one tab listens; without storage (tests) no lock unless asked
   function blockedNote() {
     const m = note(h('span', {}, 'The microphone is in use in another tab — use it here? ', h('button', { class: 'p2-btn-text', type: 'button', onclick: () => { m.msg.remove(); speech.takeOver(); } }, 'Use it here')));

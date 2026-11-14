@@ -14,7 +14,7 @@ const DOC_ICON = '<svg viewBox="0 0 24 32" class="pe-doc-icon" aria-hidden="true
 const plural = (n, w) => `${n} ${n === 1 ? w : `${w}s`}`;
 
 export default {
-  id: 'editor', label: 'Editor', world: 'docs.editor', order: 20,
+  id: 'editor', label: 'Documents', world: 'docs.editor', order: 20,
   make(holder, host) {
     const cssHref = host.asset('ui/tabs/editor/editor.css');
     if (!document.querySelector('link[data-pe-css]')) document.head.append(h('link', { rel: 'stylesheet', href: cssHref, 'data-pe-css': '' }));
@@ -44,7 +44,29 @@ export default {
     const scroll = h('div', { class: 'pe-scroll' }, paper);
     const stats = h('span', {}); const sel = h('span', { class: 'pe-sel-info' }); const prog = h('span', { class: 'pe-progress', hidden: true }); const undo = h('span', {});
     const status = h('div', { class: 'pe-status', role: 'status' }, stats, prog, sel, h('span', { class: 'pe-grow' }), undo);
-    root.append(top, bar.el, bar.menus, h('div', { class: 'pe-body' }, outline, scroll), status);
+    // std.summarize / std.compose (spec 26): the buttons and the form exist only when the library has them; no fallback. Everything goes through the normal command path (the same commands can be typed).
+    const form = h('form', { class: 'pe-compose', hidden: true });
+    const field = (label, name, type, value, extra = {}) => { const i = h('input', { name, type, value, ...extra }); form.append(h('label', { class: 'pe-field' }, h('span', {}, label), i)); return i; };
+    const fType = h('select', { name: 'type' }, ...[['essay', 'Essay'], ['scientific article', 'Scientific article'], ['presentation', 'Presentation'], ['story', 'Story'], ['report', 'Report']].map(([v, l]) => h('option', { value: v }, l)));
+    form.append(h('label', { class: 'pe-field' }, h('span', {}, 'Type'), fType));
+    const fTopic = field('Topic (empty = random)', 'topic', 'text', '', { placeholder: 'volcanoes' });
+    const fCh = field('Chapters', 'chapters', 'number', '3', { min: 1, max: 12 }), fSub = field('Subchapters each', 'subchapters', 'number', '2', { min: 0, max: 6 }), fWords = field('About words', 'words', 'number', '600', { min: 50, max: 5000, step: 50 });
+    form.append(h('button', { class: 'pe-gen', type: 'submit' }, 'Write it'));
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const topic = fTopic.value.trim().replace(/[.,;:!?]+$/, '');
+      const ty = fType.value, unit = ty === 'presentation' ? 'sections' : 'chapters';
+      const subs = Number(fSub.value) > 0 && ty !== 'presentation' && ty !== 'story' ? ` of ${fSub.value} subchapters` : '';
+      host.send(topic ? `write ${/^[aeiou]/.test(ty) ? 'an' : 'a'} ${ty} about ${topic} with ${fCh.value} ${unit}${subs}${subs ? `, about ${fWords.value} words` : ''}` : `write ${/^[aeiou]/.test(ty) ? 'an' : 'a'} ${ty} about anything`);
+      form.hidden = true;
+    });
+    let destroyed = false;
+    host.textGen?.().then((tg) => {
+      if (destroyed) return;
+      if (tg?.summarizer?.available) bar.actions.append(h('button', { class: 'pe-btn pe-gen-btn', type: 'button', title: 'Say: condense the document', onclick: () => host.send('condense the document') }, 'Summarise'));
+      if (tg?.composer?.available) bar.actions.append(h('button', { class: 'pe-btn pe-gen-btn', type: 'button', title: 'Write a document from what I know', onclick: () => { form.hidden = !form.hidden; } }, 'Compose'));
+    }, () => { /* no adapters: nothing is shown */ });
+    root.append(top, form, bar.el, bar.menus, h('div', { class: 'pe-body' }, outline, scroll), status);
     editorEl.append(h('p', {}, 'Loading the editor…'));
 
     // ---- mirrored state ----

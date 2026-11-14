@@ -10,7 +10,7 @@ import { EventLog } from './log.mjs?v=5c1fe52efb';
 import { applyMove } from './moves.mjs?v=69784e24c4';
 
 /** Worlds whose state is the user scope (shared by every discussion, never instanced, never swapped). */
-export const USER_SCOPE = new Set(['ui.shell', 'ui.help', 'kids.common', 'core', 'lang.common', 'user.profile']);
+export const USER_SCOPE = new Set(['ui.shell', 'ui.help', 'kids.common', 'core', 'lang.common']);
 export const STATUSES = ['active', 'suspended', 'completed', 'abandoned'];
 /** How many acts keep their `before` snapshot for undo. */
 export const UNDO_DEPTH = 20;

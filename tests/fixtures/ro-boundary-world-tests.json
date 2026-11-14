@@ -64,27 +64,6 @@
   "expectStatus": "conflicting"
  },
  {
-  "world": "user.profile",
-  "id": "t.user.profile.m19",
-  "session": "pw3",
-  "input": "Locuiesc în Cluj.",
-  "expectState": [
-   "fields.location.v=Cluj"
-  ],
-  "reasoner": "matrix"
- },
- {
-  "world": "user.profile",
-  "id": "t.user.profile.m20",
-  "session": "pw3",
-  "input": "De ce?",
-  "expect": [
-   "Am notat Cluj la",
-   "Locuiesc în Cluj"
-  ],
-  "reasoner": "matrix"
- },
- {
   "world": "kids.shop",
   "id": "t.shop.coh08",
   "session": "coh8",

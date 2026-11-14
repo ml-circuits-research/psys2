@@ -1778,8 +1778,7 @@
 
 @t.art.draw.r2move20 core.test
     input="Move it to the bottom left."
-    expect="We are not playing Tic-tac-toe right now"
-    expectStatus=missing
+    expectStatus=supported
     session=r2move
 
 @t.art.draw.r2move21 core.test
@@ -3675,11 +3674,6 @@
 @t.art.draw.dm302 core.test
     input="Draw a sun."
     expectState="objects.0.kind=sun"
-    session=xmv3
-
-@t.art.draw.dm303 core.test
-    input="Open the chess tab."
-    expect="Chess"
     session=xmv3
 
 @t.art.draw.dm304 core.test

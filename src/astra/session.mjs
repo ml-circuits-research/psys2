@@ -7,7 +7,7 @@ import { runCommand, parseCommand } from './where.mjs';
 import { Agenda, frameFromPending, frameFromModal } from './frames.mjs';
 import { USER_SCOPE } from './registry.mjs';
 
-const BUILTIN_TAB = { 'ui.avatar': 'robot', 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
+const BUILTIN_TAB = { 'ui.avatar': 'robot', 'docs.editor': 'editor' };
 
 /** The Astra of a dialog session: the binding reads `dialog.isession.state` lazily (the session object is replaced by an undo restore). */
 export function createSessionAstra(dialog, { chatKey = 'chat' } = {}) {
@@ -73,7 +73,7 @@ export function mirrorFrames(dialog, { consumed = null, open = null, turn = null
   if (consumed) { const f = ag.frames.find((x) => x.state === 'active' && x.kind === consumed.type && x.question === (consumed.question ?? null)); if (f) ag.complete(f.id); }
   const st = dialog.isession.state;
   for (const w of Object.keys(st)) {
-    if (USER_SCOPE.has(w) && w !== 'user.profile') continue;
+    if (USER_SCOPE.has(w)) continue;
     const spec = frameFromModal(w, st[w], instOf(w));
     const cur = ag.frames.find((x) => x.state !== 'done' && x.state !== 'cancelled' && x.kind === 'mode' && x.world === w);
     if (spec && !cur) ag.push({ ...spec, turn });

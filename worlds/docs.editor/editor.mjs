@@ -1124,7 +1124,7 @@ function _interceptInput(ctx, text) {
   return { handled: true, reply: added ? 'Added.' : '' };
 }
 
-function createDoc(ctx, title, blocks) {
+export function createDoc(ctx, title, blocks) {
   const s = ctx.state;
   commit(s);
   s.title = title; s.titleMarks = []; s.titleAlign = 'left'; s.titleSize = 0; s.blocks = []; s.dictBlock = null; s.selection = null;
@@ -1156,25 +1156,6 @@ function _fromList(ctx, { list }) {
   return ok(`I made a document called "${title}" from your ${key} list: ${entries.length} ${plural(entries.length, 'item')}. It is open in the editor.`, { from: entries.map((w) => w.id) });
 }
 
-
-function _report(ctx, { topic }) {
-  const where = animalFilter(topic);
-  if (!Object.keys(where).length) return no('missing', `I do not know a group of animals called "${String(topic).trim()}". Try sea animals, farm animals, birds or insects.`);
-  const found = askAnimals({ seek: 'matching', where, mode: 'list' });
-  if (found.status !== 'supported' || !found.values?.length) return no('missing', `I do not know any ${String(topic).trim()} in my knowledge base yet.`);
-  const names = found.values;
-  const blocks = [];
-  const group = String(found.note ?? 'animals').replace(/\s*\(.*\)\s*$/, '');
-  blocks.push({ kind: 'paragraph', text: `Here are the ${group}.`, from: found.from ?? [] });
-  blocks.push({ kind: 'list', items: names.map((n) => String(n).replace(/_/g, ' ')), from: found.from ?? [] });
-  for (const name of names.slice(0, 8)) {
-    const d = askAnimals({ seek: 'summary', where: { name } });
-    if (d.status === 'supported' && d.value) blocks.push({ kind: 'paragraph', text: `${cap(an(name))} is ${d.value}`, from: d.from ?? [] });
-  }
-  const title = `Report: ${cap(String(topic).trim())}`;
-  createDoc(ctx, title, blocks);
-  return ok(`I made a report about ${String(topic).trim()} with ${names.length} ${plural(names.length, 'animal')}. It is open in the editor.`, { from: found.from });
-}
 
 function _holdings(ctx, { who }) {
   const spec = String(who).toLowerCase().trim();
@@ -1287,7 +1268,6 @@ export const isEmpty = W(_isEmpty);
 export const dictate = W(_dictate);
 export const dictateStop = W(_dictateStop);
 export const fromList = W(_fromList);
-export const report = W(_report);
 export const holdings = W(_holdings);
 /** Resolve a phrase against a document state (read only): the decline hook of the schema world asks whether the words name a part of the document. */
 export const resolveIn = (state, phrase) => (state?.blocks ? resolve(state, phrase) : { ok: false });

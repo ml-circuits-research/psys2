@@ -34,12 +34,6 @@
     action=ui.helpAbout
     doc="What the active tab is for (from the world summary), and the state of its game."
 
-@op.ui.help.helpGame core.operation
-    impl=helpGame
-    semantics=action
-    action=ui.helpGame
-    doc="Rules and current state of the active game (or the game named by arg.game)."
-
 @op.ui.help.helpHow core.operation
     impl=helpHow
     semantics=action

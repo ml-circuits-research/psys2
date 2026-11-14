@@ -6,10 +6,6 @@
     for=action.ui.playGame
     text="{value}"
 
-@tpl.ui.shell.ui_chooseGame core.template
-    for=action.ui.chooseGame
-    text="{value}"
-
 @tpl.ui.shell.ui_back core.template
     for=action.ui.back
     text="{value}"
@@ -36,18 +32,6 @@
 
 @tpl.ui.shell.ui_language core.template
     for=action.ui.language
-    text="{value}"
-
-@tpl.ui.shell.ui_newGame core.template
-    for=action.ui.newGame
-    text="{value}"
-
-@tpl.ui.shell.ui_giveUp core.template
-    for=action.ui.giveUp
-    text="{value}"
-
-@tpl.ui.shell.ui_hint core.template
-    for=action.ui.hint
     text="{value}"
 
 @tpl.ui.shell.ui_settings core.template
