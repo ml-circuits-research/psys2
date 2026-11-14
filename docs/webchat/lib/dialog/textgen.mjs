@@ -3,31 +3,34 @@
 // releases them, `available` is false, every call returns null and the UI hides what needs them: there is NO local generator and NO fallback text here.
 // Browser-safe: no `node:*` imports; the library module is passed in.
 
-import { knowledgeWorld, genreOf, randomTopics, topicIndex, realiseFrame, chapterTitle } from './compose-world.mjs?v=6c38fda80f';
+import { knowledgeWorld, languageWorld, genreOf, randomTopics, topicIndex } from './compose-world.mjs?v=7e48e1d104';
+import { englishOf, joinList as list } from '../lang/en-generate.mjs?v=735b7ec142';
 
 const pick = (lib, name) => (typeof lib?.[name] === 'function' ? lib[name] : typeof lib?.std?.[name] === 'function' ? lib.std[name] : null);
 const clip = (n, lo, hi, def) => { const v = Math.round(Number(n)); return Math.min(hi, Math.max(lo, Number.isFinite(v) ? v : def)); };
 
 // ---- std.summarize (sopworld >= 0.61): `summarizeLog(entries, { parentOf, length })` returns FRAMES { act, kind, count, kinds?, failed?, salience }; `summarizeText(text, { n })`
-// returns { sentences: [{ text, score, at }], picked: [text] } (extractive). The library does not write English: the frames are rendered here (TEMPORARY verb table, until the
-// language world renders frames) into at most three sentences: what was done, which worlds were used, what was taught.
-const IRREGULAR = { make: 'made', draw: 'drew', put: 'put', take: 'took', give: 'gave', build: 'built', write: 'wrote', buy: 'bought', sit: 'sat', tell: 'told', find: 'found', set: 'set', get: 'got', say: 'said', go: 'went', read: 'read', teach: 'taught', run: 'ran', see: 'saw', color: 'coloured', colour: 'coloured' };
-const pastOf = (v) => IRREGULAR[v] ?? (/e$/.test(v) ? `${v}d` : /[^aeiou]y$/.test(v) ? `${v.slice(0, -1)}ied` : `${v}ed`);
-const PLURAL = { fish: 'fish', sheep: 'sheep', mouse: 'mice', man: 'men', woman: 'women', child: 'children', person: 'people', goose: 'geese', foot: 'feet', tooth: 'teeth' };
-const pluralOf = (w) => PLURAL[w] ?? (/(?:s|x|z|ch|sh)$/.test(w) ? `${w}es` : /[^aeiou]y$/.test(w) ? `${w.slice(0, -1)}ies` : `${w}s`);
-const NUMW = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
-const joinAnd = (a) => (a.length < 2 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
-const nounPhrase = (kind, n) => (n === 1 ? `a ${kind}` : `${NUMW[n] ?? n} ${pluralOf(kind)}`);
+// returns { sentences: [{ text, score, at }], picked: [text] } (extractive). The library does not write English: a frame is said through the language world's generation templates
+// (w.lang.en.template: "add {number} {kind:num=pl}.", filled by the library, plurals and articles by src/lang/en-generate.mjs). There is no verb table here. What a frame says is what
+// the person asked ("You asked me to add 3 trees and remove a house"); a frame of an act with no template that fits (a place with no spot named) is counted, not worded.
+const lower = (t) => t.charAt(0).toLowerCase() + t.slice(1);
 
-/** Frames -> one sentence ("You drew two trees and a house"); `failed` counts requests that were not understood or could not be done. */
-export function renderFrames(frames, failed = 0) {
-  const done = frames.filter((f) => !f.failed).map((f) => {
-    const what = f.kinds ? `${NUMW[f.count] ?? f.count} ${pluralOf(f.kind)} (${joinAnd(f.kinds)})` : f.kind ? nounPhrase(f.kind, f.count) : f.count > 1 ? `${NUMW[f.count] ?? f.count} times` : '';
-    return `${pastOf(f.act)}${what ? ` ${what}` : ''}`;
-  });
-  const bad = failed ? (failed === 1 ? 'one request was not understood or could not be done' : `${NUMW[failed] ?? failed} requests were not understood or could not be done`) : '';
-  if (done.length) return `You ${joinAnd(done)}${bad ? `; ${bad}` : ''}.`;
-  return bad ? `${bad[0].toUpperCase()}${bad.slice(1)}.` : '';
+/** Frames -> one sentence; `failed` counts requests that were not understood or could not be done; `en` is `englishOf(lib, languageWorld(lib))`. */
+export function renderFrames(frames, failed = 0, en = null) {
+  const said = [];
+  let other = 0;
+  for (const f of frames.filter((x) => !x.failed)) {
+    const roles = f.kind ? (f.count > 1 ? { number: f.count, kind: f.kind } : { kind: f.kind }) : null;
+    const t = roles && en ? en.actSentence(f.act, roles) : null;
+    if (t) said.push(`${lower(t.replace(/\.$/, ''))}${f.kinds ? ` (${en.list(f.kinds)})` : ''}`); else other += f.count ?? 1;
+  }
+  const parts = [];
+  if (said.length) parts.push(`You asked me to ${en.list(said)}`);
+  if (other) parts.push(`${said.length ? ', plus ' : 'You asked for '}${other} other ${other === 1 ? 'change' : 'changes'}`);
+  const bad = failed ? `${failed} ${failed === 1 ? 'request was' : 'requests were'} not understood or could not be done` : '';
+  const head = parts.join('').replace(/^, plus/, ', plus');
+  if (head) return `${head}${bad ? `; ${bad}` : ''}.`;
+  return bad ? `${bad.charAt(0).toUpperCase()}${bad.slice(1)}.` : '';
 }
 
 const isBad = (t) => ['refused', 'not-understood', 'question-back'].includes(t.outcome);
@@ -39,6 +42,8 @@ export function logEntries(turns) {
 }
 
 export function createSummarizer(lib, world) {
+  let en0 = null;
+  const english = () => (en0 ??= (typeof lib?.World === 'function' ? englishOf(lib, languageWorld(lib)) : null));
   const log = pick(lib, 'summarizeLog'), txt = pick(lib, 'summarizeText');
   return {
     available: Boolean(log && txt),
@@ -54,10 +59,10 @@ export function createSummarizer(lib, world) {
       const failed = turns.filter(isBad).length;
       const used = [...new Set(turns.flatMap((t) => t.worlds ?? []))];
       const sentences = [];
-      const did = renderFrames(Array.isArray(frames) ? frames : [], failed);
+      const did = renderFrames(Array.isArray(frames) ? frames : [], failed, lib ? english() : null);
       if (did) sentences.push({ text: did, source: 'std.summarizeLog' });
-      if (used.length) sentences.push({ text: `I worked in ${joinAnd(used.map((id) => { const l = labelOf(id); return l && l !== id ? `${l} (${id})` : id; }))}.`, source: 'turn log' });
-      if (taught.length) sentences.push({ text: `You taught me that ${joinAnd(taught)}.`, source: 'session.things' });
+      if (used.length) sentences.push({ text: `I worked in ${list(used.map((id) => { const l = labelOf(id); return l && l !== id ? `${l} (${id})` : id; }))}.`, source: 'turn log' });
+      if (taught.length) sentences.push({ text: `You taught me that ${list(taught)}.`, source: 'session.things' });
       const kept = sentences.slice(0, clip(maxSentences, 1, 6, 3));
       return kept.length ? { text: kept.map((x) => x.text).join(' '), sentences: kept } : null;
     },
@@ -102,76 +107,79 @@ export function composeRequest({ type, topic = '', chapters, subchapters, words,
  */
 export function createComposer(lib, world = null) {
   const fn = pick(lib, 'compose');
-  const works = new Map();
-  /** Does the library's composer apply the published genre of a type? (probed once: 0.65 reads `move=` on a genre and throws on the published parts and steps.) */
-  const genreWorks = (type) => {
-    if (works.has(type)) return works.get(type);
-    const kw = world ?? knowledgeWorld(lib), genre = genreOf(kw, type);
-    let ok = false;
-    if (genre) { try { fn(kw, topicIndex(kw).values().next().value?.name ?? 'x', { genre, size: { chapters: 1, sections: 1, sentences: 1 } }); ok = true; } catch { ok = false; } }
-    works.set(type, ok);
-    return ok;
-  };
+  const generators = new WeakMap(), english = (kw) => (generators.has(kw) ? generators.get(kw) : generators.set(kw, englishOf(lib, kw)).get(kw));
+  const memo = new Map();   // a composition is deterministic by its request and seed: a dry run and the real run (and a repeated press with the same seed) give the same document
   const TYPE_RE = /\b(scientific[ _-]article|research[ _-]article|scientific[ _-]paper|presentation|slideshow|essay|composition|article|story|tale|report|piece|text)\b/i;
   return {
     available: Boolean(fn),
-    /** Can a request in these words be executed (the composer exists and the knowledge holds the genre of its type, the essay needing none)? A world that cannot act does not claim the reading. */
+    /** Can a request in these words be executed (the composer exists and the knowledge holds the genre of its type)? A world that cannot act does not claim the reading. */
     supports(text) {
       if (!fn) return false;
-      const t = docTypeOf(TYPE_RE.exec(String(text ?? ''))?.[1]?.replace(/[ -]/g, '_'));
-      return t === 'essay' || genreWorks(t);
+      return Boolean(genreOf(world ?? knowledgeWorld(lib), docTypeOf(TYPE_RE.exec(String(text ?? ''))?.[1]?.replace(/[ -]/g, '_'))));
     },
     compose(input = {}) {
       if (!fn) return { why: 'the library has no composer' };
       const req = composeRequest(input);
+      const key = req.seed == null ? null : JSON.stringify([req.type, req.topic, req.chapters, req.subchapters, req.words, req.seed]);
+      if (key && memo.has(key)) return memo.get(key);
+      const out = this.composeNow(req);
+      if (key) { memo.set(key, out); if (memo.size > 40) memo.delete(memo.keys().next().value); }   // bounded
+      return out;
+    },
+    composeNow(req) {
       const kw = world ?? knowledgeWorld(lib);
       const genre = genreOf(kw, req.type);
       if (!genre) return { why: `the knowledge has no genre for a ${DOC_TYPES[req.type].label.toLowerCase()} (no k.genres.genre ${req.type})` };
       const known = req.topic ? topicIndex(kw).get(req.topic.toLowerCase().replace(/^the\s+/, ''))?.name : null;
       const topics = req.topic ? [known ?? req.topic] : randomTopics(lib, kw, req.seed ?? Date.now() % 100000);
       if (!topics.length) return { why: 'the knowledge has no subject to write about' };
-      const sections = Math.max(1, req.subchapters);
-      const sentences = clip(req.words / (req.chapters * sections * 16), 1, 8, 3);
+      // the genre decides the parts and their repeats; the host gives the budget: the sentences that fit the words asked (the register's middle length)
+      const sentences = clip(req.words / 16, 1, 60, 12);
       let c = null, topic = null;
       for (const t of topics) {   // a random topic is the best by interest that the knowledge can fill
         topic = t;
-        const opts = { size: { chapters: req.chapters, sections, sentences }, seed: Number(req.seed) || 1, realise: realiseFrame };
-        try { c = fn(kw, t, { genre, ...opts }); } catch (e) {
-          // sopworld 0.65 reads `move=` on a genre; the published k.genres has parts and steps (the library's procedure from a genre is not there yet). The genre is named in the
-          // result as not applied; the essay is composed by the library's own default moves, the other types are declined (no invented procedure).
-          if (req.type !== 'essay') return { why: `the library's composer does not read the published ${req.type} genre yet (${String(e?.message ?? e).slice(0, 60)}), so I cannot write one by the book` };
-          c = fn(kw, t, opts); if (c && !c.why) c.genre = null, c.genreNotApplied = genre;
-        }
-        if (c?.why || (c?.chapters?.length && (req.topic || checkComposition(c, req).ok))) break;   // a random topic is the best the knowledge can fill and realise
+        c = fn(kw, t, { genre, size: { sentences }, seed: Number(req.seed) || 1, realise: english(kw).realiser(Number(req.seed) || 1) });
+        if (c?.why || (c?.parts && (req.topic || checkComposition(c, req).ok))) break;
       }
       if (c?.why) return { why: c.why };
       const chk = checkComposition(c, req);
-      if (!chk.ok) return { why: c?.chapters?.length ? `I could not write that so that every sentence reads and traces to what I know (${chk.problems[0]})` : `I know nothing about ${topic} in my knowledge yet` };
+      if (!chk.ok) return { why: /no claim|nothing said/.test(chk.problems[0]) ? `I know nothing about ${topic} in my knowledge yet` : `I could not write that so that every sentence reads and traces to what I know (${chk.problems[0]})` };
       return { composition: normalise(c, req, topic, kw) };
     },
   };
 }
 
+// A story sentence states an element of the plan (a setting, a hero, an attempt): its source is the wire of the catalog that element's value names.
+const STORY_TYPES = ['k.scenes.scene', 'k.people.role', 'k.people.kind', 'k.animals.animal', 'k.actions.action', 'k.objects.object', 'k.story.goal'];
+const storyIndex = new WeakMap();
+function storyWire(kw, value) {
+  if (!storyIndex.has(kw)) { const m = new Map(); for (const t of STORY_TYPES) for (const w of kw.ofType(t)) { const n = String(w.attrs.name?.[0] ?? '').replace(/^"|"$/g, ''); if (n && !m.has(n)) m.set(n, w.id); } storyIndex.set(kw, m); }
+  return storyIndex.get(kw).get(String(value ?? '').split('|')[0]) ?? null;
+}
+const cap = (t) => String(t).charAt(0).toUpperCase() + String(t).slice(1);
+/** The frames of the library (`parts: [{ part, heading?, moves: [frame] }]`) as the document the host writes: a chapter (a slide) per part that says something; a frame with no text is not written (the library lists it in `short`). */
 function normalise(c, req, topic, kw) {
-  return { title: `All about ${topicIndex(kw).get(String(topic).toLowerCase())?.type === 'k.animals.animal' ? 'the ' : ''}${topic}`, genreNotApplied: c.genreNotApplied ?? null, topic, type: req.type, genre: c.genre ?? null, short: c.short ?? [], chapters: c.chapters.map((ch) => ({ title: chapterTitle(ch.title), interest: ch.interest,
-    subchapters: ch.sections.map((sc, i) => ({ title: req.subchapters ? `Part ${i + 1}` : '', sentences: sc.sentences.map((s) => ({ text: s.text.trim(), source: s.cites, move: s.move })) })) })) };
+  const said = c.parts.map((p) => ({ p, moves: p.moves.filter((m) => m.text) })).filter((x) => x.moves.length);
+  return { title: `All about ${topicIndex(kw).get(String(topic).toLowerCase())?.type === 'k.animals.animal' ? 'the ' : ''}${topic}`, topic, type: req.type, genre: c.genre, register: c.register?.name ?? null, seed: c.seed, short: c.short ?? [],
+    chapters: said.map(({ p, moves }) => ({ title: cap(p.heading ?? p.part), part: p.part, relation: p.relation ?? null,
+      subchapters: [{ title: '', sentences: moves.map((m) => ({ text: m.text.trim(), source: m.cites ?? m.recalls ?? (m.element ? storyWire(kw, m.value) : null), move: m.move, takes: m.takes, element: m.element ?? null, template: m.template ?? null })) }] })) };
 }
 
-/** Shape check of the library's frames: at least one chapter, no more than asked, every frame realised (a sentence) and citing a wire; a shorter result is allowed only when the library says `short`. */
+/** Shape check of the library's frames: at least one part that says something, every sentence written (no placeholder), every claim (a move that takes a fact) citing a wire, no wire twice. */
 export function checkComposition(c, req) {
   const problems = [];
-  if (!c || !Array.isArray(c.chapters) || !c.chapters.length) return { ok: false, problems: ['no chapters'] };
-  if (c.chapters.length > req.chapters) problems.push(`chapters ${c.chapters.length} > ${req.chapters}`);
-  if (c.chapters.length < req.chapters && !c.short?.length) problems.push(`chapters ${c.chapters.length} < ${req.chapters} and not said to be short`);
+  const parts = c?.parts;
+  if (!Array.isArray(parts) || !parts.length) return { ok: false, problems: ['no parts'] };
   const seen = new Set();
-  for (const [i, ch] of c.chapters.entries()) {
-    if (!Array.isArray(ch?.sections) || !ch.sections.length) { problems.push(`chapter ${i + 1} malformed`); continue; }
-    for (const sc of ch.sections) for (const s of Array.isArray(sc?.sentences) ? sc.sentences : []) {
-      if (typeof s?.text !== 'string' || !s.text.trim() || /[<{}]|\bundefined\b/.test(s.text)) problems.push('empty or placeholder sentence');
-      else if (!s.cites) problems.push(`uncited sentence: "${s.text.slice(0, 40)}"`);
-      else if (seen.has(s.cites)) problems.push(`fact said twice: ${s.cites}`); else seen.add(s.cites);
-    }
+  for (const p of parts) for (const m of p.moves ?? []) {
+    if (!m.text) continue;
+    if (!m.text.trim() || /[<{}]|\bundefined\b/.test(m.text)) problems.push('empty or placeholder sentence');
+    const id = m.cites ?? m.recalls;
+    if (['fact', 'facts', 'question'].includes(m.takes) && !id) problems.push(`uncited claim: "${m.text.slice(0, 40)}"`);
+    else if (id && m.takes === 'fact' && seen.has(id)) problems.push(`fact said twice: ${id}`); else if (id) seen.add(id);
   }
+  if (!parts.some((p) => (p.moves ?? []).some((m) => m.text))) problems.push('nothing said');
+  else if (!parts.some((p) => (p.moves ?? []).some((m) => m.text && (m.cites || m.recalls || m.element) && m.takes !== 'topic'))) problems.push('no claim: nothing is known about the topic');
   return { ok: problems.length === 0, problems };
 }
 

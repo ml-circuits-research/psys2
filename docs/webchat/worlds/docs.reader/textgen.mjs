@@ -26,11 +26,14 @@ export function digest(ctx, { t, k } = {}) {
   return ok(`In short: ${r.text}`, { from, data: { digest: true, doc: d?.id ?? null, cite: d ? r.sentences.map((s) => s.at) : [] } });
 }
 
+/** The seed of a composition the person did not choose: a function of the session (how many documents it holds) and the request, so the engine's dry run and its real run write the same document, and the next request writes another. */
+const composeSeed = (ctx, type, topic) => { let h = (ctx.state?.docs?.length ?? 0) + 1; for (const ch of `${type ?? ''}|${topic ?? ''}`) h = (Math.imul(h, 31) + ch.charCodeAt(0)) >>> 0; return h % 100000 + 1; };
+
 /** Compose an essay into a new document: topic (empty = random), chapters, subchapters, words. */
 export function compose(ctx, { type, topic, chapters, subchapters, words, seed } = {}) {
   const g = textGen()?.composer;
   if (!g?.available) return no('unsupported', UNAVAILABLE_COMPOSE);
-  const r = g.compose({ type, topic, chapters: chapters === undefined || chapters === '' ? undefined : num(chapters, 3), subchapters: subchapters === undefined || subchapters === '' ? undefined : Number(NUM[String(subchapters).toLowerCase()] ?? subchapters), words: words === undefined || words === '' ? undefined : num(words, 600), seed });
+  const r = g.compose({ type, topic, chapters: chapters === undefined || chapters === '' ? undefined : num(chapters, 3), subchapters: subchapters === undefined || subchapters === '' ? undefined : Number(NUM[String(subchapters).toLowerCase()] ?? subchapters), words: words === undefined || words === '' ? undefined : num(words, 600), seed: seed ?? composeSeed(ctx, type, topic) });
   if (!r?.composition) return no('unsupported', `I cannot write that: ${r?.why ?? 'the composer gave nothing'}.`);
   const c = r.composition;
   const out = c.chapters.map((ch) => `## ${ch.title}\n\n${ch.subchapters.map((sc) => `${sc.title ? `### ${sc.title}\n\n` : ''}${sc.sentences.map((s) => s.text).join(' ')}`).join('\n\n')}`);

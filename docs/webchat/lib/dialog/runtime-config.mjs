@@ -6,7 +6,7 @@
  *   const enc = createRuntime({ engine, settings, load, normalizer, waitForModel });   // encoder strategy, attached and registered
  *   const session = engine.createSession(sessionOptions(settings));
  */
-import { createDispatcherFormalizer } from './encoder-dispatch.mjs?v=f575a8f1f5';
+import { createDispatcherFormalizer } from './encoder-dispatch.mjs?v=2ed7e82bb2';
 import { createNxStrategy, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=bd23f13722';
 
 import { RUNTIME_DEFAULTS } from './runtime-defaults.mjs?v=3a55de5f9e';
