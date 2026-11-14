@@ -4355,3 +4355,7 @@ The kids.* worlds (about 1.8 MB: common, shapes, arith, shop, tasks, animals, ti
 - **kids.animals** → `k.animals` + taught facts in session.things (pets are things of the session).
 - **kids.common** → name/greetings in the conversation world (lang.common, w.lang.en), not a kids world.
 Do: (1) list for each kids world its canonical sentences and which general world must answer each (the audit you did is the start); (2) ask the knowledge repository / library for what is missing (their blocks below); (3) switch the bindings, keep every canonical sentence and every real-set turn passing, then delete the kids worlds. Measure: real headline, canonical sentences, test-world, boot bytes. After the 08:30 recheck and the typed worlds.
+
+## Reviewer 2026-11-15 09:00 — live mobile recheck, vendor 0.114, Romanian voice: accepted
+
+Accepted 60afb497 (deployed: the phone menu lists only Chat, Drawing, Diagram, Map, Charts, Seating, Timeline, Documents, Music, Settings), b4241aff (0.114 vendored), db2745b0 (Romanian grammar voice measured on 291 real Romanian turns: no change, default off — right; 78 fail with both rules and model). sopworld 0.115 `readFrames` and 0.116 relative continuations are out; the knowledge repository adds the missing Romanian facts (Q69). Next: typed worlds per world (typedWorldFor) measured on the real set; then the kids worlds generalisation (08:45); re-measure the Romanian voice when w.lang.ro's Q69 facts land.
