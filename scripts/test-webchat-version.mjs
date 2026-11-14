@@ -26,9 +26,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 async function makeBuild(dir, { commit, builtAt }) {
   await cp(path.join(DOCS, 'webchat'), dir, { recursive: true, filter: (s) => !/[\\/]webchat[\\/]models([\\/]|$)/.test(s) });
   const info = JSON.parse(await readFile(path.join(dir, 'build-info.json'), 'utf8'));
-  await writeFile(path.join(dir, 'build-info.json'), JSON.stringify({ ...info, commit, builtAt }));
+  await writeFile(path.join(dir, 'build-info.json'), JSON.stringify({ ...info, commit, builtAt, version: commit }));   // the manifest version is what the page compares
   const html = await readFile(path.join(dir, 'index.html'), 'utf8');
-  await writeFile(path.join(dir, 'index.html'), html.replace(/window\.__psys2Build = \{[^}]*\};/, `window.__psys2Build = ${JSON.stringify({ commit, builtAt })};`));
+  await writeFile(path.join(dir, 'index.html'), html.replace(/window\.__psys2Build = \{[^}]*\};/, `window.__psys2Build = ${JSON.stringify({ commit, builtAt, version: commit })};`));
 }
 
 export async function runVersionTest({ chrome } = {}) {

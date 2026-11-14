@@ -18,6 +18,9 @@ export async function findDispatcherModel(base) {
     if (typeof WebAssembly !== 'object') return null;
     const url = new URL(`${MODEL_DIR}meta.json`, base);
     try {
+      // the early script of index.html already asked for it (`__psys2Early.dispatcherMeta`): one fetch per start; a missing value falls back to asking here
+      const early = typeof window === 'object' ? window.__psys2Early?.dispatcherMeta : undefined;
+      if (early) { delete window.__psys2Early.dispatcherMeta; const m = await early; if (m) { try { (await caches.open(CACHE_NAME)).put(keyOf(base, 'meta.json', 'latest'), new Response(JSON.stringify(m))); } catch { /* no Cache API */ } return m; } }
       const r = await fetch(url, { cache: 'no-cache' });
       if (r.ok) {
         const meta = await r.json();
