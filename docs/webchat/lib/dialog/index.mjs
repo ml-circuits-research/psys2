@@ -13,7 +13,7 @@ import { precompile as precompileRules, registerClauseStarters } from '../formal
 import { loadWorlds } from '../worlds/index.mjs?v=436d9e32e0';
 import { validateWorldSet } from '../worlds/validate.mjs?v=b9a6cb9a9f';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=c87e066ce6';
-import { createInterpreter } from '../interpreter/index.mjs?v=8d8ade17ec';
+import { createInterpreter } from '../interpreter/index.mjs?v=6f5b716f56';
 import { createReasoner } from '../reasoner/index.mjs?v=bf67d6db1e';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=f2782e4109';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=12b3500dec';
@@ -1291,7 +1291,16 @@ export class DialogSession {
     if (mem.astra && this.astra) { try { astraRestore(this.astra, mem.astra); } catch { /* the discussions start empty */ } }
     if (Array.isArray(mem.recent)) this._recentWorlds = [...mem.recent];
     if (mem.lastGame !== undefined) this._lastGame = mem.lastGame;
-    if (mem.rs && this.isession.rs) this.isession.rs.restoreJSON(mem.rs, this.isession);   // after the world states: the timeline of the matrix reasoner
+    if (mem.rs && this.isession.rs) {   // after the world states: the timeline of the matrix reasoner
+      // the world states the host put in place are the truth: the library derives a matrix world's state from its instances, which never heard of what the host set (the open tab, a toggle), so replaying the timeline would put the older state back
+      const keep = structuredClone(this.isession.state);
+      this.isession.rs.restoreJSON(mem.rs, this.isession);
+      for (const [id, v] of Object.entries(keep)) {
+        const cur = this.isession.state[id];
+        if (!cur) { this.isession.state[id] = v; continue; }
+        if (JSON.stringify(cur) !== JSON.stringify(v)) { for (const k of Object.keys(cur)) delete cur[k]; Object.assign(cur, v); }
+      }
+    }
     return true;
   }
 
@@ -1303,6 +1312,32 @@ export class DialogSession {
       discourse: { ...dis, frames: [...dis.frames], actions: [...dis.actions], topics: [...dis.topics], lastByWorld: { ...dis.lastByWorld } },
       sources: new Set(this.sources.keys()), astra: this.astra?.capture(), dialogue: this.dialogue.toJSON(),
     };
+  }
+
+  /** LAZY LOADING: the actions a turn asked for that no loaded world has (the names), once; the host loads the worlds that have them and reads the turn again. Call it before `restore`. */
+  takeMissed() { const m = this.isession.missed; this.isession.missed = null; return m ? [...m] : []; }
+
+  /**
+   * UNDO ACROSS A RELOAD: a snapshot of this session as plain data ({ state, meta }, what a host keeps next to the world states), so that a session made by a reloaded engine
+   * (`engine.reload`, lazy loading) can take it over with `adoptSnapshot`. The session is put back to what it was.
+   */
+  portableSnapshot(snap) {
+    const now = this.snapshot();
+    try {
+      this.restore(snap);
+      return { state: structuredClone(this.isession.state), meta: { msg: this._msg, lang: this._sessionLang, weakRo: this._weakRo, memory: this.memoryJSON() } };
+    } finally { this.restore(now); }
+  }
+
+  /** Makes an undo snapshot of this session out of a `portableSnapshot()` record; the session itself is unchanged. */
+  adoptSnapshot(rec) {
+    const now = this.snapshot();
+    try {
+      this.isession.state = { ...this.isession.state, ...structuredClone(rec.state) };   // a world loaded since has its initial state
+      this._msg = rec.meta.msg ?? this._msg; this._sessionLang = rec.meta.lang ?? this._sessionLang; this._weakRo = rec.meta.weakRo ?? 0;
+      if (rec.meta.memory) this.restoreMemory(rec.meta.memory);
+      return this.snapshot();
+    } finally { this.restore(now); }
   }
 
   /** Puts the session back to a snapshot taken by `snapshot()`. */

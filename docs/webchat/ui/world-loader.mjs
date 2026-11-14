@@ -63,6 +63,8 @@ export function createWorldLoader({ indexHash, fetchJson, bag, on = () => {} }) 
       }
       return { ids: out, buckets: wanted.length };
     },
+    /** The worlds that have the actions a turn asked for and nobody had loaded (`DialogSession.takeMissed`). */
+    ofActions: (names) => (names ?? []).includes('*worlds') ? Object.keys(need().worlds) : [...new Set((names ?? []).map((a) => need().actions?.[a]).filter(Boolean))],   // '*worlds': the turn listed the worlds (what can you do?), the answer depends on every one
     /** The worlds a start loads. `state`: world id -> state (a restart restores them: a world that has state or memory is loaded again). */
     startIds({ tabWorld = null, state = null, recent = [] } = {}) {
       const ids = new Set(need().always);

@@ -254,7 +254,7 @@ async function docFor(name, viewport, o) {
   const tag = name;
   try {
     const t = await pg.evaluate(() => ({
-      greeting: document.querySelector('.p2-msg.is-hint .p2-bubble')?.childNodes[0]?.textContent ?? '', header: document.querySelector('.p2-title span')?.textContent, title: document.title,
+      greeting: document.querySelector('.p2-msg.is-hint .p2-bubble')?.childNodes[0]?.textContent ?? '', header: document.querySelector('.p2-title span:not(.p2-head-face)')?.textContent, title: document.title,
       meta: document.querySelector('meta[name=description]')?.content,
     }));
     check(`${tag}: the greeting says neurosymbolic, in the browser, small neural models, symbolic worlds, formal rules`, /neurosymbolic assistant that runs entirely in your browser/.test(t.greeting) && /Small neural models/.test(t.greeting) && /symbolic worlds/.test(t.greeting) && /formal rules/.test(t.greeting) && !/explicit rules/.test(t.greeting), t.greeting.slice(0, 80));
