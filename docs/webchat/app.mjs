@@ -29,6 +29,7 @@ import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about
 import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf, exportRecord } from './ui/phrase-log.mjs';
 import { createFeedback } from './ui/feedback.mjs';
 import { createProgress } from './ui/progress.mjs';
+import { startAssets, assetUrl, manifest as assetManifest } from './ui/assets.mjs';
 import { createEventLog, describeTarget, tapKind } from './ui/action-log.mjs';
 import { snapshotState, describeChanges } from './ui/state-diff.mjs';
 
@@ -48,7 +49,7 @@ export const TABS = [
  */
 async function loadTabPlugins(base) {
   let list = [];
-  try { const r = await fetch(new URL('ui/tabs/index.json', base)); if (r.ok) list = await r.json(); } catch { return []; }
+  try { const v = globalThis.__psys2Mod?.['ui/tabs/index.json']; const r = await fetch(new URL('ui/tabs/index.json', base).href + (v ? `?v=${v}` : '')); if (r.ok) list = await r.json(); } catch { return []; }
   // in parallel (PERF round 2): one round trip, not one per tab
   const mods = await Promise.all((Array.isArray(list) ? list : []).map((file) => import(new URL(`ui/tabs/${file}`, base).href).catch((e) => { console.warn(`tab plugin ${file} failed to load`, e); return null; })));
   return mods.filter((m) => m?.default?.id && m.default?.make).map((m) => m.default);
@@ -122,7 +123,7 @@ export async function mountPsys2(element, options = {}) {
   // USER-ACTIONS: every user action and every progress step is an event next to the phrase records (export format 3); nothing leaves the device
   const events = createEventLog(options.persist !== false ? globalThis.localStorage : null, { getTab: () => view, enabled: () => !!settings.logPhrases });
   // PROGRESS: one service and one panel for every wait; the start-up steps in their real order, weighted by the last start's measured times
-  const progress = createProgress({ storage: options.persist !== false ? globalThis.localStorage : null, localize: (t) => localized(t),
+  const progress = createProgress({ storage: options.persist !== false ? globalThis.localStorage : null, localize: (t) => localized(t), details: () => settings.devMode === true,
     onStep: (r) => events.add('step', r.label, { stepId: r.id, ms: r.ms, bytes: r.bytes, ok: r.ok, ...(r.error ? { error: r.error } : {}), tab: null, tabAfter: null }) });
   progress.plan('startup', [{ id: 'page', label: 'Loading the page code' }, { id: 'worlds', label: 'Loading the worlds' }, { id: 'reasoner', label: 'Starting the reasoner' }, { id: 'model', label: 'Loading the reading model' },
     { id: 'translator', label: 'Loading the translator' }, { id: 'catalog', label: 'Reading the knowledge catalog index' }, { id: 'voices', label: 'Finding voices' }]);
@@ -439,7 +440,7 @@ export async function mountPsys2(element, options = {}) {
     speak: (text) => { if (speech && speechSupport.synthesis) speech.speak(String(text), { lang: speechLangTag() }); },
     state: (worldId) => states[worldId],
     setWorldState: (worldId, patch) => session?.setWorldState?.(worldId, patch),
-    asset: (path) => new URL(path, base).href,
+    asset: (path) => assetUrl(base, path),   // the file's URL with its content hash (ui/assets.mjs): cached forever under it
     knowledgeUrl: () => settings.knowledgeUrl || '',   // the catalog the engine reads (the avatar tab reads its faces from the same one)
     /** Put an element inside the answer being shown (the Talk tab's cards); false when there is no answer to put it in. */
     attach: (node) => { if (!currentBot || !node) return false; currentBot.bubble.append(node); return true; },
@@ -1189,6 +1190,7 @@ export async function mountPsys2(element, options = {}) {
   });
   /** Opens the modal (on `tab`, else the last tab). One history entry is pushed so that the phone's Back button closes it. */
   function openSettings(tab, { push = true } = {}) {
+    tl.init().then(() => renderSettings(), () => {});   // the language list and the model sizes (loaded on first use, not at start-up)
     if (tab && isSettingsTab(tab)) settingsTab = resolveTab(tab);
     const wasOpen = !settingsEl.hidden;
     settingsEl.hidden = false; gearBtn.setAttribute('aria-expanded', 'true');
@@ -1227,6 +1229,7 @@ export async function mountPsys2(element, options = {}) {
   let buildInfo = null, modelsInfo = { usage: null, quota: null, cached: {}, dispatcherMB: null };
   async function loadBuildInfo() {
     if (buildInfo) return;
+    if (assetManifest()) { buildInfo = assetManifest(); if (!settingsEl.hidden) renderSettings(); return; }   // the one manifest of this start (no second fetch)
     try { const r = await fetch(new URL('build-info.json', base), { cache: 'no-cache' }); buildInfo = r.ok ? await r.json() : { error: `HTTP ${r.status}` }; } catch (e) { buildInfo = { error: String(e?.message ?? e) }; }
     if (!settingsEl.hidden) renderSettings();
   }
@@ -1341,23 +1344,15 @@ export async function mountPsys2(element, options = {}) {
   }
   /** The build this page runs (stamped into index.html by the build): "<commit> · <build time>". Shown in About and on the first line of the debug panel. */
   const buildLabel = (b = globalThis.window?.__psys2Build) => (b ? `${b.commit ?? 'unknown'} · ${b.builtAt ?? 'unknown'}` : 'unknown (development)');
-  // Version check at startup: index.html can be served up to ten minutes stale (GitHub Pages max-age=600). build-info.json is fetched with no-store and
-  // compared with the build stamped into this page; a mismatch shows a banner, and one reload fetches the new index.html.
-  async function checkForNewBuild() {
-    const mine = globalThis.window?.__psys2Build;
-    if (!mine) return;
-    try {
-      const r = await fetch(new URL('build-info.json', base), { cache: 'no-store' });
-      const live = r.ok ? await r.json() : null;
-      if (!live?.builtAt || (live.builtAt === mine.builtAt && live.commit === mine.commit)) return;
-      chat.append(h('div', { class: 'p2-update', role: 'status', 'data-live': live.commit ?? '' }, `A new version is available (${live.commit ?? '?'}). `, h('button', { class: 'p2-btn-text', type: 'button', onclick: () => location.reload() }, 'Reload')));
-    } catch { /* offline: nothing to compare */ }
+  // Version check at startup (ui/assets.mjs): the build manifest is fetched once with no cache; a page older than it reloads itself once and says so. This banner only
+  // appears when the page was already reloaded once and is still older (a stale CDN copy): never a reload loop.
+  function showNewBuildBanner(live) {
+    chat.append(h('div', { class: 'p2-update', role: 'status', 'data-live': live?.commit ?? '' }, `A new version is available (${live?.commit ?? '?'}). `, h('button', { class: 'p2-btn-text', type: 'button', onclick: () => location.reload() }, 'Reload')));
   }
-  checkForNewBuild();
   function buildInfoLines() {
     if (!buildInfo) return h('p', {}, 'Loading build information…');
     if (buildInfo.error) return h('p', {}, `Build information is not available (${buildInfo.error}).`);
-    const files = buildInfo.files ? Object.keys(buildInfo.files).length : null;
+    const files = buildInfo.assets ? Object.keys(buildInfo.assets).length : buildInfo.files ? Object.keys(buildInfo.files).length : null;
     return h('ul', { class: 'p2-buildinfo' },
       h('li', { 'data-build': '' }, `This page: ${buildLabel()}`),
       h('li', {}, `Built: ${buildInfo.builtAt ?? 'unknown'}`),
@@ -1635,7 +1630,7 @@ export async function mountPsys2(element, options = {}) {
     else if (name === 'progress') {
       dispatcherStatus = { ...dispatcherStatus, message: data }; setStatus();
       const m = /(\d+(?:\.\d+)?) \/ (\d+(?:\.\d+)?) MB/.exec(String(data));
-      if (m) { modelBytes = Math.round(Number(m[2]) * 1e6); progress.step('model', `Downloading the reading model (${m[1]} / ${m[2]} MB)`, Number(m[1]), Number(m[2])); }
+      if (m) { modelBytes = Math.round(Number(m[2]) * 1e6); progress.step('model', `Loading the reading model (${Math.round(Number(m[1]))} of ${Math.round(Number(m[2]))} MB)`, Number(m[1]), Number(m[2])); }
       else if (data) progress.step('model', `${String(data)[0].toUpperCase()}${String(data).slice(1)}`.replace(/…$/, ''), 0, 0);
     }
     else if (name === 'boot-step') {   // PROGRESS: the engine worker's start-up, in the order it happens
@@ -1655,6 +1650,10 @@ export async function mountPsys2(element, options = {}) {
     else if (name === 'notice') { note(String(data)); if (turn) setInputStage('lookup'); }   // an interim line of the engine (a catalog lookup in progress); the reply follows
   }
   try {
+    // ASSETS (ui/assets.mjs): the one build manifest first (no cache), the stale-page reload, the one-time cache reset of a release, the service worker that caches every asset under its hash
+    const assets = await startAssets({ base, say: (t) => progress.start('update', t, { immediate: true }), useWorker: !/[?&]psys2nosw=1/.test(globalThis.location?.search ?? '') });   // ?psys2nosw=1: tests of a browser without the service worker
+    if (assets.reloading) return { settings, destroy() {} };
+    if (assets.mismatch) showNewBuildBanner(assets.mismatch);
     const soplang = await import(new URL('lib/soplang/index.mjs', base).href);
     lib = { serialize: soplang.serialize };
     let meta = null, nzMeta = null;
@@ -1674,7 +1673,9 @@ export async function mountPsys2(element, options = {}) {
       translatorState: (f, t) => browserBackend.state(f, t), prepareTranslator: (f, t) => browserBackend.prepare(f, t), rules: null };
     const worldsVer = globalThis.__psys2Mod?.['worlds/index.json'];
     progress.start('worlds', 'Loading the worlds');
-    const info = await engineClient.boot({ browser: { translator: browserBackend.translatorKind(), detector: browserDetectorKind(), mt: true }, worldsUrl: new URL('worlds/index.json', base).href + (worldsVer ? `?v=${worldsVer}` : ''), onlyWorlds: options.worlds ?? null, dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
+    const worldsBytes = await (globalThis.__psys2Early?.worlds ?? undefined);   // the one fetch of worlds/index.json (index.html); the worker reads it from here
+    const info = await engineClient.boot({ worldsBytes, browser: { translator: browserBackend.translatorKind(), detector: browserDetectorKind(), mt: true }, worldsUrl: new URL('worlds/index.json', base).href + (worldsVer ? `?v=${worldsVer}` : ''), onlyWorlds: options.worlds ?? null, dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
+    for (const id of ['worlds', 'reasoner']) if (progress.state(id) !== 'done') progress.end(id, id === 'worlds' ? { label: `Loaded ${info.worlds.length} worlds` } : {});   // the worker ends them as it goes; whatever it did not end is over now (a step must never stay open after the boot)
     engine = { worlds: () => info.worlds.map((id) => ({ id })), problems: () => info.problems ?? [], get set() { return introEngine?.set ?? { list: () => [] }; } };
     if (info.problems?.length) console.warn('PSys2 world problems:', info.problems);
     if (!settingsEl.hidden) renderSettings();
@@ -1694,7 +1695,7 @@ export async function mountPsys2(element, options = {}) {
   (async () => {
     try {
       const [{ createSurprisePicker }, pool] = await Promise.all([import(new URL('lib/dialog/surprise.mjs', base).href),
-        fetch(new URL('surprise-pool.json', base)).then((r) => (r.ok ? r.json() : null)).catch(() => null)]);
+        fetch(assetUrl(base, 'surprise-pool.json')).then((r) => (r.ok ? r.json() : null)).catch(() => null)]);
       surprisePicker = createSurprisePicker(Array.isArray(pool) && pool.length ? pool : await engineClient.call('candidates'));   // unvalidated fallback: the build writes the validated pool
     } catch (e) { console.warn('surprise pool unavailable', e); }
   })();
@@ -1721,14 +1722,20 @@ export async function mountPsys2(element, options = {}) {
   // MT-SERIOUS: the model registry loads after the first paint; a saved non-English language starts its model now
   setTimeout(() => {
     const l0 = language.get();
-    if (l0 === 'en') progress.end('translator', { ms: 0, label: 'Translator: not needed for English' });
-    else progress.start('translator', `Loading the ${langName(l0)} translator`);
+    if (l0 === 'en') {
+      // English: no translation registry, no probe of the browser's Translator for dozens of language pairs, no model, nothing about any other language at start-up.
+      // The language list is loaded the first time it is needed (the selector or Settings is opened, a language is picked).
+      progress.end('translator', { ms: 0, label: 'Translator: not needed for English' });
+      tl.init({ probe: false }).then(renderLangSelect, () => {});   // the registry only (a small local file): the list of languages. No question to the browser's Translator, no model.
+      return;
+    }
+    progress.start('translator', `Loading the ${langName(l0)} translator`);
     tl.init().then(() => { renderLangSelect(); return tl.prepare(language.get()); }).catch((e) => console.warn('translation layer', e)).finally(() => { if (progress.state('translator') === 'active') progress.end('translator'); });
   }, 0);
 
   // optional capabilities, checked once
   {   // PROGRESS: the voices the browser offers (they arrive late in some browsers); bounded
-    progress.start('voices', 'Finding voices');
+    progress.start('voices', 'Finding voices', { quiet: true });
     const done = () => { if (progress.state('voices') === 'active') progress.end('voices', { label: `Voices: ${speech?.voices?.().length ?? 0} found` }); };
     if (!speechSupport.synthesis || speech?.voices?.().length) done(); else { try { speech?.onVoicesChanged?.(() => { if (speech.voices().length) done(); }); } catch { /* no events */ } setTimeout(done, 2500); }
   }

@@ -15,6 +15,9 @@
 //   models/dispatcher/      (only with --models [dir], default dir training/runs/export/dispatcher-distilbert) the Encoder formalizer's model:
 //                           model.int8.onnx, vocab.txt, meta.json. Copied only when changed, never removed; meta.json carries a `version` block. --meta-only regenerates meta.json without touching the model.
 //   surprise-pool.json      (CLI: when missing or with --surprise; `surprise: true` in code; takes about 25 minutes) the SURPRISE button's pool: canonical examples validated in fresh sessions and in click walks [{ text, world, tab }]. Left alone otherwise; tests/surprise.test.mjs flags stale entries.
+//   build-info.json also carries the ASSET MANIFEST (spec 06 "Assets, caches and versions"): { version, assets: { path: hash } } with one content hash for every file the page can fetch
+//                           (the same string that ends the file's URL as `?v=<hash>`; modules use their graph version). `version` is a hash of all of them, stamped into index.html (window.__psys2Build.version).
+//                           The service worker (sw.js), the page and the engine worker read this one manifest; a file is cached forever under its hash and anything not in it is deleted from the caches.
 // Idempotent: lib/, worlds/ and build-info.json are removed and recreated on every run.
 import { readFile, writeFile, readdir, mkdir, rm, cp, stat } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -173,8 +176,26 @@ async function moduleVersions(outDir, graph = {}) {
   }
   Object.assign(out, graph);   // lib and worlds: the graph version (the same string their own imports carry), so the page and the workers load one instance
   if (await exists(path.join(outDir, 'worlds/index.json'))) await add('worlds/index.json');
+  if (await exists(path.join(outDir, 'ui/tabs/index.json'))) await add('ui/tabs/index.json');
   return out;
 }
+/** Files that are never part of the asset manifest: the entry page and the manifest itself (always fetched fresh), the service worker, documentation and screenshots (never fetched by the page). */
+const NOT_ASSETS = [/^index\.html$/, /^build-info\.json$/, /^sw\.js$/, /(^|\/)README\.md$/, /^screenshots\//, /^system-map\.html$/];
+/**
+ * The asset manifest: { path: hash } for every file under outDir the page can fetch. The hash is the string that ends the file's URL (`?v=<hash>`): the graph version
+ * for a module of lib/ and worlds/, the content hash of the module text for ui/ and app.mjs, otherwise the content hash of the file (10 hex digits).
+ */
+export async function assetHashes(outDir, ver = {}) {
+  const out = {};
+  for (const rel of await walk(outDir)) {
+    if (NOT_ASSETS.some((re) => re.test(rel))) continue;
+    out[rel] = ver[rel] ?? sha(await readFile(path.join(outDir, rel))).slice(0, 10);
+  }
+  return out;
+}
+/** The build's version: one short hash of the whole manifest (any changed file changes it). */
+export const manifestVersion = (assets) => sha(Object.entries(assets).sort(([a], [b]) => (a < b ? -1 : 1)).map(([k, v]) => `${k}:${v}`).join('\n')).slice(0, 10);
+
 /** Short id of HEAD, with "-dirty" when tracked sources (not the generated docs/webchat output) differ from it; 'unknown' outside a checkout. */
 export function gitCommit(root) {
   try {
@@ -184,7 +205,7 @@ export function gitCommit(root) {
   } catch { return 'unknown'; }
 }
 
-async function writeEarlyLoad({ outDir, tabFiles, ids, graph, build }) {
+async function writeEarlyLoad({ outDir, tabFiles, ids, graph, build, assets = {} }) {
   const file = path.join(outDir, 'index.html');
   if (!(await exists(file))) return;
   const html = await readFile(file, 'utf8');
@@ -201,7 +222,9 @@ async function writeEarlyLoad({ outDir, tabFiles, ids, graph, build }) {
     `<script>window.__psys2Build = ${JSON.stringify(b)};</script>`,
     `<script>window.__psys2Mod = ${JSON.stringify(ver)};</script>`,
     ...mods.filter((m) => ver[m]).map((m) => `<link rel="modulepreload" href="${m}?v=${ver[m]}">`),
-    `<script>window.__psys2Early = { worlds: fetch('worlds/index.json?v=${ver['worlds/index.json']}'), dispatcherMeta: fetch('models/dispatcher/meta.json', { cache: 'no-cache' }).catch(() => null) };</script>`,
+    // ONE fetch of each of these per start, shared with the engine worker: the page reads the worlds bundle as bytes and hands it to the worker (ui/engine-client.mjs), and
+    // findDispatcherModel (ui/dispatcher-host.mjs) takes the model's meta file from here. Nothing else fetches them.
+    `<script>window.__psys2Early = { worlds: fetch('worlds/index.json?v=${ver['worlds/index.json']}').then((r) => (r.ok ? r.arrayBuffer() : undefined), () => undefined), dispatcherMeta: fetch('models/dispatcher/meta.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null), () => undefined) };</script>`,
     EARLY_END].join('\n  ');
   const a = html.indexOf(EARLY_BEGIN), b = html.indexOf(EARLY_END);
   // idempotent: when only the build time would change (same commit, same files), keep the previous block and its time
@@ -210,7 +233,9 @@ async function writeEarlyLoad({ outDir, tabFiles, ids, graph, build }) {
   try { prevBuild = prev ? JSON.parse(prev[1]) : null; } catch { /* old block */ }
   let block = makeBlock(build);
   if (prevBuild && prevBuild.commit === build.commit && makeBlock({ ...build, builtAt: prevBuild.builtAt }) === html.slice(a, b + EARLY_END.length)) block = makeBlock({ ...build, builtAt: prevBuild.builtAt });
-  const next = a >= 0 && b > a ? html.slice(0, a) + block + html.slice(b + EARLY_END.length) : html.replace('</head>', () => `  ${block}\n</head>`);
+  let next = a >= 0 && b > a ? html.slice(0, a) + block + html.slice(b + EARLY_END.length) : html.replace('</head>', () => `  ${block}\n</head>`);
+  // the stylesheet and the icon carry their hash too (no unhashed asset URL in the page)
+  next = next.replace(/href="(style\.css|favicon\.svg)(\?v=[0-9a-f]+)?"/g, (all, f) => (assets[f] ? `href="${f}?v=${assets[f]}"` : all));
   if (next !== html) await writeFile(file, next);
 }
 
@@ -274,8 +299,7 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   // 3a. early loading (PERF round 2): index.html gets modulepreload links for the whole module graph (app, lib, tabs, world ops) so that a
   // high-latency link fetches them in parallel instead of one import round trip at a time, and an early fetch of worlds/index.json and the model meta file.
   const graph = await versionGraph(outDir);   // rewrites the imports of lib/ and worlds/ to versioned URLs
-  const build = { commit: gitCommit(root), builtAt: new Date().toISOString() };
-  await writeEarlyLoad({ outDir, tabFiles, ids, graph, build });
+  const commit = gitCommit(root), builtAt = new Date().toISOString();
 
   // 3b. dispatcher model for the Encoder formalizer (optional)
   const modelFiles = models ? await copyDispatcherModel({ root, outDir, exportDir: typeof models === 'string' ? models : DEFAULT_MODEL_EXPORT, metaOnly, log }) : null;
@@ -292,12 +316,17 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   // the About section links to the copy next to the page
   if (await exists(path.join(root, 'docs/system-map.html')) && path.resolve(outDir) !== path.resolve(root, 'docs')) await cp(path.join(root, 'docs/system-map.html'), path.join(outDir, 'system-map.html'));
 
+  // 3e. the asset manifest and the early block of index.html (it stamps the manifest's version): after every other file of the out dir exists
+  const assets = await assetHashes(outDir, await moduleVersions(outDir, graph));
+  const version = manifestVersion(assets);
+  await writeEarlyLoad({ outDir, tabFiles, ids, graph, build: { commit, builtAt, version }, assets });
+
   // 4. build info
   const files = {};
   for (const sub of ['lib', 'worlds']) {
     for (const f of await walk(path.join(outDir, sub))) files[`${sub}/${f}`] = sha(await readFile(path.join(outDir, sub, f)));
   }
-  const info = { worlds: ids, tabs: tabFiles, dispatcherModel: !!modelFiles, files, builtAt: build.builtAt, commit: build.commit };
+  const info = { version, worlds: ids, tabs: tabFiles, dispatcherModel: !!modelFiles, files, builtAt, commit, assets };
   await writeFile(path.join(outDir, 'build-info.json'), JSON.stringify(info, null, 2) + '\n');
   log(`webchat: ${ids.length} worlds, ${Object.keys(files).length} files -> ${outDir}`);
   return info;

@@ -109,9 +109,17 @@ async function init(m) {
     g.guard.check = (stage) => { report(stage); return gc(stage); };
     g.guard.setStage = (stage) => { report(stage); return gs(stage); };
     g.guard.abortable = (p, stage) => { report(stage); return ga(p, stage); }; }
-  const res = await fetch(m.worldsUrl, { cache: 'default' });
-  if (!res.ok) throw new Error(`worlds/index.json: HTTP ${res.status}`);
-  const bundle = await res.json();
+  // PROGRESS: the page's start-up steps follow the real order (the page ends none of them itself, so a step that never ends is a bug the progress test catches)
+  evt('boot-step', { id: 'worlds', op: 'start' });
+  // the page already fetched the bundle once (index.html, `__psys2Early`) and hands the bytes over: one fetch of the file per start, shared by the page and this worker (also on a restart)
+  let bundleText;
+  if (m.worldsBytes) bundleText = new TextDecoder().decode(m.worldsBytes);
+  else {
+    const res = await fetch(m.worldsUrl, { cache: 'default' });
+    if (!res.ok) throw new Error(`worlds/index.json: HTTP ${res.status}`);
+    bundleText = await res.text();
+  }
+  const bundle = JSON.parse(bundleText);
   for (const [id, w] of Object.entries(bundle.worlds)) {
     if (m.onlyWorlds && id !== 'core' && !m.onlyWorlds.includes(id)) delete bundle.worlds[id];
     else {
@@ -124,8 +132,11 @@ async function init(m) {
   // MT keep-list (spec 05): the app's own words (currency, names, titles, tab names) are placeholders around the model; the engine and session exist by the first call
   { const kl = await imp('lib/translate/keep-list.mjs'); const raw = backend.translate; backend.translate = kl.protectedTranslate(raw, () => (engine ? { keep: kl.keepListOf(engine.set), extra: kl.sessionNames(session) } : null)); }
   const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend, languages: lang.LANGS });
+  evt('boot-step', { id: 'worlds', op: 'end', bytes: bundleText.length, count: Object.keys(bundle.worlds ?? {}).length });
+  evt('boot-step', { id: 'reasoner', op: 'start' });
   engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });   // Settings › Developer › Reasoner (spec 15): read when the engine starts
   try { await engine.prepareMeta?.(); } catch { /* the policy router answers alone (spec 20) */ }   // meta.worlds: the default router (C)
+  evt('boot-step', { id: 'reasoner', op: 'end' });
   // The knowledge catalog (spec 17): the sop-knowledge-worlds copy on GitHub Pages, read lazily (nothing is fetched until a message needs a thing the board or the
   // lexicons do not have), each file bounded by KNOWLEDGE_FETCH_MS (a slow or offline read counts as unreachable and is asked again after a backoff, see facts.mjs).
   engine.onModelTimeout = (info) => evt('model-timeout', info);   // a model call timed out and the rules answered (spec 06): the debug panel says so once and counts

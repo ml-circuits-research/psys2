@@ -6,6 +6,7 @@
 //   downloaded the first time the language is selected, never on the first-paint path, (c) nothing else.
 import { createMtHost, mbText } from './mt-host.mjs';
 import { langName, registerLanguages, knownLanguages } from './language.mjs';
+import { assetUrl } from './assets.mjs';
 import { browserTranslatorKind, browserTranslatorAvailability } from './translation.mjs';
 
 const CACHE = 'psys2-mt-v1';
@@ -79,10 +80,13 @@ export function createTranslationLayer({ base, h, note = () => {}, progress = nu
     if (autoHide) hideTimer = setTimeout(() => { banner.hidden = true; }, autoHide);
   }
 
-  async function init() {
-    if (initPromise) return initPromise;
-    initPromise = (async () => {
-      const get = (p) => fetch(new URL(p, base)).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  /**
+   * Loads the registry (a small local file: which languages exist) and, unless `probe: false`, asks the browser's Translator which pairs it serves. English starts with
+   * `probe: false`: the list of languages is there, but nothing is asked of the browser about any other language until one is selected or Settings is opened.
+   */
+  async function init({ probe = true } = {}) {
+    initPromise ??= (async () => {
+      const get = (p) => fetch(assetUrl(base, p)).then((r) => (r.ok ? r.json() : null)).catch(() => null);
       [registry, quality] = await Promise.all([get('vendor/bergamot/registry.json'), get('vendor/bergamot/quality.json')]);
       if (globalThis.__psys2MtOff) registry = null;   // tests of the desktop rows (fake browser Translator): the on-device model is not used, nothing is downloaded
       if (registry) {
@@ -91,12 +95,14 @@ export function createTranslationLayer({ base, h, note = () => {}, progress = nu
           spawn: spawn ?? (() => new Worker(new URL('vendor/bergamot/translator-worker.js', base))),   // a classic worker (importScripts of the Emscripten glue)
         });
       }
-      await probeNative();
       registerLanguages(listed().map((l) => l.code));
       onChange();
     })();
-    return initPromise;
+    await initPromise;
+    if (probe) await ensureNative();
   }
+  let nativeP = null;
+  const ensureNative = () => nativeP ??= (async () => { await probeNative(); registerLanguages(listed().map((l) => l.code)); onChange(); })();
 
   /** The browser Translator: which registry languages it supports in both directions with English (availability per pair, asked once, bounded). */
   async function probeNative() {

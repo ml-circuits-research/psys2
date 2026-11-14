@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // PROGRESS (spec 06 "Progress"): ONE progress service for every wait in the page. Any part reports start(id, label), step(id, label, done, total) and end(id);
-// the service owns ONE small panel (a bar, the current step in plain words, a "Details" fold with the steps done and their times). No part draws its own spinner.
+// the service owns ONE small popup: the CURRENT step in plain words ("Loading the drawing world…", "Loading the reading model (12 of 65 MB)…"), replaced as the next step starts,
+// shown only when a wait lasts more than SHOW_MS, gone the moment nothing loads (nothing at all when everything comes from the cache). The steps done and their times sit in a
+// "Details" fold that only developers see (`details()`). No part draws its own spinner.
 //
 //   const pg = createProgress({ storage, localize, onStep });
 //   pg.plan('startup', [{ id: 'page', label: 'page code' }, { id: 'worlds', label: 'worlds' }, ...]);   // an ordered set, weighted by the last start's measured times
@@ -12,12 +14,12 @@
 import { h } from './util.mjs';
 
 export const PROGRESS_KEY = 'psys2.webchat.progress';
-const HIDE_MS = 900, FAIL_MS = 20000, RENDER_MS = 80;
+const SHOW_MS = 700, FAIL_MS = 20000, RENDER_MS = 80;   // a step that has run less than SHOW_MS is not shown (a start from the cache shows nothing); each new step restarts the clock
 
 const mbText = (b) => (b >= 1e6 ? `${(b / 1e6).toFixed(1)} MB` : b >= 1e3 ? `${Math.round(b / 1e3)} kB` : `${b} B`);
 const secText = (ms) => (ms < 1000 ? `${Math.round(ms)} ms` : `${(ms / 1000).toFixed(1)} s`);
 
-export function createProgress({ storage = globalThis.localStorage, localize = null, onStep = null, now = () => globalThis.performance?.now?.() ?? Date.now(), document: doc = globalThis.document, setTimer = (fn, ms) => setTimeout(fn, ms) } = {}) {
+export function createProgress({ storage = globalThis.localStorage, localize = null, onStep = null, details = () => false, now = () => globalThis.performance?.now?.() ?? Date.now(), document: doc = globalThis.document, setTimer = (fn, ms) => setTimeout(fn, ms) } = {}) {
   const tasks = new Map();      // id -> { id, label, t0, done, total, state: 'queued' | 'active' | 'done' | 'failed', ms, bytes, error, weight, plan }
   const plans = new Map();      // name -> { ids, weights }
   const failures = [];          // { key, text, still, at }
@@ -44,8 +46,10 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
     plans.set(name, { ids });
     schedule();
   }
-  function start(id, label, { total = 0, done = 0 } = {}) {
+  function start(id, label, { total = 0, done = 0, quiet = false, immediate = false } = {}) {
     const t = taskOf(id, label);
+    t.immediate = immediate;   // shown at once, without the SHOW_MS wait (a message the person must read before the page reloads)
+    t.quiet = quiet;   // a quiet step is recorded (details, timings) but never shown in the popup: it waits for the browser, it loads nothing
     if (t.state === 'active') { if (label) t.label = label; return; }
     Object.assign(t, { label: label ?? t.label, t0: now(), state: 'active', done, total, ms: null, error: null });
     schedule();
@@ -86,25 +90,24 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
   const frac = (t) => (t.state === 'done' || t.state === 'failed' ? 1 : t.state === 'active' ? (t.total ? Math.min(0.98, t.done / t.total) : t.lastMs ? Math.min(0.9, (now() - t.t0) / t.lastMs) : 0.3) : 0);
   /** What the panel shows now: { label, fraction (0..1 or null = unknown), count, steps }. */
   function view() {
-    const active = [...tasks.values()].filter((t) => t.state === 'active');
+    const active = [...tasks.values()].filter((t) => t.state === 'active' && !t.quiet);
     const open = [...plans.entries()].filter(([n]) => !planDone(n));
-    let main = null, fraction = null;
-    if (open.length) {
-      const ids = plans.get(open[0][0]).ids.map((id) => tasks.get(id));
+    // the current step is the most recently started one that still runs (never a queued step: nothing is said about what has not begun)
+    const main = active.length ? active.reduce((a, b) => ((b.t0 ?? 0) >= (a.t0 ?? 0) ? b : a)) : null;
+    let fraction = main?.total ? main.done / main.total : null;
+    const plan = main?.plan && !planDone(main.plan) ? plans.get(main.plan) : open.length ? plans.get(open[0][0]) : null;
+    if (plan) {
+      const ids = plan.ids.map((id) => tasks.get(id));
       const sum = ids.reduce((a, t) => a + t.weight, 0), got = ids.reduce((a, t) => a + t.weight * frac(t), 0);
       fraction = sum ? got / sum : null;
-      main = ids.find((t) => t.state === 'active') ?? ids.find((t) => t.state === 'queued');
-    } else if (active.length) {
-      main = active[active.length - 1];
-      fraction = main.total ? main.done / main.total : null;
     }
-    const idx = open.length ? plans.get(open[0][0]).ids.indexOf(main?.id) + 1 : 0;
+    const idx = plan && open.length ? plan.ids.indexOf(main?.id) + 1 : 0;
     const label = main ? `${main.label}${main.total && main.total > 1 && !/\d+\s*\/\s*\d+|MB/.test(main.label) ? ` (${main.done}/${main.total})` : ''}` : '';
-    return { note: noteText, label, fraction, busy: !!main || active.length > 0, stepNo: idx, stepOf: open.length ? plans.get(open[0][0]).ids.length : 0, active: active.map((t) => t.id), failures: failures.slice(), steps: [...tasks.values()].filter((t) => t.state !== 'queued' || t.plan) };
+    return { note: noteText, label, current: main?.id ?? null, fraction, busy: !!main || active.length > 0, stepNo: idx, stepOf: open.length ? plans.get(open[0][0]).ids.length : 0, active: active.map((t) => t.id), failures: failures.slice(), steps: [...tasks.values()].filter((t) => t.state !== 'queued' || t.plan) };
   }
 
   // ---------- panel ----------
-  let el = null, rendering = 0, hideAt = 0, lastShown = null;
+  let el = null, rendering = 0, lastShown = null;
   if (doc) {
     const bar = h('i', {});
     el = h('div', { class: 'p2-progress', role: 'status', 'aria-live': 'polite', hidden: true },
@@ -113,7 +116,7 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
       h('p', { class: 'p2-pg-note', hidden: true }),
       h('p', { class: 'p2-pg-fail', hidden: true }),
       h('details', { class: 'p2-pg-details' }, h('summary', {}, 'Details'), h('ol', { class: 'p2-pg-steps' })));
-    el.querySelector('.p2-pg-close').addEventListener('click', () => { failures.length = 0; hideAt = 0; render(); });
+    el.querySelector('.p2-pg-close').addEventListener('click', () => { failures.length = 0; render(); });
   }
   const txt = (node, text) => {
     if (node._en === text) return;
@@ -125,22 +128,28 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
     const v = view();
     for (const fn of [...listeners]) { try { fn(v); } catch { /* ignore */ } }
     if (!el) return;
-    const show = v.busy || v.failures.length > 0 || (hideAt && now() < hideAt);
-    if (v.busy) hideAt = 0; else if (!hideAt && !v.failures.length && lastShown?.busy) { hideAt = now() + HIDE_MS; setTimer(schedule, HIDE_MS + 20); }
+    const t = now();
+    const cur = v.active.length ? tasks.get(v.current) : null;
+    const due = !!cur && (cur.immediate || t - (cur.t0 ?? t) >= SHOW_MS);
+    if (cur && !due) setTimer(schedule, Math.max(30, SHOW_MS - (t - (cur.t0 ?? t)) + 20));
+    const show = due || v.failures.length > 0;
     if (v.failures.length && !el.dataset.failAt) { el.dataset.failAt = '1'; setTimer(() => { if (failures.length && now() - failures[0].at >= FAIL_MS - 50) { failures.length = 0; delete el.dataset.failAt; schedule(); } }, FAIL_MS); }
     if (!v.failures.length) delete el.dataset.failAt;
     lastShown = v;
     el.hidden = !show;
     if (!show) return;
-    const idle = !v.busy && !v.failures.length;
-    txt(el.querySelector('.p2-pg-label'), idle ? 'Ready' : v.label || (v.failures.length ? 'Something did not load' : 'Working'));
-    el.querySelector('.p2-pg-count').textContent = v.stepOf ? `${Math.min(v.stepNo || v.stepOf, v.stepOf)}/${v.stepOf}` : '';
+    const idle = !v.busy;
+    const dev = !!details();
+    txt(el.querySelector('.p2-pg-label'), idle ? (v.failures.length ? 'Something did not load' : '') : `${v.label.replace(/…$/, '')}…`);
+    el.querySelector('.p2-pg-count').hidden = true;   // no "3/7": only the current step
+    el.querySelector('.p2-pg-details').hidden = !dev;
     const barEl = el.querySelector('.p2-pg-bar'), pct = idle ? 100 : v.fraction == null ? null : Math.round(v.fraction * 100);
+    barEl.hidden = idle;
     barEl.classList.toggle('is-indeterminate', pct == null);
     barEl.firstChild.style.width = pct == null ? '' : `${pct}%`;
     if (pct == null) barEl.removeAttribute('aria-valuenow'); else barEl.setAttribute('aria-valuenow', String(pct));
     const ne = el.querySelector('.p2-pg-note');
-    ne.hidden = !v.note || idle;
+    ne.hidden = !v.note || idle || !dev;
     if (v.note) txt(ne, v.note);
     const fe = el.querySelector('.p2-pg-fail');
     fe.hidden = !v.failures.length;
@@ -148,11 +157,11 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
     el.querySelector('.p2-pg-close').hidden = !v.failures.length;
     el.classList.toggle('is-failed', v.failures.length > 0);
     const ol = el.querySelector('.p2-pg-steps');
-    const items = v.steps.map((t) => `${t.state}|${t.label}|${t.ms ?? ''}|${t.bytes ?? ''}|${t.state === 'active' ? Math.round((now() - t.t0) / 100) : ''}`);
+    const items = !dev ? [] : v.steps.map((t) => `${t.state}|${t.label}|${t.ms ?? ''}|${t.bytes ?? ''}|${t.state === 'active' ? Math.round((now() - t.t0) / 100) : ''}`);
     const sig = items.join('\n');
     if (ol._sig !== sig) {
       ol._sig = sig;
-      ol.replaceChildren(...v.steps.map((t) => h('li', { class: `is-${t.state}` }, `${t.state === 'done' ? '✓' : t.state === 'failed' ? '✗' : t.state === 'active' ? '…' : '·'} ${t.label}`,
+      ol.replaceChildren(...(dev ? v.steps : []).map((t) => h('li', { class: `is-${t.state}` }, `${t.state === 'done' ? '✓' : t.state === 'failed' ? '✗' : t.state === 'active' ? '…' : '·'} ${t.label}`,
         h('span', { class: 'p2-pg-ms' }, t.state === 'active' ? ` ${secText(now() - t.t0)}` : t.ms != null ? ` ${secText(t.ms)}${t.bytes ? `, ${mbText(t.bytes)}` : ''}` : ''))));
     }
   }
