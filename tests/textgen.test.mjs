@@ -14,7 +14,7 @@ test('without the library the adapters are unavailable and return nothing (no lo
   assert.equal(s.turns({ turns: [{ n: 1 }] }), null); assert.equal(s.text({ text: 'x' }), null); assert.ok(c.compose({ topic: 'volcanoes' }).why && !c.compose({ topic: 'volcanoes' }).composition);
 });
 
-test('the vendored sopworld has std.summarize and a first std.compose (0.65; its interface differs from spec 26 until step B)', () => {
+test('the vendored sopworld has std.summarize and a first std.compose (0.71: compose by a published genre returns parts and moves)', () => {
   assert.equal(typeof lib.summarizeLog, 'function'); assert.equal(typeof lib.summarizeText, 'function'); assert.equal(typeof lib.compose, 'function');
 });
 
@@ -28,16 +28,16 @@ test('composeRequest: empty or "anything" means random, counts are clamped; docu
   assert.equal(composeRequest({ type: 'story' }).random, true);
 });
 
-test('checkComposition over the library frames: cited, realised, no fact twice, shorter only when said', () => {
-  const req = composeRequest({ type: 'essay', topic: 'x', chapters: 2, subchapters: 1 });
-  const frame = (cites, text = 'A sentence.') => ({ move: 'fact', fact: {}, about: 'x', cites, text });
-  const ch = (...f) => ({ title: 't', sections: [{ sentences: f }] });
-  assert.ok(checkComposition({ chapters: [ch(frame('a')), ch(frame('b'))] }, req).ok);
-  assert.ok(/not said to be short/.test(checkComposition({ chapters: [ch(frame('a'))] }, req).problems[0]));
-  assert.ok(checkComposition({ chapters: [ch(frame('a'))], short: ['chapter 2: no more'] }, req).ok);
-  assert.ok(/uncited/.test(checkComposition({ chapters: [ch(frame(null)), ch(frame('b'))] }, req).problems[0]));
-  assert.ok(/twice/.test(checkComposition({ chapters: [ch(frame('a')), ch(frame('a'))] }, req).problems.join()));
-  assert.ok(/placeholder/.test(checkComposition({ chapters: [ch(frame('a', 'x {y}')), ch(frame('b'))] }, req).problems.join()));
+test('checkComposition over the library frames (parts with moves): a claim cites a wire, no fact twice, no placeholder, something said', () => {
+  const part = (...moves) => ({ part: 'p', moves });
+  const claim = (cites, text = 'A sentence.') => ({ move: 'state claim', takes: 'fact', cites, text });
+  assert.ok(checkComposition({ parts: [part(claim('a'), claim('b'))] }).ok);
+  assert.ok(checkComposition({ parts: [part({ move: 'introduce topic', takes: 'topic', text: 'Today we talk about it.' }, claim('a'))] }).ok, 'a sentence about the topic is no claim, and needs no wire');
+  assert.ok(/no claim/.test(checkComposition({ parts: [part({ move: 'introduce topic', takes: 'topic', text: 'Today we talk about it.' })] }).problems.join()), 'a text that claims nothing says what it is about and no more: declined');
+  assert.ok(/uncited/.test(checkComposition({ parts: [part(claim(null))] }).problems[0]));
+  assert.ok(/twice/.test(checkComposition({ parts: [part(claim('a'), claim('a'))] }).problems.join()));
+  assert.ok(/placeholder/.test(checkComposition({ parts: [part(claim('a', 'x {y}'))] }).problems.join()));
+  assert.ok(/nothing said/.test(checkComposition({ parts: [part({ move: 'x', takes: 'fact' })] }).problems.join()));
 });
 
 test('the real std.compose over the bundled catalog: a cited, realised essay about an animal; an unknown topic and a type without a genre are declined with the reason', () => {
@@ -50,7 +50,7 @@ test('the real std.compose over the bundled catalog: a cited, realised essay abo
   assert.ok(s.length >= 1 && s.every((x) => x.text.includes('penguin') && x.source));
   assert.equal(new Set(s.map((x) => x.source)).size, s.length);
   assert.match(c.compose({ type: 'essay', topic: 'volcanoes' }).why, /know nothing about volcanoes/);
-  for (const type of ['presentation', 'story', 'report', 'scientific-article']) assert.match(c.compose({ type, topic: 'penguin' }).why, /does not read the published .* genre yet/, type);
+  for (const type of ['presentation', 'report', 'scientific-article']) { const x = c.compose({ type, topic: 'penguin', words: 100, seed: 2 }); assert.ok(x.composition?.chapters.length, `${type}: ${x.why}`); assert.equal(x.composition.genre.replace(/ /g, '-'), type); }
   const random = c.compose({ type: 'essay', chapters: 1, subchapters: 1, words: 40, seed: 11 });
   assert.ok(random.composition, random.why); assert.ok(random.composition.topic);
 });
@@ -87,7 +87,7 @@ test('std.summarize (real library): pasted text and the open document are summar
   } finally { delete globalThis[TEXTGEN_GLOBAL]; }
 });
 
-test('with the real composer the essay commands write a new document that keeps the per-sentence source; types whose published genre the library cannot apply yet are declined', async () => {
+test('with the real composer the essay commands write a new document that keeps the per-sentence source; the other types are composed by their published genres', async () => {
   installTextGen(lib, null);
   try {
     const s = docs();
@@ -96,12 +96,12 @@ test('with the real composer the essay commands write a new document that keeps 
     const w = s.state()['docs.reader'];
     const d = w.docs.find((x) => x.id === w.active);
     assert.equal(d.origin, 'composed'); assert.ok(Object.keys(d.provenance).length >= 1);
-    assert.ok(Object.values(d.provenance).every((x) => /^k\.animals\./.test(x)));
+    assert.ok(Object.values(d.provenance).filter(Boolean).every((x) => /^k\.(animals|commonsense|attributes|parts)\./.test(x)), JSON.stringify(d.provenance));
     const a = await s.send('write a composition about anything');
     assert.match(a.text, /I wrote the essay "All about /);
-    for (const [text, type] of [['write a short story', 'story'], ['make a presentation about penguin with 5 sections', 'presentation'], ['write a scientific article about bees, 3 chapters', 'scientific']]) {
+    for (const [text, type] of [['make a presentation about penguin with 5 sections', 'presentation'], ['write a report about owl', 'report']]) {
       const x = await s.send(text);
-      assert.match(x.text, /cannot write that: .*does not read the published .* genre yet/, text);
+      assert.match(x.text, new RegExp(`I wrote the ${type}`), text);
     }
     const v = await s.send('write an essay about volcanoes');
     assert.match(v.text, /know nothing about volcanoes/);
@@ -141,10 +141,10 @@ for (const file of ['owner-log-2026-11-13b.jsonl', 'owner-log-2026-11-13c.jsonl'
   });
 }
 
-test('the published k.genres is in the knowledge world and the five types map to its genres; the library cannot apply them yet (0.65 reads move= on a genre)', () => {
+test('the published k.genres is in the knowledge world and the five types map to its genres, and the library applies them (0.71)', () => {
   const kw = knowledgeWorld(lib);
   for (const t of Object.keys(DOC_TYPES)) assert.ok(genreOf(kw, t), `a genre for ${t}`);
-  assert.throws(() => lib.compose(kw, 'penguin', { genre: 'essay' }), 'update the adapter (and spec 26) when the library reads parts and steps');
+  assert.ok(lib.compose(kw, 'penguin', { genre: 'essay' }).parts, 'the library reads the published parts and steps');
   assert.ok(topicsOf(kw).includes('Peru') && topicsOf(kw).includes('penguin'), 'animals and countries are topics');
   const c = createComposer(lib).compose({ type: 'essay', topic: 'peru', chapters: 2, subchapters: 1, words: 60, seed: 1 }).composition;
   assert.equal(c.title, 'All about Peru'); assert.ok(c.chapters.length >= 1);
