@@ -11,6 +11,14 @@
 // Data: the places come by lookup from the catalog's k.geo (places.mjs); the world has no knowledge base of its own.
 
 import { buildIndex, lookup } from './places.mjs?v=a34170dee4';
+import { askBridge } from '../acts/ask-lib.mjs?v=304b6d8a1c';   // questions over attributes and relations answered by the library (sopworld `ask`)
+import { viewOf } from '../acts/view-lib.mjs?v=cf63ba741c';   // the acts on the view's own attributes (zoom, layer) by the library (sopworld std.schema.view state=)
+import * as G from './ops.mjs?v=78f7c1cefd';   // circular on purpose: the schema's executor, read inside functions only
+let VIEW = null;
+/** The view bridge of this world's schema (`@map.view` and its attributes: zoom, centre, layer): the library checks the value and computes the step; the state stays this module's. */
+const viewLib = () => (VIEW ??= viewOf(G.executor.schema, 'view'));
+export const viewBridge = () => viewLib();
+const viewState = (s) =>({ zoom: s.zoom, layer: s.layer });
 
 export function initialState() {
   return { center: { lat: 25, lon: 10 }, zoom: 2, bounds: null, markers: [], highlighted: [], lines: [], layer: 'offline', focus: null, me: null, clicked: null, pending: null, nextId: 1 };
@@ -87,7 +95,22 @@ const DEMONYM = { japanese: 'japan', brazilian: 'brazil', romanian: 'romania', g
 const place = (D, key) => (key === undefined ? null : lookup(D, key) ?? lookup(D, DEMONYM[String(key)]));
 const the = (e) => (e.kind === 'country' && THE.has(e.name) ? `the ${e.name}` : e.name);
 const theCap = (e) => { const t = the(e); return t.charAt(0).toUpperCase() + t.slice(1); };
-const countryOf = (D, e) => (e?.kind === 'country' ? e : e?.kind === 'city' ? D.byCc.get(e.cc) ?? null : null);
+// The facts of a country are asked of the library (worlds/acts/ask-lib.mjs: `ask thing= attr=` of sopworld): the countries of the index are projected to wires once per index (the kind `place` and its
+// facts are the schema's: capital, population, area, currency, language, continent, neighbours, landlocked); the library says the value, the list or yes / no, this module the sentence and what the map does.
+const FACTS = [{ name: 'capital', type: 'text', many: true }, { name: 'population', type: 'number' }, { name: 'area', type: 'number' }, { name: 'currency', type: 'text', many: true }, { name: 'language', type: 'text', many: true },
+  { name: 'continent', type: 'text' }, { name: 'neighbours', type: 'text', many: true }, { name: 'landlocked', type: 'bool' }];
+let ASKER = null;
+const projected = new WeakMap();   // the countries of an index -> their projection (the index is cached: one projection per catalog)
+/** What the library says of one country's attribute: { shape, values, number } ('none': the country has no such fact). */
+function fact(D, c, attr) {
+  let things = projected.get(D.countries);
+  if (!things) {
+    things = D.countries.map((x) => ({ id: x.id, name: x.name, attrs: { capital: x.capital, population: x.pop ?? undefined, area: x.area ?? undefined, currency: x.cur, language: x.lang, continent: CONT[x.cont], neighbours: x.nb.map((cc) => D.byCc.get(cc)?.name).filter(Boolean), landlocked: x.land } }));
+    projected.set(D.countries, things);
+  }
+  return (ASKER ??= askBridge('place', FACTS)).ask(things, { thing: c.id, attr });
+}
+const countryOf = (D, e) =>(e?.kind === 'country' ? e : e?.kind === 'city' ? D.byCc.get(e.cc) ?? null : null);
 const members = (D, rg) => rg.members.map((cc) => D.byCc.get(cc)).filter(Boolean);
 const bbOf = (D, e) => {
   if (e.kind === 'city') return [e.lat, e.lon, e.lat, e.lon];
@@ -208,8 +231,8 @@ function _zoom(ctx, { dir, amt, n }) {
   const step = n !== undefined ? clamp(Number(n), 0, 18) : amt !== undefined ? AMT[amt] ?? 1 : 1;
   const before = s.zoom;
   if (dir === 'out' && step >= 99) { s.center = { lat: WORLD_VIEW.lat, lon: WORLD_VIEW.lon }; s.zoom = WORLD_VIEW.zoom; s.bounds = null; return ok('Zoomed all the way out to the whole world.'); }
-  const target = dir === 'out' ? before - step : before + (step >= 99 ? 99 : step);
-  const z = clamp(target, dir === 'out' ? 1 : 1, maxZ);
+  const r = viewLib().change(viewState(s), { attr: 'zoom', by: dir === 'out' ? 'less' : 'more', amount: step });   // the library steps the zoom and holds it between the bounds of the schema (the layer's own bound is below)
+  const z = clamp(r.values.zoom ?? before, 1, maxZ);
   s.zoom = z; s.bounds = null;
   if (z === before) return ok(dir === 'out' ? 'This is already as far out as the map goes.' : `This is already as close as the map goes (zoom ${before}).`);
   return ok(`Zoomed ${dir === 'out' ? 'out' : 'in'} to zoom ${z}.`);
@@ -217,9 +240,10 @@ function _zoom(ctx, { dir, amt, n }) {
 
 function _zoomTo(ctx, { n }) {
   const s = ctx.state, z = Number(n);
-  if (!(z >= 1 && z <= 18)) return no('unsupported', 'The zoom level must be between 1 and 18.');
+  const r = viewLib().change(viewState(s), { attr: 'zoom', value: z });
+  if (!Number.isFinite(z) || !r.ok || r.clamped) return no('unsupported', 'The zoom level must be between 1 and 18.');
   tab(ctx);
-  s.zoom = clamp(z, 1, maxZoom(s)); s.bounds = null;
+  s.zoom = clamp(r.values.zoom, 1, maxZoom(s)); s.bounds = null;
   return ok(`Zoom is now ${s.zoom}.`);
 }
 
@@ -403,7 +427,7 @@ function _layer(ctx, { l }) {
   const want = OSM_WORDS.has(l) ? 'osm' : 'offline';
   tab(ctx);
   if (s.layer === want) return ok(want === 'osm' ? 'The street map is already on.' : 'The offline country map is already on.');
-  s.layer = want;
+  s.layer = viewLib().change(viewState(s), { attr: 'layer', value: want }).values.layer ?? want;
   if (want === 'osm') return ok('OK, the street map is on. It uses OpenStreetMap tiles, so it needs an internet connection; without one you will keep seeing the country outlines.');
   s.zoom = Math.min(s.zoom, 12);
   return ok('OK, back to the offline country map.');
@@ -420,11 +444,12 @@ export function capital(ctx, { c }) {
   if (!e) return no('unsupported', unknownNote(c));
   if (e.kind === 'city') return no('unsupported', `${e.name} is a city, not a country, so it has no capital. ${e.isCapital ? `It is itself the capital of ${the(D.byCc.get(e.cc))}.` : ''}`.trim());
   if (e.kind === 'region') return no('unsupported', `${e.name.charAt(0).toUpperCase()}${e.name.slice(1)} is not a country, so it has no capital. Try "mark the capitals of ${e.name}".`);
-  if (!e.capital.length) return no('missing', `I do not know a capital of ${the(e)}.`);
+  const capitals = fact(D, e, 'capital').values;
+  if (!capitals.length) return no('missing', `I do not know a capital of ${the(e)}.`);
   tab(ctx);
   const city = (D.capitalOf.get(e.cc) ?? [])[0];
   if (city) focusOn(s, D, city); else focusOn(s, D, e);
-  return ok(e.capital.length === 1 ? `The capital of ${the(e)} is ${e.capital[0]}.` : `${theCap(e)} has ${e.capital.length} capitals: ${list(e.capital)}.`);
+  return ok(capitals.length === 1 ? `The capital of ${the(e)} is ${capitals[0]}.` : `${theCap(e)} has ${capitals.length} capitals: ${list(capitals)}.`);
 }
 
 export function isCapital(ctx, { a, b }) {
@@ -469,9 +494,10 @@ export function population(ctx, { p }) {
     return ok(`${e.name} has about ${human(e.pop)} people (the city itself, from GeoNames).`);
   }
   if (e.kind === 'country') {
-    if (!e.pop) return no('missing', `I do not know the population of ${the(e)}.`);
+    const pop = fact(D, e, 'population');
+    if (!pop.number) return no('missing', `I do not know the population of ${the(e)}.`);
     focusOn(s, D, e);
-    return ok(`${theCap(e)} has about ${human(e.pop)} people (an estimate from around 2018).`);
+    return ok(`${theCap(e)} has about ${human(pop.number)} people (an estimate from around 2018).`);
   }
   const total = members(D, e).reduce((t, c) => t + (c.pop ?? 0), 0);
   focusOn(s, D, e);
@@ -484,7 +510,7 @@ export function area(ctx, { p }) {
   tab(ctx);
   focusOn(s, D, e);
   if (e.kind === 'city') return ok(`I do not know the area of ${e.name}, only its population: about ${human(e.pop)} people.`);
-  if (e.kind === 'country') return e.area ? ok(`${theCap(e)} covers ${fmt(e.area)} square kilometres.`) : no('missing', `I do not know the area of ${the(e)}.`);
+  if (e.kind === 'country') { const a = fact(D, e, 'area').number; return a ? ok(`${theCap(e)} covers ${fmt(a)} square kilometres.`) : no('missing', `I do not know the area of ${the(e)}.`); }
   const total = members(D, e).reduce((t, c) => t + (c.area ?? 0), 0);
   return ok(`The countries of ${e.name} cover about ${human(total)} square kilometres together.`);
 }
@@ -534,7 +560,7 @@ export function borders(ctx, { p }) {
   const { c, err } = needCountry(D, e, 'neighbours');
   if (err) return err;
   tab(ctx);
-  const nb = c.nb.map((cc) => D.byCc.get(cc)).filter(Boolean);
+  const nb = fact(D, c, 'neighbours').values.map((n) => lookup(D, n)).filter(Boolean);   // the library lists them (a relation of the country), the index gives the places back
   if (!nb.length) { focusOn(s, D, c); return ok(`${theCap(c)} has no land borders.`); }
   highlight(s, [c, ...nb], true);
   fitCountries(s, D, [c, ...nb]);
@@ -560,7 +586,7 @@ export function neighbourCount(ctx, { p }) {
   const { c, err } = needCountry(D, e, 'neighbours');
   if (err) return err;
   tab(ctx);
-  const nb = c.nb.map((cc) => D.byCc.get(cc)).filter(Boolean);
+  const nb = fact(D, c, 'neighbours').values.map((n) => lookup(D, n)).filter(Boolean);
   highlight(s, [c, ...nb], true); fitCountries(s, D, [c, ...nb]); s.focus = null;
   return ok(nb.length ? `${theCap(c)} has ${nb.length} ${nb.length === 1 ? 'neighbour' : 'neighbours'}: ${list(nb.map((x) => the(x)))}.` : `${theCap(c)} has no land neighbours.`);
 }
@@ -572,7 +598,7 @@ export function landlocked(ctx, { p }) {
   if (err) return err;
   tab(ctx);
   focusOn(s, D, c);
-  return ok(c.land ? `Yes, ${the(c)} is landlocked: it has no sea coast.` : `No, ${the(c)} is not landlocked: it has a sea coast${c.nb.length ? '' : ' (it is an island)'}.`);
+  return ok(fact(D, c, 'landlocked').values[0] === 'true' ? `Yes, ${the(c)} is landlocked: it has no sea coast.` : `No, ${the(c)} is not landlocked: it has a sea coast${c.nb.length ? '' : ' (it is an island)'}.`);
 }
 
 export function continent(ctx, { p }) {
@@ -582,7 +608,8 @@ export function continent(ctx, { p }) {
   const c = countryOf(D, e);
   tab(ctx);
   focusOn(s, D, e);
-  return ok(`${e.name} is in ${CONT[c.cont]}${c.sub && c.sub !== CONT[c.cont] ? ` (${c.sub})` : ''}.`);
+  const cont = fact(D, c, 'continent').values[0];
+  return ok(`${e.name} is in ${cont}${c.sub && c.sub !== cont ? ` (${c.sub})` : ''}.`);
 }
 
 export function isIn(ctx, { p, q: where_, r: region }) {
@@ -676,10 +703,11 @@ export function currency(ctx, { p }) {
   if (!e) return no('unsupported', unknownNote(p));
   const { c, err } = needCountry(D, e, 'currency');
   if (err) return err;
-  if (!c.cur.length) return no('missing', `I do not know the currency of ${the(c)}.`);
+  const cur = fact(D, c, 'currency').values;
+  if (!cur.length) return no('missing', `I do not know the currency of ${the(c)}.`);
   tab(ctx);
   focusOn(s, D, c);
-  return ok(`${theCap(c)} uses the ${list(c.cur)}.`);
+  return ok(`${theCap(c)} uses the ${list(cur)}.`);
 }
 
 export function languages(ctx, { p }) {
@@ -687,10 +715,11 @@ export function languages(ctx, { p }) {
   if (!e) return no('unsupported', unknownNote(p));
   const { c, err } = needCountry(D, e, 'language');
   if (err) return err;
-  if (!c.lang.length) return no('missing', `I do not know which languages are spoken in ${the(c)}.`);
+  const lang = fact(D, c, 'language').values;
+  if (!lang.length) return no('missing', `I do not know which languages are spoken in ${the(c)}.`);
   tab(ctx);
   focusOn(s, D, c);
-  return ok(c.lang.length === 1 ? `People in ${the(c)} speak ${c.lang[0]}.` : `In ${the(c)} people speak ${list(c.lang)}.`);
+  return ok(lang.length === 1 ? `People in ${the(c)} speak ${lang[0]}.` : `In ${the(c)} people speak ${list(lang)}.`);
 }
 
 export function info(ctx, { p }) {

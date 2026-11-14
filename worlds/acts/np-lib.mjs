@@ -50,6 +50,7 @@ const base = () => {
   w.tell([...PARTS.other].map((t, i) => `@lib.other.${i} core.word text=${atom(t)} means=std.other`).join('\n'));
   return (BASE = w);
 };
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const atom = (s) => String(s).toLowerCase().replace(/[^a-z0-9_.-]+/g, '_');
 const wireOf = (it) => `${atom(it.kind)}${it.n ?? ''}${it.n == null ? `_${atom(it.id)}` : ''}`;
 
@@ -65,6 +66,7 @@ const wireOf = (it) => `${atom(it.kind)}${it.n ?? ''}${it.n == null ? `_${atom(i
  * words of mode ask) reads the set and asks which ones, "all of the tables" is "all the tables" (the facts' `w.lang.en.partitive` modes: the library takes a number as a part, not a word like "some").
  */
 export function resolvePhrase(items, text, opts) {
+  budget.tick('acts.np-lib.phrase');   // the phrase may be read again ("all of", "some of"): each reading is charged
   const { kindOf, valueOf, nameOf, focus = [] } = opts;
   base();
   const raw = String(text).toLowerCase().replace(/\s*,\s*(?=(?:and|or)\b)/g, ' ').trim();
