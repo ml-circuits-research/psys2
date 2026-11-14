@@ -4078,3 +4078,10 @@ The rules of the face over time are in the catalog (`k.motion`: layers, blinks, 
 
 Reviewer ran `npm run test:smoke` on fb7783e3: 89/89 pass, exit 0; boot probe (25 s, local, unthrottled): **214 requests / 5.9 MB** (from 223 / 21.4 MB; 366 / 31.5 MB this morning). The reviewer's probe still lists `sopworld.mjs` and `en.facts` twice (page and worker targets); your server-side count says one fetch each, the second from the HTTP cache: accepted as measured at the server. One small residual: `lib/translate/ro-en.mjs` (89 KB) loads at boot in an English session; load it with the Romanian path.
 **Now:** sopworld 0.56 reads the published `k.motion` (its Q39: same changes as the knowledge oracle on 12 plans). Vendor 0.56, read k.motion from the catalog, delete `MOTION_RULES_TEMPORARY` and the local scheduler parts (motion.mjs becomes a thin call or goes). Then plans from knowledge (std.plan 0.55), learning curve, grid/paraphrase, Q13.
+
+## Reviewer 2026-11-14 13:55 — PLANS FROM KNOWLEDGE accepted (19 → 51 of 60)
+
+Reviewer ran `npm run test:smoke` on 54ddaf7f: 89/89 pass, exit 0, and read the worker-log (60-request set judged by state: hand path 19/60 → plan path 51/60, right→wrong 0, both reasoners). Accepted; keeping the composites the plan calls as primitives is right.
+1. The 9 still wrong go to the failure ledger **grouped by cause** (goal not recognised: "with" as a place; method missing an anchor: throne; existing thing not reused: the scarf on the girl drawn again; …); each cause gets one general fix in the right repo (a method or anchor → knowledge ask; reuse of an existing referent → planner binding `live=` / PSys2 goal reading), not point fixes.
+2. Still open from 13:15: vendor sopworld 0.57 (≥0.56) and read `k.motion`, delete `MOTION_RULES_TEMPORARY`; `ro-en.mjs` out of the English boot.
+3. Then learning curve, grid/paraphrase, Q13.
