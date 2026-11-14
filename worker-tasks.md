@@ -3904,3 +3904,87 @@ The reviewer read samples of `docs/webchat/coverage-grid.json` and of `paraphras
 - **and one real finding:** on the Draw grid, "Take apart the thing" and "Remove the thing from the thing 1" are answered by **the seating plan** ("There is no thing in the seating plan…"), and on the chart grid "Change the point Zed the same size as the red" too: a cross-world capture the invariants do not catch (the grid runs with which tab open?). Put these in the corpus and fix by the arbitration rule.
 Fix the generator: (1) every placeholder filled from the schema and `w.lang.en` (relations from `k.layouts` / prepositions, nouns from the kind's words, attributes from the schema); a sentence with a leftover placeholder is a generator error, not a case; (2) only verb × kind × value combinations that knowledge allows (the verb's roles in `k.actions` and the kind's attributes in the schema / `k.attributes`; "take apart" only for kinds with parts); (3) a setup per cell that makes the things the sentence needs; (4) the tab of the world open. Report the grid again with the old and new numbers side by side; the honest number is the one the owner sees.
 **Paraphrase set (22 of 146 right):** the round trip through machine translation changed the meaning in many rows while the expected answer stayed the original's ("Ana has 8 crayons. Ben gives Ana 6 pencils. How many pencils?" expects 14). Re-judge the 146: keep a row only when its meaning equals the original's (expected answer re-derived where it changed); mark the rest `meaning-changed` (they test something else: robustness to a wrong translation). Report both parts separately. Then the paraphrase number means what the owner thinks it means.
+
+## Reviewer 2026-11-14 05:10 — LAZY LOADING (owner): boot loads almost everything; measured by the reviewer
+
+**Owner:** the app loads very slowly; it should load the minimum at boot and load worlds and knowledge only when needed, with a compact index of the worlds (for instance a Bloom filter) to know at runtime which worlds a message needs; heavy extras in the background. He also sees errors about Romanian models on load and does not know what is being loaded. Find out and fix; measure before / after.
+
+**Reviewer's probe** (headless Chrome, local server of `docs/webchat` at 788a314f, no throttle, no interaction, first 25 s; script /home/claude/shot/boot.mjs on the reviewer box): **361 requests, 35.8 MB.** Largest:
+| what | size | note |
+| --- | --- | --- |
+| `vendor/onnxruntime/ort-wasm-simd-threaded.wasm` | 14.5 MB | model runtime at boot, before any message (the rules reader is the default) |
+| `worlds/index.json` | 4.4 MB **fetched twice** (8.9 MB) | the whole world index at boot |
+| `vendor/chess/stockfish-19-lite-single.wasm` | 1.8 MB | chess engine with no chess tab open |
+| `vendor/map/countries-50m.json` | 739 KB | map shapes with no map open |
+| `vendor/editor/tiptap.mjs` | 432 KB | editor with no editor open |
+| `lib/knowledge/bundled-geo.mjs`, `lib/lang/en.facts.generated.mjs` | 283 KB, 272 KB, **each fetched twice** | page and worker both load them? |
+| `lib/knowledge` 30 files 1.2 MB, `lib/dialog` 34 files, `lib/formalizer` 46 files, `ui/tabs` 28 files | | every module of every world at boot |
+The reading model (65 MB) did not arrive within 25 s here; on a phone it is the 83 s step of the start-up table.
+
+**Design to build (one landing, measured):**
+1. **Boot = shell + engine + the open tab's world + the rules reader + `w.lang.en` core**. Nothing else blocks first input. Target on the 1 MB/s profile: chat usable under 3 s, under 2 MB transferred.
+2. **A world loads on demand**: when its tab opens, when routing picks it, or when the user names it; its vendor assets (stockfish, map shapes, tiptap, Chart.js) load with the world, never at boot. The PROGRESS panel says what is loading.
+3. **A compact routing index instead of `worlds/index.json` (4.4 MB)**: per world a small card (generated; already exist for meta.worlds) plus a **compact word index** of the words each world and each knowledge shard answers to: a Bloom filter per world / per catalog shard (or one prefix-compressed table), a few KB each, built at build time; at runtime a message's words are tested against the filters to know which worlds and which knowledge shards to fetch; false positives cost one fetch, never a wrong reading (the real lexicon decides after loading). Measure: filter sizes, false-positive rate on the owner logs and the operational set, fetches per turn.
+4. **Knowledge catalog by the same index**: replace eager `vocab.json` (1.3 MB) with the filter set + per-shard lookups; the bundled offline subsets (geo, lang.en, faces, default drawings) load only when the catalog is unreachable or the world needs them before the catalog answers.
+5. **Models in the background, never on the boot path**: onnxruntime and the dispatcher model start after first paint and only on an idle CPU, and only if the setting is on; the T5 normalizer only on the user's request. Say in PROGRESS what is loading and that the chat already works.
+6. **No duplicate fetches**: page and worker share one load (or the worker owns it); one fetch per file per start; Cache Storage for every versioned asset so a second start transfers almost nothing.
+7. **The Romanian model errors**: find which file errors on load (the owner sees them; the reviewer's box cannot load the online catalog), why it is loaded at all when the language is English, and load translation models only for the selected language when it is not English.
+8. **Report**: the start-up table before / after (step, ms, bytes) on the 1 MB/s profile, cold and warm; requests and bytes in the first 25 s; time to first answer; the same 14-turn probe on Draw, Map, Avatar, Talk measuring on-demand loads. Invariant tests: no world asset is fetched at boot except the open tab's; the network invariant still holds (readings do not change when a lazy fetch fails).
+Put this before the next migration; the owner feels it every time he opens the app.
+
+## Reviewer 2026-11-14 05:30 — LAZY LOADING, corrections from the owner (read with the 05:10 block); CACHE RESET and a VERSIONING POLICY
+
+Smoke 61/61 at 9d172f35 (media.music switch landed; validated by the smoke only).
+**Owner (03:56):** "the app has been loading worlds for 5 minutes on my machine." This is now the first task, before anything else.
+1. **No arbitrary size target.** Drop the "under 2 MB" of the 05:10 block: the rule is to load **what is truly needed now** and nothing else; report what boot loads and why each piece is needed.
+2. **What the user sees during a load that is not in the cache:** one small popup that shows **the current step only**, in plain words, never paths and never a list: "Loading the drawing world…", "Loading the index of worlds…", "Loading the reading model (12 of 65 MB)…", replaced as the next step starts, gone when done. Nothing shown when everything comes from the cache. (The PROGRESS panel's details fold may keep the history for developers.)
+3. **Reset every cache, start clean, and a versioning policy so this never happens again:**
+   - On the next release, the service worker / Cache Storage / IndexedDB / localStorage keys used for assets are cleared once by a version bump (keep only user data: settings, history, saved faces).
+   - **Every asset has a content hash in its URL** (or a manifest mapping names to hashed URLs) generated by the build; a file is cached forever under its hash and never revalidated; a new build changes only the hashes of what changed.
+   - **One build manifest** (`build-info.json` with the app version and every asset's hash) loaded first with no cache; anything not in the current manifest is deleted from the caches at start-up.
+   - The worker, the page and the service worker read the same manifest (no duplicate fetches, no mixed versions); a mismatch reloads cleanly once and says so.
+   - Catalog shards from sop-knowledge-worlds: cached by the catalog's version hash (index.json `version`), the same policy.
+   - A test that fails if an asset is fetched without a hash, if two versions of one asset are in the cache, or if any file is fetched twice in one start.
+4. **Find the 5-minute load**: reproduce on a cold profile at 1 MB/s and with a stale cache from an older build (the owner's case), find the step that hangs or loops (an old cache serving a stale index? a retry loop on the unreachable catalog? the 65 MB model?), fix the cause, and add a test for it.
+5. Then the 05:10 design (open tab's world only at boot, worlds on demand, compact word index / Bloom filters, models in the background, Romanian model errors) with the before / after table.
+
+## Reviewer 2026-11-14 05:45 — the word index of LAZY LOADING: compare two designs before choosing (owner asked how the Bloom filter is designed)
+
+What goes in either design: for each **world**, the normalized words it answers to (lemmas of its lexicon, kind and attribute words of its schema, the act verbs it claims, multiword names as joined tokens); for each **catalog shard**, the lemmas and multiword names of the things it holds, **plus their synonyms and other word forms from k.words** (the risk of any word index is a false negative: a word the user says that is not in the index means no fetch). Query side: the message is normalized (lemma, lower case, accents folded, bigrams and trigrams for multiword names) and, if a word is unknown, its spelling candidates are tested too. The open tab's world, the dialogue focus world and the worlds of the last two turns are always loaded regardless of the index (continuations and pronouns have no words to index). The index decides what to **load**, never how to **read**: after loading, the real lexicon and routing decide.
+- **A: Bloom filters**, one per world and one per catalog shard, about 10 bits per entry (1% false positives); a false positive costs one extra fetch. Small and simple; cannot list words (no help for spelling correction).
+- **B: an exact index split by prefix**: the current `vocab.json` (word → shard ids) cut into buckets by the first two letters, each bucket fetched on demand and cached by hash; plus the list of known words is what the spelling corrector needs anyway. No false positives; a bucket is fetched once per prefix.
+Build both (they are small), measure on the owner logs, the operational set and the Talk questions: bytes fetched at boot and per turn, fetches per turn, false negatives (a needed shard not fetched), false positives, and the spelling corrector's needs. Choose by the numbers; a mix (A for worlds, B for knowledge) is acceptable.
+
+## Reviewer 2026-11-14 06:00 — LIVE-STATE INVARIANT (owner's avatar bug) into the smoke suite; NAMES for the kinds of worlds
+
+**Owner's bug:** on the Avatar tab, "wink", then another expression, then "wink" again answers that the avatar is already winking, while the picture shows it is not. The live world's state and what the view shows disagree, and "already X" was answered from stale state.
+**General invariant, all worlds on schema + acts and the rest, both reasoners, in the smoke suite:**
+1. **Round trip A → B → A**: for each attribute or mode of a live world (expression, colour, size, place, layer, chart type, map zoom, editor style …), set A, set B, set A again: the third request changes the state back to A (it is not refused as "already A"), and the view's rendered state equals the live world's state after each step.
+2. **"Already" only when true**: any reply that says a thing already has a value is checked against the current state of the live world.
+3. **Undo / redo of the round trip** gives B, then A.
+4. **Rendered = state**: a check that reads the view's model (what is drawn) and compares it with the world state after every turn of the invariant sweep.
+Generate the cases from the schemas (every attribute with two values) rather than writing them per world; find the cause of the avatar bug (an expression kept as an overlay outside the state? a second copy of the face?) and fix it in general.
+
+**Names for the three kinds of worlds (owner asked; reviewer proposal, to be used in every repository and in the library docs):**
+1. **world schema** — what a kind of world is: its kinds of things, attributes, value types, acts, limits, rules and the words for them; no particular things. Reusable; lives in sop-knowledge-worlds as `w.*` (seating plan, timeline, list, and the schemas of the demo tabs once general). In the library: `std.schema`.
+2. **knowledge world** — facts about the world at large (animals, places, colours, English grammar), true for everyone, no session state; lives in sop-knowledge-worlds as `k.*` (and `w.lang.en` is a knowledge world about a language).
+3. **live world** — one running instance of a world schema in a session: the things the user made, their current values, the focus, the history and undo, temporary and particular; it reads knowledge worlds and follows its schema. A tab shows a live world through a **view**.
+Plus **library modules** (`std.*`: acts, fill, focus, relations, turn, know, grammar): mechanisms, not worlds.
+In Romanian (for the owner): schema lumii, lume de cunoaștere, lume vie.
+
+Use these names in specs, docs, the system map, the landing table and the code comments you touch (no mass renaming of code identifiers needed): tab worlds become "live worlds shown in views", their schemas are world schemas (to move to sop-knowledge-worlds as `w.*` when general).
+
+## Reviewer 2026-11-14 06:20 — after LOADING and the LIVE-STATE invariant: THIN LIVE WORLDS (owner)
+
+**Owner:** the demo's own worlds must be as small as possible and use the knowledge worlds as much as possible; raise reuse between worlds. Queue this after the loading work and the live-state invariant.
+1. **Per tab world, one table** (generated, in the landing table): its own wires and lines by kind (schema, hooks, own, extras: patterns / lexicon / templates .extra), what it imports (std.*, w.*, k.*), the reuse number, and for every own part one of: *truly own* (renderer, engine), *general → library*, *general → w.* schema in sop-knowledge-worlds*, *knowledge → k.**.
+2. **Move the general parts out**: the schemas of plan.seating, plan.timeline (already published as `w.seating`, `w.timeline`: read those and delete the local copies), and the parts of the tab schemas that any drawing / diagram / chart / document / map application would share (shapes and connectors, series and points, blocks and sections, places and layers) as `w.*` schemas proposed to the knowledge repo through `handover/`; the extras (`patterns.extra.sop` and friends: 44 in the editor, the map's layer frames) re-examined: each either an act frame in `w.lang.en`, a view attribute (`std.schema.view`), an `ask` frame, or truly own.
+3. **Use knowledge everywhere a world now has a list**: colours, sizes, units, shapes, layouts, people, places, time, act verbs, value words; a world never declares a value list that a knowledge world has.
+4. Report per landing: own lines and wires per world before / after, reuse number per world before / after, extras left. Target direction: every tab world shrinking each landing; the reuse mean rising from 0.16.
+
+## Reviewer 2026-11-14 06:30 — one more landing measure: the LEARNING CURVE (owner asked whether adding wires keeps generalising)
+
+Add to the landing table, from now on, two curves over landings (x = landing date, with the count of general mechanisms / wires added):
+1. **Held-out real messages**: messages the system was never tuned on (new owner exports and new ledger rows from the time they arrive, frozen at arrival; never used to write rules): share right. Keep the frozen set separate from everything a worker looks at while fixing.
+2. **Unseen formulations**: the meaning-kept part of the paraphrase set (after the re-judging of 04:55) and the "new world from a schema alone" score.
+If these rise with each general addition, the symbolic approach generalises; if they flatten while the per-case sets keep rising, we are fitting cases and the learned fallback must take more of the load. Report the slope at each landing.

@@ -129,9 +129,6 @@
     class=modifier
     doc="Comparatives that mean less of an attribute"
     word=farther
-    word=further
-    word=back
-    word=away
 
 @lex.geo.map.nouns core.lexicon
     class=modifier

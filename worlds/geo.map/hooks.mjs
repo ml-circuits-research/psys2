@@ -134,11 +134,11 @@ const AMOUNT = /^(?:a|bit|little|lot|much|way|slightly|some|somewhat|more|again|
 function directionOf(text) {
   const z = G.executor?.schema?.attrs?.zoom;
   if (!z) return null;
+  const less = [...(z.stepLess ?? []), ...(z.less ?? [])], more = [...(z.stepMore ?? []), ...(z.more ?? [])];   // the view's step words (the library view reads the same ones)
   const ws = wordsOf(text).filter((w) => !AMOUNT.test(w));
-  if (!ws.length || !ws.every((w) => z.less.includes(w) || z.more.includes(w))) return null;
-  return ws.some((w) => z.less.includes(w)) ? 'out' : 'in';
+  if (!ws.length || !ws.every((w) => less.includes(w) || more.includes(w))) return null;
+  return ws.some((w) => less.includes(w)) ? 'out' : 'in';
 }
-const viewDirection = (r) => directionOf([r.thing, r.place, r.rel].filter(Boolean).join(' '));
 
 /** The thing phrase may carry its place ("the marker on Paris", "the pins off the map"): split it at the preposition so that thing and place are what the schema says. */
 function norm(r0) {
@@ -147,6 +147,20 @@ function norm(r0) {
   if (m && kindOf(m[1]) && !r.place && !setPhrase(r.thing)) { r.thing = m[1]; r.place = /^the map$/i.test(m[3].trim()) ? null : m[3]; }
   if (/^(?:the )?(?:map|atlas)$/i.test(String(r.place ?? '').trim())) r.place = null;
   return r;
+}
+/**
+ * An act on the view itself, its thing implicit ("pull back a bit", "closer", "put the view back to normal"): a said word that the schema gives an attribute of the view as a step (`step_more` /
+ * `step_less`: out, back, closer ...) or a reset (`reset`: normal, default). The library (std.schema.view state=, worlds/acts/view-lib.mjs) holds the value between the bounds and computes the step;
+ * the amount is the map's own table (a bit, a lot). Null when no word is one.
+ */
+function viewAct(ctx, r) {
+  const V = M.viewBridge();
+  const ws = wordsOf(r.text);
+  const hit = ws.map((w) => V?.stepOf(w)).find((x) => x?.reset) ?? ws.map((w) => V?.stepOf(w)).find(Boolean);
+  if (!hit) return null;
+  if (hit.reset) return M.reset(ctx, {});
+  const amt = [3, 2, 1].flatMap((n) => ws.slice(0, ws.length - n + 1).map((_, i) => ws.slice(i, i + n).join('_'))).find((k) => M.AMT[k]);
+  return M.zoom(ctx, { dir: hit.by === 'more' ? 'in' : 'out', ...(amt ? { amt } : {}) });
 }
 const domain0 = {
   make: (ctx, r) => {
@@ -214,10 +228,7 @@ const domain0 = {
     const dirs = wordsOf([r.rel, r.place, r.thing].filter(Boolean).join(' '));
     const d = dirs.find((w) => M.DIR[w]);
     if (d && (!k || k.name === 'view') && !firstPlace(r.place, r.thing)) return M.pan(ctx, { d, ...(dirs.find((w) => M.AMT[w]) ? { amt: dirs.find((w) => M.AMT[w]) } : {}) });
-    const dir = viewDirection(r);
-    if (dir) return M.zoom(ctx, { dir, ...(/\ba (?:bit|little)\b/i.test(String(r.text)) ? { amt: 'a_bit' } : {}) });
-    if (!firstPlace(r.place, r.thing) && /\b(?:back|out|away|farther|further)\b/i.test(String(r.text))) return M.zoom(ctx, { dir: 'out' });
-    if (!firstPlace(r.place, r.thing) && /\b(?:closer|in)\b/i.test(String(r.text))) return M.zoom(ctx, { dir: 'in' });
+    if (!firstPlace(r.place, r.thing)) { const v = viewAct(ctx, r); if (v) return v; }
     if (PRONOUN.test(String(r.place ?? '').trim()) && !k) return M.markHere(ctx, {});
     const p = firstPlace(r.place, r.thing);
     return p ? (isPlace(r.place) && String(r.place).match(/\band\b|,/) ? M.showPlace(ctx, placeArgs(r.place)) : M.showPlace(ctx, { a: keyOf(p) })) : no('Centre the map on which place?', 'missing');
@@ -231,6 +242,7 @@ const domain0 = {
       return r.what === 'highlight' ? M.highlightPlaces(ctx, args) : M.mark(ctx, args);
     }
     if (r.mode === 'none') return M.clearHighlight(ctx, {});
+    if (!p && kindOf(r.thing)?.name !== 'pin') { const v = viewAct(ctx, r); if (v) return v; }   // "pull back a bit": no place, a word that steps the view
     if (!p) return kindOf(r.thing)?.name === 'pin' ? M.markers(ctx) : no(`I do not know a place called ${String(r.thing ?? '').replace(DET, '')}.`);
     const v = verbOf(r.text), args = placeArgs(String(r.thing).replace(/\s+(?:and|with)\s+(?:its|their)\s+neighbou?rs$/i, '')), nb = /\bneighbou?rs\b/i.test(String(r.thing)) ? { nb: 'true' } : {};
     if (/^(?:mark|pin|flag|tag|point)$/.test(v)) return M.mark(ctx, args);
