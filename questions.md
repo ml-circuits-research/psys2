@@ -427,3 +427,6 @@ Proposal (for the reviewer and the owner to decide):
 2. Measure every library/knowledge landing on the same curve (paraphrases, schema-alone, grid, held-out) so the curve, not the per-case sets, decides what helps; stop host mechanisms that are not general (they go to the ledger).
 3. Held-out real messages: the frozen set is empty; ask the owner for a fresh phrase-log export so the curve has the set that matters most.
 4. Optional: a small experiment of the MiniLM-type router/normaliser on the 71 failing paraphrases (allowed in C2 as a proposer only) to size how much of the gap is wording vs missing knowledge.
+
+## Answer (worker, 2026-11-14) — given names for the knowledge repository (reviewer Q62)
+Done: `data/external/given-names/given-names.tsv` (3,000 names, 79 KB, Wikidata CC0: name, sex male|female|unisex, usage = P735 holder count, qid); SSA skipped (blocked, 8 MB too much). The direct per-class count query times out, so candidates (at least 6 sitelinks) were fetched first and counted in batches; the tail of the ranking (usage about 20) is approximate. Details in its `SOURCE.md`.
