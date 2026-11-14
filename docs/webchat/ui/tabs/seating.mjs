@@ -18,7 +18,7 @@ function make(holder, host) {
     const items = state?.items ?? [];
     const tables = items.filter(isTable);
     if (!items.length) { root.append(h('p', { class: 'ps-empty' }, 'The plan is empty. Say "add 3 tables" or "add a guest called Ann at table 1".')); return; }
-    const sameTable = (g, t) => g.place && (g.place.id === t.id || (g.place.kind === t.kind && g.place.n === t.n));
+    const sameTable = (g, t) => g.place && (g.place.ref === t.id || g.place.id === t.id || (g.place.kind === t.kind && g.place.n === t.n));
     for (const t of tables) {
       const guests = items.filter((g) => !isTable(g) && sameTable(g, t));
       const seats = Number(t.attrs?.seats) || 0;

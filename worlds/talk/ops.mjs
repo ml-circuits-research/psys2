@@ -793,3 +793,10 @@ export function undo(ctx) {
   if (!r || r.status !== 'supported') return no('missing', `The ${tab ?? 'other'} tab had nothing to take back.`);
   return ok(`OK, I took it back out of the ${tab} tab.`, { values: [tab] });
 }
+
+/**
+ * Decline hook (spec 21): Talk accepts every reading of its frames. Having a hook puts the world under the generic yield rule of the rule formalizer: its reading with free text (a catch-all
+ * frame such as "what A is X" or "how many X does Y have") gives way to the reading of another world that has no free text at all ("how much is 11 times 2" is the arithmetic's), unless the
+ * conversation is already in Talk (`lastWorld`) or the pattern claims its phrase (`tabClaim`). Talk is the default tab, so without this its frames took every question the other worlds read whole.
+ */
+export const accepts = () => true;

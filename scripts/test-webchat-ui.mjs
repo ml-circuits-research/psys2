@@ -89,6 +89,8 @@ async function settingsFor(name, viewport, o) {
         if (after !== before) changed++; else unsaved.push(id);
         await pg.click(`#p2-st-${t}`); await sleep(40);
       }
+      // put every switch back (the helper-model switch is on by default: the checks below read the defaults)
+      for (const id of ids) { await pg.evaluate((id) => document.getElementById(id)?.click(), id); await sleep(60); await pg.click(`#p2-st-${t}`); await sleep(30); }
     }
     check(`${tag}: every checkbox saves its setting (${changed}/${total})`, changed === total, unsaved.join(', '));
     await pg.click('#p2-st-languages');
@@ -122,8 +124,8 @@ async function settingsFor(name, viewport, o) {
     check(`${tag}: Developer shows one Experiments list, each with its last numbers and date, and no edit head`, /Last measured 2026-11-13/.test(dev) && !/reword a part/.test(dev), dev.replace(/\s+/g, ' ').slice(0, 120));
     // SETTINGS-COHERENT 1: the history uses the whole height of its panel (list bottom reaches the buttons, list at least half of the panel)
     await pg.click('#p2-st-privacy'); await sleep(150);
-    const hist = await pg.evaluate(() => { const b = document.querySelector('.p2-modal-body').getBoundingClientRect(), l = document.querySelector('.p2-plog-list').getBoundingClientRect(), a = document.querySelector('.p2-plog-actions').getBoundingClientRect(); return { body: [Math.round(b.top), Math.round(b.bottom)], list: [Math.round(l.top), Math.round(l.bottom)], actions: [Math.round(a.top), Math.round(a.bottom)], h: Math.round(l.height), bh: Math.round(b.height) }; });
-    check(`${tag}: the history list fills the rest of its panel (list ${hist.h}px of ${hist.bh}px, ends ${hist.actions[0] - hist.list[1]}px above the buttons, buttons end ${hist.body[1] - hist.actions[1]}px above the panel bottom)`, hist.h >= 200 && hist.actions[0] - hist.list[1] <= 24 && hist.body[1] - hist.actions[1] <= 40, JSON.stringify(hist));
+    const hist = await pg.evaluate(() => { const b = document.querySelector('.p2-modal-body').getBoundingClientRect(), l = document.querySelector('.p2-plog-list').getBoundingClientRect(), a = document.querySelector('.p2-plog-actions').getBoundingClientRect(), z = document.querySelector('.p2-modal-body').lastElementChild.getBoundingClientRect(); return { body: [Math.round(b.top), Math.round(b.bottom)], list: [Math.round(l.top), Math.round(l.bottom)], actions: [Math.round(a.top), Math.round(a.bottom)], last: Math.round(z.bottom), h: Math.round(l.height), bh: Math.round(b.height) }; });   // the "send failures" section sits under the history: the panel ends at its last section
+    check(`${tag}: the history list fills the rest of its panel (list ${hist.h}px of ${hist.bh}px, ends ${hist.actions[0] - hist.list[1]}px above the buttons, the last section ends ${hist.body[1] - hist.last}px above the panel bottom)`, hist.h >= 170 && hist.actions[0] - hist.list[1] <= 24 && hist.body[1] - hist.last <= 40, JSON.stringify(hist));
     await shot(c, o, `settings-history-${name}`);
     // the models tab: the translation engine
     await pg.click('#p2-st-models'); await sleep(150);
@@ -200,7 +202,7 @@ async function ui1For(name, viewport, o) {
     const head = await pg.evaluate(() => ({ buttons: [...document.querySelectorAll('.p2-head button')].map((b) => b.getAttribute('aria-label')), select: !!document.querySelector('.p2-head select[aria-label="Language"]'), title: document.querySelector('.p2-title')?.innerText }));
     check(`${tag}: the header keeps only the language selector and the gear`, head.select && JSON.stringify(head.buttons) === JSON.stringify(['Settings']), head.buttons.join(' | '));
     const bar = await pg.evaluate(() => [...document.querySelector('.p2-form').children].map((e) => `${e.tagName.toLowerCase()}.${[...e.classList].filter((x) => x !== 'p2-btn').join('.')}`));
-    check(`${tag}: input bar = one mic, one read-aloud toggle, the text box, the die, Send`, JSON.stringify(bar) === JSON.stringify(['button.p2-mic', 'button.p2-speaker', 'input.p2-text', 'button.p2-die', 'button.p2-send']), bar.join(' '));
+    check(`${tag}: input bar = the avatar icon, one mic, one read-aloud toggle, the text box, the die, Send`, JSON.stringify(bar) === JSON.stringify(['button.p2-avicon', 'button.p2-mic', 'button.p2-speaker', 'input.p2-text', 'button.p2-die', 'button.p2-send']), bar.join(' '));
     const voiceButtons = await pg.evaluate(() => [...document.querySelectorAll('button')].filter((b) => /microphone|speak a message|hands-free|dictat|read answers aloud/i.test(`${b.getAttribute('aria-label')} ${b.title}`)).map((b) => b.getAttribute('aria-label')));
     check(`${tag}: exactly one mic and one read-aloud toggle on the page (dictation only has Stop)`, voiceButtons.filter((l) => /^(Microphone|Speak a message)/.test(l)).length === 1 && voiceButtons.filter((l) => /^Read answers aloud/.test(l)).length === 1, voiceButtons.join(' | '));
     // read-aloud toggle
@@ -510,11 +512,11 @@ async function debugFor(name, viewport, o) {
     check(`${tag}: every tab (${tabs.length}) shows the Debug button, opens the modal, Commands is not empty, Esc closes`, bad.length === 0, bad.join(' | '));
 
     // Commands: search and Try
-    await pg.evaluate(() => window.psys2.showTab('robot'));
+    await pg.evaluate(() => window.psys2.showTab('draw'));
     await pg.click('#p2-dbg-open'); await pg.waitForSelector('.p2-dbg:not([hidden])');
-    await pg.type('.p2-dbg-search', 'glasses');
+    await pg.type('.p2-dbg-search', 'house');
     const found = await pg.$$eval('.p2-dbg-pat', (e) => e.length);
-    check(`${tag}: the search narrows the commands (${found} patterns for "glasses")`, found > 0 && found < 200);
+    check(`${tag}: the search narrows the commands (${found} patterns for "house")`, found > 0 && found < 200);
     await pg.evaluate(() => document.querySelector('.p2-dbg-try').click());
     const tried = await pg.$eval('input.p2-text', (i) => i.value);
     check(`${tag}: "Try" puts the example in the input and closes the view`, tried.length > 3 && !(await dbgOpen()), tried);
@@ -531,12 +533,12 @@ async function debugFor(name, viewport, o) {
     await pg.keyboard.press('Escape');
 
     // last turns with the wires of a command just sent
-    await c.say('make the eyes blue');
+    await c.say('draw a house');
     await pg.click('#p2-dbg-open'); await pg.waitForSelector('.p2-dbg:not([hidden])'); await section('turns');
     const first = await pg.evaluate(() => { const d = document.querySelector('.p2-dbg-turn'); d.open = true; d.dispatchEvent(new Event('toggle')); return d.querySelector('summary').textContent; });
     await pg.waitForSelector('.p2-dbg-turn .p2-dbg-wires .sop-id', { timeout: 5000 });
     const turn = await pg.evaluate(() => { const d = document.querySelector('.p2-dbg-turn'); return { wires: d.querySelector('.p2-dbg-wires pre').innerText, text: d.innerText }; });
-    check(`${tag}: Last turns shows the command just sent with its SOP Lang wires, reading, operations and timing`, /make the eyes blue/.test(first) && /core\.request|action=/.test(turn.wires) && /Readings tried/i.test(turn.text) && /Operations executed/i.test(turn.text) && /Timing/i.test(turn.text), `${first} | ${turn.wires.slice(0, 100)}`);
+    check(`${tag}: Last turns shows the command just sent with its SOP Lang wires, reading, operations and timing`, /draw a house/.test(first) && /core\.request|action=/.test(turn.wires) && /Readings tried/i.test(turn.text) && /Operations executed/i.test(turn.text) && /Timing/i.test(turn.text), `${first} | ${turn.wires.slice(0, 100)}`);
     await shot(c, o, `debug-turns-${name}`);
     // Copy / Export JSON of the section
     await pg.evaluate(() => document.querySelector('.p2-dbg-tools [data-act="export"]').click());
@@ -550,7 +552,7 @@ async function debugFor(name, viewport, o) {
     await section('world');
     await pg.waitForFunction(() => /coverage|Operation/.test(document.querySelector('.p2-dbg-cov')?.innerText ?? ''), { timeout: 8000 }).catch(() => {});
     const wd = await pg.evaluate(() => ({ sections: [...document.querySelectorAll('.p2-dbg-body h4')].map((e) => e.textContent), cov: document.querySelector('.p2-dbg-cov')?.innerText.slice(0, 80) }));
-    check(`${tag}: World shows manifest, legend, lexicons, operations, templates and coverage`, ['Manifest (world.sop)', 'Imports', 'Counts', 'Coverage (coverage.md)'].every((x) => wd.sections.includes(x)) && wd.sections.some((x) => /^Lexicons/.test(x)) && wd.sections.some((x) => /^Operations/.test(x)) && /ui\.avatar is a schema world: its coverage is the coverage grid/.test(wd.cov ?? ''), JSON.stringify(wd).slice(0, 200));
+    check(`${tag}: World shows manifest, legend, lexicons, operations, templates and coverage`, ['Manifest (world.sop)', 'Imports', 'Counts', 'Coverage (coverage.md)'].every((x) => wd.sections.includes(x)) && wd.sections.some((x) => /^Lexicons/.test(x)) && wd.sections.some((x) => /^Operations/.test(x)) && /request-shape coverage|its coverage is the coverage grid/.test(wd.cov ?? ''), JSON.stringify(wd).slice(0, 200));
     await section('models');
     const md = await pg.evaluate(() => ({ sections: [...document.querySelectorAll('.p2-dbg-body h4')].map((e) => e.textContent) }));
     check(`${tag}: Models shows dispatcher, normalizer and ORT worker status`, ['Dispatcher', 'Normalizer', 'ORT worker (onnxruntime-web)'].every((x) => md.sections.includes(x)), md.sections.join('|'));

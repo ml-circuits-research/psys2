@@ -13,8 +13,10 @@ import { withArticle } from '../src/interpreter/render.mjs';
 import { capabilities } from '../worlds/ui.help/ops.mjs';
 
 const real = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), translator: createTranslator() });
-const say = async (lines, lang = 'en') => {
+// `tab`: the Talk tab is the default, and it answers a sentence nobody read with its own "I cannot talk about that here"; the tests of the plain "not understood" reply run in chat only
+const say = async (lines, lang = 'en', tab = null) => {
   const s = real.createSession({ language: lang });
+  if (tab) s.setWorldState('ui.shell', { activeTab: tab });
   let r;
   for (const l of lines) r = await s.send(l);
   return r;
@@ -29,8 +31,8 @@ test('ellipsis: the omitted item is the most recent one of the agent, else of th
   assert.equal((await say(['Tom has 5 apples. Ana has 2 pears. Tom buys 1 more.', 'How many pears does Tom have?'])).statuses.at(-1), 'missing');
   assert.equal((await say(['Tom has 5 apples. Ana has 2 pears. Tom buys 1 more.', 'How many apples does Tom have?'])).text, 'Tom has 6 apples.');
   // nothing mentioned yet: not guessed
-  assert.ok((await say(['Ana gives 2 to Tom.'])).statuses.includes('unparsed'));
-  assert.ok((await say(['He gets 3 more.'])).statuses.includes('unparsed'));
+  assert.ok((await say(['Ana gives 2 to Tom.'], 'en', 'chat')).statuses.includes('unparsed'));
+  assert.ok((await say(['He gets 3 more.'], 'en', 'chat')).statuses.includes('unparsed'));
 });
 
 // ---- 2. arithmetic symbols ------------------------------------------------------------------------
@@ -189,14 +191,14 @@ test('unparsed Romanian input: the user sentence is quoted verbatim, examples ar
 });
 
 test('unparsed English input keeps the plain reply and exposes parts', async () => {
-  const r = await say(['Zorb flimbles quickly']);
+  const r = await say(['Zorb flimbles quickly'], 'en', 'chat');
   assert.match(r.text, /^I did not understand "Zorb flimbles quickly"\. For example: "/);
   assert.equal(r.parts.map((p) => p.text).join(''), r.text);
   assert.equal(r.parts.find((p) => p.quote).translate, false);
 });
 
 test('a multi-sentence Romanian message quotes only the sentence that failed', async () => {
-  const r = await say(['Tom are cinci mere. Zorbul flimbează repede.'], 'ro');
+  const r = await say(['Tom are cinci mere. Zorbul flimbează repede.'], 'ro', 'chat');
   const quote = r.parts.find((p) => p.quote && !p.example);
   assert.equal(quote.text, '„Zorbul flimbează repede”');
 });

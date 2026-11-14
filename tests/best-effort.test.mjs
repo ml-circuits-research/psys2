@@ -42,7 +42,7 @@ test('no value is invented: a missing number or colour is never borrowed from an
 });
 
 test('junk words are not executed', async () => {
-  const r = await ask(null, 'asdf qwer zxcv', true);
+  const r = await ask('chat', 'asdf qwer zxcv', true);   // chat only: the Talk tab (the default) answers with its own honest-scope reply
   assert.match(r.text, /did not (understand|catch)/);
 });
 

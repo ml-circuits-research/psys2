@@ -125,7 +125,7 @@ export const SCENARIOS = {
       // LAZY LOADING invariants: the start fetches no vendor asset of another tab, only the bundles of the always-loaded worlds and the open tab's, no 4.6 MB index, no reading-model runtime
       const vend = s.log.map((x) => pathOf(x.url)).filter((u) => VENDOR_RE.test(u));
       check('cold: no vendor asset of a tab is fetched at start (stockfish, map shapes, tiptap, Chart.js ...)', vend.length === 0, vend.slice(0, 4).join(', '));
-      const allowed = await startSet(site, 'ui.avatar'), got = bundlesOf(s.log);
+      const allowed = await startSet(site, 'talk'), got = bundlesOf(s.log);   // the open tab is Talk now (the avatar is an icon: its face loads with it, not as a tab world)
       check('cold: only the bundles of the always-loaded worlds and the open tab\'s world are fetched', got.every((id) => allowed.has(id)) && got.length > 5, `fetched ${got.length}: ${got.filter((id) => !allowed.has(id)).join(', ')}`);
       check('cold: no world bundle bigger than the index (worlds/index.json is the small routing index)', s.log.filter((x) => /^\/worlds\/index\.json/.test(x.url)).every((x) => x.bytes < 60000));
       const modelRt = s.log.map((x) => pathOf(x.url)).filter((u) => /ort-wasm|\/models\/dispatcher\/model/.test(u));

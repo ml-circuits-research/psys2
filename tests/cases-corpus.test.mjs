@@ -31,5 +31,5 @@ test('the runs file lists only ids that exist', () => {
 test('the system map carries the table of the measures that count', () => {
   const html = readFileSync(new URL('../docs/system-map.html', import.meta.url), 'utf8');
   assert.match(html, /The measures that count/);
-  for (const m of ['Worlds on schema + acts', 'Coverage grid holes', 'Pairs of worlds that cooperate', 'Cases in the corpus']) assert.ok(html.includes(m), m);
+  for (const m of ['Live worlds on a world schema + acts', 'Coverage grid holes', 'Pairs of worlds that cooperate', 'Cases in the corpus']) assert.ok(html.includes(m), m);
 });

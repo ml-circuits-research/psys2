@@ -416,12 +416,6 @@
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
     {
-      "file": "typo-tabfollow.test.mjs",
-      "pattern": "^tab follow on the real worlds: \"Show me Bucharest\" asked on the avatar tab opens the Map$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
       "file": "world-aware.test.mjs",
       "pattern": "^veto: \"fă părul roșu\" leaves out \"părul\": nothing is changed, the reply names the word \\(off: no veto is recorded\\)$",
       "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",

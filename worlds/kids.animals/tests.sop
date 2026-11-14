@@ -1,7 +1,6 @@
 
 @t.animals.n38 core.test
     session=zebra
-    given="ui.shell:activeTab=robot"   # FOUND: with no tab, art.draw ask.count ("how many X does Y have") outranks kids.animals; the avatar surface used to hide it (docs/lessons.md THIN LIVE WORLDS)
     input="A zebra has 4 legs."
     expect="OK, a zebra has 4 legs."
 

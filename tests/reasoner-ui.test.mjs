@@ -160,12 +160,12 @@ test('ui.help: the state is one wire; "more examples" is a step "undo that" take
   await say(s, ['what can I say here?']);
   const [w] = s.isession.rs.of('ui.help').ofType('ui.help.state');
   assert.ok(w, 'the help was used: one state wire');
-  const pos = s.isession.state['ui.help'].pos['ui.avatar'];
+  const pos = s.isession.state['ui.help'].pos['talk'];   // the examples of the open tab's world: Talk is the default tab
   assert.ok(pos > 0);
   await say(s, ['more examples']);
-  assert.ok(s.isession.state['ui.help'].pos['ui.avatar'] > pos);
+  assert.ok(s.isession.state['ui.help'].pos['talk'] > pos);
   assert.equal((await say(s, ['undo that']))[0].text, 'OK, the examples are back where they were.');
-  assert.equal(s.isession.state['ui.help'].pos['ui.avatar'], pos);
+  assert.equal(s.isession.state['ui.help'].pos['talk'], pos);
   const t = session(matrix);
   await say(t, ['I have 20 lei', 'I buy a ball']);
   await say(t, ['zzzz qqqq xxxx']);

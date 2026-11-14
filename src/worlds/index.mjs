@@ -74,6 +74,8 @@ export class World {
   get undoAction() { return txt(this.manifest ?? { entries: [] }, 'undo') ?? null; }
   /** The action that takes an undo back (`redo=<action>` in world.sop; with `undo=`): the host layer re-applies what the last undo took out, or null. */
   get redoAction() { return txt(this.manifest ?? { entries: [] }, 'redo') ?? null; }
+  /** A world shown in an always-visible view that is not a tab (the avatar in the input bar): `ambient=true`. For routing it is present on every tab: its own fully read sentences win over a tab world's generic frame, and its undo / redo answer when it made the last step. */
+  get ambient() { return txt(this.manifest ?? { entries: [] }, 'ambient') === 'true'; }
   /** A world whose state follows the other worlds (the shell's tab: an editor brings its tab forward): what another world's request changed in it is not a step of the turn, so undoing that turn leaves it alone (`passive=true`). Only a turn of its own undoes its changes. */
   get passive() { return txt(this.manifest ?? { entries: [] }, 'passive') === 'true'; }
   /** Wire types the world's operations emit that only the session memory keeps (`untold=<type>`, repeatable): the library does not hold them (facts the engine reads from its own state: the sentences of a document). */

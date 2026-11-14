@@ -43,7 +43,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
 
 test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.buildAll(), []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['art.draw', 'common.sense', 'docs.reader', 'games.chess', 'games.guess', 'games.hangman', 'games.tictactoe', 'geo.map', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'ui.help', 'ui.shell', 'user.profile']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['common.sense', 'docs.reader', 'games.chess', 'games.guess', 'games.hangman', 'games.tictactoe', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'ui.help', 'ui.shell', 'user.profile']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
@@ -509,7 +509,7 @@ test('games.hangman: undo goes back through the library: a guess, a hint, a lost
   assert.equal(s.isession.state['games.hangman'].word, 'zebra', 'undo of a new game brings the old one back');
   sameAsLibrary(s, ['games.hangman']);
   const none = await say(matrix, ['undo']);
-  assert.equal(none.out[0], 'There is nothing to undo.', 'nothing to undo before any game (generic undo)');
+  assert.match(none.out[0], /^There is nothing to (?:undo|take back)/, 'nothing to undo before any game (generic undo)');   // Talk is the default tab and says "nothing to take back on this tab"
 });
 
 test('games.hangman: the word the library holds is the one the seed chooses, as ops.mjs chooses it (the lexicon and the knowledge base reach the matrix)', async () => {
@@ -590,7 +590,7 @@ test('games.guess: undo goes back through the library: a clue, an answer (the qu
   assert.deepEqual(r.statuses, ['supported']);
   sameAsLibrary(s, ['games.guess']);
   const none = await say(matrix, ['undo']);
-  assert.equal(none.out[0], 'There is nothing to undo.', 'nothing to undo before any game (generic undo)');
+  assert.match(none.out[0], /^There is nothing to (?:undo|take back)/, 'nothing to undo before any game (generic undo)');
 });
 
 // ---- kids.shapes on the matrix (stage 2) --------------------------------------------------------------------------------------------------------
