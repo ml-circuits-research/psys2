@@ -3,7 +3,7 @@
 import { nouns, verbs, adjectives, words, names, numberWords } from './lexicon.ro-en.mjs?v=0f4eaf8bf9';
 import { foldKey } from './normalize.mjs?v=6d473eb091';
 import { places } from './places.ro-en.mjs?v=97dc087c2a';
-import { pluralEn, pastEn } from './inflect.en.mjs?v=bb4799b9ff';
+import { pluralEn, pastEn } from './inflect.en.mjs?v=5b2e62d57a';
 
 const index = new Map();
 const nameIndex = new Map();
@@ -237,7 +237,6 @@ export function analyzeRaw(raw, diaFree = false) {
   return exact;
 }
 
-export function nameEntry(key) { return nameIndex.get(key) || null; }
 export function isKnownName(key) { return nameIndex.has(key); }
 
 const placeIndex = new Map();
@@ -362,10 +361,6 @@ export function parseNumberAt(keys, i) {
   }
   const b = parseBelow100(keys, i);
   return b;
-}
-
-export function lexiconStats() {
-  return { nouns: nouns.length, verbs: verbs.length, adjectives: adjectives.length, words: words.length, names: names.length, numbers: numberWords.length, forms: index.size };
 }
 
 export { pluralEn };

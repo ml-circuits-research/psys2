@@ -42,4 +42,3 @@ export function loadArrangement(facts) {
   state.loading = { facts, promise };
   return promise;
 }
-export const arrangementFrom = () => state.from;
