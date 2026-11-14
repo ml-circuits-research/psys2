@@ -419,3 +419,11 @@ Composer adapter over the real `std.compose` (see spec 26): type -> genre only w
 
 ## 2026-11-14 catalog frame: place-verb form of the named add with a place (periodic batch 4)
 `w.lang.en` frame `acts.make.name.place` ("Add a guest called Ann at table 1.") takes only the verbs of `acts.verb.make`; `acts.make.name.p` ("Place a guest named Ann.") takes the place verbs and `value=rest`, so "Put a guest named Maria at table 1." named the guest "Maria At Table 1". plan.seating carries a local `patterns.extra.sop` with the place-verb variant until the catalog has `acts.make.name.place.p` (place verbs, role `place`, one priority above `acts.make.name.p`). The same gap probably exists for every schema world that has `named=yes` and a container (art.draw, diagram).
+
+## Q14 (worker, 2026-11-14) — the learning curve is flat over four points: proposal to move the priority from host mechanisms to the shared reader
+Four learning-curve points (66d79ae4 … cceb5841, ~39 mechanisms): paraphrases meaning kept 14.1 → 14.1 → 16.5 → 16.5 %; schema-alone world 51.7 → 51.7 → 50.0 → 53.3 % (the last +2 are two requests fixed by batch 4, not generalisation). Over the same period the per-case sets rose a lot (plans 51 → 56 of 60, test-world failures 80 → 68). Clause sequencing and the pronoun fixes did not move the paraphrases at all. Reading: host mechanisms fix the cases they were made for; they do not raise unseen formulations.
+Proposal (for the reviewer and the owner to decide):
+1. Make the two library causes (story question keeps the arithmetic focus; a knowledge relation read in any word order, 18:20) and `w.lang.en` act templates/frames the top of the queue across the three repositories; the host only wires them and measures.
+2. Measure every library/knowledge landing on the same curve (paraphrases, schema-alone, grid, held-out) so the curve, not the per-case sets, decides what helps; stop host mechanisms that are not general (they go to the ledger).
+3. Held-out real messages: the frozen set is empty; ask the owner for a fresh phrase-log export so the curve has the set that matters most.
+4. Optional: a small experiment of the MiniLM-type router/normaliser on the 71 failing paraphrases (allowed in C2 as a proposer only) to size how much of the gap is wording vs missing knowledge.
