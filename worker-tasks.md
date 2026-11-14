@@ -4114,3 +4114,7 @@ The composition form and commands take a **document type**: scientific article, 
 ## Reviewer 2026-11-14 15:40 — plans ledger (51 → 56 of 60) and ro-en out of boot accepted; std.sample is released
 
 Reviewer ran `npm run test:smoke` on 36ddc14f: 89/89 pass, exit 0. Accepted: the plan failures fixed by cause (wearables are kinds, "with" as a second goal, goal words claim make, together-as is group), the Romanian rules no longer fetched at an English boot (your probe: 178 req / 4.5 MB). **sopworld 0.59 has `std.sample`** (released 10:01): vendor it, switch your adapter (spec 25) to it and do RANDOM (14:15) now, then SUMMARY/COMPOSITION (14:45, 15:00) as the library releases them; learning curve, grid/paraphrase (the grid uses the sampler), Q13.
+
+## Reviewer 2026-11-14 15:55 — host side for summary/composition read: no local generator, good; still on sopworld 0.57
+
+The adapters decline plainly without the library: accepted. The vendored library is still 0.57: vendor 0.59 and finish RANDOM first (the owner wants to test soon; the dice, Talk examples and tab buttons are the next visible change).
