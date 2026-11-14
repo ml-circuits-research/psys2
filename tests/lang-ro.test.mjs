@@ -25,6 +25,24 @@ test('the grammar path reads with the words of w.lang.ro', () => {
   assert.equal(grammarRoEn('fă casa roșie', { lexicon: ro }).text, 'make the house red.');
   assert.equal(grammarRoEn('Ce frumos e afară', { lexicon: ro }).ok, false);
 });
+test('lang.ro replies with the article, made by the library from the catalog templates (no hand text)', () => {
+  const reply = (t) => ro.replyRo(grammarRoEn(t, { lexicon: ro }).frame);
+  assert.equal(reply('Desenează o casă roșie'), 'am desenat o casă roșie');
+  assert.equal(reply('desenează un copac verde'), 'am desenat un copac verde');
+  assert.equal(reply('șterge casa'), 'am șters casa');
+  assert.equal(reply('fă casa roșie'), 'casa este acum roșie');
+  assert.equal(reply('fă copacul albastru'), 'copacul este acum albastru');
+  assert.equal(reply('desenează o casă'), null, 'no colour: outside the catalog template, the caller keeps its own reply');
+  assert.equal(reply('desenează două case roșii'), null);
+});
+test('lang.ro: the UniMorph dictionary is a module of its own, loaded on request, and its rows have no sense', async () => {
+  const big = await openLangRo({ unimorph: true });
+  assert.ok(big.dictionary.byFolded('abac').length >= 1);
+  assert.equal(ro.dictionary.byFolded('abac').length, 0);
+  assert.equal(big.analyse('abacul', 'abacul').length, 0, 'no sense, no English: the grammar path does not use it');
+  const glossed = await openLangRo({ unimorph: true, gloss: (lemma) => (lemma === 'abac' ? 'abacus' : null) });
+  assert.equal(glossed.analyse('abacul', 'abacul')[0]?.entry.en, 'abacus');
+});
 test('lang.ro loads only the dictionary files its words need', () => {
   const fresh = ro.loaded();
   assert.ok(fresh.dictionaryFiles.length < 15);

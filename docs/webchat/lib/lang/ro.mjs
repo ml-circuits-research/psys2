@@ -23,13 +23,16 @@ const gloss = (sense) => {
 };
 const posOf = (cls) => (cls?.startsWith('v.') ? 'verb' : cls?.startsWith('a.') ? 'adj' : 'noun');
 
-export async function openLangRo({ facts = null } = {}) {
-  facts ??= (await import('./ro.facts.generated.mjs?v=8848c09dca')).LANG_RO_FACTS;
+export async function openLangRo({ facts = null, unimorph = false, gloss: glossFor = null } = {}) {
+  facts ??= (await import('./ro.facts.generated.mjs?v=9d4f7daed3')).LANG_RO_FACTS;
+  // the large dictionary (3,466 lemmas derived from UniMorph, CC BY-SA 3.0, no senses) is a module of its own, loaded only when asked for; for a letter the hand file comes first, then the derived rows
+  const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=7b06d02ad7')).LANG_RO_UNIMORPH : {};
+  const text = (letter) => [facts.dictionary[letter], extra[letter]].filter(Boolean).join('\n');
   const lib = await import('../vendor/sopworld/sopworld.mjs?v=8afa911bd6');
   const world = new lib.World();
   world.load(facts.wires);
   const m = lib.morphOf(world, { types: { cls: 'w.lang.ro.class', ending: 'w.lang.ro.ending', irregular: 'w.lang.ro.irregular', fold: 'w.lang.ro.fold', split: 'w.lang.ro.split', template: 'w.lang.ro.template', vowel: 'w.lang.ro.vowel' } });
-  const dict = lib.dictionary({ read: (l) => facts.dictionary[l] ?? null, fold: (s) => lib.fold(m, s) });
+  const dict = lib.dictionary({ read: (l) => text(l) || null, fold: (s) => lib.fold(m, s) });
   const fold = (s) => lib.fold(m, s);
   /** The library's readings of a form (exact spellings first). */
   function readings(form) {
@@ -37,9 +40,9 @@ export async function openLangRo({ facts = null } = {}) {
   }
   const toEntry = (r, enclitic) => {
     const info = dict.lookup(r.lemma);
-    const en = gloss(info?.sense);
-    if (!en) return null;
     const f = r.features, pos = posOf(r.class);
+    const en = gloss(info?.sense) ?? (glossFor ? glossFor(r.lemma, pos) : null);   // a lemma with no sense (the UniMorph rows) has no English unless the host gives one: `gloss(lemma, pos)`
+    if (!en) return null;
     if (pos === 'verb') return { pos, entry: { pos, inf: r.lemma, en, flags: {} }, tense: f.tense, person: Number(f.person) || 0, number: f.num, form: r.form, ...(enclitic ? { enclitic } : {}) };
     if (pos === 'adj') return { pos, entry: { pos, ro: r.lemma, en }, gender: f.gender, number: f.num, form: r.form };
     return { pos, entry: { pos, ro: r.lemma, en, enp: null, g: info?.gender, flags: {}, extra: [] }, number: f.num, def: f.def === 'yes', gen: f.case === 'gendat', form: r.form };
@@ -48,6 +51,7 @@ export async function openLangRo({ facts = null } = {}) {
     lib, world, m, dictionary: dict, fold,
     /** Analyses of a word in the grammar's shape. `raw` keeps the diacritics when the text had them; a clitic hyphen is split off ("mută-mi" = mută + mi). */
     analyse(key, raw = null) {
+      if (raw == null && key == null) return [];
       const form = (raw ?? key).toLowerCase();
       const [head, clitic] = lib.splitClitics(m, form);
       const enclitic = clitic && CLITICS.has(fold(clitic)) ? fold(clitic) : null;
@@ -56,5 +60,22 @@ export async function openLangRo({ facts = null } = {}) {
     },
     /** The wires a Romanian session loads, for the report: bytes of the wire text and of the dictionary files read so far. */
     loaded: () => ({ wires: facts.wires.length, dictionaryFiles: dict.loaded() }),
+    /**
+     * The Romanian REPLY to a request the grammar path read (a frame of src/translate/grammar-ro.mjs), made by the library's `realise` with the catalog's reply templates
+     * (shards/templates.sop: the article and the adjective agree with the noun): "am desenat o casă roșie", "am șters casa", "casa este acum roșie". No text is written here.
+     * null when the frame is outside the templates (a drawing with no colour, several things, a count, a place): the caller keeps its own reply.
+     */
+    replyRo(frame) {
+      const f = Array.isArray(frame) ? (frame.length === 1 ? frame[0] : null) : frame;
+      if (!f) return null;
+      const r = f.roles, one = (r.things ?? (r.thing ? [r.thing] : [])).filter((n) => !n.proper);
+      if (one.length !== 1 || one[0].count || one[0].plural || !one[0].noun?.ro) return null;
+      const n = one[0];
+      const run = (act, roles) => lib.realise(m, lib.templateFor(m, act), roles, { dictionary: dict, base: { num: 'sg', case: 'nomacc' } });
+      if (f.act === 'make' && !r.rel && !r.dir) { const colour = r.colourRo ?? n.adjsRo?.[0]; return colour ? run('make', { art: 'un', kind: n.noun.ro, colour }) : null; }
+      if (f.act === 'remove' && r.things?.length === 1) return run('remove', { thing: n.noun.ro });
+      if (f.act === 'change.colour' && r.coloursRo?.length === 1 && r.things.length === 1) return run('change', { thing: n.noun.ro, colour: r.coloursRo[0] });
+      return null;
+    },
   };
 }
