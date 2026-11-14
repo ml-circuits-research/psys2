@@ -19,7 +19,7 @@ import { budget } from './budget.mjs?v=00bce6e369';
 import { restrictedSet } from '../formalizer/spell.mjs?v=00235ec115';
 import { editDistance } from '../formalizer/rules/normalize.mjs?v=46af8fc979';
 import { foreignFragment } from './continuation.mjs?v=67b4724b49';
-import { liveFromContext } from './meta-worlds.mjs?v=7bb5bc66b3';
+import { liveFromContext } from './meta-worlds.mjs?v=95aff280f5';
 
 export const WORLD_AWARE_MODES = Object.freeze(['off', 'veto', 'choose', 'observe', 'veto-strict', 'choose-strict']);
 /** The default mode (user decision 2026-11-12): an unset option is `veto`; an explicit `off` turns the layer off. */

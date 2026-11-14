@@ -3,7 +3,7 @@
 // answered) are in matrix.sop; this file is what the library cannot say: the best question (the split that is the most even), how an answer narrows the
 // animals (`truth`, shared with ops.mjs), reading a clue, what is learned, the words of the replies (the same sentences ops.mjs says) and the state the tab
 // reads (derived from the wires after every change). Browser-safe; it imports its sibling ops.mjs for the tables. The registered names are prefixed (gs*).
-import { readAnimals, truth, pickQuestion, an, slug, factOf } from './ops.mjs?v=ea9217c752';
+import { readAnimals, truth, pickQuestion, an, slug, factOf } from './ops.mjs?v=d1468362c3';
 
 const un = (v) => String(v ?? '').replace(/^"|"$/g, '').replace(/\\"/g, '"');
 const val = (w, k) => un(w?.attrs?.[k]?.[0]);

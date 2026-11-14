@@ -15,7 +15,7 @@ import { loadWorlds } from '../worlds/index.mjs?v=a56b7c0a0f';
 import { validateWorldSet } from '../worlds/validate.mjs?v=b422872e56';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=99290ab2f5';
 import { createInterpreter } from '../interpreter/index.mjs?v=832ad8a927';
-import { createReasoner } from '../reasoner/index.mjs?v=76f1588062';
+import { createReasoner } from '../reasoner/index.mjs?v=707afc0676';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=afc707c3cb';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=6f705bd762';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
@@ -38,14 +38,14 @@ import { Discourse } from './discourse.mjs?v=3d8e2f748e';
 import { Dialogue } from './dialogue.mjs?v=4eabf62d0e';
 import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=d3ff2129e8';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=96c2382712';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=9e498421a8';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=0026bb5155';
 import { proposeByTypes } from './typed-reader.mjs?v=7812db5b24';
-import { withVariants } from './variants.mjs?v=1270ebd554';
+import { withVariants } from './variants.mjs?v=fd11eaeb1b';
 import { repairFromScene } from './scene-referents.mjs?v=edd4fbba48';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=7bb5bc66b3';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=a9e6bdc419';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=42a310b511';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=95aff280f5';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=02a15b66db';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=f32b663a76';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -1462,7 +1462,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=0f9769b0bd').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=f356067868').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.reader (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
