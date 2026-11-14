@@ -276,11 +276,18 @@ export async function mountPsys2(element, options = {}) {
     showTab(id, via);
     if (tabBtns[id] && lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); }
   }
+  /** The popup rests on the input bar: its bottom is the height of the form and the footer below the chat's content (measured, since they wrap on a phone and scale with the font). */
+  function placeAvatarPopup() {
+    const c = chat.getBoundingClientRect(), f = form.getBoundingClientRect();
+    if (c.height > 0 && f.height > 0) avPop.style.setProperty('--avpop-bottom', `${Math.ceil(c.bottom - f.top) + 6}px`);
+  }
+  window.addEventListener('resize', () => { if (avatarOpen) placeAvatarPopup(); });
   /** The avatar popup: opens or closes; closing keeps the state (the avatar world and its face are untouched). */
   function openAvatar(on = !avatarOpen) {
     if (!avatarUI) return;
     avatarOpen = !!on;
     avPop.hidden = !avatarOpen; avBtn.setAttribute('aria-expanded', String(avatarOpen)); root.classList.toggle('p2-avpop-open', avatarOpen);
+    if (avatarOpen) placeAvatarPopup();
     avatarUI.setVisible(avatarOpen);
     if (avatarOpen) events.add('avatar', 'open', { zone: 'input-bar' });
   }
