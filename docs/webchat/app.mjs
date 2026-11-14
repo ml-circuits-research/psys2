@@ -1791,7 +1791,7 @@ export async function mountPsys2(element, options = {}) {
     }
   }
   // the avatar loads with its icon (a small bundled face first, the catalog's set when it arrives)
-  if (loaded.has('ui.avatar') || options.renderAllTabs) { avatarUI = createAvatar(avBody, hostApi); avatarUI.mirror(avFace, 34); }
+  if (known.has('ui.avatar') || options.renderAllTabs) { avatarUI = createAvatar(avBody, hostApi); avatarUI.mirror(avFace, 34); }
   else avBtn.hidden = true;
   on(avBtn, 'click', () => openAvatar());
   on(avClose, 'click', () => { openAvatar(false); avBtn.focus(); });

@@ -1,5 +1,5 @@
 {
-  "version": "fe25a8074e",
+  "version": "54eef37c82",
   "worlds": [
     "acts",
     "art.draw",
@@ -64,7 +64,7 @@
     "lib/dialog/budget-limits.mjs": "361b73ef578f74d5",
     "lib/dialog/budget.mjs": "a7b9cf83512b05c1",
     "lib/dialog/continuation.mjs": "ffa19b0c5dfb6bfc",
-    "lib/dialog/conversation.mjs": "d999b8f1b5fadb9e",
+    "lib/dialog/conversation.mjs": "56c6fd46588aa7db",
     "lib/dialog/dialogue.mjs": "be4fe60839b718f3",
     "lib/dialog/discourse.mjs": "57e07f208610e3de",
     "lib/dialog/dispatch-validate.mjs": "c8fc102112c78c61",
@@ -776,10 +776,10 @@
     "worlds/words/zo.json": "3761b1887d22fef8",
     "worlds/words.bloom.json": "eec9f83cdc88ee2e"
   },
-  "builtAt": "2026-11-14T06:06:52.508Z",
-  "commit": "0be95e93-dirty",
+  "builtAt": "2026-11-14T06:13:09.378Z",
+  "commit": "f735bc59-dirty",
   "assets": {
-    "app.mjs": "28a54c5380",
+    "app.mjs": "612ed594b0",
     "coverage-grid.json": "63a716d3df",
     "favicon.svg": "89f8b9f010",
     "lib/astra/focus.mjs": "7a1ddd5018",
@@ -794,7 +794,7 @@
     "lib/dialog/budget-limits.mjs": "fb1adadf05",
     "lib/dialog/budget.mjs": "00bce6e369",
     "lib/dialog/continuation.mjs": "e170808923",
-    "lib/dialog/conversation.mjs": "9129fc8c2d",
+    "lib/dialog/conversation.mjs": "b393aa9167",
     "lib/dialog/dialogue.mjs": "f679fe4d8b",
     "lib/dialog/discourse.mjs": "be5b2d5dcd",
     "lib/dialog/dispatch-validate.mjs": "2a1c19f80a",

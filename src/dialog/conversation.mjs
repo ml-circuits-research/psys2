@@ -29,7 +29,7 @@ export function turnRecord(n, text, reply, { tab = null } = {}) {
     n, text: String(text ?? '').slice(0, 200), tab, outcome: outcomeOf(reply), worlds,
     answer: String(reply?.text ?? '').replace(/\s+/g, ' ').slice(0, 200),
     asked: answers.filter((a) => a.status === 'missing' && /\?\s*$/.test(String(a.text ?? '').trim())).map((a) => String(a.text).trim().slice(0, 160)),
-    pending: pending ? String(typeof pending === 'string' ? pending : (pending.say ?? pending.question ?? pending.text ?? JSON.stringify(pending))).slice(0, 160) : null,
+    pending: (pending?.type === 'fill' || pending?.type === 'confirm') && String(pending.text ?? '').trim() ? `${pending.type === 'confirm' ? 'waiting for a yes or no' : 'waiting for the missing part'} of "${String(pending.text ?? '').slice(0, 100)}"` : null,
   };
 }
 
@@ -74,7 +74,7 @@ export function summarize({ turns = [], states = {}, labelOf = (id) => SHARED[id
   // open threads: the last turn is a question back, or the dialogue holds something pending
   const last = turns.at(-1), open = [];
   if (last?.outcome === 'question-back') open.push({ n: last.n, text: `waiting for your answer: ${last.asked[0] ?? last.answer}` });
-  if (last?.pending) open.push({ n: last.n, text: `pending: ${last.pending}` });
+  if (last?.pending) open.push({ n: last.n, text: last.pending });
   // topics: one node per thing, parent = where the user came from (world talk)
   const topics = states.talk?.topics ?? [];
   const nameOf = new Map(topics.map((t) => [t.id, t.name]));
