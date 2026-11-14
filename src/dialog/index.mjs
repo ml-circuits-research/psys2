@@ -156,10 +156,14 @@ export async function translateParts(parts, translator, lang, userWords = null) 
     if (!fb || !translator.candidatesViaMT || fbCalls >= MAX_FALLBACK_CALLS || guard.soft() || dead) return null;
     fbCalls++;
     try {
-      const cs = await guard.abortable(translator.candidatesViaMT(text, { from: 'en', to: lang }), 'translate');
+      // the register (owner export 2026-11-14 22:43, src/translate/register.mjs): our English elides "I" ("Drew a circle."), which a machine translator reads as he / she: the subject is given
+      // before the call; the Romanian that comes back is put in one register (the informal singular)
+      const cs = await guard.abortable(translator.candidatesViaMT(withSubject(text), { from: 'en', to: lang }), 'translate');
       const ok = (cs ?? []).find((c) => !c.rejected && c.text && !(typeof translator.leftovers === 'function' && translator.leftovers(c.text, lang).length));
       if (!ok) dead = true;
-      return ok ? ok.translation ?? { text: ok.text } : null;
+      if (!ok) return null;
+      const tr = ok.translation ?? { text: ok.text };
+      return { ...tr, text: polishReply(textOf(tr) ?? ok.text, lang) };
     } catch (e) { if (e instanceof TurnAborted) throw e; dead = true; return null; }
   };
   const viaRules = async (text) => { try { return await guard.abortable(prim.translate(text, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; return null; } };
@@ -238,6 +242,7 @@ const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 /** Time budget of the leniency stage (spelling variants and partial windows) of one message, in ms; past it the best reading so far stands (turn guard, spec 06). */
 import { LIMITS } from './time-limits.mjs';
 import { languageCommand } from '../translate/language-command.mjs';
+import { withSubject, polishReply } from '../translate/register.mjs';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
