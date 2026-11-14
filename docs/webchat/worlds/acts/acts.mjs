@@ -22,14 +22,14 @@
 
 import { ACT_VERBS } from './verbs.generated.mjs?v=b363aaaa66';
 import { FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=c6788150e0';
-import { FLAGS_DATA } from './forms.data.mjs?v=0df7819d1a';   // more forms (flags `valued`, `ordered`): named values said without their name
+import { FLAGS_DATA } from './forms.data.mjs?v=87c03d11e9';   // more forms (flags `valued`, `ordered`): named values said without their name
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
 import { createEffects, EFFECT_ACTS } from './effects.mjs?v=c81f50c5a8';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=89992abfaf';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=3d429f211d';
-import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=cc27880734';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { en } from '../../lib/lang/en.mjs?v=35e9d2e031';
+import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=81baadf65c';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------

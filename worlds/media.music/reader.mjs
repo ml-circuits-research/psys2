@@ -4,6 +4,7 @@
 import { CHORD_TYPES, SCALE_TYPES, INTERVALS } from './theory.mjs';
 import { INST_OF, INSTRUMENTS } from './music.mjs';
 
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const NUMW = { a: 1, an: 1, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
 const DET = new Set(['a', 'an', 'the', 'some', 'that', 'this', 'my', 'your']);
 const KINDW = /^(?:chord|chords|triad|triads|arpeggio|arpeggios|scale|scales|note|notes|song|songs|tune|tunes|melody|melodies|track|piece)$/;
@@ -26,6 +27,7 @@ export function noteAt(tk, i) {
 export function peel(text) {
   let t = clean(text).toLowerCase().replace(/\s+/g, ' ').replace(/^(?:me|us)\s+/, ''), inst, bpm, beats, secs;
   for (let again = true; again;) {
+    budget.tick('music.peel');
     again = false;
     let m;
     if ((m = t.match(/\s+(?:please|pls|plz|now|for me|thanks|thx|would be nice|would be great|would be lovely)$/))) { t = t.slice(0, m.index); again = true; }
@@ -135,7 +137,7 @@ export function readSetting(raw) {
     if (rest && !/^(?:a bit|a little|a lot|much|slightly|a tad|a notch|just a bit|a touch)$/.test(rest)) return null;
     return { what, args: { dir: m[1], deg: rest ? rest.replace(/\s+/g, '_') : undefined } };
   }
-  if ((m = t.match(/^(?:at\s+)?(half|double|twice|triple|normal)(?:\s+the)?\s+(?:speed|tempo)$/))) return m[1] === 'normal' ? { what: 'tempo', args: { dir: 'reset' } } : { what: 'tempo', args: { f: String({ half: 0.5, double: 2, twice: 2, triple: 3 }[m[1]]), replay: 'true' } };
+  if ((m = t.match(/^(?:back\s+to\s+|at\s+|go\s+back\s+to\s+)?(half|double|twice|triple|normal)(?:\s+the)?\s+(?:speed|tempo)$/))) return m[1] === 'normal' ? { what: 'tempo', args: { dir: 'reset' } } : { what: 'tempo', args: { f: String({ half: 0.5, double: 2, twice: 2, triple: 3 }[m[1]]), replay: 'true' } };
   if ((m = t.match(/^(?:to |at |be )?(\d+)\s*(?:bpm|beats per minute|beats a minute)$/))) return { what: 'tempo', args: { bpm: m[1], replay: 'true' } };
   if ((m = t.match(/^(up|down)(?:\s+(a bit|a little|a lot|much|slightly|a tad|a notch|just a bit|a touch))?$/))) return { what: 'volume', args: { dir: m[1] === 'up' ? 'louder' : 'quieter', deg: m[2] ? m[2].replace(/\s+/g, '_') : undefined } };
   if (/^(?:just )?once$/.test(t) || /^(?:just )?one time$/.test(t)) return { what: 'loop', args: { on: 'false' } };
@@ -174,6 +176,7 @@ export { INSTRUMENTS };
 export function unDet(said, text) {
   const t = String(said ?? '').trim(), full = String(text ?? '').toLowerCase();
   const first = t.toLowerCase().split(/\s+/)[0] ?? '';
+  if (/^[a-g](?:#|b)?(?:\s+[a-g](?:#|b)?)+$/i.test(t) && new RegExp(`(?:^|\\s)a\\s+${t.split(/\s+/)[0]}(?:\\s|$)`, 'i').test(full)) return `a ${t}`;   // "play a c e": the notes A C E (a list of bare note names)
   if (!first || !/^(?:\d|sharp$|flat$|minor$|major$|min$|maj$|m$|seventh$|dim$|aug$|sus|dorian$|phrygian$|lydian$|mixolydian$|locrian$|blues$|pentatonic$)/.test(first)) return t;
   return new RegExp(`(?:^|\\s)a\\s*${first.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:\\s|$)`).test(full) ? `a ${t}` : t;
 }

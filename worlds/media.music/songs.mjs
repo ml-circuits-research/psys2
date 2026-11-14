@@ -7,9 +7,9 @@ export const SONG_NAMES = [
   'frere jacques', 'brother john', 'are you sleeping', 'mary had a little lamb', 'mary had a lamb', 'little lamb', 'jingle bells', 'jingle', 'old macdonald had a farm', 'old macdonald', 'macdonald', 'farm song',
   'london bridge is falling down', 'london bridge', 'falling down', 'row row row your boat', 'row your boat', 'row row row', 'row row', 'brahms lullaby', 'lullaby', 'wiegenlied', 'lullaby and goodnight', 'brahms',
 ];
-/** True when the phrase names one of the library songs (the same tolerance as findSong: the, a, "song" and a prefix of three letters). */
+/** True when the phrase names one of the library songs (the same tolerance as findSong: the, a, "song" and a prefix of three letters; not longer than a name: "twinkle twinkle and draw a house" is no song). */
 export function knownSong(text) {
   const t = plain(text).replace(/^(the|a|an) /, '').replace(/ (song|tune|melody)$/, '').replace(/^(song|tune) /, '');
   if (!t) return false;
-  return SONG_NAMES.some((n) => n === t || (t.length >= 3 && n.startsWith(t)) || (t.length >= 6 && t.startsWith(n) && n.split(' ').length >= 2));
+  return SONG_NAMES.some((n) => n === t || (t.length >= 3 && n.startsWith(t)));
 }

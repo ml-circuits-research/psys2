@@ -4,5 +4,5 @@
 export {
   initialState, onObservation, topicSummary, melodyShow, showNotes, showScore, listSongs, listInstruments, listTypes, scaleNotes, chordNotes, chordName, keySig, keyWith, interval, above, relative, keyChords,
   frequency, enharmonic, status, songInfo, askWhat,
-  instrument, key, melodySet, octave, playAny, playNote, playScale, random, replay, stop, tempo, transpose, transposeTo, volume,
+  instrument, key, melodySet, octave, playAny, playChord, playNote, playScale, random, replay, stop, tempo, transpose, transposeTo, volume,
 } from './music.mjs';

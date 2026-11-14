@@ -151,6 +151,12 @@
     action=music.playAny
     doc="An operation of this world that is not an act (own.mjs: playAny)."
 
+@op.media.music.playChord core.operation
+    impl=playChord
+    semantics=action
+    action=music.playChord
+    doc="An operation of this world that is not an act (own.mjs: playChord)."
+
 @op.media.music.playNote core.operation
     impl=playNote
     semantics=action

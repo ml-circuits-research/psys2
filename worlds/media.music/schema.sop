@@ -27,6 +27,7 @@
     own=melodySet:music.melodySet
     own=octave:music.octave
     own=playAny:music.playAny
+    own=playChord:music.playChord
     own=playNote:music.playNote
     own=playScale:music.playScale
     own=random:music.random

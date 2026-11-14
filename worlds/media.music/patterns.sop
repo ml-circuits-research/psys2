@@ -918,7 +918,7 @@
     canonical="How does middle C sound?"
 
 @pat.media.music.m.pick.play.bare core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [play|play_something|play_some_music|play_music|put_some_music_on|put_on_some_music|play_a_song|music|surprise_me|i_want_to_hear_some_music|i_want_some_music|i_wanna_hear_some_music|i_want_to_hear_something|play_me_something|play_me_a_song] [please|pls|plz|now|for_me]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [play_something|play_some_music|play_music|put_some_music_on|put_on_some_music|play_a_song|music|surprise_me|i_want_to_hear_some_music|i_want_some_music|i_wanna_hear_some_music|i_want_to_hear_something|play_me_something|play_me_a_song] [please|pls|plz|now|for_me]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=media.music.pick arg.mode=play arg.text=\"{segment}\""
     kind=request
     priority=8
@@ -1090,6 +1090,24 @@
     tabPriority=20
     example="I want the key to be D major."
     canonical="I want the key to be D major."
+
+@pat.media.music.m.change.bare.more core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {amount:lex.space.amounts?} {value:lex.media.music.more} [please|pls|plz|thx|thanks|now]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=media.music.change arg.mode=more arg.amount=\"{amount}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="A bit faster."
+    canonical="A bit faster."
+
+@pat.media.music.m.change.bare.less core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {amount:lex.space.amounts?} {value:lex.media.music.less} [please|pls|plz|thx|thanks|now]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=media.music.change arg.mode=less arg.amount=\"{amount}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="A bit slower."
+    canonical="A bit slower."
 
 # ---- patterns.extra.sop (hand-written, appended by the generator)
 @pat.media.music.melody.show core.pattern
@@ -2401,8 +2419,8 @@
     match="[$lang.lead.polite|pls]? [play|play_me|put_on|sing] [pls]?"
     emit="@{_} core.request action=music.askWhat"
     kind=request
-    priority=11
-    tabPriority=21
+    priority=12
+    tabPriority=22
     example="Play."
     doc="A play command with nothing to play: asks what to play and expects the answer as the next utterance (discourse pending, spec 11). On other tabs a game may claim a bare play."
 
@@ -2414,6 +2432,33 @@
     tabPriority=22
     example="What is middle C?"
     example="Whats a high G?"
+
+# ---- the typed readings of a chord and a scale (notes, qualities and scale types are lexicon slots): the discourse continues them slot by slot ("and the G major one?")
+@pat.media.music.chord core.pattern
+    canonical="Play a C major chord."
+    match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g8_play]? [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|chords|triad] [$media.music.g23_on]? {inst:lex.media.music.instruments?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
+    emit="@{_} core.request action=music.playChord arg.root={root} arg.q={q} arg.n={n} arg.inst={inst}"
+    kind=request
+    priority=13
+    tabPriority=24
+    example="Play a C major chord."
+    example="Play an A minor chord on the organ."
+    example="Play a D minor seventh chord."
+    example="Play a G 7 chord."
+    example="A C chord."
+
+@pat.media.music.scale core.pattern
+    canonical="Play the D major scale."
+    match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g8_play] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes?} {st:lex.media.music.scaletypes?} [scale|scales] {dir:lex.media.music.directions?} [$media.music.g23_on]? {inst:lex.media.music.instruments?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
+    emit="@{_} core.request action=music.playScale arg.root={root} arg.st={st} arg.dir={dir} arg.inst={inst}"
+    kind=request
+    priority=13
+    tabPriority=24
+    example="Play the D major scale."
+    example="Play an A minor scale on the flute."
+    example="Play a C major scale up and down."
+    example="Play the scale."
+    example="Play a blues scale."
 
 # ---- fallback readings of the families the acts also read (priority below the generated forms; each one is removed when the frames read its sentences)
 @pat.media.music.note.explicit core.pattern

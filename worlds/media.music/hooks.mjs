@@ -31,6 +31,8 @@ function setting(ctx, s) {
 /** Plays what a thing phrase says (a note, a chord, a scale, a song, notes, the melody, the current thing). */
 function play(ctx, thing, text) {
   thing = R.unDet(thing, text);
+  const kind = ctx.state?.current?.kind;
+  if (/\s+ones?$/i.test(thing) && ['scale', 'chord'].includes(kind)) thing = thing.replace(/\s+ones?$/i, ` ${kind}`);   // "and the G major one?": one stands for the kind of what played last
   const st = R.readSetting(thing);
   if (st) return setting(ctx, st);
   const rd = R.readPlayable(thing, { findSong: ctxFind(ctx), parseSeq: M.parseSeq, hint: text });
@@ -147,10 +149,16 @@ const domain = {
   redo: () => no('There is nothing to redo in the music.', 'missing'),
 };
 
+const MUSICAL_NOUN = /\b(?:music|song|songs|melody|melodies|tune|tunes|chord|chords|scale|scales|note|notes|tempo|volume|instrument|piano|organ|flute|violin|cello|loop|looping|octave|octaves|semitone|semitones|key|bpm|beats?)\b/i;
 const MUSICAL = /\b(?:music|song|songs|melody|melodies|tune|tunes|chord|chords|scale|scales|note|notes|tempo|volume|instrument|piano|organ|flute|violin|cello|loop|looping|octave|octaves|semitone|semitones|key|bpm|faster|slower|louder|quieter|beats?)\b/i;
 
 /** DECLINE (spec 21): a sentence is the music's when its tab is open, when it plays something that reads as music (a note, a chord, a scale, a song of the library, notes) or names a musical thing. */
-function accepts({ action, mode, roles = {}, tab, text, state }) {
+function accepts(info) {
+  const v = decline(info);
+  // the open music tab holds the focus: a reading it owns does not yield to a pattern of another world that has no free words ("Play B3" is a note here and a move on the game's tab)
+  return v === true && info.tab === 'media.music' && ['pick', 'make', 'change'].includes(String(info.action ?? '').split('.').pop()) ? 'focus' : v;
+}
+function decline({ action, mode, roles = {}, tab, text, state }) {
   const act = String(action ?? '').split('.').pop();
   if (!Object.hasOwn(domain, act)) return true;   // the operations that are not acts (theory questions, lists, status) are read by patterns that name the music's own frames
   const on = tab === 'media.music';
@@ -169,12 +177,15 @@ function accepts({ action, mode, roles = {}, tab, text, state }) {
   if (act === 'pick' || act === 'make') {
     if (!said) return on || mode === 'play';
     if (/\b(?:list|types?|kinds?)\b/i.test(said)) return false;
+    if (/\s(?:and|then)\s+(?:draw|add|make|show|open|put|set|remove|delete|move|create|tell|what|how|play)\b/i.test(` ${said} `)) return false;   // a second command of another world is its own clause
+    if (mode !== 'play' && /\btabs?\b/i.test(`${said} ${text ?? ''}`)) return false;   // "open the music tab" is the shell's
     if (/^(?:it|that|this|them)$/i.test(said)) return on ? true : (state?.current && mode === 'play' ? 'focus' : false);
     const rd = R.readPlayable(said, { findSong: (t) => (knownSong(t) ? { song: { title: t } } : {}), parseSeq: M.parseSeq });
+    if (mode !== 'play' && !['song', 'chord', 'scale', 'note', 'melody', 'seq', 'current', 'random', 'instrument'].includes(rd.type) && !R.readSetting(said)) return false;   // a verb of selection ("open the music tab", "pick a table") is the music's only for a thing it can play
     const ok = !['unknown', 'none'].includes(rd.type) && rd.type !== 'seq';
     if (rd.type === 'seq') return on || rd.args.text.split(/\s+/).length > 1;
     if (rd.type === 'song' || rd.type === 'chord' || rd.type === 'scale') return true;
-    if (rd.type === 'note') { const a = rd.args; return on || !(a.oct !== undefined && !a.explicit && !a.reg && !a.inst) || a.explicit; }
+    if (rd.type === 'note') return 'focus';   // ("Play B3" is also a move of tic-tac-toe: the playNote operation hands it over when the music tab is not open; the routing decides)
     if (ok) return on || MUSICAL.test(String(text ?? ''));
     // an unknown title on the music tab is a song the library does not have ("play Yesterday"), unless it is a move of the board ("play the queen to d5": the pieces and squares are another world's words)
     if (on && !/\b(?:king|queen|rook|bishop|knight|pawn|castle)\b|\b[a-h][1-8]\b/i.test(said)) return true;
@@ -185,8 +196,9 @@ function accepts({ action, mode, roles = {}, tab, text, state }) {
     const attrWord = /\b(?:tempo|speed|bpm|pace|volume|loudness|instrument|sound|key|loop|looping|repeat|pitch|octave|duration|length)\b/i.test(`${roles.attribute ?? ''} ${roles.thing ?? ''}`);
     const v = String(roles.value ?? '').trim();
     const valueish = !!R.instrumentOf(v) || /^(?:up|down|off|on|full|max|maximum|mute|muted|normal|default|\d+(?:\.\d+)?\s*(?:bpm|percent|%)|too\s+\w+|half|double|twice|triple)$/i.test(v) || mode === 'more' || mode === 'less' || mode === 'shift' || !!R.readSetting(roles.thing ?? '');
-    if (on) return attrWord || valueish;
-    return MUSICAL.test(`${said} ${roles.attribute ?? ''}`) || attrWord || ((mode === 'more' || mode === 'less' || mode === 'shift') && !!state?.current && /\b(?:faster|slower|louder|quieter|softer|higher|lower)\b/i.test(String(text ?? '')));
+    const thingOk = !/\b(?:speak|talk|talking|say|speech|voice|rate|queen|king|rook|bishop|knight|pawn)\b/i.test(`${roles.thing ?? ''} ${text ?? ''}`);   // words of other worlds' frames (the speech rate, the pieces of the board)
+    if (on) return attrWord || (valueish && thingOk);
+    return MUSICAL_NOUN.test(`${said} ${roles.attribute ?? ''}`) || attrWord || ((mode === 'more' || mode === 'less' || mode === 'shift') && !!state?.current && /\b(?:faster|slower|louder|quieter|softer|higher|lower)\b/i.test(String(text ?? '')));
   }
   if (act === 'remove') return on ? true : /\b(?:melody|tune|composition|last note)\b/i.test(said);
   if (act === 'ask') return ['count', 'options', 'describe', 'state'].includes(mode) || /^(?:tempo|speed|bpm|pace|volume|loudness|instrument|sound|loop|repeat|looping|key)$/i.test(String(roles.attribute ?? '')) ? (on || MUSICAL.test(`${said} ${roles.attribute ?? ''}`)) : false;
@@ -194,4 +206,5 @@ function accepts({ action, mode, roles = {}, tab, text, state }) {
 }
 
 if (globalThis.process?.env?.MU_DEBUG) for (const k of Object.keys(domain)) { const f = domain[k]; domain[k] = (ctx, r) => { console.error('DOMAIN', k, JSON.stringify({ ...r, request: undefined })); return f(ctx, r); }; }
-export const hooks = { domain, accepts, noState: true };
+const acceptsDebug = (info) => { const v = accepts(info); if (globalThis.process?.env?.MU_DEBUG) console.error('ACCEPTS', JSON.stringify({ action: info.action, mode: info.mode, tab: info.tab, roles: info.roles, v })); return v; };
+export const hooks = { domain, accepts: acceptsDebug, noState: true };
