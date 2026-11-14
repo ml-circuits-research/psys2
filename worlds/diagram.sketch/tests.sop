@@ -4855,7 +4855,9 @@
 
 @t.diagram.sketch.shaped.a core.test
     input="Make a diagram shaped like a house."
-    expect="I drew a diagram shaped like a house: one box for each of its 6 parts"
+    expect="I drew a diagram in the shape of a house: 6 nodes on its outline, joined in order."
+    expectState="shapes.length=6"
+    expectState="edges.length=6"
     session=shaped.a
 
 @t.diagram.sketch.shaped.b core.test
@@ -4864,23 +4866,23 @@
     session=shaped.b
 
 @t.diagram.sketch.shaped.c core.test
-    input="What shape is the roof?"
-    expect="roof is a triangle."
+    input="What shape is roof_top?"
+    expect="roof top is a circle."
     session=shaped.a
 
 @t.diagram.sketch.shaped.d core.test
-    input="How many triangles are there?"
-    expect="There is 1 triangle."
+    input="How many circles are there?"
+    expect="There are 6 circles."
     session=shaped.a
 
 @t.diagram.sketch.shaped.e core.test
-    input="What shape is the body?"
-    expect="body is a rectangle."
+    input="What is connected to roof_right?"
+    expect="roof right connects to body bottom right"
     session=shaped.a
 
 @t.diagram.sketch.shaped.box.a core.test
     input="Add a box shaped like a house."
-    expect="I drew a diagram shaped like a house: one box for each of its 6 parts"
+    expect="I drew a diagram in the shape of a house: 6 nodes on its outline"
     session=shaped.box.a
 
 @t.diagram.sketch.shaped.box.b core.test
@@ -4890,8 +4892,38 @@
 
 @t.diagram.sketch.shaped.box.c core.test
     input="Draw a shape in the form of a house."
-    expect="I drew a diagram shaped like a house"
+    expect="I drew a diagram in the shape of a house"
     session=shaped.box.c
+
+@t.diagram.sketch.shaped.form.a core.test
+    input="Draw a diagram in house form."
+    expect="I drew a diagram in the shape of a house: 6 nodes on its outline"
+    doc="Owner export 2026-11-14 22:43 ('deseneaza o diagrama in forma de casa' through the translator): it drew one circle and said it was done."
+    session=shaped.form.a
+
+@t.diagram.sketch.shaped.form.b core.test
+    input="Draw a diagram in xyzzy form."
+    expect="I don't know how to draw a diagram shaped like a xyzzy yet."
+    session=shaped.form.b
+
+@t.diagram.sketch.shaped.move.a core.test
+    input="Draw a circle called A, a circle called B, a circle called C, a circle called D."
+    expect="Drew "
+    session=shaped.move
+
+@t.diagram.sketch.shaped.move.b core.test
+    input="Arrange them in the shape of a house."
+    expect="I placed the 4 shapes on the outline of a house"
+    expectState="shapes.length=4"
+    session=shaped.move
+
+@t.diagram.sketch.catchall.a core.test
+    input="Make a diagram of the glorbs in a quuxy way."
+    expect="I understood only part of"
+    expectState="shapes.length=0"
+    given="ui.shell:activeTab=diagram"
+    doc="A catch-all reading ({pre} diagram {post}) that leaves words unread is a last resort: it asks, it does not draw a default circle (spec 16 section 13)."
+    session=catchall.a
 
 @t.diagram.sketch.missing.name.a core.test
     input="Draw a rectangle called Start."

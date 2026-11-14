@@ -43,6 +43,10 @@ export function annotateUnread(matches, set = null, context = null) {
   const typed = completeSource() === 'typed';
   const typedFor = typed && set?.typedFor ? (id) => set.typedFor(id) : null;
   const thingMemo = new Map(), things = (id) => { if (!thingMemo.has(id)) thingMemo.set(id, thingWordsOf(set, id, context)); return thingMemo.get(id); };   // once per world per sentence
+  const wholeMemo = new Map(), readsWhole = (id, view) => {   // the world's own reader reads the clause whole (hook readsWhole): once per world per sentence
+    if (!wholeMemo.has(id)) { const ex = set?.get?.(id)?.ops?.executor; let r = false; try { r = !!ex?.readsWhole?.({ text: view.map((t) => String(t.raw ?? '')).join(' '), state: context?.states?.[id] ?? null }); } catch { r = false; } wholeMemo.set(id, r); }
+    return wholeMemo.get(id);
+  };
   const lowerOf = (t) => t.lower ?? String(t.raw).toLowerCase();
   const content = (t) => word(t) && !FUNCTION_WORDS.has(lowerOf(t));
   const info = matches.map((m) => {
@@ -56,7 +60,7 @@ export function annotateUnread(matches, set = null, context = null) {
   for (const x of info) {
     const out = [];
     for (const [a, b] of x.m.skipped ?? []) for (const t of x.view.slice(a, b)) if (content(t)) out.push(lowerOf(t));
-    if (typed) { for (const w of unreadBy(typedFor, x.m, things)) out.push(w); x.m.unread = out; if (globalThis.process?.env?.DBG_UNREAD) console.error('unread', x.m.pattern.id, JSON.stringify(out)); continue; }   // the typed world decides what its slots accept
+    if (typed) { for (const w of unreadBy(typedFor, x.m, things, readsWhole)) out.push(w); x.m.unread = out; if (globalThis.process?.env?.DBG_UNREAD) console.error('unread', x.m.pattern.id, JSON.stringify(out)); continue; }   // the typed world decides what its slots accept
     for (const i of x.loose) {
       const t = x.view[i]; if (!word(t)) continue;
       const w = lowerOf(t);

@@ -1585,7 +1585,7 @@ export class DialogSession {
     }
     for (const seg of segments) {
       // COMPLETENESS (spec 16 section 12): a reading that leaves content words unread is not final. No voice completed it: a destructive one is never executed, and with PSYS2_COMPLETE=ask none is; the person is asked
-      if (isIncomplete(seg) && (completeMode() === 'ask' || isDestructive(seg))) {
+      if (isIncomplete(seg) && (completeMode() === 'ask' || isDestructive(seg) || seg.match?.catchAll)) {   // a catch-all reading (raw leftover arguments only) is a last resort: half-read, it is not executed
         const unread = [...new Set(seg.match.unread)];
         lines.push([T('I understood only part of '), { text: `"${seg.text}"`, translate: false, quote: true }, T(': I did not use '), ...unread.flatMap((w, k) => [...(k ? [T(' and ')] : []), { text: `"${w}"`, translate: false, quote: true }]), T(', so I did not do it. What did you mean?')]);
         statuses.push('missing');
