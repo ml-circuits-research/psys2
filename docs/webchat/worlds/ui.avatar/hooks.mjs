@@ -3,8 +3,8 @@
 // DOES on a face is the face logic over the catalog k.faces (worlds/ui.avatar/facelogic.mjs, state.face), reached through `domain`. The roles are joined back into the words
 // the face logic reads (it finds slot, variant, colour, feature, preset and mood by itself over the catalog data). Nothing here names a slot, a variant or an accessory.
 import * as F from './facelogic.mjs?v=f7b0397e34';
-import { DEFAULT_FACE } from './default-face.mjs?v=ddb5fca430';
-import { animate, dataOf, ensure, setName, askName } from './own.mjs?v=425f02993d';
+import { DEFAULT_FACE } from './default-face.mjs?v=a950183e07';
+import { animate, dataOf, ensure, setName, askName } from './own.mjs?v=e190138c12';
 
 const MOMENTS = new Set(['wink', 'nod', 'dance', 'wave', 'spin', 'jump', 'bounce', 'wiggle', 'blink']);
 const SIZE = /^(bigger|larger|longer|wider|smaller|tinier|shorter|narrower)$/;

@@ -4,8 +4,9 @@
 // motion only, generated from the catalog); the full set replaces it when it arrives. The world holds the state (state.face: a variant for each slot, colours, size and place,
 // expression); this module only draws it: the big face (in the popup of the icon in the input bar), the small face of the icon, the expression chips, the faces of the catalog and
 // the saved ones, and the variants of a part as small pictures to tap (a tap is typed into the chat like any other command).
-// The face MOVES by rules: the host emits events (reply with its text and outcome, thinking, typing, the voice speaking) and worlds/ui.avatar/motion.mjs (a thin call of the library's std.motion; the rules are TEMPORARY, until
-// k.motion and std.motion exist) answers which eyes, brows and mouth to lay over the face now. Nothing moves while the page is hidden, and prefers-reduced-motion is honoured.
+// The face MOVES by rules: the host emits events (reply with its text and outcome, thinking, the voice speaking) and worlds/ui.avatar/motion.mjs (a thin call of the library's std.motion over the
+// knowledge world `k.motion`, read from the catalog; the bundled subset worlds/ui.avatar/default-motion.mjs, generated from it, moves the face before the catalog arrives and offline) answers which
+// eyes, brows and mouth to lay over the face now. Nothing moves while the page is hidden, and prefers-reduced-motion is honoured.
 const KNOWLEDGE_URL = 'https://ml-circuits-research.github.io/sop-knowledge-worlds/worlds';
 const FADE_MS = 380;
 const plain = (t) => String(t).replace(/_/g, ' ');
@@ -82,7 +83,8 @@ export function createAvatar(container, host = null) {
   optsEl.hidden = true; facesEl.hidden = true;
 
   let full = false, state = null, data = null, mods = null, loading = null, retry = 0, destroyed = false, lastSvg = '', shown = '';
-  let fxTimer = 0, visible = false, motion = null, motionTimer = 0, frame = { over: null, talking: false }, frameKey = '';
+  let catalogFacts = null, defaultMotion = '', motionAsked = false;
+  let fxTimer = 0, visible = false, motion = null, motionRules = null, motionTimer = 0, frame = { over: null, talking: false }, frameKey = '';
   const mirrors = [];   // { el, px, svg }: the small copies of the face (the icon)
   const now = () => (host?.now ? host.now() : performance.now());
   const reducedQuery = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
@@ -94,11 +96,12 @@ export function createAvatar(container, host = null) {
     if (loading || destroyed || full) return;
     loading = (async () => {
       try {
-        const [draw, logic, { DEFAULT_FACE }, motionMod, { createFacts }, { createKnowledgeSource }, { createCachedSource }, lib] = await Promise.all(['worlds/ui.avatar/facedraw.mjs', 'worlds/ui.avatar/facelogic.mjs', 'worlds/ui.avatar/default-face.mjs', 'worlds/ui.avatar/motion.mjs', 'lib/knowledge/facts.mjs', 'lib/loaders/knowledge-source.mjs', 'lib/loaders/knowledge-cache.mjs', 'lib/vendor/sopworld/sopworld.mjs'].map((p) => import(asset(p))));
+        const [draw, logic, { DEFAULT_FACE }, motionMod, { DEFAULT_MOTION }, { createFacts }, { createKnowledgeSource }, { createCachedSource }, lib] = await Promise.all(['worlds/ui.avatar/facedraw.mjs', 'worlds/ui.avatar/facelogic.mjs', 'worlds/ui.avatar/default-face.mjs', 'worlds/ui.avatar/motion.mjs', 'worlds/ui.avatar/default-motion.mjs', 'lib/knowledge/facts.mjs', 'lib/loaders/knowledge-source.mjs', 'lib/loaders/knowledge-cache.mjs', 'lib/vendor/sopworld/sopworld.mjs'].map((p) => import(asset(p))));
         const src = createCachedSource({ source: createKnowledgeSource(host?.knowledgeUrl?.() || KNOWLEDGE_URL), caches: globalThis.caches });
         const facts = createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((r) => setTimeout(() => r(null), 6000))]) } });
-        mods = { draw, logic, motionMod, lib }; data = DEFAULT_FACE; shown = ''; startMotion(); draw_();   // the bundled fallback face first: the avatar never waits for the network
+        mods = { draw, logic, motionMod, lib }; data = DEFAULT_FACE; shown = ''; motionRules = mods.motionMod.parseMotion(lib, DEFAULT_MOTION); startMotion(); draw_();   // the bundled fallback face first: the avatar never waits for the network
         host?.progress?.start?.('faces', 'Loading the face set', { quiet: true });   // PROGRESS: recorded, never shown while it loads (the fallback face is already drawn: this is an upgrade); said only when it cannot be had
+        catalogFacts = facts; defaultMotion = DEFAULT_MOTION;   // the catalog's k.motion is read when the face is first looked at or first replies (adoptCatalogMotion): the bundled copy is the same text and has moved the face since the first paint
         const d = await facts.faces();
         if (!d) throw new Error('no faces in the catalog');
         data = d; full = true; shown = '';
@@ -119,9 +122,17 @@ export function createAvatar(container, host = null) {
 
   // ---- motion: events in, a frame of variants over the face out; one timer, none while hidden --------------------------------------------------------------------
   const has = (slot, name) => !!data?.slots.find((s) => s.name === slot)?.variants.some((v) => v.name === name && v.parts?.length !== 0);
+  /** Once, when the face is first opened or first replies: the rules of the catalog's k.motion replace the bundled ones (same text unless the catalog moved on). Offline or unreadable: the bundled rules stay. */
+  function adoptCatalogMotion() {
+    if (motionAsked || !catalogFacts || !mods) return;
+    motionAsked = true;
+    catalogFacts.worldText('k.motion').then((text) => { if (!text || text === defaultMotion || destroyed) return; motionRules = mods.motionMod.parseMotion(mods.lib, text); motion = null; frameKey = ''; startMotion(); })
+      .catch((e) => console.warn('avatar: the k.motion of the catalog was not used; the bundled rules stay', e));
+  }
+  const features = (slot, name) => data?.slots.find((s) => s.name === slot)?.variants.find((v) => v.name === name)?.features ?? {};
   function startMotion() {
-    if (!mods?.motionMod || motion) return;
-    motion = mods.motionMod.createMotion({ lib: mods.lib, seed: host?.motionSeed ?? (Math.floor(Math.random() * 1e9) | 1), has, reduced: !!reducedQuery?.matches, t0: now() });
+    if (!mods?.motionMod || !motionRules || motion) return;
+    motion = mods.motionMod.createMotion({ lib: mods.lib, motion: motionRules, features, seed: host?.motionSeed ?? (Math.floor(Math.random() * 1e9) | 1), has, reduced: !!reducedQuery?.matches, t0: now() });
     tick();
   }
   reducedQuery?.addEventListener?.('change', () => { motion = null; frameKey = ''; startMotion(); });   // the preference changed: a new scheduler
@@ -197,11 +208,11 @@ export function createAvatar(container, host = null) {
   draw_();
   return {
     update(next) { state = next ?? state; draw_(); },
-    /** An event of the host: 'reply' { text, outcome, mood }, 'thinking' { on }, 'typing', 'reset'. Moves the face by the motion rules. */
-    emit(type, payload = {}) { if (!motion) return; motion.emit(type, payload, now()); tick(); },
+    /** An event of the host: 'reply' { text, outcome }, 'thinking' { on }, 'reset' (a 'typing' or a 'mood' has no rule in k.motion and changes nothing). Moves the face by the motion rules. */
+    emit(type, payload = {}) { if (type === 'reply') adoptCatalogMotion(); if (!motion) return; motion.emit(type, payload, now()); tick(); },
     setSpeaking(on, text) { if (!motion) return; motion.emit('speaking', { on: !!on, text }, now()); tick(); },
     /** The popup opens or closes: the big face is drawn only while it is open; closing keeps the state. */
-    setVisible(on) { visible = !!on; if (visible) { shown = ''; lastSvg = ''; } draw_(); },
+    setVisible(on) { visible = !!on; if (visible) { shown = ''; lastSvg = ''; adoptCatalogMotion(); } draw_(); },
     /** Keeps a small copy of the face in `target` (the icon in the input bar). */
     mirror(target, px = 36) { mirrors.push({ el: target, px, svg: '' }); draw_(); },
     /** The motion's current frame (tests and the debug view). */

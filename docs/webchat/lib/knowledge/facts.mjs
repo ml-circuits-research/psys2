@@ -334,6 +334,13 @@ export function createFacts({ source, name = 'catalog' }) {
     },
     /** The schema and the series already built, or undefined (synchronous reads for operations: \`ctx.knowledge.peekSchema()\`, \`peekSeries()\`). */
     peekSchema: () => schemaData ?? undefined, peekSeries: () => seriesData ?? undefined,
+    /** The shards of a world (`k.motion`) as one text of facts, for a host that hands the whole world to the library; null when the catalog has no such world or it cannot be read (asked again later). */
+    async worldText(id) {
+      const w = await world(id);
+      if (!w?.shards?.length) return null;
+      const texts = await Promise.all(w.shards.map(async (sh) => (await loadShard(sh.id)).join('\n')));
+      return texts.every((t) => t.trim()) ? texts.join('\n') : null;
+    },
     /** The faces of k.faces (src/knowledge/faces.mjs), built once from the catalog; null when it has none (and asked again later). */
     faces() {
       facesLoading ??= buildFaces(api).then((d) => { facesData = d; if (!d) { facesLoading = null; } return d; });
