@@ -4,7 +4,7 @@
 // is a phrase about the text ("section 2", "the ending", "Hansel's sister", "the witch"), read by `target` into the engine's own arguments. Nothing here names a verb.
 import * as R from './read.mjs?v=a8a79efab0';
 import { ORDINALS, KIN, singular, cap } from './lang.mjs?v=afa9ef7a36';
-import { en } from '../../lib/lang/en.mjs?v=061a6ba9b3';
+import { en } from '../../lib/lang/en.mjs?v=1f848688df';
 const numerals = en.numerals('acts');
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };

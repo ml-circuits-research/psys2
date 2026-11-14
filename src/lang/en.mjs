@@ -38,7 +38,7 @@ const isWord = (t) => t.kind === 'word' || t.kind === 'number';
 const span = (toks) => [Math.min(...toks.map((t) => t.start)), Math.max(...toks.map((t) => t.end))];
 
 /** The shards of the catalog world `w.lang.en` this module reads. `core-plurals`, `hand-morphology` (lemmas: analyses -> analysis) and `hand-grammar` (copula was / were) were accepted 2026-11-14 after the corpus run (docs/lessons.md); `hand-joins` and `phrases` are not read (no view uses them). */
-export const LANG_EN_SHARDS = ['determiners', 'pronouns', 'prepositions', 'numbers', 'morphology', 'ellipsis', 'clauses', 'grammar', 'frames-acts', 'frames-acts-more', 'frames-acts-data', 'core-plurals', 'hand-morphology', 'hand-grammar'];
+export const LANG_EN_SHARDS = ['determiners', 'pronouns', 'prepositions', 'numbers', 'morphology', 'ellipsis', 'clauses', 'grammar', 'frames-acts', 'frames-acts-more', 'frames-acts-data', 'core-plurals', 'hand-morphology', 'hand-grammar', 'hand-frames'];
 /** The catalog's act names of the verb groups of the act grammar: the act `change` is the group `set`, `take apart` is `apart`. */
 const VERB_GROUP = { change: 'set', 'take apart': 'apart' };
 /** The lexicons a schema world generates (`lexicon=attribute` is its ATTR); the shared lexicons are the catalog's `w.lang.en.lex` names. */

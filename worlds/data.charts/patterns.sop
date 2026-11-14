@@ -1321,6 +1321,14 @@
     example="Stop sorting."
     canonical="Stop sorting."
 
+@pat.data.charts.make.name.place.p core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} [called|named] {value:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=data.charts.make arg.thing=\"{thing}\" arg.value=\"{value}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=15
+    tabPriority=23
+    example="Put a guest named Maria at chart."
+
 # ---- patterns.extra.sop (hand-written, appended by the generator)
 @pat.data.charts.create.refresh core.pattern
     match="[$lang.lead.polite|$data.charts.g2_hey]? [update|refresh|redo|rebuild|recount] [the|this|my|that]? {c:lex.data.charts.nouns} [again|now|with_the_new_numbers|from_the_conversation]? [pls|plz|thanks|thank_you|for_me]?"

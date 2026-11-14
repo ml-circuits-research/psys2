@@ -6,7 +6,7 @@
 // reading the executor's own rules refuse) is left to the executor: it keeps the failure classes of its replies (no such kind, none of that kind, nothing in focus).
 // Browser-safe: no `node:*`.
 import { World, resolve as libResolve } from '../../lib/vendor/sopworld/sopworld.mjs?v=9bf075bbf5';
-import { LANG_EN_FACTS } from '../../lib/lang/en.facts.generated.mjs?v=b2645dfa61';
+import { LANG_EN_FACTS } from '../../lib/lang/en.facts.generated.mjs?v=0bfa05cf7c';
 
 // the grammar of the catalog world w.lang.en (shards of the bundle): the productions and the closed classes of English noun phrases
 const SHARDS = ['grammar', 'determiners', 'numbers', 'prepositions', 'pronouns'];
