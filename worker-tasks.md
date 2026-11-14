@@ -3904,3 +3904,30 @@ The reviewer read samples of `docs/webchat/coverage-grid.json` and of `paraphras
 - **and one real finding:** on the Draw grid, "Take apart the thing" and "Remove the thing from the thing 1" are answered by **the seating plan** ("There is no thing in the seating plan…"), and on the chart grid "Change the point Zed the same size as the red" too: a cross-world capture the invariants do not catch (the grid runs with which tab open?). Put these in the corpus and fix by the arbitration rule.
 Fix the generator: (1) every placeholder filled from the schema and `w.lang.en` (relations from `k.layouts` / prepositions, nouns from the kind's words, attributes from the schema); a sentence with a leftover placeholder is a generator error, not a case; (2) only verb × kind × value combinations that knowledge allows (the verb's roles in `k.actions` and the kind's attributes in the schema / `k.attributes`; "take apart" only for kinds with parts); (3) a setup per cell that makes the things the sentence needs; (4) the tab of the world open. Report the grid again with the old and new numbers side by side; the honest number is the one the owner sees.
 **Paraphrase set (22 of 146 right):** the round trip through machine translation changed the meaning in many rows while the expected answer stayed the original's ("Ana has 8 crayons. Ben gives Ana 6 pencils. How many pencils?" expects 14). Re-judge the 146: keep a row only when its meaning equals the original's (expected answer re-derived where it changed); mark the rest `meaning-changed` (they test something else: robustness to a wrong translation). Report both parts separately. Then the paraphrase number means what the owner thinks it means.
+
+## Reviewer 2026-11-14 05:10 — LAZY LOADING (owner): boot loads almost everything; measured by the reviewer
+
+**Owner:** the app loads very slowly; it should load the minimum at boot and load worlds and knowledge only when needed, with a compact index of the worlds (for instance a Bloom filter) to know at runtime which worlds a message needs; heavy extras in the background. He also sees errors about Romanian models on load and does not know what is being loaded. Find out and fix; measure before / after.
+
+**Reviewer's probe** (headless Chrome, local server of `docs/webchat` at 788a314f, no throttle, no interaction, first 25 s; script /home/claude/shot/boot.mjs on the reviewer box): **361 requests, 35.8 MB.** Largest:
+| what | size | note |
+| --- | --- | --- |
+| `vendor/onnxruntime/ort-wasm-simd-threaded.wasm` | 14.5 MB | model runtime at boot, before any message (the rules reader is the default) |
+| `worlds/index.json` | 4.4 MB **fetched twice** (8.9 MB) | the whole world index at boot |
+| `vendor/chess/stockfish-19-lite-single.wasm` | 1.8 MB | chess engine with no chess tab open |
+| `vendor/map/countries-50m.json` | 739 KB | map shapes with no map open |
+| `vendor/editor/tiptap.mjs` | 432 KB | editor with no editor open |
+| `lib/knowledge/bundled-geo.mjs`, `lib/lang/en.facts.generated.mjs` | 283 KB, 272 KB, **each fetched twice** | page and worker both load them? |
+| `lib/knowledge` 30 files 1.2 MB, `lib/dialog` 34 files, `lib/formalizer` 46 files, `ui/tabs` 28 files | | every module of every world at boot |
+The reading model (65 MB) did not arrive within 25 s here; on a phone it is the 83 s step of the start-up table.
+
+**Design to build (one landing, measured):**
+1. **Boot = shell + engine + the open tab's world + the rules reader + `w.lang.en` core**. Nothing else blocks first input. Target on the 1 MB/s profile: chat usable under 3 s, under 2 MB transferred.
+2. **A world loads on demand**: when its tab opens, when routing picks it, or when the user names it; its vendor assets (stockfish, map shapes, tiptap, Chart.js) load with the world, never at boot. The PROGRESS panel says what is loading.
+3. **A compact routing index instead of `worlds/index.json` (4.4 MB)**: per world a small card (generated; already exist for meta.worlds) plus a **compact word index** of the words each world and each knowledge shard answers to: a Bloom filter per world / per catalog shard (or one prefix-compressed table), a few KB each, built at build time; at runtime a message's words are tested against the filters to know which worlds and which knowledge shards to fetch; false positives cost one fetch, never a wrong reading (the real lexicon decides after loading). Measure: filter sizes, false-positive rate on the owner logs and the operational set, fetches per turn.
+4. **Knowledge catalog by the same index**: replace eager `vocab.json` (1.3 MB) with the filter set + per-shard lookups; the bundled offline subsets (geo, lang.en, faces, default drawings) load only when the catalog is unreachable or the world needs them before the catalog answers.
+5. **Models in the background, never on the boot path**: onnxruntime and the dispatcher model start after first paint and only on an idle CPU, and only if the setting is on; the T5 normalizer only on the user's request. Say in PROGRESS what is loading and that the chat already works.
+6. **No duplicate fetches**: page and worker share one load (or the worker owns it); one fetch per file per start; Cache Storage for every versioned asset so a second start transfers almost nothing.
+7. **The Romanian model errors**: find which file errors on load (the owner sees them; the reviewer's box cannot load the online catalog), why it is loaded at all when the language is English, and load translation models only for the selected language when it is not English.
+8. **Report**: the start-up table before / after (step, ms, bytes) on the 1 MB/s profile, cold and warm; requests and bytes in the first 25 s; time to first answer; the same 14-turn probe on Draw, Map, Avatar, Talk measuring on-demand loads. Invariant tests: no world asset is fetched at boot except the open tab's; the network invariant still holds (readings do not change when a lazy fetch fails).
+Put this before the next migration; the owner feels it every time he opens the app.
