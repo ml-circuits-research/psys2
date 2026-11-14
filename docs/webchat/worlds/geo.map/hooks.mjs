@@ -2,10 +2,11 @@
 // geo.map (spec 21 section 12): the hooks of the schema world. The acts (make, remove, change, pick, ask, send, undo, redo) are read by the generated grammar; what an act DOES on the map is the
 // operations of map.mjs (the projection and zoom fitting, the view state, the distances). The roles of an act are mapped onto those operations here; the places named in them come by lookup from
 // the catalog (places.mjs), never from a table of this world. Nothing here lists a place, a verb or a colour: kinds and attributes come from the schema, place words from the catalog vocabulary.
-import * as M from './map.mjs';
-import { knowsPlace } from '../../src/knowledge/open-words.mjs';
-import { keyOf } from './places.mjs';
-import * as G from './ops.mjs';   // circular on purpose: only used inside functions, when the executor exists
+import * as M from './map.mjs?v=01404ace94';
+import { knowsPlace } from '../../lib/knowledge/open-words.mjs?v=e1858148f1';
+import { keyOf } from './places.mjs?v=a34170dee4';
+import * as G from './ops.mjs?v=b35a16789b';
+import { ACT_VERBS } from '../../worlds/acts/acts.mjs?v=04aef335a8';   // circular on purpose: only used inside functions, when the executor exists
 
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_'’-]+/).filter(Boolean);
 const DET = /^(?:the|a|an|my|our|this|that|these|those|another|new|all|some|any)\s+/;
@@ -13,6 +14,7 @@ const PRONOUN = /^(?:it|them|that|this|those|these|everything|all|each|every|one
 const ok = (value) => ({ status: 'supported', value });
 const no = (note, status = 'unsupported') => ({ status, note });
 const ACTS = new Set(['make', 'remove', 'change', 'place', 'pick', 'ask', 'copy', 'send', 'undo', 'redo']);
+const VERB1 = new Set(Object.entries(ACT_VERBS).filter(([a]) => !['ask', 'apart', 'undo'].includes(a)).flatMap(([, v]) => v).filter((v) => !v.includes('_') && !['name', 'list', 'count'].includes(v)));
 const THAT_ONE = /\b(?:that|this|the last|the previous)\b/i;
 
 /** The kind of the schema a phrase names: its last word is a word of the kind ("the markers", "a river"). */
@@ -31,13 +33,15 @@ const one = (text) => {
   const rel = RELATION.exec(t);
   if (rel && !/^(?:the )?capital$/.test(t)) t = (rel[1] ?? rel[2]).replace(DET, '');
   const k = t.replace(/[^a-z0-9 .'-]+/g, ' ').trim().replace(/\s+/g, '_');
-  return knowsPlace(k, ['k.geo']) || knowsPlace(k.replace(/^the_/, ''), ['k.geo']);
+  const base = k.replace(/^the_/, '');
+  // the sentence reader drops the apostrophe ("Peru's capital" arrives as "perus capital"): a last word that is not a place but is one without its s is a possessive
+  return knowsPlace(k, ['k.geo']) || knowsPlace(base, ['k.geo']) || (/[a-z]s$/.test(base) && knowsPlace(base.slice(0, -1), ['k.geo']));
 };
 export const isPlace = (text) => {
   const t = String(text ?? '').trim();
   if (one(t)) return true;
   const parts = t.replace(/\s+(?:and|with)\s+(?:its|their)\s+neighbou?rs$/i, '').split(/\s*(?:,|\band\b)\s*/i).map((x) => x.replace(/^(?:both|also)\s+/i, '').trim()).filter(Boolean);
-  return parts.length > 1 && parts.every(one);
+  return (parts.length > 1 || parts[0] !== t) && parts.length > 0 && parts.every(one);   // "Romania and its neighbours" is one place with its neighbours
 };
 /** "Paris and Rome", "Paris, Rome and Oslo" -> up to five keys for the operations that take a, b, c, d, e. */
 function placeArgs(text) {
@@ -79,6 +83,13 @@ const domain0 = {
     return no(`I can put pins and lines on the map, but I cannot make ${/^[aeiou]/i.test(String(r.thing)) ? 'an' : 'a'} ${String(r.thing ?? 'that').replace(DET, '')}.`);
   },
   remove: (ctx, r) => {
+    // a layer named by a form (the frames `layer`: highlights, pins, lines): `what` says which, the place (if any) which part of it
+    if (r.what) {
+      const p = firstPlace(r.thing);
+      if (r.what === 'highlight') return M.clearHighlight(ctx, p ? { p: keyOf(p) } : {});
+      if (r.what === 'route') return M.clearLines(ctx);
+      return M.clearMarkers(ctx, p ? { p: keyOf(p) } : r.mode === 'last' ? { last: 'true' } : {});
+    }
     const k = kindOf(r.thing);
     const said = String(r.thing ?? '').toLowerCase();
     if (r.mode === 'all' || /\b(?:everything|all)\b/.test(said) && !k) return M.clearAll(ctx);
@@ -125,6 +136,10 @@ const domain0 = {
   },
   pick: (ctx, r) => {
     const p = firstPlace(r.thing);
+    if (r.what && p) {
+      const args = placeArgs(String(r.thing).replace(/\s+(?:and|with)\s+(?:its|their)\s+neighbou?rs$/i, '').replace(/^(?:both|also)\s+/i, ''));
+      return r.what === 'highlight' ? M.highlightPlaces(ctx, args) : M.mark(ctx, args);
+    }
     if (r.mode === 'none') return M.clearHighlight(ctx, {});
     if (!p) return kindOf(r.thing)?.name === 'pin' ? M.markers(ctx) : no(`I do not know a place called ${String(r.thing ?? '').replace(DET, '')}.`);
     const v = verbOf(r.text), args = placeArgs(String(r.thing).replace(/\s+(?:and|with)\s+(?:its|their)\s+neighbou?rs$/i, '')), nb = /\bneighbou?rs\b/i.test(String(r.thing)) ? { nb: 'true' } : {};
@@ -139,6 +154,14 @@ const domain0 = {
     const p = firstPlace(r.thing, r.place);
     if (r.mode === 'describe' || r.mode === 'state' || (k?.name === 'view' && !attr)) return M.describe(ctx);
     if (k?.name === 'pin') return M.markers(ctx);
+    if (wordsOf(r.thing).some((w) => /^highlight/.test(w)) && !p) return M.highlights(ctx);   // "list the highlighted countries": the state's own kind (the schema's word highlight)
+    if ((r.mode === 'count' || /\bhow many\b/i.test(String(r.text))) && (!attr || attr === 'country')) {   // "how many countries are in Europe": the kind counted (the kind word is also the attribute `country`), then the scope
+      const ws = wordsOf([r.attribute, r.thing].join(' ')), at = ws.findIndex((w) => /^(?:countr|cit|town)/.test(w));
+      if (at >= 0) {
+        const scope = firstPlace(ws.slice(at + 1).join(' ').replace(/^(?:(?:are|is|there|in|of|do|does|have|has|on)\s+)+/, ''), r.place) ?? 'world';
+        return M.count(ctx, { k: /^(?:cit|town)/.test(ws[at]) ? 'cities' : 'countries', p: keyOf(scope) });
+      }
+    }
     if (r.mode === 'count' && !p) {
       const kw = wordsOf(r.thing).at(-1) ?? '';
       const scope = firstPlace(r.place) ?? 'world';
@@ -147,7 +170,10 @@ const domain0 = {
     if (r.mode === 'where' || (!attr && p)) return p ? M.where(ctx, { p: keyOf(p) }) : no('Where is what?', 'missing');
     if (!p) return no('About which place?', 'missing');
     const a = { p: keyOf(p), c: keyOf(p) };
+    if (r.rel === 'reverse') return attr === 'capital' ? M.capitalOfWhich(ctx, a) : no('I can look a place up by its capital only.');
+    if (r.mode === 'count' && attr === 'neighbours') return M.neighbourCount(ctx, a);
     switch (attr) {
+      case 'country': return M.country(ctx, a);
       case 'capital': return M.capital(ctx, a);
       case 'population': return M.population(ctx, a);
       case 'area': return M.area(ctx, a);
@@ -175,12 +201,14 @@ function accepts({ action, roles = {}, tab, text }) {
   if (!ACTS.has(act)) return true;   // the operations that are not acts (navigation, comparisons, distances) are read by patterns that name the map's own frames
   const open = tab === 'geo.map';
   if (['undo', 'redo'].includes(act)) return open;
-  const said = [roles.thing, roles.place, roles.value].filter(Boolean).map((x) => String(x).trim());
+  // a question whose subject starts with a verb of another act ("Highlight Romania and its" + the attribute word "neighbours") is that act's sentence, not a question about the attribute
+  if (act === 'ask' && VERB1.has(wordsOf(roles.thing)[0])) return false;
+  const said = [roles.thing, roles.place, roles.value, roles.noun].filter(Boolean).map((x) => String(x).trim());
   if (act === 'send') return !!placePhrase(roles.thing) && !kindOf(roles.place);   // "send it to the map" is the other view's act (things.show), not the map's; only a place sent away is
   if (said.some((x) => placePhrase(x))) return open ? 'focus' : true;   // the open tab owns its acts first (spec 20): "highlight Spain and Portugal" is the map's, not the document's
   const k = said.map(kindOf).find(Boolean);
   if (k && (open || /\bmap\b/i.test(String(text ?? '')) || k.name === 'view')) return true;
-  if (/\b(?:on|in|from) the map\b/i.test(String(text ?? ''))) return true;
+  if (/\b(?:on|in|from|off) the map\b/i.test(String(text ?? ''))) return true;
   if (!said.length && open) return true;
   if (said.length && open && said.every((x) => PRONOUN.test(x.replace(DET, '')))) return 'focus';
   return false;

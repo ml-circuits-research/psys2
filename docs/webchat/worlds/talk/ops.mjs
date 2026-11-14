@@ -12,7 +12,7 @@
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42';
 import * as space from '../space/space.mjs?v=f98ca4dd42';
 import { habitatSentence } from '../../lib/knowledge/commonsense.mjs?v=7fdbc6c294';
-import { colourName, numberValue } from '../../lib/knowledge/values.mjs?v=89992abfaf';   // the one colour reader (k.values)
+import { colourName, numberValue } from '../../lib/knowledge/values.mjs?v=ebf19b103c';   // the one colour reader (k.values)
 import * as R from './records.mjs?v=f3e5e4949b';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
 
 export const MAX_CARDS = 40;
@@ -526,9 +526,6 @@ export function openSlots(ctx, { action, args = {} } = {}) {
 /** Host hook: the words of the types whose wires an operation lists or looks up (loaded before it runs, `ctx.knowledge.peekWires`). */
 export function listNeeds(ctx, { action, args = {} } = {}) {
   return action === 'talk.list' ? [args.k] : action === 'talk.mix' ? ['mix'] : [];
-}
-/** Host hook: the catalog models this world reads synchronously (the schemas of the knowledge worlds, the ordered series), built by the host before an operation runs. */
-export function needs() { return ['schema', 'series']; 
 }
 
 const words = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];

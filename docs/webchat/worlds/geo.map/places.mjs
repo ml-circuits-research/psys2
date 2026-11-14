@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The places of the map, by lookup (spec 21 section 12). ONE reading path: every country, city and group comes from the catalog's `k.geo` (`ctx.knowledge`: the wires of a type once the
-// host's `needs` entries `wires:k.geo.country` ... settled, read synchronously through `peekWires`); the world keeps no knowledge base of its own. What k.geo lacks (the bounding
+// typed needs of world.sop (`std.schema.needs` k.geo.country ...) settled, read synchronously through `peekWires`); the world keeps no knowledge base of its own. What k.geo lacks (the bounding
 // boxes and aliases of the regions) is `regions.mjs`, listed in handover/knowledge-out/catalog-lacks.md. The entities have the shape the operations of the map always read:
 //   country { kind, name, cc, pop, area, lat, lon, bb [s, w, n, e], capital [names], cont (key), sub, nb [cc], cur [], lang [], land, ind }
 //   city { kind, name, cc, pop, lat, lon, isCapital }      region { kind, rkind, name, bb, members [cc] }
 // Browser-safe: no imports beyond the sibling data module.
-import { REGIONS } from './regions.mjs';
+import { REGIONS } from './regions.mjs?v=b9782a3da0';
+import { BUNDLED_GEO } from '../../lib/knowledge/bundled-geo.mjs?v=69830abbea';
+import { parseLine } from '../../lib/knowledge/catalog.mjs?v=0372695257';
 
 const fold = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 /** "St. George's" -> "st_georges": the form of a name in a lexicon and in an argument of the map's operations. */
@@ -15,8 +17,6 @@ const singKey = (k) => k.replace(/([a-z])s$/, '$1');
 const num = (v) => (v === undefined || v === null || v === '' || Number.isNaN(Number(v)) ? null : Number(v));
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
-/** The wire types the map needs before an operation runs (the host's `needs` hook): `wires:<type>[@<world>]`. */
-export const NEEDS = ['wires:k.geo.country', 'wires:k.geo.city', 'wires:k.geo.group', 'wires:core.word@k.geo'];
 
 /** Facts of one thing merged over the shards that state them (the continent shard and the borders shard of one country are one thing). */
 function merge(ws, idOf) {
@@ -33,11 +33,22 @@ function merge(ws, idOf) {
 
 let CACHE = null;
 /** The index of places, or null while the catalog's countries and cities are not loaded. Cached on the identity of the loaded wires. */
+/** The bundled k.geo wires (generated from the catalog at build time: every country, the groups, the cities of 500,000+ and the capitals), by type, parsed once: what the map knows before the catalog answers or with no network. */
+let BUNDLE = null;
+function bundled() {
+  if (BUNDLE) return BUNDLE;
+  const by = new Map();
+  for (const l of BUNDLED_GEO.text.split('\n')) { const w = l.charCodeAt(0) === 64 ? parseLine(l) : null; if (w) (by.get(w.type) ?? by.set(w.type, []).get(w.type)).push({ id: w.id, type: w.type, f: w.attrs }); }
+  return (BUNDLE = by);
+}
 export function buildIndex(kn) {
-  const cw = kn?.peekWires?.('k.geo.country'), ci = kn?.peekWires?.('k.geo.city');
+  const cat = kn?.peekWires?.('k.geo.country'), catCities = kn?.peekWires?.('k.geo.city');
+  const live = !!(cat?.length && catCities?.length);   // the catalog answered: it replaces the bundle whole
+  const bd = live ? null : bundled();
+  const cw = live ? cat : bd.get('k.geo.country'), ci = live ? catCities : bd.get('k.geo.city');
   if (!cw?.length || !ci?.length) return null;
   if (CACHE?.src === cw && CACHE.srcCities === ci) return CACHE.D;
-  const groups = kn.peekWires('k.geo.group') ?? [], words = kn.peekWires('core.word', 'k.geo') ?? [];
+  const groups = (live ? kn.peekWires('k.geo.group') : bd.get('k.geo.group')) ?? [], words = (live ? kn.peekWires('core.word', 'k.geo') : bd.get('core.word')) ?? [];
   const byKey = new Map(), byCc = new Map(), byName = new Map(), cities = [], countries = [], regions = [], capitalOf = new Map(), citiesOf = new Map();
   const first = (f, k) => f?.[k]?.[0];
   // countries
@@ -80,6 +91,8 @@ export function buildIndex(kn) {
   for (const [t, c] of byName) { add(c, t.replace(/ /g, '_')); add(c, singKey(t.replace(/ /g, '_'))); }
   for (const r of regions) { for (const k of r.keys) add(r, k); sing(r, r.name.replace(/^the /, '')); }
   for (const c of [...cities].sort((a, b) => b.pop - a.pop)) sing(c, c.name);
+  // a hyphenated compound name is also said by its first part (Cluj-Napoca: "Cluj"), when no other name has that key (the open place lexicon reads the same rule)
+  for (const c of [...cities].sort((a, b) => b.pop - a.pop)) { const i = c.name.indexOf('-'); if (i >= 4 && /^[A-Za-z]+$/.test(fold(c.name.slice(0, i)))) add(c, keyOf(c.name.slice(0, i))); }
   const D = { byKey, byCc, cities, countries, regions, capitalOf, citiesOf };
   CACHE = { src: cw, srcCities: ci, D };
   return D;

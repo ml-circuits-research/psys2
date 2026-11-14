@@ -14,10 +14,10 @@
  * `prior`: { world: probability } from the encoder (optional); its points are `round(p * priorWeight)`, one signal among the rules: it can add up to the
  * weight and never outvotes a block.
  */
-import { GRAMMAR, PERSON } from './continuation.mjs?v=df205712fa';
-import { sceneThings } from './scene-referents.mjs?v=9a7f6b9e71';
+import { GRAMMAR, PERSON } from './continuation.mjs?v=4664ce5794';
+import { sceneThings } from './scene-referents.mjs?v=2133fbb62f';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { slipDistance, stemsOf } from './scene-referents.mjs?v=9a7f6b9e71';
+import { slipDistance, stemsOf } from './scene-referents.mjs?v=2133fbb62f';
 
 /** The forms a word can have besides its lemma: plural and case endings (scene referents), and -ing / -ed ("splitting", "coloured", "dividing"). */
 const stemForms = (w) => {

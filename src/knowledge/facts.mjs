@@ -301,7 +301,7 @@ export function createFacts({ source, name = 'catalog' }) {
     async load({ type, from } = {}) {
       if (from === 'k.faces' || /^k\.faces\./.test(type ?? '')) return api.faces();
       if (!from && (type === 'core.slot' || type === 'core.word')) { await schema(); return series(); }
-      return wires(type, from ? { world: from } : {});
+      return wires(type, from && !type.startsWith(`${from}.`) ? { world: from } : {});   // a type of the world needs no world (the index says where it is, the key of `peekWires`); core.word of a world does
     },
     /** The schema and the series already built, or undefined (synchronous reads for operations: \`ctx.knowledge.peekSchema()\`, \`peekSeries()\`). */
     peekSchema: () => schemaData ?? undefined, peekSeries: () => seriesData ?? undefined,

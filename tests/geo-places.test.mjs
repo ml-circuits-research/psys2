@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // geo.map pilot (spec 21 section 12): the places of the map come by lookup from the catalog's k.geo, through the host's `needs` entries (`wires:<type>`) and `peekWires`; the open place class reads
 // any name of k.geo (accent-free spellings included) and nothing that is a colour or a word of the schema's doc. Targeted: one fixture catalog, no world run.
+import fs from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
@@ -9,7 +10,9 @@ import { createFacts } from '../src/knowledge/facts.mjs';
 import { createKnowledgeSource } from '../src/loaders/knowledge-source.mjs';
 import { attachOpenWords, ready, knowsPlace } from '../src/knowledge/open-words.mjs';
 import { parseLine } from '../src/knowledge/catalog.mjs';
-import { buildIndex, lookup, keyOf, NEEDS } from '../worlds-pilot/geo.map/places.mjs';
+import { buildIndex, lookup, keyOf } from '../worlds/geo.map/places.mjs';
+import { parse } from '../src/soplang/index.mjs';
+import { needsOf } from '../src/dialog/knowledge-lookup.mjs';
 
 const CAT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'fixtures/catalog');
 const facts = createFacts({ source: createKnowledgeSource(CAT) });
@@ -18,9 +21,11 @@ test('the shared fact parser reads keys with digits (code2)', () => {
   assert.deepEqual(parseLine('@x k.geo.country name=Japan code2=JP').attrs.code2, ['JP']);
 });
 
-test('the map reads its collections through the needs entries and builds the index synchronously', async () => {
+test('the map reads its collections through its typed needs and builds the index synchronously', async () => {
   assert.equal(buildIndex(facts), null, 'nothing is loaded before the host settles the needs');
-  for (const n of NEEDS) { const [t, w] = n.slice(6).split('@'); await facts.wires(t, w ? { world: w } : {}); }
+  const needs = needsOf({ id: 'geo.map', wires: parse(fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '../worlds/geo.map/world.sop'), 'utf8')).wires });
+  assert.equal(needs.length, 4, 'the map declares its four collections as typed needs');
+  for (const n of needs) await facts.load(n);
   const D = buildIndex(facts);
   assert.ok(D && D.countries.length > 200 && D.cities.length > 1000);
   const sudan = lookup(D, 'sudan');

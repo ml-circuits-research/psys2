@@ -1,5 +1,5 @@
 /** Static validation of a loaded WorldSet (used by `test-world` and tests). Browser-safe. */
-import { checkPattern } from '../formalizer/rules/index.mjs?v=ede1d0e7d5';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=3109864554';
 
 const STATUS = new Set(['supported', 'missing', 'conflicting', 'ambiguous', 'unsupported', 'budget', 'error']);
 const MODES = new Set(['value', 'exists', 'list', 'count']);
@@ -23,6 +23,7 @@ export function validateWorldSet(set) {
   for (const w of set.list()) {
     for (const e of w.errors) out.push(`${w.id}: ${e.file ? e.file + ': ' : ''}${e.message}`);
     for (const x of w.wires) {
+      if (/^std\./.test(x.type)) continue;   // a wire of the library's own types (std.schema.needs: typed needs, sopworld 0.39) is the library's to validate, not this legend's
       for (const e of L.validateWire(x, { lookup })) out.push(`${w.id}: ${loc(e)}${x.id}: ${e.message}`);
     }
     for (const k of w.kbRaw) if (!k.entries.some((e) => e.key === 'core.source')) out.push(`${w.id}: kb wire '${k.id}' has no core.source`);
