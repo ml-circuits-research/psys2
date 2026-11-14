@@ -442,10 +442,10 @@ export async function mountPsys2(element, options = {}) {
   const toast = (text) => { const t = h('div', { class: 'p2-toast', role: 'status' }, text); chat.append(t); setTimeout(() => t.remove(), 2600); };
   let currentBot = null; // the bot message of the reply being processed (chat.suggest adds chips to it)
   const ALLOW = {
-    'speech.say': async ({ text, lang }) => {
+    'speech.say': async ({ text, lang, rate, voice }) => {
       if (!speechSupport.synthesis || !speech) return { ok: false, detail: 'speech synthesis is not supported by this browser' };
       if (!String(text ?? '').trim()) return { ok: false, detail: 'no text' };
-      speech.speak(String(text), lang ? { lang: langTag(lang) } : undefined);
+      speech.speak(String(text), { ...(lang ? { lang: langTag(lang) } : {}), ...(Number(rate) > 0 ? { rate: Number(rate) } : {}), ...(typeof voice === 'string' ? { voice } : {}) });   // rate and voice: the reading speed and voice of docs.reader
       return { ok: true };
     },
     'chat.suggest': async ({ items }) => {

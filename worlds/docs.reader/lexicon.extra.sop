@@ -1,0 +1,1482 @@
+@lex.docs.reader.cast core.lexicon
+    class=noun
+    doc="The cast of the bundled sample story (so questions about them are recognised on any tab)"
+    word=hansel word=gretel word=witch word=father word=stepmother word=children word=woodcutter word=duck word=bird
+
+@lex.docs.reader.docs core.lexicon
+    class=noun
+    doc="Words for a document"
+    word=story word=tale word=file word=text word=book word=article word=passage word=document word=doc word=essay word=paper word=fairy_tale word=reading word=novel word=report word=pdf word=chapter_file
+
+@lex.docs.reader.kin core.lexicon
+    class=noun
+    doc="Kinship words"
+    word=sister word=brother word=mother word=father word=stepmother word=stepfather word=son word=daughter word=husband word=wife word=grandmother word=grandfather word=uncle word=aunt word=cousin word=friend word=parent word=child word=dad word=mom word=mum
+    plural=child:children
+
+@lex.docs.reader.units core.lexicon
+    class=noun
+    doc="Things to count in a document"
+    word=sentence word=word word=paragraph word=section word=chapter word=heading word=character
+
+@lex.docs.reader.ordinals core.lexicon
+    class=noun
+    doc="Ordinal words"
+    word=first word=second word=third word=fourth word=fifth word=sixth word=seventh word=eighth word=ninth word=tenth word=last
+
+@lex.docs.reader.parts core.lexicon
+    class=noun
+    doc="Parts of a document that can be read aloud"
+    word=paragraph word=sentence word=section word=chapter word=line
+
+@lex.docs.reader.ends core.lexicon
+    class=noun
+    doc="Ends of a document"
+    word=beginning word=start word=ending word=end
+
+@lex.docs.reader.verbs core.lexicon
+    class=verb
+    doc="Transitive verbs people ask about (who helped X, who did X lock); base and past forms"
+    word=help word=helped word=save word=saved word=rescue word=rescued word=free word=freed word=carry word=carried word=love word=loved word=hate word=hated word=kill word=killed word=eat word=ate word=lead word=led word=follow word=followed word=push word=pushed word=lock word=locked word=burn word=burned word=catch word=caught word=find word=found word=meet word=met word=see word=saw word=hug word=hugged word=guide word=guided word=protect word=protected word=feed word=fed word=teach word=taught word=visit word=visited word=invite word=invited word=marry word=married word=thank word=thanked word=warn word=warned word=trap word=trapped word=chase word=chased word=attack word=attacked word=hit word=bite word=bit word=beat word=punish word=punished word=leave word=left word=take word=took word=bring word=brought word=send word=sent word=welcome word=welcomed word=blame word=blamed word=fear word=feared word=kiss word=kissed word=shelter word=sheltered
+
+@lex.docs.reader.extremes core.lexicon
+    class=noun
+    doc="Superlatives for comparing the sections of a document"
+    word=longest word=shortest
+
+@phrase.docs.reader.g1_tell_me core.phrase
+    frame=false
+    doc="World-local group used by 93 patterns (made by scripts/migrate-macros.mjs)."
+    alt=tell_me
+    alt=could_you_tell_me
+    alt=can_you_tell_me
+    alt=do_you_know
+    alt=i_want_to_know
+    alt=i_wanna_know
+    alt=i_would_like_to_know
+    alt=id_like_to_know
+    alt=i_need_to_know
+    alt=i_wonder
+    alt=im_wondering
+    alt=let_me_know
+    alt=show_me
+    alt=find_out
+    alt=i_am_curious
+    alt=im_curious
+    alt=just_wondering
+    alt=just_curious
+    alt=can_i_know
+    alt=may_i_know
+    alt=i_was_wondering
+    alt=ive_been_wondering
+
+@phrase.docs.reader.g2_pls core.phrase
+    doc="World-local group used by 224 patterns (made by scripts/migrate-macros.mjs)."
+    alt=pls
+    alt=plz
+    alt=now
+    alt=for_me
+    alt=to_me
+    alt=here
+    alt=again
+    alt=thanks
+    alt=thx
+
+@phrase.docs.reader.g3_result core.phrase
+    frame=false
+    doc="World-local group used by 9 patterns (made by scripts/migrate-macros.mjs)."
+    alt=result
+    alt=results
+    alt=match
+    alt=matches
+    alt=hit
+    alt=hits
+    alt=occurrence
+    alt=occurrences
+    alt=1
+    alt=found
+    alt=mention
+    alt=mentions
+    alt=appearance
+    alt=appearances
+    alt=instance
+    alt=instances
+    alt=highlight
+    alt=highlights
+    alt=search_result
+    alt=search_results
+    alt=search_hit
+    alt=search_match
+    alt=thing
+    alt=word
+    alt=spot
+    alt=place
+    alt=line
+    alt=sentence
+    alt=passage
+    alt=find
+    alt=finding
+    alt=entry
+
+@phrase.docs.reader.g4_documents core.phrase
+    frame=false
+    doc="World-local group used by 14 patterns (made by scripts/migrate-macros.mjs)."
+    alt=documents
+    alt=files
+    alt=stories
+    alt=texts
+    alt=books
+    alt=docs
+    alt=papers
+    alt=articles
+    alt=pdfs
+    alt=reports
+    alt=essays
+    alt=tales
+    alt=passages
+    alt=notes
+    alt=readings
+    alt=novels
+
+@phrase.docs.reader.g5_do_i_have core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=do_i_have
+    alt=have_i_got
+    alt=are_open
+    alt=are_loaded
+    alt=are_there
+    alt=do_we_have
+    alt=have_i_added
+    alt=have_i_opened
+    alt=have_i_loaded
+    alt=have_i_saved
+    alt=do_you_have
+    alt=are_available
+    alt=are_saved
+    alt=are_stored
+    alt=are_added
+    alt=exist
+    alt=are_here
+    alt=are_in_here
+    alt=are_around
+    alt=are_in_the_library
+    alt=are_in_the_list
+    alt=are_in_the_tab
+    alt=are_in_the_app
+    alt=are_in_the_reader
+    alt=are_in_the_workspace
+    alt=do_i_have_open
+    alt=do_i_have_loaded
+    alt=do_i_have_here
+    alt=do_i_have_saved
+    alt=do_i_have_stored
+    alt=do_i_have_added
+    alt=do_i_have_available
+    alt=do_i_have_now
+    alt=do_i_have_right_now
+    alt=do_i_have_at_the_moment
+    alt=do_i_have_so_far
+    alt=do_i_have_in_total
+    alt=do_i_have_altogether
+    alt=do_i_have_in_all
+    alt=do_i_have_overall
+
+@phrase.docs.reader.g6_read core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=read
+    alt=read_out
+    alt=read_me
+    alt=narrate
+    alt=recite
+    alt=show
+    alt=display
+    alt=play
+    alt=speak
+    alt=say
+    alt=give_me
+    alt=get
+    alt=pull_up
+    alt=bring_up
+    alt=go_to
+    alt=jump_to
+    alt=take_me_to
+    alt=open
+    alt=tell
+    alt=voice
+    alt=announce
+    alt=deliver
+    alt=present
+    alt=perform
+    alt=vocalize
+    alt=vocalise
+    alt=utter
+    alt=pronounce
+    alt=sound_out
+    alt=speak_out
+    alt=say_out
+    alt=say_aloud
+    alt=speak_aloud
+    alt=read_aloud
+    alt=read_out_loud
+    alt=read_to_me
+    alt=read_it_to_me
+    alt=read_me_out
+    alt=read_out_to_me
+    alt=read_me_aloud
+
+@phrase.docs.reader.g7_highlights core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=highlights
+    alt=highlighting
+    alt=highlight
+    alt=highlighted
+    alt=marks
+    alt=markings
+    alt=marking
+    alt=matches
+    alt=results
+    alt=search
+    alt=search_results
+    alt=yellow_marks
+    alt=yellow_highlights
+    alt=yellow
+    alt=highlighter
+    alt=highlighted_words
+    alt=search_marks
+    alt=search_highlights
+    alt=search_results
+    alt=hits
+    alt=marked_words
+    alt=colored_words
+    alt=coloured_words
+    alt=underlines
+    alt=search_terms
+    alt=found_words
+    alt=search_bar
+    alt=finds
+    alt=selections
+    alt=selection
+    alt=search_hits
+    alt=found_matches
+    alt=word_marks
+    alt=text_marks
+    alt=word_highlights
+    alt=text_highlights
+    alt=colors
+    alt=colours
+    alt=coloring
+    alt=colouring
+
+@phrase.docs.reader.g8_mentioned core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=mentioned
+    alt=named
+    alt=said
+    alt=used
+    alt=appear
+    alt=appears
+    alt=occur
+    alt=occurs
+    alt=come_up
+    alt=comes_up
+    alt=show_up
+    alt=shows_up
+    alt=referenced
+    alt=in_the_story
+    alt=in_the_text
+    alt=get_mentioned
+    alt=gets_mentioned
+    alt=written
+    alt=spoken
+    alt=talked_about
+    alt=brought_up
+    alt=there
+    alt=listed
+    alt=seen
+    alt=found
+    alt=cited
+    alt=called
+    alt=present
+    alt=included
+    alt=featured
+    alt=noted
+    alt=repeated
+    alt=read
+    alt=shown
+    alt=here
+
+@phrase.docs.reader.g9_show core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=show
+    alt=go_to
+    alt=move_to
+    alt=move_on_to
+    alt=jump_to
+    alt=skip_to
+    alt=take_me_to
+    alt=give_me
+    alt=see
+    alt=go_on_to
+    alt=goto
+    alt=step_to
+    alt=navigate_to
+    alt=switch_to
+    alt=cycle_to
+    alt=advance_to
+    alt=get
+    alt=find
+    alt=bring_up
+    alt=pull_up
+    alt=display
+    alt=scroll_to
+    alt=let_me_see
+    alt=i_want_to_see
+    alt=show_me
+    alt=go_back_to
+    alt=step_back_to
+    alt=return_to
+    alt=revert_to
+    alt=rewind_to
+    alt=go_to_the
+    alt=move_back_to
+    alt=jump_back_to
+
+@phrase.docs.reader.g10_happens core.phrase
+    frame=false
+    doc="World-local group used by 6 patterns (made by scripts/migrate-macros.mjs)."
+    alt=happens
+    alt=happened
+    alt=goes_on
+    alt=comes_up
+    alt=occurs
+    alt=takes_place
+    alt=is_said
+    alt=is_told
+    alt=do_we_see
+    alt=do_i_see
+    alt=do_we_get
+
+@phrase.docs.reader.g11_check core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=check
+    alt=see
+    alt=find_out
+    alt=tell_me
+    alt=let_me_know
+    alt=can_you_tell_me
+    alt=do_you_know
+    alt=show_me
+    alt=figure_out
+    alt=work_out
+    alt=look_up
+    alt=look_into
+    alt=investigate
+    alt=test
+    alt=verify
+    alt=determine
+    alt=identify
+    alt=confirm
+    alt=make_sure
+    alt=make_certain
+    alt=ensure
+    alt=double_check
+    alt=look
+    alt=ask
+    alt=wonder
+    alt=tell
+    alt=say
+    alt=explain
+    alt=just_check
+    alt=just_see
+    alt=just_tell_me
+    alt=just_let_me_know
+
+@phrase.docs.reader.g12_talk_about core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=talk_about
+    alt=mention
+    alt=contain
+    alt=discuss
+    alt=include
+    alt=say
+    alt=refer_to
+    alt=cover
+    alt=deal_with
+    alt=have
+    alt=feature
+    alt=use
+    alt=name
+    alt=cite
+    alt=describe
+    alt=involve
+    alt=speak_of
+    alt=touch_on
+    alt=show
+    alt=are_about
+    alt=are_on
+    alt=are_related_to
+    alt=relate_to
+    alt=concern
+    alt=address
+    alt=bring_up
+    alt=reference
+    alt=hold
+    alt=carry
+    alt=list
+    alt=note
+    alt=record
+    alt=quote
+    alt=reveal
+    alt=display
+    alt=present
+
+@phrase.docs.reader.g13_younger core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=younger
+    alt=older
+    alt=little
+    alt=big
+    alt=elder
+    alt=twin
+    alt=only
+    alt=dear
+    alt=poor
+    alt=small
+    alt=young
+    alt=old
+    alt=real
+    alt=actual
+    alt=own
+    alt=biological
+    alt=adopted
+    alt=step
+    alt=new
+    alt=first
+    alt=second
+    alt=youngest
+    alt=oldest
+    alt=eldest
+    alt=baby
+    alt=big_brother
+    alt=baby_sister
+
+@phrase.docs.reader.g14_does_it_have core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=does_it_have
+    alt=has_it
+    alt=in_total
+    alt=in_all
+    alt=total
+    alt=are_in_it
+    alt=are_there
+    alt=in_it
+    alt=are_present
+    alt=does_it_contain
+    alt=does_it_include
+    alt=are_there_in_total
+    alt=in_there
+    alt=are_there_here
+    alt=are_there_all_in_all
+    alt=does_it_hold
+    alt=are_used
+    alt=are_written
+    alt=is_it
+    alt=in_here
+    alt=are_in_there
+    alt=exist
+    alt=does_it_use
+
+@phrase.docs.reader.g15_end core.phrase
+    frame=false
+    doc="World-local group used by 5 patterns (made by scripts/migrate-macros.mjs)."
+    alt=end
+    alt=ending
+    alt=finish
+    alt=conclusion
+    alt=finale
+    alt=close
+    alt=closing
+    alt=last_part
+    alt=last_bit
+    alt=last_lines
+    alt=outro
+    alt=last_scene
+
+@phrase.docs.reader.g16_beginning core.phrase
+    frame=false
+    doc="World-local group used by 5 patterns (made by scripts/migrate-macros.mjs)."
+    alt=beginning
+    alt=start
+    alt=opening
+    alt=outset
+    alt=first_part
+    alt=first_bit
+    alt=first_lines
+    alt=intro
+    alt=introduction
+    alt=first_scene
+
+@phrase.docs.reader.g17_go core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=go
+    alt=move
+    alt=step
+    alt=jump
+    alt=skip
+    alt=scroll
+    alt=navigate
+    alt=cycle
+    alt=advance
+    alt=continue
+    alt=proceed
+    alt=carry_on
+    alt=keep_going
+    alt=go_on
+    alt=go_ahead
+    alt=hop
+    alt=flip
+    alt=click
+    alt=press
+    alt=hit
+    alt=tap
+    alt=switch
+    alt=turn
+    alt=swipe
+    alt=run
+    alt=walk
+    alt=take_a_step
+    alt=take_me
+    alt=bring_me
+    alt=send_me
+    alt=forward_me
+    alt=move_along
+
+@phrase.docs.reader.g18_get_up_to core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=get_up_to
+    alt=do_in_the_story
+    alt=do_in_it
+    alt=do_here
+    alt=do_all_day
+    alt=up_to
+    alt=doing
+    alt=been_doing
+    alt=actually_do
+    alt=really_do
+    alt=do_there
+    alt=do_exactly
+    alt=actually_done
+    alt=really_done
+    alt=end_up_doing
+    alt=go_and_do
+    alt=try_to_do
+    alt=do_overall
+    alt=do_then
+
+@phrase.docs.reader.g19_goes_on core.phrase
+    frame=false
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=goes_on
+    alt=is_going_on
+    alt=happens
+    alt=happened
+    alt=takes_place
+    alt=is_said
+    alt=is_told
+    alt=is_covered
+    alt=is_discussed
+    alt=occurs
+
+@phrase.docs.reader.g20_in_the_end core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=in_the_end
+    alt=at_the_end
+    alt=finally
+    alt=eventually
+    alt=in_the_story
+    alt=in_it
+    alt=there
+    alt=at_last
+    alt=later
+    alt=next
+    alt=then
+    alt=afterwards
+    alt=after_that
+    alt=in_the_end_then
+    alt=overall
+    alt=here
+    alt=ultimately
+    alt=after_all
+    alt=by_the_end
+    alt=towards_the_end
+
+@phrase.docs.reader.g21_structured core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=structured
+    alt=organised
+    alt=organized
+    alt=built
+    alt=laid_out
+    alt=divided
+    alt=split
+    alt=arranged
+    alt=put_together
+    alt=set_up
+    alt=broken_up
+    alt=broken_down
+    alt=made
+    alt=composed
+    alt=constructed
+    alt=formatted
+    alt=sectioned
+    alt=chaptered
+    alt=looking
+    alt=look
+
+@phrase.docs.reader.g22_end_up core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=end_up
+    alt=finish
+    alt=end
+    alt=turn_out
+    alt=fare
+    alt=get_on
+    alt=come_out
+    alt=survive
+    alt=die
+    alt=go_out
+    alt=conclude
+    alt=finish_up
+    alt=wind_up
+    alt=get_by
+    alt=go_down
+    alt=fall
+    alt=perish
+    alt=get_away
+    alt=escape
+    alt=make_it
+    alt=do_in_the_end
+    alt=do_in_the_story
+    alt=cope
+
+@phrase.docs.reader.g23_summarize core.phrase
+    frame=false
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=summarize
+    alt=summarise
+    alt=recap
+    alt=sum_up
+    alt=sum
+    alt=tldr
+    alt=tl_dr
+    alt=condense
+    alt=boil_down
+    alt=digest
+    alt=abridge
+    alt=shorten
+
+@phrase.docs.reader.g24_end core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=end
+    alt=ends
+    alt=finish
+    alt=finishes
+    alt=conclude
+    alt=concludes
+    alt=close
+    alt=closes
+    alt=wrap_up
+    alt=wraps_up
+    alt=wind_up
+    alt=winds_up
+    alt=ended
+    alt=finished
+
+@phrase.docs.reader.g25_say core.phrase
+    frame=false
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=say
+    alt=cover
+    alt=tell
+    alt=contain
+    alt=discuss
+    alt=describe
+    alt=talk_about
+    alt=deal_with
+    alt=show
+    alt=include
+
+@phrase.docs.reader.g26_and core.phrase
+    doc="World-local group used by 7 patterns (made by scripts/migrate-macros.mjs)."
+    alt=and
+    alt=what_about
+    alt=how_about
+    alt=now
+    alt=and_now
+    alt=then
+
+@phrase.docs.reader.g27_middle core.phrase
+    frame=false
+    doc="World-local group used by 5 patterns (made by scripts/migrate-macros.mjs)."
+    alt=middle
+    alt=centre
+    alt=center
+    alt=mid_part
+    alt=middle_part
+    alt=midpoint
+    alt=heart
+
+@phrase.docs.reader.g28_tell_me core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=tell_me
+    alt=say
+    alt=describe
+    alt=explain
+    alt=summarize
+    alt=summarise
+    alt=recap
+    alt=give_me
+    alt=show_me
+    alt=what_about
+    alt=how_about
+
+@phrase.docs.reader.g29_summary core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=summary
+    alt=recap
+    alt=gist
+    alt=overview
+    alt=synopsis
+    alt=tldr
+    alt=in_short
+    alt=in_brief
+    alt=briefly
+    alt=short
+    alt=in_a_nutshell
+    alt=summarized
+    alt=summarised
+    alt=in_a_few_words
+    alt=quickly
+
+@phrase.docs.reader.g30_begin core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=begin
+    alt=start
+    alt=open
+    alt=opens
+    alt=commence
+    alt=kick_off
+    alt=get_started
+    alt=get_going
+    alt=begins
+    alt=starts
+    alt=commences
+
+@phrase.docs.reader.g31_headings core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=headings
+    alt=sections
+    alt=chapters
+    alt=titles
+    alt=parts
+    alt=chapter_titles
+    alt=section_titles
+    alt=headers
+    alt=chapter_names
+    alt=section_names
+    alt=subheadings
+    alt=subtitles
+
+@phrase.docs.reader.g32_are_there core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=are_there
+    alt=does_it_have
+    alt=has_it
+    alt=in_total
+    alt=in_all
+    alt=are_in_it
+    alt=total
+    alt=there_are
+    alt=there
+    alt=in_it
+    alt=are_present
+    alt=does_it_contain
+    alt=does_it_include
+
+@phrase.docs.reader.g33_develop core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=develop
+    alt=develops
+    alt=unfold
+    alt=unfolds
+    alt=continue
+    alt=continues
+    alt=go_on
+    alt=goes_on
+    alt=progress
+    alt=progresses
+
+@phrase.docs.reader.g34_happens core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=happens
+    alt=happened
+    alt=becomes
+    alt=became
+    alt=will_happen
+    alt=is_going_to_happen
+    alt=ends_up_happening
+    alt=comes_of
+    alt=came_of
+    alt=befell
+    alt=goes_on
+    alt=went_on
+    alt=is_up
+
+@phrase.docs.reader.g35_what_is core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=what_is
+    alt=whats
+    alt=what_was
+    alt=how_about
+    alt=what_about
+    alt=tell_me_about
+    alt=tell_me
+    alt=talk_about
+    alt=say_something_about
+    alt=explain
+    alt=describe
+
+@phrase.docs.reader.g36_go core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=go
+    alt=show
+    alt=go_to
+    alt=move_to
+    alt=move_on_to
+    alt=jump_to
+    alt=skip_to
+    alt=take_me_to
+    alt=give_me
+    alt=see
+    alt=go_on_to
+    alt=step_to
+    alt=navigate_to
+    alt=show_me
+    alt=get
+
+@phrase.docs.reader.g37_summary core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=summary
+    alt=recap
+    alt=gist
+    alt=overview
+    alt=synopsis
+    alt=tldr
+    alt=tl_dr
+    alt=rundown
+    alt=digest
+    alt=abstract
+    alt=short_version
+    alt=short_version_of
+    alt=nutshell
+
+@phrase.docs.reader.g38_tell_me core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=tell_me
+    alt=say
+    alt=describe
+    alt=explain
+    alt=summarize
+    alt=summarise
+    alt=recap
+    alt=give_me
+    alt=show_me
+
+@phrase.docs.reader.g39_finally core.phrase
+    frame=false
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=finally
+    alt=eventually
+    alt=ultimately
+    alt=then
+    alt=actually
+    alt=exactly
+
+@phrase.docs.reader.g40_said core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=said
+    alt=says
+    alt=uttered
+    alt=spoke
+    alt=asked
+    alt=replied
+    alt=cried
+    alt=shouted
+    alt=whispered
+    alt=exclaimed
+    alt=answered
+    alt=ordered
+    alt=called
+    alt=told
+
+@phrase.docs.reader.g41_in_the_story core.phrase
+    frame=false
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=in_the_story
+    alt=in_it
+    alt=here
+    alt=in_the_text
+    alt=in_this_story
+
+@phrase.docs.reader.g42_what_is core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=what_is
+    alt=whats
+    alt=what_was
+    alt=how_is
+    alt=how_was
+    alt=what_about
+    alt=how_about
+    alt=and
+
+@phrase.docs.reader.g43_for_me core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=for_me
+    alt=in_short
+    alt=in_brief
+    alt=briefly
+    alt=quickly
+    alt=shortly
+    alt=in_a_nutshell
+
+@phrase.docs.reader.g44_are_there core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=are_there
+    alt=are_mentioned
+    alt=appear
+    alt=come_up
+    alt=are_named
+    alt=does_it_mention
+    alt=are_in_it
+    alt=are_in_the_story
+
+@phrase.docs.reader.g45_happens core.phrase
+    frame=false
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=happens
+    alt=happened
+    alt=comes
+    alt=goes_on
+    alt=is_told
+    alt=occurs
+
+@phrase.docs.reader.g46_most_mentioned core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=most_mentioned
+    alt=mentioned_most
+    alt=mentioned_the_most
+    alt=most_important
+    alt=most_common
+    alt=most_frequent
+
+@phrase.docs.reader.g47_long core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=long
+    alt=big
+    alt=large
+    alt=lengthy
+    alt=short
+    alt=heavy
+    alt=wordy
+    alt=much_text
+    alt=much_content
+    alt=much_is_there
+    alt=many_pages
+
+@phrase.docs.reader.g48_tell_me core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=tell_me
+    alt=say
+    alt=explain
+    alt=describe
+    alt=show_me
+    alt=let_me_know
+    alt=find_out
+
+@phrase.docs.reader.g49_are core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=are
+    alt=were
+    alt=are_there
+    alt=are_in_it
+    alt=are_in_the_story
+    alt=exist
+    alt=appear
+    alt=are_involved
+    alt=are_mentioned
+
+@phrase.docs.reader.g50_forward core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=forward
+    alt=back
+    alt=backward
+    alt=backwards
+    alt=ahead
+    alt=on
+    alt=along
+    alt=up
+    alt=down
+    alt=to
+    alt=onto
+    alt=over
+    alt=through
+    alt=further
+
+@phrase.docs.reader.g51_to core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=to
+    alt=on_to
+    alt=onto
+    alt=over_to
+    alt=through_to
+    alt=along_to
+    alt=up_to
+    alt=down_to
+    alt=ahead_to
+    alt=forward_to
+    alt=back_to
+
+@phrase.docs.reader.g52_said core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=said
+    alt=says
+    alt=asked
+    alt=replied
+    alt=cried
+    alt=whispered
+    alt=shouted
+    alt=exclaimed
+    alt=answered
+    alt=ordered
+    alt=called
+
+@phrase.docs.reader.g53_previous core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=previous
+    alt=prior
+    alt=preceding
+    alt=earlier
+    alt=former
+    alt=last_seen
+    alt=1_before
+    alt=before
+    alt=back
+    alt=prev
+    alt=older
+
+@phrase.docs.reader.g54_person core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=person
+    alt=character
+    alt=man
+    alt=woman
+    alt=creature
+    alt=being
+    alt=figure
+    alt=guy
+    alt=girl
+    alt=boy
+    alt=animal
+    alt=bird
+    alt=one
+
+@phrase.docs.reader.g55_going_on core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=going_on
+    alt=happening
+    alt=occurring
+    alt=the_plot
+    alt=the_story_line
+    alt=the_storyline
+    alt=the_idea
+
+@phrase.docs.reader.g56_protagonist core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=protagonist
+    alt=hero
+    alt=heroine
+    alt=main_character
+    alt=lead
+    alt=star
+    alt=main_1
+    alt=central_character
+
+@phrase.docs.reader.g57_next core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=next
+    alt=following
+    alt=nxt
+    alt=subsequent
+    alt=upcoming
+    alt=another
+    alt=1_more
+    alt=1_more_time
+    alt=further
+
+@phrase.docs.reader.g58_goes core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=goes
+    alt=travels
+    alt=walks
+    alt=runs
+    alt=comes
+    alt=heads
+    alt=went
+    alt=travelled
+    alt=walked
+    alt=ran
+    alt=came
+    alt=headed
+
+@phrase.docs.reader.g59_take_place core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=take_place
+    alt=happen
+    alt=play_out
+    alt=unfold
+    alt=set
+    alt=located
+    alt=set_in
+    alt=occur
+    alt=go_on
+    alt=get_set
+
+@phrase.docs.reader.g60_plot core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=plot
+    alt=storyline
+    alt=story_line
+    alt=main_idea
+    alt=main_point
+    alt=point
+    alt=idea
+    alt=gist
+    alt=message
+
+@phrase.docs.reader.g61_have core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=have
+    alt=contain
+    alt=has
+    alt=contains
+    alt=include
+    alt=use
+    alt=there
+    alt=are_there
+    alt=are_in_it
+    alt=called
+
+@phrase.docs.reader.g62_read core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=read
+    alt=narrate
+    alt=recite
+    alt=speak
+    alt=play
+    alt=voice
+    alt=announce
+    alt=deliver
+    alt=present
+    alt=perform
+
+@phrase.docs.reader.g63_is core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=is
+    alt=was
+    alt=are
+    alt=were
+    alt=does
+    alt=do
+    alt=did
+    alt=has
+    alt=have
+    alt=got
+    alt=gets
+
+@phrase.docs.reader.g64_are_there core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=are_there
+    alt=appear
+    alt=are_mentioned
+    alt=are_in_it
+    alt=are_in_the_story
+    alt=come_up
+
+@phrase.docs.reader.g65_characters core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=characters
+    alt=people
+    alt=persons
+    alt=cast
+    alt=protagonists
+    alt=heroes
+    alt=actors
+    alt=figures
+
+@phrase.docs.reader.g66_happens core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=happens
+    alt=takes_place
+    alt=is_set
+    alt=is_located
+    alt=plays_out
+    alt=unfolds
+    alt=occurs
+
+@phrase.docs.reader.g67_who core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=who
+    alt=which_characters
+    alt=which_people
+    alt=what_characters
+    alt=what_people
+
+@phrase.docs.reader.g68_list core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=list
+    alt=and_list
+    alt=name
+    alt=and_name
+    alt=show
+    alt=and_show
+    alt=tell_me
+    alt=and_tell_me
+
+@phrase.docs.reader.g69_mainly core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=mainly
+    alt=basically
+    alt=essentially
+    alt=briefly
+    alt=actually
+    alt=really
+    alt=mostly
+
+@phrase.docs.reader.g70_of core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=of
+    alt=in
+    alt=does
+    alt=do
+    alt=has
+    alt=have
+    alt=contains
+    alt=contain
+    alt=are_there_in
+    alt=are_in
+
+@phrase.docs.reader.g71_mentions core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=mentions
+    alt=appearances
+    alt=references
+    alt=occurrences
+    alt=instances
+    alt=uses
+
+@phrase.docs.reader.g72_mention core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=mention
+    alt=contain
+    alt=talk_about
+    alt=are_about
+    alt=include
+    alt=say
+    alt=discuss
+
+@phrase.docs.reader.g73_mainly core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=mainly
+    alt=basically
+    alt=essentially
+    alt=actually
+    alt=really
+    alt=mostly
+    alt=all
+
+@phrase.docs.reader.g74_role core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=role
+    alt=part
+    alt=job
+    alt=function
+    alt=purpose
+    alt=task
+    alt=place
+    alt=position
+
+@phrase.docs.reader.g75_it core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=it
+    alt=the_story
+    alt=the_text
+    alt=the_file
+    alt=the_book
+    alt=the_tale
+
+@phrase.docs.reader.g76_with core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=with
+    alt=to
+    alt=of
+    alt=for
+    alt=about
+    alt=around
+    alt=regarding
+    alt=concerning
+
+@phrase.docs.reader.g77_say core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=say
+    alt=ask
+    alt=reply
+    alt=answer
+    alt=cry
+    alt=shout
+    alt=whisper
+    alt=exclaim
+
+@phrase.docs.reader.g78_r_there core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=r_there
+    alt=r_in_it
+    alt=r_in_there
+    alt=are_there
+    alt=are_in_it
+
+@phrase.docs.reader.g79_in_the_story core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=in_the_story
+    alt=in_the_text
+    alt=next
+    alt=then
+    alt=after_that
+
+@phrase.docs.reader.g80_short core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=short
+    alt=brief
+    alt=quick
+    alt=small
+    alt=1_line
+    alt=little
+    alt=concise
+
+@phrase.docs.reader.g81_play core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=play
+    alt=have
+    alt=take
+    alt=serve
+    alt=perform
+    alt=fulfil
+    alt=fulfill
+
+@phrase.docs.reader.g82_appear core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=appear
+    alt=occur
+    alt=come_up
+    alt=show_up
+    alt=get_mentioned
+
+@phrase.docs.reader.g83_character core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=character
+    alt=person
+    alt=hero
+    alt=heroine
+    alt=protagonist
+
+@lex.docs.reader.storywords core.lexicon
+    class=noun
+    doc="The content words of the bundled sample story: the spelling vocabulary of the reader (a word of the open story is not a typo; generated from worlds/docs.reader/sample.mjs by the world's author, 2026-11-14)"
+    word=agreed word=almost word=angry word=apron word=aprons word=are word=arms word=ate word=away word=bed
+    word=bedroom word=bent word=bird word=birds word=bone word=boy word=bread word=brother word=brothers word=built
+    word=burned word=cage word=cake word=called word=came word=carried word=carry word=catch word=children word=clear
+    word=clearing word=climb word=collected word=come word=cook word=corner word=crept word=cried word=cruel word=crumb
+    word=crumbs word=cry word=danced word=day word=days word=dead word=dear word=dedication word=deep word=domain
+    word=door word=dropped word=duck word=early word=eat word=edge word=end word=english word=enough word=evening
+    word=fairy word=family word=fat word=father word=fatten word=feel word=filled word=find word=finger word=fire
+    word=first word=floor word=followed word=food word=forest word=found word=four word=free word=furious word=glad
+    word=great word=gretel word=grew word=grimm word=guessed word=hansel word=happy word=hated word=hausm word=head
+    word=heard word=held word=home word=hot word=hour word=house word=hugged word=hungry word=inside word=instead
+    word=iron word=jewels word=joy word=kinder word=kindly word=know word=lake word=last word=later word=leave
+    word=led word=lit word=little word=lived word=locked word=lost word=loved word=made word=moon word=moonlight
+    word=morning word=mouse word=must word=next word=nibble word=nibbling word=night word=nothing word=old word=opened
+    word=ordered word=oven word=path word=patience word=pearls word=pebble word=pebbles word=piece word=plan word=pockets
+    word=poor word=project word=public word=pushed word=put word=ran word=rchen word=released word=retelling word=rolled
+    word=roof word=rose word=said word=saw word=scattered word=see word=set word=shone word=shook word=short
+    word=show word=showed word=shut word=sister word=small word=smiled word=source word=spoke word=stayed word=stepmother
+    word=steps word=strength word=sugar word=take word=tale word=thin word=thought word=threw word=time word=tired
+    word=together word=told word=tomorrow word=trees word=und word=upon word=voice word=waited word=walked word=wall
+    word=walls word=warm word=water word=way word=weeks word=well word=went word=wept word=whispered word=white
+    word=wide word=window word=windows word=witch word=woman word=woodcutter word=word word=worry word=written

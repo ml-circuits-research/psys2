@@ -95,6 +95,7 @@ export function parseSchema(wires) {
   if (Object.keys(flags).length) schema.flags = flags;   // self: the world is a character ("yourself"); dir: direction words for place; be: "be / look X"; has: "do you have X"; bare: a bare thing is a request
   if (val(sw, 'boost')) schema.boost = Number(val(sw, 'boost'));
   if (val(sw, 'sample')) schema.sample = val(sw, 'sample');
+  if (vals(sw, 'canonical').length) schema.canonical = vals(sw, 'canonical');   // frame-id prefixes whose examples are offered as help (a reader's "Add a document." is a true but useless example): `canonical=r.` marks the frames of the set that names its own
   if (val(sw, 'hooks')) schema.hooks = val(sw, 'hooks');   // a sibling module with the world's hooks (knowledge, domain effects, projection): host code the schema cannot say
   if (vals(sw, 'own').length) schema.own = vals(sw, 'own');   // "<export>:<action>": operations of the world that are not acts (a name, a moment of the stage), exported by own.mjs
   const vw = wires.find((x) => x.type === 'acts.view');   // the world is a VIEW of the session's things (spec 23): the aspects it shows and the words that name it
@@ -182,7 +183,7 @@ export function generate(schema, ns, actsUrl = '../acts/acts.mjs', isCanon = () 
   const boost = Number(schema.boost ?? 0);   // a world whose signals (named shapes, arrows, chart words) beat the open tab of another world
   for (const f of forms) {
     const emit = `@{_} core.request action=${ns}.${f.act}${f.mode ? ` arg.mode=${f.mode}` : ''}${Object.entries(f.lit ?? {}).map(([k, v]) => ` arg.${k}=\\"${v}\\"`).join('')}${f.args.map((a) => ` arg.${a}=\\"{${a}}\\"`).join('')} arg.text=\\"{segment}\\"`;
-    pats.push(`@pat.${ns}.${f.id} core.pattern\n    match="${expandMatch(f.match, ns)}"\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority + boost}\n    tabPriority=${(f.tabPriority ?? f.priority + 8) + boost}\n${schema.flags?.signal ? "    signal=true\n" : ""}${CLAIMING.has(f.id) || schema.flags?.claim ? '    tabClaim=true\n' : ''}${(f.tabOnly ?? (schema.tabOnly || (schema.flags?.tabUndo && (f.act === 'undo' || f.act === 'redo')))) ? "    tabOnly=true\n" : ""}    example=${JSON.stringify(exampleOf(schema, f))}\n${isCanon(exampleOf(schema, f)) && sayable(schema, exampleOf(schema, f)) ? `    canonical=${JSON.stringify(exampleOf(schema, f))}\n` : ''}`);
+    pats.push(`@pat.${ns}.${f.id} core.pattern\n    match="${expandMatch(f.match, ns)}"\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority + boost}\n    tabPriority=${(f.tabPriority ?? f.priority + 8) + boost}\n${schema.flags?.signal ? "    signal=true\n" : ""}${CLAIMING.has(f.id) || schema.flags?.claim ? '    tabClaim=true\n' : ''}${(f.tabOnly ?? (schema.tabOnly || (schema.flags?.tabUndo && (f.act === 'undo' || f.act === 'redo')))) ? "    tabOnly=true\n" : ""}    example=${JSON.stringify(exampleOf(schema, f))}\n${isCanon(exampleOf(schema, f)) && sayable(schema, exampleOf(schema, f)) && (!schema.canonical || schema.canonical.some((x) => f.id.startsWith(x))) ? `    canonical=${JSON.stringify(exampleOf(schema, f))}\n` : ''}`);
   }
   const used = [...new Set(forms.map((f) => f.act))];
   const own = (schema.own ?? []).map((o) => o.split(':'));

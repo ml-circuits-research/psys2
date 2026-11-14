@@ -10,8 +10,8 @@ import { parse, get, getAll } from '../soplang/index.mjs?v=c57881f705';
 import { Legends } from '../legends/index.mjs?v=db730c4e69';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
 import { describePatterns, descriptionFor, readDescriptionWires, slotDeclarations, emitKey, EN } from './describe.mjs?v=f19cebf218';
-import { checkPattern } from '../formalizer/rules/index.mjs?v=22f5f4b5fe';
-import { lexIndex } from './lexicon.mjs?v=5dcf4d4a16';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=8cf22363f7';
+import { lexIndex } from './lexicon.mjs?v=21b36efdb7';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];

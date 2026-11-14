@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // ui.avatar (spec 21): the operations that are not acts: the name, a moment of the stage (wave, nod, dance ...), and what other worlds call
 // (avatar.nameOf, avatar.setPartUnknown). The face itself is changed by the acts of the schema (hooks.mjs). Browser-safe.
-import * as F from './facelogic.mjs?v=018752f63a';
+import * as F from './facelogic.mjs?v=a8459e57b6';
 import { DEFAULT_FACE } from './default-face.mjs?v=ddb5fca430';
 
 export const ok = (value) => ({ status: 'supported', value });

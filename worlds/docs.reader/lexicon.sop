@@ -1,3 +1,117 @@
+@gen.docs.reader.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@lex.docs.reader.kinds core.lexicon
+    class=noun
+    doc="Kinds of things of this world (from schema.sop)"
+    word=document
+    word=documents
+    word=doc
+    word=docs
+    word=file
+    word=files
+    word=book
+    word=books
+    word=text
+    word=article
+    word=essay
+    word=paper
+    word=story
+    word=stories
+    word=tale
+    word=tales
+    word=fairy_tale
+    word=narrative
+    word=page
+    word=pages
+    word=chapter
+    word=chapters
+    word=section
+    word=sections
+    word=heading
+    word=headings
+    word=part
+    word=parts
+    word=paragraph
+    word=paragraphs
+    word=para
+    word=paras
+    word=sentence
+    word=sentences
+    word=line
+    word=lines
+    word=word
+    word=words
+    word=term
+    word=terms
+    word=character
+    word=characters
+    word=person
+    word=people
+    word=hero
+    word=heroes
+    word=heroe
+    word=protagonist
+    word=cast
+    word=question
+    word=questions
+    word=query
+    word=queries
+    word=bookmark
+    word=bookmarks
+    word=marker
+    word=markers
+    word=note
+    word=notes
+    word=comment
+    word=comments
+    word=annotation
+    word=annotations
+
+@lex.docs.reader.attrs core.lexicon
+    class=modifier
+    doc="Attributes (from schema.sop)"
+    word=title
+    word=author
+    word=writer
+    word=position
+    word=speed
+    word=pace
+    word=voice
+
+@lex.docs.reader.values core.lexicon
+    class=modifier
+    doc="Values the attributes take (from schema.sop; a colour attribute with no listed values takes the shared colour lexicon)"
+    word=default
+    word=female
+    word=male
+    word=deep
+    word=high
+    word=child
+
+@lex.docs.reader.more core.lexicon
+    class=modifier
+    doc="Comparatives that mean more of an attribute"
+    word=faster
+    word=quicker
+
+@lex.docs.reader.less core.lexicon
+    class=modifier
+    doc="Comparatives that mean less of an attribute"
+    word=slower
+
+@lex.docs.reader.nouns core.lexicon
+    class=modifier
+    doc="The words for the whole thing the world holds (the picture, the drawing)"
+    word=story
+    word=reader
+    word=documents
+    word=tale
+    word=tales
+    word=fairy_tale
+    word=narrative
+
+# ---- lexicon.extra.sop (hand-written, appended by the generator)
 @lex.docs.reader.cast core.lexicon
     class=noun
     doc="The cast of the bundled sample story (so questions about them are recognised on any tab)"
@@ -1455,3 +1569,28 @@
     alt=hero
     alt=heroine
     alt=protagonist
+
+@lex.docs.reader.storywords core.lexicon
+    class=noun
+    doc="The content words of the bundled sample story: the spelling vocabulary of the reader (a word of the open story is not a typo; generated from worlds/docs.reader/sample.mjs by the world's author, 2026-11-14)"
+    word=agreed word=almost word=angry word=apron word=aprons word=are word=arms word=ate word=away word=bed
+    word=bedroom word=bent word=bird word=birds word=bone word=boy word=bread word=brother word=brothers word=built
+    word=burned word=cage word=cake word=called word=came word=carried word=carry word=catch word=children word=clear
+    word=clearing word=climb word=collected word=come word=cook word=corner word=crept word=cried word=cruel word=crumb
+    word=crumbs word=cry word=danced word=day word=days word=dead word=dear word=dedication word=deep word=domain
+    word=door word=dropped word=duck word=early word=eat word=edge word=end word=english word=enough word=evening
+    word=fairy word=family word=fat word=father word=fatten word=feel word=filled word=find word=finger word=fire
+    word=first word=floor word=followed word=food word=forest word=found word=four word=free word=furious word=glad
+    word=great word=gretel word=grew word=grimm word=guessed word=hansel word=happy word=hated word=hausm word=head
+    word=heard word=held word=home word=hot word=hour word=house word=hugged word=hungry word=inside word=instead
+    word=iron word=jewels word=joy word=kinder word=kindly word=know word=lake word=last word=later word=leave
+    word=led word=lit word=little word=lived word=locked word=lost word=loved word=made word=moon word=moonlight
+    word=morning word=mouse word=must word=next word=nibble word=nibbling word=night word=nothing word=old word=opened
+    word=ordered word=oven word=path word=patience word=pearls word=pebble word=pebbles word=piece word=plan word=pockets
+    word=poor word=project word=public word=pushed word=put word=ran word=rchen word=released word=retelling word=rolled
+    word=roof word=rose word=said word=saw word=scattered word=see word=set word=shone word=shook word=short
+    word=show word=showed word=shut word=sister word=small word=smiled word=source word=spoke word=stayed word=stepmother
+    word=steps word=strength word=sugar word=take word=tale word=thin word=thought word=threw word=time word=tired
+    word=together word=told word=tomorrow word=trees word=und word=upon word=voice word=waited word=walked word=wall
+    word=walls word=warm word=water word=way word=weeks word=well word=went word=wept word=whispered word=white
+    word=wide word=window word=windows word=witch word=woman word=woodcutter word=word word=worry word=written
