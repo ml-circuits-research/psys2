@@ -1784,13 +1784,11 @@
 
 @pat.docs.editor.report core.pattern
     canonical="Make a document about farm animals."
-    canonical="Write a report about sea animals."
-    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [write|make|create|prepare|compose|build] [me]? [a|the]? [report|document|doc|summary|page] [about|on] {t:rest}"
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [write|make|create|prepare|compose|build] [me]? [a|the]? [document|doc|summary|page] [about|on] {t:rest}"
     emit="@{_} core.request action=doc.report arg.topic=\"{t}\""
     kind=request
     priority=12
     tabPriority=28
-    example="Write a report about sea animals."
     example="Make a document about farm animals."
 
 @pat.docs.editor.holdings core.pattern

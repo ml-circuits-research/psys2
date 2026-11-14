@@ -1,45 +1,3 @@
-@describe.ui.newGame core.describe
-    op=ui.newGame
-    intent=command
-    emit="@{_} core.request action=ui.newGame"
-    priority=11
-    frames=phr
-
-@describe.ui.newGame.en core.describe.words
-    of=$describe.ui.newGame
-    lang=en
-    phrase=$phrase.lang.intent.newgame
-
-@describe.ui.giveUp core.describe
-    op=ui.giveUp
-    intent=command
-    emit="@{_} core.request action=ui.giveUp"
-    priority=10
-    frames=phr
-
-@describe.ui.giveUp.en core.describe.words
-    of=$describe.ui.giveUp
-    lang=en
-    phrase=$phrase.lang.intent.giveup
-
-@describe.ui.hint core.describe
-    op=ui.hint
-    intent=command
-    emit="@{_} core.request action=ui.hint"
-    priority=10
-    frames=phr
-    frames=imp
-
-@describe.ui.hint.en core.describe.words
-    of=$describe.ui.hint
-    lang=en
-    phrase=$phrase.lang.intent.hint
-    verb=$w.en.give.ui.hint
-    verb=$w.en.tell.ui.hint
-    verb=$w.en.show.ui.hint
-    noun=$w.en.hint.ui.hint
-    noun=$w.en.clue.ui.hint
-
 @describe.ui.back core.describe
     op=ui.back
     intent=command
@@ -63,24 +21,6 @@
     of=$describe.ui.whichTab
     lang=en
     phrase=$phrase.lang.intent.whichtab
-
-@describe.ui.chooseGame core.describe
-    op=ui.chooseGame
-    intent=command
-    emit="@{_} core.request action=ui.chooseGame"
-    priority=11
-    frames=imp
-    frames=wish
-    frames=ind
-    frames=can
-
-@describe.ui.chooseGame.en core.describe.words
-    of=$describe.ui.chooseGame
-    lang=en
-    verb=$w.en.play.ui.chooseGame
-    noun=$w.en.game.ui.chooseGame
-    noun=$w.en.something.ui.chooseGame
-    noun=$w.en.games.ui.chooseGame
 
 @describe.ui.speaker.on core.describe
     op=ui.speaker
@@ -500,15 +440,6 @@
     noun=$w.en.options.ui.settings
     noun=$w.en.preferences.ui.settings
 
-@w.en.give.ui.hint core.word text=give means=ui.hint
-@w.en.tell.ui.hint core.word text=tell means=ui.hint
-@w.en.show.ui.hint core.word text=show means=ui.hint
-@w.en.hint.ui.hint core.word text=hint means=ui.hint
-@w.en.clue.ui.hint core.word text=clue means=ui.hint
-@w.en.play.ui.chooseGame core.word text=play means=ui.chooseGame
-@w.en.game.ui.chooseGame core.word text=game means=ui.chooseGame
-@w.en.something.ui.chooseGame core.word text=something means=ui.chooseGame
-@w.en.games.ui.chooseGame core.word text=games means=ui.chooseGame
 @w.en.turn_on.ui.speaker core.word text="turn on" means=ui.speaker
 @w.en.switch_on.ui.speaker core.word text="switch on" means=ui.speaker
 @w.en.enable.ui.speaker core.word text=enable means=ui.speaker

@@ -197,7 +197,7 @@
     session=g
 
 @t.docs.editor.n38 core.test
-    input="Write a report about sea animals"
+    input="Write a document about sea animals"
     expect="sea animals"
     expectState="blocks.0.kind=paragraph"
     expectState="ui.shell:activeTab=editor"
@@ -205,7 +205,7 @@
     session=h
 
 @t.docs.editor.n39 core.test
-    input="Write a report about unicorns"
+    input="Write a document about unicorns"
     expectStatus=missing
     session=h2
 
@@ -542,7 +542,7 @@
 
 @t.docs.editor.dm01 core.test
     input="Open the editor tab."
-    expect="Editor"
+    expect="Documents"
     session=dm
 
 @t.docs.editor.dm02 core.test

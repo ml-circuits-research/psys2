@@ -74,13 +74,13 @@ const run = (T, r, count, x, { noisy = true } = {}) => {
 };
 // ---------------------------------------------------------------------------------------------------------------
 export const version = '1';
-// Tabs and languages come from the world lexicons (context) with embedded fallbacks; tabs of other worlds ("chess board")
+// Tabs and languages come from the world lexicons (context) with embedded fallbacks; tabs of other worlds ("drawing board")
 // are the `declared-tab` phenomenon and are embedded.
-const TABS_FB = ['robot', 'face', 'avatar', 'editor', 'document', 'doc', 'tic_tac_toe', 'tictactoe', 'guess', 'guess_the_animal', 'hangman'];
+const TABS_FB = ['robot', 'face', 'avatar', 'editor', 'document', 'doc', 'documents'];
 const LANGS_FB = ['english', 'romanian'];
 const tabs = (x) => x.lex('lex.ui.shell.tabs', TABS_FB).filter((t) => !/\d|question/.test(t));
 const langs = (x) => x.lex('lex.ui.shell.langs', LANGS_FB);
-const DECLARED = ['chess board', 'music player', 'map', 'drawing board', 'chart view', 'photo album'];
+const DECLARED = ['music player', 'map', 'drawing board', 'chart view', 'photo album'];
 const R = (action, args = {}) => ['core.request', { action: 'ui.' + action, ...Object.fromEntries(Object.entries(args).map(([k, v]) => ['arg.' + k, v])) }];
 const CAN = ['', '', '', 'Can you ', 'Could you ', 'Will you ', 'Would you ', 'Please can you '];
 const LETS = ['', '', 'Let us ', "Let's ", 'I want to ', 'I would like to ', 'Can we ', 'Could we ', 'Shall we ', 'We could ', 'Can you ', 'Could you ', 'Will you ', 'I wanna ', 'Lets '];
@@ -97,17 +97,12 @@ add('shell.open', 'request', (r, x) => { const t = pick(r, tabs(x));
   return { text: fin(r, `${pick(r, CAN)}${pick(r, ['open', 'show', 'display', 'bring up', 'go to', 'switch to', 'take me to', 'jump to', 'select', 'view', 'show me', 'open up'])} ${pick(r, ['the ', 'my ', 'your ', ''])}${tname(t)}${pick(r, ['', '', ' tab', ' page', ' screen', ' panel', ' window'])}`), expect: E(R('openTab', { tab: t })) }; });
 // Names the shell knows (declared by the worlds) can be said bare; any other name needs the word tab, page, screen,
 // panel or window ("Open the photo album tab": refused politely, "Open your ears" is not a tab command).
-const KNOWN_DECLARED = new Set(['chess board', 'map', 'drawing board']);
+const KNOWN_DECLARED = new Set(['map', 'drawing board']);
 add('shell.open.declared', 'declared-tab', (r) => { const t = pick(r, DECLARED);
   return { text: fin(r, `${pick(r, ['Open', 'Show', 'Go to', 'Switch to'])} the ${t}${KNOWN_DECLARED.has(t) ? pick(r, ['', ' tab']) : pick(r, [' tab', ' page', ' screen'])}`), expect: E(R('openTab', { tab: q(t) })) }; });
-add('shell.play', 'request', (r, x) => { const t = pick(r, tabs(x)).replace(/^(robot|face|avatar|editor|document|doc)$/, 'hangman');
-  return { text: fin(r, `${pick(r, LETS)}${pick(r, ['play', 'start', 'begin', 'launch', 'have'])} ${pick(r, ['', 'a ', 'the ', 'some ', 'a game of ', 'a round of ', 'the game of ', 'another game of '])}${tname(t)}${pick(r, ['', ' game', ' again'])}`), expect: E(R('playGame', { tab: t })) }; });
-add('shell.play.twenty', 'number-words', (r) => ({ text: fin(r, `${pick(r, LETS)}${pick(r, ['play', 'start', 'begin', 'have'])} ${pick(r, ['', 'a ', 'the ', 'a game of '])}twenty questions${pick(r, ['', ' game'])}`), expect: E(R('playGame', { tab: 'guess' })) }));
-add('shell.open.twenty', 'number-words', (r) => ({ text: fin(r, `${pick(r, CAN)}${pick(r, ['open', 'show', 'go to', 'switch to', 'show me'])} ${pick(r, ['the ', ''])}twenty questions${pick(r, ['', ' tab'])}`), expect: E(R('openTab', { tab: 'guess' })) }));
 add('shell.play.declared', 'declared-tab', (r) => { // ("play music" is the music world's, not a tab)
-  const t = pick(r, ['chess', 'drawing', 'maps']);
+  const t = pick(r, ['drawing', 'maps']);
   return { text: fin(r, `${pick(r, LETS)}play ${t}`), expect: E(R('playGame', { tab: q(t) })) }; });
-add('shell.choose', 'request', (r) => ({ text: fin(r, `${pick(r, LETS.filter(Boolean))}${pick(r, ['play', 'play a game', 'play a game with you', 'play games'])}`), expect: E(R('chooseGame')) }));
 lists('shell.back', 'back', {}, ['go back', 'back', 'previous tab', 'go to the previous tab', 'take me back', 'switch back', 'go back to the previous tab'], ['return to the last tab', 'go to the tab before'], 'request', true);
 lists('shell.which', 'whichTab', {}, ['which tab am I on', 'what tab am I on', 'which tab are we on', 'what tab is this', 'which tab is open', 'where am I', 'what is open', 'what is on the screen'], ['which page is this', 'what am I looking at'], 'question');
 lists('shell.speaker.on', 'speaker', { on: 'true' }, ['turn on the speaker', 'switch on the sound', 'enable the voice', 'activate the speech', 'unmute the audio', 'put on the speaker', 'turn the speaker on', 'turn your voice on', 'speak to me', 'talk to me', 'read aloud', 'read out loud', 'speak out loud', 'speak your answers', 'read your answers aloud', 'read the answers aloud', 'unmute'], ['please start talking', 'say your answers out loud', 'I want to hear you'], 'request', true);
@@ -130,16 +125,9 @@ add('shell.language', 'request', (r, x) => { const l = pick(r, langs(x));
   return { text: fin(r, `${pick(r, CAN)}${pick(r, ['switch', 'change', 'go', 'talk', 'speak', 'answer', 'reply', 'respond', 'use'])} ${pick(r, ['to ', 'in ', 'into ', ''])}${cap(l)}`.replace(/(switch|change|go) (in|into) /, '$1 to ')), expect: E(R('language', { lang: l })) }; });
 add('shell.language.bare', 'ellipsis', (r, x) => { const l = pick(r, langs(x));
   return { text: `${cap(l)}${pick(r, ['', '.', '!'])}`, expect: E(R('language', { lang: l })) }; });
-lists('shell.new', 'newGame', {}, ['new game', 'play again', 'start over', 'restart', 'restart the game', 'play another game', 'another game', 'one more game', 'start a new game', 'begin a new game', 'new round', 'another round', 'play another round', 'play one more time', 'start again', 'try again', 'play a new game', 'play it again', 'reset the game', 'new word', 'another word'], ['I want to play once more', 'deal me a new game', 'let us begin again'], 'request', false);
-lists('shell.giveup', 'giveUp', {}, ['I give up', 'give up', 'I quit', 'quit the game', 'I surrender', 'I resign', 'resign', 'surrender', 'I want to give up', 'I am giving up', 'quit'], ['I cannot go on', 'this is too hard for me', 'stop the game'], 'request', false);
-add('shell.hint', 'request', (r) => ({ text: fin(r, `${pick(r, ['Give me', 'Tell me', 'Show me', 'Can I have', 'I need', 'I want', 'Can you give me', 'Could I have', 'May I have', 'Could you give me', 'I would like'])} ${pick(r, ['a', 'another', 'one more', 'the next'])} hint`), expect: E(R('hint')) }));
-add('shell.hint.bare', 'ellipsis', (r) => ({ text: fin(r, cap(pick(r, ['hint', 'a hint', 'any hint', 'another hint', 'one more hint', 'any hints', 'a clue', 'give me a clue', 'another clue']))), expect: E(R('hint')) }));
 // ---- rule sweep: chat forms (pls/u/can we), bare tab and game names, word orders, phrase log, rate words, stop-game forms
-add('shell.open.chat', 'request', (r) => { const t = pick(r, ['chess board', 'map', 'chessboard']);
+add('shell.open.chat', 'request', (r) => { const t = pick(r, ['map', 'drawing board']);
   return { text: pick(r, [`${t} tab pls`, `i want the ${t}`, `${t} please`, `open ${t} for me now`, `take me to the ${t}`, `i want to see the ${t} tab`, `could you bring up the ${t} tab`, `can u show me the ${t}`]), expect: E(R('openTab', { tab: q(t) })) }; });
-add('shell.play.chat', 'request', (r) => { const t = pick(r, ['hangman', 'tic tac toe']); const tn = t.replace(/ /g, '_');
-  return { text: fin(r, pick(r, [`${t} pls`, `${t} game please`, `can u play ${t} with me`, `play the ${t} game now`, `wanna play ${t}`, `i feel like playing ${t}`, `${t} time`]), false), expect: E(R('playGame', { tab: tn })) }; });
-lists('shell.choose.chat', 'chooseGame', {}, ['what games can we play', 'pick a game', 'i want to play something', 'games', 'choose a game for me', 'show me the games', 'game time', 'which game', 'let me choose a game', 'what games do you have', 'list the games'], ['i am bored, pick a game'], 'request', false);
 lists('shell.back.chat', 'back', {}, ['go back to the last one', 'previous screen', 'back one tab', 'return to where i was', 'back pls', 'take me back', 'go to the previous page'], [], 'request', true);
 lists('shell.plog.count', 'phraseLog', { what: 'count' }, ['count my phrases', 'phrase count', 'how many things have i said so far', 'hw many phrases i said', 'number of phrases i said', 'tell me how many phrases i said', 'so how many phrases have i said till now', 'how many phrases have i said'], [], 'question');
 lists('shell.plog.export', 'phraseLog', { what: 'export' }, ['i want a copy of my phrase log', 'phrase log download pls', 'get my phrase log as a file', 'export phrase log', 'download the phrases i said', 'phrase log to file please', 'save my phrase log', 'download my phrase log'], [], 'request', false);
@@ -149,7 +137,6 @@ lists('shell.rate.slower.chat', 'rate', { dir: 'slower' }, ['less fast please', 
 lists('shell.rate.faster.chat', 'rate', { dir: 'faster' }, ['faster voice', 'not so slow', 'too slow, speed it up'], [], 'request', false);
 add('shell.language.chat', 'request', (r, x) => { const l = pick(r, langs(x));
   return { text: fin(r, pick(r, [`i want ${l}`, `back to ${l}`, `could you use ${l} from now on`, `${l} pls`, `can u speak ${l} now`, `in ${l} please`]), false), expect: E(R('language', { lang: l })) }; });
-lists('shell.giveup.chat', 'giveUp', {}, ['stop game pls', 'can we stop the game', 'i want to stop the game now', 'stop it, game over', 'stop the game for now', 'game stop', 'could you stop the game', 'game over'], [], 'request', false);
 // negation, near misses, out of domain
 add('shell.neg', 'negation', (r, x) => { const t = pick(r, tabs(x));
   return { text: pick(r, [`Don't open the ${tname(t)}.`, `Do not turn on the speaker.`, `I don't want to play ${tname(t)}.`, `Never go back.`, `Do not stop listening.`, `I won't give up.`]), negative: true }; });

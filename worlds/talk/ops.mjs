@@ -741,14 +741,14 @@ const once = (ctx) => { const s = ensure(ctx); s.said ??= {}; if (s.said.privacy
 const labelOf = (o) => String(o.kind === 'composite' ? o.thing : o.kind ?? 'thing').replace(/[_-]/g, ' ');
 const plural = (w, n) => (n === 1 ? w : /(?:s|x|ch|sh)$/.test(w) ? `${w}es` : /[^aeiou]y$/.test(w) ? `${w.slice(0, -1)}ies` : `${w}s`);
 
-/** What do you know about me: the profile fields as a small card. */
+/** What do you know about me: the user's name (kept by kids.common) as a small card. */
 export function me(ctx) {
-  const f = ctx.peek('user.profile')?.fields ?? {};
-  const rows = Object.entries(f).map(([k, v]) => ({ k: k.replace(/_/g, ' '), v: [].concat(v?.v ?? '').join(', ') })).filter((r) => r.v).slice(0, 8);
+  const name = ctx.peek('kids.common')?.userName;
+  const rows = name ? [{ k: 'name', v: String(name) }] : [];
   const topic = topicFor(ctx, 'you');
-  if (!rows.length) { topic.say ||= 'nothing known yet'; return ok(`I do not know anything about you yet. Say "interview me" and I will learn.${once(ctx)}`, { values: [] }); }
+  if (!rows.length) { topic.say ||= 'nothing known yet'; return ok(`I do not know anything about you yet. Tell me your name and I will remember it.${once(ctx)}`, { values: [] }); }
   const text = `I know ${rows.length} thing${rows.length === 1 ? '' : 's'} about you: ${list(rows.map((r) => `your ${r.k} is ${r.v}`))}.${once(ctx)}`;
-  addCard(ctx, topic, { kind: 'facts', thing: 'you', title: 'About you', data: { rows }, how: howOf({ frame: 'what I know about you', words: 'what do you know about me', things: ['you'], sources: [{ what: 'your profile on this device', part: '' }], card: 'a small list of what you told me' }) }, text);
+  addCard(ctx, topic, { kind: 'facts', thing: 'you', title: 'About you', data: { rows }, how: howOf({ frame: 'what I know about you', words: 'what do you know about me', things: ['you'], sources: [{ what: 'what you told me on this device', part: '' }], card: 'a small list of what you told me' }) }, text);
   return ok(text, { values: rows.map((r) => r.v) });
 }
 
@@ -763,17 +763,6 @@ export function drawn(ctx) {
   const text = `In this session you drew ${objs.length} thing${objs.length === 1 ? '' : 's'}: ${list(rows.map((r) => (r.v === 1 ? an(r.k) : `${r.v} ${plural(r.k, r.v)}`)))}.${once(ctx)}`;
   addCard(ctx, topic, { kind: 'facts', thing: 'your drawing', title: 'What you drew', data: { rows, unit: 'in this session' }, how: howOf({ frame: 'what you drew', words: 'what did I draw', things: ['your drawing'], sources: [{ what: 'your drawing in this session', part: '' }], card: 'a tally of the things in your drawing' }) }, text);
   return ok(text, { values: rows.map((r) => r.v) });
-}
-
-/** How many moves did I make in chess: counted icons from the history of the game. */
-export function moves(ctx) {
-  const g = ctx.peek('games.chess');
-  const n = g?.history?.length ?? 0, mine = g?.user === 'black' ? Math.floor(n / 2) : Math.ceil(n / 2);
-  const topic = topicFor(ctx, 'your chess game');
-  if (!mine) { topic.say ||= 'no moves yet'; return ok(`You have not made a move in chess yet in this session.${once(ctx)}`, { values: [0] }); }
-  const text = `You made ${mine} move${mine === 1 ? '' : 's'} in chess in this session.${once(ctx)}`;
-  addCard(ctx, topic, { kind: 'icons', thing: 'your chess game', title: 'Your chess moves', data: { n: Math.min(mine, 40), label: plural('move', mine), from: 'session' }, how: howOf({ frame: 'how many chess moves you made', words: 'how many moves did I make in chess', things: ['your chess game'], sources: [{ what: 'your chess game in this session', part: '' }], card: `${Math.min(mine, 40)} small icons, one for each move` }) }, text);
-  return ok(text, { values: [mine] });
 }
 
 const UNDO_OF = { draw: ['draw.undo', 'Drawing'], diagram: ['diagram.undo', 'Diagram'], map: ['geo.undo', 'Map'] };

@@ -1,7 +1,7 @@
 // Operations of ui.shell: app control and voice settings (spec 07 section 3). Browser-safe: no imports.
 //
 // State (ctx.state): { activeTab, previousTab, speaker, listening, handsFree, rate, language }
-//   activeTab: 'talk' | 'editor' | 'tictactoe' | 'guess' | 'hangman' (any tab id a world declares; the avatar is a popup, not a tab)   (previousTab: the tab before, or null)
+//   activeTab: 'talk' | 'editor' (the Documents tab) | any tab id a world declares; the avatar is a popup, not a tab)   (previousTab: the tab before, or null)
 //   rate: speech rate 0.5 .. 2 (1 = normal); language: 'en' | 'ro'
 // Effects: speech.cancel (when the speaker is turned off).
 //
@@ -10,23 +10,17 @@
 
 export const TABS = {
   talk: { title: 'Talk', world: 'talk' },
-  editor: { title: 'Editor', world: 'docs.editor' },
-  tictactoe: { title: 'Tic-tac-toe', world: 'games.tictactoe' },
-  guess: { title: 'Guess the animal', world: 'games.guess' },
-  hangman: { title: 'Hangman', world: 'games.hangman' },
+  editor: { title: 'Documents', world: 'docs.editor' },
 };
 export const TAB_OF_WORD = {
-  editor: 'editor', document: 'editor', doc: 'editor',
-  tic_tac_toe: 'tictactoe', tictactoe: 'tictactoe', noughts_and_cross: 'tictactoe',
-  guess: 'guess', guess_the_animal: 'guess', guessing_game: 'guess', twenty_question: 'guess', animal_game: 'guess',
-  hangman: 'hangman',
+  editor: 'editor', document: 'editor', doc: 'editor', documents: 'editor', docs: 'editor',
 };
 /** Views that are not tabs: the avatar is an icon beside the input with a popup (the host shows it on the effect `ui.openView`); the state's activeTab never names it. */
 export const VIEWS = { avatar: { title: 'Avatar', world: 'ui.avatar', words: ['robot', 'face', 'avatar'] } };
 export const GAME_ACTIONS = {
-  new: { tictactoe: 'ttt.new', guess: 'guess.start', hangman: 'hm.new' },
-  giveUp: { tictactoe: 'ttt.giveup', guess: 'guess.giveup', hangman: 'hm.giveup' },
-  hint: { tictactoe: 'ttt.hint', guess: 'guess.hint', hangman: 'hm.hint' },
+  new: {},
+  giveUp: {},
+  hint: {},
 };
 /**
  * Tabs declared by other worlds in their manifests (spec 07 §6: tab, tabTitle, tabAlias, tabNew, tabHint, tabGiveUp)
@@ -85,9 +79,6 @@ export function playGame(ctx, { tab }) {
   // (a declared game whose start action fails still opens its tab: see openTab)
 }
 
-export function chooseGame() {
-  return ok('I can play tic-tac-toe, twenty questions (I guess your animal) or hangman. Which one would you like?');
-}
 
 export function back(ctx) {
   refresh(ctx);
@@ -147,18 +138,6 @@ export function language(ctx, { lang }) {
   ctx.state.language = code;
   return ok(code === 'ro' ? 'OK, I switched to Romanian.' : 'OK, I switched to English.');
 }
-
-function gameAction(ctx, which, args = {}) {
-  refresh(ctx);
-  const tab = ctx.state.activeTab;
-  const action = GAME_ACTIONS[which][tab];
-  if (!action) return no('missing', `There is no game open on the ${(TABS[tab]?.title ?? tab)} tab. You can say, for example, "let's play hangman".`);
-  return ctx.request(action, args);
-}
-const relay = (r) => (r.status === 'supported' ? ok(text(r)) : no(r.status, text(r)));
-export const newGame = (ctx) => relay(gameAction(ctx, 'new'));
-export const giveUp = (ctx) => relay(gameAction(ctx, 'giveUp'));
-export const hint = (ctx) => relay(gameAction(ctx, 'hint'));
 
 /** Phrase log commands; the host owns the log (localStorage) and carries out the effect. */
 export function phraseLog(ctx, { what }) {

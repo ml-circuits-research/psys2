@@ -88,12 +88,6 @@
     action=talk.drawn
     doc="What the user drew in this session: a sentence and a small tally card."
 
-@op.talk.moves core.operation
-    impl=moves
-    semantics=action
-    action=talk.moves
-    doc="How many moves the user made in the chess game of this session: a sentence and counted icons."
-
 @op.talk.undo core.operation
     impl=undo
     semantics=action

@@ -5422,16 +5422,6 @@
     alt=what_did_i_draw_so_far
     alt=what_did_i_make_in_my_drawing
 
-@phrase.lang.talk.chessmoves core.phrase
-    doc="Asking how many moves the user made in the chess game."
-    alt=how_many_moves_did_i_make_in_chess
-    alt=how_many_moves_have_i_made_in_chess
-    alt=how_many_chess_moves_did_i_make
-    alt=how_many_moves_did_i_play_in_chess
-    alt=how_many_moves_have_i_played_in_chess
-    alt=how_many_moves_did_i_make_in_the_game
-    alt=how_many_moves_have_i_made
-
 @phrase.lang.talk.kindof core.phrase
     doc="Lead-ins of a question about what kind of thing X is; the thing follows."
     alt=what_kind_of_thing_is

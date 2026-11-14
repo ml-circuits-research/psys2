@@ -48,17 +48,17 @@
 @sh.v3 ui.shell.view tab=?t
 @sh.t3 ui.shell.known id=?t title=?ti
 @sh.g3 ui.shell.game tab=?t new=?x
-@sh.d.new core.deny when=$sh.w3 when=$sh.v3 when=$sh.t3 not=$sh.g3 why="There is no game open on the ?ti tab. You can say, for example, \"let's play hangman\"."
+@sh.d.new core.deny when=$sh.w3 when=$sh.v3 when=$sh.t3 not=$sh.g3 why="There is no game open on the ?ti tab."
 @sh.w4 ui.shell.want kind=game which=hint
 @sh.v4 ui.shell.view tab=?t
 @sh.t4 ui.shell.known id=?t title=?ti
 @sh.g4 ui.shell.game tab=?t hint=?x
-@sh.d.hint core.deny when=$sh.w4 when=$sh.v4 when=$sh.t4 not=$sh.g4 why="There is no game open on the ?ti tab. You can say, for example, \"let's play hangman\"."
+@sh.d.hint core.deny when=$sh.w4 when=$sh.v4 when=$sh.t4 not=$sh.g4 why="There is no game open on the ?ti tab."
 @sh.w5 ui.shell.want kind=game which=giveup
 @sh.v5 ui.shell.view tab=?t
 @sh.t5 ui.shell.known id=?t title=?ti
 @sh.g5 ui.shell.game tab=?t giveup=?x
-@sh.d.giveup core.deny when=$sh.w5 when=$sh.v5 when=$sh.t5 not=$sh.g5 why="There is no game open on the ?ti tab. You can say, for example, \"let's play hangman\"."
+@sh.d.giveup core.deny when=$sh.w5 when=$sh.v5 when=$sh.t5 not=$sh.g5 why="There is no game open on the ?ti tab."
 
 # ---- "go back" needs a tab to go back to
 @sh.w6 ui.shell.want kind=back

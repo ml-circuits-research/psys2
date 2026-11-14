@@ -22,10 +22,6 @@
     for=action.ui.helpAbout
     text="{value}"
 
-@tpl.ui.help.helpGame core.template
-    for=action.ui.helpGame
-    text="{value}"
-
 @tpl.ui.help.helpHow core.template
     for=action.ui.helpHow
     text="{value}"

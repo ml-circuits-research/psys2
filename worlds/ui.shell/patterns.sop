@@ -1,26 +1,3 @@
-@pat.ui.shell.play20 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite|we_could]? [play|start|begin|have] [a|the|a_game_of|the_game_of]? 20 [questions|question] [game]? [$ui.shell.g4_pls]?"
-    emit="@{_} core.request action=ui.playGame arg.tab=guess"
-    kind=request
-    priority=11
-    example="Can we play twenty questions?"
-
-@pat.ui.shell.open20 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [open|show|go_to|switch_to|show_me] [the]? 20 [questions|question] [tab]? [$ui.shell.g4_pls]?"
-    emit="@{_} core.request action=ui.openTab arg.tab=guess"
-    kind=request
-    priority=10
-    example="Open twenty questions."
-
-@pat.ui.shell.choose core.pattern
-    canonical="Let's play a game."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite|we_could]? [play|play_a_game|play_a_game_with_you|play_games] [$ui.shell.g4_pls]?"
-    emit="@{_} core.request action=ui.chooseGame"
-    kind=request
-    priority=10
-    example="Let's play a game."
-    example="I want to play."
-
 @pat.ui.shell.back core.pattern
     canonical="Go back."
     match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [go_back|back|previous_tab|go_to_the_previous_tab|take_me_back|switch_back|go_back_to_the_previous_tab|return_to_the_last_tab|return_to_the_previous_tab|go_to_the_tab_before|go_to_the_last_tab|return_to_the_tab_before|return|go_to_the_previous_one] [$ui.shell.g4_pls]?"
@@ -234,39 +211,6 @@
     priority=8
     example="Romanian."
 
-@pat.ui.shell.new core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite|we_could]? [new_game|play_again|start_over|restart|restart_the_game|play_another_game|another_game|one_more_game|start_a_new_game|begin_a_new_game|new_round|another_round|play_another_round|play_one_more_time|start_again|try_again|play_a_new_game|play_it_again|reset_the_game|new_word|another_word|1_more_game|play_1_more_time|play_once_more|begin_again|deal_me_a_new_game|deal_a_new_game|i_want_to_play_once_more|play_once_again|go_again|one_more_round|1_more_round|start_afresh|play_the_game_again] [$ui.shell.g4_pls]?"
-    emit="@{_} core.request action=ui.newGame"
-    kind=request
-    priority=11
-    example="New game."
-    example="Play again."
-    example="Start over."
-
-@pat.ui.shell.giveup core.pattern
-    canonical="I give up."
-    match="[$lang.lead.filler|pls|plz]? [i_give_up|give_up|i_quit|quit_the_game|i_surrender|i_resign|resign|surrender|i_want_to_give_up|i_am_giving_up|quit] [$ui.shell.g4_pls]?"
-    emit="@{_} core.request action=ui.giveUp"
-    kind=request
-    priority=10
-    example="I give up."
-    example="Quit the game."
-
-@pat.ui.shell.hint core.pattern
-    match="[$lang.lead.filler|pls|plz]? [give_me|tell_me|show_me|can_i_have|i_need|i_want|can_you_give_me|could_i_have|may_i_have|could_you_give_me|i_would_like|gimme|i_wanna|i_wana] [a|another|one_more|the_next|1_more]? hint [$ui.shell.g4_pls]?"
-    emit="@{_} core.request action=ui.hint"
-    kind=request
-    priority=10
-    example="Give me a hint."
-    example="Can I have another hint?"
-
-@pat.ui.shell.hint2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [hint|a_hint|any_hint|another_hint|one_more_hint|any_hints|a_clue|give_me_a_clue|another_clue|1_more_hint] [$ui.shell.g4_pls]?"
-    emit="@{_} core.request action=ui.hint"
-    kind=request
-    priority=10
-    example="Hint please."
-
 @pat.ui.shell.spk.on4 core.pattern
     canonical="Could you start reading aloud?"
     match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [start|begin|keep|resume|continue] [$ui.shell.g14_talking] [$ui.shell.g4_pls]?"
@@ -371,22 +315,6 @@
     priority=12
     example="Could you slow down?"
     example="Please use a slower voice."
-
-@pat.ui.shell.giveup2 core.pattern
-    canonical="This is too hard for me."
-    match="[$lang.lead.filler|pls|plz]? [i_can_not_go_on|this_is_too_hard_for_me|this_is_too_hard|stop_the_game|end_the_game|end_game|i_can_not_do_it|i_can_not_continue|i_do_not_want_to_play_any_more|i_have_had_enough|i_am_stuck] [$ui.shell.g4_pls]?"
-    emit="@{_} core.request action=ui.giveUp"
-    kind=request
-    priority=12
-    example="This is too hard for me."
-    example="Stop the game."
-
-@pat.ui.shell.hint3 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [give_me_a_clue|a_clue|another_clue|1_more_clue|tell_me_a_clue|i_need_a_clue|i_want_a_clue|can_i_have_a_clue|one_clue_please|help_me_with_a_hint] [$ui.shell.g4_pls]?"
-    emit="@{_} core.request action=ui.hint"
-    kind=request
-    priority=12
-    example="Give me a clue."
 
 @pat.ui.shell.open.marked core.pattern
     match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [$ui.shell.g11_open] [me]? [the|my|your|ur]? {tab:lex.ui.shell.tabs} [tab|page|screen|panel|window] [$ui.shell.g4_pls]?"
@@ -515,61 +443,6 @@
     kind=request
     priority=9
     example="Editor pls"
-
-@pat.ui.shell.play.v2 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$ui.shell.g1_we_could]? [play|start|begin|launch|have|try|run|fire_up|i_want|i_wanna|i_want_to_start|i_wanna_start|i_want_to_begin|go_for|lets_go_for|how_about|what_about|up_for|open_up|get_started_with|start_up|boot_up|set_up|set_up_a|i_would_like|id_like|i_d_like|i_feel_like|i_feel_like_playing|im_in_the_mood_for|i_am_in_the_mood_for|im_up_for|i_am_up_for|are_you_up_for|are_you_in_the_mood_for|do_you_want_to_play|do_you_wanna_play|wanna_play|want_to_play|do_u_want_to_play|do_u_wanna_play|you_want_to_play|u_want_to_play|you_wanna_play|u_wanna_play|have_a_game_of|play_a_game_of|play_a_round_of|play_some|play_a_bit_of|play_a_little|a_game_of|a_round_of|another_game_of|another_round_of|one_more_game_of|one_more_round_of|a_quick_game_of|a_little_game_of|a_short_game_of|1_more_game_of|1_more_round_of] [the|my|your|ur|this|that]? {tab:lex.ui.shell.gametabs} [game|again|tab|round|with_me|with_us|together|against_me|against_you|with_you|game_with_me|game_together|game_with_you]? [$lang.tail.filler|$ui.shell.g2_for_a_moment]?"
-    emit="@{_} core.request action=ui.playGame arg.tab={tab}"
-    kind=request
-    priority=13
-    example="Can u play tic tac toe with me"
-    example="Play the tic tac toe game now"
-    example="Do you wanna play tic tac toe"
-    example="I feel like playing tic tac toe"
-
-@pat.ui.shell.play.bare core.pattern
-    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [the|my|your|ur|this|that]? {tab:lex.ui.shell.gametabs} [game|tab|round|time|please|pls|plz|now|thanks|thx|again|then|anyone|anybody|maybe|plz_now|please_now|now_please|again_please|game_please|game_pls|game_now|game_time|game_again|time_please|time_pls|time_now|round_please|round_now|tab_please|tab_pls|tab_now] [pls|plz|now|thanks|thx|again|then]?"
-    emit="@{_} core.request action=ui.playGame arg.tab={tab}"
-    kind=request
-    priority=12
-    example="Tic tac toe time"
-    example="Tic tac toe game pls"
-    example="Guess the animal game"
-
-@pat.ui.shell.play.bare0 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [the|my|your|ur|this|that]? {tab:lex.ui.shell.gametabs} [$lang.tail.filler|$ui.shell.g2_for_a_moment]?"
-    emit="@{_} core.request action=ui.playGame arg.tab={tab}"
-    kind=request
-    priority=10
-    example="Tic tac toe please"
-
-@pat.ui.shell.play.how core.pattern
-    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [the|my|your|ur|this|that]? {tab:lex.ui.shell.gametabs} [time|round|anyone|please|pls|plz|now]"
-    emit="@{_} core.request action=ui.playGame arg.tab={tab}"
-    kind=request
-    priority=12
-    example="Tic tac toe now"
-
-@pat.ui.shell.choose.v3 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$ui.shell.g1_we_could]? [i_want_to_play_something|i_wanna_play_something|i_feel_like_playing_something|can_we_play_something|lets_play_something|i_want_to_play_a_game|i_wanna_play_a_game|lets_play_a_game_please|play_something_with_me|play_something_together|can_we_play_something_together|i_want_something_to_play|i_need_something_to_play|something_to_play|a_game_to_play|any_game|any_game_will_do|whatever_game|any_game_is_fine|pick_any_game|surprise_me_with_a_game|pick_a_game_for_me|choose_a_game_for_me] [$lang.tail.filler|$ui.shell.g2_for_a_moment]?"
-    emit="@{_} core.request action=ui.chooseGame"
-    kind=request
-    priority=13
-    example="I want to play something"
-    example="Pick a game for me"
-
-@pat.ui.shell.choose.v2 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$ui.shell.g1_we_could]? [what_games|which_games|what_game|which_game|what_games_are_there|which_games_are_there|what_games_do_you_have|which_games_do_you_have|what_games_can_we_play|what_games_can_i_play|which_games_can_we_play|which_games_can_i_play|what_games_do_you_know|which_game_should_we_play|which_game_should_i_play|pick_a_game|choose_a_game|select_a_game|pick_a_game_for_me|choose_a_game_for_me|pick_us_a_game|choose_us_a_game|pick_a_game_for_us|choose_a_game_for_us|games|the_games|game_list|list_of_games|list_games|list_the_games|show_games|show_the_games|show_me_the_games|show_me_games|show_me_all_the_games|list_all_games|list_all_the_games|game_time|game_menu|games_menu|menu_of_games|games_list|i_want_to_play_something|i_wanna_play_something|let_me_choose_a_game|let_me_pick_a_game|let_us_pick_a_game|let_us_choose_a_game|lets_pick_a_game|lets_choose_a_game|lets_play_something|play_something|play_anything|play_some_game|play_some_games|i_want_to_play_a_game|i_want_to_play_games|can_we_play_something|can_we_play_a_game|can_we_play_games|do_you_have_games|got_any_games|any_games|are_there_games|are_there_any_games|have_you_got_games|what_can_we_play|what_can_i_play|what_should_we_play|what_should_i_play|available_games|what_games_are_available|which_games_are_available|what_games_exist|let_me_see_the_games|let_me_see_games|give_me_a_game|give_me_games|gimme_a_game|gimme_games|a_game|a_game_please|games_please|games_pls|i_want_a_game|i_want_games|i_need_a_game|i_need_games|play_a_game_with_me|can_we_play_a_game_together|do_you_know_any_games|do_you_know_games|what_games_do_you_know|what_games_do_you_play|what_games_can_you_play|what_games_can_you_do|what_games_have_you_got|which_games_have_you_got|which_games_do_you_know|which_games_can_you_play|show_me_some_games|show_me_what_games|show_me_a_game|show_me_your_games|show_your_games|list_your_games|what_are_the_games|which_are_the_games|which_ones_are_the_games|what_are_the_game_options|game_options|game_choices|choose_game|pick_game|select_game|choose_a_game_to_play|pick_a_game_to_play|select_a_game_to_play|what_do_you_want_to_play|what_do_you_wanna_play|what_would_you_like_to_play|what_do_we_play] [$lang.tail.filler|$ui.shell.g2_for_a_moment]?"
-    emit="@{_} core.request action=ui.chooseGame"
-    kind=request
-    priority=11
-    example="What games can we play"
-    example="Pick a game"
-    example="Games?"
-    example="Choose a game for me"
-    example="Show me the games"
-    example="Game time"
-    example="Which game"
-    example="Let me choose a game"
 
 @pat.ui.shell.back.v2 core.pattern
     match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$ui.shell.g1_we_could]? [go_back|back|return|take_me_back|switch_back|get_back|head_back|move_back|step_back|bring_me_back|go_back_one|back_one|take_me_back_one|go_one_back|go_one_step_back|go_one_tab_back|one_tab_back|one_step_back|one_back|i_want_to_go_back|i_want_back|i_wanna_go_back|undo_the_tab_switch|undo_tab_change|undo_that_switch|undo_the_switch|go_back_1|back_1|take_me_back_1|go_1_back|go_1_step_back|go_1_tab_back|1_tab_back|1_step_back|1_back] [$ui.shell.g17_one]? [$ui.shell.g17_one]? [before|ago|i_was_on|i_was_in|from_before]? [$lang.tail.filler|$ui.shell.g2_for_a_moment]?"
@@ -771,51 +644,6 @@
     example="Can u speak english now"
     example="In english please"
 
-@pat.ui.shell.giveup.v3 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$ui.shell.g1_we_could]? [quit|exit|leave|finish|cancel|abort|halt|close|drop|ditch|terminate|shut_down|shut|kill|call_off|wrap_up|conclude|quit_playing|give_up_on|abandon|forget|forget_about|enough_of|done_with|im_done_with|i_am_done_with|im_finished_with|i_am_finished_with|i_am_through_with|im_through_with|i_give_up_on|i_quit|i_finish] [the|this|that|my|our|current|it|playing]? [current]? [$ui.shell.g16_game] [$lang.tail.filler|$ui.shell.g2_for_a_moment]?"
-    emit="@{_} core.request action=ui.giveUp"
-    kind=request
-    priority=8
-    example="Quit this game please"
-    example="Could you finish the game"
-
-@pat.ui.shell.giveup.v3b core.pattern
-    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$ui.shell.g1_we_could]? [stop|end|stop_playing|end_it|stop_this|i_stop|i_end] [the|this|that|my|our|current|it|playing]? [current]? [$ui.shell.g16_game] [$lang.tail.filler|$ui.shell.g2_for_a_moment]?"
-    emit="@{_} core.request action=ui.giveUp"
-    kind=request
-    priority=13
-    example="Stop game pls"
-    example="Can we stop the game"
-    example="I want to stop the game now"
-    example="Stop the game for now"
-
-@pat.ui.shell.giveup.v4 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$ui.shell.g1_we_could]? [game|round|match|play|session] [stop|over|end|quit|exit|finished|cancel|abort|ended|done|off|out|is_over|is_done|is_finished|ends|stops|finish|terminate|close|closed|cancelled|aborted|stopped|quit_now|over_now|off_now] [$lang.tail.filler|$ui.shell.g2_for_a_moment]?"
-    emit="@{_} core.request action=ui.giveUp"
-    kind=request
-    priority=8
-    example="Game stop"
-    example="Game over"
-
-@pat.ui.shell.giveup.v5 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$ui.shell.g1_we_could]? [stop_it|stop|enough|that_is_enough|thats_enough|i_am_done|im_done|done|finished|i_am_finished|im_finished|okay_stop|ok_stop|that_is_it|thats_it|no_more|no_more_please|i_do_not_want_to_continue|i_dont_want_to_continue|i_dont_want_to_go_on|i_do_not_want_to_go_on] [game_over|the_game_is_over|end_of_game|game_is_over|the_game_over|game_ends|game_finished|game_stop|game_done|game_end|the_game_is_done|the_game_is_finished|end_the_game|stop_the_game|stop_game|end_game|quit_the_game|quit_game|quit_this_game|stop_this_game|end_this_game|the_game|this_game|with_the_game|with_this_game|with_games] [$lang.tail.filler|$ui.shell.g2_for_a_moment]?"
-    emit="@{_} core.request action=ui.giveUp"
-    kind=request
-    priority=8
-    example="Stop it, game over"
-    example="Enough, game over"
-
-@pat.ui.shell.play core.pattern
-    canonical="Can we play twenty questions?"
-    canonical="Let's play tic tac toe."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite|we_could]? [play|start|begin|launch|have] [$ui.shell.g12_a]? {tab:lex.ui.shell.tabs} [game|again]? [$ui.shell.g4_pls]?"
-    emit="@{_} core.request action=ui.playGame arg.tab={tab}"
-    kind=request
-    priority=11
-    example="Let's play tic tac toe."
-    example="Play hangman."
-    example="Can we play twenty questions?"
-
 @pat.ui.shell.x2.open.documents core.pattern
     match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [open|show|display|bring_up|go_to|switch_to|take_me_to|jump_to|select|view|show_me|open_up|pick|choose|let_me_see] [me]? [the|my|your|ur]? [documents|docs|reader|document_reader|library] [tab|page|screen|panel|window] [$ui.shell.g4_pls]?"
     emit="@{_} core.request action=ui.openTab arg.tab=documents"
@@ -834,18 +662,6 @@
     emit="@{_} core.request action=ui.openTab arg.tab={tab}"
     priority=10
     example="Open the editor."
-
-@shape.ui.shell.play core.shape
-    family=do
-    verb="play|start|begin|launch|have"
-    obj="tab:lex.ui.shell.tabs"
-    det="a"
-    extra="[game|again]?"
-    forms=imp,wish,ind,q
-    sample="tab=hangman"
-    emit="@{_} core.request action=ui.playGame arg.tab={tab}"
-    priority=11
-    example="Play hangman."
 
 @pat.ui.shell.settings.open core.pattern
     canonical="Open settings."

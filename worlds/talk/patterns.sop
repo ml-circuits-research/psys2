@@ -370,17 +370,6 @@
     example="What have I drawn so far?"
     doc="What is in the user's drawing in this session, as a small tally card."
 
-@pat.talk.moves core.pattern
-    canonical="How many moves did I make in chess?"
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.chessmoves] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=talk.moves"
-    kind=question
-    tabOnly=true
-    tabClaim=true
-    priority=14
-    example="How many moves have I made in chess?"
-    doc="How many moves the user made in the chess game of this session, as counted icons."
-
 @pat.talk.undo core.pattern
     canonical="Undo."
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.undo] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"

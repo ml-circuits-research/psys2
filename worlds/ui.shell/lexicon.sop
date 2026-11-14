@@ -6,25 +6,12 @@
     word=editor
     word=document
     word=doc
-    word=tic_tac_toe
-    word=tictactoe
-    word=tic-tac-toe
-    word=noughts_and_cross
-    word=guess
-    word=guess_the_animal
-    word=guessing_game
-    word=twenty_question
-    word=20_question
-    word=animal_game
-    word=hangman
+    word=documents
+    word=docs
 
 @lex.ui.shell.declaredtabs core.lexicon
     class=noun
     doc="Names and aliases of the tabs that other worlds declare in their manifests (spec 07 section 6); the shell opens them by name. Unknown names are refused politely by ui.openTab."
-    word=chess
-    word=chess_board
-    word=chessboard
-    word=chess_game
     word=drawing
     word=drawing_board
     word=paint
@@ -61,11 +48,7 @@
 
 @lex.ui.shell.playtabs core.lexicon
     class=noun
-    doc="Declared tabs that can be started with play: the chess game and the drawing, charts and map tabs (music and piano belong to the music world: play piano plays notes)."
-    word=chess
-    word=chess_board
-    word=chessboard
-    word=chess_game
+    doc="Declared tabs that can be started with play: the drawing, charts and map tabs (music and piano belong to the music world: play piano plays notes)."
     word=drawing
     word=drawing_board
     word=paint
@@ -92,22 +75,6 @@
     word=faster
     word=microphone
     word=mute
-
-@lex.ui.shell.gametabs core.lexicon
-    class=noun
-    doc="Game tabs that a bare game name (hangman pls, hangman game) starts. Same entries as the game words of ui.shell.tabs."
-    word=hangman
-    plural=hangman:hangmen
-    word=tic_tac_toe
-    word=tictactoe
-    word=tic-tac-toe
-    word=noughts_and_cross
-    word=guess
-    word=guess_the_animal
-    word=guessing_game
-    word=twenty_question
-    word=20_question
-    word=animal_game
 
 @phrase.ui.shell.g1_we_could core.phrase
     doc="World-local group used by 33 patterns (made by scripts/migrate-macros.mjs)."

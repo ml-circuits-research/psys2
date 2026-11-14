@@ -10,12 +10,6 @@
     action=ui.playGame
     doc="Opens a game tab and starts a game there through the game world (ctx.request)."
 
-@op.ui.shell.chooseGame core.operation
-    impl=chooseGame
-    semantics=action
-    action=ui.chooseGame
-    doc="Lists the games that can be played."
-
 @op.ui.shell.back core.operation
     impl=back
     semantics=action
@@ -57,24 +51,6 @@
     semantics=action
     action=ui.language
     doc="Sets the interface, recognition and speech language (en or ro)."
-
-@op.ui.shell.newGame core.operation
-    impl=newGame
-    semantics=action
-    action=ui.newGame
-    doc="Starts a new game in the game of the active tab (ctx.request)."
-
-@op.ui.shell.giveUp core.operation
-    impl=giveUp
-    semantics=action
-    action=ui.giveUp
-    doc="Gives up the game of the active tab (ctx.request)."
-
-@op.ui.shell.hint core.operation
-    impl=hint
-    semantics=action
-    action=ui.hint
-    doc="Asks the game of the active tab for a hint (ctx.request)."
 
 @op.ui.shell.phraseLog core.operation
     impl=phraseLog

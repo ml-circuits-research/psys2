@@ -12,7 +12,6 @@
     compose=world.kids.time
     compose=world.kids.animals
     compose=world.kids.shapes
-    compose=world.user.profile
     language=en
     status=fixture
     title="The conversation (one instance per session)"
