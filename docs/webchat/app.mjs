@@ -22,7 +22,7 @@ import { findNormalizerModel } from './ui/normalizer-host.mjs';
 import { createEngineClient } from './ui/engine-client.mjs';
 import { normalizeNxStrategy } from './lib/formalizer/nx-strategy.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings, applyReading } from './ui/settings.mjs';
-import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
+import { guard, TurnAborted, withDeadline, LOAD_WAIT_CAP_MS } from './lib/formalizer/guard.mjs';
 import { turnRecord, summarize, outcomeOf, executedActs } from './lib/dialog/conversation.mjs';
 import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
@@ -746,8 +746,14 @@ export async function mountPsys2(element, options = {}) {
       }
     }
     ticker = setInterval(() => { const long = performance.now() - tStart > 400; thinkingLabel.textContent = `thinking… ${((performance.now() - tStart) / 1000).toFixed(1)} s${long ? ` · ${STAGE_WORDS[stageOverride ?? engineClient?.stage] ?? 'working'}` : ''}`; if (long) setInputStage(stageOverride ?? engineClient?.stage ?? null); }, 100);
-    watchdog = setTimeout(() => { tn.reason ??= 'timeout'; ctl.abort(new DOMException('turn time limit', 'TimeoutError')); }, Math.max(0, limit - (performance.now() - tPress)));
-    const backstop = new Promise((_, rej) => { backstopTimer = setTimeout(() => rej(new TurnAborted('timeout', 'host')), Math.max(0, limit + TURN_LIMITS.backstopMs - (performance.now() - tPress))); });
+    // LOAD-WAIT: the time the turn spends waiting for a load (a world, catalog shards; the engine says so with `turn-wait`, `world-load`) is not compute: the watchdog is paused while it lasts,
+    // at most LOAD_WAIT_CAP_MS in all. The nets behind the watchdog (page deadline, backstop, client timer) allow that much more, so only the watchdog decides at the limit.
+    const hold = tn.hold = { depth: 0, since: 0, used: 0 };
+    const spent = () => (performance.now() - tPress) - hold.used - (hold.depth ? Math.min(performance.now() - hold.since, LOAD_WAIT_CAP_MS - hold.used) : 0);
+    const armWatchdog = () => { clearTimeout(watchdog); if (hold.depth) return; watchdog = setTimeout(() => { if (spent() < limit - 5) return armWatchdog(); tn.reason ??= 'timeout'; ctl.abort(new DOMException('turn time limit', 'TimeoutError')); }, Math.max(0, limit - spent())); };
+    tn.waiting = (on) => { if (on) { if (hold.depth++ === 0) { hold.since = performance.now(); clearTimeout(watchdog); } } else if (hold.depth && --hold.depth === 0) { hold.used += Math.max(0, Math.min(performance.now() - hold.since, LOAD_WAIT_CAP_MS - hold.used)); armWatchdog(); } };
+    armWatchdog();
+    const backstop = new Promise((_, rej) => { backstopTimer = setTimeout(() => rej(new TurnAborted('timeout', 'host')), Math.max(0, limit + LOAD_WAIT_CAP_MS + TURN_LIMITS.backstopMs - (performance.now() - tPress))); });
     backstop.catch(() => {});
       reply = await Promise.race([runTurn(tn, text, mode, user, recId, typing, ticker, tStart, limit), backstop]);
       try { inputHistory.noteOutcome(!reply || [].concat(reply.statuses ?? []).some((x) => x !== 'supported')); } catch { /* no history */ }
@@ -833,7 +839,7 @@ export async function mountPsys2(element, options = {}) {
     const sentLang = language.get();   // LANG-FIXED: the language this turn was read in
     try {
       reply = await withDeadline(session.send(text, { mode: mode === 'voice' ? 'voice' : undefined, language: sentLang, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, worldAware: settings.worldAware ?? 'veto', fastPath: settings.fastPath === true, nx: settings.nxStrategy,
-        correction: tn.correction ?? undefined, signal: tn.ctl.signal, hardMs: remaining, softMs: remaining * TURN_LIMITS.softFraction, undo: tn.undo }), remaining + 300, { signal: tn.ctl.signal, label: 'turn' });
+        correction: tn.correction ?? undefined, signal: tn.ctl.signal, hardMs: remaining, softMs: remaining * TURN_LIMITS.softFraction, undo: tn.undo }), remaining + LOAD_WAIT_CAP_MS + 300, { signal: tn.ctl.signal, label: 'turn' });
     } catch (e) {
       if (e instanceof TurnAborted && engineClient?.stage) e.stage = engineClient.stage;   // the stage the engine worker reported last (the page-side deadline only knows 'turn')
       if (e instanceof TurnAborted || tn.ctl.signal.aborted) throw e;
@@ -1871,7 +1877,9 @@ export async function mountPsys2(element, options = {}) {
       if (data.op === 'start') progress.start(data.id, data.id === 'worlds' ? 'Loading the worlds' : 'Starting the reasoner');
       else if (data.id === 'worlds') progress.end('worlds', { bytes: data.bytes ?? null, label: `Loaded ${data.count} worlds` });
       else progress.end(data.id);
+    } else if (name === 'turn-wait') { turn?.waiting?.(data?.op === 'start');   // LOAD-WAIT: the engine waits for a catalog load inside a turn: the watchdog is paused meanwhile
     } else if (name === 'world-load') {   // LAZY LOADING: a world loads on demand ("Loading the drawing world…"): one plain sentence, gone when the world is in
+      if (data.op === 'start') turn?.waiting?.(true); else turn?.waiting?.(false);
       if (data.op === 'start') progress.start(data.id, data.label); else if (data.op === 'end') progress.end(data.id, { bytes: data.bytes ?? null, label: data.label }); else progress.fail(data.id, `Could not load the ${String(data.label ?? 'world').replace(/^Loading the |…$/g, '')}`, 'the worlds that are loaded still work', { label: data.label });
     } else if (name === 'worlds-loaded') { for (const id of data.ids ?? []) loadedWorlds.add(id); loadedLog.push({ ids: data.ids, why: data.why, at: Math.round(performance.now()) });
     } else if (name === 'load') {   // PROGRESS: a knowledge shard that takes a moment ("Loading drawings: noto money 02")
