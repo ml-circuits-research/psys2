@@ -24,10 +24,10 @@
  * through `ctx.sessionFacts()` and the operation things.show of session.things (spec 23); this module only offers the facts.
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { en } from '../lang/en.mjs?v=3d429f211d';
-import { GRAMMAR } from './continuation.mjs?v=643d1524e0';
+import { en } from '../lang/en.mjs?v=cbf67c9c08';
+import { GRAMMAR } from './continuation.mjs?v=3dfd08855a';
 import { touched } from './followup.mjs?v=88af56c068';
-import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=809a4b49f8';
+import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=1a01cfb0f4';
 import { classify, describeReferent, plain } from './meta.mjs?v=aa6dfcad14';
 
 const LOG_LIMIT = 60;

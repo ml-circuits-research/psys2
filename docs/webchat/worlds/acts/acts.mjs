@@ -27,9 +27,9 @@ import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
 import { createEffects, EFFECT_ACTS } from './effects.mjs?v=c81f50c5a8';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
-import { colourName } from '../../lib/knowledge/values.mjs?v=89992abfaf';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=3d429f211d';
-import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=cc27880734';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { colourName } from '../../lib/knowledge/values.mjs?v=ebf19b103c';   // the one colour reader (k.values)
+import { en } from '../../lib/lang/en.mjs?v=cbf67c9c08';
+import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=4d08d54237';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------

@@ -57,7 +57,8 @@ const SELF = fileURLToPath(import.meta.url);
 async function testOne(eng, id) {
   if (!eng.set.get(id)) return { lines: [`${id}: unknown world`], bad: 1 };
   // a world that needs catalog models (its `needs` hook: the avatar's faces) is tested against the local fixture of the catalog (tests/fixtures/catalog), never the network
-  const needsCatalog = (typeof eng.set.get(id).ops?.needs === 'function' || eng.set.get(id).lexicons.some((l) => l.open)) && !eng.knowledge;   // or a lexicon open to the catalog (open=knowledge)
+  const reads = (w) => typeof w.ops?.needs === 'function' || w.lexicons.some((l) => l.open);   // or a lexicon open to the catalog (open=knowledge)
+  const needsCatalog = (reads(eng.set.get(id)) || eng.set.list().some(reads)) && !eng.knowledge;   // a world loaded beside it that reads the catalog (the map reads "Paris") reads the sentences of every world
   if (needsCatalog) eng.setKnowledge(createFacts({ source: createKnowledgeSource(path.join(DEFAULT_ROOT, '../tests/fixtures/catalog')) }));
   let r;
   try { r = await runWorldTests(eng, id); } finally { if (needsCatalog) eng.setKnowledge(null); }
