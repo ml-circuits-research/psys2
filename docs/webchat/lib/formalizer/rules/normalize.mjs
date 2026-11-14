@@ -5,7 +5,7 @@
  */
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { en } from '../../lang/en.mjs?v=1977201eca';
-import { isNumberWord, parseNumberRun, ordinalWordValue, digitWordValue } from './numbers.mjs?v=a33c7b0ab9';
+import { isNumberWord, parseNumberRun, ordinalWordValue, digitWordValue } from './numbers.mjs?v=a7a2dbe9ac';
 
 export const QUESTION_WORDS = en.questionWords('question-start');   // facts of handover/lang.en (clauses shard)
 

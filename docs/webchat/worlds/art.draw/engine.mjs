@@ -175,7 +175,44 @@ function loadUsualPlaces(ctx) {
     if (ctx.val(w, 'must') === 'yes') NEEDS.add(ctx.val(w, 'kind'));
   }
   if (m.size) USUAL = m;
-  try { RULED = ctx.rulesAdvise ? new Set(ctx.find('common.sense.rule').map((w) => ctx.val(w, 'kind'))) : new Set(); } catch { RULED = new Set(); }   // with the ops reasoner no rule speaks: every kind goes through the knowledge tier
+  try { RULED = new Set(ctx.find('common.sense.rule').map((w) => ctx.val(w, 'kind'))); } catch { RULED = new Set(); }   // the facts of common.sense say the advice of these kinds, in both reasoners (`commonNotes`); any other kind is asked of the knowledge tier
+  try {
+    RULES = { say: new Map(ctx.find('common.sense.rule').map((w) => [ctx.val(w, 'kind'), ctx.val(w, 'say')])), lives: new Map(), place: new Map(ctx.find('common.sense.place').map((w) => [ctx.val(w, 'name'), ctx.val(w, 'phrase')])),
+      single: new Map(ctx.find('common.sense.single').map((w) => [ctx.val(w, 'kind'), ctx.val(w, 'say')])), absent: ctx.find('common.sense.absent').map((w) => ({ kind: ctx.val(w, 'kind'), phase: ctx.val(w, 'phase'), say: ctx.val(w, 'say') })) };
+    for (const w of ctx.find('common.sense.livesin')) { const k = ctx.val(w, 'kind'); (RULES.lives.get(k) ?? RULES.lives.set(k, new Set()).get(k)).add(ctx.val(w, 'place')); }
+  } catch { RULES = null; }
+}
+let RULES = null;
+/**
+ * Common-sense advice (spec 15 "Advice"), one function for both reasoners: what the soft rules of common.sense find odd in the picture, said once while it stands, never a refusal.
+ * It reads the world's own facts (rule, livesin, place, single, absent) the way the matrix rules do: a thing of a kind that has a usual place stands in another place, a second thing of a
+ * kind of which there is usually one, a thing that is usually not there at this moment. `s.advised` holds the keys already said (a key leaves when its cause goes away).
+ */
+function commonNotes(s) {
+  if (!RULES) return [];
+  const now = new Map(), objs = (s.objects ?? []).filter((o) => !o.tag);
+  const placeOf = (o) => {
+    const usual = USUAL.get(kindKey(o));
+    if (!usual) return null;
+    const b = bbox(o), feet = usual === 'ground' || usual === 'horizon' || usual === 'water', low = (feet ? b.y1 : o.y) > HORIZON;
+    const zoneOk = (o.zone === 'sky' && !low) || (o.zone === 'ground' && low);
+    if (!(s.ground || s.sky || s.mood) && !zoneOk) return null;
+    if (!low) return 'sky';
+    if (s.ground === 'sea') return 'water';
+    return (s.objects ?? []).some((p) => p.tag === 'pond' && Math.abs(p.x - o.x) < p.size / 2 && Math.abs(p.y - o.y) < p.size * 0.3) ? 'water' : 'ground';
+  };
+  for (const o of objs) {
+    const k = kindKey(o), say = RULES.say.get(k), at = placeOf(o);
+    if (say && at && !RULES.lives.get(k)?.has(at)) now.set(`place:${o.id}:${at}`, `${say}, not ${RULES.place.get(at) ?? `in the ${at}`}.`);
+  }
+  const byKind = new Map();
+  for (const o of objs) (byKind.get(kindKey(o)) ?? byKind.set(kindKey(o), []).get(kindKey(o))).push(o);
+  for (const [k, list] of byKind) if (list.length > 1 && RULES.single.has(k)) now.set(`single:${k}`, `${RULES.single.get(k)}.`);
+  for (const a of RULES.absent) if (s.mood === a.phase && byKind.has(a.kind)) now.set(`absent:${a.kind}:${a.phase}`, `${a.say}.`);
+  const said = (s.advised ??= []), out = [];
+  for (let i = said.length - 1; i >= 0; i--) if (!now.has(said[i])) said.splice(i, 1);
+  for (const [key, text] of now) if (!said.includes(key)) { said.push(key); out.push(text); }
+  return out;
 }
 const knownAnchor = (kind) => { const z = habitat(curKnow, String(kind).replace(/_/g, ' '))?.zones?.[0]; return z ?? null; };   // delegation: a kind this world has no row for is asked of the knowledge tier (catalog and taught)
 const anchorOf = (kind) => USUAL.get(kind) ?? knownAnchor(kind) ?? (KINDS[kind]?.region ? 'ground' : 'any');   // a place (lake, road, field) lies on the ground
@@ -1078,6 +1115,10 @@ export const add = (ctx, args = {}) => {
   if (n && r?.status === 'supported' && typeof r.value === 'string') {
     const s = ensure(ctx), said = (s.drawnAsSaid ??= []);
     if (!said.includes(n.name)) { said.push(n.name); r.value += ` (${a_(n.name)} ${n.name}, drawn as ${a_(n.as)} ${n.as}.)`; }
+  }
+  if (r?.status === 'supported' && typeof r.value === 'string') {
+    const notes = commonNotes(ensure(ctx));
+    if (notes.length) r.value += ` (${notes.join(' ')})`;
   }
   return r;
 };

@@ -25,8 +25,8 @@ test('a saved v1 "rules" (the old default) migrates to "encoder" once and is wri
   assert.equal(JSON.parse(st.data[SETTINGS_KEY]).settingsVersion, SETTINGS_VERSION);
 });
 
-test('an explicit later choice of "rules" (saved with the current version) is respected', () => {
-  const st = store({ [SETTINGS_KEY]: JSON.stringify({ language: 'en', formalizer: 'rules', settingsVersion: SETTINGS_VERSION }) });
+test('an explicit later choice of "rules" (the helper model switched off, saved with the current version) is respected', () => {   // the choice is `helperModel` since settings v6; `formalizer` is derived from it
+  const st = store({ [SETTINGS_KEY]: JSON.stringify({ language: 'en', helperModel: false, settingsVersion: SETTINGS_VERSION }) });
   assert.equal(loadSettings(true, st).formalizer, 'rules');
   // and it survives another load
   assert.equal(loadSettings(true, st).formalizer, 'rules');

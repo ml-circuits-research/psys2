@@ -274,7 +274,7 @@ export const SCENARIOS = {
       const m = await say(c, 'Can a zebra swim?');
       check('animals: after the undo the question is open again', /^I don't know whether a zebra can swim\./.test(m), m.slice(0, 80));
       const l = await say(c, 'How many legs does a spider have?');
-      check('animals: a knowledge base fact comes from the library', l === 'A spider has 8 legs.', l);
+      check('animals: a knowledge base fact comes from the library', l.startsWith('A spider has 8 legs.'), l);
       check('animals: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },

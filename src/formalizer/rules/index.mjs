@@ -442,7 +442,7 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     const m = matches[k], acc = set.get(m.pattern.worldId)?.ops?.accepts;
     if (typeof acc !== 'function') continue;
     // a bare verb of an act that needs a thing ("add please", "remove") is the open tab's to read ("What should I draw?"); a schema world that is not the tab's and does not hold the dialogue does not claim it
-    if (m.pattern.worldId !== context?.tabWorld && context?.lastWorld !== m.pattern.worldId && NEEDS_THING.has(actionName(m)) && !Object.keys(m.slots ?? {}).some((n) => n !== SEGMENT_SLOT) && !/ arg\.(?!mode=|text=)\w+=/.test(m.pattern.emit ?? '')) { matches.splice(k, 1); continue; }
+    if (m.pattern.worldId !== context?.tabWorld && context?.lastWorld !== m.pattern.worldId && NEEDS_THING.has(actionName(m)) && !Object.keys(m.slots ?? {}).some((n) => n !== SEGMENT_SLOT) && !/ arg\.(?!text=)\w+=/.test(m.pattern.emit ?? '')) { matches.splice(k, 1); continue; }
     const roles = Object.fromEntries(Object.entries(m.slots ?? {}).map(([n, sl]) => [n, sl.text]));
     for (const lit of String(m.pattern.emit ?? '').matchAll(/ arg\.(\w+)=\\?"([^"{}\\]*)\\?"/g)) if (!(lit[1] in roles) && lit[1] !== 'mode') roles[lit[1]] = lit[2];   // the literal roles of a form (arg.attribute="name")
     let ok = true, strong = false, refuse = false;

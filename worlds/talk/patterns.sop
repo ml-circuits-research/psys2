@@ -397,7 +397,7 @@
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.wh] {a:words(1)} [$lang.talk.isq] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"{a}\""
     kind=question
-    tabOnly=false
+    tabOnly=true
     priority=7
     example="What colour is a tomato?"
     doc="Frame: what A is X (colour, size, kind...). One slot of the thing, found through the words of the knowledge schemas; a small facts card."
@@ -544,7 +544,7 @@
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whichlist] {k:words(1)} [is|are] {v:words(1,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.list arg.k=\"{k}\" arg.v=\"{v}\""
     kind=question
-    tabOnly=false
+    tabOnly=true
     priority=10
     example="What animals are insects?"
     example="Which colours are primary?"
@@ -600,11 +600,33 @@
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.canq] [$lang.know.det]? {o:words(3,noun)} {v:words(1)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.can arg.o=\"{o}\" arg.v=\"{v}\""
     kind=question
-    tabOnly=false
+    tabOnly=true
     priority=8
     example="Can a bat fly?"
     example="Do penguins swim?"
     doc="Frame: can X V. Yes when the can slot of the thing says V, no when its cannot slot does, else what is not known."
+
+@pat.talk.can.det core.pattern
+    canonical="Can a penguin fly?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.canq] [a|an|the] {o:words(3,noun)} {v:words(1)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.can arg.o=\"{o}\" arg.v=\"{v}\""
+    kind=question
+    tabOnly=false
+    priority=8
+    example="Can a bat fly?"
+    example="Can a zebra swim?"
+    doc="Frame: can a X V, with the article said: a question about one thing, whatever tab is open (the same frame without the article, \"can you search for oven\", belongs to the Talk tab only)."
+
+@pat.talk.can.pl core.pattern
+    canonical="Can penguins fly?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.canq] {o:words(1)} {v:words(1)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.can arg.o=\"{o}\" arg.v=\"{v}\""
+    kind=question
+    tabOnly=false
+    priority=7
+    example="Can penguins fly?"
+    example="Do fish swim?"
+    doc="Frame: can Xs V, one word for the thing and one for what it does, whatever tab is open (\"can you swim\" is the avatar's and \"can u search for oven\" is no frame of Talk: the longer forms belong to the Talk tab)."
 
 @pat.talk.ask.kindof core.pattern
     canonical="What kind of animal is a shark?"

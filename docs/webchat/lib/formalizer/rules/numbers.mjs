@@ -6,7 +6,14 @@ import { numberInfo, numberWordOf } from '../../knowledge/values.mjs?v=89992abfa
 const MISSPELLED = { fiveteen: 15, eightteen: 18, fourty: 40, ninty: 90 };
 
 /** The value of a cardinal number word of the catalog (or a misspelling of one), else null. */
-const cardinal = (w) => { const i = numberInfo(w, 'cardinal'); return i && Number.isInteger(i.value) ? i.value : MISSPELLED[w] ?? null; };
+const cardinal = (w) => {
+  const i = numberInfo(w, 'cardinal');
+  if (i && Number.isInteger(i.value)) return i.value;
+  if (MISSPELLED[w] != null) return MISSPELLED[w];
+  const m = /^([a-z]+)-([a-z]+)$/.exec(w);   // "fourty-five": the catalog has "forty-five"; a misspelled tens word joined to a unit is still the number
+  if (m && MISSPELLED[m[1]] >= 20 && MISSPELLED[m[1]] % 10 === 0) { const u = numberInfo(m[2], 'cardinal'); if (u && Number.isInteger(u.value) && u.value > 0 && u.value < 10) return MISSPELLED[m[1]] + u.value; }
+  return null;
+};
 /** What a cardinal is in the grammar of a number run: unit (0-9), teen (10-19), tens (20, 30 ... 90), tensunit (21-99), hundred, scale (thousand, million, billion). */
 const classOf = (v) => (v < 10 ? 'unit' : v < 20 ? 'teen' : v < 100 ? (v % 10 ? 'tensunit' : 'tens') : v === 100 ? 'hundred' : 'scale');
 

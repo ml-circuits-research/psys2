@@ -392,7 +392,9 @@ export function isa(ctx, { o, c } = {}) {
 }
 
 /** Can X V (can a penguin fly, do penguins swim): the `can` and `cannot` slots of the thing's records say it; a verb neither says is not known (a missing key says nothing). */
+const PERSON = /^(?:you|u|ya|i|me|we|us|he|she|it|they|them|him|her|one|someone|anyone|everyone)$/i;   // a frame about a thing is not about the speaker or the listener
 export function canDo(ctx, { o, v } = {}) {
+  if (PERSON.test(String(o ?? '').trim())) return no('unsupported', 'I can tell what a thing can do, like a penguin or a fish, but not what you or I can. Try "can a penguin fly?".');
   const subject = subj(ctx, o);
   if (!subject) return no('missing', NO_TOPIC);
   const r = lookup(ctx, subject);

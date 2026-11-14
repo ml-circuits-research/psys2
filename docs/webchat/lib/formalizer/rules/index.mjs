@@ -7,14 +7,14 @@
  */
 import { guard } from '../guard.mjs?v=eb1a66f556';
 import { perf } from '../perf.mjs?v=b75de4ae38';
-import { lexIndex } from '../../worlds/lexicon.mjs?v=e32ccfa9f7';
-import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=c3e9000200';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=21c825a047';
+import { lexIndex } from '../../worlds/lexicon.mjs?v=7cc5fec5ea';
+import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=8bb778440f';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=3e8a7d4af3';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
 import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=a3f57d74eb';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=86dc26d5f5';
-import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=7f75b099bd';
+import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=4502c962b8';
 import { en } from '../../lang/en.mjs?v=1977201eca';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse, serialize } from '../../soplang/index.mjs?v=c57881f705';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
@@ -22,8 +22,8 @@ import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
 
 export { FormSession } from './session.mjs?v=86dc26d5f5';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=a3f57d74eb';
-export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=c3e9000200';
-export { compilePattern, matchTokens } from './matcher.mjs?v=21c825a047';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=8bb778440f';
+export { compilePattern, matchTokens } from './matcher.mjs?v=3e8a7d4af3';
 export { singularLemma, pluralize } from './lemma.mjs?v=36e9c81564';
 
 const compiledCache = new WeakMap();
@@ -358,6 +358,7 @@ export const youTarget = (m) => Object.values(m.slots ?? {}).some((s) => (s.clas
 
 /** The acts whose thing must already be there and that say nothing else ("remove X": a reading of it that names no such thing is a refusal, not a request for something else; "change X to Y" or "switch to X" carry a value and stay a decline). */
 const REFERENT_ACTS = new Set(['remove']);
+const NEEDS_THING = new Set(['make', 'remove', 'change', 'place', 'copy', 'group', 'pick', 'connect']);   // acts of the generated worlds that have no meaning without a thing
 const actionName = (m) => (/action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? '').split('.').pop();
 const FREE_SKIP = new Set(['the', 'a', 'an', 'my', 'your', 'this', 'that', 'these', 'those', 'some', 'any', 'all', 'of', 'to', 'from', 'in', 'on', 'it', 'its', 'please']);
 /** Does everything a reading's free-text slots say resolve in the world's own state (every content word occurs in it)? A world with no state resolves nothing. */
@@ -440,6 +441,8 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     budget.tick('rules.accepts');
     const m = matches[k], acc = set.get(m.pattern.worldId)?.ops?.accepts;
     if (typeof acc !== 'function') continue;
+    // a bare verb of an act that needs a thing ("add please", "remove") is the open tab's to read ("What should I draw?"); a schema world that is not the tab's and does not hold the dialogue does not claim it
+    if (m.pattern.worldId !== context?.tabWorld && context?.lastWorld !== m.pattern.worldId && NEEDS_THING.has(actionName(m)) && !Object.keys(m.slots ?? {}).some((n) => n !== SEGMENT_SLOT) && !/ arg\.(?!text=)\w+=/.test(m.pattern.emit ?? '')) { matches.splice(k, 1); continue; }
     const roles = Object.fromEntries(Object.entries(m.slots ?? {}).map(([n, sl]) => [n, sl.text]));
     for (const lit of String(m.pattern.emit ?? '').matchAll(/ arg\.(\w+)=\\?"([^"{}\\]*)\\?"/g)) if (!(lit[1] in roles) && lit[1] !== 'mode') roles[lit[1]] = lit[2];   // the literal roles of a form (arg.attribute="name")
     let ok = true, strong = false, refuse = false;

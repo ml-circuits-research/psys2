@@ -26,14 +26,14 @@
     core.source="generated:meta.worlds/cards"
     id=data.charts kind=tab run=none tab=charts
     name=chart name=graph
-    act=data act=figure act=compare act=fruit act=spreadsheet act=plum act=legend act=kiwis
+    act=data act=figure act=fruit act=spreadsheet act=plum act=compare act=legend act=kiwis
     act=stacking act=table act=percent act=percentage act=visualize act=content act=amount act=average
     act=prepare act=image act=paste act=mean act=bananas act=csv act=editor act=gdoc
     act=express act=fraction act=pct act=proportion act=report act=clipboard act=dog act=gsheet
     act=outrun act=photo act=represent act=screenshot
-    actshared=house actshared=make actshared=number actshared=leg actshared=draw actshared=download actshared=copy actshared=against
-    actshared=update actshared=versus actshared=vs actshared=create actshared=rename actshared=build actshared=paint actshared=hide
-    actshared=convert actshared=shrink actshared=resize actshared=scale actshared=exchange actshared=recolor actshared=recolour actshared=straighten
+    actshared=house actshared=number actshared=make actshared=leg actshared=draw actshared=copy actshared=download actshared=against
+    actshared=versus actshared=vs actshared=update actshared=create actshared=rename actshared=build actshared=paint actshared=convert
+    actshared=hide actshared=shrink actshared=resize actshared=scale actshared=exchange actshared=recolor actshared=recolour actshared=straighten
     thing=plot thing=point thing=bar thing=slice thing=segment thing=pie thing=doughnut thing=donut
     thing=radar thing=polar thing=scatter thing=aquamarine thing=chartreuse thing=terracotta thing=burlywood thing=firebrick
     thing=gainsboro thing=goldenrod thing=burgundy thing=chestnut thing=cornsilk thing=honeydew thing=lavender thing=mahogany
@@ -80,7 +80,7 @@
     actshared=scale actshared=convert actshared=exchange actshared=edit actshared=recolor actshared=recolour actshared=straighten actshared=transform
     actshared=dye actshared=replace actshared=enlarge actshared=increase actshared=invert actshared=correct actshared=decrease actshared=expand
     actshared=alter actshared=bend actshared=darken actshared=lengthen actshared=narrow actshared=smooth actshared=substitute actshared=thicken
-    actshared=widen actshared=modify actshared=magnify actshared=tint actshared=update
+    actshared=widen actshared=modify actshared=magnify actshared=update actshared=tint
     thing=note thing=section thing=chapter thing=subsection thing=subheading thing=freetext thing=word thing=something
     thing=paragraph thing=para thing=paras thing=graf thing=header thing=headline thing=hed thing=title
     thing=checklist thing=bullet thing=entry thing=todo thing=quote thing=blockquote thing=cell thing=row
@@ -139,14 +139,14 @@
 @card.games.guess meta.worlds.card
     core.source="generated:meta.worlds/cards"
     id=games.guess kind=module run=needs
-    act=question act=thinking act=meant act=candidate act=chosen act=penguin act=creature act=kinda
-    act=naw act=nay act=qs act=rather act=chose act=correction act=decided act=depending
-    act=huh act=logic act=occasionally act=pardon act=partly act=quokka act=reason act=rephrase
-    act=reread act=restate act=sorry act=sorta act=specy act=usually act=asking act=clueless
-    act=ive act=absolutely act=affirmative act=alway act=aye act=belongs_to act=certainly act=counter
-    act=critter act=da act=definitely act=depend act=dk act=donno
-    actshared=animal actshared=giraffe actshared=guess actshared=remaining actshared=possible actshared=picked actshared=ask actshared=asked
-    actshared=selected actshared=possibility actshared=negative actshared=perhap actshared=ready actshared=repeat
+    act=question act=thinking act=meant act=candidate act=chosen act=creature act=kinda act=naw
+    act=nay act=qs act=rather act=chose act=correction act=decided act=depending act=huh
+    act=logic act=occasionally act=pardon act=partly act=quokka act=reason act=rephrase act=reread
+    act=restate act=sorry act=sorta act=specy act=usually act=asking act=clueless act=ive
+    act=absolutely act=affirmative act=alway act=aye act=belongs_to act=certainly act=counter act=critter
+    act=da act=definitely act=depend act=dk act=donno
+    actshared=animal actshared=giraffe actshared=guess actshared=remaining actshared=possible actshared=picked actshared=ask actshared=penguin
+    actshared=asked actshared=selected actshared=possibility actshared=negative actshared=perhap actshared=ready actshared=repeat
     thing=meat thing=flesh thing=insect thing=rat thing=prey thing=plant thing=vegetable thing=fruit
     thing=seed thing=nut thing=hay thing=herb thing=everything thing=anything thing=fur thing=feather
     thing=wool thing=spine thing=skin thing=fly thing=swim thing=farm thing=jungle thing=desert
@@ -365,8 +365,8 @@
     actshared=relocate actshared=fasten actshared=glue actshared=nail actshared=relate actshared=drag actshared=scatter actshared=hang
     actshared=group actshared=tape actshared=lay actshared=attach actshared=clip actshared=hook actshared=bundle actshared=detach
     actshared=disconnect actshared=import actshared=sever actshared=ungroup actshared=unhook actshared=unlink actshared=categorize actshared=disassemble
-    actshared=dismantle actshared=lump actshared=merge actshared=pair actshared=slice actshared=uncouple actshared=unfasten actshared=untie
-    actshared=bunch actshared=opt actshared=organize actshared=reload actshared=replicate
+    actshared=dismantle actshared=lump actshared=merge actshared=pair actshared=reload actshared=slice actshared=uncouple actshared=unfasten
+    actshared=untie actshared=bunch actshared=opt actshared=organize actshared=replicate
     thing=guest thing=person thing=people
     thingshared=table
     frame=is_table
@@ -391,11 +391,11 @@
     name=talk
     claim=add claim=bigger claim=doe claim=give claim=heavier claim=larger claim=longer claim=move
     claim=put claim=send claim=shorter claim=show claim=smaller claim=taller claim=undo
-    act=planet act=bicycle act=duck act=lighthouse act=spider act=sun act=cow act=heavier
-    act=taller act=isa act=scope act=define act=mix
-    actshared=cat actshared=touching actshared=bordering actshared=grow actshared=class
-    frame=did_we frame=which_planet frame=what_parts frame=what_shall frame=what_sound frame=do_red frame=is_paris frame=which_country
-    frame=which_has frame=which_month
+    act=planet act=bicycle act=duck act=lighthouse act=spider act=sun act=penguin act=cow
+    act=heavier act=taller act=isa act=scope act=define act=mix
+    actshared=fly actshared=cat actshared=touching actshared=bordering actshared=grow actshared=class
+    frame=did_we frame=which_planet frame=can_penguins frame=what_parts frame=what_shall frame=what_sound frame=do_red frame=is_paris
+    frame=which_country frame=which_has
     frameshared=what_comes frameshared=is_bigger frameshared=which_animals frameshared=can_we frameshared=what_are frameshared=what_does frameshared=what_is frameshared=do_you
     frameshared=how_do frameshared=what_kind
 
@@ -410,7 +410,7 @@
     claim=yourself
     act=yourself act=wearing act=happy act=lunch act=urself act=feel act=animate act=customise
     act=customize act=tweak act=wear act=recover act=retrieve
-    actshared=myself actshared=import actshared=unknown actshared=reload
+    actshared=myself actshared=import actshared=reload actshared=unknown
     thing=hair thing=shoulder thing=clothe thing=neck thing=cervix thing=ear thing=head thing=caput
     thing=cheek thing=blush thing=freckle thing=beard thing=whisker thing=mouth thing=moustache thing=moustach
     thing=mustache thing=nose thing=nos thing=eye thing=eyebrow thing=glass thing=sunglass thing=spectacle
@@ -462,9 +462,9 @@
     actshared=disable actshared=enable actshared=screen actshared=answer actshared=quit actshared=end actshared=command actshared=log
     actshared=reply actshared=slower actshared=message actshared=pause
     thing=avatar thing=tictactoe thing=guess thing=hangman thing=reader thing=library thing=canvas thing=map
-    thing=atlas thing=keyboard thing=profile thing=cv thing=resume thing=talk thing=seating thing=english
-    thing=understanding thing=language thing=translation thing=voice thing=speech thing=audio thing=sound thing=model
-    thing=developer thing=dev thing=about
+    thing=atlas thing=keyboard thing=profile thing=cv thing=resume thing=talk thing=seating thing=timeline
+    thing=english thing=understanding thing=language thing=translation thing=voice thing=speech thing=audio thing=sound
+    thing=model thing=developer thing=dev thing=about
     thingshared=robot thingshared=face thingshared=editor thingshared=document thingshared=doc thingshared=chess thingshared=chessboard thingshared=drawing
     thingshared=paint thingshared=picture thingshared=chart thingshared=graph thingshared=music thingshared=piano thingshared=draw thingshared=romanian
     frame=which_tab frame=which_action frame=which_word frame=which_settings frame=what_games frame=which_tabs frame=which_language frame=which_world
