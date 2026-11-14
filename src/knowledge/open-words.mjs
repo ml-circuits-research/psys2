@@ -9,7 +9,6 @@
 import { lemmaCandidates } from './facts.mjs';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 import { colourName, isCoreColour } from './values.mjs';
-import { BUNDLED_GEO } from './bundled-geo.mjs';
 
 let attached = null;
 /** The host attaches the catalog of the session (`engine.setKnowledge`); `null` detaches it. */
@@ -76,12 +75,14 @@ function foldedVocab(vocab) {
  * (not only for the doc of the schema: "river", "north" are words of the schema), it is not a colour or a number, and it has no digit (a lexicon word is lower-case ASCII with `_`).
  * Names of several words ("new york", "cape town") are looked up with spaces. A place word read here is only a reading of the sentence; the facts come by lookup (worlds/geo.map/places.mjs).
  */
-let geoKeys = null;
+let geoKeys = null, bundledGeo = null;
+/** The geo world hands over the bundled k.geo subset when its ops load (LAZY-LOAD-3: 283 KB that a start with another tab open never needs); until then no bundled place is known. */
+export function provideBundledGeo(g) { bundledGeo = g ?? null; geoKeys = null; }
 /** The names of the bundled k.geo subset (countries, capitals, cities of 500,000+, with accent-free spellings and the first part of a hyphenated compound), known before the catalog's vocabulary arrives. */
 function bundledPlaces() {
   if (geoKeys) return geoKeys;
   geoKeys = new Set();
-  for (const k of BUNDLED_GEO.keys) {
+  for (const k of bundledGeo?.keys ?? []) {
     geoKeys.add(k); geoKeys.add(foldOf(k));
     const i = k.indexOf('-'); if (i >= 4) geoKeys.add(foldOf(k.slice(0, i)));
   }
