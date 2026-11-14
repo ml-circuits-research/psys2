@@ -315,8 +315,8 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-14T04:08:04.252Z",
-  "commit": "64b5d989",
+  "builtAt": "2026-11-14T04:10:50.933Z",
+  "commit": "57b0bf33",
   "assets": {
     "app.mjs": "5b4c227cc7",
     "coverage-grid.json": "63a716d3df",
