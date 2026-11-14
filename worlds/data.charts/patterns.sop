@@ -1705,7 +1705,7 @@
 
 @pat.data.charts.x.refresh2 core.pattern
     canonical="Reload the chart."
-    match="[$lang.lead.polite|hey|pls|plz]? [redraw|re_draw|reload|refresh|update|rebuild|re_build|renew|regenerate|recalculate|redo] [it|that|this|the|my]? {c:lex.data.charts.nouns?} [again|now]? [pls|plz|thanks|thank_you|for_me|now]?"
+    match="[$lang.lead.polite|hey|pls|plz]? [redraw|re_draw|reload|refresh|update|rebuild|re_build|renew|regenerate|recalculate] [it|that|this|the|my]? {c:lex.data.charts.nouns?} [again|now]? [pls|plz|thanks|thank_you|for_me|now]?"
     emit="@{_} core.request action=chart.refresh"
     kind=request
     priority=31
