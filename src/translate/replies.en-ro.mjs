@@ -150,7 +150,8 @@ const TABLE = [
   ['Hmm, then I will not count on that one.', 'Hmm, atunci nu mă voi baza pe asta.'],
   ['I am a robot, drawn by the DiceBear library.', 'Sunt un robot, desenat cu biblioteca DiceBear.'],
   ['I can also become a person or an emoji.', 'Pot deveni și o persoană sau un emoji.'],
-  ['The Avatar tab lets you change my face.', 'Fila Avatar îți permite să îmi schimbi fața.'],
+  ['The face beside the input lets you change my face.', 'Fața de lângă câmpul de text îți permite să îmi schimbi fața.'],
+  ['OK, here is my face. It is the icon beside the input.', 'Bine, iată fața mea. Este iconița de lângă câmpul de text.'],
   // ---- understanding messages (fragments between quoted user text)
   ['I did not understand', 'Nu am înțeles'], ['Did you mean', 'Ai vrut să spui'], ['For example:', 'De exemplu:'], ['You can say:', 'Poți spune:'],
   ['I took that as:', 'Am înțeles asta:'], ['(I read', '(Am citit'], ['as', 'drept'],

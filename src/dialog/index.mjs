@@ -1654,7 +1654,7 @@ export class DialogSession {
         const r = interp.resolve(this.isession, w);
         if (!r) { statements.push(w); continue; }
         const rendered = interp.render(this.isession, r);
-        // RD9: a loose word that reads as "open this tab" ("robot" in "square eyes robot pls") must not add "You are already on the Avatar tab." to the real answer
+        // RD9: a loose word that reads as "open this tab" ("robot" in "square eyes robot pls") must not add "You are already on the Talk tab." to the real answer
         const idleTab = seg.match?.worldId === 'ui.shell' && /\.bare/.test(seg.match.patternId ?? '') && /^You are already on the .+ tab\.$/.test(rendered) && segments.some((x) => x !== seg && !x.unparsed && x.match?.worldId && x.match.worldId !== 'ui.shell');
         if (!idleTab) lines.push([T(rendered)]);
         statuses.push(r.status);
