@@ -380,3 +380,10 @@ Own tests (matrix) 410 -> 452 of 454; ledger rows 41 of 43 closed, by seven mech
 ## 2026-11-14 A pronoun gap that was one argument shape, not a missing mechanism
 - diagram.sketch resolved "it" in no clause, not even across turns: the wrapper handed the engine reader `last` as `{ref}` while the reader takes an array of names. The generic path (focus + sequential reading) was fine; the engine silently read the contract wrong, and the symptom looked like a clause-reading gap. Check the world with the same words over two turns before blaming the sequence reading.
 - Seating resolves "it"/"her" through the executor focus; its remaining gap is naming ("name it A", "call it A": no act, and the name slot swallows "and call it A"), a vocabulary hole, not pronouns. geo.map and media.music create nothing a pronoun would name.
+
+## 2026-11-14 A test that needs a clock gets one injected
+- The softMs invariant test hit its 20 s hard limit with the machine at load 8.5, because the guard read the real clock. The guard now takes a `clock` (default performance.now): an invariant test runs on a frozen clock and cannot depend on load; tests that measure real settling (fuzz) stay on the real one and are the ones to watch under load.
+## 2026-11-14 A view is named like a tab, or the refusal rule refuses it
+- The shell refused "open the avatar" with "There is no avatar tab." once the avatar stopped being a tab, because the refusal matrix checks every named tab against the kb, and the kb knew only tabs. A thing that is opened but is not a tab (a view) must be in the kb as a name, or the refusal fires before the operation that knows what to do.
+## 2026-11-14 A world with its own reader can still declare a schema
+- `declare=yes` gives hand-built worlds (the games, the profile) a schema without generating anything: the dice, chips and buttons need only the kinds and the sentences that are legal now, and the sentences come from the state (free cells, legal moves), not from a list of examples. The check that matters is the round trip: the world itself must read every sentence the dice says.

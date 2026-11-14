@@ -10,40 +10,40 @@
  * Without it all input is treated as English.
  */
 import { installTextGen } from './textgen.mjs?v=e9612a6969';
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=51b6091042';
-import { loadWorlds } from '../worlds/index.mjs?v=92d55208ca';
-import { validateWorldSet } from '../worlds/validate.mjs?v=d2c457f590';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=567d996beb';
+import { loadWorlds } from '../worlds/index.mjs?v=171233aef8';
+import { validateWorldSet } from '../worlds/validate.mjs?v=d91f66e4f9';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=3e5e6bf7a2';
-import { createInterpreter } from '../interpreter/index.mjs?v=380fbd270b';
+import { createInterpreter } from '../interpreter/index.mjs?v=5688f9b9a1';
 import { createReasoner } from '../reasoner/index.mjs?v=40b199eb34';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=619768a781';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=bd23f13722';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=706182935c';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=8358281e61';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=3ec9167cca';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=d2ac1cf00b';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=d6951c11dd';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=6e6dd65911';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=0688fdba5b';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=4b39ead121';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=0a74a9db9f';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=dc2470c516';
 import { lexIndex } from '../worlds/lexicon.mjs?v=6912cd6a5d';
-import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
-import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
+import { perf } from '../formalizer/perf.mjs?v=8b829ee7df';
+import { guard, TurnAborted } from '../formalizer/guard.mjs?v=f0c7a6e6b5';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=14d5d2cbdd';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=1e01da6431';
-import { checkValues } from './value-check.mjs?v=8530c99a2b';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=fef8e13f11';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=2688ccc36c';
+import { checkValues } from './value-check.mjs?v=0e2456a745';
 import { attachValues } from '../knowledge/values.mjs?v=a137742733';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3eed01f9f5';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f6a995963d';
-import { Discourse } from './discourse.mjs?v=9900b88a3c';
-import { Dialogue } from './dialogue.mjs?v=f9a4cda320';
+import { Discourse } from './discourse.mjs?v=3ef5ac4854';
+import { Dialogue } from './dialogue.mjs?v=9e796f21c5';
 import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=9f173a36a6';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=5e823cdd9b';
-import { repairFromScene } from './scene-referents.mjs?v=26f17fd82a';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=cfd6d463ec';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=6421c59cad';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=f028282e05';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=df0f7a32a8';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=7bb783013f';
+import { repairFromScene } from './scene-referents.mjs?v=2c0588b572';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=d89cca699c';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=823779f8b5';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=6c216f1ef0';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -1253,7 +1253,7 @@ export class DialogSession {
   async send(text, opts = {}) {
     const own = perf.start();
     // Turn guard (spec 06 "Turn lifecycle"): the outermost send installs the abort signal and the deadlines; nested sends (validator replays) inherit them.
-    const g = guard.install({ signal: opts.signal ?? null, hardMs: opts.hardMs ?? Infinity, softMs: opts.softMs ?? Infinity, force: !!opts.signal });
+    const g = guard.install({ signal: opts.signal ?? null, hardMs: opts.hardMs ?? Infinity, softMs: opts.softMs ?? Infinity, ...(opts.clock ? { clock: opts.clock } : {}), force: !!opts.signal });
     if (g) guard.onModelTimeout((stage, e) => this._noteModelTimeout(stage, e));
     // Compute budget (spec 06 "Compute budgets"): one per turn, passed down through the shared `budget` handle; nested sends join the outer turn's budget.
     const tb = opts.budget ?? createBudget();
@@ -1654,7 +1654,7 @@ export class DialogSession {
         const r = interp.resolve(this.isession, w);
         if (!r) { statements.push(w); continue; }
         const rendered = interp.render(this.isession, r);
-        // RD9: a loose word that reads as "open this tab" ("robot" in "square eyes robot pls") must not add "You are already on the Avatar tab." to the real answer
+        // RD9: a loose word that reads as "open this tab" ("robot" in "square eyes robot pls") must not add "You are already on the Talk tab." to the real answer
         const idleTab = seg.match?.worldId === 'ui.shell' && /\.bare/.test(seg.match.patternId ?? '') && /^You are already on the .+ tab\.$/.test(rendered) && segments.some((x) => x !== seg && !x.unparsed && x.match?.worldId && x.match.worldId !== 'ui.shell');
         if (!idleTab) lines.push([T(rendered)]);
         statuses.push(r.status);

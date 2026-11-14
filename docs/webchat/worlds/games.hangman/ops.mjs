@@ -148,3 +148,14 @@ export function status(ctx) {
   if (s.status !== 'playing') return ok(`The game is over: the word was ${s.word}.${tried} ${s.wrongLeft} wrong ${s.wrongLeft === 1 ? 'guess' : 'guesses'} left.`);
   return ok(`${shown(s)} (${s.word.length} letters). ${s.wrongLeft} wrong ${s.wrongLeft === 1 ? 'guess' : 'guesses'} left.${tried}`);
 }
+
+// ---- the declared schema (schema.sop, declare=yes): the letters not asked yet while a game is on; the start when there is none
+import { declaredExecutor } from '../acts/acts.mjs?v=6736c5ab88';
+import { SCHEMA } from './schema.declared.mjs?v=e511a0dc30';
+export const executor = declaredExecutor(SCHEMA, {
+  sampleKnowledge: ({ state }) => {
+    if (state?.status !== 'playing') return { letters: ["Let's play hangman."] };
+    const tried = new Set([...(state.guessed ?? []), ...(state.wrong ?? [])].map((x) => String(x).toLowerCase()));
+    return { letters: [...'abcdefghijklmnopqrstuvwxyz'].filter((c) => !tried.has(c)).map((c) => `Is there ${/[aefhilmnorsx]/.test(c) ? 'an' : 'a'} ${c.toUpperCase()}?`) };
+  },
+});

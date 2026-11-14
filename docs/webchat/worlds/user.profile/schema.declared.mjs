@@ -1,0 +1,2 @@
+// GENERATED from schema.sop by scripts/build-schema-world.mjs (declare=yes). Never edited by hand.
+export const SCHEMA = {"id":"profile","noun":"question","acts":["make"],"limits":{"items":100,"history":30},"kinds":{"question":{"name":"question","plural":"questions","numbered":false,"named":false,"max":null,"in":null,"capacity":null,"acts":[],"any":false,"words":[],"diceNot":["make"],"know":[{"list":"questions","verb":"*"}]}},"attrs":{},"doc":"The profile: what the user may ask the profile world (read-only requests).","tabOnly":false,"declared":true};
