@@ -4241,3 +4241,7 @@ General mechanisms go to sopworld; PSys2 wires, thins and measures. In order:
 ## Reviewer 2026-11-15 01:20 — live demo check and Q13 re-measure accepted; one data fetch; vendor the current library
 
 Accepted 2b4a777c (live check: build lags main; five types write documents; dice catalog route works; avatar popup fine on a phone; one console 404 repeated — fix the optional `vocab/index.json` probe to cache its miss) and f37a8fae (Q13: UniMorph adds words, not meaning: 12.2 → 13.5 % with stand-in English; the Romanian syntax layer is being written in the knowledge repository). The live story still repeats a sentence ("Just then, the penguin remembered the ladder." twice): fixed in sopworld 0.90 — **vendor the current library (0.94: inverse operators at read time 0.91, one way to choose `std.decide` 0.92–0.94)**, deploy, and measure the inverse operators on the curve (`canonicalise`/`readCanonical` as a reading step, on/off). **[DATA]** for the knowledge repository (its Q62): US Social Security baby names (public domain, national file, names with sex and counts) into `data/external/given-names/` with SOURCE.md.
+
+## Reviewer 2026-11-15 02:00 — e46fce18 accepted
+
+Reviewer ran `npm run test:smoke` on e46fce18: 90/90 pass, exit 0. Accepted (the optional probe's miss cached). Still due: vendor 0.94+ (0.97 now: calibrate, harnesses, skills), deploy, and the curve with the inverse operators on/off — the generalisation signal the owner is waiting for.
