@@ -39,7 +39,7 @@ import { Dialogue } from './dialogue.mjs';
 import { turnSteps } from './steps.mjs';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs';
 import { proposeByTypes } from './typed-reader.mjs';
 import { withVariants } from './variants.mjs';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs';
@@ -1777,6 +1777,7 @@ export class DialogSession {
     const state = {};
     for (const [k, v] of Object.entries(this.isession.state)) if (JSON.stringify(v) !== stateBefore[k] && !(stateBefore[k] === undefined && JSON.stringify(v) === '{}')) state[k] = structuredClone(v);   // a world only looked at (its empty state created on access) is not a changed world
     this._astraTurn({ sid, english, meta, pre, pend, segments, state, stateBefore, tabBefore });
+    try { this._nextPrefetch = prefetchNext(this, Object.keys(state)); } catch { this._nextPrefetch = null; }   // spec 25: what the next chips read, fetched after the reply (never awaited by a turn)
     const effects = this.isession.effects;
     this.isession.effects = [];
     const warnings = this.isession.rs?.newWarnings() ?? [];   // what the library warned about (an ambiguous key, an attribute nothing reads ...): in the debug trace and the phrase log, never in the reply (spec 15, "Namespaces")

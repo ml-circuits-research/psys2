@@ -7,6 +7,8 @@ import { addArgs, tOf } from './hooks.mjs';
 import { goalOf, goalFromText, goalWord, goalWords, layoutGoal, liveOf, whyPlan as whyOfPlan } from './plan.mjs';
 
 export { initialState, summary } from './engine.mjs';
+/** Discourse hook (after a turn, never awaited by one): the catalog wires the next suggestions read (hooks.mjs nextThings). */
+export { nextNeeds } from './hooks.mjs';
 /** Other worlds ask the board by its old action names: Talk draws with draw.add, Talk undo with draw.undo, the tab has "new" and "open". */
 export const add = D.add;
 export const drawUndo = D.undo;
