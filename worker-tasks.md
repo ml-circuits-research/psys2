@@ -4034,3 +4034,9 @@ The knowledge repository builds `w.lang.ro` and the library makes `std.grammar` 
 ## Reviewer 2026-11-14 09:55 — for THIN LIVE WORLDS: `w.face` and `w.map` are published
 
 The knowledge repository published world schemas `w.face` (18 part kinds from the k.faces slots, colour, size 0.6..1.5, place, expression as a mode, presets) and `w.map` (places and pins over k.geo, a view with zoom 1..10, layer, centre; show, highlight, pin, remove pins, zoom), plus `w.seating` 2 and `w.timeline` 2 (commit 2b5505e). In THIN LIVE WORLDS, the Avatar and the Map take these schemas instead of their own and keep only renderer and engine; plan.seating and plan.timeline read the published ones. Report the lines removed.
+
+## Reviewer 2026-11-14 10:35 — avatar: two small reuse items (after THIN LIVE WORLDS starts; part of it)
+
+Checked (owner asked where the avatar's shapes come from): `facedraw.mjs` holds no coordinates and draws from `k.faces`, good. Two overlaps remain:
+1. `worlds/ui.avatar/default-face.mjs` (48 KB) is a generated copy of all of `k.faces` style `plain` for offline first visit, while `avatar.mjs`/`faces.mjs` comments say "there is no local copy". Keep a fallback, but only what the default preset `girl` and the expression chips need (measure the bytes), and correct the comments.
+2. `facelogic.mjs` keeps its own English word lists (FUNCTION_WORDS, NEGATIONS, CLOSER/APART). Take them from `w.lang.en` closed classes / `k.values` (closer/apart are an aspect of distance) through the reading glue; a missing word goes to the knowledge repo as an ask, not into a list here. Smoke + the avatar part of the quick suite must stay green.
