@@ -15,6 +15,8 @@ export const QUALITY_GATE = 80;
 /** Languages that always are listed: English, and Romanian, which has its own rules and templates besides the model. */
 const ALWAYS = ['en', 'ro'];
 const DOWNLOAD_LIMIT_MS = 180000;
+/** Pauses before the automatic retries of a failed model download (ms): the popup appears only when all of them failed. */
+export const RETRY_PAUSES = [4000, 15000, 45000];
 
 const isGzip = (u8) => u8.length > 2 && u8[0] === 0x1f && u8[1] === 0x8b;
 async function gunzip(buf) {
@@ -24,9 +26,37 @@ async function gunzip(buf) {
 }
 const hex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
 
-/** fetch with progress, kept in Cache Storage (the gzip as downloaded), gunzipped, the model file checked against the registry's sha256. */
-export function createCachedFetch({ cacheName = CACHE } = {}) {
-  return async function fetchFile(url, { bytes, onProgress, sha256 } = {}) {
+/** Tries `urls` in order (each twice, with a short pause) and returns the first body: { buf, from }. A cross-origin block (CORS) and a dropped connection both reach the page as a TypeError. */
+async function download(urls, { onProgress, sleep = (ms) => new Promise((r) => setTimeout(r, ms)), fetchFn = (u, o) => globalThis.fetch(u, o) } = {}) {
+  let last = null;
+  for (const url of urls) {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const r = await fetchFn(url, { mode: 'cors', credentials: 'omit' });
+        if (!r.ok) throw Object.assign(new Error(`the server answered ${r.status}`), { status: r.status });
+        const chunks = []; let got = 0;
+        const reader = r.body?.getReader?.();
+        if (reader) for (;;) { const { done, value } = await reader.read(); if (done) break; chunks.push(value); got += value.length; onProgress?.(got); }
+        else { const b = new Uint8Array(await r.arrayBuffer()); chunks.push(b); got = b.length; onProgress?.(got); }
+        const all = new Uint8Array(got); let o = 0; for (const c of chunks) { all.set(c, o); o += c.length; }
+        return { buf: all.buffer, from: url };
+      } catch (e) {
+        last = e; onProgress?.(0);
+        if (e?.status && e.status < 500) break;   // a missing file is not asked twice
+        if (attempt === 0) await sleep(1200);
+      }
+    }
+  }
+  throw new Error(last?.status ? `the server answered ${last.status}` : 'no connection to the model server');
+}
+
+/**
+ * Downloads one model file: Cache Storage first (keyed by the file's own URL, the gzip as downloaded), then the network. `mirror` is a copy of the file on the page's own
+ * host (docs/webchat/models-mt/, scripts/mirror-mt-models.mjs), tried first: Mozilla's Google bucket allows CORS for localhost only, so from the published page it is
+ * blocked ("Failed to fetch") and only the mirror works. The result is gunzipped and checked against the registry's sha256 (a bad copy is dropped from the cache).
+ */
+export function createCachedFetch({ cacheName = CACHE, fetchFn = null, sleep } = {}) {
+  return async function fetchFile(url, { bytes, onProgress, sha256, mirror = null } = {}) {
     let cache = null;
     try { cache = await globalThis.caches?.open(cacheName); } catch { cache = null; }   // private windows and some embedded browsers have no Cache Storage: downloaded again next time
     let resp = null;
@@ -34,14 +64,7 @@ export function createCachedFetch({ cacheName = CACHE } = {}) {
     let data;
     if (resp) { data = await resp.arrayBuffer(); onProgress?.(data.byteLength); }
     else {
-      const r = await fetch(url, { mode: 'cors', credentials: 'omit' });
-      if (!r.ok) throw new Error(`download failed (${r.status})`);
-      const chunks = []; let got = 0;
-      const reader = r.body?.getReader?.();
-      if (reader) for (;;) { const { done, value } = await reader.read(); if (done) break; chunks.push(value); got += value.length; onProgress?.(got); }
-      else { const b = new Uint8Array(await r.arrayBuffer()); chunks.push(b); got = b.length; onProgress?.(got); }
-      const all = new Uint8Array(got); let o = 0; for (const c of chunks) { all.set(c, o); o += c.length; }
-      data = all.buffer;
+      data = (await download(mirror ? [mirror, url] : [url], { onProgress, sleep, ...(fetchFn ? { fetchFn } : {}) })).buf;
       try { await cache?.put(url, new Response(data, { headers: { 'content-type': 'application/octet-stream' } })); } catch { /* quota: the model works, it is just downloaded again next time */ }
     }
     const plain = await gunzip(data);
@@ -60,6 +83,7 @@ export function createCachedFetch({ cacheName = CACHE } = {}) {
 export function createTranslationLayer({ base, h, note = () => {}, progress = null, onChange = () => {}, spawn = null, fetchFile = null, nativeKind = browserTranslatorKind, nativeAvailability = browserTranslatorAvailability } = {}) {
   let registry = null, quality = null, host = null, initPromise = null;
   const nativeBoth = new Map();   // code -> 'available' | 'downloadable' | 'downloading' (both directions with English, the browser's own Translator)
+  const retries = new Map();      // code -> how many automatic retries of a failed model download were made
   const download = new Map();     // code -> true while a user-visible download runs
   let showAll = false;
 
@@ -90,6 +114,7 @@ export function createTranslationLayer({ base, h, note = () => {}, progress = nu
       [registry, quality] = await Promise.all([get('vendor/bergamot/registry.json'), get('vendor/bergamot/quality.json')]);
       if (globalThis.__psys2MtOff) registry = null;   // tests of the desktop rows (fake browser Translator): the on-device model is not used, nothing is downloaded
       if (registry) {
+        registry.mirrorBase = new URL(base, globalThis.location?.href).href;   // where the registry's `mirror` paths (models-mt/...) are relative to
         host = createMtHost({
           registry, fetchFile: fetchFile ?? createCachedFetch(), onState: (lang, s) => stateChanged(lang, s),
           spawn: spawn ?? (() => new Worker(new URL('vendor/bergamot/translator-worker.js', base))),   // a classic worker (importScripts of the Emscripten glue)
@@ -145,8 +170,13 @@ export function createTranslationLayer({ base, h, note = () => {}, progress = nu
       const id = pgId(lang), label = `${s.phase === 'downloading' ? 'Downloading' : 'Loading'} the ${langName(lang)} translation model${s.phase === 'downloading' && s.total ? ` (${mbText(s.done)} / ${mbText(s.total)})` : ''}`;
       if (s.phase === 'downloading') progress.step(id, label, s.done, s.total);
       else if (s.phase === 'loading') progress.step(id, label, 0, 0);
-      else if (s.phase === 'ready') { if (progress.state(id) === 'active') progress.end(id, { bytes: s.total || null }); download.delete(lang); }
-      else if (s.phase === 'error') progress.fail(id, `The ${langName(lang)} translation model could not be loaded (${s.error})`, 'the rules translate the basic phrases');
+      else if (s.phase === 'ready') { if (progress.state(id) === 'active') progress.end(id, { bytes: s.total || null }); download.delete(lang); retries.delete(lang); progress.resolve?.(id); progress.resolve?.(`translator:${lang}`); }
+      else if (s.phase === 'error') {
+        // said once, in plain words; the download is asked again by itself (a slow or dropped mobile connection is the usual cause), then by the button
+        const n = retries.get(lang) ?? 0, again = () => { retries.set(lang, 0); prepare(lang).catch(() => {}); };
+        if (n < RETRY_PAUSES.length) { retries.set(lang, n + 1); setTimeout(() => { if (host.state(lang).phase === 'error') prepare(lang).catch(() => {}); }, RETRY_PAUSES[n]); }
+        else progress.fail(id, `The ${langName(lang)} translation model could not be downloaded (${s.error})`, 'the rules translate the basic phrases', { retry: again });
+      }
     } else if (s.phase === 'downloading') showBanner(`Downloading the translation model for ${langName(lang)} (${mbText(s.total)})… ${s.total ? Math.round((100 * s.done) / s.total) : 0}%`, { progress: s.total ? (100 * s.done) / s.total : 0 });
     else if (s.phase === 'loading') showBanner(`Loading the ${langName(lang)} translation model…`);
     else if (s.phase === 'ready' && download.get(lang)) { download.delete(lang); showBanner(`The ${langName(lang)} translation model is ready.`, { autoHide: 3000 }); }

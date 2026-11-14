@@ -6,10 +6,16 @@
  */
 export const knowledgeLocation = () => globalThis.process?.env?.PSYS2_KNOWLEDGE || null;
 
+/**
+ * How long one read may take: a shard is small, `index.json` and `vocab.json` are each about 200 kB compressed (1 MB and more unpacked), which a slow mobile
+ * connection (about 50 kB/s) needs several seconds for; a bound that is too short makes the catalog unreachable for good on exactly those phones.
+ */
+export const knowledgeTimeoutMs = (path) => (/^(index|vocab)\.json$/.test(path) ? 25000 : 8000);
+
 export function createKnowledgeSource(location) {
   const base = String(location).replace(/\/+$/, '');
   if (/^https?:\/\//i.test(base)) {
-    return { text: async (p) => { const r = await fetch(`${base}/${p}`, { signal: globalThis.AbortSignal?.timeout?.(6000) }); return r.ok ? r.text() : null; } };
+    return { text: async (p) => { const r = await fetch(`${base}/${p}`, { signal: globalThis.AbortSignal?.timeout?.(knowledgeTimeoutMs(p)) }); return r.ok ? r.text() : null; } };
   }
   return {
     text: async (p) => {

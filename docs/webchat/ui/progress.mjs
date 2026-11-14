@@ -78,10 +78,15 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
   }
   const end = (id, o = {}) => finish(id, true, o);
   /** A step that failed or timed out: the panel says so once, with what still works. */
-  function fail(id, text, still = '', { label = null } = {}) {
+  function fail(id, text, still = '', { label = null, retry = null } = {}) {
     finish(id, false, { error: text, label });
     const key = `${id}|${text}`;
-    if (!failures.some((f) => f.key === key)) failures.push({ key, text, still, at: now() });
+    if (!failures.some((f) => f.key === key)) failures.push({ key, text, still, at: now(), retry });
+    schedule();
+  }
+  /** The failure of step `id` is over (a retry worked): its notice goes away at once. */
+  function resolve(id) {
+    for (let i = failures.length - 1; i >= 0; i--) if (failures[i].key.startsWith(`${id}|`)) failures.splice(i, 1);
     schedule();
   }
   const planDone = (name) => (plans.get(name)?.ids ?? []).every((id) => ['done', 'failed'].includes(tasks.get(id)?.state));
@@ -115,8 +120,10 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
       h('div', { class: 'p2-pg-bar', role: 'progressbar', 'aria-valuemin': '0', 'aria-valuemax': '100' }, bar),
       h('p', { class: 'p2-pg-note', hidden: true }),
       h('p', { class: 'p2-pg-fail', hidden: true }),
+      h('button', { class: 'p2-pg-retry', type: 'button', hidden: true }, 'Try again'),
       h('details', { class: 'p2-pg-details' }, h('summary', {}, 'Details'), h('ol', { class: 'p2-pg-steps' })));
     el.querySelector('.p2-pg-close').addEventListener('click', () => { failures.length = 0; render(); });
+    el.querySelector('.p2-pg-retry').addEventListener('click', () => { const todo = failures.filter((f) => f.retry); for (const f of todo) failures.splice(failures.indexOf(f), 1); render(); for (const f of todo) { try { f.retry(); } catch { /* the step reports its own failure */ } } });
   }
   const txt = (node, text) => {
     if (node._en === text) return;
@@ -155,6 +162,7 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
     fe.hidden = !v.failures.length;
     if (v.failures.length) txt(fe, v.failures.map((f) => `${f.text}${f.still ? `: ${f.still}` : ''}`).join(' '));
     el.querySelector('.p2-pg-close').hidden = !v.failures.length;
+    el.querySelector('.p2-pg-retry').hidden = !v.failures.some((f) => f.retry);
     el.classList.toggle('is-failed', v.failures.length > 0);
     const ol = el.querySelector('.p2-pg-steps');
     const items = !dev ? [] : v.steps.map((t) => `${t.state}|${t.label}|${t.ms ?? ''}|${t.bytes ?? ''}|${t.state === 'active' ? Math.round((now() - t.t0) / 100) : ''}`);
@@ -170,7 +178,7 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
   if (doc) setInterval(() => { if (lastShown?.busy) render(); }, 500);
 
   return {
-    plan, start, step, end, fail, view,
+    plan, start, step, end, fail, resolve, view,
     /** A standing line shown under the bar while something is loading; '' clears it. */
     note(text) { noteText = text || ''; schedule(); },
     get element() { return el; },

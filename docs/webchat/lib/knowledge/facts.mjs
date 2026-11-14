@@ -329,6 +329,15 @@ export function createFacts({ source, name = 'catalog' }) {
     peekParts: () => partsData,
     /** True when the catalog could not be read last time (offline or too slow): a miss then is "I cannot reach it", not "it does not exist". */
     unreachable: () => down,
+    /** Asks the catalog again now (the backoff of an unreachable read is not waited for): what was read from the bundled subset or not at all is forgotten; a good read stays. Returns true when something was reset. */
+    refresh() {
+      if (!down) return false;
+      vocabLoading = null; vocab = null;
+      indexLoading = null; index = null;
+      for (const id of [...shards.keys()]) { shards.delete(id); parsed.delete(id); wireIx.delete(id); }
+      wireMemo.clear(); things.clear();
+      return true;
+    },
     /** The settled lookup of a word, or undefined when it has not been looked up (a synchronous read for operations: `ctx.knowledge.peek`). null = looked up, not known. */
     peek(word) { for (const lc of lemmaCandidates(word)) if (things.has(lc)) return things.get(lc); return undefined; },
     /**
