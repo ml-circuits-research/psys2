@@ -7,4 +7,4 @@ export {
   search, searchStep, clearSearch, across, relation, isRelated, read, list, open, close, loadSample, more, sectionExtreme,
   ask as askPassage, pick as pickSection,
 } from './read.mjs?v=a8a79efab0';
-export { digest, compose } from './textgen.mjs?v=1544f074ca';
+export { digest, compose } from './textgen.mjs?v=5c3cd583ec';
