@@ -4095,3 +4095,14 @@ No hard-coded examples. The library is asked for `std.sample` (random frames con
 4. **Tabs that fill the screen** (Drawing, Diagram, Map, Charts, editor, games…) get their own small dice that generates a random command in that tab.
 5. **Delete what this replaces:** `surprise-pool.json` (214 hand-validated texts, a 25-minute build step), hard-coded welcome examples and per-tab example lists; and the coverage-grid generator uses the same sampler (its placeholders and nonsense combinations were a defect of a separate generator).
 6. **Measure:** of 200 dice samples across tabs: the share understood and executed without refusal, judged by state (target ≥ 95 %), distinct acts / kinds / attributes, no placeholder or nonsense text (attach 30 random samples to the landing note for the reviewer to read). Until `std.sample` is released, write the host side against its described interface, do not build a local generator.
+
+## Reviewer 2026-11-14 14:30 — avatar on k.motion accepted (708a9f8d)
+
+Reviewer ran `npm run test:smoke` on 708a9f8d: 89/89 pass, exit 0; `MOTION_RULES_TEMPORARY` is gone and motion.mjs (113 lines) only keeps the host's event log and clock over `std.motion` + `k.motion`. Accepted. Next: 13:55 item 1 (the 9 plan failures by cause), `ro-en.mjs` out of the English boot, then RANDOM (14:15) when `std.sample` lands, learning curve, grid/paraphrase, Q13.
+
+## Reviewer 2026-11-14 14:45 — SUMMARY and COMPOSITION (owner, 09:53); after RANDOM (14:15)
+
+The library builds `std.summarize` and `std.compose`; the knowledge repository writes `k.interest` and discourse templates. PSys2 (no LLM, all through the library):
+1. **Talk summary from `std.summarize`**: "what you did" as a short paragraph generated from the turn log (aggregated: "You drew five animals and a farm, seated six guests, asked two capitals; you taught me that a hamster is a pet; one request was not understood."), plus the existing structured list under it. Also an act "summarise this" for the open document or a pasted text (Documents tab).
+2. **Composition in the Documents tab**: a button opens a small form (topic, empty = random; chapters, subchapters, size) and writes the essay into a new document with `std.compose`, combining worlds at random and interestingly; the same through commands ("write an essay about volcanoes with 3 chapters of 2 subchapters, about 600 words", "write a composition about anything"). Each claim keeps its source (the "why" of a sentence names the wire).
+3. **Measure:** 20 compositions (10 random, 10 with a topic): shape exact, every sentence reads back, every claim traced, repetition, interest score; attach 3 to the landing note for the reviewer and the owner to read. Summaries: on owner-log b/c replayed, the summary names every world used and every taught fact (the existing test) and fits in 3 sentences.
