@@ -1,9 +1,8 @@
-# Ask to sopworld: `std.summarize` and `std.compose`
+# Ask to sopworld: `std.compose` (and notes on `std.summarize`, released in 0.61)
 
 Spec: `specs/26-summary-and-composition.md`. The host adapters are `src/dialog/textgen.mjs`; they take `summarize` / `compose` (or `std.summarize` / `std.compose`) from the module and are unavailable without them.
 
-`summarize(world, { kind: 'turns' | 'text', turns, taught, text, doc, maxSentences })` -> `{ text, sentences: [{ text, source }] }`
-- `turns`: records `{ n, text, tab, outcome, worlds, answer, asked, pending }`; the paragraph aggregates ("You drew five animals and a farm, seated six guests; you taught me that a hamster is a pet; one request was not understood."), names every world used and every taught fact, at most `maxSentences`.
+`std.summarize` is in 0.61 (`summarizeLog` frames, `summarizeText` extractive) and used as is; host notes in spec 26. Two requests: `parentOf` kinds from the catalog for the host's entries, and a frame renderer in the language world (the host's `renderFrames` is a temporary verb table).
 
 `compose(world, { type: 'essay' | 'scientific-article' | 'presentation' | 'story' | 'report', topic | null, random, chapters, subchapters, words, seed })` -> `{ title, topic, type, procedure, chapters: [{ title, subchapters: [{ title, sentences: [{ text, source, world }] }] }] }`
 - Topic empty = random, combining worlds at random and interestingly (`k.interest`, discourse templates from the knowledge repository). Exact chapter and subchapter counts, about `words` words, seedable.

@@ -13,8 +13,8 @@ test('without the library the adapters are unavailable and return nothing (no lo
   assert.equal(s.turns({ turns: [{ n: 1 }] }), null); assert.equal(s.text({ text: 'x' }), null); assert.equal(c.compose({ topic: 'volcanoes' }), null);
 });
 
-test('the vendored sopworld does not export the generators yet (update spec 26 when it does)', () => {
-  assert.equal(typeof lib.summarize, 'undefined'); assert.equal(typeof lib.compose, 'undefined');
+test('the vendored sopworld has std.summarize but not std.compose yet (update spec 26 when it does)', () => {
+  assert.equal(typeof lib.summarizeLog, 'function'); assert.equal(typeof lib.summarizeText, 'function'); assert.equal(typeof lib.compose, 'undefined');   // update spec 26 when compose ships
 });
 
 const fakeCompose = (w, req) => ({ type: req.type, procedure: `k.procedures.${req.type}`, title: `On ${req.topic ?? 'chance'}`, topic: req.topic, chapters: Array.from({ length: req.chapters }, (_, i) => ({ title: `Chapter ${i + 1}`,
@@ -42,13 +42,22 @@ test('while the library lacks the generators the commands decline plainly', asyn
   for (const text of ['write an essay about volcanoes with 3 chapters of 2 subchapters, about 600 words', 'write a composition about anything', 'write an essay about volcanoes']) {
     const r = await s.send(text); assert.match(r.text, /cannot write compositions yet/, text);
   }
-  const r = await s.send('summarize the following: Volcanoes form where hot rock reaches the surface. They can erupt for years.');
-  assert.match(r.text, /cannot write summaries yet/);
+});
+
+test('std.summarize (real library): pasted text and the open document are summarised by the extractive summariser; a document answer cites its sentences', async () => {
+  installTextGen(lib, null);
+  try {
+    const s = docs();
+    const t = await s.send('summarize the following: Volcanoes form where hot rock reaches the surface. Magma rises through cracks. Volcanoes can erupt for years. Some volcanoes are under the sea. Ash can travel around the world.');
+    assert.match(t.text, /^In short: .*Volcanoes/);
+    const d = await s.send('condense the document');
+    assert.match(d.text, /^In short: /); assert.match(d.text, /\(sentences? \d/);
+  } finally { delete globalThis[TEXTGEN_GLOBAL]; }
 });
 
 test('with the generators present the roles arrive and the new document keeps the per-sentence source', async () => {
   const calls = [];
-  const fake = { compose: (w, r) => { calls.push(r); return fakeCompose(w, r); }, summarize: () => ({ text: 'Short.', sentences: [{ text: 'Short.', source: '@src.1' }] }) };
+  const fake = { compose: (w, r) => { calls.push(r); return fakeCompose(w, r); }, summarizeLog: () => [], summarizeText: (t) => ({ sentences: [{ text: 'Short.', score: 1, at: 0 }], picked: ['Short.'] }) };
   installTextGen(fake, null);
   try {
     const s = docs();
@@ -96,3 +105,25 @@ test('arbitration: the open editor tab owns "write a report ..."; the reader yie
   installTextGen({ compose: fakeCompose }, null);
   try { assert.doesNotMatch((await ed().send('Write a report about sea animals')).text, /I wrote the report/); } finally { delete globalThis[TEXTGEN_GLOBAL]; }
 });
+
+// ---- the measurement (reviewer 14:45 item 3, summaries): owner-log b and c replayed; the paragraph names every world used and every taught fact in at most 3 sentences
+import { join } from 'node:path';
+import { replay } from '../scripts/eval-owner-log.mjs';
+import { turnRecord, taughtText } from '../src/dialog/conversation.mjs';
+for (const file of ['owner-log-2026-11-13b.jsonl', 'owner-log-2026-11-13c.jsonl']) {
+  test(`Talk paragraph (std.summarizeLog) after ${file}: names every world and every taught fact, at most 3 sentences`, async () => {
+    const turns = [], truth = new Set(); let states = {};
+    await replay({ log: join(import.meta.dirname, '..', 'training/eval', file), onReply: (rec, reply, sess) => {
+      turns.push(turnRecord(rec.i + 1, rec.text, reply, { tab: rec.tab }));
+      for (const sg of reply.segments) if (!sg.unparsed && sg.routing?.winner?.worldId) truth.add(sg.routing.winner.worldId);
+      states = sess.state();
+    } });
+    const taught = (states['session.things']?.learned ?? []).map(taughtText);
+    const p = createSummarizer(lib, null).turns({ turns, taught, maxSentences: 3 });
+    assert.ok(p, 'a paragraph');
+    assert.ok(p.sentences.length <= 3 && p.sentences.length >= 1);
+    for (const w of truth) assert.ok(p.text.includes(w), `world ${w} is not named: ${p.text}`);
+    for (const f of taught) assert.ok(p.text.includes(f), `taught fact "${f}" is not named`);
+    console.log(`# ${file}: ${p.text}`);
+  });
+}

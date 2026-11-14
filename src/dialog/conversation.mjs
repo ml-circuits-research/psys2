@@ -4,6 +4,8 @@
 // was asked back, open threads; one line per item, newest first. Pure and browser-safe: no `node:*`, no DOM.
 // TEMPORARY: the turn kinds and the focus log come from the replies and the session things until sopworld's `std.dialogue` (0.47) exists; then `turnRecord` reads them from there.
 
+import { actsOfSegment } from './textgen.mjs';
+
 /** done, already, refused, not-understood, answer, question-back: how a reply went (the avatar's face and the summary both read this). */
 export function outcomeOf(reply) {
   const answers = reply?.answers ?? [], segs = reply?.segments ?? [];
@@ -25,8 +27,10 @@ export function turnRecord(n, text, reply, { tab = null } = {}) {
   const worlds = [...new Set(segs.filter((s) => !s.unparsed).map((s) => s.routing?.winner?.worldId).filter(Boolean))];
   const answers = reply?.answers ?? [];
   const pending = reply?.trace?.discourse?.pending ?? null;
+  // what each clause did, for std.summarizeLog: the first word of the clause and the noun phrases of its first free slot (src/dialog/textgen.mjs actsOfSegment)
+  const acts = segs.filter((s) => !s.unparsed && !s.isQuestion).flatMap((s) => { const slot = Object.values(s.match?.slots ?? {}).find((x) => x?.text); return actsOfSegment(s.text, slot?.text ?? ''); }).slice(0, 40);
   return {
-    n, text: String(text ?? '').slice(0, 200), tab, outcome: outcomeOf(reply), worlds,
+    n, text: String(text ?? '').slice(0, 200), tab, outcome: outcomeOf(reply), worlds, acts,
     answer: String(reply?.text ?? '').replace(/\s+/g, ' ').slice(0, 200),
     asked: answers.filter((a) => a.status === 'missing' && /\?\s*$/.test(String(a.text ?? '').trim())).map((a) => String(a.text).trim().slice(0, 160)),
     pending: (pending?.type === 'fill' || pending?.type === 'confirm') && String(pending.text ?? '').trim() ? `${pending.type === 'confirm' ? 'waiting for a yes or no' : 'waiting for the missing part'} of "${String(pending.text ?? '').slice(0, 100)}"` : null,

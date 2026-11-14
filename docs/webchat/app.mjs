@@ -161,7 +161,7 @@ export async function mountPsys2(element, options = {}) {
     .then(([m, lib]) => { textGen = { summarizer: m.createSummarizer(lib, null), composer: m.createComposer(lib, null) }; return textGen; }).catch(() => { textGen = { summarizer: { available: false }, composer: { available: false } }; return textGen; });
   textGenReady.then(() => { try { refreshSummary(); } catch { /* the summary is rebuilt after the next turn */ } });
   const refreshSummary = () => { try { lastSummary = summarize({ turns: turnLog, states, labelOf: (id) => engine?.worlds?.().find((w) => w.id === id)?.title });
-    if (textGen?.summarizer?.available && turnLog.length) { const p = textGen.summarizer.turns({ turns: turnLog, taught: lastSummary.taught, maxSentences: 3 }); if (p) lastSummary.paragraph = p.text; } panelUI.talk?.ui?.setSummary?.(lastSummary); } catch (e) { console.warn('summary failed', e); } };
+    if (textGen?.summarizer?.available && turnLog.length) { const p = textGen.summarizer.turns({ turns: turnLog, taught: lastSummary.taught, labelOf: (id) => engine?.worlds?.().find((w) => w.id === id)?.title ?? id, maxSentences: 3 }); if (p) lastSummary.paragraph = p.text; } panelUI.talk?.ui?.setSummary?.(lastSummary); } catch (e) { console.warn('summary failed', e); } };
   let avatarUI = null, avatarOpen = false, lastAnswerText = '';   // the avatar is not a tab: an icon in the input bar and its popup
   const queue = [], micLog = [];   // MIC2: waiting messages { id, text, mode, voice, queuedAt }; the mic click log
   // BUSY: one source of truth. The host is busy while a turn runs (`turn`; the queue of MIC2 only holds waiting messages), while its host effects run (`effectsPending`) and while the answer is spoken (`mic.speaking`).
