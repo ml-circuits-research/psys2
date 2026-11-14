@@ -40,7 +40,7 @@ export function richest() {
   for (const root of ['worlds', 'worlds-pilot']) {
     const d = join(REPO, root);
     if (!existsSync(d)) continue;
-    for (const id of readdirSync(d)) { const f = join(d, id, 'schema.sop'); if (existsSync(f) && existsSync(join(d, id, 'tests.sop'))) cand.push({ id, root, lines: readFileSync(f, 'utf8').split('\n').filter((l) => l.trim() && !l.trim().startsWith('#')).length }); }
+    for (const id of readdirSync(d)) { const f = join(d, id, 'schema.sop'); if (existsSync(f) && existsSync(join(d, id, 'tests.sop')) && !/^\s*declare=yes/m.test(readFileSync(f, 'utf8'))) cand.push({ id, root, lines: readFileSync(f, 'utf8').split('\n').filter((l) => l.trim() && !l.trim().startsWith('#')).length }); }
   }
   // the richest world on acts is the drawing board while it exists as a schema world (the pilot or the switched world); otherwise the one with the most schema lines
   const pick = cand.find((c) => c.id === 'art.draw') ?? cand.sort((a, b) => b.lines - a.lines)[0];

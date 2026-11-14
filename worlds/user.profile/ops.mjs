@@ -564,3 +564,19 @@ export const sensitiveAction = W((ctx, { cat, text, remember }) => {
   return ok('Thanks for telling me. I do not keep things like that unless you say "remember", so I have not stored it.');
 });
 export { sensitiveAction as sensitive };
+
+// ---- the declared schema (schema.sop, declare=yes): read-only requests the profile world answers (the examples of its own question patterns, read at load time)
+import { declaredExecutor } from '../acts/acts.mjs';
+import { SCHEMA } from './schema.declared.mjs';
+export const executor = declaredExecutor(SCHEMA, {
+  // the examples of the world's own patterns of kind=question (read-only requests: they store nothing), read from the loaded world, not copied
+  sampleKnowledge: ({ world }) => {
+    const out = [];
+    for (const p of world?.patterns ?? []) {
+      const e = p.wire?.entries ?? [];
+      if (e.find((x) => x.key === 'kind')?.value.v !== 'question') continue;
+      for (const x of e) if (x.key === 'example' && !out.includes(x.value.v)) out.push(x.value.v);
+    }
+    return { questions: out };
+  },
+});

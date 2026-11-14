@@ -54,7 +54,7 @@ export function foreignFragment(dialog, seg, blocked = null) {
   if (!world || !blocked) return null;
   if (!(seg.wires ?? []).some((w) => w.type === 'core.request')) return null;   // a question or a statement is not a continuation
   // A pronoun stands for the last thing talked about, which lives in the world of the last action or in the open tab: another world has no referent for it
-  // ("make it happy" on the Avatar tab, after an avatar change, is not about a shape of the diagram)
+  // ("make it happy" with the avatar popup open, after an avatar change, is not about a shape of the diagram)
   if (tokens(seg.text).some((w) => PERSON.has(w))) return null;
   const pronoun = tokens(seg.text).some((w) => PRONOUN.has(w));
   const scene = typeof dialog.engine.set.get(world)?.ops?.checkReferents === 'function';   // a world with things to point at; a profile or a game has none

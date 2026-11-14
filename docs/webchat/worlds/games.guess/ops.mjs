@@ -303,3 +303,10 @@ export function evidence(ctx, { kind, value }) {
   (s.evidence ??= []).push({ feature: f.feature, value: f.value, text: f.say, answer: f.no ? 'no' : 'yes' });
   return ok(`Noted: ${f.say}. ${next(ctx)}`);
 }
+
+// ---- the declared schema (schema.sop, declare=yes): the answers to the question that is asked; the start when no game is on
+import { declaredExecutor } from '../acts/acts.mjs?v=6736c5ab88';
+import { SCHEMA } from './schema.declared.mjs?v=2c6e484dad';
+export const executor = declaredExecutor(SCHEMA, {
+  sampleKnowledge: ({ state }) => ({ answers: state?.phase === 'asking' || state?.phase === 'guessing' ? ['Yes.', 'No.', "I don't know."] : ['Guess my animal.'] }),
+});

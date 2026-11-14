@@ -23,11 +23,11 @@
  * message that an untrained world's rules read is left to the rules path.
  */
 import { lexIndex } from '../worlds/lexicon.mjs?v=6912cd6a5d';
-import { compilePattern, formalize } from './rules/index.mjs?v=51b6091042';
-import { candidateSegmentations } from './dispatcher-runtime.mjs?v=5cb07e6405';
+import { compilePattern, formalize } from './rules/index.mjs?v=567d996beb';
+import { candidateSegmentations } from './dispatcher-runtime.mjs?v=af5d305399';
 import { atom } from '../soplang/index.mjs?v=c57881f705';
-import { perf } from './perf.mjs?v=b75de4ae38';
-import { guard, TurnAborted } from './guard.mjs?v=eb1a66f556';
+import { perf } from './perf.mjs?v=8b829ee7df';
+import { guard, TurnAborted } from './guard.mjs?v=f0c7a6e6b5';
 
 import { NX_STRATEGIES, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from './nx-strategy.mjs?v=079cade33c';
 export { NX_STRATEGIES, DEFAULT_NX_STRATEGY, normalizeNxStrategy };

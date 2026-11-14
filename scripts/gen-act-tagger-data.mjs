@@ -76,6 +76,7 @@ function discoverSchemas() {
     for (const d of readdirSync(dir)) {
       const f = path.join(dir, d, 'schema.sop');
       if (!existsSync(f) || !statSync(f).isFile()) continue;
+      if (/^\s*declare=yes/m.test(readFileSync(f, 'utf8'))) continue;   // a declaration-only schema: its world has its own patterns, the act grammar does not describe it
       try { const wires = parse(readFileSync(f, 'utf8')).wires; if (wires.some((w) => w.type === 'acts.schema')) out.push({ id: d, schema: A.parseSchema(wires), file: path.relative(REPO, f) }); } catch (e) { console.error(`skip ${f}: ${e.message}`); }
     }
   }

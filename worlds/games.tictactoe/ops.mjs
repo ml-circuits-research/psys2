@@ -250,3 +250,14 @@ export function undo(ctx) {
   show(ctx);
   return ok('OK, I took back your last move and my answer. It is your move again.');
 }
+
+// ---- the declared schema (schema.sop, declare=yes): the dice, the example chips and the action buttons read the moves that are legal now, from the board
+import { declaredExecutor } from '../acts/acts.mjs';
+import { SCHEMA } from './schema.declared.mjs';
+export const executor = declaredExecutor(SCHEMA, {
+  sampleKnowledge: ({ state }) => {
+    const b = state?.board ?? Array(9).fill('');
+    if (state?.winner || (state?.turn && state.turn !== (state.user ?? 'X'))) return { moves: [] };
+    return { moves: NAMES.map((n, i) => (b[i] ? null : `Play ${n}.`)).filter(Boolean) };
+  },
+});

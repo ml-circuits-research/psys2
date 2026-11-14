@@ -62,7 +62,7 @@ export function linesOf(dir) {
 
 // ---- the measures ----------------------------------------------------------------------------------------------------------------------------
 function schemaWorlds() {
-  const has = (root, d) => existsSync(join(REPO, root, d, 'schema.sop'));
+  const has = (root, d) => existsSync(join(REPO, root, d, 'schema.sop')) && !/^\s*declare=yes/m.test(readFileSync(join(REPO, root, d, 'schema.sop'), 'utf8'));   // declare=yes: a declaration only, not a world on schema + acts
   const list = (root) => (existsSync(join(REPO, root)) ? readdirSync(join(REPO, root)).filter((d) => has(root, d)).sort() : []);
   return { switched: list('worlds'), pilots: list('worlds-pilot') };
 }

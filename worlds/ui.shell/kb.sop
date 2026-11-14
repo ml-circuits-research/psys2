@@ -70,6 +70,9 @@
 @kb.shell.alias.about_me ui.shell.alias word=about_me tab=profile core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.alias.cv ui.shell.alias word=cv tab=profile core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.alias.resume ui.shell.alias word=resume tab=profile core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
+@kb.shell.alias.avatar ui.shell.alias word=avatar tab=avatar core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
+@kb.shell.alias.robot ui.shell.alias word=robot tab=avatar core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
+@kb.shell.alias.face ui.shell.alias word=face tab=avatar core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 
 @kb.shell.game.chess ui.shell.game tab=chess new=chess.new hint=chess.hint giveup=chess.resign core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.game.diagram ui.shell.game tab=diagram new=diagram.new core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"

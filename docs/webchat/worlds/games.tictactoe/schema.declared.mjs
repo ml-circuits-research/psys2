@@ -1,0 +1,2 @@
+// GENERATED from schema.sop by scripts/build-schema-world.mjs (declare=yes). Never edited by hand.
+export const SCHEMA = {"id":"ttt","noun":"move","acts":["make"],"limits":{"items":100,"history":30},"kinds":{"move":{"name":"move","plural":"moves","numbered":false,"named":false,"max":null,"in":null,"capacity":null,"acts":[],"any":false,"words":[],"diceNot":["make"],"know":[{"list":"moves","verb":"*"}]}},"attrs":{},"doc":"Tic-tac-toe: the moves the user may play now (the free cells).","tabOnly":false,"declared":true};

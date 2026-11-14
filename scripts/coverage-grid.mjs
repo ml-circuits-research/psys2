@@ -26,7 +26,9 @@ const only = arg('world', null);
 const roots = [path.join(REPO, 'worlds-pilot')].filter(existsSync);   // the engine loads the real worlds (DEFAULT_ROOT) and the pilots; NOT the test fixtures: a fixture world (test.seating) has no tab and answered the sentences of the other tabs
 // every schema world: the pilots and the real worlds with a schema.sop (the fixture seating world is left out: the real plan.seating reads the same sentences)
 const scan = [path.join(REPO, 'worlds-pilot'), path.join(REPO, 'worlds')].filter(existsSync);
-const worlds = scan.flatMap((r) => readdirSync(r).filter((d) => existsSync(path.join(r, d, 'schema.sop')) && d !== 'test.seating' && d !== 'acts' && (!only || d === only)).map((d) => ({ id: d, dir: path.join(r, d) })));
+// declaration-only schemas (declare=yes) are in the grid when the sampler serves them and a reply can be judged: not user.profile (its questions are about stored data: on an empty profile the honest answer is "I do not know yet", which the refusal test reads as a miss)
+const NOT_JUDGEABLE = new Set(['user.profile']);
+const worlds = scan.flatMap((r) => readdirSync(r).filter((d) => existsSync(path.join(r, d, 'schema.sop')) && d !== 'test.seating' && d !== 'acts' && !NOT_JUDGEABLE.has(d) && (!only || d === only)).map((d) => ({ id: d, dir: path.join(r, d) })));
 const TAB_OVERRIDE = { 'docs.editor': 'editor', 'ui.avatar': 'robot' };   // worlds whose tab is declared by the host, not by world.sop
 const tabWorlds = new Set();   // every world that owns a tab: a reply of one of them to the sentence of another is a cross-world capture
 for (const r of [path.join(REPO, 'worlds'), path.join(REPO, 'worlds-pilot')].filter(existsSync)) for (const d of readdirSync(r)) { const f = path.join(r, d, 'world.sop'); if (existsSync(f) && (/^\s*tab=\S+/m.test(readFileSync(f, 'utf8')) || TAB_OVERRIDE[d])) tabWorlds.add(d); }
@@ -44,6 +46,7 @@ async function walkCells(engineW, w, per) {
   const s = engineW.createSession({ language: 'en' });
   if (tabOf[w.id]) s.setWorldState('ui.shell', { activeTab: tabOf[w.id] });
   const sm = engineSampler(lib, engineW, () => s);
+  const declared = /^\s*declare=yes/m.test(readFileSync(path.join(w.dir, 'schema.sop'), 'utf8'));   // a declaration-only schema (declare=yes): the sentences are whole requests of the world's own reader, judged by a non-refusal reply (a question stores nothing)
   const cells = [], done = [];
   for (let i = 0; i < per; i++) {
     const x = sm.dice({ worldId: w.id, seed: 7000 + i });
@@ -51,7 +54,7 @@ async function walkCells(engineW, w, per) {
     const before = hash(s.state(w.id));
     const r = await s.send(x.text);
     const changed = hash(s.state(w.id)) !== before;
-    cells.push({ act: x.frame.action, mode: null, form: 'sample', verb: null, kind: x.frame.args?.kind ?? null, noun: x.frame.args?.kind ?? x.frame.args?.thing ?? null, text: x.text, judge: null, setup: done.map((t) => ({ text: t, best: true })) });
+    cells.push({ act: x.frame.action, mode: null, form: 'sample', verb: null, kind: x.frame.args?.kind ?? null, noun: x.frame.args?.kind ?? x.frame.args?.thing ?? null, text: x.text, judge: declared ? 'reply' : null, setup: done.map((t) => ({ text: t, best: true })) });
     if (changed || !REFUSAL.test(r.text)) done.push(x.text);
   }
   return cells;
@@ -91,7 +94,8 @@ for (const reasoner of ['ops', 'matrix']) {
       const before = hash(s.state(w.id));
       const r = await s.send(c.text);
       const changed = hash(s.state(w.id)) !== before;
-      const refused = REFUSAL.test(r.text);
+      const NOT_READ = /did not understand|did not catch|cannot talk about that|Something went wrong/i;   // a declared world's request is judged by being read: "There is no U" is a true answer of hangman, not a refusal
+      const refused = c.judge === 'reply' ? NOT_READ.test(r.text) : REFUSAL.test(r.text);
       const verdict = c.judge === 'reply' ? (!refused ? 'reply' : 'miss')
         : CHANGES.has(c.act) ? (changed ? 'state' : 'miss') : c.act === 'ask' ? (r.text.trim() && !refused ? 'answer' : 'miss') : (!refused ? 'reply' : 'miss');
       c[reasoner] = verdict; c[`${reasoner}Reply`] = r.text.slice(0, 100); c[`${reasoner}Setup`] = confirmed;

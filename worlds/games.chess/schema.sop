@@ -1,0 +1,12 @@
+# Declaration only (spec 21 section 6, spec 25): games.chess keeps its own patterns and operations. This schema serves the dice, the example chips and the action buttons (std.sample):
+# the whole sentences the dice may say are read from the world's own state by the hook `sampleKnowledge` of ops.mjs (declaredExecutor). Nothing is generated except schema.declared.mjs.
+@chess acts.schema
+    noun="move"
+    declare=yes
+    doc="Chess: the legal moves of the user, said as the world reads them."
+    acts=make
+
+@chess.move acts.kind
+    know=moves:*
+    dice.not=make
+    plural=moves

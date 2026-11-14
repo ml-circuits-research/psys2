@@ -1,0 +1,12 @@
+# Declaration only (spec 21 section 6, spec 25): games.guess keeps its own patterns and operations. This schema serves the dice, the example chips and the action buttons (std.sample):
+# the whole sentences the dice may say are read from the world's own state by the hook `sampleKnowledge` of ops.mjs (declaredExecutor). Nothing is generated except schema.declared.mjs.
+@guess acts.schema
+    noun="answer"
+    declare=yes
+    doc="Guess the animal: the answers to the question that is asked, or the start."
+    acts=make
+
+@guess.answer acts.kind
+    know=answers:*
+    dice.not=make
+    plural=answers

@@ -47,6 +47,15 @@ async function shellKb(set, worlds) {
     seen.add(a);
     out.push(`@kb.shell.alias.${idPart(a)} ui.shell.alias word=${a} tab=${atom(id)}`);
   }
+  // views that are not tabs (the avatar popup) are named like tabs, so that "open the avatar" is the shell's own `ui.openView`, not "There is no avatar tab."
+  for (const [id, v] of Object.entries(ops.VIEWS)) {
+    for (const w of [id, ...v.words]) {
+      const a = atom(w);
+      if (seen.has(a)) continue;
+      seen.add(a);
+      out.push(`@kb.shell.alias.${idPart(a)} ui.shell.alias word=${a} tab=${atom(id)}`);
+    }
+  }
   for (const id of Object.keys(ops.TABS)) {
     const a = atom(id);
     if (seen.has(a)) continue;
