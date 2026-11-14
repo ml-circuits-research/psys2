@@ -15,15 +15,18 @@ let libraryPromise = null;
 /** The library module, loaded once (lazily: the vendored file is 900 kB). */
 export const diagramLibrary = () => (libraryPromise ??= import('../vendor/sopworld/sopworld.mjs'));
 
-/** The kinds the bundled catalog has: [{ name, form }], read from its text (a request can be read before the library is loaded). */
+/** The kinds the bundled catalog has: [{ name, form, words }], read from its text (a request can be read before the library is loaded); `words` are the other names a request uses ("hierarchy" for a tree: `core.word of=k.diagrams.kind.name`). */
 export function kindNames() {
-  return [...BUNDLED_DIAGRAMS.files['k.diagrams'].matchAll(/^@\S+ k\.diagrams\.kind name=("[^"]*"|\S+) form=(\S+)/gm)].map((m) => ({ name: bare(m[1]), form: m[2] }));
+  const text = BUNDLED_DIAGRAMS.files['k.diagrams'];
+  const words = new Map();
+  for (const m of text.matchAll(/^@\S+ core\.word ((?:text=(?:"[^"]*"|\S+) )+)means=("[^"]*"|\S+) of=k\.diagrams\.kind\.name/gm)) words.set(bare(m[2]), [...m[1].matchAll(/text=("[^"]*"|\S+)/g)].map((x) => bare(x[1])));
+  return [...text.matchAll(/^@\S+ k\.diagrams\.kind name=("[^"]*"|\S+) form=(\S+)/gm)].map((m) => ({ name: bare(m[1]), form: m[2], words: words.get(bare(m[1])) ?? [] }));
 }
-/** The ways to say a kind: its name, its form, the name without "diagram"/"chart"; one word or two ("mind map", "mindmap", "flow chart"). */
-function kindPhrases({ name, form }) {
+/** The ways to say a kind: its name, its form, the name without "diagram"/"chart", its other words; one word or two ("mind map", "mindmap", "mind-map", "flow chart"). */
+function kindPhrases({ name, form, words = [] }) {
   const out = new Set();
-  for (const raw of [name, form.replace(/_/g, ' '), name.replace(/\s+(?:diagram|chart)$/i, '')]) {
-    const w = raw.trim().split(/\s+/);
+  for (const raw of [name, form.replace(/_/g, ' '), name.replace(/\s+(?:diagram|chart)$/i, ''), ...words]) {
+    const w = raw.trim().split(/[\s-]+/);
     if (w.length === 1) out.add(esc(w[0]));
     else out.add(w.map(esc).join('[\\s-]?'));
   }

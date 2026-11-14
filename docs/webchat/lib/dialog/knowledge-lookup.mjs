@@ -11,7 +11,7 @@
  */
 import { leftOut, requestOf } from './world-aware.mjs?v=f00d040b34';
 import { planHostOf } from '../plan/host.mjs?v=6db16e1f7d';
-import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=e5f0523d68';
+import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=59c47ae69c';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 const wordsOf = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}-]+/gu) ?? [];
