@@ -94,7 +94,7 @@ export function createAvatar(container, host = null) {
         const src = createCachedSource({ source: createKnowledgeSource(host?.knowledgeUrl?.() || KNOWLEDGE_URL), caches: globalThis.caches });
         const facts = createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((r) => setTimeout(() => r(null), 6000))]) } });
         mods = { draw, logic }; data = DEFAULT_FACE; shown = ''; draw_();   // the bundled default face first: the tab never waits for the network
-        host?.progress?.start?.('faces', 'Loading the face set');   // PROGRESS: said while it loads, and when it cannot be had
+        host?.progress?.start?.('faces', 'Loading the face set', { quiet: true });   // PROGRESS: recorded, never shown while it loads (the bundled face is already drawn and works: this is an upgrade); said only when it cannot be had
         const d = await facts.faces();
         if (!d) throw new Error('no faces in the catalog');
         data = d; full = true; shown = '';

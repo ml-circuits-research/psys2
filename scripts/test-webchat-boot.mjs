@@ -106,9 +106,10 @@ export const SCENARIOS = {
       check('cold: the popup is gone when the start is done (a failure notice may stay, with its Dismiss)', v.popupHidden || v.failures > 0, `hidden=${v.popupHidden} failures=${v.failures}`);
       const seen = await popupSeen(pg);
       check('cold: the popup only ever shows one plain sentence (no path, no list)', seen.every(plainSentence), JSON.stringify(seen.slice(0, 6)));
-      const log = s.log.filter((x) => x.status === 200);
-      const count = {}; for (const x of log) count[pathOf(x.url)] = (count[pathOf(x.url)] ?? 0) + 1;
-      const twice = Object.entries(count).filter(([p, n]) => n > 1 && p !== '/sw.js').map(([p, n]) => `${n}x ${p}`);
+      // every request that reaches the server counts, a revalidation (304) too: with max-age a second request for the same URL (page and worker both importing a module) must be answered by the browser's cache
+      // or the service worker, never by the server. The URL counts as a whole (path and hash), module imports of the worker included.
+      const count = {}; for (const x of s.log.filter((r) => r.status !== 404)) count[x.url] = (count[x.url] ?? 0) + 1;
+      const twice = Object.entries(count).filter(([p, n]) => n > 1 && !/^\/(sw\.js|index\.html)?(\?.*)?$/.test(p) && !/^\/build-info\.json/.test(p)).map(([p, n]) => `${n}x ${p}`);
       check('cold: no file reaches the server twice in one start', twice.length === 0, twice.slice(0, 5).join(', '));
       const bare = s.log.map((x) => x.url).filter((u) => !/[?&][vh]=/.test(u) && !UNHASHED_OK(u));
       check('cold: every request carries its hash (except index.html, build-info.json, sw.js, models)', bare.length === 0, bare.slice(0, 5).join(', '));
