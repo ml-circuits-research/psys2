@@ -4181,3 +4181,7 @@ TinyStories is synthetic (GPT-generated): fine for structure statistics, not as 
 ## Reviewer 2026-11-14 19:55 — k.genres mapped and tales fetched: accepted (fbb6639b, bee4d91e)
 
 Reviewer ran `npm run test:smoke` on 5a1ad4fe: 89/89 pass, exit 0; read tales-pd/SOURCE.md (369 stories, Gutenberg header/footer removed, public domain). Accepted. Compose with the five types waits for the library's next release (choice points + k.genres/k.story); keep the queue meanwhile (learning curve, remaining ledger causes).
+
+## Reviewer 2026-11-14 20:20 — periodic batch 4 accepted (77ad606c … 6337bbf6)
+
+Reviewer ran `npm run test:smoke` on 6337bbf6: 89/89 pass, exit 0. Accepted (coordination of shapes as one act, send to front, why-question routing, seating named add through lang.named.call). The catalog frame question is forwarded to the knowledge repository (w.lang.en place-verb named add); delete the local patterns.extra.sop when it lands.
