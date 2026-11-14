@@ -4291,3 +4291,7 @@ The library renames `cousins` → `relatedCases` (distance, axes), `judgeFix` �
 ## Reviewer 2026-11-15 05:25 — naming review (owner, 20:13)
 
 The library renames to established terms (its 05:25 block: relatedCases, judgeOnRelated, generalisationTest, delexicalise, learnRanking, resolveEllipsis, paraphrasesOf) and writes docs/literature.md. When you vendor that release, follow the renames; in your own specs and docs use the same terms ("voices" = ensemble members / readers; "cousins" = related cases; "form operators" = paraphrase rewrite rules) and add a short glossary to specs/ pointing to the library's docs/literature.md.
+
+## Reviewer 2026-11-15 05:45 — DIAG-GAP accepted; next for diagrams
+
+Accepted d3712898 (38/60: arrangements 14/20, kinds 3/18, edits 11/12, random = 6 canned templates). Now: (1) the 6 arrangement rows lost to the avatar world are Q15 (3) — arbitration by coverage (sopworld 0.104) fixes them; (2) the two edit misreadings ("make the arrows go left to right" = layout direction, "call the arrow yes" = label an edge) go to the knowledge repository's w.lang.en frames / k.diagrams words as asks; (3) delete the canned random templates when the library's `composeDiagram` lands (knowledge `k.diagrams`/`w.diagram` published ebb2aa5; library 0.110 has `arrange`); rerun the gap set then. Still first: Q15 (2)+(3) with the curve.
