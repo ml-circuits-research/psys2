@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import * as lib from '../src/vendor/sopworld/sopworld.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
+import { knowledgeWorld, genreOf, topicsOf } from '../src/dialog/compose-world.mjs';
 import { createSummarizer, createComposer, composeRequest, docTypeOf, DOC_TYPES, checkComposition, compositionToDocument, installTextGen, TEXTGEN_GLOBAL } from '../src/dialog/textgen.mjs';
 
 test('without the library the adapters are unavailable and return nothing (no local generator)', () => {
@@ -49,7 +50,7 @@ test('the real std.compose over the bundled catalog: a cited, realised essay abo
   assert.ok(s.length >= 1 && s.every((x) => x.text.includes('penguin') && x.source));
   assert.equal(new Set(s.map((x) => x.source)).size, s.length);
   assert.match(c.compose({ type: 'essay', topic: 'volcanoes' }).why, /know nothing about volcanoes/);
-  for (const type of ['presentation', 'story', 'report', 'scientific-article']) assert.match(c.compose({ type, topic: 'penguin' }).why, /no genre/, type);
+  for (const type of ['presentation', 'story', 'report', 'scientific-article']) assert.match(c.compose({ type, topic: 'penguin' }).why, /does not read the published .* genre yet/, type);
   const random = c.compose({ type: 'essay', chapters: 1, subchapters: 1, words: 40, seed: 11 });
   assert.ok(random.composition, random.why); assert.ok(random.composition.topic);
 });
@@ -86,7 +87,7 @@ test('std.summarize (real library): pasted text and the open document are summar
   } finally { delete globalThis[TEXTGEN_GLOBAL]; }
 });
 
-test('with the real composer the essay commands write a new document that keeps the per-sentence source; types without a genre are declined', async () => {
+test('with the real composer the essay commands write a new document that keeps the per-sentence source; types whose published genre the library cannot apply yet are declined', async () => {
   installTextGen(lib, null);
   try {
     const s = docs();
@@ -97,10 +98,10 @@ test('with the real composer the essay commands write a new document that keeps 
     assert.equal(d.origin, 'composed'); assert.ok(Object.keys(d.provenance).length >= 1);
     assert.ok(Object.values(d.provenance).every((x) => /^k\.animals\./.test(x)));
     const a = await s.send('write a composition about anything');
-    assert.match(a.text, /I wrote the essay "All about the /);
+    assert.match(a.text, /I wrote the essay "All about /);
     for (const [text, type] of [['write a short story', 'story'], ['make a presentation about penguin with 5 sections', 'presentation'], ['write a scientific article about bees, 3 chapters', 'scientific']]) {
       const x = await s.send(text);
-      assert.match(x.text, /cannot write that: .*no genre/, text);
+      assert.match(x.text, /cannot write that: .*does not read the published .* genre yet/, text);
     }
     const v = await s.send('write an essay about volcanoes');
     assert.match(v.text, /know nothing about volcanoes/);
@@ -139,3 +140,13 @@ for (const file of ['owner-log-2026-11-13b.jsonl', 'owner-log-2026-11-13c.jsonl'
     console.log(`# ${file}: ${p.text}`);
   });
 }
+
+test('the published k.genres is in the knowledge world and the five types map to its genres; the library cannot apply them yet (0.65 reads move= on a genre)', () => {
+  const kw = knowledgeWorld(lib);
+  for (const t of Object.keys(DOC_TYPES)) assert.ok(genreOf(kw, t), `a genre for ${t}`);
+  assert.throws(() => lib.compose(kw, 'penguin', { genre: 'essay' }), 'update the adapter (and spec 26) when the library reads parts and steps');
+  assert.ok(topicsOf(kw).includes('Peru') && topicsOf(kw).includes('penguin'), 'animals and countries are topics');
+  const c = createComposer(lib).compose({ type: 'essay', topic: 'peru', chapters: 2, subchapters: 1, words: 60, seed: 1 }).composition;
+  assert.equal(c.title, 'All about Peru'); assert.ok(c.chapters.length >= 1);
+  assert.ok(c.chapters.flatMap((x) => x.subchapters.flatMap((y) => y.sentences)).every((x) => /^k\.geo\./.test(x.source) && !/[^\x20-\x7e]/.test(x.text)));
+});

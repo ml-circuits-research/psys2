@@ -413,3 +413,6 @@ Talk paragraph from `summarizeLog` + the host's frame rendering; "summarize the 
 
 ## 2026-11-14 std.compose wired (step B)
 Composer adapter over the real `std.compose` (see spec 26): type -> genre only when the knowledge holds it; essays work on the bundled toy catalog (k.interest + k.animals), cited and traced; scientific article, presentation, story and report are declined until `k.genres` is published. Asks (handover/textgen/ASK.md): the genres, facts beyond animals, a frame renderer in the language world. `scripts/build-bundled-interest.mjs` generates `src/knowledge/bundled-interest.mjs` from the catalog.
+
+## 2026-11-14 k.genres bundled, types mapped
+`k.genres` (knowledge 366975e) is bundled (`scripts/build-bundled-genres.mjs`) and the five types map to its genres, but sopworld 0.65 `compose` reads `move=` on a genre and throws on the published parts/steps: the essay is composed by default moves (genre named as not applied), the other types are declined with the reason. Knowledge world widened with k.geo (countries, cities): 10/10 essays, 24 claims all traced. The live catalog route for more topics is not wired (the composer's world is synchronous from the bundle). Ask: the library reading parts and steps.
