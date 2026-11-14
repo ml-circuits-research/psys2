@@ -1,26 +1,25 @@
 {
  "robustness": {
-  "date": "2026-11-13",
-  "build": "12043517",
+  "date": "2026-11-14",
+  "build": "66d79ae4",
   "config": "rules-C",
+  "paraphrasesDate": "2026-11-14",
   "typos": {
-   "right": 854,
-   "total": 1003
+   "right": 689,
+   "total": 937
   },
   "loose-words": {
-   "right": 335,
-   "total": 644
+   "right": 240,
+   "total": 629
   },
   "paraphrases-rt": {
-   "right": 12,
+   "right": 14,
    "total": 85
   },
   "paraphrases-rt-changed": {
    "right": 3,
    "total": 61
-  },
-  "paraphrasesNote": "2026-11-14 re-judged by hand: paraphrases-rt = the 85 rows whose meaning equals the original (meaning: same); paraphrases-rt-changed = the 61 rows the machine translation turned into another sentence (meaning: changed), robustness to a wrong translation, not a paraphrase measure; partial re-run (rules-C, the two paraphrase sets only)",
-  "paraphrasesDate": "2026-11-14"
+  }
  },
  "richest": {
   "date": "2026-11-13",
@@ -32,13 +31,10 @@
   "total": 600
  },
  "seating60": {
-  "date": "2026-11-13",
-  "build": "12043517",
-  "right": 31,
+  "date": "2026-11-14",
+  "build": "66d79ae4",
+  "right": 30,
   "total": 60,
-  "note": "judged by hand at Q10 (2026-11-14); to be re-judged by hand when the schema worlds change",
-  "read": 52,
-  "readOf": 60,
-  "readDate": "2026-11-13"
+  "note": "re-judged by hand 2026-11-14 after the sampler landing: 30 of 60 (was 31); the seating world is unchanged, 4 more schema worlds"
  }
 }
