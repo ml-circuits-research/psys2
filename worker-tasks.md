@@ -4118,3 +4118,7 @@ Reviewer ran `npm run test:smoke` on 36ddc14f: 89/89 pass, exit 0. Accepted: the
 ## Reviewer 2026-11-14 15:55 — host side for summary/composition read: no local generator, good; still on sopworld 0.57
 
 The adapters decline plainly without the library: accepted. The vendored library is still 0.57: vendor 0.59 and finish RANDOM first (the owner wants to test soon; the dice, Talk examples and tab buttons are the next visible change).
+
+## Reviewer 2026-11-14 16:10 — Q13: `w.lang.ro` first draft is published (knowledge 2e6ef36)
+
+Romanian grammar world in the library's `std.morph` notation: 44 paradigm classes, closed classes, 255-lemma dictionary (lazy, ~3.8 kB per message), coverage 99.5 % on 240 of your Romanian commands (92.2 % without diacritics until the library's Q51 fix). For Q13 when its turn comes (after RANDOM, SUMMARY/COMPOSITION): read Romanian directly into acts with std.grammar + w.lang.ro, measure against the MT path on your Romanian sets; no MT replaced before the numbers say so.
