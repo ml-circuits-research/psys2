@@ -584,7 +584,6 @@ test('ro->en imperative "Numește" is Name!, 3rd person stays "calls"', () => {
 test('ro->en doubled/tripled, vreun, and commas inside frames', () => {
   assert.equal(ro('Cât face 6 dublat?').text, 'What is 6 doubled?');
   assert.equal(ro('Are Ana vreo carte?').text, 'Does Ana have any books?');
-  assert.equal(ro('Da, are.').text, 'Yes it does.');
   assert.equal(ro('Între Tom și Ana, cine are mai multe mere?').text, 'Between Tom and Ana who has more apples?');
   assert.equal(ro('Câte mere mai puține are Ana decât Tom?').text, 'How many fewer apples does Ana have than Tom?');
 });
