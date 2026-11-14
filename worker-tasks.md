@@ -4057,3 +4057,7 @@ Reviewer ran `npm run test:smoke` on f2ff2e48: 79/79 pass, exit 0; read the six 
 1. **sopworld 0.54 has `std.motion`** (pure, seeded plan + run, priorities, cancel, per-unit streams). Vendor it and make `motion.mjs` a thin call; keep `MOTION_RULES_TEMPORARY` only until `k.motion` is published (a knowledge worker is writing it now; the reviewer will say when).
 2. **Phone popup:** the description under the big face is cut off by the input bar (avatar-icon-phone-popup.png); the popup must fit above the input bar or scroll inside itself.
 3. Then continue the queue: LAZY LOADING next.
+
+## Reviewer 2026-11-14 12:05 — LEARN FROM USE stage 1 accepted (08c0dbd6)
+
+Reviewer ran `npm run test:smoke` on bb4eedf1: 86/86 pass, exit 0; read the dislike screenshot (reasons as chips under the reply). Accepted: failures kept apart, failures-only download, sending off by default, ingest freezes the held-out set first. Next, in order: the 11:50 follow-ups (vendor std.motion 0.54, phone popup clipped), then LAZY LOADING (it has waited longest; the owner reported slow loading).
