@@ -3,8 +3,8 @@
 // releases them, `available` is false, every call returns null and the UI hides what needs them: there is NO local generator and NO fallback text here.
 // Browser-safe: no `node:*` imports; the library module is passed in.
 
-import { knowledgeWorld, languageWorld, genreOf, randomTopics, topicIndex } from './compose-world.mjs?v=7e48e1d104';
-import { englishOf, joinList as list } from '../lang/en-generate.mjs?v=868b5c174f';
+import { knowledgeWorld, languageWorld, randomTopics, topicIndex } from './compose-world.mjs?v=0ab8c2fade';
+import { englishOf } from '../lang/en-generate.mjs?v=84a99c355e';
 
 const pick = (lib, name) => (typeof lib?.[name] === 'function' ? lib[name] : typeof lib?.std?.[name] === 'function' ? lib.std[name] : null);
 const clip = (n, lo, hi, def) => { const v = Math.round(Number(n)); return Math.min(hi, Math.max(lo, Number.isFinite(v) ? v : def)); };
@@ -13,25 +13,6 @@ const clip = (n, lo, hi, def) => { const v = Math.round(Number(n)); return Math.
 // returns { sentences: [{ text, score, at }], picked: [text] } (extractive). The library does not write English: a frame is said through the language world's generation templates
 // (w.lang.en.template: "add {number} {kind:num=pl}.", filled by the library, plurals and articles by src/lang/en-generate.mjs). There is no verb table here. What a frame says is what
 // the person asked ("You asked me to add 3 trees and remove a house"); a frame of an act with no template that fits (a place with no spot named) is counted, not worded.
-const lower = (t) => t.charAt(0).toLowerCase() + t.slice(1);
-
-/** Frames -> one sentence; `failed` counts requests that were not understood or could not be done; `en` is `englishOf(lib, languageWorld(lib))`. */
-export function renderFrames(frames, failed = 0, en = null) {
-  const said = [];
-  let other = 0;
-  for (const f of frames.filter((x) => !x.failed)) {
-    const roles = f.kind ? (f.count > 1 ? { number: f.count, kind: f.kind } : { kind: f.kind }) : null;
-    const t = roles && en ? en.actSentence(f.act, roles) : null;
-    if (t) said.push(`${lower(t.replace(/\.$/, ''))}${f.kinds ? ` (${en.list(f.kinds)})` : ''}`); else other += f.count ?? 1;
-  }
-  const parts = [];
-  if (said.length) parts.push(`You asked me to ${en.list(said)}`);
-  if (other) parts.push(`${said.length ? ', plus ' : 'You asked for '}${other} other ${other === 1 ? 'change' : 'changes'}`);
-  const bad = failed ? `${failed} ${failed === 1 ? 'request was' : 'requests were'} not understood or could not be done` : '';
-  const head = parts.join('').replace(/^, plus/, ', plus');
-  if (head) return `${head}${bad ? `; ${bad}` : ''}.`;
-  return bad ? `${bad.charAt(0).toUpperCase()}${bad.slice(1)}.` : '';
-}
 
 const isBad = (t) => ['refused', 'not-understood', 'question-back'].includes(t.outcome);
 /** The entries `summarizeLog` aggregates, from the turn records of `turnRecord`: the acts the worlds executed (`acts`: [{ world, act, kind }], from the formalized reading). Failed turns have none and are only counted. */
@@ -43,6 +24,7 @@ export function logEntries(turns) {
 
 export function createSummarizer(lib, world) {
   let en0 = null;
+  const list = (a) => lib.joinList(a);   // the library's (0.102)
   const english = () => (en0 ??= (typeof lib?.World === 'function' ? englishOf(lib, languageWorld(lib)) : null));
   const log = pick(lib, 'summarizeLog'), txt = pick(lib, 'summarizeText');
   return {
@@ -59,7 +41,7 @@ export function createSummarizer(lib, world) {
       const failed = turns.filter(isBad).length;
       const used = [...new Set(turns.flatMap((t) => t.worlds ?? []))];
       const sentences = [];
-      const did = renderFrames(Array.isArray(frames) ? frames : [], failed, lib ? english() : null);
+      const did = lib.renderFrames(Array.isArray(frames) ? frames : [], { world: languageWorld(lib), failed });   // the library's (0.102)
       if (did) sentences.push({ text: did, source: 'std.summarizeLog' });
       if (used.length) sentences.push({ text: `I worked in ${list(used.map((id) => { const l = labelOf(id); return l && l !== id ? `${l} (${id})` : id; }))}.`, source: 'turn log' });
       if (taught.length) sentences.push({ text: `You taught me that ${list(taught)}.`, source: 'session.things' });
@@ -115,7 +97,7 @@ export function createComposer(lib, world = null) {
     /** Can a request in these words be executed (the composer exists and the knowledge holds the genre of its type)? A world that cannot act does not claim the reading. */
     supports(text) {
       if (!fn) return false;
-      return Boolean(genreOf(world ?? knowledgeWorld(lib), docTypeOf(TYPE_RE.exec(String(text ?? ''))?.[1]?.replace(/[ -]/g, '_'))));
+      return Boolean(lib.genreOf(world ?? knowledgeWorld(lib), docTypeOf(TYPE_RE.exec(String(text ?? ''))?.[1]?.replace(/[ -]/g, '_'))));
     },
     compose(input = {}) {
       if (!fn) return { why: 'the library has no composer' };
@@ -128,7 +110,7 @@ export function createComposer(lib, world = null) {
     },
     composeNow(req) {
       const kw = world ?? knowledgeWorld(lib);
-      const genre = genreOf(kw, req.type);
+      const genre = lib.genreOf(kw, req.type);
       if (!genre) return { why: `the knowledge has no genre for a ${DOC_TYPES[req.type].label.toLowerCase()} (no k.genres.genre ${req.type})` };
       const known = req.topic ? topicIndex(kw).get(req.topic.toLowerCase().replace(/^the\s+/, ''))?.name : null;
       const topics = req.topic ? [known ?? req.topic] : randomTopics(lib, kw, req.seed ?? Date.now() % 100000);

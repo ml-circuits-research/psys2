@@ -22,13 +22,6 @@ export function knowledgeWorld(lib) {
   return w;
 }
 
-/** The name of the `k.genres.genre` that holds a document type (`scientific-article` also as `scientific_article`), or null. */
-export function genreOf(world, type) {
-  const names = new Set([type, String(type).replace(/-/g, '_'), String(type).replace(/-/g, ' ')]);
-  for (const g of world.ofType('k.genres.genre')) { const n = String(g.attrs.name?.[0] ?? '').replace(/^"|"$/g, ''); if (names.has(n)) return n; }
-  return null;
-}
-
 /** The topics the knowledge can be composed about: the names of the animals and of the countries (lowercase -> the name as the knowledge writes it). */
 export function topicIndex(world) {
   const m = new Map();

@@ -8,8 +8,6 @@
 const bare = (v) => String(v).replace(/^"|"$/g, '').replace(/^\$/, '');
 const words = (s) => String(s).replace(/_/g, ' ');
 const META = new Set(['name', 'about', 'thing', 'source', 'own', 'cite', 'derived', 'named']);
-/** "a, b and c": the English way to join a list. */
-export const joinList = (a) => (a.length < 2 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
 const TYPE_KEYS = new Set(['class', 'kind', 'is']);   // the keys that say what a thing is: "is a bird"
 
 /** The generator of a language world: `lib` is the sopworld namespace, `world` the library World that holds w.lang.en's templates, irregular plurals, auxiliaries and onsets. */
@@ -37,26 +35,9 @@ export function englishOf(lib, world) {
 
   /** A verb-like key (eats, can, cannot): the key is said as it is after the subject; any other key is a noun (the colour of the house is red). */
   const verbLike = (k) => aux.has(k) || (k.endsWith('not') && aux.has(k.slice(0, -3))) || verbs.has(k) || verbs.has(k.replace(/es$/, '')) || verbs.has(k.replace(/s$/, ''));
-  const list = joinList;
-  /** One clause for a fact { type, attrs }: the verbs first, then the other keys, at most three parts; null when the fact says nothing a sentence can (no subject, only joins). */
-  function clause(f) {
-    const a = f?.attrs ?? {};
-    const subject = a.name?.[0] ?? a.about?.[0];
-    if (!subject) return null;
-    const join = ownKey(f.type);
-    const keys = Object.keys(a).filter((k) => !META.has(k) && !k.startsWith('core.') && !join(k) && a[k]?.length);
-    const say = (k) => {
-      const vs = a[k].map((v) => words(bare(v)));
-      if (verbLike(k)) return `${k} ${list(vs)}`;
-      if (preps.has(k)) return `is ${k} ${list(vs.map(np))}`;
-      if (TYPE_KEYS.has(k)) return `is ${article(vs[0])} ${vs[0]}`;
-      if (vs.length === 1 && /^(true|false)$/.test(vs[0])) return `is ${vs[0] === "true" ? "" : "not "}${k}`;   // a yes-or-no attribute: "is landlocked"
-      if (vs.length === 1 && /^\d+$/.test(vs[0]) && /s$/.test(k)) return `has ${vs[0]} ${vs[0] === '1' ? k.replace(/s$/, '') : k}`;   // a count of things: "has 2 legs"
-      return `has ${article(k)} ${k} of ${list(vs)}`;   // any other attribute: "has a habitat of sea and ice", "has an area of 622984"
-    };
-    const parts = [...keys.filter(verbLike), ...keys.filter((k) => !verbLike(k))].slice(0, 3).map(say);
-    return parts.length ? `${np(subject)} ${parts.join(', ')}` : null;
-  }
+  const list = (a) => lib.joinList(a);   // the library's (0.102)
+  /** One clause for a fact: the library's `clauseOf` (0.102; the verbs, prepositions, types, counts and nouns of the language world). */
+  const clause = (f) => lib.clauseOf(world, f, { names: places });
 
   /** The realiser of composition frames over the world's discourse templates (the library's, with this language's noun phrase, clause and inflection). */
   const FACT_SLOTS = new Set(['fact', 'claim', 'evidence', 'thesis', 'example', 'thing', 'attribute', 'value']);
@@ -78,26 +59,7 @@ export function englishOf(lib, world) {
   };
   const realiser = (seed) => lib.discourseRealiser(world, { seed, clause, np, inflect, fill });
 
-  // ---- the acts: the generation templates of the language world, filled by the library's realise
-  const acts = world.ofType('w.lang.en.template').map((t) => ({ act: bare(t.attrs.act?.[0]), shape: bare(t.attrs.shape?.[0] ?? ''), text: bare(t.attrs.text?.[0] ?? ''), mode: t.attrs.mode?.[0] ?? null }));
-  const slotsOf = (text) => [...text.matchAll(/\{(\w+)(?::[^}]*)?\}/g)].map((m) => m[1]);
-  let morph = null;
-  /**
-   * A sentence for an act and its roles ({ kind, thing, attribute, value ... }): the template of the act whose slots are exactly the roles given (the most specific that fits),
-   * filled by the library's `realise` (the plural of a `{role:num=pl}` is this language's), the articles in the form their word asks. null when no template fits.
-   */
-  function actSentence(act, roles, { mode = null } = {}) {
-    const given = Object.keys(roles).filter((k) => roles[k] != null && roles[k] !== '');
-    const fit = acts.filter((t) => t.act === act && (mode == null || t.mode == null || t.mode === mode)).filter((t) => { const s = slotsOf(t.text); return s.length === given.length && s.every((x) => given.includes(x)); });
-    const t = fit[0];
-    if (!t) return null;
-    morph ??= lib.morphOf(world, { types: { template: 'w.lang.en.template' } });
-    const r = { ...roles };
-    for (const m of t.text.matchAll(/\{(\w+):num=pl\}/g)) r[m[1]] = plural(String(r[m[1]]));
-    const out = lib.realise(morph, t.text, Object.fromEntries(Object.entries(r).map(([k, v]) => [k, words(String(v))])));
-    if (!out) return null;
-    const fixed = out.replace(/\b(a|an) ([A-Za-z]\w*)/g, (_, _a, w) => `${article(w)} ${w}`);
-    return fixed.charAt(0).toUpperCase() + fixed.slice(1);
-  }
+  // ---- the acts: the library's `actSentence` (0.102) fills the act templates of the language world
+  const actSentence = (act, roles) => lib.actSentence(world, act, roles);
   return { list, plural, article, inflect, np, clause, realiser, actSentence };
 }

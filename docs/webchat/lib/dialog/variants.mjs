@@ -12,9 +12,9 @@
  * Browser-safe: no `node:*`.
  */
 import { buildWires, SEGMENT_SLOT } from '../formalizer/rules/emit.mjs?v=8e51d17dc1';
-import { lexIndex } from '../worlds/lexicon.mjs?v=51f71db3b5';
-import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=00235ec115';
-import { FILLER } from './world-aware.mjs?v=af986d7c09';
+import { lexIndex } from '../worlds/lexicon.mjs?v=4c8b55ead1';
+import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=4611d63515';
+import { FILLER } from './world-aware.mjs?v=50771ffe43';
 import { budget } from './budget.mjs?v=00bce6e369';
 import { formOperatorTexts } from './form-operators.mjs?v=4807498111';
 
