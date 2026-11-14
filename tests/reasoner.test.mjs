@@ -20,11 +20,11 @@ const ops = await engineWith('ops');
 test('vendor: the library is the pinned file, unmodified, and passes its own loop scan', () => {
   const notes = readFileSync(path.join(ROOT, 'src/vendor/LICENSES.md'), 'utf8');
   const file = readFileSync(path.join(ROOT, 'src/vendor/sopworld/sopworld.mjs'));
-  assert.match(notes, /8b763ad/, 'the commit is named');
-  assert.match(notes, /build `ef15b5ca97ff`/, 'the build is recorded');
+  assert.match(notes, /d1f8121/, 'the commit is named');
+  assert.match(notes, /build `1f23ee172960`/, 'the build is recorded');
   assert.match(notes, new RegExp(`${file.length} bytes`), 'the size is recorded');
   assert.match(notes, new RegExp(createHash('sha256').update(file).digest('hex')), 'the sha256 of the vendored file is recorded');
-  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.23\.0 /);
+  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.29\.0 /);
   assert.equal(scan(path.join(ROOT, 'src/vendor/sopworld')).join('\n'), '', 'the library\'s own scanner finds no unguarded loop in the vendored file');
   assert.ok(readFileSync(path.join(ROOT, 'src/vendor/sopworld/LICENSE'), 'utf8').startsWith('MIT License'));
 });
@@ -35,7 +35,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
   assert.equal(ops.reasonerMode, 'ops');
   assert.equal(ops.reasoner, null);
   assert.equal(ops.createSession({ language: 'en' }).isession.rs, null);
-  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time', 'kids.animals', 'user.profile', 'docs.editor', 'docs.reader', 'geo.map', 'data.charts', 'games.chess', 'media.music']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
+  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time', 'kids.animals', 'user.profile', 'docs.editor', 'docs.reader', 'geo.map', 'games.chess', 'media.music']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
   assert.equal(ops.set.get('docs.editor').reasoner, 'matrix');
   assert.equal(ops.set.get('ui.shell').reasoner, 'matrix');
   assert.equal(ops.set.get('kids.shop').patterns.some((p) => p.id.includes('.m.')), false, 'the matrix-only patterns are not loaded in ops mode');
@@ -44,17 +44,18 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
 
 test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.buildAll(), []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['art.draw', 'common.sense', 'data.charts', 'docs.editor', 'docs.reader', 'games.chess', 'games.guess', 'games.hangman', 'games.tictactoe', 'geo.map', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'media.music', 'session.conversation', 'ui.help', 'ui.shell', 'user.profile']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['art.draw', 'common.sense', 'docs.editor', 'docs.reader', 'games.chess', 'games.guess', 'games.hangman', 'games.tictactoe', 'geo.map', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'media.music', 'session.conversation', 'ui.help', 'ui.shell', 'user.profile']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
 
 const LEDGERED_DIAGRAM = ["t.diagram.sketch.b.align.k05.b", "t.diagram.sketch.b.arrange.k06.b", "t.diagram.sketch.b.ask_path.k02.b", "t.diagram.sketch.b.create.k06.b", "t.diagram.sketch.b.delete.k04.b", "t.diagram.sketch.b.disconnect.k04.b", "t.diagram.sketch.b.group.k02.b", "t.diagram.sketch.b.group.k05.b", "t.diagram.sketch.b.move.k03.b", "t.diagram.sketch.b.rule.k06.b", "t.diagram.sketch.b.snap.k06.b", "t.diagram.sketch.b.undo.k04.b", "t.diagram.sketch.ex.star.n001"];
+const LEDGERED_CHARTS = ["t.data.charts.m04", "t.data.charts.n22", "t.data.charts.n35", "t.data.charts.n90", "t.data.charts.r2033", "t.data.charts.r2086", "t.data.charts.r2087", "t.data.charts.r2105", "t.data.charts.x203", "t.data.charts.x205"];
 test('parity gate (switch on): kids.shop 168, kids.tasks 241, kids.arith 243, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 9, kids.time 227, kids.animals 47, user.profile 144 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
   for (const [id, n] of [['kids.shop', 168], ['kids.tasks', 241], ['kids.arith', 243], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 9], ['kids.time', 227], ['kids.animals', 47], ['user.profile', 144], ['geo.map', 459], ['data.charts', 277], ['art.draw', 600], ['diagram.sketch', 771]]) {
     const r = await runWorldTests(matrix, id);
-    // the 13 rows of the diagram switch are on the ledger (training/eval/failures.jsonl, source "bug-batch diagram switch"); every other row of every world passes
-    assert.deepEqual(r.failed.map((f) => f.id).filter((x) => id !== 'diagram.sketch' || !LEDGERED_DIAGRAM.includes(x)), [], id); assert.equal(r.total, n);
+    // the 13 rows of the diagram switch and the 10 rows of the data.charts switch are on the ledger (training/eval/failures.jsonl, source "bug-batch diagram switch"); every other row of every world passes
+    assert.deepEqual(r.failed.map((f) => f.id).filter((x) => (id !== 'diagram.sketch' || !LEDGERED_DIAGRAM.includes(x)) && (id !== 'data.charts' || !LEDGERED_CHARTS.includes(x))), [], id); assert.equal(r.total, n);
   }
 });
 
@@ -256,7 +257,7 @@ test('the build ships the library and the fns of matrix worlds, versioned like e
     const index = JSON.parse(await readFile(path.join(out, 'worlds/index.json'), 'utf8'));
     assert.equal(index.worlds['kids.shop'].fnsUrl, 'worlds/kids.shop/fns.mjs');
     assert.ok(index.worlds['kids.shop'].files['matrix.sop']);
-    assert.equal(index.worlds['data.charts'].fnsUrl, 'worlds/data.charts/fns.mjs');
+    assert.equal(index.worlds['data.charts'].fnsUrl, undefined);
     assert.equal(index.worlds['ui.shell'].fnsUrl, 'worlds/ui.shell/fns.mjs');
     assert.equal(index.worlds['lang.common'].fnsUrl, undefined);
     const dialog = await readFile(path.join(out, 'lib/dialog/index.mjs'), 'utf8');

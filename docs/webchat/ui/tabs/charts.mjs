@@ -2,14 +2,14 @@
 // (vendored in ../../vendor/charts/), updates it in place so every change animates, shows the numbers in a small table,
 // keeps a strip of thumbnails for several charts and turns every click into a typed command through host.send, so mouse and
 // voice share one language layer ("what is <label>?" for a click on a bar).
-// The view of a chart (sorted data, resolved colors, flags) comes from worlds/data.charts/ops.mjs (chartView), loaded with
+// The view of a chart (sorted data, resolved colors, flags) comes from worlds/data.charts/chart.mjs (chartView), loaded with
 // host.asset, so the tab draws exactly what the state says.
 // Effects: charts.download { filename, format: 'png' | 'jpeg' } (canvas toDataURL).
 import { CSS, thumbSvg, emptyArt, num, kindName } from './charts/parts.mjs';
 import { themeOf, shapeKey, buildConfig, applyInPlace } from './charts/render.mjs';
 
 const VENDOR = new URL('../../vendor/charts/chart.mjs', import.meta.url);
-const OPS_ASSET = 'worlds/data.charts/ops.mjs';
+const OPS_ASSET = 'worlds/data.charts/chart.mjs';
 const TYPE_PILLS = [['bar', 'Bar', 'make it a bar chart'], ['line', 'Line', 'make it a line chart'], ['pie', 'Pie', 'make it a pie chart'], ['doughnut', 'Doughnut', 'make it a doughnut chart'],
   ['radar', 'Radar', 'make it a radar chart'], ['polarArea', 'Polar', 'make it a polar area chart'], ['scatter', 'Scatter', 'make it a scatter plot']];
 const EXAMPLES = ['make a chart: apples 5, pears 3, plums 8', 'chart the prices of the toys', 'compare the legs of the sea animals', 'Tom has 5 apples. Ana has 3 apples. Make a bar chart of what everyone has'];

@@ -348,6 +348,7 @@ export class Interpreter {
         if (op.semantics !== 'action') throw new Error(`operation ${op.id} is not an action and may not call requests`);
         check();
         if (st.depth > this.maxDepth) return { status: 'budget', note: 'recursion depth limit reached' };
+        if (action === 'ui.openTab' && session.noTabFollow && op.worldId !== 'ui.shell') return { status: 'supported', value: null, note: 'the reading is loose and names no world: no tab is brought forward' };   // invariant (c): a world's own "show me my tab" is a tab change like any other
         const target = this._actionOp(action);
         if (!target) return { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
         if (session.rs) session.rs.live = { request: (a, args2) => this.runAction(session, a, args2), batch: session.batch ?? null, checkpoint: (prefix) => session.rs.checkpoint(prefix) };

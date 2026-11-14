@@ -1,175 +1,41 @@
-@tpl.data.charts.fromText core.template
-    for=action.chart.fromText
-    text="{value}"
+@gen.data.charts.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
 
-@tpl.data.charts.new core.template
-    for=action.chart.new
-    text="{value}"
+@tpl.data.charts.make core.template
+    for=action.data.charts.make
+    text="{note}"
 
-@tpl.data.charts.refresh core.template
-    for=action.chart.refresh
-    text="{value}"
+@tpl.data.charts.remove core.template
+    for=action.data.charts.remove
+    text="{note}"
 
-@tpl.data.charts.duplicate core.template
-    for=action.chart.duplicate
-    text="{value}"
+@tpl.data.charts.change core.template
+    for=action.data.charts.change
+    text="{note}"
 
-@tpl.data.charts.fromHoldings core.template
-    for=action.chart.fromHoldings
-    text="{value}"
+@tpl.data.charts.send core.template
+    for=action.data.charts.send
+    text="{note}"
 
-@tpl.data.charts.fromPrices core.template
-    for=action.chart.fromPrices
-    text="{value}"
+@tpl.data.charts.pick core.template
+    for=action.data.charts.pick
+    text="{note}"
 
-@tpl.data.charts.fromLegs core.template
-    for=action.chart.fromLegs
-    text="{value}"
+@tpl.data.charts.copy core.template
+    for=action.data.charts.copy
+    text="{note}"
 
-@tpl.data.charts.fromList core.template
-    for=action.chart.fromList
-    text="{value}"
+@tpl.data.charts.ask core.template
+    for=action.data.charts.ask
+    text="{note}"
 
-@tpl.data.charts.addPoint core.template
-    for=action.chart.addPoint
-    text="{value}"
+@tpl.data.charts.undo core.template
+    for=action.data.charts.undo
+    text="{note}"
 
-@tpl.data.charts.removePoint core.template
-    for=action.chart.removePoint
-    text="{value}"
+@tpl.data.charts.redo core.template
+    for=action.data.charts.redo
+    text="{note}"
 
-@tpl.data.charts.setPoint core.template
-    for=action.chart.setPoint
-    text="{value}"
+# ---- templates.extra.sop (hand-written, appended by the generator)
 
-@tpl.data.charts.adjustPoint core.template
-    for=action.chart.adjustPoint
-    text="{value}"
-
-@tpl.data.charts.renamePoint core.template
-    for=action.chart.renamePoint
-    text="{value}"
-
-@tpl.data.charts.clearData core.template
-    for=action.chart.clearData
-    text="{value}"
-
-@tpl.data.charts.setType core.template
-    for=action.chart.setType
-    text="{value}"
-
-@tpl.data.charts.setStacked core.template
-    for=action.chart.setStacked
-    text="{value}"
-
-@tpl.data.charts.setTitle core.template
-    for=action.chart.setTitle
-    text="{value}"
-
-@tpl.data.charts.removeTitle core.template
-    for=action.chart.removeTitle
-    text="{value}"
-
-@tpl.data.charts.setColor core.template
-    for=action.chart.setColor
-    text="{value}"
-
-@tpl.data.charts.setPalette core.template
-    for=action.chart.setPalette
-    text="{value}"
-
-@tpl.data.charts.setSort core.template
-    for=action.chart.setSort
-    text="{value}"
-
-@tpl.data.charts.setOrientation core.template
-    for=action.chart.setOrientation
-    text="{value}"
-
-@tpl.data.charts.setValues core.template
-    for=action.chart.setValues
-    text="{value}"
-
-@tpl.data.charts.setLegend core.template
-    for=action.chart.setLegend
-    text="{value}"
-
-@tpl.data.charts.extreme core.template
-    for=action.chart.extreme
-    text="{value}"
-
-@tpl.data.charts.total core.template
-    for=action.chart.total
-    text="{value}"
-
-@tpl.data.charts.average core.template
-    for=action.chart.average
-    text="{value}"
-
-@tpl.data.charts.difference core.template
-    for=action.chart.difference
-    text="{value}"
-
-@tpl.data.charts.compare core.template
-    for=action.chart.compare
-    text="{value}"
-
-@tpl.data.charts.percent core.template
-    for=action.chart.percent
-    text="{value}"
-
-@tpl.data.charts.valueOf core.template
-    for=action.chart.valueOf
-    text="{value}"
-
-@tpl.data.charts.countItems core.template
-    for=action.chart.countItems
-    text="{value}"
-
-@tpl.data.charts.describe core.template
-    for=action.chart.describe
-    text="{value}"
-
-@tpl.data.charts.read core.template
-    for=action.chart.read
-    text="{value}"
-
-@tpl.data.charts.switchChart core.template
-    for=action.chart.switchChart
-    text="{value}"
-
-@tpl.data.charts.deleteChart core.template
-    for=action.chart.deleteChart
-    text="{value}"
-
-@tpl.data.charts.listCharts core.template
-    for=action.chart.listCharts
-    text="{value}"
-
-@tpl.data.charts.download core.template
-    for=action.chart.download
-    text="{value}"
-
-@tpl.data.charts.downloadData core.template
-    for=action.chart.downloadData
-    text="{value}"
-
-@tpl.data.charts.copyData core.template
-    for=action.chart.copyData
-    text="{value}"
-
-@tpl.data.charts.toDocument core.template
-    for=action.chart.toDocument
-    text="{value}"
-
-@tpl.data.charts.toDocumentData core.template
-    for=action.chart.toDocumentData
-    text="{value}"
-
-@tpl.data.charts.view core.template
-    for=action.data.charts.view
-    text="{value}"
-
-@tpl.data.charts.adopt core.template
-    for=action.data.charts.adopt
-    text="{value}"

@@ -37,6 +37,7 @@
  * Inside a tier the order is always: priority, literals, fewer wildcard tokens, router score, pattern order.
  */
 
+import { en } from '../lang/en.mjs?v=08dd6017a3';
 export function emptyContext() {
   return { activeTab: null, tabWorld: null, modalWorld: null, gameWorld: null, recentWorlds: [], lastWorld: null };
 }
@@ -88,10 +89,10 @@ export function namingTables(set) {
 }
 
 /** Words that introduce a noun: a name counts as naming a world only after one ("the avatar", "my chart"); a verb use ("paint yourself green") never names. */
-const DETERMINERS = new Set(['the', 'a', 'an', 'my', 'your', 'ur', 'this', 'that', 'our', 'its', 'his', 'her', 'their', 'new', 'another', 'some']);
+const DETERMINERS = en.words('det', 'routing');
 
 /** "as a picture", "like a chart": the name is a format or a comparison, not the object of the command. */
-const FORMAT_PREPOSITIONS = new Set(['as', 'like', 'into', 'resembling']);
+const FORMAT_PREPOSITIONS = en.words('prep', 'routing.format');
 
 /** Worlds named in a token list (see `namingTables`): a name phrase right after a determiner (and not after "as", "like"). */
 export function namedWorlds(tokens, names) {

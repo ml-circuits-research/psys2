@@ -14,16 +14,16 @@
  *  - `ctx.emit` accepts `{_}` / `{_1}` fresh-id placeholders like pattern emit templates.
  */
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
-import { budget, isBudgetExceeded } from '../dialog/budget.mjs?v=123c3e1329';
-import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=26885599a7';
+import { budget, isBudgetExceeded } from '../dialog/budget.mjs?v=00bce6e369';
+import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=c57881f705';
 import { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
-import { Renderer, fallbackText, listText } from './render.mjs?v=16a036d3a9';
-import { FormSession } from '../formalizer/rules/session.mjs?v=e445741b59';
+import { Renderer, fallbackText, listText } from './render.mjs?v=cdfbd32831';
+import { FormSession } from '../formalizer/rules/session.mjs?v=ecf9e29fa8';
 import { makeLang } from './lang.mjs?v=b0313edaaa';
 import { withLearned } from '../knowledge/learned.mjs?v=4c64642d40';
 
 export { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
-export { Renderer } from './render.mjs?v=16a036d3a9';
+export { Renderer } from './render.mjs?v=cdfbd32831';
 
 const STATUSES = new Set(['supported', 'missing', 'conflicting', 'ambiguous', 'unsupported', 'budget', 'error']);
 /**
@@ -348,6 +348,7 @@ export class Interpreter {
         if (op.semantics !== 'action') throw new Error(`operation ${op.id} is not an action and may not call requests`);
         check();
         if (st.depth > this.maxDepth) return { status: 'budget', note: 'recursion depth limit reached' };
+        if (action === 'ui.openTab' && session.noTabFollow && op.worldId !== 'ui.shell') return { status: 'supported', value: null, note: 'the reading is loose and names no world: no tab is brought forward' };   // invariant (c): a world's own "show me my tab" is a tab change like any other
         const target = this._actionOp(action);
         if (!target) return { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
         if (session.rs) session.rs.live = { request: (a, args2) => this.runAction(session, a, args2), batch: session.batch ?? null, checkpoint: (prefix) => session.rs.checkpoint(prefix) };

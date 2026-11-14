@@ -22,6 +22,11 @@ export async function build(dir) {
   // hand-written vocabulary a world keeps beside the generated one (the legend words of the diagram engine: shape names, colours ...): appended to the generated lexicon.sop
   const extra = await readFile(path.join(dir, 'lexicon.extra.sop'), 'utf8').catch(() => null);
   if (extra) files['lexicon.sop'] += `\n# ---- lexicon.extra.sop (hand-written, appended by the generator)\n${extra}`;
+  // hand-written wires beside the generated ones: the patterns, operations and templates of the families the acts do not name (a chart's sources and statistics)
+  for (const f of ['patterns', 'operations', 'templates']) {
+    const more = await readFile(path.join(dir, `${f}.extra.sop`), 'utf8').catch(() => null);
+    if (more) files[`${f}.sop`] += `\n# ---- ${f}.extra.sop (hand-written, appended by the generator)\n${more}`;
+  }
   return { files, schema };
 }
 if (import.meta.url === `file://${process.argv[1]}`) {

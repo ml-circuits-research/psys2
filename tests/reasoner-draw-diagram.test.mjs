@@ -8,7 +8,7 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
 import { toState as drawState, adopt as drawAdopt, guard as drawGuard } from '../worlds/art.draw/fns.mjs';
-import { KINDS } from '../worlds/art.draw/ops.mjs';
+import { KINDS } from '../worlds/art.draw/engine.mjs';
 
 const engineWith = (reasoner) => createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
 const matrix = await engineWith('matrix');

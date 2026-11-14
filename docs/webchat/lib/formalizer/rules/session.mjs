@@ -2,12 +2,10 @@
  * Per-session state of the rule formalizer: counters, agent entities and mention recency
  * (spec 03 section 3). Browser-safe.
  */
-import { makeWire, str, atom } from '../../soplang/index.mjs?v=26885599a7';
+import { makeWire, str, atom } from '../../soplang/index.mjs?v=c57881f705';
+import { en } from '../../lang/en.mjs?v=08dd6017a3';
 
-const PRONOUNS = {
-  he: 'm', him: 'm', his: 'm', she: 'f', her: 'f', they: 'any', them: 'any', their: 'any',
-  i: 'user', me: 'user', my: 'user', you: 'assistant', your: 'assistant',
-};
+const PRONOUNS = en.refers('session.agent');   // pronoun -> what it stands for: m, f, any, user, assistant (handover/lang.en pronouns)
 
 /** Words that are capitalized at sentence start but are never names. */
 export const STOP_WORDS = new Set(`a an the and or but then if so how what who whom whose where when which why is are was were be

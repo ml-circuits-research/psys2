@@ -1,0 +1,38 @@
+{
+ "robustness": {
+  "date": "2026-11-13",
+  "build": "12043517",
+  "config": "rules-C",
+  "typos": {
+   "right": 854,
+   "total": 1003
+  },
+  "loose-words": {
+   "right": 335,
+   "total": 644
+  },
+  "paraphrases-rt": {
+   "right": 22,
+   "total": 146
+  }
+ },
+ "richest": {
+  "date": "2026-11-13",
+  "build": "12043517",
+  "world": "art.draw",
+  "where": "worlds-pilot",
+  "schemaLines": 425,
+  "right": 561,
+  "total": 600
+ },
+ "seating60": {
+  "date": "2026-11-13",
+  "build": "12043517",
+  "right": 31,
+  "total": 60,
+  "note": "judged by hand at Q10 (2026-11-14); to be re-judged by hand when the schema worlds change",
+  "read": 52,
+  "readOf": 60,
+  "readDate": "2026-11-13"
+ }
+}

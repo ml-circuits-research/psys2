@@ -23,10 +23,11 @@
  * The session as facts (`facts()`): things made and their counts, topics, games and results, places shown. A view takes "the current discussion" as content
  * through `ctx.sessionFacts()` and the operation things.show of session.things (spec 23); this module only offers the facts.
  */
-import { budget } from './budget.mjs?v=123c3e1329';
-import { GRAMMAR } from './continuation.mjs?v=c651104054';
-import { touched } from './followup.mjs?v=1e203c3efd';
-import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=85616603c5';
+import { budget } from './budget.mjs?v=00bce6e369';
+import { en } from '../lang/en.mjs?v=08dd6017a3';
+import { GRAMMAR } from './continuation.mjs?v=b8c293a6e7';
+import { touched } from './followup.mjs?v=88af56c068';
+import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=935a2d32f7';
 import { classify, describeReferent, plain } from './meta.mjs?v=aa6dfcad14';
 
 const LOG_LIMIT = 60;
@@ -35,9 +36,9 @@ const tokens = (t) => String(t ?? '').toLowerCase().replace(/['’]/g, '').match
 const strip = (t) => String(t ?? '').trim().replace(/[\s.!?]+$/, '');
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 const quoted = (t) => `"${strip(t)}"`;
-const DETERMINERS = new Set(['a', 'an', 'the', 'some', 'another', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'my', 'your', 'this', 'that', 'these', 'those', 'many', 'few', 'several']);
-const PREPOSITIONS = new Set(['on', 'in', 'at', 'to', 'into', 'onto', 'under', 'over', 'above', 'below', 'behind', 'near', 'next', 'by', 'beside', 'between', 'inside', 'outside', 'from', 'across', 'around', 'along', 'toward', 'towards']);
-const PRONOUNS = new Set(['it', 'them', 'they', 'this', 'that', 'these', 'those', 'him', 'her']);
+const DETERMINERS = en.words('det', 'dialogue');
+const PREPOSITIONS = en.words('prep', 'dialogue');
+const PRONOUNS = en.words('pron', 'dialogue');
 
 /** A phrase group as arrays of tokens, longest first. */
 const alts = (lang, id) => [...new Set((lang.phrase?.(id) ?? []))].map((a) => a.split(' ').filter(Boolean)).filter((a) => a.length).sort((a, b) => b.length - a.length);
@@ -251,6 +252,11 @@ export class Dialogue {
     const ack = await this.ack(ws, text, sid);
     if (ack) return ack;
 
+    // 4b. a negated request ("do not remove table 3", "never draw a sun"): nothing is carried out, whatever world could have read the verb (handover/lang.en clauses.sop neg.imperative)
+    const negated = en.negatedRequest(text);
+    // ... unless a world's own pattern reads the negation ("Dont loop it" is the music world's loop off): the negation words are then in no free capture of the reading
+    if (negated && !(await this._negationOwned(text, negated, sid))) return this.tag({ reply: `OK, I will not ${negated.rest}. Nothing changed.`, info: { kind: 'negated-request', rest: negated.rest, dialogue: 'negation' } }, 'negation');
+
     // 5. a question about the scene or the history
     const q = this.sceneQuestion(ws, text);
     if (q) return q;
@@ -267,6 +273,14 @@ export class Dialogue {
     }
 
     return null;   // "a chart about the current discussion" is not read here: it is a selection of the session things into a view (session.things, spec 23)
+  }
+
+  /** Does the world's reading of the whole sentence use the negation (no free-text capture covers the lead)? A reading that swallowed "do not" into a capture ("Do not draw a" + sun) did not. */
+  async _negationOwned(text, negated, sid) {
+    const seg = await this.disc._readSeg(text, sid);
+    if (!seg?.match) return false;
+    const free = Object.values(seg.match.slots ?? {}).filter((x) => x?.span && !/^(?:lex\.|number|ordinal)/.test(String(x.class ?? '')));
+    return !free.some((x) => x.span[0] < negated.leadEnd);
   }
 
   tag(r, kind) { r.info = { ...(r.info ?? {}), dialogue: kind }; this._kind = kind; return r; }

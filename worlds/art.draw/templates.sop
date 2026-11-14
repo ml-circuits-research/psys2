@@ -1,135 +1,50 @@
-@tpl.art.draw.add core.template
-    for=action.draw.add
-    text="{value}"
+@gen.art.draw.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
 
-@tpl.art.draw.ground core.template
-    for=action.draw.ground
-    text="{value}"
-
-@tpl.art.draw.scene core.template
-    for=action.draw.scene
-    text="{value}"
-
-@tpl.art.draw.mood core.template
-    for=action.draw.mood
-    text="{value}"
-
-@tpl.art.draw.recolor core.template
-    for=action.draw.recolor
-    text="{value}"
-
-@tpl.art.draw.givePart core.template
-    for=action.draw.givePart
-    text="{value}"
-
-@tpl.art.draw.matchSize core.template
-    for=action.draw.matchSize
-    text="{value}"
-
-@tpl.art.draw.resize core.template
-    for=action.draw.resize
-    text="{value}"
-
-@tpl.art.draw.setSize core.template
-    for=action.draw.setSize
-    text="{value}"
-
-@tpl.art.draw.move core.template
-    for=action.draw.move
-    text="{value}"
-
-@tpl.art.draw.nudge core.template
-    for=action.draw.nudge
-    text="{value}"
-
-@tpl.art.draw.turn core.template
-    for=action.draw.turn
-    text="{value}"
+@tpl.art.draw.make core.template
+    for=action.art.draw.make
+    text="{note}"
 
 @tpl.art.draw.remove core.template
-    for=action.draw.remove
-    text="{value}"
+    for=action.art.draw.remove
+    text="{note}"
 
-@tpl.art.draw.removeIt core.template
-    for=action.draw.removeIt
-    text="{value}"
+@tpl.art.draw.change core.template
+    for=action.art.draw.change
+    text="{note}"
 
-@tpl.art.draw.clearAll core.template
-    for=action.draw.clearAll
-    text="{value}"
-
-@tpl.art.draw.new core.template
-    for=action.draw.new
-    text="{value}"
-
-@tpl.art.draw.undo core.template
-    for=action.draw.undo
-    text="{value}"
-
-@tpl.art.draw.redo core.template
-    for=action.draw.redo
-    text="{value}"
-
-@tpl.art.draw.select core.template
-    for=action.draw.select
-    text="{value}"
-
-@tpl.art.draw.deselect core.template
-    for=action.draw.deselect
-    text="{value}"
-
-@tpl.art.draw.fill core.template
-    for=action.draw.fill
-    text="{value}"
-
-@tpl.art.draw.duplicate core.template
-    for=action.draw.duplicate
-    text="{value}"
-
-@tpl.art.draw.describe core.template
-    for=action.draw.describe
-    text="{value}"
-
-@tpl.art.draw.count core.template
-    for=action.draw.count
-    text="{value}"
-
-@tpl.art.draw.where core.template
-    for=action.draw.where
-    text="{value}"
-
-@tpl.art.draw.exists core.template
-    for=action.draw.exists
-    text="{value}"
-
-@tpl.art.draw.colorOf core.template
-    for=action.draw.colorOf
-    text="{value}"
-
-@tpl.art.draw.near core.template
-    for=action.draw.near
-    text="{value}"
-
-@tpl.art.draw.help core.template
-    for=action.draw.help
-    text="{value}"
-
-@tpl.art.draw.colors core.template
-    for=action.draw.colors
-    text="{value}"
-
-@tpl.art.draw.save core.template
-    for=action.draw.save
-    text="{value}"
-
-@tpl.art.draw.open core.template
-    for=action.draw.open
-    text="{value}"
-
-@tpl.art.draw.takeApart core.template
-    for=action.draw.takeApart
-    text="{value}"
+@tpl.art.draw.place core.template
+    for=action.art.draw.place
+    text="{note}"
 
 @tpl.art.draw.group core.template
-    for=action.draw.group
-    text="{value}"
+    for=action.art.draw.group
+    text="{note}"
+
+@tpl.art.draw.send core.template
+    for=action.art.draw.send
+    text="{note}"
+
+@tpl.art.draw.pick core.template
+    for=action.art.draw.pick
+    text="{note}"
+
+@tpl.art.draw.copy core.template
+    for=action.art.draw.copy
+    text="{note}"
+
+@tpl.art.draw.ask core.template
+    for=action.art.draw.ask
+    text="{note}"
+
+@tpl.art.draw.undo core.template
+    for=action.art.draw.undo
+    text="{note}"
+
+@tpl.art.draw.redo core.template
+    for=action.art.draw.redo
+    text="{note}"
+
+@tpl.art.draw.save core.template
+    for=action.art.draw.save
+    text="{note}"

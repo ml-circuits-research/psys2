@@ -9,44 +9,44 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=e474061c71';
-import { loadWorlds } from '../worlds/index.mjs?v=ad896e88ec';
-import { validateWorldSet } from '../worlds/validate.mjs?v=93b9db796f';
-import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=34ef60e7bf';
-import { createInterpreter } from '../interpreter/index.mjs?v=1776a36a4a';
-import { createReasoner } from '../reasoner/index.mjs?v=2490d29af3';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=5edc418d5b';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=3f6e45b0c9';
-import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
-import { splitSentences } from '../formalizer/rules/normalize.mjs?v=fe5fe63391';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=1d1251e1cc';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=2e9aae4062';
-import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=e046742b19';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=85616603c5';
-import { lexIndex } from '../worlds/lexicon.mjs?v=43c8aa7311';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=5c05ab6465';
+import { loadWorlds } from '../worlds/index.mjs?v=ce842013fa';
+import { validateWorldSet } from '../worlds/validate.mjs?v=2d6b887ef4';
+import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=13f79011f0';
+import { createInterpreter } from '../interpreter/index.mjs?v=35da18f19b';
+import { createReasoner } from '../reasoner/index.mjs?v=6b0a80f2d1';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=47d78b9a1d';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=88ce10e80c';
+import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
+import { splitSentences } from '../formalizer/rules/normalize.mjs?v=dc30576b7d';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=f233ebe92a';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=5e3a245161';
+import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=4b39ead121';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=935a2d32f7';
+import { lexIndex } from '../worlds/lexicon.mjs?v=2026bfa238';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
-import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=123c3e1329';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=b0791e2de1';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=4c417a7997';
-import { checkValues } from './value-check.mjs?v=1ef857b2f9';
+import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=10680efc46';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=691dae285a';
+import { checkValues } from './value-check.mjs?v=e4c5e09930';
 import { attachValues } from '../knowledge/values.mjs?v=189c43bb28';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=ef748090d7';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f6a995963d';
-import { Discourse } from './discourse.mjs?v=ed4ba295a4';
-import { Dialogue } from './dialogue.mjs?v=457d56538e';
+import { Discourse } from './discourse.mjs?v=ec3794cb59';
+import { Dialogue } from './dialogue.mjs?v=590884a854';
 import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=8672066d0f';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=d2af0243eb';
-import { repairFromScene } from './scene-referents.mjs?v=d9b40d0692';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=7b0514730b';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=af2e30c86b';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=d94ff00d16';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=08fbf5a3ab';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=c4ddc6591c';
+import { repairFromScene } from './scene-referents.mjs?v=6e1efd5f3c';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=91ef1c6ef4';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=827a1ea934';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=19939584dc';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
-import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
-import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=2312c641e7';
+import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
+import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=01b85d5c18';
 
 export { runWorldTests } from './test-runner.mjs?v=84ab4dd2bc';
 
@@ -1372,7 +1372,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=2fb7c3289c').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=865e7cf660').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
     { const v = cleanVoice(text, { voice: this._voice }); if (v.corrections.length && v.text.trim()) text = v.text; }
@@ -1595,7 +1595,7 @@ export class DialogSession {
       // a world with a lazily loaded engine (ops `prepare()`, async, idempotent: spec 04) is made ready before its operations run
       { const prep = this.engine.set.get(seg.match?.worldId)?.ops?.prepare; if (typeof prep === 'function') { try { await prep(); } catch { /* the operation then says it is not ready */ } } }
       { const rs = this.isession.rs; if (rs && segments.length > 1) rs.beginStep(seg.text, rs.snapOwn(this.isession), lang === 'en' ? seg.text : originalSentence(text, seg, translation?.alignment)); }   // one step per request of the message: "undo" takes back the last one (spec 15, UNDO-REDO)
-      this.isession.noTabFollow = !!(seg.corrections?.length || seg.ignored?.length || seg.bestEffort || seg.partial) && !this._worldsNamedIn(english).has(seg.match?.worldId);
+      this.isession.noTabFollow = !!(seg.corrections?.length || seg.ignored?.length || seg.bestEffort || seg.partial || segments.some((x) => x.unparsed)) && !this._worldsNamedIn(english).has(seg.match?.worldId);   // invariant (c): a loose reading (a spelling guess, ignored words, or a clause of the message that nobody read) never changes the tab; only a named world does
       this.isession.add(seg.wires);
       this.isession.batch = { index: segNo++, count: segments.length };   // ops see their place in the message (a game's host cannot answer between two commands of one message)
       const statements = [];
@@ -1662,7 +1662,7 @@ export class DialogSession {
     // Tab follow: a world with a tab answered, but its tab is hidden: bring it forward (the existing ui.openTab action).
     const shown = this.isession.state['ui.shell']?.activeTab;
     // INVARIANT (no tab change without a named tab): a reading that needed a spelling correction, ignored words or a best effort does not bring its world's tab forward unless the message names that world
-    if (followTab && followSeg && (followSeg.corrections?.length || followSeg.ignored?.length || followSeg.bestEffort || followSeg.partial) && !this._worldsNamedIn(english).has(followSeg.match?.worldId)) followTab = null;
+    if (followTab && followSeg && (followSeg.corrections?.length || followSeg.ignored?.length || followSeg.bestEffort || followSeg.partial || segments.some((x) => x.unparsed)) && !this._worldsNamedIn(english).has(followSeg.match?.worldId)) followTab = null;
     if (followTab && shown && shown !== followTab && !this.isession.effects.some((e) => e.name === 'ui.openTab')) {
       try { interp.runAction(this.isession, 'ui.openTab', { tab: followTab }); } catch { /* the shell may be absent */ }
     }

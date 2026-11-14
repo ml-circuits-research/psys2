@@ -21,7 +21,7 @@
  * Emit templates: `{slot}` placeholders; an optional quantified argument that is absent drops the tokens / lines that use it.
  */
 import { exampleSentences } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
-import { get, getAll } from '../soplang/index.mjs?v=26885599a7';
+import { get, getAll } from '../soplang/index.mjs?v=c57881f705';
 
 export const INTENT_FRAMES = {
   command: ['imp', 'wish', 'ind', 'can', 'short', 'phr'],

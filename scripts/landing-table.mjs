@@ -11,6 +11,8 @@
  *   6. cross-world turns                                   on the owner logs (replayed, from build-system-map) and the failure ledger (cross-world causes)
  *   7. pairs of worlds that cooperate                      T1-T3 cells of the case corpus (scripts/exp-transfer.mjs): a pair counts when one cell is right
  *   8. cases in the corpus                                 training/eval/cases.jsonl (scripts/update-cases.mjs), and the right-to-wrong changes of the last run
+ *   9. the scaling indicators of Q10 item 1                a new world from a schema alone (60 natural requests), the robustness sets (rules config), cross-world captures (target 0), the richest world on acts:
+ *                                                          training/eval/indicators.json (scripts/indicators.mjs), the captures counted live from the corpus
  * Accuracy sets appear as a guard column only (owner logs, T1-T3, grid judged): they must not fall, they are not the goal.
  * Smoke and test-world are run separately and are not part of this table.
  *
@@ -22,6 +24,7 @@ import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { readCorpus, readRuns, latest } from './lib/cases-corpus.mjs';
+import { read as readIndicators } from './indicators.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (p) => { try { return readFileSync(join(REPO, p), 'utf8'); } catch { return ''; } };
@@ -135,6 +138,17 @@ export async function compute({ meas, worlds } = {}) {
   const k3 = new Set(tr.filter((c) => c.outcome === 'right' && c.exp === 'T3').map((c) => c.pair));
   const k3t = new Set(tr.filter((c) => c.exp === 'T3').map((c) => c.pair));
   rows.push({ label: 'Pairs of worlds that cooperate', value: `${ok.size} of ${tried.size}`, detail: `T1 (things) and T2 (taught facts): a pair counts when at least one cell is right in either direction (${[...ok].sort().join(', ')}); T3 (rules from the knowledge tier): ${k3.size} of ${k3t.size} world-and-knowledge pairs (${[...k3].sort().join(', ')}). T4-T6 have no experiment yet (the timeline is the T6-lite column of T1)` });
+
+  // the scaling indicators of Q10 item 1 (owner-agreed): recorded by scripts/indicators.mjs, the captures counted here from the corpus
+  const ind = readIndicators();
+  if (ind.seating60) rows.push({ label: 'New world from a schema alone: natural requests right', value: `${ind.seating60.right} of ${ind.seating60.total}`, detail: `plan.seating (schema.sop only), 60 requests written without seeing the grammar (scripts/exp-seating.mjs), judged by hand ${ind.seating60.date}${ind.seating60.read != null ? `; the rules read ${ind.seating60.read} of ${ind.seating60.readOf} (${ind.seating60.readDate})` : ''}${ind.seating60.note ? `; ${ind.seating60.note}` : ''}` });
+  if (ind.robustness) { const r = ind.robustness; rows.push({ label: 'Robustness sets (rules config)', value: ['typos', 'loose-words', 'paraphrases-rt'].map((k) => `${k} ${r[k].right}/${r[k].total}`).join(', '), detail: `${['typos', 'loose-words', 'paraphrases-rt'].map((k) => `${k} ${pct(r[k].right, r[k].total)}`).join(', ')}; end to end through the shared pipeline, skipped rows not counted (scripts/eval-ablation.mjs ${r.config}, ${r.date}, build ${r.build})` }); }
+  const captures = cases.filter((c) => c.outcome === 'wrong' && /^(wrong world routing|foreign-world reading)/.test(c.group ?? ''));
+  rows.push({ label: 'Cross-world captures (target 0)', value: String(captures.length), detail: `cases of the corpus where a world answered another world's sentence or the wrong world took it (groups "foreign-world reading" ${captures.filter((c) => /^foreign/.test(c.group)).length}, "wrong world routing" ${captures.filter((c) => /^wrong world/.test(c.group)).length}); the invariants test and test-world catch them at the landing` });
+  if (ind.richest?.total) rows.push({ label: 'Richest world on acts: its own tests', value: `${ind.richest.world} ${pct(ind.richest.right, ind.richest.total)}`, detail: `${ind.richest.right} of ${ind.richest.total} tests of ${ind.richest.world}${ind.richest.where === 'worlds-pilot' ? ' (the schema pilot, worlds-pilot)' : ' (the switched world)'}, ${ind.richest.schemaLines} schema lines; the switch of the world to schema + acts is the proof (${ind.richest.date})` });
+
+  const holes = cases.filter((c) => c.kind === 'lang-hole');
+  if (holes.length) { const by = {}; for (const c of holes) { const h = (c.class ?? '').replace('lang-hole:', ''); (by[h] ??= { right: 0, total: 0 }); by[h].total++; if (c.outcome === 'right') by[h].right++; } rows.push({ label: 'Holes of English read (handover/lang.en)', value: `${holes.filter((c) => c.outcome === 'right').length} of ${holes.length}`, detail: `${Object.entries(by).map(([h, v]) => `${h} ${v.right}/${v.total}`).join(', ')}; cases training/eval/lang-holes.jsonl (scripts/eval-lang-holes.mjs); controls must stay right` }); }
 
   const runs = readRuns(), lastRun = runs.at(-1);
   const kinds = {}; for (const c of cases) kinds[c.kind] = (kinds[c.kind] ?? 0) + 1;

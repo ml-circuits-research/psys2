@@ -1,6 +1,6 @@
 @world.art.draw core.world
     namespace=art.draw
-    version=0.1.0
+    version=0.2.0
     legend=$legend.art.draw
     imports=world.core
     imports=world.kids.common
@@ -9,7 +9,8 @@
     imports=world.space
     compose=world.common.sense
     formalization=rules
-    reasoner=matrix
+    imports=world.acts
+    imports=world.lang.common
     undo=draw.undo
     redo=draw.redo
     source="the picture"

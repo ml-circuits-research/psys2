@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createBudget, installBudget, releaseBudget, BudgetExceeded, BUDGET_GLOBAL } from '../src/dialog/budget.mjs';
-import { parseNP } from '../worlds/art.draw/ops.mjs';
+import { parseNP } from '../worlds/art.draw/engine.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
 

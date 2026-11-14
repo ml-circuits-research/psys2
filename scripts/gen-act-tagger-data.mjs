@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: AGPL-3.0-only
-// P3 (spec 21 section 6, worker-tasks 19:35): training data for the act + roles tagger, generated from every schema.sop x the act grammar (FORMS of worlds/acts/acts.mjs,
+// P3 (spec 21 section 6, worker-tasks 19:35): training data for the act + roles tagger, generated from every schema.sop x the act grammar (the frames of handover/lang.en/shards/frames-acts.sop, read by worlds/acts/acts.mjs,
 // verbs of k.actions through ACT_VERBS) x knowledge words (k.objects / k.attributes things, k.values colours, scale steps, comparatives, numbers, shapes, directions, set words,
 // k.feelings, k.geo cities, k.people roles). Labels: the act (14 classes) and BIO spans of the six roles thing, set, attribute, value, place, amount; world independent.
 //   node scripts/gen-act-tagger-data.mjs [--out training/data/act-tagger] [--kw <docs/worlds of the knowledge repo>] [--seed 1] [--train 200000] [--test 6000]

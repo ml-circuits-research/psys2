@@ -1,0 +1,99 @@
+# w.lang.en/shards/clauses: clause structure. Joiners and how they cut, frame leads, self-correction markers, bare answers, question words, negation words, imperative lead-ins.
+# sources: PSys2 src/formalizer/rules/index.mjs (splitClauses, cardCuts, FRAME_LEADS, JOINER_WORDS), expand.mjs (MARKERS, BARE_ANSWER, LEAD_ONLY), normalize.mjs (QUESTION_WORDS), src/dialog/value-check.mjs (NEG),
+#          worlds/acts forms (lead-ins and fillers are the phrase groups of shards/phrases.sop)
+# license: CC0-1.0
+
+# ---- joiners: what separates two clauses. `cut` says where the splitter cuts without any other evidence; `card-cut` where a clause starts only when an act word or a question word follows (the card-driven cutter) ----
+@lang.en.joiner.comma lang.en.joiner text="," kind=list-or-clause cut=yes card-cut=yes note="a comma after a frame lead does not cut"
+@lang.en.joiner.semicolon lang.en.joiner text=";" kind=clause cut=no card-cut=yes
+@lang.en.joiner.and lang.en.joiner text=and kind=coordination cut=yes card-cut=yes note="'and then' / 'and also' count as one joiner"
+@lang.en.joiner.then lang.en.joiner text=then kind=sequence cut=yes card-cut=yes note="explicit order: the clauses are kept as separate steps"
+@lang.en.joiner.also lang.en.joiner text=also kind=addition cut=yes card-cut=yes note="joins like then (model ablation 2026-11-13, on by default)"
+@lang.en.joiner.but lang.en.joiner text=but kind=contrast cut=yes card-cut=yes
+@lang.en.joiner.run lang.en.joiner.rule doc="a run of joiners counts as one (', and then'); the first token after the run opens the next clause"
+
+# ---- frame leads: the words before a comma that open a standing rule or default; the comma after them does not end a clause ("From now on, squares are gray") ----
+@lang.en.frame-lead.1 lang.en.frame-lead text="from now on"
+@lang.en.frame-lead.2 lang.en.frame-lead text="from here on"
+@lang.en.frame-lead.3 lang.en.frame-lead text="from then on"
+@lang.en.frame-lead.4 lang.en.frame-lead text="from today on"
+@lang.en.frame-lead.5 lang.en.frame-lead text="by default"
+@lang.en.frame-lead.6 lang.en.frame-lead text="in future"
+@lang.en.frame-lead.7 lang.en.frame-lead text="in the future"
+@lang.en.frame-lead.8 lang.en.frame-lead text="as a rule"
+@lang.en.frame-lead.9 lang.en.frame-lead text="for now"
+@lang.en.frame-lead.10 lang.en.frame-lead text=always
+
+# ---- self-correction: "blue, no, green", "draw a cat, no wait, a dog" (expand.mjs selfCorrect) ----
+@lang.en.correction.no-wait lang.en.correction text="no wait" comma=no
+@lang.en.correction.i-mean lang.en.correction text="i mean" comma=no
+@lang.en.correction.i-meant lang.en.correction text="i meant" comma=no
+@lang.en.correction.no-sorry lang.en.correction text="no sorry" comma=no
+@lang.en.correction.scratch-that lang.en.correction text="scratch that" comma=no
+@lang.en.correction.make-that lang.en.correction text="make that" comma=yes
+@lang.en.correction.or-rather lang.en.correction text="or rather" comma=no
+@lang.en.correction.no lang.en.correction text=no comma=yes
+@lang.en.correction.sorry lang.en.correction text=sorry comma=yes
+@lang.en.correction.actually lang.en.correction text=actually comma=yes
+@lang.en.correction.wait lang.en.correction text=wait comma=yes
+@lang.en.correction.rather lang.en.correction text=rather comma=yes
+@lang.en.correction.oops lang.en.correction text=oops comma=yes
+@lang.en.correction.rule lang.en.correction.rule doc="the words after the marker replace the part of the abandoned clause they correct: the whole clause when the correction restarts the command; the last number when it is a number; up to / from the shared word otherwise. A bare answer list ('yes, no, maybe') is never a correction."
+
+# words of an abandoned clause that make it only a lead ("wait, I meant yes", "sorry, ..."): such a clause is a correction of the previous turn, not of a clause of this message (expand.mjs LEAD_ONLY)
+@lang.en.correction.lead-only lang.en.correction.lead text=no text=not text=wait text=sorry text=oops text=actually text=hmm text=hm text=um text=uh text=er text=oh text=ah text=hold text=on text=well text=ok text=okay text=my text=bad text=mistake text=a text=second text=sec text=whoops text=ugh
+
+# ---- bare answers to a yes/no question ----
+@lang.en.answer.yes lang.en.answer polarity=yes text=yes text=yeah text=yep text=yup text=yea
+@lang.en.answer.no lang.en.answer polarity=no text=no text=nope text=nah
+@lang.en.answer.unsure lang.en.answer polarity=unsure text=maybe text=perhaps text=probably text=sometimes text=idk text="i dont know" text="i do not know" text="dont know" text="do not know" text="not sure" text=unsure text="i am not sure" text="im not sure" text="i guess" text="sort of" text="kind of" text=kinda
+
+# ---- question words and the auxiliaries that open a yes/no question; `in=` names the view of one old list: question-start (normalize.mjs QUESTION_WORDS: the first word of a question), wh-lead (index.mjs WH_WORDS: the words a fuzzy wh match may name),
+#      question-tail (index.mjs QUESTION_TAIL_RE: a question after a connective inside swallowed text) ----
+@lang.en.wh.what lang.en.wh text=what asks=thing in=question-start in=wh-lead in=question-tail
+@lang.en.wh.which lang.en.wh text=which asks=thing-of-a-set in=question-start in=wh-lead in=question-tail
+@lang.en.wh.who lang.en.wh text=who asks=person in=question-start in=wh-lead in=question-tail
+@lang.en.wh.whom lang.en.wh text=whom asks=person case=object in=wh-lead
+@lang.en.wh.whose lang.en.wh text=whose asks=owner in=wh-lead
+@lang.en.wh.where lang.en.wh text=where asks=place in=question-start in=wh-lead in=question-tail
+@lang.en.wh.when lang.en.wh text=when asks=time in=question-start in=wh-lead in=question-tail
+@lang.en.wh.why lang.en.wh text=why asks=reason in=question-start in=wh-lead in=question-tail
+@lang.en.wh.how lang.en.wh text=how asks=manner-or-degree in=question-start in=wh-lead in=question-tail
+@lang.en.wh.howmany lang.en.wh text="how many" asks=count of=plural
+@lang.en.wh.howmuch lang.en.wh text="how much" asks=amount of=mass
+@lang.en.aux.is lang.en.aux text=is tense=present number=sg in=question-start in=question-tail
+@lang.en.aux.are lang.en.aux text=are tense=present number=pl in=question-start in=question-tail
+@lang.en.aux.was lang.en.aux text=was tense=past number=sg
+@lang.en.aux.were lang.en.aux text=were tense=past number=pl
+@lang.en.aux.does lang.en.aux text=does tense=present number=sg support=do in=question-start in=question-tail
+@lang.en.aux.do lang.en.aux text=do tense=present support=do in=question-start in=question-tail
+@lang.en.aux.did lang.en.aux text=did tense=past support=do in=question-start
+@lang.en.aux.can lang.en.aux text=can modal=ability in=question-start in=question-tail
+@lang.en.aux.could lang.en.aux text=could modal=ability,politeness in=question-tail
+@lang.en.aux.will lang.en.aux text=will modal=future in=question-tail
+@lang.en.aux.would lang.en.aux text=would modal=politeness,conditional
+@lang.en.aux.should lang.en.aux text=should modal=advice
+@lang.en.aux.has lang.en.aux text=has tense=present number=sg support=have
+@lang.en.aux.have lang.en.aux text=have tense=present support=have
+
+# question frames: how the question words combine (the generated forms of shards/frames-acts.sop carry the act-specific ones)
+@lang.en.qframe.wh-aux-np lang.en.qframe pattern="WH AUX NP" example="Where is the cat?" asks=place
+@lang.en.qframe.wh-np-aux lang.en.qframe pattern="WH NP AUX NP" example="What colour is table 2?" asks=attribute
+@lang.en.qframe.howmany lang.en.qframe pattern="how_many N AUX? there?" example="How many tables are there?" asks=count
+@lang.en.qframe.howmany-have lang.en.qframe pattern="how_many N does NP have" example="How many legs does a spider have?" asks=count
+@lang.en.qframe.yn lang.en.qframe pattern="AUX NP VP?" example="Is there a circle?" asks=truth
+@lang.en.qframe.wh-of lang.en.qframe pattern="WH AUX the N of NP" example="What is the colour of table 2?" asks=attribute
+@lang.en.qframe.why lang.en.qframe pattern="why AUX|did|do NP VP" example="Why is table 2 blue?" asks=reason
+@lang.en.qframe.tag lang.en.qframe pattern="S , AUX-NEG PRON" example="(none in PSys2 today)" asks=truth status=hole
+
+# ---- negation ----
+@lang.en.neg.words lang.en.neg text=not text=no text=never text=without text=nothing text=none text=nobody text=nowhere text=neither text=nor text=cannot
+@lang.en.neg.contracted lang.en.neg pattern="(.+)n't" doc="every n't contraction (don't, isn't, can't, won't ...) and the same without apostrophe (dont, isnt, cant): value-check.mjs counts them as negation"
+@lang.en.neg.rule.same lang.en.neg.rule doc="a rewrite of a sentence (normalizer, paraphrase, correction) must keep the negation: both or neither carry one; stop / undo / cancel are not negations here"
+@lang.en.neg.rule.aux lang.en.neg.rule doc="negation of a statement ('Ion does not eat 1 apple': the worlds' neg patterns, kids.arith kids.shop) is read by the worlds; negation of a REQUEST is read here (slice 2): the sentence opens with the lead words of neg.imperative and is not carried out" status=read read=en.negatedRequest
+@lang.en.neg.imperative.1 lang.en.neg.imperative text="do not" text="dont" text="don't" text="please do not" text="do not ever" text="do not just" doc="the words that turn a request into 'do not': the rest is what must not be done; the system says it will not and changes nothing"
+@lang.en.neg.imperative.skip lang.en.neg.imperative.skip text=know text=worry text=mind text=forget text=think text=care text=bother text=say text=sure text=like text=want text=need text=have text=let doc="not a negated request: 'do not know', 'never mind', 'don't forget to save' (that one is a positive request), 'I do not want ...' has a subject"
+
+# ---- imperatives ----
+@lang.en.imperative.rule lang.en.imperative.rule doc="the verb of a request is the words before the first determiner, number, pronoun or preposition (at most 3, lead-in words removed): the first word of an imperative sentence"
+@lang.en.imperative.lead lang.en.imperative.lead text=please text=can text=you text=could text=would text=will text=lets text=let text=us text=now text=then text=also text=and doc="words dropped from the front before the verb is read"

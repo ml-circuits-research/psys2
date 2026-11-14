@@ -14,7 +14,8 @@ import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs
 import { routeScores } from './router.mjs';
 import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
-import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
+import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
+import { en } from '../../lang/en.mjs';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse, serialize } from '../../soplang/index.mjs';
 import { budget } from '../../dialog/budget.mjs';
 import { readingVariants, dropStyleIn } from './variants.mjs';
@@ -209,7 +210,7 @@ const LEAD_INS = [
   'i would like to know', 'i want to know', 'i need to know', 'i wanna know', 'id like to know', 'i am wondering', 'i was wondering',
   'i wonder', 'do you know', 'let me know', 'tell me', 'you know',
 ].map((x) => x.split(' ')).sort((a, b) => b.length - a.length);
-const WH_WORDS = ['how', 'what', 'who', 'where', 'when', 'which', 'why', 'whose', 'whom'];
+const WH_WORDS = [...en.questionWords('wh-lead')];
 
 /**
  * When `tokens` start with an indirect-question lead-in ("tell me", "can you tell me", "I want to know", "do you know" ...) followed by a
@@ -244,13 +245,12 @@ export function splitPossessives(tokens, lex) {
 }
 
 /** A connective followed by a question word inside swallowed free text. */
-const QUESTION_TAIL_RE = /(?:,|\b(?:and|then|but))\s+(?:also\s+)?(?:what|how|who|where|when|which|why|can|could|does|do|is|are|will)\b/i;
+const QUESTION_TAIL_RE = new RegExp(`(?:,|\\b(?:and|then|but))\\s+(?:also\\s+)?(?:${[...en.questionWords('question-tail')].join('|')})\\b`, 'i');
 
 const isContent = (t) => t.kind !== 'punct' && t.kind !== 'qmark' && !t.filler;
 
 /** Words that open a standing rule or a default ("from now on", "by default"): a comma after them does not end a clause. */
-const FRAME_LEADS = new Set(['from now on', 'from here on', 'from then on', 'from today on', 'by default', 'in future', 'in the future', 'as a rule', 'for now', 'always']);
-const isFrameLead = (clause) => FRAME_LEADS.has(clause.filter(isContent).map((t) => t.lower).join(' '));
+const isFrameLead = (clause) => en.frameLeads().has(clause.filter(isContent).map((t) => t.lower).join(' '));
 
 /** Split a token list into clauses at `,`, `and`, `then`, `but` (one level). Clauses with only fillers are dropped. */
 /** Experiments of the model ablation (on by default since 2026-11-13; `setProto({ also: false })` switches it off): `also` = "also" joins clauses like "then" ("draw a house, also what do red and yellow make"). */
@@ -258,15 +258,15 @@ const PROTO = { also: true, cutter: true };
 export const setProto = (p = {}) => Object.assign(PROTO, p);
 export function splitClauses(tokens) {
   const clauses = [[]];
-  const joiners = PROTO.also ? ['then', 'also'] : ['then'];
+  const cutAt = en.cutWords(PROTO.also), seq = en.sequenceWords(PROTO.also);
   for (let i = 0; i < tokens.length; i++) {
     budget.tick('index.splitClauses');
     const t = tokens[i];
-    const sep = t.lower === ',' || t.lower === 'and' || joiners.includes(t.lower) || t.lower === 'but';
+    const sep = cutAt.has(t.lower);
     if (!sep) { clauses[clauses.length - 1].push(t); continue; }
     if (t.lower === ',' && isFrameLead(clauses[clauses.length - 1])) continue;   // "From now on, squares should be gray": the frame of a rule belongs to the sentence it opens
-    if (t.lower === 'and' && joiners.includes(tokens[i + 1]?.lower)) i++;
-    if (t.lower === ',' && ['and', 'but', ...joiners].includes(tokens[i + 1]?.lower)) i++;
+    if (t.lower === 'and' && seq.includes(tokens[i + 1]?.lower)) i++;
+    if (t.lower === ',' && cutAt.has(tokens[i + 1]?.lower) && tokens[i + 1].lower !== ',') i++;
     clauses.push([]);
   }
   return clauses.filter((c) => c.some(isContent));
@@ -285,7 +285,7 @@ export function registerClauseStarters(set, cards) {
   for (const c of cards ?? []) for (const w of [...(c.act ?? []), ...(c.actshared ?? []), ...(c.navact ?? [])]) if (/^[a-z]{2,}$/.test(w)) words.add(w);
   STARTERS.set(set.parent ?? set, words);
 }
-const JOINER_WORDS = new Set([',', ';', 'and', 'then', 'also', 'but']);
+const JOINER_WORDS = en.cardJoiners();
 /** Token indices where a new clause starts: the first token after a run of joiners, when it is an act word or a question word, with content on the left and at least two content tokens on the right. */
 export function cardCuts(tokens, starters) {
   const cuts = [];
@@ -356,6 +356,19 @@ export function applyCoveragePolicy(matches, total, policy = PATTERN_COVERAGE_PO
 /** True when a match (a ranked match or a segment's `match`) has a free-text target that starts with your / yours / ur / yourself: it addresses the avatar. */
 export const youTarget = (m) => Object.values(m.slots ?? {}).some((s) => (s.class === 'words' || s.class === 'word') && /^(?:your|yours|ur|yourself)$/i.test(String(s.text).split(/\s+/)[0]) && !/\b(?:and|then|but|plus)\b|,/i.test(String(s.text)));   // a coordination ("your eyes and body") is left to the expansion
 
+/** The acts whose thing must already be there and that say nothing else ("remove X": a reading of it that names no such thing is a refusal, not a request for something else; "change X to Y" or "switch to X" carry a value and stay a decline). */
+const REFERENT_ACTS = new Set(['remove']);
+const actionName = (m) => (/action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? '').split('.').pop();
+const FREE_SKIP = new Set(['the', 'a', 'an', 'my', 'your', 'this', 'that', 'these', 'those', 'some', 'any', 'all', 'of', 'to', 'from', 'in', 'on', 'it', 'its', 'please']);
+/** Does everything a reading's free-text slots say resolve in the world's own state (every content word occurs in it)? A world with no state resolves nothing. */
+function freeWordsResolve(m, state) {
+  const words = Object.values(m.slots ?? {}).filter((sl) => (sl.class === 'words' || sl.class === 'rest') && sl.text).flatMap((sl) => String(sl.text).toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? []).filter((w) => !FREE_SKIP.has(w));
+  if (!words.length) return true;
+  if (!state) return false;
+  const hay = JSON.stringify(state).toLowerCase();
+  return words.every((w) => hay.includes(w.replace(/s$/, '')));
+}
+
 /** Ranked full matches of every pattern against `tokens` (commas removed), ordered by the routing policy. */
 function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   // Views of the tokens, tried in order until one of them is matched by some pattern (spec 03 section 1.5):
@@ -399,6 +412,7 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
       matches.splice(0, matches.length, ...keep);
     }
   }
+  const ownDeclined = [];
   // DECLINE (spec 21): a world may export `accepts({ action, roles, text, state })`; when it returns false the world does not own this reading ("draw a house" is not a face part),
   // so its match is dropped before routing and the next world reads the message. Pure, and every pass ticks the budget; it only looks at the words of the roles.
   for (let k = matches.length - 1; k >= 0; k--) {
@@ -407,12 +421,26 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     if (typeof acc !== 'function') continue;
     const roles = Object.fromEntries(Object.entries(m.slots ?? {}).map(([n, sl]) => [n, sl.text]));
     for (const lit of String(m.pattern.emit ?? '').matchAll(/ arg\.(\w+)=\\?"([^"{}\\]*)\\?"/g)) if (!(lit[1] in roles) && lit[1] !== 'mode') roles[lit[1]] = lit[2];   // the literal roles of a form (arg.attribute="name")
-    let ok = true, strong = false;
-    try { const verdict = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, claim: !!m.pattern.tabClaim, tab: context?.tabWorld ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null }); ok = verdict !== false; strong = verdict === 'focus'; } catch { ok = true; }   // 'focus': the world holds the focus of the dialogue ("make it red"), so it does not yield
+    let ok = true, strong = false, refuse = false;
+    try { const verdict = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, claim: !!m.pattern.tabClaim, tab: context?.tabWorld ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null }); ok = verdict !== false && verdict !== 'refuse'; strong = verdict === 'focus'; refuse = verdict === 'refuse' } catch { ok = true; }   // 'focus': the world holds the focus of the dialogue ("make it red"), so it does not yield
     // a world with a decline hook is a schema world whose forms keep free slots: its catch-all reading yields to a reading of another world that has no free text at all
     // ("Is a square a rectangle?" is the shapes world's, even while the avatar tab is open)
     if (ok && !strong && context?.lastWorld !== m.pattern.worldId && wildTokens(m) > 0 && matches.some((o) => o.pattern.worldId !== m.pattern.worldId && wildTokens(o) === 0 && !m.pattern.tabClaim)) ok = false;
-    if (!ok) matches.splice(k, 1);
+    if (!ok) { const [gone] = matches.splice(k, 1); if (gone.pattern.worldId === context?.tabWorld && (refuse || REFERENT_ACTS.has(actionName(gone)))) ownDeclined.push(gone); }   // 'refuse': the world says the reading is its own but names a thing it has not ("draw a unicorn"): it refuses plainly unless another world reads it
+  }
+  // ARBITRATION (spec 20, "Arbitration of generated worlds"). The open tab owns its acts first: when its world read the sentence with an act that needs a thing that is there ("remove X") and declined it
+  // (it has no X), the same words are not another world's either unless that world HAS what the words name: a free-text reading of another world ("remove X from my list") is claimed only when every
+  // word of its free slots resolves in that world's own state (rule 2: open-class slots must resolve); and when no other world does, the tab refuses plainly ("I can't find the X in the picture"),
+  // because the same reading in a tab that has no such thing is a refusal, not a different task (rule 3). A coordination is left to the clause-by-clause leniency stage.
+  if (ownDeclined.length) {
+    for (let k = matches.length - 1; k >= 0; k--) {
+      const m = matches[k];
+      if (m.pattern.worldId === context?.tabWorld || m.pattern.tabClaim || wildTokens(m) === 0 || m.literals > 2 || m.pattern.kind === 'question' || !ownDeclined.some((d) => REFERENT_ACTS.has(actionName(d)))) continue;
+      budget.tick('rules.resolves');
+      if (!freeWordsResolve(m, context?.states?.[m.pattern.worldId])) matches.splice(k, 1);
+    }
+    const plain = ownDeclined.find((d) => !/\band\b|,/i.test(String(Object.values(d.slots ?? {}).map((x) => x.text).join(' '))));
+    if (plain && !set.parent && !matches.some((m) => m.pattern.worldId !== context?.tabWorld)) matches.push(plain);   // (not on a one-world view of the set: nothing else could have read it there, so the restored reading would look like a full reading by the tab)
   }
   // ACT VERB SWALLOWED (TRANSFER, spec 23): a free-text reading whose wildcard slot starts with the verb of an act that another world's act pattern reads in this very sentence ("send table 1
   // to the chart": the chart's data pattern took "send table" as its data) yields to the act. The act pattern names its verb group (`$acts.verb.<act>`) and its action ends with the act, so
@@ -592,7 +620,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     if (!ana) return false;
     const last = txt.split(/\s*,\s*|\s+and\s+/i).pop();
     const ts = tokenize(last).filter((t) => t.kind === 'word' || t.kind === 'number');
-    return ts.length >= 2 && !!oneAnaphora(ts, ts.length > 1 ? [{ kind: 'word', lower: 'x' }, { kind: 'word', lower: 'y' }] : [], ana.opts);
+    return ts.length >= 2 && !!en.oneAnaphora(ts, ts.length > 1 ? [{ kind: 'word', lower: 'x' }, { kind: 'word', lower: 'y' }] : [], ana.opts);
   };
 
   /** A parsed segment whose free-text slot swallowed a separator, a correction marker or a repetition. */
@@ -644,7 +672,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       const w = selfCorrect(tokens, { whole: true });
       return w ? tryClauses([{ tokens: w.tokens.filter((t) => t.kind !== 'punct'), span: w.region, info: { kind: 'self-correction', source: w.region, dropped: w.dropped, copied: [] } }], null, bar) : null;
     }
-    for (const cand of sharedArgument(toks)) {
+    for (const cand of en.sharedArgument(toks)) {
       const clauses = cand.clauses.map((c, i) => ({ tokens: c.tokens, span: c.own, guard: true, info: { kind: 'shared-argument', source: src, copied: c.copied, ...(sc ? { dropped: sc.dropped } : {}), index: i, of: cand.clauses.length } }));
       const segs = tryClauses(clauses, null, bar);
       if (segs) return segs;
@@ -689,7 +717,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
         let ai = i - 1;
         while (ai > 0 && ana.isElliptic(clauses[ai])) { budget.tick('index.expandClauses'); ai--; }
         if (!ana.isElliptic(clauses[ai]) && !parts[ai].unparsed && !isWeak(parts[ai])) {
-          const res = oneAnaphora(ct, clauses[ai], ana.opts);
+          const res = en.oneAnaphora(ct, clauses[ai], ana.opts);
           if (res) {
             const sp = [ct[0].start, ct[ct.length - 1].end];
             for (const cand of res.candidates) {
@@ -714,7 +742,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       }
       const anchorIdx = parts.findIndex((p) => !p.unparsed && !isWeak(p));
       if ((part.unparsed || stray) && anchorIdx >= 0 && anchorIdx < i) {
-        for (const pre of ellipsisPrefixes(clauses[anchorIdx])) {
+        for (const pre of en.ellipsisPrefixes(clauses[anchorIdx])) {
           const sp = [ct[0].start, ct[ct.length - 1].end];
           const segs = tryClauses([{ tokens: [...pre, ...ct.filter((t) => t.kind !== 'punct')], span: sp, guard: true, info: { kind: 'verb-ellipsis', source: sp, copied: [[pre[0].start, pre[pre.length - 1].end]] } }], parts[anchorIdx].match.worldId, bar);
           if (segs) { out.push(...segs); changed = true; return; }
@@ -771,7 +799,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       if (parts.length === 0) { seg = read(here, []); if (!seg) return fail(); }
       else {
         const snap = snapHere;
-        const variants = [{ ts: here, copied: [], own: true }, ...[...ellipsisPrefixes(parts[0].toks)].map((pre) => ({ ts: [...pre, ...here], copied: [[pre[0].start, pre[pre.length - 1].end]], own: false }))];
+        const variants = [{ ts: here, copied: [], own: true }, ...[...en.ellipsisPrefixes(parts[0].toks)].map((pre) => ({ ts: [...pre, ...here], copied: [[pre[0].start, pre[pre.length - 1].end]], own: false }))];
         for (const v of variants) {
           const r = read(v.ts, v.copied);
           if (!r) { form.restore(snap); continue; }

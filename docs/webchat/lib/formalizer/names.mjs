@@ -12,9 +12,9 @@
  *   - the work is limited: lookups are length-bucketed with a letter-count prefilter, and `maxWindows`, `maxPerWindow`, `maxTexts` and a
  *     time budget (`budgetMs`, the best candidates found so far are returned) cap the effort whatever the message looks like.
  */
-import { lexIndex } from '../worlds/lexicon.mjs?v=43c8aa7311';
-import { editDistance } from './rules/index.mjs?v=e474061c71';
-import { isKnownWord, spellBudget, spellVocabulary } from './spell.mjs?v=85616603c5';
+import { lexIndex } from '../worlds/lexicon.mjs?v=2026bfa238';
+import { editDistance } from './rules/index.mjs?v=5c05ab6465';
+import { isKnownWord, spellBudget, spellVocabulary } from './spell.mjs?v=935a2d32f7';
 
 const WORD = /[A-Za-zÀ-ɏ]+/g;
 const QUOTE = /"[^"]*"|“[^”]*”/g;

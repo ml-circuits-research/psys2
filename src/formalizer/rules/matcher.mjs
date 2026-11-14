@@ -6,6 +6,7 @@
  */
 import { isFillerWord } from './normalize.mjs';
 import { budget } from '../../dialog/budget.mjs';
+import { en } from '../../lang/en.mjs';
 
 /** Quantity unit table: lowercase token -> canonical symbol. */
 export const UNIT_TABLE = new Map(Object.entries({
@@ -35,7 +36,7 @@ export const OP_WORDS = {
 
 /** True when the literal word list contains a filler (an old or new filler word, `for me`, `u know`, `like`) or a leading `then` / `so` / `and` / `after that`. */
 // Personal pronouns are never a noun slot value ("I live in Cluj" is not a fact about an animal called "i").
-const PERSONAL_PRONOUNS = new Set(['i', 'you', 'we', 'they', 'he', 'she', 'it', 'me', 'us', 'him', 'her', 'them']);
+const PERSONAL_PRONOUNS = en.words('pron', 'matcher');
 
 function listsFiller(words) {
   return words.some((w, k) => isFillerWord(w) || w === 'like' || w === 'then' || w === 'so' || w === 'and' || (w === 'that' && words[k - 1] === 'after') || (w === 'me' && words[k - 1] === 'for') || (w === 'know' && ['u', 'you', 'ya'].includes(words[k - 1])));
@@ -213,6 +214,7 @@ function candidates(el, tokens, i, env, slotsSoFar) {
         if (!ws.every((x, k) => x.kind === 'word' || (lexicon.class === 'counted' && x.kind === 'number' && k < len - 1 && /^\d+$/.test(x.lower)))) continue;   // class=counted: a count may open an entry ("2_chapter": "two chapters")
         const entry = [...ws.slice(0, -1).map((x) => x.lower), env.lex.lemma(ws[len - 1].lower)].join('_');
         if (lexicon.words.has(entry)) out.push({ len, value: entry, text: text(len), span: span(len) });
+        else { const raw = ws.map((x) => x.lower).join('_'); if (raw !== entry && lexicon.words.has(raw)) out.push({ len, value: raw, text: text(len), span: span(len) }); }   // a word the lexicon lists in its own form ("canvas", "glasses") that the singular lemma would cut
       }
       return out;
     }

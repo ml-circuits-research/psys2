@@ -90,7 +90,7 @@ export const isBudgetExceeded = (e) => e?.name === 'BudgetExceeded';
 /**
  * World helpers that have no `ctx` (placement, layout, routing, solvers) and may not import (a world is plain browser-safe files) reach the turn's
  * budget through this well-known global handle: `globalThis[Symbol.for('psys2.budget')]?.tick(site, n)`. It is the shared `budget` above, a no-op
- * outside a turn, so tests and the CLI work without a session. Each such file starts with `const budget = { tick: ... }` (see worlds/art.draw/ops.mjs).
+ * outside a turn, so tests and the CLI work without a session. Each such file starts with `const budget = { tick: ... }` (see worlds/art.draw/engine.mjs).
  */
 export const BUDGET_GLOBAL = Symbol.for('psys2.budget');
 globalThis[BUDGET_GLOBAL] = budget;

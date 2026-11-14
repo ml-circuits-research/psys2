@@ -17,7 +17,7 @@
 | `tests/` | `node:test` test suites. Run with `npm test`. |
 
 ## Engineering rules
-- Node.js ≥ 20, ES modules only, `.mjs` extension. Core modules use only the Node standard library; modules that must also run in the browser (`src/soplang`, `src/legends`, `src/formalizer`, `src/interpreter`, `src/translate`, `src/dialog`) must not import `node:*` — file access goes through a loader passed in by the caller.
+- Node.js ≥ 20, ES modules only, `.mjs` extension. Core modules use only the Node standard library; modules that must also run in the browser (`src/soplang`, `src/legends`, `src/formalizer`, `src/interpreter`, `src/translate`, `src/dialog`, `src/lang`) must not import `node:*` — file access goes through a loader passed in by the caller.
 - Open-source libraries are allowed for the **browser host UI** (avatar, games, editor widgets, speech helpers), never in the core. They are vendored as **one bundled file per library** under `docs/webchat/vendor/` (built with a bundler in a temporary directory, not added to `package.json`), each with a header comment naming the library, version, source URL and licence, and listed in `docs/webchat/vendor/README.md`. The project is licensed under AGPL-3.0-only (user decision 2026-11-09); licences must be compatible with it (MIT, BSD, Apache-2.0, ISC, MPL-2.0, CC0, CC BY 4.0, GPL-3.0 through section 13 of both licences). Prefer no library when a few dozen lines of our own code do the job.
 - Python lives under `training/` with pinned requirements; it is never imported by the Node core, only run as a separate process.
 - Every behaviour is specified in `specs/` before or together with its implementation. If code and spec disagree, fix one of them in the same commit.

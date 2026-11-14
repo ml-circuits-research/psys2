@@ -1,7 +1,12 @@
 {
   "about": "Failing tests that are language cases on their way to the failure ledger (training/eval/failures.jsonl). scripts/run-tests.mjs reports them as a count per class and they do not fail the run. Entry: { file, name | pattern, class, ledger }. Smoke has none: it holds invariants only.",
   "known": [
-    { "file": "webchat-matrix.test.mjs", "pattern": "^webchat matrix reasoner", "class": "diagram schema world", "ledger": "bug-fix batch 2026-11-13 (4 Chrome veto rows: connect or delete a box that is not there, en and ro)" },
+    {
+      "file": "webchat-matrix.test.mjs",
+      "pattern": "^webchat matrix reasoner",
+      "class": "diagram schema world",
+      "ledger": "bug-fix batch 2026-11-13 (4 Chrome veto rows: connect or delete a box that is not there, en and ro)"
+    },
     {
       "file": "dfix2.test.mjs",
       "pattern": "^a block without text asks for it",
@@ -103,6 +108,354 @@
       "pattern": "^canonical examples are clean sentences|^every world has a canonical example",
       "class": "canonical examples",
       "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "art-draw-parts.test.mjs",
+      "pattern": "^matrix: put things together, name the group, use it like any object$",
+      "class": "join parts into a named whole -> group + kind-of knowledge",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "art-draw-parts.test.mjs",
+      "pattern": "^matrix: \"this is a \\.\\.\\.\" names what was just drawn; \"group them\" needs things$",
+      "class": "join parts into a named whole -> group + kind-of knowledge",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "art-draw-parts.test.mjs",
+      "pattern": "^ops: put things together, name the group, use it like any object$",
+      "class": "join parts into a named whole -> group + kind-of knowledge",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "art-draw-parts.test.mjs",
+      "pattern": "^ops: \"this is a \\.\\.\\.\" names what was just drawn; \"group them\" needs things$",
+      "class": "join parts into a named whole -> group + kind-of knowledge",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "astra-session.test.mjs",
+      "pattern": "^a single discussion per world: \"back to the drawing\" and \"the first chart\" are not discussion commands$",
+      "class": "open a tab by its view word (canvas, drawing) -> session.things views vs tab names",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "commonsense.test.mjs",
+      "pattern": "^a fish in the sky: done, and one friendly warning, never a refusal$",
+      "class": "usual place / number / time notes -> knowledge scenes rules (std.relations)",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "commonsense.test.mjs",
+      "pattern": "^a second sun and a car in the sky are warned about, the sun at night too$",
+      "class": "usual place / number / time notes -> knowledge scenes rules (std.relations)",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "dialogue.test.mjs",
+      "pattern": "^ops: a fragment with no verb inherits the verb of the focus; the tab gets a complete request$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "dialogue.test.mjs",
+      "pattern": "^ops: a fragment with a place and no thing inherits the thing of the focus \\(std\\.fill: tier focus, source named\\)$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "dialogue.test.mjs",
+      "pattern": "^ops: the thread ends with another world, a cancellation or a bare answer: the tab then gets nothing it cannot read$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "dialogue.test.mjs",
+      "pattern": "^ops: a why-question is answered from the LAST turn in plain words, with an offer to undo, and never runs an action$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "dialogue.test.mjs",
+      "pattern": "^ops: \"thats wrong, I asked X\": what he says he asked is the request$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "dialogue.test.mjs",
+      "pattern": "^matrix: a fragment with no verb inherits the verb of the focus; the tab gets a complete request$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "dialogue.test.mjs",
+      "pattern": "^matrix: a fragment with a place and no thing inherits the thing of the focus \\(std\\.fill: tier focus, source named\\)$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "dialogue.test.mjs",
+      "pattern": "^matrix: the thread ends with another world, a cancellation or a bare answer: the tab then gets nothing it cannot read$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "dialogue.test.mjs",
+      "pattern": "^matrix: a why-question is answered from the LAST turn in plain words, with an offer to undo, and never runs an action$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "dialogue.test.mjs",
+      "pattern": "^matrix: \"thats wrong, I asked X\": what he says he asked is the request$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "discourse-meta.test.mjs",
+      "pattern": "^cancellation clears the expectation and never undoes$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "discourse-meta.test.mjs",
+      "pattern": "^degree and comparatives continue the last frame$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "discourse-meta.test.mjs",
+      "pattern": "^topic return reopens the last world and summarises it$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "discourse.test.mjs",
+      "pattern": "^ellipsis after a command on the drawing tab: now bigger, again, the same for X, X too$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "discourse.test.mjs",
+      "pattern": "^incomplete command: ask, then the next reply completes it \\(draw, map, music\\)$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "discourse.test.mjs",
+      "pattern": "^a pending expectation expires after one turn and yields to a full command$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "draw-from-facts.test.mjs",
+      "pattern": "^flip, size, move, undo, count and delete work on a composite as on one object, in both reasoners$",
+      "class": "drawing from knowledge: stand-ins and composites through the acts (draw-from-facts hooks)",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "draw.test.mjs",
+      "pattern": "^art\\.draw: loads without problems and its 60\\+ tests pass$",
+      "class": "test-world rows of the switch (ledgered per row): the suite that counts them fails",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "ellipsis-one.test.mjs",
+      "pattern": "^Romanian: \"fă o casă verde și una galbenă\" draws both houses$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "ellipsis-one.test.mjs",
+      "pattern": "^English: draw / add / make with \"and a <adj> one\", \"and another <adj> one\", \"and one <adj>\"$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "expand.test.mjs",
+      "pattern": "^expand: shared argument \\(\"make the tree and the house blue\": one verb and one colour for two things\\)$",
+      "class": "several things with different values / counted repeat -> act groups",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "expand.test.mjs",
+      "pattern": "^expand: verb ellipsis$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "expand.test.mjs",
+      "pattern": "^expand: self-correction keeps only the corrected value$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "followup-last-action.test.mjs",
+      "pattern": "^ops: more of the same: \"bigger\" after a move is about the things moved; \"further\" moves the same things$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "followup-last-action.test.mjs",
+      "pattern": "^ops: \"not over the water\" takes back what the last step put on it; \"but keep X\" puts X back$",
+      "class": "negation: keep / except / not-on -> acts (kept relations)",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "followup-last-action.test.mjs",
+      "pattern": "^matrix: more of the same: \"bigger\" after a move is about the things moved; \"further\" moves the same things$",
+      "class": "continuation / ellipsis / self-correction -> session.dialogue",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "followup-last-action.test.mjs",
+      "pattern": "^matrix: \"not over the water\" takes back what the last step put on it; \"but keep X\" puts X back$",
+      "class": "negation: keep / except / not-on -> acts (kept relations)",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "kids-worlds.test.mjs",
+      "pattern": "^world kids\\.shop: loads without problems, has >= 25 tests and they all pass$",
+      "class": "test-world rows of the switch (ledgered per row): the suite that counts them fails",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "knowledge-all-worlds.test.mjs",
+      "pattern": "^drawing a stand-in: drawn by its kind, and the reply says so once$",
+      "class": "drawing from knowledge: stand-ins and composites through the acts (draw-from-facts hooks)",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "map.test.mjs",
+      "pattern": "^geo\\.map: loads without problems and all its tests pass$",
+      "class": "test-world rows of the switch (ledgered per row): the suite that counts them fails",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "music.test.mjs",
+      "pattern": "^media\\.music: loads without problems and its 60\\+ tests pass$",
+      "class": "test-world rows of the switch (ledgered per row): the suite that counts them fails",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "nx-strategy.test.mjs",
+      "pattern": "^the untrained-world rule: user\\.profile is not a trained world, its rules read the text$",
+      "class": "test-world rows of the switch (ledgered per row): the suite that counts them fails",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "nx-validate.test.mjs",
+      "pattern": "^question and request ops pass through the dry run$",
+      "class": "test-world rows of the switch (ledgered per row): the suite that counts them fails",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "polish.test.mjs",
+      "pattern": "^capabilities: a short grouped sentence from world summaries, falling back to titles$",
+      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "rd-real-dialogue.test.mjs",
+      "pattern": "^bare \"next\", \"more\", \"another one\" follow the active tab; music claims them on its tab or while a song plays$",
+      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "rd-real-dialogue.test.mjs",
+      "pattern": "^never corrected towards another world when the active world reads the sentence$",
+      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "reading-variants.test.mjs",
+      "pattern": "^variants are read by the engine: round-trip English frames$",
+      "class": "test-world rows of the switch (ledgered per row): the suite that counts them fails",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "reasoner-chess-music.test.mjs",
+      "pattern": "^music: parity gate: every test of media\\.music passes in both strategies \\(ops 401, matrix 401 \\+ 12 matrix-only\\)$",
+      "class": "test-world rows of the switch (ledgered per row): the suite that counts them fails",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "reasoner-draw-diagram.test.mjs",
+      "pattern": "^tests/reasoner-draw-diagram\\.test\\.mjs$",
+      "class": "art.draw matrix reasoner removed with the hand-written world (the matrix side of the old board)",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "reasoner.test.mjs",
+      "pattern": "^matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems$",
+      "class": "art.draw matrix reasoner removed with the hand-written world (the matrix side of the old board)",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "reasoner.test.mjs",
+      "pattern": "^parity gate \\(switch on\\): kids\\.shop 168, kids\\.tasks 241, kids\\.arith 243, games\\.tictactoe 173, games\\.hangman 154, games\\.guess 130, kids\\.shapes 484, kids\\.time 227, kids\\.animals 508, user\\.profile 144 \\(the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted\\)$",
+      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "reasoner.test.mjs",
+      "pattern": "^the switch off answers exactly as before: the shop, the lists and the sums$",
+      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "space.test.mjs",
+      "pattern": "^owner rows, ops: first house left and down, further left, the middle house, the correction, the right house$",
+      "class": "place forms: behind / so-its-under -> acts forms (space layouts)",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "space.test.mjs",
+      "pattern": "^owner rows, matrix: first house left and down, further left, the middle house, the correction, the right house$",
+      "class": "place forms: behind / so-its-under -> acts forms (space layouts)",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "space2-pieces.test.mjs",
+      "pattern": "^art\\.draw keeps relations as facts: what is on a thing travels with it, \"apart\" is remembered, a thing is not pushed into what it stands on, layouts as destinations$",
+      "class": "place forms: behind / so-its-under -> acts forms (space layouts)",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "spell-partial.test.mjs",
+      "pattern": "^dialog: partial understanding is off by default, on executes what was read and says what was ignored$",
+      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "typo-tabfollow.test.mjs",
+      "pattern": "^tab follow on the real worlds: \"Show me Bucharest\" asked on the avatar tab opens the Map$",
+      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "world-aware.test.mjs",
+      "pattern": "^veto: \"fă părul roșu\" leaves out \"părul\": nothing is changed, the reply names the word \\(off: no veto is recorded\\)$",
+      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "world-aware.test.mjs",
+      "pattern": "^veto: a word that a vetoed reading names is never reported as \"I did not know the word\" \\(Romanian; the reading itself depends on the MT\\)$",
+      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "reasoner-restore.test.mjs",
+      "pattern": "^measure: a 40-turn session \\(record size and restore time\\)$",
+      "class": "undo / redo answer names the act -> std.acts timeline wording",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "webchat-budget.test.mjs",
+      "pattern": "^webchat compute budget: restart clock, memory across a restart, translator bridge, on-device fake modes$",
+      "class": "compute cost of the generated reading under the 4x throttled page (the watchdog stops a turn the old hand patterns answered in time)",
+      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     }
   ]
 }

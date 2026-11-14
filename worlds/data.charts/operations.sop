@@ -1,282 +1,221 @@
-@op.data.charts.fromText core.operation
-    impl=fromText
-    semantics=action
-    action=chart.fromText
-    doc="Builds a chart from numbers typed by the user (\"apples 5, pears 3\"); the numbers keep the id of the request wire."
-
-@op.data.charts.new core.operation
-    impl=newChart
-    semantics=action
-    action=chart.new
-    doc="Starts a new empty chart and makes it the active one."
-
-@op.data.charts.refresh core.operation
-    impl=refresh
-    semantics=action
-    action=chart.refresh
-    doc="Reads the source of the active chart again (what people have, prices, lists, legs) and updates the numbers; keeps the style."
-
-@op.data.charts.duplicate core.operation
-    impl=duplicate
-    semantics=action
-    action=chart.duplicate
-    doc="Copies the active chart (data and style) into a new chart."
+@gen.data.charts.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
 
 @op.data.charts.fromHoldings core.operation
     impl=fromHoldings
     semantics=action
     action=chart.fromHoldings
-    doc="Builds a chart of what people have: reads the kids.arith holdings and asks the computed counts (ctx.ask count); every number comes from wires whose ids are kept in the chart source."
+    doc="An operation of this world that is not an act (own.mjs: fromHoldings)."
 
 @op.data.charts.fromPrices core.operation
     impl=fromPrices
     semantics=action
     action=chart.fromPrices
-    doc="Builds a chart of prices from the kids.shop price list (ctx.ask cost) for a group (toys, fruit, school things, snacks, drinks) or named items."
+    doc="An operation of this world that is not an act (own.mjs: fromPrices)."
 
 @op.data.charts.fromLegs core.operation
     impl=fromLegs
     semantics=action
     action=chart.fromLegs
-    doc="Builds a chart of the number of legs from the kids.animals knowledge base (ctx.ask matching and legs) for a group of animals or named animals."
+    doc="An operation of this world that is not an act (own.mjs: fromLegs)."
 
 @op.data.charts.fromList core.operation
     impl=fromList
     semantics=action
     action=chart.fromList
-    doc="Builds a chart from the kids.tasks entries of one list (quantities from \"3 apples\"), or the number of items on every list."
+    doc="An operation of this world that is not an act (own.mjs: fromList)."
 
-@op.data.charts.addPoint core.operation
-    impl=addPoint
+@op.data.charts.refresh core.operation
+    impl=refresh
     semantics=action
-    action=chart.addPoint
-    doc="Adds one or more labelled numbers to the active chart (an existing label is changed)."
-
-@op.data.charts.removePoint core.operation
-    impl=removePoint
-    semantics=action
-    action=chart.removePoint
-    doc="Removes one label from the active chart."
-
-@op.data.charts.setPoint core.operation
-    impl=setPoint
-    semantics=action
-    action=chart.setPoint
-    doc="Sets the number of one label."
-
-@op.data.charts.adjustPoint core.operation
-    impl=adjustPoint
-    semantics=action
-    action=chart.adjustPoint
-    doc="Increases, decreases, doubles, triples or halves the number of one label."
-
-@op.data.charts.renamePoint core.operation
-    impl=renamePoint
-    semantics=action
-    action=chart.renamePoint
-    doc="Renames one label."
-
-@op.data.charts.clearData core.operation
-    impl=clearData
-    semantics=action
-    action=chart.clearData
-    doc="Removes all data from the active chart and keeps its style."
-
-@op.data.charts.setType core.operation
-    impl=setType
-    semantics=action
-    action=chart.setType
-    doc="Changes the type (bar, line, pie, doughnut, radar, polar area, scatter), optionally stacked; creates an empty chart when there is none."
-
-@op.data.charts.setStacked core.operation
-    impl=setStacked
-    semantics=action
-    action=chart.setStacked
-    doc="Stacks the series or puts them side by side."
-
-@op.data.charts.setTitle core.operation
-    impl=setTitle
-    semantics=action
-    action=chart.setTitle
-    doc="Sets the title of the active chart."
-
-@op.data.charts.removeTitle core.operation
-    impl=removeTitle
-    semantics=action
-    action=chart.removeTitle
-    doc="Removes the title of the active chart."
-
-@op.data.charts.setColor core.operation
-    impl=setColor
-    semantics=action
-    action=chart.setColor
-    doc="Colors the whole chart (or one label) with a named color and optional shade."
-
-@op.data.charts.setPalette core.operation
-    impl=setPalette
-    semantics=action
-    action=chart.setPalette
-    doc="Applies a palette (rainbow, pastel, ocean, forest, sunset, warm, cool, neon, earth), different colors per bar, or the default."
-
-@op.data.charts.setSort core.operation
-    impl=setSort
-    semantics=action
-    action=chart.setSort
-    doc="Sorts the items of the active chart (biggest first, smallest first, alphabetically) or restores the order."
-
-@op.data.charts.setOrientation core.operation
-    impl=setOrientation
-    semantics=action
-    action=chart.setOrientation
-    doc="Makes a bar or line chart horizontal or vertical."
-
-@op.data.charts.setValues core.operation
-    impl=setValues
-    semantics=action
-    action=chart.setValues
-    doc="Shows or hides the numbers (or percentages) on the chart."
-
-@op.data.charts.setLegend core.operation
-    impl=setLegend
-    semantics=action
-    action=chart.setLegend
-    doc="Shows or hides the legend."
+    action=chart.refresh
+    doc="An operation of this world that is not an act (own.mjs: refresh)."
 
 @op.data.charts.extreme core.operation
     impl=extreme
     semantics=action
     action=chart.extreme
-    doc="Answers which label is the biggest or the smallest in the active chart."
+    doc="An operation of this world that is not an act (own.mjs: extreme)."
 
 @op.data.charts.total core.operation
     impl=total
     semantics=action
     action=chart.total
-    doc="Answers the total of the numbers in the active chart."
+    doc="An operation of this world that is not an act (own.mjs: total)."
 
 @op.data.charts.average core.operation
     impl=average
     semantics=action
     action=chart.average
-    doc="Answers the average of the numbers in the active chart."
+    doc="An operation of this world that is not an act (own.mjs: average)."
 
 @op.data.charts.difference core.operation
     impl=difference
     semantics=action
     action=chart.difference
-    doc="Answers how much more or less one label is than another."
+    doc="An operation of this world that is not an act (own.mjs: difference)."
 
 @op.data.charts.compare core.operation
     impl=compare
     semantics=action
     action=chart.compare
-    doc="Answers which of two labels is bigger or smaller."
+    doc="An operation of this world that is not an act (own.mjs: compare)."
 
 @op.data.charts.percent core.operation
     impl=percent
     semantics=action
     action=chart.percent
-    doc="Answers which percentage of the total a label is."
-
-@op.data.charts.valueOf core.operation
-    impl=valueOf
-    semantics=action
-    action=chart.valueOf
-    doc="Answers the number of one label and its share of the total."
-
-@op.data.charts.countItems core.operation
-    impl=countItems
-    semantics=action
-    action=chart.countItems
-    doc="Answers how many items (bars, slices, points) the active chart has."
-
-@op.data.charts.describe core.operation
-    impl=describe
-    semantics=action
-    action=chart.describe
-    doc="Describes the active chart in one text (type, title, numbers, biggest)."
+    doc="An operation of this world that is not an act (own.mjs: percent)."
 
 @op.data.charts.read core.operation
     impl=read
     semantics=action
     action=chart.read
-    doc="Reads the description of the active chart aloud (effect speech.say)."
-
-@op.data.charts.switchChart core.operation
-    impl=switchChart
-    semantics=action
-    action=chart.switchChart
-    doc="Makes another chart the active one: by position (first, last, 2), next, previous or title."
-
-@op.data.charts.deleteChart core.operation
-    impl=deleteChart
-    semantics=action
-    action=chart.deleteChart
-    doc="Deletes the active chart, a numbered chart or all charts."
-
-@op.data.charts.listCharts core.operation
-    impl=listCharts
-    semantics=action
-    action=chart.listCharts
-    doc="Lists the charts with their titles and types."
+    doc="An operation of this world that is not an act (own.mjs: read)."
 
 @op.data.charts.download core.operation
     impl=download
     semantics=action
     action=chart.download
-    doc="Saves the active chart as a picture (effect charts.download, executed by the Charts tab with canvas toDataURL)."
+    doc="An operation of this world that is not an act (own.mjs: download)."
 
 @op.data.charts.downloadData core.operation
     impl=downloadData
     semantics=action
     action=chart.downloadData
-    doc="Downloads the numbers as a CSV file (effect file.download)."
+    doc="An operation of this world that is not an act (own.mjs: downloadData)."
 
 @op.data.charts.copyData core.operation
     impl=copyData
     semantics=action
     action=chart.copyData
-    doc="Copies the numbers to the clipboard (effect clipboard.copy)."
+    doc="An operation of this world that is not an act (own.mjs: copyData)."
 
-@op.data.charts.toDocument core.operation
-    impl=toDocument
+@op.data.charts.describe core.operation
+    impl=describe
     semantics=action
-    action=chart.toDocument
-    doc="Puts the chart picture into the document: asks docs.editor for the action doc.addImage (not offered yet, so it explains)."
-
-@op.data.charts.toDocumentData core.operation
-    impl=toDocumentData
-    semantics=action
-    action=chart.toDocumentData
-    doc="Puts the title and the numbers of the chart into the document with the documented requests doc.addHeading and doc.addList."
-
+    action=chart.describe
+    doc="An operation of this world that is not an act (own.mjs: describe)."
 
 @op.data.charts.options core.operation
     impl=options
     semantics=action
     action=chart.options
-    doc="Tells what the Charts tab can do: the chart types, colors and palettes, the settings and the questions it answers."
+    doc="An operation of this world that is not an act (own.mjs: options)."
 
-@op.data.charts.undo core.operation
-    impl=undo
+@op.data.charts.listCharts core.operation
+    impl=listCharts
     semantics=action
-    action=chart.undo
-    doc="Undoes the last change to a chart (type, colours, points, titles, data); the history is kept in the world state."
+    action=chart.listCharts
+    doc="An operation of this world that is not an act (own.mjs: listCharts)."
 
-@op.data.charts.redo core.operation
-    impl=redo
+@op.data.charts.valueOf core.operation
+    impl=valueOf
     semantics=action
-    action=chart.redo
-    doc="Does the undone change again."
+    action=chart.valueOf
+    doc="An operation of this world that is not an act (own.mjs: valueOf)."
+
+@op.data.charts.countItems core.operation
+    impl=countItems
+    semantics=action
+    action=chart.countItems
+    doc="An operation of this world that is not an act (own.mjs: countItems)."
+
+@op.data.charts.toDocument core.operation
+    impl=toDocument
+    semantics=action
+    action=chart.toDocument
+    doc="An operation of this world that is not an act (own.mjs: toDocument)."
+
+@op.data.charts.toDocumentData core.operation
+    impl=toDocumentData
+    semantics=action
+    action=chart.toDocumentData
+    doc="An operation of this world that is not an act (own.mjs: toDocumentData)."
+
+@op.data.charts.setValues core.operation
+    impl=setValues
+    semantics=action
+    action=chart.setValues
+    doc="An operation of this world that is not an act (own.mjs: setValues)."
 
 @op.data.charts.view core.operation
     impl=view
     semantics=action
     action=data.charts.view
-    doc="The declaration of the charts as a view of the session things (spec 23): the numeric aspect; a thing counts as one of its kind, a thing with a number of its own is a bar of that number; one request for a whole selection."
+    doc="An operation of this world that is not an act (own.mjs: view)."
 
 @op.data.charts.adopt core.operation
     impl=adopt
     semantics=action
     action=data.charts.adopt
-    doc="Take things of the session store into a chart: counts per kind (or the number a thing carries), merged into the chart made from things when there is one, else a new chart."
+    doc="An operation of this world that is not an act (own.mjs: adopt)."
+
+@op.data.charts.chartUndo core.operation
+    impl=chartUndo
+    semantics=action
+    action=chart.undo
+    doc="An operation of this world that is not an act (own.mjs: chartUndo)."
+
+@op.data.charts.chartRedo core.operation
+    impl=chartRedo
+    semantics=action
+    action=chart.redo
+    doc="An operation of this world that is not an act (own.mjs: chartRedo)."
+
+@op.data.charts.make core.operation
+    impl=make
+    semantics=action
+    action=data.charts.make
+    doc="The act 'make' (spec 21), applied by the generic executor to this world's schema."
+
+@op.data.charts.remove core.operation
+    impl=remove
+    semantics=action
+    action=data.charts.remove
+    doc="The act 'remove' (spec 21), applied by the generic executor to this world's schema."
+
+@op.data.charts.change core.operation
+    impl=change
+    semantics=action
+    action=data.charts.change
+    doc="The act 'change' (spec 21), applied by the generic executor to this world's schema."
+
+@op.data.charts.send core.operation
+    impl=send
+    semantics=action
+    action=data.charts.send
+    doc="The act 'send' (spec 21), applied by the generic executor to this world's schema."
+
+@op.data.charts.pick core.operation
+    impl=pick
+    semantics=action
+    action=data.charts.pick
+    doc="The act 'pick' (spec 21), applied by the generic executor to this world's schema."
+
+@op.data.charts.copy core.operation
+    impl=copy
+    semantics=action
+    action=data.charts.copy
+    doc="The act 'copy' (spec 21), applied by the generic executor to this world's schema."
+
+@op.data.charts.ask core.operation
+    impl=ask
+    semantics=action
+    action=data.charts.ask
+    doc="The act 'ask' (spec 21), applied by the generic executor to this world's schema."
+
+@op.data.charts.undo core.operation
+    impl=undo
+    semantics=action
+    action=data.charts.undo
+    doc="The act 'undo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.data.charts.redo core.operation
+    impl=redo
+    semantics=action
+    action=data.charts.redo
+    doc="The act 'redo' (spec 21), applied by the generic executor to this world's schema."
+
+# ---- operations.extra.sop (hand-written, appended by the generator)
+

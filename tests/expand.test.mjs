@@ -4,7 +4,8 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { loadWorlds } from '../src/worlds/index.mjs';
 import { formalize, FormSession } from '../src/formalizer/index.mjs';
-import { selfCorrect, sharedArgument, repetition } from '../src/formalizer/rules/expand.mjs';
+import { selfCorrect, repetition } from '../src/formalizer/rules/expand.mjs';
+import { en } from '../src/lang/en.mjs';
 import { analyze } from '../src/formalizer/rules/normalize.mjs';
 
 // Spec 03 section 1c: conservative pre-parse expansion (review F4 rules side, R2).
@@ -25,7 +26,7 @@ test('expand: proposals are pure token lists with provenance', () => {
   assert.equal(sc.tokens.map((t) => t.raw).join(' '), 'make your eyes green');
   assert.deepEqual(sc.dropped, [[15, 23]]);
   assert.equal(selfCorrect(toks('make your eyes blue')), null);
-  const cands = [...sharedArgument(toks('make your eyes and body blue'))];
+  const cands = [...en.sharedArgument(toks('make your eyes and body blue'))];
   assert.equal(cands[0].clauses.map((c) => c.tokens.map((t) => t.raw).join(' ')).join(' | '), 'make your eyes blue | make your body blue');
   assert.deepEqual(cands[0].clauses[1].own, [19, 23]);
   assert.equal(repetition(toks('move left three times')).n, 3);
