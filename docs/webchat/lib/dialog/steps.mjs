@@ -17,7 +17,6 @@ export const STEPS = [
 ];
 
 export const STEP_IDS = STEPS.map((s) => s.id);
-export const stepLabel = (id) => STEPS.find((s) => s.id === id)?.label ?? id;
 
 const opWorld = (op) => { const m = /^op\.(.+)\.[^.]+$/.exec(String(typeof op === 'string' ? op : op?.name ?? op?.op ?? '')); return m ? m[1] : null; };
 
