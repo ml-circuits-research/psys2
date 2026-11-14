@@ -16,17 +16,10 @@
  * is learned and nothing is weighted: a reading is dropped for a named reason, and every decision is recorded on the segment (`wa`, `veto`, `pick`).
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-<<<<<<< HEAD
-import { restrictedSet } from '../formalizer/spell.mjs?v=9c1b3212d0';
-import { editDistance } from '../formalizer/rules/normalize.mjs?v=5d0ece4d18';
-import { foreignFragment } from './continuation.mjs?v=663c0c9b83';
-import { liveFromContext } from './meta-worlds.mjs?v=26387e9db1';
-=======
-import { restrictedSet } from '../formalizer/spell.mjs?v=9f5ab1ff76';
-import { editDistance } from '../formalizer/rules/normalize.mjs?v=40a652a19c';
-import { foreignFragment } from './continuation.mjs?v=4664ce5794';
-import { liveFromContext } from './meta-worlds.mjs?v=b4cb9bf7c4';
->>>>>>> origin/main
+import { restrictedSet } from '../formalizer/spell.mjs?v=f06b4774b2';
+import { editDistance } from '../formalizer/rules/normalize.mjs?v=105bb12b0e';
+import { foreignFragment } from './continuation.mjs?v=7f826f7d6d';
+import { liveFromContext } from './meta-worlds.mjs?v=ac7a70ba68';
 
 export const WORLD_AWARE_MODES = Object.freeze(['off', 'veto', 'choose', 'observe', 'veto-strict', 'choose-strict']);
 /** The default mode (user decision 2026-11-12): an unset option is `veto`; an explicit `off` turns the layer off. */

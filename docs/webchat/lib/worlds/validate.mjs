@@ -1,9 +1,5 @@
 /** Static validation of a loaded WorldSet (used by `test-world` and tests). Browser-safe. */
-<<<<<<< HEAD
-import { checkPattern } from '../formalizer/rules/index.mjs?v=68e6e20eda';
-=======
-import { checkPattern } from '../formalizer/rules/index.mjs?v=3109864554';
->>>>>>> origin/main
+import { checkPattern } from '../formalizer/rules/index.mjs?v=9197847163';
 
 const STATUS = new Set(['supported', 'missing', 'conflicting', 'ambiguous', 'unsupported', 'budget', 'error']);
 const MODES = new Set(['value', 'exists', 'list', 'count']);

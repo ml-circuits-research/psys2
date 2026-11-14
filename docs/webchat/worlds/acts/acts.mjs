@@ -28,15 +28,9 @@ import { createEffects, EFFECT_ACTS } from './effects.mjs?v=cf2d571188';   // so
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=ebf19b103c';   // the one colour reader (k.values)
-<<<<<<< HEAD
-import { en } from '../../lib/lang/en.mjs?v=429bbf713e';
-import { resolvePhrase } from './np-lib.mjs?v=ca8ed180cd';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
-import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=f08bcf1dc4';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
-=======
-import { en } from '../../lib/lang/en.mjs?v=9b3d9a4e48';
+import { en } from '../../lib/lang/en.mjs?v=d1e2ba22e0';
 import { resolvePhrase } from './np-lib.mjs?v=7879ccdad1';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
-import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=074b66606b';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
->>>>>>> origin/main
+import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=79e16a912f';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------

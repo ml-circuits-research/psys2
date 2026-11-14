@@ -3,10 +3,6 @@ export { Astra, USER_SCOPE, UNDO_DEPTH, STATUSES } from './registry.mjs?v=a49272
 export { EventLog } from './log.mjs?v=5c1fe52efb';
 export { MOVE_TYPES, move, recognize, applyMove, infoState } from './moves.mjs?v=69784e24c4';
 export { Agenda, isComplete, missing, defaultCompatible, frameFromPending, frameFromModal } from './frames.mjs?v=7f08beebfe';
-<<<<<<< HEAD
-export { Focus, Entities } from './focus.mjs?v=ff5d88fa6a';
-=======
-export { Focus, Entities } from './focus.mjs?v=d931ef2a7e';
->>>>>>> origin/main
+export { Focus, Entities } from './focus.mjs?v=62be80ac59';
 export { snapshot, restore, migrate, Storage, memoryBackend, SCHEMA } from './persist.mjs?v=3e29fd91c2';
 export { lastUnfinished, parseCommand, findDiscussion, runCommand, card, panel } from './where.mjs?v=72e99182f4';

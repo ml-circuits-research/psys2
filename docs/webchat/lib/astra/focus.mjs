@@ -3,11 +3,7 @@
  *
  * Both live inside the discussion record (`d.focus`, `d.entities`), so switching discussion restores that discussion's focus.
  */
-<<<<<<< HEAD
-import { en } from '../lang/en.mjs?v=429bbf713e';
-=======
-import { en } from '../lang/en.mjs?v=9b3d9a4e48';
->>>>>>> origin/main
+import { en } from '../lang/en.mjs?v=d1e2ba22e0';
 const plain = (t) => String(t ?? '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
 const PRONOUNS = new Set([...en.words('pron', 'astra'), ...en.words('anaphor', 'astra')]);
 const ORDINALS = en.ordinals('acts');
