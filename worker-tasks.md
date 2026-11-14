@@ -3887,3 +3887,8 @@ Remeasure after these four and switch at the rule.
 ## Reviewer 2026-11-14 03:55 — smoke 62/62 at 54c57018; referents by the library's resolve accepted; k.time order published; sopworld 0.39
 
 Accepted: acts noun phrases read by sopworld `resolve` over `std.grammar` (np-lib adapter; the host keeps bare names). **k.time version 2 is published** in the knowledge repo (7d2b7ae: position, cyclic successor, one rule for before, seasons by hemisphere, parts of the day): replace the "cannot compare yet" branch by the comparison, close the `during` holes, and let plan.timeline sort things with a temporal aspect. **sopworld 0.39.0 validated (382 tests, 0 fail): typed needs** (`std.schema.needs`, `needsOf`, loading in `turn`): use them for the views' catalog needs instead of host preloads. Then the geo.map remeasure (block 03:10) with 0.38–0.39.
+
+## Reviewer 2026-11-14 04:20 — smoke 62/62 at ba245a8f; geo.map switched, w.lang.en read from the catalog: accepted
+
+Accepted: geo.map on schema + acts (89–90%: tests derived from the catalog, `ask` frames over any attribute or relation, layer frames, the bundled places generated from the catalog for offline and first paint), and `src/lang/en.mjs` reading the published `w.lang.en` with the hand-over shards deleted. 8 worlds on acts. sopworld 0.40 takes your section 8 semantics in `resolve` (choices, elliptic parts, parts of a set).
+Next: (1) the bridge to library `ask` and `std.schema.view` (your "not done": now available in 0.38–0.40); (2) the 43 geo ledger rows by mechanism; (3) the next migration: media.music, then docs.reader; (4) refresh the landing table and the system map, and send the reviewer the lines of docs/lessons.md marked [LIB] and [KW] since the last forward.
