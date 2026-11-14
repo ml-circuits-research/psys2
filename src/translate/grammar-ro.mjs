@@ -291,7 +291,7 @@ export function grammarRoEn(text, opts = {}) {
     const p = parseRo(part, opts);
     if (!p.ok) return { text: '', ok: false, frame: null, notes: p.notes };
     frames.push(p.frame);
-    out.push(realiseEn(p.frame) + (QUESTION_ACTS.test(p.frame.act) ? '?' : '.'));
+    out.push(realiseEn(p.frame) + (QUESTION_ACTS.test(p.frame.act) ? '?' : parts.length > 1 ? '.' : ''));   // a single request has no full stop: the reader's habit and the real turns' (a stop changed the budgeted reading of one real turn)
   }
   if (!out.length) return { text: '', ok: false, frame: null, notes: ['empty'] };
   return { text: out.join(' '), ok: true, frame: frames.length === 1 ? frames[0] : frames, notes: [] };

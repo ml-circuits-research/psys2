@@ -21,8 +21,8 @@ test('lang.ro: a clitic hyphen is split off a verb', () => {
   assert.equal(a?.enclitic, 'mi');
 });
 test('the grammar path reads with the words of w.lang.ro', () => {
-  assert.equal(grammarRoEn('Desenează o casă roșie lângă un copac', { lexicon: ro }).text, 'draw a red house next to a tree.');
-  assert.equal(grammarRoEn('fă casa roșie', { lexicon: ro }).text, 'make the house red.');
+  assert.equal(grammarRoEn('Desenează o casă roșie lângă un copac', { lexicon: ro }).text, 'draw a red house next to a tree');
+  assert.equal(grammarRoEn('fă casa roșie', { lexicon: ro }).text, 'make the house red');
   assert.equal(grammarRoEn('Ce frumos e afară', { lexicon: ro }).ok, false);
 });
 test('lang.ro replies with the article, made by the library from the catalog templates (no hand text)', () => {
