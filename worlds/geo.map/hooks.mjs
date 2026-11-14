@@ -310,7 +310,7 @@ const domain = Object.fromEntries(Object.entries(domain0).map(([act, f]) => [act
  */
 function accepts({ action, roles = {}, tab, text }) {
   const act = String(action ?? '').split('.').pop();
-  if (!ACTS.has(act)) return true;   // the operations that are not acts (navigation, comparisons, distances) are read by patterns that name the map's own frames
+  if (!ACTS.has(act)) return !(roles.a !== undefined && directionOf(roles.a));   // a direction word of the view is not the place a pattern of the map names ("back", "away")   // the operations that are not acts (navigation, comparisons, distances) are read by patterns that name the map's own frames
   const open = tab === 'geo.map';
   if (['undo', 'redo'].includes(act)) return open;
   // a question whose subject starts with a verb of another act ("Highlight Romania and its" + the attribute word "neighbours") is that act's sentence, not a question about the attribute

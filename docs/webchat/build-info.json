@@ -236,10 +236,10 @@
     "worlds/games.tictactoe/fns.mjs": "ad77e5a9e94f5933",
     "worlds/games.tictactoe/ops.mjs": "d50045e6f5ccf4c4",
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
-    "worlds/geo.map/hooks.mjs": "36899161a1efae5e",
-    "worlds/geo.map/map.mjs": "2ebf27c6cd15e2c4",
-    "worlds/geo.map/ops.mjs": "4b84889a01ac931e",
-    "worlds/geo.map/own.mjs": "5ef5cb91796914aa",
+    "worlds/geo.map/hooks.mjs": "e1b5a77f15110a5d",
+    "worlds/geo.map/map.mjs": "93d4839a28d14bb2",
+    "worlds/geo.map/ops.mjs": "5100a6b6ef1542cf",
+    "worlds/geo.map/own.mjs": "d04d2df02f905201",
     "worlds/geo.map/places.mjs": "43ad522a8dbac880",
     "worlds/geo.map/regions.mjs": "69033e813f66d8e0",
     "worlds/index.json": "c73388844f7a4102",
@@ -314,6 +314,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-14T03:25:58.541Z",
-  "commit": "af9d434c-dirty"
+  "builtAt": "2026-11-14T03:32:42.552Z",
+  "commit": "04a7edb6-dirty"
 }
