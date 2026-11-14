@@ -56,7 +56,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const data = read();
   const stamp = { date: today(), build: build() };
   const at = (k) => argv.indexOf(k);
-  if (at('--ablation') >= 0) data.robustness = { ...stamp, config: 'rules-C', ...robustness(argv[at('--ablation') + 1]) };
+  if (at('--ablation') >= 0) data.robustness = { ...stamp, config: 'rules-C', paraphrasesDate: data.robustness?.paraphrasesDate ?? '2026-11-14', ...robustness(argv[at('--ablation') + 1]) };   // paraphrasesDate: the sets are the re-judged ones (meaning same / changed)
   if (at('--richest') >= 0) data.richest = { ...stamp, ...richest() };
   if (at('--set') >= 0) { const i = at('--set'); data[argv[i + 1]] = { ...stamp, right: Number(argv[i + 2]), total: Number(argv[i + 3]), note: argv[i + 4] ?? '' }; }
   if (at('--seating') >= 0) {
