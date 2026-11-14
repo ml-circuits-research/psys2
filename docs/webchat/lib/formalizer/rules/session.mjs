@@ -3,7 +3,7 @@
  * (spec 03 section 3). Browser-safe.
  */
 import { makeWire, str, atom } from '../../soplang/index.mjs?v=c57881f705';
-import { en } from '../../lang/en.mjs?v=35d25b1790';
+import { en } from '../../lang/en.mjs?v=d1e2ba22e0';
 
 const PRONOUNS = en.refers('session.agent');   // pronoun -> what it stands for: m, f, any, user, assistant (handover/lang.en pronouns)
 

@@ -301,7 +301,7 @@
  "media.music|lexicon|lex.media.music.songtitles": 22,
  "media.music|lexicon|lex.media.music.songstarts": 15,
  "plan.seating|table|worlds/plan.seating/ops.mjs:SCHEMA": 62,
- "plan.timeline|table|worlds/plan.timeline/ops.mjs:SCHEMA": 64,
+ "plan.timeline|table|worlds/plan.timeline/ops.mjs:SCHEMA": 65,
  "plan.timeline|lexicon|lex.plan.timeline.kinds": 16,
  "space|table|worlds/space/pieces.mjs:REL_WORDS": 13,
  "space|table|worlds/space/pieces.mjs:PART_OF": 15,

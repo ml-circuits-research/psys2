@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The places of the map, by lookup (spec 21 section 12). ONE reading path: every country, city and group comes from the catalog's `k.geo` (`ctx.knowledge`: the wires of a type once the
-// host's `needs` entries `wires:k.geo.country` ... settled, read synchronously through `peekWires`); the world keeps no knowledge base of its own. What k.geo lacks (the bounding
+// typed needs of world.sop (`std.schema.needs` k.geo.country ...) settled, read synchronously through `peekWires`); the world keeps no knowledge base of its own. What k.geo lacks (the bounding
 // boxes and aliases of the regions) is `regions.mjs`, listed in handover/knowledge-out/catalog-lacks.md. The entities have the shape the operations of the map always read:
 //   country { kind, name, cc, pop, area, lat, lon, bb [s, w, n, e], capital [names], cont (key), sub, nb [cc], cur [], lang [], land, ind }
 //   city { kind, name, cc, pop, lat, lon, isCapital }      region { kind, rkind, name, bb, members [cc] }
@@ -17,8 +17,6 @@ const singKey = (k) => k.replace(/([a-z])s$/, '$1');
 const num = (v) => (v === undefined || v === null || v === '' || Number.isNaN(Number(v)) ? null : Number(v));
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
-/** The wire types the map needs before an operation runs (the host's `needs` hook): `wires:<type>[@<world>]`. */
-export const NEEDS = ['wires:k.geo.country', 'wires:k.geo.city', 'wires:k.geo.group', 'wires:core.word@k.geo'];
 
 /** Facts of one thing merged over the shards that state them (the continent shard and the borders shard of one country are one thing). */
 function merge(ws, idOf) {

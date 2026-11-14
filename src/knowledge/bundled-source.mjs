@@ -12,7 +12,8 @@
  */
 import { BUNDLED_VALUES, BUNDLED_VALUES_INDEX } from './bundled-values.mjs';
 import { BUNDLED_OBJECTS, BUNDLED_OBJECTS_INDEX } from './bundled-objects.mjs';
-const BUNDLED_SHARDS = { ...BUNDLED_VALUES, ...BUNDLED_OBJECTS }, BUNDLED_INDEX = [...BUNDLED_VALUES_INDEX, ...BUNDLED_OBJECTS_INDEX];
+import { BUNDLED_TIME, BUNDLED_TIME_INDEX } from './bundled-time.mjs';
+const BUNDLED_SHARDS = { ...BUNDLED_VALUES, ...BUNDLED_OBJECTS, ...BUNDLED_TIME }, BUNDLED_INDEX = [...BUNDLED_VALUES_INDEX, ...BUNDLED_OBJECTS_INDEX, ...BUNDLED_TIME_INDEX];
 
 /** index.json and vocab.json of the bundled subset (same format as the catalog's). */
 function bundledFiles() {

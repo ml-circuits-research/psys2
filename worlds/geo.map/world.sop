@@ -21,3 +21,21 @@
     tabOrder=60
     tabKind=tool
     doc="A voice-controlled map: every country, capital, city of 500,000+ people and Romanian and Moldovan towns of 30,000+, with population, area, borders, currency and languages. Moving, zooming, markers, highlighted countries, distance lines, comparisons and questions about places. State lives in ctx.state; the host draws it with Leaflet over an offline country outline map (street map tiles optional). The places come by lookup from the catalog (k.geo: Natural Earth, countries ODbL, GeoNames CC BY 4.0), see data/README.md. Hand-built platform fixture, not produced by the C1 workflow."
+
+# Typed needs (sopworld 0.39.0, std.schema.needs): the collections of k.geo the operations read synchronously (countries, cities, groups, the other names of countries), loaded before an operation of this world runs.
+@need.geo.map.countries std.schema.needs
+    of=geo.map
+    type=k.geo.country
+    from=k.geo
+@need.geo.map.cities std.schema.needs
+    of=geo.map
+    type=k.geo.city
+    from=k.geo
+@need.geo.map.groups std.schema.needs
+    of=geo.map
+    type=k.geo.group
+    from=k.geo
+@need.geo.map.words std.schema.needs
+    of=geo.map
+    type=core.word
+    from=k.geo
