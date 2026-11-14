@@ -80,13 +80,13 @@ const out = [], tally = {};
 const bump = (path, dim, val, res) => { const t = ((tally[path] ??= {})[`${dim}:${val}`] ??= { n: 0, kept: 0, act: 0, other: 0, unread: 0, abstain: 0 }); t.n++; t[res]++; };
 let n = 0;
 for (const r of rows) {
-  const row = { id: r.id };
+  const row = { id: r.id, source: r.source };
   for (const p of paths) {
     let en = '';
     try { en = await englishOf(p, r); } catch (e) { en = ''; }
     const got = en ? await reader.read(en, r) : { complete: false, key: '' };
     const res = judge(r.ref, got, en);
-    row[p] = { en, res };
+    row[p] = { en, res, key: got.complete ? got.key : '' };
     for (const [dim, val] of [['all', 'all'], ['source', r.source], ['kind', r.kind], ['group', r.group], ['variant', r.ro_variant], ['source+kind', `${r.source}/${r.kind}`]]) bump(p, dim, val, res);
   }
   out.push(row);

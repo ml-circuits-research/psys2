@@ -4246,11 +4246,23 @@
 @t.art.draw.named.place.p core.test
     session=namedplace
     input="Put a cat named Tom in the sky."
-    expect="I drew an orange cat in the sky."
+    expect="I did not keep the name Tom."
     expectState="objects.length=1"
 
 @t.art.draw.named.place.called core.test
     session=namedplace2
     input="Add a cat called Tom in the sky."
-    expect="I drew an orange cat in the sky."
+    expect="I did not keep the name Tom."
+    expectState="objects.length=1"
+
+@t.art.draw.named.plural core.test
+    session=namedplural
+    input="Draw 2 cats called Tom."
+    expect="I did not keep the name Tom."
+    expectState="objects.length=2"
+
+@t.art.draw.named.np core.test
+    session=namednp
+    input="Draw a cat called Rex."
+    expect="I drew an orange cat; I did not keep the name Rex."
     expectState="objects.length=1"
