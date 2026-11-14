@@ -36,7 +36,7 @@ if (truth && set !== 'colours') {
   const rd = (dir) => readdirSync(dir).flatMap((f) => readFileSync(`${dir}/${f}`, 'utf8').split('\n').map(parseFact).filter(Boolean));
   const lc = (x) => String(x ?? '').toLowerCase();
   const own = (w) => readFileSync(new URL(`../worlds/${w}/kb.sop`, import.meta.url), 'utf8').split('\n').map(parseFact).filter(Boolean);
-  const animalsOld = new Set(own('kids.animals').map((r) => lc(r.f.name?.[0])));
+  const animalsOld = new Set(JSON.parse(readFileSync(new URL('../training/eval/kb-animals-old.json', import.meta.url), 'utf8')).names);   // the animals of the deleted kb.sop of kids.animals (frozen)
   const animals = rd(`${truth}/k.animals/shards`).filter((r) => r.type === 'k.animals.animal' && !animalsOld.has(lc(r.f.name?.[0])) && /^[a-z]+$/.test(r.f.name?.[0] ?? ''));
   const legged = animals.filter((r) => r.f.legs?.length), sounding = animals.filter((r) => r.f.sound?.length);
   legged.slice(0, 50).forEach((r) => items.push({ domain: 'animal legs', tab: 'talk', say: [`How many legs does a ${r.f.name[0]} have?`], check: (_s, t) => new RegExp(`\\b${r.f.legs[0]}\\b`).test(t) && !/not how many/.test(t) }));
@@ -56,8 +56,8 @@ const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROO
 const tabOf = { draw: 'draw', talk: 'talk', charts: 'charts', map: 'map', editor: 'editor' };
 const per = {};
 const rows = [];
+if (catalog) engine.setKnowledge(createFacts({ source: createKnowledgeSource(catalog) }));   // one reader for the run (a new one per item kept every item's vocabulary in memory: out of memory on the real catalog)
 for (const it of items) {
-  if (catalog) engine.setKnowledge(createFacts({ source: createKnowledgeSource(catalog) }));
   const s = engine.createSession(sessionOptions(settingsForMode('rules'), { language: 'en' }));
   s.setWorldState('ui.shell', { activeTab: tabOf[it.tab] });
   let ok = false, last = '';

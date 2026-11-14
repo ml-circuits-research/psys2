@@ -9,7 +9,7 @@
  *   (no veto hook: an action on a referent that must exist in the world - delete, move, color, connect, select - is refused in the world's plain words whatever the catalog knows; a hit never replaces that refusal with a gloss)
  * The catalog is `engine.knowledge` (`createEngine({ options: { knowledge } })`); without it every function here does nothing and the dialog is as it was.
  */
-import { leftOut, requestOf } from './world-aware.mjs?v=18f2f6901f';
+import { leftOut, requestOf } from './world-aware.mjs?v=19939584dc';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 const wordsOf = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}-]+/gu) ?? [];
@@ -142,7 +142,7 @@ async function noticeIfSlow(dialog, lookup, name) {
 export async function preloadThings(dialog, segments) {
   const cat = knowledgeOf(dialog);
   if (!cat) return [];
-  const names = new Set(), drawNames = new Set(), needs = new Set();
+  const names = new Set(), drawNames = new Set(), needs = new Set(), lists = new Set();
   const foreign = !!dialog._waLang && dialog._waLang !== 'en';
   for (const seg of segments ?? []) {
     if (seg.unparsed) continue;
@@ -154,6 +154,9 @@ export async function preloadThings(dialog, segments) {
         for (const n of Array.isArray(need) ? need : []) if (['faces', 'schema', 'series'].includes(n)) needs.add(n);
         const slots = dialog.engine.interp.hook(dialog.isession, rq.world, 'openSlots', { action: rq.action, args: rq.args }, { state: dialog.isession.state[rq.world] ?? {} });
         for (const n of Array.isArray(slots) ? slots : []) if (n && String(n).split(/\s+/).length <= 3) { names.add(String(n)); drawNames.add(String(n)); }
+        // the words of the types whose wires the operation lists or looks up ("animals", "mix"): the catalog loads the wires of the types the schemas' words mean (`preloadWires`)
+        const listWords = dialog.engine.interp.hook(dialog.isession, rq.world, 'listNeeds', { action: rq.action, args: rq.args }, { state: dialog.isession.state[rq.world] ?? {} });
+        for (const n of Array.isArray(listWords) ? listWords : []) if (n && String(n).split(/\s+/).length <= 2) lists.add(String(n).toLowerCase());
         if (rq.args.thing) names.add(String(rq.args.thing).toLowerCase());
       }
       for (const w of leftOut(seg, foreign).slice(0, 3)) names.add(w);
@@ -162,6 +165,7 @@ export async function preloadThings(dialog, segments) {
   const done = [];
   const all = (async () => {
     for (const n of needs) { try { await cat[n]?.(); } catch { /* no model is no change */ } }
+    for (const n of [...lists].slice(0, 3)) { try { await cat.preloadWires?.(n); } catch { /* no list is no answer */ } }
     for (const n of [...names].slice(0, 6)) {
       try {
         const p = cat.thing(n);

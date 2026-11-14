@@ -6,7 +6,7 @@
 // Blocks and marks: see model.mjs. References ("the second paragraph", "the word milk", "it"): see target.mjs.
 // Effects: speech.say { text }, clipboard.copy { text }, file.download { filename, mime, content }.
 // Modal input: while inputMode is 'dictation' the engine offers every message to interceptInput(ctx, text) before formalization.
-// Cross-world: ctx.request('ui.openTab', { tab: 'editor' }) after every change; ctx.find / ctx.ask read kids.tasks, kids.animals and kids.arith.
+// Cross-world: ctx.request('ui.openTab', { tab: 'editor' }) after every change; ctx.find / ctx.ask read kids.tasks and kids.arith; the animals are the catalog's (src/knowledge/animals.mjs).
 // Every created sentence comes from wires: created blocks keep the ids of the wires they were made from in `from`.
 // Every exported operation is wrapped so that `doc` and `stats` are rebuilt after it (the tab renders `doc` with TipTap).
 
@@ -14,6 +14,7 @@ import {
   DEFAULT_TITLE, highlightHex, colorName, TITLE_SIZE_MIN, TITLE_SIZE_MAX, titleBlock, containers, getText, blockText, addMark, cutMark, covered, anyMark,
   sliceMarks, spliceText, remapMarks, hiddenTitle, normalizeMarks, sentencesOf, findAll, toDoc, toText, toHtml, stats as computeStats, documentWords, setText, wordsIn,
 } from './model.mjs';
+import { ask as askAnimals } from '../../src/knowledge/animals.mjs';   // the animals of the catalog (k.animals), read by lookup from a bundle generated from it
 import { basicColourNames } from '../../src/knowledge/values.mjs';   // the one colour reader (k.values)
 import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
@@ -421,14 +422,13 @@ function _setCell(ctx, { r, c, t } = {}) {
   return ok(`OK, row ${ri} column ${ci} now says "${String(t).trim()}".`);
 }
 
-// Animals: columns of a table map onto the keys of kids.animals.
+// Animals: columns of a table map onto the keys of k.animals (the catalog's animals, src/knowledge/animals.mjs).
 const HEADER_KEYS = {
   animal: 'name', name: 'name', legs: 'legs', leg: 'legs', food: 'food', eats: 'food', diet: 'diet', habitat: 'habitat', home: 'habitat', lives: 'habitat',
   class: 'class', type: 'class', kind: 'class', sound: 'sound', noise: 'sound', covering: 'covering', cover: 'covering', baby: 'baby', young: 'baby',
 };
 const HABITATS = { sea: 'sea', ocean: 'sea', farm: 'farm', forest: 'forest', wood: 'forest', river: 'river', jungle: 'jungle', desert: 'desert', polar: 'polar', arctic: 'polar', home: 'home', pet: 'home', garden: 'garden', savanna: 'savanna', grassland: 'grassland', mountain: 'mountain' };
 const CLASSES = { mammal: 'mammal', bird: 'bird', fish: 'fish', insect: 'insect', bug: 'insect', reptile: 'reptile', amphibian: 'amphibian', arachnid: 'arachnid' };
-const TYPE = 'kids.animals.animal';
 function animalFilter(topic) {
   const ws = (String(topic).toLowerCase().match(/[a-z]+/g) ?? []).map((x) => (x.endsWith('ies') ? `${x.slice(0, -3)}y` : x.replace(/s$/, '')));
   const where = {};
@@ -445,7 +445,7 @@ function _fillTable(ctx, { topic } = {}) {
   const s = ctx.state;
   const where = animalFilter(topic);
   if (!Object.keys(where).length) return no('missing', `I do not know a group of animals called "${String(topic).trim()}". Try sea animals, farm animals, birds or insects.`);
-  const found = ctx.ask({ type: TYPE, seek: 'matching', where, mode: 'list' });
+  const found = askAnimals({ seek: 'matching', where, mode: 'list' });
   if (found.status !== 'supported' || !found.values?.length) return no('missing', `I do not know any ${String(topic).trim()} in my knowledge base yet.`);
   let tb = tableOf(s);
   const created = !tb;
@@ -464,7 +464,7 @@ function _fillTable(ctx, { topic } = {}) {
     const row = keys.map((k) => {
       if (!k) return '';
       if (k === 'name') return cap(label);
-      const r = ctx.ask({ type: TYPE, seek: k, where: { name }, mode: 'list' });
+      const r = askAnimals({ seek: k, where: { name }, mode: 'list' });
       for (const w of r.from ?? []) from.add(w);
       const vals = r.values ?? (r.value !== undefined ? [r.value] : []);
       return r.status === 'supported' ? vals.map((v) => String(v).replace(/_/g, ' ')).join(', ') : '';
@@ -1145,7 +1145,7 @@ function _fromList(ctx, { list }) {
 function _report(ctx, { topic }) {
   const where = animalFilter(topic);
   if (!Object.keys(where).length) return no('missing', `I do not know a group of animals called "${String(topic).trim()}". Try sea animals, farm animals, birds or insects.`);
-  const found = ctx.ask({ type: TYPE, seek: 'matching', where, mode: 'list' });
+  const found = askAnimals({ seek: 'matching', where, mode: 'list' });
   if (found.status !== 'supported' || !found.values?.length) return no('missing', `I do not know any ${String(topic).trim()} in my knowledge base yet.`);
   const names = found.values;
   const blocks = [];
@@ -1153,7 +1153,7 @@ function _report(ctx, { topic }) {
   blocks.push({ kind: 'paragraph', text: `Here are the ${group}.`, from: found.from ?? [] });
   blocks.push({ kind: 'list', items: names.map((n) => String(n).replace(/_/g, ' ')), from: found.from ?? [] });
   for (const name of names.slice(0, 8)) {
-    const d = ctx.ask({ type: TYPE, seek: 'summary', where: { name } });
+    const d = askAnimals({ seek: 'summary', where: { name } });
     if (d.status === 'supported' && d.value) blocks.push({ kind: 'paragraph', text: `${cap(an(name))} is ${d.value}`, from: d.from ?? [] });
   }
   const title = `Report: ${cap(String(topic).trim())}`;

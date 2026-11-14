@@ -695,8 +695,8 @@
     session=hsh
 
 @t.games.hangman.sh02 core.test
-    input="could you maybe guess the letter e"
-    expect="Yes, there are 2 Es!"
+    input="could you maybe guess the letter a"
+    expect="Yes, there is one A!"
     session=hsh
 
 @t.games.hangman.m01 core.test

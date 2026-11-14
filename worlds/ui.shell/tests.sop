@@ -170,7 +170,7 @@
     session=s9
 
 @t.ui.shell.n34 core.test
-    input="How many legs does a spider have?"
+    input="What day comes after Monday?"
     expectStatus=supported
     session=s10
 
