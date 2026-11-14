@@ -14,7 +14,7 @@
 const GENERATION = 1;
 const ASSETS = `psys2-assets-g${GENERATION}`, META = `psys2-manifest-g${GENERATION}`;
 const MANIFEST_KEY = '/__psys2/manifest', INDEX_KEY = '/__psys2/index';
-const SELF_MANAGED = /^models\//;
+const SELF_MANAGED = /^models(-mt)?\//;
 
 let manifest = null;           // { version, assets }; null until the page posted one (or the stored one was read)
 let stale = false;             // a navigation showed a build newer than the stored manifest: unhashed requests go to the network until the page posts the new one

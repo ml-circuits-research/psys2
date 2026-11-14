@@ -29,7 +29,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const WEB = path.join(DOCS, 'webchat');
 const SETTINGS = JSON.stringify({ settingsVersion: 2, formalizer: 'rules', normalizer: false });
 /** What may reach the server without a hash (the entry page, the manifest, the service worker, and the model files kept by their own sha256-keyed caches). */
-export const UNHASHED_OK = (u) => /^\/(index\.html)?(\?.*)?$/.test(u) || /^\/(build-info\.json|sw\.js)$/.test(u) || /^\/models\//.test(u);
+export const UNHASHED_OK = (u) => /^\/(index\.html)?(\?.*)?$/.test(u) || /^\/(build-info\.json|sw\.js)$/.test(u) || /^\/models(-mt)?\//.test(u);
 
 /** A copy of docs/webchat without the model files and screenshots (big, not part of these checks). */
 async function copySite(dir) {

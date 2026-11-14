@@ -16,7 +16,6 @@
     doc="Colours a card can be changed to by talking (make it red): the shared lexicon of colour names (lex.lang.colour, from k.values)"
     extends=$lex.lang.colour
 
-
 @lex.talk.listverbs core.lexicon
     class=verb
     doc="The verbs of a listing question (which animals eat grass, which animals live in the sea, which animals can fly): the verb is read as the slot it means in the schemas (eat: eats, live: habitat, can: can)"

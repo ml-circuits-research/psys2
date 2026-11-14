@@ -13,7 +13,7 @@ const say = async (lines) => {
   return r.text;
 };
 
-const LEDGERED = ["t.data.charts.m04", "t.data.charts.n22", "t.data.charts.n35", "t.data.charts.n90", "t.data.charts.r2033", "t.data.charts.r2086", "t.data.charts.r2087", "t.data.charts.r2105", "t.data.charts.x203", "t.data.charts.x205"];
+const LEDGERED = ["t.data.charts.m04", "t.data.charts.n22", "t.data.charts.n35", "t.data.charts.n90", "t.data.charts.r2033", "t.data.charts.r2086", "t.data.charts.r2087", "t.data.charts.r2105", "t.data.charts.x203", "t.data.charts.x205", "t.data.charts.r2110"];
 test('data.charts: loads without problems and its 60+ tests pass', async () => {
   assert.deepEqual(engine.problems().filter((p) => p.startsWith('data.charts:')), []);
   const r = await runWorldTests(engine, 'data.charts');

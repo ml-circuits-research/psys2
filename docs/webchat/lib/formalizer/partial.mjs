@@ -7,7 +7,7 @@
  * Never ignores a negation: dropping "not" would turn the request into its opposite.
  */
 
-import { QUESTION_WORDS } from './rules/normalize.mjs?v=6e86079e49';
+import { QUESTION_WORDS } from './rules/normalize.mjs?v=3f42845f50';
 import { guard } from './guard.mjs?v=eb1a66f556';
 
 /** True when `text` has a question cue (a question mark or a question word anywhere). */
@@ -16,11 +16,16 @@ export const looksLikeQuestion = (text) => /\?/.test(text) || text.split(/\s+/).
 /** A window that turns a statement or request into a bare question ("body color should be red" -> "body color?") is not accepted. */
 const WH = new Set(['what', 'which', 'who', 'whom', 'whose', 'where', 'when', 'why', 'how']);
 /** A question that opens with a wh-word or ends with a question mark: no part of it is a statement ("which animals are mammals" is not "animals are mammals"). */
-const asksWh = (text) => /\?\s*$/.test(text) || WH.has(norm(String(text).trim().split(/\s+/)[0] ?? ''));
+const AUX = new Set(['can', 'could', 'do', 'does', 'did', 'is', 'are', 'was', 'were', 'will', 'would', 'should', 'shall', 'may', 'might', 'am']);   // a sentence that opens with one of these and has a subject after it is a yes/no question, with or without the mark ("Do penguins fly")
+const asksWh = (text) => { const w = String(text).trim().split(/\s+/).map(norm); return /\?\s*$/.test(text) || WH.has(w[0] ?? '') || (AUX.has(w[0] ?? '') && w.length >= 3); };
+const BE_DO = new Set(['is', 'are', 'was', 'were', 'do', 'does', 'did']);   // ("can you draw a house" is a polite request: the modal verbs are not here)
+const asksWhWord = (text) => { const w = String(text).trim().split(/\s+/).map(norm); return (WH.has(w[0] ?? '') && !/\b(?:about|if)\b/i.test(text)) || (BE_DO.has(w[0] ?? '') && w.length >= 3); };
 /** A window that changes the mood is not accepted: a statement or request that becomes a bare question ("body color should be red" -> "body color?"), a wh-question that becomes a statement ("which animals are mammals" -> "animals are mammals", taught as a fact). */
 export const changesIntoQuestion = (original, slice, kinds) => kinds.length > 0
   && ((kinds.every((k) => k === 'question') && !looksLikeQuestion(original) && slice.length / Math.max(1, original.trim().length) < 0.6)
-    || (kinds.every((k) => k === 'statement') && asksWh(original)));
+    || (kinds.every((k) => k === 'statement') && asksWh(original))
+    || (kinds.every((k) => k === 'request') && asksWhWord(original))
+    || (kinds.every((k) => k === 'question') && WH.has(norm(String(original).trim().split(/\s+/)[0] ?? '')) && !WH.has(norm(String(slice).trim().split(/\s+/)[0] ?? ''))));   // a window that drops the question word of a wh-question asks another question ("what does a rabbit eat" is not "does a rabbit eat")   // a wh-question is not a request for the thing it names ("what can a bird do" is not "a bird" = draw a bird); "what about X" is a suggestion
 
 export const NEGATIONS = new Set(['not', 'no', 'never', 'without', 'dont', "don't", 'don’t', 'cannot', "can't", 'cant', "won't", 'wont', "isn't", "doesn't", "didn't", 'nothing', 'none', 'nobody', 'neither', 'nor', 'stop', 'undo', 'cancel']);
 

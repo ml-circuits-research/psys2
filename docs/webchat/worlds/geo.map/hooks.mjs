@@ -2,12 +2,12 @@
 // geo.map (spec 21 section 12): the hooks of the schema world. The acts (make, remove, change, pick, ask, send, undo, redo) are read by the generated grammar; what an act DOES on the map is the
 // operations of map.mjs (the projection and zoom fitting, the view state, the distances). The roles of an act are mapped onto those operations here; the places named in them come by lookup from
 // the catalog (places.mjs), never from a table of this world. Nothing here lists a place, a verb or a colour: kinds and attributes come from the schema, place words from the catalog vocabulary.
-import * as M from './map.mjs?v=fc8da5c03a';
-import { knowsPlace } from '../../lib/knowledge/open-words.mjs?v=a0faf592b2';
+import * as M from './map.mjs?v=3855df0ff1';
+import { knowsPlace } from '../../lib/knowledge/open-words.mjs?v=ea05ed76e6';
 import { keyOf, lookup, peekIndex } from './places.mjs?v=953a0c9f2d';
-import * as G from './ops.mjs?v=fc8da5c03a';
+import * as G from './ops.mjs?v=3855df0ff1';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
-import { ACT_VERBS } from '../../worlds/acts/acts.mjs?v=e9853e331d';   // circular on purpose: only used inside functions, when the executor exists
+import { ACT_VERBS } from '../../worlds/acts/acts.mjs?v=dfea3aa2a5';   // circular on purpose: only used inside functions, when the executor exists
 
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_'’-]+/).filter(Boolean);
 const DET = /^(?:the|a|an|my|our|this|that|these|those|another|new|all|some|any)\s+/;

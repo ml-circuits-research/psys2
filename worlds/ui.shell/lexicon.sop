@@ -52,6 +52,7 @@
     word=talk
     word=seating
     word=seating_plan
+    word=timeline
 
 @lex.ui.shell.verbtabs core.lexicon
     class=noun

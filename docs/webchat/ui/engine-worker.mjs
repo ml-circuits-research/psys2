@@ -40,6 +40,7 @@ let lastTurnEnd = 0;
 const budgetMod = { createBudget: null };
 let btSeq = 0;
 const btPending = new Map();         // id -> { resolve, reject } of a call to the page's browser translator / detector
+let knowledgeFacts = null;           // the catalog reader (createFacts), once attached
 let warming = null;                  // the warm-up turn that runs: a user turn waits for it (the turn guard is shared), at most one warm-up turn long
 const one = async (s, text, opts) => { const p = s.send(text, opts).catch(() => {}); warming = p; try { await p; } finally { if (warming === p) warming = null; } };
 
@@ -95,7 +96,7 @@ function applySettings(s, extra) {
   if (extra?.prepare && settings.formalizer === 'encoder' && dispatcherEnc) dispatcherEnc.prepare().catch(() => {});
 }
 
-const KNOWLEDGE_URL = 'https://ml-circuits-research.github.io/sop-knowledge-worlds/worlds', KNOWLEDGE_FETCH_MS = 6000;
+const KNOWLEDGE_URL = 'https://ml-circuits-research.github.io/sop-knowledge-worlds/worlds', KNOWLEDGE_FETCH_MS = 8000;
 // ---------- boot ----------
 async function init(m) {
   Object.assign(ver, m.versions ?? {});
@@ -146,9 +147,11 @@ async function init(m) {
   try {
     const [{ createFacts }, { createKnowledgeSource }, { createLayeredSource }] = await Promise.all([imp('lib/knowledge/facts.mjs'), imp('lib/loaders/knowledge-source.mjs'), imp('lib/knowledge/bundled-source.mjs')]);
     const { createCachedSource } = await imp('lib/loaders/knowledge-cache.mjs');
+    const { knowledgeTimeoutMs } = await imp('lib/loaders/knowledge-source.mjs');
     const src = createCachedSource({ source: createKnowledgeSource(settings.knowledgeUrl || KNOWLEDGE_URL), caches: globalThis.caches, onCacheEvent: (e) => evt('knowledge-cache', e) });
     // the bundled subset (colours, number words, the drawings of the built-in kinds: generated from the catalog) answers for a catalog that cannot be reached; the catalog replaces it when it can
-    engine.setKnowledge(createFacts({ source: createLayeredSource({ text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), KNOWLEDGE_FETCH_MS))]) }) }));
+    knowledgeFacts = createFacts({ source: createLayeredSource({ text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), knowledgeTimeoutMs(p) + 2000))]) }) });
+    engine.setKnowledge(knowledgeFacts);
     engine.onNotice = (text) => evt('notice', text);   // "Looking up how a pineapple looks..." while a shard loads
   } catch (e) { console.warn('knowledge catalog not attached', e); }
   if (testHooks) installFaults();
@@ -344,6 +347,13 @@ const handlers = {
   /** The page needs a world now (its tab opens, the user names it): loads it and answers which worlds are loaded. */
   async ensure(m) { while (turnRunning()) await sleep(20); const added = await ensureWorlds(m.worlds ?? [], m.why ?? 'tab'); return { added, loaded: [...loadedIds], state: stateOf(), log: loadedLog.slice(-20) }; },
   async loaded() { return { loaded: [...loadedIds], log: loadedLog.slice(), loader: worldLoader.stats }; },
+  /** Page start-up step and its retries: reads the catalog's index (not the vocabulary: that is read by buckets, when a message needs it); { ok } is false while the catalog cannot be reached (the page asks again; `refresh` skips the backoff). */
+  async catalog(m) {
+    if (!knowledgeFacts) return { ok: false, bytes: null };
+    if (m.refresh) knowledgeFacts.refresh();
+    await knowledgeFacts.world?.('k.objects');   // LAZY LOADING: the catalog's index (version-cached), not its 1.3 MB vocabulary: a message reads the buckets of its words
+    return { ok: !knowledgeFacts.unreachable(), bytes: knowledgeFacts.stats?.vocabBytes ?? null };
+  },
   async 'ort-restart'(m) { globalThis.__psys2Ort?.restart?.(m.lane, m.why); sendOrt(); return null; },   // diagnostics and tests
   async 'ort-resume'() { globalThis.__psys2Ort?.resume?.(); sendOrt(); return null; },
 };

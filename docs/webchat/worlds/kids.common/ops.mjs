@@ -53,9 +53,8 @@ export function listen() { return { status: 'supported', value: 'Thanks for tell
 export function bye() { return { status: 'supported', value: 'Goodbye' }; }
 
 const HOWRU = ['I am fine, thank you!', 'I am doing well, thanks for asking!', 'I am great! What shall we do?'];
-let howruTurn = 0;
-/** Small talk ("how are you"): a friendly answer, rotating a little so it does not repeat. */
-export function howAreYou() { return { status: 'supported', value: HOWRU[howruTurn++ % HOWRU.length] }; }
+/** Small talk ("how are you"): a friendly answer, rotating a little so it does not repeat. The turn counter is the session's (the world's state), not the module's: two sessions never share it. */
+export function howAreYou(ctx) { const st = ctx?.state ?? {}, i = Number(st.howru) || 0; st.howru = i + 1; return { status: 'supported', value: HOWRU[i % HOWRU.length] }; }
 
 /**
  * A question that lacks its subject ("how many legs?", "what day is after"): asks for it and leaves the answer pending (spec 11 section 3).

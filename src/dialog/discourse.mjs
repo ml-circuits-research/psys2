@@ -1040,7 +1040,13 @@ export class Discourse {
   }
 
   /** The statements an answer rests on, as the user said them ("I worked it out from ..."); with the matrix reasoner they come from the library's explanation. */
-  _because(f) { return f.from?.length ? this._known(f.from) : f.fromLater ? this._known(f.fromLater()) : []; }
+  _because(f) {
+    if (f.from?.length) return this._known(f.from);
+    if (f.fromLater) { const k = this._known(f.fromLater()); if (k.length) return k; }
+    // a question a world answered from its own state (a schema world: no wires of an instance to name): it says what it looked at, its `source` phrase ("the picture")
+    const phrase = f.kind === 'question' && f.reply ? this.dialog.engine.set.get(f.world)?.sourcePhrase : null;
+    return phrase ? this._knownParts([], [phrase]) : [];
+  }
 
   // ---- topic return --------------------------------------------------------------------------------------------------------------
 

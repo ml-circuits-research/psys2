@@ -37,7 +37,7 @@ test('malformed records and duplicate keys are dropped', () => {
 test('question and request ops pass through the dry run', () => {
   const q = rec({ text: 'What is 7 plus 5?', op: '?kids.arith.calc', slots: [S('kids.arith.calc.a', '7', 7), S('kids.arith.calc.b', '5', 5), S('kids.arith.calc.op', null, 'plus'), S('seek', null, 'result')] });
   assert.equal(gateOne(gc, q).ok, true);
-  const r = rec({ world: 'art.draw', text: 'draw a red house', op: 'draw.add', slots: [S('arg.m1', 'red', 'red'), S('arg.kind', 'house', 'house')] });
+  const r = rec({ world: 'art.draw', text: 'draw a red house', op: 'art.draw.make', slots: [S('arg.thing', 'house', 'house')] });   // the drawing board's act (schema world), no longer draw.add
   assert.equal(gateOne(gc, r).ok, true);
 });
 test('gateAll counts the drops by reason', () => {
@@ -46,7 +46,7 @@ test('gateAll counts the drops by reason', () => {
 });
 
 test('NX3b: an implied value, a seek and a pattern constant skip the lexicon check', () => {
-  const q = rec({ world: 'kids.shapes', text: 'what is a hexagon', op: '?kids.shapes.shape', slots: [S('kids.shapes.shape.name', 'hexagon', 'hexagon'), S('seek', null, 'summary')] });
+  const q = rec({ text: 'How many apples does Tom have?', op: '?kids.arith.holding', slots: [S('kids.arith.holding.owner', 'Tom', 'tom'), S('kids.arith.holding.item', 'apples', 'apple'), S('seek', null, 'count')] });   // the kids.shapes questions are Talk frames now
   assert.equal(gateOne(gc, q).ok, true);
   const t = rec({ world: 'kids.tasks', text: 'what do I have left to do?', op: 'tasks.pending', slots: [S('arg.list', null, 'to-do')] });
   assert.equal(gateOne(gc, t).ok, true);

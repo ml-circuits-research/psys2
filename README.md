@@ -1,5 +1,8 @@
 # PSys2 — PragmaticSystem2
 
+**▶ Live demo: [https://ml-circuits-research.github.io/psys2/webchat/](https://ml-circuits-research.github.io/psys2/webchat/)** (runs entirely in your browser)
+
+
 **A neurosymbolic assistant that runs entirely in your browser.** There is no server and no large language model.
 
 - **Neural models propose.** A small dispatcher (DistilBERT) cuts a message into parts and proposes which world each part belongs to; a small normalizer (FLAN-T5 small) rewrites a part only when nothing else reads it.
@@ -37,7 +40,7 @@
 
 **Headline numbers** (`training/RESULTS.md`): on the 1240 authored English test messages the full pipeline answers 98.6% correctly and 0.4% wrongly (the rules alone: 95.4% and 0.5%); on 2480 Romanian cases 84.7% and 2.7%. The sets were written by us and the rules were widened by reading them, so real users will see lower numbers.
 
-**Demo:** open [`docs/webchat/index.html`](docs/webchat/index.html) through any static web server (for example `npx serve docs`). **Licence:** AGPL-3.0-only (see below).
+**Demo:** live at [https://ml-circuits-research.github.io/psys2/webchat/](https://ml-circuits-research.github.io/psys2/webchat/); locally, open [`docs/webchat/index.html`](docs/webchat/index.html) through any static web server (for example `npx serve docs`). **Licence:** AGPL-3.0-only (see below).
 
 - Vision: [`vision/PSys2-vision-v1.md`](vision/PSys2-vision-v1.md) (source: `.docx`)
 - Specifications: [`specs/`](specs/README.md)

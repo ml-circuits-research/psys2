@@ -1857,9 +1857,17 @@ export async function mountPsys2(element, options = {}) {
       } else progress.end('model', { ms: 0, label: 'Reading model: not used (the rules read)' });
     } catch { /* warm-up is best effort */ }
     if (destroyed) return;
-    // LAZY LOADING: the knowledge catalog is not read at start-up (its vocabulary was about 1.3 MB): a message that names a thing reads the vocabulary bucket of its words, then the shards of the thing
-    // (src/knowledge/facts.mjs); an unreachable catalog is said when a turn needs it (the "I can't reach the picture catalog" line), not before.
-    progress.end('catalog', { ms: 0, label: 'Knowledge catalog: read when a message needs it' });
+    // PROGRESS: the knowledge catalog's index (cached by version; the vocabulary is read by buckets, per message): the last start-up step, and the place where an unreachable catalog is said once
+    // an unreachable catalog is asked again (4 s, 12 s, 30 s, then every minute) until it answers; the notice is said once and goes away when it does
+    progress.start('catalog', 'Reading the knowledge catalog index');
+    const askCatalog = async (refresh) => { try { const r = await engineClient.call('catalog', { refresh }); return r?.ok ? r : null; } catch { return null; } };
+    const first = await askCatalog(false);
+    if (first) progress.end('catalog', { bytes: first.bytes ?? null });
+    else {
+      const CATALOG_PAUSES = [4000, 12000, 30000];
+      progress.fail('catalog', 'The picture catalog could not be reached', 'only the basic drawings are available for now; it is tried again');
+      (async () => { for (let i = 0; !destroyed; i++) { await sleep(CATALOG_PAUSES[Math.min(i, CATALOG_PAUSES.length - 1)] * (i >= CATALOG_PAUSES.length ? 2 : 1)); if (destroyed) return; const r = await askCatalog(true); if (r) { progress.resolve('catalog'); return; } } })();
+    }
   };
   setTimeout(() => { if (!destroyed) warm(); }, 100);
   return handle;
