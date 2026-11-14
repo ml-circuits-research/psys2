@@ -919,15 +919,15 @@ export function createExecutor(schema, hooks = {}) {
     for (const [i, e] of list.entries()) {
       budget.tick('acts.things');
       if (!e || typeof e !== 'object') continue;
-      if (d.active && String(e[d.id ?? 'id']) !== String(only)) continue;
       const kind = schema.kinds[e.kind] ? e.kind : d.kind;
       const name = schema.kinds[kind]?.named ? (d.name ? e[d.name] : e.name ?? e.title) : null;   // a numbered kind is pointed at by its number
       const id = String(e[d.id ?? 'id'] ?? name ?? kind);
       const attrs = {};
       for (const a of Object.values(schema.attrs)) if (a.of.includes(kind) && ['string', 'number', 'boolean'].includes(typeof e[a.name])) attrs[a.name] = e[a.name];
-      out.push({ id, kind, noun: kind, n: i + 1, words: [kind, schema.kinds[kind]?.plural].filter(Boolean), name: name ? String(name) : undefined, ...(d.diceOnly ? { pointer: false } : {}), ...(single && !schema.kinds[kind]?.numbered ? { say: `the ${kind}` } : {}), attrs, salient: false, sig: JSON.stringify(e) });
+      out.push({ id, kind, noun: kind, n: i + 1, words: [kind, schema.kinds[kind]?.plural].filter(Boolean), name: name ? String(name) : undefined, ...(d.diceOnly ? { pointer: false } : {}), ...(d.active && String(e[d.id ?? 'id']) !== String(only) ? { nodice: true } : {}), ...(single && !schema.kinds[kind]?.numbered ? { say: `the ${kind}` } : {}), attrs, salient: false, sig: JSON.stringify(e) });
     }
-    if (d.active && out.length === 1) out[0].say = `the ${out[0].kind}`;   // the one thing the world works on is "the chart", not a number
+    const act = out.filter((x) => !x.nodice);
+    if (d.active && act.length === 1) act[0].say = `the ${act[0].kind}`;   // the one thing the world works on is "the chart", not a number; the others stay pointable ("the second one") but the dice does not name them
     return out;
   }
   function stateItems(st) {
