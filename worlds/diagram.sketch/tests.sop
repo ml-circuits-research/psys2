@@ -4910,3 +4910,13 @@
     expect="I can't find “End” in the diagram. In the diagram I can see: Start."
     expectState="shapes.length=1"
     session=missing.name
+
+@t.diagram.sketch.stack.a core.test
+    input="Draw a circle called Cloud, a circle called Sun."
+    expect="Drew "
+    session=stack
+
+@t.diagram.sketch.stack.b core.test
+    input="Send Sun to the front"
+    expect="Brought Sun to the front."
+    session=stack
