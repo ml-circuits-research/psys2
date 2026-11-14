@@ -4,6 +4,8 @@
 // a sentence, and (3) keeps a host check that a change really changes something. There is NO generator of our own: no list of examples, no placeholders to fill.
 // Browser-safe: no `node:*` imports; the library module and the world registry are passed in.
 import { colourWordSet, colourLexiconWords } from '../knowledge/values.mjs?v=a137742733';
+import { languageWorld } from './compose-world.mjs?v=7e48e1d104';
+import { englishOf } from '../lang/en-generate.mjs?v=735b7ec142';
 
 const NOT_SAMPLED = new Set(['place', 'connect', 'group', 'send', 'save', 'load', 'redo']);   // acts the library cannot frame (a place, a second thing, a host act): left to typing
 const FUNCTION_WORDS = new Set(['to', 'from', 'at', 'until', 'in', 'on', 'by', 'of']);   // attributes named like prepositions cannot be said in "Set X <attr> to V"
@@ -91,27 +93,27 @@ export function sampleWorldOf(lib, schema, things, { cap = 40, lists = {}, seed 
 }
 
 /** Renders a frame as a sentence a person could type (the forms every schema world reads); null when the frame has no sentence. */
-export function realise(frame, schema, ids, labelOf, entries) {
+export function realise(frame, schema, ids, labelOf, entries, en) {
   const a = frame.args ?? {};
   const known = entries?.get(String(a.kind ?? ''));
   if (known && frame.action === 'make') {   // a thing named from knowledge: "Show Lima.", "Play Ode to Joy.", "Add a giraffe."; verb * = the entry is the whole sentence
     const t = known.entry.text;
     return known.verb === '*' ? t : `${known.verb ? known.verb[0].toUpperCase() + known.verb.slice(1) : 'Add'} ${t}.`;
   }
+  if (!en) return null;   // the sentences are the language world's generation templates (w.lang.en), filled by the library: without them there is no sentence
   const label = (id) => { const t = ids.get(id); return t ? labelOf(t) : null; };
-  const noun = (k) => { const n = String(k).replace(/_/g, ' '); return `${/^[aeiou]/i.test(n) ? 'an' : 'a'} ${n}`; };
+  const say = (act, roles) => en.actSentence(act, roles);
   switch (frame.action) {
-    case 'make': return a.kind && SIMPLE.test(String(a.kind).replace(/_/g, '')) ? `Add ${noun(a.kind)}.` : null;
-    case 'remove': { const l = label(a.thing); return l ? `Remove ${l}.` : null; }
-    case 'copy': { const l = label(a.thing); return l ? `Copy ${l}.` : null; }
-    case 'pick': { const l = label(a.thing); return l ? `Select ${l}.` : null; }
-    case 'undo': return 'Undo that.';
+    case 'make': return a.kind && SIMPLE.test(String(a.kind).replace(/_/g, '')) ? say('make', { kind: a.kind }) : null;
+    case 'remove': case 'copy': case 'pick': { const l = label(a.thing); return l ? say(frame.action, { thing: l }) : null; }
+    case 'undo': return say('undo', {});
     case 'ask': {
       const l = label(a.thing);
       if (!l) return null;
-      return a.attr && !FUNCTION_WORDS.has(a.attr) ? `What is the ${a.attr} of ${l}?` : null;   // a question with no attribute has no form that every world reads
+      return a.attr && !FUNCTION_WORDS.has(a.attr) ? say('ask', { topic: a.attr, thing: l }) : null;   // a question with no attribute has no form that every world reads
     }
-    case 'change': { const l = label(a.thing); return l && a.attr && !FUNCTION_WORDS.has(a.attr) && a.value != null ? `Set ${l} ${a.attr} to ${bare(a.value)}.`.replace(/\s+/g, ' ') : null; }
+    case 'change': { const l = label(a.thing); return l && a.attr && !FUNCTION_WORDS.has(a.attr) && a.value != null ? say('change', { attribute: a.attr, thing: l, value: bare(a.value) }) : null; }
+    case 'redo': return say('redo', {});
     default: return null;
   }
 }
@@ -122,6 +124,8 @@ export function realise(frame, schema, ids, labelOf, entries) {
  */
 export function createSampler(lib, { worldOf, thingsOf, historyOf, knowledgeOf }) {
   const fn = typeof lib?.sample === 'function' ? lib.sample : null;
+  let en0 = null;
+  const english = () => (en0 ??= englishOf(lib, languageWorld(lib)));   // the language world's generation, built once
   const seen = [];   // frames shown in this session (novelty)
   const shown = new Set();   // sentences shown in this session: a press does not repeat one while another tries remain
   let counter = 0;
@@ -157,7 +161,7 @@ export function createSampler(lib, { worldOf, thingsOf, historyOf, knowledgeOf }
     const wire = thing ? [...sw.ids].find(([, t]) => t.id === thing)?.[0] : undefined;
     const by = (f) => { const t = sw.ids.get(f.args?.thing); return t; };
     const out = [], texts = new Set();
-    if (redoOk && mode === 'one') return [{ text: 'Redo that.', frame: { action: 'redo', args: {} }, world: worldId }];
+    if (redoOk && mode === 'one') { const t = english().actSentence('redo', {}); if (t) return [{ text: t, frame: { action: 'redo', args: {} }, world: worldId }]; }
     for (const attempt of [0, 1, 2, 3, 4, 5]) {   // six tries with other seeds
       if (out.length >= (count ?? (mode === 'one' ? 1 : 4))) break;
       const r = fn(sw.world, { seed: seed0 + attempt * 104729, mode: mode === 'one' ? 'few' : mode, n: Math.max(8, (count ?? 4) * 3), prefer: { world: w.schema.id, ...(wire ? { thing: wire } : {}) }, seen });
@@ -165,7 +169,7 @@ export function createSampler(lib, { worldOf, thingsOf, historyOf, knowledgeOf }
         // a change to the value the thing already has is no change: the host knows the real attributes
         if (f.action === 'undo' && !undoOk) continue;   // the host's history and the dice's own changes, not the library's
         if (f.action === 'change') { const t = by(f); if (t && String(t.attrs?.[f.args.attr] ?? '') === bare(f.args.value)) continue; }
-        const text = realise(f, w.schema, sw.ids, labelOf, sw.entries);
+        const text = realise(f, w.schema, sw.ids, labelOf, sw.entries, english());
         if (!text || texts.has(text)) continue;
         if (shown.has(text) && f.action !== 'undo' && attempt < 5) continue;
         texts.add(text); shown.add(text);

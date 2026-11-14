@@ -20,7 +20,7 @@ import { formalize } from '../formalizer/rules/index.mjs?v=567d996beb';
 import { createDispatcherRuntime, candidateSegmentations } from '../formalizer/dispatcher-runtime.mjs?v=af5d305399';
 import { perf } from '../formalizer/perf.mjs?v=8b829ee7df';
 import { createDispatchValidator } from './dispatch-validate.mjs?v=fa609a270c';
-import { rerankPrediction, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=823779f8b5';
+import { rerankPrediction, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=098d7df13b';
 
 /** Demo policy: a parse the interpreter refuses for a state reason (spec 03 section 7, questions Q3) still counts as understood. */
 export const ENCODER_DEFAULT_POLICY = { acceptRefused: true };

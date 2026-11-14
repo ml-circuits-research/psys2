@@ -7,7 +7,7 @@
 // library takes it over as wires), so the rules, the undo and the explanation always read the game on the screen.
 // Browser-safe. It imports its sibling ops.mjs (a world is plain files) and the vendored chess.js.
 import { Chess } from './vendor/chess.mjs?v=9a44601d41';
-import { initialState, load, refresh, intent, resolve, move as opsMove, can as opsCan, NAME, VAL, colorName, other, fi, ri, ucol, plainMove } from './ops.mjs?v=6c358c7def';
+import { initialState, load, refresh, intent, resolve, move as opsMove, can as opsCan, NAME, VAL, colorName, other, fi, ri, ucol, plainMove } from './ops.mjs?v=389d9f61f1';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const un = (v) => { const s = String(v ?? ''); if (s.startsWith('"')) { try { return JSON.parse(s); } catch { /* not JSON */ } } return s; };

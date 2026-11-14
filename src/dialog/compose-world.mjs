@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// The knowledge side of `std.compose` (spec 26): the world the library composes from (the bundled subset of the catalog: k.interest's model and the k.animals facts; the catalog
-// replaces it when more worlds are bundled), the choice of a random topic by interest, the genre of a document type (only when the knowledge holds a `k.genres.genre` for it), and the
-// English realisation of a frame (TEMPORARY, until the language world realises frames: one clause per attribute of a k.animals fact). Browser-safe: no `node:*`.
+// The knowledge side of `std.compose` (spec 26): the world the library composes from (the bundled subset of the catalog: k.genres, k.interest, k.story and what it fills from, the
+// facts about the animals and the countries, and w.lang.en's generation templates; the live catalog adds to it, see `addCatalog`), the choice of a random topic by interest, and the
+// genre of a document type. The sentences are the library's (`discourseRealiser` over the language world's templates); the host's part is src/lang/en-generate.mjs. Browser-safe: no `node:*`.
 import { BUNDLED_ANIMALS } from '../knowledge/bundled-animals.mjs';
 import { BUNDLED_INTEREST } from '../knowledge/bundled-interest.mjs';
 import { BUNDLED_GENRES } from '../knowledge/bundled-genres.mjs';
 import { BUNDLED_GEO } from '../knowledge/bundled-geo.mjs';
+import { BUNDLED_COMPOSE } from '../knowledge/bundled-compose.mjs';
 
 const worlds = new WeakMap();
 /** The library World holding k.interest and the bundled facts (built once per library). */
@@ -16,6 +17,7 @@ export function knowledgeWorld(lib) {
   for (const [p, text] of Object.entries(BUNDLED_ANIMALS.files)) if (p.includes('/shards/')) w.tell(text);
   for (const text of Object.values(BUNDLED_GENRES.files)) w.tell(text);   // k.genres: the document types as structure (genre, parts, steps, moves, registers)
   w.tell(BUNDLED_GEO.text);   // k.geo: the countries, their neighbours and areas
+  for (const text of Object.values(BUNDLED_COMPOSE.files)) w.tell(text);   // k.story and its fills, w.lang.en's templates, what the catalog says about the animals
   worlds.set(lib, w);
   return w;
 }
@@ -45,42 +47,12 @@ export function randomTopics(lib, world, seed = 1, count = 14) {
   return scored.sort((a, b) => b[1] - a[1]).slice(0, count).map(([n]) => n);
 }
 
-const list = (a) => (a.length < 2 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
-const art = (w) => (/^[aeiou]/.test(w) ? 'an' : 'a');
-const clauses = {
-  class: (v) => `is ${art(v[0])} ${v[0]}`, covering: (v) => `is covered with ${list(v)}`, legs: (v) => (v[0] === '0' ? 'has no legs' : `has ${v[0]} legs`), habitat: (v) => `lives in the ${list(v)}`,
-  diet: (v) => `is ${art(v[0])} ${v[0]}`, eats: (v) => `eats ${list(v)}`, can: (v) => `can ${list(v)}`, cannot: (v) => `cannot ${list(v)}`, sound: (v) => `makes the sound ${list(v)}`,
-  baby: (v) => `has young called ${list(v)}`, group: (v) => `lives in a ${v[0]}`,
-};
-const nm = (v) => String(v);
-/** One English sentence of a frame { move, fact: { type, attrs }, about } of a k.animals or k.geo fact; null for anything else (no invented wording). */
-export function realiseFrame(f) {
-  const a = f?.fact?.attrs ?? {}, about = nm(f?.about ?? '');
-  if (f?.fact?.type === 'k.animals.animal') {
-    const name = a.name?.[0] ?? about;
-    const parts = Object.entries(a).filter(([k, v]) => clauses[k] && v?.length).map(([k, v]) => clauses[k](v.map(String)));
-    if (!parts.length) return null;
-    return `${f.move === 'conclude' ? 'Finally, the' : 'The'} ${name} ${list(parts)}.`.replace(/ +/g, ' ');
-  }
-  if (f?.fact?.type === 'k.geo.country') {
-    const name = nm(a.name?.[0] ?? about), nb = (a.neighbour ?? []).map(nm);
-    if (name !== about) return nb.includes(about) ? `${name} borders ${about}.` : null;   // a neighbour's fact that names the topic
-    const parts = [];
-    if (a.neighbour) parts.push(nb.length ? `borders ${list(nb)}` : 'has no land neighbours');
-    if (a.area?.[0]) parts.push(`covers ${Number(a.area[0]).toLocaleString('en-US')} square kilometres`);
-    if (a.landlocked?.[0] === 'true') parts.push('has no coast'); else if (a.landlocked?.[0] === 'false') parts.push('has a coast');
-    if (a.currency?.length) parts.push(`uses the ${list(a.currency.map(nm))}`);
-    if (a.language?.length) parts.push(`speaks ${list(a.language.map(nm))}`);
-    return parts.length ? `${f.move === 'conclude' ? 'Finally, ' : ''}${name} ${list(parts)}.` : null;
-  }
-  if (f?.fact?.type === 'k.geo.city') {
-    const name = nm(a.name?.[0] ?? ''), country = nm(a.country?.[0] ?? '');
-    if (!name || !country) return null;
-    const cap = a.capital_of?.[0] ? `the capital of ${nm(a.capital_of[0])}` : `a city in ${country}`;
-    return `${name} is ${cap}${a.population?.[0] ? ` with ${Number(a.population[0]).toLocaleString('en-US')} people` : ''}.`;
-  }
-  return null;
+const langWorlds = new WeakMap();
+/** The library World of the language alone: the generation templates of w.lang.en (acts and discourse), its irregular plurals, auxiliaries and prepositions, the verbs of k.actions and the joins of the schemas: what `englishOf` reads (src/lang/en-generate.mjs). Small: the dice and the summary do not need the rest of the knowledge. */
+export function languageWorld(lib) {
+  if (langWorlds.has(lib)) return langWorlds.get(lib);
+  const w = new lib.World();
+  for (const [p, text] of Object.entries(BUNDLED_COMPOSE.files)) if (/^w\.lang\.en|^k\.actions$|^joins$/.test(p)) w.tell(text);
+  langWorlds.set(lib, w);
+  return w;
 }
-
-/** A chapter's title from the type of the facts it holds ("k.animals.animal" -> "The animal"). */
-export const chapterTitle = (type) => ({ 'k.animals.animal': 'The animal', 'k.geo.country': 'The country and its neighbours', 'k.geo.city': 'Its cities' })[type] ?? `The ${String(type).split('.').at(-1).replace(/_/g, ' ')}`;
