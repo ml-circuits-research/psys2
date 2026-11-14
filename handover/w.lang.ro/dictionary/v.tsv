@@ -1,0 +1,30 @@
+# w.lang.ro dictionary, lemmas starting with v: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+vacă	noun:n.f.ă-i	f	k.words.cow.noun.1		cow
+vacanță	noun:n.f.ă-e	f	k.words.vacation.noun.1		vacation
+valoare	noun:n.f.are-ri	f	k.words.value.noun.1		value
+vară	noun:irregular	f	k.words.summer.noun.1	pl=veri	summer
+varză	noun:irregular	f	k.words.cabbage.noun.1	pl=verze	cabbage
+vecin	noun:n.m._-i	m	k.words.neighbor.noun.1		neighbor
+vecin	adj:a._-ă-i-e				neighboring
+vedea	verb:irregular		k.words.see.verb.1	pres=văd vezi vede vedem vedeți văd	see
+veni	verb:irregular		k.words.come.verb.1	pres=vin vii vine venim veniți vin	come
+ventilație	noun:n.f.ie-ii	f	k.words.vent.noun.1		vent
+verde	adj:irregular		k.colours.psys2.green	forms=verde,verde,verzi,verzi	green
+verifica	verb:v.a		k.words.check.verb.1		check
+vertical	adj:a._-ă-i-e				vertical
+vesel	adj:a._-ă-i-e				cheerful
+violet	adj:a._-_-_-_				violet
+vițel	noun:irregular	m	k.words.calf.noun.1	pl=vițeii	calf
+viteză	noun:n.f.ă-e	f	k.words.speed.noun.1		speed
+vizor	noun:n.n.r-are	n	k.words.visor.noun.1		visor
+voce	noun:n.f.e-i	f	k.words.voice.noun.1		voice
+volum	noun:n.n._-e	n	k.words.volume.noun.1		volume
+vopsea	noun:irregular	f	k.words.paint.noun.1	pl=vopsele	paint
+vopsi	verb:v.is		k.actions.verb.change.paint		paint
+vorbi	verb:v.is		k.words.speak.verb.1		speak
+vrăjitoare	noun:n.f._-_	f	k.words.witch.noun.1		witch
+vrea	verb:irregular		k.words.want.verb.1	pres=vreau vrei vrea vrem vreți vor	want
+vreme	noun:n.f._-_	f	k.words.weather.noun.1		weather
+vulpe	noun:n.f.e-i	f	k.words.fox.noun.1		fox

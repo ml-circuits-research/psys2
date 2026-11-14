@@ -1,0 +1,24 @@
+# w.lang.ro dictionary, lemmas starting with g: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+găină	noun:n.f.ă-i	f	k.words.hen.noun.1		hen
+galben	adj:a._-ă-i-e		k.colours.psys2.yellow		yellow
+gamă	noun:n.f.ă-e	f	k.words.scale.noun.1		scale
+gândi	verb:v.is		k.words.think.verb.1		think
+găsi	verb:v.is		k.actions.verb.ask.find		find
+gata	adj:a._-_-_-_				ready
+găti	verb:v.is		k.words.cook.verb.1		cook
+general	adj:a._-ă-i-e				general
+ghici	verb:v.is		k.words.guess.verb.1		guess
+girafă	noun:n.f.ă-e	f	k.words.giraffe.noun.1		giraffe
+gol	adj:irregular			forms=gol,goală,goi,goale	empty
+goli	verb:v.is		k.words.empty.verb.1		empty
+grad	noun:n.n._-e	n	k.words.degree.noun.1		degree
+grădină	noun:n.f.ă-i	f	k.words.garden.noun.1		garden
+grafic	noun:n.n._-e	n	k.words.chart.noun.1		chart
+gram	noun:n.n._-e	n	k.words.gram.noun.1		gram
+grătar	noun:n.n._-e	n	k.words.grill.noun.1		grill
+greșit	adj:a.t-tă-ți-te				wrong
+greu	adj:irregular			forms=greu,grea,grei,grele	heavy
+grup	noun:n.n._-uri	n	k.words.group.noun.1		group
+gură	noun:n.f.ă-i	f	k.words.mouth.noun.1		mouth

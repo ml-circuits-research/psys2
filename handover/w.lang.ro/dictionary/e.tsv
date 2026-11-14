@@ -1,0 +1,19 @@
+# w.lang.ro dictionary, lemmas starting with e: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+ecran	noun:n.n._-e	n	k.words.screen.noun.1		screen
+editor	noun:irregular	m	k.words.editor.noun.1	pl=editoare	editor
+elefant	noun:n.m.t-ți	m	k.words.elephant.noun.1		elephant
+element	noun:n.n._-e	n	k.words.item.noun.1		item
+elimina	verb:v.a		k.actions.verb.remove.remove		remove
+engleză	noun:n.f._-_	f	k.words.english.noun.1		English
+enumera	verb:v.az		k.actions.verb.ask.list		list
+erbivor	noun:n.n._-e	n			herbivore
+est	noun:n.n._-_	n	k.words.east.noun.1		east
+evidenția	verb:v.az		k.actions.verb.pick.highlight		highlight
+evidențiere	noun:n.f.e-i	f	k.words.highlight.noun.1		highlight
+excursie	noun:n.f.ie-ii	f	k.words.trip.noun.1		trip
+exemplu	noun:irregular	n	k.words.example.noun.1	pl=exemple	example
+exista	verb:v.a		k.words.exist.verb.1		exist
+expert	noun:n.m.t-ți	m	k.words.expert.noun.1		expert
+expresie	noun:n.f.ie-ii	f	k.words.expression.noun.1		expression

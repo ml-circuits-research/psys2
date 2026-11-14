@@ -1,0 +1,25 @@
+# w.lang.ro dictionary, lemmas starting with f: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+face	verb:irregular		k.actions.verb.change.make	pres=fac faci face facem faceți fac	make
+fată	noun:irregular	f	k.words.girl.noun.1	pl=fete	girl
+fel	noun:n.n._-uri	n	k.words.kind.noun.1		kind
+fereastră	noun:irregular	f	k.words.window.noun.1	pl=ferestre	window
+fericit	adj:a.t-tă-ți-te				happy
+fi	verb:irregular		k.words.be.verb.1	pres=sunt ești este suntem sunteți sunt	be
+filă	noun:n.f.ă-e	f	k.words.tab.noun.1		tab
+fișier	noun:n.n._-e	n	k.words.file.noun.1		file
+fiu	noun:n.m.u-i	m	k.words.son.noun.1		son
+flaut	noun:n.n._-uri	n	k.words.flute.noun.1		flute
+floare	noun:n.f.are-ri	f	k.words.flower.noun.1		flower
+foaie	noun:irregular	f	k.words.sheet.noun.1	pl=foi	sheet
+folosi	verb:v.is		k.words.use.verb.1		use
+formă	noun:n.f.ă-e	f	k.words.shape.noun.1		shape
+formatare	noun:n.f.are-ări	f			formatting
+frază	noun:n.f.ă-e	f	k.words.phrase.noun.1		phrase
+frecvență	noun:n.f.ă-e	f	k.words.frequency.noun.1		frequency
+frontieră	noun:n.f.ă-e	f	k.words.border.noun.1		border
+fruct	noun:n.n._-e	n	k.words.fruit.noun.1		fruit
+frumos	adj:a.s-asă-și-ase				beautiful
+fundal	noun:n.n._-uri	n	k.words.background.noun.1		background
+furnică	noun:n.f.ă-i	f	k.words.ant.noun.1		ant

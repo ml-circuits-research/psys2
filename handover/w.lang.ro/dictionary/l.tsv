@@ -1,0 +1,32 @@
+# w.lang.ro dictionary, lemmas starting with l: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+lac	noun:n.n._-uri	n	k.words.lake.noun.1		lake
+lămâie	noun:irregular	f	k.words.lemon.noun.1	pl=lămâi	lemon
+lapte	noun:n.n._-_	n	k.words.milk.noun.1		milk
+lasa	verb:v.a		k.words.leave.verb.1		leave
+latitudine	noun:n.f.e-i	f	k.words.latitude.noun.1		latitude
+latură	noun:n.f.ă-i	f	k.words.side.noun.1		side
+legătură	noun:n.f.ă-i	f	k.words.link.noun.1		link
+legendă	noun:n.f.ă-e	f	k.words.legend.noun.1		legend
+legumă	noun:n.f.ă-e	f	k.words.vegetable.noun.1		vegetable
+lent	adj:a.t-tă-ți-te				slow
+leu	noun:n.m.u-i	m			leu
+liber	adj:a._-ă-i-e				free
+limbă	noun:n.f.ă-i	f	k.words.language.noun.1		language
+linie	noun:n.f.ie-ii	f	k.words.line.noun.1		line
+liniștit	adj:a.t-tă-ți-te				quiet
+listă	noun:n.f.ă-e	f	k.words.list.noun.1		list
+literă	noun:n.f.ă-e	f	k.words.letter.noun.1		letter
+litru	noun:n.m.u-i	m	k.words.liter.noun.1		liter
+loc	noun:n.n._-uri	n	k.words.place.noun.1		place
+locație	noun:n.f.ie-ii	f	k.words.location.noun.1		location
+locui	verb:irregular		k.words.live.verb.1	pres=locuiesc locuiești locuiește locuim locuiți locuiesc	live
+longitudine	noun:n.f.e-i	f			longitude
+lovi	verb:v.is		k.words.hit.verb.1		hit
+lua	verb:irregular		k.actions.verb.pick.take	pres=iau iei ia luăm luați iau	take
+lucru	noun:n.n._-ri	n	k.words.thing.noun.1		thing
+lume	noun:n.f.e-i	f	k.words.world.noun.1		world
+luminos	adj:a.s-asă-și-ase				bright
+lună	noun:n.f.ă-i	f	k.words.month.noun.1		month
+lung	adj:irregular			forms=lung,lungă,lungi,lungi	long

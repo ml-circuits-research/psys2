@@ -1,0 +1,39 @@
+# w.lang.ro dictionary, lemmas starting with r: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+rachetă	noun:n.f.ă-e	f	k.words.rocket.noun.1		rocket
+rămâne	verb:irregular		k.words.be.verb.1	pres=rămân rămâi rămâne rămânem rămâneți rămân	be
+rând	noun:n.n._-uri	n	k.words.row.noun.1		row
+rapid	adj:irregular			forms=rapid,rapidă,rapizi,rapide	fast
+raport	noun:irregular	n	k.words.report.noun.1	pl=rapoarte	report
+răspunde	verb:irregular		k.words.answer.verb.1	pres=răspund răspunzi răspunde răspundem răspundeți răspund	answer
+răspuns	noun:n.n._-uri	n	k.words.answer.noun.1		answer
+rață	noun:n.f.ă-e	f	k.words.duck.noun.1		duck
+râu	noun:n.n._-ri	n	k.words.river.noun.1		river
+rău	adj:irregular			forms=rău,rea,răi,rele	bad
+rece	adj:irregular			forms=rece,rece,reci,reci	cold
+rechin	noun:n.m._-i	m	k.words.shark.noun.1		shark
+recunoaște	verb:irregular		k.words.recognize.verb.1	pres=recunosc recunoști recunoaște recunoaștem recunoașteți recunosc	recognize
+rege	noun:n.m.e-i	m	k.words.king.noun.1		king
+regină	noun:n.f.ă-e	f	k.words.queen.noun.1		queen
+regulă	noun:n.f.ă-i	f	k.words.rule.noun.1		rule
+relativ	adj:a._-ă-i-e				relative
+renunța	verb:v.a				give up
+repeta	verb:v.az		k.actions.verb.copy.repeat		repeat
+reseta	verb:v.az		k.actions.verb.change.reset		reset
+respira	verb:v.az		k.words.breathe.verb.1		breathe
+rest	noun:n.n._-_	n	k.words.change.noun.1		change
+rețetă	noun:n.f.ă-e	f	k.words.recipe.noun.1		recipe
+rezolva	verb:v.az		k.words.solve.verb.1		solve
+rezulta	verb:v.az		k.words.result.verb.1		result
+rezultat	noun:n.n._-e	n	k.words.result.noun.1		result
+riglă	noun:n.f.ă-e	f	k.words.ruler.noun.1		ruler
+robot	noun:n.m.t-ți	m	k.words.robot.noun.1		robot
+rocadă	noun:n.f.ă-e	f			castling
+română	noun:n.f._-_	f	k.words.romanian.noun.1		Romanian
+romb	noun:n.n._-uri	n	k.words.rhombus.noun.1		rhombus
+roșie	noun:n.f.ie-ii	f	k.words.tomato.noun.1		tomato
+roșu	adj:irregular		k.colours.psys2.red	forms=roșu,roșie,roșii,roșii	red
+rotund	adj:irregular			forms=rotund,rotundă,rotunzi,rotunde	round
+roz	adj:a._-_-_-_				pink
+rupe	verb:irregular		k.words.break.verb.1	pres=rup rupi rupe rupem rupeți rup	break

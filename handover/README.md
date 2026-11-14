@@ -20,6 +20,7 @@ repository's `questions.md` format; the reviewer forwards it, the target's worke
 | turn-pipeline | sopworld `std.turn` (the pieces named in its README, not the whole files) | 2,764 lines in the copied files, general part estimated in its README |
 | failure-ledger | sopworld `tools/` (format and grouper) | 160 generator lines |
 | sop-knowledge-worlds | sop-knowledge-worlds | 264 SOP (plan.seating and plan.timeline schemas, legends, lexicons) |
+| w.lang.ro (DRAFT, 2026-11-14, Q13) | sop-knowledge-worlds (`w.lang.ro`, a language world: Romanian as data) | 405 wires + a 632-lemma dictionary; see its README |
 
 Counts are `wc -l` of the copied files. They are the number to report per landing and what the inventory script
 (`scripts/knowledge-inventory.mjs`, KNOWLEDGE-OUT) should report as "general module living in PSys2".

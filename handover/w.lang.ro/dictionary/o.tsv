@@ -1,0 +1,19 @@
+# w.lang.ro dictionary, lemmas starting with o: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+oaie	noun:irregular	f	k.words.sheep.noun.1	pl=oi	sheep
+obiect	noun:n.n._-e	n	k.words.object.noun.1		object
+obține	verb:irregular		k.words.get.verb.1	pres=obțin obții obține obținem obțineți obțin	get
+ochelari	noun:n.m._-_	m	k.words.glasses.noun.1		glasses
+ochi	noun:n.m._-_	m	k.words.eye.noun.1		eye
+octavă	noun:n.f.ă-e	f			octave
+octogon	noun:n.n.n-ane	n	k.words.octagon.noun.1		octagon
+ocupa	verb:v.a		k.words.occupy.verb.1		occupy
+om	noun:irregular	m	k.words.person.noun.1	pl=oameni	person
+opri	verb:v.is		k.words.stop.verb.1		stop
+oră	noun:n.f.ă-e	f	k.words.hour.noun.1		hour
+oraș	noun:n.n._-e	n	k.words.city.noun.1		city
+ordine	noun:n.f.e-i	f	k.words.order.noun.1		order
+orez	noun:n.n._-_	n	k.words.rice.noun.1		rice
+orizontal	adj:a._-ă-i-e				horizontal
+ou	noun:irregular	n	k.words.egg.noun.1	pl=ouă	egg

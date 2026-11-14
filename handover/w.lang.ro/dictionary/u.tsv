@@ -1,0 +1,16 @@
+# w.lang.ro dictionary, lemmas starting with u: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+ud	adj:irregular			forms=ud,udă,ude,ude	wet
+uda	verb:v.a		k.words.water.verb.1		water
+ultim	adj:a._-ă-i-e				last
+uman	adj:a._-ă-i-e				human
+umple	verb:irregular		k.actions.verb.change.fill	pres=umplu umpli umple umplem umpleți umplu	fill
+urca	verb:v.a		k.words.climb.verb.1		climb
+ureche	noun:n.f.e-i	f	k.words.ear.noun.1		ear
+uriaș	adj:a._-ă-i-e				huge
+urma	verb:v.az		k.words.follow.verb.1		follow
+urmări	verb:v.is		k.words.follow.verb.1		follow
+următor	adj:irregular			forms=următor,următoare,următori,următoare	next
+ușă	noun:n.f.ă-i	f	k.words.door.noun.1		door
+ușor	adj:irregular			forms=ușor,ușoară,ușori,ușoare	light

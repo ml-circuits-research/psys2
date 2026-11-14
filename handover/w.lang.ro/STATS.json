@@ -1,0 +1,119 @@
+{
+ "tokensInSets": 47994,
+ "tokensAnalysedByTranslator": 38384,
+ "lemmas": {
+  "nouns": 382,
+  "verbs": 152,
+  "adjectives": 98
+ },
+ "paradigmClasses": {
+  "nouns": 18,
+  "verbs": 4,
+  "adjectives": 4
+ },
+ "lemmasCoveredByParadigm": {
+  "nouns": 309,
+  "verbs": 81,
+  "adjectives": 66
+ },
+ "sensesLinked": 523,
+ "lemmasTotal": 632,
+ "topNounClasses": [
+  [
+   "n.f.ă-e",
+   70
+  ],
+  [
+   "n.n._-uri",
+   50
+  ],
+  [
+   "n.n._-e",
+   49
+  ],
+  [
+   "n.f.ă-i",
+   22
+  ],
+  [
+   "n.m._-i",
+   20
+  ],
+  [
+   "n.f.ie-ii",
+   18
+  ],
+  [
+   "n.f.e-i",
+   16
+  ],
+  [
+   "n.n._-_",
+   11
+  ],
+  [
+   "n.f._-_",
+   8
+  ],
+  [
+   "n.f.are-ări",
+   8
+  ],
+  [
+   "n.n.n-ane",
+   6
+  ],
+  [
+   "n.n.r-are",
+   5
+  ],
+  [
+   "n.m._-_",
+   5
+  ],
+  [
+   "n.f.are-ri",
+   5
+  ]
+ ],
+ "verbClasses": {
+  "v.a": 30,
+  "v.irregular": 71,
+  "v.is": 25,
+  "v.az": 26
+ },
+ "adjClasses": [
+  [
+   "a._-ă-i-e",
+   30
+  ],
+  [
+   "a.t-tă-ți-te",
+   25
+  ],
+  [
+   "a.s-asă-și-ase",
+   6
+  ],
+  [
+   "a._-_-_-_",
+   5
+  ],
+  [
+   "a.d-dă-zi-de",
+   3
+  ],
+  [
+   "a.s-să-și-se",
+   3
+  ],
+  [
+   "a.r-are-ri-are",
+   3
+  ],
+  [
+   "a.e-e-i-i",
+   3
+  ]
+ ]
+}

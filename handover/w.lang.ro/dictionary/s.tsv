@@ -1,0 +1,64 @@
+# w.lang.ro dictionary, lemmas starting with s: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+șah	noun:n.n._-uri	n	k.words.chess.noun.1		chess
+saluta	verb:v.a		k.words.greet.verb.1		greet
+sănătos	adj:a.s-asă-și-ase				healthy
+sandviș	noun:n.n._-uri	n	k.words.sandwich.noun.1		sandwich
+săptămână	noun:n.f.ă-i	f	k.words.week.noun.1		week
+sărat	adj:a.t-tă-ți-te				salty
+sare	noun:n.f._-_	f	k.words.salt.noun.1		salt
+sări	verb:irregular		k.words.jump.verb.1	pres=sar sari sare sărim săriți sar	jump
+șarpe	noun:irregular	m	k.words.snake.noun.1	pl=șerpi	snake
+scădea	verb:irregular			pres=scad scazi scade scădem scădeți scad	subtract
+scaun	noun:n.n._-e	n	k.words.chair.noun.1		chair
+schimba	verb:v.a		k.actions.verb.change.change		change
+sclipitor	adj:irregular			forms=sclipitor,sclipitoare,sclipitori,sclipitoare	sparkling
+scoate	verb:irregular		k.actions.verb.remove.remove	pres=scot scoți scoate scoatem scoateți scot	remove
+scoică	noun:n.f.ă-i	f	k.words.shell.noun.1		shell
+scrie	verb:irregular		k.actions.verb.save.write	pres=scriu scrii scrie scriem scrieți scriu	write
+scurt	adj:a.t-tă-ți-te				short
+seară	noun:irregular	f	k.words.evening.noun.1	pl=seri	evening
+secțiune	noun:n.f.e-i	f	k.words.section.noun.1		section
+secundă	noun:n.f.ă-e	f	k.words.second.noun.1		second
+secundar	adj:a._-ă-i-e				secondary
+selecta	verb:v.az		k.actions.verb.pick.select		select
+selecție	noun:n.f.ie-ii	f	k.words.selection.noun.1		selection
+semiton	noun:n.n._-uri	n			semitone
+semn	noun:n.n._-e	n	k.words.sign.noun.1		sign
+seta	verb:v.az		k.actions.verb.change.set		set
+sfârșit	noun:n.n._-uri	n	k.words.end.noun.1		end
+sigur	adj:a._-ă-i-e				sure
+simplu	adj:irregular			forms=simplu,simplă,simpli,simple	simple
+simți	verb:irregular		k.words.feel.verb.1	pres=simt simți simte simțim simțiți simt	feel
+singur	adj:a._-ă-i-e				alone
+sirenă	noun:n.f.ă-e	f	k.words.siren.noun.1		siren
+soare	noun:irregular	m	k.words.sun.noun.1	pl=sori	sun
+solz	noun:n.m._-i	m	k.words.scale.noun.1		scale
+somnoros	adj:a.s-asă-și-ase				sleepy
+șoricel	noun:irregular	m	k.words.mouse.noun.1	pl=șoricei	mouse
+sorta	verb:v.az		k.actions.verb.group.sort		sort
+șosetă	noun:n.f.ă-e	f	k.words.sock.noun.1		sock
+spăla	verb:v.a		k.words.wash.verb.1		wash
+spânzurătoare	noun:n.f.are-ri	f	k.words.hangman.noun.1		hangman
+spart	adj:a.t-tă-ți-te				broken
+spune	verb:irregular		k.words.say.verb.1	pres=spun spui spune spunem spuneți spun	say
+sta	verb:irregular		k.words.stay.verb.1	pres=stau stai stă stăm stați stau	stay
+stâng	adj:irregular			forms=stâng,stângă,stângi,stângi	left
+stare	noun:n.f.are-ări	f	k.words.state.noun.1		state
+stea	noun:irregular	f	k.words.star.noun.1	pl=stele	star
+steag	noun:n.n._-uri	n	k.words.flag.noun.1		flag
+șterge	verb:irregular		k.actions.verb.remove.delete	pres=șterg ștergi șterge ștergem ștergeți șterg	delete
+ști	verb:irregular		k.words.know.verb.1	pres=știu știi știe știm știți știu	know
+sticlă	noun:n.f.ă-e	f	k.words.bottle.noun.1		bottle
+stinge	verb:irregular			pres=sting stingi stinge stingem stingeți sting	turn off
+stradă	noun:irregular	f	k.words.street.noun.1	pl=străzi	street
+strălucire	noun:irregular	f	k.words.glow.noun.1	pl=strălucirii	glow
+striga	verb:v.a		k.words.shout.verb.1		shout
+structură	noun:n.f.ă-i	f	k.words.structure.noun.1		structure
+sumă	noun:n.f.ă-e	f	k.words.sum.noun.1		sum
+suna	verb:v.a		k.actions.verb.change.call		call
+sunet	noun:n.n._-e	n	k.words.sound.noun.1		sound
+supărat	adj:a.t-tă-ți-te				angry
+suprafață	noun:irregular	f	k.words.surface.noun.1	pl=suprafețe	surface
+surprins	adj:irregular			forms=surprins,surprinsă,surprinși,surprinse	surprised
