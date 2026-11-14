@@ -1,0 +1,395 @@
+@pat.docs.editor.read core.pattern
+    canonical="Read me the document."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [read|read_me|read_out|read_aloud|speak] [me]? [the|my]? [document|doc|text|page|everything|whole_document|whole_text|whole_thing] [aloud|out_loud|back|back_to_me|to_me|out]? [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.read"
+    kind=request
+    priority=11
+    tabPriority=22
+    example="Read the document."
+    example="Read me the document."
+
+@pat.docs.editor.read2 core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? read it [back|aloud|out_loud|out]? [to_me]? [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.read"
+    kind=request
+    priority=11
+    tabPriority=27
+    example="Read it back to me."
+
+@pat.docs.editor.download core.pattern
+    canonical="Download the document."
+    canonical="Download the document as markdown."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [download|save|export] [the|my]? [document|doc|text|file|it]? [as|to|in]? [a|an]? {f:lex.docs.editor.formats?} [file|format]? [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.download arg.format={f}"
+    kind=request
+    priority=11
+    tabPriority=27
+    example="Download the document as markdown."
+    example="Download the document."
+
+@pat.docs.editor.q.block core.pattern
+    canonical="What does the first paragraph say?"
+    match="[$lang.lead.filler|pls|plz]? [what|wat] [is|does] [the]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.blockkinds} [say]? [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.whatIs arg.ord={ord} arg.kind={kind}"
+    kind=request
+    priority=11
+    tabPriority=27
+    example="What does the first paragraph say?"
+
+@pat.docs.editor.q.say core.pattern
+    canonical="What does the document say?"
+    match="[$lang.lead.filler|pls|plz]? [what_is_in_the_document|what_does_the_document_say|what_have_i_written|what_is_written_in_the_document|what_does_it_say|what_is_in_it|what_is_in_the_text] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.say"
+    kind=request
+    priority=11
+    tabPriority=27
+    example="What does the document say?"
+
+@pat.docs.editor.q.mention core.pattern
+    canonical="Does the document mention milk?"
+    match="[$lang.lead.filler|pls|plz]? [does|did] [the|my]? [document|text|doc|page|it] [mention|contain|say|include|have] {w:words}"
+    emit="@{_} core.request action=doc.mentions arg.word=\"{w}\""
+    kind=request
+    priority=11
+    tabPriority=27
+    example="Does the document mention milk?"
+
+@pat.docs.editor.q.empty core.pattern
+    canonical="Is the document empty?"
+    match="[$lang.lead.filler|pls|plz]? [is|are] [the]? [document|doc|page|text] empty [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.isEmpty"
+    kind=request
+    priority=11
+    tabPriority=27
+    example="Is the document empty?"
+
+@pat.docs.editor.dict.start core.pattern
+    canonical="Start dictation."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [start|begin|turn_on|enable|switch_on|activate|resume] [the]? [dictation|dictating|taking_dictation] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.dictate"
+    kind=request
+    priority=11
+    tabPriority=27
+    example="Start dictation."
+
+@pat.docs.editor.dict.start2 core.pattern
+    canonical="Let me dictate."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [dictate|let_me_dictate|take_dictation|i_want_to_dictate|i_will_dictate|take_down_what_i_say|dictation_mode] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.dictate"
+    kind=request
+    priority=11
+    tabPriority=27
+    example="Let me dictate."
+
+@pat.docs.editor.dict.stop core.pattern
+    canonical="Stop dictation."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [stop|end|finish|turn_off|disable|quit] [the]? [dictation|dictating] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.dictateStop"
+    kind=request
+    priority=11
+    tabPriority=27
+    example="Stop dictation."
+
+@pat.docs.editor.from.list core.pattern
+    canonical="Make a document from my shopping list."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [make|create|write|build|start|generate|prepare] [me]? [a|the]? [document|doc|page|note] [from|of|out_of|with|using] [my|the|our]? {list:words} list [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.fromList arg.list=\"{list}\""
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Make a document from my shopping list."
+
+@pat.docs.editor.from.list2 core.pattern
+    canonical="Turn my shopping list into a document."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [turn|make|put|write_down|write|note_down] [my|the|our]? {list:words} list [into|in|as]? [a|the]? [document|doc|page]? [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.fromList arg.list=\"{list}\""
+    kind=request
+    priority=9
+    tabPriority=25
+    example="Turn my shopping list into a document."
+
+@pat.docs.editor.report core.pattern
+    canonical="Make a document about farm animals."
+    canonical="Write a report about sea animals."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [write|make|create|prepare|compose|build] [me]? [a|the]? [report|document|doc|summary|page] [about|on] {t:rest}"
+    emit="@{_} core.request action=doc.report arg.topic=\"{t}\""
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Write a report about sea animals."
+    example="Make a document about farm animals."
+
+@pat.docs.editor.holdings core.pattern
+    canonical="Write down what Tom and Ana have."
+    canonical="Write down what everyone has."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [write_down|note_down|put_down|make_a_note_of|list|record|write_a_document_of|make_a_document_of|write_a_document_with|make_a_document_with|make_a_document_from] [what|wat] {who:words} [has|have|got|owns|own] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.holdings arg.who=\"{who}\""
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Write down what everyone has."
+    example="Write down what Tom and Ana have."
+
+@pat.docs.editor.holdings2 core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [write|make|create] [a|the]? [document|doc|list|summary] [of|about|with|from] [what|wat] {who:words} [has|have|got|owns|own] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.holdings arg.who=\"{who}\""
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Make a document of what everyone has."
+
+@pat.docs.editor.whatsel core.pattern
+    canonical="What is selected?"
+    canonical="What did I select?"
+    match="[$lang.lead.filler|pls|plz]? [what|wat] [is|did_i|have_i] [selected|select] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.whatSelected"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="What is selected?"
+    example="What did I select?"
+
+@pat.docs.editor.read.sel core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? read [me]? [the]? [$docs.editor.g61_selection] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.read arg.t=\"it\""
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Read the selection."
+
+@pat.docs.editor.task.check.ord core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [check|tick|complete|finish|tick_off] [the]? {ord:lex.docs.editor.ordinals} [task|item|checkbox|todo] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.checkTask arg.ord={ord} arg.state=check"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Check the first task."
+
+@pat.docs.editor.task.check.num core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [check|tick|complete|finish|tick_off] [the]? [task|item|checkbox] {n:number} [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.checkTask arg.n={n} arg.state=check"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Check task 2."
+
+@pat.docs.editor.task.check.text core.pattern
+    canonical="Check the task buy bread."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [check|tick|complete|finish|tick_off] [the]? [task|checkbox] {t:rest}"
+    emit="@{_} core.request action=doc.checkTask arg.t=\"{t}\" arg.state=check"
+    kind=request
+    priority=11
+    tabPriority=27
+    example="Check the task buy bread."
+
+@pat.docs.editor.task.check.all core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [check|tick|complete|finish|tick_off] [all|every|each] [of]? [the]? [tasks|items|checkboxes|boxes] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.checkTask arg.all=true arg.state=check"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Check all tasks."
+
+@pat.docs.editor.task.uncheck.ord core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [uncheck|untick|unmark|reopen] [the]? {ord:lex.docs.editor.ordinals} [task|item|checkbox|todo] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.checkTask arg.ord={ord} arg.state=uncheck"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Uncheck the first task."
+
+@pat.docs.editor.task.uncheck.num core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [uncheck|untick|unmark|reopen] [the]? [task|item|checkbox] {n:number} [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.checkTask arg.n={n} arg.state=uncheck"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Uncheck task 2."
+
+@pat.docs.editor.task.uncheck.text core.pattern
+    canonical="Uncheck the task buy bread."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [uncheck|untick|unmark|reopen] [the]? [task|checkbox] {t:rest}"
+    emit="@{_} core.request action=doc.checkTask arg.t=\"{t}\" arg.state=uncheck"
+    kind=request
+    priority=11
+    tabPriority=27
+    example="Uncheck the task buy bread."
+
+@pat.docs.editor.task.uncheck.all core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [uncheck|untick|unmark|reopen] [all|every|each] [of]? [the]? [tasks|items|checkboxes|boxes] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.checkTask arg.all=true arg.state=uncheck"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Uncheck all tasks."
+
+@pat.docs.editor.task.count.done core.pattern
+    canonical="How many tasks are done?"
+    match="[$lang.lead.filler|pls|plz]? [how_many] [tasks|items|checkboxes] [are|is] [done|checked|completed|finished|ticked] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.countTasks arg.state=done"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="How many tasks are done?"
+
+@pat.docs.editor.task.count.left core.pattern
+    match="[$lang.lead.filler|pls|plz]? [how_many] [tasks|items|checkboxes] [are|is] [$docs.editor.g56_left] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.countTasks arg.state=left"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="How many tasks are left?"
+
+@pat.docs.editor.task.count.notdone core.pattern
+    canonical="How many tasks are not done?"
+    match="[$lang.lead.filler|pls|plz]? [how_many] [tasks|items|checkboxes] [are|is] not [done|checked|completed|finished|ticked] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.countTasks arg.state=left"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="How many tasks are not done?"
+
+@pat.docs.editor.task.list.done core.pattern
+    canonical="Which tasks are done?"
+    match="[$lang.lead.filler|pls|plz]? [what|which] [tasks|items] [are|is] [done|checked|completed|finished|ticked] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.listTasks arg.state=done"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Which tasks are done?"
+
+@pat.docs.editor.task.list.left core.pattern
+    match="[$lang.lead.filler|pls|plz]? [what|which] [tasks|items] [are|is] [$docs.editor.g56_left] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.listTasks arg.state=left"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Which tasks are left?"
+
+@pat.docs.editor.stats core.pattern
+    canonical="Give me the statistics."
+    match="[$lang.lead.filler|pls|plz]? [what_is|whats|show_me|give_me|tell_me|wats|wat_is|gimme] [the]? [word_count|statistics|stats|document_statistics|document_stats|reading_time] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.stats"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Give me the statistics."
+
+@pat.docs.editor.stats.bare core.pattern
+    match="[$lang.lead.filler|pls|plz]? [word_count|statistics|stats|document_stats] [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.stats"
+    kind=request
+    priority=12
+    tabPriority=28
+    example="Word count."
+
+@pat.docs.editor.stats.long core.pattern
+    canonical="How long is the document?"
+    match="[$lang.lead.filler|pls|plz]? how_long [is|will_it_take_to_read] [the|my]? [document|doc|text|page|it]? [$docs.editor.g26_pls]?"
+    emit="@{_} core.request action=doc.stats"
+    kind=request
+    priority=11
+    tabPriority=27
+    example="How long is the document?"
+
+@pat.docs.editor.read.how core.pattern
+    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$docs.editor.g1_we_could]? [read|read_me|read_out|say|speak|recite] [me|out|aloud]? [the|my]? {kind:lex.docs.editor.blockkinds} [out_loud|aloud|back|to_me|for_me|out|out_to_me]? [$lang.tail.filler|$docs.editor.g2_immediately]?"
+    emit="@{_} core.request action=doc.read arg.ord=first arg.kind={kind}"
+    kind=request
+    priority=9
+    tabPriority=25
+    example="Read the heading out loud"
+
+@pat.docs.editor.stats.count core.pattern
+    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$docs.editor.g1_we_could]? [tell_me|give_me|show_me|what_is|whats|what_s|wats|get_me|gimme|check_the|i_want_the|i_need_the|can_i_get_the] [the|my|all_the|all_my|a]? [words|word_count|wordcount|word_total|number_of_words|words_count|total_words|total_word_count|total_number_of_words|word_tally|word_stats|text_stats|doc_stats|document_stats|stats|statistics|word_number|number_of_words_in_it|number_of_words_in_the_doc|number_of_words_in_the_document|length|doc_length|document_length|length_of_the_document|length_of_the_text|text_length] [pls|plz|thanks|thx|in_the_doc|in_the_document|in_the_text|in_it|in_here|here|in_this|in_total|total|now|for_me|so_far|of_the_doc|of_the_document|of_the_text|of_it]? [$lang.tail.filler|$docs.editor.g2_immediately]?"
+    emit="@{_} core.request action=doc.stats"
+    kind=request
+    priority=9
+    tabPriority=25
+    example="Wordcount pls"
+    example="Tell me the word count please"
+
+@pat.docs.editor.stats.count2 core.pattern
+    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$docs.editor.g1_we_could]? [number_of_words|the_number_of_words|total_number_of_words|word_count|wordcount|words_count|words_in_total|how_many_words_in_total|words_total|total_words|words_total_count] [in_the_doc|in_the_document|in_the_text|in_it|in_here|here|in_this|pls|plz|total|so_far|now|do_i_have|are_there|are_in_the_doc|are_in_the_document|are_in_it]? [$lang.tail.filler|$docs.editor.g2_immediately]?"
+    emit="@{_} core.request action=doc.stats"
+    kind=request
+    priority=9
+    tabPriority=25
+    example="Number of words in the doc?"
+    example="Wordcount"
+
+@pat.docs.editor.stats.count3 core.pattern
+    match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$docs.editor.g1_we_could]? [words|word_count|words_count] [how_many|how_much|total|count|number]"
+    emit="@{_} core.request action=doc.stats"
+    kind=request
+    priority=9
+    tabPriority=25
+    example="Words how many?"
+
+@pat.docs.editor.ed.read.chapter core.pattern
+    canonical="Read me chapter 2."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [$lang.doc.hear] [me|out|aloud|out_loud]? [the]? {kind:lex.docs.editor.chapterkinds} {n:number} [aloud|out_loud|to_me|out]?"
+    emit="@{_} core.request action=doc.read arg.kind={kind} arg.n={n}"
+    kind=request
+    priority=13
+    tabPriority=29
+    example="Read me chapter 2."
+    example="Read chapter 2 aloud."
+    example="I want to hear chapter 2."
+
+@pat.docs.editor.ed.read.chapter.ord core.pattern
+    canonical="Read out loud the second chapter."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [$lang.doc.hear] [me|out|aloud|out_loud]? [the]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.chapterkinds} [aloud|out_loud|to_me|out]?"
+    emit="@{_} core.request action=doc.read arg.kind={kind} arg.ord={ord}"
+    kind=request
+    priority=13
+    tabPriority=29
+    example="Read out loud the second chapter."
+    example="Read me the last chapter."
+
+@pat.docs.editor.make.doc core.pattern
+    canonical="Make a document called Holiday with the text We go to the sea."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [start|create|make|write|begin|open]? [a|an]? [new]? [document|doc] [called|named|titled|about]? {t:words(6)} [with_the_text|with_text|saying|that_says|containing|reading|with_the_words|:] {c:rest(quotes)}"
+    emit="@{_} core.request action=doc.make arg.title=\"{t}\" arg.content=\"{c}\""
+    kind=request
+    priority=13
+    tabPriority=29
+    example="Make a document called Holiday with the text We go to the sea."
+    example="Create a document about cats saying Cats purr."
+    doc="The act make-document: a title and the content in one request."
+
+@pat.docs.editor.make.doc2 core.pattern
+    canonical="Make a document with the text We go to the sea."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [start|create|make|write|begin|open]? [a|an]? [new]? [document|doc] [with_the_text|with_text|saying|that_says|containing|reading|with_the_words|:] {c:rest(quotes)}"
+    emit="@{_} core.request action=doc.make arg.content=\"{c}\""
+    kind=request
+    priority=13
+    tabPriority=29
+    example="Make a document saying We go to the sea."
+    doc="The act make-document: the content in one request, the title left as it is."
+
+@pat.docs.editor.read.thing core.pattern
+    canonical="Read the second paragraph."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [read|read_me|read_out|say|speak|recite] [me|out]? [the|my]? {t:rest}"
+    emit="@{_} core.request action=doc.read arg.t=\"{t}\""
+    kind=request
+    priority=10
+    tabPriority=20
+    example="Read the second paragraph."
+
+@pat.docs.editor.read.after core.pattern
+    match="[$lang.lead.filler|pls|plz]? [the|my]? {t:words} [read|say|speak|read_out] [it]? [out_loud|aloud]? [please|pls]?"
+    emit="@{_} core.request action=doc.read arg.t=\"{t}\""
+    kind=request
+    priority=8
+    tabPriority=14
+    example="Second paragraph read please."
+
+@pat.docs.editor.table.fill core.pattern
+    canonical="Fill the table with sea animals."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [fill|populate|complete|fill_in|fill_up] [the]? table [in]? [with|using|from]? {t:rest}"
+    emit="@{_} core.request action=doc.fillTable arg.topic=\"{t}\""
+    kind=request
+    priority=13
+    tabPriority=29
+    example="Fill the table with sea animals."

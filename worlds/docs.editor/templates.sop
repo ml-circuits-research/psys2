@@ -1,215 +1,140 @@
-@tpl.docs.editor.doc_addHeading core.template
-    for=action.doc.addHeading
-    text="{value}"
+@gen.docs.editor.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
 
-@tpl.docs.editor.doc_addParagraph core.template
-    for=action.doc.addParagraph
-    text="{value}"
+@tpl.docs.editor.make core.template
+    for=action.docs.editor.make
+    text="{note}"
 
-@tpl.docs.editor.doc_addList core.template
-    for=action.doc.addList
-    text="{value}"
+@tpl.docs.editor.remove core.template
+    for=action.docs.editor.remove
+    text="{note}"
 
-@tpl.docs.editor.doc_delete core.template
-    for=action.doc.delete
-    text="{value}"
+@tpl.docs.editor.change core.template
+    for=action.docs.editor.change
+    text="{note}"
 
-@tpl.docs.editor.doc_deleteSentence core.template
-    for=action.doc.deleteSentence
-    text="{value}"
+@tpl.docs.editor.place core.template
+    for=action.docs.editor.place
+    text="{note}"
 
-@tpl.docs.editor.doc_clear core.template
-    for=action.doc.clear
-    text="{value}"
+@tpl.docs.editor.group core.template
+    for=action.docs.editor.group
+    text="{note}"
 
-@tpl.docs.editor.doc_replace core.template
-    for=action.doc.replace
-    text="{value}"
+@tpl.docs.editor.send core.template
+    for=action.docs.editor.send
+    text="{note}"
 
-@tpl.docs.editor.doc_move core.template
-    for=action.doc.move
-    text="{value}"
+@tpl.docs.editor.pick core.template
+    for=action.docs.editor.pick
+    text="{note}"
 
-@tpl.docs.editor.doc_setTitle core.template
-    for=action.doc.setTitle
-    text="{value}"
+@tpl.docs.editor.copy core.template
+    for=action.docs.editor.copy
+    text="{note}"
 
-@tpl.docs.editor.doc_newDoc core.template
-    for=action.doc.newDoc
-    text="{value}"
+@tpl.docs.editor.ask core.template
+    for=action.docs.editor.ask
+    text="{note}"
 
-@tpl.docs.editor.doc_undo core.template
-    for=action.doc.undo
-    text="{value}"
+@tpl.docs.editor.undo core.template
+    for=action.docs.editor.undo
+    text="{note}"
 
-@tpl.docs.editor.doc_redo core.template
-    for=action.doc.redo
-    text="{value}"
+@tpl.docs.editor.redo core.template
+    for=action.docs.editor.redo
+    text="{note}"
 
-@tpl.docs.editor.doc_read core.template
-    for=action.doc.read
-    text="{value}"
+@tpl.docs.editor.save core.template
+    for=action.docs.editor.save
+    text="{note}"
 
-@tpl.docs.editor.doc_copy core.template
-    for=action.doc.copy
-    text="{value}"
-
-@tpl.docs.editor.doc_download core.template
-    for=action.doc.download
-    text="{value}"
-
-@tpl.docs.editor.doc_count core.template
-    for=action.doc.count
-    text="{value}"
-
-@tpl.docs.editor.doc_askTitle core.template
-    for=action.doc.askTitle
-    text="{value}"
-
-@tpl.docs.editor.doc_whatIs core.template
-    for=action.doc.whatIs
-    text="{value}"
-
-@tpl.docs.editor.doc_say core.template
-    for=action.doc.say
-    text="{value}"
-
-@tpl.docs.editor.doc_mentions core.template
-    for=action.doc.mentions
-    text="{value}"
-
-@tpl.docs.editor.doc_isEmpty core.template
-    for=action.doc.isEmpty
-    text="{value}"
-
-@tpl.docs.editor.doc_dictate core.template
+# ---- templates.extra.sop (hand-written, appended by the generator)
+@tpl.docs.editor.own_dictate core.template
     for=action.doc.dictate
     text="{value}"
 
-@tpl.docs.editor.doc_dictateStop core.template
+@tpl.docs.editor.own_dictateStop core.template
     for=action.doc.dictateStop
     text="{value}"
 
-@tpl.docs.editor.doc_fromList core.template
-    for=action.doc.fromList
+@tpl.docs.editor.own_read core.template
+    for=action.doc.read
     text="{value}"
 
-@tpl.docs.editor.doc_report core.template
-    for=action.doc.report
+@tpl.docs.editor.own_download core.template
+    for=action.doc.download
     text="{value}"
 
-@tpl.docs.editor.doc_holdings core.template
-    for=action.doc.holdings
-    text="{value}"
-
-@tpl.docs.editor.doc_addQuote core.template
-    for=action.doc.addQuote
-    text="{value}"
-
-@tpl.docs.editor.doc_addRule core.template
-    for=action.doc.addRule
-    text="{value}"
-
-@tpl.docs.editor.doc_addTable core.template
-    for=action.doc.addTable
-    text="{value}"
-
-@tpl.docs.editor.doc_addRow core.template
-    for=action.doc.addRow
-    text="{value}"
-
-@tpl.docs.editor.doc_addColumn core.template
-    for=action.doc.addColumn
-    text="{value}"
-
-@tpl.docs.editor.doc_deleteRow core.template
-    for=action.doc.deleteRow
-    text="{value}"
-
-@tpl.docs.editor.doc_deleteColumn core.template
-    for=action.doc.deleteColumn
-    text="{value}"
-
-@tpl.docs.editor.doc_setCell core.template
-    for=action.doc.setCell
-    text="{value}"
-
-@tpl.docs.editor.doc_fillTable core.template
-    for=action.doc.fillTable
-    text="{value}"
-
-@tpl.docs.editor.doc_addTask core.template
-    for=action.doc.addTask
-    text="{value}"
-
-@tpl.docs.editor.doc_checkTask core.template
-    for=action.doc.checkTask
-    text="{value}"
-
-@tpl.docs.editor.doc_countTasks core.template
-    for=action.doc.countTasks
-    text="{value}"
-
-@tpl.docs.editor.doc_listTasks core.template
-    for=action.doc.listTasks
-    text="{value}"
-
-@tpl.docs.editor.doc_format core.template
-    for=action.doc.format
-    text="{value}"
-
-@tpl.docs.editor.doc_clearFormat core.template
-    for=action.doc.clearFormat
-    text="{value}"
-
-@tpl.docs.editor.doc_link core.template
-    for=action.doc.link
-    text="{value}"
-
-@tpl.docs.editor.doc_size core.template
-    for=action.doc.size
-    text="{value}"
-
-@tpl.docs.editor.doc_align core.template
-    for=action.doc.align
-    text="{value}"
-
-@tpl.docs.editor.doc_convert core.template
-    for=action.doc.convert
-    text="{value}"
-
-@tpl.docs.editor.doc_select core.template
-    for=action.doc.select
-    text="{value}"
-
-@tpl.docs.editor.doc_unselect core.template
-    for=action.doc.unselect
-    text="{value}"
-
-@tpl.docs.editor.doc_whatSelected core.template
-    for=action.doc.whatSelected
-    text="{value}"
-
-@tpl.docs.editor.doc_goto core.template
-    for=action.doc.goto
-    text="{value}"
-
-@tpl.docs.editor.doc_deleteTarget core.template
-    for=action.doc.deleteTarget
-    text="{value}"
-
-@tpl.docs.editor.doc_stats core.template
+@tpl.docs.editor.own_stats core.template
     for=action.doc.stats
     text="{value}"
 
-@tpl.docs.editor.doc_make core.template
+@tpl.docs.editor.own_mentions core.template
+    for=action.doc.mentions
+    text="{value}"
+
+@tpl.docs.editor.own_isEmpty core.template
+    for=action.doc.isEmpty
+    text="{value}"
+
+@tpl.docs.editor.own_whatIs core.template
+    for=action.doc.whatIs
+    text="{value}"
+
+@tpl.docs.editor.own_say core.template
+    for=action.doc.say
+    text="{value}"
+
+@tpl.docs.editor.own_fromList core.template
+    for=action.doc.fromList
+    text="{value}"
+
+@tpl.docs.editor.own_report core.template
+    for=action.doc.report
+    text="{value}"
+
+@tpl.docs.editor.own_holdings core.template
+    for=action.doc.holdings
+    text="{value}"
+
+@tpl.docs.editor.own_whatSelected core.template
+    for=action.doc.whatSelected
+    text="{value}"
+
+@tpl.docs.editor.own_checkTask core.template
+    for=action.doc.checkTask
+    text="{value}"
+
+@tpl.docs.editor.own_countTasks core.template
+    for=action.doc.countTasks
+    text="{value}"
+
+@tpl.docs.editor.own_listTasks core.template
+    for=action.doc.listTasks
+    text="{value}"
+
+@tpl.docs.editor.own_addHeading core.template
+    for=action.doc.addHeading
+    text="{value}"
+
+@tpl.docs.editor.own_addList core.template
+    for=action.doc.addList
+    text="{value}"
+
+@tpl.docs.editor.own_addParagraph core.template
+    for=action.doc.addParagraph
+    text="{value}"
+
+@tpl.docs.editor.own_undo core.template
+    for=action.doc.undo
+    text="{value}"
+
+@tpl.docs.editor.own_redo core.template
+    for=action.doc.redo
+    text="{value}"
+
+@tpl.docs.editor.own_make core.template
     for=action.doc.make
     text="{value}"
 
-@tpl.docs.editor.view core.template
-    for=action.docs.editor.view
-    text="{value}"
-
-@tpl.docs.editor.adopt core.template
-    for=action.docs.editor.adopt
-    text="{value}"

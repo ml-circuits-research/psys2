@@ -1,0 +1,300 @@
+@doc acts.schema
+    noun="document"
+    doc="A document as a schema (spec 21): a document holds a title and blocks (sections, paragraphs, headings, lists with items, tables with cells); a block has a text, a style (marks and list styles), a level, a colour or highlight, an alignment and an order. The editor engine (editor.mjs, TipTap in the tab) keeps the state; the schema only says what is said. A view of the session things with the textual aspect (spec 23)."
+    hooks=hooks.mjs
+    own=dictate:doc.dictate
+    own=dictateStop:doc.dictateStop
+    own=read:doc.read
+    own=download:doc.download
+    own=stats:doc.stats
+    own=mentions:doc.mentions
+    own=isEmpty:doc.isEmpty
+    own=whatIs:doc.whatIs
+    own=say:doc.say
+    own=fromList:doc.fromList
+    own=report:doc.report
+    own=whatSelected:doc.whatSelected
+    own=fillTable:doc.fillTable
+    own=checkTask:doc.checkTask
+    own=countTasks:doc.countTasks
+    own=listTasks:doc.listTasks
+    own=holdings:doc.holdings
+    own=addHeading:doc.addHeading
+    own=addList:doc.addList
+    own=addParagraph:doc.addParagraph
+    own=docUndo:doc.undo
+    own=docRedo:doc.redo
+    own=view:docs.editor.view
+    own=adopt:docs.editor.adopt
+    own=makeDocument:doc.make
+    sample=document
+    list=yes
+    say=yes
+    scale=yes
+    clear=yes
+    none=yes
+    opencolour=yes
+    valued=yes
+    ordered=yes
+    textual=yes
+    acts=make
+    acts=remove
+    acts=change
+    acts=place
+    acts=group
+    acts=copy
+    acts=pick
+    acts=ask
+    acts=send
+    acts=save
+    acts=undo
+    acts=redo
+    limit.items=500
+    limit.history=50
+
+@doc.document acts.kind
+    plural=documents
+    word=doc
+    word=docs
+    word=notes
+    word=file
+
+@doc.section acts.kind
+    plural=sections
+    numbered=yes
+    word=chapter
+    word=chapters
+    word=subsection
+    word=subsections
+    word=subheading
+    word=subheadings
+
+@doc.freetext acts.kind
+    plural=freetexts
+    word=text
+    word=words
+    word=something
+
+@doc.paragraph acts.kind
+    plural=paragraphs
+    numbered=yes
+    word=para
+    word=paras
+    word=graf
+    word=note
+
+@doc.heading acts.kind
+    plural=headings
+    numbered=yes
+    word=header
+    word=headers
+    word=headline
+    word=headlines
+    word=hed
+
+@doc.title acts.kind
+    plural=titles
+
+@doc.list acts.kind
+    plural=lists
+    numbered=yes
+    word=checklist
+    word=checklists
+    word=numbered_list
+    word=bulleted_list
+    word=bullet_list
+    word=task_list
+    word=todo_list
+    word=ordered_list
+    word=check_list
+
+@doc.item acts.kind
+    plural=items
+    word=bullet
+    word=bullets
+    word=numbered_item
+    word=bulleted_item
+    word=bullet_item
+    word=task_item
+    word=todo_item
+    word=entry
+    word=entries
+
+@doc.task acts.kind
+    plural=tasks
+    word=todo
+
+@doc.quote acts.kind
+    plural=quotes
+    numbered=yes
+    word=blockquote
+
+@doc.table acts.kind
+    plural=tables
+    numbered=yes
+
+@doc.cell acts.kind
+    plural=cells
+    in=table
+
+@doc.row acts.kind
+    plural=rows
+    in=table
+
+@doc.column acts.kind
+    plural=columns
+    in=table
+    word=col
+    word=cols
+
+@doc.sentence acts.kind
+    plural=sentences
+
+@doc.word acts.kind
+    plural=words
+
+@doc.rule acts.kind
+    plural=rules
+    word=line
+    word=lines
+    word=horizontal_line
+    word=divider
+    word=separator
+
+@doc.break acts.kind
+    plural=breaks
+    word=page_break
+    word=pagebreak
+
+@doc.content acts.attr
+    of=paragraph
+    of=heading
+    of=item
+    of=cell
+    of=title
+    of=quote
+    type=text
+    word=wording
+
+@doc.style acts.attr
+    of=paragraph
+    of=heading
+    of=sentence
+    of=word
+    of=title
+    of=item
+    of=list
+    of=quote
+    of=cell
+    type=enum
+    values=bold
+    values=italic
+    values=underline
+    values=underlined
+    values=strike
+    values=strikethrough
+    values=highlight
+    values=bolden
+    values=italicize
+    values=italicise
+    values=code
+    values=plain
+    values=bulleted
+    values=numbered
+    values=checklist
+    values=numbered_list
+    values=bulleted_list
+    values=bullet_list
+    values=task_list
+    values=todo_list
+    values=ordered_list
+    values=check_list
+    word=format
+    word=formatting
+
+@doc.type acts.attr
+    of=paragraph
+    of=heading
+    of=quote
+    of=list
+    type=enum
+    values=quote
+    values=blockquote
+    word=kind
+
+@doc.level acts.attr
+    of=heading
+    type=number
+    min=1
+    max=3
+    default=2
+    more=bigger
+    less=smaller
+
+@doc.size acts.attr
+    of=title
+    type=number
+    min=-2
+    max=4
+    default=0
+    more=bigger
+    less=smaller
+    word=font
+
+@doc.align acts.attr
+    of=paragraph
+    of=heading
+    of=title
+    of=list
+    of=quote
+    type=enum
+    values=left
+    values=center
+    values=centre
+    values=centred
+    values=centered
+    values=middle
+    values=right
+    values=justify
+    values=justified
+    word=alignment
+
+@doc.highlight acts.attr
+    of=paragraph
+    of=sentence
+    of=word
+    of=heading
+    of=item
+    type=colour
+    word=highlighting
+    word=highlighted
+
+@doc.link acts.attr
+    of=word
+    of=sentence
+    type=text
+    word=url
+    word=hyperlink
+
+@doc.order acts.attr
+    of=paragraph
+    of=heading
+    of=list
+    of=section
+    of=quote
+    of=table
+    type=enum
+    values=top
+    values=end
+    values=up
+    values=down
+    values=beginning
+    values=bottom
+    word=position
+
+@doc.checked acts.attr
+    of=task
+    of=item
+    type=bool
+    word=done
+    word=finished
