@@ -18,7 +18,8 @@ import { spawnSync } from 'node:child_process';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { applyReasonerFlag } from './lib/reasoner-flag.mjs';
-import { resolveLibrary, expand, expectedOf, judge, tabulate, tableText, DIMENSIONS } from './lib/cousins-host.mjs';
+import { resolveLibrary, expand, expectedOf, clauseExpected, judge, tabulate, tableText, DIMENSIONS } from './lib/cousins-host.mjs';
+import { installFormOperators } from './lib/formops-host.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
@@ -68,15 +69,16 @@ async function runPipeline({ catalog, tab, texts }) {
   const visibleState = (st) => Object.fromEntries(Object.entries(vs(st)).filter(([k, v]) => !['talk', 'ui.shell', 'session.things'].includes(k) && JSON.stringify(v) !== '{}'));
   const source = { text: async (p) => { try { return readFileSync(`${catalog}/${p}`, 'utf8'); } catch { return null; } } };
   const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
+  await installFormOperators(engine);   // PSYS2_FORMOPS=on: the typed form operators (spec 16 section 11)
   const out = new Map();
   for (const t of texts) {
     engine.setKnowledge(createFacts({ source }));
     const s = engine.createSession(sessionOptions(settingsForMode('rules'), { language: 'en' }));
     s.setWorldState('ui.shell', { activeTab: tab });
     const before = visibleState(s.state());
-    let reply = '';
-    try { reply = (await s.send(t)).text ?? ''; } catch (e) { reply = ''; }
-    out.set(t, { reply, before, after: visibleState(s.state()) });
+    let reply = '', clauses = [];
+    try { const r = await s.send(t); reply = r.text ?? ''; clauses = (r.segments ?? []).map((x) => x.text).filter(Boolean); } catch (e) { reply = ''; }
+    out.set(t, { reply, clauses, before, after: visibleState(s.state()) });
   }
   return { reasoner: engine.reasonerMode, runs: out };
 }
@@ -104,7 +106,9 @@ async function measure() {
   for (const { c, r } of plan) {
     for (const x of (r.cousins ?? []).filter((x) => x.valid && x.text)) {
       const run = piped.runs.get(x.text);
-      const j = judge(x, expectedOf(world, x), run);
+      let expected = expectedOf(world, x);
+      if (!flag('whole-text')) { const extra = clauseExpected(lib, world, run.clauses, expected); expected = { all: [...expected.all, ...extra.all] }; }   // per-clause judge (0.88): every clause of a compound text must be answered
+      const j = judge(x, expected, run);
       rows.push({ case: c.text, caseId: c.id, text: x.text, degree: x.degree, dimension: x.dimension, outcome: j.outcome, why: j.why, reply: run.reply.slice(0, 160), key: x.frame.key, answer: x.frame.answer });
     }
   }

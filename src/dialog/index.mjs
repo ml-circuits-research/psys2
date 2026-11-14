@@ -1827,6 +1827,9 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
   const engine = {
     knowledge: options.knowledge ?? null,
+    /** Typed form operators ({ lib, world, operators }) for the step behind PSYS2_FORMOPS=on (spec 16 section 11); null = none. A host that has a typed world gives them; nothing is learnt here. */
+    formOperators: options.formOperators ?? null,
+    setFormOperators(fo) { engine.formOperators = fo ?? null; },
     /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
     setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; attachValues(cat); attachOpenWords(cat); attachArrangement(cat); },   // the colour and number readers (k.values) take the catalog's words in place of the bundled subset
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,

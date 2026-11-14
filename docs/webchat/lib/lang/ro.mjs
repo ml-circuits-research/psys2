@@ -25,7 +25,7 @@ const posOf = (cls) => (cls?.startsWith('v.') ? 'verb' : cls?.startsWith('a.') ?
 
 export async function openLangRo({ facts = null } = {}) {
   facts ??= (await import('./ro.facts.generated.mjs?v=8848c09dca')).LANG_RO_FACTS;
-  const lib = await import('../vendor/sopworld/sopworld.mjs?v=9de9c8fd7b');
+  const lib = await import('../vendor/sopworld/sopworld.mjs?v=8afa911bd6');
   const world = new lib.World();
   world.load(facts.wires);
   const m = lib.morphOf(world, { types: { cls: 'w.lang.ro.class', ending: 'w.lang.ro.ending', irregular: 'w.lang.ro.irregular', fold: 'w.lang.ro.fold', split: 'w.lang.ro.split', template: 'w.lang.ro.template', vowel: 'w.lang.ro.vowel' } });
