@@ -1253,7 +1253,7 @@ export class DialogSession {
   async send(text, opts = {}) {
     const own = perf.start();
     // Turn guard (spec 06 "Turn lifecycle"): the outermost send installs the abort signal and the deadlines; nested sends (validator replays) inherit them.
-    const g = guard.install({ signal: opts.signal ?? null, hardMs: opts.hardMs ?? Infinity, softMs: opts.softMs ?? Infinity, force: !!opts.signal });
+    const g = guard.install({ signal: opts.signal ?? null, hardMs: opts.hardMs ?? Infinity, softMs: opts.softMs ?? Infinity, ...(opts.clock ? { clock: opts.clock } : {}), force: !!opts.signal });
     if (g) guard.onModelTimeout((stage, e) => this._noteModelTimeout(stage, e));
     // Compute budget (spec 06 "Compute budgets"): one per turn, passed down through the shared `budget` handle; nested sends join the outer turn's budget.
     const tb = opts.budget ?? createBudget();

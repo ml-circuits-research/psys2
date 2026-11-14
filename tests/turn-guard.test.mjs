@@ -72,8 +72,22 @@ test('abort in the middle of a turn that already changed the state (host undo sn
 });
 
 test('softMs is accepted but has no clock: the reading is the same as without it (no throw)', async () => {
-  const say = (opts) => fresh().send('if i add eight and seven what do i gte', opts).then((r) => r.text);
-  assert.equal(await say({ signal: new AbortController().signal, hardMs: 20000, softMs: 0 }), await say({ signal: new AbortController().signal, hardMs: 20000 }));
+  // INVARIANT: independent of machine load. The guard runs on an injected clock that never advances, so no wall-clock limit can trip.
+  const frozen = () => 0;
+  const say = (opts) => fresh().send('if i add eight and seven what do i gte', { clock: frozen, signal: new AbortController().signal, hardMs: 20000, ...opts }).then((r) => r.text);
+  assert.equal(await say({ softMs: 0 }), await say({}));
+});
+
+test('the guard trips on an injected clock, not on the wall clock', async () => {
+  let t = 0;
+  const clock = () => t;
+  const token = guard.install({ clock, hardMs: 100, force: true });
+  try {
+    guard.check('a');
+    assert.equal(guard.remaining(), 100);
+    t = 101;
+    assert.throws(() => guard.check('b'), (e) => e instanceof TurnAborted && e.reason === 'timeout' && e.stage === 'b');
+  } finally { guard.release(token); }
 });
 
 test('restrictedSet is memoized per world set (the HANG task root of slow typo turns)', () => {
