@@ -134,10 +134,12 @@
     max=18
     default=2
     more=closer
+    more=nearer
     less=farther
     step=1
     step_more=closer
     step_more=in
+    step_more=nearer
     step_less=out
     step_less=back
     step_less=away
@@ -217,3 +219,18 @@
     word=coast
     word=sea
     word=ocean
+
+@map.location acts.attr
+    of=place
+    type=text
+    word=position
+    word=whereabouts
+    word=coordinates
+
+@map.distance acts.attr
+    of=place
+    type=number
+    word=kilometres
+    word=kilometers
+    word=km
+    word=miles

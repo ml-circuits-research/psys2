@@ -41,6 +41,8 @@ function bundled() {
   for (const l of BUNDLED_GEO.text.split('\n')) { const w = l.charCodeAt(0) === 64 ? parseLine(l) : null; if (w) (by.get(w.type) ?? by.set(w.type, []).get(w.type)).push({ id: w.id, type: w.type, f: w.attrs }); }
   return (BUNDLE = by);
 }
+/** The index built last (or the bundled one when none was): for the sync readers of the sentence (the decline hook), which have no catalog handle. */
+export const peekIndex = () => CACHE?.D ?? buildIndex(null);
 export function buildIndex(kn) {
   const cat = kn?.peekWires?.('k.geo.country'), catCities = kn?.peekWires?.('k.geo.city');
   const live = !!(cat?.length && catCities?.length);   // the catalog answered: it replaces the bundle whole
@@ -115,7 +117,7 @@ export function lookup(D, raw) {
 export function namesOf(args) {
   const out = new Set();
   for (const [k, v] of Object.entries(args ?? {})) {
-    if (['text', 'mode', 'dir', 'amt', 'amt2', 'n', 'm', 'unit', 'la', 'lo', 'ns', 'ew', 'l', 'what', 'k', 'self', 'nb', 'plural', 'all', 'last'].includes(k) || v === undefined || v === null) continue;
+    if (['text', 'mode', 'dir', 'amt', 'amt2', 'n', 'm', 'unit', 'la', 'lo', 'ns', 'ew', 'l', 'what', 'k', 'self', 'nb', 'ind', 'plural', 'all', 'last'].includes(k) || v === undefined || v === null) continue;
     const t = String(v).replace(/_/g, ' ').replace(/^(?:the|a|an)\s+/i, '').trim();
     if (!t || /^\d+(?:\.\d+)?$/.test(t) || t.split(/\s+/).length > 4) continue;
     out.add(t);

@@ -28,9 +28,9 @@ import { createEffects, EFFECT_ACTS } from './effects.mjs?v=eda4b4e951';   // so
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=ebf19b103c';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=d1e2ba22e0';
+import { en } from '../../lib/lang/en.mjs?v=d41affbe80';
 import { resolvePhrase } from './np-lib.mjs?v=d1f0aa2052';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
-import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=79e16a912f';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=73d6a21490';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------
@@ -894,7 +894,9 @@ export function createExecutor(schema, hooks = {}) {
     const v = ask(info);
     const said = String(info.roles?.thing ?? '');
     if (v === false || !/\band\b|,/i.test(said) || !['remove', 'change', 'place', 'copy', 'group', 'pick'].includes(String(info.action ?? '').split('.').pop())) return v === 'focus' || v === 'refuse' ? v : v !== false;   // 'focus' (the world holds the focus of the dialogue: the open tab owns its acts first) reaches the formalizer, which then does not make the reading yield
-    const parts = said.split(/\s*(?:,|\band\b)\s*/i).filter(Boolean);
+    // a conjunct that opens with a word that continues the noun phrase before it ("Romania and its neighbours": the joiner `keep` facts of the language) is part of that phrase, not a thing of its own
+    const keeps = en.joinerKeeps(), parts = [];
+    for (const c of said.split(/\s*(?:,|\band\b)\s*/i).filter(Boolean)) { if (parts.length && keeps.has(c.toLowerCase().split(/\s+/)[0])) parts[parts.length - 1] += ` and ${c}`; else parts.push(c); }
     return parts.length < 2 || parts.every((c) => ask({ ...info, roles: { ...info.roles, thing: c }, text: c }) !== false) ? v : false;
   };   // kindWord: a word the schema says is one of its kinds (its lexicon, the catalog vocabulary included)
   /** What a person can point at (the discourse hook `referents`, M1): the items, the focused ones salient. */
@@ -904,5 +906,7 @@ export function createExecutor(schema, hooks = {}) {
     const sal = new Set(st.focus?.ids ?? []);
     return (st.items ?? []).map((i) => ({ id: i.id, kind: i.kind, noun: schema.kinds[i.kind]?.name ?? i.kind, words: [i.kind, schema.kinds[i.kind]?.plural].filter(Boolean), attrs: {}, salient: sal.has(i.id), sig: JSON.stringify([i.kind, i.n, i.name, i.attrs, i.place]) }));
   }
-  return { run, operation, group: actGroup, interceptInput, lastResort, outOfScope, accepts, init, resolve, labels, schema, referents };
+  /** Does the world take a coordination in the thing of this reading as ONE act ("show Paris and Rome", "pin Paris, Rome and Madrid")? Then the formalizer keeps the whole reading and does not distribute the act clause by clause. */
+  const coordinates = (info) => !!hooks.coordinates?.(info);
+  return { run, operation, group: actGroup, interceptInput, lastResort, outOfScope, accepts, coordinates, init, resolve, labels, schema, referents };
 }

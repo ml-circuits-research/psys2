@@ -98,6 +98,15 @@
     word=coast
     word=sea
     word=ocean
+    word=location
+    word=position
+    word=whereabouts
+    word=coordinates
+    word=distance
+    word=kilometres
+    word=kilometers
+    word=km
+    word=miles
 
 @lex.geo.map.values core.lexicon
     class=modifier
@@ -114,6 +123,7 @@
     class=modifier
     doc="Comparatives that mean more of an attribute"
     word=closer
+    word=nearer
 
 @lex.geo.map.less core.lexicon
     class=modifier

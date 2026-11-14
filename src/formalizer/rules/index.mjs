@@ -436,17 +436,29 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   const ownDeclined = [];
   // DECLINE (spec 21): a world may export `accepts({ action, roles, text, state })`; when it returns false the world does not own this reading ("draw a house" is not a face part),
   // so its match is dropped before routing and the next world reads the message. Pure, and every pass ticks the budget; it only looks at the words of the roles.
+  // the verdict of a world's decline hook on one reading (pure; memoized: the yield rule below asks it of the competitor too)
+  const verdicts = new Map();
+  const verdictOf = (m) => {
+    if (verdicts.has(m)) return verdicts.get(m);
+    const acc = set.get(m.pattern.worldId)?.ops?.accepts;
+    if (typeof acc !== 'function') { verdicts.set(m, null); return null; }
+      const roles = Object.fromEntries(Object.entries(m.slots ?? {}).map(([n, sl]) => [n, sl.text]));
+      for (const lit of String(m.pattern.emit ?? '').matchAll(/ arg\.(\w+)=\\?"([^"{}\\]*)\\?"/g)) if (!(lit[1] in roles) && lit[1] !== 'mode') roles[lit[1]] = lit[2];   // the literal roles of a form (arg.attribute="name")
+    let ok = true, strong = false, refuse = false;
+      try { const verdict = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, claim: !!m.pattern.tabClaim, tab: context?.tabWorld ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null }); ok = verdict !== false && verdict !== 'refuse'; strong = verdict === 'focus'; refuse = verdict === 'refuse' } catch { ok = true; }   // 'focus': the world holds the focus of the dialogue ("make it red"), so it does not yield
+    const res = { ok, strong, refuse, roles };
+    verdicts.set(m, res);
+    return res;
+  };
   for (let k = matches.length - 1; k >= 0; k--) {
     budget.tick('rules.accepts');
-    const m = matches[k], acc = set.get(m.pattern.worldId)?.ops?.accepts;
-    if (typeof acc !== 'function') continue;
-    const roles = Object.fromEntries(Object.entries(m.slots ?? {}).map(([n, sl]) => [n, sl.text]));
-    for (const lit of String(m.pattern.emit ?? '').matchAll(/ arg\.(\w+)=\\?"([^"{}\\]*)\\?"/g)) if (!(lit[1] in roles) && lit[1] !== 'mode') roles[lit[1]] = lit[2];   // the literal roles of a form (arg.attribute="name")
-    let ok = true, strong = false, refuse = false;
-    try { const verdict = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, claim: !!m.pattern.tabClaim, tab: context?.tabWorld ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null }); ok = verdict !== false && verdict !== 'refuse'; strong = verdict === 'focus'; refuse = verdict === 'refuse' } catch { ok = true; }   // 'focus': the world holds the focus of the dialogue ("make it red"), so it does not yield
+    const m = matches[k], v = verdictOf(m);
+    if (!v) continue;
+    const { strong, refuse, roles } = v;
+    let ok = v.ok;
     // a world with a decline hook is a schema world whose forms keep free slots: its catch-all reading yields to a reading of another world that has no free text at all
     // ("Is a square a rectangle?" is the shapes world's, even while the avatar tab is open)
-    if (ok && !strong && context?.lastWorld !== m.pattern.worldId && wildTokens(m) > 0 && matches.some((o) => o.pattern.worldId !== m.pattern.worldId && wildTokens(o) === 0 && !m.pattern.tabClaim)) ok = false;
+    if (ok && !strong && context?.lastWorld !== m.pattern.worldId && wildTokens(m) > 0 && matches.some((o) => o.pattern.worldId !== m.pattern.worldId && wildTokens(o) === 0 && (verdictOf(o)?.ok ?? true) && !m.pattern.tabClaim)) ok = false;   // (a competitor that its own world declines does not count: the order of the loop must not matter)
     // the thing a "remove" names is not in the tab's own state but is in another world's: the other world holds the evidence (the reading is dropped without a refusal, so that world reads the sentence)
     if (m.pattern.worldId === context?.tabWorld && REFERENT_ACTS.has(actionName(m)) && referentElsewhere(m, roles, context, set)) { matches.splice(k, 1); continue; }
     if (!ok) { const [gone] = matches.splice(k, 1); if (gone.pattern.worldId === context?.tabWorld && (refuse || REFERENT_ACTS.has(actionName(gone)))) ownDeclined.push(gone); }   // 'refuse': the world says the reading is its own but names a thing it has not ("draw a unicorn"): it refuses plainly unless another world reads it
@@ -491,7 +503,10 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
       budget.tick('rules.kindelsewhere');
       const m = matches[k], ws = noun(m), own = kindsOf(m.pattern.worldId);
       if (!ws || !own || m.pattern.tabClaim || context?.lastWorld === m.pattern.worldId || ws.some((w) => own.has(w))) continue;   // a world the conversation is in keeps its reading
-      if (matches.some((o) => o.pattern.worldId !== m.pattern.worldId && kindsOf(o.pattern.worldId) && ws.some((w) => Set.prototype.has.call(kindsOf(o.pattern.worldId), w)))) matches.splice(k, 1);   // the other world's own list (an open lexicon answers `has` for the whole catalog)
+      // the other world's own list (an open lexicon answers `has` for the whole catalog), and only for the word the other world calls ITSELF by (its schema noun: "map", "document"): "add a cottage" in the seating
+      // tab is the plan's to refuse, not the drawing's to take, although "cottage" is a kind of the drawing too
+      const selfWords = (id) => String(set.get(id)?.ops?.executor?.schema?.noun ?? '').toLowerCase().split(/\s+/).filter(Boolean);
+      if (matches.some((o) => o.pattern.worldId !== m.pattern.worldId && kindsOf(o.pattern.worldId) && ws.some((w) => Set.prototype.has.call(kindsOf(o.pattern.worldId), w) && selfWords(o.pattern.worldId).some((n) => n === w || `${n}s` === w || n === `${w}s`)))) matches.splice(k, 1);
     }
   }
   const kept = applyCoveragePolicy(matches, toks.filter((t) => !t.filler).length);
@@ -806,7 +821,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
    * ("add a paragraph salt and a pinch of pepper": a second paragraph pattern) stays one text. Recursive for the rest of the sentence.
    */
   const splitSwallowedCommand = (tokens, whole) => {
-    if (!whole?.match) return null;
+    if (!whole?.match || coordinatedWhole(whole.match)) return null;   // a coordination the world takes as one act is not two commands
     const worldId = whole.match.worldId;
     const slots = Object.values(whole.match.slots ?? {}).filter((sl) => sl.class === 'words' || sl.class === 'rest');
     const inSlot = (t) => slots.some((sl) => t.start >= sl.span[0] && t.end <= sl.span[1]);
@@ -861,6 +876,16 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     return parts.length > 1 ? parts.flatMap((p) => p.seg) : fail();
   };
 
+  /** Does the world of this reading take the coordination in its thing as one act (the executor's `coordinates` hook over the words of the roles)? */
+  const coordinatedWhole = (m) => {
+    const co = set.get(m?.worldId ?? m?.pattern?.worldId)?.ops?.executor?.coordinates;
+    if (typeof co !== 'function') return false;
+    const pat = patternById(set).get(m.patternId);
+    if (!pat) return false;
+    const roles = Object.fromEntries(Object.entries(m.slots ?? {}).map(([n, sl]) => [n, sl.text]));
+    for (const lit of String(pat.emit ?? '').matchAll(/ arg\.(\w+)=\\?"([^"{}\\]*)\\?"/g)) if (!(lit[1] in roles) && lit[1] !== 'mode') roles[lit[1]] = lit[2];
+    try { return co({ action: /action=([\w.]+)/.exec(pat.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(pat.emit ?? '')?.[1] ?? null, roles }); } catch { return false; }
+  };
   const readSentencePlain = (s, tokens) => {
     const whole = readGroup(tokens, s.isQuestion);
     const clauses = splitClauses(tokens);
@@ -869,7 +894,8 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       // A free-text slot (words, rest) that swallowed a clause separator ("make eyes bigger AND lips red") means the whole-sentence
       // reading is a catch-all: prefer the clause-by-clause reading when every clause is understood on its own by a pattern
       // of at least the same priority, all of the same world (so a list "a, b and c" of one world is never split across worlds).
-      const swallowed = clauses.length > 1 && Object.values(whole.match?.slots ?? {}).some((sl) => (sl.class === 'words' || sl.class === 'rest') && /(^|[\s,])(and|then|but)([\s,]|$)|,/i.test(sl.text ?? ''));
+      // (not when the world takes that coordination as one act: its hook `coordinates` says so, "show Paris and Rome" is one view of both, not two views one after the other)
+      const swallowed = clauses.length > 1 && !coordinatedWhole(whole.match) && Object.values(whole.match?.slots ?? {}).some((sl) => (sl.class === 'words' || sl.class === 'rest') && /(^|[\s,])(and|then|but)([\s,]|$)|,/i.test(sl.text ?? ''));
       if (swallowed) {
         const parts = clauses.map((c, idx) => readGroup(c, QUESTION_WORDS.has(firstWord(c)) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)))));
         // clauses of one world, or a command followed by a question of another world ("add a heading Shopping and what is 2 plus 2"), or a

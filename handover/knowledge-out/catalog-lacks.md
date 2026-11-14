@@ -32,3 +32,12 @@ The pilot world `worlds-pilot/geo.map` keeps no knowledge base: countries, citie
 - `k.colours.colour kind=primary|secondary` exists only in the psys2 shard; the colour shard has no `kind`, so "is red a primary colour" needs the value `primary` found through the schema enum of `kind` (done in Talk) and every colour of a family should carry its kind.
 - Habitat words of `k.animals.animal`: `house` and `ice` where a child's book says home and polar regions; the games and the editor map two of them (home, polar). A `core.word` synonym per habitat would let every host read "home".
 - `k.animals.animal.can` / `cannot` for flightless birds other than the penguin (ostrich, emu, kiwi, dodo ... have no `cannot=fly`): "can an ostrich fly" answers "I don't know whether".
+
+## geo.map ledger by mechanism (2026-11-14, build geo-map-switch rows): what only the catalog can give
+
+Of the 43 rows, 41 are closed by general mechanisms in PSys2 (see docs/lessons.md "geo.map ledger by mechanism"); two need catalog words, and three kinds of word are the ones that made a local mechanism necessary:
+
+- **Names**: `Peking` (Beijing; row n024); short alphabetic names of 2 letters (`EU`, `UK`, `US`) that the vocabulary reader skips (its minimum is 3 letters), so the map reads the aliases of its own `regions.mjs` for them (wanted: `core.word` for the groups and a rule that a 2-letter word of k.geo counts when written in capitals).
+- **Coordination words**: `n` ("france n spain"), `&`, `plus`, `as well as` as joiners in `w.lang.en` (the splitter, the card cutter and `splitList` know `and`, `,`, `then`, `also`, `but`); row r2n125.
+- **Kinds of a vocabulary key**: `back`, `out`, `away`, `north` ... are words of `k.values/directions`, `k.body` and `k.objects` as well as names in `k.geo` (a river `Back`). The vocabulary gives only the shard of a key, not its kind, so no reader can tell "pull back a bit" from the river. Wanted: the kind of each key (`core.word kind=` or the shard's type) in `vocab.json`; until then the map reads direction words by the zoom attribute of its schema (`less` / `more` words) before any place of the same spelling.
+- **Verb `pin` / `flag` / `tag`** in `k.actions` (the acts lexicon has `mark`, not the verb forms of the nouns), and the demonyms already listed above (plural "Brazilians", "Japanese people").
