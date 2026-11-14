@@ -145,7 +145,9 @@ export async function mountPsys2(element, options = {}) {
   let engine = null, session = null, translator = null, speech = null, engineClient = null, browserBackend = null;
   const stageLog = [], longTasks = [];   // COMPUTE-BUDGET: host stage transitions and every main-thread task over 200 ms (PerformanceObserver 'longtask')
   const hostStage = (stage, recId = null) => { stageLog.push({ at: performance.now(), stage, recId }); if (stageLog.length > 400) stageLog.splice(0, 200); };
-  let view = tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
+  // a fresh start opens the first tab (Avatar); a returning user gets the tab they last used (kept next to the settings, never sent anywhere). Its world is the one loaded at boot.
+  const savedTab = (() => { try { const s = options.persist !== false ? localStorage.getItem('psys2.webchat.tab') : null; return s && tabDefs.some((t) => t.id === s) ? s : null; } catch { return null; } })();
+  let view = savedTab ?? tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
   const queue = [], micLog = [];   // MIC2: waiting messages { id, text, mode, voice, queuedAt }; the mic click log
   // BUSY: one source of truth. The host is busy while a turn runs (`turn`; the queue of MIC2 only holds waiting messages), while its host effects run (`effectsPending`) and while the answer is spoken (`mic.speaking`).
   // A speech that never ends must not hold the tabs forever: the veil is lifted after a cap that grows with the text (the speech itself goes on).
@@ -262,6 +264,7 @@ export async function mountPsys2(element, options = {}) {
     if (!tabBtns[id]) return;
     if (id !== view) events.add('tab', id, { via, tabAfter: id });   // USER-ACTIONS: how the tab was opened (tap | key | message | card | example | command)
     view = id;
+    try { if (options.persist !== false && via !== 'start') localStorage.setItem('psys2.webchat.tab', id); } catch { /* storage unavailable */ }
     for (const [k, { btn, panel }] of Object.entries(tabBtns)) {
       const active = k === id, ui = panelUI[k]?.ui;
       if (!active && !panel.hidden) ui?.hide?.(); // before hiding: lets a tab stop drawing into a zero-size box
@@ -1727,7 +1730,7 @@ export async function mountPsys2(element, options = {}) {
     if (info.problems?.length) console.warn('PSys2 world problems:', info.problems);
     if (!settingsEl.hidden) renderSettings();
     session = engineClient.session; mark('session');
-    session.setWorldState?.(SHELL, { language: language.get() });   // the shell world's language state starts as the selector (LANG-FIXED)
+    session.setWorldState?.(SHELL, { language: language.get(), ...(savedTab ? { activeTab: savedTab } : {}) });   // the shell world's language state starts as the selector (LANG-FIXED)
   } catch (e) {
     console.error(e);
     progress.fail('worlds', `PSys2 could not start: ${e?.message ?? e}`, '');

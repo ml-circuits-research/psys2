@@ -122,8 +122,9 @@ async function init(m) {
   const fetchJson = async (rel, hash) => { const r = await fetch(abs(rel) + (hash ? `?v=${hash}` : ''), { cache: 'default' }); if (!r.ok) throw new Error(`${rel}: HTTP ${r.status}`); return r.json(); };
   worldLoader = wlMod.createWorldLoader({ indexHash: ver['worlds/index.json'], fetchJson, bag: (text) => new Set([...rulesM.messageBag(text), ...wordIdx.queryWords(text)]) });
   await worldLoader.init();
-  // `?psys2lazy=0` (tests, a comparison with the full set): every world is loaded at start, as before lazy loading
-  const startIds = (m.lazyWorlds === false ? worldLoader.ids() : [...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] })]).filter((id) => allowed(id));
+  // `?psys2lazy=0` (tests, a comparison with the full set) and a saved language other than English: every world is loaded at start (a Romanian message is read through English candidates that a
+  // partial world set can mistake for understood: a session that starts in Romanian must read like the full set, from its first message)
+  const startIds = (m.lazyWorlds === false || (m.settings?.language && lang.normalize(m.settings.language) !== 'en') ? worldLoader.ids() : [...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] })]).filter((id) => allowed(id));
   await worldLoader.bundles(startIds);
   for (const id of startIds) loadedIds.add(id);
   const bundle = worldLoader.bundleOf(startIds, absModule);
@@ -249,7 +250,8 @@ const handlers = {
     faultNow = testHooks ? (m.fault ?? null) : null;
     if (m.settings) applySettings(m.settings);
     // LAZY LOADING: the open tab's world and the worlds the words of the message say it needs, before the turn is read
-    try { const plan = await worldLoader.plan(m.text); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'message'); } catch (e) { console.warn('world plan failed', e); }
+    // a message in another language is read through its English candidates, which a partial world set can mistake for understood: every world is loaded for it (the word index is English)
+    try { const lang = mods.lang.normalize(m.opts?.language ?? m.settings?.language ?? settings.language); if (lang !== 'en') await ensureWorlds(worldLoader.ids(), 'language'); else { const plan = await worldLoader.plan(m.text); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'message'); } } catch (e) { console.warn('world plan failed', e); }
     let snap = session.snapshot();
     if (m.undoId != null) { snaps.set(m.undoId, snap); if (snaps.size > SNAP_KEEP) snaps.delete(snaps.keys().next().value); }
     let budget = null;
