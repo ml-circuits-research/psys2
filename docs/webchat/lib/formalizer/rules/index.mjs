@@ -7,24 +7,24 @@
  */
 import { guard } from '../guard.mjs?v=eb1a66f556';
 import { perf } from '../perf.mjs?v=b75de4ae38';
-import { lexIndex } from '../../worlds/lexicon.mjs?v=e32ccfa9f7';
-import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=c3e9000200';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=21c825a047';
+import { lexIndex } from '../../worlds/lexicon.mjs?v=1a69f55823';
+import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=6e59e9dff8';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=8642cdeedd';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
-import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=a3f57d74eb';
-import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=86dc26d5f5';
-import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=7f75b099bd';
-import { en } from '../../lang/en.mjs?v=1977201eca';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
+import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=3dfb1cddc7';
+import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=e5fb35308a';
+import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=f1fec5bcd9';
+import { en } from '../../lang/en.mjs?v=35d25b1790';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse, serialize } from '../../soplang/index.mjs?v=c57881f705';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
 
-export { FormSession } from './session.mjs?v=86dc26d5f5';
-export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=a3f57d74eb';
-export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=c3e9000200';
-export { compilePattern, matchTokens } from './matcher.mjs?v=21c825a047';
-export { singularLemma, pluralize } from './lemma.mjs?v=36e9c81564';
+export { FormSession } from './session.mjs?v=e5fb35308a';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=3dfb1cddc7';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=6e59e9dff8';
+export { compilePattern, matchTokens } from './matcher.mjs?v=8642cdeedd';
+export { singularLemma, pluralize } from './lemma.mjs?v=88be0f95b8';
 
 const compiledCache = new WeakMap();
 /** Compile (memoized) a pattern object; returns { compiled } or { error }. */
@@ -258,11 +258,11 @@ const PROTO = { also: true, cutter: true };
 export const setProto = (p = {}) => Object.assign(PROTO, p);
 export function splitClauses(tokens) {
   const clauses = [[]];
-  const cutAt = en.cutWords(PROTO.also), seq = en.sequenceWords(PROTO.also);
+  const cutAt = en.cutWords(PROTO.also), seq = en.sequenceWords(PROTO.also), keeps = en.joinerKeeps();
   for (let i = 0; i < tokens.length; i++) {
     budget.tick('index.splitClauses');
     const t = tokens[i];
-    const sep = cutAt.has(t.lower);
+    const sep = cutAt.has(t.lower) && !(t.lower === 'and' && keeps.has(tokens[i + 1]?.lower));   // "Highlight Romania and its neighbours": 'its' continues the noun phrase
     if (!sep) { clauses[clauses.length - 1].push(t); continue; }
     if (t.lower === ',' && isFrameLead(clauses[clauses.length - 1])) continue;   // "From now on, squares should be gray": the frame of a rule belongs to the sentence it opens
     if (t.lower === 'and' && seq.includes(tokens[i + 1]?.lower)) i++;
@@ -285,13 +285,13 @@ export function registerClauseStarters(set, cards) {
   for (const c of cards ?? []) for (const w of [...(c.act ?? []), ...(c.actshared ?? []), ...(c.navact ?? [])]) if (/^[a-z]{2,}$/.test(w)) words.add(w);
   STARTERS.set(set.parent ?? set, words);
 }
-const JOINER_WORDS = en.cardJoiners();
+const JOINER_WORDS = en.cardJoiners(), KEEPS = en.joinerKeeps();
 /** Token indices where a new clause starts: the first token after a run of joiners, when it is an act word or a question word, with content on the left and at least two content tokens on the right. */
 export function cardCuts(tokens, starters) {
   const cuts = [];
   for (let i = 1; i < tokens.length; i++) {
     budget.tick('index.cardCuts');
-    if (!JOINER_WORDS.has(tokens[i].lower)) continue;
+    if (!JOINER_WORDS.has(tokens[i].lower) || (tokens[i].lower === 'and' && KEEPS.has(tokens[i + 1]?.lower))) continue;
     let j = i;
     while (j < tokens.length && JOINER_WORDS.has(tokens[j].lower)) { budget.tick('index.cardCuts'); j++; }
     const head = tokens[j];
@@ -482,6 +482,18 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
       }
     }
   }
+  // KIND NOUN OF ANOTHER WORLD (spec 20, arbitration rule 6): a schema world's act on a thing whose noun is NOT a kind of that world while it IS a kind (or the view word) of another world that reads the same
+  // sentence ("Clear the map" with the avatar tab: the avatar has no "map" on its face, the map world has the map) yields to that world. The kinds are the worlds' own generated kind lexicons.
+  if (matches.length > 1) {
+    const kindsOf = (id) => lex.lexicons.get(`lex.${id}.kinds`)?.words;
+    const noun = (m) => { const t = m.slots?.thing?.text; const w = typeof t === 'string' ? t.toLowerCase().match(/[a-z]+/g)?.at(-1) : null; return w ? [w, w.replace(/ies$/, 'y').replace(/s$/, '')] : null; };
+    for (let k = matches.length - 1; k >= 0; k--) {
+      budget.tick('rules.kindelsewhere');
+      const m = matches[k], ws = noun(m), own = kindsOf(m.pattern.worldId);
+      if (!ws || !own || m.pattern.tabClaim || context?.lastWorld === m.pattern.worldId || ws.some((w) => own.has(w))) continue;   // a world the conversation is in keeps its reading
+      if (matches.some((o) => o.pattern.worldId !== m.pattern.worldId && kindsOf(o.pattern.worldId) && ws.some((w) => Set.prototype.has.call(kindsOf(o.pattern.worldId), w)))) matches.splice(k, 1);   // the other world's own list (an open lexicon answers `has` for the whole catalog)
+    }
+  }
   const kept = applyCoveragePolicy(matches, toks.filter((t) => !t.filler).length);
   if (kept.length !== matches.length) matches.splice(0, matches.length, ...kept);
   const worlds = routeScores(toks, set, lex, new Set(matches.map((m) => m.pattern.worldId)));
@@ -642,6 +654,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     const ana = oneAnaphoraEnv();
     if (!ana) return false;
     const last = txt.split(/\s*,\s*|\s+and\s+/i).pop();
+    if (KEEPS.has(last.trim().split(/\s+/)[0]?.toLowerCase())) return false;   // "... and its neighbours" continues the noun phrase, it is not an elliptic one
     const ts = tokenize(last).filter((t) => t.kind === 'word' || t.kind === 'number');
     return ts.length >= 2 && !!en.oneAnaphora(ts, ts.length > 1 ? [{ kind: 'word', lower: 'x' }, { kind: 'word', lower: 'y' }] : [], ana.opts);
   };

@@ -91,6 +91,8 @@ export const colourNames = () => [...state.colours.keys()];
 const COLOUR_FIRST = new Set(['violet', 'rose', 'coral', 'lemon']);
 /** The colour words a formalizer lexicon may hold: every phrase of the reader except a name that is also a drawable thing and that no basic colour, k.colours entry or colour-first rule vouches for (tomato, plum, salmon, wheat). */
 export const colourLexiconWords = () => colourPhrases().filter((p) => { const c = state.colours.get(p); return !c || !c.thing || c.core || c.basic === c.name || COLOUR_FIRST.has(p); });
+/** Is `word` one of the colours people mean first: a basic or core colour of the catalog or a colour-first name (red, orange, violet)? A colour name that is only a shade of a basic colour ("peru" is brown) stays free for a name of the catalog's geography. */
+export function isCoreColour(word) { const p = colourName(word); if (!p) return false; const c = state.colours.get(p); return !c || !!c.core || c.basic === c.name || COLOUR_FIRST.has(p); }
 /** Every phrase that reads as a colour: the names and the spellings (for building a recogniser), longest first. */
 export const colourPhrases = () => [...state.colours.keys(), ...Object.keys(SPELLING)].sort((a, b) => b.length - a.length || a.localeCompare(b));
 /** The basic colours (the catalog's `basic` values: a name that is its own basic colour), in the catalog's order. */

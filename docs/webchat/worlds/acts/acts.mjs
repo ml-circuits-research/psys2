@@ -27,10 +27,10 @@ import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
 import { createEffects, EFFECT_ACTS } from './effects.mjs?v=14acca6d95';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
-import { colourName } from '../../lib/knowledge/values.mjs?v=89992abfaf';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=1977201eca';
+import { colourName } from '../../lib/knowledge/values.mjs?v=ebf19b103c';   // the one colour reader (k.values)
+import { en } from '../../lib/lang/en.mjs?v=35d25b1790';
 import { resolvePhrase } from './np-lib.mjs?v=ca8ed180cd';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
-import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=af56d011ca';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=6c02d529a0';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------

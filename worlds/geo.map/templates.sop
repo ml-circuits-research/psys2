@@ -1,187 +1,38 @@
-@tpl.geo.map.show core.template
-    for=action.geo.show
-    text="{value}"
+@gen.geo.map.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
 
-@tpl.geo.map.where core.template
-    for=action.geo.where
-    text="{value}"
+@tpl.geo.map.make core.template
+    for=action.geo.map.make
+    text="{note}"
 
-@tpl.geo.map.coords core.template
-    for=action.geo.coords
-    text="{value}"
+@tpl.geo.map.remove core.template
+    for=action.geo.map.remove
+    text="{note}"
 
-@tpl.geo.map.zoom core.template
-    for=action.geo.zoom
-    text="{value}"
+@tpl.geo.map.change core.template
+    for=action.geo.map.change
+    text="{note}"
 
-@tpl.geo.map.zoomTo core.template
-    for=action.geo.zoomTo
-    text="{value}"
+@tpl.geo.map.place core.template
+    for=action.geo.map.place
+    text="{note}"
 
-@tpl.geo.map.pan core.template
-    for=action.geo.pan
-    text="{value}"
+@tpl.geo.map.send core.template
+    for=action.geo.map.send
+    text="{note}"
 
-@tpl.geo.map.world core.template
-    for=action.geo.world
-    text="{value}"
+@tpl.geo.map.pick core.template
+    for=action.geo.map.pick
+    text="{note}"
 
-@tpl.geo.map.reset core.template
-    for=action.geo.reset
-    text="{value}"
+@tpl.geo.map.ask core.template
+    for=action.geo.map.ask
+    text="{note}"
 
-@tpl.geo.map.clearAll core.template
-    for=action.geo.clearAll
-    text="{value}"
+@tpl.geo.map.undo core.template
+    for=action.geo.map.undo
+    text="{note}"
 
-@tpl.geo.map.mark core.template
-    for=action.geo.mark
-    text="{value}"
-
-@tpl.geo.map.markHere core.template
-    for=action.geo.markHere
-    text="{value}"
-
-@tpl.geo.map.markSet core.template
-    for=action.geo.markSet
-    text="{value}"
-
-@tpl.geo.map.clearMarkers core.template
-    for=action.geo.clearMarkers
-    text="{value}"
-
-@tpl.geo.map.highlight core.template
-    for=action.geo.highlight
-    text="{value}"
-
-@tpl.geo.map.clearHighlight core.template
-    for=action.geo.clearHighlight
-    text="{value}"
-
-@tpl.geo.map.clearLines core.template
-    for=action.geo.clearLines
-    text="{value}"
-
-@tpl.geo.map.layer core.template
-    for=action.geo.layer
-    text="{value}"
-
-@tpl.geo.map.capital core.template
-    for=action.geo.capital
-    text="{value}"
-
-@tpl.geo.map.capitalOfWhich core.template
-    for=action.geo.capitalOfWhich
-    text="{value}"
-
-@tpl.geo.map.isCapital core.template
-    for=action.geo.isCapital
-    text="{value}"
-
-@tpl.geo.map.population core.template
-    for=action.geo.population
-    text="{value}"
-
-@tpl.geo.map.area core.template
-    for=action.geo.area
-    text="{value}"
-
-@tpl.geo.map.compare core.template
-    for=action.geo.compare
-    text="{value}"
-
-@tpl.geo.map.compareYN core.template
-    for=action.geo.compareYN
-    text="{value}"
-
-@tpl.geo.map.borders core.template
-    for=action.geo.borders
-    text="{value}"
-
-@tpl.geo.map.neighbourCount core.template
-    for=action.geo.neighbourCount
-    text="{value}"
-
-@tpl.geo.map.borderYN core.template
-    for=action.geo.borderYN
-    text="{value}"
-
-@tpl.geo.map.landlocked core.template
-    for=action.geo.landlocked
-    text="{value}"
-
-@tpl.geo.map.continent core.template
-    for=action.geo.continent
-    text="{value}"
-
-@tpl.geo.map.isIn core.template
-    for=action.geo.isIn
-    text="{value}"
-
-@tpl.geo.map.country core.template
-    for=action.geo.country
-    text="{value}"
-
-@tpl.geo.map.superlative core.template
-    for=action.geo.superlative
-    text="{value}"
-
-@tpl.geo.map.listOp core.template
-    for=action.geo.listOp
-    text="{value}"
-
-@tpl.geo.map.count core.template
-    for=action.geo.count
-    text="{value}"
-
-@tpl.geo.map.currency core.template
-    for=action.geo.currency
-    text="{value}"
-
-@tpl.geo.map.languages core.template
-    for=action.geo.languages
-    text="{value}"
-
-@tpl.geo.map.info core.template
-    for=action.geo.info
-    text="{value}"
-
-@tpl.geo.map.distance core.template
-    for=action.geo.distance
-    text="{value}"
-
-@tpl.geo.map.distanceFrom core.template
-    for=action.geo.distanceFrom
-    text="{value}"
-
-@tpl.geo.map.locate core.template
-    for=action.geo.locate
-    text="{value}"
-
-@tpl.geo.map.here core.template
-    for=action.geo.here
-    text="{value}"
-
-@tpl.geo.map.describe core.template
-    for=action.geo.describe
-    text="{value}"
-
-@tpl.geo.map.markers core.template
-    for=action.geo.markers
-    text="{value}"
-
-@tpl.geo.map.highlights core.template
-    for=action.geo.highlights
-    text="{value}"
-
-@tpl.geo.map.unknown core.template
-    for=action.geo.unknown
-    text="{value}"
-
-@tpl.geo.map.view core.template
-    for=action.geo.map.view
-    text="{value}"
-
-@tpl.geo.map.adopt core.template
-    for=action.geo.map.adopt
-    text="{value}"
+@tpl.geo.map.redo core.template
+    for=action.geo.map.redo
+    text="{note}"

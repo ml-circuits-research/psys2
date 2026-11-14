@@ -32,7 +32,7 @@
     word=bigger word=larger word=smaller word=more_populous word=more_populated word=less_populous word=less_populated word=more_people word=fewer_people word=more_person word=fewer_person
     word=bigger_population word=larger_population word=smaller_population word=greater word=more_inhabitant word=fewer_inhabitant
 
-@lex.geo.map.kinds core.lexicon
+@lex.geo.map.placekinds core.lexicon
     class=noun
     doc="Kinds of place that can be ranked (singular lemma; plural forms reduce to these)"
     word=city word=town word=country word=nation
@@ -2375,3 +2375,68 @@
     alt=capitals
     alt=capital_cities
     alt=capital_city
+
+@lex.geo.map.places core.lexicon
+    class=noun
+    open=place
+    catalog=k.geo
+    doc="Places: any name the catalog's k.geo knows (a country, a city, a river, a mountain, a continent), by lookup when a sentence is read (src/knowledge/open-words.mjs, knowsPlace); the words below are the names of regions the catalog has no word for (regions.mjs)"
+    word=world
+    word=earth
+    word=globe
+    word=planet
+    word=europe
+    word=asia
+    word=africa
+    word=north_america
+    word=south_america
+    word=oceania
+    word=antarctica
+    word=australia_and_new_zealand
+    word=caribbean
+    word=central_america
+    word=central_asia
+    word=central_europe
+    word=middle_europe
+    word=eastern_africa
+    word=east_africa
+    word=eastern_asia
+    word=east_asia
+    word=eastern_europe
+    word=east_europe
+    word=melanesia
+    word=micronesia
+    word=middle_africa
+    word=central_africa
+    word=northern_africa
+    word=north_africa
+    word=northern_europe
+    word=north_europe
+    word=polynesia
+    word=south-eastern_asia
+    word=southeast_asia
+    word=south_east_asia
+    word=southeast_europe
+    word=south_east_europe
+    word=southern_africa
+    word=southern_asia
+    word=south_asia
+    word=southern_europe
+    word=south_europe
+    word=western_africa
+    word=west_africa
+    word=western_asia
+    word=west_asia
+    word=western_europe
+    word=west_europe
+    word=european_union
+    word=nato
+    word=scandinavia
+    word=nordic
+    word=nordic_countries
+    word=baltic
+    word=baltic_states
+    word=benelux
+    word=balkan
+    word=balkans
+    word=middle_east
