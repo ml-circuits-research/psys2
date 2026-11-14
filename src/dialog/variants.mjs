@@ -226,7 +226,7 @@ export async function withVariants(dialog, formal, opts) {
   const segments = [];
   for (const seg of formal.segments) {
     let out = null;
-    if ((seg.unparsed || isIncomplete(seg)) && seg.text) {   // an incomplete reading is not final: it goes to the same voices as an unread clause (spec 16 section 12)
+    if ((seg.unparsed || isIncomplete(seg)) && seg.text) {   // an incomplete reading is not final: it goes to the same readers as an unread clause (spec 16 section 12)
       budget.tick('variants.segment');
       try {
         if (!out && on('PSYS2_FORMOPS')) {   // typed form operators (spec 16 section 11): the clause rewritten by the admitted operators, each candidate read by the rules, the world decides, two different readings: none

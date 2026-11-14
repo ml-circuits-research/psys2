@@ -3,24 +3,24 @@
 /**
  * FORM OPERATORS learnt from the aligned pairs of training/eval/form-pairs.jsonl by the vendored library's `learnFormOperators` (spec 16, "Learned reading rules" and section 11).
  *
- *   node scripts/learn-operators.mjs [--facts k.animals] [--catalog <dir>] [--source paraphrases-rt|owner-log|cousins|all] [--untyped] [--all] [--out file.json] [--ops-out file.json]
+ *   node scripts/learn-operators.mjs [--facts k.animals] [--catalog <dir>] [--source paraphrases-rt|owner-log|cousins|all (cousins = the old name of the related-cases pairs)] [--untyped] [--all] [--out file.json] [--ops-out file.json]
  *
  * Pairs: `same_meaning` rows (a variant and its canonical). A third (stable hash of the variant) is held out: never used to learn (unless `--all`), only to check that an operator brings the
- * variant back to its canonical sentence. By default the pairs are lifted through the typed world (0.89 `liftTokens`: a thing becomes <its type>, so "cow" and "dog" give one operator);
+ * variant back to its canonical sentence. By default the pairs are lifted through the typed world (0.89 `liftTokens`, `delexicalise` since 0.111: a thing becomes <its type>, so "cow" and "dog" give one operator);
  * `--untyped` learns on the words (the 0.84 behaviour). Output: how many operators cover 80 % / 95 % of the aligned pairs, the inventory with examples, and a reading check in the script:
  * a held-out variant is rewritten by the admitted operators (src/dialog/form-operators.mjs, the same code as the runtime step) and read by `readByTypes`; judged against the frame of its
  * canonical, with and without the operators. `--ops-out` writes the admitted operators for the runtime step (PSYS2_FORMOPS=on, PSYS2_FORMOPS_FILE).
  */
 import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { READ } from './lib/cousins-host.mjs';
+import { READ } from './lib/related-cases-host.mjs';
 import { formOperatorTexts } from '../src/dialog/form-operators.mjs';
 import { loadPairs, typedWorld, learn, isHeldOut } from './lib/formops-host.mjs';
 
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
 const flag = (k) => process.argv.includes(`--${k}`);
 const lib = await import('../src/vendor/sopworld/sopworld.mjs');
-if (!lib.learnFormOperators || !lib.liftTokens) throw new Error('the vendored sopworld has no typed form operators (needs 0.89)');
+if (!lib.learnFormOperators || !lib.delexicalise) throw new Error('the vendored sopworld has no typed form operators (needs 0.89)');
 const world = typedWorld(lib, { catalog: arg('catalog', undefined), facts: arg('facts', 'k.animals') });
 const src = arg('source', 'all');
 const pairs = loadPairs({ source: src });

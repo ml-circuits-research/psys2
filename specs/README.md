@@ -29,4 +29,5 @@ PSys2 is a neurosymbolic assistant that runs entirely in the browser, with no se
 | [20-meta-worlds.md](20-meta-worlds.md) | meta.worlds: cards per world, live facts, routing rules with reasons, the encoder as one prior, the `routing` setting, the hold-out experiment |
 | [19-space-module.md](19-space-module.md) | Tab worlds and shared modules (modules never compete in routing); the module `space`: selection by position, relative moves, placements, layouts, questions, the spatial words |
 | [21-acts-and-schemas.md](21-acts-and-schemas.md) | Acts x schemas: about twelve universal acts with six roles, worlds declared as schemas, the generic executor with undo, difference and why-answer, the graded fallback |
+| [27-glossary.md](27-glossary.md) | Glossary: related cases, ensemble members / readers, paraphrase rewrite rules and the other established terms; the library's docs/literature.md has the sources |
 | [decisions/ADR-009](decisions/ADR-009-nx-encoder-formalizer-in-the-webchat.md) | The NX encoder formalizer in the webchat: strategy setting (hybrid default, neural, rules), one encoder pass |

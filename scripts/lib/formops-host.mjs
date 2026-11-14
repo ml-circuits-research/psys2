@@ -7,7 +7,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildWorld } from '../cousins.mjs';
+import { buildWorld } from '../related-cases.mjs';
 
 export const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 /** A third of the pairs, by a stable hash of the variant, is held out (never learnt from). */
