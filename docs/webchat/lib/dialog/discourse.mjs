@@ -14,13 +14,13 @@
  *     formalizer, restricted to the frame's world. It is accepted only when the result is fully understood there.
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
-import { restrictedSet } from '../formalizer/spell.mjs?v=c0e4009005';
-import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=26e548acf9';
+import { restrictedSet } from '../formalizer/spell.mjs?v=4a9931ae96';
+import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=3ec9167cca';
 import { lastUnfinished } from '../astra/where.mjs?v=72e99182f4';
 import { runDiscussionCommand } from '../astra/session.mjs?v=65217ad31a';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=aa6dfcad14';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { en } from '../lang/en.mjs?v=eeaa2a6b1f';
+import { en } from '../lang/en.mjs?v=061a6ba9b3';
 import { touchedCount } from './followup.mjs?v=88af56c068';
 
 export const FRAME_LIMIT = 5;
@@ -1041,6 +1041,9 @@ export class Discourse {
 
   /** The statements an answer rests on, as the user said them ("I worked it out from ..."); with the matrix reasoner they come from the library's explanation. */
   _because(f) {
+    // a request a PLAN carried out (specs/24): the world says which method and why, in the words of the knowledge that holds it (hook `whyPlan`, only while the plan is the newest change)
+    const plan = f.world ? this.dialog.engine.interp.hook(this.dialog.isession, f.world, 'whyPlan', {}, { state: this.dialog.isession.state[f.world] ?? {} }) : null;
+    if (plan?.value) return [{ text: ` ${plan.value}`, translate: true }];
     if (f.from?.length) return this._known(f.from);
     if (f.fromLater) { const k = this._known(f.fromLater()); if (k.length) return k; }
     // a question a world answered from its own state (a schema world: no wires of an instance to name): it says what it looked at, its `source` phrase ("the picture")

@@ -7,6 +7,7 @@ import * as D from './engine.mjs';
 import * as space from '../space/space.mjs';
 import { splitThings } from '../acts/acts.mjs';
 import { partsOf, kindKey, kindName } from './scene.mjs';
+import * as P from './plan.mjs';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const TAIL = new Set(['there', 'here', 'now', 'added', 'drawn', 'too', 'also', 'please', 'pls', 'plz', 'thx', 'thanks', 'are', 'is', 'again', 'exactly', 'go']);   // words a role slot took that belong to the frame ("how many trees there are")
@@ -65,7 +66,8 @@ function thingsOf(ctx) {
 // In the open tab the board holds the focus of the dialogue: a reading it accepts does not yield to another world's reading without free text ("draw a sea" is not a chart palette).
 const accepts = (info) => { const v = acceptsWords(info); return v === true && info.tab === 'art.draw' ? 'focus' : v; };
 const np0Known = (k) => D.kindOfWord(k) != null || D.kindOfWord(k.replace(/s$/, '')) != null;
-function acceptsWords({ action, mode, roles, text, state, kindWord, tab }) {   // outside its own tab the board claims only a reading it fully supports (every word of the thing is read); in its tab the leniency stages may ignore a word
+function acceptsWords({ action, mode, roles, text, state, kindWord, tab }) {
+  // outside its own tab the board claims only a reading it fully supports (every word of the thing is read); in its tab the leniency stages may ignore a word
   const act = String(action ?? '').split('.').pop();
   if (!['make', 'remove', 'change', 'place', 'group', 'pick', 'ask', 'copy'].includes(act)) return true;
   const said = roles.thing ?? roles.rest ?? '';
@@ -92,17 +94,52 @@ function acceptsWords({ action, mode, roles, text, state, kindWord, tab }) {   /
   const t = words(text).join(' ');
   if (act === 'make' && /^(?:please |can you |could you )?(?:draw|sketch|paint|doodle)\b/.test(t)) {   // "draw" claims whatever follows only when its last word is a thing this board (or the catalog vocabulary) knows: "draw a flowchart with Start, Check and Done" is not a thing it draws, and the world that has flowcharts reads it
     const k = words(roles.thing).filter((x) => !DET.has(x) && !/^\d+$/.test(x)).at(-1);
-    return tab !== 'art.draw' || !k || np0Known(k) || kindWord?.(k) === true || kindWord?.(k.replace(/s$/, '')) === true || D.parseNP(roles.thing).known || 'refuse';
+    return tab !== 'art.draw' || !k || np0Known(k) || kindWord?.(k) === true || kindWord?.(k.replace(/s$/, '')) === true || D.parseNP(roles.thing).known || P.goalWord(roles.thing) || 'refuse';
   }
   const np = D.parseNP(said);
   if (tab && tab !== 'art.draw' && !np.known && !np.pron && !np.special) return false;   // outside its own tab the board claims only a reading it fully supports: every word of the thing is read ("paragraph The cat sat" is not a thing it draws)
   if (D.drawingNP(np) || np.pron || np.special || (PRONOUN.test(words(said)[0] ?? '') && act !== 'make')) return true;   // "it upside down": a pronoun first, the rest is how
-  if (act === 'make') { const k = words(roles.thing).filter((x) => !DET.has(x) && !/^\d+$/.test(x)).at(-1); return !!k && (D.kindOfWord(k) != null || D.kindOfWord(k.replace(/s$/, '')) != null || kindWord?.(k) === true); }   // a word of the catalog vocabulary (the schema's kind lexicon) is a thing to draw even before the lookup found its picture
+  if (act === 'make') { const k = words(roles.thing).filter((x) => !DET.has(x) && !/^\d+$/.test(x)).at(-1); return !!k && (D.kindOfWord(k) != null || D.kindOfWord(k.replace(/s$/, '')) != null || kindWord?.(k) === true || (tab === 'art.draw' && P.goalWord(roles.thing))); }   // a word of the catalog vocabulary (the schema's kind lexicon) is a thing to draw even before the lookup found its picture
+  // a thing the catalog names that is not drawn yet, put somewhere ("put a scarf on the girl"): the place act is the board's, the plan makes the thing there (cold, before any lookup registered the kind)
+  if (act === 'place' && roles.place && (state?.objects ?? []).length > 0 && P.goalWord(roles.thing)) return true;
   return !!np.known && (state?.objects ?? []).length > 0;
+}
+
+/** A request that is a GOAL ("a farm", "a person on the swing", "a family photo", "put the girl on the swing"): when the plan host has a method for it, the plan is run on the picture (one request, one undo step); else undefined and the board's own reading goes on. */
+function tryPlan(ctx, act, r) {
+  let goal = null;
+  try {
+    if (act === 'place' && r.mode === 'layout') goal = P.layoutGoal(r);   // "arrange them like a family photo": the people there, as that arrangement
+    else if (act === 'place') {
+      const np = D.parseNP(r.thing), rr = D.resolveNP(ctx.state, np);
+      if (rr?.objs?.length === 1) { goal = P.goalOf('place', { kind: rr.objs[0].id }, { ...r, thing: rr.objs[0].id }); if (goal) goal = { act: 'place', roles: { thing: rr.objs[0].id, place: goal.roles.place } }; }
+      else if (!np.known && !np.pron && P.goalWord(r.thing)) goal = P.goalOf('make', addArgs({ thing: r.thing }), r);   // a thing of the catalog that is not in the picture, put somewhere ("put a scarf on the girl"): the goal is to make it there
+    } else { const said = { ...r, thing: r.said ?? r.thing }; goal = P.goalOf('make', addArgs(said), said); }
+  } catch { goal = null; }
+  if (goal?.act === 'place' && !goal.roles.place) return undefined;
+  let pl = null;
+  for (const g of [goal, P.goalFromText(r.text)]) {   // the roles as read, then the sentence's own words ("set a table for four")
+    if (!g) continue;
+    const c = P.canonGoal(ctx, g);
+    if ((pl = P.planFor(ctx, c))) { goal = c; break; }
+  }
+  if (!pl) return undefined;
+  const said = goal.act === 'place' ? P.placeSaid(r) : P.goalSaid(goal);
+  const res = !goal.also ? P.runPlan(ctx, goal, pl, said) : D.oneStep(ctx, `drew ${said}`, () => {   // "a queen with a crown": the plan of the queen, then what she should have and the plan did not give, on her (one undo step for both)
+    const r1 = P.runPlan(ctx, goal, pl, said);
+    const more = r1?.status === 'supported' && P.alsoGoal(ctx, goal), pl2 = more && P.planFor(ctx, P.canonGoal(ctx, more));
+    const r2 = pl2 && P.runPlan(ctx, more, pl2, P.goalSaid(more));
+    if (r2?.status === 'supported') return { ...r2, value: `${r1.value} ${r2.value}`, note: `${r1.value} ${r2.value}` };
+    if (more && r1?.status === 'supported') { const t = `${r1.value} I left out the ${goal.also} (my knowledge has no way to give it to ${P.goalSaid(goal)} yet).`; return { ...r1, value: t, note: t }; }   // said, not dropped
+    return r1;
+  });
+  if (res?.status === 'supported' && ctx.state.lastPlan) ctx.state.lastPlan.at = ctx.state.history.length;
+  return res;
 }
 
 export const hooks = {
   thingsOf,
+  before: (ctx, act, req) => { if (typeof req.thing === 'string') { req.said = req.thing; if (P.goalWord(req.thing)) req.keep = true; } },   // the knowledge tier may rewrite the thing to the kind it is of ("farm" -> "thing"): a plan needs the words as said
   afterGroup: (st) => { st.prev = st.history.at(-1) ?? null; },   // one undo step per message: the picture before the newest step is the one the grouped step left
   accepts,
   referents: D.referents,
@@ -111,6 +148,7 @@ export const hooks = {
     make: (ctx, r) => {
       if (r.rel === 'to' && PRONOUN.test(String(r.place ?? '').trim())) r = { ...r, rel: undefined, place: undefined };   // "it needs a rainbow": the pronoun is no owner, the sentence is a wish
       if (r.mode === 'random') return D.scene(ctx, {});
+      if (r.thing && (!r.mode || r.mode === 'bare' && !r.pre)) { const planned = tryPlan(ctx, 'make', r); if (planned) return planned; }
       if (r.pre && r.mode === 'bare' && !/\b(?:between|under|over|above|below|behind|next to|beside|near|in front of|left|right|top|bottom)\b/.test(words(r.pre).join(' '))) {   // a bare kind after words the form did not name: "yo could you sketch a purple" -> the colour and size words are the modifiers
         const pw = words(r.pre), mods = pw.filter((x) => D.isShade(x) || D.isColorWord(x) || Object.hasOwn(D.SIZE_WORDS, x)), n = pw.find((x) => /^\d+$/.test(x));
         if (mods.length || n) r = { ...r, m1: r.m1 ?? mods[0], m2: r.m2 ?? mods[1], amount: r.amount ?? n };
@@ -164,6 +202,9 @@ export const hooks = {
       return undefined;
     },
     place: (ctx, r) => {
+      // "put the house and the tree together as a village": things named and put together is the group act, with the name said (what "together" means is the same wherever the sentence is read)
+      { const tg = !r.place && /^(.+?)\s+together(?:\s+(?:as|into|in)\s+(?:an?\s+|the\s+)?(.+))?$/i.exec(String(r.thing ?? '').trim().replace(/[.!?]+$/, '')); if (tg) return D.group(ctx, { t: tg[1], ...(tg[2] ? { name: tg[2].trim() } : {}) }); }
+      if (r.thing && (!r.mode || r.mode === 'layout')) { const planned = tryPlan(ctx, 'place', r); if (planned) return planned; }
       { // the thing the generic reading took may carry the noise of the sentence: "house needs to be on the" (+ left), "house over" (+ to the right)
         const tw = words(r.thing); const cut = tw.findIndex((x, i) => i > 0 && /^(?:needs|need|should|must|has|so|which|that)$/.test(x));
         const onThe = cut >= 0 && /\bon\b/.test(tw.slice(cut).join(' ')) || /\bon (?:the)?$/.test(tw.join(' '));

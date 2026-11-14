@@ -10,6 +10,7 @@
  * The catalog is `engine.knowledge` (`createEngine({ options: { knowledge } })`); without it every function here does nothing and the dialog is as it was.
  */
 import { leftOut, requestOf } from './world-aware.mjs';
+import { planHostOf } from '../plan/host.mjs';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 const wordsOf = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}-]+/gu) ?? [];
@@ -151,10 +152,22 @@ export function needsOf(world) {
 }
 const needKey = (n) => `${n.type}@${n.from ?? ''}`;
 
+/** Loads the methods a goal can use (src/plan/host.mjs) and asks the catalog for the kinds its plan makes, so the world runs it with everything at hand. At most 30 kinds, one bound for all (the caller's). */
+async function preparePlan(dialog, cat, { goal, words, world }) {
+  const host = planHostOf(cat);
+  if (!host || !(await host.load(words))) return;
+  if (!goal) return;
+  const things = dialog.engine.interp.hook(dialog.isession, world, 'planLive', {}, { state: dialog.isession.state[world] ?? {} });
+  const p = host.plan(goal, Array.isArray(things) ? things : []);
+  if (!p?.method || p.refused) return;
+  const kinds = [...new Set(p.requests.filter((q) => q.action === 'make' && q.args.kind).map((q) => String(q.args.kind)))].slice(0, 30);
+  await Promise.all(kinds.map((k) => Promise.resolve(cat.thing(k)).catch(() => null)));
+}
+
 export async function preloadThings(dialog, segments) {
   const cat = knowledgeOf(dialog);
   if (!cat) return [];
-  const names = new Set(), drawNames = new Set(), needs = new Map(), lists = new Set();
+  const names = new Set(), drawNames = new Set(), needs = new Map(), lists = new Set(), plans = [];
   const foreign = !!dialog._waLang && dialog._waLang !== 'en';
   for (const seg of segments ?? []) {
     if (seg.unparsed) continue;
@@ -168,6 +181,9 @@ export async function preloadThings(dialog, segments) {
         // the words of the types whose wires the operation lists or looks up ("animals", "mix"): the catalog loads the wires of the types the schemas' words mean (`preloadWires`)
         const listWords = dialog.engine.interp.hook(dialog.isession, rq.world, 'listNeeds', { action: rq.action, args: rq.args }, { state: dialog.isession.state[rq.world] ?? {} });
         for (const n of Array.isArray(listWords) ? listWords : []) if (n && String(n).split(/\s+/).length <= 2) lists.add(String(n).toLowerCase());
+        // a reading that may be a GOAL (specs/24): the methods it can use are loaded (and the kinds the plan makes asked of the catalog) before the world runs it
+        const goal = dialog.engine.interp.hook(dialog.isession, rq.world, 'planGoal', { action: rq.action, args: rq.args }, { state: dialog.isession.state[rq.world] ?? {} });
+        if (goal?.words?.length) plans.push({ ...goal, world: rq.world });
         if (rq.args.thing) names.add(String(rq.args.thing).toLowerCase());
       }
       // a request that hands things to a VIEW (`things.show ... to=map`) is read by the store's world: the view's own typed needs (the map's places) are loaded before it adopts them
@@ -188,6 +204,7 @@ export async function preloadThings(dialog, segments) {
   const done = [];
   const all = (async () => {
     for (const n of needs.values()) { try { await cat.load?.(n); } catch { /* no model is no change */ } }
+    for (const g of plans.slice(0, 1)) { try { await preparePlan(dialog, cat, g); } catch { /* no plan is no change: the world's own reading goes on */ } }
     for (const n of [...lists].slice(0, 3)) { try { await cat.preloadWires?.(n); } catch { /* no list is no answer */ } }
     for (const n of [...names].slice(0, 6)) {
       try {

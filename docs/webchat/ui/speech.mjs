@@ -497,7 +497,11 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
   }
   /** The voice that would read `lang` (a BCP-47 tag), or null when the device has none: the caller says so in Settings (the default voice is used then). */
   const voiceFor = (lang) => pickVoice(lang) ?? null;
-  function speak(text, { lang } = {}) {
+  // The voice hints of a world that reads a text aloud (docs.reader: speed and voice of the reading, spec 21 section 14): a rate factor and a kind of voice. The device decides the rest: a "female" or "male" voice is a
+  // voice of the language whose name says so when there is one, "deep", "high" and "child" are the pitch.
+  const FEMALE = /female|woman|zira|samantha|susan|hazel|karen|moira|fiona|victoria|tessa|google uk english female|google us english/i, MALE = /(?<!fe)male|\bman\b|david|mark|daniel|george|alex|fred|ralph|james|oliver|google uk english male/i;
+  const PITCH = { deep: 0.6, high: 1.5, child: 1.8 };
+  function speak(text, { lang, rate, voice } = {}) {
     if (!speechSupport.synthesis || !String(text).trim() || hidden) return Promise.resolve(false);
     // recognition must not hear the speaker
     if (rec) { wantRestart = handsFree; abortRec(); }
@@ -507,8 +511,10 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
       let left = parts.length;
       for (const part of parts) {
         const u = new SpeechSynthesisUtterance(part);
-        u.lang = tag; u.rate = getRate?.() ?? 1;
-        const v = pickVoice(tag);
+        u.lang = tag; u.rate = Math.max(0.5, Math.min(3, (getRate?.() ?? 1) * (Number(rate) > 0 ? Number(rate) : 1)));
+        let v = pickVoice(tag);
+        if (voice === 'female' || voice === 'male') { const all = (synth?.getVoices?.() ?? []).filter((x) => x.lang?.startsWith(tag.slice(0, 2))); v = all.find((x) => (voice === 'female' ? FEMALE : MALE).test(x.name)) ?? v; }
+        if (PITCH[voice]) u.pitch = PITCH[voice];
         if (v) u.voice = v;
         speaking++;
         const done = () => {

@@ -20,11 +20,11 @@ const ops = await engineWith('ops');
 test('vendor: the library is the pinned file, unmodified, and passes its own loop scan', () => {
   const notes = readFileSync(path.join(ROOT, 'src/vendor/LICENSES.md'), 'utf8');
   const file = readFileSync(path.join(ROOT, 'src/vendor/sopworld/sopworld.mjs'));
-  assert.match(notes, /919d20d/, 'the commit is named');
-  assert.match(notes, /build `b0e6cba3be8b`/, 'the build is recorded');
+  assert.match(notes, /1d1c3c6/, 'the commit is named');
+  assert.match(notes, /build `dd893aeaf6c0`/, 'the build is recorded');
   assert.match(notes, new RegExp(`${file.length} bytes`), 'the size is recorded');
   assert.match(notes, new RegExp(createHash('sha256').update(file).digest('hex')), 'the sha256 of the vendored file is recorded');
-  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.54\.0 /);
+  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.56\.0 /);
   assert.equal(scan(path.join(ROOT, 'src/vendor/sopworld')).join('\n'), '', 'the library\'s own scanner finds no unguarded loop in the vendored file');
   assert.ok(readFileSync(path.join(ROOT, 'src/vendor/sopworld/LICENSE'), 'utf8').startsWith('MIT License'));
 });
@@ -35,7 +35,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
   assert.equal(ops.reasonerMode, 'ops');
   assert.equal(ops.reasoner, null);
   assert.equal(ops.createSession({ language: 'en' }).isession.rs, null);
-  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time', 'kids.animals', 'user.profile', 'docs.reader', 'games.chess']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);   // (geo.map is a schema world since its switch: no matrix)
+  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time', 'kids.animals', 'user.profile', 'games.chess']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);   // (geo.map, media.music and docs.reader are schema worlds since their switches: no matrix)
   assert.equal(ops.set.get('ui.shell').reasoner, 'matrix');
   assert.equal(ops.set.get('kids.shop').patterns.some((p) => p.id.includes('.m.')), false, 'the matrix-only patterns are not loaded in ops mode');
   assert.deepEqual(ops.problems(), []);
@@ -43,7 +43,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
 
 test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.buildAll(), []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['common.sense', 'docs.reader', 'games.chess', 'games.guess', 'games.hangman', 'games.tictactoe', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'ui.help', 'ui.shell', 'user.profile']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['common.sense', 'games.chess', 'games.guess', 'games.hangman', 'games.tictactoe', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'ui.help', 'ui.shell', 'user.profile']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
@@ -56,15 +56,6 @@ test('parity gate (switch on): kids.shop 168, kids.tasks 241, kids.arith 243, ga
     const r = await runWorldTests(matrix, id);
     // the 13 rows of the diagram switch and the 10 rows of the data.charts switch are on the ledger (training/eval/failures.jsonl, source "bug-batch diagram switch"); every other row of every world passes
     assert.deepEqual(r.failed.map((f) => f.id).filter((x) => (id !== 'diagram.sketch' || !LEDGERED_DIAGRAM.includes(x)) && (id !== 'data.charts' || !LEDGERED_CHARTS.includes(x)) && (id !== 'art.draw' || !LEDGERED_DRAW.includes(x)) && !(id === 'user.profile' && x === 't.user.profile.dlg04')), [], id);   /* dlg04: on the ledger since KNOWLEDGE-OUT step 5 (spelling: vocabulary counts lost with deleted patterns) */ assert.equal(r.total, n);
-  }
-});
-
-test('parity: the other worlds that read these three (charts, documents) are unchanged with the switch on', async () => {
-  for (const id of ['docs.reader']) {
-    const r = await runWorldTests(matrix, id);
-    const o = await runWorldTests(ops, id);
-    assert.deepEqual(r.failed, o.failed, `${id} fails the same tests with the switch on and off`);
-    assert.equal(r.passed, o.passed);
   }
 });
 

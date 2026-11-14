@@ -21,7 +21,7 @@ const actionOf = operationKey;
 const BAD = /\b(it|its|them|that|those|one|ones|lol|x|q's)\b/i;
 const FRAGMENT_OK = /\b(is|are|was|were|has|have|should|can|could|will|needs|says|looks)\b/i;
 // operations that only exist as follow-ups to a question or as refusals: no canonical example is offered for them
-export const FOLLOWUPS = new Set(['chat.ask', 'draw.askKind', 'docr.pick', 'chess.pick', 'music.askWhat', 'geo.askPlace', 'geo.unknown', 'avatar.setPartUnknown',
+export const FOLLOWUPS = new Set(['chat.ask', 'draw.askKind', 'docr.pickSection', 'chess.pick', 'music.askWhat', 'geo.askPlace', 'geo.unknown', 'avatar.setPartUnknown',
   'draw.open', 'ui.newGame', 'ui.hint']);   // the last three are owned by the shell or depend on the game that is open
 const DENY = new Set(['Let me play alpha three.', 'Is pawn to e5 possible?', 'Add some snow to the ground.', 'My name is.', 'Name of mine you know?', 'Zed is fine by me.', 'Chart needs an update.', 'Take it out.', 'Tom has just eaten 2 more.', 'Let me play echo four.', 'Hungary has access to sea?',
   'Who has more pieces worth?', 'Word has an a?', 'Far is Madrid from Lisbon?', 'Tell me x.', 'How many Hansel mentions?', 'Who has the edge?', 'Am I beating you?', 'Remember a kite is 4 lei.',

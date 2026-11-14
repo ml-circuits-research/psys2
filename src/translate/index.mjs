@@ -9,7 +9,6 @@
 // `text` and reported in the extra field `untranslatable: [{span, reason}]` (confidence 0).
 import { tokenize, foldKey } from './normalize.mjs';
 import { analyze, placeOf, surfaceForms } from './morphology.ro.mjs';
-import { translateRoEn } from './ro-en.mjs';
 import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord, knownEnglishWord } from './en-ro.mjs';
 
 // Romanian evidence, in points (a rough log-odds of "Romanian" against "English"), for words typed with OR without diacritics.
@@ -134,6 +133,15 @@ export function detectLanguage(text) {
   return { lang: 'en', confidence: Math.round((en / total) * (0.5 + 0.5 * Math.min(1, total / 2)) * 1000) / 1000 };
 }
 
+// The Romanian -> English rules (ro-en.mjs and its phrase tables, 140 KB) are needed only by a Romanian turn. Node (the CLI, the server, the tests) keeps them loaded with the module; a browser host
+// that sets `globalThis.__psys2LazyRoEn` before importing this module loads them on demand: `loadRoEn()` (the host calls it when the language is not English), and a ro -> en `translate` that
+// finds them missing returns a promise that waits for them (every caller of the rules awaits the answer).
+let roEn = null, roEnLoading = null;
+export function loadRoEn() { return roEn ? Promise.resolve(roEn) : (roEnLoading ??= import('./ro-en.mjs').then((m) => (roEn = m.translateRoEn), (e) => { roEnLoading = null; throw e; })); }
+/** True when the Romanian -> English rules are in memory. */
+export const roEnLoaded = () => !!roEn;
+if (!globalThis.__psys2LazyRoEn) await loadRoEn();
+
 export function translate(text, opts = {}) {
   const source = String(text ?? '');
   let from = opts.from;
@@ -142,7 +150,7 @@ export function translate(text, opts = {}) {
   if (from === to && (from === 'ro' || from === 'en')) {
     return { text: source, alignment: source ? [{ src: [0, source.length], tgt: [0, source.length] }] : [], unknown: [], notes: ['source and target language are the same'], confidence: 1 };
   }
-  if (from === 'ro' && to === 'en') return translateRoEn(source);
+  if (from === 'ro' && to === 'en') return roEn ? roEn(source) : loadRoEn().then((f) => f(source));
   if (from === 'en' && to === 'ro') return translateEnRo(source);
   return { text: '', alignment: [], unknown: [], notes: [`unsupported language pair ${from} -> ${to}`], confidence: 0, untranslatable: source ? [{ span: [0, source.length], reason: `unsupported language pair ${from} -> ${to}` }] : [] };
 }
@@ -166,4 +174,4 @@ export function createTranslator() {
 export { foldKey };
 export { normalizeText } from './normalize.mjs';
 export { lemmaOfNoun, analyzeVerbForm, stripAdjAgreement } from './morphology.ro.mjs';
-export default { detectLanguage, translate, createTranslator };
+export default { detectLanguage, translate, createTranslator, loadRoEn };

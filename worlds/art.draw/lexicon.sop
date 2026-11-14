@@ -6,8 +6,12 @@
     doc="Kinds of things of this world (from schema.sop)"
     open=knowledge
     catalog=k.objects
+    catalog=k.wearables/shards/wearables
     catalog=k.animals
     catalog=k.food
+    catalog=k.people/shards/roles
+    catalog=k.scenes/shards/scenes
+    catalog=k.procedures/shards/tasks
     word=thing
     word=things
     word=object

@@ -30,7 +30,7 @@ export function withView(schema, ns, hooks = {}) {
     cur.ctx = ctx; cur.note = '';
     hooks.before?.(ctx, act, req);
     const k = kn();
-    if (!k || typeof req.thing !== 'string') return;
+    if (!k || typeof req.thing !== 'string' || req.keep) return;   // `keep`: the world reads the words as said (a goal word of a plan: "farm" is not "a kind of thing")
     const ts = toks(req.thing);
     const content = ts.filter((w) => !SKIP.has(w) && !/^\d+$/.test(w));
     if (!content.length || content.some((w) => kindOf(w))) return;

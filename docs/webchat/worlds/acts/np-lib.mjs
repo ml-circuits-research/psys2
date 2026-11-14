@@ -5,7 +5,7 @@
 // (3) turns the library's answer into the executor's result shape ({ ids, source, kind, guess } | { ask, candidates }). What the library does not read (it returns no ids, or a
 // reading the executor's own rules refuse) is left to the executor: it keeps the failure classes of its replies (no such kind, none of that kind, nothing in focus).
 // Browser-safe: no `node:*`.
-import { World, resolve as libResolve } from '../../lib/vendor/sopworld/sopworld.mjs?v=d358daf8ad';
+import { World, resolve as libResolve } from '../../lib/vendor/sopworld/sopworld.mjs?v=1e7afc0b40';
 import { LANG_EN_FACTS } from '../../lib/lang/en.facts.generated.mjs?v=b2645dfa61';
 
 // the grammar of the catalog world w.lang.en (shards of the bundle): the productions and the closed classes of English noun phrases
@@ -119,7 +119,7 @@ export function resolvePhrase(items, text, opts) {
   const kind = words.map((x) => lexicon[x]).find((x) => x?.cat === 'N')?.lemma ?? null;
   const ids = (xs) => xs.map((x) => idOf.get(x));
   if (r.ask === true && r.which?.length === 1) return { ids: ids(r.which), tier: 'user', kind };   // "table 1 or table 1" is one thing
-  if (r.ask === true && r.which?.length) {   // a choice or a part of a set: the library asks, with the things it could be
+  if (r.ask === true && r.which?.length && r.failure !== 'ambiguous') {   // a choice or a part of a set: the library asks, with the things it could be (0.57 marks the plain "which table? there are 3" with ask too: the number and plural rules below read that one)
     const part = /^which (\d+) of/.exec(r.why ?? '');
     return { ask: ids(r.which), how: part ? 'part' : 'choice', ...(part ? { n: Number(part[1]) } : {}), kind };
   }

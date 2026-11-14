@@ -22,15 +22,15 @@
 
 import { ACT_VERBS } from './verbs.generated.mjs?v=b363aaaa66';
 import { FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=75b22014a6';
-import { FLAGS_DATA } from './forms.data.mjs?v=949dc4408a';   // more forms (flags `valued`, `ordered`): named values said without their name
+import { FLAGS_DATA } from './forms.data.mjs?v=54c931cc9e';   // more forms (flags `valued`, `ordered`): named values said without their name
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
-import { createEffects, EFFECT_ACTS } from './effects.mjs?v=a19016c754';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
+import { createEffects, EFFECT_ACTS } from './effects.mjs?v=7717f4c736';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=eeaa2a6b1f';
-import { resolvePhrase } from './np-lib.mjs?v=533969a238';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
-import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=53e6c7198d';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { en } from '../../lib/lang/en.mjs?v=061a6ba9b3';
+import { resolvePhrase } from './np-lib.mjs?v=c76914b9ec';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
+import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=e6ea6f1de7';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------
@@ -95,6 +95,7 @@ export function parseSchema(wires) {
   if (Object.keys(flags).length) schema.flags = flags;   // self: the world is a character ("yourself"); dir: direction words for place; be: "be / look X"; has: "do you have X"; bare: a bare thing is a request
   if (val(sw, 'boost')) schema.boost = Number(val(sw, 'boost'));
   if (val(sw, 'sample')) schema.sample = val(sw, 'sample');
+  if (vals(sw, 'canonical').length) schema.canonical = vals(sw, 'canonical');   // frame-id prefixes whose examples are offered as help (a reader's "Add a document." is a true but useless example): `canonical=r.` marks the frames of the set that names its own
   if (val(sw, 'hooks')) schema.hooks = val(sw, 'hooks');   // a sibling module with the world's hooks (knowledge, domain effects, projection): host code the schema cannot say
   if (vals(sw, 'own').length) schema.own = vals(sw, 'own');   // "<export>:<action>": operations of the world that are not acts (a name, a moment of the stage), exported by own.mjs
   const vw = wires.find((x) => x.type === 'acts.view');   // the world is a VIEW of the session's things (spec 23): the aspects it shows and the words that name it
@@ -182,7 +183,7 @@ export function generate(schema, ns, actsUrl = '../acts/acts.mjs', isCanon = () 
   const boost = Number(schema.boost ?? 0);   // a world whose signals (named shapes, arrows, chart words) beat the open tab of another world
   for (const f of forms) {
     const emit = `@{_} core.request action=${ns}.${f.act}${f.mode ? ` arg.mode=${f.mode}` : ''}${Object.entries(f.lit ?? {}).map(([k, v]) => ` arg.${k}=\\"${v}\\"`).join('')}${f.args.map((a) => ` arg.${a}=\\"{${a}}\\"`).join('')} arg.text=\\"{segment}\\"`;
-    pats.push(`@pat.${ns}.${f.id} core.pattern\n    match="${expandMatch(f.match, ns)}"\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority + boost}\n    tabPriority=${(f.tabPriority ?? f.priority + 8) + boost}\n${schema.flags?.signal ? "    signal=true\n" : ""}${CLAIMING.has(f.id) || schema.flags?.claim ? '    tabClaim=true\n' : ''}${(f.tabOnly ?? (schema.tabOnly || (schema.flags?.tabUndo && (f.act === 'undo' || f.act === 'redo')))) ? "    tabOnly=true\n" : ""}    example=${JSON.stringify(exampleOf(schema, f))}\n${isCanon(exampleOf(schema, f)) && sayable(schema, exampleOf(schema, f)) ? `    canonical=${JSON.stringify(exampleOf(schema, f))}\n` : ''}`);
+    pats.push(`@pat.${ns}.${f.id} core.pattern\n    match="${expandMatch(f.match, ns)}"\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority + boost}\n    tabPriority=${(f.tabPriority ?? f.priority + 8) + boost}\n${schema.flags?.signal ? "    signal=true\n" : ""}${CLAIMING.has(f.id) || schema.flags?.claim ? '    tabClaim=true\n' : ''}${(f.tabOnly ?? (schema.tabOnly || (schema.flags?.tabUndo && (f.act === 'undo' || f.act === 'redo')))) ? "    tabOnly=true\n" : ""}    example=${JSON.stringify(exampleOf(schema, f))}\n${isCanon(exampleOf(schema, f)) && sayable(schema, exampleOf(schema, f)) && (!schema.canonical || schema.canonical.some((x) => f.id.startsWith(x))) ? `    canonical=${JSON.stringify(exampleOf(schema, f))}\n` : ''}`);
   }
   const used = [...new Set(forms.map((f) => f.act))];
   const own = (schema.own ?? []).map((o) => o.split(':'));

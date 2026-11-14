@@ -4078,3 +4078,31 @@ The rules of the face over time are in the catalog (`k.motion`: layers, blinks, 
 
 Reviewer ran `npm run test:smoke` on fb7783e3: 89/89 pass, exit 0; boot probe (25 s, local, unthrottled): **214 requests / 5.9 MB** (from 223 / 21.4 MB; 366 / 31.5 MB this morning). The reviewer's probe still lists `sopworld.mjs` and `en.facts` twice (page and worker targets); your server-side count says one fetch each, the second from the HTTP cache: accepted as measured at the server. One small residual: `lib/translate/ro-en.mjs` (89 KB) loads at boot in an English session; load it with the Romanian path.
 **Now:** sopworld 0.56 reads the published `k.motion` (its Q39: same changes as the knowledge oracle on 12 plans). Vendor 0.56, read k.motion from the catalog, delete `MOTION_RULES_TEMPORARY` and the local scheduler parts (motion.mjs becomes a thin call or goes). Then plans from knowledge (std.plan 0.55), learning curve, grid/paraphrase, Q13.
+
+## Reviewer 2026-11-14 13:55 — PLANS FROM KNOWLEDGE accepted (19 → 51 of 60)
+
+Reviewer ran `npm run test:smoke` on 54ddaf7f: 89/89 pass, exit 0, and read the worker-log (60-request set judged by state: hand path 19/60 → plan path 51/60, right→wrong 0, both reasoners). Accepted; keeping the composites the plan calls as primitives is right.
+1. The 9 still wrong go to the failure ledger **grouped by cause** (goal not recognised: "with" as a place; method missing an anchor: throne; existing thing not reused: the scarf on the girl drawn again; …); each cause gets one general fix in the right repo (a method or anchor → knowledge ask; reuse of an existing referent → planner binding `live=` / PSys2 goal reading), not point fixes.
+2. Still open from 13:15: vendor sopworld 0.57 (≥0.56) and read `k.motion`, delete `MOTION_RULES_TEMPORARY`; `ro-en.mjs` out of the English boot.
+3. Then learning curve, grid/paraphrase, Q13.
+
+## Reviewer 2026-11-14 14:15 — RANDOM as a world: the dice, Talk examples and tab buttons from `std.sample` (owner, 09:42); after the 13:55 items 1–2
+
+No hard-coded examples. The library is asked for `std.sample` (random frames constrained by schemas, state and knowledge, weighted by recency and novelty, rendered by the language world and kept only if they read back to the same frame and a dry run is not refused). In PSys2:
+1. **The dice in the input bar** gives one random command for the open tab's world or a recently used one (not from `surprise-pool.json`).
+2. **Talk:** 3–4 example commands chosen from the context (the topics and worlds of the session, less usual things), refreshed each turn; the welcome examples also come from the sampler.
+3. **Action buttons in every tab:** the acts relevant to the selected or most recent thing of that view (e.g. on a drawn house: colour, move, take apart, add a door), from `sample(..., 'actions')`, not per-tab lists.
+4. **Tabs that fill the screen** (Drawing, Diagram, Map, Charts, editor, games…) get their own small dice that generates a random command in that tab.
+5. **Delete what this replaces:** `surprise-pool.json` (214 hand-validated texts, a 25-minute build step), hard-coded welcome examples and per-tab example lists; and the coverage-grid generator uses the same sampler (its placeholders and nonsense combinations were a defect of a separate generator).
+6. **Measure:** of 200 dice samples across tabs: the share understood and executed without refusal, judged by state (target ≥ 95 %), distinct acts / kinds / attributes, no placeholder or nonsense text (attach 30 random samples to the landing note for the reviewer to read). Until `std.sample` is released, write the host side against its described interface, do not build a local generator.
+
+## Reviewer 2026-11-14 14:30 — avatar on k.motion accepted (708a9f8d)
+
+Reviewer ran `npm run test:smoke` on 708a9f8d: 89/89 pass, exit 0; `MOTION_RULES_TEMPORARY` is gone and motion.mjs (113 lines) only keeps the host's event log and clock over `std.motion` + `k.motion`. Accepted. Next: 13:55 item 1 (the 9 plan failures by cause), `ro-en.mjs` out of the English boot, then RANDOM (14:15) when `std.sample` lands, learning curve, grid/paraphrase, Q13.
+
+## Reviewer 2026-11-14 14:45 — SUMMARY and COMPOSITION (owner, 09:53); after RANDOM (14:15)
+
+The library builds `std.summarize` and `std.compose`; the knowledge repository writes `k.interest` and discourse templates. PSys2 (no LLM, all through the library):
+1. **Talk summary from `std.summarize`**: "what you did" as a short paragraph generated from the turn log (aggregated: "You drew five animals and a farm, seated six guests, asked two capitals; you taught me that a hamster is a pet; one request was not understood."), plus the existing structured list under it. Also an act "summarise this" for the open document or a pasted text (Documents tab).
+2. **Composition in the Documents tab**: a button opens a small form (topic, empty = random; chapters, subchapters, size) and writes the essay into a new document with `std.compose`, combining worlds at random and interestingly; the same through commands ("write an essay about volcanoes with 3 chapters of 2 subchapters, about 600 words", "write a composition about anything"). Each claim keeps its source (the "why" of a sentence names the wire).
+3. **Measure:** 20 compositions (10 random, 10 with a topic): shape exact, every sentence reads back, every claim traced, repetition, interest score; attach 3 to the landing note for the reviewer and the owner to read. Summaries: on owner-log b/c replayed, the summary names every world used and every taught fact (the existing test) and fits in 3 sentences.
