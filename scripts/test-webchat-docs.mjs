@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
- * Browser scenarios of the document worlds on the matrix reasoner (spec 15, "docs.editor and docs.reader on the matrix"). Not a program of its own: it is added
- * to the scenarios of scripts/test-webchat-matrix.mjs (`--only editor,reader`), which gives it the helpers.
+ * Browser scenarios of the document worlds on the matrix reasoner (spec 15, "docs.editor on the matrix"; the docs.reader scenario went with the tab cut of 2026-11-15). Not a program of its own: it is added
+ * to the scenarios of scripts/test-webchat-matrix.mjs (`--only editor`), which gives it the helpers.
  *   editor   the page and the "undo steps" counter follow the document wires; a target that does not exist is refused by the rules with the reason; "undo" says
  *            what it put back in the world's words and the page shows it again; "redo" says what it did again.
- *   reader   (docs.reader is a schema world since 2026-11-14: the shelf is no longer wires, "undo that" does not put a closed document back) a sentence that does not exist is refused with the reason, a document that was closed is gone from the
- *            a closed document is gone from the shelf.
  */
 export const docScenarios = ({ openChat, MATRIX, check, say }) => ({
   async editor(o) {
@@ -27,23 +25,6 @@ export const docScenarios = ({ openChat, MATRIX, check, say }) => ({
       const d = await say(c, 'redo');
       check('editor: "redo" does it again and says so', d === 'OK, I deleted the paragraph again.' && !/Second one here\./.test(await page()), d.slice(0, 80));
       check('editor: no page errors', c.errors.length === 0, c.errors[0] ?? '');
-    } finally { await c.close(); }
-  },
-  async reader(o) {
-    const c = await openChat({ ...o, settings: MATRIX });
-    try {
-      const shelf = () => c.pg.$$eval('.dr-doc', (els) => els.length).catch(() => -1);
-      const title = () => c.pg.$eval('.dr-title', (el) => el.innerText).catch(() => '');
-      await say(c, 'Show me the documents tab');
-      const a = await say(c, 'who is Hansel?');
-      check('reader: a question is answered from the open document and the tab shows it', /^Hansel is a boy/.test(a) && /Hansel and Gretel/.test(await title()), `${a.slice(0, 40)} | ${await title()}`);
-      const r = await say(c, 'read sentence 99');
-      check('reader: a sentence that does not exist is refused, with the reason (the reader keeps its own count since its switch to schema + acts)', r === '"Hansel and Gretel" has only 66 sentences.', r.slice(0, 80));
-      await say(c, 'close the document');
-      const n = await shelf();
-      const q = await say(c, 'who is Hansel?');
-      check('reader: a closed document is gone from the shelf and the question says there is none', n === 0 && /^There is no document open\./.test(q), `${n} | ${q.slice(0, 60)}`);
-      check('reader: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
 });

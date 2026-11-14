@@ -11,14 +11,14 @@
  *                           words are the rest, no content word may be left over (the frame of `readByTypes`, assembled from the world's lexicons instead of a typed fact world)
  * Browser-safe: no `node:*`.
  */
-import { formalize as rulesFormalize } from '../formalizer/rules/index.mjs?v=50ff331b8a';
+import { formalize as rulesFormalize } from '../formalizer/rules/index.mjs?v=a0baba0c86';
 import { buildWires, SEGMENT_SLOT } from '../formalizer/rules/emit.mjs?v=8e51d17dc1';
 import { lexIndex } from '../worlds/lexicon.mjs?v=9a10989e46';
-import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=50ff331b8a';
-import { FILLER } from './world-aware.mjs?v=1e82798e72';
+import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=a0baba0c86';
+import { FILLER } from './world-aware.mjs?v=4912212754';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { formOperatorTexts } from './form-operators.mjs?v=4807498111';
-import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=50ff331b8a';
+import { formOperatorTexts } from './form-operators.mjs?v=93b9a943fe';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=a0baba0c86';
 
 /** A catalog lookup waits at most LOOKUP_MS; a catalog that does not answer in time is no catalog (the reading is then the rules'), and the turn never waits for it. */
 const LOOKUP_MS = 400;
@@ -226,7 +226,7 @@ export async function withVariants(dialog, formal, opts) {
   const segments = [];
   for (const seg of formal.segments) {
     let out = null;
-    if ((seg.unparsed || isIncomplete(seg)) && seg.text) {   // an incomplete reading is not final: it goes to the same voices as an unread clause (spec 16 section 12)
+    if ((seg.unparsed || isIncomplete(seg)) && seg.text) {   // an incomplete reading is not final: it goes to the same readers as an unread clause (spec 16 section 12)
       budget.tick('variants.segment');
       try {
         if (!out && on('PSYS2_FORMOPS')) {   // typed form operators (spec 16 section 11): the clause rewritten by the admitted operators, each candidate read by the rules, the world decides, two different readings: none

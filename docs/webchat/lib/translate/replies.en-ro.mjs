@@ -14,7 +14,7 @@
 // Entries are matched against the whole trimmed sentence; the order of the table does not matter (exact, most specific first).
 
 import { places as PLACE_LIST } from './places.ro-en.mjs?v=97dc087c2a';
-import { CANONICAL_RO } from './canonical.en-ro.mjs?v=2b71c7e520';
+import { CANONICAL_RO } from './canonical.en-ro.mjs?v=dcd82cdc4b';
 const COLOURS = { red: 'roșu', yellow: 'galben', blue: 'albastru', green: 'verde', orange: 'portocaliu', purple: 'mov', violet: 'violet', pink: 'roz', brown: 'maro', black: 'negru', white: 'alb', gray: 'gri', grey: 'gri', turquoise: 'turcoaz', coral: 'coral', beige: 'bej', gold: 'auriu', silver: 'argintiu', tan: 'bronzat' };
 const DAYS = { Monday: 'luni', Tuesday: 'marți', Wednesday: 'miercuri', Thursday: 'joi', Friday: 'vineri', Saturday: 'sâmbătă', Sunday: 'duminică' };
 const MONTHS = { January: 'ianuarie', February: 'februarie', March: 'martie', April: 'aprilie', May: 'mai', June: 'iunie', July: 'iulie', August: 'august', September: 'septembrie', October: 'octombrie', November: 'noiembrie', December: 'decembrie' };
@@ -55,9 +55,10 @@ function animalListRo(v, sub) {
 
 
 const SHAPE_RO = { circle: ['un cerc', 'cercuri'], rectangle: ['un dreptunghi', 'dreptunghiuri'], square: ['un pătrat', 'pătrate'], diamond: ['un romb', 'romburi'], ellipse: ['o elipsă', 'elipse'], triangle: ['un triunghi', 'triunghiuri'], hexagon: ['un hexagon', 'hexagoane'], star: ['o stea', 'stele'], text: ['un text', 'texte'] };
-const DIAGRAM_FORMS = { cycle: 'ciclu', process: 'proces', hierarchy: 'ierarhie', pyramid: 'piramidă', timeline: 'cronologie', funnel: 'pâlnie', hub: 'stea', list: 'listă' };
-const DIAGRAM_UNITS = { step: 'pas', steps: 'pași', season: 'anotimp', seasons: 'anotimpuri', box: 'casetă', boxes: 'casete', level: 'nivel', levels: 'niveluri', stage: 'etapă', stages: 'etape', item: 'element', items: 'elemente' };
-const COUNT_WORDS = { one: 'un', two: 'doi', three: 'trei', four: 'patru', five: 'cinci', six: 'șase', seven: 'șapte', eight: 'opt', nine: 'nouă', ten: 'zece' };
+const DIAGRAM_FORMS = { cycle: 'ciclu', process: 'proces', hierarchy: 'ierarhie', pyramid: 'piramidă', timeline: 'cronologie', funnel: 'pâlnie', hub: 'stea', list: 'listă', flowchart: 'schemă logică', tree: 'arbore', 'mind map': 'hartă mentală', Venn: 'Venn', 'org chart': 'organigramă', network: 'rețea', pipeline: 'flux', 'comparison table': 'tabel comparativ' };   // the kinds of k.diagrams (spec 14 section 9) and the engine's templates
+const DIAGRAM_KIND_SAID = { flowchart: 'schemă logică', tree: 'arbore', cycle: 'ciclu', timeline: 'cronologie', 'mind map': 'hartă mentală', 'venn diagram': 'diagramă Venn', venn: 'diagramă Venn', 'org chart': 'organigramă', network: 'rețea', pipeline: 'flux', 'comparison table': 'tabel comparativ', table: 'tabel', diagram: 'diagramă', chart: 'schemă' };   // what a person said when the knowledge has nothing to draw it from
+const DIAGRAM_UNITS = { shape: 'formă', shapes: 'forme', step: 'pas', steps: 'pași', season: 'anotimp', seasons: 'anotimpuri', box: 'casetă', boxes: 'casete', level: 'nivel', levels: 'niveluri', stage: 'etapă', stages: 'etape', item: 'element', items: 'elemente' };
+const COUNT_WORDS = { one: 'un', two: 'doi', three: 'trei', four: 'patru', five: 'cinci', six: 'șase', seven: 'șapte', eight: 'opt', nine: 'nouă', ten: 'zece', eleven: 'unsprezece', twelve: 'douăsprezece' };
 /** "a circle, 3 triangles and a star" -> "un cerc, 3 triunghiuri și o stea". */
 function shapesRo(v) {
   const out = v.split(/, | and /).map((x) => {
@@ -76,9 +77,10 @@ const TAB_RO = { Avatar: 'Avatar', Editor: 'Editor', 'Tic-tac-toe': 'X și 0', '
 const SLOTS = {
   ids: ['([a-z]\\d+(?:, [a-z]\\d+)*(?: and [a-z]\\d+)?)', (v) => v.replace(' and ', ' și ')],   // diagram ids (c1, r2 and a3)
   shapes: ['((?:an? [a-z]+|\\d+ [a-z]+)(?:, (?:an? [a-z]+|\\d+ [a-z]+))*(?: and (?:an? [a-z]+|\\d+ [a-z]+))?)', shapesRo],   // "a circle", "3 triangles and a star" (diagram replies)
-  dform: ['(cycle|process|hierarchy|pyramid|timeline|funnel|hub|list)', mapper(DIAGRAM_FORMS)],
-  dunit: ['(steps|seasons|boxes|levels|stages|items|step|box|item)', mapper(DIAGRAM_UNITS)],
-  dcount: ['(one|two|three|four|five|six|seven|eight|nine|ten)', mapper(COUNT_WORDS)],
+  dform: ['(cycle|process|hierarchy|pyramid|timeline|funnel|hub|list|flowchart|tree|mind map|Venn|org chart|network|pipeline|comparison table)', mapper(DIAGRAM_FORMS)],
+  dunit: ['(steps|seasons|boxes|levels|stages|items|shapes|step|box|item|shape)', mapper(DIAGRAM_UNITS)],
+  dcount: ['(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)', mapper(COUNT_WORDS)],
+  dsaid: ['(flowchart|tree|cycle|timeline|mind map|Venn diagram|venn|org chart|network|pipeline|comparison table|table|diagram|chart)', mapper(DIAGRAM_KIND_SAID, { ci: true })],
   tab: [`(${Object.keys(TAB_RO).join('|')})`, (v) => TAB_RO[v] ?? null],   // the title of a tab
   n: ['(-?\\d[\\d,.]*)', (v) => v, (v) => (Number(String(v).replace(/,/g, '')) >= 20 ? `${v} de` : v)],
   w: ["([\\p{L}\\d'’\\-]+)", (v) => v],
@@ -206,6 +208,12 @@ const TABLE = [
   ['Drew {ids}.', 'Am desenat {ids}.'],
   ['Drew {shapes}.', 'Am desenat {shapes}.'],
   ['I drew a random {dform} diagram with {dcount} {dunit}.', 'Am desenat o diagramă aleatorie de tip {dform}, cu {dcount} {dunit}.'],
+  ['I drew a {dform} diagram with {dcount} {dunit}.', 'Am desenat o diagramă de tip {dform}, cu {dcount} {dunit}.'],
+  ['It is about {np}.', 'Este despre {np}.'],
+  ['It is on top of what was there; undo takes it away.', 'Este peste ce era deja acolo; „anulează” o elimină.'],
+  ['I do not know enough about {np} to draw a {dsaid} of it yet.', 'Nu știu destule despre {np} ca să desenez {dsaid}.'],
+  ['I do not know enough to draw a {dsaid} diagram yet.', 'Nu știu încă destule ca să desenez o diagramă de tip {dsaid}.'],
+  ['The diagram knowledge is still loading. Please say that again in a moment.', 'Cunoștințele pentru diagrame se încarcă încă. Mai spune o dată peste puțin timp.'],
   ['Here is a fresh sheet of paper!', 'Iată o foaie nouă de hârtie!'], ['It is night now: a dark sky, a moon and lots of stars.', 'Acum este noapte: un cer întunecat, o lună și o mulțime de stele.'],
   ['New game of tic-tac-toe.', 'Joc nou de x și 0.'], ['"{q}" has {n} words.', '"{q}" are {n} cuvinte.'],
   ['Where should it go?', 'Unde ar trebui să meargă?'], 

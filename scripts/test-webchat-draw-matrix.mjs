@@ -7,7 +7,7 @@
  *   diagram  the diagram on the tab follows the wires: an arrow that is already there is refused with the reason, undo and redo go through the timeline in the
  *            editor's words, the tab keeps its shapes and arrows.
  */
-// UNDO-REDO: the Undo and Redo buttons of the Drawing, Chess and Diagram tabs send "undo" / "redo" like the words do. A button is pressed like a user does.
+// UNDO-REDO: the Undo and Redo buttons of the Drawing and Diagram tabs send "undo" / "redo" like the words do. A button is pressed like a user does.
 const press = async (c, selector, label) => {
   const n = await c.pg.$$eval('.p2-msg.is-bot:not(.is-typing)', (e) => e.length);
   const hit = await c.pg.evaluate((sel, lab) => { const b = [...document.querySelectorAll(sel)].find((x) => x.textContent.trim().includes(lab)); if (!b || b.disabled) return false; b.click(); return true; }, selector, label);
@@ -40,12 +40,6 @@ export const drawScenarios = ({ openChat, MATRIX, OPS, check, say }) => ({
         check(`undoredo ${label}: "undo the house" through a tab switch takes the house back alone`, /took back "draw a house"|would also have to take back/.test(f), f.slice(0, 120));
         const w = await say(c, 'undo the whole message');
         check(`undoredo ${label}: "undo the whole message" answers`, /whole message|nothing|took|back/i.test(w), w.slice(0, 100));
-        // the chess tab
-        await say(c, 'play chess');
-        await say(c, 'e2 to e4');
-        const g = await press(c, '.cx-btn', 'Undo');
-        const h = await press(c, '.cx-btn', 'Redo');
-        check(`undoredo ${label}: chess Undo then Redo buttons take the move back and play it again`, /took back your last move/.test(g ?? '') && /did it again: "e2 to e4"/.test(h ?? '') && (await st('games.chess')).history?.length >= 1, `${g} | ${h}`);
         // the diagram tab
         await say(c, 'open the diagram tab');
         await say(c, 'draw a red box called Start');
