@@ -784,8 +784,8 @@
     "worlds/words/zo.json": "3761b1887d22fef8",
     "worlds/words.bloom.json": "31b72fca04a401b8"
   },
-  "builtAt": "2026-11-14T10:07:59.481Z",
-  "commit": "a23fe8b9-dirty",
+  "builtAt": "2026-11-14T10:10:50.133Z",
+  "commit": "7dab38c4-dirty",
   "assets": {
     "app.mjs": "8e3c4e60e3",
     "coverage-grid.json": "dda508bf6b",
