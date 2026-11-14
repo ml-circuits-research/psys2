@@ -8,7 +8,6 @@
 const bare = (v) => String(v).replace(/^"|"$/g, '').replace(/^\$/, '');
 const words = (s) => String(s).replace(/_/g, ' ');
 const META = new Set(['name', 'about', 'thing', 'source', 'own', 'cite', 'derived', 'named']);
-const VOWELS = 'aeiou';
 /** "a, b and c": the English way to join a list. */
 export const joinList = (a) => (a.length < 2 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
 const TYPE_KEYS = new Set(['class', 'kind', 'is']);   // the keys that say what a thing is: "is a bird"
@@ -20,7 +19,6 @@ export function englishOf(lib, world) {
   const aux = new Set(world.ofType('w.lang.en.aux').map((w) => bare(w.attrs.text?.[0])));
   const verbs = new Set(world.ofType('k.actions.action').map((w) => bare(w.attrs.name?.[0])));
   const joins = new Set(world.ofType('core.slot').filter((w) => w.attrs.type && w.attrs.key).map((w) => `${bare(w.attrs.of?.[0])}:${bare(w.attrs.key[0])}`));
-  const onsets = world.ofType('w.lang.en.onset').map((w) => [bare(w.attrs.begins?.[0]), bare(w.attrs.sound?.[0])]).sort((a, b) => b[0].length - a[0].length);
   const places = new Set(world.ofType('k.geo.country').concat(world.ofType('k.geo.city')).map((w) => bare(w.attrs.name?.[0])));
 
   /** The plural of a noun: an irregular one the world holds, else the regular spelling (s, es, ies). */
@@ -31,12 +29,8 @@ export function englishOf(lib, world) {
     if (/(s|x|z|ch|sh)$/.test(x)) return `${x}es`;
     return `${x}s`;
   };
-  /** a before a consonant sound, an before a vowel sound (the world's det facts say which; its onsets say which words begin otherwise than they are spelled). */
-  const article = (w) => {
-    const x = String(w).toLowerCase();
-    const o = onsets.find(([b]) => x.startsWith(b));
-    return (o ? o[1] === 'vowel' : VOWELS.includes(x[0])) ? 'an' : 'a';
-  };
+  /** a before a consonant sound, an before a vowel sound: the library's `articleFor` over the world's det and onset facts. */
+  const article = (w) => lib.articleFor(world, w) ?? 'a';
   const inflect = (w, feats = {}) => (feats.num === 'pl' ? plural(w) : w);
   const np = (name) => (places.has(bare(name)) ? bare(name) : `the ${words(bare(name))}`);
   const ownKey = (type) => (k) => joins.has(`${type}:${k}`);
