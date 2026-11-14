@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * Fills training/eval/failures.jsonl (the failure ledger; worker-tasks "NO POINT FIXES": a failing case is data, not a task).
- * Row: { text, tab, language, happened, expected, class, source, first_seen, build, was_passing } (+ happened_then for replays).
+ * Row: { real, text, tab, language, happened, expected, class, source, first_seen, build, was_passing }  (real: true when the row came from a real user turn, scripts/lib/real-source.mjs) (+ happened_then for replays).
  * APPEND-ONLY: existing rows are kept; a row whose (source, text, tab) is already in the file is not added again. Other agents append rows too.
  * Sources replayed on the CURRENT build: the three owner logs (scripts/eval-owner-log.mjs), minimal pairs, dialogues, coherence (rules / matrix reasoner).
  * Sources read from their result files: round-trip translation failures, WORLD-OF-WORLDS routing confusions (one group).
@@ -14,6 +14,7 @@ import { spawnSync } from 'node:child_process';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { classify as rtClassify } from './mt-roundtrip-classify.mjs';
+import { isRealRow, realDialogueIds } from './lib/real-source.mjs';
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const LEDGER = join(REPO, 'training/eval/failures.jsonl');
 const arg = (k) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : undefined; };
@@ -22,7 +23,8 @@ const build = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: REPO, en
 const today = new Date().toISOString().slice(0, 10);
 const jsonl = (p) => readFileSync(join(REPO, p), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
 const rows = [];
-const add = (r) => rows.push({ text: r.text, tab: r.tab ?? null, language: r.language ?? 'en', happened: String(r.happened ?? '').slice(0, 300), expected: typeof r.expected === 'string' ? r.expected : JSON.stringify(r.expected ?? null), class: r.class ?? 'unclassified', source: r.source, first_seen: r.first_seen ?? today, build: r.build ?? build, was_passing: r.was_passing ?? false, ...(r.happened_then ? { happened_then: String(r.happened_then).slice(0, 200) } : {}) });
+const dlgReal = realDialogueIds(REPO);
+const add = (r) => rows.push({ real: isRealRow({ source: r.source }, dlgReal), text: r.text, tab: r.tab ?? null, language: r.language ?? 'en', happened: String(r.happened ?? '').slice(0, 300), expected: typeof r.expected === 'string' ? r.expected : JSON.stringify(r.expected ?? null), class: r.class ?? 'unclassified', source: r.source, first_seen: r.first_seen ?? today, build: r.build ?? build, was_passing: r.was_passing ?? false, ...(r.happened_then ? { happened_then: String(r.happened_then).slice(0, 200) } : {}) });
 const run = (script, args) => spawnSync(process.execPath, [join(REPO, 'scripts', script), ...args], { cwd: REPO, encoding: 'utf8', maxBuffer: 1 << 28 });
 
 if (!skip.has('replay')) {
