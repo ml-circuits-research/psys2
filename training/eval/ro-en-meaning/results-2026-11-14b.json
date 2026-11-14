@@ -1,0 +1,1608 @@
+{
+ "paths": [
+  "rules",
+  "model",
+  "m4",
+  "m4+model",
+  "grammar",
+  "grammar+rules",
+  "grammar+m4",
+  "grammar>m4+model",
+  "grammar-lib0",
+  "grammar-lib",
+  "grammar-lib>m4+model",
+  "best-of(rules,model,grammar)"
+ ],
+ "tally": {
+  "all": {
+   "all": {
+    "n": 9328,
+    "rules": {
+     "kept": 4800,
+     "act": 1613,
+     "abstain": 4
+    },
+    "model": {
+     "kept": 4067,
+     "act": 1870,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 4798,
+     "act": 1633,
+     "abstain": 4
+    },
+    "m4+model": {
+     "kept": 5194,
+     "act": 2007,
+     "abstain": 1
+    },
+    "grammar": {
+     "kept": 1580,
+     "act": 180,
+     "abstain": 7489
+    },
+    "grammar+rules": {
+     "kept": 4913,
+     "act": 1516,
+     "abstain": 5
+    },
+    "grammar+m4": {
+     "kept": 4894,
+     "act": 1552,
+     "abstain": 5
+    },
+    "grammar>m4+model": {
+     "kept": 5414,
+     "act": 1876,
+     "abstain": 1
+    },
+    "grammar-lib0": {
+     "kept": 814,
+     "act": 48,
+     "abstain": 8328
+    },
+    "grammar-lib": {
+     "kept": 1139,
+     "act": 111,
+     "abstain": 7935
+    },
+    "grammar-lib>m4+model": {
+     "kept": 5252,
+     "act": 1932,
+     "abstain": 1
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 6147,
+     "act": 1126,
+     "abstain": 3
+    }
+   }
+  },
+  "source": {
+   "operational": {
+    "n": 2222,
+    "rules": {
+     "kept": 1584,
+     "act": 177,
+     "abstain": 2
+    },
+    "model": {
+     "kept": 953,
+     "act": 284,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 1587,
+     "act": 176,
+     "abstain": 2
+    },
+    "m4+model": {
+     "kept": 1541,
+     "act": 287,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 321,
+     "act": 27,
+     "abstain": 1854
+    },
+    "grammar+rules": {
+     "kept": 1585,
+     "act": 177,
+     "abstain": 3
+    },
+    "grammar+m4": {
+     "kept": 1588,
+     "act": 176,
+     "abstain": 3
+    },
+    "grammar>m4+model": {
+     "kept": 1573,
+     "act": 268,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 185,
+     "act": 14,
+     "abstain": 1987
+    },
+    "grammar-lib": {
+     "kept": 215,
+     "act": 16,
+     "abstain": 1955
+    },
+    "grammar-lib>m4+model": {
+     "kept": 1532,
+     "act": 283,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 1762,
+     "act": 140,
+     "abstain": 2
+    }
+   },
+   "canon": {
+    "n": 1638,
+    "rules": {
+     "kept": 692,
+     "act": 148,
+     "abstain": 0
+    },
+    "model": {
+     "kept": 815,
+     "act": 207,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 695,
+     "act": 155,
+     "abstain": 0
+    },
+    "m4+model": {
+     "kept": 954,
+     "act": 204,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 52,
+     "act": 14,
+     "abstain": 1557
+    },
+    "grammar+rules": {
+     "kept": 690,
+     "act": 147,
+     "abstain": 0
+    },
+    "grammar+m4": {
+     "kept": 693,
+     "act": 154,
+     "abstain": 0
+    },
+    "grammar>m4+model": {
+     "kept": 959,
+     "act": 201,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 16,
+     "act": 12,
+     "abstain": 1592
+    },
+    "grammar-lib": {
+     "kept": 21,
+     "act": 12,
+     "abstain": 1587
+    },
+    "grammar-lib>m4+model": {
+     "kept": 942,
+     "act": 207,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 1055,
+     "act": 98,
+     "abstain": 0
+    }
+   },
+   "real": {
+    "n": 141,
+    "rules": {
+     "kept": 49,
+     "act": 39,
+     "abstain": 1
+    },
+    "model": {
+     "kept": 52,
+     "act": 47,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 53,
+     "act": 39,
+     "abstain": 1
+    },
+    "m4+model": {
+     "kept": 59,
+     "act": 40,
+     "abstain": 1
+    },
+    "grammar": {
+     "kept": 37,
+     "act": 9,
+     "abstain": 93
+    },
+    "grammar+rules": {
+     "kept": 56,
+     "act": 33,
+     "abstain": 1
+    },
+    "grammar+m4": {
+     "kept": 60,
+     "act": 34,
+     "abstain": 1
+    },
+    "grammar>m4+model": {
+     "kept": 63,
+     "act": 38,
+     "abstain": 1
+    },
+    "grammar-lib0": {
+     "kept": 8,
+     "act": 1,
+     "abstain": 131
+    },
+    "grammar-lib": {
+     "kept": 22,
+     "act": 3,
+     "abstain": 115
+    },
+    "grammar-lib>m4+model": {
+     "kept": 59,
+     "act": 40,
+     "abstain": 1
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 68,
+     "act": 26,
+     "abstain": 1
+    }
+   },
+   "talk": {
+    "n": 108,
+    "rules": {
+     "kept": 55,
+     "act": 18,
+     "abstain": 0
+    },
+    "model": {
+     "kept": 69,
+     "act": 20,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 55,
+     "act": 19,
+     "abstain": 0
+    },
+    "m4+model": {
+     "kept": 76,
+     "act": 19,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 24,
+     "act": 1,
+     "abstain": 83
+    },
+    "grammar+rules": {
+     "kept": 55,
+     "act": 18,
+     "abstain": 0
+    },
+    "grammar+m4": {
+     "kept": 55,
+     "act": 19,
+     "abstain": 0
+    },
+    "grammar>m4+model": {
+     "kept": 80,
+     "act": 16,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 13,
+     "act": 0,
+     "abstain": 93
+    },
+    "grammar-lib": {
+     "kept": 13,
+     "act": 0,
+     "abstain": 93
+    },
+    "grammar-lib>m4+model": {
+     "kept": 76,
+     "act": 18,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 84,
+     "act": 9,
+     "abstain": 0
+    }
+   },
+   "template": {
+    "n": 1368,
+    "rules": {
+     "kept": 1073,
+     "act": 246,
+     "abstain": 0
+    },
+    "model": {
+     "kept": 806,
+     "act": 271,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 1073,
+     "act": 253,
+     "abstain": 0
+    },
+    "m4+model": {
+     "kept": 962,
+     "act": 267,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 978,
+     "act": 99,
+     "abstain": 287
+    },
+    "grammar+rules": {
+     "kept": 1174,
+     "act": 161,
+     "abstain": 0
+    },
+    "grammar+m4": {
+     "kept": 1157,
+     "act": 183,
+     "abstain": 0
+    },
+    "grammar>m4+model": {
+     "kept": 1127,
+     "act": 182,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 523,
+     "act": 14,
+     "abstain": 769
+    },
+    "grammar-lib": {
+     "kept": 756,
+     "act": 69,
+     "abstain": 481
+    },
+    "grammar-lib>m4+model": {
+     "kept": 1043,
+     "act": 197,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 1226,
+     "act": 121,
+     "abstain": 0
+    }
+   },
+   "grid": {
+    "n": 3581,
+    "rules": {
+     "kept": 1282,
+     "act": 948,
+     "abstain": 0
+    },
+    "model": {
+     "kept": 1316,
+     "act": 982,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 1270,
+     "act": 948,
+     "abstain": 0
+    },
+    "m4+model": {
+     "kept": 1518,
+     "act": 1119,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 150,
+     "act": 27,
+     "abstain": 3366
+    },
+    "grammar+rules": {
+     "kept": 1287,
+     "act": 941,
+     "abstain": 0
+    },
+    "grammar+m4": {
+     "kept": 1275,
+     "act": 941,
+     "abstain": 0
+    },
+    "grammar>m4+model": {
+     "kept": 1527,
+     "act": 1098,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 63,
+     "act": 7,
+     "abstain": 3495
+    },
+    "grammar-lib": {
+     "kept": 101,
+     "act": 11,
+     "abstain": 3448
+    },
+    "grammar-lib>m4+model": {
+     "kept": 1516,
+     "act": 1116,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 1857,
+     "act": 700,
+     "abstain": 0
+    }
+   },
+   "roundtrip": {
+    "n": 270,
+    "rules": {
+     "kept": 65,
+     "act": 37,
+     "abstain": 1
+    },
+    "model": {
+     "kept": 56,
+     "act": 59,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 65,
+     "act": 43,
+     "abstain": 1
+    },
+    "m4+model": {
+     "kept": 84,
+     "act": 71,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 18,
+     "act": 3,
+     "abstain": 249
+    },
+    "grammar+rules": {
+     "kept": 66,
+     "act": 39,
+     "abstain": 1
+    },
+    "grammar+m4": {
+     "kept": 66,
+     "act": 45,
+     "abstain": 1
+    },
+    "grammar>m4+model": {
+     "kept": 85,
+     "act": 73,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 6,
+     "act": 0,
+     "abstain": 261
+    },
+    "grammar-lib": {
+     "kept": 11,
+     "act": 0,
+     "abstain": 256
+    },
+    "grammar-lib>m4+model": {
+     "kept": 84,
+     "act": 71,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 95,
+     "act": 32,
+     "abstain": 0
+    }
+   }
+  },
+  "kind": {
+   "command": {
+    "n": 4647,
+    "rules": {
+     "kept": 1976,
+     "act": 1175,
+     "abstain": 1
+    },
+    "model": {
+     "kept": 1988,
+     "act": 1203,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 1973,
+     "act": 1180,
+     "abstain": 1
+    },
+    "m4+model": {
+     "kept": 2319,
+     "act": 1317,
+     "abstain": 1
+    },
+    "grammar": {
+     "kept": 899,
+     "act": 134,
+     "abstain": 3563
+    },
+    "grammar+rules": {
+     "kept": 2071,
+     "act": 1068,
+     "abstain": 1
+    },
+    "grammar+m4": {
+     "kept": 2068,
+     "act": 1072,
+     "abstain": 1
+    },
+    "grammar>m4+model": {
+     "kept": 2449,
+     "act": 1227,
+     "abstain": 1
+    },
+    "grammar-lib0": {
+     "kept": 438,
+     "act": 33,
+     "abstain": 4160
+    },
+    "grammar-lib": {
+     "kept": 748,
+     "act": 93,
+     "abstain": 3785
+    },
+    "grammar-lib>m4+model": {
+     "kept": 2433,
+     "act": 1251,
+     "abstain": 1
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 2777,
+     "act": 793,
+     "abstain": 1
+    }
+   },
+   "question": {
+    "n": 2433,
+    "rules": {
+     "kept": 1406,
+     "act": 188,
+     "abstain": 1
+    },
+    "model": {
+     "kept": 1138,
+     "act": 289,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 1411,
+     "act": 204,
+     "abstain": 1
+    },
+    "m4+model": {
+     "kept": 1546,
+     "act": 292,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 475,
+     "act": 28,
+     "abstain": 1911
+    },
+    "grammar+rules": {
+     "kept": 1417,
+     "act": 198,
+     "abstain": 1
+    },
+    "grammar+m4": {
+     "kept": 1412,
+     "act": 224,
+     "abstain": 1
+    },
+    "grammar>m4+model": {
+     "kept": 1587,
+     "act": 280,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 323,
+     "act": 7,
+     "abstain": 2013
+    },
+    "grammar-lib": {
+     "kept": 325,
+     "act": 7,
+     "abstain": 2011
+    },
+    "grammar-lib>m4+model": {
+     "kept": 1505,
+     "act": 279,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 1737,
+     "act": 138,
+     "abstain": 0
+    }
+   },
+   "multi": {
+    "n": 753,
+    "rules": {
+     "kept": 548,
+     "act": 32,
+     "abstain": 0
+    },
+    "model": {
+     "kept": 260,
+     "act": 82,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 548,
+     "act": 32,
+     "abstain": 0
+    },
+    "m4+model": {
+     "kept": 484,
+     "act": 87,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 121,
+     "act": 3,
+     "abstain": 627
+    },
+    "grammar+rules": {
+     "kept": 551,
+     "act": 34,
+     "abstain": 1
+    },
+    "grammar+m4": {
+     "kept": 544,
+     "act": 41,
+     "abstain": 1
+    },
+    "grammar>m4+model": {
+     "kept": 518,
+     "act": 66,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 12,
+     "act": 2,
+     "abstain": 710
+    },
+    "grammar-lib": {
+     "kept": 16,
+     "act": 2,
+     "abstain": 706
+    },
+    "grammar-lib>m4+model": {
+     "kept": 466,
+     "act": 87,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 584,
+     "act": 27,
+     "abstain": 0
+    }
+   },
+   "fragment": {
+    "n": 1495,
+    "rules": {
+     "kept": 870,
+     "act": 218,
+     "abstain": 2
+    },
+    "model": {
+     "kept": 681,
+     "act": 296,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 866,
+     "act": 217,
+     "abstain": 2
+    },
+    "m4+model": {
+     "kept": 845,
+     "act": 311,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 85,
+     "act": 15,
+     "abstain": 1388
+    },
+    "grammar+rules": {
+     "kept": 874,
+     "act": 216,
+     "abstain": 2
+    },
+    "grammar+m4": {
+     "kept": 870,
+     "act": 215,
+     "abstain": 2
+    },
+    "grammar>m4+model": {
+     "kept": 860,
+     "act": 303,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 41,
+     "act": 6,
+     "abstain": 1445
+    },
+    "grammar-lib": {
+     "kept": 50,
+     "act": 9,
+     "abstain": 1433
+    },
+    "grammar-lib>m4+model": {
+     "kept": 848,
+     "act": 315,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 1049,
+     "act": 168,
+     "abstain": 2
+    }
+   }
+  },
+  "hand-only": {
+   "hand": {
+    "n": 5477,
+    "rules": {
+     "kept": 3453,
+     "act": 628,
+     "abstain": 3
+    },
+    "model": {
+     "kept": 2695,
+     "act": 829,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 3463,
+     "act": 642,
+     "abstain": 3
+    },
+    "m4+model": {
+     "kept": 3592,
+     "act": 817,
+     "abstain": 1
+    },
+    "grammar": {
+     "kept": 1412,
+     "act": 150,
+     "abstain": 3874
+    },
+    "grammar+rules": {
+     "kept": 3560,
+     "act": 536,
+     "abstain": 4
+    },
+    "grammar+m4": {
+     "kept": 3553,
+     "act": 566,
+     "abstain": 4
+    },
+    "grammar>m4+model": {
+     "kept": 3802,
+     "act": 705,
+     "abstain": 1
+    },
+    "grammar-lib0": {
+     "kept": 745,
+     "act": 41,
+     "abstain": 4572
+    },
+    "grammar-lib": {
+     "kept": 1027,
+     "act": 100,
+     "abstain": 4231
+    },
+    "grammar-lib>m4+model": {
+     "kept": 3652,
+     "act": 745,
+     "abstain": 1
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 4195,
+     "act": 394,
+     "abstain": 3
+    }
+   },
+   "machine": {
+    "n": 3851,
+    "rules": {
+     "kept": 1347,
+     "act": 985,
+     "abstain": 1
+    },
+    "model": {
+     "kept": 1372,
+     "act": 1041,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 1335,
+     "act": 991,
+     "abstain": 1
+    },
+    "m4+model": {
+     "kept": 1602,
+     "act": 1190,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 168,
+     "act": 30,
+     "abstain": 3615
+    },
+    "grammar+rules": {
+     "kept": 1353,
+     "act": 980,
+     "abstain": 1
+    },
+    "grammar+m4": {
+     "kept": 1341,
+     "act": 986,
+     "abstain": 1
+    },
+    "grammar>m4+model": {
+     "kept": 1612,
+     "act": 1171,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 69,
+     "act": 7,
+     "abstain": 3756
+    },
+    "grammar-lib": {
+     "kept": 112,
+     "act": 11,
+     "abstain": 3704
+    },
+    "grammar-lib>m4+model": {
+     "kept": 1600,
+     "act": 1187,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 1952,
+     "act": 732,
+     "abstain": 0
+    }
+   }
+  },
+  "kind (hand Romanian only)": {
+   "command": {
+    "n": 2585,
+    "rules": {
+     "kept": 1470,
+     "act": 490,
+     "abstain": 1
+    },
+    "model": {
+     "kept": 1322,
+     "act": 552,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 1474,
+     "act": 498,
+     "abstain": 1
+    },
+    "m4+model": {
+     "kept": 1574,
+     "act": 539,
+     "abstain": 1
+    },
+    "grammar": {
+     "kept": 804,
+     "act": 123,
+     "abstain": 1631
+    },
+    "grammar+rules": {
+     "kept": 1564,
+     "act": 386,
+     "abstain": 1
+    },
+    "grammar+m4": {
+     "kept": 1568,
+     "act": 393,
+     "abstain": 1
+    },
+    "grammar>m4+model": {
+     "kept": 1706,
+     "act": 463,
+     "abstain": 1
+    },
+    "grammar-lib0": {
+     "kept": 406,
+     "act": 30,
+     "abstain": 2141
+    },
+    "grammar-lib": {
+     "kept": 680,
+     "act": 89,
+     "abstain": 1808
+    },
+    "grammar-lib>m4+model": {
+     "kept": 1690,
+     "act": 480,
+     "abstain": 1
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 1895,
+     "act": 293,
+     "abstain": 1
+    }
+   },
+   "question": {
+    "n": 1963,
+    "rules": {
+     "kept": 1242,
+     "act": 86,
+     "abstain": 0
+    },
+    "model": {
+     "kept": 977,
+     "act": 170,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 1247,
+     "act": 93,
+     "abstain": 0
+    },
+    "m4+model": {
+     "kept": 1356,
+     "act": 168,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 464,
+     "act": 20,
+     "abstain": 1469
+    },
+    "grammar+rules": {
+     "kept": 1253,
+     "act": 96,
+     "abstain": 0
+    },
+    "grammar+m4": {
+     "kept": 1248,
+     "act": 113,
+     "abstain": 0
+    },
+    "grammar>m4+model": {
+     "kept": 1398,
+     "act": 154,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 313,
+     "act": 7,
+     "abstain": 1558
+    },
+    "grammar-lib": {
+     "kept": 315,
+     "act": 7,
+     "abstain": 1556
+    },
+    "grammar-lib>m4+model": {
+     "kept": 1316,
+     "act": 155,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 1507,
+     "act": 65,
+     "abstain": 0
+    }
+   },
+   "multi": {
+    "n": 643,
+    "rules": {
+     "kept": 533,
+     "act": 26,
+     "abstain": 0
+    },
+    "model": {
+     "kept": 241,
+     "act": 69,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 533,
+     "act": 26,
+     "abstain": 0
+    },
+    "m4+model": {
+     "kept": 458,
+     "act": 71,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 114,
+     "act": 3,
+     "abstain": 524
+    },
+    "grammar+rules": {
+     "kept": 533,
+     "act": 28,
+     "abstain": 1
+    },
+    "grammar+m4": {
+     "kept": 526,
+     "act": 35,
+     "abstain": 1
+    },
+    "grammar>m4+model": {
+     "kept": 489,
+     "act": 50,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 12,
+     "act": 2,
+     "abstain": 603
+    },
+    "grammar-lib": {
+     "kept": 16,
+     "act": 2,
+     "abstain": 599
+    },
+    "grammar-lib>m4+model": {
+     "kept": 440,
+     "act": 71,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 555,
+     "act": 21,
+     "abstain": 0
+    }
+   },
+   "fragment": {
+    "n": 286,
+    "rules": {
+     "kept": 208,
+     "act": 26,
+     "abstain": 2
+    },
+    "model": {
+     "kept": 155,
+     "act": 38,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 209,
+     "act": 25,
+     "abstain": 2
+    },
+    "m4+model": {
+     "kept": 204,
+     "act": 39,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 30,
+     "act": 4,
+     "abstain": 250
+    },
+    "grammar+rules": {
+     "kept": 210,
+     "act": 26,
+     "abstain": 2
+    },
+    "grammar+m4": {
+     "kept": 211,
+     "act": 25,
+     "abstain": 2
+    },
+    "grammar>m4+model": {
+     "kept": 209,
+     "act": 38,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 14,
+     "act": 2,
+     "abstain": 270
+    },
+    "grammar-lib": {
+     "kept": 16,
+     "act": 2,
+     "abstain": 268
+    },
+    "grammar-lib>m4+model": {
+     "kept": 206,
+     "act": 39,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 238,
+     "act": 15,
+     "abstain": 2
+    }
+   }
+  },
+  "kind (operational only)": {
+   "command": {
+    "n": 662,
+    "rules": {
+     "kept": 398,
+     "act": 100,
+     "abstain": 0
+    },
+    "model": {
+     "kept": 294,
+     "act": 142,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 398,
+     "act": 100,
+     "abstain": 0
+    },
+    "m4+model": {
+     "kept": 410,
+     "act": 143,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 98,
+     "act": 14,
+     "abstain": 540
+    },
+    "grammar+rules": {
+     "kept": 396,
+     "act": 96,
+     "abstain": 0
+    },
+    "grammar+m4": {
+     "kept": 396,
+     "act": 96,
+     "abstain": 0
+    },
+    "grammar>m4+model": {
+     "kept": 418,
+     "act": 132,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 52,
+     "act": 6,
+     "abstain": 598
+    },
+    "grammar-lib": {
+     "kept": 80,
+     "act": 8,
+     "abstain": 568
+    },
+    "grammar-lib>m4+model": {
+     "kept": 413,
+     "act": 139,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 462,
+     "act": 79,
+     "abstain": 0
+    }
+   },
+   "question": {
+    "n": 750,
+    "rules": {
+     "kept": 553,
+     "act": 25,
+     "abstain": 0
+    },
+    "model": {
+     "kept": 330,
+     "act": 52,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 555,
+     "act": 25,
+     "abstain": 0
+    },
+    "m4+model": {
+     "kept": 560,
+     "act": 51,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 155,
+     "act": 6,
+     "abstain": 583
+    },
+    "grammar+rules": {
+     "kept": 555,
+     "act": 27,
+     "abstain": 0
+    },
+    "grammar+m4": {
+     "kept": 557,
+     "act": 27,
+     "abstain": 0
+    },
+    "grammar>m4+model": {
+     "kept": 566,
+     "act": 49,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 107,
+     "act": 4,
+     "abstain": 619
+    },
+    "grammar-lib": {
+     "kept": 107,
+     "act": 4,
+     "abstain": 619
+    },
+    "grammar-lib>m4+model": {
+     "kept": 550,
+     "act": 50,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 616,
+     "act": 25,
+     "abstain": 0
+    }
+   },
+   "multi": {
+    "n": 524,
+    "rules": {
+     "kept": 425,
+     "act": 26,
+     "abstain": 0
+    },
+    "model": {
+     "kept": 174,
+     "act": 52,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 425,
+     "act": 26,
+     "abstain": 0
+    },
+    "m4+model": {
+     "kept": 367,
+     "act": 54,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 38,
+     "act": 3,
+     "abstain": 481
+    },
+    "grammar+rules": {
+     "kept": 424,
+     "act": 28,
+     "abstain": 1
+    },
+    "grammar+m4": {
+     "kept": 424,
+     "act": 28,
+     "abstain": 1
+    },
+    "grammar>m4+model": {
+     "kept": 380,
+     "act": 49,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 12,
+     "act": 2,
+     "abstain": 500
+    },
+    "grammar-lib": {
+     "kept": 12,
+     "act": 2,
+     "abstain": 500
+    },
+    "grammar-lib>m4+model": {
+     "kept": 363,
+     "act": 55,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 446,
+     "act": 21,
+     "abstain": 0
+    }
+   },
+   "fragment": {
+    "n": 286,
+    "rules": {
+     "kept": 208,
+     "act": 26,
+     "abstain": 2
+    },
+    "model": {
+     "kept": 155,
+     "act": 38,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 209,
+     "act": 25,
+     "abstain": 2
+    },
+    "m4+model": {
+     "kept": 204,
+     "act": 39,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 30,
+     "act": 4,
+     "abstain": 250
+    },
+    "grammar+rules": {
+     "kept": 210,
+     "act": 26,
+     "abstain": 2
+    },
+    "grammar+m4": {
+     "kept": 211,
+     "act": 25,
+     "abstain": 2
+    },
+    "grammar>m4+model": {
+     "kept": 209,
+     "act": 38,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 14,
+     "act": 2,
+     "abstain": 270
+    },
+    "grammar-lib": {
+     "kept": 16,
+     "act": 2,
+     "abstain": 268
+    },
+    "grammar-lib>m4+model": {
+     "kept": 206,
+     "act": 39,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 238,
+     "act": 15,
+     "abstain": 2
+    }
+   }
+  },
+  "kind (not operational, hand Romanian)": {
+   "command": {
+    "n": 1923,
+    "rules": {
+     "kept": 1072,
+     "act": 390,
+     "abstain": 1
+    },
+    "model": {
+     "kept": 1028,
+     "act": 410,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 1076,
+     "act": 398,
+     "abstain": 1
+    },
+    "m4+model": {
+     "kept": 1164,
+     "act": 396,
+     "abstain": 1
+    },
+    "grammar": {
+     "kept": 706,
+     "act": 109,
+     "abstain": 1091
+    },
+    "grammar+rules": {
+     "kept": 1168,
+     "act": 290,
+     "abstain": 1
+    },
+    "grammar+m4": {
+     "kept": 1172,
+     "act": 297,
+     "abstain": 1
+    },
+    "grammar>m4+model": {
+     "kept": 1288,
+     "act": 331,
+     "abstain": 1
+    },
+    "grammar-lib0": {
+     "kept": 354,
+     "act": 24,
+     "abstain": 1543
+    },
+    "grammar-lib": {
+     "kept": 600,
+     "act": 81,
+     "abstain": 1240
+    },
+    "grammar-lib>m4+model": {
+     "kept": 1277,
+     "act": 341,
+     "abstain": 1
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 1433,
+     "act": 214,
+     "abstain": 1
+    }
+   },
+   "question": {
+    "n": 1213,
+    "rules": {
+     "kept": 689,
+     "act": 61,
+     "abstain": 0
+    },
+    "model": {
+     "kept": 647,
+     "act": 118,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 692,
+     "act": 68,
+     "abstain": 0
+    },
+    "m4+model": {
+     "kept": 796,
+     "act": 117,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 309,
+     "act": 14,
+     "abstain": 886
+    },
+    "grammar+rules": {
+     "kept": 698,
+     "act": 69,
+     "abstain": 0
+    },
+    "grammar+m4": {
+     "kept": 691,
+     "act": 86,
+     "abstain": 0
+    },
+    "grammar>m4+model": {
+     "kept": 832,
+     "act": 105,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 206,
+     "act": 3,
+     "abstain": 939
+    },
+    "grammar-lib": {
+     "kept": 208,
+     "act": 3,
+     "abstain": 937
+    },
+    "grammar-lib>m4+model": {
+     "kept": 766,
+     "act": 105,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 891,
+     "act": 40,
+     "abstain": 0
+    }
+   },
+   "multi": {
+    "n": 119,
+    "rules": {
+     "kept": 108,
+     "act": 0,
+     "abstain": 0
+    },
+    "model": {
+     "kept": 67,
+     "act": 17,
+     "abstain": 0
+    },
+    "m4": {
+     "kept": 108,
+     "act": 0,
+     "abstain": 0
+    },
+    "m4+model": {
+     "kept": 91,
+     "act": 17,
+     "abstain": 0
+    },
+    "grammar": {
+     "kept": 76,
+     "act": 0,
+     "abstain": 43
+    },
+    "grammar+rules": {
+     "kept": 109,
+     "act": 0,
+     "abstain": 0
+    },
+    "grammar+m4": {
+     "kept": 102,
+     "act": 7,
+     "abstain": 0
+    },
+    "grammar>m4+model": {
+     "kept": 109,
+     "act": 1,
+     "abstain": 0
+    },
+    "grammar-lib0": {
+     "kept": 0,
+     "act": 0,
+     "abstain": 103
+    },
+    "grammar-lib": {
+     "kept": 4,
+     "act": 0,
+     "abstain": 99
+    },
+    "grammar-lib>m4+model": {
+     "kept": 77,
+     "act": 16,
+     "abstain": 0
+    },
+    "best-of(rules,model,grammar)": {
+     "kept": 109,
+     "act": 0,
+     "abstain": 0
+    }
+   }
+  }
+ },
+ "note": "kept = same reading as the reference English; act = same act, another role; abstain = the path produced nothing"
+}
