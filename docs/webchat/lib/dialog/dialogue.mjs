@@ -29,7 +29,7 @@ import { GRAMMAR } from './continuation.mjs?v=4664ce5794';
 import { touched } from './followup.mjs?v=88af56c068';
 import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=9f5ab1ff76';
 import { classify, describeReferent, plain } from './meta.mjs?v=aa6dfcad14';
-import { compareTimes, loadTime } from '../knowledge/time.mjs?v=a07285c274';
+import { compareTimes, loadTime } from '../knowledge/time.mjs?v=25af79c1b8';
 
 const LOG_LIMIT = 60;
 const FOCUS_WINDOW = 30;

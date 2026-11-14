@@ -3,7 +3,7 @@
 // read through src/knowledge/time.mjs, bundled for offline) takes its place in time from the catalog: its `when` is its position in its cycle (March is 3, Friday is 5), and it remembers the
 // cycle (`time: { cycle, kind }`) so that the row puts the months with the months and the days with the days, each in the order of its cycle. A moment that is no time of the calendar
 // (a birthday called Ann) keeps its `when`; one the user set ("set Monday time to 2") keeps what was said. Nothing here names a month or a day.
-import { timePosition } from '../../lib/knowledge/time.mjs?v=a07285c274';
+import { timePosition } from '../../lib/knowledge/time.mjs?v=25af79c1b8';
 
 export const hooks = {
   after(ctx, act, req, r) {

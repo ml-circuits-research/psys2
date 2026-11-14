@@ -74,7 +74,7 @@ const DETERMINERS = new Set(['the', 'a', 'an', 'this', 'next', 'last', 'every', 
 /** What a phrase names, from the catalog: the name or a word of it ("Mon", "mondays", "fall"), a clock time ("5pm", "3 o'clock", "15:30"). */
 export function timeReadings(phrase) {
   let ws = lc(phrase).replace(/[?.!,]+$/g, '').split(' ').filter(Boolean);
-  while (ws.length > 1 && DETERMINERS.has(ws[0])) ws = ws.slice(1);
+  ws = ws.slice(Math.max(0, ws.findIndex((w, i) => i === ws.length - 1 || !DETERMINERS.has(w))));   // the leading determiners and prepositions go
   const p = ws.join(' ');
   if (!p) return [];
   const hit = state.names.get(p) ?? state.names.get(p.replace(/'s$/, ''));

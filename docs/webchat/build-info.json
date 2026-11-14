@@ -63,12 +63,12 @@
     "lib/dialog/budget-limits.mjs": "361b73ef578f74d5",
     "lib/dialog/budget.mjs": "a7b9cf83512b05c1",
     "lib/dialog/continuation.mjs": "682fb1610d8c2ade",
-    "lib/dialog/dialogue.mjs": "8bb5f8d929971691",
+    "lib/dialog/dialogue.mjs": "3d506019c7cfae91",
     "lib/dialog/discourse.mjs": "f4805854a1027ed3",
     "lib/dialog/dispatch-validate.mjs": "06b75a5a5ca7388f",
     "lib/dialog/encoder-dispatch.mjs": "5c8e79c7605d1409",
     "lib/dialog/followup.mjs": "a0ef77d024f0e067",
-    "lib/dialog/index.mjs": "24fda3ad6b23aee9",
+    "lib/dialog/index.mjs": "7c3c25af737eb846",
     "lib/dialog/knowledge-lookup.mjs": "07c45d362763145f",
     "lib/dialog/meta-worlds.mjs": "b22d8bcff870a65c",
     "lib/dialog/meta.mjs": "5314f650e6529b5d",
@@ -131,7 +131,7 @@
     "lib/knowledge/layouts.mjs": "a4e09f2002ca1797",
     "lib/knowledge/learned.mjs": "9b4727126e3d1086",
     "lib/knowledge/open-words.mjs": "a4c8846cf018df80",
-    "lib/knowledge/time.mjs": "af16ce86db186f6b",
+    "lib/knowledge/time.mjs": "94133fab07f4c97d",
     "lib/knowledge/values.mjs": "667229d462d39e4b",
     "lib/lang/en.facts.generated.mjs": "ab1051865d3519da",
     "lib/lang/en.local.mjs": "9bac4703680a926d",
@@ -276,8 +276,8 @@
     "worlds/media.music/theory.mjs": "22f906418690fd78",
     "worlds/media.music/vendor/tonal.mjs": "331490751dea871a",
     "worlds/plan.seating/ops.mjs": "b257fcf960ed69c6",
-    "worlds/plan.timeline/hooks.mjs": "a351a4c8e4b1d36e",
-    "worlds/plan.timeline/ops.mjs": "1de7f9f48942721f",
+    "worlds/plan.timeline/hooks.mjs": "ba18f698eee194e3",
+    "worlds/plan.timeline/ops.mjs": "11e6d4f4d6852580",
     "worlds/session.things/ops.mjs": "cfb62037c94c9e66",
     "worlds/session.things/things.mjs": "826550d0171690a7",
     "worlds/session.things/view.mjs": "e300161a3532f522",
@@ -308,6 +308,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-14T02:25:22.206Z",
-  "commit": "7c53f4db-dirty"
+  "builtAt": "2026-11-14T02:27:34.731Z",
+  "commit": "e7309480-dirty"
 }
