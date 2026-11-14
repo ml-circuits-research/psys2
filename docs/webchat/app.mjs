@@ -1798,9 +1798,16 @@ export async function mountPsys2(element, options = {}) {
     } catch { /* warm-up is best effort */ }
     if (destroyed) return;
     // PROGRESS: the knowledge catalog's index (vocabulary, about 1.3 MB, cached): the last start-up step, and the place where an unreachable catalog is said once
+    // an unreachable catalog is asked again (4 s, 12 s, 30 s, then every minute) until it answers; the notice is said once and goes away when it does
     progress.start('catalog', 'Reading the knowledge catalog index');
-    try { const r = await engineClient.call('catalog'); if (r?.ok) progress.end('catalog', { bytes: r.bytes ?? null }); else progress.fail('catalog', 'The picture catalog could not be reached', 'only the basic drawings are available'); }
-    catch { progress.fail('catalog', 'The picture catalog could not be reached', 'only the basic drawings are available'); }
+    const askCatalog = async (refresh) => { try { const r = await engineClient.call('catalog', { refresh }); return r?.ok ? r : null; } catch { return null; } };
+    const first = await askCatalog(false);
+    if (first) progress.end('catalog', { bytes: first.bytes ?? null });
+    else {
+      const CATALOG_PAUSES = [4000, 12000, 30000];
+      progress.fail('catalog', 'The picture catalog could not be reached', 'only the basic drawings are available for now; it is tried again');
+      (async () => { for (let i = 0; !destroyed; i++) { await sleep(CATALOG_PAUSES[Math.min(i, CATALOG_PAUSES.length - 1)] * (i >= CATALOG_PAUSES.length ? 2 : 1)); if (destroyed) return; const r = await askCatalog(true); if (r) { progress.resolve('catalog'); return; } } })();
+    }
   };
   setTimeout(() => { if (!destroyed) warm(); }, 100);
   return handle;

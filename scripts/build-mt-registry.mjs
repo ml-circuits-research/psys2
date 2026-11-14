@@ -6,8 +6,8 @@
  * Source: Mozilla's public model registry (the models of Firefox Translations, bergamot-translator student models, MPL-2.0):
  *   https://storage.googleapis.com/moz-fx-translations-data--303e-prod-translations-data/db/models.json
  * A language is listed only when BOTH directions with English exist (the worlds are English). For each direction the smallest released model
- * is taken; sizes are the gzip sizes of the files as downloaded (HEAD requests). The bucket sends CORS headers for any origin, so the page fetches
- * the files from it directly and caches them in Cache Storage; nothing of the models is stored in this repository.
+ * is taken; sizes are the gzip sizes of the files as downloaded (HEAD requests). The bucket answers CORS for localhost only (checked 2026-11-14), so the page fetches a file from its own host when the registry has a
+ * `mirror` for it (scripts/mirror-mt-models.mjs, run after this script) and from the bucket otherwise; either way it is cached in Cache Storage.
  *
  *   node scripts/build-mt-registry.mjs [--local models.json]
  */

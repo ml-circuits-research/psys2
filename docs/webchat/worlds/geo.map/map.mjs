@@ -13,7 +13,7 @@
 import { buildIndex, lookup } from './places.mjs?v=953a0c9f2d';
 import { askBridge } from '../acts/ask-lib.mjs?v=304b6d8a1c';   // questions over attributes and relations answered by the library (sopworld `ask`)
 import { viewOf } from '../acts/view-lib.mjs?v=cf63ba741c';   // the acts on the view's own attributes (zoom, layer) by the library (sopworld std.schema.view state=)
-import * as G from './ops.mjs?v=2cef055d84';   // circular on purpose: the schema's executor, read inside functions only
+import * as G from './ops.mjs?v=beeca6b59f';   // circular on purpose: the schema's executor, read inside functions only
 let VIEW = null;
 /** The view bridge of this world's schema (`@map.view` and its attributes: zoom, centre, layer): the library checks the value and computes the step; the state stays this module's. */
 const viewLib = () => (VIEW ??= viewOf(G.executor.schema, 'view'));

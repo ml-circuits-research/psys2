@@ -85,7 +85,8 @@ export function createMtHost({ registry, fetchFile, spawn, onState = () => {}, d
   }
   async function download(lang, dir, from, to, progress) {
     const spec = filesOf(dir);
-    const get = (f) => fetchFile(`${registry.baseUrl}/${f.path}`, { bytes: f.bytes, sha256: f.sha256, onProgress: (n) => progress(f.path, n) });
+    const get = (f) => fetchFile(`${registry.baseUrl}/${f.path}`, { bytes: f.bytes, sha256: f.sha256, onProgress: (n) => progress(f.path, n),
+      mirror: f.mirror ? new URL(f.mirror, registry.mirrorBase ?? globalThis.location?.href ?? import.meta.url).href : null });
     const [model, shortlist, ...vocabs] = await Promise.all([get(spec.model), get(spec.shortlist), ...spec.vocabs.map(get)]);
     return { model, shortlist, vocabs };
   }
