@@ -48,7 +48,9 @@ const SIGNAL = /\b(?:rectangles?|boxe?s?|circles?|squares?|diamonds?|ellipses?|t
 const namesShape = (text, state) => { const w = new Set(String(text).toLowerCase().match(/[a-z0-9]+/g) ?? []); return (state?.shapes ?? []).some((x) => x.name && w.has(String(x.name).toLowerCase())); };
 const FRAME = /\bdiagram\b|\b(?:chart|layout|graph|box|boxes)\s+(?:shaped|laid out|arranged)\s+(?:like|as)\b|\ban? (?:shape|box) in the (?:shape|form) of\b/i;
 const SHAPED = /\b(?:shaped|laid out|arranged|drawn|made|built)\s+(?:like|as|in the (?:shape|form) of)\s+(?:an?|the)?\s*(.+?)\s*[.!?]*$|\bin the (?:shape|form) of\s+(?:an?|the)?\s*(.+?)\s*[.!?]*$/i;
-function accepts({ action, text, state, tab }) {
+function accepts({ action, text: joined, state, tab, roles }) {
+  // the own reader's words as they were typed: `text` is the tokens joined, so a list "snap Start, Process and Pay" has lost its commas and reads as the shapes "start process" and "pay"
+  const text = String(action ?? '').endsWith('.own') && roles?.rest ? roles.rest : joined;
   // outside its own tab the diagram reads only what says "diagram": a signal word, named shapes, arrows, or the name of a shape it has (the Drawing board keeps "draw a sky and a sun")
   if (tab !== 'diagram.sketch' && !FRAME.test(String(text ?? '')) && !SIGNAL.test(String(text ?? '')) && !namesShape(String(text ?? ''), state)) return false;
   if (!String(action ?? '').endsWith('.own')) return tab !== 'diagram.sketch' ? 'focus' : true;   // signalled outside its tab: it does not yield to the open tab's world
@@ -66,7 +68,21 @@ domain.redo = (ctx) => E.redo(ctx, {});
 
 /** The colours this world draws (the names of its palette): the dice names these, not every colour of k.values (a colour the palette lacks is a question back). */
 const sampleKnowledge = () => ({ colours: Object.keys(SOPKit.COLOR_HEX).filter((c) => /^[a-z]+$/.test(c)) });
+/**
+ * COORDINATION AS ONE ACT (spec 03): a layout or a grouping is done to the named shapes together ("arrange Problem, Solution and Market in a row" is one arrangement of three shapes,
+ * not an arrangement of two followed by one of the third). Also the engine's own acts that take a list of shapes (snap, align, distribute ...), when the engine reads the whole sentence as one.
+ */
+function coordinates({ action, mode, roles = {}, text }) {
+  const act = String(action ?? '').split('.').pop();
+  const said = String(roles.thing ?? roles.rest ?? '').trim();
+  if (!/\band\b|,/i.test(said)) return false;
+  if (act === 'group' || (act === 'place' && mode === 'layout')) return true;
+  // the engine's own reader names the family from the words alone (no shapes needed): the ones that act on all the named shapes together
+  if (act === 'own') { const n = engineNode(said, {}); return ['arrange', 'align', 'snap', 'group', 'distribute'].includes(n?.args?.action); }
+  return false;
+}
 export const hooks = {
+  coordinates,
   sampleKnowledge,
   domain,
   accepts,

@@ -32,3 +32,8 @@
     session=plan
     input="remove Ann"
     expect="I removed guest Ann."
+
+@t.seating.place_named core.test
+    session=plan
+    input="put a guest named Maria at table 1"
+    expect="I added guest Maria at table 1."

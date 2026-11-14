@@ -2,7 +2,7 @@
 // media.music (spec 21): the world's OWN reader of what a role holds: the words of a note, a chord, a scale, a transposition ("an octave higher", "down a fifth", "to G major"). The acts and their frames
 // are read by the generated grammar; this is the music's own text (note names, chord qualities, scale types), which is notation, not English grammar. Browser-safe.
 import { CHORD_TYPES, SCALE_TYPES, INTERVALS } from './theory.mjs?v=967bf62fb3';
-import { INST_OF, INSTRUMENTS } from './music.mjs?v=6960887c40';
+import { INST_OF, INSTRUMENTS } from './music.mjs?v=7844697f58';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const NUMW = { a: 1, an: 1, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };

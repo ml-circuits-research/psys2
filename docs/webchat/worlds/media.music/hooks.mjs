@@ -2,8 +2,8 @@
 // media.music (spec 21): the hooks of the schema world. The acts (make, remove, change, pick, ask, undo, redo) are read by the generated grammar; what an act DOES to the player is music.mjs (the
 // state, the synth events the tab plays, the sheet music, the melody). The roles are mapped onto those operations here; the notes themselves are the music's own text, read by reader.mjs
 // (a note, a chord, a scale, a transposition). Nothing here names a verb.
-import * as M from './music.mjs?v=6960887c40';
-import * as R from './reader.mjs?v=87c76bdfe1';
+import * as M from './music.mjs?v=7844697f58';
+import * as R from './reader.mjs?v=88b94a5547';
 import { knownSong, SONG_NAMES } from './songs.mjs?v=7b859b75b4';
 import * as T from './theory.mjs?v=967bf62fb3';
 
@@ -140,7 +140,7 @@ const domain = {
     const t = String(r.thing ?? '').toLowerCase();
     const a = String(r.attribute ?? '').toLowerCase();
     if (r.mode === 'count') return M.melodyShow(ctx, { count: 'true' });
-    const what = { tempo: 'tempo', speed: 'tempo', bpm: 'tempo', pace: 'tempo', volume: 'volume', loudness: 'volume', instrument: 'instrument', sound: 'instrument', loop: 'loop', repeat: 'loop', looping: 'loop', key: 'key' }[a];
+    const what = { tempo: 'tempo', speed: 'tempo', bpm: 'tempo', pace: 'tempo', volume: 'volume', loudness: 'volume', instrument: 'instrument', sound: 'instrument', loop: 'loop', repeat: 'loop', looping: 'loop', key: 'key', pitch: 'pitch', octave: 'pitch' }[a];
     if (what) return M.status(ctx, { what });
     if (r.mode === 'options') return /instrument/.test(t) ? M.listInstruments(ctx) : /chord|scale/.test(t) ? M.listTypes(ctx, { what: /chord/.test(t) ? 'chord' : 'scale' }) : M.listSongs(ctx);
     if (r.mode === 'describe' || r.mode === 'state') return M.status(ctx, { what: 'playing' });
@@ -154,6 +154,9 @@ const MUSICAL_NOUN = /\b(?:music|song|songs|melody|melodies|tune|tunes|chord|cho
 const MUSICAL = /\b(?:music|song|songs|melody|melodies|tune|tunes|chord|chords|scale|scales|note|notes|tempo|volume|instrument|piano|organ|flute|violin|cello|loop|looping|octave|octaves|semitone|semitones|key|bpm|faster|slower|louder|quieter|beats?)\b/i;
 
 /** DECLINE (spec 21): a sentence is the music's when its tab is open, when it plays something that reads as music (a note, a chord, a scale, a song of the library, notes) or names a musical thing. */
+// every attribute of the player (schema.sop acts.attr words): the one list the ask and change branches read
+const ATTR_NAMES = 'tempo|speed|bpm|pace|volume|loudness|instrument|sound|key|loop|looping|repeat|pitch|octave|duration|length';
+const ATTR_WORD = new RegExp(`^(?:${ATTR_NAMES})$`, 'i');
 function accepts(info) {
   const v = decline(info);
   // the open music tab holds the focus: a reading it owns does not yield to a pattern of another world that has no free words ("Play B3" is a note here and a move on the game's tab)
@@ -195,7 +198,7 @@ function decline({ action, mode, roles = {}, tab, text, state }) {
   }
   if (act === 'change') {
     // a change is the player's when an attribute of the player is said, or a comparison / a transposition / an instrument / a number is the value; on the music tab nothing else ("play the queen to d5" is a move of the board)
-    const attrWord = /\b(?:tempo|speed|bpm|pace|volume|loudness|instrument|sound|key|loop|looping|repeat|pitch|octave|duration|length)\b/i.test(`${roles.attribute ?? ''} ${roles.thing ?? ''}`);
+    const attrWord = new RegExp(`\\b(?:${ATTR_NAMES})\\b`, 'i').test(`${roles.attribute ?? ''} ${roles.thing ?? ''}`);
     const v = String(roles.value ?? '').trim();
     const valueish = !!R.instrumentOf(v) || /^(?:up|down|off|on|full|max|maximum|mute|muted|normal|default|\d+(?:\.\d+)?\s*(?:bpm|percent|%)|too\s+\w+|half|double|twice|triple)$/i.test(v) || mode === 'more' || mode === 'less' || mode === 'shift' || !!R.readSetting(roles.thing ?? '');
     const thingOk = !/\b(?:speak|talk|talking|say|speech|voice|rate|queen|king|rook|bishop|knight|pawn)\b/i.test(`${roles.thing ?? ''} ${text ?? ''}`);   // words of other worlds' frames (the speech rate, the pieces of the board)
@@ -203,7 +206,7 @@ function decline({ action, mode, roles = {}, tab, text, state }) {
     return MUSICAL_NOUN.test(`${said} ${roles.attribute ?? ''}`) || attrWord || ((mode === 'more' || mode === 'less' || mode === 'shift') && !!state?.current && /\b(?:faster|slower|louder|quieter|softer|higher|lower)\b/i.test(String(text ?? '')));
   }
   if (act === 'remove') return on ? true : /\b(?:melody|tune|composition|last note)\b/i.test(said);
-  if (act === 'ask') return ['count', 'options', 'describe', 'state'].includes(mode) || /^(?:tempo|speed|bpm|pace|volume|loudness|instrument|sound|loop|repeat|looping|key)$/i.test(String(roles.attribute ?? '')) ? (on || MUSICAL.test(`${said} ${roles.attribute ?? ''}`)) : false;
+  if (act === 'ask') return ['count', 'options', 'describe', 'state'].includes(mode) || ATTR_WORD.test(String(roles.attribute ?? '')) ? (on || MUSICAL.test(`${said} ${roles.attribute ?? ''}`)) : false;
   return false;
 }
 

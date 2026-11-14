@@ -34,7 +34,7 @@
     act=outrun act=photo act=represent act=screenshot act=text act=annotate act=avg act=cherry
     act=communicate
     actshared=house actshared=leg actshared=copy actshared=draw actshared=download actshared=stacking actshared=against actshared=versus
-    actshared=vs actshared=update actshared=create actshared=build actshared=rename actshared=hide actshared=scale actshared=include
+    actshared=vs actshared=update actshared=create actshared=rename actshared=build actshared=hide actshared=scale actshared=include
     actshared=convert actshared=share actshared=stat
     thing=plot thing=point thing=bar thing=slice thing=segment thing=pie thing=doughnut thing=donut
     thing=radar thing=polar thing=scatter thing=aquamarine thing=chartreuse thing=terracotta thing=burlywood thing=firebrick
@@ -55,7 +55,7 @@
     claim=classify claim=clip claim=close claim=cluster claim=collect claim=combine claim=construct claim=correct
     claim=couple claim=darken claim=decrease claim=describe claim=destroy claim=disassemble claim=dismantle claim=divide
     claim=doe claim=done claim=dye claim=edit claim=like claim=shaped claim=take claim=what
-    act=shaped act=mar act=active act=evenly act=labeled act=front act=path act=reached
+    act=shaped act=mar act=front act=active act=evenly act=labeled act=path act=reached
     act=along act=blorp act=cluster act=directly act=downstream act=drum act=exec act=member
     act=siz act=parent act=reachable act=loosen act=normalize act=rid
     actshared=key actshared=let' actshared=bind actshared=couple actshared=tape actshared=fasten actshared=glue actshared=nail
@@ -365,11 +365,11 @@
     id=plan.seating kind=tab run=none tab=seating
     name=seating name=seating_plan
     act=bridge
-    actshared=lunch actshared=connect actshared=hook actshared=tie actshared=bind actshared=couple actshared=tape actshared=fasten
-    actshared=glue actshared=join actshared=nail actshared=relate actshared=attach actshared=group actshared=pin actshared=clip
-    actshared=recover actshared=retrieve actshared=bundle actshared=detach actshared=disconnect actshared=import actshared=sever actshared=ungroup
-    actshared=unhook actshared=unlink actshared=categorize actshared=disassemble actshared=dismantle actshared=lump actshared=merge actshared=pair
-    actshared=reload actshared=slice actshared=uncouple actshared=unfasten actshared=untie
+    actshared=lunch actshared=connect actshared=hook actshared=relocate actshared=tie actshared=bind actshared=couple actshared=tape
+    actshared=fasten actshared=glue actshared=join actshared=nail actshared=relate actshared=attach actshared=group actshared=pin
+    actshared=clip actshared=recover actshared=retrieve actshared=bundle actshared=detach actshared=disconnect actshared=import actshared=sever
+    actshared=ungroup actshared=unhook actshared=unlink actshared=categorize actshared=disassemble actshared=dismantle actshared=lump actshared=merge
+    actshared=pair actshared=reload actshared=slice actshared=uncouple actshared=unfasten actshared=untie
     thing=seat thing=chair thing=guest
     thingshared=table thingshared=place thingshared=person thingshared=people
     frame=is_table

@@ -1009,7 +1009,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     // must each be read by a pattern at least as specific as the swallowing one (the guard the clause expansions use for a swallowed "then"), unless the piece opens with a question word
     const whole = first.done ? (first.done.length === 1 ? first.done[0] : null) : first.fallback;
     const unread = !first.done || first.done.some((x) => x.unparsed);
-    const swallowed = !!whole && !whole.unparsed && !!whole.match && Object.values(whole.match.slots).some((sl) => (sl.class === 'words' || sl.class === 'rest') && sl.span && cuts.some((ci) => tokens[ci].start >= sl.span[0] && tokens[ci].end <= sl.span[1]));
+    const swallowed = !!whole && !whole.unparsed && !!whole.match && !coordinatedWhole(whole.match) && Object.values(whole.match.slots).some((sl) => (sl.class === 'words' || sl.class === 'rest') && sl.span && cuts.some((ci) => tokens[ci].start >= sl.span[0] && tokens[ci].end <= sl.span[1]));
     if (!unread && !swallowed) return null;
     form.restore(stateBefore);
     const bounds = [0, ...cuts, tokens.length], out = [];

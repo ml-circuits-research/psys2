@@ -85,6 +85,8 @@ function acceptsWords({ action, mode, roles, text, state, kindWord, tab }) {
   // a thing that holds a question auxiliary is a clause the free slot swallowed ("how many legs does a zebra have" is a knowledge question about a kind, not a count of things in the drawing):
   // outside the board's own tab the question is left to the worlds and the catalog that know kinds (Talk, the knowledge lookup)
   if (act === 'ask' && tab !== 'art.draw' && said && words(said).some((w) => /^(?:does|do|did|has|have|had|can|could|will|would|should)$/.test(w))) return false;
+  // "why" asks why the drawing is as it is: outside the board's tab, with nothing drawn, it is a general question ("why is the sky blue") that another world or the plain refusal answers, not "I have not done anything yet"
+  if (act === 'ask' && mode === 'why' && tab !== 'art.draw' && !(state?.objects?.length)) return false;
   if (act === 'ask' && ['describe', 'options'].includes(mode)) return true;
   if (act === 'ask' && !said && !roles.place) return false;
   if ((act === 'make' || act === 'change') && !roles.place && TIMES.has(words(said).at(-1) ?? '') && words(said).every((x) => TIMES.has(x) || DET.has(x) || /^(?:it|its|so|be|bright|nice|sunny|a|the)$/.test(x))) return true;   // "make it a sunny day", "change it so its day"

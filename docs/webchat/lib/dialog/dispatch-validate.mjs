@@ -17,12 +17,12 @@
  */
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { guard } from '../formalizer/guard.mjs?v=eb1a66f556';
-import { formalize, FormSession } from '../formalizer/index.mjs?v=08f7b23ecc';
-import { youTarget } from '../formalizer/rules/index.mjs?v=17a2e17459';
+import { formalize, FormSession } from '../formalizer/index.mjs?v=6366c8278e';
+import { youTarget } from '../formalizer/rules/index.mjs?v=16c6ce3890';
 import { serialize } from '../soplang/index.mjs?v=c57881f705';
-import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs?v=4a9931ae96';
+import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs?v=0635fd344a';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=14d5d2cbdd';
-import { checkValues } from './value-check.mjs?v=b3a588044a';
+import { checkValues } from './value-check.mjs?v=39923488a2';
 import { wildTokens } from '../formalizer/routing.mjs?v=3e5e6bf7a2';
 import { budget } from './budget.mjs?v=00bce6e369';
 

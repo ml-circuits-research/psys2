@@ -5578,3 +5578,9 @@
     alt=does
     alt=do
     alt=is_able_to
+
+@phrase.lang.named.call core.phrase
+    frame=false
+    doc="The word that gives a new thing its name (add a guest CALLED Ann, put a guest NAMED Ann at table 1): the verb is the act's (acts.verb.make or acts.verb.place), the place follows with lex.acts.rel."
+    alt=called
+    alt=named
