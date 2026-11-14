@@ -219,7 +219,6 @@
   .p2-chat-only { grid-template-rows: 1fr; }
 }
 .p2.p2-chat-only { grid-template-columns: 1fr; }
-@media (max-width: 760px) { .p2-host { height: auto; min-height: 100dvh; } }
 @media (prefers-reduced-motion: reduce) {
   .p2 *, .p2 *::before, .p2 *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
@@ -389,3 +388,50 @@
 .p2-plog-sending { display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
 .p2-plog-sending input[type="text"], .p2-plog-sending input[type="url"] { width: 100%; box-sizing: border-box; font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: var(--ink); }
 .p2-plog-preview { max-height: 14em; overflow: auto; font-size: 11px; white-space: pre-wrap; word-break: break-all; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; background: var(--surface-2); }
+
+/* page chip on a reply: the page its world belongs to (subtle; a tap opens the page) */
+.p2-pagechip { all: unset; box-sizing: border-box; cursor: pointer; font-size: 10.5px; line-height: 1; padding: 2px 8px; border-radius: 999px; color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); opacity: .85; }
+.p2-pagechip:hover, .p2-pagechip:focus-visible { color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); opacity: 1; }
+.p2 .p2-pagechip:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* the summary of the conversation: a collapsible panel at the top of the chat (it was the Talk page) */
+.p2-sum { background: var(--surface); border-bottom: 1px solid var(--line); font-size: 13px; }
+.p2-sum > summary { cursor: pointer; padding: 6px 12px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; list-style-position: inside; }
+.p2-sum-body { padding: 0 12px 10px; max-height: 40vh; overflow-y: auto; }
+.p2-sum-para { margin: 0 0 6px; line-height: 1.45; }
+.p2-sum-sec { margin: 8px 0 0; }
+.p2-sum-sec h4 { margin: 0 0 2px; font-size: 12px; }
+.p2-sum-sec ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 1px; }
+.p2-sum-sec li { overflow-wrap: anywhere; }
+.p2-sum-sec li::before { content: '\2022'; margin-right: .45em; color: var(--muted); }
+
+/* phone pages: the menu, the toast; both are inert on a desktop */
+.p2-burger, .p2-pagetitle, .p2-toast, .p2-menu { display: none; }
+.p2-head { position: relative; }
+.p2.is-phone { display: flex; flex-direction: column; height: 100%; min-height: 0; overflow: hidden; }
+.p2.is-phone .p2-chat { display: contents; }
+.p2.is-phone .p2-head { order: 0; }
+.p2.is-phone .p2-status, X
+.p2.is-phone .p2-sum { order: 2; }
+.p2.is-phone .p2-log, .p2.is-phone .p2-pane { order: 3; flex: 1 1 0; min-height: 0; height: auto; }
+.p2.is-phone .p2-toast { order: 4; } .p2.is-phone .p2-queue, .p2.is-phone .p2-dictbar { order: 5; }
+.p2.is-phone .p2-exbar { order: 6; flex: none; } .p2.is-phone .p2-form { order: 7; flex: none; } .p2.is-phone .p2-foot { order: 8; flex: none; }
+.p2.is-phone .p2-title { display: none; }
+.p2.is-phone .p2-burger { display: inline-flex; flex: none; }
+.p2.is-phone .p2-pagetitle { display: block; flex: 1; min-width: 0; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.p2.is-phone .p2-head { justify-content: flex-start; }
+.p2.is-phone .p2-pane { display: flex; border: 0; }
+.p2.is-phone .p2-tabs { display: none; }
+.p2.is-phone .p2-panels { flex: 1; min-height: 0; overflow: auto; }
+.p2.is-phone .p2-panel { min-height: 100%; padding: 12px; }
+.p2.is-phone .p2-tabdice { display: none; }
+.p2.is-phone.p2-on-chat .p2-pane { display: none; }
+.p2.is-phone:not(.p2-on-chat) .p2-log, .p2.is-phone:not(.p2-on-chat) .p2-sum, .p2.is-phone:not(.p2-on-chat) .p2-foot { display: none; }
+.p2.is-phone .p2-menu { display: flex; flex-direction: column; position: absolute; top: calc(100% + 2px); left: 6px; z-index: 70; min-width: 210px; padding: 4px; border-radius: 12px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line), 0 12px 32px -8px rgba(0, 0, 0, .35); }
+.p2.is-phone .p2-menu[hidden] { display: none; }
+.p2-menu-item { all: unset; box-sizing: border-box; cursor: pointer; padding: 11px 14px; border-radius: 8px; font-size: 15px; color: var(--ink); }
+.p2-menu-item:hover, .p2-menu-item:focus-visible { background: var(--surface-2); }
+.p2-menu-item[aria-current="page"] { color: var(--accent); font-weight: 700; }
+.p2 .p2-menu-item:focus-visible { outline: 3px solid var(--focus); outline-offset: -2px; }
+.p2.is-phone .p2-toast { all: unset; box-sizing: border-box; display: block; cursor: pointer; margin: 6px 8px 0; padding: 8px 12px; border-radius: 12px; background: var(--bot); color: var(--ink); font-size: 13.5px; line-height: 1.35; box-shadow: inset 0 0 0 1px var(--accent), var(--shadow); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; order: 4; }
+.p2.is-phone .p2-toast[hidden] { display: none; }
