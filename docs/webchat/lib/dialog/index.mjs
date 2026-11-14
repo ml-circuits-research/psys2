@@ -9,13 +9,13 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { installTextGen } from './textgen.mjs?v=6af08b182c';
+import { installTextGen } from './textgen.mjs?v=d19c62ab6d';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=6a1453c398';
 import { loadWorlds } from '../worlds/index.mjs?v=a56b7c0a0f';
 import { validateWorldSet } from '../worlds/validate.mjs?v=b422872e56';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=99290ab2f5';
 import { createInterpreter } from '../interpreter/index.mjs?v=832ad8a927';
-import { createReasoner } from '../reasoner/index.mjs?v=a6d16d70b9';
+import { createReasoner } from '../reasoner/index.mjs?v=76f1588062';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=afc707c3cb';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=6f705bd762';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
@@ -38,13 +38,14 @@ import { Discourse } from './discourse.mjs?v=3d8e2f748e';
 import { Dialogue } from './dialogue.mjs?v=4eabf62d0e';
 import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=52a4242c7f';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=d712554c96';
-import { proposeByTypes } from './typed-reader.mjs?v=9db95c1829';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=d3ff2129e8';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=96c2382712';
+import { proposeByTypes } from './typed-reader.mjs?v=7812db5b24';
+import { withVariants } from './variants.mjs?v=1270ebd554';
 import { repairFromScene } from './scene-referents.mjs?v=edd4fbba48';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=1b7337fb51';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=ceed397800';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=1f91f5df18';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=7bb5bc66b3';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=a9e6bdc419';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=42a310b511';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -792,7 +793,7 @@ export class DialogSession {
           out.push({ status: r.status, refused: r.status !== 'supported' ? r.status !== 'missing' : !!env.fallback && !(env.diff?.changed?.length || env.diff?.added?.length || env.diff?.removed?.length), changed: !!(env.diff?.changed?.length || env.diff?.added?.length || env.diff?.removed?.length || env.diff?.moved?.length) });
         }
       }
-    } catch { return []; }
+    } catch { return null; }   // no run: no answer (null), not an empty one
     return out;
   }
 
@@ -802,7 +803,7 @@ export class DialogSession {
     const segments = formal.segments.map((seg) => {
       try {
         if (seg.unparsed || !seg.match?.worldId || !seg.wires?.length) return seg;
-        if (!this._outcomes([seg]).some((x) => x.refused)) return seg;   // only a refused reading is read again
+        if (!this._outcomes([seg])?.some((x) => x.refused)) return seg;   // only a refused reading is read again
         const executor = this.engine.set.get(seg.match.worldId)?.ops?.executor;
         if (!executor?.referents) return seg;
         const out = proposeByTypes(seg, { lib, executor, state: this.isession.state[seg.match.worldId] ?? {}, knowledge: this.engine.knowledge, set: this.engine.set, form: this.isession.form, outcomes: (x) => this._outcomes(x) });
@@ -1461,7 +1462,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=9bf075bbf5').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=0f9769b0bd').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.reader (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
@@ -1577,6 +1578,7 @@ export class DialogSession {
       formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router });
     }
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
+    if (!icpt && !pre && !meta && formal.segments.some((x) => x.unparsed)) { try { formal = await perf.time('variants', () => withVariants(this, formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; } }   // spec 16 section 10: an unparsed clause read again (alternations, near words, slot types), the world deciding
     if (!icpt && !pre && !meta && formal.segments.length) formal = await perf.time('typed', async () => this._withTypedReader(formal));   // spec 16 section 9: a refused reading is read again by the types of its words
     // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
     if (!icpt && !pre && !meta && this.engine.knowledge && formal.segments.length) {

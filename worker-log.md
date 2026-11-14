@@ -2192,6 +2192,13 @@ Checks: heavy runs through heavy.sh, one at a time, the baseline on a clean `git
 - **Found, not fixed:** (a) the judge checks only the library's frame, so a compound question passes on one half; (b) with `--facts all` the library world is too slow (kindChain scans every wire per thing; stopped after 3 minutes), so use a few worlds; (c) the clone's `cousins` needs `known` to contain the case text, done by the adapter.
 - Not run: `npm test`, Chrome. Targeted: tests/cousins-host.test.mjs 4/4, tests/learning-curve.test.mjs 4/4.
 
+## 2026-11-14 reading steps for unparsed clauses: alternations, near words, slot types (worker; spec 16 section 10)
+- `src/dialog/variants.mjs` (`withVariants`, after the reader route, before the typed step), tests/variants.test.mjs 5/5. Switches `PSYS2_ALTERNATIONS`, `PSYS2_NEAR`, `PSYS2_SLOTS`, `PSYS2_TYPED` (= off). The world decides (fork run: supported, no refusal; a statement on its validated wires), all or nothing, no sentence, no pattern. `_outcomes` now answers null when the fork cannot run.
+- **Alternations:** `normalise` needs `w.lang.en.alternation` facts; the catalog (knowledge main fa8a629) has none, so the step reads zero rules and does nothing. Blocker on the knowledge side; no hand rules here.
+- **Near words:** works (test: "A zebra possesses 4 legs." read as "have" through a sense `possess ~ have`, kids.animals accepts). Needs the catalog's k.words lazily (`facts.wires('k.words.sense', {key})`).
+- **Slot types:** assigns content words to the typed lexicon slots of a pattern, any order. It reads nothing on the paraphrase set: the animal sound questions are Talk frames with free words (`{a:words(1)}`), which this step does not take; `readByTypes`' ask/find frames would need a typed fact world of the matrix worlds (only built for schema worlds, section 9), so they are not mapped to wires.
+- **Table (rules-C `eval-ablation --knowledge <catalog checkout>`, same pipeline; steps alone and together):** all off / near / alternations / slots / all on: paraphrases-rt 14/85 in every run, paraphrases-rt-changed 3/61, typos 651 (650 once), loose-words 240 (239 to 241): within the run-to-run noise of the sharded run. Without a catalog: typos 689, loose 240, paraphrases 14/85 identical to before. Schema-alone (exp-seating) replies identical (32/60). Grid v3 holes 2 (as after the typed step; 4 without it). `test-world all --reasoner matrix`: 68, same ids as the base.
+- **Reading of the result:** the paraphrase gap is not words the worlds lack (near words) nor wrappers (no rules published) but the Talk free-word frames and the story / currency causes in `failures.jsonl`. Next measurable lever: the knowledge side publishing `w.lang.en.alternation`, and a typed fact world for matrix worlds so `readByTypes` ask/find frames can become wires. Learning-curve point recorded (build ce079b01).
 ## 2026-11-14 acts.make.name.place.p from the catalog; plan.seating patterns.extra.sop deleted
 - Catalog frame `acts.make.name.place.p` (knowledge 585afaf) is in the shard `hand-frames`: added it to `LANG_EN_SHARDS`, regenerated `src/lang/en.facts.generated.mjs` from the commit's docs/worlds (w.lang.en version 2; the live page did not serve it yet). `--check` passes.
 - Deleted `worlds/plan.seating/patterns.extra.sop` and the phrase `lang.named.call` of lang.common (only plan.seating used it). Regenerated plan.seating and the five other schema worlds whose patterns changed (art.draw, data.charts, docs.editor, geo.map, plan.timeline, ui.avatar): the frame now generates `make.name.place.p` for each world with a named kind and a container.
@@ -2208,3 +2215,107 @@ Checks: heavy runs through heavy.sh, one at a time, the baseline on a clean `git
 - Counts: paraphrases-rt 146 (85 same, 61 changed); owner-log 4 (same_meaning true, judged reading); cousins 584 (failed cousins, same_meaning false, filler kind / aspect, ops and matrix merged).
 - Deviation: owner logs hold no correction/correctionOf flags (only live phrase records do), so owner pairs are adjacent failed-then-worked turns whose failed turn is a fragment of the fix; 19 adjacent candidates were read, 4 kept.
 - Correction (coordinator): cousin pairs now pair each failed loose-wording cousin with the PASSING clean-wording cousin of the same (key, answer), same_meaning true. Reran the clean run with the vendored library (scripts/cousins.mjs --case 'what sound does a cow make' --degree 3 --reasoner matrix --facts k.animals --tab talk --out training/results/cousins/2026-11-14-clean-animal-sound.json; aspect d1 7/8, filler d1 41/42, d2 49/50). form-pairs.jsonl is now 626: paraphrases-rt 146, owner-log 4, cousins 476 (175 reading, 301 unsure for loose cases with a second clause); 216 failed rows dropped (no passing canonical).
+## 2026-11-14 landing note: sopworld 0.80.0 vendored (worker)
+- Vendored byte for byte from ed8d808 (build 9b8336612971, 795513 bytes); LICENSES.md and the pin updated. Regressions found, none caused by the library: `tests/fixtures/worlds/test.seating/patterns.sop` was stale against the generator (regenerated with `scripts/build-schema-world.mjs`: one more generated pattern, make.name.place); `tests/acts.test.mjs` "about 40 patterns" now sees 46 against its bound of 45 (the generator, not the library: it fails on 0.75 as well; left failing for the owner of that change, not edited); the art.draw parity count 600 -> 602 (two tests added by 0418ac10). Composition measurement on 0.80 is identical to 0.72 (essay 10/10, 31 claims traced, 0 repeated; article 5/5, 5 repeated; presentation 5/5; story 5/5, 46 claims traced, 3 repeated; report 5/5).
+- One composition of each type on 0.80 (`node scripts/measure-compose.mjs --show`; the essay about a random topic, the others about the penguin, 200 words):
+
+```text
+--- essay (random) ---
+# All about Chad
+
+## Introduction
+
+Few subjects are as rewarding to think about as Chad.
+
+## Counterargument
+
+It could be objected that Chad has a code of TCD, has a formal of Republic of Chad, has a capital of N'Djamena. Yet this objection does not hold, because Chad has a code2 of TD, has a currency of Central African CFA franc, has a language of Arabic and French.
+
+--- scientific-article (penguin) ---
+# All about the penguin
+
+## Abstract
+
+The aim of this article is to describe the penguin.
+
+## Introduction
+
+The aim of this article is to describe the penguin.
+
+## Results
+
+We found that the penguin is at the ground and the water. We found that the penguin cannot fly.
+
+## Discussion
+
+In summary, the penguin can swim, is an animal, has a colour of black and white. This may indicate that the penguin has head, body, wing, beak and foot.
+
+--- presentation (penguin) ---
+# All about the penguin
+
+## Title
+
+Today we are going to talk about the penguin.
+
+## Point
+
+The penguin has head, body, wing, beak and foot.
+
+## Point
+
+The penguin can swim.
+
+## Point
+
+The penguin can swim, is an animal, has a colour of black and white.
+
+## Point
+
+The penguin eats squid.
+
+## Summary
+
+So we have seen that the penguin has head, body, wing, beak and foot. So we have seen that the penguin can swim.
+
+## Questions
+
+Thank you for listening.
+
+--- story (penguin) ---
+# All about the penguin
+
+## Orientation
+
+Once upon a time, there was a zoo. The penguin had to get to the garden, and soon.
+
+## Complication
+
+But a fence stood in the way. The penguin tried to jump, but it was no use. One day the penguin met a builder.
+
+## Climax
+
+Then the builder came by with a ladder. Then the builder came by with a ladder.
+
+## Resolution
+
+With the ladder, the penguin could climb past the fence at last.
+
+## Ending
+
+From that day on, the penguin and the builder were friends.
+
+--- report (penguin) ---
+# All about the penguin
+
+## Summary
+
+In short, the penguin eats squid.
+
+## Introduction
+
+The work described here concerned the penguin. The purpose of this work was to look at the penguin.
+
+## Results
+
+We found that the penguin cannot fly.
+```

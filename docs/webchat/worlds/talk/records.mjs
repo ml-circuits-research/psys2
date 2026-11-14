@@ -4,7 +4,7 @@
 // wires of the schemas (`ctx.knowledge.peekSchema()`: "legs" means k.animals.animal.legs, "capital" means k.geo.country.capital); ordered series (months, planets) come from
 // `ctx.knowledge.peekSeries()`. A world added to the catalog is read with no change here. Browser-safe: no `node:*`.
 
-import { askBridge } from '../acts/ask-lib.mjs?v=523e507452';   // the value of a slot of a record is asked of the library (sopworld `ask`)
+import { askBridge } from '../acts/ask-lib.mjs?v=5e499018bc';   // the value of a slot of a record is asked of the library (sopworld `ask`)
 
 const lc = (s) => String(s ?? '').toLowerCase();
 /** The words of a question that ask for a place, a purpose or an action, as the slot names they usually mean: the grammar of the question frames, not a fact of any world. */
