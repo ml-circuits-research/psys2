@@ -13,7 +13,7 @@ import { installTextGen } from './textgen.mjs';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs';
 import { loadWorlds } from '../worlds/index.mjs';
 import { validateWorldSet } from '../worlds/validate.mjs';
-import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs';
+import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs';
 import { createInterpreter } from '../interpreter/index.mjs';
 import { createReasoner } from '../reasoner/index.mjs';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs';
@@ -42,6 +42,7 @@ import { normalizeReader, readerSegments, chooseReader } from './reader-route.mj
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs';
 import { proposeByTypes } from './typed-reader.mjs';
 import { withVariants } from './variants.mjs';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs';
 import { repairFromScene } from './scene-referents.mjs';
 import { loadMetaWorlds } from './meta-worlds.mjs';
 import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs';
@@ -1578,7 +1579,7 @@ export class DialogSession {
       formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router });
     }
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
-    if (!icpt && !pre && !meta && formal.segments.some((x) => x.unparsed)) { try { formal = await perf.time('variants', () => withVariants(this, formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; } }   // spec 16 section 10: an unparsed clause read again (alternations, near words, slot types), the world deciding
+    if (!icpt && !pre && !meta && formal.segments.some((x) => x.unparsed || isIncomplete(x))) { try { formal = await perf.time('variants', () => withVariants(this, formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; } }   // spec 16 section 10: an unparsed clause read again (alternations, near words, slot types), the world deciding
     if (!icpt && !pre && !meta && formal.segments.length) formal = await perf.time('typed', async () => this._withTypedReader(formal));   // spec 16 section 9: a refused reading is read again by the types of its words
     // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
     if (!icpt && !pre && !meta && this.engine.knowledge && formal.segments.length) {
@@ -1608,12 +1609,19 @@ export class DialogSession {
     // the reply names the understood part and what was not understood. Decided from the wires' action names (clearAll, remove, delete, reset ...), for every world alike.
     const heldDestructive = new Set();
     if (!icpt && !pre && !meta) {
-      const open = segments.filter((x) => x.unparsed && !fillerOnly(x.text) && !x.veto?.say);
-      if (open.length) for (const x of segments) if (!x.unparsed && (isDestructive(x) || x.ignored?.length || x.partial || x.bestEffort)) heldDestructive.add(x);   // a clause read only in part (words ignored) next to one not read at all is held too: "You should change this voila ... ta-da ..." must not start a chess game
+      const open = segments.filter((x) => (x.unparsed && !fillerOnly(x.text) && !x.veto?.say) || isIncomplete(x));   // a clause read only in part is half-read too (spec 16 section 12)
+      if (open.length) for (const x of segments) if (!x.unparsed && !open.includes(x) && (isDestructive(x) || x.ignored?.length || x.partial || x.bestEffort)) heldDestructive.add(x);   // a clause read only in part (words ignored) next to one not read at all is held too: "You should change this voila ... ta-da ..." must not start a chess game
     }
     for (const seg of segments) {
+      // COMPLETENESS (spec 16 section 12): a reading that leaves content words unread is not final. No voice completed it: a destructive one is never executed, and with PSYS2_COMPLETE=ask none is; the person is asked
+      if (isIncomplete(seg) && (completeMode() === 'ask' || isDestructive(seg))) {
+        const unread = [...new Set(seg.match.unread)];
+        lines.push([T('I understood only part of '), { text: `"${seg.text}"`, translate: false, quote: true }, T(': I did not use '), ...unread.flatMap((w, k) => [...(k ? [T(' and ')] : []), { text: `"${w}"`, translate: false, quote: true }]), T(', so I did not do it. What did you mean?')]);
+        statuses.push('missing');
+        continue;
+      }
       if (heldDestructive.has(seg)) {
-        const open = segments.find((x) => x.unparsed && !fillerOnly(x.text));
+        const open = segments.find((x) => (x.unparsed && !fillerOnly(x.text)) || isIncomplete(x));
         const q = (t) => lang === 'en' ? t : originalSentence(text, { text: t, span: segments.find((y) => y.text === t)?.span }, translation?.alignment);
         lines.push([T('I understood '), { text: `"${q(seg.text)}"`, translate: false, quote: true }, T(' but I did not do it, because I did not understand '), { text: `"${q(open.text)}"`, translate: false, quote: true }, T('. Say the first part on its own and I will do it.')]);
         statuses.push('missing');
@@ -1822,6 +1830,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   // `set`, `reasoner` and `interp` are replaced by `engine.reload(loader)` (LAZY LOADING: the worlds a message needs are added to a running engine); everything below reads them through these bindings.
   let set = await loadWorlds(loader, { reasoner: mode });
   let reasoner = mode === 'matrix' ? await createReasoner(set) : null;
+  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
   let interp = createInterpreter(set, { ...options, reasoner });
   attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`

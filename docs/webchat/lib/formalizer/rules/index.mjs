@@ -9,21 +9,22 @@ import { guard } from '../guard.mjs?v=f0c7a6e6b5';
 import { perf } from '../perf.mjs?v=8b829ee7df';
 import { lexIndex } from '../../worlds/lexicon.mjs?v=9a10989e46';
 import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=d9469bade4';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=d5a3c15a5c';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=49ba5fddf2';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
-import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=a30a19738f';
+import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=50ff331b8a';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=f8636d75cf';
 import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=3e8bdd8000';
 import { en } from '../../lang/en.mjs?v=c93f946ea8';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse, serialize } from '../../soplang/index.mjs?v=c57881f705';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
+import { annotateUnread } from '../completeness.mjs?v=50ff331b8a';
 
 export { FormSession } from './session.mjs?v=f8636d75cf';
-export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=a30a19738f';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=50ff331b8a';
 export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=d9469bade4';
-export { compilePattern, matchTokens } from './matcher.mjs?v=d5a3c15a5c';
+export { compilePattern, matchTokens } from './matcher.mjs?v=49ba5fddf2';
 export { singularLemma, pluralize } from './lemma.mjs?v=3b6e24321f';
 
 const compiledCache = new WeakMap();
@@ -464,9 +465,9 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
       if (isQuestion && p.kind === 'statement') continue;
       if (p.tabOnly && p.worldId !== context?.tabWorld) continue;   // the router drops it anyway; a match of it must not stop the later views ("can you" dropped) from being tried
       if (last && !c.usesFiller) continue;
-      let m = prefilterPasses(c, bag) ? matchTokens(c, view, env) : null;
-      if (!m && noPct && prefilterPasses(c, bagNoPct)) m = matchTokens(c, noPct, env);
-      if (m) matches.push({ pattern: p, order, ...m });
+      let m = prefilterPasses(c, bag) ? matchTokens(c, view, env) : null, mview = view;
+      if (!m && noPct && prefilterPasses(c, bagNoPct)) { m = matchTokens(c, noPct, env); mview = noPct; }
+      if (m) matches.push({ pattern: p, order, view: mview, ...m });
     }
   }
   // "Your" addresses the avatar (COMPUTE-BUDGET C): a free-text target that starts with your / yours / ur / yourself ("make your eyes blue") is the avatar's, never a drawing
@@ -559,6 +560,7 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   }
   const kept = applyCoveragePolicy(matches, toks.filter((t) => !t.filler).length);
   if (kept.length !== matches.length) matches.splice(0, matches.length, ...kept);
+  annotateUnread(matches, set);
   const worlds = routeScores(toks, set, lex, new Set(matches.map((m) => m.pattern.worldId)));
   const score = (id) => worlds.find((w) => w.id === id)?.score ?? 0;
   for (const m of matches) { m.score = score(m.pattern.worldId); m.rank = m.pattern.priority; }
@@ -667,7 +669,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
         }));
         seg.wires = [...entityWires, ...renumbered];
         seg.unparsed = false;
-        seg.match = { patternId: m.pattern.id, worldId: m.pattern.worldId, kind: m.pattern.kind, priority: m.pattern.priority, slots: plainSlots(m.slots) };
+        seg.match = { patternId: m.pattern.id, worldId: m.pattern.worldId, kind: m.pattern.kind, priority: m.pattern.priority, slots: plainSlots(m.slots), unread: m.unread ?? [] };
         const bestSig = signature(m);
         for (const o of matches) {
           if (o === m || o.pattern.worldId === m.pattern.worldId) continue;
