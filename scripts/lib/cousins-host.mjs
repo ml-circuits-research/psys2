@@ -15,7 +15,13 @@ import { pathToFileURL } from 'node:url';
 
 /** The five dimensions the owner named, and which of them the library (0.73) generates: `filler` = the filler kind, `key` = the aspect. The others are listed as "not generated" so the table says so. */
 export const DIMENSIONS = Object.freeze({ filler: 'filler kind', key: 'aspect', act: 'act family', alternation: 'alternation', structure: 'world structure' });
-export const dimensionOf = (c) => DIMENSIONS[(c.dims ?? [])[0]] ?? (c.dims ?? []).join('+');
+/** 0.80 names a lifted-filler cousin by the EDGE it came by (`kind`, `class`, the host's), 0.73 as `filler`; `key` is the aspect. Any other name is a new dimension and is shown as it is. */
+export const dimensionOf = (c) => {
+  const d = (c.dims ?? [])[0];
+  if (d === 'key') return DIMENSIONS.key;
+  if (d === 'filler') return DIMENSIONS.filler;
+  return d ? `${DIMENSIONS.filler} (edge ${d})` : '';
+};
 
 const hasCousins = (m) => typeof m?.cousins === 'function' && typeof m?.readByTypes === 'function';
 
