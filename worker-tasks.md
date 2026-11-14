@@ -4223,3 +4223,7 @@ The library will learn paraphrase operators from aligned pairs (its 23:20 block)
 
 Reviewer ran `npm run test:smoke` on 7874bb7c: 90/90 pass, exit 0. Accepted: cousins first run on 0.75, named-add frame bundled and seating's local copy deleted, form pairs. Next: run the library's `learnFormOperators` (0.84) on form-pairs.jsonl and report how many operators cover 80 % / 95 %; vendor 0.84; five composition types.
 **Test speed:** smoke takes ~135 s on an idle machine and 400–500 s when the knowledge workers run; the turn-guard test even timed out under load. (1) Report the 10 slowest smoke tests with seconds; any invariant test over 10 s gets a smaller fixture (smoke must stay a few minutes at most); (2) smoke only on code landings (already), not on scripts/data; (3) the full suite only on the reviewer's request; (4) measurement scripts (curve, cousins) in parallel only when the machine is free.
+
+## Reviewer 2026-11-15 00:05 — vendor 0.80/0.84 and first learnRules/learnFormOperators runs accepted
+
+Reviewer ran `npm run test:smoke` on 3b3181f3: 90/90 pass, exit 0. Accepted: honest negative results (0 rules admitted; 242 operators for 407 pairs, 0 gained). Forwarded to the library: operators must be learned over types, not surface words; learnRules slot/over-generality bugs; composition quality (repeats, metadata narrated, attribute phrasing). Next: rerun both when the library fixes them; the injected clock; the slowest-tests report.
