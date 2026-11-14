@@ -39,7 +39,8 @@ export function createPlanHost(cat) {
     const have = loaded.get(spec.id) ?? { id: spec.id, schemaText: await read(w.schema), shards: new Map() };
     loaded.set(spec.id, have);
     const pick = w.shards.filter((s) => (spec.only ? spec.only.includes(String(s.id).split('/').at(-1)) : spec.keyed ? (s.keys ?? []).some((k) => words.has(String(k).toLowerCase())) : true));
-    for (const s of pick) if (!have.shards.has(s.path)) { have.shards.set(s.path, await read(s.path)); version++; }
+    const texts1 = await Promise.all(pick.map((s) => (have.shards.has(s.path) ? null : read(s.path))));   // fetched together, kept in the index's order (a phone paid one round trip per shard)
+    pick.forEach((s, i) => { if (texts1[i] != null && !have.shards.has(s.path)) { have.shards.set(s.path, texts1[i]); version++; } });
   }
 
   const api = {
@@ -50,7 +51,7 @@ export function createPlanHost(cat) {
       const set = new Set(words.flatMap((w) => { const x = String(w).toLowerCase(); return [x, x.replace(/s$/, ''), x.replace(/ies$/, 'y')]; }));
       try {
         lib ??= await import('../vendor/sopworld/sopworld.mjs');
-        for (const spec of PLAN_WORLDS) await addWorld(spec, set);
+        await Promise.all(PLAN_WORLDS.map((spec) => addWorld(spec, set)));   // the plan worlds together, not one after another
         if (!loaded.get('k.procedures')?.shards.size) return false;
         if (built !== version) {
           words = null;

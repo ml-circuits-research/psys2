@@ -41,8 +41,9 @@ export function planGoal(ctx, { action, args = {} } = {}) {
     if (t && goalWord(t.roles.kind)) return { goal: t, words: goalWords(t) };   // "set a table for four" is read as a place act
     return g?.roles.place ? { goal: null, words: goalWords(g) } : null;
   }
+  if (args.mode === 'random') return null;   // a random scene names no kind: nothing to plan (owner export 2026-11-14 22:43: "draw something random" loaded every plan world, 6 s on the phone)
   for (const goal of [goalOf('make', addArgs(args), args), goalFromText(args.text)]) {   // the roles as read, then the sentence's own words ("set a table for four")
-    if (goal && (goal.roles.place || goal.roles.material || !D.kindOfWord(goal.roles.kind) || goalWord(goal.roles.kind))) return { goal, words: goalWords(goal) };
+    if (goal && goal.roles?.kind && (goal.roles.place || goal.roles.material || !D.kindOfWord(goal.roles.kind) || goalWord(goal.roles.kind))) return { goal, words: goalWords(goal) };
   }
   return null;
 }
