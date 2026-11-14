@@ -1800,3 +1800,8 @@ Guard (accuracy sets, must not fall, not the goal):
 - tests/live-state.test.mjs (in smoke, both reasoners): generated from the world schemas (22 attribute round trips B,A,B,A + undo/redo) and the avatar expressions with the render model compared after every turn; phrasing gaps printed (docs.editor "Make the title left." is read as a block move).
 - Names (world schema, knowledge world, live world, library modules): specs/07 section 0, system map, landing table, lessons.
 - test-world all: 127 failing on ops and on matrix, identical to the baseline of this base (no regression). npm run test:smoke exit 0 (19.6 s).
+## 2026-11-14 Learning curve and frozen held-out set
+
+- scripts/freeze-heldout.mjs + training/eval/heldout-real/: real messages frozen at arrival (date, hash, source), measured only, never used to write a rule; `--add` refuses texts already seen in training/eval; `--check` finds leaks; `--score` replays, `--judge` records the hand verdict. Seeded EMPTY: every existing real message is already a case or test, so none qualifies as unseen.
+- scripts/learning-curve.mjs + training/eval/learning-curve.jsonl: 3 points (11-13 backfilled, 11-14 backfilled, now). x = general mechanisms (schema worlds + acts + verb groups): 33, 37, 38. Curves: held-out real = gap (empty set); meaning-kept paraphrases 12/85 (14.1%, gap before the re-judging); schema-alone world 31/60 (51.7%, not re-judged since). Slope: 0 pp per mechanism where computable, gap elsewhere: no evidence yet either way.
+- Landing table: 3 learning-curve rows with slope at the latest landing; inline SVG (light/dark via page variables) and per-landing table in docs/system-map.html (regenerated). Test: tests/learning-curve.test.mjs. Smoke exit 0.
