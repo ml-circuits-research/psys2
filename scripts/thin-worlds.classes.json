@@ -1,0 +1,163 @@
+{
+  "_doc": "One verdict per hand-written part of a tab world (THIN LIVE WORLDS, item 1). verdict: 'truly own' | 'general -> library' | 'general -> w.* schema' | 'knowledge -> k.*'. `part` is a file or a prefix ending in *. `to` names where a general part goes. Read by scripts/thin-worlds.mjs; a part with no entry reads 'unclassified'.",
+  "art.draw": { "parts": [
+    { "part": "engine.mjs", "verdict": "truly own", "note": "the drawing engine: scene composition, take apart / build; composite goals move to std.plan + k.procedures when they land (worker-tasks 06:45)" },
+    { "part": "scene.mjs", "verdict": "truly own", "note": "the renderer's geometry" },
+    { "part": "hooks.mjs", "verdict": "general -> library", "to": "std.acts hooks (referents by words, placement over std.space)", "note": "noun-phrase resolution over the scene is not on wires yet" },
+    { "part": "own.mjs", "verdict": "truly own" },
+    { "part": "schema.sop", "verdict": "general -> w.* schema", "to": "w.shapes (proposed: handover/sop-knowledge-worlds/w-shared-schemas.md)", "note": "shapes with colour, size, place, layer" },
+    { "part": "datagen.mjs", "verdict": "truly own", "note": "test-data generator" }
+  ] },
+  "diagram.sketch": { "parts": [
+    { "part": "engine.mjs", "verdict": "truly own" },
+    { "part": "engine/auto-layout.mjs", "verdict": "general -> library", "to": "std.space (layout solver)" },
+    { "part": "engine/logic.mjs", "verdict": "truly own", "note": "reading of diagram sentences into the model" },
+    { "part": "engine/templates.mjs", "verdict": "knowledge -> k.*", "to": "k.layouts / k.scenes (diagram templates: flowchart, tree, cycle ...)" },
+    { "part": "arrows.mjs", "verdict": "general -> library", "to": "std.space (connector routing)" },
+    { "part": "refs.mjs", "verdict": "general -> library", "to": "std.things (references to things by name)" },
+    { "part": "hooks.mjs", "verdict": "truly own" },
+    { "part": "own.mjs", "verdict": "truly own" },
+    { "part": "schema.sop", "verdict": "general -> w.* schema", "to": "w.diagram (shapes and connectors, proposed)" },
+    { "part": "describe.sop", "verdict": "truly own", "note": "slot declarations read by the pattern generator" },
+    { "part": "lexicon.extra.sop", "verdict": "knowledge -> k.*", "to": "k.values (colours, sizes, positions, fills, outlines), k.shapes, k.layouts, k.actions (169 act verbs), k.words (717 topic words)", "note": "value lists a knowledge world has (item 4)" }
+  ] },
+  "data.charts": { "parts": [
+    { "part": "chart.mjs", "verdict": "truly own", "note": "the chart renderer and statistics" },
+    { "part": "hooks.mjs", "verdict": "truly own" },
+    { "part": "own.mjs", "verdict": "truly own" },
+    { "part": "schema.sop", "verdict": "general -> w.* schema", "to": "w.chart (series and points, proposed)" },
+    { "part": "patterns.extra.sop", "verdict": "general -> w.* schema", "to": "ask frames over series (compare, difference, total, average, percent, extreme), make frames with data (fromList, fromPrices, fromHoldings, fromLegs, setValues), send frames (download, copy, toDocument)" },
+    { "part": "lexicon.extra.sop", "verdict": "knowledge -> k.*", "to": "k.values (colours, shades, palettes, extent words), k.food / k.objects (the group lists g_toys ... g_food)" },
+    { "part": "operations.extra.sop", "verdict": "truly own" },
+    { "part": "templates.extra.sop", "verdict": "truly own" },
+    { "part": "datagen.mjs", "verdict": "truly own" }
+  ] },
+  "docs.editor": { "parts": [
+    { "part": "editor.mjs", "verdict": "truly own", "note": "the document model and renderer glue" },
+    { "part": "model.mjs", "verdict": "truly own" },
+    { "part": "target.mjs", "verdict": "general -> library", "to": "std.things (selection and navigation by reference)" },
+    { "part": "hooks.mjs", "verdict": "truly own" },
+    { "part": "own.mjs", "verdict": "truly own" },
+    { "part": "schema.sop", "verdict": "general -> w.* schema", "to": "w.document (blocks and sections, proposed)" },
+    { "part": "patterns.extra.sop", "verdict": "general -> w.* schema", "to": "act frames: read aloud (act read), check / count / list tasks (change done, ask), make from the conversation (make from=), stats (ask count)" },
+    { "part": "lexicon.extra.sop", "verdict": "knowledge -> k.*", "to": "w.lang.en phrase groups (can_u ...), k.values (block kinds)" },
+    { "part": "templates.extra.sop", "verdict": "truly own" },
+    { "part": "describe.sop", "verdict": "truly own" },
+    { "part": "datagen.mjs", "verdict": "truly own" }
+  ] },
+  "docs.reader": { "note": "a rule world, not on a schema yet", "parts": [
+    { "part": "analyze.mjs", "verdict": "truly own", "note": "document analysis" },
+    { "part": "text.mjs", "verdict": "general -> library", "to": "std.text (sentence and word splitting)" },
+    { "part": "lang.mjs", "verdict": "knowledge -> k.*", "to": "w.lang.en closed classes (stop words)" },
+    { "part": "fns.mjs", "verdict": "truly own" },
+    { "part": "sample.mjs", "verdict": "truly own" },
+    { "part": "datagen.mjs", "verdict": "truly own" },
+    { "part": "describe.sop", "verdict": "truly own" },
+    { "part": "lexicon.sop", "verdict": "general -> w.* schema", "to": "w.document ask frames (what is the title, how many words)" },
+    { "part": "patterns.sop", "verdict": "general -> w.* schema", "to": "act frames in w.lang.en (ask, read) once the world runs on w.document" },
+    { "part": "operations.sop", "verdict": "truly own" },
+    { "part": "templates.sop", "verdict": "truly own" },
+    { "part": "matrix.sop", "verdict": "truly own" }
+  ] },
+  "games.chess": { "note": "game rules are own content", "parts": [
+    { "part": "fns.mjs", "verdict": "truly own", "note": "the rules of chess" },
+    { "part": "datagen.mjs", "verdict": "truly own" },
+    { "part": "describe.sop", "verdict": "truly own" },
+    { "part": "lexicon.sop", "verdict": "knowledge -> k.*", "to": "k.layouts / k.shapes (board words, piece names)" },
+    { "part": "patterns.sop", "verdict": "truly own" },
+    { "part": "operations.sop", "verdict": "truly own" },
+    { "part": "templates.sop", "verdict": "truly own" },
+    { "part": "matrix*", "verdict": "truly own" }
+  ] },
+  "games.guess": { "parts": [
+    { "part": "fns.mjs", "verdict": "truly own" },
+    { "part": "datagen.mjs", "verdict": "truly own" },
+    { "part": "describe.sop", "verdict": "truly own" },
+    { "part": "lexicon.sop", "verdict": "knowledge -> k.*", "to": "k.animals (the animals it guesses)" },
+    { "part": "patterns.sop", "verdict": "truly own" },
+    { "part": "operations.sop", "verdict": "truly own" },
+    { "part": "templates.sop", "verdict": "truly own" },
+    { "part": "matrix.sop", "verdict": "truly own" }
+  ] },
+  "games.hangman": { "parts": [
+    { "part": "fns.mjs", "verdict": "truly own" },
+    { "part": "datagen.mjs", "verdict": "truly own" },
+    { "part": "describe.sop", "verdict": "truly own" },
+    { "part": "lexicon.sop", "verdict": "knowledge -> k.*", "to": "k.words (the words it hides)" },
+    { "part": "patterns.sop", "verdict": "truly own" },
+    { "part": "operations.sop", "verdict": "truly own" },
+    { "part": "templates.sop", "verdict": "truly own" },
+    { "part": "matrix.sop", "verdict": "truly own" }
+  ] },
+  "games.tictactoe": { "parts": [
+    { "part": "fns.mjs", "verdict": "truly own" },
+    { "part": "datagen.mjs", "verdict": "truly own" },
+    { "part": "describe.sop", "verdict": "truly own" },
+    { "part": "lexicon.sop", "verdict": "knowledge -> k.*", "to": "k.layouts (board cells: top left, centre ...)" },
+    { "part": "patterns.sop", "verdict": "truly own" },
+    { "part": "operations.sop", "verdict": "truly own" },
+    { "part": "templates.sop", "verdict": "truly own" },
+    { "part": "matrix*", "verdict": "truly own" }
+  ] },
+  "geo.map": { "parts": [
+    { "part": "map.mjs", "verdict": "truly own", "note": "the map renderer and engine" },
+    { "part": "places.mjs", "verdict": "knowledge -> k.*", "to": "k.geo (index of places)" },
+    { "part": "regions.mjs", "verdict": "knowledge -> k.*", "to": "k.geo" },
+    { "part": "hooks.mjs", "verdict": "truly own", "note": "set phrases (the neighbours of ...), view acts; the view attributes move to w.map" },
+    { "part": "own.mjs", "verdict": "truly own" },
+    { "part": "schema.sop", "verdict": "general -> w.* schema", "to": "w.map (published)" },
+    { "part": "patterns.extra.sop", "verdict": "general -> w.* schema", "to": "ask frames (superlative 54, compare, distance, count, info, isCapital, isIn, borderYN, capitalOfWhich: ask over k.geo attributes), view attributes (zoom, zoomTo, pan, reset, layer: std.schema.view of w.map), act frames (show, markSet, markHere, here, world, markers, highlights)" },
+    { "part": "lexicon.extra.sop", "verdict": "knowledge -> k.*", "to": "k.geo (demonyms, places), k.values (directions, amounts, measures), k.units (kilometres, miles), w.map words (layers)" },
+    { "part": "datagen.mjs", "verdict": "truly own" }
+  ] },
+  "media.music": { "parts": [
+    { "part": "music.mjs", "verdict": "truly own", "note": "the player" },
+    { "part": "abc.mjs", "verdict": "truly own", "note": "notation reader" },
+    { "part": "reader.mjs", "verdict": "truly own", "note": "reads notes, chords and scales from the sentence" },
+    { "part": "theory.mjs", "verdict": "knowledge -> k.*", "to": "k.music (scales, intervals, chords; not published yet)" },
+    { "part": "songs.mjs", "verdict": "truly own" },
+    { "part": "kb.sop", "verdict": "truly own", "note": "sample songs" },
+    { "part": "hooks.mjs", "verdict": "truly own" },
+    { "part": "own.mjs", "verdict": "truly own" },
+    { "part": "schema.sop", "verdict": "general -> w.* schema", "to": "w.player (settings as attributes, proposed)" },
+    { "part": "patterns.extra.sop", "verdict": "general -> w.* schema", "to": "act frames (play, stop, replay: act run; transpose, volume, tempo, instrument, octave: change attribute), ask frames over theory (chordName, scaleNotes, interval, keySig ...: ask over k.music)" },
+    { "part": "lexicon.extra.sop", "verdict": "knowledge -> k.*", "to": "k.music (notes, scale types, intervals, qualities, modes), k.words (instruments), w.lang.en phrase groups (polite)" },
+    { "part": "templates.extra.sop", "verdict": "truly own" },
+    { "part": "datagen.mjs", "verdict": "truly own" }
+  ] },
+  "plan.seating": { "parts": [
+    { "part": "schema.sop", "verdict": "general -> w.* schema", "to": "w.seating 2 (published)" }
+  ] },
+  "plan.timeline": { "parts": [
+    { "part": "hooks.mjs", "verdict": "truly own", "note": "k.time position of a moment named by a time of the calendar" },
+    { "part": "schema.sop", "verdict": "general -> w.* schema", "to": "w.timeline 2 (published)" }
+  ] },
+  "talk": { "parts": [
+    { "part": "cards.mjs", "verdict": "truly own", "note": "card drawing" },
+    { "part": "records.mjs", "verdict": "truly own" },
+    { "part": "patterns.sop", "verdict": "general -> w.* schema", "to": "ask frames of w.lang.en (what is X, parts of X, how many P does X have): one implementation of ask" },
+    { "part": "operations.sop", "verdict": "truly own" },
+    { "part": "templates.sop", "verdict": "truly own" },
+    { "part": "lexicon.sop", "verdict": "truly own" }
+  ] },
+  "ui.avatar": { "parts": [
+    { "part": "facedraw.mjs", "verdict": "truly own", "note": "the renderer; no coordinates, it draws from k.faces" },
+    { "part": "facelogic.mjs", "verdict": "general -> library", "to": "std.acts hooks over a catalog of variants (choices, presets, expression as a mode); its word lists go to w.lang.en / k.values" },
+    { "part": "hooks.mjs", "verdict": "truly own" },
+    { "part": "motion.mjs", "verdict": "general -> library", "to": "std.motion over k.motion (host scheduler glue)" },
+    { "part": "own.mjs", "verdict": "truly own", "note": "name, animate" }
+  ] },
+  "user.profile": { "parts": [
+    { "part": "understand.mjs", "verdict": "truly own", "note": "reads facts about the user" },
+    { "part": "cv.mjs", "verdict": "truly own" },
+    { "part": "fns.mjs", "verdict": "truly own" },
+    { "part": "datagen.mjs", "verdict": "truly own" },
+    { "part": "describe.sop", "verdict": "truly own" },
+    { "part": "kb.sop", "verdict": "truly own", "note": "facts about the user's profile" },
+    { "part": "lexicon.sop", "verdict": "truly own" },
+    { "part": "patterns.sop", "verdict": "truly own" },
+    { "part": "operations.sop", "verdict": "truly own" },
+    { "part": "templates.sop", "verdict": "truly own" },
+    { "part": "matrix*", "verdict": "truly own" }
+  ] }
+}
