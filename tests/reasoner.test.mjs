@@ -254,7 +254,9 @@ test('the build ships the library and the fns of matrix worlds, versioned like e
   const out = await mkdtemp(path.join(tmpdir(), 'psys2-reasoner-'));
   try {
     await buildWebchat({ outDir: out });
-    const index = JSON.parse(await readFile(path.join(out, 'worlds/index.json'), 'utf8'));
+    const idx = JSON.parse(await readFile(path.join(out, 'worlds/index.json'), 'utf8'));
+    const index = { worlds: {} };
+    for (const id of Object.keys(idx.worlds)) index.worlds[id] = JSON.parse(await readFile(path.join(out, idx.worlds[id].bundle), 'utf8'));
     assert.equal(index.worlds['kids.shop'].fnsUrl, 'worlds/kids.shop/fns.mjs');
     assert.ok(index.worlds['kids.shop'].files['matrix.sop']);
     assert.equal(index.worlds['data.charts'].fnsUrl, undefined);

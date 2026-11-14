@@ -1244,7 +1244,7 @@ export class DialogSession {
     const tb = opts.budget ?? createBudget();
     const bt = installBudget(tb, { force: !!opts.budget });
     const snap = g || bt ? (opts.undo ?? this.snapshot()) : null;   // a host that passes `undo` (its own snapshot) restores the session itself
-    if (this.engine.knowledge) await openWordsReady();   // open classes (lexicons with open=knowledge) are read by lookup: the vocabulary is loaded before the sentence is read
+    if (this.engine.knowledge) await openWordsReady(text);   // open classes (lexicons with open=knowledge) are read by lookup: the vocabulary is loaded before the sentence is read
     try {
       const reply = await this._send(text, opts);
       // INVARIANT (every turn gets a reply): a message that produced no words at all (bare punctuation, an empty reading) is answered, quoting what was typed
@@ -1726,9 +1726,10 @@ export class DialogSession {
 export async function createEngine({ loader, translator = null, options = {}, formalizers = {} }) {
   // Reasoner switch (spec 15): 'matrix' (default) or 'ops' (the fallback; the worlds that say reasoner=matrix answer through the sopworld library). The option wins over PSYS2_REASONER.
   const mode = (options.reasoner ?? globalThis.process?.env?.PSYS2_REASONER) === 'ops' ? 'ops' : 'matrix';
-  const set = await loadWorlds(loader, { reasoner: mode });
-  const reasoner = mode === 'matrix' ? await createReasoner(set) : null;
-  const interp = createInterpreter(set, { ...options, reasoner });
+  // `set`, `reasoner` and `interp` are replaced by `engine.reload(loader)` (LAZY LOADING: the worlds a message needs are added to a running engine); everything below reads them through these bindings.
+  let set = await loadWorlds(loader, { reasoner: mode });
+  let reasoner = mode === 'matrix' ? await createReasoner(set) : null;
+  let interp = createInterpreter(set, { ...options, reasoner });
   attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
   const engine = {
@@ -1744,6 +1745,22 @@ export async function createEngine({ loader, translator = null, options = {}, fo
     /** Problems found at load time and by static validation (empty when everything is consistent). */
     problems: () => validateWorldSet(set),
     worlds: () => set.list().map((w) => w.summary()),
+    /**
+     * LAZY LOADING: replaces the world set with the one `newLoader` lists (the loaded worlds plus the ones a message needs), keeping this engine object (formalizers, translator, knowledge, the
+     * dispatcher runtime attached to it). Sessions made before keep their old interpreter session: the host makes a new session and gives it the state and memory back (`restoreMemory`).
+     */
+    reload: async (newLoader) => {
+      const hadMeta = !!engine.meta;
+      const nset = await loadWorlds(newLoader, { reasoner: mode });
+      const nreasoner = mode === 'matrix' ? await createReasoner(nset) : null;
+      const ninterp = createInterpreter(nset, { ...options, reasoner: nreasoner });
+      ninterp.knowledge = engine.knowledge;
+      set = nset; reasoner = nreasoner; interp = ninterp;
+      engine.set = nset; engine.reasoner = nreasoner; engine.interp = ninterp; engine.loader = newLoader; engine.meta = null;
+      attachOpenWords(engine.knowledge);
+      if (hadMeta) await engine.prepareMeta();
+      return engine;
+    },
     createSession: (opts) => new DialogSession(engine, opts),
     /** Compiles every pattern and builds the vocabularies in slices that yield to the host (the webchat warm-up, PERF round 2). */
     precompile: async (opts) => {

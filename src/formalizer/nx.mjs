@@ -29,16 +29,14 @@ import { atom } from '../soplang/index.mjs';
 import { perf } from './perf.mjs';
 import { guard, TurnAborted } from './guard.mjs';
 
-/** The strategies and the one constant that picks the default. */
-export const NX_STRATEGIES = Object.freeze(['hybrid', 'neural', 'rules']);
-export const DEFAULT_NX_STRATEGY = 'rules';   // owner decision 2026-11-14 (defaults by the numbers): the rules read; hybrid rescued 6 turns and broke 9 of 6,744, neural is 126 right fewer. The strategies stay for measurement only (no setting offers them).
+import { NX_STRATEGIES, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from './nx-strategy.mjs';
+export { NX_STRATEGIES, DEFAULT_NX_STRATEGY, normalizeNxStrategy };
 /** NX7 gate for the hybrid strategy (A3, with the negation guard); the neural strategy uses the negation guard and a minimum word coverage (0.6). */
 export const NX_GATES = Object.freeze({
   hybrid: Object.freeze({ tauOp: 0.99, tauFrame: 0.9, spans: true, noNeg: true }),
   // the model reads the whole message here, so a reading that leaves most words of the segment unread (a clause it did not model) is refused
   neural: Object.freeze({ tauOp: 0, tauFrame: 0, spans: true, noNeg: true, minCover: 0.6 }),
 });
-export const normalizeNxStrategy = (v) => (NX_STRATEGIES.includes(v) ? v : DEFAULT_NX_STRATEGY);
 
 
 

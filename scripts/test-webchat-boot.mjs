@@ -57,6 +57,15 @@ export function makeServer(getDir) {
   return { srv, log, port: () => srv.address().port, mark: () => log.length, since: (n) => log.slice(n) };
 }
 const pathOf = (u) => u.split('?')[0];
+/** The vendor directories of the worlds' tabs (LAZY LOADING): none of them is fetched at a start except the open tab's (the avatar has none). */
+const VENDOR_RE = /^\/vendor\/(chess|map|editor|charts|draw|music|documents)\//;
+const bundlesOf = (log) => [...new Set(log.filter((x) => x.status !== 404).map((x) => /^\/worlds\/([^/]+)\/bundle\.json/.exec(x.url)?.[1]).filter(Boolean))];
+const startSet = async (site, tabWorld) => {   // what the index says a start with this tab open loads: always-loaded worlds and the tab's world with its imports
+  const idx = JSON.parse(await readFile(path.join(site, 'worlds/index.json'), 'utf8'));
+  const ids = new Set(idx.always.flatMap((id) => idx.worlds[id]?.deps ?? [id]));
+  for (const d of idx.worlds[tabWorld]?.deps ?? []) ids.add(d);
+  return ids;
+};
 
 async function launch(chrome) {
   const puppeteer = await loadPuppeteer();
@@ -106,12 +115,21 @@ export const SCENARIOS = {
       check('cold: the popup is gone when the start is done (a failure notice may stay, with its Dismiss)', v.popupHidden || v.failures > 0, `hidden=${v.popupHidden} failures=${v.failures}`);
       const seen = await popupSeen(pg);
       check('cold: the popup only ever shows one plain sentence (no path, no list)', seen.every(plainSentence), JSON.stringify(seen.slice(0, 6)));
-      const log = s.log.filter((x) => x.status === 200);
-      const count = {}; for (const x of log) count[pathOf(x.url)] = (count[pathOf(x.url)] ?? 0) + 1;
-      const twice = Object.entries(count).filter(([p, n]) => n > 1 && p !== '/sw.js').map(([p, n]) => `${n}x ${p}`);
+      // every request that reaches the server counts, a revalidation (304) too: with max-age a second request for the same URL (page and worker both importing a module) must be answered by the browser's cache
+      // or the service worker, never by the server. The URL counts as a whole (path and hash), module imports of the worker included.
+      const count = {}; for (const x of s.log.filter((r) => r.status !== 404)) count[x.url] = (count[x.url] ?? 0) + 1;
+      const twice = Object.entries(count).filter(([p, n]) => n > 1 && !/^\/(sw\.js|index\.html)?(\?.*)?$/.test(p) && !/^\/build-info\.json/.test(p)).map(([p, n]) => `${n}x ${p}`);
       check('cold: no file reaches the server twice in one start', twice.length === 0, twice.slice(0, 5).join(', '));
       const bare = s.log.map((x) => x.url).filter((u) => !/[?&][vh]=/.test(u) && !UNHASHED_OK(u));
       check('cold: every request carries its hash (except index.html, build-info.json, sw.js, models)', bare.length === 0, bare.slice(0, 5).join(', '));
+      // LAZY LOADING invariants: the start fetches no vendor asset of another tab, only the bundles of the always-loaded worlds and the open tab's, no 4.6 MB index, no reading-model runtime
+      const vend = s.log.map((x) => pathOf(x.url)).filter((u) => VENDOR_RE.test(u));
+      check('cold: no vendor asset of a tab is fetched at start (stockfish, map shapes, tiptap, Chart.js ...)', vend.length === 0, vend.slice(0, 4).join(', '));
+      const allowed = await startSet(site, 'ui.avatar'), got = bundlesOf(s.log);
+      check('cold: only the bundles of the always-loaded worlds and the open tab\'s world are fetched', got.every((id) => allowed.has(id)) && got.length > 5, `fetched ${got.length}: ${got.filter((id) => !allowed.has(id)).join(', ')}`);
+      check('cold: no world bundle bigger than the index (worlds/index.json is the small routing index)', s.log.filter((x) => /^\/worlds\/index\.json/.test(x.url)).every((x) => x.bytes < 60000));
+      const modelRt = s.log.map((x) => pathOf(x.url)).filter((u) => /ort-wasm|\/models\/dispatcher\/model/.test(u));
+      check('cold: no reading-model runtime or model before it is asked for (rules setting)', modelRt.length === 0, modelRt.join(', '));
       const swReady = await pg.evaluate(async () => !!(await navigator.serviceWorker.getRegistration())?.active);
       check('cold: the service worker is active after the first start', swReady);
       const keys = await cacheKeys(pg);
@@ -124,6 +142,34 @@ export const SCENARIOS = {
       await pg.close();
       s.srv.close(); await browser.close(); await rm(tmp, { recursive: true, force: true });
     } catch (e) { check('cold: runs', false, String(e?.stack ?? e).slice(0, 400)); try { await browser.close(); } catch { /* gone */ } s.srv.close(); }
+  },
+
+  /** A world loads when it is needed and not before: "open the map" fetches the map's bundle and its vendor assets once, a second map message fetches nothing, a first question on drawing loads the drawing world. */
+  async lazy({ chrome } = {}) {
+    const tmp = await mkdtemp(path.join(os.tmpdir(), 'psys2-boot-'));
+    const site = path.join(tmp, 'site'); await copySite(site);
+    const s = makeServer(() => site);
+    const browser = await launch(chrome);
+    try {
+      const pg = await openPage(browser, `http://localhost:${s.port()}/index.html`);
+      await ready(pg); await settle(pg); await sleep(1000);
+      const say = async (text) => { const mark = s.mark(); await pg.type('input.p2-text', text, { delay: 0 }); await pg.keyboard.press('Enter'); await pg.waitForFunction(() => !window.psys2.busy && !document.querySelector('.p2-msg.is-typing'), { timeout: 60000, polling: 50 }); await sleep(2500); return s.since(mark).filter((x) => x.status !== 404); };
+      const loaded = () => pg.evaluate(() => window.psys2.engine.loaded());
+      const before = await loaded();
+      check('lazy: the map world is not loaded at start', !before.includes('geo.map'), before.join(','));
+      const r1 = await say('open the map');
+      check('lazy: "open the map" fetches the map\'s bundle', bundlesOf(r1).includes('geo.map'), bundlesOf(r1).join(','));
+      check('lazy: and its vendor assets (leaflet, the map shapes)', r1.some((x) => /^\/vendor\/map\/leaflet/.test(x.url)) && r1.some((x) => /^\/vendor\/map\/countries/.test(x.url)));
+      check('lazy: the map world is loaded now and the Map tab is on screen', (await loaded()).includes('geo.map') && await pg.evaluate(() => window.psys2.session.state()['ui.shell']?.activeTab === 'map' && !!document.querySelector('#p2-panel-map .p2-tabbody')));
+      const r2 = await say('show me paris');
+      check('lazy: a second map message fetches no world and no vendor asset again', bundlesOf(r2).length === 0 && !r2.some((x) => VENDOR_RE.test(pathOf(x.url))), r2.map((x) => pathOf(x.url)).slice(0, 4).join(', '));
+      check('lazy: no other tab\'s vendor assets were fetched meanwhile', !s.log.some((x) => /^\/vendor\/(chess|editor|charts|draw|music|documents)\//.test(x.url)));
+      const r3 = await say('open the chess tab');
+      check('lazy: "open the chess tab" loads the chess world and its engine files', (bundlesOf(r3).includes('games.chess') || (await loaded()).includes('games.chess')) && r3.some((x) => /^\/vendor\/chess\//.test(x.url)), r3.map((x) => pathOf(x.url)).join(', '));
+      const popups = await popupSeen(pg);
+      check('lazy: the popup said what loads, in plain words', popups.every(plainSentence), JSON.stringify(popups.slice(0, 5)));
+      await pg.close(); s.srv.close(); await browser.close(); await rm(tmp, { recursive: true, force: true });
+    } catch (e) { check('lazy: runs', false, String(e?.stack ?? e).slice(0, 400)); try { await browser.close(); } catch { /* gone */ } s.srv.close(); }
   },
 
   async warm({ chrome } = {}) {

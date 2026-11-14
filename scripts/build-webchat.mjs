@@ -177,6 +177,7 @@ async function moduleVersions(outDir, graph = {}) {
   Object.assign(out, graph);   // lib and worlds: the graph version (the same string their own imports carry), so the page and the workers load one instance
   if (await exists(path.join(outDir, 'worlds/index.json'))) await add('worlds/index.json');
   if (await exists(path.join(outDir, 'ui/tabs/index.json'))) await add('ui/tabs/index.json');
+  if (await exists(path.join(outDir, 'ui/tabs/meta.json'))) await add('ui/tabs/meta.json');
   return out;
 }
 /** Files that are never part of the asset manifest: the entry page and the manifest itself (always fetched fresh), the service worker, documentation and screenshots (never fetched by the page). */
@@ -210,7 +211,8 @@ async function writeEarlyLoad({ outDir, tabFiles, ids, graph, build, assets = {}
   if (!(await exists(file))) return;
   const html = await readFile(file, 'utf8');
   // the engine (dialog, formalizers, translators, world operations) runs in ui/engine-worker.mjs (COMPUTE-BUDGET): the page thread does not preload it
-  const roots = ['app.mjs', 'lib/soplang/index.mjs', 'lib/dialog/time-limits.mjs', ...tabFiles.map((f) => `ui/tabs/${f}`)];
+  // a tab's module (and the world modules and vendor assets it pulls in) is loaded when the tab is first used, never preloaded (LAZY LOADING): only the page's own graph is
+  const roots = ['app.mjs', 'lib/soplang/index.mjs', 'lib/dialog/time-limits.mjs'];
   const mods = await importGraph(outDir, roots);
   // Cache busting (URGENT-FREEZE): GitHub Pages serves everything with max-age=600, so after a deploy a browser mixes old and new files for ten minutes
   // (and an unversioned worker URL can stay old). An import map sends every module URL to `<url>?v=<content hash>`: one index.html always names one
@@ -222,9 +224,9 @@ async function writeEarlyLoad({ outDir, tabFiles, ids, graph, build, assets = {}
     `<script>window.__psys2Build = ${JSON.stringify(b)};</script>`,
     `<script>window.__psys2Mod = ${JSON.stringify(ver)};</script>`,
     ...mods.filter((m) => ver[m]).map((m) => `<link rel="modulepreload" href="${m}?v=${ver[m]}">`),
-    // ONE fetch of each of these per start, shared with the engine worker: the page reads the worlds bundle as bytes and hands it to the worker (ui/engine-client.mjs), and
-    // findDispatcherModel (ui/dispatcher-host.mjs) takes the model's meta file from here. Nothing else fetches them.
-    `<script>window.__psys2Early = { worlds: fetch('worlds/index.json?v=${ver['worlds/index.json']}').then((r) => (r.ok ? r.arrayBuffer() : undefined), () => undefined), dispatcherMeta: fetch('models/dispatcher/meta.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null), () => undefined) };</script>`,
+    // ONE fetch of the model's meta file per start: findDispatcherModel (ui/dispatcher-host.mjs) takes it from here. The worlds are not fetched here: the engine worker reads the small
+    // routing index (worlds/index.json) and loads a world's bundle when the world is needed (LAZY LOADING).
+    `<script>window.__psys2Early = { dispatcherMeta: fetch('models/dispatcher/meta.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null), () => undefined) };</script>`,
     EARLY_END].join('\n  ');
   const a = html.indexOf(EARLY_BEGIN), b = html.indexOf(EARLY_END);
   // idempotent: when only the build time would change (same commit, same files), keep the previous block and its time
@@ -237,6 +239,53 @@ async function writeEarlyLoad({ outDir, tabFiles, ids, graph, build, assets = {}
   // the stylesheet and the icon carry their hash too (no unhashed asset URL in the page)
   next = next.replace(/href="(style\.css|favicon\.svg)(\?v=[0-9a-f]+)?"/g, (all, f) => (assets[f] ? `href="${f}?v=${assets[f]}"` : all));
   if (next !== html) await writeFile(file, next);
+}
+
+/**
+ * `ui/tabs/meta.json`: for each tab plugin its id, label, world, order and the names of its effects, read by importing the module here (they import nothing that needs a DOM), so the page lists the
+ * tabs and registers their effects without loading a tab module, its world modules or its vendor assets (LAZY LOADING). Without ui/tabs in the out dir nothing is written.
+ */
+async function writeTabMeta({ outDir, tabFiles }) {
+  const dir = path.join(outDir, 'ui/tabs');
+  if (!(await exists(dir))) return;
+  const { pathToFileURL } = await import('node:url');
+  const meta = [];
+  for (const file of tabFiles) {
+    if (!(await exists(path.join(dir, file)))) continue;
+    const m = (await import(pathToFileURL(path.join(dir, file)).href)).default;
+    if (m?.id && m.make) meta.push({ file, id: m.id, label: m.label, world: m.world, order: m.order ?? 100, effects: Object.keys(m.effects ?? {}) });
+  }
+  await writeFile(path.join(dir, 'meta.json'), JSON.stringify(meta) + '\n');
+}
+
+/** The vendor assets a world's tab needs (loaded with the world, never at boot): `vendor/<dir>/` directories of docs/webchat/vendor. */
+const LABELS = { 'kids.arith': 'arithmetic', 'kids.animals': 'animals', 'kids.shop': 'shopping', 'kids.tasks': 'tasks', 'kids.time': 'time', 'kids.shapes': 'shapes', 'user.profile': 'profile', 'games.guess': 'guess the animal', 'games.hangman': 'hangman', 'games.tictactoe': 'tic-tac-toe', 'docs.editor': 'editor', 'docs.reader': 'documents', 'ui.avatar': 'avatar', talk: 'talk', 'plan.seating': 'seating plan', 'plan.timeline': 'timeline', 'diagram.sketch': 'diagram', 'data.charts': 'charts', 'media.music': 'music', 'games.chess': 'chess', 'geo.map': 'map', 'art.draw': 'drawing', space: 'space' };
+export const VENDOR_OF = { 'games.chess': ['chess'], 'geo.map': ['map'], 'docs.editor': ['editor'], 'data.charts': ['charts'], 'art.draw': ['draw'], 'media.music': ['music'], 'docs.reader': ['documents'] };
+
+/**
+ * LAZY LOADING (specs/06 "Lazy loading"): `worlds/index.json` is the small routing index, not the worlds: for every world its bundle path, imports, tab and vendor assets, the worlds a start always loads, and
+ * where the word index is. The word index is written in BOTH designs (A: `worlds/words.bloom.json`, a Bloom filter per world; B: `worlds/words/<xx>.json`, exact buckets by the first two letters, with
+ * `worlds/words/index.json`); the runtime uses the one `words.design` says. Built from the engine's own view of the worlds (src/worlds/word-index.mjs, scripts/lib/world-index-build.mjs).
+ */
+async function writeWorldIndex({ root, outDir, worldsRoot, bundle, ids, log }) {
+  const [{ createFsLoader }, { createEngine }, { buildWorldIndex, ALWAYS }] = await Promise.all([import('../src/loaders/fs-loader.mjs'), import('../src/dialog/index.mjs'), import('./lib/world-index-build.mjs')]);
+  const engine = await createEngine({ loader: createFsLoader({ roots: [worldsRoot] }) });
+  const ix = buildWorldIndex(engine.set, { mode: 'vocab' });
+  const worlds = {};
+  for (const id of ids) {
+    const w = engine.set.get(id);
+    const bytes = JSON.stringify(bundle.worlds[id]).length;
+    const hash = sha(await readFile(path.join(outDir, 'worlds', id, 'bundle.json'))).slice(0, 10);   // the same string assetHashes gives the file: the worker fetches it as `bundle.json?v=<hash>`
+    worlds[id] = { bundle: `worlds/${id}/bundle.json`, hash, label: LABELS[id] ?? id.split('.').at(-1), bytes, imports: w?.imports ?? [], deps: engine.set.available(id), reads: w?.reads ?? [], compose: w?.compose ?? [], tab: w?.tab ? { id: w.tab.id, title: w.tab.title, aliases: w.tab.aliases } : null, title: w?.title ?? id, summary: w?.summaryPhrase ?? null, vendor: (VENDOR_OF[id] ?? []).map((d) => `vendor/${d}/`) };
+  }
+  const T = 4;   // a word of more than T worlds never loads one by itself (scripts/eval-word-index.mjs)
+  await mkdir(path.join(outDir, 'worlds/words'), { recursive: true });
+  const buckets = {};
+  for (const [bk, entries] of Object.entries(ix.buckets)) { const txt = JSON.stringify(entries); await writeFile(path.join(outDir, 'worlds/words', `${bk}.json`), txt); buckets[bk] = sha(Buffer.from(txt)).slice(0, 10); }   // bucket -> hash: the worker fetches `words/<bk>.json?v=<hash>`
+  const bloomTxt = JSON.stringify(ix.bloom);
+  await writeFile(path.join(outDir, 'worlds/words.bloom.json'), bloomTxt);
+  await writeFile(path.join(outDir, 'worlds/index.json'), JSON.stringify({ version: 2, always: ALWAYS, T, words: { design: 'B', ids: ix.ids, buckets, bloom: { path: 'worlds/words.bloom.json', hash: sha(Buffer.from(bloomTxt)).slice(0, 10) } }, worlds }) + '\n');
+  log?.(`webchat: world index ${ids.length} worlds, ${ix.inv.size} words, ${Object.keys(ix.buckets).length} buckets`);
 }
 
 export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs/webchat'), models = null, metaOnly = false, surprise = false, log = () => {} } = {}) {
@@ -286,9 +335,11 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
     if (await exists(path.join(dir, 'fns.mjs'))) entry.fnsUrl = `worlds/${id}/fns.mjs`;   // the actions and reply words of a matrix world (spec 15), loaded only with the matrix reasoner
     bundle.worlds[id] = entry;
     ids.push(id);
+    await mkdir(path.join(outDir, 'worlds', id), { recursive: true });
+    await writeFile(path.join(outDir, 'worlds', id, 'bundle.json'), JSON.stringify(entry) + '\n');   // the world's files, loaded when the world is needed (LAZY LOADING)
   }
   await mkdir(path.join(outDir, 'worlds'), { recursive: true });
-  await writeFile(path.join(outDir, 'worlds/index.json'), JSON.stringify(bundle) + '\n');
+  await writeWorldIndex({ root, outDir, worldsRoot, bundle, ids, log });
 
   // 3. tab plugins: docs/webchat/ui/tabs/*.mjs -> ui/tabs/index.json (loaded by app.mjs, spec 07 §6)
   const tabsSrc = path.join(root, 'docs/webchat/ui/tabs');
@@ -299,6 +350,7 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   // 3a. early loading (PERF round 2): index.html gets modulepreload links for the whole module graph (app, lib, tabs, world ops) so that a
   // high-latency link fetches them in parallel instead of one import round trip at a time, and an early fetch of worlds/index.json and the model meta file.
   const graph = await versionGraph(outDir);   // rewrites the imports of lib/ and worlds/ to versioned URLs
+  await writeTabMeta({ outDir, tabFiles });   // ui/tabs/meta.json: what the page needs to list the tabs without loading their modules
   const commit = gitCommit(root), builtAt = new Date().toISOString();
 
   // 3b. dispatcher model for the Encoder formalizer (optional)

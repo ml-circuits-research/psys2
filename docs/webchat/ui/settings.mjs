@@ -1,6 +1,6 @@
 // Webchat settings (spec 06 "Webchat settings"): defaults, the version bump and the one-time migration. Pure, no DOM, so node:test can import it.
 
-import { RUNTIME_DEFAULTS } from '../lib/dialog/runtime-config.mjs';
+import { RUNTIME_DEFAULTS } from '../lib/dialog/runtime-defaults.mjs';
 import { TIME_LIMIT_DEFAULTS } from '../lib/dialog/time-limits.mjs';
 import { normalize as normalizeLanguage, browserLanguage, EN_VARIANTS } from './language.mjs';
 

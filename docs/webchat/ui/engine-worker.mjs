@@ -30,6 +30,10 @@ let engine = null, session = null, settings = {}, mods = null, testHooks = false
 const active = new Map();            // request id -> AbortController of a send or dry read that runs
 const turnRunning = () => [...active.values()].some((c) => !c.dry);
 let dispatcherEnc = null, normalizerHost = null, dispatcherInfo = null;
+let worldLoader = null, loaders = null, rulesMod = null, wordMod = null, tabWorlds = {}, universe = null;   // LAZY LOADING: the world index, the library modules the loader needs, tab id -> world id, the worlds this page may use (tests)
+const loadedIds = new Set();
+const allowed = (id) => !universe || id === 'core' || universe.has(id);
+const absModule = (path, id, kind) => new URL(path, ROOT).href + (ver[`worlds/${id}/${kind}.mjs`] ? `?v=${ver[`worlds/${id}/${kind}.mjs`]}` : '');
 const snaps = new Map();             // undo id -> engine snapshot (a ring: the last SNAP_KEEP)
 const SNAP_KEEP = 24;
 let lastTurnEnd = 0;
@@ -99,8 +103,10 @@ async function init(m) {
   testHooks = m.testHooks === true;
   settings = { ...(m.settings ?? {}) };
   const imp = (rel) => import(vurl(rel));
-  const [dialog, loaders, translate, soplang, rc, g, tl, hosts, lang] = await Promise.all([imp('lib/dialog/index.mjs'), imp('lib/loaders/bundle-loader.mjs'), imp('lib/translate/index.mjs'), imp('lib/soplang/index.mjs'),
-    imp('lib/dialog/runtime-config.mjs'), imp('lib/formalizer/guard.mjs'), imp('lib/dialog/time-limits.mjs'), Promise.all([imp('ui/dispatcher-host.mjs'), imp('ui/normalizer-host.mjs'), imp('ui/translation.mjs')]), imp('ui/language.mjs')]);
+  const [dialog, loadersMod, translate, soplang, rc, g, tl, hosts, lang, rulesM, wordIdx, wlMod] = await Promise.all([imp('lib/dialog/index.mjs'), imp('lib/loaders/bundle-loader.mjs'), imp('lib/translate/index.mjs'), imp('lib/soplang/index.mjs'),
+    imp('lib/dialog/runtime-config.mjs'), imp('lib/formalizer/guard.mjs'), imp('lib/dialog/time-limits.mjs'), Promise.all([imp('ui/dispatcher-host.mjs'), imp('ui/normalizer-host.mjs'), imp('ui/translation.mjs')]), imp('ui/language.mjs'), imp('lib/formalizer/rules/index.mjs'), imp('lib/worlds/word-index.mjs'), imp('ui/world-loader.mjs')]);
+  loaders = loadersMod; rulesMod = rulesM; wordMod = wordIdx;
+  tabWorlds = m.tabWorlds ?? {}; universe = m.onlyWorlds ? new Set(m.onlyWorlds) : null;
   const [dh, nh, tr] = hosts;
   try { const b = await imp('lib/dialog/budget.mjs'); budgetMod.createBudget = b.createBudget ?? null; } catch { budgetMod.createBudget = null; }   // agent B's step budget, when this build has it
   mods = { tl, dialog, rc, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang };
@@ -112,30 +118,26 @@ async function init(m) {
     g.guard.abortable = (p, stage) => { report(stage); return ga(p, stage); }; }
   // PROGRESS: the page's start-up steps follow the real order (the page ends none of them itself, so a step that never ends is a bug the progress test catches)
   evt('boot-step', { id: 'worlds', op: 'start' });
-  // the page already fetched the bundle once (index.html, `__psys2Early`) and hands the bytes over: one fetch of the file per start, shared by the page and this worker (also on a restart)
-  let bundleText;
-  if (m.worldsBytes) bundleText = new TextDecoder().decode(m.worldsBytes);
-  else {
-    const res = await fetch(m.worldsUrl, { cache: 'default' });
-    if (!res.ok) throw new Error(`worlds/index.json: HTTP ${res.status}`);
-    bundleText = await res.text();
-  }
-  const bundle = JSON.parse(bundleText);
-  for (const [id, w] of Object.entries(bundle.worlds)) {
-    if (m.onlyWorlds && id !== 'core' && !m.onlyWorlds.includes(id)) delete bundle.worlds[id];
-    else {
-      if (w.opsUrl) w.opsUrl = new URL(w.opsUrl, ROOT).href + (ver[`worlds/${id}/ops.mjs`] ? `?v=${ver[`worlds/${id}/ops.mjs`]}` : '');
-      if (w.fnsUrl) w.fnsUrl = new URL(w.fnsUrl, ROOT).href + (ver[`worlds/${id}/fns.mjs`] ? `?v=${ver[`worlds/${id}/fns.mjs`]}` : '');   // matrix worlds (spec 15)
-    }
-  }
+  // LAZY LOADING: the small routing index (worlds/index.json) now; a world's files when the world is needed. A start loads the always-loaded worlds (the shell and what reading needs), the open
+  // tab's world, and the worlds a restored session has state or memory in. Everything else loads when a tab opens, when the words of a message say so, or when the user names it.
+  const fetchJson = async (rel, hash) => { const r = await fetch(abs(rel) + (hash ? `?v=${hash}` : ''), { cache: 'default' }); if (!r.ok) throw new Error(`${rel}: HTTP ${r.status}`); return r.json(); };
+  worldLoader = wlMod.createWorldLoader({ indexHash: ver['worlds/index.json'], fetchJson, bag: (text) => new Set([...rulesM.messageBag(text), ...wordIdx.queryWords(text)]) });
+  await worldLoader.init();
+  // `?psys2lazy=0` (tests, a comparison with the full set) and a saved language other than English: every world is loaded at start (a Romanian message is read through English candidates that a
+  // partial world set can mistake for understood: a session that starts in Romanian must read like the full set, from its first message)
+  const startIds = (m.lazyWorlds === false || (m.settings?.language && lang.normalize(m.settings.language) !== 'en') ? worldLoader.ids() : [...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] })]).filter((id) => allowed(id));
+  await worldLoader.bundles(startIds);
+  for (const id of startIds) loadedIds.add(id);
+  const bundle = worldLoader.bundleOf(startIds, absModule);
+  const bundleBytes = startIds.reduce((s, id) => s + (worldLoader.info(id)?.bytes ?? 0), 0);
   // The browser Translation API and language detector exist on the page only: the worker asks the page for them, with a deadline (then the rules answer)
   const backend = tr.createRemoteBackend({ kinds: m.browser ?? {}, call: (op, payload) => new Promise((resolve, reject) => { const id = ++btSeq; btPending.set(id, { resolve, reject }); post({ type: 'bt', id, op, ...payload }); }).finally(() => {}) });
   // MT keep-list (spec 05): the app's own words (currency, names, titles, tab names) are placeholders around the model; the engine and session exist by the first call
   { const kl = await imp('lib/translate/keep-list.mjs'); const raw = backend.translate; backend.translate = kl.protectedTranslate(raw, () => (engine ? { keep: kl.keepListOf(engine.set), extra: kl.sessionNames(session) } : null)); }
   const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend, languages: lang.LANGS });
-  evt('boot-step', { id: 'worlds', op: 'end', bytes: bundleText.length, count: Object.keys(bundle.worlds ?? {}).length });
+  evt('boot-step', { id: 'worlds', op: 'end', bytes: bundleBytes, count: startIds.length });
   evt('boot-step', { id: 'reasoner', op: 'start' });
-  engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });   // Settings › Developer › Reasoner (spec 15): read when the engine starts
+  engine = await dialog.createEngine({ loader: loadersMod.createBundleLoader(bundle), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });   // Settings › Developer › Reasoner (spec 15): read when the engine starts
   try { await engine.prepareMeta?.(); } catch { /* the policy router answers alone (spec 20) */ }   // meta.worlds: the default router (C)
   evt('boot-step', { id: 'reasoner', op: 'end' });
   // The knowledge catalog (spec 17): the sop-knowledge-worlds copy on GitHub Pages, read lazily (nothing is fetched until a message needs a thing the board or the
@@ -182,7 +184,7 @@ async function init(m) {
   applySettings(null);
   if (m.restoreState) restoreStates(m.restoreState, m.restoreMeta);
   if (m.prepareModels && dispatcherEnc && settings.formalizer === 'encoder') dispatcherEnc.prepare().catch(() => {});
-  return { worlds: engine.worlds().map((w) => w.id), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget };
+  return { worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget };
 }
 
 function restoreStates(state, meta) {
@@ -202,6 +204,45 @@ function sendOrt() {
     lanes: Object.fromEntries([...o.lanes.entries()].map(([k, v]) => [k, { busy: v.pending?.size > 0, queued: v.pending?.size ?? 0 }])) }); } catch { /* diagnostics only */ }
 }
 
+// ---------- LAZY LOADING (specs/06 "Lazy loading") ----------
+const worldLabel = (ids) => { const names = ids.map((id) => worldLoader.info(id)?.label).filter(Boolean); const pick = names.slice(-1)[0] ?? 'next'; return `Loading the ${pick} world${ids.length > 1 && names.length > 1 ? 's' : ''}…`; };
+const activeWorld = () => { try { const tab = session.state()['ui.shell']?.activeTab; return tab ? (tabWorlds[tab] ?? worldLoader.ids().find((id) => worldLoader.info(id).tab?.id === tab) ?? null) : null; } catch { return null; } };
+const loadedLog = [];   // what was loaded on demand: { ids, why, ms, bytes } (diagnostics and the on-demand report)
+/**
+ * Adds `ids` (and what they import) to the running engine: fetches their files, replaces the world set (`engine.reload`), and gives the session its state and memory back, as a restart does.
+ * Nothing happens when they are all loaded. A failed fetch changes nothing: the engine goes on with the worlds it has (a lazy fetch that fails never changes a reading).
+ */
+let lockP = Promise.resolve();   // one load at a time (a page request and a turn can ask together)
+const ensureWorlds = (ids, why) => { const p = lockP.then(() => ensureRun(ids, why), () => ensureRun(ids, why)); lockP = p.catch(() => {}); return p; };
+async function ensureRun(ids, why) {
+  const want = worldLoader.closure([...ids].filter((id) => allowed(id) && worldLoader.info(id)));
+  const missing = [...want].filter((id) => !loadedIds.has(id));
+  if (!missing.length) return [];
+  const label = worldLabel(missing), stepId = `world:${missing.join(',')}`, t0 = performance.now();
+  evt('world-load', { id: stepId, op: 'start', label, why, ids: missing });
+  try {
+    try { await worldLoader.bundles(want); } catch (e) { evt('world-load', { id: stepId, op: 'fail', label, message: String(e?.message ?? e) }); return []; }
+    const st = stateOf(), meta = metaOf();
+    const next = [...loadedIds, ...missing];
+    await engine.reload(loaders.createBundleLoader(worldLoader.bundleOf(next, absModule)));
+    for (const id of missing) loadedIds.add(id);
+    session = engine.createSession({ language: mods.lang.normalize(settings.language) });
+    applySettings(null);
+    restoreStates(st, meta);
+    snaps.clear();   // the old snapshots belong to the old interpreter session: an undo of an earlier turn goes through the page's state record
+    if (testHooks) installFaults();
+    Promise.resolve(engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); while (turnRunning()) await sleep(20); } })).catch(() => {});
+    const bytes = missing.reduce((s, id) => s + (worldLoader.info(id)?.bytes ?? 0), 0);
+    loadedLog.push({ ids: missing, why, ms: Math.round(performance.now() - t0), bytes });
+    evt('world-load', { id: stepId, op: 'end', label, bytes, ids: missing });
+    evt('worlds-loaded', { ids: missing, all: [...loadedIds], why });
+    return missing;
+  } catch (e) { evt('world-load', { id: stepId, op: 'fail', label, message: String(e?.message ?? e) }); throw e; }
+}
+const allLoaded = () => worldLoader.ids().filter(allowed).every((id) => loadedIds.has(id));
+/** A reading is complete when something was understood and nothing was left out or guessed: otherwise a world that is not loaded might have read it (the worker then reads it again with every world). */
+const incomplete = (reply) => !reply.segments?.length || reply.segments.some((x) => x.unparsed || x.corrections?.length || x.ignored?.length) || (reply.statuses ?? []).some((x) => x !== 'supported');
+
 // ---------- requests ----------
 const handlers = {
   async init(m) { return init(m); },
@@ -211,15 +252,34 @@ const handlers = {
     if (warming) await warming;
     faultNow = testHooks ? (m.fault ?? null) : null;
     if (m.settings) applySettings(m.settings);
-    const snap = session.snapshot();
+    // LAZY LOADING: the open tab's world and the worlds the words of the message say it needs, before the turn is read
+    // a message in another language is read through its English candidates, which a partial world set can mistake for understood: every world is loaded for it (the word index is English)
+    try { const lang = mods.lang.normalize(m.opts?.language ?? m.settings?.language ?? settings.language); if (lang !== 'en') await ensureWorlds(worldLoader.ids(), 'language'); else { const plan = await worldLoader.plan(m.text); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'message'); } } catch (e) { console.warn('world plan failed', e); }
+    let snap = session.snapshot();
     if (m.undoId != null) { snaps.set(m.undoId, snap); if (snaps.size > SNAP_KEEP) snaps.delete(snaps.keys().next().value); }
-    const budget = budgetMod.createBudget ? (() => { try { return budgetMod.createBudget(m.limits ?? undefined); } catch { return null; } })() : null;
+    let budget = null;
+    const newBudget = () => (budgetMod.createBudget ? (() => { try { return budgetMod.createBudget(m.limits ?? undefined); } catch { return null; } })() : null);
+    budget = newBudget();
     mods.guard.setStage?.('start');
     try {
       const translator = engine.translator; translator.resetUsage?.();
       let reply;
-      try { reply = await session.send(m.text, { ...m.opts, language: mods.lang.normalize(m.opts?.language ?? m.settings?.language), signal: ctl.signal, undo: snap, ...(budget ? { budget } : {}) }); }
-      catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded' || ctl.signal.aborted) { try { session.restore(snap); } catch { /* keep */ } } if (budget && e && typeof e === 'object') e.bySite = { ...budget.bySite }; throw e; }
+      const read = async () => {
+        try { return await session.send(m.text, { ...m.opts, language: mods.lang.normalize(m.opts?.language ?? m.settings?.language), signal: ctl.signal, undo: snap, ...(budget ? { budget } : {}) }); }
+        catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded' || ctl.signal.aborted) { try { session.restore(snap); } catch { /* keep */ } } if (budget && e && typeof e === 'object') e.bySite = { ...budget.bySite }; throw e; }
+      };
+      reply = await read();
+      if (incomplete(reply) && !allLoaded()) {   // not understood, or understood with words guessed or left out: read it again with every world (the reading is then the one a full start gives)
+        try { session.restore(snap); } catch { /* keep */ }
+        const added = await ensureWorlds(worldLoader.ids(), 'second reading');
+        if (added.length) {
+          snap = session.snapshot();
+          if (m.undoId != null) snaps.set(m.undoId, snap);
+          budget = newBudget();
+          translator.resetUsage?.();
+          reply = await read();
+        } else reply = await read();   // the other worlds could not be fetched: the first reading is read again as it was (nothing changed)
+      }
       annotateWires(reply);
       return { reply, state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
         budget: budget ? { ticks: budget.ticks, bySite: { ...budget.bySite } } : null, ort: true };
@@ -284,11 +344,14 @@ const handlers = {
     evt('warm', 'translator');
     return null;
   },
-  /** Page start-up step and its retries: reads the catalog's vocabulary; { ok } is false while the catalog cannot be reached (the page asks again; `refresh` skips the backoff). */
+  /** The page needs a world now (its tab opens, the user names it): loads it and answers which worlds are loaded. */
+  async ensure(m) { while (turnRunning()) await sleep(20); const added = await ensureWorlds(m.worlds ?? [], m.why ?? 'tab'); return { added, loaded: [...loadedIds], state: stateOf(), log: loadedLog.slice(-20) }; },
+  async loaded() { return { loaded: [...loadedIds], log: loadedLog.slice(), loader: worldLoader.stats }; },
+  /** Page start-up step and its retries: reads the catalog's index (not the vocabulary: that is read by buckets, when a message needs it); { ok } is false while the catalog cannot be reached (the page asks again; `refresh` skips the backoff). */
   async catalog(m) {
     if (!knowledgeFacts) return { ok: false, bytes: null };
     if (m.refresh) knowledgeFacts.refresh();
-    await knowledgeFacts.loadVocab();
+    await knowledgeFacts.world?.('k.objects');   // LAZY LOADING: the catalog's index (version-cached), not its 1.3 MB vocabulary: a message reads the buckets of its words
     return { ok: !knowledgeFacts.unreachable(), bytes: knowledgeFacts.stats?.vocabBytes ?? null };
   },
   async 'ort-restart'(m) { globalThis.__psys2Ort?.restart?.(m.lane, m.why); sendOrt(); return null; },   // diagnostics and tests
