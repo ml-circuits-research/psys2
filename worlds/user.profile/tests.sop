@@ -688,7 +688,7 @@
     session=dlg03
 
 @t.user.profile.dlg04 core.test
-    input="so i liv in Brasov lol"
+    input="soo i liv in Brasov lol"
     expectState="fields.location.v=Brasov"
     session=dlg04
 

@@ -190,6 +190,10 @@
     expect="Your pet is called Rex."
     doc="rule sweep: heldout wording that the rules did not read before"
 
+@t.animals.x22 core.test
+    input="Is a whale a mammal or a fish?"
+    expect="mammal"
+
 @t.animals.x23 core.test
     input="is a bat a bird or a mammal"
     expect="mammal"
