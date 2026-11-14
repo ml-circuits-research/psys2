@@ -9,6 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
+import { installTextGen } from './textgen.mjs?v=50627870b4';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=17a2e17459';
 import { loadWorlds } from '../worlds/index.mjs?v=3987c25362';
 import { validateWorldSet } from '../worlds/validate.mjs?v=89e5c10d75';
@@ -1412,6 +1413,7 @@ export class DialogSession {
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
     if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=1e7afc0b40').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.reader (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
     { const v = cleanVoice(text, { voice: this._voice }); if (v.corrections.length && v.text.trim()) text = v.text; }
