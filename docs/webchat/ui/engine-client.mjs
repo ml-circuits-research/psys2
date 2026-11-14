@@ -214,7 +214,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       rest.language ??= getLanguage();   // LANG-FIXED: a turn is read in the selected language (ui/language.mjs) unless the caller says which one (the app always passes the selected one)
       stats.sends++;
       const fault = testHooks ? globalThis.__psys2Fault?.[text] ?? null : null;
-      const res = await guarded('send', 'send', { text, opts: { ...rest, hardMs, softMs }, undoId: undo?.id ?? null, settings: getSettings(), fault }, { signal, hardMs: hardMs ? hardMs + 600 : null, text, key, tab });
+      const res = await guarded('send', 'send', { text, opts: { ...rest, hardMs, softMs }, undoId: undo?.id ?? null, settings: getSettings(), fault }, { signal, hardMs: hardMs ? hardMs + 600 + 30000 : null, text, key, tab });
       applyStateInfo(res);
       lastUsage = { usage: res.usage ?? [], detection: res.detection ?? [] };
       if (res.budget && !res.reply.budget) res.reply.budget = res.budget;

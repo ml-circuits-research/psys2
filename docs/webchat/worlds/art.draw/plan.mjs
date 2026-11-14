@@ -6,7 +6,7 @@
 import * as D from './engine.mjs?v=453cded326';
 import { kindKey, kindName, W, H } from './scene.mjs?v=0882bbcd68';
 import { planHostOf } from '../../lib/plan/host.mjs?v=5e08a460c7';
-import { knowsKind } from '../../lib/knowledge/open-words.mjs?v=3eed01f9f5';
+import { knowsKind } from '../../lib/knowledge/open-words.mjs?v=d99ff8a97b';
 import { COUNTS } from '../space/space.mjs?v=f98ca4dd42';
 
 const REL = { on: 'on', 'on top of': 'on', onto: 'on', in: 'in', inside: 'in', into: 'in', around: 'around', at: 'at' };
