@@ -523,6 +523,8 @@ async function debugFor(name, viewport, o) {
     await pg.evaluate(() => { document.querySelector('input.p2-text').value = ''; });
 
     // dry run executes nothing
+    // the first read of a phrase loads the worlds it needs (lazy loading adds their initial states): prime them, then "unchanged" is measured from here
+    await pg.evaluate(async () => { for (let i = 0; i < 30; i++) { const r = await window.psys2.session.dryRead('make the eyes blue', { language: 'en' }); if (!['busy', 'deadline'].includes(r.reason)) break; await new Promise((x) => setTimeout(x, 150)); } });
     const stateBefore = await c.state();
     await pg.click('#p2-dbg-open'); await pg.waitForSelector('.p2-dbg:not([hidden])'); await section('dry');
     await pg.type('.p2-dbg-dry-in', 'make the eyes blue');

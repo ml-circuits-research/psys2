@@ -54,6 +54,8 @@ export const SCENARIOS = {
     const c = await open(o);
     try {
       await idle(c);   // a startup turn (greeting, engine warm-up) may still own the guard: a dry run then declines ("busy") by design
+      // the worlds a phrase needs are loaded by the first read of it (lazy loading; loading adds their initial states): prime them, then the snapshot below is what "no side effects" is measured against
+      await c.pg.evaluate(async () => { for (const [t, language] of [['make a house', 'en'], ['fă o casă mare', 'ro']]) for (let i = 0; i < 30; i++) { const r = await window.psys2.session.dryRead(t, { language }); if (!['busy', 'deadline'].includes(r.reason)) break; await new Promise((x) => setTimeout(x, 150)); } });
       const snap = () => c.pg.evaluate(() => JSON.stringify([window.psys2.session.state(), window.psys2.session.memory?.(), window.psys2.session._msg, window.psys2.session._sessionLang]));
       const before = await snap();
       // a background warm-up turn of the worker may own the turn guard for a moment: a dry run then declines ("busy") by design, so each read is retried until it is not busy

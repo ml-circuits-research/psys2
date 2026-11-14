@@ -618,6 +618,18 @@
       "pattern": "^small fixes \\((?:matrix|ops)\\)$",
       "class": "geo.map switch landing: the help examples of the map come from generated forms (\"Add a pin\"), not the old canonical examples",
       "ledger": "bug-fix batch 2026-11-14 (training/eval/failures.jsonl, build bugfix-batch-2; rows inherited from the geo.map / media.music landings on main)"
+    },
+    {
+      "file": "webchat-budget.test.mjs",
+      "pattern": "^webchat compute budget: ",
+      "class": "Talk-first in the browser: the memory ellipsis after a worker restart and the Romanian fallback reply are Talk's honest-scope answers; the on-device checker rows time out (\"took too long\") on a loaded box",
+      "ledger": "bug-fix batch 2026-11-14 (training/eval/failures.jsonl, build bugfix-batch-3)"
+    },
+    {
+      "file": "webchat-voice.test.mjs",
+      "pattern": "^webchat voice: pauses",
+      "class": "voice pause timing on a loaded box: the dry run of a cold page hits its 400 ms deadline (worlds compile on first read), so the pause stays at the timeout",
+      "ledger": "bug-fix batch 2026-11-14 (training/eval/failures.jsonl, build bugfix-batch-3)"
     }
   ]
 }
