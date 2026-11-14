@@ -16,11 +16,19 @@
  *   enc.attach(engine); engine.formalizers.encoder = enc;
  *   enc.onStatus((s) => ...);   // { state: 'idle' | 'loading' | 'ready' | 'error', message, ms? }
  */
+<<<<<<< HEAD
 import { formalize } from '../formalizer/rules/index.mjs?v=68e6e20eda';
 import { createDispatcherRuntime, candidateSegmentations } from '../formalizer/dispatcher-runtime.mjs?v=5cb07e6405';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { createDispatchValidator } from './dispatch-validate.mjs?v=c07c98de92';
 import { rerankPrediction, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=d71106b997';
+=======
+import { formalize } from '../formalizer/rules/index.mjs?v=3109864554';
+import { createDispatcherRuntime, candidateSegmentations } from '../formalizer/dispatcher-runtime.mjs?v=5cb07e6405';
+import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
+import { createDispatchValidator } from './dispatch-validate.mjs?v=89c53c5c24';
+import { rerankPrediction, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=ffc52c6673';
+>>>>>>> origin/main
 
 /** Demo policy: a parse the interpreter refuses for a state reason (spec 03 section 7, questions Q3) still counts as understood. */
 export const ENCODER_DEFAULT_POLICY = { acceptRefused: true };

@@ -11,7 +11,11 @@
  * (or noun-verb); when nothing is left the clause is only an argument. The rest is read from the context (`dialog.context()`) and the reading's own world.
  */
 import { budget } from './budget.mjs?v=00bce6e369';
+<<<<<<< HEAD
 import { en } from '../lang/en.mjs?v=429bbf713e';
+=======
+import { en } from '../lang/en.mjs?v=9b3d9a4e48';
+>>>>>>> origin/main
 
 const tokens = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
 

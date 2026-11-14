@@ -13,9 +13,11 @@ const WORLD = path.resolve(REPO, arg('world', 'worlds/geo.map'));
 const CAT = path.resolve(REPO, arg('catalog', 'tests/fixtures/catalog'));
 const { createFacts } = await import('../src/knowledge/facts.mjs');
 const { createKnowledgeSource } = await import('../src/loaders/knowledge-source.mjs');
-const { buildIndex, lookup, NEEDS } = await import(path.join(WORLD, 'places.mjs'));
+const { buildIndex, lookup } = await import(path.join(WORLD, 'places.mjs'));
+const { parse } = await import('../src/soplang/index.mjs');
+const { needsOf } = await import('../src/dialog/knowledge-lookup.mjs');
 const facts = createFacts({ source: createKnowledgeSource(CAT) });
-for (const n of NEEDS) { const [t, w] = n.slice(6).split('@'); await facts.wires(t, w ? { world: w } : {}); }
+for (const n of needsOf({ id: 'geo.map', wires: parse(fs.readFileSync(path.join(WORLD, 'world.sop'), 'utf8')).wires })) await facts.load(n);   // the typed needs of the world
 const D = buildIndex(facts);
 
 // ---- display conventions of the map's replies (the test states the format, the catalog the value) ----

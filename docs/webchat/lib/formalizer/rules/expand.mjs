@@ -7,9 +7,15 @@
  * tokens were copied from elsewhere in the sentence and which were dropped.
  */
 
+<<<<<<< HEAD
 import { splitSentences, tokenize } from './normalize.mjs?v=5d0ece4d18';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { en } from '../../lang/en.mjs?v=429bbf713e';
+=======
+import { splitSentences, tokenize } from './normalize.mjs?v=40a652a19c';
+import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
+import { en } from '../../lang/en.mjs?v=9b3d9a4e48';
+>>>>>>> origin/main
 
 const isWord = (t) => t.kind === 'word' || t.kind === 'number';
 

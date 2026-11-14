@@ -58,7 +58,7 @@ function libWire(lib, w) {
 export async function createReasoner(set, { lib = null } = {}) {
   const worlds = set.list().filter((w) => w.reasoner === 'matrix' && w.raw.matrix != null);
   if (!worlds.length) return null;
-  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=d3a802af16');
+  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=f5158bf112');
   const legends = set.legends;
   const lexicon = (id) => { const l = set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; };
   /** What the host gives an action function besides the library's own context (`ctx.host`, spec 15): the lexicons, and `view(ctx)`, an ops-shaped read-only context (find, val, vals, lexicon) over the library, so the tables of a world's ops.mjs can be shared. */

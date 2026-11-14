@@ -10,7 +10,7 @@
 // Every command brings the Map tab forward: ctx.request('ui.openTab', { tab: 'map' }).
 // Data: the places come by lookup from the catalog's k.geo (places.mjs); the world has no knowledge base of its own.
 
-import { buildIndex, lookup } from './places.mjs?v=cf4d58a990';
+import { buildIndex, lookup } from './places.mjs?v=a34170dee4';
 
 export function initialState() {
   return { center: { lat: 25, lon: 10 }, zoom: 2, bounds: null, markers: [], highlighted: [], lines: [], layer: 'offline', focus: null, me: null, clicked: null, pending: null, nextId: 1 };

@@ -24,11 +24,19 @@
  * through `ctx.sessionFacts()` and the operation things.show of session.things (spec 23); this module only offers the facts.
  */
 import { budget } from './budget.mjs?v=00bce6e369';
+<<<<<<< HEAD
 import { en } from '../lang/en.mjs?v=429bbf713e';
 import { GRAMMAR } from './continuation.mjs?v=663c0c9b83';
 import { touched } from './followup.mjs?v=88af56c068';
 import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=9c1b3212d0';
+=======
+import { en } from '../lang/en.mjs?v=9b3d9a4e48';
+import { GRAMMAR } from './continuation.mjs?v=4664ce5794';
+import { touched } from './followup.mjs?v=88af56c068';
+import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=9f5ab1ff76';
+>>>>>>> origin/main
 import { classify, describeReferent, plain } from './meta.mjs?v=aa6dfcad14';
+import { compareTimes, loadTime } from '../knowledge/time.mjs?v=25af79c1b8';
 
 const LOG_LIMIT = 60;
 const FOCUS_WINDOW = 30;
@@ -257,13 +265,14 @@ export class Dialogue {
     // ... unless a world's own pattern reads the negation ("Dont loop it" is the music world's loop off): the negation words are then in no free capture of the reading
     if (negated && !(await this._negationOwned(text, negated, sid))) return this.tag({ reply: `OK, I will not ${negated.rest}. Nothing changed.`, info: { kind: 'negated-request', rest: negated.rest, dialogue: 'negation' } }, 'negation');
 
-    // 4c. "is Monday before Friday": an ORDER in time, never a distance. No world has published an order in time yet (k.time has the names and positions, no before / after relation),
-    // so the answer is that it can not be compared yet; when the knowledge repository's order lands, this is the one place that asks it instead.
+    // 4c. "is Monday before Friday", "is July during the summer": an ORDER (or a containment) in time, never a distance. The sentence is cut by the English layer and the two phrases are
+    // looked up in the calendar of the catalog (k.time version 2: positions, cycles, the seasons of each hemisphere; the bundled subset answers with no network, src/knowledge/time.mjs);
+    // a phrase that is no time of the catalog is not a question about time and goes on.
     const tc = en.timeComparison(text);
     if (tc) {
-      const names = { day: 'days', month: 'months', season: 'seasons', part: 'parts of the day', clock: 'hours' };
-      const what = tc.kinds.map((k) => names[k]).join(' and ');
-      return this.tag({ reply: `I can not compare ${what} in time yet: I know their names, not their order, so I can not tell whether ${tc.a} comes ${tc.rel} ${tc.b}.`, info: { kind: 'time-order-unknown', rel: tc.rel, kinds: tc.kinds, dialogue: 'time-order' } }, 'time-order');
+      try { await loadTime(this.disc.engine?.knowledge); } catch { /* the bundled subset answers */ }
+      const r = compareTimes(tc.a, tc.b, tc.rel, { hemisphere: tc.hemisphere });
+      if (r) return this.tag({ reply: r.text, info: { kind: 'time-order', rel: tc.rel, answer: r.answer, kinds: r.kinds, dialogue: 'time-order' } }, 'time-order');
     }
 
     // 5. a question about the scene or the history

@@ -18,14 +18,23 @@
 {"id":"h18","hole":"negated-act","world":"plan.seating","tab":"seating","setup":["add table 1","add table 2","add table 3","make table 1 blue","make table 2 red"],"message":"don't add a table","expect":{"state":["plan.seating:items.length=3"],"answer":["not"],"forbid_answer":["list","drew","added"]}}
 {"id":"h19","hole":"negated-act","world":"art.draw","tab":"draw","setup":["draw a red house","draw a blue house","draw a green tree"],"message":"do not draw a sun","expect":{"state":["art.draw:objects.length=3"],"answer":["not"],"forbid_answer":["list","drew","added"]}}
 {"id":"h20","hole":"never","world":"plan.seating","tab":"seating","setup":["add table 1","add table 2","add table 3","make table 1 blue","make table 2 red"],"message":"never remove table 1","expect":{"state":["plan.seating:items.length=3"],"answer":["not"],"forbid_answer":["list","drew","added"]}}
-{"id":"h21","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Monday before Friday","expect":{"answer":["compare"],"forbid_answer":["4 days"]}}
-{"id":"h22","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Friday before Monday","expect":{"answer":["compare"],"forbid_answer":["3 days"]}}
-{"id":"h23","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Friday after Monday","expect":{"answer":["compare"]}}
-{"id":"h24","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is March during the summer","expect":{"answer":["no"]}}
-{"id":"h25","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is July during the summer","expect":{"answer":["yes"]}}
+{"id":"h21","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Monday before Friday","expect":{"answer":["Yes, Monday comes before Friday"],"forbid_answer":["4 days"]}}
+{"id":"h22","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Friday before Monday","expect":{"answer":["No, Friday comes after Monday"],"forbid_answer":["3 days"]}}
+{"id":"h23","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Friday after Monday","expect":{"answer":["Yes, Friday comes after Monday"]}}
+{"id":"h24","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is March during the summer","expect":{"answer":["No, March is not in the summer"]}}
+{"id":"h25","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is July during the summer","expect":{"answer":["Yes, July is in the summer"]}}
 {"id":"h26","hole":"control","world":"plan.seating","tab":"seating","setup":["add table 1","add table 2","add table 3","make table 1 blue","make table 2 red"],"message":"remove table 3","expect":{"state":["plan.seating:items.length=2"]}}
 {"id":"h27","hole":"control","world":"plan.seating","tab":"seating","setup":["add table 1","add table 2","add table 3","make table 1 blue","make table 2 red"],"message":"make the blue table red","expect":{"state":["plan.seating:items[id=table-1].attrs.colour=red"]}}
 {"id":"h28","hole":"control","world":"plan.seating","tab":"seating","setup":["add table 1","add table 2","add table 3","make table 1 blue","make table 2 red"],"message":"remove tables 1 and 2","expect":{"state":["plan.seating:items.length=1"]}}
 {"id":"h29","hole":"control","world":"plan.seating","tab":"seating","setup":["add table 1","add table 2","add table 3","make table 1 blue","make table 2 red"],"message":"what colour is table 1?","expect":{"answer":["blue"]}}
 {"id":"h30","hole":"control","world":"art.draw","tab":"draw","setup":["draw a red house","draw a blue house","draw a green tree"],"message":"make the blue house yellow","expect":{"state":["art.draw:objects[color=yellow].kind=house"],"forbid_state":["art.draw:objects[color=blue].kind=house"]}}
 {"id":"h31","hole":"control","world":"kids.time","tab":"time","setup":[],"message":"what month is before March","expect":{"answer":["february"]}}
+{"id":"h32","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is December after November","expect":{"answer":["Yes, December comes after November"]}}
+{"id":"h33","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is June before March","expect":{"answer":["No, June comes after March"]}}
+{"id":"h34","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"does spring come after winter","expect":{"answer":["Yes, spring follows winter"]}}
+{"id":"h35","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is January during the summer in the southern hemisphere","expect":{"answer":["Yes, January is in the summer in the southern hemisphere"]}}
+{"id":"h36","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is January during the summer","expect":{"answer":["No, January is not in the summer"]}}
+{"id":"h37","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is 3 pm during the afternoon","expect":{"answer":["Yes, 3 pm is in the afternoon"]}}
+{"id":"h38","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is 3 o'clock before 5pm","expect":{"answer":["Yes, 3 o'clock is before 5pm"]}}
+{"id":"h39","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Saturday after Friday","expect":{"answer":["Yes, Saturday comes after Friday"]}}
+{"id":"h40","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Monday before March","expect":{"answer":["not parts of one cycle"]}}

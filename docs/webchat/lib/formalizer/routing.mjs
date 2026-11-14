@@ -37,7 +37,11 @@
  * Inside a tier the order is always: priority, literals, fewer wildcard tokens, router score, pattern order.
  */
 
+<<<<<<< HEAD
 import { en } from '../lang/en.mjs?v=429bbf713e';
+=======
+import { en } from '../lang/en.mjs?v=9b3d9a4e48';
+>>>>>>> origin/main
 export function emptyContext() {
   return { activeTab: null, tabWorld: null, modalWorld: null, gameWorld: null, recentWorlds: [], lastWorld: null };
 }
