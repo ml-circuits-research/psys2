@@ -98,6 +98,8 @@ function buildItems({ sets, limit }) {
     cut(rows).forEach((r, i) => items.push({ kind: 'equiv', set: 'typos', id: `typo#${i}`, world: r.world, tab: r.tab ?? null, setup: [], message: r.typo, reference: r.original, group: r.kind }));
   }
   if (want('loose-words')) cut(L('training/eval/loose-words.jsonl')).forEach((r, i) => items.push({ kind: 'equiv', set: 'loose-words', id: `loose#${i}`, world: r.world, tab: r.tab ?? null, setup: r.setup ?? [], message: r.message, reference: r.kind === 'junk' ? null : r.intent, group: r.kind }));
+  // measurement only (scripts/exp-proposer.mjs): cases written by the proposer experiment (message = a proposal or the original, expect = the paraphrase's gold)
+  if (sets?.includes('paraphrases-proposals') && arg('proposals')) for (const c of cut(readFileSync(arg('proposals'), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)))) items.push({ kind: 'case', set: 'paraphrases-proposals', c });
   // re-judged 2026-11-14: `meaning: same` rows are the paraphrase set (the sentence means what the original meant); `meaning: changed` rows are a separate set, robustness to a WRONG translation (the original's expectation is the goal)
   if (want('paraphrases-rt')) for (const c of cut(L('training/eval/paraphrases-rt-2026-11-12.jsonl').filter((x) => x.meaning !== 'changed'))) items.push({ kind: 'case', set: 'paraphrases-rt', c });
   if (want('paraphrases-rt-changed')) for (const c of cut(L('training/eval/paraphrases-rt-2026-11-12.jsonl').filter((x) => x.meaning === 'changed'))) items.push({ kind: 'case', set: 'paraphrases-rt-changed', c });
