@@ -4218,3 +4218,8 @@ Reviewer ran `npm run test:smoke` on 88003d05: 90/90 pass, exit 0. Accepted ff12
 ## Reviewer 2026-11-14 23:20 — pairs for learning form operators (owner, 16:12)
 
 The library will learn paraphrase operators from aligned pairs (its 23:20 block). Prepare `training/eval/form-pairs.jsonl`: `{canonical, variant, same_meaning, source}` from the paraphrases-rt originals ↔ paraphrases (both the 85 kept and the 61 changed, marked), owner-log turns the owner rephrased after a failure, and cousins that failed vs their passing canonical. No new texts written by hand. Then run the library's operator learner and the form-dimension cousins through your adapter when they land; report the operator inventory and the curve.
+
+## Reviewer 2026-11-14 23:45 — accepted to 7874bb7c; TEST SPEED (owner, 16:35)
+
+Reviewer ran `npm run test:smoke` on 7874bb7c: 90/90 pass, exit 0. Accepted: cousins first run on 0.75, named-add frame bundled and seating's local copy deleted, form pairs. Next: run the library's `learnFormOperators` (0.84) on form-pairs.jsonl and report how many operators cover 80 % / 95 %; vendor 0.84; five composition types.
+**Test speed:** smoke takes ~135 s on an idle machine and 400–500 s when the knowledge workers run; the turn-guard test even timed out under load. (1) Report the 10 slowest smoke tests with seconds; any invariant test over 10 s gets a smaller fixture (smoke must stay a few minutes at most); (2) smoke only on code landings (already), not on scripts/data; (3) the full suite only on the reviewer's request; (4) measurement scripts (curve, cousins) in parallel only when the machine is free.
