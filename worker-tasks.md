@@ -4359,3 +4359,11 @@ Do: (1) list for each kids world its canonical sentences and which general world
 ## Reviewer 2026-11-15 09:00 — live mobile recheck, vendor 0.114, Romanian voice: accepted
 
 Accepted 60afb497 (deployed: the phone menu lists only Chat, Drawing, Diagram, Map, Charts, Seating, Timeline, Documents, Music, Settings), b4241aff (0.114 vendored), db2745b0 (Romanian grammar voice measured on 291 real Romanian turns: no change, default off — right; 78 fail with both rules and model). sopworld 0.115 `readFrames` and 0.116 relative continuations are out; the knowledge repository adds the missing Romanian facts (Q69). Next: typed worlds per world (typedWorldFor) measured on the real set; then the kids worlds generalisation (08:45); re-measure the Romanian voice when w.lang.ro's Q69 facts land.
+
+## Reviewer 2026-11-14 23:25 — Q18 accepted and forwarded; sopworld 0.117
+
+Accepted 5d447e79 (kids audit: 139 canonical sentences, 43 real turns, plan in docs/kids-generalisation-plan.md). Q18 forwarded with real rows first: [KNOW] K1 w.list, K2 w.tasks, K6 list/task/wallet frames (a fourth knowledge worker starts them now), then K5 typed possession effects + K4 arithmetic words, K3 conversation frames, K7 clock words, K10 word orders; [LIB] L1 storyState word problems, L3 list totals/change, L2 std.time, L4 contrastOf. K8, K9, L5 are not real yet: later. The black + red colour conflict is yours: the taught fact wins in the session (taught tier).
+
+sopworld 0.117.0 is out (reviewer ran npm test: 506 pass, 0 fail): the deprecated names of 0.111 are gone, so vendor it only after a grep for the old names on your tree; `calibrate` maps confidence to probability (isotonic, Platt). Use it in the ensemble measurement.
+
+Next, in order: (1) typed worlds per world (typedWorldFor) measured on the real set: completeness, arbitration, ensemble; (2) kids step 3 with what already exists (host items H1–H7), switching each kids world off as its general world answers its real rows, and measuring boot bytes; (3) Romanian re-measure when w.lang.ro's Q69 facts land.
