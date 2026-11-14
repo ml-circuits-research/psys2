@@ -1,5 +1,5 @@
 {
-  "version": "509cae069b",
+  "version": "71c5d627fc",
   "worlds": [
     "acts",
     "art.draw",
@@ -272,7 +272,7 @@
     "worlds/geo.map/own.mjs": "8f843116f6e620a7",
     "worlds/geo.map/places.mjs": "43ad522a8dbac880",
     "worlds/geo.map/regions.mjs": "69033e813f66d8e0",
-    "worlds/index.json": "46bee9fdb4b3d89b",
+    "worlds/index.json": "104fe7b1d5345836",
     "worlds/kids.animals/bundle.json": "888a3cd34aca3447",
     "worlds/kids.animals/coverage.md": "3862ef4a4389ddef",
     "worlds/kids.animals/datagen.mjs": "4aceba3986372928",
@@ -320,7 +320,7 @@
     "worlds/media.music/songs.mjs": "963c21c54c6a78a8",
     "worlds/media.music/theory.mjs": "22f906418690fd78",
     "worlds/media.music/vendor/tonal.mjs": "331490751dea871a",
-    "worlds/meta.worlds/bundle.json": "e2b719460e7c8379",
+    "worlds/meta.worlds/bundle.json": "1bd9d8ad11e03c83",
     "worlds/plan.seating/bundle.json": "69c882e5c662c6ca",
     "worlds/plan.seating/ops.mjs": "ecf83fee0dc1fdb2",
     "worlds/plan.timeline/bundle.json": "d38836da4d9b4a39",
@@ -789,8 +789,8 @@
     "worlds/words/zo.json": "3761b1887d22fef8",
     "worlds/words.bloom.json": "e6e3b4bec7f87e94"
   },
-  "builtAt": "2026-11-14T12:36:37.048Z",
-  "commit": "c2a3ae6b",
+  "builtAt": "2026-11-14T12:52:47.273Z",
+  "commit": "bd2e3b05",
   "assets": {
     "app.mjs": "5f0d043632",
     "coverage-grid.json": "dc56813858",
@@ -1124,7 +1124,7 @@
     "worlds/geo.map/own.mjs": "61713bc749",
     "worlds/geo.map/places.mjs": "953a0c9f2d",
     "worlds/geo.map/regions.mjs": "b9782a3da0",
-    "worlds/index.json": "46bee9fdb4",
+    "worlds/index.json": "104fe7b1d5",
     "worlds/kids.animals/bundle.json": "888a3cd34a",
     "worlds/kids.animals/coverage.md": "3862ef4a43",
     "worlds/kids.animals/datagen.mjs": "9bf291b263",
@@ -1172,7 +1172,7 @@
     "worlds/media.music/songs.mjs": "7b859b75b4",
     "worlds/media.music/theory.mjs": "967bf62fb3",
     "worlds/media.music/vendor/tonal.mjs": "7e36dbfe54",
-    "worlds/meta.worlds/bundle.json": "e2b719460e",
+    "worlds/meta.worlds/bundle.json": "1bd9d8ad11",
     "worlds/plan.seating/bundle.json": "69c882e5c6",
     "worlds/plan.seating/ops.mjs": "8290bbc5e4",
     "worlds/plan.timeline/bundle.json": "d38836da4d",
