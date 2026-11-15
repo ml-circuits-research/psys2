@@ -80,6 +80,7 @@ export const CONFIGS = {
   'enc-C-nocut': { note: 'enc-C with the card-driven clause cutter OFF', mode: 'encoder', set: { nxStrategy: 'rules' }, proto: { cutter: false } },
   'enc-C-segrules-nocut': { note: 'enc-C-segrules with the card-driven clause cutter OFF (the rules splitter as it was)', mode: 'encoder', set: { nxStrategy: 'rules' }, seg: 'rules', proto: { cutter: false } },
   // READING PATHS ALONE (2026-11-15, scripts/measure-voices.mjs): each path with every other symbolic reading step off, so a path is one voice
+  'v-all': { note: 'voice: rules-C + every symbolic reading step switched on (since P6, 2026-11-15, all of them are off by default)', mode: 'rules', set: {}, env: { PSYS2_TYPED: 'on', PSYS2_ALTERNATIONS: 'on', PSYS2_NEAR: 'on', PSYS2_SLOTS: 'on', PSYS2_RUNON: 'on', PSYS2_ENSEMBLE: 'on' } },
   'v-rules': { note: 'voice: rules-C alone (typed step, alternations, near words, slot types all off)', mode: 'rules', set: {}, env: VOICE_OFF },
   'v-typed': { note: 'voice: rules-C + the typed step (proposeByTypes) only', mode: 'rules', set: {}, env: { ...VOICE_OFF, PSYS2_TYPED: 'on' } },
   'v-formops': { note: 'voice: rules-C + the typed form operators (PSYS2_FORMOPS=on) only', mode: 'rules', set: {}, env: { ...VOICE_OFF, PSYS2_FORMOPS: 'on' } },

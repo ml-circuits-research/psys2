@@ -159,6 +159,8 @@ A host-run action (one the operations carry out and the matrix does not declare)
 
 ## 9. The typed reading step (abstraction round item 1; sopworld 0.72 `typedLexicon`)
 
+**Status (P6, 2026-11-15): off by default, `PSYS2_TYPED=on` turns it on (a named diagnostic switch).** See section 15 for the measurement.
+
 Code: `src/dialog/typed-reader.mjs`, the stage `_withTypedReader` of `src/dialog/index.mjs` (after the rules, the best-effort and the reader route, before the knowledge lookup and the world-aware review). Tests: `tests/typed-reader.test.mjs`.
 
 **What it does.** A clause the rules read completely and the world REFUSED is read again by the types of its words. "Change the unit of timeline 1 to day." is read by the frame `acts.change.of` with the thing "timeline" and the value "1 to day" (a free-text role stops at the number): the world answers "1 to day is not a unit I know". The step types the world from its own facts (each thing of the session as a wire with its label "timeline 1", its kind and attributes; each value an attribute can take, from the schema or, for a colour, from the colours the readers take), asks the library's `typedLexicon` for the type of every word, and reads the free-text roles of the refused reading again from the words they took together: the role of the type thing takes the words that name a thing of the session, the role of the type value takes the word typed as a value of the attribute the reading holds, and what is left must be function words (to, of, the). Word order only splits the words; the types assign them.
@@ -185,6 +187,8 @@ A failure is a class, and a fix is judged on its related cases (owner, 2026-11-1
 
 
 ## 10. Reading steps for unparsed clauses (abstraction round items 2 and 3; sopworld 0.74 `nearWords`, 0.75 `normalise`)
+
+**Status (P6, 2026-11-15): every step of this section is off by default; `PSYS2_ALTERNATIONS=on`, `PSYS2_NEAR=on`, `PSYS2_SLOTS=on` turn one on (named diagnostic switches; the `=off` forms below are the old defaults).** With no voice switched on, `withVariants` is not called. See section 15.
 
 Code: `src/dialog/variants.mjs`, the stage `withVariants` of `src/dialog/index.mjs` (after the reader route, before the typed step of section 9). Tests: `tests/variants.test.mjs`.
 
@@ -221,7 +225,7 @@ Code: `src/formalizer/completeness.mjs` (`annotateUnread`, `isIncomplete`, the s
 3. *Then a clarifying ask* (`ask` only): any incomplete reading that no voice completed is asked, not executed. `hold` keeps the reading for non-destructive acts.
 4. *Arbitration by coverage* (`hold` and `ask`): when several worlds read the sentence and some reading has unread words, the worlds' best readings are ordered by the library's decision for kind `world` (std.decide, the criteria of `arbitrate`): coverage (fewer unread words), then the open tab or the stronger tier (named world, navigation, recent worlds), then priority; the tiers of `routing.mjs` feed the last two criteria, so a sentence with no unread word is routed exactly as before. The decision records `arbitration: { by: 'coverage', moved, ranked }`.
 
-**Ensemble.** Superseded by section 13: the voices run side by side and `readEnsemble` decides on the typed world of the clause's world (`PSYS2_ENSEMBLE`, default on).
+**Ensemble.** Superseded by section 13: the voices run side by side and `readEnsemble` decides on the typed world of the clause's world (`PSYS2_ENSEMBLE=on`; off by default since P6, section 15). The run-on step is `PSYS2_RUNON=on` (off by default since P6).
 
 **First result (2026-11-15, untyped heuristic; superseded by section 13, where the default became `hold`).** The curve does not move (paraphrases-rt 14 right / 53 wrong / 16 not understood / 2 asked in all three modes, no row changes in the held-out third; related cases per clause identical; schema-alone 59 of 60 replies identical; dice identical) and the invariants break: `test-world all` fails 61 rows with `off`, 83 with `hold`, 101 with `ask` (a free-text `what` in the drawing world's colour questions and the docs reader's counts are legitimate readings that the host's unread test cannot tell from a swallowed clause; `ask` turns them into questions). The code stays behind `PSYS2_COMPLETE=hold|ask`; the next step needs the typed world of the matrix worlds (the library's own `left` / `complete`), not a host heuristic.
 **Still not wired.** `continueAct` (0.104; verbless continuations) and `patternReader` (mined patterns of a typed world): the typed worlds of section 13 now exist, wiring them is a later step; the host's own `discourse.ellipsis` keeps serving the continuations.
@@ -238,7 +242,7 @@ Code: `scripts/build-typed-worlds.mjs` (build time), `worlds/<id>/typed.json` (g
 
 **Consequences.** The ones of section 12 (`PSYS2_COMPLETE=off|hold|ask`), now on typed unread words: arbitration by coverage (spec 20) picks per world its best-covered reading of the same tier (a catch-all handing the sentence to a world's reader does not hide a frame of that world that reads it whole), then orders the worlds by the library's decision; incomplete destructive readings are held; `ask` asks for any incomplete reading.
 
-**The ensemble (`PSYS2_ENSEMBLE`, default on).** The voices of an unread or incomplete clause (form operators and canonicalise behind their switches, alternations, near words, slot types, run-on) run side by side; each proposes the complete readings its world accepts; the readings are pooled by their wires and `readEnsemble` decides with std.decide kind `ensemble` on the typed world of the clause's world (coverage, agreement = the voices that proposed the reading, cost, specificity). Two different readings with equal agreement and coverage: none (the library's `ask`), the clause keeps its reading. `segment.variant.ensemble` records `{ confidence, voices, readings }`. `off`: the earlier sequence (first accepted voice wins).
+**The ensemble (`PSYS2_ENSEMBLE`; on by default until P6, now off: `PSYS2_ENSEMBLE=on`, section 15).** The voices of an unread or incomplete clause (form operators and canonicalise behind their switches, alternations, near words, slot types, run-on) run side by side; each proposes the complete readings its world accepts; the readings are pooled by their wires and `readEnsemble` decides with std.decide kind `ensemble` on the typed world of the clause's world (coverage, agreement = the voices that proposed the reading, cost, specificity). Two different readings with equal agreement and coverage: none (the library's `ask`), the clause keeps its reading. `segment.variant.ensemble` records `{ confidence, voices, readings }`. `off`: the earlier sequence (first accepted voice wins).
 
 **Catch-all readings are a last resort (owner export 2026-11-14 22:43; `isCatchAll`, `LEFTOVER`, hook `readsWhole`).** "deseneaza o diagrama in forma de casa" ("Draw a diagram in house form") was read by `pat.diagram.sketch.read.frame` (`{pre:words} diagram {post:rest}`) with `arg.pre="Draw a"`, `arg.post="in house form"`, marked complete, and the reader drew one default circle. A pattern that swallows the words around one literal must not call itself complete. The rules:
 1. *Leftover arguments are checked in every world.* The content words of a `pre` / `post` capture are unread unless the world knows them (`known`: its lexicons, kinds, values) or the world's own reader reads the whole clause (the executor's hook `readsWhole({ text, state })`; the diagram: a shape frame, a diagram request of a kind or topic, or any engine command or question beyond a bare default `create`; while its engine is still loading it is not asked). A world with its own reader (flag `reader`, `typed.json` `rawArgs: true`) has no typed arguments, so every free capture of its generated patterns is checked the same way.
@@ -268,3 +272,38 @@ Code: `src/dialog/foreign-reading.mjs` (`reviewForeign`, `notFull`, `confidentTy
 **The headline measures what ships (P1, reviewer 2026-11-15 01:15).** `run` defaults to `--mode shipped`: the webchat's own settings (`docs/webchat/ui/settings.mjs` `DEFAULT_SETTINGS` through `applyReading`: the encoder formalizer with the dispatcher model through onnxruntime-node (`--ort` or `PSYS2_ORT`), `fastPath`, `worldAware: veto`, `nxStrategy: rules`, the matrix reasoner), the per-turn send options of `docs/webchat/app.mjs` (no deadline), `engine.prepareMeta()`, and the knowledge the page loads: the catalog at the pinned commit (`src/knowledge/catalog-pin.mjs`, checked out by `scripts/lib/catalog-pin.mjs`) layered over the bundled subset. `--mode rules` is the named diagnostic (the same with the rules formalizer only; `…-<reasoner>-rules.json`). Random choices are seeded: every session starts a generator from `REAL_SEED` and its session key (`Math.random`), and `Date` reads a fixed clock reset per session, so two runs of one tree give identical rows (`real-set.mjs diff <a> <b>` compares them without the time taken). A result file records `mode`, `settings`, `catalog` (commit, URL), `seed`, `model` (the onnx hashes), `build` and `tree`; `record` refuses a result that is not of the shipped mode or has no catalog commit. Judging: an in-scope judged turn answered "I did not understand" is wrong unless its check says nothing should happen (`unchanged`) or asks for the not-understood status (a forbid-only check such as `reply_not: hangman` is not met by it); a turn that a world of another tab took, done, refused or asked, is `other_world` (theft, not an answer); an owner `ok` turn that is not understood or taken by another tab's world is wrong. `real-set.mjs ledger [--write]` keeps the ledger the one work list: every open row of a removed world is closed (`closed`, `closed_reason` "ADR-010 …", kept), and every failing turn of the headline run without an open real row gets one (`real: true`, `real_id`, `cause`). A learning-curve point is labelled by the commit that wrote its line (`git blame`), its stored HEAD kept as `recordedOn`.
 
 **Result (2026-11-15, matrix and ops identical on the headline).** Real set, new judge: headline (in-scope judged turns) 132/181 with and without the review (no in-scope verdict lost or gained; 16 unjudged turns that another tab's world took on a respelling, a fragment or a reframed gerund are now honest not-understood replies, 2 turns become executed by the named or tab world); retired line 61/72 → 70/72. `test-world all` 58 raw / 40 first failures, unchanged. The old judge said 142/253; the difference is the 72 retired rows and the r0066 check that no longer accepts another world's reply.
+
+## 15. One path per job: the reading voices off the default path, and every switch (P6, reviewer 2026-11-15 01:15; review finding 24)
+
+**Rule.** A reading step is on the default path only when a shipped-mode real-set run (`node scripts/real-set.mjs run`, the headline configuration) with and without it shows a gain. A step with no measured gain stays in the code behind a named diagnostic switch (`=on`), so the ablation scripts can still run it; a switch whose step was measured as no gain AND has no further use is deleted with its code.
+
+**Measurement (2026-11-15, tree 4c1aaa23 = main with LEARNED-MEM-INDEX; shipped mode, encoder formalizer, catalog ab3b2ab, seed 20261115; one run per row, each step switched off alone, then all six together).** In scope = the 181 judged rows that do not need a removed world.
+
+| Run | in scope right / partly / wrong | retired | verdicts that differ | outcomes that differ | replies that differ | sum of turn times |
+| --- | --- | --- | --- | --- | --- | --- |
+| all six on (the old default) | 131 / 12 / 38 | 65/72 | — | — | — | 172.9 s |
+| `PSYS2_ENSEMBLE=off` | 131 / 12 / 38 | 65/72 | 0 | 0 | 0 | 172.7 s |
+| `PSYS2_ALTERNATIONS=off` | 131 / 12 / 38 | 65/72 | 0 | 0 | 0 | 170.9 s |
+| `PSYS2_NEAR=off` | 131 / 12 / 38 | 65/72 | 0 | 0 | 1 (r0145, unjudged: "assign random colous to the cars"; on: "I put the 23 cars spread out evenly.", off: "I drew 3 red cars."; wrong both ways) | 165.3 s |
+| `PSYS2_SLOTS=off` | 131 / 12 / 38 | 65/72 | 0 | 0 | 0 | 167.6 s |
+| `PSYS2_RUNON=off` | 131 / 12 / 38 | 65/72 | 0 | 0 | 0 | 166.3 s |
+| `PSYS2_TYPED=off` | 131 / 12 / 38 | 65/72 | 0 | 0 | 16 (all random draws: songs and random diagrams; the typed step runs the world on a fork, which consumes random numbers; no reading changed) | 166.9 s |
+| all six off (the new default) | 131 / 12 / 38 | 65/72 | 0 | 0 | 17 (the 16 draws + r0145) | 155.9 s |
+
+`test-world all` with all six off: 58 raw / 40 first failures, the same 58 rows as with them on. Smoke: pass (14.0 s). So all six go off the default path: `PSYS2_TYPED`, `PSYS2_ALTERNATIONS`, `PSYS2_NEAR`, `PSYS2_SLOTS`, `PSYS2_RUNON`, `PSYS2_ENSEMBLE` are now `=on` diagnostic switches (`src/dialog/variants.mjs` `VOICE_SWITCHES`, `anyVoiceOn`; `src/dialog/index.mjs` `_withTypedReader`). `scripts/eval-ablation.mjs` has the configuration `v-all` (every step on) next to the single-voice ones. The browser cannot set them: on the page the steps do not run.
+
+**Every switch (P6).** Runtime switches read by `src/`:
+
+| Switch | Default | Where | Status after P6 |
+| --- | --- | --- | --- |
+| `PSYS2_REASONER` | matrix | `src/dialog/index.mjs` `createEngine` | kept; matrix vs ops decision asked (questions.md Q23) |
+| `PSYS2_WORLD_AWARE` | veto | `src/dialog/index.mjs` | kept (section 6, user decision 2026-11-12) |
+| `PSYS2_READER` (also `globalThis.PSYS2_READER`) | off | `src/dialog/index.mjs`, `src/worlds/index.mjs` | owner decision asked (Q23): delete the reader route, or keep it as a dated diagnostic |
+| `PSYS2_COMPLETE` | hold | `src/formalizer/completeness.mjs` | kept (sections 12, 13) |
+| `PSYS2_COMPLETE_SRC` (`heuristic`), `PSYS2_COMPLETE_FOREIGN` | typed, off | `src/formalizer/completeness.mjs` | dead by measurement; left for the owner of that file (listed in Q23) |
+| `PSYS2_FOREIGN` | on | `src/dialog/foreign-reading.mjs` | kept (section 14) |
+| `PSYS2_TYPED`, `PSYS2_ALTERNATIONS`, `PSYS2_NEAR`, `PSYS2_SLOTS`, `PSYS2_RUNON`, `PSYS2_ENSEMBLE` | off (`=on`) | `src/dialog/variants.mjs`, `src/dialog/index.mjs` | diagnostic switches (this section) |
+| `PSYS2_KNOWLEDGE` | unset | `src/loaders/knowledge-source.mjs` | kept (a location, not a behaviour) |
+| `PSYS2_DEBUG_OPS` | unset | `src/interpreter/index.mjs` | kept (debug print) |
+
+Test and script plumbing (never read by the runtime): `PSYS2_SUITE`, `PSYS2_SAMPLE_SEED`, `PSYS2_CHANGED_WORLDS`, `PSYS2_FAILURES_OUT`, `PSYS2_KNOWN_FAILURES`, `PSYS2_NET_LOG`, `PSYS2_EVAL_DIR`, `PSYS2_HELDOUT_DIR`, `PSYS2_MT_CACHE`, `PSYS2_MT_NETWORK`, `PSYS2_ORT`, `PSYS2_CATALOG_CACHE`: kept.
