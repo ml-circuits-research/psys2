@@ -680,8 +680,8 @@
     "worlds/words/zo.json": "4c17adee896c939e",
     "worlds/words.bloom.json": "30a46f44600c6540"
   },
-  "builtAt": "2026-11-15T04:01:33.306Z",
-  "commit": "c91474f5-dirty",
+  "builtAt": "2026-11-15T04:19:21.345Z",
+  "commit": "eac1665b-dirty",
   "catalog": "590bc64f8777115c3c44de36378a68e75bf7eb09",
   "assets": {
     "app.mjs": "f924e2fd7f",
