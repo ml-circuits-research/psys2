@@ -15,7 +15,7 @@ import { precompile as precompileRules, registerClauseStarters } from '../formal
 import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=5333124e0f';
 import { validateWorldSet } from '../worlds/validate.mjs?v=c444cfe92a';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=2129df1f93';
-import { createInterpreter } from '../interpreter/index.mjs?v=8418710cd6';
+import { createInterpreter } from '../interpreter/index.mjs?v=2a83edbc06';
 import { createReasoner } from '../reasoner/index.mjs?v=0b9d7ed038';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=f4a0fda696';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=69901a053c';
