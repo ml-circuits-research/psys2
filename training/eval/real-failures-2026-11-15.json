@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "8e0e2c1b",
-  "tree": "028f032c19a50ce6",
+  "build": "f71adfca",
+  "tree": "e605dea80739337e",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,16 +13,16 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 130,
+   "right": 129,
    "partly": 2,
-   "wrong": 75,
-   "open": 49,
-   "changed": 17,
+   "wrong": 76,
+   "open": 52,
+   "changed": 14,
    "unjudged": 332,
    "outcome": {
-    "executed": 160,
-    "refused": 235,
-    "asked": 6,
+    "executed": 155,
+    "refused": 243,
+    "asked": 3,
     "not_understood": 109,
     "other_world": 95
    },
@@ -30,12 +30,12 @@
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 39
+     "right": 38
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
      "judged": 11,
-     "right": 2
+     "right": 1
     },
     "owner-log-2026-11-13c": {
      "turns": 24,
@@ -75,7 +75,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 83
+     "right": 84
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -88,16 +88,16 @@
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 130,
+   "right": 129,
    "partly": 2,
-   "wrong": 75,
-   "open": 49,
-   "changed": 17,
+   "wrong": 76,
+   "open": 52,
+   "changed": 14,
    "unjudged": 332,
    "outcome": {
-    "executed": 160,
-    "refused": 235,
-    "asked": 6,
+    "executed": 155,
+    "refused": 243,
+    "asked": 3,
     "not_understood": 109,
     "other_world": 95
    },
@@ -105,12 +105,12 @@
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 39
+     "right": 38
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
      "judged": 11,
-     "right": 2
+     "right": 1
     },
     "owner-log-2026-11-13c": {
      "turns": 24,
@@ -150,7 +150,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 83
+     "right": 84
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 378,
- "failing_ops": 378,
+ "failing_matrix": 384,
+ "failing_ops": 384,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -445,8 +445,8 @@
   },
   {
    "cause": "Romanian: art.draw: acted; the reply does not say what the check asks",
-   "count": 20,
-   "wrong": 20,
+   "count": 22,
+   "wrong": 22,
    "partly": 0,
    "rows": [
     {
@@ -504,9 +504,19 @@
      "verdict": "wrong",
      "text": "muta casele mai sus",
      "tab": "draw",
-     "reply": "I cannot place house in the drawing yet.",
+     "reply": "Nothing changed. There is no house here.",
      "failing": [
       "reply_any:moved the houses"
+     ]
+    },
+    {
+     "id": "r0053",
+     "verdict": "wrong",
+     "text": "si mai sus",
+     "tab": "draw",
+     "reply": "I did not understand that as something to do in the drawing.",
+     "failing": [
+      "reply_not:do not know what|did not understand"
      ]
     },
     {
@@ -514,7 +524,7 @@
      "verdict": "wrong",
      "text": "muta casele mai sus",
      "tab": "draw",
-     "reply": "I cannot place house in the drawing yet.",
+     "reply": "Nothing changed. There is no house here.",
      "failing": [
       "reply_any:moved the houses"
      ]
@@ -524,9 +534,19 @@
      "verdict": "wrong",
      "text": "muta crocodilii mai jos",
      "tab": "draw",
-     "reply": "I cannot place crocodile in the drawing yet.",
+     "reply": "Nothing changed. There is no crocodile here. I could not do lower: this world does not take place for place. I could not do crocodiles: this world does not take",
      "failing": [
       "reply_any:moved the crocodiles"
+     ]
+    },
+    {
+     "id": "r0059",
+     "verdict": "wrong",
+     "text": "nu si peste apa",
+     "tab": "draw",
+     "reply": "I did not understand that as something to do in the drawing.",
+     "failing": [
+      "reply_not:did not understand|is blue now"
      ]
     },
     {
@@ -535,16 +555,6 @@
      "text": "dar lasa lacul",
      "tab": "draw",
      "reply": "I did not understand \"leave\" here.",
-     "failing": [
-      "reply_not:Where should it go|did not understand"
-     ]
-    },
-    {
-     "id": "r0064",
-     "verdict": "wrong",
-     "text": "pune si un lac",
-     "tab": "draw",
-     "reply": "Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\".",
      "failing": [
       "reply_not:Where should it go|did not understand"
      ]
@@ -564,7 +574,7 @@
      "verdict": "wrong",
      "text": "muta rata pe lac",
      "tab": "draw",
-     "reply": "I cannot place duck in the drawing yet.",
+     "reply": "Nothing changed. That cannot be done to a place here.",
      "failing": []
     },
     {
@@ -596,7 +606,7 @@
      "verdict": "wrong",
      "text": "muta copilul pe iarba",
      "tab": "draw",
-     "reply": "I cannot place child in the drawing yet.",
+     "reply": "Nothing changed. There is no child here. I could not do on the grass: this world does not take place for place. I could not do child: this world does not take k",
      "failing": []
     },
     {
@@ -612,7 +622,7 @@
      "verdict": "wrong",
      "text": "muta capra mai jos",
      "tab": "draw",
-     "reply": "I cannot place goat in the drawing yet.",
+     "reply": "Nothing changed. There is no goat here. I could not do lower: this world does not take place for place. I could not do goat: this world does not take kind for p",
      "failing": []
     },
     {
@@ -628,36 +638,36 @@
      "verdict": "wrong",
      "text": "muta vaca mai jos",
      "tab": "draw",
-     "reply": "I cannot place cow in the drawing yet.",
+     "reply": "Nothing changed. There is no cow here. I could not do lower: this world does not take place for place. I could not do cow: this world does not take kind for pla",
+     "failing": []
+    },
+    {
+     "id": "r0125",
+     "verdict": "wrong",
+     "text": "muta casa mai sus",
+     "tab": "draw",
+     "reply": "Which house? There are 2.",
      "failing": []
     }
    ],
-   "both_reasoners": 20
+   "both_reasoners": 22
   },
   {
    "cause": "art.draw: acted; the state is not the expected one",
-   "count": 7,
-   "wrong": 7,
+   "count": 6,
+   "wrong": 6,
    "partly": 0,
    "rows": [
-    {
-     "id": "r0544",
-     "verdict": "wrong",
-     "text": "draw 5 clouds and one sun",
-     "tab": "draw",
-     "reply": "I could not plan 5 clouds, one sun as you said, so I made nothing.",
-     "failing": [
-      "state:objects.length>=6"
-     ]
-    },
     {
      "id": "r0631",
      "verdict": "wrong",
      "text": "draw a green house and a yellow one",
      "tab": "draw",
-     "reply": "I drew a green house.",
+     "reply": "I added a house. I assumed 1 for the count.",
      "failing": [
+      "state:art.draw:objects[kind=house].color=green",
       "state:art.draw:objects.length=2",
+      "answer:green house",
       "answer:yellow house"
      ]
     },
@@ -678,7 +688,7 @@
      "verdict": "wrong",
      "text": "draw a tree",
      "tab": "draw",
-     "reply": "I drew a green tree.",
+     "reply": "I added a tree. I assumed 1 for the count.",
      "failing": [
       "state:art.draw:objects.length=5"
      ]
@@ -688,9 +698,10 @@
      "verdict": "wrong",
      "text": "draw two cats and a big one",
      "tab": "draw",
-     "reply": "I drew 2 big orange cats.",
+     "reply": "I added 2 cats.",
      "failing": [
-      "state:art.draw:objects.length=3"
+      "state:art.draw:objects.length=3",
+      "answer:big"
      ]
     },
     {
@@ -698,9 +709,10 @@
      "verdict": "wrong",
      "text": "draw a house and another yellow one",
      "tab": "draw",
-     "reply": "I drew a yellow house.",
+     "reply": "I added a house. I assumed 1 for the count.",
      "failing": [
-      "state:art.draw:objects.length=5"
+      "state:art.draw:objects.length=5",
+      "answer:yellow house"
      ]
     },
     {
@@ -708,13 +720,13 @@
      "verdict": "wrong",
      "text": "draw a sun",
      "tab": "draw",
-     "reply": "I drew a yellow sun.",
+     "reply": "I added a sun. I assumed 1 for the count.",
      "failing": [
       "state:art.draw:objects.length=6"
      ]
     }
    ],
-   "both_reasoners": 7
+   "both_reasoners": 6
   },
   {
    "cause": "art.draw: acted; the reply does not say what the check asks",
@@ -1102,8 +1114,8 @@
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 138,
-   "both_reasoners": 138,
+   "count": 141,
+   "both_reasoners": 141,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -1129,8 +1141,8 @@
   },
   {
    "cause": "translation residue / wrong sense / source typo",
-   "count": 33,
-   "both_reasoners": 33,
+   "count": 34,
+   "both_reasoners": 34,
    "examples": [
     {
      "text": "an old woman",
@@ -1263,9 +1275,36 @@
    ]
   },
   {
-   "cause": "refused: the request names something the world does not support",
+   "cause": "continuation / correction / why-question",
    "count": 17,
    "both_reasoners": 17,
+   "examples": [
+    {
+     "text": "nu si peste apa",
+     "tab": "draw",
+     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; wrong; reply_not:did not understand|is blue now]"
+    },
+    {
+     "text": "dar lasa lacul",
+     "tab": "draw",
+     "happened": "I did not understand \"leave\" here. [outcome: refused; wrong; reply_not:Where should it go|did not understand]"
+    },
+    {
+     "text": "pe lac",
+     "tab": "draw",
+     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; open]"
+    },
+    {
+     "text": "nu inlocui lacul, deasupra, ai loc",
+     "tab": "draw",
+     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; open]"
+    }
+   ]
+  },
+  {
+   "cause": "refused: the request names something the world does not support",
+   "count": 16,
+   "both_reasoners": 16,
    "examples": [
     {
      "text": "add a header, two chapters and a paragraph",
@@ -1290,63 +1329,9 @@
    ]
   },
   {
-   "cause": "continuation / correction / why-question",
-   "count": 15,
-   "both_reasoners": 15,
-   "examples": [
-    {
-     "text": "dar lasa lacul",
-     "tab": "draw",
-     "happened": "I did not understand \"leave\" here. [outcome: refused; wrong; reply_not:Where should it go|did not understand]"
-    },
-    {
-     "text": "nu inlocui lacul, deasupra, ai loc",
-     "tab": "draw",
-     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; open]"
-    },
-    {
-     "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
-     "tab": "draw",
-     "happened": "I did not understand \"voila\", \"ta\", \"da\", \"makes\", \"prostii\", \"oricum\" here. [outcome: refused; open]"
-    },
-    {
-     "text": "cum ai ajuns a deschisi joculd e sah? e ridicol",
-     "tab": "chess",
-     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
-    }
-   ]
-  },
-  {
-   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
+   "cause": "amount / relation / set distribution",
    "count": 11,
    "both_reasoners": 11,
-   "examples": [
-    {
-     "text": "mcdavatara human",
-     "tab": "robot",
-     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; wrong; answer:person | human | "
-    },
-    {
-     "text": "tongue out",
-     "tab": "robot",
-     "happened": "I did not catch what to do with face. I can add, remove, change, copy, select and tell; for example \"Add a hat.\". [outcome: not_understood; wrong; answer:tongue"
-    },
-    {
-     "text": "add a header, two chapters and a paragraph",
-     "tab": "editor",
-     "happened": "I understood \"two chapters\", \"a paragraph\", but not \"add a header\", so I did nothing. [outcome: refused; wrong; state:blocks.length=4]"
-    },
-    {
-     "text": "add two chapters",
-     "tab": "editor",
-     "happened": "I did not understand that as something to do in the documents. [outcome: refused; wrong; state:blocks.length=6]"
-    }
-   ]
-  },
-  {
-   "cause": "amount / relation / set distribution",
-   "count": 10,
-   "both_reasoners": 10,
    "examples": [
     {
      "text": "muta si mai la stinga",
@@ -1367,6 +1352,33 @@
      "text": "muta capra mai jos , si mai in stinga",
      "tab": "draw",
      "happened": "I understood \"Move the goat lower\", but not \"further to the left\", so I did nothing. [outcome: refused; open]"
+    }
+   ]
+  },
+  {
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
+   "count": 10,
+   "both_reasoners": 10,
+   "examples": [
+    {
+     "text": "mcdavatara human",
+     "tab": "robot",
+     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; wrong; answer:person | human | "
+    },
+    {
+     "text": "tongue out",
+     "tab": "robot",
+     "happened": "I did not catch what to do with face. I can add, remove, change, copy, select and tell; for example \"Add a hat.\". [outcome: not_understood; wrong; answer:tongue"
+    },
+    {
+     "text": "add a header, two chapters and a paragraph",
+     "tab": "editor",
+     "happened": "I understood \"two chapters\", \"a paragraph\", but not \"add a header\", so I did nothing. [outcome: refused; wrong; state:blocks.length=4]"
+    },
+    {
+     "text": "add two chapters",
+     "tab": "editor",
+     "happened": "I did not understand that as something to do in the documents. [outcome: refused; wrong; state:blocks.length=6]"
     }
    ]
   },
@@ -1410,7 +1422,7 @@
     {
      "text": "un cer cu 5 nori",
      "tab": "draw",
-     "happened": "I cannot do sky in the drawing yet. [outcome: refused; open]"
+     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; open]"
     },
     {
      "text": "deseneaza si un magar, dar sa nu zboare, pe iarba",
@@ -1425,41 +1437,19 @@
    ]
   },
   {
-   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.ellipsis1",
+   "cause": "unknown word (a word of the request is not known)",
    "count": 6,
    "both_reasoners": 6,
-   "examples": [
-    {
-     "text": "draw a green house and a yellow one",
-     "tab": "draw",
-     "happened": "I drew a green house. [outcome: executed; wrong; state:art.draw:objects.length=2 answer:yellow house]"
-    },
-    {
-     "text": "add a red circle and a blue one",
-     "tab": "draw",
-     "happened": "I cannot make circle in the drawing yet. [outcome: refused; wrong; state:art.draw:objects.length=4 answer:red circle answer:blue circle]"
-    },
-    {
-     "text": "draw a tree",
-     "tab": "draw",
-     "happened": "I drew a green tree. [outcome: executed; wrong; state:art.draw:objects.length=5]"
-    },
-    {
-     "text": "draw two cats and a big one",
-     "tab": "draw",
-     "happened": "I drew 2 big orange cats. [outcome: executed; wrong; state:art.draw:objects.length=3]"
-    }
-   ]
-  },
-  {
-   "cause": "unknown word (a word of the request is not known)",
-   "count": 5,
-   "both_reasoners": 5,
    "examples": [
     {
      "text": "move corcodiles in lake",
      "tab": "draw",
      "happened": "I did not understand \"corcodiles\" here. [outcome: refused; wrong; reply_not:do not know what|did not understand]"
+    },
+    {
+     "text": "si mai sus",
+     "tab": "draw",
+     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; wrong; reply_not:do not know what|did not understand]"
     },
     {
      "text": "desene asta",
@@ -1470,11 +1460,33 @@
      "text": "desene asta o",
      "tab": "map",
      "happened": "I did not understand \"desene asta o\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not"
+    }
+   ]
+  },
+  {
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.ellipsis1",
+   "count": 6,
+   "both_reasoners": 6,
+   "examples": [
+    {
+     "text": "draw a green house and a yellow one",
+     "tab": "draw",
+     "happened": "I added a house. I assumed 1 for the count. [outcome: executed; wrong; state:art.draw:objects[kind=house].color=green state:art.draw:objects.length=2 answer:gre"
     },
     {
-     "text": "un mami",
-     "tab": "charts",
-     "happened": "I did not understand \"un mami\". For example: \"Add a chart.\" or \"What is the colour of chart 2?\" I did not know the word: mami. [outcome: not_understood]"
+     "text": "add a red circle and a blue one",
+     "tab": "draw",
+     "happened": "I cannot make circle in the drawing yet. [outcome: refused; wrong; state:art.draw:objects.length=4 answer:red circle answer:blue circle]"
+    },
+    {
+     "text": "draw a tree",
+     "tab": "draw",
+     "happened": "I added a tree. I assumed 1 for the count. [outcome: executed; wrong; state:art.draw:objects.length=5]"
+    },
+    {
+     "text": "draw two cats and a big one",
+     "tab": "draw",
+     "happened": "I added 2 cats. [outcome: executed; wrong; state:art.draw:objects.length=3 answer:big]"
     }
    ]
   },
