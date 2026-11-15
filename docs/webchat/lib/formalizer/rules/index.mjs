@@ -8,24 +8,24 @@
 import { guard } from '../guard.mjs?v=82a55329d9';
 import { perf } from '../perf.mjs?v=b81e032a17';
 import { lexIndex } from '../../worlds/lexicon.mjs?v=815848016d';
-import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=4a3da2a627';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=965e6281b0';
+import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=48d13a9e86';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=36d76e98ca';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
-import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=c7231fb71e';
+import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=f1c261f0a3';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=a16dcc4940';
-import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=113c6084e1';
+import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=84868be7c7';
 import { en } from '../../lang/en.mjs?v=37915f671a';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse } from '../../soplang/index.mjs?v=c57881f705';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
-import { annotateUnread } from '../completeness.mjs?v=c7231fb71e';
-import { isCatchAll } from '../typed-world.mjs?v=c7231fb71e';
+import { annotateUnread } from '../completeness.mjs?v=f1c261f0a3';
+import { isCatchAll } from '../typed-world.mjs?v=f1c261f0a3';
 
 export { FormSession } from './session.mjs?v=a16dcc4940';
-export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=c7231fb71e';
-export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=4a3da2a627';
-export { compilePattern, matchTokens } from './matcher.mjs?v=965e6281b0';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=f1c261f0a3';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=48d13a9e86';
+export { compilePattern, matchTokens } from './matcher.mjs?v=36d76e98ca';
 export { singularLemma, pluralize } from './lemma.mjs?v=551c807f5c';
 
 const compiledCache = new WeakMap();
@@ -613,7 +613,11 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     const ends = body.length ? body : tokens.filter((t) => t.kind !== 'qmark');
     const first = ends[0] ?? tokens[0], last = ends[ends.length - 1] ?? tokens[tokens.length - 1];
     const span = expanded ? expanded.span : [first.start, last.end];
-    const segText = expanded ? joinText(tokens) : text.slice(span[0], span[1]);
+    // {segment} is the sentence as it was read: a respelled word ("flyes" read as "flies") is handed to the world's own reader in its read form, the reply names the respelling
+    // (a respelling: one whole word of letters replaced by another; a contraction or an expansion ("let's", "where's": several tokens over one span) keeps the typed text)
+    const respelled = tokens.some((t) => t.kind === 'word' && Number.isFinite(t.start) && typeof t.raw === 'string' && /^\p{L}+$/u.test(t.raw) && /^\p{L}+$/u.test(text.slice(t.start, t.end))
+      && text.slice(t.start, t.end).toLowerCase() !== t.raw.toLowerCase() && tokens.filter((o) => o.start === t.start).length === 1);
+    const segText = expanded || respelled ? joinText(tokens) : text.slice(span[0], span[1]);
     const ranked = rankMatches(tokens, isQuestion, set, env, lex, ctx, router);
     const { worlds: scores, decision } = ranked;
     let matches = ranked.matches, pickNote = null;
@@ -1081,8 +1085,19 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     outs.forEach((r, idx) => { for (const x of r) x.cut = { by: 'cards', piece: pieces[idx].k }; out.push(...r); });
     return out.length > 1 ? out : (form.restore(stateAfter), null);
   };
+  // SENTENCES IN SEQUENCE (spec 03 "Clauses in sequence", the same rule one level up): a sentence after the first is read over the state the sentences before it leave
+  // ("Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?": the second sentence's "he" and the question need the story the first one starts). Only with
+  // `ctx.project` (the dialog's dry run on a copy of the session) and only while every sentence before it is read; the context is put back after the loop, nothing is committed.
+  const seqSaved = { states: ctx.states, recentWorlds: ctx.recentWorlds, lastWorld: ctx.lastWorld };
+  try {
   for (const s of analyze(text)) {
     s.tokens = dropStyleIn(splitPossessives(s.tokens, lex));
+    if (segments.length && typeof ctx.project === 'function' && segments.every((x) => !x.unparsed)) {
+      budget.tick('rules.sequence');
+      let proj = null;
+      try { proj = ctx.project(segments); } catch { proj = null; }
+      if (proj?.states) { const ws = [...new Set([...(proj.worlds ?? []), ...(seqSaved.recentWorlds ?? [])])]; ctx.states = proj.states; ctx.recentWorlds = ws; ctx.lastWorld = ws[0] ?? seqSaved.lastWorld; }
+    }
     const stateBefore = form.snapshot();
     const first = readSentence(s, s.tokens);
     const starters = PROTO.cutter ? STARTERS.get(set.parent ?? set) : null;
@@ -1118,6 +1133,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     if (third) { segments.push(...third.done); continue; }
     segments.push(first.fallback);
   }
+  } finally { ctx.states = seqSaved.states; ctx.recentWorlds = seqSaved.recentWorlds; ctx.lastWorld = seqSaved.lastWorld; }
   for (const seg of segments) wires.push(...seg.wires);
   return { segments, wires };
 }

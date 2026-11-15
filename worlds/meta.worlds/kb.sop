@@ -71,11 +71,11 @@
     actshared=dismantle actshared=lump actshared=merge actshared=pair actshared=slice actshared=uncouple actshared=unfasten actshared=untie
     thing=circle thing=square thing=rectangle thing=triangle thing=diamond thing=ellipse thing=ellip thing=oval
     thing=hexagon thing=star thing=box thing=node thing=arrow thing=connection thing=link thing=edge
-    thing=text thing=label thing=caption thing=everything thing=red thing=yellow thing=lime thing=green
-    thing=teal thing=cyan thing=blue thing=navy thing=indigo thing=purple thing=magenta thing=pink
-    thing=brown thing=gray thing=black thing=white thing=newest thing=new thing=last thing=latest
-    thing=oldest thing=first thing=earliest
-    thingshared=shape thingshared=dot thingshared=note thingshared=orange thingshared=gold
+    thing=text thing=label thing=caption thing=everything thing=red thing=yellow thing=gold thing=lime
+    thing=green thing=teal thing=cyan thing=blue thing=navy thing=indigo thing=purple thing=magenta
+    thing=pink thing=brown thing=gray thing=black thing=white thing=newest thing=new thing=last
+    thing=latest thing=oldest thing=first thing=earliest
+    thingshared=shape thingshared=dot thingshared=note thingshared=orange
     frame=which_shape frame=is_done frame=is_start frame=which_rules frame=which_shapes frame=is_connected frame=what_rules frame=which_circle
     frame=are_start frame=does_sensor
 
@@ -165,7 +165,7 @@
     id=kids.shop kind=module run=none
     slot=number
     name=shop
-    act=pay act=cost act=buy act=lei act=price act=money act=remainder act=rest
+    act=cost act=buy act=lei act=price act=money act=pay act=remainder act=rest
     act=spend act=buying act=purchase act=when act=back act=leu act=spare act=leftover
     act=enough act=paying act=owe act=difference act=using act=fine act=getting act=purchasing
     act=total act=paid act=afford act=purchased act=offer act=fund act=bill act=doable
@@ -243,13 +243,6 @@
     id=plan.list kind=module run=none
     slot=number
     act=pencil act=ball act=puzzle
-    thing=afghani thing=afghanis thing=agora thing=agorot thing=ariary thing=baht thing=balboa thing=balboas
-    thing=ban thing=bani thing=birr thing=boliviano thing=buck thing=cedi thing=cedis thing=cent
-    thing=centavo thing=centime thing=dalasi thing=dalasis thing=denar thing=denari thing=dinar thing=dirham
-    thing=dobra thing=dobras thing=dollar thing=dong thing=dram thing=emalangeni thing=escudo thing=euro
-    thing=fen thing=florin thing=forint thing=franc thing=gourde thing=greenback thing=grosz thing=groszy
-    thing=guarani thing=guaranis thing=guilder thing=haler thing=haleru thing=hryvnia thing=hryvnias
-    thingshared=gold
 
 @card.plan.seating meta.worlds.card
     core.source="generated:meta.worlds/cards"

@@ -9,11 +9,11 @@
  *   const { text, corrections } = spellCorrect('make bigger yes and red lips', { vocab: worldVocabulary(set, 'ui.avatar') });
  *   // text = 'make bigger eyes and red lips', corrections = [{ from: 'yes', to: 'eyes', span: [12, 15], kind: 'spell' }]
  */
-import { vocabularyOf, openVocab, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs?v=c7231fb71e';
+import { vocabularyOf, openVocab, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs?v=f1c261f0a3';
 import { isNumberWord } from './rules/numbers.mjs?v=e4898df942';
 import { guard } from './guard.mjs?v=82a55329d9';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
-import { namingTables } from './routing.mjs?v=c7231fb71e';
+import { namingTables } from './routing.mjs?v=f1c261f0a3';
 import { lexIndex } from '../worlds/lexicon.mjs?v=815848016d';
 
 /** Common English function words: never corrected, and valid correction targets (typos of "the", "and", "with" ...). */
@@ -58,6 +58,20 @@ function isKnown(w, keep) {
 
 /** True when the lowercase word `w` is known anywhere: a function word, a number word, a word of `vocab` (any world), a lexicon noun, or an inflection of one. */
 export const isKnownWord = (w, vocab) => FUNCTION_WORDS.has(w) || !!vocab.nouns?.has(w) || isKnown(w, vocab);
+
+/** The stems a word may be an inflection of, by the same suffix rules as `isKnown` (3 letters or more): "flyes" and "flies" both give "fly". */
+const stemsOf = (w) => {
+  const out = new Set();
+  for (const s of SUFFIXES) {
+    if (!w.endsWith(s) || w.length - s.length < (s === 'ies' ? 2 : 3)) continue;   // "flies" -> "fl" + "y"
+    const stem = w.slice(0, -s.length);
+    for (const x of [stem, `${stem}e`, s === 'ies' ? `${stem}y` : null, stem.slice(0, -1)]) if (x && x.length >= 3) out.add(x);
+  }
+  return out;
+};
+/** True when two spellings are two inflected forms of one stem that is neither of them ("flyes" and "flies" of "fly"): a respelling between them is an inflection
+ *  slip, not another word. A word and its own stem ("beard" / "bear", "cats" / "cat") are not: the shorter one is a word of its own. */
+export const sameStem = (a, b) => { if (a === b) return false; const sa = stemsOf(a); for (const x of stemsOf(b)) if (sa.has(x) && x !== a && x !== b) return true; return false; };
 
 /** True when one word is an inflection of the other (move/moves, color/colors): not a typo of it. */
 export const sameWordForm = (a, b) => isKnown(a, new Set([b])) || isKnown(b, new Set([a]));

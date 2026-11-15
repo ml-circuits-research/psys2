@@ -5,6 +5,7 @@
 import { storyState } from '../../src/vendor/sopworld/sopworld.mjs';
 import { en } from '../../src/lang/en.mjs';
 import { pluralize } from '../../src/formalizer/rules/lemma.mjs';
+import { MONEY_WORDS } from '../../src/knowledge/money-words.generated.mjs';   // the catalog's money words (k.units through w.lang.en)
 
 export function initialState() { return { story: null, turns: 0 }; }
 
@@ -86,8 +87,14 @@ export function accepts({ action, roles, text, state } = {}) {
   if (action === 'story.tell' && at >= 0) for (const t of toks.slice(at + 1, restAt > at ? restAt : toks.length)) verbs[t] ??= 'add';
   const said = withCase(text, roles) + (action === 'story.ask' && !/\?\s*$/.test(String(text ?? '')) ? '?' : '');   // the hook's tokens have no question mark
   const r = storyState(said, { ...o, skip: o.skip.filter((w) => !(w in verbs)), verbs, prior: state?.story ?? undefined });
-  if (r.unread.length) return false;
-  const inFocus = !!state?.story?.steps?.length;  // 'focus': the story is the dialogue's focus, so the reading does not yield to another world's general frame ("how many ... does Tom have")
+  if (r.unread.length || !readsWhole({ text: said, state })) return false;   // a reading that passes over words is not this world's ("Tom ate 2 apples AND NOW HAS 3": two clauses)
+  // a story about money ("Ana has 5 lei": the item is a money word of the catalog) is the shop's while kids.shop holds the wallet (money as a quantity with a unit is the
+  // next step: storyState over w.list's budget)
+  const money = (i) => !!i && (MONEY_WORDS.has(i) || MONEY_WORDS.has(`${i}s`));
+  if (r.steps.slice(state?.story?.steps?.length ?? 0).some((s) => money(s.item)) || r.answers.some((a) => money(a.item))) return false;
+  const inFocus = !!state?.story?.steps?.length;
+  // "I have one daughter" with no story in focus is a statement about the user (the profile, Q19), not the start of a word problem
+  if (action === 'story.tell' && !inFocus && r.steps.length && r.steps.every((s) => s.owner === 'I')) return false;  // 'focus': the story is the dialogue's focus, so the reading does not yield to another world's general frame ("how many ... does Tom have")
   if (action === 'story.ask') return inFocus && r.answers.some((a) => a.answer !== null && a.answer !== undefined) ? 'focus' : false;
   return r.steps.length > (state?.story?.steps?.length ?? 0) ? (inFocus ? 'focus' : true) : false;
 }

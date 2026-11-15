@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
- * The readings of plan.list from the PUBLISHED catalog (kids plan, ADR-011; Q18 K1 w.list v3, K6 list / shop frames): writes worlds/plan.list/patterns.sop and
- * lexicon.sop from the frames of w.lang.en that need a world with list entries (`needs=entries`, shard list-frames) and from the money lexicon of the same shard
- * (derived by the catalog from k.units). No phrasing is written here: a frame's words are the catalog's, its pattern is rebuilt by src/lang/en.mjs (createLangEn).
+ * The readings of plan.list from the PUBLISHED catalog (kids plan, ADR-011; Q18 K1 w.list v3, K6 list / shop frames): writes worlds/plan.list/patterns.sop from the
+ * frames of w.lang.en that need a world with list entries (`needs=entries`, shard list-frames), and src/knowledge/money-words.generated.mjs from the money lexicon of the same shard
+ * (derived by the catalog from k.units). The money words are data the operations check (`accepts`), not a world lexicon: a lexicon's values are spelling and name
+ * candidates of every sentence, and 454 currency names ("ariary", "kwacha") would respell ordinary words ("primary" read as "ariary"). No phrasing is written here: a frame's words are the catalog's, its pattern is rebuilt by src/lang/en.mjs (createLangEn).
  *
  *   node scripts/build-list-world.mjs <catalog docs/worlds dir> [--check]
  *
@@ -20,6 +21,7 @@ import { parse } from '../src/soplang/index.mjs';
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const NS = 'plan.list';
 const DIR = join(REPO, 'worlds', NS);
+const OUT = (name) => (name.endsWith('.mjs') ? join(REPO, 'src/knowledge', name) : join(DIR, name));
 /** The frame sets of the catalog this world reads (frame ids without the `acts.` set prefix). */
 export const SETS = ['shop.'];
 /** While a kids world that reads the same sentences is on (kids.shop, ADR-011), this world stands behind it: the priority of a frame that names things (want, price,
@@ -27,16 +29,17 @@ export const SETS = ['shop.'];
  *  (the money paid, the change) keep the catalog's priority, so the payment and the change of a list this world holds are not read by another world in between. */
 export const BEHIND = -4;
 const behind = (f) => (f.args.some((r) => ['value', 'currency', 'money', 'unit'].includes(r)) || f.mode === 'change' ? 0 : BEHIND);
+/** The frames whose catalog example is the canonical sentence of an operation (help and "Did you mean" quote canonical sentences only, RD6): one per act. */
+const CANONICAL = new Set(['shop.want', 'shop.pay']);   // (the questions, list.ask, stand behind kids.shop while it is on: no canonical sentence of theirs is this world's yet)
 /** The roles the operations of plan.list read; a frame with another role is not taken (it would claim a sentence no operation can run). */
 const ROLES = new Set(['thing', 'amount', 'place', 'value', 'currency', 'money', 'unit', 'attribute', 'mode', 'topic']);
 
 const q = (s) => JSON.stringify(String(s));
-const lexId = (name) => `lex.${NS}.${name}`;
 
-/** One catalog frame as a pattern of this world, in the notation of the schema worlds (worlds/acts/acts.mjs expandMatch): L, D and the lexicons named for this world. */
+/** One catalog frame as a pattern of this world, in the notation of the schema worlds (worlds/acts/acts.mjs expandMatch): L, D; a money word is one word, checked by the operations. */
 function expand(match, lexNames) {
   let m = match.replace(/\{(\w+):words\}$/, '{$1:rest}').replace(/\bL\b/g, '[$lang.lead.polite]?').replace(/\bD\b/g, '[$acts.det]?');
-  for (const n of lexNames) m = m.split(`lex.${n}`).join(lexId(n));
+  for (const n of lexNames) m = m.split(`lex.${n}`).join('word');
   return `[$lang.lead.filler|pls|plz]? ${m} [$lang.tail.filler|please]?`;
 }
 
@@ -56,13 +59,12 @@ export function build(catalog) {
   const signal = (f) => f.act === 'ask' || f.args.some((r) => ['value', 'currency', 'money', 'unit'].includes(r));
   for (const f of frames) {
     const emit = `@{_} core.request action=list.${f.act}${f.mode ? ` arg.mode=${f.mode}` : ''}${Object.entries(f.lit ?? {}).map(([k, v]) => ` arg.${k}=\\"${v}\\"`).join('')}${f.args.map((a) => ` arg.${a}=\\"{${a}}\\"`).join('')} arg.text=\\"{segment}\\"`;
-    pats.push(`@pat.${NS}.${f.id} core.pattern\n    match=${q(expand(f.match, lexNames))}\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority + behind(f)}\n${signal(f) ? '    signal=true\n' : ''}    example=${q(f.example)}\n`);
+    pats.push(`@pat.${NS}.${f.id} core.pattern\n    match=${q(expand(f.match, lexNames))}\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority + behind(f)}\n${signal(f) ? '    signal=true\n' : ''}    example=${q(f.example)}\n${CANONICAL.has(f.id) ? `    canonical=${q(f.example)}\n` : ''}`);
   }
-  const lex = [head, ...lexes.filter((w) => frames.some((f) => f.match.includes(`lex.${w.entries.find((e) => e.key === 'name')?.value.v}`))).map((w) => {
-    const name = String(w.entries.find((e) => e.key === 'name')?.value.v);
-    return `@${lexId(name)} core.lexicon\n    class=noun\n    doc=${q(`The catalog's lexicon ${name} (w.lang.en, derived from k.units): words for money after a number.`)}\n${[...new Set(items(w))].map((x) => `    word=${x}`).join('\n')}\n`;
-  })];
-  return { 'patterns.sop': pats.join('\n'), 'lexicon.sop': lex.join('\n'), frames: frames.length };
+  const money = lexes.find((w) => String(w.entries.find((e) => e.key === 'name')?.value.v) === 'money.unit');
+  const words = money ? [...new Set(items(money).map((x) => x.replace(/_/g, ' ')))] : [];
+  const mjs = `// GENERATED by scripts/build-list-world.mjs from the catalog world w.lang.en (shard list-frames, lexicon money.unit, derived by the catalog from k.units${commit ? `; catalog index ${commit}` : ''}). Never edited by hand.\n// SPDX-License-Identifier: CC0-1.0 (the catalog's licence)\nexport const MONEY_WORDS = new Set(${JSON.stringify(words)});\n`;
+  return { 'patterns.sop': pats.join('\n'), 'money-words.generated.mjs': mjs, frames: frames.length };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -70,10 +72,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   if (!catalog || !existsSync(join(catalog, 'w.lang.en/shards/list-frames.sop'))) { console.error('usage: node scripts/build-list-world.mjs <catalog docs/worlds dir with w.lang.en/shards/list-frames.sop> [--check]'); process.exit(2); }
   const out = build(catalog);
   let stale = 0;
-  for (const name of ['patterns.sop', 'lexicon.sop']) {
-    const cur = existsSync(join(DIR, name)) ? readFileSync(join(DIR, name), 'utf8') : null;
+  for (const name of ['patterns.sop', 'money-words.generated.mjs']) {
+    const cur = existsSync(OUT(name)) ? readFileSync(OUT(name), 'utf8') : null;
     if (cur === out[name]) continue;
-    if (process.argv.includes('--check')) { stale++; console.error(`stale: ${name}`); } else { writeFileSync(join(DIR, name), out[name]); console.log(`written ${name}`); }
+    if (process.argv.includes('--check')) { stale++; console.error(`stale: ${name}`); } else { writeFileSync(OUT(name), out[name]); console.log(`written ${name}`); }
   }
   console.log(`${out.frames} frames`);
   if (stale) process.exit(1);

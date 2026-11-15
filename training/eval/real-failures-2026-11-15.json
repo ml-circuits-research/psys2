@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "20543e2c",
-  "tree": "704d91aa5c7742d2",
+  "build": "8eeb5b3a",
+  "tree": "60846e64f60f04af",
   "catalog": "ab3b2ab868ba27868f88d2dbdfce3433a699ece6",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -14,96 +14,16 @@
    "turns": 579,
    "judged": 181,
    "right": 130,
-   "partly": 14,
-   "wrong": 37,
+   "partly": 15,
+   "wrong": 36,
    "open": 13,
    "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 331,
-    "refused": 3,
+    "executed": 335,
+    "refused": 2,
     "asked": 6,
-    "not_understood": 170,
-    "other_world": 69
-   },
-   "by_source": {
-    "owner-log-2026-11-13": {
-     "turns": 69,
-     "judged": 55,
-     "right": 41
-    },
-    "owner-log-2026-11-13b": {
-     "turns": 63,
-     "judged": 11,
-     "right": 11
-    },
-    "owner-log-2026-11-13c": {
-     "turns": 24,
-     "judged": 10,
-     "right": 8
-    },
-    "real-phrases-2026-11-09c": {
-     "turns": 68,
-     "judged": 0,
-     "right": 0
-    },
-    "real-phrases-2026-11-09d": {
-     "turns": 10,
-     "judged": 0,
-     "right": 0
-    },
-    "real-phrases-2026-11-09e": {
-     "turns": 67,
-     "judged": 0,
-     "right": 0
-    },
-    "real-phrases-2026-11-09f-mobile": {
-     "turns": 108,
-     "judged": 0,
-     "right": 0
-    },
-    "real-dialogue-2026-11-09": {
-     "turns": 49,
-     "judged": 0,
-     "right": 0
-    },
-    "real-dialogue-2026-11-09b": {
-     "turns": 14,
-     "judged": 0,
-     "right": 0
-    },
-    "real dialogues": {
-     "turns": 105,
-     "judged": 105,
-     "right": 70
-    },
-    "owner-exports/phrase-log-2026-11-14T2243": {
-     "turns": 2,
-     "judged": 0,
-     "right": 0
-    }
-   },
-   "retired": {
-    "judged": 72,
-    "right": 65,
-    "partly": 0,
-    "wrong": 7
-   }
-  },
-  "ops": {
-   "turns": 579,
-   "judged": 181,
-   "right": 130,
-   "partly": 14,
-   "wrong": 37,
-   "open": 13,
-   "changed": 53,
-   "unjudged": 332,
-   "outcome": {
-    "executed": 331,
-    "refused": 3,
-    "asked": 6,
-    "not_understood": 171,
+    "not_understood": 168,
     "other_world": 68
    },
    "by_source": {
@@ -165,9 +85,89 @@
    },
    "retired": {
     "judged": 72,
-    "right": 65,
+    "right": 64,
     "partly": 0,
-    "wrong": 7
+    "wrong": 8
+   }
+  },
+  "ops": {
+   "turns": 579,
+   "judged": 181,
+   "right": 130,
+   "partly": 15,
+   "wrong": 36,
+   "open": 13,
+   "changed": 53,
+   "unjudged": 332,
+   "outcome": {
+    "executed": 335,
+    "refused": 2,
+    "asked": 6,
+    "not_understood": 169,
+    "other_world": 67
+   },
+   "by_source": {
+    "owner-log-2026-11-13": {
+     "turns": 69,
+     "judged": 55,
+     "right": 41
+    },
+    "owner-log-2026-11-13b": {
+     "turns": 63,
+     "judged": 11,
+     "right": 11
+    },
+    "owner-log-2026-11-13c": {
+     "turns": 24,
+     "judged": 10,
+     "right": 8
+    },
+    "real-phrases-2026-11-09c": {
+     "turns": 68,
+     "judged": 0,
+     "right": 0
+    },
+    "real-phrases-2026-11-09d": {
+     "turns": 10,
+     "judged": 0,
+     "right": 0
+    },
+    "real-phrases-2026-11-09e": {
+     "turns": 67,
+     "judged": 0,
+     "right": 0
+    },
+    "real-phrases-2026-11-09f-mobile": {
+     "turns": 108,
+     "judged": 0,
+     "right": 0
+    },
+    "real-dialogue-2026-11-09": {
+     "turns": 49,
+     "judged": 0,
+     "right": 0
+    },
+    "real-dialogue-2026-11-09b": {
+     "turns": 14,
+     "judged": 0,
+     "right": 0
+    },
+    "real dialogues": {
+     "turns": 105,
+     "judged": 105,
+     "right": 70
+    },
+    "owner-exports/phrase-log-2026-11-14T2243": {
+     "turns": 2,
+     "judged": 0,
+     "right": 0
+    }
+   },
+   "retired": {
+    "judged": 72,
+    "right": 64,
+    "partly": 0,
+    "wrong": 8
    }
   }
  },
@@ -326,8 +326,8 @@
   },
   {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
-   "count": 16,
-   "both_reasoners": 16,
+   "count": 15,
+   "both_reasoners": 15,
    "examples": [
     {
      "text": "make the avatar an emoji",
@@ -480,9 +480,9 @@
      "happened": "There is no you here. [outcome: executed; partly; answer:wear]"
     },
     {
-     "text": "how is a circle different from other shapes",
-     "tab": "robot",
-     "happened": "I did not understand \"how is a circle different from other shapes\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; wrong; a"
+     "text": "I want a puzzle and I pay 10 lei. What is the change?",
+     "tab": null,
+     "happened": "OK, a puzzle. OK, you pay 10 lei. Change is an event that occurs when something passes from one state or phase to another. About: give a thing another value of "
     }
    ]
   },
@@ -624,6 +624,18 @@
      "text": "set title to Title 1",
      "tab": "editor",
      "happened": "The title stays the title. You can make it bigger, center it or format it; to get a heading, add one. [outcome: refused]"
+    }
+   ]
+  },
+  {
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.gaps1b",
+   "count": 1,
+   "both_reasoners": 1,
+   "examples": [
+    {
+     "text": "I would like a ball and a pencil and pay with 20 lei. what's the change",
+     "tab": "shop",
+     "happened": "OK, a ball and a pencil. OK, you pay 20 lei. I did not understand \"what's the change\". Did you mean \"What can I change?\" or \"I want a puzzle and I pay 10 lei. W"
     }
    ]
   },

@@ -41,7 +41,7 @@
     example="What is the change?"
 
 @pat.plan.list.shop.change.from core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what_is_the_change|whats_the_change|how_much_change_do_i_get|how_much_change|change|the_change] [from|out_of|with] {money:number} {unit:lex.plan.list.money.unit} for [$acts.det]? {thing:rest} [$lang.tail.filler|please]?"
+    match="[$lang.lead.filler|pls|plz]? [what_is_the_change|whats_the_change|how_much_change_do_i_get|how_much_change|change|the_change] [from|out_of|with] {money:number} {unit:word} for [$acts.det]? {thing:rest} [$lang.tail.filler|please]?"
     emit="@{_} core.request action=list.ask arg.mode=change arg.money=\"{money}\" arg.unit=\"{unit}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=15
@@ -49,7 +49,7 @@
     example="What is the change from 20 lei for a ball and a pencil?"
 
 @pat.plan.list.shop.change.for core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what_is_the_change|whats_the_change|how_much_change_do_i_get|how_much_change|change|the_change] for [$acts.det]? {thing:words} [with|from|out_of|if_i_pay|if_i_give] {money:number} {unit:lex.plan.list.money.unit} [$lang.tail.filler|please]?"
+    match="[$lang.lead.filler|pls|plz]? [what_is_the_change|whats_the_change|how_much_change_do_i_get|how_much_change|change|the_change] for [$acts.det]? {thing:words} [with|from|out_of|if_i_pay|if_i_give] {money:number} {unit:word} [$lang.tail.filler|please]?"
     emit="@{_} core.request action=list.ask arg.mode=change arg.thing=\"{thing}\" arg.money=\"{money}\" arg.unit=\"{unit}\" arg.text=\"{segment}\""
     kind=question
     priority=15
@@ -62,6 +62,7 @@
     kind=request
     priority=9
     example="I want a puzzle."
+    canonical="I want a puzzle."
 
 @pat.plan.list.shop.want.n core.pattern
     match="[$lang.lead.filler|pls|plz]? [i_want|i_would_like|id_like|i_will_take|ill_take|i_will_have|ill_have|i_want_to_buy|i_would_like_to_buy|i_need|i_buy|i_am_buying|im_buying|give_me] {amount:number} {thing:words} [for_me|for_us|today|now|please|yet]? [$lang.tail.filler|please]?"
@@ -71,9 +72,10 @@
     example="I want 2 pencils."
 
 @pat.plan.list.shop.pay core.pattern
-    match="[$lang.lead.filler|pls|plz]? [i|we]? [pay|paid|pay_with|paid_with|give|gave|give_the_cashier|gave_the_cashier|give_the_shopkeeper|gave_the_shopkeeper|hand_over|handed_over|hand_the_cashier|handed_the_cashier|have_to_pay] {value:number} {currency:lex.plan.list.money.unit} [$lang.tail.filler|please]?"
+    match="[$lang.lead.filler|pls|plz]? [i|we]? [pay|paid|pay_with|paid_with|give|gave|give_the_cashier|gave_the_cashier|give_the_shopkeeper|gave_the_shopkeeper|hand_over|handed_over|hand_the_cashier|handed_the_cashier|have_to_pay] {value:number} {currency:word} [$lang.tail.filler|please]?"
     emit="@{_} core.request action=list.change arg.attribute=\"tendered\" arg.value=\"{value}\" arg.currency=\"{currency}\" arg.text=\"{segment}\""
     kind=request
     priority=14
     signal=true
     example="I pay 10 lei."
+    canonical="I pay 10 lei."

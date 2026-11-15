@@ -3,13 +3,14 @@
 # it keeps is one its own story answers, so its question patterns rank above the general question frames (talk's "how many legs does a spider have").
 
 @pat.calc.story.event core.pattern
+    canonical="Mia found a carrot."
     match="[$lang.lead.filler]? {who:word} [$lang.story.when]? [$lang.story.set|$lang.story.add|$lang.story.remove|$lang.story.give] {rest:rest}"
     emit="@{_} core.request action=story.tell arg.rest=\"{rest}\" arg.text=\"{segment}\""
     kind=statement
     priority=6
     example="Tom has 15 apples."
     example="He gives 12 to Ana."
-    example="Mia found a coin."
+    example="Mia found a carrot."
     doc="A sentence of a story: an owner (a name, a pronoun, I, or a number as subject), a verb of holding, getting, losing or giving, an amount and an item."
 
 @pat.calc.story.event.bare core.pattern

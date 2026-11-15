@@ -18,8 +18,8 @@ import { buildWires, SEGMENT_SLOT } from '../formalizer/rules/emit.mjs?v=8e51d17
 import { lexIndex } from '../worlds/lexicon.mjs?v=815848016d';
 import { parseNumberRun, isNumberWord } from '../formalizer/rules/numbers.mjs?v=e4898df942';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { editDistance } from '../formalizer/rules/normalize.mjs?v=4a3da2a627';
-import { FILLER, leftOut } from './world-aware.mjs?v=b4fbedf047';
+import { editDistance } from '../formalizer/rules/normalize.mjs?v=48d13a9e86';
+import { FILLER, leftOut } from './world-aware.mjs?v=e8d4a4a98f';
 
 /**
  * What the reader may take (measured, spec 16 section 7.4): `freeText` (an argument that takes any words, class `rest`/`noun`/`words`: the descriptions cover only part of a world, so
