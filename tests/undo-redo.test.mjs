@@ -14,10 +14,10 @@ const both = (name, fn) => { for (const r of ['matrix', 'ops']) test(`${name} [$
 
 both('redo puts back what undo took out and says what it was; a new action clears the redo list', async (r) => {
   const { s, out } = await run(r, ['open the drawing tab', 'draw a house', 'draw a sun', 'undo', 'redo', 'undo', 'undo', 'redo', 'redo', 'redo']);
-  assert.match(out[3], /undid it \(drew a yellow sun\)/);
-  assert.match(out[4], /did it again \(drew a yellow sun\)/);
-  assert.match(out[7], /did it again \(drew a yellow house\)/);
-  assert.match(out[8], /did it again \(drew a yellow sun\)/);
+  assert.match(out[3], /undid it \(added a sun\)/);   // the step says what it did in the reply facts' words (spec 28 section 14)
+  assert.match(out[4], /did it again \(added a sun\)/);
+  assert.match(out[7], /did it again \(added a house\)/);
+  assert.match(out[8], /did it again \(added a sun\)/);
   assert.match(out[9], /nothing to redo/i);
   assert.equal(sceneOf(s), 'house,sun');
   const t = await run(r, ['open the drawing tab', 'draw a house', 'undo', 'draw a cat', 'redo']);
@@ -37,8 +37,8 @@ both('redo through a tab switch: what was undone in the drawing comes back after
 });
 
 both('a message with two requests is two steps: undo takes back the last request and says which, then the other', async (r) => {
-  const { s, out } = await run(r, ['open the drawing tab', 'draw a house', 'draw a sky and a sun', 'undo']);
-  assert.match(out[3], /drew a yellow sun/);
+  const { s, out } = await run(r, ['open the drawing tab', 'draw a house', 'draw a sky, then draw a sun', 'undo']);   // two requests ("a sky and a sun" is one request of two kinds: spec 28 section 11)
+  assert.match(out[3], /added a sun/);
   assert.equal(sceneOf(s), 'house', 'the sun is gone, the sky is the other request of the message');
   assert.ok(s.isession.state['art.draw'].sky, 'the sky stays');
   const u = await s.send('undo');
@@ -126,7 +126,7 @@ test('the timeline entries of a message share its turn and carry the words of ea
 
 test('the record of a restart keeps one entry per request (RESTORE-1 with UNDO-REDO)', async () => {
   const a = engines.matrix.createSession({ language: 'en' });
-  for (const t of ['open the drawing tab', 'draw a sky and a sun']) await a.send(t);
+  for (const t of ['open the drawing tab', 'draw a sky, then draw a sun']) await a.send(t);
   const mem = JSON.parse(JSON.stringify(a.memoryJSON()));
   const b = engines.matrix.createSession({ language: 'en' });
   b.isession.state = JSON.parse(JSON.stringify(a.isession.state));
@@ -134,6 +134,6 @@ test('the record of a restart keeps one entry per request (RESTORE-1 with UNDO-R
   assert.equal(b.restoreMemory(mem), true);
   assert.equal(b.isession.rs.turns.length, a.isession.rs.turns.length);
   const u = await b.send('undo');
-  assert.match(u.text, /drew a yellow sun/);
+  assert.match(u.text, /added a sun/);
   assert.ok(b.isession.state['art.draw'].sky, 'the sky is the other request');
 });

@@ -902,31 +902,6 @@
    "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
   },
   {
-   "file": "undo-redo.test.mjs",
-   "name": "redo puts back what undo took out and says what it was; a new action clears the redo list [matrix]",
-   "reason": "pins the old board's own reply or history wording (\"drew a yellow sun\"); a step through the declared binding (spec 28 section 14) is said from the view's diff and labelled with the person's words"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "redo puts back what undo took out and says what it was; a new action clears the redo list [ops]",
-   "reason": "pins the old board's own reply or history wording (\"drew a yellow sun\"); a step through the declared binding (spec 28 section 14) is said from the view's diff and labelled with the person's words"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "a message with two requests is two steps: undo takes back the last request and says which, then the other [matrix]",
-   "reason": "pins the old board's own reply or history wording (\"drew a yellow sun\"); a step through the declared binding (spec 28 section 14) is said from the view's diff and labelled with the person's words; \"a sky and a sun\" is now one request of coordinated kinds (one step), not two clauses"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "a message with two requests is two steps: undo takes back the last request and says which, then the other [ops]",
-   "reason": "pins the old board's own reply or history wording (\"drew a yellow sun\"); a step through the declared binding (spec 28 section 14) is said from the view's diff and labelled with the person's words; \"a sky and a sun\" is now one request of coordinated kinds (one step), not two clauses"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "the record of a restart keeps one entry per request (RESTORE-1 with UNDO-REDO)",
-   "reason": "pins the old board's own reply or history wording (\"drew a yellow sun\"); a step through the declared binding (spec 28 section 14) is said from the view's diff and labelled with the person's words; \"a sky and a sun\" is one request now"
-  },
-  {
    "file": "commonsense.test.mjs",
    "name": "a fish in the sky: done, and one friendly warning, never a refusal",
    "reason": "needs the planner's soft facts (deduceState: \"a fish is usually at water\") said as reply facts of a run through the binding [LIB]; the warning sentence was the board's glue"

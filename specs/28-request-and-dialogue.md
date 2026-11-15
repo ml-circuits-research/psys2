@@ -115,6 +115,8 @@ The bridge reader, the host revision and the host reply are gone. Per turn: the 
   nothing back; an undo with unread words takes nothing back.
 - **Tool binding** (request.sop): `psys2.op world= act= [of=<kind>] op=<operation>` binds an act (and the whole it makes) to one operation of the world: a new page is the board's
   fresh sheet (`act=make of=page op=newDrawing`), carried out inside the turn as one step. Host until the library publishes the binding (questions.md Q42 [LIB]).
+- **A message of several requests** ("draw a sky, then draw a sun") is cut by the library's `clauses` (the language world's cut points) where every clause reads as a request with an act and no unread word; each clause is a door turn of its own, so each is one step (undone last first). A list of things stays one clause; "a sky and a sun" is one request of two kinds, one step.
+- **The words of a step in the world's own history** (what "undo" / "redo" say it took back) are what the plan adds, said by the reply facts from the plan's make steps ("OK, I undid it (added a sun)"); otherwise the person's words.
 - **Things said together** ("two dogs and a tree") are the library's coordinated kinds (sopworld 0.152: each count stays with its kind); the host stand-in `coordinated` is gone (section 14).
 - **A partly read turn never acts**: the reply names the clauses understood and those not understood ("I understood "clear everything", but not "zork the plimp", so I did
   nothing"), cut at the joiners of the language world.

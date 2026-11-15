@@ -319,7 +319,7 @@ import { LIMITS } from './time-limits.mjs';
 import { languageCommand } from '../translate/language-command.mjs';
 import { withSubject, polishReply } from '../translate/register.mjs';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs';
-import { intentStep, weakReading } from './intent.mjs';
+import { intentStep, weakReading, cutWorld } from './intent.mjs';
 import { knownEnglishWord } from '../translate/en-ro.mjs';
 import { requestLanguage, liveWorld, readTurn, toolBindings, bindingFor, replyOf, stateWorld, referTo, attributeWords, worldWholes, typeParents, definiteKind, saysAnything, actOperation, clausesOf, boundTools, withTargetKind, withoutSelfPlace, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
@@ -1619,6 +1619,7 @@ export class DialogSession {
 
   /** The language and the English of a turn for the door, before anything runs (an explicit language is the language; 'auto' detects without touching the session's language). */
   async _doorEnglish(text, opts) {
+    if (opts?._clause) return opts._clause;   // a clause of a message of several requests: its English is the cut of the message's English
     const tr = this.engine.translator;
     const wanted = opts.language ?? this.language;
     let lang = wanted && wanted !== 'auto' && wanted !== 'unknown' ? wanted : 'en';
@@ -1714,6 +1715,29 @@ export class DialogSession {
     withoutSelfPlace(q.request, live); q.facts = q.request.facts ?? q.facts;   // "in the diagram" on the Diagram is the world itself
     const flat = { act: q.act, target: q.target, facts: q.facts, reaction: q.reaction, unread: q.unread, used: q.used, corrections: q.corrections, english: q.english, source: 'sopworld', ...(q.sourceRepairs ? { sourceRepairs: q.sourceRepairs } : {}), ...(q.asks?.length ? { asks: q.asks } : {}) };
     const why = (w) => ({ why: w, q: flat });
+    // A MESSAGE OF SEVERAL REQUESTS ("draw a sky, then draw a sun"): the library's clause splitter (the language world's cut points) cuts the English where every clause reads as
+    // a request with an act and no unread word; each clause is a turn of the door of its own (one step each, undone last first). A list of things stays one clause.
+    if (q.unread.length && !opts._clause && typeof lib.clauses === 'function') {
+      const count = (t) => (String(t).match(/[\p{L}\p{N}'-]+/gu) ?? []).length;
+      const read = (t) => { let r = null; try { r = readTurn(lib, live, language, t, { dialogue: dlg, known: knownHere }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; return null; } return r.act && !r.unread.length ? { literal: count(t) } : null; };
+      let cut = null;
+      try { cut = lib.clauses(cutWorld(lib), english, { read }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; cut = null; }
+      if (cut?.length > 1) {
+        const done = [];
+        for (const c of cut) {
+          budget.tick('door.clauses');
+          const d = await this._door(text, { ...opts, _clause: { lang, english: c.text, translation } }, tabWorld);
+          if (!d?.reply) break;
+          done.push(d);
+        }
+        if (done.length === cut.length) {
+          const last = done.at(-1);
+          last.reply.text = done.map((d) => d.reply.text).filter(Boolean).join(' ');
+          return { reply: last.reply, route: `clauses ${done.map((d) => d.route).join(' | ')}` };
+        }
+        if (done.length) return { reply: done.at(-1).reply, route: `clauses (part) ${done.map((d) => d.route).join(' | ')}` };
+      }
+    }
     // A REACTION THAT CHANGES NOTHING (praise, thanks: w.dialogue.revision `does=none`, data asked through reviseRequest; reviewer 22:45): read on every declared tab before the tab's acts, answered with the dialogue's own reply,
     // no plan and no undo step (a message of the reaction alone: no act, no thing, no unread word, nothing but a manner cue beside it, which the praise word also is)
     // (a praise word is also the cue of a manner, "nice": a constraint made of the very words of the reaction's cue is the praise itself, not a request to refine)
@@ -1819,7 +1843,8 @@ export class DialogSession {
    */
   async _doorBound({ text, opts, lang, english, translation, tabWorld, live, language, q, flat, lastRec, dlg, tools }) {
     const lib = this.engine.sopworld;
-    const prims = this._toolPrimitives(tabWorld, tools, english);
+    const label = { text: english };   // the words of the world's own history entry: what the plan does (set below from the plan), else the person's words
+    const prims = this._toolPrimitives(tabWorld, tools, label);
     const sayOpts = { language };
     const question = (lib.WORLD_QUESTIONS ?? []).find((x) => (q.request.reactions ?? []).some((r) => r.value === x));
     if (question && !q.act && !q.unread.length && (q.request.constraints ?? []).every((c) => c.on === 'kind' || c.on === 'place')) {   // a question of the world's kinds and places only ("what is 2 plus 2" is not one)
@@ -1865,6 +1890,8 @@ export class DialogSession {
     const before = replaces ? { ...this._doorBegin(), ...replaces.before } : undefined;
     let run = null;
     const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, ...(before ? { before } : {}), run: () => {
+      // the history entry of a make says what the plan adds, in the reply facts' words ("added a sun"), so an undo or a redo says what it took back ("OK, I undid it (added a sun)")
+      try { const adds = (plan.steps ?? []).filter((st) => st.action === 'make' && st.args?.kind).map((st, i) => ({ id: `planned${i}`, kind: st.args.kind, attrs: {} })); const pre = adds.length ? lib.sayRequest(req, { ...plan, assumed: [], run: { ok: true, diff: { added: adds, removed: [], changed: [] } } }, sayOpts)?.text ?? '' : ''; const did = pre.split(/(?<=\.)\s+/).filter((x) => /^I /.test(x) && !/^I assumed /.test(x)).map((x) => x.replace(/^I /, '').replace(/\.$/, '')).join(', '); if (did) label.text = did; } catch { /* the person's words stand */ }
       try { run = lib.runPlan(plan, tools, prims, { view: prims.view, timeline, replace, request: req, live, catalog: [language] }); } catch (e) { run = { ok: false, diff: { added: [], removed: [], changed: [] }, failed: { code: 'tool_error', reply: 'why.nothing', roles: {}, detail: String(e?.message ?? e) } }; }
       let said = null;
       try { said = lib.sayRequest(req, { ...plan, run, revised: replace && run.ok && !run.same, reply: rev?.reply }, sayOpts); } catch { said = null; }
@@ -1892,11 +1919,12 @@ export class DialogSession {
    * this turn: `{ status: 'supported' }`, else a refusal `{ ok: false, code }`; a custom search is called with its arguments and the view), the view (the world's `toolView`
    * operation: its state as facts). No snapshot / restore: the library's timeline takes a plan back by the inverse of its diff through the bindings, so an id is never given twice. No code here is per world.
    */
-  _toolPrimitives(tabWorld, tools, label = null) {
+  _toolPrimitives(tabWorld, tools, labelBox = null) {
+    const labelOf = () => (labelBox && typeof labelBox === 'object' ? labelBox.text : labelBox);
     const world = this.engine.set.get(tabWorld);
     const ops = world?.ops ?? {};
     const out = {};
-    for (const name of tools.ops.keys()) if (typeof ops[name] === 'function') out[name] = (args) => { const r = this._runWorldAct(tabWorld, name, { ...args, step: `turn${this._msg}`, label }); return r?.status === 'supported' ? r : { ok: false, code: r?.code ?? 'refused', reply: 'why.nothing', roles: {} }; };
+    for (const name of tools.ops.keys()) if (typeof ops[name] === 'function') out[name] = (args) => { const r = this._runWorldAct(tabWorld, name, { ...args, step: `turn${this._msg}`, label: labelOf() }); return r?.status === 'supported' ? r : { ok: false, code: r?.code ?? 'refused', reply: 'why.nothing', roles: {} }; };
     for (const name of tools.customs.keys()) if (typeof ops[name] === 'function') out[name] = (args, view) => ops[name](args, view);
     const state = () => { if (!this.isession.state[tabWorld]) this.isession.state[tabWorld] = typeof ops.initialState === 'function' ? ops.initialState() : {}; return this.isession.state[tabWorld]; };
     out.view = () => (typeof ops.toolView === 'function' ? ops.toolView({ state: state() }) : []);
