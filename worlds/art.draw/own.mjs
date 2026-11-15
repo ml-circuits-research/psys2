@@ -53,5 +53,5 @@ export function planGoal(ctx, { action, args = {} } = {}) {
 export const planLive = (ctx) => liveOf(ctx.state);
 /** Discourse hook: why the newest change was made, when a plan made it (the method and its steps, from the knowledge that holds them). */
 export const whyPlan = (ctx) => whyOfPlan(ctx);
-/** Spec 28: a scene as the goal of a request (the planner) and what a turn made (the check). */
-export { planRequest, requestResult, addThings, removeThings, moveThings, setThings, paintSky, toolView, thingAt } from "./engine.mjs";
+/** Spec 28: the tool primitives the request door runs (request.sop std.tool wires): a scene as a whole with its things, things of kinds, acts on the things there. */
+export { startScene, addThings, removeThings, moveThings, setThings, paintSky, toolView, thingAt } from "./engine.mjs";

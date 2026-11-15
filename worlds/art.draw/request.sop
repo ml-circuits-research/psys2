@@ -91,8 +91,8 @@
 @op.page psys2.op world=drawing act=make of=page op=newDrawing
 # Acts on the things that are there (spec 28 section 12): what each honours, and the one operation of the world that carries them out (the door resolves the things and the roles).
 @k.picture std.schema.kind of=picture world=drawing acts=make acts=remove
-@h.place std.schema.honours world=drawing act=place on=place of=thing
-@h.change std.schema.honours world=drawing act=change on=attribute on=size of=thing
+@h.place std.schema.honours world=drawing act=place on=place of=thing of=picture
+@h.change std.schema.honours world=drawing act=change on=attribute on=size of=thing of=picture
 @h.remove std.schema.honours world=drawing act=remove of=thing of=picture
 @wd.colour core.word text=color text=colour means=colour
 # TOOL BINDING (spec 28 section 12; reviewer 2026-11-15 20:45; sopworld 0.152.1 std.tool): the board's primitives with their typed parameters (std.tool.op / std.tool.param), the act of a
@@ -100,8 +100,12 @@
 # The library's runPlan fills the arguments (said, revised, the plan's values, the expectations below), translates a value the parameter does not take by knowledge (tiny -> small by
 # k.expect.scale; a water lily -> a flower by std.schema.drawn), checks, calls the primitive (worlds/art.draw/engine.mjs: no words, no defaults) and reads the view before and after.
 @tool core.use world=std.tool
-@op.add std.tool.op name=addThings world=drawing param=kind param=n param=size param=colour param=place param=anchor effect=makes doc="draw n things of a kind of the board"
-@pa.add.kind std.tool.param op=addThings name=kind type=thing required=true accepts=house accepts=tree accepts=sun accepts=cloud accepts=flower accepts=cat accepts=dog accepts=fish accepts=bird accepts=boat accepts=mountain accepts=hill accepts=lake accepts=river
+# A scene (a pond, a forest, a garden: a picture) is a whole the library plans with its parts (k.expect.make / k.expect.part of the catalog, by join; the structure operators
+# keep it when a count is revised): the whole is a scene of the board (startScene), each part is drawn in it (addThings whole<-step.in), and an act on the scene is an act on its things.
+@op.scene std.tool.op name=startScene world=drawing param=kind param=place effect=makes doc="a scene: the whole its things are drawn in (they stand together)"
+@b.scene std.tool.bind world=drawing act=make of=pond of=forest of=garden op=startScene arg=kind<-step.kind arg=place<-step.place makes=thing
+@op.add std.tool.op name=addThings world=drawing param=kind param=n param=size param=colour param=place param=anchor param=whole effect=makes doc="draw n things of a kind of the board"
+@pa.add.kind std.tool.param op=addThings name=kind type=thing required=true accepts=house accepts=tree accepts=sun accepts=cloud accepts=flower accepts=cat accepts=dog accepts=fish accepts=bird accepts=boat accepts=mountain accepts=hill accepts=lake accepts=river accepts=butterfly
 @pa.add.n std.tool.param op=addThings name=n kind=integer min=1 max=12 default=1
 @pa.add.size std.tool.param op=addThings name=size type=k.expect.scale by=step accepts=small accepts=default accepts=big
 @b.add std.tool.bind world=drawing act=make of=thing op=addThings makes=thing
@@ -111,16 +115,20 @@
 @a.add.colour std.tool.arg bind=$b.add param=colour from=step.colour
 @a.add.place std.tool.arg bind=$b.add param=place from=step.place
 @a.add.anchor std.tool.arg bind=$b.add param=anchor from=custom.thingAt
+@a.add.whole std.tool.arg bind=$b.add param=whole from=step.in
 @op.sky std.tool.op name=paintSky world=drawing param=colour effect=makes doc="the sky band behind everything, in a colour"
 @b.sky std.tool.bind world=drawing act=make of=sky op=paintSky arg=colour<-step.colour makes=thing
 @op.remove std.tool.op name=removeThings world=drawing param=ids effect=removes
 @b.remove std.tool.bind world=drawing act=remove of=thing op=removeThings arg=ids<-step.things needs=exists(ids) removes=ids
+@b.remove.scene std.tool.bind world=drawing act=remove of=picture op=removeThings arg=ids<-step.things
 @op.move std.tool.op name=moveThings world=drawing param=ids param=place param=anchor effect=changes
 @c.thingAt std.tool.custom name=thingAt world=drawing kind=search in=place out=anchor doc="the newest thing of the kind a place names (next to it)"
 @b.move std.tool.bind world=drawing act=place of=thing op=moveThings arg=ids<-step.things arg=place<-step.place arg=anchor<-custom.thingAt needs=exists(ids)
+@b.move.scene std.tool.bind world=drawing act=place of=picture op=moveThings arg=ids<-step.things arg=place<-step.place arg=anchor<-custom.thingAt needs=exists(ids)
 @op.set std.tool.op name=setThings world=drawing param=ids param=colour param=size effect=changes
 @pa.set.size std.tool.param op=setThings name=size type=k.expect.scale by=step accepts=small accepts=default accepts=big
 @b.set std.tool.bind world=drawing act=change of=thing op=setThings arg=ids<-step.things arg=colour<-step.colour arg=size<-step.size needs=exists(ids)
+@b.set.scene std.tool.bind world=drawing act=change of=picture op=setThings arg=ids<-step.things arg=colour<-step.colour arg=size<-step.size needs=exists(ids)
 # What the acts on the things that are there honour (the library's reference step resolves the things by kind, the values said before the kind, "it" / "them")
 @h.remove.kind std.schema.honours world=drawing act=remove on=kind on=count on=attribute of=thing
 @h.change.kind std.schema.honours world=drawing act=change on=kind on=attribute on=size of=thing

@@ -91,10 +91,10 @@ const regionNames = (live) => new Set(ofType(live, 'std.schema.region').map((r) 
  * Read one turn with the library (readRequest) into the host's shape: { act, target, facts (flat: key, value, neg, all, n, min, max, unit, step, of), reaction, unread, used,
  * corrections, request (the library's own) }.
  */
-export function readTurn(lib, live, language, english, { dialogue = null, known = null, worlds = [] } = {}) {
+export function readTurn(lib, live, language, english, { dialogue = null, known = null, worlds = [], state = null } = {}) {
   // the slips are one candidate source of the reader (sopworld 0.151 readRequest `spell`: the open world's words, the other live worlds, the dialogue, the language); a word the
   // language has (`known`, the host's dictionary of English) is never a slip, so a reading that would repair one is read again without repair
-  const ctx = { language, catalog: [language], dialogue: dialogue ?? {} };
+  const ctx = { language, catalog: [language], dialogue: dialogue ?? {}, ...(state ? { state } : {}) };   // `state`: the tool's view told into the declarations (mirrorState): names of things are read from it (sopworld 0.154)
   let request = lib.readRequest(live, english, { ...ctx, spell: { worlds } });
   if ((request.spell?.repairs ?? []).some((r) => typeof known === 'function' && known(String(r.from ?? r.said ?? '').toLowerCase()))) request = lib.readRequest(live, english, ctx);
   const corrections = (request.spell?.repairs ?? []).map((r) => ({ said: r.from ?? r.said, as: r.to ?? r.as }));

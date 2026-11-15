@@ -37,7 +37,7 @@ const TAB = 'draw';
 export function initialState() {
   return {
     canvas: { w: W, h: H }, objects: [], background: 'white', sky: null, ground: null, groundColor: null, mood: null, sunStash: [], sunPose: null,
-    selected: null, last: [], history: [], future: [], nextId: 1, seq: 0, seed: 20240611, rels: { facts: [], seq: 0 },
+    selected: null, last: [], history: [], future: [], nextId: 1, seq: 0, seed: 20240611, rels: { facts: [], seq: 0 }, scenes: [], sceneSeq: 0,
   };
 }
 
@@ -225,12 +225,13 @@ const sameKind = (s, kind) => s.objects.filter((o) => kindKey(o) === kind);
 function snapshot(s, label) {
   return {
     label, objects: s.objects.map((o) => ({ ...o, parts: { ...(o.parts ?? {}) } })), background: s.background, sky: s.sky, ground: s.ground,
-    groundColor: s.groundColor, mood: s.mood, sunStash: structuredClone(s.sunStash ?? []), selected: s.selected, last: [...s.last], rels: structuredClone(s.rels ?? { facts: [], seq: 0 }),
+    groundColor: s.groundColor, mood: s.mood, sunStash: structuredClone(s.sunStash ?? []), selected: s.selected, last: [...s.last], rels: structuredClone(s.rels ?? { facts: [], seq: 0 }), scenes: structuredClone(s.scenes ?? []),
   };
 }
 function restore(s, snap) {
   s.objects = snap.objects.map((o) => ({ ...o, parts: { ...(o.parts ?? {}) } }));
   s.rels = structuredClone(snap.rels ?? { facts: [], seq: 0 });
+  s.scenes = structuredClone(snap.scenes ?? []);
   Object.assign(s, { background: snap.background, sky: snap.sky, ground: snap.ground, groundColor: snap.groundColor, mood: snap.mood, sunStash: snap.sunStash, selected: snap.selected && byId(s, snap.selected) ? snap.selected : null, last: snap.last.filter((id) => byId(s, id)) });
 }
 /** Call before changing the picture. */
@@ -2373,75 +2374,28 @@ export function summary(ctx) {
 // What the matrix reasoner's functions (fns.mjs) share with the operations: the words, so that a refusal or a count says the same in both modes.
 export { describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, placePhrase, effectiveColor, sameColorName, drawingNP };
 
-// ---- spec 28: a scene as the goal of a request (w.request) ----------------------------------------------------------------------------------------------
-/** What the turn made, for the check of a request (spec 28 section 4): the things not in `before`, their kinds, their summed size. Read-only. */
-export function requestResult(ctx, { before = null } = {}) {
-  const s = ctx.state ?? {};
-  const had = new Set((before?.objects ?? []).map((o) => o.id));
-  const made = (s.objects ?? []).filter((o) => !o.tag && !had.has(o.id));
-  const kinds = {};
-  for (const o of made) kinds[o.kind] = (kinds[o.kind] ?? 0) + 1;
-  return { parts: made.length, kinds, extent: made.reduce((a, o) => a + (o.size ?? 0), 0) };
-}
-
-const PLACE = { corner: 'in the bottom left corner', top: 'at the top', bottom: 'in the bottom', left: 'on the left', right: 'on the right', center: 'in the middle' };
-/**
- * CARRY OUT A PLAN OF A REQUEST (spec 28; the plan is the library's planRequest over this world's request.sop). `goal.steps`: the make steps, the whole first ({ kind: pond }) and its
- * items; the board draws each item kind (or the kind it is drawn as: std.schema.drawn, `goal.declared.drawn`), the size and the place of the whole on its first part. A kind the board
- * cannot draw is said (`cannot`), never replaced by a guess. `goal.layout === 'layers'`: the picture in bands of the declared regions (std.schema.region). One undo step.
- */
-export function planRequest(ctx, goal = {}) {
-  if (goal.layout === 'layers' && (goal.request?.facts ?? []).some((f) => f.key === 'layout' && f.value === 'layers')) return arrangeLayers(ctx, goal);   // layers when they were said (a sampled layout never cuts the picture)
-  const drawnAs = goal.declared?.drawn ?? {};
-  const items = new Map(), cannot = [];
-  for (const st of goal.steps ?? []) {
-    budget.tick('draw.plan');
-    if (st.action !== 'make' || !st.item || !st.args?.kind) continue;
-    const said = String(st.args.kind), k = drawnAs[said] ?? said;
-    if (!kindOfWord(k) && !UNDRAWABLE.has(k) && k !== 'sky' && !Object.hasOwn(GROUND_WORDS, k)) { if (!cannot.some((c) => c.words === said)) cannot.push({ key: 'kind', words: said, why: 'I cannot draw that yet' }); continue; }
-    const e = items.get(k) ?? { n: 0, said: new Set() };
-    e.n++; e.said.add(said); items.set(k, e);
-  }
-  if (!items.size) return no(`I cannot draw ${goal.target ? `a ${goal.target}` : 'that'} with the things I know how to draw.`, 'unsupported');
-  const size =goal.size === 'small' || goal.size === 'tiny' ? 'small' : goal.size === 'big' || goal.size === 'huge' ? 'big' : null;
-  const where = PLACE[goal.place] ?? (size === 'small' ? PLACE.corner : PLACE.bottom);
-  const [main] = items.keys();
-  const said = [];
-  const r = oneStep(ctx, `drew ${goal.target ? `a ${size ? `${size} ` : ''}${goal.target}` : 'the things asked'}`, () => {
-    for (const [k, e] of items) {
-      const one = { kind: k, n: String(e.n), ...(k === main && size ? { m1: size } : {}) };
-      let ok1 = null;
-      if (k === 'sky' || Object.hasOwn(GROUND_WORDS, k)) { const x = ground(ctx, { g: k }); if (x?.status === 'supported') { said.push(k === 'sky' ? 'the sky' : GROUND_NAME[GROUND_WORDS[k]] ?? k); continue; } }   // a background of the scene (its ground, its sky): the board's own band
-      for (const w of k === main ? [where, ''] : [`next to the ${main}`, where, '']) { const x = add(ctx, { ...one, where: w }); if (x?.status === 'supported') { ok1 = x; break; } }
-      if (!ok1) { cannot.push({ key: 'kind', words: [...e.said][0], why: 'I cannot draw that yet' }); continue; }
-      said.push(`${e.n} ${e.n === 1 ? kindName(k) : pluralOfKind(k, e.n)}`);
-    }
-    return said.length ? ok('') : no('I could not draw any of it.', 'unsupported');
-  });
-  if (r?.status !== 'supported') return r;
-  // the whole is its first part (a pond is its water): the rest are what it has
-  const surface = [...(goal.steps ?? [])].find((st) => st.item && st.args?.kind)?.args.kind === "water";   // a scene whose first part is its water (a pond): the water is the whole, not a thing it has
-  const rest = goal.target && said.length > 1 && surface ? said.slice(1) : said;
-  const targetName = String(goal.target ?? "").replace(/_/g, " ");
-  const list = rest.length > 1 ? `${rest.slice(0, -1).join(', ')} and ${rest.at(-1)}` : rest[0];
-  const at = goal.place && PLACE[goal.place] ? ` ${PLACE[goal.place]}` : where === PLACE.corner ? ' in a corner' : '';
-  if (goal.target && items.size === 1 && items.has(drawnAs[goal.target] ?? goal.target)) return ok(`I drew ${said[0] === `1 ${kindName(main)}` ? `a ${size ? `${size} ` : ''}${kindName(main)}` : said[0]}${at}.`, { cannot, plain: true });   // a thing, not a scene of parts
-  return ok(goal.target ? `I drew a ${size ? `${size} ` : ''}${targetName}${at}. It has ${list}.` : `I drew ${list}${at}.`, { cannot });
-}
-
 /**
  * TOOL PRIMITIVES OF THE BOARD (spec 28 section 12; reviewer 2026-11-15 20:45): typed operations on its state, bound by the std.tool wires of request.sop and run by the library's
  * runPlan. Named arguments only; no request, no words, no defaults, no reply. Values come in as the tool takes them (the library translated them by knowledge before the call):
  *   kind    a kind of the board (scene.mjs KINDS)              n       how many            size   small | default | big (a grade the param accepts)
  *   colour  a colour of the catalog                             place   a region id of the canvas (scene.mjs REGIONS, `_` for a space; corner), a band of request.sop's
  *                                                                        std.schema.region (water, land, sky), or a direction (up, down)
- *   anchor  the id of a thing to go next to                     ids     the ids of the things acted on
+ *   anchor  the id of a thing to go next to                     ids     the ids of the things acted on (a scene's id stands for its things)
+ *   whole   the id of a scene made by startScene: the things made in it stand together (next to its first thing, else in its region)
  * A call is all or nothing; the calls of one session step are one entry of the board's history (`step`, `label`: given by the host). Result: { status, changed } or { status: 'missing', code } (the host passes a refusal to the library as { ok: false, code }).
  * `toolView` is the board's state as facts for the library's view (id, kind, colour, size grade, region); `thingAt` is the declared custom search (std.tool.custom) that finds
  * the newest thing of the kind a place names.
  */
 const STEP = 70;
-const objsOf = (s, ids) => [].concat(ids ?? []).map((id) => byId(s, String(id).replace(/^\$/, ''))).filter(Boolean);
+const plainId = (id) => String(id).replace(/^\$/, '');
+const sceneOf = (s, id) => (id == null ? null : (s.scenes ?? []).find((sc) => sc.id === plainId(id)) ?? null);
+/** The things of ids: a thing by its id, a scene by the things in it. */
+const objsOf = (s, ids) => [...new Set([].concat(ids ?? []).flatMap((id) => { const sc = sceneOf(s, id); return sc ? sc.members : [plainId(id)]; }))].map((id) => byId(s, id)).filter(Boolean);
+/** The board's kind of a kind name: a built-in kind, else a thing of the catalog the board draws. */
+const boardKind = (kind) => (kind == null ? null : Object.hasOwn(KINDS, kind) && KINDS[kind] ? String(kind) : isThing(String(kind)) ? COMPOSITE + kind : null);
+/** A scene with none of its things left is gone (kept as gone, so that taking it away again, as an undo does after its things, is no refusal). */
+const dropEmptyScenes = (s) => { for (const sc of s.scenes ?? []) { sc.members = sc.members.filter((id) => byId(s, id)); if (!sc.members.length && !sc.fresh) sc.gone = true; } };
+const liveScenes = (s) => (s.scenes ?? []).filter((sc) => !sc.gone && (sc.fresh || sc.members.some((id) => byId(s, id))));
 const toolDone = (extra = {}) => ({ status: 'supported', value: '', ...extra });
 const toolNo = (code) => ({ status: 'missing', value: '', code });
 /**
@@ -2460,26 +2414,40 @@ const DIRECTION = { up: [0, -1], down: [0, 1] };
 const regionId = (place) => (place == null ? null : place === 'corner' ? 'bottom left' : Object.hasOwn(REGIONS, String(place).replace(/_/g, ' ')) ? String(place).replace(/_/g, ' ') : null);
 const bandOf = (place) => (place != null && Object.hasOwn(GROUND_WORDS, place) ? GROUND_WORDS[place] : place === 'land' ? 'ground' : null);
 const gradeFactor = (size) => (size ? SIZE_WORDS[size === 'default' ? 'normal' : size] ?? null : 1);
-export function addThings(ctx, { kind, n = 1, size = null, colour = null, place = null, anchor = null, step = null, label = null } = {}) {
+/** A scene: a whole the things made in it belong to (they stand together; an act on the scene is an act on its things). */
+export function startScene(ctx, { kind, place = null, step = null, label = null } = {}) {
   const s = ensure(ctx);
-  if (!KINDS[kind]) return toolNo('no_kind');
+  if (kind == null) return toolNo('no_kind');
+  return toolStep(ctx, { step, label }, () => {
+    s.sceneSeq = (s.sceneSeq ?? 0) + 1;
+    s.scenes = [...(s.scenes ?? []).filter((sc) => !sc.gone).map((sc) => ({ ...sc, fresh: false })), { id: `scene${s.sceneSeq}`, kind: String(kind), region: regionId(place), members: [], fresh: true }];
+    open(ctx);
+    return toolDone({ changed: [`scene${s.sceneSeq}`] });
+  });
+}
+export function addThings(ctx, { kind, n = 1, size = null, colour = null, place = null, anchor = null, whole = null, step = null, label = null } = {}) {
+  const s = ensure(ctx), key = boardKind(kind), scene = sceneOf(s, whole);
+  if (!key) return toolNo('no_kind');
   const factor = gradeFactor(size), color = colour ? colorFrom([String(colour).toLowerCase()]) : null;
   if (!factor || (colour && !color)) return toolNo('no_value');
-  const to = objsOf(s, anchor)[0] ?? null, region = to ? null : regionId(place) ?? (bandOf(place) === 'ground' ? 'ground' : null);
+  const to = objsOf(s, anchor)[0] ?? (scene ? objsOf(s, scene.members)[0] : null) ?? null, region = to ? null : regionId(place) ?? scene?.region ?? (bandOf(place) === 'ground' ? 'ground' : null);
   return toolStep(ctx, { step, label }, () => {
-    const made = addThing(s, { kind, count: Math.max(1, Math.min(MAX_COUNT, Number(n) || 1)), color, factor, parts: {}, place: to ? { rel: 'next' } : region ? { region } : {}, refs: to ? [to] : [] });
+    const made = addThing(s, { kind: key, count: Math.max(1, Math.min(MAX_COUNT, Number(n) || 1)), color, factor, parts: {}, place: to ? { rel: 'next' } : region ? { region } : {}, refs: to ? [to] : [] });
     s.last = made.map((o) => o.id);
+    if (scene) { scene.members.push(...s.last); scene.fresh = false; }
     open(ctx);
     return toolDone({ changed: s.last });
   });
 }
 export function removeThings(ctx, { ids, step = null, label = null } = {}) {
-  const s = ensure(ctx), objs = objsOf(s, ids);
-  if (!objs.length) return toolNo('no_things');
+  const s = ensure(ctx), objs = objsOf(s, ids), scenes = [].concat(ids ?? []).map((id) => sceneOf(s, id)).filter(Boolean);
+  if (!objs.length && !scenes.length) return toolNo('no_things');
   return toolStep(ctx, { step, label }, () => {
     const gone = new Set(objs.map((o) => o.id));
     s.objects = s.objects.filter((o) => !gone.has(o.id));
     s.last = []; if (s.selected && gone.has(s.selected)) s.selected = null;
+    for (const sc of scenes) sc.gone = true;
+    dropEmptyScenes(s);
     open(ctx);
     return toolDone({ changed: [...gone] });
   });
@@ -2530,40 +2498,11 @@ export function paintSky(ctx, { colour, step = null, label = null } = {}) {
 /** The board's state as facts (the library's view): one record per thing a person can point at, and the sky when there is one. */
 export function toolView(ctx) {
   const s = ensure(ctx);
-  return [...(s.sky ? [{ id: 'sky', kind: 'sky', colour: s.sky }] : []), ...s.objects.filter((o) => !o.tag).map((o) => ({ id: o.id, kind: kindKey(o), colour: effectiveColor(o) ?? null, ...(sizeWord(o) ? { size: sizeWord(o) } : {}), place: regionOf(o.x, o.y).replace(/^(?:top|bottom) (?:left|right)$/, 'corner') }))];
+  const inScene = new Map((s.scenes ?? []).flatMap((sc) => sc.members.map((m) => [m, sc.id])));
+  return [...(s.sky ? [{ id: 'sky', kind: 'sky', colour: s.sky }] : []), ...s.objects.filter((o) => !o.tag).map((o) => ({ id: o.id, kind: kindName(kindKey(o)), ...(inScene.has(o.id) ? { in: inScene.get(o.id) } : {}), colour: effectiveColor(o) ?? null, ...(sizeWord(o) ? { size: sizeWord(o) } : {}), place: regionOf(o.x, o.y).replace(/^(?:top|bottom) (?:left|right)$/, 'corner') })), ...liveScenes(s).map((sc) => ({ id: sc.id, kind: sc.kind }))];   // a scene after its things: taken back, its things go first
 }
 /** Declared custom search (request.sop std.tool.custom thingAt): the newest thing of the view whose kind is the place named, else nothing. */
 export function thingAt({ place } = {}, view = []) {
   const hit = (view ?? []).filter((t) => t && place != null && t.kind === place);
   return hit.length ? hit.at(-1).id : null;
-}
-
-/**
- * LAYERS BY SCENE REGIONS (the owner's "break in 3 layers: water, land and sky"): the picture is cut into horizontal bands, the first region named at the bottom, and each thing moves
- * into the band of its region (std.schema.region of request.sop, `goal.declared.regions`); a thing of no named region stays in the nearest band. One undo step.
- */
-function arrangeLayers(ctx, goal) {
-  const named = goal.declared?.named ?? [];
-  const regions = (goal.declared?.regions ?? []).filter((r) => named.includes(r.name));
-  if (regions.length < 2) return no('Which layers? For example "in 3 layers: water, land and sky".', 'missing');
-  const s = ensure(ctx);
-  const live = (s.objects ?? []).filter((o) => !o.tag);
-  if (!live.length) return no('There is nothing in the picture to put in layers yet. Draw something first, for example "draw a pond".', 'missing');
-  const band = H / regions.length;
-  const bandOf = (k) => { const i = regions.findIndex((r) => r.kinds.includes(k)); return i < 0 ? null : regions.length - 1 - i; };
-  let moved = 0;
-  const r = oneStep(ctx, `put the picture in ${regions.length} layers`, () => {
-    for (const o of live) {
-      budget.tick('draw.layers');
-      let b = bandOf(kindName(kindKey(o)));
-      if (b == null) b = Math.min(regions.length - 1, Math.max(0, Math.floor(o.y / band)));
-      const y = Math.round(band * b + band / 2);
-      if (Math.abs(o.y - y) > 4) { o.y = y; moved++; }
-    }
-    s.selected = null;
-    return ok('');
-  });
-  if (r?.status !== 'supported') return r;
-  const top = regions.map((x) => x.name).reverse();
-  return ok(`I put the picture in ${regions.length} layers: ${top[0]} at the top, ${top.slice(1, -1).map((x) => `${x} in the middle, `).join('')}${top.at(-1)} at the bottom.${moved ? ` I moved ${moved} thing${moved === 1 ? '' : 's'}.` : ''}`);
 }

@@ -2,7 +2,7 @@
 // Operations of calc.arith (kids plan, ADR-011; Q18 K4): arithmetic over numbers with the catalog's words of arithmetic (w.lang.en shard arithmetic: each word names the
 // core.calc builtin it means, and a factor for "double", "half of") and the library's builtins (add, sub, mul, div). The reply names the operation by the catalog's first
 // infix word of its function ("7 plus 5 is 12."). No operator word is listed in this file. Browser-safe.
-import { builtins } from '../../lib/vendor/sopworld/sopworld.mjs?v=642832de23';
+import { builtins } from '../../lib/vendor/sopworld/sopworld.mjs?v=e5e77ae162';
 import { CALC_WORDS } from '../../lib/knowledge/calc-words.generated.mjs?v=3038efb1d8';
 import { parseNumberRun } from '../../lib/formalizer/rules/numbers.mjs?v=e8a1f00976';
 
