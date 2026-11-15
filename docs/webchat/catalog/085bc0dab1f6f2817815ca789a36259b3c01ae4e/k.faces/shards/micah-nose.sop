@@ -1,0 +1,32 @@
+# k.faces/shards/micah-nose: the variants of the slot `nose` in the DiceBear style `micah`: features, and parts converted from the drawings (a primitive shape, a box in the frame of the face, a draw order, a colour name and the exact colour; points for polygons and lines).
+# sources: dicebear-micah 67f54a0 (DiceBear style "micah", CC BY 4.0: Remix of "Avatar Illustration System" (https://www.figma.com/community/file/829741575478342595) by "Micah Lanier", licensed under "CC BY 4.0" (https://creativecommons.org/licenses/by/4.0/))
+# license: CC-BY-4.0
+# script: tools/import/dicebear.mjs
+
+# nose: micah curve
+@k.faces.micah.nose.curve k.faces.variant slot=nose name="micah curve" style=micah size=small named=model core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.curve.p1 k.faces.part slot=nose of="micah curve" name=part1 shape=line x=52.9 y=42.9 w=3.2 h=7.1 z=1 colour=black rgb="#000000" core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.curve.p1.1 k.faces.point part=$k.faces.micah.nose.curve.p1 n=1 x=53.7 y=42.9 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.curve.p1.2 k.faces.point part=$k.faces.micah.nose.curve.p1 n=2 x=54.3 y=45.5 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.curve.p1.3 k.faces.point part=$k.faces.micah.nose.curve.p1 n=3 x=56.1 y=47.9 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.curve.p1.4 k.faces.point part=$k.faces.micah.nose.curve.p1 n=4 x=55 y=49.6 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.curve.p1.5 k.faces.point part=$k.faces.micah.nose.curve.p1 n=5 x=52.9 y=50 core.source="dicebear-micah 67f54a0"
+
+# nose: micah pointed
+@k.faces.micah.nose.pointed k.faces.variant slot=nose name="micah pointed" style=micah size=medium kind=pointed named=model core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.pointed.p1 k.faces.part slot=nose of="micah pointed" name=part1 shape=line x=52.9 y=41.8 w=3.6 h=8.2 z=1 colour=black rgb="#000000" core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.pointed.p1.1 k.faces.point part=$k.faces.micah.nose.pointed.p1 n=1 x=53.6 y=41.8 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.pointed.p1.2 k.faces.point part=$k.faces.micah.nose.pointed.p1 n=2 x=54.4 y=44.9 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.pointed.p1.3 k.faces.point part=$k.faces.micah.nose.pointed.p1 n=3 x=56.5 y=48.4 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.pointed.p1.4 k.faces.point part=$k.faces.micah.nose.pointed.p1 n=4 x=54.9 y=49.7 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.pointed.p1.5 k.faces.point part=$k.faces.micah.nose.pointed.p1 n=5 x=52.9 y=50 core.source="dicebear-micah 67f54a0"
+
+# nose: micah tound
+@k.faces.micah.nose.tound k.faces.variant slot=nose name="micah tound" style=micah shape=round size=small named=model core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.tound.p1 k.faces.part slot=nose of="micah tound" name=part1 shape=line x=52.8 y=44.5 w=3.8 h=4.9 z=1 colour=black rgb="#000000" core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.tound.p1.1 k.faces.point part=$k.faces.micah.nose.tound.p1 n=1 x=52.8 y=44.5 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.tound.p1.2 k.faces.point part=$k.faces.micah.nose.tound.p1 n=2 x=55.3 y=44.5 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.tound.p1.3 k.faces.point part=$k.faces.micah.nose.tound.p1 n=3 x=56.6 y=46.2 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.tound.p1.4 k.faces.point part=$k.faces.micah.nose.tound.p1 n=4 x=56.5 y=47.6 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.tound.p1.5 k.faces.point part=$k.faces.micah.nose.tound.p1 n=5 x=55.5 y=49 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.nose.tound.p1.6 k.faces.point part=$k.faces.micah.nose.tound.p1 n=6 x=53.1 y=49.4 core.source="dicebear-micah 67f54a0"

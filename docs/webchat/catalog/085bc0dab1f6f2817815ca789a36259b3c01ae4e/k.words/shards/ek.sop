@@ -1,0 +1,7 @@
+# k.words/shards/ek: senses of the words from "ekg" to "ekg" (first letters "ek").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ekg.noun.1 k.words.sense word=EKG pos=noun n=1 supersense=noun.communication gloss="a graphical recording of the cardiac cycle produced by an electrocardiograph" synonym=electrocardiogram synonym=cardiogram synonym=ECG is_a=graph part_of=checkup core.source="wordnet 3.1"
+@k.words.ekg.spelling.EKG core.word text=ekg means=EKG of=k.words.sense.word core.source="wordnet 3.1"

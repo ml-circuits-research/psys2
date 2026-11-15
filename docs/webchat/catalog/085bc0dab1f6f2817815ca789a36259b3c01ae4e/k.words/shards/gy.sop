@@ -1,0 +1,12 @@
+# k.words/shards/gy: senses of the words from "gym" to "gypsy" (first letters "gy").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.gym.noun.1 k.words.sense word=gym pos=noun n=1 supersense=noun.artifact gloss="athletic facility equipped for sports or physical training" synonym=gymnasium is_a="athletic facility" kind_of="athletic facility" kind_of=facility kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.gymnastics.noun.1 k.words.sense word=gymnastics pos=noun n=1 supersense=noun.act gloss="a sport that involves exercises intended to display strength and balance and agility" synonym="gymnastic exercise" is_a=sport core.source="wordnet 3.1"
+@k.words.gynecologist.noun.1 k.words.sense word=gynecologist pos=noun n=1 supersense=noun.person gloss="a specialist in gynecology" synonym=gynaecologist synonym="woman's doctor" is_a=specialist core.source="wordnet 3.1"
+@k.words.gypsy.noun.1 k.words.sense word=gypsy pos=noun n=1 supersense=noun.person gloss="a laborer who moves from place to place as demanded by employment" synonym=itinerant synonym=gipsy is_a=laborer core.source="wordnet 3.1"
+@k.words.gypsy.noun.2 k.words.sense word=Gypsy pos=noun n=2 supersense=noun.person gloss="a member of a people with dark skin and hair who speak Romany and who traditionally live by seasonal work and fortunetelling; they are believed to have originated in northern India but now are living on all continents (but mostly in Europe, North Africa, and North America)" synonym=Gipsy synonym=Romany synonym=Rommany synonym=Romani synonym=Roma synonym=Bohemian is_a=Indian core.source="wordnet 3.1"
+@k.words.gypsy.noun.3 k.words.sense word=gypsy pos=noun n=3 supersense=noun.person gloss="a person who resembles a Gypsy in leading an unconventional, nomadic way of life" synonym=gipsy is_a=person core.source="wordnet 3.1"
+@k.words.gypsy.spelling.Gypsy core.word text=gypsy means=Gypsy of=k.words.sense.word core.source="wordnet 3.1"

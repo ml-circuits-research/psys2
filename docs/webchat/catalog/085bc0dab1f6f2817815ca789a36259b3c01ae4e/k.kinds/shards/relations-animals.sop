@@ -1,0 +1,22 @@
+# k.kinds/shards/relations-animals: the keys of the types of k.animals read as relations: 17 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.animals.animal.class k.kinds.relation type=k.animals.animal key=class subject=animal subject_sense=animal object=kind object_type=k.animals.class found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.animals.animal.legs k.kinds.relation type=k.animals.animal key=legs subject=animal subject_sense=animal object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.animals.animal.covering k.kinds.relation type=k.animals.animal key=covering subject=animal subject_sense=animal object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.animals.animal.sound k.kinds.relation type=k.animals.animal key=sound subject=animal subject_sense=animal object=word object_type=k.words.sense found=declared object_by=word core.source="hand-core 1"
+@k.kinds.relation.k.animals.animal.habitat k.kinds.relation type=k.animals.animal key=habitat subject=animal subject_sense=animal object=place object_type=k.commonsense.lives found=declared object_by=in core.source="hand-core 1"
+@k.kinds.relation.k.animals.animal.diet k.kinds.relation type=k.animals.animal key=diet subject=animal subject_sense=animal object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.animals.animal.eats k.kinds.relation type=k.animals.animal key=eats subject=animal subject_sense=animal object=thing object_type=k.scenes.thing object_type=k.attributes.drawn object_type=k.objects.object found=value core.source="hand-core 1"
+@k.kinds.relation.k.animals.animal.baby k.kinds.relation type=k.animals.animal key=baby subject=animal subject_sense=animal object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.animals.animal.can k.kinds.relation type=k.animals.animal key=can subject=animal subject_sense=animal object=act object_type=k.actions.action found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.animals.animal.cannot k.kinds.relation type=k.animals.animal key=cannot subject=animal subject_sense=animal object=act object_type=k.actions.action found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.animals.animal.drawing k.kinds.relation type=k.animals.animal key=drawing subject=animal subject_sense=animal object=thing object_type=k.objects.object found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.animals.animal.thing k.kinds.relation type=k.animals.animal key=thing subject=animal subject_sense=animal object=thing object_type=k.objects.object found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.animals.animal.group k.kinds.relation type=k.animals.animal key=group subject=animal subject_sense=animal object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.animals.animal.named k.kinds.relation type=k.animals.animal key=named subject=animal subject_sense=animal object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.animals.class.legs k.kinds.relation type=k.animals.class key=legs subject=class object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.animals.class.covering k.kinds.relation type=k.animals.class key=covering subject=class object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.animals.class.named k.kinds.relation type=k.animals.class key=named subject=class object=value found=schema core.source="hand-core 1"

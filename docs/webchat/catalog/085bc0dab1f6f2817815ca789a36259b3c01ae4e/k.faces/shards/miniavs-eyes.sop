@@ -1,0 +1,49 @@
+# k.faces/shards/miniavs-eyes: the variants of the slot `eyes` in the DiceBear style `miniavs`: features, and parts converted from the drawings (a primitive shape, a box in the frame of the face, a draw order, a colour name and the exact colour; points for polygons and lines).
+# sources: dicebear-miniavs 67f54a0 (DiceBear style "miniavs", CC BY 4.0: Remix of "Miniavs - Free Avatar Creator" (https://www.figma.com/community/file/923211396597067458) by "Webpixels", licensed under "CC BY 4.0" (https://creativecommons.org/licenses/by/4.0/))
+# license: CC-BY-4.0
+# script: tools/import/dicebear.mjs
+
+# eyes: miniavs confident
+@k.faces.miniavs.eyes.confident k.faces.variant slot=eyes name="miniavs confident" style=miniavs size=small feel=narrow named=model core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p1 k.faces.part slot=eyes of="miniavs confident" name=part1 shape=polygon x=62.5 y=54.7 w=4.7 h=4.4 z=1 colour=purple rgb="#1B0B47" tint=hair core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p1.1 k.faces.point part=$k.faces.miniavs.eyes.confident.p1 n=1 x=67.2 y=57 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p1.2 k.faces.point part=$k.faces.miniavs.eyes.confident.p1 n=2 x=66 y=59.1 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p1.3 k.faces.point part=$k.faces.miniavs.eyes.confident.p1 n=3 x=63.7 y=59.1 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p1.4 k.faces.point part=$k.faces.miniavs.eyes.confident.p1 n=4 x=62.6 y=57.6 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p1.5 k.faces.point part=$k.faces.miniavs.eyes.confident.p1 n=5 x=62.5 y=54.9 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p1.6 k.faces.point part=$k.faces.miniavs.eyes.confident.p1 n=6 x=67 y=54.7 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p2 k.faces.part slot=eyes of="miniavs confident" name=part2 shape=polygon x=46.9 y=54.7 w=4.7 h=4.4 z=2 colour=purple rgb="#1B0B47" tint=hair core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p2.1 k.faces.point part=$k.faces.miniavs.eyes.confident.p2 n=1 x=51.6 y=57 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p2.2 k.faces.point part=$k.faces.miniavs.eyes.confident.p2 n=2 x=50.4 y=59.1 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p2.3 k.faces.point part=$k.faces.miniavs.eyes.confident.p2 n=3 x=48 y=59.1 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p2.4 k.faces.point part=$k.faces.miniavs.eyes.confident.p2 n=4 x=47 y=57.6 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p2.5 k.faces.point part=$k.faces.miniavs.eyes.confident.p2 n=5 x=46.9 y=54.9 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p2.6 k.faces.point part=$k.faces.miniavs.eyes.confident.p2 n=6 x=51.3 y=54.7 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p3 k.faces.part slot=eyes of="miniavs confident" name=part3 shape=line x=46.1 y=55.5 w=6.2 h=0 z=3 colour=purple rgb="#1B0B47" tint=hair core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p3.1 k.faces.point part=$k.faces.miniavs.eyes.confident.p3 n=1 x=46.1 y=55.5 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p3.2 k.faces.point part=$k.faces.miniavs.eyes.confident.p3 n=2 x=52.3 y=55.5 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p4 k.faces.part slot=eyes of="miniavs confident" name=part4 shape=line x=61.7 y=55.5 w=6.3 h=0 z=4 colour=purple rgb="#1B0B47" tint=hair core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p4.1 k.faces.point part=$k.faces.miniavs.eyes.confident.p4 n=1 x=61.7 y=55.5 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.confident.p4.2 k.faces.point part=$k.faces.miniavs.eyes.confident.p4 n=2 x=68 y=55.5 core.source="dicebear-miniavs 67f54a0"
+
+# eyes: miniavs happy
+@k.faces.miniavs.eyes.happy k.faces.variant slot=eyes name="miniavs happy" style=miniavs size=small kind=dot named=model core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p1 k.faces.part slot=eyes of="miniavs happy" name=part1 shape=polygon x=46.9 y=55 w=4.6 h=4.3 z=1 colour=purple rgb="#1B0B47" core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p1.1 k.faces.point part=$k.faces.miniavs.eyes.happy.p1 n=1 x=46.9 y=57 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p1.2 k.faces.point part=$k.faces.miniavs.eyes.happy.p1 n=2 x=48 y=55 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p1.3 k.faces.point part=$k.faces.miniavs.eyes.happy.p1 n=3 x=50.4 y=55 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p1.4 k.faces.point part=$k.faces.miniavs.eyes.happy.p1 n=4 x=51.5 y=56.4 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p1.5 k.faces.point part=$k.faces.miniavs.eyes.happy.p1 n=5 x=51.5 y=59.1 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p1.6 k.faces.point part=$k.faces.miniavs.eyes.happy.p1 n=6 x=47.1 y=59.3 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p2 k.faces.part slot=eyes of="miniavs happy" name=part2 shape=polygon x=62.5 y=55 w=4.6 h=4.3 z=2 colour=purple rgb="#1B0B47" core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p2.1 k.faces.point part=$k.faces.miniavs.eyes.happy.p2 n=1 x=62.5 y=57 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p2.2 k.faces.point part=$k.faces.miniavs.eyes.happy.p2 n=2 x=63.7 y=55 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p2.3 k.faces.point part=$k.faces.miniavs.eyes.happy.p2 n=3 x=66 y=55 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p2.4 k.faces.point part=$k.faces.miniavs.eyes.happy.p2 n=4 x=67.1 y=56.4 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p2.5 k.faces.point part=$k.faces.miniavs.eyes.happy.p2 n=5 x=67.1 y=59.1 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.happy.p2.6 k.faces.point part=$k.faces.miniavs.eyes.happy.p2 n=6 x=62.7 y=59.3 core.source="dicebear-miniavs 67f54a0"
+
+# eyes: miniavs normal
+@k.faces.miniavs.eyes.normal k.faces.variant slot=eyes name="miniavs normal" style=miniavs shape=square size=small named=model core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.normal.p1 k.faces.part slot=eyes of="miniavs normal" name=part1 shape=rectangle x=46.9 y=54.7 w=4.7 h=6.2 z=1 colour=purple rgb="#1B0B47" tint=hair core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.eyes.normal.p2 k.faces.part slot=eyes of="miniavs normal" name=part2 shape=rectangle x=62.5 y=54.7 w=4.7 h=6.2 z=2 colour=purple rgb="#1B0B47" tint=hair core.source="dicebear-miniavs 67f54a0"

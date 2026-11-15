@@ -1,0 +1,11 @@
+# k.words/shards/uk: senses of the words from "uk" to "ukrainian" (first letters "uk").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.uk.noun.1 k.words.sense word=UK pos=noun n=1 supersense=noun.location gloss="a monarchy in northwestern Europe occupying most of the British Isles; divided into England and Scotland and Wales and Northern Ireland; `Great Britain' is often used loosely to refer to the United Kingdom" synonym="United Kingdom" synonym=U.K. synonym=Britain synonym="United Kingdom of Great Britain and Northern Ireland" synonym="Great Britain" instance_of=kingdom part_of="British Isles" core.source="wordnet 3.1"
+@k.words.uk.spelling.UK core.word text=uk means=UK of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.ukraine.noun.1 k.words.sense word=Ukraine pos=noun n=1 supersense=noun.location gloss="a republic in southeastern Europe; formerly a European soviet; the center of the original Russian state which came into existence in the ninth century" synonym=Ukrayina instance_of=country part_of=Europe core.source="wordnet 3.1"
+@k.words.ukraine.spelling.Ukraine core.word text=ukraine means=Ukraine of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.ukrainian.noun.1 k.words.sense word=Ukrainian pos=noun n=1 supersense=noun.communication gloss="the Slavic language spoken in the Ukraine" is_a=Slavic core.source="wordnet 3.1"
+@k.words.ukrainian.spelling.Ukrainian core.word text=ukrainian means=Ukrainian of=k.words.sense.word core.source="wordnet 3.1"

@@ -1,0 +1,27 @@
+# k.faces/shards/presets: named faces of the style `plain` (one variant per slot, and the four colours) and the expressions (the variants of mouth, eyebrows and eyes a face switches to).
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/faces-core.mjs
+
+@k.faces.plain.preset.baby k.faces.preset name=baby style=plain shoulders=small neck=thin ears=small head=round cheeks="round blush" mouth=small nose=button eyes=dot skin=light hair_colour=blond eye_colour=blue clothes=white core.source="hand-core 1"
+@k.faces.plain.preset.child k.faces.preset name=child style=plain shoulders=small neck=thin ears=small head=round cheeks="round blush" mouth=smile nose=button eyes=large eyebrows=short hair_front=tuft skin=light hair_colour=brown eye_colour=blue clothes=red core.source="hand-core 1"
+@k.faces.plain.preset.girl k.faces.preset name=girl style=plain hair_back=pigtails shoulders=small neck=thin ears=small head=round cheeks=freckles mouth="big smile" nose=small eyes=lashes eyebrows=arched hair_front=fringe hat=bow skin=pale hair_colour=red eye_colour=green clothes=yellow core.source="hand-core 1"
+@k.faces.plain.preset.boy k.faces.preset name=boy style=plain shoulders=t-shirt neck=thin ears=round head=round mouth=grin nose=small eyes=round eyebrows=straight hair_front=spikes hat=cap skin=tan hair_colour="dark brown" eye_colour=brown clothes=green core.source="hand-core 1"
+@k.faces.plain.preset.woman k.faces.preset name=woman style=plain hair_back="long straight" shoulders=v-neck neck=medium ears=small head=oval mouth="full lips" nose=medium eyes=lashes eyebrows=arched hair_front="centre parting" earrings=hoop skin=olive hair_colour="dark brown" eye_colour=brown clothes=purple core.source="hand-core 1"
+@k.faces.plain.preset.man k.faces.preset name=man style=plain shoulders=shirt neck=thick ears=round head=square beard=stubble mouth=neutral nose=medium eyes=oval eyebrows=thick hair_front=short skin=light hair_colour=brown eye_colour=blue clothes=blue core.source="hand-core 1"
+@k.faces.plain.preset.old_woman k.faces.preset name="old woman" style=plain hair_back=bun shoulders=shirt neck=necklace ears=round head=oval cheeks=wrinkles mouth=smile nose=medium eyes=oval eyebrows=arched glasses="small round" hair_front=wavy earrings=pearl skin=pale hair_colour=white eye_colour=grey clothes=pink core.source="hand-core 1"
+@k.faces.plain.preset.old_man k.faces.preset name="old man" style=plain shoulders=suit neck=thin ears=large head=long cheeks=wrinkles mouth=neutral moustache=walrus nose=long eyes=narrow eyebrows=bushy hair_front="bald on top" skin=light hair_colour=grey eye_colour=grey clothes=brown core.source="hand-core 1"
+@k.faces.plain.preset.bearded_man k.faces.preset name="bearded man" style=plain shoulders=hoodie neck=thick ears=round head=oval beard=full mouth=smile moustache=thick nose=wide eyes=round eyebrows=thick glasses=square hair_front="side parting" skin=brown hair_colour=black eye_colour="dark brown" clothes=grey core.source="hand-core 1"
+@k.faces.plain.preset.woman_with_curly_hair k.faces.preset name="woman with curly hair" style=plain hair_back=afro shoulders="tank top" neck=medium ears=small head=heart mouth="big smile" nose=wide eyes=oval eyebrows="thick arched" hair_front=curly earrings="large hoop" skin="dark brown" hair_colour=black eye_colour="dark brown" clothes=orange core.source="hand-core 1"
+@k.faces.plain.preset.robot k.faces.preset name=robot style=plain shoulders="metal plate" neck=pipe ears=square head=box mouth=grille nose=bolt eyes=square earrings=bolt hat=antenna skin="metal grey" hair_colour=black eye_colour=yellow clothes=grey core.source="hand-core 1"
+@k.faces.plain.preset.alien k.faces.preset name=alien style=plain shoulders=v-neck neck=thin ears=pointed head=heart mouth=small nose=small eyes=surprised eyebrows=raised skin=green hair_colour=green eye_colour=black clothes=purple core.source="hand-core 1"
+@k.faces.plain.preset.clown k.faces.preset name=clown style=plain hair_back="long curly" shoulders=t-shirt neck=medium ears=large head=wide cheeks="round blush" mouth="big smile" nose=round eyes=large eyebrows=raised hat="party hat" skin=white hair_colour=orange eye_colour=blue clothes=yellow core.source="hand-core 1"
+@k.faces.plain.preset.queen k.faces.preset name=queen style=plain hair_back="long wavy" shoulders=v-neck neck=necklace ears=small head=oval cheeks=blush mouth=smirk nose=pointed eyes=lashes eyebrows=arched hair_front="long sides" earrings=drop hat=crown skin=pale hair_colour=blond eye_colour=blue clothes=red core.source="hand-core 1"
+
+@k.faces.plain.expression.happy k.faces.expression name=happy style=plain mouth="big smile" eyebrows=arched eyes=happy core.source="hand-core 1"
+@k.faces.plain.expression.sad k.faces.expression name=sad style=plain mouth=sad eyebrows=sad core.source="hand-core 1"
+@k.faces.plain.expression.angry k.faces.expression name=angry style=plain mouth=frown eyebrows=angry eyes=narrow core.source="hand-core 1"
+@k.faces.plain.expression.surprised k.faces.expression name=surprised style=plain mouth=open eyebrows=raised eyes=surprised core.source="hand-core 1"
+@k.faces.plain.expression.sleepy k.faces.expression name=sleepy style=plain mouth=small eyebrows=straight eyes=sleepy core.source="hand-core 1"
+@k.faces.plain.expression.wink k.faces.expression name=wink style=plain mouth=smile one_eye=closed core.source="hand-core 1"
+@k.faces.plain.expression.talking k.faces.expression name=talking style=plain mouth=talking mouth_alt=neutral core.source="hand-core 1"

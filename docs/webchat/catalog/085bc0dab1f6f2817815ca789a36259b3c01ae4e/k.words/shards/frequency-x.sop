@@ -1,0 +1,8 @@
+# k.words/shards/frequency-x: how frequent the 3 words with senses here that start with "x" are: the Zipf value in wordfreq's English list and its band (1 very common, Zipf >= 6; 2 common, >= 5; 3 familiar, >= 4; 4 uncommon, >= 3; 5 rare).
+# sources: wordfreq 3.1.1 (Robyn Speer, https://github.com/rspeer/wordfreq, data CC BY-SA 4.0: the large_en list, top 50,000, built from Google Books Ngrams, the Leeds Internet Corpus, Wikipedia, ParaCrawl, OpenSubtitles 2018, SUBTLEX and Twitter statistics; see sources/wordfreq/SOURCE.md)
+# license: CC-BY-SA-4.0
+# script: tools/import/wordnet.mjs
+
+@k.words.frequency.x k.words.frequency word=x zipf=5.2 band=2 core.source="wordfreq 3.1.1"
+@k.words.frequency.xavier k.words.frequency word=xavier zipf=3.49 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.xi k.words.frequency word=xi zipf=4.12 band=3 core.source="wordfreq 3.1.1"

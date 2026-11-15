@@ -1,0 +1,9 @@
+# k.words/shards/w: senses of the words from "w" to "w" (first letters "w").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.w.noun.1 k.words.sense word=W pos=noun n=1 supersense=noun.substance gloss="a heavy grey-white metallic element; the pure form is used mainly in electrical applications; it is found in several ores including wolframite and scheelite" synonym=tungsten synonym=wolfram synonym="atomic number 74" is_a="metallic element" core.source="wordnet 3.1"
+@k.words.w.noun.2 k.words.sense word=W pos=noun n=2 supersense=noun.relation gloss="the cardinal compass point that is a 270 degrees" synonym=west synonym="due west" synonym=westward is_a="cardinal compass point" core.source="wordnet 3.1"
+@k.words.w.noun.3 k.words.sense word=W pos=noun n=3 supersense=noun.quantity gloss="a unit of power equal to 1 joule per second; the power dissipated by a current of 1 ampere flowing across a resistance of 1 ohm" synonym=watt is_a="power unit" part_of=kilowatt part_of=horsepower core.source="wordnet 3.1"
+@k.words.w.spelling.W core.word text=w means=W of=k.words.sense.word core.source="wordnet 3.1"

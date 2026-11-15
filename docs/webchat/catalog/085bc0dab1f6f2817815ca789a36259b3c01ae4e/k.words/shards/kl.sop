@@ -1,0 +1,10 @@
+# k.words/shards/kl: senses of the words from "klaxon" to "klein" (first letters "kl").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.klaxon.noun.1 k.words.sense word=klaxon pos=noun n=1 supersense=noun.artifact gloss="a kind of loud horn formerly used on motor vehicles" synonym=claxon is_a=horn kind_of=horn kind_of=alarm kind_of=device kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.klein.noun.1 k.words.sense word=Klein pos=noun n=1 supersense=noun.person gloss="German mathematician who created the Klein bottle (1849-1925)" synonym="Felix Klein" instance_of=mathematician core.source="wordnet 3.1"
+@k.words.klein.noun.2 k.words.sense word=Klein pos=noun n=2 supersense=noun.person gloss="United States psychoanalyst (born in Austria) who was the first to specialize in the psychoanalysis of small children (1882-1960)" synonym="Melanie Klein" instance_of=analyst core.source="wordnet 3.1"
+@k.words.klein.noun.3 k.words.sense word=Klein pos=noun n=3 supersense=noun.person gloss="United States fashion designer noted for understated fashions (born in 1942)" synonym="Calvin Klein" synonym="Calvin Richard Klein" instance_of=couturier core.source="wordnet 3.1"
+@k.words.klein.spelling.Klein core.word text=klein means=Klein of=k.words.sense.word core.source="wordnet 3.1"

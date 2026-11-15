@@ -1,0 +1,73 @@
+# w.timeline: a reusable world: timelines of events in order of time (the life of a person, the history of a town,
+# the plan of a project, a day). Declared in the library's std.schema format; the acts of std.acts drive it; four
+# denies keep an event inside its timeline and its end after its start; it has no function of its own.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later)
+
+@w.timeline core.module name=w.timeline version=2 exports=timeline exports=event core.source="hand-core 1"
+@w.timeline.world std.schema.world name=w.timeline doc="timelines: events in order of time" core.source="hand-core 1"
+
+# A timeline. `name`; `unit` says what the numbers of its events count (the year, the day of a plan, the hour of a
+# day); `from` and `to` are the ends of what it shows, in that unit, where it has ends. Every number of a timeline
+# lies between -10000 and 10000: the years from 10,000 BC to AD 10,000, or the days, hours or minutes of a plan
+# (10,000 minutes are about a week).
+@w.timeline.timeline core.type of=w.timeline.timeline extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.timeline.timeline.name core.slot of=w.timeline.timeline key=name required=true kind=atom kind=string core.source="hand-core 1"
+@w.timeline.timeline.unit core.slot of=w.timeline.timeline key=unit enum=year enum=month enum=week enum=day enum=hour enum=minute default=year core.source="hand-core 1"
+@w.timeline.timeline.from core.slot of=w.timeline.timeline key=from kind=number min=-10000 max=10000 core.source="hand-core 1"
+@w.timeline.timeline.to core.slot of=w.timeline.timeline key=to kind=number min=-10000 max=10000 core.source="hand-core 1"
+
+# An event. `title` is what happened or is planned; `timeline` refers to its timeline; `at` is when, as a number
+# in the unit of the timeline (1969; day 3; 14.5 for half past two); an event that lasts has `until`, the number
+# where it ends; `sort` says what sort of event it is (birth, battle, milestone, meeting); `about` one sentence
+# more; `certain=false` marks a time that is only about right.
+@w.timeline.event core.type of=w.timeline.event extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.timeline.event.title core.slot of=w.timeline.event key=title required=true kind=atom kind=string core.source="hand-core 1"
+@w.timeline.event.timeline core.slot of=w.timeline.event key=timeline type=w.timeline.timeline core.source="hand-core 1"
+@w.timeline.event.at core.slot of=w.timeline.event key=at required=true kind=number min=-10000 max=10000 step=1 core.source="hand-core 1"
+@w.timeline.event.until core.slot of=w.timeline.event key=until kind=number min=-10000 max=10000 step=1 core.source="hand-core 1"
+@w.timeline.event.sort core.slot of=w.timeline.event key=sort kind=atom kind=string core.source="hand-core 1"
+@w.timeline.event.about core.slot of=w.timeline.event key=about kind=string core.source="hand-core 1"
+@w.timeline.event.certain core.slot of=w.timeline.event key=certain kind=boolean default=true core.source="hand-core 1"
+
+# An event is inside its timeline: not before its `from`, not after its `to`, and an event that lasts ends by
+# its `to`; and it does not end before it begins (`until` is not before `at`). A change that would break one is
+# refused with the reason, whichever side moves (the event or an end of its timeline).
+@w.timeline.inside.start w.timeline.timeline from=?from
+@w.timeline.inside.at_start w.timeline.event timeline=$w.timeline.inside.start at=?at
+@w.timeline.inside.earlier core.check fn=lt args=?at args=?from
+@w.timeline.inside.before core.deny when=$w.timeline.inside.start when=$w.timeline.inside.at_start if=$w.timeline.inside.earlier why="An event is inside its timeline: ?at is before its start, ?from." core.source="hand-core 1"
+@w.timeline.inside.end w.timeline.timeline to=?to
+@w.timeline.inside.at_end w.timeline.event timeline=$w.timeline.inside.end at=?at
+@w.timeline.inside.until_end w.timeline.event timeline=$w.timeline.inside.end until=?at
+@w.timeline.inside.later core.check fn=gt args=?at args=?to
+@w.timeline.inside.after core.deny when=$w.timeline.inside.end when=$w.timeline.inside.at_end if=$w.timeline.inside.later why="An event is inside its timeline: ?at is after its end, ?to." core.source="hand-core 1"
+@w.timeline.inside.lasts_after core.deny when=$w.timeline.inside.end when=$w.timeline.inside.until_end if=$w.timeline.inside.later why="An event is inside its timeline: it lasts until ?at, after its end, ?to." core.source="hand-core 1"
+@w.timeline.order.event w.timeline.event at=?at until=?until
+@w.timeline.order.earlier core.check fn=lt args=?until args=?at
+@w.timeline.order.ends core.deny when=$w.timeline.order.event if=$w.timeline.order.earlier why="An event does not end before it begins: until ?until is before ?at." core.source="hand-core 1"
+
+# The kinds and the acts that apply to them. Events can be linked (connect: leads to, causes) and grouped (an
+# age, a phase). At most 20 timelines and 1,000 events.
+@w.timeline.kind.timeline std.schema.kind of=w.timeline.timeline world=w.timeline acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.timeline.kind.event std.schema.kind of=w.timeline.event world=w.timeline acts=make acts=remove acts=change acts=connect acts=group acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.timeline.limit.timeline std.schema.limit of=w.timeline.timeline max=20 core.source="hand-core 1"
+@w.timeline.limit.event std.schema.limit of=w.timeline.event max=1000 core.source="hand-core 1"
+
+# Words: for the world (how a host finds it by name), its kinds and its keys.
+@w.timeline.word.world core.word text=timeline text=timelines text="time line" text=chronology text=history text=schedule means=w.timeline of=std.schema.world.name core.source="hand-core 1"
+@w.timeline.word.timeline core.word text=timeline text=timelines means=w.timeline.timeline core.source="hand-core 1"
+@w.timeline.word.event core.word text=event text=events text=milestone text=milestones text=happened means=w.timeline.event core.source="hand-core 1"
+@w.timeline.word.name core.word text=name text=called means=w.timeline.timeline.name core.source="hand-core 1"
+@w.timeline.word.unit core.word text=unit text=counted text=in means=w.timeline.timeline.unit core.source="hand-core 1"
+@w.timeline.word.from core.word text=from text=starts text=start text=begins means=w.timeline.timeline.from core.source="hand-core 1"
+@w.timeline.word.to core.word text=to text=ends text=end means=w.timeline.timeline.to core.source="hand-core 1"
+@w.timeline.word.title core.word text=title text=called text=what means=w.timeline.event.title core.source="hand-core 1"
+@w.timeline.word.event.timeline core.word text=on text=in text=belongs means=w.timeline.event.timeline core.source="hand-core 1"
+@w.timeline.word.at core.word text=when text=at text=date text=year text=time means=w.timeline.event.at core.source="hand-core 1"
+@w.timeline.word.until core.word text=until text=till text=ended text=lasted means=w.timeline.event.until core.source="hand-core 1"
+@w.timeline.word.sort core.word text=kind text=sort text=type means=w.timeline.event.sort core.source="hand-core 1"
+@w.timeline.word.about core.word text=about text=more means=w.timeline.event.about core.source="hand-core 1"
+@w.timeline.word.certain core.word text=certain text=sure text=exact means=w.timeline.event.certain core.source="hand-core 1"

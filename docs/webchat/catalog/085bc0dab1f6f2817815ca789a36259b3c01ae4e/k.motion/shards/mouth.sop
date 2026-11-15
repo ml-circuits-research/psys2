@@ -1,0 +1,27 @@
+# k.motion/shards/mouth: 7 classes of mouth shapes joined to k.faces mouth variants of the style plain, and the rule from written text to them (11 groups of characters with durations).
+# sources: hand-core 1 (hand-written in this repository: tools/motion-core.mjs; the duration ranges from the measurements named in k.motion/WORLD.md)
+# license: CC0-1.0
+# script: tools/motion-core.mjs
+
+# Classes of mouth shapes and the k.faces mouth that shows each in the style plain
+@k.motion.viseme.plain.rest k.motion.viseme style=plain class=rest mouth=neutral about="Lips together and relaxed: between words and at a pause." core.source="hand-core 1"
+@k.motion.viseme.plain.open k.motion.viseme style=plain class=open mouth=talking about="The jaw down, the mouth open: a vowel such as a." core.source="hand-core 1"
+@k.motion.viseme.plain.mid k.motion.viseme style=plain class=mid mouth="half open" about="The mouth a little open, the teeth showing: the consonants that have no class of their own (s, k, r, h ...)." core.source="hand-core 1"
+@k.motion.viseme.plain.rounded k.motion.viseme style=plain class=rounded mouth=open about="The lips rounded and pushed forward: o, u." core.source="hand-core 1"
+@k.motion.viseme.plain.closed k.motion.viseme style=plain class=closed mouth=pressed about="The lips pressed together: m, b, p." core.source="hand-core 1"
+@k.motion.viseme.plain.lip-teeth k.motion.viseme style=plain class=lip-teeth mouth="lip bite" about="The upper teeth on the lower lip: f, v." core.source="hand-core 1"
+@k.motion.viseme.plain.tongue k.motion.viseme style=plain class=tongue mouth="tongue tip" about="The tip of the tongue behind the upper teeth: t, d, n, l." core.source="hand-core 1"
+
+# From written text to mouth shapes: one general rule for any text in Latin letters
+@k.motion.splitter.latin_letters k.motion.splitter name="latin letters" about="One unit per character of a text in Latin letters: vowel letters open the mouth, o and u round it, m, b and p close the lips, f and v put the teeth on the lip, t, d, n and l show the tongue, other letters a half-open mouth; spaces and punctuation rest. A letter with a mark counts as the letter without it; capitals as small letters." fold=true ignore_case=true default="other letters" core.source="hand-core 1"
+@k.motion.letters.latin_letters.vowels k.motion.letters splitter="latin letters" name=vowels class=open letter="a" letter="e" letter="i" letter="y" min=60 max=100 core.source="hand-core 1"
+@k.motion.letters.latin_letters.rounded_vowels k.motion.letters splitter="latin letters" name="rounded vowels" class=rounded letter="o" letter="u" min=70 max=110 core.source="hand-core 1"
+@k.motion.letters.latin_letters.lip_closers k.motion.letters splitter="latin letters" name="lip closers" class=closed letter="m" letter="b" letter="p" min=60 max=90 core.source="hand-core 1"
+@k.motion.letters.latin_letters.lip-teeth_letters k.motion.letters splitter="latin letters" name="lip-teeth letters" class=lip-teeth letter="f" letter="v" min=60 max=90 core.source="hand-core 1"
+@k.motion.letters.latin_letters.tongue_letters k.motion.letters splitter="latin letters" name="tongue letters" class=tongue letter="t" letter="d" letter="n" letter="l" min=45 max=70 core.source="hand-core 1"
+@k.motion.letters.latin_letters.other_letters k.motion.letters splitter="latin letters" name="other letters" class=mid min=45 max=75 core.source="hand-core 1"
+@k.motion.letters.latin_letters.digits k.motion.letters splitter="latin letters" name=digits class=mid kind=digit min=150 max=300 core.source="hand-core 1"
+@k.motion.letters.latin_letters.spaces k.motion.letters splitter="latin letters" name=spaces class=rest kind=space min=30 max=60 core.source="hand-core 1"
+@k.motion.letters.latin_letters.clause_marks k.motion.letters splitter="latin letters" name="clause marks" class=rest letter="," letter=";" letter=":" min=150 max=300 core.source="hand-core 1"
+@k.motion.letters.latin_letters.sentence_marks k.motion.letters splitter="latin letters" name="sentence marks" class=rest letter="." letter="!" letter="?" min=300 max=500 core.source="hand-core 1"
+@k.motion.letters.latin_letters.symbols k.motion.letters splitter="latin letters" name=symbols class=rest kind=symbol min=0 max=30 core.source="hand-core 1"

@@ -1,0 +1,7 @@
+# k.words/shards/jf: senses of the words from "jfk" to "jfk" (first letters "jf").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.jfk.noun.1 k.words.sense word=JFK pos=noun n=1 supersense=noun.person gloss="35th President of the United States; established the Peace Corps; assassinated in Dallas (1917-1963)" synonym=Kennedy synonym="Jack Kennedy" synonym="John Fitzgerald Kennedy" synonym="President Kennedy" synonym="President John F. Kennedy" instance_of="President of the United States" core.source="wordnet 3.1"
+@k.words.jfk.spelling.JFK core.word text=jfk means=JFK of=k.words.sense.word core.source="wordnet 3.1"

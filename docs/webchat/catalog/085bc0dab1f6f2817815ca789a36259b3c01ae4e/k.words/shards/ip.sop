@@ -1,0 +1,9 @@
+# k.words/shards/ip: senses of the words from "ip" to "ipod" (first letters "ip").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ip.noun.1 k.words.sense word=IP pos=noun n=1 supersense=noun.cognition gloss="the sciences concerned with gathering, manipulating, storing, retrieving, and classifying recorded information" synonym="information science" synonym=informatics synonym="information processing" is_a=science core.source="wordnet 3.1"
+@k.words.ip.spelling.IP core.word text=ip means=IP of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.ipod.noun.1 k.words.sense word=iPod pos=noun n=1 supersense=noun.artifact gloss="(trademark) a pocket-sized device used to play music files" is_a=stereo kind_of=stereo kind_of=reproducer kind_of="audio system" kind_of="electronic equipment" kind_of=equipment kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.ipod.spelling.iPod core.word text=ipod means=iPod of=k.words.sense.word core.source="wordnet 3.1"

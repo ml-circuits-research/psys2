@@ -1,0 +1,11 @@
+# k.attributes/shards/same-z: one name, one thing: for 6 names that start with "z" and are carried by facts of more than one world, the sense of the name and the types whose facts are about that thing; a name with two senses has two facts (0 facts of such names here).
+# sources: hand-core 1 (computed from the shards of the catalog by tools/joins.mjs)
+# license: CC0-1.0
+# script: tools/joins.mjs
+
+@k.attributes.same.zebra.animal k.attributes.same name=zebra sense=animal only=true in=k.animals.animal in=k.attributes.drawn in=k.attributes.number in=k.attributes.thing in=k.commonsense.thing in=k.objects.object in=k.scenes.thing by_word=k.parts.usual by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.zigzag.shape k.attributes.same name=zigzag sense=shape only=true in=k.shapes.shape by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.zip.clothing k.attributes.same name=zip sense=clothing only=true in=k.attributes.drawn in=k.objects.object in=k.scenes.thing by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.zipper.thing k.attributes.same name=zipper sense=thing only=true in=k.attributes.number by_word=k.parts.usual by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.zoo.thing k.attributes.same name=zoo sense=thing only=true in=k.attributes.thing by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.zucchini.thing k.attributes.same name=zucchini sense=thing only=true in=k.attributes.number by_word=k.parts.usual by_word=k.words.sense core.source="hand-core 1"

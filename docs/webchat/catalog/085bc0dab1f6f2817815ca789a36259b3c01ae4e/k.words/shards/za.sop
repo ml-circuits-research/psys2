@@ -1,0 +1,10 @@
+# k.words/shards/za: senses of the words from "zap" to "zap" (first letters "za").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.zap.noun.1 k.words.sense word=zap pos=noun n=1 supersense=noun.event gloss="a sudden event that imparts energy or excitement, usually with a dramatic impact" is_a=event core.source="wordnet 3.1"
+@k.words.zap.verb.1 k.words.sense word=zap pos=verb n=1 supersense=verb.emotion gloss="strike suddenly and with force" is_a=affect core.source="wordnet 3.1"
+@k.words.zap.verb.2 k.words.sense word=zap pos=verb n=2 supersense=verb.contact gloss="kill with or as if with a burst of gunfire or electric current or as if by shooting" synonym=vaporize is_a=kill core.source="wordnet 3.1"
+@k.words.zap.verb.3 k.words.sense word=zap pos=verb n=3 supersense=verb.competition gloss="strike at with firepower or bombs" synonym=nuke synonym=atomize synonym=atomise is_a=bombard core.source="wordnet 3.1"
+@k.words.zap.forms core.word text=zapped text=zapping means=zap of=k.words.sense.word core.source="wordnet 3.1"

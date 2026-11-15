@@ -1,0 +1,21 @@
+# k.words/shards/dy: senses of the words from "dye" to "dynasty" (first letters "dy").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.dye.noun.1 k.words.sense word=dye pos=noun n=1 supersense=noun.substance gloss="a usually soluble substance for staining or coloring e.g. fabrics or hair" synonym=dyestuff is_a="coloring material" core.source="wordnet 3.1"
+@k.words.dye.verb.1 k.words.sense word=dye pos=verb n=1 supersense=verb.change gloss="color with dye" is_a=discolor core.source="wordnet 3.1"
+@k.words.dying.noun.1 k.words.sense word=dying pos=noun n=1 supersense=noun.time gloss="the time when something ends" synonym=death synonym=demise is_a=end part_of=life kind_of=end kind_of=point kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.dying.adjective.1 k.words.sense word=dying pos=adjective n=1 supersense=adj.all gloss="in or associated with the process of passing from life or ceasing to be" opposite=nascent core.source="wordnet 3.1"
+@k.words.dying.adjective.2 k.words.sense word=dying pos=adjective n=2 supersense=adj.all gloss="eagerly desirous" synonym=anxious near_opposite=uneager usage=informal core.source="wordnet 3.1"
+@k.words.dyke.noun.2 k.words.sense word=dyke pos=noun n=2 supersense=noun.artifact gloss="a barrier constructed to contain the flow of water or to keep out the sea" synonym=dam synonym=dike is_a=barrier core.source="wordnet 3.1"
+@k.words.dyke.verb.1 k.words.sense word=dyke pos=verb n=1 supersense=verb.contact gloss="enclose with a dike" synonym=dike is_a=enclose core.source="wordnet 3.1"
+@k.words.dylan.noun.1 k.words.sense word=Dylan pos=noun n=1 supersense=noun.person gloss="United States songwriter noted for his protest songs (born in 1941)" synonym="Bob Dylan" instance_of=songwriter instance_of=singer core.source="wordnet 3.1"
+@k.words.dylan.noun.2 k.words.sense word=Dylan pos=noun n=2 supersense=noun.person gloss="Celtic god of the waves; son of Arianrhod" instance_of="Celtic deity" core.source="wordnet 3.1"
+@k.words.dylan.spelling.Dylan core.word text=dylan means=Dylan of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.dynamic.noun.1 k.words.sense word=dynamic pos=noun n=1 supersense=noun.motive gloss="an efficient incentive" synonym="moral force" is_a=incentive core.source="wordnet 3.1"
+@k.words.dynamics.noun.1 k.words.sense word=dynamics pos=noun n=1 supersense=noun.cognition gloss="the branch of mechanics concerned with the forces that cause motions of bodies" synonym=kinetics is_a=mechanics core.source="wordnet 3.1"
+@k.words.dynamite.noun.1 k.words.sense word=dynamite pos=noun n=1 supersense=noun.artifact gloss="an explosive containing nitrate sensitized with nitroglycerin absorbed on wood pulp" is_a="explosive compound" core.source="wordnet 3.1"
+@k.words.dynamite.verb.1 k.words.sense word=dynamite pos=verb n=1 supersense=verb.change gloss="blow up with dynamite" is_a=explode core.source="wordnet 3.1"
+@k.words.dynamo.noun.1 k.words.sense word=dynamo pos=noun n=1 supersense=noun.artifact gloss="generator consisting of a coil (the armature) that rotates between the poles of an electromagnet (the field magnet) causing a current to flow in the armature" is_a=generator kind_of=generator kind_of=engine kind_of=motor kind_of=machine kind_of=device kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.dynasty.noun.1 k.words.sense word=dynasty pos=noun n=1 supersense=noun.group gloss="a sequence of powerful leaders in the same family" is_a=family core.source="wordnet 3.1"

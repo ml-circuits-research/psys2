@@ -1,0 +1,17 @@
+# k.values/shards/fills: 5 ways a shape is filled in a picture (solid, outline, striped, dotted, checked) and their other words.
+# sources: hand-core 1 (hand-written in this repository: tools/values-core.mjs)
+# license: CC0-1.0
+# script: tools/values-core.mjs
+
+@k.values.fill.solid k.values.fill name=solid about="filled all over with its colour" core.source="hand-core 1"
+@k.values.fill.outline k.values.fill name=outline about="only the line around it is drawn; the inside is empty" core.source="hand-core 1"
+@k.values.fill.striped k.values.fill name=striped about="filled with stripes" core.source="hand-core 1"
+@k.values.fill.dotted k.values.fill name=dotted about="filled with dots" core.source="hand-core 1"
+@k.values.fill.checked k.values.fill name=checked about="filled with squares of two colours" core.source="hand-core 1"
+
+# Words.
+@k.values.word.fill.solid core.word text=filled text="filled in" text="coloured in" text="colored in" text=full means=solid of=k.values.fill.name core.source="hand-core 1"
+@k.values.word.fill.outline core.word text=outlined text=hollow text=empty text="not filled" text="line only" text="lines only" means=outline of=k.values.fill.name core.source="hand-core 1"
+@k.values.word.fill.striped core.word text=stripy text=stripes text="with stripes" means=striped of=k.values.fill.name core.source="hand-core 1"
+@k.values.word.fill.dotted core.word text=spotted text=spotty text="polka dot" text="polka dots" text="with dots" means=dotted of=k.values.fill.name core.source="hand-core 1"
+@k.values.word.fill.checked core.word text=checkered text=chequered text=checks text=squares means=checked of=k.values.fill.name core.source="hand-core 1"

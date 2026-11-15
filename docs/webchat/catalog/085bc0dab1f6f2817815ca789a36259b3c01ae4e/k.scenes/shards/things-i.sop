@@ -1,0 +1,29 @@
+# k.scenes/shards/things-i: the usual place (sky, ground, water, indoors, on another thing) and the relative size (tiny to huge) of 24 things (the drawable things and the animals of k.animals) whose name starts with "i"; labelled by a language model from the names (named=model), a sample checked against the drawings.
+# sources: hand-core 1 (hand-written in this repository: sources/hand-core/place-size.tsv, and sources/hand-core/animals.tsv for the animals without a drawing)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+
+@k.scenes.thing.iPhone k.scenes.thing name=iPhone place=indoors size=small named=model core.source="hand-core 1"
+@k.scenes.thing.iPod k.scenes.thing name=iPod place=indoors size=small named=model core.source="hand-core 1"
+@k.scenes.thing.ibex k.scenes.thing name=ibex place=ground size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.ibis k.scenes.thing name=ibis place=sky size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.ice k.scenes.thing name=ice place=indoors on=table size=tiny named=model core.source="hand-core 1"
+@k.scenes.thing.ice_cream k.scenes.thing name="ice cream" place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.ice_cream_tub k.scenes.thing name="ice cream tub" place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.ice_hockey k.scenes.thing name="ice hockey" place=ground size=small named=model core.source="hand-core 1"
+@k.scenes.thing.ice_lolly k.scenes.thing name="ice lolly" place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.ice_skate k.scenes.thing name="ice skate" place=on_thing on=foot size=small named=model core.source="hand-core 1"
+@k.scenes.thing.iceberg k.scenes.thing name=iceberg place=water size=huge named=model core.source="hand-core 1"
+@k.scenes.thing.identification_card k.scenes.thing name="identification card" place=indoors size=tiny named=model core.source="hand-core 1"
+@k.scenes.thing.igloo k.scenes.thing name=igloo place=ground size=large named=model core.source="hand-core 1"
+@k.scenes.thing.iguana k.scenes.thing name=iguana place=ground size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.impala k.scenes.thing name=impala place=ground size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.inbox_tray k.scenes.thing name="inbox tray" place=indoors size=small named=model core.source="hand-core 1"
+@k.scenes.thing.index_cards k.scenes.thing name="index cards" place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.inhaler k.scenes.thing name=inhaler place=indoors size=small named=model core.source="hand-core 1"
+@k.scenes.thing.intercom k.scenes.thing name=intercom place=on_thing on=wall size=small named=model core.source="hand-core 1"
+@k.scenes.thing.iris k.scenes.thing name=iris place=ground size=small named=model core.source="hand-core 1"
+@k.scenes.thing.iron k.scenes.thing name=iron place=indoors size=small named=model core.source="hand-core 1"
+@k.scenes.thing.ironing_board k.scenes.thing name="ironing board" place=indoors size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.island k.scenes.thing name=island place=ground size=huge named=model core.source="hand-core 1"
+@k.scenes.thing.ivy k.scenes.thing name=ivy place=on_thing on=wall size=medium named=model core.source="hand-core 1"

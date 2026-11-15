@@ -1,0 +1,61 @@
+# k.faces/shards/cutouts-nose: the variants of the slot `nose` in the DiceBear style `cutouts`: features, and parts converted from the drawings (a primitive shape, a box in the frame of the face, a draw order, a colour name and the exact colour; points for polygons and lines).
+# sources: dicebear-cutouts 67f54a0 (DiceBear style "cutouts", CC0 1.0: "Cutouts" (https://www.dicebear.com) by "DiceBear", licensed under "CC0 1.0" (https://creativecommons.org/publicdomain/zero/1.0/))
+# license: CC0-1.0
+# script: tools/import/dicebear.mjs
+
+# nose: cutouts bent
+@k.faces.cutouts.nose.bent k.faces.variant slot=nose name="cutouts bent" style=cutouts size=medium kind=bent named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.bent.p1 k.faces.part slot=nose of="cutouts bent" name=part1 shape=polygon x=46.7 y=50.5 w=9.3 h=15.7 z=1 colour=black rgb="#26211C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.bent.p1.1 k.faces.point part=$k.faces.cutouts.nose.bent.p1 n=1 x=50.8 y=50.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.bent.p1.2 k.faces.point part=$k.faces.cutouts.nose.bent.p1 n=2 x=54.2 y=51.1 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.bent.p1.3 k.faces.point part=$k.faces.cutouts.nose.bent.p1 n=3 x=50.9 y=60.9 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.bent.p1.4 k.faces.point part=$k.faces.cutouts.nose.bent.p1 n=4 x=56 y=62.4 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.bent.p1.5 k.faces.point part=$k.faces.cutouts.nose.bent.p1 n=5 x=55 y=66.2 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.bent.p1.6 k.faces.point part=$k.faces.cutouts.nose.bent.p1 n=6 x=46.7 y=63.8 core.source="dicebear-cutouts 67f54a0"
+
+# nose: cutouts dab
+@k.faces.cutouts.nose.dab k.faces.variant slot=nose name="cutouts dab" style=cutouts shape=round size=small kind=button named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.dab.p1 k.faces.part slot=nose of="cutouts dab" name=part1 shape=polygon x=45.8 y=57.1 w=10 h=9.4 z=1 colour=grey rgb="#33415C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.dab.p1.1 k.faces.point part=$k.faces.cutouts.nose.dab.p1 n=1 x=55.8 y=61 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.dab.p1.2 k.faces.point part=$k.faces.cutouts.nose.dab.p1 n=2 x=54.7 y=64.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.dab.p1.3 k.faces.point part=$k.faces.cutouts.nose.dab.p1 n=3 x=49.8 y=66.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.dab.p1.4 k.faces.point part=$k.faces.cutouts.nose.dab.p1 n=4 x=46.7 y=65.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.dab.p1.5 k.faces.point part=$k.faces.cutouts.nose.dab.p1 n=5 x=45.8 y=61.9 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.dab.p1.6 k.faces.point part=$k.faces.cutouts.nose.dab.p1 n=6 x=47.2 y=57.8 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.dab.p1.7 k.faces.point part=$k.faces.cutouts.nose.dab.p1 n=7 x=50.6 y=57.1 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.dab.p1.8 k.faces.point part=$k.faces.cutouts.nose.dab.p1 n=8 x=53.7 y=58.1 core.source="dicebear-cutouts 67f54a0"
+
+# nose: cutouts hook
+@k.faces.cutouts.nose.hook k.faces.variant slot=nose name="cutouts hook" style=cutouts size=small kind=hooked named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.hook.p1 k.faces.part slot=nose of="cutouts hook" name=part1 shape=polygon x=46.5 y=50.5 w=8.2 h=14.8 z=1 colour=black rgb="#26211C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.hook.p1.1 k.faces.point part=$k.faces.cutouts.nose.hook.p1 n=1 x=49.6 y=50.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.hook.p1.2 k.faces.point part=$k.faces.cutouts.nose.hook.p1 n=2 x=53.1 y=50.9 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.hook.p1.3 k.faces.point part=$k.faces.cutouts.nose.hook.p1 n=3 x=54.7 y=56.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.hook.p1.4 k.faces.point part=$k.faces.cutouts.nose.hook.p1 n=4 x=53.6 y=62.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.hook.p1.5 k.faces.point part=$k.faces.cutouts.nose.hook.p1 n=5 x=48 y=65.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.hook.p1.6 k.faces.point part=$k.faces.cutouts.nose.hook.p1 n=6 x=46.5 y=62.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.hook.p1.7 k.faces.point part=$k.faces.cutouts.nose.hook.p1 n=7 x=50.9 y=59.9 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.hook.p1.8 k.faces.point part=$k.faces.cutouts.nose.hook.p1 n=8 x=51.3 y=56.3 core.source="dicebear-cutouts 67f54a0"
+
+# nose: cutouts strip
+@k.faces.cutouts.nose.strip k.faces.variant slot=nose name="cutouts strip" style=cutouts length=long feel=narrow named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.strip.p1 k.faces.part slot=nose of="cutouts strip" name=part1 shape=polygon x=47 y=50.3 w=6.6 h=19.6 z=1 colour=grey rgb="#33415C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.strip.p1.1 k.faces.point part=$k.faces.cutouts.nose.strip.p1 n=1 x=48.7 y=50.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.strip.p1.2 k.faces.point part=$k.faces.cutouts.nose.strip.p1 n=2 x=53.6 y=51.4 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.strip.p1.3 k.faces.point part=$k.faces.cutouts.nose.strip.p1 n=3 x=52.4 y=69.9 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.strip.p1.4 k.faces.point part=$k.faces.cutouts.nose.strip.p1 n=4 x=47 y=68.7 core.source="dicebear-cutouts 67f54a0"
+
+# nose: cutouts torn triangle
+@k.faces.cutouts.nose.tornTriangle k.faces.variant slot=nose name="cutouts torn triangle" style=cutouts kind=pointed named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.tornTriangle.p1 k.faces.part slot=nose of="cutouts torn triangle" name=part1 shape=polygon x=46 y=51.5 w=10.5 h=17.5 z=1 colour=grey rgb="#2F4858" tint=hair core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.tornTriangle.p1.1 k.faces.point part=$k.faces.cutouts.nose.tornTriangle.p1 n=1 x=50 y=51.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.tornTriangle.p1.2 k.faces.point part=$k.faces.cutouts.nose.tornTriangle.p1 n=2 x=56.5 y=66.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.tornTriangle.p1.3 k.faces.point part=$k.faces.cutouts.nose.tornTriangle.p1 n=3 x=52 y=69 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.tornTriangle.p1.4 k.faces.point part=$k.faces.cutouts.nose.tornTriangle.p1 n=4 x=46 y=67.5 core.source="dicebear-cutouts 67f54a0"
+
+# nose: cutouts wedge
+@k.faces.cutouts.nose.wedge k.faces.variant slot=nose name="cutouts wedge" style=cutouts size=small kind=pointed named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.wedge.p1 k.faces.part slot=nose of="cutouts wedge" name=part1 shape=polygon x=45.5 y=51.5 w=11.5 h=14 z=1 colour=grey rgb="#33415C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.wedge.p1.1 k.faces.point part=$k.faces.cutouts.nose.wedge.p1 n=1 x=47 y=51.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.wedge.p1.2 k.faces.point part=$k.faces.cutouts.nose.wedge.p1 n=2 x=57 y=61.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.nose.wedge.p1.3 k.faces.point part=$k.faces.cutouts.nose.wedge.p1 n=3 x=45.5 y=65.5 core.source="dicebear-cutouts 67f54a0"

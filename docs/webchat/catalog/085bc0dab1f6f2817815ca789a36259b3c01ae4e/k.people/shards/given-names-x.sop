@@ -1,0 +1,11 @@
+# k.people/shards/given-names-x: 5 given names starting with X (of 2990 from 3000 Wikidata items), each with its sexes, the Wikidata humans who bear it, a band and its Wikidata items.
+# sources: wikidata-given-names 2026-11-14 (Wikidata given-name items with a sex class and their P735 holders, CC0; fetched by PSys2 into data/external/given-names, commit 0a24284f)
+# sources: hand-core 1 (context=person: by the rule of the import over the names of the catalog and the senses of k.words)
+# license: CC0-1.0
+# script: tools/import/given-names.mjs
+
+@k.people.given_name.Xabier k.people.given_name name=Xabier sex=male holders=198 band=frequent wikidata=Q21034663 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Xaver k.people.given_name name=Xaver sex=male holders=507 band=frequent wikidata=Q18145823 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Xavier k.people.given_name name=Xavier sex=male holders=4011 band=common wikidata=Q1066712 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Xenia k.people.given_name name=Xenia sex=female holders=473 band=frequent wikidata=Q1097066 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ximena k.people.given_name name=Ximena sex=female holders=168 band=frequent wikidata=Q2598231 core.source="wikidata-given-names 2026-11-14"

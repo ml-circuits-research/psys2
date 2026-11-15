@@ -1,0 +1,7 @@
+# k.words/shards/rv: senses of the words from "rv" to "rv" (first letters "rv").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.rv.noun.1 k.words.sense word=RV pos=noun n=1 supersense=noun.artifact gloss="a motorized wheeled vehicle used for camping or other recreational activities" synonym="recreational vehicle" synonym=R.V. is_a="self-propelled vehicle" core.source="wordnet 3.1"
+@k.words.rv.spelling.RV core.word text=rv means=RV of=k.words.sense.word core.source="wordnet 3.1"

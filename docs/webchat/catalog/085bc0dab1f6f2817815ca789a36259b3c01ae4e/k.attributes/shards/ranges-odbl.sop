@@ -1,0 +1,6 @@
+# k.attributes/shards/ranges-odbl: typical ranges computed from numbers under the Open Database License (country areas of mledoze/countries), kept in a shard of their own licence.
+# sources: countries 5.1.0 (mledoze/countries, ODbL-1.0)
+# license: ODbL-1.0
+# script: tools/ranges-core.mjs
+
+@k.attributes.range.k.geo.country.area k.attributes.range type=k.geo.country key=area low=1100 high=357000 median=65300 count=247 basis=catalog core.source="countries 5.1.0"

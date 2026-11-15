@@ -16,14 +16,24 @@ export const CATALOG_PIN = Object.freeze({
 /** The versioned URL of the catalog folder at the pin (jsDelivr serves a GitHub commit immutably, with CORS). */
 export const catalogUrl = (pin = CATALOG_PIN) => `https://cdn.jsdelivr.net/gh/${pin.repo.replace(/^https:\/\/github\.com\//, '')}@${pin.commit}/${pin.path}`;
 
-/** The same folder at the same commit on raw.githubusercontent.com (immutable by commit, CORS `*`; checked 2026-11-15): the first mirror. */
+/** The same folder at the same commit on raw.githubusercontent.com (immutable by commit, CORS `*`; checked 2026-11-15): the first external mirror. */
 export const rawCatalogUrl = (pin = CATALOG_PIN) => `https://raw.githubusercontent.com/${pin.repo.replace(/^https:\/\/github\.com\//, '')}/${pin.commit}/${pin.path}`;
 
 /**
- * Every immutable source of the pinned commit, in the order they are asked (src/loaders/knowledge-source.mjs retries, marks a dead mirror and falls back through them; one commit, so
- * the texts are equal). raw.githubusercontent.com first: jsDelivr's /gh/ route refuses a repository past 50 MB ("Package size exceeded the configured limit of 50 MB", live 2026-11-15,
- * every shard of pin 085bc0da) and sop-knowledge-worlds is past it, so each new pin can hit that refusal; jsDelivr stays the second mirror.
+ * THE SITE'S OWN COPY (reviewer 2026-11-15 09:10 item 2; questions.md Q33): `scripts/build-webchat.mjs` copies the files the app can load (index.json, vocab.json, every world's
+ * schema and shards: 1,187 files) of the pinned folder to `docs/webchat/catalog/<commit>/`, so the page reads its catalog from its own origin (no CORS, no third-party CDN, no
+ * shared rate limit; immutable: the commit is in the path). The folder relative to the site root; `siteCatalogUrl()` is its URL when this module is served over http (the page),
+ * null otherwise (node: the scripts and tests read a local checkout or the external mirrors).
  */
-export const KNOWLEDGE_URLS = Object.freeze([rawCatalogUrl(), catalogUrl()]);
+export const SITE_CATALOG = (pin = CATALOG_PIN) => `catalog/${pin.commit}`;
+export const siteCatalogUrl = (here = import.meta.url, pin = CATALOG_PIN) => (/^https?:/i.test(String(here)) ? new URL(`../../${SITE_CATALOG(pin)}`, here).href : null);   // lib/knowledge/ -> the site root
+
+/**
+ * Every immutable source of the pinned commit, in the order they are asked (src/loaders/knowledge-source.mjs retries, marks a dead mirror and falls back through them; one commit, so
+ * the texts are equal): the site's own copy first (on the page), then raw.githubusercontent.com, then jsDelivr. jsDelivr is last: its /gh/ route refuses a repository past 50 MB
+ * ("Package size exceeded the configured limit of 50 MB", live 2026-11-15, every shard of pin 085bc0da) and sop-knowledge-worlds is past it.
+ */
+export const knowledgeUrls = (here = import.meta.url, pin = CATALOG_PIN) => Object.freeze([siteCatalogUrl(here, pin), rawCatalogUrl(pin), catalogUrl(pin)].filter(Boolean));
+export const KNOWLEDGE_URLS = knowledgeUrls();
 /** The URL the page reads the catalog from first. */
 export const KNOWLEDGE_URL = KNOWLEDGE_URLS[0];

@@ -1,0 +1,16 @@
+# k.attributes/shards/same-q: one name, one thing: for 11 names that start with "q" and are carried by facts of more than one world, the sense of the name and the types whose facts are about that thing; a name with two senses has two facts (0 facts of such names here).
+# sources: hand-core 1 (computed from the shards of the catalog by tools/joins.mjs)
+# license: CC0-1.0
+# script: tools/joins.mjs
+
+@k.attributes.same.qin.place k.attributes.same name=qin sense=place only=true in=k.geo.river by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.quadrilateral.shape k.attributes.same name=quadrilateral sense=shape only=true in=k.shapes.shape by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.quail.animal k.attributes.same name=quail sense=animal only=true in=k.animals.animal in=k.attributes.drawn in=k.commonsense.thing in=k.objects.object in=k.scenes.thing by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.quarter.time k.attributes.same name=quarter sense=time only=true in=k.time.duration by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.queen.person k.attributes.same name=queen sense=person only=true in=k.objects.stand_in in=k.people.role in=k.scenes.thing by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.queens.place k.attributes.same name=queens sense=place only=true in=k.geo.city by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.quiche.food k.attributes.same name=quiche sense=food only=true in=k.food.food by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.quiche_flan.food k.attributes.same name="quiche flan" sense=food only=true in=k.attributes.drawn in=k.objects.object in=k.scenes.thing core.source="hand-core 1"
+@k.attributes.same.quill.thing k.attributes.same name=quill sense=thing only=true in=k.attributes.number in=k.objects.stand_in by_word=k.parts.inherited by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.quilt.thing k.attributes.same name=quilt sense=thing only=true in=k.attributes.number in=k.objects.stand_in by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.quince.food k.attributes.same name=quince sense=food only=true in=k.food.food by_word=k.words.sense core.source="hand-core 1"

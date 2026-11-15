@@ -1,0 +1,8 @@
+# k.words/shards/ry: senses of the words from "rye" to "rye" (first letters "ry").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.rye.noun.1 k.words.sense word=rye pos=noun n=1 supersense=noun.plant gloss="the seed of the cereal grass" is_a=grain part_of=rye kind_of=grain kind_of=seed kind_of=fruit kind_of="reproductive structure" kind_of="plant organ" kind_of="plant part" kind_of="natural object" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.rye.noun.2 k.words.sense word=rye pos=noun n=2 supersense=noun.plant gloss="hardy annual cereal grass widely cultivated in northern Europe where its grain is the chief ingredient of black bread and in North America for forage and soil improvement" synonym="Secale cereale" is_a=cereal kind_of=cereal kind_of=grass kind_of="gramineous plant" kind_of=herb kind_of="vascular plant" kind_of=plant kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.rye.noun.3 k.words.sense word=rye pos=noun n=3 supersense=noun.food gloss="whiskey distilled from rye or rye and malt" synonym="rye whiskey" synonym="rye whisky" is_a=whiskey kind_of=whiskey kind_of=liquor kind_of=alcohol kind_of=beverage kind_of=food kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

@@ -1,0 +1,6 @@
+# k.words/shards/pn: senses of the words from "pneumonia" to "pneumonia" (first letters "pn").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.pneumonia.noun.1 k.words.sense word=pneumonia pos=noun n=1 supersense=noun.state gloss="respiratory disease characterized by inflammation of the lung parenchyma (excluding the bronchi) with congestion caused by viruses or bacteria or irritants" is_a="respiratory disease" core.source="wordnet 3.1"

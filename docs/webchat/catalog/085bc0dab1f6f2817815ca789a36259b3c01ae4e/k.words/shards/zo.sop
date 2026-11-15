@@ -1,0 +1,21 @@
+# k.words/shards/zo: senses of the words from "zodiac" to "zoom" (first letters "zo").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.zodiac.noun.1 k.words.sense word=zodiac pos=noun n=1 supersense=noun.location gloss="a belt-shaped region in the heavens on either side to the ecliptic; divided into 12 constellations or signs for astrological purposes" is_a=region part_of="celestial sphere" core.source="wordnet 3.1"
+@k.words.zodiac.noun.2 k.words.sense word=zodiac pos=noun n=2 supersense=noun.artifact gloss="(astrology) a circular diagram representing the 12 zodiacal constellations and showing their signs" is_a=diagram core.source="wordnet 3.1"
+@k.words.zombie.noun.1 k.words.sense word=zombie pos=noun n=1 supersense=noun.person gloss="a dead body that has been brought back to life by a supernatural force" synonym=zombi synonym="living dead" is_a="dead person" core.source="wordnet 3.1"
+@k.words.zombie.noun.2 k.words.sense word=zombie pos=noun n=2 supersense=noun.person gloss="(voodooism) a spirit or supernatural force that reanimates a dead body" synonym=zombi synonym="zombi spirit" synonym="zombie spirit" is_a=spirit core.source="wordnet 3.1"
+@k.words.zombie.noun.3 k.words.sense word=zombie pos=noun n=3 supersense=noun.person gloss="a god of voodoo cults of African origin worshipped especially in West Indies" synonym=zombi synonym="snake god" is_a=deity core.source="wordnet 3.1"
+@k.words.zone.noun.1 k.words.sense word=zone pos=noun n=1 supersense=noun.location gloss="a locally circumscribed place characterized by some distinctive features" is_a="topographic point" kind_of="topographic point" kind_of=point kind_of=location kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.zone.noun.2 k.words.sense word=zone pos=noun n=2 supersense=noun.location gloss="any of the regions of the surface of the Earth loosely divided according to latitude or longitude" synonym="geographical zone" is_a="geographical area" kind_of="geographical area" kind_of=region kind_of=location kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.zone.noun.3 k.words.sense word=zone pos=noun n=3 supersense=noun.location gloss="an area or region distinguished from adjacent parts by a distinctive feature or characteristic" is_a=region kind_of=region kind_of=location kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.zone.verb.1 k.words.sense word=zone pos=verb n=1 supersense=verb.social gloss="regulate housing in; of certain areas of towns" synonym=district is_a=regulate kind_of=regulate kind_of=decide core.source="wordnet 3.1"
+@k.words.zone.verb.2 k.words.sense word=zone pos=verb n=2 supersense=verb.change gloss="separate or apportion into sections" synonym=partition is_a=separate kind_of=separate core.source="wordnet 3.1"
+@k.words.zoo.noun.1 k.words.sense word=zoo pos=noun n=1 supersense=noun.artifact gloss="the facility where wild animals are housed for exhibition" synonym=menagerie synonym="zoological garden" is_a=facility core.source="wordnet 3.1"
+@k.words.zoom.noun.1 k.words.sense word=zoom pos=noun n=1 supersense=noun.event gloss="a rapid rise" synonym="rapid climb" synonym="rapid growth" is_a=rise core.source="wordnet 3.1"
+@k.words.zoom.noun.2 k.words.sense word=zoom pos=noun n=2 supersense=noun.act gloss="the act of rising upward into the air" synonym=soar is_a=rise core.source="wordnet 3.1"
+@k.words.zoom.verb.1 k.words.sense word=zoom pos=verb n=1 supersense=verb.motion gloss="move along very quickly" synonym="zoom along" synonym=whizz synonym="whizz along" is_a="travel rapidly" core.source="wordnet 3.1"
+@k.words.zoom.verb.2 k.words.sense word=zoom pos=verb n=2 supersense=verb.motion gloss="move with a low humming noise" is_a=travel core.source="wordnet 3.1"
+@k.words.zoom.verb.3 k.words.sense word=zoom pos=verb n=3 supersense=verb.motion gloss="rise rapidly" synonym=soar synonym="soar up" synonym="soar upwards" synonym=surge is_a=rise core.source="wordnet 3.1"

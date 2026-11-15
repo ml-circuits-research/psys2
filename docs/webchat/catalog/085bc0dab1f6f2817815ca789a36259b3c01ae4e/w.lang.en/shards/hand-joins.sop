@@ -1,0 +1,96 @@
+# w.lang.en/shards/hand-joins: the joins of w.lang.en to k.actions and k.layouts. The roles of the frames (PSys2's
+# names) mapped to the roles of the acts of k.actions; the prepositions that say a relation of k.layouts, with the
+# spatial prepositions the hand-over lacked (left of, right of, in front of, on top of, underneath, beneath), and the
+# prepositions that mark roles in k.actions (close to, out of, using, instead of ...); the temporal prepositions
+# joined to the order in time of k.time.
+# sources: hand-core 1 (written in this repository, from the frames' examples and the roles of k.actions)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# ---- frame roles -> k.actions roles ----
+@w.lang.en.role_map.make.thing w.lang.en.role_map name=make.thing act=make role=thing act_role=kind doc="Add a table: the kind of the thing made" core.source="hand-core 1"
+@w.lang.en.role_map.make.amount w.lang.en.role_map name=make.amount act=make role=amount act_role=number doc="Add 3 tables" core.source="hand-core 1"
+@w.lang.en.role_map.make.m1 w.lang.en.role_map name=make.m1 act=make role=m1 act_role=value doc="Draw a big red house: big" core.source="hand-core 1"
+@w.lang.en.role_map.make.m2 w.lang.en.role_map name=make.m2 act=make role=m2 act_role=value doc="Draw a big red house: red" core.source="hand-core 1"
+@w.lang.en.role_map.make.pre w.lang.en.role_map name=make.pre act=make role=pre act_role=value doc="Round glasses: the modifiers before the kind" core.source="hand-core 1"
+@w.lang.en.role_map.make.rest w.lang.en.role_map name=make.rest act=make role=rest act_role=value doc="Plot x 1 y 2 z 3 as a pie chart: the values of the thing made" core.source="hand-core 1"
+@w.lang.en.role_map.make.rel w.lang.en.role_map name=make.rel act=make role=rel act_role=place marker=yes doc="Add a guest at table 1: at marks the place" core.source="hand-core 1"
+@w.lang.en.role_map.ask.attribute w.lang.en.role_map name=ask.attribute act=ask role=attribute act_role=topic doc="What colour is table 2: the attribute asked about" core.source="hand-core 1"
+@w.lang.en.role_map.ask.value w.lang.en.role_map name=ask.value act=ask role=value act_role=topic doc="Is the house red: the value asked about" core.source="hand-core 1"
+@w.lang.en.role_map.ask.rest w.lang.en.role_map name=ask.rest act=ask role=rest act_role=topic doc="Why is table 2 blue: what the question is about" core.source="hand-core 1"
+@w.lang.en.role_map.ask.rel w.lang.en.role_map name=ask.rel act=ask role=rel act_role=place marker=yes doc="What is next to the house: next to marks the place" core.source="hand-core 1"
+@w.lang.en.role_map.connect.place w.lang.en.role_map name=connect.place act=connect role=place act_role=target doc="Connect table 1 to table 2" core.source="hand-core 1"
+@w.lang.en.role_map.copy.amount w.lang.en.role_map name=copy.amount act=copy role=amount act_role=number doc="Make 3 copies of the star" core.source="hand-core 1"
+@w.lang.en.role_map.load.value w.lang.en.role_map name=load.value act=load role=value act_role=thing doc="Load lunch: the saved thing, by its name" core.source="hand-core 1"
+@w.lang.en.role_map.pick.amount w.lang.en.role_map name=pick.amount act=pick role=amount act_role=thing doc="The second chart, chart number 1: the thing by its place in an order" core.source="hand-core 1"
+@w.lang.en.role_map.place.amount2 w.lang.en.role_map name=place.amount2 act=place role=amount2 act_role=amount doc="Move it a bit to the left: how far" core.source="hand-core 1"
+@w.lang.en.role_map.place.rel.prep w.lang.en.role_map name=place.rel.prep act=place role=rel takes=prep act_role=place marker=yes doc="Put the guest at table 2: at marks the place" core.source="hand-core 1"
+@w.lang.en.role_map.place.rel.lexicon w.lang.en.role_map name=place.rel.lexicon act=place role=rel takes=lexicon act_role=direction doc="Move them closer together: a direction word" core.source="hand-core 1"
+@w.lang.en.role_map.remove.place w.lang.en.role_map name=remove.place act=remove role=place act_role=source doc="Remove the guests from table 1" core.source="hand-core 1"
+@w.lang.en.role_map.save.value w.lang.en.role_map name=save.value act=save role=value act_role=name doc="Save it as lunch" core.source="hand-core 1"
+@w.lang.en.role_map.save.value.noun w.lang.en.role_map name=save.value.noun act=save role=value frame=acts.more.save.noun act_role=format doc="Save my picture as SVG" core.source="hand-core 1"
+@w.lang.en.role_map.save.value.download w.lang.en.role_map name=save.value.download act=save role=value frame=acts.more.save.download act_role=format doc="Download the drawing as a PNG" core.source="hand-core 1"
+@w.lang.en.role_map.send.place w.lang.en.role_map name=send.place act=send role=place act_role=recipient doc="Send table 1 to Ann" core.source="hand-core 1"
+# block 07:40: the roles of the frames written after the import (sets acts.text, acts.facts, acts.media)
+@w.lang.en.role_map.pick.kind w.lang.en.role_map name=pick.kind act=pick role=kind act_role=thing doc="A C major chord please: the kind of the thing picked" core.source="hand-core 1"
+@w.lang.en.role_map.pick.value w.lang.en.role_map name=pick.value act=pick role=value act_role=thing doc="A C major chord please: what is said of the thing after its kind" core.source="hand-core 1"
+@w.lang.en.role_map.place.value w.lang.en.role_map name=place.value act=place role=value act_role=place doc="Move the last list to the top: the place in the order" core.source="hand-core 1"
+@w.lang.en.role_map.undo.amount w.lang.en.role_map name=undo.amount act=undo role=amount act_role=number doc="Undo the last 2 changes: how many steps" core.source="hand-core 1"
+
+# ---- prepositions -> k.layouts relations (facts of the same preposition merge with those of shards/prepositions) ----
+@w.lang.en.prep.join.on w.lang.en.prep text=on rel=on layout=on core.source="hand-core 1"
+@w.lang.en.prep.join.onto w.lang.en.prep text=onto rel=on layout=on core.source="hand-core 1"
+@w.lang.en.prep.join.in w.lang.en.prep text=in rel=in layout=inside core.source="hand-core 1"
+@w.lang.en.prep.join.into w.lang.en.prep text=into rel=in layout=inside core.source="hand-core 1"
+@w.lang.en.prep.join.inside w.lang.en.prep text=inside rel=in layout=inside core.source="hand-core 1"
+@w.lang.en.prep.join.above w.lang.en.prep text=above rel=above layout=above core.source="hand-core 1"
+@w.lang.en.prep.join.over w.lang.en.prep text=over rel=above layout=above core.source="hand-core 1"
+@w.lang.en.prep.join.under w.lang.en.prep text=under rel=below layout=above inverse=yes core.source="hand-core 1"
+@w.lang.en.prep.join.below w.lang.en.prep text=below rel=below layout=above inverse=yes core.source="hand-core 1"
+@w.lang.en.prep.join.behind w.lang.en.prep text=behind rel=behind layout=behind core.source="hand-core 1"
+@w.lang.en.prep.join.near w.lang.en.prep text=near rel=near layout=beside core.source="hand-core 1"
+@w.lang.en.prep.join.beside w.lang.en.prep text=beside rel=near layout=beside core.source="hand-core 1"
+@w.lang.en.prep.join.by w.lang.en.prep text=by rel=near layout=beside core.source="hand-core 1"
+@w.lang.en.prep.join.next_to w.lang.en.prep text="next to" rel=near layout=beside core.source="hand-core 1"
+@w.lang.en.prep.join.around w.lang.en.prep text=around rel=around layout=around core.source="hand-core 1"
+@w.lang.en.prep.left_of w.lang.en.prep text="left of" rel=left_of space=static layout=left_of core.source="hand-core 1"
+@w.lang.en.prep.to_the_left_of w.lang.en.prep text="to the left of" rel=left_of space=static layout=left_of core.source="hand-core 1"
+@w.lang.en.prep.right_of w.lang.en.prep text="right of" rel=right_of space=static layout=left_of inverse=yes core.source="hand-core 1"
+@w.lang.en.prep.to_the_right_of w.lang.en.prep text="to the right of" rel=right_of space=static layout=left_of inverse=yes core.source="hand-core 1"
+@w.lang.en.prep.in_front_of w.lang.en.prep text="in front of" rel=in_front_of space=static layout=behind inverse=yes core.source="hand-core 1"
+@w.lang.en.prep.on_top_of w.lang.en.prep text="on top of" rel=on space=static support=yes layout=on core.source="hand-core 1"
+@w.lang.en.prep.underneath w.lang.en.prep text=underneath rel=below space=static layout=above inverse=yes core.source="hand-core 1"
+@w.lang.en.prep.beneath w.lang.en.prep text=beneath rel=below space=static layout=above inverse=yes core.source="hand-core 1"
+
+# ---- the markers of the roles of k.actions that the hand-over lacked as prepositions ----
+@w.lang.en.prep.close_to w.lang.en.prep text="close to" rel=near space=static layout=beside core.source="hand-core 1"
+@w.lang.en.prep.in_the_middle_of w.lang.en.prep text="in the middle of" rel=in space=static core.source="hand-core 1"
+@w.lang.en.prep.out_of w.lang.en.prep text="out of" rel=from space=source core.source="hand-core 1"
+@w.lang.en.prep.off w.lang.en.prep text=off rel=from space=source core.source="hand-core 1"
+@w.lang.en.prep.among w.lang.en.prep text=among rel=among space=static core.source="hand-core 1"
+@w.lang.en.prep.through w.lang.en.prep text=through rel=through space=path core.source="hand-core 1"
+@w.lang.en.prep.via w.lang.en.prep text=via rel=through space=path core.source="hand-core 1"
+@w.lang.en.prep.using w.lang.en.prep text=using rel=with role=instrument core.source="hand-core 1"
+@w.lang.en.prep.by_means_of w.lang.en.prep text="by means of" rel=with role=instrument core.source="hand-core 1"
+@w.lang.en.prep.according_to w.lang.en.prep text="according to" rel=by role=criterion core.source="hand-core 1"
+@w.lang.en.prep.in_order_of w.lang.en.prep text="in order of" rel=by role=criterion core.source="hand-core 1"
+# block 09:50 item F: the markers of the role arrangement of k.actions ("a diagram in the shape of a house")
+@w.lang.en.prep.in_the_shape_of w.lang.en.prep text="in the shape of" rel=shape role=arrangement core.source="hand-core 1"
+@w.lang.en.prep.shaped_like w.lang.en.prep text="shaped like" rel=shape role=arrangement core.source="hand-core 1"
+@w.lang.en.prep.in_the_form_of w.lang.en.prep text="in the form of" rel=shape role=arrangement core.source="hand-core 1"
+@w.lang.en.prep.in_the_outline_of w.lang.en.prep text="in the outline of" rel=shape role=arrangement core.source="hand-core 1"
+@w.lang.en.prep.instead_of w.lang.en.prep text="instead of" rel=instead_of role=replacement core.source="hand-core 1"
+@w.lang.en.prep.rather_than w.lang.en.prep text="rather than" rel=instead_of role=replacement core.source="hand-core 1"
+
+# ---- temporal prepositions -> the order in time of k.time (k.time.before: earlier, later; k.time.during: time, span) ----
+@w.lang.en.prep.time.join.before w.lang.en.prep.time text=before rel=before order=earlier relation=k.time.before first_is=earlier second_is=later core.source="hand-core 1"
+@w.lang.en.prep.time.join.after w.lang.en.prep.time text=after rel=after order=later relation=k.time.before first_is=later second_is=earlier core.source="hand-core 1"
+@w.lang.en.prep.time.join.earlier_than w.lang.en.prep.time text="earlier than" rel=before order=earlier relation=k.time.before first_is=earlier second_is=later core.source="hand-core 1"
+@w.lang.en.prep.time.join.later_than w.lang.en.prep.time text="later than" rel=after order=later relation=k.time.before first_is=later second_is=earlier core.source="hand-core 1"
+@w.lang.en.prep.time.join.until w.lang.en.prep.time text=until rel=until order=earlier relation=k.time.before first_is=earlier second_is=later core.source="hand-core 1"
+@w.lang.en.prep.time.join.since w.lang.en.prep.time text=since rel=since order=later relation=k.time.before first_is=later second_is=earlier core.source="hand-core 1"
+@w.lang.en.prep.time.join.during w.lang.en.prep.time text=during rel=during order=within relation=k.time.during first_is=time second_is=span core.source="hand-core 1"
+
+# ---- frame act and mode -> k.actions act (where they differ) ----
+@w.lang.en.mode_map.group.apart w.lang.en.mode_map act=group mode=apart means="take apart" core.source="hand-core 1"
+@w.lang.en.mode_map.pick.none w.lang.en.mode_map act=pick mode=none means=deselect core.source="hand-core 1"

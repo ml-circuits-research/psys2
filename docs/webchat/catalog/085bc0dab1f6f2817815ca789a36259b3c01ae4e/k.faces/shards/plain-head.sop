@@ -1,0 +1,60 @@
+# k.faces/shards/plain-head: the variants of the slot `head` in the style `plain`: features, and parts with a primitive shape, a box in the frame of the face, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/faces-core.mjs
+
+# head: round
+@k.faces.plain.head.round k.faces.variant slot=head name=round style=plain shape=round core.source="hand-core 1"
+@k.faces.plain.head.round.face k.faces.part slot=head of=round name=face shape=oval x=23 y=17 w=54 h=60 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+
+# head: oval
+@k.faces.plain.head.oval k.faces.variant slot=head name=oval style=plain shape=oval core.source="hand-core 1"
+@k.faces.plain.head.oval.face k.faces.part slot=head of=oval name=face shape=oval x=25 y=13 w=50 h=66 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+
+# head: long
+@k.faces.plain.head.long k.faces.variant slot=head name=long style=plain shape=long feel=narrow core.source="hand-core 1"
+@k.faces.plain.head.long.face k.faces.part slot=head of=long name=face shape=oval x=27 y=12 w=46 h=68 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+
+# head: square
+@k.faces.plain.head.square k.faces.variant slot=head name=square style=plain shape=square feel=wide core.source="hand-core 1"
+@k.faces.plain.head.square.face k.faces.part slot=head of=square name=face shape=polygon x=22 y=15 w=56 h=62 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.plain.head.square.face.p1 k.faces.point part=$k.faces.plain.head.square.face n=1 x=28 y=15 core.source="hand-core 1"
+@k.faces.plain.head.square.face.p2 k.faces.point part=$k.faces.plain.head.square.face n=2 x=72 y=15 core.source="hand-core 1"
+@k.faces.plain.head.square.face.p3 k.faces.point part=$k.faces.plain.head.square.face n=3 x=78 y=23 core.source="hand-core 1"
+@k.faces.plain.head.square.face.p4 k.faces.point part=$k.faces.plain.head.square.face n=4 x=78 y=60 core.source="hand-core 1"
+@k.faces.plain.head.square.face.p5 k.faces.point part=$k.faces.plain.head.square.face n=5 x=68 y=77 core.source="hand-core 1"
+@k.faces.plain.head.square.face.p6 k.faces.point part=$k.faces.plain.head.square.face n=6 x=32 y=77 core.source="hand-core 1"
+@k.faces.plain.head.square.face.p7 k.faces.point part=$k.faces.plain.head.square.face n=7 x=22 y=60 core.source="hand-core 1"
+@k.faces.plain.head.square.face.p8 k.faces.point part=$k.faces.plain.head.square.face n=8 x=22 y=23 core.source="hand-core 1"
+
+# head: heart
+@k.faces.plain.head.heart k.faces.variant slot=head name=heart style=plain shape=heart core.source="hand-core 1"
+@k.faces.plain.head.heart.face k.faces.part slot=head of=heart name=face shape=polygon x=23 y=15 w=54 h=64 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p1 k.faces.point part=$k.faces.plain.head.heart.face n=1 x=23 y=40 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p2 k.faces.point part=$k.faces.plain.head.heart.face n=2 x=24.3 y=32.3 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p3 k.faces.point part=$k.faces.plain.head.heart.face n=3 x=28.2 y=25.3 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p4 k.faces.point part=$k.faces.plain.head.heart.face n=4 x=34.1 y=19.8 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p5 k.faces.point part=$k.faces.plain.head.heart.face n=5 x=41.7 y=16.2 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p6 k.faces.point part=$k.faces.plain.head.heart.face n=6 x=50 y=15 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p7 k.faces.point part=$k.faces.plain.head.heart.face n=7 x=58.3 y=16.2 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p8 k.faces.point part=$k.faces.plain.head.heart.face n=8 x=65.9 y=19.8 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p9 k.faces.point part=$k.faces.plain.head.heart.face n=9 x=71.8 y=25.3 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p10 k.faces.point part=$k.faces.plain.head.heart.face n=10 x=75.7 y=32.3 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p11 k.faces.point part=$k.faces.plain.head.heart.face n=11 x=77 y=40 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p12 k.faces.point part=$k.faces.plain.head.heart.face n=12 x=75 y=52 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p13 k.faces.point part=$k.faces.plain.head.heart.face n=13 x=66 y=68 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p14 k.faces.point part=$k.faces.plain.head.heart.face n=14 x=56 y=77 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p15 k.faces.point part=$k.faces.plain.head.heart.face n=15 x=50 y=79 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p16 k.faces.point part=$k.faces.plain.head.heart.face n=16 x=44 y=77 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p17 k.faces.point part=$k.faces.plain.head.heart.face n=17 x=34 y=68 core.source="hand-core 1"
+@k.faces.plain.head.heart.face.p18 k.faces.point part=$k.faces.plain.head.heart.face n=18 x=25 y=52 core.source="hand-core 1"
+
+# head: wide
+@k.faces.plain.head.wide k.faces.variant slot=head name=wide style=plain shape=round size=large feel=wide core.source="hand-core 1"
+@k.faces.plain.head.wide.face k.faces.part slot=head of=wide name=face shape=oval x=22 y=19 w=56 h=58 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+
+# head: box
+@k.faces.plain.head.box k.faces.variant slot=head name=box style=plain shape=square kind=box core.source="hand-core 1"
+@k.faces.plain.head.box.face k.faces.part slot=head of=box name=face shape=rectangle x=24 y=14 w=52 h=62 z=1 colour=grey tint=skin core.source="hand-core 1"
+@k.faces.plain.head.box.left_bolt k.faces.part slot=head of=box name=left_bolt kind=bolt shape=circle x=26 y=16 w=4 h=4 z=2 colour=grey tint=skin_shade core.source="hand-core 1"
+@k.faces.plain.head.box.right_bolt k.faces.part slot=head of=box name=right_bolt kind=bolt shape=circle x=70 y=16 w=4 h=4 z=2 colour=grey tint=skin_shade core.source="hand-core 1"

@@ -1,0 +1,67 @@
+# k.objects/shards/sky: sun, moon, cloud, star. Parts with a primitive shape, a box in the 0 to 100 frame
+# of the object (x right, y down), a draw order z and typical colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# sun
+@k.objects.sun k.objects.object name=sun core.source="hand-core 1"
+@k.objects.sun.disc k.objects.part of=sun name=disc shape=circle x=25 y=25 w=50 h=50 z=1 colour=yellow centered=true core.source="hand-core 1"
+@k.objects.sun.top_ray k.objects.part of=sun name=top_ray kind=ray shape=line x=50 y=5 w=0 h=15 z=0 colour=yellow above=disc core.source="hand-core 1"
+@k.objects.sun.bottom_ray k.objects.part of=sun name=bottom_ray kind=ray shape=line x=50 y=80 w=0 h=15 z=0 colour=yellow below=disc core.source="hand-core 1"
+@k.objects.sun.left_ray k.objects.part of=sun name=left_ray kind=ray shape=line x=5 y=50 w=15 h=0 z=0 colour=yellow left_of=disc core.source="hand-core 1"
+@k.objects.sun.right_ray k.objects.part of=sun name=right_ray kind=ray shape=line x=80 y=50 w=15 h=0 z=0 colour=yellow right_of=disc core.source="hand-core 1"
+@k.objects.sun.top_ray.p1 k.objects.point part=$k.objects.sun.top_ray n=1 x=50 y=5 core.source="hand-core 1"
+@k.objects.sun.top_ray.p2 k.objects.point part=$k.objects.sun.top_ray n=2 x=50 y=20 core.source="hand-core 1"
+@k.objects.sun.bottom_ray.p1 k.objects.point part=$k.objects.sun.bottom_ray n=1 x=50 y=80 core.source="hand-core 1"
+@k.objects.sun.bottom_ray.p2 k.objects.point part=$k.objects.sun.bottom_ray n=2 x=50 y=95 core.source="hand-core 1"
+@k.objects.sun.left_ray.p1 k.objects.point part=$k.objects.sun.left_ray n=1 x=5 y=50 core.source="hand-core 1"
+@k.objects.sun.left_ray.p2 k.objects.point part=$k.objects.sun.left_ray n=2 x=20 y=50 core.source="hand-core 1"
+@k.objects.sun.right_ray.p1 k.objects.point part=$k.objects.sun.right_ray n=1 x=80 y=50 core.source="hand-core 1"
+@k.objects.sun.right_ray.p2 k.objects.point part=$k.objects.sun.right_ray n=2 x=95 y=50 core.source="hand-core 1"
+
+# moon
+@k.objects.moon k.objects.object name=moon core.source="hand-core 1"
+@k.objects.moon.crescent k.objects.part of=moon name=crescent shape=polygon x=22 y=10 w=38 h=80 z=1 colour=yellow colour=white core.source="hand-core 1"
+@k.objects.moon.crescent.p1 k.objects.point part=$k.objects.moon.crescent n=1 x=60 y=10 core.source="hand-core 1"
+@k.objects.moon.crescent.p2 k.objects.point part=$k.objects.moon.crescent n=2 x=42 y=14 core.source="hand-core 1"
+@k.objects.moon.crescent.p3 k.objects.point part=$k.objects.moon.crescent n=3 x=28 y=26 core.source="hand-core 1"
+@k.objects.moon.crescent.p4 k.objects.point part=$k.objects.moon.crescent n=4 x=22 y=42 core.source="hand-core 1"
+@k.objects.moon.crescent.p5 k.objects.point part=$k.objects.moon.crescent n=5 x=22 y=58 core.source="hand-core 1"
+@k.objects.moon.crescent.p6 k.objects.point part=$k.objects.moon.crescent n=6 x=28 y=74 core.source="hand-core 1"
+@k.objects.moon.crescent.p7 k.objects.point part=$k.objects.moon.crescent n=7 x=42 y=86 core.source="hand-core 1"
+@k.objects.moon.crescent.p8 k.objects.point part=$k.objects.moon.crescent n=8 x=60 y=90 core.source="hand-core 1"
+@k.objects.moon.crescent.p9 k.objects.point part=$k.objects.moon.crescent n=9 x=48 y=78 core.source="hand-core 1"
+@k.objects.moon.crescent.p10 k.objects.point part=$k.objects.moon.crescent n=10 x=42 y=64 core.source="hand-core 1"
+@k.objects.moon.crescent.p11 k.objects.point part=$k.objects.moon.crescent n=11 x=40 y=50 core.source="hand-core 1"
+@k.objects.moon.crescent.p12 k.objects.point part=$k.objects.moon.crescent n=12 x=42 y=36 core.source="hand-core 1"
+@k.objects.moon.crescent.p13 k.objects.point part=$k.objects.moon.crescent n=13 x=48 y=22 core.source="hand-core 1"
+
+# cloud
+@k.objects.cloud k.objects.object name=cloud core.source="hand-core 1"
+@k.objects.cloud.left_puff k.objects.part of=cloud name=left_puff kind=puff shape=circle x=10 y=40 w=35 h=35 z=1 colour=white colour=grey left_of=middle_puff core.source="hand-core 1"
+@k.objects.cloud.middle_puff k.objects.part of=cloud name=middle_puff kind=puff shape=circle x=30 y=25 w=40 h=40 z=2 colour=white colour=grey core.source="hand-core 1"
+@k.objects.cloud.right_puff k.objects.part of=cloud name=right_puff kind=puff shape=circle x=55 y=40 w=35 h=35 z=1 colour=white colour=grey right_of=middle_puff core.source="hand-core 1"
+@k.objects.cloud.base k.objects.part of=cloud name=base shape=oval x=15 y=50 w=70 h=25 z=3 colour=white colour=grey below=middle_puff core.source="hand-core 1"
+
+# star
+@k.objects.star k.objects.object name=star core.source="hand-core 1"
+@k.objects.star.body k.objects.part of=star name=body shape=polygon x=6.3 y=6 w=87.4 h=83.2 z=1 colour=yellow centered=true core.source="hand-core 1"
+@k.objects.star.body.p1 k.objects.point part=$k.objects.star.body n=1 x=50 y=6 core.source="hand-core 1"
+@k.objects.star.body.p2 k.objects.point part=$k.objects.star.body n=2 x=61.2 y=36.6 core.source="hand-core 1"
+@k.objects.star.body.p3 k.objects.point part=$k.objects.star.body n=3 x=93.7 y=37.8 core.source="hand-core 1"
+@k.objects.star.body.p4 k.objects.point part=$k.objects.star.body n=4 x=68.1 y=57.9 core.source="hand-core 1"
+@k.objects.star.body.p5 k.objects.point part=$k.objects.star.body n=5 x=77 y=89.2 core.source="hand-core 1"
+@k.objects.star.body.p6 k.objects.point part=$k.objects.star.body n=6 x=50 y=71 core.source="hand-core 1"
+@k.objects.star.body.p7 k.objects.point part=$k.objects.star.body n=7 x=23 y=89.2 core.source="hand-core 1"
+@k.objects.star.body.p8 k.objects.point part=$k.objects.star.body n=8 x=31.9 y=57.9 core.source="hand-core 1"
+@k.objects.star.body.p9 k.objects.point part=$k.objects.star.body n=9 x=6.3 y=37.8 core.source="hand-core 1"
+@k.objects.star.body.p10 k.objects.point part=$k.objects.star.body n=10 x=38.8 y=36.6 core.source="hand-core 1"
+
+# words
+@k.objects.word.sun core.word text=sun means=sun of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.moon core.word text=moon text=moons means=moon of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.cloud core.word text=cloud text=clouds means=cloud of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.star core.word text=star text=stars means=star of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.part.puff core.word text=puff text=puffs means=puff of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.ray core.word text=ray text=rays means=ray of=k.objects.part.kind core.source="hand-core 1"

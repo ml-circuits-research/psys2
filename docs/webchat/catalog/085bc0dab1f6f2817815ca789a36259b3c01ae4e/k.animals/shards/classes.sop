@@ -1,0 +1,31 @@
+# k.animals/shards/classes: the 13 classes of animals of this world, and, only where it holds for the whole class, the number of walking legs (bird, fish, insect, arachnid) and the covering (bird, fish, reptile).
+# sources: hand-core 1 (hand-written in this repository: tools/animals-core.mjs)
+# license: CC0-1.0
+# script: tools/animals-core.mjs
+
+@k.animals.class.mammal k.animals.class name=mammal named=model core.source="hand-core 1"
+@k.animals.class.bird k.animals.class name=bird legs=2 covering=feathers named=model core.source="hand-core 1"
+@k.animals.class.fish k.animals.class name=fish legs=0 covering=scales named=model core.source="hand-core 1"
+@k.animals.class.reptile k.animals.class name=reptile covering=scales named=model core.source="hand-core 1"
+@k.animals.class.amphibian k.animals.class name=amphibian named=model core.source="hand-core 1"
+@k.animals.class.insect k.animals.class name=insect legs=6 named=model core.source="hand-core 1"
+@k.animals.class.arachnid k.animals.class name=arachnid legs=8 named=model core.source="hand-core 1"
+@k.animals.class.crustacean k.animals.class name=crustacean named=model core.source="hand-core 1"
+@k.animals.class.mollusc k.animals.class name=mollusc named=model core.source="hand-core 1"
+@k.animals.class.worm k.animals.class name=worm named=model core.source="hand-core 1"
+@k.animals.class.cnidarian k.animals.class name=cnidarian named=model core.source="hand-core 1"
+@k.animals.class.echinoderm k.animals.class name=echinoderm named=model core.source="hand-core 1"
+@k.animals.class.myriapod k.animals.class name=myriapod named=model core.source="hand-core 1"
+
+# Words: plural forms.
+@k.animals.word.class.mammal core.word text=mammals means=mammal of=k.animals.class.name core.source="hand-core 1"
+@k.animals.word.class.bird core.word text=birds means=bird of=k.animals.class.name core.source="hand-core 1"
+@k.animals.word.class.fish core.word text=fishes means=fish of=k.animals.class.name core.source="hand-core 1"
+@k.animals.word.class.reptile core.word text=reptiles means=reptile of=k.animals.class.name core.source="hand-core 1"
+@k.animals.word.class.amphibian core.word text=amphibians means=amphibian of=k.animals.class.name core.source="hand-core 1"
+@k.animals.word.class.insect core.word text=insects means=insect of=k.animals.class.name core.source="hand-core 1"
+@k.animals.word.class.arachnid core.word text=arachnids means=arachnid of=k.animals.class.name core.source="hand-core 1"
+@k.animals.word.class.crustacean core.word text=crustaceans means=crustacean of=k.animals.class.name core.source="hand-core 1"
+@k.animals.word.class.mollusc core.word text=molluscs means=mollusc of=k.animals.class.name core.source="hand-core 1"
+@k.animals.word.class.worm core.word text=worms means=worm of=k.animals.class.name core.source="hand-core 1"
+@k.animals.word.class.myriapod core.word text=myriapods means=myriapod of=k.animals.class.name core.source="hand-core 1"

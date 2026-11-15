@@ -9,7 +9,10 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createKnowledgeSource, resetMirrorHealth, mirrorStates } from '../src/loaders/knowledge-source.mjs';
-import { KNOWLEDGE_URLS, CATALOG_PIN } from '../src/knowledge/catalog-pin.mjs';
+import { KNOWLEDGE_URLS, CATALOG_PIN, knowledgeUrls } from '../src/knowledge/catalog-pin.mjs';
+import { copySiteCatalog, siteCatalogFiles } from '../scripts/lib/site-catalog.mjs';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { createFacts } from '../src/knowledge/facts.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
@@ -43,6 +46,40 @@ test('the pin has two immutable mirrors of one commit: raw.githubusercontent.com
   for (const u of KNOWLEDGE_URLS) assert.ok(u.includes(CATALOG_PIN.commit) && u.endsWith(CATALOG_PIN.path), u);
   assert.match(KNOWLEDGE_URLS[0], /^https:\/\/raw\.githubusercontent\.com\//, 'first: jsDelivr refuses a repository past 50 MB');
   assert.match(KNOWLEDGE_URLS[1], /^https:\/\/cdn\.jsdelivr\.net\/gh\//);
+});
+
+// reviewer 2026-11-15 09:10 item 2 (questions.md Q33): the page reads the catalog from its own origin first (a copy of the pinned folder made by build-webchat), the CDNs are the fallback
+test('on the page the site\'s own copy of the pin comes first, then raw.githubusercontent.com, then jsDelivr', () => {
+  const urls = knowledgeUrls('https://ml-circuits-research.github.io/psys2/webchat/lib/knowledge/catalog-pin.mjs?v=0123456789');
+  assert.deepEqual(urls, [`https://ml-circuits-research.github.io/psys2/webchat/catalog/${CATALOG_PIN.commit}`, ...KNOWLEDGE_URLS]);
+});
+
+test('the site copy holds exactly the files the app can load, byte for byte, and only the current pin', async () => {
+  const out = mkdtempSync(join(tmpdir(), 'site-catalog-'));
+  try {
+    const files = await siteCatalogFiles(FIX);
+    assert.ok(files.includes('index.json') && files.includes('vocab.json') && files.some((f) => f.startsWith('k.objects/shards/')));
+    const r = await copySiteCatalog({ outDir: out, dir: FIX, commit: 'old' });
+    assert.equal(r.written, files.length);
+    const again = await copySiteCatalog({ outDir: out, dir: FIX, commit: 'old' });
+    assert.equal(again.written, 0, 'idempotent');
+    const next = await copySiteCatalog({ outDir: out, dir: FIX, commit: 'new' });
+    assert.deepEqual(next.removed, ['old'], 'one pin on the site');
+    for (const f of files) assert.equal(readFileSync(join(out, 'catalog/new', f), 'utf8'), readFileSync(join(FIX, f), 'utf8'), f);
+  } finally { rmSync(out, { recursive: true, force: true }); }
+});
+
+test('a site built without its copy (404 for index.json) is a dead mirror: one request, then the CDNs, the same texts', async () => {
+  const log = [];
+  globalThis.fetch = fakeFetch((base) => (base === A ? 404 : null), log);
+  const src = createKnowledgeSource([A, B], { sleep: noSleep });
+  assert.equal(await src.text('index.json'), readFileSync(join(FIX, 'index.json'), 'utf8'));
+  assert.equal(await src.text('k.objects/shards/sky.sop'), readFileSync(join(FIX, 'k.objects/shards/sky.sop'), 'utf8'));
+  assert.deepEqual(log, [`${A}/index.json`, `${B}/index.json`, `${B}/k.objects/shards/sky.sop`]);
+  assert.equal(mirrorStates()[A].state, 'dead');
+  globalThis.fetch = fakeFetch(() => 404);   // gone everywhere: absent, not an error (the last resort asks the dead mirror once)
+  resetMirrorHealth();
+  assert.equal(await createKnowledgeSource([A, B], { sleep: noSleep }).text('index.json'), null);
 });
 
 test('a 403 from the first mirror is served by the second, with the same text, without asking the first again', async () => {

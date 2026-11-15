@@ -1,0 +1,70 @@
+# w.map: a world schema: a map of the world as a view over the places of k.geo (countries and cities): what is
+# shown, highlighted and pinned on it, and the view's own state (zoom, layer, centre). The places themselves (where
+# they are, their borders, capitals, populations) are knowledge, read from k.geo by name, never copied here.
+# Declared in the library's std.schema format; the acts of std.acts drive it; it has no rule and no function of its
+# own (drawing the map, fitting the zoom and measuring distances are the host's).
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later; 0.37.0 for acts on the
+# view itself without naming it, "zoom in")
+
+@w.map core.module name=w.map version=1 exports=place exports=pin exports=view core.source="hand-core 1"
+@w.map.world std.schema.world name=w.map doc="a map of the world: places of k.geo shown, highlighted and pinned, and the view's zoom and layer" core.source="hand-core 1"
+
+# A place shown on the map. `name` is the name of a k.geo place (`k.geo.country name=` or `k.geo.city name=`);
+# `sort` says which, where a name is both (Luxembourg, Mexico, Singapore: the country or the city), and is the
+# last part of the k.geo type (country: k.geo.country); `highlight=true` marks it (filled in `colour`, any colour
+# name of k.values; the host's colour when none).
+@w.map.place core.type of=w.map.place extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.map.place.name core.slot of=w.map.place key=name required=true kind=atom kind=string core.source="hand-core 1"
+@w.map.place.sort core.slot of=w.map.place key=sort enum=country enum=city core.source="hand-core 1"
+@w.map.place.highlight core.slot of=w.map.place key=highlight kind=boolean default=false core.source="hand-core 1"
+@w.map.place.colour core.slot of=w.map.place key=colour kind=atom kind=string core.source="hand-core 1"
+
+# A pin stuck in the map. `on` is the name of the k.geo place it marks (a city, or a country at its centre); `sort`
+# as for a place; `label` the words written by it ("our hotel"); `colour` the colour of its head.
+@w.map.pin core.type of=w.map.pin extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.map.pin.on core.slot of=w.map.pin key=on required=true kind=atom kind=string core.source="hand-core 1"
+@w.map.pin.sort core.slot of=w.map.pin key=sort enum=country enum=city core.source="hand-core 1"
+@w.map.pin.label core.slot of=w.map.pin key=label kind=string core.source="hand-core 1"
+@w.map.pin.colour core.slot of=w.map.pin key=colour kind=atom kind=string core.source="hand-core 1"
+
+# The view's own state, one thing: `zoom` from 1 (the whole world) to 10 (a city), one step at a time; `layer` what
+# is drawn over the land (borders, rivers, or none); `centre` the name of the k.geo place the map is centred on.
+# With sopworld 0.37 or later the view makes this thing itself on first use (`view_w_map`) and the acts change it
+# without naming it ("zoom in": change attr=zoom by=more); with 0.30 it is made once (`make kind=w.map.view`) and
+# named (`thing=w.map.view`).
+@w.map.view core.type of=w.map.view extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.map.view.zoom core.slot of=w.map.view key=zoom kind=integer min=1 max=10 step=1 default=3 core.source="hand-core 1"
+@w.map.view.layer core.slot of=w.map.view key=layer enum=borders enum=rivers enum=none default=none core.source="hand-core 1"
+@w.map.view.centre core.slot of=w.map.view key=centre kind=atom kind=string core.source="hand-core 1"
+
+# The kinds, the acts and the view. Show a place: make it (and centre the view on it); highlight: make it or
+# change it with highlight=true; pin: make a pin; remove the pins: remove thing=w.map.pin set=all; zoom: change the
+# view's zoom by more or less; show (the act): what the map shows, each thing with the keys of its aspect.
+@w.map.kind.place std.schema.kind of=w.map.place world=w.map acts=make acts=remove acts=change acts=pick acts=ask acts=show aspects=w.map.shown core.source="hand-core 1"
+@w.map.kind.pin std.schema.kind of=w.map.pin world=w.map acts=make acts=remove acts=change acts=pick acts=ask acts=show aspects=w.map.shown core.source="hand-core 1"
+@w.map.kind.view std.schema.kind of=w.map.view world=w.map acts=make acts=change acts=ask core.source="hand-core 1"
+@w.map.aspect.shown std.schema.aspect name=w.map.shown keys=name keys=on keys=sort keys=highlight keys=label keys=colour doc="a place or a pin on the map" core.source="hand-core 1"
+@w.map.view.map std.schema.view name=w.map shows=w.map.shown state=w.map.view core.source="hand-core 1"
+@w.map.limit.place std.schema.limit of=w.map.place max=300 core.source="hand-core 1"
+@w.map.limit.pin std.schema.limit of=w.map.pin max=100 core.source="hand-core 1"
+@w.map.limit.view std.schema.limit of=w.map.view max=1 core.source="hand-core 1"
+
+# Words: for the world (how a host finds it by name), its kinds and its keys.
+@w.map.word.world core.word text=map text=maps text="world map" text=atlas means=w.map of=std.schema.world.name core.source="hand-core 1"
+@w.map.word.place core.word text=place text=places text=country text=countries text=city text=cities means=w.map.place core.source="hand-core 1"
+@w.map.word.pin core.word text=pin text=pins text=marker text=markers text=flag text=flags means=w.map.pin core.source="hand-core 1"
+@w.map.word.view core.word text=map text=view means=w.map.view core.source="hand-core 1"
+@w.map.word.place.name core.word text=name text=called means=w.map.place.name core.source="hand-core 1"
+@w.map.word.place.sort core.word text=country text=city text=kind means=w.map.place.sort core.source="hand-core 1"
+@w.map.word.place.highlight core.word text=highlight text=highlighted text=mark text=marked text=colour means=w.map.place.highlight core.source="hand-core 1"
+@w.map.word.place.colour core.word text=colour text=color means=w.map.place.colour core.source="hand-core 1"
+@w.map.word.pin.on core.word text=on text=at text=where means=w.map.pin.on core.source="hand-core 1"
+@w.map.word.pin.sort core.word text=country text=city text=kind means=w.map.pin.sort core.source="hand-core 1"
+@w.map.word.pin.label core.word text=label text=says text=note means=w.map.pin.label core.source="hand-core 1"
+@w.map.word.pin.colour core.word text=colour text=color means=w.map.pin.colour core.source="hand-core 1"
+@w.map.word.view.zoom core.word text=zoom text="zoom in" text="zoom out" text=closer text=farther means=w.map.view.zoom core.source="hand-core 1"
+@w.map.word.view.layer core.word text=layer text=borders text=rivers means=w.map.view.layer core.source="hand-core 1"
+@w.map.word.view.centre core.word text=centre text=center text=middle means=w.map.view.centre core.source="hand-core 1"

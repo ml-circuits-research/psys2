@@ -1,0 +1,20 @@
+# k.time/shards/cycles-wordnet: the life cycles of a frog, a butterfly and a flowering plant, stage by stage, read from WordNet's glosses (life cycle: "a series of stages through which an organism passes between recurrences of a primary stage"; tadpole: "a larval frog or toad"; caterpillar: "larva of a butterfly or moth"; chrysalis: "pupa of a moth or butterfly"; imago: "an adult insect produced after metamorphosis"; seedling: "young plant or tree grown from a seed"; fruit: "the ripened reproductive body of a seed plant").
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the glosses named above)
+# license: WordNet-3.0
+# script: none (hand-written)
+
+@k.time.cycle.frog_life_cycle k.time.cycle name="frog life cycle" of=k.time.stage first=egg last=frog length=3 core.source="wordnet 3.1"
+@k.time.stage.frog_life_cycle.egg k.time.stage name=egg cycle="frog life cycle" n=1 next=tadpole is=egg about="the frog's eggs, laid in water; a larva hatches from each" core.source="wordnet 3.1"
+@k.time.stage.frog_life_cycle.tadpole k.time.stage name=tadpole cycle="frog life cycle" n=2 next=frog is=tadpole about="the larval frog, living in water, which changes into the adult frog (metamorphosis)" core.source="wordnet 3.1"
+@k.time.stage.frog_life_cycle.frog k.time.stage name=frog cycle="frog life cycle" n=3 next=egg is=frog about="the adult frog, which lays eggs again" core.source="wordnet 3.1"
+@k.time.cycle.butterfly_life_cycle k.time.cycle name="butterfly life cycle" of=k.time.stage first=egg last=butterfly length=4 core.source="wordnet 3.1"
+@k.time.stage.butterfly_life_cycle.egg k.time.stage name=egg cycle="butterfly life cycle" n=1 next=caterpillar is=egg about="the butterfly's eggs; a larva hatches from each" core.source="wordnet 3.1"
+@k.time.stage.butterfly_life_cycle.caterpillar k.time.stage name=caterpillar cycle="butterfly life cycle" n=2 next=chrysalis is=caterpillar about="the larva of the butterfly, a wormlike caterpillar that feeds" core.source="wordnet 3.1"
+@k.time.stage.butterfly_life_cycle.chrysalis k.time.stage name=chrysalis cycle="butterfly life cycle" n=3 next=butterfly is=chrysalis about="the pupa of the butterfly, inactive in its case, between larva and adult" core.source="wordnet 3.1"
+@k.time.stage.butterfly_life_cycle.butterfly k.time.stage name=butterfly cycle="butterfly life cycle" n=4 next=egg is=butterfly about="the adult insect after metamorphosis, which lays eggs again" core.source="wordnet 3.1"
+@k.time.cycle.plant_life_cycle k.time.cycle name="plant life cycle" of=k.time.stage first=seed last=fruit length=5 core.source="wordnet 3.1"
+@k.time.stage.plant_life_cycle.seed k.time.stage name=seed cycle="plant life cycle" n=1 next=seedling is=seed about="a mature fertilized ovule that can grow into a new plant" core.source="wordnet 3.1"
+@k.time.stage.plant_life_cycle.seedling k.time.stage name=seedling cycle="plant life cycle" n=2 next=plant is=seedling about="the young plant grown from the seed" core.source="wordnet 3.1"
+@k.time.stage.plant_life_cycle.plant k.time.stage name=plant cycle="plant life cycle" n=3 next=flower is=plant about="the grown plant" core.source="wordnet 3.1"
+@k.time.stage.plant_life_cycle.flower k.time.stage name=flower cycle="plant life cycle" n=4 next=fruit is=flower about="the flower, the plant's reproductive organ" core.source="wordnet 3.1"
+@k.time.stage.plant_life_cycle.fruit k.time.stage name=fruit cycle="plant life cycle" n=5 next=seed is=fruit about="the ripened reproductive body of the plant, which holds the seeds" core.source="wordnet 3.1"

@@ -1,0 +1,6 @@
+# k.words/shards/lm: senses of the words from "lm" to "lm" (first letters "lm").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.lm.noun.1 k.words.sense word=lm pos=noun n=1 supersense=noun.quantity gloss="a unit of luminous flux equal to the amount of light given out through a solid angle of 1 steradian by a point source of 1 candela intensity radiating uniformly in all directions" synonym=lumen is_a="luminous flux unit" core.source="wordnet 3.1"

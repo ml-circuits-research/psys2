@@ -16,22 +16,26 @@ import { openChat } from './test-webchat-turns.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2), opt = (k, d) => { const i = args.indexOf(`--${k}`); return i >= 0 ? args[i + 1] : d; };
 const DELAY = Number(opt('delay', 2500));
-const CAT = `${(await import('../src/knowledge/catalog-pin.mjs')).KNOWLEDGE_URL}/`;   // the pinned catalog URL the page reads (P4)
+const PIN = await import('../src/knowledge/catalog-pin.mjs');
+// the pinned catalog URLs the page reads (P4): its own copy (catalog/<commit>/ on the page's origin, Q33) and the external mirrors; each is served from the fixture
+const CATS = [`/${PIN.SITE_CATALOG()}/`, ...PIN.KNOWLEDGE_URLS.map((u) => `${u}/`)];
+const catPath = (u) => { for (const c of CATS) { const i = u.indexOf(c); if (i >= 0 && (c.startsWith('http') ? i === 0 : true)) return u.slice(i + c.length); } return null; };
 let bad = 0;
 const check = (n, ok, d = '') => { if (!ok) bad++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${n}${d ? `  (${d})` : ''}`); };
 
 const seen = [];
 const c = await openChat({
-  throttle: Number(opt('throttle', 4)), chrome: opt('chrome'), settings: { __raw: {} },
+  throttle: Number(opt('throttle', 4)), chrome: opt('chrome'), settings: { __raw: {} }, query: '?psys2nosw=1',   // the site's catalog copy is same-origin: without the service worker its requests reach the interception
   beforeGoto: async (pg) => {
     await pg.setRequestInterception(true);
     pg.on('request', async (r) => {
       const u = r.url();
-      if (!u.startsWith(CAT)) return r.continue();
-      seen.push({ at: Date.now(), path: u.slice(CAT.length) });
+      const rel = catPath(u);
+      if (rel == null) return r.continue();
+      seen.push({ at: Date.now(), path: rel });
       await new Promise((ok) => setTimeout(ok, DELAY));
       try {
-        const body = await readFile(path.join(ROOT, 'tests/fixtures/catalog', u.slice(CAT.length).split('?')[0]));
+        const body = await readFile(path.join(ROOT, 'tests/fixtures/catalog', rel.split('?')[0]));
         await r.respond({ status: 200, contentType: u.endsWith('.json') ? 'application/json' : 'text/plain', headers: { 'access-control-allow-origin': '*' }, body });
       } catch { await r.respond({ status: 404, headers: { 'access-control-allow-origin': '*' }, body: 'nf' }); }
     });

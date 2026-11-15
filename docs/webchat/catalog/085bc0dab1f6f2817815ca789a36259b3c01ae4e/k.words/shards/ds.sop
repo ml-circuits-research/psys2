@@ -1,0 +1,10 @@
+# k.words/shards/ds: senses of the words from "ds" to "ds" (first letters "ds").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ds.noun.1 k.words.sense word=Ds pos=noun n=1 supersense=noun.substance gloss="a radioactive transuranic element" synonym=darmstadtium synonym="element 110" synonym="atomic number 110" is_a="chemical element" core.source="wordnet 3.1"
+@k.words.ds.noun.2 k.words.sense word=DS pos=noun n=2 supersense=noun.group gloss="the bureau in the State Department that is responsible for the security of diplomats and embassies overseas" synonym="Bureau of Diplomatic Security" is_a=agency part_of="Department of State" core.source="wordnet 3.1"
+@k.words.ds.noun.3 k.words.sense word=DS pos=noun n=3 supersense=noun.communication gloss="an honorary degree in science" synonym="Doctor of Science" synonym=ScD is_a="honorary degree" core.source="wordnet 3.1"
+@k.words.ds.spelling.DS core.word text=ds means=DS of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.ds.spelling.Ds core.word text=ds means=Ds of=k.words.sense.word core.source="wordnet 3.1"

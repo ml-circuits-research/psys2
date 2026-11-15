@@ -1,0 +1,6 @@
+# k.commonsense/shards/psys2: from the PSys2 world common.sense: 1 more places where a thing also is.
+# sources: psys2-worlds 6b63b2ba (the hand-written knowledge of the PSys2 tab worlds, the project's own data)
+# license: CC0-1.0
+# script: tools/import/psys2.mjs
+
+@k.commonsense.psys2.bird k.commonsense.thing name=bird at=ground core.source="psys2-worlds 6b63b2ba"

@@ -1,0 +1,22 @@
+# w.lang.en/shards/words-k.food: the English words of k.food (its types, keys and values), owned by the language world
+# (Q78, reviewer 16:10; KR3): they were the core.word facts of its schema; tools/build-catalog.mjs reads them as its own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the type and keys of this world.
+@w.lang.en.word.k.food.food core.word text=food text=foods means=k.food.food core.source="hand-core 1"
+@w.lang.en.word.k.food.kind core.word text=kind means=k.food.food.kind core.source="hand-core 1"
+@w.lang.en.word.k.food.colour core.word text=colour text=color means=k.food.food.colour core.source="hand-core 1"
+@w.lang.en.word.k.food.grows_on core.word text=grows text=grow means=k.food.food.grows_on core.source="hand-core 1"
+@w.lang.en.word.k.food.comes_from core.word text=comes text=made means=k.food.food.comes_from core.source="hand-core 1"
+@w.lang.en.word.k.food.eaten core.word text=eaten text=raw text=cooked means=k.food.food.eaten core.source="hand-core 1"
+@w.lang.en.word.k.food.made_of core.word text=ingredients text=ingredient text="made of" text=contains means=k.food.food.made_of core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@w.lang.en.word.k.food.key.food.kind core.word text="kind of" means=k.food.food.kind core.source="hand-core 1"
+@w.lang.en.word.k.food.key.food.botanically core.word text=botanically means=k.food.food.botanically core.source="hand-core 1"
+@w.lang.en.word.k.food.key.food.grows_on core.word text="grows on" means=k.food.food.grows_on core.source="hand-core 1"
+@w.lang.en.word.k.food.key.food.comes_from core.word text="comes from" means=k.food.food.comes_from core.source="hand-core 1"
+@w.lang.en.word.k.food.key.food.drawing core.word text=drawing means=k.food.food.drawing core.source="hand-core 1"
+@w.lang.en.word.k.food.key.food.made_of core.word text=made text="made from" text=make text=recipe means=k.food.food.made_of core.source="hand-core 1"

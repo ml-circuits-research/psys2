@@ -1,0 +1,11 @@
+# k.parts/shards/k: the usual parts of 5 common things whose name starts with "k" (key, keyboard, kilt, knife, koto ...): the parts WordNet gives the thing, and the parts it gives what the thing is a kind of.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: part meronyms, hypernyms, glosses); which words are common things: tools/coverage.mjs (frequency-words 2018, wordnet 3.1)
+# license: WordNet-3.0
+# script: tools/import/parts.mjs
+
+@k.parts.whole.key k.parts.whole name=key gloss="metal device shaped in such a way that when it is inserted into the appropriate lock the lock's mechanism can be rotated" has=bit has=shank core.source="wordnet 3.1"
+@k.parts.whole.keyboard k.parts.whole name=keyboard gloss="device consisting of a set of keys on a piano or organ or typewriter or typesetting machine or computer or the like" has=action core.source="wordnet 3.1"
+@k.parts.inherited.kilt.skirt k.parts.inherited name=kilt from=skirt steps=1 has="box pleat" has="kick pleat" has=placket has="slide fastener" has="sunburst pleat" has=hemline plain=pleat plain=fastener core.source="wordnet 3.1"
+@k.parts.whole.knife k.parts.whole name=knife gloss="edge tool used as a cutting instrument; has a pointed blade with a sharp edge and a handle" has=blade has=haft has="knife blade" has=point core.source="wordnet 3.1"
+@k.parts.inherited.knife.edge_tool k.parts.inherited name=knife from="edge tool" steps=1 has=handle has="knife edge" plain=edge core.source="wordnet 3.1"
+@k.parts.inherited.koto.stringed_instrument k.parts.inherited name=koto from="stringed instrument" steps=1 has=bridge has=peg has="sounding board" core.source="wordnet 3.1"

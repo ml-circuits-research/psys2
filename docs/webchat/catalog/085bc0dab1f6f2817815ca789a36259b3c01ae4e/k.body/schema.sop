@@ -1,0 +1,62 @@
+# k.body: the human body: its parts, where they are, how many a person has, what they do, and the five senses.
+# Facts a child's encyclopedia states.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.body core.module name=k.body version=2 imports=k.named exports=part exports=sense core.source="hand-core 1"
+
+# A part of the human body. `kind`: an outer part, an organ, a bone, or a tissue found all over the body, or the
+# whole body. `part_of` names the larger part it belongs to; `inside` names the part an inner part lies in; `count`
+# is how many an adult has (`child_count`: how many a young child has, where that differs); `does` says what it does;
+# `drawing` names the k.objects object that draws it.
+@k.body.part core.type of=k.body.part extends=k.named.labelled shared=true closed=true core.source="hand-core 1"
+@k.body.part.name core.slot of=k.body.part key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.body.part.kind core.slot of=k.body.part key=kind required=true enum=whole enum=part enum=organ enum=bone enum=tissue core.source="hand-core 1"
+@k.body.part.part_of core.slot of=k.body.part key=part_of kind=atom type=k.body.part by=name core.source="hand-core 1"
+@k.body.part.inside core.slot of=k.body.part key=inside kind=atom type=k.body.part by=name core.source="hand-core 1"
+@k.body.part.count core.slot of=k.body.part key=count kind=integer min=1 core.source="hand-core 1"
+@k.body.part.child_count core.slot of=k.body.part key=child_count kind=integer min=1 core.source="hand-core 1"
+@k.body.part.does core.slot of=k.body.part key=does many=true kind=atom kind=string core.source="hand-core 1"
+@k.body.part.drawing core.slot of=k.body.part key=drawing kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+# Round 9. `about` says in one plain sentence what a main organ does. `count_per_part`: how many of it one larger
+# part has (five fingers on a hand). Approximate numbers: `count_about` (about 600 muscles), `temperature_about`
+# (the body, in degrees Celsius), `amount_about` (the blood of an adult, in litres), `length_about` (in metres),
+# `weight_about` (of an adult's organ, in kilograms). The units are k.units.measure facts. An exact and an
+# approximate count are never both on one part. `named=model`: written by a language model, only where sure.
+@k.body.part.about core.slot of=k.body.part key=about kind=string core.source="hand-core 1"
+@k.body.part.count_per_part core.slot of=k.body.part key=count_per_part kind=integer min=1 core.source="hand-core 1"
+@k.body.part.count_about core.slot of=k.body.part key=count_about excludes=count kind=integer min=1 core.source="hand-core 1"
+@k.body.part.temperature_about core.slot of=k.body.part key=temperature_about kind=number core.source="hand-core 1"
+@k.body.part.amount_about core.slot of=k.body.part key=amount_about kind=number min=0 core.source="hand-core 1"
+@k.body.part.length_about core.slot of=k.body.part key=length_about kind=number min=0 core.source="hand-core 1"
+@k.body.part.weight_about core.slot of=k.body.part key=weight_about kind=number min=0 core.source="hand-core 1"
+
+# One of the five senses and the part of the body it works with.
+@k.body.sense core.type of=k.body.sense shared=true closed=true complete=true core.source="hand-core 1"
+@k.body.sense.name core.slot of=k.body.sense key=name id=true required=true enum=sight enum=hearing enum=smell enum=taste enum=touch core.source="hand-core 1"
+@k.body.sense.organ core.slot of=k.body.sense key=organ required=true kind=atom type=k.body.part by=name core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.body.word.part core.word text=body text=part text=parts means=k.body.part core.source="hand-core 1"
+@k.body.word.sense core.word text=sense text=senses means=k.body.sense core.source="hand-core 1"
+@k.body.word.count core.word text=many means=k.body.part.count core.source="hand-core 1"
+@k.body.word.does core.word text=does text=do means=k.body.part.does core.source="hand-core 1"
+@k.body.word.inside core.word text=inside text=where means=k.body.part.inside core.source="hand-core 1"
+@k.body.word.about core.word text=why text="what for" means=k.body.part.about core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.body.word.key.part.kind core.word text=kind means=k.body.part.kind core.source="hand-core 1"
+@k.body.word.key.part.part_of core.word text="part of" text=belongs means=k.body.part.part_of core.source="hand-core 1"
+@k.body.word.key.part.count core.word text=count means=k.body.part.count core.source="hand-core 1"
+@k.body.word.key.part.child_count core.word text="child count" means=k.body.part.child_count core.source="hand-core 1"
+@k.body.word.key.part.does core.word text=for means=k.body.part.does core.source="hand-core 1"
+@k.body.word.key.part.drawing core.word text=drawing means=k.body.part.drawing core.source="hand-core 1"
+@k.body.word.key.part.about core.word text=about text=for means=k.body.part.about core.source="hand-core 1"
+@k.body.word.key.part.count_per_part core.word text="count per part" text=many means=k.body.part.count_per_part core.source="hand-core 1"
+@k.body.word.key.part.count_about core.word text=count text=many means=k.body.part.count_about core.source="hand-core 1"
+@k.body.word.key.part.temperature_about core.word text=temperature means=k.body.part.temperature_about core.source="hand-core 1"
+@k.body.word.key.part.amount_about core.word text=amount means=k.body.part.amount_about core.source="hand-core 1"
+@k.body.word.key.part.length_about core.word text=length means=k.body.part.length_about core.source="hand-core 1"
+@k.body.word.key.part.weight_about core.word text=weight means=k.body.part.weight_about core.source="hand-core 1"
+@k.body.word.key.sense.organ core.word text=organ means=k.body.sense.organ core.source="hand-core 1"

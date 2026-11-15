@@ -1,0 +1,9 @@
+# w.lang.en/shards/counts: the plural categories of the language and their rules (Q79 of the library, reviewer 16:45),
+# copied from Unicode CLDR 48, supplemental/plurals.json (cldr-json tag 48.2.3, sha256
+# 6c0a48e9bcfc25856f90202f703c2c7f89c105d6868f7712a943a6ed2dcbe8f4): the rule before "@", the samples after it.
+# sources: cldr 48 (Unicode CLDR, plurals.json)
+# license: Unicode-3.0
+# script: none (copied by hand from the file named above)
+
+@w.lang.en.count.one w.lang.en.count class=one rule="i = 1 and v = 0" samples="@integer 1" core.source="cldr 48"
+@w.lang.en.count.other w.lang.en.count class=other samples="@integer 0, 2~16, 100, 1000, 10000, 100000, 1000000, … @decimal 0.0~1.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, …" core.source="cldr 48"

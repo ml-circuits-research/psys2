@@ -1,0 +1,12 @@
+# k.faces/shards/cutouts-slots: the slots of the DiceBear style `cutouts`: the box that the variants of each slot fill in the 0 to 100 frame of the face, and the draw order.
+# sources: dicebear-cutouts 67f54a0 (DiceBear style "cutouts", CC0 1.0: "Cutouts" (https://www.dicebear.com) by "DiceBear", licensed under "CC0 1.0" (https://creativecommons.org/publicdomain/zero/1.0/))
+# license: CC0-1.0
+# script: tools/import/dicebear.mjs
+
+@k.faces.cutouts.slot.head k.faces.slot style=cutouts name=head x=16 y=11 w=75 h=78 z=0 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.slot.hair_front k.faces.slot style=cutouts name=hair_front x=22 y=2 w=57 h=51 z=1 optional=true core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.slot.eyebrows k.faces.slot style=cutouts name=eyebrows x=31 y=31 w=39 h=9 z=2 optional=true core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.slot.cheeks k.faces.slot style=cutouts name=cheeks x=26 y=57 w=49 h=10 z=3 optional=true core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.slot.eyes k.faces.slot style=cutouts name=eyes x=31 y=40 w=37 h=15 z=4 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.slot.nose k.faces.slot style=cutouts name=nose x=45 y=50 w=12 h=20 z=5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.slot.mouth k.faces.slot style=cutouts name=mouth x=37 y=71 w=28 h=14 z=6 core.source="dicebear-cutouts 67f54a0"

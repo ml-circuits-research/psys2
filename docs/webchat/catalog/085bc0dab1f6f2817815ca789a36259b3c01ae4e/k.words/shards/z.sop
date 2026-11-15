@@ -1,0 +1,8 @@
+# k.words/shards/z: senses of the words from "z" to "z" (first letters "z").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.z.noun.1 k.words.sense word=Z pos=noun n=1 supersense=noun.event gloss="the ending of a series or sequence" synonym=omega is_a=ending core.source="wordnet 3.1"
+@k.words.z.noun.2 k.words.sense word=Z pos=noun n=2 supersense=noun.communication gloss="the 26th letter of the Roman alphabet" synonym=z synonym=zee synonym=zed synonym=ezed synonym=izzard is_a=letter core.source="wordnet 3.1"
+@k.words.z.spelling.Z core.word text=z means=Z of=k.words.sense.word core.source="wordnet 3.1"

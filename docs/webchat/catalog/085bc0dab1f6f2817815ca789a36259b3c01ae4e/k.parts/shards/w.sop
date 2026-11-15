@@ -1,0 +1,24 @@
+# k.parts/shards/w: the usual parts of 13 common things whose name starts with "w" (wagon, wall, warship, wharf, wheat, wheel ...): the parts WordNet gives the thing, and the parts it gives what the thing is a kind of.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: part meronyms, hypernyms, glosses); which words are common things: tools/coverage.mjs (frequency-words 2018, wordnet 3.1)
+# license: WordNet-3.0
+# script: tools/import/parts.mjs
+
+@k.parts.whole.wagon k.parts.whole name=wagon gloss="any of various kinds of wheeled vehicles drawn by an animal or a tractor" has=axletree has="wagon wheel" plain=wheel core.source="wordnet 3.1"
+@k.parts.inherited.wagon.wheeled_vehicle k.parts.inherited name=wagon from="wheeled vehicle" steps=1 has=axle has=brake has=splasher has=wheel core.source="wordnet 3.1"
+@k.parts.whole.wall k.parts.whole name=wall gloss="an architectural partition with a height and length greater than its thickness; used to divide or enclose an area or to support another structure" has=arch has=capstone has=course has=doorway has=header has=paneling has=pier has=wainscot has="wall panel" core.source="wordnet 3.1"
+@k.parts.whole.warship k.parts.whole name=warship gloss="a government ship that is available for waging war" has="conning tower" has="naval gun" core.source="wordnet 3.1"
+@k.parts.inherited.warship.ship k.parts.inherited name=warship from=ship steps=1 has=bay has="bilge pump" has="bilge well" has=bulkhead has=bulwark has="cargo area" has="crow's nest" has=davit has=deck has=fin has=forecastle has=funnel has=galley has=gyrostabilizer has=helm has=log has="lubber's hole" has=porthole has=ratline has="ridge rope" has="riding bitt" has=screw has="sea anchor" has=sheet has=skeleton has=spar has=stern has=superstructure has=top has=topside has=winch plain=pump plain=well plain=hole plain=bitt core.source="wordnet 3.1"
+@k.parts.inherited.warship.vessel k.parts.inherited name=warship from=vessel steps=2 has=anchor has=bilge has="bilge keel" has=bow has=hull has=rudder has=wale has=washboard plain=keel core.source="wordnet 3.1"
+@k.parts.whole.wharf k.parts.whole name=wharf gloss="a platform built out from the shore into the water and supported by piles; provides access to ships and boats" has=bollard has=shipside core.source="wordnet 3.1"
+@k.parts.whole.wheat k.parts.whole name=wheat gloss="annual or biennial grass having erect flower spikes and light brown grains" has="wheat berry" core.source="wordnet 3.1"
+@k.parts.whole.wheel k.parts.whole name=wheel gloss="a simple machine consisting of a circular frame with spokes (or a solid disc) that can rotate on a shaft or axle (as in vehicles or other machines)" has=felloe has=rim core.source="wordnet 3.1"
+@k.parts.inherited.wheelbarrow.handcart k.parts.inherited name=wheelbarrow from=handcart steps=1 has=handle core.source="wordnet 3.1"
+@k.parts.inherited.wheelbarrow.wheeled_vehicle k.parts.inherited name=wheelbarrow from="wheeled vehicle" steps=2 has=axle has=brake has=splasher has=wheel core.source="wordnet 3.1"
+@k.parts.inherited.wheelchair.chair k.parts.inherited name=wheelchair from=chair steps=1 has=back has=leg core.source="wordnet 3.1"
+@k.parts.inherited.wheelchair.seat k.parts.inherited name=wheelchair from=seat steps=2 has=seat has=upholstery core.source="wordnet 3.1"
+@k.parts.inherited.willow.tree k.parts.inherited name=willow from=tree steps=1 has=stump has=crown has=limb has=trunk has=burl core.source="wordnet 3.1"
+@k.parts.whole.window k.parts.whole name=window gloss="a framework of wood or metal that contains a glass windowpane and is built into a wall or roof to admit light or air" has=casing has=mullion has=pane has=sash has="sash fastener" has="window frame" has=windowpane plain=frame core.source="wordnet 3.1"
+@k.parts.whole.wing k.parts.whole name=wing gloss="one of the horizontal airfoils on either side of the fuselage of an airplane" has=aileron has=flap has=rib core.source="wordnet 3.1"
+@k.parts.inherited.wing.airfoil k.parts.inherited name=wing from=airfoil steps=1 has="leading edge" has="trailing edge" plain=edge core.source="wordnet 3.1"
+@k.parts.inherited.wolf.canine k.parts.inherited name=wolf from=canine steps=1 has=paw core.source="wordnet 3.1"
+@k.parts.whole.world k.parts.whole name=world gloss="everything that exists anywhere" has="celestial body" has="extraterrestrial object" core.source="wordnet 3.1"

@@ -1,0 +1,27 @@
+# k.faces/shards/miniavs-shoulders: the variants of the slot `shoulders` in the DiceBear style `miniavs`: features, and parts converted from the drawings (a primitive shape, a box in the frame of the face, a draw order, a colour name and the exact colour; points for polygons and lines).
+# sources: dicebear-miniavs 67f54a0 (DiceBear style "miniavs", CC BY 4.0: Remix of "Miniavs - Free Avatar Creator" (https://www.figma.com/community/file/923211396597067458) by "Webpixels", licensed under "CC BY 4.0" (https://creativecommons.org/licenses/by/4.0/))
+# license: CC-BY-4.0
+# script: tools/import/dicebear.mjs
+
+# shoulders: miniavs golf
+@k.faces.miniavs.shoulders.golf k.faces.variant slot=shoulders name="miniavs golf" style=miniavs kind="polo shirt" named=model core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p1 k.faces.part slot=shoulders of="miniavs golf" name=part1 shape=rectangle x=10.9 y=93.8 w=62.5 h=6.2 z=1 colour=purple rgb="#3633E0" tint=clothes core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p2 k.faces.part slot=shoulders of="miniavs golf" name=part2 shape=polygon x=26.6 y=90.6 w=29.7 h=6.2 z=2 colour=purple rgb="#3633E0" tint=clothes core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p2.1 k.faces.point part=$k.faces.miniavs.shoulders.golf.p2 n=1 x=26.6 y=90.6 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p2.2 k.faces.point part=$k.faces.miniavs.shoulders.golf.p2 n=2 x=56.3 y=90.6 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p2.3 k.faces.point part=$k.faces.miniavs.shoulders.golf.p2 n=3 x=56.3 y=95.3 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p2.4 k.faces.point part=$k.faces.miniavs.shoulders.golf.p2 n=4 x=43.5 y=96.8 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p2.5 k.faces.point part=$k.faces.miniavs.shoulders.golf.p2 n=5 x=29.8 y=95.9 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p2.6 k.faces.point part=$k.faces.miniavs.shoulders.golf.p2 n=6 x=26.6 y=95.3 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p3 k.faces.part slot=shoulders of="miniavs golf" name=part3 shape=polygon x=25.8 y=89.1 w=31.2 h=4.7 z=3 colour=purple rgb="#3633E0" tint=clothes core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p3.1 k.faces.point part=$k.faces.miniavs.shoulders.golf.p3 n=1 x=25.8 y=92.2 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p3.2 k.faces.point part=$k.faces.miniavs.shoulders.golf.p3 n=2 x=26.7 y=90 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p3.3 k.faces.point part=$k.faces.miniavs.shoulders.golf.p3 n=3 x=28.9 y=89.1 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p3.4 k.faces.point part=$k.faces.miniavs.shoulders.golf.p3 n=4 x=53.9 y=89.1 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p3.5 k.faces.point part=$k.faces.miniavs.shoulders.golf.p3 n=5 x=56.1 y=90 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p3.6 k.faces.point part=$k.faces.miniavs.shoulders.golf.p3 n=6 x=57 y=92.2 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.golf.p3.7 k.faces.point part=$k.faces.miniavs.shoulders.golf.p3 n=7 x=41.4 y=93.8 core.source="dicebear-miniavs 67f54a0"
+
+# shoulders: miniavs t shirt
+@k.faces.miniavs.shoulders.tShirt k.faces.variant slot=shoulders name="miniavs t shirt" style=miniavs kind=t-shirt named=model core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.shoulders.tShirt.p1 k.faces.part slot=shoulders of="miniavs t shirt" name=part1 shape=rectangle x=10.9 y=93.8 w=62.5 h=6.2 z=1 colour=purple rgb="#3633E0" tint=clothes core.source="dicebear-miniavs 67f54a0"

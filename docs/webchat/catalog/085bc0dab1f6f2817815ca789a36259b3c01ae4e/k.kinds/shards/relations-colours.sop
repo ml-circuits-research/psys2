@@ -1,0 +1,22 @@
+# k.kinds/shards/relations-colours: the keys of the types of k.colours read as relations: 17 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.colours.basic.derived k.kinds.relation type=k.colours.basic key=derived subject=basic object=boolean found=schema core.source="hand-core 1"
+@k.kinds.relation.k.colours.colour.family k.kinds.relation type=k.colours.colour key=family subject=colour subject_sense=colour object=kind object_type=k.colours.basic found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.colours.colour.basic k.kinds.relation type=k.colours.colour key=basic subject=colour subject_sense=colour object=boolean found=schema core.source="hand-core 1"
+@k.kinds.relation.k.colours.colour.css k.kinds.relation type=k.colours.colour key=css subject=colour subject_sense=colour object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.colours.colour.rgb k.kinds.relation type=k.colours.colour key=rgb subject=colour subject_sense=colour object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.colours.colour.rgb_about k.kinds.relation type=k.colours.colour key=rgb_about subject=colour subject_sense=colour object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.colours.colour.tone k.kinds.relation type=k.colours.colour key=tone subject=colour subject_sense=colour object=value object_type=k.values.shade scale=brightness found=value core.source="hand-core 1"
+@k.kinds.relation.k.colours.colour.temperature k.kinds.relation type=k.colours.colour key=temperature subject=colour subject_sense=colour object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.colours.colour.lighter k.kinds.relation type=k.colours.colour key=lighter subject=colour subject_sense=colour object=value object_type=k.colours.colour object_sense=colour found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.colours.colour.darker k.kinds.relation type=k.colours.colour key=darker subject=colour subject_sense=colour object=value object_type=k.colours.colour object_sense=colour found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.colours.colour.complement k.kinds.relation type=k.colours.colour key=complement subject=colour subject_sense=colour object=value object_type=k.colours.colour object_sense=colour found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.colours.colour.kind k.kinds.relation type=k.colours.colour key=kind subject=colour subject_sense=colour object=kind found=schema core.source="hand-core 1"
+@k.kinds.relation.k.colours.colour.thing k.kinds.relation type=k.colours.colour key=thing subject=colour subject_sense=colour object=thing object_type=k.objects.object found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.colours.colour.named k.kinds.relation type=k.colours.colour key=named subject=colour subject_sense=colour object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.colours.mix.a k.kinds.relation type=k.colours.mix key=a subject=mix object=value object_type=k.colours.colour object_sense=colour found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.colours.mix.b k.kinds.relation type=k.colours.mix key=b subject=mix object=value object_type=k.colours.colour object_sense=colour found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.colours.mix.gives k.kinds.relation type=k.colours.mix key=gives subject=mix object=value object_type=k.colours.colour object_sense=colour found=declared object_by=name core.source="hand-core 1"

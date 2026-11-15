@@ -1,0 +1,7 @@
+# k.words/shards/gp: senses of the words from "gps" to "gps" (first letters "gp").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.gps.noun.1 k.words.sense word=GPS pos=noun n=1 supersense=noun.artifact gloss="a navigational system involving satellites and computers that can determine the latitude and longitude of a receiver on Earth by computing the time difference for signals from different satellites to reach the receiver" synonym="Global Positioning System" is_a="navigational system" core.source="wordnet 3.1"
+@k.words.gps.spelling.GPS core.word text=gps means=GPS of=k.words.sense.word core.source="wordnet 3.1"

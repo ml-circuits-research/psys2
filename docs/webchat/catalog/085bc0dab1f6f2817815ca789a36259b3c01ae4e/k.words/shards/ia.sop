@@ -1,0 +1,7 @@
+# k.words/shards/ia: senses of the words from "ia" to "ia" (first letters "ia").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ia.noun.1 k.words.sense word=IA pos=noun n=1 supersense=noun.location gloss="a state in midwestern United States" synonym=Iowa synonym="Hawkeye State" synonym=Ia. instance_of="American state" part_of="United States" part_of=Midwest part_of="Corn Belt" core.source="wordnet 3.1"
+@k.words.ia.spelling.IA core.word text=ia means=IA of=k.words.sense.word core.source="wordnet 3.1"

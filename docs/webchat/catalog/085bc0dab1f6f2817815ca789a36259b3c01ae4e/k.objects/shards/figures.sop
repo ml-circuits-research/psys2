@@ -1,0 +1,64 @@
+# k.objects/shards/figures: person, robot, snowman. Parts with a primitive shape, a box in the 0 to 100 frame
+# of the object (x right, y down), a draw order z and typical colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# person
+@k.objects.person k.objects.object name=person core.source="hand-core 1"
+@k.objects.person.head k.objects.part of=person name=head shape=circle x=38 y=5 w=24 h=24 z=2 colour=pink colour=brown colour=yellow above=body centered=true core.source="hand-core 1"
+@k.objects.person.body k.objects.part of=person name=body shape=line x=50 y=29 w=0 h=33 z=1 colour=black centered=true core.source="hand-core 1"
+@k.objects.person.left_arm k.objects.part of=person name=left_arm kind=arm shape=line x=30 y=38 w=20 h=17 z=1 colour=black left_of=body core.source="hand-core 1"
+@k.objects.person.right_arm k.objects.part of=person name=right_arm kind=arm shape=line x=50 y=38 w=20 h=17 z=1 colour=black right_of=body core.source="hand-core 1"
+@k.objects.person.left_leg k.objects.part of=person name=left_leg kind=leg shape=line x=35 y=62 w=15 h=30 z=1 colour=black below=body core.source="hand-core 1"
+@k.objects.person.right_leg k.objects.part of=person name=right_leg kind=leg shape=line x=50 y=62 w=15 h=30 z=1 colour=black below=body core.source="hand-core 1"
+@k.objects.person.left_eye k.objects.part of=person name=left_eye kind=eye shape=circle x=43 y=12 w=4 h=4 z=3 colour=black inside=head core.source="hand-core 1"
+@k.objects.person.right_eye k.objects.part of=person name=right_eye kind=eye shape=circle x=53 y=12 w=4 h=4 z=3 colour=black inside=head core.source="hand-core 1"
+@k.objects.person.mouth k.objects.part of=person name=mouth shape=arc x=44 y=18 w=12 h=6 z=3 colour=black opens=up inside=head core.source="hand-core 1"
+@k.objects.person.body.p1 k.objects.point part=$k.objects.person.body n=1 x=50 y=29 core.source="hand-core 1"
+@k.objects.person.body.p2 k.objects.point part=$k.objects.person.body n=2 x=50 y=62 core.source="hand-core 1"
+@k.objects.person.left_arm.p1 k.objects.point part=$k.objects.person.left_arm n=1 x=50 y=38 core.source="hand-core 1"
+@k.objects.person.left_arm.p2 k.objects.point part=$k.objects.person.left_arm n=2 x=30 y=55 core.source="hand-core 1"
+@k.objects.person.right_arm.p1 k.objects.point part=$k.objects.person.right_arm n=1 x=50 y=38 core.source="hand-core 1"
+@k.objects.person.right_arm.p2 k.objects.point part=$k.objects.person.right_arm n=2 x=70 y=55 core.source="hand-core 1"
+@k.objects.person.left_leg.p1 k.objects.point part=$k.objects.person.left_leg n=1 x=50 y=62 core.source="hand-core 1"
+@k.objects.person.left_leg.p2 k.objects.point part=$k.objects.person.left_leg n=2 x=35 y=92 core.source="hand-core 1"
+@k.objects.person.right_leg.p1 k.objects.point part=$k.objects.person.right_leg n=1 x=50 y=62 core.source="hand-core 1"
+@k.objects.person.right_leg.p2 k.objects.point part=$k.objects.person.right_leg n=2 x=65 y=92 core.source="hand-core 1"
+
+# robot
+@k.objects.robot k.objects.object name=robot core.source="hand-core 1"
+@k.objects.robot.head k.objects.part of=robot name=head shape=rectangle x=30 y=8 w=40 h=24 z=2 colour=grey above=body centered=true core.source="hand-core 1"
+@k.objects.robot.antenna k.objects.part of=robot name=antenna shape=line x=50 y=1 w=0 h=7 z=1 colour=black above=head core.source="hand-core 1"
+@k.objects.robot.left_eye k.objects.part of=robot name=left_eye kind=eye shape=square x=37 y=14 w=8 h=8 z=3 colour=blue inside=head core.source="hand-core 1"
+@k.objects.robot.right_eye k.objects.part of=robot name=right_eye kind=eye shape=square x=55 y=14 w=8 h=8 z=3 colour=blue inside=head core.source="hand-core 1"
+@k.objects.robot.mouth k.objects.part of=robot name=mouth shape=rectangle x=40 y=25 w=20 h=3 z=3 colour=black inside=head core.source="hand-core 1"
+@k.objects.robot.body k.objects.part of=robot name=body shape=rectangle x=25 y=34 w=50 h=38 z=2 colour=grey centered=true core.source="hand-core 1"
+@k.objects.robot.left_arm k.objects.part of=robot name=left_arm kind=arm shape=rectangle x=13 y=36 w=10 h=30 z=1 colour=grey left_of=body core.source="hand-core 1"
+@k.objects.robot.right_arm k.objects.part of=robot name=right_arm kind=arm shape=rectangle x=77 y=36 w=10 h=30 z=1 colour=grey right_of=body core.source="hand-core 1"
+@k.objects.robot.left_leg k.objects.part of=robot name=left_leg kind=leg shape=rectangle x=32 y=72 w=12 h=24 z=1 colour=grey below=body core.source="hand-core 1"
+@k.objects.robot.right_leg k.objects.part of=robot name=right_leg kind=leg shape=rectangle x=56 y=72 w=12 h=24 z=1 colour=grey below=body core.source="hand-core 1"
+@k.objects.robot.antenna.p1 k.objects.point part=$k.objects.robot.antenna n=1 x=50 y=8 core.source="hand-core 1"
+@k.objects.robot.antenna.p2 k.objects.point part=$k.objects.robot.antenna n=2 x=50 y=1 core.source="hand-core 1"
+
+# snowman
+@k.objects.snowman k.objects.object name=snowman core.source="hand-core 1"
+@k.objects.snowman.bottom_ball k.objects.part of=snowman name=bottom_ball kind=ball shape=circle x=27 y=52 w=46 h=46 z=1 colour=white below=middle_ball centered=true core.source="hand-core 1"
+@k.objects.snowman.middle_ball k.objects.part of=snowman name=middle_ball kind=ball shape=circle x=33 y=26 w=34 h=34 z=2 colour=white centered=true core.source="hand-core 1"
+@k.objects.snowman.head k.objects.part of=snowman name=head shape=circle x=38 y=6 w=24 h=24 z=3 colour=white above=middle_ball centered=true core.source="hand-core 1"
+@k.objects.snowman.hat k.objects.part of=snowman name=hat shape=rectangle x=40 y=1 w=20 h=8 z=4 colour=black on=head centered=true core.source="hand-core 1"
+@k.objects.snowman.nose k.objects.part of=snowman name=nose shape=triangle x=49 y=16 w=10 h=5 z=4 colour=orange pointing=right inside=head core.source="hand-core 1"
+@k.objects.snowman.left_eye k.objects.part of=snowman name=left_eye kind=eye shape=circle x=44 y=12 w=3 h=3 z=4 colour=black inside=head core.source="hand-core 1"
+@k.objects.snowman.right_eye k.objects.part of=snowman name=right_eye kind=eye shape=circle x=53 y=12 w=3 h=3 z=4 colour=black inside=head core.source="hand-core 1"
+@k.objects.snowman.top_button k.objects.part of=snowman name=top_button kind=button shape=circle x=48 y=35 w=4 h=4 z=3 colour=black inside=middle_ball core.source="hand-core 1"
+@k.objects.snowman.bottom_button k.objects.part of=snowman name=bottom_button kind=button shape=circle x=48 y=46 w=4 h=4 z=3 colour=black inside=middle_ball core.source="hand-core 1"
+
+# words
+@k.objects.word.person core.word text=person text=people text=man text=woman text=child means=person of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.robot core.word text=robot text=robots means=robot of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.snowman core.word text=snowman text=snowmen means=snowman of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.part.arm core.word text=arm text=arms means=arm of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.ball core.word text=ball text=balls means=ball of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.button core.word text=button text=buttons means=button of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.eye core.word text=eye text=eyes means=eye of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.leg core.word text=leg text=legs means=leg of=k.objects.part.kind core.source="hand-core 1"

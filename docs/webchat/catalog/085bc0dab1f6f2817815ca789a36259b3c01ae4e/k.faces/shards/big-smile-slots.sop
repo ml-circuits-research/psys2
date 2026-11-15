@@ -1,0 +1,10 @@
+# k.faces/shards/big-smile-slots: the slots of the DiceBear style `big-smile`: the box that the variants of each slot fill in the 0 to 100 frame of the face, and the draw order.
+# sources: dicebear-big-smile 67f54a0 (DiceBear style "big-smile", CC BY 4.0: Remix of "Custom Avatar" (https://www.figma.com/community/file/881358461963645496) by "Ashley Seo", licensed under "CC BY 4.0" (https://creativecommons.org/licenses/by/4.0/))
+# license: CC-BY-4.0
+# script: tools/import/dicebear.mjs
+
+@k.faces.big-smile.slot.head k.faces.slot style=big-smile name=head x=13 y=15 w=75 h=70 z=0 core.source="dicebear-big-smile 67f54a0"
+@k.faces.big-smile.slot.mouth k.faces.slot style=big-smile name=mouth x=46 y=55 w=38 h=24 z=1 core.source="dicebear-big-smile 67f54a0"
+@k.faces.big-smile.slot.eyes k.faces.slot style=big-smile name=eyes x=55 y=37 w=26 h=17 z=2 core.source="dicebear-big-smile 67f54a0"
+@k.faces.big-smile.slot.hair_front k.faces.slot style=big-smile name=hair_front x=1 y=0 w=90 h=94 z=3 core.source="dicebear-big-smile 67f54a0"
+@k.faces.big-smile.slot.accessories k.faces.slot style=big-smile name=accessories x=17 y=15 w=72 h=67 z=4 optional=true core.source="dicebear-big-smile 67f54a0"

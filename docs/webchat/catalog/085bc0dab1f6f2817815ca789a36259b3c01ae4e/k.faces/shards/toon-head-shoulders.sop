@@ -1,0 +1,24 @@
+# k.faces/shards/toon-head-shoulders: the variants of the slot `shoulders` in the DiceBear style `toon-head`: features, and parts converted from the drawings (a primitive shape, a box in the frame of the face, a draw order, a colour name and the exact colour; points for polygons and lines).
+# sources: dicebear-toon-head 67f54a0 (DiceBear style "toon-head", CC BY 4.0: Remix of "ToonHead" (https://www.figma.com/community/file/1589627891082866389) by "Johan Melin", licensed under "CC BY 4.0" (https://creativecommons.org/licenses/by/4.0/))
+# license: CC-BY-4.0
+# script: tools/import/dicebear.mjs
+
+# shoulders: toon-head body
+@k.faces.toon-head.shoulders.body k.faces.variant slot=shoulders name="toon-head body" style=toon-head core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1 k.faces.part slot=shoulders of="toon-head body" name=part1 shape=polygon x=16.1 y=72.4 w=67.9 h=27.6 z=1 colour=brown rgb="#5C3829" tint=skin core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.1 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=1 x=56.4 y=81.4 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.2 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=2 x=63.8 y=83.8 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.3 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=3 x=70.6 y=87.8 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.4 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=4 x=76.2 y=93.2 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.5 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=5 x=80.5 y=99.8 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.6 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=6 x=83.1 y=100 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.7 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=7 x=84 y=100 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.8 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=8 x=16.1 y=100 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.9 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=9 x=17.5 y=100 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.10 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=10 x=21.3 y=96.8 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.11 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=11 x=24.1 y=93.1 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.12 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=12 x=30.9 y=86.9 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.13 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=13 x=39.2 y=82.7 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.14 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=14 x=43.8 y=81.4 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.15 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=15 x=43.8 y=72.4 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.shoulders.body.p1.16 k.faces.point part=$k.faces.toon-head.shoulders.body.p1 n=16 x=56.4 y=72.4 core.source="dicebear-toon-head 67f54a0"

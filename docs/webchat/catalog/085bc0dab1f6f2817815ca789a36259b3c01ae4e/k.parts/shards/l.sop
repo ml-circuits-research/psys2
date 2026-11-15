@@ -1,0 +1,26 @@
+# k.parts/shards/l: the usual parts of 17 common things whose name starts with "l" (ladder, lance, laptop, leaf, lemon, lever ...): the parts WordNet gives the thing, and the parts it gives what the thing is a kind of.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: part meronyms, hypernyms, glosses); which words are common things: tools/coverage.mjs (frequency-words 2018, wordnet 3.1)
+# license: WordNet-3.0
+# script: tools/import/parts.mjs
+
+@k.parts.whole.ladder k.parts.whole name=ladder gloss="steps consisting of two parallel members connected by rungs; for climbing up or down" has=rundle core.source="wordnet 3.1"
+@k.parts.whole.lance k.parts.whole name=lance gloss="a long pointed rod used as a tool or weapon" has=barb has=spearhead core.source="wordnet 3.1"
+@k.parts.inherited.laptop.portable_computer k.parts.inherited name=laptop from="portable computer" steps=1 has="flat panel display" plain=display core.source="wordnet 3.1"
+@k.parts.whole.leaf k.parts.whole name=leaf gloss="the main organ of photosynthesis and transpiration in higher plants" has=venation has=lobe has="leaf shape" core.source="wordnet 3.1"
+@k.parts.whole.lemon k.parts.whole name=lemon gloss="yellow oval fruit with juicy acidic flesh" has="lemon peel" plain=peel core.source="wordnet 3.1"
+@k.parts.inherited.lemon.citrus k.parts.inherited name=lemon from=citrus steps=1 has=section core.source="wordnet 3.1"
+@k.parts.whole.lever k.parts.whole name=lever gloss="a rigid bar pivoted about a fulcrum" has=fulcrum core.source="wordnet 3.1"
+@k.parts.inherited.library.room k.parts.inherited name=library from=room steps=1 has=ceiling has=floor has="room light" has=wall plain=light core.source="wordnet 3.1"
+@k.parts.whole.licorice k.parts.whole name=licorice gloss="deep-rooted coarse-textured plant native to the Mediterranean region having blue flowers and pinnately compound leaves; widely cultivated in Europe for its long thick sweet roots" has="licorice root" plain=root core.source="wordnet 3.1"
+@k.parts.inherited.limousine.car k.parts.inherited name=limousine from=car steps=1 has=accelerator has="air bag" has="auto accessory" has="automobile engine" has="automobile horn" has=buffer has=bumper has="car door" has="car mirror" has="car seat" has="car window" has=fender has="first gear" has=floorboard has="gasoline engine" has="glove compartment" has=grille has="high gear" has=hood has="luggage compartment" has="rear window" has=reverse has=roof has="running board" has="stabilizer bar" has=sunroof has="tail fin" has="third gear" has=window plain=bag plain=accessory plain=engine plain=door plain=mirror plain=seat plain=gear plain=compartment plain=bar plain=fin core.source="wordnet 3.1"
+@k.parts.inherited.limousine.motor_vehicle k.parts.inherited name=limousine from="motor vehicle" steps=2 has=airbrake has=bodywork has="brake system" has=cab has="car wheel" has=chassis has="cooling system" has="drive line" has="electrical system" has="fuel system" has=gearshift has="hand brake" has="internal-combustion engine" has=odometer has=pedal has="power brake" has="second gear" has=speedometer has=suspension has=windshield has="windshield wiper" plain=wheel plain=brake plain=gear core.source="wordnet 3.1"
+@k.parts.whole.lion k.parts.whole name=lion gloss="large gregarious predatory feline of Africa and India having a tawny coat with a shaggy mane in the male" has=mane core.source="wordnet 3.1"
+@k.parts.whole.loaf k.parts.whole name=loaf gloss="a shaped mass of baked bread that is usually sliced before eating" has=heel core.source="wordnet 3.1"
+@k.parts.whole.lobster k.parts.whole name=lobster gloss="flesh of a lobster" has=coral has=tomalley core.source="wordnet 3.1"
+@k.parts.whole.locomotive k.parts.whole name=locomotive gloss="a wheeled vehicle consisting of a self-propelled engine that is used to draw trains along railway tracks" has=fender has=footplate core.source="wordnet 3.1"
+@k.parts.inherited.locomotive.wheeled_vehicle k.parts.inherited name=locomotive from="wheeled vehicle" steps=2 has=axle has=brake has=splasher has=wheel core.source="wordnet 3.1"
+@k.parts.inherited.lorry.wagon k.parts.inherited name=lorry from=wagon steps=1 has=axletree has="wagon wheel" plain=wheel core.source="wordnet 3.1"
+@k.parts.inherited.lorry.wheeled_vehicle k.parts.inherited name=lorry from="wheeled vehicle" steps=2 has=axle has=brake has=splasher has=wheel core.source="wordnet 3.1"
+@k.parts.inherited.lotus.water_lily k.parts.inherited name=lotus from="water lily" steps=1 has="lily pad" plain=pad core.source="wordnet 3.1"
+@k.parts.inherited.loudspeaker.electro-acoustic_transducer k.parts.inherited name=loudspeaker from="electro-acoustic transducer" steps=1 has=diaphragm core.source="wordnet 3.1"
+@k.parts.whole.luggage k.parts.whole name=luggage gloss="cases used to carry belongings when traveling" has=handle has=strap core.source="wordnet 3.1"

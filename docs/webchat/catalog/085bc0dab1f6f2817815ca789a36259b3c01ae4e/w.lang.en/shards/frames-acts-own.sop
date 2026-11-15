@@ -1,0 +1,28 @@
+# w.lang.en/shards/frames-acts-own: the frames of the act `own`: a sentence that a world reads with its own reader ("Make a diagram shaped like a house"); they name no act of k.actions, and `after` places them among the frames of the set acts
+# sources: psys2 447a5f9a (PSys2 src/lang/en.local.mjs: frames and joiners written after the import of the hand-over, in the format of this world; the project's own data)
+# license: CC0-1.0
+# script: tools/import/psys2-lang-en.mjs
+
+@w.lang.en.frame.acts.read.own w.lang.en.frame name=acts.read.own act=own set=acts priority=1 needs=reader role=rest after=acts.place.layout.all example="Which shape is the largest?" core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.own.1 w.lang.en.part frame=acts.read.own at=1 is=role role=rest takes=rest core.source="psys2 447a5f9a"
+@w.lang.en.frame.acts.read.frame w.lang.en.frame name=acts.read.frame act=own set=acts priority=30 needs=reader role=pre role=post after=acts.place.layout.all example="Make a diagram shaped like a house." core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.1 w.lang.en.part frame=acts.read.frame at=1 is=role role=pre takes=words core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.2 w.lang.en.part frame=acts.read.frame at=2 is=word word="diagram" core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.3 w.lang.en.part frame=acts.read.frame at=3 is=role role=post takes=rest core.source="psys2 447a5f9a"
+@w.lang.en.frame.acts.read.frame.end w.lang.en.frame name=acts.read.frame.end act=own set=acts priority=30 needs=reader role=pre after=acts.place.layout.all example="Add a star to the diagram." core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.end.1 w.lang.en.part frame=acts.read.frame.end at=1 is=role role=pre takes=words core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.end.2 w.lang.en.part frame=acts.read.frame.end at=2 is=word word="diagram" core.source="psys2 447a5f9a"
+@w.lang.en.frame.acts.read.frame.shaped w.lang.en.frame name=acts.read.frame.shaped act=own set=acts priority=30 needs=reader role=pre role=post after=acts.place.layout.all example="Add a box shaped like a guitar." core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.shaped.1 w.lang.en.part frame=acts.read.frame.shaped at=1 is=role role=pre takes=words core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.shaped.2 w.lang.en.part frame=acts.read.frame.shaped at=2 is=word word="chart" word="layout" word="graph" word="box" word="boxes" core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.shaped.3 w.lang.en.part frame=acts.read.frame.shaped at=3 is=word word="shaped" word="laid out" word="arranged" core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.shaped.4 w.lang.en.part frame=acts.read.frame.shaped at=4 is=word word="like" word="as" core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.shaped.5 w.lang.en.part frame=acts.read.frame.shaped at=5 is=role role=post takes=rest core.source="psys2 447a5f9a"
+@w.lang.en.frame.acts.read.frame.form w.lang.en.frame name=acts.read.frame.form act=own set=acts priority=30 needs=reader role=pre role=post after=acts.place.layout.all example="Draw a shape in the form of a house." core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.form.1 w.lang.en.part frame=acts.read.frame.form at=1 is=role role=pre takes=words core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.form.2 w.lang.en.part frame=acts.read.frame.form at=2 is=word word="a" word="an" core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.form.3 w.lang.en.part frame=acts.read.frame.form at=3 is=word word="shape" word="box" core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.form.4 w.lang.en.part frame=acts.read.frame.form at=4 is=word word="in the" core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.form.5 w.lang.en.part frame=acts.read.frame.form at=5 is=word word="shape" word="form" core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.form.6 w.lang.en.part frame=acts.read.frame.form at=6 is=word word="of" core.source="psys2 447a5f9a"
+@w.lang.en.part.acts.read.frame.form.7 w.lang.en.part frame=acts.read.frame.form at=7 is=role role=post takes=rest core.source="psys2 447a5f9a"

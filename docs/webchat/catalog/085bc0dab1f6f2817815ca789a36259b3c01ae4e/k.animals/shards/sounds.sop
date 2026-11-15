@@ -1,0 +1,69 @@
+# k.animals/shards/sounds: the sounds of 32 animals as WordNet's glosses name them ("moo: the sound made by a cow or bull"): one wire per animal with its sounds (the key sound, joined to k.words by word); the wires merge with the animal's other wires. Each wire follows a comment with the glosses it rests on (in brackets the word of the gloss where it names a kind of the animal: hen for chicken). Written by tools/animal-sounds.mjs, which says which glosses count.
+# sources: wordnet 3.1 (Princeton WordNet 3.1, the glosses of noun.event, verb.communication and verb.perception)
+# license: WordNet-3.0
+# script: tools/animal-sounds.mjs
+
+# bee: buzz (noun): sound of rapid vibration
+@k.animals.sound.bee k.animals.animal name=bee sound=buzz core.source="wordnet 3.1"
+# bull: moo (noun): the sound made by a cow or bull
+@k.animals.sound.bull k.animals.animal name=bull sound=moo core.source="wordnet 3.1"
+# cat: caterwaul (noun): the yowling sound made by a cat in heat; meow (noun): the sound made by a cat; purr (noun): a low vibrating sound typical of a contented cat; yowl (verb): utter shrieks, as of cats
+@k.animals.sound.cat k.animals.animal name=cat sound=meow sound=mew sound=purr sound=caterwaul sound=yowl core.source="wordnet 3.1"
+# cicada: chirr (verb): make a vibrant noise, of grasshoppers or cicadas
+@k.animals.sound.cicada k.animals.animal name=cicada sound=chirr core.source="wordnet 3.1"
+# cow: moo (noun): the sound made by a cow or bull
+@k.animals.sound.cow k.animals.animal name=cow sound=moo core.source="wordnet 3.1"
+# cricket: stridulate (verb): make a shrill creaking noise by rubbing together special bodily structures
+@k.animals.sound.cricket k.animals.animal name=cricket sound=stridulate core.source="wordnet 3.1"
+# cuckoo: cuckoo (verb): repeat monotonously, like a cuckoo repeats his call
+@k.animals.sound.cuckoo k.animals.animal name=cuckoo sound=cuckoo core.source="wordnet 3.1"
+# dog: bark (noun): the sound made by a dog; bay (verb): bark with prolonged noises, of dogs; bow-wow (noun): the bark of a dog; howl (noun): the long plaintive cry of a hound or a wolf [hound]; yip (noun): a sharp high-pitched cry (especially by a dog); yelp (verb): bark in a high-pitched tone [puppy]
+@k.animals.sound.dog k.animals.animal name=dog sound=bark sound=yip sound=yelp sound=bow-wow sound=bay sound=howl sound=yap core.source="wordnet 3.1"
+# donkey: hee-haw (verb): braying characteristic of donkeys
+@k.animals.sound.donkey k.animals.animal name=donkey sound=bray sound=hee-haw core.source="wordnet 3.1"
+# duck: quack (noun): the harsh sound of a duck
+@k.animals.sound.duck k.animals.animal name=duck sound=quack core.source="wordnet 3.1"
+# elephant: trumpet (verb): utter in trumpet-like sounds
+@k.animals.sound.elephant k.animals.animal name=elephant sound=trumpet core.source="wordnet 3.1"
+# frog: croak (noun): a harsh hoarse utterance (as of a frog)
+@k.animals.sound.frog k.animals.animal name=frog sound=croak core.source="wordnet 3.1"
+# goat: bleat (noun): the sound of sheep or goats
+@k.animals.sound.goat k.animals.animal name=goat sound=bleat core.source="wordnet 3.1"
+# goose: honk (noun): the cry of a goose; gaggle (verb): make a noise characteristic of a goose
+@k.animals.sound.goose k.animals.animal name=goose sound=honk sound=gaggle core.source="wordnet 3.1"
+# grasshopper: chirr (verb): make a vibrant noise, of grasshoppers or cicadas; stridulate (verb): make a shrill creaking noise by rubbing together special bodily structures
+@k.animals.sound.grasshopper k.animals.animal name=grasshopper sound=chirr sound=stridulate core.source="wordnet 3.1"
+# hen: cackle (noun): the sound made by a hen after laying an egg; cluck (noun): the sound made by a hen (as in calling her chicks)
+@k.animals.sound.hen k.animals.animal name=hen sound=cluck sound=cackle core.source="wordnet 3.1"
+# horse: neigh (noun): the characteristic sounds made by a horse
+@k.animals.sound.horse k.animals.animal name=horse sound=neigh sound=whinny core.source="wordnet 3.1"
+# lion: roar (noun): the sound made by a lion
+@k.animals.sound.lion k.animals.animal name=lion sound=roar core.source="wordnet 3.1"
+# magpie: chatter (verb): make noise as if chattering away
+@k.animals.sound.magpie k.animals.animal name=magpie sound=chatter core.source="wordnet 3.1"
+# monkey: chatter (noun): the high-pitched continuing noise made by animals (birds or monkeys)
+@k.animals.sound.monkey k.animals.animal name=monkey sound=chatter core.source="wordnet 3.1"
+# mouse: patter (noun): a quick succession of light rapid sounds; chirk (verb): make a shrill creaking, squeaking, or noise, as of a door, mouse, or bird
+@k.animals.sound.mouse k.animals.animal name=mouse sound=patter sound=chirk core.source="wordnet 3.1"
+# nightingale: sing (verb): to make melodious sounds
+@k.animals.sound.nightingale k.animals.animal name=nightingale sound=sing core.source="wordnet 3.1"
+# owl: hoot (noun): a loud raucous cry (as of an owl)
+@k.animals.sound.owl k.animals.animal name=owl sound=hoot core.source="wordnet 3.1"
+# pig: squeal (verb): utter a high-pitched cry, characteristic of pigs
+@k.animals.sound.pig k.animals.animal name=pig sound=squeal sound=oink core.source="wordnet 3.1"
+# pigeon: coo (noun): the sound made by a pigeon
+@k.animals.sound.pigeon k.animals.animal name=pigeon sound=coo core.source="wordnet 3.1"
+# raven: caw (verb): utter a cry, characteristic of crows, rooks, or ravens; croak (verb): utter a hoarse sound, like a raven
+@k.animals.sound.raven k.animals.animal name=raven sound=croak sound=caw core.source="wordnet 3.1"
+# rooster: crow (noun): the cry of a cock [cock]
+@k.animals.sound.rooster k.animals.animal name=rooster sound=crow core.source="wordnet 3.1"
+# seagull: mew (verb): utter a high-pitched cry, as of seagulls
+@k.animals.sound.seagull k.animals.animal name=seagull sound=mew core.source="wordnet 3.1"
+# sheep: baa (noun): the cry made by sheep; bleat (noun): the sound of sheep or goats
+@k.animals.sound.sheep k.animals.animal name=sheep sound=baa sound=bleat core.source="wordnet 3.1"
+# toad: croak (noun): a harsh hoarse utterance (as of a frog) [frog]
+@k.animals.sound.toad k.animals.animal name=toad sound=croak core.source="wordnet 3.1"
+# turkey: gobble (verb): make a gurgling sound, characteristic of turkeys
+@k.animals.sound.turkey k.animals.animal name=turkey sound=gobble core.source="wordnet 3.1"
+# wolf: howl (noun): the long plaintive cry of a hound or a wolf
+@k.animals.sound.wolf k.animals.animal name=wolf sound=howl core.source="wordnet 3.1"

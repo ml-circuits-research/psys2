@@ -1,0 +1,33 @@
+# k.time/shards/clock-words: how the clock names a time by an hour (o'clock, half past, quarter to ...), and the spans
+# said in clock words (half an hour, a quarter of an hour, an hour and a half) (block 09:20 K7).
+# sources: hand-core 1 (hand-written in this repository; everyday English telling of the time)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.time.clock_phrase.o_clock k.time.clock_phrase name="o'clock" minutes=0 core.source="hand-core 1"
+@k.time.clock_phrase.five_past k.time.clock_phrase name="five past" minutes=5 core.source="hand-core 1"
+@k.time.clock_phrase.ten_past k.time.clock_phrase name="ten past" minutes=10 core.source="hand-core 1"
+@k.time.clock_phrase.quarter_past k.time.clock_phrase name="quarter past" minutes=15 core.source="hand-core 1"
+@k.time.clock_phrase.a_quarter_past k.time.clock_phrase name="a quarter past" minutes=15 core.source="hand-core 1"
+@k.time.clock_phrase.twenty_past k.time.clock_phrase name="twenty past" minutes=20 core.source="hand-core 1"
+@k.time.clock_phrase.twenty_five_past k.time.clock_phrase name="twenty-five past" minutes=25 core.source="hand-core 1"
+@k.time.clock_phrase.half_past k.time.clock_phrase name="half past" minutes=30 core.source="hand-core 1"
+@k.time.clock_phrase.twenty_five_to k.time.clock_phrase name="twenty-five to" minutes=-25 core.source="hand-core 1"
+@k.time.clock_phrase.twenty_to k.time.clock_phrase name="twenty to" minutes=-20 core.source="hand-core 1"
+@k.time.clock_phrase.quarter_to k.time.clock_phrase name="quarter to" minutes=-15 core.source="hand-core 1"
+@k.time.clock_phrase.a_quarter_to k.time.clock_phrase name="a quarter to" minutes=-15 core.source="hand-core 1"
+@k.time.clock_phrase.ten_to k.time.clock_phrase name="ten to" minutes=-10 core.source="hand-core 1"
+@k.time.clock_phrase.five_to k.time.clock_phrase name="five to" minutes=-5 core.source="hand-core 1"
+
+# Spans said in clock words (one fact each, in minutes, as k.time.duration says a span in a unit).
+@k.time.duration.half_an_hour k.time.duration name="half an hour" count=30 unit=minute core.source="hand-core 1"
+@k.time.duration.half_hour k.time.duration name="half hour" count=30 unit=minute core.source="hand-core 1"
+@k.time.duration.a_quarter_of_an_hour k.time.duration name="a quarter of an hour" count=15 unit=minute core.source="hand-core 1"
+@k.time.duration.quarter_of_an_hour k.time.duration name="quarter of an hour" count=15 unit=minute core.source="hand-core 1"
+@k.time.duration.quarter_hour k.time.duration name="quarter hour" count=15 unit=minute core.source="hand-core 1"
+@k.time.duration.an_hour_and_a_half k.time.duration name="an hour and a half" count=90 unit=minute core.source="hand-core 1"
+@k.time.duration.hour_and_a_half k.time.duration name="hour and a half" count=90 unit=minute core.source="hand-core 1"
+
+# Noon and midnight are hours of the clock (shard clock, with midday, twelve noon, 12 am ...); two more names.
+@k.time.word.hour.noon.clock core.word text="12 noon" means=noon of=k.time.hour.name core.source="hand-core 1"
+@k.time.word.hour.midnight.clock core.word text="12 midnight" text="twelve midnight" means=midnight of=k.time.hour.name core.source="hand-core 1"

@@ -1,0 +1,9 @@
+# k.words/shards/o: senses of the words from "o" to "o" (first letters "o").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.o.noun.1 k.words.sense word=O pos=noun n=1 supersense=noun.substance gloss="a nonmetallic bivalent element that is normally a colorless odorless tasteless nonflammable diatomic gas; constitutes 21 percent of the atmosphere by volume; the most abundant element in the earth's crust" synonym=oxygen synonym="atomic number 8" is_a="chemical element" is_a=gas kind_of="chemical element" kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.o.noun.2 k.words.sense word=O pos=noun n=2 supersense=noun.communication gloss="the 15th letter of the Roman alphabet" synonym=o is_a=letter kind_of=letter kind_of=character kind_of="written symbol" kind_of=symbol kind_of=signal kind_of=communication kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.o.noun.3 k.words.sense word=O pos=noun n=3 supersense=noun.body gloss="the blood group whose red cells carry neither the A nor B antigens" synonym="type O" synonym="group O" is_a="blood group" kind_of="blood group" kind_of=blood kind_of="liquid body substance" kind_of="body substance" kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.o.spelling.O core.word text=o means=O of=k.words.sense.word core.source="wordnet 3.1"

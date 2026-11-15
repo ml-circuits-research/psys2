@@ -1,0 +1,25 @@
+# k.words/shards/od: senses of the words from "od" to "odyssey" (first letters "od").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.od.noun.1 k.words.sense word=OD pos=noun n=1 supersense=noun.communication gloss="a doctor's degree in optometry" synonym="Doctor of Optometry" is_a="doctor's degree" core.source="wordnet 3.1"
+@k.words.od.noun.2 k.words.sense word=OD pos=noun n=2 supersense=noun.body gloss="the right eye" synonym="oculus dexter" is_a=eye core.source="wordnet 3.1"
+@k.words.od.spelling.OD core.word text=od means=OD of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.odd.adjective.1 k.words.sense word=odd pos=adjective n=1 supersense=adj.all gloss="not divisible by two" synonym=uneven opposite=even core.source="wordnet 3.1"
+@k.words.odd.adjective.2 k.words.sense word=odd pos=adjective n=2 supersense=adj.all gloss="not easily explained" near_opposite=usual core.source="wordnet 3.1"
+@k.words.odd.adjective.3 k.words.sense word=odd pos=adjective n=3 supersense=adj.all gloss="an indefinite quantity more than that specified" near_opposite=exact core.source="wordnet 3.1"
+@k.words.odds.noun.1 k.words.sense word=odds pos=noun n=1 supersense=noun.attribute gloss="the likelihood of a thing occurring rather than not occurring" is_a=likelihood core.source="wordnet 3.1"
+@k.words.odds.noun.2 k.words.sense word=odds pos=noun n=2 supersense=noun.relation gloss="the ratio by which one better's wager is greater than that of another" synonym="betting odds" is_a=ratio core.source="wordnet 3.1"
+@k.words.odessa.noun.1 k.words.sense word=Odessa pos=noun n=1 supersense=noun.location gloss="a port city of south central Ukraine on an arm of the Black Sea" synonym=Odesa instance_of=city instance_of=port part_of=Ukraine core.source="wordnet 3.1"
+@k.words.odessa.noun.2 k.words.sense word=Odessa pos=noun n=2 supersense=noun.location gloss="a city in western Texas" instance_of=city part_of=Texas core.source="wordnet 3.1"
+@k.words.odessa.spelling.Odessa core.word text=odessa means=Odessa of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.odin.noun.1 k.words.sense word=Odin pos=noun n=1 supersense=noun.person gloss="(Norse mythology) ruler of the Aesir; supreme god of war and poetry and knowledge and wisdom (for which he gave an eye) and husband of Frigg; identified with the Teutonic Wotan" instance_of="Norse deity" core.source="wordnet 3.1"
+@k.words.odin.spelling.Odin core.word text=odin means=Odin of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.odo.noun.1 k.words.sense word=Odo pos=noun n=1 supersense=noun.person gloss="French pope from 1088 to 1099 whose sermons called for the First Crusade (1042-1099)" synonym="Urban II" synonym="Odo of Lagery" synonym=Otho synonym="Otho of Lagery" instance_of=pope core.source="wordnet 3.1"
+@k.words.odo.spelling.Odo core.word text=odo means=Odo of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.odor.noun.1 k.words.sense word=odor pos=noun n=1 supersense=noun.attribute gloss="any property detected by the olfactory system" synonym="olfactory property" synonym=smell synonym=aroma synonym=odour synonym=scent is_a=property core.source="wordnet 3.1"
+@k.words.odor.noun.2 k.words.sense word=odor pos=noun n=2 supersense=noun.cognition gloss="the sensation that results when olfactory receptors in the nose are stimulated by particular chemicals in gaseous form" synonym=smell synonym=odour synonym="olfactory sensation" synonym="olfactory perception" is_a=sensation core.source="wordnet 3.1"
+@k.words.odyssey.noun.1 k.words.sense word=odyssey pos=noun n=1 supersense=noun.act gloss="a long wandering and eventful journey" is_a=journey core.source="wordnet 3.1"
+@k.words.odyssey.noun.2 k.words.sense word=Odyssey pos=noun n=2 supersense=noun.communication gloss="a Greek epic poem (attributed to Homer) describing the journey of Odysseus after the fall of Troy" instance_of="epic poem" core.source="wordnet 3.1"
+@k.words.odyssey.spelling.Odyssey core.word text=odyssey means=Odyssey of=k.words.sense.word core.source="wordnet 3.1"

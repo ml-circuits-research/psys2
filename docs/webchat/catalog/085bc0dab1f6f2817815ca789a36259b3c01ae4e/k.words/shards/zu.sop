@@ -1,0 +1,13 @@
+# k.words/shards/zu: senses of the words from "zucchini" to "zurich" (first letters "zu").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.zucchini.noun.1 k.words.sense word=zucchini pos=noun n=1 supersense=noun.plant gloss="marrow squash plant whose fruit are eaten when small" synonym=courgette is_a=marrow kind_of=marrow kind_of="summer squash" kind_of=squash kind_of=vine kind_of="vascular plant" kind_of=plant kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.zucchini.noun.2 k.words.sense word=zucchini pos=noun n=2 supersense=noun.food gloss="small cucumber-shaped vegetable marrow; typically dark green" synonym=courgette is_a="summer squash" part_of=zucchini kind_of="summer squash" kind_of=squash kind_of=vegetable kind_of=produce kind_of=food kind_of=solid kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.zulu.noun.1 k.words.sense word=Zulu pos=noun n=1 supersense=noun.person gloss="a member of the tall Negroid people of eastern South Africa; some live in KwaZulu-Natal under the traditional clan system but many now work in the cities" is_a=African core.source="wordnet 3.1"
+@k.words.zulu.noun.2 k.words.sense word=Zulu pos=noun n=2 supersense=noun.group gloss="a community of Negroid people in eastern South Africa" instance_of=community core.source="wordnet 3.1"
+@k.words.zulu.noun.3 k.words.sense word=Zulu pos=noun n=3 supersense=noun.communication gloss="a Bantu language of considerable literary importance in southeastern Africa" is_a=Nguni core.source="wordnet 3.1"
+@k.words.zulu.spelling.Zulu core.word text=zulu means=Zulu of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.zurich.noun.1 k.words.sense word=Zurich pos=noun n=1 supersense=noun.location gloss="the largest city in Switzerland; located in the northern part of the country" instance_of=city part_of=Switzerland core.source="wordnet 3.1"
+@k.words.zurich.spelling.Zurich core.word text=zurich means=Zurich of=k.words.sense.word core.source="wordnet 3.1"

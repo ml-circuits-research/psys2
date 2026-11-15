@@ -1,0 +1,7 @@
+# k.geo/shards/psys2-cities-antarctica: Antarctica: 1 more cities with country, population and place, that the continent shard does not have.
+# sources: geonames all-the-cities-3.1.0 (GeoNames, CC-BY-4.0, https://www.geonames.org), as carried by the PSys2 world geo.map
+# sources: psys2-worlds 6b63b2ba (the selection: the largest cities and the capitals)
+# license: CC-BY-4.0
+# script: tools/import/psys2.mjs
+
+@k.geo.psys2.city.TF.Port-aux-Francais k.geo.city name=Port-aux-Français country="French Southern and Antarctic Lands" population=45 lat=-49.35 lon=70.22 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"

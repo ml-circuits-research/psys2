@@ -1,0 +1,7 @@
+# k.words/shards/pd: senses of the words from "pd" to "pd" (first letters "pd").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.pd.noun.1 k.words.sense word=Pd pos=noun n=1 supersense=noun.substance gloss="a silver-white metallic element of the platinum group that resembles platinum; occurs in some copper and nickel ores; does not tarnish at ordinary temperatures and is used (alloyed with gold) in jewelry" synonym=palladium synonym="atomic number 46" is_a="metallic element" core.source="wordnet 3.1"
+@k.words.pd.spelling.Pd core.word text=pd means=Pd of=k.words.sense.word core.source="wordnet 3.1"

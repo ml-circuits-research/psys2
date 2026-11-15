@@ -1,0 +1,7 @@
+# k.words/shards/ik: senses of the words from "ike" to "ike" (first letters "ik").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ike.noun.1 k.words.sense word=Ike pos=noun n=1 supersense=noun.person gloss="United States general who supervised the invasion of Normandy and the defeat of Nazi Germany; 34th President of the United States (1890-1961)" synonym=Eisenhower synonym="Dwight Eisenhower" synonym="Dwight D. Eisenhower" synonym="Dwight David Eisenhower" synonym="President Eisenhower" instance_of=general instance_of="President of the United States" core.source="wordnet 3.1"
+@k.words.ike.spelling.Ike core.word text=ike means=Ike of=k.words.sense.word core.source="wordnet 3.1"

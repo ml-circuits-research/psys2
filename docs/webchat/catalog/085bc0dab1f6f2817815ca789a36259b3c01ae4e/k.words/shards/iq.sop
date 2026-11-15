@@ -1,0 +1,7 @@
+# k.words/shards/iq: senses of the words from "iq" to "iq" (first letters "iq").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.iq.noun.1 k.words.sense word=IQ pos=noun n=1 supersense=noun.relation gloss="a measure of a person's intelligence as indicated by an intelligence test; the ratio of a person's mental age to their chronological age (multiplied by 100)" synonym="intelligence quotient" synonym=I.Q. is_a=ratio core.source="wordnet 3.1"
+@k.words.iq.spelling.IQ core.word text=iq means=IQ of=k.words.sense.word core.source="wordnet 3.1"

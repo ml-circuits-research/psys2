@@ -1,0 +1,23 @@
+# w.lang.en/shards/hand-morphology: plurals the rules and WordNet's exception list do not give: person and people, and
+# nouns whose plural is the singular (sheep, deer, fish), and woman and the -man words WordNet forms by a rule of its own.
+# sources: hand-core 1 (English, written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.en.irregular.person w.lang.en.irregular singular=person plural=people core.source="hand-core 1"
+@w.lang.en.irregular.sheep w.lang.en.irregular singular=sheep plural=sheep core.source="hand-core 1"
+@w.lang.en.irregular.deer w.lang.en.irregular singular=deer plural=deer core.source="hand-core 1"
+@w.lang.en.irregular.fish w.lang.en.irregular singular=fish plural=fish core.source="hand-core 1"
+@w.lang.en.irregular.moose w.lang.en.irregular singular=moose plural=moose core.source="hand-core 1"
+@w.lang.en.irregular.salmon w.lang.en.irregular singular=salmon plural=salmon core.source="hand-core 1"
+@w.lang.en.irregular.trout w.lang.en.irregular singular=trout plural=trout core.source="hand-core 1"
+@w.lang.en.irregular.bison w.lang.en.irregular singular=bison plural=bison core.source="hand-core 1"
+@w.lang.en.irregular.aircraft w.lang.en.irregular singular=aircraft plural=aircraft core.source="hand-core 1"
+@w.lang.en.irregular.series w.lang.en.irregular singular=series plural=series core.source="hand-core 1"
+@w.lang.en.irregular.species w.lang.en.irregular singular=species plural=species core.source="hand-core 1"
+@w.lang.en.irregular.woman w.lang.en.irregular singular=woman plural=women core.source="hand-core 1"
+@w.lang.en.irregular.fireman w.lang.en.irregular singular=fireman plural=firemen core.source="hand-core 1"
+@w.lang.en.irregular.policeman w.lang.en.irregular singular=policeman plural=policemen core.source="hand-core 1"
+@w.lang.en.irregular.postman w.lang.en.irregular singular=postman plural=postmen core.source="hand-core 1"
+@w.lang.en.irregular.fisherman w.lang.en.irregular singular=fisherman plural=fishermen core.source="hand-core 1"
+@w.lang.en.irregular.snowman w.lang.en.irregular singular=snowman plural=snowmen core.source="hand-core 1"

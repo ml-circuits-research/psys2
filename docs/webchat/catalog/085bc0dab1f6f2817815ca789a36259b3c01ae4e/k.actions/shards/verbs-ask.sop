@@ -1,0 +1,29 @@
+# k.actions/shards/verbs-ask: 19 verbs and phrasal verbs that mean the act "ask" (ask, inquire, enquire, wonder, query, question, tell, explain ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 19 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 0 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.ask.ask k.actions.verb text=ask act=ask sense=2 sense=4 gloss="direct or put; seek an answer to" object=topic named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.inquire k.actions.verb text=inquire act=ask sense=1 gloss="address a question to and expect an answer from" object=topic named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.enquire k.actions.verb text=enquire act=ask sense=1 gloss="address a question to and expect an answer from" object=topic named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.wonder k.actions.verb text=wonder act=ask sense=1 gloss="have a wish or desire to know something" object=topic named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.query k.actions.verb text=query act=ask sense=1 gloss="pose a question" object=topic named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.question k.actions.verb text=question act=ask sense=3 gloss="pose a question" object=topic named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.tell k.actions.verb text=tell act=ask sense=2 gloss="let something be known" object=topic named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.explain k.actions.verb text=explain act=ask sense=1 gloss="make plain and comprehensible" object=topic named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.describe k.actions.verb text=describe act=ask sense=1 gloss="give a description of" object=topic named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.find_out k.actions.verb text="find out" act=ask sense=1 gloss="establish after a calculation, investigation, experiment, survey, or study" object=topic named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.look_up k.actions.verb text="look up" act=ask sense=1 gloss="seek information from" object=topic separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.list k.actions.verb text=list act=ask sense=1 gloss="give or make a list of; name individually; give the names of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.count k.actions.verb text=count act=ask sense=1 gloss="determine the number or amount of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.name k.actions.verb text=name act=ask sense=2 gloss="give the name or identifying characteristics of; refer to by name or some other identifying characteristic property" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.identify k.actions.verb text=identify act=ask sense=2 gloss="give the name or identifying characteristics of; refer to by name or some other identifying characteristic property" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.find k.actions.verb text=find act=ask sense=3 gloss="come upon after searching; find the location of something that was missed or lost" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.look_for k.actions.verb text="look for" act=ask sense=1 gloss="try to locate or discover, or try to establish the existence of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.search k.actions.verb text=search act=ask sense=1 gloss="try to locate or discover, or try to establish the existence of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.ask.compare k.actions.verb text=compare act=ask sense=1 gloss="examine and note the similarities or differences of" object=thing named=model core.source="wordnet 3.1"
+
+# Markings: after this verb, the word marks the role.
+@k.actions.marking.ask.compare.with k.actions.marking verb=compare act=ask marker=with role=other core.source="hand-core 1"
+@k.actions.marking.ask.compare.to k.actions.marking verb=compare act=ask marker=to role=other core.source="hand-core 1"

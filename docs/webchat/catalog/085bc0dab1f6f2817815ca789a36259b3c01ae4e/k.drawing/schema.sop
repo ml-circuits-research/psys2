@@ -1,0 +1,49 @@
+# k.drawing: the drawing primitives that k.objects and k.faces share (Q34 item 1): a part is a primitive shape with
+# a box in the frame of its drawing (0 to 100 on both axes, x to the right, y downwards), a draw order, colours and a
+# direction; a point is one corner of a line or a polygon, in drawing order. The worlds that draw (k.objects,
+# k.faces) import this module and extend its two types with what only they say (the object or the slot a part
+# belongs to, its relations, its tint), so that one renderer reads both and a slot is declared once.
+# sources: hand-core 1 (hand-written in this repository; the slots were those of k.objects.part and k.faces.part)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.drawing core.module name=k.drawing version=1 exports=part exports=point core.source="hand-core 1"
+
+# A part: `shape` one of the primitive shapes, `x y w h` its box, `z` its draw order (lower first), `colour` its
+# colours by name (the basic colours of k.values: `k.values.coloured`; required here, so the enum is said again and a
+# test keeps it equal), `rgb` its exact colour ("#RRGGBB"), `pointing` and `opens` its direction.
+@k.drawing.part core.type of=k.drawing.part shared=true core.source="hand-core 1"
+@k.drawing.part.shape core.slot of=k.drawing.part key=shape required=true enum=rectangle enum=square enum=circle enum=oval enum=triangle enum=line enum=arc enum=polygon kind=atom type=k.shapes.shape by=name core.source="hand-core 1"
+@k.drawing.part.x core.slot of=k.drawing.part key=x required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.drawing.part.y core.slot of=k.drawing.part key=y required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.drawing.part.w core.slot of=k.drawing.part key=w required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.drawing.part.h core.slot of=k.drawing.part key=h required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.drawing.part.z core.slot of=k.drawing.part key=z required=true kind=integer core.source="hand-core 1"
+@k.drawing.part.colour core.slot of=k.drawing.part key=colour required=true many=true enum=black enum=white enum=grey enum=red enum=orange enum=yellow enum=green enum=blue enum=purple enum=pink enum=brown kind=atom type=k.colours.basic by=name core.source="hand-core 1"
+@k.drawing.part.rgb core.slot of=k.drawing.part key=rgb kind=string core.source="hand-core 1"
+@k.drawing.part.pointing core.slot of=k.drawing.part key=pointing enum=up enum=down enum=left enum=right kind=atom type=k.values.direction by=name core.source="hand-core 1"
+@k.drawing.part.opens core.slot of=k.drawing.part key=opens enum=up enum=down enum=left enum=right kind=atom type=k.values.direction by=name core.source="hand-core 1"
+
+# A point of a line or polygon part: `n` its place in drawing order, `x y` where it is. The world that extends the
+# type says which part it belongs to (`part`, a reference to its own part type).
+@k.drawing.point core.type of=k.drawing.point shared=true core.source="hand-core 1"
+@k.drawing.point.n core.slot of=k.drawing.point key=n id=true required=true kind=integer min=1 core.source="hand-core 1"
+@k.drawing.point.x core.slot of=k.drawing.point key=x required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.drawing.point.y core.slot of=k.drawing.point key=y required=true kind=number min=0 max=100 core.source="hand-core 1"
+
+@k.drawing.word.part core.word text=part text=parts text=shape means=k.drawing.part core.source="hand-core 1"
+@k.drawing.word.point core.word text=point text=points text=corner means=k.drawing.point core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.drawing.word.key.part.shape core.word text=shape means=k.drawing.part.shape core.source="hand-core 1"
+@k.drawing.word.key.part.x core.word text=x means=k.drawing.part.x core.source="hand-core 1"
+@k.drawing.word.key.part.y core.word text=y means=k.drawing.part.y core.source="hand-core 1"
+@k.drawing.word.key.part.w core.word text=w means=k.drawing.part.w core.source="hand-core 1"
+@k.drawing.word.key.part.h core.word text=h means=k.drawing.part.h core.source="hand-core 1"
+@k.drawing.word.key.part.z core.word text=z means=k.drawing.part.z core.source="hand-core 1"
+@k.drawing.word.key.part.colour core.word text=colour means=k.drawing.part.colour core.source="hand-core 1"
+@k.drawing.word.key.part.rgb core.word text=rgb means=k.drawing.part.rgb core.source="hand-core 1"
+@k.drawing.word.key.part.pointing core.word text=pointing means=k.drawing.part.pointing core.source="hand-core 1"
+@k.drawing.word.key.part.opens core.word text=opens means=k.drawing.part.opens core.source="hand-core 1"
+@k.drawing.word.key.point.x core.word text=x means=k.drawing.point.x core.source="hand-core 1"
+@k.drawing.word.key.point.y core.word text=y means=k.drawing.point.y core.source="hand-core 1"

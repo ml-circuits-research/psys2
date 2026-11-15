@@ -1,0 +1,97 @@
+# w.lang.en/shards/templates-acts: generation templates of the acts of k.actions (blocks 14:15 item 1 and 17:05): one
+# imperative sentence (a question for ask) per act and argument shape, in the library's template notation, each the
+# realisation side of a frame of this world and read back by it to the same act, mode and roles (tests/w.lang.en.test.mjs);
+# and what realising them needs: the form of the article (a, an) by the sound of the next word.
+# sources: hand-core 1 (written in this repository from the frames' examples and the roles of k.actions; the words
+#   whose first letter misleads about their first sound are common English spelling knowledge, own choice of list)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# ---- the article: a before a consonant sound, an before a vowel sound ----
+@w.lang.en.det.a.sound w.lang.en.det text=a kind=article before=consonant core.source="hand-core 1"
+@w.lang.en.det.an.sound w.lang.en.det text=an kind=article before=vowel core.source="hand-core 1"
+@w.lang.en.onset.hour w.lang.en.onset begins=hour sound=vowel core.source="hand-core 1"
+@w.lang.en.onset.honest w.lang.en.onset begins=honest sound=vowel core.source="hand-core 1"
+@w.lang.en.onset.honour w.lang.en.onset begins=honour sound=vowel core.source="hand-core 1"
+@w.lang.en.onset.honor w.lang.en.onset begins=honor sound=vowel core.source="hand-core 1"
+@w.lang.en.onset.heir w.lang.en.onset begins=heir sound=vowel core.source="hand-core 1"
+@w.lang.en.onset.uni w.lang.en.onset begins=uni sound=consonant core.source="hand-core 1"
+@w.lang.en.onset.unim w.lang.en.onset begins=unim sound=vowel core.source="hand-core 1"
+@w.lang.en.onset.unin w.lang.en.onset begins=unin sound=vowel core.source="hand-core 1"
+@w.lang.en.onset.unid w.lang.en.onset begins=unid sound=vowel core.source="hand-core 1"
+@w.lang.en.onset.use w.lang.en.onset begins=use sound=consonant core.source="hand-core 1"
+@w.lang.en.onset.usu w.lang.en.onset begins=usu sound=consonant core.source="hand-core 1"
+@w.lang.en.onset.uten w.lang.en.onset begins=uten sound=consonant core.source="hand-core 1"
+@w.lang.en.onset.uku w.lang.en.onset begins=uku sound=consonant core.source="hand-core 1"
+@w.lang.en.onset.uran w.lang.en.onset begins=uran sound=consonant core.source="hand-core 1"
+@w.lang.en.onset.ufo w.lang.en.onset begins=ufo sound=consonant core.source="hand-core 1"
+@w.lang.en.onset.eu w.lang.en.onset begins=eu sound=consonant core.source="hand-core 1"
+@w.lang.en.onset.ewe w.lang.en.onset begins=ewe sound=consonant core.source="hand-core 1"
+@w.lang.en.onset.one w.lang.en.onset begins=one sound=consonant core.source="hand-core 1"
+@w.lang.en.onset.once w.lang.en.onset begins=once sound=consonant core.source="hand-core 1"
+
+# ---- make ----
+@w.lang.en.template.make.kind w.lang.en.template name=make.kind act=make shape=kind role=kind frame=acts.make text="add a {kind}." example="Add a house." core.source="hand-core 1"
+@w.lang.en.template.make.number w.lang.en.template name=make.number act=make shape=kind.number role=number role=kind frame=acts.make.n text="add {number} {kind:num=pl}." example="Add 3 tables." core.source="hand-core 1"
+@w.lang.en.template.make.value w.lang.en.template name=make.value act=make shape=kind.value role=value role=kind frame=acts.make text="add a {value} {kind}." example="Add a red house." core.source="hand-core 1"
+@w.lang.en.template.make.number.value w.lang.en.template name=make.number.value act=make shape=kind.number.value role=number role=value role=kind frame=acts.make.n text="add {number} {value} {kind:num=pl}." example="Add 3 red tables." core.source="hand-core 1"
+@w.lang.en.template.make.place w.lang.en.template name=make.place act=make shape=kind.place role=kind role=place frame=acts.make.place needs=in text="add a {kind} {place}." example="Add a star next to the tree." core.source="hand-core 1"
+@w.lang.en.template.make.name w.lang.en.template name=make.name act=make shape=kind.value.name role=kind role=value attribute=name frame=acts.make.name needs=named text="add a {kind} called {value}." example="Add a guest called Ann." core.source="hand-core 1"
+@w.lang.en.template.make.name.place w.lang.en.template name=make.name.place act=make shape=kind.place.value.name role=kind role=value role=place attribute=name frame=acts.make.name.place needs=in text="add a {kind} called {value} {place}." example="Add a guest called Ann at table 1." core.source="hand-core 1"
+@w.lang.en.template.make.topic.criterion w.lang.en.template name=make.topic.criterion act=make shape=kind.topic.criterion role=kind role=topic role=criterion frame=acts.make.diagram.order text="make a {kind} of {topic} by {criterion}." example="Make a timeline of the planets by distance." core.source="hand-core 1"
+
+# ---- remove ----
+@w.lang.en.template.remove.thing w.lang.en.template name=remove.thing act=remove shape=thing role=thing frame=acts.remove text="remove {thing}." example="Remove the house." core.source="hand-core 1"
+@w.lang.en.template.remove.source w.lang.en.template name=remove.source act=remove shape=thing.source role=thing role=source frame=acts.remove.place needs=in text="remove {thing} from {source}." example="Remove Ann from table 1." core.source="hand-core 1"
+
+# ---- change ----
+@w.lang.en.template.change.value w.lang.en.template name=change.value act=change shape=thing.value role=thing role=value frame=acts.change.value needs=values text="make {thing} {value}." example="Make the house red." core.source="hand-core 1"
+@w.lang.en.template.change.attribute w.lang.en.template name=change.attribute act=change shape=thing.attribute.value.set role=attribute role=thing role=value mode=set frame=acts.change.of needs=attrs text="change the {attribute} of {thing} to {value}." example="Change the colour of the house to red." core.source="hand-core 1"
+@w.lang.en.template.change.amount.value w.lang.en.template name=change.amount.value act=change shape=thing.value.amount role=thing role=amount role=value frame=acts.more.change.cmp.more.amt frame=acts.more.change.cmp.less.amt needs=scale text="make {thing} {amount} {value}." example="Make the house a bit bigger." core.source="hand-core 1"
+@w.lang.en.template.change.more w.lang.en.template name=change.more act=change shape=thing.attribute.amount.more role=amount role=attribute role=thing mode=more frame=acts.change.add needs=number text="add {amount} {attribute:num=pl} to {thing}." example="Add 2 seats to table 1." core.source="hand-core 1"
+@w.lang.en.template.change.less w.lang.en.template name=change.less act=change shape=thing.attribute.amount.less role=amount role=attribute role=thing mode=less frame=acts.change.less needs=number text="remove {amount} {attribute:num=pl} from {thing}." example="Remove 2 seats from table 1." core.source="hand-core 1"
+
+# ---- place ----
+@w.lang.en.template.place.place w.lang.en.template name=place.place act=place shape=thing.place role=thing role=place frame=acts.place needs=in text="put {thing} {place}." example="Put the house next to the tree." core.source="hand-core 1"
+@w.lang.en.template.place.direction w.lang.en.template name=place.direction act=place shape=thing.direction role=thing role=direction frame=acts.place.dir needs=dir text="move {thing} {direction}." example="Move the house up." core.source="hand-core 1"
+@w.lang.en.template.place.direction.amount w.lang.en.template name=place.direction.amount act=place shape=thing.direction.amount role=thing role=direction role=amount frame=acts.more.place.dir.amt needs=scale text="move {thing} {direction} {amount}." example="Move the house up a bit." core.source="hand-core 1"
+@w.lang.en.template.place.criterion w.lang.en.template name=place.criterion act=place shape=thing.criterion role=thing role=criterion frame=acts.place.order text="line up {thing} in order of {criterion}." example="Line up the planets in order of size." core.source="hand-core 1"
+
+# ---- connect, group, take apart ----
+@w.lang.en.template.connect.target w.lang.en.template name=connect.target act=connect shape=thing.target role=thing role=target frame=acts.connect text="connect {thing} to {target}." example="Connect table 1 to table 2." core.source="hand-core 1"
+@w.lang.en.template.group.thing w.lang.en.template name=group.thing act=group shape=thing.group role=thing mode=group frame=acts.group text="group {thing}." example="Group the tables." core.source="hand-core 1"
+@w.lang.en.template.group.criterion w.lang.en.template name=group.criterion act=group shape=thing.criterion.group role=thing role=criterion mode=group frame=acts.group.by text="sort {thing} by {criterion}." example="Sort the planets by size." core.source="hand-core 1"
+# block 09:50 item F: the arrangement of make, place and group, an outline of k.layouts ("in the shape of a house")
+@w.lang.en.template.make.kind.arrangement w.lang.en.template name=make.kind.arrangement act=make shape=kind.arrangement role=kind role=arrangement frame=shape.make.of needs=layout text="make a {kind} in the shape of a {arrangement}." example="Make a diagram in the shape of a house." core.source="hand-core 1"
+@w.lang.en.template.place.arrangement w.lang.en.template name=place.arrangement act=place shape=thing.arrangement.layout role=thing role=arrangement mode=layout frame=shape.place.of needs=layout text="arrange {thing} in the shape of a {arrangement}." example="Arrange the boxes in the shape of a star." core.source="hand-core 1"
+@w.lang.en.template.group.arrangement w.lang.en.template name=group.arrangement act=group shape=thing.arrangement role=thing role=arrangement frame=shape.group.of needs=layout text="group {thing} in the shape of a {arrangement}." example="Group the dots in the shape of a heart." core.source="hand-core 1"
+@w.lang.en.template.take_apart.thing w.lang.en.template name=take_apart.thing act="take apart" shape=thing role=thing frame=acts.apart frame=acts.apart.2 text="take {thing} apart." example="Take the tables apart." core.source="hand-core 1"
+
+# ---- pick, deselect ----
+@w.lang.en.template.pick.thing w.lang.en.template name=pick.thing act=pick shape=thing role=thing frame=acts.pick text="select {thing}." example="Select the house." core.source="hand-core 1"
+@w.lang.en.template.deselect.all w.lang.en.template name=deselect.all act=deselect shape=none frame=acts.more.pick.none needs=none text="deselect everything." example="Deselect everything." core.source="hand-core 1"
+
+# ---- ask ----
+@w.lang.en.template.ask.attribute w.lang.en.template name=ask.attribute act=ask shape=topic.thing.what role=topic role=thing mode=what frame=acts.ask.what needs=attrs text="what is the {topic} of {thing}?" example="What is the colour of the house?" core.source="hand-core 1"
+@w.lang.en.template.ask.where w.lang.en.template name=ask.where act=ask shape=thing.where role=thing mode=where frame=acts.ask.where needs=in text="where is {thing}?" example="Where is Ann?" core.source="hand-core 1"
+@w.lang.en.template.ask.count w.lang.en.template name=ask.count act=ask shape=thing.count role=thing mode=count frame=acts.ask.count text="how many {thing:num=pl} are there?" example="How many tables are there?" core.source="hand-core 1"
+@w.lang.en.template.ask.place w.lang.en.template name=ask.place act=ask shape=place.what role=place mode=what frame=acts.ask.at needs=in text="what is {place}?" example="What is at table 1?" core.source="hand-core 1"
+
+# ---- copy, send ----
+@w.lang.en.template.copy.thing w.lang.en.template name=copy.thing act=copy shape=thing role=thing frame=acts.copy text="copy {thing}." example="Copy the house." core.source="hand-core 1"
+@w.lang.en.template.send.thing w.lang.en.template name=send.thing act=send shape=thing role=thing frame=acts.send.bare text="send {thing}." example="Send table 1." core.source="hand-core 1"
+@w.lang.en.template.send.recipient w.lang.en.template name=send.recipient act=send shape=thing.recipient role=thing role=recipient frame=acts.send text="send {thing} to {recipient}." example="Send the house to Ann." core.source="hand-core 1"
+
+# ---- undo, redo, save, load ----
+@w.lang.en.template.undo.last w.lang.en.template name=undo.last act=undo shape=none frame=acts.undo text="undo that." example="Undo that." core.source="hand-core 1"
+@w.lang.en.template.undo.number w.lang.en.template name=undo.number act=undo shape=number role=number frame=acts.text.undo.n needs=textual text="undo the last {number} changes." example="Undo the last 2 changes." core.source="hand-core 1"
+@w.lang.en.template.redo.last w.lang.en.template name=redo.last act=redo shape=none frame=acts.redo text="redo that." example="Redo that." core.source="hand-core 1"
+@w.lang.en.template.save.name w.lang.en.template name=save.name act=save shape=name role=name frame=acts.save text="save it as {name}." example="Save it as lunch." core.source="hand-core 1"
+@w.lang.en.template.load.thing w.lang.en.template name=load.thing act=load shape=thing role=thing frame=acts.load text="load {thing}." example="Load lunch." core.source="hand-core 1"
+
+# ---- conversation (block 09:20 K3) ----
+@w.lang.en.template.greet.none w.lang.en.template name=greet.none act=greet shape=none frame=talk.greet text="hello." example="Hello." core.source="hand-core 1"
+@w.lang.en.template.greet.person w.lang.en.template name=greet.person act=greet shape=person role=person frame=talk.greet.person text="hello {person}." example="Hello Ana." core.source="hand-core 1"
+@w.lang.en.template.thank.none w.lang.en.template name=thank.none act=thank shape=none frame=talk.thank text="thank you." example="Thank you." core.source="hand-core 1"
+@w.lang.en.template.thank.topic w.lang.en.template name=thank.topic act=thank shape=topic role=topic frame=talk.thank.for text="thank you for {topic}." example="Thank you for the drawing." core.source="hand-core 1"
+@w.lang.en.template.farewell.none w.lang.en.template name=farewell.none act=farewell shape=none frame=talk.farewell text="goodbye." example="Goodbye." core.source="hand-core 1"

@@ -1,0 +1,35 @@
+# k.genres/shards/story: the genre "story": 5 parts in order with how many times each occurs, and 11 steps (the moves of each part in order, with alternatives and sentence counts).
+# sources: hand-core 1 (hand-written in this repository: tools/genres-core.mjs; the works cited are in WORLD.md)
+# license: CC0-1.0
+# script: tools/genres-core.mjs
+
+@k.genres.genre.story k.genres.genre name=story about="A story: an orientation (setting, protagonist, goal), a complication (the obstacle and the attempts that fail), a climax (the turning point), a resolution and an ending. The elements, what fills them and the constraints between them are k.story's." register=narrative unit=chapter also_move=evaluate source=aristotle source=freytag1863 source=labovWaletzky1967 source=mandlerJohnson1977 source=steinGlenn1979 own="Five parts (Freytag's five, named after Labov and Waletzky), the counts." core.source="hand-core 1"
+
+# orientation
+@k.genres.part.story.orientation k.genres.part genre=story name=orientation n=1 min=1 max=1 about="Who, where and when, and what the protagonist wants (the beginning; Freytag's exposition)." source=labovWaletzky1967 source=freytag1863 source=steinGlenn1979 core.source="hand-core 1"
+@k.genres.step.story.orientation.1.set_the_scene k.genres.step genre=story part=orientation n=1 move="set the scene" min=1 max=2 source=labovWaletzky1967 core.source="hand-core 1"
+@k.genres.step.story.orientation.2.introduce_character k.genres.step genre=story part=orientation n=2 move="introduce character" min=1 max=2 about="the protagonist" source=labovWaletzky1967 source=steinGlenn1979 core.source="hand-core 1"
+@k.genres.step.story.orientation.3.state_goal k.genres.step genre=story part=orientation n=3 move="state goal" min=1 max=1 source=steinGlenn1979 core.source="hand-core 1"
+
+# complication
+@k.genres.part.story.complication k.genres.part genre=story name=complication n=2 min=1 max=1 about="What stands in the way, and the tries that do not yet succeed (Freytag's rising action)." source=labovWaletzky1967 source=freytag1863 source=mandlerJohnson1977 core.source="hand-core 1"
+@k.genres.step.story.complication.1.complicate k.genres.step genre=story part=complication n=1 move=complicate min=1 max=2 about="the obstacle" source=labovWaletzky1967 core.source="hand-core 1"
+@k.genres.step.story.complication.2.attempt k.genres.step genre=story part=complication n=2 move=attempt min=1 max=3 about="tries that fail; three at most, as in folk tales" source=mandlerJohnson1977 source=steinGlenn1979 core.source="hand-core 1"
+@k.genres.step.story.complication.3.introduce_character k.genres.step genre=story part=complication n=3 move="introduce character" min=0 max=1 about="the helper" source=steinGlenn1979 core.source="hand-core 1"
+
+# climax
+@k.genres.part.story.climax k.genres.part genre=story name=climax n=3 min=1 max=1 about="The turning point: the helper's gift, or what was set up earlier, comes into use." source=freytag1863 core.source="hand-core 1"
+@k.genres.step.story.climax.1.turning_point k.genres.step genre=story part=climax n=1 move="turning point" min=1 max=2 source=freytag1863 core.source="hand-core 1"
+@k.genres.step.story.climax.2.evaluate k.genres.step genre=story part=climax n=2 move=evaluate min=0 max=1 source=labovWaletzky1967 core.source="hand-core 1"
+
+# resolution
+@k.genres.part.story.resolution k.genres.part genre=story name=resolution n=4 min=1 max=1 about="The obstacle overcome and the goal reached (Freytag's falling action and outcome)." source=labovWaletzky1967 source=freytag1863 core.source="hand-core 1"
+@k.genres.step.story.resolution.1.resolve k.genres.step genre=story part=resolution n=1 move=resolve min=1 max=2 source=labovWaletzky1967 core.source="hand-core 1"
+
+# ending
+@k.genres.part.story.ending k.genres.part genre=story name=ending n=5 min=1 max=1 about="The state after the goal, a return to the start, or what was learnt (the coda)." source=labovWaletzky1967 source=mandlerJohnson1977 source=aristotle core.source="hand-core 1"
+@k.genres.step.story.ending.1.end k.genres.step genre=story part=ending n=1 move=end min=1 max=1 source=labovWaletzky1967 core.source="hand-core 1"
+@k.genres.step.story.ending.2.evaluate k.genres.step genre=story part=ending n=2 move=evaluate min=0 max=1 about="what was learnt" source=labovWaletzky1967 core.source="hand-core 1"
+
+# Other names of the genre.
+@k.genres.word.genre.story core.word text=stories text=tale text="fairy tale" text=narrative means=story of=k.genres.genre.name core.source="hand-core 1"

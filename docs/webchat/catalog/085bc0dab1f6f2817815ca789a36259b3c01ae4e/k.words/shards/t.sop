@@ -1,0 +1,11 @@
+# k.words/shards/t: senses of the words from "t" to "t-shirt" (first letters "t").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.t.noun.1 k.words.sense word=T pos=noun n=1 supersense=noun.substance gloss="a base found in DNA (but not in RNA) and derived from pyrimidine; pairs with adenine" synonym=thymine is_a=pyrimidine kind_of=pyrimidine kind_of=base kind_of=compound kind_of=chemical kind_of=material kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.t.noun.2 k.words.sense word=T pos=noun n=2 supersense=noun.substance gloss="one of the four nucleotides used in building DNA; all four nucleotides have a common phosphate group and a sugar (ribose)" synonym="deoxythymidine monophosphate" is_a=nucleotide kind_of=nucleotide kind_of=ester kind_of="organic compound" kind_of=compound kind_of=chemical kind_of=material kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.t.noun.3 k.words.sense word=t pos=noun n=3 supersense=noun.quantity gloss="a unit of weight equivalent to 1000 kilograms" synonym="metric ton" synonym=MT synonym=tonne is_a="metric weight unit" kind_of="metric weight unit" kind_of="mass unit" kind_of="unit of measurement" kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.t.spelling.T core.word text=t means=T of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.t-shirt.noun.1 k.words.sense word=T-shirt pos=noun n=1 supersense=noun.artifact gloss="a close-fitting pullover shirt" synonym=jersey synonym="tee shirt" is_a=shirt kind_of=shirt kind_of=garment kind_of=clothing kind_of=covering kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.t-shirt.spelling.T-shirt core.word text=t-shirt means=T-shirt of=k.words.sense.word core.source="wordnet 3.1"

@@ -1,0 +1,9 @@
+# k.faces/shards/miniavs-cheeks: the variants of the slot `cheeks` in the DiceBear style `miniavs`: features, and parts converted from the drawings (a primitive shape, a box in the frame of the face, a draw order, a colour name and the exact colour; points for polygons and lines).
+# sources: dicebear-miniavs 67f54a0 (DiceBear style "miniavs", CC BY 4.0: Remix of "Miniavs - Free Avatar Creator" (https://www.figma.com/community/file/923211396597067458) by "Webpixels", licensed under "CC BY 4.0" (https://creativecommons.org/licenses/by/4.0/))
+# license: CC-BY-4.0
+# script: tools/import/dicebear.mjs
+
+# cheeks: miniavs default
+@k.faces.miniavs.cheeks.default k.faces.variant slot=cheeks name="miniavs default" style=miniavs kind=blush named=model core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.cheeks.default.p1 k.faces.part slot=cheeks of="miniavs default" name=part1 shape=rectangle x=37.5 y=59.4 w=7.8 h=4.7 z=1 colour=pink rgb="#FF859B" core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.cheeks.default.p2 k.faces.part slot=cheeks of="miniavs default" name=part2 shape=rectangle x=67.2 y=59.4 w=6.2 h=4.7 z=2 colour=pink rgb="#FF859B" core.source="dicebear-miniavs 67f54a0"

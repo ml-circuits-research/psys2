@@ -1,0 +1,12 @@
+# k.words/shards/cd: senses of the words from "cd" to "cdc" (first letters "cd").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.cd.noun.1 k.words.sense word=Cd pos=noun n=1 supersense=noun.substance gloss="a soft bluish-white ductile malleable toxic bivalent metallic element; occurs in association with zinc ores" synonym=cadmium synonym="atomic number 48" is_a="metallic element" core.source="wordnet 3.1"
+@k.words.cd.noun.2 k.words.sense word=cd pos=noun n=2 supersense=noun.quantity gloss="the basic unit of luminous intensity adopted under the Systeme International d'Unites; equal to 1/60 of the luminous intensity per square centimeter of a black body radiating at the temperature of 2,046 degrees Kelvin" synonym=candle synonym=candela synonym="standard candle" is_a="luminous intensity unit" core.source="wordnet 3.1"
+@k.words.cd.noun.3 k.words.sense word=CD pos=noun n=3 supersense=noun.possession gloss="a debt instrument issued by a bank; usually pays interest" synonym="certificate of deposit" is_a="debt instrument" core.source="wordnet 3.1"
+@k.words.cd.spelling.CD core.word text=cd means=CD of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.cd.spelling.Cd core.word text=cd means=Cd of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.cdc.noun.1 k.words.sense word=CDC pos=noun n=1 supersense=noun.group gloss="a federal agency in the Department of Health and Human Services; located in Atlanta; investigates and diagnoses and tries to control or prevent diseases (especially new and unusual diseases)" synonym="Center for Disease Control and Prevention" is_a=agency part_of="Department of Health and Human Services" part_of=Atlanta core.source="wordnet 3.1"
+@k.words.cdc.spelling.CDC core.word text=cdc means=CDC of=k.words.sense.word core.source="wordnet 3.1"

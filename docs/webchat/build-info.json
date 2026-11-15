@@ -1,5 +1,5 @@
 {
-  "version": "ab8aef050c",
+  "version": "f709dc2c53",
   "worlds": [
     "acts",
     "art.draw",
@@ -133,7 +133,7 @@
     "lib/knowledge/bundled-source.mjs": "6050b971a2139c64",
     "lib/knowledge/bundled-time.mjs": "591fadaf1f361c78",
     "lib/knowledge/bundled-values.mjs": "6af9915e4c699739",
-    "lib/knowledge/catalog-pin.mjs": "857af44b7cfd3ed3",
+    "lib/knowledge/catalog-pin.mjs": "99132774edfaa758",
     "lib/knowledge/catalog.mjs": "da4b965617f7551d",
     "lib/knowledge/commonsense.mjs": "8abb71a89aeca90b",
     "lib/knowledge/diagram-world.mjs": "ba934620bf779c1e",
@@ -159,7 +159,7 @@
     "lib/legends/index.mjs": "828302e381b81ba8",
     "lib/loaders/bundle-loader.mjs": "784ddf4b9edff435",
     "lib/loaders/knowledge-cache.mjs": "5afb651adf762afc",
-    "lib/loaders/knowledge-source.mjs": "b5df1a08a49962ef",
+    "lib/loaders/knowledge-source.mjs": "12bba699a905fd36",
     "lib/plan/host.mjs": "882662e53a9ef8f1",
     "lib/reasoner/index.mjs": "a2d6e910f23a9002",
     "lib/reasoner/ns.mjs": "024a4cfbf7a15cbd",
@@ -691,8 +691,8 @@
     "worlds/words/zo.json": "24885730024d779a",
     "worlds/words.bloom.json": "69034a3ea60cdf56"
   },
-  "builtAt": "2026-11-15T06:39:45.028Z",
-  "commit": "34809a97-dirty",
+  "builtAt": "2026-11-15T06:54:22.832Z",
+  "commit": "ffb7760c-dirty",
   "catalog": "085bc0dab1f6f2817815ca789a36259b3c01ae4e",
   "assets": {
     "app.mjs": "1e15eb4de0",
@@ -789,7 +789,7 @@
     "lib/knowledge/bundled-source.mjs": "25c93b3118",
     "lib/knowledge/bundled-time.mjs": "69ce0cfe8d",
     "lib/knowledge/bundled-values.mjs": "00b8f5d8f5",
-    "lib/knowledge/catalog-pin.mjs": "183000556c",
+    "lib/knowledge/catalog-pin.mjs": "8b015cb881",
     "lib/knowledge/catalog.mjs": "0372695257",
     "lib/knowledge/commonsense.mjs": "a83dfa4db3",
     "lib/knowledge/diagram-world.mjs": "9af35d199b",
@@ -815,7 +815,7 @@
     "lib/legends/index.mjs": "45bd60c654",
     "lib/loaders/bundle-loader.mjs": "070984ff45",
     "lib/loaders/knowledge-cache.mjs": "6a9ec0d13e",
-    "lib/loaders/knowledge-source.mjs": "31c679a230",
+    "lib/loaders/knowledge-source.mjs": "c1abbe1bca",
     "lib/plan/host.mjs": "1e2ce96952",
     "lib/reasoner/index.mjs": "39ab51f9ed",
     "lib/reasoner/ns.mjs": "655a807958",

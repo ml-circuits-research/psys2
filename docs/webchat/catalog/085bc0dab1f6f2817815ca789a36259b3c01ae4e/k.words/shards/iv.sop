@@ -1,0 +1,11 @@
+# k.words/shards/iv: senses of the words from "iv" to "ivy" (first letters "iv").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.iv.noun.1 k.words.sense word=IV pos=noun n=1 supersense=noun.quantity gloss="the cardinal number that is the sum of three and one" synonym=four synonym=4 synonym=tetrad synonym=quatern synonym=quaternion synonym=quaternary synonym=quaternity synonym=quartet synonym=quadruplet synonym=foursome synonym="Little Joe" is_a=digit core.source="wordnet 3.1"
+@k.words.iv.noun.2 k.words.sense word=IV pos=noun n=2 supersense=noun.act gloss="administration of nutrients through a vein" synonym="intravenous feeding" is_a=feeding core.source="wordnet 3.1"
+@k.words.iv.spelling.IV core.word text=iv means=IV of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.ivory.noun.1 k.words.sense word=ivory pos=noun n=1 supersense=noun.substance gloss="a hard smooth ivory colored dentine that makes up most of the tusks of elephants and walruses" synonym=tusk is_a=dentine core.source="wordnet 3.1"
+@k.words.ivory.noun.2 k.words.sense word=ivory pos=noun n=2 supersense=noun.attribute gloss="a shade of white the color of bleached bones" synonym=bone synonym=pearl synonym=off-white is_a=white core.source="wordnet 3.1"
+@k.words.ivy.noun.1 k.words.sense word=ivy pos=noun n=1 supersense=noun.plant gloss="Old World vine with lobed evergreen leaves and black berrylike fruits" synonym="common ivy" synonym="English ivy" synonym="Hedera helix" is_a=vine kind_of=vine kind_of="vascular plant" kind_of=plant kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

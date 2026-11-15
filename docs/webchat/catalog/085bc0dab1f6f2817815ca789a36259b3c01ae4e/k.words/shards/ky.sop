@@ -1,0 +1,8 @@
+# k.words/shards/ky: senses of the words from "kylie" to "kyoto" (first letters "ky").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.kylie.noun.1 k.words.sense word=kylie pos=noun n=1 supersense=noun.artifact gloss="an Australian boomerang; one side flat and the other convex" synonym=kiley is_a=boomerang core.source="wordnet 3.1"
+@k.words.kyoto.noun.1 k.words.sense word=Kyoto pos=noun n=1 supersense=noun.location gloss="a city in central Japan on southern Honshu; a famous cultural center that was once the capital of Japan" instance_of=city part_of=Honshu part_of=Japan core.source="wordnet 3.1"
+@k.words.kyoto.spelling.Kyoto core.word text=kyoto means=Kyoto of=k.words.sense.word core.source="wordnet 3.1"

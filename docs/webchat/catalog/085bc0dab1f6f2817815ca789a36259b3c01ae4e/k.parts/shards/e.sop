@@ -1,0 +1,13 @@
+# k.parts/shards/e: the usual parts of 8 common things whose name starts with "e" (eagle, earth, egg, elephant, elevator, elk ...): the parts WordNet gives the thing, and the parts it gives what the thing is a kind of.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: part meronyms, hypernyms, glosses); which words are common things: tools/coverage.mjs (frequency-words 2018, wordnet 3.1)
+# license: WordNet-3.0
+# script: tools/import/parts.mjs
+
+@k.parts.inherited.eagle.bird k.parts.inherited name=eagle from=bird steps=2 has=beak has=furcula has=feather has=wing has=pennon has="bird's foot" has=uropygium has=hindquarters has="air sac" has="uropygial gland" has=syrinx plain=foot plain=sac core.source="wordnet 3.1"
+@k.parts.whole.earth k.parts.whole name=earth gloss="the 3rd planet from the sun; the planet we live on" has=atmosphere has=hemisphere has="Van Allen belt" has=hydrosphere has=land has=lithosphere has=sky core.source="wordnet 3.1"
+@k.parts.whole.egg k.parts.whole name=egg gloss="animal reproductive body consisting of an ovum or embryo together with nutritive and protective envelopes; especially the thin-shelled reproductive body laid by e.g. female birds" has=chalaza has=yolk core.source="wordnet 3.1"
+@k.parts.whole.elephant k.parts.whole name=elephant gloss="five-toed pachyderm" has=tusk has=proboscis core.source="wordnet 3.1"
+@k.parts.whole.elevator k.parts.whole name=elevator gloss="lifting device consisting of a platform or cage that is raised and lowered mechanically in a vertical shaft in order to move people from one floor to another in a building" has=car core.source="wordnet 3.1"
+@k.parts.inherited.elk.deer k.parts.inherited name=elk from=deer steps=1 has=antler has=scut has=flag has=withers core.source="wordnet 3.1"
+@k.parts.inherited.elm.tree k.parts.inherited name=elm from=tree steps=1 has=stump has=crown has=limb has=trunk has=burl core.source="wordnet 3.1"
+@k.parts.whole.engine k.parts.whole name=engine gloss="motor that converts thermal energy to mechanical work" has=camshaft has=gearing core.source="wordnet 3.1"

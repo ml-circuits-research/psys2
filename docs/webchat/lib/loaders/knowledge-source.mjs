@@ -26,11 +26,11 @@ export const resetOptionalMisses = () => optionalMisses.clear();
 /**
  * A required file of an http catalog that does not answer is asked again and then asked of the next MIRROR (P4, live finding 2026-11-15: jsDelivr answered 403 for one shard of the
  * pinned commit in 1 of 4 page loads). `location` may be a list of base URLs that serve the SAME immutable commit (src/knowledge/catalog-pin.mjs `KNOWLEDGE_URLS`:
- * raw.githubusercontent.com, then jsDelivr); each is tried REQUIRED_TRIES times on a transient answer (a network error, a timeout, 408, 425, 429, 5xx), REQUIRED_BACKOFF_MS apart
+ * on the page the site's own copy, then raw.githubusercontent.com, then jsDelivr); each is tried REQUIRED_TRIES times on a transient answer (a network error, a timeout, 408, 425, 429, 5xx), REQUIRED_BACKOFF_MS apart
  * (doubling). A 403 is not asked again of the same mirror: the next mirror is asked at once.
  * A DEAD MIRROR (live finding 2026-11-15, second check: jsDelivr answered 403 "Package size exceeded the configured limit of 50 MB" for every shard of a new pin, each shard was
  * tried twice there before the second mirror served it: 36 console errors per page): a mirror that answers 403 with that package-size message, or 403 before it has served
- * anything, is dead for the session (this JS context) and is not asked again; every later file goes straight to the next mirror. Until a mirror has answered once, the reads of it
+ * anything, or a 404 for index.json / vocab.json before it served anything (no catalog folder there), is dead for the session (this JS context) and is not asked again; every later file goes straight to the next mirror. Until a mirror has answered once, the reads of it
  * wait for its first answer (one probe), so a dead mirror costs one failed request per page, not one per shard. With every mirror dead each is still asked once (a last resort).
  * A 404 from every mirror asked is the file's absence (`null`); a file no mirror could serve is an error (thrown), never an empty answer: the readers count it as unreachable and
  * ask again later (facts.mjs), and the reading of a sentence is the one an absent catalog gives (the network invariant, spec 17 section 6). The mirrors serve one commit, so which
@@ -40,6 +40,9 @@ export const REQUIRED_TRIES = 2, REQUIRED_BACKOFF_MS = 400;
 const TRANSIENT = (status) => status === 408 || status === 425 || status === 429 || status >= 500;
 /** The CDN's refusal of a repository past its package size (jsDelivr: "Package size exceeded the configured limit of 50 MB."): the mirror cannot serve this commit at all. */
 export const PACKAGE_LIMIT = /package size exceeded|exceeded the configured limit/i;
+/** Files every catalog folder publishes: a 404 for one of them from a mirror that has served nothing yet means the folder is not there (the site's own copy of a build made without
+ * the pinned checkout): the mirror is dead, like a refusing one. */
+export const ROOT_FILES = new Set(['index.json', 'vocab.json']);
 const pause = (ms) => new Promise((res) => { const t = setTimeout(res, ms); t?.unref?.(); });
 const mirrorHealth = new Map();   // base -> { state: 'unknown' | 'alive' | 'dead', probe: Promise | null, why }
 const healthOf = (b) => { let h = mirrorHealth.get(b); if (!h) mirrorHealth.set(b, (h = { state: 'unknown', probe: null, why: null })); return h; };
@@ -64,6 +67,7 @@ export function createKnowledgeSource(location, { now = () => Date.now(), tries 
           let r = null;
           try { r = await get(`${b}/${p}`, p); } catch (e) { last = e; }
           if (r?.ok) { h.state = 'alive'; return { text: await r.text() }; }
+          if (r && r.status === 404 && !lastResort && h.state !== 'alive' && ROOT_FILES.has(p)) { h.state = 'dead'; h.why = `HTTP 404 for ${p}: no catalog there`; return { gone: true }; }   // a site built without its copy
           if (r && r.status === 404) { if (h.state === 'unknown') h.state = 'alive'; return { absent: true }; }   // this mirror answers and does not have it
           if (r) last = new Error(`HTTP ${r.status} for ${p}`);
           if (r?.status === 403) {
@@ -84,7 +88,7 @@ export function createKnowledgeSource(location, { now = () => Date.now(), tries 
         for (const b of bases) {
           if (lastResort !== (healthOf(b).state === 'dead')) continue;
           const r = await fromMirror(b, p, lastResort);
-          if (r.skipped) continue;
+          if (r.skipped || r.gone) continue;
           asked++;
           if (r.text != null) return r.text;
           if (r.absent) absent++;
