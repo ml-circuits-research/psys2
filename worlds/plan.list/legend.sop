@@ -2,4 +2,4 @@
     namespace=plan.list
     version=0.1.0
     imports=core
-    doc="Lists of the published schema w.list v3. State: lists ([{ id, name, sort, budget, tendered, currency, settled, items: [{ id, text, quantity, price, status }] }]), n (the last id)."
+    doc="Lists of the published schema w.list v4. State: lists ([{ id, name, sort, budget, paid (the payment at the till: an event of the story, not a key of w.list v4), currency, settled, items: [{ id, text, quantity, price, status }] }]), n (the last id)."

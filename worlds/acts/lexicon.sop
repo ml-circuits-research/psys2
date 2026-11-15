@@ -143,6 +143,24 @@
     alt=untick
     alt=uncheck
 
+@phrase.acts.verb.farewell core.phrase
+    frame=false
+    doc="Verbs of the act farewell (k.actions)."
+    alt=say_goodbye
+    alt=say_bye
+    alt=bid_farewell
+    alt=take_leave
+    alt=sign_off
+
+@phrase.acts.verb.greet core.phrase
+    frame=false
+    doc="Verbs of the act greet (k.actions)."
+    alt=greet
+    alt=say_hello
+    alt=say_hi
+    alt=welcome
+    alt=hail
+
 @phrase.acts.verb.group core.phrase
     frame=false
     doc="Verbs of the act group (k.actions)."
@@ -370,6 +388,15 @@
     alt=unlink
     alt=cut_off
 
+@phrase.acts.verb.thank core.phrase
+    frame=false
+    doc="Verbs of the act thank (k.actions)."
+    alt=thank
+    alt=say_thanks
+    alt=say_thank_you
+    alt=express_thanks
+    alt=show_gratitude
+
 @phrase.acts.verb.undo core.phrase
     frame=false
     doc="Verbs of the act undo (k.actions)."
@@ -439,6 +466,77 @@
     word=forward
     word=backward
 
+@phrase.acts.possession.set core.phrase
+    frame=false
+    doc="Verbs whose effect on what the doer holds is set (k.actions holds / money, K5), in every form."
+    alt=hold
+    alt=holds
+    alt=held
+    alt=have
+    alt=has
+    alt=had
+
+@phrase.acts.possession.add core.phrase
+    frame=false
+    doc="Verbs whose effect on what the doer holds is add (k.actions holds / money, K5), in every form."
+    alt=buy
+    alt=buys
+    alt=bought
+    alt=win
+    alt=wins
+    alt=won
+    alt=receive
+    alt=receives
+    alt=received
+    alt=get
+    alt=gets
+    alt=got
+    alt=get_back
+    alt=gets_back
+    alt=got_back
+    alt=find
+    alt=finds
+    alt=found
+
+@phrase.acts.possession.remove core.phrase
+    frame=false
+    doc="Verbs whose effect on what the doer holds is remove (k.actions holds / money, K5), in every form."
+    alt=eat
+    alt=eats
+    alt=ate
+    alt=eaten
+    alt=sell
+    alt=sells
+    alt=sold
+    alt=spend
+    alt=spends
+    alt=spent
+    alt=pay
+    alt=pays
+    alt=paid
+    alt=break
+    alt=breaks
+    alt=broke
+    alt=broken
+    alt=lose
+    alt=loses
+    alt=lost
+    alt=fly_away
+    alt=flies_away
+    alt=flew_away
+    alt=flown_away
+    alt=leave
+    alt=leaves
+    alt=left
+
+@phrase.acts.possession.give core.phrase
+    frame=false
+    doc="Verbs whose effect on what the doer holds is give (k.actions holds / money, K5), in every form."
+    alt=give
+    alt=gives
+    alt=gave
+    alt=given
+
 @lex.acts.layout core.lexicon
     class=trigger
     doc="Words of an arrangement: the layouts of k.layouts and the adverbs of a line-up."
@@ -455,6 +553,7 @@
     word=radial
     word=nested
     word=border
+    word=outline
     word=landscape
     word=room
     word=family_photo

@@ -7,7 +7,7 @@
  "acts|table|worlds/acts/verbs.generated.mjs:ACT_VERBS": 222,
  "acts|lexicon|lex.acts.rel": 17,
  "acts|lexicon|lex.acts.dir": 18,
- "acts|lexicon|lex.acts.layout": 26,
+ "acts|lexicon|lex.acts.layout": 27,
  "art.draw|table|worlds/art.draw/datagen.mjs:IRR": 19,
  "art.draw|table|worlds/art.draw/datagen.mjs:NAMES_FB": 26,
  "art.draw|table|worlds/art.draw/datagen.mjs:QW": 36,

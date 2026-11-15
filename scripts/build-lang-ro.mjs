@@ -6,7 +6,7 @@
  * `core.source`, the dictionary as one text per first letter. Romanian words are DATA of the language world (the only world that may hold them). The module is imported lazily: only a
  * session whose language is Romanian loads its 150 kB.
  *
- *   node scripts/build-lang-ro.mjs <catalog folder (docs/worlds of sop-knowledge-worlds)> [--check]
+ *   node scripts/build-lang-ro.mjs [<catalog folder (docs/worlds of sop-knowledge-worlds)>] [--check]   (no folder: the catalog at the pin)
  */
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
@@ -15,8 +15,9 @@ import { fileURLToPath } from 'node:url';
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(REPO, 'src/lang/ro.facts.generated.mjs');
 const OUT_UM = join(REPO, 'src/lang/ro.unimorph.generated.mjs');
-const catalog = process.argv[2] ?? process.env.PSYS2_KNOWLEDGE;
-if (!catalog) { console.error('usage: node scripts/build-lang-ro.mjs <catalog folder> [--check]'); process.exit(1); }
+// the catalog folder given, else PSYS2_KNOWLEDGE, else the catalog at the pin (scripts/lib/generated.mjs): build-lang-en runs this too (one command)
+const { catalogFolder } = await import('./lib/generated.mjs');
+const catalog = (await catalogFolder()).dir;
 const QUOTED = '"(?:[^"\\\\]|\\\\.)*"';
 const DROP = new RegExp(`\\s(?:core\\.source|doc|note)=(?:${QUOTED}|\\S+)`, 'g');
 const dir = join(catalog, 'w.lang.ro');

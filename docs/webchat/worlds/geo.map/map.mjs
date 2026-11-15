@@ -10,10 +10,10 @@
 // Every command brings the Map tab forward: ctx.request('ui.openTab', { tab: 'map' }).
 // Data: the places come by lookup from the catalog's k.geo (places.mjs); the world has no knowledge base of its own.
 
-import { buildIndex, lookup } from './places.mjs?v=d46e932dc4';
+import { buildIndex, lookup } from './places.mjs?v=affd5662a9';
 import { askBridge } from '../acts/ask-lib.mjs?v=2042c5e33e';   // questions over attributes and relations answered by the library (sopworld `ask`)
 import { viewOf } from '../acts/view-lib.mjs?v=589abed078';   // the acts on the view's own attributes (zoom, layer) by the library (sopworld std.schema.view state=)
-import * as G from './ops.mjs?v=28670f88b1';   // circular on purpose: the schema's executor, read inside functions only
+import * as G from './ops.mjs?v=6fbc1e57f7';   // circular on purpose: the schema's executor, read inside functions only
 let VIEW = null;
 /** The view bridge of this world's schema (`@map.view` and its attributes: zoom, centre, layer): the library checks the value and computes the step; the state stays this module's. */
 const viewLib = () => (VIEW ??= viewOf(G.executor.schema, 'view'));

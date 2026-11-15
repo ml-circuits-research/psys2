@@ -76,6 +76,7 @@ export function validateDialogue(d, stateOf) {
   for (const [i, t] of (d.turns ?? []).entries()) {
     const at = `turn ${i + 1}`;
     if (typeof t.message !== 'string' || !t.message.trim()) { err.push(`${at}: message`); continue; }
+    if (t.retired) continue;   // a retired turn (real-set.mjs RETIRED RECORDS) keeps its old expectation as a record: never replayed, not checked
     if (!isObj(t.expect)) { err.push(`${at}: expect`); continue; }
     for (const k of Object.keys(t.expect)) if (!EXPECT_KEYS.has(k)) err.push(`${at}: unknown expect key ${k}`);
     const e = t.expect;

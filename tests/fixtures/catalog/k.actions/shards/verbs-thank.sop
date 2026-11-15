@@ -1,0 +1,11 @@
+# k.actions/shards/verbs-thank: 5 verbs and phrasal verbs that mean the act "thank" (thank, say thanks, say thank you, express thanks, show gratitude ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 0 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 5 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.thank.thank k.actions.verb text=thank act=thank core.source="hand-core 1"
+@k.actions.verb.thank.say_thanks k.actions.verb text="say thanks" act=thank core.source="hand-core 1"
+@k.actions.verb.thank.say_thank_you k.actions.verb text="say thank you" act=thank core.source="hand-core 1"
+@k.actions.verb.thank.express_thanks k.actions.verb text="express thanks" act=thank core.source="hand-core 1"
+@k.actions.verb.thank.show_gratitude k.actions.verb text="show gratitude" act=thank core.source="hand-core 1"

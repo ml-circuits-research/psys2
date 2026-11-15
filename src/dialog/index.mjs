@@ -41,6 +41,7 @@ import { Dialogue } from './dialogue.mjs';
 import { turnSteps } from './steps.mjs';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
 import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs';
+import { personTurn } from './person.mjs';
 import { proposeByTypes } from './typed-reader.mjs';
 import { withVariants, anyVoiceOn } from './variants.mjs';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs';
@@ -1479,7 +1480,14 @@ export class DialogSession {
     let pre = null;   // discourse resolution (spec 11): the reply fills a pending argument, or a fragment is an ellipsis of an earlier frame
     let meta = null;  // meta-dialogue (spec 11 sections 6-14): cancel, repeat, explain, feedback, topic, list mode, repair, degree, references
     let formalText = english;
+    // THE PERSON OF THE SESSION (Q19, spec 23): a statement or a question about the user read by the catalog's person frames, or the interview, is kept as w.person facts before any world reads it
+    let personSeg = null;
     if (!icpt) {
+      let pt = null;
+      try { pt = await perf.time('person', () => personTurn(this, english)); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; pt = null; }
+      if (pt) { meta = { reply: pt.reply, status: pt.status, info: pt.info }; personSeg = pt.segment; }
+    }
+    if (!icpt && !meta) {
       // M1: the kind of the turn is read BEFORE any tab world: a fragment is completed from the focus, a complaint or a why-question is answered from the trace, a correction amends the last request
       meta = await perf.time('dialogue', () => this.dialogue.turn(english, { pend, sid, correction })) ?? await perf.time('discourse', () => disc.meta(english, pend, sid));
       if (meta?.rewrite) formalText = meta.rewrite;
@@ -1742,6 +1750,7 @@ export class DialogSession {
     this.isession.rs?.commitTurn(this._msg, english);   // a turn that changed the library keeps its mark: what "undo that" and the undo of the dialogue layer rewind to (spec 15)
     disc.commitTurn({ turn: this._msg, text: english, before: stateBefore, kind: ['undo', 'redo'].includes(meta?.info?.kind) ? 'keep' : segments.some((x) => /undo/i.test(x.match?.patternId ?? '')) ? 'undo' : segments.some((x) => /redo/i.test(x.match?.patternId ?? '')) ? 'redo' : null });
     disc.noteNavigation({ text: english, tabBefore: tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab, turn: this._msg });
+    if (personSeg) segments = [personSeg];   // the turn was the person's: its one segment names session.things (no wires: the facts are the state's)
     this.dialogue.record({ english, original: text, kind: this.dialogue._kind ?? meta?.info?.dialogue ?? (meta?.info?.kind === 'explain' ? 'why' : null) ?? (correction ? 'correction' : 'new'), metaKind: meta?.info?.kind ?? null, segments, statuses, reply: englishReply, effect: disc.actions[0]?.turn === this._msg, tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab });
     if (meta?.info?.kind !== 'repeat' && meta?.info?.kind !== 'explain') disc.lastAnswer = { text: englishReply, turn: this._msg };
     const feedback = meta?.feedback ?? null;

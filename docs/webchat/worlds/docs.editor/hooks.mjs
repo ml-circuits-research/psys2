@@ -3,10 +3,10 @@
 // to the document is the editor engine of editor.mjs (blocks, marks, the reference resolver of target.mjs, TipTap in the tab). The roles of an act are mapped onto the engine's operations here;
 // the user's sentence is not read again: the thing role goes to the engine's resolver as the words it is ("the second paragraph", "the word milk"), the attribute is the one whose enum holds the
 // value (style, align, type ...; a colour is a highlight), the kind is the schema's. Nothing here names a verb.
-import * as E from './editor.mjs?v=222eb9c9ad';
-import * as G from './ops.mjs?v=2aabf1a614';   // circular on purpose: only used inside functions, when the executor exists
-import { colourName } from '../../lib/knowledge/values.mjs?v=2bd2c8e37d';
-import { en } from '../../lib/lang/en.mjs?v=24a2dfb4e6';
+import * as E from './editor.mjs?v=adc40dfcac';
+import * as G from './ops.mjs?v=4eb111327a';   // circular on purpose: only used inside functions, when the executor exists
+import { colourName } from '../../lib/knowledge/values.mjs?v=ea821661e5';
+import { en } from '../../lib/lang/en.mjs?v=8f226ecd72';
 const numerals = en.numerals('acts');
 
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_'-]+/).filter(Boolean);

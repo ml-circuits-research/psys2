@@ -1,14 +1,14 @@
-# k.actions/shards/acts: the 16 acts (make, remove, change, place, connect, group, take apart, pick, ask, copy, send, undo, save, load, redo, deselect), and the roles each act takes with the prepositions that usually mark them.
+# k.actions/shards/acts: the 19 acts (make, remove, change, place, connect, group, take apart, pick, ask, copy, send, undo, save, load, redo, deselect, greet, thank, farewell), and the roles each act takes with the prepositions that usually mark them.
 # sources: hand-core 1 (hand-written in this repository: tools/acts-core.mjs)
 # license: CC0-1.0
 # script: tools/acts-core.mjs
 
-@k.actions.act.make k.actions.act name=make about="bring a new thing into being" opposite=remove role=kind role=number role=place role=value role=part role=material role=topic role=criterion core.source="hand-core 1"
+@k.actions.act.make k.actions.act name=make about="bring a new thing into being" opposite=remove role=kind role=number role=place role=value role=part role=material role=topic role=criterion role=arrangement core.source="hand-core 1"
 @k.actions.act.remove k.actions.act name=remove about="take a thing away so that it is no longer there" opposite=make role=thing role=source core.source="hand-core 1"
 @k.actions.act.change k.actions.act name=change about="give a thing another value of one of its attributes, or put another thing in its place" role=thing role=attribute role=value role="old value" role=amount role=replacement core.source="hand-core 1"
-@k.actions.act.place k.actions.act name=place about="put a thing somewhere, or move it to another place" role=thing role=place role=direction role=source role=amount role=criterion core.source="hand-core 1"
+@k.actions.act.place k.actions.act name=place about="put a thing somewhere, or move it to another place" role=thing role=place role=direction role=source role=amount role=criterion role=arrangement core.source="hand-core 1"
 @k.actions.act.connect k.actions.act name=connect about="join two things so that they stay together or a line runs between them" opposite="take apart" role=thing role=target role=tool core.source="hand-core 1"
-@k.actions.act.group k.actions.act name=group about="put several things together as one group, or in an order" opposite="take apart" role=thing role=target role=group role=criterion core.source="hand-core 1"
+@k.actions.act.group k.actions.act name=group about="put several things together as one group, or in an order" opposite="take apart" role=thing role=target role=group role=criterion role=arrangement core.source="hand-core 1"
 @k.actions.act.take_apart k.actions.act name="take apart" about="separate a thing into its parts, or one thing from another" opposite=connect role=thing role=parts role=source role=tool core.source="hand-core 1"
 @k.actions.act.pick k.actions.act name=pick about="choose one or some things out of several, to act on them next" opposite=deselect role=thing role=source role=other core.source="hand-core 1"
 @k.actions.act.ask k.actions.act name=ask about="want to know something about the things that are there" role=topic role=thing role=place role=other core.source="hand-core 1"
@@ -19,6 +19,9 @@
 @k.actions.act.load k.actions.act name=load about="bring back work that was kept" opposite=save role=thing role=source core.source="hand-core 1"
 @k.actions.act.redo k.actions.act name=redo about="do again what was taken back by undo" opposite=undo role=thing role=number core.source="hand-core 1"
 @k.actions.act.deselect k.actions.act name=deselect about="leave off picking a thing, so that it is no longer picked; with no thing, nothing is picked" opposite=pick role=thing core.source="hand-core 1"
+@k.actions.act.greet k.actions.act name=greet about="say hello: open a conversation or meet someone" opposite=farewell class=dialogue role=person core.source="hand-core 1"
+@k.actions.act.thank k.actions.act name=thank about="say that one is grateful for something done" class=dialogue role=topic core.source="hand-core 1"
+@k.actions.act.farewell k.actions.act name=farewell about="say goodbye: end a conversation or leave someone" opposite=greet class=dialogue role=person core.source="hand-core 1"
 
 # Roles: what an act can be told, what kind of filler each takes, and the words that mark it.
 @k.actions.role.make.kind k.actions.role act=make name=kind holds=kind needed=true about="what kind of thing to make" core.source="hand-core 1"
@@ -29,6 +32,7 @@
 @k.actions.role.make.material k.actions.role act=make name=material holds=thing about="what it is made from" marker=from marker="out of" marker=of core.source="hand-core 1"
 @k.actions.role.make.topic k.actions.role act=make name=topic holds=thing about="what the new thing is about (a story about a dragon, a chart about sales)" marker=about core.source="hand-core 1"
 @k.actions.role.make.criterion k.actions.role act=make name=criterion holds=attribute about="what puts the things the new thing shows in order (a timeline of the planets by distance, a list sorted by size)" marker=by marker="in order of" marker="according to" core.source="hand-core 1"
+@k.actions.role.make.arrangement k.actions.role act=make name=arrangement holds=arrangement about="the arrangement the things it shows are laid out in (a diagram in the shape of a house: the outline of a house)" marker="in the shape of" marker="shaped like" marker="in the form of" marker="in the outline of" core.source="hand-core 1"
 @k.actions.role.remove.thing k.actions.role act=remove name=thing holds=thing needed=true about="what to remove" core.source="hand-core 1"
 @k.actions.role.remove.source k.actions.role act=remove name=source holds=thing about="what it is removed from" marker=from marker="out of" marker=off core.source="hand-core 1"
 @k.actions.role.change.thing k.actions.role act=change name=thing holds=thing needed=true about="what to change" marker=of core.source="hand-core 1"
@@ -43,6 +47,7 @@
 @k.actions.role.place.source k.actions.role act=place name=source holds=place about="where it was" marker=from marker=off marker="out of" core.source="hand-core 1"
 @k.actions.role.place.amount k.actions.role act=place name=amount holds=amount about="how far" marker=by core.source="hand-core 1"
 @k.actions.role.place.criterion k.actions.role act=place name=criterion holds=attribute about="what decides the order the things are put in (line up the planets in order of size)" marker="in order of" marker="according to" core.source="hand-core 1"
+@k.actions.role.place.arrangement k.actions.role act=place name=arrangement holds=arrangement about="the arrangement the things are laid out in (arrange the boxes in the shape of a star)" marker="in the shape of" marker="shaped like" marker="in the form of" marker="in the outline of" core.source="hand-core 1"
 @k.actions.role.connect.thing k.actions.role act=connect name=thing holds=thing needed=true about="the first thing" core.source="hand-core 1"
 @k.actions.role.connect.target k.actions.role act=connect name=target holds=thing about="the thing it is joined to" marker=to marker=with marker=and marker=onto core.source="hand-core 1"
 @k.actions.role.connect.tool k.actions.role act=connect name=tool holds=thing about="what joins them" marker=by marker=using marker="by means of" core.source="hand-core 1"
@@ -50,6 +55,7 @@
 @k.actions.role.group.target k.actions.role act=group name=target holds=thing about="what they are grouped with" marker=with marker=and core.source="hand-core 1"
 @k.actions.role.group.group k.actions.role act=group name=group holds=group about="the group or groups they go into" marker=into marker=in marker=as core.source="hand-core 1"
 @k.actions.role.group.criterion k.actions.role act=group name=criterion holds=attribute about="what decides the group or the order" marker=by marker="according to" marker="in order of" core.source="hand-core 1"
+@k.actions.role.group.arrangement k.actions.role act=group name=arrangement holds=arrangement about="the arrangement the group is laid out in (group them in the shape of a heart)" marker="in the shape of" marker="shaped like" marker="in the form of" marker="in the outline of" core.source="hand-core 1"
 @k.actions.role.take_apart.thing k.actions.role act="take apart" name=thing holds=thing needed=true about="what to take apart" core.source="hand-core 1"
 @k.actions.role.take_apart.parts k.actions.role act="take apart" name=parts holds=group about="the pieces it becomes" marker=into marker=in core.source="hand-core 1"
 @k.actions.role.take_apart.source k.actions.role act="take apart" name=source holds=thing about="what it is separated from" marker=from marker=off core.source="hand-core 1"
@@ -80,3 +86,6 @@
 @k.actions.role.redo.thing k.actions.role act=redo name=thing holds=thing about="what was taken back and is done again" core.source="hand-core 1"
 @k.actions.role.redo.number k.actions.role act=redo name=number holds=number about="how many steps" core.source="hand-core 1"
 @k.actions.role.deselect.thing k.actions.role act=deselect name=thing holds=thing about="what is no longer picked; none: all of them" core.source="hand-core 1"
+@k.actions.role.greet.person k.actions.role act=greet name=person holds=person about="who is greeted" marker=to core.source="hand-core 1"
+@k.actions.role.thank.topic k.actions.role act=thank name=topic holds=topic about="what the thanks are for" marker=for core.source="hand-core 1"
+@k.actions.role.farewell.person k.actions.role act=farewell name=person holds=person about="who is left" marker=to core.source="hand-core 1"

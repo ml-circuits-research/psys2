@@ -3,7 +3,7 @@
 // releases them, `available` is false, every call returns null and the UI hides what needs them: there is NO local generator and NO fallback text here.
 // Browser-safe: no `node:*` imports; the library module is passed in.
 
-import { knowledgeWorld, languageWorld, randomTopics, topicIndex } from './compose-world.mjs?v=97d66663a7';
+import { knowledgeWorld, languageWorld, randomTopics, topicIndex } from './compose-world.mjs?v=1b991dfb07';
 import { englishOf } from '../lang/en-generate.mjs?v=84a99c355e';
 
 const pick = (lib, name) => (typeof lib?.[name] === 'function' ? lib[name] : typeof lib?.std?.[name] === 'function' ? lib.std[name] : null);

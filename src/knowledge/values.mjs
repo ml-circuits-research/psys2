@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * One reader of colours and number words for every world and the dialog tier (KNOWLEDGE-OUT step 4a): the colour names with their RGB and the number words come from the
- * knowledge world `k.values` (and `k.colours` for the families of colours), read through the generic catalog access of facts.mjs. No world keeps a colour table or a number lexicon.
+ * knowledge world `k.colours` (the one home of colour names: name, RGB, family) and `k.values` (number words), read through the generic catalog access of facts.mjs. No world keeps a colour table or a number lexicon.
  * Browser-safe: no `node:*`; synchronous reads (an operation must not wait), seeded from the bundled subset (bundled-values.mjs, generated from the catalog) so a first visit with no network
  * has the same names; `loadValues(facts)` replaces the seed with the catalog when it is reachable (the host calls it when the knowledge is attached: `engine.setKnowledge`).
  *
@@ -30,15 +30,33 @@ state.comparatives = COMPARATIVES_SEED_TEMPORARY;
 /** The words that move a quantity down or up on the scales of `scales` ("closer" is down on distance, "wider" is up on width): comparativeWords(['distance', 'width'], 'down') -> ['closer', ...]. */
 export const comparativeWords = (scales, way) => state.comparatives.filter((c) => scales.includes(c.scale) && c.way === way).map((c) => c.text);
 
+/**
+ * The other words for a colour: the catalog's (`core.word of=k.colours.colour.name`: blk, grn, bloo, ginger ...), read with the colours; and the one it lacks, the US spelling "gray"
+ * (TEMPORARY, [KNOW] questions.md Q30).
+ */
+const LOCAL_SPELLING = { gray: 'grey' };
+let SPELLING = { ...LOCAL_SPELLING };
+
+/** A derived form of a colour name (its plural "reds", an adjective "sandy", "golden", "silvery"): the grammar reads it, the colour reader does not respell it (a sandy floor is a floor of sand). */
+const derived = (t, to) => t.length > to.length && t.startsWith(to.slice(0, Math.max(3, to.length - 1))) && /(?:s|es|y|ey|en|ish)$/.test(t) && !t.includes(' ');
+/** Two colour names side by side ("blue green", a word of k.colours for teal): the grammar reads them (a colour and a value: "the table that is blue green"), not the colour reader. */
+const compound = (k) => k.includes(' ') && k.split(' ').every((w) => state.colours.has(w));
 function absorb(wires) {
-  const colours = new Map(), numbers = new Map();
+  const colours = new Map(), numbers = new Map(), spelling = {};
   for (const w of wires) {
-    if (w.type === 'k.values.colour' && w.f.name?.[0]) {
-      const name = lc(w.f.name[0]);
-      colours.set(name, { name, rgb: w.f.rgb?.[0] ?? w.f.rgb_about?.[0] ?? null, exact: !!w.f.rgb, basic: w.f.basic?.[0] ?? null, thing: w.f.thing?.[0] === 'true', core: w.f.core?.[0] === 'true' });
+    if (w.type === 'core.word' && (w.f.of ?? []).includes('k.colours.colour.name') && w.f.means?.[0]) { const to = lc(w.f.means[0]); for (const t of (w.f.text ?? []).map(lc)) if (!derived(t, to)) spelling[t] = to; continue; }   // the catalog's other words for a colour (blk, grn, light-blue)
+    if (w.type === 'k.colours.colour' && w.f.name?.[0]) {
+      // several wires can name one colour (the CSS shard, the common names, the hand-written colours): merged by name; `basic` here is the basic colour (k.colours `family`)
+      const name = lc(w.f.name[0]), old = colours.get(name);
+      const c = old ?? { name, rgb: null, exact: false, basic: null, thing: false, core: false };
+      if (!c.rgb || (!c.exact && w.f.rgb)) { const rgb = w.f.rgb?.[0] ?? w.f.rgb_about?.[0]; if (rgb) { c.rgb = rgb; c.exact = !!w.f.rgb; } }
+      c.basic ??= w.f.family?.[0] ?? null;
+      c.thing ||= w.f.thing?.[0] === 'true';
+      c.core ||= w.f.core?.[0] === 'true' || !!(w.f.tone || w.f.temperature || w.f.kind) || w.f.basic?.[0] === 'true';
+      if (!old) colours.set(name, c);
     } else if (w.type === 'k.values.number' && w.f.text?.[0]) { const t = lc(w.f.text[0]); (numbers.get(t) ?? numbers.set(t, []).get(t)).push({ value: Number(w.f.value?.[0] ?? w.f.value_about?.[0]), kind: w.f.kind?.[0] ?? 'cardinal' }); }   // one text can be two kinds (third: ordinal and fraction)
   }
-  return { colours, numbers };
+  return { colours, numbers, spelling };
 }
 
 /** Seeds the readers from the bundled subset (idempotent). */
@@ -46,7 +64,9 @@ export function seedValues() {
   if (state.from !== 'none') return;
   const wires = [];
   for (const text of Object.values(BUNDLED_VALUES)) for (const line of text.split('\n')) { const w = line.charCodeAt(0) === 64 ? parseLine(line) : null; if (w) wires.push({ type: w.type, f: w.attrs }); }
-  Object.assign(state, absorb(wires), { from: 'bundled' });
+  const got = absorb(wires);
+  SPELLING = { ...got.spelling, ...LOCAL_SPELLING };
+  Object.assign(state, { colours: got.colours, numbers: got.numbers }, { from: 'bundled' });
 }
 seedValues();
 
@@ -55,18 +75,19 @@ let attached = null;
 export function attachValues(facts) { attached = facts ?? null; state.loading = null; }
 const wake = () => { if (attached && !state.loading) loadValues(attached); };
 
-/** Replaces the seed with the catalog's `k.values` (and `k.colours` families) when the catalog has them; keeps the seed otherwise. Never throws; the settled answer is remembered per `facts`. */
+/** Replaces the seed with the catalog's `k.colours` colours and `k.values` numbers when the catalog has them; keeps the seed otherwise. Never throws; the settled answer is remembered per `facts`. */
 export function loadValues(facts) {
   if (!facts?.wires) return Promise.resolve(state.from);
   if (state.loading?.facts === facts) return state.loading.promise;
   const promise = (async () => {
     try {
-      const wires = [...await facts.wires('k.values.colour'), ...await facts.wires('k.values.number')];
+      const wires = [...await facts.wires('k.colours.colour'), ...await facts.wires('k.values.number'), ...(await facts.wires('core.word', { world: 'k.colours' }).catch(() => [])).filter((w) => (w.f.of ?? []).includes('k.colours.colour.name'))];
       try { const cmp = (await facts.wires('k.values.comparative')).filter((w) => w.f.text?.[0] && w.f.scale?.[0] && w.f.way?.[0]).map((w) => ({ text: lc(w.f.text[0]), scale: w.f.scale[0], way: w.f.way[0], degree: w.f.degree?.[0] })); if (cmp.length) state.comparatives = [...cmp.filter((c) => c.degree !== 'superlative'), ...COMPARATIVES_SEED_TEMPORARY.filter((s) => !cmp.some((c) => c.text === s.text))]; } catch { /* the seed stays */ }
       if (wires.length) {
         const got = absorb(wires);
         if (got.colours.size) { for (const [n, c] of got.colours) { const old = state.colours.get(n); if (old) { c.thing = old.thing; c.core = old.core; } } state.colours = got.colours; }   // thing and core are derived once, at build time: the catalog's own colour wires do not carry them
         if (got.numbers.size) state.numbers = got.numbers;
+        if (Object.keys(got.spelling).length) SPELLING = { ...got.spelling, ...LOCAL_SPELLING };
         state.from = 'catalog';
       }
     } catch { /* the seed stays */ }
@@ -79,16 +100,14 @@ export function loadValues(facts) {
 /** Where the colours came from now: "bundled" (the subset generated from the catalog) or "catalog". */
 export const valuesFrom = () => state.from;
 
-/**
- * Spellings and chat shorthand the catalog does not list (reported to the knowledge repository as `core.word` wants, questions.md): the US spelling and the short forms people type.
- * One table for every world; it names no colour and has no value of its own.
- */
-const SPELLING = { gray: 'grey', grn: 'green', blu: 'blue', bloo: 'blue', blk: 'black', org: 'orange', pnk: 'pink', gry: 'grey', prp: 'purple', ylw: 'yellow', wht: 'white', brn: 'brown' };
+
 
 /** The catalog's name of a colour phrase ("Light-Blue", ["light", "blue"], "grn"), or null. A phrase is looked up whole ("light blue" is a colour of the catalog); shades before a colour are the tool's own business. */
 export function colourName(words) {
   wake();
-  const t = lc(Array.isArray(words) ? words.join(' ') : words).split(' ').map((w) => SPELLING[w] ?? w).join(' ');
+  const raw = lc(Array.isArray(words) ? words.join(' ') : words);
+  if (raw && state.colours.has(raw)) return raw;   // a name that is a colour of its own ("teal") is never read as another name of a colour (k.colours: teal is also a word for turquoise)
+  const t = (compound(raw) ? null : SPELLING[raw]) ?? raw.split(' ').map((w) => (state.colours.has(w) ? w : SPELLING[w] ?? w)).join(' ');
   return t && state.colours.has(t) ? t : null;
 }
 export const colourHex = (name) => state.colours.get(colourName(name))?.rgb ?? null;
@@ -104,7 +123,7 @@ export const colourLexiconWords = () => colourPhrases().filter((p) => { const c 
 /** Is `word` one of the colours people mean first: a basic or core colour of the catalog or a colour-first name (red, orange, violet)? A colour name that is only a shade of a basic colour ("peru" is brown) stays free for a name of the catalog's geography. */
 export function isCoreColour(word) { const p = colourName(word); if (!p) return false; const c = state.colours.get(p); return !c || !!c.core || c.basic === c.name || COLOUR_FIRST.has(p); }
 /** Every phrase that reads as a colour: the names and the spellings (for building a recogniser), longest first. */
-export const colourPhrases = () => [...state.colours.keys(), ...Object.keys(SPELLING)].sort((a, b) => b.length - a.length || a.localeCompare(b));
+export const colourPhrases = () => [...state.colours.keys(), ...Object.keys(SPELLING).filter((k) => !compound(k))].sort((a, b) => b.length - a.length || a.localeCompare(b));
 /** The basic colours (the catalog's `basic` values: a name that is its own basic colour), in the catalog's order. */
 export const basicColourNames = () => [...state.colours.values()].filter((c) => c.basic === c.name).map((c) => c.name);
 /** Is `word` a colour name (spelling and shorthand included)? */

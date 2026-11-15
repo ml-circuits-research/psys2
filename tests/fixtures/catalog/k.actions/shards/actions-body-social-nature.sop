@@ -1,9 +1,9 @@
-# k.actions/shards/actions-body-social-nature: 46 actions of the body; with others; what weather, plants and things do: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; the other forms of the verbs; and 120 verbs and phrases that mean nearly the same.
+# k.actions/shards/actions-body-social-nature: 47 actions of the body; with others; what weather, plants and things do: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; the other forms of the verbs; and 121 verbs and phrases that mean nearly the same.
 # sources: hand-core 1 (hand-written in this repository: tools/actions-data.mjs)
 # license: CC0-1.0
 # script: tools/actions-core.mjs
 
-@k.actions.action.eat k.actions.action name=eat group=body who=person who=animal object=apple object=bread object=grass object=soup object=cake tool=spoon tool=fork tool=mouth where=kitchen where=restaurant where=picnic result="not being hungry; the food being gone" example="A rabbit eats a carrot." core.source="hand-core 1"
+@k.actions.action.eat k.actions.action name=eat group=body who=person who=animal object=apple object=bread object=grass object=soup object=cake tool=spoon tool=fork tool=mouth where=kitchen where=restaurant where=picnic result="not being hungry; the food being gone" holds=remove example="A rabbit eats a carrot." core.source="hand-core 1"
 @k.actions.action.drink k.actions.action name=drink group=body who=person who=animal object=water object=milk object=juice object=tea tool=cup tool=glass tool=bottle tool=straw where=kitchen where=cafe result="not being thirsty" example="A cat drinks milk." core.source="hand-core 1"
 @k.actions.action.bite k.actions.action name=bite group=body who=person who=dog who=mosquito who=shark object=apple object=bone object=sandwich tool=tooth result="a piece off, or tooth marks" example="She bites into an apple." core.source="hand-core 1"
 @k.actions.action.chew k.actions.action name=chew group=body who=person who=cow who=dog object=food object=grass object=bone object=gum tool=tooth result="food made small for swallowing" example="A cow chews grass." core.source="hand-core 1"
@@ -30,12 +30,13 @@
 @k.actions.action.meet k.actions.action name=meet group=social who=person object=friend object=neighbour object=teacher where=park where=cafe where="city street" result="being together; knowing each other" example="Two friends meet in the park." core.source="hand-core 1"
 @k.actions.action.fight k.actions.action name=fight group=social who=person who=cat who=dog who=knight object=dragon object=enemy object=fire tool=sword tool=shield result="one winning, or both hurt" example="The knight fights a dragon." core.source="hand-core 1"
 @k.actions.action.feed k.actions.action name=feed group=social who=person who=bird object=baby object=cat object=hen object=duck object=fish tool=bottle tool=spoon tool=bowl tool=hay where=farm where=zoo where=park result="another not being hungry" example="The farmer feeds the hens." core.source="hand-core 1"
-@k.actions.action.buy k.actions.action name=buy group=social who=person object=bread object=ticket object=toy object=shoes tool=money tool="shopping bags" tool="shopping cart" where=supermarket where=market result="having the thing, and less money" opposite=sell example="She buys bread at the market." core.source="hand-core 1"
-@k.actions.action.sell k.actions.action name=sell group=social who=person who=shopkeeper object=bread object=flowers object=tickets object=fruit tool="balance scale" tool=money where=supermarket where=market result="having money, and the thing gone" opposite=buy example="The baker sells bread." core.source="hand-core 1"
-@k.actions.action.pay k.actions.action name=pay group=social who=person object=bill object=ticket object=shopkeeper tool=money tool=coin where=supermarket where=restaurant where=cafe result="the other having the money" example="He pays for the tickets." core.source="hand-core 1"
-@k.actions.action.win k.actions.action name=win group=social who=person who=team who=horse object=game object=race object=prize object=cup where="football pitch" where=fairground result="being first or best" example="Her team wins the game." core.source="hand-core 1"
+@k.actions.action.buy k.actions.action name=buy group=social who=person object=bread object=ticket object=toy object=shoes tool=money tool="shopping bags" tool="shopping cart" where=supermarket where=market result="having the thing, and less money" holds=add money=remove opposite=sell example="She buys bread at the market." core.source="hand-core 1"
+@k.actions.action.sell k.actions.action name=sell group=social who=person who=shopkeeper object=bread object=flowers object=tickets object=fruit tool="balance scale" tool=money where=supermarket where=market result="having money, and the thing gone" holds=remove money=add opposite=buy example="The baker sells bread." core.source="hand-core 1"
+@k.actions.action.spend k.actions.action name=spend group=social who=person object=money object=coin tool=money where=supermarket where=market result="having less money" money=remove example="She spends ten lei on fruit." core.source="hand-core 1"
+@k.actions.action.pay k.actions.action name=pay group=social who=person object=bill object=ticket object=shopkeeper tool=money tool=coin where=supermarket where=restaurant where=cafe result="the other having the money" money=remove example="He pays for the tickets." core.source="hand-core 1"
+@k.actions.action.win k.actions.action name=win group=social who=person who=team who=horse object=game object=race object=prize object=cup where="football pitch" where=fairground result="being first or best" holds=add example="Her team wins the game." core.source="hand-core 1"
 @k.actions.action.send k.actions.action name=send group=social who=person object=letter object=parcel object=message object=postcard tool=envelope tool=postbox tool=phone result="the thing being on its way to another" opposite=receive example="She sends a postcard to her friend." core.source="hand-core 1"
-@k.actions.action.receive k.actions.action name=receive group=social who=person object=letter object=present object=parcel object=prize tool=hand where=Christmas where="birthday party" result="having what another sent or gave" opposite=send example="He receives a parcel from his aunt." core.source="hand-core 1"
+@k.actions.action.receive k.actions.action name=receive group=social who=person object=letter object=present object=parcel object=prize tool=hand where=Christmas where="birthday party" result="having what another sent or gave" holds=add opposite=send example="He receives a parcel from his aunt." core.source="hand-core 1"
 @k.actions.action.thank k.actions.action name=thank group=social who=person object=friend object=mother object=helper tool=voice result="the other knowing that one is glad of the help" example="She thanks the firefighter." core.source="hand-core 1"
 @k.actions.action.rain k.actions.action name=rain group=nature who=cloud who=sky where="rainy day" where=jungle result="the ground being wet; puddles" example="It rains from grey clouds." core.source="hand-core 1"
 @k.actions.action.snow k.actions.action name=snow group=nature who=cloud who=sky where=winter where=arctic where=mountains result="the ground being white" example="It snows in winter." core.source="hand-core 1"
@@ -80,6 +81,7 @@
 @k.actions.word.action.feed core.word text=feeds text=fed text=feeding means=feed of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.buy core.word text=buys text=bought text=buying means=buy of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.sell core.word text=sells text=sold text=selling means=sell of=k.actions.action.name core.source="hand-core 1"
+@k.actions.word.action.spend core.word text=spends text=spent text=spending means=spend of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.pay core.word text=pays text=paid text=paying means=pay of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.win core.word text=wins text=won text=winning means=win of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.send core.word text=sends text=sent text=sending means=send of=k.actions.action.name core.source="hand-core 1"
@@ -177,6 +179,8 @@
 @k.actions.similar.pay_for.buy k.actions.similar name="pay for" action=buy core.source="hand-core 1"
 @k.actions.similar.offer_for_sale.sell k.actions.similar name="offer for sale" action=sell core.source="hand-core 1"
 @k.actions.similar.trade.sell k.actions.similar name=trade action=sell core.source="hand-core 1"
+@k.actions.similar.pay_out.spend k.actions.similar name="pay out" action=spend core.source="hand-core 1"
+@k.actions.similar.use_up.spend k.actions.similar name="use up" action=spend core.source="hand-core 1"
 @k.actions.similar.pay_for.pay k.actions.similar name="pay for" action=pay core.source="hand-core 1"
 @k.actions.similar.settle.pay k.actions.similar name=settle action=pay core.source="hand-core 1"
 @k.actions.similar.hand_over_money.pay k.actions.similar name="hand over money" action=pay core.source="hand-core 1"
@@ -186,7 +190,6 @@
 @k.actions.similar.post.send k.actions.similar name=post action=send core.source="hand-core 1"
 @k.actions.similar.mail.send k.actions.similar name=mail action=send core.source="hand-core 1"
 @k.actions.similar.dispatch.send k.actions.similar name=dispatch action=send core.source="hand-core 1"
-@k.actions.similar.get.receive k.actions.similar name=get action=receive core.source="hand-core 1"
 @k.actions.similar.be_given.receive k.actions.similar name="be given" action=receive core.source="hand-core 1"
 @k.actions.similar.accept.receive k.actions.similar name=accept action=receive core.source="hand-core 1"
 @k.actions.similar.say_thank_you.thank k.actions.similar name="say thank you" action=thank core.source="hand-core 1"

@@ -18,7 +18,7 @@ test('the voice proposes first where its frames read the sentence', async () => 
   assert.ok(c.length >= 1);   // (a translator candidate with the same text is not repeated)
 });
 test('the voice abstains outside its frames: the translators read as before', async () => {
-  const c = await gatherCandidates('deseneaza un crocodil', { from: 'ro', to: 'en', translator: make(true) });
+  const c = await gatherCandidates('deseneaza o zebra', { from: 'ro', to: 'en', translator: make(true) });   // a word w.lang.ro's dictionary has no lemma for (crocodil has one since catalog 085bc0d: the voice reads it now)
   assert.ok(!c.some((x) => x.source === 'grammar'));
   assert.ok(c.some((x) => x.source === 'rules'));
 });

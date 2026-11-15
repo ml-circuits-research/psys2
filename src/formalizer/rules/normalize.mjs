@@ -94,13 +94,20 @@ const OP_CHARS = '+-*/×÷=<>';
 /** Chat spellings read as the standard word; the token keeps the original in `alt`, so a pattern that lists `ur` still matches. */
 const WORD_ALIASES = { ur: 'your' };
 
-/** Fillers (spec 03 section 1.5): they only colour a message. The first group was always dropped. */
+/**
+ * Fillers (spec 03 section 1.5): they only colour a message, dropped wherever they stand. The catalog's function words of the views hesitation (um, uh, hmm ...) and politeness that stands
+ * anywhere (please, pls, plz: w.lang.en.fn, shard fn); the rest are words the catalog does not class yet, dropped here anywhere (TEMPORARY, [KNOW] questions.md Q30: chat spellings, and
+ * ok / okay / well / lol, which the catalog has at the lead only or as fillers that also have a sense).
+ */
+const LOCAL_FILLERS = ['ok', 'okay', 'well', 'hey', 'hmmm', 'lol', 'lool', 'plss', 'plzz', 'thx', 'ty', 'tysm', 'rn', 'pleas'];
+const fillerSet = () => new Set([...en.fn('hesitation'), ...en.fn('politeness', 'any'), ...LOCAL_FILLERS].filter((w) => !w.includes(' ')));
+let FILLER_WORDS = null;
+/** The fillers that were always dropped before the larger set (a behaviour of the matcher, not a class of words: a message of these alone is no request). */
 const OLD_FILLERS = new Set(['please', 'ok', 'okay', 'well', 'um']);
-const NEW_FILLERS = new Set(['hey', 'uh', 'uhm', 'uhh', 'hmm', 'hm', 'hmmm', 'lol', 'lool', 'pls', 'plz', 'plss', 'plzz', 'thx', 'ty', 'tysm', 'rn', 'pleas']);
 const FILLER_PATTERN = /^(?:ple+a+s+e+|pl[sz]{1,3}|hm+|u+h+m*|lo+l+)$/;
 /** True for a word that is always a discourse filler (please-variants such as `pleeease` included). */
 export function isFillerWord(w) {
-  return OLD_FILLERS.has(w) || NEW_FILLERS.has(w) || FILLER_PATTERN.test(w);
+  return (FILLER_WORDS ??= fillerSet()).has(w) || FILLER_PATTERN.test(w);
 }
 /** True for the fillers that were always dropped (please, ok, okay, well, um). */
 export const isOldFiller = (w) => OLD_FILLERS.has(w);

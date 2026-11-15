@@ -1,40 +1,62 @@
 # k.colours: what is known about colours: the family of a colour name, whether it is light or dark, warm or cool,
 # which colours mix into which, which colour is its opposite on the colour wheel, and things that typically have
 # the colour. So that "what colour is a banana", "what do red and yellow make", "a darker blue" can be answered by
-# lookup. The exact value of a colour (its RGB) is not said here.
-# sources: hand-core 1 (hand-written in this repository)
+# lookup. The home of every colour name (KR2, reviewer 14:45): the 141 CSS names with their exact RGB and 29 common
+# names with a usual one (moved from k.values.colour), the 11 basic colour terms marked basic=true.
+# sources: hand-core 1 (hand-written in this repository); css-colors 2.1.1 (MIT, shard colours-css)
 # license: CC0-1.0
-# script: none (hand-written)
+# script: tools/colours-shapes-core.mjs, tools/values-core.mjs (the colour names)
 
-@k.colours core.module name=k.colours version=1 exports=colour exports=mix core.source="hand-core 1"
+@k.colours core.module name=k.colours version=2 imports=k.named exports=colour exports=basic exports=mix core.source="hand-core 1"
 
 # A colour, named by its common English name. `family` is the basic colour it belongs to (a basic colour is its
-# own family: red; scarlet is a red); `tone` says whether it is `light`, `medium` or `dark` among colours;
+# own family: red; scarlet is a red), where it has one (alice blue has none); `basic=true` marks the 11 basic colour
+# terms of English (Berlin and Kay 1969: black, white, grey, red, orange, yellow, green, blue, purple, pink, brown);
+# `css` is the CSS keyword of a CSS colour; `rgb` its exact value ("#DC143C"), `rgb_about` a usual value of a name
+# that has no fixed one (mustard), never both; `tone` says whether it is `light`, `medium` or `dark` among colours;
 # `temperature` whether painters call it `warm`, `cool` or `neutral`; `lighter` and `darker` name a lighter and a
 # darker colour of the same family, where there is a common name for one; `complement` names the colour opposite
 # on the colour wheel (basic colours of the wheel only); `kind=metallic` says that the colour shines like metal
 # (gold, silver). `thing` names things that typically have the colour
-# (many; the name of a k.objects object where there is one).
-@k.colours.colour core.type of=k.colours.colour shared=true closed=true core.source="hand-core 1"
+# (many; the name of a k.objects object where there is one). Tone, temperature and family are said for the 33
+# colours of shard colours (and some more); a colour name of CSS may have only its value.
+@k.colours.colour core.type of=k.colours.colour extends=k.named.labelled shared=true closed=true core.source="hand-core 1"
 @k.colours.colour.name core.slot of=k.colours.colour key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
-@k.colours.colour.family core.slot of=k.colours.colour key=family required=true enum=red enum=orange enum=yellow enum=green enum=blue enum=purple enum=pink enum=brown enum=black enum=white enum=grey core.source="hand-core 1"
-@k.colours.colour.tone core.slot of=k.colours.colour key=tone required=true enum=light enum=medium enum=dark core.source="hand-core 1"
-@k.colours.colour.temperature core.slot of=k.colours.colour key=temperature required=true enum=warm enum=cool enum=neutral core.source="hand-core 1"
-@k.colours.colour.lighter core.slot of=k.colours.colour key=lighter kind=atom kind=string core.source="hand-core 1"
-@k.colours.colour.darker core.slot of=k.colours.colour key=darker kind=atom kind=string core.source="hand-core 1"
-@k.colours.colour.complement core.slot of=k.colours.colour key=complement kind=atom kind=string core.source="hand-core 1"
-@k.colours.colour.kind core.slot of=k.colours.colour key=kind enum=metallic core.source="hand-core 1"
-@k.colours.colour.thing core.slot of=k.colours.colour key=thing many=true kind=atom kind=string core.source="hand-core 1"
+@k.colours.colour.family core.slot of=k.colours.colour key=family enum=black enum=white enum=grey enum=red enum=orange enum=yellow enum=green enum=blue enum=purple enum=pink enum=brown kind=atom type=k.colours.basic by=name core.source="hand-core 1"
+@k.colours.colour.basic core.slot of=k.colours.colour key=basic kind=boolean core.source="hand-core 1"
+@k.colours.colour.css core.slot of=k.colours.colour key=css kind=atom core.source="hand-core 1"
+@k.colours.colour.rgb core.slot of=k.colours.colour key=rgb kind=string core.source="hand-core 1"
+@k.colours.colour.rgb_about core.slot of=k.colours.colour key=rgb_about excludes=rgb kind=string core.source="hand-core 1"
+@k.colours.colour.tone core.slot of=k.colours.colour key=tone enum=light enum=medium enum=dark core.source="hand-core 1"
+@k.colours.colour.temperature core.slot of=k.colours.colour key=temperature enum=warm enum=cool enum=neutral core.source="hand-core 1"
+@k.colours.colour.lighter core.slot of=k.colours.colour key=lighter kind=atom kind=string type=k.colours.colour by=name core.source="hand-core 1"
+@k.colours.colour.darker core.slot of=k.colours.colour key=darker kind=atom kind=string type=k.colours.colour by=name core.source="hand-core 1"
+@k.colours.colour.complement core.slot of=k.colours.colour key=complement kind=atom kind=string type=k.colours.colour by=name core.source="hand-core 1"
+@k.colours.colour.kind core.slot of=k.colours.colour key=kind enum=metallic enum=primary enum=secondary enum=neutral core.source="hand-core 1"
+@k.colours.colour.thing core.slot of=k.colours.colour key=thing many=true kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+
+# The basic view: the colours with basic=true, one fact each, by rule (written out by tools/derive.mjs). A slot that
+# takes only a basic colour joins it (`type=k.colours.basic by=name`): k.values.coloured, k.drawing.part, the family.
+@k.colours.basic core.type of=k.colours.basic shared=true closed=true core.source="hand-core 1"
+@k.colours.basic.name core.slot of=k.colours.basic key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.colours.basic.derived core.slot of=k.colours.basic key=derived kind=boolean core.source="hand-core 1"
+@k.colours.basic.rule.colour k.colours.colour name=?name basic=true
+@k.colours.basic.rule.basic k.colours.basic name=?name
+@k.colours.basic.rule core.rule when=$k.colours.basic.rule.colour then=$k.colours.basic.rule.basic core.source="hand-core 1"
 
 # What two colours of paint give when they are mixed: `a` and `b` (in the order of the alphabet, so that a pair is
 # said once) give `gives`. All three are names of colours of this world.
 @k.colours.mix core.type of=k.colours.mix shared=true closed=true core.source="hand-core 1"
-@k.colours.mix.a core.slot of=k.colours.mix key=a id=true required=true kind=atom kind=string core.source="hand-core 1"
-@k.colours.mix.b core.slot of=k.colours.mix key=b id=true required=true kind=atom kind=string core.source="hand-core 1"
-@k.colours.mix.gives core.slot of=k.colours.mix key=gives required=true kind=atom kind=string core.source="hand-core 1"
+@k.colours.mix.a core.slot of=k.colours.mix key=a id=true required=true kind=atom kind=string type=k.colours.colour by=name core.source="hand-core 1"
+@k.colours.mix.b core.slot of=k.colours.mix key=b id=true required=true kind=atom kind=string type=k.colours.colour by=name core.source="hand-core 1"
+@k.colours.mix.gives core.slot of=k.colours.mix key=gives required=true kind=atom kind=string type=k.colours.colour by=name core.source="hand-core 1"
 
 # Words for the types and keys of this world.
 @k.colours.word.colour core.word text=colour text=colours text=color text=colors text=coloured text=colored means=k.colours.colour core.source="hand-core 1"
+@k.colours.word.basic core.word text=basic text="basic colour" text="basic colours" means=k.colours.basic core.source="hand-core 1"
+@k.colours.word.rgb core.word text=rgb text=RGB text="colour value" text=hex means=k.colours.colour.rgb core.source="hand-core 1"
+@k.colours.word.rgb_about core.word text="usual rgb" text="usual value" means=k.colours.colour.rgb_about core.source="hand-core 1"
+@k.colours.word.css core.word text=css text="css name" means=k.colours.colour.css core.source="hand-core 1"
 @k.colours.word.family core.word text=family text="kind of" means=k.colours.colour.family core.source="hand-core 1"
 @k.colours.word.tone core.word text=light text=dark text=pale means=k.colours.colour.tone core.source="hand-core 1"
 @k.colours.word.temperature core.word text=warm text=cool means=k.colours.colour.temperature core.source="hand-core 1"
@@ -42,3 +64,14 @@
 @k.colours.word.darker core.word text=darker text=deeper means=k.colours.colour.darker core.source="hand-core 1"
 @k.colours.word.complement core.word text=complement text=complementary text=opposite means=k.colours.colour.complement core.source="hand-core 1"
 @k.colours.word.mix core.word text=mix text=mixes text=mixed text=mixing text=make text=makes means=k.colours.mix core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.colours.word.key.colour.basic core.word text=basic means=k.colours.colour.basic core.source="hand-core 1"
+@k.colours.word.key.colour.rgb_about core.word text=rgb means=k.colours.colour.rgb_about core.source="hand-core 1"
+@k.colours.word.key.colour.tone core.word text=tone means=k.colours.colour.tone core.source="hand-core 1"
+@k.colours.word.key.colour.temperature core.word text=temperature means=k.colours.colour.temperature core.source="hand-core 1"
+@k.colours.word.key.colour.kind core.word text=kind means=k.colours.colour.kind core.source="hand-core 1"
+@k.colours.word.key.colour.thing core.word text=thing means=k.colours.colour.thing core.source="hand-core 1"
+@k.colours.word.key.basic.derived core.word text=derived means=k.colours.basic.derived core.source="hand-core 1"
+@k.colours.word.key.mix.b core.word text=b means=k.colours.mix.b core.source="hand-core 1"
+@k.colours.word.key.mix.gives core.word text=gives means=k.colours.mix.gives core.source="hand-core 1"

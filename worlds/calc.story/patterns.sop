@@ -1,10 +1,10 @@
-# Word problems (calc.story). Every pattern hands the sentence to the library's storyState (arg.text = the segment); the words are lang.common's (ADR-007).
+# Word problems (calc.story). Every pattern hands the sentence to the library's storyState (arg.text = the segment); the verbs are k.actions' possession effects (acts.possession.*, K5) and lang.common's lang.story.* for the rest (ADR-007).
 # The world declines a reading the library cannot read whole, or a question when no story is in focus (ops.mjs `accepts`), so the next world reads it. A question
 # it keeps is one its own story answers, so its question patterns rank above the general question frames (talk's "how many legs does a spider have").
 
 @pat.calc.story.event core.pattern
     canonical="Mia found a carrot."
-    match="[$lang.lead.filler]? {who:word} [$lang.story.when]? [$lang.story.set|$lang.story.add|$lang.story.remove|$lang.story.give] {rest:rest}"
+    match="[$lang.lead.filler]? {who:word} [$lang.story.when]? [$acts.possession.set|$acts.possession.add|$acts.possession.remove|$acts.possession.give|$lang.story.set|$lang.story.add|$lang.story.remove|$lang.story.give] {rest:rest}"
     emit="@{_} core.request action=story.tell arg.rest=\"{rest}\" arg.text=\"{segment}\""
     kind=statement
     priority=6
@@ -14,7 +14,7 @@
     doc="A sentence of a story: an owner (a name, a pronoun, I, or a number as subject), a verb of holding, getting, losing or giving, an amount and an item."
 
 @pat.calc.story.event.bare core.pattern
-    match="[$lang.lead.filler]? {who:word} [$lang.story.when]? [$lang.story.remove|$lang.story.add]"
+    match="[$lang.lead.filler]? {who:word} [$lang.story.when]? [$acts.possession.remove|$acts.possession.add|$lang.story.remove|$lang.story.add]"
     emit="@{_} core.request action=story.tell arg.text=\"{segment}\""
     kind=statement
     priority=6

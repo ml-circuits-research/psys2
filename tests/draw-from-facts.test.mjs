@@ -131,8 +131,10 @@ test('the built-in kinds are described as facts; the ones the facts can say full
 
 test('diagram.sketch: "a diagram shaped like a house" is an arrangement along the outline of the catalog house: nodes on its corners, joined in order, in both reasoners', async () => {
   const { outlineOf, pointsAlong } = await import('../worlds/diagram.sketch/engine.mjs');
-  const hull = outlineOf(THINGS.house);
-  // the silhouette (reviewer 2026-11-15 03:15 item 1): a symmetric gable, the two eaves, vertical walls; the one-sided chimney is a detail inside it
+  const { outlineNamed, outlines } = await import('../src/knowledge/diagram-world.mjs');
+  assert.equal(outlines().size, 50, 'the 50 outlines of k.layouts (bundled from the pin)');
+  const hull = outlineOf(outlineNamed('house'));
+  // the catalog's traced outline (Q21), snapped to the drawing's corners within its tolerance: a symmetric gable, the two eaves, vertical walls; the one-sided chimney is a detail, left out
   assert.deepEqual(hull, [[50, 15], [88, 45], [80, 45], [80, 95], [20, 95], [20, 45], [12, 45]], 'the house outline: gable top, right eave, wall, wall foot, wall foot, wall, left eave');
   assert.equal(pointsAlong(hull, 12).length, 12);
   for (const reasoner of ['ops', 'matrix']) {

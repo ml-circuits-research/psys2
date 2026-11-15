@@ -14,10 +14,12 @@ import { lexIndex } from '../worlds/lexicon.mjs';
 import { isNumberWord } from './rules/numbers.mjs';
 import { FUNCTION_WORDS, ABBREVIATIONS, worldVocabulary } from './spell.mjs';
 import { budget } from '../dialog/budget.mjs';
+import { en } from '../lang/en.mjs';
 
 const WORD_RE = /[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu;
 const SLOT_RE = /\{[A-Za-z_0-9]+:([A-Za-z_.0-9]+)\}/g;
-const FILLERS = new Set([...Object.keys(ABBREVIATIONS), ...'pls plz please thanks thx lol haha yo hmm um uh ok okay yeah so well like just'.split(' ')]);
+// the catalog's fillers, politeness and hesitation (w.lang.en.fn) and chat words it does not class yet (TEMPORARY, Q30)
+const FILLERS = new Set([...Object.keys(ABBREVIATIONS), ...['filler', 'politeness', 'hesitation'].flatMap((v) => [...en.fn(v)]).filter((w) => !w.includes(' ')), ...'lol haha yo yeah'.split(' ')]);
 /** Function words minus the ones that carry meaning in loose words (big, small, left, not, make, show ...): those count as content. */
 const KEEP = new Set(('now new old big small good bad out off down up left right one two more most less much many few not no never always all any some each every other another again still '
   + 'over under after before make get show tell give take put set see let like want need can what where who how which when why whose').split(' '));
