@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "57a5c009",
-  "tree": "66642a77c778bff6",
+  "build": "04987ded",
+  "tree": "b246a0839e0404e9",
   "catalog": "ab3b2ab868ba27868f88d2dbdfce3433a699ece6",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,97 +13,17 @@
   "matrix": {
    "turns": 579,
    "judged": 181,
-   "right": 131,
+   "right": 130,
    "partly": 13,
-   "wrong": 37,
-   "open": 11,
-   "changed": 55,
+   "wrong": 38,
+   "open": 13,
+   "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 342,
+    "executed": 330,
     "refused": 3,
     "asked": 8,
-    "not_understood": 155,
-    "other_world": 71
-   },
-   "by_source": {
-    "owner-log-2026-11-13": {
-     "turns": 69,
-     "judged": 55,
-     "right": 41
-    },
-    "owner-log-2026-11-13b": {
-     "turns": 63,
-     "judged": 11,
-     "right": 11
-    },
-    "owner-log-2026-11-13c": {
-     "turns": 24,
-     "judged": 10,
-     "right": 8
-    },
-    "real-phrases-2026-11-09c": {
-     "turns": 68,
-     "judged": 0,
-     "right": 0
-    },
-    "real-phrases-2026-11-09d": {
-     "turns": 10,
-     "judged": 0,
-     "right": 0
-    },
-    "real-phrases-2026-11-09e": {
-     "turns": 67,
-     "judged": 0,
-     "right": 0
-    },
-    "real-phrases-2026-11-09f-mobile": {
-     "turns": 108,
-     "judged": 0,
-     "right": 0
-    },
-    "real-dialogue-2026-11-09": {
-     "turns": 49,
-     "judged": 0,
-     "right": 0
-    },
-    "real-dialogue-2026-11-09b": {
-     "turns": 14,
-     "judged": 0,
-     "right": 0
-    },
-    "real dialogues": {
-     "turns": 105,
-     "judged": 105,
-     "right": 71
-    },
-    "owner-exports/phrase-log-2026-11-14T2243": {
-     "turns": 2,
-     "judged": 0,
-     "right": 0
-    }
-   },
-   "retired": {
-    "judged": 72,
-    "right": 64,
-    "partly": 0,
-    "wrong": 8
-   }
-  },
-  "ops": {
-   "turns": 579,
-   "judged": 181,
-   "right": 131,
-   "partly": 13,
-   "wrong": 37,
-   "open": 11,
-   "changed": 55,
-   "unjudged": 332,
-   "outcome": {
-    "executed": 342,
-    "refused": 3,
-    "asked": 8,
-    "not_understood": 156,
+    "not_understood": 168,
     "other_world": 70
    },
    "by_source": {
@@ -155,7 +75,7 @@
     "real dialogues": {
      "turns": 105,
      "judged": 105,
-     "right": 71
+     "right": 70
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -165,28 +85,108 @@
    },
    "retired": {
     "judged": 72,
-    "right": 64,
+    "right": 65,
     "partly": 0,
-    "wrong": 8
+    "wrong": 7
+   }
+  },
+  "ops": {
+   "turns": 579,
+   "judged": 181,
+   "right": 130,
+   "partly": 13,
+   "wrong": 38,
+   "open": 13,
+   "changed": 53,
+   "unjudged": 332,
+   "outcome": {
+    "executed": 330,
+    "refused": 3,
+    "asked": 8,
+    "not_understood": 169,
+    "other_world": 69
+   },
+   "by_source": {
+    "owner-log-2026-11-13": {
+     "turns": 69,
+     "judged": 55,
+     "right": 41
+    },
+    "owner-log-2026-11-13b": {
+     "turns": 63,
+     "judged": 11,
+     "right": 11
+    },
+    "owner-log-2026-11-13c": {
+     "turns": 24,
+     "judged": 10,
+     "right": 8
+    },
+    "real-phrases-2026-11-09c": {
+     "turns": 68,
+     "judged": 0,
+     "right": 0
+    },
+    "real-phrases-2026-11-09d": {
+     "turns": 10,
+     "judged": 0,
+     "right": 0
+    },
+    "real-phrases-2026-11-09e": {
+     "turns": 67,
+     "judged": 0,
+     "right": 0
+    },
+    "real-phrases-2026-11-09f-mobile": {
+     "turns": 108,
+     "judged": 0,
+     "right": 0
+    },
+    "real-dialogue-2026-11-09": {
+     "turns": 49,
+     "judged": 0,
+     "right": 0
+    },
+    "real-dialogue-2026-11-09b": {
+     "turns": 14,
+     "judged": 0,
+     "right": 0
+    },
+    "real dialogues": {
+     "turns": 105,
+     "judged": 105,
+     "right": 70
+    },
+    "owner-exports/phrase-log-2026-11-14T2243": {
+     "turns": 2,
+     "judged": 0,
+     "right": 0
+    }
+   },
+   "retired": {
+    "judged": 72,
+    "right": 65,
+    "partly": 0,
+    "wrong": 7
    }
   }
  },
  "diagnostic_rules_matrix": {
-  "right": 129,
+  "right": 132,
   "judged": 181,
-  "partly": 12,
-  "wrong": 40,
+  "partly": 13,
+  "wrong": 36,
   "retired": {
    "judged": 72,
    "right": 69,
    "partly": 0,
    "wrong": 3
   },
-  "build": "eb38ea45",
-  "tree": "c13f13f4b2fbf6df"
+  "build": "04987ded",
+  "tree": "b246a0839e0404e9"
  },
- "failing_matrix": 242,
- "failing_ops": 242,
+ "failing_matrix": 252,
+ "failing_ops": 252,
  "ops_only": 0,
  "causes": [
   {
@@ -218,8 +218,8 @@
   },
   {
    "cause": "bare word or two-word fragment not read",
-   "count": 30,
-   "both_reasoners": 30,
+   "count": 33,
+   "both_reasoners": 33,
    "examples": [
     {
      "text": "mcdavatara human",
@@ -229,7 +229,7 @@
     {
      "text": "yes",
      "tab": "guess",
-     "happened": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
     },
     {
      "text": "no",
@@ -245,8 +245,8 @@
   },
   {
    "cause": "translation residue / wrong sense / source typo",
-   "count": 27,
-   "both_reasoners": 27,
+   "count": 30,
+   "both_reasoners": 30,
    "examples": [
     {
      "text": "she knows what their grandma could trade charcoal Chicago",
@@ -259,21 +259,21 @@
      "happened": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of hat?\" I did not know the words: old, woman. [outcome: not_understood; w"
     },
     {
+     "text": "feitia am zis, am gresit feita",
+     "tab": "draw",
+     "happened": "I did not understand \"feitia am zis, am gresit feita\". Did you mean \"Feitia sand.\"? That sounds like something about you. I cannot keep facts about you here. I "
+    },
+    {
      "text": "desneaza o capra",
      "tab": "draw",
      "happened": "I can't find Draw a on any of your lists, so I cannot mark it as done. (I read \"goat\" as \"got\") [outcome: other_world; open]"
-    },
-    {
-     "text": "și Angie",
-     "tab": "robot",
-     "happened": "I did not understand \"și Angie\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
     }
    ]
   },
   {
    "cause": "sentence not read by any world (no cause key)",
-   "count": 26,
-   "both_reasoners": 26,
+   "count": 29,
+   "both_reasoners": 29,
    "examples": [
     {
      "text": "now be a human",
@@ -281,9 +281,9 @@
      "happened": "I did not understand \"now be a human\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
     },
     {
-     "text": "let’s play guess the animal",
-     "tab": "guess",
-     "happened": "OK, I wrote a new paragraph (5 words). [outcome: not_understood]"
+     "text": "become a women",
+     "tab": "robot",
+     "happened": "I did not understand \"become a women\". Did you mean \"Become a woman.\"? [outcome: not_understood]"
     },
     {
      "text": "start x and 0",
@@ -291,17 +291,22 @@
      "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
     },
     {
-     "text": "Become an emoji",
-     "tab": "robot",
-     "happened": "I did not understand \"Become an emoji\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
+     "text": "are the new paragraph",
+     "tab": "editor",
+     "happened": "I did not understand \"are the new paragraph\". Did you mean \"Add the new paragraph.\"? [outcome: not_understood]"
     }
    ]
   },
   {
    "cause": "a world other than the open tab took the turn",
-   "count": 25,
-   "both_reasoners": 25,
+   "count": 26,
+   "both_reasoners": 26,
    "examples": [
+    {
+     "text": "let’s play guess the animal",
+     "tab": "guess",
+     "happened": "What should I play? For example a note, a chord or a song. I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the o"
+    },
     {
      "text": "draw a sun and a house",
      "tab": "tictactoe",
@@ -316,18 +321,13 @@
      "text": "Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?",
      "tab": "robot",
      "happened": "OK, Tom has 15 apples. OK, Tom gave Ana 12 apples. Tom has 3 apples. [outcome: other_world]"
-    },
-    {
-     "text": "Tom has 5 apples. He gives 8 to Ana. How many apples does Tom have?",
-     "tab": "robot",
-     "happened": "OK, Tom has 5 apples. That does not add up. Tom only had 5 apples, so Tom cannot give away 8. Tom has 5 apples. [outcome: other_world]"
     }
    ]
   },
   {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
-   "count": 15,
-   "both_reasoners": 15,
+   "count": 16,
+   "both_reasoners": 16,
    "examples": [
     {
      "text": "make the avatar an emoji",
@@ -364,7 +364,7 @@
     {
      "text": "create a diagram",
      "tab": "diagram",
-     "happened": "I drew a random tree diagram with nine shapes. It is about Germany. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:shapes."
+     "happened": "I drew a random network diagram with nine shapes. It is about Serbia. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:shape"
     },
     {
      "text": "add a box",
@@ -386,7 +386,7 @@
     {
      "text": "sa fie diferite",
      "tab": "draw",
-     "happened": "I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon "
+     "happened": "I did not understand \"sa fie diferite\". Did you mean \"Încearcă o pălărie diferită.\"? [outcome: not_understood; wrong; not_understood]"
     },
     {
      "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
@@ -396,7 +396,7 @@
     {
      "text": "cum ai ajuns a deschisi joculd e sah? e ridicol",
      "tab": "chess",
-     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"T"
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
     },
     {
      "text": "mai jos, sta pe leagan nu pe el",
@@ -429,33 +429,6 @@
      "text": "desene asta",
      "tab": "map",
      "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
-    }
-   ]
-  },
-  {
-   "cause": "fragment / list split",
-   "count": 5,
-   "both_reasoners": 5,
-   "examples": [
-    {
-     "text": "eyeglasses",
-     "tab": "robot",
-     "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; open]"
-    },
-    {
-     "text": "a women",
-     "tab": "robot",
-     "happened": "I am not sure how “a women” fits what we were doing. Please say the whole request. [outcome: not_understood]"
-    },
-    {
-     "text": "new game",
-     "tab": "guess",
-     "happened": "I am not sure how “new name” fits what we were doing. Please say the whole request. [outcome: not_understood]"
-    },
-    {
-     "text": "cap",
-     "tab": "draw",
-     "happened": "I am not sure how “A head” fits what we were doing. Please say the whole request. [outcome: not_understood]"
     }
    ]
   },
@@ -541,6 +514,33 @@
    ]
   },
   {
+   "cause": "fragment / list split",
+   "count": 4,
+   "both_reasoners": 4,
+   "examples": [
+    {
+     "text": "eyeglasses",
+     "tab": "robot",
+     "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; open]"
+    },
+    {
+     "text": "a women",
+     "tab": "robot",
+     "happened": "I am not sure how “a women” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+    },
+    {
+     "text": "cap",
+     "tab": "draw",
+     "happened": "I am not sure how “A head” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+    },
+    {
+     "text": "turn it in a human again",
+     "tab": "robot",
+     "happened": "I am not sure how “turn it in a human again” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+    }
+   ]
+  },
+  {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.ellipsis1",
    "count": 3,
    "both_reasoners": 3,
@@ -604,14 +604,14 @@
    ]
   },
   {
-   "cause": "other / wrong result",
+   "cause": "not understood (no cause key)",
    "count": 1,
    "both_reasoners": 1,
    "examples": [
     {
      "text": "Chnage the tile of the document to Disucssion",
      "tab": "editor",
-     "happened": "What should I change about tile of the document to Disucssion? (I read \"chnage\" as \"change\" and \"tile\" as \"time\") [outcome: asked; open]"
+     "happened": "I did not understand \"Chnage the tile of the document to Disucssion\". Did you mean \"Change the time of the document to Disucssion.\"? [outcome: not_understood; o"
     }
    ]
   },

@@ -955,7 +955,8 @@
 
 @t.geo.map.r2n077 core.test
     input="Clean the map up."
-    expect="The map was already"
+    expect="Did you mean \"Clear the map up.\""
+    doc="spec 16 section 14 rule 4: \"clean\" is a real word, read as \"clear\" it is a guess, not a typo: asked, not executed"
     session=r2_geo_clearAll
 
 @t.geo.map.r2n078 core.test

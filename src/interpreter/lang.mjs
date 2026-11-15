@@ -51,10 +51,16 @@ export function makeLang(source) {
   /** Drop a trailing softener ("instead", "then", "now", "again") that a command does not need. */
   const stripTrailing = (text) => (TRAILING ? String(text ?? '').replace(TRAILING, '') : String(text ?? ''));
 
-  const moodAlts = [...new Set(phrase('lang.mood.statement'))].sort((a, b) => b.length - a.length);
-  const STATEMENT = moodAlts.length ? new RegExp(`^(?:${moodAlts.map(esc).join('|')})(?: |$)`) : null;
-  /** The first-person statement lead a clause starts with ("i have two kids" -> "i have"), or null: a statement about the speaker, not a command (spec 16 section 14). */
-  const statement = (text) => (STATEMENT ? (plain(stripFiller(text)).match(STATEMENT)?.[0].trim() ?? null) : null);
+  // the shared lead of every pattern, `[$lang.lead.filler|pls|plz]? [$lang.lead.polite]?` (src/formalizer/rules/shapes.mjs)
+  const altsOf = (id) => [...new Set(phrase(id))].sort((a, b) => b.length - a.length).map(esc);
+  const politeAlts = altsOf('lang.lead.polite'), leadFillerAlts = [...altsOf('lang.lead.filler'), 'pls', 'plz'];
+  const POLITE = new RegExp(`^(?:(?:${leadFillerAlts.join('|')})(?: |$))?(?:(?:${politeAlts.join('|') || '(?!)'})(?: |$))?`);
+  /** The clause without the shared pattern lead (a spoken filler such as "i mean", then a polite request lead such as "i want", "i would like you to", "can you": `lang.lead.filler`, `lang.lead.polite`), else the clause as it is (filler dropped): a wish is a request, the mood is the rest's (spec 16 section 14; the mood itself is the library's `moodOf`). */
+  const stripPolite = (text) => {
+    const t = stripFiller(text);
+    for (const p of [plain(String(t).replace(/[’']/g, ' ')), plain(t)]) { const m = p.match(POLITE); if (m?.[0] && p.length > m[0].length) return p.slice(m[0].length).trim(); }
+    return t;
+  };
 
   // ---- ordinals: the order of lex.lang.ordinal is the value (first = 1 ... tenth = 10); "last" and its synonyms are -1 ---------
   const ORDINAL_WORDS = ['', ...source.lexicon('lex.lang.ordinal').map((w) => String(w).toLowerCase()).filter((w) => w !== 'last')];
@@ -200,7 +206,7 @@ export function makeLang(source) {
     return null;
   };
 
-  return { phrase, statement, except, redo, undoAll, undoNamed, know, yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
+  return { phrase, stripPolite, except, redo, undoAll, undoNamed, know, yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
 }
 
 export default makeLang;

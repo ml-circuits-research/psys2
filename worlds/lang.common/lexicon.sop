@@ -2,7 +2,7 @@
     text="Seeded by scripts/build-lang-common.mjs from the union of the per-world lead-in and suffix lists (unreachable alternatives removed) and the per-world shared lexicons; edit by hand from now on. New common phrasing goes here, never inline in a world."
 
 @phrase.lang.lead.polite core.phrase
-    doc="Polite request lead-ins (\"can you\", \"i would like you to\", \"let us\"), optional before an imperative."
+    doc="Polite request lead-ins (\"can you\", \"i would like you to\", \"let us\"), optional before an imperative. ctx.lang.stripPolite drops them before the library reads the mood (spec 16 section 14): a wish is a request. \"i like\" is not here: \"I like cats\" is a statement about the speaker."
     alt=would_you_be_so_kind_as_to
     alt=i_d_like_to_be_in
     alt=i_d_love_for_you_to
@@ -281,7 +281,6 @@
     alt=could_you
     alt=go_ahead
     alt=how_about
-    alt=i_like
     alt=i_need
     alt=i_wana
     alt=i_wanna
@@ -1006,32 +1005,6 @@
     word=lei
     plural=leu:lei
 
-
-@phrase.lang.mood.statement core.phrase
-    frame=false
-    doc="First-person statement leads (\"i have\", \"i like\", \"i am\"): a clause that starts with one is a statement about the speaker, not a command; ctx.lang.statement reads them (spec 16 section 14). Wishes (\"i want\", \"i would like\", \"i need\") are requests and are not here."
-    alt=i_have
-    alt=i_ve_got
-    alt=ive_got
-    alt=i_have_got
-    alt=i_had
-    alt=i_like
-    alt=i_love
-    alt=i_enjoy
-    alt=i_hate
-    alt=i_dislike
-    alt=i_am
-    alt=i_m
-    alt=im
-    alt=i_was
-    alt=i_live
-    alt=i_work
-    alt=i_own
-    alt=i_know
-    alt=my_name_is
-    alt=my_age_is
-    alt=my_hobby_is
-    alt=my_hobbies_are
 
 @phrase.lang.yes core.phrase
     frame=false

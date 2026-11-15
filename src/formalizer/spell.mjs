@@ -12,6 +12,7 @@
 import { vocabularyOf, openVocab, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs';
 import { isNumberWord } from './rules/numbers.mjs';
 import { guard } from './guard.mjs';
+import { budget } from '../dialog/budget.mjs';
 import { namingTables } from './routing.mjs';
 import { lexIndex } from '../worlds/lexicon.mjs';
 
@@ -158,18 +159,53 @@ const matchCase = (src, out) => (/^[A-Z]/.test(src) ? out[0].toUpperCase() + out
  */
 /** The words the attached knowledge catalog has in its vocabulary (registered by `attachOpenWords` under Symbol.for('psys2.catalogWords'), no import between the layers): a word the catalog knows is a real word, never "corrected" into another ("comet" is not "comes"). */
 /** A word of the bundled subsets of the catalog (registered by the host under a symbol): a real word that no world lexicon lists any more, never a typo of another. The candidate and alternate readers keep ignoring the catalog vocabulary as before ("clean" may still be read as "clear"); only `spellCorrect` trusts it. */
+/**
+ * THE NEIGHBOURS of a word in a vocabulary, kept per vocabulary (SPELL-MEMO, spec 06 "Compute budgets"). Every reading stage asks again for the same unknown word in the
+ * vocabulary of every world (lenient reading, the validator of the dispatcher, the capability read, the suspect check, each candidate reading and turn): each ask scanned the
+ * whole vocabulary with an edit distance per word of a similar length (`spell.edit` was a sixth of the ticks of the real set). The candidate list and the neighbours of a word
+ * within `max` edits ([{ w, d }], in vocabulary order) are kept in a WeakMap on the vocabulary object, rebuilt when its size changes; the caller ranks them as before. A hit
+ * costs one `spell.edit` tick; the lists handed out are not changed by the callers.
+ */
+const NEAR = new WeakMap();   // vocab -> { size, lists: Map(kind -> cands), near: Map(kind|max|word -> [{ w, d }]) }
+const NEAR_CAP = 20000;
+const candsOf = (vocab, kind) => {
+  if (kind === 'alt') return [...vocab].filter((w) => w.length >= 3 && /^[a-z]+$/.test(w) && !FUNCTION_WORDS.has(w) && !Object.hasOwn(ABBREVIATIONS, w));
+  const cands = [...vocab].filter((w) => w.length >= 2 && /^[a-z]+$/.test(w) && !Object.hasOwn(ABBREVIATIONS, w));
+  for (const w of FUNCTION_WORDS) if (w.length >= 2 && !vocab.has(w)) cands.push(w);
+  return cands;
+};
+const nearOf = (vocab) => { let m = NEAR.get(vocab); if (!m || m.size !== vocab.size) NEAR.set(vocab, (m = { size: vocab.size, lists: new Map(), near: new Map(), keep: null })); return m; };
+/** The function words and the vocabulary as one set (kept with the neighbours). */
+const keepOf = (vocab) => { const m = nearOf(vocab); return (m.keep ??= new Set([...FUNCTION_WORDS, ...vocab])); };
+function neighbours(vocab, kind, lower, max) {
+  const m = nearOf(vocab);
+  const key = `${kind}|${max}|${lower}`;
+  const hit = m.near.get(key);
+  if (hit) { budget.tick('spell.edit'); return hit; }
+  let cands = m.lists.get(kind);
+  if (!cands) m.lists.set(kind, (cands = candsOf(vocab, kind)));
+  const out = [];
+  for (const w of cands) {
+    if (Math.abs(w.length - lower.length) > max) continue;
+    if (kind === 'alt' && w === lower) continue;
+    const d = editDistance(lower, w, max);
+    if (d <= max) out.push({ w, d });
+  }
+  if (m.near.size >= NEAR_CAP) m.near.clear();
+  m.near.set(key, out);
+  return out;
+}
+
 const outsideKnown = (w) => w.length >= 3 && !!globalThis[Symbol.for('psys2.bundledWords')]?.(w);
 
 export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = true, spelling = true, protect = null, short = false } = {}) {
   const quoted = [...text.matchAll(QUOTE_RE)].map((m) => [m.index, m.index + m[0].length]);
-  const keep = new Set([...FUNCTION_WORDS, ...vocab]);
+  const keep = keepOf(vocab);
   // Context anchoring: a word the active world (`protect`, the open tab's vocabulary) knows is never changed, and a content word (4+ letters)
   // that another world knows is not "corrected" into a word of this world: that would change both the world and the noun ("boat" -> "coat").
   // the bundled subsets of the catalog (the animals of k.animals, registered by src/dialog/index.mjs from src/knowledge/bundled-names.mjs under Symbol.for('psys2.bundledWords')) are real words too, with or without a catalog attached
   const bundled = globalThis[Symbol.for('psys2.bundledWords')];
   const known = (w) => !!protect?.has(w) || (w.length >= 3 && !!globalThis[Symbol.for('psys2.catalogWords')]?.(w)) || (w.length >= 3 && !!bundled?.(w)) || (w.length >= 3 && !!vocab.global?.has(w)) || (w.length >= 4 && !!vocab.world && !vocab.has(w) && !!vocab.nouns?.has(w));
-  const cands = [...vocab].filter((w) => w.length >= 2 && /^[a-z]+$/.test(w) && !Object.hasOwn(ABBREVIATIONS, w));
-  for (const w of FUNCTION_WORDS) if (w.length >= 2 && !vocab.has(w)) cands.push(w);
   const corrections = [];
   let out = '', last = 0, first = true;
   for (const m of text.matchAll(WORD_RE)) {
@@ -186,10 +222,7 @@ export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = 
         // rank: smaller distance, then a word of the world's own vocabulary, then the same letters (a swap such as "eyse")
         const letters = [...lower].sort().join('');
         let best = null, bestRank = Infinity, tied = [];
-        for (const w of cands) {
-          if (Math.abs(w.length - lower.length) > maxEdits) continue;
-          const d = editDistance(lower, w, maxEdits);
-          if (d > maxEdits) continue;
+        for (const { w, d } of neighbours(vocab, 'all', lower, maxEdits)) {
           const rank = d * 4 + (vocab.has(w) ? 0 : 2) + ([...w].sort().join('') === letters ? 0 : 1);
           if (rank < bestRank) { best = w; bestRank = rank; tied = [w]; }
           else if (rank === bestRank && w !== best) tied.push(w);
@@ -219,9 +252,7 @@ export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = 
  */
 export function spellCandidates(text, { vocab, protect = null, maxPerWord = 5 } = {}) {
   const quoted = [...text.matchAll(QUOTE_RE)].map((m) => [m.index, m.index + m[0].length]);
-  const keep = new Set([...FUNCTION_WORDS, ...vocab]);
-  const cands = [...vocab].filter((w) => w.length >= 2 && /^[a-z]+$/.test(w) && !Object.hasOwn(ABBREVIATIONS, w));
-  for (const w of FUNCTION_WORDS) if (w.length >= 2 && !vocab.has(w)) cands.push(w);
+  const keep = keepOf(vocab);
   const out = [];
   let first = true;
   for (const m of text.matchAll(WORD_RE)) {
@@ -234,10 +265,7 @@ export function spellCandidates(text, { vocab, protect = null, maxPerWord = 5 } 
     if (!maxEdits) continue;
     const letters = [...lower].sort().join('');
     const ranked = [];
-    for (const w of cands) {
-      if (Math.abs(w.length - lower.length) > maxEdits) continue;
-      const d = editDistance(lower, w, maxEdits);
-      if (d > maxEdits) continue;
+    for (const { w, d } of neighbours(vocab, 'all', lower, maxEdits)) {
       ranked.push({ w, rank: d * 4 + (vocab.has(w) ? 0 : 2) + ([...w].sort().join('') === letters ? 0 : 1), f: vocab.freq?.get(w) ?? 0 });
     }
     ranked.sort((a, b) => a.rank - b.rank || b.f - a.f || a.w.localeCompare(b.w));
@@ -254,7 +282,6 @@ export function spellCandidates(text, { vocab, protect = null, maxPerWord = 5 } 
  */
 export function spellAlternates(text, { vocab, maxPerWord = 4, maxTexts = 12, protect = null, short = false } = {}) {
   const quoted = [...text.matchAll(QUOTE_RE)].map((m) => [m.index, m.index + m[0].length]);
-  const cands = [...vocab].filter((w) => w.length >= 3 && /^[a-z]+$/.test(w) && !FUNCTION_WORDS.has(w) && !Object.hasOwn(ABBREVIATIONS, w));
   const out = [];
   let first = true;
   for (const m of text.matchAll(WORD_RE)) {
@@ -264,8 +291,7 @@ export function spellAlternates(text, { vocab, maxPerWord = 4, maxTexts = 12, pr
     if (protect?.has(lower) || outsideKnown(lower) || (lower.length >= 4 && vocab.nouns?.has(lower) && (!vocab.world || !vocab.has(lower)))) continue;   // known in the active tab / a content noun of another world
     if (!(short ? /^[a-z]{2,}$/ : /^[a-z]{3,}$/).test(lower) || FUNCTION_WORDS.has(lower) || isNumberWord(lower) || (!isFirst && /^[A-Z]/.test(raw)) || quoted.some(([a, b]) => start >= a && end <= b)) continue;
     let n = 0;
-    for (const w of cands) {
-      if (w === lower || Math.abs(w.length - lower.length) > 1 || editDistance(lower, w, 1) > 1) continue;
+    for (const { w } of neighbours(vocab, 'alt', lower, 1)) {
       if (isKnown(lower, new Set([w]))) continue;   // an inflection of the same word (plural, -ing ...) is not a typo
       out.push({ text: text.slice(0, start) + matchCase(raw, w) + text.slice(end), corrections: [{ from: raw, to: w, span: [start, end], kind: 'spell' }] });
       if (++n >= maxPerWord) break;

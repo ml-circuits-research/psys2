@@ -27,6 +27,14 @@ export const placePhrase = (w) => { const x = lc(w).replace(/^(?:the|a|an)\s+/, 
  * comes from above in the kind-of chain (a villa: house).
  */
 export function habitat(knowledge, word, depth = 0) {
+  // kept per word while the knowledge answers the same (OVERLAY-MEMO: the drawing board asks for every object near every spot it tries); a copy is handed out
+  if (depth === 0 && typeof knowledge?.memo === 'function' && word) {
+    const h = knowledge.memo('habitat', lc(word), () => habitatOf(knowledge, word, 0));
+    return h ? { ...h, at: [...h.at], zones: [...h.zones] } : null;
+  }
+  return habitatOf(knowledge, word, depth);
+}
+function habitatOf(knowledge, word, depth) {
   budget.tick('commonsense.habitat');
   const k = knowledge;
   if (!k?.peek || !word || depth > 4) return null;

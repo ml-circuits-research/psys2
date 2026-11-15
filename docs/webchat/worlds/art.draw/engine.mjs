@@ -21,7 +21,7 @@ import {
 } from './scene.mjs?v=0882bbcd68';
 
 import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
-import { habitat, adviceFor } from '../../lib/knowledge/commonsense.mjs?v=7fdbc6c294';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
+import { habitat, adviceFor } from '../../lib/knowledge/commonsense.mjs?v=a83dfa4db3';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
 import { readNounPhrase, foldRelative } from '../../lib/lang/np-resolve.mjs?v=ddb4bc8d03';   // the one host resolver of noun phrases   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
 import * as space from '../space/space.mjs?v=72e3867df9';
 import * as rel from '../space/pieces.mjs?v=c8d95ac4f1';

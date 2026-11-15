@@ -32,6 +32,11 @@ export class Legends {
     this.errors = [];            // legend-level problems
     this._children = new Map();
     this._dyn = new Map();       // owner type -> [dynamic key infos]
+    // LEGEND-MEMO (spec 06 "Compute budgets"): the type chain and the resolution of a key on a type are fixed until the registry is rebuilt (`_ensure` after an `add`), so they are
+    // computed once per type (and key) and handed out as copies. Every `ctx.val` / `ctx.vals` of every operation resolves a key (the drawing board read the facts of common.sense
+    // again for every candidate reading); `index.chain` was a tenth of all the ticks of the real set.
+    this._chainMemo = new Map();
+    this._resolveMemo = new Map();
   }
 
   /** Add the wires of one legend file (core.legend, core.type, core.key). */
@@ -143,6 +148,14 @@ export class Legends {
   /** [type, parent, ..., core.thing]; an unknown type yields [type]. */
   chain(type) {
     this._ensure();
+    const hit = this._chainMemo.get(type);
+    budget.tick('index.chain');
+    if (hit) return hit.slice();
+    const out = this._chainNow(type);
+    this._chainMemo.set(type, out);
+    return out.slice();
+  }
+  _chainNow(type) {
     const out = [type];
     for (let p = this.types.get(type)?.extends; p && !out.includes(p); p = this.types.get(p)?.extends) { budget.tick('index.chain'); out.push(p); }
     return out;
@@ -170,6 +183,12 @@ export class Legends {
    */
   tryResolveKey(type, key) {
     this._ensure();
+    const k = `${type}\u0000${key}`;
+    let r = this._resolveMemo.get(k);
+    if (!r) { r = this._resolveKeyNow(type, key); if (this._resolveMemo.size >= 50000) this._resolveMemo.clear(); this._resolveMemo.set(k, r); }   // dynamic keys (where.*, arg.*) are open: the memo is bounded
+    return { ...r };
+  }
+  _resolveKeyNow(type, key) {
     if (!this.types.has(type)) return { error: `unknown type '${type}'` };
     const chain = this.chain(type);
     const applies = (info) => info.global || chain.includes(info.owner);
