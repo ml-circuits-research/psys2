@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "11cf72bf",
-  "tree": "cecf47720dbf180c",
+  "build": "eb38ea45",
+  "tree": "c13f13f4b2fbf6df",
   "catalog": "ab3b2ab868ba27868f88d2dbdfce3433a699ece6",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,24 +13,24 @@
   "matrix": {
    "turns": 579,
    "judged": 181,
-   "right": 121,
+   "right": 123,
    "partly": 12,
-   "wrong": 48,
+   "wrong": 46,
    "open": 38,
    "changed": 28,
    "unjudged": 332,
    "outcome": {
     "executed": 302,
     "refused": 3,
-    "asked": 8,
-    "not_understood": 192,
-    "other_world": 74
+    "asked": 10,
+    "not_understood": 194,
+    "other_world": 70
    },
    "by_source": {
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 39
+     "right": 41
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -93,24 +93,24 @@
   "ops": {
    "turns": 579,
    "judged": 181,
-   "right": 121,
+   "right": 123,
    "partly": 12,
-   "wrong": 48,
+   "wrong": 46,
    "open": 38,
    "changed": 28,
    "unjudged": 332,
    "outcome": {
     "executed": 302,
     "refused": 3,
-    "asked": 8,
-    "not_understood": 193,
-    "other_world": 73
+    "asked": 10,
+    "not_understood": 195,
+    "other_world": 69
    },
    "by_source": {
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 39
+     "right": 41
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -172,27 +172,27 @@
   }
  },
  "diagnostic_rules_matrix": {
-  "right": 127,
+  "right": 129,
   "judged": 181,
   "partly": 12,
-  "wrong": 42,
+  "wrong": 40,
   "retired": {
    "judged": 72,
    "right": 69,
    "partly": 0,
    "wrong": 3
   },
-  "build": "11cf72bf",
-  "tree": "cecf47720dbf180c"
+  "build": "eb38ea45",
+  "tree": "c13f13f4b2fbf6df"
  },
- "failing_matrix": 284,
- "failing_ops": 284,
+ "failing_matrix": 281,
+ "failing_ops": 281,
  "ops_only": 0,
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 78,
-   "both_reasoners": 78,
+   "count": 77,
+   "both_reasoners": 77,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -218,8 +218,8 @@
   },
   {
    "cause": "translation residue / wrong sense / source typo",
-   "count": 36,
-   "both_reasoners": 36,
+   "count": 37,
+   "both_reasoners": 37,
    "examples": [
     {
      "text": "she knows what their grandma could trade charcoal Chicago",
@@ -272,8 +272,8 @@
   },
   {
    "cause": "a world other than the open tab took the turn",
-   "count": 29,
-   "both_reasoners": 29,
+   "count": 26,
+   "both_reasoners": 26,
    "examples": [
     {
      "text": "let’s play guess the animal",
@@ -299,8 +299,8 @@
   },
   {
    "cause": "sentence not read by any world (no cause key)",
-   "count": 23,
-   "both_reasoners": 23,
+   "count": 25,
+   "both_reasoners": 25,
    "examples": [
     {
      "text": "now be a human",
@@ -401,7 +401,7 @@
     {
      "text": "muta casa din dreapta mai la dreapta",
      "tab": "draw",
-     "happened": "That was too complex for me — try a shorter sentence. [outcome: not_understood; wrong; not_understood]"
+     "happened": "I can not find a house in your picture. [outcome: executed; wrong; reply_not:took the last one|can not find]"
     }
    ]
   },
@@ -456,33 +456,6 @@
      "text": "desene asta",
      "tab": "map",
      "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
-    }
-   ]
-  },
-  {
-   "cause": "acted on a partly understood sentence",
-   "count": 6,
-   "both_reasoners": 6,
-   "examples": [
-    {
-     "text": "fă un layout mai frumos",
-     "tab": "diagram",
-     "happened": "Drew a circle. [outcome: executed; wrong; state:shapes.length=$+0 reply_not:Drew]"
-    },
-    {
-     "text": "make a better layout",
-     "tab": "diagram",
-     "happened": "Drew a circle. [outcome: executed; wrong; state:shapes.length=$+0 reply_not:Drew]"
-    },
-    {
-     "text": "paint three new nodes",
-     "tab": "diagram",
-     "happened": "What should change about circle 1, square 1, square 2, square 3, square 4, circle 2 and circle 3? Try a color, size, shape, outline or label. [outcome: executed"
-    },
-    {
-     "text": "a person",
-     "tab": "robot",
-     "happened": "I drew a blue person. [outcome: other_world]"
     }
    ]
   },
@@ -564,6 +537,33 @@
      "text": "draw a house and another yellow one",
      "tab": "draw",
      "happened": "I drew a yellow house. I made a copy of the house. [outcome: executed; wrong; state:art.draw:objects.length=5]"
+    }
+   ]
+  },
+  {
+   "cause": "acted on a partly understood sentence",
+   "count": 4,
+   "both_reasoners": 4,
+   "examples": [
+    {
+     "text": "paint three new nodes",
+     "tab": "diagram",
+     "happened": "What should change about circle 1, square 1, square 2, square 3 and square 4? Try a color, size, shape, outline or label. [outcome: executed; wrong; state:shape"
+    },
+    {
+     "text": "a person",
+     "tab": "robot",
+     "happened": "I drew a blue person. [outcome: other_world]"
+    },
+    {
+     "text": "what character is on screen",
+     "tab": "robot",
+     "happened": "I did not understand \"what character is on screen\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
+    },
+    {
+     "text": "make a cartoon",
+     "tab": "robot",
+     "happened": "I did not understand \"make a maroon\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
     }
    ]
   },
