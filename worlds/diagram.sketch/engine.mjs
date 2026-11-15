@@ -624,7 +624,7 @@ function inside(p, x, y) {
   if (/^(?:circle|oval|ellipse)$/.test(p.shape)) { const rx = p.w / 2, ry = p.h / 2; return ((x - p.x - rx) / rx) ** 2 + ((y - p.y - ry) / ry) ** 2 <= 1; }
   const poly = partPoints(p);
   let c = false;
-  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const [xi, yi] = poly[i], [xj, yj] = poly[j]; if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c; }
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { budget.tick('diagram.outline'); const [xi, yi] = poly[i], [xj, yj] = poly[j]; if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c; }
   return c;
 }
 const partArea = (p) => (p.shape === 'line' ? 0 : p.shape === 'triangle' ? (p.w * p.h) / 2 : /^(?:circle|oval|ellipse)$/.test(p.shape) ? (Math.PI * p.w * p.h) / 4 : p.points ? Math.abs(area2(p.points)) / 2 : p.w * p.h);
@@ -654,7 +654,7 @@ export function outlineOf(all, { feature = 0.01 } = {}) {
   for (let i = 0; i < N * N; i++) {
     if (!fill[i] || comp[i]) continue;
     id++; let size = 0; const stack = [i]; comp[i] = id;
-    while (stack.length) { const c = stack.pop(); size++; for (const d of [1, -1, N, -N]) { const n = c + d; if (fill[n] && !comp[n]) { comp[n] = id; stack.push(n); } } }
+    while (stack.length) { budget.tick('diagram.outline'); const c = stack.pop(); size++; for (const d of [1, -1, N, -N]) { const n = c + d; if (fill[n] && !comp[n]) { comp[n] = id; stack.push(n); } } }
     if (size > bestSize) { bestSize = size; best = id; }
   }
   const on = (x, y) => x >= -1 && y >= -1 && x < N - 1 && y < N - 1 && comp[at(x, y)] === best;
@@ -671,7 +671,7 @@ export function outlineOf(all, { feature = 0.01 } = {}) {
   for (const k0 of next.keys()) {
     if (seen.has(k0)) continue;
     const l = []; let k = k0;
-    while (!seen.has(k) && next.has(k)) { seen.add(k); const [x, y] = next.get(k); l.push([x, y]); k = key(x, y); }
+    while (!seen.has(k) && next.has(k)) { budget.tick('diagram.outline'); seen.add(k); const [x, y] = next.get(k); l.push([x, y]); k = key(x, y); }
     if (l.length > loop.length) loop = l;
   }
   const dp = (pts, eps) => {
@@ -688,6 +688,7 @@ export function outlineOf(all, { feature = 0.01 } = {}) {
   poly = poly.map((q) => { const c = corners.reduce((b, c) => (Math.hypot(c[0] - q[0], c[1] - q[1]) < Math.hypot(b[0] - q[0], b[1] - q[1]) ? c : b), [1e9, 1e9]); return Math.hypot(c[0] - q[0], c[1] - q[1]) <= 2.5 ? [...c] : q; });
   const whole = Math.abs(area2(poly)) / 2;
   for (;;) {
+    budget.tick('diagram.outline');
     if (poly.length <= 3) break;
     let k = -1, min = Infinity;
     poly.forEach((p, i) => { const a = poly[(i - 1 + poly.length) % poly.length], b = poly[(i + 1) % poly.length], t = Math.abs((p[0] - a[0]) * (b[1] - a[1]) - (b[0] - a[0]) * (p[1] - a[1])) / 2; if (t < min) { min = t; k = i; } });
