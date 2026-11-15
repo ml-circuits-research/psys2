@@ -641,7 +641,7 @@ function massOf(parts) {
  * hull of its points. The parts of its mass (massOf) are painted on a 100 x 100 grid of the object's frame as the drawing fills them (boxes, polygons, ellipses; lines 3 units
  * wide), the outer boundary of the largest connected piece is traced clockwise, its straight runs become segments (Douglas-Peucker, 1.2 units) whose corners snap to the parts'
  * own corners on the boundary (the exact gable top and eaves), and corners whose triangle is under `feature` of the area go. Concave where the drawing is (the eaves under a
- * roof). Clockwise from the top. When the library's `outlineOf(parts, { concave })` lands, it replaces this (questions.md L1).
+ * roof). Clockwise from the top. The library's `outlineOf` (sopworld 0.129) is the convex hull of the parts' boxes, which loses the gable and the eaves: this stays until it has a concave silhouette (questions.md L1).
  */
 export function outlineOf(all, { feature = 0.01 } = {}) {
   const parts = massOf(all);
@@ -698,17 +698,13 @@ export function outlineOf(all, { feature = 0.01 } = {}) {
   const t = poly.reduce((k, p, i) => (p[1] < poly[k][1] - 0.01 ? i : k), 0);
   return [...poly.slice(t), ...poly.slice(0, t)].map(([x, y]) => [Math.round(x * 10) / 10, Math.round(y * 10) / 10]);
 }
-/** `n` points evenly along a closed polygon (by length), the first at its first corner. */
+/**
+ * `n` points evenly along a closed polygon (by length), the first at its first corner: the library's `arrange(nodes, 'path', { points, closed })` (sopworld 0.129; it gives the same points
+ * the host computed before). The library's `outlineOf` is the convex hull of the parts' boxes (a flat top, no gable, no eaves), so the silhouette above stays the host's (questions.md L1).
+ */
 export function pointsAlong(poly, n) {
-  const seg = poly.map((p, i) => [p, poly[(i + 1) % poly.length]]), len = seg.map(([a, b]) => Math.hypot(b[0] - a[0], b[1] - a[1])), total = len.reduce((s, x) => s + x, 0);
-  const out = [];
-  for (let k = 0; k < n; k++) {
-    let d = (total * k) / n, i = 0;
-    while (i < seg.length - 1 && d > len[i]) { budget.tick('diagram.outline'); d -= len[i]; i++; }
-    const [a, b] = seg[i], t = len[i] ? d / len[i] : 0;
-    out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]);
-  }
-  return out;
+  const at = DL.arrange(Array.from({ length: n }, (_, i) => ({ id: `p${i}`, w: 0, h: 0 })), 'path', { points: poly, closed: true });
+  return [...at.values()].map((b) => [b.x, b.y]);
 }
 /**
  * NODES ON AN OUTLINE DO NOT OVERLAP (reviewer 2026-11-15 04:50: the eaves of the house sat on the wall tops). Points of a closed outline (canvas px) get one size for their nodes: the
@@ -737,6 +733,7 @@ export function fitOnOutline(points, { usual = 62, min = 24, gap = 10 } = {}) {
  */
 export function shapedLike(ctx, args = {}) {
   if (!K) return NOT_READY();
+  if (!DL) return no('The diagram knowledge is still loading. Please say that again in a moment.', 'missing');
   const s = ensure(ctx);
   const noun = String(args.o ?? '').toLowerCase().replace(/[^a-z ]/g, '').trim();
   const thing = thingOfNoun(noun);
