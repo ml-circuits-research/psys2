@@ -10,10 +10,10 @@
  * Without it all input is treated as English.
  */
 import { composeReply, sayOf } from './composed-reply.mjs?v=e0371bfe15';
-import { reviewForeign } from './foreign-reading.mjs?v=0856b41e33';
+import { reviewForeign } from './foreign-reading.mjs?v=acf71a76d1';
 import { installTextGen } from './textgen.mjs?v=a8831e42a2';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=ff05a8582c';
-import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=313f9bfe19';
+import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=3baf082cf1';
 import { validateWorldSet } from '../worlds/validate.mjs?v=f0bbfe4db3';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=ff05a8582c';
 import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=e8a1f00976';
@@ -38,10 +38,10 @@ import { checkValues } from './value-check.mjs?v=9f806bb103';
 import { attachValues } from '../knowledge/values.mjs?v=0d60c4bf76';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3ebe6cdc98';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f39042bd20';
-import { Discourse } from './discourse.mjs?v=1a1a8495b6';
-import { Dialogue } from './dialogue.mjs?v=b4bd879a1a';
+import { Discourse } from './discourse.mjs?v=9db81498d3';
+import { Dialogue } from './dialogue.mjs?v=74a82c9c34';
 import { turnSteps } from './steps.mjs?v=44af51b084';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=ea64934148';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=789fcc7630';
 import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=62bbfade86';
 import { personTurn } from './person.mjs?v=59c15560b5';
 import { proposeByTypes } from './typed-reader.mjs?v=ecd7342ebe';
@@ -276,7 +276,7 @@ import { languageCommand } from '../translate/language-command.mjs?v=af45c6bf2e'
 import { withSubject, polishReply } from '../translate/register.mjs?v=45588e0a13';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=80e9d07ff4';
 import { intentStep, weakReading } from './intent.mjs?v=30d2fcc4e2';
-import { readRequest, reviseRequest, violations, notHonoured, wantedRange, sayRequest } from './request.mjs?v=94a2aefdc6';
+import { readRequest, reviseRequest, violations, notHonoured, wantedRange, sayRequest } from './request.mjs?v=b8491755e5';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1669,6 +1669,10 @@ export class DialogSession {
   async _requestNotes(opts, reply, q, cannot) {
     if (!reply || typeof reply !== 'object') return reply;
     if (reply.trace) reply.trace.request = q;
+    // only a turn the open world itself read and carried out: a meta turn (repeat, a question about the user), a question back ("Which one?") or another world's reading says its own
+    const tabWorld = this.context().tabWorld;
+    const segs = reply.trace?.segments ?? reply.segments ?? [];
+    if (!segs.length || !segs.every((sg) => (sg.match?.worldId ?? sg.world) === tabWorld) || /\?\s*$/.test(String(reply.trace?.replyEnglish ?? reply.text ?? '').trim())) return reply;
     const add = [];   // [frame, words]: the frame is translated, the words are the user's own and stay as they were
     const shown = String(reply.trace?.replyEnglish ?? reply.text ?? '').toLowerCase();
     const missing = cannot.filter((c) => !shown.includes(String(c.words).toLowerCase().split(' ').at(-1)));

@@ -480,7 +480,7 @@ function composedDiagram(ctx, s, req, args = {}) {
   const taken = new Set(s.shapes.flatMap((x) => [x.name, x.id].filter(Boolean))), had = s.shapes.length;
   const res = execute(ctx, s, DG.engineNodes(got.diagram, taken), { place: false });
   if (res.status !== 'supported') return res;
-  s.composed = { kind: got.diagram.kind, topic: got.topic, fill: got.diagram.fill };   // what the last composed diagram was (for "why")
+  s.composed = { kind: got.diagram.kind, topic: got.topic, fill: got.diagram.fill, n: (s.composed?.n ?? 0) + 1 };   // what the last composed diagram was (for "why")
   return { ...res, value: `${s.keptNote ? `${s.keptNote} ` : ''}${DG.say(got.diagram, got.topic, { random: !!req.random })}${had ? ' It is on top of what was there; undo takes it away.' : ''}` };
 }
 
@@ -760,6 +760,7 @@ export function shapedLike(ctx, args = {}) {
     if (mid) nodes.push({ id: 'mc', type: 'command', args: { action: 'move', target: mid.name, at: '400,250' } });
     const r = execute(ctx, s, nodes, { place: false });
     if (r.status !== 'supported') return r;
+    s.composed = { kind: 'outline', topic: thing, n: (s.composed?.n ?? 0) + 1 };   // the knowledge's arrangement (k.layouts outline)
     if (mid) return { ...r, value: `I placed the ${own.length} shapes on the outline of ${a} ${thing}, clockwise from the top, and ${plain(s, mid.name)} in the middle.` };
     return { ...r, value: `I placed the ${own.length} shapes on the outline of ${a} ${thing}, clockwise from the top.`, say: { act: 'diagram.shaped.placed', roles: { thing, shapes: { n: own.length, noun: 'shape' } } } };   // say: the frame a reply in another language is composed from (spec 06)
   }
@@ -770,6 +771,7 @@ export function shapedLike(ctx, args = {}) {
   nodes.push({ id: 'oc', type: 'command', args: { action: 'connect', from: names, pairing: 'chain', arrow: 'none' } }, { id: 'oz', type: 'command', args: { action: 'connect', from: names[names.length - 1], to: names[0], arrow: 'none' } });
   const r = execute(ctx, s, nodes, { place: false });
   if (r.status !== 'supported') return r;
+  s.composed = { kind: 'outline', topic: thing, n: (s.composed?.n ?? 0) + 1 };   // the knowledge's answer (k.layouts outline): the check of a request keeps it as it is
   return { ...r, value: `I drew a diagram in the shape of ${a} ${thing}: ${corners.length} nodes on its outline, joined in order.`, say: { act: 'diagram.shaped', roles: { thing, nodes: { n: corners.length, noun: 'node' } } } };
 }
 
@@ -950,7 +952,7 @@ export function requestResult(ctx, { before = null } = {}) {
   for (const x of made) kinds[x.shape] = (kinds[x.shape] ?? 0) + 1;
   const links = (s.edges ?? []).filter((e) => names.has(e.from) || names.has(e.to)).length;
   // a diagram the knowledge composed in this turn (a kind with its own shapes and links: a flowchart of steps, a list) is the knowledge's answer to the defaults
-  const composed = !!s.composed && JSON.stringify(s.composed) !== JSON.stringify(before?.composed ?? null) && made.length > 0;
+  const composed = !!s.composed && JSON.stringify(s.composed) !== JSON.stringify(before?.composed ?? null);
   return { parts: made.length, kinds, links, extent: made.reduce((a, x) => a + (x.size ?? 0), 0), composed };
 }
 
@@ -984,7 +986,7 @@ export function planRequest(ctx, goal = {}) {
   const keep = [], seen = new Set(), adj = new Map();
   for (const e of src.edges ?? []) { if (!adj.has(e.from)) adj.set(e.from, []); adj.get(e.from).push(e.to); }
   const queue = src.nodes.length ? [src.nodes[0].id] : [];
-  while (queue.length && keep.length < n) { const id = queue.shift(); if (seen.has(id)) continue; seen.add(id); keep.push(id); for (const t of adj.get(id) ?? []) queue.push(t); }
+  while (queue.length && keep.length < n) { budget.tick('diagram.plan'); const id = queue.shift(); if (seen.has(id)) continue; seen.add(id); keep.push(id); for (const t of adj.get(id) ?? []) queue.push(t); }
   for (const x of src.nodes) if (keep.length < n && !seen.has(x.id)) { seen.add(x.id); keep.push(x.id); }
   const nodes = keep.map((id) => ({ ...src.nodes.find((x) => x.id === id) }));
   const edges = (src.edges ?? []).filter((e) => keep.includes(e.from) && keep.includes(e.to)).map((e) => ({ ...e }));

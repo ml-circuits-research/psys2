@@ -13,7 +13,7 @@ import { readDescriptionWires, slotDeclarations } from './describe.mjs?v=956f430
 import { checkPattern } from '../formalizer/rules/index.mjs?v=ff05a8582c';
 import { lexIndex } from './lexicon.mjs?v=f0499f971c';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
-import { parseDecl } from '../dialog/request.mjs?v=94a2aefdc6';
+import { parseDecl } from '../dialog/request.mjs?v=b8491755e5';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];
 // Reasoner files (spec 15). `matrix.sop` and `mapping.sop` are data for src/reasoner. The `matrix.*.sop` extras are appended to the world's own

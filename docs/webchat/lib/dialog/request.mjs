@@ -142,7 +142,7 @@ export function readRequest(english, { lang, world, kindWords = new Set(), first
     if (layouts.has(ws[i]) && (/^(?:as|in|into|like)$/.test(ws[i - 1]) || (/^(?:a|an|the)$/.test(ws[i - 1]) && /^(?:as|in|into|like)$/.test(ws[i - 2])) || ws[i] === 'layers') && !negatedWord(i)) {
       if (ws[i] === 'layers') {
         const regions = []; let k = i + 1;
-        while (k < ws.length) { if (/^(?:and|of)$/.test(ws[k]) || ws[k] === '-') { k++; continue; } if (STOP.has(ws[k]) && ws[k] !== 'land') break; regions.push(ws[k]); k++; }
+        while (k < ws.length) { budget.tick('request.layers'); if (/^(?:and|of)$/.test(ws[k]) || ws[k] === '-') { k++; continue; } if (STOP.has(ws[k]) && ws[k] !== 'land') break; regions.push(ws[k]); k++; }
         fact({ key: 'layout', value: 'layers', regions }); use(i, k - i);
       } else { fact({ key: 'layout', value: ws[i] }); use(i); }
     }
@@ -153,6 +153,7 @@ export function readRequest(english, { lang, world, kindWords = new Set(), first
     if (ws[i] !== 'with' || ws[i - 1] === 'start' ) continue;
     let k = i + 1; const part = [];
     while (k < ws.length && !/^(?:about|that|which|in|on|not|but|without)$/.test(ws[k])) {
+      budget.tick('request.with');
       if (ws[k] === 'and' || ws[k] === ',') { if (part.length) { addWith(part); part.length = 0; } k++; continue; }
       if (/^\d+$/.test(ws[k]) || NUM[ws[k]] != null) break;   // "with 5 nodes": a count, read above
       if (!STOP.has(ws[k])) part.push(k);
@@ -173,7 +174,7 @@ export function readRequest(english, { lang, world, kindWords = new Set(), first
   const ab = ws.indexOf('about');
   if (ab >= 0) {
     let k = ab + 1; const topic = [];
-    while (k < ws.length && !/^(?:with|in|that|which|not|but)$/.test(ws[k]) && !/^\d+$/.test(ws[k])) { topic.push(ws[k]); k++; }
+    while (k < ws.length && !/^(?:with|in|that|which|not|but)$/.test(ws[k]) && !/^\d+$/.test(ws[k])) { budget.tick('request.about'); topic.push(ws[k]); k++; }
     if (topic.length) { fact({ key: 'about', value: topic.join(' ') }); use(ab, k - ab); }
   }
   // place ("in the corner" is read as a small extent above; "in Tenerife" is the map's): a capitalised name after in / at / of
@@ -229,7 +230,8 @@ export function violations(q, res, exp) {
     if (f.key === 'kind' && f.neg && f.all && kindN < 2) out.push({ key: 'kind', fact: f });
     if (f.key === 'length' && f.unit === 'chapter' && res.chapters != null && res.chapters !== f.n) out.push({ key: 'length', fact: f });
   }
-  const r = q.target || q.facts.some((f) => f.key === 'count' && (f.n != null || f.min != null) && !f.of) || q.facts.some((f) => f.key === 'count' && f.min != null) ? wantedRange(q, exp) : null;
+  const explicitCount = q.facts.some((f) => f.key === 'count' && (f.n != null || f.min != null));
+  const r = res.composed && !explicitCount ? null : q.target || q.facts.some((f) => f.key === 'count' && (f.n != null || f.min != null) && !f.of) || q.facts.some((f) => f.key === 'count' && f.min != null) ? wantedRange(q, exp) : null;
   const wantedKind = q.facts.find((f) => f.key === 'kind' && !f.neg)?.value;
   const parts = wantedKind && !q.target ? (kinds[wantedKind] ?? 0) : res.parts;
   if (r && parts != null && (parts < r[0] || parts > r[1])) out.push({ key: 'count', range: r });

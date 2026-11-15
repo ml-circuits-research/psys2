@@ -1,6 +1,6 @@
 # REAL failures by cause (2026-11-15)
 
-Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit 0966924e0a5b; seed 20261115; build 804c9f73, tree 99dbc7466167bca1), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
+Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit 0966924e0a5b; seed 20261115; build 7932366e, tree c24aa2da5ec5c313), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
 
 Headline (in scope, judged): 177/207 right (partly 9, wrong 21); 46 turns of retired records skipped. Diagnostic, rules formalizer only: 160/207.
 
@@ -35,7 +35,7 @@ The headline's own failures (verdict wrong or partly), grouped by `judgedCause`:
 | 1 | diagram.sketch: acted; the reply does not say what the check asks | 6 | 0 | 6 | 6 | r0551 "draw a red circle" (diagram) -> "Drew a circle."; r0555 "add a box" (diagram) -> "Drew a rectangle."; also r0557, r0561, r0569, r0582 |
 | 2 | ui.avatar: not understood | 4 | 4 | 0 | 4 | r0029 "an old woman" (robot) -> "I did not understand "an old woman". For example: "Add a hat"; r0512 "mcdavatara human" (robot) -> "I did not understand "mcdavatara human". For example: "Add a"; also r0523, r0595 |
 | 3 | art.draw: acted; the state is not the expected one | 3 | 3 | 0 | 3 | r0634 "draw two cats and a big one" (draw) -> "I drew 2 orange cats."; r0635 "draw a house and another yellow one" (draw) -> "I drew a yellow house. I made a copy of the house."; also r0636 |
-| 4 | diagram.sketch: acted; the state is not the expected one | 2 | 2 | 0 | 2 | r0024 "paint three new nodes" (diagram) -> "What should change about circle 1, square 1, square 2, squar"; r0552 "create a diagram" (diagram) -> "I drew a diagram with 5 nodes and 4 arrows. It is about Chin" |
+| 4 | diagram.sketch: acted; the state is not the expected one | 2 | 2 | 0 | 2 | r0024 "paint three new nodes" (diagram) -> "What should change about circle 1, square 1, square 2, squar"; r0552 "create a diagram" (diagram) -> "I drew a random timeline diagram with four shapes. It is abo" |
 | 5 | docs.editor: acted; the state is not the expected one | 2 | 1 | 1 | 2 | r0528 "add two chapters" (editor) -> "OK, I started chapter 3."; r0529 "add text" (editor) -> "What text should I add?" |
 | 6 | talk: another world took the turn (art.draw) | 2 | 2 | 0 | 2 | r0141 "draw a car" (talk) -> "I drew a red car."; r0147 "draw 2 elephants" (talk) -> "I drew 2 elephants." |
 | 7 | ui.avatar: acted; the reply does not say what the check asks | 2 | 1 | 1 | 2 | r0596 "what is on you" (robot) -> "There is no you here."; r0645 "make your eyes blue" (draw) -> "An eyes is a kind of thing. The sun is blue now. There are 3" |

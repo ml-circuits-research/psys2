@@ -17,8 +17,8 @@
 import { restrictedSet } from '../formalizer/spell.mjs?v=ff05a8582c';
 import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=58963d395d';
 import { lastUnfinished } from '../astra/where.mjs?v=09b4059350';
-import { runDiscussionCommand } from '../astra/session.mjs?v=ea64934148';
-import { tabOfWorld } from '../worlds/index.mjs?v=313f9bfe19';
+import { runDiscussionCommand } from '../astra/session.mjs?v=789fcc7630';
+import { tabOfWorld } from '../worlds/index.mjs?v=3baf082cf1';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=aa6dfcad14';
 import { budget } from './budget.mjs?v=00bce6e369';
 import { en } from '../lang/en.mjs?v=37bb133489';
