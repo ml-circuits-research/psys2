@@ -19,10 +19,14 @@
  *                                                            replays every session (fresh session per session, turns in order). THE HEADLINE is the shipped mode (P1, reviewer 2026-11-15 01:15:
  *                                                            the page's settings, the encoder formalizer, the catalog at the pinned commit, seeded random choices) and writes
  *                                                            training/results/real-2026-11-15-<reasoner>.json; `--mode rules` is the named diagnostic (…-<reasoner>-rules.json)
+ *                                                            --only <regex>: replay only the sessions whose key matches (a quick check; writes …-<reasoner>-only.json or --tag, never the headline)
  *   node scripts/real-set.mjs diff <result a> <result b>     the rows that differ (ms and ticks ignored): two runs of one tree must give none
  *   node scripts/real-set.mjs sites [<result>] [--top N]     the budget ticks per site (scripts/lib/tick-profile.mjs): top sites by total and by growth with the session
  *                                                            (every run row carries `pos` and `tk: { total, sites }`, the file a top-level `ticks` profile; SCAN-PROFILE)
  *   node scripts/real-set.mjs ledger [--write]               closes the open ledger rows of removed worlds (ADR-010) and adds the failing real turns that have no open real row
+ *   node scripts/real-set.mjs delta [<commit>] [--reasoner matrix|ops]  the rows whose verdict or scope changed vs the previously committed result (the last commit whose result file
+ *                                                            differs from the working one, or <commit>): row ids, before / after verdicts and replies. `report` prints it too (reviewer 2026-11-15 07:35:
+ *                                                            every landing reports its delta as row ids, not only totals)
  *   node scripts/real-set.mjs report                         the outcome table of both reasoners + the REAL failures grouped by cause (training/eval/real-failures-2026-11-15.{json,md})
  *   node scripts/real-set.mjs flag                           adds `real: true|false` to every row of training/eval/failures.jsonl by source (idempotent)
  *   node scripts/real-set.mjs record [--allow-stale]         prints the series for scripts/learning-curve.mjs (right / judged of the REAL set, matrix reasoner); refuses a result file whose
@@ -36,6 +40,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 import { causeOf } from './lib/failure-cause.mjs';
 import { isRealRow, realDialogueIds } from './lib/real-source.mjs';
 import { buildInfo, freshness } from './lib/measure-build.mjs';
@@ -148,7 +153,8 @@ const resultFile = (reasoner, mode, tag) => RES(reasoner, tag || (mode === 'ship
  *            Needs onnxruntime-node: --ort <entry> or PSYS2_ORT.
  *   rules    (named diagnostic): the same, with the rules formalizer only (no model).
  */
-async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 'shipped', ortPath = process.env.PSYS2_ORT ?? null, seed = REAL_SEED } = {}) {
+async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 'shipped', ortPath = process.env.PSYS2_ORT ?? null, seed = REAL_SEED, only = null } = {}) {
+  if (only && !tag) tag = '-only';   // a partial replay (--only <session regex>) never overwrites the headline file
   if (!['shipped', 'rules'].includes(mode)) throw new Error(`unknown mode ${mode} (shipped | rules)`);
   if (mode === 'shipped' && !ortPath) throw new Error('the shipped mode runs the encoder formalizer: pass --ort <onnxruntime-node entry> (or PSYS2_ORT), or --mode rules for the diagnostic');
   const build0 = buildInfo(REPO);   // the files measured, taken before the run (spec 16 section 14, "Measurement")
@@ -191,7 +197,8 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 
   const rows = jl('training/eval/real-2026-11-15.jsonl'.replace(/^/, ''));
   const META = new Set(['ui.shell', 'ui.help', 'talk', 'kids.common', 'conversation']);
   const bySession = new Map();
-  for (const r of rows) if (!r.retired) (bySession.get(r.session) ?? bySession.set(r.session, []).get(r.session)).push(r);   // a retired record is never replayed
+  const onlyRe = only ? new RegExp(only) : null;
+  for (const r of rows) if (!r.retired && (!onlyRe || onlyRe.test(r.session))) (bySession.get(r.session) ?? bySession.set(r.session, []).get(r.session)).push(r);   // a retired record is never replayed
   const out = [];
   const strip = (st) => JSON.stringify(visibleState(st));
   const RealDate = Date, realRandom = Math.random;
@@ -354,6 +361,7 @@ function report() {
   writeFileSync(join(REPO, 'training/eval/real-failures-2026-11-15.md'), md);
   for (const [k, t] of Object.entries(tables)) console.log(`${k}: turns ${t.turns}, judged ${t.judged} (right ${t.right}, partly ${t.partly}, wrong ${t.wrong}), open ${t.open}, changed ${t.changed}, unjudged ${t.unjudged}; outcome ${JSON.stringify(t.outcome)}; retired records skipped: ${t.retired} turns`);
   if (diagTable) console.log(`diagnostic (rules formalizer only, matrix): judged ${diagTable.judged} (right ${diagTable.right}, partly ${diagTable.partly}, wrong ${diagTable.wrong})`);
+  for (const k of Object.keys(res)) console.log(deltaReport(k).lines.join('\n'));   // every landing reports its delta as row ids
   for (const [k, v] of Object.entries(res)) { const f = freshness(REPO, v); if (!f.fresh) console.log(`WARNING ${k}: ${f.why}`); if (v.mode !== 'shipped') console.log(`WARNING ${k}: mode ${v.mode ?? 'unrecorded'}, not the shipped one`); }
   console.log(md);
 }
@@ -437,6 +445,47 @@ export function headline() {
   return { right: t.right, total: t.judged, turns: t.turns, retired_skipped: t.retired, build: res.build ?? null, tree: res.tree ?? null, mode: res.mode ?? null, catalog: res.catalog?.commit ?? null, seed: res.seed ?? null, ...(stale ? { stale } : {}) };
 }
 
+/** The status of a row for the delta: `retired` (out of scope), its verdict (right / partly / wrong / open / changed), or `-` (unjudged / not replayed). */
+const statusOf = (r, x) => (r?.retired ? 'retired' : x?.verdict ?? '-');
+/**
+ * DELTA (reviewer 2026-11-15 07:35): the rows of the real set whose verdict or scope differ between two (set, result) pairs, by row id. `kind`: `scope` (a row retired or unretired: a
+ * decision, the record says so), `verdict` (right / partly / wrong / open / changed moved). Each row carries its before / after status and reply. Pure.
+ */
+export function deltaRows(before, after) {
+  const map = ({ set, res }) => { const by = new Map(res.rows.map((x) => [x.id, x])); return new Map(set.map((r) => [r.id, { r, x: by.get(r.id) }])); };
+  const a = map(before), b = map(after), out = [];
+  for (const id of new Set([...a.keys(), ...b.keys()])) {
+    const p = a.get(id), q = b.get(id);
+    const sa = statusOf(p?.r, p?.x), sb = statusOf(q?.r, q?.x);
+    if (sa === sb) continue;
+    out.push({ id, kind: sa === 'retired' || sb === 'retired' ? 'scope' : 'verdict', before: sa, after: sb, text: (q ?? p).r.text, tab: (q ?? p).r.tab ?? null, reply_before: p?.x?.reply ?? null, reply_after: q?.x?.reply ?? null });
+  }
+  return out.sort((x, y) => (x.id < y.id ? -1 : 1));
+}
+const vcs = (args) => execFileSync('git', ['-C', REPO, ...args], { maxBuffer: 1 << 30, stdio: ['ignore', 'pipe', 'ignore'] }).toString();
+const SET_PATH = 'training/eval/real-2026-11-15.jsonl', RES_PATH = (r) => `training/results/real-2026-11-15-${r}.json`;
+/** The previously committed (set, result) of a reasoner: at `commit`, or at the last commit whose result file differs from the working one. Null outside a checkout. */
+export function previousCommitted(reasoner, commit = null) {
+  try {
+    const cur = readFileSync(join(REPO, RES_PATH(reasoner)), 'utf8');
+    const at = commit ?? vcs(['log', '-n', '30', '--format=%H', '--', RES_PATH(reasoner)]).split('\n').filter(Boolean).find((c) => vcs(['show', `${c}:${RES_PATH(reasoner)}`]) !== cur);
+    if (!at) return null;
+    const set = vcs(['show', `${at}:${SET_PATH}`]).split('\n').filter(Boolean).map((l) => JSON.parse(l));
+    return { commit: at.slice(0, 8), set, res: JSON.parse(vcs(['show', `${at}:${RES_PATH(reasoner)}`])) };
+  } catch { return null; }
+}
+/** The delta lines of a reasoner vs the previously committed result (for `report` and `delta`). */
+export function deltaReport(reasoner, commit = null) {
+  const prev = previousCommitted(reasoner, commit);
+  if (!prev) return { lines: [`delta ${reasoner}: no previously committed result to compare with`], rows: [], commit: null };
+  const cur = { set: jl(SET_PATH), res: JSON.parse(readFileSync(RES(reasoner), 'utf8')) };
+  const rows = deltaRows(prev, cur);
+  const tA = tableOf(prev.set, prev.res), tB = tableOf(cur.set, cur.res);
+  const lines = [`delta ${reasoner} vs ${prev.commit} (build ${prev.res.build ?? '?'} -> ${cur.res.build ?? '?'}): ${tA.right}/${tA.judged} -> ${tB.right}/${tB.judged}; ${rows.length} rows changed verdict or scope`];
+  for (const d of rows) lines.push(`  ${d.id} [${d.kind}] ${d.before} -> ${d.after} (${d.tab ?? '-'}) "${String(d.text).slice(0, 70)}"${d.kind === 'verdict' ? `\n      before: ${String(d.reply_before).slice(0, 110)}\n      after:  ${String(d.reply_after).slice(0, 110)}` : ''}`);
+  return { lines, rows, commit: prev.commit };
+}
+
 /** Rows of two result files that differ in anything but the time taken (P1 a: two runs of one tree must give identical rows). */
 export function diffRows(a, b) {
   const key = (x) => JSON.stringify({ ...x, ms: undefined, tk: undefined });
@@ -447,7 +496,7 @@ export function diffRows(a, b) {
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const cmd = process.argv[2];
   if (cmd === 'build') { const r = build(); console.log(`real set: ${r.length} turns in ${new Set(r.map((x) => x.session)).size} sessions -> ${SET}`); }
-  else if (cmd === 'run') await run(arg('reasoner', 'matrix'), { tag: arg('tag', ''), bergamot: arg('bergamot', null), voice: process.argv.includes('--voice'), mode: arg('mode', 'shipped'), ortPath: arg('ort', process.env.PSYS2_ORT ?? null), seed: Number(arg('seed', REAL_SEED)) });
+  else if (cmd === 'run') await run(arg('reasoner', 'matrix'), { tag: arg('tag', ''), bergamot: arg('bergamot', null), voice: process.argv.includes('--voice'), mode: arg('mode', 'shipped'), ortPath: arg('ort', process.env.PSYS2_ORT ?? null), seed: Number(arg('seed', REAL_SEED)), only: arg('only', null) });
   else if (cmd === 'diff') {
     const [a, b] = process.argv.slice(3).filter((x) => !x.startsWith('--')).map((f) => JSON.parse(readFileSync(resolve(f), 'utf8')));
     const d = diffRows(a, b);
@@ -461,6 +510,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     console.log(formatProfile(res.ticks ? { turns: res.rows.length, ...res.ticks } : profileSites(res.rows), Number(arg('top', 15))));   // the file's own profile (all sites); rows keep their 12 busiest
   }
   else if (cmd === 'report') report();
+  else if (cmd === 'delta') { const c = process.argv.slice(3).find((x, i, a) => !x.startsWith('--') && a[i - 1] !== '--reasoner') ?? null; for (const k of arg('reasoner', null) ? [arg('reasoner')] : ['matrix', 'ops']) console.log(deltaReport(k, c).lines.join('\n')); }
   else if (cmd === 'ledger') ledger({ write: process.argv.includes('--write') });
   else if (cmd === 'flag') flag();
   else if (cmd === 'record') {
@@ -468,5 +518,5 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     console.log(JSON.stringify(h));
     if (h.stale && !process.argv.includes('--allow-stale')) { console.error(`REFUSED: the matrix result is not from the current files (${h.stale}). node scripts/real-set.mjs run --reasoner matrix`); process.exit(1); }
   }
-  else { console.error('usage: real-set.mjs build | run --reasoner matrix|ops [--mode shipped|rules] [--ort <onnxruntime-node entry>] [--seed N] | diff <result a> <result b> | report | ledger [--write] | flag | record'); process.exit(2); }
+  else { console.error('usage: real-set.mjs build | run --reasoner matrix|ops [--mode shipped|rules] [--ort <onnxruntime-node entry>] [--seed N] | diff <result a> <result b> | delta [<commit>] | report | ledger [--write] | flag | record'); process.exit(2); }
 }
