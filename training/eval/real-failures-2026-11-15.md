@@ -1,12 +1,12 @@
 # REAL failures by cause (2026-11-15)
 
-Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit 085bc0dab1f6; seed 20261115; build c1545fc5, tree b18bda3e977f9a8e), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
+Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit 085bc0dab1f6; seed 20261115; build 1b2670f3, tree 4ac903639a8e2302), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
 
 Headline (in scope, judged): 177/207 right (partly 9, wrong 21); 46 turns of retired records skipped. Diagnostic, rules formalizer only: 160/207.
 
 Caveat: Romanian turns are replayed with the rules translator only (no browser Machine Translation in node: --bergamot runs the on-device model), so part of the Romanian causes is the missing translation backend, not the reader. Lazy world loading is not replayed (every world is loaded, as `?psys2lazy=0`).
 
-Failing turns: matrix 232, ops 232 (0 fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): 1.
+Failing turns: matrix 231, ops 231 (0 fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): 1.
 
 | # | cause | turns | both | examples |
 | --- | --- | ---: | ---: | --- |
@@ -17,8 +17,8 @@ Failing turns: matrix 232, ops 232 (0 fail on ops only). Ledger rows flagged rea
 | 5 | a world other than the open tab took the turn | 25 | 25 | "draw a sun and a house" (tictactoe); "yes, it eats meat" (draw); "Tom has 15 apples. He gives 12 to Ana. How many apples does " (robot) |
 | 6 | judged wrong (state / answer expected is not there): dialogues:dlg.real | 9 | 9 | "draw a red circle" (diagram); "create a diagram" (diagram); "add a box" (diagram) |
 | 7 | unknown word (a word of the request is not known) | 8 | 8 | "enervant da" (draw); "face un caca" (draw); "asta" (draw) |
-| 8 | continuation / correction / why-question | 7 | 7 | "ar trebui sa schimbi aceste voila si ta-da ca faci numai pro" (draw); "cum ai ajuns a deschisi joculd e sah? e ridicol" (chess); "mai jos, sta pe leagan nu pe el" (draw) |
-| 9 | judged wrong (state / answer expected is not there): dialogues:dlg.rp3 | 7 | 7 | "mcdavatara human" (robot); "tongue out" (robot); "add two chapters" (editor) |
+| 8 | judged wrong (state / answer expected is not there): dialogues:dlg.rp3 | 7 | 7 | "mcdavatara human" (robot); "tongue out" (robot); "add two chapters" (editor) |
+| 9 | continuation / correction / why-question | 6 | 6 | "ar trebui sa schimbi aceste voila si ta-da ca faci numai pro" (draw); "cum ai ajuns a deschisi joculd e sah? e ridicol" (chess); "capra zoboara, fixeaza" (draw) |
 | 10 | fragment / list split | 5 | 5 | "eyeglasses" (robot); "a women" (robot); "new game" (guess) |
 | 11 | acted on a partly understood sentence | 4 | 4 | "paint three new nodes" (diagram); "a person" (robot); "what character is on screen" (robot) |
 | 12 | judged wrong (state / answer expected is not there): dialogues:dlg.gaps | 3 | 3 | "would you say you are happy" (robot); "would you say you are sad" (robot); "what is on you" (robot) |

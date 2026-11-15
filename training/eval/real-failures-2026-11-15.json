@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "c1545fc5",
-  "tree": "b18bda3e977f9a8e",
+  "build": "1b2670f3",
+  "tree": "4ac903639a8e2302",
   "catalog": "085bc0dab1f6f2817815ca789a36259b3c01ae4e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -16,15 +16,15 @@
    "right": 177,
    "partly": 9,
    "wrong": 21,
-   "open": 12,
-   "changed": 54,
+   "open": 11,
+   "changed": 55,
    "unjudged": 332,
    "outcome": {
-    "executed": 332,
+    "executed": 333,
     "refused": 2,
     "asked": 10,
     "not_understood": 166,
-    "other_world": 95
+    "other_world": 94
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -91,15 +91,15 @@
    "right": 177,
    "partly": 9,
    "wrong": 21,
-   "open": 12,
-   "changed": 54,
+   "open": 11,
+   "changed": 55,
    "unjudged": 332,
    "outcome": {
-    "executed": 332,
+    "executed": 333,
     "refused": 2,
     "asked": 10,
     "not_understood": 166,
-    "other_world": 95
+    "other_world": 94
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 232,
- "failing_ops": 232,
+ "failing_matrix": 231,
+ "failing_ops": 231,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -810,33 +810,6 @@
    ]
   },
   {
-   "cause": "continuation / correction / why-question",
-   "count": 7,
-   "both_reasoners": 7,
-   "examples": [
-    {
-     "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
-     "tab": "draw",
-     "happened": "I did not understand \"ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum\". For example: \"Add a house.\" or \"What is the colour of the house?"
-    },
-    {
-     "text": "cum ai ajuns a deschisi joculd e sah? e ridicol",
-     "tab": "chess",
-     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
-    },
-    {
-     "text": "mai jos, sta pe leagan nu pe el",
-     "tab": "draw",
-     "happened": "OK, more down, stay on leagan not him. [outcome: other_world; open]"
-    },
-    {
-     "text": "capra zoboara, fixeaza",
-     "tab": "draw",
-     "happened": "I can't find zoboara, fixeaza on any of your lists. (I read \"goat\" as \"got\") I understood only part of that: I did not use \"The\". [outcome: other_world; open]"
-    }
-   ]
-  },
-  {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
    "count": 7,
    "both_reasoners": 7,
@@ -860,6 +833,33 @@
      "text": "add text",
      "tab": "editor",
      "happened": "What text should I add? [outcome: executed; partly; state:blocks.length=6]"
+    }
+   ]
+  },
+  {
+   "cause": "continuation / correction / why-question",
+   "count": 6,
+   "both_reasoners": 6,
+   "examples": [
+    {
+     "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
+     "tab": "draw",
+     "happened": "I did not understand \"ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum\". For example: \"Add a house.\" or \"What is the colour of the house?"
+    },
+    {
+     "text": "cum ai ajuns a deschisi joculd e sah? e ridicol",
+     "tab": "chess",
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
+    },
+    {
+     "text": "capra zoboara, fixeaza",
+     "tab": "draw",
+     "happened": "I can't find flies, fixeaza on any of your lists. (I read \"goat\" as \"got\") I understood only part of that: I did not use \"The\". [outcome: other_world; open]"
+    },
+    {
+     "text": "de ce nu ai raspuns?",
+     "tab": "draw",
+     "happened": "You said \"muta vaca mai jos, sa nu mai zboare\". I could not read those parts as a whole request, so I did not do anything with it (not read: \"muta vaca mai jos\""
     }
    ]
   },

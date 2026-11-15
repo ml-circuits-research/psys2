@@ -968,7 +968,13 @@ export function createExecutor(schema, hooks = {}) {
     if (yn === 'yes') { /* "yes" confirms the guess: run as asked */ }
     else if (p.role === 'thing' && p.candidates) { const hit = p.candidates.map((id) => st.items.find((i) => i.id === id)).filter(Boolean).find((i) => toks(t).some((w) => w === String(i.n) || (i.name && w === i.name.toLowerCase()) || ORD[w] === p.candidates.indexOf(i.id) + 1)); if (!hit) return { handled: false }; req.thing = label(hit); }
     else if (p.role === 'attribute') { const a = attrByWord(toks(t).pop() ?? ''); if (!a) { const v = Object.values(schema.attrs).find((x) => valueOf(x, t) !== undefined); if (v) { req.attribute = v.name; req.value = t; } else return { handled: false }; } else req.attribute = a.name; }
-    else if (p.role === 'value' && p.text) { if (/[?]/.test(t)) return { handled: false }; req.value = t.replace(/[.!]+$/, ''); }   // the text a block asked for: any length
+    else if (p.role === 'value' && p.text) {   // the text a block asked for: any length
+      if (/[?]/.test(t)) return { handled: false };
+      // the question followed a thing this world has no kind for: the catch-all kind stood in for the user's word ("draw a villa" -> "I can draw a house, ... What would you like?"),
+      // so the question asked for a thing, not a text: the answer ("a house and 2 fish") is a new request, read normally
+      if (req.said && String(req.said).toLowerCase() !== String(req.thing ?? '').toLowerCase()) return { handled: false };
+      req.value = t.replace(/[.!]+$/, '');
+    }
     else if (p.role === 'value' || p.role === 'place' || p.role === 'thing') { if (t.split(/\s+/).length > 4 || /[?]/.test(t)) return { handled: false }; req[p.role] = t; }
     if (hooks.domain?.[req.act]) { const { act: a, ...args } = req; const r = operation0(ctx, a, args); return { handled: true, reply: r.note }; }   // the world's own effect answers, as the request would have
     const res = run(init(st), req);

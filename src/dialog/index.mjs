@@ -24,7 +24,8 @@ import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
 import { splitSentences } from '../formalizer/rules/normalize.mjs';
 import { nameCandidates, nameIndex } from '../formalizer/names.mjs';
 import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs';
-import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs';
+import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs';
+import { worldThingNames, sessionNames } from '../translate/keep-list.mjs';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs';
 import { lexIndex } from '../worlds/lexicon.mjs';
 import { perf } from '../formalizer/perf.mjs';
@@ -1462,11 +1463,17 @@ export class DialogSession {
     const { set } = this.engine;
     const vocab = spellVocabulary(set);
     const isEnglish = englishTest((w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!tr.rules?.knownEnglish?.(w));
-    const cands = await gatherCandidates(text, { from: lang, to: 'en', translator: tr, abortable: (p, stage) => guard.abortable(p, stage) });
+    // names kept as they are (spec 05 "Keep-list"): the things of the open tab's world and the names told in the session are never source words left over nor non-words
+    const fold = (w) => String(w).normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+    const kept = new Set([...worldThingNames(this), ...sessionNames(this)].flatMap((n) => fold(n).split(/[\s_]+/)).filter((w) => w.length >= 3));
+    // a word no dictionary of the language has, with no word of the language near it ("tenerife"; "desenaza" is a typo of desenează, not a name), is a name: a candidate that keeps it is not rejected for it
+    const srcVocab = tr.rules?.sourceVocabulary?.(lang);
+    const isName = tr.rules?.glossWord ? (w) => !nearAny(w, srcVocab) && !(tr.rules.glossWord(w, lang) ?? []).length && !(tr.rules.knownEnglish?.(fold(w))) : null;
+    const cands = await gatherCandidates(text, { from: lang, to: 'en', translator: tr, abortable: (p, stage) => guard.abortable(p, stage), isEnglish, kept });
     if (!cands.length) return this._sendCore(text, opts);   // nothing translated it: the core says so (MT-SERIOUS)
-    const pick = await chooseCandidate(cands, text, { understand: (e) => this._understands(e), isEnglish, soft: () => guard.soft() });
+    const pick = await chooseCandidate(cands, text, { understand: (e) => this._understands(e), isEnglish, soft: () => guard.soft(), kept, isName });
     if (!pick.chosen) return this._sendCore(text, opts);
-    const c = pick.chosen, machine = c.source === 'browser' || c.source === 'model' || /^repaired-(browser|model)$/.test(c.source);
+    const c = pick.chosen, machine = c.source === 'browser' || c.source === 'model' || /^(?:repaired|glossed)-(browser|model)$/.test(c.source);
     const r = await this._sendCore(text, opts, { english: c.text, translation: c.translation });
     r.trace.candidates = pick.log;
     r.trace.via = machine ? 'translator-in' : 'rules-translate';

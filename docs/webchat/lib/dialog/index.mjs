@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=b1a44aa29c';
+import { composeReply, sayOf } from './composed-reply.mjs?v=d967893f3a';
 import { reviewForeign } from './foreign-reading.mjs?v=ce2e99c912';
 import { installTextGen } from './textgen.mjs?v=4c75b0d4e4';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=a815012811';
@@ -24,7 +24,8 @@ import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f70
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=d9beb26cad';
 import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=25d608cf8a';
 import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=ca8a48d659';
-import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=1794f7417d';
+import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=a988f52d3d';
+import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=a815012811';
 import { lexIndex } from '../worlds/lexicon.mjs?v=7f0cf3631e';
 import { perf } from '../formalizer/perf.mjs?v=b81e032a17';
@@ -1462,11 +1463,17 @@ export class DialogSession {
     const { set } = this.engine;
     const vocab = spellVocabulary(set);
     const isEnglish = englishTest((w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!tr.rules?.knownEnglish?.(w));
-    const cands = await gatherCandidates(text, { from: lang, to: 'en', translator: tr, abortable: (p, stage) => guard.abortable(p, stage) });
+    // names kept as they are (spec 05 "Keep-list"): the things of the open tab's world and the names told in the session are never source words left over nor non-words
+    const fold = (w) => String(w).normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+    const kept = new Set([...worldThingNames(this), ...sessionNames(this)].flatMap((n) => fold(n).split(/[\s_]+/)).filter((w) => w.length >= 3));
+    // a word no dictionary of the language has, with no word of the language near it ("tenerife"; "desenaza" is a typo of desenează, not a name), is a name: a candidate that keeps it is not rejected for it
+    const srcVocab = tr.rules?.sourceVocabulary?.(lang);
+    const isName = tr.rules?.glossWord ? (w) => !nearAny(w, srcVocab) && !(tr.rules.glossWord(w, lang) ?? []).length && !(tr.rules.knownEnglish?.(fold(w))) : null;
+    const cands = await gatherCandidates(text, { from: lang, to: 'en', translator: tr, abortable: (p, stage) => guard.abortable(p, stage), isEnglish, kept });
     if (!cands.length) return this._sendCore(text, opts);   // nothing translated it: the core says so (MT-SERIOUS)
-    const pick = await chooseCandidate(cands, text, { understand: (e) => this._understands(e), isEnglish, soft: () => guard.soft() });
+    const pick = await chooseCandidate(cands, text, { understand: (e) => this._understands(e), isEnglish, soft: () => guard.soft(), kept, isName });
     if (!pick.chosen) return this._sendCore(text, opts);
-    const c = pick.chosen, machine = c.source === 'browser' || c.source === 'model' || /^repaired-(browser|model)$/.test(c.source);
+    const c = pick.chosen, machine = c.source === 'browser' || c.source === 'model' || /^(?:repaired|glossed)-(browser|model)$/.test(c.source);
     const r = await this._sendCore(text, opts, { english: c.text, translation: c.translation });
     r.trace.candidates = pick.log;
     r.trace.via = machine ? 'translator-in' : 'rules-translate';

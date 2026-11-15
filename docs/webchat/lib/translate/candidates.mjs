@@ -44,17 +44,92 @@ export function englishTest(known) {
  * Source-language words a candidate keeps: a word of the input that is in the candidate as it was typed (diacritics ignored) and is not English. Quoted text is
  * the user's own; a capitalised word in the middle of the candidate is a name; words of fewer than 3 letters are never counted.
  */
-export function sourceResidue(candidate, input, isEnglish) {
+export function sourceResidue(candidate, input, isEnglish, { kept = null, isName = null } = {}) {
   const seen = new Set();
   for (const w of wordsOf(unquoted(input))) { budget.tick('candidates.residue'); if (w.raw.length >= 3) seen.add(fold(w.raw)); }
   const out = [];
-  for (const w of wordsOf(unquoted(candidate))) {
+  const text = unquoted(candidate);
+  for (const w of wordsOf(text)) {
     budget.tick('candidates.residue');
     if (w.raw.length < 3) continue;
     const k = fold(w.raw);
     if (!seen.has(k)) continue;
     if (w.at > 0 && /^\p{Lu}/u.test(w.raw)) continue;   // a name in the middle of the sentence
+    if (named(text, w) || kept?.has(k) || isName?.(w.raw)) continue;   // a name: after "called" / "named", a thing of the open world, or a word no dictionary of the language has
     if (!isEnglish(k)) out.push(w.raw);
+  }
+  return out;
+}
+
+/** True when the word stands right after an English naming word ("a circle called gamma"): a name, whatever language it is in. */
+const named = (text, w) => /(?:^|[^\p{L}])(?:called|named)\s+$/iu.test(text.slice(Math.max(0, w.at - 12), w.at));
+
+/**
+ * NON-WORDS of a candidate (reviewer 2026-11-15 10:10 item 2): words the translator MADE that are not English ("Assate", "Resid", "Consoposing", "Teneriphi", "exagger"): not in the
+ * input, not English for the reader, not a name (after "called" / "named", capitalised in the middle, a thing of the open world). A candidate with non-words loses to one without.
+ */
+export function nonWords(candidate, input, isEnglish, { kept = null, glossed = null } = {}) {
+  const seen = new Set();
+  for (const w of wordsOf(unquoted(input))) { budget.tick('candidates.residue'); seen.add(fold(w.raw)); }
+  for (const g of glossed ?? []) for (const x of fold(g.to).split(/\s+/)) seen.add(x);   // a dictionary gloss is English by construction (the reader's vocabulary may lack it)
+  const out = [];
+  const text = unquoted(candidate);
+  for (const w of wordsOf(text)) {
+    budget.tick('candidates.residue');
+    const k = fold(w.raw).replace(/['’](?:s|re|ve|ll|m|d|t)$/, '').replace(/n$/, (x) => (/['’]t$/.test(w.raw) ? '' : x));   // you're, it's, don't
+    if (k.length < 3 || seen.has(k) || /^[zţțž]orq[a-z]*$/.test(k)) continue;
+    if (w.at > 0 && /^\p{Lu}/u.test(w.raw)) continue;
+    if (named(text, w) || kept?.has(k)) continue;
+    if (!isEnglish(k)) out.push(w.raw);
+  }
+  return out;
+}
+
+// ---- glossed candidates ---------------------------------------------------------------------------------------------------------------------------
+
+export const MAX_GLOSSED = 3;   // glossed candidates added per message
+
+const capLike = (raw, en) => (/^\p{Lu}/u.test(raw) ? en.charAt(0).toUpperCase() + en.slice(1) : en);
+const escRe = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
+ * GLOSSED CANDIDATES (spec 05, reviewer 2026-11-15 10:10 item 2): a word a candidate failed on is glossed from the source language's dictionary (`gloss(word)` -> [{ en }], after a typo
+ * repair against the same dictionary). A source word a candidate kept ("Aseaza the items ...") is replaced by its gloss; a non-word a machine candidate made ("Assate the elements ...") is
+ * replaced by the gloss of the source word the rules candidate kept at the same place in the order (the counts must agree: no guessing). One candidate per sense, at most MAX_GLOSSED.
+ * Returns new candidates { source: `glossed-<source>`, text, translation, glossed: [{ from, to }] }; nothing is per language here.
+ */
+export function glossCandidates(cands, input, { gloss, isEnglish, kept = null }) {
+  if (!gloss) return [];
+  const out = [];
+  const rules = cands.find((c) => c.source === 'rules');
+  const residueOf = (c) => sourceResidue(c.text, input, isEnglish, { kept });
+  const ruleRes = rules ? residueOf(rules) : [];
+  const glossOf = new Map();
+  const g = (w) => { const k = fold(w); if (!glossOf.has(k)) { let r = []; try { r = gloss(w) ?? []; } catch { r = []; } glossOf.set(k, r.map((x) => x.en).filter(Boolean)); } return glossOf.get(k); };
+  const build = (c, pairs) => {   // pairs: [[surface in c, source word]]
+    const senses = pairs.map(([, src]) => g(src));
+    if (!pairs.length || senses.some((x) => !x.length)) return;
+    const n = Math.max(...senses.map((x) => x.length));
+    for (let v = 0; v < n && out.length < MAX_GLOSSED; v++) {
+      budget.tick('candidates.gloss');
+      let text = c.text;
+      const done = [];
+      for (let i = 0; i < pairs.length; i++) {
+        const [surface] = pairs[i], en = senses[i][Math.min(v, senses[i].length - 1)];
+        const rx = new RegExp(`(?<![\\p{L}])${escRe(surface)}(?![\\p{L}])`, 'u');
+        if (!rx.test(text)) return;
+        text = text.replace(rx, capLike(surface, en));
+        done.push({ from: pairs[i][1], to: en });
+      }
+      if (!cands.some((x) => norm(x.text) === norm(text)) && !out.some((x) => norm(x.text) === norm(text))) out.push({ source: `glossed-${c.source}`, text, translation: { text, alignment: [], unknown: [], confidence: 0.5 }, glossed: done });
+    }
+  };
+  for (const c of cands) {
+    if (c.rejected && !c.soft) continue;
+    const res = c === rules ? ruleRes : residueOf(c);
+    if (res.length) { build(c, res.map((w) => [w, w])); continue; }
+    const bad = nonWords(c.text, input, isEnglish, { kept });
+    if (bad.length && bad.length === ruleRes.length) build(c, bad.map((w, i) => [w, ruleRes[i]]));
   }
   return out;
 }
@@ -62,7 +137,7 @@ export function sourceResidue(candidate, input, isEnglish) {
 // ---- source-side spelling repair --------------------------------------------------------------------------------------------------------------------
 
 /** Optimal-string-alignment distance, stopping above `max` (insert, delete, replace, swap). */
-function within(a, b, max) {
+export function within(a, b, max) {
   if (Math.abs(a.length - b.length) > max) return Infinity;
   let p2 = null, p1 = Array.from({ length: b.length + 1 }, (_, j) => j);
   for (let i = 1; i <= a.length; i++) {
@@ -147,7 +222,7 @@ const norm = (t) => String(t ?? '').trim().replace(/\s+/g, ' ').toLowerCase();
  * (translated by the first machine translator that answered, else by the rules). Each: { source, text, translation, rejected? }.
  * `translator` is the switch translator of the host (`candidatesViaMT`, `rules`); anything missing is skipped. Never throws.
  */
-export async function gatherCandidates(text, { from, to = 'en', translator, abortable = (p) => p }) {
+export async function gatherCandidates(text, { from, to = 'en', translator, abortable = (p) => p, isEnglish = null, kept = null }) {
   const out = [], seen = new Set();
   const add = (source, translation, extra = {}) => {
     const t = textOf(translation).trim();
@@ -183,6 +258,16 @@ export async function gatherCandidates(text, { from, to = 'en', translator, abor
       else if (rr) add('repaired-rules', rr, { repaired: rep.text, changes: rep.changes });
     }
   }
+  // the words the candidates failed on, glossed from the language's dictionary (`rules.glossWord`)
+  if (rules?.glossWord && isEnglish) {
+    // a typo the dictionary repairs ("punr" -> pune, all the near words being forms of one lemma) goes to the machine translator once more in the repaired source
+    if (mt.length) {
+      const changes = [];
+      const fixed = text.replace(WORD, (raw) => { budget.tick('candidates.gloss'); if (raw.length < 3 || kept?.has(fold(raw))) return raw; let g = []; try { g = rules.glossWord(raw, from) ?? []; } catch { g = []; } const to = g[0]?.repaired; if (!to || fold(to) === fold(raw)) return raw; changes.push({ from: raw, to, kind: 'dictionary' }); return matchCase(raw, to); });
+      if (changes.length) { const m2 = (await viaMT(fixed)).find((m) => !m.rejected); if (m2) add(`repaired-${m2.source}`, m2.translation ?? m2.text, { repaired: fixed, changes }); }
+    }
+    for (const c of glossCandidates(out, text, { gloss: (w) => rules.glossWord(w, from), isEnglish, kept })) { if (out.length >= MAX_CANDIDATES + MAX_GLOSSED) break; out.push(c); seen.add(norm(c.text)); }
+  }
   return out;
 }
 
@@ -190,16 +275,20 @@ export async function gatherCandidates(text, { from, to = 'en', translator, abor
  * Chooses one candidate. `understand(english)` -> { issues } (0 = understood completely in the active tab) is the reader's dry reading; `isEnglish(word)` is the
  * reader's vocabulary test. Returns { chosen, log } where `log` has one record per candidate (source, text, rejected, residue, issues) for the phrase export.
  */
-export async function chooseCandidate(cands, input, { understand, isEnglish, soft = () => false }) {
-  const log = cands.map((c) => ({ source: c.source, text: c.text, ...(c.rejected ? { rejected: c.rejected } : {}), ...(c.repaired ? { repaired: c.repaired } : {}) }));
+export async function chooseCandidate(cands, input, { understand, isEnglish, soft = () => false, kept = null, isName = null }) {
+  const log = cands.map((c) => ({ source: c.source, text: c.text, ...(c.rejected ? { rejected: c.rejected } : {}), ...(c.repaired ? { repaired: c.repaired } : {}), ...(c.glossed ? { glossed: c.glossed } : {}) }));
   let pool = [];
   cands.forEach((c, i) => {
     budget.tick('candidates.residue');
     if (c.rejected && !c.soft) return;   // a soft rejection (names: exonyms such as Parys / Paris differ between languages) is only a warning: the reader's understanding decides
-    c.residue = sourceResidue(c.text, input, isEnglish);
+    c.residue = sourceResidue(c.text, input, isEnglish, { kept, isName });
     if (c.residue.length) { log[i].rejected = `source words: ${c.residue.slice(0, 4).join(', ')}`; return; }
+    c.nonWords = nonWords(c.text, input, isEnglish, { kept, glossed: c.glossed });
+    if (c.nonWords.length) log[i].nonWords = c.nonWords.slice(0, 4);
     pool.push(i);
   });
+  // a candidate with non-words loses to every one without (stable: the order of preference stays among each group)
+  pool = [...pool.filter((i) => !cands[i].nonWords?.length), ...pool.filter((i) => cands[i].nonWords?.length)];
   if (!pool.length) {   // every candidate keeps source words (or failed the checker): the least bad is still read, so that the person gets an answer
     pool = cands.map((c, i) => i).filter((i) => (!cands[i].rejected || cands[i].soft)).sort((a, b) => (cands[a].residue?.length ?? 0) - (cands[b].residue?.length ?? 0));
     for (const i of pool) log[i].fallback = true;
@@ -207,16 +296,26 @@ export async function chooseCandidate(cands, input, { understand, isEnglish, sof
   if (!pool.length) return { chosen: null, log };
   if (pool.length === 1) { log[pool[0]].chosen = true; return { chosen: cands[pool[0]], log }; }
   let best = -1, bestIssues = Infinity;
-  for (const i of pool.slice(0, MAX_CANDIDATES)) {
+  for (const i of pool.slice(0, MAX_CANDIDATES + MAX_GLOSSED)) {
     budget.tick('candidates.choose');
     if (best >= 0 && soft()) break;
     let issues = 9;
     try { issues = (await understand(cands[i].text))?.issues ?? 9; } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; }
     log[i].issues = issues;
-    if (issues < bestIssues) { best = i; bestIssues = issues; }
-    if (issues === 0) break;   // understood completely: the earlier candidates win ties, so the first complete one is the choice
+    const score = issues + 3 * (cands[i].nonWords?.length ?? 0);   // a non-word is a point of trouble the reader may not see (an unknown word read as a name)
+    if (score < bestIssues) { best = i; bestIssues = score; }
+    if (score === 0) break;   // understood completely: the earlier candidates win ties, so the first complete one is the choice
   }
   if (best < 0) best = pool[0];
   log[best].chosen = true;
   return { chosen: cands[best], log };
+}
+
+/** True when the source vocabulary has a word within one edit of `word` (two from 7 letters): a typo of a word of the language, never a name. */
+export function nearAny(word, vocab) {
+  if (!vocab?.size) return false;
+  const k = fold(word), max = k.length >= 7 ? 2 : 1, idx = byLength(vocab);
+  if (vocab.has(k)) return true;
+  for (let l = k.length - max; l <= k.length + max; l++) for (const cand of idx.get(l) ?? []) { budget.tick('candidates.repair'); if (within(k, cand, max) !== Infinity) return true; }
+  return false;
 }

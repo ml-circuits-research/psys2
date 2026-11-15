@@ -11,6 +11,9 @@
  *   - session:   names the user told this session (`extra`), protected with a capital letter;
  *   - things:    the names of the things in the open tab's world (`things`: a diagram's "work done", "summary"), protected whatever the case (owner 2026-11-15:
  *                "Moved work done." came back as "M-am mutat de la muncă"; the model never translates the names of the things on the screen).
+ *   - quotes:    (into English only) text the user quoted ("…", „…”, «…»), whatever it says (owner 2026-11-15, reviewer 10:10 item 1);
+ *   - named:     the word right after a NAMING word of the source language ("un cerc numit alfa": alfa stays alfa, not "alpha"; "gamma" not "the range"). A naming word is one whose
+ *                dictionary gloss or rules translation is call / name (`namerTest(rules)`), so the test is the language pack's, never a word list here.
  * Numbers need no placeholder: the translation checker already requires them to survive.
  */
 
@@ -81,10 +84,21 @@ const re = (alts, flags) => alts.length ? new RegExp(`(?<![${LETTER}])(?:${alts.
  * Replaces the keep-list words of `text` by placeholders. `keep` = { verbatim, names, tabs } (keepListOf), `extra` = names told in the session, `things` = worldThingNames.
  * Returns { text, found: [[placeholder, surface]...], restore(out) } where restore returns null when a placeholder did not survive the model.
  */
-export function protectText(text, keep, { extra = [], things = [], quoteThings = false } = {}) {
+export function protectText(text, keep, { extra = [], things = [], quoteThings = false, isNamer = null, quotes = false } = {}) {
   let s = String(text ?? '');
   const found = [];
   const put = (m) => { const p = PLACE(found.length); found.push([p, m]); return p; };
+  if (quotes) s = s.replace(/"[^"\n]{1,80}"|„[^”\n]{1,80}”|«[^»\n]{1,80}»/gu, put);   // quoted text: the user's own words, with the quotes
+  if (isNamer) {   // the word after a naming word (a placeholder already there is left alone)
+    const ws = [...s.matchAll(/[\p{L}][\p{L}'-]*/gu)];
+    let out = '', at = 0;
+    for (let k = 1; k < ws.length; k++) {
+      const w = ws[k - 1][0], name = ws[k];
+      if (w.length < 3 || /^Zorq/.test(name[0]) || !/^\s+$/.test(s.slice(ws[k - 1].index + w.length, name.index)) || !isNamer(w)) continue;
+      out += s.slice(at, name.index) + put(name[0]); at = name.index + name[0].length;
+    }
+    s = out + s.slice(at);
+  }
   const th = re(things.map(words).filter((x) => x.length >= 3).sort((a, b) => b.length - a.length), 'giu');   // the things on the screen: whatever the case, first (longest first)
   const quoted = new Set();   // into another language a thing's name comes back quoted („work done”): it is a name, not an English word left over
   if (th) s = s.replace(th, (m, off, all) => { const p = put(m); if (quoteThings && !/[„"“]$/.test(all.slice(0, off))) quoted.add(p); return p; });
@@ -112,6 +126,25 @@ export function protectText(text, keep, { extra = [], things = [], quoteThings =
   return { text: s, found, restore };
 }
 
+const NAMING = /^(?:call|called|name|named)$/;
+/** The naming-word test of a language pack (`rules`: glossWord(word, lang), translate(text, { from, to })): (word, lang) -> true for "numit", "numită", "called". Memoized. */
+export function namerTest(rules) {
+  const memo = new Map();
+  return (word, lang = 'ro') => {
+    const k = `${lang}|${String(word).toLowerCase()}`;
+    if (memo.has(k)) return memo.get(k);
+    let ok = false;
+    try { ok = (rules?.glossWord?.(word, lang) ?? []).some((g) => NAMING.test(g.en)); } catch { ok = false; }
+    if (!ok && rules?.translate && lang !== 'en') {
+      try { const r = rules.translate(String(word), { from: lang, to: 'en' }); const t = typeof r?.then === 'function' ? '' : (typeof r === 'string' ? r : r?.text); ok = NAMING.test(String(t ?? '').trim().toLowerCase()); } catch { ok = false; }
+    }
+    if (lang === 'en') ok = NAMING.test(String(word).toLowerCase());
+    if (memo.size > 5000) memo.clear();
+    memo.set(k, ok);
+    return ok;
+  };
+}
+
 /**
  * Wraps `translate(text, from, to) -> Promise<string>`: the keep-list words are placeholders for the model. When the model loses a placeholder the
  * unprotected translation is used (the checker of the translation layer still judges it). `getKeep()` = { keep, extra } is read at every call.
@@ -120,8 +153,8 @@ export function protectedTranslate(translate, getKeep) {
   return async (text, from, to, ...rest) => {
     let info;
     try { info = getKeep?.(); } catch { info = null; }
-    if (!info || (!info.keep && !(info.extra?.length) && !(info.things?.length))) return translate(text, from, to, ...rest);
-    const p = protectText(text, info.keep, { extra: info.extra ?? [], things: info.things ?? [], quoteThings: to !== 'en' });
+    if (!info) return translate(text, from, to, ...rest);
+    const p = protectText(text, info.keep, { extra: info.extra ?? [], things: info.things ?? [], quoteThings: to !== 'en', quotes: to === 'en', isNamer: info.isNamer ? (w) => info.isNamer(w, from) : null });
     if (!p.found.length) return translate(text, from, to, ...rest);
     const out = await translate(p.text, from, to, ...rest);
     const back = p.restore(out);
