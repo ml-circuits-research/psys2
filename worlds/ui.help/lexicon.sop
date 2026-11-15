@@ -453,6 +453,7 @@
     word=graph
     word=graphs
     word=keyboard
+    word=list
     word=lists
     word=map
     word=music
@@ -461,11 +462,13 @@
     word=piano
     word=picture
     word=pictures
+    word=problems
     word=sheet_music
     word=shop
     word=shopping
     word=sketch
     word=sketchpad
+    word=story
     word=sums
     word=talk
     word=tasks

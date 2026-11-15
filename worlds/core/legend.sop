@@ -397,6 +397,12 @@
     ask="true or false?"
     doc="With reasoner=matrix: true for a world whose state follows the other worlds (the shell's tab: an editor brings its tab forward). What another world's request changed in it is not a step of the turn, so undoing that turn leaves it alone; only a turn of the world's own undoes its changes."
 
+@core.world.reader core.key
+    value=atom
+    card=one
+    ask="yes or no?"
+    doc="yes for a hand-built world whose operations hand the sentence to their own reader (calc.story: the library's storyState): the free text of its patterns is raw, read when the world knows the words or its reader reads the whole clause (hook readsWhole, spec 16 section 13), as for a schema world with the flag reader."
+
 @core.world.ambient core.key
     value=atom
     card=one

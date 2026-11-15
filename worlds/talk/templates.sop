@@ -85,3 +85,7 @@
 @tpl.talk.can core.template
     for=action.talk.can
     text="{value}"
+
+@tpl.talk.contrast core.template
+    for=action.talk.contrast
+    text="{value}"

@@ -104,6 +104,8 @@ export async function describeWorld(w, dir, { catalog, set }) {
     }   // where a thing goes: a kind of the world or a position word the world has (direction words with the flag `dir`, layout words with `layout`)
     if (!schema.flags?.reader) for (const [flag, id] of [[true, 'lex.acts.rel'], [!!schema.flags?.dir, 'lex.acts.dir'], [!!schema.flags?.layout, 'lex.acts.layout']]) if (flag) for (const x of lexWords(id)) for (const t of toks(x)) known.add(t);
   }
+  // a hand-built world whose operations hand the sentence to their own reader (manifest `reader=yes`: calc.story, the library's storyState) has raw free text, as a schema world with the flag `reader`
+  if ((w.manifest?.entries ?? []).some((e) => e.key === 'reader' && String(e.value?.v) === 'yes')) rawArgs = true;
   // the words of the world's own lexicons (a lexicon `lex.<world>.*`)
   for (const l of w.lexicons ?? []) if (String(l.id).startsWith(`lex.${w.id}.`) && !l.open) for (const x of [...l.words, ...(l.plurals ?? []).flatMap((p) => String(p).split(':'))]) for (const t of toks(x)) known.add(t);
   const views = args['send.place'] ? viewWords(set) : [];
