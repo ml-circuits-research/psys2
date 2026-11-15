@@ -691,8 +691,8 @@
     "worlds/words/zo.json": "24885730024d779a",
     "worlds/words.bloom.json": "69034a3ea60cdf56"
   },
-  "builtAt": "2026-11-15T05:35:24.618Z",
-  "commit": "25492edc-dirty",
+  "builtAt": "2026-11-15T05:39:50.518Z",
+  "commit": "cd56a2c1",
   "catalog": "085bc0dab1f6f2817815ca789a36259b3c01ae4e",
   "assets": {
     "app.mjs": "1e15eb4de0",
