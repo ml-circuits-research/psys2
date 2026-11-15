@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "e838d108",
-  "tree": "dd1c47bb365b0b58",
+  "build": "57a5c009",
+  "tree": "66642a77c778bff6",
   "catalog": "ab3b2ab868ba27868f88d2dbdfce3433a699ece6",
   "seed": 20261115,
   "formalizer": "encoder"
