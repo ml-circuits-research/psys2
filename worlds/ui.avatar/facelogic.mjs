@@ -66,13 +66,15 @@ export function indexOf(data) {
   for (const [of, list] of Object.entries(data.colours)) for (const name of Object.keys(list)) add(ix.colourWords, name, { of, name });
   for (const c of new Set([...ix.partColours.keys()].map((k) => k.split(':')[1]))) add(ix.colourWords, c, { of: null, name: c });
   for (const p of Object.values(data.presets)) add(ix.presetWords, p.name, p.name);
+  // the other names of the presets (src/knowledge/faces.mjs presetAliases: synonyms and shared kinds from k.words): "a person" is any of the human presets, chosen by choosePreset
+  for (const [w, list] of Object.entries(data.presetAliases ?? {})) for (const name of list) if (data.presets[name]) add(ix.presetWords, w, name);
   for (const e of Object.values(data.expressions)) if (e.name !== 'talking') add(ix.moodWords, e.name, e.name);
   indexes.set(data, ix);
   return ix;
 }
 
 /** What a word list says, left to right, longest phrase first: { type: slot | variant | colour | feature | preset | mood | neg | word, ... }. */
-export function read(data, words) {
+export function read(data, words, { self = false } = {}) {
   const ix = indexOf(data), ws = words.filter((w) => !FUNCTION_WORDS.has(w) || NEGATIONS.has(w));
   const out = [];
   const has = (map, phrase) => { for (const f of forms(phrase.split(' ').at(-1))) { const p = [...phrase.split(' ').slice(0, -1), f].join(' '); if (map.has(p)) return map.get(p); } return null; };
@@ -85,7 +87,8 @@ export function read(data, words) {
       const phrase = ws.slice(i, i + n).join(' ');
       let m;
       if (n === 1 && NEGATIONS.has(ws[i])) hit = { n, m: { type: 'neg' } };
-      else if ((m = has(ix.presetWords, phrase)) && (n > 1 || !has(ix.variantWords, phrase) && !has(ix.slotWords, phrase))) hit = { n, m: { type: 'preset', name: m[0] } };
+      // a word that is a preset and a kind of variant ("robot": the preset and the robot mouth) is the preset when the request is about the avatar itself and names no part ("make the avatar a robot")
+      else if ((m = has(ix.presetWords, phrase)) && (n > 1 || !has(ix.slotWords, phrase) && (!has(ix.variantWords, phrase) || (self && !namesPart)))) hit = { n, m: { type: 'preset', name: m[0], options: m, word: phrase } };
       else if (n === 1 && !namesPart && (m = has(ix.moodWords, phrase)) && has(ix.variantWords, phrase)) hit = { n, m: { type: 'mood', name: m[0] } };
       else if ((m = has(ix.variantWords, phrase))) hit = { n, m: { type: 'variant', options: m, word: n === 1 ? phrase : null } };
       else if ((m = has(ix.slotWords, phrase))) hit = { n, m: { type: 'slot', slots: m } };
@@ -99,8 +102,8 @@ export function read(data, words) {
 }
 
 /** Clauses: the modifiers before a noun (a slot, a variant) belong to it. { slots: [candidate slots], variant?: [options], features, colours, neg, unknown, text }. */
-export function clausesOf(data, words) {
-  const out = [], ms = read(data, words), ix = indexOf(data);
+export function clausesOf(data, words, opts = {}) {
+  const out = [], ms = read(data, words, opts), ix = indexOf(data);
   let pend = { features: [], colours: [], neg: false, unknown: [] };
   const flush = () => { pend = { features: [], colours: [], neg: false, unknown: [] }; };
   ms.forEach((m, i) => {   // a word that is a variant of one slot and a feature of another ("curly", "small") before a noun is a modifier of it
@@ -115,7 +118,7 @@ export function clausesOf(data, words) {
     else if (m.type === 'word') pend.unknown.push(m.word);
     else if (m.type === 'slot') { out.push({ ...pend, slots: m.slots }); flush(); }
     else if (m.type === 'variant') { out.push({ ...pend, slots: [...new Set(m.options.map((o) => o.slot))], variant: m.options }); flush(); }
-    else if (m.type === 'preset' || m.type === 'mood') out.push({ ...pend, [m.type]: m.name, slots: [] }), flush();
+    else if (m.type === 'preset' || m.type === 'mood') out.push({ ...pend, [m.type]: m.name, ...(m.type === 'preset' ? { presetOptions: m.options, presetWord: m.word } : {}), slots: [] }), flush();
   }
   if (pend.features.length || pend.colours.length || pend.unknown.length || pend.neg) out.push({ ...pend, slots: [], dangling: true });
   return out;
@@ -233,7 +236,7 @@ export function faceAdd(ctx, a, data) {
   const before = snap(f), said = [], missed = [];
   mark(f);
   for (const c of cl) {
-    if (c.preset || c.mood) { const r = c.preset ? facePreset(ctx, c.preset, data, true) : faceMood(ctx, { mood: c.mood }, data, true); if (r) said.push(r); continue; }
+    if (c.preset || c.mood) { const r = c.preset ? facePresetClause(ctx, c, data, true) : faceMood(ctx, { mood: c.mood }, data, true); if (r) said.push(r); continue; }
     if (c.neg) { const r = removeClause(data, f, c); said.push(...r.said); missed.push(...r.missed); continue; }
     const slot = pickSlot(data, f, c);
     const cur = f.slots[slot];
@@ -242,6 +245,9 @@ export function faceAdd(ctx, a, data) {
     if (!name && cur !== NONE) name = cur;
     if (!name) name = slotOf(data, slot).variants[0].name;
     if (c.features.length && !bestVariant(data, slot, c.features, null) && !c.variant) missed.push(c.features.join(' '));
+    // a modifier the named variant does not have ("small smile": no smile is small) is said as left out, not dropped in silence
+    const lacks = c.variant ? c.features.filter((w) => { const v = slotOf(data, slot).variants.find((x) => x.name === name); return v && !Object.values(v.features).flat().includes(w) && lc(v.name) !== w; }) : [];
+    if (lacks.length) missed.push(`${lacks.join(' ')} ${plain(c.variant.find((o) => o.slot === slot)?.name ?? nounOf(slot))}`);
     if (cur === name && !col && !c.features.length) { said.push(`I already have ${phraseOf(data, f, slot)}`); continue; }
     put(data, f, slot, name);
     let colourSaid = '';
@@ -291,6 +297,8 @@ export function faceBare(ctx, a, data) {
   if (all.some((c) => c.preset || c.mood) || cl.length > 1) return faceDescribe(ctx, a, data);
   if (cl[0].features.length || cl[0].colours.length || cl[0].neg) return cl[0].neg ? faceRemove(ctx, a, data) : faceAdd(ctx, a, data);
   const c = cl[0], slot = pickSlot(data, f, c, { wantPresent: true });
+  // a part every face has (not optional) is never taken off by naming it: naming the variant it already shows says so ("big smile" twice)
+  if (!slotOf(data, slot).optional && c.variant?.some((o) => o.slot === slot && o.name === f.slots[slot])) return ok(`I already have ${phraseOf(data, f, slot)}.`);
   return f.slots[slot] === NONE || (c.variant && !c.variant.some((o) => o.slot === slot && o.name === f.slots[slot])) ? faceAdd(ctx, a, data) : faceRemove(ctx, a, data);
 }
 
@@ -413,6 +421,19 @@ export function faceCheckMood(ctx, a, data) {
   return ok(f.expression === to ? `Yes, I look ${to}.` : `No, I do not look ${to}; I look ${f.expression || 'calm'}.`);
 }
 /** Becomes a preset of the catalog ("be a woman"). `inline`: just do it and return the words. */
+/** The preset a word of several presets means ("a person": any human preset): the one the face already is, else the default, else the first the catalog lists. */
+export function choosePreset(data, face, options) {
+  const list = (options ?? []).filter((n) => data.presets[n]);
+  return list.find((n) => n === face?.base) ?? list.find((n) => n === DEFAULT_PRESET) ?? list[0] ?? null;
+}
+/** A preset clause of clausesOf as an act: the face is already that kind ("make the avatar a person" while it is a girl) -> it says so and changes nothing; else facePreset. */
+export function facePresetClause(ctx, c, data, inline = false) {
+  if (!data) return noFaces();
+  const f = faceOf(ctx, data), name = choosePreset(data, f, c.presetOptions ?? [c.preset]) ?? c.preset;
+  const word = c.presetWord && !data.presets[c.presetWord] ? plain(c.presetWord) : null;
+  if (word && name === f.base) { const t = `I am already ${article(word)} ${word}: ${article(name)} ${plain(name)}`; return inline ? t : ok(`${t}.`); }
+  return facePreset(ctx, name, data, inline);
+}
 export function facePreset(ctx, kind, data, inline = false) {
   if (!data) return noFaces();
   const name = data.presets[kind] ? kind : data.presets[lc(kind).replace(/_/g, ' ')] ? lc(kind).replace(/_/g, ' ') : null;
@@ -425,7 +446,8 @@ export function facePreset(ctx, kind, data, inline = false) {
 /** "draw a face with ...", "a woman with a long face and curly red hair": a preset to start from (when named) and the nouns of the words. */
 export function faceDescribe(ctx, a, data) {
   if (!data) return noFaces();
-  const f = faceOf(ctx, data), cl = clausesOf(data, wordsOf(a)), pre = cl.find((c) => c.preset);
+  const f = faceOf(ctx, data), cl = clausesOf(data, wordsOf(a)), pre0 = cl.find((c) => c.preset);
+  const pre = pre0 ? { ...pre0, preset: choosePreset(data, f, pre0.presetOptions ?? [pre0.preset]) ?? pre0.preset } : null;
   mark(f);
   const keep = { saved: f.saved, history: f.history, future: f.future, n: f.n, name: f.name };
   if (pre) Object.assign(f, newFace(data, pre.preset), keep, { options: null });
@@ -537,14 +559,22 @@ export function faceRedo(ctx, a, data) {
 /** "make it red", "make it happy", "become a woman", "be Grandma", "change the nose": the words decide what is meant: a saved face, a preset, an expression, a colour, or the next variant of a part. */
 export function faceRestyle(ctx, a, data) {
   if (!data) return noFaces();
-  const f = faceOf(ctx, data), ws = wordsOf(a), text = ws.join(' ');
+  const f = faceOf(ctx, data), ws = wordsOf(a), text = ws.join(' '), self = a.self === true;
   if (f.saved[keyOf(text)] || f.saved[keyOf(ws.filter((w) => !FUNCTION_WORDS.has(w)).join(' '))]) return faceLoad(ctx, { name: text }, data);
-  const cl = clausesOf(data, ws);
+  const cl = clausesOf(data, ws, { self });
   const slotC = cl.find((c) => c.slots.length), colourC = cl.some((c) => c.colours.length), pre = cl.find((c) => c.preset), mood = cl.find((c) => c.mood);
-  if (pre && !slotC) return facePreset(ctx, pre.preset, data);
+  if (pre && !slotC) return facePresetClause(ctx, pre, data);
   if (mood && !colourC) return faceMood(ctx, { mood: mood.mood }, data);
   if (slotC && colourC) return faceColour(ctx, a, data);
+  // CHARACTER REQUESTS (spec 07): the avatar itself is the thing ("make the avatar to get a big smile", "make yourself a robot"); a part is changed only when the words name one
+  if (self && slotC?.variant) return faceAdd(ctx, a, data);
   if (slotC) return faceChange(ctx, { ...a, dir: 'different' }, data);
+  if (self && colourC) return faceColour(ctx, { words: `${data.layout ?? 'face'} ${text}` }, data);   // "paint yourself green": the colour of the face
   if (colourC) return no('Which part should get the colour? For example "make the hat red".');
+  if (self && !f.saved[keyOf(text)]) {
+    // nothing of a face, a preset, an expression or a saved face: an honest refusal that names what the avatar can be ("make the avatar an emoji")
+    const what = ws.filter((w) => !FUNCTION_WORDS.has(w)).join(' ');
+    if (what) return no(`I cannot be ${article(what)} ${plain(what)}. I can be ${joinOr(Object.keys(data.presets).map((n) => `${article(n)} ${plain(n)}`))}.`);
+  }
   return faceLoad(ctx, { name: text }, data);
 }
