@@ -49,7 +49,9 @@ export function createWorldLoader({ indexHash, fetchJson, bag, on = () => {} }) 
       return index;
     },
     /** A message's words are looked up in the buckets of their first two letters (fetched on demand). A world is needed when the message has a word that at most T worlds have. */
-    async plan(text) {
+    // `have` (optional, a Set of the loaded world ids): a word a loaded world already knows loads no other world first ("draw a house" with the drawing open does not load the map and the
+    // diagram, which also know "house"); a reading that is not complete still loads the rest (the caller's fallback), so nothing is lost, only fetched later when needed
+    async plan(text, have = null) {
       stats.plans++;
       const words = [...bag(text)].filter((w) => w.length >= 2 && !/^\d+$/.test(w));
       const wanted = [...new Set(words.map(bucketOf))];
@@ -59,7 +61,7 @@ export function createWorldLoader({ indexHash, fetchJson, bag, on = () => {} }) 
       for (const w of words) {
         const b = by.get(bucketOf(w)), hit = b?.[w], strong = b?.[`!${w}`];
         if (strong) for (const i of strong) out.add(ids[i]);   // the name of a world's tab: it loads the world
-        if (hit && hit.length <= T()) for (const i of hit) out.add(ids[i]);
+        if (hit && hit.length <= T() && !(have && hit.some((i) => have.has(ids[i])))) for (const i of hit) out.add(ids[i]);
       }
       return { ids: out, buckets: wanted.length };
     },

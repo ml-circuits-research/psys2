@@ -24,7 +24,7 @@ test('vendor: the library is the pinned file, unmodified, and passes its own loo
   assert.match(notes, /build `6b02aef2b871`/, 'the build is recorded');
   assert.match(notes, new RegExp(`${file.length} bytes`), 'the size is recorded');
   assert.match(notes, new RegExp(createHash('sha256').update(file).digest('hex')), 'the sha256 of the vendored file is recorded');
-  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.114\.0 /);
+  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.118\.0 /);
   assert.equal(scan(path.join(ROOT, 'src/vendor/sopworld')).join('\n'), '', 'the library\'s own scanner finds no unguarded loop in the vendored file');
   assert.ok(readFileSync(path.join(ROOT, 'src/vendor/sopworld/LICENSE'), 'utf8').startsWith('MIT License'));
 });
@@ -35,7 +35,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
   assert.equal(ops.reasonerMode, 'ops');
   assert.equal(ops.reasoner, null);
   assert.equal(ops.createSession({ language: 'en' }).isession.rs, null);
-  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'kids.shapes', 'kids.time', 'kids.animals']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);   // (geo.map, media.music and docs.reader are schema worlds since their switches: no matrix)
+  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'kids.time']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);   // (geo.map, media.music and docs.reader are schema worlds since their switches: no matrix)
   assert.equal(ops.set.get('ui.shell').reasoner, 'matrix');
   assert.equal(ops.set.get('kids.shop').patterns.some((p) => p.id.includes('.m.')), false, 'the matrix-only patterns are not loaded in ops mode');
   assert.deepEqual(ops.problems(), []);
@@ -43,7 +43,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
 
 test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.buildAll(), []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['common.sense', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'ui.help', 'ui.shell']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['common.sense', 'kids.arith', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'ui.help', 'ui.shell']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
@@ -51,8 +51,8 @@ test('matrix mode: the worlds that opt in, the library loads without problems, t
 const LEDGERED_DIAGRAM = ["t.diagram.sketch.b.align.k05.b", "t.diagram.sketch.b.arrange.k06.b", "t.diagram.sketch.b.ask_path.k02.b", "t.diagram.sketch.b.create.k06.b", "t.diagram.sketch.b.delete.k04.b", "t.diagram.sketch.b.disconnect.k04.b", "t.diagram.sketch.b.group.k02.b", "t.diagram.sketch.b.group.k05.b", "t.diagram.sketch.b.move.k03.b", "t.diagram.sketch.b.rule.k06.b", "t.diagram.sketch.b.snap.k06.b", "t.diagram.sketch.b.undo.k04.b", "t.diagram.sketch.ex.star.n001", "t.diagram.sketch.b.label.k05.b", "t.diagram.sketch.b.redo.k03.b", "t.diagram.sketch.b.redo.k04.b", "t.diagram.sketch.b.redo.k05.b", "t.diagram.sketch.b.toback.k03.b", "t.diagram.sketch.b.toback.k06.b", "t.diagram.sketch.b.ungroup.k02.b"];
 const LEDGERED_DRAW = ["t.art.draw.dm304","t.art.draw.dm307","t.art.draw.ellipsis2","t.art.draw.f4r03","t.art.draw.f4r04","t.art.draw.f4r05","t.art.draw.f4r07","t.art.draw.p5a05","t.art.draw.p5a06","t.art.draw.pl07","t.art.draw.pl09","t.art.draw.pl10","t.art.draw.r2fill07","t.art.draw.r2help11","t.art.draw.r2help12","t.art.draw.r2move09","t.art.draw.r2move14","t.art.draw.r2move19","t.art.draw.r2move20","t.art.draw.r2move21","t.art.draw.r2move22","t.art.draw.r2move23","t.art.draw.r2recolor19","t.art.draw.r2scene01","t.art.draw.r2scene02","t.art.draw.r2scene03","t.art.draw.r2scene04","t.art.draw.r2scene05","t.art.draw.r2scene06","t.art.draw.r2scene07","t.art.draw.rd08","t.art.draw.rd09","t.art.draw.rd10","t.art.draw.rd11","t.art.draw.rd17","t.art.draw.rp3c","t.art.draw.sh03","t.art.draw.x250"];   // the rows of the art.draw switch on the ledger (training/eval/failures.jsonl, build art-draw-switch): the world's own tests, both reasoners
 const LEDGERED_CHARTS = ["t.data.charts.m04", "t.data.charts.n22", "t.data.charts.n35", "t.data.charts.n90", "t.data.charts.r2033", "t.data.charts.r2086", "t.data.charts.r2087", "t.data.charts.r2105", "t.data.charts.x203", "t.data.charts.x205", "t.data.charts.r2110"];
-test('parity gate (switch on): kids.shop 168, kids.tasks 241, kids.arith 243, kids.shapes 9, kids.time 227, kids.animals 45 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 168], ['kids.tasks', 241], ['kids.arith', 243], ['kids.shapes', 9], ['kids.time', 227], ['kids.animals', 45], ['data.charts', 277], ['art.draw', 603], ['diagram.sketch', 773]]) {
+test('parity gate (switch on): kids.shop 168, kids.tasks 241, kids.arith 243, kids.time 227 (kids.shapes and kids.animals left for session.things, 2026-11-14; the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
+  for (const [id, n] of [['kids.shop', 168], ['kids.tasks', 241], ['kids.arith', 243], ['kids.time', 227], ['data.charts', 277], ['art.draw', 603], ['diagram.sketch', 773]]) {
     const r = await runWorldTests(matrix, id);
     // the 13 rows of the diagram switch and the 10 rows of the data.charts switch are on the ledger (training/eval/failures.jsonl, source "bug-batch diagram switch"); every other row of every world passes
     assert.deepEqual(r.failed.map((f) => f.id).filter((x) => (id !== 'diagram.sketch' || !LEDGERED_DIAGRAM.includes(x)) && (id !== 'data.charts' || !LEDGERED_CHARTS.includes(x)) && (id !== 'art.draw' || !LEDGERED_DRAW.includes(x))), [], id);   /* dlg04: on the ledger since KNOWLEDGE-OUT step 5 (spelling: vocabulary counts lost with deleted patterns) */ assert.equal(r.total, n);
@@ -330,12 +330,11 @@ test('kids.shapes: a scripted session says the same as the ops reasoner, word fo
   assert.deepEqual(matrix.reasoner.buildAll(), []);
 });
 
-test('kids.shapes: a taught fact is a wire of the library and undo takes it back (the questions about shapes and colours are the Talk tab\'s frames over the catalog)', async () => {
+test('session.things (was kids.shapes): a taught count is a lesson of the session and undo takes it back (the questions about shapes and colours are the Talk tab\'s frames over the catalog)', async () => {
   const { s } = await say(matrix, ['A trapezium has 4 sides.']);
-  const lib = s.isession.rs.of('kids.shapes');
-  assert.deepEqual(lib.ofType('kids.shapes.shape').filter((w) => w.attrs.name?.[0] === 'trapezium').map((w) => w.attrs.sides), [['4']]);
-  assert.match((await s.send('undo', {})).text, /^OK, I took that back/);
-  assert.equal(lib.ofType('kids.shapes.shape').some((w) => w.attrs.name?.[0] === 'trapezium'), false);
+  assert.equal(s.isession.state['session.things'].learned.length, 1);
+  assert.match((await s.send('undo', {})).text, /^OK, I forgot what you taught me about trapeziums/);
+  assert.deepEqual(s.isession.state['session.things'].learned, []);
 });
 
 test('"why?" names the source of a world\'s own facts: the price list for the shop, a general phrase otherwise', async () => {
@@ -415,15 +414,12 @@ test('kids.animals: a scripted session says the same as the ops reasoner, word f
   assert.deepEqual(matrix.reasoner.buildAll(), []);
 });
 
-test('kids.animals: what was taught is a wire and goes with undo (the questions about animals are the Talk tab\'s frames over the catalog)', async () => {
+test('session.things (was kids.animals): what was taught is a lesson of the session and goes with undo (the questions about animals are the Talk tab\'s frames over the catalog)', async () => {
   const s = matrix.createSession({ language: 'en' });
-  const lib = s.isession.rs.of('kids.animals');
   await s.send('A zebra can swim.', {});
-  assert.deepEqual(s.isession.state['kids.animals'], { taught: [{ name: 'zebra', facts: ['can_swim=true'] }], pets: [] });
-  assert.ok(lib.ofType('kids.animals.animal').some((w) => w.attrs.name?.[0] === 'zebra'));
+  assert.deepEqual(s.isession.state['session.things'].learned, ['@learned.1 k.commonsense.thing name="zebra" can="swim" core.source="user"']);
   assert.equal((await s.send('undo that', {})).text, 'OK, I forgot what you taught me about zebras.');
-  assert.equal(lib.ofType('kids.animals.animal').some((w) => w.attrs.name?.[0] === 'zebra' && w.attrs.can_swim?.[0] === 'true'), false);
-  sameAsLibrary(s, ['kids.animals']);
+  assert.deepEqual(s.isession.state['session.things'].learned, []);
 });
 
 // ---- user.profile on the matrix (stage 2) --------------------------------------------------------------------------------------------------------
@@ -457,7 +453,7 @@ test('one instance per group (user decision 2026-11-11): created on first use, t
 test('composite world: compose= builds one instance from the legends and matrices of the worlds it names; reads= only their legends and facts', async () => {
   const e = await engineWith('matrix');
   const r = e.reasoner;
-  assert.deepEqual(r.matrixWorlds('session.conversation').sort(), ['kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation']);
+  assert.deepEqual(r.matrixWorlds('session.conversation').sort(), ['kids.arith', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation']);
   assert.ok(r.schemaWorlds('session.conversation').includes('kids.shop'));
   assert.ok(!r.schemaWorlds('ui.help').includes('kids.shop'), 'a world outside the conversation holds the legends of its own imports only');
   Object.defineProperty(e.set.get('ui.shell'), 'reads', { get: () => ['kids.shop'] });   // a world may still read another's facts (the light form of sharing)

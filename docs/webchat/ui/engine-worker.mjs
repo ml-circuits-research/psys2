@@ -268,7 +268,7 @@ const handlers = {
     if (m.settings) applySettings(m.settings);
     // LAZY LOADING: the open tab's world and the worlds the words of the message say it needs, before the turn is read
     // a message in another language is read through its English candidates, which a partial world set can mistake for understood: every world is loaded for it (the word index is English)
-    try { const lang = mods.lang.normalize(m.opts?.language ?? m.settings?.language ?? settings.language); if (lang !== 'en') { await mods.translate.loadRoEn?.(); await ensureWorlds(worldLoader.ids(), 'language'); } else { const plan = await worldLoader.plan(m.text); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'message'); } } catch (e) { console.warn('world plan failed', e); }
+    try { const lang = mods.lang.normalize(m.opts?.language ?? m.settings?.language ?? settings.language); if (lang !== 'en') { await mods.translate.loadRoEn?.(); await ensureWorlds(worldLoader.ids(), 'language'); } else { const plan = await worldLoader.plan(m.text, loadedIds); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'message'); } } catch (e) { console.warn('world plan failed', e); }
     let snap = session.snapshot();
     if (m.undoId != null) { snaps.set(m.undoId, snap); if (snaps.size > SNAP_KEEP) snaps.delete(snaps.keys().next().value); }
     let budget = null;
@@ -319,7 +319,7 @@ const handlers = {
       const read = () => session.dryRead(m.text, { ...m.opts, language, signal: ctl.signal, ...(budget ? { budget } : {}) });
       // LAZY LOADING: a dry run reads like a turn does: the worlds the words need (every world for another language) are loaded first, and an incomplete reading is read again with every world;
       // loading a world changes no reading and no state (it is skipped while a real turn runs: that turn loads what it needs itself)
-      if (!turnRunning()) { try { if (language !== 'en') await ensureWorlds(worldLoader.ids(), 'dry language'); else { const plan = await worldLoader.plan(m.text); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'dry message'); } } catch { /* the loaded worlds read */ } }
+      if (!turnRunning()) { try { if (language !== 'en') await ensureWorlds(worldLoader.ids(), 'dry language'); else { const plan = await worldLoader.plan(m.text, loadedIds); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'dry message'); } } catch { /* the loaded worlds read */ } }
       let res = await read();
       if (!res.complete && res.reason === 'incomplete' && !allLoaded() && !turnRunning()) { try { if ((await ensureWorlds(worldLoader.ids(), 'dry second reading')).length) res = await read(); } catch { /* the first reading stands */ } }
       return annotateWires(res);

@@ -1,0 +1,18 @@
+# k.shapes/shards/derived: generated, do not edit. What the rules of k.shapes (version 2) and of the modules it imports derive from the told facts
+# of k.shapes, k.kinds: 12 facts, each marked derived=true with its rule as source (k.kinds.up.direct, k.kinds.up.step).
+# sources: rule (a rule of a module of this repository, over the facts named above; sources/rule/SOURCE.md)
+# license: CC0-1.0
+# script: tools/derive.mjs
+
+@k.shapes.derived.k.kinds.up.direct.cube k.shapes.shape name=cube kind_of=cuboid derived=true core.source="rule k.kinds.up.direct"
+@k.shapes.derived.k.kinds.up.direct.hexagon k.shapes.shape name=hexagon kind_of=polygon derived=true core.source="rule k.kinds.up.direct"
+@k.shapes.derived.k.kinds.up.direct.octagon k.shapes.shape name=octagon kind_of=polygon derived=true core.source="rule k.kinds.up.direct"
+@k.shapes.derived.k.kinds.up.direct.pentagon k.shapes.shape name=pentagon kind_of=polygon derived=true core.source="rule k.kinds.up.direct"
+@k.shapes.derived.k.kinds.up.direct.quadrilateral k.shapes.shape name=quadrilateral kind_of=polygon derived=true core.source="rule k.kinds.up.direct"
+@k.shapes.derived.k.kinds.up.direct.rectangle k.shapes.shape name=rectangle kind_of=quadrilateral derived=true core.source="rule k.kinds.up.direct"
+@k.shapes.derived.k.kinds.up.direct.rhombus k.shapes.shape name=rhombus kind_of=quadrilateral derived=true core.source="rule k.kinds.up.direct"
+@k.shapes.derived.k.kinds.up.direct.square k.shapes.shape name=square kind_of=rectangle kind_of=rhombus derived=true core.source="rule k.kinds.up.direct"
+@k.shapes.derived.k.kinds.up.direct.triangle k.shapes.shape name=triangle kind_of=polygon derived=true core.source="rule k.kinds.up.direct"
+@k.shapes.derived.k.kinds.up.step.rectangle k.shapes.shape name=rectangle kind_of=polygon derived=true core.source="rule k.kinds.up.step"
+@k.shapes.derived.k.kinds.up.step.rhombus k.shapes.shape name=rhombus kind_of=polygon derived=true core.source="rule k.kinds.up.step"
+@k.shapes.derived.k.kinds.up.step.square k.shapes.shape name=square kind_of=polygon kind_of=quadrilateral derived=true core.source="rule k.kinds.up.step"

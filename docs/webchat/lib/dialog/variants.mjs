@@ -11,14 +11,14 @@
  *                           words are the rest, no content word may be left over (the frame of `readByTypes`, assembled from the world's lexicons instead of a typed fact world)
  * Browser-safe: no `node:*`.
  */
-import { formalize as rulesFormalize } from '../formalizer/rules/index.mjs?v=4b583c611f';
+import { formalize as rulesFormalize } from '../formalizer/rules/index.mjs?v=c8d5abf8f1';
 import { buildWires, SEGMENT_SLOT } from '../formalizer/rules/emit.mjs?v=8e51d17dc1';
 import { lexIndex } from '../worlds/lexicon.mjs?v=c39cd0a3df';
-import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=4b583c611f';
-import { FILLER } from './world-aware.mjs?v=6021de2bd2';
+import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=c8d5abf8f1';
+import { FILLER } from './world-aware.mjs?v=88afeb6bb9';
 import { budget } from './budget.mjs?v=00bce6e369';
 import { formOperatorTexts } from './form-operators.mjs?v=93b9a943fe';
-import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=4b583c611f';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=c8d5abf8f1';
 
 /** A catalog lookup waits at most LOOKUP_MS; a catalog that does not answer in time is no catalog (the reading is then the rules'), and the turn never waits for it. */
 const LOOKUP_MS = 400;

@@ -6,7 +6,7 @@ import { createDispatcherFormalizer } from '../src/dialog/encoder-dispatch.mjs';
 
 /** Scripted dispatcher runtime: text -> prediction (the real model is exercised by scripts/verify-dispatcher-js.mjs). */
 const W = (...pairs) => pairs.map(([world, score]) => ({ world, score }));
-const fakeRuntime = (script) => ({ worlds: ['kids.arith', 'games.chess', 'kids.animals'], async predict(text, ctx) { return { text, context: ctx, boundaries: [], segmentations: script(text, ctx) }; } });
+const fakeRuntime = (script) => ({ worlds: ['kids.arith', 'games.chess', 'session.things'], async predict(text, ctx) { return { text, context: ctx, boundaries: [], segmentations: script(text, ctx) }; } });
 const loadEngine = async (runtime, policy) => {
   const enc = createDispatcherFormalizer({ load: async () => runtime, ...(policy ? { getPolicy: () => policy } : {}) });
   const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), formalizers: { encoder: enc } });
@@ -16,7 +16,7 @@ const loadEngine = async (runtime, policy) => {
 
 test('encoder strategy: a wrong first world is recovered by validation and the wires are the rule wires', async () => {
   const t = 'What is 20 divided by 4';
-  const { engine, enc } = await loadEngine(fakeRuntime((text) => [{ score: -0.1, segments: [{ start: 0, end: text.length, text, worlds: W(['games.chess', 0.6], ['kids.arith', 0.35], ['kids.animals', 0.05]) }] }]));
+  const { engine, enc } = await loadEngine(fakeRuntime((text) => [{ score: -0.1, segments: [{ start: 0, end: text.length, text, worlds: W(['games.chess', 0.6], ['kids.arith', 0.35], ['session.things', 0.05]) }] }]));
   const states = [];
   enc.onStatus((s) => states.push(s.state));
   const session = engine.createSession({ formalizer: 'encoder' });
@@ -37,18 +37,18 @@ test('encoder strategy: two pieces from the winning segmentation, in order', asy
   const a = 'What is 20 divided by 4.', b = 'A zebra has 4 legs.', t = `${a} ${b}`;
   const { engine } = await loadEngine(fakeRuntime((text) => [
     { score: -0.1, segments: [{ start: 0, end: text.length, text, worlds: W(['kids.arith', 0.9]) }] },
-    { score: -0.9, segments: [{ start: 0, end: a.length, text: a, worlds: W(['kids.arith', 0.9]) }, { start: a.length + 1, end: text.length, text: b, worlds: W(['kids.animals', 0.8]) }] },
+    { score: -0.9, segments: [{ start: 0, end: a.length, text: a, worlds: W(['kids.arith', 0.9]) }, { start: a.length + 1, end: text.length, text: b, worlds: W(['session.things', 0.8]) }] },
   ]));
   const r = await engine.createSession({ formalizer: 'encoder' }).send(t);
   assert.equal(r.trace.dispatch.winnerIndex, 1);
-  assert.deepEqual(r.trace.segments.map((s) => s.dispatch.world), ['kids.arith', 'kids.animals']);
+  assert.deepEqual(r.trace.segments.map((s) => s.dispatch.world), ['kids.arith', 'session.things']);
   assert.deepEqual(r.trace.segments.map((s) => s.span[0]), [0, a.length + 1]);
   assert.ok(r.statuses.length >= 1 && r.statuses.every((x) => x === 'supported')); assert.match(r.text, /is 5\..*zebra has 4 legs/);   // both pieces answered (a taught fact shares the status of its message)
 });
 
 test('encoder strategy: a piece nobody validates falls back to the rules over all worlds', async () => {
   const t = 'What is 7 times 6';
-  const { engine } = await loadEngine(fakeRuntime((text) => [{ score: -0.1, segments: [{ start: 0, end: text.length, text, worlds: W(['games.chess', 0.8], ['kids.animals', 0.2]) }] }]));
+  const { engine } = await loadEngine(fakeRuntime((text) => [{ score: -0.1, segments: [{ start: 0, end: text.length, text, worlds: W(['games.chess', 0.8], ['session.things', 0.2]) }] }]));
   const r = await engine.createSession({ formalizer: 'encoder' }).send(t);
   assert.equal(r.trace.dispatch.status, 'not_understood');
   assert.match(r.text, /42/);

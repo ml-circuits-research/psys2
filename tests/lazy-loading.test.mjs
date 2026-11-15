@@ -61,7 +61,7 @@ const lazyEngine = async (c, tabWorld) => {
   };
   const incomplete = (r) => c.wordIdx.readingIncomplete(r);
   state.send = async (text) => {
-    const plan = await wl.plan(text);
+    const plan = await wl.plan(text, loaded);
     await state.ensure(plan.ids);
     const snap = session.snapshot();
     snaps.set(state.nextId = (state.nextId ?? 0) + 1, snap);

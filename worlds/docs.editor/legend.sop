@@ -4,7 +4,6 @@
     imports=core
     imports=kids.common
     imports=kids.tasks
-    imports=kids.animals
     imports=kids.arith
     doc="The document state"
 

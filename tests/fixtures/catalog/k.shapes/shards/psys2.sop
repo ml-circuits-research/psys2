@@ -1,0 +1,15 @@
+# k.shapes/shards/psys2: from the PSys2 world kids.shapes: the rhombus and the quadrilateral, what 7 shapes are a kind of, and 4 more things of a shape (window, tv, pizza slice, chessboard).
+# sources: psys2-worlds 6b63b2ba (the hand-written knowledge of the PSys2 tab worlds, the project's own data)
+# license: CC0-1.0
+# script: tools/import/psys2.mjs
+
+@k.shapes.psys2.quadrilateral k.shapes.shape name=quadrilateral kind=flat sides=4 corners=4 round=false is_a=polygon core.source="psys2-worlds 6b63b2ba"
+@k.shapes.psys2.is_a.triangle k.shapes.shape name=triangle is_a=polygon core.source="psys2-worlds 6b63b2ba"
+@k.shapes.psys2.is_a.rectangle k.shapes.shape name=rectangle is_a=quadrilateral core.source="psys2-worlds 6b63b2ba"
+@k.shapes.psys2.is_a.pentagon k.shapes.shape name=pentagon is_a=polygon core.source="psys2-worlds 6b63b2ba"
+@k.shapes.psys2.is_a.hexagon k.shapes.shape name=hexagon is_a=polygon core.source="psys2-worlds 6b63b2ba"
+@k.shapes.psys2.is_a.octagon k.shapes.shape name=octagon is_a=polygon core.source="psys2-worlds 6b63b2ba"
+@k.shapes.psys2.rhombus k.shapes.shape name=rhombus kind=flat sides=4 corners=4 round=false is_a=quadrilateral core.source="psys2-worlds 6b63b2ba"
+@k.shapes.psys2.rectangle k.shapes.shape name=rectangle thing=window thing=tv core.source="psys2-worlds 6b63b2ba"
+@k.shapes.psys2.square k.shapes.shape name=square thing=chessboard core.source="psys2-worlds 6b63b2ba"
+@k.shapes.psys2.triangle k.shapes.shape name=triangle thing="pizza slice" core.source="psys2-worlds 6b63b2ba"

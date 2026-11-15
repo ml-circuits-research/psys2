@@ -88,14 +88,11 @@ test('typed unread: the slots of a reading are checked by the types of its world
   assert.deepEqual(unreadBy(() => null, stmt), [], 'no typed world: nothing is unread');
 });
 
-test('typed worlds are built from typed.json with the library: kinds, keys, joined things, the avatar closed and the diagram (a reader) free', async () => {
+test('typed worlds are built from typed.json with the library: kinds, keys, the avatar closed and the diagram (a reader) free', async () => {
   const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner: 'matrix' } });
   engine.sopworld = lib;
-  const animals = engine.set.typedFor('kids.animals'), avatar = engine.set.typedFor('ui.avatar'), diagram = engine.set.typedFor('diagram.sketch');
-  assert.ok(animals.counts.things > 100, 'the animals of k.animals are things of the typed world');
-  assert.equal(lib.fitsSlot(animals, 'kids.animals.animal', 'legs', '4').ok, true);
-  assert.equal(lib.fitsSlot(animals, 'kids.animals.animal', 'legs', 'four legs').ok, false);
-  assert.ok(animals.open.has('kids.animals.animal|name'), 'animals can be taught: the join is open');
+  // the joined animals of k.animals left with kids.animals (deleted 2026-11-14, plan H3): what a child teaches about an animal is a wire of k.animals itself (session.things, the taught tier)
+  const avatar = engine.set.typedFor('ui.avatar'), diagram = engine.set.typedFor('diagram.sketch');
   assert.equal(avatar.args.thing, 'phrase');
   assert.ok(avatar.known.has('hat') && !avatar.known.has('boxes'));
   assert.deepEqual(diagram.args, {}, 'the diagram reads whole sentences itself (reader): its free text is not typed');
@@ -138,10 +135,10 @@ test('the ensemble (PSYS2_ENSEMBLE, default on): the voices are pooled and the l
   const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner: 'matrix' } });
   const senses = [{ id: 's1', type: 'k.words.sense', f: { word: ['possess'], pos: ['verb'], n: ['1'], synonym: ['have'] } }];
   engine.setKnowledge({ wires: async (type, { key } = {}) => senses.filter((r) => r.type === type && (key == null || [r.f.word?.[0], ...(r.f.synonym ?? [])].includes(key))), thing: async () => null, peek: () => undefined });
-  const say = (v) => withEnv('PSYS2_ENSEMBLE', v, async () => { const s = engine.createSession({ language: 'en' }); s.setWorldState('ui.shell', { activeTab: 'kids.animals' }); return s.send('A zebra possesses 4 legs.'); });
+  const say = (v) => withEnv('PSYS2_ENSEMBLE', v, async () => { const s = engine.createSession({ language: 'en' }); s.setWorldState('ui.shell', { activeTab: 'chat' }); return s.send('What pets do I possess?'); });
   try {
     const on = await say(null), off = await say('off');
-    assert.match(on.text, /a zebra has 4 legs/i);
+    assert.match(on.text, /not told me about any pets/i);
     assert.equal(on.segments[0].variant?.via, 'near');
     assert.deepEqual(on.segments[0].variant?.ensemble?.voices, ['near']);
     assert.equal(on.text, off.text);

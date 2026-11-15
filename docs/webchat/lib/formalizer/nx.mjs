@@ -23,7 +23,7 @@
  * message that an untrained world's rules read is left to the rules path.
  */
 import { lexIndex } from '../worlds/lexicon.mjs?v=c39cd0a3df';
-import { compilePattern, formalize } from './rules/index.mjs?v=4b583c611f';
+import { compilePattern, formalize } from './rules/index.mjs?v=c8d5abf8f1';
 import { candidateSegmentations } from './dispatcher-runtime.mjs?v=2deeb9a0c4';
 import { atom } from '../soplang/index.mjs?v=c57881f705';
 import { perf } from './perf.mjs?v=b81e032a17';

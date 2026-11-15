@@ -38,7 +38,7 @@ if (process.argv.includes('--strip')) {   // remove every canonical mark (to rec
 }
 const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
 // hand-picked sentences that are clean but outside the quality gate (short social words, one-word commands), by pattern id
-const MANUAL = [['kids.common', 'pat.kids.common.thanks', 'Thank you!'], ['kids.common', 'pat.kids.common.bye', 'Goodbye!'], ['kids.shapes', 'pat.kids.shapes.tmix', 'Black and red make brown.'],
+const MANUAL = [['kids.common', 'pat.kids.common.thanks', 'Thank you!'], ['kids.common', 'pat.kids.common.bye', 'Goodbye!'],
   ['art.draw', 'pat.art.draw.remove.it', 'Delete it.'], ['data.charts', 'pat.data.charts.x2.undo', 'Undo that.'], ['data.charts', 'pat.data.charts.x2.redo', 'Redo.'], ['docs.editor', 'pat.docs.editor.redo', 'Redo.'],
   ['geo.map', 'pat.geo.map.x2.undo', 'Undo that.'], ['geo.map', 'pat.geo.map.x2.redo', 'Redo.'], 
   ['media.music', 'pat.media.music.replay', 'Play it again.'],
