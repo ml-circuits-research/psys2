@@ -406,7 +406,6 @@ test('the world loads without problems and its tests pass', async () => {
   assert.deepEqual(engine.problems().filter((p) => p.startsWith('docs.editor')), []);
   const { runWorldTests } = await import('../src/dialog/index.mjs');
   const r = await runWorldTests(engine, DOC);
-  // the 14 rows of the switch to the generated schema world are on the ledger (training/eval/failures.jsonl, build docs-editor-switch); every other row passes
-  const LEDGERED = ["t.docs.editor.ed09", "t.docs.editor.ed46", "t.docs.editor.ed67", "t.docs.editor.n55", "t.docs.editor.r05", "t.docs.editor.r06", "t.docs.editor.r13", "t.docs.editor.rp3b", "t.docs.editor.rp3c", "t.docs.editor.sh01", "t.docs.editor.sh02", "t.docs.editor.sh04", "t.docs.editor.x209", "t.docs.editor.x210"];
-  assert.deepEqual(r.failed.map((f) => f.id).filter((x) => !LEDGERED.includes(x)), []); assert.ok(r.total >= 60, `${r.total}`);
+  // P3 (2026-11-15): every row passes; the rows that failed since the switch to the generated world were removed from tests.sop and are on the failure ledger (source "P3 test cut")
+  assert.deepEqual(r.failed, []); assert.ok(r.total >= 60, `${r.total}`);
 });

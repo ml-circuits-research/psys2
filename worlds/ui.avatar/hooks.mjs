@@ -61,10 +61,12 @@ function accepts({ action, mode, roles, state, claim, tab, text }) {
   const saved = Object.keys(state?.face?.saved ?? {});
   if (saved.some((k) => said.toLowerCase().includes(k))) return true;        // "be Grandma": a face the user saved
   // most of the words must be face words (a slot, a variant, a colour, a feature, a preset, an expression): "Place a medium white ellipse named Cloud at 198, 98" has two of seven
-  const read = F.read(DEFAULT_FACE, F.tokens(said)), known = read.filter((m) => m.type !== 'word' && m.type !== 'neg').length, unknown = read.filter((m) => m.type === 'word').length;
+  // the attribute role is filled from this world's own attribute lexicon (lex.ui.avatar.attrs: "colour", "size"): it is a word of the face, never an unknown word
+  const faceSaid = roles.attribute && act !== 'place' ? said.replace(new RegExp(`\\b${String(roles.attribute).replace(/[^\w ]/g, '')}\\b`, 'i'), ' ').trim() || said : said;
+  const read = F.read(DEFAULT_FACE, F.tokens(faceSaid)), known = read.filter((m) => m.type !== 'word' && m.type !== 'neg').length, unknown = read.filter((m) => m.type === 'word').length;
   if (known < unknown || ((act === 'ask' || act === 'place' || act === 'remove') && unknown > 0)) return false;   // a question about the face uses only face words
   if (roles.thing && PRONOUN.test(String(roles.thing).trim()) && state?.face?.lastThing && read.some((m) => m.type === 'colour' || m.type === 'feature')) return 'focus';   // "make it red" right after the hat
-  const cl = F.clausesOf(DEFAULT_FACE, F.tokens(said));
+  const cl = F.clausesOf(DEFAULT_FACE, F.tokens(faceSaid));
   return cl.some((c) => c.slots.length || c.preset || c.mood || (act !== 'ask' && c.variant?.length) || (c.colours?.length && (!roles.thing || SELF.test(String(roles.thing).trim()) || (PRONOUN.test(String(roles.thing).trim()) && state?.face?.lastThing))));
 }
 
@@ -102,6 +104,7 @@ export const hooks = {
       if (r.mode === 'options') return W((c, q, d) => (q.thing ? (/\bfaces?\b/.test(q.thing) ? F.faceList(c, {}, d) : F.faceWhich(c, { words: q.thing }, d)) : F.faceParts(c, {}, d)))(ctx, r);
       if (r.mode === 'state') return W((c, q, d) => F.faceAskMood(c, {}, d))(ctx, r);
       if (r.mode === 'describe') return W((c, q, d) => F.faceSelf(c, {}, d))(ctx, r);
+      if (r.mode === 'what' && /^colou?r$/i.test(r.attribute ?? '') && r.thing && !SELF.test(String(r.thing).trim())) return W((c, q, d) => F.facePartColour(c, { words: words(q, ['thing']) }, d))(ctx, r);   // the colour of a part of the face
       return undefined;   // count, why, last, what at a place: the generic executor
     },
     undo: W((c, q, d) => F.faceUndo(c, {}, d)),

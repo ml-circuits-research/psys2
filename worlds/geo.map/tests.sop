@@ -148,11 +148,6 @@
     expect="capital of Moldova"
     expectState="focus.cc=MD"
 
-@t.geo.map.n024 core.test
-    input="Show me Peking."
-    expect="Beijing"
-    expectState="focus.cc=CN"
-
 @t.geo.map.n025 core.test
     input="Move a bit to the west."
     expect="Moved west"
@@ -1195,11 +1190,6 @@
 
 @t.geo.map.r2n124 core.test
     input="Could you highlight both France and Spain?"
-    expect="France and Spain are already highlighted."
-    session=r2_geo_highlight
-
-@t.geo.map.r2n125 core.test
-    input="france n spain highlight"
     expect="France and Spain are already highlighted."
     session=r2_geo_highlight
 

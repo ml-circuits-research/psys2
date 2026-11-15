@@ -102,7 +102,13 @@ test('session.observe records a core.observation wire', async () => {
 
 test('test runner: expectState (own world and world:path) and expectEffect', async () => {
   const e = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
+  // as `test-world` does (src/cli.mjs testOne): a world with catalog needs (the avatar's faces) is tested against the local fixture of the catalog (P3: without it the
+  // face's default glasses differ and the rows of ui.avatar fail here while test-world passes)
+  const { createFacts } = await import('../src/knowledge/facts.mjs');
+  const { createKnowledgeSource } = await import('../src/loaders/knowledge-source.mjs');
+  const facts = createFacts({ source: createKnowledgeSource(new URL('./fixtures/catalog', import.meta.url).pathname) });
   for (const id of ['ui.shell', 'ui.avatar', 'docs.editor']) {
+    e.setKnowledge(id === 'ui.avatar' ? facts : null);
     const r = await runWorldTests(e, id);
     assert.deepEqual(r.failed, [], id);
     assert.ok(r.passed >= 10, id);
