@@ -3,7 +3,7 @@
 // (worlds/diagram.sketch/engine.mjs): the engine reads the sentence the user said (`req.text`, the same way the old cue patterns handed it over) and runs it on its own state.
 // The act only says which engine command family the sentence belongs to. `unread`: when no form of the grammar read a sentence in the open Diagram tab, the engine's own
 // reader gets it (its legend knows layouts, templates, queries, facts and rules that the act grammar does not have yet: those are the holes the coverage grid lists).
-import * as E from './engine.mjs?v=ec04d08eb8';
+import * as E from './engine.mjs?v=8539c2ca7e';
 import SOPKit from './engine/logic.mjs?v=07f03fb3da';
 import { parseDiagramRequest } from '../../lib/knowledge/diagram-world.mjs?v=d5650fffe0';
 
