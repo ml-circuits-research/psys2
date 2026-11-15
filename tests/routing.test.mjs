@@ -120,7 +120,7 @@ test('tier 2 in the app: opening a tab and speech settings win on any tab', asyn
 test('cross-world knowledge questions still work when the tab world has no match', async () => {
   const q = await onTab('editor', 'What day comes after Monday?');
   assert.equal(q.r.text, 'The day after Monday is Tuesday.');
-  assert.equal(q.d.winner.worldId, 'kids.time');
+  assert.equal(q.d.winner.worldId, 'time.calendar');
   assert.ok(q.d.tier >= 4);
 });
 

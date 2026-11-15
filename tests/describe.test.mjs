@@ -9,7 +9,7 @@ import { parse } from '../src/soplang/index.mjs';
 import { describePatterns, makeArg, emitKey, readDescriptionWires, descriptionFor, wordToken } from '../src/worlds/describe.mjs';
 
 const load = () => loadWorlds(createFsLoader({ roots: [DEFAULT_ROOT] }));
-const WORLDS = ['kids.shop', 'docs.editor', 'kids.arith', 'kids.tasks', 'kids.time'];
+const WORLDS = ['kids.shop', 'docs.editor', 'kids.arith', 'kids.tasks'];
 
 test('an argument is built from wires and keys, with no notation inside a value', () => {
   assert.deepEqual(makeArg({ name: 'i2', cls: 'lex.kids.shop.items', optional: true, qty: 'n2' }, { prep: ['and', 'plus'] }), { name: 'i2', cls: 'lex.kids.shop.items', optional: true, qty: 'n2', prep: ['and', 'plus'], det: null, unit: null });

@@ -1,0 +1,857 @@
+# time.calendar (kids plan, ADR-011): the rows of kids.time, ported when kids.time was switched off (expectations, not wording: "From today (Friday) to Tuesday",
+# the host's today and clock where kids.time asked to be told, the seven days of the week where it said the school days), and the rows of the general world.
+
+@t.time.calendar.n1 core.test
+    session=g1
+    input="Today is Friday."
+    expect="OK, today is Friday."
+
+@t.time.calendar.n2 core.test
+    session=g1
+    doc="The library's cycleAdd round k.time's week from the stated day."
+    input="What day is it in 3 days?"
+    expect="In 3 days it will be Monday."
+
+@t.time.calendar.n3 core.test
+    session=g1
+    input="How many days until Wednesday?"
+    expect="From today (Friday) to Wednesday is 5 days."
+
+@t.time.calendar.n4 core.test
+    input="Which season is March in?"
+    expect="March is in spring."
+
+@t.time.calendar.n5 core.test
+    session=g2
+    doc="A clock phrase of k.time (K7 clock words), read by the library's readClock."
+    input="It is half past three."
+    expect="OK, it is half past 3."
+
+@t.time.calendar.n6 core.test
+    session=g2
+    input="What time will it be in 2 hours?"
+    expect="It will be half past 5."
+
+@t.time.calendar.n7 core.test
+    doc="Nothing stated: the host's clock (the device)."
+    input="What time is it?"
+    expectStatus=supported
+
+@t.time.calendar.n9 core.test
+    input="How many weeks are in a month?"
+    expect="There are about 4 weeks in a month."
+
+@t.time.calendar.n10 core.test
+    input="It is 30 o'clock."
+    expectStatus=conflicting
+
+@t.time.calendar.k.announce core.test
+    input="I should tell you, today is Friday. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+
+@t.time.calendar.k.m01 core.test
+    input="It is 30 o'clock."
+    expect="That does not add up. That is not an hour on a clock: 30 o'clock."
+    expectStatus=conflicting
+
+@t.time.calendar.k.m02 core.test
+    session=ktm2
+    input="It is 3 o'clock."
+    expect="OK, it is 3 o'clock."
+
+@t.time.calendar.k.m03 core.test
+    session=ktm2
+    input="It is 30 o'clock."
+    expect="That is not an hour on a clock: 30 o'clock."
+    expectStatus=conflicting
+
+@t.time.calendar.k.m04 core.test
+    session=ktm2
+    input="What time is it?"
+    expect="It is 3 o'clock."
+
+@t.time.calendar.k.m05 core.test
+    session=ktm3
+    input="Today is Friday."
+    expect="OK, today is Friday."
+
+@t.time.calendar.k.m06 core.test
+    session=ktm3
+    input="Today is Monday."
+    expect="OK, today is Monday."
+
+@t.time.calendar.k.n1 core.test
+    input="What day comes after Monday?"
+    expect="The day after Monday is Tuesday."
+
+@t.time.calendar.k.n2 core.test
+    input="What day comes before Monday?"
+    expect="The day before Monday is Sunday."
+
+@t.time.calendar.k.n3 core.test
+    input="What day comes after Sunday?"
+    expect="Monday."
+
+@t.time.calendar.k.n4 core.test
+    input="What day is it tomorrow if today is Friday?"
+    expect="Tomorrow is Saturday."
+
+@t.time.calendar.k.n5 core.test
+    session=s1
+    input="Today is Friday."
+    expect="OK, today is Friday."
+
+@t.time.calendar.k.n6 core.test
+    session=s1
+    input="What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+
+@t.time.calendar.k.n7 core.test
+    session=s1
+    input="What day was yesterday?"
+    expect="Yesterday was Thursday."
+
+@t.time.calendar.k.n8 core.test
+    session=s1
+    input="What day will it be in 3 days?"
+    expect="In 3 days it will be Monday."
+
+@t.time.calendar.k.n9 core.test
+    session=s1
+    input="What day is the day after tomorrow?"
+    expect="The day after tomorrow is Sunday."
+
+@t.time.calendar.k.n10 core.test
+    session=s1
+    input="How many days until Tuesday?"
+    expect="From today (Friday) to Tuesday is 4 days."
+
+@t.time.calendar.k.n11 core.test
+    input="What day is tomorrow?"
+    expect="Tomorrow is"
+    expectStatus=supported
+
+@t.time.calendar.k.n12 core.test
+    input="What day is tomorrow?"
+    expect="Tomorrow is"
+    expectStatus=supported
+
+@t.time.calendar.k.n13 core.test
+    input="What day is 3 days after Friday?"
+    expect="3 days after Friday is Monday."
+
+@t.time.calendar.k.n14 core.test
+    input="How many days are in a week?"
+    expect="There are 7 days in a week."
+
+@t.time.calendar.k.n15 core.test
+    input="How many days are in March?"
+    expect="There are 31 days in March."
+
+@t.time.calendar.k.n16 core.test
+    input="How many days are in February?"
+    expect="There are 28 days in February, or 29 in a leap year."
+
+@t.time.calendar.k.n17 core.test
+    input="How many days are in a year?"
+    expect="There are 365 days in a year, or 366 in a leap year."
+
+@t.time.calendar.k.n18 core.test
+    input="How many months are in a year?"
+    expect="There are 12 months in a year."
+
+@t.time.calendar.k.n19 core.test
+    input="How many minutes are in an hour?"
+    expect="There are 60 minutes in an hour."
+
+@t.time.calendar.k.n20 core.test
+    input="How many hours are in two days?"
+    expect="There are 48 hours in 2 days."
+
+@t.time.calendar.k.n22 core.test
+    input="How many minutes are in a day?"
+    expect="There are 1440 minutes in a day."
+
+@t.time.calendar.k.n23 core.test
+    input="How many days are in a month?"
+    expect="A month has 28 to 31 days."
+    expectStatus=supported
+
+@t.time.calendar.k.n24 core.test
+    input="How many weeks are in a month?"
+    expect="There are about 4 weeks in a month."
+    expectStatus=supported
+
+@t.time.calendar.k.n25 core.test
+    input="Which season is July in?"
+    expect="July is in summer."
+
+@t.time.calendar.k.n26 core.test
+    input="What season is it in December?"
+    expect="December is in winter."
+
+@t.time.calendar.k.n27 core.test
+    input="Which months are in summer?"
+    expect="The summer months are June, July and August."
+
+@t.time.calendar.k.n28 core.test
+    input="What season comes after winter?"
+    expect="The season after winter is spring."
+
+@t.time.calendar.k.n29 core.test
+    input="What month comes after May?"
+    expect="The month after May is June."
+
+@t.time.calendar.k.n30 core.test
+    input="What month comes before January?"
+    expect="The month before January is December."
+
+@t.time.calendar.k.n31 core.test
+    input="What month is 3 months after November?"
+    expect="3 months after November is February."
+
+@t.time.calendar.k.n32 core.test
+    input="What month is next month if this month is May?"
+    expect="Next month is June."
+
+@t.time.calendar.k.n33 core.test
+    input="If it is 3 o'clock, what time will it be in 2 hours?"
+    expect="It will be 5 o'clock."
+
+@t.time.calendar.k.n34 core.test
+    input="If it is 11 o'clock, what time will it be in 3 hours?"
+    expect="It will be 2 o'clock."
+
+@t.time.calendar.k.n35 core.test
+    input="If it is 5 o'clock, what time was it 2 hours ago?"
+    expect="It was 3 o'clock."
+
+@t.time.calendar.k.n36 core.test
+    input="What time will it be in 30 minutes if it is 3 o'clock?"
+    expect="It will be half past 3."
+
+@t.time.calendar.k.n37 core.test
+    session=s2
+    input="It is 8 o'clock."
+    expect="OK, it is 8 o'clock."
+
+@t.time.calendar.k.n38 core.test
+    session=s2
+    input="What time will it be in four hours?"
+    expect="It will be 12 o'clock."
+
+@t.time.calendar.k.n39 core.test
+    session=s2
+    input="What time will it be in a quarter of an hour?"
+    expect="It will be quarter past 8."
+
+@t.time.calendar.k.n40 core.test
+    session=s2
+    input="What time is it?"
+    expect="It is 8 o'clock."
+
+@t.time.calendar.k.n41 core.test
+    input="What time will it be in 2 hours?"
+    expect="It will be"
+    expectStatus=supported
+
+@t.time.calendar.k.n42 core.test
+    input="What time is it?"
+    expectStatus=supported
+
+@t.time.calendar.k.n43 core.test
+    input="Which days are the weekend?"
+    expect="The weekend days are Saturday and Sunday."
+
+@t.time.calendar.k.n44 core.test
+    input="How many days from Monday to Friday?"
+    expect="From Monday to Friday is 4 days."
+
+@t.time.calendar.k.n45 core.test
+    input="How many hours from 3 o'clock to 7 o'clock?"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+
+@t.time.calendar.k.n46 core.test
+    input="Today is Friday, what day is tomorrow?"
+    expect="Tomorrow is Saturday."
+
+@t.time.calendar.k.n47 core.test
+    input="How many days are in 2 weeks?"
+    expect="There are 14 days in 2 weeks."
+
+@t.time.calendar.k.n48 core.test
+    input="What are the months of the year?"
+    expect="The months of the year are January, February, March"
+
+@t.time.calendar.k.n49 core.test
+    input="What is the season after summer?"
+    expect="The season after summer is autumn."
+
+@t.time.calendar.k.n50 core.test
+    input="What comes after August?"
+    expect="The month after August is September."
+
+@t.time.calendar.k.sh01 core.test
+    session=tsh1
+    input="tell me the day after Tuesday"
+    expect="The day after Tuesday is Wednesday."
+
+@t.time.calendar.k.sh02 core.test
+    session=tsh2
+    input="i want to know the month before May"
+    expect="The month before May is April."
+
+@t.time.calendar.k.sh03 core.test
+    session=tsh3
+    input="do you know the season after summer"
+    expect="The season after summer is autumn."
+
+@t.time.calendar.k.sh04 core.test
+    session=tsh4
+    input="can you tell me how many hours are in a day"
+    expect="There are 24 hours in a day."
+
+@t.time.calendar.k.sh05 core.test
+    session=tsh5
+    input="i wonder how many minutes make an hour"
+    expect="There are 60 minutes in an hour."
+
+@t.time.calendar.k.sh06 core.test
+    session=tsh6
+    input="tell me the season of July"
+    expect="July is in summer."
+
+@t.time.calendar.k.sh07 core.test
+    session=tsh7
+    input="which day follows Monday"
+    expect="The day after Monday is Tuesday."
+
+@t.time.calendar.k.sh08 core.test
+    session=tsh8
+    input="the season before winter"
+    expect="The season before winter is autumn."
+
+@t.time.calendar.k.sw001 core.test
+    input="how many days in june right"
+    expect="There are 30 days in June."
+
+@t.time.calendar.k.sw002 core.test
+    input="whats the length of june"
+    expect="There are 30 days in June."
+
+@t.time.calendar.k.sw003 core.test
+    input="can u tell me how many days june has"
+    expect="There are 30 days in June."
+
+@t.time.calendar.k.sw004 core.test
+    input="june days?"
+    expect="There are 30 days in June."
+
+@t.time.calendar.k.sw005 core.test
+    input="days in june?"
+    expect="There are 30 days in June."
+
+@t.time.calendar.k.sw006 core.test
+    input="u know how long june is in days"
+    expect="There are 30 days in June."
+
+@t.time.calendar.k.sw007 core.test
+    input="wait how many days are in june"
+    expect="There are 30 days in June."
+
+@t.time.calendar.k.sw008 core.test
+    input="june how many days has it got"
+    expect="There are 30 days in June."
+
+@t.time.calendar.k.sw009 core.test
+    input="how many days does june have pls"
+    expect="There are 30 days in June."
+
+@t.time.calendar.k.sw010 core.test
+    input="is june 30 days"
+    expect="There are 30 days in June."
+
+@t.time.calendar.k.sw011 core.test
+    input="length of june in days"
+    expect="There are 30 days in June."
+
+@t.time.calendar.k.sw012 core.test
+    input="how many days in feb"
+    expect="There are 28 days in February, or 29 in a leap year."
+
+@t.time.calendar.k.sw013 core.test
+    input="feb days?"
+    expect="There are 28 days in February, or 29 in a leap year."
+
+@t.time.calendar.k.sw014 core.test
+    input="is february 28 days"
+    expect="There are 28 days in February, or 29 in a leap year."
+
+@t.time.calendar.k.sw015 core.test
+    input="how many days has feb got"
+    expect="There are 28 days in February, or 29 in a leap year."
+
+@t.time.calendar.k.sw016 core.test
+    input="whats the length of feb"
+    expect="There are 28 days in February, or 29 in a leap year."
+
+@t.time.calendar.k.sw017 core.test
+    input="whats the day 4 days after sunday"
+    expect="4 days after Sunday is Thursday."
+
+@t.time.calendar.k.sw019 core.test
+    input="if its sunday what day in 4 days"
+    expect="In 4 days it will be Thursday."
+
+@t.time.calendar.k.sw021 core.test
+    input="sunday 4 days later is what day"
+    expect="4 days after Sunday is Thursday."
+
+@t.time.calendar.k.sw022 core.test
+    input="count forward 4 days from sunday"
+    expect="4 days after Sunday is Thursday."
+
+@t.time.calendar.k.sw023 core.test
+    input="skip 4 days from sunday"
+    expect="4 days after Sunday is Thursday."
+
+@t.time.calendar.k.sw024 core.test
+    input="if it is sunday what day will it be in 4 days"
+    expect="In 4 days it will be Thursday."
+
+@t.time.calendar.k.sw025 core.test
+    input="count back 5 days from wednesday"
+    expect="5 days before Wednesday is Friday."
+
+@t.time.calendar.k.sw026 core.test
+    input="wednesday 5 days ago is what day"
+    expect="5 days before Wednesday is Friday."
+
+@t.time.calendar.k.sw028 core.test
+    input="5 days before wed what day"
+    expect="5 days before Wednesday is Friday."
+
+@t.time.calendar.k.sw029 core.test
+    input="go back 5 days from wednesday"
+    expect="5 days before Wednesday is Friday."
+
+@t.time.calendar.k.sw030 core.test
+    input="what day was it 5 days before wednesday"
+    expect="5 days before Wednesday is Friday."
+
+@t.time.calendar.k.sw031 core.test
+    input="next day after monday pls"
+    expect="The day after Monday is Tuesday."
+
+@t.time.calendar.k.sw032 core.test
+    input="after monday which day is it"
+    expect="The day after Monday is Tuesday."
+
+@t.time.calendar.k.sw033 core.test
+    input="the day after monday"
+    expect="The day after Monday is Tuesday."
+
+@t.time.calendar.k.sw034 core.test
+    input="what day is right after monday"
+    expect="The day after Monday is Tuesday."
+
+@t.time.calendar.k.sw035 core.test
+    input="u know what day is after monday"
+    expect="The day after Monday is Tuesday."
+
+@t.time.calendar.k.sw036 core.test
+    input="what comes after mon"
+    expect="The day after Monday is Tuesday."
+
+@t.time.calendar.k.sw037 core.test
+    input="the day before friday?"
+    expect="The day before Friday is Thursday."
+
+@t.time.calendar.k.sw038 core.test
+    input="before friday what day is it"
+    expect="The day before Friday is Thursday."
+
+@t.time.calendar.k.sw039 core.test
+    input="the day right before friday is what"
+    expect="The day before Friday is Thursday."
+
+@t.time.calendar.k.sw040 core.test
+    input="u know what day is before friday"
+    expect="The day before Friday is Thursday."
+
+@t.time.calendar.k.sw041 core.test
+    input="what day is the day before fri"
+    expect="The day before Friday is Thursday."
+
+@t.time.calendar.k.sw042 core.test
+    input="what day is right before friday"
+    expect="The day before Friday is Thursday."
+
+@t.time.calendar.k.sw043 core.test
+    input="if its march what month in 4 months"
+    expect="In 4 months it will be July."
+
+@t.time.calendar.k.sw044 core.test
+    input="4 months after march is what month"
+    expect="4 months after March is July."
+
+@t.time.calendar.k.sw045 core.test
+    input="if i go 4 months past march what month"
+    expect="4 months after March is July."
+
+@t.time.calendar.k.sw046 core.test
+    input="march 4 months later is what month"
+    expect="4 months after March is July."
+
+@t.time.calendar.k.sw047 core.test
+    input="whats the month 4 months after march"
+    expect="4 months after March is July."
+
+@t.time.calendar.k.sw048 core.test
+    input="whats the month before may"
+    expect="The month before May is April."
+
+@t.time.calendar.k.sw049 core.test
+    input="before may what month is it"
+    expect="The month before May is April."
+
+@t.time.calendar.k.sw050 core.test
+    input="previous month before may"
+    expect="The month before May is April."
+
+@t.time.calendar.k.sw051 core.test
+    input="u know what month is before may"
+    expect="The month before May is April."
+
+@t.time.calendar.k.sw052 core.test
+    input="what month is right before may"
+    expect="The month before May is April."
+
+@t.time.calendar.k.sw053 core.test
+    input="next season after winter pls"
+    expect="The season after winter is spring."
+
+@t.time.calendar.k.sw054 core.test
+    input="u know what season is after winter"
+    expect="The season after winter is spring."
+
+@t.time.calendar.k.sw055 core.test
+    input="after winter which season is it"
+    expect="The season after winter is spring."
+
+@t.time.calendar.k.sw056 core.test
+    input="what season is right after winter"
+    expect="The season after winter is spring."
+
+@t.time.calendar.k.sw057 core.test
+    input="which season follows winter"
+    expect="The season after winter is spring."
+
+@t.time.calendar.k.sw058 core.test
+    input="season 2 steps after spring"
+    expect="2 seasons after spring is autumn."
+
+@t.time.calendar.k.sw059 core.test
+    input="which season is two after spring"
+    expect="2 seasons after spring is autumn."
+
+@t.time.calendar.k.sw060 core.test
+    input="which season comes two after spring"
+    expect="2 seasons after spring is autumn."
+
+@t.time.calendar.k.sw061 core.test
+    input="2 seasons after spring which season"
+    expect="2 seasons after spring is autumn."
+
+@t.time.calendar.k.sw062 core.test
+    input="from thursday how many days until sunday"
+    expect="From Thursday to Sunday is 3 days."
+
+@t.time.calendar.k.sw064 core.test
+    input="days between thursday and sunday?"
+    expect="From Thursday to Sunday is 3 days."
+
+@t.time.calendar.k.sw066 core.test
+    input="how many more days to sunday when its thursday"
+    expect="From Thursday to Sunday is 3 days."
+
+@t.time.calendar.k.sw067 core.test
+    input="how long until sunday if its thursday"
+    expect="From Thursday to Sunday is 3 days."
+
+@t.time.calendar.k.sw068 core.test
+    input="thursday, how many days till sunday"
+    expect="From Thursday to Sunday is 3 days."
+
+@t.time.calendar.k.sw069 core.test
+    input="how many days till sunday if its thursday pls"
+    expect="From Thursday to Sunday is 3 days."
+
+@t.time.calendar.k.sw070 core.test
+    input="time from 3 oclock to 7 oclock in hours"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+
+@t.time.calendar.k.sw071 core.test
+    input="from 3 oclock to 7 oclock how long in hours"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+
+@t.time.calendar.k.sw073 core.test
+    input="3 to 7 hours to go?"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+
+@t.time.calendar.k.sw074 core.test
+    input="countdown in hours from 3 to 7"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+
+@t.time.calendar.k.sw075 core.test
+    input="count hours 3 to 7"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+
+@t.time.calendar.k.sw079 core.test
+    input="how many hours until 7 oclock when it is 3 oclock"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+
+@t.time.calendar.k.sw080 core.test
+    input="how many more hours to 7 oclock if its 3 oclock"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+
+@t.time.calendar.k.sw081 core.test
+    input="at 3 oclock what time is it 2 hours later"
+    expect="It will be 5 o'clock."
+
+@t.time.calendar.k.sw082 core.test
+    input="in 2 hours from 3 oclock it will be what"
+    expect="It will be 5 o'clock."
+
+@t.time.calendar.k.sw084 core.test
+    input="what was the time 2 hours before 5 oclock"
+    expect="It was 3 o'clock."
+
+@t.time.calendar.k.sw085 core.test
+    input="if its 5 oclock what time was it 2 hours ago"
+    expect="It was 3 o'clock."
+
+@t.time.calendar.k.sw086 core.test
+    input="2 hours ago from 5 oclock what time"
+    expect="It was 3 o'clock."
+
+@t.time.calendar.k.sw088 core.test
+    input="what time was half an hour before 5 o clock"
+    expect="It was half past 4."
+
+@t.time.calendar.k.sw089 core.test
+    input="half an hour before 5 oclock?"
+    expect="It was half past 4."
+
+@t.time.calendar.k.sw092 core.test
+    input="hw many hours in 1 day"
+    expect="There are 24 hours in a day."
+
+@t.time.calendar.k.sw093 core.test
+    input="how many hours does a day have"
+    expect="There are 24 hours in a day."
+
+@t.time.calendar.k.sw096 core.test
+    input="in one hour how many minutes are there"
+    expect="There are 60 minutes in an hour."
+
+@t.time.calendar.k.sw098 core.test
+    input="hw many minutes in an hour"
+    expect="There are 60 minutes in an hour."
+
+@t.time.calendar.k.sw101 core.test
+    input="2 weeks how many days in total"
+    expect="There are 14 days in 2 weeks."
+
+@t.time.calendar.k.sw102 core.test
+    input="how many days does 2 weeks have"
+    expect="There are 14 days in 2 weeks."
+
+@t.time.calendar.k.sw103 core.test
+    input="how many days in a fortnight"
+    expect="There are 14 days in a fortnight."
+
+@t.time.calendar.k.sw104 core.test
+    input="weekend days?"
+    expect="The weekend days are Saturday and Sunday."
+
+@t.time.calendar.k.sw105 core.test
+    input="which days is the weekend"
+    expect="The weekend days are Saturday and Sunday."
+
+@t.time.calendar.k.sw106 core.test
+    input="name the weekend days pls"
+    expect="The weekend days are Saturday and Sunday."
+
+@t.time.calendar.k.sw107 core.test
+    input="what are the days of the weekend"
+    expect="The weekend days are Saturday and Sunday."
+
+@t.time.calendar.k.sw108 core.test
+    input="tell me which days are weekend"
+    expect="The weekend days are Saturday and Sunday."
+
+@t.time.calendar.k.sw109 core.test
+    input="which days count as weekend?"
+    expect="The weekend days are Saturday and Sunday."
+
+@t.time.calendar.k.sw110 core.test
+    input="hey which days are weekend days ty"
+    expect="The weekend days are Saturday and Sunday."
+
+@t.time.calendar.k.sw111 core.test
+    input="name all the days of the week"
+    expect="The days of the week are Monday, Tuesday, Wednesday, Thursday, Friday, Saturday and Sunday."
+
+@t.time.calendar.k.sw112 core.test
+    input="list the days of the week pls"
+    expect="The days of the week are Monday, Tuesday, Wednesday, Thursday, Friday, Saturday and Sunday."
+
+@t.time.calendar.k.sw114 core.test
+    input="tell me the days of the week"
+    expect="The days of the week are Monday, Tuesday, Wednesday, Thursday, Friday, Saturday and Sunday."
+
+@t.time.calendar.k.sw115 core.test
+    input="name all the months of the year"
+    expect="The months of the year are January, February, March, April, May, June, July, August, September, October, November and December."
+
+@t.time.calendar.k.sw116 core.test
+    input="list the months of the year pls"
+    expect="The months of the year are January, February, March, April, May, June, July, August, September, October, November and December."
+
+@t.time.calendar.k.sw117 core.test
+    input="It is 3 o'clock. what time r we at"
+    expect="It is 3 o'clock."
+
+@t.time.calendar.k.sw118 core.test
+    input="It is 3 o'clock. do u know what time it is"
+    expect="It is 3 o'clock."
+
+@t.time.calendar.k.sw119 core.test
+    input="It is 3 o'clock. can u tell me the time"
+    expect="It is 3 o'clock."
+
+@t.time.calendar.k.sw120 core.test
+    input="It is 3 o'clock. whats the time"
+    expect="It is 3 o'clock."
+
+@t.time.calendar.k.sw121 core.test
+    input="It is 3 o'clock. time pls"
+    expect="It is 3 o'clock."
+
+@t.time.calendar.k.sw123 core.test
+    input="its friday today. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+
+@t.time.calendar.k.sw124 core.test
+    input="today's friday btw. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+
+@t.time.calendar.k.sw125 core.test
+    input="fyi its friday today. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+
+@t.time.calendar.k.sw126 core.test
+    input="todays friday ok. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+
+@t.time.calendar.k.sw127 core.test
+    input="hey today is friday. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+
+@t.time.calendar.k.sw128 core.test
+    input="we are on friday today. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+
+@t.time.calendar.k.sw129 core.test
+    input="ok its friday. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+
+@t.time.calendar.k.sw130 core.test
+    input="the clock says 3 oclock. What time will it be in 2 hours?"
+    expect="It will be 5 o'clock."
+
+@t.time.calendar.k.sw131 core.test
+    input="its 3 oclock now. What time will it be in 2 hours?"
+    expect="It will be 5 o'clock."
+
+@t.time.calendar.k.sw132 core.test
+    input="the time is 3 oclock. What time will it be in 2 hours?"
+    expect="It will be 5 o'clock."
+
+@t.time.calendar.k.sw133 core.test
+    input="the clock shows 3 o clock. What time will it be in 2 hours?"
+    expect="It will be 5 o'clock."
+
+@t.time.calendar.k.sw902 core.test
+    input="The four seasons?"
+    expect="The seasons are spring, summer, autumn and winter."
+
+@t.time.calendar.k.sw903 core.test
+    input="Seasons pls."
+    expect="The seasons are spring, summer, autumn and winter."
+
+@t.time.calendar.k.w01 core.test
+    input="days in february"
+    expect="There are 28 days in February"
+
+@t.time.calendar.k.w02 core.test
+    input="monday then what day"
+    expect="The day after Monday is Tuesday."
+
+@t.time.calendar.k.w05 core.test
+    input="how many days in 2 weeks"
+    expect="There are 14 days in 2 weeks."
+
+@t.time.calendar.k.w07 core.test
+    input="Today is Friday. tmrw is what day?"
+    expect="Tomorrow is Saturday."
+
+@t.time.calendar.k.w08 core.test
+    input="after winter what season"
+    expect="The season after winter is spring."
+
+@t.time.calendar.k.w09 core.test
+    input="how many days from mon to fri"
+    expect="From Monday to Friday is 4 days."
+
+@t.time.calendar.k.w10 core.test
+    input="hours in a day"
+    expect="There are 24 hours in a day."
+
+@t.time.calendar.k.w11 core.test
+    input="What month is 3 months on from may?"
+    expect="3 months after May is August."
+
+@t.time.calendar.k.w12 core.test
+    input="what is 3 hours before 5 oclock"
+    expect="It was 2 o'clock."
+
+@t.time.calendar.k.x21 core.test
+    input="what is the day after tomorrow if today is Monday"
+    expect="Wednesday"
+
+@t.time.calendar.k.x22 core.test
+    input="If today is Friday what day is the day after tomorrow"
+    expect="Sunday"
+
+@t.time.calendar.k.x23 core.test
+    input="what day was the day before yesterday if today is Wednesday"
+    expect="Monday"
+
+@t.time.calendar.k.x24 core.test
+    input="if today is Sunday, what day is tomorrow"
+    expect="Monday"
+
+@t.time.calendar.k.x25 core.test
+    input="what day was yesterday if today is Monday"
+    expect="Sunday"
+
+@t.time.calendar.k.x26 core.test
+    input="what day is it in two days if today is Thursday"
+    expect="Saturday"
+
+@t.time.calendar.k.x27 core.test
+    input="today is Tuesday, what day is the day after tomorrow"
+    expect="Thursday"
+

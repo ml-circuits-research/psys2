@@ -8,7 +8,7 @@ import { exportTraining, mulberry32, seedOf, splitOf, canonicalWires } from '../
 import { fullOnly } from './helpers.mjs';
 
 const ROOT = fileURLToPath(new URL('../worlds', import.meta.url));
-const WORLDS = ['kids.common', 'kids.arith', 'kids.shop', 'kids.time', 'kids.tasks', 'ui.shell', 'ui.help'];
+const WORLDS = ['kids.common', 'kids.arith', 'kids.shop', 'kids.tasks', 'ui.shell', 'ui.help'];
 const KIDS = WORLDS.filter((w) => w.startsWith('kids.'));
 const load = (id) => import(pathToFileURL(path.join(ROOT, id, 'datagen.mjs')).href);
 

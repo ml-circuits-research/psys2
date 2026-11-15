@@ -9,23 +9,23 @@ import { guard } from '../guard.mjs?v=82a55329d9';
 import { perf } from '../perf.mjs?v=b81e032a17';
 import { lexIndex } from '../../worlds/lexicon.mjs?v=435219812a';
 import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=d9beb26cad';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=add9fbeba3';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=b0dc3269da';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
-import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=8c59dedcf0';
+import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=829f2647e9';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=2dc54c12bc';
 import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=97cbcc77ac';
 import { en } from '../../lang/en.mjs?v=8f226ecd72';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse } from '../../soplang/index.mjs?v=c57881f705';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
-import { annotateUnread } from '../completeness.mjs?v=8c59dedcf0';
-import { isCatchAll } from '../typed-world.mjs?v=8c59dedcf0';
+import { annotateUnread } from '../completeness.mjs?v=829f2647e9';
+import { isCatchAll } from '../typed-world.mjs?v=829f2647e9';
 
 export { FormSession } from './session.mjs?v=2dc54c12bc';
-export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=8c59dedcf0';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=829f2647e9';
 export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=d9beb26cad';
-export { compilePattern, matchTokens } from './matcher.mjs?v=add9fbeba3';
+export { compilePattern, matchTokens } from './matcher.mjs?v=b0dc3269da';
 export { singularLemma, pluralize } from './lemma.mjs?v=99f25611ee';
 
 const compiledCache = new WeakMap();
@@ -484,6 +484,8 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   // so its match is dropped before routing and the next world reads the message. Pure, and every pass ticks the budget; it only looks at the words of the roles.
   // the verdict of a world's decline hook on one reading (pure; memoized: the yield rule below asks it of the competitor too)
   const verdicts = new Map();
+  // the phrase groups of lang.common, for a world whose decline hook reads the sentence with its own reader (the words its operations read through ctx.lang.phrase)
+  const phraseOf = lex.phraseOf ??= (id) => (lex.phrases.get(id)?.alts ?? []).map((a) => a.join(' '));
   const verdictOf = (m) => {
     if (verdicts.has(m)) return verdicts.get(m);
     const acc = set.get(m.pattern.worldId)?.ops?.accepts;
@@ -493,7 +495,7 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
       const roles = Object.fromEntries(Object.entries(m.slots ?? {}).map(([n, sl]) => [n, sl.text]));
       for (const lit of String(m.pattern.emit ?? '').matchAll(/ arg\.(\w+)=\\?"([^"{}\\]*)\\?"/g)) if (!(lit[1] in roles) && lit[1] !== 'mode') roles[lit[1]] = lit[2];   // the literal roles of a form (arg.attribute="name")
     let ok = true, strong = false, refuse = false;
-      try { const verdict = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, claim: !!m.pattern.tabClaim, tab: context?.tabWorld ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null }); ok = verdict !== false && verdict !== 'refuse'; strong = verdict === 'focus'; refuse = verdict === 'refuse' } catch { ok = true; }   // 'focus': the world holds the focus of the dialogue ("make it red"), so it does not yield
+      try { const verdict = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, claim: !!m.pattern.tabClaim, tab: context?.tabWorld ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null, phrase: phraseOf }); ok = verdict !== false && verdict !== 'refuse'; strong = verdict === 'focus'; refuse = verdict === 'refuse' } catch { ok = true; }   // 'focus': the world holds the focus of the dialogue ("make it red"), so it does not yield
     const res = { ok, strong, refuse, roles };
     verdicts.set(m, res);
     return res;

@@ -12,7 +12,7 @@
  */
 import { lexIndex } from '../worlds/lexicon.mjs?v=435219812a';
 import { isNumberWord } from './rules/numbers.mjs?v=c37d822d31';
-import { FUNCTION_WORDS, ABBREVIATIONS, worldVocabulary } from './spell.mjs?v=8c59dedcf0';
+import { FUNCTION_WORDS, ABBREVIATIONS, worldVocabulary } from './spell.mjs?v=829f2647e9';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 import { en } from '../lang/en.mjs?v=8f226ecd72';
 

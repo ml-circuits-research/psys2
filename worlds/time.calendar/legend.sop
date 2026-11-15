@@ -1,0 +1,5 @@
+@legend.time.calendar core.legend
+    namespace=time.calendar
+    version=0.1.0
+    imports=core
+    doc="The calendar and the clock. State: today (the weekday the dialogue stated, else the host's), month, season (stated), clock (minutes after midnight the dialogue stated, else the host's), date ({ day, month } stated)."

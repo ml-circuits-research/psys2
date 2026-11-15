@@ -258,7 +258,7 @@ async function writeTabMeta({ outDir, tabFiles }) {
 }
 
 /** The vendor assets a world's tab needs (loaded with the world, never at boot): `vendor/<dir>/` directories of docs/webchat/vendor. */
-const LABELS = { 'kids.arith': 'arithmetic', 'kids.shop': 'shopping', 'calc.story': 'word problems', 'plan.list': 'lists', 'kids.tasks': 'tasks', 'kids.time': 'time', 'docs.editor': 'documents', 'ui.avatar': 'avatar', talk: 'talk', 'plan.seating': 'seating plan', 'plan.timeline': 'timeline', 'diagram.sketch': 'diagram', 'data.charts': 'charts', 'media.music': 'music', 'games.chess': 'chess', 'geo.map': 'map', 'art.draw': 'drawing', space: 'space' };
+const LABELS = { 'kids.arith': 'arithmetic', 'kids.shop': 'shopping', 'calc.story': 'word problems', 'plan.list': 'lists', 'kids.tasks': 'tasks', 'time.calendar': 'time', 'docs.editor': 'documents', 'ui.avatar': 'avatar', talk: 'talk', 'plan.seating': 'seating plan', 'plan.timeline': 'timeline', 'diagram.sketch': 'diagram', 'data.charts': 'charts', 'media.music': 'music', 'games.chess': 'chess', 'geo.map': 'map', 'art.draw': 'drawing', space: 'space' };
 export const VENDOR_OF = { 'geo.map': ['map'], 'docs.editor': ['editor'], 'data.charts': ['charts'], 'art.draw': ['draw'], 'media.music': ['music'] };
 
 /**

@@ -6,6 +6,12 @@ Sources: the `canonical=` sentences of every pattern in `worlds/kids.*` (139: co
 
 How the "answers now" columns were measured: each canonical sentence in a fresh session (the sentences that need context get one or two set-up turns first, such as "My dog is called Rex." before "What is my dog called?"), knowledge read from the live catalog, once with every world and once with the six content kids worlds hidden from the loader (kids.common stays, because 12 worlds import it). The probe script is a scratchpad file. It does not belong in the repository.
 
+## Status 2026-11-15 (step 3, second landing)
+
+- **kids.time: off and deleted.** General world `time.calendar` (K7 frames generated from the catalog, the world's own reader, the library's L2). Canonical 19/19, real rows r0586 / r0587 right; 195 of 227 rows ported, 32 ledger rows with their gap (ADR-011 note).
+- **kids.arith: stays on.** K4 is wired (`calc.arith`: the catalog's operator frames run the library's core.calc builtins; calc.story's storyState gets K4's aggregate, extreme, comparison and state words). Its rows and canonical sentences that still fail on the general path wait for L1 / K4 items (questions.md Q31).
+- **kids.shop: stays on** (questions.md Q31).
+
 ## Summary
 
 | Kids world | Target (reviewer block) | Canonical | Answered by the kids world now | Right with the content kids worlds hidden | Gaps: KNOW / LIB / HOST (sentences) | Real turns it answers |

@@ -9,7 +9,6 @@
     compose=world.kids.shop
     compose=world.kids.arith
     compose=world.kids.tasks
-    compose=world.kids.time
     language=en
     status=fixture
     title="The conversation (one instance per session)"

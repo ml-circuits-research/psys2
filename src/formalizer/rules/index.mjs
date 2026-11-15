@@ -484,6 +484,8 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   // so its match is dropped before routing and the next world reads the message. Pure, and every pass ticks the budget; it only looks at the words of the roles.
   // the verdict of a world's decline hook on one reading (pure; memoized: the yield rule below asks it of the competitor too)
   const verdicts = new Map();
+  // the phrase groups of lang.common, for a world whose decline hook reads the sentence with its own reader (the words its operations read through ctx.lang.phrase)
+  const phraseOf = lex.phraseOf ??= (id) => (lex.phrases.get(id)?.alts ?? []).map((a) => a.join(' '));
   const verdictOf = (m) => {
     if (verdicts.has(m)) return verdicts.get(m);
     const acc = set.get(m.pattern.worldId)?.ops?.accepts;
@@ -493,7 +495,7 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
       const roles = Object.fromEntries(Object.entries(m.slots ?? {}).map(([n, sl]) => [n, sl.text]));
       for (const lit of String(m.pattern.emit ?? '').matchAll(/ arg\.(\w+)=\\?"([^"{}\\]*)\\?"/g)) if (!(lit[1] in roles) && lit[1] !== 'mode') roles[lit[1]] = lit[2];   // the literal roles of a form (arg.attribute="name")
     let ok = true, strong = false, refuse = false;
-      try { const verdict = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, claim: !!m.pattern.tabClaim, tab: context?.tabWorld ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null }); ok = verdict !== false && verdict !== 'refuse'; strong = verdict === 'focus'; refuse = verdict === 'refuse' } catch { ok = true; }   // 'focus': the world holds the focus of the dialogue ("make it red"), so it does not yield
+      try { const verdict = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, claim: !!m.pattern.tabClaim, tab: context?.tabWorld ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null, phrase: phraseOf }); ok = verdict !== false && verdict !== 'refuse'; strong = verdict === 'focus'; refuse = verdict === 'refuse' } catch { ok = true; }   // 'focus': the world holds the focus of the dialogue ("make it red"), so it does not yield
     const res = { ok, strong, refuse, roles };
     verdicts.set(m, res);
     return res;

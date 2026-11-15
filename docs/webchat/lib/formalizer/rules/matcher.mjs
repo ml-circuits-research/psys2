@@ -211,10 +211,13 @@ function candidates(el, tokens, i, env, slotsSoFar) {
       for (let len = LEXICON_MAX_WORDS; len >= 1; len--) {
         if (i + len > tokens.length) continue;
         const ws = tokens.slice(i, i + len);
-        if (!ws.every((x, k) => x.kind === 'word' || (lexicon.class === 'counted' && x.kind === 'number' && k < len - 1 && /^\d+$/.test(x.lower)))) continue;   // class=counted: a count may open an entry ("2_chapter": "two chapters")
-        const entry = [...ws.slice(0, -1).map((x) => x.lower), env.lex.lemma(ws[len - 1].lower)].join('_');
+        // a number word keeps the word as typed in `alt` ("half", "five"): it is that word to a lexicon that lists it ("half past", "five to": k.time's clock phrases)
+        const said = (x) => (x.kind === 'number' && typeof x.alt === 'string' && /^\p{L}/u.test(x.alt) ? String(x.alt).toLowerCase() : x.lower);
+        const wordy = (x) => x.kind === 'word' || (x.kind === 'number' && typeof x.alt === 'string' && /^\p{L}/u.test(x.alt));
+        if (!ws.every((x, k) => wordy(x) || (lexicon.class === 'counted' && x.kind === 'number' && k < len - 1 && /^\d+$/.test(x.lower)))) continue;   // class=counted: a count may open an entry ("2_chapter": "two chapters")
+        const entry = [...ws.slice(0, -1).map(said), env.lex.lemma(said(ws[len - 1]))].join('_');
         if (lexicon.words.has(entry)) out.push({ len, value: entry, text: text(len), span: span(len) });
-        else { const raw = ws.map((x) => x.lower).join('_'); if (raw !== entry && lexicon.words.has(raw)) out.push({ len, value: raw, text: text(len), span: span(len) }); }   // a word the lexicon lists in its own form ("canvas", "glasses") that the singular lemma would cut
+        else { const raw = ws.map(said).join('_'); if (raw !== entry && lexicon.words.has(raw)) out.push({ len, value: raw, text: text(len), span: span(len) }); }   // a word the lexicon lists in its own form ("canvas", "glasses") that the singular lemma would cut
       }
       return out;
     }

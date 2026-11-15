@@ -10,8 +10,8 @@ const rec = async (text, extra = {}) => buildRecord({ text, tab: 'robot', reply:
 
 test('record from a real reply', async () => {
   const r = await rec('What day comes after Monday?');
-  assert.equal(r.segments[0].world, 'kids.time');
-  assert.match(r.segments[0].pattern, /^pat\.kids\.time\./);
+  assert.equal(r.segments[0].world, 'time.calendar');
+  assert.match(r.segments[0].pattern, /^pat\.time\.calendar\./);
   assert.equal(r.segments[0].status, 'supported');
   assert.equal(r.unparsed, false); assert.equal(r.source, 'human'); assert.equal(r.formalizer, 'rules');
   const bad = await rec('blah zorp quux', { mode: 'voice' });

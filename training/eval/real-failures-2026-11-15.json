@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "7c38bb2b",
-  "tree": "e110642ab55e2762",
+  "build": "b7bd9a43",
+  "tree": "e6ebc0affee0596b",
   "catalog": "085bc0dab1f6f2817815ca789a36259b3c01ae4e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -98,8 +98,8 @@
     "executed": 333,
     "refused": 2,
     "asked": 7,
-    "not_understood": 169,
-    "other_world": 94
+    "not_understood": 168,
+    "other_world": 95
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -397,7 +397,7 @@
     {
      "text": "enervant da",
      "tab": "draw",
-     "happened": "I did not understand \"enervant da\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: enervant. [outcome: not_understoo"
+     "happened": "I did not understand \"enervant da\". Did you mean \"Enervant eyes.\"? I did not know the word: enervant. [outcome: not_understood]"
     },
     {
      "text": "face un caca",

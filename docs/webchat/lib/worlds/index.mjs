@@ -10,7 +10,7 @@ import { parse, get, getAll } from '../soplang/index.mjs?v=c57881f705';
 import { Legends } from '../legends/index.mjs?v=45bd60c654';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
 import { readDescriptionWires, slotDeclarations } from './describe.mjs?v=956f430777';
-import { checkPattern } from '../formalizer/rules/index.mjs?v=8c59dedcf0';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=829f2647e9';
 import { lexIndex } from './lexicon.mjs?v=435219812a';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
@@ -83,6 +83,8 @@ export class World {
   /** Keys (`type.key`) whose questions the matrix leaves to the operations (`ops=<key>`, repeatable). */
   get opsKeys() { return getAll(this.manifest ?? { entries: [] }, 'ops').map((v) => v.v); }
   /** Worlds this composite world composes (`compose=<world>`, repeatable; spec 15): ids, in the order written. */
+  /** Worlds this world replaces (`replaces=<world>`, repeatable; ADR-011): a retired world's label of a trained model names this world. */
+  get replaces() { return getAll(this.manifest ?? { entries: [] }, 'replaces').map((v) => worldIdOf(v.v)); }
   get compose() { return getAll(this.manifest ?? { entries: [] }, 'compose').map((v) => worldIdOf(v.v)); }
   /** Worlds whose legends and knowledge bases this world's matrix reads facts of (`reads=world.<id>`, repeatable; spec 15): their wires are copied into this world's instance, their matrices are not loaded. */
   get reads() { return getAll(this.manifest ?? { entries: [] }, 'reads').map((v) => worldIdOf(v.v)); }

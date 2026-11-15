@@ -373,6 +373,12 @@
     ask="which worlds?"
     doc="With reasoner=matrix: makes this world a composite (spec 15, composite worlds): its library instance is built from the legends, knowledge bases and matrices of the named worlds plus its own matrix. The named worlds keep their own isolated instances; nothing is composed implicitly."
 
+@core.world.replaces core.key
+    value=atom
+    card=many
+    ask="which worlds does it replace?"
+    doc="A world switched off and deleted that this general world answers for (ADR-011): a trained model's label of the retired world (the dispatcher's) names this world. Not an import: the retired world is not loaded."
+
 @core.world.reads core.key
     value=atom
     card=many

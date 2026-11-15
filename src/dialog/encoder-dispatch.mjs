@@ -94,7 +94,7 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
       for (const [x, y] of c[0].segments) { const t = text.slice(x, y); pieces.push({ text: t, world: (await runtime.rank(t, ctx))[0]?.world ?? null }); }
       return { pieces, margin: c[0].score - (c[1]?.score ?? -Infinity) };
     },
-    supports: (world) => (runtime ? runtime.worlds.includes(world?.id) : true),
+    supports: (world) => (runtime ? runtime.worlds.includes(world?.id) || (world?.replaces ?? []).some((r) => runtime.worlds.includes(r)) : true),   // a world that replaces a retired label (ADR-011)
 
     async formalize(text, { worlds: set, session, source = 'input', context } = {}) {
       if (!engine) throw new Error('the dispatcher formalizer is not attached to an engine');

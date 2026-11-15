@@ -5091,3 +5091,174 @@
     alt=different
     alt=unique
     alt=stand_out
+
+# The calendar and the clock (time.calendar, kids plan Q18: kids.time -> a general time world on the library's L2 and k.time). The world's reader reads a question
+# whole with these words, the names and durations of k.time and the numbers, prepositions and question words of w.lang.en; a relation preposition with in=time
+# (after, before, until) comes from w.lang.en, these groups hold the rest.
+@phrase.lang.time.today core.phrase
+    frame=false
+    doc="The day of the dialogue (counted 0 from it)."
+    alt=today
+    alt=todays
+    alt=this_day
+
+@phrase.lang.time.tomorrow core.phrase
+    frame=false
+    doc="The day after today (+1)."
+    alt=tomorrow
+    alt=tmrw
+    alt=tmr
+    alt=tomorow
+
+@phrase.lang.time.yesterday core.phrase
+    frame=false
+    doc="The day before today (-1)."
+    alt=yesterday
+    alt=yday
+
+@phrase.lang.time.overmorrow core.phrase
+    frame=false
+    doc="Two days after today (+2)."
+    alt=the_day_after_tomorrow
+    alt=day_after_tomorrow
+
+@phrase.lang.time.ereyesterday core.phrase
+    frame=false
+    doc="Two days before today (-2)."
+    alt=the_day_before_yesterday
+    alt=day_before_yesterday
+
+@phrase.lang.time.later core.phrase
+    frame=false
+    doc="Words that count forward from a day, a month, a season or a time of the clock (3 days later, the day after Monday, 2 hours from now, monday then what day)."
+    alt=later
+    alt=from_now
+    alt=on_from
+    alt=past
+    alt=following
+    alt=follows
+    alt=follow
+    alt=next
+    alt=then
+    alt=forward
+    alt=ahead
+    alt=comes_after
+
+@phrase.lang.time.earlier core.phrase
+    frame=false
+    doc="Words that count back from a day, a month, a season or a time of the clock (5 days ago, the month before May, count back 5 days)."
+    alt=ago
+    alt=earlier
+    alt=back
+    alt=previous
+    alt=prior
+    alt=last
+    alt=comes_before
+
+@phrase.lang.time.until core.phrase
+    frame=false
+    doc="Words of a span between two moments (how many days until Saturday, from Monday to Friday, Friday is how many days away)."
+    alt=until
+    alt=till
+    alt=til
+    alt=to
+    alt=away
+    alt=between
+    alt=from
+    alt=gap
+    alt=countdown
+    alt=left
+    alt=to_go
+
+@phrase.lang.time.count core.phrase
+    frame=false
+    doc="Words that ask for a number of days, hours or minutes (how many, how long, count the hours)."
+    alt=how_many
+    alt=how_long
+    alt=hw_many
+    alt=count
+    alt=number_of
+    alt=length
+    alt=long
+
+@phrase.lang.time.list core.phrase
+    frame=false
+    doc="Words that ask for the members of a cycle or a span (name the months of spring, which days are the weekend)."
+    alt=name
+    alt=list
+    alt=which
+    alt=what
+    alt=what_are
+    alt=tell_me
+    alt=all
+
+@phrase.lang.time.clock core.phrase
+    frame=false
+    doc="Words of the clock that a question about a time of day says (what time will it be, the clock says, 3 o'clock)."
+    alt=time
+    alt=clock
+    alt=o'clock
+    alt=oclock
+    alt=o_clock
+
+@phrase.lang.time.glue core.phrase
+    frame=false
+    doc="Words a question about the calendar or the clock says around its parts that tell nothing by themselves (what day will it be, if it is Monday, do you know the time). The reader of time.calendar passes over them."
+    alt=be
+    alt=it
+    alt=its
+    alt=it's
+    alt=we
+    alt=we_re
+    alt=if
+    alt=when
+    alt=there
+    alt=come
+    alt=comes
+    alt=go
+    alt=say
+    alt=says
+    alt=show
+    alt=shows
+    alt=reads
+    alt=now
+    alt=exactly
+    alt=right
+    alt=just
+    alt=again
+    alt=so
+    alt=and
+    alt=or
+    alt=know
+    alt=tell
+    alt=want
+    alt=wonder
+    alt=make
+    alt=makes
+    alt=got
+    alt=get
+    alt=equal
+    alt=total
+    alt=in_total
+    alt=u
+    alt=r
+    alt=ok
+    alt=okay
+    alt=hey
+    alt=btw
+    alt=fyi
+    alt=steps
+    alt=step
+    alt=skip
+    alt=right_after
+    alt=right_before
+    alt=equals
+    alt=many
+    alt=much
+    alt=more
+    alt=whats
+    alt=pls
+    alt=plz
+    alt=please
+    alt=thanks
+    alt=ty

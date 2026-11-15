@@ -1,0 +1,17 @@
+@op.time.calendar.set core.operation
+    impl=set
+    semantics=action
+    action=time.set
+    doc="A statement of the catalog's time frames (K7): today's weekday, the date, the month, the season, or the time the clock shows (an hour, minutes, a clock phrase of k.time); an hour the clock does not have is refused."
+
+@op.time.calendar.ask core.operation
+    impl=ask
+    semantics=action
+    action=time.ask
+    doc="A question of the catalog's time frames (K7): what day, date, month or time it is (stated in the dialogue, else the host's clock)."
+
+@op.time.calendar.read core.operation
+    impl=read
+    semantics=action
+    action=time.read
+    doc="A sentence about the calendar or the clock read whole by the world's reader: a day, month or season n steps after or before another or today (the library's cycleAdd), the days between two days (cycleDiff), the season of a month, the months of a season, the weekend, the days of a month, units of time in units of time (k.time durations), the time n hours or minutes after or before a time, the hours between two times (readClock, writeClock)."
