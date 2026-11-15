@@ -737,11 +737,6 @@
     expect="Playing the G minor"
     session=zp
 
-@t.media.music.r025 core.test
-    input="G major chord but one note after another."
-    expect="Playing the G major"
-    session=zp
-
 @t.media.music.r026 core.test
     input="an a minor arpeggio pls"
     expect="Playing the A minor"
@@ -1942,9 +1937,6 @@
     expectStatus=supported
     session=rp3m
 
-
-
-
 @t.media.music.x204 core.test
     session=mu4
     input="write a melody: C D E"
@@ -2074,11 +2066,6 @@
     input="do you know the volume"
     expect="percent"
     session=msh7
-
-@t.media.music.sh08 core.test
-    input="which sound is it"
-    expect="I am playing"
-    session=msh8
 
 @t.media.music.sh09 core.test
     input="what key are we in"

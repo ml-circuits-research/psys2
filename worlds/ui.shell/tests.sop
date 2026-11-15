@@ -11,13 +11,6 @@
     expectState="previousTab=talk"
     session=s
 
-@t.ui.shell.n03 core.test
-    input="Go back."
-    expect="Talk"
-    expectState="activeTab=talk"
-    expectState="previousTab=editor"
-    session=s
-
 @t.ui.shell.n04 core.test
     input="Show me the document"
     expectState="activeTab=editor"

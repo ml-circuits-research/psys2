@@ -265,7 +265,6 @@
     example="What is the number of apples Tom has?"
 
 @pat.kids.arith.q.has core.pattern
-    canonical="Does Tom have any apples?"
     match="[does|do|did] {who:agent} have [any|a|an|some]? {item:lex.kids.arith.items}"
     emit="@{_} core.question type=kids.arith.has seek=answer where.owner={who} where.item={item}"
     kind=question
@@ -316,7 +315,6 @@
     example="What is the total number of apples?"
 
 @pat.kids.arith.q.total.altog core.pattern
-    canonical="How many apples in total?"
     match="how_many {item:lex.kids.arith.items} [altogether|in_total|in_all] [are_there]?"
     emit="@{_} core.question type=kids.arith.total seek=count where.item={item}"
     kind=question
@@ -1777,7 +1775,7 @@
     emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
     priority=10
     skip=short
-    example="How many apples does Tom have?"
+    example="How many apples does Tom have left?"
 
 @pat.kids.arith.leave.n core.pattern
     match="{who:lastagent} {n:number} [of_them|of_those|of_these|of_the_them]? [$kids.arith.leaves] [away|off|out|home|outside] {item:recent(lex.kids.arith.items,who)}"

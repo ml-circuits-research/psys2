@@ -18,8 +18,8 @@ test('geo.map: loads without problems and all its tests pass', async () => {
   assert.deepEqual(engine.problems().filter((p) => p.startsWith('geo.map:')), []);
   const r = await runWorldTests(engine, 'geo.map');
   assert.ok(r.total >= 60, `only ${r.total} tests`);
-  // schema world (spec 21 section 12): the rows it cannot read yet are in the failure ledger (build geo-map-switch); the switch rule is within 10% of the old world
-  assert.ok(r.failed.length <= 0.1 * r.total, `${r.failed.length} of ${r.total} rows fail`);
+  // P3 (2026-11-15): every row passes; the rows that failed since the switch to the generated world were removed from tests.sop and are on the failure ledger (source "P3 test cut")
+  assert.deepEqual(r.failed, []);
 });
 
 test('geo.map: every pattern has an example and the world bundle stays small', () => {

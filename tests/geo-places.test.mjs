@@ -22,7 +22,8 @@ test('the shared fact parser reads keys with digits (code2)', () => {
 });
 
 test('the map reads its collections through its typed needs and builds the index synchronously', async () => {
-  assert.equal(buildIndex(facts), null, 'nothing is loaded before the host settles the needs');
+  // ported (geo.map switch, spec 21 section 12): the bundled offline places subset (src/knowledge/bundled-geo.mjs) is read before the needs settle, so the index is
+  // not null at the start any more; the needs then complete it
   const needs = needsOf({ id: 'geo.map', wires: parse(fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '../worlds/geo.map/world.sop'), 'utf8')).wires });
   assert.equal(needs.length, 4, 'the map declares its four collections as typed needs');
   for (const n of needs) await facts.load(n);

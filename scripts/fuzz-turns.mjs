@@ -54,7 +54,7 @@ export function collectMessages() {
   const E = join(REPO, 'training/eval');
   const out = [];
   for (const c of readJsonl(join(E, 'operational.jsonl'))) out.push({ text: c.message, tab: c.tab, init: c.init, src: 'operational' });
-  for (const d of readJsonl(join(E, 'dialogues.jsonl'))) for (const t of d.turns ?? []) out.push({ text: t.message, tab: t.tab ?? d.tab, init: d.init, src: 'dialogues' });
+  for (const d of readJsonl(join(E, 'dialogues.jsonl')).filter((x) => !x.retired)) for (const t of d.turns ?? []) out.push({ text: t.message, tab: t.tab ?? d.tab, init: d.init, src: 'dialogues' });
   for (const c of readJsonl(join(E, 'loose-words.jsonl'))) out.push({ text: c.message, tab: c.tab, src: 'loose' });
   if (existsSync(join(E, 'typos'))) for (const f of readdirSync(join(E, 'typos'))) for (const c of readJsonl(join(E, 'typos', f))) out.push({ text: c.typo ?? c.original, tab: c.tab, src: 'typos' });
   for (const f of readdirSync(E).filter((x) => /^real-dialogue.*\.txt$/.test(x))) for (const l of readFileSync(join(E, f), 'utf8').split('\n')) if (l.trim()) out.push({ text: l.trim(), tab: null, src: 'real' });

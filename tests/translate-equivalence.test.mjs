@@ -8,6 +8,7 @@ import { translate } from '../src/translate/index.mjs';
 import { sampled } from './helpers.mjs';
 
 // [English example from a world pattern, natural Romanian twin]
+// P3 (2026-11-15): 53 twins of the guessing game, hangman and tic-tac-toe were deleted with ADR-010.
 const TWINS = [
   ['Hello!', 'Bună!'],
   ['What is your name?', 'Cum te cheamă?'],
@@ -161,43 +162,6 @@ const TWINS = [
   ['Turn my shopping list into a document.', 'Transformă lista mea de cumpărături într-un document.'],
   ['Write a report about sea animals.', 'Scrie un raport despre animalele marine.'],
   ['Make a document about farm animals.', 'Fă un document despre animalele de la fermă.'],
-  ['Yes.', 'Da.'],
-  ['No.', 'Nu.'],
-  ['I don\'t know.', 'Nu știu.'],
-  ['Not sure.', 'Nu sunt sigur.'],
-  ['Maybe.', 'Poate.'],
-  ['Sometimes.', 'Uneori.'],
-  ['I am thinking of an animal.', 'Mă gândesc la un animal.'],
-  ['Guess my animal.', 'Ghicește animalul meu.'],
-  ['It was a zebra.', 'A fost o zebră.'],
-  ['Why did you ask that?', 'De ce ai întrebat asta?'],
-  ['Which animals are left?', 'Care animale au rămas?'],
-  ['How many questions have you asked?', 'Câte întrebări ai pus?'],
-  ['Repeat the question.', 'Repetă întrebarea.'],
-  ['Is there an E?', 'E o literă E?'],
-  ['Is there a letter R?', 'Există litera R?'],
-  ['Try S.', 'Încearcă S.'],
-  ['Does it have an A?', 'Are un A?'],
-  ['Is it an owl?', 'Este o bufniță?'],
-  ['I think it is a zebra.', 'Cred că este o zebră.'],
-  ['Start a new hangman game.', 'Începe un joc nou de spânzurătoarea.'],
-  ['How many guesses are left?', 'Câte încercări au rămas?'],
-  ['Show me the word.', 'Arată-mi cuvântul.'],
-  ['Center.', 'Centru.'],
-  ['Top left.', 'Colțul din stânga sus.'],
-  ['Play the bottom right corner.', 'Joacă în colțul din dreapta jos.'],
-  ['Middle row left.', 'Rândul din mijloc stânga.'],
-  ['I play A1.', 'Joc A1.'],
-  ['Row 2 column 3.', 'Rândul 2 coloana 3.'],
-  ['Start a new tic tac toe game.', 'Începe un joc nou de X și 0.'],
-  ['Clear the board.', 'Golește tabla.'],
-  ['Let me go first.', 'Lasă-mă să încep primul.'],
-  ['You go first.', 'Începe tu primul.'],
-  ['Who goes first?', 'Cine începe primul?'],
-  ['Who is winning?', 'Cine câștigă?'],
-  ['Describe the board.', 'Descrie tabla.'],
-  ['Make it hard.', 'Fă-l dificil.'],
-  ['Where should I play?', 'Unde ar trebui să joc?'],
   ['How many sides does a hexagon have?', 'Câte laturi are un hexagon?'],
   ['How many corners has a square?', 'Câte colțuri are un pătrat?'],
   ['Which shape has 3 sides?', 'Care formă are 3 laturi?'],
@@ -290,12 +254,7 @@ const TWINS = [
   ['What do you look like?', 'Cum arăți?'],
   ['Open the editor.', 'Deschide editorul.'],
   ['Show me the robot.', 'Arată-mi robotul.'],
-  ['Go to the hangman tab.', 'Mergi la fila de spânzurătoarea.'],
-  ['Let\'s play tic tac toe.', 'Hai să jucăm X și 0.'],
-  ['Play hangman.', 'Joacă spânzurătoarea.'],
-  ['Can we play twenty questions?', 'Putem juca douăzeci de întrebări?'],
   ['Let\'s play a game.', 'Hai să jucăm un joc.'],
-  ['I want to play.', 'Vreau să joc.'],
   ['Go back.', 'Întoarce-te.'],
   ['Which tab am I on?', 'Pe ce filă sunt?'],
   ['Where am I?', 'Unde sunt?'],
@@ -316,9 +275,7 @@ const TWINS = [
   ['Speak quickly.', 'Vorbește repede.'],
   ['Switch to Romanian.', 'Treci la română.'],
   ['Change the language to Romanian.', 'Schimbă limba în română.'],
-  ['New game.', 'Joc nou.'],
   ['Play again.', 'Joacă din nou.'],
-  ['I give up.', 'Renunț.'],
   ['Give me a hint.', 'Dă-mi un indiciu.'],
   ['Take milk off my shopping list.', 'Scoate laptele de pe lista mea de cumpărături.'],
   ['Cross milk off my shopping list.', 'Taie laptele de pe lista mea de cumpărături.'],
@@ -363,15 +320,8 @@ const TWINS = [
   ['What is the document called?', 'Cum se numește documentul?'],
   ['What does the first paragraph say?', 'Ce spune primul paragraf?'],
   ['Make a document from my shopping list.', 'Fă un document din lista mea de cumpărături.'],
-  ['It does.', 'Da, are.'],
-  ['It is not.', 'Nu este.'],
-  ['I was thinking of a giraffe.', 'Mă gândeam la o girafă.'],
-  ['Let me go second.', 'Lasă-mă să încep al doilea.'],
-  ['I want to start.', 'Vreau să încep.'],
   ['What is on the board?', 'Ce este pe tablă?'],
-  ['Play perfectly.', 'Joacă perfect.'],
   ['Give me an easy game.', 'Dă-mi un joc ușor.'],
-  ['Where did you play?', 'Unde ai jucat?'],
   ['Does a pentagon have 5 sides?', 'Are un pentagon 5 laturi?'],
   ['Tell me about a circle.', 'Spune-mi despre un cerc.'],
   ['What shape is a stop sign?', 'Ce formă are un semn de stop?'],
@@ -420,8 +370,6 @@ const TWINS = [
   ['Speed up.', 'Accelerează.'],
   ['Speak English.', 'Vorbește engleza.'],
   ['Start over.', 'Începe din nou.'],
-  ['Quit the game.', 'Ieși din joc.'],
-  ['Hint please.', 'Un indiciu, te rog.'],
 ];
 
 const MIN_RATE = 0.9;
@@ -450,13 +398,19 @@ async function formalize(engine, text) {
 
 test('Romanian twins formalize to the same wires as their English examples', async () => {
   const engine = await createEngine({ loader: createFsLoader() });
+  // the Talk questions of the twins are frames over the catalog: without one their English does not parse and the twin cannot be judged (P3: the fixture catalog, as the other Talk tests)
+  const { createFacts } = await import('../src/knowledge/facts.mjs');
+  const { createKnowledgeSource } = await import('../src/loaders/knowledge-source.mjs');
+  engine.setKnowledge(createFacts({ source: createKnowledgeSource(new URL('./fixtures/catalog', import.meta.url).pathname) }));
   assert.ok(TWINS.length >= 250, 'at least 250 twins');
   const twins = sampled(TWINS, { key: ([en]) => en });
   const failures = [];
   let otherPattern = 0;
   const byWorld = new Map();
+  const englishUnread = [];   // P3: a twin whose English is not read measures nothing about the translation; those English sentences are on the failure ledger
   for (const [en, ro] of twins) {
     const e = await formalize(engine, en);
+    if (e.patterns.includes('UNPARSED')) { englishUnread.push(en); continue; }
     const world = (e.patterns[0] || '').split('.').slice(1, 3).join('.') || 'unknown';
     const t = translate(ro, { from: 'ro', to: 'en' });
     const r = await formalize(engine, t.text);
@@ -469,8 +423,9 @@ test('Romanian twins formalize to the same wires as their English examples', asy
     byWorld.set(world, stat);
     if (!ok) failures.push({ world, en, ro, translated: t.text, expected: e.patterns.join(','), got: r.patterns.join(',') });
   }
-  const rate = (twins.length - failures.length) / twins.length;
-  console.log(`equivalence: ${twins.length - failures.length}/${twins.length} = ${(rate * 100).toFixed(1)}%`);
+  const judged = twins.length - englishUnread.length;
+  const rate = (judged - failures.length) / judged;
+  console.log(`equivalence: ${judged - failures.length}/${judged} = ${(rate * 100).toFixed(1)}% (${englishUnread.length} twins whose English is not read are not judged: ${englishUnread.join(' | ')})`);
   console.log(`  (${otherPattern} twins reach identical wires through a different pattern id)`);
   for (const [w, s] of [...byWorld].sort()) console.log(`  ${w}: ${s.ok}/${s.total}`);
   for (const f of failures) console.log(`  FAIL [${f.world}] ${f.en} | ${f.ro} -> ${f.translated} (${f.expected} vs ${f.got})`);

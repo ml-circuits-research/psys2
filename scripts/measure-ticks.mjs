@@ -41,7 +41,7 @@ const run = async (set, s, msg, opts = {}) => {
   turns.push({ set, ticks: b.ticks, bySite: { ...b.bySite } });
 };
 for (const set of only) {
-  const cases = load(SETS[set]).slice(0, limit);
+  const cases = load(SETS[set]).filter((c) => !c.retired).slice(0, limit);   // retired dialogues (ADR-010) are kept in the file only
   for (const c of cases) {
     if (set === 'dialogues') {
       const s = newSession(c);

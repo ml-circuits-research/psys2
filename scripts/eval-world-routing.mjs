@@ -69,7 +69,7 @@ async function build(dir) {
   await single('knowledge', L('training/eval/knowledge-lookup-2026-11-13.jsonl').filter((c) => c.world), (c) => ({ id: c.id, message: c.message, world: c.world === 'conversation' ? 'talk' : c.world, tab: engine.set.get(c.tab)?.tab?.id ?? c.tab ?? null, setup: [] }));
   // dialogues: each turn, the session replayed to that point
   const frags = [];
-  for (const d of L('training/eval/dialogues.jsonl')) {
+  for (const d of L('training/eval/dialogues.jsonl').filter((x) => !x.retired)) {
     const s = rulesSession(engine, d.tab);
     const said = [];
     for (const [k, t] of d.turns.entries()) {

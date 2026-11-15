@@ -170,14 +170,17 @@ export class Astra {
    * (world -> string | undefined), `moves` the typed moves of the turn. Returns the act record, or null when nothing was attributed.
    */
   afterTurn({ msgId, text = '', changed = [], before = {}, tab = null, moves = [] } = {}) {
-    const worlds = changed.filter((w) => !USER_SCOPE.has(w) && this.binding.get(w) !== undefined);
+    // worlds with a tab first: a shared module without a tab (session.things, written by every view) joins the discussion of the tab world
+    // the same turn changed, instead of opening a discussion of its own on that tab
+    const worlds = changed.filter((w) => !USER_SCOPE.has(w) && this.binding.get(w) !== undefined)
+      .map((w, k) => ({ w, k, tab: this.tabOf(w) != null })).sort((a, b) => (b.tab - a.tab) || (a.k - b.k)).map((x) => x.w);
     let disc = null;
     const beforeByInst = {};
     for (const w of worlds) {
       let inst = this.instances.get(this.live[w]);
       if (!inst) {
         const wt = this.tabOf(w);
-        const host = (wt != null ? this.discussion(this.tabs[wt]) : null)
+        const host = (wt != null ? this.discussion(this.tabs[wt]) : disc)
           ?? this.activeDiscussion()
           ?? this.createDiscussion({ world: w, tab: wt ?? tab, activate: false });
         // a world of another tab never lands in a discussion that is itself about a different tab: it gets its own

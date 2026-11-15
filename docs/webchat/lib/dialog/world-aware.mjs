@@ -18,7 +18,7 @@
 import { budget } from './budget.mjs?v=00bce6e369';
 import { editDistance } from '../formalizer/rules/normalize.mjs?v=4a3da2a627';
 import { foreignFragment } from './continuation.mjs?v=f43d1d841f';
-import { liveFromContext } from './meta-worlds.mjs?v=286870b7bc';
+import { liveFromContext } from './meta-worlds.mjs?v=0f80b31a5d';
 
 export const WORLD_AWARE_MODES = Object.freeze(['off', 'veto', 'choose', 'observe', 'veto-strict', 'choose-strict']);
 /** The default mode (user decision 2026-11-12): an unset option is `veto`; an explicit `off` turns the layer off. */
@@ -27,14 +27,9 @@ export const normalizeWorldAware = (v) => (WORLD_AWARE_MODES.includes(v) ? v : D
 /** `veto-strict` and `choose-strict` are `veto` and `choose` that also veto a partial reading (words of the message left out by the partial-understanding window). */
 export const baseMode = (m) => String(m ?? 'off').replace(/-strict$/, '');
 
-/** The reasons a reading can be vetoed. The default set is the one the measurements support (spec 16, section 6); `-strict` adds `words-partial`; `PSYS2_WA_KINDS` (a comma list) overrides for experiments. */
+/** The reasons a reading can be vetoed. The default set is the one the measurements support (spec 16, section 6); `-strict` adds `words-partial`. (The experiment switch PSYS2_WA_KINDS and its opt-in `library` kind were deleted in P6, spec 16 section 15.) */
 export const VETO_KINDS = Object.freeze(['no-referent', 'no-continuation', 'words-best-effort']);
-/** `library`: the library's own `veto(result)` on the reading (its reasons except `inconsistent` (the world's refusal, answered), `nothing` and `action-unavailable` (an action the operations carry out)). Not in the default set: opt in with `PSYS2_WA_KINDS`. */
-const kinds = (mode) => {
-  const e = globalThis.process?.env?.PSYS2_WA_KINDS;
-  if (e) return new Set(e.split(',').map((x) => x.trim()));
-  return new Set(/-strict$/.test(String(mode)) ? [...VETO_KINDS, 'words-partial'] : VETO_KINDS);
-};
+const kinds = (mode) => new Set(/-strict$/.test(String(mode)) ? [...VETO_KINDS, 'words-partial'] : VETO_KINDS);
 const NEAR = (w, text) => String(text ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu)?.some((x) => x !== w && x.length >= 3 && w.length >= 3 && editDistance(w, x) <= (w.length >= 6 ? 2 : 1)) ?? false;
 
 /** Words that may be left out of a message without changing what it asks for. Everything else counts as content (interrogatives and auxiliaries too: "is" turns a command into a question). */
@@ -136,15 +131,12 @@ export function vetoOf(wa, seg, ref, mode) {
     s.text += heldPart(seg.text, ref.missing);
     return { kind: 'no-referent', why: `the world has no ${ref.missing.map((m) => m.name).join(' or ')}`, say: s.text, status: 'missing', ...(ref.offer ? { offer: { rewrite: ref.offer, world: ref.world, question: s.question } } : {}) };
   }
-  if (k.has('library') && wa.libVeto?.some((x) => !LIB_KEEP.has(x))) { const why = wa.libVeto.filter((x) => !LIB_KEEP.has(x)); return { kind: 'library', why: `the library's veto: ${why.join(', ')}`, reasons: why }; }
   if (wa.left.length && wa.how === 'best-effort' && k.has('words-best-effort')) return { kind: 'words-best-effort', why: `the reading leaves out "${wa.left.join('", "')}"`, words: wa.left };
   if (wa.left.length && wa.how !== 'best-effort' && k.has('words-partial')) return { kind: 'words-partial', why: `the reading leaves out "${wa.left.join('", "')}"`, words: wa.left };
   return null;
 }
 
-/** The library's veto reasons that are not a veto for the host: the world's own refusal (answered, with its reason), no reading, and an action that the matrix does not declare (the operations carry it out). */
-const LIB_KEEP = new Set(['inconsistent', 'nothing', 'action-unavailable']);
-const HOLDS = new Set(['no-referent', 'words-partial', 'words-best-effort', 'library']);
+const HOLDS = new Set(['no-referent', 'words-partial', 'words-best-effort']);
 
 /**
  * Review the readings of a message (segments as the formalizer or the dispatcher gave them) before anything is executed. Returns the segments, with a

@@ -30,7 +30,7 @@ const LIB_DIRS = ['soplang', 'legends', 'worlds', 'formalizer', 'interpreter', '
 const LIB_FILES = ['loaders/bundle-loader.mjs', 'loaders/knowledge-source.mjs', 'loaders/knowledge-cache.mjs'];
 const WORLD_TEXT = /\.(sop|json|txt|md)$/;
 // Files the browser never reads (the loader treats a missing tests.sop as empty; coverage.md is a human catalogue): left out of worlds/index.json to keep it small (L10).
-// describe.sop (core.describe, E3/DESCRIBE-ALL) is read in full only with PSYS_GEN_PATTERNS in Node tools; the webchat never generates patterns, so only its slot= declarations are shipped (below).
+// describe.sop (core.describe, E3/DESCRIBE-ALL) is read in full only by the reader route (PSYS2_READER) in Node tools; the webchat ships only its slot= declarations (below).
 const BROWSER_SKIP = new Set(['tests.sop', 'coverage.md', 'describe.sop']);
 
 const exists = (p) => stat(p).then(() => true, () => false);
