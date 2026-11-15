@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=bc1bcb05d5';
+import { composeReply, sayOf } from './composed-reply.mjs?v=6a0b147306';
 import { reviewForeign } from './foreign-reading.mjs?v=79d8decc9c';
 import { installTextGen } from './textgen.mjs?v=a8831e42a2';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=ff05a8582c';
@@ -27,7 +27,7 @@ import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=36494dd717'
 import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=f0ba8543a7';
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=e8977fbdec';
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=fde35e1fb8';
+import { langRoNow } from '../translate/frames-ro.mjs?v=ee68988d92';
 import { repairInContext } from '../translate/source-repair.mjs?v=e721161854';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=ff05a8582c';
 import { lexIndex } from '../worlds/lexicon.mjs?v=f0499f971c';
@@ -41,7 +41,7 @@ import { attachValues } from '../knowledge/values.mjs?v=0d60c4bf76';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3ebe6cdc98';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f39042bd20';
 import { Discourse } from './discourse.mjs?v=422ad5cc94';
-import { Dialogue } from './dialogue.mjs?v=66af0cba80';
+import { Dialogue } from './dialogue.mjs?v=22f85b8c36';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=1e9911155e';
 import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=bc80c9df4f';
@@ -360,7 +360,7 @@ import { withSubject, polishReply } from '../translate/register.mjs?v=45588e0a13
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=80e9d07ff4';
 import { intentStep, weakReading, cutWorld } from './intent.mjs?v=5e4cf030ab';
 import { knownEnglishWord } from '../translate/en-ro.mjs?v=cbd133aecd';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=2c4c9ffd63';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=efbf1c3ac3';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1965,7 +1965,7 @@ export class DialogSession {
       rd.trimTimeline(tabWorld);
       rd.record(tabWorld, { request: { ...plainRequest(req), act: plan.act ?? req.act }, flat: { ...flat, target: req.target ?? flat.target },   /* the act planned: a make in the change sense is a change */ result: run.result ? { count: run.result.count, kinds: run.result.kinds, links: run.result.links, things: run.result.things ?? [] } : null, seed, previous: lastRec?.request ?? null, previousSeed: lastRec?.seed ?? null, via: 'tool', turn: this._msg });
     }
-    const status = run?.ok && !run.same ? 'supported' : 'unsupported';
+    const status = run?.ok && !run.same ? 'supported' : [run?.failed, ...(run?.failed?.because ?? []), ...(plan?.replies ?? [])].some((x) => /missing/.test(String(x?.code ?? x?.reply ?? x?.name ?? ''))) ? 'missing' : 'unsupported';   // a value the act needs and nobody said ("move the fish": where?) is missing, as the readers' answers say it
     r.trace.request = { ...flat, revised: replace ? (req.facts ?? null) : null, plan: { roles: plan.roles, assumed: plan.assumed, notHonoured: plan.notHonoured, steps: plan.steps?.length ?? 0 }, tool: { calls: (run?.calls ?? []).map((c) => ({ op: c.op, args: c.args })), assumed: run?.assumed ?? [], failed: run?.failed ?? null, step: run?.step ?? null } };
     if (Array.isArray(r.statuses)) r.statuses = [status];
     if (Array.isArray(r.answers) && !r.answers.length) r.answers.push({ id: null, to: `door.${tabWorld}`, kind: 'action', status, value: null, text: r.text, via: 'door', sentence: english });

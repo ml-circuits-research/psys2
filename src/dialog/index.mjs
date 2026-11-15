@@ -1965,7 +1965,7 @@ export class DialogSession {
       rd.trimTimeline(tabWorld);
       rd.record(tabWorld, { request: { ...plainRequest(req), act: plan.act ?? req.act }, flat: { ...flat, target: req.target ?? flat.target },   /* the act planned: a make in the change sense is a change */ result: run.result ? { count: run.result.count, kinds: run.result.kinds, links: run.result.links, things: run.result.things ?? [] } : null, seed, previous: lastRec?.request ?? null, previousSeed: lastRec?.seed ?? null, via: 'tool', turn: this._msg });
     }
-    const status = run?.ok && !run.same ? 'supported' : 'unsupported';
+    const status = run?.ok && !run.same ? 'supported' : [run?.failed, ...(run?.failed?.because ?? []), ...(plan?.replies ?? [])].some((x) => /missing/.test(String(x?.code ?? x?.reply ?? x?.name ?? ''))) ? 'missing' : 'unsupported';   // a value the act needs and nobody said ("move the fish": where?) is missing, as the readers' answers say it
     r.trace.request = { ...flat, revised: replace ? (req.facts ?? null) : null, plan: { roles: plan.roles, assumed: plan.assumed, notHonoured: plan.notHonoured, steps: plan.steps?.length ?? 0 }, tool: { calls: (run?.calls ?? []).map((c) => ({ op: c.op, args: c.args })), assumed: run?.assumed ?? [], failed: run?.failed ?? null, step: run?.step ?? null } };
     if (Array.isArray(r.statuses)) r.statuses = [status];
     if (Array.isArray(r.answers) && !r.answers.length) r.answers.push({ id: null, to: `door.${tabWorld}`, kind: 'action', status, value: null, text: r.text, via: 'door', sentence: english });

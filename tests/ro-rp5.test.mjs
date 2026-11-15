@@ -80,7 +80,8 @@ test('RP5b: every tab opens by its Romanian name and the voice variants, with a 
 
 test('RP5b: missing-place prompt and chart help are Romanian', async () => {   // the tic-tac-toe start was deleted with ADR-010 (P3)
   const where = await run('draw', ['desenează pește', 'mută peștele']);
-  assert.match(where.r.text, /^Unde ar trebui să meargă\? Poți spune, de exemplu, „mută copacul la stânga”/);
+  assert.match(where.r.text, /^(?:Nu s-a schimbat nimic\. )?Unde ar trebui să meargă\? Poți spune, de exemplu, „mută copacul la stânga”/);   // the door says the reply facts of the run: nothing changed, then the value it needs (refused.missing_value.place)
+  assert.deepEqual(where.status, ['missing']);
   const chart = await rules.translate('I could not find numbers in "x". Say it like this: "make a chart: apples 5, pears 3, plums 8".', { from: 'en', to: 'ro' });
   assert.equal(chart.text, 'Nu am găsit numere în „x”. Spune-o așa: „fă un grafic: mere 5, pere 3, prune 8”.');
 });
