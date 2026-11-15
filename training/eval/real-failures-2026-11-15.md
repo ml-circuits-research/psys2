@@ -1,12 +1,12 @@
 # REAL failures by cause (2026-11-15)
 
-Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit 0966924e0a5b; seed 20261115; build 7becef4e, tree 20f9288aa318a591), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
+Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit 0966924e0a5b; seed 20261115; build 9cdd878a, tree 6ccce28a607df25f), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
 
 Headline (in scope, judged): 131/207 right (partly 2, wrong 74); 46 turns of retired records skipped. Diagnostic, rules formalizer only: 160/207.
 
 Caveat: Romanian turns are replayed with the rules translator only (no browser Machine Translation in node: --bergamot runs the on-device model), so part of the Romanian causes is the missing translation backend, not the reader. Lazy world loading is not replayed (every world is loaded, as `?psys2lazy=0`).
 
-Failing turns: matrix 378, ops 378 (0 fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): 1.
+Failing turns: matrix 377, ops 377 (0 fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): 1.
 
 | # | cause | turns | both | examples |
 | --- | --- | ---: | ---: | --- |
@@ -18,8 +18,8 @@ Failing turns: matrix 378, ops 378 (0 fail on ops only). Ledger rows flagged rea
 | 6 | bare word or two-word fragment not read | 23 | 23 | "mcdavatara human" (robot); "no" (guess); "yes" (guess) |
 | 7 | refused: the request names something the world does not support | 17 | 17 | "add a header, two chapters and a paragraph" (editor); "add text" (editor); "add a new paragraph" (editor) |
 | 8 | continuation / correction / why-question | 15 | 15 | "dar lasa lacul" (draw); "nu inlocui lacul, deasupra, ai loc" (draw); "ar trebui sa schimbi aceste voila si ta-da ca faci numai pro" (draw) |
-| 9 | amount / relation / set distribution | 11 | 11 | "muta si mai la stinga" (draw); "fa niste iarba deauspa lacului" (draw); "deseneaza un copil pe leagan" (draw) |
-| 10 | judged wrong (state / answer expected is not there): dialogues:dlg.rp3 | 11 | 11 | "mcdavatara human" (robot); "tongue out" (robot); "add a header, two chapters and a paragraph" (editor) |
+| 9 | judged wrong (state / answer expected is not there): dialogues:dlg.rp3 | 11 | 11 | "mcdavatara human" (robot); "tongue out" (robot); "add a header, two chapters and a paragraph" (editor) |
+| 10 | amount / relation / set distribution | 10 | 10 | "muta si mai la stinga" (draw); "fa niste iarba deauspa lacului" (draw); "deseneaza un copil pe leagan" (draw) |
 | 11 | acted on a partly understood sentence | 9 | 9 | "Desenați un cerc roșu" (diagram); "conectează toate formele" (diagram); "paint Street New nodes" (diagram) |
 | 12 | fragment / list split | 8 | 8 | "fa-mu un desen cu un lac, o rata, o vila, nori, soare ,iarba" (draw); "un cer cu 5 nori" (draw); "deseneaza si un magar, dar sa nu zboare, pe iarba" (draw) |
 | 13 | judged wrong (state / answer expected is not there): dialogues:dlg.ellipsis1 | 6 | 6 | "draw a green house and a yellow one" (draw); "add a red circle and a blue one" (draw); "draw a tree" (draw) |
@@ -32,7 +32,7 @@ The headline's own failures (verdict wrong or partly), grouped by `judgedCause`:
 
 | # | cause | turns | wrong | partly | both | rows (examples first) |
 | --- | --- | ---: | ---: | ---: | ---: | --- |
-| 1 | diagram.sketch: acted; the state is not the expected one | 24 | 24 | 0 | 24 | r0024 "paint three new nodes" (diagram) -> "What should I change? Nothing in the diagram goes by that na"; r0551 "draw a red circle" (diagram) -> "I drew a circle."; also r0552, r0554, r0557, r0558, r0561, r0562, r0567, r0568, r0569, r0570, r0574, r0575, r0576, r0577, r0578, r0579, r0580, r0581, r0582, r0583, r0584, r0585 |
+| 1 | diagram.sketch: acted; the state is not the expected one | 24 | 24 | 0 | 24 | r0024 "paint three new nodes" (diagram) -> "There is nothing like that in the diagram."; r0551 "draw a red circle" (diagram) -> "I drew a circle."; also r0552, r0554, r0557, r0558, r0561, r0562, r0567, r0568, r0569, r0570, r0574, r0575, r0576, r0577, r0578, r0579, r0580, r0581, r0582, r0583, r0584, r0585 |
 | 2 | Romanian: art.draw: acted; the reply does not say what the check asks | 19 | 19 | 0 | 19 | r0038 "roteste crocodilul albastru la 30 de grade" (draw) -> "I did not understand "roteste", "30", "degrees" here."; r0039 "fa picioarele corocilului negre" (draw) -> "I did not understand "legs", "corocilului" here."; also r0040, r0041, r0052, r0054, r0055, r0063, r0064, r0066, r0074, r0078, r0085, r0092, r0098, r0099, r0113, r0115, r0122 |
 | 3 | art.draw: acted; the state is not the expected one | 7 | 7 | 0 | 7 | r0544 "draw 5 clouds and one sun" (draw) -> "I could not plan 5 clouds, one sun as you said, so I made no"; r0631 "draw a green house and a yellow one" (draw) -> "I drew a green house."; also r0632, r0633, r0634, r0635, r0636 |
 | 4 | art.draw: acted; the reply does not say what the check asks | 4 | 4 | 0 | 4 | r0142 "10 cars" (draw) -> "I did not understand that as something to do in the drawing."; r0143 "1000 cars" (draw) -> "I did not understand that as something to do in the drawing."; also r0545, r0546 |
