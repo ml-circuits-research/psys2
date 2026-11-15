@@ -27,6 +27,11 @@
 - New phrasing goes into `worlds/lang.common` (a `core.phrase` group) or a `core.shape`, never inline in a world's patterns (ADR-007).
 - Commits go directly to `main` (no pull requests for now). Small, descriptive commits.
 
+## Generic or listed (owner, 2026-11-15)
+- A case is won only by a generic piece: a world declaration, knowledge, language-world facts, a composition of worlds, a planning or reasoning method, a library mechanism. Never a pattern, special case, sentence or world id in host code to make a case pass. Otherwise the case stays, honestly, on the list of cases waiting for a generic solution ("needs <generic piece>").
+- Acceptance in two phases: during the move from patches to generic mechanisms, losing cases won only by patches does not count; once the patches are gone, a loss needs very good arguments and is accepted only for a large gain (about 10 real turns won per 1 lost), each loss listed honestly.
+- Use the agent skills of the sopworld library (`../soplang-words-lib/skills/`, see its README): `author-live-world` before writing or changing a world, `propose-generic-method` before building a new mechanism, `improve-world-from-failures` / `consolidate` for batches of real failures, the honest-list format in `skills/HONEST-LIST.md`.
+
 ## Data principle: industrial research, not fundamental research
 - We never have too much training data. Good data is never deleted or held back from training to keep an evaluation pure.
 - Overlap between training and test data is acceptable: when a test set gets contaminated, we generate a fresh test set (as with `training/paraphrases/heldout/`) instead of removing training data.
