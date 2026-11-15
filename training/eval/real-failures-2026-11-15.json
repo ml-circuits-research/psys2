@@ -93,17 +93,17 @@
   "ops": {
    "turns": 579,
    "judged": 181,
-   "right": 123,
-   "partly": 12,
-   "wrong": 46,
-   "open": 38,
-   "changed": 28,
+   "right": 130,
+   "partly": 13,
+   "wrong": 38,
+   "open": 13,
+   "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 302,
+    "executed": 330,
     "refused": 3,
-    "asked": 10,
-    "not_understood": 195,
+    "asked": 8,
+    "not_understood": 169,
     "other_world": 69
    },
    "by_source": {
@@ -115,7 +115,7 @@
     "owner-log-2026-11-13b": {
      "turns": 63,
      "judged": 11,
-     "right": 5
+     "right": 11
     },
     "owner-log-2026-11-13c": {
      "turns": 24,
@@ -155,7 +155,7 @@
     "real dialogues": {
      "turns": 105,
      "judged": 105,
-     "right": 69
+     "right": 70
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -186,8 +186,8 @@
   "tree": "b246a0839e0404e9"
  },
  "failing_matrix": 252,
- "failing_ops": 281,
- "ops_only": 39,
+ "failing_ops": 252,
+ "ops_only": 0,
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
@@ -219,7 +219,7 @@
   {
    "cause": "bare word or two-word fragment not read",
    "count": 33,
-   "both_reasoners": 31,
+   "both_reasoners": 33,
    "examples": [
     {
      "text": "mcdavatara human",
@@ -246,7 +246,7 @@
   {
    "cause": "translation residue / wrong sense / source typo",
    "count": 30,
-   "both_reasoners": 27,
+   "both_reasoners": 30,
    "examples": [
     {
      "text": "she knows what their grandma could trade charcoal Chicago",
@@ -273,7 +273,7 @@
   {
    "cause": "sentence not read by any world (no cause key)",
    "count": 29,
-   "both_reasoners": 25,
+   "both_reasoners": 29,
    "examples": [
     {
      "text": "now be a human",
@@ -327,7 +327,7 @@
   {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
    "count": 16,
-   "both_reasoners": 15,
+   "both_reasoners": 16,
    "examples": [
     {
      "text": "make the avatar an emoji",
