@@ -2050,6 +2050,31 @@
     tabPriority=27
     example="Write an essay about volcanoes of 400 words."
 
+@pat.docs.editor.compose.sections.size core.pattern
+    match="[can_you|could_you]? [write|compose|create|make] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.editor.doctypes} [about|on] {topic:words} [with|of]? {c:number} [chapters|sections|slides] [about|of|around|roughly]? {w:number} words"
+    emit="@{_} core.request action=doc.compose arg.type={k} arg.topic=\"{topic}\" arg.chapters={c} arg.words={w}"
+    kind=request
+    priority=21
+    tabPriority=29
+    example="Make a presentation about the moon with 5 sections, about 300 words."
+
+@pat.docs.editor.compose.long core.pattern
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.editor.doctypes} [about|on] [the_following|this_topic|this] {topic:rest}"
+    emit="@{_} core.request action=doc.compose arg.type={k} arg.topic=\"{topic}\""
+    kind=request
+    priority=23
+    tabPriority=31
+    example="Write an essay about the following: penguins live on the ice and in the sea. I want to know what they eat."
+    doc="A long topic (owner request 2026-11-15): the rest of the message is the topic, read by the composer for the things the knowledge knows (spec 26, Size and long topics)."
+
+@pat.docs.editor.compose.long.size core.pattern
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.editor.doctypes} [of|with|about|around|roughly] {w:number} words [about|on] [the_following|this_topic|this] {topic:rest}"
+    emit="@{_} core.request action=doc.compose arg.type={k} arg.topic=\"{topic}\" arg.words={w}"
+    kind=request
+    priority=24
+    tabPriority=32
+    example="Write an essay of 2000 words about the following: penguins live on the ice and in the sea. I want to know what they eat."
+
 @pat.docs.editor.compose.type core.pattern
     match="[can_you|could_you]? [write|compose|create|make] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.editor.doctypes}"
     emit="@{_} core.request action=doc.compose arg.type={k}"

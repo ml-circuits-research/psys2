@@ -137,5 +137,7 @@
 .pe-compose[hidden] { display: none; }
 .pe-field { display: grid; gap: 2px; font-size: 12px; color: #444746; }
 .pe-field input, .pe-field select { font: inherit; font-size: 13px; padding: 5px 8px; border-radius: 8px; border: 1px solid #c4c7c5; background: #fff; color: #1f1f1f; width: 9em; }
+.pe-field-wide { flex: 1 1 100%; }
+.pe-field textarea.pe-topic { font: inherit; font-size: 13px; padding: 6px 8px; border-radius: 8px; border: 1px solid #c4c7c5; background: #fff; color: #1f1f1f; width: 100%; box-sizing: border-box; min-height: 3.2em; max-height: 320px; resize: vertical; overflow-y: auto; line-height: 1.4; }
 .pe-gen { all: unset; cursor: pointer; padding: 7px 14px; border-radius: 16px; background: #0b57d0; color: #fff; font: 600 13px/1 system-ui, sans-serif; }
 .pe-gen-btn { padding: 0 10px; font-size: 13px; }

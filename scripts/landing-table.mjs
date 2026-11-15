@@ -75,7 +75,7 @@ async function actCount() {
 function generalLines() {
   const sec = read('docs/host-boundary.md').split(/\n## /).find((s) => s.startsWith('General lines still in PSys2')) ?? '';
   const num = (s) => { const m = /([\d,]+)/.exec(String(s)); return m ? Number(m[1].replace(/,/g, '')) : 0; };
-  const WORLDS = { acts: ['acts'], space: ['space'], 'session.things': ['session.things'], 'session.dialogue': ['session.dialogue'], 'common.sense': ['common.sense'], 'meta.worlds': ['meta.worlds'], 'plan.seating, plan.timeline': ['plan.seating', 'plan.timeline'] };
+  const WORLDS = { acts: ['acts'], space: ['space'], 'session.things': ['session.things'], 'session.dialogue': ['session.dialogue'], 'common.sense': ['common.sense'], 'meta.worlds': ['meta.worlds'] };
   const rows = [];
   let sop = 0, code = 0, gen = 0;
   for (const line of sec.split('\n')) {

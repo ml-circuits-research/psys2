@@ -14,8 +14,8 @@ const SESSION_WIDE = new Set(['session.things', 'session.dialogue', 'ui.shell'])
 const KIT_SET = { session: SESSION_WIDE };
 const kitStray = (changed, addressed) => changed.filter((w) => ![...(addressed.size ? addressed : [null])].some((owner) => turnScope(KIT_SET, owner)({ world: w })));
 const TURNS = [
-  ['draw', 'Draw something random'], ['draw', 'make the house red'], ['diagram', 'Draw a diagram in house form'], ['seating', 'add a table for 4'],
-  ['timeline', 'add an event called launch on monday'], ['draw', 'what is 2 plus 3'], ['talk', 'hello'], ['map', 'show Paris'],
+  ['draw', 'Draw something random'], ['draw', 'make the house red'], ['diagram', 'Draw a diagram in house form'],
+  ['editor', 'add a table'], ['draw', 'what is 2 plus 3'], ['talk', 'hello'], ['map', 'show Paris'],
   ['draw', 'show the house in the diagram'], ['chart', 'make a bar chart of 3 4 5'], ['diagram', 'Which shape is the largest?'],
 ];
 
@@ -37,10 +37,10 @@ test('a turn changes only the worlds it addresses (plus session.things, session.
       for (const w of views) assert.ok(addressed.has(w) || changed.includes(w) || SESSION_WIDE.has(w), `"${text}": a view effect for ${w}, which the turn did not touch`);
     }
   }
-  // the second oracle catches the owner's bug (a drawing turn that changed plan.seating), and lets the session worlds and a second addressed world through
-  assert.deepEqual(kitStray(['art.draw', 'plan.seating', 'session.things'], new Set(['art.draw'])), ['plan.seating']);
+  // the second oracle catches the owner's bug (a drawing turn that changed the seating plan, a world removed since, ADR-012), and lets the session worlds and a second addressed world through
+  assert.deepEqual(kitStray(['art.draw', 'data.charts', 'session.things'], new Set(['art.draw'])), ['data.charts']);
   assert.deepEqual(kitStray(['art.draw', 'diagram.sketch', 'ui.shell'], new Set(['art.draw', 'diagram.sketch'])), []);
-  assert.deepEqual(kitStray(['session.dialogue', 'plan.timeline'], new Set()), ['plan.timeline']);
+  assert.deepEqual(kitStray(['session.dialogue', 'geo.map'], new Set()), ['geo.map']);
 });
 
 // LAZY WORLDS (reviewer 2026-11-15 03:15 item 5; live owner check row 2): the page took its "before" snapshot while only the start worlds existed; the turn loaded the others,

@@ -36,7 +36,7 @@ test('ui.shell: nothing is told until something changes; a tab switch and the se
   assert.deepEqual([v.attrs.tab[0], v.attrs.prev[0], v.attrs.rate[0], v.attrs.lang[0]], ['editor', 'talk', '75', 'en']);
   const st = s.isession.state['ui.shell'];
   assert.deepEqual(st, { activeTab: 'editor', previousTab: 'talk', speaker: false, listening: false, handsFree: false, rate: 0.75, language: 'en' });
-  assert.equal(s.isession.rs.of('ui.shell').ofType('ui.shell.known').length > 8, true, 'the tabs of the manifests are in the knowledge base');
+  assert.equal(s.isession.rs.of('ui.shell').ofType('ui.shell.known').length > 6, true, 'the tabs of the manifests are in the knowledge base');
 });
 
 test('ui.shell: a tab that does not exist is refused by the rules with the reason (unknown argument, as the operation says it), the state does not change', async () => {

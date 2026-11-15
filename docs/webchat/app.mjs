@@ -37,8 +37,8 @@ import { snapshotState, describeChanges, turnBaseline, turnAfter } from './ui/st
 
 const HERE = new URL('.', import.meta.url);
 
-/** The order of the pages (owner, 2026-11-15; tab cut ADR-010): Drawing and Diagram first, the rest as listed; Documents is the editor (the phone menu lists Chat, then these). The avatar is not a tab: it is the icon in the input bar; Talk is not a page: its summary is a panel of the chat. */
-export const TAB_ORDER = ['draw', 'diagram', 'map', 'charts', 'seating', 'timeline', 'editor', 'music'];
+/** The order of the pages (owner, 2026-11-15; tab cuts ADR-010 and ADR-012): Drawing and Diagram first, the rest as listed; Documents is the editor (the phone menu lists Chat, then these). The avatar is not a tab: it is the icon in the input bar; Talk is not a page: its summary is a panel of the chat. */
+export const TAB_ORDER = ['draw', 'diagram', 'map', 'charts', 'editor', 'music'];
 export const TABS = [
   { id: 'editor', label: 'Documents', world: 'docs.editor', make: createEditor },
 ];

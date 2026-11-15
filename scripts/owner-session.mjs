@@ -66,6 +66,11 @@ export function judge(row, out) {
 
 const TAB_WORLD = { draw: 'art.draw', music: 'media.music', diagram: 'diagram.sketch', map: 'geo.map', charts: 'data.charts', editor: 'docs.editor' };
 const median = (xs) => { const s = [...xs].sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : null; };
+/** Class G: the turn times of a set of rows (median, p90, max in ms). */
+const timing = (rows) => { const s = rows.map((x) => x.ms).sort((a, b) => a - b); return s.length ? { median: s[Math.floor(s.length / 2)], p90: s[Math.min(s.length - 1, Math.floor(s.length * 0.9))], max: s.at(-1) } : null; };
+
+/** The stage times of a turn (reply.perf, src/formalizer/perf.mjs) over 5 ms, slowest first, and its busiest budget sites: where a slow turn spends its time. */
+const stagesOf = (p) => (p ? { total: p.total, stages: Object.fromEntries(Object.entries(p.stages ?? {}).filter(([, v]) => v.ms >= 1 || v.n > 0).sort((a, b) => b[1].ms - a[1].ms).map(([k, v]) => [k, `${v.n}x ${v.ms}`])), ticks: p.ticks ? Object.fromEntries(Object.entries(p.ticks.sites ?? {}).sort((a, b) => b[1] - a[1]).slice(0, 6)) : undefined } : null);
 
 async function main() {
   const checksFile = resolve(arg('checks', join(REPO, 'training/eval/owner-2026-11-15T0734-checks.jsonl')));
@@ -87,16 +92,26 @@ async function main() {
   const newSession = () => { const s = engine.createSession(sessionOptions(settings, { language: 'ro' })); s.fastPath = settings.fastPath === true; keepFor.session = s; return s; };
   const play = async (s, r) => {
     if (r.tab) s.setWorldState('ui.shell', { activeTab: r.tab });
+    // OWNER_PROBE=<turn> OWNER_PROBE_TEXTS=<json file of English sentences>: before that turn, each sentence is sent in English and undone (what the open world makes of a rewording)
+    if (process.env.OWNER_PROBE && process.env.OWNER_PROBE.split(',').includes(String(r.turn ?? r.id))) {
+      for (const e of JSON.parse(readFileSync(process.env.OWNER_PROBE_TEXTS, 'utf8'))) {
+        const snap = s.snapshot();
+        const u = await s._understands(e);
+        let rep = null; try { rep = await s.send(e, sendOptions(settings, { lang: 'en', language: 'en' }, createBudget())); } catch (err) { rep = { text: `error ${err.message}` }; }
+        console.error(`PROBE T${r.turn ?? r.id} issues=${u.issues} ${JSON.stringify(e)}\n   -> ${String(rep?.text ?? '').slice(0, 300)} ${JSON.stringify(rep?.statuses ?? [])} ${JSON.stringify((rep?.trace?.segments ?? []).map((x) => x.text))}`);
+        s.restore(snap);
+      }
+    }
     const before = s.state(), t0 = performance.now();
     let reply = null, error = null;
     try { reply = await s.send(r.text, sendOptions(settings, { lang: r.lang ?? 'ro' }, createBudget())); } catch (e) { error = e.message; }
     const ms = Math.round(performance.now() - t0);
-    if (process.env.OWNER_TRACE && String(r.turn ?? r.id) === process.env.OWNER_TRACE) console.error(JSON.stringify({ text: reply?.text, statuses: reply?.statuses, parts: reply?.parts, trace: { ...reply?.trace, budget: undefined } }, null, 1).slice(0, 12000));
+    if (process.env.OWNER_TRACE && process.env.OWNER_TRACE.split(",").includes(String(r.turn ?? r.id))) console.error(JSON.stringify({ text: reply?.text, statuses: reply?.statuses, parts: reply?.parts, trace: { ...reply?.trace, budget: undefined } }, null, 1).slice(0, Number(process.env.OWNER_TRACE_MAX ?? 12000)));
     const after = s.state();
     if (process.env.OWNER_STATE && String(r.turn ?? r.id) === process.env.OWNER_STATE) console.error(JSON.stringify(after[TAB_WORLD[r.tab]] ?? null).slice(0, 6000));
     const changed = JSON.stringify(visibleState(before)) !== JSON.stringify(visibleState(after));
     const content = contentChanged(Object.fromEntries(Object.entries(before).map(([k, v]) => [k, JSON.stringify(v)])), after);
-    return { r, error, out: { before, after, changed, content, ms, shown: reply?.text ?? '', english: reply?.trace?.replyEnglish ?? '', worlds: [...new Set((reply?.segments ?? []).map((x) => x.world ?? x.match?.worldId).filter(Boolean))], tabAfter: after['ui.shell']?.activeTab ?? null } };
+    return { r, error, out: { before, after, changed, content, ms, shown: reply?.text ?? '', english: reply?.trace?.replyEnglish ?? '', worlds: [...new Set((reply?.segments ?? []).map((x) => x.world ?? x.match?.worldId).filter(Boolean))], tabAfter: after['ui.shell']?.activeTab ?? null, perf: reply?.perf ?? null } };
   };
   for (const [key, turns] of sessions) {
     // `redraw`: a regex over the visible state after that line; the lines up to it are replayed with seeds 1, 2, ... in fresh sessions until the state matches (the owner's own
@@ -121,7 +136,7 @@ async function main() {
       const { after, before, ms } = out;
       const judged = r.expect && Object.keys(r.expect).length > 0;
       const bad = error ? [`error:${error}`] : judge(r, out);
-      const row = { set: r.set, context: !!r.context, id: r.turn ?? r.id, class: r.class ?? null, text: r.text, tab: r.tab, ms, judged, right: judged ? bad.length === 0 : null, invariant: invariantFailures(out), failing: bad, worlds: out.worlds, tabAfter: out.tabAfter, changed: out.changed, content: out.content, reply: out.shown.slice(0, 240), english: out.english.slice(0, 240) };
+      const row = { set: r.set, context: !!r.context, id: r.turn ?? r.id, class: r.class ?? null, text: r.text, tab: r.tab, ms, judged, right: judged ? bad.length === 0 : null, invariant: invariantFailures(out), failing: bad, worlds: out.worlds, tabAfter: out.tabAfter, changed: out.changed, content: out.content, reply: out.shown.slice(0, 240), english: out.english.slice(0, 240), stages: stagesOf(out.perf) };
       rows.push(row);
       if (dump) {
         const ch = Object.keys(after).filter((w) => JSON.stringify(visibleState({ [w]: before[w] })) !== JSON.stringify(visibleState({ [w]: after[w] })));
@@ -134,9 +149,10 @@ async function main() {
   const sess = rows.filter((x) => x.set === 'session' && x.judged), vars = rows.filter((x) => x.set === 'variant' && x.judged);
   const byClass = {};
   for (const v of vars) { const c = (byClass[v.class ?? '?'] ??= { right: 0, total: 0 }); c.total++; if (v.right) c.right++; }
+  for (const [k, c] of Object.entries(byClass)) c.ms = timing(rows.filter((x) => x.set === 'variant' && !x.context && (x.class ?? '?') === k));
   const summary = {
-    session: { right: sess.filter((x) => x.right).length, total: sess.length, medianMs: median(rows.filter((x) => x.set === 'session' && !x.context).map((x) => x.ms)), withheld: rows.filter((x) => x.set === 'session' && x.invariant.includes('withheld')).length, falseDone: rows.filter((x) => x.set === 'session' && x.invariant.includes('false-done')).length },
-    variants: { right: vars.filter((x) => x.right).length, total: vars.length, byClass, medianMs: median(rows.filter((x) => x.set === 'variant' && !x.context).map((x) => x.ms)) },
+    session: { right: sess.filter((x) => x.right).length, total: sess.length, medianMs: median(rows.filter((x) => x.set === 'session' && !x.context).map((x) => x.ms)), withheld: rows.filter((x) => x.set === 'session' && x.invariant.includes('withheld')).length, falseDone: rows.filter((x) => x.set === 'session' && x.invariant.includes('false-done')).length, ms: timing(rows.filter((x) => x.set === 'session' && !x.context)) },
+    variants: { right: vars.filter((x) => x.right).length, total: vars.length, byClass, medianMs: median(rows.filter((x) => x.set === 'variant' && !x.context).map((x) => x.ms)), ms: timing(rows.filter((x) => x.set === 'variant' && !x.context)) },
   };
   const file = join(REPO, `training/results/${name}${tag ? `-${tag}` : ''}.json`);
   mkdirSync(dirname(file), { recursive: true });

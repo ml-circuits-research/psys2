@@ -20,11 +20,21 @@ export const readHoleCases = (file = HOLES_FILE) => readFileSync(file, 'utf8').s
 
 export async function runHoleCases({ file = HOLES_FILE, only = null } = {}) {
   const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
+  // the cases of the seating plan run on the schema fixture test.seating (the real plan.seating was removed with its tab, ADR-012): an engine of the fixture and the worlds it imports
+  let fixture = null;
+  const fixtureEngine = async () => {
+    if (fixture) return fixture;
+    const IDS = ['core', 'lang.common', 'kids.common', 'ui.help', 'acts', 'test.seating'];
+    const loader = createFsLoader({ roots: [DEFAULT_ROOT, join(REPO, 'tests/fixtures/worlds')] }), list = loader.listWorlds.bind(loader);
+    loader.listWorlds = async () => (await list()).filter((id) => IDS.includes(id));
+    return (fixture = await createEngine({ loader }));
+  };
   const rows = [];
   for (const c of readHoleCases(file)) {
     if (only && !only.includes(c.hole) && !only.includes(c.id)) continue;
-    const s = engine.createSession(sessionOptions(settingsForMode('rules'), { language: 'en' }));
-    s.setWorldState('ui.shell', { activeTab: c.tab });
+    const e = String(c.world ?? '').startsWith('test.') ? await fixtureEngine() : engine;
+    const s = e.createSession(sessionOptions(settingsForMode('rules'), { language: 'en' }));
+    if (c.tab) s.setWorldState('ui.shell', { activeTab: c.tab });
     for (const m of c.setup ?? []) await s.send(m);
     const before = JSON.parse(JSON.stringify(s.state()));
     let reply = null, error = null;

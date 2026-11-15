@@ -71,13 +71,6 @@
     { "part": "templates.extra.sop", "verdict": "truly own" },
     { "part": "datagen.mjs", "verdict": "truly own" }
   ] },
-  "plan.seating": { "parts": [
-    { "part": "schema.host.sop", "verdict": "truly own", "note": "host acts (send, undo, redo, save, load), view words, the colour attribute (not in w.seating: asked of the knowledge repo); the rest of schema.sop is generated from w.seating 2" }
-  ] },
-  "plan.timeline": { "parts": [
-    { "part": "hooks.mjs", "verdict": "truly own", "note": "k.time position of an event named by a time of the calendar" },
-    { "part": "schema.host.sop", "verdict": "truly own", "note": "host acts, view words, more / less words of `at`; the rest of schema.sop is generated from w.timeline 2" }
-  ] },
   "talk": { "parts": [
     { "part": "cards.mjs", "verdict": "truly own", "note": "card drawing" },
     { "part": "records.mjs", "verdict": "truly own" },

@@ -115,7 +115,7 @@
     input="What day comes after Monday?"
     expectStatus=supported
     session=s10
-    given="ui.shell:activeTab=timeline"   # the Talk tab answers this from the catalog, which a test session does not load; the time words are read by the shell world
+    given="ui.shell:activeTab=charts"   # the Talk tab answers this from the catalog, which a test session does not load; the time words are read by the shell world
 
 @t.ui.shell.r03 core.test
     input="i want the editor"

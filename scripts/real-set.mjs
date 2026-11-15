@@ -118,14 +118,14 @@ function forbidThieves(r) {
 }
 
 // ---------------------------------------------------------------- removed tabs and worlds (ADR-010)
-/** The tabs and worlds ADR-010 removed, and the names a user or a reply gives them. */
+/** The tabs and worlds ADR-010 and ADR-012 removed, and the names a user or a reply gives them. */
 export const REMOVED = {
-  tabs: new Set(['chess', 'tictactoe', 'hangman', 'guess', 'profile', 'reader']),
-  worlds: /\b(?:games\.[\w.]+|user\.profile|docs\.reader)\b/,
+  tabs: new Set(['chess', 'tictactoe', 'hangman', 'guess', 'profile', 'reader', 'seating', 'timeline']),   // seating, timeline: ADR-012
+  worlds: /\b(?:games\.[\w.]+|user\.profile|docs\.reader|plan\.seating|plan\.timeline)\b/,
   names: /\b(?:hangman|tic[- ]?tac[- ]?toe|noughts and crosses|chess|guess the animal|profile)\b/i,
 };
 /** The surviving worlds with a tab (a forbid-only owner check must not be met by another tab's world). */
-const THIEVES = ['art.draw', 'media.music', 'diagram.sketch', 'geo.map', 'data.charts', 'plan.seating', 'plan.timeline', 'docs.editor'];
+const THIEVES = ['art.draw', 'media.music', 'diagram.sketch', 'geo.map', 'data.charts', 'docs.editor'];
 /** The world of a row's tab. */
 const TAB_WORLD = { draw: 'art.draw', drawing: 'art.draw', music: 'media.music', diagram: 'diagram.sketch', map: 'geo.map', charts: 'data.charts', editor: 'docs.editor', documents: 'docs.editor' };
 const tabWorldOfRow = (r) => TAB_WORLD[r.tab] ?? null;

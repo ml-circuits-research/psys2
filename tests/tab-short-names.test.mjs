@@ -16,7 +16,7 @@ for (const d of await readdir(DEFAULT_ROOT)) {
 }
 
 test('the manifests declare the tabs this test knows', () => {
-  for (const id of ['draw', 'map', 'charts', 'music', 'diagram', 'seating', 'timeline']) assert.ok(tabs.some((t) => t.id === id), id);
+  for (const id of ['draw', 'map', 'charts', 'music', 'diagram']) assert.ok(tabs.some((t) => t.id === id), id);
 });
 
 for (const verb of ['open', 'show', 'go to']) {

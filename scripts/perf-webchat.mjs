@@ -6,6 +6,10 @@
 //   node scripts/perf-webchat.mjs [--mode rules|encoder|encoder+n1|all] [--throttle 4] [--runs 1] [--json out.json]
 //                                 [--chrome /usr/bin/chromium] [--messages "a|b|c"]
 //                                 [--nx hybrid|neural|rules] [--net none|fast4g|slow4g] [--cache cold|warm] [--http h1|h2]
+//                                 [--lang ro] [--turns <checks.jsonl>[:<first>-<last>]] [--stages]
+//   --lang       the language selected in the page (settings.language), e.g. ro: the owner's phone session
+//   --turns      the messages of a checks file (scripts/owner-session.mjs format: { turn|id, tab, text }), each sent on its tab (the tab button is clicked first);
+//                a range keeps the lines whose turn is in it. Per turn the requests the page made and their bytes are counted (catalog shards, models, lazy worlds).
 //
 // DEFINITIONS (printed in the output, the reviewer measures the same things):
 //   input        navigation start -> the text input exists in the DOM.
@@ -40,12 +44,20 @@ const THROTTLE = Number(opt('throttle', 4));
 const RUNS = Number(opt('runs', 1));
 const HTTP = opt('http', 'h2'); const NET = opt('net', 'none'); const CACHE = opt('cache', 'cold');
 const NETS = { fast4g: { latency: 170, downloadThroughput: 9e6 / 8, uploadThroughput: 3e6 / 8 }, slow4g: { latency: 300, downloadThroughput: 1.6e6 / 8, uploadThroughput: 0.75e6 / 8 } };
-const MESSAGES = opt('messages', 'hello|what is 3 plus 4|spider legs and 3 plus 4|pls make ur eyes square|show me paris|hello').split('|');
+const TURNS = (() => {
+  const t = opt('turns', null);
+  if (!t) return null;
+  const [file, range] = t.split(':');
+  const [a, b] = (range ?? '').split('-').map(Number);
+  return execFileSync('cat', [file], { encoding: 'utf8' }).split('\n').filter((l) => l.trim() && !l.startsWith('//')).map((l) => JSON.parse(l)).filter((r) => !range || (Number(r.turn) >= a && Number(r.turn) <= (b || a)));
+})();
+const MESSAGES = TURNS ? TURNS.map((r) => r.text) : opt('messages', 'hello|what is 3 plus 4|spider legs and 3 plus 4|pls make ur eyes square|show me paris|hello').split('|');
+const LANG = opt('lang', null);
 
 async function loadPuppeteer() {
   const cands = [process.env.PUPPETEER_CORE, '/tmp/claude-1000/-home-salboaie-work-psys2/57c88231-38dc-4b27-a5d0-162542cee3e0/scratchpad/pp/node_modules/puppeteer-core'].filter(Boolean);
   for (const c of cands) {
-    try { await access(path.join(c, 'lib/puppeteer/puppeteer-core.js')); return await import(pathToFileURL(path.join(c, 'lib/puppeteer/puppeteer-core.js')).href); } catch { /* next */ }
+    for (const entry of ['lib/puppeteer/puppeteer-core.js', 'lib/esm/puppeteer/puppeteer-core.js']) { try { await access(path.join(c, entry)); return await import(pathToFileURL(path.join(c, entry)).href); } catch { /* next */ } }   // older and newer package layouts
   }
   try { return await import('puppeteer-core'); } catch { throw new Error('puppeteer-core not found: set PUPPETEER_CORE to a scratch install'); }
 }
@@ -60,6 +72,7 @@ async function serve() {
       const p = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); const f = p.endsWith('/') ? `${p}index.html` : p;
       const ext = path.extname(f); r.setHeader('content-type', types[ext] ?? 'application/octet-stream'); r.setHeader('cache-control', 'public, max-age=600');
       let body = await readFile(f);
+      SERVED.push({ path: f.slice(ROOT.length), bytes: body.length });   // every request of the page and its workers (per turn: catalog shards, models, lazy worlds)
       if (['.html', '.mjs', '.js', '.json', '.css', '.svg', '.txt'].includes(ext) && /gzip/.test(q.headers['accept-encoding'] ?? '')) { body = zlib.gzipSync(body, { level: 6 }); r.setHeader('content-encoding', 'gzip'); }
       r.end(body);
     } catch { r.statusCode = 404; r.end('nf'); }
@@ -72,6 +85,7 @@ async function serve() {
   }
   const srv = http.createServer(handler).listen(0); srv.scheme = 'http'; return srv;
 }
+const SERVED = [];
 const pct = (xs, p) => { const s = [...xs].sort((a, b) => a - b); return s.length ? s[Math.min(s.length - 1, Math.floor(p * s.length))] : NaN; };
 
 async function runOnce(puppeteer, chrome, port, mode, scheme) {
@@ -94,7 +108,7 @@ async function runOnce(puppeteer, chrome, port, mode, scheme) {
     const cdp = await pg.createCDPSession();
     if (NET !== 'none') { await cdp.send('Network.enable'); await cdp.send('Network.emulateNetworkConditions', { offline: false, ...NETS[NET] }); }
     if (THROTTLE > 1) await cdp.send('Emulation.setCPUThrottlingRate', { rate: THROTTLE });
-    const settings = { settingsVersion: 2, formalizer: mode === 'rules' ? 'rules' : 'encoder', normalizer: mode === 'encoder+n1', showTrace: false, ...(opt('nx', null) ? { nxStrategy: opt('nx') } : {}) };   // --nx hybrid|neural|rules: the NX reading strategy (default: the webchat default)
+    const settings = { settingsVersion: 2, formalizer: mode === 'rules' ? 'rules' : 'encoder', normalizer: mode === 'encoder+n1', showTrace: false, ...(LANG ? { language: LANG } : {}), ...(opt('nx', null) ? { nxStrategy: opt('nx') } : {}) };   // --nx hybrid|neural|rules: the NX reading strategy (default: the webchat default)
     await pg.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify(s)); } catch { /* ignore */ } }, settings);
     pg.on('console', (m) => { if (/VOCAB/.test(m.text())) console.log(m.text().slice(0, 700)); }); pg.on('pageerror', (e) => console.error('pageerror', String(e).slice(0, 200)));
     const t0 = Date.now();
@@ -118,7 +132,10 @@ async function runOnce(puppeteer, chrome, port, mode, scheme) {
     }
     const modelReady = mode === 'rules' ? null : await pg.waitForFunction(() => /model v/.test(document.querySelector('.p2-status')?.textContent ?? '') || /could not/.test(document.body.innerText), { timeout: 180000, polling: 100 }).then(() => Date.now() - t0).catch(() => null);
     const out = { mode, inputMs: tInput, readyMs: ready, modelReadyMs: modelReady, firstAnswerMs, usableMs: ready + firstAnswerMs, messages: [] };
-    for (const msg of MESSAGES) {
+    for (const [mi, msg] of MESSAGES.entries()) {
+      const tab = TURNS?.[mi]?.tab;
+      if (tab) { await pg.evaluate((t) => document.getElementById(`p2-tab-${t}`)?.click(), tab); await new Promise((r) => setTimeout(r, 200)); }
+      const u0 = SERVED.length;
       const before = await pg.$$eval('.p2-msg:not(.is-typing)', (e) => e.length);
       await pg.type('input.p2-text', msg, { delay: 0 });
       const t1 = Date.now();
@@ -126,7 +143,9 @@ async function runOnce(puppeteer, chrome, port, mode, scheme) {
       await pg.waitForFunction((n) => document.querySelectorAll('.p2-msg:not(.is-typing)').length >= n + 2 && !document.querySelector('.p2-msg.is-typing'), { timeout: 120000, polling: 10 }, before);
       const ms = Date.now() - t1;
       const info = await pg.evaluate(() => { const m = [...document.querySelectorAll('.p2-msg.is-bot')].at(-1); return { reply: m?.querySelector('.p2-bubble')?.innerText.slice(0, 60), took: m?.querySelector('.p2-took')?.textContent ?? null }; });
-      out.messages.push({ msg, ms, ...info });
+      const kinds = {}, got = SERVED.slice(u0);
+      for (const { path: u } of got) { const k = /catalog|knowledge/.test(u) ? 'catalog' : /\.(onnx|bin|wasm|gz)$|bergamot|model/.test(u) ? 'model' : /worlds?\//.test(u) ? 'world' : 'other'; kinds[k] = (kinds[k] ?? 0) + 1; }
+      out.messages.push({ msg, tab: tab ?? null, ms, requests: got.length, kb: Math.round(got.reduce((a, x) => a + x.bytes, 0) / 1024), kinds, ...info });
       await new Promise((r) => setTimeout(r, 300));
     }
     out.marks = await pg.evaluate(() => performance.getEntriesByType('mark').filter((m) => m.name.startsWith('psys2:')).map((m) => `${m.name.slice(6)} ${Math.round(m.startTime)}`).join(', ')).catch(() => null);
@@ -141,7 +160,7 @@ try {
   for (const mode of MODES) for (let i = 0; i < RUNS; i++) {
     const r = await runOnce(puppeteer, chrome, port, mode, scheme); results.push(r);
     console.log(`\n== ${mode} (cpu ${THROTTLE}x, net ${NET}, ${HTTP}, cache ${CACHE}) input ${r.inputMs} ms, ready ${r.readyMs} ms, first answer ${r.firstAnswerMs} ms (usable ${r.usableMs} ms), model ready ${r.modelReadyMs ?? 'n/a'} ms`);
-    for (const m of r.messages) console.log(`  ${String(m.ms).padStart(6)} ms  ${m.msg.padEnd(30)} -> ${JSON.stringify(m.reply)}${m.took ? ` [${m.took}]` : ''}`);
+    for (const m of r.messages) console.log(`  ${String(m.ms).padStart(6)} ms  ${m.tab ? `[${m.tab}] ` : ''}${m.msg.padEnd(30)} -> ${JSON.stringify(m.reply)}${m.took ? ` [${m.took}]` : ''}${m.requests ? ` (${m.requests} requests, ${m.kb} kB: ${JSON.stringify(m.kinds)})` : ''}`);
     if (r.marks) console.log(`  marks (ms since navigation): ${r.marks}`);
     const ts = r.messages.map((m) => m.ms); console.log(`  p50 ${pct(ts, 0.5)} ms  p95 ${pct(ts, 0.95)} ms`);
     if (r.stages && args.includes('--stages')) for (const x of r.stages) console.log(`  [${x.text}] engine ${x.engineMs} render ${x.render} effects ${x.effects}: ` + Object.entries(x.stages ?? {}).map(([k, v]) => `${k} ${v.n}x/${v.ms}`).join(', '));

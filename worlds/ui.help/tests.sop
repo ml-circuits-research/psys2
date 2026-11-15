@@ -78,7 +78,6 @@
 @t.ui.help.n13 core.test
     input="How do I add a table?"
     expect="table"
-    expect="Add a table"
     session=a
 
 @t.ui.help.n14 core.test
@@ -95,7 +94,7 @@
     input="Zorb flimbles quickly"
     expectStatus=unparsed
     session=a2
-    given="ui.shell:activeTab=timeline"   # a tab that does not answer chat: what is tested is the help for an unparsed message
+    given="ui.shell:activeTab=charts"   # a tab that does not answer chat: what is tested is the help for an unparsed message
 
 @t.ui.help.n21 core.test
     input="Why didn't you understand?"
@@ -165,7 +164,7 @@
     input="what u can do"
     expect="I can chat"
     session=rh3
-    given="ui.shell:activeTab=timeline"   # a tab that does not answer chat: what is tested is the help for an unparsed message
+    given="ui.shell:activeTab=charts"   # a tab that does not answer chat: what is tested is the help for an unparsed message
 
 @t.ui.help.r06 core.test
     input="tell me what you can do"
@@ -201,7 +200,7 @@
     input="zorb flimbles quickly"
     expect="I did not understand"
     session=rh7
-    given="ui.shell:activeTab=timeline"   # a tab that does not answer chat: what is tested is the help for an unparsed message
+    given="ui.shell:activeTab=charts"   # a tab that does not answer chat: what is tested is the help for an unparsed message
 
 @t.ui.help.r17 core.test
     input="why u no understand"
@@ -252,7 +251,7 @@
     input="what is psys2"
     expect="neurosymbolic"
     session=hid6
-    given="ui.shell:activeTab=timeline"   # a tab that does not answer chat: what is tested is the help for an unparsed message
+    given="ui.shell:activeTab=charts"   # a tab that does not answer chat: what is tested is the help for an unparsed message
 
 @t.ui.help.id07 core.test
     input="do you use an llm"

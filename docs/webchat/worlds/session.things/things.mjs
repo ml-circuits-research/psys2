@@ -131,7 +131,7 @@ export function viewByWords(views, phrase) {
 // ---- selections: "what I drew", "the things in the plan", "the discussion" -------------------------------------------------------------------------------------
 const SESSION_WORDS = /^(?:the |this |our |that )?(?:current )?(?:discussion|conversation|chat|session)$|^(?:everything|all|all of it|so far|what we (?:said|did|made|talked about))$/;
 /** Verbs of doing and the word of the view that does it (TEMPORARY until k.actions says which tool a verb belongs to): "what I drew" is what the drawing holds. */
-const DID_VIEW_TEMPORARY = { drew: 'draw', drawn: 'draw', draw: 'draw', painted: 'draw', sketched: 'draw', seated: 'seating', planned: 'plan', wrote: 'document', typed: 'document' };
+const DID_VIEW_TEMPORARY = { drew: 'draw', drawn: 'draw', draw: 'draw', painted: 'draw', sketched: 'draw', planned: 'plan', wrote: 'document', typed: 'document' };
 const DID_ANY = new Set(['made', 'did', 'added', 'built', 'created', 'put', 'placed', 'said', 'have', 'had', 'has', 'got', 'asked']);
 /** Nouns that name an aspect rather than a kind (TEMPORARY until k.attributes gives the words of aspects): "the places we talked about" are the things with a geographic aspect. */
 const ASPECT_NOUN_TEMPORARY = { places: 'geographic', place: 'geographic', locations: 'geographic', location: 'geographic', cities: 'geographic', countries: 'geographic', spots: 'geographic', moments: 'temporal', dates: 'temporal', days: 'temporal', people: 'social', persons: 'social' };

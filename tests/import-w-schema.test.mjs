@@ -11,7 +11,7 @@ import { parseSchema } from '../worlds/acts/acts.mjs';
 import { convert } from '../scripts/import-w-schema.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const WORLDS = [['plan.seating', 'w.seating', 'seat'], ['plan.timeline', 'w.timeline', 'time']];
+const WORLDS = [];   // the live worlds checked against a fixture copy of their published schema: plan.seating and plan.timeline (w.seating, w.timeline) were removed with their tabs (ADR-012); ui.avatar follows a newer w.face than the fixture
 const fixture = (wid) => readFileSync(join(ROOT, 'tests/fixtures/w-schemas', wid, 'schema.sop'), 'utf8');
 
 for (const [world, wid, id] of WORLDS) {
@@ -29,7 +29,7 @@ for (const [world, wid, id] of WORLDS) {
 }
 
 test('the fixture copies of the published schemas are the catalog\'s (checked where PSYS2_KNOWLEDGE names the catalog)', { skip: !process.env.PSYS2_KNOWLEDGE }, () => {
-  for (const wid of ['w.seating', 'w.timeline', 'w.face', 'w.map']) {
+  for (const wid of ['w.face', 'w.map']) {
     const f = join(process.env.PSYS2_KNOWLEDGE, wid, 'schema.sop');
     if (existsSync(f)) assert.equal(readFileSync(f, 'utf8'), fixture(wid), `${wid}: refresh tests/fixtures/w-schemas/${wid}/schema.sop`);
   }

@@ -204,7 +204,7 @@ try {
   await pg.tap('.p2-burger'); await sleep(400);
   const items = await pg.$$eval('#p2-menu [role=menuitem]', (e) => e.map((x) => x.textContent.trim()));
   console.log('MENU ' + JSON.stringify(items));
-  const want = ['Chat', 'Drawing', 'Diagram', 'Map', 'Charts', 'Seating', 'Timeline', 'Documents', 'Music', 'Settings'];
+  const want = ['Chat', 'Drawing', 'Diagram', 'Map', 'Charts', 'Documents', 'Music', 'Settings'];
   check('menu lists exactly the ten pages', JSON.stringify([...items].sort()) === JSON.stringify([...want].sort()), items.join(', '));
   await shot(pg, 'phone-2-menu.png');
   await pg.keyboard.press('Escape'); await sleep(200);
