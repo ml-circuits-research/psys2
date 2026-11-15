@@ -3,14 +3,13 @@
 /**
  * Matrix reasoner in the real webchat (SOPWORLD-1, spec 15): headless Chrome, 390x844, CPU throttling (default 4x), rules formalizer.
  *
- *   default   no saved Reasoner: the default is `matrix` (user decision 2026-11-11): "add to my list" asks, and a saved `ops` of an older settings version is migrated once.
- *   ops       the explicit `ops` fallback: "add to my list" still reads as before and nothing of the matrix shows.
+ *   default   the page always runs `matrix` (the product reasoner; `ops` is a test oracle only, reviewer decision 2026-11-15): "add to my list" asks, a saved `reasoner` of any version is dropped,
+ *             and Settings > Developer has no Reasoner row.
  *   ask       matrix: "add to my list" asks "What shall I put on the list?" and "bread" completes it.
  *   revise    matrix: "I buy a ball" then "three of them" revises the purchase; the money follows.
  *   undo      matrix: "undo that" takes the purchase back and the money is back.
  *   why       matrix: "why?" after a shop answer says what the answer rests on (the library's `explain`).
  *   abduce    matrix: "I got 5 lei back for a book, what did I pay?" answers 17.
- *   setting   Settings > Developer > Reasoner (default matrix) switches the engine to ops (a restart) and the matrix gains disappear.
  *   assume    matrix: "I buy the ball" then "how much money do I have?" says "I assumed 1 ball." once; the phrase log record carries the assumption.
  *             "why did you play there?" explains, a finished game refuses moves.
  *             free again), a finished game refuses guesses and undo reopens it.
@@ -29,7 +28,7 @@
  *
  *   draw, diagram   matrix (art.draw, diagram.sketch): see scripts/test-webchat-draw-matrix.mjs.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,time,animals,romanian,shared,removed,geomap,charts,music,draw,commonsense,diagram,editor,shell,avatar,help] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   node scripts/test-webchat-matrix.mjs [--only default,ask,revise,undo,why,abduce,assume,time,animals,romanian,shared,removed,geomap,charts,music,draw,commonsense,diagram,editor,shell,avatar,help] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -40,36 +39,32 @@ import { docScenarios } from './test-webchat-docs.mjs';
 import { drawScenarios } from './test-webchat-draw-matrix.mjs';
 import { uiScenarios } from './test-webchat-ui-matrix.mjs';
 
-const MATRIX = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'matrix' };
-const OPS = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'ops', settingsVersion: 4 };   // an explicit choice of the current settings version
+const MATRIX = { formalizer: 'rules', normalizer: false, showTrace: false };   // the page has no reasoner setting: always matrix
 const results = [];
 const check = (name, ok, detail = '') => { results.push({ name, ok }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? `  (${detail})` : ''}`); return ok; };
 const say = async (c, text) => { const r = await c.say(text); return r.reply; };
 
 export const SCENARIOS = {
   async default(o) {
-    // no `reasoner` saved; and a saved `ops` from settings version 3 (the old default, not a choice) is migrated to matrix once
-    for (const [label, settings] of [['nothing saved', { formalizer: 'rules', normalizer: false, showTrace: false }], ['old saved ops (v3)', { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'ops', settingsVersion: 3 }]]) {
+    // nothing saved, a saved `ops` of version 3 and an explicit `ops` of the current version: the page runs matrix in every case and drops the saved value
+    const base = { formalizer: 'rules', normalizer: false, showTrace: false };
+    for (const [label, settings] of [['nothing saved', base], ['old saved ops (v3)', { ...base, reasoner: 'ops', settingsVersion: 3 }], ['saved ops (v6)', { ...base, reasoner: 'ops', settingsVersion: 6 }]]) {
       const c = await openChat({ ...o, settings });
       try {
         const a = await say(c, 'add to my list');
         check(`default (${label}): the reasoner is matrix, "add to my list" asks what to put on the list`, /What shall I put on the list\?/.test(a), a.slice(0, 80));
         const saved = await c.pg.evaluate(() => JSON.parse(localStorage.getItem('psys2.webchat.settings') ?? '{}').reasoner);
-        check(`default (${label}): the saved setting is matrix or absent`, saved === 'matrix' || saved === undefined, String(saved));
+        check(`default (${label}): no reasoner is saved`, saved === undefined, String(saved));
         check(`default (${label}): no page errors`, c.errors.length === 0, c.errors[0] ?? '');
       } finally { await c.close(); }
     }
-  },
-  async ops(o) {
-    const c = await openChat({ ...o, settings: OPS });
+    const c = await openChat({ ...o, settings: base });
     try {
-      const a = await say(c, 'add to my list');
-      check('ops: the explicit ops setting is respected, "add to my list" is read as it always was (no question asked)', !/What shall I put on the list/.test(a), a.slice(0, 80));
-      await say(c, 'I have 20 lei'); await say(c, 'I buy a ball');
-      // Since SOPWORLD-1b item 2 the ops rules also revise the last purchase (shop.reviseLast), so both strategies read it.
-      const t = await say(c, 'three of them');
-      check('ops: "three of them" revises the purchase in ops too (shop.reviseLast)', /3 balls|that makes 3/i.test(t), t.slice(0, 80));
-      check('ops: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+      await c.pg.click('button[aria-label="Settings"]');
+      await c.pg.waitForSelector('#p2-st-developer', { timeout: 5000 });
+      await c.pg.click('#p2-st-developer');
+      await new Promise((r) => setTimeout(r, 300));
+      check('default: Settings > Developer has no Reasoner row', !(await c.pg.$('#p2-f-reasoner')));
     } finally { await c.close(); }
   },
   async ask(o) {
@@ -120,30 +115,6 @@ export const SCENARIOS = {
     try {
       const a = await say(c, 'I got 5 lei back for a book, what did I pay?');
       check('abduce: "I got 5 lei back for a book, what did I pay?" answers 17', /17/.test(a), a.slice(0, 120));
-    } finally { await c.close(); }
-  },
-  async setting(o) {
-    const c = await openChat({ ...o, settings: { formalizer: 'rules', normalizer: false, showTrace: false } });
-    try {
-      const pg = c.pg;
-      await pg.click('button[aria-label="Settings"]');
-      await pg.waitForSelector('#p2-st-developer', { timeout: 5000 });
-      await pg.click('#p2-st-developer');
-      await pg.waitForSelector('#p2-f-reasoner', { timeout: 5000 });
-      check('setting: Settings > Developer has a Reasoner select, default matrix', (await pg.$eval('#p2-f-reasoner', (s) => s.value)) === 'matrix');
-      const opts = await pg.$$eval('#p2-f-reasoner option', (os) => os.map((x) => x.value));
-      check('setting: the options are matrix and ops', JSON.stringify(opts) === JSON.stringify(['matrix', 'ops']), opts.join(','));
-      await pg.select('#p2-f-reasoner', 'ops');
-      const saved = await pg.evaluate(() => JSON.parse(localStorage.getItem('psys2.webchat.settings') ?? '{}').reasoner);
-      check('setting: the choice is saved', saved === 'ops', String(saved));
-      await pg.keyboard.press('Escape');
-      await pg.waitForFunction(() => !document.querySelector('.p2-modal'), { timeout: 5000 }).catch(() => {});
-      // the engine restarts: wait until it answers again
-      await new Promise((r) => setTimeout(r, 500));
-      let a = '';
-      for (let i = 0; i < 3 && !a; i++) a = await say(c, 'add to my list');
-      check('setting: after the switch to ops "add to my list" no longer asks', a !== '' && !/What shall I put on the list\?/.test(a), a.slice(0, 80));
-      check('setting: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
   async assume(o) {
@@ -337,7 +308,7 @@ export const SCENARIOS = {
 // the editor scenario (scripts/test-webchat-docs.mjs)
 Object.assign(SCENARIOS, docScenarios({ openChat, MATRIX, check, say }));
 // art.draw and diagram.sketch (scripts/test-webchat-draw-matrix.mjs)
-Object.assign(SCENARIOS, drawScenarios({ openChat, MATRIX, OPS, check, say }));
+Object.assign(SCENARIOS, drawScenarios({ openChat, MATRIX, check, say }));
 // the UI worlds' scenarios (scripts/test-webchat-ui-matrix.mjs)
 Object.assign(SCENARIOS, uiScenarios({ openChat, MATRIX, check, say }));
 

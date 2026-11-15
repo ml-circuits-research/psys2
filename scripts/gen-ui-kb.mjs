@@ -25,7 +25,7 @@ const source = (text, id) => text.split('\n').map((l) => (l.startsWith('@') ? `$
 
 export async function buildAll({ root = DEFAULT_ROOT } = {}) {
   const loader = createFsLoader({ roots: [root] });
-  const set = await loadWorlds(loader, { reasoner: 'ops' });
+  const set = await loadWorlds(loader, { reasoner: 'matrix' });   // the product reasoner (spec 15)
   const worlds = set.list();
   return {
     'ui.shell': source(await shellKb(set, worlds), 'ui.shell'),

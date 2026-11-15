@@ -298,7 +298,7 @@ Code: `src/dialog/foreign-reading.mjs` (`reviewForeign`, `notFull`, `confidentTy
 
 | Switch | Default | Where | Status after P6 |
 | --- | --- | --- | --- |
-| `PSYS2_REASONER` | matrix | `src/dialog/index.mjs` `createEngine` | kept; matrix vs ops decision asked (questions.md Q23) |
+| `PSYS2_REASONER` | matrix | `src/dialog/index.mjs` `createEngine` | **test oracle only** (reviewer decision 2026-11-15, Q23): matrix is the product; `=ops` is set only by the A/B gate and the code that compares reasoners; the webchat has no Reasoner setting. Deleted with `ui.help/ui.shell` ops bodies after the four kids dual worlds go (spec 15 "Plan for the oracle") |
 | `PSYS2_WORLD_AWARE` | veto | `src/dialog/index.mjs` | kept (section 6, user decision 2026-11-12) |
 | `PSYS2_READER` (also `globalThis.PSYS2_READER`) | off | `src/dialog/index.mjs`, `src/worlds/index.mjs` | owner decision asked (Q23): delete the reader route, or keep it as a dated diagnostic |
 | `PSYS2_COMPLETE` | hold | `src/formalizer/completeness.mjs` | kept (sections 12, 13) |

@@ -59,7 +59,7 @@ async function walkCells(engineW, w, per) {
   }
   return cells;
 }
-const walker = await createEngine({ loader: createFsLoader({ roots: [...roots, DEFAULT_ROOT] }), options: { reasoner: 'ops' } });
+const walker = await createEngine({ loader: createFsLoader({ roots: [...roots, DEFAULT_ROOT] }), options: { reasoner: 'matrix' } });   // the product reasoner walks; the grid then reads every cell in both (ops = the test oracle, spec 15)
 
 // ---- run -----------------------------------------------------------------------------------------------------------------------------------------------------
 const previous = (() => {
