@@ -10,7 +10,7 @@ const src = process.argv[2];
 if (!src) { console.error('usage: node scripts/make-catalog-fixture.mjs <catalog docs/worlds folder> [--world k.actions]'); process.exit(1); }
 const out = path.join(import.meta.dirname, '../tests/fixtures/catalog');
 const real = JSON.parse(readFileSync(path.join(src, 'index.json'), 'utf8'));
-const WHOLE = new Set(['k.actions']);
+const WHOLE = new Set(['k.actions', 'k.colours', 'k.values', 'k.layouts']);   // k.colours, k.values: the colour names moved to k.colours (catalog 7ecf82d); k.layouts: the layout names and the outlines; refreshed whole when the pin moves
 if (process.argv.includes('--world')) {
   const id = process.argv[process.argv.indexOf('--world') + 1];
   if (!WHOLE.has(id)) { console.error(`--world: only a world the fixture copies whole (${[...WHOLE].join(', ')})`); process.exit(1); }
@@ -19,7 +19,10 @@ if (process.argv.includes('--world')) {
   rmSync(path.join(out, id), { recursive: true, force: true });
   mkdirSync(path.join(out, id, 'shards'), { recursive: true });
   writeFileSync(path.join(out, w.schema), readFileSync(path.join(src, w.schema), 'utf8'));
-  const sh = w.shards.map((x) => { const text = readFileSync(path.join(src, x.path), 'utf8'); writeFileSync(path.join(out, x.path), text); return { id: x.id, path: x.path, wires: text.split('\n').filter((l) => l.startsWith('@')).length, bytes: text.length, keys: x.keys, sources: x.sources, license: 'CC0-1.0', warnings: [] }; });
+  // the outlines of k.layouts are not in the fixture: their records name the drawable things ("house") and a test catalog of a few k.objects shards then reads the plural "houses"
+  // as a thing with no drawing (the drawing tests of art.draw); the outlines reach the diagram through its bundle (src/knowledge/bundled-diagrams.mjs), generated from the pin
+  const SKIP = { 'k.layouts': /\/outlines-/ };
+  const sh = w.shards.filter((x) => !SKIP[id]?.test(x.id)).map((x) => { const text = readFileSync(path.join(src, x.path), 'utf8'); writeFileSync(path.join(out, x.path), text); return { id: x.id, path: x.path, wires: text.split('\n').filter((l) => l.startsWith('@')).length, bytes: text.length, keys: x.keys, sources: x.sources, license: 'CC0-1.0', warnings: [] }; });
   const at = index.worlds.findIndex((x) => x.id === id);
   index.worlds[at] = { id, version: w.version, schema: w.schema, exports: w.exports, depends: [], shards: sh };
   for (const k of Object.keys(vocab)) vocab[k] = vocab[k].filter((s) => !s.startsWith(`${id}/`));

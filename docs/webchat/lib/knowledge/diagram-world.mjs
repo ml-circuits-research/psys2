@@ -3,8 +3,8 @@
 // knowledge has that structure; the library's `composeDiagram` / `sampleDiagram` (sopworld 0.112) draw a kind x a topic and lay it out with `arrange`. This file does what a host owes the
 // library: builds the World it reads (the bundled subset of the catalog, `bundled-diagrams.mjs`, with the live catalog laid over it when reachable), reads a request into a kind and a topic
 // (the kinds' words come from the knowledge, not from a list here), tries the candidate topics, and says what was composed in plain words. No template, no sample labels. Browser-safe: no `node:*`.
-import { BUNDLED_DIAGRAMS } from './bundled-diagrams.mjs?v=81558cdf41';
-import { BUNDLED_GEO } from './bundled-geo.mjs?v=e51f270b26';
+import { BUNDLED_DIAGRAMS } from './bundled-diagrams.mjs?v=9fc3974c9e';
+import { BUNDLED_GEO } from './bundled-geo.mjs?v=8ecf6785b7';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const words = (s) => String(s ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
@@ -331,4 +331,64 @@ export function diagramSentences(lib, world, { perKind = 6 } = {}) {
   }
   sentenceCache.set(world, { size: world.wires.size, list });
   return list;
+}
+
+// ---- outlines: an arrangement in the shape of a thing (Q21, reviewer 2026-11-15 05:10) ----------------------------------------------------------------------
+const attrsOf = (line) => { const a = {}; for (const m of String(line).matchAll(/(\w+)=("(?:[^"\\]|\\.)*"|\S+)/g)) (a[m[1]] ??= []).push(m[2].startsWith('"') ? JSON.parse(m[2]) : m[2]); return a; };
+let outlineTable = null;
+/** The outlines of k.layouts (bundled from the pin): Map name -> { name, from, drawing, shape, tolerance, points: [[x, y], ...] } (a 0-100 frame, clockwise from the top). */
+export function outlines() {
+  if (outlineTable) return outlineTable;
+  outlineTable = new Map();
+  const lines = String(BUNDLED_DIAGRAMS.outlines ?? '').split('\n');
+  for (const l of lines) if (/^@\S+ k\.layouts\.outline /.test(l)) { const a = attrsOf(l); if (a.name?.[0]) outlineTable.set(low(a.name[0]), { name: low(a.name[0]), from: a.from?.[0] ?? null, drawing: a.drawing?.[0] ?? null, shape: a.shape?.[0] ?? null, tolerance: Number(a.tolerance?.[0] ?? 0), points: [] }); }
+  const pts = new Map();
+  for (const l of lines) if (/^@\S+ k\.layouts\.outline_point /.test(l)) { const a = attrsOf(l), n = low(a.outline?.[0]); (pts.get(n) ?? pts.set(n, []).get(n)).push([Number(a.n[0]), Number(a.x[0]), Number(a.y[0])]); }
+  for (const [name, ps] of pts) { const o = outlineTable.get(name); if (o) o.points = ps.sort((p, q) => p[0] - q[0]).map(([, x, y]) => [x, y]); }
+  for (const [name, o] of outlineTable) if (o.points.length < 3) outlineTable.delete(name);
+  return outlineTable;
+}
+/** The outline of a name ("house", "houses", "house-shaped", "star"), or null. */
+export function outlineNamed(name) {
+  const t = outlines(), n = low(name).replace(/[-\s]?shaped$/, '').replace(/[^a-z ]/g, '').trim();
+  return t.get(n) ?? t.get(n.replace(/ies$/, 'y')) ?? t.get(n.replace(/(?:es|s)$/, '')) ?? t.get(n.replace(/s$/, '')) ?? null;
+}
+
+let shapeReader = null;
+/**
+ * The arrangement a sentence asks for, read by the w.lang.en frames of the shard shape-frames (bundled from the pin): "in the shape of a house", "shaped like a star", "house-shaped",
+ * "in heart form", "arrange the boxes in a star shape". Returns { name, frame } with the outline's name (the frame's role `arrangement`, "-shaped" stripped), { name: null, said, frame }
+ * when the frame's words are there but the thing is no outline of the catalog ("shaped like a blorp"), or null. Each frame is read from its own parts: the words before the arrangement,
+ * an optional article, the arrangement (lexicon outline.shape or outline.shaped), the words after it.
+ */
+export function outlineIn(text) {
+  if (!shapeReader) {
+    const lines = String(BUNDLED_DIAGRAMS.shapeFrames ?? '').split('\n').filter((l) => l.startsWith('@'));
+    const lex = new Map(lines.filter((l) => / w\.lang\.en\.lex /.test(l)).map((l) => { const a = attrsOf(l); return [a.name[0], (a.item ?? []).map(low).sort((x, y) => y.length - x.length)]; }));
+    const parts = new Map();
+    for (const l of lines.filter((x) => / w\.lang\.en\.part /.test(x))) { const a = attrsOf(l); (parts.get(a.frame[0]) ?? parts.set(a.frame[0], []).get(a.frame[0])).push(a); }
+    const alt = (xs) => xs.map((x) => esc(x).replace(/(?:\\-|\s)+/g, '[\\s-]+')).join('|');
+    shapeReader = [];
+    for (const [frame, ps] of parts) {
+      ps.sort((x, y) => Number(x.at[0]) - Number(y.at[0]));
+      const ai = ps.findIndex((p) => p.role?.[0] === 'arrangement');
+      if (ai < 0) continue;
+      const items = lex.get(ps[ai].lexicon?.[0]) ?? [];
+      if (!items.length) continue;
+      // the words just before the arrangement (and an optional article between), and the words right after it
+      let bi = ai - 1; const det = bi >= 0 && ps[bi].is?.[0] === 'det'; if (det) bi--;
+      const before = bi >= 0 && ps[bi].is?.[0] === 'word' ? ps[bi].word.map(low) : null;
+      const after = ps[ai + 1]?.is?.[0] === 'word' && ps[ai + 1].optional?.[0] !== 'yes' ? ps[ai + 1].word.map(low) : null;
+      const head = before ? `\\b(?:${alt(before)})\\s+${det ? '(?:(?:an?|the)\\s+)?' : ''}` : '\\b';
+      const tail = after ? `\\s+(?:${alt(after)})\\b` : '\\b';
+      // a thing that is no outline is named only after a lead of two words or more ("shaped like a blorp") or between the frame's words ("in xyzzy form"): a bare "like" ("draw it like a cat") says nothing about a shape
+      const long = (before ?? []).filter((w) => w.includes(' '));
+      const openHead = long.length ? `\\b(?:${alt(long)})\\s+${det ? '(?:(?:an?|the)\\s+)?' : ''}` : null;
+      shapeReader.push({ frame, re: new RegExp(`${head}(${alt(items)})${tail}`, 'i'), open: after ? new RegExp(`${head}([a-z]+)${tail}`, 'i') : openHead ? new RegExp(`${openHead}([a-z]+(?:\\s[a-z]+)?)\\s*[.!?]*$`, 'i') : null });   // "in xyzzy form": the words around it say it is a shape
+    }
+  }
+  const t = String(text ?? '');
+  for (const r of shapeReader) { budget.tick('diagram.outline'); const m = r.re.exec(t); if (m) return { name: low(m[1]).replace(/[\s-]+shaped$/, ''), frame: r.frame }; }
+  for (const r of shapeReader) { const m = r.open?.exec(t); if (m && !/^(?:a|an|the)$/i.test(m[1])) return { name: null, said: low(m[1]), frame: r.frame }; }
+  return null;
 }

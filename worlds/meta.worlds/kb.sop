@@ -26,9 +26,9 @@
 @card.calc.story meta.worlds.card
     core.source="generated:meta.worlds/cards"
     id=calc.story kind=module run=none
-    act=nut act=seed act=owned
-    actshared=escaped actshared=sold actshared=gathered actshared=broken actshared=earn actshared=escape actshared=sell actshared=earned
-    actshared=eaten actshared=picked actshared=kept
+    act=nut act=seed act=held act=owned
+    actshared=sell actshared=leave actshared=escaped actshared=sold actshared=gathered actshared=broken actshared=earn actshared=escape
+    actshared=earned actshared=eaten actshared=picked actshared=kept
     frame=who_has
 
 @card.data.charts meta.worlds.card
@@ -45,12 +45,12 @@
     actshared=draw actshared=include actshared=create actshared=build actshared=hide actshared=rename actshared=scale actshared=convert
     actshared=share actshared=export
     thing=plot thing=point thing=bar thing=slice thing=segment thing=pie thing=doughnut thing=donut
-    thing=radar thing=polar thing=scatter thing=aquamarine thing=chartreuse thing=terracotta thing=burlywood thing=firebrick
-    thing=gainsboro thing=goldenrod thing=turquoise thing=burgundy thing=chestnut thing=cornsilk thing=honeydew thing=lavender
-    thing=mahogany thing=moccasin thing=sapphire thing=seashell thing=apricot thing=crimson thing=emerald thing=fuchsia
-    thing=magenta thing=mustard thing=scarlet thing=thistle thing=bisque thing=cobalt thing=indigo thing=maroon
-    thing=orchid
-    thingshared=chart thingshared=graph thingshared=diagram thingshared=column thingshared=dot thingshared=item thingshared=orange
+    thing=radar thing=polar thing=scatter thing=lightgoldenrodyellow thing=mediumspringgreen thing=mediumaquamarine thing=mediumslateblue thing=mediumturquoise
+    thing=mediumvioletred thing=blanchedalmond thing=cornflowerblue thing=darkolivegreen thing=lightslategray thing=lightslategrey thing=lightsteelblue thing=mediumseagreen
+    thing=darkgoldenrod thing=darkslateblue thing=darkslategray thing=darkslategrey thing=darkturquoise thing=lavenderblush thing=lightseagreen thing=palegoldenrod
+    thing=paleturquoise thing=palevioletred thing=rebeccapurple thing=antiquewhite thing=darkseagreen thing=lemonchiffon thing=lightskyblue thing=mediumorchid
+    thing=mediumpurple thing=midnightblue
+    thingshared=chart thingshared=graph thingshared=diagram thingshared=column thingshared=dot thingshared=item
     frame=what_percentage frame=what_chart frame=what_charts frame=what_percent frame=is_chart frame=is_kiwis frame=is_plums frame=what_number
     frame=which_color frame=which_colours
 
@@ -127,10 +127,10 @@
     id=kids.arith kind=module run=none
     slot=number slot=agent
     name=arith
-    act=ate act=lost act=found act=broken act=eat act=plus act=break act=fewer
+    act=ate act=lost act=found act=broken act=eat act=plus act=fewer act=break
     act=didnt act=doesnt act=extra act=never act=dont act=together act=combined act=divided
     act=received act=subtract act=broke act=donate act=greater act=won act=several act=collect
-    act=collected act=dropped act=pass act=win act=crawl act=disappear act=doubled act=donated
+    act=collected act=dropped act=pass act=crawl act=disappear act=doubled act=win act=donated
     act=eaten act=threw act=additional act=cracked act=devoured act=gobbled act=greatest act=maximum
     act=misplaced act=munched act=ruined act=smashed act=snapped act=whoever act=brought act=escape
     actshared=gave actshared=who actshared=bought actshared=got actshared=lose actshared=less actshared=give actshared=minus

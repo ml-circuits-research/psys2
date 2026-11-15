@@ -38,7 +38,7 @@ const isWord = (t) => t.kind === 'word' || t.kind === 'number';
 const span = (toks) => [Math.min(...toks.map((t) => t.start)), Math.max(...toks.map((t) => t.end))];
 
 /** The shards of the catalog world `w.lang.en` this module reads. `core-plurals`, `hand-morphology` (lemmas: analyses -> analysis) and `hand-grammar` (copula was / were) were accepted 2026-11-14 after the corpus run (docs/lessons.md); `hand-joins` and `phrases` are not read (no view uses them). */
-export const LANG_EN_SHARDS = ['determiners', 'pronouns', 'prepositions', 'numbers', 'morphology', 'ellipsis', 'clauses', 'grammar', 'frames-acts', 'frames-acts-more', 'frames-acts-data', 'core-plurals', 'hand-morphology', 'hand-grammar', 'hand-frames', 'alternations', 'role-frames', 'diagram-frames'];
+export const LANG_EN_SHARDS = ['determiners', 'pronouns', 'prepositions', 'numbers', 'morphology', 'ellipsis', 'clauses', 'grammar', 'frames-acts', 'frames-acts-more', 'frames-acts-data', 'core-plurals', 'hand-morphology', 'hand-grammar', 'hand-frames', 'alternations', 'role-frames', 'diagram-frames', 'irregular-forms', 'fn'];
 /** The catalog's act names of the verb groups of the act grammar: the act `change` is the group `set`, `take apart` is `apart`. */
 const VERB_GROUP = { change: 'set', 'take apart': 'apart' };
 /** The lexicons a schema world generates (`lexicon=attribute` is its ATTR); the shared lexicons are the catalog's `w.lang.en.lex` names. */
@@ -134,6 +134,20 @@ export function createLangEn(source = LANG_EN_FACTS, local = LANG_EN_LOCAL) {
   const exceptions = (kind, key) => cached(`x:${kind}:${key}`, () => of('noun.exception').filter((w) => one(w, 'kind') === kind).map((w) => one(w, key)));
   const irregular = () => cached('irr', () => new Map(of('irregular').map((w) => [one(w, 'plural'), one(w, 'singular')])));
   /** The singular of a lowercase word by the rules of a set; the word itself when no rule applies. `irregular` (a Map plural -> singular) of the lexicon takes precedence in the lemma set. */
+  /**
+   * The forms of a verb (K5 readers: calc.story's possession verbs): the lemma, the third person, the past and the past participle, the irregular ones from the catalog
+   * (`w.lang.en.irregular_form lemma= form= vform=`, shard irregular-forms), the rest by the regular spelling rules. A phrasal verb ("fly away") inflects its first word.
+   */
+  const irregularForms = () => cached('vforms', () => { const m = new Map(); for (const w of of('irregular-form')) { const l = one(w, 'lemma'), v = one(w, 'vform'); if (l && v && !m.has(`${l}|${v}`)) m.set(`${l}|${v}`, one(w, 'form')); } return m; });
+  /** The function words of a view (`w.lang.en.fn text= view= at=`, shard fn: filler, politeness, wish, hesitation), optionally only those that stand at `at` (lead, tail, any): a Set of texts. */
+  const fn = (view, at = null) => cached(`fn:${view}:${at}`, () => new Set(of('fn').filter((w) => all(w, 'view').includes(view) && (!at || one(w, 'at') === at)).map((w) => one(w, 'text').toLowerCase())));
+  function verbForms(lemma) {
+    const [head, ...rest] = String(lemma).toLowerCase().split(/\s+/), tail = rest.length ? ` ${rest.join(' ')}` : '';
+    const irr = irregularForms(), get = (v) => irr.get(`${head}|${v}`);
+    const third = get('third') ?? (/(?:s|x|z|ch|sh|o)$/.test(head) ? `${head}es` : /[^aeiou]y$/.test(head) ? `${head.slice(0, -1)}ies` : `${head}s`);
+    const ed = /e$/.test(head) ? `${head}d` : /[^aeiou]y$/.test(head) ? `${head.slice(0, -1)}ied` : `${head}ed`;
+    return [...new Set([head, third, get('past') ?? ed, get('past_participle') ?? get('past') ?? ed].map((f) => f + tail))];
+  }
   function singular(word, set = 'act', lexIrregular = null) {
     const w = set === 'lemma' ? String(word).toLowerCase() : String(word);
     if (set === 'lemma') { if (lexIrregular?.has(w)) return lexIrregular.get(w); if (irregular().has(w)) return irregular().get(w); }
@@ -413,7 +427,7 @@ export function createLangEn(source = LANG_EN_FACTS, local = LANG_EN_LOCAL) {
     return { mods, lead, bare, candidates: out };
   }
 
-  return { words, ordinals, numerals, refers, anaphorRegex, singular, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, frames, nounPhrase, negatedRequest, timeRelation, timeComparison, cutWords, sequenceWords, joinerKeeps, cardJoiners, frameLeads, corrections, leadOnly, answers, answerRegex, answerWords, questionWords, facts: () => norm };
+  return { words, fn, ordinals, numerals, refers, anaphorRegex, singular, verbForms, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, frames, nounPhrase, negatedRequest, timeRelation, timeComparison, cutWords, sequenceWords, joinerKeeps, cardJoiners, frameLeads, corrections, leadOnly, answers, answerRegex, answerWords, questionWords, facts: () => norm };
 }
 
 /**

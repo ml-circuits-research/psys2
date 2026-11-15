@@ -9,6 +9,7 @@
 //   grammarRoEn(text)  -> { text, ok, frame, notes }                a message of one or more sentences; text '' when any sentence is outside the covered shapes
 //                                                                   (the caller then falls back to another path: the grammar ABSTAINS rather than guesses)
 import { budget } from '../dialog/budget.mjs';
+import { LANG_RO_FACTS } from '../lang/ro.facts.generated.mjs';
 import { tokenize } from './normalize.mjs';
 import { analyze, analyzeRaw, parseNumberAt, placeOf, pluralEn, isKnownName } from './morphology.ro.mjs';
 
@@ -18,8 +19,15 @@ const TRANSLATOR_LEXICON = { analyse: (key, raw) => (raw ? analyzeRaw(raw, true)
 let LEX = TRANSLATOR_LEXICON;   // the raw tokens of the sentence being read (diacritics decide "casă" / "casa")
 
 // ---- closed classes (data of the language world) ---------------------------------------------------------------------------------------------
-const LEAD = ['poti sa', 'ai putea sa', 'mi ai putea', 'puteti sa', 'vreau sa', 'as vrea sa', 'vrei sa', 'poti', 'ai putea'];
-const FILLER = new Set(['salut', 'buna', 'hei', 'deci', 'atunci', 'hai', 'pai', 'si', 'dar', 'ia', 'hm', 'um']);
+// THE FUNCTION WORDS OF w.lang.ro (shard fn: filler, politeness, wish, hesitation, focus; reviewer 2026-11-15 06:20): the leads (politeness and wish at the lead), the fillers
+// (filler and hesitation at the lead or anywhere) and the politeness that stands anywhere, folded like the keys (no diacritics, a hyphen a space). What the catalog does not class
+// yet stays here (TEMPORARY, [KNOW] questions.md Q30: vrei să, poți, ai putea, mi-ai putea; salut, bună, hei, atunci, hai, și, dar, ia, um).
+const foldRo = (t) => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
+const FN = [...LANG_RO_FACTS.wires.matchAll(/^@\S+ w\.lang\.ro\.fn (.*)$/gm)].map((m) => ({ text: foldRo(/text="([^"]*)"/.exec(m[1])?.[1] ?? ''), views: [...m[1].matchAll(/view=(\S+)/g)].map((x) => x[1]), at: /\bat=(\S+)/.exec(m[1])?.[1] ?? 'any' })).filter((x) => x.text);
+const fnOf = (views, ats) => FN.filter((x) => x.views.some((v) => views.includes(v)) && ats.includes(x.at)).map((x) => x.text);
+const LEAD = [...new Set([...fnOf(['politeness', 'wish'], ['lead']), 'vrei sa', 'poti', 'ai putea', 'mi ai putea'])].sort((a, b) => b.split(' ').length - a.split(' ').length);
+const FILLER = new Set([...fnOf(['filler', 'hesitation'], ['lead', 'any']).filter((t) => !t.includes(' ')), 'salut', 'buna', 'hei', 'atunci', 'hai', 'si', 'dar', 'ia', 'um']);
+const POLITE = [...new Set(fnOf(['politeness'], ['any', 'tail']))].sort((a, b) => b.split(' ').length - a.split(' ').length);
 const REL = new Map([['langa', 'next to'], ['deasupra', 'above'], ['sub', 'under'], ['pe', 'on'], ['in', 'in'], ['dupa', 'after'], ['spre', 'toward'], ['printre', 'among'], ['intre', 'between'], ['peste', 'over'], ['la', 'at']]);
 const REL2 = new Map([['in spatele', 'behind'], ['in fata', 'in front of'], ['in jurul', 'around'], ['de langa', 'next to'], ['pe langa', 'next to'], ['in interiorul', 'inside']]);
 const DIR = new Map([['la stanga', 'to the left'], ['la dreapta', 'to the right'], ['sus', 'up'], ['jos', 'down'], ['mai sus', 'higher'], ['mai jos', 'lower'], ['mai la stanga', 'further left'],
@@ -107,7 +115,7 @@ function cleanKeys(toks0) {
     for (const p of LEAD) { const pk = p.split(' '); if (pk.every((w, n) => keys[n] === w) && keys.length > pk.length) { keys = keys.slice(pk.length); raws = raws.slice(pk.length); again = true; break; } }
     if (!again && FILLER.has(keys[0]) && keys.length > 1) { keys = keys.slice(1); raws = raws.slice(1); again = true; }
   }
-  for (const p of ['te rog', 'va rog', 'mersi', 'multumesc']) { const pk = p.split(' '); for (let i = 0; i + pk.length <= keys.length; i++) { budget.tick('grammar-ro.polite'); if (pk.every((w, n) => keys[i + n] === w)) { keys.splice(i, pk.length); raws.splice(i, pk.length); break; } } }
+  for (const p of POLITE) { const pk = p.split(' '); for (let i = 0; i + pk.length <= keys.length; i++) { budget.tick('grammar-ro.polite'); if (pk.every((w, n) => keys[i + n] === w)) { keys.splice(i, pk.length); raws.splice(i, pk.length); break; } } }
   return { keys, raws };
 }
 

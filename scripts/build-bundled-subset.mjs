@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // KNOWLEDGE-OUT step 3: the small bundled subset of the catalog that a first visit has with no network (the "first paint"), GENERATED from the catalog, never copied by hand:
-//   - every colour name of k.values (name, RGB, basic colour) and every number word (cardinal, ordinal, group, fraction),
+//   - every colour name of k.colours (name, RGB, family) and every number word (cardinal, ordinal, group, fraction),
 //   - the drawings (k.objects) of the built-in kinds of the drawing board (the old hand drawings), by the generic reading `facts.wires`,
 //   - and, through the two scripts that already generate from the catalog, the act verbs of k.actions (worlds/acts/verbs.generated.mjs) and the default face of k.faces
 //     (worlds/ui.avatar/default-face.mjs), run here so that one command refreshes everything bundled.
@@ -46,18 +46,30 @@ function put(id, header, wires, keys) {
   index.push({ world: id.split('/')[0], id, path: `${id}.sop`, keys: [...new Set(keys.map((k) => String(k).toLowerCase()))], sources: ['bundled'] });
 }
 
-const colours = await facts.wires('k.values.colour');
+// k.colours is the one home of colour names (catalog KR2, 7ecf82d: k.values.colour is gone). A name can have several wires (the CSS shard, the common names, the hand-written
+// colours with tone and family, the PSys2 shard): they are merged by name into one bundled wire (rgb or rgb_about, family, basic, and core / thing derived below)
+const byName = new Map();
+for (const w of await facts.wires('k.colours.colour')) {
+  const n = String(w.f.name?.[0] ?? '').toLowerCase(); if (!n) continue;
+  const m = byName.get(n) ?? byName.set(n, { id: `k.colours.bundled.${n.replace(/\W+/g, '_')}`, type: 'k.colours.colour', f: { name: [n] } }).get(n);
+  for (const k of ['rgb', 'rgb_about', 'family', 'basic']) if (w.f[k]?.[0] && !m.f[k]) m.f[k] = [w.f[k][0]];
+  // `core=true`: the catalog describes the colour itself (tone, temperature, a kind: the hand-written colours people mean first), not only a CSS or common name with a value
+  if (w.f.tone || w.f.temperature || w.f.kind || w.f.basic?.[0] === 'true') m.f.core = ['true'];
+}
+for (const m of byName.values()) if (m.f.rgb && m.f.rgb_about) delete m.f.rgb_about;
+const colours = [...byName.values()];
 const numbers = await facts.wires('k.values.number');
-if (!colours.length || !numbers.length) { console.error('the catalog has no k.values (colours, numbers): nothing to bundle'); process.exit(1); }
-// two facts the colour lexicon needs and the catalog has in other worlds, kept on the bundled colour wires: `thing=true` when the name is also a drawable thing of k.objects (a tomato, a plum) or has a verb sense in k.words (rust),
-// `core=true` when k.colours lists it as one of its colours (the catalog's own judgement of a real colour)
+if (!colours.length || !numbers.length) { console.error('the catalog has no k.colours colours or k.values numbers: nothing to bundle'); process.exit(1); }
+// one fact the colour lexicon needs and the catalog has in other worlds, kept on the bundled colour wires: `thing=true` when the name is also a drawable thing of k.objects (a tomato, a plum) or has a verb sense in k.words (rust)
 const objectNames = new Set((await facts.wires('k.objects.object')).map((w) => String(w.f.name?.[0]).toLowerCase()));
-const coreNames = new Set((await facts.wires('k.colours.colour')).map((w) => String(w.f.name?.[0]).toLowerCase()));
 // a name with a verb sense in k.words (rust, tan, sand) is a word of other kinds too: "I want to learn Rust"
 const verbal = new Set();
-for (const w of colours) { const n = w.f.name[0].toLowerCase(); if (n.includes(' ')) continue; const th = await facts.thing(n); if (th?.senses.some((x) => x.pos === 'verb')) verbal.add(n); }
-for (const w of colours) { const n = w.f.name[0].toLowerCase(); if (objectNames.has(n) || verbal.has(n)) w.f.thing = ['true']; if (coreNames.has(n)) w.f.core = ['true']; }
-put('k.values/shards/bundled', `${colours.length} colour names with their RGB and ${numbers.length} number words of k.values (colours carry thing= and core=, derived from k.objects and k.colours)`, [...colours, ...numbers], [...colours.map((w) => w.f.name[0]), ...numbers.map((w) => w.f.text[0])]);
+for (const w of colours) { const n = w.f.name[0]; if (n.includes(' ')) continue; const th = await facts.thing(n); if (th?.senses.some((x) => x.pos === 'verb')) verbal.add(n); }
+for (const w of colours) { const n = w.f.name[0]; if (objectNames.has(n) || verbal.has(n)) w.f.thing = ['true']; }
+// the other words for colours (chat spellings: blk, grn, light-blue): core.word of k.colours names
+const colourWords = (await facts.wires('core.word', { world: 'k.colours' })).filter((w) => (w.f.of ?? []).includes('k.colours.colour.name') && w.f.means?.[0]);
+put('k.colours/shards/bundled', `${colours.length} colour names of k.colours with their RGB and family (thing= and core= derived from k.objects, k.words and the hand-written colours), ${colourWords.length} other words for colours`, [...colours, ...colourWords], colours.map((w) => w.f.name[0]));
+put('k.values/shards/bundled', `${numbers.length} number words of k.values`, numbers, numbers.map((w) => w.f.text[0]));
 
 // the drawings of the built-in kinds of the drawing board: object, parts and points as the catalog has them
 const objects = [];
@@ -80,8 +92,8 @@ const arrangement = { on: arr.supports.filter(([, b]) => b !== 'ground'), ground
 const banner = (what) => `// SPDX-License-Identifier: AGPL-3.0-only\n// GENERATED by scripts/build-bundled-subset.mjs from the knowledge catalog (${what}${stamp(commit)}; licences as in the catalog's LICENSES.md): do not edit by hand.\n// The small subset a first visit has with no network; the catalog replaces it when reachable.\n`;
 // two modules: the colour and number words (read by the formalizer and every world through src/knowledge/values.mjs) and the drawings (read only through the bundled source)
 const pick = (re) => ({ shards: Object.fromEntries(Object.entries(shards).filter(([k]) => re.test(k))), index: index.filter((e) => re.test(e.path)) });
-const v = pick(/^k\.values\//), o = pick(/^k\.objects\//);
-const valuesOut = `${banner('k.values: colour names with RGB and number words')}export const BUNDLED_VALUES = ${JSON.stringify(v.shards)};\nexport const BUNDLED_VALUES_INDEX = ${JSON.stringify(v.index)};\n`;
+const v = pick(/^k\.(?:values|colours)\//), o = pick(/^k\.objects\//);
+const valuesOut = `${banner('k.colours: colour names with RGB; k.values: number words')}export const BUNDLED_VALUES = ${JSON.stringify(v.shards)};\nexport const BUNDLED_VALUES_INDEX = ${JSON.stringify(v.index)};\n`;
 const objectsOut = `${banner('k.objects: the drawings of the built-in kinds of the drawing board')}export const BUNDLED_OBJECTS = ${JSON.stringify(o.shards)};\nexport const BUNDLED_OBJECTS_INDEX = ${JSON.stringify(o.index)};\n`;
 emit(path.join(ROOT, 'src/knowledge/bundled-values.mjs'), valuesOut);
 emit(path.join(ROOT, 'src/knowledge/bundled-objects.mjs'), objectsOut);

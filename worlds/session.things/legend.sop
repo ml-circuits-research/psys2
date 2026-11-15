@@ -2,4 +2,4 @@
     namespace=session.things
     version=0.1.0
     imports=core
-    doc="The things of the session and what the user taught. State: things (id, kind, name, attrs, origin, shown, aspects), views (declarations, cached), learned (wires of the knowledge format as text)."
+    doc="The things of the session and what the user taught. State: things (id, kind, name, attrs, origin, shown, aspects), views (declarations, cached), learned (wires of the knowledge format as text), person (the person of the session: w.person facts kept by src/dialog/person.mjs, spec 23 section 12; null until the user says something about themselves)."

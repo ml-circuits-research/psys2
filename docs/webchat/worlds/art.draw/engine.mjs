@@ -18,16 +18,16 @@ import {
   W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, SHADES,
   canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind, kindKey, kindName, thingOfWord, COMPOSITE, thingGroups, partCount,
   registerThings, partGuessed, isThing, ensureCustom, registerShape, piecesOf, groupOf, thingOfKey, partsOf,
-} from './scene.mjs?v=04b6f3a58b';
+} from './scene.mjs?v=e70f16ba54';
 
-import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/values.mjs?v=2bd2c8e37d';   // the one colour reader (k.values)
+import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/values.mjs?v=ea821661e5';   // the one colour reader (k.values)
 import { habitat, adviceFor } from '../../lib/knowledge/commonsense.mjs?v=a83dfa4db3';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
-import { readNounPhrase, foldRelative } from '../../lib/lang/np-resolve.mjs?v=3035119849';   // the one host resolver of noun phrases   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
-import * as space from '../space/space.mjs?v=15c16cca4d';
-import * as rel from '../space/pieces.mjs?v=ac37cbb2f0';
-import * as solver from '../space/solver.mjs?v=cb88050fb5';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
+import { readNounPhrase, foldRelative } from '../../lib/lang/np-resolve.mjs?v=b8f1b1e0f1';   // the one host resolver of noun phrases   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
+import * as space from '../space/space.mjs?v=c7e07062fb';
+import * as rel from '../space/pieces.mjs?v=6b32c71834';
+import * as solver from '../space/solver.mjs?v=0f8d962a2b';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
 
-export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=04b6f3a58b';
+export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=e70f16ba54';
 
 // The turn's step budget (a no-op outside a turn): placement and name resolution are searches whose cost grows with the picture.
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };

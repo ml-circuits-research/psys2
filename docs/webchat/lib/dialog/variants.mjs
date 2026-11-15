@@ -13,13 +13,13 @@
  *   PSYS2_ENSEMBLE=on       the voices that are on run side by side and `readEnsemble` decides (spec 16 section 13); without it they run in sequence, the first accepted reading wins
  * Browser-safe: no `node:*`.
  */
-import { formalize as rulesFormalize } from '../formalizer/rules/index.mjs?v=847724fd89';
+import { formalize as rulesFormalize } from '../formalizer/rules/index.mjs?v=8c59dedcf0';
 import { buildWires, SEGMENT_SLOT } from '../formalizer/rules/emit.mjs?v=8e51d17dc1';
-import { lexIndex } from '../worlds/lexicon.mjs?v=2b73282059';
-import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=847724fd89';
-import { FILLER } from './world-aware.mjs?v=42c5d45b80';
+import { lexIndex } from '../worlds/lexicon.mjs?v=435219812a';
+import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=8c59dedcf0';
+import { FILLER } from './world-aware.mjs?v=1c4ba0e17c';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=847724fd89';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=8c59dedcf0';
 
 /** A catalog lookup waits at most LOOKUP_MS; a catalog that does not answer in time is no catalog (the reading is then the rules'), and the turn never waits for it. */
 const LOOKUP_MS = 400;

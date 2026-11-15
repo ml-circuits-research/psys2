@@ -1,4 +1,4 @@
-# k.values/shards/scales: 13 ordered scales (size, length, width, height, thickness, amount, degree, brightness, speed, weight, temperature, distance, loudness): the steps of each from the least to the most, other words for a step, and the comparatives and superlatives that move along a scale (bigger, smallest).
+# k.values/shards/scales: 14 ordered scales (size, length, width, height, thickness, amount, degree, brightness, speed, weight, temperature, distance, loudness, price): the steps of each from the least to the most, other words for a step, and the comparatives and superlatives that move along a scale (bigger, smallest).
 # sources: hand-core 1 (hand-written in this repository: tools/values-core.mjs)
 # license: CC0-1.0
 # script: tools/values-core.mjs
@@ -60,6 +60,10 @@
 @k.values.scale.loudness k.values.scale name=loudness about="how loud a sound is" steps=2 core.source="hand-core 1"
 @k.values.step.loudness.quiet k.values.step scale=loudness name=quiet rank=1 core.source="hand-core 1"
 @k.values.step.loudness.loud k.values.step scale=loudness name=loud rank=2 core.source="hand-core 1"
+@k.values.scale.price k.values.scale name=price about="how much a thing usually costs to buy" steps=3 core.source="hand-core 1"
+@k.values.step.price.cheap k.values.step scale=price name=cheap rank=1 core.source="hand-core 1"
+@k.values.step.price.medium k.values.step scale=price name=medium rank=2 core.source="hand-core 1"
+@k.values.step.price.expensive k.values.step scale=price name=expensive rank=3 core.source="hand-core 1"
 
 # Words: other words for a step.
 @k.values.word.step.size.tiny core.word text="very small" text=minute text=miniature text=mini text=teeny text=wee means=tiny of=k.values.step.name core.source="hand-core 1"
@@ -94,6 +98,9 @@
 @k.values.word.step.distance.far core.word text=distant text="far away" means=far of=k.values.step.name core.source="hand-core 1"
 @k.values.word.step.loudness.quiet core.word text=soft means=quiet of=k.values.step.name core.source="hand-core 1"
 @k.values.word.step.loudness.loud core.word text=noisy means=loud of=k.values.step.name core.source="hand-core 1"
+@k.values.word.step.price.cheap core.word text=inexpensive text=low-priced means=cheap of=k.values.step.name core.source="hand-core 1"
+@k.values.word.step.price.medium core.word text="moderately priced" means=medium of=k.values.step.name core.source="hand-core 1"
+@k.values.word.step.price.expensive core.word text=dear text=costly text=pricey means=expensive of=k.values.step.name core.source="hand-core 1"
 
 # Comparatives and superlatives.
 @k.values.comparative.size.bigger k.values.comparative text=bigger scale=size way=up degree=comparative core.source="hand-core 1"
@@ -110,9 +117,11 @@
 @k.values.comparative.length.shortest k.values.comparative text=shortest scale=length way=down degree=superlative core.source="hand-core 1"
 @k.values.comparative.width.wider k.values.comparative text=wider scale=width way=up degree=comparative core.source="hand-core 1"
 @k.values.comparative.width.broader k.values.comparative text=broader scale=width way=up degree=comparative core.source="hand-core 1"
+@k.values.comparative.width.apart k.values.comparative text=apart scale=width way=up degree=comparative core.source="hand-core 1"
 @k.values.comparative.width.widest k.values.comparative text=widest scale=width way=up degree=superlative core.source="hand-core 1"
 @k.values.comparative.width.broadest k.values.comparative text=broadest scale=width way=up degree=superlative core.source="hand-core 1"
 @k.values.comparative.width.narrower k.values.comparative text=narrower scale=width way=down degree=comparative core.source="hand-core 1"
+@k.values.comparative.width.together k.values.comparative text=together scale=width way=down degree=comparative core.source="hand-core 1"
 @k.values.comparative.width.narrowest k.values.comparative text=narrowest scale=width way=down degree=superlative core.source="hand-core 1"
 @k.values.comparative.height.taller k.values.comparative text=taller scale=height way=up degree=comparative core.source="hand-core 1"
 @k.values.comparative.height.higher k.values.comparative text=higher scale=height way=up degree=comparative core.source="hand-core 1"
@@ -166,10 +175,12 @@
 @k.values.comparative.temperature.coolest k.values.comparative text=coolest scale=temperature way=down degree=superlative core.source="hand-core 1"
 @k.values.comparative.distance.farther k.values.comparative text=farther scale=distance way=up degree=comparative core.source="hand-core 1"
 @k.values.comparative.distance.further k.values.comparative text=further scale=distance way=up degree=comparative core.source="hand-core 1"
+@k.values.comparative.distance.apart k.values.comparative text=apart scale=distance way=up degree=comparative core.source="hand-core 1"
 @k.values.comparative.distance.farthest k.values.comparative text=farthest scale=distance way=up degree=superlative core.source="hand-core 1"
 @k.values.comparative.distance.furthest k.values.comparative text=furthest scale=distance way=up degree=superlative core.source="hand-core 1"
 @k.values.comparative.distance.nearer k.values.comparative text=nearer scale=distance way=down degree=comparative core.source="hand-core 1"
 @k.values.comparative.distance.closer k.values.comparative text=closer scale=distance way=down degree=comparative core.source="hand-core 1"
+@k.values.comparative.distance.together k.values.comparative text=together scale=distance way=down degree=comparative core.source="hand-core 1"
 @k.values.comparative.distance.nearest k.values.comparative text=nearest scale=distance way=down degree=superlative core.source="hand-core 1"
 @k.values.comparative.distance.closest k.values.comparative text=closest scale=distance way=down degree=superlative core.source="hand-core 1"
 @k.values.comparative.loudness.louder k.values.comparative text=louder scale=loudness way=up degree=comparative core.source="hand-core 1"
@@ -178,3 +189,11 @@
 @k.values.comparative.loudness.softer k.values.comparative text=softer scale=loudness way=down degree=comparative core.source="hand-core 1"
 @k.values.comparative.loudness.quietest k.values.comparative text=quietest scale=loudness way=down degree=superlative core.source="hand-core 1"
 @k.values.comparative.loudness.softest k.values.comparative text=softest scale=loudness way=down degree=superlative core.source="hand-core 1"
+@k.values.comparative.price.dearer k.values.comparative text=dearer scale=price way=up degree=comparative core.source="hand-core 1"
+@k.values.comparative.price.pricier k.values.comparative text=pricier scale=price way=up degree=comparative core.source="hand-core 1"
+@k.values.comparative.price.more_expensive k.values.comparative text="more expensive" scale=price way=up degree=comparative core.source="hand-core 1"
+@k.values.comparative.price.dearest k.values.comparative text=dearest scale=price way=up degree=superlative core.source="hand-core 1"
+@k.values.comparative.price.priciest k.values.comparative text=priciest scale=price way=up degree=superlative core.source="hand-core 1"
+@k.values.comparative.price.most_expensive k.values.comparative text="most expensive" scale=price way=up degree=superlative core.source="hand-core 1"
+@k.values.comparative.price.cheaper k.values.comparative text=cheaper scale=price way=down degree=comparative core.source="hand-core 1"
+@k.values.comparative.price.cheapest k.values.comparative text=cheapest scale=price way=down degree=superlative core.source="hand-core 1"

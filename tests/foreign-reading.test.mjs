@@ -41,8 +41,15 @@ test('the turns the tab cut orphaned are not taken by a surviving world; full re
     const r = await s.send(text, opts);
     return { r, worlds: r.segments.filter((x) => !x.unparsed).map((x) => x.match?.worldId), state: s.state() };
   };
-  // MOOD: a first-person statement is not a command, in the tab's own world too
+  // MOOD: a first-person statement is not a command, in the tab's own world too; one the catalog's person frames read is a fact of the person of the session (spec 23 section 12, Q19)
   for (const [tab, text] of [['talk', 'I have two kids'], ['draw', 'I have two kids'], ['talk', 'I like cats, dogs and horses'], ['talk', 'I like chess, music and maps']]) {
+    const { r, worlds, state } = await say(tab, text);
+    assert.deepEqual(worlds, ['session.things'], `${tab}: "${text}" read by ${worlds}`);
+    assert.match(r.text, /^OK, you (?:have|like) /, text);
+    assert.equal(state['art.draw']?.objects?.length ?? 0, 0, `${text}: nothing drawn`);
+    assert.equal(state['ui.shell'].activeTab, tab, `${text}: no tab opened`);
+  }
+  for (const [tab, text] of [['talk', 'I was born in a small town'], ['draw', 'I feel sleepy today'], ['talk', 'I live near the sea']]) {   // no person frame reads them: nobody keeps them
     const { r, worlds, state } = await say(tab, text);
     assert.deepEqual(worlds, [], `${tab}: "${text}" read by ${worlds}`);
     assert.equal(r.text, STATEMENT_SAY, text);

@@ -16,9 +16,10 @@
  * is learned and nothing is weighted: a reading is dropped for a named reason, and every decision is recorded on the segment (`wa`, `veto`, `pick`).
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { editDistance } from '../formalizer/rules/normalize.mjs?v=fd96f11b4f';
-import { foreignFragment } from './continuation.mjs?v=265d0f7308';
-import { liveFromContext } from './meta-worlds.mjs?v=a4b2902a72';
+import { en } from '../lang/en.mjs?v=8f226ecd72';
+import { editDistance } from '../formalizer/rules/normalize.mjs?v=d9beb26cad';
+import { foreignFragment } from './continuation.mjs?v=21e48736aa';
+import { liveFromContext } from './meta-worlds.mjs?v=b3f4639070';
 
 export const WORLD_AWARE_MODES = Object.freeze(['off', 'veto', 'choose', 'observe', 'veto-strict', 'choose-strict']);
 /** The default mode (user decision 2026-11-12): an unset option is `veto`; an explicit `off` turns the layer off. */
@@ -33,8 +34,10 @@ const kinds = (mode) => new Set(/-strict$/.test(String(mode)) ? [...VETO_KINDS, 
 const NEAR = (w, text) => String(text ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu)?.some((x) => x !== w && x.length >= 3 && w.length >= 3 && editDistance(w, x) <= (w.length >= 6 ? 2 : 1)) ?? false;
 
 /** Words that may be left out of a message without changing what it asks for. Everything else counts as content (interrogatives and auxiliaries too: "is" turns a command into a question). */
-export const FILLER = new Set(['please', 'pls', 'plz', 'kindly', 'now', 'just', 'also', 'then', 'ok', 'okay', 'so', 'well', 'and', 'the', 'a', 'an', 'it', 'to', 'of', 'that', 'this', 'really',
-  'hey', 'hi', 'hello', 'thanks', 'thx', 'ty', 'rly', 'rlly', 'kno', 'know', 'u', 'ya', 'haha', 'yo', 'idk', 'btw', 'lil', 'bit', 'kinda', 'sorta', 'thank', 'you', 'lol', 'um', 'umm', 'uh', 'uhh', 'hmm', 'oh', 'yes', 'yeah', 'maybe', 'could', 'would', 'can', 'will', 'for', 'me', 'my', 'too', 'again', 'quickly', 'actually']);
+// the catalog's function words of the views filler, politeness and hesitation (w.lang.en.fn, shard fn), and the words it does not class that a reading may leave out without losing content
+// (function words of other classes, greetings, chat spellings: TEMPORARY where they are fillers the catalog lacks, questions.md Q30)
+export const FILLER = new Set([...['filler', 'politeness', 'hesitation'].flatMap((v) => [...en.fn(v)]).filter((w) => !w.includes(' ')),
+  'also', 'and', 'the', 'a', 'an', 'it', 'to', 'of', 'that', 'this', 'really', 'hey', 'hi', 'hello', 'ty', 'rly', 'rlly', 'kno', 'know', 'u', 'ya', 'haha', 'yo', 'idk', 'btw', 'lil', 'bit', 'kinda', 'sorta', 'thank', 'you', 'oh', 'yes', 'yeah', 'maybe', 'could', 'would', 'can', 'will', 'for', 'me', 'my', 'too', 'again', 'quickly']);
 
 const words = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
 const val = (w, k) => w.entries.find((e) => e.key === k)?.value?.v;

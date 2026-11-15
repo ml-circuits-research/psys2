@@ -48,3 +48,14 @@ test('natural or nothing (reviewer 2026-11-15 04:50 decision 3): a chip the gram
   const r = await tr.translate('What is the size of the circle?', { from: 'en', to: 'ro' });
   assert.ok(r.text && r.calques.some((c) => c.kind === 'of-genitive'));
 });
+
+test('composed chips (reviewer 2026-11-15 05:30): a chip whose frame the language world has a request template for is composed from it, not translated', async () => {
+  const items = [
+    { text: 'Add a red tree.', world: 'art.draw', frame: { action: 'make', args: { kind: 'tree', value: 'red' } } },
+    { text: 'Remove the sun.', world: 'art.draw', frame: { action: 'remove', args: { thing: 'o3', thingNoun: 'sun' } } },
+    { text: 'Change the colour of c1 to pink.', world: 'diagram.sketch', frame: { action: 'change', args: { thing: 'c1', thingNoun: 'circle', attr: 'colour', value: 'pink' } } },
+  ];
+  const ro = await chipsInLanguage(items, 'ro', null);
+  assert.deepEqual(ro.map((x) => x.text), ['Adaugă un copac roșu.', 'Șterge soarele.', 'Schimbă culoarea cercului în roz.']);
+  assert.ok(ro.every((x) => x.composed && x.en), 'composed, the English kept');
+});

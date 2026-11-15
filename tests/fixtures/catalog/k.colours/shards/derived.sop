@@ -1,0 +1,17 @@
+# k.colours/shards/derived: generated, do not edit. What the rules of k.colours (version 2) and of the modules it imports derive from the told facts
+# of k.colours, k.named: 11 facts, each marked derived=true with its rule as source (k.colours.basic.rule).
+# sources: rule (a rule of a module of this repository, over the facts named above; sources/rule/SOURCE.md)
+# license: MIT
+# script: tools/derive.mjs
+
+@k.colours.derived.basic.rule.black k.colours.basic name=black derived=true core.source="rule k.colours.basic.rule"
+@k.colours.derived.basic.rule.blue k.colours.basic name=blue derived=true core.source="rule k.colours.basic.rule"
+@k.colours.derived.basic.rule.brown k.colours.basic name=brown derived=true core.source="rule k.colours.basic.rule"
+@k.colours.derived.basic.rule.green k.colours.basic name=green derived=true core.source="rule k.colours.basic.rule"
+@k.colours.derived.basic.rule.grey k.colours.basic name=grey derived=true core.source="rule k.colours.basic.rule"
+@k.colours.derived.basic.rule.orange k.colours.basic name=orange derived=true core.source="rule k.colours.basic.rule"
+@k.colours.derived.basic.rule.pink k.colours.basic name=pink derived=true core.source="rule k.colours.basic.rule"
+@k.colours.derived.basic.rule.purple k.colours.basic name=purple derived=true core.source="rule k.colours.basic.rule"
+@k.colours.derived.basic.rule.red k.colours.basic name=red derived=true core.source="rule k.colours.basic.rule"
+@k.colours.derived.basic.rule.white k.colours.basic name=white derived=true core.source="rule k.colours.basic.rule"
+@k.colours.derived.basic.rule.yellow k.colours.basic name=yellow derived=true core.source="rule k.colours.basic.rule"

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// Operations of plan.list (kids plan, ADR-011; Q18 K1, K6, L3): lists of the published schema w.list v3, the acts make / change / ask, and every sum by the library
+// Operations of plan.list (kids plan, ADR-011; Q18 K1, K6, L3): lists of the published schema w.list v4, the acts make / change / ask, and every sum by the library
 // (listSums: total of quantity x price, change, short, left, affordable; listMeant: the list a request means). The lists are the world state; a library World with
 // w.list's two types is built from them for each sum, so nothing computed is stored. Prices: an entry's own, else the sample price list (prices.sample.mjs, H1).
 // No item, price or phrase is listed here: the readings are the catalog's frames (patterns.sop, generated), the number words and determiners w.lang.en's. Browser-safe.
 import { World, listSums, listMeant } from '../../lib/vendor/sopworld/sopworld.mjs?v=bf1ab27553';
-import { en } from '../../lib/lang/en.mjs?v=24a2dfb4e6';
-import { pluralize, singularLemma } from '../../lib/formalizer/rules/lemma.mjs?v=9ffe311f37';
+import { en } from '../../lib/lang/en.mjs?v=8f226ecd72';
+import { pluralize, singularLemma } from '../../lib/formalizer/rules/lemma.mjs?v=99f25611ee';
 import { SAMPLE_PRICES, SAMPLE_CURRENCY } from './prices.sample.mjs?v=1e37605e83';
 import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=4fba5d0be8';
 
@@ -48,7 +48,7 @@ function worldOf(lst) {
   const w = new World();
   w.load('@t.list core.type of=w.list.list\n@t.item core.type of=w.list.item\n@t.link core.slot of=w.list.item key=list type=w.list.list');
   const num = (k, v) => (v === undefined || v === null ? '' : ` ${k}=${+v}`);
-  const lines = [`@${lst.id} w.list.list name=${JSON.stringify(lst.name)} sort=${lst.sort ?? 'shopping'}${num('budget', lst.budget)}${num('tendered', lst.tendered)} currency=${lst.currency ?? SAMPLE_CURRENCY.code}`];
+  const lines = [`@${lst.id} w.list.list name=${JSON.stringify(lst.name)} sort=${lst.sort ?? 'shopping'}${num('budget', lst.budget)} currency=${lst.currency ?? SAMPLE_CURRENCY.code}`];
   for (const it of lst.items) lines.push(`@${it.id} w.list.item text=${JSON.stringify(it.text)} quantity=${+it.quantity} list=$${lst.id} status=${it.status ?? 'open'}${num('price', it.price)}`);
   w.tell(lines.join('\n'));
   return w;
@@ -108,7 +108,7 @@ export function change(ctx, { attribute, value, currency } = {}) {
   const n = Number(value);
   if (!Number.isFinite(n)) return { status: 'missing', note: 'How much money?' };
   const lst = attribute === 'budget' ? meant(st) : meant(st, { create: true });
-  if (attribute === 'budget') lst.budget = n; else { lst.tendered = n; lst.settled = true; }   // money handed over at the till closes the basket: the change is asked of it, the next thing wanted starts a new list
+  if (attribute === 'budget') lst.budget = n; else { lst.paid = n; lst.settled = true; }   // money handed over at the till is an EVENT of the story (w.list v4: `tendered` is no key of a list; k.actions pay: money remove), kept with the basket it pays for; it closes the basket
   if (currency) { lst.currencyWord = /s$|^lei$/.test(String(currency).toLowerCase()) ? String(currency).toLowerCase() : `${String(currency).toLowerCase()}s`; }
   return { status: 'supported', value: attribute === 'budget' ? `OK, you have ${money(n, lst)}.` : `OK, you pay ${money(n, lst)}.` };
 }
@@ -127,15 +127,18 @@ export function ask(ctx, { mode, thing, money: paid, unit, text } = {}) {
   if (mode === 'change') {
     let lst = meant(st, { create: false });
     if (thing || paid !== undefined) {   // "the change from 20 lei for a ball and a pencil": the question names its own purchase
-      lst = { id: 'q', name: 'question', items: [], tendered: paid !== undefined && paid !== '' ? Number(paid) : lst?.tendered, currencyWord: unit ? String(unit).toLowerCase() : lst?.currencyWord };
+      lst = { id: 'q', name: 'question', items: [], paid: paid !== undefined && paid !== '' ? Number(paid) : lst?.paid, currencyWord: unit ? String(unit).toLowerCase() : lst?.currencyWord };
       st.n = (st.n ?? 0) + 1;
       addItems(st, lst, entriesOf(thing));
     }
     if (!lst || !lst.items.length) return { status: 'missing', note: 'What do you buy?' };
-    if (lst.tendered === undefined || lst.tendered === null) return { status: 'missing', note: 'How much do you pay?' };
+    if (lst.paid === undefined || lst.paid === null) return { status: 'missing', note: 'How much do you pay?' };
     const s = sumsOf(lst);
     if (s.total === null || s.total === undefined) return { status: 'missing', note: `I don't know the price of ${s.missing.map((m) => an(label(m))).join(' and ')}.` };
     lst.settled = true;   // the purchase is paid for: the next thing wanted starts a new list
+    // the change is what was paid less the library's total (w.list v4: the payment is the story's event, not a key of the list)
+    s.tendered = lst.paid;
+    if (lst.paid < s.total) s.short = +(s.total - lst.paid).toFixed(2); else s.change = +(lst.paid - s.total).toFixed(2);
     if (s.short !== undefined) {
       const what = lst.items.length === 1 ? `${cap(count(lst.items[0].quantity, lst.items[0].text))} ${lst.items[0].quantity === 1 ? 'costs' : 'cost'}` : 'They cost';
       return { status: 'conflicting', value: `${money(s.tendered, lst)} is not enough. ${what} ${money(s.total, lst)}.`, answer: -s.short };

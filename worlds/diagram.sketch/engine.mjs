@@ -600,92 +600,44 @@ export const disconnect = make({ type: 'command', name: 'disconnect' });
 export const align = make({ type: 'command', name: 'align' });
 export const arrange = make({ type: 'command', name: 'arrange' });
 
-// ---- "a diagram shaped like a house" (DRAW-FROM-FACTS) --------------------------------------------------------------------
+// ---- "a diagram shaped like a house" (DRAW-FROM-FACTS; the outlines of k.layouts, Q21) -------------------------------------------------------------------------
 const LAYOUT_WORDS = new Set(['row', 'column', 'line', 'grid', 'circle', 'stack', 'cluster', 'ring', 'triangle', 'square', 'pyramid', 'tree', 'layers', 'radial', 'hierarchy', 'organic']);
-const thingOfNoun = (w) => {
-  const x = String(w ?? '').toLowerCase().replace(/[^a-z ]/g, '').trim();
-  for (const t of [x, x.replace(/ies$/, 'y'), x.replace(/es$/, ''), x.replace(/s$/, '')]) if (Object.hasOwn(THING_WORDS, t)) return THING_WORDS[t];
-  return null;
-};
-/** The points of one part of a catalog object in its 0-100 frame: its own points (lines, polygons), the corners of its box, the apex of a triangle, a ring round an oval. */
-function partPoints(p) {
+/** The corners of one part of a catalog drawing in its 0-100 frame: its own points (lines, polygons), the corners of its box, the apex of a triangle (an ellipse has none). */
+function partCorners(p) {
   if (Array.isArray(p.points) && p.points.length) return p.points.map(([x, y]) => [x, y]);
   if (p.shape === 'triangle') return [[p.x, p.y + p.h], [p.x + p.w, p.y + p.h], [p.x + p.w / 2, p.y]];
-  if (/^(?:circle|oval|ellipse)$/.test(p.shape)) return Array.from({ length: 12 }, (_, i) => [p.x + p.w / 2 + (p.w / 2) * Math.cos((i * Math.PI) / 6), p.y + p.h / 2 + (p.h / 2) * Math.sin((i * Math.PI) / 6)]);
+  if (/^(?:circle|oval|ellipse)$/.test(p.shape)) return [];
   return [[p.x, p.y], [p.x + p.w, p.y], [p.x + p.w, p.y + p.h], [p.x, p.y + p.h]];
 }
-const area2 = (poly) => poly.reduce((s, p, i) => { const q = poly[(i + 1) % poly.length]; return s + p[0] * q[1] - q[0] * p[1]; }, 0);
-function inside(p, x, y) {
-  if (p.shape === 'line') {
-    const pts = p.points ?? partPoints(p);
-    for (let i = 0; i + 1 < pts.length; i++) { const [ax, ay] = pts[i], [bx, by] = pts[i + 1], dx = bx - ax, dy = by - ay, l = dx * dx + dy * dy, t = l ? Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / l)) : 0; if (Math.hypot(x - ax - t * dx, y - ay - t * dy) <= 1.5) return true; }
-    return false;
-  }
-  if (/^(?:circle|oval|ellipse)$/.test(p.shape)) { const rx = p.w / 2, ry = p.h / 2; return ((x - p.x - rx) / rx) ** 2 + ((y - p.y - ry) / ry) ** 2 <= 1; }
-  const poly = partPoints(p);
-  let c = false;
-  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { budget.tick('diagram.outline'); const [xi, yi] = poly[i], [xj, yj] = poly[j]; if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c; }
-  return c;
-}
-const partArea = (p) => (p.shape === 'line' ? 0 : p.shape === 'triangle' ? (p.w * p.h) / 2 : /^(?:circle|oval|ellipse)$/.test(p.shape) ? (Math.PI * p.w * p.h) / 4 : p.points ? Math.abs(area2(p.points)) / 2 : p.w * p.h);
-/** The parts that make the silhouette: the mass (filled parts of 8 % of the largest one or more, and the lines), and a small part only when its mirror image is a part too (the two roofs of a castle); a one-sided small detail (a chimney, a beak) stays inside. */
-function massOf(parts) {
+const partArea = (p) => (p.shape === 'line' ? 0 : p.shape === 'triangle' ? (p.w * p.h) / 2 : /^(?:circle|oval|ellipse)$/.test(p.shape) ? (Math.PI * p.w * p.h) / 4 : p.w * p.h);
+/** The one-sided small details of a drawing: a filled part under 8 % of the largest one whose mirror image is no part (a chimney, a beak; the two towers of a castle are twins and stay). */
+function details(parts) {
   const big = Math.max(...parts.map(partArea)), small = (p) => p.shape !== 'line' && partArea(p) < 0.08 * big;
   const mass = parts.filter((p) => !small(p));
-  const ax = (Math.min(...mass.map((p) => p.x)) + Math.max(...mass.map((p) => p.x + p.w)));   // twice the axis
+  const ax = Math.min(...mass.map((p) => p.x)) + Math.max(...mass.map((p) => p.x + p.w));   // twice the axis
   const twin = (p) => parts.some((q) => q !== p && Math.abs(q.x - (ax - p.x - p.w)) <= Math.max(2, p.w * 0.25) && Math.abs(q.y - p.y) <= Math.max(2, p.h * 0.25) && Math.abs(q.w - p.w) <= Math.max(2, p.w * 0.25) && Math.abs(q.h - p.h) <= Math.max(2, p.h * 0.25));
-  return parts.filter((p) => !small(p) || twin(p));
+  return new Set(parts.filter((p) => small(p) && !twin(p)));
 }
+const area2 = (poly) => poly.reduce((s, p, i) => { const q = poly[(i + 1) % poly.length]; return s + p[0] * q[1] - q[0] * p[1]; }, 0);
 /**
- * THE OUTLINE of a catalog object (owner export 2026-11-14 22:43: "a diagram in the shape of a house"; reviewer 2026-11-15 03:15 item 1): the SILHOUETTE of the drawing, not the
- * hull of its points. The parts of its mass (massOf) are painted on a 100 x 100 grid of the object's frame as the drawing fills them (boxes, polygons, ellipses; lines 3 units
- * wide), the outer boundary of the largest connected piece is traced clockwise, its straight runs become segments (Douglas-Peucker, 1.2 units) whose corners snap to the parts'
- * own corners on the boundary (the exact gable top and eaves), and corners whose triangle is under `feature` of the area go. Concave where the drawing is (the eaves under a
- * roof). Clockwise from the top. The library's `outlineOf` (sopworld 0.129) is the convex hull of the parts' boxes, which loses the gable and the eaves: this stays until it has a concave silhouette (questions.md L1).
+ * THE OUTLINE of a thing, from the catalog (k.layouts outline: points in a 0-100 frame, clockwise from the top; bundled from the pin, src/knowledge/diagram-world.mjs). A traced outline
+ * (from=k.objects.object) is within its `tolerance` of the drawing's own corners: each point goes to the drawing's corner it traces (the exact gable top and eaves of the house). A small
+ * one-sided detail (the chimney) is not part of the shape on a phone: the corners whose triangle is under `feature` of the area go, one at a time (the smallest first). Clockwise from the top.
  */
-export function outlineOf(all, { feature = 0.01 } = {}) {
-  const parts = massOf(all);
-  const N = 102, at = (x, y) => (x + 1) + (y + 1) * N, fill = new Uint8Array(N * N);
-  for (const p of parts) {
-    const x0 = Math.max(0, Math.floor(p.x - 2)), x1 = Math.min(99, Math.ceil(p.x + p.w + 2)), y0 = Math.max(0, Math.floor(p.y - 2)), y1 = Math.min(99, Math.ceil(p.y + p.h + 2));
-    for (let y = y0; y <= y1; y++) { budget.tick('diagram.outline'); for (let x = x0; x <= x1; x++) if (!fill[at(x, y)] && inside(p, x + 0.5, y + 0.5)) fill[at(x, y)] = 1; }
+export function outlineOf(outline, { feature = 0.01 } = {}) {
+  let poly = outline.points.map(([x, y]) => [x, y]);
+  const parts = outline.drawing ? THINGS[outline.drawing] : null;
+  if (parts && outline.tolerance > 0) {
+    const detail = details(parts);
+    const corners = parts.flatMap((p) => partCorners(p).map((c) => ({ c, detail: detail.has(p) })));
+    poly = poly.flatMap((q) => {
+      budget.tick('diagram.outline');
+      const near = corners.filter(({ c }) => Math.hypot(c[0] - q[0], c[1] - q[1]) <= outline.tolerance).sort((a, b) => Math.hypot(a.c[0] - q[0], a.c[1] - q[1]) - Math.hypot(b.c[0] - q[0], b.c[1] - q[1]));
+      if (!near.length) return [q];
+      if (near.every((x) => x.detail)) return [];   // a corner of a one-sided small detail only (the chimney): not part of the shape
+      return [[...near.find((x) => !x.detail).c]];
+    });
   }
-  const comp = new Int32Array(N * N); let best = 0, bestSize = 0, id = 0;
-  for (let i = 0; i < N * N; i++) {
-    if (!fill[i] || comp[i]) continue;
-    id++; let size = 0; const stack = [i]; comp[i] = id;
-    while (stack.length) { budget.tick('diagram.outline'); const c = stack.pop(); size++; for (const d of [1, -1, N, -N]) { const n = c + d; if (fill[n] && !comp[n]) { comp[n] = id; stack.push(n); } } }
-    if (size > bestSize) { bestSize = size; best = id; }
-  }
-  const on = (x, y) => x >= -1 && y >= -1 && x < N - 1 && y < N - 1 && comp[at(x, y)] === best;
-  const next = new Map(), key = (x, y) => x * 1000 + y;
-  for (let y = 0; y < 100; y++) for (let x = 0; x < 100; x++) {
-    if (!on(x, y)) continue;
-    if (!on(x, y - 1)) next.set(key(x, y), [x + 1, y]);
-    if (!on(x + 1, y)) next.set(key(x + 1, y), [x + 1, y + 1]);
-    if (!on(x, y + 1)) next.set(key(x + 1, y + 1), [x, y + 1]);
-    if (!on(x - 1, y)) next.set(key(x, y + 1), [x, y]);
-  }
-  let loop = [];
-  const seen = new Set();
-  for (const k0 of next.keys()) {
-    if (seen.has(k0)) continue;
-    const l = []; let k = k0;
-    while (!seen.has(k) && next.has(k)) { budget.tick('diagram.outline'); seen.add(k); const [x, y] = next.get(k); l.push([x, y]); k = key(x, y); }
-    if (l.length > loop.length) loop = l;
-  }
-  const dp = (pts, eps) => {
-    if (pts.length < 3) return pts;
-    const [a, b] = [pts[0], pts[pts.length - 1]]; let far = 0, idx = 0;
-    for (let i = 1; i < pts.length - 1; i++) { const d = Math.abs((b[0] - a[0]) * (a[1] - pts[i][1]) - (a[0] - pts[i][0]) * (b[1] - a[1])) / (Math.hypot(b[0] - a[0], b[1] - a[1]) || 1); if (d > far) { far = d; idx = i; } }
-    return far > eps ? [...dp(pts.slice(0, idx + 1), eps).slice(0, -1), ...dp(pts.slice(idx), eps)] : [a, b];
-  };
-  const top = loop.reduce((k, p, i) => (p[1] < loop[k][1] || (p[1] === loop[k][1] && p[0] < loop[k][0]) ? i : k), 0);
-  loop = [...loop.slice(top), ...loop.slice(0, top)];
-  const far = loop.reduce((k, p, i) => (Math.hypot(p[0] - loop[0][0], p[1] - loop[0][1]) > Math.hypot(loop[k][0] - loop[0][0], loop[k][1] - loop[0][1]) ? i : k), 0);
-  let poly = [...dp(loop.slice(0, far + 1), 1.2).slice(0, -1), ...dp([...loop.slice(far), loop[0]], 1.2).slice(0, -1)];
-  const corners = parts.filter((p) => !/^(?:circle|oval|ellipse)$/.test(p.shape)).flatMap(partPoints).filter(([cx, cy]) => [[-0.6, -0.6], [0.6, -0.6], [0.6, 0.6], [-0.6, 0.6]].some(([dx, dy]) => !on(Math.floor(cx + dx), Math.floor(cy + dy))));
-  poly = poly.map((q) => { const c = corners.reduce((b, c) => (Math.hypot(c[0] - q[0], c[1] - q[1]) < Math.hypot(b[0] - q[0], b[1] - q[1]) ? c : b), [1e9, 1e9]); return Math.hypot(c[0] - q[0], c[1] - q[1]) <= 2.5 ? [...c] : q; });
   const whole = Math.abs(area2(poly)) / 2;
   for (;;) {
     budget.tick('diagram.outline');
@@ -699,8 +651,7 @@ export function outlineOf(all, { feature = 0.01 } = {}) {
   return [...poly.slice(t), ...poly.slice(0, t)].map(([x, y]) => [Math.round(x * 10) / 10, Math.round(y * 10) / 10]);
 }
 /**
- * `n` points evenly along a closed polygon (by length), the first at its first corner: the library's `arrange(nodes, 'path', { points, closed })` (sopworld 0.129; it gives the same points
- * the host computed before). The library's `outlineOf` is the convex hull of the parts' boxes (a flat top, no gable, no eaves), so the silhouette above stays the host's (questions.md L1).
+ * `n` points evenly along a closed polygon (by length), the first at its first corner: the library's `arrange(nodes, 'path', { points, closed })` (sopworld 0.129).
  */
 export function pointsAlong(poly, n) {
   const at = DL.arrange(Array.from({ length: n }, (_, i) => ({ id: `p${i}`, w: 0, h: 0 })), 'path', { points: poly, closed: true });
@@ -727,7 +678,7 @@ export function fitOnOutline(points, { usual = 62, min = 24, gap = 10 } = {}) {
 }
 
 /**
- * A diagram in the shape of a thing of the catalog: an ARRANGEMENT ALONG ITS OUTLINE. With three or more shapes in the diagram, they are moved onto the outline (evenly, from the top,
+ * A diagram in the shape of a thing of the catalog (an outline of k.layouts: 17 shapes, 33 drawings): an ARRANGEMENT ALONG ITS OUTLINE. With three or more shapes in the diagram, they are moved onto the outline (evenly, from the top,
  * clockwise); on an empty diagram one unnamed node is made at each corner of the outline (numbered in order), and the nodes are joined in order (a closed line).
  * A layout word (a row, a circle) is the engine's own arrange.
  */
@@ -735,15 +686,15 @@ export function shapedLike(ctx, args = {}) {
   if (!K) return NOT_READY();
   if (!DL) return no('The diagram knowledge is still loading. Please say that again in a moment.', 'missing');
   const s = ensure(ctx);
-  const noun = String(args.o ?? '').toLowerCase().replace(/[^a-z ]/g, '').trim();
-  const thing = thingOfNoun(noun);
-  if (!thing) {
+  const noun = String(args.o ?? '').toLowerCase().replace(/[-\s]?shaped$/, '').replace(/[^a-z ]/g, '').trim();   // "house-shaped": the frame's arrangement without "-shaped"
+  const outline = DG.outlineNamed(noun);
+  if (!outline) {
     if (LAYOUT_WORDS.has(noun) && s.shapes.length) return make({ type: 'command', name: 'arrange' })(ctx, { text: `arrange the boxes as a ${noun}` });
     const art = /^[aeiou]/.test(noun) ? 'an' : 'a';
     return no(`I don't know how to draw a diagram shaped like ${art} ${noun} yet. The catalog has no outline of ${art} ${noun}.`, 'unsupported');
   }
-  const parts = THINGS[thing], a = /^[aeiou]/.test(thing) ? 'an' : 'a';
-  const poly = outlineOf(parts);
+  const thing = outline.name, a = /^[aeiou]/.test(thing) ? 'an' : 'a';
+  const poly = outlineOf(outline);
   const x0 = Math.min(...poly.map((p) => p[0])), x1 = Math.max(...poly.map((p) => p[0])), y0 = Math.min(...poly.map((p) => p[1])), y1 = Math.max(...poly.map((p) => p[1]));
   const k = Math.min(640 / Math.max(1, x1 - x0), 380 / Math.max(1, y1 - y0));
   const canvas = ([x, y]) => [Math.round(400 + (x - (x0 + x1) / 2) * k), Math.round(250 + (y - (y0 + y1) / 2) * k)];
