@@ -204,8 +204,8 @@ export function violations(q, res, exp) {
   const parts = wantedKind && !q.target ? (kinds[wantedKind] ?? 0) : res.parts;
   if (r && parts != null && (parts < r[0] || parts > r[1])) out.push({ key: 'count', range: r });
   if (q.target && exp) {
-    if (exp.kinds > 1 && !wantedKind && kindN < Math.min(exp.kinds, Math.max(1, res.parts ?? 0))) out.push({ key: 'kinds', n: exp.kinds });
-    if ((exp.with ?? []).includes('arrow') && res.links === 0 && (res.parts ?? 0) > 1) out.push({ key: 'with', value: 'arrow' });
+    // the kinds of a whole thing are its own (a flowchart of process steps is all rectangles): only a kind said ("not all circles") or "random" (below) asks for variety
+    if ((exp.with ?? []).includes('arrow') && !res.composed && res.links === 0 && (res.parts ?? 0) > 1) out.push({ key: 'with', value: 'arrow' });   // a composed diagram's links are its kind's
     for (const w of exp.parts ?? []) if (!q.facts.some((f) => f.key === 'kind' && f.neg && f.value === w) && res.kinds && !(kinds[w] > 0) && (res.parts ?? 0) > 0 && exp.must?.includes(w)) out.push({ key: 'with', value: w });
   }
   if (q.facts.some((f) => f.key === 'manner' && f.value === 'random') && !q.facts.some((f) => f.key === 'kind' && !f.neg && !f.generic) && kindN < 2 && (res.parts ?? 0) > 2) out.push({ key: 'manner', value: 'random' });   // random is varied, never all of one kind

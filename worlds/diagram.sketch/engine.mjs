@@ -949,7 +949,9 @@ export function requestResult(ctx, { before = null } = {}) {
   const kinds = {};
   for (const x of made) kinds[x.shape] = (kinds[x.shape] ?? 0) + 1;
   const links = (s.edges ?? []).filter((e) => names.has(e.from) || names.has(e.to)).length;
-  return { parts: made.length, kinds, links, extent: made.reduce((a, x) => a + (x.size ?? 0), 0) };
+  // a diagram the knowledge composed in this turn (a kind with its own shapes and links: a flowchart of steps, a list) is the knowledge's answer to the defaults
+  const composed = !!s.composed && JSON.stringify(s.composed) !== JSON.stringify(before?.composed ?? null) && made.length > 0;
+  return { parts: made.length, kinds, links, extent: made.reduce((a, x) => a + (x.size ?? 0), 0), composed };
 }
 
 /** A small deterministic generator (the session's seed): "random" is varied, and the same seed gives the same diagram. */

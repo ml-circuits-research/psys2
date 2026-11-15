@@ -1547,7 +1547,7 @@ export class DialogSession {
   async _send(text, opts = {}) {
     const tabWorld = this.context().tabWorld;
     const decl = tabWorld ? this.engine.set.get(tabWorld)?.requestDecl : null;
-    if (!decl || opts.request === false || guard.soft()) return this._sendRead(text, opts);
+    if (!decl || opts.request === false || globalThis.process?.env?.PSYS2_REQUEST === 'off' || guard.soft()) return this._sendRead(text, opts);   // PSYS2_REQUEST=off: the A/B of the request step
     const snap0 = this.snapshot();
     const first = await this._sendRead(text, opts);
     try { return (await perf.time("request", () => this._requestStep(text, opts, first, { tabWorld, decl, snap0 }))) ?? first; } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error("[request]", e); return first; }
@@ -1573,7 +1573,7 @@ export class DialogSession {
     const world = set.get(tabWorld);
     const english = String(first.trace.intent?.from ?? first.trace.english ?? text);
     const segs = first.trace.segments ?? [];
-    const catchAll = segs.some((sg) => /\.read\.frame\.end$/.test(sg.match?.patternId ?? '') && sg.match?.args?.pre != null);
+    const catchAll = segs.some((sg) => /\.read\.frame(?:\.end)?$/.test(sg.match?.patternId ?? '')) && (first.statuses ?? []).some((x) => x !== 'supported');   // a frame reader ({pre} diagram {post}) that did not carry it out: its words are not read
     const complete = !catchAll && segs.length > 0 && segs.every((sg) => !sg.unparsed && !(sg.ignored?.length) && !sg.partial && !sg.bestEffort) && (first.statuses ?? []).every((x) => x === 'supported');
     const rd = this.dialogue.requests;
     const lastRec = rd.last(tabWorld);
