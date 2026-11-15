@@ -1,9 +1,9 @@
-# k.actions/shards/actions-hands: 29 actions of handling a thing: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; the other forms of the verbs; and 67 verbs and phrases that mean nearly the same.
+# k.actions/shards/actions-hands: 32 actions of handling a thing: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; the other forms of the verbs; and 75 verbs and phrases that mean nearly the same.
 # sources: hand-core 1 (hand-written in this repository: tools/actions-data.mjs)
 # license: CC0-1.0
 # script: tools/actions-core.mjs
 
-@k.actions.action.hold k.actions.action name=hold group=hands who=person who=monkey object=cup object=hand object=book object=balloon tool=hand result="the thing staying in the hand" opposite=drop example="A child holds a balloon." core.source="hand-core 1"
+@k.actions.action.hold k.actions.action name=hold group=hands who=person who=monkey object=cup object=hand object=book object=balloon tool=hand result="the thing staying in the hand" holds=set opposite=drop example="A child holds a balloon." core.source="hand-core 1"
 @k.actions.action.carry k.actions.action name=carry group=hands who=person who=ant who=truck object=bag object=box object=baby object=bucket tool=bag tool=basket tool=backpack result="the thing being somewhere else" example="A postman carries a parcel." core.source="hand-core 1"
 @k.actions.action.lift k.actions.action name=lift group=hands who=person who=crane who=elephant object=box object=stone object=child tool=crane tool=hand where="construction site" result="the thing being higher up" opposite=lower example="A crane lifts a heavy load." core.source="hand-core 1"
 @k.actions.action.lower k.actions.action name=lower group=hands who=person who=crane object=flag object=bucket object=load tool=rope tool=crane result="the thing being further down" opposite=lift example="They lower the bucket into the well." core.source="hand-core 1"
@@ -15,7 +15,10 @@
 @k.actions.action.pick_up k.actions.action name="pick up" group=hands who=person object=ball object=toy object=book object=baby tool=hand result="the thing being in the hand" undone_by=put example="She picks up the toys from the floor." core.source="hand-core 1"
 @k.actions.action.put k.actions.action name=put group=hands who=person object=cup object=book object=toy object=plate tool=hand result="the thing being in its new place" undone_by=take example="She puts the cup on the table." core.source="hand-core 1"
 @k.actions.action.take k.actions.action name=take group=hands who=person who=animal object=book object=apple object=toy tool=hand result="having the thing" opposite=give undone_by=put example="He takes an apple from the bowl." core.source="hand-core 1"
-@k.actions.action.give k.actions.action name=give group=hands who=person object=present object=flower object=book object=food tool=hand where="birthday party" where=Christmas result="another having the thing" opposite=take undone_by=take example="A child gives a present to a friend." core.source="hand-core 1"
+@k.actions.action.get k.actions.action name=get group=hands who=person who=animal object=present object=apple object=letter object=ticket tool=hand result="having the thing" holds=add example="Tom gets two apples from his grandmother." core.source="hand-core 1"
+@k.actions.action.get_back k.actions.action name="get back" group=hands who=person object=ball object=book object=money object=change tool=hand result="having the thing again" holds=add example="She gets back two lei in change." core.source="hand-core 1"
+@k.actions.action.have k.actions.action name=have group=hands who=person who=animal object=apple object=toy object=pet object=book result="the thing being one's own" holds=set example="Ana has five apples." core.source="hand-core 1"
+@k.actions.action.give k.actions.action name=give group=hands who=person object=present object=flower object=book object=food tool=hand where="birthday party" where=Christmas result="another having the thing" holds=give opposite=take undone_by=take example="A child gives a present to a friend." core.source="hand-core 1"
 @k.actions.action.open k.actions.action name=open group=hands who=person object=door object=window object=box object=book object=bottle object=umbrella tool=key tool=hand result="the thing being open" opposite=close undone_by=close example="She opens the door with a key." core.source="hand-core 1"
 @k.actions.action.close k.actions.action name=close group=hands who=person object=door object=window object=box object=book object=eyes tool=hand result="the thing being closed" opposite=open undone_by=open example="He closes the window." core.source="hand-core 1"
 @k.actions.action.shake k.actions.action name=shake group=hands who=person who=dog who=wind object=bottle object=hand object=tree object=rattle tool=hand result="the thing moving quickly to and fro" example="The baby shakes a rattle." core.source="hand-core 1"
@@ -46,6 +49,9 @@
 @k.actions.word.action.pick_up core.word text="picks up" text="picked up" text="picking up" means="pick up" of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.put core.word text=puts text=putting means=put of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.take core.word text=takes text=took text=taking means=take of=k.actions.action.name core.source="hand-core 1"
+@k.actions.word.action.get core.word text=gets text=got text=getting means=get of=k.actions.action.name core.source="hand-core 1"
+@k.actions.word.action.get_back core.word text="gets back" text="got back" text="getting back" means="get back" of=k.actions.action.name core.source="hand-core 1"
+@k.actions.word.action.have core.word text=has text=had text=having means=have of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.give core.word text=gives text=gave text=giving means=give of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.open core.word text=opens text=opened text=opening means=open of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.close core.word text=closes text=closed text=closing means=close of=k.actions.action.name core.source="hand-core 1"
@@ -95,8 +101,16 @@
 @k.actions.similar.lay.put k.actions.similar name=lay action=put core.source="hand-core 1"
 @k.actions.similar.put_down.put k.actions.similar name="put down" action=put core.source="hand-core 1"
 @k.actions.similar.grab.take k.actions.similar name=grab action=take core.source="hand-core 1"
-@k.actions.similar.get.take k.actions.similar name=get action=take core.source="hand-core 1"
 @k.actions.similar.remove.take k.actions.similar name=remove action=take core.source="hand-core 1"
+@k.actions.similar.obtain.get k.actions.similar name=obtain action=get core.source="hand-core 1"
+@k.actions.similar.come_by.get k.actions.similar name="come by" action=get core.source="hand-core 1"
+@k.actions.similar.be_given.get k.actions.similar name="be given" action=get core.source="hand-core 1"
+@k.actions.similar.recover.get_back k.actions.similar name=recover action="get back" core.source="hand-core 1"
+@k.actions.similar.take_back.get_back k.actions.similar name="take back" action="get back" core.source="hand-core 1"
+@k.actions.similar.be_given_back.get_back k.actions.similar name="be given back" action="get back" core.source="hand-core 1"
+@k.actions.similar.own.have k.actions.similar name=own action=have core.source="hand-core 1"
+@k.actions.similar.possess.have k.actions.similar name=possess action=have core.source="hand-core 1"
+@k.actions.similar.have_got.have k.actions.similar name="have got" action=have core.source="hand-core 1"
 @k.actions.similar.hand_over.give k.actions.similar name="hand over" action=give core.source="hand-core 1"
 @k.actions.similar.pass.give k.actions.similar name=pass action=give core.source="hand-core 1"
 @k.actions.similar.offer.give k.actions.similar name=offer action=give core.source="hand-core 1"

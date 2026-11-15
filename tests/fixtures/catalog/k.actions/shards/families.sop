@@ -1,4 +1,4 @@
-# k.actions/shards/families: act families: the 16 acts grouped by what they do (15 families in three layers: creation and destruction under existence, joining and separating under structure, change of a value, change of place, question, view, history, keeping) and by the role they need (3 families), each membership with its reason; the up edges of acts for the library's cousins.
+# k.actions/shards/families: act families: the 19 acts grouped by what they do (16 families in three layers: creation and destruction under existence, joining and separating under structure, change of a value, change of place, question, view, history, keeping) and by the role they need (3 families), each membership with its reason; the up edges of acts for the library's cousins.
 # sources: hand-core 1 (hand-written in this repository: tools/acts-core.mjs; the "takes" families are read off the roles)
 # license: CC0-1.0
 # script: tools/acts-core.mjs
@@ -19,6 +19,7 @@
 @k.actions.family.view k.actions.family name=view dimension=does about="only what is picked changes: the things the next acts are about" parent="no change of things" core.source="hand-core 1"
 @k.actions.family.history k.actions.family name=history dimension=does about="the things come back as they were at an earlier or a later step" parent="the work itself" core.source="hand-core 1"
 @k.actions.family.keeping k.actions.family name=keeping dimension=does about="the work goes out of the application or comes back into it (kept, brought back, given to someone)" parent="the work itself" core.source="hand-core 1"
+@k.actions.family.conversation k.actions.family name=conversation dimension=does about="a move of talk the other side answers (a greeting, thanks, a goodbye); nothing in the work changes" parent="no change of things" core.source="hand-core 1"
 @k.actions.family.acts_by_what_they_need k.actions.family name="acts by what they need" dimension=takes about="acts grouped by the one role they cannot do without" core.source="hand-core 1"
 @k.actions.family.acts_on_a_kind k.actions.family name="acts on a kind" dimension=takes about="the needed role holds a kind" parent="acts by what they need" core.source="hand-core 1"
 @k.actions.family.acts_on_a_thing k.actions.family name="acts on a thing" dimension=takes about="the needed role holds a thing" parent="acts by what they need" core.source="hand-core 1"
@@ -42,6 +43,9 @@
 @k.actions.member.redo.history k.actions.member act=redo family=history why="what undo took back is done again" core.source="hand-core 1"
 @k.actions.member.save.keeping k.actions.member act=save family=keeping why="the work is kept so that it can be brought back later" core.source="hand-core 1"
 @k.actions.member.load.keeping k.actions.member act=load family=keeping why="work that was kept is brought back" core.source="hand-core 1"
+@k.actions.member.greet.conversation k.actions.member act=greet family=conversation why="it opens a conversation; the other side greets back" core.source="hand-core 1"
+@k.actions.member.thank.conversation k.actions.member act=thank family=conversation why="it says the speaker is grateful; the other side answers (you are welcome)" core.source="hand-core 1"
+@k.actions.member.farewell.conversation k.actions.member act=farewell family=conversation why="it ends a conversation; the other side says goodbye" core.source="hand-core 1"
 @k.actions.member.make.acts_on_a_kind k.actions.member act=make family="acts on a kind" why="its needed role kind holds a kind" core.source="hand-core 1"
 @k.actions.member.remove.acts_on_a_thing k.actions.member act=remove family="acts on a thing" why="its needed role thing holds a thing" core.source="hand-core 1"
 @k.actions.member.change.acts_on_a_thing k.actions.member act=change family="acts on a thing" why="its needed role thing holds a thing" core.source="hand-core 1"
@@ -58,3 +62,6 @@
 @k.actions.member.load.acts_on_a_thing k.actions.member act=load family="acts on a thing" why="its needed role thing holds a thing" core.source="hand-core 1"
 @k.actions.member.redo.acts_that_need_no_filler k.actions.member act=redo family="acts that need no filler" why="none of its roles is needed" core.source="hand-core 1"
 @k.actions.member.deselect.acts_that_need_no_filler k.actions.member act=deselect family="acts that need no filler" why="none of its roles is needed" core.source="hand-core 1"
+@k.actions.member.greet.acts_that_need_no_filler k.actions.member act=greet family="acts that need no filler" why="none of its roles is needed" core.source="hand-core 1"
+@k.actions.member.thank.acts_that_need_no_filler k.actions.member act=thank family="acts that need no filler" why="none of its roles is needed" core.source="hand-core 1"
+@k.actions.member.farewell.acts_that_need_no_filler k.actions.member act=farewell family="acts that need no filler" why="none of its roles is needed" core.source="hand-core 1"

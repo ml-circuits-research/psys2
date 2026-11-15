@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * One reader of colours and number words for every world and the dialog tier (KNOWLEDGE-OUT step 4a): the colour names with their RGB and the number words come from the
- * knowledge world `k.values` (and `k.colours` for the families of colours), read through the generic catalog access of facts.mjs. No world keeps a colour table or a number lexicon.
+ * knowledge world `k.colours` (the one home of colour names: name, RGB, family) and `k.values` (number words), read through the generic catalog access of facts.mjs. No world keeps a colour table or a number lexicon.
  * Browser-safe: no `node:*`; synchronous reads (an operation must not wait), seeded from the bundled subset (bundled-values.mjs, generated from the catalog) so a first visit with no network
  * has the same names; `loadValues(facts)` replaces the seed with the catalog when it is reachable (the host calls it when the knowledge is attached: `engine.setKnowledge`).
  *
@@ -33,9 +33,15 @@ export const comparativeWords = (scales, way) => state.comparatives.filter((c) =
 function absorb(wires) {
   const colours = new Map(), numbers = new Map();
   for (const w of wires) {
-    if (w.type === 'k.values.colour' && w.f.name?.[0]) {
-      const name = lc(w.f.name[0]);
-      colours.set(name, { name, rgb: w.f.rgb?.[0] ?? w.f.rgb_about?.[0] ?? null, exact: !!w.f.rgb, basic: w.f.basic?.[0] ?? null, thing: w.f.thing?.[0] === 'true', core: w.f.core?.[0] === 'true' });
+    if (w.type === 'k.colours.colour' && w.f.name?.[0]) {
+      // several wires can name one colour (the CSS shard, the common names, the hand-written colours): merged by name; `basic` here is the basic colour (k.colours `family`)
+      const name = lc(w.f.name[0]), old = colours.get(name);
+      const c = old ?? { name, rgb: null, exact: false, basic: null, thing: false, core: false };
+      if (!c.rgb || (!c.exact && w.f.rgb)) { const rgb = w.f.rgb?.[0] ?? w.f.rgb_about?.[0]; if (rgb) { c.rgb = rgb; c.exact = !!w.f.rgb; } }
+      c.basic ??= w.f.family?.[0] ?? null;
+      c.thing ||= w.f.thing?.[0] === 'true';
+      c.core ||= w.f.core?.[0] === 'true' || !!(w.f.tone || w.f.temperature || w.f.kind) || w.f.basic?.[0] === 'true';
+      if (!old) colours.set(name, c);
     } else if (w.type === 'k.values.number' && w.f.text?.[0]) { const t = lc(w.f.text[0]); (numbers.get(t) ?? numbers.set(t, []).get(t)).push({ value: Number(w.f.value?.[0] ?? w.f.value_about?.[0]), kind: w.f.kind?.[0] ?? 'cardinal' }); }   // one text can be two kinds (third: ordinal and fraction)
   }
   return { colours, numbers };
@@ -55,13 +61,13 @@ let attached = null;
 export function attachValues(facts) { attached = facts ?? null; state.loading = null; }
 const wake = () => { if (attached && !state.loading) loadValues(attached); };
 
-/** Replaces the seed with the catalog's `k.values` (and `k.colours` families) when the catalog has them; keeps the seed otherwise. Never throws; the settled answer is remembered per `facts`. */
+/** Replaces the seed with the catalog's `k.colours` colours and `k.values` numbers when the catalog has them; keeps the seed otherwise. Never throws; the settled answer is remembered per `facts`. */
 export function loadValues(facts) {
   if (!facts?.wires) return Promise.resolve(state.from);
   if (state.loading?.facts === facts) return state.loading.promise;
   const promise = (async () => {
     try {
-      const wires = [...await facts.wires('k.values.colour'), ...await facts.wires('k.values.number')];
+      const wires = [...await facts.wires('k.colours.colour'), ...await facts.wires('k.values.number')];
       try { const cmp = (await facts.wires('k.values.comparative')).filter((w) => w.f.text?.[0] && w.f.scale?.[0] && w.f.way?.[0]).map((w) => ({ text: lc(w.f.text[0]), scale: w.f.scale[0], way: w.f.way[0], degree: w.f.degree?.[0] })); if (cmp.length) state.comparatives = [...cmp.filter((c) => c.degree !== 'superlative'), ...COMPARATIVES_SEED_TEMPORARY.filter((s) => !cmp.some((c) => c.text === s.text))]; } catch { /* the seed stays */ }
       if (wires.length) {
         const got = absorb(wires);

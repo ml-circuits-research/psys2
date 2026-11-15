@@ -1,4 +1,4 @@
-# k.actions/shards/actions-move: 30 actions of moving oneself: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; the other forms of the verbs; and 57 verbs and phrases that mean nearly the same.
+# k.actions/shards/actions-move: 31 actions of moving oneself: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; the other forms of the verbs; and 59 verbs and phrases that mean nearly the same.
 # sources: hand-core 1 (hand-written in this repository: tools/actions-data.mjs)
 # license: CC0-1.0
 # script: tools/actions-core.mjs
@@ -9,6 +9,7 @@
 @k.actions.action.climb k.actions.action name=climb group=move who=person who=animal object=tree object=ladder object=mountain object=stairs tool=ladder tool=rope where=mountains where=playground where=forest result="being higher up" example="A monkey climbs a tree." core.source="hand-core 1"
 @k.actions.action.swim k.actions.action name=swim group=move who=person who=fish who=animal where="swimming pool" where=lake where=river where=beach result="moving through water" example="A fish swims in the sea." core.source="hand-core 1"
 @k.actions.action.fly k.actions.action name=fly group=move who=bird who=insect who=plane who=kite who=balloon tool=wing where=night where=airport where=space result="moving through the air" example="Birds and planes fly." core.source="hand-core 1"
+@k.actions.action.fly_away k.actions.action name="fly away" group=move who=bird who=butterfly who=balloon who=insect tool=wing result="not being there any more" holds=remove example="Two of the birds fly away." core.source="hand-core 1"
 @k.actions.action.crawl k.actions.action name=crawl group=move who=baby who=insect who=snake result="moving close to the ground" example="A baby crawls across the floor." core.source="hand-core 1"
 @k.actions.action.fall k.actions.action name=fall group=move who=person who=leaf who=rain who=apple result="being lower down, on the ground" opposite=rise example="Leaves fall from the tree in autumn." core.source="hand-core 1"
 @k.actions.action.rise k.actions.action name=rise group=move who=sun who=balloon who=smoke result="being higher up" opposite=fall example="The sun rises in the morning." core.source="hand-core 1"
@@ -28,7 +29,7 @@
 @k.actions.action.stop k.actions.action name=stop group=move who=person who=car who=train who=rain tool="traffic light" where="city street" where="railway station" result="not moving any more" opposite=go example="The bus stops at the bus stop." core.source="hand-core 1"
 @k.actions.action.go k.actions.action name=go group=move who=person who=animal who=car result="being somewhere else" opposite=stop example="Children go to school." core.source="hand-core 1"
 @k.actions.action.come k.actions.action name=come group=move who=person who=animal result="being here" opposite=leave example="Grandmother comes to visit." core.source="hand-core 1"
-@k.actions.action.leave k.actions.action name=leave group=move who=person who=train who=ship object=house object=room object=town where="railway station" where=harbour where=airport result="not being there any more" opposite=come example="The train leaves the station." core.source="hand-core 1"
+@k.actions.action.leave k.actions.action name=leave group=move who=person who=train who=ship object=house object=room object=town where="railway station" where=harbour where=airport result="not being there any more" holds=remove opposite=come example="The train leaves the station." core.source="hand-core 1"
 @k.actions.action.enter k.actions.action name=enter group=move who=person who=animal object=house object=room object=cave tool=door result="being inside" example="A person enters the house through the door." core.source="hand-core 1"
 @k.actions.action.follow k.actions.action name=follow group=move who=person who=dog who=duckling object=person object=path object=animal result="being behind another" opposite=lead example="The ducklings follow their mother." core.source="hand-core 1"
 @k.actions.action.lead k.actions.action name=lead group=move who=person who=guide who="mother duck" object=person object=animal object=horse tool=leash tool=rope result="others coming along behind" opposite=follow example="A girl leads a horse by the rope." core.source="hand-core 1"
@@ -41,6 +42,7 @@
 @k.actions.word.action.climb core.word text=climbs text=climbed text=climbing means=climb of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.swim core.word text=swims text=swam text=swimming means=swim of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.fly core.word text=flies text=flew text=flying means=fly of=k.actions.action.name core.source="hand-core 1"
+@k.actions.word.action.fly_away core.word text="flies away" text="flew away" text="flying away" means="fly away" of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.crawl core.word text=crawls text=crawled text=crawling means=crawl of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.fall core.word text=falls text=fell text=falling means=fall of=k.actions.action.name core.source="hand-core 1"
 @k.actions.word.action.rise core.word text=rises text=rose text=rising means=rise of=k.actions.action.name core.source="hand-core 1"
@@ -79,6 +81,8 @@
 @k.actions.similar.paddle.swim k.actions.similar name=paddle action=swim core.source="hand-core 1"
 @k.actions.similar.soar.fly k.actions.similar name=soar action=fly core.source="hand-core 1"
 @k.actions.similar.glide.fly k.actions.similar name=glide action=fly core.source="hand-core 1"
+@k.actions.similar.flutter_off.fly_away k.actions.similar name="flutter off" action="fly away" core.source="hand-core 1"
+@k.actions.similar.fly_off.fly_away k.actions.similar name="fly off" action="fly away" core.source="hand-core 1"
 @k.actions.similar.creep.crawl k.actions.similar name=creep action=crawl core.source="hand-core 1"
 @k.actions.similar.drop_down.fall k.actions.similar name="drop down" action=fall core.source="hand-core 1"
 @k.actions.similar.tumble.fall k.actions.similar name=tumble action=fall core.source="hand-core 1"

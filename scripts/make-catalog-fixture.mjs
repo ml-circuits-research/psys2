@@ -10,7 +10,7 @@ const src = process.argv[2];
 if (!src) { console.error('usage: node scripts/make-catalog-fixture.mjs <catalog docs/worlds folder> [--world k.actions]'); process.exit(1); }
 const out = path.join(import.meta.dirname, '../tests/fixtures/catalog');
 const real = JSON.parse(readFileSync(path.join(src, 'index.json'), 'utf8'));
-const WHOLE = new Set(['k.actions']);
+const WHOLE = new Set(['k.actions', 'k.colours', 'k.values', 'k.layouts']);   // k.colours, k.values: the colour names moved to k.colours (catalog 7ecf82d); k.layouts: the layout names and the outlines; refreshed whole when the pin moves
 if (process.argv.includes('--world')) {
   const id = process.argv[process.argv.indexOf('--world') + 1];
   if (!WHOLE.has(id)) { console.error(`--world: only a world the fixture copies whole (${[...WHOLE].join(', ')})`); process.exit(1); }

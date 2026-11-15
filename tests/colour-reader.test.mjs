@@ -40,7 +40,7 @@ test('the catalog replaces the bundled subset when it is reachable; an unreachab
   assert.equal(valuesFrom(), 'catalog');
   assert.equal(colourHex('red').toLowerCase(), '#ff0000');
   const down = createFacts({ source: createLayeredSource({ text: async () => null }) });
-  assert.equal((await down.wires('k.values.colour')).length > 150, true, 'the bundled subset answers through the same reading path');
+  assert.equal((await down.wires('k.colours.colour')).length > 150, true, 'the bundled subset answers through the same reading path');
   assert.equal(down.unreachable(), true, 'a read served by the subset is still "I cannot reach the catalog"');
   assert.equal((await down.thing('house'))?.objects.length > 0, true, 'a built-in drawing is there with no network');
 });

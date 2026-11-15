@@ -143,6 +143,24 @@
     alt=untick
     alt=uncheck
 
+@phrase.acts.verb.farewell core.phrase
+    frame=false
+    doc="Verbs of the act farewell (k.actions)."
+    alt=say_goodbye
+    alt=say_bye
+    alt=bid_farewell
+    alt=take_leave
+    alt=sign_off
+
+@phrase.acts.verb.greet core.phrase
+    frame=false
+    doc="Verbs of the act greet (k.actions)."
+    alt=greet
+    alt=say_hello
+    alt=say_hi
+    alt=welcome
+    alt=hail
+
 @phrase.acts.verb.group core.phrase
     frame=false
     doc="Verbs of the act group (k.actions)."
@@ -370,6 +388,15 @@
     alt=unlink
     alt=cut_off
 
+@phrase.acts.verb.thank core.phrase
+    frame=false
+    doc="Verbs of the act thank (k.actions)."
+    alt=thank
+    alt=say_thanks
+    alt=say_thank_you
+    alt=express_thanks
+    alt=show_gratitude
+
 @phrase.acts.verb.undo core.phrase
     frame=false
     doc="Verbs of the act undo (k.actions)."
@@ -455,6 +482,7 @@
     word=radial
     word=nested
     word=border
+    word=outline
     word=landscape
     word=room
     word=family_photo

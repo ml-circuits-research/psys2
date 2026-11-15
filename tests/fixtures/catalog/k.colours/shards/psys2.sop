@@ -1,0 +1,30 @@
+# k.colours/shards/psys2: from the PSys2 world kids.shapes: which colours are primary, secondary and neutral, and 2 more things of a colour (fire truck, ocean); and from the PSys2 drawing world and lexicon: 1 colour (skin) with a usual RGB value and 11 words for colours (moved from k.values/shards/psys2, KR2).
+# sources: psys2-worlds 6b63b2ba (the hand-written knowledge of the PSys2 tab worlds, the project's own data)
+# license: CC0-1.0
+# script: tools/import/psys2.mjs
+
+@k.colours.psys2.red k.colours.colour name=red kind=primary core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.yellow k.colours.colour name=yellow kind=primary core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.blue k.colours.colour name=blue kind=primary core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.orange k.colours.colour name=orange kind=secondary core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.green k.colours.colour name=green kind=secondary core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.purple k.colours.colour name=purple kind=secondary core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.black k.colours.colour name=black kind=neutral core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.white k.colours.colour name=white kind=neutral core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.grey k.colours.colour name=grey kind=neutral core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.things.blue k.colours.colour name=blue thing=ocean core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.things.red k.colours.colour name=red thing="fire truck" core.source="psys2-worlds 6b63b2ba"
+
+# From the PSys2 drawing world and lexicon (moved from k.values/shards/psys2: k.colours is the home of colour names).
+@k.colours.psys2.colour.skin k.colours.colour name=skin rgb_about="#F3C69B" core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.word.black core.word text=blk means=black of=k.colours.colour.name core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.word.blue core.word text=blu text=bloo means=blue of=k.colours.colour.name core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.word.brown core.word text=brn means=brown of=k.colours.colour.name core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.word.green core.word text=grn means=green of=k.colours.colour.name core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.word.grey core.word text=gry means=grey of=k.colours.colour.name core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.word.light_blue core.word text=light-blue means="light blue" of=k.colours.colour.name core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.word.orange core.word text=ginger text=org means=orange of=k.colours.colour.name core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.word.pink core.word text=pnk means=pink of=k.colours.colour.name core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.word.purple core.word text=prp means=purple of=k.colours.colour.name core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.word.white core.word text=wht means=white of=k.colours.colour.name core.source="psys2-worlds 6b63b2ba"
+@k.colours.psys2.word.yellow core.word text=ylw means=yellow of=k.colours.colour.name core.source="psys2-worlds 6b63b2ba"
