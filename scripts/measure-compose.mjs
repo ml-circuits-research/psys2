@@ -10,6 +10,37 @@ const kw = knowledgeWorld(lib), composer = createComposer(lib);
 const topics = ['penguin', 'owl', 'dog', 'robin', 'elephant'];
 const unq = (v) => String(v).replace(/^"|"$/g, '');
 const rows = [], shown = [];
+
+// --sizes (owner request 2026-11-15, spec 26 "Size and long topics"): words written, sections, repetition and traced claims at 500 / 2,000 / 5,000 words on three topics, and
+// what is taken from three topics written as paragraphs.   node scripts/measure-compose.mjs --sizes [--text <topic> <words>]
+if (process.argv.includes('--sizes')) {
+  const { wordCount } = await import('../src/dialog/compose-plan.mjs');
+  const grams = (text) => { const t = text.toLowerCase().split(/\s+/), m = new Map(); for (let i = 0; i + 4 <= t.length; i++) { const g = t.slice(i, i + 4).join(' '); m.set(g, (m.get(g) ?? 0) + 1); } return [...m.values()].reduce((a, v) => a + v - 1, 0); };
+  const row = (label, words, r) => {
+    if (!r.composition) return { label, asked: words, why: r.why };
+    const d = compositionToDocument(r.composition), body = d.sentences.map((s) => s.text).join(' ');
+    return { label, asked: words, words: wordCount(body), chapters: r.composition.chapters.length, sections: r.composition.chapters.reduce((n, ch) => n + ch.subchapters.length, 0), sentences: d.sentences.length,
+      repeatedSentences: d.sentences.length - new Set(d.sentences.map((s) => s.text)).size, repeated4grams: grams(body), traced: d.sentences.filter((s) => s.source && kw.get(s.source)).length };
+  };
+  const out = [];
+  for (const topic of ['penguin', 'France', 'elephant']) for (const words of [500, 2000, 5000]) { const t0 = Date.now(); out.push({ ...row(topic, words, composer.compose({ type: 'essay', topic, words, seed: 7 })), ms: Date.now() - t0 }); }
+  console.table(out);
+  const LONG = [
+    'Penguins live on the ice and in the sea. I want to know what they eat, which birds are like them and how the seals live near them. Also something about climate change.',
+    'An essay about France for a school project: its neighbours, its capital and the big cities, the languages people speak, and how it fits in the European Union. Mention the history of the Eiffel tower too.',
+    'Elephants of the savanna and the forest: how big they are, what they eat, the sounds they make, and which other animals share their home. My little brother loves them.',
+  ];
+  const longRows = [];
+  for (const text of LONG) {
+    const r = composer.compose({ type: 'essay', topic: text, words: 2000, seed: 7 }), c = r.composition;
+    longRows.push({ topic: text, subject: c?.read?.topic ?? r.why, subtopics: c?.read?.subtopics, linked: c?.read?.linked, unlinked: c?.read?.unlinked, keys: c?.read?.keys, unused: c?.read?.unused, words: c?.words, sections: c?.chapters.reduce((n, ch) => n + ch.subchapters.length, 0), firstSections: c?.chapters.flatMap((ch) => ch.subchapters.map((s) => s.title).filter(Boolean)).slice(0, 8) });
+  }
+  console.log(JSON.stringify(longRows, null, 1));
+  const at = process.argv.indexOf('--text');
+  if (at > 0) console.log(compositionToDocument(composer.compose({ type: 'essay', topic: process.argv[at + 1], words: Number(process.argv[at + 2] ?? 2000), seed: 7 }).composition).text);
+  process.exit(0);
+}
+
 for (const type of Object.keys(DOC_TYPES)) {
   const runs = [];
   for (let i = 0; i < (type === 'essay' ? 10 : 5); i++) runs.push({ topic: type === 'essay' && i < 5 ? null : topics[i % 5], seed: i + 1 });

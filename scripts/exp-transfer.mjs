@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// TRANSFER (spec 23, worker-tasks 21:30): experiments T1 and T2 over the views of the session things: the avatar (worlds/ui.avatar), the seating plan
-// (worlds/plan.seating), Talk (worlds/talk), the chart (worlds/data.charts, numeric: a thing counts as one of its kind), the document (worlds/docs.editor, textual) and, as T6-lite, the
-// timeline (worlds/plan.timeline, a view declared by a schema alone: things with a temporal aspect). The chart, the document and the timeline are columns of the matrix (they take things);
+// TRANSFER (spec 23, worker-tasks 21:30): experiments T1 and T2 over the views of the session things: the avatar (worlds/ui.avatar), Talk (worlds/talk), the chart
+// (worlds/data.charts, numeric: a thing counts as one of its kind), the document (worlds/docs.editor, textual) and the map. (The seating plan and the timeline views were removed
+// with their tabs, ADR-012; their columns and the things made in them are gone, the earlier measurements stay in the worker log.) The chart and the document are columns of the matrix (they take things);
 // they do not yet publish things of their own, so no row is made in them. No code per pair of views is involved: every transfer is the one operation things.show (the `send` act of a schema world or Talk's
 // "send it to X"), judged against EXPECTATIONS written below by hand from common sense, not from the code.
 //   node scripts/exp-transfer.mjs [--reasoner ops|matrix] [--catalog tests/fixtures/catalog] [--out file.jsonl] [--only t1|t2] [--verbose]
@@ -25,10 +25,10 @@ const catalog = () => createFacts({ source: { text: async (p) => { try { return 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
 engine.setKnowledge(catalog());
 const WITH_DRAW = process.argv.includes('--draw');
-const TAB = { avatar: 'robot', seating: 'seating', talk: 'talk', ...(WITH_DRAW ? { draw: 'draw' } : {}), chart: 'charts', doc: 'editor', time: 'talk', map: 'talk' };
-const WORLD = { avatar: 'ui.avatar', seating: 'plan.seating', talk: 'talk', draw: 'art.draw', chart: 'data.charts', doc: 'docs.editor', time: 'plan.timeline', map: 'geo.map' };
-const SEND = { avatar: (t, to) => `send the ${t} to the ${to}`, seating: (t, to) => `send ${t} to the ${to}`, talk: (t, to) => `send it to the ${to}`, draw: (t, to) => `send the ${t} to the ${to}` };
-const TO = { avatar: 'avatar', seating: 'seating plan', talk: 'talk', draw: 'drawing', chart: 'chart', doc: 'document', time: 'timeline', map: 'map' };
+const TAB = { avatar: 'robot', talk: 'talk', ...(WITH_DRAW ? { draw: 'draw' } : {}), chart: 'charts', doc: 'editor', map: 'talk' };
+const WORLD = { avatar: 'ui.avatar', talk: 'talk', draw: 'art.draw', chart: 'data.charts', doc: 'docs.editor', map: 'geo.map' };
+const SEND = { avatar: (t, to) => `send the ${t} to the ${to}`, talk: (t, to) => `send it to the ${to}`, draw: (t, to) => `send the ${t} to the ${to}` };
+const TO = { avatar: 'avatar', talk: 'talk', draw: 'drawing', chart: 'chart', doc: 'document', map: 'map' };
 
 async function session() {
   const s = engine.createSession({ language: 'en' });
@@ -43,51 +43,36 @@ const warm = async (words) => { for (const w of words) await engine.knowledge.th
 // plainly), with `keep` the words the other view's answer or state must still hold (the colour, the name) so a thing that arrives changed is WRONG.
 const THINGS = [
   // made on the avatar (10)
-  { view: 'avatar', make: ['put on a red hat'], ref: 'hat', expect: { seating: 'na', talk: 'ok' }, keep: { talk: ['hat'] } },
-  { view: 'avatar', make: ['put on glasses'], ref: 'glasses', expect: { seating: 'na', talk: 'ok' }, keep: { talk: ['glasses'] } },
-  { view: 'avatar', make: ['give me a beard'], ref: 'beard', expect: { seating: 'na', talk: 'ok' }, keep: { talk: ['beard'] } },
-  { view: 'avatar', make: ['put on earrings'], ref: 'earrings', expect: { seating: 'na', talk: 'ok' }, keep: { talk: ['earring'] } },
-  { view: 'avatar', make: ['add a moustache'], ref: 'moustache', expect: { seating: 'na', talk: 'ok' }, keep: { talk: ['moustache'] } },
-  { view: 'avatar', make: ['add freckles'], ref: 'cheeks', expect: { seating: 'na', talk: 'ok' }, keep: { talk: ['cheeks'] } },
-  { view: 'avatar', make: ['add long hair'], ref: 'hair_back', expect: { seating: 'na', talk: 'ok' }, keep: { talk: ['hair'] } },
-  { view: 'avatar', make: ['make my hair green'], ref: 'face', expect: { seating: 'na', talk: 'ok' }, keep: { talk: ['green'] } },
-  { view: 'avatar', make: ['add a fringe'], ref: 'hair_front', expect: { seating: 'na', talk: 'ok' }, keep: { talk: ['hair'] } },
-  { view: 'avatar', make: ['put on a hat'], ref: 'face', expect: { seating: 'na', talk: 'ok' }, keep: { talk: [] } },
-  // made in the seating plan (10)
-  { view: 'seating', make: ['add a table'], ref: 'table 1', expect: { avatar: 'na', talk: 'ok' }, keep: { talk: ['table'] } },
-  { view: 'seating', make: ['add a table', 'make table 1 blue'], ref: 'table 1', expect: { avatar: 'na', talk: 'ok' }, keep: { talk: ['blue'] } },
-  { view: 'seating', make: ['add a table', 'table 1 should have 6 seats'], ref: 'table 1', expect: { avatar: 'na', talk: 'ok' }, keep: { talk: ['6'] } },
-  { view: 'seating', make: ['add a table', 'add a guest called Ann at table 1'], ref: 'Ann', expect: { avatar: 'na', talk: 'ok' }, keep: { talk: ['Ann'] } },
-  { view: 'seating', make: ['add a table', 'add a guest called Max at table 1', 'make Max green'], ref: 'Max', expect: { avatar: 'na', talk: 'ok' }, keep: { talk: ['Max', 'green'] } },
-  { view: 'seating', make: ['add 2 tables', 'make table 2 red'], ref: 'table 2', expect: { avatar: 'na', talk: 'ok' }, keep: { talk: ['red'] } },
-  { view: 'seating', make: ['add a guest called Zoe'], ref: 'Zoe', expect: { avatar: 'na', talk: 'ok' }, keep: { talk: ['Zoe'] } },
-  { view: 'seating', make: ['add a table', 'add a guest called Bob at table 1'], ref: 'Bob', expect: { avatar: 'na', talk: 'ok' }, keep: { talk: ['Bob', 'table'] } },
-  { view: 'seating', make: ['add a table', 'table 1 should have 2 seats'], ref: 'table 1', expect: { avatar: 'na', talk: 'ok' }, keep: { talk: ['2'] } },
-  { view: 'seating', make: ['add a guest called Lily', 'make Lily pink'], ref: 'Lily', expect: { avatar: 'na', talk: 'ok' }, keep: { talk: ['Lily', 'pink'] } },
+  { view: 'avatar', make: ['put on a red hat'], ref: 'hat', expect: { talk: 'ok' }, keep: { talk: ['hat'] } },
+  { view: 'avatar', make: ['put on glasses'], ref: 'glasses', expect: { talk: 'ok' }, keep: { talk: ['glasses'] } },
+  { view: 'avatar', make: ['give me a beard'], ref: 'beard', expect: { talk: 'ok' }, keep: { talk: ['beard'] } },
+  { view: 'avatar', make: ['put on earrings'], ref: 'earrings', expect: { talk: 'ok' }, keep: { talk: ['earring'] } },
+  { view: 'avatar', make: ['add a moustache'], ref: 'moustache', expect: { talk: 'ok' }, keep: { talk: ['moustache'] } },
+  { view: 'avatar', make: ['add freckles'], ref: 'cheeks', expect: { talk: 'ok' }, keep: { talk: ['cheeks'] } },
+  { view: 'avatar', make: ['add long hair'], ref: 'hair_back', expect: { talk: 'ok' }, keep: { talk: ['hair'] } },
+  { view: 'avatar', make: ['make my hair green'], ref: 'face', expect: { talk: 'ok' }, keep: { talk: ['green'] } },
+  { view: 'avatar', make: ['add a fringe'], ref: 'hair_front', expect: { talk: 'ok' }, keep: { talk: ['hair'] } },
+  { view: 'avatar', make: ['put on a hat'], ref: 'face', expect: { talk: 'ok' }, keep: { talk: [] } },
   // made in Talk (10): topics from knowledge
-  { view: 'talk', make: ['What does a bicycle look like?'], ref: 'bicycle', expect: { avatar: 'na', seating: 'na' }, keep: {} },
-  { view: 'talk', make: ['What does a spider look like?'], ref: 'spider', expect: { avatar: 'na', seating: 'na' }, keep: {} },
-  { view: 'talk', make: ['What does a house look like?'], ref: 'house', expect: { avatar: 'na', seating: 'na' }, keep: {} },
-  { view: 'talk', make: ['What is a comet?'], ref: 'comet', expect: { avatar: 'na', seating: 'na' }, keep: {} },
-  { view: 'talk', make: ['Tell me about the moon.'], ref: 'moon', expect: { avatar: 'na', seating: 'na' }, keep: {} },
-  { view: 'talk', make: ['What is Paris?'], ref: 'Paris', expect: { avatar: 'na', seating: 'na' }, keep: {} },
-  { view: 'talk', make: ['What is France?'], ref: 'France', expect: { avatar: 'na', seating: 'na' }, keep: {} },
-  { view: 'talk', make: ['What is Japan?'], ref: 'Japan', expect: { avatar: 'na', seating: 'na' }, keep: {} },
-  { view: 'talk', make: ['What does a hat look like?'], ref: 'hat', expect: { avatar: 'ok', seating: 'na' }, keep: { avatar: ['hat'] } },
-  { view: 'talk', make: ['What does a table look like?'], ref: 'table', expect: { avatar: 'na', seating: 'ok' }, keep: { seating: ['table'] } },
+  { view: 'talk', make: ['What does a bicycle look like?'], ref: 'bicycle', expect: { avatar: 'na' }, keep: {} },
+  { view: 'talk', make: ['What does a spider look like?'], ref: 'spider', expect: { avatar: 'na' }, keep: {} },
+  { view: 'talk', make: ['What does a house look like?'], ref: 'house', expect: { avatar: 'na' }, keep: {} },
+  { view: 'talk', make: ['What is a comet?'], ref: 'comet', expect: { avatar: 'na' }, keep: {} },
+  { view: 'talk', make: ['Tell me about the moon.'], ref: 'moon', expect: { avatar: 'na' }, keep: {} },
+  { view: 'talk', make: ['What is Paris?'], ref: 'Paris', expect: { avatar: 'na' }, keep: {} },
+  { view: 'talk', make: ['What is France?'], ref: 'France', expect: { avatar: 'na' }, keep: {} },
+  { view: 'talk', make: ['What is Japan?'], ref: 'Japan', expect: { avatar: 'na' }, keep: {} },
+  { view: 'talk', make: ['What does a hat look like?'], ref: 'hat', expect: { avatar: 'ok' }, keep: { avatar: ['hat'] } },
 ];
 // the drawing board as a fourth view (--draw): ten things made in it, and what each older thing should do when sent to it (written by hand from common sense: what can be drawn)
 const DRAW_THINGS = [
   ['draw a red house', 'house', 'red'], ['draw a tree', 'tree', 'tree'], ['draw a big yellow sun', 'sun', 'yellow'], ['draw a cat', 'cat', 'cat'], ['draw a blue car', 'car', 'blue'],
   ['draw a boat', 'boat', 'boat'], ['draw a green balloon', 'balloon', 'green'], ['draw a star', 'star', 'star'], ['draw a purple flower', 'flower', 'purple'], ['draw a dog', 'dog', 'dog'],
-].map(([m, ref, keep]) => ({ view: 'draw', make: [m], ref, expect: { avatar: 'na', seating: 'na', talk: 'ok' }, keep: { talk: [keep] } }));
+].map(([m, ref, keep]) => ({ view: 'draw', make: [m], ref, expect: { avatar: 'na', talk: 'ok' }, keep: { talk: [keep] } }));
 const DRAWABLE = new Set(['hat', 'glasses', 'table', 'bicycle', 'spider', 'house', 'moon']);   // sent to the drawing: a kind of thing it can show
 if (WITH_DRAW) { THINGS.push(...DRAW_THINGS); for (const th of THINGS) if (th.view !== 'draw') { th.expect.draw = DRAWABLE.has(th.ref) ? 'ok' : 'na'; th.keep = { ...(th.keep ?? {}), draw: [] }; } }
-// temporal things (T6-lite): made in Talk from the calendar of the knowledge; the timeline takes them, the picture views cannot
-const TIME_THINGS = ['What is Monday?|monday', 'What is winter?|winter', 'What is March?|march', 'What is Tuesday?|tuesday'].map((x) => x.split('|')).map(([m, ref]) => ({ view: 'talk', make: [m], ref, expect: { avatar: 'na', seating: 'na', ...(WITH_DRAW ? { draw: 'na' } : {}) }, keep: {} }));
-THINGS.push(...TIME_THINGS);
-for (const th of THINGS) { th.expect.chart = 'ok'; th.expect.doc = 'ok'; th.expect.time = TIME_THINGS.includes(th) ? 'ok' : 'na'; const place = ['Paris', 'France', 'Japan'].includes(th.ref); th.expect.map = place ? 'ok' : 'na'; th.keep = { ...(th.keep ?? {}), map: place ? [th.ref] : [] }; th.keep = { ...(th.keep ?? {}), doc: th.keep?.talk ?? [] }; if (th.view !== 'talk' || TIME_THINGS.includes(th)) th.expect.talk = th.expect.talk ?? 'ok'; }
-const THING_WARM = ['monday', 'march', 'winter', 'tuesday', 'bicycle', 'spider', 'house', 'comet', 'moon', 'paris', 'france', 'japan', 'hat', 'table', 'glasses', 'beard'];
+for (const th of THINGS) { th.expect.chart = 'ok'; th.expect.doc = 'ok'; const place = ['Paris', 'France', 'Japan'].includes(th.ref); th.expect.map = place ? 'ok' : 'na'; th.keep = { ...(th.keep ?? {}), map: place ? [th.ref] : [] }; th.keep = { ...(th.keep ?? {}), doc: th.keep?.talk ?? [] }; if (th.view !== 'talk') th.expect.talk = th.expect.talk ?? 'ok'; }
+const THING_WARM = ['bicycle', 'spider', 'house', 'comet', 'moon', 'paris', 'france', 'japan', 'hat', 'table', 'glasses', 'beard'];
 
 /** Reads what a view holds after a transfer: the text of its state, to look for the words that must survive. */
 const heldBy = (s, view) => JSON.stringify(s.state(WORLD[view]) ?? {}).toLowerCase();
@@ -124,26 +109,22 @@ async function t1() {
 // A fact is taught in one view, then used in the two other views. `use` says what each view is asked and what a right answer holds (`has`), or that the view has no use for the fact
 // (`na`: the answer must say so plainly rather than ignore it).
 const FACTS = [
-  { teach: 'a villa is a kind of house', in: 'talk', use: { talk: { ask: 'What kind of thing is a villa?', has: ['house'] }, seating: { ask: 'add a villa', na: true }, avatar: { ask: 'put on a villa', na: true } } },
-  { teach: 'a waiter is a kind of person', in: 'seating', use: { seating: { ask: 'add a waiter called Sam', has: ['sam'], state: 'guest' }, talk: { ask: 'What kind of thing is a waiter?', has: ['person'] }, avatar: { ask: 'put on a waiter', na: true } } },
-  { teach: 'a beret is a kind of hat', in: 'avatar', use: { avatar: { ask: 'put on a beret', has: ['hat'], state: '"hat"' }, talk: { ask: 'What kind of thing is a beret?', has: ['hat'] }, seating: { ask: 'add a beret', na: true } } },
-  { teach: 'a cottage is a kind of house', in: 'talk', use: { talk: { ask: 'What does a cottage look like?', has: ['cottage'] }, seating: { ask: 'add a cottage', na: true }, avatar: { ask: 'put on a cottage', na: true } } },
-  { teach: 'a cap is a kind of hat', in: 'talk', use: { avatar: { ask: 'put on a cap', has: ['hat'], state: '"hat"' }, talk: { ask: 'What kind of thing is a cap?', has: ['hat'] }, seating: { ask: 'add a cap', na: true } } },
-  { teach: 'my dog is called Rex', in: 'talk', use: { talk: { ask: 'Tell me about Rex.', has: ['rex'] }, seating: { ask: 'add my dog', na: true }, avatar: { ask: 'put on my dog', na: true } } },
-  { teach: 'my sister is called Ann', in: 'seating', use: { seating: { ask: 'add my sister', has: ['ann'], state: 'ann' }, talk: { ask: 'Tell me about Ann.', has: ['ann'] }, avatar: { ask: 'put on my sister', na: true } } },
-  { teach: 'my brother is called Tom', in: 'avatar', use: { seating: { ask: 'add my brother', has: ['tom'], state: 'tom' }, talk: { ask: 'Tell me about Tom.', has: ['tom'] }, avatar: { ask: 'put on my brother', na: true } } },
-  { teach: 'my cat is called Tiger', in: 'talk', use: { talk: { ask: 'Tell me about Tiger.', has: ['tiger'] }, seating: { ask: 'add my cat', na: true }, avatar: { ask: 'put on my cat', na: true } } },
-  { teach: 'my friend is called Eva', in: 'talk', use: { seating: { ask: 'add my friend', has: ['eva'], state: 'eva' }, talk: { ask: 'Tell me about Eva.', has: ['eva'] }, avatar: { ask: 'put on my friend', na: true } } },
-  { teach: 'ducks float', in: 'talk', use: { talk: { ask: 'Tell me about a duck.', has: ['float'] }, seating: { ask: 'seat the ducks', na: true }, avatar: { ask: 'put on ducks', na: true } } },
-  { teach: 'penguins cannot fly', in: 'talk', use: { talk: { ask: 'Tell me about a penguin.', has: ['fly'] }, seating: { ask: 'seat the penguins', na: true }, avatar: { ask: 'put on penguins', na: true } } },
-  { teach: 'fish live in water', in: 'talk', use: { talk: { ask: 'Tell me about a fish.', has: ['water'] }, seating: { ask: 'seat the fish', na: true }, avatar: { ask: 'put on fish', na: true } } },
-  { teach: 'a boat is made of wood', in: 'talk', use: { talk: { ask: 'Tell me about a boat.', has: ['wood'] }, seating: { ask: 'add a boat', na: true }, avatar: { ask: 'put on a boat', na: true } } },
-  { teach: 'dogs can bark', in: 'talk', use: { talk: { ask: 'Tell me about a dog.', has: ['bark'] }, seating: { ask: 'seat the dogs', na: true }, avatar: { ask: 'put on dogs', na: true } } },
-  { teach: 'a king is a kind of person', in: 'seating', use: { seating: { ask: 'add a king called Leo', has: ['leo'], state: 'guest' }, talk: { ask: 'What kind of thing is a king?', has: ['person'] }, avatar: { ask: 'put on a king', na: true } } },
-  { teach: 'a bonnet is a kind of hat', in: 'avatar', use: { avatar: { ask: 'put on a bonnet', has: ['hat'], state: '"hat"' }, talk: { ask: 'What kind of thing is a bonnet?', has: ['hat'] }, seating: { ask: 'add a bonnet', na: true } } },
-  { teach: 'cats climb', in: 'talk', use: { talk: { ask: 'Tell me about a cat.', has: ['climb'] }, seating: { ask: 'seat the cats', na: true }, avatar: { ask: 'put on cats', na: true } } },
-  { teach: 'a lighthouse is a kind of tower', in: 'talk', use: { talk: { ask: 'What kind of thing is a lighthouse?', has: ['tower'] }, seating: { ask: 'add a lighthouse', na: true }, avatar: { ask: 'put on a lighthouse', na: true } } },
-  { teach: 'my uncle is called Bill', in: 'seating', use: { seating: { ask: 'add my uncle', has: ['bill'], state: 'bill' }, talk: { ask: 'Tell me about Bill.', has: ['bill'] }, avatar: { ask: 'put on my uncle', na: true } } },
+  { teach: 'a villa is a kind of house', in: 'talk', use: { talk: { ask: 'What kind of thing is a villa?', has: ['house'] }, avatar: { ask: 'put on a villa', na: true } } },
+  { teach: 'a beret is a kind of hat', in: 'avatar', use: { avatar: { ask: 'put on a beret', has: ['hat'], state: '"hat"' }, talk: { ask: 'What kind of thing is a beret?', has: ['hat'] } } },
+  { teach: 'a cottage is a kind of house', in: 'talk', use: { talk: { ask: 'What does a cottage look like?', has: ['cottage'] }, avatar: { ask: 'put on a cottage', na: true } } },
+  { teach: 'a cap is a kind of hat', in: 'talk', use: { avatar: { ask: 'put on a cap', has: ['hat'], state: '"hat"' }, talk: { ask: 'What kind of thing is a cap?', has: ['hat'] } } },
+  { teach: 'my dog is called Rex', in: 'talk', use: { talk: { ask: 'Tell me about Rex.', has: ['rex'] }, avatar: { ask: 'put on my dog', na: true } } },
+  { teach: 'my brother is called Tom', in: 'avatar', use: { talk: { ask: 'Tell me about Tom.', has: ['tom'] }, avatar: { ask: 'put on my brother', na: true } } },
+  { teach: 'my cat is called Tiger', in: 'talk', use: { talk: { ask: 'Tell me about Tiger.', has: ['tiger'] }, avatar: { ask: 'put on my cat', na: true } } },
+  { teach: 'my friend is called Eva', in: 'talk', use: { talk: { ask: 'Tell me about Eva.', has: ['eva'] }, avatar: { ask: 'put on my friend', na: true } } },
+  { teach: 'ducks float', in: 'talk', use: { talk: { ask: 'Tell me about a duck.', has: ['float'] }, avatar: { ask: 'put on ducks', na: true } } },
+  { teach: 'penguins cannot fly', in: 'talk', use: { talk: { ask: 'Tell me about a penguin.', has: ['fly'] }, avatar: { ask: 'put on penguins', na: true } } },
+  { teach: 'fish live in water', in: 'talk', use: { talk: { ask: 'Tell me about a fish.', has: ['water'] }, avatar: { ask: 'put on fish', na: true } } },
+  { teach: 'a boat is made of wood', in: 'talk', use: { talk: { ask: 'Tell me about a boat.', has: ['wood'] }, avatar: { ask: 'put on a boat', na: true } } },
+  { teach: 'dogs can bark', in: 'talk', use: { talk: { ask: 'Tell me about a dog.', has: ['bark'] }, avatar: { ask: 'put on dogs', na: true } } },
+  { teach: 'a bonnet is a kind of hat', in: 'avatar', use: { avatar: { ask: 'put on a bonnet', has: ['hat'], state: '"hat"' }, talk: { ask: 'What kind of thing is a bonnet?', has: ['hat'] } } },
+  { teach: 'cats climb', in: 'talk', use: { talk: { ask: 'Tell me about a cat.', has: ['climb'] }, avatar: { ask: 'put on cats', na: true } } },
+  { teach: 'a lighthouse is a kind of tower', in: 'talk', use: { talk: { ask: 'What kind of thing is a lighthouse?', has: ['tower'] }, avatar: { ask: 'put on a lighthouse', na: true } } },
 ];
 const FACT_WARM = ['villa', 'house', 'person', 'waiter', 'beret', 'hat', 'cottage', 'cap', 'dog', 'rex', 'sister', 'brother', 'cat', 'friend', 'duck', 'penguin', 'fish', 'boat', 'king', 'bonnet', 'lighthouse', 'tower', 'uncle', 'ann', 'tom', 'eva', 'bill', 'tiger'];
 
@@ -260,7 +241,7 @@ if (ledger && all.some((r) => r.exp === 'T3' || r.exp === 'T2')) {
   const { execSync } = await import('node:child_process'), { existsSync, appendFileSync } = await import('node:fs');
   let build = 'unknown'; try { build = execSync('git rev-parse --short HEAD', { cwd: REPO }).toString().trim(); } catch { /* not a checkout */ }
   const file = path.resolve(REPO, ledger), have = new Set(existsSync(file) ? readFileSync(file, 'utf8').split('\n').filter(Boolean).map((l) => { try { const j = JSON.parse(l); return `${j.source}\t${j.text}\t${j.tab}`; } catch { return ''; } }) : []);
-  const t2rows = all.filter((r) => r.exp === 'T2' && r.verdict.startsWith('wrong')).map((r) => ({ text: r.ask, tab: { talk: 'talk', seating: 'seating', avatar: 'avatar' }[r.view], language: 'en', happened: String(r.reply).slice(0, 240), expected: `the taught fact "${r.fact}" (taught in ${r.taughtIn}) is used or refused plainly in ${r.view}`, source: `T2 taught-fact transfer (${reasoner}) scripts/exp-transfer.mjs`, cause: r.cause, first_seen: new Date().toISOString().slice(0, 10), build })).filter((r) => !have.has(`${r.source}\t${r.text}\t${r.tab}`));
+  const t2rows = all.filter((r) => r.exp === 'T2' && r.verdict.startsWith('wrong')).map((r) => ({ text: r.ask, tab: { talk: 'talk', avatar: 'avatar' }[r.view], language: 'en', happened: String(r.reply).slice(0, 240), expected: `the taught fact "${r.fact}" (taught in ${r.taughtIn}) is used or refused plainly in ${r.view}`, source: `T2 taught-fact transfer (${reasoner}) scripts/exp-transfer.mjs`, cause: r.cause, first_seen: new Date().toISOString().slice(0, 10), build })).filter((r) => !have.has(`${r.source}\t${r.text}\t${r.tab}`));
   const rows = all.filter((r) => r.exp === 'T3' && r.verdict.startsWith('wrong')).map((r) => ({ text: r.ask, tab: { drawing: 'draw', diagram: 'diagram', talk: 'talk' }[r.view], language: 'en', happened: String(r.reply).slice(0, 240), expected: `the fact "${r.fact}" (${r.taught ? 'taught in a sentence' : 'in the catalog'}) shows in the answer: ${[].concat(r.expect).join(' / ')}`, source: `T3 rule transfer (${reasoner}) scripts/exp-transfer.mjs`, cause: r.cause, first_seen: new Date().toISOString().slice(0, 10), build }))
     .filter((r) => !have.has(`${r.source}\t${r.text}\t${r.tab}`));
   rows.push(...t2rows);

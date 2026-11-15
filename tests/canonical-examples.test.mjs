@@ -16,7 +16,7 @@ const EXEMPT = new Set(['chat.ask', 'story.ask', 'list.ask', 'shop.reviseLast', 
   'core.question:kids.shapes.shape/sides',
   // generated worlds (Q23): redo and load only after an undo or a save (follow-ups: "There is nothing to redo."); music's transpose by an interval has only the fragment
   // "Up a whole tone." (transposing is offered by "Transpose it to D major."; "go up a whole tone" is misread as a song: a ledger row)
-  'media.music.redo', 'plan.seating.redo', 'plan.timeline.redo', 'ui.avatar.load', 'music.transpose']);
+  'media.music.redo', 'ui.avatar.load', 'music.transpose']);
 const allCanonical = new Set(worlds.flatMap((w) => w.patterns.flatMap((p) => p.canonical ?? [])));
 // The generated schema worlds (a schema.sop, spec 21) are covered again (Q23): scripts/build-schema-world.mjs writes their canonical examples from the world's own sample
 // things and kinds (worlds/acts/acts.mjs exampleOf: sample=, sample.other=, sample.place=, sample.name=, sample.word=), offers no example with another world's nouns, and leaves
@@ -25,7 +25,7 @@ const generated = (w) => existsSync(new URL(`../worlds/${w.id}/schema.sop`, impo
 
 test('a generated world offers no example written about another world (no house in the charts, no guest Ann at the face)', () => {
   const foreign = /\b(?:house|houses|guest|guests|Ann|seats?)\b/;
-  const own = { 'art.draw': /house/, 'plan.seating': /guest|Ann|seat/ };
+  const own = { 'art.draw': /house/ };
   const bad = [];
   for (const w of worlds.filter(generated)) for (const c of new Set(w.patterns.flatMap((p) => p.canonical ?? []))) {
     const m = c.match(foreign);

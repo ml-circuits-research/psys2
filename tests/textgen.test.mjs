@@ -7,6 +7,7 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { knowledgeWorld, topicsOf } from '../src/dialog/compose-world.mjs';
 import { createSummarizer, createComposer, composeRequest, docTypeOf, DOC_TYPES, checkComposition, compositionToDocument, installTextGen, TEXTGEN_GLOBAL } from '../src/dialog/textgen.mjs';
+import { readLongTopic, relatedTopics } from '../src/dialog/compose-plan.mjs';
 
 test('without the library the adapters are unavailable and return nothing (no local generator)', () => {
   const s = createSummarizer({}, {}), c = createComposer({}, {});
@@ -151,4 +152,49 @@ test('the published k.genres is in the knowledge world and the five types map to
   const c = createComposer(lib).compose({ type: 'essay', topic: 'peru', chapters: 2, subchapters: 1, words: 60, seed: 1 }).composition;
   assert.equal(c.title, 'All about Peru'); assert.ok(c.chapters.length >= 1);
   assert.ok(c.chapters.flatMap((x) => x.subchapters.flatMap((y) => y.sentences)).every((x) => (/^k\.geo\./.test(x.source) || (x.takes === "topic" && x.source == null)) && !/[^\x20-\x7e]/.test(x.text)));
+});
+
+// ---- the size asked and long topics (owner request 2026-11-15, spec 26 "Size and long topics")
+test('the size asked is honoured from related topics, never padded: no sentence twice, every claim traced, sections grouped by relation before the closing part', () => {
+  const c = createComposer(lib), kw = knowledgeWorld(lib);
+  const small = c.compose({ type: 'essay', topic: 'penguin', words: 100, seed: 7 }).composition;
+  const big = c.compose({ type: 'essay', topic: 'penguin', words: 2000, seed: 7 }).composition;
+  assert.ok(big.words > small.words * 4 && big.words >= 1500 && big.words <= 2300, `${small.words} -> ${big.words}`);
+  const all = big.chapters.flatMap((ch) => ch.subchapters.flatMap((s) => s.sentences));
+  assert.equal(new Set(all.map((s) => s.text)).size, all.length, 'no sentence twice');
+  const related = big.chapters.filter((ch) => ch.part === 'related');
+  assert.ok(related.length >= 2 && related.every((ch) => ch.subchapters.every((s) => s.title && s.sentences.length && s.sentences.every((x) => kw.get(x.source)))), 'each related section is titled and every sentence cites a wire');
+  assert.equal(big.chapters.at(-1).part, 'conclusion', 'the closing part stays last');
+  assert.ok(related[0].subchapters[0].sentences[0].text.startsWith('The penguin eats'), 'a section opens with the fact that links it');
+  const huge = c.compose({ type: 'essay', topic: 'penguin', words: 5000, seed: 7 }).composition;
+  assert.ok(huge.words < 4000 && huge.asked === 5000, 'the knowledge runs out before 5000 words: the composition is the smaller one');
+  assert.ok(!relatedTopics(kw, 'penguin').some((r) => r.name === 'fly' || r.name === 'slide'), 'an act is not a related thing ("cannot fly", "slide: who penguin")');
+  const story = c.compose({ type: 'story', topic: 'penguin', words: 2000, seed: 7 }).composition;
+  assert.ok(!story.chapters.some((ch) => ch.part === 'related'), 'a story is told from one plan, not widened');
+});
+
+test('a long topic: the subject, the subtopics and the fact keys the knowledge knows are taken from it; the phrases nothing came from are listed', () => {
+  const kw = knowledgeWorld(lib);
+  const r = readLongTopic(kw, 'Penguins live on the ice and in the sea. I want to know what they eat, and how the seals live near them. Also something about climate change.');
+  assert.equal(r.topic, 'penguin');
+  assert.ok(r.subtopics.includes('seal') && r.keys.includes('eats') && !r.subtopics.includes('know'), JSON.stringify(r));
+  assert.deepEqual(r.unused, ['Also something about climate change']);
+  const c = createComposer(lib).compose({ type: 'essay', topic: '"An essay about France for a school project: its neighbours, its capital and how it fits in the European Union."', words: 1500, seed: 7 }).composition;
+  assert.equal(c.read.topic, 'France');
+  assert.ok(c.read.subtopics.includes('European Union') && c.read.unlinked.includes('school'), JSON.stringify(c.read));
+  assert.equal(c.chapters.flatMap((ch) => ch.subchapters).filter((s) => /school/i.test(s.title)).length, 0, 'a subtopic nothing links to the topic is not written');
+});
+
+test('the Documents tab: a long topic after "about the following:" (quoted by the form) and a size the knowledge cannot reach are said honestly', async () => {
+  installTextGen(lib, null);
+  const s = docs();
+  const r = await s.send('write an essay of 2000 words about the following: "Penguins live on the ice and in the sea. I want to know what they eat, which birds are like them and how the seals live near them. Also something about climate change."');
+  assert.match(r.text, /From your topic I used penguin \(the subject\), seal/);
+  assert.match(r.text, /I found nothing I know in "Also something about climate change"/);
+  assert.ok(s.state('docs.editor').blocks.some((b) => b.kind === 'heading' && b.level === 3), 'related sections are subheadings');
+  const big = await s.send('write an essay about France of 5000 words');
+  assert.match(big.text, /I could write about [\d,]+ words about France from what I know \(you asked for 5,000\); I did not pad it/);
+  const t = await s.send('write an essay about Italy with 3 chapters, about 600 words');
+  assert.match(t.text, /I wrote the essay "All about Italy": [\d,]+ words/);
+  assert.doesNotMatch(t.text, /I could write about/, 'the size the form sends without subchapters is read and reached');
 });
