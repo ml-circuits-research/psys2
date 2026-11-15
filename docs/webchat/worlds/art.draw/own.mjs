@@ -3,10 +3,12 @@
 // drawing from facts; ops.mjs: the scene operations) stays in worlds/art.draw; this file re-exports what the dialog layer and other worlds reach by name and gives the discourse hooks
 // (referents, openSlots, checkReferents) the words of the acts (`art.draw.make` -> the board's `draw.add`). Browser-safe.
 import * as D from './engine.mjs?v=c7313291f3';
-import { addArgs, tOf } from './hooks.mjs?v=3eb82354aa';
-import { goalOf, goalFromText, goalWord, goalWords, layoutGoal, liveOf, whyPlan as whyOfPlan } from './plan.mjs?v=258aeda5bf';
+import { addArgs, tOf } from './hooks.mjs?v=d72401adab';
+import { goalOf, goalFromText, goalWord, goalWords, layoutGoal, liveOf, whyPlan as whyOfPlan } from './plan.mjs?v=9f2655a899';
 
 export { initialState, summary } from './engine.mjs?v=c7313291f3';
+/** Discourse hook (after a turn, never awaited by one): the catalog wires the next suggestions read (hooks.mjs nextThings). */
+export { nextNeeds } from './hooks.mjs?v=d72401adab';
 /** Other worlds ask the board by its old action names: Talk draws with draw.add, Talk undo with draw.undo, the tab has "new" and "open". */
 export const add = D.add;
 export const drawUndo = D.undo;
@@ -41,8 +43,9 @@ export function planGoal(ctx, { action, args = {} } = {}) {
     if (t && goalWord(t.roles.kind)) return { goal: t, words: goalWords(t) };   // "set a table for four" is read as a place act
     return g?.roles.place ? { goal: null, words: goalWords(g) } : null;
   }
+  if (args.mode === 'random') return null;   // a random scene names no kind: nothing to plan (owner export 2026-11-14 22:43: "draw something random" loaded every plan world, 6 s on the phone)
   for (const goal of [goalOf('make', addArgs(args), args), goalFromText(args.text)]) {   // the roles as read, then the sentence's own words ("set a table for four")
-    if (goal && (goal.roles.place || goal.roles.material || !D.kindOfWord(goal.roles.kind) || goalWord(goal.roles.kind))) return { goal, words: goalWords(goal) };
+    if (goal && goal.roles?.kind && (goal.roles.place || goal.roles.material || !D.kindOfWord(goal.roles.kind) || goalWord(goal.roles.kind))) return { goal, words: goalWords(goal) };
   }
   return null;
 }

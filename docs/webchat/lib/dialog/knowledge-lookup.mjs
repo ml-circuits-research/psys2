@@ -9,8 +9,8 @@
  *   (no veto hook: an action on a referent that must exist in the world - delete, move, color, connect, select - is refused in the world's plain words whatever the catalog knows; a hit never replaces that refusal with a gloss)
  * The catalog is `engine.knowledge` (`createEngine({ options: { knowledge } })`); without it every function here does nothing and the dialog is as it was.
  */
-import { leftOut, requestOf } from './world-aware.mjs?v=6021de2bd2';
-import { planHostOf } from '../plan/host.mjs?v=5e08a460c7';
+import { leftOut, requestOf } from './world-aware.mjs?v=6d5a977922';
+import { planHostOf } from '../plan/host.mjs?v=ba1bc7b73e';
 import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=361e3abaa7';
 import { guard } from '../formalizer/guard.mjs?v=82a55329d9';
 
@@ -164,6 +164,31 @@ async function preparePlan(dialog, cat, { goal, words, world }) {
   if (!p?.method || p.refused) return;
   const kinds = [...new Set(p.requests.filter((q) => q.action === 'make' && q.args.kind).map((q) => String(q.args.kind)))].slice(0, 30);
   await Promise.all(kinds.map((k) => Promise.resolve(cat.thing(k)).catch(() => null)));
+}
+
+/**
+ * NEXT-STEP KNOWLEDGE (owner export 2026-11-14 22:43, finding 5): after a turn, the worlds it touched say which catalog wires their next suggestions read (a discourse hook
+ * `nextNeeds(ctx)` -> { type, keys, then? }: the wires of `type` naming each key, then, when `then` names a key of those wires, the wires naming each of its values). Fetched in the
+ * background: NEVER awaited by a turn; the chips refreshed after it read them synchronously (`peekWiresBy`). Bounded: 8 keys, 8 follow-up values.
+ */
+export function prefetchNext(dialog, worldIds) {
+  const cat = knowledgeOf(dialog);
+  if (!cat?.wires) return null;
+  const asks = [];
+  for (const id of new Set(worldIds ?? [])) {
+    try { const n = dialog.engine.interp.hook(dialog.isession, id, 'nextNeeds', {}, { state: dialog.isession.state[id] ?? {} }); if (n?.type && Array.isArray(n.keys)) asks.push(n); } catch { /* no hook, no prefetch */ }
+  }
+  if (!asks.length) return null;
+  const run = (async () => {
+    for (const n of asks) {
+      const first = await Promise.all(n.keys.slice(0, 8).map((k) => cat.wires(n.type, { key: k }).catch(() => [])));
+      if (!n.then) continue;
+      const next = [...new Set(first.flat().flatMap((w) => w.f?.[n.then] ?? []).map((x) => String(x).toLowerCase()))].slice(0, 8);
+      await Promise.all(next.map((k) => cat.wires(n.type, { key: k }).catch(() => [])));
+    }
+  })();
+  run.catch(() => {});
+  return run;
 }
 
 export async function preloadThings(dialog, segments) {
