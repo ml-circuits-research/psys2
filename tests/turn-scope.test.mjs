@@ -6,8 +6,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
+import { turnScope } from '../src/vendor/sopworld/sopworld.mjs';
 
 const SESSION_WIDE = new Set(['session.things', 'session.dialogue', 'ui.shell']);
+// Second oracle (Q24 migration step 3): the library's kit predicate `turnScope(set, owner)` (sopworld >= 0.133: one World per world, the session worlds
+// named by the host). It reads only `set.session`, so the host's session-wide worlds are passed as that set until our worlds load through loadWorldSet (step 4).
+const KIT_SET = { session: SESSION_WIDE };
+const kitStray = (changed, addressed) => changed.filter((w) => ![...(addressed.size ? addressed : [null])].some((owner) => turnScope(KIT_SET, owner)({ world: w })));
 const TURNS = [
   ['draw', 'Draw something random'], ['draw', 'make the house red'], ['diagram', 'Draw a diagram in house form'], ['seating', 'add a table for 4'],
   ['timeline', 'add an event called launch on monday'], ['draw', 'what is 2 plus 3'], ['talk', 'hello'], ['map', 'show Paris'],
@@ -27,10 +32,15 @@ test('a turn changes only the worlds it addresses (plus session.things, session.
       const changed = [...new Set([...Object.keys(before), ...Object.keys(after)])].filter((w) => JSON.stringify(after[w]) !== JSON.stringify(before[w]));
       const stray = changed.filter((w) => !addressed.has(w) && !SESSION_WIDE.has(w));
       assert.deepEqual(stray, [], `"${text}" on ${tab} (addressed ${[...addressed].join(', ') || 'none'}) changed ${stray.join(', ')}`);
+      assert.deepEqual(kitStray(changed, addressed), stray, `"${text}": the library's turnScope agrees with the host's invariant`);
       const views = r.effects.filter((e) => e.name === 'view' || e.name === 'ui.view').map((e) => e.world ?? e.args?.world).filter(Boolean);
       for (const w of views) assert.ok(addressed.has(w) || changed.includes(w) || SESSION_WIDE.has(w), `"${text}": a view effect for ${w}, which the turn did not touch`);
     }
   }
+  // the second oracle catches the owner's bug (a drawing turn that changed plan.seating), and lets the session worlds and a second addressed world through
+  assert.deepEqual(kitStray(['art.draw', 'plan.seating', 'session.things'], new Set(['art.draw'])), ['plan.seating']);
+  assert.deepEqual(kitStray(['art.draw', 'diagram.sketch', 'ui.shell'], new Set(['art.draw', 'diagram.sketch'])), []);
+  assert.deepEqual(kitStray(['session.dialogue', 'plan.timeline'], new Set()), ['plan.timeline']);
 });
 
 // LAZY WORLDS (reviewer 2026-11-15 03:15 item 5; live owner check row 2): the page took its "before" snapshot while only the start worlds existed; the turn loaded the others,
