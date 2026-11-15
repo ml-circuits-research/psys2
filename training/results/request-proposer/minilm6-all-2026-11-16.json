@@ -1,0 +1,237 @@
+{
+ "base": "nreimers/MiniLM-L6-H384-uncased",
+ "layers": 6,
+ "params_m": 22.73,
+ "epochs": 6,
+ "bs": 256,
+ "lr": 0.00015,
+ "seed": 1,
+ "train_rows": 21133,
+ "dev_rows": 1066,
+ "train_seconds": 20.2,
+ "log": [
+  {
+   "epoch": 1,
+   "loss": 4.6642,
+   "dev_exact": 0.7355,
+   "dev_act": 0.9484,
+   "dev_tag": 0.9756,
+   "elapsed_s": 3.7
+  },
+  {
+   "epoch": 2,
+   "loss": 0.5137,
+   "dev_exact": 0.9287,
+   "dev_act": 0.9934,
+   "dev_tag": 0.9869,
+   "elapsed_s": 7.0
+  },
+  {
+   "epoch": 3,
+   "loss": 0.1848,
+   "dev_exact": 0.939,
+   "dev_act": 0.9944,
+   "dev_tag": 0.9891,
+   "elapsed_s": 10.3
+  },
+  {
+   "epoch": 4,
+   "loss": 0.1038,
+   "dev_exact": 0.9212,
+   "dev_act": 0.9925,
+   "dev_tag": 0.9869,
+   "elapsed_s": 13.6
+  },
+  {
+   "epoch": 5,
+   "loss": 0.0712,
+   "dev_exact": 0.9418,
+   "dev_act": 0.9925,
+   "dev_tag": 0.9896,
+   "elapsed_s": 16.9
+  },
+  {
+   "epoch": 6,
+   "loss": 0.057,
+   "dev_exact": 0.9353,
+   "dev_act": 0.9925,
+   "dev_tag": 0.9892,
+   "elapsed_s": 20.2
+  }
+ ],
+ "labels": {
+  "act": [
+   "ask",
+   "change",
+   "connect",
+   "group",
+   "load",
+   "make",
+   "none",
+   "pick",
+   "place",
+   "redo",
+   "remove",
+   "send",
+   "take apart",
+   "undo"
+  ],
+  "reaction": [
+   "capabilities",
+   "enlarge",
+   "frustration",
+   "none",
+   "put_back",
+   "redo",
+   "reduce",
+   "refine",
+   "reject",
+   "state",
+   "thanks"
+  ],
+  "refers": [
+   "all",
+   "kind",
+   "last",
+   "none"
+  ],
+  "tags": [
+   "O",
+   "ACT",
+   "DROP",
+   "REACT",
+   "REF",
+   "UNREAD",
+   "about",
+   "attribute",
+   "count",
+   "extent",
+   "kind",
+   "kind.no",
+   "kind.not_all",
+   "layout",
+   "length",
+   "manner",
+   "place",
+   "size",
+   "with"
+  ]
+ },
+ "data_sha256": {
+  "train.jsonl": "f19ab47059c6311c6ed6361e9e2390c9751172247a684c98e4751e84b8580685",
+  "dev.jsonl": "737f7f26c434810dfeb93c3db9b8be2ed744d48e8d5aec47b3faa4d5e45f9c8d"
+ },
+ "dev": {
+  "n": 1066,
+  "act_acc": 0.9924953095684803,
+  "reaction_acc": 0.9953095684803002,
+  "refers_acc": 0.9962476547842402,
+  "question_acc": 1.0,
+  "tag_acc": 0.9896060567175671,
+  "tag_f1": {
+   "ACT": 0.9993,
+   "DROP": 1.0,
+   "O": 0.9674,
+   "REACT": 0.9935,
+   "REF": 1.0,
+   "UNREAD": 0.9877,
+   "about": 0.994,
+   "attribute": 1.0,
+   "count": 0.9765,
+   "extent": 1.0,
+   "kind": 0.9927,
+   "kind.no": 1.0,
+   "kind.not_all": 1.0,
+   "layout": 0.9937,
+   "length": 0.9707,
+   "manner": 0.9877,
+   "place": 0.9928,
+   "size": 1.0,
+   "with": 0.9241
+  },
+  "exact": 0.9418386491557224,
+  "exact_by_source": {
+   "framed": {
+    "n": 829,
+    "exact": 0.9493
+   },
+   "framed.verb": {
+    "n": 61,
+    "exact": 0.8852
+   },
+   "generated": {
+    "n": 99,
+    "exact": 0.9293
+   },
+   "noise": {
+    "n": 37,
+    "exact": 0.973
+   },
+   "unread": {
+    "n": 40,
+    "exact": 0.875
+   }
+  }
+ },
+ "holdout": {
+  "world": "",
+  "family": ""
+ },
+ "tests": {
+  "real (rules-labelled, never trained)": {
+   "n": 113,
+   "act_acc": 0.6814159292035398,
+   "reaction_acc": 0.9557522123893806,
+   "refers_acc": 0.8761061946902655,
+   "question_acc": 1.0,
+   "tag_acc": 0.8127490039840638,
+   "tag_f1": {
+    "ACT": 0.9892,
+    "DROP": 0.0,
+    "O": 0.7623,
+    "REACT": 0.3448,
+    "REF": 0.75,
+    "UNREAD": 0.0,
+    "about": 0.5294,
+    "attribute": 0.878,
+    "count": 0.88,
+    "extent": 1.0,
+    "kind": 0.8942,
+    "kind.no": 0.0,
+    "kind.not_all": 1.0,
+    "layout": 0.9333,
+    "length": 0.8,
+    "manner": 0.8333,
+    "place": 0.7748,
+    "size": 0.8333,
+    "with": 0.5
+   },
+   "exact": 0.4247787610619469,
+   "exact_by_source": {
+    "real.owner": {
+     "n": 11,
+     "exact": 0.4545
+    },
+    "real.ro-rules-en": {
+     "n": 69,
+     "exact": 0.4058
+    },
+    "real.set": {
+     "n": 33,
+     "exact": 0.4545
+    }
+   }
+  },
+  "held-out world ": {
+   "n": 0
+  },
+  "held-out family ": {
+   "n": 0
+  }
+ },
+ "onnx": {
+  "fp32_mb": 90.47,
+  "int8_mb": 23.02,
+  "int8_sha256": "489a43200fe818eeb87e19c54c720da089277e812d50a09a5193f999a43a047f"
+ }
+}

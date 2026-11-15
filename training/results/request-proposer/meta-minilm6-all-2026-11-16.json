@@ -1,0 +1,97 @@
+{
+ "acts": [
+  "ask",
+  "change",
+  "connect",
+  "group",
+  "load",
+  "make",
+  "none",
+  "pick",
+  "place",
+  "redo",
+  "remove",
+  "send",
+  "take apart",
+  "undo"
+ ],
+ "reactions": [
+  "capabilities",
+  "enlarge",
+  "frustration",
+  "none",
+  "put_back",
+  "redo",
+  "reduce",
+  "refine",
+  "reject",
+  "state",
+  "thanks"
+ ],
+ "refers": [
+  "all",
+  "kind",
+  "last",
+  "none"
+ ],
+ "tags": [
+  "O",
+  "ACT",
+  "DROP",
+  "REACT",
+  "REF",
+  "UNREAD",
+  "about",
+  "attribute",
+  "count",
+  "extent",
+  "kind",
+  "kind.no",
+  "kind.not_all",
+  "layout",
+  "length",
+  "manner",
+  "place",
+  "size",
+  "with"
+ ],
+ "base": "nreimers/MiniLM-L6-H384-uncased",
+ "layers": 6,
+ "max_len": 64,
+ "lowercase": true,
+ "cls_id": 101,
+ "sep_id": 102,
+ "unk_id": 100,
+ "pad_id": 0,
+ "verbs": {
+  "art.draw": {
+   "make": "make",
+   "place": "place",
+   "remove": "remove",
+   "redo": "redo",
+   "change": "change",
+   "undo": "undo",
+   "group": "pair",
+   "ask": "ask",
+   "connect": "couple"
+  },
+  "diagram.sketch": {
+   "remove": "remove",
+   "make": "make",
+   "change": "change",
+   "place": "place",
+   "undo": "undo",
+   "redo": "redo",
+   "ask": "ask",
+   "connect": "link"
+  },
+  "docs.editor": {
+   "make": "make",
+   "undo": "undo",
+   "redo": "redo",
+   "connect": "couple",
+   "place": "centre",
+   "ask": "ask"
+  }
+ }
+}

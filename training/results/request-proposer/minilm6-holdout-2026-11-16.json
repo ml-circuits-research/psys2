@@ -1,0 +1,330 @@
+{
+ "base": "nreimers/MiniLM-L6-H384-uncased",
+ "layers": 6,
+ "params_m": 22.73,
+ "epochs": 6,
+ "bs": 256,
+ "lr": 0.00015,
+ "seed": 1,
+ "train_rows": 13123,
+ "dev_rows": 638,
+ "train_seconds": 11.5,
+ "log": [
+  {
+   "epoch": 1,
+   "loss": 5.8754,
+   "dev_exact": 0.5596,
+   "dev_act": 0.9075,
+   "dev_tag": 0.9396,
+   "elapsed_s": 2.2
+  },
+  {
+   "epoch": 2,
+   "loss": 1.051,
+   "dev_exact": 0.7947,
+   "dev_act": 0.9969,
+   "dev_tag": 0.9695,
+   "elapsed_s": 4.1
+  },
+  {
+   "epoch": 3,
+   "loss": 0.4053,
+   "dev_exact": 0.8918,
+   "dev_act": 0.9984,
+   "dev_tag": 0.9764,
+   "elapsed_s": 5.9
+  },
+  {
+   "epoch": 4,
+   "loss": 0.2173,
+   "dev_exact": 0.8918,
+   "dev_act": 0.9953,
+   "dev_tag": 0.9766,
+   "elapsed_s": 7.7
+  },
+  {
+   "epoch": 5,
+   "loss": 0.1482,
+   "dev_exact": 0.8903,
+   "dev_act": 0.9953,
+   "dev_tag": 0.9774,
+   "elapsed_s": 9.6
+  },
+  {
+   "epoch": 6,
+   "loss": 0.1201,
+   "dev_exact": 0.8903,
+   "dev_act": 0.9953,
+   "dev_tag": 0.9777,
+   "elapsed_s": 11.4
+  }
+ ],
+ "labels": {
+  "act": [
+   "ask",
+   "change",
+   "connect",
+   "group",
+   "load",
+   "make",
+   "none",
+   "pick",
+   "place",
+   "redo",
+   "remove",
+   "send",
+   "take apart",
+   "undo"
+  ],
+  "reaction": [
+   "capabilities",
+   "enlarge",
+   "frustration",
+   "none",
+   "put_back",
+   "redo",
+   "reduce",
+   "refine",
+   "reject",
+   "state",
+   "thanks"
+  ],
+  "refers": [
+   "all",
+   "kind",
+   "last",
+   "none"
+  ],
+  "tags": [
+   "O",
+   "ACT",
+   "DROP",
+   "REACT",
+   "REF",
+   "UNREAD",
+   "about",
+   "attribute",
+   "count",
+   "extent",
+   "kind",
+   "kind.no",
+   "kind.not_all",
+   "layout",
+   "length",
+   "manner",
+   "place",
+   "size",
+   "with"
+  ]
+ },
+ "data_sha256": {
+  "train.jsonl": "f19ab47059c6311c6ed6361e9e2390c9751172247a684c98e4751e84b8580685",
+  "dev.jsonl": "737f7f26c434810dfeb93c3db9b8be2ed744d48e8d5aec47b3faa4d5e45f9c8d"
+ },
+ "dev": {
+  "n": 638,
+  "act_acc": 0.9984326018808778,
+  "reaction_acc": 0.9890282131661442,
+  "refers_acc": 0.9952978056426333,
+  "question_acc": 1.0,
+  "tag_acc": 0.9763644177051999,
+  "tag_f1": {
+   "ACT": 0.9976,
+   "DROP": 0.9988,
+   "O": 0.9623,
+   "REACT": 0.9877,
+   "REF": 1.0,
+   "UNREAD": 0.9818,
+   "about": 1.0,
+   "attribute": 1.0,
+   "count": 0.9187,
+   "extent": 0.8067,
+   "kind": 0.991,
+   "kind.no": 0.9976,
+   "kind.not_all": 1.0,
+   "layout": 0.9856,
+   "length": 0.9876,
+   "manner": 0.8421,
+   "place": 0.9301,
+   "size": 0.995,
+   "with": 0.8
+  },
+  "exact": 0.8918495297805643,
+  "exact_by_source": {
+   "framed": {
+    "n": 492,
+    "exact": 0.9065
+   },
+   "framed.verb": {
+    "n": 36,
+    "exact": 0.8056
+   },
+   "generated": {
+    "n": 61,
+    "exact": 0.8852
+   },
+   "noise": {
+    "n": 21,
+    "exact": 0.9524
+   },
+   "unread": {
+    "n": 28,
+    "exact": 0.7143
+   }
+  }
+ },
+ "holdout": {
+  "world": "diagram.sketch",
+  "family": "range"
+ },
+ "tests": {
+  "real (rules-labelled, never trained)": {
+   "n": 113,
+   "act_acc": 0.6371681415929203,
+   "reaction_acc": 0.9469026548672567,
+   "refers_acc": 0.8407079646017699,
+   "question_acc": 1.0,
+   "tag_acc": 0.7928286852589641,
+   "tag_f1": {
+    "ACT": 0.9892,
+    "DROP": 0.0,
+    "O": 0.7325,
+    "REACT": 0.3226,
+    "REF": 0.75,
+    "UNREAD": 0.0,
+    "about": 0.6,
+    "attribute": 0.8571,
+    "count": 0.8627,
+    "extent": 1.0,
+    "kind": 0.8738,
+    "kind.not_all": 1.0,
+    "layout": 0.7143,
+    "length": 0.8571,
+    "manner": 0.7692,
+    "place": 0.7227,
+    "size": 0.9091,
+    "with": 0.0
+   },
+   "exact": 0.4336283185840708,
+   "exact_by_source": {
+    "real.owner": {
+     "n": 11,
+     "exact": 0.4545
+    },
+    "real.ro-rules-en": {
+     "n": 69,
+     "exact": 0.4203
+    },
+    "real.set": {
+     "n": 33,
+     "exact": 0.4545
+    }
+   }
+  },
+  "held-out world diagram.sketch": {
+   "n": 3000,
+   "act_acc": 0.9766666666666667,
+   "reaction_acc": 0.9793333333333333,
+   "refers_acc": 0.91,
+   "question_acc": 1.0,
+   "tag_acc": 0.9349664202541431,
+   "tag_f1": {
+    "ACT": 0.9883,
+    "DROP": 0.9971,
+    "O": 0.9219,
+    "REACT": 0.9687,
+    "REF": 0.9894,
+    "UNREAD": 0.0,
+    "about": 0.9469,
+    "attribute": 0.9469,
+    "count": 0.9643,
+    "extent": 0.9057,
+    "kind": 0.8613,
+    "kind.no": 0.9747,
+    "kind.not_all": 0.9804,
+    "layout": 0.9549,
+    "length": 0.0,
+    "manner": 0.8088,
+    "place": 0.9445,
+    "size": 0.9782,
+    "with": 0.6548
+   },
+   "exact": 0.656,
+   "exact_by_source": {
+    "framed": {
+     "n": 2102,
+     "exact": 0.6865
+    },
+    "framed.verb": {
+     "n": 196,
+     "exact": 0.4643
+    },
+    "generated": {
+     "n": 586,
+     "exact": 0.6195
+    },
+    "noise": {
+     "n": 116,
+     "exact": 0.6121
+    }
+   }
+  },
+  "held-out family range": {
+   "n": 1146,
+   "act_acc": 0.9930191972076788,
+   "reaction_acc": 0.9886561954624782,
+   "refers_acc": 0.9485165794066318,
+   "question_acc": 1.0,
+   "tag_acc": 0.9612699842377843,
+   "tag_f1": {
+    "ACT": 1.0,
+    "DROP": 0.9993,
+    "O": 0.9236,
+    "REACT": 0.887,
+    "REF": 0.0,
+    "UNREAD": 0.9565,
+    "about": 0.9915,
+    "attribute": 1.0,
+    "count": 0.9756,
+    "extent": 0.8998,
+    "kind": 0.9246,
+    "kind.no": 0.997,
+    "kind.not_all": 1.0,
+    "layout": 0.9362,
+    "length": 0.9002,
+    "manner": 0.8464,
+    "place": 0.9127,
+    "size": 0.9856,
+    "with": 0.8455
+   },
+   "exact": 0.6928446771378709,
+   "exact_by_source": {
+    "framed": {
+     "n": 864,
+     "exact": 0.6921
+    },
+    "framed.verb": {
+     "n": 100,
+     "exact": 0.72
+    },
+    "generated": {
+     "n": 115,
+     "exact": 0.7043
+    },
+    "noise": {
+     "n": 43,
+     "exact": 0.7442
+    },
+    "unread": {
+     "n": 24,
+     "exact": 0.4583
+    }
+   }
+  }
+ },
+ "onnx": {
+  "fp32_mb": 90.47,
+  "int8_mb": 23.02,
+  "int8_sha256": "ade09f22dc1201a5dab5bdbd228beb1cb4b7612c0ff498d79b3e52eac696e07a"
+ }
+}
