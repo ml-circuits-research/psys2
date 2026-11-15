@@ -1,26 +1,33 @@
-# Spec 28: what the acts of the diagram honour (w.honour), the words of the request reader (w.words) and the defaults of a diagram (w.expect) until k.expect is in the catalog pin.
-# A diagram a reasonable person expects (reviewer 2026-11-15 14:00 item 3): 5-9 nodes of two or three shapes, links, a named layout; the scale steps are factors on the count.
-
-@diagram.sketch.honour.make w.honour
-    act=make
-    keys=kind,count,size,layout,with,manner,about
-    target=diagram
-
-@diagram.sketch.honour.arrange w.honour
-    act=arrange
-    keys=layout,manner
-
-@diagram.sketch.words w.words
-    kind=circle,square,rectangle,triangle,diamond,ellipse,hexagon,star,node,shape,box
-    generic=node,shape,box
-    layout=tree,grid,row,column,circle,layers,radial,hierarchy
-
-@diagram.sketch.expect.diagram w.expect
-    of=diagram
-    count=5..9
-    kinds=2
-    shapes=rectangle,diamond,ellipse,circle
-    with=arrow
-    small=0.6
-    big=1.6
-    source="own, hand-checked: k.diagrams fills sample 4-9 nodes (src/knowledge/diagram-world.mjs sampleDiagrams)"
+# Spec 28 (sopworld 0.149): what this world can do, as data the library reads (capabilitiesOf, readRequest, planRequest): its kinds and slots (std.schema),
+# the constraints each act honours (std.schema.honours) and its own expectations (k.expect.make / k.expect.part) where the catalog's k.expect has none.
+# No code reads this file per world: src/dialog/request.mjs loads it as the world's live request World.
+@acts core.use world=std.acts
+@w std.schema.world name=diagram doc="the diagram editor: nodes of several shapes, arrows between them, a named layout"
+@t.diagram core.type of=diagram extends=std.schema.thing closed=true
+@s.layout core.slot of=diagram key=layout enum=tree enum=grid enum=row enum=column enum=circle enum=radial enum=layers
+@s.about core.slot of=diagram key=about kind=string
+@k.diagram std.schema.kind of=diagram world=diagram acts=make acts=remove
+@t.node core.type of=node extends=std.schema.thing closed=true
+@s.size core.slot of=node key=size enum=tiny enum=small enum=medium enum=big enum=huge
+@s.colour core.slot of=node key=colour enum=red enum=blue enum=green enum=yellow enum=orange enum=purple enum=pink enum=white enum=black enum=grey
+@s.in core.slot of=node key=in
+@t.circle core.type of=circle extends=node closed=true
+@k.circle std.schema.kind of=circle world=diagram acts=make acts=remove acts=connect
+@t.square core.type of=square extends=node closed=true
+@k.square std.schema.kind of=square world=diagram acts=make acts=remove acts=connect
+@t.rectangle core.type of=rectangle extends=node closed=true
+@k.rectangle std.schema.kind of=rectangle world=diagram acts=make acts=remove acts=connect
+@t.diamond core.type of=diamond extends=node closed=true
+@k.diamond std.schema.kind of=diamond world=diagram acts=make acts=remove acts=connect
+@t.ellipse core.type of=ellipse extends=node closed=true
+@k.ellipse std.schema.kind of=ellipse world=diagram acts=make acts=remove acts=connect
+@t.triangle core.type of=triangle extends=node closed=true
+@k.triangle std.schema.kind of=triangle world=diagram acts=make acts=remove acts=connect
+@t.hexagon core.type of=hexagon extends=node closed=true
+@k.hexagon std.schema.kind of=hexagon world=diagram acts=make acts=remove acts=connect
+@t.star core.type of=star extends=node closed=true
+@k.star std.schema.kind of=star world=diagram acts=make acts=remove acts=connect
+@h.make std.schema.honours world=diagram act=make on=kind on=count on=size on=layout on=manner on=with on=about on=attribute of=diagram of=circle of=square of=rectangle of=diamond of=ellipse of=triangle of=hexagon of=star
+@h.arrange std.schema.honours world=diagram act=arrange on=layout on=manner of=diagram of=node
+@wd.link core.word text=arrow text=arrows text=link text=links text=lines text=connections means=link
+@fill.diagram std.schema.fill world=diagram of=diagram from=k.diagrams about="the labels, the topic and the arrows of a diagram come from the knowledge's diagrams (the world's own fill of its parts)"

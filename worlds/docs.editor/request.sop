@@ -1,38 +1,24 @@
-# Spec 28: what the acts of the documents editor honour (w.honour), the words of the request reader (w.words) and the defaults of what it writes (w.expect) until k.expect is read from the pin.
-# words= the length in words, chapters= the number of chapters; small / big are factors on the words (a short story, a long story).
-
-@docs.editor.honour.write w.honour
-    act=write
-    keys=kind,about,length,size,manner,count
-
-@docs.editor.honour.make w.honour
-    act=make
-    keys=kind,about,length,size,manner,count
-
-@docs.editor.words w.words
-    kind=story,poem,report,essay,letter,document,chapter
-    generic=document,chapter
-
-@docs.editor.expect.story w.expect
-    of=story
-    words=150..300
-    chapters=3..5
-    small=0.4
-    big=3
-    source="own, hand-checked (owner 2026-11-15: compositions far too short; a long one honoured as far as the knowledge goes)"
-
-@docs.editor.expect.essay w.expect
-    of=essay
-    words=200..400
-    chapters=3..5
-    small=0.4
-    big=3
-    source="own, hand-checked"
-
-@docs.editor.expect.report w.expect
-    of=report
-    words=200..400
-    chapters=4..6
-    small=0.4
-    big=3
-    source="own, hand-checked"
+# Spec 28 (sopworld 0.149): what this world can do, as data the library reads (capabilitiesOf, readRequest, planRequest): its kinds and slots (std.schema),
+# the constraints each act honours (std.schema.honours) and its own expectations (k.expect.make / k.expect.part) where the catalog's k.expect has none.
+# No code reads this file per world: src/dialog/request.mjs loads it as the world's live request World.
+@acts core.use world=std.acts
+@w std.schema.world name=documents doc="the documents editor: texts of a kind about a topic, with chapters and a length"
+@t.text core.type of=text extends=std.schema.thing closed=true
+@s.about core.slot of=text key=about kind=string
+@s.length core.slot of=text key=length kind=integer min=1
+@t.story core.type of=story extends=text closed=true
+@t.essay core.type of=essay extends=text closed=true
+@t.report core.type of=report extends=text closed=true
+@t.poem core.type of=poem extends=text closed=true
+@k.story std.schema.kind of=story world=documents acts=make
+@k.essay std.schema.kind of=essay world=documents acts=make
+@k.report std.schema.kind of=report world=documents acts=make
+@k.poem std.schema.kind of=poem world=documents acts=make
+@t.chapter core.type of=chapter extends=std.schema.thing closed=true
+@s.in core.slot of=chapter key=in
+@k.chapter std.schema.kind of=chapter world=documents acts=make
+@h.make std.schema.honours world=documents act=make on=kind on=about on=length on=size on=count of=story of=essay of=report of=poem of=chapter
+@wa.make core.word text=write text=compose text=type means=make
+@e.story k.expect.make thing=story made_in=document unit=chapter min=3 max=5 typical=5 length_unit=word length=150 about="what this world writes from the knowledge it has: about 150 words in its parts"
+@e.essay k.expect.make thing=essay made_in=document unit=chapter min=3 max=5 typical=3 length_unit=word length=300
+@e.report k.expect.make thing=report made_in=document unit=chapter min=4 max=6 typical=5 length_unit=word length=300

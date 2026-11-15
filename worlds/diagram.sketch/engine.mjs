@@ -1021,7 +1021,8 @@ export function planRequest(ctx, goal = {}) {
   const res = execute(ctx, s, list, { place: false });
   if (res.status !== 'supported') return res;
   const made = (s.last ?? []).slice();
-  const layout = goal.layout && goal.layout !== 'layers' ? goal.layout : (edges.length ? 'tree' : 'grid');
+  const ENGINE_LAYOUT = { top_down: 'tree', hierarchy: 'tree', left_right: 'row', ring: 'circle', radial: 'radial', tree: 'tree', grid: 'grid', row: 'row', column: 'column', circle: 'circle' };   // the expectation's layout names in the engine's words
+  const layout = ENGINE_LAYOUT[goal.layout] ?? (edges.length ? 'tree' : 'grid');
   if (!goal.layout) assumed.push(`The diagram is a ${layout}.`);
   if (made.length > 1) { try { arrangeLayout(ctx, { text: `arrange ${made.join(', ')} as a ${layout}` }); } catch { /* the engine's places stay */ } }
   s.last = made;

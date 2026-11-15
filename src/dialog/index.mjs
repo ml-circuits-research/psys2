@@ -276,7 +276,7 @@ import { languageCommand } from '../translate/language-command.mjs';
 import { withSubject, polishReply } from '../translate/register.mjs';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs';
 import { intentStep, weakReading } from './intent.mjs';
-import { readRequest, reviseRequest, violations, notHonoured, wantedRange, sayRequest } from './request.mjs';
+import { requestLanguage, liveWorld, readTurn, expectOf, violations, goalOf, plainRequest, declarationsOf } from './request.mjs';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1549,11 +1549,13 @@ export class DialogSession {
    */
   async _send(text, opts = {}) {
     const tabWorld = this.context().tabWorld;
-    const decl = tabWorld ? this.engine.set.get(tabWorld)?.requestDecl : null;
+    const decl = tabWorld ? this.engine.set.get(tabWorld)?.requestText : null;   // the world declares what it can do (request.sop)
     if (!decl || opts.request === false || globalThis.process?.env?.PSYS2_REQUEST === 'off' || guard.soft()) return this._sendRead(text, opts);   // PSYS2_REQUEST=off: the A/B of the request step
     const snap0 = this.snapshot();
+    const before0 = this.isession.state[tabWorld] ? structuredClone(this.isession.state[tabWorld]) : null;   // the open world's state before the turn, as the world holds it
+    if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error("[request] start", tabWorld, this.isession.state[tabWorld]?.objects?.length, this.isession.state[tabWorld]?.shapes?.length);
     const first = await this._sendRead(text, opts);
-    try { return (await perf.time("request", () => this._requestStep(text, opts, first, { tabWorld, decl, snap0 }))) ?? first; } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error("[request]", e); return first; }
+    try { return (await perf.time("request", () => this._requestStep(text, opts, first, { tabWorld, snap0, before0 }))) ?? first; } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error("[request]", e); return first; }
   }
 
   /** Run a world's operation as an action of this turn (the planner of a request): the live state of the world, the matrix reasoner adopts what it changed. */
@@ -1569,95 +1571,117 @@ export class DialogSession {
     return r;
   }
 
-  async _requestStep(text, opts, first, { tabWorld, decl, snap0 }) {
-    if (!first || typeof first !== "object") return first;
+  async _requestStep(text, opts, first, { tabWorld, snap0, before0 = null }) {
+    if (!first || typeof first !== 'object') return first;
     first.trace ??= {};
     const { set, interp } = this.engine;
+    const lib = this.engine.sopworld;
     const world = set.get(tabWorld);
-    const english = String(first.trace.intent?.from ?? first.trace.english ?? text);
+    const language = requestLanguage(lib), live = liveWorld(lib, world);
+    if (!language || !live || typeof lib?.readRequest !== 'function') return first;
+    // the words as said (English input) or as translated: not the dialogue's rewriting of them ("7 nodes, no circles" is not the correction "no X, Y")
+    const lang0 = opts.language ?? this.language;
+    const english = String((lang0 === 'en' ? text : textOf(first.translation) ?? first.trace.english) ?? first.trace.english ?? text);
     const segs = first.trace.segments ?? [];
-    const catchAll = segs.some((sg) => /\.read\.frame(?:\.end)?$/.test(sg.match?.patternId ?? '')) && (first.statuses ?? []).some((x) => x !== 'supported');   // a frame reader ({pre} diagram {post}) that did not carry it out: its words are not read
+    const catchAll = segs.some((sg) => /\.read\.frame(?:\.end)?$/.test(sg.match?.patternId ?? '')) && (first.statuses ?? []).some((x) => x !== 'supported');   // a frame reader ({pre} diagram {post}) that did not carry it out
     const complete = !catchAll && segs.length > 0 && segs.every((sg) => !sg.unparsed && !(sg.ignored?.length) && !sg.partial && !sg.bestEffort) && (first.statuses ?? []).every((x) => x === 'supported');
     const rd = this.dialogue.requests;
     const lastRec = rd.last(tabWorld);
-    const parsed = !catchAll && segs.length > 0 && segs.every((sg) => !sg.unparsed && !(sg.ignored?.length) && !sg.partial && !sg.bestEffort);   // every word read (a refusal still read its words)
     const vocab = spellVocabulary(set);
     const known = (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!this.engine.translator?.rules?.knownEnglish?.(w);   // a word of the language is never a slip
-    const q = readRequest(english, { lang: interp.lang, world, kindWords: decl.kinds, first: { complete: parsed }, lib: this.engine.sopworld, last: lastRec?.request ?? null, known });
-    first.trace.request = q;
-    const beforeState = snap0.isession.state[tabWorld] ? structuredClone(snap0.isession.state[tabWorld]) : null;
+    const dlg = lastRec ? { last: lastRec.request, result: lastRec.result, previous: lastRec.previous ?? null, seed: lastRec.seed ?? 1, previousSeed: lastRec.previousSeed ?? null } : { last: null, result: null, seed: 1 };
+    const q = readTurn(lib, live, language, english, { dialogue: dlg, known });
+    const flat = { act: q.act, target: q.target, facts: q.facts, reaction: q.reaction, unread: q.unread, used: q.used, corrections: q.corrections, english: q.english, source: 'sopworld' };
+    first.trace.request = flat;
+    const beforeState = before0;
     const measure = (before) => interp.hook(this.isession, tabWorld, 'requestResult', { before });
-    const expOf = (r) => decl.expect.get(r.target) ?? (decl.expect.size === 1 && (r.facts.some((f) => f.key === 'count' && !f.of) || r.facts.some((f) => f.key === 'count' && decl.generic.has(f.of)) || r.facts.some((f) => f.key === 'kind' && f.all)) ? [...decl.expect.values()][0] : null);
-    const cannot = notHonoured(q, decl);
+    const libResult = (res) => (res ? { count: res.parts ?? 0, kinds: res.kinds ?? {}, links: res.links ?? 0 } : null);
+    const dryPlan = (req) => { try { return lib.planRequest(live, req, { catalog: [language], dialogue: dlg, seed: 1 }); } catch { return null; } };
+    const cannotOf = (p) => (p?.notHonoured ?? []).filter((x) => x.code === 'not_declared').map((x) => ({ key: x.on, words: x.words }));
     // a question is never a request to make nor a reaction ("how many shapes are there?")
-    if (/\?\s*$/.test(english.trim()) || /^(?:is|are|does|do|did|how|what|which|who|where|why|when|was|were|has|have)\b/i.test(english.trim())) return await this._requestNotes(opts, first, q, cannot);
-    // a reaction to the last result of this tab: the last request revised, the last result replaced
-    const constraintsOnly =!q.act && !q.target && q.facts.length > 0;
-    let reaction = q.reaction && !['thanks', 'frustration'].includes(q.reaction) ? q.reaction : (q.reaction === 'frustration' && constraintsOnly ? 'refine' : null);
-    // a turn of constraints only (no act, no thing) about the last result: a refine, also when a reader carried out something else with it ("not all circles, better layout" read as a correction)
-    if (!reaction && constraintsOnly && lastRec && (!complete || q.facts.some((f) => (f.key === 'kind' && f.neg) || ['manner', 'count', 'size', 'layout'].includes(f.key)))) reaction = 'refine';
-    const sameAgain = lastRec && q.act && lastRec.request.act === q.act && q.target && lastRec.request.target === q.target && JSON.stringify(q.facts) === JSON.stringify(lastRec.request.facts);
-    if (sameAgain) reaction = 'redo';
-    // the open world itself read the turn completely ("now bigger", "make another one", "not that one, the other one" are its own acts on the last thing): a reaction to the last request
-    // only when no reader of the tab carried it out, or when it states what was expected (a refine carries a whole constraint set)
-    const tabRead = complete && segs.every((sg) => sg.match?.worldId === tabWorld);
-    if (reaction && reaction !== 'refine' && !sameAgain && tabRead) reaction = null;
-    if (!(reaction && lastRec) && this.context().tabWorld !== tabWorld) return first;   // the turn moved to another tab (a reaction to the last result of the tab is read against it: the move is undone)
-    if (reaction && lastRec && (!complete || ['redo', 'refine', 'reduce', 'enlarge', 'reject'].includes(reaction))) {
-      if (reaction === 'refine' && q.target && lastRec.request.target && q.target !== lastRec.request.target) reaction = null;
-    } else if (reaction && !lastRec) reaction = null;
-    let goalReq = null, revised = false, base = null;
-    if (reaction && lastRec) {
-      goalReq = reviseRequest(lastRec.request, { ...q, reaction }, { lib: this.engine.sopworld, result: lastRec.result });
-      revised = reaction !== 'redo';
-      base = lastRec.before;
-    } else {
-      const act = q.act ?? (q.reaction === 'refine' && q.target ? 'make' : null);   // "my expectation was a nice diagram ..." with nothing to revise: a new request with the whole set
-      const question = /\?\s*$/.test(english.trim()) || /^(?:is|are|does|do|did|how|what|which|who|where|can|could|why|when|was|were|will|would|should|has|have)\b/i.test(english.trim());
-      if (question || q.unread.length) return await this._requestNotes(opts, first, q, cannot);   // a question is never a make; words no reader read are asked about, never planned around
-      if (act !== 'make' && act !== 'write' && !(act === 'arrange' && q.facts.some((f) => f.key === 'layout'))) return await this._requestNotes(opts, first, q, cannot);
+    if (/\?\s*$/.test(english.trim()) || /^(?:is|are|does|do|did|how|what|which|who|where|why|when|was|were|has|have)\b/i.test(english.trim())) return this._requestNotes(opts, first, flat, []);
+    let rev = null;
+    try { rev = lib.reviseRequest(dlg, q.request, { revisions: language, catalog: [language] }); } catch { rev = null; }
+    let reaction = lastRec && rev?.sort === 'reaction' ? rev.reaction : null;
+    // the same request again ("draw a random diagram" twice): another result in place of the last one, varied, never a second one on top
+    const sameAgain = !reaction && lastRec && q.act && q.target && lastRec.flat?.target === q.target && q.facts.some((f) => f.key === 'manner' && f.value === 'random') && JSON.stringify(q.facts) === JSON.stringify(lastRec.flat?.facts ?? null);   // random again: another sample
+    if (sameAgain && rev) { reaction = 'redo'; rev = { ...rev, sort: 'reaction', reaction: 'redo', request: rev.request ?? q.request, vary: true, seed: (lastRec.seed ?? 1) + 7919 }; }
+    // a turn of constraints only (no act, no thing, nothing unread) after a planned result refines it ("not all circles, better layout"): the last request with the constraints said in place of
+    // those of the same key (the library's revision `add`; stand-in until reviseRequest reads such a turn as a refine itself, questions.md Q40)
+    if (!reaction && lastRec?.via === 'plan' && !q.act && !q.target && q.request.constraints?.length && !q.unread.length && !q.facts.some((f) => f.key === 'layout' && f.value === 'layers')) {
+      const last = plainRequest(lastRec.request), said = q.request.constraints;
+      const constraints = [...(last.constraints ?? []).filter((c) => !said.some((x) => x.on === c.on && (x.on !== 'kind' || x.value === c.value))), ...said];
+      const facts = [...(lastRec.flat?.facts ?? []).filter((f) => !q.facts.some((x) => x.key === f.key && (x.key !== 'kind' || x.value === f.value))), ...q.facts];
+      const request = Object.assign(last, { constraints, revisedFrom: last.text ?? null }); Object.defineProperty(request, 'facts', { value: facts, enumerable: false });
+      reaction = 'refine'; rev = { sort: 'reaction', reaction: 'refine', request, replace: true, seed: lastRec.seed ?? 1 };
+    }
+    // the open world itself read the turn completely ("now bigger", "make another one" are its own acts on the last thing): a reaction to the last request only when no reader of
+    // the tab carried it out, or when it states what was expected (a refine carries a whole constraint set)
+    const tabRead = complete && !first.trace.intent && segs.every((sg) => sg.match?.worldId === tabWorld);   // the intent step's guess is not the world's own reading
+    if (reaction && !sameAgain && ((complete && !first.trace.intent) || !segs.length) && lastRec?.via !== 'plan' && (reaction !== 'refine' || tabRead || !segs.length)) reaction = null;   // a result the readers made and a turn they carried out are theirs; a reaction to a planned result is the plan's to redo
+    if (reaction && q.unread.length) reaction = null;   // words no reader read are never planned around
+    if (reaction && !rev?.request) return this._requestNotes(opts, first, flat, []);   // thanks, frustration: the reply of the readers stands
+    // a layout said with no act and no new thing ("break in 3 layers: water, land and sky") arranges what the open world holds: the act arrange of its declared capabilities
+    const arrangeOnly = !q.act && !q.target && q.facts.some((f) => f.key === 'layout') && !q.unread.length && !!beforeState;
+    if (!reaction && !arrangeOnly && this.context().tabWorld !== tabWorld) return first;   // the turn moved to another tab (a reaction to the last result of the tab is read against it: the move is undone)
+    let goalReq = null, base = null;
+    if (arrangeOnly) { reaction = null;   // an arrangement of what is there, never a redo of the last request
+      goalReq = Object.assign(plainRequest(q.request), { act: 'arrange', target: lastRec?.flat?.target ?? null }); Object.defineProperty(goalReq, 'facts', { value: q.facts, enumerable: false }); base = beforeState; }
+    else if (reaction) { goalReq = rev.request; base = lastRec.before; }
+    else {
+      const req = rev?.request ?? q.request;
+      const act = req.act ?? q.act;
+      if (q.unread.length || !act) return this._requestNotes(opts, first, flat, cannotOf(act ? dryPlan(req) : null));   // words no reader read are asked about, never planned around
       const res = measure(beforeState);
-      const exp = expOf(q);
-      const bad = violations(q, res, exp);
-      const keep = complete && !bad.length;
-      if (keep || (!bad.length && !catchAll && !q.target)) {
-        if (res?.parts > 0) rd.record(tabWorld, { request: q, result: res, before: beforeState, via: 'reader' });
-        return await this._requestNotes(opts, first, q, cannot);
+      const exp = expectOf(live, language, q.target);
+      const bad = violations(flat, res, exp);
+      if (complete && !bad.length || (!bad.length && !catchAll && !q.target)) {
+        if (res?.parts > 0) rd.record(tabWorld, { request: plainRequest(req), flat, result: libResult(res), before: beforeState, seed: dlg.seed, previous: lastRec?.request ?? null, via: 'reader' });
+        return this._requestNotes(opts, first, flat, cannotOf(dryPlan(req)));
       }
-      if (!q.target && !bad.length) return await this._requestNotes(opts, first, q, cannot);
-      goalReq = { ...q, act };
+      goalReq = req;
       base = beforeState;
     }
-    // the open world plans the request: the session goes back to before the turn (a reaction: to before the last result)
-    const exp = expOf(goalReq);
-    if (!exp) return await this._requestNotes(opts, first, q, cannot);   // the world plans only what it has an expectation of (a target of request.sop / k.expect)
-    if (typeof world?.ops?.planRequest !== 'function') return await this._requestNotes(opts, first, q, cannot);
+    if (typeof world?.ops?.planRequest !== 'function') return this._requestNotes(opts, first, flat, []);
+    this._requestSeed = ((this._requestSeed ?? Math.floor(Math.random() * 2 ** 31)) * 1103515245 + 12345) >>> 0;   // random is varied across sessions; a session's next plan is the next number
+    const seed = reaction ? (rev.seed ?? this._requestSeed) : this._requestSeed;
+    let plan = null;
+    try { plan = lib.planRequest(live, goalReq, { catalog: [language], dialogue: dlg, seed, vary: !!rev?.vary }); } catch { plan = null; }
+    if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error("[request] plan", JSON.stringify({ ok: plan?.ok, roles: plan?.roles, nh: plan?.notHonoured, rej: plan?.rejected, cannot: plan?.cannot })?.slice(0, 600));
+    if (!plan?.ok && arrangeOnly) plan = { ok: true, roles: { layout: q.facts.find((f) => f.key === 'layout')?.value }, steps: [], assumed: [], notHonoured: plan?.notHonoured ?? [], target: goalReq.target };   // an arrangement of what is there: the world's own act on its things
+    if (!plan?.ok && plan?.cannot?.length && goalReq) {
+      // the library's reasoning found the plan cannot hold (a kind not wanted would be made): the reader's result that broke the request is taken back and the reasons are said
+      this.restore(snap0);
+      let why = null;
+      try { why = lib.sayRequest(goalReq, { cannot: plan.cannot, notHonoured: plan.notHonoured ?? [] }, { language }); } catch { why = null; }
+      const say = why?.text || `I could not do that: ${plan.cannot.map((c) => c.why).join('; ')}.`;
+      const r = await this._sendCore(text, opts, { english, translation: first.translation ?? null, say });
+      r.trace.request = { ...flat, plan: { cannot: plan.cannot, rejected: plan.rejected } };
+      return r;
+    }
+    if (!plan?.ok) return this._requestNotes(opts, first, flat, cannotOf(plan));
+    // the open world carries out the plan: the session goes back to before the turn (a reaction: to before the last result)
     this.restore(snap0);
     if (base !== undefined) this.isession.state[tabWorld] = base ? structuredClone(base) : (typeof world.ops.initialState === 'function' ? world.ops.initialState() : {});
     const beforePlan = this.isession.state[tabWorld] ? structuredClone(this.isession.state[tabWorld]) : null;
-    this._requestSeed = ((this._requestSeed ?? Math.floor(Math.random() * 2 ** 31)) * 1103515245 + 12345) >>> 0;   // random is varied across sessions; a session's next plan is the next number
-    const range = wantedRange(goalReq, exp);
-    const f = goalReq.facts;
-    const goal = {
-      request: goalReq, expect: exp, range, rangeAssumed: !f.some((x) => x.key === 'count' && (x.n != null || x.min != null)),
-      kinds: f.filter((x) => x.key === 'kind' && !x.neg && !decl.generic.has(x.value)).map((x) => x.value),
-      not: f.filter((x) => x.key === 'kind' && x.neg && !x.all).map((x) => x.value),
-      notAll: f.find((x) => x.key === 'kind' && x.neg && x.all)?.value ?? null,
-      varied: (exp?.kinds ?? 1) > 1, shapes: exp?.shapes ?? [], parts: exp?.parts ?? [],
-      arrows: f.some((x) => x.key === 'with' && x.value === 'arrow') || (!!goalReq.target && (exp?.with ?? []).includes('arrow')),
-      with: f.filter((x) => x.key === 'with' && x.value !== 'arrow').map((x) => x.value),
-      layout: f.find((x) => x.key === 'layout')?.value ?? null, regions: f.find((x) => x.key === 'layout')?.regions ?? null,
-      topic: f.find((x) => x.key === 'about')?.value ?? null, size: f.find((x) => x.key === 'size')?.step ?? null, target: goalReq.target, seed: this._requestSeed,
-    };
-    let plan = null;
-    try { plan = this._runWorldAct(tabWorld, 'planRequest', goal); } catch { plan = null; }
-    if (!plan || plan.status !== 'supported') { this.restore(snap0); const again = await this._sendRead(text, { ...opts, intent: false }); return await this._requestNotes(opts, again, q, cannot); }
+    const goal = { ...goalOf(plan, { facts: goalReq.facts ?? flat.facts, target: goalReq.target ?? q.target }, { seed }), declared: declarationsOf(live, english) };
+    let done = null;
+    try { done = this._runWorldAct(tabWorld, "planRequest", goal); } catch (e) { if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error("[request] act", e); done = null; }
+    if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error("[request] done", JSON.stringify(done)?.slice(0, 300), "base", base?.objects?.length, "now", this.isession.state[tabWorld]?.objects?.length, "snap", snap0.isession.state[tabWorld]?.objects?.length);
+    if (!done || done.status !== "supported") { this.restore(snap0); const again = await this._sendRead(text, { ...opts, intent: false }); return this._requestNotes(opts, again, flat, cannotOf(plan)); }
     const result = measure(beforePlan);
-    this.dialogue.requests.record(tabWorld, { request: goalReq, result, before: beforePlan, via: 'plan' });
-    const say = sayRequest(goalReq, plan, { lib: this.engine.sopworld, cannot, revised });
+    const record = { request: plainRequest(goalReq), flat: { ...flat, facts: goalReq.facts ?? flat.facts }, result: libResult(result), before: beforePlan, seed, previous: lastRec?.request ?? null, previousSeed: lastRec?.seed ?? null, via: 'plan' };
+    // the reply: the slips read, the revision's words, what the world made (its own words), then the library's reply facts of what was assumed and not honoured
+    let said = null, head = null;
+    try { head = lib.sayRequest(goalReq, { revised: !!reaction && reaction !== 'redo', reply: rev?.reply }, { language }); } catch { head = null; }   // the revision's words first
+    try { said = lib.sayRequest(goalReq, { assumed: plan.assumed, notHonoured: [...(plan.notHonoured ?? []), ...(done.cannot ?? []).map((c) => ({ on: c.key, words: c.words, why: c.why ?? 'the knowledge has no more', code: 'world' }))], reason: plan.cannot }, { language }); } catch { said = null; }
+    const parts = [];
+    if (q.corrections.length) parts.push(`I read ${q.corrections.map((c) => `"${c.said}" as "${c.as}"`).join(', ')}.`);
+    parts.push(head?.text ?? '', String(done.value ?? '').trim(), arrangeOnly ? '' : said?.text ?? '');   // an arrangement says what it moved
+    const say = parts.filter(Boolean).join(' ');
     const r = await this._sendCore(text, opts, { english, translation: first.translation ?? null, say });
-    this.dialogue.requests.record(tabWorld, { request: goalReq, result, before: beforePlan, via: 'plan' });   // the core's reading of the say does not touch it; recorded again in case the dialogue memory was reloaded
-    r.trace.request = { ...q, revised: revised ? goalReq.facts : null, plan: { goal: { ...goal, request: undefined, expect: undefined }, result } };
+    this.dialogue.requests.record(tabWorld, record);
+    r.trace.request = { ...flat, revised: reaction ? (goalReq.facts ?? null) : null, plan: { roles: plan.roles, assumed: plan.assumed, notHonoured: plan.notHonoured, steps: plan.steps?.length ?? 0, result } };
     r.trace.intent = first.trace.intent;
     if (Array.isArray(r.worlds) && !r.worlds.includes(tabWorld)) r.worlds.push(tabWorld);
     if (!(r.segments ?? []).some((sg) => (sg.world ?? sg.match?.worldId) === tabWorld)) r.segments = [...(r.segments ?? []), { world: tabWorld, text: english, planned: true }];   // the world that carried out the request
