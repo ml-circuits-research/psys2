@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "9cdd878a",
-  "tree": "6ccce28a607df25f",
+  "build": "8e0e2c1b",
+  "tree": "028f032c19a50ce6",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,9 +13,9 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 131,
+   "right": 130,
    "partly": 2,
-   "wrong": 74,
+   "wrong": 75,
    "open": 49,
    "changed": 17,
    "unjudged": 332,
@@ -30,7 +30,7 @@
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 40
+     "right": 39
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -88,9 +88,9 @@
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 131,
+   "right": 130,
    "partly": 2,
-   "wrong": 74,
+   "wrong": 75,
    "open": 49,
    "changed": 17,
    "unjudged": 332,
@@ -105,7 +105,7 @@
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 40
+     "right": 39
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 377,
- "failing_ops": 377,
+ "failing_matrix": 378,
+ "failing_ops": 378,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -445,8 +445,8 @@
   },
   {
    "cause": "Romanian: art.draw: acted; the reply does not say what the check asks",
-   "count": 19,
-   "wrong": 19,
+   "count": 20,
+   "wrong": 20,
    "partly": 0,
    "rows": [
     {
@@ -454,7 +454,7 @@
      "verdict": "wrong",
      "text": "roteste crocodilul albastru la 30 de grade",
      "tab": "draw",
-     "reply": "I did not understand \"roteste\", \"30\", \"degrees\" here.",
+     "reply": "I did not understand \"30\", \"degrees\" here.",
      "failing": [
       "reply_any:turned the crocodile"
      ]
@@ -487,6 +487,16 @@
      "reply": "I did not understand \"leg\" here.",
      "failing": [
       "reply_not:did not understand|composite"
+     ]
+    },
+    {
+     "id": "r0045",
+     "verdict": "wrong",
+     "text": "move corcodiles in lake",
+     "tab": "draw",
+     "reply": "I did not understand \"corcodiles\" here.",
+     "failing": [
+      "reply_not:do not know what|did not understand"
      ]
     },
     {
@@ -578,7 +588,7 @@
      "verdict": "wrong",
      "text": "desenaza un leagan",
      "tab": "draw",
-     "reply": "I did not understand \"leagan\" here.",
+     "reply": "I cannot make swing in the drawing yet.",
      "failing": []
     },
     {
@@ -622,7 +632,7 @@
      "failing": []
     }
    ],
-   "both_reasoners": 19
+   "both_reasoners": 20
   },
   {
    "cause": "art.draw: acted; the state is not the expected one",
@@ -1130,7 +1140,7 @@
     {
      "text": "desneaza o vila",
      "tab": "draw",
-     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; open]"
+     "happened": "I did not understand \"vila\" here. [outcome: refused; open]"
     },
     {
      "text": "fa un cel cu 5 nori si un soare",
@@ -1297,7 +1307,7 @@
     {
      "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
      "tab": "draw",
-     "happened": "I understood \"You should change this to want\", but not \"ta-da makes only prostii oricum like\", so I did nothing. [outcome: refused; open]"
+     "happened": "I did not understand \"voila\", \"ta\", \"da\", \"makes\", \"prostii\", \"oricum\" here. [outcome: refused; open]"
     },
     {
      "text": "cum ai ajuns a deschisi joculd e sah? e ridicol",
@@ -1346,7 +1356,7 @@
     {
      "text": "fa niste iarba deauspa lacului",
      "tab": "draw",
-     "happened": "I cannot make grass in the drawing yet. [outcome: refused; open]"
+     "happened": "I did not understand \"deauspa\" here. [outcome: refused; open]"
     },
     {
      "text": "deseneaza un copil pe leagan",
@@ -1395,7 +1405,7 @@
     {
      "text": "fa-mu un desen cu un lac, o rata, o vila, nori, soare ,iarba",
      "tab": "draw",
-     "happened": "I did not understand \"fa\", \"mu\" here. [outcome: refused; open]"
+     "happened": "I cannot do a villa, the grass in the drawing yet. [outcome: refused; open]"
     },
     {
      "text": "un cer cu 5 nori",
@@ -1405,7 +1415,7 @@
     {
      "text": "deseneaza si un magar, dar sa nu zboare, pe iarba",
      "tab": "draw",
-     "happened": "I understood \"on the grass\", but not \"Draw a magar\", \"too to not fly\", so I did nothing. [outcome: refused; open]"
+     "happened": "I understood \"on the grass\", but not \"Draw a donkey\", \"too to not fly\", so I did nothing. [outcome: refused; open]"
     },
     {
      "text": "eyeglasses",
@@ -1442,37 +1452,15 @@
    ]
   },
   {
-   "cause": "unknown kind (no drawing / stand-in)",
-   "count": 4,
-   "both_reasoners": 4,
-   "examples": [
-    {
-     "text": "deseneaa un mic lac, o balta",
-     "tab": "draw",
-     "happened": "I understood \"Draw a small lake\", but not \"a balta\", so I did nothing. [outcome: refused; open]"
-    },
-    {
-     "text": "muta copilul linga leagan, in stinga",
-     "tab": "draw",
-     "happened": "I understood \"to the left\", but not \"Move the child linga leagan\", so I did nothing. [outcome: refused; open]"
-    },
-    {
-     "text": "fa un bunic linga rata",
-     "tab": "draw",
-     "happened": "I did not understand \"grandfather\" here. [outcome: refused; open]"
-    },
-    {
-     "text": "deseneaza un bunic",
-     "tab": "draw",
-     "happened": "I did not understand \"grandfather\" here. [outcome: refused; open]"
-    }
-   ]
-  },
-  {
    "cause": "unknown word (a word of the request is not known)",
-   "count": 4,
-   "both_reasoners": 4,
+   "count": 5,
+   "both_reasoners": 5,
    "examples": [
+    {
+     "text": "move corcodiles in lake",
+     "tab": "draw",
+     "happened": "I did not understand \"corcodiles\" here. [outcome: refused; wrong; reply_not:do not know what|did not understand]"
+    },
     {
      "text": "desene asta",
      "tab": "map",
@@ -1487,11 +1475,33 @@
      "text": "un mami",
      "tab": "charts",
      "happened": "I did not understand \"un mami\". For example: \"Add a chart.\" or \"What is the colour of chart 2?\" I did not know the word: mami. [outcome: not_understood]"
+    }
+   ]
+  },
+  {
+   "cause": "unknown kind (no drawing / stand-in)",
+   "count": 4,
+   "both_reasoners": 4,
+   "examples": [
+    {
+     "text": "deseneaa un mic lac, o balta",
+     "tab": "draw",
+     "happened": "I did not understand \"deseneaa\", \"balta\" here. [outcome: refused; open]"
     },
     {
-     "text": "whats on u",
-     "tab": "robot",
-     "happened": "I don't know what an on u is. [outcome: not_understood; wrong; answer:wear not_understood]"
+     "text": "muta copilul linga leagan, in stinga",
+     "tab": "draw",
+     "happened": "I understood \"to the left\", but not \"Move the child linga leagan\", so I did nothing. [outcome: refused; open]"
+    },
+    {
+     "text": "fa un bunic linga rata",
+     "tab": "draw",
+     "happened": "I did not understand \"grandfather\", \"linga\" here. [outcome: refused; open]"
+    },
+    {
+     "text": "deseneaza un bunic",
+     "tab": "draw",
+     "happened": "I did not understand \"grandfather\" here. [outcome: refused; open]"
     }
    ]
   },
