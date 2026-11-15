@@ -1676,9 +1676,21 @@ export class DialogSession {
       const others = [];
       for (const w of this.engine.set.list()) { if (w.id === tabWorld) continue; const l = w.requestText ? liveWorld(lib, w) : null; if (l) others.push(lib.worldWords(l)); }
       let shown = [];
-      try { const r = this.engine.interp.hook(this.isession, tabWorld, 'referents', {}); shown = Array.isArray(r) ? r : []; } catch { shown = []; }
+      shown = this._shown(tabWorld);
       return repairInContext(text, { ro, vocab, isEnglish: (w) => !!tr.rules?.knownEnglish?.(w) || !!tr.knownEnglish?.(w), open: lib.worldWords(open), others, names: shown.map((x) => x?.name ?? x?.label).filter(Boolean), recent: (this._recentSource ?? []).slice(-8) });
     };
+  }
+
+  /**
+   * The things the open tab shows: a world bound to tool primitives (std.tool) shows its view (the tool's state as facts: id, kind, attributes); any other world its `referents`
+   * hook (the readers' own). No code here is per world.
+   */
+  _shown(tabWorld) {
+    const lib = this.engine.sopworld, world = this.engine.set.get(tabWorld);
+    const live = lib && world?.requestText ? liveWorld(lib, world) : null;
+    const tools = live ? boundTools(lib, live, requestLanguage(lib)) : null;
+    if (tools) { try { return this._toolPrimitives(tabWorld, tools).view().map(({ id, kind, name = null, ...attrs }) => ({ id, kind, name, attrs })); } catch { return []; } }
+    try { const r = this.engine.interp.hook(this.isession, tabWorld, 'referents', {}); return Array.isArray(r) ? r : []; } catch { return []; }
   }
 
   /** The door of one turn: `{ reply, route }` when the request path handled it, else `{ why }` (the reason the turn goes to the old readers). */
@@ -1705,9 +1717,12 @@ export class DialogSession {
     const knownHere = keptWords ? (w) => known(w) || keptWords.has(String(w ?? '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()) : known;
     const dlg = lastRec ? { last: lastRec.request, result: lastRec.result, previous: lastRec.previous ?? null, seed: lastRec.seed ?? 1, previousSeed: lastRec.previousSeed ?? null } : { last: null, result: null, seed: 1 };
     // THE OPEN STATE AS FACTS (owner 19:10): the things the world shows, told into a fork of its live request World (the spell repair reads their names; references resolve to them)
-    const shown = this.isession.state[tabWorld] ? (() => { try { const r = this.engine.interp.hook(this.isession, tabWorld, 'referents', {}); return Array.isArray(r) ? r : []; } catch { return []; } })() : [];
+    const shown = this.isession.state[tabWorld] ? this._shown(tabWorld) : [];
     const present = stateWorld(lib, live, shown);
-    const q = readTurn(lib, live, language, english, { dialogue: dlg, known: knownHere, worlds: present.world && present.world !== live ? [present.world] : [] });
+    const tools = boundTools(lib, live, language);
+    let mirrored = null;   // a bound world: its view as things of the declarations, the state the library reads names from and plans on (as its toolSession does)
+    if (tools) { try { mirrored = lib.mirrorState(live, this._toolPrimitives(tabWorld, tools).view).world; } catch { mirrored = null; } }
+    const q = readTurn(lib, live, language, english, { dialogue: dlg, known: knownHere, worlds: present.world && present.world !== live ? [present.world] : [], state: mirrored });
     // the words of the person's own language the contextual repair put right before the translation (Q39 S3) and its asks are recorded on the request (trace.request); they are not said in the
     // reply yet: "I read X as Y" has no Romanian phrase (needs the reply phrase in the language world, questions.md), and the machine translation of it is not fit to show
     if (en.repairs?.length) q.sourceRepairs = en.repairs.map((r) => ({ said: r.from, as: r.to, source: r.source }));
@@ -1718,7 +1733,7 @@ export class DialogSession {
     // a request with an act and no unread word; each clause is a turn of the door of its own (one step each, undone last first). A list of things stays one clause.
     if (q.unread.length && !opts._clause && typeof lib.clauses === 'function') {
       const count = (t) => (String(t).match(/[\p{L}\p{N}'-]+/gu) ?? []).length;
-      const read = (t) => { let r = null; try { r = readTurn(lib, live, language, t, { dialogue: dlg, known: knownHere }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; return null; } return r.act && !r.unread.length ? { literal: count(t) } : null; };
+      const read = (t) => { let r = null; try { r = readTurn(lib, live, language, t, { dialogue: dlg, known: knownHere, state: mirrored }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; return null; } return r.act && !r.unread.length ? { literal: count(t) } : null; };
       let cut = null;
       try { cut = lib.clauses(cutWorld(lib), english, { read }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; cut = null; }
       if (cut?.length > 1) {
@@ -1756,7 +1771,6 @@ export class DialogSession {
     // THE DECLARED BINDING (sopworld 0.152.1 std.tool; reviewer 2026-11-15 20:45): a world whose request.sop binds its acts to tool primitives is planned, run and said by the
     // library: a question about the state or about what the world can do (askWorld), the acts on the things there and things of kinds (planRequest over the mirrored view, runPlan
     // through the bindings, sayRequest from the view's diff). What the binding does not take goes on (scenes: the world's executor; undo; the honest reply).
-    const tools = boundTools(lib, live, language);
     if (tools) { const b = await this._doorBound({ text, opts, lang, english, translation, tabWorld, live, language, q, flat, lastRec, dlg, tools }); if (b) return b; }
     if (isQuestion(english, language)) return why('question');
     // UNDO / REDO are acts of the session's timeline (k.actions undo, redo), not of the tab world's request: the timeline answers ("redo", "undo the whole message", "undo the
@@ -1859,8 +1873,8 @@ export class DialogSession {
     if (lastRec?.via === 'tool') { try { rev = lib.reviseRequest(dlg, q.request, { revisions: language, catalog: [language], live: lib.mirrorState(live, prims.view).world }); } catch { rev = null; } }   // over the state: a make that refers to things there is a change of its own, not a revision
     if (rev?.sort === 'reaction' && (!q.act || q.act === (lastRec.request?.act ?? 'make')) && (!q.act || q.request.refers === 'last' || ['redo', 'reduce', 'enlarge'].includes(q.reaction))) {   // an act on the things there ("put it in the corner", "remove it") is not a revision of the request that made them
       if (!rev.request) return null;   // thanks, frustration: the dialogue's own reply
-      req = rev.request; replace = true;
-    }
+      req = rev.request; replace = !!rev.replace;   // a reaction that replaces the last result ("fewer dogs")
+    } else if (rev?.reaction === 'continue' && rev.request && !q.act && !(q.request.constraints ?? []).some((c) => c.on === 'place')) req = rev.request;   // a fragment of kinds continues the dialogue's act with a new request ("a sun" after "draw a fish": sopworld 0.154); one read with a place ("I like cats": "like" as a relation) is no fragment of a request (questions.md [LIB])
     if (!req.act || !tools.binds.some((b) => b.act === req.act)) return null;
     // a thing the world makes with no binding for its kind (a page: request.sop psys2.op) is not the binding's
     if (req.act === 'make' && req.target && !tools.binds.some((b) => b.act === 'make' && (!b.of.length || lib.kindLineage(req.target, { live, catalog: [language] }).some((k) => b.of.includes(k))))) return null;
@@ -1877,6 +1891,7 @@ export class DialogSession {
     try { plan = lib.planRequest(mirror, req, planOpts); } catch (e) { if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door] bound plan', e); plan = null; }
     if (!plan) return null;
     if (!plan.ok && (plan.notHonoured ?? []).some((x) => x.code === 'no_target')) return null;   // nothing named: the door's other paths say it
+    if (req.act === 'make' && !req.target && !(req.constraints ?? []).length && (plan.assumed ?? []).some((a) => a.key === 'target')) return null;   // a bare "draw" (nothing said but the act): never a whole guessed from the world (the door asks, as on every path); "something random", "5 nodes" are the planner's
     if (replace && (plan.notHonoured ?? []).length) return null;   // a reaction with words the world does not take ("I like horses") is not a revision of its result
     // P9: a plan that breaks a count said of one kind ("6 boxes" planned as 3 boxes and 3 circles) is never carried out; the honest reply names it
     if (plan.ok) {
