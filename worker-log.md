@@ -2677,3 +2677,14 @@ Measured in shipped mode (`real-set.mjs run`, encoder formalizer, catalog ab3b2a
 - Note: the Q23 commit message says "Q22"; the question was renumbered Q23 in the merge (origin/main took Q22 for the reader-contract asks).
 - **After merging origin/main again (9a7095e8: scan memos, live owner check):** shipped real set matrix 130/13/38 and ops 130/13/38 (same 1 outcome r0586), 0 verdicts and 0 outcomes differ from main's committed result; sum of turn times 132.9 s (main's file 167.7 s, measured before the scan memos, so the gain is P6 + memos together). test-world 58/40, smoke exit 0 (13.1 s), real-result-fresh passes. Result files and failure report refreshed.
 - **After merging origin/main (P3: npm test green, test-world 0):** shipped real set **130/181 matrix and ops** (as origin/main, partly 14, wrong 37, retired 65/72), test-world all **0 failing rows**, full `npm test` **1756 pass, 0 fail**. The merge needed: the knowledge inventory no longer counts a module generated from the catalog (worlds/acts/verbs.generated.mjs grew with k.actions: it is catalog data, `FROM_CATALOG` in scripts/knowledge-inventory.mjs); ASK_HINTS `made` asks `material` (the catalog's key; baseline 15 -> 16 because the old `made_of` was not counted as a word); meta.worlds cards and the system map regenerated.
+
+## 2026-11-15 P7 host kit: sopworld 0.130 read against the PSys2 host (reviewer 04:00, last paragraph) — analysis only
+
+- Read 0.130.0 (`ad4d456`: `src/kit.mjs`, `test/kit.test.mjs`, `examples/lists-app.mjs`) read-only from an archive in the scratchpad; nothing vendored, no runtime change. Result: questions.md Q24 [LIB] (per kit function: what maps 1:1, the [LIB] items with our file:line and the covering test, and a migration order in 7 steps with risk and guards).
+- lists-app runs as advertised on the catalog pin `b20eeeb`. Against plan.seating (scratch scripts `scratchpad/p7/seating-on-kit.mjs`, `seating-probe2.mjs`):
+  - our `schema.sop` (acts.schema dialect) loads silently with no kinds, so every turn fails;
+  - the whole world directory throws on duplicate ids (our ids are unique per file);
+  - the published w.seating 2 makes tables and guests but executes incomplete readings ("a table called family" is made without its required name; "at table 1" and "for 4" are dropped; all report `done`), leaks ids in fixed English replies, resolves no referents ("remove Ann", "make table 2 blue"), and does not read "undo";
+  - "add a table" loses to a media frame.
+- Main conflict: `loadWorldSet` merges all worlds into one live World. That goes against the owner's one-instance-per-world decision (spec 15).
+- Recommended first library asks: no dropped roles, composed replies, and one World per world. These are the reviewer's 13:50 conditions 1, 2 and 4.
