@@ -5,7 +5,7 @@
 // reader gets it (its legend knows layouts, templates, queries, facts and rules that the act grammar does not have yet: those are the holes the coverage grid lists).
 import * as E from './engine.mjs';
 import SOPKit from './engine/logic.mjs';
-import { parseDiagramRequest } from '../../src/knowledge/diagram-world.mjs';
+import { parseDiagramRequest, outlineIn } from '../../src/knowledge/diagram-world.mjs';
 
 const by = { make: 'create', remove: 'delete', change: 'set', place: 'move', connect: 'connect', pick: 'select', copy: 'duplicate' };
 /** A clause that depends on the one before it ("... and connect A to it", cut at the "and"): the pronoun is the thing the last command made or named (state.last, the engine's own "it"). */
@@ -41,8 +41,8 @@ domain.group = (ctx, r) => run(r.mode === 'apart' ? E.ungroup : E.group)(ctx, r)
 domain.ask = (ctx, r) => (['why', 'last'].includes(r.mode) ? undefined : run(E.ask_describe)(ctx, r));
 /** The world's own reader (act `own`): the engine reads the sentence itself, a question or a command. */
 domain.own = (ctx, r) => {
-  const sh = SHAPED.exec(String(r.text ?? ''));
-  if (sh) return E.shapedLike(ctx, { o: sh[1] ?? sh[2] ?? sh[3] ?? sh[4] });
+  const sh = shapedOf(r.text);
+  if (sh) return E.shapedLike(ctx, { o: sh.name ?? sh.said });
   const n = engineNode(String(r.text ?? ''), ctx.state);
   const fn = !n ? null : n.type === 'question' ? E.ask_describe : n.type === 'command' ? E[n.args?.action] : null;   // the family the engine names is the function that runs it (a name or an unknown one is the engine's to refuse)
   const text = String(r.text ?? '').trim();
@@ -67,8 +67,9 @@ const GENEROUS = new Set(['create', 'delete', 'move', 'set', 'group', 'ungroup',
 const SIGNAL = /\b(?:rectangles?|boxe?s?|circles?|squares?|diamonds?|ellipses?|triangles?|hexagons?|nodes?|shapes?)\s+(?:called|named)\b|\barrows?\s+(?:from|between|to)\b|\b(?:flow\s?chart|org(?:anisation|anization)?\s+chart|mind\s?map|diagram)\b/i;   // words only a diagram says: named shapes, arrows between names, chart words
 const namesShape = (text, state) => { const w = new Set(String(text).toLowerCase().match(/[a-z0-9]+/g) ?? []); return (state?.shapes ?? []).some((x) => x.name && w.has(String(x.name).toLowerCase())); };
 const FRAME = /\bdiagram\b|\b(?:chart|layout|graph|box|boxes)\s+(?:shaped|laid out|arranged)\s+(?:like|as)\b|\ban? (?:shape|box) in the (?:shape|form) of\b/i;
-// "shaped like a house", "in the shape of a house", "in house form" / "in a house shape" (the Romanian "in forma de casa" through the translator), "house-shaped" / "a house shaped diagram"
-const SHAPED = /\b(?:shaped|laid out|arranged|drawn|made|built)\s+(?:like|as|in the (?:shape|form) of)\s+(?:an?|the)?\s*(.+?)\s*[.!?]*$|\bin the (?:shape|form|outline) of\s+(?:an?|the)?\s*(.+?)\s*[.!?]*$|\bin (?:an? |the )?([a-z]+)\s+(?:shape|form|outline)\s*[.!?]*$|\b([a-z]+)[- ]shaped\b(?!\s+(?:like|as)\b)/i;
+// "shaped like a house", "in the shape of a house", "in house form" / "in a house shape" (the Romanian "in forma de casa" through the translator), "house-shaped": the catalog's frames of the
+// shard shape-frames (w.lang.en, bundled from the pin) with their role `arrangement` (an outline of k.layouts), src/knowledge/diagram-world.mjs outlineIn
+const shapedOf = (text) => outlineIn(String(text ?? ''));
 function accepts({ action, text: joined, state, tab, roles }) {
   // the own reader's words as they were typed: `text` is the tokens joined, so a list "snap Start, Process and Pay" has lost its commas and reads as the shapes "start process" and "pay"
   const text = String(action ?? '').endsWith('.own') && roles?.rest ? roles.rest : joined;
@@ -108,7 +109,7 @@ function coordinates({ action, mode, roles = {}, text }) {
  */
 function readsWhole({ text, state } = {}) {
   const t = String(text ?? '');
-  if (SHAPED.test(t) || parseDiagramRequest(t)) return true;
+  if (shapedOf(t) || parseDiagramRequest(t)) return true;
   if (!E.engineReady()) { E.loadEngine(); return true; }   // the engine is still loading (lazy in a browser): it cannot be asked yet, the reading is not held for that
   const n = engineNode(t, state);
   return !!n && !(n.type === 'command' && n.args?.action === 'create' && Object.keys(n.args).length === 1);
