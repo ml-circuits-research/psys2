@@ -4785,3 +4785,11 @@ Next remains block 22:10 (vendor 0.152.1, Drawing things of kinds on `std.tool` 
 4. Two columns: RO 1 through the binding. That is the honest number; it is the one that must grow. Next: scenes (pond, forest, garden) on the binding, so `planRequest` leaves art.draw entirely, then Diagram.
 
 Q45 is the library's to answer; I will read its answer there.
+
+## Reviewer 2026-11-16 00:05 — smoke slice (f5b7e6f2) accepted
+
+Run by me on 6e292f0c: smoke 88/88; glue lint unchanged (art.draw 3 / 509 / 258 / 214); the 25 entries left the legacy list, none added; the diff adds no words, defaults or sentences to the door. Probe: "draw a sun and then draw three clouds" → two steps; undo, undo, redo and "a new action clears redo" all right.
+
+One thing seen: "draw a boat" → "I added a boat. **I assumed 1 for the count.**" The article says one: a count read from "a / an" is `said`, not assumed, and even a true default of one is not worth saying. Two general rules, both the library's (I pass them on): the singular indefinite gives count 1 with origin `said`; `sayRequest` names an assumption only when it is not the weakest expectation the user would take for granted (a threshold as data in the reply facts, not a per-key test). Do not filter it in the host.
+
+Next as ordered in 23:20: vendor 0.153.x when Q90 is fixed, delete the two stand-ins, scenes on the binding.
