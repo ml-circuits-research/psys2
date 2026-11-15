@@ -9,7 +9,7 @@
 // path, the same format), so the same catalog code works with no network.
 // `createCatalogs` reads several catalogs at once, in an order of precedence (there will
 // be more knowledge repositories than one).
-import { parse, serialize } from './parser.mjs';
+import { parse, serialize, valueText } from './parser.mjs';
 
 /**
  * @param {{ index: { worlds: { id: string, schema?: string, depends?: string[], shards?: { id: string, path: string }[] }[] },
@@ -35,8 +35,8 @@ export function createCatalog({ index, vocab = {}, read, cache = new Map(), lemm
     const found = memo.get(key);
     if (found.length || !world) return found;
     // a form the vocabulary lacks but a loaded core.word maps to a word it has ("ants" means "ant")
-    const means = world.ofType('core.word').filter((w) => (w.attrs.text || []).some((t) => String(t).replace(/^"|"$/g, '').toLowerCase() === key.toLowerCase())).flatMap((w) => w.attrs.means || []);
-    return [...new Set(means.flatMap((m) => forms(String(m).replace(/^"|"$/g, '')).flatMap((f) => vocab[f] || [])))];
+    const means = world.ofType('core.word').filter((w) => (w.attrs.text || []).some((t) => valueText(t).toLowerCase() === key.toLowerCase())).flatMap((w) => w.attrs.means || []);
+    return [...new Set(means.flatMap((m) => forms(valueText(m)).flatMap((f) => vocab[f] || [])))];
   };
   const worldOf = (shard) => String(shard).split('/')[0];
   const pathFor = (shard) => pathOf.get(shard) ?? (/\.sop$/.test(shard) ? shard : `${shard}.sop`);
@@ -150,7 +150,7 @@ export function createCatalogs(list, { lemma } = {}) {
   if (new Set(cats.map((c) => c.name)).size !== cats.length || cats.some((c) => !c.name)) throw new Error('sopworld: createCatalogs needs a distinct name for each catalog');
   const owner = new WeakMap(); // World -> Map(wire id -> { catalog, attrs })
   const done = new WeakMap(); // World -> Set of "<catalog>:<path>" told
-  const tag = (name, w) => { const src = w.attrs['core.source']?.[0]; return { ...w, attrs: { ...w.attrs, 'core.source': [JSON.stringify(`${name}: ${src ? String(src).replace(/^"|"$/g, '') : 'no source'}`)] } }; };
+  const tag = (name, w) => { const src = w.attrs['core.source']?.[0]; return { ...w, attrs: { ...w.attrs, 'core.source': [JSON.stringify(`${name}: ${src ? valueText(src) : 'no source'}`)] } }; };
   const same = (a, b) => JSON.stringify(Object.entries(a).filter(([k]) => k !== 'core.source').sort()) === JSON.stringify(Object.entries(b).filter(([k]) => k !== 'core.source').sort());
   function tellText(world, name, path, text, res) {
     const own = owner.get(world) || owner.set(world, new Map()).get(world);
@@ -233,7 +233,7 @@ export function bundleThenRead(bundle, read) {
 
 /** The loaded wires of a type, optionally those whose `slot` has `value`: the names (or ids) in order. */
 export function listOf(world, type, slot, value) {
-  const bare = (v) => String(v).replace(/^"|"$/g, '').replace(/^\$/, '');
+  const bare = (v) => valueText(v).replace(/^\$/, '');
   return world.ofType(type).filter((w) => slot === undefined || (w.attrs[slot] || []).some((v) => bare(v) === bare(value))).map((w) => (w.attrs.name ? bare(w.attrs.name[0]) : w.id));
 }
 
