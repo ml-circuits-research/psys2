@@ -579,7 +579,114 @@ I did not delete anything (task P6: owner / reviewer decides). My recommendation
 
 **Left for the agent that owns `src/formalizer/completeness.mjs`:** `PSYS2_COMPLETE_SRC=heuristic` and `PSYS2_COMPLETE_FOREIGN` are dead by measurement (heuristic: test-world 61 -> 83 held; foreign: no row changed) — delete them with their branches when that file is free (listed, not touched here).
 
-## Q24 [KNOW] [LIB] (worker, 2026-11-15) — composed replies in the user's language: the reply templates and words w.lang.ro lacks (reviewer 03:15 items 1-2)
+## Q24 [LIB] (worker, 2026-11-15) — P7 host kit: what PSys2 needs to move onto sopworld 0.130
+
+Read: sopworld 0.130.0 (`ad4d456`, `src/kit.mjs` 105 lines, `test/kit.test.mjs`, `examples/lists-app.mjs`), read-only from an archive in the scratchpad; not vendored (we vendor 0.121). Compared with `src/worlds/index.mjs` (388 lines), `src/dialog/index.mjs` (1,890), `src/dialog/discourse.mjs` (1,291), `src/dialog/dialogue.mjs` (553), `src/reasoner/index.mjs`, `tests/turn-scope.test.mjs` and the 96-file closure in section F of the architecture review.
+
+**Summary.** The kit's three functions are a sound first shape for an application built on catalog schemas: w.list + w.tasks run as advertised. They do not yet cover a PSys2 world:
+- The kit loads `std.schema` text only: no manifest, legend, lexicon, patterns, operations, templates, tests or ops.mjs / fns.mjs.
+- It merges every world into **one** live World. This goes against our "one instance per world" decision (spec 15, `tests/reasoner-worlds-apart.test.mjs`).
+- It reads only with the language world's frames: not our patterns, routing tiers, spelling, translation or voices.
+- It has no session: no timeline across worlds, no pending fill, no ellipsis, no snapshot / restore.
+
+Two of the reviewer's own conditions for the kit (library block 13:50) fail on the seating probe below:
+1. An incomplete reading is executed when the leftover words sit in a role the binding ignores.
+2. The replies are fixed English strings, not composed from the language world.
+
+The kit does not meet the conditions for PSys2 yet. The parts that map 1:1 are small: `arbitrate`, `typedWorldFor` / `schemaOf`, `moodOf` and World `undo` / `redo`, which we already call or could call.
+
+### Probe: examples/lists-app.mjs shape against plan.seating (scratch script, not in the repo)
+
+`scratchpad/p7/seating-on-kit.mjs` and `seating-probe2.mjs`, on the catalog at the library's pin `b20eeeb`, with the 8 inputs of `worlds/plan.seating/tests.sop` plus 5 more:
+- **A. Our `worlds/plan.seating/schema.sop`** (the `acts.schema` dialect that `scripts/import-w-schema.mjs` writes): `loadWorldSet` **accepts it silently** with `kinds: []`. Every turn then says "There is no table here." or "I did not understand ...". [LIB] `loadWorldSet` should refuse a world that declares no kind (or uses unknown types), not load an empty world.
+- **A2. The whole world directory** (world.sop + legend + lexicon + patterns + operations + templates as one text): throws `the id "gen.plan.seating.note" is declared twice`. Our loader parses each file on its own (`src/worlds/index.mjs:165` `readEntries`), so ids are unique per file, not per world. The kit's one-text-per-world loader cannot read our directories as they are.
+- **B. The published `w.seating` 2** (the schema our plan.seating is generated from), with lists-app-style bindings: `make` works ("add 2 tables" makes 2 tables). The rest breaks:
+  - **An incomplete reading is executed** (condition 1). "add a table called family" makes a table with **no name**, although `name` is `required=true` in w.seating, and no violation is reported. "add a guest called Ann at table 1" makes a guest with no name and no seat. "add a table for 4" ignores `seats`. All three return `status: done`. The kit names unread words only for the `thing` role (`src/kit.mjs:84-88`); it drops the `value`, `place` and `rel` roles the frame filled. Fix: every role a frame fills must land in a request argument or be named as unread.
+  - **The replies leak ids and are fixed English** (condition 2): "I made a table (w_seating_table1)." when two tables were made; "a item" in lists-app. The strings are literals at `src/kit.mjs:57, 62, 76, 84, 88, 92`.
+  - **No referents.** "make table 2 blue", "remove Ann" and "who is at table 1" are not understood, because nothing resolves a name or a number to a thing. We do this in `src/dialog/scene-referents.mjs`, `src/formalizer/names.mjs` and `discourse.pronoun`.
+  - "add a table", "add a blue table" and "add a round table" are not understood: the media frame `acts.media.m.make.add` wins and leaves "a" and "add" unread. This is a frame-ranking problem in the language world or in `readFrames`.
+  - "undo" is not understood. `World.undo` / `redo` exist, but `readTurn` has no path for an `undo` request.
+  - "Open the seating tab." is not understood ("tab"). Navigation is the host's job, so this is expected, but the kit needs a hook where a host criterion or a host request takes the turn.
+- **C. w.seating + w.list + w.tasks, no active world**: same results. Arbitration correctly picks w.seating for the seating kinds.
+- **The semantics also differ** ([KNOW], already recorded in `worlds/plan.seating/schema.host.sop`). In PSys2 a guest sits at a **table** (`in=table capacity=seats`); in w.seating 2 a guest sits on a **seat**. Here `seats` defaults to 4, and `colour` is not published. Until the catalog schema says the same, moving plan.seating onto `w.seating` changes behaviour (for example "add a guest called Ann at table 1").
+
+### Per kit function
+
+**`loadWorldSet(loader, { names, language, knowledge, bindings, verbs })`**
+- Maps 1:1:
+  - the loader as a function (our loader contract `listWorlds` / `readFile` / `loadOps`, `src/worlds/index.mjs:1-8`, is a superset);
+  - the SOP parse;
+  - one typed world from `schemaOf` (we build one per world from `typed.json` through the same `typedWorldFor`, `src/formalizer/typed-world.mjs:59-63`).
+- [LIB] missing, each with our code and the test that covers it:
+  1. **One World per world, composites explicit.** Ours: `src/reasoner/index.mjs:88-113` (one instance per world), `compose=` / `reads=` at `src/worlds/index.mjs:88-90`. Tests: `tests/reasoner-worlds-apart.test.mjs` (8), `tests/reasoner-namespaces.test.mjs` (9). The kit's single `live` World (`src/kit.mjs:26-30`) is the design the owner rejected on 2026-11-11. Ask: `set.worlds.get(name).world`, one World per world as Q72 itself proposed, plus `compose`.
+  2. **The world directory and its manifest.** Ours: files per world, each parsed on its own (`src/worlds/index.mjs:17, 165-171`); manifest fields `tab*`, `ambient`, `passive`, `undo` / `redo`, `untold`, `mirror`, `ops`, `source`, `language` (`:72-122`). Tests: `tests/engine-routing.test.mjs` (12), `tests/tab-short-names.test.mjs`, `tests/undo-redo.test.mjs` (4). Ask: a manifest reader (`core.world`) that keeps unknown keys for the host.
+  3. **Imports in dependency order, with cycle detection** (`src/worlds/index.mjs:288-308`), and **the legend registry and kb normalization** (`:309-320`, `src/legends/`). Test: `tests/legends.test.mjs` (14).
+  4. **Lexicons with `extends` / `exclude`, `core.phrase` macros, `core.shape` expansion** (`src/worlds/index.mjs:202-215, 328, 360`; ADR-007). Tests: `tests/phrase-macros.test.mjs` (10), `tests/shapes.test.mjs` (11), `tests/lang-common.test.mjs`. These stay host-side for now: patterns are our formalizer's input, so they stay ours until `readTurn` reads patterns (see below).
+  5. **World functions**: ops.mjs, and fns.mjs with toState / adopt / guard / isView / undoWords / closeOffer / voice / why (`src/worlds/index.mjs:173-187, 279-282`). Tests: every `test-world`, `tests/reasoner.test.mjs`. The kit has no slot for world code. After P6 picks one reasoner, only the fns.mjs hooks need a library contract.
+  6. **Lazy reload**, adding worlds to a running engine (`src/dialog/index.mjs:1847-1862` `reload`). Tests: `tests/lazy-loading.test.mjs` (8), `tests/first-turn-load-wait.test.mjs`.
+  7. **Refusing what does not load** (probes A and A2 above). Ours: `allErrors()` and `validateWorldSet` (`src/worlds/index.mjs:159-162`, `src/worlds/validate.mjs:12`). Checks: `node src/cli.mjs validate`, `tests/invariants.test.mjs`.
+
+**`readTurn(set, text, context)`**
+- Maps 1:1:
+  - `moodOf` (we call it in `src/dialog/foreign-reading.mjs:63-65`);
+  - `arbitrate` with the open tab as a criterion (we call `choose`: `src/dialog/index.mjs:1826`, `src/formalizer/routing.mjs:44-48`);
+  - "a statement is not a request" (`src/dialog/foreign-reading.mjs:202`);
+  - "never act on an incomplete reading" (ours: `src/dialog/index.mjs:1592-1610`, `src/formalizer/completeness.mjs:27`; tests `tests/completeness.test.mjs` (11), `tests/foreign-reading.test.mjs` (3)). The kit does not hold this yet (probe B).
+- [LIB] missing:
+  1. **Every filled role is used or named as unread** (probe B). This blocks the rest: until it holds, a "done" from the kit cannot be trusted.
+  2. **Replies composed from the language world, with no ids** (`src/kit.mjs:57-97`). Ours: templates per world (`src/worlds/index.mjs:258-262`) plus the renderer. Tests: `tests/reply-check.test.mjs`, `tests/register.test.mjs`.
+  3. **A reader the host plugs in.** Ours: the rules formalizer over patterns (`src/formalizer/rules/*`), the encoder strategy (`src/formalizer/strategy.mjs`), spelling (`src/dialog/index.mjs:601`), partial windows (`:672`), best effort and the value checker (`:696-702`), the world-aware review (`:1570`), the voices (`:1561`). Tests: `tests/routing.test.mjs` (16), `tests/spell-partial.test.mjs` (12), `tests/best-effort.test.mjs`, `tests/world-aware.test.mjs` (14), `tests/variants.test.mjs`. Ask: `readTurn(set, text, { readers: [fn] })`. Each reader returns readings under the reader contract; the kit keeps the contract, the arbitration and the execution. Without this, adopting `readTurn` means replacing our formalizer with frames, and we would lose real-set rows: the frames miss most of the sentences our patterns read (probe B fails 7 of 13 seating turns).
+  4. **Routing tiers as data.** Ours: `src/formalizer/routing.mjs:123-193` and `src/worlds/index.mjs:216-247` (tabOnly, tabPriority, yieldsTo, needsState, onlyWhile, tabFollow, signal, tabClaim, whole). Tests: `tests/engine-routing.test.mjs`, `tests/dispatch-order.test.mjs`, `tests/typo-tabfollow.test.mjs`. Ask: ADR-004 as a `std.decide` criterion table.
+  5. **Several requests per message, one timeline step each** (`src/dialog/index.mjs:1680`, `rs.beginStep` per segment). Tests: `tests/compound-messages.test.mjs` (3), `tests/clauses-in-sequence.test.mjs`.
+  6. **Referents**: names, numbers, "it", "the second one". Ours: `src/dialog/scene-referents.mjs` (called at `src/dialog/index.mjs:1537`), `discourse.pronoun` (`src/dialog/discourse.mjs:258`), `src/formalizer/names.mjs`. Tests: `tests/scene-referents.test.mjs`, `tests/np-time-referent.test.mjs`. The library has `resolveEllipsis`; it also needs a resolver from a name or an ordinal to the world's things.
+  7. **Effects for the page**: view, openTab (the interpreter envelope, `src/interpreter/index.mjs:343-346, 388-392`). Tests: `tests/transfer-views.test.mjs` (2), the views half of `tests/turn-scope.test.mjs:30-31`. `readTurn` returns only the changed types.
+  8. **Budget and abort over a turn** (`src/dialog/index.mjs:1282-1300` guard and budget, `:267-280` TOO_COMPLEX). Tests: `tests/budget.test.mjs` (5), `tests/turn-guard.test.mjs` (9), `tests/world-budget.test.mjs`. The library has `Budget` (`src/budget.mjs:24`), but `readTurn` does not take one.
+  9. **Romanian.** `context.lang` exists, but the reply strings are English (item 2). Our translation boundary (`src/dialog/index.mjs:145, 1767`) stays the host's. Tests: `tests/translate-session.test.mjs` (6), `tests/ro-sessions.test.mjs`.
+
+**`turnScope(set, owner)`**
+- Maps 1:1 in intent with our invariant (`tests/turn-scope.test.mjs`): a turn changes only the worlds its clauses address, plus `session.things`, `session.dialogue` and `ui.shell`. In the kit it is a predicate over wire **types** in the one live world (`src/kit.mjs:101-105`; the session is the `std.` / `core.` / `_std` prefixes).
+- [LIB] missing:
+  1. A scope per world, once worlds are separate instances (loadWorldSet item 1).
+  2. Session worlds named by the host: our three are world ids, not type prefixes.
+  3. "Passive" worlds (`src/worlds/index.mjs:78`): the shell follows other worlds, and its change is not a step.
+  4. The check on effects, not only on wires (`tests/turn-scope.test.mjs:30-31`).
+  5. A property test over more than one world. `test/kit.test.mjs:23-26` runs four list turns on one world, so it never tests a stray change to a *second* world, which is the bug the invariant exists for (owner export 22:43).
+
+**The session** (not in 0.130; the third part of Q72). What PSys2 would need from it, for the next library round:
+- **A timeline across worlds**, with undo / redo / undo all / undo named / undo to (`src/dialog/discourse.mjs:589-643, 760-922`; `src/reasoner/index.mjs:606-657, 1093`). Tests: `tests/undo-redo.test.mjs` (4), `tests/discourse-meta.test.mjs`. World `undo` / `redo` cover one instance only; we need one timeline whose steps name the worlds they touched.
+- **Pending question / fill and confirm** (`src/dialog/discourse.mjs:157-216`), and ellipsis (`:218`). Tests: `tests/discourse.test.mjs` (7), `tests/ellipsis-one.test.mjs` (5), `tests/fragment-continuation.test.mjs`.
+- **Snapshot / restore / portable snapshot / memory JSON** (`src/dialog/index.mjs:1322-1390`; `timelineJSON` at `src/reasoner/index.mjs:284-330`). Tests: `tests/reasoner-restore.test.mjs` (6), `tests/lazy-loading.test.mjs`.
+- **"Why?" / explain** over the turn's facts (`src/dialog/dialogue.mjs:314-380`). Test: `tests/dialogue.test.mjs` (12).
+- Discussions (ASTRA, `src/astra/`) stay ours: they are application UI, not kit.
+
+### Migration order
+
+Each step is measured by the in-scope real set, `test-world` over all worlds, and smoke. These are deterministic except for the 13-14 song / random rows.
+
+1. **Vendor 0.129 / 0.130 with no behaviour change** (already queued).
+   - Risk: low.
+   - Guards: `npm test`, smoke 88/88, test-world 58/40, real set 130/13/38 unchanged.
+2. **A world-facing API through `ctx`** (the first step of section F: `ctx.values`, `ctx.lang`, `ctx.knowledge`; remove the `../../src/` imports from worlds, one world at a time). This does not depend on the kit, but a world must be copyable before any kit can load it.
+   - Risk: low to medium; one world per commit.
+   - Guards: `test-world <id>` per world, `tests/host-functions.test.mjs`, `tests/knowledge-lookup.test.mjs`, that world's real-set rows.
+3. **`turnScope` as a second oracle in `tests/turn-scope.test.mjs`**, after turnScope items 1-2. Test-only.
+   - Risk: none to the product.
+4. **`loadWorldSet` for the generated schema worlds only** (plan.seating, plan.timeline, session.things, acts). Prerequisites: loadWorldSet items 1 (one instance per world) and 7 (refusal), and the [KNOW] alignment of w.seating / w.timeline with our host deviations. Our directory loader keeps the patterns, templates and tests.
+   - Risk: medium. The generated worlds carry the seating and timeline real rows and the owner's phone checks.
+   - Guards: `test-world plan.seating`, `test-world plan.timeline`, `tests/import-w-schema.test.mjs`, `tests/turn-scope.test.mjs`, `tests/things.test.mjs`, the seating / timeline real-set rows, smoke.
+5. **`readTurn` as a fallback reader** for a clause our formalizer leaves unparsed, behind the reader contract. Prerequisites: readTurn items 1 (no dropped roles) and 3 (pluggable readers). Its reading must pass our completeness and foreign-reading checks.
+   - Risk: medium to high (the catch-all theft class, P2).
+   - Guards: the real set with a per-row diff that requires 0 right -> wrong; `tests/completeness.test.mjs`, `tests/foreign-reading.test.mjs`, `tests/world-aware.test.mjs`, the A/B gate (`tests/ab-gate.test.mjs`).
+6. **The session** (timeline, fill, snapshot), when the library ships it with one instance per world. Replace the undo and fill parts of `discourse.mjs` one at a time.
+   - Risk: high (undo across worlds, the passive shell, restore after a lazy reload).
+   - Guards: `tests/undo-redo.test.mjs`, `tests/reasoner-restore.test.mjs`, `tests/lazy-loading.test.mjs`, `tests/discourse*.test.mjs`, `tests/dialogues.test.mjs`, the real-set undo rows, smoke, and the browser webchat-turns suite.
+7. **`readTurn` as the main path**, only once its pluggable readers carry our rules formalizer and the tier table. `src/dialog/index.mjs` then shrinks to the host's own stages: translation, page effects, discussions.
+   - Risk: high.
+   - Guards: everything above, plus the Romanian set with all three translation paths.
+
+Not done here: no runtime change, nothing vendored. My recommendation: send readTurn items 1-2 and loadWorldSet item 1 to the library before step 4. They are the reviewer's own conditions (13:50 items 1, 2, 4) and the owner's isolation decision.
+
+## Q25 [KNOW] [LIB] (worker, 2026-11-15) — composed replies in the user's language: the reply templates and words w.lang.ro lacks (reviewer 03:15 items 1-2)
 The application now composes a reply in Romanian from its frame (`say: { act, roles }` on a world's result; spec 06 "Composed replies"; `src/lang/ro.mjs` `composeRo`, std.morph `realise`) instead of machine-translating the English. Until the catalog has them, the templates and lemmas live in `src/lang/ro.local.mjs` (loaded after the catalog's facts; a catalog row wins), and go when the catalog publishes them.
 [KNOW]
 - **K1 reply templates (`w.lang.ro.template act= text=`)** — the three families composed so far:
