@@ -5305,7 +5305,7 @@
 
 @phrase.lang.intent.arrange core.phrase
     frame=false
-    doc="Verbs that mean the open world's arrange act (lay the things out again, in a layout or along an outline)."
+    doc="Verbs that mean the open world's arrange act (lay the things out again, in a layout or along an outline); read so only as the first word of a clause (the imperative)."
     alt=rearrange
     alt=re_arrange
     alt=lay_out
@@ -5316,7 +5316,6 @@
     alt=organize
     alt=sit
     alt=seat
-    alt=order
     alt=sort_out
     alt=put_in_order
     alt=tidy_up

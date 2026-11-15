@@ -1516,15 +1516,19 @@ export class DialogSession {
    */
   async _send(text, opts = {}) {
     const snap = opts.intent === false || guard.soft() ? null : this.snapshot();
+    const prevTurn = this.dialogue?.log?.at?.(-1) ?? null;
     const first = await this._sendFirst(text, opts);
     if (!snap || !weakReading(first)) return first;
-    // THE INTENT STEP (spec 03 section 7.9f): the first reading was weak; on the session as it was before the turn, propose what the user may mean and choose (src/dialog/intent.mjs)
-    const now = this.snapshot();
-    this.restore(snap);
+    // THE INTENT STEP (spec 03 section 7.9f): the first reading was weak; on a copy of the session as it was before the turn, propose what the user may mean and choose
+    // (src/dialog/intent.mjs). The live session is touched only when a reading is chosen: then it goes back to before the turn and the turn is read again.
+    const view = Object.create(DialogSession.prototype);
+    view.engine = this.engine; view.isession = snap.isession.clone(); view.isession.sessionFacts = this.isession.sessionFacts; view._recentWorlds = [...(snap.recent ?? [])];
+    view.discourse = this.discourse; view.dialogue = { log: prevTurn ? [prevTurn] : [] }; view._routing = this._routing;
     let alt = null;
-    try { alt = await perf.time('intent', () => intentStep(this, first.trace?.english ?? text, { understand: (e) => this._understands(e) })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; alt = null; }
-    if (!alt) { this.restore(now); return first; }
-    const r = await this._sendCore(text, opts, { english: alt.english, translation: first.translation ?? null, assumed: alt.assumed, say: alt.say ?? null });
+    try { const vocab = spellVocabulary(this.engine.set); alt = await perf.time('intent', () => intentStep(view, first.trace?.english ?? text, { understand: (e) => view._understands(e), known: (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!this.engine.translator?.rules?.knownEnglish?.(w) })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; alt = null; }
+    if (!alt) return first;
+    this.restore(snap);
+    const r = await this._sendCore(text, opts, { english: alt.english, translation: first.translation ?? null, assumed: alt.assumed, left: alt.left ?? [], say: alt.say ?? null });
     r.trace.intent = { from: first.trace?.english ?? null, assumed: alt.assumed, log: alt.log };
     if (first.trace?.candidates) r.trace.candidates = first.trace.candidates;
     if (first.trace?.via) r.trace.via = first.trace.via;
@@ -1909,7 +1913,7 @@ export class DialogSession {
       for (let i = 0; i < lines.length; i++) if (lines[i].length === 1 && BARE_DONE.test(lines[i][0].text ?? '')) lines[i] = [T(NOTHING_CHANGED)];
     }
     // THE INTENT STEP: what was assumed is said first ("I took "make it nicer" as: improve the diagram."), in the user's language through the translator
-    if (override?.assumed?.length) lines.unshift([T(`I took that as: ${override.assumed.map((a) => a.as).join('; ')}.`)]);
+    if (override?.assumed?.length) lines.unshift([T(`I took that as: ${override.assumed.map((a) => a.as).join('; ')}.`), ...(override.left?.length ? [T(' I left out '), { text: override.left.map((x) => `"${x}"`).join(', '), translate: false, quote: true }, T(': I could not read it.')] : [])]);
     let englishParts = [];
     lines.forEach((ln, i) => { if (i) englishParts.push({ text: ' ', translate: true, join: true }); englishParts.push(...ln); });
     const englishReply = englishParts.map((p) => p.text).join('');

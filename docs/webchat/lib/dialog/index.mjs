@@ -275,6 +275,7 @@ import { LIMITS } from './time-limits.mjs?v=3dc818f0e6';
 import { languageCommand } from '../translate/language-command.mjs?v=af45c6bf2e';
 import { withSubject, polishReply } from '../translate/register.mjs?v=93be3be4ed';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=46f9b50001';
+import { intentStep, weakReading } from './intent.mjs?v=0313324ea7';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1514,6 +1515,27 @@ export class DialogSession {
    * with them off, English input, or past the soft time limit, the core reads it as it is (rules translation).
    */
   async _send(text, opts = {}) {
+    const snap = opts.intent === false || guard.soft() ? null : this.snapshot();
+    const prevTurn = this.dialogue?.log?.at?.(-1) ?? null;
+    const first = await this._sendFirst(text, opts);
+    if (!snap || !weakReading(first)) return first;
+    // THE INTENT STEP (spec 03 section 7.9f): the first reading was weak; on a copy of the session as it was before the turn, propose what the user may mean and choose
+    // (src/dialog/intent.mjs). The live session is touched only when a reading is chosen: then it goes back to before the turn and the turn is read again.
+    const view = Object.create(DialogSession.prototype);
+    view.engine = this.engine; view.isession = snap.isession.clone(); view.isession.sessionFacts = this.isession.sessionFacts; view._recentWorlds = [...(snap.recent ?? [])];
+    view.discourse = this.discourse; view.dialogue = { log: prevTurn ? [prevTurn] : [] }; view._routing = this._routing;
+    let alt = null;
+    try { const vocab = spellVocabulary(this.engine.set); alt = await perf.time('intent', () => intentStep(view, first.trace?.english ?? text, { understand: (e) => view._understands(e), known: (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!this.engine.translator?.rules?.knownEnglish?.(w) })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; alt = null; }
+    if (!alt) return first;
+    this.restore(snap);
+    const r = await this._sendCore(text, opts, { english: alt.english, translation: first.translation ?? null, assumed: alt.assumed, left: alt.left ?? [], say: alt.say ?? null });
+    r.trace.intent = { from: first.trace?.english ?? null, assumed: alt.assumed, log: alt.log };
+    if (first.trace?.candidates) r.trace.candidates = first.trace.candidates;
+    if (first.trace?.via) r.trace.via = first.trace.via;
+    return r;
+  }
+
+  async _sendFirst(text, opts = {}) {
     const tr = this.engine.translator;
     const wantedLang = opts.language ?? this.language;
     if (!tr || tr.fallbackMode?.() !== 'fallback' || wantedLang === 'en' || guard.soft()) return this._sendCore(text, opts);
@@ -1614,6 +1636,7 @@ export class DialogSession {
         if (!english.trim() && text.trim()) { english = text; translation = { ...(translation ?? {}), text, alignment: [], unknown: [], notes: [...(translation?.notes ?? []), 'the rules translation was empty'], confidence: 0 }; }
       } else lang = 'en';
     }
+    if (override?.english && lang === 'en') english = override.english;   // the intent step's reading of an English message
     this._waLang = lang;   // world-aware reading (spec 16): the words a Romanian message leaves out are the translator's, not the reading's
     // LANG-FIXED: an explicit "switch the language" command is read as such in either language, whatever language is selected ("treci pe engleză" while English is selected)
     { const switchTo = languageCommand(text); if (switchTo) english = switchTo; }
@@ -1634,11 +1657,11 @@ export class DialogSession {
     const pend = disc.takePending();   // an expectation lives for one turn (spec 11)
     const icpt = interp.intercept(this.isession, english);   // modal input (spec 07 section 2)
     let pre = null;   // discourse resolution (spec 11): the reply fills a pending argument, or a fragment is an ellipsis of an earlier frame
-    let meta = null;  // meta-dialogue (spec 11 sections 6-14): cancel, repeat, explain, feedback, topic, list mode, repair, degree, references
+    let meta = override?.say ? { reply: override.say, status: 'supported', info: { kind: 'intent', dialogue: 'about-you' } } : null;  // meta-dialogue (spec 11 sections 6-14): cancel, repeat, explain, feedback, topic, list mode, repair, degree, references
     let formalText = english;
     // THE PERSON OF THE SESSION (Q19, spec 23): a statement or a question about the user read by the catalog's person frames, or the interview, is kept as w.person facts before any world reads it
     let personSeg = null;
-    if (!icpt) {
+    if (!icpt && !meta) {
       let pt = null;
       try { pt = await perf.time('person', () => personTurn(this, english)); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; pt = null; }
       if (pt) { meta = { reply: pt.reply, status: pt.status, info: pt.info, ...(pt.say ? { parts: [{ text: pt.reply, translate: true, say: pt.say }] } : {}) }; personSeg = pt.segment; }
@@ -1889,6 +1912,8 @@ export class DialogSession {
     if (lines.some((ln) => ln.length === 1 && BARE_DONE.test(ln[0].text ?? '')) && !this.isession.effects.some((e) => e.name !== 'chat.suggest') && !contentChanged(stateBefore, this.isession.state)) {
       for (let i = 0; i < lines.length; i++) if (lines[i].length === 1 && BARE_DONE.test(lines[i][0].text ?? '')) lines[i] = [T(NOTHING_CHANGED)];
     }
+    // THE INTENT STEP: what was assumed is said first ("I took "make it nicer" as: improve the diagram."), in the user's language through the translator
+    if (override?.assumed?.length) lines.unshift([T(`I took that as: ${override.assumed.map((a) => a.as).join('; ')}.`), ...(override.left?.length ? [T(' I left out '), { text: override.left.map((x) => `"${x}"`).join(', '), translate: false, quote: true }, T(': I could not read it.')] : [])]);
     let englishParts = [];
     lines.forEach((ln, i) => { if (i) englishParts.push({ text: ' ', translate: true, join: true }); englishParts.push(...ln); });
     const englishReply = englishParts.map((p) => p.text).join('');

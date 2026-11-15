@@ -3,7 +3,7 @@
 // (worlds/diagram.sketch/engine.mjs): the engine reads the sentence the user said (`req.text`, the same way the old cue patterns handed it over) and runs it on its own state.
 // The act only says which engine command family the sentence belongs to. `unread`: when no form of the grammar read a sentence in the open Diagram tab, the engine's own
 // reader gets it (its legend knows layouts, templates, queries, facts and rules that the act grammar does not have yet: those are the holes the coverage grid lists).
-import * as E from './engine.mjs?v=ca936386ae';
+import * as E from './engine.mjs?v=3beb3a8e9f';
 import SOPKit from './engine/logic.mjs?v=07f03fb3da';
 import { parseDiagramRequest, outlineIn } from '../../lib/knowledge/diagram-world.mjs?v=09ca005543';
 
@@ -42,7 +42,7 @@ domain.ask = (ctx, r) => (['why', 'last'].includes(r.mode) ? undefined : run(E.a
 /** The world's own reader (act `own`): the engine reads the sentence itself, a question or a command. */
 domain.own = (ctx, r) => {
   const sh = shapedOf(r.text);
-  if (sh) return E.shapedLike(ctx, { o: sh.name ?? sh.said });
+  if (sh) return E.shapedLike(ctx, { o: sh.name ?? sh.said, text: r.text });
   const n = engineNode(String(r.text ?? ''), ctx.state);
   const fn = !n ? null : n.type === 'question' ? E.ask_describe : n.type === 'command' ? E[n.args?.action] : null;   // the family the engine names is the function that runs it (a name or an unknown one is the engine's to refuse)
   const text = String(r.text ?? '').trim();

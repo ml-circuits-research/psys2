@@ -60,7 +60,7 @@ function thingsOf(state) {
 }
 
 /** The candidates of one clause: [{ text, via, cost, cue }] (`cue`: the words the kind of reading explains). */
-function proposals(clause, { phrase, lang, state, previous, worldWords }) {
+function proposals(clause, { phrase, lang, state, previous, worldWords, known }) {
   const out = [];
   const add = (text, via, cost, cue = [], say = null) => { if (text && !out.some((c) => c.text === text)) out.push({ text, via, cost, cue, say }); };
   const ws = words(clause);
@@ -70,7 +70,7 @@ function proposals(clause, { phrase, lang, state, previous, worldWords }) {
   if (imp) for (const n of nouns) { add(`improve the ${n}`, 'improve', 1, imp.split(' ')); add(`tidy the ${n}`, 'improve', 2, imp.split(' ')); }
   // arrange: a verb that means the arrange act, the rest kept ("sit the items like a hexagon" -> "arrange the items like a hexagon")
   const arr = has(clause, phrase('lang.intent.arrange'));
-  if (arr) add(` ${ws.join(' ')} `.replace(` ${arr} `, ' arrange ').trim(), 'arrange', 1, [arr]);
+  if (arr && ` ${ws.join(' ')} `.startsWith(` ${arr} `)) add(` ${ws.join(' ')} `.replace(` ${arr} `, ' arrange ').trim(), 'arrange', 1, [arr]);   // the verb first: an imperative, not a word inside a sentence
   // a complaint that there is too much: about half of each group of the open world goes (groups of four or more, else of two or more)
   const over = has(clause, phrase('lang.intent.overdo'));
   if (over) {
@@ -128,11 +128,11 @@ function proposals(clause, { phrase, lang, state, previous, worldWords }) {
     if (about) add(`write a ${txt} about ${about[1]}`, 'text', 1, ws);
     add(`write a ${txt}`, 'text', 3, ws);
   }
-  // a bare noun on a tab ("Tenerife" on the Map): the requests it may stand for, in the order of lang.intent.bare
+  // a bare name on a tab ("Tenerife" on the Map): the requests it may stand for, in the order of lang.intent.bare
   const content = ws.filter((w) => !STOP.has(w));
   const raw = clause.trim().replace(/[.!?]+$/, '');
-  if (ws.length <= 3 && /^[\p{Lu}][\p{L}'-]*(?:\s+[\p{L}'-]+){0,2}$/u.test(raw) && content.length >= 1 && content.length === ws.filter((w) => !/^(?:the|a|an)$/.test(w)).length && !worldWords.verbs.has(content[0]) && !content.some((w) => DIRECTION.test(w) || lang.position?.(w))) {
-    phrase('lang.intent.bare').forEach((lead, i) => add(`${lead} ${clause.trim().replace(/[.!?]+$/, '')}`, 'bare', 1 + i, ws));
+  if (ws.length === 1 && /^[\p{Lu}][\p{L}'-]+$/u.test(raw) && !known(ws[0]) && !DIRECTION.test(ws[0]) && !lang.position?.(ws[0])) {   // one capitalised word no world and no English dictionary knows: a name
+    phrase('lang.intent.bare').forEach((lead, i) => { if (worldWords.verbs.has(lead.split(' ')[0])) add(`${lead} ${clause.trim().replace(/[.!?]+$/, '')}`, 'bare', 1 + i, ws); });   // only requests the open world itself makes (a lead of its own examples)
   }
   return out;
 }
@@ -171,7 +171,7 @@ function previousNouns(text) {
  * Propose and choose. `dialog` is the DialogSession (its state is the one before the turn), `english` the first reading's English. Returns null (keep the first reading),
  * or { english, assumed: [{ said, as }], say?, log }.
  */
-export async function intentStep(dialog, english, { understand }) {
+export async function intentStep(dialog, english, { understand, known = () => false }) {
   const { engine } = dialog;
   const lang = engine.interp.lang, lib = engine.sopworld;
   if (!lib?.choose || !lib?.World) return null;
@@ -210,7 +210,7 @@ export async function intentStep(dialog, english, { understand }) {
   for (const c of clauses) {
     budget.tick('intent.clause');
     if (!c.text.trim()) continue;
-    const props = proposals(c.text, { phrase, lang, state, previous, worldWords });
+    const props = proposals(c.text, { phrase, lang, state, previous, worldWords, known });
     if (!props.length) continue;
     const content = words(c.text).filter((w) => !STOP.has(w));
     const score = async (text, via, cost, cue) => {
@@ -225,17 +225,31 @@ export async function intentStep(dialog, english, { understand }) {
     for (const p of props.slice(0, 12)) cands.push(await score(p.text, p.via, p.cost, p.cue));
     const r = lib.choose(world, 'intent', cands, { seed: null });
     const best = r.best;
+    // two different kinds of reading as good as each other on every criterion but cost: ONE concrete question with the two options (a message of one clause)
+    const second = r.order.find((x) => x !== best && x.via !== 'self' && x.via !== best.via);
+    if (clauses.filter((x) => x.text.trim()).length === 1 && best.via !== 'self' && second && best.issues === 0 && second.issues === 0 && second.uncovered === best.uncovered && second.previous === best.previous && Math.abs(second.cost - best.cost) < 1) {
+      const sayOf = (x) => props.find((p) => p.text === x.text)?.say ?? x.text;
+      log.push({ clause: c.text, ask: [best.text, second.text] });
+      return { english, say: `Do you mean "${sayOf(best)}" or "${sayOf(second)}"?`, assumed: [], log };
+    }
     log.push({ clause: c.text, chosen: best.text, via: best.via, cands: cands.map((x) => [x.text, x.via, x.issues, x.uncovered, x.cost]) });
     if (best.via !== 'self' && best.issues < cands[0].issues) {
       changed = true;
       assumed.push({ said: c.text, as: props.find((p) => p.text === best.text)?.say ?? best.text, via: best.via });
       c.text = best.text;
+      c.read = true;
     }
   }
   if (!changed) return null;
+  // do the part that is read and name the rest: a clause no reading reads at all (a garbled word) is left out, said, and does not hold back the clauses that are read
+  const left = [];
+  if (assumed.length) for (const c of clauses) {
+    if (!c.text.trim() || c.read) continue;
+    if ((await understand(c.text)).issues >= 3) { left.push(c.text); log.push({ clause: c.text, left: true }); c.text = ''; }
+  }
   const kept = clauses.filter((c) => c.text.trim());
   if (!kept.length) return null;
-  return { english: kept.map((c, i) => c.text + (i < kept.length - 1 ? c.sep || ', ' : '')).join(''), assumed, log };
+  return { english: kept.map((c, i) => c.text + (i < kept.length - 1 ? c.sep || ', ' : '')).join(''), assumed, left, log };
 }
 
 const TAB_NOUNS = ['diagram', 'picture', 'drawing', 'document', 'chart', 'map', 'song', 'list', 'timeline', 'calendar', 'plan'];

@@ -1,18 +1,18 @@
 {
- "date": "2026-11-15T09:26:54.610Z",
+ "date": "2026-11-15T10:19:57.956Z",
  "reasoner": "matrix",
  "mt": true,
  "encoder": true,
  "summary": {
   "session": {
-   "right": 21,
+   "right": 30,
    "total": 43,
-   "medianMs": 356,
+   "medianMs": 325,
    "withheld": 0,
    "falseDone": 0
   },
   "variants": {
-   "right": 25,
+   "right": 27,
    "total": 35,
    "byClass": {
     "A": {
@@ -32,7 +32,7 @@
      "total": 5
     },
     "E": {
-     "right": 2,
+     "right": 4,
      "total": 5
     },
     "F": {
@@ -44,7 +44,7 @@
      "total": 5
     }
    },
-   "medianMs": 140
+   "medianMs": 143
   }
  },
  "rows": [
@@ -55,7 +55,7 @@
    "class": null,
    "text": "adaugă un cerc",
    "tab": "diagram",
-   "ms": 55,
+   "ms": 53,
    "judged": false,
    "right": null,
    "invariant": [],
@@ -76,7 +76,7 @@
    "class": null,
    "text": "creaza o diagrama random",
    "tab": "diagram",
-   "ms": 330,
+   "ms": 318,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -97,36 +97,11 @@
    "class": null,
    "text": "aseaza elementele diagramei ca un hexagon",
    "tab": "diagram",
-   "ms": 356,
+   "ms": 345,
    "judged": true,
-   "right": false,
+   "right": true,
    "invariant": [],
-   "failing": [
-    "reply_any:hexagon"
-   ],
-   "worlds": [
-    "diagram.sketch"
-   ],
-   "tabAfter": "diagram",
-   "changed": true,
-   "content": true,
-   "reply": "Am mutat cercul, „summary”, „introduction”, „work done”, „results” și 2 mai mult. Am aranjat 7 forme ca un copac, de la stânga la dreapta. c1 nu are legături, așa că stă lângă copac.",
-   "english": "Moved the circle, summary, introduction, work done, results and 2 more. Arranged 7 shapes as a tree, left to right. c1 has no links, so it stands beside the tree."
-  },
-  {
-   "set": "session",
-   "context": false,
-   "id": 3,
-   "class": null,
-   "text": "aseaza elementele diagramei ca un hexagon cu cercul in mijloc",
-   "tab": "diagram",
-   "ms": 320,
-   "judged": true,
-   "right": false,
-   "invariant": [],
-   "failing": [
-    "state:diagram.sketch:shapes[kind=circle].y>=150 (60)"
-   ],
+   "failing": [],
    "worlds": [
     "diagram.sketch"
    ],
@@ -139,11 +114,32 @@
   {
    "set": "session",
    "context": false,
+   "id": 3,
+   "class": null,
+   "text": "aseaza elementele diagramei ca un hexagon cu cercul in mijloc",
+   "tab": "diagram",
+   "ms": 297,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am plasat cele 6 forme pe conturul unui hexagon, în sensul acelor de ceas din partea de sus, și cercul din mijloc.",
+   "english": "I placed the 6 shapes on the outline of a hexagon, clockwise from the top, and the circle in the middle."
+  },
+  {
+   "set": "session",
+   "context": false,
    "id": 4,
    "class": null,
    "text": "aseaza mai bine elementele diagramei",
    "tab": "diagram",
-   "ms": 145,
+   "ms": 150,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -164,7 +160,7 @@
    "class": null,
    "text": "reaseaza diagrama",
    "tab": "diagram",
-   "ms": 78,
+   "ms": 81,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -185,7 +181,7 @@
    "class": null,
    "text": "fa diagrama mai frumoasa",
    "tab": "diagram",
-   "ms": 237,
+   "ms": 364,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -196,10 +192,10 @@
     "diagram.sketch"
    ],
    "tabAfter": "diagram",
-   "changed": false,
+   "changed": true,
    "content": false,
-   "reply": "Ce ar trebui să se schimbe în jurul cercului 1, rezumat, introducere, work_done, rezultate, probleme și pași următori? Încerci o culoare, dimensiune, formă, contur sau etichetă.",
-   "english": "What should change about circle 1, summary, introduction, work_done, results, problems and next_steps? Try a color, size, shape, outline or label."
+   "reply": "Am luat asta ca: îmbunătățirea diagramei. Aspectul are deja un scor de 98,4/100 și nimic din ceea ce am încercat scoruri mai mari, așa că l-am lăsat așa cum este.",
+   "english": "I took that as: improve the diagram. The layout already scores 98.4/100 and nothing I tried scores higher, so I left it as it is."
   },
   {
    "set": "session",
@@ -208,7 +204,7 @@
    "class": null,
    "text": "reaseaza",
    "tab": "diagram",
-   "ms": 72,
+   "ms": 68,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -229,11 +225,13 @@
    "class": null,
    "text": "punr elementele din mijloc mai sus",
    "tab": "diagram",
-   "ms": 178,
+   "ms": 181,
    "judged": true,
-   "right": true,
+   "right": false,
    "invariant": [],
-   "failing": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=results].y<$+0 (196)"
+   ],
    "worlds": [
     "diagram.sketch"
    ],
@@ -250,7 +248,7 @@
    "class": null,
    "text": "sterge cercul",
    "tab": "diagram",
-   "ms": 245,
+   "ms": 265,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -271,7 +269,7 @@
    "class": null,
    "text": "pune primul si ultimul  od mao jos iar nodul din centru mai sus",
    "tab": "diagram",
-   "ms": 1823,
+   "ms": 1517,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -296,7 +294,7 @@
    "class": null,
    "text": "muta results mai sus",
    "tab": "diagram",
-   "ms": 856,
+   "ms": 512,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -317,7 +315,7 @@
    "class": null,
    "text": "si mai sus",
    "tab": "diagram",
-   "ms": 50,
+   "ms": 48,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -340,7 +338,7 @@
    "class": null,
    "text": "muta work done si problems mai sus",
    "tab": "diagram",
-   "ms": 1156,
+   "ms": 871,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -361,7 +359,7 @@
    "class": null,
    "text": "muta summary pe la mijloc",
    "tab": "diagram",
-   "ms": 678,
+   "ms": 582,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -382,20 +380,19 @@
    "class": null,
    "text": "mai jos",
    "tab": "diagram",
-   "ms": 731,
+   "ms": 799,
    "judged": true,
-   "right": false,
+   "right": true,
    "invariant": [],
-   "failing": [
-    "world:diagram.sketch got -",
-    "state:diagram.sketch:shapes[name=summary].y>$+0 (250)"
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
    ],
-   "worlds": [],
    "tabAfter": "diagram",
-   "changed": false,
-   "content": false,
-   "reply": "Nu am înţeles „mai jos”. De exemplu: „Adaugă un cerc.” sau „Ce este culoarea cercului?”",
-   "english": "I did not understand \"mai jos\". For example: \"Add a circle.\" or \"What is the colour of the circle?\""
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: muti-o pe „summary”. M-am mutat în jos pe „summary”.",
+   "english": "I took that as: move summary down. Moved summary down."
   },
   {
    "set": "session",
@@ -404,21 +401,19 @@
    "class": null,
    "text": "nu problems , revina vu probls unde era",
    "tab": "diagram",
-   "ms": 98,
+   "ms": 367,
    "judged": true,
-   "right": false,
+   "right": true,
    "invariant": [],
-   "failing": [
-    "state:diagram.sketch:shapes[name=problems].y>$+0 (116)"
-   ],
+   "failing": [],
    "worlds": [
     "diagram.sketch"
    ],
    "tabAfter": "diagram",
    "changed": true,
    "content": true,
-   "reply": "OK, am luat asta înapoi. Unde ar trebui să meargă „summary”? Încerci \"move „summary” de mai jos ...\" sau \"movează „summary” stânga cu 50\".",
-   "english": "OK, I took that back. Where should summary go? Try \"move summary below …\" or \"move summary left by 50\"."
+   "reply": "Am luat asta ca: pune-o pe „problems” înapoi unde era. M-am mutat în jos pe „problems”.",
+   "english": "I took that as: put problems back where it was. Moved problems down."
   },
   {
    "set": "session",
@@ -427,21 +422,19 @@
    "class": null,
    "text": "gresit, muta problems mai sus",
    "tab": "diagram",
-   "ms": 714,
+   "ms": 488,
    "judged": true,
-   "right": false,
+   "right": true,
    "invariant": [],
-   "failing": [
-    "state:diagram.sketch:shapes[name=problems].y<$+0 (116)"
-   ],
+   "failing": [],
    "worlds": [
     "diagram.sketch"
    ],
    "tabAfter": "diagram",
    "changed": true,
-   "content": false,
-   "reply": "Nimic nu s-a schimbat.",
-   "english": "Nothing changed."
+   "content": true,
+   "reply": "Am mutat „problems” în sus.",
+   "english": "Moved problems up."
   },
   {
    "set": "session",
@@ -450,7 +443,7 @@
    "class": null,
    "text": "muta summary mai jos",
    "tab": "diagram",
-   "ms": 592,
+   "ms": 159,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -471,7 +464,7 @@
    "class": null,
    "text": "muta problems mai sus",
    "tab": "diagram",
-   "ms": 333,
+   "ms": 170,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -492,7 +485,7 @@
    "class": null,
    "text": "fa un desen random",
    "tab": "diagram",
-   "ms": 129,
+   "ms": 134,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -515,7 +508,7 @@
    "class": null,
    "text": "deseneaza ceva random",
    "tab": "diagram",
-   "ms": 438,
+   "ms": 281,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -526,8 +519,8 @@
    "tabAfter": "diagram",
    "changed": true,
    "content": true,
-   "reply": "Am desenat o diagramă aleatorie de tip rețea, cu nouă forme. Este despre Tanzania. Este peste ce era deja acolo; „anulează” o elimină.",
-   "english": "I drew a random network diagram with nine shapes. It is about Tanzania. It is on top of what was there; undo takes it away."
+   "reply": "Am desenat o diagramă aleatorie de tip flux, cu cinci forme. Este despre poveste. Este peste ce era deja acolo; „anulează” o elimină.",
+   "english": "I drew a random pipeline diagram with five shapes. It is about story. It is on top of what was there; undo takes it away."
   },
   {
    "set": "session",
@@ -536,7 +529,7 @@
    "class": null,
    "text": "unde este paris",
    "tab": "editor",
-   "ms": 136,
+   "ms": 144,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -557,7 +550,7 @@
    "class": null,
    "text": "arata-mi paris pe harta",
    "tab": "map",
-   "ms": 107,
+   "ms": 113,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -578,7 +571,7 @@
    "class": null,
    "text": "deseneaza ceva frumos",
    "tab": "draw",
-   "ms": 52,
+   "ms": 51,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -599,7 +592,7 @@
    "class": null,
    "text": "deseneaza o casa",
    "tab": "draw",
-   "ms": 157,
+   "ms": 179,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -620,7 +613,7 @@
    "class": null,
    "text": "deseneaza orice vrei tu",
    "tab": "draw",
-   "ms": 71,
+   "ms": 73,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -641,7 +634,7 @@
    "class": null,
    "text": "sterge desenul",
    "tab": "draw",
-   "ms": 60,
+   "ms": 67,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -662,7 +655,7 @@
    "class": null,
    "text": "deseneaza un tablou cu un lac",
    "tab": "draw",
-   "ms": 593,
+   "ms": 516,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -685,7 +678,7 @@
    "class": null,
    "text": "deseneaza un pond",
    "tab": "draw",
-   "ms": 252,
+   "ms": 260,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -706,20 +699,19 @@
    "class": null,
    "text": "ai exagerat",
    "tab": "draw",
-   "ms": 449,
+   "ms": 557,
    "judged": true,
-   "right": false,
+   "right": true,
    "invariant": [],
-   "failing": [
-    "world:art.draw got -",
-    "state:art.draw:objects.length<$+0 (33)"
+   "failing": [],
+   "worlds": [
+    "art.draw"
    ],
-   "worlds": [],
    "tabAfter": "draw",
-   "changed": false,
-   "content": false,
-   "reply": "Nu am înţeles „ai exagerat”. De exemplu: „Se adaugă o casă.” sau „Care este culoarea casei?”",
-   "english": "I did not understand \"ai exagerat\". For example: \"Add a house.\" or \"What is the colour of the house?\""
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: scoate a patra iarbă şi iarba a cincea. Am luat 2 ierburi.",
+   "english": "I took that as: remove the fourth grass and the fifth grass. I took away 2 grasses."
   },
   {
    "set": "session",
@@ -728,12 +720,12 @@
    "class": null,
    "text": "sterge elementele in plus, exgarat de mukte elemente, unde este apa?",
    "tab": "draw",
-   "ms": 1042,
+   "ms": 1158,
    "judged": true,
    "right": false,
    "invariant": [],
    "failing": [
-    "state:art.draw:objects.length<$+0 (33)"
+    "reply_any:ap[aă]|iaz|lac"
    ],
    "worlds": [
     "art.draw"
@@ -741,8 +733,8 @@
    "tabAfter": "draw",
    "changed": true,
    "content": true,
-   "reply": "Pot desena o casă, un copac, un soare, un nor, o mașină, o floare, o pisică, un câine, un pește, o pasăre, o barcă, un munte, un curcubeu, o persoană, un balon, o rachetă, o lună și se formează ca un cerc, un pătrat, o stea sau o inimă. - C",
-   "english": "I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon and shapes like a circle, a square, a star or a heart. What would you like? I ad"
+   "reply": "Am luat asta ca: scoate a treia libelulă. Am plecat pe dinafă „exgart by the time”: Nu am putut să-l citesc. Am luat libelula. Pot să-ţi spun doar unde sunt lucrurile pe care le-ai tras.",
+   "english": "I took that as: remove the third dragonfly. I left out \"exgart by the time\": I could not read it. I took away the dragonfly. I can only tell you where the things you drew are."
   },
   {
    "set": "session",
@@ -751,21 +743,19 @@
    "class": null,
    "text": "pune pestii in ala",
    "tab": "draw",
-   "ms": 521,
+   "ms": 530,
    "judged": true,
-   "right": false,
+   "right": true,
    "invariant": [],
-   "failing": [
-    "reply_not:Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins|nu am f[aă]cut|Ce ai vrut|doar o parte|unde s[aă]-l"
-   ],
+   "failing": [],
    "worlds": [
     "art.draw"
    ],
    "tabAfter": "draw",
    "changed": true,
    "content": true,
-   "reply": "Nu am înțeles unde să-l muți (\"în\"). Încerci \"la stânga\", \"un pic mai sus\", \"lâncez la soare\" sau \"la colțul din dreapta sus\".",
-   "english": "I did not understand where to move it (\"in the\"). Try \"to the left\", \"a bit higher\", \"next to the sun\" or \"to the top right corner\"."
+   "reply": "Am luat asta ca: pui peștele în apă. Există 3: peștișori aurii din stânga, peștii de aur din mijloc și peștii de aur din dreapta. La care vrei să spui?",
+   "english": "I took that as: put the fish in the water. There are 3: the left goldfish, the middle goldfish and the right goldfish. Which one do you mean?"
   },
   {
    "set": "session",
@@ -774,7 +764,7 @@
    "class": null,
    "text": "lasa plantele de apa ij apa, pune iarba deasupra apei, lasa cerul albastru azuriu",
    "tab": "draw",
-   "ms": 943,
+   "ms": 729,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -797,7 +787,7 @@
    "class": null,
    "text": "plantele de apa am zis",
    "tab": "draw",
-   "ms": 156,
+   "ms": 158,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -809,8 +799,8 @@
    "tabAfter": "draw",
    "changed": false,
    "content": false,
-   "reply": "Nu găsesc „plantele spuse despre” în imagine. În imagine pot vedea: un soare galben, 3 libelule, un iaz, 2 copaci verzi, 2 tufișuri, o bancă, 5 ierburi, un melc, 3 pietre, 3 rațe, 3 broaște, 4 crinuri de apă, 3 pescari aurii și un heron.",
-   "english": "I can't find “plants said of the” in the picture. In the picture I can see: a yellow sun, 3 dragonflys, a pond, 2 green trees, 2 bushes, a bench, 5 grasses, a snail, 3 stones, 3 ducks, 3 frogs, 4 water lilys, 3 goldfishes and a heron."
+   "reply": "Nu găsesc „plantele spuse despre” în imagine. În imagine pot vedea: un soare galben, 2 libelule, un iaz, 2 copaci verzi, 2 tufișuri, o bancă, 3 ierburi, un melc, 3 pietre, 3 rațe, 3 broaște, 4 nuferi, 3 nuci, 3 pescari aurii și un heron.",
+   "english": "I can't find “plants said of the” in the picture. In the picture I can see: a yellow sun, 2 dragonflys, a pond, 2 green trees, 2 bushes, a bench, 3 grasses, a snail, 3 stones, 3 ducks, 3 frogs, 4 water lilys, 3 goldfishes and a heron."
   },
   {
    "set": "session",
@@ -819,7 +809,7 @@
    "class": null,
    "text": "ada pestii jos pe primul nivel",
    "tab": "draw",
-   "ms": 534,
+   "ms": 380,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -841,30 +831,7 @@
    "class": null,
    "text": "muta pestii pe primul nivel",
    "tab": "draw",
-   "ms": 420,
-   "judged": true,
-   "right": false,
-   "invariant": [],
-   "failing": [
-    "reply_not:Nu pot g[aă]si"
-   ],
-   "worlds": [
-    "art.draw"
-   ],
-   "tabAfter": "draw",
-   "changed": true,
-   "content": true,
-   "reply": "Nu pot găsi peşte în poza ta.",
-   "english": "I can not find fish in your picture."
-  },
-  {
-   "set": "session",
-   "context": false,
-   "id": 37,
-   "class": null,
-   "text": "imparte diagrama pe 3 nivele: apa, iarba/peisaj/cer",
-   "tab": "draw",
-   "ms": 734,
+   "ms": 333,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -875,8 +842,32 @@
    "tabAfter": "draw",
    "changed": true,
    "content": true,
-   "reply": "Am adăugat apă la pământ. Pot să desfac lucrurile pe care le-ai desenat, de exemplu \"să desfacă casa\".",
-   "english": "I added water to the ground. I can take apart the things you drew, for example \"take the house apart\"."
+   "reply": "Am mutat peştişorii de aur deasupra peştilor de aur.",
+   "english": "I moved the goldfishes on top of the goldfish."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 37,
+   "class": null,
+   "text": "imparte diagrama pe 3 nivele: apa, iarba/peisaj/cer",
+   "tab": "draw",
+   "ms": 684,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "world:art.draw got diagram.sketch",
+    "changed"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": false,
+   "reply": "Unde trebuie să fie rezumatul? Încerci \"move rezumatul de mai jos ...\" sau \"mișcați rezumatul lăsat de 50\".",
+   "english": "Where should summary go? Try \"move summary below …\" or \"move summary left by 50\"."
   },
   {
    "set": "session",
@@ -885,7 +876,7 @@
    "class": null,
    "text": "muta elementele logic pe cele trei nivele",
    "tab": "draw",
-   "ms": 582,
+   "ms": 537,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -908,19 +899,17 @@
    "class": null,
    "text": "nu prea intelegi ce-ti zic, esti stupid?",
    "tab": "draw",
-   "ms": 1470,
+   "ms": 1597,
    "judged": true,
-   "right": false,
+   "right": true,
    "invariant": [],
-   "failing": [
-    "reply_not:Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins|nu am f[aă]cut|Ce ai vrut|doar o parte|documentul"
-   ],
+   "failing": [],
    "worlds": [],
    "tabAfter": "draw",
    "changed": false,
    "content": false,
-   "reply": "Nu am înţeles „nu prea intelegi ce-ti zic, esti stupid”. Ai vrut să spui „Ce spune documentul?”?",
-   "english": "I did not understand \"nu prea intelegi ce-ti zic, esti stupid\". Did you mean \"Ce spune documentul?\"?"
+   "reply": "Îmi pare rău, nu am primit o parte din ceea ce ai spus. Pe fila Drawing pot, de exemplu: \"Adaugă o casă\" sau \"Adaugă 3 case\". Spune-mi ce vrei într-o propoziţie scurtă şi o voi face.",
+   "english": "Sorry, I did not get some of what you said. On the Drawing tab I can, for example: \"Add a house\" or \"Add 3 houses\". Tell me what you want in a short sentence and I will do it."
   },
   {
    "set": "session",
@@ -929,20 +918,19 @@
    "class": null,
    "text": "fa-mi o piveste despre un lac  unde un povestitor scrie o poveste despre broaste",
    "tab": "editor",
-   "ms": 1282,
+   "ms": 1274,
    "judged": true,
-   "right": false,
+   "right": true,
    "invariant": [],
-   "failing": [
-    "world:docs.editor got -",
-    "state:docs.editor:stats.words>=$+20 (0)"
+   "failing": [],
+   "worlds": [
+    "docs.editor"
    ],
-   "worlds": [],
    "tabAfter": "editor",
-   "changed": false,
-   "content": false,
-   "reply": "Nu am înţeles „fa-mi o piveste despre un lac  unde un povestitor scrie o poveste despre broaste”. De exemplu: „Se adaugă un document.” sau „Care este culoarea documentului?” Nu am înţeles „fa-mi o piveste despre un lac  unde un povestitor s",
-   "english": "I did not understand \"fa-mi o piveste despre un lac  unde un povestitor scrie o poveste despre broaste\". For example: \"Add a document.\" or \"What is the colour of the document?\" I did not understand \"fa-mi o piveste despre un lac  unde un po"
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: scrie o poveste despre un lac. Am scris povestea \"Totul despre un lac\": 102 cuvinte în 5 capitole. Cunoștințele mele au fost în afară de ceea ce ați întrebat (2 propoziții nu au nici un șablon care să se potrivească: să int",
+   "english": "I took that as: write a story about a lake. I wrote the story \"All about a lake\": 102 words in 5 chapters. My knowledge was short of what you asked (2 sentences have no template that fits: introduce character, state goal), so it is smaller "
   },
   {
    "set": "session",
@@ -951,21 +939,22 @@
    "class": null,
    "text": "conoune o poveste cu 3 capitole despre un lac",
    "tab": "editor",
-   "ms": 1110,
+   "ms": 830,
    "judged": true,
    "right": false,
    "invariant": [],
    "failing": [
-    "world:docs.editor got -",
-    "state:docs.editor:stats.words>=$+30 (0)",
-    "state:docs.editor:blocks.length>=$+3 (0)"
+    "state:docs.editor:stats.words>=$+30 (103)",
+    "state:docs.editor:blocks.length>=$+3 (10)"
    ],
-   "worlds": [],
+   "worlds": [
+    "docs.editor"
+   ],
    "tabAfter": "editor",
-   "changed": false,
-   "content": false,
-   "reply": "Nu am înţeles „conoune o poveste cu 3 capitole despre un lac”. De exemplu: „Se adaugă un document.” sau „Care este culoarea documentului?”",
-   "english": "I did not understand \"conoune o poveste cu 3 capitole despre un lac\". For example: \"Add a document.\" or \"What is the colour of the document?\""
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: scrie o poveste despre un lac. Am scris povestea \"Totul despre un lac\": 103 cuvinte în 5 capitole. Cunoștințele mele au fost în afară de ceea ce ați întrebat (2 propoziții nu au nici un șablon care să se potrivească: să int",
+   "english": "I took that as: write a story about a lake. I wrote the story \"All about a lake\": 103 words in 5 chapters. My knowledge was short of what you asked (2 sentences have no template that fits: introduce character, state goal), so it is smaller "
   },
   {
    "set": "session",
@@ -974,7 +963,7 @@
    "class": null,
    "text": "arat-mi parisul",
    "tab": "map",
-   "ms": 81,
+   "ms": 83,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -995,20 +984,19 @@
    "class": null,
    "text": "tenerife",
    "tab": "map",
-   "ms": 734,
+   "ms": 325,
    "judged": true,
-   "right": false,
+   "right": true,
    "invariant": [],
-   "failing": [
-    "world:geo.map got -",
-    "state:geo.map:focus~Tenerife ({\"name\":\"Paris\",\"kind\":\"city\",\"lat\":48.87,\"lon\":2.33,\"cc\":\"FR\",\"label\":\"capital of France · 9.9 million people\"})"
+   "failing": [],
+   "worlds": [
+    "geo.map"
    ],
-   "worlds": [],
    "tabAfter": "map",
    "changed": false,
    "content": false,
-   "reply": "Nu am înţeles „tenerife”. De exemplu: „Se adaugă un ac.” sau „Care este culoarea acului?” Nu am ştiut cuvântul: tenerife.",
-   "english": "I did not understand \"tenerife\". For example: \"Add a pin.\" or \"What is the colour of the pin?\" I did not know the word: tenerife."
+   "reply": "Am luat asta ca: unde este Tenerife. Nu cunosc un loc numit Tenerife. Cunosc fiecare țară și capitală, orașe cu 500.000 de oameni sau mai mult, și orașe românești și moldovenești cu 30.000 sau mai mult.",
+   "english": "I took that as: where is Tenerife. I do not know a place called Tenerife. I know every country and capital, cities with 500,000 people or more, and Romanian and Moldovan towns with 30,000 or more."
   },
   {
    "set": "variant",
@@ -1016,7 +1004,7 @@
    "class": null,
    "text": "desenează trei cercuri",
    "tab": "diagram",
-   "ms": 109,
+   "ms": 114,
    "right": null,
    "invariant": [],
    "failing": [],
@@ -1056,7 +1044,7 @@
    "class": null,
    "text": "desenează doi copaci și o casă",
    "tab": "draw",
-   "ms": 223,
+   "ms": 217,
    "right": null,
    "invariant": [],
    "failing": [],
@@ -1076,20 +1064,21 @@
    "class": "A",
    "text": "rearanjează desenul",
    "tab": "draw",
-   "ms": 187,
+   "ms": 288,
    "judged": true,
    "right": false,
    "invariant": [],
    "failing": [
-    "world:art.draw got -",
-    "changed"
+    "state:art.draw:objects.length=$+0 (1)"
    ],
-   "worlds": [],
+   "worlds": [
+    "art.draw"
+   ],
    "tabAfter": "draw",
-   "changed": false,
-   "content": false,
-   "reply": "Nu am înţeles „rearanjează desenul”. Ai vrut să spui „Sal să-mi salvez desenul ca rearanja” sau „descarcă desenul ca rearanja”?",
-   "english": "I did not understand \"rearanjează desenul\". Did you mean \"save my drawing as rearrange\" or \"download the drawing as a rearrange\"?"
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: aranjează desenul. Am pus 2 copaci verzi și casa galbenă împreună ca un grup. Poţi să-l muţi, să-l reiau, să-l copiezi sau să-l desfaci ca orice alt lucru.",
+   "english": "I took that as: arrange the drawing. I put 2 green trees and the yellow house together as a group. You can move it, resize it, copy it or take it apart like any other thing."
   },
   {
    "set": "variant",
@@ -1098,7 +1087,7 @@
    "class": "A",
    "text": "du-mă la madrid",
    "tab": "map",
-   "ms": 57,
+   "ms": 59,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1142,7 +1131,7 @@
    "class": "A",
    "text": "desenează o pisică portocalie",
    "tab": "draw",
-   "ms": 136,
+   "ms": 134,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1163,7 +1152,7 @@
    "class": "B",
    "text": "unde e roma",
    "tab": "map",
-   "ms": 197,
+   "ms": 196,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1183,7 +1172,7 @@
    "class": null,
    "text": "desenează cinci cercuri",
    "tab": "diagram",
-   "ms": 102,
+   "ms": 100,
    "right": null,
    "invariant": [],
    "failing": [],
@@ -1203,7 +1192,7 @@
    "class": "B",
    "text": "pune cercurile ca un pentagon",
    "tab": "diagram",
-   "ms": 354,
+   "ms": 348,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1222,7 +1211,7 @@
    "class": "B",
    "text": "câte cuvinte are documentul?",
    "tab": "editor",
-   "ms": 67,
+   "ms": 63,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1243,7 +1232,7 @@
    "class": "B",
    "text": "fă un grafic cu vânzările pe luni",
    "tab": "charts",
-   "ms": 98,
+   "ms": 94,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1284,7 +1273,7 @@
    "class": null,
    "text": "desenează un pătrat numit start",
    "tab": "diagram",
-   "ms": 160,
+   "ms": 154,
    "right": null,
    "invariant": [],
    "failing": [],
@@ -1304,7 +1293,7 @@
    "class": "C",
    "text": "mută start la stânga",
    "tab": "diagram",
-   "ms": 140,
+   "ms": 125,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1324,7 +1313,7 @@
    "class": null,
    "text": "desenează un cerc numit alfa și un pătrat numit beta",
    "tab": "diagram",
-   "ms": 275,
+   "ms": 246,
    "right": null,
    "invariant": [],
    "failing": [],
@@ -1344,7 +1333,7 @@
    "class": "C",
    "text": "mută alfa și beta în jos",
    "tab": "diagram",
-   "ms": 400,
+   "ms": 394,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1364,7 +1353,7 @@
    "class": null,
    "text": "desenează un cerc numit gamma",
    "tab": "diagram",
-   "ms": 133,
+   "ms": 134,
    "right": null,
    "invariant": [],
    "failing": [],
@@ -1384,7 +1373,7 @@
    "class": "C",
    "text": "mută delta în sus",
    "tab": "diagram",
-   "ms": 245,
+   "ms": 242,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1404,7 +1393,7 @@
    "class": null,
    "text": "desenează o casă",
    "tab": "draw",
-   "ms": 41,
+   "ms": 40,
    "right": null,
    "invariant": [],
    "failing": [],
@@ -1424,7 +1413,7 @@
    "class": "C",
    "text": "fă casa roșie",
    "tab": "draw",
-   "ms": 63,
+   "ms": 66,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -1446,7 +1435,7 @@
    "class": null,
    "text": "desenează un cerc numit ana",
    "tab": "diagram",
-   "ms": 112,
+   "ms": 111,
    "right": null,
    "invariant": [],
    "failing": [],
@@ -1465,7 +1454,7 @@
    "class": null,
    "text": "mută ana sus de tot",
    "tab": "diagram",
-   "ms": 166,
+   "ms": 161,
    "right": null,
    "invariant": [],
    "failing": [],
@@ -1485,7 +1474,7 @@
    "class": "C",
    "text": "mută ana mai sus",
    "tab": "diagram",
-   "ms": 220,
+   "ms": 215,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -1508,7 +1497,7 @@
    "class": "D",
    "text": "cântă ceva vesel",
    "tab": "music",
-   "ms": 130,
+   "ms": 136,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -1573,7 +1562,7 @@
    "class": "D",
    "text": "arată ceva interesant",
    "tab": "map",
-   "ms": 276,
+   "ms": 197,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1593,7 +1582,7 @@
    "class": null,
    "text": "desenează doi copaci",
    "tab": "draw",
-   "ms": 57,
+   "ms": 51,
    "right": null,
    "invariant": [],
    "failing": [],
@@ -1613,7 +1602,7 @@
    "class": "D",
    "text": "mută copacii mai sus",
    "tab": "draw",
-   "ms": 122,
+   "ms": 125,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1633,7 +1622,7 @@
    "class": null,
    "text": "desenează patru pătrate",
    "tab": "diagram",
-   "ms": 108,
+   "ms": 104,
    "right": null,
    "invariant": [],
    "failing": [],
@@ -1653,7 +1642,7 @@
    "class": "E",
    "text": "fă-l mai ordonat",
    "tab": "diagram",
-   "ms": 262,
+   "ms": 340,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -1664,10 +1653,10 @@
     "diagram.sketch"
    ],
    "tabAfter": "diagram",
-   "changed": false,
+   "changed": true,
    "content": false,
-   "reply": "Ce formă ar trebui să mă schimb? Nume it, de exemplu \"change Circle1\".",
-   "english": "Which shape should I change? Name it, e.g. \"change circle1\"."
+   "reply": "Am luat asta ca: îmbunătățirea diagramei. Aspectul marchează deja 100/100 și nimic din ce am încercat scoruri mai mari, așa că l-am lăsat așa cum este.",
+   "english": "I took that as: improve the diagram. The layout already scores 100/100 and nothing I tried scores higher, so I left it as it is."
   },
   {
    "set": "variant",
@@ -1675,7 +1664,7 @@
    "class": null,
    "text": "desenează cinci flori",
    "tab": "draw",
-   "ms": 50,
+   "ms": 47,
    "right": null,
    "invariant": [],
    "failing": [],
@@ -1695,20 +1684,19 @@
    "class": "E",
    "text": "sunt prea multe",
    "tab": "draw",
-   "ms": 139,
+   "ms": 262,
    "judged": true,
-   "right": false,
+   "right": true,
    "invariant": [],
-   "failing": [
-    "world:art.draw got -",
-    "state:art.draw:objects.length<$+0 (5)"
+   "failing": [],
+   "worlds": [
+    "art.draw"
    ],
-   "worlds": [],
    "tabAfter": "draw",
-   "changed": false,
-   "content": false,
-   "reply": "Nu am înţeles „sunt prea multe”. Ai vrut să spui „Câte case sunt acolo?” sau „Mă spune câte case este.”?",
-   "english": "I did not understand \"sunt prea multe\". Did you mean \"Câte case sunt acolo?\" or \"Mă spune câte case este.\"?"
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: scoate a patra floare și a cincea floare. Am luat 2 flori roz.",
+   "english": "I took that as: remove the fourth flower and the fifth flower. I took away 2 pink flowers."
   },
   {
    "set": "variant",
@@ -1717,7 +1705,7 @@
    "class": "E",
    "text": "lisabona",
    "tab": "map",
-   "ms": 51,
+   "ms": 54,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1738,20 +1726,17 @@
    "class": "E",
    "text": "ești prost?",
    "tab": "draw",
-   "ms": 168,
+   "ms": 256,
    "judged": true,
-   "right": false,
+   "right": true,
    "invariant": [],
-   "failing": [
-    "unchanged",
-    "reply_not:Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins"
-   ],
+   "failing": [],
    "worlds": [],
    "tabAfter": "draw",
    "changed": false,
-   "content": true,
-   "reply": "Nu am înţeles „ești prost”. De exemplu: „Se adaugă o casă.” sau „Care este culoarea casei?” Nu am ştiut cuvântul: prost.",
-   "english": "I did not understand \"ești prost\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: prost."
+   "content": false,
+   "reply": "Îmi pare rău, nu am primit o parte din ceea ce ai spus. Pe fila Drawing pot, de exemplu: \"Adaugă o casă\" sau \"Adaugă 3 case\". Spune-mi ce vrei într-o propoziţie scurtă şi o voi face.",
+   "english": "Sorry, I did not get some of what you said. On the Drawing tab I can, for example: \"Add a house\" or \"Add 3 houses\". Tell me what you want in a short sentence and I will do it."
   },
   {
    "set": "variant",
@@ -1760,7 +1745,7 @@
    "class": "E",
    "text": "scrie-mi o poveste despre un urs",
    "tab": "editor",
-   "ms": 387,
+   "ms": 237,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1781,7 +1766,7 @@
    "class": "F",
    "text": "desenează o casă, pune un copac lângă ea și fă cerul albastru",
    "tab": "draw",
-   "ms": 296,
+   "ms": 288,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1802,7 +1787,7 @@
    "class": "F",
    "text": "desenează trei cercuri, leagă-le între ele și pune primul mai sus",
    "tab": "diagram",
-   "ms": 342,
+   "ms": 336,
    "judged": true,
    "right": false,
    "invariant": [],
@@ -1825,7 +1810,7 @@
    "class": "F",
    "text": "arată-mi roma și apoi du-te la paris",
    "tab": "map",
-   "ms": 413,
+   "ms": 418,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1845,7 +1830,7 @@
    "class": null,
    "text": "desenează un lac",
    "tab": "draw",
-   "ms": 196,
+   "ms": 190,
    "right": null,
    "invariant": [],
    "failing": [],
@@ -1865,7 +1850,7 @@
    "class": "F",
    "text": "pune peștii în apă, adaugă trei rațe și șterge soarele",
    "tab": "draw",
-   "ms": 617,
+   "ms": 609,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1886,7 +1871,7 @@
    "class": "F",
    "text": "scrie un titlu despre mare, apoi un paragraf despre valuri",
    "tab": "editor",
-   "ms": 343,
+   "ms": 333,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1907,7 +1892,7 @@
    "class": "G",
    "text": "desenează un câine",
    "tab": "draw",
-   "ms": 121,
+   "ms": 126,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1949,7 +1934,7 @@
    "class": "G",
    "text": "arată-mi berlinul",
    "tab": "map",
-   "ms": 74,
+   "ms": 71,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1970,7 +1955,7 @@
    "class": "G",
    "text": "adaugă un paragraf despre ploaie",
    "tab": "editor",
-   "ms": 58,
+   "ms": 56,
    "judged": true,
    "right": true,
    "invariant": [],
@@ -1991,7 +1976,7 @@
    "class": "G",
    "text": "cântă o melodie",
    "tab": "music",
-   "ms": 144,
+   "ms": 143,
    "judged": true,
    "right": false,
    "invariant": [],
