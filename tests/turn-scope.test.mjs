@@ -56,4 +56,10 @@ test('the what-happened diff counts a world loaded during the turn from its init
   // a world the page already had keeps the page's state (the worker's copy never overrides it)
   const b = turnBaseline({ 'art.draw': '{"objects":[]}' }, { 'art.draw': { objects: [1] }, 'geo.map': { zoom: 2 } });
   assert.deepEqual(b, { 'art.draw': '{"objects":[]}', 'geo.map': '{"zoom":2}' });
+  // a world a background load added AFTER the turn ended (in the page's state by the time the log is written) is not the turn's change either
+  const { turnAfter } = await import('../docs/webchat/ui/state-diff.mjs');
+  const late = { ...after, 'late.world': '{"notes":[]}' };
+  const endIds = Object.keys(s.state());
+  assert.deepEqual(stray(describeChanges(turnBaseline(page, loaded), turnAfter(late, turnBaseline(page, loaded), endIds))), [], 'loaded after the turn: not listed');
+  assert.equal(turnAfter(late, {}, null), late, 'no end list (an in-page engine): the state as it is');
 });

@@ -30,6 +30,13 @@ export function turnBaseline(pageBefore, loaded) {
   return out;
 }
 
+/** The "after" side of the turn: worlds that neither the baseline nor the turn's end had (`endIds`: loaded after the turn, by a background load) are left out. */
+export function turnAfter(after, base, endIds) {
+  if (!Array.isArray(endIds)) return after;
+  const keep = new Set([...Object.keys(base ?? {}), ...endIds]);
+  return Object.fromEntries(Object.entries(after ?? {}).filter(([id]) => keep.has(id)));
+}
+
 const isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);
 const num = (n) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100));
 const plural = (w, n) => (n === 1 ? w : /(?:s|x|ch|sh)$/.test(w) ? `${w}es` : /[^aeiou]y$/.test(w) ? `${w.slice(0, -1)}ies` : `${w}s`);

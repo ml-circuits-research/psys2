@@ -34,7 +34,8 @@ const turnRunning = () => [...active.values()].some((c) => !c.dry);
  * reading the worlds' files ticked against the TURN's step budget, "compute budget exceeded at index.readString", and the charts and talk worlds were reported as not loaded).
  * A turn's own loads come before its reading (no budget is installed then) and wait for a load in progress through the one lock.
  */
-const turnIdle = async () => { while (turnRunning()) await sleep(20); };
+const turnIdle = async () => { while (turnRunning() || warming) await sleep(20); };   // a warm-up turn holds a step budget too
+let reloading = 0;   // a world load in progress: the warm-up turns wait for it (they would read a half-swapped engine and charge their budget)
 let dispatcherEnc = null, normalizerHost = null, dispatcherInfo = null;
 let worldLoader = null, loaders = null, rulesMod = null, wordMod = null, tabWorlds = {}, universe = null;   // LAZY LOADING: the world index, the library modules the loader needs, tab id -> world id, the worlds this page may use (tests)
 const loadedIds = new Set();
@@ -92,7 +93,7 @@ function annotateWires(root) {
 }
 const stateOf = () => session.state();
 /** Of the before-turn state, the worlds the turn loaded (not in `had`): the page has the others in its own snapshot, so its what-happened diff needs nothing more. */
-const loadedBefore = (before, had) => Object.fromEntries(Object.entries(before ?? {}).filter(([id]) => !had.has(id)));
+const loadedBefore = (before, had) => Object.fromEntries(Object.entries(before ?? {}).filter(([id]) => !had.has(id)));   // `had`: the worlds whose state the page holds (it sends their ids)
 const metaOf = () => ({ msg: session._msg, lang: session._sessionLang, weakRo: session._weakRo, language: session.language, memory: memoryOf() });
 /** The discourse / ASTRA memory as JSON, so that a restarted worker gets it back (a failure here must never fail a turn). */
 function memoryOf() { try { return session.memoryJSON(); } catch { return null; } }
@@ -246,7 +247,8 @@ async function ensureRun(ids, why) {
   try {
     try { await worldLoader.bundles(want); } catch (e) { evt('world-load', { id: stepId, op: 'fail', label, message: String(e?.message ?? e) }); return []; }
     const next = [...loadedIds, ...missing];
-    await engine.reload(loaders.createBundleLoader(worldLoader.bundleOf(next, absModule)));
+    reloading++;
+    try { await engine.reload(loaders.createBundleLoader(worldLoader.bundleOf(next, absModule))); } finally { reloading--; }
     // the session is read HERE, after the awaits and with none between this and the new session: a state the page set while the worlds were loading (a tab click, a setting) is in it, and is not lost
     const st = stateOf(), meta = metaOf();
     const old = session, portable = [...snaps].map(([k, sn]) => { try { return [k, old.portableSnapshot(sn)]; } catch { return null; } }).filter(Boolean);   // the undo snapshots as plain data: they survive the reload
@@ -278,7 +280,7 @@ const handlers = {
     if (warming) await warming;
     faultNow = testHooks ? (m.fault ?? null) : null;
     if (m.settings) applySettings(m.settings);
-    const had = new Set(loadedIds);
+    const had = new Set(Array.isArray(m.known) ? m.known : loadedIds);   // the page's snapshot has these worlds; a world loaded since (by this turn, or by a background load the page has not seen) is in `before`
     // LAZY LOADING: the open tab's world and the worlds the words of the message say it needs, before the turn is read
     // a message in another language is read through its English candidates, which a partial world set can mistake for understood: every world is loaded for it (the word index is English)
     try { const lang = mods.lang.normalize(m.opts?.language ?? m.settings?.language ?? settings.language); if (lang !== 'en') { await mods.translate.loadRoEn?.(); await ensureWorlds(worldLoader.ids(), 'language'); } else { const plan = await worldLoader.plan(m.text, loadedIds); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'message'); } } catch (e) { console.warn('world plan failed', e); }
@@ -408,7 +410,7 @@ const handlers = {
   },
   async warm(m) {
     const opts = { language: 'en', formalizer: 'rules', spell: true, partial: true, fastPath: false };
-    const idle = async () => { while (turnRunning() || performance.now() - lastTurnEnd < 500) await sleep(50); };
+    const idle = async () => { while (turnRunning() || reloading || performance.now() - lastTurnEnd < 500) await sleep(50); };
     const s = engine.createSession({ language: 'en' });
     if (m.phase === 'model') { await idle(); await one(s, 'what is 3 plus 4', { ...opts, formalizer: 'encoder' }); evt('warm', 'dispatcher'); return null; }
     for (const x of ['hello', 'zzq flarb wug', 'spider legs and 3 plus 4']) { await idle(); await one(s, x, opts); await sleep(0); }

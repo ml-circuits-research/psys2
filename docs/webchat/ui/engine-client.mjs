@@ -20,7 +20,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
   const stats = { starts: 0, kills: [], crashes: 0, sends: 0, dryRuns: 0, refused: 0, restartsThisTurn: 0, startTimeouts: 0 };
   const bad = new Map();            // badKeyOf -> { reason, stage, at, text, tab, site }
   const cache = { state: {}, meta: null };
-  let lastBefore = null;   // see session.loadedBefore
+  let lastBefore = null, lastEnd = null;   // see session.loadedBefore / session.turnWorlds
   let worker = null, gen = 0, seq = 0, undoSeq = 0, stage = null, bootFailures = 0, down = null;
   let readyP = null, bootInfo = null, booting = false, lastBoot = null;
   const pending = new Map();        // id -> { resolve, reject, op, text, key, kind }
@@ -215,9 +215,9 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       rest.language ??= getLanguage();   // LANG-FIXED: a turn is read in the selected language (ui/language.mjs) unless the caller says which one (the app always passes the selected one)
       stats.sends++;
       const fault = testHooks ? globalThis.__psys2Fault?.[text] ?? null : null;
-      const res = await guarded('send', 'send', { text, opts: { ...rest, hardMs, softMs }, undoId: undo?.id ?? null, settings: getSettings(), fault }, { signal, hardMs: hardMs ? hardMs + 600 + 30000 : null, text, key, tab });
+      const res = await guarded('send', 'send', { text, opts: { ...rest, hardMs, softMs }, undoId: undo?.id ?? null, settings: getSettings(), fault, known: Object.keys(cache.state ?? {}) }, { signal, hardMs: hardMs ? hardMs + 600 + 30000 : null, text, key, tab });
       applyStateInfo(res);
-      lastBefore = res.before ?? null;
+      lastBefore = res.before ?? null; lastEnd = res.state ? Object.keys(res.state) : null;
       lastUsage = { usage: res.usage ?? [], detection: res.detection ?? [] };
       if (res.budget && !res.reply.budget) res.reply.budget = res.budget;
       if (res.reply.budgetExceeded) rememberBad({ key, text, tab, kind: 'send' }, 'budget', { site: res.reply.budgetExceeded.site, stage: res.reply.budgetExceeded.stage });   // a reply that says "too complex" is never recomputed
@@ -257,6 +257,8 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
     },
     /** The before-turn state of the worlds the last turn loaded (lazy loading): the page's what-happened diff takes them as they were when the turn started, not as absent. */
     loadedBefore() { return lastBefore; },
+    /** The worlds that existed when the last turn ended: a world a later load added (the background load of a language) is not the turn's doing. */
+    turnWorlds() { return lastEnd; },
     /** The committed state (a plain object; read only). Always the state after the last finished operation, so it is also what a new worker starts from. */
     state(worldId) { return worldId ? (cache.state[worldId] ?? null) : cache.state; },
     snapshot() { return { id: ++undoSeq, state: cache.state, meta: cache.meta }; },
