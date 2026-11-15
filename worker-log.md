@@ -2905,3 +2905,5 @@ Owner: (1) remove the Timeline and Seating tabs from the demo (incomplete, not h
 
 ## 2026-11-15 spec 28 (request worker)
 Baseline of tests/request-properties.test.mjs before any change (96 generated cases, en + ro): P1 3/22, P2 10/20, P3 2/8, P4 2/14, P5 0/10, P6 6/8, P7 0/6, P8 7/8; total 30/96. Ratchet MIN starts at 0.
+
++60 min (request worker): request step + diagram planner landed; request properties 69/96 (baseline 30/96): P1 17/22, P2 16/20, P3 4/8, P4 7/14, P5 8/10, P6 6/8, P7 3/6, P8 8/8. Next: Drawing scenes, Documents length, Charts count.
