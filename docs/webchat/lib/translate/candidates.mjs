@@ -174,7 +174,7 @@ const matchCase = (raw, form) => (/^\p{Lu}/u.test(raw) ? form.charAt(0).toUpperC
  * diacritics gets its surface form back. Words that are English, short, numbers or capitalised names are left alone.
  * Returns { text, changes: [{ from, to, kind }] }.
  */
-export function repairSource(text, vocab, isEnglish = () => false) {
+export function repairSource(text, vocab, isEnglish = () => false, { near = true } = {}) {
   const src = String(text ?? '');
   if (!vocab || !vocab.size) return { text: src, changes: [] };
   const idx = byLength(vocab);
@@ -190,6 +190,7 @@ export function repairSource(text, vocab, isEnglish = () => false) {
       if (surface && raw.toLowerCase() === k && surface !== k) { changes.push({ from: raw, to: surface, kind: 'diacritics' }); return matchCase(raw, surface); }
       return raw;
     }
+    if (!near) return raw;   // the contextual repair (gatherCandidates `contextRepair`) is the one that replaces unknown words
     const max = k.length >= 7 ? 2 : 1;
     let best = Infinity, bestKeys = [];
     for (let l = k.length - max; l <= k.length + max; l++) {
@@ -222,7 +223,7 @@ const norm = (t) => String(t ?? '').trim().replace(/\s+/g, ' ').toLowerCase();
  * (translated by the first machine translator that answered, else by the rules). Each: { source, text, translation, rejected? }.
  * `translator` is the switch translator of the host (`candidatesViaMT`, `rules`); anything missing is skipped. Never throws.
  */
-export async function gatherCandidates(text, { from, to = 'en', translator, abortable = (p) => p, isEnglish = null, kept = null }) {
+export async function gatherCandidates(text, { from, to = 'en', translator, abortable = (p) => p, isEnglish = null, kept = null, contextRepair = null }) {
   const out = [], seen = new Set();
   const add = (source, translation, extra = {}) => {
     const t = textOf(translation).trim();
@@ -248,7 +249,7 @@ export async function gatherCandidates(text, { from, to = 'en', translator, abor
   const vocab = rules?.sourceVocabulary?.(from);
   if (vocab) {
     const known = rules.knownEnglish ? englishTest((w) => rules.knownEnglish(w)) : () => false;
-    const rep = repairSource(text, vocab, known);
+    const rep = repairSource(text, vocab, known, { near: !contextRepair });
     if (rep.changes.length) {
       const mt2 = mt.length ? await viaMT(rep.text) : [];
       const first = mt2.find((m) => !m.rejected);
@@ -257,6 +258,20 @@ export async function gatherCandidates(text, { from, to = 'en', translator, abor
       if (via) add(`repaired-${via.source}`, via.translation ?? via.text, { repaired: rep.text, changes: rep.changes });
       else if (rr) add('repaired-rules', rr, { repaired: rep.text, changes: rep.changes });
     }
+  }
+  // the repair of the live worlds' words (Q39 S3): `contextRepair(text) -> { text, changes, asks }`, one more source of the reading, after the others (the reader's choice keeps the earlier
+  // candidate on a tie, so a repair stands only when it reads strictly better); its asks are recorded on the candidate
+  if (contextRepair) {
+    let rep = null;
+    try { rep = contextRepair(text); } catch { rep = null; }
+    if (rep && (rep.changes?.length || rep.asks?.length) && rep.changes?.length && norm(rep.text) !== norm(text)) {
+      const mt2 = mt.length ? await viaMT(rep.text) : [];
+      const first = mt2.find((m) => !m.rejected);
+      if (first) add(`repaired-context-${first.source}`, first.translation ?? first.text, { repaired: rep.text, changes: rep.changes, asks: rep.asks });
+      const rr = await viaRules(rep.text);
+      if (rr) add('repaired-context-rules', rr, { repaired: rep.text, changes: rep.changes, asks: rep.asks });
+    }
+    if (rep?.asks?.length) out.asks = rep.asks;
   }
   // the words the candidates failed on, glossed from the language's dictionary (`rules.glossWord`)
   if (rules?.glossWord && isEnglish) {

@@ -27,6 +27,8 @@ import { nameCandidates, nameIndex } from '../formalizer/names.mjs';
 import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs';
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs';
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs';
+import { langRoNow } from '../translate/frames-ro.mjs';
+import { repairInContext } from '../translate/source-repair.mjs';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs';
 import { lexIndex } from '../worlds/lexicon.mjs';
 import { perf } from '../formalizer/perf.mjs';
@@ -1626,7 +1628,8 @@ export class DialogSession {
     // the translation candidates of every translator (rules, the source-side repair, the machine translators), chosen by the request reading: the one whose request leaves the
     // fewest words unread in the open world (ties: the earlier candidate). The translators are the system boundary; the reading is the door's.
     let cands = [];
-    try { cands = await gatherCandidates(text, { from: lang, to: 'en', translator: tr, abortable: (p, stage) => guard.abortable(p, stage) }); } catch (e) { if (e instanceof TurnAborted) throw e; cands = []; }
+    const contextRepair = this._contextRepairOf(lang, tr);
+    try { cands = await gatherCandidates(text, { from: lang, to: 'en', translator: tr.rules ? tr : { rules: tr }, abortable: (p, stage) => guard.abortable(p, stage), contextRepair, isEnglish: this._doorIsEnglish(tr), kept: this._doorKept() }); } catch (e) { if (e instanceof TurnAborted) throw e; cands = []; }
     if (!cands.length) {
       const translation = await guard.abortable((tr.rules ?? tr).translate(text, { from: lang, to: 'en' }), 'translate');
       const english = textOf(translation);
@@ -1637,7 +1640,40 @@ export class DialogSession {
     const score = (c) => { if (!live || !language) return 0; try { const q = readTurn(lib, live, language, c.text, {}); return q.unread.length * 2 + (q.act || q.target || q.reaction ? 0 : 1); } catch { return 9; } };
     let best = cands[0], bestScore = score(cands[0]);
     for (const c of cands.slice(1)) { budget.tick('door.candidates'); const sc = score(c); if (sc < bestScore) { best = c; bestScore = sc; } }
-    return { lang, english: best.text, translation: best.translation ?? null };
+    const recent = (this._recentSource ??= []);
+    if (recent.at(-1) !== text) { recent.push(text); if (recent.length > 12) recent.shift(); }
+    return { lang, english: best.text, translation: best.translation ?? null, repairs: (best.changes ?? []).filter((c) => c.kind === 'context'), asks: best.asks ?? cands.asks ?? [], changes: best.changes ?? [] };
+  }
+
+  /** The reader's vocabulary test and the names kept as they are, for the glossed candidates of the translation (the same ones the readers of the undeclared tabs use). */
+  _doorIsEnglish(tr) {
+    const vocab = spellVocabulary(this.engine.set);
+    return englishTest((w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!tr.rules?.knownEnglish?.(w) || !!tr.knownEnglish?.(w));
+  }
+  _doorKept() {
+    const fold = (w) => String(w).normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+    return new Set([...worldThingNames(this), ...sessionNames(this)].flatMap((n) => fold(n).split(/[\s_]+/)).filter((w) => w.length >= 3));
+  }
+
+  /**
+   * The contextual repair of a source-language message (Q39 S3): `(text) -> { text, changes, asks }` over the open tab's live world and the other live worlds (their words told in the
+   * language through its dictionary and morphology), the things on the screen, the person's recent messages and the language's dictionary (src/translate/source-repair.mjs). null when the
+   * language pack is not loaded or has no dictionary. One candidate source of the door's reading (gatherCandidates `contextRepair`).
+   */
+  _contextRepairOf(lang, tr) {
+    const ro = lang === 'ro' ? langRoNow() : null;
+    const vocab = tr?.sourceVocabulary?.(lang) ?? tr?.rules?.sourceVocabulary?.(lang);
+    const lib = this.engine.sopworld, tabWorld = this.context().tabWorld;
+    if (!ro?.formsOfEnglish || !vocab || !lib?.worldWords || !tabWorld) return null;
+    return (text) => {
+      const open = liveWorld(lib, this.engine.set.get(tabWorld));
+      if (!open) return null;
+      const others = [];
+      for (const w of this.engine.set.list()) { if (w.id === tabWorld) continue; const l = w.requestText ? liveWorld(lib, w) : null; if (l) others.push(lib.worldWords(l)); }
+      let shown = [];
+      try { const r = this.engine.interp.hook(this.isession, tabWorld, 'referents', {}); shown = Array.isArray(r) ? r : []; } catch { shown = []; }
+      return repairInContext(text, { ro, vocab, isEnglish: (w) => !!tr.rules?.knownEnglish?.(w) || !!tr.knownEnglish?.(w), open: lib.worldWords(open), others, names: shown.map((x) => x?.name ?? x?.label).filter(Boolean), recent: (this._recentSource ?? []).slice(-8) });
+    };
   }
 
   /** The door of one turn: `{ reply, route }` when the request path handled it, else `{ why }` (the reason the turn goes to the old readers). */
@@ -1658,15 +1694,39 @@ export class DialogSession {
     const lastRec = rd.last(tabWorld);
     const vocab = spellVocabulary(set);
     const known = (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || knownEnglishWord(String(w ?? '').toLowerCase());   // a word of the language (the English dictionary, with or without a translator) is never a slip: "baked" is never repaired to "named" (reviewer 20:05 1(a))
+    // a word the translation left as the person wrote it (a word of their own language no dictionary knew) is theirs, never a slip of English: the repair of the person's own language is the
+    // contextual one before the translation (Q39 S3), so the English reader never "repairs" "stanca" to "stanza"
+    const keptWords = lang === 'en' ? null : new Set((String(text).match(/[\p{L}]+/gu) ?? []).map((w) => w.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()));
+    const knownHere = keptWords ? (w) => known(w) || keptWords.has(String(w ?? '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()) : known;
     const dlg = lastRec ? { last: lastRec.request, result: lastRec.result, previous: lastRec.previous ?? null, seed: lastRec.seed ?? 1, previousSeed: lastRec.previousSeed ?? null } : { last: null, result: null, seed: 1 };
     // THE OPEN STATE AS FACTS (owner 19:10): the things the world shows, told into a fork of its live request World (the spell repair reads their names; references resolve to them)
     const shown = this.isession.state[tabWorld] ? (() => { try { const r = this.engine.interp.hook(this.isession, tabWorld, 'referents', {}); return Array.isArray(r) ? r : []; } catch { return []; } })() : [];
     const present = stateWorld(lib, live, shown);
-    const q = readTurn(lib, live, language, english, { dialogue: dlg, known, worlds: present.world && present.world !== live ? [present.world] : [] });
+    const q = readTurn(lib, live, language, english, { dialogue: dlg, known: knownHere, worlds: present.world && present.world !== live ? [present.world] : [] });
+    // the words of the person's own language the contextual repair put right before the translation (Q39 S3) and its asks are recorded on the request (trace.request); they are not said in the
+    // reply yet: "I read X as Y" has no Romanian phrase (needs the reply phrase in the language world, questions.md), and the machine translation of it is not fit to show
+    if (en.repairs?.length) q.sourceRepairs = en.repairs.map((r) => ({ said: r.from, as: r.to, source: r.source }));
+    if (en.asks?.length) q.asks = [...(q.asks ?? []), ...en.asks.map((a) => ({ ...a, language: lang }))];
     withoutSelfPlace(q.request, live); q.facts = q.request.facts ?? q.facts;   // "in the diagram" on the Diagram is the world itself
-    const flat = { act: q.act, target: q.target, facts: q.facts, reaction: q.reaction, unread: q.unread, used: q.used, corrections: q.corrections, english: q.english, source: 'sopworld' };
+    const flat = { act: q.act, target: q.target, facts: q.facts, reaction: q.reaction, unread: q.unread, used: q.used, corrections: q.corrections, english: q.english, source: 'sopworld', ...(q.sourceRepairs ? { sourceRepairs: q.sourceRepairs } : {}), ...(q.asks?.length ? { asks: q.asks } : {}) };
     const why = (w) => ({ why: w, q: flat });
     if (isQuestion(english, language)) return why('question');
+    // PRAISE AND THANKS are reactions of the dialogue world (w.dialogue.revision `does=none`): read on every declared tab before the tab's acts, answered with the dialogue's own reply,
+    // no plan and no undo step (a message of the reaction alone: no act, no thing, no unread word, nothing but a manner cue beside it, which the praise word also is)
+    // (a praise word is also the cue of a manner, "nice": a constraint made of the very words of the reaction's cue is the praise itself, not a request to refine)
+    const sayingCue = (c) => (q.request.reactions ?? []).some((x) => x.value === q.reaction && x.at === c.at && x.words === c.words);
+    if (q.reaction === 'thanks' && !q.act && !q.target && !q.unread.length && (q.request.constraints ?? []).every(sayingCue)) {
+      let rv = null;
+      const bare = Object.assign(plainRequest(q.request), { constraints: [] });
+      // what the dialogue does with the reaction does not depend on there being a result to change: with none, it is asked as if the turn's own request were the current one
+      try { rv = lib.reviseRequest(dlg.result ? dlg : { ...dlg, last: bare, result: { status: 'current' } }, bare, { revisions: language, catalog: [language] }); } catch { rv = null; }
+      const said = rv && !rv.request ? replyOf(lib, language, rv.reply ?? '', {}) : null;
+      if (said?.text) {
+        const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, say: said.text });
+        r.trace.request = flat;
+        return { reply: r, route: `reaction ${rv.reaction}` };
+      }
+    }
     // UNDO / REDO are acts of the session's timeline (k.actions undo, redo), not of the tab world's request: the timeline answers ("redo", "undo the whole message", "undo the
     // house"), else the world's own undo or redo declared in its request.sop (psys2.op act=undo op=...) takes back its last step (reviewer 2026-11-15 19:05)
     // ACTS ON THINGS THAT ARE THERE (move / place, change an attribute, remove): bound in request.sop to one operation of the world (psys2.op act= op=), one executor path

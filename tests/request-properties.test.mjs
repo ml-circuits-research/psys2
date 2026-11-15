@@ -9,7 +9,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 
 // The ratchet: the number of cases of each property that held at the last landing (baseline 2026-11-15 before spec 28: see worker-log.md).
-const MIN = { P1: 55, P2: 17, P3: 5, P4: 10, P5: 7, P6: 7, P7: 3, P8: 7, P9: 12, P10: 1, P11: 0 };   // 2026-11-15 the door (no fallback on declared tabs): 136/160 at landing; P10 and P11 wait for the open world's things as facts of the live request World (worker-log)
+const MIN = { P1: 55, P2: 17, P3: 5, P4: 10, P5: 7, P6: 7, P7: 3, P8: 7, P9: 12, P10: 1, P11: 0, P12: 12 };   // 2026-11-15 the door (no fallback on declared tabs): 136/160 at landing; P10 and P11 wait for the open world's things as facts of the live request World (worker-log)
 
 const loader = createFsLoader(DEFAULT_ROOT);
 const engines = {
@@ -146,6 +146,14 @@ add('P10', 'diagram', ['draw a diagram with 4 nodes', 'add 2 more nodes to it'],
 // P11: after three things of one style a fourth takes that style unless told otherwise (induction over the live world)
 add('P11', 'draw', ['draw 3 big trees', 'draw a tree'], ['desenează 3 copaci mari', 'desenează un copac'], (r) => r[1].m.kindList.length === 4 && r[1].m.extent - r[0].m.extent >= r[0].m.extent / 3 - 1);
 add('P11', 'diagram', ['draw 3 squares', 'draw a node'], ['desenează 3 pătrate', 'desenează un nod'], (r) => r[1].m.parts === 4 && r[1].m.kindList.every((k) => k === 'square'));
+
+// P12: a reaction with no change request (praise, thanks) never runs a plan: the view stays as it was and the turn adds no undo step (an "undo" after it takes back the work)
+const same = (a, b) => JSON.stringify([a.parts, a.kindList, a.extent, a.sig]) === JSON.stringify([b.parts, b.kindList, b.extent, b.sig]);
+for (const [w, ro] of [['nice', 'frumos'], ['lovely', 'frumos'], ['thanks', 'mulțumesc']]) {
+  // the view is as it was and a later undo takes back the work of the turn before the reaction (the reaction is no step of its own)
+  add('P12', 'draw', ['draw a house and a sun', w, 'undo'], ['desenează o casă și un soare', ro, 'anulează'], (r) => r[0].m.parts === 2 && same(r[0].m, r[1].m) && r[2].m.parts < r[1].m.parts);
+  add('P12', 'diagram', ['draw 3 squares', w], ['desenează 3 pătrate', ro], (r) => r[0].m.parts === 3 && same(r[0].m, r[1].m));
+}
 
 // ---- run --------------------------------------------------------------------------------------------------------------------------------------------
 const results = [];

@@ -80,6 +80,31 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
     }
     return senses;
   };
+  // the words of the live worlds in Romanian (reviewer 2026-11-15 16:50, Q39 S3): an English word -> every surface form of the lemmas whose dictionary sense is that word (all cells of the
+  // lemma's class, its irregular forms), by the language world's own morphology: inflections and the forms with their diacritics are what a Romanian user may type for it
+  let reverse = null;
+  const formsCache = new WeakMap();
+  const formsOfLemma = (lemma) => {
+    const cls = dict.lookup(lemma)?.class, c = cls ? m.classes.get(cls) : null, out = new Set([lemma]);
+    for (const cell of c?.cells?.values?.() ?? []) { const f = lib.generate(m, lemma, cls, cell.feat); if (f) out.add(f); }
+    for (const x of m.irregular) if (x.lemma === lemma && x.form) out.add(x.form);
+    return out;
+  };
+  const formsOfEnglish = (words) => {
+    if (words && typeof words === 'object' && formsCache.has(words)) return formsCache.get(words);
+    if (!reverse) {
+      reverse = new Map();
+      for (const [lemma, list] of sensesOf()) for (const s of list) { const k = s.en.toLowerCase(); if (!reverse.has(k)) reverse.set(k, new Set()); reverse.get(k).add(lemma); }
+    }
+    const out = new Set();
+    for (const w0 of words) {
+      const w = String(w0).toLowerCase();
+      const lemmas = reverse.get(w) ?? (w.length > 3 ? reverse.get(w.replace(/(?:es|s)$/, '')) : null) ?? null;   // a regular English plural names its singular's sense
+      for (const lemma of lemmas ?? []) for (const f of formsOfLemma(lemma)) out.add(f.toLowerCase());
+    }
+    if (words && typeof words === 'object') formsCache.set(words, out);
+    return out;
+  };
   const run = (template, roles) => lib.realise(m, template, roles, { dictionary: dict, base: { num: 'sg', case: 'nomacc' } });
   const needsDe = (n) => n % 100 === 0 || n % 100 >= 20;   // Romanian: "20 de flori", "7 flori"
   /** A count { n, noun, colour? } in Romanian: the article or the number, the noun in its number, the colour agreeing with it; null when a word has no lemma. */
@@ -102,7 +127,19 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
     return null;
   };
   return {
-    lib, world, m, dictionary: dict, fold,
+    lib, world, m, dictionary: dict, fold, formsOfEnglish,
+    /** The dictionary lemmas the morphology reads a form as (diacritics typed away are folded): a Set, empty for a word the language does not know. */
+    lemmasOf(form) {
+      const [head] = lib.splitClitics(m, String(form ?? '').toLowerCase());
+      return new Set(readings(head).map((r) => r.lemma));
+    },
+    /** True when the morphology reads the form as a form of a dictionary lemma (an inflection, diacritics typed away): such a word is the language's, never a typo. */
+    knows(form) {
+      const raw = String(form ?? '').toLowerCase();
+      if (raw.length < 2) return false;
+      const [head] = lib.splitClitics(m, raw);
+      return readings(head).length > 0;
+    },
     /** Analyses of a word in the grammar's shape. `raw` keeps the diacritics when the text had them; a clitic hyphen is split off ("mută-mi" = mută + mi). */
     analyse(key, raw = null) {
       if (raw == null && key == null) return [];
