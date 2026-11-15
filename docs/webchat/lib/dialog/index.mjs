@@ -1601,9 +1601,21 @@ export class DialogSession {
       if (ev?.strongEn || (lang === 'ro' && ev?.strongRo)) { this._sessionLang = lang; this._weakRo = 0; }   // the session's language, as the core keeps it (the core then gets the language explicitly)
     }
     if (lang === 'en' || !tr) return { lang: 'en', english: text, translation: null };
-    const translation = await guard.abortable((tr.rules ?? tr).translate(text, { from: lang, to: 'en' }), 'translate');
-    const english = textOf(translation);
-    return english?.trim() ? { lang, english, translation } : null;
+    // the translation candidates of every translator (rules, the source-side repair, the machine translators), chosen by the request reading: the one whose request leaves the
+    // fewest words unread in the open world (ties: the earlier candidate). The translators are the system boundary; the reading is the door's.
+    let cands = [];
+    try { cands = await gatherCandidates(text, { from: lang, to: 'en', translator: tr, abortable: (p, stage) => guard.abortable(p, stage) }); } catch (e) { if (e instanceof TurnAborted) throw e; cands = []; }
+    if (!cands.length) {
+      const translation = await guard.abortable((tr.rules ?? tr).translate(text, { from: lang, to: 'en' }), 'translate');
+      const english = textOf(translation);
+      return english?.trim() ? { lang, english, translation } : null;
+    }
+    const lib = this.engine.sopworld, tabWorld = this.context().tabWorld;
+    const live = tabWorld ? liveWorld(lib, this.engine.set.get(tabWorld)) : null, language = requestLanguage(lib);
+    const score = (c) => { if (!live || !language) return 0; try { const q = readTurn(lib, live, language, c.text, {}); return q.unread.length * 2 + (q.act || q.target || q.reaction ? 0 : 1); } catch { return 9; } };
+    let best = cands[0], bestScore = score(cands[0]);
+    for (const c of cands.slice(1)) { budget.tick('door.candidates'); const sc = score(c); if (sc < bestScore) { best = c; bestScore = sc; } }
+    return { lang, english: best.text, translation: best.translation ?? null };
   }
 
   /** The door of one turn: `{ reply, route }` when the request path handled it, else `{ why }` (the reason the turn goes to the old readers). */

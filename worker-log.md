@@ -3010,3 +3010,168 @@ psys2> I made it again, the way you said. I drew a pond. It has 2 flowers, 2 bir
 you> :quit
 ```
 Wrong in the probe: "6 boxes but no diamonds" (read as a correction), "add arrows" (one pair), "draw something random in the diagram" (a circle), "paint a lake scene without birds" (3 birds: the pattern acted first; the door fixes this), "break it into 2 layers" (Documents took it), "write a short story" (not shorter). Next: the door (16:10 block).
+
+## 2026-11-15 the request door (reviewer 16:40, owner 17:40 / 17:55; door worker)
+Merged 732c1543 (0.150 switch) first; questions.md Q39 clash: the request worker's Q39 [KNOW] is now Q41 [KNOW].
+**What changed (three slices, commits 0b504d1d, the no-fallback slice, 211205f1, then this gates commit):**
+- **The door** (`src/dialog/index.mjs` `_send` / `_door` / `_doorRun` / `_doorHonest`): on a declared tab (a world with request.sop AND a `planRequest` executor: Diagram, Drawing, Documents) every message is read FIRST by the library's readRequest (sopworld 0.151, `spell` on) over the tab's live World, with the English of the turn (Romanian: the translation candidates of every translator, chosen by the request reading, fewest unread words). The dialogue world (reviseRequest against the OPEN TAB's last planned result) says new request or revision; planRequest plans (reasoning cycle); the world's executor carries the plan out; sayRequest says what was assumed / not honoured. Old patterns are not a candidate source. P9 guard: a plan that drops a thing or a key the turn said is never carried out.
+- **No fallback on a declared tab (owner 17:55):** what the door cannot take is said honestly (unread words, an act / a thing the world does not declare, a question, a plan that breaks a said count); the old readers of a declared world never run. Worlds that declare nothing yet (ui.shell tabs, help, conversation, Charts, Map, Music) still answer, marked `trace.legacy` with the reason in `trace.door`.
+- **request.mjs shrunk to glue** (215 -> 205 lines with the stand-ins): the host request checker (expectOf, wantedRange, violations), the slip corrector (correctSlips, editDistance) and kindNames deleted; `_requestStep` / `_requestNotes` deleted from index.mjs. Stand-ins left, each a [LIB] ask (Q40 5-15): catalogWholes (the catalog's wholes made in a world are its kinds), withSubkindsNegated (no birds = no ducks), a declared kind planned as itself when its catalog parts are not makeable, a reaction naming a part keeps the last target. The case stand-ins of the first slice (place/change as make, the ellipsis "one", the single-things boundary) were removed after the owner's 17:40 rule.
+- **Capabilities as data** (request.sop): diagram link kind + `psys2.door` wholes, oval drawn as ellipse, catalog diagram kinds in honours, boxes/steps words; drawing thing place slot, woods/things words; documents wholes. Executors: diagram `linkLoose` ("add arrows" links the nodes that have none), plain shapes when the plan is of kinds; drawing things of kinds drawn the way the board draws a thing (facts placement, colours, warnings), layers only when said; documents chapters from the plan's count.
+- **Language data stand-ins** (src/lang/en.request.local.mjs, Q41 [KNOW]): "anything but / everything but / other than" (without), "until / up to / through" (range). Bundled request words now include w.lang.en.wh and w.lang.en.closed (questions read from the language world, `isQuestion`, not a host regex). Reply table entries for the door's sentences (src/translate/replies.en-ro.mjs).
+- **sopworld 0.151** vendored byte for byte (421f13b, build 29bf05310cc5, sha256 6a3f0ef5...); readRequest `spell` is the candidate-source slot; a word the host dictionary knows is never a slip (the reading is redone without repair).
+
+**a / b / c of the pre-request patches** (a = candidate source, b = made unnecessary, c = deleted). On a declared tab none of them runs any more (they sit in `_sendRead`, which a declared tab no longer reaches); they still serve the undeclared tabs.
+- spelling repair (formalizer/spell.mjs spellCorrect, scene-referents repairFromScene, voice garble): **a** -> replaced on the door by readRequest `spell` (0.151 repairWords); host correctSlips **c** (deleted).
+- translation candidates (gatherCandidates / chooseCandidate): **a** (the door chooses among them by the request reading).
+- partial windows (findPartialWindow), best effort (looseCandidates): **c** for declared tabs (never reached); delete when the last tab is declared.
+- variants / voices (withVariants), typed-reader (proposeByTypes), word-reader: **a** in principle (act/target proposals), but the owner (17:55) dropped patterns as a source: **c** for declared tabs.
+- world-aware review, foreign-reading, open-tab prior: **b** (the open tab's live world decides; the door reads only the open tab's capabilities).
+- intent.mjs (intent step), continuation / relative / followup, the legacy reaction planning of _requestStep: **b** (reviseRequest + the reasoning cycle); `_requestStep` **c** (deleted).
+- honest-done, value-check: **b** (sayRequest says what was done / assumed / not honoured); value-check stays for the undeclared tabs.
+- encoder dispatcher (ML pattern predictor): **c** on the door (it predicts a pattern; it no longer runs on a declared tab: the 1.0-1.2 s of a weak turn on the phone is gone there).
+- English in host code: the question regex -> w.lang.en.wh / closed (done); FUNCTION_WORDS remains as the "known word" guard of the spell slot (to go when repairWords takes a dictionary option, Q40 14); the definite-article test of the door ("the tree" names a thing of the open world) is an English regex (to go when readRequest marks `refers=present`, Q40).
+- **kids.\***: not removed from the product path in this landing: data.charts imports kids.arith / kids.shop / kids.tasks (lexicons), docs.editor imports kids.tasks / kids.arith, session.conversation composes all three, and ui.* import kids.common. Taking them out needs those imports moved first (their lexicons into the worlds that use them); on the declared tabs they no longer run anyway.
+
+**npm test**: green (exit 0); 2 real failures fixed on the way (vendor pin test updated to 0.151; the freshness gates rebuilt). **Legacy list** (report-only, `tests/legacy-list.json`, 227 tests, each with the generic piece it needs; plus 6 `legacyOnly` TODOs in the files): 45 need change / move / arrange acts of things of the open world; 42 need undo / redo as door acts; 41 pin a reader of a declared tab; 42 pin a route / the old patterns; 37 need the Documents editing acts (format, select, delete, dictate); 13 need questions answered from factsOf; 7 need the dialogue world's repair / meta acts. The 6 TODOs: random-diagram wording (2), the intent step's "I took that as" wording, the template arrow bench through a session ("make a cycle" is now a door whole), the ellipsis "one" reader tests (2, failing since the 0.150 switch). Refused by scripts/legacy-list.mjs (must pass): Romanian never mixed, typos against the open tab, vendor, freshness, P-gates: all pass.
+
+**Gates** (tree of this commit):
+| gate | before (732c1543) | now |
+| --- | --- | --- |
+| properties P1-P11 through Session.send | 118/140 (P1-P8) | 135/160: P1 58/66, P2 18/20, P3 7/8, P4 12/14, P5 8/10, P6 8/8, P7 3/6, P8 8/8, P9 12/12, P10 1/4, P11 0/4 |
+| owner session RO (setup fixture) | 22/43 | 7/43, legacy share 4/44 turns |
+| owner session EN | 12/16 | 7/16, legacy share 0/16 |
+| probes (31 turns) | legacy 10/11 | legacy 0/31; reviewer 16:10 sentences 4 right, 2 wrong, 2 honest refusals |
+| real set (reported, not a gate) | 177/207 both | 126/207 both, 100 rows changed |
+| test-world all (reported) | 0 failing | 1034 failing rows (art.draw 128/577, diagram.sketch 332/773, docs.editor 68/212; all other worlds pass) |
+| typo set through the door (0.151 spell) | - | 100 rows: wrong 2 (controls 0/37 wrong), typo rows right 4/63, asked 6, missed 51; Romanian rows are not repaired before translation yet (S3) |
+
+**Per-turn attribution of the owner-session drops** (spec28 right -> now wrong; every one is a loss accepted by the owner's 17:55 rule, none fixed locally):
+- RO T4, T5, T7 ("aseaza / reaseaza diagrama"): lost: needs Romanian source repair before translation (repairWords with w.lang.ro, S3) and an `arrange` without a layout word (better layout) in the diagram's capabilities.
+- RO T8, T11, T14, T17, T18, T19 ("muta X mai sus / jos / la mijloc"): lost: needs a `move` act of things of the diagram declared with an executor, and node labels (results, summary, problems) as names of the live world (factsOf of the open state).
+- RO T21, T24 ("deseneaza ceva random / frumos"): lost: needs readRequest to read "something" as the world's default whole (target from the world, sampled).
+- RO T27 ("sterge desenul"): lost: needs a `remove` / clear act of the whole declared with an executor.
+- RO T30 ("ai exagerat"): lost: needs the reaction cue (w.dialogue reduce: "you overdid it" in Romanian through the translation) — the rules translation gives no cue word; [KNOW] ro reaction phrases.
+- RO T32 ("pune pestii in ala"): lost: needs reference words resolved against the live world's things (P10; the open state as facts of the live request World).
+- RO T36 ("muta pestii pe primul nivel"): lost: needs `move` of things into a region (layers) declared.
+- EN T4 ("you are stupid"): w.dialogue revision for frustration does `keep` (a redo): [KNOW] frustration with no constraint should change nothing.
+- EN T9 ("create a random picture"): lost: needs `picture` as the drawing's default whole (a sampled scene).
+- EN T11, T13 ("Change the colour / size of the sun"): lost: needs `change` of an attribute of a thing of the open world declared with an executor.
+- EN T15 ("make sunt green"): lost: needs the spell slot to repair "sunt" -> "sun" (repairWords asked instead: sun / sunk) and a `change` colour act.
+
+**Probe** (scripts/request-probe.mjs training/eval/door-probe-2026-11-15.txt, CLI engine without the catalog):
+```
+[tab draw]
+you> draw a big forest, no birds
+psys2> I drew a big forest. It has 9 trees.
+   door request | 9 things {"tree":9}
+you> less trees
+psys2> I made it again, the way you said. I drew a small forest in a corner. It has 6 trees.
+   door reaction reduce | 6 things {"tree":6}
+you> put a house on the left
+psys2> I cannot place house in the drawing yet.
+   door honest: act place house not declared | 6 things {"tree":6}
+[tab draw]
+you> paint a lake scene without birds
+psys2> I cannot change lake scene in the drawing yet.
+   door honest: act change lake_scene not declared | 0 things {}
+[tab editor]
+you> write a long report about volcanoes in 4 chapters
+psys2> I cannot write that: I know nothing about volcanoes in my knowledge yet.
+   door request refused | "Untitled document" 0 headings 0 words
+you> shorter
+psys2> There is nothing in the documents that I made and could change that way yet.
+   door honest: reaction reduce with no result | "Untitled document" 0 headings 0 words
+[tab editor]
+you> write a short story about a fox
+psys2> I wrote the story "All about the fox": 74 words in 3 chapters. I could write about 74 words about the fox from what I know (you asked for 500); I did not pad it with repetition. It is open in t
+   door request | "All about the fox" 3 headings 77 words
+you> make it longer
+psys2> I made it again, the way you said. I wrote the story "All about the fox": 74 words in 5 chapters. I could write about 74 words about the fox from what I know (you asked for 500); I did not pad 
+   door reaction refine | "All about the fox" 5 headings 79 words
+[tab diagram]
+you> make me a diagram of 6 boxes but no diamonds
+psys2> I drew a diagram with 6 nodes and 5 arrows. It is about year. The nodes are 6 rectangles.
+   door request | 6 nodes {"rectangle":6} 5 links
+you> add arrows
+psys2> Every node already has an arrow.
+   door request | 6 nodes {"rectangle":6} 5 links
+[tab diagram]
+you> draw a flowchart with five steps, without rectangles
+psys2> I drew a diagram with 5 nodes and 4 arrows. It is about washing the dishes. The nodes are 5 ellipses.
+   door request | 5 nodes {"ellipse":5} 4 links
+you> fewer nodes
+psys2> I made it again, the way you said. I drew a diagram with 3 nodes and 2 arrows. It is about washing the dishes. The nodes are 3 ellipses.
+   door reaction reduce | 3 nodes {"ellipse":3} 2 links
+you> anything but circles
+psys2> I made it again, the way you said. I drew a diagram with 3 nodes and 2 arrows. It is about washing the dishes. The nodes are 3 ellipses.
+   door reaction refine | 3 nodes {"ellipse":3} 2 links
+[tab diagram]
+you> draw seven circles
+psys2> I drew a diagram with 7 nodes. It is about boiling an egg. The nodes are 7 circles.
+   door request | 7 nodes {"circle":7} 0 links
+you> add arrows
+psys2> I added 6 arrows, so that every node has one.
+   door request | 7 nodes {"circle":7} 6 links
+[tab diagram]
+you> sketch a mind map with 4 to 6 nodes, not all ellipses
+psys2> I drew a diagram with 5 nodes and 4 arrows. It is about Brazil. The nodes are 5 ellipses. I could not do not all ellipses: there is only one kind here.
+   door request | 5 nodes {"ellipse":5} 4 links
+you> too many
+psys2> I made it again, the way you said. I drew a diagram with 3 nodes and 3 arrows. It is about frog life cycle. The nodes are 3 ellipses. I could not do not all ellipses: there is only one kind her
+   door reaction reduce | 3 nodes {"ellipse":3} 3 links
+you> again
+psys2> I drew a diagram with 3 nodes and 2 arrows. It is about week. The nodes are 3 ellipses. I could not do not all ellipses: there is only one kind here.
+   door reaction redo | 3 nodes {"ellipse":3} 2 links
+[tab draw]
+you> draw a garden without flowers
+psys2> I drew a garden. It has 5 trees, 2 butterflys and 2 birds. I assumed 9 for the count.
+   door request | 9 things {"tree":5,"composite":2,"bird":2}
+you> bigger
+psys2> I made it again, the way you said. I drew a big garden. It has 7 trees, 4 butterflys and 3 birds.
+   door reaction enlarge | 14 things {"tree":7,"composite":4,"bird":3}
+[tab draw]
+you> make a tiny pond in the corner
+psys2> I drew a small pond in the bottom left corner. It has 1 flower. I assumed 2 for the count.
+   door request | 2 things {"lake":1,"flower":1}
+you> not so many things
+psys2> I made it again, the way you said. I drew a small pond in the bottom left corner. It has 1 lake.
+   door reaction reduce | 1 things {"lake":1}
+[tab draw]
+you> draw 3 clouds and a sun
+psys2> I could not plan 3 clouds as you said, so I made nothing.
+   door honest: plan breaks 3 clouds | 0 things {}
+you> how many clouds are there?
+psys2> I cannot answer questions about the drawing yet.
+   door honest: question | 0 things {}
+[tab diagram]
+you> desenează o diagramă cu 5 noduri, fără cercuri
+psys2> Am desenat o diagramă cu 5 noduri și 4 săgeți. Este despre gătește paste. Nodurile sunt 3 dreptunghiuri și 2 romburi.
+   door request | 5 nodes {"rectangle":3,"diamond":2} 4 links
+you> prea multe
+psys2> Am refăcut-o, așa cum ai spus. Am desenat o diagramă cu 3 noduri și 2 săgeți. Este despre gătește paste. Nodurile sunt 2 dreptunghiuri și 1 romb.
+   door reaction reduce | 3 nodes {"rectangle":2,"diamond":1} 2 links
+[tab draw]
+you> desenează o pădure mare fără păsări
+psys2> Am desenat o pădure mare. Are 9 copaci.
+   door request | 9 things {"tree":9}
+you> mai puțini copaci
+psys2> Am refăcut-o, așa cum ai spus. Am desenat o pădure mică în un colț. Are 6 copaci.
+   door reaction reduce | 6 things {"tree":6}
+[tab draw]
+you> desenează un iaz mic
+psys2> Am desenat un iaz mic în un colț. Are 1 floare, 1 pasăre și 1 pește. Am presupus 4 pentru numără.
+   door request | 4 things {"lake":1,"flower":1,"bird":1,"fish":1}
+you> mai mare
+psys2> Am refăcut-o, așa cum ai spus. Am desenat un iaz. Are 2 flori, 2 păsări și 2 pești.
+   door reaction enlarge | 7 things {"lake":1,"flower":2,"bird":2,"fish":2}
+[tab editor]
+you> scrie o poveste scurtă despre o vulpe
+psys2> Am scris povestea „All about the fox”: 69 de cuvinte în 3 capitole. Am putut scrie cam 69 de cuvinte despre vulpea din ce știu (ai cerut 500); nu am umplut textul cu repetiții. Este desc
+   door request | "All about the fox" 3 headings 72 words
+legacy share: 0/31
+```
+
+Judged: forest no birds RIGHT; less trees RIGHT (also made smaller); house on the left WRONG (honest: needs a place/move act); lake scene without birds WRONG (honest: "paint" read as change; needs the dialogue's abduction of make, Q40 11); long report about volcanoes HONEST refusal (no catalog in the CLI engine); shorter HONEST (nothing made yet); short story RIGHT; make it longer WRONG (length not stepped, Q40 4); 6 boxes no diamonds RIGHT; add arrows RIGHT (both cases); flowchart five steps without rectangles RIGHT; fewer nodes RIGHT; anything but circles RIGHT; mind map not all ellipses WRONG (Q40 8: the shapes pool of one part); too many / again RIGHT; garden without flowers RIGHT ("butterflys": executor plural); bigger RIGHT; tiny pond RIGHT; not so many things RIGHT; 3 clouds and a sun HONEST (the plan breaks the per-kind count, [LIB]); how many clouds HONEST (questions lost); Romanian blocks RIGHT (5/5). Legacy share 0/31.
+
+**What remains** (by owner-session weight): move / change / remove acts of things declared with executors (Diagram, Drawing); the open state as facts of the live request World (references P10, induction P11); Romanian repair before translation (S3, repairWords with w.lang.ro); undo / redo and questions as door acts; the Documents editing acts; Charts, Map, Music get request.sop + an executor and leave legacy; the kids.* imports untangled so they can leave the product path.

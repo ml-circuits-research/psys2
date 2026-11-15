@@ -109,6 +109,6 @@ const runOk = r.status === 0 || (r.status === 1 && failed.length > 0 && !realFai
 const netViolations = existsSync(env.PSYS2_NET_LOG) ? readFileSync(env.PSYS2_NET_LOG, 'utf8').trim() : '';
 
 if (netViolations) console.log(`== NETWORK ACCESS IN TESTS (not allowed):\n${netViolations}`);
-console.log(`== psys2 ${suite} suite finished in ${((Date.now() - t0) / 1000).toFixed(1)} s wall (seed ${seed}, exit ${r.status ?? 1})`);
+console.log(`== psys2 ${suite} suite finished in ${((Date.now() - t0) / 1000).toFixed(1)} s wall (seed ${seed}, exit ${netViolations ? 1 : (runOk ? 0 : (r.status ?? 1))}${runOk && r.status ? ", only the legacy list failed" : ""})`);
 rmSync(netDir, { recursive: true, force: true });
 process.exit(netViolations ? 1 : (runOk ? 0 : (r.status ?? 1)));
