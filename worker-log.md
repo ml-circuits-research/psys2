@@ -2899,3 +2899,6 @@ live build 4d2d3d4f78 has classes D + A (live demo build-info.json = main docs/w
 
 ## 2026-11-15 status (coordinator)
 Live build 8bcf1a91a9 = main d144a73b (classes B, C, A, D, E). Owner session 30/43, variants 27/35; real set 177/207. In progress: classes F (long messages, on sopworld 0.148 clauses/chooseRewrite) and G (phone speed) in one worktree. Library: sopworld 0.148.0 pushed (std.decide kind intent, chooseRewrite, readTurn rewrites, cutter keeps multi-word things) for psys2 Q35.
+
+## 2026-11-15 owner requests (coordinator)
+Owner: (1) remove the Timeline and Seating tabs from the demo (incomplete, not helping); (2) compositions are far too short (asked 5,000 words, got short paragraphs): honour the size as far as the knowledge allows and say when it runs out; a long multi-line topic box; from a long topic take what is understood (phrases, content words, known topics) and make it credible. One agent assigned; F+G continue.
