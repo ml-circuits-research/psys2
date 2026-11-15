@@ -118,3 +118,17 @@ The bridge reader, the host revision and the host reply are gone. Per turn: the 
 - **Things said together** ("a sky and a sun") are planned kind by kind and carried out as one request each (each its own step in the world's history), stand-in `coordinated`.
 - **A partly read turn never acts**: the reply names the clauses understood and those not understood ("I understood "clear everything", but not "zork the plimp", so I did
   nothing"), cut at the joiners of the language world.
+
+## 12. The open state as facts; acts on things (owner 2026-11-15 19:10; coordinator 19:30)
+- **The open state is facts of the live request World**: the things the open world shows (its `referents` operation: id, kind, name, attributes) are told into a fork of its
+  request World as instances of its declared kinds (`stateWorld`). The fork is a candidate source of the spell repair (the names of things) and the world a new request is planned
+  over (its things are places and referents). Host stand-in until readRequest marks `refers=present` with thing ids (questions.md Q42 [LIB]).
+- **References** (`referTo`): a thing's name in the unread words; a kind said (plural: all of them; one there: it; several: the salient, else the world asks which); the world's own
+  whole (the kind its `std.schema.world` name means: "the drawing", "the diagram"); a pronoun of the language world with `refers=all` ("everything"); "it" / "them" (the last act's
+  things, else what the last result made, else the salient things). Definiteness is the language world's (`w.lang.en.det definite=yes`).
+- **Acts on things** (place, change, remove; k.actions): declared per act and kind in request.sop (`std.schema.honours act=place|change|remove on= of=`), carried out by the one
+  operation the world binds to the act (`psys2.op act= op=`) with one argument shape `{ act, ids, place: { value, relation, ids }, attribute, value, size: { value, step } }`.
+  "make X red" is the change sense of the verb when X is there and named definitely or by "it"; a turn of only roles after an act on things continues it ("higher"); an act with no
+  object takes the last act's things. A key the act does not honour is named; a thing that is not there is said; nothing is guessed.
+- **Make**: an indefinite pronoun with `refers=any` ("something", "whatever you want") names the world's own whole; a general whole is sampled among the wholes the world plans (its own
+  `psys2.door` wholes before the catalog's); a place said by a kind the world makes that is not there is made by the world; a place that names the world itself is the world.

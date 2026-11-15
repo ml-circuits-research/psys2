@@ -78,16 +78,6 @@
   },
   {
    "file": "astra-session.test.mjs",
-   "name": "a single discussion per world: \"back to the drawing\" and \"the first chart\" are not discussion commands",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "astra-session.test.mjs",
-   "name": "each tab gets its own discussion with the message id on the act; user scope is never a discussion",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "astra-session.test.mjs",
    "name": "two drawings: new discussion, back to the first, state follows, other world untouched",
    "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
   },
@@ -115,11 +105,6 @@
    "file": "clauses-in-sequence.test.mjs",
    "name": "other worlds: a thing made in the first clause is named by \"it\" in the second",
    "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "clauses-in-sequence.test.mjs",
-   "name": "undo follows the established invariant: each clause is an act of the world, undone one by one, back to the empty document",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
   },
   {
    "file": "commonsense.test.mjs",
@@ -327,11 +312,6 @@
    "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
   },
   {
-   "file": "discourse-memory.test.mjs",
-   "name": "memoryJSON is plain data: JSON round trip and structuredClone are lossless",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
    "file": "discourse-meta.test.mjs",
    "name": "a choice expectation lives one turn and an unrelated reply is routed normally",
    "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
@@ -415,11 +395,6 @@
    "file": "draw.test.mjs",
    "name": "art.draw: save asks the tab to download, an empty picture does not",
    "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "draw.test.mjs",
-   "name": "art.draw: undo restores the scene and history stays bounded",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
   },
   {
    "file": "editor-ed.test.mjs",
@@ -722,11 +697,6 @@
    "reason": "needs the dialogue world's repair and meta acts (w.dialogue) on the door"
   },
   {
-   "file": "open-tab-prior.test.mjs",
-   "name": "an indefinite thing never opens another tab: \"draw something random\" on the Diagram tab draws a diagram, not a Documents paragraph",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
    "file": "overlay-memo-budget.test.mjs",
    "name": "a long draw session: the same turn costs about the same at 12 and at 48 objects (learned.mem, things.aspects, commonsense.habitat do not grow with the picture)",
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
@@ -787,31 +757,6 @@
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
   },
   {
-   "file": "ro-rp5.test.mjs",
-   "name": "RP5b: \"diagramă\" is the diagram, \"în diagramă\" names the Diagram world, off the Drawing tab",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "ro-rp5.test.mjs",
-   "name": "RP5b: missing-place prompt and chart help are Romanian",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
-   "file": "ro-rp5.test.mjs",
-   "name": "RP5b: moving a thing into the water says \"în apă\" and adds the water when there is none",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "ro-rp5.test.mjs",
-   "name": "RP5c: a tab opened by a command is the active tab for the next command",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "ro-rp5.test.mjs",
-   "name": "RP5c: open the Diagram tab by command after Drawing turns, then \"desenează trei cercuri\" draws in the Diagram",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
    "file": "ro-sessions.test.mjs",
    "name": "RD9: \"more X\" with a plural adds two or three and says how many",
    "reason": "needs questions answered from factsOf of the live world (no question act on the door yet)"
@@ -862,11 +807,6 @@
    "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
   },
   {
-   "file": "scene-referents.test.mjs",
-   "name": "the whole path: a slipped noun acts on the thing of the scene and says what was assumed",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
    "file": "several-clauses.test.mjs",
    "name": "a clause with no verb takes the verb of the clause before it",
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
@@ -905,11 +845,6 @@
    "file": "system-map.test.mjs",
    "name": "the trace of a turn lists the steps in the vocabulary of the page",
    "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
-   "file": "talk-transfers.test.mjs",
-   "name": "what kind of thing: a tree from the is-a facts; session cards say \"nothing leaves the device\" once",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
   },
   {
    "file": "textgen.test.mjs",
@@ -972,11 +907,6 @@
    "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
   },
   {
-   "file": "turn-scope.test.mjs",
-   "name": "the what-happened diff counts a world loaded during the turn from its initial state, not as \"(was none)\"",
-   "reason": "needs questions answered from factsOf of the live world (no question act on the door yet)"
-  },
-  {
    "file": "voice-repair.test.mjs",
    "name": "rp3-07 editor: several structures in one request",
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
@@ -985,11 +915,6 @@
    "file": "where-were-we.test.mjs",
    "name": "the return is sticky only until the next digression",
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "world-aware.test.mjs",
-   "name": "choose: the reading the open tab can take wins over a move in a game that is not running; veto alone keeps the router order",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
   },
   {
    "file": "world-aware.test.mjs",

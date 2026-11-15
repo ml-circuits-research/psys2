@@ -62,7 +62,7 @@
 @k.goldfish std.schema.kind of=goldfish world=drawing acts=make acts=remove
 @t.duck core.type of=duck extends=bird closed=true
 @k.duck std.schema.kind of=duck world=drawing acts=make acts=remove
-@h.make std.schema.honours world=drawing act=make on=kind on=count on=size on=extent on=place on=with on=manner on=layout on=attribute of=pond of=forest of=garden of="water" of="water lily" of="reed" of="duck" of="goldfish" of="flower" of="tree" of="bush" of="butterfly" of="bird" of="cloud" of="sky" of="sun" of="house" of="fish" of="boat" of="cat" of="dog" of="mountain" of="lake" of="river" of="hill"
+@h.make std.schema.honours world=drawing act=make on=kind on=count on=size on=extent on=place on=with on=manner on=layout on=attribute of=picture of=pond of=forest of=garden of="water" of="water lily" of="reed" of="duck" of="goldfish" of="flower" of="tree" of="bush" of="butterfly" of="bird" of="cloud" of="sky" of="sun" of="house" of="fish" of="boat" of="cat" of="dog" of="mountain" of="lake" of="river" of="hill"
 @h.arrange std.schema.honours world=drawing act=arrange on=layout of=picture of=pond of=forest of=garden
 @e.forest k.expect.make thing=forest made_in=drawing unit=part min=5 max=7 typical=6 kinds_min=1 kinds_max=2 layout=free
 @e.forest.tree k.expect.part of=forest part=tree group=plant min=5 max=7 typical=6 needed=yes
@@ -89,3 +89,12 @@
 @op.redo psys2.op world=drawing act=redo op=redo
 # A whole the world makes with an operation of its own, not by a plan of parts: a new page is the board's fresh sheet (the old one stays for undo).
 @op.page psys2.op world=drawing act=make of=page op=newDrawing
+# Acts on the things that are there (spec 28 section 12): what each honours, and the one operation of the world that carries them out (the door resolves the things and the roles).
+@k.picture std.schema.kind of=picture world=drawing acts=make acts=remove
+@h.place std.schema.honours world=drawing act=place on=place of=thing
+@h.change std.schema.honours world=drawing act=change on=attribute on=size of=thing
+@h.remove std.schema.honours world=drawing act=remove of=thing of=picture
+@wd.colour core.word text=color text=colour means=colour
+@op.place psys2.op world=drawing act=place op=requestAct
+@op.change psys2.op world=drawing act=change op=requestAct
+@op.remove psys2.op world=drawing act=remove op=requestAct

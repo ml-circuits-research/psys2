@@ -11,6 +11,7 @@
 @s.size core.slot of=node key=size enum=tiny enum=small enum=medium enum=big enum=huge
 @s.colour core.slot of=node key=colour enum=red enum=blue enum=green enum=yellow enum=orange enum=purple enum=pink enum=white enum=black enum=grey
 @s.in core.slot of=node key=in
+@s.name core.slot of=node key=name kind=string
 @t.circle core.type of=circle extends=node closed=true
 @k.circle std.schema.kind of=circle world=diagram acts=make acts=remove acts=connect
 @t.square core.type of=square extends=node closed=true
@@ -45,3 +46,11 @@
 # The session timeline (reviewer 2026-11-15 19:05): the world's own undo and redo, the operations the door calls for the acts undo / redo of k.actions (src/dialog/request.mjs actOperation).
 @op.undo psys2.op world=diagram act=undo op=diagramUndo
 @op.redo psys2.op world=diagram act=redo op=diagramRedo
+# Acts on the things that are there (spec 28 section 12): what each honours, and the one operation of the world that carries them out (the door resolves the things and the roles).
+@h.place std.schema.honours world=diagram act=place on=place of=node
+@h.change std.schema.honours world=diagram act=change on=attribute on=size of=node
+@h.remove std.schema.honours world=diagram act=remove of=node of=diagram
+@wd.colour core.word text=color text=colour means=colour
+@op.place psys2.op world=diagram act=place op=requestAct
+@op.change psys2.op world=diagram act=change op=requestAct
+@op.remove psys2.op world=diagram act=remove op=requestAct

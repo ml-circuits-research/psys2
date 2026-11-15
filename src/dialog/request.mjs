@@ -105,6 +105,113 @@ export function readTurn(lib, live, language, english, { dialogue = null, known 
 }
 
 /**
+ * THE OPEN TAB'S STATE AS FACTS OF THE LIVE REQUEST WORLD (owner 2026-11-15 19:10; questions.md Q42 [LIB]): the things a world shows (its `referents` operation, which every
+ * schema world has: id, kind, name, attributes) are told into a fork of its live request World as instances of its declared kinds, so that the library sees them (factsOf: the
+ * spell repair's world words, the planner's places) and the host resolves references against them. An attribute is told under the slot of its name, or the slot a `core.word`
+ * names for it (color -> colour); a value the slot refuses (a size in pixels for a size enum) is left out. A thing of a kind the world does not declare is kept in `things` only.
+ * Returns { world, view, things: [{ id, kind, name, attrs, salient, told }] }. No code here is per world.
+ */
+export function stateWorld(lib, live, referents = []) {
+  const things = (referents ?? []).filter((r) => r && r.id != null && r.kind).map((r) => ({ id: String(r.id), kind: String(r.kind), name: r.name != null ? String(r.name) : null, attrs: r.attrs ?? {}, salient: !!r.salient, told: null }));
+  if (!live || typeof live.fork !== 'function') return { world: live, view: null, things };
+  const fork = live.fork();
+  const c = (() => { try { return live._compiled?.(); } catch { return null; } })();
+  const kinds = new Set(ofType(live, 'std.schema.kind').map((r) => one(r, 'of')));
+  const alias = new Map();
+  for (const r of ofType(live, 'core.word')) for (const m of r.means ?? []) for (const t of r.text ?? []) alias.set(String(t).replace(/^"|"$/g, ''), String(m).replace(/^"|"$/g, ''));
+  const q = (v) => `"${String(v).replace(/["\\]/g, ' ')}"`;
+  for (const [i, t] of things.entries()) {
+    budget.tick('door.state');
+    if (!kinds.has(t.kind)) continue;
+    const slots = c?.slots?.get(t.kind);
+    const keys = [];
+    if (t.name && slots?.get?.('name')) keys.push(`name=${q(t.name)}`);
+    for (const [k, v] of Object.entries(t.attrs)) {
+      const key = slots?.get?.(k) ? k : slots?.get?.(alias.get(k)) ? alias.get(k) : null;
+      const s = key ? slots.get(key) : null;
+      if (!s || v == null || typeof v === 'object') continue;
+      const en = (s.enum ?? []).map((x) => String(x).replace(/^"|"$/g, ''));
+      if (en.length && !en.includes(String(v))) continue;
+      keys.push(`${key}=${en.length ? v : q(v)}`);
+    }
+    const id = `st${i}_${t.id.replace(/[^\w]/g, '_')}`;
+    let r = null;
+    try { r = fork.tell(`@${id} ${t.kind} ${keys.join(' ')}`); } catch { r = null; }
+    if (!r?.ok) { try { r = fork.tell(`@${id} ${t.kind}`); } catch { r = null; } }
+    if (r?.ok) t.told = id;
+  }
+  let view = null;
+  try { view = typeof lib?.factsOf === 'function' ? lib.factsOf(fork) : null; } catch { view = null; }
+  return { world: fork, view, things };
+}
+
+/** The attribute names a live world's kinds have (their slot keys) and the words for them (core.word means=<slot key>): "colour", "color", "size". */
+export function attributeWords(live) {
+  const c = (() => { try { return live?._compiled?.(); } catch { return null; } })();
+  const keys = new Set();
+  for (const k of ofType(live, 'std.schema.kind')) for (const s of c?.slots?.get(one(k, 'of'))?.values?.() ?? []) if (s.key && !['in', 'name', 'place'].includes(s.key)) keys.add(String(s.key));
+  const words = new Map([...keys].map((k) => [k, k]));
+  for (const r of ofType(live, 'core.word')) for (const m of r.means ?? []) { const mm = String(m).replace(/^"|"$/g, ''); if (keys.has(mm)) for (const t of r.text ?? []) words.set(String(t).replace(/^"|"$/g, '').toLowerCase(), mm); }
+  return words;
+}
+
+/**
+ * WHAT A TURN REFERS TO in the open state (host stand-in until readRequest marks `refers=present` with the things of the live world, questions.md Q42 [LIB]): one mechanism over
+ * the things of `stateWorld` and the dialogue, the same for every world.
+ *   names  a run of unread words that is a thing's name ("work done", "results"; `_` and space alike) - the words are then read;
+ *   kinds  a kind said (a wanted kind, the target) that the state holds: all of them when said in the plural, the one there is, else the salient (last made or named) ones;
+ *   whole  the world's whole said ("the drawing", "the diagram"): every thing;
+ *   it     an anaphor read as the last request (refers=last): the things of the last act on things, else the salient things.
+ * Returns { ids, how, kinds, consumed: [words read as names] } or null when the turn names nothing that is there.
+ */
+export function referTo(q, state, { lastIds = [], wholes = new Set(), words = null, language = null } = {}) {
+  const things = state?.things ?? [];
+  if (!things.length) return null;
+  // a pronoun of the language world that refers to all ("everything", "all of them": w.lang.en.pron refers=all) with no kind said: every thing
+  const all = new Set(ofType(language, 'w.lang.en.pron').filter((r) => one(r, 'refers') === 'all').flatMap((r) => (r.text ?? []).map((t) => String(t).replace(/^"|"$/g, '').toLowerCase())));
+  const said0 = (q.request?.constraints ?? []).some((c) => c.on === 'kind' && c.want === 'yes' && c.value);
+  const low = ` ${String(q.english ?? '').toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, ' ')} `;
+  if (!said0 && !q.target && [...all].some((t) => low.includes(` ${t} `))) return { ids: things.map((t) => t.id), how: 'all', kinds: [...new Set(things.map((t) => t.kind))], consumed: [] };
+  const norm = (x) => String(x ?? '').toLowerCase().replace(/[_\s]+/g, ' ').trim();
+  const toks = [...(words ?? (q.english ?? '').toLowerCase().match(/[\p{L}\p{N}_]+/gu) ?? [])];
+  const unread = new Set(q.unread ?? []);
+  const byName = new Map(things.filter((t) => t.name).map((t) => [norm(t.name), t]));
+  const named = [], consumed = [];
+  for (let i = 0; i < toks.length; i++) {
+    budget.tick('door.names');
+    for (let n = Math.min(3, toks.length - i); n >= 1; n--) {
+      const span = toks.slice(i, i + n);
+      const t = byName.get(norm(span.join(' ')));
+      if (t && span.every((w) => unread.has(w) || !STOP.has(w))) { if (!named.includes(t)) named.push(t); consumed.push(...span); i += n - 1; break; }
+    }
+  }
+  if (named.length) return { ids: named.map((t) => t.id), how: 'name', kinds: [...new Set(named.map((t) => t.kind))], consumed };
+  const said1 = (q.request?.constraints ?? []).some((c) => c.on === 'kind' && c.want === 'yes' && c.value);
+  if (q.request?.refers === 'last' && !said1) {   // "it", "them": the things of the last act on things, else the salient ones (the target the reader took from the dialogue is not said)
+    const last = things.filter((t) => lastIds.includes(t.id));
+    const pick = last.length ? last : things.filter((t) => t.salient);
+    if (pick.length) return { ids: pick.map((t) => t.id), how: 'it', kinds: [...new Set(pick.map((t) => t.kind))], consumed: [] };
+  }
+  const target = q.target ?? null;
+  if (target && wholes.has(target) && !things.some((t) => t.kind === target)) return { ids: things.map((t) => t.id), how: 'whole', kinds: [...new Set(things.map((t) => t.kind))], consumed };
+  const said = (q.request?.constraints ?? []).filter((c) => c.on === 'kind' && c.want === 'yes' && c.value);
+  const kinds = [...new Set([...said.map((c) => c.value), ...(target && !said.length ? [target] : [])])];
+  const hit = kinds.flatMap((k) => things.filter((t) => t.kind === k));
+  if (hit.length) {
+    const plural = said.some((c) => c.plural || c.number !== undefined);
+    if (plural || hit.length === 1) return { ids: hit.map((t) => t.id), how: 'kind', kinds, consumed };
+    const sal = hit.filter((t) => lastIds.includes(t.id) || t.salient);
+    return { ids: (sal.length && sal.length < hit.length ? sal : hit).map((t) => t.id), how: sal.length && sal.length < hit.length ? 'kind+salient' : 'kind', kinds, consumed, several: !(sal.length && sal.length < hit.length) };
+  }
+  if (q.request?.refers === 'last') {
+    const last = things.filter((t) => lastIds.includes(t.id));
+    const pick = last.length ? last : things.filter((t) => t.salient);
+    if (pick.length) return { ids: pick.map((t) => t.id), how: 'it', kinds: [...new Set(pick.map((t) => t.kind))], consumed };
+  }
+  return null;
+}
+
+/**
  * The clauses of a turn as typed, cut at the joiners of the language world (w.lang.en.closed class=conjunction from w.lang.en.joiner, and the comma), each with whether a word of
  * it is unread: what the honest reply names as understood and not understood ("I understood "clear everything", but not "zork the plimp""). Never a host list of English words.
  */
@@ -125,16 +232,18 @@ export function clausesOf(english, language, unread = []) {
  * constraints said of every kind), and the item steps are joined. Null when nothing was dropped or a part cannot be planned. Stand-in, questions.md Q42 [LIB].
  */
 export function coordinated(lib, live, req, plan, opts) {
-  const wanted = [...new Set((req.constraints ?? []).filter((c) => c.on === 'kind' && c.want === 'yes' && c.value && c.origin !== 'lineage').map((c) => c.value))];
+  const wanted = [...new Set([...(req.target && req.refers === 'kind' ? [req.target] : []), ...(req.constraints ?? []).filter((c) => c.on === 'kind' && c.want === 'yes' && c.value && c.origin !== 'lineage').map((c) => c.value)])];   // the target said as a kind is one of the things said together
   const planned = new Set((plan.steps ?? []).filter((st) => st.item && st.args?.kind).map((st) => st.args.kind));
   if (wanted.length < 2 || wanted.every((k) => planned.has(k))) return null;
   const steps = [], assumed = [], notHonoured = [];
   for (const k of wanted) {
     budget.tick('door.coordinated');
     const own = (c) => (c.on === 'kind' ? c.want !== 'yes' || c.value === k : c.on === 'count' ? !c.of || c.of === k : true);
-    const sub = { ...req, target: k, constraints: (req.constraints ?? []).filter(own) };
+    const kept = (req.constraints ?? []).filter(own);
+    const sub = { ...req, target: k, constraints: kept.some((c) => c.on === 'kind' && c.value === k) ? kept : [...kept, { on: 'kind', want: 'yes', value: k, words: k, origin: 'said' }] };   // each thing planned as a thing of its kind
     let p = null;
     try { p = lib.planRequest(live, sub, opts); } catch { p = null; }
+    if (!p?.ok && !p?.cannot?.length) { try { const p2 = lib.planRequest(live, sub, { ...opts, sources: lib.REQUEST_SOURCES.filter((x) => x !== 'expect') }); if (p2?.ok) p = p2; } catch { /* the first plan stands */ } }   // a kind whose catalog parts the world cannot make is planned as itself (Q40 (9))
     if (!p?.ok) return null;
     steps.push(...(p.steps ?? []).filter((st) => st.item || !steps.length));
     assumed.push(...(p.assumed ?? []).filter((a) => !assumed.some((x) => x.key === a.key)));
@@ -149,11 +258,61 @@ export function actOperation(live, act, of = null) {
   return r ? one(r, 'op') : null;
 }
 
+/** "in the diagram" on the Diagram: a place that names the open world itself (its std.schema.world name, or a word for it) is where everything of it goes, not a place in it: dropped. */
+export function withoutSelfPlace(req, live) {
+  const name = one(ofType(live, 'std.schema.world')[0], 'name');
+  if (!name || !req?.constraints?.length) return req;
+  req.constraints = req.constraints.filter((c) => !(c.on === 'place' && c.want !== 'no' && String(c.value ?? '').toLowerCase() === name.toLowerCase()));
+  return req;
+}
+
+/** The parent of each declared type of a live world (core.type extends=), read from the world's facts. */
+export function typeParents(live) {
+  const m = new Map();
+  let c = null;
+  try { c = live?._compiled?.(); } catch { c = null; }
+  for (const [k, t] of c?.types ?? []) { const ext = t?.attrs?.extends?.[0]; if (k && ext) m.set(String(k).replace(/^"|"$/g, ''), String(ext).replace(/^"|"$/g, '')); }
+  return m;
+}
+
+/** The world's own whole: the kind its std.schema.world name names (a kind of that name, or the kind a core.word of that name means): "the diagram", "the drawing". */
+export function worldWholes(live) {
+  const name = one(ofType(live, 'std.schema.world')[0], 'name');
+  const out = new Set();
+  if (!name) return out;
+  if (ofType(live, 'std.schema.kind').some((r) => one(r, 'of') === name)) out.add(name);
+  for (const r of ofType(live, 'core.word')) if ((r.text ?? []).map((t) => String(t).replace(/^"|"$/g, '')).includes(name)) for (const m of r.means ?? []) out.add(String(m).replace(/^"|"$/g, ''));
+  return out;
+}
+
+/** Whether a kind said is named definitely: the determiner before its words is one the language world marks definite (w.lang.en.det definite=yes: the, this, that, these, those). */
+const definites = new WeakMap();
+export function definiteKind(english, constraints, language, target = null) {
+  let d = definites.get(language ?? {});
+  if (!d) { d = new Set(); for (const r of ofType(language, 'w.lang.en.det')) if (one(r, 'definite') === 'yes') for (const t of r.text ?? []) d.add(String(t).replace(/^"|"$/g, '').toLowerCase()); if (language) definites.set(language, d); }
+  const toks = String(english ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
+  const said = [...(constraints ?? []).filter((c) => c.on === 'kind' && c.want === 'yes' && c.words).map((c) => String(c.words).toLowerCase().split(/\s+/)[0]), ...(target ? [String(target).toLowerCase().replace(/_/g, ' ').split(' ').pop()] : [])];
+  return said.some((w) => {
+    const i = toks.findIndex((t) => t === w || (t.startsWith(w) && t.length - w.length <= 2));   // the word or its plural
+    return i > 0 && (d.has(toks[i - 1]) || (i > 1 && d.has(toks[i - 2])));
+  });
+}
+
+/** Whether the turn names its thing by an indefinite pronoun of the language world ("something", "whatever you want": w.lang.en.pron refers=any): the world's own whole is meant. */
+export function saysAnything(english, language) {
+  const any = ofType(language, 'w.lang.en.pron').filter((r) => one(r, 'refers') === 'any').flatMap((r) => (r.text ?? []).map((t) => String(t).replace(/^"|"$/g, '').toLowerCase()));
+  const low = ` ${String(english ?? '').toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, ' ').replace(/\s+/g, ' ')} `;
+  return any.some((t) => low.includes(` ${t} `));
+}
+
 /** The live w.dialogue of a session: per tab world { request, result, before }. JSON in the memory and the snapshot. */
 export class RequestDialogue {
   constructor() { this.byWorld = {}; }
-  last(world) { return this.byWorld[world] ?? null; }
-  record(world, rec) { this.byWorld[world] = rec; }
+  last(world) { const r = this.byWorld[world]; return r?.request ? r : null; }
+  record(world, rec) { this.byWorld[world] = { ...rec, act: null }; }
+  /** The last act on things of a world ({ act, ids, turn }): what "higher" continues. */
+  lastAct(world) { return this.byWorld[world]?.act ?? null; }
+  recordAct(world, act) { this.byWorld[world] = { ...(this.byWorld[world] ?? {}), act }; }
   toJSON() { return { v: 1, byWorld: structuredClone(this.byWorld) }; }
   load(j) { this.byWorld = j?.v === 1 ? structuredClone(j.byWorld ?? {}) : {}; return this; }
 }
