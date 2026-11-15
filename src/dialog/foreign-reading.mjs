@@ -60,7 +60,11 @@ function verbless(seg) {
 const moodText = (lang, clause) => String(lang?.stripPolite?.(clause) ?? clause).trim().toLowerCase();
 
 /** The library's mood of a clause (question | imperative | statement | fragment), wishes read as requests, a statement only with a first-person subject; null without the library. */
-export const moodOfClause = (lib, lang, clause) => (lib?.moodOf ? lib.moodOf(null, moodText(lang, clause)) : null);
+export const moodOfClause = (lib, lang, clause) => {
+  if (!lib?.moodOf) return null;
+  const t = moodText(lang, clause), mood = lib.moodOf(null, t);
+  return mood === 'statement' && words(t).length < 2 ? 'fragment' : mood;   // "my" alone (Romanian "meu") is a fragment, not a statement (questions.md Q22 L4)
+};
 
 const SUBJECT = new Set(['i', 'im', "i'm"]);
 const SUBJ_MEMO = new WeakMap();
@@ -210,12 +214,15 @@ export function reviewForeign(dialog, segments, { english }) {
     else if (r.repaired.length) { why = `a guess, not a confident typo: ${r.repaired.map((c) => `"${c.from}" as "${c.to}"`).join(', ')}`; guessed = r.repaired; }
     if (!why) { out.push(seg); stmt = null; continue; }
     const refused = { ...seg, unparsed: true, wires: [], match: undefined, alternatives: [], corrections: [], ignored: [], bestEffort: undefined, partial: false, worlds: seg.worlds ?? [], foreign: { world: id, why, pattern: seg.match.patternId, ...(guessed ? { guessed } : {}) } };
-    if (guessed) {   // the clause is what the user said, not the guess
-      let t = String(seg.text ?? '');
-      for (const c of guessed) { const i = t.toLowerCase().indexOf(String(c.to).toLowerCase()); if (i >= 0) t = t.slice(0, i) + c.from + t.slice(i + String(c.to).length); }
-      refused.text = t;
+    let guess = String(seg.text ?? '');
+    if (guessed) {   // the clause quoted is what the user said; the suggestion is the guess (a segment's text may carry either spelling)
+      const swap = (t, a, b) => { const i = t.toLowerCase().search(new RegExp(`\\b${String(a).toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`)); return i >= 0 ? t.slice(0, i) + b + t.slice(i + String(a).length) : t; };
+      let said = guess;
+      for (const c of guessed) said = swap(said, c.to, c.from);
+      for (const c of seg.corrections ?? []) if (c.to) guess = swap(guess, c.from, c.to);
+      refused.text = said;
     }
-    if (guessed?.some((c) => c.kind === 'voice' || c.real) && !refused.suggestions?.length) refused.suggestions = [seg.text.replace(/^./, (x) => x.toUpperCase()) + '.'];   // a sound-alike of spoken input (RP3) or a real word read as another ("clean" as "clear"): offered as "Did you mean", never executed; an unknown word stays "not understood"
+    if (guessed?.some((c) => c.kind === 'voice' || c.real) && !refused.suggestions?.length && guess.toLowerCase() !== refused.text.toLowerCase()) refused.suggestions = [guess.replace(/^./, (x) => x.toUpperCase()) + '.'];   // a sound-alike of spoken input (RP3) or a real word read as another ("clean" as "clear"): offered as "Did you mean", never executed; an unknown word stays "not understood"
     if (mood === 'list') { stmt.foreign.with = [...(stmt.foreign.with ?? []), seg.text]; continue; }   // one reply for the whole statement
     if (mood) { refused.veto = { say: STATEMENT_SAY, status: 'unsupported', why }; stmt = refused; }
     else stmt = null;
