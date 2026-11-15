@@ -32,7 +32,7 @@ import { failureReasons, filterFailures, toFailuresJSON, failuresFilename, creat
 import { createProgress } from './ui/progress.mjs';
 import { startAssets, assetUrl, manifest as assetManifest } from './ui/assets.mjs';
 import { createEventLog, describeTarget, tapKind } from './ui/action-log.mjs';
-import { snapshotState, describeChanges } from './ui/state-diff.mjs';
+import { snapshotState, describeChanges, turnBaseline } from './ui/state-diff.mjs';
 
 const HERE = new URL('.', import.meta.url);
 
@@ -1042,7 +1042,7 @@ export async function mountPsys2(element, options = {}) {
    * the state before and after (ui/state-diff.mjs, no code per world), plus the view effects (tab switch, a tab's world changed, effects that ran).
    */
   function buildHappened(tn, reply, botMsg, effects) {
-    const changes = describeChanges(tn.snapBefore, snapshotState(session.state?.()));
+    const changes = describeChanges(turnBaseline(tn.snapBefore, session.loadedBefore?.()), snapshotState(session.state?.()));   // a world loaded for the turn counts from its initial state
     const worlds = [...new Set((reply.segments ?? []).map((sg) => sg.match?.worldId).filter(Boolean))];
     const shown = (tn.shown ?? []).map((x) => {
       const clone = x.bubble.cloneNode(true); clone.querySelectorAll('.p2-chips-row').forEach((n) => n.remove());

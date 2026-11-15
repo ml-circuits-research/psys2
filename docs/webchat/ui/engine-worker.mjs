@@ -85,6 +85,8 @@ function annotateWires(root) {
   return root;
 }
 const stateOf = () => session.state();
+/** Of the before-turn state, the worlds the turn loaded (not in `had`): the page has the others in its own snapshot, so its what-happened diff needs nothing more. */
+const loadedBefore = (before, had) => Object.fromEntries(Object.entries(before ?? {}).filter(([id]) => !had.has(id)));
 const metaOf = () => ({ msg: session._msg, lang: session._sessionLang, weakRo: session._weakRo, language: session.language, memory: memoryOf() });
 /** The discourse / ASTRA memory as JSON, so that a restarted worker gets it back (a failure here must never fail a turn). */
 function memoryOf() { try { return session.memoryJSON(); } catch { return null; } }
@@ -270,10 +272,14 @@ const handlers = {
     if (warming) await warming;
     faultNow = testHooks ? (m.fault ?? null) : null;
     if (m.settings) applySettings(m.settings);
+    const had = new Set(loadedIds);
     // LAZY LOADING: the open tab's world and the worlds the words of the message say it needs, before the turn is read
     // a message in another language is read through its English candidates, which a partial world set can mistake for understood: every world is loaded for it (the word index is English)
     try { const lang = mods.lang.normalize(m.opts?.language ?? m.settings?.language ?? settings.language); if (lang !== 'en') { await mods.translate.loadRoEn?.(); await ensureWorlds(worldLoader.ids(), 'language'); } else { const plan = await worldLoader.plan(m.text, loadedIds); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'message'); } } catch (e) { console.warn('world plan failed', e); }
     let snap = session.snapshot();
+    // TURN BASELINE (reviewer 2026-11-15 03:15 item 5): the state the turn starts from, taken AFTER the lazy loads: a world loaded for this turn is in it with its initial state, so the
+    // page's what-happened diff does not list it as changed "(was none)". Taken again whenever the turn loads more worlds and is read again.
+    let before = stateOf();
     if (m.undoId != null) { snaps.set(m.undoId, snap); if (snaps.size > SNAP_KEEP) snaps.delete(snaps.keys().next().value); }
     let budget = null;
     const newBudget = () => (budgetMod.createBudget ? (() => { try { return budgetMod.createBudget(m.limits ?? undefined); } catch { return null; } })() : null);
@@ -293,13 +299,14 @@ const handlers = {
       if (lacking.length) {
         try { session.restore(snap); } catch { /* keep */ }
         const added = await ensureWorlds(lacking, 'action');
-        if (added.length) { snap = session.snapshot(); if (m.undoId != null) snaps.set(m.undoId, snap); budget = newBudget(); translator.resetUsage?.(); reply = await read(); } else reply = await read();
+        if (added.length) { snap = session.snapshot(); before = stateOf(); if (m.undoId != null) snaps.set(m.undoId, snap); budget = newBudget(); translator.resetUsage?.(); reply = await read(); } else reply = await read();
       }
       if (incomplete(reply) && !allLoaded()) {   // not understood, or understood with words guessed or left out: read it again with every world (the reading is then the one a full start gives)
         try { session.restore(snap); } catch { /* keep */ }
         const added = await ensureWorlds(worldLoader.ids(), 'second reading');
         if (added.length) {
           snap = session.snapshot();
+          before = stateOf();
           if (m.undoId != null) snaps.set(m.undoId, snap);
           budget = newBudget();
           translator.resetUsage?.();
@@ -308,7 +315,7 @@ const handlers = {
       }
       annotateWires(reply);
       noteWorlds(reply);
-      return { reply, state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
+      return { reply, before: loadedBefore(before, had), state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
         budget: budget ? { ticks: budget.ticks, bySite: { ...budget.bySite } } : null, ort: true };
     } finally { active.delete(m.id); lastTurnEnd = performance.now(); faultNow = null; sendOrt(); }
   },
