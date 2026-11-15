@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "230506dd",
-  "tree": "b33804223759cfab",
+  "build": "af80c6ff",
+  "tree": "3d9285447cf3ebc7",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,15 +13,15 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 129,
+   "right": 128,
    "partly": 3,
-   "wrong": 75,
-   "open": 52,
-   "changed": 14,
+   "wrong": 76,
+   "open": 50,
+   "changed": 16,
    "unjudged": 332,
    "outcome": {
-    "executed": 160,
-    "refused": 238,
+    "executed": 157,
+    "refused": 241,
     "asked": 3,
     "not_understood": 109,
     "other_world": 95
@@ -35,7 +35,7 @@
     "owner-log-2026-11-13b": {
      "turns": 63,
      "judged": 11,
-     "right": 2
+     "right": 1
     },
     "owner-log-2026-11-13c": {
      "turns": 24,
@@ -88,15 +88,15 @@
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 129,
+   "right": 128,
    "partly": 3,
-   "wrong": 75,
-   "open": 52,
-   "changed": 14,
+   "wrong": 76,
+   "open": 50,
+   "changed": 16,
    "unjudged": 332,
    "outcome": {
-    "executed": 160,
-    "refused": 238,
+    "executed": 157,
+    "refused": 241,
     "asked": 3,
     "not_understood": 109,
     "other_world": 95
@@ -110,7 +110,7 @@
     "owner-log-2026-11-13b": {
      "turns": 63,
      "judged": 11,
-     "right": 2
+     "right": 1
     },
     "owner-log-2026-11-13c": {
      "turns": 24,
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 383,
- "failing_ops": 383,
+ "failing_matrix": 386,
+ "failing_ops": 386,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -306,7 +306,7 @@
      "verdict": "wrong",
      "text": "make c1 a bit bigger",
      "tab": "diagram",
-     "reply": "I did not understand \"c\", \"1\", \"bit\" here.",
+     "reply": "I did not understand \"bit\" here.",
      "failing": [
       "state:shapes[name=c1].size>62"
      ]
@@ -434,8 +434,8 @@
   },
   {
    "cause": "Romanian: art.draw: acted; the reply does not say what the check asks",
-   "count": 21,
-   "wrong": 21,
+   "count": 22,
+   "wrong": 22,
    "partly": 0,
    "rows": [
     {
@@ -563,7 +563,7 @@
      "verdict": "wrong",
      "text": "muta rata pe lac",
      "tab": "draw",
-     "reply": "Nothing changed. That cannot be done to a place here.",
+     "reply": "Nothing changed. There is no duck here.",
      "failing": []
     },
     {
@@ -629,9 +629,17 @@
      "tab": "draw",
      "reply": "Nothing changed. There is no cow here. I could not do lower: this world does not take place for place.",
      "failing": []
+    },
+    {
+     "id": "r0125",
+     "verdict": "wrong",
+     "text": "muta casa mai sus",
+     "tab": "draw",
+     "reply": "Which house? There are 2.",
+     "failing": []
     }
    ],
-   "both_reasoners": 21
+   "both_reasoners": 22
   },
   {
    "cause": "art.draw: acted; the state is not the expected one",
@@ -1115,8 +1123,8 @@
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 140,
-   "both_reasoners": 140,
+   "count": 145,
+   "both_reasoners": 145,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -1142,8 +1150,8 @@
   },
   {
    "cause": "translation residue / wrong sense / source typo",
-   "count": 34,
-   "both_reasoners": 34,
+   "count": 33,
+   "both_reasoners": 33,
    "examples": [
     {
      "text": "an old woman",
@@ -1331,8 +1339,8 @@
   },
   {
    "cause": "amount / relation / set distribution",
-   "count": 11,
-   "both_reasoners": 11,
+   "count": 10,
+   "both_reasoners": 10,
    "examples": [
     {
      "text": "muta si mai la stinga",
@@ -1416,9 +1424,9 @@
    "both_reasoners": 8,
    "examples": [
     {
-     "text": "o casa si 2 pesti",
+     "text": "fa-mu un desen cu un lac, o rata, o vila, nori, soare ,iarba",
      "tab": "draw",
-     "happened": "I could not plan 2 fish as you said, so I made nothing. [outcome: refused; open]"
+     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; open]"
     },
     {
      "text": "un cer cu 5 nori",
