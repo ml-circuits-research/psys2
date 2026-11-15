@@ -274,6 +274,9 @@ export function createFacts({ source, name = 'catalog' }) {
         if (!w.schema) continue;
         let text = null;
         try { text = await source.text(w.schema); } catch { /* no schema, no slots */ }
+        // a world's English words stored beside it (catalog 34bab7c6, owner's decision 2026-11-15 08:10): the `core.word` wires of its words shard belong to its schema
+        const wordsShard = (w.shards ?? []).find((sh) => /\/shards\/words$/.test(sh.id));
+        if (wordsShard) { try { text = `${text ?? ''}\n${(await source.text(wordsShard.path ?? `${wordsShard.id}.sop`)) ?? ''}`; } catch { /* the schema's own words */ } }
         for (const line of (text ?? '').split('\n')) {
           if (line.charCodeAt(0) !== 64) continue;
           const r = parseFact(line);
