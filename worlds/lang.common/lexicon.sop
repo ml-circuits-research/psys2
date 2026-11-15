@@ -4899,3 +4899,39 @@
     alt=total
     alt=combined
     alt=all
+
+# How a kind differs from the other kinds under the same parent (talk.contrast, the library's contrastOf; real rows r0610, r0611).
+@phrase.lang.talk.contrastlead core.phrase
+    frame=false
+    doc="The lead of a question about what sets a kind apart from its siblings (how is a circle different from other shapes)."
+    alt=how_is
+    alt=how_are
+    alt=how_does
+    alt=in_what_way_is
+    alt=what_is_different_about
+
+@phrase.lang.talk.contrastrel core.phrase
+    frame=false
+    doc="The relation of such a question: different from, unlike the other kinds."
+    alt=different_from
+    alt=different_than
+    alt=different_to
+    alt=differ_from
+    alt=unlike
+
+@phrase.lang.talk.others core.phrase
+    frame=false
+    doc="The siblings named in such a question (the other shapes, all other animals)."
+    alt=other
+    alt=the_other
+    alt=all_other
+    alt=all_the_other
+    alt=any_other
+
+@phrase.lang.talk.special core.phrase
+    frame=false
+    doc="What makes a kind stand out (what makes a square special)."
+    alt=special
+    alt=different
+    alt=unique
+    alt=stand_out

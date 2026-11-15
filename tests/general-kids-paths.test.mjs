@@ -62,3 +62,14 @@ test('rule 4: two inflected forms of one stem are an inflection slip, a word and
   assert.equal(confidentTypo({ from: 'flyes', to: 'flies' }, known), true);
   assert.equal(confidentTypo({ from: 'hint', to: 'mint' }, known), false);
 });
+
+test('the contrast of a kind among its siblings by the library (talk.contrast, contrastOf; real rows r0610, r0611)', async () => {
+  const { createFacts } = await import('../src/knowledge/facts.mjs');
+  const { createKnowledgeSource } = await import('../src/loaders/knowledge-source.mjs');
+  const e = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
+  e.setKnowledge(createFacts({ source: createKnowledgeSource(new URL('./fixtures/catalog', import.meta.url).pathname) }));
+  const s = e.createSession({ language: 'en' });
+  s.setWorldState('ui.shell', { activeTab: 'robot' });
+  assert.match(say(await s.send('how is a circle different from other shapes')), /round shape with no sides/);
+  assert.match(say(await s.send('what makes a square special')), /4 sides/);
+});

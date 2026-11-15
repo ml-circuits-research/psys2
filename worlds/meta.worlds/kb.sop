@@ -298,11 +298,11 @@
     claim=put claim=send claim=shorter claim=show claim=smaller claim=taller claim=undo
     act=planet act=bicycle act=penguin act=part act=duck act=lighthouse act=sun act=spider
     act=cow act=heavier act=taller act=board act=isa act=live act=mix act=scope
-    act=define
+    act=special act=unique act=unlike act=define act=different
     actshared=about actshared=animal actshared=fly actshared=cat actshared=look actshared=touching actshared=bordering actshared=class
     actshared=sleep
-    frame=did_we frame=which_animals frame=which_planet frame=can_penguins frame=can_we frame=what_parts frame=what_shall frame=what_sound
-    frame=where_does frame=do_red
+    frame=did_we frame=which_animals frame=which_planet frame=can_penguins frame=can_we frame=how_is frame=what_makes frame=what_parts
+    frame=what_shall frame=what_sound
     frameshared=what_does frameshared=is_bigger frameshared=what_are frameshared=what_kind frameshared=what_is frameshared=do_you frameshared=which_is frameshared=how_do
     frameshared=what_comes frameshared=what_do
 
@@ -337,7 +337,7 @@
     act=flimble act=followed act=halp act=heard act=ignore act=ignored act=incorrectly act=mishear
     act=misheard act=missed act=misunderstand act=misunderstood act=recognised act=recognized act=zorb act=cannot
     act=caught act=miss act=uh act=accept act=asked act=bard act=batch act=chatgpt
-    act=claude act=confused act=copilot act=different act=explained
+    act=claude act=confused act=copilot act=explained act=few
     actshared=why actshared=recognize actshared=recognise actshared=follow actshared=option actshared=hear
     thing=arith thing=canvas thing=chat thing=drawing thing=editor thing=flowchart thing=keyboard thing=music
     thing=piano thing=shop thing=sketch thing=sketchpad thing=sum thing=talk thing=time
