@@ -27,6 +27,7 @@ import { budget } from './budget.mjs';
 import { en } from '../lang/en.mjs';
 import { GRAMMAR } from './continuation.mjs';
 import { touched } from './followup.mjs';
+import { relativeTurn } from './relative.mjs';
 import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs';
 import { classify, describeReferent, plain } from './meta.mjs';
 import { compareTimes, loadTime } from '../knowledge/time.mjs';
@@ -282,6 +283,11 @@ export class Dialogue {
       const head = await d._readSeg(neg[1], sid);
       if (head && !head.unparsed && !head.ignored?.length) { this._kind = 'correction'; return { rewrite: neg[1], info: { kind: 'repair', how: 'not-clause', dialogue: 'correction', not: neg[2], fragment: text } }; }
     }
+
+    // 7. a relative continuation of the last move ("even higher", "move it further to the left") or a correction of its thing ("not the first house, the one in the middle"):
+    // the roles by the library's resolveEllipsis over the scene (relative.mjs), the request realised in the world's words
+    const rel = await relativeTurn(this, text, sid);
+    if (rel) return rel;
 
     return null;   // "a chart about the current discussion" is not read here: it is a selection of the session things into a view (session.things, spec 23)
   }

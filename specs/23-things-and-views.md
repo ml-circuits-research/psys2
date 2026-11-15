@@ -14,7 +14,7 @@ visual, spatial, relational, numeric, textual, geographic, temporal, social. `as
 ## 4. Views
 A schema world declares `acts.view` (`aspects=`, `word=`); the generator gives it two operations: `<ns>.view` (its declaration) and `<ns>.adopt` (take a thing: the act `make` of the executor with the thing's kind and name, then `change` for each attribute the schema has for that kind; one undo step per act as always). A world that is not a schema world (Talk) writes the two operations itself. The gate of `things.show` is two questions asked in this order, and each refusal is said in plain words:
 1. the thing has at least one aspect the view shows ("A hat has no look to show in..." never reaches the user for a thing that has one);
-2. the view has a kind for it, read at the knowledge tier: an unknown word that the knowledge says is a kind of one of the view's kinds is read as that kind ("a waiter is a kind of person", "A waiter is a kind of guest. I added guest Sam.").
+2. the view has a kind for it, read at the knowledge tier: an unknown word that the knowledge says is a kind of one of the view's kinds is read as that kind ("a waiter is a kind of person", "A waiter is a kind of guest. I added guest Sam."). A word that is already a word of a kind of the view, in any of its singular forms ("houses" -> house, "buses" -> bus), is never read again at the knowledge tier: "3 different houses" stays houses (real set r0042: once the catalog knew "house", the plural was read as "a kind of thing").
 The act `send` of every view (and "send it to X" of Talk) is this one operation; there is no code per pair of views. A view that does not hold the thing named in a `send` hands the words to the store, which knows every thing of the session.
 
 ## 5. Who writes what

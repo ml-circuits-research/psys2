@@ -300,6 +300,7 @@ const POS_FRAMES = [];
 for (const [rv, ev] of [['sus', 'top'], ['jos', 'bottom']]) {
   for (const [rh, eh] of [['stânga', 'left'], ['dreapta', 'right'], ['mijloc', 'middle']]) {
     POS_FRAMES.push({ p: `${rv} în ${rh}`, out: `${ev} ${eh}` }, { p: `${rv} ${rh}`, out: `${ev} ${eh}` }, { p: `${rv}-${rh}`, out: `${ev} ${eh}` });
+    if (rh !== 'mijloc') POS_FRAMES.push({ p: `în ${rh} ${rv}`, out: `in the ${ev} ${eh}` }, { p: `${rh} ${rv}`, out: `${ev} ${eh}` });   // the horizontal side first ("în dreapta sus": in the top right)
   }
 }
 POS_FRAMES.push({ p: 'în centru', out: 'center' }, { p: 'în colțul de sus din stânga', out: 'top left corner' });
