@@ -51,6 +51,13 @@
 @h.change std.schema.honours world=diagram act=change on=attribute on=size of=node
 @h.remove std.schema.honours world=diagram act=remove of=node of=diagram
 @wd.colour core.word text=color text=colour means=colour
-@op.place psys2.op world=diagram act=place op=requestAct
-@op.change psys2.op world=diagram act=change op=requestAct
-@op.remove psys2.op world=diagram act=remove op=requestAct
+# TOOL BINDING (spec 28 section 12; reviewer general-mechanisms item 3): act + roles -> one operation of the world (a tool with no words), the arguments taken from the
+# roles of the request (`arg=<tool argument>:<role path>`, `:=` a constant), the preconditions (`when=<role path>` present, or `<path>=<value>`), the effect it has (data), and the
+# reply facts the host says it with (w.lang.en.reply / w.lang.ro.reply; `{place.value}` is filled from the roles). The first row whose preconditions hold is run.
+@tool.remove psys2.tool world=diagram act=remove op=removeShapes arg="ids:things" effect="the things are no longer there" reply="done.remove"
+@tool.place.dir psys2.tool world=diagram act=place op=moveShapes when="place.relation=direction" arg="ids:things" arg="direction:place.value" effect="the things are one step further that way" reply="done.place.{place.value}"
+@tool.place.next psys2.tool world=diagram act=place op=moveShapes when="place.ids" arg="ids:things" arg="anchor:place.ids" arg="relation:place.relation" effect="the things are next to (or in) the thing named" reply="done.place.next"
+@tool.place.into psys2.tool world=diagram act=place op=moveShapes when="place.value" when="place.relation=in" arg="ids:things" arg="region:place.value" effect="the things are in the region named" reply="done.place.into"
+@tool.place.region psys2.tool world=diagram act=place op=moveShapes when="place.value" arg="ids:things" arg="region:place.value" effect="the things are in the region named" reply="done.place.region"
+@tool.change.attr psys2.tool world=diagram act=change op=setShapes when="attribute" arg="ids:things" arg="attribute:attribute" arg="value:value" effect="the things have the value" reply="done.change"
+@tool.change.size psys2.tool world=diagram act=change op=setShapes when="size" arg="ids:things" arg="attribute:=size" arg="value:size.value" arg="step:size.step" effect="the things have the size, or one step more or less" reply="done.change.size.{size.step}"

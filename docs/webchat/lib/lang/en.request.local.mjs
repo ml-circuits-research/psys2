@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // What the catalog's request words (w.lang.en.cue, catalog pin 0966924e) lack yet, in the catalog's own shape, told after the bundled facts (src/dialog/request.mjs requestLanguage).
+// The reply rows (w.lang.en.reply) say the door's acts on things and its honest answers (Q43 [KNOW]).
 // Each row goes when the catalog publishes a cue of that meaning (questions.md Q41 [KNOW]). Data only: no code reads these rows by name.
 export const REQUEST_LOCAL = `
 @w.lang.en.cue.local.reduce w.lang.en.cue name=reaction.reduce.more on=reaction value=reduce step=down lead="too long" lead="not so many" lead="not that many" lead="not so much" lead="shorter" lead="too large" lead="less of them" takes=none priority=3 example="not so many nodes"
@@ -19,4 +20,45 @@ export const REQUEST_LOCAL = `
 @w.lang.en.pron.local.any w.lang.en.pron text=something text=anything text="whatever you want" text="anything you want" text="whatever you like" text="what you want" refers=any example="draw something random"
 @k.actions.verb.local.start k.actions.verb text=start act=make sense=1 gloss="bring into being; begin a new one" object=thing
 @k.actions.verb.local.begin k.actions.verb text=begin act=make sense=1 gloss="start a new one" object=thing
+@w.lang.en.reply.local.place_up_1 w.lang.en.reply name=done.place.up count=one act=place role=thing text="I moved the {thing} up."
+@w.lang.en.reply.local.place_up_n w.lang.en.reply name=done.place.up count=other act=place role=thing role=number text="I moved the {number} {thing:num=pl} up."
+@w.lang.en.reply.local.place_up_name w.lang.en.reply name=done.place.up act=place role=name text="I moved {name} up."
+@w.lang.en.reply.local.place_down_1 w.lang.en.reply name=done.place.down count=one act=place role=thing text="I moved the {thing} down."
+@w.lang.en.reply.local.place_down_n w.lang.en.reply name=done.place.down count=other act=place role=thing role=number text="I moved the {number} {thing:num=pl} down."
+@w.lang.en.reply.local.place_down_name w.lang.en.reply name=done.place.down act=place role=name text="I moved {name} down."
+@w.lang.en.reply.local.place_left_1 w.lang.en.reply name=done.place.left count=one act=place role=thing text="I moved the {thing} to the left side."
+@w.lang.en.reply.local.place_left_n w.lang.en.reply name=done.place.left count=other act=place role=thing role=number text="I moved the {number} {thing:num=pl} to the left side."
+@w.lang.en.reply.local.place_left_name w.lang.en.reply name=done.place.left act=place role=name text="I moved {name} to the left side."
+@w.lang.en.reply.local.place_right_1 w.lang.en.reply name=done.place.right count=one act=place role=thing text="I moved the {thing} to the right side."
+@w.lang.en.reply.local.place_right_n w.lang.en.reply name=done.place.right count=other act=place role=thing role=number text="I moved the {number} {thing:num=pl} to the right side."
+@w.lang.en.reply.local.place_right_name w.lang.en.reply name=done.place.right act=place role=name text="I moved {name} to the right side."
+@w.lang.en.reply.local.place_next_1 w.lang.en.reply name=done.place.next count=one act=place role=thing role=target text="I moved the {thing} next to the {target}."
+@w.lang.en.reply.local.place_next_n w.lang.en.reply name=done.place.next count=other act=place role=thing role=number role=target text="I moved the {number} {thing:num=pl} next to the {target}."
+@w.lang.en.reply.local.place_next_name w.lang.en.reply name=done.place.next act=place role=name role=target text="I moved {name} next to {target}."
+@w.lang.en.reply.local.place_region_1 w.lang.en.reply name=done.place.region count=one act=place role=thing role=region text="I moved the {thing} to the {region}."
+@w.lang.en.reply.local.place_region_n w.lang.en.reply name=done.place.region count=other act=place role=thing role=number role=region text="I moved the {number} {thing:num=pl} to the {region}."
+@w.lang.en.reply.local.place_region_name w.lang.en.reply name=done.place.region act=place role=name role=region text="I moved {name} to the {region}."
+@w.lang.en.reply.local.place_into_1 w.lang.en.reply name=done.place.into count=one act=place role=thing role=region text="I moved the {thing} into the {region}."
+@w.lang.en.reply.local.place_into_n w.lang.en.reply name=done.place.into count=other act=place role=thing role=number role=region text="I moved the {number} {thing:num=pl} into the {region}."
+@w.lang.en.reply.local.place_none_1 w.lang.en.reply name=done.none count=one role=thing text="The {thing} is already there."
+@w.lang.en.reply.local.place_none_n w.lang.en.reply name=done.none count=other role=thing role=number text="The {number} {thing:num=pl} are already there."
+@w.lang.en.reply.local.place_none_name w.lang.en.reply name=done.none role=name text="{name} is already there."
+@w.lang.en.reply.local.added_band w.lang.en.reply name=done.added.band role=band text="There was no {band}, so I added it to the ground."
+@w.lang.en.reply.local.change_name w.lang.en.reply name=done.change act=change role=name role=value text="{name} is {value} now."
+@w.lang.en.reply.local.size_up_1 w.lang.en.reply name=done.change.size.up count=one act=change role=thing text="The {thing} is bigger now."
+@w.lang.en.reply.local.size_up_n w.lang.en.reply name=done.change.size.up count=other act=change role=thing role=number text="The {number} {thing:num=pl} are bigger now."
+@w.lang.en.reply.local.size_up_name w.lang.en.reply name=done.change.size.up act=change role=name text="{name} is bigger now."
+@w.lang.en.reply.local.size_down_1 w.lang.en.reply name=done.change.size.down count=one act=change role=thing text="The {thing} is smaller now."
+@w.lang.en.reply.local.size_down_n w.lang.en.reply name=done.change.size.down count=other act=change role=thing role=number text="The {number} {thing:num=pl} are smaller now."
+@w.lang.en.reply.local.size_down_name w.lang.en.reply name=done.change.size.down act=change role=name text="{name} is smaller now."
+@w.lang.en.reply.local.remove_name w.lang.en.reply name=done.remove act=remove role=name text="I removed {name}."
+@w.lang.en.reply.local.remove_n w.lang.en.reply name=done.remove count=other act=remove role=thing role=number text="I removed the {number} {thing:num=pl}."
+@w.lang.en.reply.local.no_things w.lang.en.reply name=cannot.no_things role=thing role=world text="There is no {thing} in the {world}."
+@w.lang.en.reply.local.no_things_any w.lang.en.reply name=cannot.no_things role=world text="There is nothing like that in the {world}."
+@w.lang.en.reply.local.no_place w.lang.en.reply name=cannot.no_place text="Where should it go? You can say, for example, \\"move the tree to the left\\", \\"put the cat next to the house\\" or \\"move it to the top right corner\\"."
+@w.lang.en.reply.local.no_value w.lang.en.reply name=cannot.no_value text="What should change, and to what? The colour or the size."
+@w.lang.en.reply.local.refused w.lang.en.reply name=cannot.refused text="I could not do that."
+@w.lang.en.reply.local.which w.lang.en.reply name=ask.which role=thing role=list text="Which {thing} do you mean: {list}?"
+@w.lang.en.reply.local.not_act w.lang.en.reply name=cannot.act role=act role=thing role=world text="I cannot {act} the {thing} in the {world} yet."
+@w.lang.en.reply.local.not_key w.lang.en.reply name=cannot.key role=words role=world text="I cannot do \\"{words}\\" in the {world} yet."
 `;

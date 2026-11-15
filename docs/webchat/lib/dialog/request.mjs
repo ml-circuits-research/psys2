@@ -12,7 +12,7 @@
  */
 import { budget } from './budget.mjs?v=00bce6e369';
 import { BUNDLED_REQUEST } from '../knowledge/bundled-request.mjs?v=d6c9c5d2e1';
-import { REQUEST_LOCAL } from '../lang/en.request.local.mjs?v=a4d4a773fa';
+import { REQUEST_LOCAL } from '../lang/en.request.local.mjs?v=e3c756194a';
 
 const STOP = new Set('a an the of to in on at for with and or but is are was were be been being it its this that these those there here i you he she we they me my your our his her their them us do does did please just also so then very some any can could would should will shall may might must have has had am get got let lets want like one'.split(' '));
 
@@ -198,7 +198,7 @@ export function referTo(q, state, { lastIds = [], wholes = new Set(), words = nu
   const kinds = [...new Set([...said.map((c) => c.value), ...(target && !said.length ? [target] : [])])];
   const hit = kinds.flatMap((k) => things.filter((t) => t.kind === k));
   if (hit.length) {
-    const plural = said.some((c) => c.plural || c.number !== undefined);
+    const plural = said.some((c) => c.plural || c.number !== undefined) || [...all].some((t) => low.includes(` ${t} `));   // "all the fish": the pronoun of all with a kind
     if (plural || hit.length === 1) return { ids: hit.map((t) => t.id), how: 'kind', kinds, consumed };
     const sal = hit.filter((t) => lastIds.includes(t.id) || t.salient);
     return { ids: (sal.length && sal.length < hit.length ? sal : hit).map((t) => t.id), how: sal.length && sal.length < hit.length ? 'kind+salient' : 'kind', kinds, consumed, several: !(sal.length && sal.length < hit.length) };
@@ -303,6 +303,54 @@ export function saysAnything(english, language) {
   const any = ofType(language, 'w.lang.en.pron').filter((r) => one(r, 'refers') === 'any').flatMap((r) => (r.text ?? []).map((t) => String(t).replace(/^"|"$/g, '').toLowerCase()));
   const low = ` ${String(english ?? '').toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, ' ').replace(/\s+/g, ' ')} `;
   return any.some((t) => low.includes(` ${t} `));
+}
+
+/**
+ * TOOL BINDING (spec 28 section 12; reviewer general-mechanisms item 3): the rows `psys2.tool world= act= op= when= arg= effect= reply=` of a live world, as data. A row binds an
+ * act to one operation of the world (a tool with no words); `arg="<tool argument>:<role path>"` takes an argument from the roles of the request (`:=<value>` a constant);
+ * `when="<role path>"` (present) or `when="<role path>=<value>"` are its preconditions; `reply` names the reply fact the host says it with (`{<role path>}` filled from the roles).
+ * Host stand-in until the library publishes the binding and runPlan carries it out (questions.md Q42 (3), (14)).
+ */
+const unq = (x) => String(x ?? '').replace(/^"|"$/g, '');
+export function toolBindings(live, act) {
+  return ofType(live, 'psys2.tool').filter((r) => one(r, 'act') === act).map((r) => ({
+    op: one(r, 'op'), when: (r.when ?? []).map(unq), reply: unq(r.reply?.[0] ?? ''), effect: unq(r.effect?.[0] ?? ''),
+    args: (r.arg ?? []).map(unq).map((a) => { const k = a.indexOf(':'); return [a.slice(0, k), a.slice(k + 1)]; }),
+  }));
+}
+/** A role of the request by its path ("place.value", "things"), or the constant of a `=value` path. */
+export function roleAt(roles, path) {
+  if (String(path).startsWith('=')) return String(path).slice(1);
+  let v = roles;
+  for (const k of String(path).split('.')) { if (v == null) return undefined; v = v[k]; }
+  return v;
+}
+const present = (v) => v != null && v !== '' && !(Array.isArray(v) && !v.length);
+/** The first binding of an act whose preconditions hold for the roles, with its arguments and its reply name; null when none holds. */
+export function bindingFor(live, act, roles) {
+  for (const b of toolBindings(live, act)) {
+    budget.tick('door.binding');
+    const holds = b.when.every((w) => { const k = w.indexOf('='); return k < 0 ? present(roleAt(roles, w)) : String(roleAt(roles, w.slice(0, k)) ?? '') === w.slice(k + 1); });
+    if (!holds) continue;
+    const args = Object.fromEntries(b.args.map(([name, path]) => [name, roleAt(roles, path)]).filter(([, v]) => v !== undefined && v !== null));
+    const reply = b.reply.replace(/\{([\w.]+)\}/g, (_, p) => String(roleAt(roles, p) ?? ''));
+    return { ...b, args, reply: reply.replace(/\.+$/, '') };
+  }
+  return null;
+}
+/**
+ * A sentence of the language world's reply facts (`w.lang.en.reply name= role= text=`, through the library's replyFrom), trying the name and then the names it extends
+ * ("done.change.size.up", "done.change.size", "done.change"); null when there is none (the caller then has nothing to say from data, and says so).
+ */
+export function replyOf(lib, language, name, roles) {
+  const given = Object.fromEntries(Object.entries(roles ?? {}).filter(([, v]) => v != null && v !== ''));
+  for (let n = String(name ?? ''); n; n = n.includes('.') ? n.slice(0, n.lastIndexOf('.')) : '') {
+    budget.tick('door.reply');
+    let t = null;
+    try { t = lib.replyFrom?.(language, n, given) ?? null; } catch { t = null; }
+    if (t) return { name: n, text: typeof t === 'string' ? t : t.text ?? String(t) };
+  }
+  return null;
 }
 
 /** The live w.dialogue of a session: per tab world { request, result, before }. JSON in the memory and the snapshot. */

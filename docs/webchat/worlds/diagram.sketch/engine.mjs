@@ -871,7 +871,7 @@ export function referents(ctx) {
   const s = ensure(ctx);
   const salient = new Set(s.last ?? []);
   return s.shapes.filter((x) => x.layer !== 'background').map((x) => ({
-    id: x.name, kind: x.shape, name: x.name, noun: x.shape, words: [x.shape, x.name.toLowerCase()],
+    id: x.name, kind: x.shape, ...(ID_RE.test(String(x.name)) ? {} : { name: x.name }), noun: x.shape,   // a name the engine gave (c1) is an id, not a name words: [x.shape, x.name.toLowerCase()],
     attrs: { color: x.color, size: x.size, x: x.x, y: x.y }, salient: salient.has(x.name), sig: JSON.stringify([x.name, x.shape, x.x, x.y, x.size, x.color, x.label]),
   }));
 }
@@ -957,45 +957,41 @@ export function requestResult(ctx, { before = null } = {}) {
 }
 
 /**
- * AN ACT ON SHAPES THAT ARE THERE (spec 28 section 12; request.sop `psys2.op act=place|change|remove op=requestAct`): the door resolved the shapes (`a.ids`: their names) and read
- * the roles; the engine carries them out with its own commands (move, set, delete), one step. `a`: { act, ids, place: { value, relation, ids }, attribute, value, size: { value, step } }.
+ * TOOLS OF THE DIAGRAM (spec 28 section 12): the engine's own commands (delete, move, set, resize) on shapes named by the host, with no words. Arguments: `ids` (shape names), a
+ * direction (up, down, left, right), a region id (the canvas regions of the engine: top, bottom, left, right, centre, corner, top_left ...), the ids of a shape to go next to, an
+ * attribute (colour, size) and a value (a colour; a step of the scale) or a step (up / down). One undo step each. Result: { status, changed: [names] } or { status: 'missing', code }.
+ * Bound in request.sop (psys2.tool); the host says what was done from the language world's reply facts.
  */
-const SPOT = { centre: 'center', center: 'center', top: 'top', bottom: 'bottom', left: 'left', right: 'right', top_left: 'topLeft', top_right: 'topRight', bottom_left: 'bottomLeft', bottom_right: 'bottomRight', corner: 'bottomLeft' };
+const SPOT = { centre: 'center', center: 'center', top: 'top', bottom: 'bottom', left: 'left', right: 'right', top_left: 'topLeft', top_right: 'topRight', bottom_left: 'bottomLeft', bottom_right: 'bottomRight', corner: 'bottomLeft' };   // the region ids of the requests in the engine's names
 const ENGINE_SIZE = { tiny: 'tiny', small: 'small', medium: 'medium', default: 'medium', big: 'large', large: 'large', huge: 'huge' };
-export function requestAct(ctx, a = {}) {
+function shapeTool(ctx, ids, args) {
   if (!K) return NOT_READY();
   const s = ensure(ctx);
-  const names = (a.ids ?? []).filter((n) => s.shapes.some((x) => x.name === n));
-  if (!names.length) return no('There is no such shape in the diagram.', 'missing');
-  let args = null;
-  if (a.act === 'remove') args = { action: 'delete', target: names };
-  else if (a.act === 'place') {
-    const p = String(a.place?.value ?? '');
-    const anchor = (a.place?.ids ?? []).find((n) => s.shapes.some((x) => x.name === n));
-    if (['up', 'down', 'left', 'right'].includes(p) && a.place?.relation === 'direction') args = { action: 'move', target: names, direction: p };
-    else if (SPOT[p]) args = { action: 'move', target: names, region: SPOT[p] };
-    else if (anchor) args = { action: 'move', target: names, position: 'rightOf', anchor };
-    else return no(`Where should ${names.join(' and ')} go? For example "up", "to the left" or "to the middle".`, 'missing');
-  } else if (a.act === 'change') {
-    if (a.attribute === 'colour' && a.value) args = { action: 'set', target: names, color: String(a.value).toLowerCase() };
-    else if (a.size?.value && ENGINE_SIZE[a.size.value]) args = { action: 'set', target: names, size: ENGINE_SIZE[a.size.value] };
-    else if (a.size?.step) args = { action: 'resize', target: names, scale: a.size.step === 'up' ? 1.5 : 0.67 };
-    else return no(`What should change about ${names.join(' and ')}? A colour or a size.`, 'missing');
-  } else return no(`I cannot ${a.act} shapes yet.`, 'unsupported');
-  const at0 = new Map(s.shapes.map((x) => [x.name, `${x.x},${x.y}`]));
-  const r = execute(ctx, s, [{ id: 'ra1', type: 'command', args }], { place: false });
-  if (r.status === 'supported') s.last = names.filter((n) => s.shapes.some((x) => x.name === n));
-  // a move that left every shape where it was: it is already at that edge (said plainly, not "nothing changed")
-  if (r.status === 'supported' && args.action === 'move' && names.every((n) => at0.get(n) === (() => { const x = s.shapes.find((q) => q.name === n); return x ? `${x.x},${x.y}` : null; })())) {
-    const edge = { up: 'up', down: 'down', left: 'on the left side', right: 'on the right side' }[args.direction];   // plain words that survive the translation of the reply
-    return ok(`${names.join(' and ')} ${names.length > 1 ? 'are' : 'is'} already ${edge ?? 'there'}.`, { names, plain: true });
-  }
-  if (r.status === 'supported' && names.length > 2 && args.action !== 'move') {   // many shapes: one sentence, not one per shape
-    const what = args.action === 'delete' ? `I deleted ${names.length} shapes.` : args.color ? `I made ${names.length} shapes ${args.color}.` : `I changed the size of ${names.length} shapes.`;
-    return { ...r, value: what, note: what, names: [] };
-  }
-  return r.status === 'supported' ? { ...r, names } : r;
+  const names = (ids ?? []).filter((n) => s.shapes.some((x) => x.name === n));
+  if (!names.length) return { status: 'missing', value: '', code: 'no_things' };
+  const a = args(names);
+  if (!a) return { status: 'missing', value: '', code: 'no_place' };
+  const at0 = JSON.stringify(s.shapes.filter((x) => names.includes(x.name)).map((x) => [x.x, x.y, x.color, x.size, x.w, x.h]));
+  const r = execute(ctx, s, [{ id: 'tool1', type: 'command', args: a }], { place: false });
+  if (r.status !== 'supported') return { status: r.status, value: '', code: 'refused' };
+  s.last = names.filter((n) => s.shapes.some((x) => x.name === n));
+  const now = JSON.stringify(s.shapes.filter((x) => names.includes(x.name)).map((x) => [x.x, x.y, x.color, x.size, x.w, x.h]));
+  return { status: 'supported', value: '', changed: a.action === 'delete' || now !== at0 ? names : [] };
 }
+export const removeShapes = (ctx, { ids } = {}) => shapeTool(ctx, ids, (names) => ({ action: 'delete', target: names }));
+export const moveShapes = (ctx, { ids, direction = null, region = null, anchor = null } = {}) => shapeTool(ctx, ids, (names) => {
+  const to = [].concat(anchor ?? []).find((n) => ensure(ctx).shapes.some((x) => x.name === n));
+  if (['up', 'down', 'left', 'right'].includes(direction)) return { action: 'move', target: names, direction };
+  if (to) return { action: 'move', target: names, position: 'rightOf', anchor: to };
+  if (SPOT[region]) return { action: 'move', target: names, region: SPOT[region] };
+  return null;
+});
+export const setShapes = (ctx, { ids, attribute, value = null, step = null } = {}) => shapeTool(ctx, ids, (names) => {
+  if (attribute === 'colour' && value) return { action: 'set', target: names, color: String(value).toLowerCase() };
+  if (attribute === 'size' && value && ENGINE_SIZE[value]) return { action: 'set', target: names, size: ENGINE_SIZE[value] };
+  if (attribute === 'size' && step) return { action: 'resize', target: names, scale: step === 'up' ? 1.5 : 0.67 };
+  return null;
+});
 
 /**
  * ARROWS FOR THE NODES THAT HAVE NONE ("add arrows", a request whose target is the link): every node with no arrow is joined to the node before it in reading order (top to bottom,
