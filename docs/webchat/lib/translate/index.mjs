@@ -9,7 +9,7 @@
 // `text` and reported in the extra field `untranslatable: [{span, reason}]` (confidence 0).
 import { tokenize, foldKey } from './normalize.mjs?v=6d473eb091';
 import { analyze, placeOf, surfaceForms } from './morphology.ro.mjs?v=1a500300fa';
-import { frameMoveRoEn, loadFramesRo, langRoNow } from './frames-ro.mjs?v=09a1017623';
+import { frameMoveRoEn, loadFramesRo, langRoNow } from './frames-ro.mjs?v=c9ca0155f1';
 import { within } from './candidates.mjs?v=a988f52d3d';
 import { pluralEn, pastEn } from './inflect.en.mjs?v=5b2e62d57a';
 import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord, knownEnglishWord } from './en-ro.mjs?v=1e1308212f';

@@ -9,13 +9,14 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=d967893f3a';
+import { composeReply, sayOf } from './composed-reply.mjs?v=13cd016837';
 import { reviewForeign } from './foreign-reading.mjs?v=ce2e99c912';
 import { installTextGen } from './textgen.mjs?v=4c75b0d4e4';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=a815012811';
 import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=1f3f8df5d4';
 import { validateWorldSet } from '../worlds/validate.mjs?v=86a765f9e1';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=a815012811';
+import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=c37d822d31';
 import { createInterpreter } from '../interpreter/index.mjs?v=35597183c4';
 import { createReasoner } from '../reasoner/index.mjs?v=01b551450f';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=78993c3573';
@@ -211,6 +212,12 @@ export async function translateParts(parts, translator, lang, userWords = null, 
     // translators are for free text)
     const say = run.length === 1 && run[0].say && lang !== 'en' && compose ? await compose(run[0].say, lang) : null;
     if (say) { out.push({ text: fitFragment(src, say), translate: true, src }); routes.push('composed'); continue; }
+    // several composed sentences in a row ("Moved alfa up. Moved beta up."): each from its template, when every one of them has one
+    if (run.length > 1 && lang !== 'en' && compose && run.every((p) => p.say || (p.join && !p.text.trim()))) {
+      const each = [];
+      for (const p of run) { if (!p.say) { each.push(p.text); continue; } const t = await compose(p.say, lang); if (!t) break; each.push(fitFragment(p.text, t)); }
+      if (each.length === run.length) { out.push({ text: each.join(''), translate: true, src }); routes.push('composed'); continue; }
+    }
     const c = await choose(src, { fallback: run.length === 1 ? run[0].fallback : null });
     if (c.route) { out.push({ text: fitFragment(src, c.text), translate: true, src }); routes.push(c.route); continue; }
     if (c.incomplete) complete = false;
@@ -1045,11 +1052,93 @@ export class DialogSession {
     return null;
   }
 
+  /**
+   * THE OPEN TAB'S WORLD HAS A STRONG PRIOR (class D, reviewer 2026-11-15 10:00 item 3; spec 03 section 7.9e): another world that owns a tab takes a turn only when the message names
+   * it or its things. A reading of such a world that the message does not name is not its reading when
+   *   (a) the only words it took as its own things are indefinite ("something", "anything": the phrase group lang.quant.something): "draw something random" on the Diagram tab
+   *       is no Documents paragraph about "random"; or
+   *   (b) a catch-all slot swallows most of the sentence and holds none of that world's words: "move the elements logically to the three levels" on the Drawing tab is no
+   *       transposition in Music.
+   * The open world then reads the message alone: as it is, then with the indefinite said as the world's own thing ("something random" -> "a random diagram", then "a diagram");
+   * when it cannot, the foreign reading is dropped (the open world answers that it did not understand), never carried out. Returns the segments or null (nothing to do).
+   */
+  async _openTabPrior(english, res, opts) {
+    const ctx = opts.context ?? this.context(), T = ctx.tabWorld;
+    if (!T || !res.segments.length) return null;
+    const { set, formalizers, interp } = this.engine;
+    if (!set.get(T)?.patterns?.length) return null;
+    const SKIP = new Set(['ui.shell', 'ui.help', 'core', 'lang.common', 'talk']);
+    // a world is named by one of its names, unless that name is a word the open world reads itself ("draw" names the Drawing tab, and the Diagram draws too)
+    const tabVocab = worldVocabulary(set, T), padded = ` ${english.toLowerCase().match(/[a-z0-9]+/g)?.join(' ') ?? ''} `;
+    const tabPatterns = (set.get(T)?.patterns ?? []).map((p) => String(p.match ?? '')).join(' ').toLowerCase();
+    const ownWord = (n) => new RegExp(`(?<![a-z])${n}(?![a-z])`).test(tabPatterns);   // a word of the open world's own patterns
+    const named = new Set([...namingTables(set).names].filter(([w, list]) => list.some((n) => padded.includes(` ${n} `) && (n.includes(' ') || w === T || !ownWord(n)))).map(([w]) => w));
+    const indef = new Set(interp.lang.phrase?.('lang.quant.something') ?? []);
+    const words = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
+    const free = (sl) => sl.class === 'rest' || sl.class === 'words';
+    const notNamed = (x) => {
+      budget.tick('dialog.prior');
+      const w = x.match?.worldId;
+      if (!w || w === T || SKIP.has(w) || named.has(w) || !tabOfWorld(set, w) || x.unparsed) return false;
+      const slots = Object.values(x.match?.slots ?? {});
+      const own = slots.filter((sl) => !free(sl)).map((sl) => String(sl.text ?? sl.value ?? '').toLowerCase().trim()).filter(Boolean);
+      if (own.length && own.every((t) => indef.has(t.replace(/^(?:a|an|the|some)\s+/, '')))) return true;   // (a)
+      const vocab = worldVocabulary(set, w);
+      const fw = slots.filter(free).flatMap((sl) => words(sl.text ?? sl.value)), total = words(x.text ?? english).length || 1;
+      if (fw.length * 2 > total && !fw.some((t) => content(t) && vocab.has(t))) return true;   // (b)
+      // (c) every content word of the clause is a word the open world reads itself (the indefinites aside): the other world brings nothing of its own; it yields only to a reading of the open world
+      const all = words(x.text ?? english), cw = all.filter((t) => content(t) && !anyWords.has(t));
+      if (all.some((t) => indef.has(t)) && cw.length && cw.every((t) => tabVocab.has(t))) { soft.add(x); return true; }   // only for a request of something unspecified
+      return false;
+    };
+    const content = (t) => t.length >= 3 && !FUNCTION_WORDS.has(t) && !isNumberWord(t) && ordinalWordValue(t) == null;   // a number is no word of a world
+    const soft = new Set();
+    const anyWords = new Set([...indef, ...(interp.lang.phrase?.('lang.intent.surpriseme') ?? [])].flatMap((p) => p.split(/\s+/)));   // the words of asking for anything / something random (lang.common): no world's own
+    const bad = res.segments.filter(notNamed);
+    if (!bad.length) return null;
+    // the open world alone reads the message: as it is, then with the indefinite said as its own thing
+    const only = set.list().filter((w) => w.id === T || SKIP.has(w.id));
+    const view = Object.create(set);
+    view._cache = new Map();
+    view.parent = set.parent ?? set;
+    view.list = () => only;
+    const lower = english.toLowerCase();
+    const names = (namingTables(set).names.get(T) ?? []).filter((n) => /^[a-z]+$/.test(n));   // the world's own name, singular, not a word of the message ("draw" is the verb: "drawing")
+    const noun = names.find((n) => !(n.endsWith('s') && names.includes(n.slice(0, -1))) && !new RegExp(`\\b${n}\\b`).test(lower));
+    const texts = [];
+    const ind = [...indef].sort((a, b) => b.length - a.length).find((i) => new RegExp(`\\b${i}\\b`, 'i').test(english));
+    if (ind && noun) {
+      const m = new RegExp(`\\b${ind}((?:\\s+[a-z]+)?)\\s*([.!?]*)$`, 'i').exec(english);   // "something random" at the end: the word after it describes it
+      if (m) {
+        const adj = m[1].trim(), head = english.slice(0, m.index);
+        if (adj && !FUNCTION_WORDS.has(adj.toLowerCase())) texts.push(`${head}a ${adj} ${noun}${m[2]}`);
+        texts.push(`${head}a ${noun}${m[2]}`);
+      }
+    }
+    texts.push(english);
+    for (const t of texts) {
+      let r;
+      try { r = await formalizers.rules.formalize(t, { ...opts, worlds: view }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; continue; }
+      if (!r.segments.length || r.segments.some((x) => x.unparsed || x.partial || x.ignored?.length || isIncomplete(x) || (x.match?.worldId !== T && !SKIP.has(x.match?.worldId)))) continue;
+      await this._prepareWorldsOf(r.segments);
+      const st = this._dryStatuses(r.segments);
+      if (st.some((x) => x === 'unsupported' || x === 'error')) continue;
+      r.segments.forEach((x) => { x.strategy = 'rules'; if (t !== english) x.prior = { from: english, read: t }; });
+      return { segments: r.segments, wires: r.segments.flatMap((x) => x.wires) };
+    }
+    // the open world cannot read it either: the foreign reading is dropped, never carried out (the open world says what it did not understand); a reading set aside by (c) alone stays
+    if (bad.every((x) => soft.has(x))) return null;
+    const segments = res.segments.map((x) => (bad.includes(x) ? { ...x, unparsed: true, wires: [], match: null, alternatives: [], errors: [], corrections: [], ignored: [] } : x));
+    return { segments, wires: segments.flatMap((x) => x.wires) };
+  }
+
   async _capability(english, res, opts, lenient) {
     const story = await this._oneStory(english, res, opts);
     if (story) return story;
     const rep = await this._nameRepair(english, res, opts, lenient);
     if (rep) return rep;
+    const prior = await this._openTabPrior(english, res, opts);
+    if (prior) return prior;
     const r = await this._capabilityRead(english, res, opts, lenient);
     if (r) return r;
     const owner = await this._tabOwnsAct(english, res, opts);
@@ -1239,7 +1328,7 @@ export class DialogSession {
     const enc = preferred === 'encoder' ? formalizers.encoder : null;
     let usable = false, encoderError = null;
     try { usable = !!enc && !!(await perf.time('encoder.available', () => guard.abortable(enc.available(), 'encoder.available'))) && set.list().some((w) => enc.supports(w)); } catch (e) { usable = false; if (e instanceof TurnAborted) throw e; this._noteModelTimeout('encoder.available', e); }
-    if (usable && lenient.fastPath) { const quick = await this._quickRules(english, opts); if (quick) return quick; }
+    if (usable && lenient.fastPath) { const quick = await this._quickRules(english, opts); if (quick) return (await this._openTabPrior(english, quick, opts)) ?? quick; }   // the fast path keeps the open tab's prior (class D)
     if (usable) {
       try {
         const res = await perf.time('encoder', () => guard.abortable(enc.formalize(english, opts), 'encoder'));
