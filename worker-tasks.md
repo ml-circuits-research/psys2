@@ -4700,3 +4700,44 @@ Owner: my role is consolidation of the general mechanisms. The page in soplang-w
 Also seen, for the list: "wide", "meadow", "taller" unread in Drawing / Diagram (extent words exist in knowledge: is `on=extent` joined to its words? meadow = a whole the catalog lacks → [KNOW]).
 
 Order stays yours (acts with executors, state as facts); 1(a) first if it is one line in the source priors, since it damages turns that were read right.
+
+## Reviewer 2026-11-15 20:45 — OWNER ORDER: the glue between a live world and the generic mechanisms must be declarative. Today it is JavaScript. This is the next work, before new tabs.
+
+**Owner (19:27, sense):** the link between a tab's live world and knowledge / generic worlds must be SOP wires that translate to the generic engines. Only the concrete actions of local tools are code (perhaps some custom constraints and searches). Parameter matching, parameter detection, decisions must come from general mechanisms over knowledge and schema worlds. Passing cases through hard-coding in live-world code does not count as passing.
+
+**What I read on d501f887 (my own reading, not a report):** each declared tab has a hand-written JS `planRequest` / `requestAct` between the library's plan and the tool. `request.sop` declares kinds, honours, `psys2.op`, `std.schema.drawn` (good), but the op bound is the glue function itself (`op=requestAct`), not a tool primitive. In that JS:
+
+| Where | What it decides in code (should be wires) |
+|---|---|
+| `worlds/art.draw/engine.mjs` planRequest (2393–2447) | size synonyms (`small\|tiny → small`, `big\|huge → big`); default place by size (`small → corner`, else bottom); parts placed `next to the <main>`; literals `'sky'`, `"water"` ("a pond is its water"), `GROUND_WORDS`, `PLACE`; reads `goal.request.facts` itself for colour; 29 English reply sentences ("I drew a … It has …"), a/an and plural rules |
+| `worlds/diagram.sketch/engine.mjs` planRequest (1030–~1120) | default range `[5, 9]`; default kind `'circle'`; shape pools `['rectangle','diamond','ellipse','circle']`; shape by role (start / branch / leaf) computed in code; "not all X" alternation rule; row if ≤ 6 else grid; cut to n by BFS; fill labels `Step k`; `'link'` special-cased; 10 reply sentences |
+| `worlds/docs.editor/textgen.mjs` planRequest (82–113) | default words `[150, 300]`, small × 0.4, big × 3, max 12 chapters; trimming rule; reply rewritten by regex (`/in \d+ chapters?/`); 7 reply sentences |
+| the door, `src/dialog/index.mjs` `_door*` + `src/dialog/request.mjs` (409 lines, 23 functions) | stand-ins: `coordinated`, `withSubkindsNegated`, `definiteKind`, general whole → subkind, makes-place, re-plan without `expect`; `/^executor/.test(why)`; 26 reply sentences |
+
+So the request is read and planned generically, and then a per-world program re-decides values and writes the sentence. Rows that pass through this are **not generic passes**. From now on every number is reported in two columns: "through declared binding only" and "through hand-written glue"; only the first counts for acceptance.
+
+### The rule (goes into AGENTS.md and the library's skills)
+JS of a live world may contain only:
+1. **tool primitives** — small operations with typed parameters and no reading of the request (`add(kind, n, size, colour, where)`, `link(a, b)`, `background(kind, colour)`, `setLayout(name, ids)`, `insertSection(title, text)`, undo / redo);
+2. **the view** — the tool's state as facts (what is there, with ids, kinds, attributes, places);
+3. **named custom constraints / searches**, each declared in the world's `.sop` with its signature, and only where a wire cannot say it.
+
+Forbidden there: reading request facts, word or synonym tables, default values, choice of count / kind / shape / place, reply sentences, regex over user text or over replies, literals of kind names.
+
+### The declarative binding (proposal; [LIB] owns the mechanism, the world owns the wires)
+- **Primitive signature:** `std.tool.op world= name=add param=kind param=n param=size param=colour param=where effect=makes` with `std.tool.param op=add name=size type=k.size.grade accepts=small accepts=big` (the values the tool takes).
+- **Binding of a plan step to a primitive:** `std.tool.bind act=make of=thing op=add arg=kind<-step.kind arg=n<-step.count arg=size<-request.size arg=colour<-request.attribute.colour arg=where<-request.place`. Preconditions and effects as wires (`needs=exists(thing)`, `makes=thing`).
+- **Value translation is knowledge, not code:** tiny → small because `k.size` orders the grades and the param accepts {small, big}: the generic rule "nearest accepted grade" does it. `std.schema.drawn` already does this for kinds; same mechanism for every parameter.
+- **Defaults are expectations:** "a small thing goes in a corner", "5–9 nodes", "150–300 words, small = 0.4×", "≤ 6 in a row, else grid", "the start is an ellipse, a branch a diamond" are `k.expect.*` / `k.diagram.*` facts with conditions, chosen by planRequest's existing default / abduction step, visible in `assumed`.
+- **Structure choices are planning:** "cut a whole to n keeping its structure", "fill up to n", "not all of one kind" are generic plan operators over any whole with parts and links (library), not Diagram code.
+- **The reply** is `sayRequest` over the result facts (the view before / after) and reply facts of the language world; a world has no sentences. The view diff also gives "nothing changed" for free (block 20:05, item 2).
+- **Execution:** the library's `runPlan(plan, bindings, primitives)` resolves each step's binding, fills arguments (said → revised → default, with provenance), checks preconditions, calls the primitive, reads the view, owns the timeline (Q42). The host passes only the primitives table.
+
+### Order and acceptance
+1. **Inventory first (small, today):** a report-only test `tests/glue-lint` that counts, in every file reachable from a world's door operations: reads of `request` / `facts`, string literals equal to a declared kind / size / place word, reply sentences, regex on text. Publish the counts per world in worker-log. The count may only go down; it is the measure of this work.
+2. **[LIB] ask** (I write it in the library's worker-tasks now): `std.tool.*` schema, binding resolution with value translation by knowledge, runPlan with primitives + view diff + timeline.
+3. **Drawing "things of kinds" first** (one primitive `add`, simplest), then scenes, then Diagram, then Documents. Each move deletes its JS branch; nothing is kept as fallback. Losses go on the honest list as "needs <wire / operator>".
+4. **Proof of generality (acceptance of the whole):** a new toy live world (e.g. a shelf with books) declared only by `.sop` wires and three primitives works through the door — make with count, a negated kind, a revision, undo, "what can you do here?" — with zero lines of glue. And `planRequest` / `requestAct` no longer exist as JS in Drawing, Diagram, Documents.
+5. Avatar, Map, Charts, Music are added **only** in the declared form; do not write a new `planRequest` in JS for them.
+
+If you already planned part of this (the "generic executor" in the 19:35 note), say in worker-log what differs; where the plan keeps per-world JS that decides values, this block overrides it.
