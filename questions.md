@@ -556,3 +556,25 @@ The attribution (worker-log "REAL HEADLINE 201 -> 142") shows user.profile carri
 - **scripts/real-set.mjs reads `families: real` dialogues without looking at the new `retired` field** (P1's file, left alone): 18 real dialogues are retired, 16 of them are also retired by its own ADR-010 rule, 2 are robot-avatar dialogues (w.face) it still judges. Should real-set skip `retired` dialogues, or keep its own rule only?
 - **Generated canonical examples** (ledger class "generated canonical examples"): scripts/build-schema-world.mjs fills the shared templates' sentences with the sample kind, so data.charts and docs.editor offer "Is there a house in my picture?" / "Where is Ann?" as help, and many operations of the generated worlds have none. tests/canonical-examples.test.mjs now checks the hand-built worlds only for these two properties; the generated worlds need the generator fixed (a task?).
 - **Two "ops better" dialogues in today's A/B** (dlg.kidsB#037, dlg.kidsA#035; ledgered, not in the gate): kidsB#037 is a coherence bug of both reasoners after a question about an agent nobody introduced yet (matrix: "That does not add up. Must refer to a core.agent wire."; ops: replies with the id "e.ben"). Relevant to P6.
+## Q23 (worker, 2026-11-15) — P6 one path per job: which reasoner is the product, and the reader route (owner / reviewer decision)
+Measured on tree 4c1aaa23 (main with LEARNED-MEM-INDEX), shipped mode (`real-set.mjs run`, encoder formalizer, catalog ab3b2ab, seed 20261115).
+
+| | matrix | ops |
+| --- | --- | --- |
+| real set, in scope (181 judged) | 131 right / 12 partly / 38 wrong | 131 / 12 / 38 |
+| real set, retired line | 65/72 | 65/72 |
+| real set, rows that differ | — | 0 verdicts, 1 outcome of 651 (r0586 other_world -> not_understood; unjudged) |
+| real set, sum of turn times | 172.9 s | 170.8 s |
+| `test-world all` | 58 raw / 40 first, of 3,839 rows | 57 / 39, of 3,778 rows (61 rows are `reasoner=matrix` only: session.conversation 11, geo.map 13, kids.time 10, data.charts 10, kids.shop 4, art.draw 4; one of them fails in data.charts). Per world failures otherwise identical (art.draw 24, diagram.sketch 11, docs.editor 8, data.charts 10/9, geo.map 2, media.music 2, ui.shell 1) |
+| smoke | 15.2 s, exit 0 | 14.5 s; exit 1 only on the build-freshness test (`worlds/index.json` built under PSYS2_REASONER=ops differs from the committed matrix build: an artefact of running smoke under ops, not a behaviour difference) |
+
+Code kept twice: the 6 worlds that still carry both paths (the review counted 8; kids.animals and kids.shapes are deleted) are kids.arith, kids.shop, kids.tasks, kids.time, ui.help, ui.shell. Their `ops.mjs`: 1,415 lines / 73.6 KB; their `fns.mjs` + `matrix.sop`: 1,175 lines / 75.2 KB. The host side of ops is `src/interpreter/` (626 + 206 + 111 + 159 lines), but the interpreter is not ops-only: it runs every world's operations in matrix mode too (12 worlds have only `ops.mjs`, and `initialState()` and the read-only hooks of spec 11 come from `ops.mjs` even in the 6 dual worlds). The library is loaded every turn in both modes (review finding 25), so ops is not a library-free fallback.
+
+**Proposal.**
+1. **matrix is the product.** In the 6 dual worlds the matrix path is the one that is measured and shipped; their `ops.mjs` keeps only what matrix mode still reads (`initialState`, hooks) and the operation bodies that `matrix.sop` replaced go. `PSYS2_REASONER` / `--reasoner ops` and the `reasoner=` test filter go with them; the "ops" result file and the ops half of `tests/reasoner.test.mjs` go.
+2. Or, if you want an oracle: keep `--reasoner ops` as a **named test oracle** only (no Settings row, no result file in training/results, run by one parity test on the 6 dual worlds), and say so in spec 15.
+I did not delete anything (task P6: owner / reviewer decides). My recommendation is 1: 0 verdicts of 181 differ, and the two copies have drifted (61 test rows already exist only for matrix).
+
+**PSYS2_READER (reader route, spec 16 section 7; `src/dialog/reader-route.mjs` 383 lines + `describe.sop` loading in `src/worlds/index.mjs`).** Off everywhere; the browser never sets it; spec 03:452 measured `fill` as losing 2 dialogue turns and 10 typos. It is the only path that reads the English words of `describe.sop` (5,322 lines in 11 worlds; the webchat ships only their `slot=` lines). Decision needed: delete the route (and then `describe.sop` keeps only its `slot=` declarations), or keep it as a named diagnostic with a dated measurement. Not deleted in P6.
+
+**Left for the agent that owns `src/formalizer/completeness.mjs`:** `PSYS2_COMPLETE_SRC=heuristic` and `PSYS2_COMPLETE_FOREIGN` are dead by measurement (heuristic: test-world 61 -> 83 held; foreign: no row changed) — delete them with their branches when that file is free (listed, not touched here).

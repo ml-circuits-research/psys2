@@ -76,7 +76,6 @@ test('the store keeps the identity of a thing; the view that made it owns kind, 
 
 for (const reasoner of ['ops', 'matrix']) {
   test(`${reasoner}: a table made in the seating plan is shown in Talk and a thing of Talk in the seating plan, by the one operation; what a view cannot take is said plainly`, async () => {
-    process.env.PSYS2_PILOT_ROOTS = path.resolve(import.meta.dirname, '../worlds-pilot');
     const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
     engine.setKnowledge(catalog());
     for (const w of ['table', 'hat', 'bicycle', 'house']) await engine.knowledge.thing(w);

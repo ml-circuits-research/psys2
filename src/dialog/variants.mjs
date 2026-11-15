@@ -2,13 +2,15 @@
 /**
  * READING STEPS FOR UNPARSED CLAUSES (spec 16 section 10; sopworld 0.74 `nearWords`, 0.75 `normalise`): the paraphrase gap. Each step proposes another reading of a clause nobody read;
  * the world decides (a run on a fork must support the new reading and must not end in the world's own refusal); all or nothing (a clause with two different acceptable readings
- * keeps none); nothing is told to a world, no sentence is generated, nothing is added to a pattern or a lexicon. One switch per step for A/B runs:
- *   PSYS2_FORMOPS=on        (off unless set) typed form operators: the operators the library's `learnFormOperators({ world })` admitted rewrite the clause (src/dialog/form-operators.mjs), the rules read each candidate; the first step
- *   PSYS2_CANON=on          (off unless set) inverse operators at read time: `canonicalise` drops the learnt fillers at the start and end of the clause and applies the alternation rules, the rules read the result
- *   PSYS2_ALTERNATIONS=off  alternations: `normalise` over the `w.lang.en.alternation` rules of the language world (passive, wrappers, question and command, dative shift), then the rules read the canonical form
- *   PSYS2_NEAR=off          near words: an unknown word that the word senses of the catalog (k.words) make a synonym or a kind of a word the worlds know (cost 3 at most) is read as that word
- *   PSYS2_SLOTS=off         slot types: the words of the clause are assigned to the typed slots of a pattern of the worlds by their lexicons, whatever their order; the pattern's own words and the function
+ * keeps none); nothing is told to a world, no sentence is generated, nothing is added to a pattern or a lexicon. One switch per step; EVERY STEP IS OFF unless its switch is `on` (P6, 2026-11-15:
+ * on the shipped real set no step changed a verdict, an outcome or a reply, and `test-world all` is the same with all of them off; spec 16 section 15). Named diagnostic switches:
+ *   (PSYS2_FORMOPS, typed form operators, and PSYS2_CANON, inverse operators, were deleted in P6: off everywhere, no gain on held-out, no operators in the browser)
+ *   PSYS2_ALTERNATIONS=on   alternations: `normalise` over the `w.lang.en.alternation` rules of the language world (passive, wrappers, question and command, dative shift), then the rules read the canonical form
+ *   PSYS2_NEAR=on           near words: an unknown word that the word senses of the catalog (k.words) make a synonym or a kind of a word the worlds know (cost 3 at most) is read as that word
+ *   PSYS2_SLOTS=on          slot types: the words of the clause are assigned to the typed slots of a pattern of the worlds by their lexicons, whatever their order; the pattern's own words and the function
  *                           words are the rest, no content word may be left over (the frame of `readByTypes`, assembled from the world's lexicons instead of a typed fact world)
+ *   PSYS2_RUNON=on          run-on clauses (spec 16 section 12): the library's `splitRunOn` cuts an incomplete clause where its parts read best
+ *   PSYS2_ENSEMBLE=on       the voices that are on run side by side and `readEnsemble` decides (spec 16 section 13); without it they run in sequence, the first accepted reading wins
  * Browser-safe: no `node:*`.
  */
 import { formalize as rulesFormalize } from '../formalizer/rules/index.mjs';
@@ -17,14 +19,16 @@ import { lexIndex } from '../worlds/lexicon.mjs';
 import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs';
 import { FILLER } from './world-aware.mjs';
 import { budget } from './budget.mjs';
-import { formOperatorTexts } from './form-operators.mjs';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs';
 
 /** A catalog lookup waits at most LOOKUP_MS; a catalog that does not answer in time is no catalog (the reading is then the rules'), and the turn never waits for it. */
 const LOOKUP_MS = 400;
 const bounded = (p) => new Promise((resolve) => { const t = setTimeout(() => resolve(null), LOOKUP_MS); Promise.resolve(p).then((v) => { clearTimeout(t); resolve(v); }, () => { clearTimeout(t); resolve(null); }); });
-const off = (name) => globalThis.process?.env?.[name] === 'off';
-const on = (name) => globalThis.process?.env?.[name] === 'on';   // a step that is off unless asked for
+const on = (name) => globalThis.process?.env?.[name] === 'on';   // every voice is off unless asked for (P6, spec 16 section 15)
+/** The voices that run when switched on (P6, 2026-11-15: none of them changed a verdict, an outcome or a reply of the shipped real set, so none is on the default path). */
+export const VOICE_SWITCHES = Object.freeze(['PSYS2_ALTERNATIONS', 'PSYS2_NEAR', 'PSYS2_SLOTS', 'PSYS2_RUNON']);
+/** True when at least one voice is switched on; otherwise `withVariants` is not called at all. */
+export const anyVoiceOn = () => VOICE_SWITCHES.some(on);
 const toks = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
 const FUNCTIONAL = new Set([...FILLER, ...FUNCTION_WORDS, 'what', 'which', 'who', 'where', 'when', 'how', 'does', 'do', 'did', 'is', 'are', 'was', 'were', 'be', 'in', 'on', 'at', 'by', 'with', 'its', 'these', 'those', 'tell', 'say', 'i', 'we']);
 const unq = (v) => String(v).replace(/^"|"$/g, '');
@@ -144,18 +148,6 @@ async function alternationText(dialog, seg) {
   return r?.applied?.length && r.text && r.text !== seg.text ? { text: r.text, applied: r.applied } : null;
 }
 
-/** The inverse operators at read time (sopworld 0.91 `canonicalise`): the learnt filler words dropped at the start and end of the clause, then the alternation rules; one clause (the clause splitter has cut already). */
-async function canonicalText(dialog, seg) {
-  const fo = dialog.engine.formOperators;
-  if (!fo?.lib?.canonicalise || !fo.fillers?.length) return null;
-  const w = (await alternationWorld(dialog)) ?? fo.world;
-  if (!w) return null;
-  const r = fo.lib.canonicalise(w, seg.text, { fillers: fo.fillers, splitters: [] });
-  if (r.clauses.length !== 1) return null;
-  const c = r.clauses[0];
-  return c.text && c.text !== toks(seg.text).join(' ') ? { text: c.text, applied: c.applied, dropped: r.dropped } : null;
-}
-
 async function nearTexts(dialog, seg) {
   const lib = dialog.engine.sopworld, facts = dialog.engine.knowledge;
   if (!lib?.nearWords || !facts?.wires) return [];
@@ -221,17 +213,15 @@ function runOnSegments(dialog, seg, opts) {
  * THE ENSEMBLE (spec 16 section 13; sopworld 0.98 `readEnsemble`): the voices below run side by side on the clause, not as a fallback chain. Each voice proposes the complete readings the world
  * accepts (`reread`, `bySlotTypes`, `runOnSegments`); the readings are pooled by their wires and the library decides (std.decide kind `ensemble`, on the typed world of the clause's world:
  * coverage, then agreement = how many voices proposed it, then cost, then specificity). Two different readings with the same agreement and coverage: none (the library's `ask`), the clause
- * keeps its reading. `PSYS2_ENSEMBLE=off` (or no library) runs the voices in sequence, the first accepted reading wins (the earlier behaviour).
+ * keeps its reading. Without `PSYS2_ENSEMBLE=on` (or with no library) the voices run in sequence, the first accepted reading wins.
  */
 async function voicesOf(dialog, seg, opts, ctx) {
   const v = {};
   const add = (name, segs, cost) => { if (segs) (v[name] ??= []).push({ segs, cost, sig: sigOf(segs.flatMap((x) => x.wires)), specificity: segs.reduce((n, x) => n + (x.wires?.length ?? 0), 0) }); };
-  if (on('PSYS2_FORMOPS')) for (const t of formOperatorTexts(dialog.engine.formOperators, seg.text)) add('form-operator', await reread(dialog, seg, t, opts, 'form-operator', { operator: true }), 1);
-  if (on('PSYS2_CANON')) { const c = await canonicalText(dialog, seg); if (c) add('canonical', await reread(dialog, seg, c.text, opts, 'canonical', { applied: c.applied, dropped: c.dropped }), 0.5 * (c.applied?.length ?? 1)); }
-  if (!off('PSYS2_ALTERNATIONS')) { const a = await alternationText(dialog, seg); if (a) add('alternation', await reread(dialog, seg, a.text, opts, 'alternation', { applied: a.applied }), 0.5 * (a.applied?.length ?? 1)); }
-  if (!off('PSYS2_NEAR')) for (const n of await nearTexts(dialog, seg)) add('near', await reread(dialog, seg, n.text, opts, 'near', { word: n.word, as: n.as, cost: n.cost }), n.cost);
-  if (!off('PSYS2_SLOTS')) { const s = bySlotTypes(dialog, seg, ctx); if (s) add('slot-types', [s], 1); }
-  if (completeMode() !== 'off' && !off('PSYS2_RUNON')) { const r = runOnSegments(dialog, seg, opts); if (r) add('run-on', r, r.length - 1); }
+  if (on('PSYS2_ALTERNATIONS')) { const a = await alternationText(dialog, seg); if (a) add('alternation', await reread(dialog, seg, a.text, opts, 'alternation', { applied: a.applied }), 0.5 * (a.applied?.length ?? 1)); }
+  if (on('PSYS2_NEAR')) for (const n of await nearTexts(dialog, seg)) add('near', await reread(dialog, seg, n.text, opts, 'near', { word: n.word, as: n.as, cost: n.cost }), n.cost);
+  if (on('PSYS2_SLOTS')) { const s = bySlotTypes(dialog, seg, ctx); if (s) add('slot-types', [s], 1); }
+  if (completeMode() !== 'off' && on('PSYS2_RUNON')) { const r = runOnSegments(dialog, seg, opts); if (r) add('run-on', r, r.length - 1); }
   return v;
 }
 
@@ -258,7 +248,7 @@ function ensembleOf(dialog, seg, voices, ctx) {
 export async function withVariants(dialog, formal, opts) {
   const ctx = dialog.context();
   const segments = [];
-  const ensemble = !off('PSYS2_ENSEMBLE') && !!dialog.engine.sopworld?.readEnsemble;
+  const ensemble = on('PSYS2_ENSEMBLE') && !!dialog.engine.sopworld?.readEnsemble;
   for (const seg of formal.segments) {
     let out = null;
     if ((seg.unparsed || isIncomplete(seg)) && seg.text) {   // an incomplete reading is not final: it goes to the same readers as an unread clause (spec 16 section 12)
@@ -273,22 +263,16 @@ export async function withVariants(dialog, formal, opts) {
   return { ...formal, segments, wires: segments.flatMap((x) => x.wires ?? []) };
 }
 
-/** PSYS2_ENSEMBLE=off: the voices in sequence, the first accepted reading wins; inside one voice two different readings: none. */
+/** Without PSYS2_ENSEMBLE=on: the voices in sequence, the first accepted reading wins; inside one voice two different readings: none. */
 async function firstVoice(dialog, seg, opts, ctx) {
   let out = null;
-  if (!out && on('PSYS2_FORMOPS')) {   // typed form operators (spec 16 section 11): the clause rewritten by the admitted operators, each candidate read by the rules, the world decides, two different readings: none
-    const readings = new Map();
-    for (const t of formOperatorTexts(dialog.engine.formOperators, seg.text)) { const r = await reread(dialog, seg, t, opts, 'form-operator', { operator: true }); if (r) readings.set(sigOf(r.flatMap((x) => x.wires)), r); }
-    if (readings.size === 1) out = [...readings.values()][0];
-  }
-  if (!out && on('PSYS2_CANON')) { const c = await canonicalText(dialog, seg); if (c) out = await reread(dialog, seg, c.text, opts, 'canonical', { applied: c.applied, dropped: c.dropped }); }   // inverse operators (spec 16 section 11)
-  if (!out && !off('PSYS2_ALTERNATIONS')) { const a = await alternationText(dialog, seg); if (a) out = await reread(dialog, seg, a.text, opts, 'alternation', { applied: a.applied }); }
-  if (!out && !off('PSYS2_NEAR')) {
+  if (!out && on('PSYS2_ALTERNATIONS')) { const a = await alternationText(dialog, seg); if (a) out = await reread(dialog, seg, a.text, opts, 'alternation', { applied: a.applied }); }
+  if (!out && on('PSYS2_NEAR')) {
     const readings = new Map();
     for (const n of await nearTexts(dialog, seg)) { const r = await reread(dialog, seg, n.text, opts, 'near', { word: n.word, as: n.as, cost: n.cost }); if (r) readings.set(sigOf(r.flatMap((x) => x.wires)), r); }
     if (readings.size === 1) out = [...readings.values()][0];   // two different readings of the same unknown word: none
   }
-  if (!out && !off('PSYS2_SLOTS')) { const s = bySlotTypes(dialog, seg, ctx); if (s) out = [s]; }
-  if (!out && completeMode() !== 'off' && !off('PSYS2_RUNON')) out = runOnSegments(dialog, seg, opts);   // spec 16 section 12: a run-on clause cut where its parts read best
+  if (!out && on('PSYS2_SLOTS')) { const s = bySlotTypes(dialog, seg, ctx); if (s) out = [s]; }
+  if (!out && completeMode() !== 'off' && on('PSYS2_RUNON')) out = runOnSegments(dialog, seg, opts);   // spec 16 section 12: a run-on clause cut where its parts read best
   return out;
 }

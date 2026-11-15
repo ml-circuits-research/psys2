@@ -20,7 +20,6 @@ import { fileURLToPath } from 'node:url';
 import { applyReasonerFlag } from './lib/reasoner-flag.mjs';
 import { resolveLibrary, expand, expectedOf, clauseExpected, judge, DIMENSIONS } from './lib/related-cases-host.mjs';
 import * as VENDORED from '../src/vendor/sopworld/sopworld.mjs';
-import { installFormOperators } from './lib/formops-host.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
@@ -70,7 +69,6 @@ async function runPipeline({ catalog, tab, texts }) {
   const visibleState = (st) => Object.fromEntries(Object.entries(vs(st)).filter(([k, v]) => !['talk', 'ui.shell', 'session.things'].includes(k) && JSON.stringify(v) !== '{}'));
   const source = { text: async (p) => { try { return readFileSync(`${catalog}/${p}`, 'utf8'); } catch { return null; } } };
   const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
-  await installFormOperators(engine);   // PSYS2_FORMOPS=on: the typed form operators (spec 16 section 11)
   const out = new Map();
   for (const t of texts) {
     engine.setKnowledge(createFacts({ source }));

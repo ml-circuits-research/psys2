@@ -78,7 +78,7 @@
 
 @core.describe core.type
     extends=core.thing
-    doc="An operation description: one operation (op, intent, emit, frames). Its arguments are core.describe.arg wires, its wording one core.describe.words wire per language, its words core.word wires; request, question and statement patterns are generated from them (spec 03 section 2c). Read only with PSYS_GEN_PATTERNS."
+    doc="An operation description: one operation (op, intent, emit, frames). Its arguments are core.describe.arg wires, its wording one core.describe.words wire per language, its words core.word wires; request, question and statement patterns could be generated from them (spec 03 section 2c; the loader's generator and its switch were deleted in P6). Read in full only by the reader route (PSYS2_READER); otherwise only its slot= declarations."
 
 @core.describe.arg core.type
     extends=core.thing

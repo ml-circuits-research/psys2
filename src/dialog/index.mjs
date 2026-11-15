@@ -42,7 +42,7 @@ import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs';
 import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs';
 import { proposeByTypes } from './typed-reader.mjs';
-import { withVariants } from './variants.mjs';
+import { withVariants, anyVoiceOn } from './variants.mjs';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs';
 import { createTypedWorlds } from '../formalizer/typed-world.mjs';
 import { repairFromScene } from './scene-referents.mjs';
@@ -788,7 +788,7 @@ export class DialogSession {
 
   _withTypedReader(formal) {
     const lib = this.engine.sopworld;
-    if (!lib?.typedLexicon || globalThis.process?.env?.PSYS2_TYPED === 'off') return formal;   // PSYS2_TYPED=off: the step is skipped (before/after measurements)
+    if (!lib?.typedLexicon || globalThis.process?.env?.PSYS2_TYPED !== 'on') return formal;   // off unless PSYS2_TYPED=on (P6, spec 16 section 15: no reply of the shipped real set changes)
     const segments = formal.segments.map((seg) => {
       try {
         if (seg.unparsed || !seg.match?.worldId || !seg.wires?.length) return seg;
@@ -1558,7 +1558,7 @@ export class DialogSession {
       formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router });
     }
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
-    if (!icpt && !pre && !meta && formal.segments.some((x) => x.unparsed || isIncomplete(x))) { try { formal = await perf.time('variants', () => withVariants(this, formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; } }   // spec 16 section 10: an unparsed clause read again (alternations, near words, slot types), the world deciding
+    if (!icpt && !pre && !meta && anyVoiceOn() && formal.segments.some((x) => x.unparsed || isIncomplete(x))) { try { formal = await perf.time('variants', () => withVariants(this, formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; } }   // spec 16 section 10: an unparsed clause read again (alternations, near words, slot types), the world deciding
     if (!icpt && !pre && !meta && formal.segments.length) formal = await perf.time('typed', async () => this._withTypedReader(formal));   // spec 16 section 9: a refused reading is read again by the types of its words
     // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
     if (!icpt && !pre && !meta && this.engine.knowledge && formal.segments.length) {
@@ -1829,9 +1829,6 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
   const engine = {
     knowledge: options.knowledge ?? null,
-    /** Typed form operators ({ lib, world, operators }) for the step behind PSYS2_FORMOPS=on (spec 16 section 11); null = none. A host that has a typed world gives them; nothing is learnt here. */
-    formOperators: options.formOperators ?? null,
-    setFormOperators(fo) { engine.formOperators = fo ?? null; },
     /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
     setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; attachValues(cat); attachOpenWords(cat); attachArrangement(cat); },   // the colour and number readers (k.values) take the catalog's words in place of the bundled subset
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,
