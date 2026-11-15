@@ -349,7 +349,7 @@
     doc="Frame: what kind of thing is X. A sentence and a small tree from the is-a facts of the word senses."
 
 @pat.talk.me core.pattern
-    canonical="What do you know about me?"
+    canonical="What have you learned about me?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.me] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.me"
     kind=question
@@ -357,7 +357,7 @@
     tabClaim=true
     priority=14
     example="What have you learned about me?"
-    doc="What the profile holds about the user, as a small card."
+    doc="What the profile holds about the user, as a small card. (\"What do you know about me?\" is the person frame person.ask.all, src/dialog/person.mjs: it owns the question also with an empty profile, live check 2026-11-15.)"
 
 @pat.talk.drawn core.pattern
     canonical="What did I draw today?"

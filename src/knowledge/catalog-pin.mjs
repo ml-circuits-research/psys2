@@ -16,10 +16,14 @@ export const CATALOG_PIN = Object.freeze({
 /** The versioned URL of the catalog folder at the pin (jsDelivr serves a GitHub commit immutably, with CORS). */
 export const catalogUrl = (pin = CATALOG_PIN) => `https://cdn.jsdelivr.net/gh/${pin.repo.replace(/^https:\/\/github\.com\//, '')}@${pin.commit}/${pin.path}`;
 
-/** The same folder at the same commit on raw.githubusercontent.com (immutable by commit, CORS `*`; checked 2026-11-15): the second mirror. */
+/** The same folder at the same commit on raw.githubusercontent.com (immutable by commit, CORS `*`; checked 2026-11-15): the first mirror. */
 export const rawCatalogUrl = (pin = CATALOG_PIN) => `https://raw.githubusercontent.com/${pin.repo.replace(/^https:\/\/github\.com\//, '')}/${pin.commit}/${pin.path}`;
 
+/**
+ * Every immutable source of the pinned commit, in the order they are asked (src/loaders/knowledge-source.mjs retries, marks a dead mirror and falls back through them; one commit, so
+ * the texts are equal). raw.githubusercontent.com first: jsDelivr's /gh/ route refuses a repository past 50 MB ("Package size exceeded the configured limit of 50 MB", live 2026-11-15,
+ * every shard of pin 085bc0da) and sop-knowledge-worlds is past it, so each new pin can hit that refusal; jsDelivr stays the second mirror.
+ */
+export const KNOWLEDGE_URLS = Object.freeze([rawCatalogUrl(), catalogUrl()]);
 /** The URL the page reads the catalog from first. */
-export const KNOWLEDGE_URL = catalogUrl();
-/** Every immutable source of the pinned commit, in the order they are asked (src/loaders/knowledge-source.mjs retries and falls back through them; one commit, so the texts are equal). */
-export const KNOWLEDGE_URLS = Object.freeze([catalogUrl(), rawCatalogUrl()]);
+export const KNOWLEDGE_URL = KNOWLEDGE_URLS[0];

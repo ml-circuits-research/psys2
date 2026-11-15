@@ -105,10 +105,11 @@ test('what kind of thing: a tree from the is-a facts; session cards say "nothing
   assert.equal(c.kind, 'tree');
   assert.ok(treeSvg(c).includes('celestial body'));
   r = await s.send('What do you know about me?');
-  assert.match(r.text, /do not know anything about you/);
-  assert.match(r.text, /Nothing leaves this device\./);
+  assert.equal(r.text, 'I do not know anything about you yet.', 'the person frame owns the question, also with an empty profile (live check 2026-11-15)');
   r = await s.send('What did I draw today?');
   assert.match(r.text, /not drawn anything/);
+  assert.match(r.text, /Nothing leaves this device\./, 'the first session card says it');
+  r = await s.send('What did I draw today?');
   assert.doesNotMatch(r.text, /Nothing leaves/, 'said once');
   tab(s, 'draw');
   await s.send('draw a red house'); await s.send('draw two trees');

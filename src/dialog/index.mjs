@@ -1523,7 +1523,7 @@ export class DialogSession {
     if (!icpt) {
       let pt = null;
       try { pt = await perf.time('person', () => personTurn(this, english)); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; pt = null; }
-      if (pt) { meta = { reply: pt.reply, status: pt.status, info: pt.info }; personSeg = pt.segment; }
+      if (pt) { meta = { reply: pt.reply, status: pt.status, info: pt.info, ...(pt.say ? { parts: [{ text: pt.reply, translate: true, say: pt.say }] } : {}) }; personSeg = pt.segment; }
     }
     if (!icpt && !meta) {
       // M1: the kind of the turn is read BEFORE any tab world: a fragment is completed from the focus, a complaint or a why-question is answered from the trace, a correction amends the last request

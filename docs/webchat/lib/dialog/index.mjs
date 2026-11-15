@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=792e4c052d';
+import { composeReply, sayOf } from './composed-reply.mjs?v=b2b42871f1';
 import { reviewForeign } from './foreign-reading.mjs?v=162cb9c591';
 import { installTextGen } from './textgen.mjs?v=4c75b0d4e4';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=8c59dedcf0';
@@ -40,8 +40,8 @@ import { Discourse } from './discourse.mjs?v=ed14c9a2eb';
 import { Dialogue } from './dialogue.mjs?v=285827b20d';
 import { turnSteps } from './steps.mjs?v=44af51b084';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=83356816cd';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=131cdb7d24';
-import { personTurn } from './person.mjs?v=ee41aab3c1';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=eea6f6a661';
+import { personTurn } from './person.mjs?v=581958f43f';
 import { proposeByTypes } from './typed-reader.mjs?v=d6f34dec57';
 import { withVariants, anyVoiceOn } from './variants.mjs?v=a486a3f8bc';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=8c59dedcf0';
@@ -1523,7 +1523,7 @@ export class DialogSession {
     if (!icpt) {
       let pt = null;
       try { pt = await perf.time('person', () => personTurn(this, english)); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; pt = null; }
-      if (pt) { meta = { reply: pt.reply, status: pt.status, info: pt.info }; personSeg = pt.segment; }
+      if (pt) { meta = { reply: pt.reply, status: pt.status, info: pt.info, ...(pt.say ? { parts: [{ text: pt.reply, translate: true, say: pt.say }] } : {}) }; personSeg = pt.segment; }
     }
     if (!icpt && !meta) {
       // M1: the kind of the turn is read BEFORE any tab world: a fragment is completed from the focus, a complaint or a why-question is answered from the trace, a correction amends the last request

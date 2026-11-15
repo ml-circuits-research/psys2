@@ -773,7 +773,7 @@ export const CANONICAL_RO = {
   'Where do I live?': 'Unde locuiesc?',
   'Let us get to know me.': 'Să ne cunoaștem.',
   'Stop the game.': 'Oprește jocul.',
-  'What do you know about me?': 'Ce știi despre mine?',
+  'What have you learned about me?': 'Ce ai aflat despre mine?',
   'How well do you know me?': 'Cât de bine mă cunoști?',
   'How far are we?': 'Cât de departe suntem?',
   'Delete my hobbies.': 'Șterge hobby-urile mele.',

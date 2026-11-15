@@ -770,3 +770,7 @@ PSys2 now reads `w.lang.en.fn` (views filler, politeness, hesitation) in the fil
 - **K3 Romanian leads and fillers**: vrei să, poți, ai putea, mi-ai putea (politeness at the lead), salut, bună, hei (greetings), atunci, hai, dar, ia (filler at the lead), um.
 - **K4 the US spelling "gray"** as `core.word text=gray means=grey of=k.colours.colour.name` (the catalog has the CSS gray names, not the bare word).
 - **K5 derived forms of colours** (reds, blues, sandy, golden, silvery, rusty) are core.words of k.colours names; a reader cannot tell a derived form ("a sandy floor" = sand) from another name ("teal" for turquoise): a key `form=plural|adjective` on those words would let the host take only the names.
+
+## Q31 [KNOW] (worker, 2026-11-15) — the Romanian reply for "I know nothing about you yet" (person.know.none)
+[KNOW]
+- **K1 a fourth reply name the application composes**: `person.know.none` ("încă nu știu nimic despre tine"; English "I do not know anything about you yet."), the answer of the w.person question frames when nothing about the speaker is kept (a fresh session, or after "Forget what you know about me"). Kept in src/lang/ro.local.mjs in the catalog's key shape until w.lang.ro.reply (and w.lang.en.reply) publish it; the same ask as Q29 K1.
