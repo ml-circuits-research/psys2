@@ -376,6 +376,8 @@ soț,soți|husband|m anim kin
 soție,soții|wife|f anim kin
 băiat,băieți|boy|m anim
 fată,fete|girl|f anim||fetei
+fetiță,fetițe|girl|f anim
+băiețel,băieței|boy|m anim
 om,oameni|person/people|m anim
 bărbat,bărbați|man/men|m anim
 femeie,femei|woman/women|f anim

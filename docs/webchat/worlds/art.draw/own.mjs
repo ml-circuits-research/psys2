@@ -2,13 +2,13 @@
 // art.draw (pilot, spec 21 and 23): what the schema cannot say and other code calls. The drawing board itself (scene.mjs: the renderer's geometry, the scene composition and the
 // drawing from facts; ops.mjs: the scene operations) stays in worlds/art.draw; this file re-exports what the dialog layer and other worlds reach by name and gives the discourse hooks
 // (referents, openSlots, checkReferents) the words of the acts (`art.draw.make` -> the board's `draw.add`). Browser-safe.
-import * as D from './engine.mjs?v=ce535c9c42';
-import { addArgs, tOf } from './hooks.mjs?v=08bafefc36';
-import { goalOf, goalFromText, goalWord, goalWords, layoutGoal, liveOf, whyPlan as whyOfPlan } from './plan.mjs?v=84254349de';
+import * as D from './engine.mjs?v=0a64a903b1';
+import { addArgs, tOf } from './hooks.mjs?v=38095e0fa3';
+import { goalOf, goalFromText, goalWord, goalWords, layoutGoal, liveOf, whyPlan as whyOfPlan } from './plan.mjs?v=2bf29b75ab';
 
-export { initialState, summary } from './engine.mjs?v=ce535c9c42';
+export { initialState, summary } from './engine.mjs?v=0a64a903b1';
 /** Discourse hook (after a turn, never awaited by one): the catalog wires the next suggestions read (hooks.mjs nextThings). */
-export { nextNeeds } from './hooks.mjs?v=08bafefc36';
+export { nextNeeds } from './hooks.mjs?v=38095e0fa3';
 /** Other worlds ask the board by its old action names: Talk draws with draw.add, Talk undo with draw.undo, the tab has "new" and "open". */
 export const add = D.add;
 export const drawUndo = D.undo;

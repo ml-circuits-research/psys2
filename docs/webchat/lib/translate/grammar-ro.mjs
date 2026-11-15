@@ -11,7 +11,7 @@
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 import { LANG_RO_FACTS } from '../lang/ro.facts.generated.mjs?v=268c444d52';
 import { tokenize } from './normalize.mjs?v=6d473eb091';
-import { analyze, analyzeRaw, parseNumberAt, placeOf, pluralEn, isKnownName } from './morphology.ro.mjs?v=af92ea5710';
+import { analyze, analyzeRaw, parseNumberAt, placeOf, pluralEn, isKnownName } from './morphology.ro.mjs?v=1a500300fa';
 
 let RAWS = [], KEYS = [];
 // The lexicon: how a word is analysed. Default: the translator's own (lexicon.ro-en.mjs, morphology.ro.mjs); src/lang/ro.mjs gives one made from the catalog's w.lang.ro with the library's std.morph.

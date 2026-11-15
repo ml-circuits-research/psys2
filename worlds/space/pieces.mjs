@@ -252,7 +252,14 @@ export function checkMove(store, pieces, id, dx, dy, o = {}) {
   for (const f of store.facts.filter((g) => g.a === id && (g.rel === 'on' || g.rel === 'in') && P[g.b])) {
     const B = P[f.b], a = boxOf(moved), b = boxOf(B);
     if (f.rel === 'on' && dy > 0 && a.b > b.t + 3 && !(B.region && !o.groundKinds?.includes(B.kind))) return { ok: false, reason: `${nameOf(nm, id)} can not go lower: it is on ${nameOf(nm, f.b)}.` };
-    if (f.rel === 'in' && (a.l < b.l - 1 || a.r > b.r + 1 || a.t < b.t - 1 || a.b > b.b + 1)) return { ok: false, reason: `${nameOf(nm, id)} can not go there: it is in ${nameOf(nm, f.b)}.` };
+    if (f.rel === 'in' && (a.l < b.l - 1 || a.r > b.r + 1 || a.t < b.t - 1 || a.b > b.b + 1)) {
+      // a step out of a container stops at its edge ("the crocodile stays in the lake"); a thing already at that edge leaves it (the fact goes, the reply says so)
+      const a0 = boxOf(A), lim = (d, lo, hi) => Math.max(lo, Math.min(hi, d));
+      const cx = lim(dx, Math.min(0, b.l - a0.l), Math.max(0, b.r - a0.r)), cy = lim(dy, Math.min(0, b.t - a0.t), Math.max(0, b.b - a0.b));
+      const stuck = (dx !== 0 && Math.abs(cx) < 1) || (dy !== 0 && Math.abs(cy) < 1);
+      if (stuck) return { ok: true, leaves: f, reason: `${nameOf(nm, id)} is no longer in ${nameOf(nm, f.b)}.` };
+      return { ok: true, clampTo: { dx: Math.round(cx), dy: Math.round(cy) }, reason: `${nameOf(nm, id)} stays in ${nameOf(nm, f.b)}.` };
+    }
   }
   const frame = o.frame;
   if (frame) { const m = boxOf(moved); if ((dx < 0 && m.l < 0) || (dx > 0 && m.r > frame.w) || (dy < 0 && m.t < 0) || (dy > 0 && m.b > frame.h)) return { ok: true, clamp: true, reason: `${nameOf(nm, id)} stops at the edge of the picture.` }; }

@@ -184,6 +184,10 @@ export const hooks = {
     make: (ctx, r) => {
       if (r.rel === 'to' && PRONOUN.test(String(r.place ?? '').trim())) r = { ...r, rel: undefined, place: undefined };   // "it needs a rainbow": the pronoun is no owner, the sentence is a wish
       if (r.mode === 'random') return D.scene(ctx, {});
+      { // "make them different", "make the houses different": a change of things of the picture, not a thing to draw ("draw 3 different houses" has its count and its verb)
+        const tw = words(r.thing).filter((x) => !DET.has(x));
+        if (tw.length >= 2 && D.DIFFERENT.has(tw.at(-1)) && !r.amount && !/\b(?:draw|add|sketch|paint|doodle|create)\b/.test(words(r.text).join(' '))) return D.makeDifferent(ctx, { phrase: tw.slice(0, -1).join(' ') });
+      }
       if (r.thing && (!r.mode || r.mode === 'bare' && !r.pre)) { const planned = tryPlan(ctx, 'make', r); if (planned) return planned; }
       if (r.pre && r.mode === 'bare' && !/\b(?:between|under|over|above|below|behind|next to|beside|near|in front of|left|right|top|bottom)\b/.test(words(r.pre).join(' '))) {   // a bare kind after words the form did not name: "yo could you sketch a purple" -> the colour and size words are the modifiers
         const pw = words(r.pre), mods = pw.filter((x) => D.isShade(x) || D.isColorWord(x) || Object.hasOwn(D.SIZE_WORDS, x)), n = pw.find((x) => /^\d+$/.test(x));

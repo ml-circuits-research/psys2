@@ -3,9 +3,9 @@
 // Pipeline per sentence:  tokens -> number words -> phrase frames -> items (NP, VG, wh, pp ...)
 //                         -> clause splitting -> clause grammar -> pieces with source spans.
 import { tokenize, splitSentences, foldKey } from './normalize.mjs?v=6d473eb091';
-import * as M from './morphology.ro.mjs?v=af92ea5710';
+import * as M from './morphology.ro.mjs?v=1a500300fa';
 import * as E from './inflect.en.mjs?v=5b2e62d57a';
-import { FRAMES } from './phrases.ro-en.mjs?v=4d0ff4dd06';
+import { FRAMES } from './phrases.ro-en.mjs?v=ab974e4e8f';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
 // ------------------------------------------------------------------ static tables
@@ -793,6 +793,15 @@ function buildItems(toks, info) {
       else items.push({ t: 'punct', tok: t });
       i++; continue;
     }
+    // A WISH ABOUT THE THINGS SPOKEN OF: a sentence that is only "să fie" + an adjective ("să fie diferite", "să fie roșu") has no subject; it asks for the things in focus to be so:
+    // "make them different" (the adjective's number says it or them). Anything after the adjective, or a subject, and the subjunctive is read as before.
+    if (i === 0 && t.key === 'sa' && toks[1]?.key === 'fie' && toks.length === 3 && adjOf(toks[2])) {
+      const a = analysesOf(toks[2]).find((x) => x.pos === 'adj');
+      const pl = a?.number === 'pl';
+      items.push({ t: 'adv', en: `make ${pl ? 'them' : 'it'} ${a.entry.en}`, tok: t, flags: new Set(), start: t.start, end: toks[2].end });
+      ctx.content++; ctx.mapped++;
+      i = 3; continue;
+    }
     const prev = prevItem();
     if (t.kind === 'num') {
       const r = parseNP(toks, i, info, prev);
@@ -851,6 +860,12 @@ function buildItems(toks, info) {
     if (key === 'unde' && !t.synth) { items.push({ t: 'wh', kind: 'where', tok: t, np: null, start: t.start, end: t.end }); i++; continue; }
     // coordination / subordination
     if (f && f.fpos === 'conj') {
+      // THE FOCUS PARTICLE (w.lang.ro phrase `focus`): "și" right after an imperative verb and before what it takes is "too", not "and" ("pune și un lac": put a lake too); nothing is
+      // coordinated with the verb itself. Before "mai" it is "even" (the amount reads it: "mută-l și mai la stânga").
+      const nxt = toks[i + 1];
+      if (key === 'si' && prev?.t === 'vg' && prev.imp !== false && items.length === 1 && nxt && isWord(nxt) && nxt.key !== 'mai' && !verbsOf(nxt).length) {
+        items.push({ t: 'adv', en: 'too', tok: t, flags: new Set(['end']), start: t.start, end: t.end }); i++; continue;
+      }
       items.push({ t: 'conj', en: f.entry.en, sub: f.entry.flags.has('sub'), than: f.entry.flags.has('than'), tok: t });
       i++; continue;
     }
@@ -887,7 +902,7 @@ function buildItems(toks, info) {
       }
     }
     // "să" typed without diacritics
-    if (key === 'sa' && !t.synth && toks[i + 1] && (verbsOf(toks[i + 1]).length || toks[i + 1].key === 'nu') && !(prev && prev.t === 'np' && !prev.pron && false)) {
+    if (key === 'sa' &&!t.synth && toks[i + 1] && (verbsOf(toks[i + 1]).length || toks[i + 1].key === 'nu') && !(prev && prev.t === 'np' && !prev.pron && false)) {
       const vg = parseVG(toks, i, info, prev);
       if (vg) { items.push(vg); i = vg.next; continue; }
     }
@@ -985,6 +1000,12 @@ function buildItems(toks, info) {
   return foldPP(items);
 }
 
+/** English locatives of the sides of a place, by the English sense of the noun: `at` which one (a modifier), `to` where to (a direction). */
+const SIDE_EN = {
+  left: { at: 'on the left', to: 'to the left' }, right: { at: 'on the right', to: 'to the right' }, middle: { at: 'in the middle', to: 'to the middle' },
+  centre: { at: 'in the centre', to: 'to the centre' }, center: { at: 'in the center', to: 'to the center' },
+};
+
 function foldPP(items) {
   const out = [];
   for (let i = 0; i < items.length; i++) {
@@ -994,6 +1015,14 @@ function foldPP(items) {
     if (it.t === 'prep' && nx && nx.t === 'wh') { nx.prep = it; out.push(nx); i++; continue; }
     if (it.t === 'prep' && it.tok && it.tok.key === 'pe' && nx && ((nx.t === 'np' && nx.head && (nx.head.kind === 'name' || (nx.head.kind === 'noun' && nx.head.entry.flags.has('anim') && nx.def))) || nx.t === 'pron')) {
       nx.pePerson = true; out.push(nx); i++; continue;
+    }
+    // A SIDE of a place ("din dreapta", "din mijloc", "la stânga", "spre dreapta"): Romanian puts a bare side noun after a preposition, English a locative with the article.
+    // "din" + side says WHICH thing (the house on the right, the one in the middle); "la" / "spre" / "în" + side says where to (to the left). Read from the English sense of the noun.
+    const side = it.t === 'prep' && it.tok && (nx?.t === 'np' && nx.head?.kind === 'noun' && !nx.adjs?.length && !nx.num ? SIDE_EN[nx.head.entry?.en] : nx?.t === 'adj' && !nx.tok0 ? SIDE_EN[nx.en] : null) || null;   // "stânga" / "dreapta" are the adjectives' feminine forms, read as adjectives
+    if (side && /^(din|in|la|spre|pe)$/.test(it.tok.key)) {
+      const where = it.tok.key === 'din' || it.tok.key === 'pe' ? side.at : side.to;
+      out.push({ t: 'adv', en: where, tok: it.tok, flags: new Set(), start: it.tok.start, end: nx.end ?? nx.tok?.end });
+      i++; continue;
     }
     if (it.t === 'prep' && nx && (nx.t === 'np' || nx.t === 'pron' || nx.t === 'day' || nx.t === 'month') && !(nx.t === 'np' && nx.dat && false)) {
       out.push({ t: 'pp', prep: it, obj: nx, start: it.tok.start, end: nx.end ?? nx.tok?.end });

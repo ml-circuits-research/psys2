@@ -3,11 +3,11 @@
 // grammar; what an act DOES on the picture is the scene of worlds/art.draw (ops.mjs: the scene operations, the noun-phrase resolution, the placement over the space module; scene.mjs: the
 // renderer's geometry and the drawing from facts). The roles of an act are joined back into the words those operations read. Nothing here names a kind, a colour or a part: kinds and
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
-import * as D from './engine.mjs?v=ce535c9c42';
+import * as D from './engine.mjs?v=0a64a903b1';
 import * as space from '../space/space.mjs?v=c7e07062fb';
-import { splitThings } from '../acts/acts.mjs?v=e5935be3b0';
+import { splitThings } from '../acts/acts.mjs?v=1f0436d51b';
 import { partsOf, kindKey, kindName } from './scene.mjs?v=e70f16ba54';
-import * as P from './plan.mjs?v=84254349de';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
+import * as P from './plan.mjs?v=2bf29b75ab';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const TAIL = new Set(['there', 'here', 'now', 'added', 'drawn', 'too', 'also', 'please', 'pls', 'plz', 'thx', 'thanks', 'are', 'is', 'again', 'exactly', 'go']);   // words a role slot took that belong to the frame ("how many trees there are")
@@ -184,6 +184,10 @@ export const hooks = {
     make: (ctx, r) => {
       if (r.rel === 'to' && PRONOUN.test(String(r.place ?? '').trim())) r = { ...r, rel: undefined, place: undefined };   // "it needs a rainbow": the pronoun is no owner, the sentence is a wish
       if (r.mode === 'random') return D.scene(ctx, {});
+      { // "make them different", "make the houses different": a change of things of the picture, not a thing to draw ("draw 3 different houses" has its count and its verb)
+        const tw = words(r.thing).filter((x) => !DET.has(x));
+        if (tw.length >= 2 && D.DIFFERENT.has(tw.at(-1)) && !r.amount && !/\b(?:draw|add|sketch|paint|doodle|create)\b/.test(words(r.text).join(' '))) return D.makeDifferent(ctx, { phrase: tw.slice(0, -1).join(' ') });
+      }
       if (r.thing && (!r.mode || r.mode === 'bare' && !r.pre)) { const planned = tryPlan(ctx, 'make', r); if (planned) return planned; }
       if (r.pre && r.mode === 'bare' && !/\b(?:between|under|over|above|below|behind|next to|beside|near|in front of|left|right|top|bottom)\b/.test(words(r.pre).join(' '))) {   // a bare kind after words the form did not name: "yo could you sketch a purple" -> the colour and size words are the modifiers
         const pw = words(r.pre), mods = pw.filter((x) => D.isShade(x) || D.isColorWord(x) || Object.hasOwn(D.SIZE_WORDS, x)), n = pw.find((x) => /^\d+$/.test(x));

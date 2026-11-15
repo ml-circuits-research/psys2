@@ -20,7 +20,7 @@ import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs?v=
 import { routeEdges, segBoxDist, boxOf } from './arrows.mjs?v=3346b422bb';
 import * as space from '../space/space.mjs?v=c7e07062fb';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42';
-import * as DG from '../../lib/knowledge/diagram-world.mjs?v=9af35d199b';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
+import * as DG from '../../lib/knowledge/diagram-world.mjs?v=09ca005543';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const TAB = 'diagram';
@@ -151,12 +151,15 @@ function systemFor(s) {
 }
 function writeBack(s) {
   const w = sys.world;
+  const was = JSON.stringify(WORLD_KEYS.map((k) => s[k] ?? null)), undo0 = s.undo?.length ?? 0;
   for (const k of WORLD_KEYS) { if (w.state[k] === undefined) delete s[k]; else s[k] = w.state[k]; }
   s.undo = w.undoStack; s.redo = w.redoStack;
   assignIds(s);
   while (s.undo.length > MAX_HISTORY) { budget.tick('ops.writeBack'); s.undo.shift(); }
   while (s.redo.length > MAX_HISTORY) { budget.tick('ops.writeBack2'); s.redo.shift(); }
-  s.rev = (s.rev ?? 0) + 1; w.rev = s.rev;
+  // the revision counts changes of the diagram: a run that read it (a question, a refused request) leaves it as it was
+  if (JSON.stringify(WORLD_KEYS.map((k) => s[k] ?? null)) !== was || (s.undo?.length ?? 0) !== undo0) s.rev = (s.rev ?? 0) + 1;
+  w.rev = s.rev;
   w.state = structuredClone(Object.fromEntries(WORLD_KEYS.filter((k) => s[k] !== undefined).map((k) => [k, s[k]])));   // the state of the context is never aliased by the engine
 }
 /** Every token that names a shape: its name, its short id and its old long name (circle1 for c1). */
