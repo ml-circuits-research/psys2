@@ -171,7 +171,8 @@ export async function openShipped({ reasoner = 'matrix', mode = 'shipped', ortPa
   if (bergamot) {
     const { createNodeMt } = await import('./lib/mt-node.mjs');
     const kl = await import('../src/translate/keep-list.mjs');
-    mt = await createNodeMt({ cacheDir: bergamot, keep: () => (engine ? { keep: kl.keepListOf(engine.set), extra: kl.sessionNames(keepFor.session), things: kl.worldThingNames(keepFor.session) } : null) });
+    const isNamer = kl.namerTest(rules);
+    mt = await createNodeMt({ cacheDir: bergamot, keep: () => (engine ? { keep: kl.keepListOf(engine.set), extra: kl.sessionNames(keepFor.session), things: kl.worldThingNames(keepFor.session), isNamer } : null) });
     await mt.ensure('ro');
   }
   const roVoice = voice ? (await import('../src/translate/voice-ro.mjs')).createRoGrammarVoice() : null;

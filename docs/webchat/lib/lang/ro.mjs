@@ -32,7 +32,7 @@ const posOf = (cls) => (cls?.startsWith('v.') ? 'verb' : cls?.startsWith('a.') ?
 
 export async function openLangRo({ facts = null, unimorph = false, gloss: glossFor = null, local: withLocal = true } = {}) {
   facts ??= (await import('./ro.facts.generated.mjs?v=268c444d52')).LANG_RO_FACTS;
-  const local = withLocal ? (await import('./ro.local.mjs?v=3d449c129c')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
+  const local = withLocal ? (await import('./ro.local.mjs?v=5357af68e7')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
   // the large dictionary (3,466 lemmas derived from UniMorph, CC BY-SA 3.0, no senses) is a module of its own, loaded only when asked for; for a letter the hand file comes first, then the derived rows
   const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=56f524c863')).LANG_RO_UNIMORPH : {};
   const text = (letter) => [facts.dictionary[letter], local.dictionary[letter], extra[letter]].filter(Boolean).join('\n');
@@ -68,6 +68,18 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
     }
     return byEnglish.get(`${pos}|${String(en).toLowerCase().replace(/ /g, '_')}`) ?? null;
   };
+  // every sense of a lemma (a lemma may have several dictionary rows: așeza "sit" and "arrange"), from the rows in memory, built once
+  let senses = null;
+  const sensesOf = () => {
+    if (!senses) {
+      senses = new Map();
+      for (const rows of [facts.dictionary, local.dictionary]) for (const t of Object.values(rows ?? {})) for (const line of String(t).split('\n')) {
+        const [lemma, cls, , sense] = line.split('\t'), en = gloss(sense);
+        if (lemma && en) (senses.get(lemma) ?? senses.set(lemma, []).get(lemma)).push({ en, pos: posOf(cls) });
+      }
+    }
+    return senses;
+  };
   const run = (template, roles) => lib.realise(m, template, roles, { dictionary: dict, base: { num: 'sg', case: 'nomacc' } });
   const needsDe = (n) => n % 100 === 0 || n % 100 >= 20;   // Romanian: "20 de flori", "7 flori"
   /** A count { n, noun, colour? } in Romanian: the article or the number, the noun in its number, the colour agreeing with it; null when a word has no lemma. */
@@ -98,6 +110,37 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
       const enclitic = clitic && CLITICS.has(fold(clitic)) ? fold(clitic) : null;
       if (clitic && !enclitic) return [];
       return readings(head).map((r) => toEntry(r, enclitic)).filter(Boolean).filter((a) => !enclitic || a.pos === 'verb');
+    },
+    /**
+     * THE TRANSLATION GLOSS (spec 05 "Glossed candidates", reviewer 2026-11-15 10:10 item 2): the English words of the senses of a Romanian form, by the dictionary (a lookup, not a reader).
+     * `form` is analysed by the morphology (diacritics typed away are folded); when nothing analyses it, the one dictionary lemma within one edit (two for 7 letters or more) is taken
+     * as the word meant ("punr" -> pune). Returns [{ en, pos, lemma, features, repaired? }] (every sense of every reading, in dictionary order), [] when the dictionary has nothing near.
+     */
+    glossWord(form, { within = null } = {}) {
+      const raw = String(form ?? '').toLowerCase();
+      if (raw.length < 3) return [];
+      const out = [], seen = new Set();
+      const add = (lemma, pos, features, repaired) => {
+        for (const s of sensesOf().get(lemma) ?? []) {
+          if (s.pos !== pos) continue;
+          const k = `${s.en}|${features?.tense ?? ''}|${features?.num ?? ''}`;
+          if (seen.has(k)) continue;
+          seen.add(k);
+          out.push({ en: s.en, pos, lemma, features: features ?? {}, ...(repaired ? { repaired } : {}) });
+        }
+      };
+      const [head] = lib.splitClitics(m, raw);
+      for (const r of readings(head)) add(r.lemma, posOf(r.class), r.features, null);
+      if (out.length || !within) return out;
+      // a typo: the nearest lemma of the dictionary, only when exactly one is nearest
+      const k = fold(head), max = k.length >= 7 ? 2 : 1;
+      let best = Infinity, near = [];
+      for (const lemma of sensesOf().keys()) {
+        const d = within(k, fold(lemma), Math.min(max, best));
+        if (d < best) { best = d; near = [lemma]; } else if (d === best && d !== Infinity) near.push(lemma);
+      }
+      if (near.length === 1) for (const s of sensesOf().get(near[0])) add(near[0], s.pos, {}, near[0]);
+      return out;
     },
     /**
      * COMPOSED REPLIES (spec 06 "Composed replies", reviewer 2026-11-15 03:15 item 2 and 05:30): the Romanian of a reply the application composes, from its frame `say = { act, roles }`,

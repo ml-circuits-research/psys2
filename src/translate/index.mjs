@@ -9,7 +9,9 @@
 // `text` and reported in the extra field `untranslatable: [{span, reason}]` (confidence 0).
 import { tokenize, foldKey } from './normalize.mjs';
 import { analyze, placeOf, surfaceForms } from './morphology.ro.mjs';
-import { frameMoveRoEn, loadFramesRo } from './frames-ro.mjs';
+import { frameMoveRoEn, loadFramesRo, langRoNow } from './frames-ro.mjs';
+import { within } from './candidates.mjs';
+import { pluralEn, pastEn } from './inflect.en.mjs';
 import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord, knownEnglishWord } from './en-ro.mjs';
 
 // Romanian evidence, in points (a rough log-odds of "Romanian" against "English"), for words typed with OR without diacritics.
@@ -177,6 +179,31 @@ export function createTranslator() {
     /** M4: true for an English word of this translator's lexicon (or a regular form of one). */
     knownEnglish: (word) => knownEnglishWord(String(word ?? '').toLowerCase()),
     supports: (from, to) => (from === 'ro' && to === 'en') || (from === 'en' && to === 'ro'),
+    /**
+     * The dictionary GLOSS of one source word (spec 05 "Glossed candidates"): the English words of its senses, inflected as the source form was (a participle -> "exaggerated", a plural
+     * noun -> "elements"), after a typo repair against the same dictionary ("punr" -> pune -> "put"). [{ en, lemma, repaired? }]; [] when the language has no dictionary or nothing is near.
+     */
+    glossWord: (word, lang) => {
+      const ro = lang === 'ro' ? langRoNow() : null;
+      if (!ro?.glossWord) return [];
+      const out = [], seen = new Set();
+      let gl = ro.glossWord(word, { within });
+      // a repaired word stands only when every word of the language pack as near as the repair is a form of the same lemma ("punr": pun, pune, puna -> pune; "mukte": munte, multe -> no guess)
+      if (gl[0]?.repaired) {
+        const k = foldKey(word), lemma = gl[0].lemma, d = within(k, foldKey(lemma), 2);
+        const vocab = (roVocab ??= surfaceForms());
+        for (const key of vocab.keys()) {
+          if (Math.abs(key.length - k.length) > d || within(k, key, d) === Infinity) continue;
+          if (!ro.glossWord(key).some((x) => x.lemma === lemma)) { gl = []; break; }
+        }
+      }
+      for (const g of gl) {
+        const f = g.features ?? {};
+        const en = g.pos === 'verb' && f.tense === 'part' ? pastEn(g.en) : g.pos === 'noun' && f.num === 'pl' ? pluralEn(g.en) : g.en;
+        if (!seen.has(en)) { seen.add(en); out.push({ en, lemma: g.lemma, ...(g.repaired ? { repaired: g.repaired } : {}) }); }
+      }
+      return out;
+    },
   };
 }
 

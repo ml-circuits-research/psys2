@@ -16,7 +16,9 @@ import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
 let langRo = null, loading = null;
 /** Loads the bundled w.lang.ro once (the translator's loadRoEn waits for it, so that a ro -> en translation stays synchronous afterwards). */
-export const loadFramesRo = () => (loading ??= import('../lang/ro.mjs?v=22e7cbea53').then((m) => m.openLangRo()).then((x) => (langRo = x), () => null));
+/** The bundled w.lang.ro once loaded (null before): the dictionary gloss of the candidates reads it. */
+export const langRoNow = () => langRo;
+export const loadFramesRo = () => (loading ??= import('../lang/ro.mjs?v=cf4c9d9ef6').then((m) => m.openLangRo()).then((x) => (langRo = x), () => null));
 
 const fold = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const MOVES = /^acts\.more\.place\.dir\.(?:amt|two)$/;   // the reference frames (en=) of the moves this module realises
