@@ -49,18 +49,19 @@
     core.source="generated:meta.worlds/cards"
     id=diagram.sketch kind=tab run=none tab=diagram
     name=diagram name=diagram_editor name=flowchart name=flow_chart name=org_chart name=sketchpad name=canvas name=sketch
-    claim=adjust claim=alter claim=arranged claim=assemble claim=away claim=become claim=bend claim=bind
-    claim=break claim=bunch claim=called claim=cancel claim=carry claim=categorize claim=changed claim=choose
-    claim=classify claim=clip claim=close claim=cluster claim=collect claim=combine claim=construct claim=correct
-    claim=couple claim=darken claim=decrease claim=describe claim=destroy claim=disassemble claim=dismantle claim=divide
-    claim=doe claim=done claim=dye claim=edit claim=like claim=shaped claim=take claim=what
+    claim=adjust claim=along claim=alter claim=arranged claim=assemble claim=away claim=become claim=bend
+    claim=bind claim=break claim=bunch claim=called claim=cancel claim=carry claim=categorize claim=changed
+    claim=choose claim=classify claim=clip claim=close claim=cluster claim=collect claim=combine claim=construct
+    claim=correct claim=couple claim=darken claim=decrease claim=describe claim=destroy claim=disassemble claim=dismantle
+    claim=divide claim=doe claim=done claim=go claim=like claim=shaped claim=take claim=what
     act=shaped act=mar act=rule act=front act=active act=evenly act=labeled act=path
-    act=key act=reached act=let' act=default act=along act=blorp act=cluster act=directly
+    act=along act=key act=reached act=let' act=default act=blorp act=cluster act=directly
     act=downstream act=drum act=exec act=member act=reachable act=siz act=parent act=arranged
-    act=loosen act=normalize act=rid
+    act=loosen act=normalize act=orient act=rid
     actshared=like actshared=describe actshared=kid actshared=bind actshared=couple actshared=tape actshared=fasten actshared=glue
-    actshared=nail actshared=relate actshared=pin actshared=user actshared=clip actshared=bunch actshared=categorize actshared=disassemble
-    actshared=dismantle actshared=lump actshared=merge actshared=pair actshared=slice actshared=uncouple actshared=unfasten actshared=untie
+    actshared=nail actshared=relate actshared=pin actshared=user actshared=clip actshared=redraw actshared=bunch actshared=categorize
+    actshared=disassemble actshared=dismantle actshared=lump actshared=merge actshared=pair actshared=slice actshared=uncouple actshared=unfasten
+    actshared=untie
     thing=diamond thing=ellipse thing=ellip thing=hexagon thing=box thing=node thing=arrow thing=connection
     thing=link thing=edge thing=text thing=label thing=caption thing=everything thing=newest thing=new
     thing=last thing=latest thing=oldest thing=first thing=earliest thing=undo
@@ -98,7 +99,7 @@
     name=map name=world_map name=atlas
     act=zoom act=highlighted act=neighbour act=touch act=landlocked act=madrid act=people act=kilometre
     act=bookmark act=tag act=kilometer act=km act=adjoin act=mile act=state act=dot
-    act=pushpin act=pan act=point act=across act=locate act=kms act=throughout act=colored
+    act=pushpin act=pan act=across act=locate act=point act=kms act=throughout act=colored
     act=coloured act=shaded act=borough act=burg act=european act=metro act=metropolise act=municipality
     act=settlement act=shade act=capitol act=coordinate act=currency act=japan act=land act=bordering
     act=african act=asian act=dist act=emphasised act=emphasized act=france act=glowing act=lat
@@ -197,7 +198,7 @@
     act=enough act=paying act=owe act=difference act=using act=fine act=getting act=purchasing
     act=total act=paid act=afford act=purchased act=offer act=fund act=bill act=doable
     act=possible act=purse act=once act=bought act=cash act=wallet act=spent act=sufficient
-    act=run act=affordable act=pocket act=allowance act=bank act=coin act=imagine act=budget
+    act=affordable act=run act=pocket act=allowance act=bank act=coin act=imagine act=budget
     act=dough act=saving act=suppose act=assuming act=giving act=sum act=adequate
     actshared=change actshared=get actshared=after actshared=give actshared=take
     thing=backpack thing=juice
@@ -320,10 +321,10 @@
     id=ui.avatar kind=module run=none
     name=avatar
     claim=add claim=assemble claim=avatar claim=become claim=build claim=call claim=called claim=change
-    claim=construct claim=create claim=draw claim=face claim=feel claim=generate claim=get claim=let
-    claim=look claim=make claim=myself claim=name claim=named claim=paint claim=place claim=produce
-    claim=put claim=rename claim=robot claim=sketch claim=stick claim=turn claim=ur claim=urself
-    claim=yourself
+    claim=construct claim=create claim=draw claim=face claim=feel claim=generate claim=get claim=give
+    claim=let claim=look claim=make claim=myself claim=name claim=named claim=paint claim=place
+    claim=produce claim=put claim=rename claim=robot claim=sketch claim=stick claim=turn claim=ur
+    claim=urself claim=yourself
     act=yourself act=wearing act=happy act=urself act=feel act=myself act=animate act=customise
     act=customize act=tweak act=wear act=unknown
     actshared=lunch actshared=become actshared=recover actshared=retrieve actshared=import actshared=reload

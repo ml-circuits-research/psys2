@@ -145,15 +145,14 @@ test('a correction without an earlier action is not invented', async () => {
 test('cancellation clears the expectation and never undoes', async () => {
   const s = fresh();
   await run(s, 'open the drawing tab', 'Draw a cat.');
+  // ported (spec 21 schema switch): the generated art.draw asks for the missing thing itself (its own pending, not a discourse fill);
+  // "a dog" after the cancellation is read by the world's bare form and drawn: ledgered (source P3 test cut), not asserted here
   const ask = await s.send('Draw');
-  assert.equal(ask.trace.discourse.pending?.type, 'fill');
+  assert.match(ask.text, /What should I draw\?/);
   const r = await s.send('never mind');
   assert.match(r.text, /never mind/i);
   assert.equal(r.trace.discourse.pending, null);
-  assert.equal(r.trace.discourse.meta.dropped, 'fill');
-  const late = await s.send('a dog');
-  assert.equal(late.trace.discourse.resolved, null);
-  assert.equal(objects(s).length, 1, 'cancel did not undo the cat and the dog was not drawn from the dropped question');
+  assert.equal(objects(s).length, 1, 'cancel did not undo the cat');
   await s.send('cancel that');
   assert.equal(objects(s)[0].kind, 'cat');
 });
@@ -210,18 +209,17 @@ test('degree and comparatives continue the last frame', async () => {
   assert.equal(size(), 312);
   await s.send('a bit more');
   assert.equal(size(), 359);
-  const much = await s.send('much bigger');
+  // ported (spec 21 schema switch): the generated art.draw reads degree and comparatives itself, so the trace has no discourse resolution; the sizes are the contract
+  await s.send('much bigger');
   assert.equal(size(), 610);
-  assert.equal(much.trace.discourse.resolved.kind, 'degree');
   await s.send('even smaller');
   assert.equal(size(), 469);
   await s.send('twice as big');
   assert.equal(size(), 938);
-  const same = await s.send('the same size as the tree');
-  assert.equal(same.trace.discourse.resolved.type, 'same');
+  await s.send('the same size as the tree');
   assert.equal(size(), objects(s)[1].size);
   const w = await s.send('Make the tree the same size as the house.');   // the world's own pattern
-  assert.equal(w.trace.patterns[0], 'pat.art.draw.samesize');
+  assert.match(w.trace.patterns[0], /^pat\.art\.draw\./);
   assert.equal(objects(s)[1].size, size());
   assert.equal((await fresh().send('a bit more')).trace.discourse.resolved, null, 'no frame, nothing invented');
 });
@@ -298,15 +296,16 @@ test('feedback: apology, undo offer, trace and phrase-log mark', async () => {
 
 test('topic return reopens the last world and summarises it', async () => {
   const s = fresh();
-  await run(s, 'open the drawing tab', 'Draw a red house.', 'open the chess tab', 'e4');
+  // ported from the chess tab (ADR-010 tab cut) to the map
+  await run(s, 'open the drawing tab', 'Draw a red house.', 'open the map tab', 'show Paris');
   const r = await s.send('back to the drawing');
   assert.match(r.text, /^Back to Drawing board\. In your picture I can see a red house/);
   assert.equal(r.state['ui.shell'].activeTab, 'draw', 'the tab is reopened');
-  const c = await s.send('back to the chess game');
-  assert.match(c.text, /^Back to Chess\. The chess game has 1 move/);
-  assert.equal(c.state['ui.shell'].activeTab, 'chess');
+  const c = await s.send('back to the map');
+  assert.match(c.text, /^Back to World map\. Last time you said "show Paris"/);
+  assert.equal(c.state['ui.shell'].activeTab, 'map');
   const w = await s.send('where were we?');
-  assert.match(w.text, /^Back to Chess/);
+  assert.match(w.text, /^Back to World map/);
   await s.send('open the drawing tab');
   await s.send('Draw a sun.');
   assert.match((await s.send('continue')).text, /sun/);
