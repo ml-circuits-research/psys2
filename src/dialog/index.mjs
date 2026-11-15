@@ -40,7 +40,6 @@ import { Discourse } from './discourse.mjs';
 import { Dialogue } from './dialogue.mjs';
 import { turnSteps } from './steps.mjs';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs';
 import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs';
 import { proposeByTypes } from './typed-reader.mjs';
 import { withVariants, anyVoiceOn } from './variants.mjs';
@@ -62,7 +61,6 @@ const plainSegment = (s) => ({
   unparsed: s.unparsed, discourse: s.discourse ?? null, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy, reading: s.strategy === 'model' ? 'model' : 'rules', corrections: s.corrections ?? [], ignored: s.ignored ?? [], dispatch: s.dispatch ?? null,
   ...(s.nx ? { nx: { op: s.nx.op, world: s.nx.world, pattern: s.nx.pattern, p: s.nx.p, spans: s.nx.spans } } : {}),
   wires: s.wires.map((w) => w.id),
-  ...(s.reader ? { reader: s.reader } : {}),
 });
 
 /** Up to two example sentences from the closest world (or any world as a fallback). */
@@ -287,13 +285,11 @@ function tooComplexReply(session, text, e, b) {
 export const isModelTimeout = (e) => !!e && e.name !== 'TurnAborted' && (['OrtTimeout', 'AbortError', 'TimeoutError'].includes(e.name) || /timed out|timeout|aborted/i.test(String(e.message ?? e)));
 
 export class DialogSession {
-  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader, routing, suspect = true } = {}) {
+  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, routing, suspect = true } = {}) {
     this.routing = routing;   // spec 20: dispatcher (default) | symbolic | symbolic+encoder
     this.engine = engine;
     /** World-aware reading (spec 16): 'off' (default) | 'veto' | 'choose' | 'observe'. The environment variable PSYS2_WORLD_AWARE sets the default for command-line tools; an explicit option wins. */
     this.worldAware = normalizeWorldAware(worldAware ?? globalThis.process?.env?.PSYS2_WORLD_AWARE);
-    /** READER-ROUTE (spec 16 section 7): the library's reader over the `core.word` facts as a third source of readings: 'off' (default) | 'fill' (readings for clauses nobody read) | 'choose' (and a reading that beats one that leaves words out). */
-    this.reader = normalizeReader(reader ?? globalThis.process?.env?.PSYS2_READER);
     /** NX reading strategy (ADR-009): 'hybrid' (default) | 'neural' | 'rules'. Only used with the encoder formalizer and when `engine.formalizers.nx` is ready; otherwise the rules path answers. */
     this.nx = normalizeNxStrategy(nx);
     /** Best effort with loose words (spec 03 section 7.15): after everything else failed, execute the most sensible reading of the content words (off in the library, on in the shipped settings). */
@@ -731,42 +727,6 @@ export class DialogSession {
     const real = await formalizers.rules.formalize(best.c.text, { ...opts, worlds: restrictedSet(set, [best.c.world]) });
     const segments = real.segments.map((x, k) => ({ ...x, span: seg.span, strategy: 'rules', corrections: [], ignored: [], ...(k === 0 ? { bestEffort: { took: best.c.text, ignored: best.c.ignored, world: best.c.world }, ...(waPick ? { pick: waPick } : {}) } : {}) }));
     return { segments };
-  }
-
-  /**
-   * READER-ROUTE (spec 16 section 7): for each clause the library's reader (`interpret` over the English `core.word` facts) is asked for a reading. A clause nobody read
-   * takes the reader's reading when it is unambiguous and leaves nothing out; in `choose` mode a clause that was read but leaves words out, or that the world refuses,
-   * takes it when the library's `rank` puts it first. Every decision is on the segment (`reader`). Never throws: a failure keeps the reading.
-   */
-  async _withReader(formal, mode) {
-    const ctx = this.context();
-    const worldOrder = [ctx.tabWorld, ctx.modalWorld, ctx.gameWorld, ...(ctx.recentWorlds ?? [])].filter((w, i, a) => w && a.indexOf(w) === i);
-    const inWorlds = [ctx.tabWorld, ctx.modalWorld, ctx.gameWorld].filter(Boolean);   // the worlds the user is in: the reader reads only these
-    const segments = [];
-    for (const seg of formal.segments) {
-      budget.tick('dialog.reader');
-      let out = null;
-      try {
-        if (seg.unparsed) {
-          const r = readerSegments(this, seg, { worldOrder, allowed: inWorlds, freeWorlds: inWorlds });
-          out = r.segments && !r.ambiguous ? r.segments : null;
-          if (out && this.isession?.rs) {   // the reading must be one the world instance can take (the library's `score`): a refusal by the rules is an answer, not a reason to drop it
-            const sc = this.isession.rs.score(out.map((x) => ({ wires: x.wires })));
-            if (sc.results.some((c) => c.judged && c.ok === false && !(c.violations ?? []).length)) out = null;
-          }
-          if (!out) { segments.push(r.info?.accepted ? { ...seg, reader: { ...r.info, used: false, ambiguous: !!r.ambiguous } } : seg); continue; }
-          segments.push(...out.map((x) => ({ ...x, reader: { ...x.reader, used: true, from: 'unparsed' } })));
-          continue;
-        }
-        if (mode === 'choose' && seg.wires?.length) {
-          const r = chooseReader(this, seg, { worldOrder, freeWorlds: inWorlds });
-          if (r?.segments) { segments.push(...r.segments); continue; }
-          if (r?.note) { segments.push({ ...seg, reader: r.note }); continue; }
-        }
-      } catch { /* keep the reading */ }
-      segments.push(seg);
-    }
-    return { ...formal, segments, wires: segments.flatMap((x) => x.wires ?? []) };
   }
 
   /**
@@ -1453,7 +1413,7 @@ export class DialogSession {
     return r;
   }
 
-  async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
+  async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, correction } = {}, override = null) {
     const { engine } = this;
     if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.editor (spec 26); unavailable until the library ships them
@@ -1562,7 +1522,6 @@ export class DialogSession {
     if (!icpt && !pre && !meta && (bestEffort ?? this.bestEffort) && formal.segments.length === 1 && formal.segments[0].unparsed) {   // one unparsed clause: a fragment of a longer message is never guessed
       formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router });
     }
-    { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
     if (!icpt && !pre && !meta && anyVoiceOn() && formal.segments.some((x) => x.unparsed || isIncomplete(x))) { try { formal = await perf.time('variants', () => withVariants(this, formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; } }   // spec 16 section 10: an unparsed clause read again (alternations, near words, slot types), the world deciding
     if (!icpt && !pre && !meta && formal.segments.length) formal = await perf.time('typed', async () => this._withTypedReader(formal));   // spec 16 section 9: a refused reading is read again by the types of its words
     // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads

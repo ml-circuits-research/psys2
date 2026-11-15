@@ -73,69 +73,9 @@ What it shows, honestly:
 - The matrices declare few actions (spec 15), so `score` returns `judged = false` for most readings and the library's criteria alone rarely separate two readings. The named cases that need the open tab or the knowledge of another world to be decided (the document that takes "center and what is 3 times 3", "colour Spain in", "add milk ... and also can penguins fly") are not changed: the right reading is not among the readings the formalizers found.
 - Romanian: not addressed here (E1: 349 of 451 are translator or lexicon cases), except where the English reading names something the world does not have.
 
-## 7. The reader as a third source of readings (READER-ROUTE)
+## 7. The reader as a third source of readings (READER-ROUTE) — deleted 2026-11-15
 
-Code: `src/dialog/reader-route.mjs`, the stage `_withReader` of `src/dialog/index.mjs`, the loader flag in `src/worlds/index.mjs`. Measurement: `scripts/e1-collect.mjs --reader <mode>`, `scripts/reader-route-report.mjs`, `scripts/e2-splits.mjs`; results in `training/results/reader-route-2026-11-12.{json,md}`. Tests: `tests/reader-route.test.mjs`.
-
-### 7.1 What it is
-
-The library's reader core (`interpret` over the English `core.word` facts of a world's `describe.sop`, split candidates, `score`, `rank`) reads a clause and gives readings. They are turned into the **same dialogue wires the rules produce**: the description's own `emit` template filled with what the library found, normalized and validated like the rules' wires (`buildWires`, `normalizeWire`, `validateWire`). The segment is marked `strategy: 'reader'` and carries `reader` (the world, the operation, what was assumed, why it was taken). It is a third source next to the rules and the encoder and uses the same judging (`ReasonerSession.score`).
-
-### 7.2 The option
-
-`reader` is a session option of `engine.createSession` (`'off' | 'fill' | 'choose'`, default `'off'`; a per-message option of `send` overrides it; the environment variable `PSYS2_READER` sets the default of command-line tools; `scripts/e1-collect.mjs --reader <mode>` passes it to the evaluation). `describe.sop` is read in full by the loader only when the flag is on (`PSYS2_READER` at engine creation; otherwise only its `slot=` declarations). With `off` nothing in this section runs and the turn is byte for byte the shipped one.
-
-| mode | what it does |
-| --- | --- |
-| `fill` | A clause that nothing read (unparsed, after the rules, the encoder, the leniency stages and the best-effort reader) takes the reader's reading when the reader has one that passes section 7.4. |
-| `choose` | `fill`, and a clause that was read takes the reader's reading when the library's `rank` (`ReasonerSession.score` over the current reading with the words it leaves out, and the reader's) puts the reader's first. A tie keeps the current reading (the given order). Only a rival reading of the world the clause was read in, or of the open tab, is considered. |
-
-The reader reads only the worlds the user is in (the open tab's world, the modal world, the running game's world). A world with no English description is not read. After the stage, the world-aware layer (sections 2 to 5) judges the reader's reading like any other (`veto`, `choose`).
-
-### 7.3 The mapping of `means`
-
-The 0.12 finding: with the words told to the world's matrix instance, only kids.shop's words resolved (geo.map 341 and docs.editor 247 `unknown-word` warnings), because a `means` of a description word is an **emit key** (`geo.capital`, `doc.addHeading`), not a name the matrix declares (the matrices declare few actions, spec 15). The reader therefore keeps a small **reader world** (a library `World`, built once per loaded world set, memoized, never holding user state) in which every `means` has a place the library knows:
-
-- every description (`core.describe`) is a **type** named by its id (not by its `op`: several descriptions may share one `op` and differ in emit and words, as a title and a heading do);
-- every argument is a **slot** of that type (`op.arg` is the key the words of an argument mean; a quantity slot `qty=` is a number slot); a `number` argument is a number slot, an argument of a lexicon class (`lex.x`) is a slot that holds a wire of the class, whose wires are the lexicon's words (identifying key `name`), any other class (`rest`, `noun`, `words`) is a free string slot;
-- the words of a description are told per description and role (`verb`, `tverb`, `noun`, `ask`, `rest`, `pre`, `mid`, `subject` mean the type; `prep.x`, `det.x`, `unit.x` mean the key `type.x`); a text of several words is one token with `_` (the library keeps the quotes of a quoted text), and the host merges the tokens of a clause that spell such a word or a name ("how many people live in", "new_york") before the library sees them; a plural name is read as its singular (the rules' lemma).
-
-So a `means` that names an operation, an argument or a value always resolves (`readerCoverage` reports it per world; the tests require no `unknown-word` warning and no unused word). Where the matrix does declare the name (kids.shop) the reading is the same; the matrix is not touched: the reading is judged on the real instance afterwards, as the rules' readings are.
-
-### 7.4 What the reader may take (the policy, `READER_POLICY`)
-
-A reading is taken only when all of these hold; each was added because a measurement showed a wrong answer without it.
-
-1. It leaves nothing out: every word of the clause is a word of the chosen description (role words, argument words), the value of an argument, a glue word (the host's fillers, question words, auxiliaries, prepositions), or the spelling the library corrected (`assumes`). A split candidate must read every frame of the split: since sopworld 0.13.2 (R14.1) a frame the library cannot read stays as an unresolved part (`unread: true`, its words in `unresolved`), and a split with such a part is no reading.
-2. A word the library read as a near known word is corrected by one letter at most (`maxAssume`; "moved" read as "money" is not a spelling of it).
-3. It rests on a content word of the description (`anchor`): one of its role words that is not glue, spelled as in the description or one letter away. "Is Kyoto" alone is not "is Kyoto landlocked".
-4. It is unambiguous: no reading of another set of wires is as good on every criterion (words left out, assumptions, a verb word rather than an implied verb, words used) in a world as near the conversation. Two descriptions that emit the same wires are one reading.
-5. Every number of the clause is a value of the reading.
-6. No negation in the clause (the reader has no way to say it).
-7. **No free text** (`freeText: false`): an argument that takes any words (class `rest`, `noun`, `words`) is not filled by the reader. The descriptions cover only part of a world, so a word they do not know may be content that the rules know ("make the heading bigger", "heading underline", "center the title" were read as headings with that text in the first measurement: 30 wrong answers). Descriptions with such an argument give the reader no reading.
-
-### 7.5 Rules of the stage
-
-- Read-only: `interpret`, `score` and `rank` run on the reader world and on forks; nothing is told to any world (`tests/reader-route.test.mjs`).
-- Bounded: the stage ticks the turn budget (`dialog.reader`, `reader.world`, `reader.tokens`, `reader.build`); `interpret` takes the library's own limit (12 candidates a clause).
-- Never throws: a failure keeps the reading.
-- English only: a Romanian message is read through the translator first and then the same English route.
-- The follow-up readings of the library (`previous`, `correction`, `other`) are not used: the discourse layer has already handled follow-ups before the formalizer runs.
-
-### 7.6 Results
-
-See `training/results/reader-route-2026-11-12.md` (and `-splits.json`). Rules / encoder+n1, over operational, operational-ro (Romanian through the rules translator), dialogues, gold, loose-words and typos, right / wrong / not understood:
-
-| mode | rules | encoder+n1 |
-| --- | --- | --- |
-| reader off | 7,221 / 424 / 642 | 7,394 / 473 / 479 |
-| `fill` | 4 not understood to right, 1 to wrong | 2 to right, 1 to wrong |
-| `choose` | 5 to right, 1 to wrong | 2 to right, 1 to wrong |
-
-- The one new wrong answer is a label mismatch (gold-real "on the new chapter": the reply is the rules' reply to "add a new chapter"; the gold op differs). No other case changed, in either mode, with or without the world-aware layer on top (E2 `choose`: the same 4 and 1; encoder+n1 the same 2 and 1).
-- Coverage of `means`: kids.shop 173 of 173 words (0.12: 0 unknown), docs.editor 247 of 247 (0.12: 247 unknown), geo.map 344 of 344 (0.12: 341 unknown); no `unknown-word` warning after the mapping.
-- The reader adds little because only three worlds have a description and it reads only the world the user is in; gold-para (class b) and loose-words (class e) gain nothing (no accepted reading of 14 and 105 messages of described worlds). Its value grows with the descriptions, with no change of code.
-- The library's split candidates are read and judged; a split is taken only when every frame reads. In the measurement of the reader alone (`scripts/e2-splits.mjs`, 1,500 messages of the three worlds) 11 accepted readings are splits of compound messages; none changed an outcome.
+**Deleted (reviewer decision 2026-11-15, questions.md Q23).** The route read a clause with the library's reader core (`interpret` over the English `core.word` facts of a world's `describe.sop`) and turned its readings into dialogue wires, behind the session option `reader` (`off` | `fill` | `choose`) and `PSYS2_READER`. It was off everywhere (the browser never set it): measured on 2026-11-12 (`training/results/reader-route-2026-11-12.{json,md}`, kept as a dated measurement) it turned 4 of 642 not-understood rules readings into right answers and 1 into a wrong one, and with the leniency switches on `fill` lost 2 dialogue turns and 10 typos (spec 03 section 7.17). Gone with it: `src/dialog/reader-route.mjs`, the stage `_withReader` of `src/dialog/index.mjs`, the loader flag of `src/worlds/index.mjs`, `settings.reader` / `RUNTIME_DEFAULTS.reader`, `scripts/reader-route-report.mjs`, `scripts/e2-splits.mjs`, `e1-collect.mjs --reader`, the reader configurations of `scripts/eval-ablation.mjs`, `tests/reader-route.test.mjs` and the R14.1 split test of `tests/host-functions.test.mjs`. `describe.sop` keeps only its `slot=` declarations (section 8); no world has one today, so the nine files with wording (diagram.sketch, docs.editor, kids.arith, kids.common, kids.shop, kids.tasks, kids.time, ui.help, ui.shell; 5,248 lines) were removed, and the meta.worlds cards that read their verbs and examples were regenerated. Before the deletion, the 24 English words of those files that the pinned catalog does not have were sent to the knowledge repository (questions.md Q27). The texts stay in the repository history.
 
 ## 8. One declaration of what an argument fills (Q2 item 2, J2; sopworld 0.13.1)
 
@@ -161,7 +101,7 @@ A host-run action (one the operations carry out and the matrix does not declare)
 
 **Status (P6, 2026-11-15): off by default, `PSYS2_TYPED=on` turns it on (a named diagnostic switch).** See section 15 for the measurement.
 
-Code: `src/dialog/typed-reader.mjs`, the stage `_withTypedReader` of `src/dialog/index.mjs` (after the rules, the best-effort and the reader route, before the knowledge lookup and the world-aware review). Tests: `tests/typed-reader.test.mjs`.
+Code: `src/dialog/typed-reader.mjs`, the stage `_withTypedReader` of `src/dialog/index.mjs` (after the rules and the best-effort, before the knowledge lookup and the world-aware review). Tests: `tests/typed-reader.test.mjs`.
 
 **What it does.** A clause the rules read completely and the world REFUSED is read again by the types of its words. "Change the unit of timeline 1 to day." is read by the frame `acts.change.of` with the thing "timeline" and the value "1 to day" (a free-text role stops at the number): the world answers "1 to day is not a unit I know". The step types the world from its own facts (each thing of the session as a wire with its label "timeline 1", its kind and attributes; each value an attribute can take, from the schema or, for a colour, from the colours the readers take), asks the library's `typedLexicon` for the type of every word, and reads the free-text roles of the refused reading again from the words they took together: the role of the type thing takes the words that name a thing of the session, the role of the type value takes the word typed as a value of the attribute the reading holds, and what is left must be function words (to, of, the). Word order only splits the words; the types assign them.
 
@@ -190,7 +130,7 @@ A failure is a class, and a fix is judged on its related cases (owner, 2026-11-1
 
 **Status (P6, 2026-11-15): every step of this section is off by default; `PSYS2_ALTERNATIONS=on`, `PSYS2_NEAR=on`, `PSYS2_SLOTS=on` turn one on (named diagnostic switches; the `=off` forms below are the old defaults).** With no voice switched on, `withVariants` is not called. See section 15.
 
-Code: `src/dialog/variants.mjs`, the stage `withVariants` of `src/dialog/index.mjs` (after the reader route, before the typed step of section 9). Tests: `tests/variants.test.mjs`.
+Code: `src/dialog/variants.mjs`, the stage `withVariants` of `src/dialog/index.mjs` (after the rules, before the typed step of section 9). Tests: `tests/variants.test.mjs`.
 
 A clause nobody read (`unparsed`) is read again by three steps in this order, each behind a switch for A/B runs. A step proposes another reading; the world decides (a run on a fork must support the new reading and must not end in the world's own refusal; a statement is accepted on its validated wires); all or nothing (a clause with two different acceptable readings keeps none; the original stays whole when no step succeeds); nothing is told to a world, no sentence is generated, no pattern or lexicon entry is added.
 1. **Alternations** (`PSYS2_ALTERNATIONS=off`): `normalise` over the `w.lang.en.alternation` facts of the catalog (passive, wrappers such as "could you", question and command, dative shift) brings the clause to its canonical form and the rules read that. The rules are knowledge: the catalog published none at the time of writing, so the step is a no-op until it does (it reads `facts.wires('w.lang.en.alternation')`).
@@ -300,7 +240,7 @@ Code: `src/dialog/foreign-reading.mjs` (`reviewForeign`, `notFull`, `confidentTy
 | --- | --- | --- | --- |
 | `PSYS2_REASONER` | matrix | `src/dialog/index.mjs` `createEngine` | **test oracle only** (reviewer decision 2026-11-15, Q23): matrix is the product; `=ops` is set only by the A/B gate and the code that compares reasoners; the webchat has no Reasoner setting. Deleted with `ui.help/ui.shell` ops bodies after the four kids dual worlds go (spec 15 "Plan for the oracle") |
 | `PSYS2_WORLD_AWARE` | veto | `src/dialog/index.mjs` | kept (section 6, user decision 2026-11-12) |
-| `PSYS2_READER` (also `globalThis.PSYS2_READER`) | off | `src/dialog/index.mjs`, `src/worlds/index.mjs` | owner decision asked (Q23): delete the reader route, or keep it as a dated diagnostic |
+| `PSYS2_READER` (also `globalThis.PSYS2_READER`) | off | — | **deleted** with the reader route (reviewer decision 2026-11-15, section 7) |
 | `PSYS2_COMPLETE` | hold | `src/formalizer/completeness.mjs` | kept (sections 12, 13) |
 | `PSYS2_COMPLETE_SRC` (`heuristic`), `PSYS2_COMPLETE_FOREIGN` | typed, off | `src/formalizer/completeness.mjs` | dead by measurement; left for the owner of that file (listed in Q23) |
 | `PSYS2_FOREIGN` | on | `src/dialog/foreign-reading.mjs` | kept (section 14) |

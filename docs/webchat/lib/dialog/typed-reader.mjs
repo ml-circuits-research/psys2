@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
- * TYPED READING STEP (spec 16 section 9): the library's type-driven reading (`typedLexicon`, the typing of `readByTypes`) as a reading step AFTER the rules and the reader route.
+ * TYPED READING STEP (spec 16 section 9): the library's type-driven reading (`typedLexicon`, the typing of `readByTypes`) as a reading step AFTER the rules.
  * It proposes, the world decides, and it is all-or-nothing:
  *  - it runs only on a clause the rules read and the world REFUSED (a run on a fork of the session ends in the world's own refusal: an answer with a `fallback` code and no change): a reading the world accepts, a clause nobody read, and a clause
  *    that was corrected earlier are never touched;

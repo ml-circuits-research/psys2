@@ -51,7 +51,7 @@ export function policyFromSettings(settings) {
 
 /** Options of `engine.createSession` for a settings object. */
 export function sessionOptions(settings, extra = {}) {
-  return { ...(settings.routing ? { routing: settings.routing } : {}), formalizer: settings.formalizer, nx: normalizeNxStrategy(settings.nxStrategy), spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, suspect: settings.suspectWords !== false, ...(settings.reader && settings.reader !== 'off' ? { reader: settings.reader } : {}), ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
+  return { ...(settings.routing ? { routing: settings.routing } : {}), formalizer: settings.formalizer, nx: normalizeNxStrategy(settings.nxStrategy), spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, suspect: settings.suspectWords !== false, ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
 }
 
 /**

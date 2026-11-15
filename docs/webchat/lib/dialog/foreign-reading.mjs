@@ -28,7 +28,7 @@ import { FUNCTION_WORDS, spellVocabulary, isKnownWord, spellBudget } from '../fo
 import { targetsOf } from '../formalizer/typed-world.mjs?v=f43790816b';
 import { slipDistance, stemsOf } from './scene-referents.mjs?v=b0abbd3363';
 import { lexIndex } from '../worlds/lexicon.mjs?v=2b73282059';
-import { tabOfWorld } from '../worlds/index.mjs?v=6d91759413';
+import { tabOfWorld } from '../worlds/index.mjs?v=47260d4352';
 
 export const foreignOn = () => globalThis.process?.env?.PSYS2_FOREIGN !== 'off';
 

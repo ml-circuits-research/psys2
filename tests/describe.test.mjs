@@ -1,5 +1,6 @@
 // E3 (spec 03 section 2c): operation descriptions. The loader's pattern generator and its switch PSYS_GEN_PATTERNS were deleted in P6 (spec 16 section 15);
-// describePatterns stays a pure function (tested here), and describe.sop is read in full only by the reader route (PSYS2_READER).
+// describePatterns stays a pure function (tested here). The reader route that read describe.sop in full was deleted 2026-11-15 (reviewer decision; spec 16 section 7):
+// a world's describe.sop holds only `slot=` declarations, and no world ships one with wording.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
@@ -7,10 +8,7 @@ import { loadWorlds } from '../src/worlds/index.mjs';
 import { parse } from '../src/soplang/index.mjs';
 import { describePatterns, makeArg, emitKey, readDescriptionWires, descriptionFor, wordToken } from '../src/worlds/describe.mjs';
 
-const load = async (reader) => {
-  if (reader) globalThis.PSYS2_READER = reader; else delete globalThis.PSYS2_READER;
-  try { return await loadWorlds(createFsLoader({ roots: [DEFAULT_ROOT] })); } finally { delete globalThis.PSYS2_READER; }
-};
+const load = () => loadWorlds(createFsLoader({ roots: [DEFAULT_ROOT] }));
 const WORLDS = ['kids.shop', 'docs.editor', 'kids.arith', 'kids.tasks', 'kids.time'];
 
 test('an argument is built from wires and keys, with no notation inside a value', () => {
@@ -42,18 +40,15 @@ test('a quantified optional item expands to every count form and drops the absen
   assert.ok(list.some((p) => p.emit.includes('count=1')));
 });
 
-test('descriptions are not read in full unless the reader route is on', async () => {
-  const set = await load(null);
-  for (const id of WORLDS) assert.equal(set.worlds.get(id).descriptions.length, 0);
-});
-
-test('every description loads clean (read with the reader route on)', async () => {
-  const set = await load('fill');
-  assert.equal(set.worlds.get('kids.common').descriptions.length, 6);
-  for (const id of ['kids.common', ...WORLDS]) {
-    const w = set.worlds.get(id);
-    assert.ok(id === 'kids.common' || w.descriptions.length >= (id === 'docs.editor' ? 5 : 10), `${id}: ${w.descriptions.length} descriptions`);
-    assert.deepEqual(w.errors.filter((e) => e.file === 'describe.sop'), [], `${id}: describe.sop errors`);
-    for (const d of w.descriptions) assert.equal(emitKey(d.emit), d.op, `${d.id}: op differs from the key of its emit`);
+test('no world ships the wording of a description: describe.sop holds only slot= declarations, and the loader reads only those', async () => {
+  const { readdirSync, existsSync, readFileSync } = await import('node:fs');
+  const root = new URL('../worlds/', import.meta.url);
+  for (const id of readdirSync(root)) {
+    const f = new URL(`${id}/describe.sop`, root);
+    if (!existsSync(f)) continue;
+    const text = readFileSync(f, 'utf8');
+    assert.doesNotMatch(text, /core\.describe\.words|core\.word\b/, `${id}/describe.sop has wording`);
   }
+  const set = await load();
+  for (const id of WORLDS) assert.ok(set.worlds.get(id).descriptions.every((d) => d.words.size === 0), id);
 });
