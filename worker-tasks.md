@@ -4675,3 +4675,7 @@ Ran on main (34f18f5d + 0.151) through `cli.mjs chat`; properties test 11 pass; 
 4. **Make with a place** ("put a house on the left") is a make when the thing is not present: the drawing world declares `place` for make.
 5. The list of "needs <generic piece>" from the owner sessions (RO 7/43, EN 7/16 through the generic door): paste it in the log grouped by piece with counts, so the next work is chosen by the largest piece, not by a sentence.
 Then deploy and write the live build; the owner will try it.
+
+## Reviewer 2026-11-15 19:05 — smoke on main: 66 pass, 22 fail
+
+I ran `npm run test:smoke` on 34f18f5d + rebuild: 66 pass, 22 fail (it was 88/88 before the door). The gate decision of 17:20 stands: a merge keeps `npm test` green; tests that only pin an old wording or route move to the tagged report-only legacy list with a reason each. So: class the 22 now (old route / wording → legacy list; real break of something the page needs — loading, tabs, export, undo, Romanian replies — → fix first), write the classes in the log, and get the suite green again before the deploy.
