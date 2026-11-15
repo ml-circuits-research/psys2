@@ -1189,8 +1189,10 @@ export async function mountPsys2(element, options = {}) {
     if (destroyed || !engineClient || options.suggestions === false) return;
     const my = ++sugSeq, onChat = phone && page === 'chat', tab = onChat ? 'talk' : view, talk = onChat || !tab;
     let items = [];
-    try { items = await sampleItems(talk ? 'few' : 'actions', { tab, count: talk ? 4 : 5 }); } catch { items = []; }
-    if (!items.length && !talk) { try { items = await sampleItems('few', { tab: 'talk', count: 4 }); } catch { items = []; } }   // a page with no acts of its own shows the examples of the conversation
+    const lang = language.get();   // the chips are in the selected language (the worker leaves out a chip it cannot say in it)
+    try { items = await sampleItems(talk ? 'few' : 'actions', { tab, count: talk ? 4 : 5, language: lang }); } catch { items = []; }
+    // a page with no acts for its thing yet shows examples of ITS OWN world (reviewer 2026-11-15 03:15 item 3: never the chips of other pages)
+    if (!items.length && !talk) { try { items = await sampleItems('few', { tab, count: 4, onlyTab: true, language: lang }); } catch { items = []; } }
     if (my !== sugSeq || destroyed) return;
     exBar.replaceChildren(...items.map((it) => h('button', { class: 'p2-example', type: 'button', onclick: () => { if (it.tab && it.tab !== 'robot' && tabBtns[it.tab] && view !== it.tab) userTab(it.tab, 'example'); send(it.text, 'chip', { example: true }); input.focus(); } }, it.text)));
     exBar.hidden = !items.length;
@@ -1318,6 +1320,7 @@ export async function mountPsys2(element, options = {}) {
     session?.setWorldState?.(SHELL, { language: lang });   // the shell world's state follows the selector, so that "speak Romanian" is a change and not a no-op
     renderLangSelect(); checkBrowserTranslator(lang); tl.prepare(lang).then(() => { renderSettings(); loadVoiceWords(lang); }, () => {}); loadVoiceWords(lang); voiceNotice(lang);   // MT-SERIOUS: the model of the language downloads now (lazily: only when it is selected)
     hintEl?.remove(); hintEl = null;
+    refreshSuggestions();   // the example bar is in the selected language
     if (reason === 'hint') { const said = `Switched to ${langName(lang, { own: false })}.`; localized(said, lang).then((t) => note(t)); }   // a switch command confirms in its own reply, in the new language
   });
   on(langSel, 'change', () => setLanguage(langSel.value, 'selector'));
@@ -1995,7 +1998,7 @@ export async function mountPsys2(element, options = {}) {
   if (options.onboarding !== false) {
     const chips = h('div', { class: 'p2-chips-row' });   // the welcome examples come from the sampler too, a moment after the page
     addMessage('bot', GREETING, { children: chips, className: 'is-hint' });
-    sampleItems('few', { tab: 'talk', count: 4 }).then((items) => { for (const it of items) chips.append(h('button', { class: 'p2-example', type: 'button', onclick: () => { if (it.tab && tabBtns[it.tab] && view !== it.tab) userTab(it.tab, 'example'); send(it.text, 'chip', { example: true }); input.focus(); } }, it.text)); }).catch(() => {});
+    sampleItems('few', { tab: 'talk', count: 4, language: language.get() }).then((items) => { for (const it of items) chips.append(h('button', { class: 'p2-example', type: 'button', onclick: () => { if (it.tab && tabBtns[it.tab] && view !== it.tab) userTab(it.tab, 'example'); send(it.text, 'chip', { example: true }); input.focus(); } }, it.text)); }).catch(() => {});
   }
   const handle = {
     engine, session, settings, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => showTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },

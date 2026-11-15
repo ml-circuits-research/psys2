@@ -370,20 +370,23 @@ const handlers = {
     const [lib, sm] = await Promise.all([import(vurl('lib/vendor/sopworld/sopworld.mjs')), import(vurl('lib/dialog/sampler.mjs'))]);
     sampler ??= sm.engineSampler(lib, engine, () => session);
     if (!sampler.available) return { items: [], available: false };
+    // CHIPS IN THE SELECTED LANGUAGE (reviewer 2026-11-15 03:15 item 3): src/dialog/sampler.mjs `chipsInLanguage`, the rules translator (Romanian tables loaded first)
+    const chipsIn = async (mod, items, language) => { const lang = language ? mods.lang.normalize(language) : 'en'; if (lang !== 'en') { try { await mods.translate.loadRoEn?.(); } catch { /* the rules have what they have */ } } return mod.chipsInLanguage(items, lang, engine.translator); };
     const tabWorld = (m.tab && (tabWorlds[m.tab] ?? worldLoader.ids().find((id) => worldLoader.info(id).tab?.id === m.tab))) || null;
     const tabOfWorld = (id) => worldLoader.info(id)?.tab?.id ?? Object.keys(tabWorlds).find((t) => tabWorlds[t] === id) ?? null;   // the page's tab plugins name the world of each tab (the built-in Documents tab too)
     if (tabWorld && !loadedIds.has(tabWorld)) await ensureWorlds([tabWorld], 'dice');
     const loaded = () => sampler.worlds();
-    const orderOf = () => [...new Set([tabWorld, ...recentWorlds, ...loaded()].filter((id) => id && loaded().includes(id)))];
+    // `onlyTab` (the example bar of a page, reviewer 2026-11-15 03:15 item 3): only the open page's world, never the examples of other pages
+    const orderOf = () => (m.onlyTab ? (tabWorld && loaded().includes(tabWorld) ? [tabWorld] : []) : [...new Set([tabWorld, ...recentWorlds, ...loaded()].filter((id) => id && loaded().includes(id)))]);
     let order = orderOf();
-    if (!order.length && m.mode !== 'actions' && worldLoader.info(DEFAULT_DICE_WORLD)) { await ensureWorlds([DEFAULT_DICE_WORLD], 'dice'); order = orderOf(); }   // nothing sampleable is loaded yet (lazy loading): the drawing board is the smallest general world
+    if (!order.length && m.mode !== 'actions' && !m.onlyTab && worldLoader.info(DEFAULT_DICE_WORLD)) { await ensureWorlds([DEFAULT_DICE_WORLD], 'dice'); order = orderOf(); }   // nothing sampleable is loaded yet (lazy loading): the drawing board is the smallest general world
     const item = (r) => ({ text: r.text, world: r.world, tab: tabOfWorld(r.world), act: r.frame?.action ?? null, thing: r.frame?.args?.thing ?? null });
     const count = Math.min(Math.max(Number(m.count) || 4, 1), 6);
     if (m.mode === 'actions') {
       if (!tabWorld || !loaded().includes(tabWorld)) return { items: [], available: true };
       const things = sampler.thingsOf?.(tabWorld) ?? [];
       const target = m.thing ?? (things.find((t) => t.salient) ?? things.at(-1))?.id;
-      return { items: target ? sampler.actions({ worldId: tabWorld, thing: target, seed: m.seed, count }).map(item) : [], available: true, thing: target ?? null };
+      return { items: await chipsIn(sm, target ? sampler.actions({ worldId: tabWorld, thing: target, seed: m.seed, count }).map(item) : [], m.language), available: true, thing: target ?? null };
     }
     if (m.mode === 'few') {
       const out = [], texts = new Set();
@@ -392,7 +395,7 @@ const handlers = {
         for (const r of sampler.sample('one', { worldId: id, seed: m.seed != null ? m.seed + out.length + round * 31 : undefined })) if (!texts.has(r.text)) { texts.add(r.text); out.push(item(r)); }
         if (out.length >= count) break;
       }
-      return { items: out.slice(0, count), available: true };
+      return { items: await chipsIn(sm, out.slice(0, count), m.language), available: true };
     }
     for (const id of order) { const r = sampler.dice({ worldId: id, seed: m.seed }); if (r) return { items: [item(r)], available: true }; }
     return { items: [], available: true };

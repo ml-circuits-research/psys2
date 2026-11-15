@@ -211,3 +211,27 @@ export function engineSampler(lib, engine, session) {
   const worlds = () => engine.set.list().filter((w) => w.ops?.executor?.schema).map((w) => w.id);
   return { ...sampler, worlds };
 }
+
+/**
+ * CHIPS IN THE SELECTED LANGUAGE (spec 25; reviewer 2026-11-15 03:15 item 3): a chip is a command the sampler rendered in English; in a session of another language it is shown (and
+ * sent) in that language, by the rules translator (its reply tables and grammar, never a machine translator), and a chip it cannot say completely is left out: never an English chip
+ * on a page in another language. Each item keeps its English text in `en`. `translator` is the engine's (its `rules` when it switches between translators).
+ */
+const norm = (s) => String(s ?? '').toLowerCase().replace(/[.!?,"„”]/g, '').replace(/\s+/g, ' ').trim();
+export async function chipsInLanguage(items, lang, translator) {
+  if (!lang || lang === 'en' || !items?.length) return items ?? [];
+  const rules = translator?.rules ?? translator;
+  if (!rules?.translate) return [];
+  const out = [];
+  for (const it of items) {
+    try {
+      const r = await rules.translate(it.text, { from: 'en', to: lang });
+      const text = typeof r === 'string' ? r : r?.text;
+      if (!text || r?.unknown?.length || r?.untranslatable?.length || (translator?.leftovers?.(text, lang) ?? rules.leftovers?.(text, lang) ?? []).length) continue;
+      // read back: the chip, when tapped, is read as the same command (the reading of a chip is the world's, so a chip that would read otherwise is not offered)
+      const back = await rules.translate(text, { from: lang, to: 'en' });
+      if (norm(typeof back === 'string' ? back : back?.text) === norm(it.text)) out.push({ ...it, text: text.trim(), en: it.text });
+    } catch { /* this chip is left out */ }
+  }
+  return out;
+}
