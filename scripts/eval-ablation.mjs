@@ -99,7 +99,7 @@ function buildItems({ sets, limit }) {
   if (sets?.includes('operational-ro')) for (const c of cut(L('training/eval/operational-ro.jsonl'))) items.push({ kind: 'case', set: 'operational-ro', c });   // only when asked for (translation: rules-only vs the model path)
   if (want('minimal-pairs')) for (const c of cut(L('training/eval/minimal-pairs-2026-11-12.jsonl'))) items.push({ kind: 'case', set: 'minimal-pairs', c });
   if (want('knowledge')) for (const c of cut(L('training/eval/knowledge-lookup-2026-11-13.jsonl'))) items.push({ kind: 'knowledge', set: 'knowledge', c });
-  if (want('dialogues')) for (const d of cut(L('training/eval/dialogues.jsonl'))) items.push({ kind: 'dialogue', set: 'dialogues', d });
+  if (want('dialogues')) for (const d of cut(L('training/eval/dialogues.jsonl').filter((x) => !x.retired))) items.push({ kind: 'dialogue', set: 'dialogues', d });
   if (want('wrong-tab')) {
     const f = process.env.ABL_ROUTE_INPUTS ?? arg('route-inputs');
     if (f && existsSync(f)) for (const x of cut(JSON.parse(readFileSync(f, 'utf8')).filter((y) => y.set.startsWith('wrong-tab')))) items.push({ kind: 'world', set: 'wrong-tab', x });

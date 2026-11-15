@@ -60,7 +60,7 @@ for (const c of operational) {
     rows.push({ id: c.id, set: 'operational', world: c.world, message: c.message, action, act: actOf(action), outcome: outcomes.get(c.id) ?? null });
   } catch (e) { rows.push({ id: c.id, set: 'operational', world: c.world, message: c.message, action: null, act: null, error: String(e.message).slice(0, 80) }); }
 }
-const dialogues = read('training/eval/dialogues.jsonl').slice(0, LIMIT);
+const dialogues = read('training/eval/dialogues.jsonl').filter((d) => !d.retired).slice(0, LIMIT);
 for (const d of dialogues) {
   const s = engine.createSession({ language: 'en' });
   if (d.tab) s.setWorldState('ui.shell', { activeTab: d.tab });

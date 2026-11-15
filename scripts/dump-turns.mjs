@@ -24,7 +24,7 @@ const step = (m) => (typeof m === 'string' ? m : m.message ?? m.text);
 const cut = (rows) => (LIMIT ? rows.slice(0, LIMIT) : rows);
 const ss = [];
 if (want.includes('operational')) for (const c of cut(jsonl(E('operational.jsonl')))) ss.push({ set: 'operational', id: c.id, world: c.world, tab: c.tab, init: c.init, turns: [...(c.setup ?? []).map(step), c.message] });
-if (want.includes('dialogues')) for (const d of cut(jsonl(E('dialogues.jsonl')))) ss.push({ set: 'dialogues', id: d.id, world: d.world, tab: d.tab, init: d.init, turns: d.turns.map((t) => ({ message: t.message, tab: t.tab, mode: t.mode })) });
+if (want.includes('dialogues')) for (const d of cut(jsonl(E('dialogues.jsonl')).filter((d) => !d.retired))) ss.push({ set: 'dialogues', id: d.id, world: d.world, tab: d.tab, init: d.init, turns: d.turns.map((t) => ({ message: t.message, tab: t.tab, mode: t.mode })) });
 if (want.includes('coherence')) for (const c of cut(jsonl(E('coherence-2026-11-10.jsonl')))) ss.push({ set: 'coherence', id: c.id, world: c.world, tab: c.tab, turns: c.turns.map(step) });
 if (want.includes('gold')) for (const g of cut(jsonl(join(REPO, 'training/nx/gold/pilot-300.jsonl')))) ss.push({ set: 'gold', id: g.id, world: g.world, tab: g.tab && g.tab !== 'none' ? g.tab : null, turns: [...(g.context ?? []).map(step), step(g.text)] });
 
