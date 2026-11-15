@@ -533,3 +533,8 @@ Own tests (matrix) 410 -> 452 of 454; ledger rows 41 of 43 closed, by seven mech
 - **A world with its own reader must say what it passes over.** `readsWhole: () => true` gave calc.story full coverage of "i lost 2 lei buying a sweet" and it took the sentence from kids.shop; counting the words the reader did not use made the coverage honest.
 - **Measure in the shipped configuration before claiming a row.** The shop rows passed in the rules formalizer with the page's router; the encoder dispatcher cut one of them into pieces nobody reads.
 - **Take the library's function when it gives the same answer, and say why when it does not.** `arrange(..,'path')` gave the host's points exactly and replaced them; `outlineOf` is a convex hull of boxes, and a hull flattens a gable and drops the eaves, so the host's silhouette stays until the library has a concave one.
+
+## 2026-11-15 sopworld 0.136 and probe B on the kit
+- **Re-run the probe that found the gap, not a new one.** The 13 seating turns of probe B, kept as a scratch script, showed in minutes which of the four conditions now hold and which replies are still English; a fresh probe would have measured something else.
+- **A second oracle is worth adding only when it can disagree.** The library's `turnScope` joined the turn-scope test only once it scoped per world; the test asserts that both checks give the same stray list and that the kit's predicate catches the owner's original bug, so a change in either one shows.
+- **Refusing our own text is the right answer from a library.** The kit now refuses PSys2's generated `acts.schema` text it loaded silently before; the gap is in our generator's dialect, and that is what step 4 has to settle (one source of truth: the published schema text).
