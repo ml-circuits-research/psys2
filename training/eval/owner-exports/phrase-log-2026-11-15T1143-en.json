@@ -1,0 +1,3521 @@
+{
+ "format": "psys2-phrase-log/3",
+ "app": {
+  "build": "f2681db2",
+  "version": "8bcf1a91a9"
+ },
+ "turns": 10,
+ "exported": "2026-11-15T11:43:48.626Z",
+ "count": 10,
+ "diagnostics": {
+  "longTasks": [
+   {
+    "at": "2026-11-15T11:33:56.963Z",
+    "ms": 266,
+    "stage": "idle",
+    "engineStage": null,
+    "tab": "diagram"
+   }
+  ],
+  "engine": {
+   "starts": 1,
+   "kills": [],
+   "crashes": 0,
+   "sends": 16,
+   "dryRuns": 0,
+   "refused": 0,
+   "restartsThisTurn": 0,
+   "startTimeouts": 0,
+   "bad": []
+  },
+  "ort": {
+   "restarts": 0,
+   "stats": {
+    "requests": 102,
+    "responses": 102,
+    "timeouts": 0,
+    "aborts": 0,
+    "restarts": 0,
+    "pauses": 0,
+    "cancelled": 0,
+    "byLabel": {
+     "create dispatcher": 1,
+     "dispatcher": 101
+    }
+   }
+  }
+ },
+ "eventCount": 116,
+ "events": [
+  {
+   "id": "emwhjabwqj1g",
+   "time": "2026-11-15T07:49:24.554Z",
+   "kind": "tap",
+   "target": "Close settings",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "settings",
+   "what": "button"
+  },
+  {
+   "id": "emwhjad5f0yw",
+   "time": "2026-11-15T07:49:26.163Z",
+   "kind": "tap",
+   "target": "Pages",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhjae9y7zz",
+   "time": "2026-11-15T07:49:27.622Z",
+   "kind": "tap",
+   "target": "Chat",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhjafkzcm5",
+   "time": "2026-11-15T07:49:29.315Z",
+   "kind": "step",
+   "target": "Loading the page code",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "page",
+   "ms": 701,
+   "bytes": 500057,
+   "ok": true
+  },
+  {
+   "id": "emwhjahjpd91",
+   "time": "2026-11-15T07:49:31.861Z",
+   "kind": "step",
+   "target": "Loaded 13 worlds",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "worlds",
+   "ms": 1260,
+   "bytes": 626194,
+   "ok": true
+  },
+  {
+   "id": "emwhjaibx89i",
+   "time": "2026-11-15T07:49:32.877Z",
+   "kind": "step",
+   "target": "Starting the reasoner",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "reasoner",
+   "ms": 1015,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhjaie3njn",
+   "time": "2026-11-15T07:49:32.955Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhjaiio6wy",
+   "time": "2026-11-15T07:49:33.120Z",
+   "kind": "step",
+   "target": "Voices: 92 found",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "voices",
+   "ms": 18,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhjajfk7je",
+   "time": "2026-11-15T07:49:34.304Z",
+   "kind": "step",
+   "target": "Face set loaded",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "faces",
+   "ms": 858,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhjajibjbf",
+   "time": "2026-11-15T07:49:34.403Z",
+   "kind": "step",
+   "target": "Loading the Romanian translation model",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "translator",
+   "ms": 1287,
+   "bytes": 29729171,
+   "ok": true
+  },
+  {
+   "id": "emwhjao6y7e2",
+   "time": "2026-11-15T07:49:40.474Z",
+   "kind": "step",
+   "target": "Loading the arithmetic worlds…",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "world:ui.avatar,time.calendar,talk,plan.timeline,plan.seating,plan.list,media.music,kids.tasks,kids.shop,kids.arith,geo.map,docs.editor,diagram.sketch,data.charts,calc.story,calc.arith",
+   "ms": 7363,
+   "bytes": 3042315,
+   "ok": true
+  },
+  {
+   "id": "emwhjaout8xn",
+   "time": "2026-11-15T07:49:41.333Z",
+   "kind": "step",
+   "target": "Reading model: loads when a message needs it",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "model",
+   "ms": 0,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhjaouu7jy",
+   "time": "2026-11-15T07:49:41.334Z",
+   "kind": "step",
+   "target": "Reading the knowledge catalog index",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "catalog",
+   "ms": 1,
+   "bytes": 3379248,
+   "ok": true
+  },
+  {
+   "id": "emwhjbdfshqm",
+   "time": "2026-11-15T07:50:13.192Z",
+   "kind": "step",
+   "target": "Reading model loaded",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "model",
+   "ms": 1848,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhra4xfmi7",
+   "time": "2026-11-15T11:33:12.435Z",
+   "kind": "step",
+   "target": "Loading the page code",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "page",
+   "ms": 789,
+   "bytes": 502839,
+   "ok": true
+  },
+  {
+   "id": "emwhra6e9rh1",
+   "time": "2026-11-15T11:33:14.337Z",
+   "kind": "tap",
+   "target": "Settings",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhra70von1",
+   "time": "2026-11-15T11:33:15.151Z",
+   "kind": "step",
+   "target": "Loaded 13 worlds",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "worlds",
+   "ms": 1497,
+   "bytes": 630373,
+   "ok": true
+  },
+  {
+   "id": "emwhra7w2vj3",
+   "time": "2026-11-15T11:33:16.274Z",
+   "kind": "step",
+   "target": "Starting the reasoner",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "reasoner",
+   "ms": 1123,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhra832c4p",
+   "time": "2026-11-15T11:33:16.526Z",
+   "kind": "step",
+   "target": "Voices: 92 found",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "voices",
+   "ms": 26,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhra8sndo2",
+   "time": "2026-11-15T11:33:17.447Z",
+   "kind": "step",
+   "target": "Face set loaded",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "faces",
+   "ms": 602,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhra8xiv0i",
+   "time": "2026-11-15T11:33:17.622Z",
+   "kind": "step",
+   "target": "Loading the Romanian translation model",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "translator",
+   "ms": 1107,
+   "bytes": 29729171,
+   "ok": true
+  },
+  {
+   "id": "emwhrab2kv6k",
+   "time": "2026-11-15T11:33:20.396Z",
+   "kind": "step",
+   "target": "Loading the arithmetic worlds…",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "world:ui.avatar,time.calendar,talk,plan.timeline,plan.seating,plan.list,media.music,kids.tasks,kids.shop,kids.arith,geo.map,docs.editor,diagram.sketch,data.charts,calc.story,calc.arith",
+   "ms": 3881,
+   "bytes": 3042315,
+   "ok": true
+  },
+  {
+   "id": "emwhrabtt1dv",
+   "time": "2026-11-15T11:33:21.377Z",
+   "kind": "step",
+   "target": "Reading model: loads when a message needs it",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "model",
+   "ms": 0,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhrabu4a0f",
+   "time": "2026-11-15T11:33:21.388Z",
+   "kind": "step",
+   "target": "Reading the knowledge catalog index",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "catalog",
+   "ms": 10,
+   "bytes": 3379248,
+   "ok": true
+  },
+  {
+   "id": "emwhraji43s3",
+   "time": "2026-11-15T11:33:31.324Z",
+   "kind": "tap",
+   "target": "Close settings",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "settings",
+   "what": "button"
+  },
+  {
+   "id": "emwhrawzqdub",
+   "time": "2026-11-15T11:33:48.806Z",
+   "kind": "tap",
+   "target": "Pages",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhraxqz3ay",
+   "time": "2026-11-15T11:33:49.787Z",
+   "kind": "tap",
+   "target": "Diagram",
+   "tab": "draw",
+   "tabAfter": "diagram",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhraxqzfze",
+   "time": "2026-11-15T11:33:49.787Z",
+   "kind": "tab",
+   "target": "diagram",
+   "tab": "draw",
+   "tabAfter": "diagram",
+   "via": "menu"
+  },
+  {
+   "id": "emwhrb07ut8g",
+   "time": "2026-11-15T11:33:52.986Z",
+   "kind": "step",
+   "target": "Reading model loaded",
+   "tab": null,
+   "tabAfter": "diagram",
+   "stepId": "model",
+   "ms": 1594,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhrb1a5igf",
+   "time": "2026-11-15T11:33:54.365Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrb3adnxg",
+   "time": "2026-11-15T11:33:56.965Z",
+   "kind": "step",
+   "target": "Loading the page code",
+   "tab": null,
+   "tabAfter": "diagram",
+   "stepId": "page",
+   "ms": 439,
+   "bytes": 502839,
+   "ok": true
+  },
+  {
+   "id": "emwhrb4b0hs2",
+   "time": "2026-11-15T11:33:58.284Z",
+   "kind": "step",
+   "target": "Loaded 13 worlds",
+   "tab": null,
+   "tabAfter": "diagram",
+   "stepId": "worlds",
+   "ms": 432,
+   "bytes": 666695,
+   "ok": true
+  },
+  {
+   "id": "emwhrb4n57u0",
+   "time": "2026-11-15T11:33:58.721Z",
+   "kind": "step",
+   "target": "Starting the reasoner",
+   "tab": null,
+   "tabAfter": "diagram",
+   "stepId": "reasoner",
+   "ms": 437,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhrb4tffmc",
+   "time": "2026-11-15T11:33:58.947Z",
+   "kind": "step",
+   "target": "Voices: 92 found",
+   "tab": null,
+   "tabAfter": "diagram",
+   "stepId": "voices",
+   "ms": 5,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhrb59iiir",
+   "time": "2026-11-15T11:33:59.526Z",
+   "kind": "tap",
+   "target": "Language",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhrb5gl9v5",
+   "time": "2026-11-15T11:33:59.781Z",
+   "kind": "step",
+   "target": "Face set loaded",
+   "tab": null,
+   "tabAfter": "diagram",
+   "stepId": "faces",
+   "ms": 575,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhrb5lbp1b",
+   "time": "2026-11-15T11:33:59.951Z",
+   "kind": "step",
+   "target": "Loading the Romanian translation model",
+   "tab": null,
+   "tabAfter": "diagram",
+   "stepId": "translator",
+   "ms": 1005,
+   "bytes": 29729171,
+   "ok": true
+  },
+  {
+   "id": "emwhrb5w8yyl",
+   "time": "2026-11-15T11:34:00.344Z",
+   "kind": "step",
+   "target": "Loading the drawing worlds…",
+   "tab": null,
+   "tabAfter": "diagram",
+   "stepId": "world:ui.avatar,time.calendar,talk,plan.timeline,plan.seating,plan.list,media.music,kids.tasks,kids.shop,kids.arith,geo.map,docs.editor,data.charts,calc.story,calc.arith,art.draw",
+   "ms": 1399,
+   "bytes": 3005993,
+   "ok": true
+  },
+  {
+   "id": "emwhrb6lb5lr",
+   "time": "2026-11-15T11:34:01.247Z",
+   "kind": "step",
+   "target": "Reading model: loads when a message needs it",
+   "tab": null,
+   "tabAfter": "diagram",
+   "stepId": "model",
+   "ms": 0,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhrb6lygn5",
+   "time": "2026-11-15T11:34:01.270Z",
+   "kind": "step",
+   "target": "Reading the knowledge catalog index",
+   "tab": null,
+   "tabAfter": "diagram",
+   "stepId": "catalog",
+   "ms": 22,
+   "bytes": 3379248,
+   "ok": true
+  },
+  {
+   "id": "emwhrb72rv0j",
+   "time": "2026-11-15T11:34:01.875Z",
+   "kind": "language",
+   "target": "en",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "from": "ro",
+   "reason": "selector"
+  },
+  {
+   "id": "emwhrb72xbmf",
+   "time": "2026-11-15T11:34:01.881Z",
+   "kind": "tap",
+   "target": "Language",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhrb7wur2f",
+   "time": "2026-11-15T11:34:02.958Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrbfngk20",
+   "time": "2026-11-15T11:34:12.988Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrbgwnhbr",
+   "time": "2026-11-15T11:34:14.615Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrbjlrt7m",
+   "time": "2026-11-15T11:34:18.111Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrbl676dn",
+   "time": "2026-11-15T11:34:20.143Z",
+   "kind": "message",
+   "target": "creare a random diagram",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "mode": "typed",
+   "recId": "pmwhrbl67oafv"
+  },
+  {
+   "id": "emwhrburjnva",
+   "time": "2026-11-15T11:34:32.575Z",
+   "kind": "step",
+   "target": "Reading model loaded",
+   "tab": null,
+   "tabAfter": "diagram",
+   "stepId": "model",
+   "ms": 1316,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwhrc19vc9y",
+   "time": "2026-11-15T11:34:41.011Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrcqnn57y",
+   "time": "2026-11-15T11:35:13.907Z",
+   "kind": "message",
+   "target": "this is stupid, my expectatiom was to get a nice eiagram5-10 ndes, arraws, nice …",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "mode": "typed",
+   "recId": "pmwhrcqnmb9rs"
+  },
+  {
+   "id": "emwhrd45yn80",
+   "time": "2026-11-15T11:35:31.414Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrdghnwvg",
+   "time": "2026-11-15T11:35:47.387Z",
+   "kind": "message",
+   "target": "you are saying that I am stupid?",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "mode": "typed",
+   "recId": "pmwhrdghm31sn"
+  },
+  {
+   "id": "emwhrdn73ev2",
+   "time": "2026-11-15T11:35:56.079Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrdsl97xu",
+   "time": "2026-11-15T11:36:03.069Z",
+   "kind": "message",
+   "target": "you are stupid",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "mode": "typed",
+   "recId": "pmwhrdsl86jw7"
+  },
+  {
+   "id": "emwhrdx9yxkf",
+   "time": "2026-11-15T11:36:09.142Z",
+   "kind": "tap",
+   "target": "Change the colour of the circle to purple.",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": null,
+   "what": "chip"
+  },
+  {
+   "id": "emwhrdxa12h9",
+   "time": "2026-11-15T11:36:09.145Z",
+   "kind": "message",
+   "target": "Change the colour of the circle to purple.",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "mode": "chip",
+   "recId": "pmwhrdxa05lmh"
+  },
+  {
+   "id": "emwhre0kmui0",
+   "time": "2026-11-15T11:36:13.414Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhre7ofuon",
+   "time": "2026-11-15T11:36:22.623Z",
+   "kind": "message",
+   "target": "add 5 random nodes",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "mode": "typed",
+   "recId": "pmwhre7od69zr"
+  },
+  {
+   "id": "emwhrea2i0da",
+   "time": "2026-11-15T11:36:25.722Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhreg5ra3x",
+   "time": "2026-11-15T11:36:33.615Z",
+   "kind": "message",
+   "target": "not all circles, better layout",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "mode": "typed",
+   "recId": "pmwhreg5qk6x6"
+  },
+  {
+   "id": "emwhrgt2y7l2",
+   "time": "2026-11-15T11:38:23.674Z",
+   "kind": "tap",
+   "target": "Pages",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhrgtsqy54",
+   "time": "2026-11-15T11:38:24.602Z",
+   "kind": "tap",
+   "target": "Documents",
+   "tab": "diagram",
+   "tabAfter": "editor",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhrgtsqb3m",
+   "time": "2026-11-15T11:38:24.602Z",
+   "kind": "tab",
+   "target": "editor",
+   "tab": "diagram",
+   "tabAfter": "editor",
+   "via": "menu"
+  },
+  {
+   "id": "emwhrguxas4x",
+   "time": "2026-11-15T11:38:26.062Z",
+   "kind": "tap",
+   "target": "Write a document from what I know",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": "editor",
+   "what": "button"
+  },
+  {
+   "id": "emwhrgw5erw1",
+   "time": "2026-11-15T11:38:27.650Z",
+   "kind": "tap",
+   "target": "Topic (empty = random)",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": "editor",
+   "what": "button"
+  },
+  {
+   "id": "emwhrgx82dj6",
+   "time": "2026-11-15T11:38:29.042Z",
+   "kind": "tap",
+   "target": "TypeEssayScientific articlePresentationStoryReport",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": "editor",
+   "what": "button"
+  },
+  {
+   "id": "emwhrgxzlxbs",
+   "time": "2026-11-15T11:38:30.033Z",
+   "kind": "tap",
+   "target": "TypeEssayScientific articlePresentationStoryReport",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": "editor",
+   "what": "button"
+  },
+  {
+   "id": "emwhrgyk083u",
+   "time": "2026-11-15T11:38:30.768Z",
+   "kind": "tap",
+   "target": "Topic (empty = random)",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": "editor",
+   "what": "button"
+  },
+  {
+   "id": "emwhrh4zihqu",
+   "time": "2026-11-15T11:38:39.102Z",
+   "kind": "tap",
+   "target": "About words",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": "editor",
+   "what": "button"
+  },
+  {
+   "id": "emwhrh89um8h",
+   "time": "2026-11-15T11:38:43.362Z",
+   "kind": "tap",
+   "target": "Subchapters each",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": "editor",
+   "what": "button"
+  },
+  {
+   "id": "emwhrha1t3if",
+   "time": "2026-11-15T11:38:45.665Z",
+   "kind": "tap",
+   "target": "Chapters",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": "editor",
+   "what": "button"
+  },
+  {
+   "id": "emwhrhcf9pud",
+   "time": "2026-11-15T11:38:48.741Z",
+   "kind": "tap",
+   "target": "Write it",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": "editor",
+   "what": "button"
+  },
+  {
+   "id": "emwhrhcfgxp8",
+   "time": "2026-11-15T11:38:48.748Z",
+   "kind": "message",
+   "target": "write a story about ancient hobbits with 5 chapters",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "mode": "chip",
+   "recId": "pmwhrhcffb930"
+  },
+  {
+   "id": "emwhrhwn20wj",
+   "time": "2026-11-15T11:39:14.942Z",
+   "kind": "tap",
+   "target": "Pages",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhrhx3jsdz",
+   "time": "2026-11-15T11:39:15.535Z",
+   "kind": "tap",
+   "target": "Chat",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhri0nm23g",
+   "time": "2026-11-15T11:39:20.146Z",
+   "kind": "tap",
+   "target": "Not what I wanted",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": "chat",
+   "what": "button"
+  },
+  {
+   "id": "emwhri2lml3h",
+   "time": "2026-11-15T11:39:22.666Z",
+   "kind": "tap",
+   "target": "What did you expect? (optional)",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": "chat",
+   "what": "button"
+  },
+  {
+   "id": "emwhriquf2rh",
+   "time": "2026-11-15T11:39:54.087Z",
+   "kind": "tap",
+   "target": "Done",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": "chat",
+   "what": "button"
+  },
+  {
+   "id": "emwhrj1of4nf",
+   "time": "2026-11-15T11:40:08.127Z",
+   "kind": "recall",
+   "target": "you are saying that I am stupid?",
+   "tab": "editor",
+   "tabAfter": "editor"
+  },
+  {
+   "id": "emwhrj3ra7tv",
+   "time": "2026-11-15T11:40:10.822Z",
+   "kind": "recall",
+   "target": "you are saying that I am stupid?",
+   "tab": "editor",
+   "tabAfter": "editor"
+  },
+  {
+   "id": "emwhrj5wmu91",
+   "time": "2026-11-15T11:40:13.606Z",
+   "kind": "tap",
+   "target": "Pages",
+   "tab": "editor",
+   "tabAfter": "editor",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhrj6ubgbz",
+   "time": "2026-11-15T11:40:14.819Z",
+   "kind": "tap",
+   "target": "Drawing",
+   "tab": "editor",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhrj6ub0ri",
+   "time": "2026-11-15T11:40:14.819Z",
+   "kind": "tab",
+   "target": "draw",
+   "tab": "editor",
+   "tabAfter": "draw",
+   "via": "menu"
+  },
+  {
+   "id": "emwhrj8awhcj",
+   "time": "2026-11-15T11:40:16.712Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrjbkad41",
+   "time": "2026-11-15T11:40:20.938Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrjbnxbx0",
+   "time": "2026-11-15T11:40:21.069Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrjc77e7t",
+   "time": "2026-11-15T11:40:21.763Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrjcavzpw",
+   "time": "2026-11-15T11:40:21.895Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrjnugdvf",
+   "time": "2026-11-15T11:40:36.856Z",
+   "kind": "message",
+   "target": "create a random picture",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "mode": "typed",
+   "recId": "pmwhrjnudwav5"
+  },
+  {
+   "id": "emwhrjvui0ye",
+   "time": "2026-11-15T11:40:47.226Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrjz3hz90",
+   "time": "2026-11-15T11:40:51.437Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrk2bmuw7",
+   "time": "2026-11-15T11:40:55.618Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrk7ndroy",
+   "time": "2026-11-15T11:41:02.521Z",
+   "kind": "message",
+   "target": "break in 3 layers: eater, land and sky",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "mode": "typed",
+   "recId": "pmwhrk7nb44vp"
+  },
+  {
+   "id": "emwhrkryue26",
+   "time": "2026-11-15T11:41:28.854Z",
+   "kind": "tap",
+   "target": "Change the colour of the sun to black.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "chip"
+  },
+  {
+   "id": "emwhrkrztuuj",
+   "time": "2026-11-15T11:41:28.889Z",
+   "kind": "message",
+   "target": "Change the colour of the sun to black.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "mode": "chip",
+   "recId": "pmwhrkrzlwqlj"
+  },
+  {
+   "id": "emwhrkuvnuh9",
+   "time": "2026-11-15T11:41:32.627Z",
+   "kind": "tap",
+   "target": "Change the colour of the sun to black.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "chip"
+  },
+  {
+   "id": "emwhrkuvpmhd",
+   "time": "2026-11-15T11:41:32.629Z",
+   "kind": "message",
+   "target": "Change the colour of the sun to black.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "mode": "chip",
+   "recId": "pmwhrkuvo4w9o"
+  },
+  {
+   "id": "emwhrky85hly",
+   "time": "2026-11-15T11:41:36.965Z",
+   "kind": "tap",
+   "target": "Change the size of the sun to big.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "chip"
+  },
+  {
+   "id": "emwhrky8asys",
+   "time": "2026-11-15T11:41:36.970Z",
+   "kind": "message",
+   "target": "Change the size of the sun to big.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "mode": "chip",
+   "recId": "pmwhrky87m77m"
+  },
+  {
+   "id": "emwhrl4vysuo",
+   "time": "2026-11-15T11:41:45.598Z",
+   "kind": "tap",
+   "target": "Change the fill of the sun to solid.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "chip"
+  },
+  {
+   "id": "emwhrl4w1c41",
+   "time": "2026-11-15T11:41:45.601Z",
+   "kind": "message",
+   "target": "Change the fill of the sun to solid.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "mode": "chip",
+   "recId": "pmwhrl4vzb76w"
+  },
+  {
+   "id": "emwhrl8imoy3",
+   "time": "2026-11-15T11:41:50.302Z",
+   "kind": "tap",
+   "target": "Open the chat to read the whole reply",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhrla6p65m",
+   "time": "2026-11-15T11:41:52.465Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrle7hl8i",
+   "time": "2026-11-15T11:41:57.677Z",
+   "kind": "message",
+   "target": "make sunt green",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "mode": "typed",
+   "recId": "pmwhrle7fjfb7"
+  },
+  {
+   "id": "emwhrlgq128v",
+   "time": "2026-11-15T11:42:00.937Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrllcqbi0",
+   "time": "2026-11-15T11:42:06.938Z",
+   "kind": "tap",
+   "target": "Pages",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhrlmaxkpb",
+   "time": "2026-11-15T11:42:08.169Z",
+   "kind": "tap",
+   "target": "Drawing",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhrlpj0r2s",
+   "time": "2026-11-15T11:42:12.348Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwhrlt8x59y",
+   "time": "2026-11-15T11:42:17.169Z",
+   "kind": "message",
+   "target": "add a small pond",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "mode": "typed",
+   "recId": "pmwhrlt8vgb7w"
+  },
+  {
+   "id": "emwhrm41b9c5",
+   "time": "2026-11-15T11:42:31.151Z",
+   "kind": "tap",
+   "target": "Pages",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhrm62l3xa",
+   "time": "2026-11-15T11:42:33.789Z",
+   "kind": "tap",
+   "target": "Chat",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhrm7howa6",
+   "time": "2026-11-15T11:42:35.628Z",
+   "kind": "tap",
+   "target": "Not what I wanted",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "chat",
+   "what": "button"
+  },
+  {
+   "id": "emwhrm91lr5z",
+   "time": "2026-11-15T11:42:37.641Z",
+   "kind": "tap",
+   "target": "What did you expect? (optional)",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "chat",
+   "what": "button"
+  },
+  {
+   "id": "emwhrnejs04f",
+   "time": "2026-11-15T11:43:31.432Z",
+   "kind": "tap",
+   "target": "Done",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "chat",
+   "what": "button"
+  },
+  {
+   "id": "emwhrngr91j1",
+   "time": "2026-11-15T11:43:34.293Z",
+   "kind": "tap",
+   "target": "Settings",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwhrnrtbouo",
+   "time": "2026-11-15T11:43:48.623Z",
+   "kind": "tap",
+   "target": "Export JSON",
+   "tab": "draw",
+   "tabAfter": null,
+   "zone": "p2-set-panel",
+   "what": "button"
+  }
+ ],
+ "records": [
+  {
+   "text": "creare a random diagram",
+   "lang": "en",
+   "english": null,
+   "mode": "typed",
+   "tab": "diagram",
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "status": "supported",
+   "time": "2026-11-15T11:34:20.143Z",
+   "routing": {
+    "activeTab": "diagram",
+    "activeWorld": "diagram.sketch",
+    "chosen": [
+     "diagram.sketch"
+    ],
+    "pieces": [
+     {
+      "text": "creare a random diagram",
+      "chosen": "diagram.sketch",
+      "pattern": "pat.diagram.sketch.read.frame.end",
+      "candidates": []
+     }
+    ]
+   },
+   "id": "pmwhrbl67oafv",
+   "source": "human",
+   "unparsed": false,
+   "formalizer": "rules",
+   "feedback": null,
+   "selectedLang": "en",
+   "replyOutcome": "done",
+   "turnKind": null,
+   "tabWorld": "diagram.sketch",
+   "detail": {
+    "tab": "diagram",
+    "worlds": [
+     "diagram.sketch"
+    ],
+    "status": null,
+    "readings": [
+     {
+      "text": "creare a random diagram",
+      "world": "diagram.sketch",
+      "pattern": "pat.diagram.sketch.read.frame.end",
+      "strategy": "rules",
+      "unparsed": false,
+      "complete": true,
+      "refusal": null,
+      "candidates": [],
+      "wires": "@t1_w1 core.request\n    action=diagram.sketch.own\n    arg.pre=\"creare a random\"\n    arg.text=\"creare a random diagram\"\n    core.via=$pat.diagram.sketch.read.frame.end\n    core.source=\"msg1#0-23\"\n    core.seq=2\n    core.in=$diagram.sketch\n"
+     }
+    ],
+    "answer": "Drew a circle.",
+    "effects": [],
+    "budget": {
+     "ticks": 1805,
+     "top": {
+      "matcher.backtrack": 913,
+      "rules.pattern": 203,
+      "matcher.attempt": 155,
+      "emit.substituteEmit": 120,
+      "interpreter.visit": 66
+     }
+    },
+    "budgetExceeded": null,
+    "state": {
+     "before": "451812c7",
+     "after": "600914e7"
+    },
+    "perf": {
+     "totalMs": 660,
+     "engineMs": 611,
+     "stages": {
+      "correct": {
+       "n": 1,
+       "ms": 0.1
+      },
+      "person": {
+       "n": 1,
+       "ms": 0.9
+      },
+      "dialogue": {
+       "n": 2,
+       "ms": 0.8
+      },
+      "discourse": {
+       "n": 2,
+       "ms": 1.2
+      },
+      "encoder.available": {
+       "n": 1,
+       "ms": 0.6
+      },
+      "rules": {
+       "n": 1,
+       "ms": 48.1
+      },
+      "formalize": {
+       "n": 1,
+       "ms": 108.7
+      },
+      "typed": {
+       "n": 1,
+       "ms": 0
+      },
+      "knowledge": {
+       "n": 3,
+       "ms": 0.3
+      },
+      "interpret": {
+       "n": 1,
+       "ms": 10.3
+      }
+     },
+     "render": 49.1,
+     "effects": 0.4
+    }
+   },
+   "happened": {
+    "tabAfter": "diagram",
+    "shown": [
+     {
+      "text": "Drew a circle.",
+      "world": "diagram.sketch"
+     }
+    ],
+    "changes": [
+     {
+      "world": "diagram.sketch",
+      "changes": [
+       "shapes: +1 circle",
+       "order 1 (was 0)",
+       "last: +1 item",
+       "kept note ",
+       "items: 0 items",
+       "counter {…} (was none)",
+       "saved {…} (was none)",
+       "log: 1 item"
+      ]
+     },
+     {
+      "world": "session.things",
+      "changes": [
+       "person {…} (was none)"
+      ]
+     }
+    ],
+    "viewEffects": [
+     {
+      "kind": "view",
+      "tab": "diagram",
+      "world": "diagram.sketch"
+     }
+    ]
+   },
+   "budget": {
+    "ticks": 1805,
+    "top": {
+     "matcher.backtrack": 913,
+     "rules.pattern": 203,
+     "matcher.attempt": 155,
+     "emit.substituteEmit": 120,
+     "interpreter.visit": 66
+    }
+   },
+   "reaction": {
+    "kind": "tap",
+    "target": "Message",
+    "afterMs": 20868,
+    "tab": "diagram"
+   },
+   "segments": [
+    {
+     "text": "creare a random diagram",
+     "status": "supported",
+     "world": "diagram.sketch",
+     "pattern": "pat.diagram.sketch.read.frame.end",
+     "unparsed": false,
+     "strategy": "rules"
+    }
+   ]
+  },
+  {
+   "text": "this is stupid, my expectatiom was to get a nice eiagram5-10 ndes, arraws, nice layout, not a circle",
+   "lang": "en",
+   "english": null,
+   "mode": "typed",
+   "tab": "diagram",
+   "worlds": [],
+   "status": "unparsed",
+   "time": "2026-11-15T11:35:13.906Z",
+   "routing": {
+    "activeTab": "diagram",
+    "activeWorld": "diagram.sketch",
+    "chosen": [],
+    "pieces": [
+     {
+      "text": "my expectatiom was to get a nice diagram5-10 ndes, arraws, nice layout, a circle",
+      "chosen": null,
+      "pattern": null,
+      "candidates": [
+       {
+        "world": "diagram.sketch",
+        "score": 0.815,
+        "valid": true
+       },
+       {
+        "world": "diagram.sketch",
+        "score": 0.815,
+        "valid": true
+       },
+       {
+        "world": "kids.shop",
+        "score": 0.099,
+        "valid": false
+       },
+       {
+        "world": "art.draw",
+        "score": 0.086,
+        "valid": false
+       }
+      ]
+     }
+    ]
+   },
+   "id": "pmwhrcqnmb9rs",
+   "source": "human",
+   "unparsed": true,
+   "formalizer": "rules",
+   "feedback": null,
+   "selectedLang": "en",
+   "replyOutcome": "not-understood",
+   "turnKind": null,
+   "tabWorld": "diagram.sketch",
+   "detail": {
+    "tab": "diagram",
+    "worlds": [],
+    "status": "understood",
+    "readings": [
+     {
+      "text": "my expectatiom was to get a nice diagram5-10 ndes, arraws, nice layout, a circle",
+      "world": null,
+      "pattern": null,
+      "strategy": "rules",
+      "unparsed": true,
+      "complete": false,
+      "refusal": null,
+      "candidates": [
+       {
+        "world": "diagram.sketch",
+        "score": 0.815,
+        "valid": true,
+        "variant": "original"
+       },
+       {
+        "world": "diagram.sketch",
+        "score": 0.815,
+        "valid": true,
+        "variant": "spell"
+       },
+       {
+        "world": "kids.shop",
+        "score": 0.099,
+        "valid": false,
+        "variant": "original"
+       },
+       {
+        "world": "art.draw",
+        "score": 0.086,
+        "valid": false,
+        "variant": "original"
+       }
+      ],
+      "wires": ""
+     }
+    ],
+    "answer": "I took that as: a circle. I left out \"this is stupid\": I could not read it. That sounds like something about you. I cannot keep facts about you here.",
+    "effects": [],
+    "budget": {
+     "ticks": 127194,
+     "top": {
+      "matcher.backtrack": 40513,
+      "spell.edit": 25179,
+      "meta.worlds.near": 15104,
+      "scene.edit": 9190,
+      "emit.substituteEmit": 9046
+     }
+    },
+    "budgetExceeded": null,
+    "state": {
+     "before": "600914e7",
+     "after": "600914e7"
+    },
+    "perf": {
+     "totalMs": 3174,
+     "engineMs": 3102,
+     "stages": {
+      "correct": {
+       "n": 2,
+       "ms": 0.3
+      },
+      "person": {
+       "n": 2,
+       "ms": 1.6
+      },
+      "dialogue": {
+       "n": 3,
+       "ms": 62.5
+      },
+      "knowledge": {
+       "n": 4,
+       "ms": 0.6
+      },
+      "interpret": {
+       "n": 2,
+       "ms": 18.4
+      },
+      "intent": {
+       "n": 1,
+       "ms": 287.3
+      },
+      "discourse": {
+       "n": 2,
+       "ms": 0.8
+      },
+      "encoder.available": {
+       "n": 1,
+       "ms": 0.1
+      },
+      "encoder.prepare": {
+       "n": 1,
+       "ms": 0.1
+      },
+      "tokenize": {
+       "n": 8,
+       "ms": 2.1
+      },
+      "ort": {
+       "n": 8,
+       "ms": 1238.9
+      },
+      "predict": {
+       "n": 1,
+       "ms": 1246.7
+      },
+      "seed": {
+       "n": 25,
+       "ms": 3.5
+      },
+      "check": {
+       "n": 24,
+       "ms": 0
+      },
+      "check.formalize": {
+       "n": 52,
+       "ms": 494.7
+      },
+      "validate": {
+       "n": 1,
+       "ms": 733.2
+      },
+      "rules.final": {
+       "n": 4,
+       "ms": 42
+      },
+      "encoder": {
+       "n": 1,
+       "ms": 2192.8
+      },
+      "formalize": {
+       "n": 1,
+       "ms": 2404.5
+      },
+      "typed": {
+       "n": 1,
+       "ms": 0
+      }
+     },
+     "render": 71,
+     "effects": 0.3
+    }
+   },
+   "happened": {
+    "tabAfter": "diagram",
+    "shown": [
+     {
+      "text": "I took that as: a circle. I left out \"this is stupid\": I could not read it. That sounds like something about you. I cannot keep facts about you here.",
+      "world": null
+     }
+    ],
+    "changes": [],
+    "viewEffects": []
+   },
+   "budget": {
+    "ticks": 127194,
+    "top": {
+     "matcher.backtrack": 40513,
+     "spell.edit": 25179,
+     "meta.worlds.near": 15104,
+     "scene.edit": 9190,
+     "emit.substituteEmit": 9046
+    }
+   },
+   "reaction": {
+    "kind": "tap",
+    "target": "Message",
+    "afterMs": 17508,
+    "tab": "diagram"
+   },
+   "segments": [
+    {
+     "text": "my expectatiom was to get a nice diagram5-10 ndes, arraws, nice layout, a circle",
+     "status": "unparsed",
+     "world": null,
+     "pattern": null,
+     "unparsed": true,
+     "strategy": "rules"
+    }
+   ]
+  },
+  {
+   "text": "you are saying that I am stupid?",
+   "lang": "en",
+   "english": null,
+   "mode": "typed",
+   "tab": "diagram",
+   "worlds": [],
+   "status": "unparsed",
+   "time": "2026-11-15T11:35:47.386Z",
+   "routing": {
+    "activeTab": "diagram",
+    "activeWorld": "diagram.sketch",
+    "chosen": [],
+    "pieces": [
+     {
+      "text": "saying that I am stupid",
+      "chosen": null,
+      "pattern": null,
+      "candidates": [
+       {
+        "world": "ui.help",
+        "score": 0.477,
+        "valid": false
+       },
+       {
+        "world": "diagram.sketch",
+        "score": 0.294,
+        "valid": false
+       },
+       {
+        "world": "docs.editor",
+        "score": 0.229,
+        "valid": false
+       },
+       {
+        "world": "diagram.sketch",
+        "score": 0.294,
+        "valid": true
+       }
+      ]
+     }
+    ]
+   },
+   "id": "pmwhrdghm31sn",
+   "source": "human",
+   "unparsed": true,
+   "formalizer": "encoder",
+   "feedback": {
+    "vote": "down",
+    "reasons": [],
+    "wanted": "",
+    "correction": "pmwhrdxa05lmh",
+    "time": "2026-11-15T11:36:03.110Z"
+   },
+   "selectedLang": "en",
+   "replyOutcome": "not-understood",
+   "turnKind": null,
+   "tabWorld": "diagram.sketch",
+   "detail": {
+    "tab": "diagram",
+    "worlds": [],
+    "status": "understood",
+    "readings": [
+     {
+      "text": "saying that I am stupid",
+      "world": null,
+      "pattern": null,
+      "strategy": "encoder",
+      "unparsed": true,
+      "complete": false,
+      "refusal": null,
+      "candidates": [
+       {
+        "world": "ui.help",
+        "score": 0.477,
+        "valid": false,
+        "variant": "original"
+       },
+       {
+        "world": "diagram.sketch",
+        "score": 0.294,
+        "valid": false,
+        "variant": "original"
+       },
+       {
+        "world": "docs.editor",
+        "score": 0.229,
+        "valid": false,
+        "variant": "original"
+       },
+       {
+        "world": "diagram.sketch",
+        "score": 0.294,
+        "valid": true,
+        "variant": "partial"
+       }
+      ],
+      "wires": ""
+     }
+    ],
+    "answer": "I did not understand \"saying that I am stupid\". For example: \"Add a circle.\" or \"What is the colour of the circle?\"",
+    "effects": [],
+    "budget": {
+     "ticks": 55728,
+     "top": {
+      "spell.edit": 16861,
+      "matcher.backtrack": 15023,
+      "meta.worlds.near": 4568,
+      "rules.pattern": 3718,
+      "scene.edit": 2905
+     }
+    },
+    "budgetExceeded": null,
+    "state": {
+     "before": "600914e7",
+     "after": "d8c330ab"
+    },
+    "perf": {
+     "totalMs": 2266,
+     "engineMs": 2234,
+     "stages": {
+      "correct": {
+       "n": 2,
+       "ms": 0
+      },
+      "person": {
+       "n": 2,
+       "ms": 1.4
+      },
+      "dialogue": {
+       "n": 4,
+       "ms": 2
+      },
+      "discourse": {
+       "n": 4,
+       "ms": 1.5
+      },
+      "encoder.available": {
+       "n": 1,
+       "ms": 0.1
+      },
+      "encoder.prepare": {
+       "n": 1,
+       "ms": 0
+      },
+      "tokenize": {
+       "n": 8,
+       "ms": 0.8
+      },
+      "ort": {
+       "n": 8,
+       "ms": 1019.9
+      },
+      "predict": {
+       "n": 1,
+       "ms": 1024.1
+      },
+      "seed.replay": {
+       "n": 1,
+       "ms": 0
+      },
+      "rules": {
+       "n": 1,
+       "ms": 54.3
+      },
+      "names": {
+       "n": 1,
+       "ms": 7.1
+      },
+      "lenient": {
+       "n": 1,
+       "ms": 59.1
+      },
+      "formalize": {
+       "n": 2,
+       "ms": 1799.2
+      },
+      "typed": {
+       "n": 2,
+       "ms": 0
+      },
+      "knowledge": {
+       "n": 6,
+       "ms": 0.3
+      },
+      "interpret": {
+       "n": 2,
+       "ms": 21.3
+      },
+      "intent": {
+       "n": 2,
+       "ms": 1
+      },
+      "seed": {
+       "n": 43,
+       "ms": 209.5
+      },
+      "check": {
+       "n": 42,
+       "ms": 0
+      },
+      "check.formalize": {
+       "n": 44,
+       "ms": 169.6
+      },
+      "validate": {
+       "n": 1,
+       "ms": 450.4
+      },
+      "rules.final": {
+       "n": 1,
+       "ms": 39
+      },
+      "encoder": {
+       "n": 1,
+       "ms": 1580.3
+      },
+      "bestEffort": {
+       "n": 1,
+       "ms": 29.8
+      }
+     },
+     "render": 31.8,
+     "effects": 0.1
+    }
+   },
+   "happened": {
+    "tabAfter": "diagram",
+    "shown": [
+     {
+      "text": "I did not understand \"saying that I am stupid\". For example: \"Add a circle.\" or \"What is the colour of the circle?\"",
+      "world": null
+     }
+    ],
+    "changes": [
+     {
+      "world": "ui.help",
+      "changes": [
+       "last unparsed saying that I am stupid (was none)"
+      ]
+     }
+    ],
+    "viewEffects": []
+   },
+   "budget": {
+    "ticks": 55728,
+    "top": {
+     "spell.edit": 16861,
+     "matcher.backtrack": 15023,
+     "meta.worlds.near": 4568,
+     "rules.pattern": 3718,
+     "scene.edit": 2905
+    }
+   },
+   "reaction": {
+    "kind": "tap",
+    "target": "Message",
+    "afterMs": 8693,
+    "tab": "diagram"
+   },
+   "segments": [
+    {
+     "text": "saying that I am stupid",
+     "status": "unparsed",
+     "world": null,
+     "pattern": null,
+     "unparsed": true,
+     "strategy": "encoder"
+    }
+   ]
+  },
+  {
+   "text": "you are stupid",
+   "lang": "en",
+   "english": null,
+   "mode": "typed",
+   "tab": "diagram",
+   "worlds": [],
+   "status": "unknown",
+   "time": "2026-11-15T11:36:03.068Z",
+   "routing": {
+    "activeTab": "diagram",
+    "activeWorld": "diagram.sketch",
+    "chosen": [],
+    "pieces": []
+   },
+   "id": "pmwhrdsl86jw7",
+   "source": "human",
+   "unparsed": false,
+   "formalizer": "",
+   "feedback": "negative",
+   "selectedLang": "en",
+   "replyOutcome": "not-understood",
+   "turnKind": "complaint",
+   "tabWorld": "diagram.sketch",
+   "detail": {
+    "tab": "diagram",
+    "worlds": [],
+    "status": null,
+    "readings": [],
+    "answer": "Oh no, sorry about that, I got it wrong. Shall I undo it? Say \"yes\" to undo, or tell me what you meant.",
+    "effects": [],
+    "budget": {
+     "ticks": 5,
+     "top": {
+      "voice.tight": 3,
+      "expand.splitAnswerList": 1,
+      "dialogue.turn": 1
+     }
+    },
+    "budgetExceeded": null,
+    "state": {
+     "before": "d8c330ab",
+     "after": "d8c330ab"
+    },
+    "perf": {
+     "totalMs": 47,
+     "engineMs": 21,
+     "stages": {
+      "correct": {
+       "n": 1,
+       "ms": 0.7
+      },
+      "person": {
+       "n": 1,
+       "ms": 0.5
+      },
+      "dialogue": {
+       "n": 1,
+       "ms": 0.7
+      },
+      "interpret": {
+       "n": 1,
+       "ms": 0
+      }
+     },
+     "render": 26,
+     "effects": 0.2
+    }
+   },
+   "happened": {
+    "tabAfter": "diagram",
+    "shown": [
+     {
+      "text": "Oh no, sorry about that, I got it wrong. Shall I undo it? Say \"yes\" to undo, or tell me what you meant.",
+      "world": null
+     }
+    ],
+    "changes": [],
+    "viewEffects": []
+   },
+   "budget": {
+    "ticks": 5,
+    "top": {
+     "voice.tight": 3,
+     "expand.splitAnswerList": 1,
+     "dialogue.turn": 1
+    }
+   },
+   "reaction": {
+    "kind": "tap",
+    "target": "Change the colour of the circle to purple.",
+    "afterMs": 6074,
+    "tab": "diagram"
+   },
+   "segments": []
+  },
+  {
+   "text": "add 5 random nodes",
+   "lang": "en",
+   "english": null,
+   "mode": "typed",
+   "tab": "diagram",
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "status": "supported",
+   "time": "2026-11-15T11:36:22.621Z",
+   "routing": {
+    "activeTab": "diagram",
+    "activeWorld": "diagram.sketch",
+    "chosen": [
+     "diagram.sketch"
+    ],
+    "pieces": [
+     {
+      "text": "add 5 random nodes",
+      "chosen": "diagram.sketch",
+      "pattern": "pat.diagram.sketch.make.n",
+      "candidates": [
+       {
+        "world": "diagram.sketch",
+        "score": 1,
+        "valid": true
+       }
+      ]
+     }
+    ]
+   },
+   "id": "pmwhre7od69zr",
+   "source": "human",
+   "unparsed": false,
+   "formalizer": "encoder",
+   "feedback": null,
+   "selectedLang": "en",
+   "replyOutcome": "done",
+   "turnKind": null,
+   "tabWorld": "diagram.sketch",
+   "detail": {
+    "tab": "diagram",
+    "worlds": [
+     "diagram.sketch"
+    ],
+    "status": "understood",
+    "readings": [
+     {
+      "text": "add 5 random nodes",
+      "world": "diagram.sketch",
+      "pattern": "pat.diagram.sketch.make.n",
+      "strategy": "encoder",
+      "unparsed": false,
+      "complete": true,
+      "refusal": null,
+      "candidates": [
+       {
+        "world": "diagram.sketch",
+        "score": 1,
+        "valid": true,
+        "variant": "original"
+       }
+      ],
+      "wires": "@t6_w13 core.request\n    action=diagram.sketch.make\n    arg.amount=\"5\"\n    arg.thing=\"random nodes\"\n    arg.text=\"add 5 random nodes\"\n    core.via=$pat.diagram.sketch.make.n\n    core.source=\"msg6#0-18\"\n    core.seq=28\n    core.in=$diagram.sketch\n"
+     }
+    ],
+    "answer": "Drew 5 circles.",
+    "effects": [],
+    "budget": {
+     "ticks": 36168,
+     "top": {
+      "matcher.backtrack": 16650,
+      "meta.worlds.near": 4568,
+      "rules.pattern": 3323,
+      "scene.edit": 2592,
+      "matcher.attempt": 2240
+     }
+    },
+    "budgetExceeded": null,
+    "state": {
+     "before": "11abebf0",
+     "after": "5ffde521"
+    },
+    "perf": {
+     "totalMs": 1725,
+     "engineMs": 1703,
+     "stages": {
+      "correct": {
+       "n": 4,
+       "ms": 0
+      },
+      "person": {
+       "n": 4,
+       "ms": 1.8
+      },
+      "dialogue": {
+       "n": 8,
+       "ms": 2.2
+      },
+      "discourse": {
+       "n": 8,
+       "ms": 2.3
+      },
+      "encoder.available": {
+       "n": 1,
+       "ms": 0
+      },
+      "encoder.prepare": {
+       "n": 1,
+       "ms": 0
+      },
+      "tokenize": {
+       "n": 8,
+       "ms": 5.8
+      },
+      "ort": {
+       "n": 8,
+       "ms": 923.3
+      },
+      "predict": {
+       "n": 1,
+       "ms": 937.7
+      },
+      "seed.replay": {
+       "n": 3,
+       "ms": 0
+      },
+      "rules": {
+       "n": 3,
+       "ms": 113.6
+      },
+      "names": {
+       "n": 2,
+       "ms": 9.2
+      },
+      "lenient": {
+       "n": 2,
+       "ms": 117.8
+      },
+      "formalize": {
+       "n": 4,
+       "ms": 1734.9
+      },
+      "typed": {
+       "n": 4,
+       "ms": 0
+      },
+      "knowledge": {
+       "n": 12,
+       "ms": 0.9
+      },
+      "interpret": {
+       "n": 4,
+       "ms": 19.9
+      },
+      "intent": {
+       "n": 3,
+       "ms": 1.3
+      },
+      "seed": {
+       "n": 2,
+       "ms": 333.6
+      },
+      "check": {
+       "n": 1,
+       "ms": 0
+      },
+      "check.formalize": {
+       "n": 1,
+       "ms": 7
+      },
+      "validate": {
+       "n": 1,
+       "ms": 369.8
+      },
+      "rules.final": {
+       "n": 1,
+       "ms": 8.6
+      },
+      "encoder": {
+       "n": 1,
+       "ms": 1423.3
+      }
+     },
+     "render": 21.9,
+     "effects": 0.1
+    }
+   },
+   "happened": {
+    "tabAfter": "diagram",
+    "shown": [
+     {
+      "text": "Drew 5 circles.",
+      "world": "diagram.sketch"
+     }
+    ],
+    "changes": [
+     {
+      "world": "diagram.sketch",
+      "changes": [
+       "shapes: +5 circles",
+       "order 6 (was 1)",
+       "last: +5 items",
+       "last: -1 item",
+       "log: +1 item",
+       "last act act make (was change)",
+       "last act mode removed (was set)",
+       "last act text add 5 random nodes (was Change the colour of the circle to purpl…)"
+      ]
+     }
+    ],
+    "viewEffects": [
+     {
+      "kind": "view",
+      "tab": "diagram",
+      "world": "diagram.sketch"
+     }
+    ]
+   },
+   "budget": {
+    "ticks": 36168,
+    "top": {
+     "matcher.backtrack": 16650,
+     "meta.worlds.near": 4568,
+     "rules.pattern": 3323,
+     "scene.edit": 2592,
+     "matcher.attempt": 2240
+    }
+   },
+   "reaction": {
+    "kind": "tap",
+    "target": "Message",
+    "afterMs": 3101,
+    "tab": "diagram"
+   },
+   "segments": [
+    {
+     "text": "add 5 random nodes",
+     "status": "supported",
+     "world": "diagram.sketch",
+     "pattern": "pat.diagram.sketch.make.n",
+     "unparsed": false,
+     "strategy": "encoder"
+    }
+   ]
+  },
+  {
+   "text": "not all circles, better layout",
+   "lang": "en",
+   "english": null,
+   "mode": "typed",
+   "tab": "diagram",
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "status": "supported",
+   "time": "2026-11-15T11:36:33.614Z",
+   "routing": {
+    "activeTab": "diagram",
+    "activeWorld": "diagram.sketch",
+    "chosen": [
+     "diagram.sketch"
+    ],
+    "pieces": [
+     {
+      "text": "add 5 circles better layout",
+      "chosen": "diagram.sketch",
+      "pattern": "pat.diagram.sketch.make.n",
+      "candidates": []
+     }
+    ]
+   },
+   "id": "pmwhreg5qk6x6",
+   "source": "human",
+   "unparsed": false,
+   "formalizer": "rules",
+   "feedback": null,
+   "selectedLang": "en",
+   "replyOutcome": "done",
+   "turnKind": null,
+   "tabWorld": "diagram.sketch",
+   "detail": {
+    "tab": "diagram",
+    "worlds": [
+     "diagram.sketch"
+    ],
+    "status": null,
+    "readings": [
+     {
+      "text": "add 5 circles better layout",
+      "world": "diagram.sketch",
+      "pattern": "pat.diagram.sketch.make.n",
+      "strategy": "rules",
+      "unparsed": false,
+      "complete": true,
+      "refusal": null,
+      "candidates": [],
+      "wires": "@t7_w14 core.request\n    action=diagram.sketch.make\n    arg.amount=\"5\"\n    arg.thing=\"circles better layout\"\n    arg.text=\"add 5 circles better layout\"\n    core.via=$pat.diagram.sketch.make.n\n    core.source=\"msg7#0-27\"\n    core.seq=31\n    core.in=$diagram.sketch\n"
+     }
+    ],
+    "answer": "OK, I took that back. Drew 5 circles.",
+    "effects": [],
+    "budget": {
+     "ticks": 882,
+     "top": {
+      "emit.substituteEmit": 282,
+      "index.readString": 121,
+      "matcher.backtrack": 97,
+      "index.run": 92,
+      "normalize.push3": 65
+     }
+    },
+    "budgetExceeded": null,
+    "state": {
+     "before": "5ffde521",
+     "after": "5bfc3bb1"
+    },
+    "perf": {
+     "totalMs": 256,
+     "engineMs": 233,
+     "stages": {
+      "correct": {
+       "n": 1,
+       "ms": 0
+      },
+      "person": {
+       "n": 1,
+       "ms": 0.6
+      },
+      "dialogue": {
+       "n": 1,
+       "ms": 0.8
+      },
+      "discourse": {
+       "n": 1,
+       "ms": 32.1
+      },
+      "knowledge": {
+       "n": 1,
+       "ms": 0.4
+      },
+      "interpret": {
+       "n": 1,
+       "ms": 4.7
+      }
+     },
+     "render": 23.1,
+     "effects": 0.2
+    }
+   },
+   "happened": {
+    "tabAfter": "diagram",
+    "shown": [
+     {
+      "text": "OK, I took that back. Drew 5 circles.",
+      "world": "diagram.sketch"
+     }
+    ],
+    "changes": [
+     {
+      "world": "diagram.sketch",
+      "changes": [
+       "log: +1 item",
+       "log: -1 item",
+       "last act text add 5 circles better layout (was add 5 random nodes)",
+       "last act roles {…} (was {…})"
+      ]
+     }
+    ],
+    "viewEffects": [
+     {
+      "kind": "view",
+      "tab": "diagram",
+      "world": "diagram.sketch"
+     }
+    ]
+   },
+   "budget": {
+    "ticks": 882,
+    "top": {
+     "emit.substituteEmit": 282,
+     "index.readString": 121,
+     "matcher.backtrack": 97,
+     "index.run": 92,
+     "normalize.push3": 65
+    }
+   },
+   "reaction": {
+    "kind": "tap",
+    "target": "Pages",
+    "afterMs": 110060,
+    "tab": "diagram"
+   },
+   "segments": [
+    {
+     "text": "add 5 circles better layout",
+     "status": "supported",
+     "world": "diagram.sketch",
+     "pattern": "pat.diagram.sketch.make.n",
+     "unparsed": false,
+     "strategy": "rules"
+    }
+   ]
+  },
+  {
+   "text": "create a random picture",
+   "lang": "en",
+   "english": null,
+   "mode": "typed",
+   "tab": "draw",
+   "worlds": [
+    "art.draw"
+   ],
+   "status": "supported",
+   "time": "2026-11-15T11:40:36.853Z",
+   "routing": {
+    "activeTab": "draw",
+    "activeWorld": "art.draw",
+    "chosen": [
+     "art.draw"
+    ],
+    "pieces": [
+     {
+      "text": "create a random picture",
+      "chosen": "art.draw",
+      "pattern": "pat.art.draw.make.random.picture",
+      "candidates": [
+       {
+        "world": "art.draw",
+        "score": 1,
+        "valid": true
+       }
+      ]
+     }
+    ]
+   },
+   "id": "pmwhrjnudwav5",
+   "source": "human",
+   "unparsed": false,
+   "formalizer": "encoder",
+   "feedback": null,
+   "selectedLang": "en",
+   "replyOutcome": "done",
+   "turnKind": null,
+   "tabWorld": "art.draw",
+   "detail": {
+    "tab": "draw",
+    "worlds": [
+     "art.draw"
+    ],
+    "status": "understood",
+    "readings": [
+     {
+      "text": "create a random picture",
+      "world": "art.draw",
+      "pattern": "pat.art.draw.make.random.picture",
+      "strategy": "encoder",
+      "unparsed": false,
+      "complete": true,
+      "refusal": null,
+      "candidates": [
+       {
+        "world": "art.draw",
+        "score": 1,
+        "valid": true,
+        "variant": "original"
+       }
+      ],
+      "wires": "@t9_w17 core.request\n    action=art.draw.make\n    arg.mode=random\n    arg.text=\"create a random picture\"\n    core.via=$pat.art.draw.make.random.picture\n    core.source=\"msg9#0-23\"\n    core.seq=38\n    core.in=$art.draw\n"
+     }
+    ],
+    "answer": "I drew a sunny scene for you: a yellow sun, 2 clouds, a grey mountain, a blue house, 2 green trees, 2 pink flowers, a brown dog and a blue bird. You can change anything, for example \"make the house blue\".",
+    "effects": [],
+    "budget": {
+     "ticks": 135957,
+     "top": {
+      "matcher.backtrack": 72831,
+      "rules.pattern": 16230,
+      "matcher.attempt": 9467,
+      "spell.edit": 8763,
+      "meta.worlds.near": 4568
+     }
+    },
+    "budgetExceeded": null,
+    "state": {
+     "before": "5d3f1e6e",
+     "after": "811eb568"
+    },
+    "perf": {
+     "totalMs": 2558,
+     "engineMs": 2532,
+     "stages": {
+      "correct": {
+       "n": 6,
+       "ms": 0.1
+      },
+      "person": {
+       "n": 6,
+       "ms": 2.3
+      },
+      "dialogue": {
+       "n": 12,
+       "ms": 2
+      },
+      "discourse": {
+       "n": 12,
+       "ms": 5.5
+      },
+      "encoder.available": {
+       "n": 1,
+       "ms": 0.2
+      },
+      "encoder.prepare": {
+       "n": 1,
+       "ms": 0
+      },
+      "tokenize": {
+       "n": 8,
+       "ms": 1.4
+      },
+      "ort": {
+       "n": 8,
+       "ms": 1085
+      },
+      "predict": {
+       "n": 1,
+       "ms": 1088.4
+      },
+      "seed.replay": {
+       "n": 5,
+       "ms": 0
+      },
+      "rules": {
+       "n": 5,
+       "ms": 480.7
+      },
+      "names": {
+       "n": 6,
+       "ms": 9.8
+      },
+      "lenient": {
+       "n": 6,
+       "ms": 270.9
+      },
+      "formalize": {
+       "n": 6,
+       "ms": 3245.5
+      },
+      "typed": {
+       "n": 6,
+       "ms": 0.1
+      },
+      "knowledge": {
+       "n": 18,
+       "ms": 1.3
+      },
+      "interpret": {
+       "n": 6,
+       "ms": 68.2
+      },
+      "intent": {
+       "n": 4,
+       "ms": 2.5
+      },
+      "seed": {
+       "n": 2,
+       "ms": 1049.6
+      },
+      "check": {
+       "n": 1,
+       "ms": 0
+      },
+      "check.formalize": {
+       "n": 1,
+       "ms": 2.7
+      },
+      "validate": {
+       "n": 1,
+       "ms": 1076.3
+      },
+      "rules.final": {
+       "n": 1,
+       "ms": 4.5
+      },
+      "encoder": {
+       "n": 1,
+       "ms": 2285.9
+      }
+     },
+     "render": 25.8,
+     "effects": 0.2
+    }
+   },
+   "happened": {
+    "tabAfter": "draw",
+    "shown": [
+     {
+      "text": "I drew a sunny scene for you: a yellow sun, 2 clouds, a grey mountain, a blue house, 2 green trees, 2 pink flowers, a brown dog and a blue bird. You can change anything, for example \"make the house blue\".",
+      "world": "art.draw"
+     }
+    ],
+    "changes": [
+     {
+      "world": "session.things",
+      "changes": [
+       "things: +1 sun",
+       "things: +2 clouds",
+       "things: +1 mountain",
+       "things: +1 house",
+       "things: +2 trees",
+       "things: +2 flowers",
+       "things: +1 dog",
+       "things: +1 bird"
+      ]
+     },
+     {
+      "world": "art.draw",
+      "changes": [
+       "objects: +1 sun",
+       "objects: +2 clouds",
+       "objects: +1 mountain",
+       "objects: +1 house",
+       "objects: +2 trees",
+       "objects: +2 flowers",
+       "objects: +1 dog",
+       "objects: +1 bird"
+      ]
+     }
+    ],
+    "viewEffects": [
+     {
+      "kind": "view",
+      "tab": "draw",
+      "world": "art.draw"
+     }
+    ]
+   },
+   "budget": {
+    "ticks": 135957,
+    "top": {
+     "matcher.backtrack": 72831,
+     "rules.pattern": 16230,
+     "matcher.attempt": 9467,
+     "spell.edit": 8763,
+     "meta.worlds.near": 4568
+    }
+   },
+   "reaction": {
+    "kind": "tap",
+    "target": "Message",
+    "afterMs": 10373,
+    "tab": "draw"
+   },
+   "segments": [
+    {
+     "text": "create a random picture",
+     "status": "supported",
+     "world": "art.draw",
+     "pattern": "pat.art.draw.make.random.picture",
+     "unparsed": false,
+     "strategy": "encoder"
+    }
+   ]
+  },
+  {
+   "text": "break in 3 layers: eater, land and sky",
+   "lang": "en",
+   "english": null,
+   "mode": "typed",
+   "tab": "draw",
+   "worlds": [
+    "art.draw"
+   ],
+   "status": "supported",
+   "time": "2026-11-15T11:41:02.519Z",
+   "routing": {
+    "activeTab": "draw",
+    "activeWorld": "art.draw",
+    "chosen": [
+     "art.draw"
+    ],
+    "pieces": [
+     {
+      "text": "break in 3 layers: eater, land and sky",
+      "chosen": "art.draw",
+      "pattern": "pat.art.draw.bare.mod",
+      "candidates": [
+       {
+        "world": "art.draw",
+        "score": 0.56,
+        "valid": true
+       },
+       {
+        "world": "diagram.sketch",
+        "score": 0.28,
+        "valid": false
+       },
+       {
+        "world": "docs.editor",
+        "score": 0.159,
+        "valid": true
+       }
+      ]
+     }
+    ]
+   },
+   "id": "pmwhrk7nb44vp",
+   "source": "human",
+   "unparsed": false,
+   "formalizer": "encoder",
+   "feedback": null,
+   "selectedLang": "en",
+   "replyOutcome": "already",
+   "turnKind": null,
+   "tabWorld": "art.draw",
+   "detail": {
+    "tab": "draw",
+    "worlds": [
+     "art.draw"
+    ],
+    "status": "understood",
+    "readings": [
+     {
+      "text": "break in 3 layers: eater, land and sky",
+      "world": "art.draw",
+      "pattern": "pat.art.draw.bare.mod",
+      "strategy": "encoder",
+      "unparsed": false,
+      "complete": true,
+      "refusal": null,
+      "candidates": [
+       {
+        "world": "art.draw",
+        "score": 0.56,
+        "valid": true,
+        "variant": "original"
+       },
+       {
+        "world": "diagram.sketch",
+        "score": 0.28,
+        "valid": false,
+        "variant": "original"
+       },
+       {
+        "world": "docs.editor",
+        "score": 0.159,
+        "valid": true,
+        "variant": "original"
+       }
+      ],
+      "wires": "@t10_w18 core.request\n    action=art.draw.make\n    arg.mode=bare\n    arg.pre=\"break in 3 layers: eater, land and\"\n    arg.thing=\"sky\"\n    arg.text=\"break in 3 layers: eater, land and sky\"\n    core.via=$pat.art.draw.bare.mod\n    core.source=\"msg10#0-38\"\n    core.seq=41\n    core.in=$art.draw\n"
+     }
+    ],
+    "answer": "The sky is already there: it is light blue. You can change its color.",
+    "effects": [],
+    "budget": {
+     "ticks": 165649,
+     "top": {
+      "matcher.backtrack": 76055,
+      "rules.pattern": 19178,
+      "emit.substituteEmit": 11206,
+      "meta.worlds.near": 10926,
+      "matcher.attempt": 10495
+     }
+    },
+    "budgetExceeded": null,
+    "state": {
+     "before": "811eb568",
+     "after": "874a75e0"
+    },
+    "perf": {
+     "totalMs": 4237,
+     "engineMs": 4186,
+     "stages": {
+      "correct": {
+       "n": 7,
+       "ms": 0
+      },
+      "person": {
+       "n": 7,
+       "ms": 2.8
+      },
+      "dialogue": {
+       "n": 14,
+       "ms": 2.2
+      },
+      "discourse": {
+       "n": 14,
+       "ms": 3.9
+      },
+      "encoder.available": {
+       "n": 1,
+       "ms": 0
+      },
+      "encoder.prepare": {
+       "n": 1,
+       "ms": 0.1
+      },
+      "tokenize": {
+       "n": 8,
+       "ms": 1.4
+      },
+      "ort": {
+       "n": 8,
+       "ms": 1326.3
+      },
+      "predict": {
+       "n": 1,
+       "ms": 1331.5
+      },
+      "seed.replay": {
+       "n": 6,
+       "ms": 0
+      },
+      "rules": {
+       "n": 6,
+       "ms": 485.6
+      },
+      "names": {
+       "n": 5,
+       "ms": 9.3
+      },
+      "lenient": {
+       "n": 5,
+       "ms": 138.1
+      },
+      "formalize": {
+       "n": 7,
+       "ms": 3235.4
+      },
+      "typed": {
+       "n": 7,
+       "ms": 0.1
+      },
+      "knowledge": {
+       "n": 21,
+       "ms": 1341.8
+      },
+      "interpret": {
+       "n": 7,
+       "ms": 72.8
+      },
+      "intent": {
+       "n": 4,
+       "ms": 2.7
+      },
+      "seed": {
+       "n": 22,
+       "ms": 776
+      },
+      "check": {
+       "n": 21,
+       "ms": 0
+      },
+      "check.formalize": {
+       "n": 30,
+       "ms": 239.4
+      },
+      "validate": {
+       "n": 1,
+       "ms": 1132.4
+      },
+      "rules.final": {
+       "n": 1,
+       "ms": 12.2
+      },
+      "encoder": {
+       "n": 1,
+       "ms": 2563.7
+      }
+     },
+     "render": 50.3,
+     "effects": 0.3
+    }
+   },
+   "happened": {
+    "tabAfter": "draw",
+    "shown": [
+     {
+      "text": "Looking up how a sky looks…",
+      "world": null,
+      "from": "host"
+     },
+     {
+      "text": "The sky is already there: it is light blue. You can change its color.",
+      "world": "art.draw"
+     }
+    ],
+    "changes": [
+     {
+      "world": "session.things",
+      "changes": [
+       "things: +1 sun",
+       "things: +2 clouds",
+       "things: +1 mountain",
+       "things: +1 house",
+       "things: +2 trees",
+       "things: +2 flowers",
+       "things: +1 dog",
+       "things: +1 bird"
+      ]
+     },
+     {
+      "world": "art.draw",
+      "changes": [
+       "prev label added the sky (was drew a scene)",
+       "prev objects: +1 sun",
+       "prev objects: +2 clouds",
+       "prev objects: +1 mountain",
+       "prev objects: +1 house",
+       "prev objects: +2 trees",
+       "prev objects: +2 flowers",
+       "prev objects: +1 dog"
+      ]
+     }
+    ],
+    "viewEffects": [
+     {
+      "kind": "view",
+      "tab": "draw",
+      "world": "art.draw"
+     }
+    ]
+   },
+   "budget": {
+    "ticks": 165649,
+    "top": {
+     "matcher.backtrack": 76055,
+     "rules.pattern": 19178,
+     "emit.substituteEmit": 11206,
+     "meta.worlds.near": 10926,
+     "matcher.attempt": 10495
+    }
+   },
+   "reaction": {
+    "kind": "tap",
+    "target": "Change the colour of the sun to black.",
+    "afterMs": 26335,
+    "tab": "draw"
+   },
+   "segments": [
+    {
+     "text": "break in 3 layers: eater, land and sky",
+     "status": "supported",
+     "world": "art.draw",
+     "pattern": "pat.art.draw.bare.mod",
+     "unparsed": false,
+     "strategy": "encoder"
+    }
+   ]
+  },
+  {
+   "text": "make sunt green",
+   "lang": "en",
+   "english": null,
+   "mode": "typed",
+   "tab": "draw",
+   "worlds": [
+    "art.draw"
+   ],
+   "status": "supported",
+   "time": "2026-11-15T11:41:57.675Z",
+   "routing": {
+    "activeTab": "draw",
+    "activeWorld": "art.draw",
+    "chosen": [
+     "art.draw"
+    ],
+    "pieces": [
+     {
+      "text": "make sun green",
+      "chosen": "art.draw",
+      "pattern": "pat.art.draw.change.value",
+      "candidates": [
+       {
+        "world": "art.draw",
+        "score": 1,
+        "valid": true
+       }
+      ]
+     }
+    ]
+   },
+   "id": "pmwhrle7fjfb7",
+   "source": "human",
+   "unparsed": false,
+   "formalizer": "encoder",
+   "feedback": null,
+   "selectedLang": "en",
+   "replyOutcome": "done",
+   "turnKind": null,
+   "tabWorld": "art.draw",
+   "detail": {
+    "tab": "draw",
+    "worlds": [
+     "art.draw"
+    ],
+    "status": "understood",
+    "readings": [
+     {
+      "text": "make sun green",
+      "world": "art.draw",
+      "pattern": "pat.art.draw.change.value",
+      "strategy": "encoder",
+      "unparsed": false,
+      "complete": true,
+      "refusal": null,
+      "candidates": [
+       {
+        "world": "art.draw",
+        "score": 1,
+        "valid": true,
+        "variant": "original"
+       }
+      ],
+      "wires": "@t15_w24 core.request\n    action=art.draw.change\n    arg.mode=set\n    arg.thing=\"sun\"\n    arg.value=\"green\"\n    arg.text=\"make sun green\"\n    core.via=$pat.art.draw.change.value\n    core.source=\"msg15#0-14\"\n    core.seq=58\n    core.in=$art.draw\n"
+     }
+    ],
+    "answer": "The sun is green now. (I read \"sunt\" as \"sun\")",
+    "effects": [],
+    "budget": {
+     "ticks": 68224,
+     "top": {
+      "matcher.backtrack": 28161,
+      "rules.pattern": 5907,
+      "interpreter.visit": 5478,
+      "learned.mem": 5180,
+      "matcher.attempt": 3584
+     }
+    },
+    "budgetExceeded": null,
+    "state": {
+     "before": "a2221f0f",
+     "after": "f94a8ca0"
+    },
+    "perf": {
+     "totalMs": 1787,
+     "engineMs": 1753,
+     "stages": {
+      "correct": {
+       "n": 7,
+       "ms": 0.2
+      },
+      "person": {
+       "n": 7,
+       "ms": 3.1
+      },
+      "dialogue": {
+       "n": 14,
+       "ms": 2.7
+      },
+      "discourse": {
+       "n": 14,
+       "ms": 4.2
+      },
+      "encoder.available": {
+       "n": 1,
+       "ms": 0
+      },
+      "encoder.prepare": {
+       "n": 1,
+       "ms": 0
+      },
+      "tokenize": {
+       "n": 7,
+       "ms": 1
+      },
+      "ort": {
+       "n": 7,
+       "ms": 1030.8
+      },
+      "predict": {
+       "n": 1,
+       "ms": 1033.9
+      },
+      "seed.replay": {
+       "n": 6,
+       "ms": 0
+      },
+      "rules": {
+       "n": 6,
+       "ms": 242.6
+      },
+      "formalize": {
+       "n": 7,
+       "ms": 1778.2
+      },
+      "typed": {
+       "n": 7,
+       "ms": 0
+      },
+      "knowledge": {
+       "n": 21,
+       "ms": 2
+      },
+      "interpret": {
+       "n": 7,
+       "ms": 20
+      },
+      "seed": {
+       "n": 2,
+       "ms": 347.8
+      },
+      "check": {
+       "n": 1,
+       "ms": 0
+      },
+      "check.formalize": {
+       "n": 1,
+       "ms": 3.6
+      },
+      "validate": {
+       "n": 1,
+       "ms": 372.4
+      },
+      "rules.final": {
+       "n": 1,
+       "ms": 4.9
+      },
+      "encoder": {
+       "n": 1,
+       "ms": 1484.7
+      }
+     },
+     "render": 34.5,
+     "effects": 0.1
+    }
+   },
+   "happened": {
+    "tabAfter": "draw",
+    "shown": [
+     {
+      "text": "The sun is green now. (I read \"sunt\" as \"sun\")",
+      "world": "art.draw"
+     }
+    ],
+    "changes": [
+     {
+      "world": "session.things",
+      "changes": [
+       "things: +1 sun",
+       "things: +2 clouds",
+       "things: +1 mountain",
+       "things: +1 house",
+       "things: +2 trees",
+       "things: +2 flowers",
+       "things: +1 dog",
+       "things: +1 bird"
+      ]
+     },
+     {
+      "world": "art.draw",
+      "changes": [
+       "objects: sun changed",
+       "prev label colored it green (was made it solid)",
+       "prev objects: sun changed",
+       "log: +1 item",
+       "last act text make sun green (was Change the fill of the sun to solid)",
+       "last act roles attribute removed (was fill)",
+       "last act roles value green (was solid)",
+       "last act reply The sun is green now. (was The sun is filled in now.)"
+      ]
+     }
+    ],
+    "viewEffects": [
+     {
+      "kind": "view",
+      "tab": "draw",
+      "world": "art.draw"
+     }
+    ]
+   },
+   "budget": {
+    "ticks": 68224,
+    "top": {
+     "matcher.backtrack": 28161,
+     "rules.pattern": 5907,
+     "interpreter.visit": 5478,
+     "learned.mem": 5180,
+     "matcher.attempt": 3584
+    }
+   },
+   "reaction": {
+    "kind": "tap",
+    "target": "Message",
+    "afterMs": 3262,
+    "tab": "draw"
+   },
+   "segments": [
+    {
+     "text": "make sun green",
+     "status": "supported",
+     "world": "art.draw",
+     "pattern": "pat.art.draw.change.value",
+     "unparsed": false,
+     "strategy": "encoder"
+    }
+   ]
+  },
+  {
+   "text": "add a small pond",
+   "lang": "en",
+   "english": null,
+   "mode": "typed",
+   "tab": "draw",
+   "worlds": [
+    "art.draw"
+   ],
+   "status": "supported",
+   "time": "2026-11-15T11:42:17.167Z",
+   "routing": {
+    "activeTab": "draw",
+    "activeWorld": "art.draw",
+    "chosen": [
+     "art.draw"
+    ],
+    "pieces": [
+     {
+      "text": "add a small pond",
+      "chosen": "art.draw",
+      "pattern": "pat.art.draw.make.mods",
+      "candidates": [
+       {
+        "world": "art.draw",
+        "score": 1,
+        "valid": true
+       }
+      ]
+     }
+    ]
+   },
+   "id": "pmwhrlt8vgb7w",
+   "source": "human",
+   "unparsed": false,
+   "formalizer": "encoder",
+   "feedback": {
+    "vote": "down",
+    "reasons": [],
+    "wanted": "did way too much, i was expecting a small lake somewhere in a corner, maybe with some water plants and a duck or random animal, not this abomination",
+    "correction": null,
+    "time": "2026-11-15T11:42:35.630Z"
+   },
+   "selectedLang": "en",
+   "replyOutcome": "done",
+   "turnKind": null,
+   "tabWorld": "art.draw",
+   "detail": {
+    "tab": "draw",
+    "worlds": [
+     "art.draw"
+    ],
+    "status": "understood",
+    "readings": [
+     {
+      "text": "add a small pond",
+      "world": "art.draw",
+      "pattern": "pat.art.draw.make.mods",
+      "strategy": "encoder",
+      "unparsed": false,
+      "complete": true,
+      "refusal": null,
+      "candidates": [
+       {
+        "world": "art.draw",
+        "score": 1,
+        "valid": true,
+        "variant": "original"
+       }
+      ],
+      "wires": "@t16_w25 core.request\n    action=art.draw.make\n    arg.m1=\"small\"\n    arg.thing=\"pond\"\n    arg.text=\"add a small pond\"\n    core.via=$pat.art.draw.make.mods\n    core.source=\"msg16#0-16\"\n    core.seq=61\n    core.in=$art.draw\n"
+     }
+    ],
+    "answer": "I drew a pond: a sun, 3 dragonflys, a pond, 2 trees, 2 bushes, a bench, 5 grasses, a snail, 3 stones, 3 ducks, 3 frogs, 4 water lilys, 3 goldfishes and a heron. I put the 3 ducks on the water of the pond, the 3 frogs on the water of the pond and the 4 water lilys on the water of the pond.",
+    "effects": [],
+    "budget": {
+     "ticks": 341373,
+     "top": {
+      "matcher.backtrack": 221342,
+      "rules.pattern": 35767,
+      "matcher.attempt": 25003,
+      "spell.edit": 6487,
+      "meta.worlds.near": 6358
+     }
+    },
+    "budgetExceeded": null,
+    "state": {
+     "before": "f94a8ca0",
+     "after": "6e039fd7"
+    },
+    "perf": {
+     "totalMs": 4889,
+     "engineMs": 4789,
+     "stages": {
+      "correct": {
+       "n": 7,
+       "ms": 0.1
+      },
+      "person": {
+       "n": 7,
+       "ms": 2.1
+      },
+      "dialogue": {
+       "n": 14,
+       "ms": 2.3
+      },
+      "discourse": {
+       "n": 14,
+       "ms": 2.6
+      },
+      "encoder.available": {
+       "n": 1,
+       "ms": 0
+      },
+      "encoder.prepare": {
+       "n": 1,
+       "ms": 0
+      },
+      "tokenize": {
+       "n": 8,
+       "ms": 1.3
+      },
+      "ort": {
+       "n": 8,
+       "ms": 1220.4
+      },
+      "predict": {
+       "n": 1,
+       "ms": 1224.9
+      },
+      "seed.replay": {
+       "n": 6,
+       "ms": 0
+      },
+      "rules": {
+       "n": 6,
+       "ms": 234.3
+      },
+      "formalize": {
+       "n": 7,
+       "ms": 6726.5
+      },
+      "typed": {
+       "n": 7,
+       "ms": 0
+      },
+      "knowledge": {
+       "n": 21,
+       "ms": 390.1
+      },
+      "interpret": {
+       "n": 7,
+       "ms": 50.2
+      },
+      "names": {
+       "n": 5,
+       "ms": 0.4
+      },
+      "lenient": {
+       "n": 5,
+       "ms": 958.2
+      },
+      "intent": {
+       "n": 5,
+       "ms": 2.8
+      },
+      "seed": {
+       "n": 2,
+       "ms": 2669.3
+      },
+      "check": {
+       "n": 1,
+       "ms": 0
+      },
+      "check.formalize": {
+       "n": 1,
+       "ms": 2.7
+      },
+      "validate": {
+       "n": 1,
+       "ms": 2694.6
+      },
+      "rules.final": {
+       "n": 1,
+       "ms": 4.3
+      },
+      "encoder": {
+       "n": 1,
+       "ms": 4076
+      }
+     },
+     "render": 99,
+     "effects": 0.2
+    }
+   },
+   "happened": {
+    "tabAfter": "draw",
+    "shown": [
+     {
+      "text": "I drew a pond: a sun, 3 dragonflys, a pond, 2 trees, 2 bushes, a bench, 5 grasses, a snail, 3 stones, 3 ducks, 3 frogs, 4 water lilys, 3 goldfishes and a heron. I put the 3 ducks on the water of the pond, the 3 frogs on the water of the pond and the 4 water lilys on the water of the pond.",
+      "world": "art.draw"
+     }
+    ],
+    "changes": [
+     {
+      "world": "session.things",
+      "changes": [
+       "things: +2 suns",
+       "things: +2 clouds",
+       "things: +1 mountain",
+       "things: +1 house",
+       "things: +4 trees",
+       "things: +2 flowers",
+       "things: +1 dog",
+       "things: +1 bird"
+      ]
+     },
+     {
+      "world": "art.draw",
+      "changes": [
+       "objects: +1 sun",
+       "objects: +30 composites",
+       "objects: +2 trees",
+       "last: +33 items",
+       "last: -1 item",
+       "seed 3929756407 (was 2801092474)",
+       "prev label drew a pond (was colored it green)",
+       "prev objects: sun changed"
+      ]
+     }
+    ],
+    "viewEffects": [
+     {
+      "kind": "view",
+      "tab": "draw",
+      "world": "art.draw"
+     }
+    ]
+   },
+   "budget": {
+    "ticks": 341373,
+    "top": {
+     "matcher.backtrack": 221342,
+     "rules.pattern": 35767,
+     "matcher.attempt": 25003,
+     "spell.edit": 6487,
+     "meta.worlds.near": 6358
+    }
+   },
+   "reaction": {
+    "kind": "tap",
+    "target": "Pages",
+    "afterMs": 13984,
+    "tab": "draw"
+   },
+   "segments": [
+    {
+     "text": "add a small pond",
+     "status": "supported",
+     "world": "art.draw",
+     "pattern": "pat.art.draw.make.mods",
+     "unparsed": false,
+     "strategy": "encoder"
+    }
+   ]
+  }
+ ]
+}
