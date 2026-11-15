@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "af80c6ff",
-  "tree": "3d9285447cf3ebc7",
+  "build": "72eba292",
+  "tree": "61678096358bc509",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -1426,7 +1426,7 @@
     {
      "text": "fa-mu un desen cu un lac, o rata, o vila, nori, soare ,iarba",
      "tab": "draw",
-     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; open]"
+     "happened": "I could not make that in the drawing. [outcome: refused; open]"
     },
     {
      "text": "un cer cu 5 nori",
