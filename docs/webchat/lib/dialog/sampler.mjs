@@ -217,7 +217,8 @@ export function engineSampler(lib, engine, session) {
  * sent) in that language, by the rules translator (its reply tables and grammar, never a machine translator), and a chip it cannot say completely is left out: never an English chip
  * on a page in another language. Each item keeps its English text in `en`. `translator` is the engine's (its `rules` when it switches between translators).
  */
-const norm = (s) => String(s ?? '').toLowerCase().replace(/[.!?,"„”]/g, '').replace(/\s+/g, ' ').trim();
+const norm = (s) => String(s ?? '').toLowerCase().replace(/[.!?,"„”]/g, '').replace(/\b([a-z]+) (\d+)\b/g, '$1$2').replace(/\s+/g, ' ').trim();   // the reader splits a name like c1 into c 1 and still reads it
+const ID = /\b[a-z]+\d+\b/gi;
 export async function chipsInLanguage(items, lang, translator) {
   if (!lang || lang === 'en' || !items?.length) return items ?? [];
   const rules = translator?.rules ?? translator;
@@ -225,8 +226,10 @@ export async function chipsInLanguage(items, lang, translator) {
   const out = [];
   for (const it of items) {
     try {
-      const r = await rules.translate(it.text, { from: 'en', to: lang });
-      const text = typeof r === 'string' ? r : r?.text;
+      // a name like c1 (a diagram node, a seat) is kept as it is, as the reply tables keep a name ({w}): it goes through the translator as a name it does not touch
+      const ids = [...new Set(it.text.match(ID) ?? [])], hold = (i) => `Zq${'abcdefghij'[i]}`;
+      const r = await rules.translate(ids.reduce((t, id, i) => t.replace(new RegExp(`\\b${id}\\b`, 'g'), hold(i)), it.text), { from: 'en', to: lang });
+      const text = ids.reduce((t, id, i) => t?.replace(new RegExp(`\\b${hold(i)}\\b`, 'g'), id), typeof r === 'string' ? r : r?.text);
       if (!text || r?.unknown?.length || r?.untranslatable?.length || (translator?.leftovers?.(text, lang) ?? rules.leftovers?.(text, lang) ?? []).length) continue;
       // read back: the chip, when tapped, is read as the same command (the reading of a chip is the world's, so a chip that would read otherwise is not offered)
       const back = await rules.translate(text, { from: lang, to: 'en' });
