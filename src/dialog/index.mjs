@@ -986,7 +986,45 @@ export class DialogSession {
     return null;
   }
 
+  /**
+   * ONE STORY (spec 03 "Sentences in sequence", rule 2): a message of two or more sentences whose reading mixes worlds and leaves a part unread ("I want 2 pencils and I give the
+   * cashier 10 lei. How much change do I get?" on the drawing tab: the drawing world takes the first sentence, so the change question finds no list) is read again, by the rules,
+   * once per world that read a part of it, on a view of that world alone. A world that reads EVERY sentence in sequence, and whose readings its dry run does not refuse, takes the
+   * whole message: the sentences of one message are one story, told to one world. The open tab's world is tried first, then the others in the order they read. Returns the segments or null.
+   */
+  async _oneStory(english, res, opts) {
+    if (!res.segments.length || !res.segments.some((x) => x.unparsed) || splitSentences(english).length < 2) return null;
+    budget.tick('dialog.story');
+    const { set, formalizers } = this.engine;
+    const ctx = opts.context ?? this.context();
+    const SKIP = new Set(['ui.shell', 'ui.help', 'core', 'lang.common', 'talk', 'conversation']);
+    const worldsOf = (segs) => segs.filter((x) => !x.unparsed).map((x) => x.match?.worldId).filter((w) => w && !SKIP.has(w));
+    const read = worldsOf(res.segments);
+    // a reading by the model (the encoder) may cut the story elsewhere: the worlds the rules read in the message are candidates too
+    if (res.segments.some((x) => x.strategy === 'encoder')) { try { read.push(...worldsOf((await formalizers.rules.formalize(english, opts)).segments)); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; } }
+    if (!read.length) return null;
+    const order = [...new Set(read)].sort((a, b) => (b === ctx.tabWorld) - (a === ctx.tabWorld));
+    for (const w of order.slice(0, 3)) {
+      const only = set.list().filter((x) => x.id === w);
+      if (!only.length) continue;
+      const view = Object.create(set);
+      view._cache = new Map();
+      view.parent = set.parent ?? set;
+      view.list = () => only;
+      let r;
+      try { r = await formalizers.rules.formalize(english, { ...opts, worlds: view }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; continue; }
+      if (!r.segments.length || r.segments.some((x) => x.unparsed || x.partial || x.ignored?.length || x.match?.worldId !== w)) continue;
+      const st = this._dryStatuses(r.segments);
+      if (st.some((x) => x === 'unsupported' || x === 'error')) continue;
+      r.segments.forEach((s) => { s.strategy = 'rules'; s.story = w; });
+      return { segments: r.segments, wires: r.segments.flatMap((s) => s.wires) };
+    }
+    return null;
+  }
+
   async _capability(english, res, opts, lenient) {
+    const story = await this._oneStory(english, res, opts);
+    if (story) return story;
     const rep = await this._nameRepair(english, res, opts, lenient);
     if (rep) return rep;
     const r = await this._capabilityRead(english, res, opts, lenient);

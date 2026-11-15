@@ -1,12 +1,12 @@
 # REAL failures by cause (2026-11-15)
 
-Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit 085bc0dab1f6; seed 20261115; build 25492edc, tree 1a2f18da4cbac97e), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
+Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit 085bc0dab1f6; seed 20261115; build 7c38bb2b, tree e110642ab55e2762), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
 
-Headline (in scope, judged): 157/207 right (partly 20, wrong 30); 46 turns of retired records skipped. Diagnostic, rules formalizer only: 160/207.
+Headline (in scope, judged): 159/207 right (partly 17, wrong 31); 46 turns of retired records skipped. Diagnostic, rules formalizer only: 160/207.
 
 Caveat: Romanian turns are replayed with the rules translator only (no browser Machine Translation in node: --bergamot runs the on-device model), so part of the Romanian causes is the missing translation backend, not the reader. Lazy world loading is not replayed (every world is loaded, as `?psys2lazy=0`).
 
-Failing turns: matrix 252, ops 252 (0 fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): 1.
+Failing turns: matrix 250, ops 250 (0 fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): 1.
 
 | # | cause | turns | both | examples |
 | --- | --- | ---: | ---: | --- |

@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "25492edc",
-  "tree": "1a2f18da4cbac97e",
+  "build": "7c38bb2b",
+  "tree": "e110642ab55e2762",
   "catalog": "085bc0dab1f6f2817815ca789a36259b3c01ae4e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,17 +13,17 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 157,
-   "partly": 20,
-   "wrong": 30,
+   "right": 159,
+   "partly": 17,
+   "wrong": 31,
    "open": 13,
    "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 335,
+    "executed": 333,
     "refused": 2,
-    "asked": 6,
-    "not_understood": 167,
+    "asked": 7,
+    "not_understood": 168,
     "other_world": 95
    },
    "by_source": {
@@ -75,7 +75,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 97
+     "right": 99
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -88,18 +88,18 @@
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 157,
-   "partly": 20,
-   "wrong": 30,
+   "right": 159,
+   "partly": 17,
+   "wrong": 31,
    "open": 13,
    "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 335,
+    "executed": 333,
     "refused": 2,
-    "asked": 6,
-    "not_understood": 167,
-    "other_world": 95
+    "asked": 7,
+    "not_understood": 169,
+    "other_world": 94
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -150,7 +150,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 97
+     "right": 99
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 252,
- "failing_ops": 252,
+ "failing_matrix": 250,
+ "failing_ops": 250,
  "ops_only": 0,
  "causes": [
   {
@@ -505,7 +505,7 @@
     {
      "text": "would you say you are happy",
      "tab": "robot",
-     "happened": "I could not find \"you are happy\" in the document. [outcome: other_world; partly; answer:happy]"
+     "happened": "I could not find \"you are happy\" in the document. [outcome: other_world; wrong; answer:happy]"
     },
     {
      "text": "would you say you are sad",
@@ -555,23 +555,6 @@
      "text": "draw 2 elephants",
      "tab": "talk",
      "happened": "I drew 2 elephants. [outcome: other_world; wrong]"
-    }
-   ]
-  },
-  {
-   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.gaps1b",
-   "count": 2,
-   "both_reasoners": 2,
-   "examples": [
-    {
-     "text": "I would like a ball and a pencil and pay with 20 lei. what's the change",
-     "tab": "shop",
-     "happened": "OK, a ball. I did not understand \"a pencil\". Did you mean \"I buy 3 pencils.\" or \"Ben bought a pencil.\"? OK, you pay 20 lei. I did not understand \"what's the cha"
-    },
-    {
-     "text": "I want 2 pencils and I give the cashier 10 lei. How much change do I get?",
-     "tab": "drawing",
-     "happened": "I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon "
     }
    ]
   },
