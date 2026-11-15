@@ -2375,47 +2375,91 @@ export function requestResult(ctx, { before = null } = {}) {
   return { parts: made.length, kinds, extent: made.reduce((a, o) => a + (o.size ?? 0), 0) };
 }
 
-const rngOf = (seed) => { let a = (Number(seed) >>> 0) || 1; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
-const PLACE = { small: 'in the bottom left corner', big: 'in the bottom', default: 'in the bottom' };
+const PLACE = { corner: 'in the bottom left corner', top: 'at the top', bottom: 'in the bottom', left: 'on the left', right: 'on the right', center: 'in the middle' };
 /**
- * PLAN A SCENE FOR A REQUEST (spec 28 section 4, step 5). `goal`: { target, range: [lo, hi], parts: [the scene's kinds, the first is the one that makes it that scene], not: [kinds not
- * wanted], with: [parts asked for], size, seed }. The parts come from the expectation of the scene (request.sop w.expect until k.expect / k.scenes.has are in the pin); the size step
- * scales the main part and the number of parts; one undo step. Returns { status, value, assumed, cannot }.
+ * CARRY OUT A PLAN OF A REQUEST (spec 28; the plan is the library's planRequest over this world's request.sop). `goal.steps`: the make steps, the whole first ({ kind: pond }) and its
+ * items; the board draws each item kind (or the kind it is drawn as: std.schema.drawn, `goal.declared.drawn`), the size and the place of the whole on its first part. A kind the board
+ * cannot draw is said (`cannot`), never replaced by a guess. `goal.layout === 'layers'`: the picture in bands of the declared regions (std.schema.region). One undo step.
  */
 export function planRequest(ctx, goal = {}) {
-  const rnd = rngOf(goal.seed ?? Math.floor(Math.random() * 2 ** 31));
-  const not = new Set(goal.not ?? []);
-  const asked = (goal.with ?? []).map((w) => String(w).split(' ').at(-1).replace(/s$/, ''));
-  const drawable = (k) => !!kindOfWord(k) || UNDRAWABLE.has(k);
-  const cannot = asked.filter((k) => !drawable(k)).map((k) => ({ key: 'with', words: k }));
-  const parts = [...new Set([...(goal.parts ?? []), ...asked.filter(drawable)])].filter((k) => !not.has(k));
-  if (!parts.length) return no(`I do not know what a ${goal.target ?? 'scene'} has without ${[...not].join(' and ')}.`, 'unsupported');
-  const [lo, hi] = goal.range ?? [parts.length, parts.length];
-  const n = Math.max(1 + asked.filter((k) => parts.includes(k) && k !== parts[0]).length, lo + Math.floor(rnd() * (hi - lo + 1)));   // the parts asked for are always there
-  const main = parts[0];
-  // the main part once (a scene of one kind, a forest: all of it), the others in turn, the asked-for parts first
-  const plan = new Map([[main, 1]]);
-  const rest = [...asked.filter((k) => parts.includes(k) && k !== main), ...parts.slice(1).filter((k) => !asked.includes(k))];
-  const order = rest.length ? rest : [main];
-  for (let i = 1, j = Math.floor(rnd() * order.length); i < n; i++, j++) { budget.tick('draw.plan'); const k = order[j % order.length]; plan.set(k, (plan.get(k) ?? 0) + 1); }
-  const size = goal.size === 'small' ? 'small' : goal.size === 'big' ? 'big' : null;
-  const where = PLACE[size ?? 'default'];
-  const label = `drew a ${size ? `${size} ` : ''}${goal.target ?? main}`;
+  if (goal.layout === 'layers' && (goal.request?.facts ?? []).some((f) => f.key === 'layout' && f.value === 'layers')) return arrangeLayers(ctx, goal);   // layers when they were said (a sampled layout never cuts the picture)
+  const drawnAs = goal.declared?.drawn ?? {};
+  const items = new Map(), cannot = [];
+  for (const st of goal.steps ?? []) {
+    budget.tick('draw.plan');
+    if (st.action !== 'make' || !st.item || !st.args?.kind) continue;
+    const said = String(st.args.kind), k = drawnAs[said] ?? said;
+    if (!kindOfWord(k) && !UNDRAWABLE.has(k)) { if (!cannot.some((c) => c.words === said)) cannot.push({ key: 'kind', words: said, why: 'I cannot draw that yet' }); continue; }
+    const e = items.get(k) ?? { n: 0, said: new Set() };
+    e.n++; e.said.add(said); items.set(k, e);
+  }
+  if (!items.size) return no(`I cannot draw ${goal.target ? `a ${goal.target}` : 'that'} with the things I know how to draw.`, 'unsupported');
+  if (goal.plan?.roles?.mode === 'kind') {   // things of kinds, not a scene: the board draws each the way it draws a thing (its place from the facts, its colour, its warnings), and says so
+    const sz = goal.size === 'small' || goal.size === 'tiny' ? 'small' : goal.size === 'big' || goal.size === 'huge' ? 'big' : null;
+    const texts = [];
+    const r0 = oneStep(ctx, 'drew the things asked', () => {
+      for (const [k, e] of items) {
+        budget.tick('draw.plan');
+        const x = add(ctx, { kind: k, n: String(e.n), ...(sz ? { m1: sz } : {}), where: goal.placeWords ?? (goal.place && PLACE[goal.place] ? PLACE[goal.place] : '') });
+        if (x?.status === 'supported') texts.push(String(x.value ?? '').trim()); else cannot.push({ key: 'kind', words: [...e.said][0], why: 'I cannot draw that yet' });
+      }
+      return texts.length ? ok('') : no('I could not draw any of it.', 'unsupported');
+    });
+    return r0?.status === 'supported' ? ok(texts.join(' '), { cannot, plain: true }) : r0;
+  }
+  const size =goal.size === 'small' || goal.size === 'tiny' ? 'small' : goal.size === 'big' || goal.size === 'huge' ? 'big' : null;
+  const where = PLACE[goal.place] ?? (size === 'small' ? PLACE.corner : PLACE.bottom);
+  const [main] = items.keys();
   const said = [];
-  const r = oneStep(ctx, label, () => {
-    for (const [k, m] of plan) {
-      const one = { kind: k, n: String(m), ...(k === main && size ? { m1: size } : {}) };
-      const tries = k === main ? [where, ''] : [`next to the ${main}`, where, ''];
-      let done = null;
-      for (const w of tries) { const x = add(ctx, { ...one, where: w }); if (x?.status === 'supported') { done = x; break; } }
-      if (!done) return no(`I could not draw the ${k} of the ${goal.target}.`, 'unsupported');
-      said.push(`${m} ${m === 1 ? k : pluralOfKind(k, m)}`);
+  const r = oneStep(ctx, `drew ${goal.target ? `a ${size ? `${size} ` : ''}${goal.target}` : 'the things asked'}`, () => {
+    for (const [k, e] of items) {
+      const one = { kind: k, n: String(e.n), ...(k === main && size ? { m1: size } : {}) };
+      let ok1 = null;
+      for (const w of k === main ? [where, ''] : [`next to the ${main}`, where, '']) { const x = add(ctx, { ...one, where: w }); if (x?.status === 'supported') { ok1 = x; break; } }
+      if (!ok1) { cannot.push({ key: 'kind', words: [...e.said][0], why: 'I cannot draw that yet' }); continue; }
+      said.push(`${e.n} ${e.n === 1 ? kindName(k) : pluralOfKind(k, e.n)}`);
     }
+    return said.length ? ok('') : no('I could not draw any of it.', 'unsupported');
+  });
+  if (r?.status !== 'supported') return r;
+  // the whole is its first part (a pond is its water): the rest are what it has
+  const surface = [...(goal.steps ?? [])].find((st) => st.item && st.args?.kind)?.args.kind === "water";   // a scene whose first part is its water (a pond): the water is the whole, not a thing it has
+  const rest = goal.target && said.length > 1 && surface ? said.slice(1) : said;
+  const targetName = String(goal.target ?? "").replace(/_/g, " ");
+  const list = rest.length > 1 ? `${rest.slice(0, -1).join(', ')} and ${rest.at(-1)}` : rest[0];
+  const at = goal.place && PLACE[goal.place] ? ` ${PLACE[goal.place]}` : where === PLACE.corner ? ' in a corner' : '';
+  const one1 = (x) => x.replace(/^1 (.+)$/, (m, k) => `${/^[aeiou]/.test(k) ? 'an' : 'a'} ${k}`);
+  if (goal.plan?.roles?.mode === 'kind') { const xs = said.map(one1); return ok(`I drew ${xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}` : xs[0]}${at}.`, { cannot, plain: true }); }   // things of kinds, not a scene: what was drawn
+  if (goal.target && items.size === 1 && items.has(drawnAs[goal.target] ?? goal.target)) return ok(`I drew ${said[0] === `1 ${kindName(main)}` ? `a ${size ? `${size} ` : ''}${kindName(main)}` : said[0]}${at}.`, { cannot, plain: true });   // a thing, not a scene of parts
+  return ok(goal.target ? `I drew a ${size ? `${size} ` : ''}${targetName}${at}. It has ${list}.` : `I drew ${list}${at}.`, { cannot });
+}
+
+/**
+ * LAYERS BY SCENE REGIONS (the owner's "break in 3 layers: water, land and sky"): the picture is cut into horizontal bands, the first region named at the bottom, and each thing moves
+ * into the band of its region (std.schema.region of request.sop, `goal.declared.regions`); a thing of no named region stays in the nearest band. One undo step.
+ */
+function arrangeLayers(ctx, goal) {
+  const named = goal.declared?.named ?? [];
+  const regions = (goal.declared?.regions ?? []).filter((r) => named.includes(r.name));
+  if (regions.length < 2) return no('Which layers? For example "in 3 layers: water, land and sky".', 'missing');
+  const s = ensure(ctx);
+  const live = (s.objects ?? []).filter((o) => !o.tag);
+  if (!live.length) return no('There is nothing in the picture to put in layers yet. Draw something first, for example "draw a pond".', 'missing');
+  const band = H / regions.length;
+  const bandOf = (k) => { const i = regions.findIndex((r) => r.kinds.includes(k)); return i < 0 ? null : regions.length - 1 - i; };
+  let moved = 0;
+  const r = oneStep(ctx, `put the picture in ${regions.length} layers`, () => {
+    for (const o of live) {
+      budget.tick('draw.layers');
+      let b = bandOf(kindName(kindKey(o)));
+      if (b == null) b = Math.min(regions.length - 1, Math.max(0, Math.floor(o.y / band)));
+      const y = Math.round(band * b + band / 2);
+      if (Math.abs(o.y - y) > 4) { o.y = y; moved++; }
+    }
+    s.selected = null;
     return ok('');
   });
   if (r?.status !== 'supported') return r;
-  const list = said.length > 1 ? `${said.slice(0, -1).join(', ')} and ${said.at(-1)}` : said[0];
-  const assumed = [];
-  if (goal.rangeAssumed) assumed.push(`I chose ${n} things.`);
-  return ok(`I drew a ${size ? `${size} ` : ''}${goal.target ?? main}${size === 'small' ? ' in a corner' : ''}. It has ${list}.`, { assumed, cannot });
+  const top = regions.map((x) => x.name).reverse();
+  return ok(`I put the picture in ${regions.length} layers: ${top[0]} at the top, ${top.slice(1, -1).map((x) => `${x} in the middle, `).join('')}${top.at(-1)} at the bottom.${moved ? ` I moved ${moved} thing${moved === 1 ? '' : 's'}.` : ''}`);
 }

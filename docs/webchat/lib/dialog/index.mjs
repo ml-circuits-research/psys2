@@ -9,16 +9,16 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=e0371bfe15';
-import { reviewForeign } from './foreign-reading.mjs?v=acf71a76d1';
+import { composeReply, sayOf } from './composed-reply.mjs?v=8ba443c46c';
+import { reviewForeign } from './foreign-reading.mjs?v=79d8decc9c';
 import { installTextGen } from './textgen.mjs?v=a8831e42a2';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=ff05a8582c';
-import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=3baf082cf1';
+import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=ca19719ad4';
 import { validateWorldSet } from '../worlds/validate.mjs?v=f0bbfe4db3';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=ff05a8582c';
 import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=e8a1f00976';
 import { createInterpreter } from '../interpreter/index.mjs?v=d604aa1cfc';
-import { createReasoner } from '../reasoner/index.mjs?v=1f35733fdc';
+import { createReasoner } from '../reasoner/index.mjs?v=678a7a8eac';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=ef142ac40e';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=2c08312adb';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
@@ -38,20 +38,20 @@ import { checkValues } from './value-check.mjs?v=9f806bb103';
 import { attachValues } from '../knowledge/values.mjs?v=0d60c4bf76';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3ebe6cdc98';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f39042bd20';
-import { Discourse } from './discourse.mjs?v=9db81498d3';
-import { Dialogue } from './dialogue.mjs?v=74a82c9c34';
+import { Discourse } from './discourse.mjs?v=2aa77d7f4a';
+import { Dialogue } from './dialogue.mjs?v=7b73f8311f';
 import { turnSteps } from './steps.mjs?v=44af51b084';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=789fcc7630';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=62bbfade86';
-import { personTurn } from './person.mjs?v=59c15560b5';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=1e9911155e';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=92671a37d7';
+import { personTurn } from './person.mjs?v=cf3762d663';
 import { proposeByTypes } from './typed-reader.mjs?v=ecd7342ebe';
-import { withVariants, anyVoiceOn } from './variants.mjs?v=19c2ae30e0';
+import { withVariants, anyVoiceOn } from './variants.mjs?v=31da8a4ba4';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=ff05a8582c';
 import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=ff05a8582c';
 import { repairFromScene } from './scene-referents.mjs?v=71b2b4cd5b';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=d07c322e99';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=ed5b846bed';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=0cde8f93fd';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=31fb738b59';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=6913fe1bf3';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=ffe4866283';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -266,6 +266,23 @@ function soundAlikes(text, tabWorld) {
 
 
 const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
+/** A turn the old readers handled (the door did not take it): `trace.legacy`, with the door's reason. */
+/** The segment of the world that took a turn through the door (the readers' segments record theirs), with the slips the request read (as the readers record their corrections). */
+function stampDoor(r, tabWorld, text, q) {
+  r.trace ??= {};
+  const corrections = (q?.corrections ?? []).map((c) => ({ from: c.said, to: c.as }));
+  const mine = (r.segments ?? []).find((sg) => (sg.match?.worldId ?? sg.world) === tabWorld);
+  if (!mine) r.segments = [...(r.segments ?? []), { world: tabWorld, text: r.trace.english ?? text, planned: true, match: { worldId: tabWorld, patternId: `door.${tabWorld}` }, corrections }];
+  else { mine.match ??= { worldId: tabWorld, patternId: `door.${tabWorld}` }; if (corrections.length) mine.corrections = [...(mine.corrections ?? []), ...corrections]; }
+  if (Array.isArray(r.worlds) && !r.worlds.includes(tabWorld)) r.worlds.push(tabWorld);
+}
+/** A world on the request door: it declares its capabilities (request.sop) and carries a plan out (an operation planRequest). Charts, Map, Music join as they get both. */
+const declaredWorld = (w) => !!(w?.requestText && typeof w?.ops?.planRequest === 'function');
+const markLegacy = (r, why) => { if (r && typeof r === 'object') { r.trace ??= {}; r.trace.legacy = true; r.trace.door = why; } return r; };
+/** A request with another act (a stand-in decision of the dialogue world; the library's facts kept). */
+const withAct = (req, act) => { const facts = req.facts; const r = Object.assign(plainRequest(req), { act }); Object.defineProperty(r, 'facts', { value: facts, enumerable: false }); return r; };
+/** Whether the open world's state holds a thing of a kind (its objects or shapes, by kind / shape / label). */
+const hasThing = (state, kind) => { const k = String(kind ?? '').toLowerCase(); if (k === 'link') return (state?.edges ?? []).length > 0; return !!k && [...(state?.objects ?? []), ...(state?.shapes ?? [])].some((o) => [o.kind, o.shape, o.label, o.name].some((v) => String(v ?? '').toLowerCase() === k)); };
 const textOf = (r) => (typeof r === 'string' ? r : r?.text);
 
 const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
@@ -276,7 +293,7 @@ import { languageCommand } from '../translate/language-command.mjs?v=af45c6bf2e'
 import { withSubject, polishReply } from '../translate/register.mjs?v=45588e0a13';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=80e9d07ff4';
 import { intentStep, weakReading } from './intent.mjs?v=30d2fcc4e2';
-import { readRequest, reviseRequest, violations, notHonoured, wantedRange, sayRequest } from './request.mjs?v=b8491755e5';
+import { requestLanguage, liveWorld, readTurn, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=91eda965b5';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1543,17 +1560,236 @@ export class DialogSession {
   }
 
   /**
-   * THE REQUEST STEP (spec 28; owner GO 2026-11-15 14:00): what was asked is a world. The turn is read as before (`_sendRead`: the existing readers and the intent step); then a live
-   * w.request is filled from its English, the live w.dialogue (this.dialogue.requests) says whether it is a new request or a reaction to the last result of the open tab, the result is
-   * checked against the request, and when a constraint is violated (or the turn is a reaction, which replaces the last result) the open tab's world plans the request itself.
+   * THE DOOR (spec 28 section 4; reviewer 2026-11-15 16:40, owner-backed): every message is read as a w.request FIRST (the library's readRequest over the open tab's live world);
+   * nothing executes before it. The dialogue world (reviseRequest against the OPEN TAB's last result) says new request or revision; planRequest fills and checks; the tab world's
+   * executor carries out the plan; sayRequest says what was assumed and not honoured. Only a turn the door does not take (no act, target or reaction read; an act or a constraint
+   * the world does not declare; words no fact explains; a question) goes to the old readers (`_sendRead`), marked `trace.legacy = true` with the reason in `trace.door`: the
+   * legacy share is what the request path cannot read yet. On a declared tab nothing falls back to the old readers of a declared world (owner 17:55): see below.
    */
   async _send(text, opts = {}) {
     const tabWorld = this.context().tabWorld;
-    const decl = tabWorld ? this.engine.set.get(tabWorld)?.requestDecl : null;
-    if (!decl || opts.request === false || globalThis.process?.env?.PSYS2_REQUEST === 'off' || guard.soft()) return this._sendRead(text, opts);   // PSYS2_REQUEST=off: the A/B of the request step
+    const decl = tabWorld && declaredWorld(this.engine.set.get(tabWorld));   // the world declares what it can do (request.sop) and carries a plan out (its planRequest operation)
+    const off = opts.request === false || globalThis.process?.env?.PSYS2_REQUEST === 'off' || guard.soft();   // PSYS2_REQUEST=off: the A/B of the request step
+    if (!decl || off) return markLegacy(await this._sendRead(text, opts), off ? 'off' : 'no request declarations');
+    if (this.engine.sopworld === undefined) this.engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=1a46c4b8fc').catch(() => null);
+    if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(this.engine.sopworld, null);   // the executors of the door (docs.editor composes) run before the core
+    let door = null;
+    try { door = await perf.time('door', () => this._door(text, opts, tabWorld)); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door]', e); door = { why: 'door error' }; }
+    if (door?.reply) { stampDoor(door.reply, tabWorld, text, door.reply.trace?.request ?? door.q); door.reply.trace.legacy = false; door.reply.trace.door = door.route ?? 'plan'; return door.reply; }
+    if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door] legacy:', door?.why, JSON.stringify(door?.q ?? null)?.slice(0, 300));
+    // NO FALLBACK ON A DECLARED TAB (owner 2026-11-15 17:55): the old patterns of the declared worlds never run. The worlds that declare nothing yet (the shell's tabs, help,
+    // the conversation) may still answer, marked legacy; a reading by a declared world is taken back and the turn is said honestly.
     const snap0 = this.snapshot();
     const first = await this._sendRead(text, opts);
-    try { return (await perf.time("request", () => this._requestStep(text, opts, first, { tabWorld, decl, snap0 }))) ?? first; } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error("[request]", e); return first; }
+    const hit = [...new Set((first?.trace?.segments ?? first?.segments ?? []).map((sg) => sg.match?.worldId ?? sg.world).filter(Boolean))];
+    if (hit.length && !hit.some((w) => declaredWorld(this.engine.set.get(w)))) return markLegacy(first, `${door?.why ?? 'not read'}; answered by ${hit.join(', ')} (no declarations)`);
+    this.restore(snap0);
+    const honest = await this._doorHonest(text, opts, tabWorld, door);
+    stampDoor(honest, tabWorld, text, door?.q); honest.trace.legacy = false; honest.trace.door = `honest: ${door?.why ?? 'not read'}`;
+    return honest;
+  }
+
+  /** The language and the English of a turn for the door, before anything runs (an explicit language is the language; 'auto' detects without touching the session's language). */
+  async _doorEnglish(text, opts) {
+    const tr = this.engine.translator;
+    const wanted = opts.language ?? this.language;
+    let lang = wanted && wanted !== 'auto' && wanted !== 'unknown' ? wanted : 'en';
+    if (tr && wanted === 'auto') {
+      const seen = langOf(await guard.abortable(tr.detectLanguage(text), 'detect'));
+      const ev = typeof tr.evidence === 'function' ? await guard.abortable(tr.evidence(text), 'detect') : null;
+      lang = ev?.strongEn ? 'en' : seen === 'ro' && (ev?.strongRo || this._sessionLang === 'ro') ? 'ro' : (this._sessionLang ?? 'en');
+      if (ev?.strongEn || (lang === 'ro' && ev?.strongRo)) { this._sessionLang = lang; this._weakRo = 0; }   // the session's language, as the core keeps it (the core then gets the language explicitly)
+    }
+    if (lang === 'en' || !tr) return { lang: 'en', english: text, translation: null };
+    // the translation candidates of every translator (rules, the source-side repair, the machine translators), chosen by the request reading: the one whose request leaves the
+    // fewest words unread in the open world (ties: the earlier candidate). The translators are the system boundary; the reading is the door's.
+    let cands = [];
+    try { cands = await gatherCandidates(text, { from: lang, to: 'en', translator: tr, abortable: (p, stage) => guard.abortable(p, stage) }); } catch (e) { if (e instanceof TurnAborted) throw e; cands = []; }
+    if (!cands.length) {
+      const translation = await guard.abortable((tr.rules ?? tr).translate(text, { from: lang, to: 'en' }), 'translate');
+      const english = textOf(translation);
+      return english?.trim() ? { lang, english, translation } : null;
+    }
+    const lib = this.engine.sopworld, tabWorld = this.context().tabWorld;
+    const live = tabWorld ? liveWorld(lib, this.engine.set.get(tabWorld)) : null, language = requestLanguage(lib);
+    const score = (c) => { if (!live || !language) return 0; try { const q = readTurn(lib, live, language, c.text, {}); return q.unread.length * 2 + (q.act || q.target || q.reaction ? 0 : 1); } catch { return 9; } };
+    let best = cands[0], bestScore = score(cands[0]);
+    for (const c of cands.slice(1)) { budget.tick('door.candidates'); const sc = score(c); if (sc < bestScore) { best = c; bestScore = sc; } }
+    return { lang, english: best.text, translation: best.translation ?? null };
+  }
+
+  /** The door of one turn: `{ reply, route }` when the request path handled it, else `{ why }` (the reason the turn goes to the old readers). */
+  async _door(text, opts, tabWorld) {
+    const { set, interp } = this.engine;
+    const lib = this.engine.sopworld;
+    const world = set.get(tabWorld);
+    const language = requestLanguage(lib), live = liveWorld(lib, world);
+    if (!language || !live || typeof lib?.readRequest !== 'function') return { why: 'no library' };
+    if (languageCommand(text)) return { why: 'language command' };
+    const en = await this._doorEnglish(text, opts);
+    if (!en) return { why: 'not translated' };
+    const { lang, english, translation } = en;
+    const rd = this.dialogue.requests;
+    const lastRec = rd.last(tabWorld);
+    const vocab = spellVocabulary(set);
+    const known = (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!this.engine.translator?.rules?.knownEnglish?.(w);   // a word of the language is never a slip
+    const dlg = lastRec ? { last: lastRec.request, result: lastRec.result, previous: lastRec.previous ?? null, seed: lastRec.seed ?? 1, previousSeed: lastRec.previousSeed ?? null } : { last: null, result: null, seed: 1 };
+    const q = readTurn(lib, live, language, english, { dialogue: dlg, known });
+    const flat = { act: q.act, target: q.target, facts: q.facts, reaction: q.reaction, unread: q.unread, used: q.used, corrections: q.corrections, english: q.english, source: 'sopworld' };
+    const why = (w) => ({ why: w, q: flat });
+    if (isQuestion(english, language)) return why('question');
+    if (!q.act && !q.target && !q.reaction && !(lastRec && q.request.constraints?.length)) return why('nothing read');   // constraints only count against a last result (a refine)
+    if (q.unread.length) return why(`unread: ${q.unread.join(' ')}`);
+    const state = this.isession.state[tabWorld] ?? null;
+    let rev = null;
+    try { rev = lib.reviseRequest(dlg, q.request, { revisions: language, catalog: [language] }); } catch { rev = null; }
+    const cap = lib.capabilitiesOf(live);
+    const base = { text, opts, lang, english, translation, tabWorld, q, flat, lastRec, dlg };
+    // 1. a reaction to the open tab's last result: the revision of its request, carried out on the state before it (the last result is replaced, never piled on)
+    const named = q.target ?? q.facts.find((f) => f.key === 'kind' && !f.neg)?.value ?? null;
+    const definite = named && hasThing(state, named) && new RegExp(`\\b(?:the|this|that)\\s+(?:\\w+\\s+)?${named.replace(/[^a-z ]/gi, '')}`, 'i').test(english);   // "the tree": a thing of the open world, the readers' to change
+    if (lastRec?.via === 'plan' && !definite && rev?.sort === 'reaction' && (!q.act || q.request.refers === 'last' || ['redo', 'reduce', 'enlarge'].includes(q.reaction))) {   // the dialogue world's decision: a reaction cue, or constraints only (a refine: "anything but circles")
+      if (!rev.request) return why(`reaction ${rev.reaction} changes nothing`);   // thanks, frustration: the dialogue's own reply
+      const lastT = lastRec.flat?.target ?? lastRec.request?.target ?? null;
+      const keys = new Set(cap.honours.filter((h) => h.act === 'make' && (!lastT || !h.of.length || h.of.includes(lastT) || madeIn(live, language, lastT))).flatMap((h) => [...h.on]));
+      const foreign = (q.request.constraints ?? []).filter((c) => !keys.has(c.on));
+      if (foreign.length) return why(`revision by ${foreign.map((c) => c.on).join(', ')} not declared`);   // "make it bold" after a story: an edit for the readers, not a revision of the request
+      const lastTarget = lastRec.flat?.target ?? lastRec.request?.target ?? null;
+      if (lastTarget && rev.request.target !== lastTarget && !q.act) rev.request.target = lastTarget;   // "less trees" after a forest: a part of the last result, never a new thing (stand-in, questions.md Q40)
+      return this._doorRun({ ...base, goalReq: rev.request, base: lastRec.before, reaction: rev.reaction, rev, route: `reaction ${rev.reaction}` });
+    }
+    // 2. an arrangement of what the open world holds: a layout said with no act and no new thing ("break it into 3 layers: water, land and sky")
+    const layout = q.facts.find((f) => f.key === 'layout' && f.value !== 'better');
+    if (!q.act && !q.target && layout && (state?.objects ?? state?.shapes ?? []).length > 0 && cap.honours.some((h) => h.act === 'arrange')) {
+      const goalReq = withAct(q.request, 'arrange'); goalReq.target = lastRec?.flat?.target ?? null;
+      return this._doorRun({ ...base, goalReq, base: undefined, arrange: true, route: 'arrange' });
+    }
+    if (q.reaction && !q.act) return why(lastRec ? `reaction ${q.reaction} not a revision` : `reaction ${q.reaction} with no result`);
+    // the same random request again ("draw a random diagram" twice): another sample in place of the last result, never a second one on top
+    if (lastRec && q.act && q.target && lastRec.flat?.target === q.target && q.facts.some((f) => f.key === 'manner' && f.value === 'random') && JSON.stringify(q.facts) === JSON.stringify(lastRec.flat?.facts ?? null)) {
+      const again = Object.assign(plainRequest(q.request), {}); Object.defineProperty(again, 'facts', { value: q.facts, enumerable: false });
+      return this._doorRun({ ...base, goalReq: again, base: lastRec.before, reaction: 'redo', rev: { sort: 'reaction', reaction: 'redo', request: again, vary: true }, route: 'reaction redo' });
+    }
+    if (!q.act) return why('no act');
+    // 3. a new request: the act and the thing must be declared by the open world (std.schema.honours); a thing of the open world named with "the" is a change of it, not a new one
+    let req = q.request;
+    const isMade = (k) => !!k && cap.honours.some((h) => h.act === 'make' && (!h.of.length || h.of.includes(k)));
+    const act = req.act;
+    const thing = req.target ?? q.facts.find((f) => f.key === 'kind' && !f.neg)?.value ?? null;
+    // no thing named: the door's only when a count names the unit of a whole this world makes ("draw 6 nodes"); "add a paragraph ..." is not a story to guess
+    if (!thing && !(req.constraints ?? []).some((c) => c.on === 'count' && c.of && unitOfWhole(live, language, c.of))) return why('no thing named');
+    if (!cap.honours.some((h) => h.act === act && (!thing || !h.of.length || h.of.includes(thing) || (act === 'make' && madeIn(live, language, thing))))) return why(`act ${act}${thing ? ` ${thing}` : ''} not declared`);   // a whole the catalog expects made in this world (k.expect.make made_in) is this world's to make
+    if (thing && hasThing(state, thing) && new RegExp(`\\b(?:the|this|that)\\s+(?:\\w+\\s+)?${thing.replace(/[^a-z ]/gi, '')}`, 'i').test(english)) return why(`refers to the ${thing} of the open world`);
+    let dry = null;
+    withSubkindsNegated(req, live, world.requestText);
+    try { dry = lib.planRequest(live, req, { catalog: [language], dialogue: dlg, seed: 1 }); } catch { dry = null; }
+    const undeclared = (dry?.notHonoured ?? []).filter((x) => x.code === 'not_declared');
+    // a plan that breaks a count said of one kind ("3 clouds and a sun" planned as 2 clouds and 1 sun) is never carried out (P9: no executed result violates a said constraint)
+    const planned = {};
+    for (const st of dry?.steps ?? []) if (st.item && st.args?.kind) planned[st.args.kind] = (planned[st.args.kind] ?? 0) + 1;
+    const broken = (req.constraints ?? []).filter((c) => c.on === 'count' && c.of && c.number !== undefined && planned[c.of] !== undefined && planned[c.of] !== c.number);
+    if (dry?.ok && broken.length) return why(`plan breaks ${broken.map((c) => c.words ?? c.of).join(', ')}`);
+    if (undeclared.length) return why(`not declared: ${undeclared.map((x) => x.words ?? x.on).join(', ')}`);   // the readers may do it; their result is checked and the constraint named
+    return this._doorRun({ ...base, goalReq: req, base: undefined, route: 'request' });
+  }
+
+  /**
+   * No fallback on a declared tab (owner 2026-11-15 17:55): what the door could not take is said honestly, from the request (its unread words, the act or the thing the world
+   * does not declare, what the plan could not honour); nothing of the old tab patterns runs. Every reason is a "needs <generic piece>" of the log's attribution.
+   */
+  async _doorHonest(text, opts, tabWorld, door) {
+    const lib = this.engine.sopworld;
+    const live = liveWorld(lib, this.engine.set.get(tabWorld));
+    const name = (live?.ofType?.('std.schema.world')?.[0]?.attrs?.name?.[0]) ?? 'open tab';
+    const q = door?.q ?? null;
+    const why = String(door?.why ?? '');
+    const list = (ws) => ws.map((w) => `"${w}"`).join(', ');
+    let say;
+    if (q?.unread?.length) say = `I did not understand ${list(q.unread)} here.`;
+    else if (why === 'question') say = `I cannot answer questions about the ${name} yet.`;
+    else if (/^act (\S+)(?: (.+))? not declared$/.test(why)) { const [, act, thing] = why.match(/^act (\S+)(?: (.+))? not declared$/); say = `I cannot ${act}${thing ? ` ${thing.replace(/_/g, ' ')}` : ''} in the ${name} yet.`; }
+    else if (/^refers to the (.+) of the open world$/.test(why)) say = `I cannot change the ${why.match(/^refers to the (.+) of the open world$/)[1]} in the ${name} yet.`;
+    else if (/^(?:plan drops|not declared:) (.+)$/.test(why)) say = `I cannot do ${why.replace(/^(?:plan drops|not declared:) /, '')} in the ${name} yet.`;
+    else if (/^executor/.test(why) || /^no plan/.test(why)) say = `I could not make that in the ${name}.`;
+    else if (/^plan breaks (.+)$/.test(why)) say = `I could not plan ${why.replace(/^plan breaks /, '')} as you said, so I made nothing.`;
+    else if (/^reaction \S+ with no result$/.test(why) || /not a revision$/.test(why)) say = `There is nothing in the ${name} that I made and could change that way yet.`;
+    else say = `I did not understand that as something to do in the ${name}.`;
+    const en = await this._doorEnglish(text, opts).catch(() => null);
+    const r = await this._sendCore(text, { ...opts, ...(en?.lang ? { language: en.lang } : {}) }, { english: en?.english ?? text, translation: en?.translation ?? null, say });
+    r.trace.request = q;
+    if (Array.isArray(r.statuses)) r.statuses = ['unsupported'];
+    return r;
+  }
+
+  /** Plan a request with the library and let the open world carry it out (the door's tail); `{ reply, route }`, or `{ why }` when the world's executor does not take the plan. */
+  async _doorRun({ text, opts, lang, english, translation, tabWorld, goalReq, base, reaction = null, rev = null, arrange = false, q, flat, lastRec, dlg, route }) {
+    const { set, interp } = this.engine;
+    const lib = this.engine.sopworld;
+    const world = set.get(tabWorld);
+    const language = requestLanguage(lib), live = liveWorld(lib, world);
+    if (typeof world?.ops?.planRequest !== 'function') return { why: 'no executor', q: flat };
+    const sendOpts = { ...opts, language: lang };
+    const measure = (before) => interp.hook(this.isession, tabWorld, 'requestResult', { before });
+    this._requestSeed = ((this._requestSeed ?? Math.floor(Math.random() * 2 ** 31)) * 1103515245 + 12345) >>> 0;   // random is varied across sessions; a session's next plan is the next number
+    const seed = reaction && !rev?.vary ? (rev?.seed ?? this._requestSeed) : this._requestSeed;   // a varied redo is a fresh sample
+    let plan = null;
+    withSubkindsNegated(goalReq, live, world.requestText);
+    try { plan = lib.planRequest(live, goalReq, { catalog: [language], dialogue: dlg, seed, vary: !!rev?.vary }); } catch { plan = null; }
+    // a thing the world declares as one of its kinds, whose catalog parts it cannot make ("a house": walls, a roof, a door): planned as that kind itself (stand-in, Q40 [LIB])
+    if (!plan?.ok && !plan?.cannot?.length && goalReq.target && lib.capabilitiesOf(live).kinds.get(goalReq.target)?.has('make')) { try { const p2 = lib.planRequest(live, goalReq, { catalog: [language], dialogue: dlg, seed, vary: !!rev?.vary, sources: lib.REQUEST_SOURCES.filter((x) => x !== 'expect') }); if (p2?.ok) plan = p2; } catch { /* the first plan stands */ } }
+    if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door] plan', route, JSON.stringify({ ok: plan?.ok, roles: plan?.roles, nh: plan?.notHonoured, cannot: plan?.cannot })?.slice(0, 600));
+    if (!plan?.ok && arrange) plan = { ok: true, roles: { layout: q.facts.find((f) => f.key === 'layout')?.value }, steps: [], assumed: [], notHonoured: plan?.notHonoured ?? [], target: goalReq.target };   // an arrangement of what is there: the world's own act on its things
+    if (!plan?.ok && plan?.cannot?.length) {   // the library's reasoning found the plan cannot hold: nothing is made, the reasons are said
+      let whyNot = null;
+      try { whyNot = lib.sayRequest(goalReq, { cannot: plan.cannot, notHonoured: plan.notHonoured ?? [] }, { language }); } catch { whyNot = null; }
+      const r = await this._sendCore(text, sendOpts, { english, translation, say: whyNot?.text || `I could not do that: ${plan.cannot.map((c) => c.why).join('; ')}.` });
+      r.trace.request = { ...flat, plan: { cannot: plan.cannot, rejected: plan.rejected } };
+      return { reply: r, route: `${route} cannot` };
+    }
+    if (!plan?.ok) return { why: `no plan (${(plan?.notHonoured ?? []).map((x) => x.code).join(', ') || 'library'})`, q: flat };
+    // P9 (no executed result violates what was said): a plan that drops a thing or a key this turn said ("there should be a moon" where the world has no moon; "a sun, a cloud and
+    // a bird" planned as one sun) is not carried out; the readers may know it, and their result is checked
+    const saidText = english.toLowerCase();
+    const dropped = (plan.notHonoured ?? []).filter((x) => !['one_kind', 'nothing_left'].includes(x.code) && x.words && saidText.includes(String(x.words).toLowerCase()));
+    if (dropped.length && !arrange) return { why: `plan drops ${dropped.map((x) => x.words).join(', ')}`, q: flat };
+    const drawnAs = declarationsOf(live, '').drawn;
+    const planned = new Set((plan.steps ?? []).filter((st) => st.item && st.args?.kind).flatMap((st) => [st.args.kind, drawnAs[st.args.kind]]));
+    const wanted = (q.request.constraints ?? []).filter((c) => c.on === 'kind' && c.want === 'yes' && c.value && c.value !== (plan.target ?? goalReq.target)).map((c) => c.value);
+    const lost = (plan.steps ?? []).some((st) => st.item) ? wanted.filter((k) => !planned.has(k)) : [];
+    if (lost.length) return { why: `plan drops ${lost.join(', ')}`, q: flat };
+    const snap = this.snapshot();
+    if (base !== undefined) this.isession.state[tabWorld] = base ? structuredClone(base) : (typeof world.ops.initialState === 'function' ? world.ops.initialState() : {});
+    const beforePlan = this.isession.state[tabWorld] ? structuredClone(this.isession.state[tabWorld]) : null;
+    const goal = { ...goalOf(plan, { facts: goalReq.facts ?? flat.facts, target: goalReq.target ?? q.target }, { seed }), declared: declarationsOf(live, english), placeWords: (goalReq.constraints ?? []).find((c) => c.on === 'place' && c.want !== 'no')?.words ?? null };   // the place in the user's words ("in the sky"): the world reads it as it reads a place
+    let done = null;
+    try { done = this._runWorldAct(tabWorld, 'planRequest', goal); } catch (e) { if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door] act', e); done = null; }
+    if (!done || done.status !== 'supported') {   // the world cannot carry it out: it says why (its own words), it never does something else instead
+      this.restore(snap);
+      const note = done?.note ?? done?.value;
+      if (!note) return { why: 'executor: refused', q: flat };
+      const r = await this._sendCore(text, sendOpts, { english, translation, say: String(note) });
+      r.trace.request = { ...flat, plan: { roles: plan.roles, refused: String(note) } };
+      return { reply: r, route: `${route} refused` };
+    }
+    const result = measure(beforePlan);
+    const record = { request: plainRequest(goalReq), flat: { ...flat, facts: goalReq.facts ?? flat.facts, target: goalReq.target ?? flat.target }, result: result ? { count: result.parts ?? 0, kinds: result.kinds ?? {}, links: result.links ?? 0 } : null, before: beforePlan, seed, previous: lastRec?.request ?? null, previousSeed: lastRec?.seed ?? null, via: 'plan' };
+    let said = null, head = null;
+    try { head = lib.sayRequest(goalReq, { revised: !!reaction && reaction !== 'redo', reply: rev?.reply }, { language }); } catch { head = null; }   // the revision's words first
+    const shownDone = String(done.value ?? '').toLowerCase();
+    const assumed = (plan.assumed ?? []).filter((a) => !(a.key === 'layout' && ['free', 'better'].includes(String(a.value))) && ![].concat(a.value ?? []).every((v) => shownDone.includes(String(v).toLowerCase().replace(/_/g, ' ')) || (a.key === 'kinds' && /\b(?:it has|the nodes are)\b/.test(shownDone))));   // what the world's own reply already says is not said again
+    try { said = lib.sayRequest(goalReq, { assumed, notHonoured: [...(plan.notHonoured ?? []), ...(done.cannot ?? []).map((c) => ({ on: c.key, words: c.words, why: c.why ?? 'the knowledge has no more', code: 'world' }))], reason: plan.cannot }, { language }); } catch { said = null; }
+    const parts = [];
+    if (q.corrections.length) parts.push(`I read ${q.corrections.map((c) => `"${c.said}" as "${c.as}"`).join(', ')}.`);
+    parts.push(reaction ? head?.text ?? '' : '', String(done.value ?? '').trim(), arrange || done.plain ? '' : said?.text ?? '');   // an arrangement (or an act that used none of the plan's assumptions) says only what it did
+    const r = await this._sendCore(text, sendOpts, { english, translation, say: parts.filter(Boolean).join(' ') });
+    this.dialogue.requests.record(tabWorld, record);
+    r.trace.request = { ...flat, revised: reaction ? (goalReq.facts ?? null) : null, plan: { roles: plan.roles, assumed: plan.assumed, notHonoured: plan.notHonoured, steps: plan.steps?.length ?? 0, result } };
+    if (Array.isArray(r.worlds) && !r.worlds.includes(tabWorld)) r.worlds.push(tabWorld);
+    if (!(r.segments ?? []).some((sg) => (sg.world ?? sg.match?.worldId) === tabWorld)) r.segments = [...(r.segments ?? []), { world: tabWorld, text: english, planned: true }];   // the world that carried out the request
+    r.statuses = Array.isArray(r.statuses) && r.statuses.length ? r.statuses : ['supported'];   // the world carried the request out
+    if (r.trace && !(r.trace.statuses ?? []).length) r.trace.statuses = ['supported'];
+    if (Array.isArray(r.answers) && !r.answers.length) r.answers.push({ id: null, to: `op.${tabWorld}.planRequest`, kind: 'action', status: 'supported', value: done.value ?? null, text: String(done.value ?? ''), via: 'door', sentence: english });   // the act of the world, as the readers' answers record theirs
+    return { reply: r, route };
   }
 
   /** Run a world's operation as an action of this turn (the planner of a request): the live state of the world, the matrix reasoner adopts what it changed. */
@@ -1567,132 +1803,6 @@ export class DialogSession {
     const r = w.ops[name](ctx, args);
     try { this.isession.rs?.adoptState(this.isession, worldId); } catch { /* the ops reasoner keeps the state as it is */ }
     return r;
-  }
-
-  async _requestStep(text, opts, first, { tabWorld, decl, snap0 }) {
-    if (!first || typeof first !== "object") return first;
-    first.trace ??= {};
-    const { set, interp } = this.engine;
-    const world = set.get(tabWorld);
-    const english = String(first.trace.intent?.from ?? first.trace.english ?? text);
-    const segs = first.trace.segments ?? [];
-    const catchAll = segs.some((sg) => /\.read\.frame(?:\.end)?$/.test(sg.match?.patternId ?? '')) && (first.statuses ?? []).some((x) => x !== 'supported');   // a frame reader ({pre} diagram {post}) that did not carry it out: its words are not read
-    const complete = !catchAll && segs.length > 0 && segs.every((sg) => !sg.unparsed && !(sg.ignored?.length) && !sg.partial && !sg.bestEffort) && (first.statuses ?? []).every((x) => x === 'supported');
-    const rd = this.dialogue.requests;
-    const lastRec = rd.last(tabWorld);
-    const parsed = !catchAll && segs.length > 0 && segs.every((sg) => !sg.unparsed && !(sg.ignored?.length) && !sg.partial && !sg.bestEffort);   // every word read (a refusal still read its words)
-    const vocab = spellVocabulary(set);
-    const known = (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!this.engine.translator?.rules?.knownEnglish?.(w);   // a word of the language is never a slip
-    const q = readRequest(english, { lang: interp.lang, world, kindWords: decl.kinds, first: { complete: parsed }, lib: this.engine.sopworld, last: lastRec?.request ?? null, known });
-    first.trace.request = q;
-    const beforeState = snap0.isession.state[tabWorld] ? structuredClone(snap0.isession.state[tabWorld]) : null;
-    const measure = (before) => interp.hook(this.isession, tabWorld, 'requestResult', { before });
-    const expOf = (r) => decl.expect.get(r.target) ?? (decl.expect.size === 1 && (r.facts.some((f) => f.key === 'count' && !f.of) || r.facts.some((f) => f.key === 'count' && decl.generic.has(f.of)) || r.facts.some((f) => f.key === 'kind' && f.all)) ? [...decl.expect.values()][0] : null);
-    const cannot = notHonoured(q, decl);
-    // a question is never a request to make nor a reaction ("how many shapes are there?")
-    if (/\?\s*$/.test(english.trim()) || /^(?:is|are|does|do|did|how|what|which|who|where|why|when|was|were|has|have)\b/i.test(english.trim())) return await this._requestNotes(opts, first, q, cannot);
-    // a reaction to the last result of this tab: the last request revised, the last result replaced
-    const constraintsOnly =!q.act && !q.target && q.facts.length > 0;
-    let reaction = q.reaction && !['thanks', 'frustration'].includes(q.reaction) ? q.reaction : (q.reaction === 'frustration' && constraintsOnly ? 'refine' : null);
-    // a turn of constraints only (no act, no thing) about the last result: a refine, also when a reader carried out something else with it ("not all circles, better layout" read as a correction)
-    if (!reaction && constraintsOnly && lastRec && (!complete || q.facts.some((f) => (f.key === 'kind' && f.neg) || ['manner', 'count', 'size', 'layout'].includes(f.key)))) reaction = 'refine';
-    const sameAgain = lastRec && q.act && lastRec.request.act === q.act && q.target && lastRec.request.target === q.target && JSON.stringify(q.facts) === JSON.stringify(lastRec.request.facts);
-    if (sameAgain) reaction = 'redo';
-    // the open world itself read the turn completely ("now bigger", "make another one", "not that one, the other one" are its own acts on the last thing): a reaction to the last request
-    // only when no reader of the tab carried it out, or when it states what was expected (a refine carries a whole constraint set)
-    const tabRead = complete && segs.every((sg) => sg.match?.worldId === tabWorld);
-    if (reaction && reaction !== 'refine' && !sameAgain && tabRead) reaction = null;
-    if (!(reaction && lastRec) && this.context().tabWorld !== tabWorld) return first;   // the turn moved to another tab (a reaction to the last result of the tab is read against it: the move is undone)
-    if (reaction && lastRec && (!complete || ['redo', 'refine', 'reduce', 'enlarge', 'reject'].includes(reaction))) {
-      if (reaction === 'refine' && q.target && lastRec.request.target && q.target !== lastRec.request.target) reaction = null;
-    } else if (reaction && !lastRec) reaction = null;
-    let goalReq = null, revised = false, base = null;
-    if (reaction && lastRec) {
-      goalReq = reviseRequest(lastRec.request, { ...q, reaction }, { lib: this.engine.sopworld, result: lastRec.result });
-      revised = reaction !== 'redo';
-      base = lastRec.before;
-    } else {
-      const act = q.act ?? (q.reaction === 'refine' && q.target ? 'make' : null);   // "my expectation was a nice diagram ..." with nothing to revise: a new request with the whole set
-      const question = /\?\s*$/.test(english.trim()) || /^(?:is|are|does|do|did|how|what|which|who|where|can|could|why|when|was|were|will|would|should|has|have)\b/i.test(english.trim());
-      if (question || q.unread.length) return await this._requestNotes(opts, first, q, cannot);   // a question is never a make; words no reader read are asked about, never planned around
-      if (act !== 'make' && act !== 'write' && !(act === 'arrange' && q.facts.some((f) => f.key === 'layout'))) return await this._requestNotes(opts, first, q, cannot);
-      const res = measure(beforeState);
-      const exp = expOf(q);
-      const bad = violations(q, res, exp);
-      const keep = complete && !bad.length;
-      if (keep || (!bad.length && !catchAll && !q.target)) {
-        if (res?.parts > 0) rd.record(tabWorld, { request: q, result: res, before: beforeState, via: 'reader' });
-        return await this._requestNotes(opts, first, q, cannot);
-      }
-      if (!q.target && !bad.length) return await this._requestNotes(opts, first, q, cannot);
-      goalReq = { ...q, act };
-      base = beforeState;
-    }
-    // the open world plans the request: the session goes back to before the turn (a reaction: to before the last result)
-    const exp = expOf(goalReq);
-    if (!exp) return await this._requestNotes(opts, first, q, cannot);   // the world plans only what it has an expectation of (a target of request.sop / k.expect)
-    if (typeof world?.ops?.planRequest !== 'function') return await this._requestNotes(opts, first, q, cannot);
-    this.restore(snap0);
-    if (base !== undefined) this.isession.state[tabWorld] = base ? structuredClone(base) : (typeof world.ops.initialState === 'function' ? world.ops.initialState() : {});
-    const beforePlan = this.isession.state[tabWorld] ? structuredClone(this.isession.state[tabWorld]) : null;
-    this._requestSeed = ((this._requestSeed ?? Math.floor(Math.random() * 2 ** 31)) * 1103515245 + 12345) >>> 0;   // random is varied across sessions; a session's next plan is the next number
-    const range = wantedRange(goalReq, exp);
-    const f = goalReq.facts;
-    const goal = {
-      request: goalReq, expect: exp, range, rangeAssumed: !f.some((x) => x.key === 'count' && (x.n != null || x.min != null)),
-      kinds: f.filter((x) => x.key === 'kind' && !x.neg && !decl.generic.has(x.value)).map((x) => x.value),
-      not: f.filter((x) => x.key === 'kind' && x.neg && !x.all).map((x) => x.value),
-      notAll: f.find((x) => x.key === 'kind' && x.neg && x.all)?.value ?? null,
-      varied: (exp?.kinds ?? 1) > 1, shapes: exp?.shapes ?? [], parts: exp?.parts ?? [],
-      arrows: f.some((x) => x.key === 'with' && x.value === 'arrow') || (!!goalReq.target && (exp?.with ?? []).includes('arrow')),
-      with: f.filter((x) => x.key === 'with' && x.value !== 'arrow').map((x) => x.value),
-      layout: f.find((x) => x.key === 'layout')?.value ?? null, regions: f.find((x) => x.key === 'layout')?.regions ?? null,
-      topic: f.find((x) => x.key === 'about')?.value ?? null, size: f.find((x) => x.key === 'size')?.step ?? null, target: goalReq.target, seed: this._requestSeed,
-    };
-    let plan = null;
-    try { plan = this._runWorldAct(tabWorld, 'planRequest', goal); } catch { plan = null; }
-    if (!plan || plan.status !== 'supported') { this.restore(snap0); const again = await this._sendRead(text, { ...opts, intent: false }); return await this._requestNotes(opts, again, q, cannot); }
-    const result = measure(beforePlan);
-    this.dialogue.requests.record(tabWorld, { request: goalReq, result, before: beforePlan, via: 'plan' });
-    const say = sayRequest(goalReq, plan, { lib: this.engine.sopworld, cannot, revised });
-    const r = await this._sendCore(text, opts, { english, translation: first.translation ?? null, say });
-    this.dialogue.requests.record(tabWorld, { request: goalReq, result, before: beforePlan, via: 'plan' });   // the core's reading of the say does not touch it; recorded again in case the dialogue memory was reloaded
-    r.trace.request = { ...q, revised: revised ? goalReq.facts : null, plan: { goal: { ...goal, request: undefined, expect: undefined }, result } };
-    r.trace.intent = first.trace.intent;
-    if (Array.isArray(r.worlds) && !r.worlds.includes(tabWorld)) r.worlds.push(tabWorld);
-    if (!(r.segments ?? []).some((sg) => (sg.world ?? sg.match?.worldId) === tabWorld)) r.segments = [...(r.segments ?? []), { world: tabWorld, text: english, planned: true }];   // the world that carried out the request
-    if (Array.isArray(r.statuses)) r.statuses = r.statuses.length ? r.statuses : ['supported'];
-    return r;
-  }
-
-  /** A turn the readers carried out: what the request says the reply must also name (a constraint the world does not honour, a word no reader read). */
-  async _requestNotes(opts, reply, q, cannot) {
-    if (!reply || typeof reply !== 'object') return reply;
-    if (reply.trace) reply.trace.request = q;
-    // only a turn the open world itself read and carried out: a meta turn (repeat, a question about the user), a question back ("Which one?") or another world's reading says its own
-    const tabWorld = this.context().tabWorld;
-    const segs = reply.trace?.segments ?? reply.segments ?? [];
-    if (!segs.length || !segs.every((sg) => (sg.match?.worldId ?? sg.world) === tabWorld) || /\?\s*$/.test(String(reply.trace?.replyEnglish ?? reply.text ?? '').trim())) return reply;
-    const add = [];   // [frame, words]: the frame is translated, the words are the user's own and stay as they were
-    const shown = String(reply.trace?.replyEnglish ?? reply.text ?? '').toLowerCase();
-    const missing = cannot.filter((c) => !shown.includes(String(c.words).toLowerCase().split(' ').at(-1)));
-    if (missing.length) add.push(['I cannot do this here:', missing.map((c) => c.words)]);
-    const unread = (q.unread ?? []).filter((w) => !shown.includes(w));
-    if (unread.length && (reply.statuses ?? []).every((x) => x === 'supported') && !/did not understand|could not read|understood only part/i.test(shown)) add.push(['I did not use these words:', unread]);   // a refusal or a question back already says what it could not do
-    if (!add.length) return reply;
-    const lang = opts?.language ?? this.language;
-    const tr = this.engine.translator;
-    const english = add.map(([fr, ws]) => `${fr} ${ws.map((w) => `"${w}"`).join(', ')}.`).join(' ');
-    let extra = ' ' + english;
-    if (lang && lang !== 'en' && lang !== 'auto' && tr) {
-      const out = [];
-      for (const [fr, ws] of add) { let t = fr; try { t = textOf(await (tr.rules ?? tr).translate(fr, { from: 'en', to: lang })) || fr; } catch { /* the English frame stays */ } out.push(`${t.replace(/[.:]+\s*$/, ':')} ${ws.map((w) => `„${w}”`).join(', ')}.`); }
-      extra = ' ' + out.join(' ');
-    }
-    reply.text = `${String(reply.text ?? '').trim()}${extra}`;
-    if (Array.isArray(reply.parts)) reply.parts.push({ text: extra, translate: false });
-    if (reply.trace) reply.trace.replyEnglish = `${String(reply.trace.replyEnglish ?? '').trim()} ${english}`;
-    return reply;
   }
 
   async _sendFirst(text, opts = {}) {
@@ -1770,7 +1880,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=1b73c37222').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=1a46c4b8fc').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.editor (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
@@ -2176,7 +2286,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   // `set`, `reasoner` and `interp` are replaced by `engine.reload(loader)` (LAZY LOADING: the worlds a message needs are added to a running engine); everything below reads them through these bindings.
   let set = await loadWorlds(loader, { reasoner: mode });
   let reasoner = mode === 'matrix' ? await createReasoner(set) : null;
-  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=1b73c37222')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
+  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=1a46c4b8fc')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
   let interp = createInterpreter(set, { ...options, reasoner });
   attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`

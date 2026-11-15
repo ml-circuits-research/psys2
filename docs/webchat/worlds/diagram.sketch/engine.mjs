@@ -20,7 +20,7 @@ import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs?v=
 import { routeEdges, segBoxDist, boxOf } from './arrows.mjs?v=3346b422bb';
 import * as space from '../space/space.mjs?v=da302c7b07';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42';
-import * as DG from '../../lib/knowledge/diagram-world.mjs?v=1758817b12';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
+import * as DG from '../../lib/knowledge/diagram-world.mjs?v=300f9711fd';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const TAB = 'diagram';
@@ -956,6 +956,28 @@ export function requestResult(ctx, { before = null } = {}) {
   return { parts: made.length, kinds, links, extent: made.reduce((a, x) => a + (x.size ?? 0), 0), composed };
 }
 
+/**
+ * ARROWS FOR THE NODES THAT HAVE NONE ("add arrows", a request whose target is the link): every node with no arrow is joined to the node before it in reading order (top to bottom,
+ * left to right), the first one to the node after it. One undo step. Returns { status, value }.
+ */
+function linkLoose(ctx, s) {
+  const nodes = (s.shapes ?? []).filter((x) => !x.layer && !x.template).slice().sort((a, b) => (a.y ?? 0) - (b.y ?? 0) || (a.x ?? 0) - (b.x ?? 0));
+  if (nodes.length < 2) return no('I need two shapes to connect. Draw them first, for example "draw a diagram with 5 nodes".', 'missing');
+  const linked = (x) => (s.edges ?? []).some((e) => e.from === x.name || e.to === x.name);
+  const pairs = [];
+  for (const [i, x] of nodes.entries()) {
+    budget.tick('diagram.links');
+    if (linked(x) || pairs.some(([a, b]) => a === x.name || b === x.name)) continue;
+    const y = i > 0 ? nodes[i - 1] : nodes[1];
+    pairs.push(i > 0 ? [y.name, x.name] : [x.name, y.name]);
+  }
+  if (!pairs.length) return ok('Every node already has an arrow.', { plain: true });
+  const res = execute(ctx, s, pairs.map(([from, to], k) => ({ id: `lk${k}`, type: 'command', args: { action: 'connect', from, to } })), { place: false });
+  if (res.status !== 'supported') return res;
+  open(ctx);
+  return ok(`I added ${pairs.length} arrow${pairs.length === 1 ? '' : 's'}, so that every node has one.`, { plain: true });
+}
+
 /** A small deterministic generator (the session's seed): "random" is varied, and the same seed gives the same diagram. */
 const rngOf = (seed) => { let a = (Number(seed) >>> 0) || 1; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
 
@@ -968,6 +990,10 @@ export function planRequest(ctx, goal = {}) {
   if (!K) return NOT_READY();
   if (!DL) return no('The diagram knowledge is still loading. Please say that again in a moment.', 'missing');
   const s = ensure(ctx);
+  if (goal.target === 'link') return linkLoose(ctx, s);
+  const drawnAs = goal.declared?.drawn ?? {};   // a kind of the expectations drawn as one of the engine's shapes (request.sop std.schema.drawn: oval as ellipse)
+  if (goal.kinds?.includes('link')) goal = { ...goal, arrows: true, kinds: goal.kinds.filter((k) => k !== 'link') };   // "with arrows": the links of the diagram, never a shape
+  if (goal.kinds?.length) goal = { ...goal, kinds: [...new Set(goal.kinds.map((k) => drawnAs[k] ?? k))] };
   const rnd = rngOf(goal.seed ?? Math.floor(Math.random() * 2 ** 31));
   const [lo, hi] = goal.range ?? [5, 9];
   const n = Math.max(1, lo + Math.floor(rnd() * (hi - lo + 1)));
@@ -989,8 +1015,9 @@ export function planRequest(ctx, goal = {}) {
   while (queue.length && keep.length < n) { budget.tick('diagram.plan'); const id = queue.shift(); if (seen.has(id)) continue; seen.add(id); keep.push(id); for (const t of adj.get(id) ?? []) queue.push(t); }
   for (const x of src.nodes) if (keep.length < n && !seen.has(x.id)) { seen.add(x.id); keep.push(x.id); }
   const nodes = keep.map((id) => ({ ...src.nodes.find((x) => x.id === id) }));
-  const edges = (src.edges ?? []).filter((e) => keep.includes(e.from) && keep.includes(e.to)).map((e) => ({ ...e }));
-  for (let k = nodes.length; k < n; k++) { const id = `fill${k}`; nodes.push({ id, label: `${goal.topic ? String(goal.topic).replace(/^(?:a|an|the)\s+/, '') : 'Step'} ${k + 1}`, shape: 'rectangle', x: 0, y: 0 }); if (nodes.length > 1) edges.push({ from: nodes[Math.floor(rnd() * (nodes.length - 1))].id, to: id }); }
+  const plainShapes = goal.plan?.roles?.mode === 'kind' && !goal.arrows;   // "draw seven circles": shapes, not a diagram of arrows ("add arrows" links them)
+  const edges = plainShapes ? [] : (src.edges ?? []).filter((e) => keep.includes(e.from) && keep.includes(e.to)).map((e) => ({ ...e }));
+  for (let k = nodes.length; k < n; k++) { const id = `fill${k}`; nodes.push({ id, label: `${goal.topic ? String(goal.topic).replace(/^(?:a|an|the)\s+/, '') : 'Step'} ${k + 1}`, shape: 'rectangle', x: 0, y: 0 }); if (nodes.length > 1 && !plainShapes) edges.push({ from: nodes[Math.floor(rnd() * (nodes.length - 1))].id, to: id }); }
   // a diagram with arrows has no loose boxes: a node with no arrow is joined to the one before it
   if (goal.arrows) for (let k = 1; k < nodes.length; k++) if (!edges.some((e) => e.from === nodes[k].id || e.to === nodes[k].id)) edges.push({ from: nodes[k - 1].id, to: nodes[k].id });
   // shapes: the kinds asked, never a kind not wanted; "not all X" and a diagram of the default kind have two or three shapes (the steps, the branch points, the leaves)
@@ -1021,7 +1048,8 @@ export function planRequest(ctx, goal = {}) {
   const res = execute(ctx, s, list, { place: false });
   if (res.status !== 'supported') return res;
   const made = (s.last ?? []).slice();
-  const layout = goal.layout && goal.layout !== 'layers' ? goal.layout : (edges.length ? 'tree' : 'grid');
+  const ENGINE_LAYOUT = { top_down: 'tree', hierarchy: 'tree', left_right: 'row', ring: 'circle', radial: 'radial', tree: 'tree', grid: 'grid', row: 'row', column: 'column', circle: 'circle' };   // the expectation's layout names in the engine's words
+  const layout = ENGINE_LAYOUT[goal.layout] ?? (edges.length ? 'tree' : 'grid');
   if (!goal.layout) assumed.push(`The diagram is a ${layout}.`);
   if (made.length > 1) { try { arrangeLayout(ctx, { text: `arrange ${made.join(', ')} as a ${layout}` }); } catch { /* the engine's places stay */ } }
   s.last = made;

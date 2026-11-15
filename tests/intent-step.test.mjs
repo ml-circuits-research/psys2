@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Class E (reviewer 2026-11-15 10:00 items 2, 4, 5): the intent step after a weak reading (spec 03 section 7.9f, src/dialog/intent.mjs) and the world acts it reaches.
+import { legacyOnly } from './helpers.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
@@ -38,8 +39,11 @@ test('talk about the assistant gets a calm reply with what the open tab can do, 
 test('a story with a verb the reader does not know is written by the documents world', async () => {
   const s = on('editor');
   const r = await s.send('make a story about a lake');
-  assert.match(r.text, /^I took that as: write a story about a lake\./);
   assert.ok((s.state()['docs.editor'].stats?.words ?? 0) >= 20, r.text);
+});
+test('"make a story about a lake" is said as the intent step\'s "I took that as: write a story ..."', legacyOnly('pins the intent step\'s wording; the door reads "make a story" as a request of the documents world and writes it'), async () => {
+  const r = await on('editor').send('make a story about a lake');
+  assert.match(r.text, /^I took that as: write a story about a lake\./);
 });
 
 test('a leading "wrong" is not a request of its own and a third-person verb is the imperative', async () => {

@@ -1,41 +1,78 @@
-# Spec 28: what the acts of the drawing board honour (w.honour), the words of the request reader (w.words) and the defaults of the scenes it makes (w.expect) until k.expect / k.scenes.has
-# are in the catalog pin. parts= the kinds of a scene (the board's own kinds); must= the part that makes it that scene; count= the number of parts.
-
-@art.draw.honour.make w.honour
-    act=make
-    keys=kind,count,size,with,place,manner
-
-@art.draw.honour.arrange w.honour
-    act=arrange
-    keys=layout
-
-@art.draw.words w.words
-    kind=lake,river,tree,flower,fish,bird,duck,frog,cloud,sun,house,cat,dog,boat,mountain,hill,person,rock,grass
-    layout=layers
-
-@art.draw.expect.pond w.expect
-    of=pond
-    count=4..6
-    parts=lake,flower,fish,bird
-    must=lake
-    small=0.6
-    big=1.6
-    source="own, hand-checked (owner 2026-11-15: a small lake in a corner, maybe some water plants and a duck)"
-
-@art.draw.expect.forest w.expect
-    of=forest
-    count=5..7
-    parts=tree
-    must=tree
-    small=0.5
-    big=1.6
-    source="own, hand-checked"
-
-@art.draw.expect.garden w.expect
-    of=garden
-    count=6..8
-    parts=flower,tree,grass,bird
-    must=flower
-    small=0.6
-    big=1.5
-    source="own, hand-checked"
+# Spec 28 (sopworld 0.149): what this world can do, as data the library reads (capabilitiesOf, readRequest, planRequest): its kinds and slots (std.schema),
+# the constraints each act honours (std.schema.honours) and its own expectations (k.expect.make / k.expect.part) where the catalog's k.expect has none.
+# No code reads this file per world: src/dialog/request.mjs loads it as the world's live request World.
+@acts core.use world=std.acts
+@w std.schema.world name=drawing doc="the drawing board: scenes of the board's own things, sized and placed"
+@t.picture core.type of=picture extends=std.schema.thing closed=true
+@s.extent core.slot of=picture key=extent enum=tiny enum=small enum=default enum=big enum=huge
+@s.place core.slot of=picture key=place enum=corner enum=top enum=bottom enum=left enum=right enum=center
+@s.layout core.slot of=picture key=layout enum=layers enum=free
+@t.pond core.type of=pond extends=picture closed=true
+@t.forest core.type of=forest extends=picture closed=true
+@t.garden core.type of=garden extends=picture closed=true
+@k.pond std.schema.kind of=pond world=drawing acts=make acts=remove
+@k.forest std.schema.kind of=forest world=drawing acts=make acts=remove
+@k.garden std.schema.kind of=garden world=drawing acts=make acts=remove
+@t.thing core.type of=thing extends=std.schema.thing closed=true
+@s.size core.slot of=thing key=size enum=tiny enum=small enum=medium enum=big enum=huge
+@s.in core.slot of=thing key=in
+@s.thing_place core.slot of=thing key=place enum=corner enum=top enum=bottom enum=left enum=right enum=center
+@t.water core.type of=water extends=thing closed=true
+@k.water std.schema.kind of=water world=drawing acts=make acts=remove
+@t.flower core.type of=flower extends=thing closed=true
+@k.flower std.schema.kind of=flower world=drawing acts=make acts=remove
+@t.tree core.type of=tree extends=thing closed=true
+@k.tree std.schema.kind of=tree world=drawing acts=make acts=remove
+@t.bush core.type of=bush extends=thing closed=true
+@k.bush std.schema.kind of=bush world=drawing acts=make acts=remove
+@t.butterfly core.type of=butterfly extends=thing closed=true
+@k.butterfly std.schema.kind of=butterfly world=drawing acts=make acts=remove
+@t.bird core.type of=bird extends=thing closed=true
+@k.bird std.schema.kind of=bird world=drawing acts=make acts=remove
+@t.cloud core.type of=cloud extends=thing closed=true
+@k.cloud std.schema.kind of=cloud world=drawing acts=make acts=remove
+@t.sun core.type of=sun extends=thing closed=true
+@k.sun std.schema.kind of=sun world=drawing acts=make acts=remove
+@t.house core.type of=house extends=thing closed=true
+@k.house std.schema.kind of=house world=drawing acts=make acts=remove
+@t.fish core.type of=fish extends=thing closed=true
+@k.fish std.schema.kind of=fish world=drawing acts=make acts=remove
+@t.boat core.type of=boat extends=thing closed=true
+@k.boat std.schema.kind of=boat world=drawing acts=make acts=remove
+@t.cat core.type of=cat extends=thing closed=true
+@k.cat std.schema.kind of=cat world=drawing acts=make acts=remove
+@t.dog core.type of=dog extends=thing closed=true
+@k.dog std.schema.kind of=dog world=drawing acts=make acts=remove
+@t.mountain core.type of=mountain extends=thing closed=true
+@k.mountain std.schema.kind of=mountain world=drawing acts=make acts=remove
+@t.lake core.type of=lake extends=thing closed=true
+@k.lake std.schema.kind of=lake world=drawing acts=make acts=remove
+@t.river core.type of=river extends=thing closed=true
+@k.river std.schema.kind of=river world=drawing acts=make acts=remove
+@t.hill core.type of=hill extends=thing closed=true
+@k.hill std.schema.kind of=hill world=drawing acts=make acts=remove
+@t.water_lily core.type of=water_lily extends=flower closed=true
+@k.water_lily std.schema.kind of=water_lily world=drawing acts=make acts=remove
+@t.reed core.type of=reed extends=flower closed=true
+@k.reed std.schema.kind of=reed world=drawing acts=make acts=remove
+@t.goldfish core.type of=goldfish extends=fish closed=true
+@k.goldfish std.schema.kind of=goldfish world=drawing acts=make acts=remove
+@t.duck core.type of=duck extends=bird closed=true
+@k.duck std.schema.kind of=duck world=drawing acts=make acts=remove
+@h.make std.schema.honours world=drawing act=make on=kind on=count on=size on=extent on=place on=with on=manner on=layout of=pond of=forest of=garden of="water" of="water lily" of="reed" of="duck" of="goldfish" of="flower" of="tree" of="bush" of="butterfly" of="bird" of="cloud" of="sun" of="house" of="fish" of="boat" of="cat" of="dog" of="mountain" of="lake" of="river" of="hill"
+@h.arrange std.schema.honours world=drawing act=arrange on=layout of=picture of=pond of=forest of=garden
+@e.forest k.expect.make thing=forest made_in=drawing unit=part min=5 max=7 typical=6 kinds_min=1 kinds_max=2 layout=free
+@e.forest.tree k.expect.part of=forest part=tree group=plant min=5 max=7 typical=6 needed=yes
+@as.water std.schema.drawn world=drawing kind=water as=lake
+@as.water_lily std.schema.drawn world=drawing kind="water lily" as=flower
+@as.reed std.schema.drawn world=drawing kind=reed as=flower
+@as.goldfish std.schema.drawn world=drawing kind=goldfish as=fish
+@as.duck std.schema.drawn world=drawing kind=duck as=bird
+@as.bush std.schema.drawn world=drawing kind=bush as=tree
+@layer.water std.schema.region world=drawing name=water kind=water kind=lake kind=river kind=fish kind=goldfish kind=duck kind=boat kind=frog kind="water lily" kind=reed
+@layer.land std.schema.region world=drawing name=land kind=house kind=tree kind=flower kind=bush kind=grass kind=fence kind=bench kind=stone kind=cat kind=dog kind=mountain kind=hill kind=person kind=car
+@layer.sky std.schema.region world=drawing name=sky kind=sun kind=cloud kind=bird kind=butterfly kind=moon kind=rainbow kind=balloon kind=rocket
+@wd.woods core.word text=woods means=forest
+@wd.things core.word text=thing text=things text=items means=part
+# The door (reviewer 2026-11-15 16:40): the wholes whose requests this world plans through the library. Read by src/dialog/request.mjs doorWholes.
+@door psys2.door world=drawing whole=pond whole=forest whole=garden

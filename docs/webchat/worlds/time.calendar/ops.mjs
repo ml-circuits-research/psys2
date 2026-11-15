@@ -5,7 +5,7 @@
 // clock a host pins with Symbol.for('psys2.now')) unless the dialogue stated them. The world's reader (`readTime`) reads a sentence whole with the names and durations of
 // k.time, the numbers, prepositions and question words of w.lang.en (src/lang/en.mjs) and lang.common's lang.time.* phrase groups; a sentence it does not read whole is
 // declined (`accepts`). No day, month or season is listed in this file. Browser-safe.
-import { World, cycleAdd, cycleDiff, statedDay, readClock, writeClock } from '../../lib/vendor/sopworld/sopworld.mjs?v=1b73c37222';
+import { World, cycleAdd, cycleDiff, statedDay, readClock, writeClock } from '../../lib/vendor/sopworld/sopworld.mjs?v=1a46c4b8fc';
 import { BUNDLED_TIME } from '../../lib/knowledge/bundled-time.mjs?v=47d3b8489a';
 import { parseLine } from '../../lib/knowledge/catalog.mjs?v=0372695257';
 import { en } from '../../lib/lang/en.mjs?v=37bb133489';

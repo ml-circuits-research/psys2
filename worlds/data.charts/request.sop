@@ -1,0 +1,22 @@
+# Spec 28 (sopworld 0.149): what this world can do, as data the library reads (capabilitiesOf, readRequest, planRequest): its kinds and slots (std.schema),
+# the constraints each act honours (std.schema.honours) and its own expectations (k.expect.make / k.expect.part) where the catalog's k.expect has none.
+# No code reads this file per world: src/dialog/request.mjs loads it as the world's live request World.
+@acts core.use world=std.acts
+@w std.schema.world name=charts doc="charts: a chart of a kind with a number of bars, points or slices"
+@t.chart core.type of=chart extends=std.schema.thing closed=true
+@s.about core.slot of=chart key=about kind=string
+@t.bar_chart core.type of="bar chart" extends=chart closed=true
+@t.line_chart core.type of="line chart" extends=chart closed=true
+@t.pie_chart core.type of="pie chart" extends=chart closed=true
+@k.bar_chart std.schema.kind of="bar chart" world=charts acts=make acts=remove
+@k.line_chart std.schema.kind of="line chart" world=charts acts=make acts=remove
+@k.pie_chart std.schema.kind of="pie chart" world=charts acts=make acts=remove
+@t.bar core.type of=bar extends=std.schema.thing closed=true
+@s.in core.slot of=bar key=in
+@k.bar std.schema.kind of=bar world=charts acts=make
+@h.make std.schema.honours world=charts act=make on=kind on=count on=about of="bar chart" of="line chart" of="pie chart" of=bar
+@e.line k.expect.make thing="line chart" made_in=chart unit=bar min=4 max=10 typical=6 kinds_min=1 kinds_max=1
+@e.line.point k.expect.part of="line chart" part=bar group=mark min=4 max=10 typical=6 needed=yes
+@e.pie k.expect.make thing="pie chart" made_in=chart unit=bar min=3 max=6 typical=4 kinds_min=1 kinds_max=1
+@e.pie.slice k.expect.part of="pie chart" part=bar group=mark min=3 max=6 typical=4 needed=yes
+@wd.bar core.word text=bar text=bars text=point text=points text=slice text=slices text=item text=items means=bar

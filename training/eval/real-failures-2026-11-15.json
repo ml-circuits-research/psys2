@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "7932366e",
-  "tree": "c24aa2da5ec5c313",
+  "build": "21f284d1",
+  "tree": "704fed68860015d5",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -194,7 +194,7 @@
      "verdict": "partly",
      "text": "add a box",
      "tab": "diagram",
-     "reply": "Drew a rectangle.",
+     "reply": "Drew a rectangle. I did not use these words: \"box\".",
      "failing": [
       "answer:r1"
      ]
@@ -204,7 +204,7 @@
      "verdict": "partly",
      "text": "connect all elements",
      "tab": "diagram",
-     "reply": "Connected the circle → rectangle 1 and rectangle 1 → rectangle 2.",
+     "reply": "Connected the circle → rectangle 1 and rectangle 1 → rectangle 2. I did not use these words: \"all\", \"elements\".",
      "failing": [
       "answer:a1",
       "answer:a2"
@@ -215,7 +215,7 @@
      "verdict": "partly",
      "text": "connect circle1 and rectangle1",
      "tab": "diagram",
-     "reply": "Connected the circle → the rectangle.",
+     "reply": "Connected the circle → the rectangle. I did not use these words: \"1\".",
      "failing": [
       "answer:a1"
      ]
@@ -225,7 +225,7 @@
      "verdict": "partly",
      "text": "label a1 as uses",
      "tab": "diagram",
-     "reply": "The arrow the circle → the rectangle now says “uses”.",
+     "reply": "The arrow the circle → the rectangle now says “uses”. I did not use these words: \"1\".",
      "failing": [
       "answer:a1"
      ]
@@ -235,7 +235,7 @@
      "verdict": "partly",
      "text": "reverse a1",
      "tab": "diagram",
-     "reply": "The arrow B → A was reversed, it now goes B → A.",
+     "reply": "The arrow B → A was reversed, it now goes B → A. I did not use these words: \"1\".",
      "failing": [
       "answer:a1"
      ]
@@ -308,10 +308,9 @@
      "verdict": "wrong",
      "text": "draw two cats and a big one",
      "tab": "draw",
-     "reply": "I drew 2 orange cats.",
+     "reply": "I drew a big cat. It has 2 cats.",
      "failing": [
-      "state:art.draw:objects.length=3",
-      "answer:big"
+      "state:art.draw:objects.length=3"
      ]
     },
     {
@@ -379,7 +378,7 @@
      "verdict": "wrong",
      "text": "add two chapters",
      "tab": "editor",
-     "reply": "OK, I started chapter 3.",
+     "reply": "I wrote the story \"All about the coral\": 89 words in 2 chapters. It is open in the Documents tab. I assumed story for the target.",
      "failing": [
       "state:blocks.length=6"
      ]
@@ -491,7 +490,7 @@
      "verdict": "partly",
      "text": "the un si up not udner clouds",
      "tab": "draw",
-     "reply": "I drew 3 clouds.",
+     "reply": "I drew 3 clouds. I did not use these words: \"un\", \"si\", \"up\", \"not\", \"udner\".",
      "failing": [
       "answer:above"
      ]
@@ -590,7 +589,7 @@
      "verdict": "wrong",
      "text": "fa picioarele corocilului negre",
      "tab": "draw",
-     "reply": "I can not find a leg in your picture.",
+     "reply": "I can not find a leg in your picture. I cannot do this here: \"black\".",
      "failing": [
       "reply_any:legs of the crocodile are black|has no leg|has these parts"
      ]
@@ -773,12 +772,12 @@
     {
      "text": "add a box",
      "tab": "diagram",
-     "happened": "Drew a rectangle. [outcome: executed; partly; answer:r1]"
+     "happened": "Drew a rectangle. I did not use these words: \"box\". [outcome: executed; partly; answer:r1]"
     },
     {
      "text": "connect all elements",
      "tab": "diagram",
-     "happened": "Connected the circle → rectangle 1 and rectangle 1 → rectangle 2. [outcome: executed; partly; answer:a1 answer:a2]"
+     "happened": "Connected the circle → rectangle 1 and rectangle 1 → rectangle 2. I did not use these words: \"all\", \"elements\". [outcome: executed; partly; answer:a1 answer:a2]"
     }
    ]
   },
@@ -827,7 +826,7 @@
     {
      "text": "add two chapters",
      "tab": "editor",
-     "happened": "OK, I started chapter 3. [outcome: executed; wrong; state:blocks.length=6]"
+     "happened": "I wrote the story \"All about the coral\": 89 words in 2 chapters. It is open in the Documents tab. I assumed story for the target. [outcome: executed; wrong; sta"
     },
     {
      "text": "add text",
@@ -947,7 +946,7 @@
     {
      "text": "draw two cats and a big one",
      "tab": "draw",
-     "happened": "I drew 2 orange cats. [outcome: executed; wrong; state:art.draw:objects.length=3 answer:big]"
+     "happened": "I drew a big cat. It has 2 cats. [outcome: executed; wrong; state:art.draw:objects.length=3]"
     },
     {
      "text": "draw a house and another yellow one",

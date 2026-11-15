@@ -13,7 +13,6 @@ import { readDescriptionWires, slotDeclarations } from './describe.mjs';
 import { checkPattern } from '../formalizer/rules/index.mjs';
 import { lexIndex } from './lexicon.mjs';
 import { budget } from '../dialog/budget.mjs';
-import { parseDecl } from '../dialog/request.mjs';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];
 // Reasoner files (spec 15). `matrix.sop` and `mapping.sop` are data for src/reasoner. The `matrix.*.sop` extras are appended to the world's own
@@ -256,11 +255,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
   w.descReader = read;                                 // { descriptions, words, errors }: a language pack adds to it
   for (const m of read.errors) w.errors.push({ file: 'describe.sop', message: m });
   w.kbRaw = wires['kb.sop'];
-  if (files['request.sop'] != null) {   // spec 28: what the acts of the world honour (w.honour) and the defaults of what it makes (w.expect); not wires of the world's memory
-    const { wires: rq, errors: re } = parse(files['request.sop'], { source: `${id}/request.sop` });
-    for (const e of re) w.errors.push({ file: 'request.sop', ...e });
-    w.requestDecl = parseDecl(rq, txt, getAll);
-  }
+  if (files['request.sop'] != null) w.requestText = files['request.sop'];   // spec 28: what the world can do, as data the library reads (src/dialog/request.mjs liveWorld)
   w.templates = wires['templates.sop'].filter((x) => x.type === 'core.template').map((x) => ({
     id: x.id, wire: x, worldId: id, for: txt(x, 'for'), status: txt(x, 'status') ?? 'supported',
     mode: txt(x, 'mode') ?? 'value', text: txt(x, 'text'), when: getAll(x, 'when').map((v) => v.v),

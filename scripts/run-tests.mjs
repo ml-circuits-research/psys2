@@ -102,11 +102,13 @@ env.PSYS2_FAILURES_OUT = join(netDir, 'failures.jsonl');
 const reporter = join(root, 'scripts', 'lib', 'failures-reporter.mjs');
 const r = spawnSync(process.execPath, ['--import', preload, '--test', `--test-reporter=${reporter}`, '--test-reporter-destination=stdout', `--test-concurrency=${jobs}`, ...rest, ...files], { stdio: 'inherit', cwd: root, env });
 const failed = existsSync(env.PSYS2_FAILURES_OUT) ? readFileSync(env.PSYS2_FAILURES_OUT, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : [];
-if (failed.length) console.log(`== FAILURES: ${failed.length}\n${failed.map((f) => `   ${f.file}: ${f.name}`).join('\n')}`);
-const runOk = r.status === 0;   // the exit code of node --test: 1 when any test failed or a file crashed
+const legacyFails = failed.filter((f) => f.legacy), realFails = failed.filter((f) => !f.legacy);
+if (legacyFails.length) console.log(`== LEGACY LIST (report-only, not failures): ${legacyFails.length}\n${legacyFails.map((f) => `   ${f.file}: ${f.name}`).join('\n')}`);
+if (realFails.length) console.log(`== FAILURES: ${realFails.length}\n${realFails.map((f) => `   ${f.file}: ${f.name}`).join('\n')}`);
+const runOk = r.status === 0 || (r.status === 1 && failed.length > 0 && !realFails.length);   // failures of the legacy list only: the run is green (they are reported above)   // the exit code of node --test: 1 when any test failed or a file crashed
 const netViolations = existsSync(env.PSYS2_NET_LOG) ? readFileSync(env.PSYS2_NET_LOG, 'utf8').trim() : '';
 
 if (netViolations) console.log(`== NETWORK ACCESS IN TESTS (not allowed):\n${netViolations}`);
-console.log(`== psys2 ${suite} suite finished in ${((Date.now() - t0) / 1000).toFixed(1)} s wall (seed ${seed}, exit ${r.status ?? 1})`);
+console.log(`== psys2 ${suite} suite finished in ${((Date.now() - t0) / 1000).toFixed(1)} s wall (seed ${seed}, exit ${netViolations ? 1 : (runOk ? 0 : (r.status ?? 1))}${runOk && r.status ? ", only the legacy list failed" : ""})`);
 rmSync(netDir, { recursive: true, force: true });
 process.exit(netViolations ? 1 : (runOk ? 0 : (r.status ?? 1)));

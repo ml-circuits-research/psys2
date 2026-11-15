@@ -9,7 +9,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 
 // The ratchet: the number of cases of each property that held at the last landing (baseline 2026-11-15 before spec 28: see worker-log.md).
-const MIN = { P1: 19, P2: 17, P3: 6, P4: 12, P5: 9, P6: 5, P7: 4, P8: 7 };   // 2026-11-15 spec 28 + Documents: 87/96 (a margin of one for the sampled diagrams)
+const MIN = { P1: 55, P2: 17, P3: 5, P4: 10, P5: 7, P6: 7, P7: 3, P8: 7, P9: 12, P10: 1, P11: 0 };   // 2026-11-15 the door (no fallback on declared tabs): 136/160 at landing; P10 and P11 wait for the open world's things as facts of the live request World (worker-log)
 
 const loader = createFsLoader(DEFAULT_ROOT);
 const engines = {
@@ -54,7 +54,22 @@ for (const k of ['circle', 'square', 'diamond', 'triangle']) {
   add('P1', 'diagram', [`draw 6 nodes, not all ${k}s`], [`desenează 6 noduri, nu toate ${RO_KIND[k][0]}`], (r) => r[0].m.parts >= 2 && r[0].m.kinds.size > 1);
 }
 add('P1', 'diagram', ['make a diagram that is not a circle'], ['fă o diagramă care nu este un cerc'], (r) => r[0].m.parts >= 2);
-add('P1', 'draw', ['draw a pond without ducks'], ['desenează un iaz fără rațe'], (r) => r[0].m.parts > 0 && !r[0].m.kinds.has('duck'));
+// reviewer 2026-11-15 15:40 item 1: every form of negation the language has (no X, not X, without X, anything but X; not all X), with a count or a range, for every kind each world makes
+const NEG_EN = [(k) => `no ${k}s`, (k) => `not ${k}s`, (k) => `without ${k}s`, (k) => `anything but ${k}s`];
+const NEG_RO = [(k) => `fără ${k}`, (k) => `nu ${k}`];
+for (const k of ['circle', 'square', 'diamond', 'rectangle', 'triangle']) {
+  const ro = RO_KIND[k]?.[0] ?? `${k}s`;
+  for (const [i, neg] of NEG_EN.entries()) add('P1', 'diagram', [`draw a diagram with ${i % 2 ? '6 to 8' : '7'} nodes, ${neg(k)}`], null, (r) => r[0].m.parts > 0 && !r[0].m.kinds.has(k));
+  for (const neg of NEG_RO) cases.push({ p: 'P1', lang: 'ro', tab: 'diagram', turns: [`desenează o diagramă cu 6 până la 8 noduri, ${neg(ro)}`], ok: (r) => r[0].m.parts > 0 && !r[0].m.kinds.has(k) });
+}
+// the board draws some kinds as others (request.sop std.schema.drawn): "no ducks" is no bird of the pond either
+const DRAWN = { duck: ['duck', 'bird'], fish: ['fish'], flower: ['flower'] };
+for (const [k, ro] of [['duck', 'rațe'], ['fish', 'pești'], ['flower', 'flori']]) {
+  for (const neg of NEG_EN.slice(0, 3)) add('P1', 'draw', [`draw a pond, ${neg(k).replace(/fishs/, 'fish')}`], null, (r) => r[0].m.parts > 0 && !DRAWN[k].some((x) => r[0].m.kinds.has(x)));
+  cases.push({ p: 'P1', lang: 'ro', tab: 'draw', turns: [`desenează un iaz fără ${ro}`], ok: (r) => r[0].m.parts > 0 && !DRAWN[k].some((x) => r[0].m.kinds.has(x)) });
+}
+add('P1', 'diagram', ['draw a diagram with 6 to 8 nodes, no circles'], ['desenează o diagramă cu 6 până la 8 noduri, fără cercuri'], (r) => r[0].m.parts >= 6 && r[0].m.parts <= 8 && !r[0].m.kinds.has('circle'));
+add('P1', 'draw', ['draw a pond without ducks'], ['desenează un iaz fără rațe'], (r) => r[0].m.parts > 0 && !r[0].m.kinds.has('duck') && !r[0].m.kinds.has('bird'));
 add('P1', 'draw', ['draw a garden with no flowers'], ['desenează o grădină fără flori'], (r) => r[0].m.parts > 0 && !r[0].m.kinds.has('flower'));
 
 // P2: a count or a range is respected
@@ -121,6 +136,16 @@ add('P8', 'diagram', ['draw a diagram with 6 nodes in 3 chapters'], ['desenează
 add('P8', 'music', ['play a happy song with 3 chapters'], ['cântă un cântec vesel cu 3 capitole'], (r) => /chapter|capitol/i.test(r[0].reply));
 add('P8', 'map', ['show Tenerife with 3 chapters'], ['arată Tenerife cu 3 capitole'], (r) => /chapter|capitol/i.test(r[0].reply));
 add('P8', 'charts', ['make a bar chart with 5 bars about bees, with a duck'], ['fă un grafic cu bare cu 5 bare despre albine, cu o rață'], (r) => /duck|rață|rata/i.test(r[0].reply));
+
+// P9 (reasoning cycle, 15:20 block): no executed result violates a hard constraint said in the turn: a kind not wanted never appears, whatever else the turn did (nothing made counts)
+for (const k of ['circle', 'square', 'diamond']) add('P9', 'diagram', [`make a flowchart without ${k}s`], [`fă o schemă logică fără ${RO_KIND[k][0]}`], (r) => !r[0].m.kinds.has(k));
+for (const [k, ro] of [['bird', 'păsări'], ['tree', 'copaci'], ['fish', 'pești']]) add('P9', 'draw', [`paint a lake scene with no ${k === 'fish' ? 'fish' : `${k}s`}`], [`pictează un lac fără ${ro}`], (r) => !r[0].m.kinds.has(k) && !(k === 'bird' && r[0].m.kinds.has('duck')));
+// P10: a reference word resolves to a thing that makes the request satisfiable ("in it" after a pond is the pond)
+add('P10', 'draw', ['draw a pond', 'add a duck in it'], ['desenează un iaz', 'adaugă o rață în el'], (r) => r[1].m.kindList.filter((k) => k === 'bird' || k === 'duck').length > r[0].m.kindList.filter((k) => k === 'bird' || k === 'duck').length);
+add('P10', 'diagram', ['draw a diagram with 4 nodes', 'add 2 more nodes to it'], ['desenează o diagramă cu 4 noduri', 'adaugă încă 2 noduri la ea'], (r) => r[1].m.parts === r[0].m.parts + 2);
+// P11: after three things of one style a fourth takes that style unless told otherwise (induction over the live world)
+add('P11', 'draw', ['draw 3 big trees', 'draw a tree'], ['desenează 3 copaci mari', 'desenează un copac'], (r) => r[1].m.kindList.length === 4 && r[1].m.extent - r[0].m.extent >= r[0].m.extent / 3 - 1);
+add('P11', 'diagram', ['draw 3 squares', 'draw a node'], ['desenează 3 pătrate', 'desenează un nod'], (r) => r[1].m.parts === 4 && r[1].m.kindList.every((k) => k === 'square'));
 
 // ---- run --------------------------------------------------------------------------------------------------------------------------------------------
 const results = [];

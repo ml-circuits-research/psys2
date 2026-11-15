@@ -9,10 +9,10 @@
 // `text` and reported in the extra field `untranslatable: [{span, reason}]` (confidence 0).
 import { tokenize, foldKey } from './normalize.mjs?v=6d473eb091';
 import { analyze, placeOf, surfaceForms } from './morphology.ro.mjs?v=8bcf5dc68f';
-import { frameMoveRoEn, loadFramesRo, langRoNow } from './frames-ro.mjs?v=f62366b639';
+import { frameMoveRoEn, loadFramesRo, langRoNow } from './frames-ro.mjs?v=44f0b20428';
 import { within } from './candidates.mjs?v=a988f52d3d';
 import { pluralEn, pastEn } from './inflect.en.mjs?v=5b2e62d57a';
-import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord, knownEnglishWord } from './en-ro.mjs?v=11e3138ad4';
+import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord, knownEnglishWord } from './en-ro.mjs?v=e1add16f14';
 
 // Romanian evidence, in points (a rough log-odds of "Romanian" against "English"), for words typed with OR without diacritics.
 // Words that are also English words ("cat", "care", "la", "fa", "pune", "do"...) carry only a small weight by themselves;
@@ -140,7 +140,7 @@ export function detectLanguage(text) {
 // that sets `globalThis.__psys2LazyRoEn` before importing this module loads them on demand: `loadRoEn()` (the host calls it when the language is not English), and a ro -> en `translate` that
 // finds them missing returns a promise that waits for them (every caller of the rules awaits the answer).
 let roEn = null, roEnLoading = null;
-export function loadRoEn() { return roEn ? Promise.resolve(roEn) : (roEnLoading ??= Promise.all([import('./ro-en.mjs?v=466dfca3ac'), loadFramesRo()]).then(([m]) => (roEn = m.translateRoEn), (e) => { roEnLoading = null; throw e; })); }   // with the w.lang.ro frames (frames-ro.mjs)
+export function loadRoEn() { return roEn ? Promise.resolve(roEn) : (roEnLoading ??= Promise.all([import('./ro-en.mjs?v=e6579b2d8e'), loadFramesRo()]).then(([m]) => (roEn = m.translateRoEn), (e) => { roEnLoading = null; throw e; })); }   // with the w.lang.ro frames (frames-ro.mjs)
 /** True when the Romanian -> English rules are in memory. */
 export const roEnLoaded = () => !!roEn;
 if (!globalThis.__psys2LazyRoEn) await loadRoEn();

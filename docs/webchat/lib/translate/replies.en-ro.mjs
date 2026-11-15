@@ -273,6 +273,13 @@ const TABLE = [
   ['OK, I wrote a new paragraph ({n} words).', 'Bine, am scris un paragraf nou ({n} cuvinte).'], ['OK, I wrote it ({n} words).', 'Bine, am scris ({n} cuvinte).'],
   ['OK, I continued the paragraph ({n} words).', 'Bine, am continuat paragraful ({n} cuvinte).'], ['OK, I wrote the paragraph ({n} words).', 'Bine, am scris paragraful ({n} cuvinte).'],
   ['OK, I added a paragraph ({n} words).', 'Bine, am adăugat un paragraf ({n} cuvinte).'],
+  // ---- the request door (spec 28): the revision's words, a written text, the world's honest refusals
+  ['I cannot do this here:', 'Nu pot face asta aici:'], ['I did not use these words:', 'Nu am folosit cuvintele:'],
+  ['I made it again, the way you said.', 'Am refăcut-o, așa cum ai spus.'], ['It is open in the Documents tab.', 'Este deschisă în fila Documente.'],
+  ['I wrote the story "{q}": {n} words in {n2} chapters.', 'Am scris povestea „{q}”: {n:de} cuvinte în {n2} capitole.'], ['I wrote the report "{q}": {n} words in {n2} chapters.', 'Am scris raportul „{q}”: {n:de} cuvinte în {n2} capitole.'],
+  ['I wrote the essay "{q}": {n} words in {n2} chapters.', 'Am scris eseul „{q}”: {n:de} cuvinte în {n2} capitole.'], ['I wrote the poem "{q}": {n} words in {n2} chapters.', 'Am scris poezia „{q}”: {n:de} cuvinte în {n2} capitole.'],
+  ['I could write about {n} words about {t} from what I know (you asked for {n2}); I did not pad it with repetition.', 'Am putut scrie cam {n:de} cuvinte despre {t} din ce știu (ai cerut {n2}); nu am umplut textul cu repetiții.'],
+  ['I added {n} arrows, so that every node has one.', 'Am adăugat {n} săgeți, ca fiecare nod să aibă una.'], ['I added 1 arrow, so that every node has one.', 'Am adăugat o săgeată, ca fiecare nod să aibă una.'], ['Every node already has an arrow.', 'Fiecare nod are deja o săgeată.'],
   ['OK, I started chapter {n}.', 'Bine, am început capitolul {n}.'], ['OK, I started chapter {n}, "{q}".', 'Bine, am început capitolul {n}, "{q}".'],
   ['OK, I started section {n}.', 'Bine, am început secțiunea {n}.'], ['OK, I started section {n}, "{q}".', 'Bine, am început secțiunea {n}, "{q}".'],
   ['New chapter.', 'Capitol nou.'], ['New section.', 'Secțiune nouă.'], ['What is its title?', 'Care este titlul?'],
