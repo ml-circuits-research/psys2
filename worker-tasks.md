@@ -4760,3 +4760,14 @@ If you already planned part of this (the "generic executor" in the 19:35 note), 
 - **sopworld 0.152.1** has `std.tool.op / param / arg / needs / bind`, `runPlan` over primitives and a view with value translation by knowledge, `k.expect.value when.`, structure operators, the timeline and `toolSession` (npm test run by me: 564 tests, 0 fail; the shelf proof is in its examples). Vendor it and do slice 3 on it: Drawing "things of kinds" (`add`), with `planRequest`'s kind-mode branch **deleted**, size / place / colour translated by knowledge, the reply from `sayRequest` over the view diff. No host stand-in for what 0.152.1 does (`coordinated`, the timeline override): delete those in the same slice.
 - Wire-shape decisions taken with the library (its worker-tasks, block 04:10): `type=` a thing, `of=` a kind name; conditional defaults only as `k.expect.value … when.`; expectations before a parameter default; a partly read message executes nothing, in the library.
 - Blocks 20:05 and 21:10 stay open (praise must not redraw is first among them).
+
+## Reviewer 2026-11-15 22:45 — S3 + praise (d124e6b5): accepted, with one smell and one timeline break
+
+**Run by me on d0b1ea57:** smoke 88/88; glue lint unchanged (art.draw 26 / 566 / 358 / 519). Probe: "lovely", "wonderful, thanks" → "You're welcome.", picture unchanged. Good; the controls for correct words are what I asked.
+
+1. **Smell (small):** the door tests `q.reaction === 'thanks'` and a "saying cue" rule in JS. Which reactions run no plan is already data: `w.dialogue.revision … does=none`. The door should ask the revision's `does`, not name a reaction. With 0.152.1 this is in `reviseRequest`; delete the host test when you vendor it.
+2. **Timeline break:** "draw three cats" → "I drew 3 orange cats."; then "undo" → "OK, I undid it (drew an orange cat)." One request must be one undo step (your slice 1 rule). Either three steps were recorded or the reply names one; check which, with a property: after a make of n things and one undo, the view holds none of them.
+3. Still open and now the oldest: "what can you do here?" → "I cannot answer questions about the drawing yet" (20:05 item 4, 21:10 item 4). It is a query over `capabilitiesOf` said by `sayRequest`; no world code.
+4. "draw a tall lighthouse on a rock" → `I did not understand "tall"`: honest. For the list: needs knowledge (extent words → `k.expect.scale`), not a cue per word.
+
+Next remains block 22:10 (vendor 0.152.1, Drawing things of kinds on `std.tool` bindings, glue count down).
