@@ -167,8 +167,32 @@ function aboutTopic(world, lib, r, topic) {
   return null;
 }
 
-/** Whether the kind's edges are arrows (`edges=directed`) or plain lines; the diagram carries it for the engine. */
-const withDirection = (lib, world, d) => ({ ...d, directed: lib.diagramKinds(world).find((k) => k.name === d.kind)?.edges === 'directed' });
+/**
+ * Whether a person is ever offered what a fill reads about a topic. A fact may say it is not for a person (`user_facing=false`: the drawing methods of PSys2 in k.procedures, "show a feeling on a
+ * face"); such a fact, and a topic that names one through the fill's topic key (the key's slot says which facts it names: `type=k.procedures.method by=name`), is never drawn, sampled or offered.
+ * Nothing here names a type or a topic: the key is the catalog's published `user_facing`.
+ */
+const NOT_FOR_PEOPLE = (f) => (f.attrs.user_facing ?? []).some((v) => low(bare(v)) === 'false');
+export function offered(world, fill, topic) {
+  const t = low(topic), has = (f, key) => (f.attrs[key] ?? []).some((v) => low(bare(v)) === t);
+  const facts = world.ofType(fill.type).filter((f) => has(f, fill.topic ?? 'name'));
+  if (facts.some(NOT_FOR_PEOPLE)) return false;
+  const slot = fill.topic ? world._compiled?.()?.slotOf?.(fill.type, fill.topic) : null;
+  if (slot?.type && slot.type !== fill.type && world.ofType(slot.type).some((f) => has(f, slot.by ?? 'name') && NOT_FOR_PEOPLE(f))) return false;
+  return true;
+}
+const fillOf = (lib, world, r) => lib.diagramKinds(world).find((k) => k.name === r.kind)?.fills.find((f) => `${f.type}.${f.key}` === r.fill);
+
+/**
+ * How the engine joins the nodes: arrows when the kind's edges are `directed`, plain lines when `undirected`. A kind with no edges whose structure is a sequence (a timeline: "events in order
+ * along a line", each "a dot on the line") is drawn on its line: `line` joins its nodes in their order with plain segments, so the order is on the canvas and not only in the places.
+ */
+const kindWire = (world, name) => world.ofType('k.diagrams.kind').find((k) => bare(k.attrs.name?.[0]) === name);
+function withDirection(lib, world, d) {
+  const k = lib.diagramKinds(world).find((x) => x.name === d.kind), w = kindWire(world, d.kind);
+  const sequence = (w?.attrs.structure ?? []).map(bare).includes('sequence');
+  return { ...d, directed: k?.edges === 'directed', line: k?.edges === 'none' && sequence && !(d.edges ?? []).length && d.nodes.length > 1 };
+}
 
 /**
  * The size `composeDiagram` lays a node out with, in the units of its frame (its boxes: 6 + 1.6 per letter, at most 30, 8 high). A layer with more nodes than the frame is wide enough for is
@@ -186,26 +210,42 @@ const fitted = (lib, world, opts) => {
  * A kind can be filled from several knowledge types (a tree of "car": its kinds, its parts); the library takes one by a seed. The request says which it means ("the parts of a car", "the cities of
  * France", "the kinds of mammals"): the fill whose type or key names a word of the request (in the singular) is the one asked for. Returns the number of such words.
  */
-const FILLS_TRIED = 6;
-const askedFor = (r, requestWords) => {
-  const named = new Set(String(r.fill).split(/[._]/).map((x) => sing(x.toLowerCase())));
+const askedFor = (fill, requestWords) => {
+  const named = new Set([...String(fill.id).split(/[._]/), ...fill.by].map((x) => sing(x.toLowerCase())));
   return requestWords.filter((w) => w.length > 2 && !FUNCTION_WORDS.has(w) && named.has(sing(w))).length;
 };
-/** A diagram of a kind about the topic of a request, from knowledge: { diagram, topic } or { why }. The candidate topics are tried in order; the first the knowledge has the structure for wins. */
+/**
+ * The fills of a kind, in the knowledge's order, each with the World seen through it alone: the library takes one fill of a kind by its seed, so a view in which the kind has only that fill
+ * composes exactly that one. `by` is what the fill orders or groups by (`by=distance`, `by=size`): a word of the request may name it ("the planets by distance").
+ */
+function fillsOf(lib, world, kind) {
+  const ks = lib.diagramKinds(world), k = low(kind);
+  const name = (ks.find((x) => low(x.name) === k) ?? ks.find((x) => x.form === k) ?? ks.find((x) => low(x.name).replace(/ diagram$/, '') === k))?.name;   // the library's reading of a kind
+  return world.ofType('k.diagrams.fill').filter((f) => bare(f.attrs.kind?.[0]) === name).map((f) => ({
+    id: `${bare(f.attrs.type?.[0])}.${bare(f.attrs.key?.[0])}`, by: (f.attrs.by ?? []).map(bare),
+    view: { ofType: (t) => (t === 'k.diagrams.fill' ? [f] : world.ofType(t)), _compiled: () => world._compiled?.() },
+  }));
+}
+/**
+ * A diagram of a kind about the topic of a request, from knowledge: { diagram, topic } or { why }. The candidate topics are tried in order; the first the knowledge has the structure for wins.
+ * Every fill of the kind is tried (not a seeded few): the one whose type, key or `by` names a word of the request is drawn, and among equals the first in the knowledge, so one request draws
+ * one diagram whatever the seed or the reasoner (the seed only places a free layout).
+ */
 export function composeForRequest(lib, world, { kind, topic }, { seed = 1, max = 9 } = {}) {
-  const tried = [], asked = words(topic);
+  const tried = [], asked = words(topic), fills = fillsOf(lib, world, kind);
   for (const c of topicCandidates(topic)) {
     tried.push(c);
-    const found = new Map();   // fill -> composed diagram: the fills the library takes for the topic, over a few seeds
-    for (let k = 0; k < FILLS_TRIED; k++) {
-      const r = fitted(lib, world, { kind, topic: c, seed: seed + k, max });
-      if (r.why || !r.nodes?.length || found.has(r.fill)) continue;
-      const said = aboutTopic(world, lib, r, c);
-      if (said) found.set(r.fill, { r, said, seed: seed + k });
+    const found = [];
+    for (const f of fills) {
+      budget.tick('diagram.fill');
+      const r = fitted(lib, f.view, { kind, topic: c, seed, max });
+      if (r.why || !r.nodes?.length) continue;
+      const said = aboutTopic(f.view, lib, r, c);
+      if (said && offered(world, fillOf(lib, f.view, r), said)) found.push({ f, r, said });
     }
-    if (!found.size) continue;
-    const best = [...found.values()].sort((a, b) => askedFor(b.r, asked) - askedFor(a.r, asked))[0];
-    const spelt = best.said === c ? best.r : fitted(lib, world, { kind, topic: best.said, seed: best.seed, max });   // the topic as the knowledge writes it (France, not france)
+    if (!found.length) continue;
+    const best = found.reduce((a, b) => (askedFor(b.f, asked) > askedFor(a.f, asked) ? b : a));
+    const spelt = best.said === c ? best.r : fitted(lib, best.f.view, { kind, topic: best.said, seed, max });   // the topic as the knowledge writes it (France, not france)
     return { diagram: withDirection(lib, world, spelt.why ? best.r : spelt), topic: best.said };
   }
   return { why: `no knowledge of the structure of a ${kind} about ${topic} (tried ${tried.slice(0, 6).join(', ')})` };
@@ -214,7 +254,7 @@ export function composeForRequest(lib, world, { kind, topic }, { seed = 1, max =
 export function sampleDiagrams(lib, world, { seed = 1, kinds, min = 4, tries = 24, max = 9 } = {}) {
   for (let i = 0; i < tries; i++) {
     const s = (seed + i * 7919) >>> 0, r = lib.sampleDiagram(world, { seed: s, max, ...(kinds ? { kinds: [kinds] } : {}) });
-    if (r.why || r.nodes.length < min || String(r.topic).length < 3 || !aboutTopic(world, lib, r, r.topic)) continue;   // (the sampled topic is the knowledge's own spelling)
+    if (r.why || r.nodes.length < min || String(r.topic).length < 3 || !aboutTopic(world, lib, r, r.topic) || !offered(world, fillOf(lib, world, r), r.topic)) continue;   // (the sampled topic is the knowledge's own spelling; never what is not for a person)
     const f = fitted(lib, world, { kind: r.kind, topic: r.topic, seed: s, max });   // the same diagram with its extent
     if (!f.why) return { diagram: withDirection(lib, world, f), topic: r.topic };
   }
@@ -254,6 +294,9 @@ export function engineNodes(d, taken = new Set()) {
   }
   for (const e of d.edges ?? []) {
     nodes.push({ id: `e${nodes.length}`, type: 'command', args: { action: 'connect', from: nameOf.get(e.from), to: nameOf.get(e.to), arrow: d.directed ? 'forward' : 'none' } });
+  }
+  if (d.line && !(d.edges ?? []).length) for (let i = 1; i < d.nodes.length; i++) {   // the line of a sequence with no edges (a timeline): plain segments through its nodes in order
+    nodes.push({ id: `e${nodes.length}`, type: 'command', args: { action: 'connect', from: nameOf.get(d.nodes[i - 1].id), to: nameOf.get(d.nodes[i].id), arrow: 'none' } });
   }
   return nodes;
 }

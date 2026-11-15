@@ -641,7 +641,7 @@ function massOf(parts) {
  * hull of its points. The parts of its mass (massOf) are painted on a 100 x 100 grid of the object's frame as the drawing fills them (boxes, polygons, ellipses; lines 3 units
  * wide), the outer boundary of the largest connected piece is traced clockwise, its straight runs become segments (Douglas-Peucker, 1.2 units) whose corners snap to the parts'
  * own corners on the boundary (the exact gable top and eaves), and corners whose triangle is under `feature` of the area go. Concave where the drawing is (the eaves under a
- * roof). Clockwise from the top. When the library's `outlineOf(parts, { concave })` lands, it replaces this (questions.md L1).
+ * roof). Clockwise from the top. The library's `outlineOf` (sopworld 0.129) is the convex hull of the parts' boxes, which loses the gable and the eaves: this stays until it has a concave silhouette (questions.md L1).
  */
 export function outlineOf(all, { feature = 0.01 } = {}) {
   const parts = massOf(all);
@@ -698,18 +698,34 @@ export function outlineOf(all, { feature = 0.01 } = {}) {
   const t = poly.reduce((k, p, i) => (p[1] < poly[k][1] - 0.01 ? i : k), 0);
   return [...poly.slice(t), ...poly.slice(0, t)].map(([x, y]) => [Math.round(x * 10) / 10, Math.round(y * 10) / 10]);
 }
-/** `n` points evenly along a closed polygon (by length), the first at its first corner. */
+/**
+ * `n` points evenly along a closed polygon (by length), the first at its first corner: the library's `arrange(nodes, 'path', { points, closed })` (sopworld 0.129; it gives the same points
+ * the host computed before). The library's `outlineOf` is the convex hull of the parts' boxes (a flat top, no gable, no eaves), so the silhouette above stays the host's (questions.md L1).
+ */
 export function pointsAlong(poly, n) {
-  const seg = poly.map((p, i) => [p, poly[(i + 1) % poly.length]]), len = seg.map(([a, b]) => Math.hypot(b[0] - a[0], b[1] - a[1])), total = len.reduce((s, x) => s + x, 0);
-  const out = [];
-  for (let k = 0; k < n; k++) {
-    let d = (total * k) / n, i = 0;
-    while (i < seg.length - 1 && d > len[i]) { budget.tick('diagram.outline'); d -= len[i]; i++; }
-    const [a, b] = seg[i], t = len[i] ? d / len[i] : 0;
-    out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]);
-  }
-  return out;
+  const at = DL.arrange(Array.from({ length: n }, (_, i) => ({ id: `p${i}`, w: 0, h: 0 })), 'path', { points: poly, closed: true });
+  return [...at.values()].map((b) => [b.x, b.y]);
 }
+/**
+ * NODES ON AN OUTLINE DO NOT OVERLAP (reviewer 2026-11-15 04:50: the eaves of the house sat on the wall tops). Points of a closed outline (canvas px) get one size for their nodes: the
+ * engine's usual size when the shortest gap between neighbours leaves room, else that gap less a margin (`gap`); corners closer than the smallest node (`min` + `gap`) are one node, at their
+ * middle. Returns { points, size } (`size` null = the usual size). Any arrangement along an outline uses it.
+ */
+export function fitOnOutline(points, { usual = 62, min = 24, gap = 10 } = {}) {
+  let pts = points.map((p) => [...p]);
+  const near = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+  for (let merged = true; merged && pts.length > 3;) {
+    merged = false;
+    for (let i = 0; i < pts.length; i++) {
+      budget.tick('diagram.outline');
+      const j = (i + 1) % pts.length;
+      if (near(pts[i], pts[j]) < min + gap) { pts[i] = [Math.round((pts[i][0] + pts[j][0]) / 2), Math.round((pts[i][1] + pts[j][1]) / 2)]; pts.splice(j, 1); merged = true; break; }
+    }
+  }
+  const shortest = Math.min(...pts.map((p, i) => near(p, pts[(i + 1) % pts.length])));
+  return { points: pts, size: shortest - gap >= usual ? null : Math.max(min, Math.floor(shortest - gap)) };
+}
+
 /**
  * A diagram in the shape of a thing of the catalog: an ARRANGEMENT ALONG ITS OUTLINE. With three or more shapes in the diagram, they are moved onto the outline (evenly, from the top,
  * clockwise); on an empty diagram one unnamed node is made at each corner of the outline (numbered in order), and the nodes are joined in order (a closed line).
@@ -717,6 +733,7 @@ export function pointsAlong(poly, n) {
  */
 export function shapedLike(ctx, args = {}) {
   if (!K) return NOT_READY();
+  if (!DL) return no('The diagram knowledge is still loading. Please say that again in a moment.', 'missing');
   const s = ensure(ctx);
   const noun = String(args.o ?? '').toLowerCase().replace(/[^a-z ]/g, '').trim();
   const thing = thingOfNoun(noun);
@@ -732,16 +749,19 @@ export function shapedLike(ctx, args = {}) {
   const canvas = ([x, y]) => [Math.round(400 + (x - (x0 + x1) / 2) * k), Math.round(250 + (y - (y0 + y1) / 2) * k)];
   const own = s.shapes.filter((x) => !x.template && !x.layer && x.shape !== 'text');
   if (own.length >= 3) {
-    const at = pointsAlong(poly, own.length).map(canvas);
-    const nodes = [...own].sort((p, q) => (p.order ?? 0) - (q.order ?? 0)).map((x, i) => ({ id: `m${i + 1}`, type: 'command', args: { action: 'move', target: x.name, at: `${at[i][0]},${at[i][1]}` } }));
+    const at = pointsAlong(poly, own.length).map(canvas), fit = fitOnOutline(at, { min: 0 }).size;   // evenly spaced: no corner merges, a shape bigger than the spacing is made to fit
+    const nodes = [...own].sort((p, q) => (p.order ?? 0) - (q.order ?? 0)).flatMap((x, i) => {
+      const move = { id: `m${i + 1}`, type: 'command', args: { action: 'move', target: x.name, at: `${at[i][0]},${at[i][1]}` } }, b = K.dims(x), k = fit ? fit / Math.max(b.w, b.h) : 1;
+      return k < 1 ? [move, { id: `z${i + 1}`, type: 'command', args: { action: 'resize', target: x.name, width: Math.max(10, Math.round(b.w * k)), height: Math.max(10, Math.round(b.h * k)) } }] : [move];
+    });
     const r = execute(ctx, s, nodes, { place: false });
     if (r.status !== 'supported') return r;
     return { ...r, value: `I placed the ${own.length} shapes on the outline of ${a} ${thing}, clockwise from the top.`, say: { act: 'diagram.shaped.placed', roles: { thing, shapes: { n: own.length, noun: 'shape' } } } };   // say: the frame a reply in another language is composed from (spec 06)
   }
-  const corners = poly.length > 10 ? pointsAlong(poly, 8) : poly;
+  const { points: corners, size } = fitOnOutline((poly.length > 10 ? pointsAlong(poly, 8) : poly).map(canvas));
   // the user gave no content: the nodes are unnamed (circle 1, circle 2 ... in the order of the outline), not named after the parts they sit on
   const names = corners.map(() => nextId(s, 'circle'));
-  const nodes = corners.map((pt, i) => { const [x, y] = canvas(pt); return { id: `o${i + 1}`, type: 'command', args: { action: 'create', shape: 'circle', name: names[i], at: `${x},${y}` } }; });
+  const nodes = corners.map(([x, y], i) => ({ id: `o${i + 1}`, type: 'command', args: { action: 'create', shape: 'circle', name: names[i], at: `${x},${y}`, ...(size ? { width: size, height: size } : {}) } }));
   nodes.push({ id: 'oc', type: 'command', args: { action: 'connect', from: names, pairing: 'chain', arrow: 'none' } }, { id: 'oz', type: 'command', args: { action: 'connect', from: names[names.length - 1], to: names[0], arrow: 'none' } });
   const r = execute(ctx, s, nodes, { place: false });
   if (r.status !== 'supported') return r;
