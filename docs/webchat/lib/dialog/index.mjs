@@ -11,7 +11,7 @@
  */
 import { composeReply, sayOf } from './composed-reply.mjs?v=13cd016837';
 import { reviewForeign } from './foreign-reading.mjs?v=ce2e99c912';
-import { installTextGen } from './textgen.mjs?v=4c75b0d4e4';
+import { installTextGen } from './textgen.mjs?v=f3147928cc';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=a815012811';
 import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=1f3f8df5d4';
 import { validateWorldSet } from '../worlds/validate.mjs?v=86a765f9e1';
