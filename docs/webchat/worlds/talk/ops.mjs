@@ -88,6 +88,8 @@ const partNames = (parts) => {
 };
 const offline = (ctx) => !!ctx.knowledge?.unreachable?.();
 const dontKnow = (ctx, what) => (offline(ctx) && !what ? no('missing', "I can't reach the picture catalog right now, so I can only show the basic things.") : no('missing', NONE));
+/** A question about someone nobody introduced ("How many apples does Ben have?" before any Ben): the name as written, never an id (Q23, dlg.kidsB#037). Null for a word that is not a name. */
+const unknownName = (o) => { const t = String(o ?? '').trim(); return /^\p{Lu}\p{Ll}+$/u.test(t) ? no('missing', `I do not know ${t} yet.`) : null; };
 
 // ---------------------------------------------------------------- cards and topics
 function topicFor(ctx, name, hint = {}) {
@@ -205,7 +207,7 @@ export function count(ctx, { o, p } = {}) {
   const subject = subj(ctx, o);
   if (!subject) return no("missing", NO_TOPIC);
   const r = lookup(ctx, subject);
-  if (!r) return dontKnow(ctx, false);
+  if (!r) return unknownName(o) ?? dontKnow(ctx, false);
   const topic = topicFor(ctx, r.name);
   const what = clean(p);
   const c = countOf(ctx, r, what);
@@ -345,7 +347,7 @@ export function has(ctx, { o, p } = {}) {
   const subject = subj(ctx, o);
   if (!subject) return no('missing', NO_TOPIC);
   const r = lookup(ctx, subject);
-  if (!r) return dontKnow(ctx, false);
+  if (!r) return unknownName(o) ?? dontKnow(ctx, false);
   const asked = /^(\S+) (.+)$/.exec(clean(p));   // "4 legs", "two wings": a count given in the question is checked against the fact
   const given = asked ? (/^\d+$/.test(asked[1]) ? Number(asked[1]) : numberValue(asked[1], 'cardinal')) : null;
   const what = given !== null && Number.isFinite(given) ? clean(asked[2]) : clean(p), one = singular(what);

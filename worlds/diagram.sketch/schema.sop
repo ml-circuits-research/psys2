@@ -1,4 +1,5 @@
 @dg acts.schema
+    sample.other=square
     noun="diagram"
     doc="The diagram editor as a schema (pilot P1 of spec 21): shapes, arrows and labels with colour, size and text. The engine of diagram-vss-demo (engine/, ops.mjs) stays as it is: it executes and lays out; the schema only says what is said."
     hooks=hooks.mjs

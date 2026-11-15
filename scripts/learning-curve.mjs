@@ -84,7 +84,7 @@ export async function currentPoint(note = '') {
   const build = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: REPO, encoding: 'utf8' }).stdout.trim();
   const same = ind.robustness?.paraphrasesDate ? ind.robustness['paraphrases-rt'] : null;   // only after the re-judging (meaning kept) does the set mean "paraphrases"
   let real = null;
-  try { const h = realHeadline(); real = h.total ? { right: h.right, total: h.total, turns: h.turns, ...(h.retired?.total ? { retired: h.retired } : {}), measuredOn: h.build, tree: h.tree, mode: h.mode, catalog: h.catalog, seed: h.seed, ...(h.stale ? { stale: h.stale } : {}) } : null; } catch { /* the real set was not run yet (node scripts/real-set.mjs run) */ }   // headline = in-scope judged turns; retired (ADR-010) rows are a line of their own; a result not from the current files is flagged
+  try { const h = realHeadline(); real = h.total ? { right: h.right, total: h.total, turns: h.turns, ...(h.retired_skipped ? { retired_skipped: h.retired_skipped } : {}), measuredOn: h.build, tree: h.tree, mode: h.mode, catalog: h.catalog, seed: h.seed, ...(h.stale ? { stale: h.stale } : {}) } : null; } catch { /* the real set was not run yet (node scripts/real-set.mjs run) */ }   // headline = in-scope judged turns; turns of retired records are skipped (real-set.mjs); a result not from the current files is flagged
   const rb = ind.robustness?.paraphrasesDate ? ind.robustness : null;
   const boot = bootCost();
   return { date: new Date().toISOString().slice(0, 10), build, mechanisms: await mechanisms(),

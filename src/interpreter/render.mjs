@@ -23,6 +23,8 @@ export function withArticle(x) {
 }
 
 const words = (s) => String(s).replace(/_/g, ' ');
+/** The words for an entity whose wire is not at hand: an agent id `e.ben` is the name as the reader writes it (`Ben`), never the id (Q23); any other id is its words. */
+export const entityName = (id) => { const m = /^e\.([a-z][\w]*)$/i.exec(String(id)); return m && m[1] !== 'user' && m[1] !== 'assistant' ? words(m[1]).replace(/^\p{Ll}/u, (c) => c.toUpperCase()) : words(String(id).replace(/^e\./, '')); };
 
 /** "a, b and c" */
 export function listText(items) {
@@ -48,9 +50,9 @@ export class Renderer {
   nameOf(memory, id) {
     if (id === 'e.user') return 'you';
     const w = memory.get(id);
-    if (!w) return words(id);
+    if (!w) return entityName(id);
     const n = w.entries.find((e) => e.key.endsWith('.name') || e.key === 'name');
-    return n ? n.value.v : words(id);
+    return n ? n.value.v : entityName(id);
   }
 
   /**

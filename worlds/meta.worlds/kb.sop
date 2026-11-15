@@ -8,11 +8,11 @@
     act=door act=corner act=roof act=dark act=wheel act=night act=um act=art
     act=degree act=organise act=upside act=three act=organize act=distribute act=landscape act=masterpiece
     act=mind act=mirror act=painting act=scene
-    actshared=draw actshared=save actshared=everything actshared=deselect actshared=look actshared=nice actshared=surprise actshared=anything
-    actshared=blow actshared=arrange actshared=png actshared=selected actshared=highlight actshared=memorize actshared=preserve actshared=archive
-    actshared=sized actshared=swivel actshared=twin actshared=unpick actshared=unselected actshared=whatever actshared=bundle actshared=compress
-    actshared=deflate actshared=detach actshared=disconnect actshared=drew actshared=inflate actshared=minimise actshared=minimize actshared=press
-    actshared=puff actshared=pump actshared=sever actshared=ungroup actshared=unhook actshared=unlink actshared=available
+    actshared=draw actshared=deselect actshared=want actshared=save actshared=everything actshared=look actshared=nice actshared=surprise
+    actshared=anything actshared=blow actshared=arrange actshared=png actshared=selected actshared=highlight actshared=memorize actshared=preserve
+    actshared=archive actshared=sized actshared=swivel actshared=twin actshared=unpick actshared=unselected actshared=whatever actshared=bundle
+    actshared=compress actshared=deflate actshared=detach actshared=disconnect actshared=drew actshared=inflate actshared=minimise actshared=minimize
+    actshared=press actshared=puff actshared=pump actshared=sever actshared=ungroup actshared=unhook actshared=unlink
     thing=object thing=house thing=home thing=cottage thing=hut thing=tree thing=pine thing=palm
     thing=sun thing=cloud thing=car thing=automobile thing=truck thing=daisy thing=tulip thing=sunflower
     thing=cat thing=kitten thing=kitty thing=dog thing=puppy thing=fish thing=goldfish thing=bird
@@ -20,21 +20,22 @@
     thing=street thing=field thing=patch thing=person thing=man thing=woman
     thingshared=thing thingshared=item thingshared=shape thingshared=flower thingshared=rose thingshared=mountain thingshared=lake thingshared=river
     thingshared=road thingshared=rainbow
-    frame=what_color frame=what_colors frame=where_are frame=is_anything frame=is_house frame=which_colors frame=which_colour frame=which_spot
-    frame=which_thing frame=how_about
+    frame=where_did frame=what_color frame=what_colors frame=where_are frame=does_my frame=is_anything frame=which_colors frame=which_colour
+    frame=which_spot frame=which_thing
 
 @card.data.charts meta.worlds.card
     core.source="generated:meta.worlds/cards"
     id=data.charts kind=tab run=none tab=charts
     name=chart name=graph
-    act=data act=figure act=leg act=fruit act=spreadsheet act=compare act=plum act=legend
-    act=kiwis act=table act=percent act=percentage act=content act=visualize act=amount act=prepare
-    act=average act=mean act=image act=paste act=result act=report act=bananas act=csv
-    act=editor act=gdoc act=entry act=express act=fraction act=pct act=proportion act=text
+    act=data act=figure act=leg act=spreadsheet act=compare act=table act=percent act=percentage
+    act=content act=visualize act=amount act=prepare act=average act=mean act=image act=paste
+    act=result act=report act=bananas act=csv act=editor act=fruit act=gdoc act=kiwis
+    act=legend act=plum act=entry act=express act=fraction act=pct act=proportion act=text
     act=capture act=clipboard act=gsheet act=outrun act=photo act=represent act=screenshot act=stat
-    actshared=make actshared=house actshared=show actshared=draw actshared=copy actshared=download actshared=send actshared=stacking
-    actshared=against actshared=versus actshared=vs actshared=update actshared=create actshared=include actshared=build actshared=hide
-    actshared=rename actshared=scale actshared=convert actshared=share
+    act=annotate act=information act=avg
+    actshared=download actshared=copy actshared=send actshared=against actshared=versus actshared=vs actshared=update actshared=draw
+    actshared=create actshared=include actshared=build actshared=hide actshared=rename actshared=scale actshared=convert actshared=share
+    actshared=export
     thing=plot thing=point thing=bar thing=slice thing=segment thing=pie thing=doughnut thing=donut
     thing=radar thing=polar thing=scatter thing=aquamarine thing=chartreuse thing=terracotta thing=burlywood thing=firebrick
     thing=gainsboro thing=goldenrod thing=turquoise thing=burgundy thing=chestnut thing=cornsilk thing=honeydew thing=lavender
@@ -42,8 +43,8 @@
     thing=magenta thing=mustard thing=scarlet thing=thistle thing=bisque thing=cobalt thing=indigo thing=maroon
     thing=orchid
     thingshared=chart thingshared=graph thingshared=diagram thingshared=column thingshared=dot thingshared=item thingshared=orange
-    frame=what_percentage frame=what_chart frame=what_charts frame=what_percent frame=is_chart frame=is_kiwis frame=what_number frame=which_color
-    frame=which_colours frame=which_kind
+    frame=what_percentage frame=what_chart frame=what_charts frame=what_percent frame=is_chart frame=is_kiwis frame=is_plums frame=what_number
+    frame=which_color frame=which_colours
 
 @card.diagram.sketch meta.worlds.card
     core.source="generated:meta.worlds/cards"
@@ -74,14 +75,14 @@
 @card.docs.editor meta.worlds.card
     core.source="generated:meta.worlds/cards"
     id=docs.editor kind=module run=none
-    act=dictation act=pear act=shopping act=selected act=bread act=bar act=checkbox act=world
-    act=fox act=numbered act=compose act=plan act=reopen act=selection act=food act=italic
-    act=krill act=statistic act=whale act=condense act=dictating act=hyperlink act=lived act=nd
-    actshared=house actshared=write actshared=undo actshared=new actshared=turn actshared=read actshared=stop actshared=start
-    actshared=download actshared=milk actshared=insert actshared=select actshared=apple actshared=legend actshared=deselect actshared=plum
-    actshared=stacking actshared=kiwis actshared=scale actshared=create actshared=rename actshared=shrink actshared=exchange actshared=resize
-    actshared=convert actshared=invert actshared=recolor actshared=recolour actshared=straighten actshared=transform actshared=reverse actshared=revert
-    actshared=egg actshared=hello actshared=unmark actshared=untick
+    act=dictation act=shopping act=selected act=bread act=checkbox act=world act=fox act=numbered
+    act=compose act=plan act=reopen act=selection act=food act=italic act=krill act=statistic
+    act=whale act=condense act=dictating act=hyperlink act=lived act=nd act=owl act=period
+    act=saying act=subchapter act=underline act=wordcount act=dictate act=party
+    actshared=write actshared=undo actshared=read actshared=new actshared=stop actshared=start actshared=milk actshared=insert
+    actshared=scale actshared=create actshared=rename actshared=shrink actshared=exchange actshared=resize actshared=convert actshared=invert
+    actshared=recolor actshared=recolour actshared=straighten actshared=transform actshared=reverse actshared=revert actshared=egg actshared=hello
+    actshared=unmark actshared=untick actshared=uncheck actshared=download actshared=finish actshared=mention
     thing=file thing=section thing=chapter thing=subsection thing=subheading thing=freetext thing=text thing=word
     thing=something thing=paragraph thing=para thing=paras thing=graf thing=heading thing=header thing=headline
     thing=hed thing=title thing=checklist thing=bullet thing=entry thing=todo thing=quote thing=blockquote
@@ -89,7 +90,7 @@
     thing=break thing=pagebreak thing=markdown thing=txt thing=md thing=html thing=json thing=first
     thing=second
     thingshared=document thingshared=doc thingshared=note thingshared=list thingshared=item thingshared=task thingshared=column
-    frame=is_document frame=is_selected frame=what_a frame=what_have frame=which_tasks
+    frame=is_selected frame=what_a frame=what_have frame=which_tasks
 
 @card.geo.map meta.worlds.card
     core.source="generated:meta.worlds/cards"
@@ -101,8 +102,9 @@
     act=colored act=coloured act=shaded act=borough act=burg act=european act=metro act=metropolise
     act=municipality act=settlement act=shade act=capitol act=coordinate act=currency act=japan act=land
     act=bordering act=african act=asian act=dist act=emphasised act=emphasized act=glowing act=lat
-    actshared=which actshared=where actshared=go actshared=everything actshared=see actshared=wipe actshared=out actshared=what'
-    actshared=speak actshared=deselect actshared=display actshared=move
+    act=latitude act=lit
+    actshared=which actshared=where actshared=move actshared=go actshared=everything actshared=wipe actshared=out actshared=what'
+    actshared=speak actshared=display
     thing=country thing=nation thing=city thing=town thing=capital thing=continent thing=region thing=highlight
     thing=seas thing=pin thing=marker thing=flag thing=route thing=path thing=label thing=caption
     thing=view thing=atla thing=globe thing=north thing=south thing=east thing=west thing=northeast
@@ -155,14 +157,14 @@
     id=kids.shop kind=module run=none
     slot=number
     name=shop
-    act=pay act=cost act=buy act=lei act=price act=money act=remainder act=rest
-    act=spend act=buying act=purchase act=when act=back act=leu act=spare act=leftover
-    act=enough act=paying act=owe act=difference act=using act=fine act=getting act=purchasing
-    act=total act=paid act=afford act=purchased act=offer act=fund act=bill act=doable
-    act=possible act=purse act=once act=bought act=cash act=wallet act=spent act=sufficient
-    act=affordable act=run act=pocket act=allowance act=bank act=coin act=imagine act=budget
-    act=dough act=saving act=suppose act=assuming act=giving act=sum act=adequate
-    actshared=change actshared=get actshared=after actshared=give actshared=take
+    act=pay act=cost act=buy act=lei act=price act=change act=money act=remainder
+    act=rest act=spend act=buying act=purchase act=when act=back act=leu act=spare
+    act=leftover act=enough act=paying act=owe act=difference act=using act=fine act=getting
+    act=purchasing act=total act=paid act=afford act=purchased act=offer act=fund act=bill
+    act=doable act=possible act=purse act=once act=bought act=cash act=wallet act=spent
+    act=sufficient act=affordable act=run act=pocket act=allowance act=bank act=coin act=imagine
+    act=budget act=dough act=saving act=suppose act=assuming act=giving act=sum act=adequate
+    actshared=get actshared=after actshared=give actshared=take
     thing=backpack thing=bread thing=milk thing=juice
     thingshared=pencil thingshared=pen thingshared=eraser thingshared=ruler thingshared=notebook thingshared=sticker thingshared=book thingshared=apple
     thingshared=banana thingshared=orange thingshared=pear thingshared=water thingshared=biscuit thingshared=chocolate thingshared=sandwich thingshared=doll
@@ -181,13 +183,13 @@
     act=strike act=trash act=scratch act=alarm act=bin act=hwmany act=jot act=unbought
     act=dump act=unfinished act=upon act=among act=abolish act=feed act=fetched act=memo
     act=notification act=obliterate act=outta act=uncrossed act=unticked
-    actshared=check actshared=wipe actshared=clear actshared=delete actshared=remove actshared=include
+    actshared=check actshared=clear actshared=wipe actshared=delete actshared=include actshared=read
     thing=shop thing=grocery thing=homework thing=chore thing=errand thing=wishlist thing=packing thing=garden
     thing=party thing=birthday thing=gift thing=present thing=toy thing=holiday thing=trip thing=camping
     thing=bedtime thing=weekend thing=cleaning thing=cooking thing=pet
     thingshared=shopping thingshared=book
     frame=which_list frame=is_milk frame=what_lists frame=are_my frame=is_bread frame=is_cheese frame=is_homework frame=which_request
-    frame=would_you
+    frame=does_my frame=would_you
 
 @card.kids.time meta.worlds.card
     core.source="generated:meta.worlds/cards"
@@ -213,15 +215,14 @@
     core.source="generated:meta.worlds/cards"
     id=media.music kind=tab run=none tab=music
     name=music name=piano name=keyboard name=sheet_music name=the_piano
-    act=play act=major act=sound act=sharp act=flat act=hertz act=minor act=pear
-    act=bar act=tone act=instrument act=octave act=letter act=tempo act=transpose act=frequency
-    act=relative act=volume act=bpm act=playing act=semitone act=spell act=hear act=notation
-    act=bell act=flute act=hz act=looping act=spelled act=score act=beat act=hit
-    act=accidental act=form act=high act=loud act=organ act=signature act=wrote act=freq
-    act=jingle act=louder act=match act=quieter act=replay act=sing act=staff act=stave
-    act=strum
-    actshared=stop actshared=two actshared=apple actshared=legend actshared=plum actshared=stacking actshared=what' actshared=kiwis
-    actshared=speed actshared=spin
+    act=play act=major act=sound act=sharp act=flat act=hertz act=transpose act=minor
+    act=faster act=tone act=instrument act=octave act=letter act=tempo act=frequency act=relative
+    act=volume act=bpm act=playing act=semitone act=spell act=hear act=notation act=bell
+    act=flute act=hz act=looping act=spelled act=score act=beat act=hit act=accidental
+    act=form act=high act=loud act=organ act=signature act=wrote act=freq act=jingle
+    act=louder act=match act=quieter act=replay act=sing act=staff act=stave act=strum
+    act=sheet act=fit act=author act=composer act=comprise act=creator
+    actshared=stop actshared=what' actshared=speed actshared=spin actshared=contain
     thing=song thing=tune thing=track thing=piece thing=melody thing=composition thing=pitch thing=chord
     thing=triad thing=arpeggio thing=scale thing=key thing=interval
     thingshared=note
@@ -232,28 +233,29 @@
     core.source="generated:meta.worlds/cards"
     id=plan.seating kind=tab run=none tab=seating
     name=seating name=seating_plan
-    act=bridge act=tie
-    actshared=lunch actshared=connect actshared=hook actshared=bind actshared=couple actshared=tape actshared=attach actshared=fasten
-    actshared=glue actshared=join actshared=nail actshared=relate actshared=group actshared=pin actshared=clip actshared=recover
-    actshared=retrieve actshared=bundle actshared=detach actshared=disconnect actshared=import actshared=sever actshared=ungroup actshared=unhook
-    actshared=unlink actshared=bunch actshared=categorize actshared=disassemble actshared=dismantle actshared=lump actshared=merge actshared=pair
-    actshared=reload actshared=slice actshared=uncouple actshared=unfasten actshared=untie
+    act=lunch act=bridge act=tie
+    actshared=connect actshared=hook actshared=bind actshared=couple actshared=tape actshared=attach actshared=fasten actshared=glue
+    actshared=join actshared=nail actshared=relate actshared=group actshared=pin actshared=clip actshared=recover actshared=retrieve
+    actshared=bundle actshared=detach actshared=disconnect actshared=import actshared=sever actshared=ungroup actshared=unhook actshared=unlink
+    actshared=bunch actshared=categorize actshared=disassemble actshared=dismantle actshared=lump actshared=merge actshared=pair actshared=reload
+    actshared=slice actshared=uncouple actshared=unfasten actshared=untie
     thing=table thing=seat thing=chair thing=guest thing=person thing=people
     thingshared=place
-    frame=is_table
+    frame=is_ann frame=is_table
 
 @card.plan.timeline meta.worlds.card
     core.source="generated:meta.worlds/cards"
     id=plan.timeline kind=tab run=none tab=timeline
     name=timeline
-    act=bridge act=tie
-    actshared=lunch actshared=connect actshared=hook actshared=bind actshared=couple actshared=tape actshared=attach actshared=fasten
-    actshared=glue actshared=join actshared=nail actshared=relate actshared=group actshared=pin actshared=clip actshared=recover
-    actshared=retrieve actshared=bundle actshared=detach actshared=disconnect actshared=import actshared=sever actshared=ungroup actshared=unhook
-    actshared=unlink actshared=bunch actshared=categorize actshared=disassemble actshared=dismantle actshared=lump actshared=merge actshared=pair
-    actshared=reload actshared=slice actshared=uncouple actshared=unfasten actshared=untie
+    act=lunch act=bridge act=tie
+    actshared=connect actshared=hook actshared=bind actshared=couple actshared=tape actshared=attach actshared=fasten actshared=glue
+    actshared=join actshared=nail actshared=relate actshared=group actshared=pin actshared=clip actshared=recover actshared=retrieve
+    actshared=bundle actshared=detach actshared=disconnect actshared=import actshared=sever actshared=ungroup actshared=unhook actshared=unlink
+    actshared=bunch actshared=categorize actshared=disassemble actshared=dismantle actshared=lump actshared=merge actshared=pair actshared=reload
+    actshared=slice actshared=uncouple actshared=unfasten actshared=untie
     thing=event thing=milestone thing=happened
     thingshared=timeline
+    frame=is_launch
 
 @card.session.things meta.worlds.card
     core.source="generated:meta.worlds/cards"
@@ -281,7 +283,7 @@
     frame=did_we frame=which_animals frame=which_planet frame=can_penguins frame=can_we frame=what_parts frame=what_shall frame=what_sound
     frame=where_does frame=do_red
     frameshared=what_does frameshared=is_bigger frameshared=what_are frameshared=what_kind frameshared=what_is frameshared=do_you frameshared=which_is frameshared=how_do
-    frameshared=what_comes frameshared=what_do
+    frameshared=what_colour frameshared=what_comes
 
 @card.ui.avatar meta.worlds.card
     core.source="generated:meta.worlds/cards"
@@ -294,7 +296,7 @@
     claim=turn claim=ur claim=urself claim=yourself
     act=yourself act=wearing act=happy act=urself act=feel act=myself act=animate act=customise
     act=customize act=tweak act=wear act=unknown
-    actshared=lunch actshared=become actshared=recover actshared=retrieve actshared=import actshared=reload
+    actshared=become actshared=recover actshared=retrieve actshared=import actshared=reload
     thing=ponytail thing=bun thing=shoulder thing=shoulderss thing=clothe thing=shirt thing=clothess thing=outfit
     thing=neck thing=ear thing=earss thing=head thing=cheek thing=cheekss thing=blush thing=freckle
     thing=beard thing=mouth thing=lip thing=smile thing=moustache thing=moustach thing=mustache thing=nose
@@ -302,7 +304,7 @@
     thing=spectacle thing=sunglass thing=spec thing=hair thing=fringe thing=bang thing=hairstyle thing=earring
     thing=earringss thing=hat thing=cap thing=helmet thing=crown
     thingshared=face thingshared=avatar thingshared=top
-    frame=is_your frame=what_hats frame=is_hat
+    frame=is_your frame=what_hats
 
 @card.ui.help meta.worlds.card
     core.source="generated:meta.worlds/cards"
@@ -322,8 +324,8 @@
     thingshared=graph thingshared=list thingshared=map thingshared=paint thingshared=picture thingshared=shopping thingshared=task thingshared=thing
     frame=how_to frame=what_commands frame=why_did frame=how_were frame=is_psys frame=was_wrong frame=were_you frame=what_else
     frame=what_u frame=which_area
-    frameshared=are_you frameshared=what_can frameshared=can_i frameshared=how_do frameshared=do_you frameshared=what_does frameshared=what_are frameshared=what_was
-    frameshared=did_you frameshared=can_you
+    frameshared=are_you frameshared=what_can frameshared=can_i frameshared=how_do frameshared=do_you frameshared=did_you frameshared=what_does frameshared=what_are
+    frameshared=what_was frameshared=can_you
 
 @card.ui.shell meta.worlds.card
     core.source="generated:meta.worlds/cards"
@@ -334,12 +336,12 @@
     navact=screen navact=select navact=show navact=start navact=tab navact=view navact=window navact=ya
     act=setting act=microphone act=free act=phrase act=rate act=sentence act=answer act=pace
     act=launch act=speed act=deactivate act=handsfree act=listening act=speaker act=unmute act=mute
-    act=panel act=window act=preference act=reply act=faster act=activate act=screen act=backup
-    act=disable act=exit act=go_to act=mic act=respond act=switch_off act=switch_on act=turn_off
-    act=turn_on act=pause act=slower act=action act=word act=dictated act=former act=game
-    act=say_it act=shut act=switch_to act=take_me_to act=utterance act=return
-    actshared=open actshared=tab actshared=speak actshared=view actshared=enable actshared=start actshared=select actshared=begin
-    actshared=log actshared=command actshared=message actshared=fast actshared=quicker actshared=said
+    act=panel act=window act=preference act=reply act=activate act=screen act=backup act=disable
+    act=exit act=go_to act=mic act=respond act=switch_off act=switch_on act=turn_off act=turn_on
+    act=pause act=slower act=action act=word act=dictated act=former act=game act=say_it
+    act=shut act=switch_to act=take_me_to act=utterance act=return
+    actshared=open actshared=tab actshared=speak actshared=view actshared=faster actshared=start actshared=enable actshared=select
+    actshared=begin actshared=log actshared=command actshared=message actshared=fast actshared=quicker actshared=said
     thing=robot thing=editor thing=drawing thing=reader thing=library thing=canvas thing=music thing=piano
     thing=keyboard thing=profile thing=cv thing=resume thing=talk thing=seating thing=english thing=romanian
     thing=understanding thing=language thing=translation thing=voice thing=speech thing=audio thing=sound thing=model
