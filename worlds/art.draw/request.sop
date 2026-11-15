@@ -120,15 +120,15 @@
 @b.sky std.tool.bind world=drawing act=make of=sky op=paintSky arg=colour<-step.colour makes=thing
 @op.remove std.tool.op name=removeThings world=drawing param=ids effect=removes
 @b.remove std.tool.bind world=drawing act=remove of=thing op=removeThings arg=ids<-step.things needs=exists(ids) removes=ids
-@b.remove.scene std.tool.bind world=drawing act=remove of=picture op=removeThings arg=ids<-step.things
+@b.remove.scene std.tool.bind world=drawing act=remove of=pond of=forest of=garden op=removeThings arg=ids<-step.things
 @op.move std.tool.op name=moveThings world=drawing param=ids param=place param=anchor effect=changes
 @c.thingAt std.tool.custom name=thingAt world=drawing kind=search in=place out=anchor doc="the newest thing of the kind a place names (next to it)"
 @b.move std.tool.bind world=drawing act=place of=thing op=moveThings arg=ids<-step.things arg=place<-step.place arg=anchor<-custom.thingAt needs=exists(ids)
-@b.move.scene std.tool.bind world=drawing act=place of=picture op=moveThings arg=ids<-step.things arg=place<-step.place arg=anchor<-custom.thingAt needs=exists(ids)
+@b.move.scene std.tool.bind world=drawing act=place of=pond of=forest of=garden op=moveThings arg=ids<-step.things arg=place<-step.place arg=anchor<-custom.thingAt needs=exists(ids)
 @op.set std.tool.op name=setThings world=drawing param=ids param=colour param=size effect=changes
 @pa.set.size std.tool.param op=setThings name=size type=k.expect.scale by=step accepts=small accepts=default accepts=big
 @b.set std.tool.bind world=drawing act=change of=thing op=setThings arg=ids<-step.things arg=colour<-step.colour arg=size<-step.size needs=exists(ids)
-@b.set.scene std.tool.bind world=drawing act=change of=picture op=setThings arg=ids<-step.things arg=colour<-step.colour arg=size<-step.size needs=exists(ids)
+@b.set.scene std.tool.bind world=drawing act=change of=pond of=forest of=garden op=setThings arg=ids<-step.things arg=colour<-step.colour arg=size<-step.size needs=exists(ids)
 # What the acts on the things that are there honour (the library's reference step resolves the things by kind, the values said before the kind, "it" / "them")
 @h.remove.kind std.schema.honours world=drawing act=remove on=kind on=count on=attribute of=thing
 @h.change.kind std.schema.honours world=drawing act=change on=kind on=attribute on=size of=thing

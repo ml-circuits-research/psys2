@@ -69,3 +69,19 @@ test('Romanian replies are never mixed (sample of the Romanian operational set)'
   }
   assert.deepEqual(mixed, []);
 });
+
+// Slice 6 (coordinator): every reply of the request door reaches a Romanian session in Romanian, through its reply facts (w.lang.ro reply rows, src/lang/ro.local.mjs while the catalog
+// lacks them) or the translators sentence by sentence: never English, not even as a whole. Properties through Session.send; the person's own words and the kinds the dictionary has no
+// word for are quoted.
+test('the request door: every reply of a Romanian session is Romanian (acts, questions, capabilities, undo / redo, praise, honest replies)', async () => {
+  const e = await engineWith();
+  const s = e.createSession({ language: 'ro' });
+  s.setWorldState('ui.shell', { activeTab: 'draw' });
+  const english = [];
+  for (const m of ['desenează o pădure', 'ce este în desen?', 'câți copaci sunt?', 'fă copacii roșii', 'mută copacii la stânga', 'anulează', 'refă', 'frumos', 'ce poți face aici?', 'desenează un unicorn zburător', 'șterge desenul', 'anulează casa', 'mută copacul']) {
+    const r = await s.send(m, { language: 'ro' });
+    const body = r.text.replace(/"[^"]*"|„[^”]*”/g, '');
+    if (/\b(the|you|your|is|my|I|did|could|can|what|how|and|with|have|has|added|removed|moved|assumed|there|nothing|undid)\b/.test(body)) english.push(`${m} -> ${r.text}`);
+  }
+  assert.deepEqual(english, []);
+});
