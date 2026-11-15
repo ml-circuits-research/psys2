@@ -25,6 +25,10 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.irregular.local.reaseza.pres_3_pl_a w.lang.ro.irregular lemma=reașeza form=reașază tense=pres person=3 num=pl
 @w.lang.ro.irregular.local.reaseza.imper_2_sg_a w.lang.ro.irregular lemma=reașeza form=reașază tense=imper person=2 num=sg
 @w.lang.ro.irregular.local.reaseza.subj_3_sg_a w.lang.ro.irregular lemma=reașeza form=reașeze tense=subj person=3 num=sg
+@w.lang.ro.reply.local.done_place_up w.lang.ro.reply name=done.place.up count=other role=things text="am mutat {things} în sus"
+@w.lang.ro.reply.local.done_place_down w.lang.ro.reply name=done.place.down count=other role=things text="am mutat {things} în jos"
+@w.lang.ro.reply.local.done_place_left w.lang.ro.reply name=done.place.left count=other role=things text="am mutat {things} la stânga"
+@w.lang.ro.reply.local.done_place_right w.lang.ro.reply name=done.place.right count=other role=things text="am mutat {things} la dreapta"
 @w.lang.ro.reply.local.person_know_none w.lang.ro.reply name=person.know.none count=other text="încă nu știu nimic despre tine"
 `,
   dictionary: {

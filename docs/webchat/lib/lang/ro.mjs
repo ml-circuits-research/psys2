@@ -32,7 +32,7 @@ const posOf = (cls) => (cls?.startsWith('v.') ? 'verb' : cls?.startsWith('a.') ?
 
 export async function openLangRo({ facts = null, unimorph = false, gloss: glossFor = null, local: withLocal = true } = {}) {
   facts ??= (await import('./ro.facts.generated.mjs?v=268c444d52')).LANG_RO_FACTS;
-  const local = withLocal ? (await import('./ro.local.mjs?v=5357af68e7')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
+  const local = withLocal ? (await import('./ro.local.mjs?v=8cba184447')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
   // the large dictionary (3,466 lemmas derived from UniMorph, CC BY-SA 3.0, no senses) is a module of its own, loaded only when asked for; for a letter the hand file comes first, then the derived rows
   const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=56f524c863')).LANG_RO_UNIMORPH : {};
   const text = (letter) => [facts.dictionary[letter], local.dictionary[letter], extra[letter]].filter(Boolean).join('\n');
@@ -98,6 +98,7 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
     if (typeof v === 'string') return lemmaOf(v, 'noun') ?? lemmaOf(v, 'adjective');
     if (Array.isArray(v)) { const xs = v.map((x) => (x && typeof x === 'object' ? countRo(x) : null)); return xs.length && xs.every(Boolean) && (xs.length < 2 || AND) ? listRo(xs) : null; }
     if (v && typeof v === 'object' && Number.isFinite(v.n)) return countRo(v);
+    if (v && typeof v === 'object' && Array.isArray(v.names) && v.names.length && (v.names.length < 2 || AND)) return listRo(v.names.map((x) => `„${x}”`));   // names of things the user gave: quoted, as they are
     return null;
   };
   return {

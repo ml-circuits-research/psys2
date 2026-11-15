@@ -233,7 +233,9 @@ function wayMoved(from, to) {
  * changed (owner 2026-11-15, class C): a move says which way each shape went, a shape set to where it already was is not "moved", and a run that changed nothing says so
  * ("Nothing changed.") instead of "Done.".
  */
+let lastSay = null;   // the composable frame of the last summary (set by summarize, read right after it)
 function summarize(result, s, from = null) {
+  lastSay = null;
   const adds = [], links = [], unlinks = [], dels = [], moved = [], changed = [], renames = [], rules = [], said = [], answers = [], edgeSets = [], ways = new Map();
   for (const st of result.steps) {
     let ownAnswer = false;
@@ -274,6 +276,9 @@ function summarize(result, s, from = null) {
     const w = new Set(moved.map((n) => ways.get(n) ?? ''));
     const way = !answers.length && !said.length && w.size === 1 ? [...w][0] : '';
     out.push(`Moved ${few(moved.map((n) => plain(s, n)), 5)}${way ? ` ${way}` : ''}.`);
+    // the frame of a move that is the whole reply, one way, at most 5 shapes: another language composes it with the doer acting on the things ("Am mutat „work done” în sus.", spec 06)
+    const dir = { up: 'up', down: 'down', 'to the left': 'left', 'to the right': 'right' }[way];
+    if (dir && moved.length <= 5 && moved.every((n) => plain(s, n) === n && !ID_RE.test(String(n)))) lastSay = { act: `done.place.${dir}`, roles: { things: { names: moved.map((n) => plain(s, n).replace(/_/g, ' ')) } } };
   }
   out.push(...edgeSentences(edgeSets, s));
   if (unlinks.length) out.push(`Removed the arrow${unlinks.length > 1 ? 's' : ''} ${few(unlinks, 4)}.`);
@@ -447,7 +452,9 @@ function execute(ctx, s, nodes, { place = true } = {}) {
     return no(said, clarify ? 'missing' : 'unsupported');
   }
   open(ctx);
-  return ok(`${s.keptNote ? `${s.keptNote} ` : ''}${shortNames(s, summarize(result, s, from))}`);
+  const said = summarize(result, s, from), say = lastSay;
+  const text = `${s.keptNote ? `${s.keptNote} ` : ''}${shortNames(s, said)}`;
+  return ok(text, say && !s.keptNote && /^Moved [^.]*\.$/.test(text) ? { say } : undefined);
 }
 
 /** What the dice may say on this tab: a diagram of each kind about a topic the knowledge can draw (src/knowledge/diagram-world.mjs); nothing until the library is loaded. */

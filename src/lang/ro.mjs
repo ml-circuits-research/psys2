@@ -98,6 +98,7 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
     if (typeof v === 'string') return lemmaOf(v, 'noun') ?? lemmaOf(v, 'adjective');
     if (Array.isArray(v)) { const xs = v.map((x) => (x && typeof x === 'object' ? countRo(x) : null)); return xs.length && xs.every(Boolean) && (xs.length < 2 || AND) ? listRo(xs) : null; }
     if (v && typeof v === 'object' && Number.isFinite(v.n)) return countRo(v);
+    if (v && typeof v === 'object' && Array.isArray(v.names) && v.names.length && (v.names.length < 2 || AND)) return listRo(v.names.map((x) => `„${x}”`));   // names of things the user gave: quoted, as they are
     return null;
   };
   return {

@@ -18,4 +18,4 @@ export async function composeReply(say, lang) {
 }
 
 /** The frame of a rendered reply: only when the text shown is the world's own value (nothing added around it), so the composed sentence says the same thing. */
-export const sayOf = (envelope, rendered) => (envelope?.say?.act && typeof envelope.value === 'string' && envelope.value === rendered ? envelope.say : null);
+export const sayOf = (envelope, rendered) => (envelope?.say?.act && typeof envelope.value === 'string' && (envelope.value === rendered || envelope.value.replace(/_/g, ' ') === rendered) ? envelope.say : null);   // the render says a name's underscores as spaces (work_done)

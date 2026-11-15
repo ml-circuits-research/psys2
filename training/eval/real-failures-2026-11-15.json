@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "1b2670f3",
-  "tree": "4ac903639a8e2302",
+  "build": "a6c5287d",
+  "tree": "69f873226c488e4f",
   "catalog": "085bc0dab1f6f2817815ca789a36259b3c01ae4e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -23,8 +23,8 @@
     "executed": 333,
     "refused": 2,
     "asked": 10,
-    "not_understood": 166,
-    "other_world": 94
+    "not_understood": 168,
+    "other_world": 92
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -98,8 +98,8 @@
     "executed": 333,
     "refused": 2,
     "asked": 10,
-    "not_understood": 166,
-    "other_world": 94
+    "not_understood": 168,
+    "other_world": 92
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -622,8 +622,8 @@
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 63,
-   "both_reasoners": 63,
+   "count": 61,
+   "both_reasoners": 61,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -703,8 +703,8 @@
   },
   {
    "cause": "translation residue / wrong sense / source typo",
-   "count": 28,
-   "both_reasoners": 28,
+   "count": 30,
+   "both_reasoners": 30,
    "examples": [
     {
      "text": "an old woman",
