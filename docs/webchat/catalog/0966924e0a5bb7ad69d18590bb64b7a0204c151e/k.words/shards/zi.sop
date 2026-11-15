@@ -1,0 +1,17 @@
+# k.words/shards/zi: senses of the words from "zigzag" to "zipper" (first letters "zi").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.zigzag.noun.1 k.words.sense word=zigzag pos=noun n=1 supersense=noun.shape gloss="an angular shape characterized by sharp turns in alternating directions" synonym=zig synonym=zag is_a="angular shape" kind_of="angular shape" kind_of=shape kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.zigzag.verb.1 k.words.sense word=zigzag pos=verb n=1 supersense=verb.motion gloss="travel along a zigzag path" synonym=crank is_a=travel kind_of=travel core.source="wordnet 3.1"
+@k.words.zigzag.adjective.1 k.words.sense word=zigzag pos=adjective n=1 supersense=adj.all gloss="having short sharp turns or angles" synonym=zig-zag near_opposite=straight core.source="wordnet 3.1"
+@k.words.zigzag.adverb.1 k.words.sense word=zigzag pos=adverb n=1 supersense=adv.all gloss="in a zigzag course or on a zigzag path" core.source="wordnet 3.1"
+@k.words.zip.noun.1 k.words.sense word=zip pos=noun n=1 supersense=noun.quantity gloss="a quantity of no importance" synonym=nothing synonym=nil synonym=nix synonym=nada synonym=null synonym=aught synonym=cipher synonym=cypher synonym="goose egg" synonym=naught synonym=zero synonym=zilch synonym=zippo is_a="relative quantity" core.source="wordnet 3.1"
+@k.words.zip.noun.2 k.words.sense word=ZIP pos=noun n=2 supersense=noun.communication gloss="a code of letters and digits added to a postal address to aid in the sorting of mail" synonym="ZIP code" synonym=postcode synonym="postal code" is_a=code part_of=address core.source="wordnet 3.1"
+@k.words.zip.noun.3 k.words.sense word=zip pos=noun n=3 supersense=noun.attribute gloss="forceful exertion" synonym=energy synonym=vigor synonym=vigour is_a=force core.source="wordnet 3.1"
+@k.words.zip.verb.1 k.words.sense word=zip pos=verb n=1 supersense=verb.contact gloss="close with a zipper" synonym="zip up" synonym=zipper is_a=fasten core.source="wordnet 3.1"
+@k.words.zip.verb.2 k.words.sense word=zip pos=verb n=2 supersense=verb.motion gloss="move very fast" synonym="travel rapidly" synonym=speed synonym=hurry is_a=travel core.source="wordnet 3.1"
+@k.words.zip.spelling.ZIP core.word text=zip means=ZIP of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.zipper.noun.1 k.words.sense word=zipper pos=noun n=1 supersense=noun.artifact gloss="a fastener for locking together two toothed edges by means of a sliding tab" synonym="slide fastener" synonym=zip synonym="zip fastener" is_a=fastener part_of=cardigan part_of=dress part_of=trousers part_of=skirt kind_of=fastener kind_of=restraint kind_of=device kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.zipper.verb.1 k.words.sense word=zipper pos=verb n=1 supersense=verb.contact gloss="close with a zipper" synonym="zip up" synonym=zip is_a=fasten kind_of=fasten kind_of=attach kind_of=connect core.source="wordnet 3.1"

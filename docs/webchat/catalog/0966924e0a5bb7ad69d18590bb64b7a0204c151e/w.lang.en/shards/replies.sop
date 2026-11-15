@@ -1,0 +1,84 @@
+# w.lang.en/shards/replies: what the assistant says back (reviewer block 14:25 item 2: real, the owner read a machine-translated
+# reply): done (drew, added, moved, removed, changed N things, in the shape of X, connected, undid), not understood naming the
+# unread words, did you mean, and the answers to a greeting, thanks and a goodbye; first person, informal singular. The same
+# names (counts: CLDR plural categories) as the replies of the other language worlds, so a host picks by language.
+# Also the kit's reply names (the library's Q82: done.redo, nothing.*, ask.*, refused.*, too_complex.*, why.*, answer.no) and
+# person.know.none (psys2 Q32).
+# sources: hand-core 1 (written by hand in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.en.reply.done.make.one w.lang.en.reply name=done.make count=one act=make role=kind text="I drew a {kind}." example="I drew a house." core.source="hand-core 1"
+@w.lang.en.reply.done.make.other w.lang.en.reply name=done.make count=other act=make role=kind role=number text="I drew {number} {kind:num=pl}." example="I drew 3 houses." core.source="hand-core 1"
+@w.lang.en.reply.done.make.value.one w.lang.en.reply name=done.make.value count=one act=make role=kind role=value text="I drew a {value} {kind}." example="I drew a red house." core.source="hand-core 1"
+@w.lang.en.reply.done.make.value.other w.lang.en.reply name=done.make.value count=other act=make role=kind role=number role=value text="I drew {number} {value} {kind:num=pl}." example="I drew 3 red houses." core.source="hand-core 1"
+@w.lang.en.reply.done.make.shape.one w.lang.en.reply name=done.make.shape count=one act=make role=kind role=shape text="I drew a {kind} in the shape of a {shape}." example="I drew a cloud in the shape of a heart." core.source="hand-core 1"
+@w.lang.en.reply.done.add.one w.lang.en.reply name=done.add count=one act=make role=kind text="I added a {kind}." example="I added a house." core.source="hand-core 1"
+@w.lang.en.reply.done.add.other w.lang.en.reply name=done.add count=other act=make role=kind role=number text="I added {number} {kind:num=pl}." example="I added 3 houses." core.source="hand-core 1"
+@w.lang.en.reply.done.place.one w.lang.en.reply name=done.place count=one act=place role=thing text="I moved the {thing}." example="I moved the house." core.source="hand-core 1"
+@w.lang.en.reply.done.place.other w.lang.en.reply name=done.place count=other act=place role=thing role=number text="I moved {number} {thing:num=pl}." example="I moved 3 houses." core.source="hand-core 1"
+@w.lang.en.reply.done.remove.one w.lang.en.reply name=done.remove count=one act=remove role=thing text="I removed the {thing}." example="I removed the house." core.source="hand-core 1"
+@w.lang.en.reply.done.remove.other w.lang.en.reply name=done.remove count=other act=remove role=thing role=number text="I removed {number} {thing:num=pl}." example="I removed 3 houses." core.source="hand-core 1"
+@w.lang.en.reply.done.change.one w.lang.en.reply name=done.change count=one act=change role=thing role=value text="The {thing} is {value} now." example="The house is red now." core.source="hand-core 1"
+@w.lang.en.reply.done.change.other w.lang.en.reply name=done.change count=other act=change role=thing role=number role=value text="The {number} {thing:num=pl} are {value} now." example="The 3 houses are red now." core.source="hand-core 1"
+@w.lang.en.reply.done.connect.one w.lang.en.reply name=done.connect count=one act=connect role=thing role=target text="I connected the {thing} to the {target}." example="I connected the house to the tree." core.source="hand-core 1"
+@w.lang.en.reply.done.undo.one w.lang.en.reply name=done.undo count=one act=undo text="I undid the last change." example="I undid the last change." core.source="hand-core 1"
+@w.lang.en.reply.not_understood.one w.lang.en.reply name=not_understood count=one role=words text="I did not understand: {words}." example="I did not understand: blorp." core.source="hand-core 1"
+@w.lang.en.reply.not_understood.all.one w.lang.en.reply name=not_understood.all count=one text="I did not understand what you mean." example="I did not understand what you mean." core.source="hand-core 1"
+@w.lang.en.reply.did_you_mean.one w.lang.en.reply name=did_you_mean count=one role=request text="Did you mean: {request}?" example="Did you mean: add a house?" core.source="hand-core 1"
+@w.lang.en.reply.welcome.one w.lang.en.reply name=welcome count=one act=thank text="You're welcome." example="You're welcome." core.source="hand-core 1"
+@w.lang.en.reply.hello.one w.lang.en.reply name=hello count=one act=greet text="Hello!" example="Hello!" core.source="hand-core 1"
+@w.lang.en.reply.goodbye.one w.lang.en.reply name=goodbye count=one act=farewell text="Goodbye!" example="Goodbye!" core.source="hand-core 1"
+
+# the kit's reply names (the library's Q82: KIT_REPLIES of src/kit.mjs) and person.know.none (psys2 Q32)
+@w.lang.en.reply.done.redo.one w.lang.en.reply name=done.redo count=one text="I put it back." core.source="hand-core 1"
+@w.lang.en.reply.nothing.undo.one w.lang.en.reply name=nothing.undo count=one text="There is nothing to undo." core.source="hand-core 1"
+@w.lang.en.reply.nothing.redo.one w.lang.en.reply name=nothing.redo count=one text="There is nothing to redo." core.source="hand-core 1"
+@w.lang.en.reply.ask.key.one w.lang.en.reply name=ask.key count=one role=key text="What {key}?" core.source="hand-core 1"
+@w.lang.en.reply.ask.make_missing.one w.lang.en.reply name=ask.make_missing count=one role=name role=kind text="There is no {name} {kind} yet. Shall I make it?" core.source="hand-core 1"
+@w.lang.en.reply.ask.which_world.one w.lang.en.reply name=ask.which_world count=one role=worlds text="Which one do you mean: {worlds}?" core.source="hand-core 1"
+@w.lang.en.reply.ask.count.one w.lang.en.reply name=ask.count count=one role=given role=number text="That is {given}; I need {number}." core.source="hand-core 1"
+@w.lang.en.reply.ask.count.other w.lang.en.reply name=ask.count count=other role=given role=number text="That is {given}; I need {number}." core.source="hand-core 1"
+@w.lang.en.reply.not_understood.fragment.one w.lang.en.reply name=not_understood.fragment count=one text="That is only a fragment." core.source="hand-core 1"
+@w.lang.en.reply.not_understood.statement.one w.lang.en.reply name=not_understood.statement count=one text="I took that as a statement, not a request." core.source="hand-core 1"
+@w.lang.en.reply.refused.no_place.one w.lang.en.reply name=refused.no_place count=one role=kind role=rel role=place text="A {kind} has no place {rel} a {place}." core.source="hand-core 1"
+@w.lang.en.reply.refused.cannot_be.one w.lang.en.reply name=refused.cannot_be count=one role=thing role=value text="A {thing} cannot be {value}." core.source="hand-core 1"
+@w.lang.en.reply.refused.no_such.one w.lang.en.reply name=refused.no_such count=one role=thing text="There is no {thing} here." core.source="hand-core 1"
+@w.lang.en.reply.refused.no_world.one w.lang.en.reply name=refused.no_world count=one text="No world here takes that." core.source="hand-core 1"
+@w.lang.en.reply.refused.no_host.one w.lang.en.reply name=refused.no_host count=one text="No host here takes that." core.source="hand-core 1"
+@w.lang.en.reply.refused.fragment.one w.lang.en.reply name=refused.fragment count=one role=value text="{value} is only a fragment." core.source="hand-core 1"
+@w.lang.en.reply.refused.value.one w.lang.en.reply name=refused.value count=one role=key role=value role=values text="The {key} is one of {values}, not {value}." core.source="hand-core 1"
+@w.lang.en.reply.refused.one w.lang.en.reply name=refused count=one role=why text="{why}" core.source="hand-core 1"
+@w.lang.en.reply.too_complex.none.one w.lang.en.reply name=too_complex.none count=one text="That took too long; nothing was changed." core.source="hand-core 1"
+@w.lang.en.reply.too_complex.rest.one w.lang.en.reply name=too_complex.rest count=one text="That took too long; the rest was not done." core.source="hand-core 1"
+@w.lang.en.reply.answer.no.one w.lang.en.reply name=answer.no count=one text="All right." core.source="hand-core 1"
+@w.lang.en.reply.why.asked.one w.lang.en.reply name=why.asked count=one role=request text="You asked: {request}." core.source="hand-core 1"
+@w.lang.en.reply.why.told.one w.lang.en.reply name=why.told count=one role=key role=value text="The {key} is {value} because you said so." core.source="hand-core 1"
+@w.lang.en.reply.why.default.one w.lang.en.reply name=why.default count=one role=key role=value text="The {key} is {value} by default." core.source="hand-core 1"
+@w.lang.en.reply.why.other.one w.lang.en.reply name=why.other count=one role=key role=value role=tier text="The {key} is {value} ({tier})." core.source="hand-core 1"
+@w.lang.en.reply.why.nothing.one w.lang.en.reply name=why.nothing count=one text="Nothing changed." core.source="hand-core 1"
+@w.lang.en.reply.why.none.one w.lang.en.reply name=why.none count=one text="Nothing was done." core.source="hand-core 1"
+@w.lang.en.reply.refused.not_allowed.one w.lang.en.reply name=refused.not_allowed count=one role=kind text="That cannot be done to a {kind} here." core.source="hand-core 1"
+@w.lang.en.reply.refused.no_world_kind.one w.lang.en.reply name=refused.no_world_kind count=one role=kind text="No world here has a {kind}." core.source="hand-core 1"
+@w.lang.en.reply.refused.no_key.one w.lang.en.reply name=refused.no_key count=one role=kind role=key text="A {kind} has no {key}." core.source="hand-core 1"
+@w.lang.en.reply.refused.not_a_number.one w.lang.en.reply name=refused.not_a_number count=one role=key role=thing text="The {key} of the {thing} is not a number." core.source="hand-core 1"
+@w.lang.en.reply.refused.missing_value.one w.lang.en.reply name=refused.missing_value count=one role=key text="To what {key}?" core.source="hand-core 1"
+@w.lang.en.reply.refused.which.one w.lang.en.reply name=refused.which count=one role=kind text="Which {kind}?" core.source="hand-core 1"
+@w.lang.en.reply.refused.which.other w.lang.en.reply name=refused.which count=other role=kind role=number text="Which {kind}? There are {number}." core.source="hand-core 1"
+@w.lang.en.reply.refused.no_room.one w.lang.en.reply name=refused.no_room count=one role=kind text="There is no room for another {kind}." core.source="hand-core 1"
+@w.lang.en.reply.refused.no_world_named.one w.lang.en.reply name=refused.no_world_named count=one role=world text="There is no world called {world}." core.source="hand-core 1"
+@w.lang.en.reply.refused.no_kind_in.one w.lang.en.reply name=refused.no_kind_in count=one role=kind role=world text="There is no {kind} in {world}." core.source="hand-core 1"
+@w.lang.en.reply.refused.no_relation.one w.lang.en.reply name=refused.no_relation count=one role=relation text="There is no relation {relation} here." core.source="hand-core 1"
+@w.lang.en.reply.refused.no_aspect.one w.lang.en.reply name=refused.no_aspect count=one role=kind role=aspect text="A {kind} has no {aspect}." core.source="hand-core 1"
+@w.lang.en.reply.refused.nothing_to_show.one w.lang.en.reply name=refused.nothing_to_show count=one role=view text="Nothing here has what the view {view} shows." core.source="hand-core 1"
+@w.lang.en.reply.refused.bad_value.one w.lang.en.reply name=refused.bad_value count=one role=key text="That is not a {key} here." core.source="hand-core 1"
+@w.lang.en.reply.person.know.none.one w.lang.en.reply name=person.know.none count=one text="I do not know anything about you yet." core.source="hand-core 1"
+
+# The replies of a request and its revision (reviewer block 2026-11-15 14:00: w.request, w.dialogue): an apology for a
+# frustration, what was assumed (a constraint with origin=default), a constraint the world could not honour, the words
+# no constraint took (w.request.unread), and a revision redone.
+@w.lang.en.reply.sorry.one w.lang.en.reply name=sorry count=one text="Sorry, I will try again." example="Sorry, I will try again." core.source="hand-core 1"
+@w.lang.en.reply.assumed.one w.lang.en.reply name=assumed count=one role=key role=value text="I assumed {value} for the {key}." example="I assumed 7 for the count." core.source="hand-core 1"
+@w.lang.en.reply.not_honoured.one w.lang.en.reply name=not_honoured count=one role=words role=why text="I could not do {words}: {why}." example="I could not do in a corner: a diagram has no corners." core.source="hand-core 1"
+@w.lang.en.reply.unread.one w.lang.en.reply name=unread count=one role=words text="I did not use: {words}." example="I did not use: blorp." core.source="hand-core 1"
+@w.lang.en.reply.done.revise.one w.lang.en.reply name=done.revise count=one text="I made it again, the way you said." example="I made it again, the way you said." core.source="hand-core 1"

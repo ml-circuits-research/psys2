@@ -4037,7 +4037,7 @@
     session=places1
 
 @t.art.draw.pl02 core.test
-    input="Draw a pond."
+    input="Draw a lake."
     expect="I drew a blue lake"
     expectStatus=supported
     expectState="objects.2.kind=lake"

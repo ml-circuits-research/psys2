@@ -21,3 +21,5 @@ export function diagramGoal(ctx, { args = {} } = {}) {
   const req = parseDiagramRequest(args.text);
   return req ? { words: req.topic ? [...new Set(topicCandidates(req.topic).flatMap((c) => c.split(' ')))] : [] } : null;
 }
+/** Spec 28: the diagram as the goal of a request (the planner) and what a turn made (the check). */
+export { planRequest, requestResult } from "./engine.mjs";

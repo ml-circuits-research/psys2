@@ -1,0 +1,846 @@
+{
+ "date": "2026-11-15T13:25:19.622Z",
+ "reasoner": "matrix",
+ "mt": false,
+ "encoder": true,
+ "summary": {
+  "session": {
+   "right": 14,
+   "total": 16,
+   "medianMs": 156,
+   "withheld": 0,
+   "falseDone": 0,
+   "ms": {
+    "median": 156,
+    "p90": 1559,
+    "max": 1776
+   }
+  },
+  "variants": {
+   "right": 0,
+   "total": 0,
+   "byClass": {},
+   "medianMs": null,
+   "ms": null
+  }
+ },
+ "rows": [
+  {
+   "set": "session",
+   "context": false,
+   "id": 1,
+   "class": null,
+   "text": "creare a random diagram",
+   "tab": "diagram",
+   "ms": 1776,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "I read \"creare\" as \"create\". I drew a diagram with 7 nodes and 7 arrows. It is about making toast. The nodes are 2 ellipses and 5 rectangles. The diagram is a tree. I chose 7 nodes.",
+   "english": "I read \"creare\" as \"create\". I drew a diagram with 7 nodes and 7 arrows. It is about making toast. The nodes are 2 ellipses and 5 rectangles. The diagram is a tree. I chose 7 nodes.",
+   "stages": {
+    "total": 1775.4,
+    "stages": {
+     "request": "1x 329.6",
+     "formalize": "1x 114.7",
+     "fast.probe": "1x 79.1",
+     "init.compilePattern": "2901x 59.3",
+     "intent": "1x 17.4",
+     "understands": "1x 15.7",
+     "fast.rules": "1x 8.9",
+     "person": "1x 5.1",
+     "discourse": "2x 4.9",
+     "dialogue": "2x 1.6",
+     "knowledge": "3x 0.7",
+     "correct": "2x 0.2",
+     "interpret": "2x 0.2",
+     "encoder.available": "1x 0.1",
+     "fast.path": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "facts.index": 309876,
+     "matcher.backtrack": 2739,
+     "rules.pattern": 603,
+     "matcher.attempt": 465,
+     "emit.substituteEmit": 360,
+     "index.readString": 114
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 2,
+   "class": null,
+   "text": "this is stupid, my expectatiom was to get a nice eiagram5-10 ndes, arraws, nice layout, not a circle",
+   "tab": "diagram",
+   "ms": 1559,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "I read \"expectatiom\" as \"expectation\", \"eiagram\" as \"diagram\", \"ndes\" as \"nodes\", \"arraws\" as \"arrows\". I changed the last result. I drew a diagram with 7 nodes and 10 arrows. It is about Germany. The nodes are 3 rectangles and 1 diamond an",
+   "english": "I read \"expectatiom\" as \"expectation\", \"eiagram\" as \"diagram\", \"ndes\" as \"nodes\", \"arraws\" as \"arrows\". I changed the last result. I drew a diagram with 7 nodes and 10 arrows. It is about Germany. The nodes are 3 rectangles and 1 diamond an",
+   "stages": {
+    "total": 1558.4,
+    "stages": {
+     "formalize": "2x 1116",
+     "encoder": "2x 896.2",
+     "validate": "2x 708.1",
+     "check.formalize": "107x 456.3",
+     "intent.reread": "1x 384.7",
+     "intent": "1x 307.9",
+     "understands": "16x 302.4",
+     "ort": "13x 75.1",
+     "rules.final": "7x 70.2",
+     "dialogue": "3x 59.4",
+     "request": "1x 56.7",
+     "fast.probe": "2x 49.5",
+     "fast.segment": "2x 48",
+     "predict": "2x 35.2",
+     "interpret": "3x 9",
+     "seed": "67x 5.2",
+     "discourse": "2x 2.3",
+     "tokenize": "13x 2",
+     "knowledge": "4x 0.9",
+     "person": "2x 0.6",
+     "correct": "3x 0",
+     "encoder.available": "2x 0",
+     "encoder.prepare": "2x 0",
+     "check": "65x 0",
+     "understands.memo": "16x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 95420,
+     "diagram.layout": 49487,
+     "spell.edit": 39061,
+     "meta.worlds.near": 34216,
+     "scene.edit": 20664,
+     "rules.pattern": 16578
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 3,
+   "class": null,
+   "text": "you are saying that I am stupid?",
+   "tab": "diagram",
+   "ms": 156,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "unchanged"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": true,
+   "reply": "Which shape should I check? Name it, e.g. \"check circle1\". I understood only part of that: I did not use \"you\".",
+   "english": "Which shape should I check? Name it, e.g. \"check circle1\". I understood only part of that: I did not use \"you\".",
+   "stages": {
+    "total": 156.4,
+    "stages": {
+     "formalize": "1x 140.4",
+     "encoder": "1x 120.8",
+     "validate": "1x 74.5",
+     "check.formalize": "36x 39.3",
+     "predict": "1x 34.7",
+     "ort": "8x 33.2",
+     "fast.probe": "1x 11.2",
+     "intent": "1x 9.6",
+     "understands": "1x 9.3",
+     "rules.final": "1x 4.7",
+     "interpret": "1x 2.5",
+     "seed": "35x 1.7",
+     "request": "1x 0.5",
+     "person": "1x 0.3",
+     "discourse": "2x 0.3",
+     "tokenize": "8x 0.3",
+     "knowledge": "3x 0.3",
+     "dialogue": "2x 0.2",
+     "correct": "1x 0",
+     "encoder.available": "1x 0",
+     "encoder.prepare": "1x 0",
+     "check": "34x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "meta.worlds.near": 9008,
+     "scene.edit": 6842,
+     "matcher.backtrack": 6026,
+     "spell.edit": 3419,
+     "rules.pattern": 1942,
+     "matcher.attempt": 1322
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 4,
+   "class": null,
+   "text": "you are stupid",
+   "tab": "diagram",
+   "ms": 2,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Oh no, sorry about that, I got it wrong. Please say it again in other words, or tell me what you meant.",
+   "english": "Oh no, sorry about that, I got it wrong. Please say it again in other words, or tell me what you meant.",
+   "stages": {
+    "total": 1.8,
+    "stages": {
+     "person": "1x 0.3",
+     "request": "1x 0.3",
+     "dialogue": "1x 0.2",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "voice.tight": 3,
+     "request.act": 3,
+     "request.count": 3,
+     "request.kind": 3,
+     "expand.splitAnswerList": 1,
+     "dialogue.turn": 1
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 5,
+   "class": null,
+   "text": "Change the colour of the circle to purple.",
+   "tab": "diagram",
+   "ms": 518,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "I changed the last result. I drew a diagram with 9 nodes and 14 arrows. It is about Germany. The nodes are 9 circles. The diagram is a tree.",
+   "english": "I changed the last result. I drew a diagram with 9 nodes and 14 arrows. It is about Germany. The nodes are 9 circles. The diagram is a tree.",
+   "stages": {
+    "total": 518,
+    "stages": {
+     "formalize": "2x 431.4",
+     "encoder": "1x 302.8",
+     "validate": "1x 239",
+     "check.formalize": "51x 110.6",
+     "seed": "37x 75.4",
+     "knowledge": "6x 59.2",
+     "fast.probe": "1x 50.9",
+     "request": "2x 42.8",
+     "predict": "1x 38.1",
+     "ort": "8x 36.7",
+     "intent": "2x 35.9",
+     "lenient": "1x 35.7",
+     "understands": "2x 35",
+     "interpret": "3x 13.5",
+     "rules": "1x 9.3",
+     "rules.final": "1x 3.2",
+     "discourse": "4x 0.8",
+     "names": "1x 0.5",
+     "person": "2x 0.4",
+     "tokenize": "8x 0.4",
+     "dialogue": "4x 0.2",
+     "correct": "3x 0",
+     "encoder.available": "1x 0",
+     "encoder.prepare": "1x 0",
+     "seed.replay": "1x 0",
+     "typed": "2x 0",
+     "check": "36x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 35839,
+     "rules.pattern": 6882,
+     "emit.substituteEmit": 6620,
+     "spell.edit": 6149,
+     "matcher.attempt": 4805,
+     "meta.worlds.near": 4504
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 6,
+   "class": null,
+   "text": "add 5 random nodes",
+   "tab": "diagram",
+   "ms": 80,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "I drew a diagram with 5 nodes and 6 arrows. It is about Democratic Republic of the Congo. The nodes are 1 circle and 4 rectangles. The diagram is a tree.",
+   "english": "I drew a diagram with 5 nodes and 6 arrows. It is about Democratic Republic of the Congo. The nodes are 1 circle and 4 rectangles. The diagram is a tree.",
+   "stages": {
+    "total": 79.8,
+    "stages": {
+     "request": "1x 46.2",
+     "formalize": "1x 28.3",
+     "fast.probe": "1x 14.6",
+     "fast.rules": "1x 10.5",
+     "interpret": "2x 2.3",
+     "dialogue": "2x 0.5",
+     "person": "1x 0.4",
+     "knowledge": "3x 0.2",
+     "discourse": "2x 0.1",
+     "correct": "2x 0",
+     "encoder.available": "1x 0",
+     "fast.path": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 2242,
+     "rules.pattern": 372,
+     "matcher.attempt": 352,
+     "emit.substituteEmit": 312,
+     "index.run": 100,
+     "scene.walk": 77
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 7,
+   "class": null,
+   "text": "not all circles, better layout",
+   "tab": "diagram",
+   "ms": 285,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "I changed the last result. I drew a diagram with 5 nodes and 4 arrows. It is about doing the laundry. The nodes are 4 rectangles and 1 ellipse. The diagram is a tree.",
+   "english": "I changed the last result. I drew a diagram with 5 nodes and 4 arrows. It is about doing the laundry. The nodes are 4 rectangles and 1 ellipse. The diagram is a tree.",
+   "stages": {
+    "total": 285.1,
+    "stages": {
+     "formalize": "1x 189.5",
+     "encoder": "1x 151.8",
+     "validate": "1x 99.4",
+     "check.formalize": "36x 60.1",
+     "intent": "1x 44.4",
+     "understands": "4x 43.8",
+     "ort": "8x 34.4",
+     "predict": "1x 23.7",
+     "request": "1x 22.1",
+     "dialogue": "2x 15",
+     "fast.segment": "1x 11.8",
+     "fast.probe": "1x 10.6",
+     "rules.final": "2x 10",
+     "interpret": "2x 8.2",
+     "seed": "25x 1.9",
+     "knowledge": "3x 0.5",
+     "person": "1x 0.4",
+     "tokenize": "8x 0.3",
+     "discourse": "2x 0.1",
+     "correct": "2x 0",
+     "encoder.available": "1x 0",
+     "encoder.prepare": "1x 0",
+     "check": "24x 0",
+     "typed": "1x 0",
+     "understands.memo": "6x 0"
+    },
+    "ticks": {
+     "diagram.layout": 284287,
+     "meta.worlds.near": 10134,
+     "matcher.backtrack": 9545,
+     "scene.edit": 7803,
+     "emit.substituteEmit": 4246,
+     "spell.edit": 2617
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 8,
+   "class": null,
+   "text": "write a story about ancient hobbits with 5 chapters",
+   "tab": "editor",
+   "ms": 282,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": true,
+   "content": true,
+   "reply": "I wrote the story \"All about ancient hobbits\": 94 words in 5 chapters. I could write about 94 words about ancient hobbits from what I know (you asked for 500); I did not pad it with repetition. It is open in the Documents tab.",
+   "english": "I wrote the story \"All about ancient hobbits\": 94 words in 5 chapters. I could write about 94 words about ancient hobbits from what I know (you asked for 500); I did not pad it with repetition. It is open in the Documents tab.",
+   "stages": {
+    "total": 282.1,
+    "stages": {
+     "formalize": "1x 275.1",
+     "encoder": "1x 250.3",
+     "validate": "1x 190.2",
+     "ort": "8x 41.1",
+     "predict": "1x 29.9",
+     "fast.segment": "1x 13.1",
+     "fast.probe": "1x 8.3",
+     "rules.final": "1x 4.7",
+     "check.formalize": "1x 4.6",
+     "request": "1x 0.7",
+     "tokenize": "8x 0.5",
+     "seed": "2x 0.5",
+     "interpret": "1x 0.5",
+     "person": "1x 0.3",
+     "dialogue": "2x 0.3",
+     "knowledge": "3x 0.3",
+     "discourse": "2x 0.1",
+     "correct": "1x 0",
+     "encoder.available": "1x 0",
+     "encoder.prepare": "1x 0",
+     "check": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "meta.worlds.near": 7296,
+     "scene.edit": 4448,
+     "matcher.backtrack": 3472,
+     "spell.edit": 1529,
+     "rules.pattern": 696,
+     "emit.substituteEmit": 592
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 9,
+   "class": null,
+   "text": "create a random picture",
+   "tab": "draw",
+   "ms": 28,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I drew a sunny scene for you: a yellow sun, 2 clouds, a grey mountain, a blue house, 2 green trees, 2 pink flowers, a brown dog and a blue bird. You can change anything, for example \"make the house blue\".",
+   "english": "I drew a sunny scene for you: a yellow sun, 2 clouds, a grey mountain, a blue house, 2 green trees, 2 pink flowers, a brown dog and a blue bird. You can change anything, for example \"make the house blue\".",
+   "stages": {
+    "total": 28.2,
+    "stages": {
+     "formalize": "1x 21.3",
+     "fast.rules": "1x 8.7",
+     "fast.probe": "1x 8.3",
+     "interpret": "1x 2.2",
+     "discourse": "2x 0.5",
+     "dialogue": "2x 0.4",
+     "request": "1x 0.4",
+     "person": "1x 0.3",
+     "knowledge": "3x 0.3",
+     "correct": "1x 0",
+     "encoder.available": "1x 0",
+     "fast.path": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 2352,
+     "art.place": 1714,
+     "interpreter.visit": 528,
+     "rules.pattern": 462,
+     "matcher.attempt": 360,
+     "emit.substituteEmit": 236
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 10,
+   "class": null,
+   "text": "break in 3 layers: eater, land and sky",
+   "tab": "draw",
+   "ms": 451,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:already there"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "The sky is already there: it is light blue. You can change its color.",
+   "english": "The sky is already there: it is light blue. You can change its color.",
+   "stages": {
+    "total": 450.8,
+    "stages": {
+     "formalize": "2x 353.2",
+     "encoder": "1x 288.4",
+     "validate": "1x 200.7",
+     "check.formalize": "30x 119.2",
+     "knowledge": "6x 99.4",
+     "predict": "1x 58.1",
+     "ort": "8x 56.7",
+     "fast.probe": "1x 42.4",
+     "seed": "22x 25.9",
+     "rules": "1x 7.1",
+     "rules.final": "1x 6.6",
+     "interpret": "2x 4.8",
+     "request": "2x 1.1",
+     "discourse": "4x 0.9",
+     "person": "2x 0.5",
+     "tokenize": "8x 0.4",
+     "dialogue": "4x 0.3",
+     "correct": "2x 0",
+     "encoder.available": "1x 0",
+     "encoder.prepare": "1x 0",
+     "seed.replay": "1x 0",
+     "typed": "2x 0",
+     "check": "21x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 28781,
+     "meta.worlds.near": 10773,
+     "emit.substituteEmit": 10484,
+     "rules.pattern": 9063,
+     "scene.edit": 6822,
+     "spell.edit": 6659
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 11,
+   "class": null,
+   "text": "Change the colour of the sun to black.",
+   "tab": "draw",
+   "ms": 63,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "The sun is black now.",
+   "english": "The sun is black now.",
+   "stages": {
+    "total": 63,
+    "stages": {
+     "formalize": "1x 40.1",
+     "fast.rules": "1x 19.4",
+     "fast.probe": "1x 18.7",
+     "knowledge": "3x 16",
+     "interpret": "1x 2.4",
+     "discourse": "2x 0.5",
+     "person": "1x 0.3",
+     "request": "1x 0.3",
+     "dialogue": "2x 0.1",
+     "correct": "1x 0",
+     "encoder.available": "1x 0",
+     "fast.path": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 6792,
+     "rules.pattern": 928,
+     "matcher.attempt": 704,
+     "interpreter.visit": 660,
+     "emit.substituteEmit": 416,
+     "learned.mem": 297
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 12,
+   "class": null,
+   "text": "Change the colour of the sun to black.",
+   "tab": "draw",
+   "ms": 40,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "The sun is black now.",
+   "english": "The sun is black now.",
+   "stages": {
+    "total": 39.9,
+    "stages": {
+     "formalize": "1x 31.4",
+     "fast.probe": "1x 15.7",
+     "fast.rules": "1x 13.3",
+     "interpret": "1x 1.9",
+     "discourse": "2x 0.4",
+     "person": "1x 0.3",
+     "request": "1x 0.3",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.2",
+     "correct": "1x 0",
+     "encoder.available": "1x 0",
+     "fast.path": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 6792,
+     "rules.pattern": 928,
+     "matcher.attempt": 704,
+     "interpreter.visit": 660,
+     "learned.mem": 503,
+     "emit.substituteEmit": 416
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 13,
+   "class": null,
+   "text": "Change the size of the sun to big.",
+   "tab": "draw",
+   "ms": 38,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "The sun is big now.",
+   "english": "The sun is big now.",
+   "stages": {
+    "total": 37.7,
+    "stages": {
+     "formalize": "1x 31.3",
+     "fast.rules": "1x 16.3",
+     "fast.probe": "1x 12.5",
+     "interpret": "1x 1.6",
+     "request": "1x 0.6",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.2",
+     "correct": "1x 0",
+     "encoder.available": "1x 0",
+     "fast.path": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 7746,
+     "rules.pattern": 936,
+     "matcher.attempt": 710,
+     "interpreter.visit": 660,
+     "learned.mem": 509,
+     "emit.substituteEmit": 416
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 14,
+   "class": null,
+   "text": "Change the fill of the sun to solid.",
+   "tab": "draw",
+   "ms": 39,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "The sun is filled in now.",
+   "english": "The sun is filled in now.",
+   "stages": {
+    "total": 38.5,
+    "stages": {
+     "formalize": "1x 32.1",
+     "fast.rules": "1x 16.2",
+     "fast.probe": "1x 13.6",
+     "interpret": "1x 1.6",
+     "discourse": "2x 0.3",
+     "knowledge": "3x 0.3",
+     "request": "1x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "correct": "1x 0",
+     "encoder.available": "1x 0",
+     "fast.path": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 7220,
+     "rules.pattern": 916,
+     "matcher.attempt": 700,
+     "interpreter.visit": 660,
+     "learned.mem": 515,
+     "emit.substituteEmit": 416
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 15,
+   "class": null,
+   "text": "make sunt green",
+   "tab": "draw",
+   "ms": 55,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "The sun is green now. (I read \"sunt\" as \"sun\")",
+   "english": "The sun is green now. (I read \"sunt\" as \"sun\")",
+   "stages": {
+    "total": 55,
+    "stages": {
+     "formalize": "1x 15.7",
+     "fast.rules": "1x 7.4",
+     "fast.probe": "1x 5.6",
+     "interpret": "1x 1.8",
+     "discourse": "2x 0.4",
+     "request": "1x 0.4",
+     "knowledge": "3x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "correct": "1x 0",
+     "encoder.available": "1x 0",
+     "fast.path": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 6182,
+     "spell.edit": 1821,
+     "rules.pattern": 908,
+     "matcher.attempt": 880,
+     "interpreter.visit": 660,
+     "learned.mem": 521
+    }
+   }
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 16,
+   "class": null,
+   "text": "add a small pond",
+   "tab": "draw",
+   "ms": 219,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I drew a small pond in a corner. It has 1 lake and 1 bird. I chose 2 things.",
+   "english": "I drew a small pond in a corner. It has 1 lake and 1 bird. I chose 2 things.",
+   "stages": {
+    "total": 219,
+    "stages": {
+     "knowledge": "3x 164.7",
+     "interpret": "2x 22.9",
+     "formalize": "1x 17.8",
+     "fast.rules": "1x 7.7",
+     "fast.probe": "1x 5.6",
+     "request": "1x 3.4",
+     "discourse": "2x 3.1",
+     "person": "1x 0.3",
+     "dialogue": "2x 0.3",
+     "correct": "2x 0",
+     "encoder.available": "1x 0",
+     "fast.path": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "interpreter.visit": 2970,
+     "matcher.backtrack": 2522,
+     "knowledge.memo": 2481,
+     "art.place": 1485,
+     "learned.mem": 1464,
+     "rules.pattern": 516
+    }
+   }
+  }
+ ]
+}

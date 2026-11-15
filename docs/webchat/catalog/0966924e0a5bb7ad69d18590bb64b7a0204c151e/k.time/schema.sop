@@ -1,0 +1,274 @@
+# k.time: the calendar and the clock: months, weekdays, seasons by hemisphere, parts of the day, clock hours,
+# their order in time (position, successor, which comes before which), and spans of time (durations).
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.time core.module name=k.time version=7 exports=ordered exports=cycle exports=before exports=during exports=span exports=month exports=weekday exports=season exports=season_in exports=part_of_day exports=hour exports=duration exports=stage exports=clock_phrase exports=zone core.source="hand-core 1"
+
+# Order in time. Every time that repeats in a cycle (a weekday in the week, a month in the year, a season, a part of
+# the day, an hour of the clock) is a `k.time.ordered`: `cycle` names its cycle, `n` is its position in it, `next`
+# names the one that follows it. The last of a cycle is followed by the first again (Sunday by Monday, December by
+# January, winter by spring): `next` is the cyclic successor, and `k.time.cycle` says where a cycle starts.
+@k.time.ordered core.type of=k.time.ordered core.source="hand-core 1"
+@k.time.ordered.name core.slot of=k.time.ordered key=name required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.ordered.cycle core.slot of=k.time.ordered key=cycle required=true kind=atom kind=string type=k.time.cycle by=name core.source="hand-core 1"
+@k.time.ordered.n core.slot of=k.time.ordered key=n required=true kind=integer min=0 core.source="hand-core 1"
+@k.time.ordered.next core.slot of=k.time.ordered key=next required=true kind=atom kind=string core.source="hand-core 1"
+
+# A cycle: the times of the type `of` in order, from `first` to `last`, `length` of them; one round `lasts` the
+# duration named (a week, a year, a day).
+@k.time.cycle core.type of=k.time.cycle shared=true closed=true complete=true core.source="hand-core 1"
+@k.time.cycle.name core.slot of=k.time.cycle key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.cycle.of core.slot of=k.time.cycle key=of required=true kind=atom core.source="hand-core 1"
+@k.time.cycle.first core.slot of=k.time.cycle key=first required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.cycle.last core.slot of=k.time.cycle key=last required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.cycle.length core.slot of=k.time.cycle key=length required=true kind=integer min=1 core.source="hand-core 1"
+@k.time.cycle.lasts core.slot of=k.time.cycle key=lasts kind=atom kind=string type=k.time.duration by=name core.source="hand-core 1"
+
+# Which comes before which, inside one round of a cycle as `k.time.cycle` counts it (the week from Monday, the year
+# from January, the seasons from spring, the day from the morning, the clock from midnight). One fact says both
+# "earlier is before later" and "later is after earlier": "after" is this fact read backwards (one home).
+# Complete: every pair is derived from the complete types below, so a pair that is not there is "no".
+@k.time.before core.type of=k.time.before shared=true closed=true complete=true core.source="hand-core 1"
+@k.time.before.cycle core.slot of=k.time.before key=cycle id=true required=true kind=atom kind=string type=k.time.cycle by=name core.source="hand-core 1"
+@k.time.before.earlier core.slot of=k.time.before key=earlier id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.before.later core.slot of=k.time.before key=later id=true required=true kind=atom kind=string core.source="hand-core 1"
+# `derived=true`: a fact that a rule of this module made, written by tools/derive.mjs into the shard `derived`.
+@k.time.before.derived core.slot of=k.time.before key=derived kind=boolean core.source="hand-core 1"
+
+# Rule (one, for every cycle): of two times of one cycle, the one with the smaller position is before the other.
+@k.time.order.earlier k.time.ordered cycle=?cycle name=?earlier n=?i
+@k.time.order.later k.time.ordered cycle=?cycle name=?later n=?j
+@k.time.order.less core.check fn=lt args=?i args=?j
+@k.time.order.before k.time.before cycle=?cycle earlier=?earlier later=?later
+@k.time.order core.rule when=$k.time.order.earlier when=$k.time.order.later if=$k.time.order.less then=$k.time.order.before core.source="hand-core 1"
+
+# A month of the Gregorian calendar (cycle `year`). `n` is its number in the year; `days` in a common year,
+# `leap_days` in a leap year when that differs; `season_north` and `season_south` are its season in each hemisphere.
+@k.time.month core.type of=k.time.month extends=k.time.ordered shared=true closed=true complete=true core.source="hand-core 1"
+@k.time.month.name core.slot of=k.time.month key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.time.month.n core.slot of=k.time.month key=n required=true kind=integer min=1 max=12 core.source="hand-core 1"
+@k.time.month.days core.slot of=k.time.month key=days required=true kind=integer min=28 max=31 core.source="hand-core 1"
+@k.time.month.leap_days core.slot of=k.time.month key=leap_days kind=integer min=28 max=31 core.source="hand-core 1"
+@k.time.month.season_north core.slot of=k.time.month key=season_north required=true kind=atom type=k.time.season by=name core.source="hand-core 1"
+@k.time.month.season_south core.slot of=k.time.month key=season_south required=true kind=atom type=k.time.season by=name core.source="hand-core 1"
+
+# A day of the week (cycle `week`). `n` counts from Monday (ISO 8601); `weekend` is true for Saturday and Sunday.
+@k.time.weekday core.type of=k.time.weekday extends=k.time.ordered shared=true closed=true complete=true core.source="hand-core 1"
+@k.time.weekday.name core.slot of=k.time.weekday key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.time.weekday.n core.slot of=k.time.weekday key=n required=true kind=integer min=1 max=7 core.source="hand-core 1"
+@k.time.weekday.weekend core.slot of=k.time.weekday key=weekend required=true kind=boolean core.source="hand-core 1"
+
+# A season (cycle `seasons`). `n` is its order, spring first; `next` the season that follows (after winter comes
+# spring). The order is the same in both hemispheres; which months a season has is not (`k.time.season_in`).
+@k.time.season core.type of=k.time.season extends=k.time.ordered shared=true closed=true complete=true core.source="hand-core 1"
+@k.time.season.name core.slot of=k.time.season key=name id=true required=true enum=spring enum=summer enum=autumn enum=winter core.source="hand-core 1"
+@k.time.season.n core.slot of=k.time.season key=n required=true kind=integer min=1 max=4 core.source="hand-core 1"
+@k.time.season.next core.slot of=k.time.season key=next required=true enum=spring enum=summer enum=autumn enum=winter core.source="hand-core 1"
+
+# A season in a hemisphere: its `first` and `last` month (the meteorological seasons). Derived from the months by the
+# four rules below (a month whose season differs from the season of the month before it is the first of its
+# season; one whose season differs from the next month's is the last), so it never disagrees with the months.
+@k.time.season_in core.type of=k.time.season_in shared=true closed=true core.source="hand-core 1"
+@k.time.season_in.season core.slot of=k.time.season_in key=season id=true required=true kind=atom type=k.time.season by=name core.source="hand-core 1"
+@k.time.season_in.hemisphere core.slot of=k.time.season_in key=hemisphere id=true required=true enum=north enum=south core.source="hand-core 1"
+@k.time.season_in.first core.slot of=k.time.season_in key=first kind=atom type=k.time.month by=name core.source="hand-core 1"
+@k.time.season_in.last core.slot of=k.time.season_in key=last kind=atom type=k.time.month by=name core.source="hand-core 1"
+@k.time.season_in.derived core.slot of=k.time.season_in key=derived kind=boolean core.source="hand-core 1"
+
+# A stage of a cycle of nature (version 5, block "04:40", for cycle diagrams): the life cycle of a frog (egg, tadpole,
+# frog), of a butterfly, of a flowering plant, the water cycle. Like every k.time.ordered: `cycle`, `n` from where the
+# cycle is said to start, `next` (after the last comes the first: the frog lays eggs). `name` and `cycle` are its
+# identity (an egg is a stage of two cycles); `is` the k.words word the stage is (tadpole, chrysalis), `about` what
+# happens at it. Shards cycles-wordnet (the life cycles, from WordNet's glosses) and cycles-usgs (the water cycle).
+@k.time.stage core.type of=k.time.stage extends=k.time.ordered shared=true closed=true core.source="hand-core 1"
+@k.time.stage.name core.slot of=k.time.stage key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.stage.cycle core.slot of=k.time.stage key=cycle id=true required=true kind=atom kind=string type=k.time.cycle by=name core.source="hand-core 1"
+@k.time.stage.n core.slot of=k.time.stage key=n required=true kind=integer min=1 max=20 core.source="hand-core 1"
+@k.time.stage.next core.slot of=k.time.stage key=next required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.stage.is core.slot of=k.time.stage key=is kind=atom kind=string core.source="hand-core 1"
+@k.time.stage.about core.slot of=k.time.stage key=about kind=string core.source="hand-core 1"
+
+@k.time.season_in.differ core.check fn=neq args=?season args=?other
+@k.time.season_in.first_north.before k.time.month name=?before season_north=?other next=?month
+@k.time.season_in.first_north.month k.time.month name=?month season_north=?season
+@k.time.season_in.first_north.then k.time.season_in season=?season hemisphere=north first=?month
+@k.time.season_in.first_north core.rule when=$k.time.season_in.first_north.before when=$k.time.season_in.first_north.month if=$k.time.season_in.differ then=$k.time.season_in.first_north.then core.source="hand-core 1"
+@k.time.season_in.last_north.month k.time.month name=?month season_north=?season next=?after
+@k.time.season_in.last_north.after k.time.month name=?after season_north=?other
+@k.time.season_in.last_north.then k.time.season_in season=?season hemisphere=north last=?month
+@k.time.season_in.last_north core.rule when=$k.time.season_in.last_north.month when=$k.time.season_in.last_north.after if=$k.time.season_in.differ then=$k.time.season_in.last_north.then core.source="hand-core 1"
+@k.time.season_in.first_south.before k.time.month name=?before season_south=?other next=?month
+@k.time.season_in.first_south.month k.time.month name=?month season_south=?season
+@k.time.season_in.first_south.then k.time.season_in season=?season hemisphere=south first=?month
+@k.time.season_in.first_south core.rule when=$k.time.season_in.first_south.before when=$k.time.season_in.first_south.month if=$k.time.season_in.differ then=$k.time.season_in.first_south.then core.source="hand-core 1"
+@k.time.season_in.last_south.month k.time.month name=?month season_south=?season next=?after
+@k.time.season_in.last_south.after k.time.month name=?after season_south=?other
+@k.time.season_in.last_south.then k.time.season_in season=?season hemisphere=south last=?month
+@k.time.season_in.last_south core.rule when=$k.time.season_in.last_south.month when=$k.time.season_in.last_south.after if=$k.time.season_in.differ then=$k.time.season_in.last_south.then core.source="hand-core 1"
+
+# A part of the day (cycle `day`, from the morning): `starts_about` and `ends_about` are hours after midnight, as
+# everyday English uses them (they differ between people and places, hence `_about`).
+@k.time.part_of_day core.type of=k.time.part_of_day extends=k.time.ordered shared=true closed=true complete=true core.source="hand-core 1"
+@k.time.part_of_day.name core.slot of=k.time.part_of_day key=name id=true required=true enum=morning enum=afternoon enum=evening enum=night core.source="hand-core 1"
+@k.time.part_of_day.n core.slot of=k.time.part_of_day key=n required=true kind=integer min=1 max=4 core.source="hand-core 1"
+@k.time.part_of_day.starts_about core.slot of=k.time.part_of_day key=starts_about required=true kind=integer min=0 max=23 core.source="hand-core 1"
+@k.time.part_of_day.ends_about core.slot of=k.time.part_of_day key=ends_about required=true kind=integer min=0 max=23 core.source="hand-core 1"
+
+# An hour of the clock (cycle `clock`, from midnight): `n` is the hour of the 24-hour clock (0 to 23); `hour12` and
+# `am_pm` are the same hour on the 12-hour clock (1 to 12, am or pm); `part` is the part of the day it is in.
+@k.time.hour core.type of=k.time.hour extends=k.time.ordered shared=true closed=true complete=true core.source="hand-core 1"
+@k.time.hour.name core.slot of=k.time.hour key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.hour.n core.slot of=k.time.hour key=n required=true kind=integer min=0 max=23 core.source="hand-core 1"
+@k.time.hour.hour12 core.slot of=k.time.hour key=hour12 required=true kind=integer min=1 max=12 core.source="hand-core 1"
+@k.time.hour.am_pm core.slot of=k.time.hour key=am_pm required=true enum=am enum=pm core.source="hand-core 1"
+@k.time.hour.part core.slot of=k.time.hour key=part required=true kind=atom type=k.time.part_of_day by=name core.source="hand-core 1"
+
+# How the clock names a time by an hour (block 09:20 K7, PSys2's real turn r0586 "today is Friday" and its clock turns):
+# "o'clock", "half past", "quarter to". `minutes` is what the phrase adds to the hour it names ("half past 3" is 3:30);
+# a phrase with "to" names the hour that comes next and takes minutes away ("quarter to 4" is 3:45: minutes -15).
+@k.time.clock_phrase core.type of=k.time.clock_phrase shared=true closed=true complete=true core.source="hand-core 1"
+@k.time.clock_phrase.name core.slot of=k.time.clock_phrase key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.clock_phrase.minutes core.slot of=k.time.clock_phrase key=minutes required=true kind=integer min=-59 max=59 core.source="hand-core 1"
+
+# Which time lies within which span (Round 12, the preposition "during"): an hour within its part of the day ("9 am
+# is during the morning"); a month within its season, in the `hemisphere` said ("January is during winter" in the
+# north, during summer in the south). Derived by three rules from the hours and the months, so it never disagrees with
+# them. Complete: a pair that is not there is "no" ("3 pm is not during the morning").
+@k.time.during core.type of=k.time.during shared=true closed=true complete=true core.source="hand-core 1"
+@k.time.during.time core.slot of=k.time.during key=time id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.during.span core.slot of=k.time.during key=span id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.during.hemisphere core.slot of=k.time.during key=hemisphere id=true enum=north enum=south core.source="hand-core 1"
+# `derived=true`: a fact that a rule of this module made, written by tools/derive.mjs into the shard `derived`.
+@k.time.during.derived core.slot of=k.time.during key=derived kind=boolean core.source="hand-core 1"
+@k.time.during.hour.when k.time.hour name=?time part=?span
+@k.time.during.hour.then k.time.during time=?time span=?span
+@k.time.during.hour core.rule when=$k.time.during.hour.when then=$k.time.during.hour.then core.source="hand-core 1"
+@k.time.during.north.when k.time.month name=?time season_north=?span
+@k.time.during.north.then k.time.during time=?time span=?span hemisphere=north
+@k.time.during.north core.rule when=$k.time.during.north.when then=$k.time.during.north.then core.source="hand-core 1"
+@k.time.during.south.when k.time.month name=?time season_south=?span
+@k.time.during.south.then k.time.during time=?time span=?span hemisphere=south
+@k.time.during.south core.rule when=$k.time.during.south.when then=$k.time.during.south.then core.source="hand-core 1"
+
+# A named span of time that holds other times (block 07:40, on top of k.time.during): every time of each `cycle` it
+# names lies within it (the week holds the weekdays; the year the months and the seasons), and it lies itself
+# `within` another span (dawn within the morning, dusk within the evening), from about `starts_about` to about
+# `ends_about` (hours after midnight). The weekend holds the weekdays whose `weekend` is true (Saturday, Sunday).
+# "The day" is no span here: in English it is both the 24 hours of the clock and the daytime ("during the day" is
+# not at night), so a span "day" that held every hour would answer "is midnight during the day" with yes.
+@k.time.span core.type of=k.time.span shared=true closed=true complete=true core.source="hand-core 1"
+@k.time.span.name core.slot of=k.time.span key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.span.cycle core.slot of=k.time.span key=cycle many=true kind=atom type=k.time.cycle by=name core.source="hand-core 1"
+@k.time.span.within core.slot of=k.time.span key=within kind=atom kind=string type=k.time.part_of_day by=name core.source="hand-core 1"
+@k.time.span.starts_about core.slot of=k.time.span key=starts_about kind=integer min=0 max=23 core.source="hand-core 1"
+@k.time.span.ends_about core.slot of=k.time.span key=ends_about kind=integer min=0 max=23 core.source="hand-core 1"
+# Three rules make k.time.during from the spans: a time of a cycle a span names; a span within another; a weekday of
+# the weekend.
+@k.time.during.cycle.span k.time.span name=?span cycle=?cycle
+@k.time.during.cycle.time k.time.ordered cycle=?cycle name=?time
+@k.time.during.cycle.then k.time.during time=?time span=?span
+@k.time.during.cycle core.rule when=$k.time.during.cycle.span when=$k.time.during.cycle.time then=$k.time.during.cycle.then core.source="hand-core 1"
+@k.time.during.within.when k.time.span name=?time within=?span
+@k.time.during.within.then k.time.during time=?time span=?span
+@k.time.during.within core.rule when=$k.time.during.within.when then=$k.time.during.within.then core.source="hand-core 1"
+@k.time.during.weekend.when k.time.weekday name=?time weekend=true
+@k.time.during.weekend.then k.time.during time=?time span=weekend
+@k.time.during.weekend core.rule when=$k.time.during.weekend.when then=$k.time.during.weekend.then core.source="hand-core 1"
+
+# A time zone of the IANA time zone database (tzdata; block 15:35 item 3): `name` its id (Europe/Bucharest); `country_code`
+# (many) the ISO 3166 two-letter codes of the countries it covers (the join to k.geo.country by code2); `lat` and `lon`
+# the principal place of the zone, in degrees; `offset_january` and `offset_july` its UTC offset in minutes in
+# January and July of the year the shard says (120 and 180 for Bucharest in 2026); `summer_time` true when they
+# differ; `about` the database's comment (the part of a country it covers). Imported by tools/import/tzdata.mjs.
+@k.time.zone core.type of=k.time.zone shared=true closed=true core.source="hand-core 1"
+@k.time.zone.name core.slot of=k.time.zone key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.zone.country_code core.slot of=k.time.zone key=country_code many=true required=true kind=atom type=k.geo.country by=code2 core.source="hand-core 1"
+@k.time.zone.lat core.slot of=k.time.zone key=lat required=true kind=number min=-90 max=90 core.source="hand-core 1"
+@k.time.zone.lon core.slot of=k.time.zone key=lon required=true kind=number min=-180 max=180 core.source="hand-core 1"
+@k.time.zone.offset_january core.slot of=k.time.zone key=offset_january required=true kind=integer min=-720 max=840 core.source="hand-core 1"
+@k.time.zone.offset_july core.slot of=k.time.zone key=offset_july required=true kind=integer min=-720 max=840 core.source="hand-core 1"
+@k.time.zone.summer_time core.slot of=k.time.zone key=summer_time required=true kind=boolean core.source="hand-core 1"
+@k.time.zone.about core.slot of=k.time.zone key=about kind=string core.source="hand-core 1"
+
+# A span of time: it is `count` times the span `unit` names (a week is 7 days), or about `count_about` times
+# (a month is about 30 days). A span may be told in several units, one fact each (a week is 7 days, a week is 168
+# hours): `name` and `unit` together are its identity. The second has no smaller unit here.
+@k.time.duration core.type of=k.time.duration shared=true closed=true core.source="hand-core 1"
+@k.time.duration.name core.slot of=k.time.duration key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.duration.count core.slot of=k.time.duration key=count kind=number min=0 core.source="hand-core 1"
+@k.time.duration.count_about core.slot of=k.time.duration key=count_about excludes=count kind=number min=0 core.source="hand-core 1"
+@k.time.duration.unit core.slot of=k.time.duration key=unit id=true kind=atom kind=string type=k.units.unit by=name core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.time.word.month core.word text=month text=months means=k.time.month core.source="hand-core 1"
+@k.time.word.weekday core.word text=weekday text=weekdays means=k.time.weekday core.source="hand-core 1"
+@k.time.word.season core.word text=season text=seasons means=k.time.season core.source="hand-core 1"
+@k.time.word.duration core.word text=long text=lasts text=duration means=k.time.duration core.source="hand-core 1"
+@k.time.word.zone core.word text="time zone" text="time zones" text=timezone means=k.time.zone core.source="hand-core 1"
+@k.time.word.days core.word text=days means=k.time.month.days core.source="hand-core 1"
+@k.time.word.weekend core.word text=weekend means=k.time.weekday.weekend core.source="hand-core 1"
+@k.time.word.span core.word text=span text="span of time" means=k.time.span core.source="hand-core 1"
+@k.time.word.during core.word text=during means=k.time.during core.source="hand-core 1"
+@k.time.word.before core.word text=before text=after text=earlier text=later text=precedes text=follows means=k.time.before core.source="hand-core 1"
+@k.time.word.next core.word text=next text="comes after" text=follows text=following means=k.time.ordered.next core.source="hand-core 1"
+@k.time.word.cycle core.word text=cycle text=round means=k.time.cycle core.source="hand-core 1"
+@k.time.word.part_of_day core.word text="part of the day" text="time of day" means=k.time.part_of_day core.source="hand-core 1"
+@k.time.word.hour core.word text=hour text="o'clock" text=clock means=k.time.hour core.source="hand-core 1"
+@k.time.word.clock_phrase core.word text="half past" text="quarter past" text="quarter to" text="time on the clock" means=k.time.clock_phrase core.source="hand-core 1"
+@k.time.word.hemisphere core.word text=hemisphere text=hemispheres means=k.time.season_in.hemisphere core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.time.word.key.ordered.name core.word text=name means=k.time.ordered.name core.source="hand-core 1"
+@k.time.word.key.ordered.cycle core.word text=cycle means=k.time.ordered.cycle core.source="hand-core 1"
+@k.time.word.key.ordered.n core.word text=n text=position text=order means=k.time.ordered.n core.source="hand-core 1"
+@k.time.word.key.cycle.of core.word text=of means=k.time.cycle.of core.source="hand-core 1"
+@k.time.word.key.cycle.first core.word text=first means=k.time.cycle.first core.source="hand-core 1"
+@k.time.word.key.cycle.last core.word text=last means=k.time.cycle.last core.source="hand-core 1"
+@k.time.word.key.cycle.length core.word text=length means=k.time.cycle.length core.source="hand-core 1"
+@k.time.word.key.cycle.lasts core.word text=lasts means=k.time.cycle.lasts core.source="hand-core 1"
+@k.time.word.key.before.earlier core.word text=earlier means=k.time.before.earlier core.source="hand-core 1"
+@k.time.word.key.before.later core.word text=later means=k.time.before.later core.source="hand-core 1"
+@k.time.word.key.before.derived core.word text=derived means=k.time.before.derived core.source="hand-core 1"
+@k.time.word.key.month.n core.word text=n means=k.time.month.n core.source="hand-core 1"
+@k.time.word.key.month.days core.word text=long means=k.time.month.days core.source="hand-core 1"
+@k.time.word.key.month.leap_days core.word text="leap days" means=k.time.month.leap_days core.source="hand-core 1"
+@k.time.word.key.month.season_north core.word text="season north" means=k.time.month.season_north core.source="hand-core 1"
+@k.time.word.key.month.season_south core.word text="season south" means=k.time.month.season_south core.source="hand-core 1"
+@k.time.word.key.weekday.n core.word text=n means=k.time.weekday.n core.source="hand-core 1"
+@k.time.word.key.season.n core.word text=n means=k.time.season.n core.source="hand-core 1"
+@k.time.word.key.season.next core.word text=next means=k.time.season.next core.source="hand-core 1"
+@k.time.word.key.season_in.first core.word text=first means=k.time.season_in.first core.source="hand-core 1"
+@k.time.word.key.season_in.last core.word text=last means=k.time.season_in.last core.source="hand-core 1"
+@k.time.word.key.season_in.derived core.word text=derived means=k.time.season_in.derived core.source="hand-core 1"
+@k.time.word.key.stage.cycle core.word text=cycle means=k.time.stage.cycle core.source="hand-core 1"
+@k.time.word.key.stage.n core.word text=n means=k.time.stage.n core.source="hand-core 1"
+@k.time.word.key.stage.next core.word text=next means=k.time.stage.next core.source="hand-core 1"
+@k.time.word.key.stage.is core.word text=is means=k.time.stage.is core.source="hand-core 1"
+@k.time.word.key.stage.about core.word text=about means=k.time.stage.about core.source="hand-core 1"
+@k.time.word.key.part_of_day.n core.word text=n means=k.time.part_of_day.n core.source="hand-core 1"
+@k.time.word.key.part_of_day.starts_about core.word text=starts means=k.time.part_of_day.starts_about core.source="hand-core 1"
+@k.time.word.key.part_of_day.ends_about core.word text=ends means=k.time.part_of_day.ends_about core.source="hand-core 1"
+@k.time.word.key.hour.n core.word text=n means=k.time.hour.n core.source="hand-core 1"
+@k.time.word.key.hour.hour12 core.word text=hour12 text="12-hour clock" means=k.time.hour.hour12 core.source="hand-core 1"
+@k.time.word.key.hour.am_pm core.word text="am pm" text=am text=pm means=k.time.hour.am_pm core.source="hand-core 1"
+@k.time.word.key.hour.part core.word text=part means=k.time.hour.part core.source="hand-core 1"
+@k.time.word.key.clock_phrase.minutes core.word text=minutes means=k.time.clock_phrase.minutes core.source="hand-core 1"
+@k.time.word.key.during.span core.word text=span means=k.time.during.span core.source="hand-core 1"
+@k.time.word.key.during.hemisphere core.word text=hemisphere means=k.time.during.hemisphere core.source="hand-core 1"
+@k.time.word.key.during.derived core.word text=derived means=k.time.during.derived core.source="hand-core 1"
+@k.time.word.key.span.cycle core.word text=cycle means=k.time.span.cycle core.source="hand-core 1"
+@k.time.word.key.span.within core.word text=within means=k.time.span.within core.source="hand-core 1"
+@k.time.word.key.span.starts_about core.word text=starts means=k.time.span.starts_about core.source="hand-core 1"
+@k.time.word.key.span.ends_about core.word text=ends means=k.time.span.ends_about core.source="hand-core 1"
+@k.time.word.key.zone.country_code core.word text="country code" means=k.time.zone.country_code core.source="hand-core 1"
+@k.time.word.key.zone.lat core.word text=lat means=k.time.zone.lat core.source="hand-core 1"
+@k.time.word.key.zone.lon core.word text=lon means=k.time.zone.lon core.source="hand-core 1"
+@k.time.word.key.zone.offset_january core.word text="offset january" means=k.time.zone.offset_january core.source="hand-core 1"
+@k.time.word.key.zone.offset_july core.word text="offset july" means=k.time.zone.offset_july core.source="hand-core 1"
+@k.time.word.key.zone.summer_time core.word text="summer time" means=k.time.zone.summer_time core.source="hand-core 1"
+@k.time.word.key.zone.about core.word text=about means=k.time.zone.about core.source="hand-core 1"
+@k.time.word.key.duration.count core.word text=count text=many means=k.time.duration.count core.source="hand-core 1"
+@k.time.word.key.duration.count_about core.word text=count means=k.time.duration.count_about core.source="hand-core 1"
+@k.time.word.key.duration.unit core.word text=unit means=k.time.duration.unit core.source="hand-core 1"

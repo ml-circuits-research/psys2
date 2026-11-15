@@ -1,0 +1,16 @@
+# w.lang.en/shards/capacity-frames: a thing made for a number of people ("Add a table for 4"; reviewer block 2026-11-15,
+# w.seating version 3): the frame and its template; the template names the attribute the number sets (`seats`, the key
+# of w.seating's capacity), so a host binds "for 4" with no rule of its own.
+# sources: hand-core 1 (written by hand in this repository; own)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.en.frame.acts.make.for w.lang.en.frame name=acts.make.for act=make set=acts priority=13 role=thing role=value example="Add a table for 4." core.source="hand-core 1"
+@w.lang.en.part.acts.make.for.1 w.lang.en.part frame=acts.make.for at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.make.for.2 w.lang.en.part frame=acts.make.for at=2 is=verb act=make core.source="hand-core 1"
+@w.lang.en.part.acts.make.for.3 w.lang.en.part frame=acts.make.for at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.make.for.4 w.lang.en.part frame=acts.make.for at=4 is=role role=thing takes=words core.source="hand-core 1"
+@w.lang.en.part.acts.make.for.5 w.lang.en.part frame=acts.make.for at=5 is=word word="for" word="seating" word="that seats" word="with room for" word="with seats for" word="with places for" core.source="hand-core 1"
+@w.lang.en.part.acts.make.for.6 w.lang.en.part frame=acts.make.for at=6 is=role role=value takes=number core.source="hand-core 1"
+@w.lang.en.part.acts.make.for.7 w.lang.en.part frame=acts.make.for at=7 is=word word="people" word="persons" word="guests" word="seats" word="places" word="of us" optional=yes core.source="hand-core 1"
+@w.lang.en.template.make.for w.lang.en.template name=make.for act=make shape=kind.value.seats role=kind role=value attribute=seats frame=acts.make.for text="add a {kind} for {value}." example="Add a table for 4." core.source="hand-core 1"

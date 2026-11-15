@@ -24,6 +24,7 @@
  * through `ctx.sessionFacts()` and the operation things.show of session.things (spec 23); this module only offers the facts.
  */
 import { budget } from './budget.mjs';
+import { RequestDialogue } from './request.mjs';
 import { en } from '../lang/en.mjs';
 import { GRAMMAR } from './continuation.mjs';
 import { touched } from './followup.mjs';
@@ -70,12 +71,13 @@ export class Dialogue {
   constructor(session) {
     this.s = session;
     this.log = [];        // one plain record per turn, oldest first (JSON: part of the memory and of the undo snapshot)
+    this.requests = new RequestDialogue();   // the live w.dialogue (spec 28): per tab world the last request, its result and the state before it
     this.note = null;     // what this turn's reading did (the fill sources of a completed fragment), moved into its record
   }
 
   // ---- memory -------------------------------------------------------------------------------------------------------------------------------------
-  toJSON() { return { v: 1, log: this.log.map((r) => ({ ...r })) }; }
-  load(json) { if (json && json.v === 1 && Array.isArray(json.log)) this.log = json.log.map((r) => ({ ...r })); return this; }
+  toJSON() { return { v: 1, log: this.log.map((r) => ({ ...r })), ...(this.requests ? { requests: this.requests.toJSON() } : {}) }; }   // requests: the live w.dialogue of spec 28 (src/dialog/request.mjs)
+  load(json) { if (json && json.v === 1 && Array.isArray(json.log)) { this.log = json.log.map((r) => ({ ...r })); this.requests = new RequestDialogue().load(json.requests); } return this; }
 
   get lang() { return this.s.engine.interp.lang; }
   get disc() { return this.s.discourse; }

@@ -26,15 +26,15 @@ const bare = (v) => String(v ?? '').replace(/^"|"$/g, '');
 const plural = (n) => { try { return new Intl.PluralRules('ro').select(n); } catch { return n === 1 ? 'one' : n === 0 || (n % 100 >= 1 && n % 100 <= 19) ? 'few' : 'other'; } };
 /** A world's own act said with the catalog's reply that says the same thing (the rest have no catalog reply yet: questions.md [KNOW]). */
 const REPLY_OF = {
-  'diagram.shaped': (r) => ({ name: 'done.make.shape', roles: { kind: 'diagram', shape: r.thing } }),
+  'diagram.shaped': (r) => ({ name: 'done.make.shape', roles: { kind: 'diagram', shape: r.thing }, uses: ['thing'] }),   // `uses`: the roles of the act the catalog's reply says
 };
 const posOf = (cls) => (cls?.startsWith('v.') ? 'verb' : cls?.startsWith('a.') ? 'adj' : 'noun');
 
 export async function openLangRo({ facts = null, unimorph = false, gloss: glossFor = null, local: withLocal = true } = {}) {
-  facts ??= (await import('./ro.facts.generated.mjs?v=268c444d52')).LANG_RO_FACTS;
+  facts ??= (await import('./ro.facts.generated.mjs?v=70639dca60')).LANG_RO_FACTS;
   const local = withLocal ? (await import('./ro.local.mjs?v=8cba184447')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
   // the large dictionary (3,466 lemmas derived from UniMorph, CC BY-SA 3.0, no senses) is a module of its own, loaded only when asked for; for a letter the hand file comes first, then the derived rows
-  const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=56f524c863')).LANG_RO_UNIMORPH : {};
+  const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=723f88d67c')).LANG_RO_UNIMORPH : {};
   const text = (letter) => [facts.dictionary[letter], local.dictionary[letter], extra[letter]].filter(Boolean).join('\n');
   const lib = await import('../vendor/sopworld/sopworld.mjs?v=1b73c37222');
   const world = new lib.World();
@@ -154,7 +154,10 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
     composeRo(say) {
       if (!say?.act) return null;
       // the catalog's reply of the same meaning first; the reply of the act's own name (the catalog's, or a local one in the catalog's shape) when that one cannot be said
-      for (const how of [REPLY_OF[say.act]?.(say.roles ?? {}), { name: say.act, roles: say.roles ?? {} }]) { const t = how && this.reply(how); if (t) return t; }
+      // a reply that would drop a role the act gives ("7 nodes on its outline") comes after the reply of the act's own name that says it
+      const mapped = REPLY_OF[say.act]?.(say.roles ?? {}), own = { name: say.act, roles: say.roles ?? {} };
+      const drops = mapped?.uses && Object.keys(say.roles ?? {}).some((k) => !mapped.uses.includes(k));
+      for (const how of drops ? [own, mapped] : [mapped, own]) { const t = how && this.reply(how); if (t) return t; }
       return null;
     },
     /**

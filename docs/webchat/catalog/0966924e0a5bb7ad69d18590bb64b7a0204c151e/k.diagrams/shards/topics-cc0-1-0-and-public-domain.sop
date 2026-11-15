@@ -1,0 +1,28 @@
+# k.diagrams/shards/topics-cc0-1-0-and-public-domain: 23 topics a diagram can be drawn about, read from the fills of k.diagrams over facts under CC0-1.0 AND public-domain (block 07:30 item 9): each with the kinds of diagram it fills, the types it comes from and the nodes of its largest diagram. Derived; rebuilt by the build.
+# sources: hand-core 1 (the facts the topics are read from)
+# license: CC0-1.0 AND public-domain
+# script: tools/diagram-topics.mjs
+
+@k.diagrams.topic.cc0_1_0_and_public_domain.boiling_an_egg k.diagrams.topic name="boiling an egg" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=8 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.brushing_teeth k.diagrams.topic name="brushing teeth" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=4 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.cooking_pasta k.diagrams.topic name="cooking pasta" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=9 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.covering_a_cough k.diagrams.topic name="covering a cough" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=5 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.crossing_the_road k.diagrams.topic name="crossing the road" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=7 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.doing_the_laundry k.diagrams.topic name="doing the laundry" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=9 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.drop_cover_and_hold_on k.diagrams.topic name="drop, cover and hold on" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=3 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.feeding_a_pet k.diagrams.topic name="feeding a pet" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=5 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.getting_dressed k.diagrams.topic name="getting dressed" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=8 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.keeping_food_safe k.diagrams.topic name="keeping food safe" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=4 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.making_a_sandwich k.diagrams.topic name="making a sandwich" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=7 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.making_tea k.diagrams.topic name="making tea" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=8 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.making_the_bed k.diagrams.topic name="making the bed" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=5 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.making_toast k.diagrams.topic name="making toast" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=7 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.packing_a_school_bag k.diagrams.topic name="packing a school bag" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=7 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.planting_a_seed k.diagrams.topic name="planting a seed" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=9 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.sending_a_letter k.diagrams.topic name="sending a letter" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=6 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.setting_the_table k.diagrams.topic name="setting the table" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=6 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.stop_drop_and_roll k.diagrams.topic name="stop, drop and roll" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=3 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.tying_shoelaces k.diagrams.topic name="tying shoelaces" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=5 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.washing_hands k.diagrams.topic name="washing hands" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=5 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.washing_the_dishes k.diagrams.topic name="washing the dishes" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=8 core.source="hand-core 1"
+@k.diagrams.topic.cc0_1_0_and_public_domain.watering_a_plant k.diagrams.topic name="watering a plant" kind=flowchart kind=pipeline from=k.procedures.howto_step nodes=5 core.source="hand-core 1"

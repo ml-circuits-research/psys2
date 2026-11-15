@@ -1,0 +1,11 @@
+# w.lang.ro/shards/words-w.calendar: the Romanian word for each kind of the world schema w.calendar (the library's Q79, reviewer 16:45),
+# so a host names a kind in Romanian with no wordOf of its own; the word is a lemma of the hand dictionary where it has
+# one (its gender and plural from its class: calendar, calendare). Not in English vocab.json (an English index).
+# sources: hand-core 1 (written by hand in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.ro.word.w.calendar.world core.word text="calendar" means=w.calendar of=std.schema.world.name core.source="hand-core 1"
+@w.lang.ro.word.w.calendar.calendar core.word text="calendar" means=w.calendar.calendar core.source="hand-core 1"
+@w.lang.ro.word.w.calendar.event core.word text="eveniment" means=w.calendar.event core.source="hand-core 1"
+@w.lang.ro.word.w.calendar.view core.word text="vedere" means=w.calendar.view core.source="hand-core 1"

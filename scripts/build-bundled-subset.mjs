@@ -58,7 +58,8 @@ for (const w of await facts.wires('k.colours.colour')) {
 }
 for (const m of byName.values()) if (m.f.rgb && m.f.rgb_about) delete m.f.rgb_about;
 const colours = [...byName.values()];
-const numbers = await facts.wires('k.values.number');
+// number words: k.values.number until catalog 3e9aa5a2, then their one home w.lang.en.number (same fields); bundled as k.values.number so the readers stay as they are
+const numbers = [...await facts.wires('k.values.number'), ...(await facts.wires('w.lang.en.number')).map((w) => ({ ...w, id: w.id.replace(/^w\.lang\.en\.number/, 'k.values.number'), type: 'k.values.number' }))];
 if (!colours.length || !numbers.length) { console.error('the catalog has no k.colours colours or k.values numbers: nothing to bundle'); process.exit(1); }
 // one fact the colour lexicon needs and the catalog has in other worlds, kept on the bundled colour wires: `thing=true` when the name is also a drawable thing of k.objects (a tomato, a plum) or has a verb sense in k.words (rust)
 const objectNames = new Set((await facts.wires('k.objects.object')).map((w) => String(w.f.name?.[0]).toLowerCase()));

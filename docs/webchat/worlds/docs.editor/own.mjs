@@ -5,5 +5,7 @@
 export {
   initialState, summary, view, adopt, make as makeDocument, dictate, dictateStop, read, download, stats, mentions, isEmpty, whatIs, say, fromList, holdings, fillTable, whatSelected, checkTask, countTasks, listTasks,
   addHeading, addList, addParagraph, undo as docUndo, redo as docRedo,
-} from './editor.mjs?v=adc40dfcac';
-export { digest, compose } from './textgen.mjs?v=cd17d2ff8f';   // the summary and the composition (spec 26), from the library's std.summarize / std.compose
+} from './editor.mjs?v=eb3053781e';
+export { digest, compose } from './textgen.mjs?v=88a87c553e';   // the summary and the composition (spec 26), from the library's std.summarize / std.compose
+/** Spec 28: a text as the goal of a request (the planner) and what a turn wrote (the check). */
+export { planRequest, requestResult } from "./textgen.mjs?v=88a87c553e";

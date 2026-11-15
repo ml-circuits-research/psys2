@@ -1,0 +1,30 @@
+# k.kinds/shards/relations-charts: the keys of the types of k.charts read as relations: 25 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.charts.encoding.about k.kinds.relation type=k.charts.encoding key=about subject=encoding object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.kind.form k.kinds.relation type=k.charts.kind key=form subject=kind object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.kind.mark k.kinds.relation type=k.charts.kind key=mark subject=kind object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.kind.encoding k.kinds.relation type=k.charts.kind key=encoding subject=kind object=thing object_type=k.charts.encoding found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.charts.kind.x k.kinds.relation type=k.charts.kind key=x subject=kind object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.kind.y k.kinds.relation type=k.charts.kind key=y subject=kind object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.kind.whole k.kinds.relation type=k.charts.kind key=whole subject=kind object=boolean found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.kind.about k.kinds.relation type=k.charts.kind key=about subject=kind object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.kind.source k.kinds.relation type=k.charts.kind key=source subject=kind object=thing object_type=k.charts.source found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.charts.rank.encoding k.kinds.relation type=k.charts.rank key=encoding subject=rank object=thing object_type=k.charts.encoding found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.charts.rank.data k.kinds.relation type=k.charts.rank key=data subject=rank object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.rank.source k.kinds.relation type=k.charts.rank key=source subject=rank object=thing object_type=k.charts.source found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.charts.rank.rank k.kinds.relation type=k.charts.rank key=rank subject=rank object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.relationship.about k.kinds.relation type=k.charts.relationship key=about subject=relationship object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.relationship.source k.kinds.relation type=k.charts.relationship key=source subject=relationship object=thing object_type=k.charts.source found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.charts.rule.relationship k.kinds.relation type=k.charts.rule key=relationship subject=rule object=thing object_type=k.charts.relationship found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.charts.rule.kind k.kinds.relation type=k.charts.rule key=kind subject=rule object=kind object_type=k.charts.kind found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.charts.rule.rank k.kinds.relation type=k.charts.rule key=rank subject=rule object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.rule.categories_max k.kinds.relation type=k.charts.rule key=categories_max subject=rule object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.rule.series k.kinds.relation type=k.charts.rule key=series subject=rule object=value object_type=k.expect.amount found=value core.source="hand-core 1"
+@k.kinds.relation.k.charts.rule.points_min k.kinds.relation type=k.charts.rule key=points_min subject=rule object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.rule.about k.kinds.relation type=k.charts.rule key=about subject=rule object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.rule.source k.kinds.relation type=k.charts.rule key=source subject=rule object=thing object_type=k.charts.source found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.charts.source.cite k.kinds.relation type=k.charts.source key=cite subject=source object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.source.year k.kinds.relation type=k.charts.source key=year subject=source object=number found=schema core.source="hand-core 1"

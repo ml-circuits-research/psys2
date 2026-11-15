@@ -2,8 +2,8 @@
 // `compose` (a document written from knowledge, from `std.compose`, into the editor). The adapters (src/dialog/textgen.mjs) are installed by the engine in a well-known
 // global once the library is loaded; without them these operations decline plainly. There is no local generator and no fallback text. Browser-safe.
 // (Moved here from docs.reader when the document-analysis tab was removed: one Documents tab, the editor with the composition and the summary.)
-import { allTexts } from './model.mjs?v=3c8796265a';
-import { createDoc, finish } from './editor.mjs?v=adc40dfcac';
+import { allTexts } from './model.mjs?v=2f37cc47a6';
+import { createDoc, finish } from './editor.mjs?v=eb3053781e';
 
 const textGen = () => globalThis[Symbol.for('psys2.textgen')] ?? null;
 const no = (status, note) => ({ status, note });
@@ -64,4 +64,48 @@ function usedNote(r) {
   const unused = r.unused.slice(0, 4), unlinked = (r.unlinked ?? []).slice(0, 4);
   const and = (xs) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}` : xs[0]);
   return `From your topic I used ${and(used)}. ${unlinked.length ? `I know ${and(unlinked)}, but nothing that links ${unlinked.length > 1 ? 'them' : 'it'} to ${r.topic}, so I left ${unlinked.length > 1 ? 'them' : 'it'} out. ` : ''}${unused.length ? `I found nothing I know in ${quoteList(unused)}${r.unused.length > unused.length ? ` and ${r.unused.length - unused.length} more` : ''}. ` : ''}`;
+}
+
+// ---- spec 28: a text as the goal of a request (w.request) ---------------------------------------------------------------------------------------------------
+/** What the turn wrote, for the check of a request (spec 28 section 4): the chapters (headings that start chapters) and the words of the document. Read-only. */
+export function requestResult(ctx) {
+  const bl = ctx.state?.blocks ?? [];
+  const words = bl.reduce((a, b) => a + String(b.text ?? '').split(/\s+/).filter(Boolean).length, 0);
+  const chapters = bl.filter((b) => b.kind === 'heading' && (b.level ?? 2) <= 2).length;
+  return { parts: chapters, chapters, words, kinds: {} };
+}
+
+/**
+ * PLAN A TEXT FOR A REQUEST (spec 28 section 4, step 5): the kind (story, essay, report), the topic, the chapters and the length said, the rest from the expectation of the kind
+ * (request.sop w.expect until k.expect is read from the pin): "short" and "long" are factors on its usual words. The composer is the library's std.compose (textgen.mjs).
+ */
+export function planRequest(ctx, goal = {}) {
+  const f = goal.request?.facts ?? [];
+  const exp = goal.expect ?? {};
+  const ch = f.find((x) => x.key === 'length' && x.unit === 'chapter')?.n;
+  const said = f.find((x) => x.key === 'length' && x.unit === 'word')?.n;
+  const [lo, hi] = exp.words ?? [150, 300];
+  const words = said ?? (goal.size === 'small' ? Math.max(30, Math.round(lo * (exp.small ?? 0.4))) : goal.size === 'big' ? Math.round(hi * (exp.big ?? 3)) : undefined);
+  const r = compose(ctx, { type: goal.target ?? undefined, topic: goal.topic ?? undefined, chapters: ch, words, seed: goal.seed });
+  if (r?.status !== 'supported') return r;
+  const st = ctx.state, cannot = [];
+  // the chapters said: the composer's parts are put together into that many (the later parts go under the last heading kept); more than the knowledge has is said, not padded
+  const heads = () => st.blocks.filter((b) => b.kind === 'heading' && (b.level ?? 2) <= 2);
+  let changed = false;
+  if (ch && heads().length > ch) { changed = true; const drop = new Set(heads().slice(ch).map((b) => b.id ?? b)); st.blocks = st.blocks.filter((b) => !drop.has(b.id ?? b)); }
+  else if (ch && heads().length < ch) cannot.push({ key: 'length', words: `${ch} chapters` });
+  // a short text: the sections keep their first sentences until the length fits (never below one sentence per section)
+  if (words && !said && goal.size === 'small') {
+    const count = () => st.blocks.reduce((a, b) => a + String(b.text ?? '').split(/\s+/).filter(Boolean).length, 0);
+    for (let guard = 0; count() > words && guard < 50; guard++) {
+      const p = st.blocks.filter((b) => b.kind === 'paragraph').map((b) => ({ b, ss: String(b.text).match(/[^.!?]+[.!?]+/g) ?? [b.text] })).filter((x) => x.ss.length > 1).sort((a, c) => c.ss.length - a.ss.length)[0];
+      if (!p) break;
+      p.b.text = p.ss.slice(0, -1).join('').trim(); changed = true;
+    }
+  }
+  finish(st);
+  const n = heads().length, w = st.stats?.words ?? 0;
+  if (changed) r.value = `I wrote the ${goal.target ?? 'text'} "${st.title}": ${fmt(w)} words in ${n} ${n === 1 ? "chapter" : "chapters"}.${w < (said ?? 0) * 0.8 ? ` I know only enough for ${w} words about this; I did not pad it.` : ''} It is open in the Documents tab.`;
+  r.cannot = cannot;
+  return r;
 }

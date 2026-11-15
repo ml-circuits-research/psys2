@@ -1,0 +1,37 @@
+# k.people/shards/words: the English words of k.people (its types, keys and values), stored beside the world (owner's
+# decision 2026-11-15 08:10); tools/build-catalog.mjs reads them as the world's own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+@k.people.word.given_name core.word text="given name" text="given names" text="first name" text="first names" means=k.people.given_name core.source="hand-core 1"
+@k.people.word.kind core.word text=person text=people text=persons means=k.people.kind core.source="hand-core 1"
+@k.people.word.age core.word text=age text=old means=k.people.kind.age core.source="hand-core 1"
+@k.people.word.height core.word text=height text=tall means=k.people.kind.height_about core.source="hand-core 1"
+@k.people.word.hair core.word text=hair means=k.people.kind.hair core.source="hand-core 1"
+@k.people.word.face core.word text=face means=k.people.kind.face core.source="hand-core 1"
+@k.people.word.role core.word text=role text=roles text=job text=jobs text=work means=k.people.role core.source="hand-core 1"
+@k.people.word.wears core.word text=wears text=wear text=clothes means=k.people.role.wears core.source="hand-core 1"
+@k.people.word.holds core.word text=holds text=hold text=carries means=k.people.role.holds core.source="hand-core 1"
+@k.people.word.uses core.word text=uses text=use text=tools means=k.people.role.uses core.source="hand-core 1"
+@k.people.word.works_at core.word text=works text="works at" text=workplace means=k.people.role.works_at core.source="hand-core 1"
+@k.people.word.does core.word text=does means=k.people.role.does core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.people.word.key.kind.sex core.word text=sex means=k.people.kind.sex core.source="hand-core 1"
+@k.people.word.key.kind.drawing core.word text=drawing means=k.people.kind.drawing core.source="hand-core 1"
+@k.people.word.key.role.group core.word text=group means=k.people.role.group core.source="hand-core 1"
+@k.people.word.key.role.is core.word text=is means=k.people.role.is core.source="hand-core 1"
+@k.people.word.key.role.does core.word text=do text=job means=k.people.role.does core.source="hand-core 1"
+@k.people.word.key.role.hat core.word text=hat means=k.people.role.hat core.source="hand-core 1"
+@k.people.word.key.role.glasses core.word text=glasses means=k.people.role.glasses core.source="hand-core 1"
+@k.people.word.key.role.beard core.word text=beard means=k.people.role.beard core.source="hand-core 1"
+@k.people.word.key.role.moustache core.word text=moustache means=k.people.role.moustache core.source="hand-core 1"
+@k.people.word.key.role.shoulders core.word text=shoulders means=k.people.role.shoulders core.source="hand-core 1"
+@k.people.word.key.role.face core.word text=face means=k.people.role.face core.source="hand-core 1"
+@k.people.word.key.role.drawing core.word text=drawing means=k.people.role.drawing core.source="hand-core 1"
+@k.people.word.key.given_name.sex core.word text=sex means=k.people.given_name.sex core.source="hand-core 1"
+@k.people.word.key.given_name.holders core.word text=holders means=k.people.given_name.holders core.source="hand-core 1"
+@k.people.word.key.given_name.band core.word text=band means=k.people.given_name.band core.source="hand-core 1"
+@k.people.word.key.given_name.wikidata core.word text=wikidata means=k.people.given_name.wikidata core.source="hand-core 1"
+@k.people.word.key.given_name.context core.word text=context means=k.people.given_name.context core.source="hand-core 1"

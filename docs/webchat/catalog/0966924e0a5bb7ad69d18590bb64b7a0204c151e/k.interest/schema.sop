@@ -1,0 +1,71 @@
+# k.interest: what makes a fact, a link between facts or a passage interesting to a reader, and what makes it dull,
+# as features a program can measure over the facts of the catalog and over a text being written, each with a weight
+# range and the published work it rests on. Read by the library's interest scoring (std.compose and std.summarize:
+# the choice points of a composition procedure are sampled by these weights; never free random).
+# How a score is made (the formula is stated by the facts of k.interest.appraisal and k.interest.feature):
+#   each feature gives weight * shape(measure), the shape running from 0 to 1 (rising, falling, peak, step);
+#   each appraisal is its base plus the sum of its features, held between 0 and 1;
+#   score = the product of the appraisals that multiply, minus the sum of those that subtract.
+# The directions of the features and the two-appraisal structure come from the sources (k.interest.source,
+# WORLD.md); every number (weights, where a shape starts and ends, bases) is this repository's own choice, said on
+# each fact by `own`. A host may take the middle of a weight range, or draw a weight inside it with a seed so that
+# two compositions of one topic differ while both stay by the book.
+# sources: hand-core 1 (the schema and the features, hand-written in this repository; the findings they rest on are
+# the published works of k.interest.source, cited in WORLD.md)
+# license: CC0-1.0
+# script: none (hand-written); the shards are written by tools/interest-core.mjs
+
+@k.interest core.module name=k.interest version=1 exports=source exports=appraisal exports=measure exports=feature core.source="hand-core 1"
+
+# A published work a feature rests on: `name` a short id (author and year: silvia2005), `cite` the reference,
+# `year` of publication, `doi` where it has one, `finding` what this world takes from it, in one sentence.
+@k.interest.source core.type of=k.interest.source shared=true closed=true core.source="hand-core 1"
+@k.interest.source.name core.slot of=k.interest.source key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.interest.source.cite core.slot of=k.interest.source key=cite required=true kind=string core.source="hand-core 1"
+@k.interest.source.year core.slot of=k.interest.source key=year required=true kind=integer min=1800 max=2100 core.source="hand-core 1"
+@k.interest.source.doi core.slot of=k.interest.source key=doi kind=string core.source="hand-core 1"
+@k.interest.source.finding core.slot of=k.interest.source key=finding required=true kind=string core.source="hand-core 1"
+
+# An appraisal: one of the judgements interest is made of (Silvia 2005, 2008: is it new and complex, and can I
+# understand it), plus relevance to the topic and the reader, and the penalties of dull text. `combine`: multiply
+# (the score is the product of these) or subtract (taken off the product); `base` is its value when no feature of it
+# applies; `about` in plain words; `source` (many) the works it rests on; `own` what is this repository's choice.
+@k.interest.appraisal core.type of=k.interest.appraisal shared=true closed=true core.source="hand-core 1"
+@k.interest.appraisal.name core.slot of=k.interest.appraisal key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.interest.appraisal.about core.slot of=k.interest.appraisal key=about required=true kind=string core.source="hand-core 1"
+@k.interest.appraisal.combine core.slot of=k.interest.appraisal key=combine required=true enum=multiply enum=subtract core.source="hand-core 1"
+@k.interest.appraisal.base core.slot of=k.interest.appraisal key=base required=true kind=number min=0 max=1 core.source="hand-core 1"
+@k.interest.appraisal.source core.slot of=k.interest.appraisal key=source many=true kind=atom type=k.interest.source by=name core.source="hand-core 1"
+@k.interest.appraisal.own core.slot of=k.interest.appraisal key=own kind=string core.source="hand-core 1"
+
+# A measure: a number a program computes for a fact, a link (a fact whose value names a thing of another world), a
+# sentence or a passage of the text being written. `scope` says over what; `reads` (many) the types of the catalog
+# or of the document it reads (a type, or a type and key: k.attributes.number.size_about); `gives` what the number
+# is, with its range; `about` how it is computed, in plain words. The computing is the library's (a function there);
+# this fact says what it must compute.
+@k.interest.measure core.type of=k.interest.measure shared=true closed=true core.source="hand-core 1"
+@k.interest.measure.name core.slot of=k.interest.measure key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.interest.measure.scope core.slot of=k.interest.measure key=scope required=true enum=fact enum=link enum=sentence enum=passage core.source="hand-core 1"
+@k.interest.measure.reads core.slot of=k.interest.measure key=reads many=true kind=atom core.source="hand-core 1"
+@k.interest.measure.gives core.slot of=k.interest.measure key=gives required=true kind=string core.source="hand-core 1"
+@k.interest.measure.about core.slot of=k.interest.measure key=about required=true kind=string core.source="hand-core 1"
+
+# A feature: what raises (positive weights) or lowers (negative weights, or an appraisal that subtracts) interest.
+# `appraisal` it adds to; `measure` it reads; `shape` how the measure becomes a share from 0 to 1: `rising` (0 up to
+# `start_at`, 1 from `full_at`, a straight line between), `falling` (1 up to `start_at`, 0 from `full_at`), `peak`
+# (0 at `start_at`, 1 at `peak_at`, 0 again at `full_at`), `step` (1 from `full_at`, else 0); `weight_min` and
+# `weight_max` the range of its weight (the contribution is weight times the share); `about` in plain words; `source`
+# (many) the works its direction rests on; `own` what is this repository's choice (always the numbers).
+@k.interest.feature core.type of=k.interest.feature shared=true closed=true core.source="hand-core 1"
+@k.interest.feature.name core.slot of=k.interest.feature key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.interest.feature.appraisal core.slot of=k.interest.feature key=appraisal required=true kind=atom type=k.interest.appraisal by=name core.source="hand-core 1"
+@k.interest.feature.measure core.slot of=k.interest.feature key=measure required=true kind=atom type=k.interest.measure by=name core.source="hand-core 1"
+@k.interest.feature.shape core.slot of=k.interest.feature key=shape required=true enum=rising enum=falling enum=peak enum=step core.source="hand-core 1"
+@k.interest.feature.start_at core.slot of=k.interest.feature key=start_at kind=number core.source="hand-core 1"
+@k.interest.feature.peak_at core.slot of=k.interest.feature key=peak_at kind=number core.source="hand-core 1"
+@k.interest.feature.full_at core.slot of=k.interest.feature key=full_at required=true kind=number core.source="hand-core 1"
+@k.interest.feature.weight_min core.slot of=k.interest.feature key=weight_min required=true kind=number min=-1 max=1 core.source="hand-core 1"
+@k.interest.feature.weight_max core.slot of=k.interest.feature key=weight_max required=true kind=number min=-1 max=1 core.source="hand-core 1"
+@k.interest.feature.about core.slot of=k.interest.feature key=about required=true kind=string core.source="hand-core 1"
+@k.interest.feature.source core.slot of=k.interest.feature key=source many=true kind=atom type=k.interest.source by=name core.source="hand-core 1"
+@k.interest.feature.own core.slot of=k.interest.feature key=own required=true kind=string core.source="hand-core 1"

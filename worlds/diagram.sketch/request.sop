@@ -1,0 +1,26 @@
+# Spec 28: what the acts of the diagram honour (w.honour), the words of the request reader (w.words) and the defaults of a diagram (w.expect) until k.expect is in the catalog pin.
+# A diagram a reasonable person expects (reviewer 2026-11-15 14:00 item 3): 5-9 nodes of two or three shapes, links, a named layout; the scale steps are factors on the count.
+
+@diagram.sketch.honour.make w.honour
+    act=make
+    keys=kind,count,size,layout,with,manner,about
+    target=diagram
+
+@diagram.sketch.honour.arrange w.honour
+    act=arrange
+    keys=layout,manner
+
+@diagram.sketch.words w.words
+    kind=circle,square,rectangle,triangle,diamond,ellipse,hexagon,star,node,shape,box
+    generic=node,shape,box
+    layout=tree,grid,row,column,circle,layers,radial,hierarchy
+
+@diagram.sketch.expect.diagram w.expect
+    of=diagram
+    count=5..9
+    kinds=2
+    shapes=rectangle,diamond,ellipse,circle
+    with=arrow
+    small=0.6
+    big=1.6
+    source="own, hand-checked: k.diagrams fills sample 4-9 nodes (src/knowledge/diagram-world.mjs sampleDiagrams)"

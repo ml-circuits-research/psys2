@@ -1,0 +1,135 @@
+# k.attributes/shards/things-abilities: what 65 common things of the catalog that had no ability can do (132 values; 16 of 148 proposed were wrong by the hand check and are not written): the agent role of k.actions, and abilities inherited down WordNet's hypernyms from the kinds the catalog describes (KR6; the rule in tools/attributes-abilities.mjs)
+# sources: wordnet 3.1 (the hypernym chains of the first noun senses, as imported in k.words; the abilities they carry down are the catalog's own: k.attributes, k.animals, k.actions; hand-checked in sources/coverage/abilities-audit.tsv)
+# license: WordNet-3.0
+# script: tools/attributes-abilities.mjs
+
+# aphid: a kind of insect (WordNet)
+@k.attributes.thing.abilities.aphid k.attributes.thing name=aphid can=crawl can=fly can="fly away" core.source="wordnet 3.1"
+# apple: the agent of these actions in k.actions
+@k.attributes.thing.abilities.apple k.attributes.thing name=apple can=fall core.source="wordnet 3.1"
+# baby: the agent of these actions in k.actions
+@k.attributes.thing.abilities.baby k.attributes.thing name=baby can=crawl can=cry core.source="wordnet 3.1"
+# battleship: a kind of ship (WordNet)
+@k.attributes.thing.abilities.battleship k.attributes.thing name=battleship can=float can=leave can=move can=sail can=sink core.source="wordnet 3.1"
+# branch: the agent of these actions in k.actions
+@k.attributes.thing.abilities.branch k.attributes.thing name=branch can=wave core.source="wordnet 3.1"
+# bungalow: a kind of house (WordNet)
+@k.attributes.thing.abilities.bungalow k.attributes.thing name=bungalow can=stand core.source="wordnet 3.1"
+# card: a kind of paper (WordNet)
+@k.attributes.thing.abilities.card k.attributes.thing name=card can=burn core.source="wordnet 3.1"
+# castle: a kind of house (WordNet)
+@k.attributes.thing.abilities.castle k.attributes.thing name=castle can=stand core.source="wordnet 3.1"
+# cellphone: a kind of telephone (WordNet)
+@k.attributes.thing.abilities.cellphone k.attributes.thing name=cellphone can=ring core.source="wordnet 3.1"
+# chainsaw: a kind of machine (WordNet)
+@k.attributes.thing.abilities.chainsaw k.attributes.thing name=chainsaw can=work core.source="wordnet 3.1"
+# chick: the agent of these actions in k.actions
+@k.attributes.thing.abilities.chick k.attributes.thing name=chick can=hatch core.source="wordnet 3.1"
+# child: the agent of these actions in k.actions
+@k.attributes.thing.abilities.child k.attributes.thing name=child can=grow can=hop can=play core.source="wordnet 3.1"
+# computer: a kind of machine (WordNet)
+@k.attributes.thing.abilities.computer k.attributes.thing name=computer can=work core.source="wordnet 3.1"
+# convent: a kind of house (WordNet)
+@k.attributes.thing.abilities.convent k.attributes.thing name=convent can=stand core.source="wordnet 3.1"
+# cottage: a kind of house (WordNet)
+@k.attributes.thing.abilities.cottage k.attributes.thing name=cottage can=stand core.source="wordnet 3.1"
+# cow: the agent of these actions in k.actions
+@k.attributes.thing.abilities.cow k.attributes.thing name=cow can=chew core.source="wordnet 3.1"
+# cruiser: a kind of car (WordNet)
+@k.attributes.thing.abilities.cruiser k.attributes.thing name=cruiser can=go can=move can=stop can=turn core.source="wordnet 3.1"
+# destroyer: a kind of ship (WordNet)
+@k.attributes.thing.abilities.destroyer k.attributes.thing name=destroyer can=float can=leave can=move can=sail can=sink core.source="wordnet 3.1"
+# engine: a kind of machine (WordNet)
+@k.attributes.thing.abilities.engine k.attributes.thing name=engine can=work core.source="wordnet 3.1"
+# farmhouse: a kind of house (WordNet)
+@k.attributes.thing.abilities.farmhouse k.attributes.thing name=farmhouse can=stand core.source="wordnet 3.1"
+# freezer: the agent of these actions in k.actions
+@k.attributes.thing.abilities.freezer k.attributes.thing name=freezer can=freeze core.source="wordnet 3.1"
+# freighter: a kind of ship (WordNet)
+@k.attributes.thing.abilities.freighter k.attributes.thing name=freighter can=float can=leave can=move can=sail can=sink core.source="wordnet 3.1"
+# gear: a kind of wheel (WordNet)
+@k.attributes.thing.abilities.gear k.attributes.thing name=gear can=spin can=turn core.source="wordnet 3.1"
+# grenade: a kind of bomb (WordNet)
+@k.attributes.thing.abilities.grenade k.attributes.thing name=grenade can=explode core.source="wordnet 3.1"
+# guide: the agent of these actions in k.actions
+@k.attributes.thing.abilities.guide k.attributes.thing name=guide can=lead core.source="wordnet 3.1"
+# handgun: a kind of gun (WordNet)
+@k.attributes.thing.abilities.handgun k.attributes.thing name=handgun can=shoot core.source="wordnet 3.1"
+# house: the agent of these actions in k.actions
+@k.attributes.thing.abilities.house k.attributes.thing name=house can=stand core.source="wordnet 3.1"
+# jukebox: a kind of machine (WordNet)
+@k.attributes.thing.abilities.jukebox k.attributes.thing name=jukebox can=work core.source="wordnet 3.1"
+# kitten: the agent of these actions in k.actions
+@k.attributes.thing.abilities.kitten k.attributes.thing name=kitten can=play core.source="wordnet 3.1"
+# knight: the agent of these actions in k.actions
+@k.attributes.thing.abilities.knight k.attributes.thing name=knight can=fight core.source="wordnet 3.1"
+# laptop: a kind of machine (WordNet)
+@k.attributes.thing.abilities.laptop k.attributes.thing name=laptop can=work core.source="wordnet 3.1"
+# leaf: the agent of these actions in k.actions
+@k.attributes.thing.abilities.leaf k.attributes.thing name=leaf can=fall can=float can=wilt core.source="wordnet 3.1"
+# lifeboat: a kind of boat (WordNet)
+@k.attributes.thing.abilities.lifeboat k.attributes.thing name=lifeboat can=float can=move can=sail core.source="wordnet 3.1"
+# louse: a kind of insect (WordNet)
+@k.attributes.thing.abilities.louse k.attributes.thing name=louse can=crawl core.source="wordnet 3.1"
+# mainframe: a kind of machine (WordNet)
+@k.attributes.thing.abilities.mainframe k.attributes.thing name=mainframe can=work core.source="wordnet 3.1"
+# manor: a kind of house (WordNet)
+@k.attributes.thing.abilities.manor k.attributes.thing name=manor can=stand core.source="wordnet 3.1"
+# mantis: a kind of insect (WordNet)
+@k.attributes.thing.abilities.mantis k.attributes.thing name=mantis can=crawl can=fly can="fly away" core.source="wordnet 3.1"
+# monastery: a kind of house (WordNet)
+@k.attributes.thing.abilities.monastery k.attributes.thing name=monastery can=stand core.source="wordnet 3.1"
+# motor: a kind of machine (WordNet)
+@k.attributes.thing.abilities.motor k.attributes.thing name=motor can=work core.source="wordnet 3.1"
+# mud: the agent of these actions in k.actions
+@k.attributes.thing.abilities.mud k.attributes.thing name=mud can=dirty core.source="wordnet 3.1"
+# palace: a kind of house (WordNet)
+@k.attributes.thing.abilities.palace k.attributes.thing name=palace can=stand core.source="wordnet 3.1"
+# pants: a kind of underpants (WordNet)
+@k.attributes.thing.abilities.pants k.attributes.thing name=pants can=cover core.source="wordnet 3.1"
+# poodle: a kind of dog (WordNet)
+@k.attributes.thing.abilities.poodle k.attributes.thing name=poodle can=bark can=bite can=catch can=chase can=chew can=dig can=dirty can=fight can=find can=follow can=help can=run can=search can=shake can=sit can=smell can=sneeze can=swim can=tear can=wait can=yawn core.source="wordnet 3.1"
+# praying mantis: a kind of insect (WordNet)
+@k.attributes.thing.abilities.praying_mantis k.attributes.thing name="praying mantis" can=crawl can=fly can="fly away" core.source="wordnet 3.1"
+# puddle: the agent of these actions in k.actions
+@k.attributes.thing.abilities.puddle k.attributes.thing name=puddle can=shrink core.source="wordnet 3.1"
+# puppy: the agent of these actions in k.actions
+@k.attributes.thing.abilities.puppy k.attributes.thing name=puppy can=play core.source="wordnet 3.1"
+# revolver: a kind of pistol (WordNet)
+@k.attributes.thing.abilities.revolver k.attributes.thing name=revolver can=shoot core.source="wordnet 3.1"
+# rickshaw: a kind of cart (WordNet)
+@k.attributes.thing.abilities.rickshaw k.attributes.thing name=rickshaw can=move core.source="wordnet 3.1"
+# rooster: a kind of bird (WordNet)
+@k.attributes.thing.abilities.rooster k.attributes.thing name=rooster can=feed can=fly can="fly away" can=hop can=sit core.source="wordnet 3.1"
+# scalpel: a kind of knife (WordNet)
+@k.attributes.thing.abilities.scalpel k.attributes.thing name=scalpel can=cut core.source="wordnet 3.1"
+# shipwreck: a kind of ship (WordNet)
+@k.attributes.thing.abilities.shipwreck k.attributes.thing name=shipwreck can=sink core.source="wordnet 3.1"
+# sky: the agent of these actions in k.actions
+@k.attributes.thing.abilities.sky k.attributes.thing name=sky can=rain can=snow core.source="wordnet 3.1"
+# skylight: a kind of window (WordNet)
+@k.attributes.thing.abilities.skylight k.attributes.thing name=skylight can=open core.source="wordnet 3.1"
+# smoke: the agent of these actions in k.actions
+@k.attributes.thing.abilities.smoke k.attributes.thing name=smoke can=rise core.source="wordnet 3.1"
+# softball: a kind of ball (WordNet)
+@k.attributes.thing.abilities.softball k.attributes.thing name=softball can=bounce can=break can=roll core.source="wordnet 3.1"
+# stag: a kind of deer (WordNet)
+@k.attributes.thing.abilities.stag k.attributes.thing name=stag can=jump can=run can=swim core.source="wordnet 3.1"
+# stapler: a kind of machine (WordNet)
+@k.attributes.thing.abilities.stapler k.attributes.thing name=stapler can=work core.source="wordnet 3.1"
+# stone: the agent of these actions in k.actions
+@k.attributes.thing.abilities.stone k.attributes.thing name=stone can=roll can=sink core.source="wordnet 3.1"
+# sweater: the agent of these actions in k.actions
+@k.attributes.thing.abilities.sweater k.attributes.thing name=sweater can=shrink core.source="wordnet 3.1"
+# sweatshirt: a kind of sweater (WordNet)
+@k.attributes.thing.abilities.sweatshirt k.attributes.thing name=sweatshirt can=shrink core.source="wordnet 3.1"
+# tanker: a kind of ship (WordNet)
+@k.attributes.thing.abilities.tanker k.attributes.thing name=tanker can=float can=leave can=move can=sail can=sink core.source="wordnet 3.1"
+# teacher: the agent of these actions in k.actions
+@k.attributes.thing.abilities.teacher k.attributes.thing name=teacher can=teach core.source="wordnet 3.1"
+# termite: a kind of insect (WordNet)
+@k.attributes.thing.abilities.termite k.attributes.thing name=termite can=crawl can=fly can="fly away" core.source="wordnet 3.1"
+# typewriter: a kind of machine (WordNet)
+@k.attributes.thing.abilities.typewriter k.attributes.thing name=typewriter can=work core.source="wordnet 3.1"
+# weevil: a kind of insect (WordNet)
+@k.attributes.thing.abilities.weevil k.attributes.thing name=weevil can=crawl can=fly can="fly away" core.source="wordnet 3.1"

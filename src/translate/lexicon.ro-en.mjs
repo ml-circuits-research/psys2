@@ -397,7 +397,7 @@ cerc,cercuri|circle|n
 pătrat,pătrate|square|n
 triunghi,triunghiuri|triangle|n
 dreptunghi,dreptunghiuri|rectangle|n
-romb,romburi|rhombus|n
+romb,romburi|diamond|n
 oval,ovaluri|oval|n
 linie,linii|line|f
 liniuță,liniuțe|dash|f
@@ -543,6 +543,10 @@ coordonată,coordonate|coordinate|f
 evidențiere,evidențieri|highlight|f
 distanță,distanțe|distance|f
 iaz,iazuri|pond|n
+nod,noduri|node|n
+săgeată,săgeți|arrow|f
+elipsă,elipse|ellipse|f
+capitol,capitole|chapter|n
 scoică,scoici|shell|f
 octavă,octave|octave|f
 treaptă,trepte|step|f
@@ -655,6 +659,7 @@ scădea|subtract|scad scazi scade scădem scădeți scad|scăzut|t
 calcula|calculate|az:calcul|calculat|t imp
 rezolva|solve|az:rezolv|rezolvat|t imp
 adăuga|add|adaug adaugi adaugă adăugăm adăugați adaugă|adăugat|t imp sj=adauge
+crea|create/created|creez creezi creează creăm creați creează|creat|t imp imp=creează,creaza,creați sj=creeze
 aduna|add|a:adun|adunat|t imp
 șterge|delete|șterg ștergi șterge ștergem ștergeți șterg|șters|t imp
 termina|finish|a:termin|terminat|t imp
@@ -826,6 +831,7 @@ roșu,roșie,roșii,roșii|red
 albastru,albastră,albaștri,albastre|blue
 verde,verde,verzi,verzi|green
 galben,galbenă,galbeni,galbene|yellow
+aleatoriu,aleatorie,aleatorii,aleatorii|random
 portocaliu,portocalie,portocalii,portocalii|orange
 mov|purple
 roz|pink

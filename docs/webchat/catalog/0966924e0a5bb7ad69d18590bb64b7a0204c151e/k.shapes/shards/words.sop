@@ -1,0 +1,23 @@
+# k.shapes/shards/words: the English words of k.shapes (its types, keys and values), stored beside the world (owner's
+# decision 2026-11-15 08:10); tools/build-catalog.mjs reads them as the world's own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the types and keys of this world.
+@k.shapes.word.shape core.word text=shape text=shapes text=shaped text=form means=k.shapes.shape core.source="hand-core 1"
+@k.shapes.word.sides core.word text=side text=sides means=k.shapes.shape.sides core.source="hand-core 1"
+@k.shapes.word.corners core.word text=corner text=corners text=vertex text=vertices text=point text=points means=k.shapes.shape.corners core.source="hand-core 1"
+@k.shapes.word.faces core.word text=face text=faces means=k.shapes.shape.faces core.source="hand-core 1"
+@k.shapes.word.edges core.word text=edge text=edges means=k.shapes.shape.edges core.source="hand-core 1"
+@k.shapes.word.round core.word text=round text=curved text=rounded means=k.shapes.shape.round core.source="hand-core 1"
+@k.shapes.word.kind core.word text=flat text=solid text="2D" text="3D" means=k.shapes.shape.kind core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.shapes.word.key.shape.kind core.word text=kind means=k.shapes.shape.kind core.source="hand-core 1"
+@k.shapes.word.key.shape.sides core.word text=many means=k.shapes.shape.sides core.source="hand-core 1"
+@k.shapes.word.key.shape.face core.word text=face means=k.shapes.shape.face core.source="hand-core 1"
+@k.shapes.word.key.shape.equal_sides core.word text="equal sides" means=k.shapes.shape.equal_sides core.source="hand-core 1"
+@k.shapes.word.key.shape.symmetric core.word text=symmetric means=k.shapes.shape.symmetric core.source="hand-core 1"
+@k.shapes.word.key.shape.flat core.word text=flat means=k.shapes.shape.flat core.source="hand-core 1"
+@k.shapes.word.key.shape.thing core.word text=thing means=k.shapes.shape.thing core.source="hand-core 1"

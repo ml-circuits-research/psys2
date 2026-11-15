@@ -9,9 +9,9 @@
 //   grammarRoEn(text)  -> { text, ok, frame, notes }                a message of one or more sentences; text '' when any sentence is outside the covered shapes
 //                                                                   (the caller then falls back to another path: the grammar ABSTAINS rather than guesses)
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
-import { LANG_RO_FACTS } from '../lang/ro.facts.generated.mjs?v=268c444d52';
+import { LANG_RO_FACTS } from '../lang/ro.facts.generated.mjs?v=70639dca60';
 import { tokenize } from './normalize.mjs?v=6d473eb091';
-import { analyze, analyzeRaw, parseNumberAt, placeOf, pluralEn, isKnownName } from './morphology.ro.mjs?v=1a500300fa';
+import { analyze, analyzeRaw, parseNumberAt, placeOf, pluralEn, isKnownName } from './morphology.ro.mjs?v=8bcf5dc68f';
 
 let RAWS = [], KEYS = [];
 // The lexicon: how a word is analysed. Default: the translator's own (lexicon.ro-en.mjs, morphology.ro.mjs); src/lang/ro.mjs gives one made from the catalog's w.lang.ro with the library's std.morph.

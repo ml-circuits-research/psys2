@@ -162,6 +162,10 @@ export const COMMAND_FRAMES = [
   F('pune un titlu numit {rest:cont} în partea de sus', 'put a heading called {rest:cont} at the top'),
   F('adaugă un titlu numit {rest:cont}', 'add a heading called {rest:cont}'),
   F('scrie un raport despre {np:bare}', 'write a report about {np}'),
+  F('scrie|compune|fă o poveste|povestire scurtă {rest}', 'write a short story {rest}'),   // a kind of text with its size and the rest read (spec 28): not dictation
+  F('scrie|compune|fă o poveste|povestire lungă {rest}', 'write a long story {rest}'),
+  F('scrie|compune|fă o poveste|povestire {rest}', 'write a story {rest}'),
+  F('scrie|compune|fă un eseu {rest}', 'write an essay {rest}'),
   F('scrie {rest:raw}', 'type {rest:raw}'),
   F('șterge ultimul paragraf', 'delete the last paragraph'),
   F('șterge paragraful {num}', 'delete paragraph {num}'),

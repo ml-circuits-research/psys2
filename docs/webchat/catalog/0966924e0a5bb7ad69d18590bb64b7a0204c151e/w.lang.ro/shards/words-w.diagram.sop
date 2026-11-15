@@ -1,0 +1,12 @@
+# w.lang.ro/shards/words-w.diagram: the Romanian word for each kind of the world schema w.diagram (the library's Q79, reviewer 16:45),
+# so a host names a kind in Romanian with no wordOf of its own; the word is a lemma of the hand dictionary where it has
+# one (its gender and plural from its class: masă, mese). Not in English vocab.json (an English index).
+# sources: hand-core 1 (written by hand in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.ro.word.w.diagram.world core.word text="diagramă" means=w.diagram of=std.schema.world.name core.source="hand-core 1"
+@w.lang.ro.word.w.diagram.diagram core.word text="diagramă" means=w.diagram.diagram core.source="hand-core 1"
+@w.lang.ro.word.w.diagram.node core.word text="nod" means=w.diagram.node core.source="hand-core 1"
+@w.lang.ro.word.w.diagram.edge core.word text="linie" means=w.diagram.edge core.source="hand-core 1"
+@w.lang.ro.word.w.diagram.group core.word text="grup" means=w.diagram.group core.source="hand-core 1"

@@ -1,0 +1,25 @@
+# k.commonsense/shards/words: the English words of k.commonsense (its types, keys and values), stored beside the world (owner's
+# decision 2026-11-15 08:10); tools/build-catalog.mjs reads them as the world's own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the types and keys of this world.
+@k.commonsense.word.thing core.word text=thing text=things means=k.commonsense.thing core.source="hand-core 1"
+@k.commonsense.word.at core.word text=where text=live text=lives means=k.commonsense.thing.at core.source="hand-core 1"
+@k.commonsense.word.lives core.word text="where it lives" means=k.commonsense.lives core.source="hand-core 1"
+@k.commonsense.word.lives.in core.word text=habitat text="lives in" means=k.commonsense.lives.in core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.commonsense.word.key.thing.at core.word text=at text=find text=found text=place means=k.commonsense.thing.at core.source="hand-core 1"
+@k.commonsense.word.key.thing.can core.word text=can text=able text=do means=k.commonsense.thing.can core.source="hand-core 1"
+@k.commonsense.word.key.thing.part_of core.word text="part of" means=k.commonsense.thing.part_of core.source="hand-core 1"
+@k.commonsense.word.key.thing.has core.word text=has means=k.commonsense.thing.has core.source="hand-core 1"
+@k.commonsense.word.key.thing.cannot core.word text=cannot means=k.commonsense.thing.cannot core.source="hand-core 1"
+@k.commonsense.word.key.thing.usually_count core.word text="usually count" means=k.commonsense.thing.usually_count core.source="hand-core 1"
+@k.commonsense.word.key.placed.thing core.word text=thing means=k.commonsense.placed.thing core.source="hand-core 1"
+@k.commonsense.word.key.placed.at core.word text=at means=k.commonsense.placed.at core.source="hand-core 1"
+@k.commonsense.word.key.placed.scene core.word text=scene means=k.commonsense.placed.scene core.source="hand-core 1"
+@k.commonsense.word.key.placed.on core.word text=on means=k.commonsense.placed.on core.source="hand-core 1"
+@k.commonsense.word.key.placed.in core.word text=in means=k.commonsense.placed.in core.source="hand-core 1"
+@k.commonsense.word.key.lives.at core.word text=at means=k.commonsense.lives.at core.source="hand-core 1"

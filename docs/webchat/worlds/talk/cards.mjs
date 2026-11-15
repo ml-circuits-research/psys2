@@ -5,7 +5,7 @@
 
 export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const num = (v, d = 0) => (Number.isFinite(Number(v)) ? Number(v) : d);
-import { colourName, colourHex, basicColour } from '../../lib/knowledge/values.mjs?v=ea821661e5';   // the one colour reader (k.values)
+import { colourName, colourHex, basicColour } from '../../lib/knowledge/values.mjs?v=0d60c4bf76';   // the one colour reader (k.values)
 const r1 = (v) => Math.round(v * 10) / 10;
 const clip = (s, n) => { const t = String(s ?? ''); return t.length > n ? `${t.slice(0, n - 1)}…` : t; };
 

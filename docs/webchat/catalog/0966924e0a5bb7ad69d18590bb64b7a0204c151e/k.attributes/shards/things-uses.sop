@@ -1,0 +1,155 @@
+# k.attributes/shards/things-uses: what 75 common things of the catalog that do nothing by themselves and had no use are for (85 values; 16 of 101 proposed (15.8 %) were wrong by the hand check and are not written): the instrument role of k.actions, and uses inherited down WordNet's hypernyms from the kinds the catalog describes (KR6; the rule in tools/attributes-uses.mjs)
+# sources: wordnet 3.1 (the hypernym chains of the first noun senses, as imported in k.words; the uses they carry down are the catalog's own: k.attributes, k.actions; hand-checked in sources/coverage/uses-audit.tsv)
+# license: WordNet-3.0
+# script: tools/attributes-uses.mjs
+
+# abacus: the instrument of these actions in k.actions
+@k.attributes.thing.uses.abacus k.attributes.thing name=abacus used_for="counting" core.source="wordnet 3.1"
+# balance scale: the instrument of these actions in k.actions
+@k.attributes.thing.uses.balance_scale k.attributes.thing name="balance scale" used_for="weighing" core.source="wordnet 3.1"
+# ballet shoes: the instrument of these actions in k.actions
+@k.attributes.thing.uses.ballet_shoes k.attributes.thing name="ballet shoes" used_for="dancing" core.source="wordnet 3.1"
+# bathrobe: a kind of robe (WordNet)
+@k.attributes.thing.uses.bathrobe k.attributes.thing name=bathrobe used_for="wearing" core.source="wordnet 3.1"
+# binoculars: the instrument of these actions in k.actions
+@k.attributes.thing.uses.binoculars k.attributes.thing name=binoculars used_for="watching" core.source="wordnet 3.1"
+# blazer: a kind of jacket (WordNet)
+@k.attributes.thing.uses.blazer k.attributes.thing name=blazer used_for="wearing" core.source="wordnet 3.1"
+# bonnet: a kind of hat (WordNet)
+@k.attributes.thing.uses.bonnet k.attributes.thing name=bonnet used_for="wearing" core.source="wordnet 3.1"
+# bookshop: a kind of shop (WordNet)
+@k.attributes.thing.uses.bookshop k.attributes.thing name=bookshop used_for="buying" core.source="wordnet 3.1"
+# bookstore: a kind of shop (WordNet)
+@k.attributes.thing.uses.bookstore k.attributes.thing name=bookstore used_for="buying" core.source="wordnet 3.1"
+# boutique: a kind of shop (WordNet)
+@k.attributes.thing.uses.boutique k.attributes.thing name=boutique used_for="buying" core.source="wordnet 3.1"
+# bow tie: a kind of necktie (WordNet)
+@k.attributes.thing.uses.bow_tie k.attributes.thing name="bow tie" used_for="wearing" core.source="wordnet 3.1"
+# brain: the instrument of these actions in k.actions
+@k.attributes.thing.uses.brain k.attributes.thing name=brain used_for="thinking" core.source="wordnet 3.1"
+# bungalow: a kind of house (WordNet)
+@k.attributes.thing.uses.bungalow k.attributes.thing name=bungalow used_for="living" core.source="wordnet 3.1"
+# canteen: a kind of bottle (WordNet)
+@k.attributes.thing.uses.canteen k.attributes.thing name=canteen used_for="holding drinks" core.source="wordnet 3.1"
+# caramel: a kind of candy (WordNet)
+@k.attributes.thing.uses.caramel k.attributes.thing name=caramel used_for="eating" core.source="wordnet 3.1"
+# card: a kind of paper (WordNet)
+@k.attributes.thing.uses.card k.attributes.thing name=card used_for="writing" core.source="wordnet 3.1"
+# castle: a kind of house (WordNet)
+@k.attributes.thing.uses.castle k.attributes.thing name=castle used_for="living" core.source="wordnet 3.1"
+# cauldron: a kind of pot (WordNet)
+@k.attributes.thing.uses.cauldron k.attributes.thing name=cauldron used_for="cooking" core.source="wordnet 3.1"
+# chocolate milk: a kind of milk (WordNet)
+@k.attributes.thing.uses.chocolate_milk k.attributes.thing name="chocolate milk" used_for="drinking" core.source="wordnet 3.1"
+# commissary: a kind of shop (WordNet)
+@k.attributes.thing.uses.commissary k.attributes.thing name=commissary used_for="buying" core.source="wordnet 3.1"
+# convent: a kind of house (WordNet)
+@k.attributes.thing.uses.convent k.attributes.thing name=convent used_for="living" core.source="wordnet 3.1"
+# crane: the instrument of these actions in k.actions
+@k.attributes.thing.uses.crane k.attributes.thing name=crane used_for="building" used_for="lifting" used_for="lowering" core.source="wordnet 3.1"
+# crate: a kind of box (WordNet)
+@k.attributes.thing.uses.crate k.attributes.thing name=crate used_for="storing" core.source="wordnet 3.1"
+# dish cloth: the instrument of these actions in k.actions
+@k.attributes.thing.uses.dish_cloth k.attributes.thing name="dish cloth" used_for="wiping" core.source="wordnet 3.1"
+# dough: the instrument of these actions in k.actions
+@k.attributes.thing.uses.dough k.attributes.thing name=dough used_for="baking" core.source="wordnet 3.1"
+# dressing gown: a kind of robe (WordNet)
+@k.attributes.thing.uses.dressing_gown k.attributes.thing name="dressing gown" used_for="wearing" core.source="wordnet 3.1"
+# driveway: a kind of road (WordNet)
+@k.attributes.thing.uses.driveway k.attributes.thing name=driveway used_for="driving" core.source="wordnet 3.1"
+# espresso: a kind of coffee (WordNet)
+@k.attributes.thing.uses.espresso k.attributes.thing name=espresso used_for="drinking" core.source="wordnet 3.1"
+# farmhouse: a kind of house (WordNet)
+@k.attributes.thing.uses.farmhouse k.attributes.thing name=farmhouse used_for="living" core.source="wordnet 3.1"
+# fire: the instrument of these actions in k.actions
+@k.attributes.thing.uses.fire k.attributes.thing name=fire used_for="burning" core.source="wordnet 3.1"
+# fire hose: the instrument of these actions in k.actions
+@k.attributes.thing.uses.fire_hose k.attributes.thing name="fire hose" used_for="putting out" core.source="wordnet 3.1"
+# fishing pole: the instrument of these actions in k.actions
+@k.attributes.thing.uses.fishing_pole k.attributes.thing name="fishing pole" used_for="catching" core.source="wordnet 3.1"
+# flask: a kind of bottle (WordNet)
+@k.attributes.thing.uses.flask k.attributes.thing name=flask used_for="holding drinks" core.source="wordnet 3.1"
+# freeway: a kind of highway (WordNet)
+@k.attributes.thing.uses.freeway k.attributes.thing name=freeway used_for="driving" core.source="wordnet 3.1"
+# glue: the instrument of these actions in k.actions
+@k.attributes.thing.uses.glue k.attributes.thing name=glue used_for="gluing" used_for="joining" used_for="mending" core.source="wordnet 3.1"
+# hairbrush: the instrument of these actions in k.actions
+@k.attributes.thing.uses.hairbrush k.attributes.thing name=hairbrush used_for="brushing" core.source="wordnet 3.1"
+# hairdryer: the instrument of these actions in k.actions
+@k.attributes.thing.uses.hairdryer k.attributes.thing name=hairdryer used_for="drying" core.source="wordnet 3.1"
+# handkerchief: the instrument of these actions in k.actions
+@k.attributes.thing.uses.handkerchief k.attributes.thing name=handkerchief used_for="wiping" core.source="wordnet 3.1"
+# headphone: the instrument of these actions in k.actions
+@k.attributes.thing.uses.headphone k.attributes.thing name=headphone used_for="listening" core.source="wordnet 3.1"
+# hook: the instrument of these actions in k.actions
+@k.attributes.thing.uses.hook k.attributes.thing name=hook used_for="hanging" core.source="wordnet 3.1"
+# hostel: a kind of hotel (WordNet)
+@k.attributes.thing.uses.hostel k.attributes.thing name=hostel used_for="staying overnight" core.source="wordnet 3.1"
+# hutch: a kind of cage (WordNet)
+@k.attributes.thing.uses.hutch k.attributes.thing name=hutch used_for="keeping animals" core.source="wordnet 3.1"
+# keypad: a kind of keyboard (WordNet)
+@k.attributes.thing.uses.keypad k.attributes.thing name=keypad used_for="typing" core.source="wordnet 3.1"
+# kitchen knife: the instrument of these actions in k.actions
+@k.attributes.thing.uses.kitchen_knife k.attributes.thing name="kitchen knife" used_for="cutting" used_for="peeling" core.source="wordnet 3.1"
+# marzipan: a kind of candy (WordNet)
+@k.attributes.thing.uses.marzipan k.attributes.thing name=marzipan used_for="eating" core.source="wordnet 3.1"
+# monastery: a kind of house (WordNet)
+@k.attributes.thing.uses.monastery k.attributes.thing name=monastery used_for="living" core.source="wordnet 3.1"
+# money: the instrument of these actions in k.actions
+@k.attributes.thing.uses.money k.attributes.thing name=money used_for="buying" used_for="paying" used_for="spending" core.source="wordnet 3.1"
+# mop: the instrument of these actions in k.actions
+@k.attributes.thing.uses.mop k.attributes.thing name=mop used_for="cleaning" core.source="wordnet 3.1"
+# motorway: a kind of highway (WordNet)
+@k.attributes.thing.uses.motorway k.attributes.thing name=motorway used_for="driving" core.source="wordnet 3.1"
+# paint: the instrument of these actions in k.actions
+@k.attributes.thing.uses.paint k.attributes.thing name=paint used_for="painting" core.source="wordnet 3.1"
+# paint brush: the instrument of these actions in k.actions
+@k.attributes.thing.uses.paint_brush k.attributes.thing name="paint brush" used_for="painting" core.source="wordnet 3.1"
+# palace: a kind of house (WordNet)
+@k.attributes.thing.uses.palace k.attributes.thing name=palace used_for="living" core.source="wordnet 3.1"
+# pencil sharpener: the instrument of these actions in k.actions
+@k.attributes.thing.uses.pencil_sharpener k.attributes.thing name="pencil sharpener" used_for="sharpening" core.source="wordnet 3.1"
+# pew: a kind of bench (WordNet)
+@k.attributes.thing.uses.pew k.attributes.thing name=pew used_for="sitting" core.source="wordnet 3.1"
+# pouch: a kind of bag (WordNet)
+@k.attributes.thing.uses.pouch k.attributes.thing name=pouch used_for="carrying" core.source="wordnet 3.1"
+# scales: the instrument of these actions in k.actions
+@k.attributes.thing.uses.scales k.attributes.thing name=scales used_for="weighing" core.source="wordnet 3.1"
+# scalpel: a kind of knife (WordNet)
+@k.attributes.thing.uses.scalpel k.attributes.thing name=scalpel used_for="cutting" core.source="wordnet 3.1"
+# scrubbing brush: the instrument of these actions in k.actions
+@k.attributes.thing.uses.scrubbing_brush k.attributes.thing name="scrubbing brush" used_for="brushing" core.source="wordnet 3.1"
+# sewer: a kind of pipe (WordNet)
+@k.attributes.thing.uses.sewer k.attributes.thing name=sewer used_for="carrying water" core.source="wordnet 3.1"
+# sewing needle: the instrument of these actions in k.actions
+@k.attributes.thing.uses.sewing_needle k.attributes.thing name="sewing needle" used_for="mending" used_for="sewing" core.source="wordnet 3.1"
+# sherry: a kind of wine (WordNet)
+@k.attributes.thing.uses.sherry k.attributes.thing name=sherry used_for="drinking" core.source="wordnet 3.1"
+# shower cap: a kind of cap (WordNet)
+@k.attributes.thing.uses.shower_cap k.attributes.thing name="shower cap" used_for="wearing" core.source="wordnet 3.1"
+# soap: the instrument of these actions in k.actions
+@k.attributes.thing.uses.soap k.attributes.thing name=soap used_for="washing" core.source="wordnet 3.1"
+# softball: a kind of ball (WordNet)
+@k.attributes.thing.uses.softball k.attributes.thing name=softball used_for="playing" core.source="wordnet 3.1"
+# sponge: the instrument of these actions in k.actions
+@k.attributes.thing.uses.sponge k.attributes.thing name=sponge used_for="cleaning" used_for="washing" used_for="wiping" core.source="wordnet 3.1"
+# straw: the instrument of these actions in k.actions
+@k.attributes.thing.uses.straw k.attributes.thing name=straw used_for="drinking" core.source="wordnet 3.1"
+# street: a kind of road (WordNet)
+@k.attributes.thing.uses.street k.attributes.thing name=street used_for="driving" core.source="wordnet 3.1"
+# sweatpants: a kind of trousers (WordNet)
+@k.attributes.thing.uses.sweatpants k.attributes.thing name=sweatpants used_for="wearing" core.source="wordnet 3.1"
+# swimming cap: a kind of cap (WordNet)
+@k.attributes.thing.uses.swimming_cap k.attributes.thing name="swimming cap" used_for="wearing" core.source="wordnet 3.1"
+# table cloth: the instrument of these actions in k.actions
+@k.attributes.thing.uses.table_cloth k.attributes.thing name="table cloth" used_for="covering" core.source="wordnet 3.1"
+# tap: the instrument of these actions in k.actions
+@k.attributes.thing.uses.tap k.attributes.thing name=tap used_for="filling" core.source="wordnet 3.1"
+# tape measure: the instrument of these actions in k.actions
+@k.attributes.thing.uses.tape_measure k.attributes.thing name="tape measure" used_for="measuring" core.source="wordnet 3.1"
+# thread: the instrument of these actions in k.actions
+@k.attributes.thing.uses.thread k.attributes.thing name=thread used_for="sewing" core.source="wordnet 3.1"
+# traffic light: the instrument of these actions in k.actions
+@k.attributes.thing.uses.traffic_light k.attributes.thing name="traffic light" used_for="stopping" core.source="wordnet 3.1"
+# visor: a kind of shield (WordNet)
+@k.attributes.thing.uses.visor k.attributes.thing name=visor used_for="protecting" core.source="wordnet 3.1"

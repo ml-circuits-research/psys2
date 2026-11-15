@@ -1,0 +1,21 @@
+# k.named: one slot shared by every world whose facts may be labelled by a language model (block 06:55 item 2; the
+# library's slot groups, sopworld 0.34+). A type takes it by an `extends=k.named.labelled` (a second `extends` where
+# the type already has a parent): `named=model` says that a language model gave the values of the fact, from the
+# name of the thing; a sampled audit of each such world is in its WORLD.md. Before, 21 types declared the same slot.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.named core.module name=k.named version=1 exports=labelled core.source="hand-core 1"
+
+# A fact whose values may have been given by a language model.
+@k.named.labelled core.type of=k.named.labelled shared=true core.source="hand-core 1"
+# `named=no` (Q45): nobody named it: the name is a placeholder (part1, part2 of an imported drawing whose parts were not
+# labelled), so a host that takes a thing apart can tell a named part from an unnamed one.
+@k.named.labelled.named core.slot of=k.named.labelled key=named enum=model enum=no core.source="hand-core 1"
+
+# The English words of this world (beside it, owner's decision 2026-11-15 08:10).
+@k.named.word.named core.word text="labelled by a model" text="named by a model" means=k.named.labelled.named core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.named.word.key.labelled.named core.word text=named means=k.named.labelled.named core.source="hand-core 1"
