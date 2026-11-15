@@ -4552,3 +4552,7 @@ Owner (08:45): we cannot afford to teach worlds per language; English is the cen
 3. **Several translation candidates, chosen by the intent step:** model, rules, dictionary-glossed, typo-repaired (the log already carries `candidates`); the one whose English reads most plausibly in the open world wins — the same `choose` as item 2 of 10:00. A candidate with non-words loses.
 4. **Replies:** English reply → the translator, with composed templates only where they exist and are right; never withheld (class B).
 w.lang.ro stays what the owner described: the Romanian vocabulary for translation (dictionary, morphology to find the lemma). The library's direct reading of Romanian frames stays a measurement tool, not the product path. Everything else of 10:00 stands.
+
+## Reviewer 2026-11-15 10:20 — OWNER: the history file name
+
+Owner (08:49): the name in block 10:00 is too long. The download is **`psys2-15Nov.json`** (day and month of the local date; a second export the same day `psys2-15Nov-2.json`, and so on). The rest of that task stands (share sheet on the phone, say where it went, build and turn count in the first lines). The owner will also run a session in English, to separate translation faults from intent faults: when that export arrives it is a second headline file, judged the same way.
