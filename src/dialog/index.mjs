@@ -1581,7 +1581,9 @@ export class DialogSession {
     const rd = this.dialogue.requests;
     const lastRec = rd.last(tabWorld);
     const parsed = !catchAll && segs.length > 0 && segs.every((sg) => !sg.unparsed && !(sg.ignored?.length) && !sg.partial && !sg.bestEffort);   // every word read (a refusal still read its words)
-    const q = readRequest(english, { lang: interp.lang, world, kindWords: decl.kinds, first: { complete: parsed }, lib: this.engine.sopworld, last: lastRec?.request ?? null });
+    const vocab = spellVocabulary(set);
+    const known = (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!this.engine.translator?.rules?.knownEnglish?.(w);   // a word of the language is never a slip
+    const q = readRequest(english, { lang: interp.lang, world, kindWords: decl.kinds, first: { complete: parsed }, lib: this.engine.sopworld, last: lastRec?.request ?? null, known });
     first.trace.request = q;
     const beforeState = snap0.isession.state[tabWorld] ? structuredClone(snap0.isession.state[tabWorld]) : null;
     const measure = (before) => interp.hook(this.isession, tabWorld, 'requestResult', { before });
@@ -1590,7 +1592,8 @@ export class DialogSession {
     // a reaction to the last result of this tab: the last request revised, the last result replaced
     const constraintsOnly = !q.act && !q.target && q.facts.length > 0;
     let reaction = q.reaction && !['thanks', 'frustration'].includes(q.reaction) ? q.reaction : (q.reaction === 'frustration' && constraintsOnly ? 'refine' : null);
-    if (!reaction && constraintsOnly && lastRec && !complete) reaction = 'refine';
+    // a turn of constraints only (no act, no thing) about the last result: a refine, also when a reader carried out something else with it ("not all circles, better layout" read as a correction)
+    if (!reaction && constraintsOnly && lastRec && (!complete || q.facts.some((f) => (f.key === 'kind' && f.neg) || ['manner', 'count', 'size', 'layout'].includes(f.key)))) reaction = 'refine';
     const sameAgain = lastRec && q.act && lastRec.request.act === q.act && q.target && lastRec.request.target === q.target && JSON.stringify(q.facts) === JSON.stringify(lastRec.request.facts);
     if (sameAgain) reaction = 'redo';
     // the open world itself read the turn completely ("now bigger", "make another one", "not that one, the other one" are its own acts on the last thing): a reaction to the last request
