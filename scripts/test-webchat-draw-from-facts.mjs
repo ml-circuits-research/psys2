@@ -84,10 +84,9 @@ async function diagram(o) {
   const c = await open(o);
   try {
     const r = await c.say('make a diagram shaped like a house');
-    check('diagram: shaped like a house', /one box for each of its 6 parts/.test(r.reply), r.reply);
-    const shapes = JSON.parse(await c.state())['diagram.sketch']?.shapes ?? [];
-    const roof = shapes.find((x) => x.name === 'roof'), body = shapes.find((x) => x.name === 'body');
-    check('diagram: the roof is a triangle, the body stays a rectangle', roof?.shape === 'triangle' && body?.shape === 'rectangle', JSON.stringify([roof?.shape, body?.shape]));
+    check('diagram: shaped like a house', /6 nodes on its outline/.test(r.reply), r.reply);
+    const st = JSON.parse(await c.state())['diagram.sketch'] ?? {};
+    check('diagram: the outline is closed (6 nodes, 6 lines)', (st.shapes ?? []).length === 6 && (st.edges ?? []).length === 6, JSON.stringify([(st.shapes ?? []).length, (st.edges ?? []).length]));
     await c.pg.evaluate(() => document.querySelector('.p2-tab[data-tab="diagram"], [data-tab="diagram"]')?.click?.());
     await settle(1200);
     await c.pg.screenshot({ path: path.join(OUT, 'diagram-shaped-like-a-house.png') });

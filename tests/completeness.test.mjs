@@ -145,3 +145,19 @@ test('the ensemble (PSYS2_ENSEMBLE, default on): the voices are pooled and the l
     assert.equal(off.segments[0].variant?.ensemble, undefined);
   } finally { engine.setKnowledge(null); }
 });
+
+// CATCH-ALL readings (spec 16 section 13; owner export 2026-11-14 22:43: "deseneaza o diagrama in forma de casa" drew one circle, read by "{pre} diagram {post}" and called complete)
+test('catch-all patterns: every world pattern whose captured arguments are only raw text (pre / post / rest) is listed, and a half-read catch-all is asked, not executed', async () => {
+  const { isCatchAll } = await import('../src/formalizer/typed-world.mjs');
+  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
+  const all = engine.set.list().flatMap((w) => (w.patterns ?? []).filter((p) => isCatchAll(p)).map((p) => p.id)).sort();
+  for (const id of ['pat.diagram.sketch.read.frame', 'pat.diagram.sketch.read.frame.end', 'pat.diagram.sketch.read.frame.form', 'pat.diagram.sketch.read.frame.shaped', 'pat.diagram.sketch.read.own']) assert.ok(all.includes(id), id);
+  assert.ok(!all.includes('pat.diagram.sketch.bare.mod'), 'a typed thing next to a leftover is not a catch-all (its leftover is still checked)');
+  const s = engine.createSession({ language: 'en' });
+  s.setWorldState('ui.shell', { activeTab: 'diagram' });
+  const r = await s.send('Make a diagram of the glorbs in a quuxy way.');
+  assert.match(r.text, /I understood only part of .*"glorbs" and "quuxy"/);
+  assert.equal((s.state('diagram.sketch')?.shapes ?? []).length, 0, 'no default circle');
+  const h = await s.send('Draw a diagram in house form.');
+  assert.match(h.text, /in the shape of a house: 6 nodes on its outline/, 'the frame words are the own reader\'s (lex.diagram.sketch.shapedlike) and it reads the shape');
+});

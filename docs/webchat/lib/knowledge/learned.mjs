@@ -8,7 +8,7 @@
  * The wires written: a kind-of fact is a word sense (`k.words.sense ... is_a=`), an ability or a habitat is a commonsense fact (`k.commonsense.thing ... can= / cannot= / at= / made_of=`), a thing of
  * the user is `session.learned.own kind= name= owner=user`.
  */
-import { parseFact, lemmaCandidates } from './facts.mjs?v=f9a0600c1d';
+import { parseFact, lemmaCandidates } from './facts.mjs?v=e6e977142f';
 import { parseTeachTyped } from './teach-typed.mjs?v=00495dbd36';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };

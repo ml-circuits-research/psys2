@@ -2583,3 +2583,14 @@
     word=top_to_bottom
     word=upwards
     word=vertically
+
+@lex.diagram.sketch.shapedlike core.lexicon
+    class=noun
+    doc="The words of an arrangement along the outline of a thing of the catalog ('a diagram in the shape of a house', 'in house form', 'house-shaped'): the own reader's frame words (hooks.mjs SHAPED), so a leftover made of them is read, not unread (spec 16 section 13)."
+    word=form
+    word=shape
+    word=shaped
+    word=outline
+    word=silhouette
+    word=contour
+    word=like
