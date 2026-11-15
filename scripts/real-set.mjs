@@ -30,7 +30,7 @@
  *
  * RETIRED RECORDS (one rule; reviewer 2026-11-15 04:00, Q23): a source record that carries the `retired` field (a dialogue of training/eval/dialogues.jsonl, an owner-log turn)
  * is skipped: its rows stay in the set with `retired` (so the ids of the other rows do not move) and are never replayed, judged or counted. The script has no rule of its own
- * about what is retired; the record says so (`retired: { reason, date }`).
+ * about what is retired; the record says so (`retired: { reason, date }`). A turn of a real dialogue can carry it alone (the turns after it that are not retired are replayed in order).
  * Every result file records the build it was measured on (`build`, `tree`).
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
@@ -82,7 +82,7 @@ export function build() {
   // real dialogues with expectations
   for (const d of jl('training/eval/dialogues.jsonl').filter((x) => (x.families ?? []).includes('real'))) {
     let tab = d.tab ?? null;
-    d.turns.forEach((t, i) => { if (t.tab) tab = t.tab; add({ set: `dialogues:${d.id}`, session: `dialogues:${d.id}`, i, tab, lang: 'en', mode: t.mode, text: t.message, class: (d.families ?? []).join(','), logged: {}, init: i === 0 ? d.init : undefined, judge: 'state', check: { world: d.world, expect: t.expect }, source: 'real-dialogue', ...(d.retired ? { retired: d.retired } : {}), ...(t.note ? { note: t.note } : {}) }); });
+    d.turns.forEach((t, i) => { if (t.tab) tab = t.tab; add({ set: `dialogues:${d.id}`, session: `dialogues:${d.id}`, i, tab, lang: 'en', mode: t.mode, text: t.message, class: (d.families ?? []).join(','), logged: {}, init: i === 0 ? d.init : undefined, judge: 'state', check: { world: d.world, expect: t.expect }, source: 'real-dialogue', ...(d.retired ?? t.retired ? { retired: d.retired ?? t.retired } : {}), ...(t.note ? { note: t.note } : {}) }); });
   }
   // Romanian originals of owner / phrase-log sources not already present
   const have = new Set(rows.map((r) => norm(r.text)));

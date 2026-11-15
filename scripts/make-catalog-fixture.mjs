@@ -19,7 +19,10 @@ if (process.argv.includes('--world')) {
   rmSync(path.join(out, id), { recursive: true, force: true });
   mkdirSync(path.join(out, id, 'shards'), { recursive: true });
   writeFileSync(path.join(out, w.schema), readFileSync(path.join(src, w.schema), 'utf8'));
-  const sh = w.shards.map((x) => { const text = readFileSync(path.join(src, x.path), 'utf8'); writeFileSync(path.join(out, x.path), text); return { id: x.id, path: x.path, wires: text.split('\n').filter((l) => l.startsWith('@')).length, bytes: text.length, keys: x.keys, sources: x.sources, license: 'CC0-1.0', warnings: [] }; });
+  // the outlines of k.layouts are not in the fixture: their records name the drawable things ("house") and a test catalog of a few k.objects shards then reads the plural "houses"
+  // as a thing with no drawing (the drawing tests of art.draw); the outlines reach the diagram through its bundle (src/knowledge/bundled-diagrams.mjs), generated from the pin
+  const SKIP = { 'k.layouts': /\/outlines-/ };
+  const sh = w.shards.filter((x) => !SKIP[id]?.test(x.id)).map((x) => { const text = readFileSync(path.join(src, x.path), 'utf8'); writeFileSync(path.join(out, x.path), text); return { id: x.id, path: x.path, wires: text.split('\n').filter((l) => l.startsWith('@')).length, bytes: text.length, keys: x.keys, sources: x.sources, license: 'CC0-1.0', warnings: [] }; });
   const at = index.worlds.findIndex((x) => x.id === id);
   index.worlds[at] = { id, version: w.version, schema: w.schema, exports: w.exports, depends: [], shards: sh };
   for (const k of Object.keys(vocab)) vocab[k] = vocab[k].filter((s) => !s.startsWith(`${id}/`));

@@ -251,8 +251,7 @@
   "k.shapes/shards/derived",
   "k.shapes/shards/psys2",
   "k.shapes/shards/shapes",
-  "k.values/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/shapes"
  ],
  "arched": [
   "k.faces/shards/plain-eyebrows"
@@ -296,8 +295,7 @@
   "k.faces/shards/plain-eyes",
   "k.faces/shards/plain-head",
   "k.shapes/shards/shapes",
-  "k.values/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/shapes"
  ],
  "surprised": [
   "k.faces/shards/plain-eyes",
@@ -392,8 +390,7 @@
   "k.objects/shards/nature",
   "k.layouts/shards/anchors-points",
   "k.layouts/shards/anchors",
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-apache-2-0-and-unicode-3-0"
+  "k.layouts/shards/joins"
  ],
  "hat": [
   "k.faces/shards/plain-hat",
@@ -427,8 +424,7 @@
   "k.body/shards/core",
   "k.words/shards/he",
   "k.shapes/shards/shapes",
-  "k.values/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/shapes"
  ],
  "long": [
   "k.faces/shards/plain-head",
@@ -645,8 +641,7 @@
   "k.words/shards/ho",
   "k.scenes/shards/things-h",
   "k.layouts/shards/anchors",
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.layouts/shards/joins"
  ],
  "body": [
   "k.objects/shards/buildings",
@@ -682,8 +677,7 @@
   "k.scenes/shards/scenes-town",
   "k.scenes/shards/things-c",
   "k.layouts/shards/anchors",
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.layouts/shards/joins"
  ],
  "castles": [
   "k.objects/shards/buildings"
@@ -912,8 +906,7 @@
   "k.commonsense/shards/core",
   "k.words/shards/bi",
   "k.scenes/shards/things-b",
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.layouts/shards/joins"
  ],
  "birds": [
   "k.objects/shards/animals"
@@ -923,8 +916,7 @@
  ],
  "butterfly": [
   "k.objects/shards/animals",
-  "k.animals/shards/invertebrates",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.animals/shards/invertebrates"
  ],
  "cat": [
   "k.objects/shards/animals",
@@ -977,8 +969,7 @@
   "k.commonsense/shards/core",
   "k.words/shards/fi",
   "k.scenes/shards/things-f",
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.layouts/shards/joins"
  ],
  "fishes": [
   "k.objects/shards/animals"
@@ -1121,8 +1112,7 @@
   "k.objects/shards/figures",
   "k.words/shards/sn",
   "k.words/shards/sn",
-  "k.scenes/shards/things-s",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.scenes/shards/things-s"
  ],
  "snowmen": [
   "k.objects/shards/figures"
@@ -1160,7 +1150,6 @@
   "k.scenes/shards/things-c",
   "k.layouts/shards/anchors",
   "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-cc0-1-0",
   "k.layouts/shards/psys2"
  ],
  "cups": [
@@ -1259,8 +1248,7 @@
   "k.words/shards/um",
   "k.words/shards/um",
   "k.scenes/shards/things-u",
-  "k.layouts/shards/anchors",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.layouts/shards/anchors"
  ],
  "umbrellas": [
   "k.objects/shards/household"
@@ -1272,8 +1260,7 @@
   "k.food/shards/fruit",
   "k.words/shards/ap",
   "k.scenes/shards/things-a",
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.layouts/shards/joins"
  ],
  "apples": [
   "k.objects/shards/nature"
@@ -1295,8 +1282,7 @@
   "k.words/shards/fl",
   "k.scenes/shards/things-f",
   "k.actions/shards/actions-body-social-nature",
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.layouts/shards/joins"
  ],
  "flowers": [
   "k.objects/shards/nature"
@@ -1307,8 +1293,7 @@
  ],
  "leaf": [
   "k.objects/shards/nature",
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-cc-by-sa-4-0"
+  "k.layouts/shards/joins"
  ],
  "left_petal": [
   "k.objects/shards/nature"
@@ -1350,8 +1335,7 @@
   "k.layouts/shards/anchors-points",
   "k.layouts/shards/anchors",
   "k.layouts/shards/joins",
-  "k.layouts/shards/layouts",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.layouts/shards/layouts"
  ],
  "trees": [
   "k.objects/shards/nature"
@@ -1365,8 +1349,7 @@
  ],
  "cloud": [
   "k.objects/shards/sky",
-  "k.commonsense/shards/core",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.commonsense/shards/core"
  ],
  "clouds": [
   "k.objects/shards/sky"
@@ -1395,8 +1378,7 @@
   "k.space/shards/kinds",
   "k.space/shards/solar-system",
   "k.words/shards/mo",
-  "k.scenes/shards/things-m",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.scenes/shards/things-m"
  ],
  "moons": [
   "k.objects/shards/sky",
@@ -1430,8 +1412,7 @@
   "k.scenes/shards/things-s",
   "k.shapes/shards/shapes",
   "k.values/shards/shapes",
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.layouts/shards/joins"
  ],
  "stars": [
   "k.objects/shards/sky"
@@ -1442,8 +1423,7 @@
   "k.commonsense/shards/core",
   "k.space/shards/solar-system",
   "k.words/shards/su",
-  "k.scenes/shards/things-s",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.scenes/shards/things-s"
  ],
  "top_ray": [
   "k.objects/shards/sky"
@@ -1497,8 +1477,7 @@
   "k.words/shards/ca",
   "k.scenes/shards/things-c",
   "k.layouts/shards/anchors",
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.layouts/shards/joins"
  ],
  "carriage": [
   "k.objects/shards/vehicles"
@@ -1589,8 +1568,7 @@
   "k.objects/shards/vehicles",
   "k.words/shards/ro",
   "k.words/shards/ro",
-  "k.scenes/shards/things-r",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.scenes/shards/things-r"
  ],
  "rockets": [
   "k.objects/shards/vehicles"
@@ -1749,8 +1727,7 @@
   "k.words/shards/ba",
   "k.food/shards/fruit",
   "k.words/shards/ba",
-  "k.scenes/shards/things-b",
-  "k.layouts/shards/outlines-apache-2-0-and-unicode-3-0"
+  "k.scenes/shards/things-b"
  ],
  "bee": [
   "k.words/shards/be",
@@ -1954,8 +1931,7 @@
   "k.food/shards/animal-foods",
   "k.words/shards/eg",
   "k.scenes/shards/things-e",
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-apache-2-0-and-unicode-3-0"
+  "k.layouts/shards/joins"
  ],
  "egypt": [
   "k.words/shards/eg",
@@ -2159,8 +2135,7 @@
   "k.words/shards/ki",
   "k.words/shards/ki",
   "k.scenes/shards/things-k",
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-apache-2-0-and-unicode-3-0"
+  "k.layouts/shards/joins"
  ],
  "know": [
   "k.words/shards/kn",
@@ -2587,8 +2562,7 @@
   "k.actions/shards/actions-body-social-nature",
   "k.layouts/shards/anchors",
   "k.layouts/shards/joins",
-  "k.layouts/shards/layouts",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.layouts/shards/layouts"
  ],
  "scatter": [
   "k.actions/shards/verbs-place",
@@ -5189,8 +5163,7 @@
  "lemon": [
   "k.demo/shards/fruits",
   "k.food/shards/fruit",
-  "k.colours/shards/colours-common",
-  "k.layouts/shards/outlines-apache-2-0-and-unicode-3-0"
+  "k.colours/shards/colours-common"
  ],
  "albatross": [
   "k.animals/shards/birds"
@@ -6848,8 +6821,7 @@
   "k.food/shards/fruit"
  ],
  "pear": [
-  "k.food/shards/fruit",
-  "k.layouts/shards/outlines-apache-2-0-and-unicode-3-0"
+  "k.food/shards/fruit"
  ],
  "pineapple": [
   "k.food/shards/fruit"
@@ -7108,8 +7080,7 @@
   "k.food/shards/vegetables"
  ],
  "mushroom": [
-  "k.food/shards/vegetables",
-  "k.layouts/shards/outlines-apache-2-0-and-unicode-3-0"
+  "k.food/shards/vegetables"
  ],
  "onion": [
   "k.food/shards/vegetables"
@@ -9148,13 +9119,11 @@
  "arrow": [
   "k.shapes/shards/shapes",
   "k.values/shards/shapes",
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.layouts/shards/joins"
  ],
  "circle": [
   "k.shapes/shards/shapes",
-  "k.values/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/shapes"
  ],
  "cone": [
   "k.shapes/shards/shapes",
@@ -9162,8 +9131,7 @@
  ],
  "cross": [
   "k.shapes/shards/shapes",
-  "k.values/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/shapes"
  ],
  "cube": [
   "k.shapes/shards/derived",
@@ -9180,15 +9148,13 @@
  ],
  "diamond": [
   "k.shapes/shards/shapes",
-  "k.values/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/shapes"
  ],
  "hexagon": [
   "k.shapes/shards/derived",
   "k.shapes/shards/psys2",
   "k.shapes/shards/shapes",
-  "k.values/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/shapes"
  ],
  "line": [
   "k.shapes/shards/shapes",
@@ -9199,32 +9165,27 @@
   "k.shapes/shards/derived",
   "k.shapes/shards/psys2",
   "k.shapes/shards/shapes",
-  "k.values/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/shapes"
  ],
  "parallelogram": [
   "k.shapes/shards/shapes",
-  "k.values/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/shapes"
  ],
  "pentagon": [
   "k.shapes/shards/derived",
   "k.shapes/shards/psys2",
   "k.shapes/shards/shapes",
-  "k.values/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/shapes"
  ],
  "rectangle": [
   "k.shapes/shards/derived",
   "k.shapes/shards/psys2",
   "k.shapes/shards/shapes",
-  "k.values/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/shapes"
  ],
  "semicircle": [
   "k.shapes/shards/shapes",
-  "k.values/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/shapes"
  ],
  "sphere": [
   "k.shapes/shards/shapes",
@@ -9241,8 +9202,7 @@
   "k.shapes/shards/derived",
   "k.shapes/shards/psys2",
   "k.shapes/shards/shapes",
-  "k.values/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/shapes"
  ],
  "zigzag": [
   "k.shapes/shards/shapes",
@@ -16153,8 +16113,7 @@
   "k.geo/shards/north-america"
  ],
  "bell": [
-  "k.geo/shards/north-america",
-  "k.layouts/shards/outlines-apache-2-0-and-unicode-3-0"
+  "k.geo/shards/north-america"
  ],
  "belmopan": [
   "k.geo/shards/north-america"
@@ -21356,8 +21315,7 @@
  "rhombus": [
   "k.shapes/shards/derived",
   "k.shapes/shards/psys2",
-  "k.values/shards/psys2",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.values/shards/psys2"
  ],
  "cloud shape": [
   "k.shapes/shards/shapes"
@@ -21379,8 +21337,7 @@
   "k.shapes/shards/shapes"
  ],
  "trapezium": [
-  "k.shapes/shards/shapes",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.shapes/shards/shapes"
  ],
  "wavy line": [
   "k.shapes/shards/shapes"
@@ -21621,8 +21578,7 @@
   "k.attributes/shards/things-living"
  ],
  "ghost": [
-  "k.attributes/shards/things-living",
-  "k.layouts/shards/outlines-cc-by-sa-4-0"
+  "k.attributes/shards/things-living"
  ],
  "hippo": [
   "k.attributes/shards/things-living"
@@ -22481,8 +22437,7 @@
   "k.layouts/shards/joins"
  ],
  "bottle": [
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-cc0-1-0"
+  "k.layouts/shards/joins"
  ],
  "bracelet": [
   "k.layouts/shards/joins"
@@ -22573,8 +22528,7 @@
   "k.layouts/shards/joins"
  ],
  "key": [
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-apache-2-0-and-unicode-3-0"
+  "k.layouts/shards/joins"
  ],
  "knife": [
   "k.layouts/shards/joins"
@@ -22669,8 +22623,7 @@
   "k.layouts/shards/joins"
  ],
  "teapot": [
-  "k.layouts/shards/joins",
-  "k.layouts/shards/outlines-apache-2-0-and-unicode-3-0"
+  "k.layouts/shards/joins"
  ],
  "town": [
   "k.layouts/shards/joins"
@@ -22765,15 +22718,6 @@
  ],
  "top_right": [
   "k.layouts/shards/layouts"
- ],
- "church": [
-  "k.layouts/shards/outlines-apache-2-0-and-unicode-3-0"
- ],
- "light bulb": [
-  "k.layouts/shards/outlines-apache-2-0-and-unicode-3-0"
- ],
- "shield": [
-  "k.layouts/shards/outlines-apache-2-0-and-unicode-3-0"
  ],
  "fire": [
   "k.layouts/shards/psys2"

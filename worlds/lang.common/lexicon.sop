@@ -1260,6 +1260,49 @@
     alt=do_not_put_it_on
     alt=not_covering
 
+@phrase.person.interview core.phrase
+    frame=false
+    doc="The user asks to be interviewed about themselves (src/dialog/person.mjs, spec 23 \"The person of the session\"): the session asks the keys of w.person one by one."
+    alt=get_to_know_me
+    alt=get_to_know_me_better
+    alt=interview_me
+    alt=ask_me_about_myself
+    alt=ask_me_questions_about_me
+    alt=ask_me_questions_about_myself
+    alt=learn_about_me
+    alt=lets_get_to_know_each_other
+
+@phrase.person.interview.resume core.phrase
+    frame=false
+    doc="The user comes back to the interview about themselves (src/dialog/person.mjs)."
+    alt=coming_back_to_knowing_me
+    alt=back_to_knowing_me
+    alt=back_to_getting_to_know_me
+    alt=lets_go_back_to_knowing_me
+    alt=continue_getting_to_know_me
+    alt=continue_the_interview
+    alt=go_on_with_the_questions_about_me
+
+@phrase.person.interview.stop core.phrase
+    frame=false
+    doc="The user ends the interview about themselves while a question of it is open (src/dialog/person.mjs)."
+    alt=stop
+    alt=stop_it
+    alt=stop_asking
+    alt=stop_the_questions
+    alt=no_more_questions
+    alt=that_is_enough
+    alt=thats_enough
+    alt=enough
+
+@phrase.person.profile core.phrase
+    frame=false
+    doc="The user asks to see what the session keeps about them (src/dialog/person.mjs): the person of the session, shown in Settings › Privacy too."
+    alt=open_my_profile
+    alt=show_my_profile
+    alt=show_me_my_profile
+    alt=my_profile
+
 @phrase.lang.cancel core.phrase
     frame=false
     doc="Cancellations (ctx.lang.cancel): never mind, forget it, cancel that."

@@ -24,6 +24,7 @@ import { normalizeNxStrategy } from './lib/formalizer/nx-strategy.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings, applyReading } from './ui/settings.mjs';
 import { guard, TurnAborted, withDeadline, LOAD_WAIT_CAP_MS } from './lib/formalizer/guard.mjs';
 import { turnRecord, summarize, outcomeOf, executedActs } from './lib/dialog/conversation.mjs';
+import { personView } from './lib/dialog/person-view.mjs';
 import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
 import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf, exportRecord } from './ui/phrase-log.mjs';
@@ -1730,7 +1731,17 @@ export async function mountPsys2(element, options = {}) {
     ];
   }
   function privacyBody() {
-    return [phraseLogSection(), sendingSection()];
+    return [personSection(), phraseLogSection(), sendingSection()];
+  }
+  // ---------- what the conversation knows about the person (Q19, spec 23): w.person facts of this session only, never sent, gone with the session ----------
+  function personSection() {
+    const v = personView(states['session.things']);
+    const rows = [['Name', v.name], ['Age', v.age], ['Job', v.occupation], ['Languages', v.language.join(', ')], ['Family', v.relatives.map((r) => `${r.count} × ${r.relation}`).join(', ')], ['Likes', v.likes.map((x) => x.thing).join(', ')], ['Does not like', v.dislikes.map((x) => x.thing).join(', ')]].filter(([, x]) => x != null && x !== '');
+    const forget = h('button', { class: 'p2-btn-text', type: 'button', disabled: rows.length ? null : true, onclick: () => { session?.setWorldState?.('session.things', { person: null }); states['session.things'] = { ...(states['session.things'] ?? {}), person: null }; toast('Forgotten'); renderSettings(); } }, 'Forget what you know about me');
+    return h('div', { class: 'p2-plog', 'data-section': 'person' }, h('strong', {}, 'What I know about you'),
+      h('p', { class: 'p2-opt-note' }, 'What you told me about yourself in this conversation ("my name is Ana", "I have two kids", "I like cats"). It stays on this device, only for this conversation, and is never sent.'),
+      rows.length ? h('dl', { class: 'p2-person' }, ...rows.flatMap(([k, x]) => [h('dt', {}, k), h('dd', {}, String(x))])) : h('p', {}, 'Nothing yet.'),
+      forget);
   }
   // ---------- send failures (LEARN FROM USE): OFF by default; nothing leaves the device before the person turns it on ----------
   const failureSender = createFailureSender({ settings: () => settings, records: () => phrases.all(), events: () => events.all(), storage: options.persist !== false ? globalThis.localStorage : null, build: null, onResult: () => { if (!settingsEl.hidden && settingsTab === 'privacy') renderSettings(); } });

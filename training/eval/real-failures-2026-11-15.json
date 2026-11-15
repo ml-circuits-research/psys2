@@ -2,29 +2,29 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "9e5bb2b1",
-  "tree": "caebc76d95c23eee",
-  "catalog": "590bc64f8777115c3c44de36378a68e75bf7eb09",
+  "build": "04179577",
+  "tree": "4e4e6a5fbf004902",
+  "catalog": "7ecf82db79603dc624885693c697cf9389e9219d",
   "seed": 20261115,
   "formalizer": "encoder"
  },
  "set": 651,
  "tables": {
   "matrix": {
-   "turns": 578,
-   "judged": 180,
-   "right": 130,
-   "partly": 19,
-   "wrong": 31,
+   "turns": 605,
+   "judged": 207,
+   "right": 157,
+   "partly": 20,
+   "wrong": 30,
    "open": 13,
    "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 334,
+    "executed": 335,
     "refused": 2,
     "asked": 6,
-    "not_understood": 168,
-    "other_world": 68
+    "not_understood": 167,
+    "other_world": 95
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -73,9 +73,9 @@
      "right": 0
     },
     "real dialogues": {
-     "turns": 104,
-     "judged": 104,
-     "right": 70
+     "turns": 131,
+     "judged": 131,
+     "right": 97
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -83,23 +83,23 @@
      "right": 0
     }
    },
-   "retired": 73
+   "retired": 46
   },
   "ops": {
-   "turns": 578,
-   "judged": 180,
-   "right": 130,
-   "partly": 19,
-   "wrong": 31,
+   "turns": 605,
+   "judged": 207,
+   "right": 157,
+   "partly": 20,
+   "wrong": 30,
    "open": 13,
    "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 334,
+    "executed": 335,
     "refused": 2,
     "asked": 6,
-    "not_understood": 169,
-    "other_world": 67
+    "not_understood": 167,
+    "other_world": 95
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -148,9 +148,9 @@
      "right": 0
     },
     "real dialogues": {
-     "turns": 104,
-     "judged": 104,
-     "right": 70
+     "turns": 131,
+     "judged": 131,
+     "right": 97
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -158,14 +158,14 @@
      "right": 0
     }
    },
-   "retired": 73
+   "retired": 46
   }
  },
  "diagnostic_rules_matrix": {
-  "right": 131,
-  "judged": 180,
+  "right": 156,
+  "judged": 207,
   "partly": 13,
-  "wrong": 36,
+  "wrong": 38,
   "build": "04987ded",
   "tree": "b246a0839e0404e9"
  },
@@ -348,7 +348,7 @@
     {
      "text": "create a diagram",
      "tab": "diagram",
-     "happened": "I drew a random timeline diagram with four shapes. It is about day. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:shapes."
+     "happened": "I drew a random timeline diagram with four shapes. It is about water cycle. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state"
     },
     {
      "text": "add a box",
@@ -505,7 +505,7 @@
     {
      "text": "would you say you are happy",
      "tab": "robot",
-     "happened": "I could not find \"you are happy\" in the document. [outcome: other_world; wrong; answer:happy]"
+     "happened": "I could not find \"you are happy\" in the document. [outcome: other_world; partly; answer:happy]"
     },
     {
      "text": "would you say you are sad",
