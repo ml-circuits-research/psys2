@@ -1652,6 +1652,7 @@ export class DialogSession {
     r.trace.request = { ...q, revised: revised ? goalReq.facts : null, plan: { goal: { ...goal, request: undefined, expect: undefined }, result } };
     r.trace.intent = first.trace.intent;
     if (Array.isArray(r.worlds) && !r.worlds.includes(tabWorld)) r.worlds.push(tabWorld);
+    if (!(r.segments ?? []).some((sg) => (sg.world ?? sg.match?.worldId) === tabWorld)) r.segments = [...(r.segments ?? []), { world: tabWorld, text: english, planned: true }];   // the world that carried out the request
     if (Array.isArray(r.statuses)) r.statuses = r.statuses.length ? r.statuses : ['supported'];
     return r;
   }

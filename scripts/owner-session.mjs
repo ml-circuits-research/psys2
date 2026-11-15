@@ -13,7 +13,8 @@
  *
  * A checks / variants line: { turn | id, session?, class?, tab, lang, text, intent, expect, seed?, redraw? }. `redraw` (a regex over the visible
  * state) replays the lines up to it with seeds 1, 2, ... until the state matches: the owner's random diagram of turn 1 (the report pipeline: summary, work done, results,
- * problems) is drawn again, so the later turns name the same nodes. `seed` on a session's first line fixes its generator. Lines of one `session` are replayed in order in one session (the checks file is one
+ * problems) is drawn again, so the later turns name the same nodes. `setup` (a list of English requests) replaces `redraw`: the turn is judged on its own draw, then the session goes back
+ * to before it and the requests build the owner's state (independent of the random draw and of the catalog version). `seed` on a session's first line fixes its generator. Lines of one `session` are replayed in order in one session (the checks file is one
  * session; a variant line without `session` gets a fresh one). `expect` (all optional; an empty expect is a context turn, replayed and not judged):
  *   world      the world that must act or answer (one of the reply's worlds), or a list of acceptable worlds
  *   tab        the tab after the turn
@@ -103,11 +104,15 @@ async function main() {
       }
     }
     const before = s.state(), t0 = performance.now();
+    const setupSnap = r.setup ? s.snapshot() : null;
     let reply = null, error = null;
     try { reply = await s.send(r.text, sendOptions(settings, { lang: r.lang ?? 'ro' }, createBudget())); } catch (e) { error = e.message; }
     const ms = Math.round(performance.now() - t0);
     if (process.env.OWNER_TRACE && process.env.OWNER_TRACE.split(",").includes(String(r.turn ?? r.id))) console.error(JSON.stringify({ text: reply?.text, statuses: reply?.statuses, parts: reply?.parts, trace: { ...reply?.trace, budget: undefined } }, null, 1).slice(0, Number(process.env.OWNER_TRACE_MAX ?? 12000)));
     const after = s.state();
+    // `setup`: the turn is judged on its own result; then the session goes back to before it and the owner's state is built by plain English requests (independent of any random
+    // draw or catalog version: the later turns name the owner's things), unjudged
+    if (r.setup) { s.restore(setupSnap); for (const e of r.setup) { try { await s.send(e, sendOptions(settings, { lang: 'en', language: 'en' }, createBudget())); } catch { /* the next lines say what is missing */ } } }
     if (process.env.OWNER_STATE && String(r.turn ?? r.id) === process.env.OWNER_STATE) console.error(JSON.stringify(after[TAB_WORLD[r.tab]] ?? null).slice(0, 6000));
     const changed = JSON.stringify(visibleState(before)) !== JSON.stringify(visibleState(after));
     const content = contentChanged(Object.fromEntries(Object.entries(before).map(([k, v]) => [k, JSON.stringify(v)])), after);

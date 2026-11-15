@@ -659,6 +659,7 @@ scădea|subtract|scad scazi scade scădem scădeți scad|scăzut|t
 calcula|calculate|az:calcul|calculat|t imp
 rezolva|solve|az:rezolv|rezolvat|t imp
 adăuga|add|adaug adaugi adaugă adăugăm adăugați adaugă|adăugat|t imp sj=adauge
+crea|create/created|creez creezi creează creăm creați creează|creat|t imp imp=creează,creaza,creați sj=creeze
 aduna|add|a:adun|adunat|t imp
 șterge|delete|șterg ștergi șterge ștergem ștergeți șterg|șters|t imp
 termina|finish|a:termin|terminat|t imp

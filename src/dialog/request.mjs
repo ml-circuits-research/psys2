@@ -103,7 +103,12 @@ export function readRequest(english, { lang, world, kindWords = new Set(), first
     budget.tick('request.kind');
     const s = singular(ws[i]);
     const afterPrep = /^(?:in|into|on|onto|under|near|by|to|from|above|below|behind|beside|of)$/.test(ws[i - 1] ?? '') || /^(?:in|into|on|onto|under|near|by|to|from|above|below|behind|beside)$/.test(ws[i - 2] ?? '') && /^(?:a|an|the|this|that)$/.test(ws[i - 1] ?? '');
-    if (!target && (targets.has(s) || targets.has(ws[i])) && !afterPrep) { target = targets.has(s) ? s : ws[i]; use(i); continue; }   // "put the houses in the pond": a place, not the thing made
+    if (!target && (targets.has(s) || targets.has(ws[i])) && !afterPrep) {
+      target = targets.has(s) ? s : ws[i]; use(i);
+      // "make the diagram more beautiful": the thing that is there, changed; only a thing said with a / an / no article is a new one
+      if (/^(?:the|this|that|my|our|your|it)$/.test(ws[i - 1] ?? '') && act === 'make' && !/^(?:draw|create|add|build|generate|paint|sketch|design|produce)$/.test(ws.find((w) => Object.hasOwn(ACT, w)) ?? '')) act = 'change';
+      continue;
+    }   // "put the houses in the pond": a place, not the thing made
     if (negated.has(i)) continue;
     if (kindWords.has(s) && !facts.some((f) => f.key === 'count' && f.of === s && !kindWords.has(s))) {
       const generic = decl?.generic?.has(s);
