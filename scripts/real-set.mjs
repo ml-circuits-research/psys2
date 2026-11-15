@@ -182,6 +182,8 @@ export async function openShipped({ reasoner = 'matrix', mode = 'shipped', ortPa
   const settings = applyReading({ ...DEFAULT_SETTINGS, reasoner, ...(mode === 'rules' ? { helperModel: false } : {}) });
   engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });
   try { await engine.prepareMeta?.(); } catch { /* the policy router answers alone (spec 20), as on the page */ }
+  if (process.env.PSYS2_TRANSLATION_ARM) engine.translationArm = process.env.PSYS2_TRANSLATION_ARM;   // the arms of the Romanian translation measure (Q48 proposal 2): model | both
+  if (process.env.PSYS2_PROPOSER === '1') await (await import('./lib/proposer-node.mjs')).installProposer(engine, { ortPath });   // the request proposer (Q48), behind its flag
   // the knowledge the page loads (engine-worker.mjs): the catalog, here its checkout at the pinned commit, over the bundled subset
   const catSource = createKnowledgeSource(catalog.dir);
   engine.setKnowledge(createFacts({ source: createLayeredSource({ text: (p) => catSource.text(p).catch(() => null) }) }));

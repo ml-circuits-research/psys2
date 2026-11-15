@@ -20,3 +20,4 @@ training/experiments/browser-limits/www-nx/*
 !training/experiments/browser-limits/www-nx/lora.html
 training/results/nx5/*.json
 .cache/
+training/data/request-proposer/train.jsonl

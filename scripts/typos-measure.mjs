@@ -27,11 +27,15 @@ const known = (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has
 const TAB = { draw: 'art.draw', diagram: 'diagram.sketch', editor: 'docs.editor', docs: 'docs.editor' };
 const fold = (w) => String(w).normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 const tally = {};
+const proposed = []; let proposerHarm = 0;
+const { proposeReading, negationWords } = await import('../src/dialog/proposer.mjs');
+const proposer = process.env.PSYS2_PROPOSER === '1' ? await (await import('./lib/proposer-node.mjs')).openProposer({}) : null;
 const bump = (k, v) => { tally[k] ??= { right: 0, wrong: 0, asked: 0, missed: 0, n: 0 }; tally[k][v]++; tally[k].n++; };
 for (const r of rows) {
   const world = TAB[r.tab] ? engine.set.get(TAB[r.tab]) : null;
   const live = world ? liveWorld(lib, world) : null;
   let verdict = 'missed', fixes = [], asks = [], english = r.text, srcRepairs = [];
+  const control = !(r.typos ?? []).length;
   if (live) {
     srcRepairs = [];
     if (process.argv.includes('--rules-only') && r.lang === 'ro') english = (await tr.translate(r.text, { from: 'ro', to: 'en' }))?.text ?? r.text;
@@ -44,8 +48,11 @@ for (const r of rows) {
     const kw = r.lang === 'ro' ? new Set((r.text.match(/[\p{L}]+/gu) ?? []).map(fold)) : null;   // as the door passes it: a word the translation left as written is the person's own
     const q = readTurn(lib, live, language, english, { known: kw ? (w) => known(w) || kw.has(fold(w)) : known });
     fixes = [...q.corrections, ...srcRepairs.map((x) => ({ said: x.from, as: x.to, kind: x.kind }))]; asks = [...(q.asks ?? []), ...asks];
+    if (proposer) {   // spell + proposer (Q48): the proposal reads the spell-repaired words; an accepted one is listed (on a control it is harm)
+      const pr = await proposeReading(proposer, { q, english, world: TAB[r.tab], read: (t) => readTurn(lib, live, language, t, {}), negations: negationWords(language) });
+      if (pr.accepted) { proposed.push(`${r.id} [${control ? 'control' : 'typo'}] ${english} -> ${pr.english}`); if (control) proposerHarm++; }
+    }
   }
-  const control = !(r.typos ?? []).length;
   // a Romanian row is judged on its English: a repair is right when it lands on the translation of the intended word (the source word is gone from the English)
   const intended = (r.typos ?? []).map((t) => fold(t.to));
   if (control) verdict = fixes.length ? 'wrong' : 'right';
@@ -59,3 +66,4 @@ for (const r of rows) {
   if (process.argv.includes('--dump')) console.log(`${verdict.padEnd(6)} ${r.id} [${r.lang} ${r.tab}] ${r.text} | ${english !== r.text ? `en: ${english} | ` : ''}${fixes.map((f) => `${f.said}>${f.as}${f.kind ? `(${f.kind})` : ''}`).join(', ')}${asks.length ? ` asks ${JSON.stringify(asks).slice(0, 80)}` : ''}`);
 }
 for (const [k, t] of Object.entries(tally)) console.log(`${k.padEnd(12)} n=${t.n} right ${t.right}, wrong ${t.wrong}, asked ${t.asked}, missed ${t.missed}`);
+if (proposer) console.log(`spell + proposer: ${proposed.length} proposals accepted (controls changed: ${proposerHarm})${proposed.length ? `\n  ${proposed.join('\n  ')}` : ''}`);

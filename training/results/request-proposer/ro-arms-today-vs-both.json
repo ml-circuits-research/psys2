@@ -1,0 +1,450 @@
+{
+ "a": "training/results/real-2026-11-15-matrixarm-today.json",
+ "b": "training/results/real-2026-11-15-matrixarm-both.json",
+ "totalsA": {
+  "unjudged-other_world": 14,
+  "executed-unjudged": 40,
+  "right": 36,
+  "unjudged-refused": 84,
+  "wrong-exec": 11,
+  "honest": 64,
+  "unjudged-not_understood": 44
+ },
+ "totalsB": {
+  "unjudged-other_world": 14,
+  "executed-unjudged": 37,
+  "right": 36,
+  "unjudged-refused": 87,
+  "wrong-exec": 11,
+  "honest": 64,
+  "unjudged-not_understood": 44
+ },
+ "won": [],
+ "lost": [],
+ "changed": [
+  {
+   "id": "#r0007",
+   "text": "Des",
+   "a": "right",
+   "b": "right",
+   "replyA": "I did not understand \"des\" here.",
+   "replyB": "I did not understand \"often\" here."
+  },
+  {
+   "id": "#r0040",
+   "text": "piicorul corocilului albastru",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I did not understand \"corocyr\", \"leg\" here.",
+   "replyB": "I did not understand \"piicorul\", \"corocilului\" here."
+  },
+  {
+   "id": "#r0046",
+   "text": "muta corcodilii in lac",
+   "a": "right",
+   "b": "right",
+   "replyA": "I read \"corcodiles\" as \"crocodiles\". Nothing changed. There is no crocodile here. I could not do into the lake: this wor",
+   "replyB": "Nothing changed. There is no crocodile here. I could not do in the lake: this world does not take place for place."
+  },
+  {
+   "id": "#r0048",
+   "text": "muta crocodilii in lac",
+   "a": "right",
+   "b": "right",
+   "replyA": "Nothing changed. There is no crocodile here. I could not do lake: this world does not take place for place.",
+   "replyB": "Nothing changed. There is no crocodile here. I could not do in the lake: this world does not take place for place."
+  },
+  {
+   "id": "#r0055",
+   "text": "muta crocodilii mai jos",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "Nothing changed. There is no crocodile here. I could not do below: this world does not take place for place.",
+   "replyB": "Nothing changed. There is no crocodile here. I could not do lower: this world does not take place for place."
+  },
+  {
+   "id": "#r0056",
+   "text": "pune iraba pe sub case",
+   "a": "right",
+   "b": "right",
+   "replyA": "Nothing changed. There is no grass here. I could not do houses: this world does not take place for place.",
+   "replyB": "Nothing changed. There is no grass here. I could not do on under houses: this world does not take about for place."
+  },
+  {
+   "id": "#r0057",
+   "text": "pune iarba pe sub case",
+   "a": "right",
+   "b": "right",
+   "replyA": "Nothing changed. There is no grass here. I could not do houses: this world does not take place for place.",
+   "replyB": "Nothing changed. There is no grass here. I could not do on under houses: this world does not take about for place."
+  },
+  {
+   "id": "#r0068",
+   "text": "nu prima acasa, cea din mijloc",
+   "a": "right",
+   "b": "right",
+   "replyA": "I understood \"the middle\", but not \"not the first home\", so I did nothing.",
+   "replyB": "I understood \"the one in the middle\", but not \"Not the first home\", so I did nothing."
+  },
+  {
+   "id": "#r0070",
+   "text": "fa-mu un desen cu un lac, o rata, o vila, nori, soare ,iarba",
+   "a": "wrong-exec",
+   "b": "wrong-exec",
+   "replyA": "I could not do a villa: there is no villa here. I could not do a villa: there is no villa here. I could not do grass: th",
+   "replyB": "I could not do a villa: there is no villa here. I could not do the grass: there is no grass here. I could not do Make a "
+  },
+  {
+   "id": "#r0075",
+   "text": "desneaza o vila",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I did not understand \"villa\" here.",
+   "replyB": "I did not understand \"vila\" here."
+  },
+  {
+   "id": "#r0096",
+   "text": "muta copilul deseneat anterior in stinga",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I did not understand \"previously\", \"drawn\" here.",
+   "replyB": "I did not understand \"deseneat\", \"previous\" here."
+  },
+  {
+   "id": "#r0098",
+   "text": "muta copilul pe iarba",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "Nothing changed. There is no child here. I could not do grass: this world does not take place for place.",
+   "replyB": "Nothing changed. There is no child here. I could not do on the grass: this world does not take place for place."
+  },
+  {
+   "id": "#r0100",
+   "text": "muta fetita linga baiat",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I did not understand \"girl\", \"boy\" here.",
+   "replyB": "I did not understand \"girl\", \"linga\", \"boy\" here."
+  },
+  {
+   "id": "#r0104",
+   "text": "muta fetita in fata casei,muta pestii pe cer",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I did not understand \"girl\", \"front\", \"mute\" here.",
+   "replyB": "I did not understand \"girl\", \"move\" here."
+  },
+  {
+   "id": "#r0106",
+   "text": "muta fata in fata casei",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I did not understand \"front\" here.",
+   "replyB": "I did not understand \"girl\" here."
+  },
+  {
+   "id": "#r0113",
+   "text": "muta capra mai jos",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "Nothing changed. There is no goat here. I could not do below: this world does not take place for place.",
+   "replyB": "Nothing changed. There is no goat here. I could not do lower: this world does not take place for place."
+  },
+  {
+   "id": "#r0117",
+   "text": "deseneaza si un magar, dar sa nu zboare, pe iarba",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I understood \"on the grass\", but not \"draw a donkey\", \"not to fly\", so I did nothing.",
+   "replyB": "I understood \"on the grass\", but not \"Draw a donkey\", \"too to not fly\", so I did nothing."
+  },
+  {
+   "id": "#r0122",
+   "text": "muta vaca mai jos",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "Nothing changed. There is no cow here. I could not do below: this world does not take place for place.",
+   "replyB": "Nothing changed. There is no cow here. I could not do lower: this world does not take place for place."
+  },
+  {
+   "id": "#r0129",
+   "text": "muta un peste in coltul din dreapta",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "Nothing changed. There is no fish here. I could not do corner: this world does not take attribute for place.",
+   "replyB": "Nothing changed. There is no fish here. I could not do in the corner: this world does not take extent for place."
+  },
+  {
+   "id": "#r0130",
+   "text": "asta e centru, nu e dreapta",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I understood \"the set is center\", but not \"it's not right\", so I did nothing.",
+   "replyB": "Nothing changed. There is no He set to be a center, it is not right here."
+  },
+  {
+   "id": "#r0270",
+   "text": "tata ce pot să zic",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"dad\", \"say\" here.",
+   "replyB": "I did not understand \"father\", \"say\" here."
+  },
+  {
+   "id": "#r0275",
+   "text": "vizionează soare desenează un soare",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"watch\", \"draw\", \"sunshine\" here.",
+   "replyB": "I did not understand \"vizionează\", \"draw\" here."
+  },
+  {
+   "id": "#r0278",
+   "text": "n ai înțeles desenează maimuță",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"n\", \"understand\", \"draw\" here.",
+   "replyB": "I did not understand \"n\", \"understood\", \"draw\" here."
+  },
+  {
+   "id": "#r0279",
+   "text": "desenează liniuță",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"indent\" here.",
+   "replyB": "I did not understand \"dash\" here."
+  },
+  {
+   "id": "#r0281",
+   "text": "tata tău mai mult desenează un pește",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"dad\", \"draws\" here.",
+   "replyB": "I did not understand \"father\", \"draws\" here."
+  },
+  {
+   "id": "#r0282",
+   "text": "tata",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"dad\" here.",
+   "replyB": "I did not understand \"father\" here."
+  },
+  {
+   "id": "#r0287",
+   "text": "peștele stă în apă",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"sits\" here.",
+   "replyB": "I did not understand \"stays\" here."
+  },
+  {
+   "id": "#r0288",
+   "text": "desenează trei pești în apă",
+   "a": "executed-unjudged",
+   "b": "executed-unjudged",
+   "replyA": "I added 3 fish. I could not do in the water: there is no place water here.",
+   "replyB": "I added 3 fish. I could not do in water: there is no place water here."
+  },
+  {
+   "id": "#r0293",
+   "text": "enervant da",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"annoying\" here.",
+   "replyB": "I did not understand \"enervant\" here."
+  },
+  {
+   "id": "#r0296",
+   "text": "face un caca",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"heca\" here.",
+   "replyB": "I did not understand \"caca\" here."
+  },
+  {
+   "id": "#r0306",
+   "text": "Șterge toate cercurile roșii",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "Nothing changed. There is no circle here. I could not do all red: this world does not take attribute for remove.",
+   "replyB": "Nothing changed. There is no circle here. I could not do all the red: this world does not take attribute for remove."
+  },
+  {
+   "id": "#r0321",
+   "text": "desenează",
+   "a": "executed-unjudged",
+   "b": "unjudged-refused",
+   "replyA": "I drew a garden. It has 5 flowers, 2 trees, 1 butterfly and 1 bird. I assumed 9 for the count.",
+   "replyB": "I did not understand that as something to do in the drawing."
+  },
+  {
+   "id": "#r0325",
+   "text": "desenează",
+   "a": "executed-unjudged",
+   "b": "unjudged-refused",
+   "replyA": "I drew a pond. It has 2 flowers, 2 birds and 1 fish. I assumed 6 for the count.",
+   "replyB": "I did not understand that as something to do in the drawing."
+  },
+  {
+   "id": "#r0330",
+   "text": "desenează",
+   "a": "executed-unjudged",
+   "b": "unjudged-refused",
+   "replyA": "I drew a garden. It has 5 flowers, 2 trees, 1 butterfly and 1 bird. I assumed 9 for the count.",
+   "replyB": "I did not understand that as something to do in the drawing."
+  },
+  {
+   "id": "#r0334",
+   "text": "desenează o inimioară desenează o inimă",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"heart\", \"draws\" here.",
+   "replyB": "I did not understand \"heart\", \"draw\" here."
+  },
+  {
+   "id": "#r0335",
+   "text": "desenează o inimioară desenează o inimă",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"heart\", \"draws\" here.",
+   "replyB": "I did not understand \"heart\", \"draw\" here."
+  },
+  {
+   "id": "#r0336",
+   "text": "desenează",
+   "a": "executed-unjudged",
+   "b": "unjudged-refused",
+   "replyA": "I drew a pond. It has 2 flowers, 2 birds and 1 fish. I assumed 6 for the count.",
+   "replyB": "I did not understand that as something to do in the drawing."
+  },
+  {
+   "id": "#r0339",
+   "text": "desenează o inimioară desenează o inimă",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"heart\", \"draws\" here.",
+   "replyB": "I did not understand \"heart\", \"draw\" here."
+  },
+  {
+   "id": "#r0340",
+   "text": "desene",
+   "a": "executed-unjudged",
+   "b": "executed-unjudged",
+   "replyA": "I made it again, the way you said. I drew a pond. It has 2 flowers, 2 birds and 1 fish. I assumed 6 for the count.",
+   "replyB": "I made it again, the way you said. I drew a garden. It has 5 flowers, 2 trees, 1 butterfly and 1 bird. I assumed 9 for t"
+  },
+  {
+   "id": "#r0343",
+   "text": "desenează",
+   "a": "unjudged-other_world",
+   "b": "unjudged-other_world",
+   "replyA": "I drew a sunny scene for you: a yellow sun, 2 clouds, a grey mountain, a yellow house, 2 green trees, a red flower, a pi",
+   "replyB": "I drew a sunny scene for you: a yellow sun, 2 clouds, a grey mountain, an orange house, 2 green trees, a yellow flower, "
+  },
+  {
+   "id": "#r0345",
+   "text": "desenează o casă",
+   "a": "unjudged-other_world",
+   "b": "unjudged-other_world",
+   "replyA": "I drew a yellow house. (Fish usually live in water, not on the ground. Fish usually live in water, not on the ground.)",
+   "replyB": "I drew a yellow house."
+  },
+  {
+   "id": "#r0347",
+   "text": "e o desenat",
+   "a": "unjudged-refused",
+   "b": "executed-unjudged",
+   "replyA": "I did not understand \"it's\", \"draw\" here.",
+   "replyB": "Nothing changed. That is what is there already."
+  },
+  {
+   "id": "#r0348",
+   "text": "desenează o casă e o desenat",
+   "a": "executed-unjudged",
+   "b": "executed-unjudged",
+   "replyA": "I drew a house. I could not do picture: I cannot draw that yet.",
+   "replyB": "I added a house."
+  },
+  {
+   "id": "#r0359",
+   "text": "știi Numai inima desenează",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"know\", \"heart\", \"draws\" here.",
+   "replyB": "I did not understand \"know\", \"heart\", \"draw\" here."
+  },
+  {
+   "id": "#r0364",
+   "text": "desenează",
+   "a": "executed-unjudged",
+   "b": "executed-unjudged",
+   "replyA": "I drew a forest. It has 6 trees.",
+   "replyB": "I added a house. I assumed house for the target. I assumed 1 for the count."
+  },
+  {
+   "id": "#r0368",
+   "text": "săracul",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"poor\" here.",
+   "replyB": "I did not understand \"săracul\" here."
+  },
+  {
+   "id": "#r0369",
+   "text": "desenează o inimă săracul",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"heart\", \"poor\" here.",
+   "replyB": "I did not understand \"heart\", \"săracul\" here."
+  },
+  {
+   "id": "#r0379",
+   "text": "cap",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I cannot do head in the drawing yet.",
+   "replyB": "I did not understand that as something to do in the drawing."
+  },
+  {
+   "id": "#r0411",
+   "text": "Da face face face apă face un mare",
+   "a": "unjudged-other_world",
+   "b": "unjudged-other_world",
+   "replyA": "I added water to the ground.",
+   "replyB": "There is no he to give to make ground here."
+  },
+  {
+   "id": "#r0413",
+   "text": "Da face face face apă face un mare faci un",
+   "a": "executed-unjudged",
+   "b": "executed-unjudged",
+   "replyA": "I did not understand \"Da face face apă face un mare faci un\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt aco",
+   "replyB": "I did not understand \"Da face face apă face un mare faci un\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt aco"
+  },
+  {
+   "id": "#r0414",
+   "text": "Da face face face apă face un mare faci",
+   "a": "unjudged-other_world",
+   "b": "unjudged-other_world",
+   "replyA": "I added water to the ground.",
+   "replyB": "There is no he to give to make ground here."
+  },
+  {
+   "id": "#r0418",
+   "text": "Da face face face apă face un mare faci un mami mare",
+   "a": "unjudged-other_world",
+   "b": "unjudged-other_world",
+   "replyA": "I did not understand \"Da face face apă face un mare faci un mami mare\". For example: \"Adaugă un cântec.\" or \"Câte cântec",
+   "replyB": "I can only change the size of things you drew. The sky and the ground fill the whole page. I did not understand \"Da face"
+  },
+  {
+   "id": "#r0651",
+   "text": "deseneaza o diagrama in forma de casa",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"form\" here.",
+   "replyB": "I did not understand \"shaped\" here."
+  }
+ ]
+}

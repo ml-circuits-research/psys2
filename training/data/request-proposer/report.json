@@ -1,0 +1,364 @@
+{
+ "date": "2026-11-15T22:34:36.753Z",
+ "seed": 7,
+ "per_world": 3000,
+ "rows": 22312,
+ "train": 21246,
+ "dev": 1066,
+ "by_source": {
+  "generated": 2020,
+  "framed": 16984,
+  "framed.verb": 1499,
+  "noise": 882,
+  "framed.verb.render-differs": 346,
+  "noise.render-differs": 17,
+  "unread": 814,
+  "real.set": 33,
+  "real.owner": 11,
+  "real.ro-rules-en": 69
+ },
+ "by_world": {
+  "art.draw": 7800,
+  "diagram.sketch": 7314,
+  "docs.editor": 7198
+ },
+ "acts": {
+  "none": 7119,
+  "make": 11015,
+  "place": 1428,
+  "remove": 895,
+  "redo": 311,
+  "change": 982,
+  "undo": 436,
+  "group": 29,
+  "ask": 61,
+  "connect": 30,
+  "load": 1,
+  "take apart": 2,
+  "pick": 2,
+  "send": 1
+ },
+ "reactions": {
+  "enlarge": 285,
+  "refine": 730,
+  "none": 17744,
+  "capabilities": 481,
+  "thanks": 604,
+  "redo": 271,
+  "state": 982,
+  "reduce": 590,
+  "frustration": 246,
+  "reject": 246,
+  "put_back": 133
+ },
+ "refers": {
+  "none": 7024,
+  "kind": 14365,
+  "last": 727,
+  "all": 196
+ },
+ "questions": {
+  "false": 22312
+ },
+ "tags": {
+  "REACT": 9256,
+  "kind.no": 7247,
+  "ACT": 13637,
+  "O": 21971,
+  "kind": 18090,
+  "extent": 1578,
+  "layout": 6698,
+  "place": 8633,
+  "manner": 2341,
+  "count": 13627,
+  "size": 5572,
+  "attribute": 3939,
+  "with": 1455,
+  "REF": 957,
+  "about": 6448,
+  "kind.not_all": 2186,
+  "length": 4483,
+  "DROP": 29309,
+  "UNREAD": 814
+ },
+ "frames": 57,
+ "top_frames": [
+  {
+   "pre": "can u",
+   "suf": "",
+   "verb": true,
+   "n": 76
+  },
+  {
+   "pre": "",
+   "suf": "pls",
+   "verb": true,
+   "n": 51
+  },
+  {
+   "pre": "um",
+   "suf": "",
+   "verb": true,
+   "n": 40
+  },
+  {
+   "pre": "i want",
+   "suf": "",
+   "verb": false,
+   "n": 29
+  },
+  {
+   "pre": "could you",
+   "suf": "",
+   "verb": true,
+   "n": 29
+  },
+  {
+   "pre": "",
+   "suf": "please",
+   "verb": true,
+   "n": 23
+  },
+  {
+   "pre": "",
+   "suf": "",
+   "verb": false,
+   "n": 19
+  },
+  {
+   "pre": "",
+   "suf": "now",
+   "verb": true,
+   "n": 19
+  },
+  {
+   "pre": "so",
+   "suf": "",
+   "verb": true,
+   "n": 17
+  },
+  {
+   "pre": "",
+   "suf": "for me",
+   "verb": true,
+   "n": 15
+  },
+  {
+   "pre": "can you",
+   "suf": "",
+   "verb": true,
+   "n": 15
+  },
+  {
+   "pre": "hey",
+   "suf": "",
+   "verb": true,
+   "n": 11
+  },
+  {
+   "pre": "",
+   "suf": "ok",
+   "verb": true,
+   "n": 9
+  },
+  {
+   "pre": "",
+   "suf": "i guess",
+   "verb": true,
+   "n": 8
+  },
+  {
+   "pre": "can u tell me",
+   "suf": "",
+   "verb": true,
+   "n": 8
+  },
+  {
+   "pre": "ok",
+   "suf": "",
+   "verb": true,
+   "n": 8
+  },
+  {
+   "pre": "",
+   "suf": "lol",
+   "verb": true,
+   "n": 6
+  },
+  {
+   "pre": "pls",
+   "suf": "",
+   "verb": true,
+   "n": 6
+  },
+  {
+   "pre": "i want to",
+   "suf": "",
+   "verb": true,
+   "n": 5
+  },
+  {
+   "pre": "",
+   "suf": "thing",
+   "verb": true,
+   "n": 5
+  },
+  {
+   "pre": "can we",
+   "suf": "",
+   "verb": true,
+   "n": 4
+  },
+  {
+   "pre": "i want to know",
+   "suf": "",
+   "verb": true,
+   "n": 4
+  },
+  {
+   "pre": "",
+   "suf": "to me",
+   "verb": true,
+   "n": 4
+  },
+  {
+   "pre": "play",
+   "suf": "",
+   "verb": true,
+   "n": 4
+  },
+  {
+   "pre": "",
+   "suf": "yeah",
+   "verb": true,
+   "n": 3
+  },
+  {
+   "pre": "um so",
+   "suf": "",
+   "verb": true,
+   "n": 3
+  },
+  {
+   "pre": "so um",
+   "suf": "",
+   "verb": true,
+   "n": 3
+  },
+  {
+   "pre": "go to",
+   "suf": "",
+   "verb": false,
+   "n": 3
+  },
+  {
+   "pre": "please",
+   "suf": "",
+   "verb": true,
+   "n": 3
+  },
+  {
+   "pre": "just so you know",
+   "suf": "",
+   "verb": true,
+   "n": 3
+  },
+  {
+   "pre": "",
+   "suf": "side",
+   "verb": true,
+   "n": 2
+  },
+  {
+   "pre": "oops",
+   "suf": "",
+   "verb": true,
+   "n": 2
+  },
+  {
+   "pre": "",
+   "suf": "one",
+   "verb": true,
+   "n": 2
+  },
+  {
+   "pre": "i need",
+   "suf": "",
+   "verb": false,
+   "n": 2
+  },
+  {
+   "pre": "kill",
+   "suf": "",
+   "verb": false,
+   "n": 2
+  },
+  {
+   "pre": "grab",
+   "suf": "",
+   "verb": false,
+   "n": 2
+  },
+  {
+   "pre": "",
+   "suf": "roughly",
+   "verb": true,
+   "n": 2
+  },
+  {
+   "pre": "i",
+   "suf": "",
+   "verb": true,
+   "n": 2
+  },
+  {
+   "pre": "",
+   "suf": "rn",
+   "verb": true,
+   "n": 2
+  },
+  {
+   "pre": "wait",
+   "suf": "",
+   "verb": true,
+   "n": 2
+  }
+ ],
+ "verbs": {
+  "art.draw": {
+   "make": "make",
+   "place": "place",
+   "remove": "remove",
+   "redo": "redo",
+   "change": "change",
+   "undo": "undo",
+   "group": "pair",
+   "ask": "ask",
+   "connect": "couple"
+  },
+  "diagram.sketch": {
+   "remove": "remove",
+   "make": "make",
+   "change": "change",
+   "place": "place",
+   "undo": "undo",
+   "redo": "redo",
+   "ask": "ask",
+   "connect": "link"
+  },
+  "docs.editor": {
+   "make": "make",
+   "undo": "undo",
+   "redo": "redo",
+   "connect": "couple",
+   "place": "centre",
+   "ask": "ask"
+  }
+ },
+ "real": {
+  "turns": 334,
+  "labelled": 113,
+  "not_read": 191
+ },
+ "seconds": 336.242
+}

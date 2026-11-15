@@ -1,0 +1,93 @@
+// FRESH PROBE SET of the request proposer (Q48; written 2026-11-15 by the worker before any training run, never trained on). One request per line on a declared tab: `text` as a
+// person might type it, `canonical` a plain phrasing of the same request (its rules reading is the gold), or `canonical: null` for a control that must NOT be read as a
+// request (a word no world knows stays unread, honestly named). Spelling is correct on purpose: spelling is the symbolic repair's job (owner 2026-11-15).
+{"id":"p001","tab":"draw","text":"hey could you maybe draw me three dogs","canonical":"draw three dogs"}
+{"id":"p002","tab":"draw","text":"i would love a picture of a big red house please","canonical":"draw a big red house"}
+{"id":"p003","tab":"draw","text":"ok so now put two clouds in the sky","canonical":"draw two clouds in the sky"}
+{"id":"p004","tab":"draw","text":"can i get a small pond without ducks","canonical":"draw a small pond without ducks"}
+{"id":"p005","tab":"draw","text":"go ahead and draw a forest but no birds","canonical":"draw a forest, no birds"}
+{"id":"p006","tab":"draw","text":"draw a sun for me thanks","canonical":"draw a sun"}
+{"id":"p007","tab":"draw","text":"right, now a tree on the left","canonical":"a tree on the left"}
+{"id":"p008","tab":"draw","text":"please get rid of the house","canonical":"remove the house"}
+{"id":"p009","tab":"draw","text":"could you remove all the clouds now","canonical":"remove all the clouds"}
+{"id":"p010","tab":"draw","text":"i think it needs a few more trees","canonical":"draw a few trees"}
+{"id":"p011","tab":"draw","text":"let's have 4 to 6 flowers","canonical":"draw 4 to 6 flowers"}
+{"id":"p012","tab":"draw","text":"show me a cat and a dog","canonical":"draw a cat and a dog"}
+{"id":"p013","tab":"draw","text":"i want a boat on the lake","canonical":"draw a boat on the lake"}
+{"id":"p014","tab":"draw","text":"draw like two mountains ok","canonical":"draw two mountains"}
+{"id":"p015","tab":"draw","text":"hmm too many trees","canonical":"too many trees"}
+{"id":"p016","tab":"draw","text":"wow that is lovely","canonical":"lovely"}
+{"id":"p017","tab":"draw","text":"make the house blue please","canonical":"make the house blue"}
+{"id":"p018","tab":"draw","text":"move the sun to the right a bit","canonical":"move the sun to the right"}
+{"id":"p019","tab":"draw","text":"undo that please","canonical":"undo"}
+{"id":"p020","tab":"draw","text":"could you draw a garden with lots of flowers","canonical":"draw a garden with lots of flowers"}
+{"id":"p021","tab":"draw","text":"i'd like exactly five fish","canonical":"draw exactly five fish"}
+{"id":"p022","tab":"draw","text":"add a huge yellow sun in the top right corner","canonical":"draw a huge yellow sun in the top right"}
+{"id":"p023","tab":"draw","text":"now draw some butterflies too","canonical":"draw some butterflies"}
+{"id":"p024","tab":"draw","text":"paint me a lake scene with no fish in it","canonical":"draw a lake scene, no fish"}
+{"id":"p025","tab":"draw","text":"draw at least 3 bushes for me","canonical":"draw at least 3 bushes"}
+{"id":"p026","tab":"draw","text":"please clear everything","canonical":"remove everything"}
+{"id":"p027","tab":"draw","text":"how many trees are there now","canonical":"how many trees are there"}
+{"id":"p028","tab":"draw","text":"what can you do here?","canonical":"what can you do"}
+{"id":"p029","tab":"draw","text":"draw a river and also a hill","canonical":"draw a river and a hill"}
+{"id":"p030","tab":"draw","text":"give me a dog, not a cat","canonical":"draw a dog, not cats"}
+{"id":"p031","tab":"draw","text":"draw a zorblat next to the tree","canonical":null}
+{"id":"p032","tab":"draw","text":"florp the house","canonical":null}
+{"id":"p033","tab":"draw","text":"draw a spaceship with three flimbos","canonical":null}
+{"id":"p034","tab":"draw","text":"so basically just draw a tiny cloud","canonical":"draw a tiny cloud"}
+{"id":"p035","tab":"draw","text":"draw the sky dark blue","canonical":"make the sky dark blue"}
+{"id":"p036","tab":"draw","text":"draw two cats and a big one","canonical":"draw two cats and a big one"}
+{"id":"p037","tab":"draw","text":"yes now make it bigger","canonical":"make it bigger"}
+{"id":"p038","tab":"draw","text":"please do it again","canonical":"do it again"}
+{"id":"p039","tab":"draw","text":"thank you so much","canonical":"thank you"}
+{"id":"p040","tab":"draw","text":"draw a house, then a sun","canonical":"draw a house and a sun"}
+{"id":"p041","tab":"diagram","text":"can you make me a diagram with 6 nodes","canonical":"draw a diagram with 6 nodes"}
+{"id":"p042","tab":"diagram","text":"i need a flowchart with five steps and no diamonds","canonical":"draw a flowchart with five nodes, no diamonds"}
+{"id":"p043","tab":"diagram","text":"please add three squares","canonical":"add three squares"}
+{"id":"p044","tab":"diagram","text":"could you draw a red circle for me","canonical":"draw a red circle"}
+{"id":"p045","tab":"diagram","text":"now a blue triangle","canonical":"a blue triangle"}
+{"id":"p046","tab":"diagram","text":"delete all the circles please","canonical":"remove all the circles"}
+{"id":"p047","tab":"diagram","text":"let's do a random diagram","canonical":"draw a random diagram"}
+{"id":"p048","tab":"diagram","text":"hmm, too many nodes","canonical":"too many nodes"}
+{"id":"p049","tab":"diagram","text":"not all circles, ok?","canonical":"not all circles"}
+{"id":"p050","tab":"diagram","text":"put the nodes in a row please","canonical":"arrange the nodes in a row"}
+{"id":"p051","tab":"diagram","text":"i want a mind map about volcanoes","canonical":"draw a mind map about volcanoes"}
+{"id":"p052","tab":"diagram","text":"make a small timeline please","canonical":"draw a small timeline"}
+{"id":"p053","tab":"diagram","text":"could i get a diagram with between 5 and 8 nodes","canonical":"draw a diagram with between 5 and 8 nodes"}
+{"id":"p054","tab":"diagram","text":"add a couple of hexagons","canonical":"add a couple of hexagons"}
+{"id":"p055","tab":"diagram","text":"just add one star","canonical":"add one star"}
+{"id":"p056","tab":"diagram","text":"make the square green","canonical":"make the square green"}
+{"id":"p057","tab":"diagram","text":"ok remove the triangle","canonical":"remove the triangle"}
+{"id":"p058","tab":"diagram","text":"can you undo","canonical":"undo"}
+{"id":"p059","tab":"diagram","text":"draw an org chart with 7 boxes","canonical":"draw an org chart with 7 boxes"}
+{"id":"p060","tab":"diagram","text":"perfect, thanks","canonical":"thanks"}
+{"id":"p061","tab":"diagram","text":"draw a diagram with arrows and a nicer layout","canonical":"draw a diagram with arrows, better layout"}
+{"id":"p062","tab":"diagram","text":"anything but rectangles please","canonical":"anything but rectangles"}
+{"id":"p063","tab":"diagram","text":"how many nodes are there?","canonical":"how many nodes are there?"}
+{"id":"p064","tab":"diagram","text":"draw a gleebox with 4 nodes","canonical":null}
+{"id":"p065","tab":"diagram","text":"connect the snorfs","canonical":null}
+{"id":"p066","tab":"diagram","text":"yo add two ovals","canonical":"add two ovals"}
+{"id":"p067","tab":"diagram","text":"please make it smaller","canonical":"make it smaller"}
+{"id":"p068","tab":"diagram","text":"i'd like a cycle with four nodes","canonical":"draw a cycle with four nodes"}
+{"id":"p069","tab":"diagram","text":"draw me a pipeline of 5 steps, without circles","canonical":"draw a pipeline with 5 nodes, without circles"}
+{"id":"p070","tab":"diagram","text":"redo it please","canonical":"redo"}
+{"id":"p071","tab":"editor","text":"could you write a short story about a lake","canonical":"write a short story about a lake"}
+{"id":"p072","tab":"editor","text":"i want a long report about volcanoes in 4 chapters","canonical":"write a long report about volcanoes with 4 chapters"}
+{"id":"p073","tab":"editor","text":"please write me a poem about the sea","canonical":"write a poem about the sea"}
+{"id":"p074","tab":"editor","text":"now an essay about dogs","canonical":"an essay about dogs"}
+{"id":"p075","tab":"editor","text":"add two more chapters please","canonical":"add two chapters"}
+{"id":"p076","tab":"editor","text":"hmm too long","canonical":"too long"}
+{"id":"p077","tab":"editor","text":"write a story with 3 chapters about dragons please","canonical":"write a story with 3 chapters about dragons"}
+{"id":"p078","tab":"editor","text":"can you make it shorter","canonical":"shorter"}
+{"id":"p079","tab":"editor","text":"i'd like a brief report about bees","canonical":"write a brief report about bees"}
+{"id":"p080","tab":"editor","text":"write a blorkish story","canonical":null}
+{"id":"p081","tab":"editor","text":"great thanks","canonical":"thanks"}
+{"id":"p082","tab":"editor","text":"ok write a story about space with five chapters","canonical":"write a story about space with five chapters"}
+{"id":"p083","tab":"draw","text":"draw three dogs and two cats please","canonical":"draw three dogs and two cats"}
+{"id":"p084","tab":"draw","text":"draw a forest with exactly 4 trees","canonical":"draw a forest with exactly 4 trees"}
+{"id":"p085","tab":"draw","text":"remove the dog please, thank you","canonical":"remove the dog"}
+{"id":"p086","tab":"draw","text":"i want everything gone","canonical":"remove everything"}
+{"id":"p087","tab":"draw","text":"draw a house in the middle please","canonical":"draw a house in the middle"}
+{"id":"p088","tab":"diagram","text":"can you please draw a diagram, not too big","canonical":"draw a small diagram"}
+{"id":"p089","tab":"diagram","text":"some random shapes please","canonical":"draw some random nodes"}
+{"id":"p090","tab":"draw","text":"draw a few birds up high","canonical":"draw a few birds at the top"}

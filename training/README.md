@@ -124,3 +124,16 @@ node scripts/learn-from-logs.mjs --ort ... --retrain [--version v4]             
 - **Into the dataset**: `scripts/build-dataset.mjs` ingests `labelled/*.jsonl` as a source (`self-validated`, weight 0.8, split by group, per-world train/dev/test and routing) and ignores `review.jsonl`.
 - **`--retrain`** runs, after labelling, the R3 commands (worker-log "R3 combined rebuild + retrain + publish") for the dispatcher: `relabel-training.mjs --in-place`, `build-dataset.mjs`, `psys2_train.multicmd`, `psys2_train.check_splits`, `psys2_train.dispatcher --model distilbert-base-uncased --no-lora --lr 5e-5 --epochs 6 --no-select --keep-ckpts 3 --out runs/dispatcher-distilbert-<version>`, `psys2_train.export_onnx`. Choosing the checkpoint and tau (`eval-operational --model-dir`) and publishing (`build-webchat --models`) stay a reviewer decision. `--dry-run` prints the commands and writes nothing.
 - Tests: `tests/learn-logs.test.mjs` (decision, margins, corrections, sessions, fake logs, rows, queue, CLI dry run).
+
+## Request proposer (Q48; spec 28 section 15)
+A MiniLM-L6 encoder that proposes a reading of a request (word roles + act / reaction / reference / question); the rules decide (`src/dialog/proposer.mjs`).
+```bash
+node scripts/gen-request-data.mjs [--per-world 3000] [--seed 7]        # -> training/data/request-proposer/{train,dev}.jsonl (train is gitignored; sha256 in the results), report.json, verbs.json
+node scripts/request-label-share.mjs                                    # share of rows whose label the rules cannot produce on that sentence
+cd training && python -m psys2_train.request_proposer --out runs/request-proposer/<name>                     # holds out the Diagram and the count-range family by default
+python -m psys2_train.request_proposer --holdout-world "" --holdout-family "" --out runs/request-proposer/<name>   # the model the door uses
+node scripts/proposer-latency.mjs --ort <onnxruntime-node entry> --dir training/runs/request-proposer/<name>   # int8 graph + JS tokenizer: dev agreement, p50 / p95
+node scripts/proposer-probe.mjs --ort <entry> --dir <run>              # fresh probes (training/eval/request-probe-2026-11-15.jsonl, test only), two columns
+PSYS2_PROPOSER=1 PSYS2_PROPOSER_DIR=<run> PSYS2_ORT=<entry> node scripts/owner-session.mjs ... / real-set.mjs run ... / typos-measure.mjs / node --test tests/request-properties.test.mjs
+```
+Real rows (real set, owner sessions, phrase logs) are written with their rules labels but never trained on (reviewer 2026-11-16: test only). Model card and results: `training/results/request-proposer-2026-11-16.md`.

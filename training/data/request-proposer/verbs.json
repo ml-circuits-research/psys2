@@ -1,0 +1,31 @@
+{
+ "art.draw": {
+  "make": "make",
+  "place": "place",
+  "remove": "remove",
+  "redo": "redo",
+  "change": "change",
+  "undo": "undo",
+  "group": "pair",
+  "ask": "ask",
+  "connect": "couple"
+ },
+ "diagram.sketch": {
+  "remove": "remove",
+  "make": "make",
+  "change": "change",
+  "place": "place",
+  "undo": "undo",
+  "redo": "redo",
+  "ask": "ask",
+  "connect": "link"
+ },
+ "docs.editor": {
+  "make": "make",
+  "undo": "undo",
+  "redo": "redo",
+  "connect": "couple",
+  "place": "centre",
+  "ask": "ask"
+ }
+}

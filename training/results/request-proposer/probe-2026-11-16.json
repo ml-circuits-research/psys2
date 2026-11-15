@@ -1,0 +1,2167 @@
+{
+ "summary": {
+  "n": 90,
+  "rules": {
+   "right": 49,
+   "honest": 34,
+   "wrong": 7
+  },
+  "proposer": {
+   "right": 56,
+   "honest": 27,
+   "wrong": 7
+  },
+  "consulted": 43,
+  "accepted": 7,
+  "model_ms_p50": 2,
+  "model_ms_p95": 10,
+  "won": [
+   "p004",
+   "p011",
+   "p013",
+   "p021",
+   "p042",
+   "p051",
+   "p072"
+  ],
+  "lost": [],
+  "wrong_added": []
+ },
+ "rows": [
+  {
+   "id": "p001",
+   "tab": "draw",
+   "text": "hey could you maybe draw me three dogs",
+   "canonical": "draw three dogs",
+   "gold": "[\"make\",\"dog\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":3,\\\"of\\\":\\\"dog\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"dog\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added 3 dogs.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added 3 dogs.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p002",
+   "tab": "draw",
+   "text": "i would love a picture of a big red house please",
+   "canonical": "draw a big red house",
+   "gold": "[\"make\",\"house\",null,[\"{\\\"key\\\":\\\"attribute\\\",\\\"value\\\":\\\"red\\\",\\\"attribute\\\":\\\"colour\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"house\\\"}\",\"{\\\"key\\\":\\\"size\\\",\\\"step\\\":\\\"big\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the drawing.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the drawing.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "thanks",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP DROP REACT O kind about with size attribute kind DROP",
+     "score": 0.421,
+     "ms": 4,
+     "render": "love a picture of a big red house",
+     "why": "rules disagree: act none reaction none"
+    }
+   }
+  },
+  {
+   "id": "p003",
+   "tab": "draw",
+   "text": "ok so now put two clouds in the sky",
+   "canonical": "draw two clouds in the sky",
+   "gold": "[\"make\",\"cloud\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":2,\\\"of\\\":\\\"cloud\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"cloud\\\"}\",\"{\\\"key\\\":\\\"place\\\",\\\"value\\\":\\\"top\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "Nothing changed. There is no cloud here. I could not do two clouds: this world does not take count for place.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "Nothing changed. There is no cloud here. I could not do two clouds: this world does not take count for place.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p004",
+   "tab": "draw",
+   "text": "can i get a small pond without ducks",
+   "canonical": "draw a small pond without ducks",
+   "gold": "[\"make\",\"pond\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"duck\\\",\\\"neg\\\":true}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"pond\\\"}\",\"{\\\"key\\\":\\\"size\\\",\\\"step\\\":\\\"small\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the drawing.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I read \"can i get a small pond without ducks\" as \"make a small pond without ducks\". I drew a small pond in a corner. It has 2 flowers and 1 fish. I assumed 4 fo",
+    "source": "proposer",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP DROP DROP O size kind kind.no kind.no",
+     "score": 0.946,
+     "ms": 2,
+     "render": "make a small pond without ducks",
+     "why": "accepted"
+    }
+   }
+  },
+  {
+   "id": "p005",
+   "tab": "draw",
+   "text": "go ahead and draw a forest but no birds",
+   "canonical": "draw a forest, no birds",
+   "gold": "[\"make\",\"forest\",\"reject\",[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"bird\\\",\\\"neg\\\":true}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"forest\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I understood \"no birds\", but not \"go ahead\", \"draw a forest\", so I did nothing.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I understood \"no birds\", but not \"go ahead\", \"draw a forest\", so I did nothing.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP O O ACT O kind kind.no kind.no kind.no",
+     "score": 0.693,
+     "ms": 3,
+     "render": "ahead and draw a forest but no birds",
+     "why": "rules leave unread: ahead draw"
+    }
+   }
+  },
+  {
+   "id": "p006",
+   "tab": "draw",
+   "text": "draw a sun for me thanks",
+   "canonical": "draw a sun",
+   "gold": "[\"make\",\"sun\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"sun\\\"}\"]]",
+   "rules": {
+    "verdict": "wrong",
+    "reply": "I added a sun.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "wrong",
+    "reply": "I added a sun.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p007",
+   "tab": "draw",
+   "text": "right, now a tree on the left",
+   "canonical": "a tree on the left",
+   "gold": "[null,\"tree\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"tree\\\"}\",\"{\\\"key\\\":\\\"place\\\",\\\"value\\\":\\\"left\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the drawing.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the drawing.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "place O O O kind place place place",
+     "score": 0.491,
+     "ms": 2,
+     "render": "right, now a tree on the left",
+     "why": "same words"
+    }
+   }
+  },
+  {
+   "id": "p008",
+   "tab": "draw",
+   "text": "please get rid of the house",
+   "canonical": "remove the house",
+   "gold": "[\"remove\",\"house\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"house\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the drawing.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the drawing.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p009",
+   "tab": "draw",
+   "text": "could you remove all the clouds now",
+   "canonical": "remove all the clouds",
+   "gold": "[\"remove\",\"cloud\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"cloud\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "Nothing changed. There is no cloud here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "Nothing changed. There is no cloud here.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p010",
+   "tab": "draw",
+   "text": "i think it needs a few more trees",
+   "canonical": "draw a few trees",
+   "gold": "[\"make\",\"tree\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"of\\\":\\\"tree\\\",\\\"step\\\":\\\"few\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"tree\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand \"think\", \"needs\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand \"think\", \"needs\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "refine",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP DROP REACT REACT count count REACT kind",
+     "score": 0.441,
+     "ms": 2,
+     "render": "it needs a few more trees",
+     "why": "rules leave unread: needs"
+    }
+   }
+  },
+  {
+   "id": "p011",
+   "tab": "draw",
+   "text": "let's have 4 to 6 flowers",
+   "canonical": "draw 4 to 6 flowers",
+   "gold": "[\"make\",\"flower\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"min\\\":4,\\\"max\\\":6,\\\"of\\\":\\\"flower\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"flower\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand \"let's\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I read \"let's have 4 to 6 flowers\" as \"make have 4 to 6 flowers\". I added 5 flowers.",
+    "source": "proposer",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP O count count count kind",
+     "score": 0.507,
+     "ms": 2,
+     "render": "make have 4 to 6 flowers",
+     "why": "accepted"
+    }
+   }
+  },
+  {
+   "id": "p012",
+   "tab": "draw",
+   "text": "show me a cat and a dog",
+   "canonical": "draw a cat and a dog",
+   "gold": "[\"make\",\"cat\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"cat\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"dog\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I cannot show cat in the drawing yet.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I cannot show cat in the drawing yet.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p013",
+   "tab": "draw",
+   "text": "i want a boat on the lake",
+   "canonical": "draw a boat on the lake",
+   "gold": "[\"make\",\"boat\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"boat\\\"}\",\"{\\\"key\\\":\\\"place\\\",\\\"value\\\":\\\"lake\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the drawing.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I read \"i want a boat on the lake\" as \"make a boat on the lake\". I added a boat. I could not do on the lake: there is no place lake here.",
+    "source": "proposer",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP DROP O kind place place place",
+     "score": 0.998,
+     "ms": 2,
+     "render": "make a boat on the lake",
+     "why": "accepted"
+    }
+   }
+  },
+  {
+   "id": "p014",
+   "tab": "draw",
+   "text": "draw like two mountains ok",
+   "canonical": "draw two mountains",
+   "gold": "[\"make\",\"mountain\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":2,\\\"of\\\":\\\"mountain\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"mountain\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I could not plan two mountains as you said, so I made nothing.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I could not plan two mountains as you said, so I made nothing.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p015",
+   "tab": "draw",
+   "text": "hmm too many trees",
+   "canonical": "too many trees",
+   "gold": "[null,\"tree\",\"reduce\",[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"tree\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "There is nothing in the drawing that I made and could change that way yet.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "There is nothing in the drawing that I made and could change that way yet.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "reduce",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP REACT REACT kind",
+     "score": 0.972,
+     "ms": 1,
+     "render": "too many trees",
+     "why": "reads no more than the rules"
+    }
+   }
+  },
+  {
+   "id": "p016",
+   "tab": "draw",
+   "text": "wow that is lovely",
+   "canonical": "lovely",
+   "gold": "[null,null,\"thanks\",[\"{\\\"key\\\":\\\"manner\\\",\\\"value\\\":\\\"nice\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand \"wow\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand \"wow\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "thanks",
+     "refers": "none",
+     "question": false,
+     "tags": "REACT REACT REACT REACT",
+     "score": 0.924,
+     "ms": 1,
+     "render": "wow that is lovely",
+     "why": "same words"
+    }
+   }
+  },
+  {
+   "id": "p017",
+   "tab": "draw",
+   "text": "make the house blue please",
+   "canonical": "make the house blue",
+   "gold": "[\"make\",\"house\",null,[\"{\\\"key\\\":\\\"attribute\\\",\\\"value\\\":\\\"blue\\\",\\\"attribute\\\":\\\"colour\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"house\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added a house.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added a house.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p018",
+   "tab": "draw",
+   "text": "move the sun to the right a bit",
+   "canonical": "move the sun to the right",
+   "gold": "[\"place\",\"sun\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"sun\\\"}\",\"{\\\"key\\\":\\\"place\\\",\\\"value\\\":\\\"right\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand \"bit\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand \"bit\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "place",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "ACT O kind place place place place DROP",
+     "score": 0.648,
+     "ms": 1,
+     "render": "move the sun to the right a",
+     "why": "reads no more than the rules"
+    }
+   }
+  },
+  {
+   "id": "p019",
+   "tab": "draw",
+   "text": "undo that please",
+   "canonical": "undo",
+   "gold": "[\"undo\",null,null,[]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "There is nothing to undo.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "There is nothing to undo.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p020",
+   "tab": "draw",
+   "text": "could you draw a garden with lots of flowers",
+   "canonical": "draw a garden with lots of flowers",
+   "gold": "[\"make\",\"garden\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"of\\\":\\\"flower\\\",\\\"step\\\":\\\"many\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"garden\\\"}\",\"{\\\"key\\\":\\\"place\\\",\\\"value\\\":\\\"flower\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I could not make that in the drawing.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I could not make that in the drawing.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p021",
+   "tab": "draw",
+   "text": "i'd like exactly five fish",
+   "canonical": "draw exactly five fish",
+   "gold": "[\"make\",\"fish\",\"thanks\",[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":5,\\\"of\\\":\\\"fish\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"fish\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand \"i'd\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I read \"i'd like exactly five fish\" as \"make like exactly five fish\". I added 5 fish.",
+    "source": "proposer",
+    "proposer": {
+     "act": "make",
+     "reaction": "thanks",
+     "refers": "none",
+     "question": false,
+     "tags": "DROP O REACT count kind",
+     "score": 0.464,
+     "ms": 2,
+     "render": "make like exactly five fish",
+     "why": "accepted"
+    }
+   }
+  },
+  {
+   "id": "p022",
+   "tab": "draw",
+   "text": "add a huge yellow sun in the top right corner",
+   "canonical": "draw a huge yellow sun in the top right",
+   "gold": "[\"make\",\"sun\",null,[\"{\\\"key\\\":\\\"attribute\\\",\\\"value\\\":\\\"yellow\\\",\\\"of\\\":\\\"sun\\\",\\\"attribute\\\":\\\"colour\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"sun\\\"}\",\"{\\\"key\\\":\\\"place\\\",\\\"value\\\":\\\"top_right\\\"}\",\"{\\\"key\\\":\\\"size\\\",\\\"step\\\":\\\"huge\\\"}\"]]",
+   "rules": {
+    "verdict": "wrong",
+    "reply": "I added a sun. I assumed big for the size. I could not do in the top right: there is no place top_right here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "wrong",
+    "reply": "I added a sun. I assumed big for the size. I could not do in the top right: there is no place top_right here.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p023",
+   "tab": "draw",
+   "text": "now draw some butterflies too",
+   "canonical": "draw some butterflies",
+   "gold": "[\"make\",\"butterfly\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"of\\\":\\\"butterfly\\\",\\\"step\\\":\\\"few\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"butterfly\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "Nothing changed. The kind is one of house, tree, sun, cloud, flower, cat, dog, fish, bird, boat, mountain, hill, lake, river, not butterfly.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "Nothing changed. The kind is one of house, tree, sun, cloud, flower, cat, dog, fish, bird, boat, mountain, hill, lake, river, not butterfly.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p024",
+   "tab": "draw",
+   "text": "paint me a lake scene with no fish in it",
+   "canonical": "draw a lake scene, no fish",
+   "gold": "[\"make\",\"lake_scene\",\"reject\",[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"fish\\\",\\\"neg\\\":true}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"lake_scene\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "Nothing changed. There is no lake scene here. I could not do with no fish: this world does not take kind for change. I could not do in it: this world does not t",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "Nothing changed. There is no lake scene here. I could not do with no fish: this world does not take kind for change. I could not do in it: this world does not t",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p025",
+   "tab": "draw",
+   "text": "draw at least 3 bushes for me",
+   "canonical": "draw at least 3 bushes",
+   "gold": "[\"make\",\"bush\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":3,\\\"of\\\":\\\"bush\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"bush\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added 3 trees. I assumed tree for the kind.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added 3 trees. I assumed tree for the kind.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p026",
+   "tab": "draw",
+   "text": "please clear everything",
+   "canonical": "remove everything",
+   "gold": "[\"remove\",null,null,[]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "Nothing changed. That cannot be done to a remove here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "Nothing changed. That cannot be done to a remove here.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p027",
+   "tab": "draw",
+   "text": "how many trees are there now",
+   "canonical": "how many trees are there",
+   "gold": "[null,\"tree\",\"state\",[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"tree\\\"}\",\"{\\\"key\\\":\\\"place\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "There are 0 trees.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "There are 0 trees.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "state",
+     "refers": "kind",
+     "question": false,
+     "tags": "REACT REACT kind O place DROP",
+     "score": 0.992,
+     "ms": 3,
+     "render": "how many trees are there",
+     "why": "reads no more than the rules"
+    }
+   }
+  },
+  {
+   "id": "p028",
+   "tab": "draw",
+   "text": "what can you do here?",
+   "canonical": "what can you do",
+   "gold": "[null,null,\"capabilities\",[]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I can make: waters, flowers, trees, bushes, butterflies, birds, clouds, suns, skies, houses, fish, boats, cats, dogs, mountains, lakes, rivers, hills, water lil",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I can make: waters, flowers, trees, bushes, butterflies, birds, clouds, suns, skies, houses, fish, boats, cats, dogs, mountains, lakes, rivers, hills, water lil",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "capabilities",
+     "refers": "none",
+     "question": false,
+     "tags": "REACT REACT REACT REACT REACT",
+     "score": 0.989,
+     "ms": 2,
+     "render": "what can you do here",
+     "why": "same words"
+    }
+   }
+  },
+  {
+   "id": "p029",
+   "tab": "draw",
+   "text": "draw a river and also a hill",
+   "canonical": "draw a river and a hill",
+   "gold": "[\"make\",\"river\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"hill\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"river\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "Nothing changed. I could not do draw a river and also a hill: 2 made, the request said 1.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "Nothing changed. I could not do draw a river and also a hill: 2 made, the request said 1.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p030",
+   "tab": "draw",
+   "text": "give me a dog, not a cat",
+   "canonical": "draw a dog, not cats",
+   "gold": "[\"make\",\"dog\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"cat\\\",\\\"neg\\\":true}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"dog\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I cannot send dog in the drawing yet.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I cannot send dog in the drawing yet.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p031",
+   "tab": "draw",
+   "text": "draw a zorblat next to the tree",
+   "canonical": null,
+   "gold": null,
+   "rules": {
+    "verdict": "right",
+    "reply": "I did not understand \"zorblat\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I did not understand \"zorblat\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "ACT O UNREAD place place place place",
+     "score": 0.99,
+     "ms": 4,
+     "why": "proposal keeps an unread word"
+    }
+   }
+  },
+  {
+   "id": "p032",
+   "tab": "draw",
+   "text": "florp the house",
+   "canonical": null,
+   "gold": null,
+   "rules": {
+    "verdict": "right",
+    "reply": "I did not understand \"florp\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I did not understand \"florp\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "UNREAD O kind",
+     "score": 0.41,
+     "ms": 4,
+     "why": "proposal keeps an unread word"
+    }
+   }
+  },
+  {
+   "id": "p033",
+   "tab": "draw",
+   "text": "draw a spaceship with three flimbos",
+   "canonical": null,
+   "gold": null,
+   "rules": {
+    "verdict": "right",
+    "reply": "I did not understand \"spaceship\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I did not understand \"spaceship\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "ACT O kind count count UNREAD",
+     "score": 0.799,
+     "ms": 2,
+     "why": "proposal keeps an unread word"
+    }
+   }
+  },
+  {
+   "id": "p034",
+   "tab": "draw",
+   "text": "so basically just draw a tiny cloud",
+   "canonical": "draw a tiny cloud",
+   "gold": "[\"make\",\"cloud\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"cloud\\\"}\",\"{\\\"key\\\":\\\"size\\\",\\\"step\\\":\\\"tiny\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand \"basically\", \"draw\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand \"basically\", \"draw\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP DROP DROP ACT O size kind",
+     "score": 0.975,
+     "ms": 12,
+     "render": "draw a tiny cloud",
+     "why": "value check: negation just"
+    }
+   }
+  },
+  {
+   "id": "p035",
+   "tab": "draw",
+   "text": "draw the sky dark blue",
+   "canonical": "make the sky dark blue",
+   "gold": "[\"make\",\"sky\",null,[\"{\\\"key\\\":\\\"attribute\\\",\\\"value\\\":\\\"dark blue\\\",\\\"attribute\\\":\\\"colour\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"sky\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added a sky.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added a sky.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p036",
+   "tab": "draw",
+   "text": "draw two cats and a big one",
+   "canonical": "draw two cats and a big one",
+   "gold": "[\"make\",\"cat\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":2,\\\"of\\\":\\\"cat\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"cat\\\"}\",\"{\\\"key\\\":\\\"size\\\",\\\"step\\\":\\\"big\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added 2 cats.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added 2 cats.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p037",
+   "tab": "draw",
+   "text": "yes now make it bigger",
+   "canonical": "make it bigger",
+   "gold": "[null,null,\"enlarge\",[\"{\\\"key\\\":\\\"size\\\",\\\"step\\\":\\\"big\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "There is nothing in the drawing that I made and could change that way yet.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "There is nothing in the drawing that I made and could change that way yet.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "enlarge",
+     "refers": "none",
+     "question": false,
+     "tags": "DROP DROP REACT REACT REACT",
+     "score": 0.963,
+     "ms": 2,
+     "render": "make it bigger",
+     "why": "reads no more than the rules"
+    }
+   }
+  },
+  {
+   "id": "p038",
+   "tab": "draw",
+   "text": "please do it again",
+   "canonical": "do it again",
+   "gold": "[null,null,\"redo\",[]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "There is nothing in the drawing that I made and could change that way yet.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "There is nothing in the drawing that I made and could change that way yet.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "redo",
+     "refers": "none",
+     "question": false,
+     "tags": "DROP REACT REACT REACT",
+     "score": 0.976,
+     "ms": 5,
+     "render": "do it again",
+     "why": "reads no more than the rules"
+    }
+   }
+  },
+  {
+   "id": "p039",
+   "tab": "draw",
+   "text": "thank you so much",
+   "canonical": "thank you",
+   "gold": "[null,null,\"thanks\",[]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "You are welcome.",
+    "source": null,
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "You are welcome.",
+    "source": null,
+    "proposer": null
+   }
+  },
+  {
+   "id": "p040",
+   "tab": "draw",
+   "text": "draw a house, then a sun",
+   "canonical": "draw a house and a sun",
+   "gold": "[\"make\",\"house\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"house\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"sun\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added a house. I added a sun.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added a house. I added a sun.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p041",
+   "tab": "diagram",
+   "text": "can you make me a diagram with 6 nodes",
+   "canonical": "draw a diagram with 6 nodes",
+   "gold": "[\"make\",\"diagram\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":6,\\\"of\\\":\\\"node\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"diagram\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added a diagram. I added 3 rectangles. I added 3 circles. I added 5 links. I assumed tree for the layout. I assumed rectangle, circle for the kinds.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added a diagram. I added 3 rectangles. I added 3 circles. I added 5 links. I assumed tree for the layout. I assumed rectangle, circle for the kinds.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p042",
+   "tab": "diagram",
+   "text": "i need a flowchart with five steps and no diamonds",
+   "canonical": "draw a flowchart with five nodes, no diamonds",
+   "gold": "[\"make\",\"flowchart\",\"reject\",[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":5,\\\"of\\\":\\\"node\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"diamond\\\",\\\"neg\\\":true}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"flowchart\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "There is nothing in the diagram that I made and could change that way yet.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I read \"i need a flowchart with five steps and no diamonds\" as \"make a flowchart with five steps and no diamonds\". I added a flowchart. I added 5 ellipses. I ad",
+    "source": "proposer",
+    "proposer": {
+     "act": "make",
+     "reaction": "reject",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP DROP O kind O length length O REACT kind.no",
+     "score": 0.942,
+     "ms": 8,
+     "render": "make a flowchart with five steps and no diamonds",
+     "why": "accepted"
+    }
+   }
+  },
+  {
+   "id": "p043",
+   "tab": "diagram",
+   "text": "please add three squares",
+   "canonical": "add three squares",
+   "gold": "[\"make\",\"square\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":3,\\\"of\\\":\\\"square\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"square\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added 3 squares. I assumed row for the layout.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added 3 squares. I assumed row for the layout.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p044",
+   "tab": "diagram",
+   "text": "could you draw a red circle for me",
+   "canonical": "draw a red circle",
+   "gold": "[\"make\",\"circle\",null,[\"{\\\"key\\\":\\\"attribute\\\",\\\"value\\\":\\\"red\\\",\\\"of\\\":\\\"circle\\\",\\\"attribute\\\":\\\"colour\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"circle\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added a circle.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added a circle.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p045",
+   "tab": "diagram",
+   "text": "now a blue triangle",
+   "canonical": "a blue triangle",
+   "gold": "[null,null,null,[\"{\\\"key\\\":\\\"attribute\\\",\\\"value\\\":\\\"blue\\\",\\\"of\\\":\\\"triangle\\\",\\\"attribute\\\":\\\"colour\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"triangle\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I did not understand that as something to do in the diagram.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I did not understand that as something to do in the diagram.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "none",
+     "refers": "none",
+     "question": false,
+     "tags": "O O attribute kind",
+     "score": 0.996,
+     "ms": 2,
+     "render": "now a blue triangle",
+     "why": "same words"
+    }
+   }
+  },
+  {
+   "id": "p046",
+   "tab": "diagram",
+   "text": "delete all the circles please",
+   "canonical": "remove all the circles",
+   "gold": "[\"remove\",\"circle\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"circle\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "Nothing changed. There is no circle here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "Nothing changed. There is no circle here.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p047",
+   "tab": "diagram",
+   "text": "let's do a random diagram",
+   "canonical": "draw a random diagram",
+   "gold": "[\"make\",\"diagram\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"diagram\\\"}\",\"{\\\"key\\\":\\\"manner\\\",\\\"value\\\":\\\"random\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand \"let's\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand \"let's\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP ACT O manner kind",
+     "score": 0.994,
+     "ms": 2,
+     "render": "do a random diagram",
+     "why": "rules disagree: act none reaction none"
+    }
+   }
+  },
+  {
+   "id": "p048",
+   "tab": "diagram",
+   "text": "hmm, too many nodes",
+   "canonical": "too many nodes",
+   "gold": "[null,null,\"reduce\",[]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "There is nothing in the diagram that I made and could change that way yet.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "There is nothing in the diagram that I made and could change that way yet.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "reduce",
+     "refers": "none",
+     "question": false,
+     "tags": "DROP O REACT REACT kind",
+     "score": 0.986,
+     "ms": 5,
+     "render": ", too many nodes",
+     "why": "kinds not read: nodes"
+    }
+   }
+  },
+  {
+   "id": "p049",
+   "tab": "diagram",
+   "text": "not all circles, ok?",
+   "canonical": "not all circles",
+   "gold": "[null,null,null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"circle\\\",\\\"neg\\\":true,\\\"all\\\":true}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I cannot answer questions about the diagram yet.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I cannot answer questions about the diagram yet.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "none",
+     "refers": "none",
+     "question": false,
+     "tags": "kind.not_all kind.not_all kind.not_all O DROP",
+     "score": 0.869,
+     "ms": 2,
+     "render": "not all circles,",
+     "why": "reads no more than the rules"
+    }
+   }
+  },
+  {
+   "id": "p050",
+   "tab": "diagram",
+   "text": "put the nodes in a row please",
+   "canonical": "arrange the nodes in a row",
+   "gold": "[\"group\",null,null,[\"{\\\"key\\\":\\\"layout\\\",\\\"value\\\":\\\"row\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the diagram.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the diagram.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p051",
+   "tab": "diagram",
+   "text": "i want a mind map about volcanoes",
+   "canonical": "draw a mind map about volcanoes",
+   "gold": "[\"make\",\"mind_map\",null,[\"{\\\"key\\\":\\\"about\\\",\\\"value\\\":\\\"volcanoes\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"mind_map\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the diagram.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I read \"i want a mind map about volcanoes\" as \"make a mind map about volcanoes\". I added a mind map. I added 7 ellipses. I added 6 links. I assumed radial for t",
+    "source": "proposer",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP DROP O kind kind about about",
+     "score": 0.998,
+     "ms": 17,
+     "render": "make a mind map about volcanoes",
+     "why": "accepted"
+    }
+   }
+  },
+  {
+   "id": "p052",
+   "tab": "diagram",
+   "text": "make a small timeline please",
+   "canonical": "draw a small timeline",
+   "gold": "[\"make\",\"timeline\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"timeline\\\"}\",\"{\\\"key\\\":\\\"size\\\",\\\"step\\\":\\\"small\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added a timeline. I assumed tree for the layout. I could not do small: nothing here has a size.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added a timeline. I assumed tree for the layout. I could not do small: nothing here has a size.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p053",
+   "tab": "diagram",
+   "text": "could i get a diagram with between 5 and 8 nodes",
+   "canonical": "draw a diagram with between 5 and 8 nodes",
+   "gold": "[\"make\",\"diagram\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"min\\\":5,\\\"max\\\":8,\\\"of\\\":\\\"node\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"diagram\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the diagram.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the diagram.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP DROP DROP O kind O count count count count kind",
+     "score": 0.993,
+     "ms": 8,
+     "render": "make a diagram with between 5 and 8 nodes",
+     "why": "kinds not read: nodes"
+    }
+   }
+  },
+  {
+   "id": "p054",
+   "tab": "diagram",
+   "text": "add a couple of hexagons",
+   "canonical": "add a couple of hexagons",
+   "gold": "[\"make\",null,null,[\"{\\\"key\\\":\\\"count\\\",\\\"of\\\":\\\"hexagon\\\",\\\"step\\\":\\\"couple\\\"}\",\"{\\\"key\\\":\\\"place\\\",\\\"value\\\":\\\"hexagon\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed diagram for the target. I assumed tree for the layout. I assumed 7 for th",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed diagram for the target. I assumed tree for the layout. I assumed 7 for th",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p055",
+   "tab": "diagram",
+   "text": "just add one star",
+   "canonical": "add one star",
+   "gold": "[\"make\",\"star\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":1,\\\"of\\\":\\\"star\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"star\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added a star.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added a star.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p056",
+   "tab": "diagram",
+   "text": "make the square green",
+   "canonical": "make the square green",
+   "gold": "[\"make\",\"square\",null,[\"{\\\"key\\\":\\\"attribute\\\",\\\"value\\\":\\\"green\\\",\\\"attribute\\\":\\\"colour\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"square\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added a square.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added a square.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p057",
+   "tab": "diagram",
+   "text": "ok remove the triangle",
+   "canonical": "remove the triangle",
+   "gold": "[\"remove\",\"triangle\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"triangle\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "Nothing changed. There is no triangle here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "Nothing changed. There is no triangle here.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p058",
+   "tab": "diagram",
+   "text": "can you undo",
+   "canonical": "undo",
+   "gold": "[\"undo\",null,null,[]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "There is nothing to undo.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "There is nothing to undo.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p059",
+   "tab": "diagram",
+   "text": "draw an org chart with 7 boxes",
+   "canonical": "draw an org chart with 7 boxes",
+   "gold": "[\"make\",\"org_chart\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":7,\\\"of\\\":\\\"rectangle\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"org_chart\\\"}\",\"{\\\"key\\\":\\\"with\\\",\\\"value\\\":\\\"rectangle\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added an org chart. I added 7 rectangles. I added 6 links. I assumed tree for the layout. I assumed rectangle for the kinds.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added an org chart. I added 7 rectangles. I added 6 links. I assumed tree for the layout. I assumed rectangle for the kinds.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p060",
+   "tab": "diagram",
+   "text": "perfect, thanks",
+   "canonical": "thanks",
+   "gold": "[null,null,\"thanks\",[]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "You're welcome.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "You're welcome.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "thanks",
+     "refers": "none",
+     "question": false,
+     "tags": "REACT O REACT",
+     "score": 0.973,
+     "ms": 3,
+     "render": "perfect, thanks",
+     "why": "same words"
+    }
+   }
+  },
+  {
+   "id": "p061",
+   "tab": "diagram",
+   "text": "draw a diagram with arrows and a nicer layout",
+   "canonical": "draw a diagram with arrows, better layout",
+   "gold": "[\"make\",\"diagram\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"diagram\\\"}\",\"{\\\"key\\\":\\\"layout\\\",\\\"value\\\":\\\"better\\\"}\",\"{\\\"key\\\":\\\"with\\\",\\\"value\\\":\\\"link\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed tree for the layout. I assumed 7 for the count. I assumed rectangle, circ",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed tree for the layout. I assumed 7 for the count. I assumed rectangle, circ",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p062",
+   "tab": "diagram",
+   "text": "anything but rectangles please",
+   "canonical": "anything but rectangles",
+   "gold": "[null,null,null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"rectangle\\\",\\\"neg\\\":true}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I did not understand that as something to do in the diagram.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I did not understand that as something to do in the diagram.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "none",
+     "refers": "none",
+     "question": false,
+     "tags": "kind.no kind.no kind.no DROP",
+     "score": 0.944,
+     "ms": 5,
+     "render": "anything but rectangles",
+     "why": "reads no more than the rules"
+    }
+   }
+  },
+  {
+   "id": "p063",
+   "tab": "diagram",
+   "text": "how many nodes are there?",
+   "canonical": "how many nodes are there?",
+   "gold": "[null,null,\"state\",[\"{\\\"key\\\":\\\"place\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "There is nothing here yet.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "There is nothing here yet.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "state",
+     "refers": "none",
+     "question": false,
+     "tags": "REACT REACT kind O place",
+     "score": 0.995,
+     "ms": 4,
+     "render": "how many nodes are there",
+     "why": "same words"
+    }
+   }
+  },
+  {
+   "id": "p064",
+   "tab": "diagram",
+   "text": "draw a gleebox with 4 nodes",
+   "canonical": null,
+   "gold": null,
+   "rules": {
+    "verdict": "right",
+    "reply": "I did not understand \"gleebox\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I did not understand \"gleebox\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "ACT O kind O length length",
+     "score": 0.736,
+     "ms": 2,
+     "render": "draw a gleebox with 4 nodes",
+     "why": "same words"
+    }
+   }
+  },
+  {
+   "id": "p065",
+   "tab": "diagram",
+   "text": "connect the snorfs",
+   "canonical": null,
+   "gold": null,
+   "rules": {
+    "verdict": "right",
+    "reply": "I did not understand \"snorfs\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I did not understand \"snorfs\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "remove",
+     "reaction": "none",
+     "refers": "last",
+     "question": false,
+     "tags": "ACT O UNREAD",
+     "score": 0.944,
+     "ms": 9,
+     "why": "proposal keeps an unread word"
+    }
+   }
+  },
+  {
+   "id": "p066",
+   "tab": "diagram",
+   "text": "yo add two ovals",
+   "canonical": "add two ovals",
+   "gold": "[\"make\",\"oval\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":2,\\\"of\\\":\\\"oval\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"oval\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand \"yo\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand \"yo\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP ACT count kind",
+     "score": 0.998,
+     "ms": 3,
+     "render": "add two ovals",
+     "why": "contradicts the rules' cues: with|yes|oval||||||||"
+    }
+   }
+  },
+  {
+   "id": "p067",
+   "tab": "diagram",
+   "text": "please make it smaller",
+   "canonical": "make it smaller",
+   "gold": "[null,null,null,[\"{\\\"key\\\":\\\"size\\\",\\\"step\\\":\\\"small\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I did not understand that as something to do in the diagram.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I did not understand that as something to do in the diagram.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "change",
+     "reaction": "none",
+     "refers": "last",
+     "question": false,
+     "tags": "DROP ACT size size",
+     "score": 0.705,
+     "ms": 1,
+     "render": "make it smaller",
+     "why": "rules disagree: act none reaction none"
+    }
+   }
+  },
+  {
+   "id": "p068",
+   "tab": "diagram",
+   "text": "i'd like a cycle with four nodes",
+   "canonical": "draw a cycle with four nodes",
+   "gold": "[\"make\",\"cycle\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":4,\\\"of\\\":\\\"node\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"cycle\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand \"i'd\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand \"i'd\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP O O kind O length length",
+     "score": 0.639,
+     "ms": 2,
+     "render": "like a cycle with four nodes",
+     "why": "kinds not read: cycle"
+    }
+   }
+  },
+  {
+   "id": "p069",
+   "tab": "diagram",
+   "text": "draw me a pipeline of 5 steps, without circles",
+   "canonical": "draw a pipeline with 5 nodes, without circles",
+   "gold": "[\"make\",\"pipeline\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":5,\\\"of\\\":\\\"node\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"circle\\\",\\\"neg\\\":true}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"pipeline\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I could not plan 5 steps as you said, so I made nothing.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I could not plan 5 steps as you said, so I made nothing.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p070",
+   "tab": "diagram",
+   "text": "redo it please",
+   "canonical": "redo",
+   "gold": "[\"redo\",null,null,[]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "There is nothing in the diagram that I made and could change that way yet.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "There is nothing in the diagram that I made and could change that way yet.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "redo",
+     "refers": "none",
+     "question": false,
+     "tags": "REACT REACT DROP",
+     "score": 0.981,
+     "ms": 8,
+     "render": "redo it",
+     "why": "reads no more than the rules"
+    }
+   }
+  },
+  {
+   "id": "p071",
+   "tab": "editor",
+   "text": "could you write a short story about a lake",
+   "canonical": "write a short story about a lake",
+   "gold": "[\"make\",\"story\",null,[\"{\\\"key\\\":\\\"about\\\",\\\"value\\\":\\\"lake\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"story\\\"}\",\"{\\\"key\\\":\\\"length\\\",\\\"step\\\":\\\"small\\\"}\"]]",
+   "rules": {
+    "verdict": "wrong",
+    "reply": "I wrote the story \"All about lake\": 99 words in 3 chapters. I could write about 99 words about lake from what I know (you asked for 500); I did not pad it with ",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "wrong",
+    "reply": "I wrote the story \"All about lake\": 89 words in 3 chapters. I could write about 89 words about lake from what I know (you asked for 500); I did not pad it with ",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p072",
+   "tab": "editor",
+   "text": "i want a long report about volcanoes in 4 chapters",
+   "canonical": "write a long report about volcanoes with 4 chapters",
+   "gold": "[\"make\",\"report\",null,[\"{\\\"key\\\":\\\"about\\\",\\\"value\\\":\\\"volcanoes\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"report\\\"}\",\"{\\\"key\\\":\\\"length\\\",\\\"n\\\":4,\\\"unit\\\":\\\"chapter\\\"}\",\"{\\\"key\\\":\\\"length\\\",\\\"step\\\":\\\"big\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the documents.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I cannot write that: I know nothing about volcanoes in my knowledge yet.",
+    "source": "proposer",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP DROP length length kind about about O length length",
+     "score": 0.605,
+     "ms": 5,
+     "render": "make a long report about volcanoes in 4 chapters",
+     "why": "accepted"
+    }
+   }
+  },
+  {
+   "id": "p073",
+   "tab": "editor",
+   "text": "please write me a poem about the sea",
+   "canonical": "write a poem about the sea",
+   "gold": "[\"make\",\"poem\",null,[\"{\\\"key\\\":\\\"about\\\",\\\"value\\\":\\\"sea\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"poem\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I cannot write that: I know nothing about sea in my knowledge yet.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I cannot write that: I know nothing about sea in my knowledge yet.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p074",
+   "tab": "editor",
+   "text": "now an essay about dogs",
+   "canonical": "an essay about dogs",
+   "gold": "[null,\"essay\",null,[\"{\\\"key\\\":\\\"about\\\",\\\"value\\\":\\\"dogs\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"essay\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I did not understand that as something to do in the documents.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I did not understand that as something to do in the documents.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "O O kind about about",
+     "score": 0.763,
+     "ms": 9,
+     "render": "now an essay about dogs",
+     "why": "same words"
+    }
+   }
+  },
+  {
+   "id": "p075",
+   "tab": "editor",
+   "text": "add two more chapters please",
+   "canonical": "add two chapters",
+   "gold": "[\"make\",null,null,[\"{\\\"key\\\":\\\"length\\\",\\\"n\\\":2,\\\"unit\\\":\\\"chapter\\\"}\"]]",
+   "rules": {
+    "verdict": "wrong",
+    "reply": "I wrote the essay \"All about the cricket\": 610 words in 2 chapters and 11 sections. It is open in the Documents tab.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "wrong",
+    "reply": "I wrote the essay \"All about Chad\": 588 words in 2 chapters and 11 sections. It is open in the Documents tab.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p076",
+   "tab": "editor",
+   "text": "hmm too long",
+   "canonical": "too long",
+   "gold": "[null,null,\"reduce\",[]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "There is nothing in the documents that I made and could change that way yet.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "There is nothing in the documents that I made and could change that way yet.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "reduce",
+     "refers": "none",
+     "question": false,
+     "tags": "DROP REACT REACT",
+     "score": 0.984,
+     "ms": 2,
+     "render": "too long",
+     "why": "reads no more than the rules"
+    }
+   }
+  },
+  {
+   "id": "p077",
+   "tab": "editor",
+   "text": "write a story with 3 chapters about dragons please",
+   "canonical": "write a story with 3 chapters about dragons",
+   "gold": "[\"make\",\"story\",null,[\"{\\\"key\\\":\\\"about\\\",\\\"value\\\":\\\"dragons\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"story\\\"}\",\"{\\\"key\\\":\\\"length\\\",\\\"n\\\":3,\\\"unit\\\":\\\"chapter\\\"}\"]]",
+   "rules": {
+    "verdict": "wrong",
+    "reply": "I wrote the story \"All about dragons\": 86 words in 3 chapters. It is open in the Documents tab.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "wrong",
+    "reply": "I wrote the story \"All about dragons\": 103 words in 3 chapters. It is open in the Documents tab.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p078",
+   "tab": "editor",
+   "text": "can you make it shorter",
+   "canonical": "shorter",
+   "gold": "[null,null,\"reduce\",[\"{\\\"key\\\":\\\"length\\\",\\\"step\\\":\\\"small\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the documents.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand that as something to do in the documents.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p079",
+   "tab": "editor",
+   "text": "i'd like a brief report about bees",
+   "canonical": "write a brief report about bees",
+   "gold": "[\"make\",\"report\",null,[\"{\\\"key\\\":\\\"about\\\",\\\"value\\\":\\\"bees\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"report\\\"}\",\"{\\\"key\\\":\\\"length\\\",\\\"step\\\":\\\"small\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand \"i'd\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand \"i'd\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "DROP O O length kind about about",
+     "score": 0.803,
+     "ms": 2,
+     "render": "like a brief report about bees",
+     "why": "reads no more than the rules"
+    }
+   }
+  },
+  {
+   "id": "p080",
+   "tab": "editor",
+   "text": "write a blorkish story",
+   "canonical": null,
+   "gold": null,
+   "rules": {
+    "verdict": "right",
+    "reply": "I did not understand \"blorkish\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I did not understand \"blorkish\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "make",
+     "reaction": "none",
+     "refers": "kind",
+     "question": false,
+     "tags": "ACT O UNREAD kind",
+     "score": 0.988,
+     "ms": 10,
+     "why": "proposal keeps an unread word"
+    }
+   }
+  },
+  {
+   "id": "p081",
+   "tab": "editor",
+   "text": "great thanks",
+   "canonical": "thanks",
+   "gold": "[null,null,\"thanks\",[]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "You're welcome.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "You're welcome.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "thanks",
+     "refers": "none",
+     "question": false,
+     "tags": "REACT REACT",
+     "score": 0.993,
+     "ms": 8,
+     "render": "great thanks",
+     "why": "same words"
+    }
+   }
+  },
+  {
+   "id": "p082",
+   "tab": "editor",
+   "text": "ok write a story about space with five chapters",
+   "canonical": "write a story about space with five chapters",
+   "gold": "[\"make\",\"story\",null,[\"{\\\"key\\\":\\\"about\\\",\\\"value\\\":\\\"space\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"story\\\"}\",\"{\\\"key\\\":\\\"length\\\",\\\"n\\\":5,\\\"unit\\\":\\\"chapter\\\"}\"]]",
+   "rules": {
+    "verdict": "wrong",
+    "reply": "I wrote the story \"All about space\": 93 words in 5 chapters. I could write about 93 words about space from what I know (you asked for 500); I did not pad it wit",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "wrong",
+    "reply": "I wrote the story \"All about space\": 71 words in 5 chapters. I could write about 71 words about space from what I know (you asked for 500); I did not pad it wit",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p083",
+   "tab": "draw",
+   "text": "draw three dogs and two cats please",
+   "canonical": "draw three dogs and two cats",
+   "gold": "[\"make\",\"dog\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":2,\\\"of\\\":\\\"cat\\\"}\",\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":3,\\\"of\\\":\\\"dog\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"cat\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"dog\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added 3 dogs. I added 2 cats.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added 3 dogs. I added 2 cats.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p084",
+   "tab": "draw",
+   "text": "draw a forest with exactly 4 trees",
+   "canonical": "draw a forest with exactly 4 trees",
+   "gold": "[\"make\",\"forest\",\"thanks\",[\"{\\\"key\\\":\\\"count\\\",\\\"n\\\":4,\\\"of\\\":\\\"tree\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"forest\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"tree\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I drew a forest. It has 4 trees.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I drew a forest. It has 4 trees.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p085",
+   "tab": "draw",
+   "text": "remove the dog please, thank you",
+   "canonical": "remove the dog",
+   "gold": "[\"remove\",\"dog\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"dog\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "Nothing changed. There is no dog here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "Nothing changed. There is no dog here.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p086",
+   "tab": "draw",
+   "text": "i want everything gone",
+   "canonical": "remove everything",
+   "gold": "[\"remove\",null,null,[]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand \"gone\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand \"gone\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "change",
+     "reaction": "none",
+     "refers": "all",
+     "question": false,
+     "tags": "DROP DROP REF REACT",
+     "score": 0.431,
+     "ms": 2,
+     "render": "change everything gone",
+     "why": "rules leave unread: gone"
+    }
+   }
+  },
+  {
+   "id": "p087",
+   "tab": "draw",
+   "text": "draw a house in the middle please",
+   "canonical": "draw a house in the middle",
+   "gold": "[\"make\",\"house\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"house\\\"}\",\"{\\\"key\\\":\\\"place\\\",\\\"value\\\":\\\"centre\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added a house. I could not do in the middle: there is no place centre here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added a house. I could not do in the middle: there is no place centre here.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p088",
+   "tab": "diagram",
+   "text": "can you please draw a diagram, not too big",
+   "canonical": "draw a small diagram",
+   "gold": "[\"make\",\"diagram\",null,[\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"diagram\\\"}\",\"{\\\"key\\\":\\\"size\\\",\\\"step\\\":\\\"small\\\"}\"]]",
+   "rules": {
+    "verdict": "wrong",
+    "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed tree for the layout. I assumed 7 for the count. I assumed rectangle, circ",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "wrong",
+    "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed tree for the layout. I assumed 7 for the count. I assumed rectangle, circ",
+    "source": "sopworld",
+    "proposer": null
+   }
+  },
+  {
+   "id": "p089",
+   "tab": "diagram",
+   "text": "some random shapes please",
+   "canonical": "draw some random nodes",
+   "gold": "[\"make\",null,null,[\"{\\\"key\\\":\\\"manner\\\",\\\"value\\\":\\\"random\\\"}\"]]",
+   "rules": {
+    "verdict": "honest",
+    "reply": "I did not understand \"shapes\" here.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "honest",
+    "reply": "I did not understand \"shapes\" here.",
+    "source": "sopworld",
+    "proposer": {
+     "act": "none",
+     "reaction": "none",
+     "refers": "none",
+     "question": false,
+     "tags": "count manner kind DROP",
+     "score": 0.937,
+     "ms": 2,
+     "render": "some random shapes",
+     "why": "rules leave unread: shapes"
+    }
+   }
+  },
+  {
+   "id": "p090",
+   "tab": "draw",
+   "text": "draw a few birds up high",
+   "canonical": "draw a few birds at the top",
+   "gold": "[\"make\",\"bird\",null,[\"{\\\"key\\\":\\\"count\\\",\\\"of\\\":\\\"bird\\\",\\\"step\\\":\\\"few\\\"}\",\"{\\\"key\\\":\\\"kind\\\",\\\"value\\\":\\\"bird\\\"}\",\"{\\\"key\\\":\\\"place\\\",\\\"value\\\":\\\"top\\\"}\"]]",
+   "rules": {
+    "verdict": "right",
+    "reply": "I added 3 birds.",
+    "source": "sopworld",
+    "proposer": null
+   },
+   "proposer": {
+    "verdict": "right",
+    "reply": "I added 3 birds.",
+    "source": "sopworld",
+    "proposer": null
+   }
+  }
+ ]
+}
