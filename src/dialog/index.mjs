@@ -318,7 +318,9 @@ function factParts(lib, language, facts, text = null) {
     const words = Object.fromEntries(Object.entries(roles).map(([k, v]) => [k, Array.isArray(v?.names) ? v.names.map((w) => `"${w}"`).join(', ') : v]));   // the person's own words, quoted
     for (const n of names) { let t = null; try { t = lib.replyFrom?.(language, n, words) ?? null; } catch { t = null; } if (t) { said = { name: n, text: typeof t === 'string' ? t : t.text ?? String(t) }; break; } }
     if (!said) return null;
-    parts.push({ text: said.text, translate: true, say: { act: said.name, roles } });
+    // a list of counts the fact also gives as data (done.whole: `kinds`, `numbers`) is framed as counts, so that a language says each one with its own noun
+    const sayRoles = Array.isArray(f.kinds) && Array.isArray(f.numbers) && f.kinds.length === f.numbers.length && typeof roles.parts === 'string' ? { ...roles, parts: f.kinds.map((k, i) => ({ n: f.numbers[i], noun: k })) } : roles;
+    parts.push({ text: said.text, translate: true, say: { act: said.name, roles: sayRoles } });
   }
   const out = parts.flatMap((p, i) => (i ? [{ text: ' ', translate: false, join: true }, p] : [p]));
   if (text != null && out.map((p) => p.text).join('').trim() !== String(text).trim()) return null;
@@ -1912,7 +1914,8 @@ export class DialogSession {
     if (lastRec?.via === 'tool') { try { rev = lib.reviseRequest(dlg, q.request, { revisions: language, catalog: [language], live: lib.mirrorState(live, prims.view).world }); } catch { rev = null; } }   // over the state: a make that refers to things there is a change of its own, not a revision
     if (rev?.sort === 'reaction' && (!q.act || q.act === (lastRec.request?.act ?? 'make')) && (!q.act || q.request.refers === 'last' || ['redo', 'reduce', 'enlarge'].includes(q.reaction))) {   // an act on the things there ("put it in the corner", "remove it") is not a revision of the request that made them
       if (!rev.request) return null;   // thanks, frustration: the dialogue's own reply
-      req = rev.request; replace = !!rev.replace;   // a reaction that replaces the last result ("fewer dogs")
+      replace = !!rev.replace;   // a reaction that replaces the last result ("fewer dogs")
+      req = replace || !q.act ? rev.request : q.request;   // a turn with its own act that replaces nothing ("make the house bigger": the change sense of make) is its own request
     } else if (rev?.reaction === 'continue' && rev.request && !q.act && !(q.request.constraints ?? []).some((c) => c.on === 'place')) req = rev.request;   // a fragment of kinds continues the dialogue's act with a new request ("a sun" after "draw a fish": sopworld 0.154); one read with a place ("I like cats": "like" as a relation) is no fragment of a request (questions.md [LIB])
     if (!req.act || !tools.binds.some((b) => b.act === req.act)) return null;
     // a thing the world makes with no binding for its kind (a page: request.sop psys2.op) is not the binding's

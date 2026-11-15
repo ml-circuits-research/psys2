@@ -39,6 +39,7 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.not_understood_undo w.lang.ro.reply name=not_understood.undo count=one role=words text="nu am înțeles {words} aici, așa că nu am anulat nimic"
 @w.lang.ro.reply.local.nothing_like w.lang.ro.reply name=nothing.like count=one role=words text="nu am găsit nimic ca {words} printre ce am făcut, așa că nu am anulat nimic"
 @w.lang.ro.reply.local.missing_place w.lang.ro.reply name=refused.missing_value.place count=one role=key text="unde ar trebui să meargă? Poți spune, de exemplu, „mută copacul la stânga”, „pune pisica lângă casă” sau „mută-l în colțul din dreapta sus”"
+@w.lang.ro.reply.local.done_whole w.lang.ro.reply name=done.whole count=one role=whole role=parts text="acum {whole:def=yes} are {parts}"
 @w.lang.ro.reply.local.cannot_key w.lang.ro.reply name=cannot.key count=one role=words text="încă nu pot face {words} aici"
 @w.lang.ro.reply.local.no_things w.lang.ro.reply name=cannot.no_things count=one role=thing text="aici nu există {art@thing} {thing}"
 @w.lang.ro.fill.local.no_things_art w.lang.ro.fill template=cannot.no_things role=art lemma=un
