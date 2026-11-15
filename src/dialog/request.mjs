@@ -65,7 +65,7 @@ export function readRequest(english, { lang, world, kindWords = new Set(), first
     if (red.length && (!act || ws.length <= 4)) return 'reduce';
     if (enl.length && !act && ws.length <= 4) return 'enlarge';
     if (redo.length && !act) return 'redo';
-    if (rej.length && rej[0].i === 0 && (!act || ws.length <= 3)) { use(rej[0].i, rej[0].n); return 'reject'; }
+    if (rej.length && rej[0].i === 0 && !act && ws.slice(rej[0].n).every((w) => w === ',' || STOP.has(w) || kindWords.has(singular(w)))) { use(rej[0].i, rej[0].n); return 'reject'; }   // "no", "wrong", "no, squares"; "no, I meant the tree" is a correction of the dialogue
     if (thx.length && !act && ws.length <= 4) return 'thanks';
     if (fr.length && !act && !targets.size) return 'frustration';
     return fr.length && !act ? 'frustration' : null;
@@ -102,7 +102,8 @@ export function readRequest(english, { lang, world, kindWords = new Set(), first
   for (let i = 0; i < ws.length; i++) {
     budget.tick('request.kind');
     const s = singular(ws[i]);
-    if (!target && (targets.has(s) || targets.has(ws[i]))) { target = targets.has(s) ? s : ws[i]; use(i); continue; }
+    const afterPrep = /^(?:in|into|on|onto|under|near|by|to|from|above|below|behind|beside|of)$/.test(ws[i - 1] ?? '') || /^(?:in|into|on|onto|under|near|by|to|from|above|below|behind|beside)$/.test(ws[i - 2] ?? '') && /^(?:a|an|the|this|that)$/.test(ws[i - 1] ?? '');
+    if (!target && (targets.has(s) || targets.has(ws[i])) && !afterPrep) { target = targets.has(s) ? s : ws[i]; use(i); continue; }   // "put the houses in the pond": a place, not the thing made
     if (negated.has(i)) continue;
     if (kindWords.has(s) && !facts.some((f) => f.key === 'count' && f.of === s && !kindWords.has(s))) {
       const generic = decl?.generic?.has(s);

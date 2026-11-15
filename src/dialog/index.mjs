@@ -1577,7 +1577,8 @@ export class DialogSession {
     const complete = !catchAll && segs.length > 0 && segs.every((sg) => !sg.unparsed && !(sg.ignored?.length) && !sg.partial && !sg.bestEffort) && (first.statuses ?? []).every((x) => x === 'supported');
     const rd = this.dialogue.requests;
     const lastRec = rd.last(tabWorld);
-    const q = readRequest(english, { lang: interp.lang, world, kindWords: decl.kinds, first: { complete }, lib: this.engine.sopworld, last: lastRec?.request ?? null });
+    const parsed = !catchAll && segs.length > 0 && segs.every((sg) => !sg.unparsed && !(sg.ignored?.length) && !sg.partial && !sg.bestEffort);   // every word read (a refusal still read its words)
+    const q = readRequest(english, { lang: interp.lang, world, kindWords: decl.kinds, first: { complete: parsed }, lib: this.engine.sopworld, last: lastRec?.request ?? null });
     first.trace.request = q;
     const beforeState = snap0.isession.state[tabWorld] ? structuredClone(snap0.isession.state[tabWorld]) : null;
     const measure = (before) => interp.hook(this.isession, tabWorld, 'requestResult', { before });
@@ -1589,6 +1590,10 @@ export class DialogSession {
     if (!reaction && constraintsOnly && lastRec && !complete) reaction = 'refine';
     const sameAgain = lastRec && q.act && lastRec.request.act === q.act && q.target && lastRec.request.target === q.target && JSON.stringify(q.facts) === JSON.stringify(lastRec.request.facts);
     if (sameAgain) reaction = 'redo';
+    // the open world itself read the turn completely ("now bigger", "make another one", "not that one, the other one" are its own acts on the last thing): a reaction to the last request
+    // only when no reader of the tab carried it out, or when it states what was expected (a refine carries a whole constraint set)
+    const tabRead = complete && segs.every((sg) => sg.match?.worldId === tabWorld);
+    if (reaction && reaction !== 'refine' && !sameAgain && tabRead) reaction = null;
     if (!(reaction && lastRec) && this.context().tabWorld !== tabWorld) return first;   // the turn moved to another tab (a reaction to the last result of the tab is read against it: the move is undone)
     if (reaction && lastRec && (!complete || ['redo', 'refine', 'reduce', 'enlarge', 'reject'].includes(reaction))) {
       if (reaction === 'refine' && q.target && lastRec.request.target && q.target !== lastRec.request.target) reaction = null;
@@ -1617,7 +1622,7 @@ export class DialogSession {
     }
     // the open world plans the request: the session goes back to before the turn (a reaction: to before the last result)
     const exp = expOf(goalReq);
-    if (!exp && !goalReq.facts.length) return await this._requestNotes(opts, first, q, cannot);
+    if (!exp) return await this._requestNotes(opts, first, q, cannot);   // the world plans only what it has an expectation of (a target of request.sop / k.expect)
     if (typeof world?.ops?.planRequest !== 'function') return await this._requestNotes(opts, first, q, cannot);
     this.restore(snap0);
     if (base !== undefined) this.isession.state[tabWorld] = base ? structuredClone(base) : (typeof world.ops.initialState === 'function' ? world.ops.initialState() : {});
