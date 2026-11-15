@@ -10,10 +10,28 @@
  * What a typed world can say about a reading: `unreadBy(typed, match)` = the content words of the free-text slots of the reading that the world's types do not accept (a `thing` that is
  * not a kind of the world, a name that is a question or an act of the world, a value outside its closed set, a number that is not one). A slot nobody typed is free: nothing is unread.
  */
-import { FUNCTION_WORDS } from './spell.mjs?v=4b583c611f';
-import { lemmaCandidates } from '../knowledge/facts.mjs?v=f9a0600c1d';
+import { FUNCTION_WORDS } from './spell.mjs?v=2129df1f93';
+import { lemmaCandidates } from '../knowledge/facts.mjs?v=e6e977142f';
 
 const FREE = new Set(['words', 'noun', 'word', 'rest']);
+/**
+ * LEFTOVER arguments (spec 16 section 13; owner export 2026-11-14 22:43): `pre` / `post` are the raw words a catch-all pattern swallows around its one literal ("{pre} diagram {post}").
+ * Nobody types them, so they are checked against the world's own words in every world, a world with its own reader included: a content word the world does not know is unread.
+ */
+export const LEFTOVER = new Set(['pre', 'post']);
+/** The arguments of a request that carry raw text, not a typed value: the leftovers, the own reader's `rest`, and `text` (the whole clause). */
+const RAW_ARGS = new Set(['pre', 'post', 'rest', 'text']);
+/**
+ * A CATCH-ALL reading: a request whose every captured argument is raw text (leftovers or the whole rest), so nothing in it is typed ("{pre} diagram {post}" handing the sentence to a
+ * reader). It is a LAST RESORT: when it leaves words unread it is not executed and the reply says what was not understood (src/dialog/index.mjs).
+ */
+export function isCatchAll(pattern) {
+  if (!pattern) return false;
+  const emit = String(pattern.emit ?? '');
+  if (!/\baction=/.test(emit)) return false;
+  const captured = [...emit.matchAll(/\barg\.(\w+)=\\?"?\{(\w+)\}/g)].map((m) => m[1]);
+  return captured.some((a) => LEFTOVER.has(a) || a === 'rest') && captured.every((a) => RAW_ARGS.has(a));
+}
 const lower = (t) => String(t.lower ?? t.raw ?? '').toLowerCase();
 const isWord = (t) => (t.kind === 'word' || t.kind === 'number') && !t.filler;
 
@@ -42,7 +60,7 @@ function buildTyped(lib, raw, things) {
   const know = { ofType: (t) => (j.knowledge?.[t] ?? []).map((x) => ({ attrs: { name: [x.name], ...(x.kind ? { kind: [x.kind] } : {}) } })) };
   try {
     const t = lib.typedWorldFor(j.description, know, { things: things ?? [] });
-    return { ...t, known: new Set(j.known ?? []), args: j.args ?? {}, open: new Set(j.openSlots ?? []), views: new Set(j.views ?? []), worldId: j.world, fits: (target, text) => { const i = target.indexOf('|'); return lib.fitsSlot(t, target.slice(0, i), target.slice(i + 1), text); } };
+    return { ...t, known: new Set(j.known ?? []), args: j.args ?? {}, raw: !!j.rawArgs, open: new Set(j.openSlots ?? []), views: new Set(j.views ?? []), worldId: j.world, fits: (target, text) => { const i = target.indexOf('|'); return lib.fitsSlot(t, target.slice(0, i), target.slice(i + 1), text); } };
   } catch { return null; }
 }
 
@@ -87,10 +105,12 @@ function knows(tw, w, extra) {
  * `typedFor(id)` gives the bundle. Returns [] when the world has no typed bundle or no slot is typed.
  * `strict` (the FULL reading a world other than the open tab's needs, spec 16 section 14): a `rest` capture is typed like any other free text (dictation is free only in the tab's own world).
  */
-export function unreadBy(typedFor, m, things = null, { strict = false } = {}) {
+export function unreadBy(typedFor, m, things = null, { strict = false, readsWhole = null } = {}) {   // `readsWhole(worldId, view)`: the world's own reader reads the whole clause (leftovers are then read)
   const tw = typedFor?.(m.pattern.worldId);
   if (!tw) return [];
   const targets = targetsOf(m.pattern), view = m.view ?? [], out = [], extra = things?.(m.pattern.worldId) ?? null;
+  // a world with its own reader whose reading captured only free text (no lexicon or typed slot): the reading is a catch-all too (the engine reads the words, nothing else typed them)
+  if (tw.raw) { const caps = Object.entries(m.slots ?? {}).filter(([n, sl]) => sl?.tokens && targets[n] && !targets[n].endsWith('|text')); if (caps.length && caps.every(([, sl]) => FREE.has(sl.class))) m.rawOnly = true; }
   for (const [name, sl] of Object.entries(m.slots ?? {})) {
     if (!sl?.tokens || !FREE.has(sl.class)) continue;
     const target = targets[name];
@@ -101,6 +121,11 @@ export function unreadBy(typedFor, m, things = null, { strict = false } = {}) {
     if (tw.open.has(target)) continue;
     const sig = tw.slots.get(target);
     const [act, arg] = target.split('|');
+    if ((LEFTOVER.has(arg) || (tw.raw && arg !== "text")) && !sig) {   // raw leftover words (or any free text of a world with its own reader): unread unless the world knows them, or its own reader reads the whole clause (hook `readsWhole`)
+      const left = words.map(lower).filter((w, i) => words[i].kind === 'word' && !FUNCTION_WORDS.has(w) && !knows(tw, w, extra));
+      if (left.length && !readsWhole?.(m.pattern.worldId, view)) out.push(...left);
+      continue;
+    }
     const argType = tw.args[`${act.split('.').pop()}.${arg}`] ?? tw.args[arg];   // an act's own typing of an argument first (send.place: a view), then the world's
     if (!sig && argType === 'view') {   // another view: a tab, a world or a view word
       for (const t of words) { const w = lower(t); if (t.kind === 'word' && !FUNCTION_WORDS.has(w) && !tw.views.has(w) && !knows(tw, w, extra)) out.push(w); }

@@ -21,3 +21,15 @@
     semantics=action
     action=things.list
     doc="The things of the session and the views that show them."
+
+@op.session.things.own core.operation
+    impl=own
+    semantics=action
+    action=things.own
+    doc="A question about the things the user named (my dog is called Rex): what is my dog called, who is Rex, what pets do I have, do I have a cat. A pet is a thing of the user whose kind the catalog keeps as an animal."
+
+@op.session.things.undo core.operation
+    impl=forget
+    semantics=action
+    action=things.undo
+    doc="Undo that / forget that after a lesson: the newest lesson (its wires and the thing of the user it made) is taken back."

@@ -1,0 +1,15 @@
+# ADR-011 — The kids worlds become general worlds, one at a time (2026-11-14)
+
+Status: accepted (owner 2026-11-14 22:54 "KIDS WORLDS become serious, reusable worlds"; reviewer blocks 2026-11-15 08:45 and 2026-11-14 23:25). Plan and audit: `docs/kids-generalisation-plan.md`; asks: questions.md Q18.
+
+## Decision
+Each `kids.*` world is switched off, then deleted, as soon as the general world that should answer its canonical sentences and its real-set turns does, in the plan's order (animals, shapes, time, tasks, arith, shop, common). A kids world whose general world waits for a gap of the knowledge repository (K*) or the library (L*) stays ON: its replacement is not faked with host patterns or a renamed copy.
+- **kids.animals, kids.shapes -> session.things** (host item H3): statements are read BY TYPE into wires of the catalog's own types (spec 23 section 11) and win over the catalog in the session (the taught tier); the user's pets are the session's own things (`things.own`); undo takes a lesson back. The imports of art.draw, data.charts and docs.editor and the compose of session.conversation no longer name them (H6); the chart of legs reads the catalog's animals.
+- **The colour conflict** (k.colours.mix black + red = maroon, the child teaches brown): the taught fact wins in the session; the catalog is not changed.
+- **No point fixes**: what a deleted world read and no general world reads yet is a ledger row (`training/eval/failures.jsonl`, `real` flag), not a pattern kept alive.
+
+## Consequences
+- Test rows move with the world (kept, ported when only the wording of an expectation changes), so test-world counts do not drop by deletion.
+- The fixture catalog (`tests/fixtures/catalog`) gained `k.shapes` and a `k.attributes` subset (schema, attributes, things-living): the worlds the typed reading of a shape or a colour lesson needs.
+- The bundled animal names are speller words (no world lexicon lists them any more).
+- Boot: the browser no longer fetches kids.shapes (the drawing world imported it).

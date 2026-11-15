@@ -20,7 +20,7 @@ import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs?v=
 import { routeEdges, segBoxDist, boxOf } from './arrows.mjs?v=3346b422bb';
 import * as space from '../space/space.mjs?v=72e3867df9';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42';
-import * as DG from '../../lib/knowledge/diagram-world.mjs?v=361e3abaa7';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
+import * as DG from '../../lib/knowledge/diagram-world.mjs?v=5e4354c660';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const TAB = 'diagram';
@@ -602,16 +602,49 @@ export const arrange = make({ type: 'command', name: 'arrange' });
 
 // ---- "a diagram shaped like a house" (DRAW-FROM-FACTS) --------------------------------------------------------------------
 const LAYOUT_WORDS = new Set(['row', 'column', 'line', 'grid', 'circle', 'stack', 'cluster', 'ring', 'triangle', 'square', 'pyramid', 'tree', 'layers', 'radial', 'hierarchy', 'organic']);
-/** The part's own primitive where the diagram has one (the roof of a house is a triangle, a sun a circle); every other part shape stays a rectangle. */
-const DIAGRAM_SHAPE_OF = { triangle: 'triangle', circle: 'circle', oval: 'ellipse', ellipse: 'ellipse' };
 const thingOfNoun = (w) => {
   const x = String(w ?? '').toLowerCase().replace(/[^a-z ]/g, '').trim();
   for (const t of [x, x.replace(/ies$/, 'y'), x.replace(/es$/, ''), x.replace(/s$/, '')]) if (Object.hasOwn(THING_WORDS, t)) return THING_WORDS[t];
   return null;
 };
+/** The points of one part of a catalog object in its 0-100 frame: its own points (lines, polygons), the corners of its box, the apex of a triangle, a ring round an oval. */
+function partPoints(p) {
+  if (Array.isArray(p.points) && p.points.length) return p.points.map(([x, y]) => [x, y]);
+  if (p.shape === 'triangle') return [[p.x, p.y + p.h], [p.x + p.w, p.y + p.h], [p.x + p.w / 2, p.y]];
+  if (/^(?:circle|oval|ellipse)$/.test(p.shape)) return Array.from({ length: 12 }, (_, i) => [p.x + p.w / 2 + (p.w / 2) * Math.cos((i * Math.PI) / 6), p.y + p.h / 2 + (p.h / 2) * Math.sin((i * Math.PI) / 6)]);
+  return [[p.x, p.y], [p.x + p.w, p.y], [p.x + p.w, p.y + p.h], [p.x, p.y + p.h]];
+}
 /**
- * One box per part of a thing of the catalog, labelled with the part name, put where the part is (its box x y w h in the 0-100 frame of the object, scaled to the
- * canvas, in draw order). Nothing else is made: no arrows, no invented boxes. A layout word (a row, a circle) is the engine's own arrange.
+ * THE OUTLINE of a catalog object (owner export 2026-11-14 22:43: "a diagram in the shape of a house"): the convex hull of the points of its parts, clockwise from the top, nearly
+ * straight corners dropped. A concave silhouette (the eaves of a roof) is closed over; an outline as an arrangement path is asked of the library ([LIB] in questions.md).
+ */
+export function outlineOf(parts) {
+  const pts = parts.flatMap(partPoints).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const half = (list) => { const h = []; for (const p of list) { while (h.length >= 2 && cross(h[h.length - 2], h[h.length - 1], p) <= 0) { budget.tick('diagram.outline'); h.pop(); } h.push(p); } h.pop(); return h; };
+  let hull = [...half(pts), ...half([...pts].reverse())];
+  // drop corners that hardly turn (under 8 degrees) and points closer than 3 units to the one before
+  for (let pass = 0; pass < 3 && hull.length > 3; pass++) hull = hull.filter((p, i) => { const a = hull[(i - 1 + hull.length) % hull.length], b = hull[(i + 1) % hull.length]; const t = Math.abs(Math.atan2(cross(a, p, b), (p[0] - a[0]) * (b[0] - p[0]) + (p[1] - a[1]) * (b[1] - p[1]))); return t > 0.14 && Math.hypot(p[0] - a[0], p[1] - a[1]) > 3; });
+  const top = hull.reduce((k, p, i) => (p[1] < hull[k][1] ? i : k), 0);
+  return [...hull.slice(top), ...hull.slice(0, top)];
+}
+/** `n` points evenly along a closed polygon (by length), the first at its first corner. */
+export function pointsAlong(poly, n) {
+  const seg = poly.map((p, i) => [p, poly[(i + 1) % poly.length]]), len = seg.map(([a, b]) => Math.hypot(b[0] - a[0], b[1] - a[1])), total = len.reduce((s, x) => s + x, 0);
+  const out = [];
+  for (let k = 0; k < n; k++) {
+    let d = (total * k) / n, i = 0;
+    while (i < seg.length - 1 && d > len[i]) { budget.tick('diagram.outline'); d -= len[i]; i++; }
+    const [a, b] = seg[i], t = len[i] ? d / len[i] : 0;
+    out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]);
+  }
+  return out;
+}
+const SIDE = ['right', 'bottom_right', 'bottom', 'bottom_left', 'left', 'top_left', 'top', 'top_right'];
+/**
+ * A diagram in the shape of a thing of the catalog: an ARRANGEMENT ALONG ITS OUTLINE. With three or more shapes in the diagram, they are moved onto the outline (evenly, from the top,
+ * clockwise); on an empty diagram one node is made at each corner of the outline, named after the part and the side it sits on, and the nodes are joined in order (a closed line).
+ * A layout word (a row, a circle) is the engine's own arrange.
  */
 export function shapedLike(ctx, args = {}) {
   if (!K) return NOT_READY();
@@ -621,23 +654,38 @@ export function shapedLike(ctx, args = {}) {
   if (!thing) {
     if (LAYOUT_WORDS.has(noun) && s.shapes.length) return make({ type: 'command', name: 'arrange' })(ctx, { text: `arrange the boxes as a ${noun}` });
     const art = /^[aeiou]/.test(noun) ? 'an' : 'a';
-    return no(`I don't know how to draw a diagram shaped like ${art} ${noun} yet.`, 'unsupported');
+    return no(`I don't know how to draw a diagram shaped like ${art} ${noun} yet. The catalog has no outline of ${art} ${noun}.`, 'unsupported');
   }
-  const parts = [...THINGS[thing]].sort((a, b) => a.z - b.z);
-  const x0 = Math.min(...parts.map((p) => p.x)), x1 = Math.max(...parts.map((p) => p.x + p.w)), y0 = Math.min(...parts.map((p) => p.y)), y1 = Math.max(...parts.map((p) => p.y + p.h));
-  const k = Math.min(700 / Math.max(1, x1 - x0), 410 / Math.max(1, y1 - y0));
+  const parts = THINGS[thing], a = /^[aeiou]/.test(thing) ? 'an' : 'a';
+  const poly = outlineOf(parts);
+  const x0 = Math.min(...poly.map((p) => p[0])), x1 = Math.max(...poly.map((p) => p[0])), y0 = Math.min(...poly.map((p) => p[1])), y1 = Math.max(...poly.map((p) => p[1]));
+  const k = Math.min(640 / Math.max(1, x1 - x0), 380 / Math.max(1, y1 - y0));
+  const canvas = ([x, y]) => [Math.round(400 + (x - (x0 + x1) / 2) * k), Math.round(250 + (y - (y0 + y1) / 2) * k)];
+  const own = s.shapes.filter((x) => !x.template && !x.layer && x.shape !== 'text');
+  if (own.length >= 3) {
+    const at = pointsAlong(poly, own.length).map(canvas);
+    const nodes = [...own].sort((p, q) => (p.order ?? 0) - (q.order ?? 0)).map((x, i) => ({ id: `m${i + 1}`, type: 'command', args: { action: 'move', target: x.name, at: `${at[i][0]},${at[i][1]}` } }));
+    const r = execute(ctx, s, nodes, { place: false });
+    if (r.status !== 'supported') return r;
+    return { ...r, value: `I placed the ${own.length} shapes on the outline of ${a} ${thing}, clockwise from the top.` };
+  }
+  const corners = poly.length > 10 ? pointsAlong(poly, 8) : poly;
+  const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+  const boxDist = (p, [x, y]) => Math.hypot(Math.max(p.x - x, 0, x - p.x - p.w), Math.max(p.y - y, 0, y - p.y - p.h));
   const taken = new Set(s.shapes.flatMap((x) => [x.name.toLowerCase(), (x.id ?? '').toLowerCase()]));
-  const nodes = parts.map((p, i) => {
-    let name = p.name, n = 1;
-    while (taken.has(name.toLowerCase()) || /^[crsdetxhk]\d+$/i.test(name)) { budget.tick('diagram.name'); name = `${p.name}${++n}`; }
+  const names = corners.map((pt) => {
+    const part = [...parts].sort((p, q) => boxDist(p, pt) - boxDist(q, pt) || (q.z ?? 0) - (p.z ?? 0))[0];
+    const side = SIDE[((Math.round(Math.atan2(pt[1] - cy, pt[0] - cx) / (Math.PI / 4)) % 8) + 8) % 8];
+    let name = `${part.name}_${side}`, n = 1;
+    while (taken.has(name.toLowerCase())) { budget.tick('diagram.name'); name = `${part.name}_${side}${++n}`; }
     taken.add(name.toLowerCase());
-    const w = Math.max(10, Math.round(p.w * k)), h = Math.max(10, Math.round(p.h * k));
-    const cx = 400 + ((p.x + p.w / 2) - (x0 + x1) / 2) * k, cy = 250 + ((p.y + p.h / 2) - (y0 + y1) / 2) * k;
-    return { id: `s${i + 1}`, type: 'command', args: { action: 'create', shape: DIAGRAM_SHAPE_OF[p.shape] ?? 'rectangle', name, label: p.name.replace(/_/g, ' '), width: w, height: h, at: `${Math.round(cx)},${Math.round(cy)}` } };
+    return name;
   });
-  const r = execute(ctx, s, nodes);
+  const nodes = corners.map((pt, i) => { const [x, y] = canvas(pt); return { id: `o${i + 1}`, type: 'command', args: { action: 'create', shape: 'circle', name: names[i], label: names[i].replace(/_/g, ' '), at: `${x},${y}` } }; });
+  nodes.push({ id: 'oc', type: 'command', args: { action: 'connect', from: names, pairing: 'chain', arrow: 'none' } }, { id: 'oz', type: 'command', args: { action: 'connect', from: names[names.length - 1], to: names[0], arrow: 'none' } });
+  const r = execute(ctx, s, nodes, { place: false });
   if (r.status !== 'supported') return r;
-  return { ...r, value: `I drew a diagram shaped like ${/^[aeiou]/.test(thing) ? 'an' : 'a'} ${thing}: one box for each of its ${parts.length} parts, named after the part.` };
+  return { ...r, value: `I drew a diagram in the shape of ${a} ${thing}: ${corners.length} nodes on its outline, joined in order.` };
 }
 
 export const distribute = make({ type: 'command', name: 'distribute' });

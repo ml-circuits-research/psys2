@@ -36,7 +36,7 @@ function subset(list, k, seed) {
  * The library's world for one schema world and the things of the session: types, slots and kinds of the schema, the nouns an open kind takes, and one wire per thing.
  * `things`: [{ id, kind, noun?, attrs }] (the world's `referents`). Returns { world, ids } where `ids` maps a wire id back to the thing.
  */
-export function sampleWorldOf(lib, schema, things, { cap = 40, lists = {}, seed = 1, take = 30 } = {}) {
+export function sampleWorldOf(lib, schema, things, { cap = 40, lists = {}, seed = 1, take = 30, preferKnown = false } = {}) {
   const world = new lib.World();
   const ns = schema.id;
   const lines = ['@acts core.use world=std.acts', `@w std.schema.world name=${ns}`];
@@ -59,7 +59,7 @@ export function sampleWorldOf(lib, schema, things, { cap = 40, lists = {}, seed 
     const kindActs = acts(k).filter((a) => !k.diceNot?.includes(a)).filter((a) => !(k.any && a === 'make') && !(a === 'make' && ((k.name === 'group' && schema.acts.has('group')) || (k.in && k.in !== k.name && (schema.kinds[k.in]?.numbered || schema.kinds[k.in]?.named) && !present.has(k.in)))));   // an open kind is made from the nouns below; a group is made by the act group
     if (kindActs.length) lines.push(`@k.${k.name} std.schema.kind of=${k.name} world=${ns} ${kindActs.map((a) => `acts=${a}`).join(' ')}`);
     closed.set(k.name, k);
-    if (k.any) {
+    if (k.any && !(preferKnown && (k.know ?? []).some((kn) => lists[kn.list]?.length))) {   // the chips: a kind whose knowledge list the world filled (what comes next) names those, not the built-in nouns
       const nouns = [...new Set((k.words ?? []).filter((w) => SIMPLE.test(w) && !GENERIC_NOUNS.has(w)))];
       if (nouns.length && acts(k).includes('make')) {
         opens.push(...nouns);
@@ -137,7 +137,7 @@ export function createSampler(lib, { worldOf, thingsOf, historyOf, knowledgeOf }
     if (!w?.schema) return [];
     const things = thingsOf?.(worldId) ?? [];
     const seed0 = seed ?? ++counter * 7919;
-    const sw = sampleWorldOf(lib, w.schema, things, { lists: knowledgeOf?.(worldId) ?? {}, seed: seed0 });
+    const sw = sampleWorldOf(lib, w.schema, things, { lists: knowledgeOf?.(worldId, { mode }) ?? {}, seed: seed0, preferKnown: mode !== 'one' });   // the mode: the dice (one) may draw from the whole knowledge, the chips (few, actions) from what comes next
     if (!sw) return [];
     // undo: only after a change the dice's own press made, and at most one press in ten (a roll of the seed)
     const mine = (dicing[worldId] ??= { n: 0, last: null });
@@ -196,11 +196,11 @@ export function engineSampler(lib, engine, session) {
   const sampler = createSampler(lib, {
     worldOf: (id) => { const x = schemaWorld(id); return x?.schema ? { schema: x.schema, executor: x } : null; },
     historyOf: (id) => session().state(id)?.history?.length ?? 0,
-    knowledgeOf: (id) => {
+    knowledgeOf: (id, { mode = null } = {}) => {
       const lists = {};
       try { const readable = new Set(colourLexiconWords()); lists.colours = [...colourWordSet()].filter((c) => readable.has(c)); }   // the colours the readers take as colour words (not "cherry", a fruit)
       catch { /* no colours: the schema's own */ }
-      try { Object.assign(lists, schemaWorld(id)?.sampleKnowledge?.({ state: session().state(id) ?? {}, knowledge: engine.knowledge, world: engine.set.get(id) }) ?? {}); } catch { /* the world's lists are optional */ }
+      try { Object.assign(lists, schemaWorld(id)?.sampleKnowledge?.({ state: session().state(id) ?? {}, knowledge: engine.knowledge, world: engine.set.get(id), mode }) ?? {}); } catch { /* the world's lists are optional */ }
       return lists;
     },
     thingsOf: (id) => {

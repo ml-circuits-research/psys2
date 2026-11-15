@@ -24,13 +24,13 @@ import { ACT_VERBS } from './verbs.generated.mjs?v=b363aaaa66';
 import { FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=75b22014a6';
 import { FLAGS_DATA } from './forms.data.mjs?v=54c931cc9e';   // more forms (flags `valued`, `ordered`): named values said without their name
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
-import { createEffects, EFFECT_ACTS } from './effects.mjs?v=ef599ffbd3';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
+import { createEffects, EFFECT_ACTS } from './effects.mjs?v=08377b9709';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=136be736fc';
-import { resolvePhrase } from './np-lib.mjs?v=36fa904426';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
-import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=0a6979f5b7';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { en } from '../../lib/lang/en.mjs?v=37915f671a';
+import { resolvePhrase } from './np-lib.mjs?v=c5aaf557ee';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
+import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=ddb4bc8d03';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------
@@ -970,5 +970,7 @@ export function createExecutor(schema, hooks = {}) {
   const coordinates = (info) => !!hooks.coordinates?.(info);
   /** The knowledge lists the world names things from, for the dice (spec 25): { list: [text | { text, act }] }, from the world's own knowledge (its hook `sampleKnowledge`). Read-only. */
   const sampleKnowledge = (ctx) => { try { return hooks.sampleKnowledge?.(ctx) ?? {}; } catch { return {}; } };
-  return { run, operation, group: actGroup, sampleKnowledge, interceptInput, lastResort, outOfScope, accepts, coordinates, init, resolve, labels, schema, referents };
+  /** Does the world's own reader (flag `reader`) read the whole clause ({ text, state }), so the raw leftover words of a catch-all reading are read by it (spec 16 section 13)? Its hook `readsWhole`. */
+  const readsWhole = (info) => { try { return !!hooks.readsWhole?.(info); } catch { return false; } };
+  return { run, operation, group: actGroup, sampleKnowledge, interceptInput, lastResort, outOfScope, accepts, coordinates, readsWhole, init, resolve, labels, schema, referents };
 }

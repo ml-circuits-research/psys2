@@ -18,7 +18,7 @@
 //   is probed by "put the chart in the document".
 // The pure helpers at the bottom (chartView, csv) are also imported by the tab, so the tab draws exactly what the state says.
 
-import { ask as askAnimals } from '../../lib/knowledge/animals.mjs?v=7ef6dd8b71';   // the animals of the catalog (k.animals), read by lookup from a bundle generated from it
+import { ask as askAnimals, animalNames } from '../../lib/knowledge/animals.mjs?v=7ef6dd8b71';   // the animals of the catalog (k.animals), read by lookup from a bundle generated from it
 import { colourName, colourHex } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const TAB = 'charts';
@@ -322,7 +322,7 @@ export const legGroups = () => ({ habitats: [...new Set(Object.values(HABITATS))
 /** The legs of animals (k.animals) -> one bar per animal (a group such as sea animals, or named animals). */
 function buildLegs(ctx, { what }) {
   const raw = String(what ?? '').trim();
-  const known = ctx.lexicon('lex.kids.animals.names');
+  const known = animalNames().map((n) => String(n).toLowerCase().replace(/ /g, '_'));   // the animals of the catalog (k.animals), not a world's lexicon
   const named = splitList(raw).map((p) => bareWords(p).join('_')).filter(Boolean).map((w) => (known.includes(w) ? w : singular(w)));
   let names = [], groupText = null;
   if (named.length && named.every((n) => known.includes(n))) names = [...new Set(named)];

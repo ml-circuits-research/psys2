@@ -206,6 +206,7 @@ export function createFacts({ source, name = 'catalog' }) {
     if (!hit) { things.set(key, null); return null; }
     const { lemma } = hit;
     const objects = new Map(), commonsense = [], senses = [], others = [];
+    await Promise.all(hit.shards.map((sid) => loadShard(sid)));   // the shards of a lemma are fetched together ("house" names 55 shards: one round trip each, in a row, was seconds on a phone)
     for (const sid of hit.shards) {
       const lines = await loadShard(sid);
       const needle = lemma;
@@ -324,6 +325,8 @@ export function createFacts({ source, name = 'catalog' }) {
     preloadWires,
     /** The wires of a type that `preloadWires` loaded, or undefined (a synchronous read for operations: `ctx.knowledge.peekWires(type)`). */
     peekWires: (type, world = null) => listed.get(type) ?? wireMemo.get(`${type}|null|${world ?? ''}`),   // also the whole-type wires a world's `needs` entry `wires:<type>[@<world>]` settled (the map's countries and cities)
+    /** The wires of a type that name one value (`wires(type, { key })` settled them), or undefined: a synchronous read (the scenes a kind is in, the things of a scene). */
+    peekWiresBy: (type, key) => wireMemo.get(`${type}|${String(key).toLowerCase()}|`),
     name, find, thing, stats, loadVocab, loadVocabFor, world, wires, schema, series,
     /** The text of a catalog file (a shard, a schema) through the same source, for hosts that read worlds whole (the planner: src/plan/host.mjs). */
     readText: (path) => source.text(path),
@@ -361,6 +364,7 @@ export function createFacts({ source, name = 'catalog' }) {
       partsLoading ??= (async () => {
         const out = new Set();
         const w = await world('k.objects');
+        await Promise.all((w?.shards ?? []).map((sh) => loadShard(sh.id)));   // fetched together, indexed in order
         for (const sh of w?.shards ?? []) for (const r of (await wireIndex(sh.id)).byType.get('k.objects.part') ?? []) { const n = one(r, 'name'); if (n) out.add(String(n).toLowerCase()); }
         partsData = out;
         if (!w) partsLoading = null;

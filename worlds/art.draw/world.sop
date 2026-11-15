@@ -4,7 +4,6 @@
     legend=$legend.art.draw
     imports=world.core
     imports=world.kids.common
-    imports=world.kids.shapes
     imports=world.common.sense
     imports=world.space
     compose=world.common.sense

@@ -1,0 +1,392 @@
+{
+ "generated": "scripts/measure-boot.mjs",
+ "date": "2026-11-14",
+ "build": "72cd7744",
+ "profile": "Chrome 390x844, 4x CPU throttle, no Translator API (the on-device model translates)",
+ "pages": {
+  "draw/en": {
+   "lang": "en",
+   "selected": "en",
+   "steps": [
+    {
+     "step": "page",
+     "ms": 72,
+     "bytes": 503984,
+     "ok": true
+    },
+    {
+     "step": "worlds",
+     "ms": 200,
+     "bytes": 633556,
+     "ok": true
+    },
+    {
+     "step": "reasoner",
+     "ms": 127,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "translator",
+     "ms": 0,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "world:talk",
+     "ms": 122,
+     "bytes": 44535,
+     "ok": true
+    },
+    {
+     "step": "model",
+     "ms": 0,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "catalog",
+     "ms": 11,
+     "bytes": 3338687,
+     "ok": true
+    },
+    {
+     "step": "faces",
+     "ms": 1651,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "voices",
+     "ms": 2501,
+     "bytes": null,
+     "ok": true
+    }
+   ],
+   "requests": 178,
+   "mb": 4.5,
+   "translationModelMb": 0,
+   "reasonerMs": 127
+  },
+  "diagram/en": {
+   "lang": "en",
+   "selected": "en",
+   "steps": [
+    {
+     "step": "page",
+     "ms": 96,
+     "bytes": 503984,
+     "ok": true
+    },
+    {
+     "step": "worlds",
+     "ms": 200,
+     "bytes": 633438,
+     "ok": true
+    },
+    {
+     "step": "reasoner",
+     "ms": 137,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "translator",
+     "ms": 0,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "world:talk",
+     "ms": 121,
+     "bytes": 44535,
+     "ok": true
+    },
+    {
+     "step": "faces",
+     "ms": 702,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "model",
+     "ms": 0,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "catalog",
+     "ms": 19,
+     "bytes": 3338687,
+     "ok": true
+    },
+    {
+     "step": "voices",
+     "ms": 2502,
+     "bytes": null,
+     "ok": true
+    }
+   ],
+   "requests": 177,
+   "mb": 4.8,
+   "translationModelMb": 0,
+   "reasonerMs": 137
+  },
+  "talk/en": {
+   "lang": "en",
+   "selected": "en",
+   "steps": [
+    {
+     "step": "page",
+     "ms": 90,
+     "bytes": 503984,
+     "ok": true
+    },
+    {
+     "step": "worlds",
+     "ms": 251,
+     "bytes": 633556,
+     "ok": true
+    },
+    {
+     "step": "reasoner",
+     "ms": 132,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "translator",
+     "ms": 0,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "world:talk",
+     "ms": 106,
+     "bytes": 44535,
+     "ok": true
+    },
+    {
+     "step": "faces",
+     "ms": 683,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "model",
+     "ms": 0,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "catalog",
+     "ms": 1,
+     "bytes": 3338687,
+     "ok": true
+    },
+    {
+     "step": "voices",
+     "ms": 2501,
+     "bytes": null,
+     "ok": true
+    }
+   ],
+   "requests": 177,
+   "mb": 4.4,
+   "translationModelMb": 0,
+   "reasonerMs": 132
+  },
+  "draw/ro": {
+   "lang": "ro",
+   "selected": "en",
+   "steps": [
+    {
+     "step": "page",
+     "ms": 86,
+     "bytes": 503984,
+     "ok": true
+    },
+    {
+     "step": "worlds",
+     "ms": 237,
+     "bytes": 633556,
+     "ok": true
+    },
+    {
+     "step": "reasoner",
+     "ms": 131,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "world:ui.avatar,talk,plan.timeline,plan.seating,media.music,kids.time,kids.tasks,kids.shop,kids.arith,kids.animals,geo.map,docs.editor,diagram.sketch,data.charts",
+     "ms": 486,
+     "bytes": 3364347,
+     "ok": true
+    },
+    {
+     "step": "model",
+     "ms": 0,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "catalog",
+     "ms": 67,
+     "bytes": 3338687,
+     "ok": true
+    },
+    {
+     "step": "translator",
+     "ms": 2390,
+     "bytes": 29729171,
+     "ok": true
+    },
+    {
+     "step": "voices",
+     "ms": 2509,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "faces",
+     "ms": 2803,
+     "bytes": null,
+     "ok": true
+    }
+   ],
+   "requests": 184,
+   "mb": 34.2,
+   "translationModelMb": 29.7,
+   "reasonerMs": 131
+  },
+  "diagram/ro": {
+   "lang": "ro",
+   "selected": "en",
+   "steps": [
+    {
+     "step": "page",
+     "ms": 67,
+     "bytes": 503984,
+     "ok": true
+    },
+    {
+     "step": "worlds",
+     "ms": 221,
+     "bytes": 633438,
+     "ok": true
+    },
+    {
+     "step": "reasoner",
+     "ms": 144,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "model",
+     "ms": 0,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "world:ui.avatar,talk,plan.timeline,plan.seating,media.music,kids.time,kids.tasks,kids.shop,kids.shapes,kids.arith,kids.animals,geo.map,docs.editor,data.charts,art.draw",
+     "ms": 1730,
+     "bytes": 3364465,
+     "ok": true
+    },
+    {
+     "step": "catalog",
+     "ms": 209,
+     "bytes": 3338687,
+     "ok": true
+    },
+    {
+     "step": "translator",
+     "ms": 2454,
+     "bytes": 29729171,
+     "ok": true
+    },
+    {
+     "step": "voices",
+     "ms": 2512,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "faces",
+     "ms": 2335,
+     "bytes": null,
+     "ok": true
+    }
+   ],
+   "requests": 183,
+   "mb": 34.5,
+   "translationModelMb": 29.7,
+   "reasonerMs": 144
+  },
+  "talk/ro": {
+   "lang": "ro",
+   "selected": "en",
+   "steps": [
+    {
+     "step": "page",
+     "ms": 67,
+     "bytes": 503984,
+     "ok": true
+    },
+    {
+     "step": "worlds",
+     "ms": 268,
+     "bytes": 633556,
+     "ok": true
+    },
+    {
+     "step": "reasoner",
+     "ms": 142,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "world:ui.avatar,talk,plan.timeline,plan.seating,media.music,kids.time,kids.tasks,kids.shop,kids.arith,kids.animals,geo.map,docs.editor,diagram.sketch,data.charts",
+     "ms": 1702,
+     "bytes": 3364347,
+     "ok": true
+    },
+    {
+     "step": "model",
+     "ms": 0,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "catalog",
+     "ms": 29,
+     "bytes": 3338687,
+     "ok": true
+    },
+    {
+     "step": "translator",
+     "ms": 2419,
+     "bytes": 29729171,
+     "ok": true
+    },
+    {
+     "step": "voices",
+     "ms": 2507,
+     "bytes": null,
+     "ok": true
+    },
+    {
+     "step": "faces",
+     "ms": 2358,
+     "bytes": null,
+     "ok": true
+    }
+   ],
+   "requests": 183,
+   "mb": 34.2,
+   "translationModelMb": 29.7,
+   "reasonerMs": 142
+  }
+ }
+}

@@ -14,10 +14,10 @@
  * `prior`: { world: probability } from the encoder (optional); its points are `round(p * priorWeight)`, one signal among the rules: it can add up to the
  * weight and never outvotes a block.
  */
-import { GRAMMAR, PERSON } from './continuation.mjs?v=a414b57a5c';
-import { sceneThings } from './scene-referents.mjs?v=1656464c5a';
+import { GRAMMAR, PERSON } from './continuation.mjs?v=f43d1d841f';
+import { sceneThings } from './scene-referents.mjs?v=9dae83505f';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { slipDistance, stemsOf } from './scene-referents.mjs?v=1656464c5a';
+import { slipDistance, stemsOf } from './scene-referents.mjs?v=9dae83505f';
 
 /** The forms a word can have besides its lemma: plural and case endings (scene referents), and -ing / -ed ("splitting", "coloured", "dividing"). */
 const stemForms = (w) => {
@@ -62,7 +62,7 @@ export const DEFAULT_PRIOR = Object.freeze({ max: 60, min: 8, span: 45 });
 export async function loadMetaWorlds(set, { lib = null, priorWeight = DEFAULT_PRIOR } = {}) {
   const w = set.get('meta.worlds');
   if (!w?.raw?.legend || !w.raw.kb || !w.raw.matrix) return null;
-  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=ba0569612c');
+  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=7db210d009');
   const base = new lib.World({});
   for (const [what, text] of [['legend', w.raw.legend], ['kb', w.raw.kb], ['matrix', w.raw.matrix]]) {
     const r = base.load(text);

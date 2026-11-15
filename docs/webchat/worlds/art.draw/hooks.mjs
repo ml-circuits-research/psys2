@@ -3,11 +3,11 @@
 // grammar; what an act DOES on the picture is the scene of worlds/art.draw (ops.mjs: the scene operations, the noun-phrase resolution, the placement over the space module; scene.mjs: the
 // renderer's geometry and the drawing from facts). The roles of an act are joined back into the words those operations read. Nothing here names a kind, a colour or a part: kinds and
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
-import * as D from './engine.mjs?v=c7313291f3';
+import * as D from './engine.mjs?v=425487b051';
 import * as space from '../space/space.mjs?v=72e3867df9';
-import { splitThings } from '../acts/acts.mjs?v=dd751a2a42';
+import { splitThings } from '../acts/acts.mjs?v=ce8bfa4e0b';
 import { partsOf, kindKey, kindName } from './scene.mjs?v=0882bbcd68';
-import * as P from './plan.mjs?v=258aeda5bf';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
+import * as P from './plan.mjs?v=420762b97c';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const TAIL = new Set(['there', 'here', 'now', 'added', 'drawn', 'too', 'also', 'please', 'pls', 'plz', 'thx', 'thanks', 'are', 'is', 'again', 'exactly', 'go']);   // words a role slot took that belong to the frame ("how many trees there are")
@@ -139,11 +139,33 @@ function tryPlan(ctx, act, r) {
   return res;
 }
 
+/** The kinds in the picture (lemmas), newest first. */
+const kindsOf = (state) => [...new Set([...(state?.objects ?? [])].reverse().map((o) => String(o.kind ?? '').replace(/^composite:/, '').toLowerCase()).filter((k) => /^[a-z][a-z ]*$/.test(k)))];
 /**
- * What the dice may draw from the knowledge catalog (spec 25): the lemmas of the catalog's vocabulary that have a drawing (a shard of k.objects) and are plain singular words.
- * Empty while the catalog is not attached or its vocabulary not loaded (the dice then draws the built-in nouns).
+ * NEXT-STEP KNOWLEDGE (owner export 2026-11-14 22:43, finding 5: the chip "Add a weapon." after a sunny scene with a house and a dog): what the catalog's scenes put with the kinds in the
+ * picture (k.scenes.has: the scenes a kind is in, then the other things of those scenes), ranked by the number of the picture's kinds that share a scene with it. Read synchronously from
+ * the wires the catalog already settled (`peekWiresBy`; `nextNeeds` asks for them after a turn). Empty when nothing is settled yet: the chips then act on the things of the picture and
+ * name the built-in kinds, never a random lemma of the catalog.
+ */
+function nextThings(ctx) {
+  const k = ctx?.knowledge, kinds = kindsOf(ctx?.state);
+  if (!k?.peekWiresBy || !kinds.length) return [];
+  const score = new Map(), have = new Set(kinds);
+  for (const kind of kinds.slice(0, 8)) {
+    const scenes = new Set((k.peekWiresBy('k.scenes.has', kind) ?? []).filter((w) => (w.f?.thing ?? []).some((t) => String(t).toLowerCase() === kind)).flatMap((w) => w.f?.scene ?? []));
+    for (const sc of scenes) for (const w of k.peekWiresBy('k.scenes.has', sc) ?? []) for (const t of w.f?.thing ?? []) { const x = String(t).toLowerCase(); if (!have.has(x) && /^[a-z]{3,}$/.test(x)) score.set(x, (score.get(x) ?? 0) + 1); }
+  }
+  const v = k.peekVocab?.();
+  return [...score].filter(([x]) => !v || (v[x] ?? []).some((s) => /^k\.objects\//.test(s))).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([x]) => `${/^[aeiou]/.test(x) ? 'an' : 'a'} ${x}`);
+}
+/** What a turn should have ready for the next one (after the reply, never awaited by a turn): the scenes of the picture's kinds (`keys`), then the things of those scenes (`then`: the key of the wires found). */
+export function nextNeeds(ctx) { const kinds = kindsOf(ctx?.state).slice(0, 8); return kinds.length ? { type: 'k.scenes.has', keys: kinds, then: 'scene' } : null; }
+/**
+ * What the dice and the chips may name from the knowledge catalog (spec 25). The dice (mode `one`, "something random") draws from the lemmas of the catalog's vocabulary that have a drawing
+ * (a shard of k.objects) and are plain singular words; the chips (modes `few`, `actions`) name what comes next in this picture (`nextThings`). Empty while the catalog is not attached.
  */
 function sampleKnowledge(ctx) {
+  if (ctx?.mode && ctx.mode !== 'one') return { things: nextThings(ctx) };
   const v = ctx?.knowledge?.peekVocab?.();
   if (!v) return {};
   const things = Object.entries(v).filter(([w, shards]) => /^[a-z]{3,}$/.test(w) && shards.some((s) => /^k\.objects\//.test(s)) && !/(?:s|ae)$/.test(w))

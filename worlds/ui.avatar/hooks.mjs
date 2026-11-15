@@ -61,8 +61,9 @@ function accepts({ action, mode, roles, state, claim, tab, text }) {
   const saved = Object.keys(state?.face?.saved ?? {});
   if (saved.some((k) => said.toLowerCase().includes(k))) return true;        // "be Grandma": a face the user saved
   // most of the words must be face words (a slot, a variant, a colour, a feature, a preset, an expression): "Place a medium white ellipse named Cloud at 198, 98" has two of seven
-  // the attribute role is filled from this world's own attribute lexicon (lex.ui.avatar.attrs: "colour", "size"): it is a word of the face, never an unknown word
-  const faceSaid = roles.attribute && act !== 'place' ? said.replace(new RegExp(`\\b${String(roles.attribute).replace(/[^\w ]/g, '')}\\b`, 'i'), ' ').trim() || said : said;
+  // "the colour of the hat": the attribute word "colour" (this world's own attribute lexicon) is not an unknown word of a question about a part; the part itself
+  // must still be a face word ("how many sides does a square have" stays Talk's: "sides" is not stripped)
+  const faceSaid = /^colou?r$/i.test(roles.attribute ?? '') && act !== 'place' ? said.replace(new RegExp(`\\b${String(roles.attribute).replace(/[^\w ]/g, '')}\\b`, 'i'), ' ').trim() || said : said;
   const read = F.read(DEFAULT_FACE, F.tokens(faceSaid)), known = read.filter((m) => m.type !== 'word' && m.type !== 'neg').length, unknown = read.filter((m) => m.type === 'word').length;
   if (known < unknown || ((act === 'ask' || act === 'place' || act === 'remove') && unknown > 0)) return false;   // a question about the face uses only face words
   if (roles.thing && PRONOUN.test(String(roles.thing).trim()) && state?.face?.lastThing && read.some((m) => m.type === 'colour' || m.type === 'feature')) return 'focus';   // "make it red" right after the hat

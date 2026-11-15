@@ -974,5 +974,7 @@ export function createExecutor(schema, hooks = {}) {
   const coordinates = (info) => !!hooks.coordinates?.(info);
   /** The knowledge lists the world names things from, for the dice (spec 25): { list: [text | { text, act }] }, from the world's own knowledge (its hook `sampleKnowledge`). Read-only. */
   const sampleKnowledge = (ctx) => { try { return hooks.sampleKnowledge?.(ctx) ?? {}; } catch { return {}; } };
-  return { run, operation, group: actGroup, sampleKnowledge, interceptInput, lastResort, outOfScope, accepts, coordinates, init, resolve, labels, schema, referents };
+  /** Does the world's own reader (flag `reader`) read the whole clause ({ text, state }), so the raw leftover words of a catch-all reading are read by it (spec 16 section 13)? Its hook `readsWhole`. */
+  const readsWhole = (info) => { try { return !!hooks.readsWhole?.(info); } catch { return false; } };
+  return { run, operation, group: actGroup, sampleKnowledge, interceptInput, lastResort, outOfScope, accepts, coordinates, readsWhole, init, resolve, labels, schema, referents };
 }

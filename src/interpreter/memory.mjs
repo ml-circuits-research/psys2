@@ -16,11 +16,13 @@ export class WireStore {
     this._byKV = new Map();
     this._ord = new Map();
     this._n = 0;
+    this._memo = null;
   }
   add(wire) {
     if (this.byId.has(wire.id)) this._remove(this.byId.get(wire.id));
     this.byId.set(wire.id, wire);
     this._ord.set(wire.id, this._n++);
+    this._memo = null;   // what readers derived from the old contents (see memo)
     (this._byType.get(wire.type) ?? this._byType.set(wire.type, []).get(wire.type)).push(wire);
     for (const e of wire.entries) {
       const k = wire.type + SEP + e.key + SEP + e.value.v;
@@ -37,6 +39,7 @@ export class WireStore {
   clone() {
     const c = new WireStore();
     c.byId = new Map(this.byId); c._ord = new Map(this._ord); c._n = this._n;
+    c._memo = this._memo ?? (this._memo = new Map());   // same contents, same derived data: shared until either side adds a wire
     for (const [k, v] of this._byType) c._byType.set(k, v.slice());
     for (const [k, v] of this._byKV) c._byKV.set(k, v.slice());
     return c;
@@ -45,6 +48,15 @@ export class WireStore {
   withKV(type, key, v) { return this._byKV.get(type + SEP + key + SEP + v) ?? []; }
   order(wire) { return this._ord.get(wire.id) ?? 0; }
   all() { return [...this.byId.values()]; }
+  /**
+   * Data a reader derives from the whole store (an index), kept until the next `add` (a retraction or a replacement is an add too); a clone made before that shares it,
+   * since wires are immutable and the contents are the same. `build()` runs at most once per key and contents.
+   */
+  memo(key, build) {
+    const m = this._memo ?? (this._memo = new Map());
+    if (!m.has(key)) m.set(key, build());
+    return m.get(key);
+  }
 }
 
 /** Base store (knowledge bases, read-only) plus the session's own store. */

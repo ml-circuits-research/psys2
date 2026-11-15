@@ -60,7 +60,7 @@ function union(sources, own = []) {
 }
 const LEX = [
   ['colour', 'noun', 'Colour names (union of the colour lexicons of the draw, editor, charts, shapes and avatar worlds).',
-    ['art.draw:lexicon.sop:lex.art.draw.colors', 'docs.editor:lexicon.sop:lex.docs.editor.colors', 'data.charts:lexicon.sop:lex.data.charts.colors', 'kids.shapes:lexicon.sop:lex.kids.shapes.colors']],
+    ['art.draw:lexicon.sop:lex.art.draw.colors', 'docs.editor:lexicon.sop:lex.docs.editor.colors', 'data.charts:lexicon.sop:lex.data.charts.colors']],
   ['ordinal', 'noun', 'Ordinal words (first ... tenth, last).', ['art.draw:lexicon.sop:lex.art.draw.ordinals', 'docs.editor:lexicon.sop:lex.docs.editor.ordinals', 'data.charts:lexicon.sop:lex.data.charts.ordinals']],
   ['size', 'noun', 'Size words and comparatives.', ['art.draw:lexicon.sop:lex.art.draw.sizes', 'docs.editor:lexicon.sop:lex.docs.editor.sizes']],
   ['degree', 'degree', 'Degree adverbs ("a bit", "a lot", "slightly").', ['media.music:lexicon.sop:lex.media.music.degrees']],
