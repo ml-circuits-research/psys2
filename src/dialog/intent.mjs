@@ -20,7 +20,7 @@ import { LANG_EN_FACTS } from '../lang/en.facts.generated.mjs';
 
 /** The library World of the language's clause cut points (w.lang.en shards clauses, determiners, numbers): what `clauses` cuts at. Built once per library. */
 const cutWorlds = new WeakMap();
-function cutWorld(lib) {
+export function cutWorld(lib) {
   if (!cutWorlds.has(lib)) { const w = new lib.World(); for (const k of ['clauses', 'determiners', 'numbers']) if (LANG_EN_FACTS[k]) w.tell(LANG_EN_FACTS[k]); cutWorlds.set(lib, w); }
   return cutWorlds.get(lib);
 }
