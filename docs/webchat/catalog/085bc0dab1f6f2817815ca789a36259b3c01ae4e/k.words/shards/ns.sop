@@ -1,0 +1,7 @@
+# k.words/shards/ns: senses of the words from "nsa" to "nsa" (first letters "ns").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.nsa.noun.1 k.words.sense word=NSA pos=noun n=1 supersense=noun.group gloss="the United States cryptologic organization that coordinates and directs highly specialized activities to protect United States information systems and to produce foreign intelligence information" synonym="National Security Agency" is_a="United States intelligence agency" part_of="Department of Defense" core.source="wordnet 3.1"
+@k.words.nsa.spelling.NSA core.word text=nsa means=NSA of=k.words.sense.word core.source="wordnet 3.1"

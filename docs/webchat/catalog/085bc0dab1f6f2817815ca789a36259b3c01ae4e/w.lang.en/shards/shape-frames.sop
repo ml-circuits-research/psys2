@@ -1,0 +1,81 @@
+# w.lang.en/shards/shape-frames: frames for an arrangement in the shape of something (block 09:50 item F): 8 frames (make or place with the role arrangement: in the shape of, shaped like, X-shaped, in X form), 2 lexicons derived from the outlines of k.layouts.
+# sources: hand-core 1 (written in this repository: tools/lang-en-shape-frames.mjs; the lexicons derived from k.layouts outlines)
+# license: CC0-1.0
+# script: tools/lang-en-shape-frames.mjs
+
+# Lexicons
+@w.lang.en.lex.outline.shape w.lang.en.lex name=outline.shape doc="Shapes a thing can be laid out in the shape of: the names of the outlines of k.layouts (k.layouts.outline); derived by tools/lang-en-shape-frames.mjs." item="apple" item="arrow" item="banana" item="bell" item="bird" item="bottle" item="butterfly" item="car" item="castle" item="church" item="circle" item="cloud" item="cross" item="crown" item="cup" item="diamond" item="egg" item="fish" item="flower" item="ghost" item="heart" item="hexagon" item="house" item="key" item="kite" item="leaf" item="lemon" item="light bulb" item="moon" item="mushroom" item="octagon" item="oval" item="parallelogram" item="pear" item="pentagon" item="rectangle" item="rhombus" item="ring" item="rocket" item="semicircle" item="shield" item="snowman" item="square" item="star" item="sun" item="teapot" item="trapezium" item="tree" item="triangle" item="umbrella" core.source="hand-core 1"
+@w.lang.en.lex.outline.shaped w.lang.en.lex name=outline.shaped doc="The outlines said as an adjective (\"house-shaped\", \"star shaped\"); derived by tools/lang-en-shape-frames.mjs." item="apple shaped" item="apple-shaped" item="arrow shaped" item="arrow-shaped" item="banana shaped" item="banana-shaped" item="bell shaped" item="bell-shaped" item="bird shaped" item="bird-shaped" item="bottle shaped" item="bottle-shaped" item="butterfly shaped" item="butterfly-shaped" item="car shaped" item="car-shaped" item="castle shaped" item="castle-shaped" item="church shaped" item="church-shaped" item="circle shaped" item="circle-shaped" item="cloud shaped" item="cloud-shaped" item="cross shaped" item="cross-shaped" item="crown shaped" item="crown-shaped" item="cup shaped" item="cup-shaped" item="diamond shaped" item="diamond-shaped" item="egg shaped" item="egg-shaped" item="fish shaped" item="fish-shaped" item="flower shaped" item="flower-shaped" item="ghost shaped" item="ghost-shaped" item="heart shaped" item="heart-shaped" item="hexagon shaped" item="hexagon-shaped" item="house shaped" item="house-shaped" item="key shaped" item="key-shaped" item="kite shaped" item="kite-shaped" item="leaf shaped" item="leaf-shaped" item="lemon shaped" item="lemon-shaped" item="light bulb shaped" item="light bulb-shaped" item="moon shaped" item="moon-shaped" item="mushroom shaped" item="mushroom-shaped" item="octagon shaped" item="octagon-shaped" item="oval shaped" item="oval-shaped" item="parallelogram shaped" item="parallelogram-shaped" item="pear shaped" item="pear-shaped" item="pentagon shaped" item="pentagon-shaped" item="rectangle shaped" item="rectangle-shaped" item="rhombus shaped" item="rhombus-shaped" item="ring shaped" item="ring-shaped" item="rocket shaped" item="rocket-shaped" item="semicircle shaped" item="semicircle-shaped" item="shield shaped" item="shield-shaped" item="snowman shaped" item="snowman-shaped" item="square shaped" item="square-shaped" item="star shaped" item="star-shaped" item="sun shaped" item="sun-shaped" item="teapot shaped" item="teapot-shaped" item="trapezium shaped" item="trapezium-shaped" item="tree shaped" item="tree-shaped" item="triangle shaped" item="triangle-shaped" item="umbrella shaped" item="umbrella-shaped" core.source="hand-core 1"
+
+# a new thing laid out in the shape of an outline
+@w.lang.en.frame.shape.make.of w.lang.en.frame name=shape.make.of act=make set=acts priority=17 needs=layout role=kind role=arrangement example="Make a diagram in the shape of a house." core.source="hand-core 1"
+@w.lang.en.part.shape.make.of.1 w.lang.en.part frame=shape.make.of at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.make.of.2 w.lang.en.part frame=shape.make.of at=2 is=verb act=make core.source="hand-core 1"
+@w.lang.en.part.shape.make.of.3 w.lang.en.part frame=shape.make.of at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.make.of.4 w.lang.en.part frame=shape.make.of at=4 is=role role=kind takes=words max_words=3 core.source="hand-core 1"
+@w.lang.en.part.shape.make.of.5 w.lang.en.part frame=shape.make.of at=5 is=word word="in the shape of" word="shaped like" word="in the form of" word="in the outline of" word="that looks like" word="looking like" word="like" core.source="hand-core 1"
+@w.lang.en.part.shape.make.of.6 w.lang.en.part frame=shape.make.of at=6 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.make.of.7 w.lang.en.part frame=shape.make.of at=7 is=role role=arrangement takes=lexicon lexicon=outline.shape core.source="hand-core 1"
+# a new thing laid out in the shape of an outline, said as an adjective
+@w.lang.en.frame.shape.make.shaped w.lang.en.frame name=shape.make.shaped act=make set=acts priority=17 needs=layout role=arrangement role=kind example="Make a house-shaped diagram." core.source="hand-core 1"
+@w.lang.en.part.shape.make.shaped.1 w.lang.en.part frame=shape.make.shaped at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.make.shaped.2 w.lang.en.part frame=shape.make.shaped at=2 is=verb act=make core.source="hand-core 1"
+@w.lang.en.part.shape.make.shaped.3 w.lang.en.part frame=shape.make.shaped at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.make.shaped.4 w.lang.en.part frame=shape.make.shaped at=4 is=role role=arrangement takes=lexicon lexicon=outline.shaped core.source="hand-core 1"
+@w.lang.en.part.shape.make.shaped.5 w.lang.en.part frame=shape.make.shaped at=5 is=role role=kind takes=words max_words=3 core.source="hand-core 1"
+# a new thing in the form of an outline ("in heart form", "as a star shape")
+@w.lang.en.frame.shape.make.form w.lang.en.frame name=shape.make.form act=make set=acts priority=17 needs=layout role=kind role=arrangement example="Draw a diagram in heart form." core.source="hand-core 1"
+@w.lang.en.part.shape.make.form.1 w.lang.en.part frame=shape.make.form at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.make.form.2 w.lang.en.part frame=shape.make.form at=2 is=verb act=make core.source="hand-core 1"
+@w.lang.en.part.shape.make.form.3 w.lang.en.part frame=shape.make.form at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.make.form.4 w.lang.en.part frame=shape.make.form at=4 is=role role=kind takes=words max_words=3 core.source="hand-core 1"
+@w.lang.en.part.shape.make.form.5 w.lang.en.part frame=shape.make.form at=5 is=word word="in" word="as" core.source="hand-core 1"
+@w.lang.en.part.shape.make.form.6 w.lang.en.part frame=shape.make.form at=6 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.make.form.7 w.lang.en.part frame=shape.make.form at=7 is=role role=arrangement takes=lexicon lexicon=outline.shape core.source="hand-core 1"
+@w.lang.en.part.shape.make.form.8 w.lang.en.part frame=shape.make.form at=8 is=word word="form" word="shape" word="outline" core.source="hand-core 1"
+# a new thing in the shape of an outline, without a verb
+@w.lang.en.frame.shape.make.bare w.lang.en.frame name=shape.make.bare act=make set=acts priority=5 needs=layout role=kind role=arrangement example="A diagram in the shape of a house." core.source="hand-core 1"
+@w.lang.en.part.shape.make.bare.1 w.lang.en.part frame=shape.make.bare at=1 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.make.bare.2 w.lang.en.part frame=shape.make.bare at=2 is=role role=kind takes=words max_words=3 core.source="hand-core 1"
+@w.lang.en.part.shape.make.bare.3 w.lang.en.part frame=shape.make.bare at=3 is=word word="in the shape of" word="shaped like" word="in the form of" word="in the outline of" word="that looks like" word="looking like" core.source="hand-core 1"
+@w.lang.en.part.shape.make.bare.4 w.lang.en.part frame=shape.make.bare at=4 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.make.bare.5 w.lang.en.part frame=shape.make.bare at=5 is=role role=arrangement takes=lexicon lexicon=outline.shape core.source="hand-core 1"
+# things already there laid out in the shape of an outline
+@w.lang.en.frame.shape.place.of w.lang.en.frame name=shape.place.of act=place mode=layout set=acts priority=17 needs=layout role=thing role=arrangement example="Arrange the boxes in the shape of a star." core.source="hand-core 1"
+@w.lang.en.part.shape.place.of.1 w.lang.en.part frame=shape.place.of at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.place.of.2 w.lang.en.part frame=shape.place.of at=2 is=word word="arrange" word="rearrange" word="lay out" word="lay" word="set out" word="put" word="place" word="organise" word="organize" word="line up" word="order" word="move" act=place core.source="hand-core 1"
+@w.lang.en.part.shape.place.of.3 w.lang.en.part frame=shape.place.of at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.place.of.4 w.lang.en.part frame=shape.place.of at=4 is=role role=thing takes=words core.source="hand-core 1"
+@w.lang.en.part.shape.place.of.5 w.lang.en.part frame=shape.place.of at=5 is=word word="out" word="up" optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.place.of.6 w.lang.en.part frame=shape.place.of at=6 is=word word="in the shape of" word="shaped like" word="in the form of" word="in the outline of" word="that looks like" word="looking like" word="like" core.source="hand-core 1"
+@w.lang.en.part.shape.place.of.7 w.lang.en.part frame=shape.place.of at=7 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.place.of.8 w.lang.en.part frame=shape.place.of at=8 is=role role=arrangement takes=lexicon lexicon=outline.shape core.source="hand-core 1"
+# things already there laid out in the form of an outline
+@w.lang.en.frame.shape.place.form w.lang.en.frame name=shape.place.form act=place mode=layout set=acts priority=17 needs=layout role=thing role=arrangement example="Put the nodes in a heart shape." core.source="hand-core 1"
+@w.lang.en.part.shape.place.form.1 w.lang.en.part frame=shape.place.form at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.place.form.2 w.lang.en.part frame=shape.place.form at=2 is=word word="arrange" word="rearrange" word="lay out" word="lay" word="set out" word="put" word="place" word="organise" word="organize" word="line up" word="order" word="move" act=place core.source="hand-core 1"
+@w.lang.en.part.shape.place.form.3 w.lang.en.part frame=shape.place.form at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.place.form.4 w.lang.en.part frame=shape.place.form at=4 is=role role=thing takes=words core.source="hand-core 1"
+@w.lang.en.part.shape.place.form.5 w.lang.en.part frame=shape.place.form at=5 is=word word="out" word="up" optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.place.form.6 w.lang.en.part frame=shape.place.form at=6 is=word word="in" word="into" word="as" core.source="hand-core 1"
+@w.lang.en.part.shape.place.form.7 w.lang.en.part frame=shape.place.form at=7 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.place.form.8 w.lang.en.part frame=shape.place.form at=8 is=role role=arrangement takes=lexicon lexicon=outline.shape core.source="hand-core 1"
+@w.lang.en.part.shape.place.form.9 w.lang.en.part frame=shape.place.form at=9 is=word word="form" word="shape" word="outline" core.source="hand-core 1"
+# things already there laid out in the shape of an outline, said as an adjective
+@w.lang.en.frame.shape.place.shaped w.lang.en.frame name=shape.place.shaped act=place mode=layout set=acts priority=16 needs=layout role=thing role=arrangement example="Lay the boxes out star-shaped." core.source="hand-core 1"
+@w.lang.en.part.shape.place.shaped.1 w.lang.en.part frame=shape.place.shaped at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.place.shaped.2 w.lang.en.part frame=shape.place.shaped at=2 is=word word="arrange" word="rearrange" word="lay out" word="lay" word="set out" word="put" word="place" word="organise" word="organize" word="line up" word="order" word="move" act=place core.source="hand-core 1"
+@w.lang.en.part.shape.place.shaped.3 w.lang.en.part frame=shape.place.shaped at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.place.shaped.4 w.lang.en.part frame=shape.place.shaped at=4 is=role role=thing takes=words core.source="hand-core 1"
+@w.lang.en.part.shape.place.shaped.5 w.lang.en.part frame=shape.place.shaped at=5 is=word word="out" word="up" optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.place.shaped.6 w.lang.en.part frame=shape.place.shaped at=6 is=role role=arrangement takes=lexicon lexicon=outline.shaped core.source="hand-core 1"
+# things grouped in the shape of an outline
+@w.lang.en.frame.shape.group.of w.lang.en.frame name=shape.group.of act=group set=acts priority=17 needs=layout role=thing role=arrangement example="Group the dots in the shape of a heart." core.source="hand-core 1"
+@w.lang.en.part.shape.group.of.1 w.lang.en.part frame=shape.group.of at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.group.of.2 w.lang.en.part frame=shape.group.of at=2 is=verb act=group core.source="hand-core 1"
+@w.lang.en.part.shape.group.of.3 w.lang.en.part frame=shape.group.of at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.group.of.4 w.lang.en.part frame=shape.group.of at=4 is=role role=thing takes=words core.source="hand-core 1"
+@w.lang.en.part.shape.group.of.5 w.lang.en.part frame=shape.group.of at=5 is=word word="together" word="all together" optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.group.of.6 w.lang.en.part frame=shape.group.of at=6 is=word word="in the shape of" word="shaped like" word="in the form of" word="in the outline of" word="that looks like" word="looking like" word="like" core.source="hand-core 1"
+@w.lang.en.part.shape.group.of.7 w.lang.en.part frame=shape.group.of at=7 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.shape.group.of.8 w.lang.en.part frame=shape.group.of at=8 is=role role=arrangement takes=lexicon lexicon=outline.shape core.source="hand-core 1"

@@ -1,0 +1,6 @@
+# k.faces/shards/plain-canon: the proportion canon of the style `plain`: where its eyes, brows, nose, mouth and ears go, as fractions of the box of the slot head (0 at its top or left, 1 at its bottom or right) and sizes in eye widths. tools/faces-core.mjs places the parts of the style by these facts.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/faces-core.mjs
+
+@k.faces.plain.canon.plain k.faces.canon style=plain name=plain eye_line=0.4412 nose_line=0.6324 mouth_line=0.7941 eye_width=0.1786 eye_gap=1.6 brow_above=1.1 about="The canon of the style plain: big eyes high in the head (the eye line at 0.44 of the head's height), 1.6 eye widths between the eyes, the brows 1.1 eye widths above the eye line, the bottom of the nose at 0.63 and the mouth at 0.79 of the height, leaving a long space under the nose; the ears between the brow line and the nose line." core.source="hand-core 1"

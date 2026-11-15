@@ -1,0 +1,10 @@
+# k.words/shards/c: senses of the words from "c" to "c" (first letters "c").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.c.noun.1 k.words.sense word=C pos=noun n=1 supersense=noun.quantity gloss="a degree on the centigrade scale of temperature" synonym="degree centigrade" synonym="degree Celsius" is_a=degree kind_of=degree kind_of="temperature unit" kind_of="unit of measurement" kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.c.noun.2 k.words.sense word=c pos=noun n=2 supersense=noun.time gloss="the speed at which light travels in a vacuum; the constancy and universality of the speed of light is recognized by defining it to be exactly 299,792,458 meters per second" synonym="speed of light" synonym="light speed" is_a=speed is_a=constant kind_of=speed kind_of=rate kind_of="magnitude relation" kind_of=relation kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.c.noun.3 k.words.sense word=C pos=noun n=3 supersense=noun.substance gloss="a vitamin found in fresh fruits (especially citrus fruits) and vegetables; prevents scurvy" synonym="vitamin C" synonym="ascorbic acid" is_a="water-soluble vitamin" is_a=antioxidant kind_of="water-soluble vitamin" kind_of=vitamin kind_of=nutriment kind_of=food kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.c.adjective.1 k.words.sense word=c pos=adjective n=1 supersense=adj.all gloss="being ten more than ninety" synonym=hundred synonym="one hundred" synonym=100 near_opposite=ordinal core.source="wordnet 3.1"
+@k.words.c.spelling.C core.word text=c means=C of=k.words.sense.word core.source="wordnet 3.1"

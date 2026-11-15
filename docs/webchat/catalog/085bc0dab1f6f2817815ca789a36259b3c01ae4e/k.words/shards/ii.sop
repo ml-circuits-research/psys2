@@ -1,0 +1,9 @@
+# k.words/shards/ii: senses of the words from "ii" to "iii" (first letters "ii").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ii.noun.1 k.words.sense word=II pos=noun n=1 supersense=noun.quantity gloss="the cardinal number that is the sum of one and one or a numeral representing this number" synonym=two synonym=2 synonym=deuce is_a=digit core.source="wordnet 3.1"
+@k.words.ii.spelling.II core.word text=ii means=II of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.iii.noun.1 k.words.sense word=III pos=noun n=1 supersense=noun.quantity gloss="the cardinal number that is the sum of one and one and one" synonym=three synonym=3 synonym=trio synonym=threesome synonym=tierce synonym=leash synonym=troika synonym=triad synonym=trine synonym=trinity synonym=ternary synonym=ternion synonym=triplet synonym=tercet synonym=terzetto synonym=trey synonym=deuce-ace is_a=digit core.source="wordnet 3.1"
+@k.words.iii.spelling.III core.word text=iii means=III of=k.words.sense.word core.source="wordnet 3.1"

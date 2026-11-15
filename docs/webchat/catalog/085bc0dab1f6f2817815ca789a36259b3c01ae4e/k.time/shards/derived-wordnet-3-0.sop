@@ -1,0 +1,25 @@
+# k.time/shards/derived-wordnet-3-0: generated, do not edit. What the rules of k.time (version 6) and of the modules it imports derive from the told facts
+# of k.time: 19 facts, each marked derived=true with its rule as source (k.time.order).
+# sources: rule (a rule of a module of this repository, over the facts named above; sources/rule/SOURCE.md)
+# license: WordNet-3.0
+# script: tools/derive.mjs
+
+@k.time.derived.order.butterfly_life_cycle.caterpillar.butterfly k.time.before cycle="butterfly life cycle" earlier=caterpillar later=butterfly derived=true core.source="rule k.time.order"
+@k.time.derived.order.butterfly_life_cycle.caterpillar.chrysalis k.time.before cycle="butterfly life cycle" earlier=caterpillar later=chrysalis derived=true core.source="rule k.time.order"
+@k.time.derived.order.butterfly_life_cycle.chrysalis.butterfly k.time.before cycle="butterfly life cycle" earlier=chrysalis later=butterfly derived=true core.source="rule k.time.order"
+@k.time.derived.order.butterfly_life_cycle.egg.butterfly k.time.before cycle="butterfly life cycle" earlier=egg later=butterfly derived=true core.source="rule k.time.order"
+@k.time.derived.order.butterfly_life_cycle.egg.caterpillar k.time.before cycle="butterfly life cycle" earlier=egg later=caterpillar derived=true core.source="rule k.time.order"
+@k.time.derived.order.butterfly_life_cycle.egg.chrysalis k.time.before cycle="butterfly life cycle" earlier=egg later=chrysalis derived=true core.source="rule k.time.order"
+@k.time.derived.order.frog_life_cycle.egg.frog k.time.before cycle="frog life cycle" earlier=egg later=frog derived=true core.source="rule k.time.order"
+@k.time.derived.order.frog_life_cycle.egg.tadpole k.time.before cycle="frog life cycle" earlier=egg later=tadpole derived=true core.source="rule k.time.order"
+@k.time.derived.order.frog_life_cycle.tadpole.frog k.time.before cycle="frog life cycle" earlier=tadpole later=frog derived=true core.source="rule k.time.order"
+@k.time.derived.order.plant_life_cycle.flower.fruit k.time.before cycle="plant life cycle" earlier=flower later=fruit derived=true core.source="rule k.time.order"
+@k.time.derived.order.plant_life_cycle.plant.flower k.time.before cycle="plant life cycle" earlier=plant later=flower derived=true core.source="rule k.time.order"
+@k.time.derived.order.plant_life_cycle.plant.fruit k.time.before cycle="plant life cycle" earlier=plant later=fruit derived=true core.source="rule k.time.order"
+@k.time.derived.order.plant_life_cycle.seed.flower k.time.before cycle="plant life cycle" earlier=seed later=flower derived=true core.source="rule k.time.order"
+@k.time.derived.order.plant_life_cycle.seed.fruit k.time.before cycle="plant life cycle" earlier=seed later=fruit derived=true core.source="rule k.time.order"
+@k.time.derived.order.plant_life_cycle.seed.plant k.time.before cycle="plant life cycle" earlier=seed later=plant derived=true core.source="rule k.time.order"
+@k.time.derived.order.plant_life_cycle.seed.seedling k.time.before cycle="plant life cycle" earlier=seed later=seedling derived=true core.source="rule k.time.order"
+@k.time.derived.order.plant_life_cycle.seedling.flower k.time.before cycle="plant life cycle" earlier=seedling later=flower derived=true core.source="rule k.time.order"
+@k.time.derived.order.plant_life_cycle.seedling.fruit k.time.before cycle="plant life cycle" earlier=seedling later=fruit derived=true core.source="rule k.time.order"
+@k.time.derived.order.plant_life_cycle.seedling.plant k.time.before cycle="plant life cycle" earlier=seedling later=plant derived=true core.source="rule k.time.order"

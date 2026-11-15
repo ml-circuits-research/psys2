@@ -1,0 +1,23 @@
+# w.lang.en/shards/hand-request: the words a request skips (politeness, desire, filler, conjunction, copula,
+# reflexives, the prepositions of a request), the negation words that remove (without, lose, minus, no), the other
+# forms of be, and "if" as a joiner of a condition: asked by the first host (block "21:05" item 5), written by hand.
+# sources: hand-core 1 (English grammar, written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.en.skip.politeness w.lang.en.skip class=politeness text=please text=pls text=plz text=kindly text="thank you" text=thanks doc="politeness: carries no role" core.source="hand-core 1"
+@w.lang.en.skip.desire w.lang.en.skip class=desire text=want text=wanna text=like text=love text=wish text=need doc="a wish before the thing asked for (I want a house): the request is the thing; skipped only where it is no verb of a frame" core.source="hand-core 1"
+@w.lang.en.skip.filler w.lang.en.skip class=filler text=also text=now text=just text=too text=very text=really text=then text=um text=uh text=er text=hmm text=hey text=well text=ok text=okay text=so text=actually text=maybe doc="fillers and hedges: no role (\"now\" and \"then\" are times only where a frame reads them so)" core.source="hand-core 1"
+@w.lang.en.skip.conjunction w.lang.en.skip class=conjunction text=and doc="and between two things of one role (a cat and a dog); between two clauses it is a joiner (w.lang.en.joiner)" core.source="hand-core 1"
+@w.lang.en.skip.copula w.lang.en.skip class=copula text=be text=being text=been doc="the copula in a wish (I want it to be red): the value is the content" core.source="hand-core 1"
+@w.lang.en.skip.reflexive w.lang.en.skip class=reflexive text=yourself text=myself text=ourselves text=yourselves text=urself doc="the addressee or the speaker as the thing changed (give yourself a hat): the thing is the one who speaks or is spoken to" core.source="hand-core 1"
+@w.lang.en.skip.request_preposition w.lang.en.skip class=request_preposition text=of text=on text=to text=for text=with doc="skipped only by a reader that fills the parts of a thing (a face: please make the hair red, I want it with a hat) and has no role marked by them" core.source="hand-core 1"
+
+@w.lang.en.neg.removal w.lang.en.neg means=removal text=without text=lose text=minus text=no doc="words that take away what follows: a house without a door, lose the hat, ten minus two, no hat; never is a negation (w.lang.en.neg.words)" core.source="hand-core 1"
+
+@w.lang.en.copula.be w.lang.en.copula text="be" core.source="hand-core 1"
+@w.lang.en.copula.am w.lang.en.copula text="am" number=sg core.source="hand-core 1"
+@w.lang.en.copula.been w.lang.en.copula text="been" core.source="hand-core 1"
+@w.lang.en.copula.being w.lang.en.copula text="being" core.source="hand-core 1"
+
+@w.lang.en.joiner.if w.lang.en.joiner text="if" kind=condition cut=no card_cut=no note="a condition: its clause stays with the clause it conditions (if I give 17 lei, what is my change)" core.source="hand-core 1"

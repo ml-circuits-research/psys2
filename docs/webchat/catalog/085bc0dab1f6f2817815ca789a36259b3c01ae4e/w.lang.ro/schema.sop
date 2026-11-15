@@ -1,0 +1,219 @@
+# w.lang.ro: what is known about Romanian, as facts, for any application that reads or answers in Romanian (block
+# "09:25"; first draft). A language world: Romanian words are its data (forms, endings, lemmas), its types, keys and
+# comments are English, and it joins the domain worlds only by sense ids (a lemma -> a k.words sense or a k.actions
+# verb) and by the relation names of w.lang.en and k.layouts. Morphology is rules in the library's std.morph notation
+# (sopworld 0.52/0.53): paradigm classes with inheritance, the cells of each class (features -> suffix, with ordered
+# alternations of the stem), the irregular forms no class covers, spelling folds and the clitic joiner. The open
+# lexicon is an external dictionary, not wires: dictionary/<letter>.tsv, one row per lemma (lemma, class, gender,
+# sense), split by the first letter of the folded lemma. Read with morphOf(world, { types }) where types renames the
+# library's m.* types to this world's (class, ending, irregular, fold, split, template, vowel; WORLD.md).
+# Features (the cells' keys): num sg pl; case nomacc gendat (pronouns: nom acc gendat); def yes no; gender m f n;
+# person 1 2 3; tense inf imper pres subj part, and for the auxiliary avea cond (aș vrea) and perf (am desenat).
+# sources: hand-core 1 (written by hand in this repository; no dictionary or treebank imported)
+# license: CC0-1.0
+# script: none (hand-written); the shards and the dictionary are written by tools/lang-ro-core.mjs
+
+@w.lang.ro core.module name=w.lang.ro version=1 exports=class exports=ending exports=irregular exports=vowel exports=fold exports=split exports=template exports=det exports=pron exports=prep exports=numeral exports=particle exports=frame exports=part exports=phrase exports=lex exports=syntax exports=request exports=reply exports=fill exports=fn exports=count core.source="hand-core 1"
+
+# ---- morphology (std.morph) ----
+# A paradigm class: a class inherits every cell of its `parent` and overrides some. `drop`: what the lemma loses
+# before an ending; `alt`: the class's alternations of the stem, in order (from>to, at the stem's last vowel with
+# @vowel, at its end with @end, else at the last place it occurs), used by the cells marked alt=yes. `pos`: the part
+# of speech of its lemmas.
+@w.lang.ro.class core.type of=w.lang.ro.class shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.class.name core.slot of=w.lang.ro.class key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.class.parent core.slot of=w.lang.ro.class key=parent kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.class.drop core.slot of=w.lang.ro.class key=drop kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.class.alt core.slot of=w.lang.ro.class key=alt many=true kind=string core.source="hand-core 1"
+@w.lang.ro.class.pos core.slot of=w.lang.ro.class key=pos required=true enum=noun enum=adjective enum=verb core.source="hand-core 1"
+@w.lang.ro.class.about core.slot of=w.lang.ro.class key=about kind=string core.source="hand-core 1"
+
+# A cell of a class: its features and the suffix that makes the form from the stem (`_`: none). `alt=yes`: the
+# class's alternations apply; or the cell's own list, in order.
+@w.lang.ro.ending core.type of=w.lang.ro.ending shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.ending.class core.slot of=w.lang.ro.ending key=class required=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.ending.suffix core.slot of=w.lang.ro.ending key=suffix required=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.ending.alt core.slot of=w.lang.ro.ending key=alt many=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.ending.num core.slot of=w.lang.ro.ending key=num enum=sg enum=pl core.source="hand-core 1"
+@w.lang.ro.ending.case core.slot of=w.lang.ro.ending key=case enum=nomacc enum=gendat core.source="hand-core 1"
+@w.lang.ro.ending.def core.slot of=w.lang.ro.ending key=def enum=yes enum=no core.source="hand-core 1"
+@w.lang.ro.ending.gender core.slot of=w.lang.ro.ending key=gender enum=m enum=f enum=n core.source="hand-core 1"
+@w.lang.ro.ending.person core.slot of=w.lang.ro.ending key=person kind=integer min=1 max=3 core.source="hand-core 1"
+@w.lang.ro.ending.tense core.slot of=w.lang.ro.ending key=tense enum=inf enum=imper enum=pres enum=subj enum=part enum=cond enum=perf core.source="hand-core 1"
+
+# A form no class gives for its lemma in that cell (consulted first).
+@w.lang.ro.irregular core.type of=w.lang.ro.irregular shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.irregular.lemma core.slot of=w.lang.ro.irregular key=lemma required=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.irregular.form core.slot of=w.lang.ro.irregular key=form required=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.irregular.num core.slot of=w.lang.ro.irregular key=num enum=sg enum=pl core.source="hand-core 1"
+@w.lang.ro.irregular.case core.slot of=w.lang.ro.irregular key=case enum=nomacc enum=gendat core.source="hand-core 1"
+@w.lang.ro.irregular.def core.slot of=w.lang.ro.irregular key=def enum=yes enum=no core.source="hand-core 1"
+@w.lang.ro.irregular.gender core.slot of=w.lang.ro.irregular key=gender enum=m enum=f enum=n core.source="hand-core 1"
+@w.lang.ro.irregular.person core.slot of=w.lang.ro.irregular key=person kind=integer min=1 max=3 core.source="hand-core 1"
+@w.lang.ro.irregular.tense core.slot of=w.lang.ro.irregular key=tense enum=inf enum=imper enum=pres enum=subj enum=part enum=cond enum=perf core.source="hand-core 1"
+
+# The vowels (for alternations at the stem's last vowel); a spelling fold (a letter and its plain form: a word typed
+# without diacritics); a clitic joiner (the hyphen of "desenează-mi").
+@w.lang.ro.vowel core.type of=w.lang.ro.vowel shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.vowel.text core.slot of=w.lang.ro.vowel key=text required=true kind=string core.source="hand-core 1"
+@w.lang.ro.fold core.type of=w.lang.ro.fold shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.fold.from core.slot of=w.lang.ro.fold key=from id=true required=true kind=string core.source="hand-core 1"
+@w.lang.ro.fold.to core.slot of=w.lang.ro.fold key=to required=true kind=string core.source="hand-core 1"
+@w.lang.ro.split core.type of=w.lang.ro.split shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.split.text core.slot of=w.lang.ro.split key=text required=true kind=string core.source="hand-core 1"
+
+# A realisation template of a reply for an act: {role} the role's lemma, {role:f=v,...} in that cell, {role@other}
+# agreeing in gender and number with the other role.
+@w.lang.ro.template core.type of=w.lang.ro.template shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.template.act core.slot of=w.lang.ro.template key=act id=true required=true kind=atom core.source="hand-core 1"
+@w.lang.ro.template.shape core.slot of=w.lang.ro.template key=shape kind=atom core.source="hand-core 1"
+@w.lang.ro.template.text core.slot of=w.lang.ro.template key=text required=true kind=string core.source="hand-core 1"
+
+# Reply and request templates (reviewer block 14:25 item 2): what a host needs to compose its own replies in Romanian,
+# the same names, acts and shapes as w.lang.en's templates (w.lang.en.template, w.lang.en.reply), so a host picks by
+# language. `count` is the CLDR plural category of the number the template says (Romanian: one 1; few 0, 2 to 19 and
+# numbers ending in 01 to 19; other the rest, which put "de" before the noun: 20 de case); `name` and `count` are the
+# identity. A request is what a person says (the imperative, informal singular), read back by w.lang.ro's frames
+# where they say the act; a reply is what the assistant says (first person, informal singular). Text as in
+# w.lang.ro.template: {role} the lemma, {role:f=v,...} a cell, {role@other} agreeing with the other role.
+@w.lang.ro.request core.type of=w.lang.ro.request shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.request.name core.slot of=w.lang.ro.request key=name id=true required=true kind=atom core.source="hand-core 1"
+@w.lang.ro.request.count core.slot of=w.lang.ro.request key=count id=true enum=one enum=few enum=other core.source="hand-core 1"
+@w.lang.ro.request.act core.slot of=w.lang.ro.request key=act required=true kind=atom kind=string type=k.actions.act by=name core.source="hand-core 1"
+@w.lang.ro.request.shape core.slot of=w.lang.ro.request key=shape required=true kind=atom core.source="hand-core 1"
+@w.lang.ro.request.role core.slot of=w.lang.ro.request key=role many=true kind=atom core.source="hand-core 1"
+@w.lang.ro.request.text core.slot of=w.lang.ro.request key=text required=true kind=string core.source="hand-core 1"
+@w.lang.ro.request.example core.slot of=w.lang.ro.request key=example kind=string core.source="hand-core 1"
+@w.lang.ro.reply core.type of=w.lang.ro.reply shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.reply.name core.slot of=w.lang.ro.reply key=name id=true required=true kind=atom core.source="hand-core 1"
+@w.lang.ro.reply.count core.slot of=w.lang.ro.reply key=count id=true enum=one enum=few enum=other core.source="hand-core 1"
+@w.lang.ro.reply.act core.slot of=w.lang.ro.reply key=act kind=atom kind=string type=k.actions.act by=name core.source="hand-core 1"
+@w.lang.ro.reply.role core.slot of=w.lang.ro.reply key=role many=true kind=atom core.source="hand-core 1"
+@w.lang.ro.reply.text core.slot of=w.lang.ro.reply key=text required=true kind=string core.source="hand-core 1"
+@w.lang.ro.reply.example core.slot of=w.lang.ro.reply key=example kind=string core.source="hand-core 1"
+# A word a template says itself, agreeing like a role (`{many@thing}` with role many the lemma mult: cât de mulți copaci).
+@w.lang.ro.fill core.type of=w.lang.ro.fill shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.fill.template core.slot of=w.lang.ro.fill key=template id=true required=true kind=atom core.source="hand-core 1"
+@w.lang.ro.fill.role core.slot of=w.lang.ro.fill key=role id=true required=true kind=atom core.source="hand-core 1"
+@w.lang.ro.fill.lemma core.slot of=w.lang.ro.fill key=lemma required=true kind=string core.source="hand-core 1"
+
+# A plural category of the language (Q79 of the library, reviewer 16:45): `class` one of CLDR's categories (one, few,
+# other ...), `rule` its condition in CLDR's plural rule syntax (operands n the number, i its integer digits, v the
+# count of its visible fraction digits; `%` modulo, `a..b` a range; the category with no rule is the rest), `samples`
+# CLDR's sample numbers. A host takes the category of a number by these rules (or Intl.PluralRules, which reads the same
+# data) and the template row of that `count`. Source: Unicode CLDR 48, supplemental/plurals.json.
+@w.lang.ro.count core.type of=w.lang.ro.count shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.count.class core.slot of=w.lang.ro.count key=class id=true required=true enum=zero enum=one enum=two enum=few enum=many enum=other core.source="hand-core 1"
+@w.lang.ro.count.rule core.slot of=w.lang.ro.count key=rule kind=string core.source="hand-core 1"
+@w.lang.ro.count.samples core.slot of=w.lang.ro.count key=samples required=true kind=string core.source="hand-core 1"
+
+# A function word or phrase that carries no content of a request (reviewer 16:10, as w.lang.en.fn): `text`, its `view`
+# (many): filler (păi, deci, adică), politeness (te rog, vă rog), wish (vreau, aș vrea), hesitation (ăă, hm) and focus
+# (și before the object: "pune și un lac", too); `at` where it stands: lead, tail or any. The frames take their phrase
+# groups skip, focus and wish, and the leads, from these (tools/lang-ro-frames.mjs).
+@w.lang.ro.fn core.type of=w.lang.ro.fn shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.fn.text core.slot of=w.lang.ro.fn key=text id=true required=true kind=string core.source="hand-core 1"
+@w.lang.ro.fn.view core.slot of=w.lang.ro.fn key=view many=true required=true enum=filler enum=politeness enum=wish enum=hesitation enum=focus core.source="hand-core 1"
+@w.lang.ro.fn.at core.slot of=w.lang.ro.fn key=at required=true enum=lead enum=tail enum=any core.source="hand-core 1"
+
+# ---- closed classes ----
+# A determiner or article (the definite article is a cell of the nouns): `form` as written, `lemma` its base form,
+# `kind`, and the features it agrees in (`gender` may repeat: one form for two genders). `value` of an ordinal
+# (-1: the last); `owner` the number of the possessor of a possessive.
+@w.lang.ro.det core.type of=w.lang.ro.det shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.det.form core.slot of=w.lang.ro.det key=form id=true required=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.det.lemma core.slot of=w.lang.ro.det key=lemma required=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.det.kind core.slot of=w.lang.ro.det key=kind required=true enum=article enum=adjectival enum=demonstrative enum=possessive enum=possessive_article enum=quantifier enum=other enum=ordinal core.source="hand-core 1"
+@w.lang.ro.det.def core.slot of=w.lang.ro.det key=def enum=yes enum=no core.source="hand-core 1"
+@w.lang.ro.det.gender core.slot of=w.lang.ro.det key=gender many=true enum=m enum=f enum=n core.source="hand-core 1"
+@w.lang.ro.det.num core.slot of=w.lang.ro.det key=num enum=sg enum=pl core.source="hand-core 1"
+@w.lang.ro.det.case core.slot of=w.lang.ro.det key=case enum=nomacc enum=gendat core.source="hand-core 1"
+@w.lang.ro.det.person core.slot of=w.lang.ro.det key=person kind=integer min=1 max=3 core.source="hand-core 1"
+@w.lang.ro.det.owner core.slot of=w.lang.ro.det key=owner enum=sg enum=pl core.source="hand-core 1"
+@w.lang.ro.det.distance core.slot of=w.lang.ro.det key=distance enum=near enum=far core.source="hand-core 1"
+@w.lang.ro.det.value core.slot of=w.lang.ro.det key=value kind=integer core.source="hand-core 1"
+@w.lang.ro.det.polarity core.slot of=w.lang.ro.det key=polarity enum=neg core.source="hand-core 1"
+
+# A pronoun: `case` may repeat; `clitic`: free (a full form), bound (a clitic before the verb: îl, îmi) or joined
+# (after a hyphen: -l, -mi); `refers` as in w.lang.en (a thing, the user, the assistant, anyone).
+@w.lang.ro.pron core.type of=w.lang.ro.pron shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.pron.form core.slot of=w.lang.ro.pron key=form id=true required=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.pron.lemma core.slot of=w.lang.ro.pron key=lemma required=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.pron.kind core.slot of=w.lang.ro.pron key=kind required=true enum=personal enum=reflexive enum=demonstrative enum=interrogative enum=indefinite core.source="hand-core 1"
+@w.lang.ro.pron.case core.slot of=w.lang.ro.pron key=case many=true required=true enum=nom enum=acc enum=gendat core.source="hand-core 1"
+@w.lang.ro.pron.person core.slot of=w.lang.ro.pron key=person kind=integer min=1 max=3 core.source="hand-core 1"
+@w.lang.ro.pron.num core.slot of=w.lang.ro.pron key=num enum=sg enum=pl core.source="hand-core 1"
+@w.lang.ro.pron.gender core.slot of=w.lang.ro.pron key=gender enum=m enum=f enum=n core.source="hand-core 1"
+@w.lang.ro.pron.clitic core.slot of=w.lang.ro.pron key=clitic required=true enum=free enum=bound enum=joined core.source="hand-core 1"
+@w.lang.ro.pron.refers core.slot of=w.lang.ro.pron key=refers required=true enum=thing enum=user enum=assistant enum=any core.source="hand-core 1"
+
+# A preposition as a relation (`lemma`: the base form of a variant, în for într-): `rel` a relation name of
+# w.lang.en's prepositions, `layout` the k.layouts relation it
+# says (`inverse=yes`: the other way round), `case` of the noun after it, `space` as in w.lang.en.
+@w.lang.ro.prep core.type of=w.lang.ro.prep shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.prep.form core.slot of=w.lang.ro.prep key=form id=true required=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.prep.lemma core.slot of=w.lang.ro.prep key=lemma kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.prep.rel core.slot of=w.lang.ro.prep key=rel required=true kind=atom core.source="hand-core 1"
+@w.lang.ro.prep.layout core.slot of=w.lang.ro.prep key=layout enum=left_of enum=above enum=inside enum=around enum=on enum=behind enum=beside core.source="hand-core 1"
+@w.lang.ro.prep.inverse core.slot of=w.lang.ro.prep key=inverse enum=yes core.source="hand-core 1"
+@w.lang.ro.prep.case core.slot of=w.lang.ro.prep key=case required=true enum=acc enum=gendat core.source="hand-core 1"
+@w.lang.ro.prep.space core.slot of=w.lang.ro.prep key=space enum=static enum=direction enum=source enum=path core.source="hand-core 1"
+
+# A numeral: its value, the genders of the nouns it counts with this form, `with_de=yes` when a noun after it takes
+# "de" (20 and over: douăzeci de case).
+@w.lang.ro.numeral core.type of=w.lang.ro.numeral shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.numeral.form core.slot of=w.lang.ro.numeral key=form id=true required=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.numeral.value core.slot of=w.lang.ro.numeral key=value required=true kind=integer min=0 core.source="hand-core 1"
+@w.lang.ro.numeral.gender core.slot of=w.lang.ro.numeral key=gender many=true required=true enum=m enum=f enum=n core.source="hand-core 1"
+@w.lang.ro.numeral.with_de core.slot of=w.lang.ro.numeral key=with_de enum=yes core.source="hand-core 1"
+
+# A conjunction, adverb, particle or interjection of requests: `meaning` an English name of what it does (and, or,
+# then, negation, subjunctive, please, ...).
+@w.lang.ro.particle core.type of=w.lang.ro.particle shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.particle.form core.slot of=w.lang.ro.particle key=form id=true required=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.particle.kind core.slot of=w.lang.ro.particle key=kind required=true enum=conjunction enum=adverb enum=particle enum=interjection core.source="hand-core 1"
+@w.lang.ro.particle.meaning core.slot of=w.lang.ro.particle key=meaning required=true kind=atom core.source="hand-core 1"
+
+
+# ---- frames and order (block "18:20" item 1): w.lang.en's frame vocabulary, the words Romanian ----
+# A frame says an act of k.actions with its roles (`en` the English frame it says: same act, mode and roles); its parts in
+# order: `is` lead (a phrase group), det, verb (any form of a lemma whose dictionary sense reaches `act`), word (one of
+# `word`; `act` adds the verbs of that act), phrase (a group of w.lang.ro.phrase), lexicon, role (a capture: `takes`).
+@w.lang.ro.frame core.type of=w.lang.ro.frame shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.frame.name core.slot of=w.lang.ro.frame key=name id=true required=true kind=atom core.source="hand-core 1"
+@w.lang.ro.frame.en core.slot of=w.lang.ro.frame key=en required=true kind=atom core.source="hand-core 1"
+@w.lang.ro.frame.act core.slot of=w.lang.ro.frame key=act required=true kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.frame.mode core.slot of=w.lang.ro.frame key=mode kind=atom core.source="hand-core 1"
+@w.lang.ro.frame.set core.slot of=w.lang.ro.frame key=set required=true enum=acts core.source="hand-core 1"
+@w.lang.ro.frame.priority core.slot of=w.lang.ro.frame key=priority required=true kind=integer core.source="hand-core 1"
+@w.lang.ro.frame.needs core.slot of=w.lang.ro.frame key=needs kind=atom core.source="hand-core 1"
+@w.lang.ro.frame.role core.slot of=w.lang.ro.frame key=role many=true kind=atom core.source="hand-core 1"
+@w.lang.ro.frame.example core.slot of=w.lang.ro.frame key=example required=true kind=string core.source="hand-core 1"
+@w.lang.ro.part core.type of=w.lang.ro.part shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.part.frame core.slot of=w.lang.ro.part key=frame id=true required=true kind=atom core.source="hand-core 1"
+@w.lang.ro.part.at core.slot of=w.lang.ro.part key=at id=true required=true kind=integer min=1 core.source="hand-core 1"
+@w.lang.ro.part.is core.slot of=w.lang.ro.part key=is required=true enum=lead enum=det enum=verb enum=word enum=phrase enum=lexicon enum=role core.source="hand-core 1"
+@w.lang.ro.part.act core.slot of=w.lang.ro.part key=act kind=atom kind=string core.source="hand-core 1"
+@w.lang.ro.part.role core.slot of=w.lang.ro.part key=role kind=atom core.source="hand-core 1"
+@w.lang.ro.part.takes core.slot of=w.lang.ro.part key=takes enum=words enum=rest enum=number enum=prep enum=lexicon core.source="hand-core 1"
+@w.lang.ro.part.lexicon core.slot of=w.lang.ro.part key=lexicon kind=atom core.source="hand-core 1"
+@w.lang.ro.part.max_words core.slot of=w.lang.ro.part key=max_words kind=integer min=1 core.source="hand-core 1"
+@w.lang.ro.part.word core.slot of=w.lang.ro.part key=word many=true kind=string core.source="hand-core 1"
+@w.lang.ro.part.phrase core.slot of=w.lang.ro.part key=phrase many=true kind=atom core.source="hand-core 1"
+@w.lang.ro.part.optional core.slot of=w.lang.ro.part key=optional enum=yes core.source="hand-core 1"
+# A phrase group (leads, politeness words a reader skips, joined and bound clitics, wishes) and a lexicon of a role.
+@w.lang.ro.phrase core.type of=w.lang.ro.phrase shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.phrase.name core.slot of=w.lang.ro.phrase key=name id=true required=true kind=atom core.source="hand-core 1"
+@w.lang.ro.phrase.doc core.slot of=w.lang.ro.phrase key=doc kind=string core.source="hand-core 1"
+@w.lang.ro.phrase.item core.slot of=w.lang.ro.phrase key=item many=true required=true kind=string core.source="hand-core 1"
+@w.lang.ro.lex core.type of=w.lang.ro.lex shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.lex.name core.slot of=w.lang.ro.lex key=name id=true required=true kind=atom core.source="hand-core 1"
+@w.lang.ro.lex.doc core.slot of=w.lang.ro.lex key=doc kind=string core.source="hand-core 1"
+@w.lang.ro.lex.item core.slot of=w.lang.ro.lex key=item many=true required=true kind=string core.source="hand-core 1"
+# An order fact a reader of the frames needs (adjective after its noun, genitive possessor, clitic placement).
+@w.lang.ro.syntax core.type of=w.lang.ro.syntax shared=true closed=true core.source="hand-core 1"
+@w.lang.ro.syntax.name core.slot of=w.lang.ro.syntax key=name id=true required=true kind=atom core.source="hand-core 1"
+@w.lang.ro.syntax.about core.slot of=w.lang.ro.syntax key=about required=true kind=string core.source="hand-core 1"
+
+# Words for the types of this world (English).
+@w.lang.ro.word.world core.word text="romanian grammar" text="romanian language" text=romanian means=w.lang.ro.class core.source="hand-core 1"

@@ -1,0 +1,14 @@
+# k.words/shards/kr: senses of the words from "kremlin" to "kruger" (first letters "kr").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.kremlin.noun.1 k.words.sense word=Kremlin pos=noun n=1 supersense=noun.artifact gloss="citadel of Moscow, housing the offices of the Russian government" instance_of=bastion part_of=Moscow core.source="wordnet 3.1"
+@k.words.kremlin.noun.2 k.words.sense word=kremlin pos=noun n=2 supersense=noun.artifact gloss="citadel of a Russian town" is_a=bastion core.source="wordnet 3.1"
+@k.words.kremlin.spelling.Kremlin core.word text=kremlin means=Kremlin of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.krill.noun.1 k.words.sense word=krill pos=noun n=1 supersense=noun.animal gloss="shrimp-like planktonic crustaceans; major source of food for e.g. baleen whales" is_a="malacostracan crustacean" kind_of="malacostracan crustacean" kind_of=crustacean kind_of=arthropod kind_of=invertebrate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.kris.noun.1 k.words.sense word=kris pos=noun n=1 supersense=noun.artifact gloss="a Malayan dagger with a wavy blade" synonym=creese synonym=crease is_a=dagger core.source="wordnet 3.1"
+@k.words.krishna.noun.1 k.words.sense word=Krishna pos=noun n=1 supersense=noun.person gloss="8th and most important avatar of Vishnu; incarnated as a handsome young man playing a flute" instance_of=avatar core.source="wordnet 3.1"
+@k.words.krishna.spelling.Krishna core.word text=krishna means=Krishna of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.kruger.noun.1 k.words.sense word=Kruger pos=noun n=1 supersense=noun.person gloss="Boer statesman (1825-1904)" synonym="Oom Paul Kruger" synonym="Stephanus Johannes Paulus Kruger" instance_of=statesman core.source="wordnet 3.1"
+@k.words.kruger.spelling.Kruger core.word text=kruger means=Kruger of=k.words.sense.word core.source="wordnet 3.1"

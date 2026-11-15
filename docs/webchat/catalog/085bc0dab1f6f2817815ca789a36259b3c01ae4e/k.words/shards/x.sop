@@ -1,0 +1,14 @@
+# k.words/shards/x: senses of the words from "x" to "x-ray" (first letters "x").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.x.noun.1 k.words.sense word=X pos=noun n=1 supersense=noun.quantity gloss="the cardinal number that is the sum of nine and one; the base of the decimal system" synonym=ten synonym=10 synonym=tenner synonym=decade is_a="large integer" core.source="wordnet 3.1"
+@k.words.x.noun.2 k.words.sense word=X pos=noun n=2 supersense=noun.communication gloss="the 24th letter of the Roman alphabet" synonym=x synonym=ex is_a=letter core.source="wordnet 3.1"
+@k.words.x.noun.3 k.words.sense word=X pos=noun n=3 supersense=noun.artifact gloss="street names for methylenedioxymethamphetamine" synonym=Adam synonym=ecstasy synonym=XTC synonym=go synonym="disco biscuit" synonym=cristal synonym="hug drug" is_a=methylenedioxymethamphetamine core.source="wordnet 3.1"
+@k.words.x.spelling.X core.word text=x means=X of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.x-ray.noun.1 k.words.sense word=X-ray pos=noun n=1 supersense=noun.phenomenon gloss="electromagnetic radiation of short wavelength produced when high-speed electrons strike a solid target" synonym="X ray" synonym=X-radiation synonym="roentgen ray" is_a="electromagnetic radiation" is_a="ionizing radiation" core.source="wordnet 3.1"
+@k.words.x-ray.noun.2 k.words.sense word=X-ray pos=noun n=2 supersense=noun.artifact gloss="a radiogram made by exposing photographic film to X rays; used in medical diagnosis" synonym=roentgenogram synonym="X ray" synonym="X-ray picture" synonym="X-ray photograph" is_a=radiogram core.source="wordnet 3.1"
+@k.words.x-ray.verb.1 k.words.sense word=x-ray pos=verb n=1 supersense=verb.perception gloss="examine by taking x-rays" is_a=examine core.source="wordnet 3.1"
+@k.words.x-ray.verb.2 k.words.sense word=x-ray pos=verb n=2 supersense=verb.communication gloss="take an x-ray of something or somebody" is_a=photograph core.source="wordnet 3.1"
+@k.words.x-ray.spelling.X-ray core.word text=x-ray means=X-ray of=k.words.sense.word core.source="wordnet 3.1"

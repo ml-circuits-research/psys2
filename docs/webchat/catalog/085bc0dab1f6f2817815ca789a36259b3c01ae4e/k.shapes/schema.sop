@@ -1,0 +1,54 @@
+# k.shapes: what is known about shapes: flat shapes and solids, how many sides and corners a shape has, whether it
+# is round, and things that typically have the shape. So that "how many sides has a hexagon", "what is shaped like
+# a cone", "which shapes are round" can be answered by lookup.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.shapes core.module name=k.shapes version=2 imports=k.kinds exports=shape core.source="hand-core 1"
+
+# A shape, named by its common English name. `kind` is `flat` (drawn on paper), `solid` (it takes up room) or `line`
+# (a stroke with no inside). For a flat shape `sides` and `corners` are how many straight sides and corners it has
+# (a circle: 0 and 0; left out where the number is not fixed: a polygon, a star with any number of points). For a
+# solid, `faces`, `edges` and `corners` count its flat or curved faces, its edges and its corners, and `face` names
+# the flat shape of its faces (many: a cylinder has circles). `round=true` says that the outline is curved
+# all round or in part; `equal_sides=true` that all sides are the same length; `symmetric=true` that one half
+# mirrors the other. `flat` names the flat shape one sees when the solid is drawn from the front (a sphere: a
+# circle). `is_a` names the more general shapes (from k.kinds, many: a square is a rectangle and a rhombus; `kind_of`, derived, every one above). `thing` names things that typically have
+# the shape (many; the name of a k.objects object where there is one).
+@k.shapes.shape core.type of=k.shapes.shape extends=k.kinds.kind shared=true closed=true core.source="hand-core 1"
+@k.shapes.shape.kind core.slot of=k.shapes.shape key=kind required=true enum=flat enum=solid enum=line core.source="hand-core 1"
+@k.shapes.shape.sides core.slot of=k.shapes.shape key=sides kind=integer min=0 core.source="hand-core 1"
+@k.shapes.shape.corners core.slot of=k.shapes.shape key=corners kind=integer min=0 core.source="hand-core 1"
+@k.shapes.shape.faces core.slot of=k.shapes.shape key=faces kind=integer min=1 core.source="hand-core 1"
+@k.shapes.shape.edges core.slot of=k.shapes.shape key=edges kind=integer min=0 core.source="hand-core 1"
+@k.shapes.shape.face core.slot of=k.shapes.shape key=face many=true kind=atom kind=string type=k.shapes.shape by=name core.source="hand-core 1"
+@k.shapes.shape.round core.slot of=k.shapes.shape key=round required=true kind=boolean core.source="hand-core 1"
+@k.shapes.shape.equal_sides core.slot of=k.shapes.shape key=equal_sides kind=boolean core.source="hand-core 1"
+@k.shapes.shape.symmetric core.slot of=k.shapes.shape key=symmetric kind=boolean core.source="hand-core 1"
+@k.shapes.shape.flat core.slot of=k.shapes.shape key=flat kind=atom kind=string type=k.shapes.shape by=name core.source="hand-core 1"
+@k.shapes.shape.thing core.slot of=k.shapes.shape key=thing many=true kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+
+# A solid has no sides, a flat shape no faces.
+@k.shapes.solid_sides.fact k.shapes.shape name=?shape kind=solid sides=?n
+@k.shapes.solid_sides core.deny when=$k.shapes.solid_sides.fact why="?shape is a solid: it has faces and edges, not sides." core.source="hand-core 1"
+@k.shapes.flat_faces.fact k.shapes.shape name=?shape kind=flat faces=?n
+@k.shapes.flat_faces core.deny when=$k.shapes.flat_faces.fact why="?shape is a flat shape: it has sides, not faces." core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.shapes.word.shape core.word text=shape text=shapes text=shaped text=form means=k.shapes.shape core.source="hand-core 1"
+@k.shapes.word.sides core.word text=side text=sides means=k.shapes.shape.sides core.source="hand-core 1"
+@k.shapes.word.corners core.word text=corner text=corners text=vertex text=vertices text=point text=points means=k.shapes.shape.corners core.source="hand-core 1"
+@k.shapes.word.faces core.word text=face text=faces means=k.shapes.shape.faces core.source="hand-core 1"
+@k.shapes.word.edges core.word text=edge text=edges means=k.shapes.shape.edges core.source="hand-core 1"
+@k.shapes.word.round core.word text=round text=curved text=rounded means=k.shapes.shape.round core.source="hand-core 1"
+@k.shapes.word.kind core.word text=flat text=solid text="2D" text="3D" means=k.shapes.shape.kind core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.shapes.word.key.shape.kind core.word text=kind means=k.shapes.shape.kind core.source="hand-core 1"
+@k.shapes.word.key.shape.sides core.word text=many means=k.shapes.shape.sides core.source="hand-core 1"
+@k.shapes.word.key.shape.face core.word text=face means=k.shapes.shape.face core.source="hand-core 1"
+@k.shapes.word.key.shape.equal_sides core.word text="equal sides" means=k.shapes.shape.equal_sides core.source="hand-core 1"
+@k.shapes.word.key.shape.symmetric core.word text=symmetric means=k.shapes.shape.symmetric core.source="hand-core 1"
+@k.shapes.word.key.shape.flat core.word text=flat means=k.shapes.shape.flat core.source="hand-core 1"
+@k.shapes.word.key.shape.thing core.word text=thing means=k.shapes.shape.thing core.source="hand-core 1"

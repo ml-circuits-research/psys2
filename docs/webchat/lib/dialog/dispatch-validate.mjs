@@ -17,13 +17,13 @@
  */
 import { perf } from '../formalizer/perf.mjs?v=b81e032a17';
 import { guard } from '../formalizer/guard.mjs?v=82a55329d9';
-import { formalize, FormSession } from '../formalizer/index.mjs?v=dbe9b03636';
-import { youTarget } from '../formalizer/rules/index.mjs?v=27cce628a5';
+import { formalize, FormSession } from '../formalizer/index.mjs?v=2d3ba5abcd';
+import { youTarget } from '../formalizer/rules/index.mjs?v=a815012811';
 import { serialize } from '../soplang/index.mjs?v=c57881f705';
-import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs?v=27cce628a5';
+import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs?v=a815012811';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=bf0251be42';
-import { checkValues } from './value-check.mjs?v=a15a4d2e38';
-import { wildTokens } from '../formalizer/routing.mjs?v=27cce628a5';
+import { checkValues } from './value-check.mjs?v=56a356c601';
+import { wildTokens } from '../formalizer/routing.mjs?v=a815012811';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 /** Default policy; every weight is an option. */
@@ -85,6 +85,23 @@ export function toProb(x) {
  * list of segments, a missing `segmentations` (one segmentation with the whole text, using `worlds` of the record),
  * `p` or `prob` for `score`, `logprob` for the segmentation score.
  */
+/**
+ * A world the dispatcher was trained on that is gone (a kids world switched off, ADR-011) is read as the world that declares it replaces it (`replaces=` in its world.sop):
+ * the label of the model names the successor, never a world that is not loaded. A world neither loaded nor replaced keeps its label (the validator skips it as before).
+ */
+export function retiredToSuccessor(pred, set) {
+  if (!set?.list) return pred;
+  const next = new Map();
+  for (const w of set.list()) for (const r of w.replaces ?? []) if (!set.get(r)) next.set(r, w.id);
+  if (!next.size) return pred;
+  for (const g of pred.segmentations ?? []) for (const piece of g.segments ?? []) {
+    const seen = new Map();
+    for (const w of piece.worlds ?? []) { const id = next.get(w.world) ?? w.world; if (!seen.has(id) || seen.get(id).score < w.score) seen.set(id, { ...w, world: id }); }
+    piece.worlds = [...seen.values()].sort((a, b) => b.score - a.score);
+  }
+  return pred;
+}
+
 export function normalizePrediction(pred) {
   const text = String(pred?.text ?? '');
   const ctx = pred?.context ?? {};
@@ -479,7 +496,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
   /** Validate one prediction. `override` replaces policy fields for this call only. */
   const validate = async (prediction, override = {}) => {
     const o = { ...base, ...override };
-    const pred = normalizePrediction(prediction);
+    const pred = retiredToSuccessor(normalizePrediction(prediction), engine.set);
     let segs = pred.segmentations.slice(0, o.maxSegmentations);
     const evals = [];
     const tabSeg = (await tabFirst(pred, o)) ?? (await wholeFirst(pred, o));

@@ -1,0 +1,29 @@
+# k.words/shards/on: senses of the words from "on" to "only" (first letters "on").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.on.adjective.1 k.words.sense word=on pos=adjective n=1 supersense=adj.all gloss="in operation or operational" opposite=off core.source="wordnet 3.1"
+@k.words.on.adjective.2 k.words.sense word=on pos=adjective n=2 supersense=adj.all gloss="(of events) planned or scheduled" opposite=off core.source="wordnet 3.1"
+@k.words.on.adverb.1 k.words.sense word=on pos=adverb n=1 supersense=adv.all gloss="with a forward motion" synonym=along core.source="wordnet 3.1"
+@k.words.on.adverb.2 k.words.sense word=on pos=adverb n=2 supersense=adv.all gloss="indicates continuity or persistence or concentration" core.source="wordnet 3.1"
+@k.words.on.adverb.3 k.words.sense word=on pos=adverb n=3 supersense=adv.all gloss="in a state required for something to function or be effective" core.source="wordnet 3.1"
+@k.words.once.adverb.1 k.words.sense word=once pos=adverb n=1 supersense=adv.all gloss="on one occasion" synonym="one time" synonym="in one case" core.source="wordnet 3.1"
+@k.words.once.adverb.2 k.words.sense word=once pos=adverb n=2 supersense=adv.all gloss="as soon as" core.source="wordnet 3.1"
+@k.words.once.adverb.3 k.words.sense word=once pos=adverb n=3 supersense=adv.all gloss="at a previous time" synonym=formerly synonym="at one time" synonym=erstwhile synonym=erst core.source="wordnet 3.1"
+@k.words.one.noun.1 k.words.sense word=one pos=noun n=1 supersense=noun.quantity gloss="the smallest whole number or a numeral representing this number" synonym=1 synonym=I synonym=ace synonym=single synonym=unity is_a=digit kind_of=digit kind_of=integer kind_of=number kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.one.noun.2 k.words.sense word=one pos=noun n=2 supersense=noun.cognition gloss="a single person or thing" is_a=unit kind_of=unit kind_of=whole kind_of=concept kind_of=idea kind_of=content kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.one.adjective.1 k.words.sense word=one pos=adjective n=1 supersense=adj.all gloss="used of a single unit or thing; not two or more" synonym=1 synonym=i synonym=ane near_opposite=ordinal core.source="wordnet 3.1"
+@k.words.one.adjective.2 k.words.sense word=one pos=adjective n=2 supersense=adj.all gloss="having the indivisible character of a unit" synonym=unitary near_opposite=divided core.source="wordnet 3.1"
+@k.words.one.adjective.3 k.words.sense word=one pos=adjective n=3 supersense=adj.all gloss="of the same kind or quality" near_opposite=different core.source="wordnet 3.1"
+@k.words.onion.noun.1 k.words.sense word=onion pos=noun n=1 supersense=noun.plant gloss="the bulb of an onion plant" is_a=bulb part_of=onion kind_of=bulb kind_of=stalk kind_of="plant organ" kind_of="plant part" kind_of="natural object" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.onion.noun.2 k.words.sense word=onion pos=noun n=2 supersense=noun.plant gloss="bulbous plant having hollow leaves cultivated worldwide for its rounded edible bulb" synonym="onion plant" synonym="Allium cepa" is_a="alliaceous plant" kind_of="alliaceous plant" kind_of="liliaceous plant" kind_of="bulbous plant" kind_of="vascular plant" kind_of=plant kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.onion.noun.3 k.words.sense word=onion pos=noun n=3 supersense=noun.food gloss="an aromatic flavorful vegetable" is_a=vegetable kind_of=vegetable kind_of=produce kind_of=food kind_of=solid kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.online.adjective.1 k.words.sense word=online pos=adjective n=1 supersense=adj.all gloss="on a regular route of a railroad or bus or airline system" synonym=on-line core.source="wordnet 3.1"
+@k.words.online.adjective.2 k.words.sense word=online pos=adjective n=2 supersense=adj.all gloss="connected to a computer network or accessible by computer" synonym=on-line core.source="wordnet 3.1"
+@k.words.online.adjective.3 k.words.sense word=online pos=adjective n=3 supersense=adj.all gloss="being in progress now" synonym=on-line near_opposite=noncurrent core.source="wordnet 3.1"
+@k.words.only.adjective.1 k.words.sense word=only pos=adjective n=1 supersense=adj.all gloss="being the only one; single and isolated from others" synonym=lone synonym=lonesome synonym=sole synonym=solitary near_opposite=multiple core.source="wordnet 3.1"
+@k.words.only.adjective.2 k.words.sense word=only pos=adjective n=2 supersense=adj.all gloss="exclusive of anyone or anything else" synonym=alone near_opposite=inclusive core.source="wordnet 3.1"
+@k.words.only.adverb.1 k.words.sense word=only pos=adverb n=1 supersense=adv.all gloss="and nothing more" synonym=merely synonym=simply synonym=just synonym=but core.source="wordnet 3.1"
+@k.words.only.adverb.2 k.words.sense word=only pos=adverb n=2 supersense=adv.all gloss="without any others being included or involved" synonym=entirely synonym=exclusively synonym=solely synonym=alone core.source="wordnet 3.1"
+@k.words.only.adverb.3 k.words.sense word=only pos=adverb n=3 supersense=adv.all gloss="with nevertheless the final result" core.source="wordnet 3.1"

@@ -1,0 +1,14 @@
+# k.scenes/shards/things-u: the usual place (sky, ground, water, indoors, on another thing) and the relative size (tiny to huge) of 9 things (the drawable things and the animals of k.animals) whose name starts with "u"; labelled by a language model from the names (named=model), a sample checked against the drawings.
+# sources: hand-core 1 (hand-written in this repository: sources/hand-core/place-size.tsv, and sources/hand-core/animals.tsv for the animals without a drawing)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+
+@k.scenes.thing.Uranus k.scenes.thing name=Uranus place=sky size=huge named=model core.source="hand-core 1"
+@k.scenes.thing.umbrella k.scenes.thing name=umbrella place=on_thing on=hand size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.umbrella_on_ground k.scenes.thing name="umbrella on ground" place=ground size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.umbrella_with_rain_drops k.scenes.thing name="umbrella with rain drops" place=on_thing on=hand size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.underground_train k.scenes.thing name="underground train" place=ground size=huge named=model core.source="hand-core 1"
+@k.scenes.thing.underwear k.scenes.thing name=underwear place=on_thing on=person size=small named=model core.source="hand-core 1"
+@k.scenes.thing.unicorn k.scenes.thing name=unicorn place=ground size=large named=model core.source="hand-core 1"
+@k.scenes.thing.unlocked k.scenes.thing name=unlocked place=on_thing on=door size=tiny named=model core.source="hand-core 1"
+@k.scenes.thing.usb_stick k.scenes.thing name="usb stick" place=indoors on=table size=tiny named=model core.source="hand-core 1"

@@ -252,7 +252,7 @@ test('real worlds: shapes load without errors and their patterns never use an un
     assert.deepEqual(w.errors, [], w.id);
     for (const p of w.patterns.filter((x) => x.shape)) { n++; assert.deepEqual(checkPattern(p, rs), [], p.id); compilePattern(p.match, rl.phrases); }
   }
-  assert.ok(n >= 30, `generated ${n}`);
+  assert.ok(n >= 20, `generated ${n}`);   // (24 since kids.time, which generated shapes, was switched off for time.calendar)
 });
 
 test('shapes without an object slot: the noun is the thing (set and ask.value)', () => {

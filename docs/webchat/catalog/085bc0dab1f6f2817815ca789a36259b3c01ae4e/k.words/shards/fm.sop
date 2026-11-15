@@ -1,0 +1,9 @@
+# k.words/shards/fm: senses of the words from "fm" to "fm" (first letters "fm").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.fm.noun.1 k.words.sense word=FM pos=noun n=1 supersense=noun.communication gloss="modulation of the frequency of the (radio) carrier wave" synonym="frequency modulation" is_a=modulation core.source="wordnet 3.1"
+@k.words.fm.noun.2 k.words.sense word=Fm pos=noun n=2 supersense=noun.substance gloss="a radioactive transuranic metallic element produced by bombarding plutonium with neutrons" synonym=fermium synonym="atomic number 100" is_a="metallic element" core.source="wordnet 3.1"
+@k.words.fm.spelling.FM core.word text=fm means=FM of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.fm.spelling.Fm core.word text=fm means=Fm of=k.words.sense.word core.source="wordnet 3.1"

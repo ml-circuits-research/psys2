@@ -1,0 +1,73 @@
+# k.faces/shards/plain-earrings: the variants of the slot `earrings` in the style `plain` (the side on the viewer's left; the other side is its mirror image): features, and parts with a primitive shape, a box in the frame of the face, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/faces-core.mjs
+
+# earrings: stud
+@k.faces.plain.earrings.stud k.faces.variant slot=earrings name=stud style=plain size=small kind=stud core.source="hand-core 1"
+@k.faces.plain.earrings.stud.stud k.faces.part slot=earrings of=stud name=stud shape=circle x=19 y=56 w=4 h=4 z=1 colour=yellow rgb="#E8B923" core.source="hand-core 1"
+
+# earrings: hoop
+@k.faces.plain.earrings.hoop k.faces.variant slot=earrings name=hoop style=plain kind=hoop core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop k.faces.part slot=earrings of=hoop name=hoop shape=line x=17 y=57 w=8 h=8 z=1 colour=yellow rgb="#E8B923" core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop.p1 k.faces.point part=$k.faces.plain.earrings.hoop.hoop n=1 x=25 y=61 core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop.p2 k.faces.point part=$k.faces.plain.earrings.hoop.hoop n=2 x=24.5 y=63 core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop.p3 k.faces.point part=$k.faces.plain.earrings.hoop.hoop n=3 x=23 y=64.5 core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop.p4 k.faces.point part=$k.faces.plain.earrings.hoop.hoop n=4 x=21 y=65 core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop.p5 k.faces.point part=$k.faces.plain.earrings.hoop.hoop n=5 x=19 y=64.5 core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop.p6 k.faces.point part=$k.faces.plain.earrings.hoop.hoop n=6 x=17.5 y=63 core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop.p7 k.faces.point part=$k.faces.plain.earrings.hoop.hoop n=7 x=17 y=61 core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop.p8 k.faces.point part=$k.faces.plain.earrings.hoop.hoop n=8 x=17.5 y=59 core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop.p9 k.faces.point part=$k.faces.plain.earrings.hoop.hoop n=9 x=19 y=57.5 core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop.p10 k.faces.point part=$k.faces.plain.earrings.hoop.hoop n=10 x=21 y=57 core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop.p11 k.faces.point part=$k.faces.plain.earrings.hoop.hoop n=11 x=23 y=57.5 core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop.p12 k.faces.point part=$k.faces.plain.earrings.hoop.hoop n=12 x=24.5 y=59 core.source="hand-core 1"
+@k.faces.plain.earrings.hoop.hoop.p13 k.faces.point part=$k.faces.plain.earrings.hoop.hoop n=13 x=25 y=61 core.source="hand-core 1"
+
+# earrings: drop
+@k.faces.plain.earrings.drop k.faces.variant slot=earrings name=drop style=plain kind=drop core.source="hand-core 1"
+@k.faces.plain.earrings.drop.wire k.faces.part slot=earrings of=drop name=wire shape=line x=21 y=56 w=0 h=6 z=1 colour=yellow rgb="#E8B923" core.source="hand-core 1"
+@k.faces.plain.earrings.drop.stone k.faces.part slot=earrings of=drop name=stone shape=circle x=18.5 y=62 w=5 h=5 z=2 colour=blue rgb="#2F7FD0" core.source="hand-core 1"
+@k.faces.plain.earrings.drop.wire.p1 k.faces.point part=$k.faces.plain.earrings.drop.wire n=1 x=21 y=56 core.source="hand-core 1"
+@k.faces.plain.earrings.drop.wire.p2 k.faces.point part=$k.faces.plain.earrings.drop.wire n=2 x=21 y=62 core.source="hand-core 1"
+
+# earrings: pearl
+@k.faces.plain.earrings.pearl k.faces.variant slot=earrings name=pearl style=plain kind=pearl core.source="hand-core 1"
+@k.faces.plain.earrings.pearl.pearl k.faces.part slot=earrings of=pearl name=pearl shape=circle x=18.5 y=56 w=5 h=5 z=1 colour=white rgb="#F6F2EA" core.source="hand-core 1"
+
+# earrings: large hoop
+@k.faces.plain.earrings.large_hoop k.faces.variant slot=earrings name="large hoop" style=plain size=large kind=hoop core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop k.faces.part slot=earrings of="large hoop" name=hoop shape=line x=14.5 y=57.7 w=12 h=11.6 z=1 colour=yellow rgb="#E8B923" core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p1 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=1 x=26.5 y=63.5 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p2 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=2 x=25.9 y=66.1 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p3 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=3 x=24.2 y=68.2 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p4 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=4 x=21.8 y=69.3 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p5 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=5 x=19.2 y=69.3 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p6 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=6 x=16.8 y=68.2 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p7 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=7 x=15.1 y=66.1 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p8 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=8 x=14.5 y=63.5 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p9 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=9 x=15.1 y=60.9 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p10 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=10 x=16.8 y=58.8 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p11 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=11 x=19.2 y=57.7 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p12 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=12 x=21.8 y=57.7 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p13 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=13 x=24.2 y=58.8 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p14 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=14 x=25.9 y=60.9 core.source="hand-core 1"
+@k.faces.plain.earrings.large_hoop.hoop.p15 k.faces.point part=$k.faces.plain.earrings.large_hoop.hoop n=15 x=26.5 y=63.5 core.source="hand-core 1"
+
+# earrings: star
+@k.faces.plain.earrings.star k.faces.variant slot=earrings name=star style=plain kind=star core.source="hand-core 1"
+@k.faces.plain.earrings.star.star k.faces.part slot=earrings of=star name=star shape=polygon x=17 y=56 w=8 h=9 z=1 colour=yellow rgb="#E8B923" core.source="hand-core 1"
+@k.faces.plain.earrings.star.star.p1 k.faces.point part=$k.faces.plain.earrings.star.star n=1 x=21 y=56 core.source="hand-core 1"
+@k.faces.plain.earrings.star.star.p2 k.faces.point part=$k.faces.plain.earrings.star.star n=2 x=22.4 y=59.2 core.source="hand-core 1"
+@k.faces.plain.earrings.star.star.p3 k.faces.point part=$k.faces.plain.earrings.star.star n=3 x=25 y=59.5 core.source="hand-core 1"
+@k.faces.plain.earrings.star.star.p4 k.faces.point part=$k.faces.plain.earrings.star.star n=4 x=23 y=61.8 core.source="hand-core 1"
+@k.faces.plain.earrings.star.star.p5 k.faces.point part=$k.faces.plain.earrings.star.star n=5 x=23.8 y=65 core.source="hand-core 1"
+@k.faces.plain.earrings.star.star.p6 k.faces.point part=$k.faces.plain.earrings.star.star n=6 x=21 y=63.2 core.source="hand-core 1"
+@k.faces.plain.earrings.star.star.p7 k.faces.point part=$k.faces.plain.earrings.star.star n=7 x=18.2 y=65 core.source="hand-core 1"
+@k.faces.plain.earrings.star.star.p8 k.faces.point part=$k.faces.plain.earrings.star.star n=8 x=19 y=61.8 core.source="hand-core 1"
+@k.faces.plain.earrings.star.star.p9 k.faces.point part=$k.faces.plain.earrings.star.star n=9 x=17 y=59.5 core.source="hand-core 1"
+@k.faces.plain.earrings.star.star.p10 k.faces.point part=$k.faces.plain.earrings.star.star n=10 x=19.6 y=59.2 core.source="hand-core 1"
+
+# earrings: bolt
+@k.faces.plain.earrings.bolt k.faces.variant slot=earrings name=bolt style=plain shape=square kind=robot core.source="hand-core 1"
+@k.faces.plain.earrings.bolt.bolt k.faces.part slot=earrings of=bolt name=bolt shape=square x=18 y=57 w=6 h=6 z=1 colour=grey rgb="#9AA4AE" core.source="hand-core 1"

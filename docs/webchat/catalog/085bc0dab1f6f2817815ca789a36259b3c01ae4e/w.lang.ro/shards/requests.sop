@@ -1,0 +1,68 @@
+# w.lang.ro/shards/requests: the act templates of w.lang.en (shard templates-acts) said in Romanian, one to one by name, act
+# and shape (reviewer block 14:25 item 2): what a person asks, in the imperative, informal singular, for a host that
+# realises a request (did you mean: ...). A number says its CLDR plural category (few: 3 case; other: 20 de case).
+# sources: hand-core 1 (written by hand in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.ro.request.make.kind w.lang.ro.request name=make.kind act=make shape=kind role=kind text="adaugă {art@kind} {kind}." example="Adaugă o casă." core.source="hand-core 1"
+@w.lang.ro.request.make.number.few w.lang.ro.request name=make.number count=few act=make shape=kind.number role=number role=kind text="adaugă {number} {kind:num=pl}." example="Adaugă 3 case." core.source="hand-core 1"
+@w.lang.ro.request.make.number.other w.lang.ro.request name=make.number count=other act=make shape=kind.number role=number role=kind text="adaugă {number} de {kind:num=pl}." example="Adaugă 20 de case." core.source="hand-core 1"
+@w.lang.ro.request.make.value w.lang.ro.request name=make.value act=make shape=kind.value role=value role=kind text="adaugă {art@kind} {kind} {value@kind}." example="Adaugă o casă roșie." core.source="hand-core 1"
+@w.lang.ro.request.make.number.value.few w.lang.ro.request name=make.number.value count=few act=make shape=kind.number.value role=number role=value role=kind text="adaugă {number} {kind:num=pl} {value:num=pl@kind}." example="Adaugă 3 case roșii." core.source="hand-core 1"
+@w.lang.ro.request.make.number.value.other w.lang.ro.request name=make.number.value count=other act=make shape=kind.number.value role=number role=value role=kind text="adaugă {number} de {kind:num=pl} {value:num=pl@kind}." example="Adaugă 20 de case roșii." core.source="hand-core 1"
+@w.lang.ro.request.make.place w.lang.ro.request name=make.place act=make shape=kind.place role=kind role=place text="adaugă {art@kind} {kind} {place}." example="Adaugă o stea lângă copac." core.source="hand-core 1"
+@w.lang.ro.request.make.name w.lang.ro.request name=make.name act=make shape=kind.value.name role=kind role=value text="adaugă {art@kind} {kind} cu numele {value}." example="Adaugă un invitat cu numele Ana." core.source="hand-core 1"
+@w.lang.ro.request.make.name.place w.lang.ro.request name=make.name.place act=make shape=kind.place.value.name role=kind role=value role=place text="adaugă {art@kind} {kind} cu numele {value} {place}." example="Adaugă un invitat cu numele Ana la masa 1." core.source="hand-core 1"
+@w.lang.ro.request.make.topic.criterion w.lang.ro.request name=make.topic.criterion act=make shape=kind.topic.criterion role=kind role=topic role=criterion text="fă {art@kind} {kind} despre {topic}, în ordinea {criterion:def=yes,case=gendat}." example="Fă o hartă despre planete, în ordinea distanței." core.source="hand-core 1"
+@w.lang.ro.request.remove.thing w.lang.ro.request name=remove.thing act=remove shape=thing role=thing text="șterge {thing:def=yes}." example="Șterge casa." core.source="hand-core 1"
+@w.lang.ro.request.remove.source w.lang.ro.request name=remove.source act=remove shape=thing.source role=thing role=source text="scoate {thing:def=yes} din {source}." example="Scoate pisica din casă." core.source="hand-core 1"
+@w.lang.ro.request.change.value w.lang.ro.request name=change.value act=change shape=thing.value role=thing role=value text="fă {thing:def=yes} {value@thing}." example="Fă casa roșie." core.source="hand-core 1"
+@w.lang.ro.request.change.attribute w.lang.ro.request name=change.attribute act=change shape=thing.attribute.value.set role=attribute role=thing role=value text="schimbă {attribute:def=yes} {thing:def=yes,case=gendat} în {value:gender=m}." example="Schimbă culoarea casei în roșu." core.source="hand-core 1"
+@w.lang.ro.request.change.amount.value w.lang.ro.request name=change.amount.value act=change shape=thing.value.amount role=thing role=amount role=value text="fă {thing:def=yes} {amount:gender=m} mai {value@thing}." example="Fă casa puțin mai mare." core.source="hand-core 1"
+@w.lang.ro.request.change.more w.lang.ro.request name=change.more act=change shape=thing.attribute.amount.more role=amount role=attribute role=thing text="adaugă {amount} {attribute:num=pl} la {thing}." example="Adaugă 2 locuri la masă." core.source="hand-core 1"
+@w.lang.ro.request.change.less w.lang.ro.request name=change.less act=change shape=thing.attribute.amount.less role=amount role=attribute role=thing text="scoate {amount} {attribute:num=pl} de la {thing}." example="Scoate 2 locuri de la masă." core.source="hand-core 1"
+@w.lang.ro.request.place.place w.lang.ro.request name=place.place act=place shape=thing.place role=thing role=place text="pune {thing:def=yes} {place}." example="Pune casa lângă copac." core.source="hand-core 1"
+@w.lang.ro.request.place.direction w.lang.ro.request name=place.direction act=place shape=thing.direction role=thing role=direction text="mută {thing:def=yes} {direction}." example="Mută casa la stânga." core.source="hand-core 1"
+@w.lang.ro.request.place.direction.amount w.lang.ro.request name=place.direction.amount act=place shape=thing.direction.amount role=thing role=direction role=amount text="mută {thing:def=yes} {amount:gender=m} {direction}." example="Mută casa puțin la stânga." core.source="hand-core 1"
+@w.lang.ro.request.place.criterion w.lang.ro.request name=place.criterion act=place shape=thing.criterion role=thing role=criterion text="aliniază {thing:num=pl,def=yes} în ordinea {criterion:def=yes,case=gendat}." example="Aliniază planetele în ordinea mărimii." core.source="hand-core 1"
+@w.lang.ro.request.connect.target w.lang.ro.request name=connect.target act=connect shape=thing.target role=thing role=target text="conectează {thing:def=yes} cu {target:def=yes}." example="Conectează casa cu copacul." core.source="hand-core 1"
+@w.lang.ro.request.group.thing w.lang.ro.request name=group.thing act=group shape=thing.group role=thing text="grupează {thing:num=pl,def=yes}." example="Grupează mesele." core.source="hand-core 1"
+@w.lang.ro.request.group.criterion w.lang.ro.request name=group.criterion act=group shape=thing.criterion.group role=thing role=criterion text="sortează {thing:num=pl,def=yes} după {criterion}." example="Sortează planetele după mărime." core.source="hand-core 1"
+@w.lang.ro.request.take_apart.thing w.lang.ro.request name=take_apart.thing act="take apart" shape=thing role=thing text="desparte {thing:def=yes}." example="Desparte casa." core.source="hand-core 1"
+@w.lang.ro.request.pick.thing w.lang.ro.request name=pick.thing act=pick shape=thing role=thing text="selectează {thing:def=yes}." example="Selectează casa." core.source="hand-core 1"
+@w.lang.ro.request.deselect.all w.lang.ro.request name=deselect.all act=deselect shape=none text="deselectează tot." example="Deselectează tot." core.source="hand-core 1"
+@w.lang.ro.request.ask.attribute w.lang.ro.request name=ask.attribute act=ask shape=topic.thing.what role=topic role=thing text="care este {topic:def=yes} {thing:def=yes,case=gendat}?" example="Care este culoarea casei?" core.source="hand-core 1"
+@w.lang.ro.request.ask.where w.lang.ro.request name=ask.where act=ask shape=thing.where role=thing text="unde este {thing:def=yes}?" example="Unde este casa?" core.source="hand-core 1"
+@w.lang.ro.request.ask.count w.lang.ro.request name=ask.count act=ask shape=thing.count role=thing text="cât de {many:num=pl@thing} {thing:num=pl} sunt?" example="Cât de multe case sunt?" core.source="hand-core 1"
+@w.lang.ro.request.ask.place w.lang.ro.request name=ask.place act=ask shape=place.what role=place text="ce este {place}?" example="Ce este lângă copac?" core.source="hand-core 1"
+@w.lang.ro.request.copy.thing w.lang.ro.request name=copy.thing act=copy shape=thing role=thing text="copiază {thing:def=yes}." example="Copiază casa." core.source="hand-core 1"
+@w.lang.ro.request.send.thing w.lang.ro.request name=send.thing act=send shape=thing role=thing text="trimite {thing:def=yes}." example="Trimite desenul." core.source="hand-core 1"
+@w.lang.ro.request.send.recipient w.lang.ro.request name=send.recipient act=send shape=thing.recipient role=thing role=recipient text="trimite {thing:def=yes} către {recipient}." example="Trimite desenul către Ana." core.source="hand-core 1"
+@w.lang.ro.request.undo.last w.lang.ro.request name=undo.last act=undo shape=none text="anulează asta." example="Anulează asta." core.source="hand-core 1"
+@w.lang.ro.request.undo.number.few w.lang.ro.request name=undo.number count=few act=undo shape=number role=number text="anulează ultimele {number} schimbări." example="Anulează ultimele 3 schimbări." core.source="hand-core 1"
+@w.lang.ro.request.undo.number.other w.lang.ro.request name=undo.number count=other act=undo shape=number role=number text="anulează ultimele {number} de schimbări." example="Anulează ultimele 20 de schimbări." core.source="hand-core 1"
+@w.lang.ro.request.redo.last w.lang.ro.request name=redo.last act=redo shape=none text="refă asta." example="Refă asta." core.source="hand-core 1"
+@w.lang.ro.request.save.name w.lang.ro.request name=save.name act=save shape=name role=name text="salvează ca {name}." example="Salvează ca prânz." core.source="hand-core 1"
+@w.lang.ro.request.load.thing w.lang.ro.request name=load.thing act=load shape=thing role=thing text="încarcă {thing}." example="Încarcă prânz." core.source="hand-core 1"
+@w.lang.ro.request.greet.none w.lang.ro.request name=greet.none act=greet shape=none text="salut." example="Salut." core.source="hand-core 1"
+@w.lang.ro.request.greet.person w.lang.ro.request name=greet.person act=greet shape=person role=person text="salut, {person}." example="Salut, Ana." core.source="hand-core 1"
+@w.lang.ro.request.thank.none w.lang.ro.request name=thank.none act=thank shape=none text="mulțumesc." example="Mulțumesc." core.source="hand-core 1"
+@w.lang.ro.request.thank.topic w.lang.ro.request name=thank.topic act=thank shape=topic role=topic text="mulțumesc pentru {topic:def=yes}." example="Mulțumesc pentru desen." core.source="hand-core 1"
+@w.lang.ro.request.farewell.none w.lang.ro.request name=farewell.none act=farewell shape=none text="la revedere." example="La revedere." core.source="hand-core 1"
+
+@w.lang.ro.request.make_kind_arrangement w.lang.ro.request name=make.kind.arrangement act=make shape=kind.arrangement role=kind role=arrangement text="fă {art@kind} {kind} în formă de {arrangement}." example="Fă o diagramă în formă de casă." core.source="hand-core 1"
+@w.lang.ro.request.place_arrangement w.lang.ro.request name=place.arrangement act=place shape=thing.arrangement.layout role=thing role=arrangement text="aranjează {thing:num=pl,def=yes} în formă de {arrangement}." example="Aranjează cutiile în formă de stea." core.source="hand-core 1"
+@w.lang.ro.request.group_arrangement w.lang.ro.request name=group.arrangement act=group shape=thing.arrangement role=thing role=arrangement text="grupează {thing:num=pl,def=yes} în formă de {arrangement}." example="Grupează punctele în formă de inimă." core.source="hand-core 1"
+# the words a template says itself, agreeing like a role
+@w.lang.ro.fill.ask_count.many w.lang.ro.fill template=ask.count role=many lemma=mult core.source="hand-core 1"
+
+# the indefinite article: the lemma un of w.lang.ro (det.art), its form chosen by the gender and number of the noun
+# (o casă, un copac): the template says it, a caller gives no article (the library's Q79)
+@w.lang.ro.fill.make_kind.art w.lang.ro.fill template=make.kind role=art lemma=un core.source="hand-core 1"
+@w.lang.ro.fill.make_value.art w.lang.ro.fill template=make.value role=art lemma=un core.source="hand-core 1"
+@w.lang.ro.fill.make_kind_arrangement.art w.lang.ro.fill template=make.kind.arrangement role=art lemma=un core.source="hand-core 1"
+@w.lang.ro.fill.make_place.art w.lang.ro.fill template=make.place role=art lemma=un core.source="hand-core 1"
+@w.lang.ro.fill.make_name.art w.lang.ro.fill template=make.name role=art lemma=un core.source="hand-core 1"
+@w.lang.ro.fill.make_name_place.art w.lang.ro.fill template=make.name.place role=art lemma=un core.source="hand-core 1"
+@w.lang.ro.fill.make_topic_criterion.art w.lang.ro.fill template=make.topic.criterion role=art lemma=un core.source="hand-core 1"

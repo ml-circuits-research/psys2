@@ -1,0 +1,11 @@
+# k.people/shards/roles-social: 2 people one knows who are no relatives (friend, neighbour): what they wear, hold and use, where they work, what they do, the k.faces features that suit them; and their other names.
+# sources: hand-core 1 (hand-written in this repository: tools/people-core.mjs)
+# license: CC0-1.0
+# script: tools/people-core.mjs
+
+@k.people.role.friend k.people.role name=friend group=social is_a=person does=play does=talk drawing=person core.source="hand-core 1"
+@k.people.role.neighbour k.people.role name=neighbour group=social is_a=person does=visit does="say hello" drawing=person core.source="hand-core 1"
+
+# Words: plural forms and other names.
+@k.people.word.role.friend core.word text=friends text=pal text=pals text=buddy text=buddies text=mate text=mates means=friend of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.neighbour core.word text=neighbours text=neighbor text=neighbors means=neighbour of=k.people.role.name core.source="hand-core 1"

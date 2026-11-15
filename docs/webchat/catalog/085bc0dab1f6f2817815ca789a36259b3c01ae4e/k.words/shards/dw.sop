@@ -1,0 +1,16 @@
+# k.words/shards/dw: senses of the words from "dwarf" to "dwelling" (first letters "dw").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.dwarf.noun.1 k.words.sense word=dwarf pos=noun n=1 supersense=noun.person gloss="a person who is markedly small" synonym=midget synonym=nanus is_a="small person" core.source="wordnet 3.1"
+@k.words.dwarf.noun.2 k.words.sense word=dwarf pos=noun n=2 supersense=noun.person gloss="a legendary creature resembling a tiny old man; lives in the depths of the earth and guards buried treasure" synonym=gnome is_a=fairy core.source="wordnet 3.1"
+@k.words.dwarf.noun.3 k.words.sense word=dwarf pos=noun n=3 supersense=noun.Tops gloss="a plant or animal that is atypically small" is_a=organism core.source="wordnet 3.1"
+@k.words.dwarf.verb.1 k.words.sense word=dwarf pos=verb n=1 supersense=verb.stative gloss="make appear small by comparison" synonym=shadow synonym=overshadow is_a=dominate core.source="wordnet 3.1"
+@k.words.dwarf.verb.2 k.words.sense word=dwarf pos=verb n=2 supersense=verb.social gloss="check the growth of" is_a=stunt core.source="wordnet 3.1"
+@k.words.dwarf.forms core.word text=dwarves means=dwarf of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.dwell.verb.1 k.words.sense word=dwell pos=verb n=1 supersense=verb.cognition gloss="think moodily or anxiously about something" synonym=brood is_a=worry core.source="wordnet 3.1"
+@k.words.dwell.verb.2 k.words.sense word=dwell pos=verb n=2 supersense=verb.stative gloss="originate (in)" synonym=consist synonym=lie synonym="lie in" is_a=exist core.source="wordnet 3.1"
+@k.words.dwell.verb.3 k.words.sense word=dwell pos=verb n=3 supersense=verb.stative gloss="be an inhabitant of or reside in" synonym=populate synonym=live synonym=inhabit is_a=be core.source="wordnet 3.1"
+@k.words.dwell.forms core.word text=dwelt means=dwell of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.dwelling.noun.1 k.words.sense word=dwelling pos=noun n=1 supersense=noun.artifact gloss="housing that someone is living in" synonym=home synonym=domicile synonym=abode synonym=habitation synonym="dwelling house" is_a=housing core.source="wordnet 3.1"

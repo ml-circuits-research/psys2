@@ -1,0 +1,11 @@
+# k.words/shards/vu: senses of the words from "vulcan" to "vulture" (first letters "vu").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.vulcan.noun.1 k.words.sense word=Vulcan pos=noun n=1 supersense=noun.person gloss="(Roman mythology) god of fire and metal working; counterpart of Greek Hephaestus" instance_of="Roman deity" core.source="wordnet 3.1"
+@k.words.vulcan.spelling.Vulcan core.word text=vulcan means=Vulcan of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.vulnerability.noun.1 k.words.sense word=vulnerability pos=noun n=1 supersense=noun.state gloss="the state of being vulnerable or exposed" synonym=exposure is_a=danger core.source="wordnet 3.1"
+@k.words.vulnerability.noun.2 k.words.sense word=vulnerability pos=noun n=2 supersense=noun.attribute gloss="susceptibility to injury or attack" is_a=weakness opposite=invulnerability core.source="wordnet 3.1"
+@k.words.vulture.noun.1 k.words.sense word=vulture pos=noun n=1 supersense=noun.animal gloss="any of various large diurnal birds of prey having naked heads and weak claws and feeding chiefly on carrion" is_a="bird of prey" kind_of="bird of prey" kind_of=bird kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.vulture.noun.2 k.words.sense word=vulture pos=noun n=2 supersense=noun.person gloss="someone who attacks in search of booty" synonym=marauder synonym=predator synonym=piranha is_a=attacker kind_of=attacker kind_of=wrongdoer kind_of="bad person" kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

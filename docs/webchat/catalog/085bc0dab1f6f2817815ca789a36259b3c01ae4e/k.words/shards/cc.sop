@@ -1,0 +1,6 @@
+# k.words/shards/cc: senses of the words from "cc" to "cc" (first letters "cc").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.cc.noun.1 k.words.sense word=cc pos=noun n=1 supersense=noun.quantity gloss="a metric unit of volume equal to one thousandth of a liter" synonym=milliliter synonym=millilitre synonym=mil synonym=ml synonym="cubic centimeter" synonym="cubic centimetre" is_a="metric capacity unit" part_of=centiliter core.source="wordnet 3.1"

@@ -1,0 +1,9 @@
+# k.words/shards/h: senses of the words from "h" to "h" (first letters "h").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.h.noun.1 k.words.sense word=H pos=noun n=1 supersense=noun.substance gloss="a nonmetallic univalent element that is normally a colorless and odorless highly flammable diatomic gas; the simplest and lightest and most abundant element in the universe" synonym=hydrogen synonym="atomic number 1" is_a="chemical element" is_a=gas kind_of="chemical element" kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.h.noun.2 k.words.sense word=H pos=noun n=2 supersense=noun.quantity gloss="a unit of inductance in which an induced electromotive force of one volt is produced when the current is varied at the rate of one ampere per second" synonym=henry is_a="inductance unit" kind_of="inductance unit" kind_of="electromagnetic unit" kind_of="unit of measurement" kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.h.noun.3 k.words.sense word=h pos=noun n=3 supersense=noun.quantity gloss="the constant of proportionality relating the energy of a photon to its frequency; approximately 6.626 x 10^-34 joule-second" synonym="Planck's constant" is_a="factor of proportionality" kind_of="factor of proportionality" kind_of=factor kind_of=number kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.h.spelling.H core.word text=h means=H of=k.words.sense.word core.source="wordnet 3.1"

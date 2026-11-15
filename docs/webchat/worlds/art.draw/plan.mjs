@@ -5,7 +5,7 @@
 // No kind, scene, role, anchor or slot is named in this file.
 import * as D from './engine.mjs?v=0a64a903b1';
 import { kindKey, kindName, W, H } from './scene.mjs?v=e70f16ba54';
-import { planHostOf } from '../../lib/plan/host.mjs?v=aa07762761';
+import { planHostOf } from '../../lib/plan/host.mjs?v=ac5d10883f';
 import { knowsKind } from '../../lib/knowledge/open-words.mjs?v=07763ed0e6';
 import { COUNTS } from '../space/space.mjs?v=c7e07062fb';
 

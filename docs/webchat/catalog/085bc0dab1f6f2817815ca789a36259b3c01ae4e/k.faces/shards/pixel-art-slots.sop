@@ -1,0 +1,13 @@
+# k.faces/shards/pixel-art-slots: the slots of the DiceBear style `pixel-art`: the box that the variants of each slot fill in the 0 to 100 frame of the face, and the draw order.
+# sources: dicebear-pixel-art 67f54a0 (DiceBear style "pixel-art", CC0 1.0: "Pixel Art" (https://www.figma.com/community/file/1198754108850888330) by "DiceBear", licensed under "CC0 1.0" (https://creativecommons.org/publicdomain/zero/1.0/))
+# license: CC0-1.0
+# script: tools/import/dicebear.mjs
+
+@k.faces.pixel-art.slot.head k.faces.slot style=pixel-art name=head x=12 y=12 w=76 h=88 z=0 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.slot.accessories k.faces.slot style=pixel-art name=accessories x=6 y=43 w=88 h=14 z=1 optional=true core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.slot.shoulders k.faces.slot style=pixel-art name=shoulders x=12 y=75 w=76 h=25 z=2 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.slot.eyes k.faces.slot style=pixel-art name=eyes x=25 y=31 w=50 h=19 z=3 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.slot.glasses k.faces.slot style=pixel-art name=glasses x=12 y=25 w=76 h=32 z=4 optional=true core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.slot.mouth k.faces.slot style=pixel-art name=mouth x=37 y=56 w=26 h=19 z=5 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.slot.hair_front k.faces.slot style=pixel-art name=hair_front x=0 y=0 w=100 h=100 z=6 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.slot.hat k.faces.slot style=pixel-art name=hat x=6 y=0 w=88 h=32 z=7 optional=true core.source="dicebear-pixel-art 67f54a0"

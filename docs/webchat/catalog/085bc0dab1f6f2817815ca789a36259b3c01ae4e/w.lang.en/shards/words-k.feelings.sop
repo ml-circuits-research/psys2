@@ -1,0 +1,20 @@
+# w.lang.en/shards/words-k.feelings: the English words of k.feelings (its types, keys and values), owned by the language world
+# (Q78, reviewer 16:10; KR3): they were the core.word facts of its schema; tools/build-catalog.mjs reads them as its own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the type and keys of this world.
+@w.lang.en.word.k.feelings.feeling core.word text=feeling text=feelings text=feel text=feels text=emotion text=emotions text=mood means=k.feelings.feeling core.source="hand-core 1"
+@w.lang.en.word.k.feelings.caused_by core.word text=cause text=causes text=why text=because means=k.feelings.feeling.caused_by core.source="hand-core 1"
+@w.lang.en.word.k.feelings.opposite core.word text=opposite means=k.feelings.feeling.opposite core.source="hand-core 1"
+@w.lang.en.word.k.feelings.looks_like core.word text="looks like" text="same face" text=alike means=k.feelings.feeling.looks_like core.source="hand-core 1"
+@w.lang.en.word.k.feelings.expression core.word text=expression text=face text=looks means=k.feelings.feeling.expression core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@w.lang.en.word.k.feelings.key.feeling.tone core.word text=tone text=good text=bad means=k.feelings.feeling.tone core.source="hand-core 1"
+@w.lang.en.word.k.feelings.key.feeling.mouth core.word text=mouth means=k.feelings.feeling.mouth core.source="hand-core 1"
+@w.lang.en.word.k.feelings.key.feeling.eyebrows core.word text=eyebrows means=k.feelings.feeling.eyebrows core.source="hand-core 1"
+@w.lang.en.word.k.feelings.key.feeling.eyes core.word text=eyes means=k.feelings.feeling.eyes core.source="hand-core 1"
+@w.lang.en.word.k.feelings.key.feeling.cheeks core.word text=cheeks means=k.feelings.feeling.cheeks core.source="hand-core 1"
+@w.lang.en.word.k.feelings.key.feeling.caused_by core.word text="caused by" means=k.feelings.feeling.caused_by core.source="hand-core 1"

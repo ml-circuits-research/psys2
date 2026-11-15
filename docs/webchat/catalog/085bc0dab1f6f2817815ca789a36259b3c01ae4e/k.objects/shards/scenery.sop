@@ -1,0 +1,93 @@
+# k.objects/shards/scenery: lake, mountain lake, river, sea, sandcastle: what a scene is made of. Parts with a primitive shape, a box in the
+# 0 to 100 frame of the object (x right, y down), a draw order z and typical colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# lake
+@k.objects.lake k.objects.object name=lake core.source="hand-core 1"
+@k.objects.lake.water k.objects.part of=lake name=water shape=oval x=3 y=22 w=94 h=56 z=0 colour=blue core.source="hand-core 1"
+@k.objects.lake.ripple_1 k.objects.part of=lake name=ripple_1 kind=ripple inside=water shape=line x=22 y=40 w=20 h=0 z=1 colour=white core.source="hand-core 1"
+@k.objects.lake.ripple_2 k.objects.part of=lake name=ripple_2 kind=ripple inside=water shape=line x=52 y=50 w=24 h=0 z=1 colour=white core.source="hand-core 1"
+@k.objects.lake.ripple_3 k.objects.part of=lake name=ripple_3 kind=ripple inside=water shape=line x=30 y=62 w=18 h=0 z=1 colour=white core.source="hand-core 1"
+@k.objects.lake.ripple_1.p1 k.objects.point part=$k.objects.lake.ripple_1 n=1 x=22 y=40 core.source="hand-core 1"
+@k.objects.lake.ripple_1.p2 k.objects.point part=$k.objects.lake.ripple_1 n=2 x=42 y=40 core.source="hand-core 1"
+@k.objects.lake.ripple_2.p1 k.objects.point part=$k.objects.lake.ripple_2 n=1 x=52 y=50 core.source="hand-core 1"
+@k.objects.lake.ripple_2.p2 k.objects.point part=$k.objects.lake.ripple_2 n=2 x=76 y=50 core.source="hand-core 1"
+@k.objects.lake.ripple_3.p1 k.objects.point part=$k.objects.lake.ripple_3 n=1 x=30 y=62 core.source="hand-core 1"
+@k.objects.lake.ripple_3.p2 k.objects.point part=$k.objects.lake.ripple_3 n=2 x=48 y=62 core.source="hand-core 1"
+
+# mountain lake
+@k.objects.mountain_lake k.objects.object name="mountain lake" core.source="hand-core 1"
+@k.objects.mountain_lake.far_mountain k.objects.part of="mountain lake" name=far_mountain shape=triangle x=36 y=10 w=50 h=36 z=0 colour=grey colour=blue core.source="hand-core 1"
+@k.objects.mountain_lake.near_mountain k.objects.part of="mountain lake" name=near_mountain shape=triangle x=6 y=18 w=44 h=28 z=0 colour=grey colour=green core.source="hand-core 1"
+@k.objects.mountain_lake.shore k.objects.part of="mountain lake" name=shore shape=rectangle x=2 y=44 w=96 h=52 z=1 colour=green core.source="hand-core 1"
+@k.objects.mountain_lake.water k.objects.part of="mountain lake" name=water shape=oval x=10 y=52 w=80 h=36 z=2 colour=blue inside=shore core.source="hand-core 1"
+@k.objects.mountain_lake.ripple_1 k.objects.part of="mountain lake" name=ripple_1 kind=ripple inside=water shape=line x=26 y=64 w=18 h=0 z=3 colour=white core.source="hand-core 1"
+@k.objects.mountain_lake.ripple_2 k.objects.part of="mountain lake" name=ripple_2 kind=ripple inside=water shape=line x=50 y=76 w=22 h=0 z=3 colour=white core.source="hand-core 1"
+@k.objects.mountain_lake.trunk k.objects.part of="mountain lake" name=trunk shape=rectangle x=84 y=34 w=4 h=16 z=3 colour=brown core.source="hand-core 1"
+@k.objects.mountain_lake.crown k.objects.part of="mountain lake" name=crown shape=circle x=76 y=18 w=20 h=20 z=4 colour=green above=trunk core.source="hand-core 1"
+@k.objects.mountain_lake.ripple_1.p1 k.objects.point part=$k.objects.mountain_lake.ripple_1 n=1 x=26 y=64 core.source="hand-core 1"
+@k.objects.mountain_lake.ripple_1.p2 k.objects.point part=$k.objects.mountain_lake.ripple_1 n=2 x=44 y=64 core.source="hand-core 1"
+@k.objects.mountain_lake.ripple_2.p1 k.objects.point part=$k.objects.mountain_lake.ripple_2 n=1 x=50 y=76 core.source="hand-core 1"
+@k.objects.mountain_lake.ripple_2.p2 k.objects.point part=$k.objects.mountain_lake.ripple_2 n=2 x=72 y=76 core.source="hand-core 1"
+
+# river
+@k.objects.river k.objects.object name=river core.source="hand-core 1"
+@k.objects.river.land k.objects.part of=river name=land shape=rectangle x=2 y=10 w=96 h=84 z=0 colour=green core.source="hand-core 1"
+@k.objects.river.water k.objects.part of=river name=water shape=polygon x=22 y=10 w=50 h=84 z=1 colour=blue core.source="hand-core 1"
+@k.objects.river.ripple_1 k.objects.part of=river name=ripple_1 kind=ripple shape=line x=46 y=40 w=12 h=4 z=2 colour=white core.source="hand-core 1"
+@k.objects.river.ripple_2 k.objects.part of=river name=ripple_2 kind=ripple shape=line x=40 y=80 w=16 h=2 z=2 colour=white core.source="hand-core 1"
+@k.objects.river.stone_1 k.objects.part of=river name=stone_1 kind=stone left_of=water shape=oval x=12 y=62 w=12 h=7 z=2 colour=grey core.source="hand-core 1"
+@k.objects.river.stone_2 k.objects.part of=river name=stone_2 kind=stone right_of=water shape=oval x=78 y=82 w=10 h=6 z=2 colour=grey core.source="hand-core 1"
+@k.objects.river.trunk k.objects.part of=river name=trunk shape=rectangle x=84 y=36 w=4 h=16 z=2 colour=brown core.source="hand-core 1"
+@k.objects.river.crown k.objects.part of=river name=crown shape=circle x=76 y=18 w=20 h=20 z=3 colour=green above=trunk core.source="hand-core 1"
+@k.objects.river.bush k.objects.part of=river name=bush shape=oval x=6 y=24 w=22 h=14 z=2 colour=green left_of=water core.source="hand-core 1"
+@k.objects.river.water.p1 k.objects.point part=$k.objects.river.water n=1 x=44 y=10 core.source="hand-core 1"
+@k.objects.river.water.p2 k.objects.point part=$k.objects.river.water n=2 x=38 y=30 core.source="hand-core 1"
+@k.objects.river.water.p3 k.objects.point part=$k.objects.river.water n=3 x=52 y=50 core.source="hand-core 1"
+@k.objects.river.water.p4 k.objects.point part=$k.objects.river.water n=4 x=30 y=72 core.source="hand-core 1"
+@k.objects.river.water.p5 k.objects.point part=$k.objects.river.water n=5 x=22 y=94 core.source="hand-core 1"
+@k.objects.river.water.p6 k.objects.point part=$k.objects.river.water n=6 x=62 y=94 core.source="hand-core 1"
+@k.objects.river.water.p7 k.objects.point part=$k.objects.river.water n=7 x=70 y=72 core.source="hand-core 1"
+@k.objects.river.water.p8 k.objects.point part=$k.objects.river.water n=8 x=72 y=50 core.source="hand-core 1"
+@k.objects.river.water.p9 k.objects.point part=$k.objects.river.water n=9 x=56 y=30 core.source="hand-core 1"
+@k.objects.river.water.p10 k.objects.point part=$k.objects.river.water n=10 x=54 y=10 core.source="hand-core 1"
+@k.objects.river.ripple_1.p1 k.objects.point part=$k.objects.river.ripple_1 n=1 x=46 y=40 core.source="hand-core 1"
+@k.objects.river.ripple_1.p2 k.objects.point part=$k.objects.river.ripple_1 n=2 x=58 y=44 core.source="hand-core 1"
+@k.objects.river.ripple_2.p1 k.objects.point part=$k.objects.river.ripple_2 n=1 x=40 y=82 core.source="hand-core 1"
+@k.objects.river.ripple_2.p2 k.objects.point part=$k.objects.river.ripple_2 n=2 x=56 y=80 core.source="hand-core 1"
+
+# sea
+@k.objects.sea k.objects.object name=sea core.source="hand-core 1"
+@k.objects.sea.sun k.objects.part of=sea name=sun shape=circle x=68 y=8 w=18 h=18 z=0 colour=yellow core.source="hand-core 1"
+@k.objects.sea.water k.objects.part of=sea name=water shape=rectangle x=2 y=36 w=96 h=60 z=1 colour=blue core.source="hand-core 1"
+@k.objects.sea.wave_1 k.objects.part of=sea name=wave_1 kind=wave opens=down inside=water shape=arc x=8 y=46 w=18 h=5 z=2 colour=white core.source="hand-core 1"
+@k.objects.sea.wave_2 k.objects.part of=sea name=wave_2 kind=wave opens=down inside=water shape=arc x=40 y=44 w=18 h=5 z=2 colour=white core.source="hand-core 1"
+@k.objects.sea.wave_3 k.objects.part of=sea name=wave_3 kind=wave opens=down inside=water shape=arc x=72 y=48 w=18 h=5 z=2 colour=white core.source="hand-core 1"
+@k.objects.sea.wave_4 k.objects.part of=sea name=wave_4 kind=wave opens=down inside=water shape=arc x=20 y=62 w=22 h=6 z=2 colour=white core.source="hand-core 1"
+@k.objects.sea.wave_5 k.objects.part of=sea name=wave_5 kind=wave opens=down inside=water shape=arc x=56 y=64 w=22 h=6 z=2 colour=white core.source="hand-core 1"
+@k.objects.sea.wave_6 k.objects.part of=sea name=wave_6 kind=wave opens=down inside=water shape=arc x=10 y=80 w=26 h=7 z=2 colour=white core.source="hand-core 1"
+@k.objects.sea.wave_7 k.objects.part of=sea name=wave_7 kind=wave opens=down inside=water shape=arc x=50 y=82 w=26 h=7 z=2 colour=white core.source="hand-core 1"
+
+# sandcastle
+@k.objects.sandcastle k.objects.object name=sandcastle core.source="hand-core 1"
+@k.objects.sandcastle.sand k.objects.part of=sandcastle name=sand shape=oval x=4 y=78 w=92 h=16 z=0 colour=yellow core.source="hand-core 1"
+@k.objects.sandcastle.wall k.objects.part of=sandcastle name=wall shape=rectangle x=24 y=56 w=52 h=30 z=1 colour=yellow colour=orange core.source="hand-core 1"
+@k.objects.sandcastle.left_tower k.objects.part of=sandcastle name=left_tower kind=tower left_of=keep shape=rectangle x=12 y=42 w=20 h=44 z=2 colour=yellow colour=orange core.source="hand-core 1"
+@k.objects.sandcastle.right_tower k.objects.part of=sandcastle name=right_tower kind=tower right_of=keep shape=rectangle x=68 y=42 w=20 h=44 z=2 colour=yellow colour=orange core.source="hand-core 1"
+@k.objects.sandcastle.keep k.objects.part of=sandcastle name=keep shape=rectangle x=40 y=30 w=20 h=30 z=2 colour=yellow colour=orange core.source="hand-core 1"
+@k.objects.sandcastle.left_roof k.objects.part of=sandcastle name=left_roof kind=roof pointing=up above=left_tower shape=triangle x=10 y=26 w=24 h=16 z=3 colour=orange core.source="hand-core 1"
+@k.objects.sandcastle.right_roof k.objects.part of=sandcastle name=right_roof kind=roof pointing=up above=right_tower shape=triangle x=66 y=26 w=24 h=16 z=3 colour=orange core.source="hand-core 1"
+@k.objects.sandcastle.door k.objects.part of=sandcastle name=door shape=oval x=44 y=66 w=12 h=20 z=3 colour=brown inside=wall core.source="hand-core 1"
+@k.objects.sandcastle.flagpole k.objects.part of=sandcastle name=flagpole shape=line x=50 y=10 w=0 h=20 z=3 colour=brown above=keep core.source="hand-core 1"
+@k.objects.sandcastle.flag k.objects.part of=sandcastle name=flag shape=triangle x=50 y=10 w=14 h=9 z=4 colour=red pointing=right core.source="hand-core 1"
+@k.objects.sandcastle.flagpole.p1 k.objects.point part=$k.objects.sandcastle.flagpole n=1 x=50 y=30 core.source="hand-core 1"
+@k.objects.sandcastle.flagpole.p2 k.objects.point part=$k.objects.sandcastle.flagpole n=2 x=50 y=10 core.source="hand-core 1"
+
+# Words: the plural forms and other names of the objects of this shard.
+@k.objects.word.lake core.word text=lake text=lakes means=lake of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.mountain_lake core.word text="mountain lake" text="mountain lakes" text=tarn means="mountain lake" of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.river core.word text=river text=rivers text=stream text=streams text=brook means=river of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.sea core.word text=sea text=seas text=ocean text=oceans means=sea of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.sandcastle core.word text=sandcastle text=sandcastles text="sand castle" text="sand castles" means=sandcastle of=k.objects.object.name core.source="hand-core 1"

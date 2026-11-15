@@ -1,0 +1,29 @@
+# k.actions/shards/verbs-take_apart: 23 verbs and phrasal verbs that mean the act "take apart" (take apart, break up, break apart, dismantle, disassemble, separate, split, split up ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 20 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 3 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.take_apart.take_apart k.actions.verb text="take apart" act="take apart" sense=1 gloss="take apart into its constituent pieces" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.break_up k.actions.verb text="break up" act="take apart" sense=8 gloss="take apart into its constituent pieces" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.break_apart k.actions.verb text="break apart" act="take apart" sense=1 gloss="take apart into its constituent pieces" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.dismantle k.actions.verb text=dismantle act="take apart" sense=2 gloss="take apart into its constituent pieces" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.disassemble k.actions.verb text=disassemble act="take apart" sense=1 gloss="take apart into its constituent pieces" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.separate k.actions.verb text=separate act="take apart" sense=2 sense=4 gloss="force, take, or pull apart" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.split k.actions.verb text=split act="take apart" sense=1 gloss="separate into parts or portions" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.split_up k.actions.verb text="split up" act="take apart" sense=2 gloss="separate into parts or portions" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.divide k.actions.verb text=divide act="take apart" sense=1 gloss="separate into parts or portions" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.cut_up k.actions.verb text="cut up" act="take apart" sense=1 gloss="cut to pieces" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.slice k.actions.verb text=slice act="take apart" sense=3 gloss="cut into slices" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.cut k.actions.verb text=cut act="take apart" sense=1 gloss="separate with or as if with an instrument" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.pull_apart k.actions.verb text="pull apart" act="take apart" object=thing separable=true core.source="hand-core 1"
+@k.actions.verb.take_apart.ungroup k.actions.verb text=ungroup act="take apart" object=thing core.source="hand-core 1"
+@k.actions.verb.take_apart.detach k.actions.verb text=detach act="take apart" sense=1 gloss="cause to become detached or separated; take off" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.disconnect k.actions.verb text=disconnect act="take apart" sense=2 gloss="make disconnected, disjoin or unfasten" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.uncouple k.actions.verb text=uncouple act="take apart" sense=1 gloss="disconnect or separate" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.untie k.actions.verb text=untie act="take apart" sense=1 gloss="undo the ties of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.unfasten k.actions.verb text=unfasten act="take apart" sense=1 gloss="cause to become undone" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.unhook k.actions.verb text=unhook act="take apart" sense=1 gloss="take off a hook" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.sever k.actions.verb text=sever act="take apart" sense=2 gloss="cut off from a whole" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.take_apart.unlink k.actions.verb text=unlink act="take apart" object=thing core.source="hand-core 1"
+@k.actions.verb.take_apart.cut_off k.actions.verb text="cut off" act="take apart" sense=3 gloss="remove by or as if by cutting" object=thing separable=true after_particle=source named=model core.source="wordnet 3.1"

@@ -1,0 +1,8 @@
+# k.words/shards/tv: senses of the words from "tv" to "tv" (first letters "tv").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.tv.noun.1 k.words.sense word=TV pos=noun n=1 supersense=noun.communication gloss="broadcasting visual images of stationary or moving objects" synonym=television synonym=telecasting synonym=video is_a=broadcasting kind_of=broadcasting kind_of=telecommunication kind_of=medium kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.tv.noun.2 k.words.sense word=tv pos=noun n=2 supersense=noun.artifact gloss="an electronic device that receives television signals and displays them on a screen" synonym="television receiver" synonym=television synonym="television set" synonym="tv set" synonym="idiot box" synonym="boob tube" synonym=telly synonym="goggle box" is_a=receiver part_of=television kind_of=receiver kind_of=set kind_of="electronic equipment" kind_of=equipment kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.tv.spelling.TV core.word text=tv means=TV of=k.words.sense.word core.source="wordnet 3.1"

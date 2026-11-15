@@ -1,0 +1,11 @@
+# k.words/shards/ez: senses of the words from "ezekiel" to "ezra" (first letters "ez").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ezekiel.noun.1 k.words.sense word=Ezekiel pos=noun n=1 supersense=noun.person gloss="a Hebrew prophet of the 6th century BC who was exiled to Babylon in 587 BC" synonym=Ezechiel instance_of=prophet core.source="wordnet 3.1"
+@k.words.ezekiel.noun.2 k.words.sense word=Ezekiel pos=noun n=2 supersense=noun.communication gloss="an Old Testament book containing Ezekiel's prophecies of the downfall of Jerusalem and Judah and their subsequent restoration" synonym=Ezechiel synonym="Book of Ezekiel" instance_of=book part_of=Prophets part_of="Old Testament" core.source="wordnet 3.1"
+@k.words.ezekiel.spelling.Ezekiel core.word text=ezekiel means=Ezekiel of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.ezra.noun.1 k.words.sense word=Ezra pos=noun n=1 supersense=noun.person gloss="a Jewish priest and scribe sent by the Persian king to restore Jewish law and worship in Jerusalem" instance_of=priest instance_of=copyist core.source="wordnet 3.1"
+@k.words.ezra.noun.2 k.words.sense word=Ezra pos=noun n=2 supersense=noun.communication gloss="an Old Testament book telling of a rabbi's efforts in the 5th century BC to reconstitute Jewish law and worship in Jerusalem after the Babylonian Captivity" synonym="Book of Ezra" instance_of=book part_of=Hagiographa part_of="Old Testament" core.source="wordnet 3.1"
+@k.words.ezra.spelling.Ezra core.word text=ezra means=Ezra of=k.words.sense.word core.source="wordnet 3.1"

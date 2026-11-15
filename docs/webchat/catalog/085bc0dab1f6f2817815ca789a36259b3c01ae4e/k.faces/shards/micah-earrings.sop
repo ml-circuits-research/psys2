@@ -1,0 +1,25 @@
+# k.faces/shards/micah-earrings: the variants of the slot `earrings` in the DiceBear style `micah`: features, and parts converted from the drawings (a primitive shape, a box in the frame of the face, a draw order, a colour name and the exact colour; points for polygons and lines).
+# sources: dicebear-micah 67f54a0 (DiceBear style "micah", CC BY 4.0: Remix of "Avatar Illustration System" (https://www.figma.com/community/file/829741575478342595) by "Micah Lanier", licensed under "CC BY 4.0" (https://creativecommons.org/licenses/by/4.0/))
+# license: CC-BY-4.0
+# script: tools/import/dicebear.mjs
+
+# earrings: micah hoop
+@k.faces.micah.earrings.hoop k.faces.variant slot=earrings name="micah hoop" style=micah kind=hoop named=model core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1 k.faces.part slot=earrings of="micah hoop" name=part1 shape=line x=24.2 y=52.5 w=13.1 h=13.1 z=1 colour=black rgb="#000000" core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1.1 k.faces.point part=$k.faces.micah.earrings.hoop.p1 n=1 x=30.8 y=52.5 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1.2 k.faces.point part=$k.faces.micah.earrings.hoop.p1 n=2 x=32.6 y=52.7 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1.3 k.faces.point part=$k.faces.micah.earrings.hoop.p1 n=3 x=35.5 y=54.5 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1.4 k.faces.point part=$k.faces.micah.earrings.hoop.p1 n=4 x=37.3 y=57.4 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1.5 k.faces.point part=$k.faces.micah.earrings.hoop.p1 n=5 x=37.3 y=60.9 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1.6 k.faces.point part=$k.faces.micah.earrings.hoop.p1 n=6 x=36.6 y=62.5 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1.7 k.faces.point part=$k.faces.micah.earrings.hoop.p1 n=7 x=35.5 y=63.9 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1.8 k.faces.point part=$k.faces.micah.earrings.hoop.p1 n=8 x=32.6 y=65.6 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1.9 k.faces.point part=$k.faces.micah.earrings.hoop.p1 n=9 x=29.1 y=65.6 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1.10 k.faces.point part=$k.faces.micah.earrings.hoop.p1 n=10 x=26.1 y=63.9 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1.11 k.faces.point part=$k.faces.micah.earrings.hoop.p1 n=11 x=25.1 y=62.5 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1.12 k.faces.point part=$k.faces.micah.earrings.hoop.p1 n=12 x=24.2 y=58.6 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.hoop.p1.13 k.faces.point part=$k.faces.micah.earrings.hoop.p1 n=13 x=26.3 y=54.2 core.source="dicebear-micah 67f54a0"
+
+# earrings: micah stud
+@k.faces.micah.earrings.stud k.faces.variant slot=earrings name="micah stud" style=micah size=small kind=stud named=model core.source="dicebear-micah 67f54a0"
+@k.faces.micah.earrings.stud.p1 k.faces.part slot=earrings of="micah stud" name=part1 shape=circle x=30 y=51.9 w=2.2 h=2.2 z=1 colour=black rgb="#000000" core.source="dicebear-micah 67f54a0"

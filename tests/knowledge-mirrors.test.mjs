@@ -8,8 +8,11 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createKnowledgeSource } from '../src/loaders/knowledge-source.mjs';
-import { KNOWLEDGE_URLS, CATALOG_PIN } from '../src/knowledge/catalog-pin.mjs';
+import { createKnowledgeSource, resetMirrorHealth, mirrorStates } from '../src/loaders/knowledge-source.mjs';
+import { KNOWLEDGE_URLS, CATALOG_PIN, knowledgeUrls } from '../src/knowledge/catalog-pin.mjs';
+import { copySiteCatalog, siteCatalogFiles } from '../scripts/lib/site-catalog.mjs';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { createFacts } from '../src/knowledge/facts.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
@@ -17,6 +20,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 const FIX = join(dirname(fileURLToPath(import.meta.url)), 'fixtures/catalog');
 const realFetch = globalThis.fetch;
 test.after(() => { globalThis.fetch = realFetch; });
+test.beforeEach(() => resetMirrorHealth());   // the health of a mirror lives for the JS context: each test starts with fresh mirrors
 const A = 'https://a.invalid/worlds', B = 'https://b.invalid/worlds';
 const res = (status, body = '') => ({ ok: status >= 200 && status < 300, status, text: async () => body });
 // a thing the board has no drawing of its own for (not in things.catalog.mjs): its drawing is only in the catalog
@@ -32,24 +36,113 @@ const fakeFetch = (rule, log = []) => async (url) => {
   log.push(u); const n = log.filter((x) => x === u).length;
   const st = rule(base, p, n);
   if (st === 'throw') throw new TypeError('fetch failed');
+  if (st === 'size') return res(403, 'Package size exceeded the configured limit of 50 MB. Try https://github.com/... instead.');   // jsDelivr's refusal of a repository past 50 MB
   return st ? res(st) : fixture(p);
 };
 const noSleep = async () => {};
 
-test('the pin has two immutable mirrors of one commit: jsDelivr, then raw.githubusercontent.com', () => {
+test('the pin has two immutable mirrors of one commit: raw.githubusercontent.com, then jsDelivr', () => {
   assert.equal(KNOWLEDGE_URLS.length, 2);
   for (const u of KNOWLEDGE_URLS) assert.ok(u.includes(CATALOG_PIN.commit) && u.endsWith(CATALOG_PIN.path), u);
-  assert.match(KNOWLEDGE_URLS[0], /^https:\/\/cdn\.jsdelivr\.net\/gh\//);
-  assert.match(KNOWLEDGE_URLS[1], /^https:\/\/raw\.githubusercontent\.com\//);
+  assert.match(KNOWLEDGE_URLS[0], /^https:\/\/raw\.githubusercontent\.com\//, 'first: jsDelivr refuses a repository past 50 MB');
+  assert.match(KNOWLEDGE_URLS[1], /^https:\/\/cdn\.jsdelivr\.net\/gh\//);
 });
 
-test('a 403 from the first mirror is served by the second, with the same text', async () => {
+// reviewer 2026-11-15 09:10 item 2 (questions.md Q33): the page reads the catalog from its own origin first (a copy of the pinned folder made by build-webchat), the CDNs are the fallback
+test('on the page the site\'s own copy of the pin comes first, then raw.githubusercontent.com, then jsDelivr', () => {
+  const urls = knowledgeUrls('https://ml-circuits-research.github.io/psys2/webchat/lib/knowledge/catalog-pin.mjs?v=0123456789');
+  assert.deepEqual(urls, [`https://ml-circuits-research.github.io/psys2/webchat/catalog/${CATALOG_PIN.commit}`, ...KNOWLEDGE_URLS]);
+});
+
+test('the site copy holds exactly the files the app can load, byte for byte, and only the current pin', async () => {
+  const out = mkdtempSync(join(tmpdir(), 'site-catalog-'));
+  try {
+    const files = await siteCatalogFiles(FIX);
+    assert.ok(files.includes('index.json') && files.includes('vocab.json') && files.some((f) => f.startsWith('k.objects/shards/')));
+    const r = await copySiteCatalog({ outDir: out, dir: FIX, commit: 'old' });
+    assert.equal(r.written, files.length);
+    const again = await copySiteCatalog({ outDir: out, dir: FIX, commit: 'old' });
+    assert.equal(again.written, 0, 'idempotent');
+    const next = await copySiteCatalog({ outDir: out, dir: FIX, commit: 'new' });
+    assert.deepEqual(next.removed, ['old'], 'one pin on the site');
+    for (const f of files) assert.equal(readFileSync(join(out, 'catalog/new', f), 'utf8'), readFileSync(join(FIX, f), 'utf8'), f);
+  } finally { rmSync(out, { recursive: true, force: true }); }
+});
+
+test('a site built without its copy (404 for index.json) is a dead mirror: one request, then the CDNs, the same texts', async () => {
+  const log = [];
+  globalThis.fetch = fakeFetch((base) => (base === A ? 404 : null), log);
+  const src = createKnowledgeSource([A, B], { sleep: noSleep });
+  assert.equal(await src.text('index.json'), readFileSync(join(FIX, 'index.json'), 'utf8'));
+  assert.equal(await src.text('k.objects/shards/sky.sop'), readFileSync(join(FIX, 'k.objects/shards/sky.sop'), 'utf8'));
+  assert.deepEqual(log, [`${A}/index.json`, `${B}/index.json`, `${B}/k.objects/shards/sky.sop`]);
+  assert.equal(mirrorStates()[A].state, 'dead');
+  globalThis.fetch = fakeFetch(() => 404);   // gone everywhere: absent, not an error (the last resort asks the dead mirror once)
+  resetMirrorHealth();
+  assert.equal(await createKnowledgeSource([A, B], { sleep: noSleep }).text('index.json'), null);
+});
+
+test('a 403 from the first mirror is served by the second, with the same text, without asking the first again', async () => {
   const log = [];
   globalThis.fetch = fakeFetch((base, p) => (base === A && p.startsWith('k.objects/') ? 403 : null), log);
   const src = createKnowledgeSource([A, B], { sleep: noSleep });
   const want = readFileSync(join(FIX, 'k.objects/shards/sky.sop'), 'utf8');
   assert.equal(await src.text('k.objects/shards/sky.sop'), want);
-  assert.deepEqual(log, [`${A}/k.objects/shards/sky.sop`, `${A}/k.objects/shards/sky.sop`, `${B}/k.objects/shards/sky.sop`], 'two tries of the first mirror, then the second');
+  assert.deepEqual(log, [`${A}/k.objects/shards/sky.sop`, `${B}/k.objects/shards/sky.sop`], 'one ask of the first mirror, then the second');
+});
+
+// live 2026-11-15: jsDelivr answered 403 "Package size exceeded the configured limit of 50 MB" for every shard of the new pin; each shard was asked twice there (36 console errors)
+test('a 403 with the package-size message kills the mirror for the session: every later file goes straight to the next mirror', async () => {
+  const log = [];
+  globalThis.fetch = fakeFetch((base) => (base === A ? 'size' : null), log);
+  const src = createKnowledgeSource([A, B], { sleep: noSleep });
+  const files = ['k.objects/shards/sky.sop', 'k.objects/shards/nature.sop', 'index.json'];
+  for (const f of files) assert.equal(await src.text(f), readFileSync(join(FIX, f), 'utf8'), `${f}: the text of a good mirror`);
+  assert.equal(log.filter((u) => u.startsWith(A)).length, 1, 'the dead mirror was asked once in all');
+  assert.equal(mirrorStates()[A].state, 'dead');
+  assert.match(mirrorStates()[A].why, /package size/);
+  const again = createKnowledgeSource([A, B], { sleep: noSleep });   // another source of the same page (the drawing tab, the avatar): the mirror is dead for it too
+  await again.text('k.objects/shards/sky.sop');
+  assert.equal(log.filter((u) => u.startsWith(A)).length, 1);
+});
+
+test('any 403 on the first file of a mirror kills it; a 403 after it served files only skips it for that file', async () => {
+  const log = [];
+  globalThis.fetch = fakeFetch((base) => (base === A ? 403 : null), log);
+  const src = createKnowledgeSource([A, B], { sleep: noSleep });
+  await src.text('k.objects/shards/sky.sop');
+  await src.text('k.objects/shards/nature.sop');
+  assert.deepEqual(log, [`${A}/k.objects/shards/sky.sop`, `${B}/k.objects/shards/sky.sop`, `${B}/k.objects/shards/nature.sop`]);
+  resetMirrorHealth();
+  const log2 = [];
+  globalThis.fetch = fakeFetch((base, p) => (base === A && p === 'k.objects/shards/sky.sop' ? 403 : null), log2);
+  const src2 = createKnowledgeSource([A, B], { sleep: noSleep });
+  await src2.text('index.json');   // A serves: it is alive
+  await src2.text('k.objects/shards/sky.sop');   // one refusal of a live mirror: the next mirror for this file
+  await src2.text('k.objects/shards/nature.sop');   // A is still asked
+  assert.deepEqual(log2, [`${A}/index.json`, `${A}/k.objects/shards/sky.sop`, `${B}/k.objects/shards/sky.sop`, `${A}/k.objects/shards/nature.sop`]);
+});
+
+test('reads asked together wait for the first answer of an untried mirror: a dead mirror costs one request, not one per shard', async () => {
+  const log = [];
+  globalThis.fetch = fakeFetch((base) => (base === A ? 'size' : null), log);
+  const src = createKnowledgeSource([A, B], { sleep: noSleep });
+  const files = ['k.objects/shards/sky.sop', 'k.objects/shards/nature.sop', 'index.json', 'vocab.json'];
+  const got = await Promise.all(files.map((f) => src.text(f)));
+  assert.ok(got.every((t) => typeof t === 'string' && t.length));
+  assert.equal(log.filter((u) => u.startsWith(A)).length, 1, 'one request to the dead mirror');
+  assert.equal(log.filter((u) => u.startsWith(B)).length, files.length);
+});
+
+test('every mirror dead: each is still asked once per file (a last resort), and a file none serves is an error', async () => {
+  const log = [];
+  globalThis.fetch = fakeFetch(() => 'size', log);
+  const src = createKnowledgeSource([A, B], { sleep: noSleep });
+  await assert.rejects(() => src.text('k.objects/shards/sky.sop'), /HTTP 403/);
+  await assert.rejects(() => src.text('k.objects/shards/nature.sop'), /HTTP 403/);
+  assert.equal(log.length, 4, 'one ask of each mirror per file');
+  globalThis.fetch = fakeFetch(() => null, log);   // the CDN serves again later in the session: the last resort still reads it
+  assert.ok((await src.text('k.objects/shards/sky.sop')).includes('name=sun'));
 });
 
 test('a transient failure is asked again on the same mirror (backoff), a network error too', async () => {

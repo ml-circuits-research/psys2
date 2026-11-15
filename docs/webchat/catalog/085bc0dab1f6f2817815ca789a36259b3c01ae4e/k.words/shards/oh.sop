@@ -1,0 +1,10 @@
+# k.words/shards/oh: senses of the words from "oh" to "ohio" (first letters "oh").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.oh.noun.1 k.words.sense word=OH pos=noun n=1 supersense=noun.location gloss="a midwestern state in north central United States in the Great Lakes region" synonym=Ohio synonym="Buckeye State" instance_of="American state" part_of="United States" part_of=Midwest kind_of="American state" kind_of=state kind_of="administrative district" kind_of=district kind_of=region kind_of=location kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.oh.spelling.OH core.word text=oh means=OH of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.ohio.noun.1 k.words.sense word=Ohio pos=noun n=1 supersense=noun.location gloss="a midwestern state in north central United States in the Great Lakes region" synonym="Buckeye State" synonym=OH instance_of="American state" part_of="United States" part_of=Midwest core.source="wordnet 3.1"
+@k.words.ohio.noun.2 k.words.sense word=Ohio pos=noun n=2 supersense=noun.object gloss="a river that is formed in western Pennsylvania and flows westward to become a tributary of the Mississippi River" synonym="Ohio River" instance_of=river part_of="United States" core.source="wordnet 3.1"
+@k.words.ohio.spelling.Ohio core.word text=ohio means=Ohio of=k.words.sense.word core.source="wordnet 3.1"

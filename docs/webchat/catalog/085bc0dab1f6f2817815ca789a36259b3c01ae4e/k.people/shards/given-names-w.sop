@@ -1,0 +1,36 @@
+# k.people/shards/given-names-w: 30 given names starting with W (of 2990 from 3000 Wikidata items), each with its sexes, the Wikidata humans who bear it, a band and its Wikidata items.
+# sources: wikidata-given-names 2026-11-14 (Wikidata given-name items with a sex class and their P735 holders, CC0; fetched by PSys2 into data/external/given-names, commit 0a24284f)
+# sources: hand-core 1 (context=person: by the rule of the import over the names of the catalog and the senses of k.words)
+# license: CC0-1.0
+# script: tools/import/given-names.mjs
+
+@k.people.given_name.Wac_aw k.people.given_name name=Wacław sex=male holders=1122 band=common wikidata=Q19817877 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Waldemar k.people.given_name name=Waldemar sex=male holders=1535 band=common wikidata=Q18609914 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Waleed k.people.given_name name=Waleed sex=male holders=265 band=frequent wikidata=Q3357916 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wallace k.people.given_name name=Wallace sex=male holders=1016 band=common wikidata=Q2542509 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Walter k.people.given_name name=Walter sex=male holders=24061 band="very common" wikidata=Q499249 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Waltraud k.people.given_name name=Waltraud sex=female holders=248 band=frequent wikidata=Q386156 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wanda k.people.given_name name=Wanda sex=female holders=1223 band=common wikidata=Q786005 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wayne k.people.given_name name=Wayne sex=male holders=2815 band=common wikidata=Q1423817 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wendy k.people.given_name name=Wendy sex=female holders=2360 band=common wikidata=Q4018995 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Werner k.people.given_name name=Werner sex=male holders=9075 band=common wikidata=Q676823 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Weronika k.people.given_name name=Weronika sex=female holders=241 band=frequent wikidata=Q19692509 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wiebke k.people.given_name name=Wiebke sex=female holders=325 band=frequent wikidata=Q19723449 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wiktor k.people.given_name name=Wiktor sex=male holders=741 band=frequent wikidata=Q17524157 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wiktoria k.people.given_name name=Wiktoria sex=female holders=179 band=frequent wikidata=Q20087985 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wilfried k.people.given_name name=Wilfried sex=male holders=1389 band=common wikidata=Q16291791 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wilhelm k.people.given_name name=Wilhelm sex=male holders=21129 band="very common" wikidata=Q11027623 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wilhelmina k.people.given_name name=Wilhelmina sex=female holders=548 band=frequent wikidata=Q19816474 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Willem k.people.given_name name=Willem sex=male holders=4853 band=common wikidata=Q15282375 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.William k.people.given_name name=William sex=male holders=94197 band="very common" wikidata=Q12344159 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Willy k.people.given_name name=Willy sex=male holders=3042 band=common wikidata=Q1459646 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wilma k.people.given_name name=Wilma sex=female holders=485 band=frequent wikidata=Q4964995 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wim k.people.given_name name=Wim sex=male holders=1485 band=common wikidata=Q1459852 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Winifred k.people.given_name name=Winifred sex=female holders=1177 band=common wikidata=Q13422280 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Winona k.people.given_name name=Winona sex=female holders=27 band=rare wikidata=Q2584778 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Winston k.people.given_name name=Winston sex=male holders=571 band=frequent wikidata=Q2584852 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Witold k.people.given_name name=Witold sex=male holders=1329 band=common wikidata=Q602138 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wojciech k.people.given_name name=Wojciech sex=male holders=3473 band=common wikidata=Q2588339 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Wolfgang k.people.given_name name=Wolfgang sex=male holders=12895 band="very common" wikidata=Q2589157 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.W_adys_aw k.people.given_name name=Władysław sex=male holders=3177 band=common wikidata=Q16282653 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.W_odzimierz k.people.given_name name=Włodzimierz sex=male holders=1108 band=common wikidata=Q8041320 core.source="wikidata-given-names 2026-11-14"

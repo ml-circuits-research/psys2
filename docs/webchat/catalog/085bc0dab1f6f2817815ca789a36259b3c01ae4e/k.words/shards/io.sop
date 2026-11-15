@@ -1,0 +1,13 @@
+# k.words/shards/io: senses of the words from "io" to "iowa" (first letters "io").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.io.noun.1 k.words.sense word=Io pos=noun n=1 supersense=noun.person gloss="(Greek mythology) a maiden seduced by Zeus; when Hera was about to discover them together Zeus turned her into a white heifer" instance_of=maid kind_of=maid kind_of=girl kind_of=woman kind_of=female kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.io.noun.2 k.words.sense word=Io pos=noun n=2 supersense=noun.object gloss="the closest of Jupiter's moons; has active volcanoes" instance_of="Galilean satellite" kind_of="Galilean satellite" kind_of=satellite kind_of="celestial body" kind_of="natural object" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.io.spelling.Io core.word text=io means=Io of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.ion.noun.1 k.words.sense word=ion pos=noun n=1 supersense=noun.object gloss="a particle that is electrically charged (positive or negative); an atom or molecule or group that has lost or gained one or more electrons" is_a=particle core.source="wordnet 3.1"
+@k.words.iowa.noun.1 k.words.sense word=Iowa pos=noun n=1 supersense=noun.person gloss="a member of the Siouan people formerly living in Iowa and Minnesota and Missouri" synonym=Ioway is_a=Sioux core.source="wordnet 3.1"
+@k.words.iowa.noun.2 k.words.sense word=Iowa pos=noun n=2 supersense=noun.location gloss="a state in midwestern United States" synonym="Hawkeye State" synonym=IA synonym=Ia. instance_of="American state" part_of="United States" part_of=Midwest part_of="Corn Belt" core.source="wordnet 3.1"
+@k.words.iowa.noun.3 k.words.sense word=Iowa pos=noun n=3 supersense=noun.communication gloss="a dialect of the Chiwere language spoken by the Iowa" synonym=Ioway is_a=Chiwere core.source="wordnet 3.1"
+@k.words.iowa.spelling.Iowa core.word text=iowa means=Iowa of=k.words.sense.word core.source="wordnet 3.1"

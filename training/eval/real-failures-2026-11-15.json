@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "7ff64229",
-  "tree": "2b6f78f0e0b41fde",
+  "build": "295364c6",
+  "tree": "8bbdce0320cb3e7e",
   "catalog": "085bc0dab1f6f2817815ca789a36259b3c01ae4e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,24 +13,24 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 177,
+   "right": 167,
    "partly": 9,
-   "wrong": 21,
-   "open": 12,
-   "changed": 54,
+   "wrong": 31,
+   "open": 13,
+   "changed": 53,
    "unjudged": 332,
    "outcome": {
     "executed": 332,
     "refused": 2,
-    "asked": 10,
-    "not_understood": 166,
+    "asked": 7,
+    "not_understood": 169,
     "other_world": 95
    },
    "by_source": {
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 51
+     "right": 41
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -88,24 +88,24 @@
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 177,
+   "right": 167,
    "partly": 9,
-   "wrong": 21,
-   "open": 12,
-   "changed": 54,
+   "wrong": 31,
+   "open": 13,
+   "changed": 53,
    "unjudged": 332,
    "outcome": {
     "executed": 332,
     "refused": 2,
-    "asked": 10,
-    "not_understood": 167,
-    "other_world": 94
+    "asked": 7,
+    "not_understood": 169,
+    "other_world": 95
    },
    "by_source": {
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 51
+     "right": 41
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -169,10 +169,99 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 232,
- "failing_ops": 232,
+ "failing_matrix": 243,
+ "failing_ops": 243,
  "ops_only": 0,
  "judged_causes": [
+  {
+   "cause": "Romanian: art.draw: acted; the reply does not say what the check asks",
+   "count": 8,
+   "wrong": 8,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0039",
+     "verdict": "wrong",
+     "text": "fa picioarele corocilului negre",
+     "tab": "draw",
+     "reply": "I can not find a leg in your picture.",
+     "failing": [
+      "reply_any:legs of the crocodile are black|has no leg|has these parts"
+     ]
+    },
+    {
+     "id": "r0052",
+     "verdict": "wrong",
+     "text": "muta casele mai sus",
+     "tab": "draw",
+     "reply": "the crocodile can not go there: it is in the lake.",
+     "failing": [
+      "reply_any:moved the houses"
+     ]
+    },
+    {
+     "id": "r0054",
+     "verdict": "wrong",
+     "text": "muta casele mai sus",
+     "tab": "draw",
+     "reply": "the crocodile can not go there: it is in the lake.",
+     "failing": [
+      "reply_any:moved the houses"
+     ]
+    },
+    {
+     "id": "r0055",
+     "verdict": "wrong",
+     "text": "muta crocodilii mai jos",
+     "tab": "draw",
+     "reply": "the crocodile can not go there: it is in the lake.",
+     "failing": [
+      "reply_any:moved the crocodiles"
+     ]
+    },
+    {
+     "id": "r0064",
+     "verdict": "wrong",
+     "text": "pune si un lac",
+     "tab": "draw",
+     "reply": "Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\".",
+     "failing": [
+      "reply_not:Where should it go|did not understand"
+     ]
+    },
+    {
+     "id": "r0067",
+     "verdict": "wrong",
+     "text": "muta casa din mijloc mai la dreapta",
+     "tab": "draw",
+     "reply": "I can not find a house in your picture.",
+     "failing": [
+      "reply_not:took the last one|can not find"
+     ]
+    },
+    {
+     "id": "r0068",
+     "verdict": "wrong",
+     "text": "nu prima acasa, cea din mijloc",
+     "tab": "draw",
+     "reply": "I drew a red home. (a home, drawn as a house.) I did not understand \"nu prima acasa, cea din mijloc\". Did you mean \"Cum sună do central?\" or \"Câți herți are do ",
+     "failing": [
+      "reply_not:did not understand|Where should it go"
+     ]
+    },
+    {
+     "id": "r0069",
+     "verdict": "wrong",
+     "text": "muta casa din dreapta mai la dreapta",
+     "tab": "draw",
+     "reply": "I can not find a house in your picture.",
+     "failing": [
+      "reply_not:took the last one|can not find"
+     ]
+    }
+   ],
+   "both_reasoners": 8
+  },
   {
    "cause": "diagram.sketch: acted; the reply does not say what the check asks",
    "count": 6,
@@ -332,6 +421,46 @@
      "reply": "I drew a yellow sun.",
      "failing": [
       "state:art.draw:objects.length=6"
+     ]
+    }
+   ],
+   "both_reasoners": 3
+  },
+  {
+   "cause": "Romanian: art.draw: not understood",
+   "count": 3,
+   "wrong": 3,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0006",
+     "verdict": "wrong",
+     "text": "she knows what their grandma could trade charcoal Chicago",
+     "tab": "diagram",
+     "reply": "I did not understand \"she knows what their grandma could trade charcoal Chicago\". For example: \"Add a circle.\" or \"What is the colour of the circle?\" I did not ",
+     "failing": [
+      "unchanged"
+     ]
+    },
+    {
+     "id": "r0043",
+     "verdict": "wrong",
+     "text": "sa fie diferite",
+     "tab": "draw",
+     "reply": "I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon ",
+     "failing": [
+      "not_understood"
+     ]
+    },
+    {
+     "id": "r0066",
+     "verdict": "wrong",
+     "text": "muta si mai la stinga",
+     "tab": "draw",
+     "reply": "I did not understand \"muta si mai la stinga\". For example: \"Add a house.\" or \"What is the colour of the house?\"",
+     "failing": [
+      "reply_not:did not understand|do not know what",
+      "not_understood"
      ]
     }
    ],
@@ -580,25 +709,6 @@
    "both_reasoners": 1
   },
   {
-   "cause": "Romanian: art.draw: acted; the reply does not say what the check asks",
-   "count": 1,
-   "wrong": 1,
-   "partly": 0,
-   "rows": [
-    {
-     "id": "r0039",
-     "verdict": "wrong",
-     "text": "fa picioarele corocilului negre",
-     "tab": "draw",
-     "reply": "I can not find a leg in your picture.",
-     "failing": [
-      "reply_any:legs of the crocodile are black|has no leg|has these parts"
-     ]
-    }
-   ],
-   "both_reasoners": 1
-  },
-  {
    "cause": "Romanian: ui.avatar: not understood",
    "count": 1,
    "wrong": 1,
@@ -622,8 +732,8 @@
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 63,
-   "both_reasoners": 63,
+   "count": 67,
+   "both_reasoners": 67,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -703,28 +813,28 @@
   },
   {
    "cause": "translation residue / wrong sense / source typo",
-   "count": 28,
-   "both_reasoners": 28,
+   "count": 30,
+   "both_reasoners": 30,
    "examples": [
+    {
+     "text": "she knows what their grandma could trade charcoal Chicago",
+     "tab": "diagram",
+     "happened": "I did not understand \"she knows what their grandma could trade charcoal Chicago\". For example: \"Add a circle.\" or \"What is the colour of the circle?\" I did not "
+    },
     {
      "text": "an old woman",
      "tab": "robot",
      "happened": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" I did not know the words: old, woman. [outcome: not_understoo"
     },
     {
+     "text": "feitia am zis, am gresit feita",
+     "tab": "draw",
+     "happened": "I did not understand \"feitia am zis, am gresit feita\". Did you mean \"Feitia sand.\"? That sounds like something about you. I cannot keep facts about you here. I "
+    },
+    {
      "text": "desneaza o capra",
      "tab": "draw",
      "happened": "I can't find Draw a on any of your lists, so I cannot mark it as done. (I read \"goat\" as \"got\") [outcome: other_world; open]"
-    },
-    {
-     "text": "fii în boi",
-     "tab": "robot",
-     "happened": "I did not understand \"fii în boi\". Did you mean \"Fii în băiat.\"? I did not know the word: boi. [outcome: not_understood]"
-    },
-    {
-     "text": "și Angie",
-     "tab": "robot",
-     "happened": "I did not understand \"și Angie\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
     }
    ]
   },
@@ -783,6 +893,33 @@
    ]
   },
   {
+   "cause": "continuation / correction / why-question",
+   "count": 8,
+   "both_reasoners": 8,
+   "examples": [
+    {
+     "text": "sa fie diferite",
+     "tab": "draw",
+     "happened": "I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon "
+    },
+    {
+     "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
+     "tab": "draw",
+     "happened": "I did not understand \"ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum\". For example: \"Add a house.\" or \"What is the colour of the house?"
+    },
+    {
+     "text": "cum ai ajuns a deschisi joculd e sah? e ridicol",
+     "tab": "chess",
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
+    },
+    {
+     "text": "mai jos, sta pe leagan nu pe el",
+     "tab": "draw",
+     "happened": "OK, more down, stay on leagan not him. [outcome: other_world; open]"
+    }
+   ]
+  },
+  {
    "cause": "unknown word (a word of the request is not known)",
    "count": 8,
    "both_reasoners": 8,
@@ -790,7 +927,7 @@
     {
      "text": "enervant da",
      "tab": "draw",
-     "happened": "I did not understand \"enervant da\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: enervant. [outcome: not_understoo"
+     "happened": "I did not understand \"enervant da\". Did you mean \"Enervant eyes.\"? I did not know the word: enervant. [outcome: not_understood]"
     },
     {
      "text": "face un caca",
@@ -806,33 +943,6 @@
      "text": "desene asta",
      "tab": "map",
      "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
-    }
-   ]
-  },
-  {
-   "cause": "continuation / correction / why-question",
-   "count": 7,
-   "both_reasoners": 7,
-   "examples": [
-    {
-     "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
-     "tab": "draw",
-     "happened": "I did not understand \"ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum\". For example: \"Add a house.\" or \"What is the colour of the house?"
-    },
-    {
-     "text": "cum ai ajuns a deschisi joculd e sah? e ridicol",
-     "tab": "chess",
-     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
-    },
-    {
-     "text": "mai jos, sta pe leagan nu pe el",
-     "tab": "draw",
-     "happened": "OK, more down, stay on leagan not him. [outcome: other_world; open]"
-    },
-    {
-     "text": "capra zoboara, fixeaza",
-     "tab": "draw",
-     "happened": "I can't find zoboara, fixeaza on any of your lists. (I read \"goat\" as \"got\") I understood only part of that: I did not use \"The\". [outcome: other_world; open]"
     }
    ]
   },
@@ -898,7 +1008,7 @@
     {
      "text": "paint three new nodes",
      "tab": "diagram",
-     "happened": "What should change about circle 1, square 1, square 2, square 3 and square 4? Try a color, size, shape, outline or label. [outcome: asked; wrong; state:shapes.l"
+     "happened": "What should change about circle 1, square 1, square 2, square 3 and square 4? Try a color, size, shape, outline or label. [outcome: executed; wrong; state:shape"
     },
     {
      "text": "a person",
@@ -914,6 +1024,33 @@
      "text": "make a cartoon",
      "tab": "robot",
      "happened": "I did not understand \"make a maroon\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
+    }
+   ]
+  },
+  {
+   "cause": "amount / relation / set distribution",
+   "count": 4,
+   "both_reasoners": 4,
+   "examples": [
+    {
+     "text": "muta si mai la stinga",
+     "tab": "draw",
+     "happened": "I did not understand \"muta si mai la stinga\". For example: \"Add a house.\" or \"What is the colour of the house?\" [outcome: not_understood; wrong; reply_not:did n"
+    },
+    {
+     "text": "muta casa din mijloc mai la dreapta",
+     "tab": "draw",
+     "happened": "I can not find a house in your picture. [outcome: executed; wrong; reply_not:took the last one|can not find]"
+    },
+    {
+     "text": "nu prima acasa, cea din mijloc",
+     "tab": "draw",
+     "happened": "I drew a red home. (a home, drawn as a house.) I did not understand \"nu prima acasa, cea din mijloc\". Did you mean \"Cum sună do central?\" or \"Câți herți are do "
+    },
+    {
+     "text": "muta casa din dreapta mai la dreapta",
+     "tab": "draw",
+     "happened": "I can not find a house in your picture. [outcome: executed; wrong; reply_not:took the last one|can not find]"
     }
    ]
   },

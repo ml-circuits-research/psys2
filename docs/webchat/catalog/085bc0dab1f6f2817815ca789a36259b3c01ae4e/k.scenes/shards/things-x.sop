@@ -1,0 +1,8 @@
+# k.scenes/shards/things-x: the usual place (sky, ground, water, indoors, on another thing) and the relative size (tiny to huge) of 3 things (the drawable things and the animals of k.animals) whose name starts with "x"; labelled by a language model from the names (named=model), a sample checked against the drawings.
+# sources: hand-core 1 (hand-written in this repository: sources/hand-core/place-size.tsv, and sources/hand-core/animals.tsv for the animals without a drawing)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+
+@k.scenes.thing.x-ray k.scenes.thing name=x-ray place=indoors size=small named=model core.source="hand-core 1"
+@k.scenes.thing.xray k.scenes.thing name=xray place=indoors size=small named=model core.source="hand-core 1"
+@k.scenes.thing.xylophone k.scenes.thing name=xylophone place=indoors size=small named=model core.source="hand-core 1"

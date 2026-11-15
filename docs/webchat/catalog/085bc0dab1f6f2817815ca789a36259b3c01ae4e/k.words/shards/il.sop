@@ -1,0 +1,25 @@
+# k.words/shards/il: senses of the words from "il" to "illusion" (first letters "il").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.il.noun.1 k.words.sense word=IL pos=noun n=1 supersense=noun.location gloss="a midwestern state in north-central United States" synonym=Illinois synonym="Prairie State" synonym="Land of Lincoln" synonym=Ill. instance_of="American state" part_of="United States" part_of=Midwest core.source="wordnet 3.1"
+@k.words.il.spelling.IL core.word text=il means=IL of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.ill.noun.1 k.words.sense word=ill pos=noun n=1 supersense=noun.state gloss="an often persistent bodily disorder or disease; a cause for complaining" synonym=ailment synonym=complaint is_a=disorder kind_of=disorder kind_of="physical condition" kind_of=condition kind_of=state kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.ill.adjective.1 k.words.sense word=ill pos=adjective n=1 supersense=adj.all gloss="affected by an impairment of normal physical or mental function" synonym=sick opposite=well core.source="wordnet 3.1"
+@k.words.ill.adjective.2 k.words.sense word=ill pos=adjective n=2 supersense=adj.all gloss="resulting in suffering or adversity" near_opposite=harmless core.source="wordnet 3.1"
+@k.words.ill.adjective.3 k.words.sense word=ill pos=adjective n=3 supersense=adj.all gloss="distressing" near_opposite=good core.source="wordnet 3.1"
+@k.words.ill.adverb.1 k.words.sense word=ill pos=adverb n=1 supersense=adv.all gloss="(`ill' is often used as a combining form) in a poor or improper or unsatisfactory manner; not well" synonym=badly synonym=poorly opposite=well core.source="wordnet 3.1"
+@k.words.ill.adverb.2 k.words.sense word=ill pos=adverb n=2 supersense=adv.all gloss="unfavorably or with disapproval" synonym=badly opposite=well core.source="wordnet 3.1"
+@k.words.ill.adverb.3 k.words.sense word=ill pos=adverb n=3 supersense=adv.all gloss="with difficulty or inconvenience; scarcely or hardly" core.source="wordnet 3.1"
+@k.words.illegal.adjective.1 k.words.sense word=illegal pos=adjective n=1 supersense=adj.all gloss="prohibited by law or by official or accepted rules" opposite=legal core.source="wordnet 3.1"
+@k.words.illegitimate.noun.1 k.words.sense word=illegitimate pos=noun n=1 supersense=noun.person gloss="the illegitimate offspring of unmarried parents" synonym=bastard synonym=by-blow synonym="love child" synonym="illegitimate child" synonym=whoreson is_a=offspring core.source="wordnet 3.1"
+@k.words.illinois.noun.1 k.words.sense word=Illinois pos=noun n=1 supersense=noun.location gloss="a midwestern state in north-central United States" synonym="Prairie State" synonym="Land of Lincoln" synonym=IL synonym=Ill. instance_of="American state" part_of="United States" part_of=Midwest core.source="wordnet 3.1"
+@k.words.illinois.noun.2 k.words.sense word=Illinois pos=noun n=2 supersense=noun.person gloss="a member of the Algonquian people formerly of Illinois and regions to the west" is_a=Algonquian core.source="wordnet 3.1"
+@k.words.illinois.noun.3 k.words.sense word=Illinois pos=noun n=3 supersense=noun.communication gloss="the Algonquian language of the Illinois and Miami" is_a=Algonquian core.source="wordnet 3.1"
+@k.words.illinois.spelling.Illinois core.word text=illinois means=Illinois of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.illiterate.noun.1 k.words.sense word=illiterate pos=noun n=1 supersense=noun.person gloss="a person unable to read" synonym="illiterate person" synonym=nonreader is_a=ignoramus core.source="wordnet 3.1"
+@k.words.illness.noun.1 k.words.sense word=illness pos=noun n=1 supersense=noun.state gloss="impairment of normal physiological function affecting part or all of an organism" synonym=unwellness synonym=malady synonym=sickness is_a="ill health" opposite=wellness core.source="wordnet 3.1"
+@k.words.illusion.noun.1 k.words.sense word=illusion pos=noun n=1 supersense=noun.cognition gloss="an erroneous mental representation" synonym=semblance is_a=appearance core.source="wordnet 3.1"
+@k.words.illusion.noun.2 k.words.sense word=illusion pos=noun n=2 supersense=noun.cognition gloss="something many people believe that is false" synonym=fantasy synonym=phantasy synonym=fancy is_a=misconception core.source="wordnet 3.1"
+@k.words.illusion.noun.3 k.words.sense word=illusion pos=noun n=3 supersense=noun.act gloss="the act of deluding; deception by creating illusory ideas" synonym=delusion synonym="head game" is_a=deception core.source="wordnet 3.1"

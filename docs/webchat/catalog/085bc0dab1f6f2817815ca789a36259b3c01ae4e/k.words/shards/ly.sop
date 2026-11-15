@@ -1,0 +1,20 @@
+# k.words/shards/ly: senses of the words from "lydia" to "lyric" (first letters "ly").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.lydia.noun.1 k.words.sense word=Lydia pos=noun n=1 supersense=noun.location gloss="an ancient region on the coast of western Asia Minor; a powerful kingdom until conquered by the Persians in 546 BC" instance_of="geographical area" part_of="Asia Minor" core.source="wordnet 3.1"
+@k.words.lydia.spelling.Lydia core.word text=lydia means=Lydia of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.lying.noun.1 k.words.sense word=lying pos=noun n=1 supersense=noun.act gloss="the deliberate act of deviating from the truth" synonym=prevarication synonym=fabrication is_a=falsification kind_of=falsification kind_of=wrongdoing kind_of=activity kind_of=act kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.lynch.verb.1 k.words.sense word=lynch pos=verb n=1 supersense=verb.social gloss="kill without legal sanction" is_a=kill core.source="wordnet 3.1"
+@k.words.lynx.noun.1 k.words.sense word=lynx pos=noun n=1 supersense=noun.communication gloss="a text browser" instance_of=browser kind_of=browser kind_of=application kind_of=program kind_of=software kind_of=code kind_of="coding system" kind_of=writing kind_of="written communication" kind_of=communication kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.lynx.noun.2 k.words.sense word=lynx pos=noun n=2 supersense=noun.animal gloss="short-tailed wildcats with usually tufted ears; valued for their fur" synonym=catamount is_a=wildcat kind_of=wildcat kind_of=cat kind_of=feline kind_of=carnivore kind_of=placental kind_of=mammal kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.lyon.noun.1 k.words.sense word=Lyon pos=noun n=1 supersense=noun.location gloss="a city in east-central France on the Rhone River; a principal producer of silk and rayon" synonym=Lyons instance_of=city part_of=France part_of=Lyonnais core.source="wordnet 3.1"
+@k.words.lyon.spelling.Lyon core.word text=lyon means=Lyon of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.lyons.noun.1 k.words.sense word=Lyons pos=noun n=1 supersense=noun.location gloss="a city in east-central France on the Rhone River; a principal producer of silk and rayon" synonym=Lyon instance_of=city part_of=France part_of=Lyonnais core.source="wordnet 3.1"
+@k.words.lyons.noun.2 k.words.sense word=Lyons pos=noun n=2 supersense=noun.group gloss="the council in 1274 that effected a temporary reunion of the Greek Orthodox with the Roman Catholic Church" synonym="Second Council of Lyons" is_a=council core.source="wordnet 3.1"
+@k.words.lyons.noun.3 k.words.sense word=Lyons pos=noun n=3 supersense=noun.group gloss="the council of the Western Church in 1245 that excommunicated Holy Roman Emperor Frederick II and planned a new crusade against the Holy Land" synonym="First Council of Lyons" is_a=council core.source="wordnet 3.1"
+@k.words.lyons.spelling.Lyons core.word text=lyons means=Lyons of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.lyric.noun.1 k.words.sense word=lyric pos=noun n=1 supersense=noun.communication gloss="the text of a popular song or musical-comedy number" synonym=words synonym=language is_a=text part_of=song core.source="wordnet 3.1"
+@k.words.lyric.noun.2 k.words.sense word=lyric pos=noun n=2 supersense=noun.communication gloss="a short poem of songlike quality" synonym="lyric poem" is_a=poem core.source="wordnet 3.1"
+@k.words.lyric.verb.1 k.words.sense word=lyric pos=verb n=1 supersense=verb.creation gloss="write lyrics for (a song)" is_a=write core.source="wordnet 3.1"

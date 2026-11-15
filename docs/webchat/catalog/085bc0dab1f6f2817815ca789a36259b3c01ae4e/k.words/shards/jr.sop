@@ -1,0 +1,7 @@
+# k.words/shards/jr: senses of the words from "jr" to "jr" (first letters "jr").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.jr.noun.1 k.words.sense word=Jr pos=noun n=1 supersense=noun.person gloss="a son who has the same first name as his father" synonym=Junior synonym=Jnr is_a=son core.source="wordnet 3.1"
+@k.words.jr.spelling.Jr core.word text=jr means=Jr of=k.words.sense.word core.source="wordnet 3.1"

@@ -1,0 +1,37 @@
+# k.wearables/shards/places: the 15 places on the body where things are worn (head, hair, eyes, ears, face, neck, body, back, waist, arms, wrist, hands, finger, legs, feet): the box of each on the drawing "person" of k.objects, the k.faces slot that draws what is worn there, and the k.body part.
+# sources: hand-core 1 (hand-written in this repository: tools/wearables-core.mjs)
+# license: CC0-1.0
+# script: tools/wearables-core.mjs
+
+@k.wearables.place.head k.wearables.place name=head about="the top of the head, where a hat sits" face_slot=hat body_part=head x=36 y=1 w=28 h=11 named=model core.source="hand-core 1"
+@k.wearables.place.hair k.wearables.place name=hair about="the hair, where a clip or a band is worn" body_part=hair x=38 y=4 w=24 h=7 named=model core.source="hand-core 1"
+@k.wearables.place.eyes k.wearables.place name=eyes about="in front of the eyes" face_slot=glasses body_part=eye x=41 y=10 w=18 h=8 named=model core.source="hand-core 1"
+@k.wearables.place.ears k.wearables.place name=ears about="on or over an ear" face_slot=earrings body_part=ear x=35 y=13 w=5 h=8 pair=true named=model core.source="hand-core 1"
+@k.wearables.place.face k.wearables.place name=face about="over the face" body_part=face x=40 y=8 w=20 h=20 named=model core.source="hand-core 1"
+@k.wearables.place.neck k.wearables.place name=neck about="around the neck" body_part=neck x=45 y=27 w=10 h=5 named=model core.source="hand-core 1"
+@k.wearables.place.body k.wearables.place name=body about="the upper body, from the shoulders to the waist" face_slot=shoulders body_part=chest x=41 y=30 w=18 h=30 named=model core.source="hand-core 1"
+@k.wearables.place.back k.wearables.place name=back about="on the back" body_part=back x=43 y=31 w=14 h=22 named=model core.source="hand-core 1"
+@k.wearables.place.waist k.wearables.place name=waist about="around the waist" body_part=hip x=44 y=57 w=12 h=6 named=model core.source="hand-core 1"
+@k.wearables.place.arms k.wearables.place name=arms about="on an arm" body_part=arm x=30 y=38 w=20 h=17 pair=true named=model core.source="hand-core 1"
+@k.wearables.place.wrist k.wearables.place name=wrist about="around a wrist" body_part=wrist x=30 y=50 w=6 h=5 pair=true named=model core.source="hand-core 1"
+@k.wearables.place.hands k.wearables.place name=hands about="on a hand" body_part=hand x=26 y=52 w=8 h=7 pair=true named=model core.source="hand-core 1"
+@k.wearables.place.finger k.wearables.place name=finger about="on a finger" body_part=finger x=27 y=54 w=4 h=4 pair=true named=model core.source="hand-core 1"
+@k.wearables.place.legs k.wearables.place name=legs about="on the legs, from the waist down" body_part=leg x=35 y=62 w=15 h=30 pair=true named=model core.source="hand-core 1"
+@k.wearables.place.feet k.wearables.place name=feet about="on a foot" body_part=foot x=30 y=88 w=9 h=7 pair=true named=model core.source="hand-core 1"
+
+# Words.
+@k.wearables.word.place.head core.word text="top of the head" text="on the head" means=head of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.hair core.word text="in the hair" means=hair of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.eyes core.word text="over the eyes" text="on the nose" means=eyes of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.ears core.word text=ear text="on the ears" means=ears of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.face core.word text="over the face" means=face of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.neck core.word text="around the neck" text=throat means=neck of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.body core.word text="upper body" text=torso text=chest text="top half" means=body of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.back core.word text="on the back" means=back of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.waist core.word text="around the waist" text=hips means=waist of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.arms core.word text=arm text=sleeves means=arms of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.wrist core.word text=wrists text="on the wrist" means=wrist of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.hands core.word text=hand text="on the hands" means=hands of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.finger core.word text=fingers text="on the finger" means=finger of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.legs core.word text=leg text="lower body" text="bottom half" means=legs of=k.wearables.place.name core.source="hand-core 1"
+@k.wearables.word.place.feet core.word text=foot text="on the feet" means=feet of=k.wearables.place.name core.source="hand-core 1"

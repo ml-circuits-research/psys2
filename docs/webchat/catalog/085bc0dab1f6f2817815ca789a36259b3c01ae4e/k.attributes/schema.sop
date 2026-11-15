@@ -1,0 +1,298 @@
+# k.attributes: the attributes of kinds of things. Which attributes a kind of thing usually has (an animal: legs,
+# covering, what it eats; a vehicle: wheels, what it is made of), in which world the values of an attribute are
+# found, and the usual values of common things that no other world says: colour, material, wheels, what it can do,
+# what it is used for.
+# sources: hand-core 1 (hand-written in this repository; the usual values are labelled by a language model)
+# license: CC0-1.0
+# script: none (hand-written); the shards are written by tools/attributes-core.mjs
+
+@k.attributes core.module name=k.attributes version=5 imports=k.named exports=attribute exports=switch exports=found exports=kind exports=thing exports=aspect exports=family exports=shows exports=drawn exports=same exports=number exports=usage exports=range exports=typical exports=narration core.source="hand-core 1"
+
+# An attribute of things. `holds` says what kind of value it takes; `aspect` names the aspect it belongs to.
+@k.attributes.attribute core.type of=k.attributes.attribute shared=true closed=true core.source="hand-core 1"
+@k.attributes.attribute.name core.slot of=k.attributes.attribute key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.attributes.attribute.holds core.slot of=k.attributes.attribute key=holds required=true enum=colour enum=material enum=size enum=place enum=kind enum=thing enum=number enum=verb enum=use enum=class enum=time enum=person core.source="hand-core 1"
+@k.attributes.attribute.aspect core.slot of=k.attributes.attribute key=aspect required=true kind=atom type=k.attributes.aspect by=name core.source="hand-core 1"
+@k.attributes.attribute.about core.slot of=k.attributes.attribute key=about required=true kind=string core.source="hand-core 1"
+# Block 07:40 item 4: `default_type` and `default_key` say where the value an attribute goes back to when it is reset
+# is found ("reset the colours": the colour of each part in the thing's drawing, k.objects.part colour).
+@k.attributes.attribute.default_type core.slot of=k.attributes.attribute key=default_type kind=atom core.source="hand-core 1"
+@k.attributes.attribute.default_key core.slot of=k.attributes.attribute key=default_key kind=atom type=k.attributes.attribute by=name core.source="hand-core 1"
+
+# A switch attribute of a thing a user makes: true or false. `on` names the verbs that make it true (show, stack),
+# `off` those that make it false (hide, unstack), `default` its value before any act (a thing is visible, not
+# stacked). One home per pair: hidden is visible read backwards, so there is no attribute hidden.
+@k.attributes.switch core.type of=k.attributes.switch shared=true closed=true complete=true core.source="hand-core 1"
+@k.attributes.switch.name core.slot of=k.attributes.switch key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.attributes.switch.on core.slot of=k.attributes.switch key=on many=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.attributes.switch.off core.slot of=k.attributes.switch key=off many=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.attributes.switch.default core.slot of=k.attributes.switch key=default required=true kind=boolean core.source="hand-core 1"
+@k.attributes.switch.about core.slot of=k.attributes.switch key=about required=true kind=string core.source="hand-core 1"
+@k.attributes.word.switch core.word text=switch text=toggle text="on or off" means=k.attributes.switch core.source="hand-core 1"
+
+# Where the values of an attribute are found: the facts of `type` (in the world `world`) carry them under `key`,
+# named by the thing. `covers` says for which things. An attribute is found in several places (the colour of a
+# food in k.food, of a common thing here); the values are not copied from one world to another.
+@k.attributes.found core.type of=k.attributes.found shared=true closed=true core.source="hand-core 1"
+@k.attributes.found.attribute core.slot of=k.attributes.found key=attribute id=true required=true kind=atom type=k.attributes.attribute by=name core.source="hand-core 1"
+@k.attributes.found.world core.slot of=k.attributes.found key=world required=true kind=atom core.source="hand-core 1"
+@k.attributes.found.type core.slot of=k.attributes.found key=type id=true required=true kind=atom core.source="hand-core 1"
+@k.attributes.found.key core.slot of=k.attributes.found key=key id=true required=true kind=atom core.source="hand-core 1"
+@k.attributes.found.covers core.slot of=k.attributes.found key=covers required=true kind=string core.source="hand-core 1"
+
+# A kind of thing and the attributes (many) that things of the kind usually have.
+@k.attributes.kind core.type of=k.attributes.kind shared=true closed=true core.source="hand-core 1"
+@k.attributes.kind.name core.slot of=k.attributes.kind key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.attributes.kind.attribute core.slot of=k.attributes.kind key=attribute many=true required=true kind=atom type=k.attributes.attribute by=name core.source="hand-core 1"
+
+# The usual values of a common thing, each only where it is plain: a missing key says nothing. `kind` names a
+# k.attributes.kind; `colour` (many) is one of the eleven basic colours (the names of k.objects.part.colour and of
+# k.colours.colour family), or the one value `any`: the thing comes in any colour and has no usual one (a car, a
+# ball, a shirt); `any` never stands next to a colour. How a thing is drawn is another fact: k.attributes.drawn.
+# A host that needs a colour takes the usual one, then the drawn one. `material` (many) what it is usually made of; `wheels` how
+# many wheels it usually has (0: it is a vehicle without wheels); `can` (many) what it can do; `used_for` (many)
+# what people use it for. `named=model`: the values were given by a language model from the name of the thing.
+@k.attributes.thing core.type of=k.attributes.thing extends=k.named.labelled shared=true closed=true core.source="hand-core 1"
+@k.attributes.thing.name core.slot of=k.attributes.thing key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.attributes.thing.kind core.slot of=k.attributes.thing key=kind kind=atom kind=string type=k.attributes.kind by=name core.source="hand-core 1"
+@k.attributes.thing.colour core.slot of=k.attributes.thing key=colour many=true enum=black enum=white enum=grey enum=red enum=orange enum=yellow enum=green enum=blue enum=purple enum=pink enum=brown enum=any core.source="hand-core 1"
+@k.attributes.thing.material core.slot of=k.attributes.thing key=material many=true kind=atom core.source="hand-core 1"
+@k.attributes.thing.wheels core.slot of=k.attributes.thing key=wheels kind=integer min=0 core.source="hand-core 1"
+@k.attributes.thing.can core.slot of=k.attributes.thing key=can many=true kind=atom type=k.actions.action by=name core.source="hand-core 1"
+@k.attributes.thing.used_for core.slot of=k.attributes.thing key=used_for many=true kind=string core.source="hand-core 1"
+
+# The colours a drawable thing is drawn in: computed from the drawing of k.objects that has the name `name`
+# (tools/drawn-colour.mjs), the largest first, at most three. `drawn_colour` (many) is one of the eleven basic
+# colours; `drawn_shade` (many) is the nearest colour name of k.colours.colour to each main fill colour. This says
+# how the thing is drawn, never what colour it usually is (a car that happens to be drawn red): the usual colour
+# is k.attributes.thing.colour, and the two are never mixed. The source of the fact is the source of the drawing.
+@k.attributes.drawn core.type of=k.attributes.drawn shared=true closed=true core.source="hand-core 1"
+@k.attributes.drawn.name core.slot of=k.attributes.drawn key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.attributes.drawn.drawn_colour core.slot of=k.attributes.drawn key=drawn_colour many=true required=true enum=black enum=white enum=grey enum=red enum=orange enum=yellow enum=green enum=blue enum=purple enum=pink enum=brown kind=atom type=k.colours.basic by=name core.source="hand-core 1"
+@k.attributes.drawn.drawn_shade core.slot of=k.attributes.drawn key=drawn_shade many=true kind=atom kind=string type=k.colours.colour by=name core.source="hand-core 1"
+
+# The usual numbers of a common thing (tools/numbers-core.mjs), each only where it is plain and about right, for
+# a usual grown one in its everyday meaning: `size_about` the length of its longest side in metres; `weight_about`
+# its weight in kilograms; `speed_about` its usual top speed in kilometres per hour, when it moves by itself or
+# carries people; `legs` the legs of a thing that is not an animal (a chair; the legs of animals are in k.animals);
+# `sides` its flat sides where they are counted (a dice, a box). `weight_class` and `speed_class` are steps of the
+# k.values scales weight and speed, computed from the number (light under 2 kg, heavy over 30 kg; slow under
+# 10 km/h, fast over 60 km/h), never labelled apart; `price_class` (a step of the k.values scale price) says
+# whether it is cheap, medium or expensive to buy. The units are in k.units.measure. `size_about` is the one home of the
+# size of a thing: the size class of k.scenes.thing is computed from it (KR1 item 3, tools/lib/size-class.mjs). `named=model`: the values were
+# given by a language model from the name of the thing. Q37: `sense`, only on the facts of a name with several
+# senses (k.attributes.same with only=false: turkey the bird and the food), says which one the numbers are about.
+@k.attributes.number core.type of=k.attributes.number extends=k.named.labelled shared=true closed=true core.source="hand-core 1"
+@k.attributes.number.name core.slot of=k.attributes.number key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.attributes.number.sense core.slot of=k.attributes.number key=sense id=true enum=animal enum=food enum=plant enum=person enum="body part" enum=clothing enum=colour enum=shape enum=place enum=time enum="body in space" enum=thing core.source="hand-core 1"
+@k.attributes.number.size_about core.slot of=k.attributes.number key=size_about kind=number min=0 core.source="hand-core 1"
+@k.attributes.number.weight_about core.slot of=k.attributes.number key=weight_about kind=number min=0 core.source="hand-core 1"
+@k.attributes.number.weight_class core.slot of=k.attributes.number key=weight_class enum=light enum=medium enum=heavy core.source="hand-core 1"
+@k.attributes.number.speed_about core.slot of=k.attributes.number key=speed_about kind=number min=0 core.source="hand-core 1"
+@k.attributes.number.speed_class core.slot of=k.attributes.number key=speed_class enum=slow enum=medium enum=fast core.source="hand-core 1"
+@k.attributes.number.legs core.slot of=k.attributes.number key=legs kind=integer min=0 core.source="hand-core 1"
+@k.attributes.number.sides core.slot of=k.attributes.number key=sides kind=integer min=0 core.source="hand-core 1"
+@k.attributes.number.price_class core.slot of=k.attributes.number key=price_class enum=cheap enum=medium enum=expensive core.source="hand-core 1"
+
+# When and by whom a thing of k.scenes is usually used or seen (tools/usage-core.mjs), each only where it is plain:
+# `season`, `time` and `weather` (many) take the values of k.scenes.scene, so a thing fits a scene with the same
+# value (a sled in winter and snow, an owl at night; `time` is a k.time.part_of_day, a declared join: KR1 item 5); `age` (many) the ages of k.people.kind (a rattle for a baby,
+# beer for an adult); `used_by` (many) names a k.people.role that uses it, where the role does not already list it in
+# its own `uses` (who uses a thing: both). `named=model`: the values were given by a language model. Q37: `sense`,
+# only on the facts of a name with several senses (star the shape and the body in space), says which one is meant.
+@k.attributes.usage core.type of=k.attributes.usage extends=k.named.labelled shared=true closed=true core.source="hand-core 1"
+@k.attributes.usage.name core.slot of=k.attributes.usage key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.attributes.usage.sense core.slot of=k.attributes.usage key=sense id=true enum=animal enum=food enum=plant enum=person enum="body part" enum=clothing enum=colour enum=shape enum=place enum=time enum="body in space" enum=thing core.source="hand-core 1"
+@k.attributes.usage.season core.slot of=k.attributes.usage key=season many=true kind=atom type=k.time.season by=name core.source="hand-core 1"
+@k.attributes.usage.time core.slot of=k.attributes.usage key=time many=true kind=atom type=k.time.part_of_day by=name core.source="hand-core 1"
+@k.attributes.usage.weather core.slot of=k.attributes.usage key=weather many=true enum=sunny enum=cloudy enum=rainy enum=snowy enum=windy enum=stormy enum=foggy core.source="hand-core 1"
+@k.attributes.usage.age core.slot of=k.attributes.usage key=age many=true enum=baby enum=child enum=adult enum=old core.source="hand-core 1"
+@k.attributes.usage.used_by core.slot of=k.attributes.usage key=used_by many=true kind=atom kind=string type=k.people.role by=name core.source="hand-core 1"
+
+# One name, one thing across worlds (computed by tools/joins.mjs): for a name that facts of more than one world
+# carry, its `sense` and the types (`in`, many) whose facts with that name are about that one thing. `only=true`:
+# the name has one sense in the whole catalog; `only=false`: it has several, each sense with its own fact, and a
+# host must not join facts across them. `unsure` (many): types whose fact gives no sense by itself; `by_word`
+# (many): types keyed by the word whatever it means (k.words.sense, k.parts), whose gloss says which sense.
+@k.attributes.same core.type of=k.attributes.same shared=true closed=true core.source="hand-core 1"
+@k.attributes.same.name core.slot of=k.attributes.same key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.attributes.same.sense core.slot of=k.attributes.same key=sense id=true required=true enum=animal enum=food enum=plant enum=person enum="body part" enum=clothing enum=colour enum=shape enum=place enum=time enum="body in space" enum=thing core.source="hand-core 1"
+@k.attributes.same.only core.slot of=k.attributes.same key=only required=true kind=boolean core.source="hand-core 1"
+@k.attributes.same.in core.slot of=k.attributes.same key=in many=true kind=atom core.source="hand-core 1"
+@k.attributes.same.unsure core.slot of=k.attributes.same key=unsure many=true kind=atom core.source="hand-core 1"
+@k.attributes.same.by_word core.slot of=k.attributes.same key=by_word many=true kind=atom core.source="hand-core 1"
+
+# An aspect: a side of a thing that one kind of view can show. `shown_in` (many) names the views that show it
+# (picture, diagram, chart, map, document, card), where that is plain.
+@k.attributes.aspect core.type of=k.attributes.aspect shared=true closed=true core.source="hand-core 1"
+@k.attributes.aspect.name core.slot of=k.attributes.aspect key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.attributes.aspect.about core.slot of=k.attributes.aspect key=about required=true kind=string core.source="hand-core 1"
+@k.attributes.aspect.shown_in core.slot of=k.attributes.aspect key=shown_in many=true enum=picture enum=diagram enum=chart enum=map enum=document enum=card core.source="hand-core 1"
+
+# A family of things that share their aspects: the things of one type of a world (`world`, `type`; the key `by`
+# of that type names the thing). The family "common thing" has no type of its own.
+@k.attributes.family core.type of=k.attributes.family shared=true closed=true core.source="hand-core 1"
+@k.attributes.family.name core.slot of=k.attributes.family key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.attributes.family.about core.slot of=k.attributes.family key=about required=true kind=string core.source="hand-core 1"
+@k.attributes.family.world core.slot of=k.attributes.family key=world kind=atom core.source="hand-core 1"
+@k.attributes.family.type core.slot of=k.attributes.family key=type kind=atom core.source="hand-core 1"
+@k.attributes.family.by core.slot of=k.attributes.family key=by kind=atom core.source="hand-core 1"
+
+# A family shows an aspect: the facts of `type` (world `world`) whose key `by` is the name of the thing carry a
+# value of the aspect under `key`. A family has an aspect when it has at least one such fact; how many things of
+# the family have a value is counted in ASPECTS.md, not here.
+@k.attributes.shows core.type of=k.attributes.shows shared=true closed=true core.source="hand-core 1"
+@k.attributes.shows.family core.slot of=k.attributes.shows key=family id=true required=true kind=atom kind=string type=k.attributes.family by=name core.source="hand-core 1"
+@k.attributes.shows.aspect core.slot of=k.attributes.shows key=aspect required=true kind=atom type=k.attributes.aspect by=name core.source="hand-core 1"
+@k.attributes.shows.world core.slot of=k.attributes.shows key=world required=true kind=atom core.source="hand-core 1"
+@k.attributes.shows.type core.slot of=k.attributes.shows key=type id=true required=true kind=atom core.source="hand-core 1"
+@k.attributes.shows.key core.slot of=k.attributes.shows key=key id=true required=true kind=atom core.source="hand-core 1"
+@k.attributes.shows.by core.slot of=k.attributes.shows key=by required=true kind=atom core.source="hand-core 1"
+
+# The typical range of a number for things of a kind (block 15:15 item 3), so that "a number far from the usual" can
+# be computed (k.interest: range_distance): the numbers are those of `type` under `key` (their unit is in
+# k.units.measure); `kind` the kind the range is for (a k.attributes.kind, a class of k.animals, a kind of k.people,
+# or a k.attributes.thing name; none: every fact of the type). `low` and `high` the range, `median` its middle;
+# `basis` catalog: the interquartile range and median of the `count` numbers of the kind in the catalog
+# (tools/ranges-core.mjs; the quartile is the number at floor(p * (count - 1)) of the sorted numbers), source: a
+# published work (`cite`), own: own choice (`own` says what, and `cite` what it rests on, if anything). A range of a
+# catalog's numbers is the catalog's usual, not a measured population (the model-labelled numbers of
+# k.attributes.number). A kind may have a catalog range and a sourced one (the basis is part of the identity): the
+# catalog's is the usual of everyday things, a sourced one the usual of the population its `cite` names (Wikidata's
+# taxa with a mass are mostly small species).
+@k.attributes.range core.type of=k.attributes.range shared=true closed=true core.source="hand-core 1"
+@k.attributes.range.type core.slot of=k.attributes.range key=type id=true required=true kind=atom core.source="hand-core 1"
+@k.attributes.range.key core.slot of=k.attributes.range key=key id=true required=true kind=atom core.source="hand-core 1"
+@k.attributes.range.kind core.slot of=k.attributes.range key=kind id=true kind=atom kind=string core.source="hand-core 1"
+@k.attributes.range.low core.slot of=k.attributes.range key=low required=true kind=number core.source="hand-core 1"
+@k.attributes.range.high core.slot of=k.attributes.range key=high required=true kind=number core.source="hand-core 1"
+@k.attributes.range.median core.slot of=k.attributes.range key=median kind=number core.source="hand-core 1"
+@k.attributes.range.count core.slot of=k.attributes.range key=count kind=integer min=1 core.source="hand-core 1"
+@k.attributes.range.basis core.slot of=k.attributes.range key=basis id=true required=true enum=catalog enum=source enum=own core.source="hand-core 1"
+@k.attributes.range.cite core.slot of=k.attributes.range key=cite kind=string core.source="hand-core 1"
+@k.attributes.range.own core.slot of=k.attributes.range key=own kind=string core.source="hand-core 1"
+
+# How usual it is that a thing of a kind has, and a request names, a value for an attribute (block 14:15 item 2):
+# `of` a k.attributes.kind name (its `attribute` a k.attributes.attribute) or a type of a world (a world schema's
+# kind, w.seating.guest; a knowledge type, k.geo.country: its `attribute` a key of that type); `weight` in (0, 1],
+# own choice (1: nearly always named; 0.1: seldom). A sampler weighs the attributes it names by it; an attribute a
+# kind has with no fact here is not unusual, only not weighed.
+@k.attributes.typical core.type of=k.attributes.typical shared=true closed=true core.source="hand-core 1"
+@k.attributes.typical.of core.slot of=k.attributes.typical key=of id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.attributes.typical.attribute core.slot of=k.attributes.typical key=attribute id=true required=true kind=atom core.source="hand-core 1"
+@k.attributes.typical.weight core.slot of=k.attributes.typical key=weight required=true kind=number min=0.01 max=1 core.source="hand-core 1"
+
+# Which keys a composition may narrate (block 00:05 item 1), one fact per slot of every k.* type, computed by
+# tools/narration-core.mjs from the catalog's own facts: `narrate` no for identifiers and metadata (codes, formal
+# names, sources, joins to drawings and senses, internal numbers, coordinates, colour codes), the naming key, and every
+# key of a machinery type (how to draw, move, plan, compose), with `why`; `form` how a narrated key is said
+# (state, count, measure, kind, text, relation; w.lang.en.phrasing says each in English); `salience` in [0, 1]: the
+# typicality weight of k.attributes.typical where there is one (`basis` typical), else measured from the questions
+# that ask the key, k.attributes.shows and the share of facts that have it (`basis` measured).
+@k.attributes.narration core.type of=k.attributes.narration shared=true closed=true core.source="hand-core 1"
+@k.attributes.narration.type core.slot of=k.attributes.narration key=type id=true required=true kind=atom core.source="hand-core 1"
+@k.attributes.narration.key core.slot of=k.attributes.narration key=key id=true required=true kind=atom core.source="hand-core 1"
+@k.attributes.narration.narrate core.slot of=k.attributes.narration key=narrate required=true enum=yes enum=no core.source="hand-core 1"
+@k.attributes.narration.salience core.slot of=k.attributes.narration key=salience required=true kind=number min=0 max=1 core.source="hand-core 1"
+@k.attributes.narration.form core.slot of=k.attributes.narration key=form enum=state enum=count enum=measure enum=kind enum=text enum=relation core.source="hand-core 1"
+@k.attributes.narration.basis core.slot of=k.attributes.narration key=basis enum=typical enum=measured core.source="hand-core 1"
+@k.attributes.narration.why core.slot of=k.attributes.narration key=why kind=string core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.attributes.word.narration core.word text=narration text=narratable text=salience means=k.attributes.narration core.source="hand-core 1"
+@k.attributes.word.aspect core.word text=aspect text=aspects text=view text=views means=k.attributes.aspect core.source="hand-core 1"
+@k.attributes.word.attribute core.word text=attribute text=attributes text=property text=properties text=feature text=features means=k.attributes.attribute core.source="hand-core 1"
+@k.attributes.word.colour core.word text=colour text=color text=coloured text=colored means=k.attributes.thing.colour core.source="hand-core 1"
+@k.attributes.word.drawn_colour core.word text=drawn text="drawn colour" text="colour of the drawing" means=k.attributes.drawn.drawn_colour core.source="hand-core 1"
+@k.attributes.word.material core.word text=material text=made text="made of" text="made from" means=k.attributes.thing.material core.source="hand-core 1"
+@k.attributes.word.wheels core.word text=wheel text=wheels means=k.attributes.thing.wheels core.source="hand-core 1"
+@k.attributes.word.can core.word text=can text=able means=k.attributes.thing.can core.source="hand-core 1"
+@k.attributes.word.number core.word text=numbers text="how big" text="how heavy" text="how fast" text=measurements means=k.attributes.number core.source="hand-core 1"
+@k.attributes.word.size_about core.word text=size text=long text=big text=metres text=meters means=k.attributes.number.size_about core.source="hand-core 1"
+@k.attributes.word.weight_about core.word text=weight text=weigh text=weighs text=heavy text=kilograms text=kilos means=k.attributes.number.weight_about core.source="hand-core 1"
+@k.attributes.word.speed_about core.word text=speed text=fast text=quick text="kilometres per hour" means=k.attributes.number.speed_about core.source="hand-core 1"
+@k.attributes.word.price_class core.word text=price text=cost text=costs text=expensive text=cheap means=k.attributes.number.price_class core.source="hand-core 1"
+@k.attributes.word.usage core.word text=when text="who uses" text="used by" text=season text="time of day" means=k.attributes.usage core.source="hand-core 1"
+@k.attributes.word.used_for core.word text=use text=used text="used for" text=for means=k.attributes.thing.used_for core.source="hand-core 1"
+
+# Words for the attributes that can put things in order (the criterion of make, place and group in k.actions: "a timeline
+# of the planets by distance from the sun", "sorted by how big they are"): the phrases a request names an attribute
+# with, besides its name. "distance from the sun": k.space keeps the distance of a body from what it orbits, the Sun for
+# the planets. w.lang.en's lexicon order.criterion is these words and the names of the attributes that hold a number,
+# a size or a step of a scale (tools/lang-en-diagram-frames.mjs).
+@k.attributes.word.name.distance core.word text="distance from the sun" text="how far" text="how far away" text="how far from the sun" text="closeness to the sun" means=distance of=k.attributes.attribute.name core.source="hand-core 1"
+@k.attributes.word.name.size core.word text="how big" text="how large" means=size of=k.attributes.attribute.name core.source="hand-core 1"
+@k.attributes.word.name.length core.word text="how long" means=length of=k.attributes.attribute.name core.source="hand-core 1"
+@k.attributes.word.name.height core.word text="how tall" text="how high" means=height of=k.attributes.attribute.name core.source="hand-core 1"
+@k.attributes.word.name.weight core.word text="how heavy" means=weight of=k.attributes.attribute.name core.source="hand-core 1"
+@k.attributes.word.name.speed core.word text="how fast" means=speed of=k.attributes.attribute.name core.source="hand-core 1"
+@k.attributes.word.name.temperature core.word text="how hot" text="how cold" means=temperature of=k.attributes.attribute.name core.source="hand-core 1"
+@k.attributes.word.name.price core.word text="how much it costs" text="how expensive" means=price of=k.attributes.attribute.name core.source="hand-core 1"
+@k.attributes.word.name.legs core.word text="number of legs" means=legs of=k.attributes.attribute.name core.source="hand-core 1"
+@k.attributes.word.name.wheels core.word text="number of wheels" means=wheels of=k.attributes.attribute.name core.source="hand-core 1"
+@k.attributes.word.name.sides core.word text="number of sides" means=sides of=k.attributes.attribute.name core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.attributes.word.key.attribute.holds core.word text=holds means=k.attributes.attribute.holds core.source="hand-core 1"
+@k.attributes.word.key.attribute.aspect core.word text=aspect means=k.attributes.attribute.aspect core.source="hand-core 1"
+@k.attributes.word.key.attribute.about core.word text=about means=k.attributes.attribute.about core.source="hand-core 1"
+@k.attributes.word.key.attribute.default_type core.word text="default type" means=k.attributes.attribute.default_type core.source="hand-core 1"
+@k.attributes.word.key.attribute.default_key core.word text="default key" means=k.attributes.attribute.default_key core.source="hand-core 1"
+@k.attributes.word.key.switch.on core.word text=on means=k.attributes.switch.on core.source="hand-core 1"
+@k.attributes.word.key.switch.off core.word text=off means=k.attributes.switch.off core.source="hand-core 1"
+@k.attributes.word.key.switch.default core.word text=default means=k.attributes.switch.default core.source="hand-core 1"
+@k.attributes.word.key.switch.about core.word text=about means=k.attributes.switch.about core.source="hand-core 1"
+@k.attributes.word.key.found.world core.word text=world means=k.attributes.found.world core.source="hand-core 1"
+@k.attributes.word.key.found.type core.word text=type means=k.attributes.found.type core.source="hand-core 1"
+@k.attributes.word.key.found.key core.word text=key means=k.attributes.found.key core.source="hand-core 1"
+@k.attributes.word.key.found.covers core.word text=covers means=k.attributes.found.covers core.source="hand-core 1"
+@k.attributes.word.key.kind.attribute core.word text=attribute means=k.attributes.kind.attribute core.source="hand-core 1"
+@k.attributes.word.key.thing.kind core.word text=kind means=k.attributes.thing.kind core.source="hand-core 1"
+@k.attributes.word.key.thing.wheels core.word text=many means=k.attributes.thing.wheels core.source="hand-core 1"
+@k.attributes.word.key.thing.can core.word text=do means=k.attributes.thing.can core.source="hand-core 1"
+@k.attributes.word.key.drawn.drawn_shade core.word text="drawn shade" means=k.attributes.drawn.drawn_shade core.source="hand-core 1"
+@k.attributes.word.key.number.sense core.word text=sense means=k.attributes.number.sense core.source="hand-core 1"
+@k.attributes.word.key.number.weight_class core.word text="weight class" means=k.attributes.number.weight_class core.source="hand-core 1"
+@k.attributes.word.key.number.speed_class core.word text="speed class" means=k.attributes.number.speed_class core.source="hand-core 1"
+@k.attributes.word.key.number.legs core.word text=legs means=k.attributes.number.legs core.source="hand-core 1"
+@k.attributes.word.key.number.sides core.word text=sides means=k.attributes.number.sides core.source="hand-core 1"
+@k.attributes.word.key.number.price_class core.word text="price class" means=k.attributes.number.price_class core.source="hand-core 1"
+@k.attributes.word.key.usage.sense core.word text=sense means=k.attributes.usage.sense core.source="hand-core 1"
+@k.attributes.word.key.usage.season core.word text=season means=k.attributes.usage.season core.source="hand-core 1"
+@k.attributes.word.key.usage.time core.word text=time means=k.attributes.usage.time core.source="hand-core 1"
+@k.attributes.word.key.usage.weather core.word text=weather means=k.attributes.usage.weather core.source="hand-core 1"
+@k.attributes.word.key.usage.age core.word text=age means=k.attributes.usage.age core.source="hand-core 1"
+@k.attributes.word.key.usage.used_by core.word text="used by" means=k.attributes.usage.used_by core.source="hand-core 1"
+@k.attributes.word.key.same.sense core.word text=sense means=k.attributes.same.sense core.source="hand-core 1"
+@k.attributes.word.key.same.only core.word text=only means=k.attributes.same.only core.source="hand-core 1"
+@k.attributes.word.key.same.in core.word text=in means=k.attributes.same.in core.source="hand-core 1"
+@k.attributes.word.key.same.unsure core.word text=unsure means=k.attributes.same.unsure core.source="hand-core 1"
+@k.attributes.word.key.same.by_word core.word text="by word" means=k.attributes.same.by_word core.source="hand-core 1"
+@k.attributes.word.key.aspect.about core.word text=about means=k.attributes.aspect.about core.source="hand-core 1"
+@k.attributes.word.key.aspect.shown_in core.word text="shown in" means=k.attributes.aspect.shown_in core.source="hand-core 1"
+@k.attributes.word.key.family.about core.word text=about means=k.attributes.family.about core.source="hand-core 1"
+@k.attributes.word.key.family.world core.word text=world means=k.attributes.family.world core.source="hand-core 1"
+@k.attributes.word.key.family.type core.word text=type means=k.attributes.family.type core.source="hand-core 1"
+@k.attributes.word.key.family.by core.word text=by means=k.attributes.family.by core.source="hand-core 1"
+@k.attributes.word.key.shows.aspect core.word text=aspect means=k.attributes.shows.aspect core.source="hand-core 1"
+@k.attributes.word.key.shows.world core.word text=world means=k.attributes.shows.world core.source="hand-core 1"
+@k.attributes.word.key.shows.type core.word text=type means=k.attributes.shows.type core.source="hand-core 1"
+@k.attributes.word.key.shows.key core.word text=key means=k.attributes.shows.key core.source="hand-core 1"
+@k.attributes.word.key.shows.by core.word text=by means=k.attributes.shows.by core.source="hand-core 1"
+@k.attributes.word.key.range.key core.word text=key means=k.attributes.range.key core.source="hand-core 1"
+@k.attributes.word.key.range.kind core.word text=kind means=k.attributes.range.kind core.source="hand-core 1"
+@k.attributes.word.key.range.low core.word text=low means=k.attributes.range.low core.source="hand-core 1"
+@k.attributes.word.key.range.high core.word text=high means=k.attributes.range.high core.source="hand-core 1"
+@k.attributes.word.key.range.median core.word text=median means=k.attributes.range.median core.source="hand-core 1"
+@k.attributes.word.key.range.count core.word text=count means=k.attributes.range.count core.source="hand-core 1"
+@k.attributes.word.key.range.basis core.word text=basis means=k.attributes.range.basis core.source="hand-core 1"
+@k.attributes.word.key.range.cite core.word text=cite means=k.attributes.range.cite core.source="hand-core 1"
+@k.attributes.word.key.range.own core.word text=own means=k.attributes.range.own core.source="hand-core 1"
+@k.attributes.word.key.typical.attribute core.word text=attribute means=k.attributes.typical.attribute core.source="hand-core 1"
+@k.attributes.word.key.typical.weight core.word text=weight means=k.attributes.typical.weight core.source="hand-core 1"
+@k.attributes.word.key.narration.key core.word text=key means=k.attributes.narration.key core.source="hand-core 1"
+@k.attributes.word.key.narration.narrate core.word text=narrate means=k.attributes.narration.narrate core.source="hand-core 1"
+@k.attributes.word.key.narration.salience core.word text=salience means=k.attributes.narration.salience core.source="hand-core 1"
+@k.attributes.word.key.narration.form core.word text=form means=k.attributes.narration.form core.source="hand-core 1"
+@k.attributes.word.key.narration.basis core.word text=basis means=k.attributes.narration.basis core.source="hand-core 1"
+@k.attributes.word.key.narration.why core.word text=why means=k.attributes.narration.why core.source="hand-core 1"

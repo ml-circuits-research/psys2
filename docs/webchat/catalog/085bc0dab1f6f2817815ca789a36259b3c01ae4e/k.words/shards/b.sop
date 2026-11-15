@@ -1,0 +1,9 @@
+# k.words/shards/b: senses of the words from "b" to "b" (first letters "b").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.b.noun.1 k.words.sense word=B pos=noun n=1 supersense=noun.animal gloss="aerobic rod-shaped spore-producing bacterium; often occurring in chainlike formations; found primarily in soil" synonym=bacillus is_a=eubacteria kind_of=eubacteria kind_of=bacteria kind_of=microorganism kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.b.noun.2 k.words.sense word=B pos=noun n=2 supersense=noun.substance gloss="originally thought to be a single vitamin but now separated into several B vitamins" synonym="B-complex vitamin" synonym="B complex" synonym="vitamin B complex" synonym="vitamin B" synonym="B vitamin" is_a="water-soluble vitamin" kind_of="water-soluble vitamin" kind_of=vitamin kind_of=nutriment kind_of=food kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.b.noun.3 k.words.sense word=B pos=noun n=3 supersense=noun.substance gloss="a trivalent metalloid element; occurs both in a hard black crystal and in the form of a yellow or brown powder" synonym=boron synonym="atomic number 5" is_a="chemical element" kind_of="chemical element" kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.b.spelling.B core.word text=b means=B of=k.words.sense.word core.source="wordnet 3.1"

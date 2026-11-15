@@ -1,0 +1,8 @@
+# w.lang.ro/shards/templates: realisation templates of replies (std.morph realise): a role in the cell the template names, an adjective agreeing with its noun.
+# sources: hand-core 1 (written by hand in this repository)
+# license: CC0-1.0
+# script: tools/lang-ro-core.mjs
+
+@w.lang.ro.template.make w.lang.ro.template act=make text="am desenat {art@kind} {kind:num=sg,case=nomacc,def=no} {colour@kind}" core.source="hand-core 1"
+@w.lang.ro.template.remove w.lang.ro.template act=remove text="am șters {thing:num=sg,case=nomacc,def=yes}" core.source="hand-core 1"
+@w.lang.ro.template.change w.lang.ro.template act=change text="{thing:num=sg,case=nomacc,def=yes} este acum {colour@thing}" core.source="hand-core 1"

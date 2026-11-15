@@ -1,0 +1,7 @@
+# k.words/shards/zh: senses of the words from "zhou" to "zhou" (first letters "zh").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.zhou.noun.1 k.words.sense word=Zhou pos=noun n=1 supersense=noun.group gloss="the imperial dynasty of China from 1122 to 221 BC; notable for the rise of Confucianism and Taoism" synonym="Zhou dynasty" synonym=Chou synonym="Chou dynasty" synonym=Chow synonym="Chow dynasty" is_a=dynasty core.source="wordnet 3.1"
+@k.words.zhou.spelling.Zhou core.word text=zhou means=Zhou of=k.words.sense.word core.source="wordnet 3.1"

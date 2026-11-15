@@ -1,0 +1,11 @@
+# k.words/shards/e: senses of the words from "e" to "e-mail" (first letters "e").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.e.noun.1 k.words.sense word=E pos=noun n=1 supersense=noun.substance gloss="a fat-soluble vitamin that is essential for normal reproduction; an important antioxidant that neutralizes free radicals in the body" synonym="vitamin E" synonym=tocopherol is_a="fat-soluble vitamin" is_a=antioxidant kind_of="fat-soluble vitamin" kind_of=vitamin kind_of=nutriment kind_of=food kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.e.noun.2 k.words.sense word=E pos=noun n=2 supersense=noun.substance gloss="a radioactive transuranic element produced by bombarding plutonium with neutrons" synonym=einsteinium synonym=Es synonym="atomic number 99" is_a="metallic element" kind_of="metallic element" kind_of="chemical element" kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.e.noun.3 k.words.sense word=E pos=noun n=3 supersense=noun.relation gloss="the cardinal compass point that is at 90 degrees" synonym=east synonym="due east" synonym=eastward is_a="cardinal compass point" kind_of="cardinal compass point" kind_of="compass point" kind_of=direction kind_of=position kind_of=relation kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.e.spelling.E core.word text=e means=E of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.e-mail.noun.1 k.words.sense word=e-mail pos=noun n=1 supersense=noun.communication gloss="(computer science) a system of world-wide electronic communication in which a computer user can compose a message at one terminal that can be regenerated at the recipient's terminal when the recipient logs in" synonym="electronic mail" synonym=email is_a="electronic communication" opposite="snail mail" core.source="wordnet 3.1"
+@k.words.e-mail.verb.1 k.words.sense word=e-mail pos=verb n=1 supersense=verb.communication gloss="communicate electronically on the computer" synonym=email synonym=netmail is_a=telecommunicate core.source="wordnet 3.1"

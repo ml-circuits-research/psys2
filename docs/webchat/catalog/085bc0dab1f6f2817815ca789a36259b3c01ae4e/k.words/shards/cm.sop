@@ -1,0 +1,8 @@
+# k.words/shards/cm: senses of the words from "cm" to "cm" (first letters "cm").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.cm.noun.1 k.words.sense word=cm pos=noun n=1 supersense=noun.quantity gloss="a metric unit of length equal to one hundredth of a meter" synonym=centimeter synonym=centimetre is_a="metric linear unit" part_of=decimeter core.source="wordnet 3.1"
+@k.words.cm.noun.2 k.words.sense word=Cm pos=noun n=2 supersense=noun.substance gloss="a radioactive transuranic metallic element; produced by bombarding plutonium with helium nuclei" synonym=curium synonym="atomic number 96" is_a="metallic element" core.source="wordnet 3.1"
+@k.words.cm.spelling.Cm core.word text=cm means=Cm of=k.words.sense.word core.source="wordnet 3.1"

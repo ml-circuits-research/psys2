@@ -16,11 +16,11 @@
  *   enc.attach(engine); engine.formalizers.encoder = enc;
  *   enc.onStatus((s) => ...);   // { state: 'idle' | 'loading' | 'ready' | 'error', message, ms? }
  */
-import { formalize } from '../formalizer/rules/index.mjs?v=27cce628a5';
+import { formalize } from '../formalizer/rules/index.mjs?v=a815012811';
 import { createDispatcherRuntime, candidateSegmentations } from '../formalizer/dispatcher-runtime.mjs?v=2deeb9a0c4';
 import { perf } from '../formalizer/perf.mjs?v=b81e032a17';
-import { createDispatchValidator } from './dispatch-validate.mjs?v=1f716050fb';
-import { rerankPrediction, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=1bff2fd1fd';
+import { createDispatchValidator } from './dispatch-validate.mjs?v=33711a620e';
+import { rerankPrediction, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=d358df682a';
 
 /** Demo policy: a parse the interpreter refuses for a state reason (spec 03 section 7, questions Q3) still counts as understood. */
 export const ENCODER_DEFAULT_POLICY = { acceptRefused: true };
@@ -94,7 +94,7 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
       for (const [x, y] of c[0].segments) { const t = text.slice(x, y); pieces.push({ text: t, world: (await runtime.rank(t, ctx))[0]?.world ?? null }); }
       return { pieces, margin: c[0].score - (c[1]?.score ?? -Infinity) };
     },
-    supports: (world) => (runtime ? runtime.worlds.includes(world?.id) : true),
+    supports: (world) => (runtime ? runtime.worlds.includes(world?.id) || (world?.replaces ?? []).some((r) => runtime.worlds.includes(r)) : true),   // a world that replaces a retired label (ADR-011)
 
     async formalize(text, { worlds: set, session, source = 'input', context } = {}) {
       if (!engine) throw new Error('the dispatcher formalizer is not attached to an engine');

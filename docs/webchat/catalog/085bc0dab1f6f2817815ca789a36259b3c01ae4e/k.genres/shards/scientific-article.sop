@@ -1,0 +1,54 @@
+# k.genres/shards/scientific-article: the genre "scientific article": 6 parts in order with how many times each occurs, and 27 steps (the moves of each part in order, with alternatives and sentence counts).
+# sources: hand-core 1 (hand-written in this repository: tools/genres-core.mjs; the works cited are in WORLD.md)
+# license: CC0-1.0
+# script: tools/genres-core.mjs
+
+@k.genres.genre.scientific_article k.genres.genre name="scientific article" about="A research article: an abstract, then introduction, methods, results and discussion (IMRaD), and an optional conclusion; the introduction makes the moves of Swales' CARS model." register=scientific unit=chapter also_move=define also_move=transition also_move="give example" source=sollaci2004 source=apa2020 source=swales1990 source=swales2004 own="The conclusion as a part of its own (optional) and the counts of sentences per move." core.source="hand-core 1"
+
+# abstract
+@k.genres.part.scientific_article.abstract k.genres.part genre="scientific article" name=abstract n=1 min=1 max=1 heading=Abstract about="The whole article in a few sentences, one for each move." source=hyland2000 source=apa2020 core.source="hand-core 1"
+@k.genres.step.scientific_article.abstract.1.introduce_topic k.genres.step genre="scientific article" part=abstract n=1 move="introduce topic" min=0 max=1 stage=introduction source=hyland2000 core.source="hand-core 1"
+@k.genres.step.scientific_article.abstract.2.state_purpose k.genres.step genre="scientific article" part=abstract n=2 move="state purpose" min=1 max=1 stage=purpose source=hyland2000 core.source="hand-core 1"
+@k.genres.step.scientific_article.abstract.3.describe_method k.genres.step genre="scientific article" part=abstract n=3 move="describe method" min=1 max=1 stage=method tense=past source=hyland2000 core.source="hand-core 1"
+@k.genres.step.scientific_article.abstract.4.report_result k.genres.step genre="scientific article" part=abstract n=4 move="report result" min=1 max=2 stage=product tense=past source=hyland2000 core.source="hand-core 1"
+@k.genres.step.scientific_article.abstract.5.conclude k.genres.step genre="scientific article" part=abstract n=5 move=conclude min=1 max=1 stage=conclusion source=hyland2000 core.source="hand-core 1"
+
+# introduction
+@k.genres.part.scientific_article.introduction k.genres.part genre="scientific article" name=introduction n=2 min=1 max=1 heading=Introduction about="Why the topic matters, what is not known about it, and what this article does (CARS)." source=swales1990 source=swales2004 core.source="hand-core 1"
+@k.genres.step.scientific_article.introduction.1.claim_centrality k.genres.step genre="scientific article" part=introduction n=1 move="claim centrality" min=0 max=1 stage="establishing a territory" source=swales1990 core.source="hand-core 1"
+@k.genres.step.scientific_article.introduction.2.generalise k.genres.step genre="scientific article" part=introduction n=2 move=generalise min=1 max=2 stage="establishing a territory" source=swales1990 core.source="hand-core 1"
+@k.genres.step.scientific_article.introduction.3.review_previous_work k.genres.step genre="scientific article" part=introduction n=3 move="review previous work" min=1 max=3 stage="establishing a territory" source=swales1990 core.source="hand-core 1"
+@k.genres.step.scientific_article.introduction.4.indicate_a_gap k.genres.step genre="scientific article" part=introduction n=4 move="indicate a gap" min=1 max=1 stage="establishing a niche" source=swales1990 core.source="hand-core 1"
+@k.genres.step.scientific_article.introduction.4.raise_a_question k.genres.step genre="scientific article" part=introduction n=4 move="raise a question" min=1 max=1 stage="establishing a niche" source=swales1990 core.source="hand-core 1"
+@k.genres.step.scientific_article.introduction.4.counter-claim k.genres.step genre="scientific article" part=introduction n=4 move=counter-claim min=1 max=1 stage="establishing a niche" source=swales1990 core.source="hand-core 1"
+@k.genres.step.scientific_article.introduction.5.state_purpose k.genres.step genre="scientific article" part=introduction n=5 move="state purpose" min=1 max=1 stage="occupying the niche" source=swales1990 source=swales2004 core.source="hand-core 1"
+@k.genres.step.scientific_article.introduction.6.announce_findings k.genres.step genre="scientific article" part=introduction n=6 move="announce findings" min=0 max=1 stage="occupying the niche" source=swales2004 core.source="hand-core 1"
+@k.genres.step.scientific_article.introduction.7.outline_structure k.genres.step genre="scientific article" part=introduction n=7 move="outline structure" min=0 max=1 stage="occupying the niche" source=swales2004 core.source="hand-core 1"
+
+# methods
+@k.genres.part.scientific_article.methods k.genres.part genre="scientific article" name=methods n=3 min=1 max=1 heading=Methods tense=past about="What was done: the facts used and how they were measured or compared." source=apa2020 source=sollaci2004 core.source="hand-core 1"
+@k.genres.step.scientific_article.methods.1.describe_method k.genres.step genre="scientific article" part=methods n=1 move="describe method" min=2 max=5 source=apa2020 core.source="hand-core 1"
+
+# results
+@k.genres.part.scientific_article.results k.genres.part genre="scientific article" name=results n=4 min=1 max=1 heading=Results tense=past about="What was found, with numbers and units, compared where it helps." source=apa2020 source=yangAllison2003 core.source="hand-core 1"
+@k.genres.step.scientific_article.results.1.report_result k.genres.step genre="scientific article" part=results n=1 move="report result" min=2 max=5 source=yangAllison2003 core.source="hand-core 1"
+@k.genres.step.scientific_article.results.2.compare k.genres.step genre="scientific article" part=results n=2 move=compare min=0 max=2 about="comment on the results by comparing them" source=yangAllison2003 source=swalesFeak2012 core.source="hand-core 1"
+@k.genres.step.scientific_article.results.3.summarize k.genres.step genre="scientific article" part=results n=3 move=summarize min=0 max=1 source=yangAllison2003 core.source="hand-core 1"
+
+# discussion
+@k.genres.part.scientific_article.discussion k.genres.part genre="scientific article" name=discussion n=5 min=1 max=1 heading=Discussion about="What the results mean, how they compare with earlier work, what the study could not show, and what follows." source=yangAllison2003 source=apa2020 core.source="hand-core 1"
+@k.genres.step.scientific_article.discussion.1.summarize k.genres.step genre="scientific article" part=discussion n=1 move=summarize min=1 max=1 tense=past about="the main findings again" source=yangAllison2003 core.source="hand-core 1"
+@k.genres.step.scientific_article.discussion.2.interpret_result k.genres.step genre="scientific article" part=discussion n=2 move="interpret result" min=1 max=3 about="comment on the findings" source=yangAllison2003 source=hyland1998 core.source="hand-core 1"
+@k.genres.step.scientific_article.discussion.2.compare k.genres.step genre="scientific article" part=discussion n=2 move=compare min=1 max=3 about="comment on the findings" source=yangAllison2003 source=hyland1998 core.source="hand-core 1"
+@k.genres.step.scientific_article.discussion.2.surprising_fact k.genres.step genre="scientific article" part=discussion n=2 move="surprising fact" min=1 max=3 about="comment on the findings" source=yangAllison2003 source=hyland1998 core.source="hand-core 1"
+@k.genres.step.scientific_article.discussion.3.state_limitation k.genres.step genre="scientific article" part=discussion n=3 move="state limitation" min=0 max=1 source=yangAllison2003 core.source="hand-core 1"
+@k.genres.step.scientific_article.discussion.4.recommend k.genres.step genre="scientific article" part=discussion n=4 move=recommend min=0 max=1 about="further research" source=yangAllison2003 core.source="hand-core 1"
+@k.genres.step.scientific_article.discussion.5.conclude k.genres.step genre="scientific article" part=discussion n=5 move=conclude min=1 max=1 source=yangAllison2003 core.source="hand-core 1"
+
+# conclusion
+@k.genres.part.scientific_article.conclusion k.genres.part genre="scientific article" name=conclusion n=6 min=0 max=1 heading=Conclusion about="The point of the article in a few sentences." source=niso2005 own="A separate conclusion is optional (many journals end with the discussion)." core.source="hand-core 1"
+@k.genres.step.scientific_article.conclusion.1.summarize k.genres.step genre="scientific article" part=conclusion n=1 move=summarize min=1 max=2 source=niso2005 core.source="hand-core 1"
+@k.genres.step.scientific_article.conclusion.2.conclude k.genres.step genre="scientific article" part=conclusion n=2 move=conclude min=1 max=1 source=niso2005 core.source="hand-core 1"
+
+# Other names of the genre.
+@k.genres.word.genre.scientific_article core.word text="scientific articles" text=article text="research article" text=paper text="scientific paper" text="research paper" means="scientific article" of=k.genres.genre.name core.source="hand-core 1"

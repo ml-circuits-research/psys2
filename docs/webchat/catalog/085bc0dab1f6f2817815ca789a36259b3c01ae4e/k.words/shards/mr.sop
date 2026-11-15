@@ -1,0 +1,11 @@
+# k.words/shards/mr: senses of the words from "mr" to "mrs" (first letters "mr").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.mr.noun.1 k.words.sense word=Mr pos=noun n=1 supersense=noun.communication gloss="a form of address for a man" synonym=Mister synonym=Mr. is_a=title kind_of=title kind_of=appellation kind_of=name kind_of="language unit" kind_of=part kind_of=relation kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.mr.spelling.Mr core.word text=mr means=Mr of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.mri.noun.1 k.words.sense word=MRI pos=noun n=1 supersense=noun.act gloss="the use of nuclear magnetic resonance of protons to produce proton density images" synonym="magnetic resonance imaging" is_a=imaging core.source="wordnet 3.1"
+@k.words.mri.spelling.MRI core.word text=mri means=MRI of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.mrs.noun.1 k.words.sense word=Mrs pos=noun n=1 supersense=noun.communication gloss="a form of address for a married woman" synonym=Mrs. is_a=title kind_of=title kind_of=appellation kind_of=name kind_of="language unit" kind_of=part kind_of=relation kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.mrs.spelling.Mrs core.word text=mrs means=Mrs of=k.words.sense.word core.source="wordnet 3.1"

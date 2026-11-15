@@ -9,9 +9,9 @@
  *   (no veto hook: an action on a referent that must exist in the world - delete, move, color, connect, select - is refused in the world's plain words whatever the catalog knows; a hit never replaces that refusal with a gloss)
  * The catalog is `engine.knowledge` (`createEngine({ options: { knowledge } })`); without it every function here does nothing and the dialog is as it was.
  */
-import { leftOut, requestOf } from './world-aware.mjs?v=a216b6ed56';
-import { planHostOf } from '../plan/host.mjs?v=aa07762761';
-import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=d8c39c0c21';
+import { leftOut, requestOf } from './world-aware.mjs?v=3324fe2754';
+import { planHostOf } from '../plan/host.mjs?v=ac5d10883f';
+import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=09ca005543';
 import { guard } from '../formalizer/guard.mjs?v=82a55329d9';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
@@ -68,7 +68,8 @@ export function answerFrom(frame, th, catalog) {
 export const TIMED_OUT = Symbol('knowledge lookup timed out');
 export const LOOKUP_DEADLINE_MS = 6000;
 export const knowledgeStatsOf = (dialog) => (dialog.engine.knowledgeStats ??= { timeouts: 0, failures: 0 });
-async function within(dialog, promise) {
+/** A catalog wait bounded by the lookup deadline (TIMED_OUT past it or on a failure): a catalog that hangs delays a turn once and changes nothing. */
+export async function within(dialog, promise) {
   const st = knowledgeStatsOf(dialog);
   let timer;
   try {

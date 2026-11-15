@@ -1,0 +1,11 @@
+# k.faces/shards/personas-slots: the slots of the DiceBear style `personas`: the box that the variants of each slot fill in the 0 to 100 frame of the face, and the draw order.
+# sources: dicebear-personas 67f54a0 (DiceBear style "personas", CC BY 4.0: Remix of "Personas by Draftbit" (https://personas.draftbit.com/) by "Draftbit - draftbit.com", licensed under "CC BY 4.0" (https://creativecommons.org/licenses/by/4.0/))
+# license: CC-BY-4.0
+# script: tools/import/dicebear.mjs
+
+@k.faces.personas.slot.head k.faces.slot style=personas name=head x=22 y=20 w=56 h=69 z=0 core.source="dicebear-personas 67f54a0"
+@k.faces.personas.slot.eyes k.faces.slot style=personas name=eyes x=31 y=37 w=38 h=17 z=1 core.source="dicebear-personas 67f54a0"
+@k.faces.personas.slot.hair_front k.faces.slot style=personas name=hair_front x=14 y=7 w=71 h=85 z=2 core.source="dicebear-personas 67f54a0"
+@k.faces.personas.slot.shoulders k.faces.slot style=personas name=shoulders x=17 y=72 w=66 h=28 z=3 core.source="dicebear-personas 67f54a0"
+@k.faces.personas.slot.mouth k.faces.slot style=personas name=mouth x=42 y=58 w=17 h=14 z=4 core.source="dicebear-personas 67f54a0"
+@k.faces.personas.slot.beard k.faces.slot style=personas name=beard x=28 y=44 w=44 h=33 z=5 optional=true core.source="dicebear-personas 67f54a0"

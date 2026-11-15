@@ -1,0 +1,8 @@
+# k.scenes/shards/psys2: from the PSys2 world common.sense: 3 more things that are usually on another (wheel on road, car on road, book on shelf).
+# sources: psys2-worlds 6b63b2ba (the hand-written knowledge of the PSys2 tab worlds, the project's own data)
+# license: CC0-1.0
+# script: tools/import/psys2.mjs
+
+@k.scenes.psys2.wheel.road k.scenes.thing name=wheel on=road core.source="psys2-worlds 6b63b2ba"
+@k.scenes.psys2.car.road k.scenes.thing name=car on=road core.source="psys2-worlds 6b63b2ba"
+@k.scenes.psys2.book.shelf k.scenes.thing name=book on=shelf core.source="psys2-worlds 6b63b2ba"

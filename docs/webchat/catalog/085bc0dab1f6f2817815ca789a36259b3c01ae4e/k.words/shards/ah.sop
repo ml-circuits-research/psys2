@@ -1,0 +1,10 @@
+# k.words/shards/ah: senses of the words from "ahead" to "ahem" (first letters "ah").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ahead.adjective.1 k.words.sense word=ahead pos=adjective n=1 supersense=adj.all gloss="having the leading position or higher score in a contest" synonym="in the lead" synonym=leading near_opposite=down core.source="wordnet 3.1"
+@k.words.ahead.adverb.1 k.words.sense word=ahead pos=adverb n=1 supersense=adv.all gloss="at or in the front" synonym="in front" synonym=before core.source="wordnet 3.1"
+@k.words.ahead.adverb.2 k.words.sense word=ahead pos=adverb n=2 supersense=adv.all gloss="toward the future; forward in time" synonym=forward opposite=back core.source="wordnet 3.1"
+@k.words.ahead.adverb.3 k.words.sense word=ahead pos=adverb n=3 supersense=adv.all gloss="in a forward direction" synonym=onward synonym=onwards synonym=forward synonym=forwards synonym=forrader core.source="wordnet 3.1"
+@k.words.ahem.noun.1 k.words.sense word=ahem pos=noun n=1 supersense=noun.communication gloss="the utterance of a sound similar to clearing the throat; intended to get attention, express hesitancy, fill a pause, hide embarrassment, warn a friend, etc." synonym=hem is_a=utterance core.source="wordnet 3.1"

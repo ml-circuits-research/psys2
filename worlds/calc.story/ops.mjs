@@ -5,7 +5,8 @@
 import { storyState } from '../../src/vendor/sopworld/sopworld.mjs';
 import { en } from '../../src/lang/en.mjs';
 import { pluralize } from '../../src/formalizer/rules/lemma.mjs';
-import { MONEY_WORDS } from '../../src/knowledge/money-words.generated.mjs';   // the catalog's money words (k.units through w.lang.en)
+import { MONEY_WORDS } from '../../src/knowledge/money-words.generated.mjs';
+import { CALC_WORDS } from '../../src/knowledge/calc-words.generated.mjs';   // the catalog's words of arithmetic (K4: w.lang.en shard arithmetic)   // the catalog's money words (k.units through w.lang.en)
 
 export function initialState() { return { story: null, turns: 0 }; }
 
@@ -34,7 +35,15 @@ export function storyOptions(lang) {
   const askWords = [...phrase('lang.story.ask'), ...safe(() => [...en.words('wh')].filter((w) => /^how /.test(w)), [])].flatMap((p) => p.split(/[ _]+/));   // "how many", "how much" (w.lang.en wh)
   const when = phrase('lang.story.when').flatMap((p) => p.split(/[ _]+/));
   const skip = words([...safe(() => [...en.words('det')], []), ...aux, ...safe(() => [...en.words('prep')], []), ...when, 'away', 'back', 'up']).filter((w) => !(w in verbs) && !/^\d/.test(w) && !w.includes(' ') && !w.includes('_'));
-  return { verbs, numbers: safe(() => en.numerals(), {}), pronouns, self: self.length ? self : ['i', 'me'], question: words(askWords), all: phrase('lang.story.all').flatMap((p) => p.split(/[ _]+/)), skip };
+  // K4: the story words of the catalog (aggregate: "in total", "altogether"; extreme: "the most" / "the fewest"; comparison: "more", "fewer", "twice as many as"; state: "at first")
+  const k4 = (pred) => CALC_WORDS.filter(pred).map((w) => String(w.text).toLowerCase().split(/\s+/).filter((t) => !aux.has(t) && !['the', 'a', 'to', 'in', 'at', 'with', 'as', 'than', 'all'].includes(t)));
+  const lastOf = (pred) => words(k4(pred).map((ts) => ts.at(-1)).filter(Boolean));
+  const times = {};
+  for (const w of CALC_WORDS.filter((x) => x.kind === 'comparison' && x.form === 'relation' && x.factor)) times[String(w.text).toLowerCase().split(/\s+/)[0]] = w.factor;
+  return { verbs, numbers: safe(() => en.numerals(), {}), pronouns, self: self.length ? self : ['i', 'me'], question: words(askWords), all: words([...phrase('lang.story.all').flatMap((p) => p.split(/[ _]+/)), ...lastOf((w) => w.kind === 'aggregate')]), skip,
+    more: words(['more', ...lastOf((w) => w.kind === 'comparison' && w.form === 'question' && /^more$/.test(w.text))]), fewer: words(['fewer', 'less', ...lastOf((w) => w.kind === 'comparison' && w.form === 'question' && w.text !== 'more')]),
+    most: words(['most', ...lastOf((w) => w.kind === 'extreme' && w.calc === 'argmax')]), least: words(['least', 'fewest', ...lastOf((w) => w.kind === 'extreme' && w.calc === 'argmin')]),
+    start: words(['first', 'start', 'beginning', 'begin', 'began', ...k4((w) => w.kind === 'state' && w.state === 'start').flat()]), times: { thrice: 3, triple: 3, double: 2, ...times } };
 }
 
 /** The sentence with the case of the words its roles carry (the decline hook sees the lower-cased tokens; the library tells a name by its capital). */

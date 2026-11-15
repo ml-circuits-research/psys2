@@ -55,3 +55,14 @@
     doc="A sum is not a price: the shop declines it."
     input="How much is 2 plus 2?"
     expect="4"
+
+@t.plan.list.w1 core.test
+    session=wallet
+    doc="The catalog's wallet frames (list-frames wallet.start / wallet.left): the money the person has is the list's budget (they stand behind kids.shop while it is on)."
+    input="I start with 30 lei."
+    expect="30 lei"
+
+@t.plan.list.w2 core.test
+    session=wallet
+    input="How much money is left?"
+    expect="30 lei"

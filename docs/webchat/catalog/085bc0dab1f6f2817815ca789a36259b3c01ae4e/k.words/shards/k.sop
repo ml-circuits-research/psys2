@@ -1,0 +1,9 @@
+# k.words/shards/k: senses of the words from "k" to "k" (first letters "k").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.k.noun.1 k.words.sense word=K pos=noun n=1 supersense=noun.quantity gloss="the basic unit of thermodynamic temperature adopted under the Systeme International d'Unites" synonym=kelvin is_a="temperature unit" core.source="wordnet 3.1"
+@k.words.k.noun.2 k.words.sense word=K pos=noun n=2 supersense=noun.substance gloss="a light soft silver-white metallic element of the alkali metal group; oxidizes rapidly in air and reacts violently with water; is abundant in nature in combined forms occurring in sea water and in carnallite and kainite and sylvite" synonym=potassium synonym="atomic number 19" is_a="metallic element" core.source="wordnet 3.1"
+@k.words.k.noun.3 k.words.sense word=K pos=noun n=3 supersense=noun.quantity gloss="the cardinal number that is the product of 10 and 100" synonym=thousand synonym="one thousand" synonym=1000 synonym=M synonym=chiliad synonym=G synonym=grand synonym=thou synonym=yard is_a="large integer" core.source="wordnet 3.1"
+@k.words.k.spelling.K core.word text=k means=K of=k.words.sense.word core.source="wordnet 3.1"

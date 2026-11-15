@@ -1,0 +1,33 @@
+# k.scenes/shards/things-k: the usual place (sky, ground, water, indoors, on another thing) and the relative size (tiny to huge) of 28 things (the drawable things and the animals of k.animals) whose name starts with "k"; labelled by a language model from the names (named=model), a sample checked against the drawings.
+# sources: hand-core 1 (hand-written in this repository: sources/hand-core/place-size.tsv, and sources/hand-core/animals.tsv for the animals without a drawing)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+
+@k.scenes.thing.Komodo_dragon k.scenes.thing name="Komodo dragon" place=ground size=large named=model core.source="hand-core 1"
+@k.scenes.thing.kaaba k.scenes.thing name=kaaba place=ground size=huge named=model core.source="hand-core 1"
+@k.scenes.thing.kangaroo k.scenes.thing name=kangaroo place=ground size=large named=model core.source="hand-core 1"
+@k.scenes.thing.kebab k.scenes.thing name=kebab place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.kennel k.scenes.thing name=kennel place=ground size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.ketchup k.scenes.thing name=ketchup place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.kettle k.scenes.thing name=kettle place=indoors size=small named=model core.source="hand-core 1"
+@k.scenes.thing.key k.scenes.thing name=key place=indoors size=tiny named=model core.source="hand-core 1"
+@k.scenes.thing.keyboard k.scenes.thing name=keyboard place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.keyboard_electric k.scenes.thing name="keyboard electric" place=indoors size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.kick_scooter k.scenes.thing name="kick scooter" place=ground size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.killer_whale k.scenes.thing name="killer whale" place=water size=huge named=model core.source="hand-core 1"
+@k.scenes.thing.kimono k.scenes.thing name=kimono place=on_thing on=person size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.king k.scenes.thing name=king place=ground size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.kingfisher k.scenes.thing name=kingfisher size=small named=model core.source="hand-core 1"
+@k.scenes.thing.kitchen_knife k.scenes.thing name="kitchen knife" place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.kite k.scenes.thing name=kite place=sky size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.kitten k.scenes.thing name=kitten place=ground size=small named=model core.source="hand-core 1"
+@k.scenes.thing.kiwi k.scenes.thing name=kiwi place=indoors on=table size=tiny named=model core.source="hand-core 1"
+@k.scenes.thing.kiwi_bird k.scenes.thing name="kiwi bird" place=ground size=small named=model core.source="hand-core 1"
+@k.scenes.thing.kiwi_fruit k.scenes.thing name="kiwi fruit" place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.knickers k.scenes.thing name=knickers place=on_thing on=person size=small named=model core.source="hand-core 1"
+@k.scenes.thing.knife k.scenes.thing name=knife place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.knight k.scenes.thing name=knight place=ground size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.knob k.scenes.thing name=knob place=indoors size=tiny named=model core.source="hand-core 1"
+@k.scenes.thing.koala k.scenes.thing name=koala place=on_thing on=tree size=small named=model core.source="hand-core 1"
+@k.scenes.thing.koosh_ball k.scenes.thing name="koosh ball" place=indoors size=small named=model core.source="hand-core 1"
+@k.scenes.thing.krill k.scenes.thing name=krill place=water size=tiny named=model core.source="hand-core 1"

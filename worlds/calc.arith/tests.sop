@@ -1,0 +1,157 @@
+# calc.arith (kids plan, ADR-011, K4): sums with the catalog's words of arithmetic and the library's core.calc builtins. The k. rows are the sum rows of kids.arith
+# that the general world answers (kids.arith keeps its own rows while it is on).
+
+@t.calc.arith.n1 core.test
+    input="What is 7 plus 5?"
+    expect="7 plus 5 is 12."
+
+@t.calc.arith.n2 core.test
+    input="Share 12 between 3."
+    expect="12 divided by 3 is 4."
+
+@t.calc.arith.n3 core.test
+    doc="A split verb with the marker from names the second number first."
+    input="Subtract 4 from 10."
+    expect="10 minus 4 is 6."
+
+@t.calc.arith.n4 core.test
+    input="What is a quarter of 12?"
+    expect="A quarter of 12 is 3."
+
+@t.calc.arith.n5 core.test
+    doc="Refused (kids.arith answers it while it is on, calc.arith when it is off: both say so)."
+    input="What is 5 divided by 0?"
+    expect="Dividing by zero has no answer"
+
+@t.calc.arith.k.n25 core.test
+    input="What is 7 plus 5?"
+    expect="7 plus 5 is 12."
+
+@t.calc.arith.k.n26 core.test
+    input="How much is 3 times 4?"
+    expect="3 times 4 is 12."
+
+@t.calc.arith.k.n27 core.test
+    input="12 minus 5"
+    expect="12 minus 5 is 7."
+
+@t.calc.arith.k.n28 core.test
+    input="What is 20 divided by 4?"
+    expect="20 divided by 4 is 5."
+
+@t.calc.arith.k.n29 core.test
+    input="What is half of 10?"
+    expect="Half of 10 is 5."
+
+@t.calc.arith.k.n30 core.test
+    input="Double 6"
+    expect="Double 6 is 12."
+
+@t.calc.arith.k.n31 core.test
+    input="What is 5 divided by 0?"
+    expect="Dividing by zero has no answer"
+
+@t.calc.arith.k.n32 core.test
+    input="What is 0.1 plus 0.2?"
+    expect="0.1 plus 0.2 is 0.3."
+
+@t.calc.arith.k.n33 core.test
+    input="What is 10 divided by 4?"
+    expect="10 divided by 4 is 2.5."
+
+@t.calc.arith.k.n34 core.test
+    input="What is 10 divided by 3?"
+    expect="about 3.33"
+
+@t.calc.arith.k.n35 core.test
+    input="What is twenty minus seven?"
+    expect="20 minus 7 is 13."
+
+@t.calc.arith.k.n36 core.test
+    input="Half of seven"
+    expect="Half of 7 is 3.5."
+
+@t.calc.arith.k.n39 core.test
+    input="What is 3 minus 8?"
+    expect="3 minus 8 is -5."
+
+@t.calc.arith.k.sw082 core.test
+    input="whats 15 minus 8"
+    expect="15 minus 8 is 7."
+
+@t.calc.arith.k.sw084 core.test
+    input="15 less 8 is?"
+    expect="15 minus 8 is 7."
+
+@t.calc.arith.k.sw087 core.test
+    input="hey whats 15 minus 8 pls"
+    expect="15 minus 8 is 7."
+
+@t.calc.arith.k.sw090 core.test
+    input="tell me 15 minus 8"
+    expect="15 minus 8 is 7."
+
+@t.calc.arith.k.sw091 core.test
+    input="whats 7 plus 5"
+    expect="7 plus 5 is 12."
+
+@t.calc.arith.k.sw092 core.test
+    input="can u add 7 and 5 for me"
+    expect="7 plus 5 is 12."
+
+@t.calc.arith.k.sw096 core.test
+    input="7 plus 5 pls"
+    expect="7 plus 5 is 12."
+
+@t.calc.arith.k.sw099 core.test
+    input="whats 6 times 7"
+    expect="6 times 7 is 42."
+
+@t.calc.arith.k.sw104 core.test
+    input="6 times 7 equals?"
+    expect="6 times 7 is 42."
+
+@t.calc.arith.k.sw106 core.test
+    input="whats 20 divided by 4"
+    expect="20 divided by 4 is 5."
+
+@t.calc.arith.k.sw114 core.test
+    input="whats double 13 pls"
+    expect="Double 13 is 26."
+
+@t.calc.arith.k.sw117 core.test
+    input="half of 12 pls"
+    expect="Half of 12 is 6."
+
+@t.calc.arith.k.sw119 core.test
+    input="ok what is half of 12 lol"
+    expect="Half of 12 is 6."
+
+@t.calc.arith.k.sw121 core.test
+    input="half 12"
+    expect="Half of 12 is 6."
+
+@t.calc.arith.k.w04 core.test
+    input="Whats double 9?"
+    expect="Double 9 is 18."
+
+@t.calc.arith.k.w05 core.test
+    input="Split 18 into 3 equal parts."
+    expect="18 divided by 3 is 6."
+
+@t.calc.arith.k.xa03 core.test
+    input="what is 10 take away 4"
+    expect="10 minus 4 is 6."
+
+@t.calc.arith.k.xa04 core.test
+    input="subtract 2 off from 9"
+    expect="9 minus 2 is 7."
+
+@t.calc.arith.k.xa21 core.test
+    input="wat is 7 pluss 5"
+    expect="7 plus 5 is 12."
+
+@t.calc.arith.k.xa22 core.test
+    input="quick one: what is 6 plus 7"
+    expect="6 plus 7 is 13."
+

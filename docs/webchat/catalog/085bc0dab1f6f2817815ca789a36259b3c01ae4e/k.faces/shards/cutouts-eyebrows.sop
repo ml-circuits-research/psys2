@@ -1,0 +1,53 @@
+# k.faces/shards/cutouts-eyebrows: the variants of the slot `eyebrows` in the DiceBear style `cutouts`: features, and parts converted from the drawings (a primitive shape, a box in the frame of the face, a draw order, a colour name and the exact colour; points for polygons and lines).
+# sources: dicebear-cutouts 67f54a0 (DiceBear style "cutouts", CC0 1.0: "Cutouts" (https://www.dicebear.com) by "DiceBear", licensed under "CC0 1.0" (https://creativecommons.org/publicdomain/zero/1.0/))
+# license: CC0-1.0
+# script: tools/import/dicebear.mjs
+
+# eyebrows: cutouts dashes
+@k.faces.cutouts.eyebrows.dashes k.faces.variant slot=eyebrows name="cutouts dashes" style=cutouts size=small feel=thin feel=flat named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.dashes.p1 k.faces.part slot=eyebrows of="cutouts dashes" name=part1 shape=polygon x=33 y=33.7 w=13.3 h=4.6 z=1 colour=black rgb="#26211C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.dashes.p1.1 k.faces.point part=$k.faces.cutouts.eyebrows.dashes.p1 n=1 x=33 y=35.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.dashes.p1.2 k.faces.point part=$k.faces.cutouts.eyebrows.dashes.p1 n=2 x=46 y=33.7 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.dashes.p1.3 k.faces.point part=$k.faces.cutouts.eyebrows.dashes.p1 n=3 x=46.3 y=36.7 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.dashes.p1.4 k.faces.point part=$k.faces.cutouts.eyebrows.dashes.p1 n=4 x=33.3 y=38.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.dashes.p2 k.faces.part slot=eyebrows of="cutouts dashes" name=part2 shape=polygon x=54.4 y=33.7 w=13.6 h=4.6 z=2 colour=black rgb="#26211C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.dashes.p2.1 k.faces.point part=$k.faces.cutouts.eyebrows.dashes.p2 n=1 x=54.7 y=33.7 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.dashes.p2.2 k.faces.point part=$k.faces.cutouts.eyebrows.dashes.p2 n=2 x=68 y=35.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.dashes.p2.3 k.faces.point part=$k.faces.cutouts.eyebrows.dashes.p2 n=3 x=67.7 y=38.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.dashes.p2.4 k.faces.point part=$k.faces.cutouts.eyebrows.dashes.p2 n=4 x=54.4 y=36.7 core.source="dicebear-cutouts 67f54a0"
+
+# eyebrows: cutouts mono
+@k.faces.cutouts.eyebrows.mono k.faces.variant slot=eyebrows name="cutouts mono" style=cutouts feel=thick feel=flat kind=monobrow named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.mono.p1 k.faces.part slot=eyebrows of="cutouts mono" name=part1 shape=polygon x=32.9 y=32.9 w=34.6 h=6.7 z=1 colour=grey rgb="#2F4858" tint=hair core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.mono.p1.1 k.faces.point part=$k.faces.cutouts.eyebrows.mono.p1 n=1 x=32.9 y=35.1 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.mono.p1.2 k.faces.point part=$k.faces.cutouts.eyebrows.mono.p1 n=2 x=66.9 y=32.9 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.mono.p1.3 k.faces.point part=$k.faces.cutouts.eyebrows.mono.p1 n=3 x=67.5 y=37.4 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.mono.p1.4 k.faces.point part=$k.faces.cutouts.eyebrows.mono.p1 n=4 x=33.6 y=39.6 core.source="dicebear-cutouts 67f54a0"
+
+# eyebrows: cutouts strips
+@k.faces.cutouts.eyebrows.strips k.faces.variant slot=eyebrows name="cutouts strips" style=cutouts feel=thick feel=flat named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.strips.p1 k.faces.part slot=eyebrows of="cutouts strips" name=part1 shape=polygon x=31.8 y=33.3 w=15.9 h=6.5 z=1 colour=grey rgb="#2F4858" tint=hair core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.strips.p1.1 k.faces.point part=$k.faces.cutouts.eyebrows.strips.p1 n=1 x=31.8 y=35.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.strips.p1.2 k.faces.point part=$k.faces.cutouts.eyebrows.strips.p1 n=2 x=46.7 y=33.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.strips.p1.3 k.faces.point part=$k.faces.cutouts.eyebrows.strips.p1 n=3 x=47.7 y=37.7 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.strips.p1.4 k.faces.point part=$k.faces.cutouts.eyebrows.strips.p1 n=4 x=32.8 y=39.8 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.strips.p2 k.faces.part slot=eyebrows of="cutouts strips" name=part2 shape=polygon x=54.2 y=34 w=15.1 h=5.1 z=2 colour=grey rgb="#2F4858" tint=hair core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.strips.p2.1 k.faces.point part=$k.faces.cutouts.eyebrows.strips.p2 n=1 x=54.2 y=34 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.strips.p2.2 k.faces.point part=$k.faces.cutouts.eyebrows.strips.p2 n=2 x=69.2 y=34.6 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.strips.p2.3 k.faces.point part=$k.faces.cutouts.eyebrows.strips.p2 n=3 x=69.3 y=39.1 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.strips.p2.4 k.faces.point part=$k.faces.cutouts.eyebrows.strips.p2 n=4 x=54.3 y=38.5 core.source="dicebear-cutouts 67f54a0"
+
+# eyebrows: cutouts uneven
+@k.faces.cutouts.eyebrows.uneven k.faces.variant slot=eyebrows name="cutouts uneven" style=cutouts feel=arched kind=uneven named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.uneven.p1 k.faces.part slot=eyebrows of="cutouts uneven" name=part1 shape=polygon x=33 y=32.3 w=13 h=6.6 z=1 colour=black rgb="#26211C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.uneven.p1.1 k.faces.point part=$k.faces.cutouts.eyebrows.uneven.p1 n=1 x=33 y=36.1 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.uneven.p1.2 k.faces.point part=$k.faces.cutouts.eyebrows.uneven.p1 n=2 x=39 y=32.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.uneven.p1.3 k.faces.point part=$k.faces.cutouts.eyebrows.uneven.p1 n=3 x=46 y=35.1 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.uneven.p1.4 k.faces.point part=$k.faces.cutouts.eyebrows.uneven.p1 n=4 x=45.6 y=38.1 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.uneven.p1.5 k.faces.point part=$k.faces.cutouts.eyebrows.uneven.p1 n=5 x=39.2 y=35.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.uneven.p1.6 k.faces.point part=$k.faces.cutouts.eyebrows.uneven.p1 n=6 x=33.6 y=38.9 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.uneven.p2 k.faces.part slot=eyebrows of="cutouts uneven" name=part2 shape=polygon x=53.8 y=31 w=15.9 h=6.8 z=2 colour=grey rgb="#2F4858" tint=hair core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.uneven.p2.1 k.faces.point part=$k.faces.cutouts.eyebrows.uneven.p2 n=1 x=53.8 y=33.4 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.uneven.p2.2 k.faces.point part=$k.faces.cutouts.eyebrows.uneven.p2 n=2 x=68.6 y=31 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.uneven.p2.3 k.faces.point part=$k.faces.cutouts.eyebrows.uneven.p2 n=3 x=69.7 y=35.4 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.eyebrows.uneven.p2.4 k.faces.point part=$k.faces.cutouts.eyebrows.uneven.p2 n=4 x=54.9 y=37.8 core.source="dicebear-cutouts 67f54a0"

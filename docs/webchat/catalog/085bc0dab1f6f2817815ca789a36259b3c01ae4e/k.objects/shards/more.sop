@@ -1,0 +1,123 @@
+# k.objects/shards/more: truck, hen, bee, planet, heart, flag, hat, boot, sock. Parts with a primitive shape, a box in the 0 to 100 frame
+# of the object (x right, y down), a draw order z and typical colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# truck
+@k.objects.truck k.objects.object name=truck core.source="hand-core 1"
+@k.objects.truck.cargo k.objects.part of=truck name=cargo shape=rectangle x=5 y=25 w=58 h=50 z=1 colour=red colour=blue colour=grey core.source="hand-core 1"
+@k.objects.truck.cab k.objects.part of=truck name=cab shape=rectangle x=63 y=40 w=30 h=35 z=1 colour=red colour=blue colour=white right_of=cargo core.source="hand-core 1"
+@k.objects.truck.window k.objects.part of=truck name=window shape=rectangle x=70 y=45 w=16 h=13 z=2 colour=blue colour=white inside=cab core.source="hand-core 1"
+@k.objects.truck.back_wheel k.objects.part of=truck name=back_wheel kind=wheel shape=circle x=14 y=68 w=18 h=18 z=3 colour=black below=cargo core.source="hand-core 1"
+@k.objects.truck.front_wheel k.objects.part of=truck name=front_wheel kind=wheel shape=circle x=68 y=68 w=18 h=18 z=3 colour=black below=window core.source="hand-core 1"
+@k.objects.truck.headlight k.objects.part of=truck name=headlight shape=circle x=89 y=64 w=4 h=4 z=3 colour=yellow inside=cab core.source="hand-core 1"
+
+# hen
+@k.objects.hen k.objects.object name=hen core.source="hand-core 1"
+@k.objects.hen.body k.objects.part of=hen name=body shape=oval x=25 y=40 w=50 h=35 z=1 colour=brown colour=white colour=orange core.source="hand-core 1"
+@k.objects.hen.head k.objects.part of=hen name=head shape=circle x=62 y=22 w=22 h=22 z=2 colour=brown colour=white colour=orange right_of=body core.source="hand-core 1"
+@k.objects.hen.beak k.objects.part of=hen name=beak shape=triangle x=83 y=30 w=10 h=7 z=2 colour=yellow colour=orange pointing=right right_of=head core.source="hand-core 1"
+@k.objects.hen.eye k.objects.part of=hen name=eye shape=circle x=72 y=28 w=4 h=4 z=3 colour=black inside=head core.source="hand-core 1"
+@k.objects.hen.comb k.objects.part of=hen name=comb shape=triangle x=66 y=12 w=14 h=11 z=1 colour=red above=head core.source="hand-core 1"
+@k.objects.hen.wattle k.objects.part of=hen name=wattle shape=oval x=76 y=40 w=6 h=9 z=3 colour=red below=beak core.source="hand-core 1"
+@k.objects.hen.tail k.objects.part of=hen name=tail shape=triangle x=12 y=28 w=20 h=24 z=0 colour=brown colour=white colour=orange pointing=left left_of=body core.source="hand-core 1"
+@k.objects.hen.wing k.objects.part of=hen name=wing shape=oval x=34 y=46 w=26 h=18 z=2 colour=brown colour=orange colour=white inside=body core.source="hand-core 1"
+@k.objects.hen.left_leg k.objects.part of=hen name=left_leg kind=leg shape=line x=42 y=74 w=2 h=18 z=0 colour=yellow colour=orange below=body core.source="hand-core 1"
+@k.objects.hen.right_leg k.objects.part of=hen name=right_leg kind=leg shape=line x=56 y=74 w=2 h=18 z=0 colour=yellow colour=orange below=body core.source="hand-core 1"
+@k.objects.hen.left_leg.p1 k.objects.point part=$k.objects.hen.left_leg n=1 x=44 y=74 core.source="hand-core 1"
+@k.objects.hen.left_leg.p2 k.objects.point part=$k.objects.hen.left_leg n=2 x=42 y=92 core.source="hand-core 1"
+@k.objects.hen.right_leg.p1 k.objects.point part=$k.objects.hen.right_leg n=1 x=56 y=74 core.source="hand-core 1"
+@k.objects.hen.right_leg.p2 k.objects.point part=$k.objects.hen.right_leg n=2 x=58 y=92 core.source="hand-core 1"
+
+# bee
+@k.objects.bee k.objects.object name=bee core.source="hand-core 1"
+@k.objects.bee.body k.objects.part of=bee name=body shape=oval x=28 y=42 w=50 h=30 z=1 colour=yellow core.source="hand-core 1"
+@k.objects.bee.first_stripe k.objects.part of=bee name=first_stripe kind=stripe shape=rectangle x=42 y=43 w=6 h=28 z=2 colour=black inside=body core.source="hand-core 1"
+@k.objects.bee.second_stripe k.objects.part of=bee name=second_stripe kind=stripe shape=rectangle x=56 y=43 w=6 h=28 z=2 colour=black inside=body core.source="hand-core 1"
+@k.objects.bee.head k.objects.part of=bee name=head shape=circle x=12 y=44 w=24 h=24 z=2 colour=black colour=yellow left_of=body core.source="hand-core 1"
+@k.objects.bee.eye k.objects.part of=bee name=eye shape=circle x=18 y=50 w=5 h=5 z=3 colour=white inside=head core.source="hand-core 1"
+@k.objects.bee.left_wing k.objects.part of=bee name=left_wing kind=wing shape=oval x=38 y=18 w=20 h=28 z=0 colour=white colour=blue above=body core.source="hand-core 1"
+@k.objects.bee.right_wing k.objects.part of=bee name=right_wing kind=wing shape=oval x=54 y=20 w=20 h=26 z=0 colour=white colour=blue above=body core.source="hand-core 1"
+@k.objects.bee.sting k.objects.part of=bee name=sting shape=triangle x=77 y=52 w=12 h=8 z=0 colour=black pointing=right right_of=body core.source="hand-core 1"
+@k.objects.bee.left_antenna k.objects.part of=bee name=left_antenna kind=antenna shape=line x=10 y=30 w=8 h=15 z=1 colour=black above=head core.source="hand-core 1"
+@k.objects.bee.right_antenna k.objects.part of=bee name=right_antenna kind=antenna shape=line x=26 y=28 w=0 h=16 z=1 colour=black above=head core.source="hand-core 1"
+@k.objects.bee.left_antenna.p1 k.objects.point part=$k.objects.bee.left_antenna n=1 x=18 y=45 core.source="hand-core 1"
+@k.objects.bee.left_antenna.p2 k.objects.point part=$k.objects.bee.left_antenna n=2 x=10 y=30 core.source="hand-core 1"
+@k.objects.bee.right_antenna.p1 k.objects.point part=$k.objects.bee.right_antenna n=1 x=26 y=44 core.source="hand-core 1"
+@k.objects.bee.right_antenna.p2 k.objects.point part=$k.objects.bee.right_antenna n=2 x=26 y=28 core.source="hand-core 1"
+
+# planet
+@k.objects.planet k.objects.object name=planet core.source="hand-core 1"
+@k.objects.planet.ball k.objects.part of=planet name=ball shape=circle x=25 y=25 w=50 h=50 z=1 colour=orange colour=yellow colour=blue centered=true core.source="hand-core 1"
+@k.objects.planet.ring k.objects.part of=planet name=ring shape=oval x=5 y=42 w=90 h=16 z=2 colour=brown colour=grey colour=yellow core.source="hand-core 1"
+@k.objects.planet.front k.objects.part of=planet name=front shape=arc x=25 y=25 w=50 h=25 z=3 colour=orange colour=yellow colour=blue opens=down above=ring core.source="hand-core 1"
+@k.objects.planet.spot k.objects.part of=planet name=spot shape=circle x=40 y=58 w=8 h=8 z=4 colour=red colour=brown inside=ball core.source="hand-core 1"
+
+# heart
+@k.objects.heart k.objects.object name=heart core.source="hand-core 1"
+@k.objects.heart.left_lobe k.objects.part of=heart name=left_lobe kind=lobe shape=circle x=12 y=15 w=42 h=42 z=1 colour=red colour=pink core.source="hand-core 1"
+@k.objects.heart.right_lobe k.objects.part of=heart name=right_lobe kind=lobe shape=circle x=46 y=15 w=42 h=42 z=1 colour=red colour=pink right_of=left_lobe core.source="hand-core 1"
+@k.objects.heart.point k.objects.part of=heart name=point shape=polygon x=14.5 y=46 w=71 h=46 z=1 colour=red colour=pink below=left_lobe below=right_lobe core.source="hand-core 1"
+@k.objects.heart.shine k.objects.part of=heart name=shine shape=oval x=24 y=24 w=10 h=14 z=2 colour=white colour=pink inside=left_lobe core.source="hand-core 1"
+@k.objects.heart.point.p1 k.objects.point part=$k.objects.heart.point n=1 x=14.5 y=46 core.source="hand-core 1"
+@k.objects.heart.point.p2 k.objects.point part=$k.objects.heart.point n=2 x=85.5 y=46 core.source="hand-core 1"
+@k.objects.heart.point.p3 k.objects.point part=$k.objects.heart.point n=3 x=50 y=92 core.source="hand-core 1"
+
+# flag
+@k.objects.flag k.objects.object name=flag core.source="hand-core 1"
+@k.objects.flag.pole k.objects.part of=flag name=pole shape=rectangle x=14 y=8 w=4 h=86 z=1 colour=brown colour=grey core.source="hand-core 1"
+@k.objects.flag.knob k.objects.part of=flag name=knob shape=circle x=12 y=2 w=8 h=8 z=2 colour=yellow above=pole core.source="hand-core 1"
+@k.objects.flag.cloth k.objects.part of=flag name=cloth shape=rectangle x=18 y=12 w=62 h=38 z=1 colour=red colour=blue colour=green right_of=pole core.source="hand-core 1"
+@k.objects.flag.stripe k.objects.part of=flag name=stripe shape=rectangle x=18 y=26 w=62 h=10 z=2 colour=white colour=yellow inside=cloth core.source="hand-core 1"
+
+# hat
+@k.objects.hat k.objects.object name=hat core.source="hand-core 1"
+@k.objects.hat.brim k.objects.part of=hat name=brim shape=oval x=6 y=62 w=88 h=20 z=1 colour=brown colour=black core.source="hand-core 1"
+@k.objects.hat.crown k.objects.part of=hat name=crown shape=polygon x=26 y=24 w=48 h=46 z=2 colour=brown colour=black above=brim core.source="hand-core 1"
+@k.objects.hat.band k.objects.part of=hat name=band shape=rectangle x=27.5 y=56 w=45 h=8 z=3 colour=red colour=white inside=crown core.source="hand-core 1"
+@k.objects.hat.top k.objects.part of=hat name=top shape=oval x=30 y=19 w=40 h=10 z=3 colour=brown colour=black above=band core.source="hand-core 1"
+@k.objects.hat.crown.p1 k.objects.point part=$k.objects.hat.crown n=1 x=26 y=70 core.source="hand-core 1"
+@k.objects.hat.crown.p2 k.objects.point part=$k.objects.hat.crown n=2 x=30 y=24 core.source="hand-core 1"
+@k.objects.hat.crown.p3 k.objects.point part=$k.objects.hat.crown n=3 x=70 y=24 core.source="hand-core 1"
+@k.objects.hat.crown.p4 k.objects.point part=$k.objects.hat.crown n=4 x=74 y=70 core.source="hand-core 1"
+
+# boot
+@k.objects.boot k.objects.object name=boot core.source="hand-core 1"
+@k.objects.boot.leg k.objects.part of=boot name=leg shape=rectangle x=30 y=8 w=28 h=56 z=1 colour=brown colour=red colour=yellow core.source="hand-core 1"
+@k.objects.boot.foot k.objects.part of=boot name=foot shape=polygon x=30 y=60 w=58 h=24 z=1 colour=brown colour=red colour=yellow below=leg core.source="hand-core 1"
+@k.objects.boot.sole k.objects.part of=boot name=sole shape=rectangle x=28 y=84 w=62 h=7 z=2 colour=black below=foot core.source="hand-core 1"
+@k.objects.boot.cuff k.objects.part of=boot name=cuff shape=rectangle x=28 y=6 w=32 h=9 z=2 colour=white colour=grey above=foot core.source="hand-core 1"
+@k.objects.boot.heel k.objects.part of=boot name=heel shape=rectangle x=28 y=91 w=14 h=4 z=2 colour=black below=sole core.source="hand-core 1"
+@k.objects.boot.foot.p1 k.objects.point part=$k.objects.boot.foot n=1 x=30 y=60 core.source="hand-core 1"
+@k.objects.boot.foot.p2 k.objects.point part=$k.objects.boot.foot n=2 x=58 y=60 core.source="hand-core 1"
+@k.objects.boot.foot.p3 k.objects.point part=$k.objects.boot.foot n=3 x=84 y=70 core.source="hand-core 1"
+@k.objects.boot.foot.p4 k.objects.point part=$k.objects.boot.foot n=4 x=88 y=84 core.source="hand-core 1"
+@k.objects.boot.foot.p5 k.objects.point part=$k.objects.boot.foot n=5 x=30 y=84 core.source="hand-core 1"
+
+# sock
+@k.objects.sock k.objects.object name=sock core.source="hand-core 1"
+@k.objects.sock.leg k.objects.part of=sock name=leg shape=rectangle x=34 y=8 w=26 h=50 z=1 colour=red colour=blue colour=white core.source="hand-core 1"
+@k.objects.sock.foot k.objects.part of=sock name=foot shape=polygon x=34 y=54 w=50 h=34 z=1 colour=red colour=blue colour=white below=leg core.source="hand-core 1"
+@k.objects.sock.cuff k.objects.part of=sock name=cuff shape=rectangle x=32 y=6 w=30 h=9 z=2 colour=white colour=grey above=foot core.source="hand-core 1"
+@k.objects.sock.toe k.objects.part of=sock name=toe shape=oval x=66 y=72 w=18 h=16 z=2 colour=white colour=grey inside=foot core.source="hand-core 1"
+@k.objects.sock.first_stripe k.objects.part of=sock name=first_stripe kind=stripe shape=rectangle x=34 y=22 w=26 h=5 z=2 colour=white colour=blue inside=leg core.source="hand-core 1"
+@k.objects.sock.second_stripe k.objects.part of=sock name=second_stripe kind=stripe shape=rectangle x=34 y=34 w=26 h=5 z=2 colour=white colour=blue below=first_stripe inside=leg core.source="hand-core 1"
+@k.objects.sock.foot.p1 k.objects.point part=$k.objects.sock.foot n=1 x=34 y=54 core.source="hand-core 1"
+@k.objects.sock.foot.p2 k.objects.point part=$k.objects.sock.foot n=2 x=60 y=54 core.source="hand-core 1"
+@k.objects.sock.foot.p3 k.objects.point part=$k.objects.sock.foot n=3 x=84 y=72 core.source="hand-core 1"
+@k.objects.sock.foot.p4 k.objects.point part=$k.objects.sock.foot n=4 x=84 y=88 core.source="hand-core 1"
+@k.objects.sock.foot.p5 k.objects.point part=$k.objects.sock.foot n=5 x=46 y=88 core.source="hand-core 1"
+@k.objects.sock.foot.p6 k.objects.point part=$k.objects.sock.foot n=6 x=34 y=74 core.source="hand-core 1"
+
+@k.objects.word.truck core.word text=truck text=trucks text=lorries means=truck of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.hen core.word text=hen text=hens text=chickens means=hen of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.bee core.word text=bee text=bees means=bee of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.planet core.word text=planet text=planets means=planet of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.heart core.word text=heart text=hearts means=heart of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.flag core.word text=flag text=flags means=flag of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.hat core.word text=hat text=hats means=hat of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.boot core.word text=boot means=boot of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.sock core.word text=sock means=sock of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.part.stripe core.word text=stripe text=stripes means=stripe of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.lobe core.word text=lobe text=lobes means=lobe of=k.objects.part.kind core.source="hand-core 1"

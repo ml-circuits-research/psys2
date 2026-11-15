@@ -11,7 +11,7 @@ import { createProgress } from '../docs/webchat/ui/progress.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WEB = path.join(ROOT, 'docs/webchat');
-const NOT_ASSETS = [/^index\.html$/, /^build-info\.json$/, /^sw\.js$/, /(^|\/)README\.md$/, /^screenshots\//, /^system-map\.html$/];
+const NOT_ASSETS = [/^index\.html$/, /^build-info\.json$/, /^sw\.js$/, /(^|\/)README\.md$/, /^screenshots\//, /^system-map\.html$/, /^catalog\//];   // catalog/<pin>/: the site copy of the catalog (Q33), fetched lazily, never in the manifest
 async function walk(dir, base = dir, out = []) {
   for (const e of await readdir(dir)) { const f = path.join(dir, e); if ((await stat(f)).isDirectory()) await walk(f, base, out); else out.push(path.relative(base, f).split(path.sep).join('/')); }
   return out;
@@ -23,6 +23,7 @@ test('built webchat: build-info.json is the one manifest: every fetchable file h
   const files = (await walk(WEB)).filter((f) => !NOT_ASSETS.some((re) => re.test(f)));
   assert.deepEqual(files.filter((f) => !info.assets[f]), [], 'every file the page can fetch is in the manifest (rebuild: node scripts/build-webchat.mjs)');
   assert.deepEqual(Object.keys(info.assets).filter((f) => !files.includes(f)), [], 'nothing in the manifest that is not shipped');
+  assert.ok(!Object.keys(info.assets).some((f) => f.startsWith('catalog/')) && !html.includes(`catalog/${info.catalog}`), 'the site copy of the catalog is in neither the manifest nor the page (boot bytes unchanged)');
   assert.equal(info.version, manifestVersion(info.assets), 'version is the hash of the manifest');
   assert.equal(JSON.parse(/window\.__psys2Build = (\{.*?\});/.exec(html)[1]).version, info.version, 'index.html stamps the manifest version');
   const mod = JSON.parse(/window\.__psys2Mod = (.*?);<\/script>/.exec(html)[1]);

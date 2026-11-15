@@ -1,0 +1,115 @@
+# w.lang.en/shards/hand-grammar: English the hand-over left open, as constructions and plain productions: statements
+# with be ("the table is red"), the tag question ("the table is red, isn't it": negated auxiliaries), relative clauses
+# with have ("the table that has 4 seats"), conditions ("if the table is red then the chair is blue") and standing
+# rules after a frame lead ("from now on squares are grey"); and the past forms of be. Imperative clauses ("please put the cat
+# on the mat", "do not move the tree") and "of" beyond parts ("the colour of the table", "the top of the box").
+# sources: hand-core 1 (English grammar, written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# ---- statements with be ----
+@w.lang.en.construction.s.copula w.lang.en.construction name=s.copula about=S emit=thing doc="a statement with be: a thing, then what it is (modifiers, a place or another noun phrase)" example="the table is red" example="the cat is on the mat" example="the star is a shape" core.source="hand-core 1"
+@w.lang.en.rule.s.copula.1 w.lang.en.rule lhs=S rhs=NP rhs=COPULA rhs=MODS construction=s.copula head=NP core.source="hand-core 1"
+@w.lang.en.rule.s.copula.2 w.lang.en.rule lhs=S rhs=NP rhs=COPULA rhs=PP construction=s.copula head=NP core.source="hand-core 1"
+@w.lang.en.rule.s.copula.3 w.lang.en.rule lhs=S rhs=NP rhs=COPNP construction=s.copula head=NP core.source="hand-core 1"
+@w.lang.en.construction.helper.COPNP w.lang.en.construction name=helper.COPNP about=COPNP doc="the rest of a production that names a category twice: COPULA NP" core.source="hand-core 1"
+@w.lang.en.rule.helper.COPNP.1 w.lang.en.rule lhs=COPNP rhs=COPULA rhs=NP construction=helper.COPNP core.source="hand-core 1"
+@w.lang.en.copula.was w.lang.en.copula text="was" number=sg core.source="hand-core 1"
+@w.lang.en.copula.were w.lang.en.copula text="were" number=pl core.source="hand-core 1"
+
+# ---- the tag question: the words of AUXNEG (the production Q -> S AUXNEG PRON is the hand-over's) ----
+@w.lang.en.word.AUXNEG.isnt w.lang.en.word text="isn't" cat=AUXNEG core.source="hand-core 1"
+@w.lang.en.word.AUXNEG.arent w.lang.en.word text="aren't" cat=AUXNEG core.source="hand-core 1"
+@w.lang.en.word.AUXNEG.wasnt w.lang.en.word text="wasn't" cat=AUXNEG core.source="hand-core 1"
+@w.lang.en.word.AUXNEG.werent w.lang.en.word text="weren't" cat=AUXNEG core.source="hand-core 1"
+@w.lang.en.word.AUXNEG.dont w.lang.en.word text="don't" cat=AUXNEG core.source="hand-core 1"
+@w.lang.en.word.AUXNEG.doesnt w.lang.en.word text="doesn't" cat=AUXNEG core.source="hand-core 1"
+@w.lang.en.word.AUXNEG.didnt w.lang.en.word text="didn't" cat=AUXNEG core.source="hand-core 1"
+@w.lang.en.word.AUXNEG.cant w.lang.en.word text="can't" cat=AUXNEG core.source="hand-core 1"
+@w.lang.en.word.AUXNEG.wont w.lang.en.word text="won't" cat=AUXNEG core.source="hand-core 1"
+@w.lang.en.word.AUXNEG.couldnt w.lang.en.word text="couldn't" cat=AUXNEG core.source="hand-core 1"
+@w.lang.en.word.AUXNEG.wouldnt w.lang.en.word text="wouldn't" cat=AUXNEG core.source="hand-core 1"
+@w.lang.en.word.AUXNEG.shouldnt w.lang.en.word text="shouldn't" cat=AUXNEG core.source="hand-core 1"
+@w.lang.en.word.AUXNEG.hasnt w.lang.en.word text="hasn't" cat=AUXNEG core.source="hand-core 1"
+@w.lang.en.word.AUXNEG.havent w.lang.en.word text="haven't" cat=AUXNEG core.source="hand-core 1"
+
+# ---- relative clauses with have ----
+@w.lang.en.construction.np.relative-have w.lang.en.construction name=np.relative-have about=NP emit=thing doc="a noun phrase with a relative clause of have: the things of the first noun phrase that have the second" example="the table that has 4 seats" example="the animals which have wings" core.source="hand-core 1"
+@w.lang.en.rule.np.relative-have w.lang.en.rule lhs=NP rhs=NP rhs=RELPRON rhs=HAVENP construction=np.relative-have head=NP core.source="hand-core 1"
+@w.lang.en.construction.helper.HAVENP w.lang.en.construction name=helper.HAVENP about=HAVENP doc="the rest of a production that names a category twice: HAVE NP" core.source="hand-core 1"
+@w.lang.en.rule.helper.HAVENP.1 w.lang.en.rule lhs=HAVENP rhs=HAVE rhs=NP construction=helper.HAVENP core.source="hand-core 1"
+@w.lang.en.word.HAVE.has w.lang.en.word text="has" cat=HAVE core.source="hand-core 1"
+
+# ---- conditions and standing rules ----
+@w.lang.en.construction.clause.if w.lang.en.construction name=clause.if about=S reading="the second clause holds or is done when the first holds" function=grammar.clauses example="if the table is red then the chair is blue" example="if the cat is hungry, the dog is sad" core.source="hand-core 1"
+@w.lang.en.rule.clause.if.1 w.lang.en.rule lhs=S rhs=IFS rhs=THENS construction=clause.if core.source="hand-core 1"
+@w.lang.en.rule.clause.if.2 w.lang.en.rule lhs=S rhs=IFS rhs=S construction=clause.if core.source="hand-core 1"
+@w.lang.en.construction.helper.IFS w.lang.en.construction name=helper.IFS about=IFS doc="a condition: if and a clause" core.source="hand-core 1"
+@w.lang.en.rule.helper.IFS.1 w.lang.en.rule lhs=IFS rhs=IF rhs=S construction=helper.IFS core.source="hand-core 1"
+@w.lang.en.construction.helper.THENS w.lang.en.construction name=helper.THENS about=THENS doc="then and a clause" core.source="hand-core 1"
+@w.lang.en.rule.helper.THENS.1 w.lang.en.rule lhs=THENS rhs=THEN rhs=S construction=helper.THENS core.source="hand-core 1"
+@w.lang.en.word.IF.if w.lang.en.word text="if" cat=IF core.source="hand-core 1"
+@w.lang.en.word.THEN.then w.lang.en.word text="then" cat=THEN core.source="hand-core 1"
+@w.lang.en.construction.clause.standing w.lang.en.construction name=clause.standing about=S reading="a standing rule or default: the clause holds from now on, not only once" function=grammar.clauses example="from now on squares are grey" example="by default the tables are round" core.source="hand-core 1"
+@w.lang.en.rule.clause.standing w.lang.en.rule lhs=S rhs=FRAMELEAD rhs=S construction=clause.standing core.source="hand-core 1"
+
+# ---- the categories these name ----
+@w.lang.en.cat.COPNP w.lang.en.cat name=COPNP doc="the rest of a production that names a category twice: COPULA NP" core.source="hand-core 1"
+@w.lang.en.cat.HAVENP w.lang.en.cat name=HAVENP doc="the rest of a production that names a category twice: HAVE NP" core.source="hand-core 1"
+@w.lang.en.cat.IFS w.lang.en.cat name=IFS doc="a condition: if and a clause" core.source="hand-core 1"
+@w.lang.en.cat.THENS w.lang.en.cat name=THENS doc="then and a clause" core.source="hand-core 1"
+@w.lang.en.cat.IF w.lang.en.cat name=IF doc="the word if" type=w.lang.en.word core.source="hand-core 1"
+@w.lang.en.cat.THEN w.lang.en.cat name=THEN doc="the word then" type=w.lang.en.word core.source="hand-core 1"
+@w.lang.en.cat.FRAMELEAD w.lang.en.cat name=FRAMELEAD doc="words that open a standing rule (frame_lead)" type=w.lang.en.frame_lead core.source="hand-core 1"
+
+# ---- imperative clauses (the hole of Round 12: the frames said them, no production did) ----
+@w.lang.en.cat.V w.lang.en.cat name=V doc="a verb of an act: the text of a k.actions verb" from_type=k.actions.verb from_key=text core.source="hand-core 1"
+@w.lang.en.cat.IMPLEAD w.lang.en.cat name=IMPLEAD doc="a word dropped before the verb of a request: please, can, you, let us" type=w.lang.en.imperative.lead core.source="hand-core 1"
+@w.lang.en.cat.NEGIMP w.lang.en.cat name=NEGIMP doc="the words that make a request a request not to: do not, don't" type=w.lang.en.neg.imperative core.source="hand-core 1"
+@w.lang.en.cat.IMP w.lang.en.cat name=IMP doc="a verb with what it acts on and where (V NP, V NP PP, V PP)" core.source="hand-core 1"
+@w.lang.en.cat.LEADS w.lang.en.cat name=LEADS doc="one or more lead words (IMPLEAD, IMPLEAD LEADS)" core.source="hand-core 1"
+@w.lang.en.construction.clause.imperative w.lang.en.construction name=clause.imperative about=S emit=act emit=thing doc="a request: the verb of an act first, after lead words, then what it acts on and where; the act is the verb's act in k.actions, the roles come from the frames of the act" example="draw a house" example="put the cat on the mat" example="please draw a red house" example="can you move the tree" core.source="hand-core 1"
+@w.lang.en.rule.clause.imperative.1 w.lang.en.rule lhs=S rhs=IMP construction=clause.imperative head=IMP core.source="hand-core 1"
+@w.lang.en.rule.clause.imperative.2 w.lang.en.rule lhs=S rhs=LEADS rhs=IMP construction=clause.imperative head=IMP core.source="hand-core 1"
+@w.lang.en.construction.clause.imperative-neg w.lang.en.construction name=clause.imperative-neg about=S emit=act doc="a request not to do something: what follows do not is the act that must not be done" example="do not move the tree" example="don't draw a cat" core.source="hand-core 1"
+@w.lang.en.rule.clause.imperative-neg w.lang.en.rule lhs=S rhs=NEGIMP rhs=IMP construction=clause.imperative-neg head=IMP core.source="hand-core 1"
+@w.lang.en.construction.helper.IMP w.lang.en.construction name=helper.IMP about=IMP doc="a verb with what it acts on and where" core.source="hand-core 1"
+@w.lang.en.rule.helper.IMP.1 w.lang.en.rule lhs=IMP rhs=V rhs=NP construction=helper.IMP head=V core.source="hand-core 1"
+@w.lang.en.rule.helper.IMP.2 w.lang.en.rule lhs=IMP rhs=V rhs=NP rhs=PP construction=helper.IMP head=V core.source="hand-core 1"
+@w.lang.en.rule.helper.IMP.3 w.lang.en.rule lhs=IMP rhs=V rhs=PP construction=helper.IMP head=V core.source="hand-core 1"
+@w.lang.en.construction.helper.LEADS w.lang.en.construction name=helper.LEADS about=LEADS doc="one or more lead words" core.source="hand-core 1"
+@w.lang.en.rule.helper.LEADS.1 w.lang.en.rule lhs=LEADS rhs=IMPLEAD construction=helper.LEADS core.source="hand-core 1"
+@w.lang.en.rule.helper.LEADS.2 w.lang.en.rule lhs=LEADS rhs=IMPLEAD rhs=LEADS construction=helper.LEADS core.source="hand-core 1"
+
+# ---- "of" beyond parts: an attribute of a thing, a position on a thing ----
+# ATTRN takes its own words, not every attribute of k.attributes: there legs, wheels, sides and parts are attributes
+# (how many), and "the legs of the crocodile" names the legs themselves (np.possessive-of).
+@w.lang.en.cat.ATTRN w.lang.en.cat name=ATTRN doc="a noun that names an attribute whose value is asked: colour, size, height" type=w.lang.en.word core.source="hand-core 1"
+@w.lang.en.word.ATTRN.colour w.lang.en.word text=colour cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.color w.lang.en.word text=color cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.size w.lang.en.word text=size cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.height w.lang.en.word text=height cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.length w.lang.en.word text=length cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.width w.lang.en.word text=width cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.weight w.lang.en.word text=weight cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.shape w.lang.en.word text=shape cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.name w.lang.en.word text=name cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.age w.lang.en.word text=age cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.price w.lang.en.word text=price cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.speed w.lang.en.word text=speed cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.temperature w.lang.en.word text=temperature cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.depth w.lang.en.word text=depth cat=ATTRN core.source="hand-core 1"
+@w.lang.en.word.ATTRN.material w.lang.en.word text=material cat=ATTRN core.source="hand-core 1"
+@w.lang.en.cat.POSN w.lang.en.cat name=POSN doc="a position on a thing: top, bottom, left, front (k.values)" from_type=k.values.position from_key=name core.source="hand-core 1"
+@w.lang.en.cat.ATTRNP w.lang.en.cat name=ATTRNP doc="the attribute asked: DET ATTRN" core.source="hand-core 1"
+@w.lang.en.cat.POSNP w.lang.en.cat name=POSNP doc="the position named: DET POSN" core.source="hand-core 1"
+@w.lang.en.construction.np.attribute-of w.lang.en.construction name=np.attribute-of about=NP emit=attribute emit=thing doc="the value of an attribute of a thing: the head is the attribute (k.attributes), the noun phrase after of is the thing" example="the colour of the table" example="the height of the tree" core.source="hand-core 1"
+@w.lang.en.rule.np.attribute-of w.lang.en.rule lhs=NP rhs=ATTRNP rhs=OFNP construction=np.attribute-of head=ATTRNP priority=20 core.source="hand-core 1"
+@w.lang.en.construction.np.position-of w.lang.en.construction name=np.position-of about=NP emit=place emit=thing doc="a place on a thing: the head is a position (k.values), the noun phrase after of is the thing it is on" example="the top of the box" example="the bottom of the box" core.source="hand-core 1"
+@w.lang.en.rule.np.position-of w.lang.en.rule lhs=NP rhs=POSNP rhs=OFNP construction=np.position-of head=POSNP priority=20 core.source="hand-core 1"
+@w.lang.en.construction.helper.ATTRNP w.lang.en.construction name=helper.ATTRNP about=ATTRNP doc="the attribute asked" core.source="hand-core 1"
+@w.lang.en.rule.helper.ATTRNP.1 w.lang.en.rule lhs=ATTRNP rhs=DET rhs=ATTRN construction=helper.ATTRNP core.source="hand-core 1"
+@w.lang.en.construction.helper.POSNP w.lang.en.construction name=helper.POSNP about=POSNP doc="the position named" core.source="hand-core 1"
+@w.lang.en.rule.helper.POSNP.1 w.lang.en.rule lhs=POSNP rhs=DET rhs=POSN construction=helper.POSNP core.source="hand-core 1"
+# the question of an attribute ("what is the colour of the table") with an attribute word, beside the hand-over's N
+@w.lang.en.rule.q.wh-of.attribute w.lang.en.rule lhs=Q rhs=WH rhs=AUX rhs=THE rhs=ATTRN rhs=OF rhs=NP construction=q.wh-of core.source="hand-core 1"

@@ -1,0 +1,7 @@
+# k.words/shards/ls: senses of the words from "lsd" to "lsd" (first letters "ls").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.lsd.noun.1 k.words.sense word=LSD pos=noun n=1 supersense=noun.artifact gloss="a powerful hallucinogenic drug manufactured from lysergic acid" synonym="lysergic acid diethylamide" is_a=hallucinogen is_a="drug of abuse" is_a="controlled substance" core.source="wordnet 3.1"
+@k.words.lsd.spelling.LSD core.word text=lsd means=LSD of=k.words.sense.word core.source="wordnet 3.1"

@@ -1,0 +1,16 @@
+# k.faces/shards/micah-slots: the slots of the DiceBear style `micah`: the box that the variants of each slot fill in the 0 to 100 frame of the face, and the draw order.
+# sources: dicebear-micah 67f54a0 (DiceBear style "micah", CC BY 4.0: Remix of "Avatar Illustration System" (https://www.figma.com/community/file/829741575478342595) by "Micah Lanier", licensed under "CC BY 4.0" (https://creativecommons.org/licenses/by/4.0/))
+# license: CC-BY-4.0
+# script: tools/import/dicebear.mjs
+
+@k.faces.micah.slot.head k.faces.slot style=micah name=head x=26 y=12 w=48 h=84 z=0 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.slot.mouth k.faces.slot style=micah name=mouth x=44 y=53 w=23 h=14 z=1 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.slot.beard k.faces.slot style=micah name=beard x=32 y=38 w=41 h=36 z=2 optional=true core.source="dicebear-micah 67f54a0"
+@k.faces.micah.slot.eyebrows k.faces.slot style=micah name=eyebrows x=36 y=28 w=31 h=11 z=3 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.slot.hair_front k.faces.slot style=micah name=hair_front x=7 y=0 w=85 h=97 z=4 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.slot.eyes k.faces.slot style=micah name=eyes x=40 y=33 w=25 h=12 z=5 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.slot.glasses k.faces.slot style=micah name=glasses x=28 y=31 w=44 h=20 z=6 optional=true core.source="dicebear-micah 67f54a0"
+@k.faces.micah.slot.nose k.faces.slot style=micah name=nose x=52 y=41 w=5 h=9 z=7 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.slot.ears k.faces.slot style=micah name=ears x=23 y=43 w=13 h=14 z=8 core.source="dicebear-micah 67f54a0"
+@k.faces.micah.slot.earrings k.faces.slot style=micah name=earrings x=24 y=51 w=14 h=15 z=9 optional=true core.source="dicebear-micah 67f54a0"
+@k.faces.micah.slot.shoulders k.faces.slot style=micah name=shoulders x=10 y=79 w=79 h=21 z=10 core.source="dicebear-micah 67f54a0"

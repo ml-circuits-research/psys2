@@ -1,0 +1,137 @@
+# k.attributes/shards/things-glosses: the usual colour (17 things), material (25) and abilities (24) of common things that the catalog lacked, read from the WordNet gloss of the sense kept by the rules of tools/attributes-glosses.mjs (KR6); every proposed value checked by hand (sources/coverage/kr6-audit.tsv: colour 3 of 22 wrong, material 8 of 38 wrong, can 7 of 31 wrong); only the right ones are here.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the glosses of the senses kept by tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/attributes-glosses.mjs
+
+# antenna: an electrical device that sends or receives radio or television signals
+@k.attributes.thing.glosses.antenna k.attributes.thing name=antenna can=send core.source="wordnet 3.1"
+# bagging: coarse fabric used for bags or sacks
+@k.attributes.thing.glosses.bagging k.attributes.thing name=bagging material=cloth core.source="wordnet 3.1"
+# bandage: a piece of soft material that covers and protects an injured part of the body
+@k.attributes.thing.glosses.bandage k.attributes.thing name=bandage can=cover core.source="wordnet 3.1"
+# bellows: (used in the plural) a mechanical device that blows a strong current of air
+@k.attributes.thing.glosses.bellows k.attributes.thing name=bellows can=blow core.source="wordnet 3.1"
+# binder: a machine that cuts grain and binds it in sheaves
+@k.attributes.thing.glosses.binder k.attributes.thing name=binder can=cut core.source="wordnet 3.1"
+# blackberry: large sweet black or very dark purple edible aggregate fruit of any of various bushes of the genus Rubus
+@k.attributes.thing.glosses.blackberry k.attributes.thing name=blackberry colour=black colour=purple core.source="wordnet 3.1"
+# blindfold: a cloth used to cover the eyes
+@k.attributes.thing.glosses.blindfold k.attributes.thing name=blindfold material=cloth core.source="wordnet 3.1"
+# blowtorch: a burner that mixes air and gas to produce a very hot flame
+@k.attributes.thing.glosses.blowtorch k.attributes.thing name=blowtorch can=mix core.source="wordnet 3.1"
+# boardwalk: a walkway made of wooden boards
+@k.attributes.thing.glosses.boardwalk k.attributes.thing name=boardwalk material=wood core.source="wordnet 3.1"
+# bomber: a military aircraft that drops bombs during flight
+@k.attributes.thing.glosses.bomber k.attributes.thing name=bomber can=drop core.source="wordnet 3.1"
+# boot: footwear that covers the whole foot and lower leg
+@k.attributes.thing.glosses.boot k.attributes.thing name=boot can=cover core.source="wordnet 3.1"
+# boutique: a shop that sells women's clothes and jewelry
+@k.attributes.thing.glosses.boutique k.attributes.thing name=boutique can=sell core.source="wordnet 3.1"
+# buffalo: large shaggy-haired brown bison of North American plains
+@k.attributes.thing.glosses.buffalo k.attributes.thing name=buffalo colour=brown core.source="wordnet 3.1"
+# bugle: a brass instrument without valves
+@k.attributes.thing.glosses.bugle k.attributes.thing name=bugle material=metal core.source="wordnet 3.1"
+# canister: a metallic cylinder packed with shot and used as ammunition in a firearm
+@k.attributes.thing.glosses.canister k.attributes.thing name=canister material=metal core.source="wordnet 3.1"
+# carrot: deep orange edible root of the cultivated carrot plant
+@k.attributes.thing.glosses.carrot k.attributes.thing name=carrot colour=orange core.source="wordnet 3.1"
+# cassette: a container that holds a magnetic tape used for recording or playing sound or video
+@k.attributes.thing.glosses.cassette k.attributes.thing name=cassette can=hold core.source="wordnet 3.1"
+# chip: a triangular wooden float attached to the end of a log line
+@k.attributes.thing.glosses.chip k.attributes.thing name=chip material=wood core.source="wordnet 3.1"
+# clip: a metal frame or container holding cartridges
+@k.attributes.thing.glosses.clip k.attributes.thing name=clip material=metal core.source="wordnet 3.1"
+# cloak: anything that covers or conceals
+@k.attributes.thing.glosses.cloak k.attributes.thing name=cloak can=cover core.source="wordnet 3.1"
+# coconut: the edible white meat of a coconut
+@k.attributes.thing.glosses.coconut k.attributes.thing name=coconut colour=white core.source="wordnet 3.1"
+# commissary: a retail store that sells equipment and provisions (usually to military personnel)
+@k.attributes.thing.glosses.commissary k.attributes.thing name=commissary can=sell core.source="wordnet 3.1"
+# corkscrew: a bottle opener that pulls corks
+@k.attributes.thing.glosses.corkscrew k.attributes.thing name=corkscrew can=pull core.source="wordnet 3.1"
+# cowl: protective covering consisting of a metal part that covers the engine
+@k.attributes.thing.glosses.cowl k.attributes.thing name=cowl can=cover core.source="wordnet 3.1"
+# crate: a rugged box (usually made of wood)
+@k.attributes.thing.glosses.crate k.attributes.thing name=crate material=wood core.source="wordnet 3.1"
+# creeper: any plant (as ivy or periwinkle) that grows by creeping
+@k.attributes.thing.glosses.creeper k.attributes.thing name=creeper can=grow core.source="wordnet 3.1"
+# crowbar: a heavy iron lever with one end forged into a wedge
+@k.attributes.thing.glosses.crowbar k.attributes.thing name=crowbar material=metal core.source="wordnet 3.1"
+# crutch: a wooden or metal staff that fits under the armpit and reaches to the ground
+@k.attributes.thing.glosses.crutch k.attributes.thing name=crutch material=wood material=metal core.source="wordnet 3.1"
+# dobson: large brown aquatic larva of the dobsonfly
+@k.attributes.thing.glosses.dobson k.attributes.thing name=dobson colour=brown core.source="wordnet 3.1"
+# espresso: strong black coffee brewed by forcing hot water under pressure through finely ground coffee beans
+@k.attributes.thing.glosses.espresso k.attributes.thing name=espresso colour=black core.source="wordnet 3.1"
+# gunny: coarse jute fabric
+@k.attributes.thing.glosses.gunny k.attributes.thing name=gunny material=cloth core.source="wordnet 3.1"
+# gurney: a metal stretcher with wheels
+@k.attributes.thing.glosses.gurney k.attributes.thing name=gurney material=metal core.source="wordnet 3.1"
+# hinge: a joint that holds two parts together so that one can swing relative to the other
+@k.attributes.thing.glosses.hinge k.attributes.thing name=hinge can=hold core.source="wordnet 3.1"
+# hutch: a cage (usually made of wood and wire mesh) for small animals
+@k.attributes.thing.glosses.hutch k.attributes.thing name=hutch material=wood core.source="wordnet 3.1"
+# icebox: white goods in which food can be stored at low temperatures
+@k.attributes.thing.glosses.icebox k.attributes.thing name=icebox colour=white core.source="wordnet 3.1"
+# jewel: a precious or semiprecious stone incorporated into a piece of jewelry
+@k.attributes.thing.glosses.jewel k.attributes.thing name=jewel material=stone core.source="wordnet 3.1"
+# kelp: large brown seaweeds having fluted leathery fronds
+@k.attributes.thing.glosses.kelp k.attributes.thing name=kelp colour=brown core.source="wordnet 3.1"
+# lemon: yellow oval fruit with juicy acidic flesh
+@k.attributes.thing.glosses.lemon k.attributes.thing name=lemon colour=yellow core.source="wordnet 3.1"
+# mozzarella: mild white Italian cheese
+@k.attributes.thing.glosses.mozzarella k.attributes.thing name=mozzarella colour=white core.source="wordnet 3.1"
+# nog: a wooden pin pushed or driven into a surface
+@k.attributes.thing.glosses.nog k.attributes.thing name=nog material=wood core.source="wordnet 3.1"
+# paisley: a soft wool fabric with a colorful swirled pattern of curved shapes
+@k.attributes.thing.glosses.paisley k.attributes.thing name=paisley material=wool material=cloth core.source="wordnet 3.1"
+# pane: sheet glass cut in shapes for windows or doors
+@k.attributes.thing.glosses.pane k.attributes.thing name=pane material=glass core.source="wordnet 3.1"
+# pendant: an adornment that hangs from a piece of jewelry (necklace or earring)
+@k.attributes.thing.glosses.pendant k.attributes.thing name=pendant can=hang core.source="wordnet 3.1"
+# popsicle: ice cream or water ice on a small wooden stick
+@k.attributes.thing.glosses.popsicle k.attributes.thing name=popsicle material=ice core.source="wordnet 3.1"
+# refrigerator: white goods in which food can be stored at low temperatures
+@k.attributes.thing.glosses.refrigerator k.attributes.thing name=refrigerator colour=white core.source="wordnet 3.1"
+# rhubarb: long pinkish sour leafstalks usually eaten cooked and sweetened
+@k.attributes.thing.glosses.rhubarb k.attributes.thing name=rhubarb colour=pink core.source="wordnet 3.1"
+# rod: a long thin implement made of metal or wood
+@k.attributes.thing.glosses.rod k.attributes.thing name=rod material=metal material=wood core.source="wordnet 3.1"
+# roof: a protective covering that covers or forms the top of a building
+@k.attributes.thing.glosses.roof k.attributes.thing name=roof can=cover core.source="wordnet 3.1"
+# sarcophagus: a stone coffin (usually bearing sculpture or inscriptions)
+@k.attributes.thing.glosses.sarcophagus k.attributes.thing name=sarcophagus material=stone core.source="wordnet 3.1"
+# sash: a framework that holds the panes of a window in the window frame
+@k.attributes.thing.glosses.sash k.attributes.thing name=sash can=hold core.source="wordnet 3.1"
+# screen: a white or silvered surface where pictures can be projected for viewing
+@k.attributes.thing.glosses.screen k.attributes.thing name=screen colour=white core.source="wordnet 3.1"
+# shutter: a mechanical device on a camera that opens and closes to control the time of a photographic exposure
+@k.attributes.thing.glosses.shutter k.attributes.thing name=shutter can=open core.source="wordnet 3.1"
+# silverware: tableware made of silver or silver plate or pewter or stainless steel
+@k.attributes.thing.glosses.silverware k.attributes.thing name=silverware material=silver core.source="wordnet 3.1"
+# ski: narrow wood or metal or plastic runners used in pairs for gliding over snow
+@k.attributes.thing.glosses.ski k.attributes.thing name=ski material=wood material=metal material=plastic core.source="wordnet 3.1"
+# sonar: a measuring instrument that sends out an acoustic pulse in water and measures distances in terms of the time for the echo of the pulse to return
+@k.attributes.thing.glosses.sonar k.attributes.thing name=sonar can=send core.source="wordnet 3.1"
+# strawberry: sweet fleshy red fruit
+@k.attributes.thing.glosses.strawberry k.attributes.thing name=strawberry colour=red core.source="wordnet 3.1"
+# streetcar: a wheeled vehicle that runs on rails and is propelled by electricity
+@k.attributes.thing.glosses.streetcar k.attributes.thing name=streetcar can=run core.source="wordnet 3.1"
+# sultana: pale yellow seedless grape used for raisins and wine
+@k.attributes.thing.glosses.sultana k.attributes.thing name=sultana colour=yellow core.source="wordnet 3.1"
+# tarp: waterproofed canvas
+@k.attributes.thing.glosses.tarp k.attributes.thing name=tarp material=cloth core.source="wordnet 3.1"
+# tomato: mildly acid red or yellow pulpy fruit eaten as a vegetable
+@k.attributes.thing.glosses.tomato k.attributes.thing name=tomato colour=red colour=yellow core.source="wordnet 3.1"
+# tombstone: a stone that is used to mark a grave
+@k.attributes.thing.glosses.tombstone k.attributes.thing name=tombstone material=stone core.source="wordnet 3.1"
+# tourniquet: bandage that stops the flow of blood from an artery by applying pressure
+@k.attributes.thing.glosses.tourniquet k.attributes.thing name=tourniquet can=stop core.source="wordnet 3.1"
+# trolley: a wheeled vehicle that runs on rails and is propelled by electricity
+@k.attributes.thing.glosses.trolley k.attributes.thing name=trolley can=run core.source="wordnet 3.1"
+# underpants: an undergarment that covers the body from the waist no further than to the thighs
+@k.attributes.thing.glosses.underpants k.attributes.thing name=underpants can=cover core.source="wordnet 3.1"
+# upholstery: covering (padding and springs and webbing and fabric) on a piece of furniture
+@k.attributes.thing.glosses.upholstery k.attributes.thing name=upholstery material=cloth core.source="wordnet 3.1"
+# yolk: the yellow spherical part of an egg that is surrounded by the albumen
+@k.attributes.thing.glosses.yolk k.attributes.thing name=yolk colour=yellow core.source="wordnet 3.1"

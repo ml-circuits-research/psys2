@@ -1,0 +1,98 @@
+# k.faces/shards/cutouts-mouth: the variants of the slot `mouth` in the DiceBear style `cutouts`: features, and parts converted from the drawings (a primitive shape, a box in the frame of the face, a draw order, a colour name and the exact colour; points for polygons and lines).
+# sources: dicebear-cutouts 67f54a0 (DiceBear style "cutouts", CC0 1.0: "Cutouts" (https://www.dicebear.com) by "DiceBear", licensed under "CC0 1.0" (https://creativecommons.org/publicdomain/zero/1.0/))
+# license: CC0-1.0
+# script: tools/import/dicebear.mjs
+
+# mouth: cutouts gasp
+@k.faces.cutouts.mouth.gasp k.faces.variant slot=mouth name="cutouts gasp" style=cutouts shape=round size=small feel=open feel=surprised named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.gasp.p1 k.faces.part slot=mouth of="cutouts gasp" name=part1 shape=polygon x=46.5 y=72.1 w=11.4 h=12.6 z=1 colour=black rgb="#26211C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.gasp.p1.1 k.faces.point part=$k.faces.cutouts.mouth.gasp.p1 n=1 x=57.9 y=77.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.gasp.p1.2 k.faces.point part=$k.faces.cutouts.mouth.gasp.p1 n=2 x=55.7 y=82.6 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.gasp.p1.3 k.faces.point part=$k.faces.cutouts.mouth.gasp.p1 n=3 x=52.1 y=84.7 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.gasp.p1.4 k.faces.point part=$k.faces.cutouts.mouth.gasp.p1 n=4 x=48.2 y=81.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.gasp.p1.5 k.faces.point part=$k.faces.cutouts.mouth.gasp.p1 n=5 x=46.5 y=78.8 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.gasp.p1.6 k.faces.point part=$k.faces.cutouts.mouth.gasp.p1 n=6 x=48.6 y=73.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.gasp.p1.7 k.faces.point part=$k.faces.cutouts.mouth.gasp.p1 n=7 x=51.7 y=72.1 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.gasp.p1.8 k.faces.point part=$k.faces.cutouts.mouth.gasp.p1 n=8 x=55.6 y=73.8 core.source="dicebear-cutouts 67f54a0"
+
+# mouth: cutouts grin
+@k.faces.cutouts.mouth.grin k.faces.variant slot=mouth name="cutouts grin" style=cutouts feel=open kind=grin named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p1 k.faces.part slot=mouth of="cutouts grin" name=part1 shape=polygon x=40 y=71.5 w=22 h=8.5 z=1 colour=white rgb="#F7F2E8" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p1.1 k.faces.point part=$k.faces.cutouts.mouth.grin.p1 n=1 x=40 y=72.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p1.2 k.faces.point part=$k.faces.cutouts.mouth.grin.p1 n=2 x=61 y=71.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p1.3 k.faces.point part=$k.faces.cutouts.mouth.grin.p1 n=3 x=62 y=79 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p1.4 k.faces.point part=$k.faces.cutouts.mouth.grin.p1 n=4 x=41 y=80 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p2 k.faces.part slot=mouth of="cutouts grin" name=part2 shape=line x=47.5 y=72.6 w=0 h=6.6 z=2 colour=black rgb="#26211C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p2.1 k.faces.point part=$k.faces.cutouts.mouth.grin.p2 n=1 x=47.5 y=72.6 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p2.2 k.faces.point part=$k.faces.cutouts.mouth.grin.p2 n=2 x=47.5 y=79.2 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p3 k.faces.part slot=mouth of="cutouts grin" name=part3 shape=line x=54.5 y=72.2 w=0 h=6.6 z=3 colour=black rgb="#26211C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p3.1 k.faces.point part=$k.faces.cutouts.mouth.grin.p3 n=1 x=54.5 y=72.2 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p3.2 k.faces.point part=$k.faces.cutouts.mouth.grin.p3 n=2 x=54.5 y=78.8 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p4 k.faces.part slot=mouth of="cutouts grin" name=part4 shape=line x=40.5 y=71.7 w=21 h=1 z=4 colour=black rgb="#26211C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p4.1 k.faces.point part=$k.faces.cutouts.mouth.grin.p4 n=1 x=40.5 y=72.7 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p4.2 k.faces.point part=$k.faces.cutouts.mouth.grin.p4 n=2 x=61.5 y=71.7 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p5 k.faces.part slot=mouth of="cutouts grin" name=part5 shape=line x=41.5 y=78.9 w=20.3 h=0.8 z=5 colour=black rgb="#26211C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p5.1 k.faces.point part=$k.faces.cutouts.mouth.grin.p5 n=1 x=41.5 y=79.7 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.grin.p5.2 k.faces.point part=$k.faces.cutouts.mouth.grin.p5 n=2 x=61.8 y=78.9 core.source="dicebear-cutouts 67f54a0"
+
+# mouth: cutouts smile
+@k.faces.cutouts.mouth.smile k.faces.variant slot=mouth name="cutouts smile" style=cutouts feel=smiling feel=closed named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.smile.p1 k.faces.part slot=mouth of="cutouts smile" name=part1 shape=polygon x=37.8 y=74 w=26.5 h=9.2 z=1 colour=black rgb="#26211C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.smile.p1.1 k.faces.point part=$k.faces.cutouts.mouth.smile.p1 n=1 x=38.6 y=74.8 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.smile.p1.2 k.faces.point part=$k.faces.cutouts.mouth.smile.p1 n=2 x=44.5 y=78.2 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.smile.p1.3 k.faces.point part=$k.faces.cutouts.mouth.smile.p1 n=3 x=51 y=79.2 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.smile.p1.4 k.faces.point part=$k.faces.cutouts.mouth.smile.p1 n=4 x=57.5 y=77.8 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.smile.p1.5 k.faces.point part=$k.faces.cutouts.mouth.smile.p1 n=5 x=63.2 y=74 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.smile.p1.6 k.faces.point part=$k.faces.cutouts.mouth.smile.p1 n=6 x=64.3 y=76.8 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.smile.p1.7 k.faces.point part=$k.faces.cutouts.mouth.smile.p1 n=7 x=58 y=82 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.smile.p1.8 k.faces.point part=$k.faces.cutouts.mouth.smile.p1 n=8 x=50.8 y=83.2 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.smile.p1.9 k.faces.point part=$k.faces.cutouts.mouth.smile.p1 n=9 x=43.4 y=81.4 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.smile.p1.10 k.faces.point part=$k.faces.cutouts.mouth.smile.p1 n=10 x=37.8 y=77.4 core.source="dicebear-cutouts 67f54a0"
+
+# mouth: cutouts strip
+@k.faces.cutouts.mouth.strip k.faces.variant slot=mouth name="cutouts strip" style=cutouts feel=flat feel=closed named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.strip.p1 k.faces.part slot=mouth of="cutouts strip" name=part1 shape=polygon x=38.9 y=73.7 w=23.7 h=8 z=1 colour=brown rgb="#8F303E" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.strip.p1.1 k.faces.point part=$k.faces.cutouts.mouth.strip.p1 n=1 x=38.9 y=76.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.strip.p1.2 k.faces.point part=$k.faces.cutouts.mouth.strip.p1 n=2 x=61.7 y=73.7 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.strip.p1.3 k.faces.point part=$k.faces.cutouts.mouth.strip.p1 n=3 x=62.6 y=79.1 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.strip.p1.4 k.faces.point part=$k.faces.cutouts.mouth.strip.p1 n=4 x=39.7 y=81.7 core.source="dicebear-cutouts 67f54a0"
+
+# mouth: cutouts torn smile
+@k.faces.cutouts.mouth.tornSmile k.faces.variant slot=mouth name="cutouts torn smile" style=cutouts feel=smiling feel=thick named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.tornSmile.p1 k.faces.part slot=mouth of="cutouts torn smile" name=part1 shape=polygon x=38 y=75.5 w=27 h=8.5 z=1 colour=brown rgb="#8F303E" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.tornSmile.p1.1 k.faces.point part=$k.faces.cutouts.mouth.tornSmile.p1 n=1 x=38 y=76 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.tornSmile.p1.2 k.faces.point part=$k.faces.cutouts.mouth.tornSmile.p1 n=2 x=45 y=77.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.tornSmile.p1.3 k.faces.point part=$k.faces.cutouts.mouth.tornSmile.p1 n=3 x=53 y=78 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.tornSmile.p1.4 k.faces.point part=$k.faces.cutouts.mouth.tornSmile.p1 n=4 x=61 y=75.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.tornSmile.p1.5 k.faces.point part=$k.faces.cutouts.mouth.tornSmile.p1 n=5 x=65 y=77.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.tornSmile.p1.6 k.faces.point part=$k.faces.cutouts.mouth.tornSmile.p1 n=6 x=59 y=82.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.tornSmile.p1.7 k.faces.point part=$k.faces.cutouts.mouth.tornSmile.p1 n=7 x=49 y=84 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.tornSmile.p1.8 k.faces.point part=$k.faces.cutouts.mouth.tornSmile.p1 n=8 x=40 y=81.5 core.source="dicebear-cutouts 67f54a0"
+
+# mouth: cutouts wavy
+@k.faces.cutouts.mouth.wavy k.faces.variant slot=mouth name="cutouts wavy" style=cutouts feel=wavy feel=closed named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.wavy.p1 k.faces.part slot=mouth of="cutouts wavy" name=part1 shape=polygon x=39 y=74.2 w=24.8 h=9.6 z=1 colour=black rgb="#26211C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.wavy.p1.1 k.faces.point part=$k.faces.cutouts.mouth.wavy.p1 n=1 x=39 y=77.2 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.wavy.p1.2 k.faces.point part=$k.faces.cutouts.mouth.wavy.p1 n=2 x=44.5 y=74.2 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.wavy.p1.3 k.faces.point part=$k.faces.cutouts.mouth.wavy.p1 n=3 x=56.5 y=80.6 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.wavy.p1.4 k.faces.point part=$k.faces.cutouts.mouth.wavy.p1 n=4 x=63 y=75.8 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.wavy.p1.5 k.faces.point part=$k.faces.cutouts.mouth.wavy.p1 n=5 x=63.8 y=78.8 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.wavy.p1.6 k.faces.point part=$k.faces.cutouts.mouth.wavy.p1 n=6 x=56.8 y=83.8 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.wavy.p1.7 k.faces.point part=$k.faces.cutouts.mouth.wavy.p1 n=7 x=44.2 y=77.4 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.wavy.p1.8 k.faces.point part=$k.faces.cutouts.mouth.wavy.p1 n=8 x=39.7 y=80.2 core.source="dicebear-cutouts 67f54a0"
+
+# mouth: cutouts zigzag
+@k.faces.cutouts.mouth.zigzag k.faces.variant slot=mouth name="cutouts zigzag" style=cutouts feel=wavy feel=closed kind=zigzag named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.zigzag.p1 k.faces.part slot=mouth of="cutouts zigzag" name=part1 shape=polygon x=38 y=73.6 w=26.7 h=6 z=1 colour=black rgb="#26211C" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.zigzag.p1.1 k.faces.point part=$k.faces.cutouts.mouth.zigzag.p1 n=1 x=38 y=76.4 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.zigzag.p1.2 k.faces.point part=$k.faces.cutouts.mouth.zigzag.p1 n=2 x=43.5 y=74 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.zigzag.p1.3 k.faces.point part=$k.faces.cutouts.mouth.zigzag.p1 n=3 x=48.5 y=76.6 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.zigzag.p1.4 k.faces.point part=$k.faces.cutouts.mouth.zigzag.p1 n=4 x=54 y=74 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.zigzag.p1.5 k.faces.point part=$k.faces.cutouts.mouth.zigzag.p1 n=5 x=59 y=76.6 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.zigzag.p1.6 k.faces.point part=$k.faces.cutouts.mouth.zigzag.p1 n=6 x=64 y=73.6 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.zigzag.p1.7 k.faces.point part=$k.faces.cutouts.mouth.zigzag.p1 n=7 x=64.7 y=76.4 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.zigzag.p1.8 k.faces.point part=$k.faces.cutouts.mouth.zigzag.p1 n=8 x=59.4 y=79.6 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.zigzag.p1.9 k.faces.point part=$k.faces.cutouts.mouth.zigzag.p1 n=9 x=54.1 y=76.9 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.zigzag.p1.10 k.faces.point part=$k.faces.cutouts.mouth.zigzag.p1 n=10 x=48.8 y=79.6 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.zigzag.p1.11 k.faces.point part=$k.faces.cutouts.mouth.zigzag.p1 n=11 x=43.6 y=76.9 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.mouth.zigzag.p1.12 k.faces.point part=$k.faces.cutouts.mouth.zigzag.p1 n=12 x=38.7 y=79.2 core.source="dicebear-cutouts 67f54a0"

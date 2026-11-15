@@ -1,0 +1,10 @@
+# k.words/shards/ib: senses of the words from "ibex" to "ibrahim" (first letters "ib").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ibex.noun.1 k.words.sense word=ibex pos=noun n=1 supersense=noun.animal gloss="wild goat of mountain areas of Eurasia and northern Africa having large recurved horns" synonym="Capra ibex" is_a="wild goat" kind_of="wild goat" kind_of=goat kind_of=bovid kind_of=ruminant kind_of="even-toed ungulate" kind_of=ungulate kind_of=placental kind_of=mammal kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.ibex.forms core.word text=ibices means=ibex of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.ibis.noun.1 k.words.sense word=ibis pos=noun n=1 supersense=noun.animal gloss="wading birds of warm regions having long slender down-curved bills" is_a="wading bird" kind_of="wading bird" kind_of="aquatic bird" kind_of=bird kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.ibrahim.noun.1 k.words.sense word=Ibrahim pos=noun n=1 supersense=noun.person gloss="the first of the Old Testament patriarchs and the father of Isaac; according to Genesis, God promised to give Abraham's family (the Hebrews) the land of Canaan (the Promised Land); God tested Abraham by asking him to sacrifice his son" synonym=Abraham instance_of=patriarch core.source="wordnet 3.1"
+@k.words.ibrahim.spelling.Ibrahim core.word text=ibrahim means=Ibrahim of=k.words.sense.word core.source="wordnet 3.1"

@@ -1,0 +1,13 @@
+# k.words/shards/mc: senses of the words from "mc" to "mckinley" (first letters "mc").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.mc.noun.1 k.words.sense word=Mc pos=noun n=1 supersense=noun.time gloss="one million periods per second" synonym=megahertz synonym=MHz synonym="megacycle per second" synonym=megacycle is_a=rate core.source="wordnet 3.1"
+@k.words.mc.spelling.Mc core.word text=mc means=Mc of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.mccarthy.noun.1 k.words.sense word=McCarthy pos=noun n=1 supersense=noun.person gloss="United States satirical novelist and literary critic (1912-1989)" synonym="Mary McCarthy" synonym="Mary Therese McCarthy" instance_of=writer core.source="wordnet 3.1"
+@k.words.mccarthy.noun.2 k.words.sense word=McCarthy pos=noun n=2 supersense=noun.person gloss="United States politician who unscrupulously accused many citizens of being Communists (1908-1957)" synonym="Joseph McCarthy" synonym="Joseph Raymond McCarthy" instance_of=politician core.source="wordnet 3.1"
+@k.words.mccarthy.spelling.McCarthy core.word text=mccarthy means=McCarthy of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.mckinley.noun.1 k.words.sense word=McKinley pos=noun n=1 supersense=noun.person gloss="25th President of the United States; was assassinated by an anarchist (1843-1901)" synonym="William McKinley" synonym="President McKinley" instance_of="President of the United States" core.source="wordnet 3.1"
+@k.words.mckinley.noun.2 k.words.sense word=McKinley pos=noun n=2 supersense=noun.object gloss="a mountain in south central Alaska; the highest peak in North America (20,300 feet high)" synonym="Mount McKinley" synonym="Mt. McKinley" synonym=Denali instance_of="mountain peak" part_of="Alaska Range" part_of=Alaska core.source="wordnet 3.1"
+@k.words.mckinley.spelling.McKinley core.word text=mckinley means=McKinley of=k.words.sense.word core.source="wordnet 3.1"

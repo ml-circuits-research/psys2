@@ -1,0 +1,20 @@
+# k.attributes/shards/same-u: one name, one thing: for 15 names that start with "u" and are carried by facts of more than one world, the sense of the name and the types whose facts are about that thing; a name with two senses has two facts (0 facts of such names here).
+# sources: hand-core 1 (computed from the shards of the catalog by tools/joins.mjs)
+# license: CC0-1.0
+# script: tools/joins.mjs
+
+@k.attributes.same.ukraine.place k.attributes.same name=ukraine sense=place only=true in=k.geo.country by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.umbrella.thing k.attributes.same name=umbrella sense=thing only=true in=k.attributes.drawn in=k.attributes.number in=k.attributes.thing in=k.attributes.usage in=k.layouts.anchor in=k.objects.object in=k.scenes.thing by_word=k.parts.whole by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.umbrella_on_ground.thing k.attributes.same name="umbrella on ground" sense=thing only=true in=k.attributes.drawn in=k.attributes.usage in=k.objects.object in=k.scenes.thing core.source="hand-core 1"
+@k.attributes.same.umbrella_with_rain_drops.thing k.attributes.same name="umbrella with rain drops" sense=thing only=true in=k.attributes.drawn in=k.attributes.usage in=k.objects.object in=k.scenes.thing core.source="hand-core 1"
+@k.attributes.same.uncle.person k.attributes.same name=uncle sense=person only=true in=k.people.role by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.underground_train.thing k.attributes.same name="underground train" sense=thing only=true in=k.attributes.drawn in=k.objects.object in=k.scenes.thing core.source="hand-core 1"
+@k.attributes.same.underpants.clothing k.attributes.same name=underpants sense=clothing only=true in=k.attributes.number in=k.attributes.thing in=k.wearables.wearable by_word=k.parts.usual by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.underwear.clothing k.attributes.same name=underwear sense=clothing only=true in=k.attributes.drawn in=k.attributes.thing in=k.objects.object in=k.scenes.thing by_word=k.parts.usual by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.unicorn.animal k.attributes.same name=unicorn sense=animal only=true in=k.attributes.drawn in=k.attributes.thing in=k.objects.object in=k.scenes.thing by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.unlocked.thing k.attributes.same name=unlocked sense=thing only=true in=k.attributes.drawn in=k.objects.object in=k.scenes.thing core.source="hand-core 1"
+@k.attributes.same.upholstery.thing k.attributes.same name=upholstery sense=thing only=true in=k.attributes.thing by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.uranus.body_in_space k.attributes.same name=uranus sense="body in space" only=true in=k.attributes.drawn in=k.objects.object in=k.scenes.thing in=k.space.body by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.urn.thing k.attributes.same name=urn sense=thing only=true in=k.attributes.number in=k.objects.stand_in by_word=k.parts.usual by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.usa.place k.attributes.same name=usa sense=place only=true in=k.geo.river by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.usb_stick.thing k.attributes.same name="usb stick" sense=thing only=true in=k.attributes.drawn in=k.objects.object in=k.scenes.thing core.source="hand-core 1"

@@ -14,7 +14,7 @@
 // Entries are matched against the whole trimmed sentence; the order of the table does not matter (exact, most specific first).
 
 import { places as PLACE_LIST } from './places.ro-en.mjs?v=97dc087c2a';
-import { CANONICAL_RO } from './canonical.en-ro.mjs?v=dcd82cdc4b';
+import { CANONICAL_RO } from './canonical.en-ro.mjs?v=b781e750ba';
 const COLOURS = { red: 'roșu', yellow: 'galben', blue: 'albastru', green: 'verde', orange: 'portocaliu', purple: 'mov', violet: 'violet', pink: 'roz', brown: 'maro', black: 'negru', white: 'alb', gray: 'gri', grey: 'gri', turquoise: 'turcoaz', coral: 'coral', beige: 'bej', gold: 'auriu', silver: 'argintiu', tan: 'bronzat' };
 const DAYS = { Monday: 'luni', Tuesday: 'marți', Wednesday: 'miercuri', Thursday: 'joi', Friday: 'vineri', Saturday: 'sâmbătă', Sunday: 'duminică' };
 const MONTHS = { January: 'ianuarie', February: 'februarie', March: 'martie', April: 'aprilie', May: 'mai', June: 'iunie', July: 'iulie', August: 'august', September: 'septembrie', October: 'octombrie', November: 'noiembrie', December: 'decembrie' };

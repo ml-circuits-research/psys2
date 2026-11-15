@@ -1,0 +1,20 @@
+# k.words/shards/et: senses of the words from "eta" to "etiquette" (first letters "et").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.eta.noun.1 k.words.sense word=ETA pos=noun n=1 supersense=noun.group gloss="a terrorist organization organized in 1959 by student activists who were dissatisfied with the moderate nationalism of the traditional Basque party; want to create an independent homeland in Spain's western Pyrenees" synonym="Basque Homeland and Freedom" synonym="Basque Fatherland and Liberty" synonym="Euskadi ta Askatasuna" instance_of="terrorist organization" core.source="wordnet 3.1"
+@k.words.eta.noun.2 k.words.sense word=eta pos=noun n=2 supersense=noun.communication gloss="the 7th letter of the Greek alphabet" is_a=letter core.source="wordnet 3.1"
+@k.words.eta.spelling.ETA core.word text=eta means=ETA of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.eternity.noun.1 k.words.sense word=eternity pos=noun n=1 supersense=noun.time gloss="time without end" synonym=infinity is_a=time core.source="wordnet 3.1"
+@k.words.eternity.noun.2 k.words.sense word=eternity pos=noun n=2 supersense=noun.state gloss="a state of eternal existence believed in some religions to characterize the afterlife" synonym=timelessness synonym="timeless existence" is_a=being core.source="wordnet 3.1"
+@k.words.eternity.noun.3 k.words.sense word=eternity pos=noun n=3 supersense=noun.time gloss="a seemingly endless time interval (waiting)" is_a="time interval" core.source="wordnet 3.1"
+@k.words.ether.noun.1 k.words.sense word=ether pos=noun n=1 supersense=noun.substance gloss="the fifth and highest element after air and earth and fire and water; was believed to be the substance composing all heavenly bodies" synonym=quintessence is_a=element usage=archaic core.source="wordnet 3.1"
+@k.words.ether.noun.2 k.words.sense word=ether pos=noun n=2 supersense=noun.substance gloss="any of a class of organic compounds that have two hydrocarbon groups linked by an oxygen atom" is_a="organic compound" core.source="wordnet 3.1"
+@k.words.ether.noun.3 k.words.sense word=ether pos=noun n=3 supersense=noun.communication gloss="a medium that was once supposed to fill all space and to support the propagation of electromagnetic waves" synonym=aether is_a=medium core.source="wordnet 3.1"
+@k.words.ethics.noun.1 k.words.sense word=ethics pos=noun n=1 supersense=noun.motive gloss="motivation based on ideas of right and wrong" synonym="ethical motive" synonym=morals synonym=morality is_a=motivation core.source="wordnet 3.1"
+@k.words.ethics.noun.2 k.words.sense word=ethics pos=noun n=2 supersense=noun.cognition gloss="the philosophical study of moral values and rules" synonym="moral philosophy" is_a=philosophy core.source="wordnet 3.1"
+@k.words.ethiopia.noun.1 k.words.sense word=Ethiopia pos=noun n=1 supersense=noun.location gloss="Ethiopia is a republic in northeastern Africa on the Red Sea; formerly called Abyssinia" synonym="Federal Democratic Republic of Ethiopia" synonym=Yaltopya synonym=Abyssinia instance_of="African country" part_of="Somali peninsula" part_of=Africa core.source="wordnet 3.1"
+@k.words.ethiopia.spelling.Ethiopia core.word text=ethiopia means=Ethiopia of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.ethnic.noun.1 k.words.sense word=ethnic pos=noun n=1 supersense=noun.person gloss="a person who is a member of an ethnic group" is_a=person core.source="wordnet 3.1"
+@k.words.etiquette.noun.1 k.words.sense word=etiquette pos=noun n=1 supersense=noun.communication gloss="rules governing socially acceptable behavior" is_a=rule core.source="wordnet 3.1"

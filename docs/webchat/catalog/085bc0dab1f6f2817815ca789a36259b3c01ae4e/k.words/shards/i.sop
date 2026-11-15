@@ -1,0 +1,10 @@
+# k.words/shards/i: senses of the words from "i" to "i" (first letters "i").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.i.noun.1 k.words.sense word=I pos=noun n=1 supersense=noun.substance gloss="a nonmetallic element belonging to the halogens; used especially in medicine and photography and in dyes; occurs naturally only in combination in small quantities (as in sea water or rocks)" synonym=iodine synonym=iodin synonym="atomic number 53" is_a="chemical element" is_a=halogen kind_of="chemical element" kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.i.noun.2 k.words.sense word=I pos=noun n=2 supersense=noun.quantity gloss="the smallest whole number or a numeral representing this number" synonym=one synonym=1 synonym=ace synonym=single synonym=unity is_a=digit kind_of=digit kind_of=integer kind_of=number kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.i.noun.3 k.words.sense word=I pos=noun n=3 supersense=noun.communication gloss="the 9th letter of the Roman alphabet" synonym=i is_a=letter kind_of=letter kind_of=character kind_of="written symbol" kind_of=symbol kind_of=signal kind_of=communication kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.i.adjective.1 k.words.sense word=i pos=adjective n=1 supersense=adj.all gloss="used of a single unit or thing; not two or more" synonym=one synonym=1 synonym=ane near_opposite=ordinal core.source="wordnet 3.1"
+@k.words.i.spelling.I core.word text=i means=I of=k.words.sense.word core.source="wordnet 3.1"

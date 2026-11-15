@@ -1,0 +1,6 @@
+# k.words/shards/hm: senses of the words from "hm" to "hm" (first letters "hm").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.hm.noun.1 k.words.sense word=hm pos=noun n=1 supersense=noun.quantity gloss="a metric unit of length equal to 100 meters" synonym=hectometer synonym=hectometre is_a="metric linear unit" part_of=kilometer kind_of="metric linear unit" kind_of="linear unit" kind_of="unit of measurement" kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"

@@ -1,0 +1,19 @@
+# k.kinds/shards/relations-shapes: the keys of the types of k.shapes read as relations: 14 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.shapes.shape.kind k.kinds.relation type=k.shapes.shape key=kind subject=shape subject_sense=shape object=kind found=schema core.source="hand-core 1"
+@k.kinds.relation.k.shapes.shape.sides k.kinds.relation type=k.shapes.shape key=sides subject=shape subject_sense=shape object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.shapes.shape.corners k.kinds.relation type=k.shapes.shape key=corners subject=shape subject_sense=shape object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.shapes.shape.faces k.kinds.relation type=k.shapes.shape key=faces subject=shape subject_sense=shape object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.shapes.shape.edges k.kinds.relation type=k.shapes.shape key=edges subject=shape subject_sense=shape object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.shapes.shape.face k.kinds.relation type=k.shapes.shape key=face subject=shape subject_sense=shape object=value object_type=k.shapes.shape object_sense=shape found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.shapes.shape.round k.kinds.relation type=k.shapes.shape key=round subject=shape subject_sense=shape object=boolean found=schema core.source="hand-core 1"
+@k.kinds.relation.k.shapes.shape.equal_sides k.kinds.relation type=k.shapes.shape key=equal_sides subject=shape subject_sense=shape object=boolean found=schema core.source="hand-core 1"
+@k.kinds.relation.k.shapes.shape.symmetric k.kinds.relation type=k.shapes.shape key=symmetric subject=shape subject_sense=shape object=boolean found=schema core.source="hand-core 1"
+@k.kinds.relation.k.shapes.shape.flat k.kinds.relation type=k.shapes.shape key=flat subject=shape subject_sense=shape object=value object_type=k.shapes.shape object_sense=shape found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.shapes.shape.thing k.kinds.relation type=k.shapes.shape key=thing subject=shape subject_sense=shape object=thing object_type=k.objects.object found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.shapes.shape.is_a k.kinds.relation type=k.shapes.shape key=is_a subject=shape subject_sense=shape object=kind object_type=k.shapes.shape object_sense=shape found=value core.source="hand-core 1"
+@k.kinds.relation.k.shapes.shape.kind_of k.kinds.relation type=k.shapes.shape key=kind_of subject=shape subject_sense=shape object=kind object_type=k.shapes.shape object_sense=shape found=value core.source="hand-core 1"
+@k.kinds.relation.k.shapes.shape.derived k.kinds.relation type=k.shapes.shape key=derived subject=shape subject_sense=shape object=boolean found=schema core.source="hand-core 1"

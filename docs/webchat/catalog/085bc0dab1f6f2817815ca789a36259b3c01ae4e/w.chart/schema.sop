@@ -1,0 +1,63 @@
+# w.chart: a reusable world: charts of numbers (a bar chart of sales by month, a pie chart of favourite fruits, a line
+# chart of temperatures). Declared as data in the library's std.schema format; the acts of std.acts drive it (make,
+# remove, change, pick, ask, copy); it has no rule and no function of its own (Q45 (ii)).
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later)
+
+@w.chart core.module name=w.chart version=1 exports=chart exports=series exports=point core.source="hand-core 1"
+@w.chart.world std.schema.world name=w.chart doc="charts of numbers: series of values by category" core.source="hand-core 1"
+
+# A chart. `title` is what it shows; `form` how (bar, line, pie, scatter, area; not `kind`, which the act `make` reads as
+# the kind of thing to make); `x_label` and `y_label` name the axes;
+# `unit` is the unit of the values (k.units names units).
+@w.chart.chart core.type of=w.chart.chart extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.chart.chart.title core.slot of=w.chart.chart key=title kind=atom kind=string core.source="hand-core 1"
+@w.chart.chart.form core.slot of=w.chart.chart key=form enum=bar enum=line enum=pie enum=scatter enum=area default=bar core.source="hand-core 1"
+@w.chart.chart.x_label core.slot of=w.chart.chart key=x_label kind=atom kind=string core.source="hand-core 1"
+@w.chart.chart.y_label core.slot of=w.chart.chart key=y_label kind=atom kind=string core.source="hand-core 1"
+@w.chart.chart.unit core.slot of=w.chart.chart key=unit kind=atom kind=string core.source="hand-core 1"
+
+# A series of values in a chart: `name` (sales 2025), `chart` its chart, `colour` the colour it is drawn in, `n` its
+# place among the series of the chart, from 1.
+@w.chart.series core.type of=w.chart.series extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.chart.series.name core.slot of=w.chart.series key=name kind=atom kind=string core.source="hand-core 1"
+@w.chart.series.chart core.slot of=w.chart.series key=chart type=w.chart.chart core.source="hand-core 1"
+@w.chart.series.colour core.slot of=w.chart.series key=colour kind=atom kind=string core.source="hand-core 1"
+@w.chart.series.n core.slot of=w.chart.series key=n kind=integer min=1 step=1 core.source="hand-core 1"
+
+# A value of a series: `category` is where it stands on the other axis (a month, a fruit, a year), `value` the number,
+# `series` its series, `n` its place in the series, from 1.
+@w.chart.point core.type of=w.chart.point extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.chart.point.category core.slot of=w.chart.point key=category kind=atom kind=string core.source="hand-core 1"
+@w.chart.point.value core.slot of=w.chart.point key=value required=true kind=number core.source="hand-core 1"
+@w.chart.point.series core.slot of=w.chart.point key=series type=w.chart.series core.source="hand-core 1"
+@w.chart.point.n core.slot of=w.chart.point key=n kind=integer min=1 step=1 core.source="hand-core 1"
+
+# The kinds and the acts that apply to them. At most 20 charts, 100 series and 2,000 values.
+@w.chart.kind.chart std.schema.kind of=w.chart.chart world=w.chart acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.chart.kind.series std.schema.kind of=w.chart.series world=w.chart acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.chart.kind.point std.schema.kind of=w.chart.point world=w.chart acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
+@w.chart.limit.chart std.schema.limit of=w.chart.chart max=20 core.source="hand-core 1"
+@w.chart.limit.series std.schema.limit of=w.chart.series max=100 core.source="hand-core 1"
+@w.chart.limit.point std.schema.limit of=w.chart.point max=2000 core.source="hand-core 1"
+
+# Words: for the world (how a host finds it by name), its kinds and its keys.
+@w.chart.word.world core.word text=chart text=charts text=graph text=graphs text="bar chart" text="pie chart" text="line chart" text="line graph" text="bar graph" text=plot means=w.chart of=std.schema.world.name core.source="hand-core 1"
+@w.chart.word.chart core.word text=chart text=charts text=graph text=graphs text=plot means=w.chart.chart core.source="hand-core 1"
+@w.chart.word.series core.word text=series text=line text=lines text=dataset text="data set" means=w.chart.series core.source="hand-core 1"
+@w.chart.word.point core.word text=point text=points text=value text=values text=bar text=bars text=slice text=slices text="data point" means=w.chart.point core.source="hand-core 1"
+@w.chart.word.title core.word text=title text=called text=name means=w.chart.chart.title core.source="hand-core 1"
+@w.chart.word.form core.word text=kind text=type text=form means=w.chart.chart.form core.source="hand-core 1"
+@w.chart.word.x_label core.word text="x axis" text="horizontal axis" means=w.chart.chart.x_label core.source="hand-core 1"
+@w.chart.word.y_label core.word text="y axis" text="vertical axis" means=w.chart.chart.y_label core.source="hand-core 1"
+@w.chart.word.unit core.word text=unit text=units means=w.chart.chart.unit core.source="hand-core 1"
+@w.chart.word.series.name core.word text=name text=called means=w.chart.series.name core.source="hand-core 1"
+@w.chart.word.series.chart core.word text=on text=in text=belongs means=w.chart.series.chart core.source="hand-core 1"
+@w.chart.word.series.n core.word text=place text=position text=order means=w.chart.series.n core.source="hand-core 1"
+@w.chart.word.colour core.word text=colour text=color means=w.chart.series.colour core.source="hand-core 1"
+@w.chart.word.category core.word text=category text=label text=month text=year text=group means=w.chart.point.category core.source="hand-core 1"
+@w.chart.word.value core.word text=value text=number text=amount text="how much" means=w.chart.point.value core.source="hand-core 1"
+@w.chart.word.n core.word text=place text=position text=order means=w.chart.point.n core.source="hand-core 1"
+@w.chart.word.point.series core.word text=on text=in text=belongs means=w.chart.point.series core.source="hand-core 1"

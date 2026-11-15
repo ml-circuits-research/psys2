@@ -1,0 +1,19 @@
+# k.words/shards/ax: senses of the words from "ax" to "axolotl" (first letters "ax").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ax.noun.1 k.words.sense word=ax pos=noun n=1 supersense=noun.artifact gloss="an edge tool with a heavy bladed head mounted across a handle" synonym=axe is_a="edge tool" core.source="wordnet 3.1"
+@k.words.ax.verb.1 k.words.sense word=ax pos=verb n=1 supersense=verb.contact gloss="chop or split with an ax" synonym=axe is_a=chop core.source="wordnet 3.1"
+@k.words.ax.verb.2 k.words.sense word=ax pos=verb n=2 supersense=verb.change gloss="terminate" synonym=axe is_a=end core.source="wordnet 3.1"
+@k.words.ax.forms core.word text=axes means=ax of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.axe.noun.1 k.words.sense word=axe pos=noun n=1 supersense=noun.artifact gloss="an edge tool with a heavy bladed head mounted across a handle" synonym=ax is_a="edge tool" kind_of="edge tool" kind_of=cutter kind_of="cutting implement" kind_of=tool kind_of=implement kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.axe.verb.1 k.words.sense word=axe pos=verb n=1 supersense=verb.contact gloss="chop or split with an ax" synonym=ax is_a=chop kind_of=chop kind_of=cut kind_of=separate kind_of=move core.source="wordnet 3.1"
+@k.words.axe.verb.2 k.words.sense word=axe pos=verb n=2 supersense=verb.change gloss="terminate" synonym=ax is_a=end kind_of=end kind_of=change core.source="wordnet 3.1"
+@k.words.axis.noun.1 k.words.sense word=axis pos=noun n=1 supersense=noun.cognition gloss="a straight line through a body or figure that satisfies certain conditions" is_a=line core.source="wordnet 3.1"
+@k.words.axis.noun.2 k.words.sense word=axis pos=noun n=2 supersense=noun.plant gloss="the main stem or central part about which plant organs or plant parts such as branches are arranged" is_a=stalk core.source="wordnet 3.1"
+@k.words.axis.noun.3 k.words.sense word=Axis pos=noun n=3 supersense=noun.group gloss="in World War II the alliance of Germany and Italy in 1936 which later included Japan and other nations" is_a=alliance core.source="wordnet 3.1"
+@k.words.axis.spelling.Axis core.word text=axis means=Axis of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.axis.forms core.word text=axes means=axis of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.axle.noun.1 k.words.sense word=axle pos=noun n=1 supersense=noun.artifact gloss="a shaft on which a wheel rotates" is_a=shaft part_of="wheeled vehicle" kind_of=shaft kind_of=rod kind_of=implement kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.axolotl.noun.1 k.words.sense word=axolotl pos=noun n=1 supersense=noun.animal gloss="larval salamander of mountain lakes of Mexico that usually lives without metamorphosing" synonym="mud puppy" synonym="Ambystoma mexicanum" is_a=ambystomid kind_of=ambystomid kind_of=salamander kind_of=amphibian kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

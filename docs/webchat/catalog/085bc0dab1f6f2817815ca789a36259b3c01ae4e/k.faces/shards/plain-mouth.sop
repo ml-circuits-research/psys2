@@ -1,0 +1,173 @@
+# k.faces/shards/plain-mouth: the variants of the slot `mouth` in the style `plain`: features, and parts with a primitive shape, a box in the frame of the face, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/faces-core.mjs
+
+# mouth: smile
+@k.faces.plain.mouth.smile k.faces.variant slot=mouth name=smile style=plain feel=smiling feel=closed core.source="hand-core 1"
+@k.faces.plain.mouth.smile.lips k.faces.part slot=mouth of=smile name=lips shape=arc x=41 y=63 w=18 h=6 z=1 colour=red rgb="#B5483F" opens=up core.source="hand-core 1"
+
+# mouth: big smile
+@k.faces.plain.mouth.big_smile k.faces.variant slot=mouth name="big smile" style=plain size=large feel=smiling feel=open core.source="hand-core 1"
+@k.faces.plain.mouth.big_smile.inside k.faces.part slot=mouth of="big smile" name=inside shape=polygon x=38 y=62 w=24 h=11 z=1 colour=red rgb="#6E1F24" core.source="hand-core 1"
+@k.faces.plain.mouth.big_smile.teeth k.faces.part slot=mouth of="big smile" name=teeth shape=rectangle x=41 y=62 w=18 h=3.5 z=2 colour=white rgb="#FFFFFF" core.source="hand-core 1"
+@k.faces.plain.mouth.big_smile.inside.p1 k.faces.point part=$k.faces.plain.mouth.big_smile.inside n=1 x=38 y=62 core.source="hand-core 1"
+@k.faces.plain.mouth.big_smile.inside.p2 k.faces.point part=$k.faces.plain.mouth.big_smile.inside n=2 x=62 y=62 core.source="hand-core 1"
+@k.faces.plain.mouth.big_smile.inside.p3 k.faces.point part=$k.faces.plain.mouth.big_smile.inside n=3 x=61.1 y=66.2 core.source="hand-core 1"
+@k.faces.plain.mouth.big_smile.inside.p4 k.faces.point part=$k.faces.plain.mouth.big_smile.inside n=4 x=58.5 y=69.8 core.source="hand-core 1"
+@k.faces.plain.mouth.big_smile.inside.p5 k.faces.point part=$k.faces.plain.mouth.big_smile.inside n=5 x=54.6 y=72.2 core.source="hand-core 1"
+@k.faces.plain.mouth.big_smile.inside.p6 k.faces.point part=$k.faces.plain.mouth.big_smile.inside n=6 x=50 y=73 core.source="hand-core 1"
+@k.faces.plain.mouth.big_smile.inside.p7 k.faces.point part=$k.faces.plain.mouth.big_smile.inside n=7 x=45.4 y=72.2 core.source="hand-core 1"
+@k.faces.plain.mouth.big_smile.inside.p8 k.faces.point part=$k.faces.plain.mouth.big_smile.inside n=8 x=41.5 y=69.8 core.source="hand-core 1"
+@k.faces.plain.mouth.big_smile.inside.p9 k.faces.point part=$k.faces.plain.mouth.big_smile.inside n=9 x=38.9 y=66.2 core.source="hand-core 1"
+
+# mouth: neutral
+@k.faces.plain.mouth.neutral k.faces.variant slot=mouth name=neutral style=plain feel=flat feel=closed core.source="hand-core 1"
+@k.faces.plain.mouth.neutral.lips k.faces.part slot=mouth of=neutral name=lips shape=line x=43 y=66 w=14 h=0 z=1 colour=red rgb="#B5483F" core.source="hand-core 1"
+@k.faces.plain.mouth.neutral.lips.p1 k.faces.point part=$k.faces.plain.mouth.neutral.lips n=1 x=43 y=66 core.source="hand-core 1"
+@k.faces.plain.mouth.neutral.lips.p2 k.faces.point part=$k.faces.plain.mouth.neutral.lips n=2 x=57 y=66 core.source="hand-core 1"
+
+# mouth: sad
+@k.faces.plain.mouth.sad k.faces.variant slot=mouth name=sad style=plain feel=sad feel=closed core.source="hand-core 1"
+@k.faces.plain.mouth.sad.lips k.faces.part slot=mouth of=sad name=lips shape=arc x=42 y=65 w=16 h=5 z=1 colour=red rgb="#B5483F" opens=down core.source="hand-core 1"
+
+# mouth: open
+@k.faces.plain.mouth.open k.faces.variant slot=mouth name=open style=plain shape=round size=small feel=open feel=surprised core.source="hand-core 1"
+@k.faces.plain.mouth.open.inside k.faces.part slot=mouth of=open name=inside shape=oval x=46 y=62 w=8 h=10 z=1 colour=red rgb="#6E1F24" core.source="hand-core 1"
+
+# mouth: talking
+@k.faces.plain.mouth.talking k.faces.variant slot=mouth name=talking style=plain feel=open core.source="hand-core 1"
+@k.faces.plain.mouth.talking.inside k.faces.part slot=mouth of=talking name=inside shape=oval x=43 y=62 w=14 h=9 z=1 colour=red rgb="#6E1F24" core.source="hand-core 1"
+@k.faces.plain.mouth.talking.tongue k.faces.part slot=mouth of=talking name=tongue shape=oval x=46 y=67 w=8 h=4 z=2 colour=pink rgb="#E8788A" core.source="hand-core 1"
+
+# mouth: small
+@k.faces.plain.mouth.small k.faces.variant slot=mouth name=small style=plain size=small feel=closed core.source="hand-core 1"
+@k.faces.plain.mouth.small.lips k.faces.part slot=mouth of=small name=lips shape=line x=47 y=66 w=6 h=0 z=1 colour=red rgb="#B5483F" core.source="hand-core 1"
+@k.faces.plain.mouth.small.lips.p1 k.faces.point part=$k.faces.plain.mouth.small.lips n=1 x=47 y=66 core.source="hand-core 1"
+@k.faces.plain.mouth.small.lips.p2 k.faces.point part=$k.faces.plain.mouth.small.lips n=2 x=53 y=66 core.source="hand-core 1"
+
+# mouth: wide
+@k.faces.plain.mouth.wide k.faces.variant slot=mouth name=wide style=plain feel=wide feel=flat feel=closed core.source="hand-core 1"
+@k.faces.plain.mouth.wide.lips k.faces.part slot=mouth of=wide name=lips shape=line x=39 y=66 w=22 h=0 z=1 colour=red rgb="#B5483F" core.source="hand-core 1"
+@k.faces.plain.mouth.wide.lips.p1 k.faces.point part=$k.faces.plain.mouth.wide.lips n=1 x=39 y=66 core.source="hand-core 1"
+@k.faces.plain.mouth.wide.lips.p2 k.faces.point part=$k.faces.plain.mouth.wide.lips n=2 x=61 y=66 core.source="hand-core 1"
+
+# mouth: smirk
+@k.faces.plain.mouth.smirk k.faces.variant slot=mouth name=smirk style=plain feel=closed kind=smirk core.source="hand-core 1"
+@k.faces.plain.mouth.smirk.lips k.faces.part slot=mouth of=smirk name=lips shape=line x=43 y=63 w=16 h=4 z=1 colour=red rgb="#B5483F" core.source="hand-core 1"
+@k.faces.plain.mouth.smirk.lips.p1 k.faces.point part=$k.faces.plain.mouth.smirk.lips n=1 x=43 y=67 core.source="hand-core 1"
+@k.faces.plain.mouth.smirk.lips.p2 k.faces.point part=$k.faces.plain.mouth.smirk.lips n=2 x=53 y=67 core.source="hand-core 1"
+@k.faces.plain.mouth.smirk.lips.p3 k.faces.point part=$k.faces.plain.mouth.smirk.lips n=3 x=59 y=63 core.source="hand-core 1"
+
+# mouth: full lips
+@k.faces.plain.mouth.full_lips k.faces.variant slot=mouth name="full lips" style=plain feel=thick feel=closed kind="full lips" core.source="hand-core 1"
+@k.faces.plain.mouth.full_lips.upper_lip k.faces.part slot=mouth of="full lips" name=upper_lip kind=lip shape=polygon x=41 y=62.5 w=18 h=3.5 z=1 colour=red rgb="#B5483F" core.source="hand-core 1"
+@k.faces.plain.mouth.full_lips.lower_lip k.faces.part slot=mouth of="full lips" name=lower_lip kind=lip shape=polygon x=41 y=66 w=18 h=5.5 z=1 colour=red rgb="#B5483F" core.source="hand-core 1"
+@k.faces.plain.mouth.full_lips.upper_lip.p1 k.faces.point part=$k.faces.plain.mouth.full_lips.upper_lip n=1 x=41 y=66 core.source="hand-core 1"
+@k.faces.plain.mouth.full_lips.upper_lip.p2 k.faces.point part=$k.faces.plain.mouth.full_lips.upper_lip n=2 x=46 y=62.5 core.source="hand-core 1"
+@k.faces.plain.mouth.full_lips.upper_lip.p3 k.faces.point part=$k.faces.plain.mouth.full_lips.upper_lip n=3 x=50 y=64 core.source="hand-core 1"
+@k.faces.plain.mouth.full_lips.upper_lip.p4 k.faces.point part=$k.faces.plain.mouth.full_lips.upper_lip n=4 x=54 y=62.5 core.source="hand-core 1"
+@k.faces.plain.mouth.full_lips.upper_lip.p5 k.faces.point part=$k.faces.plain.mouth.full_lips.upper_lip n=5 x=59 y=66 core.source="hand-core 1"
+@k.faces.plain.mouth.full_lips.lower_lip.p1 k.faces.point part=$k.faces.plain.mouth.full_lips.lower_lip n=1 x=41 y=66 core.source="hand-core 1"
+@k.faces.plain.mouth.full_lips.lower_lip.p2 k.faces.point part=$k.faces.plain.mouth.full_lips.lower_lip n=2 x=59 y=66 core.source="hand-core 1"
+@k.faces.plain.mouth.full_lips.lower_lip.p3 k.faces.point part=$k.faces.plain.mouth.full_lips.lower_lip n=3 x=55 y=70.5 core.source="hand-core 1"
+@k.faces.plain.mouth.full_lips.lower_lip.p4 k.faces.point part=$k.faces.plain.mouth.full_lips.lower_lip n=4 x=50 y=71.5 core.source="hand-core 1"
+@k.faces.plain.mouth.full_lips.lower_lip.p5 k.faces.point part=$k.faces.plain.mouth.full_lips.lower_lip n=5 x=45 y=70.5 core.source="hand-core 1"
+
+# mouth: grin
+@k.faces.plain.mouth.grin k.faces.variant slot=mouth name=grin style=plain feel=smiling feel=open feel=wide kind=grin core.source="hand-core 1"
+@k.faces.plain.mouth.grin.teeth k.faces.part slot=mouth of=grin name=teeth shape=polygon x=39 y=62 w=22 h=9 z=1 colour=white rgb="#FFFFFF" core.source="hand-core 1"
+@k.faces.plain.mouth.grin.gap_1 k.faces.part slot=mouth of=grin name=gap_1 kind=gap shape=line x=45 y=62.5 w=0 h=7 z=2 colour=grey rgb="#9AA4AE" core.source="hand-core 1"
+@k.faces.plain.mouth.grin.gap_2 k.faces.part slot=mouth of=grin name=gap_2 kind=gap shape=line x=50 y=62.5 w=0 h=8 z=2 colour=grey rgb="#9AA4AE" core.source="hand-core 1"
+@k.faces.plain.mouth.grin.gap_3 k.faces.part slot=mouth of=grin name=gap_3 kind=gap shape=line x=55 y=62.5 w=0 h=7 z=2 colour=grey rgb="#9AA4AE" core.source="hand-core 1"
+@k.faces.plain.mouth.grin.teeth.p1 k.faces.point part=$k.faces.plain.mouth.grin.teeth n=1 x=39 y=62 core.source="hand-core 1"
+@k.faces.plain.mouth.grin.teeth.p2 k.faces.point part=$k.faces.plain.mouth.grin.teeth n=2 x=61 y=62 core.source="hand-core 1"
+@k.faces.plain.mouth.grin.teeth.p3 k.faces.point part=$k.faces.plain.mouth.grin.teeth n=3 x=58 y=69 core.source="hand-core 1"
+@k.faces.plain.mouth.grin.teeth.p4 k.faces.point part=$k.faces.plain.mouth.grin.teeth n=4 x=50 y=71 core.source="hand-core 1"
+@k.faces.plain.mouth.grin.teeth.p5 k.faces.point part=$k.faces.plain.mouth.grin.teeth n=5 x=42 y=69 core.source="hand-core 1"
+@k.faces.plain.mouth.grin.gap_1.p1 k.faces.point part=$k.faces.plain.mouth.grin.gap_1 n=1 x=45 y=62.5 core.source="hand-core 1"
+@k.faces.plain.mouth.grin.gap_1.p2 k.faces.point part=$k.faces.plain.mouth.grin.gap_1 n=2 x=45 y=69.5 core.source="hand-core 1"
+@k.faces.plain.mouth.grin.gap_2.p1 k.faces.point part=$k.faces.plain.mouth.grin.gap_2 n=1 x=50 y=62.5 core.source="hand-core 1"
+@k.faces.plain.mouth.grin.gap_2.p2 k.faces.point part=$k.faces.plain.mouth.grin.gap_2 n=2 x=50 y=70.5 core.source="hand-core 1"
+@k.faces.plain.mouth.grin.gap_3.p1 k.faces.point part=$k.faces.plain.mouth.grin.gap_3 n=1 x=55 y=62.5 core.source="hand-core 1"
+@k.faces.plain.mouth.grin.gap_3.p2 k.faces.point part=$k.faces.plain.mouth.grin.gap_3 n=2 x=55 y=69.5 core.source="hand-core 1"
+
+# mouth: tongue out
+@k.faces.plain.mouth.tongue_out k.faces.variant slot=mouth name="tongue out" style=plain feel=smiling kind="tongue out" core.source="hand-core 1"
+@k.faces.plain.mouth.tongue_out.lips k.faces.part slot=mouth of="tongue out" name=lips shape=arc x=41 y=63 w=18 h=5 z=2 colour=red rgb="#B5483F" opens=up core.source="hand-core 1"
+@k.faces.plain.mouth.tongue_out.tongue k.faces.part slot=mouth of="tongue out" name=tongue shape=oval x=47 y=66 w=8 h=8 z=1 colour=pink rgb="#E8788A" core.source="hand-core 1"
+
+# mouth: frown
+@k.faces.plain.mouth.frown k.faces.variant slot=mouth name=frown style=plain feel=sad feel=open core.source="hand-core 1"
+@k.faces.plain.mouth.frown.inside k.faces.part slot=mouth of=frown name=inside shape=polygon x=40 y=63 w=20 h=8 z=1 colour=red rgb="#6E1F24" core.source="hand-core 1"
+@k.faces.plain.mouth.frown.inside.p1 k.faces.point part=$k.faces.plain.mouth.frown.inside n=1 x=40 y=71 core.source="hand-core 1"
+@k.faces.plain.mouth.frown.inside.p2 k.faces.point part=$k.faces.plain.mouth.frown.inside n=2 x=60 y=71 core.source="hand-core 1"
+@k.faces.plain.mouth.frown.inside.p3 k.faces.point part=$k.faces.plain.mouth.frown.inside n=3 x=59.2 y=67.9 core.source="hand-core 1"
+@k.faces.plain.mouth.frown.inside.p4 k.faces.point part=$k.faces.plain.mouth.frown.inside n=4 x=57.1 y=65.3 core.source="hand-core 1"
+@k.faces.plain.mouth.frown.inside.p5 k.faces.point part=$k.faces.plain.mouth.frown.inside n=5 x=53.8 y=63.6 core.source="hand-core 1"
+@k.faces.plain.mouth.frown.inside.p6 k.faces.point part=$k.faces.plain.mouth.frown.inside n=6 x=50 y=63 core.source="hand-core 1"
+@k.faces.plain.mouth.frown.inside.p7 k.faces.point part=$k.faces.plain.mouth.frown.inside n=7 x=46.2 y=63.6 core.source="hand-core 1"
+@k.faces.plain.mouth.frown.inside.p8 k.faces.point part=$k.faces.plain.mouth.frown.inside n=8 x=42.9 y=65.3 core.source="hand-core 1"
+@k.faces.plain.mouth.frown.inside.p9 k.faces.point part=$k.faces.plain.mouth.frown.inside n=9 x=40.8 y=67.9 core.source="hand-core 1"
+
+# mouth: grille
+@k.faces.plain.mouth.grille k.faces.variant slot=mouth name=grille style=plain shape=square kind=robot core.source="hand-core 1"
+@k.faces.plain.mouth.grille.plate k.faces.part slot=mouth of=grille name=plate shape=rectangle x=40 y=62 w=20 h=9 z=1 colour=grey rgb="#9AA4AE" core.source="hand-core 1"
+@k.faces.plain.mouth.grille.slot_1 k.faces.part slot=mouth of=grille name=slot_1 kind=slot shape=line x=44 y=63.5 w=0 h=6 z=2 colour=black rgb="#3A3A3A" core.source="hand-core 1"
+@k.faces.plain.mouth.grille.slot_2 k.faces.part slot=mouth of=grille name=slot_2 kind=slot shape=line x=48 y=63.5 w=0 h=6 z=2 colour=black rgb="#3A3A3A" core.source="hand-core 1"
+@k.faces.plain.mouth.grille.slot_3 k.faces.part slot=mouth of=grille name=slot_3 kind=slot shape=line x=52 y=63.5 w=0 h=6 z=2 colour=black rgb="#3A3A3A" core.source="hand-core 1"
+@k.faces.plain.mouth.grille.slot_4 k.faces.part slot=mouth of=grille name=slot_4 kind=slot shape=line x=56 y=63.5 w=0 h=6 z=2 colour=black rgb="#3A3A3A" core.source="hand-core 1"
+@k.faces.plain.mouth.grille.slot_1.p1 k.faces.point part=$k.faces.plain.mouth.grille.slot_1 n=1 x=44 y=63.5 core.source="hand-core 1"
+@k.faces.plain.mouth.grille.slot_1.p2 k.faces.point part=$k.faces.plain.mouth.grille.slot_1 n=2 x=44 y=69.5 core.source="hand-core 1"
+@k.faces.plain.mouth.grille.slot_2.p1 k.faces.point part=$k.faces.plain.mouth.grille.slot_2 n=1 x=48 y=63.5 core.source="hand-core 1"
+@k.faces.plain.mouth.grille.slot_2.p2 k.faces.point part=$k.faces.plain.mouth.grille.slot_2 n=2 x=48 y=69.5 core.source="hand-core 1"
+@k.faces.plain.mouth.grille.slot_3.p1 k.faces.point part=$k.faces.plain.mouth.grille.slot_3 n=1 x=52 y=63.5 core.source="hand-core 1"
+@k.faces.plain.mouth.grille.slot_3.p2 k.faces.point part=$k.faces.plain.mouth.grille.slot_3 n=2 x=52 y=69.5 core.source="hand-core 1"
+@k.faces.plain.mouth.grille.slot_4.p1 k.faces.point part=$k.faces.plain.mouth.grille.slot_4 n=1 x=56 y=63.5 core.source="hand-core 1"
+@k.faces.plain.mouth.grille.slot_4.p2 k.faces.point part=$k.faces.plain.mouth.grille.slot_4 n=2 x=56 y=69.5 core.source="hand-core 1"
+
+# mouth: gritted
+@k.faces.plain.mouth.gritted k.faces.variant slot=mouth name=gritted style=plain feel=open feel=wide kind="gritted teeth" core.source="hand-core 1"
+@k.faces.plain.mouth.gritted.teeth k.faces.part slot=mouth of=gritted name=teeth shape=rectangle x=40 y=63 w=20 h=7 z=1 colour=white rgb="#FFFFFF" core.source="hand-core 1"
+@k.faces.plain.mouth.gritted.bite k.faces.part slot=mouth of=gritted name=bite shape=line x=40 y=66.5 w=20 h=0 z=2 colour=grey rgb="#9AA4AE" core.source="hand-core 1"
+@k.faces.plain.mouth.gritted.gap_1 k.faces.part slot=mouth of=gritted name=gap_1 kind=gap shape=line x=45 y=63 w=0 h=7 z=2 colour=grey rgb="#9AA4AE" core.source="hand-core 1"
+@k.faces.plain.mouth.gritted.gap_2 k.faces.part slot=mouth of=gritted name=gap_2 kind=gap shape=line x=50 y=63 w=0 h=7 z=2 colour=grey rgb="#9AA4AE" core.source="hand-core 1"
+@k.faces.plain.mouth.gritted.gap_3 k.faces.part slot=mouth of=gritted name=gap_3 kind=gap shape=line x=55 y=63 w=0 h=7 z=2 colour=grey rgb="#9AA4AE" core.source="hand-core 1"
+@k.faces.plain.mouth.gritted.bite.p1 k.faces.point part=$k.faces.plain.mouth.gritted.bite n=1 x=40 y=66.5 core.source="hand-core 1"
+@k.faces.plain.mouth.gritted.bite.p2 k.faces.point part=$k.faces.plain.mouth.gritted.bite n=2 x=60 y=66.5 core.source="hand-core 1"
+@k.faces.plain.mouth.gritted.gap_1.p1 k.faces.point part=$k.faces.plain.mouth.gritted.gap_1 n=1 x=45 y=63 core.source="hand-core 1"
+@k.faces.plain.mouth.gritted.gap_1.p2 k.faces.point part=$k.faces.plain.mouth.gritted.gap_1 n=2 x=45 y=70 core.source="hand-core 1"
+@k.faces.plain.mouth.gritted.gap_2.p1 k.faces.point part=$k.faces.plain.mouth.gritted.gap_2 n=1 x=50 y=63 core.source="hand-core 1"
+@k.faces.plain.mouth.gritted.gap_2.p2 k.faces.point part=$k.faces.plain.mouth.gritted.gap_2 n=2 x=50 y=70 core.source="hand-core 1"
+@k.faces.plain.mouth.gritted.gap_3.p1 k.faces.point part=$k.faces.plain.mouth.gritted.gap_3 n=1 x=55 y=63 core.source="hand-core 1"
+@k.faces.plain.mouth.gritted.gap_3.p2 k.faces.point part=$k.faces.plain.mouth.gritted.gap_3 n=2 x=55 y=70 core.source="hand-core 1"
+
+# mouth: half open
+@k.faces.plain.mouth.half_open k.faces.variant slot=mouth name="half open" style=plain feel=open kind="half open" core.source="hand-core 1"
+@k.faces.plain.mouth.half_open.inside k.faces.part slot=mouth of="half open" name=inside shape=oval x=43 y=63.5 w=14 h=5 z=1 colour=red rgb="#6E1F24" core.source="hand-core 1"
+@k.faces.plain.mouth.half_open.teeth k.faces.part slot=mouth of="half open" name=teeth shape=rectangle x=45 y=63.5 w=10 h=1.5 z=2 colour=white rgb="#FFFFFF" core.source="hand-core 1"
+
+# mouth: pressed
+@k.faces.plain.mouth.pressed k.faces.variant slot=mouth name=pressed style=plain feel=closed feel=thick kind="pressed lips" core.source="hand-core 1"
+@k.faces.plain.mouth.pressed.lips k.faces.part slot=mouth of=pressed name=lips shape=polygon x=42 y=64.8 w=16 h=2.4 z=1 colour=red rgb="#B5483F" core.source="hand-core 1"
+@k.faces.plain.mouth.pressed.lips.p1 k.faces.point part=$k.faces.plain.mouth.pressed.lips n=1 x=42 y=65.4 core.source="hand-core 1"
+@k.faces.plain.mouth.pressed.lips.p2 k.faces.point part=$k.faces.plain.mouth.pressed.lips n=2 x=50 y=64.8 core.source="hand-core 1"
+@k.faces.plain.mouth.pressed.lips.p3 k.faces.point part=$k.faces.plain.mouth.pressed.lips n=3 x=58 y=65.4 core.source="hand-core 1"
+@k.faces.plain.mouth.pressed.lips.p4 k.faces.point part=$k.faces.plain.mouth.pressed.lips n=4 x=58 y=66.6 core.source="hand-core 1"
+@k.faces.plain.mouth.pressed.lips.p5 k.faces.point part=$k.faces.plain.mouth.pressed.lips n=5 x=50 y=67.2 core.source="hand-core 1"
+@k.faces.plain.mouth.pressed.lips.p6 k.faces.point part=$k.faces.plain.mouth.pressed.lips n=6 x=42 y=66.6 core.source="hand-core 1"
+
+# mouth: lip bite
+@k.faces.plain.mouth.lip_bite k.faces.variant slot=mouth name="lip bite" style=plain feel=closed kind="teeth on lip" core.source="hand-core 1"
+@k.faces.plain.mouth.lip_bite.lower_lip k.faces.part slot=mouth of="lip bite" name=lower_lip kind=lip shape=polygon x=43 y=66 w=14 h=2.5 z=1 colour=red rgb="#B5483F" core.source="hand-core 1"
+@k.faces.plain.mouth.lip_bite.teeth k.faces.part slot=mouth of="lip bite" name=teeth shape=rectangle x=44.5 y=63.5 w=11 h=3 z=2 colour=white rgb="#FFFFFF" core.source="hand-core 1"
+@k.faces.plain.mouth.lip_bite.lower_lip.p1 k.faces.point part=$k.faces.plain.mouth.lip_bite.lower_lip n=1 x=43 y=66 core.source="hand-core 1"
+@k.faces.plain.mouth.lip_bite.lower_lip.p2 k.faces.point part=$k.faces.plain.mouth.lip_bite.lower_lip n=2 x=57 y=66 core.source="hand-core 1"
+@k.faces.plain.mouth.lip_bite.lower_lip.p3 k.faces.point part=$k.faces.plain.mouth.lip_bite.lower_lip n=3 x=55 y=68.5 core.source="hand-core 1"
+@k.faces.plain.mouth.lip_bite.lower_lip.p4 k.faces.point part=$k.faces.plain.mouth.lip_bite.lower_lip n=4 x=45 y=68.5 core.source="hand-core 1"
+
+# mouth: tongue tip
+@k.faces.plain.mouth.tongue_tip k.faces.variant slot=mouth name="tongue tip" style=plain feel=open kind="tongue tip" core.source="hand-core 1"
+@k.faces.plain.mouth.tongue_tip.inside k.faces.part slot=mouth of="tongue tip" name=inside shape=oval x=44 y=62.5 w=12 h=7 z=1 colour=red rgb="#6E1F24" core.source="hand-core 1"
+@k.faces.plain.mouth.tongue_tip.teeth k.faces.part slot=mouth of="tongue tip" name=teeth shape=rectangle x=45.5 y=62.5 w=9 h=1.8 z=2 colour=white rgb="#FFFFFF" core.source="hand-core 1"
+@k.faces.plain.mouth.tongue_tip.tongue k.faces.part slot=mouth of="tongue tip" name=tongue shape=oval x=46 y=64.5 w=8 h=3.5 z=3 colour=pink rgb="#E8788A" core.source="hand-core 1"

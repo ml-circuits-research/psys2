@@ -1,0 +1,6 @@
+# w.lang.en/shards/joiners-keep: words after "and" that continue the noun phrase before it ("Highlight Romania and its neighbours"): a reader does not cut a clause there
+# sources: psys2 447a5f9a (PSys2 src/lang/en.local.mjs: frames and joiners written after the import of the hand-over, in the format of this world; the project's own data)
+# license: CC0-1.0
+# script: tools/import/psys2-lang-en.mjs
+
+@w.lang.en.joiner.keep.its w.lang.en.joiner.keep text=its core.source="psys2 447a5f9a"

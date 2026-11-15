@@ -1,0 +1,17 @@
+# k.words/shards/by: senses of the words from "by" to "byron" (first letters "by").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.by.adverb.1 k.words.sense word=by pos=adverb n=1 supersense=adv.all gloss="so as to pass a given point" synonym=past core.source="wordnet 3.1"
+@k.words.by.adverb.2 k.words.sense word=by pos=adverb n=2 supersense=adv.all gloss="in reserve; not for immediate use" synonym=aside synonym=away core.source="wordnet 3.1"
+@k.words.bye.noun.1 k.words.sense word=bye pos=noun n=1 supersense=noun.communication gloss="an automatic advance to the next round in a tournament without playing an opponent" synonym=pass is_a=concession kind_of=concession kind_of=assent kind_of=agreement kind_of="speech act" kind_of=act kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.bye.noun.2 k.words.sense word=bye pos=noun n=2 supersense=noun.communication gloss="a farewell remark" synonym=adieu synonym=adios synonym=arrivederci synonym="auf wiedersehen" synonym="au revoir" synonym=bye-bye synonym=cheerio synonym=good-by synonym=goodby synonym=good-bye synonym=goodbye synonym="good day" synonym=sayonara synonym="so long" is_a=farewell kind_of=farewell kind_of=acknowledgment kind_of=message kind_of=communication kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.bye-bye.noun.1 k.words.sense word=bye-bye pos=noun n=1 supersense=noun.communication gloss="a farewell remark" synonym=adieu synonym=adios synonym=arrivederci synonym="auf wiedersehen" synonym="au revoir" synonym=bye synonym=cheerio synonym=good-by synonym=goodby synonym=good-bye synonym=goodbye synonym="good day" synonym=sayonara synonym="so long" is_a=farewell kind_of=farewell kind_of=acknowledgment kind_of=message kind_of=communication kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.bypass.noun.1 k.words.sense word=bypass pos=noun n=1 supersense=noun.artifact gloss="a highway that encircles an urban area so that traffic does not have to pass through the center" synonym=beltway synonym="ring road" synonym=ringway is_a=highway core.source="wordnet 3.1"
+@k.words.bypass.noun.2 k.words.sense word=bypass pos=noun n=2 supersense=noun.body gloss="a surgically created shunt (usually around a damaged part)" is_a=shunt core.source="wordnet 3.1"
+@k.words.bypass.noun.3 k.words.sense word=bypass pos=noun n=3 supersense=noun.artifact gloss="a conductor having low resistance in parallel with another device to divert a fraction of the current" synonym=shunt synonym="electrical shunt" is_a=conductor part_of=circuit core.source="wordnet 3.1"
+@k.words.bypass.verb.1 k.words.sense word=bypass pos=verb n=1 supersense=verb.communication gloss="avoid something unpleasant or laborious" synonym=short-circuit synonym="go around" synonym="get around" is_a=avoid core.source="wordnet 3.1"
+@k.words.bypass.forms core.word text=bypast means=bypass of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.byron.noun.1 k.words.sense word=Byron pos=noun n=1 supersense=noun.person gloss="English romantic poet notorious for his rebellious and unconventional lifestyle (1788-1824)" synonym="Lord George Gordon Byron" synonym="Sixth Baron Byron of Rochdale" instance_of=poet core.source="wordnet 3.1"
+@k.words.byron.spelling.Byron core.word text=byron means=Byron of=k.words.sense.word core.source="wordnet 3.1"

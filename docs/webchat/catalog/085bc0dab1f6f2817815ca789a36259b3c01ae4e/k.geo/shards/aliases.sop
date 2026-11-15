@@ -1,0 +1,145 @@
+# k.geo/shards/aliases: other names of 44 countries and 26 cities (Peking for Beijing, Bombay for Mumbai), the synonyms of their WordNet sense that are proper names
+# sources: wordnet 3.1 (Princeton WordNet 3.1, through k.words: the synonyms of the sense of the place's name)
+# license: WordNet-3.0
+# script: tools/geo-aliases.mjs
+
+# Alexandria: the sense Alexandria noun 2
+@k.geo.word.alias.city.Alexandria core.word text="El Iskandriyah" means=Alexandria of=k.geo.city.name core.source="wordnet 3.1"
+# Athens: the sense Athens noun 1
+@k.geo.word.alias.city.Athens core.word text=Athinai means=Athens of=k.geo.city.name core.source="wordnet 3.1"
+# Baghdad: the sense Baghdad noun 1
+@k.geo.word.alias.city.Baghdad core.word text=Bagdad means=Baghdad of=k.geo.city.name core.source="wordnet 3.1"
+# Bangkok: the sense Bangkok noun 1
+@k.geo.word.alias.city.Bangkok core.word text="Krung Thep" means=Bangkok of=k.geo.city.name core.source="wordnet 3.1"
+# Beijing: the sense Beijing noun 1
+@k.geo.word.alias.city.Beijing core.word text=Peiping text=Peking means=Beijing of=k.geo.city.name core.source="wordnet 3.1"
+# Beirut: the sense Beirut noun 1
+@k.geo.word.alias.city.Beirut core.word text=Bayrut means=Beirut of=k.geo.city.name core.source="wordnet 3.1"
+# Brussels: the sense Brussels noun 1
+@k.geo.word.alias.city.Brussels core.word text=Bruxelles means=Brussels of=k.geo.city.name core.source="wordnet 3.1"
+# Cairo: the sense Cairo noun 2
+@k.geo.word.alias.city.Cairo core.word text="Al Qahira" text="El Qahira" means=Cairo of=k.geo.city.name core.source="wordnet 3.1"
+# Damascus: the sense Damascus noun 1
+@k.geo.word.alias.city.Damascus core.word text=Dimash means=Damascus of=k.geo.city.name core.source="wordnet 3.1"
+# Fez: the sense Fez noun 1
+@k.geo.word.alias.city.Fez core.word text=Fes means=Fez of=k.geo.city.name core.source="wordnet 3.1"
+# Frankfurt: the sense Frankfurt noun 1
+@k.geo.word.alias.city.Frankfurt core.word text=Frankfort means=Frankfurt of=k.geo.city.name core.source="wordnet 3.1"
+# Geneva: the sense Geneva noun 1
+@k.geo.word.alias.city.Geneva core.word text=Geneve text=Genf means=Geneva of=k.geo.city.name core.source="wordnet 3.1"
+# Gent: the sense Gent noun 3
+@k.geo.word.alias.city.Gent core.word text=Gand text=Ghent means=Gent of=k.geo.city.name core.source="wordnet 3.1"
+# Istanbul: the sense Istanbul noun 1
+@k.geo.word.alias.city.Istanbul core.word text=Constantinople text=Stamboul text=Stambul means=Istanbul of=k.geo.city.name core.source="wordnet 3.1"
+# Lyon: the sense Lyon noun 1
+@k.geo.word.alias.city.Lyon core.word text=Lyons means=Lyon of=k.geo.city.name core.source="wordnet 3.1"
+# Marseille: the sense Marseille noun 1
+@k.geo.word.alias.city.Marseille core.word text=Marseilles means=Marseille of=k.geo.city.name core.source="wordnet 3.1"
+# Medina: the sense Medina noun 1
+@k.geo.word.alias.city.Medina core.word text="Al Madinah" means=Medina of=k.geo.city.name core.source="wordnet 3.1"
+# Odessa: the sense Odessa noun 1
+@k.geo.word.alias.city.Odessa core.word text=Odesa means=Odessa of=k.geo.city.name core.source="wordnet 3.1"
+# Oslo: the sense Oslo noun 1
+@k.geo.word.alias.city.Oslo core.word text=Christiania means=Oslo of=k.geo.city.name core.source="wordnet 3.1"
+# Paris: the sense Paris noun 1
+@k.geo.word.alias.city.Paris core.word text="City of Light" means=Paris of=k.geo.city.name core.source="wordnet 3.1"
+# Prague: the sense Prague noun 1
+@k.geo.word.alias.city.Prague core.word text=Prag means=Prague of=k.geo.city.name core.source="wordnet 3.1"
+# Rome: the sense Rome noun 1
+@k.geo.word.alias.city.Rome core.word text="Eternal City" text=Roma means=Rome of=k.geo.city.name core.source="wordnet 3.1"
+# Santiago: the sense Santiago noun 3
+@k.geo.word.alias.city.Santiago core.word text="Gran Santiago" text="Santiago de Chile" means=Santiago of=k.geo.city.name core.source="wordnet 3.1"
+# Sofia: the sense Sofia noun 1
+@k.geo.word.alias.city.Sofia core.word text=Serdica means=Sofia of=k.geo.city.name core.source="wordnet 3.1"
+# Taipei: the sense Taipei noun 1
+@k.geo.word.alias.city.Taipei core.word text=Taipeh means=Taipei of=k.geo.city.name core.source="wordnet 3.1"
+# Tokyo: the sense Tokyo noun 1
+@k.geo.word.alias.city.Tokyo core.word text=Edo text=Tokio text=Yeddo text=Yedo means=Tokyo of=k.geo.city.name core.source="wordnet 3.1"
+# Algeria: the sense Algeria noun 1
+@k.geo.word.alias.country.Algeria core.word text=Algerie text="Democratic and Popular Republic of Algeria" means=Algeria of=k.geo.country.name core.source="wordnet 3.1"
+# Austria: the sense Austria noun 1
+@k.geo.word.alias.country.Austria core.word text=Oesterreich means=Austria of=k.geo.country.name core.source="wordnet 3.1"
+# Bahamas: the sense Bahamas noun 1
+@k.geo.word.alias.country.Bahamas core.word text="Bahama Islands" means=Bahamas of=k.geo.country.name core.source="wordnet 3.1"
+# Belgium: the sense Belgium noun 1
+@k.geo.word.alias.country.Belgium core.word text=Belgique means=Belgium of=k.geo.country.name core.source="wordnet 3.1"
+# Bolivia: the sense Bolivia noun 1
+@k.geo.word.alias.country.Bolivia core.word text="Republic of Bolivia" means=Bolivia of=k.geo.country.name core.source="wordnet 3.1"
+# Brazil: the sense Brazil noun 1
+@k.geo.word.alias.country.Brazil core.word text=Brasil means=Brazil of=k.geo.country.name core.source="wordnet 3.1"
+# Cambodia: the sense Cambodia noun 1
+@k.geo.word.alias.country.Cambodia core.word text=Kampuchea means=Cambodia of=k.geo.country.name core.source="wordnet 3.1"
+# Chad: the sense Chad noun 3
+@k.geo.word.alias.country.Chad core.word text=Tchad means=Chad of=k.geo.country.name core.source="wordnet 3.1"
+# China: the sense China noun 1
+@k.geo.word.alias.country.China core.word text=Cathay text="Communist China" text=PRC text="Red China" means=China of=k.geo.country.name core.source="wordnet 3.1"
+# Congo: the sense Congo noun 3
+@k.geo.word.alias.country.Congo core.word text="French Congo" means=Congo of=k.geo.country.name core.source="wordnet 3.1"
+# Denmark: the sense Denmark noun 1
+@k.geo.word.alias.country.Denmark core.word text=Danmark means=Denmark of=k.geo.country.name core.source="wordnet 3.1"
+# Egypt: the sense Egypt noun 1
+@k.geo.word.alias.country.Egypt core.word text="United Arab Republic" means=Egypt of=k.geo.country.name core.source="wordnet 3.1"
+# Ethiopia: the sense Ethiopia noun 1
+@k.geo.word.alias.country.Ethiopia core.word text=Abyssinia text=Yaltopya means=Ethiopia of=k.geo.country.name core.source="wordnet 3.1"
+# Finland: the sense Finland noun 1
+@k.geo.word.alias.country.Finland core.word text=Suomi means=Finland of=k.geo.country.name core.source="wordnet 3.1"
+# Georgia: the sense Georgia noun 3
+@k.geo.word.alias.country.Georgia core.word text=Sakartvelo means=Georgia of=k.geo.country.name core.source="wordnet 3.1"
+# Germany: the sense Germany noun 1
+@k.geo.word.alias.country.Germany core.word text=Deutschland text=FRG means=Germany of=k.geo.country.name core.source="wordnet 3.1"
+# Greece: the sense Greece noun 1
+@k.geo.word.alias.country.Greece core.word text=Ellas means=Greece of=k.geo.country.name core.source="wordnet 3.1"
+# Guinea: the sense Guinea noun 3
+@k.geo.word.alias.country.Guinea core.word text="French Guinea" means=Guinea of=k.geo.country.name core.source="wordnet 3.1"
+# Hungary: the sense Hungary noun 1
+@k.geo.word.alias.country.Hungary core.word text=Magyarorszag means=Hungary of=k.geo.country.name core.source="wordnet 3.1"
+# India: the sense India noun 1
+@k.geo.word.alias.country.India core.word text=Bharat means=India of=k.geo.country.name core.source="wordnet 3.1"
+# Indonesia: the sense Indonesia noun 1
+@k.geo.word.alias.country.Indonesia core.word text="Dutch East Indies" means=Indonesia of=k.geo.country.name core.source="wordnet 3.1"
+# Iran: the sense Iran noun 1
+@k.geo.word.alias.country.Iran core.word text=Persia means=Iran of=k.geo.country.name core.source="wordnet 3.1"
+# Iraq: the sense Iraq noun 1
+@k.geo.word.alias.country.Iraq core.word text=Al-Iraq text=Irak means=Iraq of=k.geo.country.name core.source="wordnet 3.1"
+# Ireland: the sense Ireland noun 1
+@k.geo.word.alias.country.Ireland core.word text=Eire text="Irish Republic" text="Republic of Ireland" means=Ireland of=k.geo.country.name core.source="wordnet 3.1"
+# Israel: the sense Israel noun 1
+@k.geo.word.alias.country.Israel core.word text=Sion text=Yisrael text=Zion means=Israel of=k.geo.country.name core.source="wordnet 3.1"
+# Italy: the sense Italy noun 1
+@k.geo.word.alias.country.Italy core.word text=Italia means=Italy of=k.geo.country.name core.source="wordnet 3.1"
+# Japan: the sense Japan noun 2
+@k.geo.word.alias.country.Japan core.word text=Nihon text=Nippon means=Japan of=k.geo.country.name core.source="wordnet 3.1"
+# Libya: the sense Libya noun 1
+@k.geo.word.alias.country.Libya core.word text="Socialist People's Libyan Arab Jamahiriya" means=Libya of=k.geo.country.name core.source="wordnet 3.1"
+# Madagascar: the sense Madagascar noun 1
+@k.geo.word.alias.country.Madagascar core.word text="Malagasy Republic" means=Madagascar of=k.geo.country.name core.source="wordnet 3.1"
+# Malaysia: the sense Malaysia noun 1
+@k.geo.word.alias.country.Malaysia core.word text="Federation of Malaysia" means=Malaysia of=k.geo.country.name core.source="wordnet 3.1"
+# Morocco: the sense Morocco noun 1
+@k.geo.word.alias.country.Morocco core.word text=Al-Magrib text=Maroc text=Marruecos means=Morocco of=k.geo.country.name core.source="wordnet 3.1"
+# Netherlands: the sense Netherlands noun 1
+@k.geo.word.alias.country.Netherlands core.word text=Holland text="Kingdom of The Netherlands" text=Nederland text="The Netherlands" means=Netherlands of=k.geo.country.name core.source="wordnet 3.1"
+# Norway: the sense Norway noun 1
+@k.geo.word.alias.country.Norway core.word text=Noreg text=Norge means=Norway of=k.geo.country.name core.source="wordnet 3.1"
+# Pakistan: the sense Pakistan noun 1
+@k.geo.word.alias.country.Pakistan core.word text="West Pakistan" means=Pakistan of=k.geo.country.name core.source="wordnet 3.1"
+# Poland: the sense Poland noun 1
+@k.geo.word.alias.country.Poland core.word text=Polska means=Poland of=k.geo.country.name core.source="wordnet 3.1"
+# Romania: the sense Romania noun 1
+@k.geo.word.alias.country.Romania core.word text=Roumania text=Rumania means=Romania of=k.geo.country.name core.source="wordnet 3.1"
+# Spain: the sense Spain noun 1
+@k.geo.word.alias.country.Spain core.word text=Espana means=Spain of=k.geo.country.name core.source="wordnet 3.1"
+# Sudan: the sense Sudan noun 1
+@k.geo.word.alias.country.Sudan core.word text=Soudan means=Sudan of=k.geo.country.name core.source="wordnet 3.1"
+# Sweden: the sense Sweden noun 1
+@k.geo.word.alias.country.Sweden core.word text=Sverige means=Sweden of=k.geo.country.name core.source="wordnet 3.1"
+# Switzerland: the sense Switzerland noun 1
+@k.geo.word.alias.country.Switzerland core.word text=Schweiz text=Suisse text=Svizzera means=Switzerland of=k.geo.country.name core.source="wordnet 3.1"
+# Thailand: the sense Thailand noun 1
+@k.geo.word.alias.country.Thailand core.word text=Siam means=Thailand of=k.geo.country.name core.source="wordnet 3.1"
+# Ukraine: the sense Ukraine noun 1
+@k.geo.word.alias.country.Ukraine core.word text=Ukrayina means=Ukraine of=k.geo.country.name core.source="wordnet 3.1"
+# Venezuela: the sense Venezuela noun 1
+@k.geo.word.alias.country.Venezuela core.word text="Republic of Venezuela" means=Venezuela of=k.geo.country.name core.source="wordnet 3.1"
+# Vietnam: the sense Vietnam noun 1
+@k.geo.word.alias.country.Vietnam core.word text=Annam text="Viet Nam" means=Vietnam of=k.geo.country.name core.source="wordnet 3.1"

@@ -1,0 +1,21 @@
+# k.commonsense/shards/liquids: everyday liquids (the drinks of k.food are liquids by the rule k.commonsense.drink);
+# a liquid placed with nothing to hold it is a soft issue (k.commonsense.liquid).
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.commonsense.liquid.water k.commonsense.thing name=water is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.milk k.commonsense.thing name=milk is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.oil k.commonsense.thing name=oil is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.ink k.commonsense.thing name=ink is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.paint k.commonsense.thing name=paint is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.soup k.commonsense.thing name=soup is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.honey k.commonsense.thing name=honey is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.petrol k.commonsense.thing name=petrol is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.vinegar k.commonsense.thing name=vinegar is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.shampoo k.commonsense.thing name=shampoo is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.juice k.commonsense.thing name=juice is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.tea k.commonsense.thing name=tea is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.coffee k.commonsense.thing name=coffee is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.wine k.commonsense.thing name=wine is_a=liquid core.source="hand-core 1"
+@k.commonsense.liquid.beer k.commonsense.thing name=beer is_a=liquid core.source="hand-core 1"

@@ -1,0 +1,254 @@
+# k.procedures: how goals are reached. A method says how one goal (an act on a kind, or a named task such as
+# "a family photo" or "set a table") is reached by acts: its steps, each one of the 16 acts of k.actions with roles
+# that refer to the goal's roles, to what earlier steps made, to the live world or to facts of other knowledge
+# worlds (the things a scene has, the anchor a thing sits on, the slots of a layout, the parts of a thing, what a
+# role wears); when it applies (preconditions), what it brings about (effects), the order of its steps, and, as
+# several methods of one goal, the alternatives with when each applies. Facts only: the planner that reads them is
+# the library's std.plan (format: questions.md Q44).
+# sources: hand-core 1 (the schema and the methods, hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written); the shards are written by tools/procedures-core.mjs
+
+@k.procedures core.module name=k.procedures version=3 exports=method exports=goal exports=binding exports=match exports=step exports=arg exports=condition exports=howto exports=howto_step core.source="hand-core 1"
+
+# A method: `name` says it in plain words ("compose a scene"); `act` is the act of the goal it reaches (one of the
+# acts of k.actions); `world` names a world schema (w.seating, w.face, w.map, w.list, w.timeline) when the method
+# acts on its kinds: it applies only in a live world of that schema; `rank` orders the methods of one goal when
+# more than one applies (the lower first; none said: 1); `example` is a goal it reaches, said in plain words.
+# `user_facing` (block 07:30 item 3): true when a person would ask to see the method as a procedure (its goal a task
+# named in plain words, its steps steps a person could follow: set a table, write an essay); false when it is one of the
+# app's ways to reach a goal (put a thing on an anchor, a face of a role). A host drawing a random flowchart of a
+# method takes a user-facing one.
+@k.procedures.method core.type of=k.procedures.method shared=true closed=true core.source="hand-core 1"
+@k.procedures.method.name core.slot of=k.procedures.method key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.procedures.method.about core.slot of=k.procedures.method key=about required=true kind=string core.source="hand-core 1"
+@k.procedures.method.act core.slot of=k.procedures.method key=act required=true kind=atom kind=string type=k.actions.act by=name core.source="hand-core 1"
+@k.procedures.method.world core.slot of=k.procedures.method key=world kind=atom core.source="hand-core 1"
+@k.procedures.method.rank core.slot of=k.procedures.method key=rank kind=integer min=1 max=9 core.source="hand-core 1"
+@k.procedures.method.user_facing core.slot of=k.procedures.method key=user_facing required=true kind=boolean core.source="hand-core 1"
+@k.procedures.method.example core.slot of=k.procedures.method key=example many=true kind=string core.source="hand-core 1"
+
+# What a role of the goal must be for the method to apply. `role` is a role of the goal's act in k.actions (make:
+# kind, number, place, value, part, material; place: thing, place). `from` names a knowledge type whose fact the
+# filler names, by the key `by` (none said: name); for a thing of the live world, its kind is the name. `value`: the
+# filler is this name (a named task: role=kind value="family photo"). `kind`: the filler is a thing of this kind.
+# `rel`: the relation the goal gives with a place (on, in, around). `needed=true`: without it the planner asks.
+# `default`: the filler when the goal does not say it.
+@k.procedures.goal core.type of=k.procedures.goal shared=true closed=true core.source="hand-core 1"
+@k.procedures.goal.method core.slot of=k.procedures.goal key=method id=true required=true kind=atom kind=string type=k.procedures.method by=name core.source="hand-core 1"
+@k.procedures.goal.role core.slot of=k.procedures.goal key=role id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.procedures.goal.from core.slot of=k.procedures.goal key=from kind=atom core.source="hand-core 1"
+@k.procedures.goal.by core.slot of=k.procedures.goal key=by kind=atom core.source="hand-core 1"
+@k.procedures.goal.value core.slot of=k.procedures.goal key=value kind=atom kind=string core.source="hand-core 1"
+@k.procedures.goal.kind core.slot of=k.procedures.goal key=kind kind=atom kind=string core.source="hand-core 1"
+@k.procedures.goal.rel core.slot of=k.procedures.goal key=rel kind=atom kind=string core.source="hand-core 1"
+@k.procedures.goal.needed core.slot of=k.procedures.goal key=needed kind=boolean core.source="hand-core 1"
+@k.procedures.goal.default core.slot of=k.procedures.goal key=default kind=atom kind=string kind=integer core.source="hand-core 1"
+
+# A name the steps of a method use, bound to exactly one source, read when a step uses it: `goal` the filler of a
+# role of the goal (or its default); `step` what those steps made (many: all of them; for an ask step, its answer:
+# one row per kind with `kind` and `count`); `from` the facts of a knowledge type that pass the binding's matches;
+# `live` the things of the live world of a kind (`any`: every thing), as they are when the step is done, the things
+# made by earlier steps included; `history` the acts done before the plan began, oldest first (each with `act`,
+# `thing`, `at`);
+# `upto` the whole numbers from 1 to the value of another binding; `together` (many) the values of those bindings
+# together; `value` a name; `about` (proposed, questions.md Q57) the statements of the loaded catalog about the
+# thing(s) of another binding: one row per fact named by it (or by a kind of it) and per key the fact says, with
+# `thing`, `type`, `key` and `value`. `key` takes the values of that key of the facts (a many key gives all its
+# values) instead of the facts themselves.
+# A choice point (proposed, questions.md Q57): `choose` (a whole number, or a binding that gives one) makes the binding
+# stand for that many different values chosen among its candidates (between `choose_min` and `choose` when
+# `choose_min` is said), chosen together with the other choose bindings of the method: a match whose `equals` or
+# `differs` names a choose binding is a constraint between the two choices, read against the chosen values only. The
+# planner solves the choices as one finite-domain problem and draws one solution with its seed, weighted by k.interest
+# (and by the soft matches); without a seed, the first solution in the order of the facts.
+@k.procedures.binding core.type of=k.procedures.binding shared=true closed=true core.source="hand-core 1"
+@k.procedures.binding.method core.slot of=k.procedures.binding key=method id=true required=true kind=atom kind=string type=k.procedures.method by=name core.source="hand-core 1"
+@k.procedures.binding.name core.slot of=k.procedures.binding key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.procedures.binding.goal core.slot of=k.procedures.binding key=goal kind=atom kind=string core.source="hand-core 1"
+@k.procedures.binding.step core.slot of=k.procedures.binding key=step many=true kind=integer min=1 core.source="hand-core 1"
+@k.procedures.binding.from core.slot of=k.procedures.binding key=from kind=atom core.source="hand-core 1"
+@k.procedures.binding.live core.slot of=k.procedures.binding key=live kind=atom kind=string core.source="hand-core 1"
+@k.procedures.binding.history core.slot of=k.procedures.binding key=history kind=boolean core.source="hand-core 1"
+@k.procedures.binding.upto core.slot of=k.procedures.binding key=upto kind=atom core.source="hand-core 1"
+@k.procedures.binding.together core.slot of=k.procedures.binding key=together many=true kind=atom core.source="hand-core 1"
+@k.procedures.binding.value core.slot of=k.procedures.binding key=value kind=atom kind=string core.source="hand-core 1"
+@k.procedures.binding.about core.slot of=k.procedures.binding key=about kind=atom core.source="hand-core 1"
+@k.procedures.binding.key core.slot of=k.procedures.binding key=key kind=atom core.source="hand-core 1"
+@k.procedures.binding.choose core.slot of=k.procedures.binding key=choose kind=integer kind=atom core.source="hand-core 1"
+@k.procedures.binding.choose_min core.slot of=k.procedures.binding key=choose_min kind=integer kind=atom core.source="hand-core 1"
+
+# A filter on a binding of facts or of live things: the key `key` of a fact is `value`, or is one of the values of
+# the binding `equals` (of its key `equals_key`), compared by name and up the chain of kinds (is_a; the age of a
+# kind of person); `not`: the key's value is not this; `present=false`: the fact does not say the key,
+# `present=true`: it does. Inside a step that repeats over a binding, that binding stands for its current value.
+# Proposed (questions.md Q57): `differs` names a binding: none of the key's values is one of that binding's values (of
+# its key `equals_key`), compared by name (a binding that names itself: its chosen values differ in the key);
+# `soft=true`: the match is a preference, not a filter (a candidate that holds it weighs more); `n` tells apart
+# several matches on one key of one binding.
+@k.procedures.match core.type of=k.procedures.match shared=true closed=true core.source="hand-core 1"
+@k.procedures.match.method core.slot of=k.procedures.match key=method id=true required=true kind=atom kind=string type=k.procedures.method by=name core.source="hand-core 1"
+@k.procedures.match.binding core.slot of=k.procedures.match key=binding id=true required=true kind=atom core.source="hand-core 1"
+@k.procedures.match.key core.slot of=k.procedures.match key=key id=true required=true kind=atom core.source="hand-core 1"
+@k.procedures.match.n core.slot of=k.procedures.match key=n id=true kind=integer min=1 core.source="hand-core 1"
+@k.procedures.match.value core.slot of=k.procedures.match key=value kind=atom kind=string core.source="hand-core 1"
+@k.procedures.match.equals core.slot of=k.procedures.match key=equals kind=atom core.source="hand-core 1"
+@k.procedures.match.equals_key core.slot of=k.procedures.match key=equals_key kind=atom core.source="hand-core 1"
+@k.procedures.match.not core.slot of=k.procedures.match key=not kind=atom kind=string core.source="hand-core 1"
+@k.procedures.match.differs core.slot of=k.procedures.match key=differs kind=atom core.source="hand-core 1"
+@k.procedures.match.present core.slot of=k.procedures.match key=present kind=boolean core.source="hand-core 1"
+@k.procedures.match.soft core.slot of=k.procedures.match key=soft kind=boolean core.source="hand-core 1"
+
+# A step: one act (`act`, an act of k.actions), number `n` in the method. `each` repeats it for every value of a
+# binding (a binding with no value: the step is not done). `after` (many) names the steps it comes after; steps with
+# no order between them may be done in any order. `expand=false`: the step is done as the act itself, never by
+# another method (needed where the step has the goal of its own method). `optional=true`: the plan goes on
+# without it when it cannot be done. `about` says the step in plain words.
+@k.procedures.step core.type of=k.procedures.step shared=true closed=true core.source="hand-core 1"
+@k.procedures.step.method core.slot of=k.procedures.step key=method id=true required=true kind=atom kind=string type=k.procedures.method by=name core.source="hand-core 1"
+@k.procedures.step.n core.slot of=k.procedures.step key=n id=true required=true kind=integer min=1 core.source="hand-core 1"
+@k.procedures.step.act core.slot of=k.procedures.step key=act required=true kind=atom kind=string type=k.actions.act by=name core.source="hand-core 1"
+@k.procedures.step.each core.slot of=k.procedures.step key=each kind=atom core.source="hand-core 1"
+@k.procedures.step.after core.slot of=k.procedures.step key=after many=true kind=integer min=1 core.source="hand-core 1"
+@k.procedures.step.expand core.slot of=k.procedures.step key=expand kind=boolean core.source="hand-core 1"
+@k.procedures.step.optional core.slot of=k.procedures.step key=optional kind=boolean core.source="hand-core 1"
+@k.procedures.step.about core.slot of=k.procedures.step key=about kind=string core.source="hand-core 1"
+
+# A role of a step: `role` is a role of the step's act in k.actions; for the role `value`, `attribute` names the
+# attribute it sets. The filler comes from the binding `binding` (its value, or the key `key` of its fact, or, where
+# the fact does not say `key`, the key `else_key`), or is the name `value`. A role of the goal that the goal does not
+# say is left out of the step (unless k.actions says the act needs it); any other binding with no value leaves the
+# step out for that value. `rel` is the relation of a place (on, in, at, around). `of` names a binding: the filler is
+# then a part or an anchor of that thing, named by its name or its kind (`value=seat of=swing`: the seat of the
+# swing), as k.layouts.anchor, k.wearables.place (on a person) or k.objects.part say.
+@k.procedures.arg core.type of=k.procedures.arg shared=true closed=true core.source="hand-core 1"
+@k.procedures.arg.method core.slot of=k.procedures.arg key=method id=true required=true kind=atom kind=string type=k.procedures.method by=name core.source="hand-core 1"
+@k.procedures.arg.step core.slot of=k.procedures.arg key=step id=true required=true kind=integer min=1 core.source="hand-core 1"
+@k.procedures.arg.role core.slot of=k.procedures.arg key=role id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.procedures.arg.attribute core.slot of=k.procedures.arg key=attribute id=true kind=atom core.source="hand-core 1"
+@k.procedures.arg.binding core.slot of=k.procedures.arg key=binding kind=atom core.source="hand-core 1"
+@k.procedures.arg.key core.slot of=k.procedures.arg key=key kind=atom core.source="hand-core 1"
+@k.procedures.arg.else_key core.slot of=k.procedures.arg key=else_key kind=atom core.source="hand-core 1"
+@k.procedures.arg.value core.slot of=k.procedures.arg key=value kind=atom kind=string kind=integer core.source="hand-core 1"
+@k.procedures.arg.rel core.slot of=k.procedures.arg key=rel kind=atom kind=string core.source="hand-core 1"
+@k.procedures.arg.of core.slot of=k.procedures.arg key=of kind=atom core.source="hand-core 1"
+
+# A fact about the live world. `when=before`: a precondition (of the method when no `step` is said: the method
+# applies only if it holds; of a step: the step is done only if it holds, and left out otherwise); `when=after`: an
+# effect, true once the method (or the step) is done. `fact`: `exists` (a thing of the binding `thing` is in the live
+# world, or the binding has a value), `absent` (the contrary), `on` and `inside` (`thing` on or inside `other`),
+# `grouped` (`thing` in a group, as `other` if said), `has` (the fact or thing `thing` says `attribute`, as `value` if
+# said).
+@k.procedures.condition core.type of=k.procedures.condition shared=true closed=true core.source="hand-core 1"
+@k.procedures.condition.method core.slot of=k.procedures.condition key=method id=true required=true kind=atom kind=string type=k.procedures.method by=name core.source="hand-core 1"
+@k.procedures.condition.n core.slot of=k.procedures.condition key=n id=true required=true kind=integer min=1 core.source="hand-core 1"
+@k.procedures.condition.step core.slot of=k.procedures.condition key=step kind=integer min=1 core.source="hand-core 1"
+@k.procedures.condition.when core.slot of=k.procedures.condition key=when required=true enum=before enum=after core.source="hand-core 1"
+@k.procedures.condition.fact core.slot of=k.procedures.condition key=fact required=true enum=exists enum=absent enum=on enum=inside enum=grouped enum=has core.source="hand-core 1"
+@k.procedures.condition.thing core.slot of=k.procedures.condition key=thing required=true kind=atom core.source="hand-core 1"
+@k.procedures.condition.other core.slot of=k.procedures.condition key=other kind=atom core.source="hand-core 1"
+@k.procedures.condition.attribute core.slot of=k.procedures.condition key=attribute kind=atom core.source="hand-core 1"
+@k.procedures.condition.value core.slot of=k.procedures.condition key=value kind=atom kind=string core.source="hand-core 1"
+
+# An everyday procedure, as a person does it and may ask a flowchart of (making tea, washing hands, planting a seed;
+# block 07:30 item 2): knowledge of how a task is done, not a method of the planner (its steps are not acts of
+# k.actions on a live world, and the planner never reads it). `name` says it as people ask for it ("a flowchart of
+# making tea"); `about` in words; `basis` says where its steps come from: `cited` (the published instructions `cite`
+# names) or `own` (written here from common practice, no source claimed).
+@k.procedures.howto core.type of=k.procedures.howto shared=true closed=true core.source="hand-core 1"
+@k.procedures.howto.name core.slot of=k.procedures.howto key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.procedures.howto.about core.slot of=k.procedures.howto key=about required=true kind=string core.source="hand-core 1"
+@k.procedures.howto.basis core.slot of=k.procedures.howto key=basis required=true enum=cited enum=own core.source="hand-core 1"
+@k.procedures.howto.cite core.slot of=k.procedures.howto key=cite kind=string core.source="hand-core 1"
+
+# A step of an everyday procedure: number `n`; `about` the step in a few words (the text of its box in a flowchart);
+# `role` process (something done) or decision (a question answered yes or no); `after` (many) the steps it comes
+# after (none: the first step); `branch` the answer, yes or no, of the decision among `after` that leads to it;
+# `detail` the step in full, as the source says it.
+@k.procedures.howto_step core.type of=k.procedures.howto_step shared=true closed=true core.source="hand-core 1"
+@k.procedures.howto_step.howto core.slot of=k.procedures.howto_step key=howto id=true required=true kind=atom kind=string type=k.procedures.howto by=name core.source="hand-core 1"
+@k.procedures.howto_step.n core.slot of=k.procedures.howto_step key=n id=true required=true kind=integer min=1 core.source="hand-core 1"
+@k.procedures.howto_step.about core.slot of=k.procedures.howto_step key=about required=true kind=string core.source="hand-core 1"
+@k.procedures.howto_step.role core.slot of=k.procedures.howto_step key=role required=true enum=process enum=decision core.source="hand-core 1"
+@k.procedures.howto_step.after core.slot of=k.procedures.howto_step key=after many=true kind=integer min=1 core.source="hand-core 1"
+@k.procedures.howto_step.branch core.slot of=k.procedures.howto_step key=branch enum=yes enum=no core.source="hand-core 1"
+@k.procedures.howto_step.detail core.slot of=k.procedures.howto_step key=detail kind=string core.source="hand-core 1"
+
+# Words for the types of this world.
+@k.procedures.word.method core.word text=method text=methods text=procedure text=procedures text="how to" text=way text=ways text=plan means=k.procedures.method core.source="hand-core 1"
+@k.procedures.word.step core.word text=step text=steps means=k.procedures.step core.source="hand-core 1"
+@k.procedures.word.goal core.word text=goal text=goals text=task text=tasks means=k.procedures.goal core.source="hand-core 1"
+@k.procedures.word.howto core.word text="everyday procedure" text="everyday procedures" text=instructions text="how to do" means=k.procedures.howto core.source="hand-core 1"
+@k.procedures.word.condition core.word text=condition text=conditions text=precondition text=preconditions text=effect text=effects means=k.procedures.condition core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.procedures.word.key.method.about core.word text=about means=k.procedures.method.about core.source="hand-core 1"
+@k.procedures.word.key.method.act core.word text=act means=k.procedures.method.act core.source="hand-core 1"
+@k.procedures.word.key.method.world core.word text=world means=k.procedures.method.world core.source="hand-core 1"
+@k.procedures.word.key.method.rank core.word text=rank means=k.procedures.method.rank core.source="hand-core 1"
+@k.procedures.word.key.method.user_facing core.word text="user facing" means=k.procedures.method.user_facing core.source="hand-core 1"
+@k.procedures.word.key.method.example core.word text=example means=k.procedures.method.example core.source="hand-core 1"
+@k.procedures.word.key.goal.role core.word text=role means=k.procedures.goal.role core.source="hand-core 1"
+@k.procedures.word.key.goal.from core.word text=from means=k.procedures.goal.from core.source="hand-core 1"
+@k.procedures.word.key.goal.by core.word text=by means=k.procedures.goal.by core.source="hand-core 1"
+@k.procedures.word.key.goal.value core.word text=value means=k.procedures.goal.value core.source="hand-core 1"
+@k.procedures.word.key.goal.kind core.word text=kind means=k.procedures.goal.kind core.source="hand-core 1"
+@k.procedures.word.key.goal.rel core.word text=rel means=k.procedures.goal.rel core.source="hand-core 1"
+@k.procedures.word.key.goal.needed core.word text=needed means=k.procedures.goal.needed core.source="hand-core 1"
+@k.procedures.word.key.goal.default core.word text=default means=k.procedures.goal.default core.source="hand-core 1"
+@k.procedures.word.key.binding.name core.word text=name means=k.procedures.binding.name core.source="hand-core 1"
+@k.procedures.word.key.binding.goal core.word text=goal means=k.procedures.binding.goal core.source="hand-core 1"
+@k.procedures.word.key.binding.step core.word text=step means=k.procedures.binding.step core.source="hand-core 1"
+@k.procedures.word.key.binding.from core.word text=from means=k.procedures.binding.from core.source="hand-core 1"
+@k.procedures.word.key.binding.live core.word text=live means=k.procedures.binding.live core.source="hand-core 1"
+@k.procedures.word.key.binding.history core.word text=history means=k.procedures.binding.history core.source="hand-core 1"
+@k.procedures.word.key.binding.upto core.word text=upto means=k.procedures.binding.upto core.source="hand-core 1"
+@k.procedures.word.key.binding.together core.word text=together means=k.procedures.binding.together core.source="hand-core 1"
+@k.procedures.word.key.binding.value core.word text=value means=k.procedures.binding.value core.source="hand-core 1"
+@k.procedures.word.key.binding.about core.word text=about means=k.procedures.binding.about core.source="hand-core 1"
+@k.procedures.word.key.binding.key core.word text=key means=k.procedures.binding.key core.source="hand-core 1"
+@k.procedures.word.key.binding.choose core.word text=choose means=k.procedures.binding.choose core.source="hand-core 1"
+@k.procedures.word.key.binding.choose_min core.word text="choose min" means=k.procedures.binding.choose_min core.source="hand-core 1"
+@k.procedures.word.key.match.binding core.word text=binding means=k.procedures.match.binding core.source="hand-core 1"
+@k.procedures.word.key.match.key core.word text=key means=k.procedures.match.key core.source="hand-core 1"
+@k.procedures.word.key.match.n core.word text=n means=k.procedures.match.n core.source="hand-core 1"
+@k.procedures.word.key.match.value core.word text=value means=k.procedures.match.value core.source="hand-core 1"
+@k.procedures.word.key.match.equals core.word text=equals means=k.procedures.match.equals core.source="hand-core 1"
+@k.procedures.word.key.match.equals_key core.word text="equals key" means=k.procedures.match.equals_key core.source="hand-core 1"
+@k.procedures.word.key.match.not core.word text=not means=k.procedures.match.not core.source="hand-core 1"
+@k.procedures.word.key.match.differs core.word text=differs means=k.procedures.match.differs core.source="hand-core 1"
+@k.procedures.word.key.match.present core.word text=present means=k.procedures.match.present core.source="hand-core 1"
+@k.procedures.word.key.match.soft core.word text=soft means=k.procedures.match.soft core.source="hand-core 1"
+@k.procedures.word.key.step.n core.word text=n means=k.procedures.step.n core.source="hand-core 1"
+@k.procedures.word.key.step.act core.word text=act means=k.procedures.step.act core.source="hand-core 1"
+@k.procedures.word.key.step.each core.word text=each means=k.procedures.step.each core.source="hand-core 1"
+@k.procedures.word.key.step.after core.word text=after means=k.procedures.step.after core.source="hand-core 1"
+@k.procedures.word.key.step.expand core.word text=expand means=k.procedures.step.expand core.source="hand-core 1"
+@k.procedures.word.key.step.optional core.word text=optional means=k.procedures.step.optional core.source="hand-core 1"
+@k.procedures.word.key.step.about core.word text=about means=k.procedures.step.about core.source="hand-core 1"
+@k.procedures.word.key.arg.step core.word text=step means=k.procedures.arg.step core.source="hand-core 1"
+@k.procedures.word.key.arg.role core.word text=role means=k.procedures.arg.role core.source="hand-core 1"
+@k.procedures.word.key.arg.attribute core.word text=attribute means=k.procedures.arg.attribute core.source="hand-core 1"
+@k.procedures.word.key.arg.binding core.word text=binding means=k.procedures.arg.binding core.source="hand-core 1"
+@k.procedures.word.key.arg.key core.word text=key means=k.procedures.arg.key core.source="hand-core 1"
+@k.procedures.word.key.arg.else_key core.word text="else key" means=k.procedures.arg.else_key core.source="hand-core 1"
+@k.procedures.word.key.arg.value core.word text=value means=k.procedures.arg.value core.source="hand-core 1"
+@k.procedures.word.key.arg.rel core.word text=rel means=k.procedures.arg.rel core.source="hand-core 1"
+@k.procedures.word.key.arg.of core.word text=of means=k.procedures.arg.of core.source="hand-core 1"
+@k.procedures.word.key.condition.n core.word text=n means=k.procedures.condition.n core.source="hand-core 1"
+@k.procedures.word.key.condition.step core.word text=step means=k.procedures.condition.step core.source="hand-core 1"
+@k.procedures.word.key.condition.when core.word text=when means=k.procedures.condition.when core.source="hand-core 1"
+@k.procedures.word.key.condition.fact core.word text=fact means=k.procedures.condition.fact core.source="hand-core 1"
+@k.procedures.word.key.condition.thing core.word text=thing means=k.procedures.condition.thing core.source="hand-core 1"
+@k.procedures.word.key.condition.other core.word text=other means=k.procedures.condition.other core.source="hand-core 1"
+@k.procedures.word.key.condition.attribute core.word text=attribute means=k.procedures.condition.attribute core.source="hand-core 1"
+@k.procedures.word.key.condition.value core.word text=value means=k.procedures.condition.value core.source="hand-core 1"
+@k.procedures.word.key.howto.about core.word text=about means=k.procedures.howto.about core.source="hand-core 1"
+@k.procedures.word.key.howto.basis core.word text=basis means=k.procedures.howto.basis core.source="hand-core 1"
+@k.procedures.word.key.howto.cite core.word text=cite means=k.procedures.howto.cite core.source="hand-core 1"
+@k.procedures.word.key.howto_step.n core.word text=n means=k.procedures.howto_step.n core.source="hand-core 1"
+@k.procedures.word.key.howto_step.about core.word text=about means=k.procedures.howto_step.about core.source="hand-core 1"
+@k.procedures.word.key.howto_step.role core.word text=role means=k.procedures.howto_step.role core.source="hand-core 1"
+@k.procedures.word.key.howto_step.after core.word text=after means=k.procedures.howto_step.after core.source="hand-core 1"
+@k.procedures.word.key.howto_step.branch core.word text=branch means=k.procedures.howto_step.branch core.source="hand-core 1"
+@k.procedures.word.key.howto_step.detail core.word text=detail means=k.procedures.howto_step.detail core.source="hand-core 1"

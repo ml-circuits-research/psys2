@@ -1,0 +1,9 @@
+# k.words/shards/nd: senses of the words from "nd" to "nd" (first letters "nd").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.nd.noun.1 k.words.sense word=Nd pos=noun n=1 supersense=noun.substance gloss="a yellow trivalent metallic element of the rare earth group; occurs in monazite and bastnasite in association with cerium and lanthanum and praseodymium" synonym=neodymium synonym="atomic number 60" is_a="metallic element" core.source="wordnet 3.1"
+@k.words.nd.noun.2 k.words.sense word=ND pos=noun n=2 supersense=noun.location gloss="a state of north central United States bordering on Canada" synonym="North Dakota" synonym="Peace Garden State" synonym=N.D. instance_of="American state" part_of="United States" part_of=Dakota core.source="wordnet 3.1"
+@k.words.nd.spelling.ND core.word text=nd means=ND of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.nd.spelling.Nd core.word text=nd means=Nd of=k.words.sense.word core.source="wordnet 3.1"

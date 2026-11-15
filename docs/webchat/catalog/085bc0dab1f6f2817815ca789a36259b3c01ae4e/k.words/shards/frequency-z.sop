@@ -1,0 +1,27 @@
+# k.words/shards/frequency-z: how frequent the 22 words with senses here that start with "z" are: the Zipf value in wordfreq's English list and its band (1 very common, Zipf >= 6; 2 common, >= 5; 3 familiar, >= 4; 4 uncommon, >= 3; 5 rare).
+# sources: wordfreq 3.1.1 (Robyn Speer, https://github.com/rspeer/wordfreq, data CC BY-SA 4.0: the large_en list, top 50,000, built from Google Books Ngrams, the Leeds Internet Corpus, Wikipedia, ParaCrawl, OpenSubtitles 2018, SUBTLEX and Twitter statistics; see sources/wordfreq/SOURCE.md)
+# license: CC-BY-SA-4.0
+# script: tools/import/wordnet.mjs
+
+@k.words.frequency.z k.words.frequency word=z zipf=4.47 band=3 core.source="wordfreq 3.1.1"
+@k.words.frequency.zap k.words.frequency word=zap zipf=2.96 band=5 core.source="wordfreq 3.1.1"
+@k.words.frequency.zealand k.words.frequency word=zealand zipf=4.5 band=3 core.source="wordfreq 3.1.1"
+@k.words.frequency.zebra k.words.frequency word=zebra zipf=3.4 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.zed k.words.frequency word=zed zipf=3.02 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.zee k.words.frequency word=zee zipf=3.16 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.zen k.words.frequency word=zen zipf=3.7 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.zero k.words.frequency word=zero zipf=4.63 band=3 core.source="wordfreq 3.1.1"
+@k.words.frequency.zeta k.words.frequency word=zeta zipf=3.08 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.zeus k.words.frequency word=zeus zipf=3.54 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.zhou k.words.frequency word=zhou zipf=3.38 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.zigzag k.words.frequency word=zigzag zipf=2.82 band=5 core.source="wordfreq 3.1.1"
+@k.words.frequency.zip k.words.frequency word=zip zipf=3.87 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.zipper k.words.frequency word=zipper zipf=3.3 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.zodiac k.words.frequency word=zodiac zipf=3.41 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.zombie k.words.frequency word=zombie zipf=3.94 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.zone k.words.frequency word=zone zipf=4.72 band=3 core.source="wordfreq 3.1.1"
+@k.words.frequency.zoo k.words.frequency word=zoo zipf=4.14 band=3 core.source="wordfreq 3.1.1"
+@k.words.frequency.zoom k.words.frequency word=zoom zipf=3.83 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.zucchini k.words.frequency word=zucchini zipf=2.96 band=5 core.source="wordfreq 3.1.1"
+@k.words.frequency.zulu k.words.frequency word=zulu zipf=3.19 band=4 core.source="wordfreq 3.1.1"
+@k.words.frequency.zurich k.words.frequency word=zurich zipf=3.59 band=4 core.source="wordfreq 3.1.1"

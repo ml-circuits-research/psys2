@@ -1,0 +1,7 @@
+# k.words/shards/cp: senses of the words from "cpr" to "cpr" (first letters "cp").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.cpr.noun.1 k.words.sense word=CPR pos=noun n=1 supersense=noun.act gloss="an emergency procedure consisting of external cardiac massage and artificial respiration; the first treatment for a person who has collapsed and has no pulse and has stopped breathing; attempts to restore circulation of the blood and prevent death or brain damage due to lack of oxygen" synonym="cardiopulmonary resuscitation" synonym="cardiac resuscitation" synonym="mouth-to-mouth resuscitation" synonym="kiss of life" is_a=resuscitation is_a="emergency procedure" core.source="wordnet 3.1"
+@k.words.cpr.spelling.CPR core.word text=cpr means=CPR of=k.words.sense.word core.source="wordnet 3.1"

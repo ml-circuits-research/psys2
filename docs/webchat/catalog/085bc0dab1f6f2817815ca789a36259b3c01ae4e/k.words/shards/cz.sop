@@ -1,0 +1,11 @@
+# k.words/shards/cz: senses of the words from "czech" to "czechoslovakia" (first letters "cz").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.czech.noun.1 k.words.sense word=Czech pos=noun n=1 supersense=noun.person gloss="a native of inhabitant of the Czech Republic" is_a=European core.source="wordnet 3.1"
+@k.words.czech.noun.2 k.words.sense word=Czech pos=noun n=2 supersense=noun.person gloss="a native or inhabitant of the former republic of Czechoslovakia" synonym=Czechoslovakian synonym=Czechoslovak is_a=European core.source="wordnet 3.1"
+@k.words.czech.noun.3 k.words.sense word=Czech pos=noun n=3 supersense=noun.communication gloss="the Slavic language of Czechs" is_a=Slavic core.source="wordnet 3.1"
+@k.words.czech.spelling.Czech core.word text=czech means=Czech of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.czechoslovakia.noun.1 k.words.sense word=Czechoslovakia pos=noun n=1 supersense=noun.location gloss="a former republic in central Europe; divided into Czech Republic and Slovakia in 1993" instance_of="geographical area" part_of=Europe core.source="wordnet 3.1"
+@k.words.czechoslovakia.spelling.Czechoslovakia core.word text=czechoslovakia means=Czechoslovakia of=k.words.sense.word core.source="wordnet 3.1"

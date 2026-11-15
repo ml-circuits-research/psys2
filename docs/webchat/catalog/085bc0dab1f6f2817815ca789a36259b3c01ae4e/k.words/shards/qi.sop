@@ -1,0 +1,10 @@
+# k.words/shards/qi: senses of the words from "qi" to "qing" (first letters "qi").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.qi.noun.1 k.words.sense word=qi pos=noun n=1 supersense=noun.state gloss="the circulating life energy that in Chinese philosophy is thought to be inherent in all things; in traditional Chinese medicine the balance of negative and positive forms in the body is believed to be essential for good health" synonym=chi synonym=ch'i synonym=ki is_a=energy core.source="wordnet 3.1"
+@k.words.qin.noun.1 k.words.sense word=Qin pos=noun n=1 supersense=noun.group gloss="the Chinese dynasty (from 246 BC to 206 BC) that established the first centralized imperial government and built much of the Great Wall" synonym="Qin dynasty" synonym=Ch'in synonym="Ch'in dynasty" is_a=dynasty core.source="wordnet 3.1"
+@k.words.qin.spelling.Qin core.word text=qin means=Qin of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.qing.noun.1 k.words.sense word=Qing pos=noun n=1 supersense=noun.group gloss="the last imperial dynasty of China (from 1644 to 1912) which was overthrown by revolutionaries; during the Qing dynasty China was ruled by the Manchu" synonym="Qing dynasty" synonym=Ch'ing synonym="Ch'ing dynasty" synonym=Manchu synonym="Manchu dynasty" is_a=dynasty core.source="wordnet 3.1"
+@k.words.qing.spelling.Qing core.word text=qing means=Qing of=k.words.sense.word core.source="wordnet 3.1"

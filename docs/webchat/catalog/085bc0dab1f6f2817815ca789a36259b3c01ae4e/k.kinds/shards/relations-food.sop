@@ -1,0 +1,14 @@
+# k.kinds/shards/relations-food: the keys of the types of k.food read as relations: 9 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.food.food.kind k.kinds.relation type=k.food.food key=kind subject=food subject_sense=food object=kind object_type=k.attributes.drawn object_type=k.objects.object object_type=k.scenes.thing found=value core.source="hand-core 1"
+@k.kinds.relation.k.food.food.botanically k.kinds.relation type=k.food.food key=botanically subject=food subject_sense=food object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.food.food.grows_on k.kinds.relation type=k.food.food key=grows_on subject=food subject_sense=food object=value object_type=k.attributes.drawn object_type=k.objects.object object_type=k.scenes.thing found=value core.source="hand-core 1"
+@k.kinds.relation.k.food.food.comes_from k.kinds.relation type=k.food.food key=comes_from subject=food subject_sense=food object=thing object_type=k.attributes.drawn object_type=k.objects.object object_type=k.scenes.thing found=value core.source="hand-core 1"
+@k.kinds.relation.k.food.food.eaten k.kinds.relation type=k.food.food key=eaten subject=food subject_sense=food object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.food.food.drawing k.kinds.relation type=k.food.food key=drawing subject=food subject_sense=food object=thing object_type=k.objects.object found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.food.food.made_of k.kinds.relation type=k.food.food key=made_of subject=food subject_sense=food object=thing object_type=k.objects.object object_type=k.scenes.thing object_type=k.attributes.drawn found=value core.source="hand-core 1"
+@k.kinds.relation.k.food.food.colour k.kinds.relation type=k.food.food key=colour subject=food subject_sense=food object=value object_type=k.colours.basic found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.food.food.named k.kinds.relation type=k.food.food key=named subject=food subject_sense=food object=value found=schema core.source="hand-core 1"

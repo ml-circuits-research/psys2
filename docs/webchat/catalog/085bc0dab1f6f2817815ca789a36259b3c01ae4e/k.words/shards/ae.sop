@@ -1,0 +1,9 @@
+# k.words/shards/ae: senses of the words from "aerial" to "aesthetic" (first letters "ae").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.aerial.noun.1 k.words.sense word=aerial pos=noun n=1 supersense=noun.act gloss="a pass to a receiver downfield from the passer" synonym="forward pass" is_a=pass core.source="wordnet 3.1"
+@k.words.aerial.noun.2 k.words.sense word=aerial pos=noun n=2 supersense=noun.artifact gloss="an electrical device that sends or receives radio or television signals" synonym=antenna synonym="transmitting aerial" is_a="electrical device" part_of=receiver part_of=transmitter core.source="wordnet 3.1"
+@k.words.aeroplane.noun.1 k.words.sense word=aeroplane pos=noun n=1 supersense=noun.artifact gloss="an aircraft that has a fixed wing and is powered by propellers or jets" synonym=airplane synonym=plane is_a="heavier-than-air craft" kind_of="heavier-than-air craft" kind_of=aircraft kind_of=craft kind_of=vehicle kind_of=conveyance kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.aesthetic.noun.1 k.words.sense word=aesthetic pos=noun n=1 supersense=noun.cognition gloss="(philosophy) a philosophical theory as to what is beautiful" synonym=esthetic is_a="philosophical doctrine" core.source="wordnet 3.1"

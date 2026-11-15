@@ -1,0 +1,50 @@
+# w.lang.en/shards/talk-frames: conversation frames (block 09:20 K3, PSys2 Q18): 9 frames for a greeting, thanks and a goodbye (the acts greet, thank, farewell of k.actions) and the questions about the assistant (who, how; its name is acts.ask.name); what the speaker says about themselves is w.person's shard person-frames.
+# sources: hand-core 1 (written in this repository: tools/lang-en-talk-frames.mjs)
+# license: CC0-1.0
+# script: tools/lang-en-talk-frames.mjs
+
+# a greeting
+@w.lang.en.frame.talk.greet w.lang.en.frame name=talk.greet act=greet set=acts priority=16 example="Hello." core.source="hand-core 1"
+@w.lang.en.part.talk.greet.1 w.lang.en.part frame=talk.greet at=1 is=word word="hello" word="hi" word="hey" word="hi there" word="hello there" word="hey there" word="good morning" word="good afternoon" word="good evening" word="morning" word="howdy" word="greetings" word="good day" word="hiya" word="yo" word="hey hey" word="hullo" word="hallo" core.source="hand-core 1"
+@w.lang.en.part.talk.greet.2 w.lang.en.part frame=talk.greet at=2 is=word word="please" word="pls" word="again" word="buddy" word="friend" word="mate" word="robot" optional=yes core.source="hand-core 1"
+# a greeting with the name of who is greeted
+@w.lang.en.frame.talk.greet.person w.lang.en.frame name=talk.greet.person act=greet set=acts priority=15 role=person example="Hello Robi." core.source="hand-core 1"
+@w.lang.en.part.talk.greet.person.1 w.lang.en.part frame=talk.greet.person at=1 is=word word="hello" word="hi" word="hey" word="hi there" word="hello there" word="hey there" word="good morning" word="good afternoon" word="good evening" word="morning" word="howdy" word="greetings" word="good day" word="hiya" word="yo" word="hey hey" word="hullo" word="hallo" core.source="hand-core 1"
+@w.lang.en.part.talk.greet.person.2 w.lang.en.part frame=talk.greet.person at=2 is=role role=person takes=words max_words=2 core.source="hand-core 1"
+# greet someone (the role person of greet, after a verb of greeting)
+@w.lang.en.frame.talk.greet.verb w.lang.en.frame name=talk.greet.verb act=greet set=acts priority=12 role=person example="Say hello to Ana." core.source="hand-core 1"
+@w.lang.en.part.talk.greet.verb.1 w.lang.en.part frame=talk.greet.verb at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.talk.greet.verb.2 w.lang.en.part frame=talk.greet.verb at=2 is=verb act=greet core.source="hand-core 1"
+@w.lang.en.part.talk.greet.verb.3 w.lang.en.part frame=talk.greet.verb at=3 is=word word="to" word="unto" optional=yes core.source="hand-core 1"
+@w.lang.en.part.talk.greet.verb.4 w.lang.en.part frame=talk.greet.verb at=4 is=role role=person takes=words max_words=3 core.source="hand-core 1"
+# thanks
+@w.lang.en.frame.talk.thank w.lang.en.frame name=talk.thank act=thank set=acts priority=16 example="Thanks." core.source="hand-core 1"
+@w.lang.en.part.talk.thank.1 w.lang.en.part frame=talk.thank at=1 is=word word="thanks" word="thank you" word="thank u" word="thx" word="ty" word="thanks a lot" word="thanks a bunch" word="thank you very much" word="thanks very much" word="thanks so much" word="thank you so much" word="many thanks" word="cheers" word="much appreciated" word="thanks a million" word="tysm" word="thank you kindly" word="great thanks" word="ok thanks" word="okay thanks" word="ok thank you" core.source="hand-core 1"
+@w.lang.en.part.talk.thank.2 w.lang.en.part frame=talk.thank at=2 is=word word="please" word="pls" word="again" word="buddy" word="friend" word="mate" word="robot" optional=yes core.source="hand-core 1"
+# thanks for something (the role topic of thank)
+@w.lang.en.frame.talk.thank.for w.lang.en.frame name=talk.thank.for act=thank set=acts priority=16 role=topic example="Thank you for the drawing." core.source="hand-core 1"
+@w.lang.en.part.talk.thank.for.1 w.lang.en.part frame=talk.thank.for at=1 is=word word="thanks" word="thank you" word="thank u" word="thx" word="ty" word="thanks a lot" word="thanks a bunch" word="thank you very much" word="thanks very much" word="thanks so much" word="thank you so much" word="many thanks" word="cheers" word="much appreciated" word="thanks a million" word="tysm" word="thank you kindly" word="great thanks" word="ok thanks" word="okay thanks" word="ok thank you" core.source="hand-core 1"
+@w.lang.en.part.talk.thank.for.2 w.lang.en.part frame=talk.thank.for at=2 is=word word="for" word="about" core.source="hand-core 1"
+@w.lang.en.part.talk.thank.for.3 w.lang.en.part frame=talk.thank.for at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.talk.thank.for.4 w.lang.en.part frame=talk.thank.for at=4 is=role role=topic takes=words core.source="hand-core 1"
+# a goodbye
+@w.lang.en.frame.talk.farewell w.lang.en.frame name=talk.farewell act=farewell set=acts priority=16 example="Goodbye." core.source="hand-core 1"
+@w.lang.en.part.talk.farewell.1 w.lang.en.part frame=talk.farewell at=1 is=word word="bye" word="goodbye" word="good bye" word="bye bye" word="byebye" word="see you" word="see you later" word="see ya" word="see you soon" word="good night" word="goodnight" word="night night" word="farewell" word="talk to you later" word="cya" word="take care" word="i have to go" word="i gotta go" word="gotta go" word="i am leaving" word="im leaving" word="later" core.source="hand-core 1"
+@w.lang.en.part.talk.farewell.2 w.lang.en.part frame=talk.farewell at=2 is=word word="please" word="pls" word="again" word="buddy" word="friend" word="mate" word="robot" word="now" word="for now" word="for today" optional=yes core.source="hand-core 1"
+# a goodbye with the name of who is left
+@w.lang.en.frame.talk.farewell.person w.lang.en.frame name=talk.farewell.person act=farewell set=acts priority=15 role=person example="Bye Robi." core.source="hand-core 1"
+@w.lang.en.part.talk.farewell.person.1 w.lang.en.part frame=talk.farewell.person at=1 is=word word="bye" word="goodbye" word="good bye" word="bye bye" word="byebye" word="see you" word="see you later" word="see ya" word="see you soon" word="good night" word="goodnight" word="night night" word="farewell" word="talk to you later" word="cya" word="take care" word="i have to go" word="i gotta go" word="gotta go" word="i am leaving" word="im leaving" word="later" core.source="hand-core 1"
+@w.lang.en.part.talk.farewell.person.2 w.lang.en.part frame=talk.farewell.person at=2 is=role role=person takes=words max_words=2 core.source="hand-core 1"
+# asks who the assistant is
+@w.lang.en.frame.talk.ask.who w.lang.en.frame name=talk.ask.who act=ask mode=who set=acts priority=15 example="Who are you?" core.source="hand-core 1"
+@w.lang.en.part.talk.ask.who.1 w.lang.en.part frame=talk.ask.who at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.talk.ask.who.2 w.lang.en.part frame=talk.ask.who at=2 is=word word="who are you" word="what are you" word="tell me about yourself" word="introduce yourself" word="who am i talking to" word="who is this" word="what kind of thing are you" core.source="hand-core 1"
+@w.lang.en.fixed.talk.ask.who.thing w.lang.en.fixed frame=talk.ask.who role=thing value="yourself" core.source="hand-core 1"
+@w.lang.en.fixed.talk.ask.who.topic w.lang.en.fixed frame=talk.ask.who role=topic value="identity" core.source="hand-core 1"
+# asks how the assistant is
+@w.lang.en.frame.talk.ask.how w.lang.en.frame name=talk.ask.how act=ask mode=feeling set=acts priority=15 example="How are you?" core.source="hand-core 1"
+@w.lang.en.part.talk.ask.how.1 w.lang.en.part frame=talk.ask.how at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.talk.ask.how.2 w.lang.en.part frame=talk.ask.how at=2 is=word word="how are you" word="how are you doing" word="how are u" word="how r u" word="how is it going" word="hows it going" word="how s it going" word="how do you do" word="how are things" word="are you ok" word="are you okay" word="how do you feel" word="how are you feeling" word="whats up" word="what s up" word="sup" core.source="hand-core 1"
+@w.lang.en.part.talk.ask.how.3 w.lang.en.part frame=talk.ask.how at=3 is=word word="today" word="now" optional=yes core.source="hand-core 1"
+@w.lang.en.fixed.talk.ask.how.thing w.lang.en.fixed frame=talk.ask.how role=thing value="yourself" core.source="hand-core 1"
+@w.lang.en.fixed.talk.ask.how.topic w.lang.en.fixed frame=talk.ask.how role=topic value="feeling" core.source="hand-core 1"
