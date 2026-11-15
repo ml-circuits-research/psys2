@@ -3392,4 +3392,13 @@ Arms through a measuring hook (`engine.translationArm`, `PSYS2_TRANSLATION_ARM`,
 | today's chain (+MT) | 10 | 18 | 7 | 556 |
 | cleaner + model only | 9 | 18 | 7 | 467 |
 | cleaner + both, ties to the rules | 10 | 19 | 6 | 578 |
-(The rules chain without the model, the column of the proposer runs: 10/43 + 19/35, 5 wrong executions.) "Both, ties to the rules" vs today: won 3 (T40 "fa-mi o piveste despre un lac…" story written, VC4 "fă casa roșie" now changes the house instead of adding one, VE2 "sunt prea multe" now reduces), lost 2 (T41 the story's word count, noise run to run; VE4 "ești prost?" "prost" left unread). Model only lost T1 ("creaza o diagrama random": "figura" unread). Verdict: the model alone is not better than today; "both with ties to the rules" is at least equal on right and one wrong execution fewer on this session — the reviewer's switch condition holds on this one session only; the real-set Romanian rows were not run with the model in this session (three full runs with MT, about 25 min each, did not fit); measure them before any switch.
+(The rules chain without the model, the column of the proposer runs: 10/43 + 19/35, 5 wrong executions.) "Both, ties to the rules" vs today: won 3 (T40 "fa-mi o piveste despre un lac…" story written, VC4 "fă casa roșie" now changes the house instead of adding one, VE2 "sunt prea multe" now reduces), lost 2 (T41 the story's word count, noise run to run; VE4 "ești prost?" "prost" left unread). Model only lost T1 ("creaza o diagrama random": "figura" unread). Verdict: the model alone is not better than today; "both with ties to the rules" is at least equal on right and one wrong execution fewer on this session — the reviewer's switch condition holds on this one session only; the real-set Romanian rows below decide against a switch for now.
+
+**The real set's Romanian rows (293 turns, replayed in their sessions; tags arm-today / arm-model / arm-both, `scripts/two-columns.mjs --lang ro`):**
+| arm | right | honest | wrong executions (judged) | executed, unjudged | median / p90 ms |
+| --- | --- | --- | --- | --- | --- |
+| rules chain, no model (proposer-off run) | 36 | 67 | 8 | 34 | 453 / 1275 |
+| today's chain (+MT) | 36 | 64 | 11 | 40 | 551 / 1568 |
+| cleaner + model only | 36 | 66 | 9 | 39 | 544 / 1677 |
+| cleaner + both, ties to the rules | 36 | 64 | 11 | 37 | 542 / 1420 |
+Model only vs today: won r0019 ("for their grandma do it" no longer re-runs the diagram), lost r0072 ("deseneaza o rata": "rate" unread). Both vs today: no turn won or lost. On real Romanian rows no arm is right more often; the on-device model adds 3 judged wrong executions over the rules chain without it (8 -> 11) and about 90 ms median in Node. Verdict: do not switch; the reading-based choice with ties to the rules is not worse than today, the model alone is not better.

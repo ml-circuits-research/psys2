@@ -1,0 +1,308 @@
+{
+ "a": "training/results/real-2026-11-15-matrixarm-today.json",
+ "b": "training/results/real-2026-11-15-matrixarm-model.json",
+ "totalsA": {
+  "unjudged-other_world": 14,
+  "executed-unjudged": 40,
+  "right": 36,
+  "unjudged-refused": 84,
+  "wrong-exec": 11,
+  "honest": 64,
+  "unjudged-not_understood": 44
+ },
+ "totalsB": {
+  "unjudged-other_world": 14,
+  "executed-unjudged": 39,
+  "right": 36,
+  "unjudged-refused": 85,
+  "honest": 66,
+  "wrong-exec": 9,
+  "unjudged-not_understood": 44
+ },
+ "won": [
+  {
+   "id": "#r0019",
+   "text": "for their grandma do it",
+   "a": "wrong-exec",
+   "b": "right",
+   "replyA": "I made it again, the way you said. I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I remove",
+   "replyB": "I did not understand \"grandma\" here."
+  }
+ ],
+ "lost": [
+  {
+   "id": "#r0072",
+   "text": "deseneaza o rata",
+   "a": "right",
+   "b": "honest",
+   "replyA": "I added a bird. I assumed bird for the kind.",
+   "replyB": "I did not understand \"rate\" here."
+  }
+ ],
+ "changed": [
+  {
+   "id": "#r0010",
+   "text": "fă un layout mai frumos",
+   "a": "right",
+   "b": "right",
+   "replyA": "I did not understand \"layout\" here.",
+   "replyB": "I did not understand \"nicest\", \"layout\" here."
+  },
+  {
+   "id": "#r0070",
+   "text": "fa-mu un desen cu un lac, o rata, o vila, nori, soare ,iarba",
+   "a": "wrong-exec",
+   "b": "honest",
+   "replyA": "I could not do a villa: there is no villa here. I could not do a villa: there is no villa here. I could not do grass: th",
+   "replyB": "I did not understand \"fa\", \"m\" here."
+  },
+  {
+   "id": "#r0074",
+   "text": "muta rata pe lac",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "Nothing changed. That cannot be done to a place here.",
+   "replyB": "I did not understand \"rate\" here."
+  },
+  {
+   "id": "#r0083",
+   "text": "fa un cel cu 5 nori si un soare",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I understood \"a sun\", but not \"Make a cel with 5 clouds\", so I did nothing.",
+   "replyB": "I understood \"make a 5-nore\", but not \"sunny\", so I did nothing."
+  },
+  {
+   "id": "#r0084",
+   "text": "un cer cu 5 nori",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "Nothing changed. I could not do A sky with 5 clouds: 2 made, the request said 1.",
+   "replyB": "I did not understand \"5\" here."
+  },
+  {
+   "id": "#r0085",
+   "text": "da 5 nori",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I cannot send cloud in the drawing yet.",
+   "replyB": "I did not understand \"da\" here."
+  },
+  {
+   "id": "#r0088",
+   "text": "muta soarele mai sus, de ce e pus asa jos bu default?",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I understood \"Move the sun more up\", but not \"why is it to put like this down bu default\", so I did nothing.",
+   "replyB": "I understood \"move the sun higher\", but not \"why is it put so low bu default\", so I did nothing."
+  },
+  {
+   "id": "#r0101",
+   "text": "muta fetita in fata casei",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I did not understand \"girl\" here.",
+   "replyB": "I did not understand \"girl\", \"front\" here."
+  },
+  {
+   "id": "#r0105",
+   "text": "muta fetita in fata casei",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I did not understand \"girl\" here.",
+   "replyB": "I did not understand \"girl\", \"front\" here."
+  },
+  {
+   "id": "#r0107",
+   "text": "fa un bunic linga rata",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I did not understand \"grandfather\", \"linga\" here.",
+   "replyB": "I did not understand \"grandfather\", \"rate\" here."
+  },
+  {
+   "id": "#r0112",
+   "text": "muta capra linga rata",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I did not understand \"linga\" here.",
+   "replyB": "I did not understand \"rate\" here."
+  },
+  {
+   "id": "#r0117",
+   "text": "deseneaza si un magar, dar sa nu zboare, pe iarba",
+   "a": "honest",
+   "b": "honest",
+   "replyA": "I understood \"on the grass\", but not \"draw a donkey\", \"not to fly\", so I did nothing.",
+   "replyB": "I understood \"on the grass\", but not \"draw a lyar\", \"not to fly\", so I did nothing."
+  },
+  {
+   "id": "#r0268",
+   "text": "Cu cine vorbești cu robotul de aici când am făcut eu",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"speaks\" here.",
+   "replyB": "I did not understand \"you're\", \"talking\" here."
+  },
+  {
+   "id": "#r0290",
+   "text": "mută peștele de aer în apă",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "Which fish? There are 5. I could not do of air: this world does not take about for place.",
+   "replyB": "I did not understand \"moves\", \"air\" here."
+  },
+  {
+   "id": "#r0291",
+   "text": "faci tu",
+   "a": "executed-unjudged",
+   "b": "unjudged-refused",
+   "replyA": "I added a fish. I assumed fish for the target. I assumed 1 for the count.",
+   "replyB": "I did not understand that as something to do in the drawing."
+  },
+  {
+   "id": "#r0292",
+   "text": "mută peștele",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "Which fish? There are 6.",
+   "replyB": "Which fish? There are 5."
+  },
+  {
+   "id": "#r0294",
+   "text": "mută peștele de Sus",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "Which fish? There are 6.",
+   "replyB": "Which fish? There are 5."
+  },
+  {
+   "id": "#r0295",
+   "text": "scuze",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand that as something to do in the drawing.",
+   "replyB": "I did not understand \"apologies\" here."
+  },
+  {
+   "id": "#r0307",
+   "text": "l ai șters",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"deleted\" here.",
+   "replyB": "I did not understand \"l\", \"deleted\" here."
+  },
+  {
+   "id": "#r0308",
+   "text": "șterge peștii",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "Which fish? There are 6.",
+   "replyB": "Which fish? There are 5."
+  },
+  {
+   "id": "#r0338",
+   "text": "desenează o inimioară desenează o inimă desenează o casă",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"heart\", \"draw\" here.",
+   "replyB": "I did not understand \"heart\", \"draws\", \"home\" here."
+  },
+  {
+   "id": "#r0340",
+   "text": "desene",
+   "a": "executed-unjudged",
+   "b": "executed-unjudged",
+   "replyA": "I made it again, the way you said. I drew a pond. It has 2 flowers, 2 birds and 1 fish. I assumed 6 for the count.",
+   "replyB": "You are already on the Drawing tab."
+  },
+  {
+   "id": "#r0349",
+   "text": "dacă ești calm desenează",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"draw\" here.",
+   "replyB": "I did not understand \"calm\", \"draw\" here."
+  },
+  {
+   "id": "#r0350",
+   "text": "desenează o casă e o desenat dacă ești calm desenează",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"draw\" here.",
+   "replyB": "I did not understand \"you're\", \"draw\" here."
+  },
+  {
+   "id": "#r0356",
+   "text": "desenează o casă e o desenat dacă ești calm desenează o inimioară știi Numai",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"draw\", \"heart\" here.",
+   "replyB": "I did not understand \"calm\", \"draw\", \"heart\", \"know\" here."
+  },
+  {
+   "id": "#r0358",
+   "text": "desenează o casă e o desenat dacă ești calm desenează o inimioară",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"draw\", \"heart\" here.",
+   "replyB": "I did not understand \"drawing\", \"draw\", \"heart\" here."
+  },
+  {
+   "id": "#r0362",
+   "text": "desenează o casă e o desenat dacă ești calm desenează o inimioară știi Numai inima desenează o inimă",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"draw\", \"heart\" here.",
+   "replyB": "I did not understand \"drawing\", \"calm\", \"draw\", \"heart\", \"know\" here."
+  },
+  {
+   "id": "#r0364",
+   "text": "desenează",
+   "a": "executed-unjudged",
+   "b": "executed-unjudged",
+   "replyA": "I drew a forest. It has 6 trees.",
+   "replyB": "I drew a garden. It has 5 flowers, 2 trees, 1 butterfly and 1 bird. I assumed 9 for the count."
+  },
+  {
+   "id": "#r0377",
+   "text": "înnebunești",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"înnebunești\" here.",
+   "replyB": "I did not understand \"going\", \"crazy\" here."
+  },
+  {
+   "id": "#r0384",
+   "text": "ce Hai ce îl înnebunești de cap săracul tot ai zis de multe",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"hai\", \"still\", \"say\", \"îl\", \"înnebunești\" here.",
+   "replyB": "I understood \"What\", but not \"let him go crazy about your head\", \"the poor guy still said a lot\", so I did nothing."
+  },
+  {
+   "id": "#r0387",
+   "text": "ia",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand that as something to do in the drawing.",
+   "replyB": "I did not understand \"ia\" here."
+  },
+  {
+   "id": "#r0413",
+   "text": "Da face face face apă face un mare faci un",
+   "a": "executed-unjudged",
+   "b": "executed-unjudged",
+   "replyA": "I did not understand \"Da face face apă face un mare faci un\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt aco",
+   "replyB": "I did not understand \"Da face face apă face un mare faci un\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt aco"
+  },
+  {
+   "id": "#r0418",
+   "text": "Da face face face apă face un mare faci un mami mare",
+   "a": "unjudged-other_world",
+   "b": "unjudged-other_world",
+   "replyA": "I did not understand \"Da face face apă face un mare faci un mami mare\". For example: \"Adaugă un cântec.\" or \"Câte cântec",
+   "replyB": "I did not understand \"Da face face apă face un mare faci un mami mare\". For example: \"Adaugă un cântec.\" or \"Câte cântec"
+  }
+ ]
+}
