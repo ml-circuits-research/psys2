@@ -332,6 +332,35 @@ export function failureRows(setRows, res, tag) {
   return out;
 }
 
+/**
+ * The cause of an IN-SCOPE JUDGED failure (verdict wrong / partly; reviewer 2026-11-15 08:15 item 2), from what the row records, no hand label: the AREA is the world the check
+ * names (else the tab's world), the KIND what went wrong — another world took the turn, nothing was understood, the state is not the expected one, the status is not the
+ * expected one (a refusal expected, an act done, or the reverse), or the act was done but the reply does not say what the check asks. A Romanian turn says so first.
+ */
+export function judgedCause(r, x) {
+  const area = r.check?.world ?? r.check?.expect?.world ?? tabWorldOfRow(r) ?? r.tab ?? '?';
+  const f = x.failing ?? [];
+  const kind = x.outcome === 'other_world' ? `another world took the turn (${(x.worlds ?? []).join(', ') || '?'})`
+    : x.outcome === 'not_understood' || f.includes('not_understood') ? 'not understood'
+      : f.some((k) => /^(state|forbid_state)/.test(k) || k === 'unchanged') ? 'acted; the state is not the expected one'
+        : f.some((k) => /^status/.test(k)) ? 'acted; the status is not the expected one'
+          : 'acted; the reply does not say what the check asks';
+  return `${r.lang === 'ro' ? 'Romanian: ' : ''}${area}: ${kind}`;
+}
+
+/** The in-scope judged failures grouped by judgedCause: [{ cause, count, wrong, partly, rows: [{ id, verdict, text, tab, reply, failing }] }], largest first. */
+export function judgedFailures(setRows, res) {
+  const by = new Map(res.rows.map((x) => [x.id, x])), groups = new Map();
+  for (const r of setRows) {
+    const x = by.get(r.id);
+    if (r.retired || !x || (x.verdict !== 'wrong' && x.verdict !== 'partly')) continue;
+    const c = judgedCause(r, x);
+    (groups.get(c) ?? groups.set(c, []).get(c)).push({ id: r.id, verdict: x.verdict, text: r.text, tab: r.tab, reply: String(x.reply ?? '').slice(0, 160), failing: x.failing ?? [] });
+  }
+  return [...groups].map(([cause, rows]) => ({ cause, count: rows.length, wrong: rows.filter((y) => y.verdict === 'wrong').length, partly: rows.filter((y) => y.verdict === 'partly').length, rows }))
+    .sort((a, b) => b.count - a.count || a.cause.localeCompare(b.cause));
+}
+
 function report() {
   const setRows = jl('training/eval/real-2026-11-15.jsonl');
   const res = { matrix: JSON.parse(readFileSync(RES('matrix'), 'utf8')), ops: JSON.parse(readFileSync(RES('ops'), 'utf8')) };
@@ -351,13 +380,19 @@ function report() {
   // the rules-only diagnostic (P1 a: a named diagnostic, never the headline), when it was run
   const diag = existsSync(RES('matrix', '-rules')) ? JSON.parse(readFileSync(RES('matrix', '-rules'), 'utf8')) : null;
   const diagTable = diag?.mode === 'rules' ? tableOf(setRows, diag) : null;
+  const judged = judgedFailures(setRows, res.matrix), opsJudged = new Set(judgedFailures(setRows, res.ops).flatMap((g) => g.rows.map((y) => y.id)));
+  for (const g of judged) g.both_reasoners = g.rows.filter((y) => opsJudged.has(y.id)).length;
   const measured = { mode: res.matrix.mode ?? null, build: res.matrix.build ?? null, tree: res.matrix.tree ?? null, catalog: res.matrix.catalog?.commit ?? null, seed: res.matrix.seed ?? null, formalizer: res.matrix.settings?.formalizer ?? null };
-  const doc = { date: '2026-11-15', measured, set: setRows.length, tables, ...(diagTable ? { diagnostic_rules_matrix: { right: diagTable.right, judged: diagTable.judged, partly: diagTable.partly, wrong: diagTable.wrong, build: diag.build, tree: diag.tree } } : {}), failing_matrix: fm.length, failing_ops: fo.length, ops_only: opsOnly.length, causes: top, ledger_real_extra: extra.length };
+  const doc = { date: '2026-11-15', measured, set: setRows.length, tables, ...(diagTable ? { diagnostic_rules_matrix: { right: diagTable.right, judged: diagTable.judged, partly: diagTable.partly, wrong: diagTable.wrong, build: diag.build, tree: diag.tree } } : {}), failing_matrix: fm.length, failing_ops: fo.length, ops_only: opsOnly.length, judged_causes: judged, causes: top, ledger_real_extra: extra.length };
   writeFileSync(join(REPO, 'training/eval/real-failures-2026-11-15.json'), `${JSON.stringify(doc, null, 1)}\n`);
   const md = [`# REAL failures by cause (2026-11-15)`, '', `Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: ${setRows.length} turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode ${measured.mode}: formalizer ${measured.formalizer}, the webchat's settings and send options; catalog at the pinned commit ${String(measured.catalog).slice(0, 12)}; seed ${measured.seed}; build ${measured.build}, tree ${measured.tree}), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by \`node scripts/real-set.mjs report\`.`, '',
     `Headline (in scope, judged): ${tables.matrix.right}/${tables.matrix.judged} right (partly ${tables.matrix.partly}, wrong ${tables.matrix.wrong}); ${tables.matrix.retired} turns of retired records skipped.${diagTable ? ` Diagnostic, rules formalizer only: ${diagTable.right}/${diagTable.judged}.` : ''}`, '',
     `Caveat: Romanian turns are replayed with the rules translator only (no browser Machine Translation in node: --bergamot runs the on-device model), so part of the Romanian causes is the missing translation backend, not the reader. Lazy world loading is not replayed (every world is loaded, as \`?psys2lazy=0\`).`, '', `Failing turns: matrix ${fm.length}, ops ${fo.length} (${opsOnly.length} fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): ${extra.length}.`, '', '| # | cause | turns | both | examples |', '| --- | --- | ---: | ---: | --- |',
-    ...top.slice(0, 15).map((c, i) => `| ${i + 1} | ${c.cause.replace(/\|/g, '/').slice(0, 150)} | ${c.count} | ${c.both_reasoners} | ${c.examples.slice(0, 3).map((e) => `"${String(e.text).replace(/\|/g, '/').slice(0, 60)}" (${e.tab})`).join('; ')} |`), ''].join('\n');
+    ...top.slice(0, 15).map((c, i) => `| ${i + 1} | ${c.cause.replace(/\|/g, '/').slice(0, 150)} | ${c.count} | ${c.both_reasoners} | ${c.examples.slice(0, 3).map((e) => `"${String(e.text).replace(/\|/g, '/').slice(0, 60)}" (${e.tab})`).join('; ')} |`), '',
+    `## In scope, judged wrong or partly, by cause (${judged.reduce((n, g) => n + g.count, 0)} turns)`, '',
+    'The headline\'s own failures (verdict wrong or partly), grouped by `judgedCause`: the area is the world the check names (else the tab\'s), the kind what went wrong. Every row id is listed.', '',
+    '| # | cause | turns | wrong | partly | both | rows (examples first) |', '| --- | --- | ---: | ---: | ---: | ---: | --- |',
+    ...judged.map((g, i) => `| ${i + 1} | ${g.cause.replace(/\|/g, '/')} | ${g.count} | ${g.wrong} | ${g.partly} | ${g.both_reasoners} | ${g.rows.slice(0, 2).map((y) => `${y.id} "${String(y.text).replace(/\|/g, '/').slice(0, 50)}" (${y.tab}) -> "${y.reply.replace(/\|/g, '/').slice(0, 60)}"`).join('; ')}${g.rows.length > 2 ? `; also ${g.rows.slice(2).map((y) => y.id).join(', ')}` : ''} |`), ''].join('\n');
   writeFileSync(join(REPO, 'training/eval/real-failures-2026-11-15.md'), md);
   for (const [k, t] of Object.entries(tables)) console.log(`${k}: turns ${t.turns}, judged ${t.judged} (right ${t.right}, partly ${t.partly}, wrong ${t.wrong}), open ${t.open}, changed ${t.changed}, unjudged ${t.unjudged}; outcome ${JSON.stringify(t.outcome)}; retired records skipped: ${t.retired} turns`);
   if (diagTable) console.log(`diagnostic (rules formalizer only, matrix): judged ${diagTable.judged} (right ${diagTable.right}, partly ${diagTable.partly}, wrong ${diagTable.wrong})`);
