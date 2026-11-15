@@ -1,0 +1,15 @@
+# k.words/shards/ep: senses of the words from "epi" to "episode" (first letters "ep").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.epi.noun.1 k.words.sense word=EPI pos=noun n=1 supersense=noun.communication gloss="a self-report personality inventory based on Hans Eysenck's factor analysis of personality which assumes three basic factors (the two most important being extraversion to introversion and neuroticism)" synonym="Eysenck Personality Inventory" is_a="self-report personality inventory" core.source="wordnet 3.1"
+@k.words.epi.spelling.EPI core.word text=epi means=EPI of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.epic.noun.1 k.words.sense word=epic pos=noun n=1 supersense=noun.communication gloss="a long narrative poem telling of a hero's deeds" synonym="epic poem" synonym="heroic poem" synonym=epos is_a=poem core.source="wordnet 3.1"
+@k.words.epidemic.noun.1 k.words.sense word=epidemic pos=noun n=1 supersense=noun.event gloss="a widespread outbreak of an infectious disease; many people are infected at the same time" is_a=outbreak core.source="wordnet 3.1"
+@k.words.epiphany.noun.1 k.words.sense word=epiphany pos=noun n=1 supersense=noun.event gloss="a divine manifestation" is_a=manifestation core.source="wordnet 3.1"
+@k.words.epiphany.noun.2 k.words.sense word=Epiphany pos=noun n=2 supersense=noun.time gloss="twelve days after Christmas; celebrates the visit of the three wise men to the infant Jesus" synonym="Epiphany of Our Lord" synonym="Twelfth day" synonym="Three Kings' Day" synonym="January 6" is_a="Christian holy day" part_of=January core.source="wordnet 3.1"
+@k.words.epiphany.spelling.Epiphany core.word text=epiphany means=Epiphany of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.episode.noun.1 k.words.sense word=episode pos=noun n=1 supersense=noun.event gloss="a happening that is distinctive in a series of related events" is_a=happening kind_of=happening kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.episode.noun.2 k.words.sense word=episode pos=noun n=2 supersense=noun.communication gloss="a brief section of a literary or dramatic work that forms part of a connected series" is_a=section kind_of=section kind_of=writing kind_of="written communication" kind_of=communication kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.episode.noun.3 k.words.sense word=episode pos=noun n=3 supersense=noun.communication gloss="a part of a broadcast serial" synonym=installment synonym=instalment is_a=broadcast part_of=serial kind_of=broadcast kind_of=show kind_of="social event" kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"

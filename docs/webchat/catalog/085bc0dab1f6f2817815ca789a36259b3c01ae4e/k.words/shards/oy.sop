@@ -1,0 +1,9 @@
+# k.words/shards/oy: senses of the words from "oyster" to "oyster" (first letters "oy").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.oyster.noun.1 k.words.sense word=oyster pos=noun n=1 supersense=noun.animal gloss="marine mollusks having a rough irregular shell; found on the sea bed mostly in coastal waters" is_a=bivalve kind_of=bivalve kind_of=mollusk kind_of=invertebrate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.oyster.noun.2 k.words.sense word=oyster pos=noun n=2 supersense=noun.food gloss="edible body of any of numerous oysters" synonym=huitre is_a=shellfish part_of=oyster kind_of=shellfish kind_of=seafood kind_of=food kind_of=solid kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.oyster.noun.3 k.words.sense word=oyster pos=noun n=3 supersense=noun.food gloss="a small muscle on each side of the back of a fowl" is_a=helping part_of=bird kind_of=helping kind_of="small indefinite quantity" kind_of="indefinite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.oyster.verb.1 k.words.sense word=oyster pos=verb n=1 supersense=verb.contact gloss="gather oysters, dig oysters" is_a=gather kind_of=gather core.source="wordnet 3.1"

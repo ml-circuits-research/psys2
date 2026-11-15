@@ -1,0 +1,65 @@
+# w.seating: a reusable world: a seating plan: tables, their seats, and the guests who sit on them (a wedding, a
+# class, a dinner). Declared as data in the library's std.schema format; the acts of std.acts drive it; it has no
+# rule and no function of its own.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later; 0.33.0 for a guest placed on a seat)
+
+@w.seating core.module name=w.seating version=2 exports=table exports=seat exports=guest core.source="hand-core 1"
+@w.seating.world std.schema.world name=w.seating doc="a seating plan: tables, seats and the guests on them" core.source="hand-core 1"
+
+# A table. `name` is what it is called (family, 1); `shape` its shape; `seats` how many seats it has room for (a
+# table with no `seats` takes any number); `x` and `y` where it stands in the room (the act `place` sets `x`).
+@w.seating.table core.type of=w.seating.table extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.seating.table.name core.slot of=w.seating.table key=name required=true kind=atom kind=string core.source="hand-core 1"
+@w.seating.table.shape core.slot of=w.seating.table key=shape enum=round enum=square enum=long default=round core.source="hand-core 1"
+@w.seating.table.seats core.slot of=w.seating.table key=seats kind=integer min=1 max=40 step=1 core.source="hand-core 1"
+@w.seating.table.x core.slot of=w.seating.table key=x kind=number core.source="hand-core 1"
+@w.seating.table.y core.slot of=w.seating.table key=y kind=number core.source="hand-core 1"
+
+# A seat at a table. `table` refers to its table; `n` is its place at the table, from 1, going round or along it.
+@w.seating.seat core.type of=w.seating.seat extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.seating.seat.table core.slot of=w.seating.seat key=table required=true type=w.seating.table core.source="hand-core 1"
+@w.seating.seat.n core.slot of=w.seating.seat key=n kind=integer min=1 step=1 core.source="hand-core 1"
+
+# A guest. `name`; `seat` refers to the seat the guest sits on (none: not seated yet; the act `place` with a seat
+# as `at` puts a guest on it through this slot, sopworld 0.33 or later); `party` names the people the
+# guest came with (a family, the bride's side); `needs` (many) what the seat or the meal must allow for
+# (vegetarian, "high chair", wheelchair); `note` anything else.
+@w.seating.guest core.type of=w.seating.guest extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.seating.guest.name core.slot of=w.seating.guest key=name required=true kind=atom kind=string core.source="hand-core 1"
+@w.seating.guest.seat core.slot of=w.seating.guest key=seat type=w.seating.seat core.source="hand-core 1"
+@w.seating.guest.party core.slot of=w.seating.guest key=party kind=atom kind=string core.source="hand-core 1"
+@w.seating.guest.needs core.slot of=w.seating.guest key=needs many=true kind=atom kind=string core.source="hand-core 1"
+@w.seating.guest.note core.slot of=w.seating.guest key=note kind=string core.source="hand-core 1"
+
+# The kinds and the acts that apply to them. Tables can be placed in the room, linked (connect: next to, far from)
+# and grouped (the tables in the garden); guests can be linked (next to, not next to), grouped, copied and placed on
+# a seat. A table holds at most its `seats` seats (std.schema.capacity: one seat more is refused, and so is a
+# `seats` below the seats it has). At most 50 tables, 500 seats and 500 guests.
+@w.seating.kind.table std.schema.kind of=w.seating.table world=w.seating acts=make acts=remove acts=change acts=place acts=connect acts=group acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.seating.kind.seat std.schema.kind of=w.seating.seat world=w.seating acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.seating.kind.guest std.schema.kind of=w.seating.guest world=w.seating acts=make acts=remove acts=change acts=place acts=connect acts=group acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.seating.room std.schema.capacity of=w.seating.table key=seats holds=w.seating.seat via=table core.source="hand-core 1"
+@w.seating.limit.table std.schema.limit of=w.seating.table max=50 core.source="hand-core 1"
+@w.seating.limit.seat std.schema.limit of=w.seating.seat max=500 core.source="hand-core 1"
+@w.seating.limit.guest std.schema.limit of=w.seating.guest max=500 core.source="hand-core 1"
+
+# Words: for the world (how a host finds it by name), its kinds and its keys.
+@w.seating.word.world core.word text="seating plan" text="seating chart" text=seating text="table plan" text="who sits where" means=w.seating of=std.schema.world.name core.source="hand-core 1"
+@w.seating.word.table core.word text=table text=tables means=w.seating.table core.source="hand-core 1"
+@w.seating.word.seat core.word text=seat text=seats text=chair text=chairs text=place text=places means=w.seating.seat core.source="hand-core 1"
+@w.seating.word.guest core.word text=guest text=guests text=person text=people means=w.seating.guest core.source="hand-core 1"
+@w.seating.word.name core.word text=name text=called means=w.seating.table.name core.source="hand-core 1"
+@w.seating.word.shape core.word text=shape text=round text=square text=long means=w.seating.table.shape core.source="hand-core 1"
+@w.seating.word.seats core.word text="how many seats" text=size means=w.seating.table.seats core.source="hand-core 1"
+@w.seating.word.table.x core.word text=where text=stands text=across means=w.seating.table.x core.source="hand-core 1"
+@w.seating.word.table.y core.word text=where text=stands text=along means=w.seating.table.y core.source="hand-core 1"
+@w.seating.word.seat.table core.word text=at text=table means=w.seating.seat.table core.source="hand-core 1"
+@w.seating.word.seat.n core.word text=number text=position means=w.seating.seat.n core.source="hand-core 1"
+@w.seating.word.guest.name core.word text=name text=called means=w.seating.guest.name core.source="hand-core 1"
+@w.seating.word.guest.seat core.word text=sits text=sit text=sitting text=seated text=where means=w.seating.guest.seat core.source="hand-core 1"
+@w.seating.word.guest.party core.word text=party text=family text=with text=side means=w.seating.guest.party core.source="hand-core 1"
+@w.seating.word.guest.needs core.word text=needs text=need text=diet text=allergy means=w.seating.guest.needs core.source="hand-core 1"
+@w.seating.word.guest.note core.word text=note text=notes means=w.seating.guest.note core.source="hand-core 1"

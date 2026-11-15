@@ -1,0 +1,8 @@
+# k.words/shards/j: senses of the words from "j" to "j" (first letters "j").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.j.noun.1 k.words.sense word=J pos=noun n=1 supersense=noun.quantity gloss="a unit of electrical energy equal to the work done when a current of one ampere passes through a resistance of one ohm for one second" synonym=joule synonym="watt second" is_a="work unit" core.source="wordnet 3.1"
+@k.words.j.noun.2 k.words.sense word=J pos=noun n=2 supersense=noun.communication gloss="the 10th letter of the Roman alphabet" synonym=j is_a=letter core.source="wordnet 3.1"
+@k.words.j.spelling.J core.word text=j means=J of=k.words.sense.word core.source="wordnet 3.1"

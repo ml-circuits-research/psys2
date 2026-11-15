@@ -1,0 +1,10 @@
+# k.words/shards/ny: senses of the words from "nylon" to "nymph" (first letters "ny").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.nylon.noun.1 k.words.sense word=nylon pos=noun n=1 supersense=noun.substance gloss="a thermoplastic polyamide; a family of strong resilient synthetic fibers" is_a="man-made fiber" is_a=polyamide core.source="wordnet 3.1"
+@k.words.nylon.noun.2 k.words.sense word=nylon pos=noun n=2 supersense=noun.artifact gloss="a synthetic fabric" is_a=fabric core.source="wordnet 3.1"
+@k.words.nymph.noun.1 k.words.sense word=nymph pos=noun n=1 supersense=noun.person gloss="(classical mythology) a minor nature goddess usually depicted as a beautiful maiden" is_a="Greco-Roman deity" kind_of="Greco-Roman deity" kind_of=deity kind_of="spiritual being" kind_of=belief kind_of=content kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.nymph.noun.2 k.words.sense word=nymph pos=noun n=2 supersense=noun.animal gloss="a larva of an insect with incomplete metamorphosis (as the dragonfly or mayfly)" is_a=larva kind_of=larva kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.nymph.noun.3 k.words.sense word=nymph pos=noun n=3 supersense=noun.person gloss="a voluptuously beautiful young woman" synonym=houri is_a=woman kind_of=woman kind_of=female kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

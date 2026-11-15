@@ -1,0 +1,10 @@
+# k.words/shards/mp: senses of the words from "mp" to "mps" (first letters "mp").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.mp.noun.1 k.words.sense word=MP pos=noun n=1 supersense=noun.person gloss="a member of the military police who polices soldiers and guards prisoners" synonym="military policeman" is_a=lawman core.source="wordnet 3.1"
+@k.words.mp.noun.2 k.words.sense word=MP pos=noun n=2 supersense=noun.group gloss="a military corps that enforces discipline and guards prisoners" synonym="military police" is_a=force core.source="wordnet 3.1"
+@k.words.mp.spelling.MP core.word text=mp means=MP of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.mps.noun.1 k.words.sense word=MPS pos=noun n=1 supersense=noun.body gloss="a widely distributed system of free and fixed macrophages derived from bone marrow" synonym="mononuclear phagocyte system" synonym="system of macrophages" is_a=system part_of="reticuloendothelial system" core.source="wordnet 3.1"
+@k.words.mps.spelling.MPS core.word text=mps means=MPS of=k.words.sense.word core.source="wordnet 3.1"

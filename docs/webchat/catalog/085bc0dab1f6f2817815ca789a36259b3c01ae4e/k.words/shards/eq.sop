@@ -1,0 +1,23 @@
+# k.words/shards/eq: senses of the words from "equal" to "equivalent" (first letters "eq").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.equal.noun.1 k.words.sense word=equal pos=noun n=1 supersense=noun.person gloss="a person who is of equal standing with another in a group" synonym=peer synonym=match synonym=compeer is_a=person core.source="wordnet 3.1"
+@k.words.equal.verb.1 k.words.sense word=equal pos=verb n=1 supersense=verb.stative gloss="be identical or equivalent to" synonym=be opposite=differ core.source="wordnet 3.1"
+@k.words.equal.verb.2 k.words.sense word=equal pos=verb n=2 supersense=verb.stative gloss="be equal to in quality or ability" synonym=touch synonym=rival synonym=match is_a=compete core.source="wordnet 3.1"
+@k.words.equal.verb.3 k.words.sense word=equal pos=verb n=3 supersense=verb.change gloss="make equal, uniform, corresponding, or matching" synonym=match synonym=equalize synonym=equalise synonym=equate is_a=change core.source="wordnet 3.1"
+@k.words.equal.forms core.word text=equalled text=equalling means=equal of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.equality.noun.1 k.words.sense word=equality pos=noun n=1 supersense=noun.attribute gloss="the quality of being the same in quantity or measure or value or status" is_a=sameness opposite=inequality core.source="wordnet 3.1"
+@k.words.equality.noun.2 k.words.sense word=equality pos=noun n=2 supersense=noun.state gloss="a state of being essentially equal or equivalent; equally balanced" synonym=equivalence synonym=equation synonym=par is_a=status core.source="wordnet 3.1"
+@k.words.equation.noun.1 k.words.sense word=equation pos=noun n=1 supersense=noun.communication gloss="a mathematical statement that two expressions are equal" is_a="mathematical statement" core.source="wordnet 3.1"
+@k.words.equation.noun.2 k.words.sense word=equation pos=noun n=2 supersense=noun.state gloss="a state of being essentially equal or equivalent; equally balanced" synonym=equality synonym=equivalence synonym=par is_a=status core.source="wordnet 3.1"
+@k.words.equation.noun.3 k.words.sense word=equation pos=noun n=3 supersense=noun.act gloss="the act of regarding as equal" synonym=equating is_a=equalization core.source="wordnet 3.1"
+@k.words.equator.noun.1 k.words.sense word=equator pos=noun n=1 supersense=noun.location gloss="an imaginary line around the Earth forming the great circle that is equidistant from the north and south poles" is_a="great circle" core.source="wordnet 3.1"
+@k.words.equator.noun.2 k.words.sense word=equator pos=noun n=2 supersense=noun.shape gloss="a circle dividing a sphere or other surface into two usually equal and symmetrical parts" is_a=circle core.source="wordnet 3.1"
+@k.words.equipment.noun.1 k.words.sense word=equipment pos=noun n=1 supersense=noun.artifact gloss="an instrumentality needed for an undertaking or to perform a service" is_a=instrumentality kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.equity.noun.1 k.words.sense word=equity pos=noun n=1 supersense=noun.possession gloss="the difference between the market value of a property and the claims held against it" is_a=assets core.source="wordnet 3.1"
+@k.words.equity.noun.2 k.words.sense word=equity pos=noun n=2 supersense=noun.possession gloss="the ownership interest of shareholders in a corporation" is_a=interest core.source="wordnet 3.1"
+@k.words.equity.noun.3 k.words.sense word=equity pos=noun n=3 supersense=noun.attribute gloss="conformity with rules or standards" synonym=fairness is_a=justice opposite=inequity core.source="wordnet 3.1"
+@k.words.equivalent.noun.1 k.words.sense word=equivalent pos=noun n=1 supersense=noun.cognition gloss="a person or thing equal to another in value or measure or force or effect or significance etc" is_a=cognition core.source="wordnet 3.1"
+@k.words.equivalent.noun.2 k.words.sense word=equivalent pos=noun n=2 supersense=noun.attribute gloss="the atomic weight of an element that has the same combining capacity as a given weight of another element; the standard is 8 for oxygen" synonym="equivalent weight" synonym="combining weight" synonym=eq is_a="atomic mass" core.source="wordnet 3.1"

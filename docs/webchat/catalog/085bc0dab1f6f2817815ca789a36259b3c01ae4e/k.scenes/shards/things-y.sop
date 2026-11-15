@@ -1,0 +1,13 @@
+# k.scenes/shards/things-y: the usual place (sky, ground, water, indoors, on another thing) and the relative size (tiny to huge) of 8 things (the drawable things and the animals of k.animals) whose name starts with "y"; labelled by a language model from the names (named=model), a sample checked against the drawings.
+# sources: hand-core 1 (hand-written in this repository: sources/hand-core/place-size.tsv, and sources/hand-core/animals.tsv for the animals without a drawing)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+
+@k.scenes.thing.yacht k.scenes.thing name=yacht place=water size=huge named=model core.source="hand-core 1"
+@k.scenes.thing.yak k.scenes.thing name=yak place=ground size=large named=model core.source="hand-core 1"
+@k.scenes.thing.yarn k.scenes.thing name=yarn place=indoors size=small named=model core.source="hand-core 1"
+@k.scenes.thing.yen_banknote k.scenes.thing name="yen banknote" place=indoors size=small named=model core.source="hand-core 1"
+@k.scenes.thing.yo-yo k.scenes.thing name=yo-yo place=indoors size=small named=model core.source="hand-core 1"
+@k.scenes.thing.yogurt k.scenes.thing name=yogurt place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.yorkshire_pudding k.scenes.thing name="yorkshire pudding" place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.yule_log k.scenes.thing name="yule log" place=indoors on=table size=small named=model core.source="hand-core 1"

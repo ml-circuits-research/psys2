@@ -1,0 +1,13 @@
+# k.words/shards/yu: senses of the words from "yuan" to "yugoslavia" (first letters "yu").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.yuan.noun.1 k.words.sense word=yuan pos=noun n=1 supersense=noun.quantity gloss="the basic unit of money in China" synonym=kwai is_a="Chinese monetary unit" core.source="wordnet 3.1"
+@k.words.yuan.noun.2 k.words.sense word=Yuan pos=noun n=2 supersense=noun.group gloss="the imperial dynasty of China from 1279 to 1368" synonym="Yuan dynasty" synonym="Mongol dynasty" is_a=dynasty core.source="wordnet 3.1"
+@k.words.yuan.spelling.Yuan core.word text=yuan means=Yuan of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.yue.noun.1 k.words.sense word=Yue pos=noun n=1 supersense=noun.communication gloss="the dialect of Chinese spoken in Canton and neighboring provinces and in Hong Kong and elsewhere outside China" synonym="Yue dialect" synonym=Cantonese synonym="Cantonese dialect" is_a=Chinese core.source="wordnet 3.1"
+@k.words.yue.spelling.Yue core.word text=yue means=Yue of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.yugoslavia.noun.1 k.words.sense word=Yugoslavia pos=noun n=1 supersense=noun.location gloss="a mountainous republic in southeastern Europe bordering on the Adriatic Sea; formed from two of the six republics that made up Yugoslavia until 1992; Serbia and Montenegro were known as the Federal Republic of Yugoslavia until 2003 when they adopted the name of the Union of Serbia and Montenegro" synonym="Serbia and Montenegro" synonym="Union of Serbia and Montenegro" synonym="Federal Republic of Yugoslavia" synonym=Jugoslavija instance_of="European country" core.source="wordnet 3.1"
+@k.words.yugoslavia.noun.2 k.words.sense word=Yugoslavia pos=noun n=2 supersense=noun.location gloss="a former country of southeastern Europe bordering the Adriatic Sea; formed in 1918 and named Yugoslavia in 1929; controlled by Marshal Tito as a communist state until his death in 1980" instance_of="European country" core.source="wordnet 3.1"
+@k.words.yugoslavia.spelling.Yugoslavia core.word text=yugoslavia means=Yugoslavia of=k.words.sense.word core.source="wordnet 3.1"

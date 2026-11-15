@@ -1,0 +1,21 @@
+# k.kinds/shards/relations-body: the keys of the types of k.body read as relations: 16 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.body.part.kind k.kinds.relation type=k.body.part key=kind subject=part subject_sense="body part" object=kind found=schema core.source="hand-core 1"
+@k.kinds.relation.k.body.part.part_of k.kinds.relation type=k.body.part key=part_of subject=part subject_sense="body part" object=thing object_type=k.body.part object_sense="body part" found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.body.part.inside k.kinds.relation type=k.body.part key=inside subject=part subject_sense="body part" object=thing object_type=k.body.part object_sense="body part" found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.body.part.count k.kinds.relation type=k.body.part key=count subject=part subject_sense="body part" object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.body.part.child_count k.kinds.relation type=k.body.part key=child_count subject=part subject_sense="body part" object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.body.part.does k.kinds.relation type=k.body.part key=does subject=part subject_sense="body part" object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.body.part.drawing k.kinds.relation type=k.body.part key=drawing subject=part subject_sense="body part" object=thing object_type=k.objects.object found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.body.part.about k.kinds.relation type=k.body.part key=about subject=part subject_sense="body part" object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.body.part.count_per_part k.kinds.relation type=k.body.part key=count_per_part subject=part subject_sense="body part" object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.body.part.count_about k.kinds.relation type=k.body.part key=count_about subject=part subject_sense="body part" object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.body.part.temperature_about k.kinds.relation type=k.body.part key=temperature_about subject=part subject_sense="body part" object=amount found=schema core.source="hand-core 1"
+@k.kinds.relation.k.body.part.amount_about k.kinds.relation type=k.body.part key=amount_about subject=part subject_sense="body part" object=amount found=schema core.source="hand-core 1"
+@k.kinds.relation.k.body.part.length_about k.kinds.relation type=k.body.part key=length_about subject=part subject_sense="body part" object=amount found=schema core.source="hand-core 1"
+@k.kinds.relation.k.body.part.weight_about k.kinds.relation type=k.body.part key=weight_about subject=part subject_sense="body part" object=amount found=schema core.source="hand-core 1"
+@k.kinds.relation.k.body.part.named k.kinds.relation type=k.body.part key=named subject=part subject_sense="body part" object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.body.sense.organ k.kinds.relation type=k.body.sense key=organ subject=sense object=thing object_type=k.body.part object_sense="body part" found=declared object_by=name core.source="hand-core 1"

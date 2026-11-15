@@ -1,0 +1,101 @@
+# k.people: kinds of person (baby, child, man, grandmother ...) as variants of one person drawing, and (from R7.5)
+# roles and jobs: what they wear, hold and use, where they work, and the features that map to k.faces.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.people core.module name=k.people version=5 imports=k.kinds exports=kind exports=role exports=given_name core.source="hand-core 1"
+
+# A kind of person by age and sex. All kinds are drawn by the one person drawing of k.objects (`drawing`), varied by
+# what the fact says: `age` (baby, child, adult, old), `sex` where the word says it, `height_about`: the usual
+# height in per cent of the height of a grown man (an approximate number, so the key ends in `_about`), `hair`:
+# what the hair is usually like (`little`, `short`, `long`, `grey`, `white`; many), and `face`: the name of the
+# k.faces preset (style `plain`) that shows such a face. `is_a` names the wider kind (a boy is a child, a
+# grandfather is a man). Other names for the kind (kid, grandpa, lady) are core.word facts. Block 07:40 item 4: the
+# kind `person` is above every other (a man, a woman, a child, a baby is a person), and `relative` (a member of a
+# family) is a person; these two have no one age or height, so `age` and `height_about` are not required.
+@k.people.kind core.type of=k.people.kind extends=k.kinds.kind shared=true closed=true core.source="hand-core 1"
+@k.people.kind.age core.slot of=k.people.kind key=age enum=baby enum=child enum=adult enum=old core.source="hand-core 1"
+@k.people.kind.sex core.slot of=k.people.kind key=sex enum=male enum=female core.source="hand-core 1"
+@k.people.kind.height_about core.slot of=k.people.kind key=height_about kind=integer min=1 max=120 core.source="hand-core 1"
+@k.people.kind.hair core.slot of=k.people.kind key=hair many=true kind=atom kind=string core.source="hand-core 1"
+@k.people.kind.face core.slot of=k.people.kind key=face kind=atom kind=string type=k.faces.preset by=name core.source="hand-core 1"
+@k.people.kind.drawing core.slot of=k.people.kind key=drawing required=true kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+
+# A role or job. `group` says what kind of role it is: a `job`, a member of the `family`, a figure of a `story`, or
+# someone one knows who is no relative (`social`: friend, neighbour).
+# `is` names the kind of person where the role says it (a grandmother is a grandmother, a king is a man, a
+# princess is a girl). `wears`, `holds` and `uses` name things, by the name of their drawing in k.objects where one
+# exists (a doctor wears a "lab coat", holds a stethoscope); `works_at` names where the role is usually found, a
+# scene of k.scenes where one exists; `does` names what the role does (a verb or a short phrase). The keys `hat`,
+# `glasses`, `beard`, `moustache` and `shoulders` name the variant of that k.faces slot (style `plain`) that suits
+# the role, and `face` a k.faces preset. Every role is drawn by the person drawing (`drawing`). A role is a kind of
+# k.kinds (block 07:40 item 4): `is_a` person, or relative for a member of a family (sister, uncle), so that its
+# `kind_of` (derived) says that a sister is a relative and a person. A fairy is a figure of stories but no person.
+@k.people.role core.type of=k.people.role extends=k.kinds.kind shared=true closed=true core.source="hand-core 1"
+@k.people.role.group core.slot of=k.people.role key=group required=true enum=job enum=family enum=story enum=social core.source="hand-core 1"
+@k.people.role.is core.slot of=k.people.role key=is kind=atom kind=string type=k.people.kind by=name core.source="hand-core 1"
+@k.people.role.wears core.slot of=k.people.role key=wears many=true kind=atom kind=string type=k.wearables.wearable by=name core.source="hand-core 1"
+@k.people.role.holds core.slot of=k.people.role key=holds many=true kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+@k.people.role.uses core.slot of=k.people.role key=uses many=true kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+@k.people.role.works_at core.slot of=k.people.role key=works_at many=true kind=atom kind=string type=k.scenes.scene by=name core.source="hand-core 1"
+@k.people.role.does core.slot of=k.people.role key=does many=true kind=atom kind=string core.source="hand-core 1"
+@k.people.role.hat core.slot of=k.people.role key=hat kind=atom kind=string core.source="hand-core 1"
+@k.people.role.glasses core.slot of=k.people.role key=glasses kind=atom kind=string core.source="hand-core 1"
+@k.people.role.beard core.slot of=k.people.role key=beard kind=atom kind=string core.source="hand-core 1"
+@k.people.role.moustache core.slot of=k.people.role key=moustache kind=atom kind=string core.source="hand-core 1"
+@k.people.role.shoulders core.slot of=k.people.role key=shoulders kind=atom kind=string core.source="hand-core 1"
+@k.people.role.face core.slot of=k.people.role key=face kind=atom kind=string type=k.faces.preset by=name core.source="hand-core 1"
+@k.people.role.drawing core.slot of=k.people.role key=drawing required=true kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+
+# A given name (Q62; shards given-names-<letter>, written by tools/import/given-names.mjs from Wikidata's given-name
+# items with a sex class, CC0): `name` the English label as spelled (José, Anna Maria, Abd al-Rahman), `sex` female,
+# male, or both for a unisex name, `holders` the Wikidata humans whose given name it is (a label of two items adds
+# them), `band` computed from `holders` (very common: 10,000 or more, common: 1,000, frequent: 100, rare: fewer),
+# `wikidata` its items. It tells a reader that a word is a given name (Zoe, Ana, Tom, Leo), not who bears it; the
+# holders lean to notable people and well-covered countries, so the band says how often a name is met in the record,
+# not in a population.
+@k.people.given_name core.type of=k.people.given_name shared=true closed=true core.source="hand-core 1"
+@k.people.given_name.name core.slot of=k.people.given_name key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.people.given_name.sex core.slot of=k.people.given_name key=sex many=true required=true enum=female enum=male core.source="hand-core 1"
+@k.people.given_name.holders core.slot of=k.people.given_name key=holders required=true kind=integer min=1 core.source="hand-core 1"
+@k.people.given_name.band core.slot of=k.people.given_name key=band required=true enum=rare enum=frequent enum=common enum="very common" core.source="hand-core 1"
+@k.people.given_name.wikidata core.slot of=k.people.given_name key=wikidata many=true required=true kind=atom core.source="hand-core 1"
+# `context=person` (reviewer 04:10 item 4): the name is also a common word or the name of a common thing of the catalog
+# (Rose, Hope, Mark, Robin, May, Kelvin; 49 names, by the rule of tools/import/given-names.mjs). A reader takes the word
+# (a rose, hope, in May) and the name only where a person context applies: no determiner before it, and a capital
+# inside the sentence, a person noun next to it (my friend Rose; Rose is my friend) or a verb a person does (Rose
+# said). The vocabulary (vocab.json) lists the names shard last for such a word.
+@k.people.given_name.context core.slot of=k.people.given_name key=context enum=person core.source="hand-core 1"
+
+@k.people.word.given_name core.word text="given name" text="given names" text="first name" text="first names" means=k.people.given_name core.source="hand-core 1"
+@k.people.word.kind core.word text=person text=people text=persons means=k.people.kind core.source="hand-core 1"
+@k.people.word.age core.word text=age text=old means=k.people.kind.age core.source="hand-core 1"
+@k.people.word.height core.word text=height text=tall means=k.people.kind.height_about core.source="hand-core 1"
+@k.people.word.hair core.word text=hair means=k.people.kind.hair core.source="hand-core 1"
+@k.people.word.face core.word text=face means=k.people.kind.face core.source="hand-core 1"
+@k.people.word.role core.word text=role text=roles text=job text=jobs text=work means=k.people.role core.source="hand-core 1"
+@k.people.word.wears core.word text=wears text=wear text=clothes means=k.people.role.wears core.source="hand-core 1"
+@k.people.word.holds core.word text=holds text=hold text=carries means=k.people.role.holds core.source="hand-core 1"
+@k.people.word.uses core.word text=uses text=use text=tools means=k.people.role.uses core.source="hand-core 1"
+@k.people.word.works_at core.word text=works text="works at" text=workplace means=k.people.role.works_at core.source="hand-core 1"
+@k.people.word.does core.word text=does means=k.people.role.does core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.people.word.key.kind.sex core.word text=sex means=k.people.kind.sex core.source="hand-core 1"
+@k.people.word.key.kind.drawing core.word text=drawing means=k.people.kind.drawing core.source="hand-core 1"
+@k.people.word.key.role.group core.word text=group means=k.people.role.group core.source="hand-core 1"
+@k.people.word.key.role.is core.word text=is means=k.people.role.is core.source="hand-core 1"
+@k.people.word.key.role.does core.word text=do text=job means=k.people.role.does core.source="hand-core 1"
+@k.people.word.key.role.hat core.word text=hat means=k.people.role.hat core.source="hand-core 1"
+@k.people.word.key.role.glasses core.word text=glasses means=k.people.role.glasses core.source="hand-core 1"
+@k.people.word.key.role.beard core.word text=beard means=k.people.role.beard core.source="hand-core 1"
+@k.people.word.key.role.moustache core.word text=moustache means=k.people.role.moustache core.source="hand-core 1"
+@k.people.word.key.role.shoulders core.word text=shoulders means=k.people.role.shoulders core.source="hand-core 1"
+@k.people.word.key.role.face core.word text=face means=k.people.role.face core.source="hand-core 1"
+@k.people.word.key.role.drawing core.word text=drawing means=k.people.role.drawing core.source="hand-core 1"
+@k.people.word.key.given_name.sex core.word text=sex means=k.people.given_name.sex core.source="hand-core 1"
+@k.people.word.key.given_name.holders core.word text=holders means=k.people.given_name.holders core.source="hand-core 1"
+@k.people.word.key.given_name.band core.word text=band means=k.people.given_name.band core.source="hand-core 1"
+@k.people.word.key.given_name.wikidata core.word text=wikidata means=k.people.given_name.wikidata core.source="hand-core 1"
+@k.people.word.key.given_name.context core.word text=context means=k.people.given_name.context core.source="hand-core 1"

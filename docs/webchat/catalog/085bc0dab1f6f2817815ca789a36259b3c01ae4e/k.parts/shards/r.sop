@@ -1,0 +1,32 @@
+# k.parts/shards/r: the usual parts of 24 common things whose name starts with "r" (rabbit, racehorse, radar, rail, railing, railway ...): the parts WordNet gives the thing, and the parts it gives what the thing is a kind of.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: part meronyms, hypernyms, glosses); which words are common things: tools/coverage.mjs (frequency-words 2018, wordnet 3.1)
+# license: WordNet-3.0
+# script: tools/import/parts.mjs
+
+@k.parts.whole.rabbit k.parts.whole name=rabbit gloss="any of various burrowing animals of the family Leporidae having long ears and short tails; some domesticated and raised for pets or food" has=scut core.source="wordnet 3.1"
+@k.parts.inherited.racehorse.horse k.parts.inherited name=racehorse from=horse steps=1 has=encolure has=horseback has="horse's foot" has=withers has=gaskin has=poll core.source="wordnet 3.1"
+@k.parts.whole.radar k.parts.whole name=radar gloss="measuring instrument in which the echo of a pulse of microwave radiation is used to detect and locate distant objects" has=dish has=oscilloscope has="pulse generator" has=waveguide plain=generator core.source="wordnet 3.1"
+@k.parts.whole.rail k.parts.whole name=rail gloss="a barrier consisting of a horizontal bar and supports" has="ledger board" core.source="wordnet 3.1"
+@k.parts.whole.railing k.parts.whole name=railing gloss="a barrier consisting of a horizontal bar and supports" has="ledger board" core.source="wordnet 3.1"
+@k.parts.whole.railway k.parts.whole name=railway gloss="a line of track providing a runway for wheels" has=tie has=track core.source="wordnet 3.1"
+@k.parts.inherited.raincoat.coat k.parts.inherited name=raincoat from=coat steps=1 has="breast pocket" has="coat button" has=coattail has=hemline plain=pocket plain=button core.source="wordnet 3.1"
+@k.parts.whole.ratchet k.parts.whole name=ratchet gloss="mechanical device consisting of a toothed wheel or rack engaged with a pawl that permits it to move in only one direction" has=pawl has="ratchet wheel" plain=wheel core.source="wordnet 3.1"
+@k.parts.whole.rattlesnake k.parts.whole name=rattlesnake gloss="pit viper with horny segments at the end of the tail that rattle when shaken" has=rattle core.source="wordnet 3.1"
+@k.parts.whole.razor k.parts.whole name=razor gloss="edge tool used in shaving" has=razorblade core.source="wordnet 3.1"
+@k.parts.inherited.razor.edge_tool k.parts.inherited name=razor from="edge tool" steps=1 has=handle has="knife edge" plain=edge core.source="wordnet 3.1"
+@k.parts.whole.refrigerator k.parts.whole name=refrigerator gloss="white goods in which food can be stored at low temperatures" has="drip pan" has="refrigeration system" plain=pan core.source="wordnet 3.1"
+@k.parts.inherited.reindeer.deer k.parts.inherited name=reindeer from=deer steps=1 has=antler has=scut has=flag has=withers core.source="wordnet 3.1"
+@k.parts.inherited.restaurant.building k.parts.inherited name=restaurant from=building steps=1 has=annex has=anteroom has=corner has=cornerstone has=court has=cullis has=elevator has="exterior door" has=floor has="foundation stone" has="heating system" has="interior door" has=roof has=room has=scantling has=shaft has=skeleton has=stairway has=upstairs has=wall has=window has=crawlspace plain=door plain=stone core.source="wordnet 3.1"
+@k.parts.inherited.rickshaw.cart k.parts.inherited name=rickshaw from=cart steps=1 has=axletree has=cartwheel core.source="wordnet 3.1"
+@k.parts.inherited.ridge.natural_elevation k.parts.inherited name=ridge from="natural elevation" steps=1 has=slope core.source="wordnet 3.1"
+@k.parts.whole.rifle k.parts.whole name=rifle gloss="a shoulder firearm with a long barrel and a rifled bore" has=bolt has="pump action" has="rifle butt" plain=action plain=butt core.source="wordnet 3.1"
+@k.parts.inherited.rifle.firearm k.parts.inherited name=rifle from=firearm steps=1 has="firing pin" has=lock has=sights core.source="wordnet 3.1"
+@k.parts.inherited.rink.building k.parts.inherited name=rink from=building steps=1 has=annex has=anteroom has=corner has=cornerstone has=court has=cullis has=elevator has="exterior door" has=floor has="foundation stone" has="heating system" has="interior door" has=roof has=room has=scantling has=shaft has=skeleton has=stairway has=upstairs has=wall has=window has=crawlspace plain=door plain=stone core.source="wordnet 3.1"
+@k.parts.whole.road k.parts.whole name=road gloss="an open way (generally public) for travel or transportation" has=bend has=crown has=intersection has=roadbed has=shoulder has="traffic circle" has=turnaround has=turnout core.source="wordnet 3.1"
+@k.parts.whole.roof k.parts.whole name=roof gloss="a protective covering that covers or forms the top of a building" has=eaves has="roof peak" plain=peak core.source="wordnet 3.1"
+@k.parts.whole.root k.parts.whole name=root gloss="(botany) the usually underground organ that lacks buds or leaves or nodes; absorbs water and mineral salts; usually it anchors the plant to the ground" has="root cap" has="root hair" has=bark core.source="wordnet 3.1"
+@k.parts.whole.rope k.parts.whole name=rope gloss="a strong line" has=bight core.source="wordnet 3.1"
+@k.parts.inherited.rope.line k.parts.inherited name=rope from=line steps=1 has="bitter end" has="drip loop" plain=end plain=loop core.source="wordnet 3.1"
+@k.parts.whole.rose k.parts.whole name=rose gloss="any of many shrubs of the genus Rosa that bear roses" has=hip core.source="wordnet 3.1"
+@k.parts.inherited.rudder.airfoil k.parts.inherited name=rudder from=airfoil steps=1 has="leading edge" has="trailing edge" plain=edge core.source="wordnet 3.1"
+@k.parts.whole.rug k.parts.whole name=rug gloss="floor covering consisting of a piece of thick heavy fabric (usually with nap or pile)" has=edging core.source="wordnet 3.1"

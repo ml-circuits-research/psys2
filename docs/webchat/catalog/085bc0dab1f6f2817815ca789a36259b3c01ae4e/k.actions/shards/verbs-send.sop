@@ -1,0 +1,27 @@
+# k.actions/shards/verbs-send: 21 verbs and phrasal verbs that mean the act "send" (send, send out, send off, mail, post, e-mail, email, forward ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 19 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 2 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.send.send k.actions.verb text=send act=send sense=2 sense=3 gloss="to cause or order to be taken, directed, or transmitted to another place" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.send_out k.actions.verb text="send out" act=send sense=1 gloss="to cause or order to be taken, directed, or transmitted to another place" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.send.send_off k.actions.verb text="send off" act=send sense=1 gloss="send away towards a designated goal" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.send.mail k.actions.verb text=mail act=send sense=2 gloss="cause to be directed or transmitted to another place" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.post k.actions.verb text=post act=send sense=11 gloss="cause to be directed or transmitted to another place" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.e-mail k.actions.verb text=e-mail act=send sense=1 gloss="communicate electronically on the computer" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.email k.actions.verb text=email act=send sense=1 gloss="communicate electronically on the computer" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.forward k.actions.verb text=forward act=send sense=1 gloss="send or ship onward from an intermediate post or station in transit" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.deliver k.actions.verb text=deliver act=send sense=2 gloss="bring to a destination, make a delivery" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.transmit k.actions.verb text=transmit act=send sense=4 gloss="send from one person or place to another" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.dispatch k.actions.verb text=dispatch act=send sense=1 gloss="send away towards a designated goal" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.pass_on k.actions.verb text="pass on" act=send sense=1 gloss="place into the hands or custody of" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.send.hand k.actions.verb text=hand act=send sense=1 gloss="place into the hands or custody of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.hand_over k.actions.verb text="hand over" act=send sense=1 gloss="to surrender someone or something to another" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.send.give k.actions.verb text=give act=send sense=3 gloss="transfer possession of something concrete or abstract to somebody" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.message k.actions.verb text=message act=send sense=2 gloss="send as a message" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.publish k.actions.verb text=publish act=send sense=2 gloss="prepare and issue for public distribution or sale" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.upload k.actions.verb text=upload act=send sense=1 gloss="transfer a file or program to a central computer from a smaller computer or a computer at a remote location" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.export k.actions.verb text=export act=send sense=2 gloss="transfer (electronic data) out of a database or document in a format that can be used by other programs" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.send.share k.actions.verb text=share act=send object=thing core.source="hand-core 1"
+@k.actions.verb.send.send_over k.actions.verb text="send over" act=send object=thing separable=true core.source="hand-core 1"

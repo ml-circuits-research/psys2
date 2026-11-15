@@ -1,0 +1,38 @@
+# k.faces/shards/plain-ears: the variants of the slot `ears` in the style `plain` (the side on the viewer's left; the other side is its mirror image): features, and parts with a primitive shape, a box in the frame of the face, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/faces-core.mjs
+
+# ears: round
+@k.faces.plain.ears.round k.faces.variant slot=ears name=round style=plain shape=round size=medium core.source="hand-core 1"
+@k.faces.plain.ears.round.ear k.faces.part slot=ears of=round name=ear shape=circle x=15 y=42 w=13 h=13 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.plain.ears.round.fold k.faces.part slot=ears of=round name=fold shape=arc x=18 y=45 w=5 h=7 z=2 colour=brown tint=skin_shade opens=right core.source="hand-core 1"
+
+# ears: small
+@k.faces.plain.ears.small k.faces.variant slot=ears name=small style=plain size=small core.source="hand-core 1"
+@k.faces.plain.ears.small.ear k.faces.part slot=ears of=small name=ear shape=circle x=18 y=44 w=10 h=10 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+
+# ears: large
+@k.faces.plain.ears.large k.faces.variant slot=ears name=large style=plain size=large core.source="hand-core 1"
+@k.faces.plain.ears.large.ear k.faces.part slot=ears of=large name=ear shape=oval x=12 y=39 w=16 h=22 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.plain.ears.large.fold k.faces.part slot=ears of=large name=fold shape=arc x=15 y=44 w=6 h=12 z=2 colour=brown tint=skin_shade opens=right core.source="hand-core 1"
+
+# ears: pointed
+@k.faces.plain.ears.pointed k.faces.variant slot=ears name=pointed style=plain kind=pointed core.source="hand-core 1"
+@k.faces.plain.ears.pointed.ear k.faces.part slot=ears of=pointed name=ear shape=polygon x=13 y=39 w=15 h=19 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.plain.ears.pointed.ear.p1 k.faces.point part=$k.faces.plain.ears.pointed.ear n=1 x=28 y=44 core.source="hand-core 1"
+@k.faces.plain.ears.pointed.ear.p2 k.faces.point part=$k.faces.plain.ears.pointed.ear n=2 x=13 y=39 core.source="hand-core 1"
+@k.faces.plain.ears.pointed.ear.p3 k.faces.point part=$k.faces.plain.ears.pointed.ear n=3 x=18 y=52 core.source="hand-core 1"
+@k.faces.plain.ears.pointed.ear.p4 k.faces.point part=$k.faces.plain.ears.pointed.ear n=4 x=28 y=58 core.source="hand-core 1"
+
+# ears: long
+@k.faces.plain.ears.long k.faces.variant slot=ears name=long style=plain shape=long core.source="hand-core 1"
+@k.faces.plain.ears.long.ear k.faces.part slot=ears of=long name=ear shape=oval x=16 y=39 w=12 h=23 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.plain.ears.long.fold k.faces.part slot=ears of=long name=fold shape=line x=20 y=44 w=1 h=12 z=2 colour=brown tint=skin_shade core.source="hand-core 1"
+@k.faces.plain.ears.long.fold.p1 k.faces.point part=$k.faces.plain.ears.long.fold n=1 x=21 y=44 core.source="hand-core 1"
+@k.faces.plain.ears.long.fold.p2 k.faces.point part=$k.faces.plain.ears.long.fold n=2 x=20 y=56 core.source="hand-core 1"
+
+# ears: square
+@k.faces.plain.ears.square k.faces.variant slot=ears name=square style=plain shape=square kind=robot core.source="hand-core 1"
+@k.faces.plain.ears.square.ear k.faces.part slot=ears of=square name=ear shape=rectangle x=15 y=43 w=12 h=12 z=1 colour=grey tint=skin core.source="hand-core 1"
+@k.faces.plain.ears.square.bolt k.faces.part slot=ears of=square name=bolt shape=circle x=16 y=46 w=6 h=6 z=2 colour=grey rgb="#9AA4AE" core.source="hand-core 1"

@@ -98,7 +98,7 @@
     thing=break thing=pagebreak thing=markdown thing=txt thing=md thing=html thing=json thing=first
     thing=second
     thingshared=document thingshared=doc thingshared=note thingshared=list thingshared=item thingshared=task thingshared=column
-    frame=is_selected frame=what_a frame=what_have frame=which_tasks
+    frame=is_selected frame=what_a frame=which_tasks
 
 @card.geo.map meta.worlds.card
     core.source="generated:meta.worlds/cards"
@@ -294,9 +294,9 @@
     act=special act=unique act=unlike act=define act=different
     actshared=about actshared=animal actshared=fly actshared=cat actshared=look actshared=touching actshared=bordering actshared=class
     actshared=sleep
-    frame=did_we frame=which_animals frame=which_planet frame=can_penguins frame=can_we frame=how_is frame=what_makes frame=what_parts
-    frame=what_shall frame=what_sound
-    frameshared=what_does frameshared=is_bigger frameshared=what_are frameshared=what_kind frameshared=what_is frameshared=do_you frameshared=which_is frameshared=how_do
+    frame=did_we frame=which_animals frame=which_planet frame=can_penguins frame=can_we frame=have_you frame=how_is frame=what_makes
+    frame=what_parts frame=what_shall
+    frameshared=what_does frameshared=is_bigger frameshared=what_are frameshared=what_kind frameshared=what_is frameshared=which_is frameshared=how_do frameshared=do_you
     frameshared=what_colour frameshared=what_comes
 
 @card.ui.avatar meta.worlds.card

@@ -1,0 +1,29 @@
+# k.kinds/shards/relations-music: the keys of the types of k.music read as relations: 24 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.music.chord.root k.kinds.relation type=k.music.chord key=root subject=chord object=thing object_type=k.music.note found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.music.chord.quality k.kinds.relation type=k.music.chord key=quality subject=chord object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.music.chord.note k.kinds.relation type=k.music.chord key=note subject=chord object=thing object_type=k.music.note found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.music.interval.semitones k.kinds.relation type=k.music.interval key=semitones subject=interval object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.music.interval.number k.kinds.relation type=k.music.interval key=number subject=interval object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.music.interval.quality k.kinds.relation type=k.music.interval key=quality subject=interval object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.music.key.tonic k.kinds.relation type=k.music.key key=tonic subject=key object=thing object_type=k.music.note found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.music.key.mode k.kinds.relation type=k.music.key key=mode subject=key object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.music.key.sharps k.kinds.relation type=k.music.key key=sharps subject=key object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.music.key.flats k.kinds.relation type=k.music.key key=flats subject=key object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.music.key.signature k.kinds.relation type=k.music.key key=signature subject=key object=thing object_type=k.music.note found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.music.key.relative k.kinds.relation type=k.music.key key=relative subject=key object=thing object_type=k.music.key found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.music.key.parallel k.kinds.relation type=k.music.key key=parallel subject=key object=thing object_type=k.music.key found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.music.key.enharmonic k.kinds.relation type=k.music.key key=enharmonic subject=key object=thing object_type=k.music.key found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.music.key.scale k.kinds.relation type=k.music.key key=scale subject=key object=thing object_type=k.music.scale found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.music.key.chord k.kinds.relation type=k.music.key key=chord subject=key object=thing object_type=k.music.chord found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.music.note.letter k.kinds.relation type=k.music.note key=letter subject=note object=value object_type=k.music.chord object_type=k.music.note found=value core.source="hand-core 1"
+@k.kinds.relation.k.music.note.accidental k.kinds.relation type=k.music.note key=accidental subject=note object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.music.note.pitch_class k.kinds.relation type=k.music.note key=pitch_class subject=note object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.music.note.enharmonic k.kinds.relation type=k.music.note key=enharmonic subject=note object=thing object_type=k.music.note found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.music.scale.tonic k.kinds.relation type=k.music.scale key=tonic subject=scale object=thing object_type=k.music.note found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.music.scale.type k.kinds.relation type=k.music.scale key=type subject=scale object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.music.scale.note k.kinds.relation type=k.music.scale key=note subject=scale object=thing object_type=k.music.note found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.music.scale.key k.kinds.relation type=k.music.scale key=key subject=scale object=thing object_type=k.music.key found=declared object_by=name core.source="hand-core 1"

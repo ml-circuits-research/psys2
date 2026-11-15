@@ -1,0 +1,9 @@
+# k.attributes/shards/same-x: one name, one thing: for 4 names that start with "x" and are carried by facts of more than one world, the sense of the name and the types whose facts are about that thing; a name with two senses has two facts (0 facts of such names here).
+# sources: hand-core 1 (computed from the shards of the catalog by tools/joins.mjs)
+# license: CC0-1.0
+# script: tools/joins.mjs
+
+@k.attributes.same.x-ray.thing k.attributes.same name=x-ray sense=thing only=true in=k.attributes.drawn in=k.objects.object in=k.scenes.thing by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.xi.place k.attributes.same name=xi sense=place only=true in=k.geo.river by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.xray.thing k.attributes.same name=xray sense=thing only=true in=k.attributes.drawn in=k.objects.object in=k.scenes.thing core.source="hand-core 1"
+@k.attributes.same.xylophone.thing k.attributes.same name=xylophone sense=thing only=true in=k.attributes.drawn in=k.attributes.thing in=k.objects.object in=k.scenes.thing core.source="hand-core 1"

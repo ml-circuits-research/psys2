@@ -1,0 +1,6 @@
+# k.words/shards/oo: senses of the words from "ooh" to "ooh" (first letters "oo").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ooh.verb.1 k.words.sense word=ooh pos=verb n=1 supersense=verb.communication gloss="express admiration and pleasure by uttering `ooh' or `aah'" synonym=aah is_a=exclaim kind_of=exclaim kind_of=express core.source="wordnet 3.1"

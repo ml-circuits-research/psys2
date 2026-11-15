@@ -1,0 +1,15 @@
+# k.words/shards/gh: senses of the words from "ghetto" to "ghost" (first letters "gh").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ghetto.noun.1 k.words.sense word=ghetto pos=noun n=1 supersense=noun.location gloss="formerly the restricted quarter of many European cities in which Jews were required to live" is_a=quarter core.source="wordnet 3.1"
+@k.words.ghetto.noun.2 k.words.sense word=ghetto pos=noun n=2 supersense=noun.state gloss="any segregated mode of living or working that results from bias or stereotyping" is_a=life core.source="wordnet 3.1"
+@k.words.ghetto.noun.3 k.words.sense word=ghetto pos=noun n=3 supersense=noun.location gloss="a poor densely populated city district occupied by a minority ethnic group linked together by economic hardship and social restrictions" is_a="city district" core.source="wordnet 3.1"
+@k.words.ghetto.forms core.word text=ghettoes means=ghetto of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.ghost.noun.1 k.words.sense word=ghost pos=noun n=1 supersense=noun.cognition gloss="a mental representation of some haunting experience" synonym=shade synonym=spook synonym=wraith synonym=specter synonym=spectre is_a=apparition kind_of=apparition kind_of=illusion kind_of=appearance kind_of=representation kind_of=content kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.ghost.noun.2 k.words.sense word=ghost pos=noun n=2 supersense=noun.person gloss="a writer who gives the credit of authorship to someone else" synonym=ghostwriter is_a=writer kind_of=writer kind_of=communicator kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.ghost.noun.3 k.words.sense word=ghost pos=noun n=3 supersense=noun.person gloss="the visible disembodied soul of a dead person" is_a=soul kind_of=soul kind_of=spirit kind_of="vital principle" kind_of="causal agent" kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.ghost.verb.1 k.words.sense word=ghost pos=verb n=1 supersense=verb.motion gloss="move like a ghost" is_a=travel kind_of=travel core.source="wordnet 3.1"
+@k.words.ghost.verb.2 k.words.sense word=ghost pos=verb n=2 supersense=verb.emotion gloss="haunt like a ghost; pursue" synonym=haunt synonym=obsess is_a=preoccupy kind_of=preoccupy kind_of=control core.source="wordnet 3.1"
+@k.words.ghost.verb.3 k.words.sense word=ghost pos=verb n=3 supersense=verb.creation gloss="write for someone else" synonym=ghostwrite is_a=author kind_of=author kind_of=write kind_of="create verbally" kind_of=make core.source="wordnet 3.1"

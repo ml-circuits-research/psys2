@@ -1,0 +1,269 @@
+# w.lang.en/shards/templates-discourse: rhetorical moves as templates (blocks 14:45 item 2, 15:00 item 4, 17:05): one or
+# more sentences per move of k.genres and register of k.genres (scientific, presentation, essay, narrative, report), in the
+# library's template notation, for std.compose; and the slots they name, with what fills each (a story slot is an element
+# of k.story).
+# sources: hand-core 1 (written in this repository; the moves and registers are those of k.genres, the story elements those
+#   of k.story, with the works they cite)
+# license: CC0-1.0
+# script: tools/lang-en-discourse.mjs
+
+# ---- slots ----
+@w.lang.en.slot.topic w.lang.en.slot name=topic about="the topic, a noun phrase as the text names it (octopuses, the octopus)" core.source="hand-core 1"
+@w.lang.en.slot.thing w.lang.en.slot name=thing about="the thing or kind a fact is about, a noun phrase with its determiner (the octopus)" core.source="hand-core 1"
+@w.lang.en.slot.other w.lang.en.slot name=other about="a second thing, for a comparison, a noun phrase with its determiner (the squid)" core.source="hand-core 1"
+@w.lang.en.slot.kind w.lang.en.slot name=kind about="the kind of the thing, a noun (mollusc); in the plural where the template says num=pl" core.source="hand-core 1"
+@w.lang.en.slot.attribute w.lang.en.slot name=attribute about="an attribute, a noun (weight, length, number of hearts)" core.source="hand-core 1"
+@w.lang.en.slot.value w.lang.en.slot name=value about="the value of the attribute for the thing, with its unit (about 15 kg)" core.source="hand-core 1"
+@w.lang.en.slot.other_value w.lang.en.slot name=other_value about="the value of the same attribute for the other thing, with its unit (about 2 kg)" core.source="hand-core 1"
+@w.lang.en.slot.usual w.lang.en.slot name=usual about="the usual value or range of the attribute for things of the kind, with its unit (one to three kg)" core.source="hand-core 1"
+@w.lang.en.slot.fact w.lang.en.slot name=fact about="a fact as a clause, without a final stop (an octopus has three hearts)" core.source="hand-core 1"
+@w.lang.en.slot.example w.lang.en.slot name=example about="a thing that is an instance of what was said, a noun phrase (the giant Pacific octopus)" core.source="hand-core 1"
+@w.lang.en.slot.question w.lang.en.slot name=question about="an indirect question as a clause (why an octopus has three hearts, whether squids sleep)" core.source="hand-core 1"
+@w.lang.en.slot.part w.lang.en.slot name=part about="the title of the next part, a noun phrase (its food)" core.source="hand-core 1"
+@w.lang.en.slot.parts w.lang.en.slot name=parts about="the titles of the parts that follow, joined with commas and \"and\" (its body, its food and its home)" core.source="hand-core 1"
+@w.lang.en.slot.count w.lang.en.slot name=count about="a number, in words or digits (three)" core.source="hand-core 1"
+@w.lang.en.slot.thesis w.lang.en.slot name=thesis about="the position the text argues for, a clause (zoos help wild animals)" core.source="hand-core 1"
+@w.lang.en.slot.claim w.lang.en.slot name=claim about="one point, a clause (octopuses are good at solving problems)" core.source="hand-core 1"
+@w.lang.en.slot.evidence w.lang.en.slot name=evidence about="a fact that supports the claim, a clause (an octopus can open a jar)" core.source="hand-core 1"
+@w.lang.en.slot.source w.lang.en.slot name=source about="where a fact comes from, a short citation (Mather, 2008)" core.source="hand-core 1"
+@w.lang.en.slot.method w.lang.en.slot name=method about="what was done, a verb phrase in the past (compared the weights of 314 animals)" core.source="hand-core 1"
+@w.lang.en.slot.action w.lang.en.slot name=action about="what was done, a verb phrase in the past (counted the guests)" core.source="hand-core 1"
+@w.lang.en.slot.time w.lang.en.slot name=time about="when, an adverbial (on Monday, last week, one morning)" core.source="hand-core 1"
+@w.lang.en.slot.problem w.lang.en.slot name=problem about="what went wrong, a clause (the map did not load)" core.source="hand-core 1"
+@w.lang.en.slot.next w.lang.en.slot name=next about="what will be done, a verb phrase in the base form (add the missing cities)" core.source="hand-core 1"
+@w.lang.en.slot.limitation w.lang.en.slot name=limitation about="what the work did not cover, a clause (only drawn animals were counted)" core.source="hand-core 1"
+@w.lang.en.slot.setting w.lang.en.slot name=setting about="where the story happens, a noun (forest), a k.scenes scene" element="setting" core.source="hand-core 1"
+@w.lang.en.slot.protagonist w.lang.en.slot name=protagonist about="who the story is about, a noun (fox)" element="protagonist" core.source="hand-core 1"
+@w.lang.en.slot.trait w.lang.en.slot name=trait about="what the protagonist is like, an adjective (clever)" core.source="hand-core 1"
+@w.lang.en.slot.goal w.lang.en.slot name=goal about="what the protagonist wants, a verb phrase in the base form (cross the river)" element="goal" core.source="hand-core 1"
+@w.lang.en.slot.target w.lang.en.slot name=target about="what the goal is about, a noun phrase with its determiner (the island)" element="target" core.source="hand-core 1"
+@w.lang.en.slot.obstacle w.lang.en.slot name=obstacle about="what stands in the way, a noun (river)" element="obstacle" core.source="hand-core 1"
+@w.lang.en.slot.attempt w.lang.en.slot name=attempt about="one try, a verb phrase in the base form (jump over it)" element="attempt" core.source="hand-core 1"
+@w.lang.en.slot.helper w.lang.en.slot name=helper about="who helps, a noun (heron)" element="helper" core.source="hand-core 1"
+@w.lang.en.slot.means w.lang.en.slot name=means about="what the helper has and the protagonist lacks, a noun (branch)" element="means" core.source="hand-core 1"
+@w.lang.en.slot.overcome w.lang.en.slot name=overcome about="how the obstacle is got past, a verb phrase in the base form (cross it)" element="resolution" core.source="hand-core 1"
+@w.lang.en.slot.feeling w.lang.en.slot name=feeling about="a feeling, an adjective (happy), a k.feelings feeling" core.source="hand-core 1"
+
+# ---- introduce topic ----
+@w.lang.en.discourse.scientific.introduce_topic.1 w.lang.en.discourse name=scientific.introduce_topic.1 move="introduce topic" register=scientific slot=kind slot=topic text="Many studies of {kind:num=pl} have described {topic}." core.source="hand-core 1"
+@w.lang.en.discourse.scientific.introduce_topic.2 w.lang.en.discourse name=scientific.introduce_topic.2 move="introduce topic" register=scientific slot=topic slot=kind text="This article is concerned with {topic}, a group of {kind:num=pl} that has been studied widely." core.source="hand-core 1"
+@w.lang.en.discourse.presentation.introduce_topic.1 w.lang.en.discourse name=presentation.introduce_topic.1 move="introduce topic" register=presentation slot=topic text="Today we are going to talk about {topic}." core.source="hand-core 1"
+@w.lang.en.discourse.presentation.introduce_topic.2 w.lang.en.discourse name=presentation.introduce_topic.2 move="introduce topic" register=presentation slot=topic text="Let us look at {topic} together." core.source="hand-core 1"
+@w.lang.en.discourse.essay.introduce_topic.1 w.lang.en.discourse name=essay.introduce_topic.1 move="introduce topic" register=essay slot=topic text="Few subjects are as rewarding to think about as {topic}." core.source="hand-core 1"
+@w.lang.en.discourse.essay.introduce_topic.2 w.lang.en.discourse name=essay.introduce_topic.2 move="introduce topic" register=essay slot=topic text="Everyone has heard of {topic}, yet few know the details." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.introduce_topic.1 w.lang.en.discourse name=narrative.introduce_topic.1 move="introduce topic" register=narrative slot=topic text="It all began with {topic}." core.source="hand-core 1"
+@w.lang.en.discourse.report.introduce_topic.1 w.lang.en.discourse name=report.introduce_topic.1 move="introduce topic" register=report slot=topic text="This report is about {topic}." core.source="hand-core 1"
+@w.lang.en.discourse.report.introduce_topic.2 w.lang.en.discourse name=report.introduce_topic.2 move="introduce topic" register=report slot=topic text="The work described here concerned {topic}." core.source="hand-core 1"
+
+# ---- compare ----
+@w.lang.en.discourse.scientific.compare.1 w.lang.en.discourse name=scientific.compare.1 move=compare register=scientific slot=attribute slot=thing slot=value slot=other slot=other_value text="The {attribute} of {thing} is {value}, whereas that of {other} is {other_value}." core.source="hand-core 1"
+@w.lang.en.discourse.scientific.compare.2 w.lang.en.discourse name=scientific.compare.2 move=compare register=scientific slot=other slot=other_value slot=thing slot=attribute slot=value text="Compared with {other} ({other_value}), {thing} has a {attribute} of {value}." core.source="hand-core 1"
+@w.lang.en.discourse.presentation.compare.1 w.lang.en.discourse name=presentation.compare.1 move=compare register=presentation slot=thing slot=attribute slot=value slot=other slot=other_value text="{thing} has a {attribute} of {value}, and {other} only {other_value}." core.source="hand-core 1"
+@w.lang.en.discourse.presentation.compare.2 w.lang.en.discourse name=presentation.compare.2 move=compare register=presentation slot=thing slot=other slot=value slot=other_value text="Put {thing} next to {other}: {value} against {other_value}." core.source="hand-core 1"
+@w.lang.en.discourse.essay.compare.1 w.lang.en.discourse name=essay.compare.1 move=compare register=essay slot=attribute slot=thing slot=value slot=other slot=other_value text="Consider the {attribute}: {thing} has {value}, while {other} has {other_value}." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.compare.1 w.lang.en.discourse name=narrative.compare.1 move=compare register=narrative slot=thing slot=attribute slot=value slot=other slot=other_value text="{thing} had a {attribute} of {value}, but {other} had only {other_value}." core.source="hand-core 1"
+@w.lang.en.discourse.report.compare.1 w.lang.en.discourse name=report.compare.1 move=compare register=report slot=attribute slot=thing slot=value slot=other_value slot=other text="The {attribute} of {thing} was {value}, against {other_value} for {other}." core.source="hand-core 1"
+
+# ---- surprising fact ----
+@w.lang.en.discourse.scientific.surprising_fact.1 w.lang.en.discourse name=scientific.surprising_fact.1 move="surprising fact" register=scientific slot=fact text="Unexpectedly, {fact}." core.source="hand-core 1"
+@w.lang.en.discourse.scientific.surprising_fact.2 w.lang.en.discourse name=scientific.surprising_fact.2 move="surprising fact" register=scientific slot=attribute slot=thing slot=value slot=kind slot=usual text="The {attribute} of {thing} is {value}, far outside the usual range for {kind:num=pl} ({usual})." core.source="hand-core 1"
+@w.lang.en.discourse.presentation.surprising_fact.1 w.lang.en.discourse name=presentation.surprising_fact.1 move="surprising fact" register=presentation slot=fact text="Here is a surprise: {fact}." core.source="hand-core 1"
+@w.lang.en.discourse.presentation.surprising_fact.2 w.lang.en.discourse name=presentation.surprising_fact.2 move="surprising fact" register=presentation slot=fact text="Did you know that {fact}?" core.source="hand-core 1"
+@w.lang.en.discourse.essay.surprising_fact.1 w.lang.en.discourse name=essay.surprising_fact.1 move="surprising fact" register=essay slot=fact text="It may come as a surprise that {fact}." core.source="hand-core 1"
+@w.lang.en.discourse.essay.surprising_fact.2 w.lang.en.discourse name=essay.surprising_fact.2 move="surprising fact" register=essay slot=kind slot=attribute slot=usual slot=thing slot=value text="Most {kind:num=pl} have a {attribute} of {usual}, yet {thing} has {value}." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.surprising_fact.1 w.lang.en.discourse name=narrative.surprising_fact.1 move="surprising fact" register=narrative slot=fact text="And then, to everyone's surprise, it turned out that {fact}." core.source="hand-core 1"
+@w.lang.en.discourse.report.surprising_fact.1 w.lang.en.discourse name=report.surprising_fact.1 move="surprising fact" register=report slot=fact text="An unexpected result was that {fact}." core.source="hand-core 1"
+@w.lang.en.discourse.report.surprising_fact.2 w.lang.en.discourse name=report.surprising_fact.2 move="surprising fact" register=report slot=attribute slot=thing slot=value slot=usual text="The {attribute} of {thing} was {value}, well outside the usual {usual}." core.source="hand-core 1"
+
+# ---- give example ----
+@w.lang.en.discourse.scientific.give_example.1 w.lang.en.discourse name=scientific.give_example.1 move="give example" register=scientific slot=example text="A well-known example is {example}." core.source="hand-core 1"
+@w.lang.en.discourse.scientific.give_example.2 w.lang.en.discourse name=scientific.give_example.2 move="give example" register=scientific slot=example text="This is seen, for instance, in {example}." core.source="hand-core 1"
+@w.lang.en.discourse.presentation.give_example.1 w.lang.en.discourse name=presentation.give_example.1 move="give example" register=presentation slot=example text="Take {example}, for example." core.source="hand-core 1"
+@w.lang.en.discourse.presentation.give_example.2 w.lang.en.discourse name=presentation.give_example.2 move="give example" register=presentation slot=example text="One example is {example}." core.source="hand-core 1"
+@w.lang.en.discourse.essay.give_example.1 w.lang.en.discourse name=essay.give_example.1 move="give example" register=essay slot=example text="Consider, for example, {example}." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.give_example.1 w.lang.en.discourse name=narrative.give_example.1 move="give example" register=narrative slot=example text="There was {example}, for one." core.source="hand-core 1"
+@w.lang.en.discourse.report.give_example.1 w.lang.en.discourse name=report.give_example.1 move="give example" register=report slot=example text="An example is {example}." core.source="hand-core 1"
+
+# ---- raise a question ----
+@w.lang.en.discourse.scientific.raise_a_question.1 w.lang.en.discourse name=scientific.raise_a_question.1 move="raise a question" register=scientific slot=question text="This raises the question of {question}." core.source="hand-core 1"
+@w.lang.en.discourse.scientific.raise_a_question.2 w.lang.en.discourse name=scientific.raise_a_question.2 move="raise a question" register=scientific slot=question text="It remains to be explained {question}." core.source="hand-core 1"
+@w.lang.en.discourse.presentation.raise_a_question.1 w.lang.en.discourse name=presentation.raise_a_question.1 move="raise a question" register=presentation slot=question text="Have you ever wondered {question}?" core.source="hand-core 1"
+@w.lang.en.discourse.presentation.raise_a_question.2 w.lang.en.discourse name=presentation.raise_a_question.2 move="raise a question" register=presentation slot=question text="So the question is: {question}." core.source="hand-core 1"
+@w.lang.en.discourse.essay.raise_a_question.1 w.lang.en.discourse name=essay.raise_a_question.1 move="raise a question" register=essay slot=question text="One may well ask {question}." core.source="hand-core 1"
+@w.lang.en.discourse.essay.raise_a_question.2 w.lang.en.discourse name=essay.raise_a_question.2 move="raise a question" register=essay slot=question text="But why does this matter, and {question}?" core.source="hand-core 1"
+@w.lang.en.discourse.narrative.raise_a_question.1 w.lang.en.discourse name=narrative.raise_a_question.1 move="raise a question" register=narrative slot=question text="Nobody could say {question}." core.source="hand-core 1"
+@w.lang.en.discourse.report.raise_a_question.1 w.lang.en.discourse name=report.raise_a_question.1 move="raise a question" register=report slot=question text="One question remained open: {question}." core.source="hand-core 1"
+
+# ---- conclude ----
+@w.lang.en.discourse.scientific.conclude.1 w.lang.en.discourse name=scientific.conclude.1 move=conclude register=scientific slot=fact text="Taken together, these results suggest that {fact}." core.source="hand-core 1"
+@w.lang.en.discourse.scientific.conclude.2 w.lang.en.discourse name=scientific.conclude.2 move=conclude register=scientific slot=fact text="In conclusion, the evidence indicates that {fact}." core.source="hand-core 1"
+@w.lang.en.discourse.presentation.conclude.1 w.lang.en.discourse name=presentation.conclude.1 move=conclude register=presentation slot=fact text="So remember: {fact}." core.source="hand-core 1"
+@w.lang.en.discourse.presentation.conclude.2 w.lang.en.discourse name=presentation.conclude.2 move=conclude register=presentation slot=fact text="To sum up, {fact}." core.source="hand-core 1"
+@w.lang.en.discourse.essay.conclude.1 w.lang.en.discourse name=essay.conclude.1 move=conclude register=essay slot=fact text="In the end, it is clear that {fact}." core.source="hand-core 1"
+@w.lang.en.discourse.essay.conclude.2 w.lang.en.discourse name=essay.conclude.2 move=conclude register=essay slot=fact text="All in all, I am convinced that {fact}." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.conclude.1 w.lang.en.discourse name=narrative.conclude.1 move=conclude register=narrative slot=fact text="And that was how it came to be that {fact}." core.source="hand-core 1"
+@w.lang.en.discourse.report.conclude.1 w.lang.en.discourse name=report.conclude.1 move=conclude register=report slot=fact text="In conclusion, {fact}." core.source="hand-core 1"
+
+# ---- transition ----
+@w.lang.en.discourse.scientific.transition.1 w.lang.en.discourse name=scientific.transition.1 move=transition register=scientific slot=part text="The next section turns to {part}." core.source="hand-core 1"
+@w.lang.en.discourse.scientific.transition.2 w.lang.en.discourse name=scientific.transition.2 move=transition register=scientific slot=part text="We now consider {part}." core.source="hand-core 1"
+@w.lang.en.discourse.presentation.transition.1 w.lang.en.discourse name=presentation.transition.1 move=transition register=presentation slot=part text="Now let us move on to {part}." core.source="hand-core 1"
+@w.lang.en.discourse.presentation.transition.2 w.lang.en.discourse name=presentation.transition.2 move=transition register=presentation slot=part text="Next up: {part}." core.source="hand-core 1"
+@w.lang.en.discourse.essay.transition.1 w.lang.en.discourse name=essay.transition.1 move=transition register=essay slot=part text="This brings us to {part}." core.source="hand-core 1"
+@w.lang.en.discourse.essay.transition.2 w.lang.en.discourse name=essay.transition.2 move=transition register=essay slot=part text="Turning now to {part}, the picture changes." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.transition.1 w.lang.en.discourse name=narrative.transition.1 move=transition register=narrative text="But that was not the end of it." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.transition.2 w.lang.en.discourse name=narrative.transition.2 move=transition register=narrative text="Meanwhile, something else was happening." core.source="hand-core 1"
+@w.lang.en.discourse.report.transition.1 w.lang.en.discourse name=report.transition.1 move=transition register=report slot=part text="The following section describes {part}." core.source="hand-core 1"
+
+# ---- claim centrality ----
+@w.lang.en.discourse.scientific.claim_centrality.1 w.lang.en.discourse name=scientific.claim_centrality.1 move="claim centrality" register=scientific slot=topic text="In recent years, {topic} has become a subject of considerable interest." core.source="hand-core 1"
+
+# ---- generalise ----
+@w.lang.en.discourse.scientific.generalise.1 w.lang.en.discourse name=scientific.generalise.1 move=generalise register=scientific slot=fact text="In general, {fact}." core.source="hand-core 1"
+
+# ---- review previous work ----
+@w.lang.en.discourse.scientific.review_previous_work.1 w.lang.en.discourse name=scientific.review_previous_work.1 move="review previous work" register=scientific slot=fact slot=source text="Earlier work has shown that {fact} ({source})." core.source="hand-core 1"
+
+# ---- indicate a gap ----
+@w.lang.en.discourse.scientific.indicate_a_gap.1 w.lang.en.discourse name=scientific.indicate_a_gap.1 move="indicate a gap" register=scientific slot=question text="However, it is not yet known {question}." core.source="hand-core 1"
+
+# ---- counter-claim ----
+@w.lang.en.discourse.scientific.counter_claim.1 w.lang.en.discourse name=scientific.counter_claim.1 move=counter-claim register=scientific slot=fact text="Contrary to a common belief, {fact}." core.source="hand-core 1"
+
+# ---- state purpose ----
+@w.lang.en.discourse.scientific.state_purpose.1 w.lang.en.discourse name=scientific.state_purpose.1 move="state purpose" register=scientific slot=topic text="The aim of this article is to describe {topic}." core.source="hand-core 1"
+
+# ---- announce findings ----
+@w.lang.en.discourse.scientific.announce_findings.1 w.lang.en.discourse name=scientific.announce_findings.1 move="announce findings" register=scientific slot=fact text="We show that {fact}." core.source="hand-core 1"
+
+# ---- outline structure ----
+@w.lang.en.discourse.scientific.outline_structure.1 w.lang.en.discourse name=scientific.outline_structure.1 move="outline structure" register=scientific slot=count slot=parts text="The article has {count} parts: {parts}." core.source="hand-core 1"
+
+# ---- define ----
+@w.lang.en.discourse.scientific.define.1 w.lang.en.discourse name=scientific.define.1 move=define register=scientific slot=thing slot=kind slot=fact text="Here, {thing} denotes a {kind} that {fact}." core.source="hand-core 1"
+
+# ---- describe method ----
+@w.lang.en.discourse.scientific.describe_method.1 w.lang.en.discourse name=scientific.describe_method.1 move="describe method" register=scientific slot=method text="We {method}." core.source="hand-core 1"
+
+# ---- report result ----
+@w.lang.en.discourse.scientific.report_result.1 w.lang.en.discourse name=scientific.report_result.1 move="report result" register=scientific slot=attribute slot=thing slot=value text="The {attribute} of {thing} was {value}." core.source="hand-core 1"
+@w.lang.en.discourse.scientific.report_result.2 w.lang.en.discourse name=scientific.report_result.2 move="report result" register=scientific slot=fact text="We found that {fact}." core.source="hand-core 1"
+
+# ---- interpret result ----
+@w.lang.en.discourse.scientific.interpret_result.1 w.lang.en.discourse name=scientific.interpret_result.1 move="interpret result" register=scientific slot=fact text="This may indicate that {fact}." core.source="hand-core 1"
+
+# ---- state limitation ----
+@w.lang.en.discourse.scientific.state_limitation.1 w.lang.en.discourse name=scientific.state_limitation.1 move="state limitation" register=scientific slot=limitation text="One limitation of this work is that {limitation}." core.source="hand-core 1"
+
+# ---- recommend ----
+@w.lang.en.discourse.scientific.recommend.1 w.lang.en.discourse name=scientific.recommend.1 move=recommend register=scientific slot=question text="Future work should examine {question}." core.source="hand-core 1"
+
+# ---- summarize ----
+@w.lang.en.discourse.scientific.summarize.1 w.lang.en.discourse name=scientific.summarize.1 move=summarize register=scientific slot=fact text="In summary, {fact}." core.source="hand-core 1"
+
+# ---- state thesis ----
+@w.lang.en.discourse.essay.state_thesis.1 w.lang.en.discourse name=essay.state_thesis.1 move="state thesis" register=essay slot=thesis text="In this essay I argue that {thesis}." core.source="hand-core 1"
+
+# ---- state claim ----
+@w.lang.en.discourse.essay.state_claim.1 w.lang.en.discourse name=essay.state_claim.1 move="state claim" register=essay slot=claim text="First of all, {claim}." core.source="hand-core 1"
+
+# ---- give evidence ----
+@w.lang.en.discourse.essay.give_evidence.1 w.lang.en.discourse name=essay.give_evidence.1 move="give evidence" register=essay slot=evidence slot=source text="For instance, {evidence}, as {source} reports." core.source="hand-core 1"
+@w.lang.en.discourse.essay.give_evidence.2 w.lang.en.discourse name=essay.give_evidence.2 move="give evidence" register=essay slot=evidence text="This is shown by the fact that {evidence}." core.source="hand-core 1"
+
+# ---- counterargument ----
+@w.lang.en.discourse.essay.counterargument.1 w.lang.en.discourse name=essay.counterargument.1 move=counterargument register=essay slot=claim text="It could be objected that {claim}." core.source="hand-core 1"
+
+# ---- rebut ----
+@w.lang.en.discourse.essay.rebut.1 w.lang.en.discourse name=essay.rebut.1 move=rebut register=essay slot=evidence text="Yet this objection does not hold, because {evidence}." core.source="hand-core 1"
+
+# ---- restate thesis ----
+@w.lang.en.discourse.essay.restate_thesis.1 w.lang.en.discourse name=essay.restate_thesis.1 move="restate thesis" register=essay slot=thesis text="For all these reasons, I maintain that {thesis}." core.source="hand-core 1"
+
+# ---- outline structure ----
+@w.lang.en.discourse.essay.outline_structure.1 w.lang.en.discourse name=essay.outline_structure.1 move="outline structure" register=essay slot=parts text="I will first discuss {parts}." core.source="hand-core 1"
+
+# ---- generalise ----
+@w.lang.en.discourse.essay.generalise.1 w.lang.en.discourse name=essay.generalise.1 move=generalise register=essay slot=fact text="As a rule, {fact}." core.source="hand-core 1"
+
+# ---- summarize ----
+@w.lang.en.discourse.essay.summarize.1 w.lang.en.discourse name=essay.summarize.1 move=summarize register=essay slot=fact text="To summarise, {fact}." core.source="hand-core 1"
+
+# ---- define ----
+@w.lang.en.discourse.essay.define.1 w.lang.en.discourse name=essay.define.1 move=define register=essay slot=thing slot=kind slot=fact text="By {thing} I mean a {kind} that {fact}." core.source="hand-core 1"
+
+# ---- outline structure ----
+@w.lang.en.discourse.presentation.outline_structure.1 w.lang.en.discourse name=presentation.outline_structure.1 move="outline structure" register=presentation slot=count slot=parts text="We will look at {count} things: {parts}." core.source="hand-core 1"
+
+# ---- state claim ----
+@w.lang.en.discourse.presentation.state_claim.1 w.lang.en.discourse name=presentation.state_claim.1 move="state claim" register=presentation slot=claim text="{claim}." core.source="hand-core 1"
+
+# ---- give evidence ----
+@w.lang.en.discourse.presentation.give_evidence.1 w.lang.en.discourse name=presentation.give_evidence.1 move="give evidence" register=presentation slot=evidence text="Look at this: {evidence}." core.source="hand-core 1"
+
+# ---- state takeaway ----
+@w.lang.en.discourse.presentation.state_takeaway.1 w.lang.en.discourse name=presentation.state_takeaway.1 move="state takeaway" register=presentation slot=fact text="The one thing to remember: {fact}." core.source="hand-core 1"
+
+# ---- summarize ----
+@w.lang.en.discourse.presentation.summarize.1 w.lang.en.discourse name=presentation.summarize.1 move=summarize register=presentation slot=fact text="So we have seen that {fact}." core.source="hand-core 1"
+
+# ---- thank audience ----
+@w.lang.en.discourse.presentation.thank_audience.1 w.lang.en.discourse name=presentation.thank_audience.1 move="thank audience" register=presentation text="Thank you for listening." core.source="hand-core 1"
+
+# ---- invite questions ----
+@w.lang.en.discourse.presentation.invite_questions.1 w.lang.en.discourse name=presentation.invite_questions.1 move="invite questions" register=presentation text="Do you have any questions?" core.source="hand-core 1"
+
+# ---- state purpose ----
+@w.lang.en.discourse.report.state_purpose.1 w.lang.en.discourse name=report.state_purpose.1 move="state purpose" register=report slot=topic text="The purpose of this work was to look at {topic}." core.source="hand-core 1"
+
+# ---- report action ----
+@w.lang.en.discourse.report.report_action.1 w.lang.en.discourse name=report.report_action.1 move="report action" register=report slot=time slot=action text="{time}, we {action}." core.source="hand-core 1"
+
+# ---- report result ----
+@w.lang.en.discourse.report.report_result.1 w.lang.en.discourse name=report.report_result.1 move="report result" register=report slot=attribute slot=thing slot=value text="The {attribute} of {thing} was {value}." core.source="hand-core 1"
+@w.lang.en.discourse.report.report_result.2 w.lang.en.discourse name=report.report_result.2 move="report result" register=report slot=fact text="We found that {fact}." core.source="hand-core 1"
+
+# ---- report problem ----
+@w.lang.en.discourse.report.report_problem.1 w.lang.en.discourse name=report.report_problem.1 move="report problem" register=report slot=problem text="One problem was that {problem}." core.source="hand-core 1"
+
+# ---- next step ----
+@w.lang.en.discourse.report.next_step.1 w.lang.en.discourse name=report.next_step.1 move="next step" register=report slot=next text="Next, we will {next}." core.source="hand-core 1"
+
+# ---- summarize ----
+@w.lang.en.discourse.report.summarize.1 w.lang.en.discourse name=report.summarize.1 move=summarize register=report slot=fact text="In short, {fact}." core.source="hand-core 1"
+
+# ---- set the scene ----
+@w.lang.en.discourse.narrative.set_the_scene.1 w.lang.en.discourse name=narrative.set_the_scene.1 move="set the scene" register=narrative slot=setting text="Once upon a time, there was a {setting}." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.set_the_scene.2 w.lang.en.discourse name=narrative.set_the_scene.2 move="set the scene" register=narrative slot=time slot=setting text="{time}, in a {setting} far away, everything was quiet." core.source="hand-core 1"
+
+# ---- introduce character ----
+@w.lang.en.discourse.narrative.introduce_character.1 w.lang.en.discourse name=narrative.introduce_character.1 move="introduce character" register=narrative slot=setting slot=trait slot=protagonist text="In the {setting} lived a {trait} {protagonist}." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.introduce_character.2 w.lang.en.discourse name=narrative.introduce_character.2 move="introduce character" register=narrative slot=protagonist slot=helper text="One day the {protagonist} met a {helper}." core.source="hand-core 1"
+
+# ---- state goal ----
+@w.lang.en.discourse.narrative.state_goal.1 w.lang.en.discourse name=narrative.state_goal.1 move="state goal" register=narrative slot=protagonist slot=goal text="More than anything, the {protagonist} wanted to {goal}." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.state_goal.2 w.lang.en.discourse name=narrative.state_goal.2 move="state goal" register=narrative slot=protagonist slot=goal text="The {protagonist} had to {goal}, and soon." core.source="hand-core 1"
+
+# ---- complicate ----
+@w.lang.en.discourse.narrative.complicate.1 w.lang.en.discourse name=narrative.complicate.1 move=complicate register=narrative slot=obstacle text="But a {obstacle} stood in the way." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.complicate.2 w.lang.en.discourse name=narrative.complicate.2 move=complicate register=narrative slot=protagonist slot=target slot=obstacle text="Between the {protagonist} and {target} lay a {obstacle}." core.source="hand-core 1"
+
+# ---- attempt ----
+@w.lang.en.discourse.narrative.attempt.1 w.lang.en.discourse name=narrative.attempt.1 move=attempt register=narrative slot=protagonist slot=attempt text="The {protagonist} tried to {attempt}, but it was no use." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.attempt.2 w.lang.en.discourse name=narrative.attempt.2 move=attempt register=narrative slot=protagonist slot=attempt text="First the {protagonist} tried to {attempt}, and failed." core.source="hand-core 1"
+
+# ---- turning point ----
+@w.lang.en.discourse.narrative.turning_point.1 w.lang.en.discourse name=narrative.turning_point.1 move="turning point" register=narrative slot=helper slot=means text="Then the {helper} came by with a {means}." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.turning_point.2 w.lang.en.discourse name=narrative.turning_point.2 move="turning point" register=narrative slot=protagonist slot=means text="Just then, the {protagonist} remembered the {means}." core.source="hand-core 1"
+
+# ---- resolve ----
+@w.lang.en.discourse.narrative.resolve.1 w.lang.en.discourse name=narrative.resolve.1 move=resolve register=narrative slot=means slot=protagonist slot=overcome text="With the {means}, the {protagonist} could {overcome} at last." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.resolve.2 w.lang.en.discourse name=narrative.resolve.2 move=resolve register=narrative slot=protagonist slot=means slot=overcome text="So the {protagonist} used the {means} to {overcome}." core.source="hand-core 1"
+
+# ---- evaluate ----
+@w.lang.en.discourse.narrative.evaluate.1 w.lang.en.discourse name=narrative.evaluate.1 move=evaluate register=narrative slot=protagonist slot=feeling text="The {protagonist} felt {feeling}." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.evaluate.2 w.lang.en.discourse name=narrative.evaluate.2 move=evaluate register=narrative slot=protagonist slot=feeling text="It had been a long day, and the {protagonist} was {feeling}." core.source="hand-core 1"
+
+# ---- end ----
+@w.lang.en.discourse.narrative.end.1 w.lang.en.discourse name=narrative.end.1 move=end register=narrative slot=protagonist slot=goal slot=feeling text="And so the {protagonist} was able to {goal}, and was {feeling} ever after." core.source="hand-core 1"
+@w.lang.en.discourse.narrative.end.2 w.lang.en.discourse name=narrative.end.2 move=end register=narrative slot=protagonist slot=helper text="From that day on, the {protagonist} and the {helper} were friends." core.source="hand-core 1"

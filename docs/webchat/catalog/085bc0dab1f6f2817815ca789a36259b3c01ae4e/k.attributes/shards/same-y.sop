@@ -1,0 +1,22 @@
+# k.attributes/shards/same-y: one name, one thing: for 16 names that start with "y" and are carried by facts of more than one world, the sense of the name and the types whose facts are about that thing; a name with two senses has two facts (2 facts of such names here).
+# sources: hand-core 1 (computed from the shards of the catalog by tools/joins.mjs)
+# license: CC0-1.0
+# script: tools/joins.mjs
+
+@k.attributes.same.yacht.thing k.attributes.same name=yacht sense=thing only=true in=k.attributes.drawn in=k.attributes.number in=k.attributes.thing in=k.layouts.anchor in=k.objects.object in=k.scenes.thing by_word=k.parts.inherited by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.yak.animal k.attributes.same name=yak sense=animal only=true in=k.animals.animal in=k.commonsense.thing in=k.scenes.thing by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.yam.thing k.attributes.same name=yam sense=thing only=true in=k.attributes.number by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.yarn.thing k.attributes.same name=yarn sense=thing only=true in=k.attributes.drawn in=k.attributes.thing in=k.objects.object in=k.scenes.thing by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.year.time k.attributes.same name=year sense=time only=true in=k.time.duration by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.yellow.colour k.attributes.same name=yellow sense=colour only=false in=k.colours.colour by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.yellow.place k.attributes.same name=yellow sense=place only=false in=k.geo.river by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.yellowstone.place k.attributes.same name=yellowstone sense=place only=true in=k.geo.river by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.yen_banknote.thing k.attributes.same name="yen banknote" sense=thing only=true in=k.attributes.drawn in=k.objects.object in=k.scenes.thing core.source="hand-core 1"
+@k.attributes.same.yi.place k.attributes.same name=yi sense=place only=true in=k.geo.river by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.yo-yo.thing k.attributes.same name=yo-yo sense=thing only=true in=k.attributes.drawn in=k.attributes.thing in=k.attributes.usage in=k.objects.object in=k.scenes.thing by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.yoghurt.thing k.attributes.same name=yoghurt sense=thing only=true in=k.attributes.number by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.yogurt.food k.attributes.same name=yogurt sense=food only=true in=k.attributes.drawn in=k.food.food in=k.objects.object in=k.scenes.thing by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.yolk.thing k.attributes.same name=yolk sense=thing only=true in=k.attributes.thing by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.yorkshire_pudding.food k.attributes.same name="yorkshire pudding" sense=food only=true in=k.attributes.drawn in=k.objects.object in=k.scenes.thing core.source="hand-core 1"
+@k.attributes.same.yuan.place k.attributes.same name=yuan sense=place only=true in=k.geo.river by_word=k.words.sense core.source="hand-core 1"
+@k.attributes.same.yule_log.thing k.attributes.same name="yule log" sense=thing only=true in=k.attributes.drawn in=k.attributes.usage in=k.objects.object in=k.scenes.thing core.source="hand-core 1"

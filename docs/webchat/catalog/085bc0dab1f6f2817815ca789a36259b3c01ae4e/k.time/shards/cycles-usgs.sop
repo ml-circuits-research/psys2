@@ -1,0 +1,10 @@
+# k.time/shards/cycles-usgs: the water cycle, stage by stage, from the USGS Water Science School (evaporation, condensation, precipitation, runoff and groundwater).
+# sources: usgs-water 2026-11-15 (U.S. Geological Survey, Water Science School, public domain; see sources/usgs-water/SOURCE.md)
+# license: public-domain
+# script: none (hand-written)
+
+@k.time.cycle.water_cycle k.time.cycle name="water cycle" of=k.time.stage first=evaporation last=runoff length=4 core.source="usgs-water 2026-11-15"
+@k.time.stage.water_cycle.evaporation k.time.stage name=evaporation cycle="water cycle" n=1 next=condensation is=evaporation about="the sun's heat turns water of seas, lakes and rivers into vapour, which rises" core.source="usgs-water 2026-11-15"
+@k.time.stage.water_cycle.condensation k.time.stage name=condensation cycle="water cycle" n=2 next=precipitation is=condensation about="the vapour cools high up and forms the droplets of clouds" core.source="usgs-water 2026-11-15"
+@k.time.stage.water_cycle.precipitation k.time.stage name=precipitation cycle="water cycle" n=3 next=runoff is=precipitation about="the droplets grow heavy and fall as rain or snow" core.source="usgs-water 2026-11-15"
+@k.time.stage.water_cycle.runoff k.time.stage name=runoff cycle="water cycle" n=4 next=evaporation is=runoff about="the water flows over the land to rivers, lakes and the sea, or soaks into the ground as groundwater" core.source="usgs-water 2026-11-15"

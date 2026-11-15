@@ -1,0 +1,29 @@
+# k.kinds/shards/relations-interest: the keys of the types of k.interest read as relations: 24 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.interest.appraisal.about k.kinds.relation type=k.interest.appraisal key=about subject=appraisal object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.appraisal.combine k.kinds.relation type=k.interest.appraisal key=combine subject=appraisal object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.appraisal.base k.kinds.relation type=k.interest.appraisal key=base subject=appraisal object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.appraisal.source k.kinds.relation type=k.interest.appraisal key=source subject=appraisal object=thing object_type=k.interest.source found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.interest.appraisal.own k.kinds.relation type=k.interest.appraisal key=own subject=appraisal object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.feature.appraisal k.kinds.relation type=k.interest.feature key=appraisal subject=feature object=thing object_type=k.interest.appraisal found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.interest.feature.measure k.kinds.relation type=k.interest.feature key=measure subject=feature object=thing object_type=k.interest.measure found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.interest.feature.shape k.kinds.relation type=k.interest.feature key=shape subject=feature object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.feature.start_at k.kinds.relation type=k.interest.feature key=start_at subject=feature object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.feature.peak_at k.kinds.relation type=k.interest.feature key=peak_at subject=feature object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.feature.full_at k.kinds.relation type=k.interest.feature key=full_at subject=feature object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.feature.weight_min k.kinds.relation type=k.interest.feature key=weight_min subject=feature object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.feature.weight_max k.kinds.relation type=k.interest.feature key=weight_max subject=feature object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.feature.about k.kinds.relation type=k.interest.feature key=about subject=feature object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.feature.source k.kinds.relation type=k.interest.feature key=source subject=feature object=thing object_type=k.interest.source found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.interest.feature.own k.kinds.relation type=k.interest.feature key=own subject=feature object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.measure.scope k.kinds.relation type=k.interest.measure key=scope subject=measure object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.measure.reads k.kinds.relation type=k.interest.measure key=reads subject=measure object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.interest.measure.gives k.kinds.relation type=k.interest.measure key=gives subject=measure object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.measure.about k.kinds.relation type=k.interest.measure key=about subject=measure object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.source.cite k.kinds.relation type=k.interest.source key=cite subject=source object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.source.year k.kinds.relation type=k.interest.source key=year subject=source object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.source.doi k.kinds.relation type=k.interest.source key=doi subject=source object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.interest.source.finding k.kinds.relation type=k.interest.source key=finding subject=source object=text found=schema core.source="hand-core 1"

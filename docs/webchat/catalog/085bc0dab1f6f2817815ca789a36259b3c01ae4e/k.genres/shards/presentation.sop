@@ -1,0 +1,36 @@
+# k.genres/shards/presentation: the genre "presentation": 5 parts in order with how many times each occurs, and 12 steps (the moves of each part in order, with alternatives and sentence counts).
+# sources: hand-core 1 (hand-written in this repository: tools/genres-core.mjs; the works cited are in WORLD.md)
+# license: CC0-1.0
+# script: tools/genres-core.mjs
+
+@k.genres.genre.presentation k.genres.genre name=presentation about="A talk with slides: a title slide, an agenda of the main points, one slide (or a short run of slides) per point with a sentence headline, its evidence and what to remember, a summary of the points, and a closing slide." register=presentation unit=slide also_move="give example" also_move="raise a question" also_move=transition source=alley2013 source=alleyNeeley2005 source=mayer2009 own="Three to five points (after Cowan's three to five chunks); the counts of sentences." core.source="hand-core 1"
+
+# title
+@k.genres.part.presentation.title k.genres.part genre=presentation name=title n=1 min=1 max=1 layout=title about="The topic and the speaker." source=alley2013 core.source="hand-core 1"
+@k.genres.step.presentation.title.1.introduce_topic k.genres.step genre=presentation part=title n=1 move="introduce topic" min=1 max=1 source=alley2013 core.source="hand-core 1"
+
+# agenda
+@k.genres.part.presentation.agenda k.genres.part genre=presentation name=agenda n=2 min=1 max=1 heading=Overview layout=agenda about="The main points, in the order they come (a mapping slide)." source=alley2013 source=mayer2009 core.source="hand-core 1"
+@k.genres.step.presentation.agenda.1.outline_structure k.genres.step genre=presentation part=agenda n=1 move="outline structure" min=1 max=1 source=alley2013 source=mayer2009 core.source="hand-core 1"
+
+# point
+@k.genres.part.presentation.point k.genres.part genre=presentation name=point n=3 min=3 max=5 layout=content about="One main point: its assertion as the headline, the evidence or an example, and what to remember." source=alley2013 source=alleyNeeley2005 source=cowan2001 own="Three to five points: the count is this repository's choice after Cowan (2001)." core.source="hand-core 1"
+@k.genres.step.presentation.point.1.state_claim k.genres.step genre=presentation part=point n=1 move="state claim" min=1 max=1 about="the assertion of the slide, as its sentence headline" source=alleyNeeley2005 core.source="hand-core 1"
+@k.genres.step.presentation.point.2.give_evidence k.genres.step genre=presentation part=point n=2 move="give evidence" min=1 max=2 source=alley2013 core.source="hand-core 1"
+@k.genres.step.presentation.point.2.give_example k.genres.step genre=presentation part=point n=2 move="give example" min=1 max=2 source=alley2013 core.source="hand-core 1"
+@k.genres.step.presentation.point.2.compare k.genres.step genre=presentation part=point n=2 move=compare min=1 max=2 source=alley2013 core.source="hand-core 1"
+@k.genres.step.presentation.point.2.surprising_fact k.genres.step genre=presentation part=point n=2 move="surprising fact" min=1 max=2 source=alley2013 core.source="hand-core 1"
+@k.genres.step.presentation.point.3.state_takeaway k.genres.step genre=presentation part=point n=3 move="state takeaway" min=0 max=1 source=alley2013 core.source="hand-core 1"
+
+# summary
+@k.genres.part.presentation.summary k.genres.part genre=presentation name=summary n=4 min=1 max=1 heading=Summary layout=summary about="The main points again, in a few words each." source=alley2013 core.source="hand-core 1"
+@k.genres.step.presentation.summary.1.summarize k.genres.step genre=presentation part=summary n=1 move=summarize min=1 max=3 source=alley2013 core.source="hand-core 1"
+@k.genres.step.presentation.summary.2.conclude k.genres.step genre=presentation part=summary n=2 move=conclude min=0 max=1 source=alley2013 core.source="hand-core 1"
+
+# closing
+@k.genres.part.presentation.closing k.genres.part genre=presentation name=closing n=5 min=1 max=1 heading=Questions layout=closing about="Thanks and an invitation to ask." source=alley2013 core.source="hand-core 1"
+@k.genres.step.presentation.closing.1.thank_audience k.genres.step genre=presentation part=closing n=1 move="thank audience" min=1 max=1 core.source="hand-core 1"
+@k.genres.step.presentation.closing.2.invite_questions k.genres.step genre=presentation part=closing n=2 move="invite questions" min=0 max=1 source=alley2013 core.source="hand-core 1"
+
+# Other names of the genre.
+@k.genres.word.genre.presentation core.word text=presentations text=talk text=slides text="slide show" text=slideshow means=presentation of=k.genres.genre.name core.source="hand-core 1"

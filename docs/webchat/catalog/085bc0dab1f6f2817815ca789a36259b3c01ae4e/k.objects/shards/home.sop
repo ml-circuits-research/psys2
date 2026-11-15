@@ -1,0 +1,127 @@
+# k.objects/shards/home: sofa, shelf, oven, bottle, box, suitcase, bag, phone, computer, book. Parts with a primitive shape, a box in the 0 to 100 frame
+# of the object (x right, y down), a draw order z and typical colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# sofa
+@k.objects.sofa k.objects.object name=sofa core.source="hand-core 1"
+@k.objects.sofa.back k.objects.part of=sofa name=back shape=rectangle x=15 y=30 w=70 h=30 z=1 colour=blue colour=red colour=green core.source="hand-core 1"
+@k.objects.sofa.seat k.objects.part of=sofa name=seat shape=rectangle x=15 y=55 w=70 h=20 z=2 colour=blue colour=red colour=green below=back core.source="hand-core 1"
+@k.objects.sofa.left_arm k.objects.part of=sofa name=left_arm kind=arm shape=rectangle x=5 y=42 w=12 h=38 z=3 colour=blue colour=red colour=green left_of=seat core.source="hand-core 1"
+@k.objects.sofa.right_arm k.objects.part of=sofa name=right_arm kind=arm shape=rectangle x=83 y=42 w=12 h=38 z=3 colour=blue colour=red colour=green right_of=seat core.source="hand-core 1"
+@k.objects.sofa.left_leg k.objects.part of=sofa name=left_leg kind=leg shape=rectangle x=10 y=80 w=5 h=10 z=0 colour=brown below=seat core.source="hand-core 1"
+@k.objects.sofa.right_leg k.objects.part of=sofa name=right_leg kind=leg shape=rectangle x=85 y=80 w=5 h=10 z=0 colour=brown below=seat core.source="hand-core 1"
+
+# shelf
+@k.objects.shelf k.objects.object name=shelf core.source="hand-core 1"
+@k.objects.shelf.frame k.objects.part of=shelf name=frame shape=rectangle x=15 y=10 w=70 h=82 z=0 colour=brown core.source="hand-core 1"
+@k.objects.shelf.top_board k.objects.part of=shelf name=top_board kind=board shape=rectangle x=15 y=30 w=70 h=4 z=2 colour=brown inside=frame core.source="hand-core 1"
+@k.objects.shelf.middle_board k.objects.part of=shelf name=middle_board kind=board shape=rectangle x=15 y=52 w=70 h=4 z=2 colour=brown inside=frame core.source="hand-core 1"
+@k.objects.shelf.bottom_board k.objects.part of=shelf name=bottom_board kind=board shape=rectangle x=15 y=74 w=70 h=4 z=2 colour=brown inside=frame core.source="hand-core 1"
+@k.objects.shelf.back k.objects.part of=shelf name=back shape=rectangle x=20 y=14 w=60 h=74 z=1 colour=white colour=yellow inside=frame core.source="hand-core 1"
+@k.objects.shelf.first_book k.objects.part of=shelf name=first_book kind=book shape=rectangle x=24 y=16 w=6 h=14 z=3 colour=red inside=frame core.source="hand-core 1"
+@k.objects.shelf.second_book k.objects.part of=shelf name=second_book kind=book shape=rectangle x=31 y=18 w=5 h=12 z=3 colour=blue inside=frame core.source="hand-core 1"
+@k.objects.shelf.third_book k.objects.part of=shelf name=third_book kind=book shape=rectangle x=37 y=15 w=7 h=15 z=3 colour=green inside=frame core.source="hand-core 1"
+@k.objects.shelf.ball k.objects.part of=shelf name=ball shape=circle x=58 y=41 w=11 h=11 z=3 colour=orange inside=frame core.source="hand-core 1"
+
+# oven
+@k.objects.oven k.objects.object name=oven core.source="hand-core 1"
+@k.objects.oven.body k.objects.part of=oven name=body shape=rectangle x=18 y=12 w=64 h=80 z=1 colour=white colour=grey core.source="hand-core 1"
+@k.objects.oven.door k.objects.part of=oven name=door shape=rectangle x=26 y=42 w=48 h=42 z=2 colour=grey colour=black inside=body core.source="hand-core 1"
+@k.objects.oven.window k.objects.part of=oven name=window shape=rectangle x=32 y=50 w=36 h=24 z=3 colour=black inside=door core.source="hand-core 1"
+@k.objects.oven.handle k.objects.part of=oven name=handle shape=rectangle x=32 y=45 w=36 h=3 z=3 colour=grey colour=black above=window inside=door core.source="hand-core 1"
+@k.objects.oven.first_knob k.objects.part of=oven name=first_knob kind=knob shape=circle x=26 y=24 w=7 h=7 z=2 colour=black above=door inside=body core.source="hand-core 1"
+@k.objects.oven.second_knob k.objects.part of=oven name=second_knob kind=knob shape=circle x=40 y=24 w=7 h=7 z=2 colour=black above=door inside=body core.source="hand-core 1"
+@k.objects.oven.third_knob k.objects.part of=oven name=third_knob kind=knob shape=circle x=54 y=24 w=7 h=7 z=2 colour=black above=door inside=body core.source="hand-core 1"
+@k.objects.oven.fourth_knob k.objects.part of=oven name=fourth_knob kind=knob shape=circle x=68 y=24 w=7 h=7 z=2 colour=black above=door inside=body core.source="hand-core 1"
+
+# bottle
+@k.objects.bottle k.objects.object name=bottle core.source="hand-core 1"
+@k.objects.bottle.body k.objects.part of=bottle name=body shape=rectangle x=35 y=40 w=30 h=52 z=1 colour=green colour=blue centered=true core.source="hand-core 1"
+@k.objects.bottle.shoulder k.objects.part of=bottle name=shoulder shape=polygon x=35 y=24 w=30 h=16 z=1 colour=green colour=blue above=body core.source="hand-core 1"
+@k.objects.bottle.neck k.objects.part of=bottle name=neck shape=rectangle x=44 y=12 w=12 h=14 z=1 colour=green colour=blue above=shoulder core.source="hand-core 1"
+@k.objects.bottle.cap k.objects.part of=bottle name=cap shape=rectangle x=43 y=6 w=14 h=7 z=2 colour=red colour=white above=neck core.source="hand-core 1"
+@k.objects.bottle.label k.objects.part of=bottle name=label shape=rectangle x=35 y=55 w=30 h=20 z=2 colour=white colour=yellow inside=body core.source="hand-core 1"
+@k.objects.bottle.shoulder.p1 k.objects.point part=$k.objects.bottle.shoulder n=1 x=35 y=40 core.source="hand-core 1"
+@k.objects.bottle.shoulder.p2 k.objects.point part=$k.objects.bottle.shoulder n=2 x=44 y=24 core.source="hand-core 1"
+@k.objects.bottle.shoulder.p3 k.objects.point part=$k.objects.bottle.shoulder n=3 x=56 y=24 core.source="hand-core 1"
+@k.objects.bottle.shoulder.p4 k.objects.point part=$k.objects.bottle.shoulder n=4 x=65 y=40 core.source="hand-core 1"
+
+# box
+@k.objects.box k.objects.object name=box core.source="hand-core 1"
+@k.objects.box.front k.objects.part of=box name=front shape=rectangle x=15 y=40 w=55 h=50 z=1 colour=brown core.source="hand-core 1"
+@k.objects.box.top k.objects.part of=box name=top shape=polygon x=15 y=22 w=75 h=18 z=2 colour=brown colour=yellow above=front core.source="hand-core 1"
+@k.objects.box.side k.objects.part of=box name=side shape=polygon x=70 y=22 w=20 h=68 z=1 colour=brown right_of=front core.source="hand-core 1"
+@k.objects.box.tape k.objects.part of=box name=tape shape=rectangle x=38 y=40 w=8 h=50 z=3 colour=yellow colour=white inside=front core.source="hand-core 1"
+@k.objects.box.top.p1 k.objects.point part=$k.objects.box.top n=1 x=15 y=40 core.source="hand-core 1"
+@k.objects.box.top.p2 k.objects.point part=$k.objects.box.top n=2 x=35 y=22 core.source="hand-core 1"
+@k.objects.box.top.p3 k.objects.point part=$k.objects.box.top n=3 x=90 y=22 core.source="hand-core 1"
+@k.objects.box.top.p4 k.objects.point part=$k.objects.box.top n=4 x=70 y=40 core.source="hand-core 1"
+@k.objects.box.side.p1 k.objects.point part=$k.objects.box.side n=1 x=70 y=40 core.source="hand-core 1"
+@k.objects.box.side.p2 k.objects.point part=$k.objects.box.side n=2 x=90 y=22 core.source="hand-core 1"
+@k.objects.box.side.p3 k.objects.point part=$k.objects.box.side n=3 x=90 y=72 core.source="hand-core 1"
+@k.objects.box.side.p4 k.objects.point part=$k.objects.box.side n=4 x=70 y=90 core.source="hand-core 1"
+
+# suitcase
+@k.objects.suitcase k.objects.object name=suitcase core.source="hand-core 1"
+@k.objects.suitcase.body k.objects.part of=suitcase name=body shape=rectangle x=12 y=32 w=76 h=56 z=1 colour=brown colour=red colour=blue core.source="hand-core 1"
+@k.objects.suitcase.handle k.objects.part of=suitcase name=handle shape=arc x=36 y=16 w=28 h=16 z=0 colour=black opens=down above=body core.source="hand-core 1"
+@k.objects.suitcase.left_strap k.objects.part of=suitcase name=left_strap kind=strap shape=rectangle x=26 y=32 w=6 h=56 z=2 colour=black inside=body core.source="hand-core 1"
+@k.objects.suitcase.right_strap k.objects.part of=suitcase name=right_strap kind=strap shape=rectangle x=68 y=32 w=6 h=56 z=2 colour=black inside=body core.source="hand-core 1"
+@k.objects.suitcase.lock k.objects.part of=suitcase name=lock shape=rectangle x=46 y=34 w=8 h=6 z=3 colour=yellow inside=body core.source="hand-core 1"
+
+# bag
+@k.objects.bag k.objects.object name=bag core.source="hand-core 1"
+@k.objects.bag.body k.objects.part of=bag name=body shape=polygon x=14 y=40 w=72 h=52 z=1 colour=red colour=green colour=blue core.source="hand-core 1"
+@k.objects.bag.handle k.objects.part of=bag name=handle shape=arc x=34 y=14 w=32 h=28 z=0 colour=black colour=brown opens=down above=body core.source="hand-core 1"
+@k.objects.bag.flap k.objects.part of=bag name=flap shape=rectangle x=22 y=40 w=56 h=14 z=2 colour=red colour=green colour=blue inside=body core.source="hand-core 1"
+@k.objects.bag.button k.objects.part of=bag name=button shape=circle x=47 y=45 w=6 h=6 z=3 colour=yellow inside=flap core.source="hand-core 1"
+@k.objects.bag.body.p1 k.objects.point part=$k.objects.bag.body n=1 x=22 y=40 core.source="hand-core 1"
+@k.objects.bag.body.p2 k.objects.point part=$k.objects.bag.body n=2 x=78 y=40 core.source="hand-core 1"
+@k.objects.bag.body.p3 k.objects.point part=$k.objects.bag.body n=3 x=86 y=92 core.source="hand-core 1"
+@k.objects.bag.body.p4 k.objects.point part=$k.objects.bag.body n=4 x=14 y=92 core.source="hand-core 1"
+
+# phone
+@k.objects.phone k.objects.object name=phone core.source="hand-core 1"
+@k.objects.phone.body k.objects.part of=phone name=body shape=rectangle x=30 y=6 w=40 h=88 z=1 colour=black colour=grey centered=true core.source="hand-core 1"
+@k.objects.phone.screen k.objects.part of=phone name=screen shape=rectangle x=34 y=16 w=32 h=62 z=2 colour=blue colour=white inside=body core.source="hand-core 1"
+@k.objects.phone.button k.objects.part of=phone name=button shape=circle x=46 y=82 w=8 h=8 z=2 colour=grey colour=white below=screen inside=body core.source="hand-core 1"
+@k.objects.phone.speaker k.objects.part of=phone name=speaker shape=rectangle x=43 y=10 w=14 h=2 z=2 colour=grey above=screen inside=body core.source="hand-core 1"
+
+# computer
+@k.objects.computer k.objects.object name=computer core.source="hand-core 1"
+@k.objects.computer.monitor k.objects.part of=computer name=monitor shape=rectangle x=15 y=10 w=70 h=50 z=1 colour=black colour=grey core.source="hand-core 1"
+@k.objects.computer.screen k.objects.part of=computer name=screen shape=rectangle x=20 y=15 w=60 h=40 z=2 colour=blue colour=white inside=monitor core.source="hand-core 1"
+@k.objects.computer.stand k.objects.part of=computer name=stand shape=square x=45 y=60 w=10 h=10 z=0 colour=grey colour=black below=monitor core.source="hand-core 1"
+@k.objects.computer.base k.objects.part of=computer name=base shape=rectangle x=32 y=70 w=36 h=4 z=1 colour=grey colour=black below=stand core.source="hand-core 1"
+@k.objects.computer.keyboard k.objects.part of=computer name=keyboard shape=rectangle x=18 y=80 w=54 h=10 z=1 colour=grey colour=white below=base core.source="hand-core 1"
+@k.objects.computer.mouse k.objects.part of=computer name=mouse shape=oval x=78 y=79 w=10 h=13 z=1 colour=grey colour=white right_of=keyboard core.source="hand-core 1"
+
+# book
+@k.objects.book k.objects.object name=book core.source="hand-core 1"
+@k.objects.book.cover k.objects.part of=book name=cover shape=rectangle x=18 y=15 w=64 h=72 z=1 colour=red colour=blue colour=green core.source="hand-core 1"
+@k.objects.book.spine k.objects.part of=book name=spine shape=rectangle x=18 y=15 w=8 h=72 z=2 colour=brown colour=black inside=cover core.source="hand-core 1"
+@k.objects.book.pages k.objects.part of=book name=pages shape=rectangle x=26 y=83 w=56 h=6 z=0 colour=white below=cover core.source="hand-core 1"
+@k.objects.book.title k.objects.part of=book name=title shape=rectangle x=36 y=28 w=36 h=10 z=3 colour=yellow colour=white inside=cover core.source="hand-core 1"
+@k.objects.book.first_line k.objects.part of=book name=first_line kind=line shape=line x=36 y=50 w=36 h=0 z=3 colour=yellow colour=white below=title core.source="hand-core 1"
+@k.objects.book.second_line k.objects.part of=book name=second_line kind=line shape=line x=36 y=58 w=36 h=0 z=3 colour=yellow colour=white below=first_line core.source="hand-core 1"
+@k.objects.book.first_line.p1 k.objects.point part=$k.objects.book.first_line n=1 x=36 y=50 core.source="hand-core 1"
+@k.objects.book.first_line.p2 k.objects.point part=$k.objects.book.first_line n=2 x=72 y=50 core.source="hand-core 1"
+@k.objects.book.second_line.p1 k.objects.point part=$k.objects.book.second_line n=1 x=36 y=58 core.source="hand-core 1"
+@k.objects.book.second_line.p2 k.objects.point part=$k.objects.book.second_line n=2 x=72 y=58 core.source="hand-core 1"
+
+@k.objects.word.sofa core.word text=sofa text=sofas text=couch means=sofa of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.shelf core.word text=shelf text=shelves text=bookshelf means=shelf of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.oven core.word text=oven text=ovens means=oven of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.bottle core.word text=bottle text=bottles means=bottle of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.box core.word text=box text=boxes text=crate means=box of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.suitcase core.word text=suitcase text=suitcases means=suitcase of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.bag core.word text=bag text=bags means=bag of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.phone core.word text=phone text=phones text=mobile text=smartphone means=phone of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.computer core.word text=computer text=computers text=pc means=computer of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.book core.word text=book means=book of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.part.board core.word text=board text=boards means=board of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.knob core.word text=knob text=knobs means=knob of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.strap core.word text=strap text=straps means=strap of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.line core.word text=line text=lines means=line of=k.objects.part.kind core.source="hand-core 1"

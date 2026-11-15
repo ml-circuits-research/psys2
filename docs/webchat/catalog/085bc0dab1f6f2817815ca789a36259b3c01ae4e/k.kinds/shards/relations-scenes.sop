@@ -1,0 +1,24 @@
+# k.kinds/shards/relations-scenes: the keys of the types of k.scenes read as relations: 19 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.scenes.has.scene k.kinds.relation type=k.scenes.has key=scene subject=has object=place object_type=k.scenes.scene found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.scenes.has.thing k.kinds.relation type=k.scenes.has key=thing subject=has object=thing object_type=k.scenes.thing found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.scenes.has.count k.kinds.relation type=k.scenes.has key=count subject=has object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.scenes.has.where k.kinds.relation type=k.scenes.has key=where subject=has object=place found=schema core.source="hand-core 1"
+@k.kinds.relation.k.scenes.has.side k.kinds.relation type=k.scenes.has key=side subject=has object=value object_type=k.values.position found=value core.source="hand-core 1"
+@k.kinds.relation.k.scenes.has.on k.kinds.relation type=k.scenes.has key=on subject=has object=thing object_type=k.scenes.thing found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.scenes.has.fills k.kinds.relation type=k.scenes.has key=fills subject=has object=boolean found=schema core.source="hand-core 1"
+@k.kinds.relation.k.scenes.has.drawing k.kinds.relation type=k.scenes.has key=drawing subject=has object=thing object_type=k.objects.object found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.scenes.scene.kind k.kinds.relation type=k.scenes.scene key=kind subject=scene object=kind object_type=k.scenes.scene found=value core.source="hand-core 1"
+@k.kinds.relation.k.scenes.scene.ground k.kinds.relation type=k.scenes.scene key=ground subject=scene object=thing object_type=k.scenes.thing found=value core.source="hand-core 1"
+@k.kinds.relation.k.scenes.scene.time k.kinds.relation type=k.scenes.scene key=time subject=scene object=time object_type=k.time.part_of_day object_sense=time found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.scenes.scene.weather k.kinds.relation type=k.scenes.scene key=weather subject=scene object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.scenes.scene.season k.kinds.relation type=k.scenes.scene key=season subject=scene object=time object_type=k.time.season object_sense=time found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.scenes.scene.happens k.kinds.relation type=k.scenes.scene key=happens subject=scene object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.scenes.scene.drawing k.kinds.relation type=k.scenes.scene key=drawing subject=scene object=thing object_type=k.objects.object found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.scenes.thing.place k.kinds.relation type=k.scenes.thing key=place subject=thing object=place found=schema core.source="hand-core 1"
+@k.kinds.relation.k.scenes.thing.on k.kinds.relation type=k.scenes.thing key=on subject=thing object=thing object_type=k.attributes.drawn object_type=k.objects.object object_type=k.layouts.anchor found=value core.source="hand-core 1"
+@k.kinds.relation.k.scenes.thing.size k.kinds.relation type=k.scenes.thing key=size subject=thing object=value scale=size found=schema core.source="hand-core 1"
+@k.kinds.relation.k.scenes.thing.named k.kinds.relation type=k.scenes.thing key=named subject=thing object=value found=schema core.source="hand-core 1"

@@ -68,7 +68,8 @@ export function answerFrom(frame, th, catalog) {
 export const TIMED_OUT = Symbol('knowledge lookup timed out');
 export const LOOKUP_DEADLINE_MS = 6000;
 export const knowledgeStatsOf = (dialog) => (dialog.engine.knowledgeStats ??= { timeouts: 0, failures: 0 });
-async function within(dialog, promise) {
+/** A catalog wait bounded by the lookup deadline (TIMED_OUT past it or on a failure): a catalog that hangs delays a turn once and changes nothing. */
+export async function within(dialog, promise) {
   const st = knowledgeStatsOf(dialog);
   let timer;
   try {

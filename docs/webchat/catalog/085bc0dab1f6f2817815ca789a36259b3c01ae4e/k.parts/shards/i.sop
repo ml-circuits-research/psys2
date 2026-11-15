@@ -1,0 +1,15 @@
+# k.parts/shards/i: the usual parts of 8 common things whose name starts with "i" (icebox, ied, incinerator, incubator, infirmary, inn ...): the parts WordNet gives the thing, and the parts it gives what the thing is a kind of.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: part meronyms, hypernyms, glosses); which words are common things: tools/coverage.mjs (frequency-words 2018, wordnet 3.1)
+# license: WordNet-3.0
+# script: tools/import/parts.mjs
+
+@k.parts.whole.icebox k.parts.whole name=icebox gloss="white goods in which food can be stored at low temperatures" has="drip pan" has="refrigeration system" plain=pan core.source="wordnet 3.1"
+@k.parts.inherited.ied.explosive_device k.parts.inherited name=ied from="explosive device" steps=1 has=explosive core.source="wordnet 3.1"
+@k.parts.inherited.incinerator.furnace k.parts.inherited name=incinerator from=furnace steps=1 has=grate has=register core.source="wordnet 3.1"
+@k.parts.whole.incubator k.parts.whole name=incubator gloss="apparatus consisting of a box designed to maintain a constant temperature by the use of a thermostat; used for chicks or premature infants" has=thermostat core.source="wordnet 3.1"
+@k.parts.whole.infirmary k.parts.whole name=infirmary gloss="a health facility where patients receive treatment" has="burn center" has=clinic has="hospital room" has=ward plain=center plain=room core.source="wordnet 3.1"
+@k.parts.inherited.infirmary.building k.parts.inherited name=infirmary from=building steps=2 has=annex has=anteroom has=corner has=cornerstone has=court has=cullis has=elevator has="exterior door" has=floor has="foundation stone" has="heating system" has="interior door" has=roof has=room has=scantling has=shaft has=skeleton has=stairway has=upstairs has=wall has=window has=crawlspace plain=door plain=stone core.source="wordnet 3.1"
+@k.parts.inherited.inn.hotel k.parts.inherited name=inn from=hotel steps=1 has="hotel room" core.source="wordnet 3.1"
+@k.parts.inherited.inn.building k.parts.inherited name=inn from=building steps=2 has=annex has=anteroom has=corner has=cornerstone has=court has=cullis has=elevator has="exterior door" has=floor has="foundation stone" has="heating system" has="interior door" has=roof has=room has=scantling has=shaft has=skeleton has=stairway has=upstairs has=wall has=window has=crawlspace plain=door plain=stone core.source="wordnet 3.1"
+@k.parts.whole.insect k.parts.whole name=insect gloss="small air-breathing arthropod" has=clypeus has=wing has=ala has="air sac" has=thorax has=mentum plain=sac core.source="wordnet 3.1"
+@k.parts.whole.intercom k.parts.whole name=intercom gloss="a communication system linking different rooms within a building or ship etc" has="squawk box" core.source="wordnet 3.1"

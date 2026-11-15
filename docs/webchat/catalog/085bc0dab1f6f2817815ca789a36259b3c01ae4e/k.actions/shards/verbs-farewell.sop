@@ -1,0 +1,11 @@
+# k.actions/shards/verbs-farewell: 5 verbs and phrasal verbs that mean the act "farewell" (say goodbye, say bye, bid farewell, take leave, sign off ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 0 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 5 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.farewell.say_goodbye k.actions.verb text="say goodbye" act=farewell core.source="hand-core 1"
+@k.actions.verb.farewell.say_bye k.actions.verb text="say bye" act=farewell core.source="hand-core 1"
+@k.actions.verb.farewell.bid_farewell k.actions.verb text="bid farewell" act=farewell core.source="hand-core 1"
+@k.actions.verb.farewell.take_leave k.actions.verb text="take leave" act=farewell core.source="hand-core 1"
+@k.actions.verb.farewell.sign_off k.actions.verb text="sign off" act=farewell core.source="hand-core 1"

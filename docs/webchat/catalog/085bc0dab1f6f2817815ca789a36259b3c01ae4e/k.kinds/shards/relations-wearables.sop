@@ -1,0 +1,23 @@
+# k.kinds/shards/relations-wearables: the keys of the types of k.wearables read as relations: 18 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.wearables.place.about k.kinds.relation type=k.wearables.place key=about subject=place object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.wearables.place.face_slot k.kinds.relation type=k.wearables.place key=face_slot subject=place object=thing object_type=k.faces.slot found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.wearables.place.body_part k.kinds.relation type=k.wearables.place key=body_part subject=place object=thing object_type=k.body.part object_sense="body part" found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.wearables.place.x k.kinds.relation type=k.wearables.place key=x subject=place object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.wearables.place.y k.kinds.relation type=k.wearables.place key=y subject=place object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.wearables.place.w k.kinds.relation type=k.wearables.place key=w subject=place object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.wearables.place.h k.kinds.relation type=k.wearables.place key=h subject=place object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.wearables.place.pair k.kinds.relation type=k.wearables.place key=pair subject=place object=boolean found=schema core.source="hand-core 1"
+@k.kinds.relation.k.wearables.place.named k.kinds.relation type=k.wearables.place key=named subject=place object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.wearables.wearable.kind k.kinds.relation type=k.wearables.wearable key=kind subject=wearable subject_sense=clothing object=kind found=schema core.source="hand-core 1"
+@k.kinds.relation.k.wearables.wearable.worn_on k.kinds.relation type=k.wearables.wearable key=worn_on subject=wearable subject_sense=clothing object=thing object_type=k.wearables.place found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.wearables.wearable.covers k.kinds.relation type=k.wearables.wearable key=covers subject=wearable subject_sense=clothing object=thing object_type=k.wearables.place found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.wearables.wearable.layer k.kinds.relation type=k.wearables.wearable key=layer subject=wearable subject_sense=clothing object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.wearables.wearable.pair k.kinds.relation type=k.wearables.wearable key=pair subject=wearable subject_sense=clothing object=boolean found=schema core.source="hand-core 1"
+@k.kinds.relation.k.wearables.wearable.drawing k.kinds.relation type=k.wearables.wearable key=drawing subject=wearable subject_sense=clothing object=thing object_type=k.objects.object found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.wearables.wearable.face_slot k.kinds.relation type=k.wearables.wearable key=face_slot subject=wearable subject_sense=clothing object=thing object_type=k.faces.slot found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.wearables.wearable.face k.kinds.relation type=k.wearables.wearable key=face subject=wearable subject_sense=clothing object=thing object_type=k.scenes.thing found=value core.source="hand-core 1"
+@k.kinds.relation.k.wearables.wearable.worn_for k.kinds.relation type=k.wearables.wearable key=worn_for subject=wearable subject_sense=clothing object=word object_type=k.words.sense found=value core.source="hand-core 1"

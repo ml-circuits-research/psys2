@@ -1,0 +1,12 @@
+# k.layouts/shards/psys2: from the PSys2 world common.sense: 7 kinds of things that usually stand around another (chairs around a table, a bench at a fire).
+# sources: psys2-worlds 6b63b2ba (the hand-written knowledge of the PSys2 tab worlds, the project's own data)
+# license: CC0-1.0
+# script: tools/import/psys2.mjs
+
+@k.layouts.psys2.chair.around.table k.layouts.joins a=chair rel=around b=table core.source="psys2-worlds 6b63b2ba"
+@k.layouts.psys2.stool.around.table k.layouts.joins a=stool rel=around b=table core.source="psys2-worlds 6b63b2ba"
+@k.layouts.psys2.plate.around.table k.layouts.joins a=plate rel=around b=table core.source="psys2-worlds 6b63b2ba"
+@k.layouts.psys2.person.around.table k.layouts.joins a=person rel=around b=table core.source="psys2-worlds 6b63b2ba"
+@k.layouts.psys2.cup.around.table k.layouts.joins a=cup rel=around b=table core.source="psys2-worlds 6b63b2ba"
+@k.layouts.psys2.bench.around.fire k.layouts.joins a=bench rel=around b=fire core.source="psys2-worlds 6b63b2ba"
+@k.layouts.psys2.chair.around.desk k.layouts.joins a=chair rel=around b=desk core.source="psys2-worlds 6b63b2ba"

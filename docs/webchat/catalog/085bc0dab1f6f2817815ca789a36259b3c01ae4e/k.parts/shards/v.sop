@@ -1,0 +1,15 @@
+# k.parts/shards/v: the usual parts of 7 common things whose name starts with "v" (vase, vcr, veal, ventilator, vial, violin ...): the parts WordNet gives the thing, and the parts it gives what the thing is a kind of.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: part meronyms, hypernyms, glosses); which words are common things: tools/coverage.mjs (frequency-words 2018, wordnet 3.1)
+# license: WordNet-3.0
+# script: tools/import/parts.mjs
+
+@k.parts.inherited.vase.vessel k.parts.inherited name=vase from=vessel steps=2 has=base has=brim core.source="wordnet 3.1"
+@k.parts.inherited.vcr.tape_recorder k.parts.inherited name=vcr from="tape recorder" steps=1 has="magnetic head" has="tape drive" core.source="wordnet 3.1"
+@k.parts.whole.veal k.parts.whole name=veal gloss="meat from a calf" has="cut of veal" core.source="wordnet 3.1"
+@k.parts.whole.ventilator k.parts.whole name=ventilator gloss="a device (such as a fan) that introduces fresh air or expels foul air" has="air filter" plain=filter core.source="wordnet 3.1"
+@k.parts.inherited.vial.bottle k.parts.inherited name=vial from=bottle steps=1 has=bottlecap has=mouth core.source="wordnet 3.1"
+@k.parts.inherited.vial.vessel k.parts.inherited name=vial from=vessel steps=2 has=base has=brim core.source="wordnet 3.1"
+@k.parts.whole.violin k.parts.whole name=violin gloss="bowed stringed instrument that is the highest member of the violin family; this instrument has four strings and a hollow body and an unfretted fingerboard and is played with a bow" has="chin rest" has=fiddlestick plain=rest core.source="wordnet 3.1"
+@k.parts.inherited.violin.bowed_stringed_instrument k.parts.inherited name=violin from="bowed stringed instrument" steps=1 has=fingerboard core.source="wordnet 3.1"
+@k.parts.inherited.violin.stringed_instrument k.parts.inherited name=violin from="stringed instrument" steps=2 has=bridge has=peg has="sounding board" core.source="wordnet 3.1"
+@k.parts.inherited.vulture.bird k.parts.inherited name=vulture from=bird steps=2 has=beak has=furcula has=feather has=wing has=pennon has="bird's foot" has=uropygium has=hindquarters has="air sac" has="uropygial gland" has=syrinx plain=foot plain=sac core.source="wordnet 3.1"

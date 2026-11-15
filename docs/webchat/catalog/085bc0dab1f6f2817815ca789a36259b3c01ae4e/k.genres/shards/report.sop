@@ -1,0 +1,35 @@
+# k.genres/shards/report: the genre "report": 6 parts in order with how many times each occurs, and 8 steps (the moves of each part in order, with alternatives and sentence counts).
+# sources: hand-core 1 (hand-written in this repository: tools/genres-core.mjs; the works cited are in WORLD.md)
+# license: CC0-1.0
+# script: tools/genres-core.mjs
+
+@k.genres.genre.report k.genres.genre name=report about="A report of work done: a summary, what the work was and why, what was done and when, the results, the problems met (if any), and the next steps (after ANSI/NISO Z39.18: summary, introduction, methods, results, conclusions and recommendations)." register=report unit=chapter also_move=compare also_move=transition source=niso2005 source=cutts2013 own="The parts \"work done\" and \"problems\" for a report of work (NISO's methods and procedures; problems are this repository's), and the counts." core.source="hand-core 1"
+
+# summary
+@k.genres.part.report.summary k.genres.part genre=report name=summary n=1 min=1 max=1 heading=Summary about="The whole report in a few sentences." source=niso2005 core.source="hand-core 1"
+@k.genres.step.report.summary.1.summarize k.genres.step genre=report part=summary n=1 move=summarize min=1 max=3 source=niso2005 core.source="hand-core 1"
+
+# introduction
+@k.genres.part.report.introduction k.genres.part genre=report name=introduction n=2 min=1 max=1 heading=Introduction tense=present about="What the work is and why it was done." source=niso2005 core.source="hand-core 1"
+@k.genres.step.report.introduction.1.introduce_topic k.genres.step genre=report part=introduction n=1 move="introduce topic" min=1 max=1 source=niso2005 core.source="hand-core 1"
+@k.genres.step.report.introduction.2.state_purpose k.genres.step genre=report part=introduction n=2 move="state purpose" min=1 max=1 source=niso2005 core.source="hand-core 1"
+
+# work done
+@k.genres.part.report.work_done k.genres.part genre=report name="work done" n=3 min=1 max=1 heading="Work done" about="What was done, and when, in order." source=niso2005 own="NISO's methods, assumptions and procedures, as the acts done." core.source="hand-core 1"
+@k.genres.step.report.work_done.1.report_action k.genres.step genre=report part="work done" n=1 move="report action" min=1 max=6 source=niso2005 core.source="hand-core 1"
+
+# results
+@k.genres.part.report.results k.genres.part genre=report name=results n=4 min=1 max=1 heading=Results tense=present about="What came out of it, with numbers." source=niso2005 core.source="hand-core 1"
+@k.genres.step.report.results.1.report_result k.genres.step genre=report part=results n=1 move="report result" min=1 max=4 source=niso2005 core.source="hand-core 1"
+@k.genres.step.report.results.2.compare k.genres.step genre=report part=results n=2 move=compare min=0 max=1 source=niso2005 core.source="hand-core 1"
+
+# problems
+@k.genres.part.report.problems k.genres.part genre=report name=problems n=5 min=0 max=1 heading=Problems about="What went wrong or held the work up." own="A part of a progress report, not of NISO Z39.18." core.source="hand-core 1"
+@k.genres.step.report.problems.1.report_problem k.genres.step genre=report part=problems n=1 move="report problem" min=1 max=2 core.source="hand-core 1"
+
+# next steps
+@k.genres.part.report.next_steps k.genres.part genre=report name="next steps" n=6 min=1 max=1 heading="Next steps" tense=future about="What will be done next." source=niso2005 own="NISO's recommendations, as the writer's own next steps." core.source="hand-core 1"
+@k.genres.step.report.next_steps.1.next_step k.genres.step genre=report part="next steps" n=1 move="next step" min=1 max=3 source=niso2005 core.source="hand-core 1"
+
+# Other names of the genre.
+@k.genres.word.genre.report core.word text=reports text="progress report" text="status report" means=report of=k.genres.genre.name core.source="hand-core 1"

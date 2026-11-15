@@ -1,0 +1,17 @@
+# k.kinds/shards/relations-drawing: the keys of the types of k.drawing read as relations: 12 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.drawing.part.shape k.kinds.relation type=k.drawing.part key=shape subject=part object=value object_type=k.shapes.shape object_sense=shape found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.drawing.part.x k.kinds.relation type=k.drawing.part key=x subject=part object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.drawing.part.y k.kinds.relation type=k.drawing.part key=y subject=part object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.drawing.part.w k.kinds.relation type=k.drawing.part key=w subject=part object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.drawing.part.h k.kinds.relation type=k.drawing.part key=h subject=part object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.drawing.part.z k.kinds.relation type=k.drawing.part key=z subject=part object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.drawing.part.colour k.kinds.relation type=k.drawing.part key=colour subject=part object=value object_type=k.colours.basic found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.drawing.part.rgb k.kinds.relation type=k.drawing.part key=rgb subject=part object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.drawing.part.pointing k.kinds.relation type=k.drawing.part key=pointing subject=part object=value object_type=k.values.direction found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.drawing.part.opens k.kinds.relation type=k.drawing.part key=opens subject=part object=value object_type=k.values.direction found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.drawing.point.x k.kinds.relation type=k.drawing.point key=x subject=point object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.drawing.point.y k.kinds.relation type=k.drawing.point key=y subject=point object=number found=schema core.source="hand-core 1"

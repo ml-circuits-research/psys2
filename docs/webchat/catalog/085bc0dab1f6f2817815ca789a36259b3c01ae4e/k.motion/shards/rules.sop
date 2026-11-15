@@ -1,0 +1,122 @@
+# k.motion/shards/rules: 2 events, 4 layers and 17 rules of a face over time: blinking, glancing, saying a reply, and how a reply came out (done, already, refused, not understood, answer, question, thinking).
+# sources: hand-core 1 (hand-written in this repository: tools/motion-core.mjs; the duration ranges from the measurements named in k.motion/WORLD.md)
+# license: CC0-1.0
+# script: tools/motion-core.mjs
+
+# Events and their fields
+@k.motion.event.reply k.motion.event name=reply about="A reply begins: how it came out (outcome) and what is said (text)." core.source="hand-core 1"
+@k.motion.field.reply.outcome k.motion.field event=reply name=outcome value=done value=already value=refused value="not understood" value=answer value=question value=thinking about="How the request came out: done, already so, refused, not understood, an answer, a question back, or still thinking." core.source="hand-core 1"
+@k.motion.field.reply.text k.motion.field event=reply name=text about="What the reply says, as written text (may be empty)." core.source="hand-core 1"
+@k.motion.event.spoken k.motion.event name=spoken about="The text of a reply has been said (made by the rule that says it); it carries the fields of that reply." core.source="hand-core 1"
+@k.motion.field.spoken.outcome k.motion.field event=spoken name=outcome value=done value=already value=refused value="not understood" value=answer value=question value=thinking about="The outcome of the reply that was said." core.source="hand-core 1"
+@k.motion.field.spoken.text k.motion.field event=spoken name=text about="The text that was said." core.source="hand-core 1"
+
+# Layers
+@k.motion.layer.blink k.motion.layer name=blink priority=4 key=eyes key=one_eye about="Blinking: above everything, so that the face blinks while it talks and while it shows an expression." core.source="hand-core 1"
+@k.motion.layer.talk k.motion.layer name=talk priority=3 key=mouth about="The mouth while a text is said: above the mouth of an expression." core.source="hand-core 1"
+@k.motion.layer.expression k.motion.layer name=expression priority=2 key=mouth key=eyebrows key=eyes key=one_eye about="How a reply came out: a smile, raised or sad brows, eyes looking up." core.source="hand-core 1"
+@k.motion.layer.glance k.motion.layer name=glance priority=1 key=eyes key=one_eye about="Small glances aside: below an expression that sets the eyes." core.source="hand-core 1"
+
+# blink at rest
+@k.motion.rule.blink_at_rest k.motion.rule name="blink at rest" about="Blink every few seconds while nothing is said (17 blinks a minute at rest); not when the eyes are already closed." layer=blink repeat_min=1500 repeat_max=5500 not_during=talk core.source="hand-core 1"
+@k.motion.when.blink_at_rest.eyes k.motion.when rule="blink at rest" key=eyes of=state value=closed feature=feel not=true core.source="hand-core 1"
+@k.motion.step.blink_at_rest.1 k.motion.step rule="blink at rest" n=1 about="close both eyes and open them again" onset_min=60 onset_max=100 hold_min=30 hold_max=60 back_min=110 back_max=200 core.source="hand-core 1"
+@k.motion.set.blink_at_rest.1.eyes k.motion.set rule="blink at rest" step=1 key=eyes value=closed via=sleepy core.source="hand-core 1"
+@k.motion.set.blink_at_rest.1.one_eye k.motion.set rule="blink at rest" step=1 key=one_eye value=closed via=sleepy core.source="hand-core 1"
+
+# blink while talking
+@k.motion.rule.blink_while_talking k.motion.rule name="blink while talking" about="Blink more often while saying a reply (26 blinks a minute in conversation)." layer=blink repeat_min=1000 repeat_max=3600 during=talk core.source="hand-core 1"
+@k.motion.when.blink_while_talking.eyes k.motion.when rule="blink while talking" key=eyes of=state value=closed feature=feel not=true core.source="hand-core 1"
+@k.motion.step.blink_while_talking.1 k.motion.step rule="blink while talking" n=1 about="close both eyes and open them again" onset_min=60 onset_max=100 hold_min=30 hold_max=60 back_min=110 back_max=200 core.source="hand-core 1"
+@k.motion.set.blink_while_talking.1.eyes k.motion.set rule="blink while talking" step=1 key=eyes value=closed via=sleepy core.source="hand-core 1"
+@k.motion.set.blink_while_talking.1.one_eye k.motion.set rule="blink while talking" step=1 key=one_eye value=closed via=sleepy core.source="hand-core 1"
+
+# glance left while listening
+@k.motion.rule.glance_left_while_listening k.motion.rule name="glance left while listening" about="Look a little to the viewer's left now and then while nothing is said, and back." layer=glance repeat_min=10000 repeat_max=22000 not_during=talk core.source="hand-core 1"
+@k.motion.step.glance_left_while_listening.1 k.motion.step rule="glance left while listening" n=1 about="look to the left" onset_min=25 onset_max=60 hold_min=190 hold_max=670 back_min=25 back_max=60 core.source="hand-core 1"
+@k.motion.set.glance_left_while_listening.1.eyes k.motion.set rule="glance left while listening" step=1 key=eyes value="looking out" core.source="hand-core 1"
+@k.motion.set.glance_left_while_listening.1.one_eye k.motion.set rule="glance left while listening" step=1 key=one_eye value="looking in" core.source="hand-core 1"
+
+# glance left while talking
+@k.motion.rule.glance_left_while_talking k.motion.rule name="glance left while talking" about="Look a little to the viewer's left more often while saying a reply, and back." layer=glance repeat_min=3000 repeat_max=12000 during=talk core.source="hand-core 1"
+@k.motion.step.glance_left_while_talking.1 k.motion.step rule="glance left while talking" n=1 about="look to the left" onset_min=25 onset_max=60 hold_min=300 hold_max=1500 back_min=25 back_max=60 core.source="hand-core 1"
+@k.motion.set.glance_left_while_talking.1.eyes k.motion.set rule="glance left while talking" step=1 key=eyes value="looking out" core.source="hand-core 1"
+@k.motion.set.glance_left_while_talking.1.one_eye k.motion.set rule="glance left while talking" step=1 key=one_eye value="looking in" core.source="hand-core 1"
+
+# glance right while listening
+@k.motion.rule.glance_right_while_listening k.motion.rule name="glance right while listening" about="Look a little to the viewer's right now and then while nothing is said, and back." layer=glance repeat_min=10000 repeat_max=22000 not_during=talk core.source="hand-core 1"
+@k.motion.step.glance_right_while_listening.1 k.motion.step rule="glance right while listening" n=1 about="look to the right" onset_min=25 onset_max=60 hold_min=190 hold_max=670 back_min=25 back_max=60 core.source="hand-core 1"
+@k.motion.set.glance_right_while_listening.1.eyes k.motion.set rule="glance right while listening" step=1 key=eyes value="looking in" core.source="hand-core 1"
+@k.motion.set.glance_right_while_listening.1.one_eye k.motion.set rule="glance right while listening" step=1 key=one_eye value="looking out" core.source="hand-core 1"
+
+# glance right while talking
+@k.motion.rule.glance_right_while_talking k.motion.rule name="glance right while talking" about="Look a little to the viewer's right more often while saying a reply, and back." layer=glance repeat_min=3000 repeat_max=12000 during=talk core.source="hand-core 1"
+@k.motion.step.glance_right_while_talking.1 k.motion.step rule="glance right while talking" n=1 about="look to the right" onset_min=25 onset_max=60 hold_min=300 hold_max=1500 back_min=25 back_max=60 core.source="hand-core 1"
+@k.motion.set.glance_right_while_talking.1.eyes k.motion.set rule="glance right while talking" step=1 key=eyes value="looking in" core.source="hand-core 1"
+@k.motion.set.glance_right_while_talking.1.one_eye k.motion.set rule="glance right while talking" step=1 key=one_eye value="looking out" core.source="hand-core 1"
+
+# say the reply
+@k.motion.rule.say_the_reply k.motion.rule name="say the reply" about="Move the mouth through the text of the reply, letter by letter, by the classes of mouth shapes; when it is said, the event spoken comes." layer=talk on=reply until=reply emits=spoken core.source="hand-core 1"
+@k.motion.step.say_the_reply.1 k.motion.step rule="say the reply" n=1 about="one mouth shape per letter" per=text splitter="latin letters" key=mouth core.source="hand-core 1"
+
+# done: smile
+@k.motion.rule.done_smile k.motion.rule name="done: smile" about="After saying that it is done, smile, then ease back." layer=expression on=spoken until=reply core.source="hand-core 1"
+@k.motion.when.done_smile.outcome k.motion.when rule="done: smile" key=outcome of=event value=done core.source="hand-core 1"
+@k.motion.step.done_smile.1 k.motion.step rule="done: smile" n=1 about="smile" onset_min=400 onset_max=700 hold_min=800 hold_max=1600 back_min=450 back_max=750 core.source="hand-core 1"
+@k.motion.set.done_smile.1.mouth k.motion.set rule="done: smile" step=1 key=mouth value=smile core.source="hand-core 1"
+
+# already: eyebrow flash
+@k.motion.rule.already_eyebrow_flash k.motion.rule name="already: eyebrow flash" about="When it was already so, a quick raise of the brows as the reply begins." layer=expression on=reply until=reply core.source="hand-core 1"
+@k.motion.when.already_eyebrow_flash.outcome k.motion.when rule="already: eyebrow flash" key=outcome of=event value=already core.source="hand-core 1"
+@k.motion.step.already_eyebrow_flash.1 k.motion.step rule="already: eyebrow flash" n=1 about="raise the brows quickly" onset_min=60 onset_max=120 hold_min=150 hold_max=300 back_min=100 back_max=200 core.source="hand-core 1"
+@k.motion.set.already_eyebrow_flash.1.eyebrows k.motion.set rule="already: eyebrow flash" step=1 key=eyebrows value=raised core.source="hand-core 1"
+
+# already: small smile
+@k.motion.rule.already_small_smile k.motion.rule name="already: small smile" about="After saying it was already so, a short smile." layer=expression on=spoken until=reply core.source="hand-core 1"
+@k.motion.when.already_small_smile.outcome k.motion.when rule="already: small smile" key=outcome of=event value=already core.source="hand-core 1"
+@k.motion.step.already_small_smile.1 k.motion.step rule="already: small smile" n=1 about="smile shortly" onset_min=400 onset_max=700 hold_min=400 hold_max=900 back_min=450 back_max=750 core.source="hand-core 1"
+@k.motion.set.already_small_smile.1.mouth k.motion.set rule="already: small smile" step=1 key=mouth value=smile core.source="hand-core 1"
+
+# refused: sad brows
+@k.motion.rule.refused_sad_brows k.motion.rule name="refused: sad brows" about="When it cannot be done, sad brows while saying so and a little after." layer=expression on=reply until=reply core.source="hand-core 1"
+@k.motion.when.refused_sad_brows.outcome k.motion.when rule="refused: sad brows" key=outcome of=event value=refused core.source="hand-core 1"
+@k.motion.step.refused_sad_brows.1 k.motion.step rule="refused: sad brows" n=1 about="sad brows" onset_min=300 onset_max=600 hold_min=300 hold_max=800 hold_until=spoken back_min=400 back_max=800 core.source="hand-core 1"
+@k.motion.set.refused_sad_brows.1.eyebrows k.motion.set rule="refused: sad brows" step=1 key=eyebrows value=sad core.source="hand-core 1"
+
+# refused: sad mouth
+@k.motion.rule.refused_sad_mouth k.motion.rule name="refused: sad mouth" about="After saying it cannot be done, a sad mouth, then ease back." layer=expression on=spoken until=reply core.source="hand-core 1"
+@k.motion.when.refused_sad_mouth.outcome k.motion.when rule="refused: sad mouth" key=outcome of=event value=refused core.source="hand-core 1"
+@k.motion.step.refused_sad_mouth.1 k.motion.step rule="refused: sad mouth" n=1 about="sad mouth" onset_min=300 onset_max=600 hold_min=500 hold_max=1000 back_min=400 back_max=800 core.source="hand-core 1"
+@k.motion.set.refused_sad_mouth.1.mouth k.motion.set rule="refused: sad mouth" step=1 key=mouth value=sad core.source="hand-core 1"
+
+# not understood: raised brows
+@k.motion.rule.not_understood_raised_brows k.motion.rule name="not understood: raised brows" about="When the request was not understood, raised brows while saying so and a little after." layer=expression on=reply until=reply core.source="hand-core 1"
+@k.motion.when.not_understood_raised_brows.outcome k.motion.when rule="not understood: raised brows" key=outcome of=event value="not understood" core.source="hand-core 1"
+@k.motion.step.not_understood_raised_brows.1 k.motion.step rule="not understood: raised brows" n=1 about="raise the brows" onset_min=100 onset_max=200 hold_min=300 hold_max=700 hold_until=spoken back_min=200 back_max=400 core.source="hand-core 1"
+@k.motion.set.not_understood_raised_brows.1.eyebrows k.motion.set rule="not understood: raised brows" step=1 key=eyebrows value=raised core.source="hand-core 1"
+
+# not understood: small mouth
+@k.motion.rule.not_understood_small_mouth k.motion.rule name="not understood: small mouth" about="After saying it was not understood, a small puzzled mouth." layer=expression on=spoken until=reply core.source="hand-core 1"
+@k.motion.when.not_understood_small_mouth.outcome k.motion.when rule="not understood: small mouth" key=outcome of=event value="not understood" core.source="hand-core 1"
+@k.motion.step.not_understood_small_mouth.1 k.motion.step rule="not understood: small mouth" n=1 about="small mouth" onset_min=150 onset_max=300 hold_min=500 hold_max=1000 back_min=200 back_max=400 core.source="hand-core 1"
+@k.motion.set.not_understood_small_mouth.1.mouth k.motion.set rule="not understood: small mouth" step=1 key=mouth value=small core.source="hand-core 1"
+
+# answer: eyebrow flash
+@k.motion.rule.answer_eyebrow_flash k.motion.rule name="answer: eyebrow flash" about="An answer: attentive, a quick raise of the brows as it begins, otherwise the face as it is." layer=expression on=reply until=reply core.source="hand-core 1"
+@k.motion.when.answer_eyebrow_flash.outcome k.motion.when rule="answer: eyebrow flash" key=outcome of=event value=answer core.source="hand-core 1"
+@k.motion.step.answer_eyebrow_flash.1 k.motion.step rule="answer: eyebrow flash" n=1 about="raise the brows quickly" onset_min=60 onset_max=120 hold_min=150 hold_max=300 back_min=100 back_max=200 core.source="hand-core 1"
+@k.motion.set.answer_eyebrow_flash.1.eyebrows k.motion.set rule="answer: eyebrow flash" step=1 key=eyebrows value=raised core.source="hand-core 1"
+
+# question: raised brows
+@k.motion.rule.question_raised_brows k.motion.rule name="question: raised brows" about="A question back: raised brows while asking and a little after, while the other may answer." layer=expression on=reply until=reply core.source="hand-core 1"
+@k.motion.when.question_raised_brows.outcome k.motion.when rule="question: raised brows" key=outcome of=event value=question core.source="hand-core 1"
+@k.motion.step.question_raised_brows.1 k.motion.step rule="question: raised brows" n=1 about="raise the brows" onset_min=100 onset_max=200 hold_min=400 hold_max=900 hold_until=spoken back_min=200 back_max=400 core.source="hand-core 1"
+@k.motion.set.question_raised_brows.1.eyebrows k.motion.set rule="question: raised brows" step=1 key=eyebrows value=raised core.source="hand-core 1"
+
+# thinking: look up
+@k.motion.rule.thinking_look_up k.motion.rule name="thinking: look up" about="While a reply is being made, the eyes look up and the mouth is small, until the next reply." layer=expression on=reply until=reply core.source="hand-core 1"
+@k.motion.when.thinking_look_up.outcome k.motion.when rule="thinking: look up" key=outcome of=event value=thinking core.source="hand-core 1"
+@k.motion.step.thinking_look_up.1 k.motion.step rule="thinking: look up" n=1 about="look up" onset_min=150 onset_max=300 hold_min=0 hold_max=0 hold_until=reply back_min=150 back_max=300 core.source="hand-core 1"
+@k.motion.set.thinking_look_up.1.eyes k.motion.set rule="thinking: look up" step=1 key=eyes value="looking up" core.source="hand-core 1"
+@k.motion.set.thinking_look_up.1.one_eye k.motion.set rule="thinking: look up" step=1 key=one_eye value="looking up" core.source="hand-core 1"
+@k.motion.set.thinking_look_up.1.mouth k.motion.set rule="thinking: look up" step=1 key=mouth value=small core.source="hand-core 1"

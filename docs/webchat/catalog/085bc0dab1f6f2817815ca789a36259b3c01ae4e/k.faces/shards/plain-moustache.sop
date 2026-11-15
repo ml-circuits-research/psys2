@@ -1,0 +1,64 @@
+# k.faces/shards/plain-moustache: the variants of the slot `moustache` in the style `plain`: features, and parts with a primitive shape, a box in the frame of the face, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/faces-core.mjs
+
+# moustache: thin
+@k.faces.plain.moustache.thin k.faces.variant slot=moustache name=thin style=plain feel=thin core.source="hand-core 1"
+@k.faces.plain.moustache.thin.moustache k.faces.part slot=moustache of=thin name=moustache shape=line x=41 y=57.5 w=18 h=1 z=1 colour=brown colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.moustache.thin.moustache.p1 k.faces.point part=$k.faces.plain.moustache.thin.moustache n=1 x=41 y=58.5 core.source="hand-core 1"
+@k.faces.plain.moustache.thin.moustache.p2 k.faces.point part=$k.faces.plain.moustache.thin.moustache n=2 x=50 y=57.5 core.source="hand-core 1"
+@k.faces.plain.moustache.thin.moustache.p3 k.faces.point part=$k.faces.plain.moustache.thin.moustache n=3 x=59 y=58.5 core.source="hand-core 1"
+
+# moustache: thick
+@k.faces.plain.moustache.thick k.faces.variant slot=moustache name=thick style=plain feel=thick core.source="hand-core 1"
+@k.faces.plain.moustache.thick.moustache k.faces.part slot=moustache of=thick name=moustache shape=polygon x=38 y=54.5 w=24 h=6 z=1 colour=brown colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.moustache.thick.moustache.p1 k.faces.point part=$k.faces.plain.moustache.thick.moustache n=1 x=38 y=56.5 core.source="hand-core 1"
+@k.faces.plain.moustache.thick.moustache.p2 k.faces.point part=$k.faces.plain.moustache.thick.moustache n=2 x=50 y=54.5 core.source="hand-core 1"
+@k.faces.plain.moustache.thick.moustache.p3 k.faces.point part=$k.faces.plain.moustache.thick.moustache n=3 x=62 y=56.5 core.source="hand-core 1"
+@k.faces.plain.moustache.thick.moustache.p4 k.faces.point part=$k.faces.plain.moustache.thick.moustache n=4 x=62 y=60.5 core.source="hand-core 1"
+@k.faces.plain.moustache.thick.moustache.p5 k.faces.point part=$k.faces.plain.moustache.thick.moustache n=5 x=50 y=58.5 core.source="hand-core 1"
+@k.faces.plain.moustache.thick.moustache.p6 k.faces.point part=$k.faces.plain.moustache.thick.moustache n=6 x=38 y=60.5 core.source="hand-core 1"
+
+# moustache: handlebar
+@k.faces.plain.moustache.handlebar k.faces.variant slot=moustache name=handlebar style=plain kind=handlebar core.source="hand-core 1"
+@k.faces.plain.moustache.handlebar.moustache k.faces.part slot=moustache of=handlebar name=moustache shape=polygon x=35.5 y=53.5 w=29 h=8 z=1 colour=brown colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.moustache.handlebar.moustache.p1 k.faces.point part=$k.faces.plain.moustache.handlebar.moustache n=1 x=37 y=53.5 core.source="hand-core 1"
+@k.faces.plain.moustache.handlebar.moustache.p2 k.faces.point part=$k.faces.plain.moustache.handlebar.moustache n=2 x=41 y=57 core.source="hand-core 1"
+@k.faces.plain.moustache.handlebar.moustache.p3 k.faces.point part=$k.faces.plain.moustache.handlebar.moustache n=3 x=50 y=55.5 core.source="hand-core 1"
+@k.faces.plain.moustache.handlebar.moustache.p4 k.faces.point part=$k.faces.plain.moustache.handlebar.moustache n=4 x=59 y=57 core.source="hand-core 1"
+@k.faces.plain.moustache.handlebar.moustache.p5 k.faces.point part=$k.faces.plain.moustache.handlebar.moustache n=5 x=63 y=53.5 core.source="hand-core 1"
+@k.faces.plain.moustache.handlebar.moustache.p6 k.faces.point part=$k.faces.plain.moustache.handlebar.moustache n=6 x=64.5 y=58 core.source="hand-core 1"
+@k.faces.plain.moustache.handlebar.moustache.p7 k.faces.point part=$k.faces.plain.moustache.handlebar.moustache n=7 x=59 y=61.5 core.source="hand-core 1"
+@k.faces.plain.moustache.handlebar.moustache.p8 k.faces.point part=$k.faces.plain.moustache.handlebar.moustache n=8 x=50 y=59 core.source="hand-core 1"
+@k.faces.plain.moustache.handlebar.moustache.p9 k.faces.point part=$k.faces.plain.moustache.handlebar.moustache n=9 x=41 y=61.5 core.source="hand-core 1"
+@k.faces.plain.moustache.handlebar.moustache.p10 k.faces.point part=$k.faces.plain.moustache.handlebar.moustache n=10 x=35.5 y=58 core.source="hand-core 1"
+
+# moustache: walrus
+@k.faces.plain.moustache.walrus k.faces.variant slot=moustache name=walrus style=plain size=large feel=thick feel=bushy kind=walrus core.source="hand-core 1"
+@k.faces.plain.moustache.walrus.moustache k.faces.part slot=moustache of=walrus name=moustache shape=polygon x=35.5 y=53.5 w=29 h=9 z=1 colour=brown colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.moustache.walrus.moustache.p1 k.faces.point part=$k.faces.plain.moustache.walrus.moustache n=1 x=40 y=54.5 core.source="hand-core 1"
+@k.faces.plain.moustache.walrus.moustache.p2 k.faces.point part=$k.faces.plain.moustache.walrus.moustache n=2 x=50 y=53.5 core.source="hand-core 1"
+@k.faces.plain.moustache.walrus.moustache.p3 k.faces.point part=$k.faces.plain.moustache.walrus.moustache n=3 x=60 y=54.5 core.source="hand-core 1"
+@k.faces.plain.moustache.walrus.moustache.p4 k.faces.point part=$k.faces.plain.moustache.walrus.moustache n=4 x=64.5 y=62.5 core.source="hand-core 1"
+@k.faces.plain.moustache.walrus.moustache.p5 k.faces.point part=$k.faces.plain.moustache.walrus.moustache n=5 x=56 y=60.5 core.source="hand-core 1"
+@k.faces.plain.moustache.walrus.moustache.p6 k.faces.point part=$k.faces.plain.moustache.walrus.moustache n=6 x=50 y=59.5 core.source="hand-core 1"
+@k.faces.plain.moustache.walrus.moustache.p7 k.faces.point part=$k.faces.plain.moustache.walrus.moustache n=7 x=44 y=60.5 core.source="hand-core 1"
+@k.faces.plain.moustache.walrus.moustache.p8 k.faces.point part=$k.faces.plain.moustache.walrus.moustache n=8 x=35.5 y=62.5 core.source="hand-core 1"
+
+# moustache: pencil
+@k.faces.plain.moustache.pencil k.faces.variant slot=moustache name=pencil style=plain size=small feel=thin kind=pencil core.source="hand-core 1"
+@k.faces.plain.moustache.pencil.left_half k.faces.part slot=moustache of=pencil name=left_half kind=half shape=line x=41 y=57.5 w=7 h=1 z=1 colour=brown colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.moustache.pencil.right_half k.faces.part slot=moustache of=pencil name=right_half kind=half shape=line x=52 y=57.5 w=7 h=1 z=1 colour=brown colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.moustache.pencil.left_half.p1 k.faces.point part=$k.faces.plain.moustache.pencil.left_half n=1 x=41 y=58.5 core.source="hand-core 1"
+@k.faces.plain.moustache.pencil.left_half.p2 k.faces.point part=$k.faces.plain.moustache.pencil.left_half n=2 x=48 y=57.5 core.source="hand-core 1"
+@k.faces.plain.moustache.pencil.right_half.p1 k.faces.point part=$k.faces.plain.moustache.pencil.right_half n=1 x=52 y=57.5 core.source="hand-core 1"
+@k.faces.plain.moustache.pencil.right_half.p2 k.faces.point part=$k.faces.plain.moustache.pencil.right_half n=2 x=59 y=58.5 core.source="hand-core 1"
+
+# moustache: chevron
+@k.faces.plain.moustache.chevron k.faces.variant slot=moustache name=chevron style=plain feel=thick kind=chevron core.source="hand-core 1"
+@k.faces.plain.moustache.chevron.moustache k.faces.part slot=moustache of=chevron name=moustache shape=polygon x=38 y=54 w=24 h=6.5 z=1 colour=brown colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.moustache.chevron.moustache.p1 k.faces.point part=$k.faces.plain.moustache.chevron.moustache n=1 x=50 y=54 core.source="hand-core 1"
+@k.faces.plain.moustache.chevron.moustache.p2 k.faces.point part=$k.faces.plain.moustache.chevron.moustache n=2 x=62 y=60.5 core.source="hand-core 1"
+@k.faces.plain.moustache.chevron.moustache.p3 k.faces.point part=$k.faces.plain.moustache.chevron.moustache n=3 x=50 y=58.5 core.source="hand-core 1"
+@k.faces.plain.moustache.chevron.moustache.p4 k.faces.point part=$k.faces.plain.moustache.chevron.moustache n=4 x=38 y=60.5 core.source="hand-core 1"

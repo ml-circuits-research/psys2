@@ -1,0 +1,9 @@
+# k.words/shards/gn: senses of the words from "gnat" to "gnome" (first letters "gn").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.gnat.noun.1 k.words.sense word=gnat pos=noun n=1 supersense=noun.animal gloss="any of various small biting flies: midges; biting midges; black flies; sand flies" is_a="dipterous insect" kind_of="dipterous insect" kind_of=insect kind_of=arthropod kind_of=invertebrate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.gnat.noun.2 k.words.sense word=gnat pos=noun n=2 supersense=noun.animal gloss="(British usage) mosquito" is_a=mosquito kind_of=mosquito kind_of="dipterous insect" kind_of=insect kind_of=arthropod kind_of=invertebrate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.gnome.noun.1 k.words.sense word=gnome pos=noun n=1 supersense=noun.person gloss="a legendary creature resembling a tiny old man; lives in the depths of the earth and guards buried treasure" synonym=dwarf is_a=fairy core.source="wordnet 3.1"
+@k.words.gnome.noun.2 k.words.sense word=gnome pos=noun n=2 supersense=noun.communication gloss="a short pithy saying expressing a general truth" is_a=maxim core.source="wordnet 3.1"

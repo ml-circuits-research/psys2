@@ -1,0 +1,32 @@
+# k.people/shards/given-names-u: 26 given names starting with U (of 2990 from 3000 Wikidata items), each with its sexes, the Wikidata humans who bear it, a band and its Wikidata items.
+# sources: wikidata-given-names 2026-11-14 (Wikidata given-name items with a sex class and their P735 holders, CC0; fetched by PSys2 into data/external/given-names, commit 0a24284f)
+# sources: hand-core 1 (context=person: by the rule of the import over the names of the catalog and the senses of k.words)
+# license: CC0-1.0
+# script: tools/import/given-names.mjs
+
+@k.people.given_name.Ubaldo k.people.given_name name=Ubaldo sex=male holders=199 band=frequent wikidata=Q19828990 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Udo k.people.given_name name=Udo sex=male holders=1271 band=common wikidata=Q1465588 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ueli k.people.given_name name=Ueli sex=male holders=122 band=frequent wikidata=Q1400282 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Uffe k.people.given_name name=Uffe sex=male holders=60 band=rare wikidata=Q2473763 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ufuk k.people.given_name name=Ufuk sex=female sex=male holders=92 band=rare wikidata=Q1517168 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ugo k.people.given_name name=Ugo sex=male holders=965 band=frequent wikidata=Q18010581 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ulf k.people.given_name name=Ulf sex=male holders=1369 band=common wikidata=Q1481253 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Uliana k.people.given_name name=Uliana sex=female holders=60 band=rare wikidata=Q15731689 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ulla k.people.given_name name=Ulla sex=female holders=839 band=frequent wikidata=Q2475096 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ulric k.people.given_name name=Ulric sex=male holders=77 band=rare wikidata=Q2087690 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ulrica k.people.given_name name=Ulrica sex=female holders=91 band=rare wikidata=Q4964647 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ulrich k.people.given_name name=Ulrich sex=male holders=6514 band=common wikidata=Q18011418 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ulrik k.people.given_name name=Ulrik sex=male holders=323 band=frequent wikidata=Q5412982 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ulrika k.people.given_name name=Ulrika sex=female holders=412 band=frequent wikidata=Q18924998 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ulrike k.people.given_name name=Ulrike sex=female holders=2531 band=common wikidata=Q18924997 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Umberto k.people.given_name name=Umberto sex=male holders=1065 band=common wikidata=Q2478120 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Unai k.people.given_name name=Unai sex=male holders=72 band=rare wikidata=Q7882238 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Urban k.people.given_name name=Urban sex=male holders=414 band=frequent wikidata=Q15732140 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Uri k.people.given_name name=Uri sex=male holders=265 band=frequent wikidata=Q8661943 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Urmas k.people.given_name name=Urmas sex=male holders=184 band=frequent wikidata=Q2500881 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Uros k.people.given_name name=Uroš sex=male holders=325 band=frequent wikidata=Q1400113 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ursula k.people.given_name name=Ursula sex=female holders=3989 band=common wikidata=Q1087262 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Uthman k.people.given_name name=Uthman sex=male holders=50 band=rare wikidata=Q841383 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Uwe k.people.given_name name=Uwe sex=male holders=3070 band=common wikidata=Q18515951 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.Ugur k.people.given_name name=Uğur sex=male holders=303 band=frequent wikidata=Q1290345 core.source="wikidata-given-names 2026-11-14"
+@k.people.given_name.ukasz k.people.given_name name=Łukasz sex=male holders=1562 band=common wikidata=Q19816594 core.source="wikidata-given-names 2026-11-14"

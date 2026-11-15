@@ -1,0 +1,35 @@
+# k.genres/shards/essay: the genre "essay": 4 parts in order with how many times each occurs, and 14 steps (the moves of each part in order, with alternatives and sentence counts).
+# sources: hand-core 1 (hand-written in this repository: tools/genres-core.mjs; the works cited are in WORLD.md)
+# license: CC0-1.0
+# script: tools/genres-core.mjs
+
+@k.genres.genre.essay k.genres.genre name=essay about="An argumentative essay: an introduction that ends with the thesis, two to four arguments each with a claim and its evidence, a counterargument and its rebuttal, and a conclusion that restates the thesis (Hyland's thesis, argument and conclusion stages; Toulmin's claim, data and rebuttal)." register=essay unit=chapter also_move="give example" also_move=define also_move=transition also_move=compare source=hyland1990 source=toulmin1958 own="The counterargument as a part of its own, and the counts." core.source="hand-core 1"
+
+# introduction
+@k.genres.part.essay.introduction k.genres.part genre=essay name=introduction n=1 min=1 max=1 heading=Introduction about="Draw the reader in, give the background, state the thesis." source=hyland1990 core.source="hand-core 1"
+@k.genres.step.essay.introduction.1.surprising_fact k.genres.step genre=essay part=introduction n=1 move="surprising fact" min=0 max=1 stage="thesis stage" about="the gambit: something to draw the reader in" source=hyland1990 core.source="hand-core 1"
+@k.genres.step.essay.introduction.1.raise_a_question k.genres.step genre=essay part=introduction n=1 move="raise a question" min=0 max=1 stage="thesis stage" about="the gambit: something to draw the reader in" source=hyland1990 core.source="hand-core 1"
+@k.genres.step.essay.introduction.1.generalise k.genres.step genre=essay part=introduction n=1 move=generalise min=0 max=1 stage="thesis stage" about="the gambit: something to draw the reader in" source=hyland1990 core.source="hand-core 1"
+@k.genres.step.essay.introduction.2.introduce_topic k.genres.step genre=essay part=introduction n=2 move="introduce topic" min=1 max=2 stage="thesis stage" about="information: the background" source=hyland1990 core.source="hand-core 1"
+@k.genres.step.essay.introduction.3.state_thesis k.genres.step genre=essay part=introduction n=3 move="state thesis" min=1 max=1 stage="thesis stage" about="the proposition" source=hyland1990 source=toulmin1958 core.source="hand-core 1"
+@k.genres.step.essay.introduction.4.outline_structure k.genres.step genre=essay part=introduction n=4 move="outline structure" min=0 max=1 stage="thesis stage" about="the marker: how the essay goes on" source=hyland1990 core.source="hand-core 1"
+
+# argument
+@k.genres.part.essay.argument k.genres.part genre=essay name=argument n=2 min=2 max=4 about="One argument for the thesis: its claim and the evidence for it." source=hyland1990 source=toulmin1958 own="Two to four arguments." core.source="hand-core 1"
+@k.genres.step.essay.argument.1.state_claim k.genres.step genre=essay part=argument n=1 move="state claim" min=1 max=1 stage="argument stage" source=hyland1990 source=toulmin1958 core.source="hand-core 1"
+@k.genres.step.essay.argument.2.give_evidence k.genres.step genre=essay part=argument n=2 move="give evidence" min=1 max=3 stage="argument stage" about="the support: data for the claim" source=hyland1990 source=toulmin1958 core.source="hand-core 1"
+@k.genres.step.essay.argument.3.give_example k.genres.step genre=essay part=argument n=3 move="give example" min=0 max=1 stage="argument stage" source=hyland1990 core.source="hand-core 1"
+
+# counterargument
+@k.genres.part.essay.counterargument k.genres.part genre=essay name=counterargument n=3 min=1 max=1 about="A view against the thesis, stated fairly, and the answer to it." source=toulmin1958 own="One counterargument part; Hyland (1990) does not require it, the owner's brief does." core.source="hand-core 1"
+@k.genres.step.essay.counterargument.1.counterargument k.genres.step genre=essay part=counterargument n=1 move=counterargument min=1 max=2 source=toulmin1958 core.source="hand-core 1"
+@k.genres.step.essay.counterargument.2.rebut k.genres.step genre=essay part=counterargument n=2 move=rebut min=1 max=2 source=toulmin1958 core.source="hand-core 1"
+
+# conclusion
+@k.genres.part.essay.conclusion k.genres.part genre=essay name=conclusion n=4 min=1 max=1 heading=Conclusion about="The thesis again, as now shown, and why it matters." source=hyland1990 core.source="hand-core 1"
+@k.genres.step.essay.conclusion.1.restate_thesis k.genres.step genre=essay part=conclusion n=1 move="restate thesis" min=1 max=1 stage="conclusion stage" about="consolidation and affirmation" source=hyland1990 core.source="hand-core 1"
+@k.genres.step.essay.conclusion.2.summarize k.genres.step genre=essay part=conclusion n=2 move=summarize min=0 max=1 stage="conclusion stage" source=hyland1990 core.source="hand-core 1"
+@k.genres.step.essay.conclusion.3.conclude k.genres.step genre=essay part=conclusion n=3 move=conclude min=1 max=1 stage="conclusion stage" about="the close" source=hyland1990 core.source="hand-core 1"
+
+# Other names of the genre.
+@k.genres.word.genre.essay core.word text=essays text=composition text="argumentative essay" means=essay of=k.genres.genre.name core.source="hand-core 1"

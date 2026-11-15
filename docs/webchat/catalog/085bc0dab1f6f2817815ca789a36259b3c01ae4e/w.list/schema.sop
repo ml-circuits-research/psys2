@@ -1,0 +1,77 @@
+# w.list: a reusable world: lists of entries in order, which can be ticked off (a shopping list, a to-do list, a
+# packing list). Declared as data in the library's std.schema format; the acts of std.acts drive it (make, remove,
+# change, pick, ask, copy); it has no rule and no function of its own. Version 3 (PSys2 Q18 K1): a list has a sort
+# (shopping, to-do, any), a budget (a planned limit) and a currency; an entry names the
+# k.food food or k.objects object it is, a quantity in a k.units unit, a price in a k.units currency, and a status
+# (open or done). Terms: an entry is schema.org's ListItem (`n` its position, `text` and `food`/`object` its item); a
+# price with a currency is schema.org's Offer (price, priceCurrency) and a quantity with a unit its QuantitativeValue
+# (value, unitText). The money a person has and what they hand over at the till are no keys of a list: paying is an
+# event of the story, and a person's money its state (reviewer's answer to Q71 (1); version 4: `tendered` gone).
+# sources: hand-core 1 (hand-written in this repository; own)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later)
+
+@w.list core.module name=w.list version=4 exports=list exports=item core.source="hand-core 1"
+@w.list.world std.schema.world name=w.list doc="lists of entries in order, which can be ticked off" core.source="hand-core 1"
+
+# A list. `name` is what it is called (shopping); `about` says what it is for; `sort` what sort of list it is
+# (shopping, to-do, or any other; not `kind`, which is the kind of every thing of a world). `budget` is a planned
+# limit for a shopping list ("my budget is 30 lei"), in `currency`, the ISO 4217 code of a k.units currency (RON for
+# lei). The total (the sum of quantity x price over the list's entries) and what the budget leaves are computed by the
+# library, never stored; the money a person has ("I start with 30 lei") and pays ("I pay 10 lei") are the story's
+# (k.actions money effects), and the change is what was paid less the total.
+@w.list.list core.type of=w.list.list extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.list.list.name core.slot of=w.list.list key=name required=true kind=atom kind=string core.source="hand-core 1"
+@w.list.list.about core.slot of=w.list.list key=about kind=string core.source="hand-core 1"
+@w.list.list.sort core.slot of=w.list.list key=sort enum=shopping enum=to-do enum=any default=any core.source="hand-core 1"
+@w.list.list.budget core.slot of=w.list.list key=budget kind=number min=0 core.source="hand-core 1"
+@w.list.list.currency core.slot of=w.list.list key=currency kind=atom type=k.units.currency by=code core.source="hand-core 1"
+
+# An entry of a list. `text` is what it says, as the user said it (milk, call the plumber); `food` and `object` name
+# what it is where the catalog knows it: a food of k.food (milk, apple) or an object of k.objects (pencil, ball), by
+# name; free text has neither. `list` refers to its list; `n` is its place (its position, its order) in the list, from
+# 1. `quantity` is how many or how much, in `unit` when it has one (a k.units unit by name: 2 kilogram, 1 litre; no
+# unit: a count, 3 pencils). `price` is the price of one of it (one pencil; one kilogram where the unit is kilogram), in
+# `currency` (a k.units currency by ISO 4217 code). `status`: open, or done (bought, ticked off); the act change sets
+# it. `note` anything else. (Not `amount`: the act `make` reads `amount` as how many things to make, since sopworld
+# 0.27.0.)
+@w.list.item core.type of=w.list.item extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.list.item.text core.slot of=w.list.item key=text required=true kind=atom kind=string core.source="hand-core 1"
+@w.list.item.food core.slot of=w.list.item key=food kind=atom kind=string type=k.food.food by=name core.source="hand-core 1"
+@w.list.item.object core.slot of=w.list.item key=object kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+@w.list.item.list core.slot of=w.list.item key=list type=w.list.list core.source="hand-core 1"
+@w.list.item.n core.slot of=w.list.item key=n kind=integer min=1 step=1 core.source="hand-core 1"
+@w.list.item.quantity core.slot of=w.list.item key=quantity kind=number min=0 core.source="hand-core 1"
+@w.list.item.unit core.slot of=w.list.item key=unit kind=atom kind=string type=k.units.unit by=name core.source="hand-core 1"
+@w.list.item.price core.slot of=w.list.item key=price kind=number min=0 core.source="hand-core 1"
+@w.list.item.currency core.slot of=w.list.item key=currency kind=atom type=k.units.currency by=code core.source="hand-core 1"
+@w.list.item.status core.slot of=w.list.item key=status enum=open enum=done default=open core.source="hand-core 1"
+@w.list.item.note core.slot of=w.list.item key=note kind=string core.source="hand-core 1"
+
+# The kinds and the acts that apply to them. At most 20 lists and 500 entries.
+@w.list.kind.list std.schema.kind of=w.list.list world=w.list acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.list.kind.item std.schema.kind of=w.list.item world=w.list acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.list.limit.list std.schema.limit of=w.list.list max=20 core.source="hand-core 1"
+@w.list.limit.item std.schema.limit of=w.list.item max=500 core.source="hand-core 1"
+
+# Words: for the world (how a host finds it by name), its kinds and its keys. Tasks are w.tasks's words.
+@w.list.word.world core.word text=list text=lists text="shopping list" text="to-do list" text="todo list" text="grocery list" text=checklist text="packing list" text=basket text="shopping basket" means=w.list of=std.schema.world.name core.source="hand-core 1"
+@w.list.word.list core.word text=list text=lists text=checklist text=basket means=w.list.list core.source="hand-core 1"
+@w.list.word.item core.word text=item text=items text=entry text=entries text=thing text=things text=stuff means=w.list.item core.source="hand-core 1"
+@w.list.word.name core.word text=name text=called text=title means=w.list.list.name core.source="hand-core 1"
+@w.list.word.about core.word text=about text=for means=w.list.list.about core.source="hand-core 1"
+@w.list.word.sort core.word text=sort text=kind text=type text=shopping text=to-do text=todo means=w.list.list.sort core.source="hand-core 1"
+@w.list.word.budget core.word text=budget text=limit text="spend at most" means=w.list.list.budget core.source="hand-core 1"
+@w.list.word.currency core.word text=currency text=money text=in means=w.list.list.currency core.source="hand-core 1"
+@w.list.word.item.list core.word text=on text=in text=belongs means=w.list.item.list core.source="hand-core 1"
+@w.list.word.text core.word text=text text=says means=w.list.item.text core.source="hand-core 1"
+@w.list.word.food core.word text=food text=eat text=drink means=w.list.item.food core.source="hand-core 1"
+@w.list.word.object core.word text=object text=thing means=w.list.item.object core.source="hand-core 1"
+@w.list.word.n core.word text=place text=position text=number text=order means=w.list.item.n core.source="hand-core 1"
+@w.list.word.quantity core.word text=quantity text="how many" text="how much" means=w.list.item.quantity core.source="hand-core 1"
+@w.list.word.unit core.word text=unit text=units means=w.list.item.unit core.source="hand-core 1"
+@w.list.word.price core.word text=price text=cost text=costs text="how much" text=priced means=w.list.item.price core.source="hand-core 1"
+@w.list.word.item.currency core.word text=currency text=in means=w.list.item.currency core.source="hand-core 1"
+@w.list.word.status core.word text=status text=done text=open text=ticked text=checked text=finished text=bought text=left means=w.list.item.status core.source="hand-core 1"
+@w.list.word.note core.word text=note text=notes text=comment means=w.list.item.note core.source="hand-core 1"

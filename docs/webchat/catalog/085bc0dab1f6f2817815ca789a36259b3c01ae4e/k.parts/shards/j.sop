@@ -1,0 +1,20 @@
+# k.parts/shards/j: the usual parts of 11 common things whose name starts with "j" (jackal, jacket, jar, jeep, jet, jewellery ...): the parts WordNet gives the thing, and the parts it gives what the thing is a kind of.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: part meronyms, hypernyms, glosses); which words are common things: tools/coverage.mjs (frequency-words 2018, wordnet 3.1)
+# license: WordNet-3.0
+# script: tools/import/parts.mjs
+
+@k.parts.inherited.jackal.canine k.parts.inherited name=jackal from=canine steps=1 has=paw core.source="wordnet 3.1"
+@k.parts.inherited.jacket.coat k.parts.inherited name=jacket from=coat steps=1 has="breast pocket" has="coat button" has=coattail has=hemline plain=pocket plain=button core.source="wordnet 3.1"
+@k.parts.whole.jar k.parts.whole name=jar gloss="a vessel (usually cylindrical) with a wide mouth and without handles" has=lid has=mouth core.source="wordnet 3.1"
+@k.parts.inherited.jar.vessel k.parts.inherited name=jar from=vessel steps=1 has=base has=brim core.source="wordnet 3.1"
+@k.parts.inherited.jeep.car k.parts.inherited name=jeep from=car steps=1 has=accelerator has="air bag" has="auto accessory" has="automobile engine" has="automobile horn" has=buffer has=bumper has="car door" has="car mirror" has="car seat" has="car window" has=fender has="first gear" has=floorboard has="gasoline engine" has="glove compartment" has=grille has="high gear" has=hood has="luggage compartment" has="rear window" has=reverse has=roof has="running board" has="stabilizer bar" has=sunroof has="tail fin" has="third gear" has=window plain=bag plain=accessory plain=engine plain=door plain=mirror plain=seat plain=gear plain=compartment plain=bar plain=fin core.source="wordnet 3.1"
+@k.parts.inherited.jeep.motor_vehicle k.parts.inherited name=jeep from="motor vehicle" steps=2 has=airbrake has=bodywork has="brake system" has=cab has="car wheel" has=chassis has="cooling system" has="drive line" has="electrical system" has="fuel system" has=gearshift has="hand brake" has="internal-combustion engine" has=odometer has=pedal has="power brake" has="second gear" has=speedometer has=suspension has=windshield has="windshield wiper" plain=wheel plain=brake plain=gear core.source="wordnet 3.1"
+@k.parts.whole.jet k.parts.whole name=jet gloss="an airplane powered by one or more jet engines" has="jet engine" core.source="wordnet 3.1"
+@k.parts.inherited.jet.airplane k.parts.inherited name=jet from=airplane steps=1 has=accelerator has="escape hatch" has=fuselage has=hood has="landing gear" has="navigation light" has=pod has=radome has=windshield has=wing plain=light core.source="wordnet 3.1"
+@k.parts.whole.jewellery k.parts.whole name=jewellery gloss="an adornment (as a bracelet or ring or necklace) made of precious metals and set with gems (or imitation gems)" has=gem core.source="wordnet 3.1"
+@k.parts.whole.jewelry k.parts.whole name=jewelry gloss="an adornment (as a bracelet or ring or necklace) made of precious metals and set with gems (or imitation gems)" has=gem core.source="wordnet 3.1"
+@k.parts.inherited.jib.fore-and-aft_sail k.parts.inherited name=jib from="fore-and-aft sail" steps=1 has=luff core.source="wordnet 3.1"
+@k.parts.inherited.jigsaw.power_saw k.parts.inherited name=jigsaw from="power saw" steps=1 has=tooth core.source="wordnet 3.1"
+@k.parts.inherited.jug.bottle k.parts.inherited name=jug from=bottle steps=1 has=bottlecap has=mouth core.source="wordnet 3.1"
+@k.parts.inherited.jug.vessel k.parts.inherited name=jug from=vessel steps=2 has=base has=brim core.source="wordnet 3.1"
+@k.parts.inherited.jukebox.record_player k.parts.inherited name=jukebox from="record player" steps=1 has=cartridge has="radio chassis" has="record changer" has="tone arm" has=turntable plain=chassis core.source="wordnet 3.1"

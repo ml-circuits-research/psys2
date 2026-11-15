@@ -1,0 +1,139 @@
+# w.document: a reusable world: a written document (an article, an essay, a story, a report, a presentation) as
+# a tree of parts in order (chapters, sections, paragraphs, slides) down to sentences, each sentence with the
+# rhetorical move it makes, the template it was realised from and the wires of the facts it states. Composition
+# (the library's std.compose) writes one as a live world that any host renders (an editor, slides); a summary
+# (std.summarize) reads one back. Declared in the library's std.schema format; the acts of std.acts drive it; two
+# denies keep a paragraph and a sentence in one place; it has no function of its own.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later)
+
+@w.document core.module name=w.document version=1 exports=document exports=chapter exports=section exports=paragraph exports=slide exports=sentence core.source="hand-core 1"
+@w.document.world std.schema.world name=w.document doc="written documents: chapters, sections, paragraphs, slides and sentences, each sentence with the facts it states" core.source="hand-core 1"
+
+# A document. `title`; `genre` names a genre of k.genres (scientific article, essay, story, report, presentation);
+# `topic` what it is about (a name of the catalog: penguin, Peru); `register` names a register of k.genres (how it
+# is written: person, tense, sentence length); `language` names a language world (w.lang.en); `seed` the number a
+# composition was drawn with, so that the same seed writes the same document; `about` one sentence more.
+@w.document.document core.type of=w.document.document extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.document.document.title core.slot of=w.document.document key=title required=true kind=atom kind=string core.source="hand-core 1"
+@w.document.document.genre core.slot of=w.document.document key=genre kind=atom kind=string type=k.genres.genre by=name core.source="hand-core 1"
+@w.document.document.topic core.slot of=w.document.document key=topic kind=atom kind=string core.source="hand-core 1"
+@w.document.document.register core.slot of=w.document.document key=register kind=atom type=k.genres.register by=name core.source="hand-core 1"
+@w.document.document.language core.slot of=w.document.document key=language kind=atom core.source="hand-core 1"
+@w.document.document.seed core.slot of=w.document.document key=seed kind=integer min=0 step=1 core.source="hand-core 1"
+@w.document.document.about core.slot of=w.document.document key=about kind=string core.source="hand-core 1"
+
+# A chapter of a document (a part of a story, the introduction of an article). `title`; `document` refers to its
+# document; `n` its place in the document, from 1; `part` names the part of its genre it realises (k.genres.part:
+# introduction, methods; orientation, complication).
+@w.document.chapter core.type of=w.document.chapter extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.document.chapter.title core.slot of=w.document.chapter key=title kind=atom kind=string core.source="hand-core 1"
+@w.document.chapter.document core.slot of=w.document.chapter key=document type=w.document.document core.source="hand-core 1"
+@w.document.chapter.n core.slot of=w.document.chapter key=n required=true kind=integer min=1 step=1 core.source="hand-core 1"
+@w.document.chapter.part core.slot of=w.document.chapter key=part kind=atom kind=string core.source="hand-core 1"
+
+# A section of a chapter. `title`; `chapter` refers to its chapter; `n` its place in the chapter, from 1; `part`
+# as for a chapter.
+@w.document.section core.type of=w.document.section extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.document.section.title core.slot of=w.document.section key=title kind=atom kind=string core.source="hand-core 1"
+@w.document.section.chapter core.slot of=w.document.section key=chapter type=w.document.chapter core.source="hand-core 1"
+@w.document.section.n core.slot of=w.document.section key=n required=true kind=integer min=1 step=1 core.source="hand-core 1"
+@w.document.section.part core.slot of=w.document.section key=part kind=atom kind=string core.source="hand-core 1"
+
+# A paragraph: in a section (`section`) or, in a document without sections, straight in a chapter (`chapter`),
+# never both; `n` its place there, from 1.
+@w.document.paragraph core.type of=w.document.paragraph extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.document.paragraph.section core.slot of=w.document.paragraph key=section type=w.document.section core.source="hand-core 1"
+@w.document.paragraph.chapter core.slot of=w.document.paragraph key=chapter type=w.document.chapter core.source="hand-core 1"
+@w.document.paragraph.n core.slot of=w.document.paragraph key=n required=true kind=integer min=1 step=1 core.source="hand-core 1"
+
+# A slide of a presentation. `title` its headline; `document` refers to its document; `n` its place, from 1;
+# `layout` what sort of slide it is (title, agenda, content, summary, closing); `part` as for a chapter; `note`
+# what the speaker says beyond the slide.
+@w.document.slide core.type of=w.document.slide extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.document.slide.title core.slot of=w.document.slide key=title kind=atom kind=string core.source="hand-core 1"
+@w.document.slide.document core.slot of=w.document.slide key=document type=w.document.document core.source="hand-core 1"
+@w.document.slide.n core.slot of=w.document.slide key=n required=true kind=integer min=1 step=1 core.source="hand-core 1"
+@w.document.slide.layout core.slot of=w.document.slide key=layout enum=title enum=agenda enum=content enum=summary enum=closing default=content core.source="hand-core 1"
+@w.document.slide.part core.slot of=w.document.slide key=part kind=atom kind=string core.source="hand-core 1"
+@w.document.slide.note core.slot of=w.document.slide key=note kind=string core.source="hand-core 1"
+
+# A sentence (or a bullet of a slide): in a paragraph (`paragraph`) or on a slide (`slide`), never both; `n` its
+# place there, from 1; `text` the sentence as written. `move` names the rhetorical move it makes (k.genres.move,
+# w.lang.en discourse templates: introduce, compare, surprising fact, example, question, conclude); `template` the
+# id of the language world's template it was realised from; `fact` (many) the ids of the wires of the catalog it
+# states (k.animals.animal.penguin): every claim traces to a fact; `interest` its score by k.interest, 0 to 1.
+@w.document.sentence core.type of=w.document.sentence extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.document.sentence.text core.slot of=w.document.sentence key=text required=true kind=atom kind=string core.source="hand-core 1"
+@w.document.sentence.paragraph core.slot of=w.document.sentence key=paragraph type=w.document.paragraph core.source="hand-core 1"
+@w.document.sentence.slide core.slot of=w.document.sentence key=slide type=w.document.slide core.source="hand-core 1"
+@w.document.sentence.n core.slot of=w.document.sentence key=n required=true kind=integer min=1 step=1 core.source="hand-core 1"
+@w.document.sentence.move core.slot of=w.document.sentence key=move kind=atom kind=string type=k.genres.move by=name core.source="hand-core 1"
+@w.document.sentence.template core.slot of=w.document.sentence key=template kind=atom core.source="hand-core 1"
+@w.document.sentence.fact core.slot of=w.document.sentence key=fact many=true kind=atom core.source="hand-core 1"
+@w.document.sentence.interest core.slot of=w.document.sentence key=interest kind=number min=0 max=1 core.source="hand-core 1"
+
+# One place for a paragraph and for a sentence: a paragraph is not in a section and a chapter at once, a sentence
+# not in a paragraph and on a slide at once.
+@w.document.one.paragraph w.document.paragraph section=?section chapter=?chapter
+@w.document.one.paragraph.deny core.deny when=$w.document.one.paragraph why="A paragraph is in a section or straight in a chapter, not both." core.source="hand-core 1"
+@w.document.one.sentence w.document.sentence paragraph=?paragraph slide=?slide
+@w.document.one.sentence.deny core.deny when=$w.document.one.sentence why="A sentence is in a paragraph or on a slide, not both." core.source="hand-core 1"
+
+# The kinds and the acts that apply to them. Parts are linked (connect: a slide to the section it presents) and
+# grouped. At most 50 documents, 2,000 parts of each kind and 20,000 sentences.
+@w.document.kind.document std.schema.kind of=w.document.document world=w.document acts=make acts=remove acts=change acts=pick acts=ask acts=copy acts=save acts=load core.source="hand-core 1"
+@w.document.kind.chapter std.schema.kind of=w.document.chapter world=w.document acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.document.kind.section std.schema.kind of=w.document.section world=w.document acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.document.kind.paragraph std.schema.kind of=w.document.paragraph world=w.document acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.document.kind.slide std.schema.kind of=w.document.slide world=w.document acts=make acts=remove acts=change acts=connect acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.document.kind.sentence std.schema.kind of=w.document.sentence world=w.document acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.document.limit.document std.schema.limit of=w.document.document max=50 core.source="hand-core 1"
+@w.document.limit.chapter std.schema.limit of=w.document.chapter max=2000 core.source="hand-core 1"
+@w.document.limit.section std.schema.limit of=w.document.section max=2000 core.source="hand-core 1"
+@w.document.limit.paragraph std.schema.limit of=w.document.paragraph max=2000 core.source="hand-core 1"
+@w.document.limit.slide std.schema.limit of=w.document.slide max=2000 core.source="hand-core 1"
+@w.document.limit.sentence std.schema.limit of=w.document.sentence max=20000 core.source="hand-core 1"
+
+# Words: for the world (how a host finds it by name), its kinds and its keys.
+@w.document.word.world core.word text=document text=documents text=essay text=article text=presentation text=slides text="slide show" text=composition text=story means=w.document of=std.schema.world.name core.source="hand-core 1"
+@w.document.word.document core.word text=document text=documents text=text means=w.document.document core.source="hand-core 1"
+@w.document.word.chapter core.word text=chapter text=chapters text=part means=w.document.chapter core.source="hand-core 1"
+@w.document.word.section core.word text=section text=sections text=subchapter text=subchapters text=subsection means=w.document.section core.source="hand-core 1"
+@w.document.word.paragraph core.word text=paragraph text=paragraphs means=w.document.paragraph core.source="hand-core 1"
+@w.document.word.slide core.word text=slide text=slides means=w.document.slide core.source="hand-core 1"
+@w.document.word.sentence core.word text=sentence text=sentences text=bullet text=bullets text=line text=lines means=w.document.sentence core.source="hand-core 1"
+@w.document.word.title.document core.word text=title text=called text=heading text=headline means=w.document.document.title core.source="hand-core 1"
+@w.document.word.title.chapter core.word text=title text=called text=heading text=headline means=w.document.chapter.title core.source="hand-core 1"
+@w.document.word.title.section core.word text=title text=called text=heading text=headline means=w.document.section.title core.source="hand-core 1"
+@w.document.word.title.slide core.word text=title text=called text=heading text=headline means=w.document.slide.title core.source="hand-core 1"
+@w.document.word.genre core.word text=genre text=kind text=type means=w.document.document.genre core.source="hand-core 1"
+@w.document.word.topic core.word text=topic text=about text=subject means=w.document.document.topic core.source="hand-core 1"
+@w.document.word.register core.word text=register text=style text=tone means=w.document.document.register core.source="hand-core 1"
+@w.document.word.language core.word text=language means=w.document.document.language core.source="hand-core 1"
+@w.document.word.seed core.word text=seed means=w.document.document.seed core.source="hand-core 1"
+@w.document.word.n.chapter core.word text=number text=position text=place text=order means=w.document.chapter.n core.source="hand-core 1"
+@w.document.word.n.section core.word text=number text=position text=place text=order means=w.document.section.n core.source="hand-core 1"
+@w.document.word.n.paragraph core.word text=number text=position text=place text=order means=w.document.paragraph.n core.source="hand-core 1"
+@w.document.word.n.slide core.word text=number text=position text=place text=order means=w.document.slide.n core.source="hand-core 1"
+@w.document.word.n.sentence core.word text=number text=position text=place text=order means=w.document.sentence.n core.source="hand-core 1"
+@w.document.word.part.chapter core.word text=part text=role means=w.document.chapter.part core.source="hand-core 1"
+@w.document.word.part.section core.word text=part text=role means=w.document.section.part core.source="hand-core 1"
+@w.document.word.part.slide core.word text=part text=role means=w.document.slide.part core.source="hand-core 1"
+@w.document.word.layout core.word text=layout means=w.document.slide.layout core.source="hand-core 1"
+@w.document.word.note core.word text=note text=notes text="speaker notes" means=w.document.slide.note core.source="hand-core 1"
+@w.document.word.text core.word text=text text=says text=wording means=w.document.sentence.text core.source="hand-core 1"
+@w.document.word.move core.word text=move text="rhetorical move" means=w.document.sentence.move core.source="hand-core 1"
+@w.document.word.template core.word text=template means=w.document.sentence.template core.source="hand-core 1"
+@w.document.word.fact core.word text=fact text=facts text=source text=sources text=evidence means=w.document.sentence.fact core.source="hand-core 1"
+@w.document.word.interest core.word text=interest text=interesting means=w.document.sentence.interest core.source="hand-core 1"
+@w.document.word.in.chapter core.word text=in text=belongs means=w.document.chapter.document core.source="hand-core 1"
+@w.document.word.in.section core.word text=in text=belongs means=w.document.section.chapter core.source="hand-core 1"
+@w.document.word.in.paragraph.section core.word text=in text=belongs means=w.document.paragraph.section core.source="hand-core 1"
+@w.document.word.in.paragraph.chapter core.word text=in text=belongs means=w.document.paragraph.chapter core.source="hand-core 1"
+@w.document.word.in.slide core.word text=in text=belongs means=w.document.slide.document core.source="hand-core 1"
+@w.document.word.in.sentence.paragraph core.word text=in text=belongs means=w.document.sentence.paragraph core.source="hand-core 1"
+@w.document.word.in.sentence.slide core.word text=in text=belongs means=w.document.sentence.slide core.source="hand-core 1"
+@w.document.word.about core.word text=about text=more means=w.document.document.about core.source="hand-core 1"

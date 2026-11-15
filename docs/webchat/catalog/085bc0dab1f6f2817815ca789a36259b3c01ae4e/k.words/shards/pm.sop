@@ -1,0 +1,10 @@
+# k.words/shards/pm: senses of the words from "pm" to "pm" (first letters "pm").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.pm.noun.1 k.words.sense word=PM pos=noun n=1 supersense=noun.act gloss="an examination and dissection of a dead body to determine cause of death or the changes produced by disease" synonym=autopsy synonym=necropsy synonym=postmortem synonym=post-mortem synonym="postmortem examination" synonym="post-mortem examination" is_a=examination core.source="wordnet 3.1"
+@k.words.pm.noun.2 k.words.sense word=Pm pos=noun n=2 supersense=noun.substance gloss="a soft silvery metallic element of the rare earth group having no stable isotope; was discovered in radioactive form as a fission product of uranium" synonym=promethium synonym="atomic number 61" is_a="metallic element" core.source="wordnet 3.1"
+@k.words.pm.noun.3 k.words.sense word=PM pos=noun n=3 supersense=noun.person gloss="the person who holds the position of head of the government in the United Kingdom" synonym="Prime Minister" synonym=premier is_a="head of state" core.source="wordnet 3.1"
+@k.words.pm.spelling.PM core.word text=pm means=PM of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.pm.spelling.Pm core.word text=pm means=Pm of=k.words.sense.word core.source="wordnet 3.1"

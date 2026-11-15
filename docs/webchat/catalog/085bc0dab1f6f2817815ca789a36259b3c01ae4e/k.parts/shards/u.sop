@@ -1,0 +1,6 @@
+# k.parts/shards/u: the usual parts of 1 common things whose name starts with "u" (umbrella ...): the parts WordNet gives the thing, and the parts it gives what the thing is a kind of.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: part meronyms, hypernyms, glosses); which words are common things: tools/coverage.mjs (frequency-words 2018, wordnet 3.1)
+# license: WordNet-3.0
+# script: tools/import/parts.mjs
+
+@k.parts.whole.umbrella k.parts.whole name=umbrella gloss="a lightweight handheld collapsible canopy" has=gore has=handle has=rib core.source="wordnet 3.1"

@@ -1,0 +1,44 @@
+# k.faces/shards/plain-nose: the variants of the slot `nose` in the style `plain`: features, and parts with a primitive shape, a box in the frame of the face, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/faces-core.mjs
+
+# nose: small
+@k.faces.plain.nose.small k.faces.variant slot=nose name=small style=plain size=small core.source="hand-core 1"
+@k.faces.plain.nose.small.nose k.faces.part slot=nose of=small name=nose shape=arc x=47 y=52 w=6 h=3 z=1 colour=brown tint=skin_shade opens=up core.source="hand-core 1"
+
+# nose: medium
+@k.faces.plain.nose.medium k.faces.variant slot=nose name=medium style=plain size=medium core.source="hand-core 1"
+@k.faces.plain.nose.medium.nose k.faces.part slot=nose of=medium name=nose shape=line x=46.5 y=44 w=5.5 h=11 z=1 colour=brown tint=skin_shade core.source="hand-core 1"
+@k.faces.plain.nose.medium.nose.p1 k.faces.point part=$k.faces.plain.nose.medium.nose n=1 x=50 y=44 core.source="hand-core 1"
+@k.faces.plain.nose.medium.nose.p2 k.faces.point part=$k.faces.plain.nose.medium.nose n=2 x=46.5 y=55 core.source="hand-core 1"
+@k.faces.plain.nose.medium.nose.p3 k.faces.point part=$k.faces.plain.nose.medium.nose n=3 x=52 y=55 core.source="hand-core 1"
+
+# nose: long
+@k.faces.plain.nose.long k.faces.variant slot=nose name=long style=plain size=large length=long core.source="hand-core 1"
+@k.faces.plain.nose.long.nose k.faces.part slot=nose of=long name=nose shape=line x=45.5 y=42 w=7.5 h=17 z=1 colour=brown tint=skin_shade core.source="hand-core 1"
+@k.faces.plain.nose.long.nose.p1 k.faces.point part=$k.faces.plain.nose.long.nose n=1 x=50 y=42 core.source="hand-core 1"
+@k.faces.plain.nose.long.nose.p2 k.faces.point part=$k.faces.plain.nose.long.nose n=2 x=45.5 y=59 core.source="hand-core 1"
+@k.faces.plain.nose.long.nose.p3 k.faces.point part=$k.faces.plain.nose.long.nose n=3 x=53 y=59 core.source="hand-core 1"
+
+# nose: wide
+@k.faces.plain.nose.wide k.faces.variant slot=nose name=wide style=plain feel=wide core.source="hand-core 1"
+@k.faces.plain.nose.wide.nose k.faces.part slot=nose of=wide name=nose shape=arc x=44 y=52 w=12 h=5 z=1 colour=brown tint=skin_shade opens=up core.source="hand-core 1"
+@k.faces.plain.nose.wide.left_nostril k.faces.part slot=nose of=wide name=left_nostril kind=nostril shape=circle x=46 y=53 w=1.6 h=1.6 z=2 colour=brown tint=skin_shade core.source="hand-core 1"
+@k.faces.plain.nose.wide.right_nostril k.faces.part slot=nose of=wide name=right_nostril kind=nostril shape=circle x=52.4 y=53 w=1.6 h=1.6 z=2 colour=brown tint=skin_shade core.source="hand-core 1"
+
+# nose: button
+@k.faces.plain.nose.button k.faces.variant slot=nose name=button style=plain shape=round size=small kind=button core.source="hand-core 1"
+@k.faces.plain.nose.button.nose k.faces.part slot=nose of=button name=nose shape=circle x=47 y=50 w=6 h=6 z=1 colour=pink colour=brown tint=skin_shade core.source="hand-core 1"
+
+# nose: pointed
+@k.faces.plain.nose.pointed k.faces.variant slot=nose name=pointed style=plain kind=pointed core.source="hand-core 1"
+@k.faces.plain.nose.pointed.nose k.faces.part slot=nose of=pointed name=nose shape=triangle x=46 y=46 w=8 h=11 z=1 colour=pink colour=brown tint=skin_shade pointing=up core.source="hand-core 1"
+
+# nose: round
+@k.faces.plain.nose.round k.faces.variant slot=nose name=round style=plain shape=round size=large core.source="hand-core 1"
+@k.faces.plain.nose.round.nose k.faces.part slot=nose of=round name=nose shape=oval x=44 y=47 w=12 h=10 z=1 colour=pink colour=brown tint=skin_shade core.source="hand-core 1"
+
+# nose: bolt
+@k.faces.plain.nose.bolt k.faces.variant slot=nose name=bolt style=plain shape=square kind=robot core.source="hand-core 1"
+@k.faces.plain.nose.bolt.nose k.faces.part slot=nose of=bolt name=nose shape=square x=47 y=50 w=6 h=6 z=1 colour=grey rgb="#9AA4AE" core.source="hand-core 1"

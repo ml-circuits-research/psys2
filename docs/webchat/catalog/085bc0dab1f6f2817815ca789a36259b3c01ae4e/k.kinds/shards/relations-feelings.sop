@@ -1,0 +1,14 @@
+# k.kinds/shards/relations-feelings: the keys of the types of k.feelings read as relations: 9 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.feelings.feeling.tone k.kinds.relation type=k.feelings.feeling key=tone subject=feeling object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.feelings.feeling.expression k.kinds.relation type=k.feelings.feeling key=expression subject=feeling object=thing object_type=k.faces.expression found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.feelings.feeling.mouth k.kinds.relation type=k.feelings.feeling key=mouth subject=feeling object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.feelings.feeling.eyebrows k.kinds.relation type=k.feelings.feeling key=eyebrows subject=feeling object=thing object_type=k.faces.expression found=value core.source="hand-core 1"
+@k.kinds.relation.k.feelings.feeling.eyes k.kinds.relation type=k.feelings.feeling key=eyes subject=feeling object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.feelings.feeling.cheeks k.kinds.relation type=k.feelings.feeling key=cheeks subject=feeling object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.feelings.feeling.looks_like k.kinds.relation type=k.feelings.feeling key=looks_like subject=feeling object=thing object_type=k.faces.expression found=value core.source="hand-core 1"
+@k.kinds.relation.k.feelings.feeling.caused_by k.kinds.relation type=k.feelings.feeling key=caused_by subject=feeling object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.feelings.feeling.opposite k.kinds.relation type=k.feelings.feeling key=opposite subject=feeling object=thing object_type=k.feelings.feeling found=declared object_by=name core.source="hand-core 1"

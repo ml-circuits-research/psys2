@@ -1,0 +1,12 @@
+# k.parts/shards/o: the usual parts of 6 common things whose name starts with "o" (oar, observatory, orange, orchid, overcoat, owl ...): the parts WordNet gives the thing, and the parts it gives what the thing is a kind of.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: part meronyms, hypernyms, glosses); which words are common things: tools/coverage.mjs (frequency-words 2018, wordnet 3.1)
+# license: WordNet-3.0
+# script: tools/import/parts.mjs
+
+@k.parts.whole.oar k.parts.whole name=oar gloss="an implement used to propel or steer a boat" has=blade core.source="wordnet 3.1"
+@k.parts.inherited.observatory.building k.parts.inherited name=observatory from=building steps=1 has=annex has=anteroom has=corner has=cornerstone has=court has=cullis has=elevator has="exterior door" has=floor has="foundation stone" has="heating system" has="interior door" has=roof has=room has=scantling has=shaft has=skeleton has=stairway has=upstairs has=wall has=window has=crawlspace plain=door plain=stone core.source="wordnet 3.1"
+@k.parts.whole.orange k.parts.whole name=orange gloss="round yellow to orange fruit of any of several citrus trees" has="orange peel" plain=peel core.source="wordnet 3.1"
+@k.parts.inherited.orange.citrus k.parts.inherited name=orange from=citrus steps=1 has=section core.source="wordnet 3.1"
+@k.parts.whole.orchid k.parts.whole name=orchid gloss="any of numerous plants of the orchid family usually having flowers of unusual shapes and beautiful colors" has=mentum core.source="wordnet 3.1"
+@k.parts.inherited.overcoat.coat k.parts.inherited name=overcoat from=coat steps=1 has="breast pocket" has="coat button" has=coattail has=hemline plain=pocket plain=button core.source="wordnet 3.1"
+@k.parts.inherited.owl.bird k.parts.inherited name=owl from=bird steps=2 has=beak has=furcula has=feather has=wing has=pennon has="bird's foot" has=uropygium has=hindquarters has="air sac" has="uropygial gland" has=syrinx plain=foot plain=sac core.source="wordnet 3.1"

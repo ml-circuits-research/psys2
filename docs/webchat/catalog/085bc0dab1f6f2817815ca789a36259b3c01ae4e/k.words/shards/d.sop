@@ -1,0 +1,10 @@
+# k.words/shards/d: senses of the words from "d" to "d" (first letters "d").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.d.noun.1 k.words.sense word=D pos=noun n=1 supersense=noun.substance gloss="a fat-soluble vitamin that prevents rickets" synonym="vitamin D" synonym=calciferol synonym=viosterol synonym=ergocalciferol synonym=cholecalciferol is_a="fat-soluble vitamin" kind_of="fat-soluble vitamin" kind_of=vitamin kind_of=nutriment kind_of=food kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.d.noun.2 k.words.sense word=D pos=noun n=2 supersense=noun.quantity gloss="the cardinal number that is the product of one hundred and five" synonym="five hundred" synonym=500 is_a="large integer" kind_of="large integer" kind_of=integer kind_of=number kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.d.noun.3 k.words.sense word=D pos=noun n=3 supersense=noun.communication gloss="the 4th letter of the Roman alphabet" synonym=d is_a=letter kind_of=letter kind_of=character kind_of="written symbol" kind_of=symbol kind_of=signal kind_of=communication kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.d.adjective.1 k.words.sense word=d pos=adjective n=1 supersense=adj.all gloss="denoting a quantity consisting of 500 items or units" synonym="five hundred" synonym=500 near_opposite=ordinal core.source="wordnet 3.1"
+@k.words.d.spelling.D core.word text=d means=D of=k.words.sense.word core.source="wordnet 3.1"

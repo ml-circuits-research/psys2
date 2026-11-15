@@ -1,0 +1,38 @@
+# k.commonsense/shards/lives: where an animal that lives in a habitat usually is: water, ground (both for the edges of
+# ponds and marshes) or indoors; read by the rule k.commonsense.habitat.place with the habitats of k.animals.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.commonsense.lives.sea k.commonsense.lives in=sea at=water core.source="hand-core 1"
+@k.commonsense.lives.river k.commonsense.lives in=river at=water core.source="hand-core 1"
+@k.commonsense.lives.lake k.commonsense.lives in=lake at=water core.source="hand-core 1"
+@k.commonsense.lives.coral_reef k.commonsense.lives in="coral reef" at=water core.source="hand-core 1"
+@k.commonsense.lives.pond k.commonsense.lives in=pond at=water at=ground core.source="hand-core 1"
+@k.commonsense.lives.swamp k.commonsense.lives in=swamp at=water at=ground core.source="hand-core 1"
+@k.commonsense.lives.marsh k.commonsense.lives in=marsh at=water at=ground core.source="hand-core 1"
+@k.commonsense.lives.wetland k.commonsense.lives in=wetland at=water at=ground core.source="hand-core 1"
+@k.commonsense.lives.forest k.commonsense.lives in=forest at=ground core.source="hand-core 1"
+@k.commonsense.lives.grassland k.commonsense.lives in=grassland at=ground core.source="hand-core 1"
+@k.commonsense.lives.garden k.commonsense.lives in=garden at=ground core.source="hand-core 1"
+@k.commonsense.lives.field k.commonsense.lives in=field at=ground core.source="hand-core 1"
+@k.commonsense.lives.mountain k.commonsense.lives in=mountain at=ground core.source="hand-core 1"
+@k.commonsense.lives.farm k.commonsense.lives in=farm at=ground core.source="hand-core 1"
+@k.commonsense.lives.desert k.commonsense.lives in=desert at=ground core.source="hand-core 1"
+@k.commonsense.lives.rainforest k.commonsense.lives in=rainforest at=ground core.source="hand-core 1"
+@k.commonsense.lives.savanna k.commonsense.lives in=savanna at=ground core.source="hand-core 1"
+@k.commonsense.lives.jungle k.commonsense.lives in=jungle at=ground core.source="hand-core 1"
+@k.commonsense.lives.soil k.commonsense.lives in=soil at=ground core.source="hand-core 1"
+@k.commonsense.lives.ice k.commonsense.lives in=ice at=ground core.source="hand-core 1"
+@k.commonsense.lives.city k.commonsense.lives in=city at=ground core.source="hand-core 1"
+@k.commonsense.lives.town k.commonsense.lives in=town at=ground core.source="hand-core 1"
+@k.commonsense.lives.tundra k.commonsense.lives in=tundra at=ground core.source="hand-core 1"
+@k.commonsense.lives.meadow k.commonsense.lives in=meadow at=ground core.source="hand-core 1"
+@k.commonsense.lives.beach k.commonsense.lives in=beach at=ground core.source="hand-core 1"
+@k.commonsense.lives.rock k.commonsense.lives in=rock at=ground core.source="hand-core 1"
+@k.commonsense.lives.sand k.commonsense.lives in=sand at=ground core.source="hand-core 1"
+@k.commonsense.lives.park k.commonsense.lives in=park at=ground core.source="hand-core 1"
+@k.commonsense.lives.island k.commonsense.lives in=island at=ground core.source="hand-core 1"
+@k.commonsense.lives.cliff k.commonsense.lives in=cliff at=ground core.source="hand-core 1"
+@k.commonsense.lives.cave k.commonsense.lives in=cave at=ground core.source="hand-core 1"
+@k.commonsense.lives.house k.commonsense.lives in=house at=indoors core.source="hand-core 1"

@@ -1,0 +1,8 @@
+# k.scenes/shards/things-q: the usual place (sky, ground, water, indoors, on another thing) and the relative size (tiny to huge) of 3 things (the drawable things and the animals of k.animals) whose name starts with "q"; labelled by a language model from the names (named=model), a sample checked against the drawings.
+# sources: hand-core 1 (hand-written in this repository: sources/hand-core/place-size.tsv, and sources/hand-core/animals.tsv for the animals without a drawing)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+
+@k.scenes.thing.quail k.scenes.thing name=quail place=ground size=small named=model core.source="hand-core 1"
+@k.scenes.thing.queen k.scenes.thing name=queen place=ground size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.quiche_flan k.scenes.thing name="quiche flan" place=indoors on=table size=small named=model core.source="hand-core 1"

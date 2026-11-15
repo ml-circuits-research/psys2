@@ -1,0 +1,10 @@
+# k.words/shards/u: senses of the words from "u" to "u-turn" (first letters "u").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.u.noun.1 k.words.sense word=U pos=noun n=1 supersense=noun.substance gloss="a base containing nitrogen that is found in RNA (but not in DNA) and derived from pyrimidine; pairs with adenine" synonym=uracil is_a=nucleotide core.source="wordnet 3.1"
+@k.words.u.noun.2 k.words.sense word=U pos=noun n=2 supersense=noun.substance gloss="a heavy toxic silvery-white radioactive metallic element; occurs in many isotopes; used for nuclear fuels and nuclear weapons" synonym=uranium synonym="atomic number 92" is_a="metallic element" core.source="wordnet 3.1"
+@k.words.u.noun.3 k.words.sense word=U pos=noun n=3 supersense=noun.communication gloss="the 21st letter of the Roman alphabet" synonym=u is_a=letter core.source="wordnet 3.1"
+@k.words.u.spelling.U core.word text=u means=U of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.u-turn.noun.1 k.words.sense word=u-turn pos=noun n=1 supersense=noun.act gloss="complete reversal of direction of travel" is_a=reversion core.source="wordnet 3.1"

@@ -1,0 +1,7 @@
+# k.words/shards/uf: senses of the words from "ufo" to "ufo" (first letters "uf").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ufo.noun.1 k.words.sense word=UFO pos=noun n=1 supersense=noun.cognition gloss="an (apparently) flying object whose nature is unknown; especially those considered to have extraterrestrial origins" synonym="unidentified flying object" synonym="flying saucer" is_a=apparition core.source="wordnet 3.1"
+@k.words.ufo.spelling.UFO core.word text=ufo means=UFO of=k.words.sense.word core.source="wordnet 3.1"

@@ -1,0 +1,13 @@
+# k.faces/shards/miniavs-slots: the slots of the DiceBear style `miniavs`: the box that the variants of each slot fill in the 0 to 100 frame of the face, and the draw order.
+# sources: dicebear-miniavs 67f54a0 (DiceBear style "miniavs", CC BY 4.0: Remix of "Miniavs - Free Avatar Creator" (https://www.figma.com/community/file/923211396597067458) by "Webpixels", licensed under "CC BY 4.0" (https://creativecommons.org/licenses/by/4.0/))
+# license: CC-BY-4.0
+# script: tools/import/dicebear.mjs
+
+@k.faces.miniavs.slot.head k.faces.slot style=miniavs name=head x=20 y=20 w=53 h=80 z=0 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.slot.shoulders k.faces.slot style=miniavs name=shoulders x=10 y=89 w=64 h=11 z=1 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.slot.hair_front k.faces.slot style=miniavs name=hair_front x=0 y=4 w=85 h=96 z=2 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.slot.mouth k.faces.slot style=miniavs name=mouth x=45 y=70 w=18 h=10 z=3 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.slot.eyes k.faces.slot style=miniavs name=eyes x=46 y=54 w=22 h=7 z=4 core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.slot.cheeks k.faces.slot style=miniavs name=cheeks x=37 y=59 w=37 h=6 z=5 optional=true core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.slot.glasses k.faces.slot style=miniavs name=glasses x=40 y=50 w=36 h=14 z=6 optional=true core.source="dicebear-miniavs 67f54a0"
+@k.faces.miniavs.slot.moustache k.faces.slot style=miniavs name=moustache x=41 y=67 w=34 h=23 z=7 optional=true core.source="dicebear-miniavs 67f54a0"

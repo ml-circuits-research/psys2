@@ -1,0 +1,56 @@
+# k.faces/shards/pixel-art-accessories: the variants of the slot `accessories` in the DiceBear style `pixel-art`: features, and parts converted from the drawings (a primitive shape, a box in the frame of the face, a draw order, a colour name and the exact colour; points for polygons and lines).
+# sources: dicebear-pixel-art 67f54a0 (DiceBear style "pixel-art", CC0 1.0: "Pixel Art" (https://www.figma.com/community/file/1198754108850888330) by "DiceBear", licensed under "CC0 1.0" (https://creativecommons.org/publicdomain/zero/1.0/))
+# license: CC0-1.0
+# script: tools/import/dicebear.mjs
+
+# accessories: pixel-art variant 01
+@k.faces.pixel-art.accessories.variant01 k.faces.variant slot=accessories name="pixel-art variant 01" style=pixel-art core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant01.p1 k.faces.part slot=accessories of="pixel-art variant 01" name=part1 shape=polygon x=81.3 y=43.8 w=12.5 h=12.5 z=1 colour=grey rgb="#A9A9A9" core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant01.p1.1 k.faces.point part=$k.faces.pixel-art.accessories.variant01.p1 n=1 x=81.3 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant01.p1.2 k.faces.point part=$k.faces.pixel-art.accessories.variant01.p1 n=2 x=93.8 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant01.p1.3 k.faces.point part=$k.faces.pixel-art.accessories.variant01.p1 n=3 x=93.8 y=56.3 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant01.p1.4 k.faces.point part=$k.faces.pixel-art.accessories.variant01.p1 n=4 x=81.3 y=56.3 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant01.p2 k.faces.part slot=accessories of="pixel-art variant 01" name=part2 shape=polygon x=6.3 y=43.8 w=12.5 h=12.5 z=2 colour=grey rgb="#A9A9A9" core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant01.p2.1 k.faces.point part=$k.faces.pixel-art.accessories.variant01.p2 n=1 x=6.3 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant01.p2.2 k.faces.point part=$k.faces.pixel-art.accessories.variant01.p2 n=2 x=18.8 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant01.p2.3 k.faces.point part=$k.faces.pixel-art.accessories.variant01.p2 n=3 x=18.8 y=56.3 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant01.p2.4 k.faces.point part=$k.faces.pixel-art.accessories.variant01.p2 n=4 x=6.3 y=56.3 core.source="dicebear-pixel-art 67f54a0"
+
+# accessories: pixel-art variant 02
+@k.faces.pixel-art.accessories.variant02 k.faces.variant slot=accessories name="pixel-art variant 02" style=pixel-art core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant02.p1 k.faces.part slot=accessories of="pixel-art variant 02" name=part1 shape=polygon x=81.3 y=43.8 w=6.2 h=12.5 z=1 colour=grey rgb="#A9A9A9" core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant02.p1.1 k.faces.point part=$k.faces.pixel-art.accessories.variant02.p1 n=1 x=81.3 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant02.p1.2 k.faces.point part=$k.faces.pixel-art.accessories.variant02.p1 n=2 x=87.5 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant02.p1.3 k.faces.point part=$k.faces.pixel-art.accessories.variant02.p1 n=3 x=87.5 y=56.3 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant02.p1.4 k.faces.point part=$k.faces.pixel-art.accessories.variant02.p1 n=4 x=81.3 y=56.3 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant02.p2 k.faces.part slot=accessories of="pixel-art variant 02" name=part2 shape=polygon x=12.5 y=43.8 w=6.3 h=12.5 z=2 colour=grey rgb="#A9A9A9" core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant02.p2.1 k.faces.point part=$k.faces.pixel-art.accessories.variant02.p2 n=1 x=12.5 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant02.p2.2 k.faces.point part=$k.faces.pixel-art.accessories.variant02.p2 n=2 x=18.8 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant02.p2.3 k.faces.point part=$k.faces.pixel-art.accessories.variant02.p2 n=3 x=18.8 y=56.3 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant02.p2.4 k.faces.point part=$k.faces.pixel-art.accessories.variant02.p2 n=4 x=12.5 y=56.3 core.source="dicebear-pixel-art 67f54a0"
+
+# accessories: pixel-art variant 03
+@k.faces.pixel-art.accessories.variant03 k.faces.variant slot=accessories name="pixel-art variant 03" style=pixel-art core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant03.p1 k.faces.part slot=accessories of="pixel-art variant 03" name=part1 shape=polygon x=81.3 y=43.8 w=6.2 h=12.5 z=1 colour=grey rgb="#A9A9A9" core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant03.p1.1 k.faces.point part=$k.faces.pixel-art.accessories.variant03.p1 n=1 x=81.3 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant03.p1.2 k.faces.point part=$k.faces.pixel-art.accessories.variant03.p1 n=2 x=87.5 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant03.p1.3 k.faces.point part=$k.faces.pixel-art.accessories.variant03.p1 n=3 x=87.5 y=56.3 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant03.p1.4 k.faces.point part=$k.faces.pixel-art.accessories.variant03.p1 n=4 x=81.3 y=56.3 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant03.p2 k.faces.part slot=accessories of="pixel-art variant 03" name=part2 shape=polygon x=12.5 y=43.8 w=6.3 h=12.5 z=2 colour=grey rgb="#A9A9A9" core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant03.p2.1 k.faces.point part=$k.faces.pixel-art.accessories.variant03.p2 n=1 x=12.5 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant03.p2.2 k.faces.point part=$k.faces.pixel-art.accessories.variant03.p2 n=2 x=18.8 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant03.p2.3 k.faces.point part=$k.faces.pixel-art.accessories.variant03.p2 n=3 x=18.8 y=56.3 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant03.p2.4 k.faces.point part=$k.faces.pixel-art.accessories.variant03.p2 n=4 x=12.5 y=56.3 core.source="dicebear-pixel-art 67f54a0"
+
+# accessories: pixel-art variant 04
+@k.faces.pixel-art.accessories.variant04 k.faces.variant slot=accessories name="pixel-art variant 04" style=pixel-art core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant04.p1 k.faces.part slot=accessories of="pixel-art variant 04" name=part1 shape=polygon x=12.5 y=43.8 w=6.3 h=6.2 z=1 colour=grey rgb="#A9A9A9" core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant04.p1.1 k.faces.point part=$k.faces.pixel-art.accessories.variant04.p1 n=1 x=12.5 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant04.p1.2 k.faces.point part=$k.faces.pixel-art.accessories.variant04.p1 n=2 x=18.8 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant04.p1.3 k.faces.point part=$k.faces.pixel-art.accessories.variant04.p1 n=3 x=18.8 y=50 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant04.p1.4 k.faces.point part=$k.faces.pixel-art.accessories.variant04.p1 n=4 x=12.5 y=50 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant04.p2 k.faces.part slot=accessories of="pixel-art variant 04" name=part2 shape=polygon x=81.3 y=43.8 w=6.2 h=6.2 z=2 colour=grey rgb="#A9A9A9" core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant04.p2.1 k.faces.point part=$k.faces.pixel-art.accessories.variant04.p2 n=1 x=81.3 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant04.p2.2 k.faces.point part=$k.faces.pixel-art.accessories.variant04.p2 n=2 x=87.5 y=43.8 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant04.p2.3 k.faces.point part=$k.faces.pixel-art.accessories.variant04.p2 n=3 x=87.5 y=50 core.source="dicebear-pixel-art 67f54a0"
+@k.faces.pixel-art.accessories.variant04.p2.4 k.faces.point part=$k.faces.pixel-art.accessories.variant04.p2 n=4 x=81.3 y=50 core.source="dicebear-pixel-art 67f54a0"

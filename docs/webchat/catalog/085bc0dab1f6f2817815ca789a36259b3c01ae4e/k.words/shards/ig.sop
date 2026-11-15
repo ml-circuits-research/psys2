@@ -1,0 +1,16 @@
+# k.words/shards/ig: senses of the words from "ignite" to "iguana" (first letters "ig").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ignite.verb.1 k.words.sense word=ignite pos=verb n=1 supersense=verb.weather gloss="cause to start burning; subject to fire or great heat" synonym=light is_a=burn opposite=extinguish core.source="wordnet 3.1"
+@k.words.ignite.verb.2 k.words.sense word=ignite pos=verb n=2 supersense=verb.weather gloss="start to burn or burst into flames" synonym=erupt synonym="catch fire" synonym="take fire" synonym=combust synonym=conflagrate is_a="change state" core.source="wordnet 3.1"
+@k.words.ignite.verb.3 k.words.sense word=ignite pos=verb n=3 supersense=verb.emotion gloss="arouse or excite feelings and passions" synonym=inflame synonym="stir up" synonym=wake synonym=heat synonym="fire up" is_a=arouse core.source="wordnet 3.1"
+@k.words.ignition.noun.1 k.words.sense word=ignition pos=noun n=1 supersense=noun.process gloss="the process of initiating combustion or catching fire" is_a=fire core.source="wordnet 3.1"
+@k.words.ignition.noun.2 k.words.sense word=ignition pos=noun n=2 supersense=noun.artifact gloss="the mechanism that ignites the fuel in an internal-combustion engine" synonym="ignition system" is_a=mechanism part_of="electrical system" core.source="wordnet 3.1"
+@k.words.ignition.noun.3 k.words.sense word=ignition pos=noun n=3 supersense=noun.act gloss="the act of setting something on fire" synonym=firing synonym=lighting synonym=kindling synonym=inflammation is_a=burning core.source="wordnet 3.1"
+@k.words.ignorance.noun.1 k.words.sense word=ignorance pos=noun n=1 supersense=noun.cognition gloss="the lack of knowledge or education" is_a=content core.source="wordnet 3.1"
+@k.words.ignore.verb.1 k.words.sense word=ignore pos=verb n=1 supersense=verb.communication gloss="refuse to acknowledge" synonym=disregard synonym=snub synonym=cut is_a=treat kind_of=treat kind_of=interact kind_of=act core.source="wordnet 3.1"
+@k.words.ignore.verb.2 k.words.sense word=ignore pos=verb n=2 supersense=verb.communication gloss="bar from attention or consideration" synonym=dismiss synonym=disregard synonym="brush aside" synonym="brush off" synonym=discount synonym="push aside" is_a=reject kind_of=reject kind_of=evaluate kind_of=think core.source="wordnet 3.1"
+@k.words.ignore.verb.3 k.words.sense word=ignore pos=verb n=3 supersense=verb.perception gloss="fail to notice" opposite=notice core.source="wordnet 3.1"
+@k.words.iguana.noun.1 k.words.sense word=iguana pos=noun n=1 supersense=noun.animal gloss="large herbivorous tropical American arboreal lizards with a spiny crest along the back; used as human food in Central America and South America" synonym="common iguana" synonym="Iguana iguana" is_a=iguanid kind_of=iguanid kind_of=lizard kind_of=saurian kind_of=diapsid kind_of=reptile kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

@@ -1,0 +1,10 @@
+# k.words/shards/l: senses of the words from "l" to "l" (first letters "l").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.l.noun.1 k.words.sense word=l pos=noun n=1 supersense=noun.quantity gloss="a metric unit of capacity, formerly defined as the volume of one kilogram of pure water under standard conditions; now equal to 1,000 cubic centimeters (or approximately 1.75 pints)" synonym=liter synonym=litre synonym="cubic decimeter" synonym="cubic decimetre" is_a="metric capacity unit" part_of=dekaliter kind_of="metric capacity unit" kind_of="volume unit" kind_of="unit of measurement" kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.l.noun.2 k.words.sense word=L pos=noun n=2 supersense=noun.quantity gloss="the cardinal number that is the product of ten and five" synonym=fifty synonym=50 is_a="large integer" kind_of="large integer" kind_of=integer kind_of=number kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.l.noun.3 k.words.sense word=L pos=noun n=3 supersense=noun.quantity gloss="a cgs unit of illumination equal to the brightness of a perfectly diffusing surface that emits or reflects one lumen per square centimeter" synonym=lambert is_a="illumination unit" kind_of="illumination unit" kind_of="light unit" kind_of="electromagnetic unit" kind_of="unit of measurement" kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.l.adjective.1 k.words.sense word=l pos=adjective n=1 supersense=adj.all gloss="being ten more than forty" synonym=fifty synonym=50 near_opposite=ordinal core.source="wordnet 3.1"
+@k.words.l.spelling.L core.word text=l means=L of=k.words.sense.word core.source="wordnet 3.1"

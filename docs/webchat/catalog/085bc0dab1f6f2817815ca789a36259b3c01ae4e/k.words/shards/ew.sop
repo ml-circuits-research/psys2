@@ -1,0 +1,7 @@
+# k.words/shards/ew: senses of the words from "ew" to "ew" (first letters "ew").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ew.noun.1 k.words.sense word=EW pos=noun n=1 supersense=noun.act gloss="military action involving the use of electromagnetic energy to determine or exploit or reduce or prevent hostile use of the electromagnetic spectrum" synonym="electronic warfare" is_a="military action" core.source="wordnet 3.1"
+@k.words.ew.spelling.EW core.word text=ew means=EW of=k.words.sense.word core.source="wordnet 3.1"

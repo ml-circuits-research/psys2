@@ -1,0 +1,38 @@
+# k.diagrams/shards/topics-apache-2-0-and-unicode-3-0: 32 topics a diagram can be drawn about, read from the fills of k.diagrams over facts under Apache-2.0 AND Unicode-3.0 (block 07:30 item 9): each with the kinds of diagram it fills, the types it comes from and the nodes of its largest diagram. Derived; rebuilt by the build.
+# sources: cldr 48 (the facts the topics are read from)
+# sources: noto-emoji 99701e0 (the facts the topics are read from)
+# license: Apache-2.0 AND Unicode-3.0
+# script: tools/diagram-topics.mjs
+
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.aircraft k.diagrams.topic name=aircraft kind="Venn diagram" kind=tree from=k.kinds.parent nodes=13 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.art_supply k.diagrams.topic name="art supply" kind="Venn diagram" kind=tree from=k.kinds.parent nodes=8 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.award k.diagrams.topic name=award kind="Venn diagram" kind=tree from=k.kinds.parent nodes=7 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.bird k.diagrams.topic name=bird kind="Venn diagram" kind=tree from=k.kinds.parent nodes=10 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.building k.diagrams.topic name=building kind="Venn diagram" kind=tree from=k.kinds.parent nodes=23 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.celebration_item k.diagrams.topic name="celebration item" kind="Venn diagram" kind=tree from=k.kinds.parent nodes=21 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.clothing k.diagrams.topic name=clothing kind="Venn diagram" kind=tree from=k.kinds.parent nodes=30 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.computer_equipment k.diagrams.topic name="computer equipment" kind="Venn diagram" kind=tree from=k.kinds.parent nodes=15 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.dessert k.diagrams.topic name=dessert kind="Venn diagram" kind=tree from=k.kinds.parent nodes=15 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.dish k.diagrams.topic name=dish kind="Venn diagram" kind=tree from=k.kinds.parent nodes=41 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.drink k.diagrams.topic name=drink kind="Venn diagram" kind=tree from=k.kinds.parent nodes=21 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.electrical_device k.diagrams.topic name="electrical device" kind="Venn diagram" kind=tree from=k.kinds.parent nodes=23 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.flower k.diagrams.topic name=flower kind="Venn diagram" kind=tree from=k.kinds.parent nodes=13 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.fruit k.diagrams.topic name=fruit kind="Venn diagram" kind=tree from=k.kinds.parent nodes=9 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.game k.diagrams.topic name=game kind="Venn diagram" kind=tree from=k.kinds.parent nodes=18 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.household_item k.diagrams.topic name="household item" kind="Venn diagram" kind=tree from=k.kinds.parent nodes=25 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.invertebrate k.diagrams.topic name=invertebrate kind="Venn diagram" kind=tree from=k.kinds.parent nodes=16 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.mammal k.diagrams.topic name=mammal kind="Venn diagram" kind=tree from=k.kinds.parent nodes=22 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.medical_supply k.diagrams.topic name="medical supply" kind="Venn diagram" kind=tree from=k.kinds.parent nodes=8 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.money k.diagrams.topic name=money kind="Venn diagram" kind=tree from=k.kinds.parent nodes=12 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.musical_instrument k.diagrams.topic name="musical instrument" kind="Venn diagram" kind=tree from=k.kinds.parent nodes=14 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.office_supply k.diagrams.topic name="office supply" kind="Venn diagram" kind=tree from=k.kinds.parent nodes=24 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.plant k.diagrams.topic name=plant kind="Venn diagram" kind=tree from=k.kinds.parent nodes=11 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.reptile k.diagrams.topic name=reptile kind="Venn diagram" kind=tree from=k.kinds.parent nodes=5 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.science_equipment k.diagrams.topic name="science equipment" kind="Venn diagram" kind=tree from=k.kinds.parent nodes=8 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.sports_equipment k.diagrams.topic name="sports equipment" kind="Venn diagram" kind=tree from=k.kinds.parent nodes=28 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.tableware k.diagrams.topic name=tableware kind="Venn diagram" kind=tree from=k.kinds.parent nodes=6 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.tool k.diagrams.topic name=tool kind="Venn diagram" kind=tree from=k.kinds.parent nodes=20 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.vegetable k.diagrams.topic name=vegetable kind="Venn diagram" kind=tree from=k.kinds.parent nodes=13 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.water_animal k.diagrams.topic name="water animal" kind="Venn diagram" kind=tree from=k.kinds.parent nodes=18 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.watercraft k.diagrams.topic name=watercraft kind="Venn diagram" kind=tree from=k.kinds.parent nodes=10 core.source="cldr 48" core.source="noto-emoji 99701e0"
+@k.diagrams.topic.apache_2_0_and_unicode_3_0.writing_implement k.diagrams.topic name="writing implement" kind="Venn diagram" kind=tree from=k.kinds.parent nodes=8 core.source="cldr 48" core.source="noto-emoji 99701e0"

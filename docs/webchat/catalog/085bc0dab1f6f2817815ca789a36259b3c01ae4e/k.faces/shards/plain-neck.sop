@@ -1,0 +1,40 @@
+# k.faces/shards/plain-neck: the variants of the slot `neck` in the style `plain`: features, and parts with a primitive shape, a box in the frame of the face, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/faces-core.mjs
+
+# neck: medium
+@k.faces.plain.neck.medium k.faces.variant slot=neck name=medium style=plain size=medium core.source="hand-core 1"
+@k.faces.plain.neck.medium.neck k.faces.part slot=neck of=medium name=neck shape=rectangle x=42 y=70 w=16 h=18 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+
+# neck: thin
+@k.faces.plain.neck.thin k.faces.variant slot=neck name=thin style=plain feel=thin feel=narrow core.source="hand-core 1"
+@k.faces.plain.neck.thin.neck k.faces.part slot=neck of=thin name=neck shape=rectangle x=45 y=70 w=10 h=18 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+
+# neck: thick
+@k.faces.plain.neck.thick k.faces.variant slot=neck name=thick style=plain feel=thick feel=wide core.source="hand-core 1"
+@k.faces.plain.neck.thick.neck k.faces.part slot=neck of=thick name=neck shape=rectangle x=38 y=70 w=24 h=18 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+
+# neck: tapered
+@k.faces.plain.neck.tapered k.faces.variant slot=neck name=tapered style=plain feel=wide kind=tapered core.source="hand-core 1"
+@k.faces.plain.neck.tapered.neck k.faces.part slot=neck of=tapered name=neck shape=polygon x=37 y=70 w=26 h=18 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.plain.neck.tapered.neck.p1 k.faces.point part=$k.faces.plain.neck.tapered.neck n=1 x=42 y=70 core.source="hand-core 1"
+@k.faces.plain.neck.tapered.neck.p2 k.faces.point part=$k.faces.plain.neck.tapered.neck n=2 x=58 y=70 core.source="hand-core 1"
+@k.faces.plain.neck.tapered.neck.p3 k.faces.point part=$k.faces.plain.neck.tapered.neck n=3 x=63 y=88 core.source="hand-core 1"
+@k.faces.plain.neck.tapered.neck.p4 k.faces.point part=$k.faces.plain.neck.tapered.neck n=4 x=37 y=88 core.source="hand-core 1"
+
+# neck: necklace
+@k.faces.plain.neck.necklace k.faces.variant slot=neck name=necklace style=plain kind=necklace core.source="hand-core 1"
+@k.faces.plain.neck.necklace.neck k.faces.part slot=neck of=necklace name=neck shape=rectangle x=42 y=70 w=16 h=18 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.plain.neck.necklace.chain k.faces.part slot=neck of=necklace name=chain shape=arc x=42 y=80 w=16 h=6 z=2 colour=yellow rgb="#E8B923" opens=up core.source="hand-core 1"
+@k.faces.plain.neck.necklace.pendant k.faces.part slot=neck of=necklace name=pendant shape=circle x=48 y=85 w=4 h=4 z=3 colour=yellow rgb="#E8B923" core.source="hand-core 1"
+
+# neck: pipe
+@k.faces.plain.neck.pipe k.faces.variant slot=neck name=pipe style=plain feel=thin kind=robot core.source="hand-core 1"
+@k.faces.plain.neck.pipe.neck k.faces.part slot=neck of=pipe name=neck shape=rectangle x=45 y=70 w=10 h=18 z=1 colour=grey rgb="#9AA4AE" core.source="hand-core 1"
+@k.faces.plain.neck.pipe.upper_ring k.faces.part slot=neck of=pipe name=upper_ring shape=line x=45 y=80 w=10 h=0 z=2 colour=black rgb="#3A3A3A" core.source="hand-core 1"
+@k.faces.plain.neck.pipe.lower_ring k.faces.part slot=neck of=pipe name=lower_ring shape=line x=45 y=85 w=10 h=0 z=2 colour=black rgb="#3A3A3A" core.source="hand-core 1"
+@k.faces.plain.neck.pipe.upper_ring.p1 k.faces.point part=$k.faces.plain.neck.pipe.upper_ring n=1 x=45 y=80 core.source="hand-core 1"
+@k.faces.plain.neck.pipe.upper_ring.p2 k.faces.point part=$k.faces.plain.neck.pipe.upper_ring n=2 x=55 y=80 core.source="hand-core 1"
+@k.faces.plain.neck.pipe.lower_ring.p1 k.faces.point part=$k.faces.plain.neck.pipe.lower_ring n=1 x=45 y=85 core.source="hand-core 1"
+@k.faces.plain.neck.pipe.lower_ring.p2 k.faces.point part=$k.faces.plain.neck.pipe.lower_ring n=2 x=55 y=85 core.source="hand-core 1"

@@ -1,0 +1,6 @@
+# k.kinds/shards/relations-named: the keys of the types of k.named read as relations: 1 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.named.labelled.named k.kinds.relation type=k.named.labelled key=named subject=labelled object=value found=schema core.source="hand-core 1"

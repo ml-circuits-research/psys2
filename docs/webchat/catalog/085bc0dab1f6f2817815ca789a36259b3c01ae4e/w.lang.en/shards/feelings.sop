@@ -1,0 +1,36 @@
+# w.lang.en/shards/feelings: a kind thing to say to someone who has a feeling of k.feelings (KR3, reviewer 14:25: English
+# wording out of the language-neutral worlds; it was k.feelings.feeling.reply). One reply per feeling.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.en.feeling_reply.happy w.lang.en.feeling_reply feeling=happy text="I am glad you are happy! What made your day so good?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.sad w.lang.en.feeling_reply feeling=sad text="I am sorry you are sad. Do you want to tell me about it?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.angry w.lang.en.feeling_reply feeling=angry text="It is all right to be angry. Take a deep breath, and tell me what happened." core.source="hand-core 1"
+@w.lang.en.feeling_reply.afraid w.lang.en.feeling_reply feeling=afraid text="I am here with you. What is frightening you?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.surprised w.lang.en.feeling_reply feeling=surprised text="What a surprise! What happened?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.tired w.lang.en.feeling_reply feeling=tired text="You have done a lot today. A rest will do you good." core.source="hand-core 1"
+@w.lang.en.feeling_reply.excited w.lang.en.feeling_reply feeling=excited text="How exciting! Tell me what you are looking forward to." core.source="hand-core 1"
+@w.lang.en.feeling_reply.proud w.lang.en.feeling_reply feeling=proud text="You can be proud of that. Well done!" core.source="hand-core 1"
+@w.lang.en.feeling_reply.shy w.lang.en.feeling_reply feeling=shy text="Take your time. I am happy to wait." core.source="hand-core 1"
+@w.lang.en.feeling_reply.bored w.lang.en.feeling_reply feeling=bored text="Shall we think of something to do together?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.lonely w.lang.en.feeling_reply feeling=lonely text="I am here, and I like talking with you. Who would you like to see?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.worried w.lang.en.feeling_reply feeling=worried text="That sounds like a lot on your mind. What worries you most?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.calm w.lang.en.feeling_reply feeling=calm text="It is good to feel calm. Enjoy the quiet." core.source="hand-core 1"
+@w.lang.en.feeling_reply.jealous w.lang.en.feeling_reply feeling=jealous text="It is hard when someone else has what you want. What would you wish for?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.disappointed w.lang.en.feeling_reply feeling=disappointed text="That is a pity. You were looking forward to it." core.source="hand-core 1"
+@w.lang.en.feeling_reply.embarrassed w.lang.en.feeling_reply feeling=embarrassed text="That happens to everybody. It will soon be forgotten." core.source="hand-core 1"
+@w.lang.en.feeling_reply.confused w.lang.en.feeling_reply feeling=confused text="Let us go through it slowly, one step at a time." core.source="hand-core 1"
+@w.lang.en.feeling_reply.curious w.lang.en.feeling_reply feeling=curious text="Good question! Let us find out together." core.source="hand-core 1"
+@w.lang.en.feeling_reply.grateful w.lang.en.feeling_reply feeling=grateful text="It is lovely to say thank you. Who helped you?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.hopeful w.lang.en.feeling_reply feeling=hopeful text="I hope it comes true. What are you hoping for?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.nervous w.lang.en.feeling_reply feeling=nervous text="Many people feel like that before something new. You can do it." core.source="hand-core 1"
+@w.lang.en.feeling_reply.ashamed w.lang.en.feeling_reply feeling=ashamed text="Everybody makes mistakes. Saying sorry can make it better." core.source="hand-core 1"
+@w.lang.en.feeling_reply.guilty w.lang.en.feeling_reply feeling=guilty text="You can put it right. What could you do now?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.disgusted w.lang.en.feeling_reply feeling=disgusted text="Yuck, that is not nice. Let us get away from it." core.source="hand-core 1"
+@w.lang.en.feeling_reply.loved w.lang.en.feeling_reply feeling=loved text="You are loved. That is a warm feeling." core.source="hand-core 1"
+@w.lang.en.feeling_reply.hurt w.lang.en.feeling_reply feeling=hurt text="I am sorry that hurt you. Do you want to tell me what happened?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.frustrated w.lang.en.feeling_reply feeling=frustrated text="That is annoying. Shall we try another way, or take a short break?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.relieved w.lang.en.feeling_reply feeling=relieved text="What a relief! Now you can breathe out." core.source="hand-core 1"
+@w.lang.en.feeling_reply.homesick w.lang.en.feeling_reply feeling=homesick text="You miss home. What do you like best there?" core.source="hand-core 1"
+@w.lang.en.feeling_reply.amused w.lang.en.feeling_reply feeling=amused text="That is funny! Tell me the joke." core.source="hand-core 1"

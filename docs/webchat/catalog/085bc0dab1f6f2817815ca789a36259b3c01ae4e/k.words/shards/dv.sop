@@ -1,0 +1,7 @@
+# k.words/shards/dv: senses of the words from "dvd" to "dvd" (first letters "dv").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.dvd.noun.1 k.words.sense word=DVD pos=noun n=1 supersense=noun.artifact gloss="a digital recording (as of a movie) on an optical disk that can be played on a computer or a television set" synonym=videodisk synonym=videodisc is_a="optical disk" kind_of="optical disk" kind_of="memory device" kind_of=device kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.dvd.spelling.DVD core.word text=dvd means=DVD of=k.words.sense.word core.source="wordnet 3.1"

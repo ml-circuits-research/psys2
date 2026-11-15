@@ -1,0 +1,24 @@
+# k.faces/shards/cutouts-cheeks: the variants of the slot `cheeks` in the DiceBear style `cutouts`: features, and parts converted from the drawings (a primitive shape, a box in the frame of the face, a draw order, a colour name and the exact colour; points for polygons and lines).
+# sources: dicebear-cutouts 67f54a0 (DiceBear style "cutouts", CC0 1.0: "Cutouts" (https://www.dicebear.com) by "DiceBear", licensed under "CC0 1.0" (https://creativecommons.org/publicdomain/zero/1.0/))
+# license: CC0-1.0
+# script: tools/import/dicebear.mjs
+
+# cheeks: cutouts torn
+@k.faces.cutouts.cheeks.torn k.faces.variant slot=cheeks name="cutouts torn" style=cutouts kind=blush named=model core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p1 k.faces.part slot=cheeks of="cutouts torn" name=part1 shape=polygon x=26.2 y=57.2 w=9.8 h=9 z=1 colour=pink rgb="#E2839A" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p1.1 k.faces.point part=$k.faces.cutouts.cheeks.torn.p1 n=1 x=36 y=61.2 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p1.2 k.faces.point part=$k.faces.cutouts.cheeks.torn.p1 n=2 x=34.2 y=64.5 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p1.3 k.faces.point part=$k.faces.cutouts.cheeks.torn.p1 n=3 x=31.8 y=66.2 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p1.4 k.faces.point part=$k.faces.cutouts.cheeks.torn.p1 n=4 x=28.5 y=64.6 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p1.5 k.faces.point part=$k.faces.cutouts.cheeks.torn.p1 n=5 x=26.2 y=60.6 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p1.6 k.faces.point part=$k.faces.cutouts.cheeks.torn.p1 n=6 x=30.2 y=57.2 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p1.7 k.faces.point part=$k.faces.cutouts.cheeks.torn.p1 n=7 x=33.7 y=58.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p2 k.faces.part slot=cheeks of="cutouts torn" name=part2 shape=polygon x=64.8 y=59.4 w=9.5 h=7 z=2 colour=pink rgb="#E2839A" core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p2.1 k.faces.point part=$k.faces.cutouts.cheeks.torn.p2 n=1 x=74.3 y=62.7 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p2.2 k.faces.point part=$k.faces.cutouts.cheeks.torn.p2 n=2 x=72.3 y=65.6 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p2.3 k.faces.point part=$k.faces.cutouts.cheeks.torn.p2 n=3 x=70.3 y=66.4 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p2.4 k.faces.point part=$k.faces.cutouts.cheeks.torn.p2 n=4 x=66 y=65.4 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p2.5 k.faces.point part=$k.faces.cutouts.cheeks.torn.p2 n=5 x=64.8 y=62.8 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p2.6 k.faces.point part=$k.faces.cutouts.cheeks.torn.p2 n=6 x=66.9 y=60.3 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p2.7 k.faces.point part=$k.faces.cutouts.cheeks.torn.p2 n=7 x=69.2 y=59.4 core.source="dicebear-cutouts 67f54a0"
+@k.faces.cutouts.cheeks.torn.p2.8 k.faces.point part=$k.faces.cutouts.cheeks.torn.p2 n=8 x=72 y=60 core.source="dicebear-cutouts 67f54a0"

@@ -109,7 +109,7 @@
 
 @t.talk.s05 core.test
     input="What do you know about me?"
-    expect="Nothing leaves this device."
+    expect="I do not know anything about you yet."
     session=b
 
 @t.talk.s06 core.test

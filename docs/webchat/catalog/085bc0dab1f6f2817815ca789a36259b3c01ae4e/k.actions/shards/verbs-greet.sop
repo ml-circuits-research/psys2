@@ -1,0 +1,11 @@
+# k.actions/shards/verbs-greet: 5 verbs and phrasal verbs that mean the act "greet" (greet, say hello, say hi, welcome, hail ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 0 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 5 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.greet.greet k.actions.verb text=greet act=greet core.source="hand-core 1"
+@k.actions.verb.greet.say_hello k.actions.verb text="say hello" act=greet core.source="hand-core 1"
+@k.actions.verb.greet.say_hi k.actions.verb text="say hi" act=greet core.source="hand-core 1"
+@k.actions.verb.greet.welcome k.actions.verb text=welcome act=greet core.source="hand-core 1"
+@k.actions.verb.greet.hail k.actions.verb text=hail act=greet core.source="hand-core 1"

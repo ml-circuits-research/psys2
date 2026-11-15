@@ -1,0 +1,10 @@
+# k.words/shards/m: senses of the words from "m" to "m" (first letters "m").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.m.noun.1 k.words.sense word=m pos=noun n=1 supersense=noun.quantity gloss="the basic unit of length adopted under the Systeme International d'Unites (approximately 1.094 yards)" synonym=meter synonym=metre is_a="metric linear unit" part_of=decameter kind_of="metric linear unit" kind_of="linear unit" kind_of="unit of measurement" kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.m.noun.2 k.words.sense word=M pos=noun n=2 supersense=noun.attribute gloss="concentration measured by the number of moles of solute per liter of solution" synonym=molarity synonym="molar concentration" is_a=concentration kind_of=concentration kind_of=property kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.m.noun.3 k.words.sense word=M pos=noun n=3 supersense=noun.quantity gloss="the cardinal number that is the product of 10 and 100" synonym=thousand synonym="one thousand" synonym=1000 synonym=K synonym=chiliad synonym=G synonym=grand synonym=thou synonym=yard is_a="large integer" kind_of="large integer" kind_of=integer kind_of=number kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.m.adjective.1 k.words.sense word=m pos=adjective n=1 supersense=adj.all gloss="denoting a quantity consisting of 1,000 items or units" synonym=thousand synonym="one thousand" synonym=1000 synonym=k near_opposite=ordinal core.source="wordnet 3.1"
+@k.words.m.spelling.M core.word text=m means=M of=k.words.sense.word core.source="wordnet 3.1"

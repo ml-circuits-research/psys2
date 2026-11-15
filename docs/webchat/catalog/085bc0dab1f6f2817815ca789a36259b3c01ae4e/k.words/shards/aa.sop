@@ -1,0 +1,14 @@
+# k.words/shards/aa: senses of the words from "aa" to "aaron" (first letters "aa").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.aa.noun.1 k.words.sense word=aa pos=noun n=1 supersense=noun.substance gloss="a dry form of lava resembling clinkers" is_a=lava core.source="wordnet 3.1"
+@k.words.aa.noun.2 k.words.sense word=AA pos=noun n=2 supersense=noun.group gloss="an international organization that provides a support group for persons trying to overcome alcoholism" synonym="Alcoholics Anonymous" is_a="nongovernmental organization" core.source="wordnet 3.1"
+@k.words.aa.noun.3 k.words.sense word=AA pos=noun n=3 supersense=noun.communication gloss="an associate degree in arts" synonym="Associate in Arts" is_a="associate degree" core.source="wordnet 3.1"
+@k.words.aa.spelling.AA core.word text=aa means=AA of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.aah.verb.1 k.words.sense word=aah pos=verb n=1 supersense=verb.communication gloss="express admiration and pleasure by uttering `ooh' or `aah'" synonym=ooh is_a=exclaim kind_of=exclaim kind_of=express core.source="wordnet 3.1"
+@k.words.aardvark.noun.1 k.words.sense word=aardvark pos=noun n=1 supersense=noun.animal gloss="nocturnal burrowing mammal of the grasslands of Africa that feeds on termites; sole extant representative of the order Tubulidentata" synonym="ant bear" synonym=anteater synonym="Orycteropus afer" is_a=placental kind_of=placental kind_of=mammal kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.aaron.noun.1 k.words.sense word=Aaron pos=noun n=1 supersense=noun.person gloss="United States professional baseball player who hit more home runs than Babe Ruth (born in 1934)" synonym="Henry Louis Aaron" synonym="Hank Aaron" instance_of=ballplayer core.source="wordnet 3.1"
+@k.words.aaron.noun.2 k.words.sense word=Aaron pos=noun n=2 supersense=noun.person gloss="(Old Testament) elder brother of Moses and first high priest of the Israelites; created the golden calf" instance_of=priest core.source="wordnet 3.1"
+@k.words.aaron.spelling.Aaron core.word text=aaron means=Aaron of=k.words.sense.word core.source="wordnet 3.1"

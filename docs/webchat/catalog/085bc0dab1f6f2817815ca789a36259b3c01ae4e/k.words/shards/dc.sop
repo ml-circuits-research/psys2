@@ -1,0 +1,10 @@
+# k.words/shards/dc: senses of the words from "dc" to "dci" (first letters "dc").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.dc.noun.1 k.words.sense word=DC pos=noun n=1 supersense=noun.location gloss="the district occupied entirely by the city of Washington; chosen by George Washington as the site of the capital of the United States and created out of land ceded by Maryland and Virginia" synonym="District of Columbia" synonym=D.C. instance_of="federal district" part_of="United States" core.source="wordnet 3.1"
+@k.words.dc.noun.2 k.words.sense word=DC pos=noun n=2 supersense=noun.phenomenon gloss="an electric current that flows in one direction steadily" synonym="direct current" synonym="direct electric current" is_a=electricity core.source="wordnet 3.1"
+@k.words.dc.spelling.DC core.word text=dc means=DC of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.dci.noun.1 k.words.sense word=DCI pos=noun n=1 supersense=noun.person gloss="the head of the United States Intelligence Community and director of the Central Intelligence Agency" synonym="Director of Central Intelligence" is_a=administrator core.source="wordnet 3.1"
+@k.words.dci.spelling.DCI core.word text=dci means=DCI of=k.words.sense.word core.source="wordnet 3.1"

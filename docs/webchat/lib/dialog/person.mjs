@@ -19,10 +19,13 @@ import { en } from '../lang/en.mjs?v=8f226ecd72';
 import { numberWords, numberValue } from '../knowledge/values.mjs?v=ea821661e5';
 import { ACT_VERBS } from '../../worlds/acts/verbs.generated.mjs?v=8fbdca66b6';
 import { personView } from './person-view.mjs?v=ceeabdb255';
+import { guard } from '../formalizer/guard.mjs?v=82a55329d9';
+import { within, TIMED_OUT } from './knowledge-lookup.mjs?v=163b3c7abc';
 
 export { personView };
 
 const HOME = 'session.things';
+const NAME_HOME = 'kids.common';   // the home of the user's name (its own reader of introductions, state `userName`)
 /** The order the interview asks the person's keys in (the schema's slots of w.person.person, then the tastes). */
 const ASK_ORDER = ['name', 'occupation', 'age', 'language', 'likes'];
 const QUESTION = { name: 'What is your name?', occupation: 'What do you do for a living?', age: 'How old are you?', language: 'Which languages do you speak?', likes: 'What do you like?' };
@@ -33,6 +36,8 @@ const NOT_A_THING = new Set(['it', 'this', 'that', 'them', 'these', 'those', 'yo
 const PLURAL_OF = { child: 'children', person: 'people' };
 const NAME_FRAMES = new Set(['person.state.name', 'person.state.called', 'person.ask.name']);
 const PRIVATE = 'It stays in this conversation. Nothing leaves this device.';
+/** The answer to a question about the speaker when nothing is known (fresh, or after "Forget what you know about me"): a composed reply (`person.know.none`, w.lang.ro.reply). */
+export const NOTHING_YET = 'I do not know anything about you yet.';
 /** The user's name: kids.common keeps it (`userName`); the interview's answer is kept there too. */
 const nameOf = (dialog, person) => dialog.isession.state['kids.common']?.userName ?? person.me.name ?? null;
 const verbs = new Set(Object.values(ACT_VERBS).flat().map((v) => v.split('_')[0]));
@@ -94,14 +99,21 @@ function describe(v) {   // v.said: the user's words for the things
   return said;
 }
 
-/** The catalog type of a thing one likes: the type of the catalog's records of the word, the most telling first (null when the catalog does not know it or is not attached). */
-async function typeOf(dialog, thing) {
+/**
+ * The catalog types of the things one likes: the type of the catalog's records of each word, the most telling first (null when the catalog does not know it, is not attached or did
+ * not answer in time). The records of all the things are asked together, and the wait is the catalog's, not the turn's (guard.untimed, bounded by the lookup deadline: a catalog
+ * that hangs delays the turn once and only leaves the taste untyped; first-run evidence 2026-11-15: 4.7 s live, 385 shard reads asked one thing after another inside the turn clock).
+ */
+async function typesOf(dialog, things) {
   const k = dialog.engine.knowledge;
-  if (!k?.thing) return null;
-  let th = null;
-  try { th = k.peek?.(thing) ?? await k.thing(thing); } catch { th = null; }
-  const types = new Set((th?.wires ?? []).filter((x) => [...(x.f?.name ?? []), ...(x.f?.word ?? [])].some((n) => String(n).toLowerCase() === thing)).map((x) => x.type));
-  return TYPE_ORDER.find((t) => types.has(t)) ?? null;   // a record that only counts the word (k.words.frequency) or tags a drawing does not type it
+  if (!k?.thing) return things.map(() => null);
+  const ask = (t) => { try { return Promise.resolve(k.peek?.(t) ?? k.thing(t)).catch(() => null); } catch { return Promise.resolve(null); } };
+  const got = await guard.untimed(() => within(dialog, Promise.all(things.map(ask))));
+  const ths = got === TIMED_OUT ? things.map((t) => k.peek?.(t) ?? null) : got;
+  return things.map((thing, i) => {
+    const types = new Set((ths[i]?.wires ?? []).filter((x) => [...(x.f?.name ?? []), ...(x.f?.word ?? [])].some((n) => String(n).toLowerCase() === thing)).map((x) => x.type));
+    return TYPE_ORDER.find((t) => types.has(t)) ?? null;   // a record that only counts the word (k.words.frequency) or tags a drawing does not type it
+  });
 }
 
 /** Tell lines to the World; a refusal (the schema's check) is said, nothing is kept. */
@@ -160,9 +172,10 @@ async function state(dialog, lib, person, frame, roles, english) {
     const items = itemsOf(value);
     if (!items.length || items.some((x) => x.split(' ').some((t) => NOT_A_THING.has(t)))) return null;   // "I like it", "I like to draw": not a list of things
     const kept = [];
-    for (const it of items) {
-      const thing = it.split(' ').map((t, i, a) => (i === a.length - 1 ? en.singular(t, 'lemma') : t)).join(' ');
-      const type = await typeOf(dialog, thing);
+    const thingOf = (it) => it.split(' ').map((t, i, a) => (i === a.length - 1 ? en.singular(t, 'lemma') : t)).join(' ');
+    const types = await typesOf(dialog, items.map(thingOf));
+    for (const [n, it] of items.entries()) {
+      const thing = thingOf(it), type = types[n];
       const id = `me.taste.${thing.replace(/[^\p{L}\p{N}]+/gu, '_')}`;
       person.lines = person.lines.filter((l) => !l.startsWith(`@${id} `));
       const r = tell(w, person, [`@${id} w.person.taste of=$me thing=${q(thing)}${type ? ` type=${type}` : ''} stance=${stance}`]);
@@ -195,7 +208,7 @@ function ask(lib, person, frame, roles, name = null) {
     // the person's own keys as the library describes the user's thing (L5 describeThing: name, age, occupation, language); relatives and tastes are facts of their own
     const own = Object.fromEntries(lib.describeThing(worldOf(lib, person).w, 'me').filter((x) => x.key !== 'user').map((x) => [x.key, x.values]));
     const said = describe({ ...v, name: name ?? own.name?.[0] ?? null, age: own.age ? Number(own.age[0]) : null, occupation: own.occupation?.[0] ?? null, language: own.language ?? [], said: v.said });
-    return said.length ? `Here is what I know about you: ${said.join('; ')}. ${PRIVATE}` : `I do not know anything about you yet. You can tell me, for example "My name is Ana", "I am 40" or "I like cats". ${PRIVATE}`;
+    return said.length ? `Here is what I know about you: ${said.join('; ')}. ${PRIVATE}` : { text: NOTHING_YET, say: { act: 'person.know.none', roles: {} } };   // composed: said from the language world's reply in another language
   }
   if (frame === 'person.ask.count') {
     const rel = relationOf(roles.attribute?.item ?? roles.attribute?.text ?? '');
@@ -251,6 +264,20 @@ async function answer(dialog, lib, person, english) {
   return `${said} ${next ? QUESTION[next] : 'Thank you, that is all my questions. You can see what I know about you in Settings › Privacy.'}`;
 }
 
+/** Does the name's home (kids.common) read the whole sentence as its name question, with no repair? A rules probe of the sentence (no effect: nothing runs). */
+async function nameHomeReads(dialog, english) {
+  const { set, formalizers } = dialog.engine;
+  if (!set?.get?.(NAME_HOME) || !formalizers?.rules) return false;
+  try {
+    const probe = await formalizers.rules.formalize(english, { worlds: set, session: dialog.isession, source: 'probe', context: dialog.context(), router: dialog._router });
+    const sg = probe.segments;
+    if (sg.length !== 1 || sg[0].unparsed || sg[0].partial || sg[0].ignored?.length || sg[0].corrections?.length) return false;
+    const reqs = (probe.wires ?? []).filter((x) => x.type === 'core.request');
+    const val = (w, key) => w.entries?.find((e) => e.key === key)?.value?.v;
+    return reqs.length === 1 && val(reqs[0], 'core.in') === NAME_HOME && val(reqs[0], 'core.request.action') === 'chat.myname';
+  } catch { return false; }
+}
+
 /**
  * A turn about the person: a statement or a question of the person frames, or the interview. Returns null when the turn is not about the person (the worlds read it as before).
  */
@@ -261,7 +288,7 @@ export async function personTurn(dialog, english) {
   if (!person) return null;
   const t = plain(english);
   if (!t) return null;
-  const done = (reply, frame, extra = {}) => ({ reply, status: 'supported', info: { kind: 'person', frame, ...extra }, segment: { text: String(english), world: HOME, worlds: [HOME], wires: [], match: { worldId: HOME, patternId: frame, kind: 'request' }, strategy: 'person' } });
+  const done = (said, frame, extra = {}) => ({ reply: said?.text ?? said, ...(said?.say ? { say: said.say } : {}), status: 'supported', info: { kind: 'person', frame, ...extra }, segment: { text: String(english), world: HOME, worlds: [HOME], wires: [], match: { worldId: HOME, patternId: frame, kind: 'request' }, strategy: 'person' } });
   // the interview: start, resume, stop, and the answer to its open question
   const asking = person.asking;
   person.asking = null;   // an interview question lives for one turn unless it is answered
@@ -283,9 +310,12 @@ export async function personTurn(dialog, english) {
   const read = lib.readFrames(r.world, t.replace(/,/g, ' , '), { lang: 'w.lang.en' });
   const best = read.best;
   // the user's NAME has its home in kids.common (its own reader of introductions: trailing words, run-ons, "my name is" alone asks back; state `userName`): those frames are left to it
-  // "what do you know about me" / "who am i" with nothing told but (at most) a name: the worlds that answered it before answer it (kids.common the name, Talk its card)
-  const empty = !person.lines.length && !Object.keys(person.me).some((k) => k !== 'name');
-  if (best?.frame?.startsWith('person.') && !NAME_FRAMES.has(best.frame) && !(best.frame === 'person.ask.all' && empty)) {
+  // OWNERSHIP (live check 2026-11-15, ledger: an empty profile let "what do you know about me" fall through and be respelled as the place "Me", Maine): a frame that reads the whole
+  // sentence owns it whether or not the profile has facts; an empty world answers "nothing yet", it never hands the sentence on to a respelled or place reading
+  // The one exception keeps the name's home: with nothing kept but (at most) a name, a describe question the name's home reads whole, unrepaired, as its own name question
+  // ("who am i": kids.common chat.myname) is the name's home's to answer; that world being absent or reading it any other way changes nothing (the frame answers)
+  if (best?.frame === 'person.ask.all' && !person.lines.length && !Object.keys(person.me).some((k) => k !== 'name') && await nameHomeReads(dialog, english)) return null;
+  if (best?.frame?.startsWith('person.') && !NAME_FRAMES.has(best.frame)) {
     const said = best.frame.startsWith('person.state.') ? await state(dialog, lib, person, best.frame, best.roles, english) : ask(lib, person, best.frame, best.roles, nameOf(dialog, person));
     if (said) { if (asking && best.frame.startsWith('person.state.')) { const next = nextKey(person, nameOf(dialog, person)); person.asking = next; return done(`${said}${next ? ` ${QUESTION[next]}` : ''}`, best.frame); } return done(said, best.frame); }
   }

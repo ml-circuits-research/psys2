@@ -1,0 +1,9 @@
+# k.scenes/shards/things-0: the usual place (sky, ground, water, indoors, on another thing) and the relative size (tiny to huge) of 4 things (the drawable things and the animals of k.animals) whose name starts with a digit; labelled by a language model from the names (named=model), a sample checked against the drawings.
+# sources: hand-core 1 (hand-written in this repository: sources/hand-core/place-size.tsv, and sources/hand-core/animals.tsv for the animals without a drawing)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+
+@k.scenes.thing.1st_place_medal k.scenes.thing name="1st place medal" place=indoors size=tiny named=model core.source="hand-core 1"
+@k.scenes.thing.2nd_place_medal k.scenes.thing name="2nd place medal" place=indoors size=tiny named=model core.source="hand-core 1"
+@k.scenes.thing.3d_printer k.scenes.thing name="3d printer" place=indoors size=small named=model core.source="hand-core 1"
+@k.scenes.thing.3rd_place_medal k.scenes.thing name="3rd place medal" place=indoors size=tiny named=model core.source="hand-core 1"

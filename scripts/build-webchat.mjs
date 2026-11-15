@@ -7,6 +7,7 @@
 //               (the system map with the table of the measures that count, scripts/landing-table.mjs). Do this once per landing, after the merge; `node scripts/landing-table.mjs --log` then appends the table to worker-log.md.
 //
 // Output (only these paths are written; everything else in the out dir is left alone):
+//   catalog/<pin commit>/   the site's copy of the files the app loads from the pinned catalog (scripts/lib/site-catalog.mjs; the page's first catalog source, Q33)
 //   lib/                    browser-safe copies of src/{soplang,legends,worlds,formalizer,interpreter,dialog,translate,astra,reasoner,knowledge,vendor}
 //                           and src/loaders/bundle-loader.mjs, relative imports preserved
 //   worlds/index.json       { worlds: { <id>: { files: { 'world.sop': text, ... }, opsUrl: 'worlds/<id>/ops.mjs' } } }
@@ -180,7 +181,7 @@ async function moduleVersions(outDir, graph = {}) {
   return out;
 }
 /** Files that are never part of the asset manifest: the entry page and the manifest itself (always fetched fresh), the service worker, documentation and screenshots (never fetched by the page). */
-const NOT_ASSETS = [/^index\.html$/, /^build-info\.json$/, /^sw\.js$/, /(^|\/)README\.md$/, /^screenshots\//, /^system-map\.html$/];
+const NOT_ASSETS = [/^index\.html$/, /^build-info\.json$/, /^sw\.js$/, /(^|\/)README\.md$/, /^screenshots\//, /^system-map\.html$/, /^catalog\//];   // catalog/<pin>/: the site's copy of the catalog, fetched lazily, versioned by the commit in its path
 /**
  * The asset manifest: { path: hash } for every file under outDir the page can fetch. The hash is the string that ends the file's URL (`?v=<hash>`): the graph version
  * for a module of lib/ and worlds/, the content hash of the module text for ui/ and app.mjs, otherwise the content hash of the file (10 hex digits).
@@ -392,4 +393,14 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     catch { console.error('webchat: REFUSED: the bundled English, a bundled subset or a schema world is stale against the pinned catalog (src/knowledge/catalog-pin.mjs): node scripts/build-lang-en.mjs'); process.exit(1); }
   }
   await buildWebchat({ outDir, models, metaOnly: process.argv.includes('--meta-only'), log: console.log });
+  // the site's own copy of the pinned catalog (questions.md Q33): the page's first catalog source; skipped offline (--no-catalog-check / --no-site-catalog), the external mirrors then serve
+  if (!process.argv.includes('--no-catalog-check') && !process.argv.includes('--no-site-catalog')) {
+    const { pinnedCatalog } = await import('./lib/catalog-pin.mjs');
+    const { copySiteCatalog } = await import('./lib/site-catalog.mjs');
+    try {
+      const pin = pinnedCatalog();
+      const r = await copySiteCatalog({ outDir: outDir ?? path.join(REPO, 'docs/webchat'), dir: pin.dir, commit: pin.commit });
+      console.log(`webchat: site catalog ${pin.short}: ${r.files} files, ${(r.bytes / 1e6).toFixed(1)} MB (${r.written} written${r.removed.length ? `, removed ${r.removed.join(', ')}` : ''})`);
+    } catch (e) { console.error(`webchat: site catalog not copied (${e.message}); the page falls back to the external mirrors`); }
+  }
 }

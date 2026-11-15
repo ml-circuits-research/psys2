@@ -1,0 +1,7 @@
+# k.words/shards/hand: senses WordNet 3.1 does not have, asked for by other worlds and written by hand (tools/import/wordnet.mjs HAND_SENSES says why each).
+# sources: hand-core 1 (written in this repository)
+# license: CC0-1.0
+# script: tools/import/wordnet.mjs
+
+@k.words.maa.noun.1 k.words.sense word=maa pos=noun n=1 supersense=noun.event gloss="the bleat of a goat, as a child says it" synonym=bleat core.source="hand-core 1"
+@k.words.numbered.adjective.1 k.words.sense word=numbered pos=adjective n=1 supersense=adj.ppl gloss="marked with numbers that give an order" core.source="hand-core 1"

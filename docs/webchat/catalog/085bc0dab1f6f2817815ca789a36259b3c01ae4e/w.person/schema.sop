@@ -1,0 +1,97 @@
+# w.person: a reusable world: who a person is, as they tell it in a session (block 10:55, PSys2 Q19: 30 real turns of
+# its former Profile tab: "I have two kids", "I like cats, dogs and horses", "I am 40", "my name is Ana", "what do you
+# know about me"): a person's name, age, occupation and languages, their family (relatives by relation, with a count),
+# and what they like and dislike, each a typed relation to the catalog. Declared as data in the library's std.schema
+# format; the acts of std.acts drive it (make, remove, change, pick, ask, copy); it has no rule and no function of
+# its own. A statement ("I am 40") is the act change with mood declarative (w.lang.en frames of the shard
+# person-frames); a question about the person ("how old am I") is the act ask.
+# Terms after schema.org's Person (https://schema.org/Person, CC BY-SA 3.0 for the vocabulary; the names only):
+# `name` its name, `age` (schema.org has birthDate; a session hears an age), `occupation` its hasOccupation,
+# `language` its knowsLanguage; a relative is a relation of schema.org's (children, parent, sibling, spouse) with a count.
+# sources: hand-core 1 (hand-written in this repository; own)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later)
+
+@w.person core.module name=w.person version=1 exports=person exports=relative exports=taste core.source="hand-core 1"
+@w.person.world std.schema.world name=w.person doc="who a person is: name, age, occupation, languages, family, likes and dislikes" core.source="hand-core 1"
+
+# A person. `user=true` marks the person the session talks with ("I", "me"): at most one. `name` as they say it (Ana;
+# a given name of k.people where it is one). `age` in years. `occupation` a job, a role of k.people (teacher, doctor;
+# group job) by name. `language` (many) a language they speak, its English name (English, Romanian). `note` anything
+# else they tell.
+@w.person.person core.type of=w.person.person extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.person.person.user core.slot of=w.person.person key=user kind=boolean default=false core.source="hand-core 1"
+@w.person.person.name core.slot of=w.person.person key=name kind=atom kind=string core.source="hand-core 1"
+@w.person.person.age core.slot of=w.person.person key=age kind=integer min=0 max=130 core.source="hand-core 1"
+@w.person.person.occupation core.slot of=w.person.person key=occupation kind=atom kind=string type=k.people.role by=name core.source="hand-core 1"
+@w.person.person.language core.slot of=w.person.person key=language many=true kind=atom kind=string core.source="hand-core 1"
+@w.person.person.note core.slot of=w.person.person key=note kind=string core.source="hand-core 1"
+
+# A relative of a person: `of` the person, `relation` what the relative is to them (child: "I have two kids"), `count`
+# how many relatives of that relation the person has told of (one fact for "two kids"; a relative told of by name is a
+# fact of its own with count 1), `name` and `age` when told ("my son Tom is 7").
+@w.person.relative core.type of=w.person.relative extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.person.relative.of core.slot of=w.person.relative key=of required=true type=w.person.person core.source="hand-core 1"
+@w.person.relative.relation core.slot of=w.person.relative key=relation required=true enum=child enum=son enum=daughter enum=parent enum=mother enum=father enum=sibling enum=brother enum=sister enum=spouse enum=husband enum=wife enum=partner enum=grandchild enum=grandson enum=granddaughter enum=grandparent enum=grandmother enum=grandfather enum=aunt enum=uncle enum=cousin enum=niece enum=nephew core.source="hand-core 1"
+@w.person.relative.count core.slot of=w.person.relative key=count kind=integer min=1 default=1 core.source="hand-core 1"
+@w.person.relative.name core.slot of=w.person.relative key=name kind=atom kind=string core.source="hand-core 1"
+@w.person.relative.age core.slot of=w.person.relative key=age kind=integer min=0 max=130 core.source="hand-core 1"
+
+# What a person likes or dislikes ("I like cats, dogs and horses": three facts): `of` the person, `thing` a thing or
+# kind of the catalog by its English name, singular (cat; pizza; football), `type` the catalog type that names it (the
+# kind the vocabulary files the word under in vocab-kinds.json: k.animals.animal for cat, k.food.food for pizza), and
+# `stance` likes or dislikes; `strong=true` for love and hate.
+@w.person.taste core.type of=w.person.taste extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.person.taste.of core.slot of=w.person.taste key=of required=true type=w.person.person core.source="hand-core 1"
+@w.person.taste.thing core.slot of=w.person.taste key=thing required=true kind=atom kind=string core.source="hand-core 1"
+@w.person.taste.type core.slot of=w.person.taste key=type kind=atom core.source="hand-core 1"
+@w.person.taste.stance core.slot of=w.person.taste key=stance enum=likes enum=dislikes default=likes core.source="hand-core 1"
+@w.person.taste.strong core.slot of=w.person.taste key=strong kind=boolean default=false core.source="hand-core 1"
+
+# The kinds and the acts that apply to them. At most 50 persons, 200 relatives, 500 tastes.
+@w.person.kind.person std.schema.kind of=w.person.person world=w.person acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.person.kind.relative std.schema.kind of=w.person.relative world=w.person acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
+@w.person.kind.taste std.schema.kind of=w.person.taste world=w.person acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
+@w.person.limit.person std.schema.limit of=w.person.person max=50 core.source="hand-core 1"
+@w.person.limit.relative std.schema.limit of=w.person.relative max=200 core.source="hand-core 1"
+@w.person.limit.taste std.schema.limit of=w.person.taste max=500 core.source="hand-core 1"
+
+# Words: for the world (how a host finds it by name), its kinds and its keys.
+@w.person.word.world core.word text=profile text="my profile" text="about me" text="user profile" means=w.person of=std.schema.world.name core.source="hand-core 1"
+@w.person.word.person core.word text=person text=people text=user text=me means=w.person.person core.source="hand-core 1"
+@w.person.word.relative core.word text=relative text=relatives text=family text="family member" text="family members" means=w.person.relative core.source="hand-core 1"
+@w.person.word.taste core.word text=likes text=dislikes text=preferences text=favourites text=favorites means=w.person.taste core.source="hand-core 1"
+@w.person.word.name core.word text=name text=called means=w.person.person.name core.source="hand-core 1"
+@w.person.word.age core.word text=age text=old text="years old" means=w.person.person.age core.source="hand-core 1"
+@w.person.word.occupation core.word text=occupation text=job text=work text=profession means=w.person.person.occupation core.source="hand-core 1"
+@w.person.word.language core.word text=language text=languages text=speak means=w.person.person.language core.source="hand-core 1"
+@w.person.word.note core.word text=note text=notes means=w.person.person.note core.source="hand-core 1"
+@w.person.word.relation core.word text=relation text=kids text=children text=child text=son text=daughter text=parents text=siblings text=brother text=sister text=husband text=wife means=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.count core.word text=count text="how many" means=w.person.relative.count core.source="hand-core 1"
+@w.person.word.stance core.word text=like text=dislike text=love text=hate means=w.person.taste.stance core.source="hand-core 1"
+@w.person.word.thing core.word text=thing text=what means=w.person.taste.thing core.source="hand-core 1"
+@w.person.word.user core.word text=me text=myself text=you means=w.person.person.user core.source="hand-core 1"
+@w.person.word.of core.word text=whose text=of means=w.person.relative.of core.source="hand-core 1"
+@w.person.word.relative_name core.word text=name text=called means=w.person.relative.name core.source="hand-core 1"
+@w.person.word.relative_age core.word text=age text=old means=w.person.relative.age core.source="hand-core 1"
+@w.person.word.taste_of core.word text=whose text=of means=w.person.taste.of core.source="hand-core 1"
+@w.person.word.type core.word text=kind text=type means=w.person.taste.type core.source="hand-core 1"
+@w.person.word.strong core.word text=love text=hate text=really means=w.person.taste.strong core.source="hand-core 1"
+
+# Words for the relations (a value of w.person.relative.relation said another way: "kids" are children).
+@w.person.word.rel.child core.word text=kid text=kids text=children text="little ones" means=child of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.son core.word text=sons text=boy text=boys means=son of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.daughter core.word text=daughters text=girl text=girls means=daughter of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.parent core.word text=parents means=parent of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.mother core.word text=mom text=mum text=mommy text=mummy text=mama means=mother of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.father core.word text=dad text=daddy text=papa means=father of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.sibling core.word text=siblings means=sibling of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.brother core.word text=brothers means=brother of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.sister core.word text=sisters means=sister of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.grandchild core.word text=grandchildren text=grandkids text=grandkid means=grandchild of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.grandparent core.word text=grandparents means=grandparent of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.grandmother core.word text=grandma text=granny text=nan means=grandmother of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.grandfather core.word text=grandpa text=grandad text=granddad means=grandfather of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.cousin core.word text=cousins means=cousin of=w.person.relative.relation core.source="hand-core 1"
+@w.person.word.rel.partner core.word text=boyfriend text=girlfriend means=partner of=w.person.relative.relation core.source="hand-core 1"

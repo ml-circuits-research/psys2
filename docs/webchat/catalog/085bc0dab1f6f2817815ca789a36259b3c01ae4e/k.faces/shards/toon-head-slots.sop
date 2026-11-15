@@ -1,0 +1,14 @@
+# k.faces/shards/toon-head-slots: the slots of the DiceBear style `toon-head`: the box that the variants of each slot fill in the 0 to 100 frame of the face, and the draw order.
+# sources: dicebear-toon-head 67f54a0 (DiceBear style "toon-head", CC BY 4.0: Remix of "ToonHead" (https://www.figma.com/community/file/1589627891082866389) by "Johan Melin", licensed under "CC BY 4.0" (https://creativecommons.org/licenses/by/4.0/))
+# license: CC-BY-4.0
+# script: tools/import/dicebear.mjs
+
+@k.faces.toon-head.slot.hair_back k.faces.slot style=toon-head name=hair_back x=21 y=44 w=59 h=55 z=0 optional=true core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.slot.shoulders k.faces.slot style=toon-head name=shoulders x=16 y=72 w=68 h=28 z=1 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.slot.head k.faces.slot style=toon-head name=head x=24 y=18 w=52 h=59 z=2 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.slot.clothes k.faces.slot style=toon-head name=clothes x=14 y=76 w=73 h=24 z=3 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.slot.mouth k.faces.slot style=toon-head name=mouth x=43 y=63 w=14 h=9 z=4 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.slot.beard k.faces.slot style=toon-head name=beard x=29 y=52 w=42 h=39 z=5 optional=true core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.slot.eyes k.faces.slot style=toon-head name=eyes x=32 y=47 w=35 h=11 z=6 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.slot.eyebrows k.faces.slot style=toon-head name=eyebrows x=34 y=37 w=32 h=13 z=7 core.source="dicebear-toon-head 67f54a0"
+@k.faces.toon-head.slot.hair_front k.faces.slot style=toon-head name=hair_front x=20 y=0 w=61 h=80 z=8 core.source="dicebear-toon-head 67f54a0"

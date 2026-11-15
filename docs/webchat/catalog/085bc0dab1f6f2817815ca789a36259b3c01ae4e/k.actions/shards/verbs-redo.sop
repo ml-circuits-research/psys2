@@ -1,0 +1,11 @@
+# k.actions/shards/verbs-redo: 5 verbs and phrasal verbs that mean the act "redo" (redo, do again, put back, bring back, get back ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 0 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 5 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.redo.redo k.actions.verb text=redo act=redo object=thing core.source="hand-core 1"
+@k.actions.verb.redo.do_again k.actions.verb text="do again" act=redo object=thing separable=true core.source="hand-core 1"
+@k.actions.verb.redo.put_back k.actions.verb text="put back" act=redo object=thing separable=true core.source="hand-core 1"
+@k.actions.verb.redo.bring_back k.actions.verb text="bring back" act=redo object=thing separable=true core.source="hand-core 1"
+@k.actions.verb.redo.get_back k.actions.verb text="get back" act=redo object=thing separable=true core.source="hand-core 1"

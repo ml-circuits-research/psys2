@@ -1,0 +1,9 @@
+# k.words/shards/ee: senses of the words from "ee" to "eel" (first letters "ee").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ee.noun.1 k.words.sense word=EE pos=noun n=1 supersense=noun.cognition gloss="the branch of engineering science that studies the uses of electricity and the equipment for power generation and distribution and the control of machines and communication" synonym="electrical engineering" is_a=engineering core.source="wordnet 3.1"
+@k.words.ee.spelling.EE core.word text=ee means=EE of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.eel.noun.1 k.words.sense word=eel pos=noun n=1 supersense=noun.food gloss="the fatty flesh of eel; an elongate fish found in fresh water in Europe and America; large eels are usually smoked or pickled" is_a=fish part_of="common eel" kind_of=fish kind_of=food kind_of=solid kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.eel.noun.2 k.words.sense word=eel pos=noun n=2 supersense=noun.animal gloss="voracious snakelike marine or freshwater fishes with smooth slimy usually scaleless skin and having a continuous vertical fin but no ventral fins" is_a="soft-finned fish" kind_of="soft-finned fish" kind_of="teleost fish" kind_of="bony fish" kind_of=fish kind_of="aquatic vertebrate" kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

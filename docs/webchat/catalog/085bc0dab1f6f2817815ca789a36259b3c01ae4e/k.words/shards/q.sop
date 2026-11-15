@@ -1,0 +1,7 @@
+# k.words/shards/q: senses of the words from "q" to "q" (first letters "q").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.q.noun.1 k.words.sense word=Q pos=noun n=1 supersense=noun.communication gloss="the 17th letter of the Roman alphabet" synonym=q is_a=letter core.source="wordnet 3.1"
+@k.words.q.spelling.Q core.word text=q means=Q of=k.words.sense.word core.source="wordnet 3.1"

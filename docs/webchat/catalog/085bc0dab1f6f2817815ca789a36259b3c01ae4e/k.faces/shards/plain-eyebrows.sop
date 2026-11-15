@@ -1,0 +1,74 @@
+# k.faces/shards/plain-eyebrows: the variants of the slot `eyebrows` in the style `plain` (the side on the viewer's left; the other side is its mirror image): features, and parts with a primitive shape, a box in the frame of the face, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/faces-core.mjs
+
+# eyebrows: straight
+@k.faces.plain.eyebrows.straight k.faces.variant slot=eyebrows name=straight style=plain feel=flat feel=thin core.source="hand-core 1"
+@k.faces.plain.eyebrows.straight.brow k.faces.part slot=eyebrows of=straight name=brow shape=line x=30 y=31 w=14 h=0 z=1 colour=brown colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.eyebrows.straight.brow.p1 k.faces.point part=$k.faces.plain.eyebrows.straight.brow n=1 x=30 y=31 core.source="hand-core 1"
+@k.faces.plain.eyebrows.straight.brow.p2 k.faces.point part=$k.faces.plain.eyebrows.straight.brow n=2 x=44 y=31 core.source="hand-core 1"
+
+# eyebrows: thick
+@k.faces.plain.eyebrows.thick k.faces.variant slot=eyebrows name=thick style=plain feel=thick feel=flat core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick.brow k.faces.part slot=eyebrows of=thick name=brow shape=polygon x=29 y=29 w=16 h=4.5 z=1 colour=brown colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick.brow.p1 k.faces.point part=$k.faces.plain.eyebrows.thick.brow n=1 x=29 y=29 core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick.brow.p2 k.faces.point part=$k.faces.plain.eyebrows.thick.brow n=2 x=45 y=29 core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick.brow.p3 k.faces.point part=$k.faces.plain.eyebrows.thick.brow n=3 x=45 y=33.5 core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick.brow.p4 k.faces.point part=$k.faces.plain.eyebrows.thick.brow n=4 x=29 y=33.5 core.source="hand-core 1"
+
+# eyebrows: arched
+@k.faces.plain.eyebrows.arched k.faces.variant slot=eyebrows name=arched style=plain feel=arched feel=thin core.source="hand-core 1"
+@k.faces.plain.eyebrows.arched.brow k.faces.part slot=eyebrows of=arched name=brow shape=arc x=30 y=28 w=14 h=5 z=1 colour=brown colour=black tint=hair opens=down core.source="hand-core 1"
+
+# eyebrows: thick arched
+@k.faces.plain.eyebrows.thick_arched k.faces.variant slot=eyebrows name="thick arched" style=plain feel=thick feel=arched core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick_arched.brow k.faces.part slot=eyebrows of="thick arched" name=brow shape=polygon x=29 y=27.5 w=16.5 h=5.5 z=1 colour=brown colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick_arched.brow.p1 k.faces.point part=$k.faces.plain.eyebrows.thick_arched.brow n=1 x=29 y=33 core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick_arched.brow.p2 k.faces.point part=$k.faces.plain.eyebrows.thick_arched.brow n=2 x=32 y=29 core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick_arched.brow.p3 k.faces.point part=$k.faces.plain.eyebrows.thick_arched.brow n=3 x=38 y=27.5 core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick_arched.brow.p4 k.faces.point part=$k.faces.plain.eyebrows.thick_arched.brow n=4 x=44 y=29 core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick_arched.brow.p5 k.faces.point part=$k.faces.plain.eyebrows.thick_arched.brow n=5 x=45.5 y=32 core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick_arched.brow.p6 k.faces.point part=$k.faces.plain.eyebrows.thick_arched.brow n=6 x=44 y=33 core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick_arched.brow.p7 k.faces.point part=$k.faces.plain.eyebrows.thick_arched.brow n=7 x=38 y=31 core.source="hand-core 1"
+@k.faces.plain.eyebrows.thick_arched.brow.p8 k.faces.point part=$k.faces.plain.eyebrows.thick_arched.brow n=8 x=32 y=32.5 core.source="hand-core 1"
+
+# eyebrows: angry
+@k.faces.plain.eyebrows.angry k.faces.variant slot=eyebrows name=angry style=plain feel=flat kind=angry core.source="hand-core 1"
+@k.faces.plain.eyebrows.angry.brow k.faces.part slot=eyebrows of=angry name=brow shape=line x=30 y=28 w=15 h=5.5 z=1 colour=brown colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.eyebrows.angry.brow.p1 k.faces.point part=$k.faces.plain.eyebrows.angry.brow n=1 x=30 y=28 core.source="hand-core 1"
+@k.faces.plain.eyebrows.angry.brow.p2 k.faces.point part=$k.faces.plain.eyebrows.angry.brow n=2 x=45 y=33.5 core.source="hand-core 1"
+
+# eyebrows: sad
+@k.faces.plain.eyebrows.sad k.faces.variant slot=eyebrows name=sad style=plain feel=sad core.source="hand-core 1"
+@k.faces.plain.eyebrows.sad.brow k.faces.part slot=eyebrows of=sad name=brow shape=line x=30 y=28.5 w=15 h=5.5 z=1 colour=brown colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.eyebrows.sad.brow.p1 k.faces.point part=$k.faces.plain.eyebrows.sad.brow n=1 x=30 y=34 core.source="hand-core 1"
+@k.faces.plain.eyebrows.sad.brow.p2 k.faces.point part=$k.faces.plain.eyebrows.sad.brow n=2 x=45 y=28.5 core.source="hand-core 1"
+
+# eyebrows: bushy
+@k.faces.plain.eyebrows.bushy k.faces.variant slot=eyebrows name=bushy style=plain feel=bushy feel=thick age=old core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow k.faces.part slot=eyebrows of=bushy name=brow shape=polygon x=28 y=27 w=18 h=7.5 z=1 colour=grey colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p1 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=1 x=28 y=33 core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p2 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=2 x=29 y=29 core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p3 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=3 x=31 y=30 core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p4 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=4 x=33 y=27.5 core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p5 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=5 x=35 y=29.5 core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p6 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=6 x=38 y=27 core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p7 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=7 x=40 y=29.5 core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p8 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=8 x=43 y=27.5 core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p9 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=9 x=44 y=30 core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p10 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=10 x=46 y=29.5 core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p11 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=11 x=45.5 y=34 core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p12 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=12 x=42 y=33 core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p13 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=13 x=38 y=34.5 core.source="hand-core 1"
+@k.faces.plain.eyebrows.bushy.brow.p14 k.faces.point part=$k.faces.plain.eyebrows.bushy.brow n=14 x=33 y=33.5 core.source="hand-core 1"
+
+# eyebrows: raised
+@k.faces.plain.eyebrows.raised k.faces.variant slot=eyebrows name=raised style=plain feel=arched feel=surprised core.source="hand-core 1"
+@k.faces.plain.eyebrows.raised.brow k.faces.part slot=eyebrows of=raised name=brow shape=arc x=30 y=25.5 w=14 h=5 z=1 colour=brown colour=black tint=hair opens=down core.source="hand-core 1"
+
+# eyebrows: short
+@k.faces.plain.eyebrows.short k.faces.variant slot=eyebrows name=short style=plain size=small feel=thin core.source="hand-core 1"
+@k.faces.plain.eyebrows.short.brow k.faces.part slot=eyebrows of=short name=brow shape=line x=34 y=30.5 w=8 h=1 z=1 colour=brown colour=black tint=hair core.source="hand-core 1"
+@k.faces.plain.eyebrows.short.brow.p1 k.faces.point part=$k.faces.plain.eyebrows.short.brow n=1 x=34 y=31.5 core.source="hand-core 1"
+@k.faces.plain.eyebrows.short.brow.p2 k.faces.point part=$k.faces.plain.eyebrows.short.brow n=2 x=42 y=30.5 core.source="hand-core 1"

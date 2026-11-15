@@ -1,0 +1,21 @@
+# k.words/shards/ow: senses of the words from "owe" to "ownership" (first letters "ow").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.owe.verb.1 k.words.sense word=owe pos=verb n=1 supersense=verb.possession gloss="be obliged to pay or repay" core.source="wordnet 3.1"
+@k.words.owe.verb.2 k.words.sense word=owe pos=verb n=2 supersense=verb.stative gloss="be indebted to, in an abstract or intellectual sense" is_a="repose on" kind_of="repose on" kind_of="depend on" core.source="wordnet 3.1"
+@k.words.owe.verb.3 k.words.sense word=owe pos=verb n=3 supersense=verb.possession gloss="be in debt" is_a=be kind_of=be core.source="wordnet 3.1"
+@k.words.owen.noun.1 k.words.sense word=Owen pos=noun n=1 supersense=noun.person gloss="Welsh industrialist and social reformer who founded cooperative communities (1771-1858)" synonym="Robert Owen" instance_of=industrialist instance_of=reformer core.source="wordnet 3.1"
+@k.words.owen.noun.2 k.words.sense word=Owen pos=noun n=2 supersense=noun.person gloss="English comparative anatomist and paleontologist who was an opponent of Darwinism (1804-1892)" synonym="Sir Richard Owen" instance_of=paleontologist instance_of="comparative anatomist" core.source="wordnet 3.1"
+@k.words.owen.spelling.Owen core.word text=owen means=Owen of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.owens.noun.1 k.words.sense word=Owens pos=noun n=1 supersense=noun.person gloss="United States athlete and Black American whose success in the 1936 Olympic Games in Berlin outraged Hitler (1913-1980)" synonym="Jesse Owens" synonym="James Cleveland Owens" instance_of=athlete core.source="wordnet 3.1"
+@k.words.owens.spelling.Owens core.word text=owens means=Owens of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.owl.noun.1 k.words.sense word=owl pos=noun n=1 supersense=noun.animal gloss="nocturnal bird of prey with hawk-like beak and claws and large head with front-facing eyes" synonym="bird of Minerva" synonym="bird of night" synonym=hooter is_a="bird of prey" kind_of="bird of prey" kind_of=bird kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.own.verb.1 k.words.sense word=own pos=verb n=1 supersense=verb.possession gloss="have ownership or possession of" synonym=have synonym=possess core.source="wordnet 3.1"
+@k.words.own.adjective.1 k.words.sense word=own pos=adjective n=1 supersense=adj.all gloss="belonging to or on behalf of a specified person (especially yourself); preceded by a possessive" synonym=ain near_opposite=impersonal core.source="wordnet 3.1"
+@k.words.owner.noun.1 k.words.sense word=owner pos=noun n=1 supersense=noun.person gloss="(law) someone who owns (is legal possessor of) a business" synonym=proprietor is_a=businessman kind_of=businessman kind_of=businessperson kind_of=capitalist kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.owner.noun.2 k.words.sense word=owner pos=noun n=2 supersense=noun.person gloss="a person who owns something" synonym=possessor is_a=person kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.ownership.noun.1 k.words.sense word=ownership pos=noun n=1 supersense=noun.possession gloss="the relation of an owner to the thing possessed; possession with the right to transfer possession to others" is_a=relation core.source="wordnet 3.1"
+@k.words.ownership.noun.2 k.words.sense word=ownership pos=noun n=2 supersense=noun.act gloss="the act of having and controlling property" synonym=possession is_a=control core.source="wordnet 3.1"
+@k.words.ownership.noun.3 k.words.sense word=ownership pos=noun n=3 supersense=noun.state gloss="the state or fact of being an owner" is_a=state core.source="wordnet 3.1"

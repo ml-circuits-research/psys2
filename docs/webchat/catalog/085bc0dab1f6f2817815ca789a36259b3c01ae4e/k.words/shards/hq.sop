@@ -1,0 +1,7 @@
+# k.words/shards/hq: senses of the words from "hq" to "hq" (first letters "hq").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.hq.noun.1 k.words.sense word=HQ pos=noun n=1 supersense=noun.artifact gloss="the military installation from which a commander performs the functions of command" synonym=headquarters synonym="military headquarters" is_a="military installation" core.source="wordnet 3.1"
+@k.words.hq.spelling.HQ core.word text=hq means=HQ of=k.words.sense.word core.source="wordnet 3.1"

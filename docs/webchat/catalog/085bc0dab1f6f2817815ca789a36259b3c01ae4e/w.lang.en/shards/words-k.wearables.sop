@@ -1,0 +1,28 @@
+# w.lang.en/shards/words-k.wearables: the English words of k.wearables (its types, keys and values), owned by the language world
+# (Q78, reviewer 16:10; KR3): they were the core.word facts of its schema; tools/build-catalog.mjs reads them as its own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the types and keys of this world.
+@w.lang.en.word.k.wearables.wearable core.word text=wear text=wears text=wearing text=worn text=clothes text=clothing text=garment text=garments means=k.wearables.wearable core.source="hand-core 1"
+@w.lang.en.word.k.wearables.worn_on core.word text=where text=on means=k.wearables.wearable.worn_on core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@w.lang.en.word.k.wearables.key.place.about core.word text=about means=k.wearables.place.about core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.place.face_slot core.word text="face slot" means=k.wearables.place.face_slot core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.place.body_part core.word text="body part" means=k.wearables.place.body_part core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.place.x core.word text=x means=k.wearables.place.x core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.place.y core.word text=y means=k.wearables.place.y core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.place.w core.word text=w means=k.wearables.place.w core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.place.h core.word text=h means=k.wearables.place.h core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.place.pair core.word text=pair means=k.wearables.place.pair core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.wearable.kind core.word text=kind means=k.wearables.wearable.kind core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.wearable.worn_on core.word text="worn on" means=k.wearables.wearable.worn_on core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.wearable.covers core.word text=covers means=k.wearables.wearable.covers core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.wearable.layer core.word text=layer means=k.wearables.wearable.layer core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.wearable.pair core.word text=pair means=k.wearables.wearable.pair core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.wearable.drawing core.word text=drawing means=k.wearables.wearable.drawing core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.wearable.face_slot core.word text="face slot" means=k.wearables.wearable.face_slot core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.wearable.face core.word text=face means=k.wearables.wearable.face core.source="hand-core 1"
+@w.lang.en.word.k.wearables.key.wearable.worn_for core.word text="worn for" text=for means=k.wearables.wearable.worn_for core.source="hand-core 1"

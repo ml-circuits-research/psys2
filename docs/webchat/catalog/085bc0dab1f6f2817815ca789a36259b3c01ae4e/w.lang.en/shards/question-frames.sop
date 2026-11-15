@@ -1,0 +1,58 @@
+# w.lang.en/shards/question-frames: question frames in other word orders over facts that exist (reviewer block 2026-11-15 09:20, PSys2 Q18 K10): 7 frames, needs=facts ("April has how many days?", "Friday is how many days away?", "Which months are in summer?", "Name all the seasons of the year."); "how many legs has a cow" (real row r0244) is read by acts.facts.ask.count.does.
+# sources: hand-core 1 (written in this repository, own: tools/lang-en-question-frames.mjs)
+# license: CC0-1.0
+# script: tools/lang-en-question-frames.mjs
+
+# acts.facts.ask.count.tail: the number asked last
+@w.lang.en.frame.acts.facts.ask.count.tail w.lang.en.frame name=acts.facts.ask.count.tail act=ask mode=count set=acts.facts priority=15 needs=facts role=thing role=attribute example="April has how many days?" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.tail.1 w.lang.en.part frame=acts.facts.ask.count.tail at=1 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.tail.2 w.lang.en.part frame=acts.facts.ask.count.tail at=2 is=role role=thing takes=words core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.tail.3 w.lang.en.part frame=acts.facts.ask.count.tail at=3 is=word word="has" word="have" word="has got" word="have got" word="gets" word="get" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.tail.4 w.lang.en.part frame=acts.facts.ask.count.tail at=4 is=word word="how many" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.tail.5 w.lang.en.part frame=acts.facts.ask.count.tail at=5 is=role role=attribute takes=lexicon lexicon=attribute core.source="hand-core 1"
+# acts.facts.ask.count.in: over acts.facts.ask.live (14), which read it as "how many people live in"
+@w.lang.en.frame.acts.facts.ask.count.in w.lang.en.frame name=acts.facts.ask.count.in act=ask mode=count set=acts.facts priority=15 needs=facts role=attribute role=thing example="How many days are in April?" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.in.1 w.lang.en.part frame=acts.facts.ask.count.in at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.in.2 w.lang.en.part frame=acts.facts.ask.count.in at=2 is=word word="how many" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.in.3 w.lang.en.part frame=acts.facts.ask.count.in at=3 is=role role=attribute takes=lexicon lexicon=attribute core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.in.4 w.lang.en.part frame=acts.facts.ask.count.in at=4 is=word word="are in" word="are there in" word="is in" word="are on" word="go into" word="does it take for" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.in.5 w.lang.en.part frame=acts.facts.ask.count.in at=5 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.in.6 w.lang.en.part frame=acts.facts.ask.count.in at=6 is=role role=thing takes=words core.source="hand-core 1"
+# acts.facts.ask.count.away: how far a member of a cycle is: the unit counted, the end
+@w.lang.en.frame.acts.facts.ask.count.away w.lang.en.frame name=acts.facts.ask.count.away act=ask mode=count set=acts.facts priority=15 needs=facts role=thing role=attribute example="Friday is how many days away?" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.away.1 w.lang.en.part frame=acts.facts.ask.count.away at=1 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.away.2 w.lang.en.part frame=acts.facts.ask.count.away at=2 is=role role=thing takes=words core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.away.3 w.lang.en.part frame=acts.facts.ask.count.away at=3 is=word word="is" word="are" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.away.4 w.lang.en.part frame=acts.facts.ask.count.away at=4 is=word word="how many" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.away.5 w.lang.en.part frame=acts.facts.ask.count.away at=5 is=role role=attribute takes=lexicon lexicon=attribute core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.away.6 w.lang.en.part frame=acts.facts.ask.count.away at=6 is=word word="away" word="from now" word="from today" word="off" word="ahead" core.source="hand-core 1"
+@w.lang.en.frame.acts.facts.ask.count.until w.lang.en.frame name=acts.facts.ask.count.until act=ask mode=count set=acts.facts priority=15 needs=facts role=attribute role=thing example="How many days until Saturday?" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.until.1 w.lang.en.part frame=acts.facts.ask.count.until at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.until.2 w.lang.en.part frame=acts.facts.ask.count.until at=2 is=word word="how many" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.until.3 w.lang.en.part frame=acts.facts.ask.count.until at=3 is=role role=attribute takes=lexicon lexicon=attribute core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.until.4 w.lang.en.part frame=acts.facts.ask.count.until at=4 is=word word="until" word="till" word="to" word="are left until" word="are there until" word="is it until" word="is it to" word="before" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.until.5 w.lang.en.part frame=acts.facts.ask.count.until at=5 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.count.until.6 w.lang.en.part frame=acts.facts.ask.count.until at=6 is=role role=thing takes=words core.source="hand-core 1"
+# acts.facts.ask.which.in: the members of a set: the topic the kind, the thing the set (as "name the months of spring")
+@w.lang.en.frame.acts.facts.ask.which.in w.lang.en.frame name=acts.facts.ask.which.in act=ask mode=what set=acts.facts priority=14 needs=facts role=attribute role=thing example="Which months are in summer?" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.which.in.1 w.lang.en.part frame=acts.facts.ask.which.in at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.which.in.2 w.lang.en.part frame=acts.facts.ask.which.in at=2 is=word word="which" word="what" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.which.in.3 w.lang.en.part frame=acts.facts.ask.which.in at=3 is=role role=attribute takes=lexicon lexicon=attribute core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.which.in.4 w.lang.en.part frame=acts.facts.ask.which.in at=4 is=word word="are in" word="are there in" word="come in" word="belong to" word="are part of" word="make up" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.which.in.5 w.lang.en.part frame=acts.facts.ask.which.in at=5 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.which.in.6 w.lang.en.part frame=acts.facts.ask.which.in at=6 is=role role=thing takes=words core.source="hand-core 1"
+# acts.facts.ask.name.all: over acts.facts.ask.of (9); "all" before the attribute
+@w.lang.en.frame.acts.facts.ask.name.all w.lang.en.frame name=acts.facts.ask.name.all act=ask mode=what set=acts.facts priority=13 needs=facts role=attribute role=thing example="Name all the seasons of the year." core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.name.all.1 w.lang.en.part frame=acts.facts.ask.name.all at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.name.all.2 w.lang.en.part frame=acts.facts.ask.name.all at=2 is=word word="name all" word="name" word="list all" word="list" word="tell me all" word="say all" word="what are all" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.name.all.3 w.lang.en.part frame=acts.facts.ask.name.all at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.name.all.4 w.lang.en.part frame=acts.facts.ask.name.all at=4 is=role role=attribute takes=lexicon lexicon=attribute core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.name.all.5 w.lang.en.part frame=acts.facts.ask.name.all at=5 is=word word="of" word="in" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.name.all.6 w.lang.en.part frame=acts.facts.ask.name.all at=6 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.name.all.7 w.lang.en.part frame=acts.facts.ask.name.all at=7 is=role role=thing takes=words core.source="hand-core 1"
+# acts.facts.ask.what.are: the whole set of an attribute, nothing else said
+@w.lang.en.frame.acts.facts.ask.what.are w.lang.en.frame name=acts.facts.ask.what.are act=ask mode=what set=acts.facts priority=8 needs=facts role=attribute example="What are the seasons?" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.what.are.1 w.lang.en.part frame=acts.facts.ask.what.are at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.what.are.2 w.lang.en.part frame=acts.facts.ask.what.are at=2 is=word word="what are" word="which are" word="name" word="name all" word="list" word="list all" word="tell me" core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.what.are.3 w.lang.en.part frame=acts.facts.ask.what.are at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.facts.ask.what.are.4 w.lang.en.part frame=acts.facts.ask.what.are at=4 is=role role=attribute takes=lexicon lexicon=attribute core.source="hand-core 1"

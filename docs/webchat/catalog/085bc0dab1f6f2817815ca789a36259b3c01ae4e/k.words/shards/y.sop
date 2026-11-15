@@ -1,0 +1,8 @@
+# k.words/shards/y: senses of the words from "y" to "y" (first letters "y").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.y.noun.1 k.words.sense word=Y pos=noun n=1 supersense=noun.substance gloss="a silvery metallic element that is common in rare-earth minerals; used in magnesium and aluminum alloys" synonym=yttrium synonym="atomic number 39" is_a="metallic element" kind_of="metallic element" kind_of="chemical element" kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.y.noun.2 k.words.sense word=Y pos=noun n=2 supersense=noun.communication gloss="the 25th letter of the Roman alphabet" synonym=y synonym=wye is_a=letter kind_of=letter kind_of=character kind_of="written symbol" kind_of=symbol kind_of=signal kind_of=communication kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.y.spelling.Y core.word text=y means=Y of=k.words.sense.word core.source="wordnet 3.1"

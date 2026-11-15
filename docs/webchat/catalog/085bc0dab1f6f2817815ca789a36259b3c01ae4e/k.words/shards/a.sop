@@ -1,0 +1,9 @@
+# k.words/shards/a: senses of the words from "a" to "a" (first letters "a").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.a.noun.1 k.words.sense word=A pos=noun n=1 supersense=noun.quantity gloss="a metric unit of length equal to one ten billionth of a meter (or 0.0001 micron); used to specify wavelengths of electromagnetic radiation" synonym=angstrom synonym="angstrom unit" is_a="metric linear unit" part_of=nanometer kind_of="metric linear unit" kind_of="linear unit" kind_of="unit of measurement" kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.a.noun.2 k.words.sense word=A pos=noun n=2 supersense=noun.substance gloss="any of several fat-soluble vitamins essential for normal vision; prevents night blindness or inflammation or dryness of the eyes" synonym="vitamin A" synonym="antiophthalmic factor" synonym=axerophthol is_a="fat-soluble vitamin" kind_of="fat-soluble vitamin" kind_of=vitamin kind_of=nutriment kind_of=food kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.a.noun.3 k.words.sense word=A pos=noun n=3 supersense=noun.substance gloss="one of the four nucleotides used in building DNA; all four nucleotides have a common phosphate group and a sugar (ribose)" synonym="deoxyadenosine monophosphate" is_a=nucleotide kind_of=nucleotide kind_of=ester kind_of="organic compound" kind_of=compound kind_of=chemical kind_of=material kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.a.spelling.A core.word text=a means=A of=k.words.sense.word core.source="wordnet 3.1"

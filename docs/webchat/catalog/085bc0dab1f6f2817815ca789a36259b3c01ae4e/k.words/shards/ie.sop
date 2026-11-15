@@ -1,0 +1,7 @@
+# k.words/shards/ie: senses of the words from "ied" to "ied" (first letters "ie").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ied.noun.1 k.words.sense word=IED pos=noun n=1 supersense=noun.artifact gloss="an explosive device that is improvised" synonym="improvised explosive device" synonym=I.E.D. is_a="explosive device" kind_of="explosive device" kind_of=device kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.ied.spelling.IED core.word text=ied means=IED of=k.words.sense.word core.source="wordnet 3.1"

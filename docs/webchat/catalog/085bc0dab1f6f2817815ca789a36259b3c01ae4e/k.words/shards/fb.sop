@@ -1,0 +1,7 @@
+# k.words/shards/fb: senses of the words from "fbi" to "fbi" (first letters "fb").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.fbi.noun.1 k.words.sense word=FBI pos=noun n=1 supersense=noun.group gloss="a federal law enforcement agency that is the principal investigative arm of the Department of Justice" synonym="Federal Bureau of Investigation" is_a="law enforcement agency" part_of="Department of Justice" kind_of="law enforcement agency" kind_of=agency kind_of="administrative unit" kind_of=unit kind_of=organization kind_of="social group" kind_of=group kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.fbi.spelling.FBI core.word text=fbi means=FBI of=k.words.sense.word core.source="wordnet 3.1"

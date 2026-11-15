@@ -1,0 +1,24 @@
+# k.actions/shards/verbs-connect: 18 verbs and phrasal verbs that mean the act "connect" (connect, link, link up, join, attach, fasten, couple, hook up ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 18 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 0 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.connect.connect k.actions.verb text=connect act=connect sense=1 gloss="connect, fasten, or put together two or more pieces" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.link k.actions.verb text=link act=connect sense=2 gloss="connect, fasten, or put together two or more pieces" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.link_up k.actions.verb text="link up" act=connect sense=2 gloss="connect, fasten, or put together two or more pieces" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.join k.actions.verb text=join act=connect sense=2 gloss="cause to become joined or linked" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.attach k.actions.verb text=attach act=connect sense=1 gloss="cause to be attached" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.fasten k.actions.verb text=fasten act=connect sense=1 gloss="cause to be firmly attached" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.couple k.actions.verb text=couple act=connect sense=2 gloss="link together" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.hook_up k.actions.verb text="hook up" act=connect sense=1 gloss="connect or link" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.bridge k.actions.verb text=bridge act=connect sense=1 gloss="connect or reduce the distance between" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.relate k.actions.verb text=relate act=connect sense=1 gloss="make a logical or causal connection" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.tie k.actions.verb text=tie act=connect sense=1 sense=4 gloss="fasten or secure with a rope, string, or cord" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.bind k.actions.verb text=bind act=connect sense=3 gloss="make fast; tie or secure, with or as if with a rope" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.glue k.actions.verb text=glue act=connect sense=1 gloss="join or attach with or as if with glue" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.hook k.actions.verb text=hook act=connect sense=1 gloss="fasten with a hook" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.pin k.actions.verb text=pin act=connect sense=2 gloss="attach or fasten with pins" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.clip k.actions.verb text=clip act=connect sense=3 gloss="attach with a clip" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.nail k.actions.verb text=nail act=connect sense=1 gloss="attach something somewhere by means of nails" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.connect.tape k.actions.verb text=tape act=connect sense=1 gloss="fasten or attach with tape" object=thing named=model core.source="wordnet 3.1"

@@ -1,0 +1,89 @@
+# k.space: the solar system and beyond: the Sun, the eight planets, a dwarf planet, some named moons, a comet, a few
+# stars and galaxies, and what kinds of things these are. Facts a child's encyclopedia states.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.space core.module name=k.space version=3 imports=k.named imports=k.values exports=body exports=kind core.source="hand-core 1"
+
+# A named thing in space. `orbits` names what it goes around; `order` is a planet's place counted from the Sun;
+# `size` is a planet's size class and `size_rank` its place by size (1 is the largest planet); `group` says whether
+# a planet is rocky, a gas giant (gas) or an ice giant (ice); `moons` is an exact count, `moons_about` a count that
+# grows as more small moons are found; `rings` says whether it has rings; `orbit_years` is about how many Earth
+# years one trip around the Sun takes; `in` names the galaxy it is in; `drawing` names the k.objects object that draws it.
+@k.space.body core.type of=k.space.body extends=k.values.coloured extends=k.named.labelled shared=true closed=true core.source="hand-core 1"
+@k.space.body.name core.slot of=k.space.body key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.space.body.kind core.slot of=k.space.body key=kind required=true kind=atom kind=string type=k.space.kind by=name core.source="hand-core 1"
+@k.space.body.orbits core.slot of=k.space.body key=orbits kind=atom kind=string type=k.space.body by=name core.source="hand-core 1"
+@k.space.body.order core.slot of=k.space.body key=order kind=integer min=1 max=8 core.source="hand-core 1"
+@k.space.body.size core.slot of=k.space.body key=size enum=small enum=medium enum=large enum=huge core.source="hand-core 1"
+@k.space.body.size_rank core.slot of=k.space.body key=size_rank kind=integer min=1 max=8 core.source="hand-core 1"
+@k.space.body.group core.slot of=k.space.body key=group enum=rocky enum=gas enum=ice core.source="hand-core 1"
+@k.space.body.moons core.slot of=k.space.body key=moons kind=integer min=0 core.source="hand-core 1"
+@k.space.body.moons_about core.slot of=k.space.body key=moons_about excludes=moons kind=integer min=0 core.source="hand-core 1"
+@k.space.body.rings core.slot of=k.space.body key=rings kind=boolean core.source="hand-core 1"
+@k.space.body.orbit_years core.slot of=k.space.body key=orbit_years kind=number min=0 core.source="hand-core 1"
+@k.space.body.in core.slot of=k.space.body key=in kind=atom kind=string type=k.space.body by=name core.source="hand-core 1"
+@k.space.body.drawing core.slot of=k.space.body key=drawing kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+# Round 9. `colour_why` says in one plain sentence why it has its colour. Approximate numbers: `day_hours_about`, the
+# time of one turn around its own axis in Earth hours; `orbit_days_about`, the time of one trip around what it
+# orbits in Earth days (given where that is under two years); `diameter_about`, its width in kilometres;
+# `distance_about`, its usual distance from what it orbits in kilometres; `temperature_about`, the temperature of
+# its surface in degrees Celsius; `age_years_about`, its age in years; `light_years_about`, its distance from the
+# Sun in light years. The units are k.units.measure facts. `named=model`: written by a language model, only where sure.
+@k.space.body.colour_why core.slot of=k.space.body key=colour_why kind=string core.source="hand-core 1"
+@k.space.body.day_hours_about core.slot of=k.space.body key=day_hours_about kind=number min=0 core.source="hand-core 1"
+@k.space.body.orbit_days_about core.slot of=k.space.body key=orbit_days_about kind=number min=0 core.source="hand-core 1"
+@k.space.body.diameter_about core.slot of=k.space.body key=diameter_about kind=number min=0 core.source="hand-core 1"
+@k.space.body.distance_about core.slot of=k.space.body key=distance_about kind=number min=0 core.source="hand-core 1"
+@k.space.body.temperature_about core.slot of=k.space.body key=temperature_about kind=number core.source="hand-core 1"
+@k.space.body.age_years_about core.slot of=k.space.body key=age_years_about kind=number min=0 core.source="hand-core 1"
+@k.space.body.light_years_about core.slot of=k.space.body key=light_years_about kind=number min=0 core.source="hand-core 1"
+
+# An exact count and an approximate count are never both on one body.
+
+# A kind of thing in space: what it is made of, what it goes around, what it has, what it does.
+@k.space.kind core.type of=k.space.kind extends=k.named.labelled shared=true closed=true core.source="hand-core 1"
+@k.space.kind.name core.slot of=k.space.kind key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.space.kind.material core.slot of=k.space.kind key=material many=true kind=atom kind=string core.source="hand-core 1"
+@k.space.kind.orbits core.slot of=k.space.kind key=orbits kind=atom kind=string core.source="hand-core 1"
+@k.space.kind.has core.slot of=k.space.kind key=has many=true kind=atom kind=string core.source="hand-core 1"
+@k.space.kind.does core.slot of=k.space.kind key=does many=true kind=atom kind=string core.source="hand-core 1"
+@k.space.kind.drawing core.slot of=k.space.kind key=drawing kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+# `about` says in one plain sentence what the kind is.
+@k.space.kind.about core.slot of=k.space.kind key=about kind=string core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.space.word.body core.word text=space text="solar system" means=k.space.body core.source="hand-core 1"
+@k.space.word.orbits core.word text=orbits text=orbit text=around means=k.space.body.orbits core.source="hand-core 1"
+@k.space.word.order core.word text=order means=k.space.body.order core.source="hand-core 1"
+@k.space.word.moons core.word text=moons means=k.space.body.moons core.source="hand-core 1"
+@k.space.word.rings core.word text=rings text=ring means=k.space.body.rings core.source="hand-core 1"
+@k.space.word.size core.word text=size text=largest text=smallest means=k.space.body.size_rank core.source="hand-core 1"
+@k.space.word.day core.word text=day text=turn text=spin means=k.space.body.day_hours_about core.source="hand-core 1"
+@k.space.word.diameter core.word text=diameter text=wide text=width means=k.space.body.diameter_about core.source="hand-core 1"
+@k.space.word.distance core.word text=distance text=far means=k.space.body.distance_about core.source="hand-core 1"
+@k.space.word.why core.word text=why means=k.space.body.colour_why core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.space.word.key.body.kind core.word text=kind means=k.space.body.kind core.source="hand-core 1"
+@k.space.word.key.body.size core.word text=size means=k.space.body.size core.source="hand-core 1"
+@k.space.word.key.body.size_rank core.word text="size rank" means=k.space.body.size_rank core.source="hand-core 1"
+@k.space.word.key.body.group core.word text=group means=k.space.body.group core.source="hand-core 1"
+@k.space.word.key.body.moons_about core.word text=moons means=k.space.body.moons_about core.source="hand-core 1"
+@k.space.word.key.body.orbit_years core.word text="orbit years" text=year means=k.space.body.orbit_years core.source="hand-core 1"
+@k.space.word.key.body.in core.word text=in means=k.space.body.in core.source="hand-core 1"
+@k.space.word.key.body.drawing core.word text=drawing means=k.space.body.drawing core.source="hand-core 1"
+@k.space.word.key.body.colour_why core.word text="colour why" means=k.space.body.colour_why core.source="hand-core 1"
+@k.space.word.key.body.day_hours_about core.word text="day hours" means=k.space.body.day_hours_about core.source="hand-core 1"
+@k.space.word.key.body.orbit_days_about core.word text="orbit days" means=k.space.body.orbit_days_about core.source="hand-core 1"
+@k.space.word.key.body.temperature_about core.word text=temperature text=hot text=cold text=warm means=k.space.body.temperature_about core.source="hand-core 1"
+@k.space.word.key.body.age_years_about core.word text="age years" text=old means=k.space.body.age_years_about core.source="hand-core 1"
+@k.space.word.key.body.light_years_about core.word text="light years" means=k.space.body.light_years_about core.source="hand-core 1"
+@k.space.word.key.kind core.word text=kind means=k.space.kind core.source="hand-core 1"
+@k.space.word.key.kind.material core.word text=material text=made text="made of" means=k.space.kind.material core.source="hand-core 1"
+@k.space.word.key.kind.orbits core.word text=orbits means=k.space.kind.orbits core.source="hand-core 1"
+@k.space.word.key.kind.has core.word text=has means=k.space.kind.has core.source="hand-core 1"
+@k.space.word.key.kind.does core.word text=does means=k.space.kind.does core.source="hand-core 1"
+@k.space.word.key.kind.drawing core.word text=drawing means=k.space.kind.drawing core.source="hand-core 1"
+@k.space.word.key.kind.about core.word text=about means=k.space.kind.about core.source="hand-core 1"

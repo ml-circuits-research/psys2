@@ -1,0 +1,34 @@
+# w.lang.en/shards/hand-frames: argument frames written in this repository where a host found a sentence no frame of
+# the hand-over reads right (block 20:15, from PSys2): the named add with a place verb and a place ("Put a guest
+# named Maria at table 1."): acts.make.name.p takes the rest as the name ("Maria At Table 1"); this frame ends the name
+# before the place preposition, as acts.make.name.place does for the verbs of make. And two directions in one move
+# (block 14:25: "move the house a bit left and up").
+# sources: hand-core 1 (written in this repository after PSys2's question; same parts as acts.make.name.place)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.en.frame.acts.make.name.place.p w.lang.en.frame name=acts.make.name.place.p act=make set=acts priority=15 needs=in role=thing role=value role=rel role=place example="Put a guest named Maria at table 1." core.source="hand-core 1"
+@w.lang.en.part.acts.make.name.place.p.1 w.lang.en.part frame=acts.make.name.place.p at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.make.name.place.p.2 w.lang.en.part frame=acts.make.name.place.p at=2 is=verb act=place core.source="hand-core 1"
+@w.lang.en.part.acts.make.name.place.p.3 w.lang.en.part frame=acts.make.name.place.p at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.make.name.place.p.4 w.lang.en.part frame=acts.make.name.place.p at=4 is=role role=thing takes=words core.source="hand-core 1"
+@w.lang.en.part.acts.make.name.place.p.5 w.lang.en.part frame=acts.make.name.place.p at=5 is=word word="called" word="named" core.source="hand-core 1"
+@w.lang.en.part.acts.make.name.place.p.6 w.lang.en.part frame=acts.make.name.place.p at=6 is=role role=value takes=words core.source="hand-core 1"
+@w.lang.en.part.acts.make.name.place.p.7 w.lang.en.part frame=acts.make.name.place.p at=7 is=role role=rel takes=prep core.source="hand-core 1"
+@w.lang.en.part.acts.make.name.place.p.8 w.lang.en.part frame=acts.make.name.place.p at=8 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.make.name.place.p.9 w.lang.en.part frame=acts.make.name.place.p at=9 is=role role=place takes=words core.source="hand-core 1"
+
+# Two directions in one move (reviewer block 14:25 item 1, from PSys2's real Romanian turns "mută prima casă mai la
+# stânga și mai jos", "mută vaca și mai jos și mai în dreapta"): "move the house a bit left and up". The second
+# direction is the act's direction too (role map place.rel2), its amount the act's amount (place.amount2).
+@w.lang.en.frame.acts.more.place.dir.two w.lang.en.frame name=acts.more.place.dir.two act=place set=acts.more priority=14 needs=scale role=thing role=amount role=rel role=amount2 role=rel2 example="Move the house a bit left and up." core.source="hand-core 1"
+@w.lang.en.part.acts.more.place.dir.two.1 w.lang.en.part frame=acts.more.place.dir.two at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.more.place.dir.two.2 w.lang.en.part frame=acts.more.place.dir.two at=2 is=word act=place word="move" word="put" word="bring" word="push" word="shift" word="nudge" core.source="hand-core 1"
+@w.lang.en.part.acts.more.place.dir.two.3 w.lang.en.part frame=acts.more.place.dir.two at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.more.place.dir.two.4 w.lang.en.part frame=acts.more.place.dir.two at=4 is=role role=thing takes=words core.source="hand-core 1"
+@w.lang.en.part.acts.more.place.dir.two.5 w.lang.en.part frame=acts.more.place.dir.two at=5 is=role role=amount takes=lexicon lexicon=space.amounts optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.more.place.dir.two.6 w.lang.en.part frame=acts.more.place.dir.two at=6 is=role role=rel takes=lexicon lexicon=acts.dir core.source="hand-core 1"
+@w.lang.en.part.acts.more.place.dir.two.7 w.lang.en.part frame=acts.more.place.dir.two at=7 is=word word="and" word="and then" word="then" core.source="hand-core 1"
+@w.lang.en.part.acts.more.place.dir.two.8 w.lang.en.part frame=acts.more.place.dir.two at=8 is=role role=amount2 takes=lexicon lexicon=space.amounts optional=yes core.source="hand-core 1"
+@w.lang.en.part.acts.more.place.dir.two.9 w.lang.en.part frame=acts.more.place.dir.two at=9 is=role role=rel2 takes=lexicon lexicon=acts.dir core.source="hand-core 1"
+@w.lang.en.role_map.place.rel2 w.lang.en.role_map name=place.rel2 act=place role=rel2 act_role=direction frame=acts.more.place.dir.two doc="Move the house left and up: the second direction" core.source="hand-core 1"

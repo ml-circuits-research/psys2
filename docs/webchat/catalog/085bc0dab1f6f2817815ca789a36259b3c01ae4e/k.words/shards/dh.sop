@@ -1,0 +1,7 @@
+# k.words/shards/dh: senses of the words from "dharma" to "dharma" (first letters "dh").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.dharma.noun.1 k.words.sense word=Dharma pos=noun n=1 supersense=noun.person gloss="basic principles of the cosmos; also: an ancient sage in Hindu mythology worshipped as a god by some lower castes" is_a="Hindu deity" core.source="wordnet 3.1"
+@k.words.dharma.spelling.Dharma core.word text=dharma means=Dharma of=k.words.sense.word core.source="wordnet 3.1"
