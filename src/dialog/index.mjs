@@ -1547,7 +1547,7 @@ export class DialogSession {
     if (!decl || opts.request === false || guard.soft()) return this._sendRead(text, opts);
     const snap0 = this.snapshot();
     const first = await this._sendRead(text, opts);
-    try { return (await perf.time('request', () => this._requestStep(text, opts, first, { tabWorld, decl, snap0 }))) ?? first; } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; return first; }
+    try { return (await perf.time("request", () => this._requestStep(text, opts, first, { tabWorld, decl, snap0 }))) ?? first; } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error("[request]", e); return first; }
   }
 
   /** Run a world's operation as an action of this turn (the planner of a request): the live state of the world, the matrix reasoner adopts what it changed. */
@@ -1564,12 +1564,12 @@ export class DialogSession {
   }
 
   async _requestStep(text, opts, first, { tabWorld, decl, snap0 }) {
-    if (!first || typeof first !== 'object' || !first.trace) return first;
+    if (!first || typeof first !== "object") return first;
+    first.trace ??= {};
     const { set, interp } = this.engine;
     const world = set.get(tabWorld);
     const english = String(first.trace.intent?.from ?? first.trace.english ?? text);
     const segs = first.trace.segments ?? [];
-    if (this.context().tabWorld !== tabWorld) return first;   // the turn moved to another tab
     const catchAll = segs.some((sg) => /\.read\.frame\.end$/.test(sg.match?.patternId ?? '') && sg.match?.args?.pre != null);
     const complete = !catchAll && segs.length > 0 && segs.every((sg) => !sg.unparsed && !(sg.ignored?.length) && !sg.partial && !sg.bestEffort) && (first.statuses ?? []).every((x) => x === 'supported');
     const rd = this.dialogue.requests;
@@ -1586,6 +1586,7 @@ export class DialogSession {
     if (!reaction && constraintsOnly && lastRec && !complete) reaction = 'refine';
     const sameAgain = lastRec && q.act && lastRec.request.act === q.act && q.target && lastRec.request.target === q.target && JSON.stringify(q.facts) === JSON.stringify(lastRec.request.facts);
     if (sameAgain) reaction = 'redo';
+    if (!(reaction && lastRec) && this.context().tabWorld !== tabWorld) return first;   // the turn moved to another tab (a reaction to the last result of the tab is read against it: the move is undone)
     if (reaction && lastRec && (!complete || ['redo', 'refine', 'reduce', 'enlarge', 'reject'].includes(reaction))) {
       if (reaction === 'refine' && q.target && lastRec.request.target && q.target !== lastRec.request.target) reaction = null;
     } else if (reaction && !lastRec) reaction = null;
@@ -1595,7 +1596,9 @@ export class DialogSession {
       revised = reaction !== 'redo';
       base = lastRec.before;
     } else {
-      const act = q.act ?? (q.target ? 'make' : null);
+      const act = q.act;
+      const question = /\?\s*$/.test(english.trim()) || /^(?:is|are|does|do|did|how|what|which|who|where|can|could|why|when|was|were|will|would|should|has|have)\b/i.test(english.trim());
+      if (question || q.unread.length) return await this._requestNotes(opts, first, q, cannot);   // a question is never a make; words no reader read are asked about, never planned around
       if (act !== 'make' && !(act === 'arrange' && q.facts.some((f) => f.key === 'layout'))) return await this._requestNotes(opts, first, q, cannot);
       const res = measure(beforeState);
       const exp = expOf(q);

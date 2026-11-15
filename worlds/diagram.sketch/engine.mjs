@@ -1018,15 +1018,16 @@ export function planRequest(ctx, goal = {}) {
   if (res.status !== 'supported') return res;
   const made = (s.last ?? []).slice();
   const layout = goal.layout && goal.layout !== 'layers' ? goal.layout : (edges.length ? 'tree' : 'grid');
-  if (!goal.layout) assumed.push(`a ${layout} layout`);
+  if (!goal.layout) assumed.push(`The diagram is a ${layout}.`);
   if (made.length > 1) { try { arrangeLayout(ctx, { text: `arrange ${made.join(', ')} as a ${layout}` }); } catch { /* the engine's places stay */ } }
   s.last = made;
   s.composed = { kind: src.kind, topic: got?.topic ?? goal.topic ?? null };
-  if (goal.rangeAssumed) assumed.push(`${nodes.length} nodes (a diagram usually has ${lo === hi ? lo : `${lo} to ${hi}`})`);
+  if (goal.rangeAssumed) assumed.push(`I chose ${nodes.length} nodes.`);
   const kinds = [...new Set(nodes.map((x) => x.engine))];
   const cnt = (k) => nodes.filter((x) => x.engine === k).length;
   const topic = got?.topic ? ` about ${got.topic}` : '';
-  const said = `I drew a diagram${topic} with ${nodes.length} node${nodes.length === 1 ? '' : 's'} (${kinds.map((k) => `${cnt(k)} ${cnt(k) === 1 ? k : `${k}s`}`).join(', ')})${edges.length ? ` and ${edges.length} arrow${edges.length === 1 ? '' : 's'}` : ''}, laid out as a ${layout}.`;
+  // short plain sentences with a subject (they survive the translation of the reply, reviewer 2026-11-15 13:10 item 3)
+  const said = `I drew a diagram with ${nodes.length} node${nodes.length === 1 ? '' : 's'}${edges.length ? ` and ${edges.length} arrow${edges.length === 1 ? '' : 's'}` : ''}.${got?.topic ? ` It is about ${got.topic}.` : ''} The nodes are ${kinds.map((k) => `${cnt(k)} ${cnt(k) === 1 ? k : `${k}s`}`).join(' and ')}.`;
   open(ctx);
   return ok(said, { assumed });
 }

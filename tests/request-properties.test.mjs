@@ -9,7 +9,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 
 // The ratchet: the number of cases of each property that held at the last landing (baseline 2026-11-15 before spec 28: see worker-log.md).
-const MIN = { P1: 0, P2: 0, P3: 0, P4: 0, P5: 0, P6: 0, P7: 0, P8: 0 };
+const MIN = { P1: 19, P2: 15, P3: 5, P4: 9, P5: 7, P6: 5, P7: 4, P8: 7 };   // 2026-11-15 spec 28 step 3: 79/96 (a margin of one for the sampled diagrams)
 
 const loader = createFsLoader(DEFAULT_ROOT);
 const engines = {

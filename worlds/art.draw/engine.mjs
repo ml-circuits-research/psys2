@@ -2363,3 +2363,59 @@ export function summary(ctx) {
 
 // What the matrix reasoner's functions (fns.mjs) share with the operations: the words, so that a refusal or a count says the same in both modes.
 export { describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, placePhrase, effectiveColor, sameColorName, drawingNP };
+
+// ---- spec 28: a scene as the goal of a request (w.request) ----------------------------------------------------------------------------------------------
+/** What the turn made, for the check of a request (spec 28 section 4): the things not in `before`, their kinds, their summed size. Read-only. */
+export function requestResult(ctx, { before = null } = {}) {
+  const s = ctx.state ?? {};
+  const had = new Set((before?.objects ?? []).map((o) => o.id));
+  const made = (s.objects ?? []).filter((o) => !o.tag && !had.has(o.id));
+  const kinds = {};
+  for (const o of made) kinds[o.kind] = (kinds[o.kind] ?? 0) + 1;
+  return { parts: made.length, kinds, extent: made.reduce((a, o) => a + (o.size ?? 0), 0) };
+}
+
+const rngOf = (seed) => { let a = (Number(seed) >>> 0) || 1; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
+const PLACE = { small: 'in the bottom left corner', big: 'in the bottom', default: 'in the bottom' };
+/**
+ * PLAN A SCENE FOR A REQUEST (spec 28 section 4, step 5). `goal`: { target, range: [lo, hi], parts: [the scene's kinds, the first is the one that makes it that scene], not: [kinds not
+ * wanted], with: [parts asked for], size, seed }. The parts come from the expectation of the scene (request.sop w.expect until k.expect / k.scenes.has are in the pin); the size step
+ * scales the main part and the number of parts; one undo step. Returns { status, value, assumed, cannot }.
+ */
+export function planRequest(ctx, goal = {}) {
+  const rnd = rngOf(goal.seed ?? Math.floor(Math.random() * 2 ** 31));
+  const not = new Set(goal.not ?? []);
+  const asked = (goal.with ?? []).map((w) => String(w).split(' ').at(-1).replace(/s$/, ''));
+  const drawable = (k) => !!kindOfWord(k) || UNDRAWABLE.has(k);
+  const cannot = asked.filter((k) => !drawable(k)).map((k) => ({ key: 'with', words: k }));
+  const parts = [...new Set([...(goal.parts ?? []), ...asked.filter(drawable)])].filter((k) => !not.has(k));
+  if (!parts.length) return no(`I do not know what a ${goal.target ?? 'scene'} has without ${[...not].join(' and ')}.`, 'unsupported');
+  const [lo, hi] = goal.range ?? [parts.length, parts.length];
+  const n = Math.max(1 + asked.filter((k) => parts.includes(k) && k !== parts[0]).length, lo + Math.floor(rnd() * (hi - lo + 1)));   // the parts asked for are always there
+  const main = parts[0];
+  // the main part once (a scene of one kind, a forest: all of it), the others in turn, the asked-for parts first
+  const plan = new Map([[main, 1]]);
+  const rest = [...asked.filter((k) => parts.includes(k) && k !== main), ...parts.slice(1).filter((k) => !asked.includes(k))];
+  const order = rest.length ? rest : [main];
+  for (let i = 1, j = Math.floor(rnd() * order.length); i < n; i++, j++) { const k = order[j % order.length]; plan.set(k, (plan.get(k) ?? 0) + 1); }
+  const size = goal.size === 'small' ? 'small' : goal.size === 'big' ? 'big' : null;
+  const where = PLACE[size ?? 'default'];
+  const label = `drew a ${size ? `${size} ` : ''}${goal.target ?? main}`;
+  const said = [];
+  const r = oneStep(ctx, label, () => {
+    for (const [k, m] of plan) {
+      const one = { kind: k, n: String(m), ...(k === main && size ? { m1: size } : {}) };
+      const tries = k === main ? [where, ''] : [`next to the ${main}`, where, ''];
+      let done = null;
+      for (const w of tries) { const x = add(ctx, { ...one, where: w }); if (x?.status === 'supported') { done = x; break; } }
+      if (!done) return no(`I could not draw the ${k} of the ${goal.target}.`, 'unsupported');
+      said.push(`${m} ${m === 1 ? k : pluralOfKind(k, m)}`);
+    }
+    return ok('');
+  });
+  if (r?.status !== 'supported') return r;
+  const list = said.length > 1 ? `${said.slice(0, -1).join(', ')} and ${said.at(-1)}` : said[0];
+  const assumed = [];
+  if (goal.rangeAssumed) assumed.push(`I chose ${n} things.`);
+  return ok(`I drew a ${size ? `${size} ` : ''}${goal.target ?? main}${size === 'small' ? ' in a corner' : ''}. It has ${list}.`, { assumed, cannot });
+}

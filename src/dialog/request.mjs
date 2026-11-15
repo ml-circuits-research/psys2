@@ -14,7 +14,7 @@ import { budget } from './budget.mjs';
 
 const NUM = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, fifteen: 15, twenty: 20 };
 const STOP = new Set('a an the of to in on at for with and or but is are was were be been being it its this that these those there here i you he she we they me my your our his her their them us do does did please just also so then very some any can could would should will shall may might must have has had am get got make made let lets want like one'.split(' '));
-const ACT = { draw: 'make', make: 'make', create: 'make', add: 'make', build: 'make', generate: 'make', give: 'make', put: 'make', paint: 'make', creare: null, design: 'make', sketch: 'make', produce: 'make',
+const ACT = { draw: 'make', make: 'make', create: 'make', add: 'make', build: 'make', generate: 'make', give: 'make', put: 'make', paint: 'make', design: 'make', sketch: 'make', produce: 'make',
   write: 'write', compose: 'write', type: 'write', tell: 'write', play: 'play', sing: 'play', show: 'show', find: 'show', open: 'show',
   arrange: 'arrange', break: 'arrange', split: 'arrange', divide: 'arrange', organise: 'arrange', organize: 'arrange', layout: 'arrange', lay: 'arrange', order: 'arrange', sort: 'arrange' };
 const LENGTH_UNITS = /^(?:chapters?|paragraphs?|sections?|words?|pages?|parts?|verses?)$/;
@@ -245,14 +245,16 @@ export function reviseRequest(last, q, { lib = null, result = null } = {}) {
     facts.push({ ...f });
   }
   const parts = result?.parts ?? null;
-  if (q.reaction === 'reduce') {
+  const wasBig = facts.some((x) => x.key === 'size' && x.step === 'big'), wasSmall = facts.some((x) => x.key === 'size' && x.step === 'small');
+  if (q.reaction === 'reduce') {   // one step down the scale: big -> default -> small
     drop((x) => x.key === 'size' && x.step === 'big');
     if (parts != null && parts > 1) { drop((x) => x.key === 'count'); const n = Math.max(1, Math.round(parts * 0.6)); facts.push({ key: 'count', min: Math.max(1, Math.min(n, parts - 1)), max: parts - 1 }); }
-    if (!facts.some((x) => x.key === 'size')) facts.push({ key: 'size', step: 'small' });
+    if (!wasBig && !facts.some((x) => x.key === 'size')) facts.push({ key: 'size', step: 'small' });
   }
-  if (q.reaction === 'enlarge') {
+  if (q.reaction === 'enlarge') {   // one step up: small -> default -> big
     drop((x) => x.key === 'size' && x.step === 'small');
-    if (!facts.some((x) => x.key === 'size')) facts.push({ key: 'size', step: 'big' });
+    drop((x) => x.key === 'count' && x.max != null && parts != null && x.max < parts);
+    if (!wasSmall && !facts.some((x) => x.key === 'size')) facts.push({ key: 'size', step: 'big' });
   }
   if (q.reaction === 'reject' && result?.kinds) {
     const main = Object.entries(result.kinds).sort((a, b) => b[1] - a[1])[0]?.[0];
@@ -276,12 +278,12 @@ const factWords = (f) => (f.key === 'count' ? (f.n != null ? `${f.n}` : f.min !=
 export function sayRequest(q, plan, { lib = null, cannot = [], revised = false } = {}) {
   if (typeof lib?.sayRequest === 'function') { try { const t = lib.sayRequest(q, plan); if (typeof t === 'string' && t) return t; } catch { /* the bridge says it */ } }
   const out = [];
-  if (revised) out.push(`I changed the last result: ${q.facts.filter((f) => f.key !== 'manner' || f.value !== 'random').map(factWords).join(', ') || 'redone'}.`);
+  if (revised) out.push('I changed the last result.');   // short plain sentences with a subject: they survive the translation of the reply
   if (plan?.value) out.push(String(plan.value).trim());
-  if (plan?.assumed?.length) out.push(`I assumed ${plan.assumed.join(', ')}.`);
+  if (plan?.assumed?.length) out.push(...plan.assumed);
   const no = [...cannot, ...(plan?.cannot ?? [])];
-  if (no.length) out.push(`I cannot do ${no.map((c) => `"${c.words ?? c}"`).join(' or ')} here.`);
-  if (q.unread?.length) out.push(`I did not use ${q.unread.map((w) => `"${w}"`).join(', ')}.`);
+  if (no.length) out.push(`I cannot do this here: ${no.map((c) => `"${c.words ?? c}"`).join(', ')}.`);
+  if (q.unread?.length) out.push(`I did not use these words: ${q.unread.map((w) => `"${w}"`).join(', ')}.`);
   return out.join(' ');
 }
 
