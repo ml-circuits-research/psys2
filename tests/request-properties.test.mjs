@@ -9,7 +9,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 
 // The ratchet: the number of cases of each property that held at the last landing (baseline 2026-11-15 before spec 28: see worker-log.md).
-const MIN = { P1: 19, P2: 15, P3: 5, P4: 9, P5: 7, P6: 5, P7: 4, P8: 7 };   // 2026-11-15 spec 28 step 3: 79/96 (a margin of one for the sampled diagrams)
+const MIN = { P1: 19, P2: 17, P3: 6, P4: 12, P5: 9, P6: 5, P7: 4, P8: 7 };   // 2026-11-15 spec 28 + Documents: 87/96 (a margin of one for the sampled diagrams)
 
 const loader = createFsLoader(DEFAULT_ROOT);
 const engines = {
@@ -21,7 +21,7 @@ const session = (lang, tab) => { const s = engines[lang].createSession({ languag
 
 // ---- measures of a result (the visible state of the open world) -------------------------------------------------------------------------------------
 const M = {
-  diagram: (st) => { const d = st['diagram.sketch'] ?? {}; const sh = d.shapes ?? []; return { parts: sh.length, kinds: new Set(sh.map((x) => x.shape)), kindList: sh.map((x) => x.shape), links: (d.edges ?? []).length, extent: sh.reduce((a, x) => a + (x.size ?? 0), 0), sig: JSON.stringify([sh.map((x) => x.shape).sort(), (d.edges ?? []).length]) }; },
+  diagram: (st) => { const d = st['diagram.sketch'] ?? {}; const sh = d.shapes ?? []; return { parts: sh.length, kinds: new Set(sh.map((x) => x.shape)), kindList: sh.map((x) => x.shape), links: (d.edges ?? []).length, extent: sh.reduce((a, x) => a + (x.size ?? 0), 0), sig: JSON.stringify([sh.map((x) => `${x.shape}:${x.label ?? x.name}`).sort(), (d.edges ?? []).length]) }; },
   draw: (st) => { const d = st['art.draw'] ?? {}; const ob = d.objects ?? []; return { parts: ob.length, kinds: new Set(ob.map((o) => o.kind)), kindList: ob.map((o) => o.kind), extent: ob.reduce((a, o) => a + (o.size ?? 0), 0), sig: JSON.stringify(ob.map((o) => o.kind).sort()) }; },
   docs: (st) => { const d = st['docs.editor'] ?? {}; const bl = d.blocks ?? []; return { parts: bl.filter((b) => b.kind === 'heading').length, words: bl.reduce((a, b) => a + String(b.text ?? '').split(/\s+/).filter(Boolean).length, 0), docs: d.title ? 1 : 0, kinds: new Set(), kindList: [], extent: 0, sig: d.title ?? '' }; },
   charts: (st) => { const d = st['data.charts'] ?? {}; const c = (d.charts ?? []).find((x) => x.id === d.active) ?? (d.charts ?? []).at(-1); return { parts: c?.labels?.length ?? 0, charts: (d.charts ?? []).length, kinds: new Set(c ? [c.type] : []), kindList: c ? [c.type] : [], extent: 0, sig: JSON.stringify(c?.labels ?? []) }; },

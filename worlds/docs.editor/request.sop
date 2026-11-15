@@ -1,0 +1,38 @@
+# Spec 28: what the acts of the documents editor honour (w.honour), the words of the request reader (w.words) and the defaults of what it writes (w.expect) until k.expect is read from the pin.
+# words= the length in words, chapters= the number of chapters; small / big are factors on the words (a short story, a long story).
+
+@docs.editor.honour.write w.honour
+    act=write
+    keys=kind,about,length,size,manner,count
+
+@docs.editor.honour.make w.honour
+    act=make
+    keys=kind,about,length,size,manner,count
+
+@docs.editor.words w.words
+    kind=story,poem,report,essay,letter,document,chapter
+    generic=document,chapter
+
+@docs.editor.expect.story w.expect
+    of=story
+    words=150..300
+    chapters=3..5
+    small=0.4
+    big=3
+    source="own, hand-checked (owner 2026-11-15: compositions far too short; a long one honoured as far as the knowledge goes)"
+
+@docs.editor.expect.essay w.expect
+    of=essay
+    words=200..400
+    chapters=3..5
+    small=0.4
+    big=3
+    source="own, hand-checked"
+
+@docs.editor.expect.report w.expect
+    of=report
+    words=200..400
+    chapters=4..6
+    small=0.4
+    big=3
+    source="own, hand-checked"

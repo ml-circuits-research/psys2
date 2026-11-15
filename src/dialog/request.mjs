@@ -174,7 +174,7 @@ export function readRequest(english, { lang, world, kindWords = new Set(), first
   if (ab >= 0) {
     let k = ab + 1; const topic = [];
     while (k < ws.length && !/^(?:with|in|that|which|not|but)$/.test(ws[k]) && !/^\d+$/.test(ws[k])) { topic.push(ws[k]); k++; }
-    if (topic.length) { fact({ key: 'about', value: topic.filter((w) => !/^(?:a|an|the)$/.test(w)).join(' ') }); use(ab, k - ab); }
+    if (topic.length) { fact({ key: 'about', value: topic.join(' ') }); use(ab, k - ab); }
   }
   // place ("in the corner" is read as a small extent above; "in Tenerife" is the map's): a capitalised name after in / at / of
   // the first reading: a complete reading uses every word it read
@@ -243,7 +243,7 @@ export function violations(q, res, exp) {
   const len = q.facts.find((f) => f.key === 'size' || (f.key === 'length' && f.step));
   if (len && exp?.words && res.words != null) {
     const [lo, hi] = exp.words;
-    if (len.step === 'small' && res.words >= lo) out.push({ key: 'length', step: 'small' });
+    if (len.step === 'small' && res.words > Math.round(lo * (exp.small ?? 0.6))) out.push({ key: 'length', step: 'small' });   // short: below the small step of the usual length
     if (len.step === 'big' && res.words <= hi) out.push({ key: 'length', step: 'big' });
   }
   return out;

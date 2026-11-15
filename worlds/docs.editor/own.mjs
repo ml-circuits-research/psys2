@@ -7,3 +7,5 @@ export {
   addHeading, addList, addParagraph, undo as docUndo, redo as docRedo,
 } from './editor.mjs';
 export { digest, compose } from './textgen.mjs';   // the summary and the composition (spec 26), from the library's std.summarize / std.compose
+/** Spec 28: a text as the goal of a request (the planner) and what a turn wrote (the check). */
+export { planRequest, requestResult } from "./textgen.mjs";
