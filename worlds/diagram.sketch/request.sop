@@ -8,7 +8,8 @@
 @s.about core.slot of=diagram key=about kind=string
 @k.diagram std.schema.kind of=diagram world=diagram acts=make acts=remove
 @t.node core.type of=node extends=std.schema.thing closed=true
-@s.size core.slot of=node key=size enum=tiny enum=small enum=medium enum=big enum=huge
+@s.size core.slot of=node key=size enum=tiny enum=small enum=default enum=big enum=huge
+@s.place core.slot of=node key=place enum=up enum=down enum=left enum=right enum=top enum=bottom enum=center enum=corner
 @s.colour core.slot of=node key=colour enum=red enum=blue enum=green enum=yellow enum=orange enum=purple enum=pink enum=white enum=black enum=grey
 @s.in core.slot of=node key=in
 @s.name core.slot of=node key=name kind=string
@@ -41,23 +42,63 @@
 @wd.box core.word text=box text=boxes means=rectangle
 @wd.step core.word text=step text=steps means=node
 # The door (reviewer 2026-11-15 16:40): the wholes whose requests this world plans through the library (a request of a single thing goes through the door only with a constraint the readers cannot honour). Read by src/dialog/request.mjs doorWholes.
-@door psys2.door world=diagram whole=diagram whole=link
-@e.link k.expect.make thing=link made_in=diagram unit=link min=1 max=12 typical=4 about="the arrows of a diagram: added where a node has none"
+@door psys2.door world=diagram whole=diagram
 # The session timeline (reviewer 2026-11-15 19:05): the world's own undo and redo, the operations the door calls for the acts undo / redo of k.actions (src/dialog/request.mjs actOperation).
-@op.undo psys2.op world=diagram act=undo op=diagramUndo
-@op.redo psys2.op world=diagram act=redo op=diagramRedo
+@op.undo psys2.op world=diagram act=undo op=undoStep
+@op.redo psys2.op world=diagram act=redo op=redoStep
 # Acts on the things that are there (spec 28 section 12): what each honours, and the one operation of the world that carries them out (the door resolves the things and the roles).
 @h.place std.schema.honours world=diagram act=place on=place of=node
 @h.change std.schema.honours world=diagram act=change on=attribute on=size of=node
 @h.remove std.schema.honours world=diagram act=remove of=node of=diagram
 @wd.colour core.word text=color text=colour means=colour
-# TOOL BINDING (spec 28 section 12; reviewer general-mechanisms item 3): act + roles -> one operation of the world (a tool with no words), the arguments taken from the
-# roles of the request (`arg=<tool argument>:<role path>`, `:=` a constant), the preconditions (`when=<role path>` present, or `<path>=<value>`), the effect it has (data), and the
-# reply facts the host says it with (w.lang.en.reply / w.lang.ro.reply; `{place.value}` is filled from the roles). The first row whose preconditions hold is run.
-@tool.remove psys2.tool world=diagram act=remove op=removeShapes arg="ids:things" effect="the things are no longer there" reply="done.remove"
-@tool.place.dir psys2.tool world=diagram act=place op=moveShapes when="place.relation=direction" arg="ids:things" arg="direction:place.value" effect="the things are one step further that way" reply="done.place.{place.value}"
-@tool.place.next psys2.tool world=diagram act=place op=moveShapes when="place.ids" arg="ids:things" arg="anchor:place.ids" arg="relation:place.relation" effect="the things are next to (or in) the thing named" reply="done.place.next"
-@tool.place.into psys2.tool world=diagram act=place op=moveShapes when="place.value" when="place.relation=in" arg="ids:things" arg="region:place.value" effect="the things are in the region named" reply="done.place.into"
-@tool.place.region psys2.tool world=diagram act=place op=moveShapes when="place.value" arg="ids:things" arg="region:place.value" effect="the things are in the region named" reply="done.place.region"
-@tool.change.attr psys2.tool world=diagram act=change op=setShapes when="attribute" arg="ids:things" arg="attribute:attribute" arg="value:value" effect="the things have the value" reply="done.change"
-@tool.change.size psys2.tool world=diagram act=change op=setShapes when="size" arg="ids:things" arg="attribute:=size" arg="value:size.value" arg="step:size.step" effect="the things have the size, or one step more or less" reply="done.change.size.{size.step}"
+# TOOL BINDING (spec 28 section 14; reviewer 2026-11-15 20:45, 22:10; sopworld 0.152.1 std.tool): the diagram's primitives with their typed parameters (std.tool.op / std.tool.param), the act
+# of a plan step bound to one primitive with its arguments' sources (std.tool.bind / std.tool.arg), the preconditions (needs=) and the effect on the view. The library plans a diagram as
+# a whole with its nodes and links (k.expect.make / k.expect.part of the catalog), fills each argument (said, revised, the plan's values, the expectations below), translates a value the
+# parameter does not take by knowledge (an oval is drawn as an ellipse; tiny is a grade of k.expect.scale), checks, calls the primitive (worlds/diagram.sketch/tool.mjs: no words, no
+# defaults) and says what changed from the view's diff. A count revision ("fewer nodes") keeps the structure: the library's structure operators (cutToCount / fillToCount / notAllOneKind).
+@tool core.use world=std.tool
+@op.diagram std.tool.op name=startDiagram world=diagram param=kind param=layout param=links effect=makes doc="a new diagram: the whole its shapes belong to and are laid out by (once its links are all there)"
+@pa.diagram.links std.tool.param op=startDiagram name=links kind=integer min=0 max=60 default=0
+@pa.diagram.layout std.tool.param op=startDiagram name=layout accepts=tree accepts=grid accepts=row accepts=column accepts=circle accepts=radial accepts=layers
+@b.diagram std.tool.bind world=diagram act=make of=diagram op=startDiagram arg=kind<-step.kind arg=layout<-step.layout arg=links<-plan.links makes=thing
+@op.add std.tool.op name=addShapes world=diagram param=kind param=n param=whole param=size param=colour param=layout effect=makes doc="n shapes of a kind, in a diagram or free"
+@pa.add.kind std.tool.param op=addShapes name=kind type=node required=true accepts=circle accepts=square accepts=rectangle accepts=diamond accepts=ellipse accepts=triangle accepts=hexagon accepts=star
+@pa.add.n std.tool.param op=addShapes name=n kind=integer min=1 max=12 default=1
+@pa.add.size std.tool.param op=addShapes name=size type=k.expect.scale by=step accepts=tiny accepts=small accepts=default accepts=big accepts=huge
+@pa.add.layout std.tool.param op=addShapes name=layout accepts=row accepts=grid accepts=column accepts=circle
+@b.add std.tool.bind world=diagram act=make of=node op=addShapes makes=thing
+@a.add.kind std.tool.arg bind=$b.add param=kind from=step.kind
+@a.add.n std.tool.arg bind=$b.add param=n from=step.count
+@a.add.whole std.tool.arg bind=$b.add param=whole from=step.in from=value.free
+@a.add.size std.tool.arg bind=$b.add param=size from=step.size
+@a.add.colour std.tool.arg bind=$b.add param=colour from=step.colour
+@a.add.layout std.tool.arg bind=$b.add param=layout from=expect
+@op.link std.tool.op name=linkShapes world=diagram param=a param=b effect=makes doc="an arrow from one shape to another"
+@pa.link.a std.tool.param op=linkShapes name=a required=true
+@pa.link.b std.tool.param op=linkShapes name=b required=true
+@b.link std.tool.bind world=diagram act=connect op=linkShapes arg=a<-step.a arg=b<-step.b needs=exists(a) needs=exists(b) makes=thing
+@op.remove std.tool.op name=removeShapes world=diagram param=ids effect=removes
+@b.remove std.tool.bind world=diagram act=remove of=node op=removeShapes arg=ids<-step.things needs=exists(ids) removes=ids
+@op.unlink std.tool.op name=removeLinks world=diagram param=ids effect=removes doc="arrows by id (one already gone with its shape is no refusal)"
+@b.unlink std.tool.bind world=diagram act=remove of=link op=removeLinks arg=ids<-step.things
+@op.drop std.tool.op name=dropDiagram world=diagram param=ids effect=removes
+@b.drop std.tool.bind world=diagram act=remove of=diagram op=dropDiagram arg=ids<-step.things needs=exists(ids) removes=ids
+@op.move std.tool.op name=moveShapes world=diagram param=ids param=place param=anchor effect=changes
+@c.thingAt std.tool.custom name=thingAt world=diagram kind=search in=place out=anchor doc="the newest shape of the kind a place names (next to it)"
+@b.move std.tool.bind world=diagram act=place of=node op=moveShapes arg=ids<-step.things arg=place<-step.place arg=anchor<-custom.thingAt needs=exists(ids)
+@op.arrange std.tool.op name=arrangeShapes world=diagram param=ids param=layout effect=changes doc="the shapes laid out again in a layout"
+@pa.arrange.layout std.tool.param op=arrangeShapes name=layout accepts=tree accepts=grid accepts=row accepts=column accepts=circle accepts=radial accepts=layers
+@b.arrange std.tool.bind world=diagram act=arrange of=node op=arrangeShapes arg=ids<-step.things arg=layout<-step.layout needs=exists(ids)
+@h.arrange.kind std.schema.honours world=diagram act=arrange on=kind on=layout of=node
+@op.set std.tool.op name=setShapes world=diagram param=ids param=colour param=size effect=changes
+@pa.set.size std.tool.param op=setShapes name=size type=k.expect.scale by=step accepts=tiny accepts=small accepts=default accepts=big accepts=huge
+@b.set std.tool.bind world=diagram act=change of=node op=setShapes arg=ids<-step.things arg=colour<-step.colour arg=size<-step.size needs=exists(ids)
+# What the acts on the shapes that are there honour (the library's reference step resolves them by kind, the values said before the kind, "it" / "them")
+@h.remove.kind std.schema.honours world=diagram act=remove on=kind on=count on=attribute of=node
+@h.change.kind std.schema.honours world=diagram act=change on=kind on=attribute on=size of=node
+@h.place.kind std.schema.honours world=diagram act=place on=kind on=place of=node
+# Defaults are expectations (k.expect.value ... when.), chosen by the library and said in `assumed`. The count of a diagram (5 to 9 nodes) and its shapes are the catalog's
+# (k.expect.make / k.expect.part thing=diagram); a shape the engine is asked for with none said is its own (a circle).
+@x.layout k.expect.value of=diagram on=layout value=tree about="a diagram of arrows is laid out as a tree"
+@x.row k.expect.value of=node on=layout value=row when.whole=free when.n.min=2 when.n.max=6 about="up to six shapes made together stand in a row"
+@x.grid k.expect.value of=node on=layout value=grid when.whole=free when.n.min=7 about="more shapes made together stand in a grid"

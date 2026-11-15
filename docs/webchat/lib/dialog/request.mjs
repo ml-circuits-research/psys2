@@ -11,8 +11,8 @@
  * No code here is per world: what a world can do is what its request.sop declares, and it carries out a plan with its own operation `planRequest(ctx, goal)`.
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { BUNDLED_REQUEST } from '../knowledge/bundled-request.mjs?v=d6c9c5d2e1';
-import { REQUEST_LOCAL } from '../lang/en.request.local.mjs?v=1a2e67f9cb';
+import { BUNDLED_REQUEST } from '../knowledge/bundled-request.mjs?v=32be4c412e';
+import { REQUEST_LOCAL } from '../lang/en.request.local.mjs?v=c7d328fa1e';
 
 const STOP = new Set('a an the of to in on at for with and or but is are was were be been being it its this that these those there here i you he she we they me my your our his her their them us do does did please just also so then very some any can could would should will shall may might must have has had am get got let lets want like one'.split(' '));
 
@@ -145,72 +145,6 @@ export function stateWorld(lib, live, referents = []) {
   return { world: fork, view, things };
 }
 
-/** The attribute names a live world's kinds have (their slot keys) and the words for them (core.word means=<slot key>): "colour", "color", "size". */
-export function attributeWords(live) {
-  const c = (() => { try { return live?._compiled?.(); } catch { return null; } })();
-  const keys = new Set();
-  for (const k of ofType(live, 'std.schema.kind')) for (const s of c?.slots?.get(one(k, 'of'))?.values?.() ?? []) if (s.key && !['in', 'name', 'place'].includes(s.key)) keys.add(String(s.key));
-  const words = new Map([...keys].map((k) => [k, k]));
-  for (const r of ofType(live, 'core.word')) for (const m of r.means ?? []) { const mm = String(m).replace(/^"|"$/g, ''); if (keys.has(mm)) for (const t of r.text ?? []) words.set(String(t).replace(/^"|"$/g, '').toLowerCase(), mm); }
-  return words;
-}
-
-/**
- * WHAT A TURN REFERS TO in the open state (host stand-in until readRequest marks `refers=present` with the things of the live world, questions.md Q42 [LIB]): one mechanism over
- * the things of `stateWorld` and the dialogue, the same for every world.
- *   names  a run of unread words that is a thing's name ("work done", "results"; `_` and space alike) - the words are then read;
- *   kinds  a kind said (a wanted kind, the target) that the state holds: all of them when said in the plural, the one there is, else the salient (last made or named) ones;
- *   whole  the world's whole said ("the drawing", "the diagram"): every thing;
- *   it     an anaphor read as the last request (refers=last): the things of the last act on things, else the salient things.
- * Returns { ids, how, kinds, consumed: [words read as names] } or null when the turn names nothing that is there.
- */
-export function referTo(q, state, { lastIds = [], wholes = new Set(), words = null, language = null } = {}) {
-  const things = state?.things ?? [];
-  if (!things.length) return null;
-  // a pronoun of the language world that refers to all ("everything", "all of them": w.lang.en.pron refers=all) with no kind said: every thing
-  const all = new Set(ofType(language, 'w.lang.en.pron').filter((r) => one(r, 'refers') === 'all').flatMap((r) => (r.text ?? []).map((t) => String(t).replace(/^"|"$/g, '').toLowerCase())));
-  const said0 = (q.request?.constraints ?? []).some((c) => c.on === 'kind' && c.want === 'yes' && c.value);
-  const low = ` ${String(q.english ?? '').toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, ' ')} `;
-  if (!said0 && !q.target && [...all].some((t) => low.includes(` ${t} `))) return { ids: things.map((t) => t.id), how: 'all', kinds: [...new Set(things.map((t) => t.kind))], consumed: [] };
-  const norm = (x) => String(x ?? '').toLowerCase().replace(/[_\s]+/g, ' ').trim();
-  const toks = [...(words ?? (q.english ?? '').toLowerCase().match(/[\p{L}\p{N}_]+/gu) ?? [])];
-  const unread = new Set(q.unread ?? []);
-  const byName = new Map(things.filter((t) => t.name).map((t) => [norm(t.name), t]));
-  const named = [], consumed = [];
-  for (let i = 0; i < toks.length; i++) {
-    budget.tick('door.names');
-    for (let n = Math.min(3, toks.length - i); n >= 1; n--) {
-      const span = toks.slice(i, i + n);
-      const t = byName.get(norm(span.join(' ')));
-      if (t && span.every((w) => unread.has(w) || !STOP.has(w))) { if (!named.includes(t)) named.push(t); consumed.push(...span); i += n - 1; break; }
-    }
-  }
-  if (named.length) return { ids: named.map((t) => t.id), how: 'name', kinds: [...new Set(named.map((t) => t.kind))], consumed };
-  const said1 = (q.request?.constraints ?? []).some((c) => c.on === 'kind' && c.want === 'yes' && c.value);
-  if (q.request?.refers === 'last' && !said1) {   // "it", "them": the things of the last act on things, else the salient ones (the target the reader took from the dialogue is not said)
-    const last = things.filter((t) => lastIds.includes(t.id));
-    const pick = last.length ? last : things.filter((t) => t.salient);
-    if (pick.length) return { ids: pick.map((t) => t.id), how: 'it', kinds: [...new Set(pick.map((t) => t.kind))], consumed: [] };
-  }
-  const target = q.target ?? null;
-  if (target && wholes.has(target) && !things.some((t) => t.kind === target)) return { ids: things.map((t) => t.id), how: 'whole', kinds: [...new Set(things.map((t) => t.kind))], consumed };
-  const said = (q.request?.constraints ?? []).filter((c) => c.on === 'kind' && c.want === 'yes' && c.value);
-  const kinds = [...new Set([...said.map((c) => c.value), ...(target && !said.length ? [target] : [])])];
-  const hit = kinds.flatMap((k) => things.filter((t) => t.kind === k));
-  if (hit.length) {
-    const plural = said.some((c) => c.plural || c.number !== undefined) || [...all].some((t) => low.includes(` ${t} `));   // "all the fish": the pronoun of all with a kind
-    if (plural || hit.length === 1) return { ids: hit.map((t) => t.id), how: 'kind', kinds, consumed };
-    const sal = hit.filter((t) => lastIds.includes(t.id) || t.salient);
-    return { ids: (sal.length && sal.length < hit.length ? sal : hit).map((t) => t.id), how: sal.length && sal.length < hit.length ? 'kind+salient' : 'kind', kinds, consumed, several: !(sal.length && sal.length < hit.length) };
-  }
-  if (q.request?.refers === 'last') {
-    const last = things.filter((t) => lastIds.includes(t.id));
-    const pick = last.length ? last : things.filter((t) => t.salient);
-    if (pick.length) return { ids: pick.map((t) => t.id), how: 'it', kinds: [...new Set(pick.map((t) => t.kind))], consumed };
-  }
-  return null;
-}
-
 /**
  * The clauses of a turn as typed, cut at the joiners of the language world (w.lang.en.closed class=conjunction from w.lang.en.joiner, and the comma), each with whether a word of
  * it is unread: what the honest reply names as understood and not understood ("I understood "clear everything", but not "zork the plimp""). Never a host list of English words.
@@ -240,39 +174,10 @@ export function boundTools(lib, live, language) {
   return live._psys2Tools;
 }
 
-/**
- * The target said as a kind is one of the kinds said, and a kind said beside others with no number is one. The reader takes "tree" in "draw two dogs and a tree" as the target
- * with no kind constraint (the library's coordinated kinds would give the tree the dogs' count), gives an act on things none ("change the house to blue": the values after the
- * kind's word are the new values, those before it choose the things), and the library's coordinated kinds start only from a count said ("a sky and a sun" made one sky). The
- * request gets the target's kind constraint (with the position of its word) and, for things said together, a count of one for each kind said with none. Host stand-in until
- * readRequest and planRequest do it (questions.md Q45 (1), (2) [LIB]); it plans nothing.
- */
-export function withTargetKind(req) {
-  if (!req?.target || req.refers !== 'kind') return req;
-  let cs = [...(req.constraints ?? [])];
-  const wanted = () => cs.filter((c) => c.on === 'kind' && c.want === 'yes' && c.value);
-  if (!wanted().some((c) => c.value === req.target) && (req.act !== 'make' || wanted().length)) {
-    const word = String(req.target).split('_')[0].toLowerCase();
-    const at = String(req.text ?? '').toLowerCase().split(/\s+/).findIndex((t) => t.replace(/[^\p{L}]/gu, '').startsWith(word));
-    cs.push({ on: 'kind', want: 'yes', value: req.target, words: String(req.target).replace(/_/g, ' '), origin: 'said', ...(at >= 0 ? { at } : {}) });
-  }
-  const kinds = [...new Set(wanted().map((c) => c.value))];
-  if (req.act === 'make' && kinds.length > 1) for (const k of kinds) if (!cs.some((c) => (c.on === 'count' && c.of === k) || (c.on === 'kind' && c.value === k && c.plural))) cs.push({ on: 'count', want: 'yes', number: 1, of: k, words: String(k).replace(/_/g, ' '), origin: 'said' });
-  return cs.length === (req.constraints ?? []).length ? req : { ...req, constraints: cs };
-}
-
 /** The world operation a live world declares for an act (`psys2.op world= act= op=` of request.sop): the one executor path of the door's acts that are not plans (undo, redo). */
 export function actOperation(live, act, of = null) {
   const r = ofType(live, 'psys2.op').find((x) => one(x, 'act') === act && (of ? one(x, 'of') === of : !one(x, 'of')));
   return r ? one(r, 'op') : null;
-}
-
-/** "in the diagram" on the Diagram: a place that names the open world itself (its std.schema.world name, or a word for it) is where everything of it goes, not a place in it: dropped. */
-export function withoutSelfPlace(req, live) {
-  const name = one(ofType(live, 'std.schema.world')[0], 'name');
-  if (!name || !req?.constraints?.length) return req;
-  req.constraints = req.constraints.filter((c) => !(c.on === 'place' && c.want !== 'no' && String(c.value ?? '').toLowerCase() === name.toLowerCase()));
-  return req;
 }
 
 /** The parent of each declared type of a live world (core.type extends=), read from the world's facts. */
@@ -314,39 +219,6 @@ export function saysAnything(english, language) {
   return any.some((t) => low.includes(` ${t} `));
 }
 
-/**
- * TOOL BINDING (spec 28 section 12; reviewer general-mechanisms item 3): the rows `psys2.tool world= act= op= when= arg= effect= reply=` of a live world, as data. A row binds an
- * act to one operation of the world (a tool with no words); `arg="<tool argument>:<role path>"` takes an argument from the roles of the request (`:=<value>` a constant);
- * `when="<role path>"` (present) or `when="<role path>=<value>"` are its preconditions; `reply` names the reply fact the host says it with (`{<role path>}` filled from the roles).
- * Host stand-in until the library publishes the binding and runPlan carries it out (questions.md Q42 (3), (14)).
- */
-const unq = (x) => String(x ?? '').replace(/^"|"$/g, '');
-export function toolBindings(live, act) {
-  return ofType(live, 'psys2.tool').filter((r) => one(r, 'act') === act).map((r) => ({
-    op: one(r, 'op'), when: (r.when ?? []).map(unq), reply: unq(r.reply?.[0] ?? ''), effect: unq(r.effect?.[0] ?? ''),
-    args: (r.arg ?? []).map(unq).map((a) => { const k = a.indexOf(':'); return [a.slice(0, k), a.slice(k + 1)]; }),
-  }));
-}
-/** A role of the request by its path ("place.value", "things"), or the constant of a `=value` path. */
-export function roleAt(roles, path) {
-  if (String(path).startsWith('=')) return String(path).slice(1);
-  let v = roles;
-  for (const k of String(path).split('.')) { if (v == null) return undefined; v = v[k]; }
-  return v;
-}
-const present = (v) => v != null && v !== '' && !(Array.isArray(v) && !v.length);
-/** The first binding of an act whose preconditions hold for the roles, with its arguments and its reply name; null when none holds. */
-export function bindingFor(live, act, roles) {
-  for (const b of toolBindings(live, act)) {
-    budget.tick('door.binding');
-    const holds = b.when.every((w) => { const k = w.indexOf('='); return k < 0 ? present(roleAt(roles, w)) : String(roleAt(roles, w.slice(0, k)) ?? '') === w.slice(k + 1); });
-    if (!holds) continue;
-    const args = Object.fromEntries(b.args.map(([name, path]) => [name, roleAt(roles, path)]).filter(([, v]) => v !== undefined && v !== null));
-    const reply = b.reply.replace(/\{([\w.]+)\}/g, (_, p) => String(roleAt(roles, p) ?? ''));
-    return { ...b, args, reply: reply.replace(/\.+$/, '') };
-  }
-  return null;
-}
 /**
  * A sentence of the language world's reply facts (`w.lang.en.reply name= role= text=`, through the library's replyFrom), trying the name and then the names it extends
  * ("done.change.size.up", "done.change.size", "done.change"); null when there is none (the caller then has nothing to say from data, and says so).

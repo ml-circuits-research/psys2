@@ -119,8 +119,9 @@ test('$new and mention(...) of the gold become the shape made last and a descrip
 // ---- the engine is loaded lazily, the tab exists ---------------------------------------------------------------------------------------
 test('the engine is not imported statically by ops.mjs and is not preloaded by the page', () => {
   const src = readFileSync(new URL('../worlds/diagram.sketch/engine.mjs', import.meta.url), 'utf8');
-  assert.ok(!/^import .*engine\//m.test(src), 'ops.mjs must import the engine with import() only');
-  assert.match(src, /import\('\.\/engine\/logic\.mjs'\)/);
+  const core = readFileSync(new URL('../worlds/diagram.sketch/core.mjs', import.meta.url), 'utf8');   // the engine bound to a state (shared by the tool primitives and the word operations)
+  for (const f of [src, core]) assert.ok(!/^import .*engine\//m.test(f), 'ops.mjs must import the engine with import() only');
+  assert.match(core, /import\('\.\/engine\/logic\.mjs'\)/);
   assert.match(src, /export const prepare = /);
   const html = readFileSync(new URL('../docs/webchat/index.html', import.meta.url), 'utf8');
   assert.ok(!/engine\/logic/.test(html.replace(/<script type="importmap">.*<\/script>/, "").replace(/<script>window\.__psys2Mod.*<\/script>/, "")), "the page must not preload the diagram engine");   // the import map and version table name it (URL versioning), a preload would not

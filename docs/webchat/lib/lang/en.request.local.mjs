@@ -45,6 +45,11 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.place_none_n w.lang.en.reply name=done.none count=other role=thing role=number text="The {number} {thing:num=pl} are already there."
 @w.lang.en.reply.local.place_none_name w.lang.en.reply name=done.none role=name text="{name} is already there."
 @w.lang.en.reply.local.added_band w.lang.en.reply name=done.added.band role=band text="There was no {band}, so I added it to the ground."
+# done.change with its key (sopworld 0.153.0: a reply fact with a key is said by <name>.<key>); the library's proposal in examples/tool-app.mjs PROPOSED_EN, local until published (questions.md Q47 [KNOW])
+@w.lang.en.reply.local.change_place_1 w.lang.en.reply name=done.change.place count=one role=thing role=value text="I moved the {thing} to the {value}."
+@w.lang.en.reply.local.change_place_n w.lang.en.reply name=done.change.place count=other role=thing role=number role=value text="I moved {number} {thing:num=pl} to the {value}."
+@w.lang.en.reply.local.change_size_1 w.lang.en.reply name=done.change.size count=one role=thing role=value text="The {thing} is {value} now."
+@w.lang.en.reply.local.change_size_n w.lang.en.reply name=done.change.size count=other role=thing role=number role=value text="I made {number} {thing:num=pl} {value}."
 @w.lang.en.reply.local.change_name w.lang.en.reply name=done.change act=change role=name role=value text="{name} is {value} now."
 @w.lang.en.reply.local.size_up_1 w.lang.en.reply name=done.change.size.up count=one act=change role=thing text="The {thing} is bigger now."
 @w.lang.en.reply.local.size_up_n w.lang.en.reply name=done.change.size.up count=other act=change role=thing role=number text="The {number} {thing:num=pl} are bigger now."
@@ -65,7 +70,7 @@ export const REQUEST_LOCAL = `
 # The questions the door answers by saying facts of the live world (sopworld 0.152.1 askWorld, WORLD_QUESTIONS) and their replies: the library's proposal for w.lang.en
 # (soplang-words-lib examples/tool-app.mjs PROPOSED_EN, its questions.md Q87 1), local until the catalog publishes them ([KNOW]).
 @w.lang.en.cue.local.ask_capabilities w.lang.en.cue name=ask.capabilities on=reaction value=capabilities lead="what can you do" lead="what can i do here" lead="what can i do" lead="what do you do" lead="help" takes=none priority=4 example="what can you do here?"
-@w.lang.en.cue.local.ask_state w.lang.en.cue name=ask.state on=reaction value=state lead="what is" lead="what's" lead="what is there" lead="what do you have" takes=none priority=3 example="what is in the picture?"
+@w.lang.en.cue.local.ask_state w.lang.en.cue name=ask.state on=reaction value=state lead="how many" lead="what is" lead="what's" lead="what is there" lead="what do you have" takes=none priority=3 example="what is in the picture?"
 @w.lang.en.reply.local.can_one w.lang.en.reply name=can count=one role=act role=kinds text="I can {act}: {kinds}."
 @w.lang.en.reply.local.can_say_one w.lang.en.reply name=can.say count=one role=act role=keys text="When I {act}, you can say the {keys}."
 @w.lang.en.reply.local.state_count_one w.lang.en.reply name=state.count count=one role=kind role=number text="There is one {kind}."

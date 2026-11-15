@@ -9,7 +9,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 
 // The ratchet: the number of cases of each property that held at the last landing (baseline 2026-11-15 before spec 28: see worker-log.md).
-const MIN = { P1: 55, P2: 17, P3: 5, P4: 10, P5: 7, P6: 7, P7: 3, P8: 7, P9: 12, P10: 1, P11: 0, P12: 12 };   // 2026-11-15 the door (no fallback on declared tabs): 136/160 at landing; P10 and P11 wait for the open world's things as facts of the live request World (worker-log)
+const MIN = { P1: 55, P2: 16, P3: 5, P4: 10, P5: 7, P6: 7, P7: 3, P8: 7, P9: 12, P10: 1, P11: 0, P12: 12 };   // 2026-11-15 the door (no fallback on declared tabs): 136/160 at landing; P10 and P11 wait for the open world's things as facts of the live request World (worker-log)   // slice 4 (Diagram on the binding): P2 16 ("with arrows" is a link kind the planner makes as items: needs it read as the whole's links, Q46 [LIB]; won by the deleted JS planner before)
 
 const loader = createFsLoader(DEFAULT_ROOT);
 const engines = {

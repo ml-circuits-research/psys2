@@ -61,7 +61,7 @@ test('RP5b: "diagramă" is the diagram, "în diagramă" names the Diagram world,
     const { r, s } = await run(tab, ['desenează trei cercuri în diagramă']);
     assert.equal(s.state()['ui.shell'].activeTab, 'diagram', tab);
     assert.equal(s.state()['diagram.sketch'].shapes.length, 3, tab);
-    assert.equal(r.text, 'Am desenat 3 cercuri.', tab);
+    assert.match(r.text, /^Am (?:adăugat|desenat) 3 cercuri\./, tab);   // the reply of a plan run through the binding is the view's diff in reply facts (spec 28 section 14); from another tab the old readers still draw (legacy)
   }
 });
 
