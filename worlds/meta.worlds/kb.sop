@@ -53,15 +53,14 @@
     claim=bind claim=break claim=bunch claim=called claim=cancel claim=carry claim=categorize claim=changed
     claim=choose claim=classify claim=clip claim=close claim=cluster claim=collect claim=combine claim=construct
     claim=correct claim=couple claim=darken claim=decrease claim=describe claim=destroy claim=disassemble claim=dismantle
-    claim=divide claim=doe claim=done claim=go claim=like claim=shaped claim=take claim=what
-    act=shaped act=mar act=rule act=front act=active act=evenly act=labeled act=path
-    act=along act=key act=reached act=let' act=default act=blorp act=cluster act=directly
-    act=downstream act=drum act=exec act=member act=reachable act=siz act=parent act=arranged
-    act=loosen act=normalize act=orient act=rid
-    actshared=like actshared=describe actshared=kid actshared=bind actshared=couple actshared=tape actshared=fasten actshared=glue
-    actshared=nail actshared=relate actshared=pin actshared=user actshared=clip actshared=redraw actshared=bunch actshared=categorize
-    actshared=disassemble actshared=dismantle actshared=lump actshared=merge actshared=pair actshared=slice actshared=uncouple actshared=unfasten
-    actshared=untie
+    claim=divide claim=doe claim=done claim=dye claim=edit claim=go claim=take claim=what
+    act=mar act=rule act=front act=active act=evenly act=labeled act=path act=along
+    act=key act=reached act=let' act=default act=blorp act=cluster act=directly act=downstream
+    act=drum act=exec act=member act=reachable act=siz act=parent act=arranged act=loosen
+    act=normalize act=orient act=rid
+    actshared=describe actshared=kid actshared=bind actshared=couple actshared=tape actshared=fasten actshared=glue actshared=nail
+    actshared=relate actshared=pin actshared=user actshared=clip actshared=redraw actshared=bunch actshared=categorize actshared=disassemble
+    actshared=dismantle actshared=lump actshared=merge actshared=pair actshared=slice actshared=uncouple actshared=unfasten actshared=untie
     thing=circle thing=square thing=rectangle thing=triangle thing=diamond thing=ellipse thing=ellip thing=oval
     thing=hexagon thing=star thing=box thing=node thing=arrow thing=connection thing=link thing=edge
     thing=text thing=label thing=caption thing=everything thing=red thing=yellow thing=gold thing=lime
@@ -69,8 +68,8 @@
     thing=pink thing=brown thing=gray thing=black thing=white thing=newest thing=new thing=last
     thing=latest thing=oldest thing=first thing=earliest
     thingshared=shape thingshared=dot thingshared=note thingshared=orange
-    frame=which_shape frame=is_done frame=is_start frame=which_rules frame=which_shapes frame=is_connected frame=what_rules frame=what_shape
-    frame=which_circle frame=are_start
+    frame=which_shape frame=is_done frame=is_start frame=which_rules frame=which_shapes frame=is_connected frame=what_rules frame=which_circle
+    frame=are_start frame=does_sensor
 
 @card.docs.editor meta.worlds.card
     core.source="generated:meta.worlds/cards"
@@ -219,7 +218,7 @@
     act=bar act=tone act=instrument act=octave act=letter act=tempo act=transpose act=frequency
     act=relative act=volume act=bpm act=playing act=semitone act=spell act=hear act=notation
     act=bell act=flute act=hz act=looping act=spelled act=score act=beat act=hit
-    act=accidental act=high act=loud act=organ act=signature act=form act=wrote act=freq
+    act=accidental act=form act=high act=loud act=organ act=signature act=wrote act=freq
     act=jingle act=louder act=match act=quieter act=replay act=sing act=staff act=stave
     act=strum
     actshared=stop actshared=two actshared=apple actshared=legend actshared=plum actshared=stacking actshared=what' actshared=kiwis

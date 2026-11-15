@@ -40,7 +40,7 @@ import { Dialogue } from './dialogue.mjs';
 import { turnSteps } from './steps.mjs';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs';
 import { proposeByTypes } from './typed-reader.mjs';
 import { withVariants } from './variants.mjs';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs';
@@ -157,10 +157,14 @@ export async function translateParts(parts, translator, lang, userWords = null) 
     if (!fb || !translator.candidatesViaMT || fbCalls >= MAX_FALLBACK_CALLS || guard.soft() || dead) return null;
     fbCalls++;
     try {
-      const cs = await guard.abortable(translator.candidatesViaMT(text, { from: 'en', to: lang }), 'translate');
+      // the register (owner export 2026-11-14 22:43, src/translate/register.mjs): our English elides "I" ("Drew a circle."), which a machine translator reads as he / she: the subject is given
+      // before the call; the Romanian that comes back is put in one register (the informal singular)
+      const cs = await guard.abortable(translator.candidatesViaMT(withSubject(text), { from: 'en', to: lang }), 'translate');
       const ok = (cs ?? []).find((c) => !c.rejected && c.text && !(typeof translator.leftovers === 'function' && translator.leftovers(c.text, lang).length));
       if (!ok) dead = true;
-      return ok ? ok.translation ?? { text: ok.text } : null;
+      if (!ok) return null;
+      const tr = ok.translation ?? { text: ok.text };
+      return { ...tr, text: polishReply(textOf(tr) ?? ok.text, lang) };
     } catch (e) { if (e instanceof TurnAborted) throw e; dead = true; return null; }
   };
   const viaRules = async (text) => { try { return await guard.abortable(prim.translate(text, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; return null; } };
@@ -236,6 +240,7 @@ const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 /** Time budget of the leniency stage (spelling variants and partial windows) of one message, in ms; past it the best reading so far stands (turn guard, spec 06). */
 import { LIMITS } from './time-limits.mjs';
 import { languageCommand } from '../translate/language-command.mjs';
+import { withSubject, polishReply } from '../translate/register.mjs';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1584,7 +1589,7 @@ export class DialogSession {
     }
     for (const seg of segments) {
       // COMPLETENESS (spec 16 section 12): a reading that leaves content words unread is not final. No voice completed it: a destructive one is never executed, and with PSYS2_COMPLETE=ask none is; the person is asked
-      if (isIncomplete(seg) && (completeMode() === 'ask' || isDestructive(seg))) {
+      if (isIncomplete(seg) && (completeMode() === 'ask' || isDestructive(seg) || seg.match?.catchAll)) {   // a catch-all reading (raw leftover arguments only) is a last resort: half-read, it is not executed
         const unread = [...new Set(seg.match.unread)];
         lines.push([T('I understood only part of '), { text: `"${seg.text}"`, translate: false, quote: true }, T(': I did not use '), ...unread.flatMap((w, k) => [...(k ? [T(' and ')] : []), { text: `"${w}"`, translate: false, quote: true }]), T(', so I did not do it. What did you mean?')]);
         statuses.push('missing');
@@ -1773,6 +1778,7 @@ export class DialogSession {
     const state = {};
     for (const [k, v] of Object.entries(this.isession.state)) if (JSON.stringify(v) !== stateBefore[k] && !(stateBefore[k] === undefined && JSON.stringify(v) === '{}')) state[k] = structuredClone(v);   // a world only looked at (its empty state created on access) is not a changed world
     this._astraTurn({ sid, english, meta, pre, pend, segments, state, stateBefore, tabBefore });
+    try { this._nextPrefetch = prefetchNext(this, Object.keys(state)); } catch { this._nextPrefetch = null; }   // spec 25: what the next chips read, fetched after the reply (never awaited by a turn)
     const effects = this.isession.effects;
     this.isession.effects = [];
     const warnings = this.isession.rs?.newWarnings() ?? [];   // what the library warned about (an ambiguous key, an attribute nothing reads ...): in the debug trace and the phrase log, never in the reply (spec 15, "Namespaces")

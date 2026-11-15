@@ -61,6 +61,7 @@ function viewWords(set) {
 export async function describeWorld(w, dir, { catalog, set }) {
   const lexWords = (id) => set.list().flatMap((x) => x.lexicons ?? []).filter((l) => l.id === id).flatMap((l) => [...l.words, ...(l.plurals ?? []).flatMap((p) => String(p).split(':'))]);
   const kinds = [], known = new Set(), args = {}, knowledge = {}, openSlots = [];
+  let rawArgs = false;   // a world with its own reader: the free text of its generated patterns is RAW (read when the world knows its words or its reader reads the whole clause)
   const joins = new Map();
   if (await exists(path.join(dir, 'typed.sop'))) {
     for (const x of parse(await readFile(path.join(dir, 'typed.sop'), 'utf8'), { source: 'typed.sop' }).wires.filter((y) => y.type === 'core.typed.join')) joins.set(val(x, 'slot'), { type: val(x, 'type'), by: val(x, 'by') ?? 'name', open: val(x, 'open') === 'yes' });
@@ -95,7 +96,8 @@ export async function describeWorld(w, dir, { catalog, set }) {
       for (const x of [a.name, ...a.values, ...(a.more ?? []), ...(a.less ?? [])]) for (const t of toks(x)) known.add(t);
       if (a.type === 'colour') for (const x of colourLexiconWords()) for (const t of toks(x)) known.add(t);
     }
-    if (!schema.flags?.reader) {   // a world with its own reader (flag `reader`: the diagram) reads whole sentences itself: its generated patterns are shortcuts, their free text is not typed
+    if (schema.flags?.reader) rawArgs = true;
+    if (!schema.flags?.reader) {   // a world with its own reader (flag `reader`: the diagram) reads whole sentences itself: its generated patterns are shortcuts, their free text is raw (rawArgs), not typed by kind
       args.thing = open ? 'open' : 'phrase';
       if (!open) args.place = 'place';
       args['send.place'] = 'view';   // the place of the act send is another view (a tab or a world: "send table 1 to the talk"), not a place of this world
@@ -105,7 +107,7 @@ export async function describeWorld(w, dir, { catalog, set }) {
   // the words of the world's own lexicons (a lexicon `lex.<world>.*`)
   for (const l of w.lexicons ?? []) if (String(l.id).startsWith(`lex.${w.id}.`) && !l.open) for (const x of [...l.words, ...(l.plurals ?? []).flatMap((p) => String(p).split(':'))]) for (const t of toks(x)) known.add(t);
   const views = args['send.place'] ? viewWords(set) : [];
-  return { description: { kinds, words: [] }, known: [...known].sort(), args, openSlots, knowledge, ...(views.length ? { views } : {}) };
+  return { description: { kinds, words: [] }, known: [...known].sort(), args, ...(rawArgs ? { rawArgs } : {}), openSlots, knowledge, ...(views.length ? { views } : {}) };
 }
 
 export async function build({ catalog = path.join(REPO, 'tests/fixtures/catalog') } = {}) {

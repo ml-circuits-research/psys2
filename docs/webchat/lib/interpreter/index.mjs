@@ -17,13 +17,13 @@ import { guard, TurnAborted } from '../formalizer/guard.mjs?v=82a55329d9';
 import { budget, isBudgetExceeded } from '../dialog/budget.mjs?v=00bce6e369';
 import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=c57881f705';
 import { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
-import { Renderer, fallbackText, listText } from './render.mjs?v=19a4bd4d36';
+import { Renderer, fallbackText, listText } from './render.mjs?v=129a52a0f1';
 import { FormSession } from '../formalizer/rules/session.mjs?v=b56c914a5e';
 import { makeLang } from './lang.mjs?v=404d50e9dd';
-import { withLearned } from '../knowledge/learned.mjs?v=bb45fdb2e2';
+import { withLearned } from '../knowledge/learned.mjs?v=73e66c98fc';
 
 export { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
-export { Renderer } from './render.mjs?v=19a4bd4d36';
+export { Renderer } from './render.mjs?v=129a52a0f1';
 
 const STATUSES = new Set(['supported', 'missing', 'conflicting', 'ambiguous', 'unsupported', 'budget', 'error']);
 /**
@@ -331,7 +331,9 @@ export class Interpreter {
         if (op.semantics !== 'action') throw new Error(`operation ${op.id} is not an action and may not retract wires`);
         return mem.retract(String(wireId).replace(/^\$/, ''), reason);
       },
-      state: (session.state[op.worldId] ??= {}),
+      // a read-only world hook (spec 11: the discourse's referent lookup asks every world) sees the world's state but never creates it: a world nobody addressed keeps no state
+      // (owner export 2026-11-14 22:43: a drawing turn "changed" the seating plan and the timeline). Operations, queries included, keep the world's own state object.
+      state: limit?.detached ? (session.state[op.worldId] ?? {}) : (session.state[op.worldId] ??= {}),
       /** The dialogue module's focus for this world as words ({ thing, place }) or null (M1; the acts executor resolves it when its own focus is empty). */
       dialogueFocus: typeof session.dialogueFocus === 'function' ? () => session.dialogueFocus(op.worldId) : undefined,
       /** The session as facts (session.dialogue `facts()`: things with their world, topics, games, places) or null: what a view takes when the user asks for "the discussion". */
@@ -413,7 +415,7 @@ export class Interpreter {
       if (session.rs && w.undoAction && /^(?:undo(?: that)?|scratch that)[.!]*$/i.test(String(text).trim())) continue;   // matrix mode: the library takes the last step back (spec 15), not the world's own history
       const op = { id: `op.${w.id}.interceptInput`, worldId: w.id, semantics: 'action' };
       const st = { depth: 0, visited: 0, ops: [] };
-      const ctx = this._makeCtx(session, op, st, { deadline: performance.now() + this.opTimeoutMs * 5 });
+      const ctx = this._makeCtx(session, op, st, { deadline: performance.now() + this.opTimeoutMs * 5, detached: true });
       let res;
       try { res = w.ops.interceptInput(ctx, text); } catch (e) { res = { handled: true, reply: `Something went wrong while I handled that (${e?.message ?? e}).` }; }
       if (res?.handled) {
@@ -433,7 +435,7 @@ export class Interpreter {
     if (typeof w?.ops?.onObservation !== 'function') return null;
     const op = { id: `op.${w.id}.onObservation`, worldId: w.id, semantics: 'action' };
     const st = { depth: 0, visited: 0, ops: [] };
-    const ctx = this._makeCtx(session, op, st, { deadline: performance.now() + this.opTimeoutMs * 5 });
+    const ctx = this._makeCtx(session, op, st, { deadline: performance.now() + this.opTimeoutMs * 5, detached: true });
     try {
       const out = w.ops.onObservation(ctx, obs) ?? null;
       session.rs?.adoptState(session);   // a world whose state the library takes over (`adopt`) sees what the observation changed (the engine's move)
@@ -452,7 +454,7 @@ export class Interpreter {
     if (typeof fn !== 'function') return undefined;
     const op = { id: `op.${w.id}.${name}`, worldId: w.id, semantics: 'query' };
     const st = { depth: 0, visited: 0, ops: [] };
-    const ctx = this._makeCtx(session, op, st, { deadline: performance.now() + this.opTimeoutMs * 5 });
+    const ctx = this._makeCtx(session, op, st, { deadline: performance.now() + this.opTimeoutMs * 5, detached: true });
     if (state) ctx.state = structuredClone(state);
     try { return fn(ctx, args); } catch { return undefined; }
   }

@@ -5,24 +5,24 @@
   "matrix": {
    "turns": 579,
    "judged": 181,
-   "right": 132,
+   "right": 134,
    "partly": 13,
-   "wrong": 36,
+   "wrong": 34,
    "open": 17,
    "changed": 49,
    "unjudged": 332,
    "outcome": {
-    "executed": 328,
+    "executed": 327,
     "refused": 5,
-    "asked": 22,
-    "not_understood": 158,
-    "other_world": 66
+    "asked": 25,
+    "not_understood": 161,
+    "other_world": 61
    },
    "by_source": {
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 44
+     "right": 46
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -85,24 +85,24 @@
   "ops": {
    "turns": 579,
    "judged": 181,
-   "right": 132,
+   "right": 134,
    "partly": 13,
-   "wrong": 36,
+   "wrong": 34,
    "open": 17,
    "changed": 49,
    "unjudged": 332,
    "outcome": {
-    "executed": 328,
+    "executed": 327,
     "refused": 6,
-    "asked": 23,
-    "not_understood": 159,
-    "other_world": 63
+    "asked": 25,
+    "not_understood": 162,
+    "other_world": 59
    },
    "by_source": {
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 44
+     "right": 46
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -163,14 +163,14 @@
    }
   }
  },
- "failing_matrix": 246,
- "failing_ops": 246,
+ "failing_matrix": 243,
+ "failing_ops": 243,
  "ops_only": 0,
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 70,
-   "both_reasoners": 70,
+   "count": 69,
+   "both_reasoners": 69,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -196,8 +196,8 @@
   },
   {
    "cause": "translation residue / wrong sense / source typo",
-   "count": 31,
-   "both_reasoners": 31,
+   "count": 32,
+   "both_reasoners": 32,
    "examples": [
     {
      "text": "she knows what their grandma could trade charcoal Chicago",
@@ -222,36 +222,9 @@
    ]
   },
   {
-   "cause": "a world other than the open tab took the turn",
-   "count": 29,
-   "both_reasoners": 29,
-   "examples": [
-    {
-     "text": "a women",
-     "tab": "robot",
-     "happened": "I drew 3 women. [outcome: other_world]"
-    },
-    {
-     "text": "draw a sun and a house",
-     "tab": "tictactoe",
-     "happened": "I drew a yellow sun and a yellow house. [outcome: other_world]"
-    },
-    {
-     "text": "Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?",
-     "tab": "robot",
-     "happened": "OK, Tom has 15 apples. OK, Tom gave Ana 12 apples. Tom has 3 apples. [outcome: other_world]"
-    },
-    {
-     "text": "Tom has 5 apples. He gives 8 to Ana. How many apples does Tom have?",
-     "tab": "robot",
-     "happened": "OK, Tom has 5 apples. That does not add up. Tom only had 5 apples, so Tom cannot give away 8. Tom has 5 apples. [outcome: other_world]"
-    }
-   ]
-  },
-  {
    "cause": "sentence not read by any world (no cause key)",
-   "count": 26,
-   "both_reasoners": 26,
+   "count": 28,
+   "both_reasoners": 28,
    "examples": [
     {
      "text": "now be a human",
@@ -272,6 +245,33 @@
      "text": "start x and 0",
      "tab": "tictactoe",
      "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
+    }
+   ]
+  },
+  {
+   "cause": "a world other than the open tab took the turn",
+   "count": 26,
+   "both_reasoners": 26,
+   "examples": [
+    {
+     "text": "a women",
+     "tab": "robot",
+     "happened": "I drew 3 women. [outcome: other_world]"
+    },
+    {
+     "text": "draw a sun and a house",
+     "tab": "tictactoe",
+     "happened": "I drew a yellow sun and a yellow house. [outcome: other_world]"
+    },
+    {
+     "text": "Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?",
+     "tab": "robot",
+     "happened": "OK, Tom has 15 apples. OK, Tom gave Ana 12 apples. Tom has 3 apples. [outcome: other_world]"
+    },
+    {
+     "text": "Tom has 5 apples. He gives 8 to Ana. How many apples does Tom have?",
+     "tab": "robot",
+     "happened": "OK, Tom has 5 apples. That does not add up. Tom only had 5 apples, so Tom cannot give away 8. Tom has 5 apples. [outcome: other_world]"
     }
    ]
   },
@@ -342,7 +342,7 @@
     {
      "text": "create a diagram",
      "tab": "diagram",
-     "happened": "I drew a random tree diagram with nine shapes. It is about Canada. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:shapes.l"
+     "happened": "I drew a random mind map diagram with nine shapes. It is about cat. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:shapes."
     },
     {
      "text": "add a box",
@@ -380,33 +380,6 @@
      "text": "mai in dreapta",
      "tab": "draw",
      "happened": "I did not understand \"mai in dreapta\". For example: \"Add a house.\" or \"What is the colour of house?\" [outcome: not_understood; open]"
-    }
-   ]
-  },
-  {
-   "cause": "acted on a partly understood sentence",
-   "count": 6,
-   "both_reasoners": 6,
-   "examples": [
-    {
-     "text": "fă un layout mai frumos",
-     "tab": "diagram",
-     "happened": "Drew a circle. [outcome: executed; wrong; state:shapes.length=$+0 reply_not:Drew]"
-    },
-    {
-     "text": "make a better layout",
-     "tab": "diagram",
-     "happened": "Drew a circle. [outcome: executed; wrong; state:shapes.length=$+0 reply_not:Drew]"
-    },
-    {
-     "text": "paint three new nodes",
-     "tab": "diagram",
-     "happened": "What should change about circle 1, square 1, square 2, square 3, square 4, circle 2 and circle 3? Try a color, size, shape, outline or label. [outcome: executed"
-    },
-    {
-     "text": "a person",
-     "tab": "robot",
-     "happened": "I drew a blue person. [outcome: other_world]"
     }
    ]
   },
@@ -461,6 +434,33 @@
      "text": "what is on you",
      "tab": "robot",
      "happened": "There is no you here. [outcome: executed; partly; answer:wear]"
+    }
+   ]
+  },
+  {
+   "cause": "acted on a partly understood sentence",
+   "count": 4,
+   "both_reasoners": 4,
+   "examples": [
+    {
+     "text": "paint three new nodes",
+     "tab": "diagram",
+     "happened": "What should change about circle 1, square 1, square 2, square 3 and square 4? Try a color, size, shape, outline or label. [outcome: executed; wrong; state:shape"
+    },
+    {
+     "text": "a person",
+     "tab": "robot",
+     "happened": "I drew a blue person. [outcome: other_world]"
+    },
+    {
+     "text": "what character is on screen",
+     "tab": "robot",
+     "happened": "I did not understand \"what character is on screen\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
+    },
+    {
+     "text": "make a cartoon",
+     "tab": "robot",
+     "happened": "I did not understand \"make a maroon\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
     }
    ]
   },

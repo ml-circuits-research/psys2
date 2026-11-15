@@ -132,7 +132,10 @@ async function init(m) {
   await worldLoader.init();
   // `?psys2lazy=0` (tests, a comparison with the full set) and a saved language other than English: every world is loaded at start (a Romanian message is read through English candidates that a
   // partial world set can mistake for understood: a session that starts in Romanian must read like the full set, from its first message)
-  const startIds = (m.lazyWorlds === false || m.settings?.lazyWorlds === false || (m.settings?.language && lang.normalize(m.settings.language) !== 'en') ? worldLoader.ids() : [...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] })]).filter((id) => allowed(id));
+  // BOOT COST (owner export 2026-11-14 22:43: "Starting the reasoner" took 6.3 s on a phone in a Romanian session): a saved language other than English no longer builds the engine on every world at
+  // start. It starts on the lazy set like English and the rest loads in the background once the reasoner is up; a Romanian message still waits for every world before it is read (send).
+  const otherLanguage = !!(m.settings?.language && lang.normalize(m.settings.language) !== 'en');
+  const startIds = (m.lazyWorlds === false || m.settings?.lazyWorlds === false ? worldLoader.ids() : [...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] })]).filter((id) => allowed(id));
   await worldLoader.bundles(startIds);
   for (const id of startIds) loadedIds.add(id);
   const bundle = worldLoader.bundleOf(startIds, absModule);
@@ -194,6 +197,7 @@ async function init(m) {
   applySettings(null);
   if (m.restoreState) restoreStates(m.restoreState, m.restoreMeta);
   if (m.prepareModels && dispatcherEnc && settings.formalizer === 'encoder') dispatcherEnc.prepare().catch(() => {});
+  if (otherLanguage) rules.then(() => sleep(0)).then(() => ensureWorlds(worldLoader.ids(), 'language (background)')).catch(() => {});   // after the first paint and the rule compilation, never inside a turn's wait
   return { worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget };
 }
 

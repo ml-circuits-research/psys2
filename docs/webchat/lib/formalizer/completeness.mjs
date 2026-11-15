@@ -4,8 +4,8 @@
  * slot, or a free-text role. The words a pattern's `...` skipped, and the content words of a free-text capture that are words of the readers themselves (question words, the verbs of
  * other acts), are UNREAD; with the typed worlds (spec 16 section 13, the default source) a free-text slot is unread when its world's types do not accept its words. Browser-safe. `PSYS2_COMPLETE=off` turns the consequences off for A/B runs (the measurement is still recorded on the segment).
  */
-import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs?v=c8d5abf8f1';
-import { unreadBy, thingWordsOf } from './typed-world.mjs?v=c8d5abf8f1';
+import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs?v=38440cb2a1';
+import { unreadBy, thingWordsOf } from './typed-world.mjs?v=38440cb2a1';
 
 const word = (t) => (t.kind === 'word' || t.kind === 'number') && !t.filler;
 /** Content words (not function words, not fillers) of a token list. */
@@ -43,6 +43,12 @@ export function annotateUnread(matches, set = null, context = null) {
   const typed = completeSource() === 'typed';
   const typedFor = typed && set?.typedFor ? (id) => set.typedFor(id) : null;
   const thingMemo = new Map(), things = (id) => { if (!thingMemo.has(id)) thingMemo.set(id, thingWordsOf(set, id, context)); return thingMemo.get(id); };   // once per world per sentence
+  const wholeMemo = new Map(), readsWhole = (id, view) => {   // the world's own reader reads the clause whole (hook readsWhole): once per world per sentence
+    // the clause as typed: tokens that touch are joined ("a1" is one name, not "a 1")
+    const spaced = view.map((t, i) => (i && Number.isFinite(t.start) && t.start === view[i - 1].end ? '' : i ? ' ' : '') + String(t.raw ?? '')).join('');
+    if (!wholeMemo.has(id)) { const ex = set?.get?.(id)?.ops?.executor; let r = false; try { r = !!ex?.readsWhole?.({ text: spaced, state: context?.states?.[id] ?? null }); } catch { r = false; } wholeMemo.set(id, r); }
+    return wholeMemo.get(id);
+  };
   const lowerOf = (t) => t.lower ?? String(t.raw).toLowerCase();
   const content = (t) => word(t) && !FUNCTION_WORDS.has(lowerOf(t));
   const info = matches.map((m) => {
@@ -56,7 +62,7 @@ export function annotateUnread(matches, set = null, context = null) {
   for (const x of info) {
     const out = [];
     for (const [a, b] of x.m.skipped ?? []) for (const t of x.view.slice(a, b)) if (content(t)) out.push(lowerOf(t));
-    if (typed) { const skip = [...out]; for (const w of unreadBy(typedFor, x.m, things)) out.push(w); x.m.unread = out; x.m.unreadStrict = [...new Set([...skip, ...unreadBy(typedFor, x.m, things, { strict: true })])]; if (globalThis.process?.env?.DBG_UNREAD) console.error('unread', x.m.pattern.id, JSON.stringify(out)); continue; }   // the typed world decides what its slots accept; unreadStrict: what a world other than the open tab's leaves unread (rest typed too, spec 16 section 14)
+    if (typed) { const skip = [...out]; for (const w of unreadBy(typedFor, x.m, things, { readsWhole })) out.push(w); x.m.unread = out; x.m.unreadStrict = [...new Set([...skip, ...unreadBy(typedFor, x.m, things, { strict: true, readsWhole })])]; if (globalThis.process?.env?.DBG_UNREAD) console.error('unread', x.m.pattern.id, JSON.stringify(out)); continue; }   // the typed world decides what its slots accept; unreadStrict: what a world other than the open tab's leaves unread (rest typed too, spec 16 section 14)
     for (const i of x.loose) {
       const t = x.view[i]; if (!word(t)) continue;
       const w = lowerOf(t);

@@ -20,6 +20,7 @@ import { parse } from '../../soplang/index.mjs';
 import { budget } from '../../dialog/budget.mjs';
 import { readingVariants, dropStyleIn } from './variants.mjs';
 import { annotateUnread } from '../completeness.mjs';
+import { isCatchAll } from '../typed-world.mjs';
 
 export { FormSession } from './session.mjs';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs';
@@ -669,7 +670,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
         }));
         seg.wires = [...entityWires, ...renumbered];
         seg.unparsed = false;
-        seg.match = { patternId: m.pattern.id, worldId: m.pattern.worldId, kind: m.pattern.kind, priority: m.pattern.priority, slots: plainSlots(m.slots), unread: m.unread ?? [], unreadStrict: m.unreadStrict ?? m.unread ?? [] };
+        seg.match = { patternId: m.pattern.id, worldId: m.pattern.worldId, kind: m.pattern.kind, priority: m.pattern.priority, slots: plainSlots(m.slots), unread: m.unread ?? [], unreadStrict: m.unreadStrict ?? m.unread ?? [], ...(isCatchAll(m.pattern) || m.rawOnly ? { catchAll: true } : {}) };
         const bestSig = signature(m);
         for (const o of matches) {
           if (o === m || o.pattern.worldId === m.pattern.worldId) continue;
