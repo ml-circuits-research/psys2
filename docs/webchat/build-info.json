@@ -1,5 +1,5 @@
 {
-  "version": "15e566d838",
+  "version": "2f3be25e11",
   "worlds": [
     "acts",
     "art.draw",
@@ -62,7 +62,7 @@
     "lib/dialog/followup.mjs": "a0ef77d024f0e067",
     "lib/dialog/foreign-reading.mjs": "c468c3cf05a584ec",
     "lib/dialog/honest-done.mjs": "685e6a89ddf4c3dd",
-    "lib/dialog/index.mjs": "5a4a28e066b7529d",
+    "lib/dialog/index.mjs": "c6753da5fdd77669",
     "lib/dialog/intent.mjs": "a9a118cc948fb72d",
     "lib/dialog/knowledge-lookup.mjs": "fec10166c09a5822",
     "lib/dialog/meta-worlds.mjs": "454a81b48195093f",
@@ -70,6 +70,7 @@
     "lib/dialog/normalizer-runtime.mjs": "5f70a7886b4a8475",
     "lib/dialog/person-view.mjs": "6edfee63b3e56cd0",
     "lib/dialog/person.mjs": "7a661c91c84dd907",
+    "lib/dialog/proposer.mjs": "864bbc94a77a065c",
     "lib/dialog/relative.mjs": "ebb842269cbc25bb",
     "lib/dialog/request.mjs": "3fa6f847ffcb1e76",
     "lib/dialog/runtime-config.mjs": "bd2aeef993b5a37a",
@@ -687,8 +688,8 @@
     "worlds/words/zo.json": "001841dabf5d9de7",
     "worlds/words.bloom.json": "2b7992132f0ff72e"
   },
-  "builtAt": "2026-11-15T23:11:46.644Z",
-  "commit": "abb3a4b2",
+  "builtAt": "2026-11-15T23:25:20.901Z",
+  "commit": "db69551d",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "assets": {
     "app.mjs": "52cf9cb7bf",
@@ -717,7 +718,7 @@
     "lib/dialog/followup.mjs": "88af56c068",
     "lib/dialog/foreign-reading.mjs": "79d8decc9c",
     "lib/dialog/honest-done.mjs": "80e9d07ff4",
-    "lib/dialog/index.mjs": "7996043da9",
+    "lib/dialog/index.mjs": "9692b9420e",
     "lib/dialog/intent.mjs": "5e4cf030ab",
     "lib/dialog/knowledge-lookup.mjs": "bc80c9df4f",
     "lib/dialog/meta-worlds.mjs": "84f921fb77",
@@ -725,6 +726,7 @@
     "lib/dialog/normalizer-runtime.mjs": "0cb684354c",
     "lib/dialog/person-view.mjs": "ceeabdb255",
     "lib/dialog/person.mjs": "9eec997e28",
+    "lib/dialog/proposer.mjs": "b3c21ed7d7",
     "lib/dialog/relative.mjs": "4d9503cc42",
     "lib/dialog/request.mjs": "2c4c9ffd63",
     "lib/dialog/runtime-config.mjs": "9d17377846",
