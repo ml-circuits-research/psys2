@@ -1632,8 +1632,8 @@ export class DialogSession {
       goalReq = Object.assign(plainRequest(q.request), { act: 'arrange', target: lastRec?.flat?.target ?? null }); Object.defineProperty(goalReq, 'facts', { value: q.facts, enumerable: false }); base = beforeState; }
     else if (reaction) { goalReq = rev.request; base = lastRec.before; }
     else {
-      const req = rev?.request ?? q.request;
-      const act = req.act ?? q.act;
+      const req = rev?.sort === 'request' && rev.request ? rev.request : q.request;   // not a reaction: the turn's own request, never the library's revision of the last one
+      const act = q.act;   // a new request has the act its words say
       if (q.unread.length || !act) return this._requestNotes(opts, first, flat, cannotOf(act ? dryPlan(req) : null));   // words no reader read are asked about, never planned around
       const res = measure(beforeState);
       const exp = expectOf(live, language, q.target);

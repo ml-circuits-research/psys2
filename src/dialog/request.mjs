@@ -150,8 +150,12 @@ export function violations(q, res, exp) {
     if (f.key === 'kind' && f.neg && f.all && kindN < 2) out.push({ key: 'kind', fact: f });
     if (f.key === 'length' && f.unit === 'chapter' && res.chapters != null && res.chapters !== f.n) out.push({ key: 'length', fact: f });
   }
-  const explicitCount = q.facts.some((f) => f.key === 'count' && (f.n != null || f.min != null));
-  const r = res.composed && !explicitCount ? null : q.target || explicitCount ? wantedRange(q, exp) : null;
+  // a count of one kind ("5 clouds and one sun") is that kind's number in the result; a count of the whole's parts ("6 nodes") is the number of parts
+  const perKind = q.facts.filter((f) => f.key === 'count' && f.n != null && f.of && kinds[f.of] !== undefined);
+  for (const f of perKind) if (kinds[f.of] !== f.n) out.push({ key: 'count', fact: f });
+  const explicitCount = q.facts.some((f) => f.key === 'count' && (f.n != null || f.min != null) && !perKind.includes(f));
+  if (perKind.length && !explicitCount) return out;
+  const r = res.composed && !explicitCount ? null : q.target || explicitCount ? wantedRange({ facts: q.facts.filter((f) => !perKind.includes(f)) }, exp) : null;
   const wantedKind = q.facts.find((f) => f.key === 'kind' && !f.neg && f.value !== q.target)?.value;
   const parts = wantedKind && !q.target ? (kinds[wantedKind] ?? res.parts) : res.parts;
   if (r && parts != null && (parts < r[0] || parts > r[1])) out.push({ key: 'count', range: r });
