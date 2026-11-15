@@ -170,8 +170,8 @@ async function init(m) {
     const [{ createFacts }, { createKnowledgeSource }, { createLayeredSource }] = await Promise.all([imp('lib/knowledge/facts.mjs'), imp('lib/loaders/knowledge-source.mjs'), imp('lib/knowledge/bundled-source.mjs')]);
     const { createCachedSource } = await imp('lib/loaders/knowledge-cache.mjs');
     const { knowledgeTimeoutMs } = await imp('lib/loaders/knowledge-source.mjs');
-    const { KNOWLEDGE_URL } = await imp('lib/knowledge/catalog-pin.mjs');   // the catalog at the pinned commit, not the moving Pages head (P4)
-    const src = createCachedSource({ source: createKnowledgeSource(settings.knowledgeUrl || KNOWLEDGE_URL), caches: globalThis.caches, onCacheEvent: (e) => evt('knowledge-cache', e) });
+    const { KNOWLEDGE_URLS } = await imp('lib/knowledge/catalog-pin.mjs');   // the catalog at the pinned commit, not the moving Pages head (P4); its mirrors when one fails
+    const src = createCachedSource({ source: createKnowledgeSource(settings.knowledgeUrl || KNOWLEDGE_URLS), caches: globalThis.caches, onCacheEvent: (e) => evt('knowledge-cache', e) });
     // the bundled subset (colours, number words, the drawings of the built-in kinds: generated from the catalog) answers for a catalog that cannot be reached; the catalog replaces it when it can
     knowledgeFacts = createFacts({ source: createLayeredSource({ text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), knowledgeTimeoutMs(p) + 2000))]) }) });
     engine.setKnowledge(knowledgeFacts);
@@ -438,6 +438,8 @@ const handlers = {
     await knowledgeFacts.world?.('k.objects');   // LAZY LOADING: the catalog's index (version-cached), not its 1.3 MB vocabulary: a message reads the buckets of its words
     return { ok: !knowledgeFacts.unreachable(), bytes: knowledgeFacts.stats?.vocabBytes ?? null };
   },
+  /** The parts of a catalog thing as the engine drew it (the drawing tab draws with these: the page never reads a second copy of the catalog that could miss a shard the reply counted). */
+  async 'thing-parts'(m) { if (!knowledgeFacts) return null; let th = null; try { th = knowledgeFacts.peek?.(m.name) ?? await knowledgeFacts.thing(m.name); } catch { th = null; } const parts = th?.objects?.[0]?.parts; return parts?.length ? { name: th.name, parts } : null; },
   async 'ort-restart'(m) { globalThis.__psys2Ort?.restart?.(m.lane, m.why); sendOrt(); return null; },   // diagnostics and tests
   async 'ort-resume'() { globalThis.__psys2Ort?.resume?.(); sendOrt(); return null; },
 };

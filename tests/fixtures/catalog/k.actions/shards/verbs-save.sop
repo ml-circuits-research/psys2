@@ -1,6 +1,6 @@
-# k.actions/shards/verbs-save: 12 verbs and phrasal verbs that mean the act "save" (save, write, store, keep, record, write down, preserve, remember ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
-# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 11 verbs; which act a sense means and the roles are a language model's reading, named=model)
-# sources: hand-core 1 (hand-written in this repository: 1 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# k.actions/shards/verbs-save: 14 verbs and phrasal verbs that mean the act "save" (save, write, store, keep, record, write down, preserve, remember ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 12 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 2 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
 # license: WordNet-3.0
 # script: tools/acts-core.mjs
 
@@ -16,3 +16,11 @@
 @k.actions.verb.save.archive k.actions.verb text=archive act=save sense=1 gloss="put into an archive" object=thing named=model core.source="wordnet 3.1"
 @k.actions.verb.save.memorize k.actions.verb text=memorize act=save sense=1 gloss="commit to memory; learn by heart" object=thing named=model core.source="wordnet 3.1"
 @k.actions.verb.save.hold_on_to k.actions.verb text="hold on to" act=save object=thing core.source="hand-core 1"
+@k.actions.verb.save.download k.actions.verb text=download act=save object=thing core.source="hand-core 1"
+@k.actions.verb.save.export k.actions.verb text=export act=save sense=2 gloss="transfer (electronic data) out of a database or document in a format that can be used by other programs" object=thing named=model core.source="wordnet 3.1"
+
+# Markings: after this verb, the word marks the role.
+@k.actions.marking.save.download.as k.actions.marking verb=download act=save marker=as role=format core.source="hand-core 1"
+@k.actions.marking.save.download.in k.actions.marking verb=download act=save marker=in role=format core.source="hand-core 1"
+@k.actions.marking.save.export.as k.actions.marking verb=export act=save marker=as role=format core.source="hand-core 1"
+@k.actions.marking.save.export.in k.actions.marking verb=export act=save marker=in role=format core.source="hand-core 1"

@@ -1,5 +1,5 @@
-# k.actions/shards/verbs-load: 14 verbs and phrasal verbs that mean the act "load" (load, open, retrieve, recover, import, download, read, bring back ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
-# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 12 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# k.actions/shards/verbs-load: 13 verbs and phrasal verbs that mean the act "load" (load, open, retrieve, recover, import, read, bring back, get back ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 11 verbs; which act a sense means and the roles are a language model's reading, named=model)
 # sources: hand-core 1 (hand-written in this repository: 2 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
 # license: WordNet-3.0
 # script: tools/acts-core.mjs
@@ -9,7 +9,6 @@
 @k.actions.verb.load.retrieve k.actions.verb text=retrieve act=load sense=1 gloss="get or find back; recover the use of" object=thing named=model core.source="wordnet 3.1"
 @k.actions.verb.load.recover k.actions.verb text=recover act=load sense=1 gloss="get or find back; recover the use of" object=thing named=model core.source="wordnet 3.1"
 @k.actions.verb.load.import k.actions.verb text=import act=load sense=2 gloss="transfer (electronic data) into a database or document" object=thing named=model core.source="wordnet 3.1"
-@k.actions.verb.load.download k.actions.verb text=download act=load sense=1 gloss="transfer a file or program from a central computer to a smaller computer or to a computer at a remote location" object=thing named=model core.source="wordnet 3.1"
 @k.actions.verb.load.read k.actions.verb text=read act=load sense=4 gloss="obtain data from magnetic tapes or other digital sources" object=thing named=model core.source="wordnet 3.1"
 @k.actions.verb.load.bring_back k.actions.verb text="bring back" act=load sense=1 gloss="bring back to the point of departure" object=thing separable=true named=model core.source="wordnet 3.1"
 @k.actions.verb.load.get_back k.actions.verb text="get back" act=load sense=1 gloss="recover something or somebody that appeared to be lost" object=thing separable=true named=model core.source="wordnet 3.1"

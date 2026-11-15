@@ -263,7 +263,7 @@
  "space|lexicon|lex.space.layouts": 15,
  "space|lexicon|lex.space.relations": 21,
  "talk|table|worlds/talk/ops.mjs:ORD": 12,
- "talk|table|worlds/talk/records.mjs:ASK_HINTS": 15,
+ "talk|table|worlds/talk/records.mjs:ASK_HINTS": 16,
  "talk|lexicon|lex.talk.sequences": 9,
  "ui.avatar|table|worlds/ui.avatar/default-face.mjs:DEFAULT_FACE": 232,
  "ui.avatar|table|worlds/ui.avatar/hooks.mjs:hooks": 20,

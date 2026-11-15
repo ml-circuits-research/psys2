@@ -44,8 +44,8 @@ test('the catalog plurals and the past of be are read: analysis, antenna, aquari
 test('the reader through the knowledge source answers what the bundle answers', async () => {
   const source = { text: async (p) => { const s = /w\.lang\.en\/shards\/([^/]+)\.sop$/.exec(p)?.[1]; return s === 'phrases' ? LANG_EN_FACTS.lexicons : LANG_EN_FACTS[s] ?? null; } };
   const viaCatalog = await langEnFromCatalog(source);
-  const catalogOnly = createLangEn(LANG_EN_FACTS, null);   // the local frames are the bundle's addition: the catalog's own are 281
-  assert.equal(catalogOnly.frames().length, 281);
+  const catalogOnly = createLangEn(LANG_EN_FACTS, null);   // the local frames are the bundle's addition: the catalog's own are 289 (catalog 590bc64: 8 more, the K6/K10 frames)
+  assert.equal(catalogOnly.frames().length, 289);
   assert.deepEqual(viaCatalog.frames(), en.frames());
   assert.equal(viaCatalog.timeRelation('before').rel, 'before');
   assert.deepEqual([...viaCatalog.words('det', 'acts')], [...en.words('det', 'acts')]);
@@ -109,8 +109,8 @@ test('clauses: joiners, frame leads, corrections and question words are facts', 
   assert.ok(en.answerRegex().test('i dont know') && en.answerWords()[0].split(' ').length >= 4);
 });
 
-test('frames: the argument frames of the acts are facts (437: 281 of the catalog and 30 local frames of the editor and the readers, acts 124, acts.more 91, acts.data 62; 9 of the local frames of before moved to the role-frames shard, 9 diagram frames), the schema worlds generate from them', () => {
-  assert.deepEqual([en.frames('acts').length, en.frames('acts.more').length, en.frames('acts.data').length], [124, 91, 62]);
+test('frames: the argument frames of the acts are facts (445: 289 of the catalog and 30 local frames of the editor and the readers, acts 132, acts.more 91, acts.data 62; 9 of the local frames of before moved to the role-frames shard, 9 diagram frames), the schema worlds generate from them', () => {
+  assert.deepEqual([en.frames('acts').length, en.frames('acts.more').length, en.frames('acts.data').length], [132, 91, 62]);
   const own = en.frames('acts').find((f) => f.id === 'read.own');
   assert.deepEqual([own.tabOnly, own.tabPriority, own.args], [true, 30, ['rest']]);
   assert.deepEqual(en.frames('acts.more').find((f) => f.id === 'ask.near').lit, { rel: 'near' });

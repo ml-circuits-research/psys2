@@ -3,11 +3,11 @@
 // code in this world. The methods are knowledge (k.procedures), the planner is the library's (src/plan/host.mjs); what is left here is what only the board can do: run one act of a plan on the
 // picture (make = the board's add, place at an anchor or a slot = the boxes k.layouts and k.wearables state, in the frame of the thing), all or nothing, one undo step, and say it in words.
 // No kind, scene, role, anchor or slot is named in this file.
-import * as D from './engine.mjs?v=4cfd3f2d62';
-import { kindKey, kindName, W, H } from './scene.mjs?v=0882bbcd68';
+import * as D from './engine.mjs?v=ab6ef8ada7';
+import { kindKey, kindName, W, H } from './scene.mjs?v=04b6f3a58b';
 import { planHostOf } from '../../lib/plan/host.mjs?v=340a189763';
-import { knowsKind } from '../../lib/knowledge/open-words.mjs?v=64050d59a4';
-import { COUNTS } from '../space/space.mjs?v=72e3867df9';
+import { knowsKind } from '../../lib/knowledge/open-words.mjs?v=5a7b64a4a8';
+import { COUNTS } from '../space/space.mjs?v=15c16cca4d';
 
 const REL = { on: 'on', 'on top of': 'on', onto: 'on', in: 'in', inside: 'in', into: 'in', around: 'around', at: 'at' };
 const DET = new Set(['a', 'an', 'the', 'some', 'my', 'this', 'that']);
@@ -110,7 +110,7 @@ export function runPlan(ctx, goal, { p, host }, said0) {
         let r = draw(kind);
         if (r?.status !== 'supported' && standIn(host, kind)) r = draw(standIn(host, kind));   // a doctor is drawn as a person
         const fresh = s.objects.filter((o) => !before.has(o.id) && !o.tag);
-        if (r?.status !== 'supported' && !fresh.length) { left.push(`${an(kind)} (I cannot draw it yet)`); continue; }
+        if (r?.status !== 'supported' && !fresh.length) { left.push(`${an(kind)} (${ctx.knowledge?.unreachable?.() ? 'the picture catalog did not answer' : 'I cannot draw it yet'})`); continue; }   // a catalog that did not answer is not "I cannot draw it"
         const nth = counts.get(base(kind)) ?? 0;
         fresh.forEach((o, i) => { ids.set(`${base(kind)}${nth + i + 1}`, o.id); made.push(o); });
         counts.set(base(kind), nth + Math.max(fresh.length, 1));

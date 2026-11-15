@@ -7,9 +7,9 @@
 //   adj: { <slot>: { s: scale, dx, dy } }, expression, base (the preset it started from), name, saved: { <key>: { name, slots, colours, paint, adj } }, options (what "which hats are there"
 //   shows), refs (the things of the face: the referents of this world), history / future (undo, redo), n (a counter) }.
 // Browser-safe: imports the shared space module, the English of the catalog (src/lang/en.mjs: the words a request skips, the negations) and the comparatives of k.values.
-import * as space from '../space/space.mjs?v=72e3867df9';
-import { en } from '../../lib/lang/en.mjs?v=37915f671a';
-import { comparativeWords } from '../../lib/knowledge/values.mjs?v=a137742733';
+import * as space from '../space/space.mjs?v=15c16cca4d';
+import { en } from '../../lib/lang/en.mjs?v=24a2dfb4e6';
+import { comparativeWords } from '../../lib/knowledge/values.mjs?v=2bd2c8e37d';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 export const NONE = 'none';

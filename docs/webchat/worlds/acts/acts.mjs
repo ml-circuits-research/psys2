@@ -20,17 +20,17 @@
 //   unread(ctx, text)      -> a reply string when the world can read a sentence the forms did not (its own reader), else undefined
 //   domain.<act>(ctx, req) -> { status, value | note } | undefined   the world's own effect for an act over its own state (the generic executor is used when it returns undefined)
 
-import { ACT_VERBS } from './verbs.generated.mjs?v=b363aaaa66';
+import { ACT_VERBS } from './verbs.generated.mjs?v=42c7eb31c8';
 import { FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=75b22014a6';
 import { FLAGS_DATA } from './forms.data.mjs?v=54c931cc9e';   // more forms (flags `valued`, `ordered`): named values said without their name
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
 import { createEffects, EFFECT_ACTS } from './effects.mjs?v=29aa3e0c9a';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
-import { colourName } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=37915f671a';
-import { resolvePhrase } from './np-lib.mjs?v=8ffbd1eeda';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
-import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=ddb4bc8d03';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { colourName } from '../../lib/knowledge/values.mjs?v=2bd2c8e37d';   // the one colour reader (k.values)
+import { en } from '../../lib/lang/en.mjs?v=24a2dfb4e6';
+import { resolvePhrase } from './np-lib.mjs?v=e2aec5b4f5';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
+import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=3035119849';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------
@@ -158,8 +158,10 @@ const kindWords = (s) => [...new Set(Object.values(s.kinds).flatMap((k) => [k.na
  * otherwise the pattern would claim a sentence that no executor of that world can run, and the sentence would end in "did not understand" (spec 21).
  */
 export const CORE_ROLES = new Set(['thing', 'rel', 'place', 'amount', 'amount2', 'value', 'attribute', 'rest', 'pre', 'post', 'm1', 'm2', 'kind']);
-/** Catalog frames that carry core roles only but that no executor runs (the act takes no such role): "Undo the colour change" (undo takes none, and its verbs include "reset" and "go back"), "Copy the star to the corner", "Save the drawing to my files". A world that runs one says `reads=` for it, which is not possible for these: they wait for an executor. */
-const NO_EXECUTOR = new Set(['undo.thing', 'copy.place', 'save.place', 'save.thing', 'load.from']);
+/** Catalog frames that carry core roles only but that no executor runs (the act takes no such role): "Undo the colour change" (undo takes none, and its verbs include "reset" and "go back"), "Redo the colour change"
+ * (redo takes none: the executor redoes the last undone step whatever the thing; generated once k.actions had redo verbs, catalog fea0fecb), "Copy the star to the corner", "Save the drawing to my files".
+ * A world that runs one says `reads=` for it, which is not possible for these: they wait for an executor. */
+const NO_EXECUTOR = new Set(['undo.thing', 'redo.thing', 'copy.place', 'save.place', 'save.thing', 'load.from']);
 const SHARED_LEXICONS = /^(acts|space|lang)\./;
 /** The forms a world gets: those whose condition the schema meets, whose act the world declares, whose verb group k.actions has (a frame for "redo the colour change" has no verb of k.actions), whose roles and shared lexicons the world reads. */
 export function formsFor(schema) {

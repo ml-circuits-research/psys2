@@ -16,7 +16,7 @@
  *   numberWordOf(n, kind)   12 -> "twelve", 3 -> "third" (ordinal)
  */
 import { parseLine } from './catalog.mjs?v=0372695257';
-import { BUNDLED_VALUES } from './bundled-values.mjs?v=d9555c35e1';
+import { BUNDLED_VALUES } from './bundled-values.mjs?v=b0153f9b60';
 
 const lc = (s) => String(s ?? '').toLowerCase().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
 const state = { colours: new Map(), numbers: new Map(), comparatives: [], from: 'none', loading: null };

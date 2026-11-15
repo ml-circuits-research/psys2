@@ -53,7 +53,7 @@ export function answerFrom(frame, th, catalog) {
       if (!c) return { text: `I know what ${a} is, but not how many ${frame.part} it has.`, status: 'missing' };
       return c.from === 'gloss' ? { text: `${cap(a)} has ${c.n} ${frame.part}.`, status: 'supported' } : { text: `My picture of ${a} has ${c.n} ${frame.part}.`, status: 'supported' };
     }
-    case 'made': return cs?.made_of?.length ? { text: `${cap(a)} is made of ${list(cs.made_of)}.`, status: 'supported' } : { text: `I know what ${a} is, but not what it is made of.`, status: 'missing' };
+    case 'made': return cs?.material?.length ? { text: `${cap(a)} is made of ${list(cs.material)}.`, status: 'supported' } : { text: `I know what ${a} is, but not what it is made of.`, status: 'missing' };
     case 'where': return cs?.at?.length ? { text: `${cap(a)} is usually found at the ${list(cs.at)}.`, status: 'supported' } : { text: `I know what ${a} is, but not where to find it.`, status: 'missing' };
     case 'can': return cs?.can?.length ? { text: `${cap(a)} can ${list(cs.can)}.`, status: 'supported' } : { text: `I know what ${a} is, but not what it can do.`, status: 'missing' };
     default: return null;

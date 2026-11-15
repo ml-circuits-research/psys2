@@ -8,6 +8,7 @@
   "scripts": {
     "test": "node scripts/run-tests.mjs --full",
     "build:lang": "node scripts/build-lang-en.mjs",
+    "check:catalog": "node scripts/build-lang-en.mjs --check",
     "test:full": "node scripts/run-tests.mjs --full",
     "test:smoke": "node scripts/run-tests.mjs --smoke",
     "test:fast": "node scripts/run-tests.mjs",

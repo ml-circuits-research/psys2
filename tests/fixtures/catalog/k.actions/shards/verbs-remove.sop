@@ -1,6 +1,6 @@
-# k.actions/shards/verbs-remove: 21 verbs and phrasal verbs that mean the act "remove" (remove, delete, erase, take away, take out, get rid of, rub out, wipe out ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
-# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 21 verbs; which act a sense means and the roles are a language model's reading, named=model)
-# sources: hand-core 1 (hand-written in this repository: 0 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# k.actions/shards/verbs-remove: 23 verbs and phrasal verbs that mean the act "remove" (remove, delete, erase, take away, take out, get rid of, rub out, wipe out ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 22 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 1 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
 # license: WordNet-3.0
 # script: tools/acts-core.mjs
 
@@ -25,6 +25,8 @@
 @k.actions.verb.remove.cut_out k.actions.verb text="cut out" act=remove sense=1 gloss="delete or remove" object=thing separable=true named=model core.source="wordnet 3.1"
 @k.actions.verb.remove.cross_out k.actions.verb text="cross out" act=remove sense=1 gloss="remove from a list" object=thing separable=true named=model core.source="wordnet 3.1"
 @k.actions.verb.remove.take_off k.actions.verb text="take off" act=remove sense=2 gloss="take away or remove" object=thing separable=true after_particle=source named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.wipe k.actions.verb text=wipe act=remove object=thing core.source="hand-core 1"
+@k.actions.verb.remove.drop k.actions.verb text=drop act=remove sense=16 sense=19 gloss="get rid of" object=thing named=model core.source="wordnet 3.1"
 
 # Markings: after this verb, the word marks the role.
 @k.actions.marking.remove.cross_out.from k.actions.marking verb="cross out" act=remove marker=from role=source core.source="hand-core 1"

@@ -110,7 +110,7 @@ export function runPlan(ctx, goal, { p, host }, said0) {
         let r = draw(kind);
         if (r?.status !== 'supported' && standIn(host, kind)) r = draw(standIn(host, kind));   // a doctor is drawn as a person
         const fresh = s.objects.filter((o) => !before.has(o.id) && !o.tag);
-        if (r?.status !== 'supported' && !fresh.length) { left.push(`${an(kind)} (I cannot draw it yet)`); continue; }
+        if (r?.status !== 'supported' && !fresh.length) { left.push(`${an(kind)} (${ctx.knowledge?.unreachable?.() ? 'the picture catalog did not answer' : 'I cannot draw it yet'})`); continue; }   // a catalog that did not answer is not "I cannot draw it"
         const nth = counts.get(base(kind)) ?? 0;
         fresh.forEach((o, i) => { ids.set(`${base(kind)}${nth + i + 1}`, o.id); made.push(o); });
         counts.set(base(kind), nth + Math.max(fresh.length, 1));
