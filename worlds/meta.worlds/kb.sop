@@ -318,12 +318,10 @@
     act=caught act=miss act=uh act=accept act=asked act=bard act=batch act=chatgpt
     act=claude act=confused act=copilot act=different act=explained
     actshared=why actshared=recognize actshared=recognise actshared=follow actshared=option actshared=hear
-    thing=animal thing=arith thing=canvas thing=chat thing=color thing=drawing thing=editor thing=flowchart
-    thing=keyboard thing=music thing=piano thing=shop thing=sketch thing=sketchpad thing=sum thing=talk
-    thing=time
+    thing=arith thing=canvas thing=chat thing=drawing thing=editor thing=flowchart thing=keyboard thing=music
+    thing=piano thing=shop thing=sketch thing=sketchpad thing=sum thing=talk thing=time
     thingshared=atlas thingshared=avatar thingshared=chart thingshared=diagram thingshared=doc thingshared=document thingshared=draw thingshared=face
-    thingshared=graph thingshared=list thingshared=map thingshared=paint thingshared=picture thingshared=shape thingshared=shopping thingshared=task
-    thingshared=thing
+    thingshared=graph thingshared=list thingshared=map thingshared=paint thingshared=picture thingshared=shopping thingshared=task thingshared=thing
     frame=how_to frame=what_commands frame=why_did frame=how_were frame=is_psys frame=was_wrong frame=were_you frame=what_else
     frame=what_u frame=which_area
     frameshared=are_you frameshared=what_can frameshared=can_i frameshared=how_do frameshared=do_you frameshared=what_does frameshared=what_are frameshared=what_was
