@@ -4620,3 +4620,14 @@ Owner (14:11): the link between the request and the live world should reason a l
 Literature names to use: forward chaining (Datalog), generate-and-test with constraints, weighted abduction (Hobbs et al. 1993), anti-unification (Plotkin 1970).
 
 PSys2: the library session has released nothing since the GO (0.148 is from before). If its mechanisms are not there when you need them, build `factsOf` and this cycle here behind the library's intended names and shapes (readRequest / reviseRequest / planRequest / sayRequest), in one module with no world ids, so it can move to the library unchanged; say so in questions.md as [LIB].
+
+## Reviewer 2026-11-15 15:40 — spec 28 (requests as worlds) accepted as a first step; my own probes; the properties test is not general yet
+
+Accepted the spec-28 landing (request and dialogue step on w.request / w.dialogue / k.expect; Documents honours kind, about, chapters, short). I ran tests/request-properties.test.mjs (8 pass) and then my own sentences through `cli.mjs chat`:
+- "draw a diagram with 6 to 8 nodes, no circles" → "8 nodes and 7 arrows … The nodes are 8 circles." **The range is honoured, the negation is not — and the properties test passes.** So P1 is not testing what it says: it must generate the negation in every form the language world has (no X, not X, without X, not all X, anything but X, Romanian "fără X", "nu X") for every kind a world can make, and fail on this. Fix the test first, then the reader / planner.
+- "make it smaller" → "I changed the last result … 5 nodes": right, and it replaced the result. "too much" after the pond → fewer things: right.
+- "not so many nodes, and add arrows" → "I could not read 'not so many nodes' …" then one link: a reduce reaction with a quantity word is not read ("not so many", "fewer", "less"), and "add arrows" should link the nodes that have no link, not one pair.
+- "draw a small pond in the corner" → "a small pond in a corner. It has 1 lake, 1 flower and 1 fish." Right in size; "1 lake" inside a pond is odd — the water is the pond.
+- "write a short story about a fox, 2 chapters" → 60 words, 2 chapters: right; the title is "All about a fox ," (stray comma).
+- The diagram said "It is about car" then "about boot" after "smaller": a revision keeps what was not revised (the topic).
+Rule for the next hours: after each landing run a probe of your own with sentences nobody has written before (one per property, per tab, English and Romanian) and paste the replies in the log; a property that passes while a plain probe fails is a test bug and comes first. Then: switch to the library's 0.149 functions (no per-world planner), the reasoning cycle (15:20 block; the library says 0.150 has factsOf + deduce / abduce / induce), every tab by its declared capabilities, deploy, and write the live build. Report owner sessions on ONE fixture from now (you gave 30/43 earlier and 25/43 "on the new fixture, main 21/43": say what changed in the fixture).
