@@ -4,8 +4,8 @@
  * slot, or a free-text role. The words a pattern's `...` skipped, and the content words of a free-text capture that are words of the readers themselves (question words, the verbs of
  * other acts), are UNREAD; with the typed worlds (spec 16 section 13, the default source) a free-text slot is unread when its world's types do not accept its words. Browser-safe. `PSYS2_COMPLETE=off` turns the consequences off for A/B runs (the measurement is still recorded on the segment).
  */
-import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs?v=27cce628a5';
-import { unreadBy, thingWordsOf } from './typed-world.mjs?v=27cce628a5';
+import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs?v=a815012811';
+import { unreadBy, thingWordsOf } from './typed-world.mjs?v=a815012811';
 
 const word = (t) => (t.kind === 'word' || t.kind === 'number') && !t.filler;
 /** Content words (not function words, not fillers) of a token list. */
@@ -37,6 +37,12 @@ const STRUCTURAL = new Set(['what', 'which', 'who', 'whom', 'whose', 'where', 'w
  *    music world: the drawing world has the house). This is the evidence of competition, not a word list: free text that nobody else reads stays free text.
  * `rest` captures are dictation (free by design) and never count.
  */
+/** The phrase groups of the loaded worlds (lang.common), for a world whose own reader reads its words through them (memoized on the set). */
+function phraseOfSet(set) {
+  if (!set?.list) return null;
+  if (!set._phraseOf) { const m = new Map(); for (const w of set.list()) for (const ph of w.phrases ?? []) m.set(ph.id, ph.alts.map((x) => x.join(' '))); set._phraseOf = (id) => m.get(id); }
+  return set._phraseOf;
+}
 const CATALOG_WORLDS = new Set(['art.draw', 'talk']);   // the two worlds that take any thing of the knowledge catalog (the `catalog=yes` cards of meta.worlds)
 export function annotateUnread(matches, set = null, context = null) {
   const foreign = set && globalThis.process?.env?.PSYS2_COMPLETE_FOREIGN === '1';
@@ -46,7 +52,7 @@ export function annotateUnread(matches, set = null, context = null) {
   const wholeMemo = new Map(), readsWhole = (id, view) => {   // the world's own reader reads the clause whole (hook readsWhole): once per world per sentence
     // the clause as typed: tokens that touch are joined ("a1" is one name, not "a 1")
     const spaced = view.map((t, i) => (i && Number.isFinite(t.start) && t.start === view[i - 1].end ? '' : i ? ' ' : '') + String(t.raw ?? '')).join('');
-    if (!wholeMemo.has(id)) { const ex = set?.get?.(id)?.ops?.executor; let r = false; try { r = !!ex?.readsWhole?.({ text: spaced, state: context?.states?.[id] ?? null }); } catch { r = false; } wholeMemo.set(id, r); }
+    if (!wholeMemo.has(id)) { const ex = set?.get?.(id)?.ops?.executor; let r = false; try { r = !!ex?.readsWhole?.({ text: spaced, state: context?.states?.[id] ?? null, phrase: phraseOfSet(set) }); } catch { r = false; } wholeMemo.set(id, r); }
     return wholeMemo.get(id);
   };
   const lowerOf = (t) => t.lower ?? String(t.raw).toLowerCase();

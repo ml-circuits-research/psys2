@@ -1,0 +1,325 @@
+# time.calendar: the calendar and the clock (kids plan, ADR-011; Q18 K7, L2). The patterns above the GENERATED marker hand the sentence to the world's own reader (ops.mjs
+# `readTime`): a sentence that names a day, a month, a season, a unit of time, today / tomorrow / yesterday or the clock is read whole with the names and durations of
+# k.time, the words of lang.common's lang.time.* and the numbers, prepositions and question words of w.lang.en; the library's cycleAdd / cycleDiff / statedDay /
+# readClock / writeClock do the arithmetic. A sentence the reader does not read whole is declined (`accepts`), so the next world reads it. No phrasing is listed here.
+
+@pat.time.calendar.read.weekday core.pattern
+    match="[$lang.lead.filler]? {pre:words(12)} {x:lex.time.calendar.weekday} {post:rest}"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="How many days until Saturday?"
+    canonical="How many days until Saturday?"
+
+@pat.time.calendar.read.weekday.lead core.pattern
+    match="[$lang.lead.filler]? {x:lex.time.calendar.weekday} {post:rest}"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="How many days until Saturday?"
+
+@pat.time.calendar.read.weekday.tail core.pattern
+    match="[$lang.lead.filler]? {pre:words(12)} {x:lex.time.calendar.weekday} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="How many days until Saturday?"
+
+@pat.time.calendar.read.weekday.bare core.pattern
+    match="[$lang.lead.filler]? {x:lex.time.calendar.weekday} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="How many days until Saturday?"
+
+@pat.time.calendar.read.month core.pattern
+    match="[$lang.lead.filler]? {pre:words(12)} {x:lex.time.calendar.month} {post:rest}"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="Which season is March in?"
+
+@pat.time.calendar.read.month.lead core.pattern
+    match="[$lang.lead.filler]? {x:lex.time.calendar.month} {post:rest}"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="Which season is March in?"
+
+@pat.time.calendar.read.month.tail core.pattern
+    match="[$lang.lead.filler]? {pre:words(12)} {x:lex.time.calendar.month} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="Which season is March in?"
+
+@pat.time.calendar.read.month.bare core.pattern
+    match="[$lang.lead.filler]? {x:lex.time.calendar.month} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="Which season is March in?"
+
+@pat.time.calendar.read.season core.pattern
+    match="[$lang.lead.filler]? {pre:words(12)} {x:lex.time.calendar.season} {post:rest}"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="Which months are in summer?"
+
+@pat.time.calendar.read.season.lead core.pattern
+    match="[$lang.lead.filler]? {x:lex.time.calendar.season} {post:rest}"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="Which months are in summer?"
+
+@pat.time.calendar.read.season.tail core.pattern
+    match="[$lang.lead.filler]? {pre:words(12)} {x:lex.time.calendar.season} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="Which months are in summer?"
+
+@pat.time.calendar.read.season.bare core.pattern
+    match="[$lang.lead.filler]? {x:lex.time.calendar.season} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="Which months are in summer?"
+
+@pat.time.calendar.read.unit core.pattern
+    match="[$lang.lead.filler]? {pre:words(12)} {x:lex.time.calendar.unit} {post:rest}"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="What day will it be in 3 days?"
+    canonical="What day will it be in 3 days?"
+
+@pat.time.calendar.read.unit.lead core.pattern
+    match="[$lang.lead.filler]? {x:lex.time.calendar.unit} {post:rest}"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="What day will it be in 3 days?"
+
+@pat.time.calendar.read.unit.tail core.pattern
+    match="[$lang.lead.filler]? {pre:words(12)} {x:lex.time.calendar.unit} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="What day will it be in 3 days?"
+
+@pat.time.calendar.read.unit.bare core.pattern
+    match="[$lang.lead.filler]? {x:lex.time.calendar.unit} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="What day will it be in 3 days?"
+
+@pat.time.calendar.read.day core.pattern
+    match="[$lang.lead.filler]? {pre:words(12)} [$lang.time.today|$lang.time.tomorrow|$lang.time.yesterday] {post:rest}"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="What day is tomorrow?"
+
+@pat.time.calendar.read.day.lead core.pattern
+    match="[$lang.lead.filler]? [$lang.time.today|$lang.time.tomorrow|$lang.time.yesterday] {post:rest}"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="What day is tomorrow?"
+
+@pat.time.calendar.read.day.tail core.pattern
+    match="[$lang.lead.filler]? {pre:words(12)} [$lang.time.today|$lang.time.tomorrow|$lang.time.yesterday] [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="What day is tomorrow?"
+
+@pat.time.calendar.read.day.bare core.pattern
+    match="[$lang.lead.filler]? [$lang.time.today|$lang.time.tomorrow|$lang.time.yesterday] [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="What day is tomorrow?"
+
+@pat.time.calendar.read.clock core.pattern
+    match="[$lang.lead.filler]? {pre:words(12)} [$lang.time.clock] {post:rest}"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="What time will it be in 2 hours?"
+
+@pat.time.calendar.read.clock.lead core.pattern
+    match="[$lang.lead.filler]? [$lang.time.clock] {post:rest}"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="What time will it be in 2 hours?"
+
+@pat.time.calendar.read.clock.tail core.pattern
+    match="[$lang.lead.filler]? {pre:words(12)} [$lang.time.clock] [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="What time will it be in 2 hours?"
+
+@pat.time.calendar.read.clock.bare core.pattern
+    match="[$lang.lead.filler]? [$lang.time.clock] [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    example="What time will it be in 2 hours?"
+
+# The order of a cycle said with the unit and no free words ("what day comes after Monday"): a signal of this world, read whole even on the Talk tab; without the unit ("what comes after March") it stays Talk's (its cards), and so does the order of months (Talk's own rows: "Which month comes before January?").
+@pat.time.calendar.order.weekday core.pattern
+    match="[$lang.lead.filler]? [$lang.time.list]? [$lang.time.glue]? {u:lex.time.calendar.unit} [$lang.time.glue]? [$lang.time.later|$lang.time.earlier] {x:lex.time.calendar.weekday} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    signal=true
+    example="What day comes after Monday?"
+    canonical="What day comes after Monday?"
+
+@pat.time.calendar.order.season core.pattern
+    match="[$lang.lead.filler]? [$lang.time.list]? [$lang.time.glue]? {u:lex.time.calendar.unit} [$lang.time.glue]? [$lang.time.later|$lang.time.earlier] {x:lex.time.calendar.season} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    signal=true
+    example="What season comes after winter?"
+
+# A question of one member and the words of the calendar only ("Which season is March in?", "Which months are in summer?", "How many days has April?"): no free words, a signal of this world.
+@pat.time.calendar.member.weekday core.pattern
+    match="[$lang.lead.filler]? [$lang.time.list|$lang.time.count]? [$lang.time.glue]? {u:lex.time.calendar.unit?} [$lang.time.glue]? [$lang.time.glue]? {x:lex.time.calendar.weekday} [$lang.time.glue]? {v:lex.time.calendar.unit?} [$lang.time.glue]? [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=13
+    signal=true
+    example="How many days until Saturday?"
+
+@pat.time.calendar.member.month core.pattern
+    match="[$lang.lead.filler]? [$lang.time.list|$lang.time.count]? [$lang.time.glue]? {u:lex.time.calendar.unit?} [$lang.time.glue]? [$lang.time.glue]? {x:lex.time.calendar.month} [$lang.time.glue]? {v:lex.time.calendar.unit?} [$lang.time.glue]? [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=13
+    signal=true
+    example="Which season is March in?"
+
+@pat.time.calendar.member.season core.pattern
+    match="[$lang.lead.filler]? [$lang.time.list|$lang.time.count]? [$lang.time.glue]? {u:lex.time.calendar.unit?} [$lang.time.glue]? [$lang.time.glue]? {x:lex.time.calendar.season} [$lang.time.glue]? {v:lex.time.calendar.unit?} [$lang.time.glue]? [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=13
+    signal=true
+    example="Which months are in summer?"
+
+# ---- GENERATED below this line by scripts/build-time-world.mjs from the catalog (w.lang.en shard time-frames). Never edited by hand.
+
+@pat.time.calendar.state.today core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.polite]? [i_should_tell_you|i_need_to_tell_you|i_have_to_tell_you|i_want_to_tell_you|just_so_you_know|fyi|by_the_way|btw|remember|note_that|you_should_know]? [today_is|today_it_is|today_its|it_is|its|it_s] {value:lex.time.calendar.weekday} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.set arg.thing=\"today\" arg.attribute=\"weekday\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=statement
+    priority=16
+    signal=true
+    example="I should tell you, today is Friday."
+    canonical="I should tell you, today is Friday."
+
+@pat.time.calendar.state.date.dm core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.polite]? [i_should_tell_you|i_need_to_tell_you|i_have_to_tell_you|i_want_to_tell_you|just_so_you_know|fyi|by_the_way|btw|remember|note_that|you_should_know]? [today_is|today_it_is|today_its|it_is|its|it_s|the_date_is|todays_date_is|today_s_date_is] [$acts.det]? {day:words(1)} of {month:lex.time.calendar.month} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.set arg.thing=\"today\" arg.attribute=\"date\" arg.day=\"{day}\" arg.month=\"{month}\" arg.text=\"{segment}\""
+    kind=statement
+    priority=16
+    signal=true
+    example="Today is the 5th of May."
+
+@pat.time.calendar.state.date.md core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.polite]? [i_should_tell_you|i_need_to_tell_you|i_have_to_tell_you|i_want_to_tell_you|just_so_you_know|fyi|by_the_way|btw|remember|note_that|you_should_know]? [today_is|today_it_is|today_its|it_is|its|it_s|the_date_is|todays_date_is|today_s_date_is] {month:lex.time.calendar.month} {day:words(1)} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.set arg.thing=\"today\" arg.attribute=\"date\" arg.month=\"{month}\" arg.day=\"{day}\" arg.text=\"{segment}\""
+    kind=statement
+    priority=16
+    signal=true
+    example="Today is May 5."
+
+@pat.time.calendar.state.month core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.polite]? [i_should_tell_you|i_need_to_tell_you|i_have_to_tell_you|i_want_to_tell_you|just_so_you_know|fyi|by_the_way|btw|remember|note_that|you_should_know]? [we_are_in|were_in|we_re_in|it_is|its|it_s|this_month_is|the_month_is|now_it_is] {value:lex.time.calendar.month} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.set arg.thing=\"now\" arg.attribute=\"month\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=statement
+    priority=16
+    signal=true
+    example="We are in May."
+
+@pat.time.calendar.state.season core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.polite]? [i_should_tell_you|i_need_to_tell_you|i_have_to_tell_you|i_want_to_tell_you|just_so_you_know|fyi|by_the_way|btw|remember|note_that|you_should_know]? [we_are_in|were_in|we_re_in|it_is|its|it_s|the_season_is|now_it_is] {value:lex.time.calendar.season} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.set arg.thing=\"now\" arg.attribute=\"season\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=statement
+    priority=16
+    signal=true
+    example="It is spring."
+
+@pat.time.calendar.state.clock core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.polite]? [i_should_tell_you|i_need_to_tell_you|i_have_to_tell_you|i_want_to_tell_you|just_so_you_know|fyi|by_the_way|btw|remember|note_that|you_should_know]? [the_clock_says|the_clock_shows|the_clock_is_at|the_time_is|the_time_now_is|my_clock_says|my_watch_says] {phrase:lex.time.calendar.clock_phrase?} {hour:number} {minutes:number?} [o_clock|oclock|o'clock|o_clock|am|pm|in_the_morning|in_the_afternoon|in_the_evening|at_night]? [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.set arg.thing=\"now\" arg.attribute=\"time\" arg.phrase=\"{phrase}\" arg.hour=\"{hour}\" arg.minutes=\"{minutes}\" arg.text=\"{segment}\""
+    kind=statement
+    priority=16
+    signal=true
+    example="The clock says half past 3."
+
+@pat.time.calendar.state.clock.past core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.polite]? [i_should_tell_you|i_need_to_tell_you|i_have_to_tell_you|i_want_to_tell_you|just_so_you_know|fyi|by_the_way|btw|remember|note_that|you_should_know]? [it_is|its|it_s|it_is_now|its_now|now_it_is] {phrase:lex.time.calendar.clock_phrase} {hour:number} [am|pm|in_the_morning|in_the_afternoon|in_the_evening|at_night]? [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.set arg.thing=\"now\" arg.attribute=\"time\" arg.phrase=\"{phrase}\" arg.hour=\"{hour}\" arg.text=\"{segment}\""
+    kind=statement
+    priority=16
+    signal=true
+    example="It's quarter to 4."
+
+@pat.time.calendar.state.clock.oclock core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.polite]? [i_should_tell_you|i_need_to_tell_you|i_have_to_tell_you|i_want_to_tell_you|just_so_you_know|fyi|by_the_way|btw|remember|note_that|you_should_know]? [it_is|its|it_s|it_is_now|its_now|now_it_is] {hour:number} {minutes:number?} [o_clock|oclock|o'clock|o_clock|am|pm|in_the_morning|in_the_afternoon|in_the_evening|at_night] [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.set arg.thing=\"now\" arg.attribute=\"time\" arg.hour=\"{hour}\" arg.minutes=\"{minutes}\" arg.text=\"{segment}\""
+    kind=statement
+    priority=16
+    signal=true
+    example="It is 5 o'clock."
+
+@pat.time.calendar.state.clock.named core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.polite]? [i_should_tell_you|i_need_to_tell_you|i_have_to_tell_you|i_want_to_tell_you|just_so_you_know|fyi|by_the_way|btw|remember|note_that|you_should_know]? [it_is|its|it_s|it_is_now|its_now|now_it_is] {hour:lex.time.calendar.hour_named} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.set arg.thing=\"now\" arg.attribute=\"time\" arg.hour=\"{hour}\" arg.text=\"{segment}\""
+    kind=statement
+    priority=16
+    signal=true
+    example="It is noon."
+
+@pat.time.calendar.ask.day core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.polite]? [what_day_is_it|what_day_is_today|which_day_is_it|what_day_of_the_week_is_it|what_is_the_day_today|whats_the_day_today] [today|now]? [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.ask arg.thing=\"today\" arg.topic=\"weekday\" arg.text=\"{segment}\""
+    kind=question
+    priority=15
+    signal=true
+    example="What day is it today?"
+
+@pat.time.calendar.ask.date core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.polite]? [what_is_the_date|whats_the_date|what_date_is_it|what_is_todays_date|whats_todays_date|what_is_the_date_today] [today|now]? [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.ask arg.thing=\"today\" arg.topic=\"date\" arg.text=\"{segment}\""
+    kind=question
+    priority=15
+    signal=true
+    example="What's the date today?"
+
+@pat.time.calendar.ask.time core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.polite]? [what_time_is_it|whats_the_time|what_is_the_time|what_time_is_it_now|do_you_know_what_time_it_is|what_does_the_clock_say|what_time_do_you_have] [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.ask arg.thing=\"now\" arg.topic=\"time\" arg.text=\"{segment}\""
+    kind=question
+    priority=15
+    signal=true
+    example="What time is it?"
+    canonical="What time is it?"
+
+@pat.time.calendar.ask.month core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.polite]? [what_month_is_it|which_month_is_it|what_month_are_we_in|which_month_are_we_in|what_is_the_month] [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.ask arg.thing=\"now\" arg.topic=\"month\" arg.text=\"{segment}\""
+    kind=question
+    priority=15
+    signal=true
+    example="What month is it?"

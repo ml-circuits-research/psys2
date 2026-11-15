@@ -117,7 +117,6 @@ const NOTES = {
   'kids.shop': 'Done in stage 1 (matrix + reply words): prices, wallet, change, affordability.',
   'kids.arith': 'Done in stage 1: holdings as states, leader/gap/verdict as queries; the calculator stays small code.',
   'kids.tasks': 'Done in stage 1: entries as wires, actions on them; list-name and item-splitting text handling stays code.',
-  'kids.time': 'Date arithmetic is `time_add`, `time_diff`, `weekday` in the library: most of it is replaceable; calendar facts as wires.',
   'kids.common': 'Greetings and the user\'s name: wording and one fact; little to move.',
   'user.profile': 'What is known about the user: facts, sections as aggregates; the questionnaire plan is rules over facts.',
   'games.tictactoe': 'Board state and win rule are rules over wires (and a denies for illegal moves); the minimax search stays code.',

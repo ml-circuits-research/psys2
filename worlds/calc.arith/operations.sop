@@ -1,0 +1,5 @@
+@op.calc.arith.compute core.operation
+    impl=compute
+    semantics=action
+    action=calc.compute
+    doc="An operation over numbers: an infix word between two numbers, a prefix word with a factor before one, a split verb around two (its marker \"from\" names the second number first); the word's core.calc builtin computes it; dividing by zero is refused."

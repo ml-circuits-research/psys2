@@ -56,14 +56,15 @@ test('fast path: a single clause the rules read completely skips the model, anyt
   engine.formalizers.encoder = encoder;
   try {
     const s = engine.createSession({ language: 'en', formalizer: 'encoder', fastPath: true });
-    const a = await s.send('What is 3 plus 4');
-    assert.match(a.text, /7/);
+    // (a sum is read by kids.arith and by calc.arith, which stands behind it while it is on: a contested routing is the model's, so the uncontested probe is a sum only calc.arith reads)
+    const a = await s.send('What is a quarter of 12');
+    assert.match(a.text, /3/);
     assert.equal(calls, 0, 'the model is not used');
     assert.ok(a.perf.stages['fast.path']);
     await s.send('What is 3 plus 4 and what is 5 plus 1');
     assert.equal(calls, 1, 'two clauses go to the model');
     const off = engine.createSession({ language: 'en', formalizer: 'encoder', fastPath: false });
-    await off.send('What is 3 plus 4');
+    await off.send('What is a quarter of 12');
     assert.equal(calls, 2, 'without the fast path the model is used');
   } finally { engine.formalizers.encoder = saved; }
 });

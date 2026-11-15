@@ -18,7 +18,7 @@ const say = async (e, lines) => { const s = open(e); const out = []; for (const 
 
 test('grouping: the conversation worlds share one instance, every other matrix world has its own, and the composite is declared in world.sop', async () => {
   const r = matrix.reasoner;
-  const conv = ['kids.shop', 'kids.arith', 'kids.tasks', 'kids.time'];
+  const conv = ['kids.shop', 'kids.arith', 'kids.tasks'];
   assert.deepEqual(matrix.set.get('session.conversation').compose.sort(), [...conv].sort(), 'declared, not automatic');
   for (const id of conv) assert.equal(r.instKey(id), 'session.conversation', id);
   for (const id of ['ui.shell', 'ui.help']) assert.equal(r.instKey(id), id, id);

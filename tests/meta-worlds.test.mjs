@@ -80,7 +80,7 @@ test('the encoder is one prior with a weight: it adds, and it never reaches a re
   const e = withPrior.ranked.flatMap((x) => x.reasons).find((x) => x.rule === 'encoder');
   assert.ok(e && e.points <= mw.priorWeight);
   // with no other evidence the prior decides
-  const only = mw.decide({ text: 'zzz qqq', live: live(), prior: { 'kids.arith': 0.8, 'kids.time': 0.2 } });
+  const only = mw.decide({ text: 'zzz qqq', live: live(), prior: { 'kids.arith': 0.8, 'time.calendar': 0.2 } });
   assert.equal(only.world, 'kids.arith');
   assert.equal(mw.decide({ text: 'zzz qqq', live: live() }).world, null, 'no reason: asked, not guessed');
 });

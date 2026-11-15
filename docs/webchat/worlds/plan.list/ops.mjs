@@ -7,7 +7,7 @@ import { World, listSums, listMeant } from '../../lib/vendor/sopworld/sopworld.m
 import { en } from '../../lib/lang/en.mjs?v=8f226ecd72';
 import { pluralize, singularLemma } from '../../lib/formalizer/rules/lemma.mjs?v=99f25611ee';
 import { SAMPLE_PRICES, SAMPLE_CURRENCY } from './prices.sample.mjs?v=1e37605e83';
-import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=4fba5d0be8';
+import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=f8689c864a';
 
 export function initialState() { return { lists: [], n: 0 }; }
 
@@ -103,9 +103,12 @@ export function make(ctx, { thing, amount } = {}) {
   return { status: 'supported', value: `OK, ${said.length > 1 ? `${said.slice(0, -1).join(', ')} and ${said.at(-1)}` : said[0]}.` };
 }
 
-export function change(ctx, { attribute, value, currency } = {}) {
+export function change(ctx, { attribute: attr, mode, value, amount, currency, unit } = {}) {
   const st = ctx.state;
-  const n = Number(value);
+  // the catalog's frames (list-frames): shop.pay is attribute=money mode=less (the money handed over), wallet.start attribute=money with no mode (the money the person has: the budget)
+  const attribute = attr === 'money' ? (mode === 'less' ? 'tendered' : 'budget') : attr;
+  currency ??= unit;
+  const n = Number(value ?? amount);
   if (!Number.isFinite(n)) return { status: 'missing', note: 'How much money?' };
   const lst = attribute === 'budget' ? meant(st) : meant(st, { create: true });
   if (attribute === 'budget') lst.budget = n; else { lst.paid = n; lst.settled = true; }   // money handed over at the till is an EVENT of the story (w.list v4: `tendered` is no key of a list; k.actions pay: money remove), kept with the basket it pays for; it closes the basket

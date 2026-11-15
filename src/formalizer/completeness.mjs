@@ -37,6 +37,12 @@ const STRUCTURAL = new Set(['what', 'which', 'who', 'whom', 'whose', 'where', 'w
  *    music world: the drawing world has the house). This is the evidence of competition, not a word list: free text that nobody else reads stays free text.
  * `rest` captures are dictation (free by design) and never count.
  */
+/** The phrase groups of the loaded worlds (lang.common), for a world whose own reader reads its words through them (memoized on the set). */
+function phraseOfSet(set) {
+  if (!set?.list) return null;
+  if (!set._phraseOf) { const m = new Map(); for (const w of set.list()) for (const ph of w.phrases ?? []) m.set(ph.id, ph.alts.map((x) => x.join(' '))); set._phraseOf = (id) => m.get(id); }
+  return set._phraseOf;
+}
 const CATALOG_WORLDS = new Set(['art.draw', 'talk']);   // the two worlds that take any thing of the knowledge catalog (the `catalog=yes` cards of meta.worlds)
 export function annotateUnread(matches, set = null, context = null) {
   const foreign = set && globalThis.process?.env?.PSYS2_COMPLETE_FOREIGN === '1';
@@ -46,7 +52,7 @@ export function annotateUnread(matches, set = null, context = null) {
   const wholeMemo = new Map(), readsWhole = (id, view) => {   // the world's own reader reads the clause whole (hook readsWhole): once per world per sentence
     // the clause as typed: tokens that touch are joined ("a1" is one name, not "a 1")
     const spaced = view.map((t, i) => (i && Number.isFinite(t.start) && t.start === view[i - 1].end ? '' : i ? ' ' : '') + String(t.raw ?? '')).join('');
-    if (!wholeMemo.has(id)) { const ex = set?.get?.(id)?.ops?.executor; let r = false; try { r = !!ex?.readsWhole?.({ text: spaced, state: context?.states?.[id] ?? null }); } catch { r = false; } wholeMemo.set(id, r); }
+    if (!wholeMemo.has(id)) { const ex = set?.get?.(id)?.ops?.executor; let r = false; try { r = !!ex?.readsWhole?.({ text: spaced, state: context?.states?.[id] ?? null, phrase: phraseOfSet(set) }); } catch { r = false; } wholeMemo.set(id, r); }
     return wholeMemo.get(id);
   };
   const lowerOf = (t) => t.lower ?? String(t.raw).toLowerCase();

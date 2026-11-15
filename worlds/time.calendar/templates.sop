@@ -1,0 +1,21 @@
+@tpl.time.calendar.set core.template
+    for=action.time.set
+    text="{value}"
+
+@tpl.time.calendar.set.conflicting core.template
+    for=action.time.set
+    status=conflicting
+    text="That does not add up. {note}"
+
+@tpl.time.calendar.ask core.template
+    for=action.time.ask
+    text="{value}"
+
+@tpl.time.calendar.read core.template
+    for=action.time.read
+    text="{value}"
+
+@tpl.time.calendar.read.conflicting core.template
+    for=action.time.read
+    status=conflicting
+    text="That does not add up. {note}"

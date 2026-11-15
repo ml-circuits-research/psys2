@@ -20,7 +20,7 @@ test('renderer: the user entity is shown as "you" and :has/:is agree with the su
   assert.equal(await say(['I have 2 apples.']), 'OK, you have 2 apples.');
 });
 
-for (const id of ['kids.arith', 'kids.shop', 'kids.time']) {
+for (const id of ['kids.arith', 'kids.shop', 'time.calendar']) {   // (kids.time switched off for time.calendar, ADR-011)
   test(`world ${id}: loads without problems, has >= 25 tests and they all pass`, async () => {
     const mine = engine.problems().filter((p) => p.startsWith(id + ':'));
     assert.deepEqual(mine, []);

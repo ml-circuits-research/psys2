@@ -1,0 +1,5 @@
+@legend.calc.arith core.legend
+    namespace=calc.arith
+    version=0.1.0
+    imports=core
+    doc="Arithmetic over numbers with the catalog's words of arithmetic (K4) and the library's core.calc builtins. No state."

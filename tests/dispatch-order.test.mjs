@@ -78,7 +78,7 @@ test('a cut inside a clause read through a lower-ranked world is a weak cut (cla
 test('a delimited split of clean top-ranked readings stays class 0', async () => {
   const t = 'What is 20 divided by 4. What day comes after Monday?';
   const a = 'What is 20 divided by 4.', b = 'What day comes after Monday?';
-  const r = await createDispatchValidator({ engine }).validate(msg(t, [{ score: -0.1, segments: [piece(a, W(['kids.arith', 0.9])), piece(b, W(['kids.time', 0.8]), t.indexOf(b))] }]));
+  const r = await createDispatchValidator({ engine }).validate(msg(t, [{ score: -0.1, segments: [piece(a, W(['kids.arith', 0.9])), piece(b, W(['time.calendar', 0.8]), t.indexOf(b))] }]));
   assert.equal(r.trace.segmentations[0].tier, 0);
 });
 
