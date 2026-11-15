@@ -6,7 +6,10 @@
  * and desktop 1280x800 (chat with a page beside it). Records page errors / console errors / failed requests.
  * `--owner` adds the owner's two phone turns (training/eval/owner-exports/phrase-log-2026-11-14T2243.json): a fresh phone session with Romanian selected,
  * "deseneaza ceva random" on the Drawing page (reply under 2 s) and "deseneaza o diagrama in forma de casa" on the Diagram page (nodes on a house outline);
- * both answer in the informal singular and the first person, offer no weapon chip and leave seating / timeline untouched. `--owner-only` runs just those.
+ * both answer in the informal singular and the first person, offer no weapon chip and leave seating / timeline untouched; the house nodes do not overlap on the canvas.
+ * With `--owner` / `--owner-only` it also runs three person turns in English in a FRESH session (its own browser context): "I have two kids",
+ * "I like cats, dogs and horses", "what do you know about me" (the reply names the kids and the likes), then Settings › Privacy shows the facts and
+ * "Forget what you know about me" clears them. `--owner-only` runs just those.
  *   PUPPETEER_CORE=... node scripts/check-live-mobile.mjs --expect <version> [--wait 600] [--out docs/landing/2026-11-15-mobile] [--owner | --owner-only]
  */
 import { mkdir } from 'node:fs/promises';
@@ -35,8 +38,8 @@ check('deployed build equals main', !expect || live === expect, `live ${live}, e
 const pp = await loadPuppeteer();
 const browser = await pp.launch({ executablePath: opt('chrome', '/usr/bin/google-chrome'), headless: true, args: ['--no-sandbox'] });
 const log = { pageErrors: [], consoleErrors: [], failed: [], bad: [] };
-async function open(viewport, tag, settings = null) {
-  const pg = await browser.newPage();
+async function open(viewport, tag, settings = null, ctx = browser) {
+  const pg = await ctx.newPage();
   await pg.setViewport(viewport);
   if (settings) await pg.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify(s)); } catch { /* ignore */ } }, settings);
   pg.on('pageerror', (e) => log.pageErrors.push(`${tag}: ${String(e).slice(0, 200)}`));
@@ -115,6 +118,12 @@ async function ownerTurns() {
   check('owner 2: the reply is composed from the template (not machine-translated)', /^Am desenat o diagramă în formă de casă: \d+ noduri pe contur, unite în ordine\.$/.test(b.reply.trim()), b.reply);
   const xs = (st?.shapes ?? []).map((x) => x.x), mid = xs.length ? (Math.min(...xs) + Math.max(...xs)) / 2 : 0;
   check('owner 2: a symmetric gable and no part names on the nodes', st == null || ((st.shapes ?? []).every((x) => !x.label) && xs.filter((x) => x < mid - 1).length === xs.filter((x) => x > mid + 1).length), JSON.stringify((st?.shapes ?? []).map((x) => [x.name, x.label, x.x, x.y])));
+  // the nodes as drawn on the canvas: no two node bodies overlap (1 px tolerance)
+  const boxes = await pg.$$eval('.dg-svg .body', (e) => e.map((x) => { const r = x.getBoundingClientRect(); return [r.left, r.top, r.right, r.bottom].map((v) => Math.round(v)); }));
+  const over = [];
+  for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) { const [a, b] = [boxes[i], boxes[j]]; if (a[0] < b[2] - 1 && b[0] < a[2] - 1 && a[1] < b[3] - 1 && b[1] < a[3] - 1) over.push(`${i}/${j}`); }
+  console.log(`INFO  owner 2 node boxes on the canvas: ${JSON.stringify(boxes)}`);
+  check('owner 2: the house nodes do not overlap on the canvas', boxes.length >= 5 && over.length === 0, `${boxes.length} nodes; overlapping pairs ${over.join(', ') || 'none'}`);
   const bar = await pg.$$eval('.p2-example', (e) => e.filter((b) => b.offsetParent && !b.closest('.p2-msg')).map((b) => b.textContent.trim()));
   console.log(`INFO  owner 2 example bar: ${JSON.stringify(bar)}`);
   check('owner 2: the example bar has no English chips of other pages', !bar.some((c) => /^(Remove|Play|Add|Change|Make|Show|Draw|Move|Connect)\b/.test(c) || /bird|seventh|chord|sun\b/i.test(c)), JSON.stringify(bar));
@@ -129,8 +138,66 @@ async function ownerTurns() {
   await pg.close();
 }
 
+// reviewer 2026-11-15 08:15 item 3: three person turns in English in a fresh session, the reply of the third names the kids and the likes,
+// Settings › Privacy shows the facts and its "Forget what you know about me" button clears them
+async function personTurns() {
+  const ctx = await (browser.createBrowserContext ?? browser.createIncognitoBrowserContext).call(browser);
+  const pg = await open(PHONE, 'person', { settingsVersion: 3, language: 'en' }, ctx);
+  await idle(pg);
+  const turns = [];
+  for (const text of ['I have two kids', 'I like cats, dogs and horses', 'what do you know about me']) {
+    const r = await ownerTurn(pg, text);
+    turns.push(r);
+    console.log('PERSON ' + JSON.stringify({ text, wallMs: r.wallMs, perfMs: r.perfMs, reply: r.reply, pattern: r.pattern }));
+  }
+  const [k, l, w] = turns;
+  check('person 1 "I have two kids": acknowledged without an error reply', !!k.reply && !/did not understand|could not|cannot|error/i.test(k.reply), k.reply.slice(0, 100));
+  check('person 2 "I like cats, dogs and horses": acknowledged without an error reply', !!l.reply && !/did not understand|could not|cannot|error/i.test(l.reply), l.reply.slice(0, 100));
+  check('person 3 "what do you know about me": names the kids', /\b(two|2)\b.*\b(kids?|children|child)\b|\b(kids?|children)\b.*\b(two|2)\b/i.test(w.reply), w.reply);
+  check('person 3: names the likes (cats, dogs, horses)', ['cat', 'dog', 'horse'].every((x) => new RegExp(`\\b${x}s?\\b`, 'i').test(w.reply)), w.reply);
+  await shot(pg, 'person-1-chat.png');
+  await pg.tap('.p2-burger'); await sleep(300);
+  await pg.evaluate(() => document.querySelector('.p2-menu-item[data-page=settings]')?.click());
+  await pg.waitForSelector('#p2-st-privacy', { visible: true, timeout: 10000 }).catch(() => {});
+  await pg.tap('#p2-st-privacy').catch(() => pg.evaluate(() => document.querySelector('#p2-st-privacy')?.click()));
+  await sleep(600);
+  const view = () => pg.evaluate(() => {
+    const sec = document.querySelector('[data-section=person]');
+    const rows = [...(sec?.querySelectorAll('dt') ?? [])].map((dt) => [dt.textContent.trim(), dt.nextElementSibling?.textContent.trim() ?? '']);
+    const btn = [...(sec?.querySelectorAll('button') ?? [])].find((b) => /Forget what you know about me/.test(b.textContent));
+    return { shown: !!sec && !!sec.offsetParent, rows, button: !!btn, disabled: !!btn?.disabled, text: sec?.innerText ?? '' };
+  });
+  const before = await view();
+  console.log('PRIVACY ' + JSON.stringify(before));
+  const fam = before.rows.find(([kk]) => kk === 'Family')?.[1] ?? '', likes = before.rows.find(([kk]) => kk === 'Likes')?.[1] ?? '';
+  check('Settings › Privacy shows the family fact (two kids)', before.shown && /2/.test(fam) && /kid|child/i.test(fam), fam);
+  check('Settings › Privacy shows the likes (cats, dogs, horses)', ['cat', 'dog', 'horse'].every((x) => likes.toLowerCase().includes(x)), likes);
+  check('Settings › Privacy has an enabled "Forget what you know about me" button', before.button && !before.disabled);
+  await pg.evaluate(() => document.querySelector('.p2-modal-body, #p2-set-panel')?.scrollTo?.(0, 0));
+  await pg.evaluate(() => document.querySelector('[data-section=person]')?.scrollIntoView({ block: 'start' }));
+  await sleep(200);
+  await shot(pg, 'person-2-privacy.png');
+  await pg.evaluate(() => [...document.querySelectorAll('[data-section=person] button')].find((b) => /Forget what you know about me/.test(b.textContent))?.click());
+  await sleep(800);
+  const after = await view();
+  console.log('PRIVACY-AFTER ' + JSON.stringify(after));
+  check('"Forget what you know about me" clears the facts', after.rows.length === 0 && /Nothing yet/.test(after.text) && after.disabled, JSON.stringify(after.rows));
+  await pg.evaluate(() => document.querySelector('[data-section=person]')?.scrollIntoView({ block: 'start' }));
+  await shot(pg, 'person-3-forgotten.png');
+  // and the conversation forgot too
+  await pg.tap('.p2-modal-close').catch(() => pg.evaluate(() => document.querySelector('.p2-modal-close')?.click()));
+  await sleep(400);
+  const again = await ownerTurn(pg, 'what do you know about me');
+  console.log('PERSON ' + JSON.stringify({ text: 'what do you know about me (after forget)', wallMs: again.wallMs, reply: again.reply }));
+  check('after forgetting, "what do you know about me" no longer names the kids or the likes', !/\b(kids?|children|cats?|dogs?|horses?)\b/i.test(again.reply), again.reply);
+  check('after forgetting, "what do you know about me" is still answered by the person profile ("nothing yet"), not by another world', /\b(nothing|do not know|don't know)\b/i.test(again.reply) && /\byou\b/i.test(again.reply), `${again.wallMs} ms: ${again.reply}`);
+  await shot(pg, 'person-4-after-forget.png');
+  await pg.close(); await ctx.close();
+}
+
 try {
   if (args.includes('--owner') || args.includes('--owner-only')) await ownerTurns();
+  if (args.includes('--owner') || args.includes('--owner-only')) await personTurns();
   if (!args.includes('--owner-only')) {
   const pg = await open(PHONE, 'phone');
   await shot(pg, 'phone-1-chat.png');
