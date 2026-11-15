@@ -2944,3 +2944,53 @@ Per-world code still (owner 14:40): the two planners diagram.sketch/engine.mjs p
 
 ## 2026-11-15 spec 28 gates (request worker)
 Gates on d3c170a8: npm test 0 failures; real set 177/207 matrix and ops (delta 0; r0610/r0611 fixed on our side: a world's words shard is read as part of its schema); test-world all 0; owner sessions on the setup fixture: RO 25/43 (main on the same fixture 21/43), EN 14/16 (main 9/16); request properties 86-87/96. composed-reply fixed on our side (composeRo prefers the act's own reply when the catalog reply would drop a role; Q38 [KNOW]). Owner runner: `setup` replaces `redraw` (turn 1 judged on its own draw, then the owner's six-hexagon report flowchart is built by plain requests). Documents honours chapters and short. Next (own commit): sopworld 0.149 vendored byte for byte; the bridge and the per-world planners replaced by readRequest / reviseRequest / planRequest / runPlan / sayRequest over a live library World per tab built from request.sop (std.schema.honours, k.expect.make / part) with the steps executed by the world executors; needs the w.lang.en cues, w.dialogue revisions and k.expect bundled (build-lang-en).
+
+## 2026-11-15 spec 28 on sopworld 0.150 (request worker)
+Switch landed (04b7c284, e541d7a0, 21f284d1): 0.150 vendored byte for byte; readRequest / reviseRequest / planRequest / sayRequest over one live library World per tab (request.sop in the library vocabulary); bundled request words (build-bundled-request); local cues Q39; Q40 [LIB]. Gates on 21f284d1: real set 177/207 both (delta 0); test-world 0; properties 118/140 (P1 now 66 negation cases, 57 hold). Owner sessions (setup fixture): RO 22/43, EN 12/16 (25 and 14 before the switch on the same fixture: the planned diagrams and ponds now come from the library's sampling, so later turns meet other things; per-turn attribution not yet written). Not yet the door of the 16:10 block: the patterns still act first and the request step checks and plans after them.
+Probe (cli chat, new sentences, EN and RO):
+```
+you> open the diagram tab
+psys2> OK, here is the Diagram tab.
+you> make me a diagram of 6 boxes but no diamonds
+psys2> There are no rectangles on the canvas.
+you> draw 7 nodes, not all rectangles
+psys2> I drew a diagram with 7 nodes and 6 arrows. It is about shoe. The nodes are 4 rectangles and 3 circles. I assumed diagram for the target. I assumed rectangle, circle for the kinds.
+you> make a tiny diagram
+psys2> I drew a diagram with 3 nodes and 3 arrows. It is about frog life cycle. The nodes are 2 rectangles and 1 circle. I assumed 3 for the count. I assumed rectangle, circle for the kinds.
+you> not so many nodes
+psys2> I made it again, the way you said. I drew a diagram with 2 nodes and 1 arrow. It is about frog life cycle. The nodes are 1 rectangle and 1 circle. I assumed rectangle, circle for the kinds.
+you> add arrows
+psys2> That arrow already connects egg and tadpole. I cannot do this here: "arrows".
+you> draw something random in the diagram
+psys2> Drew a circle.
+you> open the drawing tab
+psys2> OK, here is the Drawing tab.
+you> paint a lake scene without birds
+psys2> I drew 3 blue birds.
+you> draw a big pond
+psys2> I drew a big pond. It has 3 flowers, 2 birds and 2 fish. I assumed free for the layout. I assumed 9 for the count. I assumed water, reed, duck, goldfish for the kinds.
+you> shorter
+psys2> I made it again, the way you said. I drew a small pond in a corner. It has 1 flower, 2 birds and 2 fish. I assumed free for the layout. I assumed water, reed, duck, goldfish for the kinds. I could not do shorter: this world does not take length for make
+you> break it into 2 layers: sky and land
+psys2> OK, I added a page break; I did not keep the name It Into 2 Layers: Sky And Land.
+you> open the documents tab
+psys2> You are already on the Documents tab.
+you> compose a story about a fox with 2 chapters
+psys2> I wrote the story "All about the fox": 84 words in 2 chapters. It is open in the Documents tab.
+you> write a short story about a fox
+psys2> I wrote the story "All about the fox": 90 words in 5 chapters. I could write about 90 words about the fox from what I know (you asked for 500); I did not pad it with repetition. It is open in the Documents tab. I assumed 3 for the count.
+you> open the diagram tab
+psys2> OK, here is the Diagram tab.
+you> desenează o diagramă cu 5 noduri, fără cercuri
+psys2> I drew a diagram with 5 nodes and 4 arrows. It is about boot. The nodes are 3 rectangles and 2 diamonds. I assumed rectangle, diamond for the kinds.
+you> prea multe
+psys2> I made it again, the way you said. I drew a diagram with 3 nodes and 2 arrows. It is about boot. The nodes are 2 rectangles and 1 diamond. I assumed rectangle, diamond for the kinds.
+you> open the drawing tab
+psys2> OK, here is the Drawing tab.
+you> desenează un iaz mic
+psys2> I drew a small pond in a corner. It has 1 flower, 1 bird and 1 fish. I assumed free for the layout. I assumed 4 for the count. I assumed water, reed, duck, goldfish for the kinds.
+you> mai mare
+psys2> I made it again, the way you said. I drew a pond. It has 2 flowers, 2 birds and 2 fish. I assumed free for the layout. I assumed water, reed, duck, goldfish for the kinds.
+you> :quit
+```
+Wrong in the probe: "6 boxes but no diamonds" (read as a correction), "add arrows" (one pair), "draw something random in the diagram" (a circle), "paint a lake scene without birds" (3 birds: the pattern acted first; the door fixes this), "break it into 2 layers" (Documents took it), "write a short story" (not shorter). Next: the door (16:10 block).

@@ -16,6 +16,10 @@ const BASE_FRAMES = [
   { p: 'îmi poți|puteți spune|spui', out: 'can you tell me' },
   { p: 'mi ai|ați putea spune', out: 'could you tell me' },
   { p: 'jumătate din {num}', out: 'half of {num}' },
+  // ---- reactions to the last result (spec 28): whole messages
+  { p: 'prea mult|multe|mulți|multă', out: 'too many', full: true },
+  { p: 'prea lung|lungă|lungi', out: 'too long', full: true },
+  { p: 'încă unul|una', out: 'another one', full: true },
   // ---- greetings and chat
   { p: 'bună ziua', out: 'hello' },
   { p: 'bună dimineața', out: 'good morning' },
