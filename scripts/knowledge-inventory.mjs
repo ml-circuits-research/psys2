@@ -20,7 +20,8 @@ export const EXEMPT = {
   'lang.common': 'shared phrase library (ADR-007)', core: 'platform core', 'session.conversation': 'the session', 'session.dialogue': 'the session', 'session.things': 'the session',
 };
 /** Item names that are the world's own sample data (stays, marked as such) or rules of a game. */
-export const SAMPLE = new Set(['kids.shop|kb|kids.shop.price', 'media.music|kb|media.music.song']);
+// acts EXAMPLE_*: the nouns the catalog's shared example sentences are written with (Q23: which examples a generated world may offer), not facts about the world
+export const SAMPLE = new Set(['kids.shop|kb|kids.shop.price', 'media.music|kb|media.music.song', 'acts|table|worlds/acts/acts.mjs:EXAMPLE_COLOURS', 'acts|table|worlds/acts/acts.mjs:EXAMPLE_THINGS', 'acts|table|worlds/acts/acts.mjs:EXAMPLE_WORLD']);
 
 const worldsDir = path.join(ROOT, 'worlds');
 const listWorlds = () => readdirSync(worldsDir).filter((d) => statSync(path.join(worldsDir, d)).isDirectory() && !EXEMPT[d]).sort();

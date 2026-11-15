@@ -216,7 +216,8 @@ export function generate(schema, ns, actsUrl = '../acts/acts.mjs', isCanon = () 
   }
   return files;
 }
-export const serializeSchema = (s) => ({ ...s, acts: [...s.acts] });
+// the fields that only choose a world's help examples (exampleOf, canonicalOf) are the generator's: never written into the generated modules
+export const serializeSchema = ({ sampleOther: _o, samplePlace: _p, sampleName: _n, sampleWords: _w, canonicalNot: _c, ...s }) => ({ ...s, acts: [...s.acts] });
 export const deserializeSchema = (j) => ({ ...j, acts: new Set(j.acts) });
 /**
  * The executor of a DECLARED schema (`declare=yes`): no acts are run (the world keeps its own operations), it only states what the sampler needs (spec 25): the schema, the things of the
