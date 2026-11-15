@@ -5,7 +5,7 @@
 import { storyState } from '../../lib/vendor/sopworld/sopworld.mjs?v=bf1ab27553';
 import { en } from '../../lib/lang/en.mjs?v=8f226ecd72';
 import { pluralize } from '../../lib/formalizer/rules/lemma.mjs?v=99f25611ee';
-import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=4fba5d0be8';
+import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=f8689c864a';
 import { CALC_WORDS } from '../../lib/knowledge/calc-words.generated.mjs?v=3038efb1d8';   // the catalog's words of arithmetic (K4: w.lang.en shard arithmetic)   // the catalog's money words (k.units through w.lang.en)
 
 export function initialState() { return { story: null, turns: 0 }; }

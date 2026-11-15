@@ -23,12 +23,13 @@ const NS = 'plan.list';
 const DIR = join(REPO, 'worlds', NS);
 const OUT = (name) => (name.endsWith('.mjs') ? join(REPO, 'src/knowledge', name) : join(DIR, name));
 /** The frame sets of the catalog this world reads (frame ids without the `acts.` set prefix). */
-export const SETS = ['shop.'];
+export const SETS = ['shop.', 'wallet.'];   // the wallet: w.list's budget (kids.shop step, ADR-011)
 /** While a kids world that reads the same sentences is on (kids.shop, ADR-011), this world stands behind it: the priority of a frame that names things (want, price,
  *  afford: 13-14) is lowered below the kids world's (10-12), so such a sentence stays the kids world's until it is switched off. The frames of a purchase in progress
  *  (the money paid, the change) keep the catalog's priority, so the payment and the change of a list this world holds are not read by another world in between. */
 export const BEHIND = -4;
-const behind = (f) => (f.args.some((r) => ['value', 'currency', 'money', 'unit'].includes(r)) || f.mode === 'change' ? 0 : BEHIND);
+// the wallet (what the person has, what is left) is kids.shop's own story while it is on: its frames stand behind it too
+const behind = (f) => (f.id.startsWith('wallet.') ? BEHIND : f.args.some((r) => ['value', 'currency', 'money', 'unit'].includes(r)) || f.mode === 'change' ? 0 : BEHIND);
 /** The frames whose catalog example is the canonical sentence of an operation (help and "Did you mean" quote canonical sentences only, RD6): one per act. */
 const CANONICAL = new Set(['shop.want', 'shop.pay']);   // (the questions, list.ask, stand behind kids.shop while it is on: no canonical sentence of theirs is this world's yet)
 /** The roles the operations of plan.list read; a frame with another role is not taken (it would claim a sentence no operation can run). */
