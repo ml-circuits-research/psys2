@@ -1669,6 +1669,10 @@ export class DialogSession {
   async _requestNotes(opts, reply, q, cannot) {
     if (!reply || typeof reply !== 'object') return reply;
     if (reply.trace) reply.trace.request = q;
+    // only a turn the open world itself read and carried out: a meta turn (repeat, a question about the user), a question back ("Which one?") or another world's reading says its own
+    const tabWorld = this.context().tabWorld;
+    const segs = reply.trace?.segments ?? reply.segments ?? [];
+    if (!segs.length || !segs.every((sg) => (sg.match?.worldId ?? sg.world) === tabWorld) || /\?\s*$/.test(String(reply.trace?.replyEnglish ?? reply.text ?? '').trim())) return reply;
     const add = [];   // [frame, words]: the frame is translated, the words are the user's own and stay as they were
     const shown = String(reply.trace?.replyEnglish ?? reply.text ?? '').toLowerCase();
     const missing = cannot.filter((c) => !shown.includes(String(c.words).toLowerCase().split(' ').at(-1)));

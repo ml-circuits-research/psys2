@@ -2397,7 +2397,7 @@ export function planRequest(ctx, goal = {}) {
   const plan = new Map([[main, 1]]);
   const rest = [...asked.filter((k) => parts.includes(k) && k !== main), ...parts.slice(1).filter((k) => !asked.includes(k))];
   const order = rest.length ? rest : [main];
-  for (let i = 1, j = Math.floor(rnd() * order.length); i < n; i++, j++) { const k = order[j % order.length]; plan.set(k, (plan.get(k) ?? 0) + 1); }
+  for (let i = 1, j = Math.floor(rnd() * order.length); i < n; i++, j++) { budget.tick('draw.plan'); const k = order[j % order.length]; plan.set(k, (plan.get(k) ?? 0) + 1); }
   const size = goal.size === 'small' ? 'small' : goal.size === 'big' ? 'big' : null;
   const where = PLACE[size ?? 'default'];
   const label = `drew a ${size ? `${size} ` : ''}${goal.target ?? main}`;

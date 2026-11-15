@@ -32,7 +32,8 @@ for (const reasoner of ['ops', 'matrix']) {
   test(`${reasoner}: a pond or a lake is an object, not water over the whole ground`, async () => {
     const s = await session(['draw 2 trees']);
     const r = await s.send('draw a pond');
-    assert.deepEqual(kinds(s), ['tree', 'tree', 'lake'], r.text);
+    // spec 28: a pond is a scene of the board's own kinds (request.sop w.expect: water, a few plants, an animal), its water one lake object
+    assert.deepEqual(kinds(s).slice(0, 3), ['tree', 'tree', 'lake'], r.text);
     assert.ok(!draw(s).ground, 'the ground stays as it was');
     assert.equal(byKind(s, 'lake').length, 1);
   });

@@ -91,7 +91,8 @@ export function planRequest(ctx, goal = {}) {
   const st = ctx.state, cannot = [];
   // the chapters said: the composer's parts are put together into that many (the later parts go under the last heading kept); more than the knowledge has is said, not padded
   const heads = () => st.blocks.filter((b) => b.kind === 'heading' && (b.level ?? 2) <= 2);
-  if (ch && heads().length > ch) { const drop = new Set(heads().slice(ch).map((b) => b.id ?? b)); st.blocks = st.blocks.filter((b) => !drop.has(b.id ?? b)); }
+  let changed = false;
+  if (ch && heads().length > ch) { changed = true; const drop = new Set(heads().slice(ch).map((b) => b.id ?? b)); st.blocks = st.blocks.filter((b) => !drop.has(b.id ?? b)); }
   else if (ch && heads().length < ch) cannot.push({ key: 'length', words: `${ch} chapters` });
   // a short text: the sections keep their first sentences until the length fits (never below one sentence per section)
   if (words && !said && goal.size === 'small') {
@@ -99,12 +100,12 @@ export function planRequest(ctx, goal = {}) {
     for (let guard = 0; count() > words && guard < 50; guard++) {
       const p = st.blocks.filter((b) => b.kind === 'paragraph').map((b) => ({ b, ss: String(b.text).match(/[^.!?]+[.!?]+/g) ?? [b.text] })).filter((x) => x.ss.length > 1).sort((a, c) => c.ss.length - a.ss.length)[0];
       if (!p) break;
-      p.b.text = p.ss.slice(0, -1).join('').trim();
+      p.b.text = p.ss.slice(0, -1).join('').trim(); changed = true;
     }
   }
   finish(st);
   const n = heads().length, w = st.stats?.words ?? 0;
-  r.value = `I wrote the ${goal.target ?? 'text'} "${st.title}". It has ${w} words in ${n} ${n === 1 ? 'chapter' : 'chapters'}.${w < (said ?? 0) * 0.8 ? ` I know only enough for ${w} words about this; I did not pad it.` : ''} It is open in the Documents tab.`;
+  if (changed) r.value = `I wrote the ${goal.target ?? 'text'} "${st.title}": ${fmt(w)} words in ${n} ${n === 1 ? "chapter" : "chapters"}.${w < (said ?? 0) * 0.8 ? ` I know only enough for ${w} words about this; I did not pad it.` : ''} It is open in the Documents tab.`;
   r.cannot = cannot;
   return r;
 }
