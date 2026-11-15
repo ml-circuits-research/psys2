@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "db69551d",
-  "tree": "050b6decdec95f26",
+  "build": "d226c110",
+  "tree": "2e7310a7e42836b5",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,16 +13,16 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 128,
+   "right": 127,
    "partly": 3,
-   "wrong": 76,
+   "wrong": 77,
    "open": 50,
    "changed": 16,
    "unjudged": 332,
    "outcome": {
     "executed": 157,
-    "refused": 241,
-    "asked": 3,
+    "refused": 240,
+    "asked": 4,
     "not_understood": 109,
     "other_world": 95
    },
@@ -30,7 +30,7 @@
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 37
+     "right": 36
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -88,16 +88,16 @@
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 128,
+   "right": 127,
    "partly": 3,
-   "wrong": 76,
+   "wrong": 77,
    "open": 50,
    "changed": 16,
    "unjudged": 332,
    "outcome": {
     "executed": 157,
-    "refused": 241,
-    "asked": 3,
+    "refused": 240,
+    "asked": 4,
     "not_understood": 109,
     "other_world": 95
    },
@@ -105,7 +105,7 @@
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 37
+     "right": 36
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 386,
- "failing_ops": 386,
+ "failing_matrix": 387,
+ "failing_ops": 387,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -184,7 +184,7 @@
      "verdict": "wrong",
      "text": "make a better layout",
      "tab": "diagram",
-     "reply": "I added a square. I assumed square for the target. I assumed white for the colour. I assumed default for the size. I assumed 1 for the count. I could not do a b",
+     "reply": "I added a square. I assumed square for the target. I assumed white for the colour. I could not do a better layout: nothing here has a layout.",
      "failing": [
       "state:shapes.length=$+0"
      ]
@@ -204,7 +204,7 @@
      "verdict": "wrong",
      "text": "create a diagram",
      "tab": "diagram",
-     "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed tree for the layout. I assumed 7 for the count. I assumed rectangle, circ",
+     "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed tree for the layout.",
      "failing": [
       "state:shapes.length=1",
       "answer:Keep the current one",
@@ -339,7 +339,7 @@
      "verdict": "wrong",
      "text": "make both green",
      "tab": "diagram",
-     "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed diagram for the target. I assumed tree for the layout. I assumed 7 for th",
+     "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed diagram for the target. I assumed tree for the layout.",
      "failing": [
       "state:shapes[name=A].color=green",
       "state:shapes[name=B].color=green"
@@ -434,8 +434,8 @@
   },
   {
    "cause": "Romanian: art.draw: acted; the reply does not say what the check asks",
-   "count": 22,
-   "wrong": 22,
+   "count": 23,
+   "wrong": 23,
    "partly": 0,
    "rows": [
     {
@@ -549,6 +549,16 @@
      ]
     },
     {
+     "id": "r0064",
+     "verdict": "wrong",
+     "text": "pune si un lac",
+     "tab": "draw",
+     "reply": "Nothing changed. Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\"",
+     "failing": [
+      "reply_not:Where should it go|did not understand"
+     ]
+    },
+    {
      "id": "r0066",
      "verdict": "wrong",
      "text": "muta si mai la stinga",
@@ -639,7 +649,7 @@
      "failing": []
     }
    ],
-   "both_reasoners": 22
+   "both_reasoners": 23
   },
   {
    "cause": "art.draw: acted; the state is not the expected one",
@@ -919,7 +929,7 @@
      "verdict": "wrong",
      "text": "for their grandma do it",
      "tab": "diagram",
-     "reply": "I made it again, the way you said. I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I removed the square. I assumed diagram for the ",
+     "reply": "The diagram now has 4 rectangles, 3 circles. I assumed diagram for the target. I assumed default for the size.",
      "failing": [
       "unchanged"
      ]
@@ -1123,8 +1133,8 @@
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 145,
-   "both_reasoners": 145,
+   "count": 146,
+   "both_reasoners": 146,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -1242,7 +1252,7 @@
     {
      "text": "create a diagram",
      "tab": "diagram",
-     "happened": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed tree for the layout. I assumed 7 for the count. I assumed rectangle, circ"
+     "happened": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed tree for the layout. [outcome: executed; wrong; state:shapes.length=1 ans"
     },
     {
      "text": "add a box",
@@ -1404,7 +1414,7 @@
     {
      "text": "make a better layout",
      "tab": "diagram",
-     "happened": "I added a square. I assumed square for the target. I assumed white for the colour. I assumed default for the size. I assumed 1 for the count. I could not do a b"
+     "happened": "I added a square. I assumed square for the target. I assumed white for the colour. I could not do a better layout: nothing here has a layout. [outcome: executed"
     },
     {
      "text": "paint Street New nodes",
