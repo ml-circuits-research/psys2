@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { createFsLoader } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
-import { buildRecord, completeRecord, appendCapped, filterRecords, toJSONL, toJSON, createStore, exportFilename, hashState, buildDetail, nextFeedback, voteOf, isComplaint } from '../docs/webchat/ui/phrase-log.mjs';
+import { buildRecord, completeRecord, appendCapped, filterRecords, toJSONL, toJSON, createStore, exportFilename, localDay, nextExportNumber, hashState, buildDetail, nextFeedback, voteOf, isComplaint } from '../docs/webchat/ui/phrase-log.mjs';
 
 const engine = await createEngine({ loader: createFsLoader() });
 const rec = async (text, extra = {}) => buildRecord({ text, tab: 'robot', reply: await engine.createSession().send(text, { language: 'en' }), ...extra });
@@ -24,6 +24,10 @@ test('cap drops the oldest, filters, JSONL and text', async () => {
   assert.deepEqual(l.map((r) => r.id), ['2', '3', '4', '5', '6']);
   const a = await rec('What day comes after Monday?'), b = await rec('blah zorp quux', { mode: 'voice' }), c = await rec('Open the editor', { mode: 'chip' });
   const all = [a, b, c];
+  const head = JSON.parse(toJSON(all, { includeChips: true, app: { commit: 'abc1234', version: 'v9' } }));
+  assert.deepEqual(Object.keys(head).slice(0, 3), ['format', 'app', 'turns']);   // the first lines: the app build and the number of turns
+  assert.deepEqual(head.app, { build: 'abc1234', version: 'v9' });
+  assert.equal(head.turns, 2);   // the button press is not a turn
   assert.deepEqual(filterRecords(all, 'misses'), [b]);
   assert.deepEqual(filterRecords(all, 'voice'), [b]);
   const lines = toJSONL(all).trim().split('\n').map((x) => JSON.parse(x));
@@ -32,7 +36,11 @@ test('cap drops the oldest, filters, JSONL and text', async () => {
   assert.equal(lines[1].status, 'unparsed');
   assert.equal(toJSONL(all, { includeChips: true }).trim().split('\n').length, 3);
   assert.deepEqual(JSON.parse(toJSON(all)).records.map((r) => r.text), ['What day comes after Monday?', 'blah zorp quux']);
-  assert.match(exportFilename(new Date('2026-11-08T10:00:00Z')), /^psys2-phrases-20261108\.json$/);
+  assert.equal(exportFilename(new Date(2026, 10, 15, 8, 34)), 'psys2-15Nov.json');   // the local day and the English month (owner 2026-11-15)
+  assert.equal(exportFilename(new Date(2026, 10, 15, 9, 0), 2), 'psys2-15Nov-2.json');
+  assert.deepEqual(nextExportNumber({ day: '2026-11-15', n: 1 }, '2026-11-15'), { n: 2, next: { day: '2026-11-15', n: 2 } });
+  assert.deepEqual(nextExportNumber({ day: '2026-11-14', n: 5 }, '2026-11-15').n, 1);
+  assert.equal(localDay(new Date(2026, 10, 5)), '2026-11-05');
 });
 
 test('store survives broken storage', () => {

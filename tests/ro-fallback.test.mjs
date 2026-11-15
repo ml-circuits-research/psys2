@@ -121,16 +121,22 @@ test('output: a reply the rules cannot put into Romanian goes to the Translator,
   assert.equal(q.map((p) => p.text).join(''), 'Soarele este o stea. „soare”');   // Romanian quotes
 });
 
-test('output: no template and no usable Translator: a Romanian line, never English (rules route when the table knows it)', async () => {
+test('output: no template and no usable Translator: the reply is never withheld (the best partial translation is shown, never a fixed line)', async () => {
   for (const backend of [backendOf(async () => '', { kind: null }), backendOf(async () => 'The sun is a star.')]) {
     const tr = mk(weakRules({ ro: false, en: true }), backend);
     const parts = await translateParts([{ text: 'Totally unknown sentence about quasars.', translate: true }, { text: '"cuvânt"', translate: false, quote: true }], tr, 'ro');
     const shown = parts.map((p) => p.text).join('');
-    assert.deepEqual(parts.routes, ['ro-generic']);
-    assert.match(shown, /^Nu am încă o formulare în română/);
+    assert.deepEqual(parts.routes, ['rules-partial']);
+    assert.doesNotMatch(shown, /Nu am încă o formulare/);
     assert.match(shown, /„cuvânt”/);
-    assert.doesNotMatch(shown, /quasars/);
+    assert.match(shown, /quasars/);   // what the reply says is shown (owner 2026-11-15, class B)
   }
+  // a translator that can do the whole reply at once (but not a run alone, e.g. a leftover English word in one run) translates it as a whole
+  let n = 0;
+  const whole = mk(weakRules({ ro: false, en: true }), backendOf(async (t) => (++n === 1 ? 'The sun is a star.' : 'Soarele este o stea. „cuvânt”')));
+  const w = await translateParts([{ text: 'The sun is a star. ', translate: true }, { text: '"cuvânt"', translate: false, quote: true }], whole, 'ro');
+  assert.deepEqual(w.routes, ['translator-out-whole']);
+  assert.match(w.map((p) => p.text).join(''), /^Soarele este o stea/);
   const ok = await translateParts([{ text: 'I drew a house.', translate: true }], mk(base, okBackend()), 'ro');
   assert.deepEqual(ok.routes, ['translator-out']);   // P7: the Translator first
   const rulesOnly = await translateParts([{ text: 'I drew a house.', translate: true }], mk(base, backendOf(async () => { throw new Error('down'); })), 'ro');

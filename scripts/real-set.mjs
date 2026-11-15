@@ -146,6 +146,58 @@ const RUN_EPOCH = Date.parse('2026-11-15T12:00:00Z');
 const resultFile = (reasoner, mode, tag) => RES(reasoner, tag || (mode === 'shipped' ? '' : `-${mode}`));
 
 /**
+ * The page's engine in node (shared by `run` and scripts/owner-session.mjs): the webchat's settings with `reasoner`, the translator chain (rules, the on-device model when
+ * `bergamot` names its cache directory, the Romanian voice), the catalog at the pinned commit over the bundled subset, and in the shipped mode the encoder formalizer.
+ */
+export async function openShipped({ reasoner = 'matrix', mode = 'shipped', ortPath = null, bergamot = null, voice = false } = {}) {
+  process.env.PSYS2_REASONER = reasoner;
+  const { createFsLoader, DEFAULT_ROOT } = await import('../src/loaders/fs-loader.mjs');
+  const { createEngine } = await import('../src/dialog/index.mjs');
+  const { sessionOptions, runtimeSettings } = await import('../src/dialog/runtime-config.mjs');
+  const { createTranslator } = await import('../src/translate/index.mjs');
+  const { createSwitchTranslator } = await import('../docs/webchat/ui/translation.mjs');
+  const { DEFAULT_SETTINGS, applyReading } = await import('../docs/webchat/ui/settings.mjs');
+  const { createFacts } = await import('../src/knowledge/facts.mjs');
+  const { createKnowledgeSource } = await import('../src/loaders/knowledge-source.mjs');
+  const { createLayeredSource } = await import('../src/knowledge/bundled-source.mjs');
+  const { pinnedCatalog } = await import('./lib/catalog-pin.mjs');
+  const catalog = pinnedCatalog();
+  const rules = createTranslator();
+  // --bergamot <cacheDir>: the on-device model (Bergamot ro-en / en-ro in node) as the MT source, as the shipped chain has it (the browser Translator API does not exist in node); --voice: the Romanian grammar voice (src/translate/voice-ro.mjs)
+  let mt = null;
+  // the page's keep-list around the model (engine-worker.mjs): `keepFor.session` is the session being replayed
+  const keepFor = { session: null };
+  let engine = null;
+  if (bergamot) {
+    const { createNodeMt } = await import('./lib/mt-node.mjs');
+    const kl = await import('../src/translate/keep-list.mjs');
+    mt = await createNodeMt({ cacheDir: bergamot, keep: () => (engine ? { keep: kl.keepListOf(engine.set), extra: kl.sessionNames(keepFor.session), things: kl.worldThingNames(keepFor.session) } : null) });
+    await mt.ensure('ro');
+  }
+  const roVoice = voice ? (await import('../src/translate/voice-ro.mjs')).createRoGrammarVoice() : null;
+  const mtBackend = { translatorKind: () => 'mt', detectorKind: () => null, supports: () => true, sources: async () => ['model'], translate: (t, f, to) => mt?.translate(t, f, to), detect: async () => { throw new Error('none'); }, prepare: async () => {}, state: () => 'ready' };
+  const translator = createSwitchTranslator({ rules, getStrategy: () => 'auto', voices: () => (roVoice ? [roVoice] : []), backend: mt ? mtBackend : { translatorKind: () => null, detectorKind: () => null, translate: async () => { throw new Error('none'); }, detect: async () => { throw new Error('none'); }, prepare: async () => {}, state: () => 'none' } });
+  // the page's settings (a first visit: no saved profile), with the reasoner of this run; the rules diagnostic switches the helper model off as Settings › Reading does
+  const settings = applyReading({ ...DEFAULT_SETTINGS, reasoner, ...(mode === 'rules' ? { helperModel: false } : {}) });
+  engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });
+  try { await engine.prepareMeta?.(); } catch { /* the policy router answers alone (spec 20), as on the page */ }
+  // the knowledge the page loads (engine-worker.mjs): the catalog, here its checkout at the pinned commit, over the bundled subset
+  const catSource = createKnowledgeSource(catalog.dir);
+  engine.setKnowledge(createFacts({ source: createLayeredSource({ text: (p) => catSource.text(p).catch(() => null) }) }));
+  let model = null;
+  if (settings.formalizer === 'encoder') {
+    const { openNodeRuntime } = await import('./lib/runtime-node.mjs');
+    // one ORT thread: the same scores on every run (a parallel reduction may round differently)
+    const rt = await openNodeRuntime({ engine, mode: 'encoder', ortPath, ortThreads: 1, overrides: runtimeSettings(settings) });
+    model = rt.info.hashes;
+  }
+  return { engine, settings, catalog, model, mt, keepFor };
+}
+
+/** The send options of docs/webchat/app.mjs for a row (the page's turn), without the deadline. */
+export const sendOptions = (settings, r, budget) => ({ mode: r.mode === 'voice' ? 'voice' : undefined, language: r.lang === 'ro' ? 'ro' : 'en', formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, worldAware: settings.worldAware ?? 'veto', fastPath: settings.fastPath === true, nx: settings.nxStrategy, budget });
+
+/**
  * Replays the set. `mode`:
  *   shipped  (default, the headline): what the page runs. The webchat's own settings (docs/webchat/ui/settings.mjs DEFAULT_SETTINGS through applyReading: the encoder formalizer
  *            with the DistilBERT dispatcher, fastPath, worldAware veto, nxStrategy rules, the matrix reasoner), the per-turn send options of docs/webchat/app.mjs, and the
@@ -158,42 +210,11 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 
   if (!['shipped', 'rules'].includes(mode)) throw new Error(`unknown mode ${mode} (shipped | rules)`);
   if (mode === 'shipped' && !ortPath) throw new Error('the shipped mode runs the encoder formalizer: pass --ort <onnxruntime-node entry> (or PSYS2_ORT), or --mode rules for the diagnostic');
   const build0 = buildInfo(REPO);   // the files measured, taken before the run (spec 16 section 14, "Measurement")
-  process.env.PSYS2_REASONER = reasoner;
-  const { createFsLoader, DEFAULT_ROOT } = await import('../src/loaders/fs-loader.mjs');
-  const { createEngine } = await import('../src/dialog/index.mjs');
-  const { sessionOptions, runtimeSettings } = await import('../src/dialog/runtime-config.mjs');
-  const { createTranslator } = await import('../src/translate/index.mjs');
-  const { createSwitchTranslator } = await import('../docs/webchat/ui/translation.mjs');
-  const { DEFAULT_SETTINGS, applyReading } = await import('../docs/webchat/ui/settings.mjs');
+  const { engine, settings, catalog, model, mt, keepFor } = await openShipped({ reasoner, mode, ortPath, bergamot, voice });
   const { visibleState } = await import('./lib/visible-state.mjs');
   const { evaluateCase, classify } = await import('./lib/operational-check.mjs');
-  const { createFacts } = await import('../src/knowledge/facts.mjs');
-  const { createKnowledgeSource } = await import('../src/loaders/knowledge-source.mjs');
-  const { createLayeredSource } = await import('../src/knowledge/bundled-source.mjs');
-  const { pinnedCatalog } = await import('./lib/catalog-pin.mjs');
   const { createBudget } = await import('../src/dialog/budget.mjs');
-  const catalog = pinnedCatalog();
-  const rules = createTranslator();
-  // --bergamot <cacheDir>: the on-device model (Bergamot ro-en / en-ro in node) as the MT source, as the shipped chain has it (the browser Translator API does not exist in node); --voice: the Romanian grammar voice (src/translate/voice-ro.mjs)
-  let mt = null;
-  if (bergamot) { const { createNodeMt } = await import('./lib/mt-node.mjs'); mt = await createNodeMt({ cacheDir: bergamot }); await mt.ensure('ro'); }
-  const roVoice = voice ? (await import('../src/translate/voice-ro.mjs')).createRoGrammarVoice() : null;
-  const mtBackend = { translatorKind: () => 'mt', detectorKind: () => null, supports: () => true, sources: async () => ['model'], translate: (t, f, to) => mt?.translate(t, f, to), detect: async () => { throw new Error('none'); }, prepare: async () => {}, state: () => 'ready' };
-  const translator = createSwitchTranslator({ rules, getStrategy: () => 'auto', voices: () => (roVoice ? [roVoice] : []), backend: mt ? mtBackend : { translatorKind: () => null, detectorKind: () => null, translate: async () => { throw new Error('none'); }, detect: async () => { throw new Error('none'); }, prepare: async () => {}, state: () => 'none' } });
-  // the page's settings (a first visit: no saved profile), with the reasoner of this run; the rules diagnostic switches the helper model off as Settings › Reading does
-  const settings = applyReading({ ...DEFAULT_SETTINGS, reasoner, ...(mode === 'rules' ? { helperModel: false } : {}) });
-  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });
-  try { await engine.prepareMeta?.(); } catch { /* the policy router answers alone (spec 20), as on the page */ }
-  // the knowledge the page loads (engine-worker.mjs): the catalog, here its checkout at the pinned commit, over the bundled subset
-  const catSource = createKnowledgeSource(catalog.dir);
-  engine.setKnowledge(createFacts({ source: createLayeredSource({ text: (p) => catSource.text(p).catch(() => null) }) }));
-  let model = null;
-  if (settings.formalizer === 'encoder') {
-    const { openNodeRuntime } = await import('./lib/runtime-node.mjs');
-    // one ORT thread: the same scores on every run (a parallel reduction may round differently)
-    const rt = await openNodeRuntime({ engine, mode: 'encoder', ortPath, ortThreads: 1, overrides: runtimeSettings(settings) });
-    model = rt.info.hashes;
-  }
+  const { sessionOptions, runtimeSettings } = await import('../src/dialog/runtime-config.mjs');
   const rows = jl('training/eval/real-2026-11-15.jsonl'.replace(/^/, ''));
   const META = new Set(['ui.shell', 'ui.help', 'talk', 'kids.common', 'conversation']);
   const bySession = new Map();
@@ -211,6 +232,7 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 
     Math.random = mulberry32(seed ^ hash32(key));   // P1 a: seeded per session
     fake = RUN_EPOCH;
     const s = engine.createSession(sessionOptions(settings, { language: 'en' }));
+    keepFor.session = s;
     s.fastPath = settings.fastPath === true;   // as engine-worker.mjs applySettings
     for (const [pos, r] of turns.entries()) {
       if (r.init) for (const [w, patch] of Object.entries(r.init)) s.setWorldState(w, patch);
@@ -222,7 +244,7 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 
       let reply = null, error = null;
       const tb = createBudget();   // the turn's budget (the default limits), passed in so its ticks per site are read on every outcome (SCAN-PROFILE)
       // the send options of docs/webchat/app.mjs (the page's turn), without the deadline (none in node: a measurement does not depend on the machine's load)
-      const opts = { mode: r.mode === 'voice' ? 'voice' : undefined, language: r.lang === 'ro' ? 'ro' : 'en', formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, worldAware: settings.worldAware ?? 'veto', fastPath: settings.fastPath === true, nx: settings.nxStrategy, budget: tb };
+      const opts = sendOptions(settings, r, tb);
       try { reply = await s.send(r.text, opts); } catch (e) { error = e.message; }
       const ms = Math.round(performance.now() - t0);
       const tk = { total: tb.ticks, sites: { ...tb.bySite } };   // ticks per site of the turn (deterministic; `diff` ignores it like ms)

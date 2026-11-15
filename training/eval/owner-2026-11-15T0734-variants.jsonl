@@ -1,0 +1,49 @@
+// Variants of the classes A-G of the owner's session 2026-11-15T0734 (reviewer 2026-11-15 10:00): 5 sentences of our own per class, other words and another tab / world, written BEFORE the fixes; reported per class by scripts/owner-session.mjs. Lines of one `session` run in order in one session; `context` lines set the scene and are not judged.
+{"session": "a1", "context": true, "tab": "diagram", "lang": "ro", "text": "desenează trei cercuri"}
+{"id": "A1", "class": "A", "tab": "diagram", "lang": "ro", "text": "ordonează cercurile pe un rând", "intent": "arrange the circles in a row", "expect": {"world": "diagram.sketch", "changed": true, "state": ["diagram.sketch:shapes.length=$+0"]}, "session": "a1"}
+{"session": "a2", "context": true, "tab": "draw", "lang": "ro", "text": "desenează doi copaci și o casă"}
+{"id": "A2", "class": "A", "tab": "draw", "lang": "ro", "text": "rearanjează desenul", "intent": "re-arrange the drawing", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length=$+0"]}, "session": "a2"}
+{"id": "A3", "class": "A", "tab": "map", "lang": "ro", "text": "du-mă la madrid", "intent": "show Madrid on the map", "expect": {"world": "geo.map", "state": ["geo.map:focus~Madrid"]}}
+{"id": "A4", "class": "A", "tab": "editor", "lang": "ro", "text": "scrie un paragraf despre munți", "intent": "write a paragraph about mountains", "expect": {"world": "docs.editor", "state": ["docs.editor:stats.words>=$+5"]}}
+{"id": "A5", "class": "A", "tab": "draw", "lang": "ro", "text": "desenează o pisică portocalie", "intent": "draw an orange cat", "expect": {"world": "art.draw", "state": ["art.draw:objects.length>=$+1"], "reply_any": "pisic"}}
+{"id": "B1", "class": "B", "tab": "map", "lang": "ro", "text": "unde e roma", "intent": "where is Rome", "expect": {"world": "geo.map", "reply_any": "Rom"}}
+{"session": "b2", "context": true, "tab": "diagram", "lang": "ro", "text": "desenează cinci cercuri"}
+{"id": "B2", "class": "B", "tab": "diagram", "lang": "ro", "text": "pune cercurile ca un pentagon", "intent": "arrange the circles as a pentagon (at least an honest reply in Romanian)", "expect": {"reply_any": "\\S"}, "session": "b2"}
+{"id": "B3", "class": "B", "tab": "editor", "lang": "ro", "text": "câte cuvinte are documentul?", "intent": "how many words does the document have", "expect": {"reply_any": "\\d|niciun|gol"}}
+{"id": "B4", "class": "B", "tab": "charts", "lang": "ro", "text": "fă un grafic cu vânzările pe luni", "intent": "make a chart of sales by month", "expect": {"reply_any": "\\S"}}
+{"id": "B5", "class": "B", "tab": "map", "lang": "ro", "text": "cât de mare e franța", "intent": "how big is France", "expect": {"reply_any": "Fran"}}
+{"session": "c1", "context": true, "tab": "diagram", "lang": "ro", "text": "desenează un pătrat numit start"}
+{"id": "C1", "class": "C", "tab": "diagram", "lang": "ro", "text": "mută start la stânga", "intent": "move start to the left; the reply names it", "expect": {"world": "diagram.sketch", "state": ["diagram.sketch:shapes[name=start].x<$+0"], "reply_any": "start"}, "session": "c1"}
+{"session": "c2", "context": true, "tab": "diagram", "lang": "ro", "text": "desenează un cerc numit alfa și un pătrat numit beta"}
+{"id": "C2", "class": "C", "tab": "diagram", "lang": "ro", "text": "mută alfa și beta în jos", "intent": "move alfa and beta down; the reply names both", "expect": {"world": "diagram.sketch", "state": ["diagram.sketch:shapes[name=alfa].y>$+0", "diagram.sketch:shapes[name=beta].y>$+0"], "reply_any": ["alfa", "beta"]}, "session": "c2"}
+{"session": "c3", "context": true, "tab": "diagram", "lang": "ro", "text": "desenează un cerc numit gamma"}
+{"id": "C3", "class": "C", "tab": "diagram", "lang": "ro", "text": "mută delta în sus", "intent": "move a shape that does not exist: nothing changes and the reply says so, never \"done\"", "expect": {"changed": false, "reply_not": "^\\s*(Gata|F[aă]cut)"}, "session": "c3"}
+{"session": "c4", "context": true, "tab": "draw", "lang": "ro", "text": "desenează o casă"}
+{"id": "C4", "class": "C", "tab": "draw", "lang": "ro", "text": "fă casa roșie", "intent": "make the house red; the reply says it", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length=$+0"], "reply_any": "ro[sșş]"}, "session": "c4"}
+{"session": "c5", "context": true, "tab": "diagram", "lang": "ro", "text": "desenează un cerc numit ana"}
+{"session": "c5", "context": true, "tab": "diagram", "lang": "ro", "text": "mută ana sus de tot"}
+{"id": "C5", "class": "C", "tab": "diagram", "lang": "ro", "text": "mută ana mai sus", "intent": "move ana further up, or say plainly why not", "expect": {"world": "diagram.sketch", "state": ["diagram.sketch:shapes[name=ana].y<$+0"], "or_reply": "deja|already|margine|sus de tot"}, "session": "c5"}
+{"id": "D1", "class": "D", "tab": "music", "lang": "ro", "text": "cântă ceva vesel", "intent": "play something cheerful (Music)", "expect": {"world": "media.music", "tab": "music", "reply_not": "Nu [sș]tiu"}}
+{"id": "D2", "class": "D", "tab": "charts", "lang": "ro", "text": "desenează ceva", "intent": "draw something on the Charts tab: a chart, not a Documents paragraph", "expect": {"world": "data.charts", "tab": "charts"}}
+{"id": "D3", "class": "D", "tab": "diagram", "lang": "ro", "text": "desenează ceva frumos", "intent": "draw something nice on the Diagram tab", "expect": {"world": "diagram.sketch", "tab": "diagram", "changed": true}}
+{"id": "D4", "class": "D", "tab": "map", "lang": "ro", "text": "arată ceva interesant", "intent": "show something interesting on the map", "expect": {"world": "geo.map", "tab": "map"}}
+{"session": "d5", "context": true, "tab": "draw", "lang": "ro", "text": "desenează doi copaci"}
+{"id": "D5", "class": "D", "tab": "draw", "lang": "ro", "text": "mută copacii mai sus", "intent": "move the trees up (Drawing, not Music or Diagram)", "expect": {"world": "art.draw", "changed": true}, "session": "d5"}
+{"session": "e1", "context": true, "tab": "diagram", "lang": "ro", "text": "desenează patru pătrate"}
+{"id": "E1", "class": "E", "tab": "diagram", "lang": "ro", "text": "fă-l mai ordonat", "intent": "make it tidier: arrange the diagram", "expect": {"world": "diagram.sketch", "changed": true, "state": ["diagram.sketch:shapes.length=$+0"]}, "session": "e1"}
+{"session": "e2", "context": true, "tab": "draw", "lang": "ro", "text": "desenează cinci flori"}
+{"id": "E2", "class": "E", "tab": "draw", "lang": "ro", "text": "sunt prea multe", "intent": "a complaint \"too many\": remove some of the flowers", "expect": {"world": "art.draw", "state": ["art.draw:objects.length<$+0"]}, "session": "e2"}
+{"id": "E3", "class": "E", "tab": "map", "lang": "ro", "text": "lisabona", "intent": "a bare place name on the Map: show Lisbon", "expect": {"world": "geo.map", "state": ["geo.map:focus~Lis"]}}
+{"id": "E4", "class": "E", "tab": "draw", "lang": "ro", "text": "ești prost?", "intent": "talk about the assistant: a calm reply, nothing changes", "expect": {"changed": false, "reply_not": "Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins"}}
+{"id": "E5", "class": "E", "tab": "editor", "lang": "ro", "text": "scrie-mi o poveste despre un urs", "intent": "write a story about a bear", "expect": {"world": "docs.editor", "state": ["docs.editor:stats.words>=$+20"]}}
+{"id": "F1", "class": "F", "tab": "draw", "lang": "ro", "text": "desenează o casă, pune un copac lângă ea și fă cerul albastru", "intent": "three instructions in one message", "expect": {"world": "art.draw", "state": ["art.draw:objects.length>=$+2"]}}
+{"id": "F2", "class": "F", "tab": "diagram", "lang": "ro", "text": "desenează trei cercuri, leagă-le între ele și pune primul mai sus", "intent": "three instructions on the diagram", "expect": {"world": "diagram.sketch", "state": ["diagram.sketch:shapes.length>=$+3", "diagram.sketch:edges.length>=$+2"]}}
+{"id": "F3", "class": "F", "tab": "map", "lang": "ro", "text": "arată-mi roma și apoi du-te la paris", "intent": "two places in one message: ends on Paris", "expect": {"world": "geo.map", "state": ["geo.map:focus~Paris"]}}
+{"session": "f4", "context": true, "tab": "draw", "lang": "ro", "text": "desenează un lac"}
+{"id": "F4", "class": "F", "tab": "draw", "lang": "ro", "text": "pune peștii în apă, adaugă trei rațe și șterge soarele", "intent": "three edits of the picture", "expect": {"world": "art.draw", "changed": true, "reply_not": "Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins"}, "session": "f4"}
+{"id": "F5", "class": "F", "tab": "editor", "lang": "ro", "text": "scrie un titlu despre mare, apoi un paragraf despre valuri", "intent": "a title and a paragraph", "expect": {"world": "docs.editor", "state": ["docs.editor:blocks.length>=$+2"]}}
+{"id": "G1", "class": "G", "tab": "draw", "lang": "ro", "text": "desenează un câine", "intent": "draw a dog, fast", "expect": {"world": "art.draw", "state": ["art.draw:objects.length>=$+1"], "max_ms": 1000}}
+{"id": "G2", "class": "G", "tab": "diagram", "lang": "ro", "text": "adaugă un pătrat", "intent": "add a square, fast", "expect": {"world": "diagram.sketch", "state": ["diagram.sketch:shapes.length>=$+1"], "max_ms": 1000}}
+{"id": "G3", "class": "G", "tab": "map", "lang": "ro", "text": "arată-mi berlinul", "intent": "show Berlin, fast", "expect": {"world": "geo.map", "state": ["geo.map:focus~Berlin"], "max_ms": 1000}}
+{"id": "G4", "class": "G", "tab": "editor", "lang": "ro", "text": "adaugă un paragraf despre ploaie", "intent": "add a paragraph about rain, fast", "expect": {"world": "docs.editor", "changed": true, "max_ms": 1000}}
+{"id": "G5", "class": "G", "tab": "music", "lang": "ro", "text": "cântă o melodie", "intent": "play a tune, fast", "expect": {"world": "media.music", "reply_not": "Nu [sș]tiu", "max_ms": 1000}}
