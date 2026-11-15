@@ -2403,21 +2403,6 @@ export function planRequest(ctx, goal = {}) {
     e.n++; e.said.add(said); items.set(k, e);
   }
   if (!items.size) return no(`I cannot draw ${goal.target ? `a ${goal.target}` : 'that'} with the things I know how to draw.`, 'unsupported');
-  if (goal.plan?.roles?.mode === 'kind') {   // things of kinds, not a scene: the board draws each the way it draws a thing (its place from the facts, its colour, its warnings), and says so
-    // each kind said is a request of its own ("draw a sky and a sun": two steps of undo, as two clauses are), each with the board's own words for its step ("drew a yellow sun")
-    const sz = goal.size === 'small' || goal.size === 'tiny' ? 'small' : goal.size === 'big' || goal.size === 'huge' ? 'big' : null;
-    const colour = (goal.request?.facts ?? []).find((f) => f.key === 'attribute' && f.attribute === 'colour' && !f.neg)?.value ?? null;   // a colour said ("draw a red house")
-    const texts = [];
-    for (const [k, e] of items) {
-      budget.tick('draw.plan');
-      const one = { kind: k, n: String(e.n), ...(sz ? { m1: sz } : {}), ...(colour ? { m2: String(colour).toLowerCase() } : {}) };
-      // the place in the user's words first ("in the sky": the board warns when a thing does not belong there), else the plan's place in the board's words ("in the corner")
-      let x = k === 'sky' && colour ? skyColour(ctx, colour) : k === 'sky' || Object.hasOwn(GROUND_WORDS, k) ? ground(ctx, { g: k }) : add(ctx, { ...one, where: goal.placeWords ?? (goal.place && PLACE[goal.place] ? PLACE[goal.place] : '') });
-      if (x?.status !== 'supported' && goal.placeWords && goal.place && PLACE[goal.place]) x = add(ctx, { ...one, where: PLACE[goal.place] });
-      if (x?.status === 'supported') texts.push(String(x.value ?? '').trim()); else cannot.push({ key: 'kind', words: [...e.said][0], why: 'I cannot draw that yet' });
-    }
-    return texts.length ? ok(texts.join(' '), { cannot, plain: true }) : no('I could not draw any of it.', 'unsupported');
-  }
   const size =goal.size === 'small' || goal.size === 'tiny' ? 'small' : goal.size === 'big' || goal.size === 'huge' ? 'big' : null;
   const where = PLACE[goal.place] ?? (size === 'small' ? PLACE.corner : PLACE.bottom);
   const [main] = items.keys();
@@ -2440,27 +2425,58 @@ export function planRequest(ctx, goal = {}) {
   const targetName = String(goal.target ?? "").replace(/_/g, " ");
   const list = rest.length > 1 ? `${rest.slice(0, -1).join(', ')} and ${rest.at(-1)}` : rest[0];
   const at = goal.place && PLACE[goal.place] ? ` ${PLACE[goal.place]}` : where === PLACE.corner ? ' in a corner' : '';
-  const one1 = (x) => x.replace(/^1 (.+)$/, (m, k) => `${/^[aeiou]/.test(k) ? 'an' : 'a'} ${k}`);
-  if (goal.plan?.roles?.mode === 'kind') { const xs = said.map(one1); return ok(`I drew ${xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}` : xs[0]}${at}.`, { cannot, plain: true }); }   // things of kinds, not a scene: what was drawn
   if (goal.target && items.size === 1 && items.has(drawnAs[goal.target] ?? goal.target)) return ok(`I drew ${said[0] === `1 ${kindName(main)}` ? `a ${size ? `${size} ` : ''}${kindName(main)}` : said[0]}${at}.`, { cannot, plain: true });   // a thing, not a scene of parts
   return ok(goal.target ? `I drew a ${size ? `${size} ` : ''}${targetName}${at}. It has ${list}.` : `I drew ${list}${at}.`, { cannot });
 }
 
 /**
- * TOOLS OF THE BOARD (spec 28 section 12): operations on its state with no words of their own. Arguments: the ids of its things, a direction (up, down, left, right), a region id
- * (the canvas regions top, bottom, left, right, centre, corner, top_left ...; the bands of request.sop std.schema.region: water, land, sky), the ids of a thing to go next to or in,
- * an attribute and a value (colour: a colour of the catalog; size: a step of the scale, or step up / down). `label` is the host's words for the undo history. Each is one undo
- * step. Result: { status, changed: [ids], added } or { status: 'missing', code } (the host says it from the language world's reply facts). Bound in request.sop (psys2.tool).
+ * TOOL PRIMITIVES OF THE BOARD (spec 28 section 12; reviewer 2026-11-15 20:45): typed operations on its state, bound by the std.tool wires of request.sop and run by the library's
+ * runPlan. Named arguments only; no request, no words, no defaults, no reply. Values come in as the tool takes them (the library translated them by knowledge before the call):
+ *   kind    a kind of the board (scene.mjs KINDS)              n       how many            size   small | default | big (a grade the param accepts)
+ *   colour  a colour of the catalog                             place   a region id of the canvas (scene.mjs REGIONS, `_` for a space; corner), a band of request.sop's
+ *                                                                        std.schema.region (water, land, sky), or a direction (up, down)
+ *   anchor  the id of a thing to go next to                     ids     the ids of the things acted on
+ * A call is all or nothing; the calls of one session step are one entry of the board's history (`step`, `label`: given by the host). Result: { status, changed } or { status: 'missing', code } (the host passes a refusal to the library as { ok: false, code }).
+ * `toolView` is the board's state as facts for the library's view (id, kind, colour, size grade, region); `thingAt` is the declared custom search (std.tool.custom) that finds
+ * the newest thing of the kind a place names.
  */
 const STEP = 70;
-const objsOf = (s, ids) => (ids ?? []).map((id) => byId(s, id)).filter(Boolean);
+const objsOf = (s, ids) => [].concat(ids ?? []).map((id) => byId(s, String(id).replace(/^\$/, ''))).filter(Boolean);
 const toolDone = (extra = {}) => ({ status: 'supported', value: '', ...extra });
 const toolNo = (code) => ({ status: 'missing', value: '', code });
-export function removeThings(ctx, { ids, label = 'removed things' } = {}) {
+/**
+ * One call of a primitive: all or nothing, and a step of the board's own history; the calls of one step of the session (`step`: its id, given by the host) are one history entry,
+ * labelled with `label` (the person's words), so that one plan of several calls is one undo.
+ */
+function toolStep(ctx, { step = null, label = null } = {}, fn) {
+  const s = ensure(ctx);
+  const base = step && s.stepGroup?.id === step && s.stepGroup.base <= s.history.length ? s.stepGroup.base : s.history.length;
+  if (step) s.stepGroup = { id: step, base };
+  const r = oneStep(ctx, label ?? '', () => { remember(s, label ?? ''); return fn(s); });
+  if (r?.status === 'supported' && s.history.length > base + 1) { s.history.splice(base + 1); s.history[base].label = label ?? ''; s.prev = s.history.at(-1) ?? null; }
+  return r;
+}
+const DIRECTION = { up: [0, -1], down: [0, 1] };
+const regionId = (place) => (place == null ? null : place === 'corner' ? 'bottom left' : Object.hasOwn(REGIONS, String(place).replace(/_/g, ' ')) ? String(place).replace(/_/g, ' ') : null);
+const bandOf = (place) => (place != null && Object.hasOwn(GROUND_WORDS, place) ? GROUND_WORDS[place] : place === 'land' ? 'ground' : null);
+const gradeFactor = (size) => (size ? SIZE_WORDS[size === 'default' ? 'normal' : size] ?? null : 1);
+export function addThings(ctx, { kind, n = 1, size = null, colour = null, place = null, anchor = null, step = null, label = null } = {}) {
+  const s = ensure(ctx);
+  if (!KINDS[kind]) return toolNo('no_kind');
+  const factor = gradeFactor(size), color = colour ? colorFrom([String(colour).toLowerCase()]) : null;
+  if (!factor || (colour && !color)) return toolNo('no_value');
+  const to = objsOf(s, anchor)[0] ?? null, region = to ? null : regionId(place) ?? (bandOf(place) === 'ground' ? 'ground' : null);
+  return toolStep(ctx, { step, label }, () => {
+    const made = addThing(s, { kind, count: Math.max(1, Math.min(MAX_COUNT, Number(n) || 1)), color, factor, parts: {}, place: to ? { rel: 'next' } : region ? { region } : {}, refs: to ? [to] : [] });
+    s.last = made.map((o) => o.id);
+    open(ctx);
+    return toolDone({ changed: s.last });
+  });
+}
+export function removeThings(ctx, { ids, step = null, label = null } = {}) {
   const s = ensure(ctx), objs = objsOf(s, ids);
   if (!objs.length) return toolNo('no_things');
-  return oneStep(ctx, label, () => {
-    remember(s, label);
+  return toolStep(ctx, { step, label }, () => {
     const gone = new Set(objs.map((o) => o.id));
     s.objects = s.objects.filter((o) => !gone.has(o.id));
     s.last = []; if (s.selected && gone.has(s.selected)) s.selected = null;
@@ -2468,46 +2484,58 @@ export function removeThings(ctx, { ids, label = 'removed things' } = {}) {
     return toolDone({ changed: [...gone] });
   });
 }
-export function moveThings(ctx, { ids, direction = null, region = null, anchor = null, relation = null, label = 'moved things' } = {}) {
+export function moveThings(ctx, { ids, place = null, anchor = null, step = null, label = null } = {}) {
   const s = ensure(ctx), objs = objsOf(s, ids);
   if (!objs.length) return toolNo('no_things');
-  const dir = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[direction];
-  const to = [].concat(anchor ?? []).map((id) => byId(s, id)).find(Boolean);
-  const band = region && Object.hasOwn(GROUND_WORDS, region) ? GROUND_WORDS[region] : null;   // a band of the ground (water: the sea band), made when there is none
-  const area = region && !band ? (region === 'corner' ? 'bottom left' : regionIn(String(region).split('_'))) : null;
+  const to = objsOf(s, anchor).find((o) => !objs.includes(o)) ?? null;
+  const dir = to ? null : DIRECTION[place] ?? null;
+  const band = to || dir ? null : bandOf(place);
+  const area = to || dir || band ? null : regionId(place);
   if (!dir && !to && !band && !area) return toolNo('no_place');
-  const at0 = objs.map((o) => `${o.x},${o.y}`).join(' ');
-  return oneStep(ctx, label, () => {
-    remember(s, label);
-    const added = band && s.ground !== band ? band : null;
-    if (added) { s.ground = band; s.groundColor = GROUND_COLOR[band]; }
+  return toolStep(ctx, { step, label }, () => {
+    if (band && band !== 'ground' && s.ground !== band) { s.ground = band; s.groundColor = GROUND_COLOR[band]; }   // a band of the ground (water: the sea band), made when there is none
     for (const o of objs) {
       budget.tick('draw.tool');
       if (dir) { o.x += dir[0] * STEP; o.y += dir[1] * STEP; clampIn(o); }
-      else if (to) placeRelative(s, o, relation === 'in' || relation === 'on' ? relation : 'next', [to]);
+      else if (to) placeRelative(s, o, 'next', [to]);
       else placeRegion(s, o, band ? 'ground' : area);
     }
     s.last = objs.map((o) => o.id);
     open(ctx);
-    const moved = objs.map((o) => `${o.x},${o.y}`).join(' ') !== at0 || !!added;
-    return toolDone({ changed: moved ? objs.map((o) => o.id) : [], ...(added ? { added: { band: region } } : {}) });
+    return toolDone({ changed: s.last });
   });
 }
-export function setThings(ctx, { ids, attribute, value = null, step = null, label = 'changed things' } = {}) {
+export function setThings(ctx, { ids, colour = null, size = null, step = null, label = null } = {}) {
   const s = ensure(ctx), objs = objsOf(s, ids);
   if (!objs.length) return toolNo('no_things');
-  if (attribute === 'colour') {
-    const color = colorFrom([String(value ?? '').toLowerCase()]);
-    if (!color) return toolNo('no_value');
-    return oneStep(ctx, label, () => { remember(s, label); const changed = objs.filter((o) => o.color !== color).map((o) => o.id); for (const o of objs) o.color = color; s.last = objs.map((o) => o.id); open(ctx); return toolDone({ changed }); });
-  }
-  if (attribute === 'size') {
-    const factor = value ? SIZE_WORDS[value === 'default' ? 'normal' : value] : null;
-    const by = step === 'up' ? 1.4 : step === 'down' ? 0.7 : null;
-    if (!factor && !by) return toolNo('no_value');
-    return oneStep(ctx, label, () => { remember(s, label); for (const o of objs) { const k = KINDS[kindKey(o)]; o.size = Math.round(factor ? (k?.size ?? o.size) * factor : o.size * by); if (onGround(kindKey(o))) clampIn(o); } s.last = objs.map((o) => o.id); open(ctx); return toolDone({ changed: objs.map((o) => o.id) }); });
-  }
-  return toolNo('no_attribute');
+  const color = colour ? colorFrom([String(colour).toLowerCase()]) : null, factor = size ? gradeFactor(size) : null;
+  if ((colour && !color) || (size && !factor) || (!color && !factor)) return toolNo('no_value');
+  return toolStep(ctx, { step, label }, () => {
+    for (const o of objs) {
+      budget.tick('draw.tool');
+      if (color) o.color = color;
+      if (factor) { o.size = Math.round((KINDS[kindKey(o)]?.size ?? o.size) * factor); if (onGround(kindKey(o))) clampIn(o); }
+    }
+    s.last = objs.map((o) => o.id);
+    open(ctx);
+    return toolDone({ changed: s.last });
+  });
+}
+/** The sky of the board, a band behind everything (the view has it as the thing `sky` when it is there). */
+export function paintSky(ctx, { colour, step = null, label = null } = {}) {
+  const s = ensure(ctx), c = colorFrom([String(colour ?? '').toLowerCase()]);
+  if (!c) return toolNo('no_value');
+  return toolStep(ctx, { step, label }, () => { s.sky = c; s.mood = null; open(ctx); return toolDone({ changed: ['sky'] }); });
+}
+/** The board's state as facts (the library's view): one record per thing a person can point at, and the sky when there is one. */
+export function toolView(ctx) {
+  const s = ensure(ctx);
+  return [...(s.sky ? [{ id: 'sky', kind: 'sky', colour: s.sky }] : []), ...s.objects.filter((o) => !o.tag).map((o) => ({ id: o.id, kind: kindKey(o), colour: effectiveColor(o) ?? null, ...(sizeWord(o) ? { size: sizeWord(o) } : {}), place: regionOf(o.x, o.y).replace(/^(?:top|bottom) (?:left|right)$/, 'corner') }))];
+}
+/** Declared custom search (request.sop std.tool.custom thingAt): the newest thing of the view whose kind is the place named, else nothing. */
+export function thingAt({ place } = {}, view = []) {
+  const hit = (view ?? []).filter((t) => t && place != null && t.kind === place);
+  return hit.length ? hit.at(-1).id : null;
 }
 
 /**

@@ -62,4 +62,14 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.which w.lang.en.reply name=ask.which role=thing role=list text="Which {thing} do you mean: {list}?"
 @w.lang.en.reply.local.not_act w.lang.en.reply name=cannot.act role=act role=thing role=world text="I cannot {act} the {thing} in the {world} yet."
 @w.lang.en.reply.local.not_key w.lang.en.reply name=cannot.key role=words role=world text="I cannot do \\"{words}\\" in the {world} yet."
+# The questions the door answers by saying facts of the live world (sopworld 0.152.1 askWorld, WORLD_QUESTIONS) and their replies: the library's proposal for w.lang.en
+# (soplang-words-lib examples/tool-app.mjs PROPOSED_EN, its questions.md Q87 1), local until the catalog publishes them ([KNOW]).
+@w.lang.en.cue.local.ask_capabilities w.lang.en.cue name=ask.capabilities on=reaction value=capabilities lead="what can you do" lead="what can i do here" lead="what can i do" lead="what do you do" lead="help" takes=none priority=4 example="what can you do here?"
+@w.lang.en.cue.local.ask_state w.lang.en.cue name=ask.state on=reaction value=state lead="what is" lead="what's" lead="what is there" lead="what do you have" takes=none priority=3 example="what is in the picture?"
+@w.lang.en.reply.local.can_one w.lang.en.reply name=can count=one role=act role=kinds text="I can {act}: {kinds}."
+@w.lang.en.reply.local.can_say_one w.lang.en.reply name=can.say count=one role=act role=keys text="When I {act}, you can say the {keys}."
+@w.lang.en.reply.local.state_count_one w.lang.en.reply name=state.count count=one role=kind role=number text="There is one {kind}."
+@w.lang.en.reply.local.state_count_other w.lang.en.reply name=state.count count=other role=kind role=number text="There are {number} {kind:num=pl}."
+@w.lang.en.reply.local.state_empty_one w.lang.en.reply name=state.empty count=one text="There is nothing here yet."
+@w.lang.en.reply.local.nothing_same_one w.lang.en.reply name=nothing.same count=one text="That is what is there already."
 `;

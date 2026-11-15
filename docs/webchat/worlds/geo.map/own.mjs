@@ -3,7 +3,7 @@
 // one attribute), the state, the view declaration of the transfer slice and the host hook `openSlots` (the names a request mentions; the catalog collections the map reads are typed needs in world.sop). The places themselves are
 // looked up in the catalog (places.mjs); the view state, the projection and the distances are map.mjs.
 import { namesOf } from './places.mjs?v=81ecc9de2a';
-export { initialState, showPlace, coords, zoom, zoomTo, pan, world, reset, markHere, markSet, layer, locate, here, distance, distanceFrom, compare, compareYN, borderYN, isIn, isCapital, capitalOfWhich, superlative, listOp, count, info, markers, highlights, describe, askPlace, unknown, view, adopt, onObservation, undo as mapUndo, redo as mapRedo } from './map.mjs?v=61fc0041e3';
+export { initialState, showPlace, coords, zoom, zoomTo, pan, world, reset, markHere, markSet, layer, locate, here, distance, distanceFrom, compare, compareYN, borderYN, isIn, isCapital, capitalOfWhich, superlative, listOp, count, info, markers, highlights, describe, askPlace, unknown, view, adopt, onObservation, undo as mapUndo, redo as mapRedo } from './map.mjs?v=86d68aaa84';
 
 /** Host hook: the names a request mentions, looked up in the catalog before the operation (a river, a mountain: features that are not in the collections above). */
 export function openSlots(_ctx, { args } = {}) { return namesOf(args); }

@@ -228,28 +228,37 @@ export function clausesOf(english, language, unread = []) {
 }
 
 /**
- * A plan of things of kinds that dropped kinds said beside the first ("a sky and a sun" planned as one sky): each wanted kind is planned as its own request (its own count, the
- * constraints said of every kind), and the item steps are joined. Null when nothing was dropped or a part cannot be planned. Stand-in, questions.md Q42 [LIB].
+ * THE DECLARED TOOL BINDING (sopworld 0.152.1 std.tool; reviewer 2026-11-15 20:45): the std.tool wires of a live world, read and checked once (the library's toolBindings), or
+ * null when the world binds no act to a primitive. No code here is per world.
  */
-export function coordinated(lib, live, req, plan, opts) {
-  const wanted = [...new Set([...(req.target && req.refers === 'kind' ? [req.target] : []), ...(req.constraints ?? []).filter((c) => c.on === 'kind' && c.want === 'yes' && c.value && c.origin !== 'lineage').map((c) => c.value)])];   // the target said as a kind is one of the things said together
-  const planned = new Set((plan.steps ?? []).filter((st) => st.item && st.args?.kind).map((st) => st.args.kind));
-  if (wanted.length < 2 || wanted.every((k) => planned.has(k))) return null;
-  const steps = [], assumed = [], notHonoured = [];
-  for (const k of wanted) {
-    budget.tick('door.coordinated');
-    const own = (c) => (c.on === 'kind' ? c.want !== 'yes' || c.value === k : c.on === 'count' ? !c.of || c.of === k : true);
-    const kept = (req.constraints ?? []).filter(own);
-    const sub = { ...req, target: k, constraints: kept.some((c) => c.on === 'kind' && c.value === k) ? kept : [...kept, { on: 'kind', want: 'yes', value: k, words: k, origin: 'said' }] };   // each thing planned as a thing of its kind
-    let p = null;
-    try { p = lib.planRequest(live, sub, opts); } catch { p = null; }
-    if (!p?.ok && !p?.cannot?.length) { try { const p2 = lib.planRequest(live, sub, { ...opts, sources: lib.REQUEST_SOURCES.filter((x) => x !== 'expect') }); if (p2?.ok) p = p2; } catch { /* the first plan stands */ } }   // a kind whose catalog parts the world cannot make is planned as itself (Q40 (9))
-    if (!p?.ok) return null;
-    steps.push(...(p.steps ?? []).filter((st) => st.item || !steps.length));
-    assumed.push(...(p.assumed ?? []).filter((a) => !assumed.some((x) => x.key === a.key)));
-    notHonoured.push(...(p.notHonoured ?? []).filter((x) => !notHonoured.some((y) => y.on === x.on && y.words === x.words)));
+export function boundTools(lib, live, language) {
+  if (!live || typeof lib?.toolBindings !== 'function') return null;
+  if (Object.hasOwn(live, '_psys2Tools')) return live._psys2Tools;
+  let B = null;
+  try { B = lib.toolBindings(live, { catalog: language ? [language] : [] }); } catch { B = null; }
+  Object.defineProperty(live, '_psys2Tools', { value: B?.binds?.length ? B : null, enumerable: false });
+  return live._psys2Tools;
+}
+
+/**
+ * The target said as a kind is one of the kinds said, and a kind said beside others with no number is one. The reader takes "tree" in "draw two dogs and a tree" as the target
+ * with no kind constraint (the library's coordinated kinds would give the tree the dogs' count), gives an act on things none ("change the house to blue": the values after the
+ * kind's word are the new values, those before it choose the things), and the library's coordinated kinds start only from a count said ("a sky and a sun" made one sky). The
+ * request gets the target's kind constraint (with the position of its word) and, for things said together, a count of one for each kind said with none. Host stand-in until
+ * readRequest and planRequest do it (questions.md Q45 (1), (2) [LIB]); it plans nothing.
+ */
+export function withTargetKind(req) {
+  if (!req?.target || req.refers !== 'kind') return req;
+  let cs = [...(req.constraints ?? [])];
+  const wanted = () => cs.filter((c) => c.on === 'kind' && c.want === 'yes' && c.value);
+  if (!wanted().some((c) => c.value === req.target) && (req.act !== 'make' || wanted().length)) {
+    const word = String(req.target).split('_')[0].toLowerCase();
+    const at = String(req.text ?? '').toLowerCase().split(/\s+/).findIndex((t) => t.replace(/[^\p{L}]/gu, '').startsWith(word));
+    cs.push({ on: 'kind', want: 'yes', value: req.target, words: String(req.target).replace(/_/g, ' '), origin: 'said', ...(at >= 0 ? { at } : {}) });
   }
-  return { ...plan, steps, assumed, notHonoured, roles: { ...plan.roles, kinds: wanted, count: steps.filter((st) => st.item).length } };
+  const kinds = [...new Set(wanted().map((c) => c.value))];
+  if (req.act === 'make' && kinds.length > 1) for (const k of kinds) if (!cs.some((c) => (c.on === 'count' && c.of === k) || (c.on === 'kind' && c.value === k && c.plural))) cs.push({ on: 'count', want: 'yes', number: 1, of: k, words: String(k).replace(/_/g, ' '), origin: 'said' });
+  return cs.length === (req.constraints ?? []).length ? req : { ...req, constraints: cs };
 }
 
 /** The world operation a live world declares for an act (`psys2.op world= act= op=` of request.sop): the one executor path of the door's acts that are not plans (undo, redo). */
@@ -358,11 +367,15 @@ export class RequestDialogue {
   constructor() { this.byWorld = {}; }
   last(world) { const r = this.byWorld[world]; return r?.request ? r : null; }
   record(world, rec) { this.byWorld[world] = { ...rec, act: null }; }
+  /** The library's timeline of a world's plans run through its binding (sopworld toolTimeline: one entry per plan, a revision replaces the last), kept with the dialogue. */
+  timeline(world) { this.timelines ??= {}; return (this.timelines[world] ??= { done: [], undone: [] }); }
+  /** At most the last 12 entries are kept (each holds the world's state before and after). */
+  trimTimeline(world) { const t = this.timeline(world); if (t.done.length > 12) t.done.splice(0, t.done.length - 12); t.undone.length = Math.min(t.undone.length, 12); }
   /** The last act on things of a world ({ act, ids, turn }): what "higher" continues. */
   lastAct(world) { return this.byWorld[world]?.act ?? null; }
   recordAct(world, act) { this.byWorld[world] = { ...(this.byWorld[world] ?? {}), act }; }
-  toJSON() { return { v: 1, byWorld: structuredClone(this.byWorld) }; }
-  load(j) { this.byWorld = j?.v === 1 ? structuredClone(j.byWorld ?? {}) : {}; return this; }
+  toJSON() { return { v: 1, byWorld: structuredClone(this.byWorld), ...(this.timelines ? { timelines: JSON.parse(JSON.stringify(this.timelines)) } : {}) }; }
+  load(j) { this.byWorld = j?.v === 1 ? structuredClone(j.byWorld ?? {}) : {}; this.timelines = j?.v === 1 && j.timelines ? JSON.parse(JSON.stringify(j.timelines)) : {}; return this; }
 }
 
 /**
@@ -390,7 +403,7 @@ export function declarationsOf(live, english = '') {
   const drawn = {};
   for (const r of ofType(live, 'std.schema.drawn')) if (one(r, 'kind') && one(r, 'as')) drawn[one(r, 'kind')] = one(r, 'as');
   const text = ` ${String(english).toLowerCase()} `;
-  const regions = ofType(live, 'std.schema.region').map((r) => ({ name: one(r, 'name'), kinds: (r.kind ?? []).map((k) => String(k).replace(/^"|"$/g, '')), at: text.search(new RegExp(`\\b${one(r, 'name')}\\b`)) }))
+  const regions = ofType(live, 'std.schema.region').map((r) => ({ name: one(r, 'name'), kinds: (r.holds ?? []).map((k) => String(k).replace(/^"|"$/g, '')), at: text.search(new RegExp(`\\b${one(r, 'name')}\\b`)) }))
     .filter((r) => r.name).sort((a, b) => (a.at < 0) - (b.at < 0) || a.at - b.at);
   const fill = ofType(live, 'std.schema.fill').map((r) => ({ of: one(r, 'of'), from: one(r, 'from') }));
   return { drawn, regions, named: regions.filter((r) => r.at >= 0).map((r) => r.name), fill };

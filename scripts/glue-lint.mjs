@@ -2,14 +2,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * GLUE LINT (reviewer 2026-11-15 20:45, owner order): how much hand-written glue stands between a declared world and the generic mechanisms. Report-only: it counts, per declared
- * world (a world with request.sop), in every file reachable by relative imports from its ops.mjs (inside the repository, the vendored library excepted):
+ * world (a world with request.sop), in every file reachable by relative imports from the door's surface (its tool.mjs, the operations the request door calls: the tool
+ * primitives, the view, the scene executor, undo / redo), else from its ops.mjs (inside the repository, the vendored library excepted):
  *   requestReads  reads of the request, the plan or its facts in world code (goal.request / goal.facts / goal.steps / goal.plan / goal.roles, .constraints, readRequest ...)
  *   wordLiterals  string literals equal to a word the world declares in request.sop (a kind, a value of a slot enum: sizes, places, layouts) — words that belong in the declarations
  *   replies       reply sentences written in code ("I drew ...", "There is no ...", "Where should ...")
  *   textRegex     regular expressions run on text (.test / .exec / .match / .replace with a regex literal, new RegExp)
  * The numbers go down as worlds become tool primitives + views + declarations (std.tool.op / param / bind). Never a gate.
  *
- *   node scripts/glue-lint.mjs [--json]
+ *   node scripts/glue-lint.mjs [--json] [--ops]     --ops: from ops.mjs for every world (the measure before the door had its own surface)
  */
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, dirname, join, relative } from 'node:path';
@@ -44,7 +45,7 @@ function declaredWords(text) {
 export function glueLint() {
   const out = {};
   for (const id of readdirSync(join(REPO, 'worlds')).sort()) {
-    const req = join(REPO, 'worlds', id, 'request.sop'), ops = join(REPO, 'worlds', id, 'ops.mjs');
+    const req = join(REPO, 'worlds', id, 'request.sop'), tool = join(REPO, 'worlds', id, 'tool.mjs'), ops = existsSync(tool) && !process.argv.includes('--ops') ? tool : join(REPO, 'worlds', id, 'ops.mjs');   // the door's surface (tool.mjs: what the door calls) when the world has one, else all its operations
     if (!existsSync(req) || !existsSync(ops)) continue;
     const words = declaredWords(readFileSync(req, 'utf8'));
     const files = reachable(ops);
