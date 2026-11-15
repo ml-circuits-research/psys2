@@ -5,6 +5,7 @@
     imports=world.core
     imports=world.lang.common
     formalization=rules
+    reader=yes
     language=en
     status=fixture
     title="Word problems"

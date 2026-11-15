@@ -4,7 +4,7 @@
 
 @pat.calc.story.event core.pattern
     match="[$lang.lead.filler]? {who:word} [$lang.story.when]? [$lang.story.set|$lang.story.add|$lang.story.remove|$lang.story.give] {rest:rest}"
-    emit="@{_} core.request action=story.tell arg.text=\"{segment}\""
+    emit="@{_} core.request action=story.tell arg.rest=\"{rest}\" arg.text=\"{segment}\""
     kind=statement
     priority=6
     example="Tom has 15 apples."
@@ -22,7 +22,7 @@
 
 @pat.calc.story.ask core.pattern
     match="[$lang.lead.filler]? [$lang.story.ask] {rest:rest}"
-    emit="@{_} core.request action=story.ask arg.text=\"{segment}\""
+    emit="@{_} core.request action=story.ask arg.rest=\"{rest}\" arg.text=\"{segment}\""
     kind=question
     priority=12
     example="How many apples does Tom have?"
@@ -31,7 +31,7 @@
 
 @pat.calc.story.who core.pattern
     match="[$lang.lead.filler]? [$lang.story.who] {rest:rest}"
-    emit="@{_} core.request action=story.ask arg.text=\"{segment}\""
+    emit="@{_} core.request action=story.ask arg.rest=\"{rest}\" arg.text=\"{segment}\""
     kind=question
     priority=12
     example="Who has the most apples?"

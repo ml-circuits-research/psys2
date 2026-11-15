@@ -45,16 +45,6 @@
     input="How much do 3 pencils cost?"
     expect="3 pencils cost 6 lei."
 
-@t.plan.list.n9 core.test
-    session=wallet
-    input="I start with 30 lei."
-    expect="OK, you have 30 lei."
-
-@t.plan.list.n10 core.test
-    session=wallet
-    input="Can I buy 3 pencils?"
-    expect="Yes, 3 pencils cost 6 lei and you have 30 lei."
-
 @t.plan.list.n11 core.test
     session=from
     input="What is the change from 20 lei for a ball and a pencil?"

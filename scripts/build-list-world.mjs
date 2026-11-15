@@ -7,8 +7,9 @@
  *
  *   node scripts/build-list-world.mjs <catalog docs/worlds dir> [--check]
  *
- * The frame sets taken are SETS below (the shop and the wallet: the real shop turns of the real set). The list and task frames (list.*, tasks.*) are the kids.tasks
- * step of the plan: they are added to SETS when plan.list answers them (w.tasks is a schema of its own).
+ * The frame sets taken are SETS below (the shop: the real shop turns of the real set). The wallet frames (wallet.*: "I start with 30 lei", "how much money is left")
+ * read what kids.shop's wallet reads with another meaning (kids.shop spends the wallet as things are bought; w.list keeps a budget beside the list): they are the
+ * kids.shop step of the plan, as the list and task frames (list.*, tasks.*) are the kids.tasks step (w.tasks is a schema of its own).
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
@@ -20,7 +21,12 @@ const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const NS = 'plan.list';
 const DIR = join(REPO, 'worlds', NS);
 /** The frame sets of the catalog this world reads (frame ids without the `acts.` set prefix). */
-export const SETS = ['shop.', 'wallet.'];
+export const SETS = ['shop.'];
+/** While a kids world that reads the same sentences is on (kids.shop, ADR-011), this world stands behind it: the priority of a frame that names things (want, price,
+ *  afford: 13-14) is lowered below the kids world's (10-12), so such a sentence stays the kids world's until it is switched off. The frames of a purchase in progress
+ *  (the money paid, the change) keep the catalog's priority, so the payment and the change of a list this world holds are not read by another world in between. */
+export const BEHIND = -4;
+const behind = (f) => (f.args.some((r) => ['value', 'currency', 'money', 'unit'].includes(r)) || f.mode === 'change' ? 0 : BEHIND);
 /** The roles the operations of plan.list read; a frame with another role is not taken (it would claim a sentence no operation can run). */
 const ROLES = new Set(['thing', 'amount', 'place', 'value', 'currency', 'money', 'unit', 'attribute', 'mode', 'topic']);
 
@@ -50,7 +56,7 @@ export function build(catalog) {
   const signal = (f) => f.act === 'ask' || f.args.some((r) => ['value', 'currency', 'money', 'unit'].includes(r));
   for (const f of frames) {
     const emit = `@{_} core.request action=list.${f.act}${f.mode ? ` arg.mode=${f.mode}` : ''}${Object.entries(f.lit ?? {}).map(([k, v]) => ` arg.${k}=\\"${v}\\"`).join('')}${f.args.map((a) => ` arg.${a}=\\"{${a}}\\"`).join('')} arg.text=\\"{segment}\\"`;
-    pats.push(`@pat.${NS}.${f.id} core.pattern\n    match=${q(expand(f.match, lexNames))}\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority}\n${signal(f) ? '    signal=true\n' : ''}    example=${q(f.example)}\n`);
+    pats.push(`@pat.${NS}.${f.id} core.pattern\n    match=${q(expand(f.match, lexNames))}\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority + behind(f)}\n${signal(f) ? '    signal=true\n' : ''}    example=${q(f.example)}\n`);
   }
   const lex = [head, ...lexes.filter((w) => frames.some((f) => f.match.includes(`lex.${w.entries.find((e) => e.key === 'name')?.value.v}`))).map((w) => {
     const name = String(w.entries.find((e) => e.key === 'name')?.value.v);

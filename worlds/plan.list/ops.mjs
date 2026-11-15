@@ -82,6 +82,8 @@ const priced = (st, thing) => { const lst = st?.lists?.at?.(-1); return entriesO
 export function accepts({ action, mode, roles = {}, state } = {}) {
   if (!/^list\./.test(action ?? '')) return true;
   if (roles.thing !== undefined && !nounPhrases(roles.thing)) return false;
+  // the shop sells what is on its price list: a purchase of a thing with no price (the sample list or one the user stated) is not this shop's ("I buy a rocket")
+  if (action === 'list.make' && roles.thing !== undefined && !entriesOf(roles.thing).every((e) => (state?.lists?.at?.(-1)?.prices?.[key(e.text)] ?? SAMPLE_PRICES[key(e.text)]) !== undefined)) return false;
   if (action === 'list.ask' && (mode === 'price' || mode === 'afford')) return !!roles.thing && priced(state, roles.thing);
   if (action === 'list.ask' && (mode === 'change' || mode === 'left')) return !!roles.thing || roles.money !== undefined || !!state?.lists?.some((l) => l.items.length) || (mode === 'left' && state?.lists?.some((l) => l.budget !== undefined));
   return true;

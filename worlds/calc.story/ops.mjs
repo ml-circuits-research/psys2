@@ -92,9 +92,24 @@ export function accepts({ action, roles, text, state } = {}) {
   return r.steps.length > (state?.story?.steps?.length ?? 0) ? (inFocus ? 'focus' : true) : false;
 }
 
-/** The world's own reader (storyState) reads the clause whole: the leftover words of its free slots are read (spec 16 section 13). A clause the library cannot
- *  read whole never reaches here as this world's: `accepts` declined it. */
-export const executor = { readsWhole: () => true };
+/** Does the world's own reader (storyState) read the clause whole, so the leftover words of its free slots are read (spec 16 section 13)? The library reads an owner,
+ *  a verb, an amount, an item, names and function words; any other word it passes over ("i lost 2 lei BUYING A SWEET") is unread. One word is the verb (its effect
+ *  is lang.common's, which this hook does not see). */
+function readsWhole({ text, state } = {}) {
+  const o = storyOptions(null);
+  const known = new Set([...o.skip, ...o.pronouns, ...o.self, ...o.question, ...Object.keys(o.numbers), 'who', 'whose', 'most', 'least', 'fewest', 'more', 'fewer', 'less', 'than', 'together', 'altogether', 'total', 'first', ...(state?.story?.steps ?? []).map((s) => s.verb)]);
+  const toks = String(text ?? '').match(/[\p{L}\p{N}'-]+/gu) ?? [];
+  const items = new Set(Object.values(state?.story?.state ?? {}).flatMap((h) => Object.keys(h)));
+  let other = 0, item = 0;
+  for (const t of toks) {
+    const w = t.toLowerCase();
+    if (known.has(w) || /^\d+(?:\.\d+)?$/.test(w) || /^\p{Lu}/u.test(t)) continue;   // a name (the owner, the one given to)
+    if (!item && (items.has(w) || items.has(w.replace(/s$/, '')) || toks[toks.indexOf(t) - 1]?.match(/^(?:\d+|an?)$/i) || o.numbers[toks[toks.indexOf(t) - 1]?.toLowerCase()] !== undefined)) { item++; continue; }
+    other++;
+  }
+  return other <= 1;
+}
+export const executor = { readsWhole };
 
 export function tell(ctx, { text } = {}) {
   const st = ctx.state;
