@@ -877,12 +877,13 @@ export function createExecutor(schema, hooks = {}) {
       const lib = EFFECT_ACTS.includes(act) ? fx().sentence(ctx, [act], [() => dom(ctx, req) ?? { declined: true }], (o) => o.declined || o.status === 'supported') : null;
       const r = lib ? (lib.results[0]?.declined ? undefined : lib.results[0]) : dom(ctx, req);
       if (r) {
+        const said0 = r.value;   // a composed reply's frame (say) stays only while the text is the world's own
         if (!hooks.noState) init(st);   // `noState`: the world keeps its own state shape (the map's `focus` is a place, not the executor's selection) and no act log
         if (r.status === 'supported' && !hooks.noState) { st.log.push({ act, mode: req.mode ?? null, text: req.text, roles: roleView(req), diff: null, reply: String(r.value ?? r.note ?? ''), guesses: [] }); if (st.log.length > 50) st.log.shift(); st.lastAct = st.log[st.log.length - 1]; }
         if (r.status === 'supported' && act === 'make') { const lost = unkeptName(req); const t = String(r.value ?? r.note ?? ''); const kept = () => JSON.stringify(ctx.state ?? {}, (k, v) => (['log', 'lastAct', 'history', 'pending', 'redo', 'future'].includes(k) ? undefined : v)).toLowerCase().includes(String(req.value).trim().toLowerCase()); if (lost && !t.toLowerCase().includes(lost.toLowerCase()) && !kept()) { const said = /^[^.!?]*\.$/.test(t) ? `${t.slice(0, -1)}; I did not keep the name ${lost}.` : `${t} I did not keep the name ${lost}.`; r.value = said; r.note = said; } }   // a name said for a thing of a kind that is not `named` is never dropped silently (spec 21)
         // a domain hook that answers a make without its text by a question ("What should the heading say?") asked for the value role: the next message is the answer (spec 21, fallback 4)
         if (r.status !== 'supported' && act === 'make' && req.thing && String(req.thing).trim() && (req.value == null || req.value === '') && /\?\s*$/.test(String(r.note ?? r.value ?? ''))) { st.pending = { type: 'role', role: 'value', text: true, req: { ...req }, guess: `${act} ${req.thing ?? ''}`.trim() }; st.inputMode = 'confirm'; }
-        return r.status === 'supported' ? { status: 'supported', note: r.value ?? r.note, value: r.value ?? r.note, ...(r.effect ? { effect: r.effect } : {}), ...(lib?.diff ? { diff: lib.diff } : {}) } : { status: r.status, note: r.note ?? r.value, value: r.note ?? r.value };
+        return r.status === 'supported' ? { status: 'supported', note: r.value ?? r.note, value: r.value ?? r.note, ...(r.effect ? { effect: r.effect } : {}), ...(lib?.diff ? { diff: lib.diff } : {}), ...(r.say && r.value === said0 ? { say: r.say } : {}) } : { status: r.status, note: r.note ?? r.value, value: r.note ?? r.value };
       }
     }
     if (hooks.noState) return { status: 'missing', note: `I cannot do that on the ${schema.noun}.`, value: `I cannot do that on the ${schema.noun}.` };   // a world with its own state answers every act through its domain hooks

@@ -32,3 +32,34 @@ test('a turn changes only the worlds it addresses (plus session.things, session.
     }
   }
 });
+
+// LAZY WORLDS (reviewer 2026-11-15 03:15 item 5; live owner check row 2): the page took its "before" snapshot while only the start worlds existed; the turn loaded the others,
+// and the what-happened log listed each of them as changed "(was none)" with a view effect. The baseline is the page snapshot plus the loaded worlds as the turn started
+// (the worker's `before`, their initial state): only what the turn did counts.
+test('the what-happened diff counts a world loaded during the turn from its initial state, not as "(was none)"', async () => {
+  const { snapshotState, describeChanges, turnBaseline } = await import('../docs/webchat/ui/state-diff.mjs');
+  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
+  const s = engine.createSession({ language: 'en' });
+  s.setWorldState('ui.shell', { activeTab: 'draw' });
+  const START = new Set(['ui.shell', 'art.draw', 'session.things', 'session.dialogue']);   // what a lazy page has before its first turn on the Drawing tab
+  const full = s.state();
+  const page = snapshotState(Object.fromEntries(Object.entries(full).filter(([id]) => START.has(id))));
+  const loaded = Object.fromEntries(Object.entries(full).filter(([id]) => !START.has(id)));
+  assert.ok(Object.keys(loaded).length >= 5, 'worlds the turn loads');
+  const r = await s.send('Draw something random');
+  const after = snapshotState(s.state());
+  const addressed = new Set(r.segments.map((x) => x.world ?? x.match?.worldId).filter(Boolean));
+  const stray = (changes) => changes.map((c) => c.world).filter((w) => !addressed.has(w) && !SESSION_WIDE.has(w));
+  assert.ok(stray(describeChanges(page, after)).length >= 5, 'the old baseline (the page snapshot alone) lists the loaded worlds as changed');
+  assert.deepEqual(stray(describeChanges(turnBaseline(page, loaded), after)), [], 'the turn baseline lists only what the turn changed');
+  assert.ok(describeChanges(turnBaseline(page, loaded), after).some((c) => c.world === 'art.draw'), 'the drawing itself is still listed');
+  // a world the page already had keeps the page's state (the worker's copy never overrides it)
+  const b = turnBaseline({ 'art.draw': '{"objects":[]}' }, { 'art.draw': { objects: [1] }, 'geo.map': { zoom: 2 } });
+  assert.deepEqual(b, { 'art.draw': '{"objects":[]}', 'geo.map': '{"zoom":2}' });
+  // a world a background load added AFTER the turn ended (in the page's state by the time the log is written) is not the turn's change either
+  const { turnAfter } = await import('../docs/webchat/ui/state-diff.mjs');
+  const late = { ...after, 'late.world': '{"notes":[]}' };
+  const endIds = Object.keys(s.state());
+  assert.deepEqual(stray(describeChanges(turnBaseline(page, loaded), turnAfter(late, turnBaseline(page, loaded), endIds))), [], 'loaded after the turn: not listed');
+  assert.equal(turnAfter(late, {}, null), late, 'no end list (an in-page engine): the state as it is');
+});

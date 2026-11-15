@@ -29,6 +29,13 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let engine = null, session = null, settings = {}, mods = null, testHooks = false, faultNow = null;
 const active = new Map();            // request id -> AbortController of a send or dry read that runs
 const turnRunning = () => [...active.values()].some((c) => !c.dry);
+/**
+ * A load that is not the turn's own starts only when no turn runs (owner check 2026-11-15: a Romanian session's background load of every world started during the first turn;
+ * reading the worlds' files ticked against the TURN's step budget, "compute budget exceeded at index.readString", and the charts and talk worlds were reported as not loaded).
+ * A turn's own loads come before its reading (no budget is installed then) and wait for a load in progress through the one lock.
+ */
+const turnIdle = async () => { while (turnRunning() || warming) await sleep(20); };   // a warm-up turn holds a step budget too
+let reloading = 0;   // a world load in progress: the warm-up turns wait for it (they would read a half-swapped engine and charge their budget)
 let dispatcherEnc = null, normalizerHost = null, dispatcherInfo = null;
 let worldLoader = null, loaders = null, rulesMod = null, wordMod = null, tabWorlds = {}, universe = null;   // LAZY LOADING: the world index, the library modules the loader needs, tab id -> world id, the worlds this page may use (tests)
 const loadedIds = new Set();
@@ -85,6 +92,8 @@ function annotateWires(root) {
   return root;
 }
 const stateOf = () => session.state();
+/** Of the before-turn state, the worlds the turn loaded (not in `had`): the page has the others in its own snapshot, so its what-happened diff needs nothing more. */
+const loadedBefore = (before, had) => Object.fromEntries(Object.entries(before ?? {}).filter(([id]) => !had.has(id)));   // `had`: the worlds whose state the page holds (it sends their ids)
 const metaOf = () => ({ msg: session._msg, lang: session._sessionLang, weakRo: session._weakRo, language: session.language, memory: memoryOf() });
 /** The discourse / ASTRA memory as JSON, so that a restarted worker gets it back (a failure here must never fail a turn). */
 function memoryOf() { try { return session.memoryJSON(); } catch { return null; } }
@@ -198,7 +207,7 @@ async function init(m) {
   applySettings(null);
   if (m.restoreState) restoreStates(m.restoreState, m.restoreMeta);
   if (m.prepareModels && dispatcherEnc && settings.formalizer === 'encoder') dispatcherEnc.prepare().catch(() => {});
-  if (otherLanguage) rules.then(() => sleep(0)).then(() => ensureWorlds(worldLoader.ids(), 'language (background)')).catch(() => {});   // after the first paint and the rule compilation, never inside a turn's wait
+  if (otherLanguage) rules.then(() => sleep(0)).then(turnIdle).then(() => ensureWorlds(worldLoader.ids(), 'language (background)')).catch(() => {});   // after the first paint and the rule compilation, never inside a turn's wait
   return { worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget };
 }
 
@@ -238,7 +247,8 @@ async function ensureRun(ids, why) {
   try {
     try { await worldLoader.bundles(want); } catch (e) { evt('world-load', { id: stepId, op: 'fail', label, message: String(e?.message ?? e) }); return []; }
     const next = [...loadedIds, ...missing];
-    await engine.reload(loaders.createBundleLoader(worldLoader.bundleOf(next, absModule)));
+    reloading++;
+    try { await engine.reload(loaders.createBundleLoader(worldLoader.bundleOf(next, absModule))); } finally { reloading--; }
     // the session is read HERE, after the awaits and with none between this and the new session: a state the page set while the worlds were loading (a tab click, a setting) is in it, and is not lost
     const st = stateOf(), meta = metaOf();
     const old = session, portable = [...snaps].map(([k, sn]) => { try { return [k, old.portableSnapshot(sn)]; } catch { return null; } }).filter(Boolean);   // the undo snapshots as plain data: they survive the reload
@@ -270,10 +280,14 @@ const handlers = {
     if (warming) await warming;
     faultNow = testHooks ? (m.fault ?? null) : null;
     if (m.settings) applySettings(m.settings);
+    const had = new Set(Array.isArray(m.known) ? m.known : loadedIds);   // the page's snapshot has these worlds; a world loaded since (by this turn, or by a background load the page has not seen) is in `before`
     // LAZY LOADING: the open tab's world and the worlds the words of the message say it needs, before the turn is read
     // a message in another language is read through its English candidates, which a partial world set can mistake for understood: every world is loaded for it (the word index is English)
     try { const lang = mods.lang.normalize(m.opts?.language ?? m.settings?.language ?? settings.language); if (lang !== 'en') { await mods.translate.loadRoEn?.(); await ensureWorlds(worldLoader.ids(), 'language'); } else { const plan = await worldLoader.plan(m.text, loadedIds); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'message'); } } catch (e) { console.warn('world plan failed', e); }
     let snap = session.snapshot();
+    // TURN BASELINE (reviewer 2026-11-15 03:15 item 5): the state the turn starts from, taken AFTER the lazy loads: a world loaded for this turn is in it with its initial state, so the
+    // page's what-happened diff does not list it as changed "(was none)". Taken again whenever the turn loads more worlds and is read again.
+    let before = stateOf();
     if (m.undoId != null) { snaps.set(m.undoId, snap); if (snaps.size > SNAP_KEEP) snaps.delete(snaps.keys().next().value); }
     let budget = null;
     const newBudget = () => (budgetMod.createBudget ? (() => { try { return budgetMod.createBudget(m.limits ?? undefined); } catch { return null; } })() : null);
@@ -293,13 +307,14 @@ const handlers = {
       if (lacking.length) {
         try { session.restore(snap); } catch { /* keep */ }
         const added = await ensureWorlds(lacking, 'action');
-        if (added.length) { snap = session.snapshot(); if (m.undoId != null) snaps.set(m.undoId, snap); budget = newBudget(); translator.resetUsage?.(); reply = await read(); } else reply = await read();
+        if (added.length) { snap = session.snapshot(); before = stateOf(); if (m.undoId != null) snaps.set(m.undoId, snap); budget = newBudget(); translator.resetUsage?.(); reply = await read(); } else reply = await read();
       }
       if (incomplete(reply) && !allLoaded()) {   // not understood, or understood with words guessed or left out: read it again with every world (the reading is then the one a full start gives)
         try { session.restore(snap); } catch { /* keep */ }
         const added = await ensureWorlds(worldLoader.ids(), 'second reading');
         if (added.length) {
           snap = session.snapshot();
+          before = stateOf();
           if (m.undoId != null) snaps.set(m.undoId, snap);
           budget = newBudget();
           translator.resetUsage?.();
@@ -308,7 +323,7 @@ const handlers = {
       }
       annotateWires(reply);
       noteWorlds(reply);
-      return { reply, state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
+      return { reply, before: loadedBefore(before, had), state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
         budget: budget ? { ticks: budget.ticks, bySite: { ...budget.bySite } } : null, ort: true };
     } finally { active.delete(m.id); lastTurnEnd = performance.now(); faultNow = null; sendOrt(); }
   },
@@ -363,20 +378,23 @@ const handlers = {
     const [lib, sm] = await Promise.all([import(vurl('lib/vendor/sopworld/sopworld.mjs')), import(vurl('lib/dialog/sampler.mjs'))]);
     sampler ??= sm.engineSampler(lib, engine, () => session);
     if (!sampler.available) return { items: [], available: false };
+    // CHIPS IN THE SELECTED LANGUAGE (reviewer 2026-11-15 03:15 item 3): src/dialog/sampler.mjs `chipsInLanguage`, the rules translator (Romanian tables loaded first)
+    const chipsIn = async (mod, items, language) => { const lang = language ? mods.lang.normalize(language) : 'en'; if (lang !== 'en') { try { await mods.translate.loadRoEn?.(); } catch { /* the rules have what they have */ } } return mod.chipsInLanguage(items, lang, engine.translator); };
     const tabWorld = (m.tab && (tabWorlds[m.tab] ?? worldLoader.ids().find((id) => worldLoader.info(id).tab?.id === m.tab))) || null;
     const tabOfWorld = (id) => worldLoader.info(id)?.tab?.id ?? Object.keys(tabWorlds).find((t) => tabWorlds[t] === id) ?? null;   // the page's tab plugins name the world of each tab (the built-in Documents tab too)
-    if (tabWorld && !loadedIds.has(tabWorld)) await ensureWorlds([tabWorld], 'dice');
+    if (tabWorld && !loadedIds.has(tabWorld)) { await turnIdle(); await ensureWorlds([tabWorld], 'dice'); }
     const loaded = () => sampler.worlds();
-    const orderOf = () => [...new Set([tabWorld, ...recentWorlds, ...loaded()].filter((id) => id && loaded().includes(id)))];
+    // `onlyTab` (the example bar of a page, reviewer 2026-11-15 03:15 item 3): only the open page's world, never the examples of other pages
+    const orderOf = () => (m.onlyTab ? (tabWorld && loaded().includes(tabWorld) ? [tabWorld] : []) : [...new Set([tabWorld, ...recentWorlds, ...loaded()].filter((id) => id && loaded().includes(id)))]);
     let order = orderOf();
-    if (!order.length && m.mode !== 'actions' && worldLoader.info(DEFAULT_DICE_WORLD)) { await ensureWorlds([DEFAULT_DICE_WORLD], 'dice'); order = orderOf(); }   // nothing sampleable is loaded yet (lazy loading): the drawing board is the smallest general world
+    if (!order.length && m.mode !== 'actions' && !m.onlyTab && worldLoader.info(DEFAULT_DICE_WORLD)) { await turnIdle(); await ensureWorlds([DEFAULT_DICE_WORLD], 'dice'); order = orderOf(); }   // nothing sampleable is loaded yet (lazy loading): the drawing board is the smallest general world
     const item = (r) => ({ text: r.text, world: r.world, tab: tabOfWorld(r.world), act: r.frame?.action ?? null, thing: r.frame?.args?.thing ?? null });
     const count = Math.min(Math.max(Number(m.count) || 4, 1), 6);
     if (m.mode === 'actions') {
       if (!tabWorld || !loaded().includes(tabWorld)) return { items: [], available: true };
       const things = sampler.thingsOf?.(tabWorld) ?? [];
       const target = m.thing ?? (things.find((t) => t.salient) ?? things.at(-1))?.id;
-      return { items: target ? sampler.actions({ worldId: tabWorld, thing: target, seed: m.seed, count }).map(item) : [], available: true, thing: target ?? null };
+      return { items: await chipsIn(sm, target ? sampler.actions({ worldId: tabWorld, thing: target, seed: m.seed, count }).map(item) : [], m.language), available: true, thing: target ?? null };
     }
     if (m.mode === 'few') {
       const out = [], texts = new Set();
@@ -385,14 +403,14 @@ const handlers = {
         for (const r of sampler.sample('one', { worldId: id, seed: m.seed != null ? m.seed + out.length + round * 31 : undefined })) if (!texts.has(r.text)) { texts.add(r.text); out.push(item(r)); }
         if (out.length >= count) break;
       }
-      return { items: out.slice(0, count), available: true };
+      return { items: await chipsIn(sm, out.slice(0, count), m.language), available: true };
     }
     for (const id of order) { const r = sampler.dice({ worldId: id, seed: m.seed }); if (r) return { items: [item(r)], available: true }; }
     return { items: [], available: true };
   },
   async warm(m) {
     const opts = { language: 'en', formalizer: 'rules', spell: true, partial: true, fastPath: false };
-    const idle = async () => { while (turnRunning() || performance.now() - lastTurnEnd < 500) await sleep(50); };
+    const idle = async () => { while (turnRunning() || reloading || performance.now() - lastTurnEnd < 500) await sleep(50); };
     const s = engine.createSession({ language: 'en' });
     if (m.phase === 'model') { await idle(); await one(s, 'what is 3 plus 4', { ...opts, formalizer: 'encoder' }); evt('warm', 'dispatcher'); return null; }
     for (const x of ['hello', 'zzq flarb wug', 'spider legs and 3 plus 4']) { await idle(); await one(s, x, opts); await sleep(0); }

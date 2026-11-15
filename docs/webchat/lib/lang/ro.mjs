@@ -23,14 +23,16 @@ const gloss = (sense) => {
 };
 const posOf = (cls) => (cls?.startsWith('v.') ? 'verb' : cls?.startsWith('a.') ? 'adj' : 'noun');
 
-export async function openLangRo({ facts = null, unimorph = false, gloss: glossFor = null } = {}) {
+export async function openLangRo({ facts = null, unimorph = false, gloss: glossFor = null, local: withLocal = true } = {}) {
   facts ??= (await import('./ro.facts.generated.mjs?v=9d4f7daed3')).LANG_RO_FACTS;
+  const local = withLocal ? (await import('./ro.local.mjs?v=71e90d0f84')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
   // the large dictionary (3,466 lemmas derived from UniMorph, CC BY-SA 3.0, no senses) is a module of its own, loaded only when asked for; for a letter the hand file comes first, then the derived rows
   const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=7b06d02ad7')).LANG_RO_UNIMORPH : {};
-  const text = (letter) => [facts.dictionary[letter], extra[letter]].filter(Boolean).join('\n');
-  const lib = await import('../vendor/sopworld/sopworld.mjs?v=33f5b1e4fd');
+  const text = (letter) => [facts.dictionary[letter], local.dictionary[letter], extra[letter]].filter(Boolean).join('\n');
+  const lib = await import('../vendor/sopworld/sopworld.mjs?v=0e5fd8eed8');
   const world = new lib.World();
   world.load(facts.wires);
+  if (local.wires.trim()) world.load(local.wires);
   const m = lib.morphOf(world, { types: { cls: 'w.lang.ro.class', ending: 'w.lang.ro.ending', irregular: 'w.lang.ro.irregular', fold: 'w.lang.ro.fold', split: 'w.lang.ro.split', template: 'w.lang.ro.template', vowel: 'w.lang.ro.vowel' } });
   const dict = lib.dictionary({ read: (l) => text(l) || null, fold: (s) => lib.fold(m, s) });
   const fold = (s) => lib.fold(m, s);
@@ -47,6 +49,38 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
     if (pos === 'adj') return { pos, entry: { pos, ro: r.lemma, en }, gender: f.gender, number: f.num, form: r.form };
     return { pos, entry: { pos, ro: r.lemma, en, enp: null, g: info?.gender, flags: {}, extra: [] }, number: f.num, def: f.def === 'yes', gen: f.case === 'gendat', form: r.form };
   };
+  // the Romanian lemma of an English word, by the sense column of the dictionary rows (k.words.<word>.<pos>.<n>), built once from the rows in memory (the hand file and the local rows)
+  let byEnglish = null;
+  const lemmaOf = (en, pos) => {
+    if (!byEnglish) {
+      byEnglish = new Map();
+      for (const rows of [facts.dictionary, local.dictionary]) for (const t of Object.values(rows ?? {})) for (const line of String(t).split('\n')) {
+        const [lemma, , , sense] = line.split('\t'), g = /^k\.words\.(.+)\.(noun|adjective)\.\d+$/.exec(sense ?? '');
+        if (g && !byEnglish.has(`${g[2]}|${g[1]}`)) byEnglish.set(`${g[2]}|${g[1]}`, lemma);
+      }
+    }
+    return byEnglish.get(`${pos}|${String(en).toLowerCase().replace(/ /g, '_')}`) ?? null;
+  };
+  const run = (template, roles) => lib.realise(m, template, roles, { dictionary: dict, base: { num: 'sg', case: 'nomacc' } });
+  const needsDe = (n) => n % 100 === 0 || n % 100 >= 20;   // Romanian: "20 de flori", "7 flori"
+  /** A count { n, noun, colour? } in Romanian: the article or the number, the noun in its number, the colour agreeing with it; null when a word has no lemma. */
+  const countRo = ({ n, noun, colour = null }) => {
+    const k = lemmaOf(noun, 'noun'), c = colour ? lemmaOf(colour, 'adjective') : null;
+    if (!k || (colour && !c)) return null;
+    if (n === 1) return run(`{art@k} {k:num=sg,case=nomacc,def=no}${c ? ' {c@k}' : ''}`, { art: 'un', k, ...(c ? { c } : {}) });
+    const np = run(`{k:num=pl,case=nomacc,def=no}${c ? ' {c:num=pl@k}' : ''}`, { k, ...(c ? { c } : {}) });
+    return np ? `${n}${needsDe(n) ? ' de' : ''} ${np}` : null;
+  };
+  /** One role of a composed reply in Romanian: a lemma for realise (noun or colour), a number, a count, or a list of counts. */
+  const AND = world.ofType('w.lang.ro.particle').find((p) => String(p.attrs.meaning?.[0] ?? '').replace(/"/g, '') === 'and')?.attrs.form?.[0]?.replace(/"/g, '') ?? null;   // the language world's "and"
+  const listRo = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} ${AND} ${xs.at(-1)}`);
+  const roleRo = (v) => {
+    if (typeof v === 'number') return String(v);
+    if (typeof v === 'string') return lemmaOf(v, 'noun') ?? lemmaOf(v, 'adjective');
+    if (Array.isArray(v)) { const xs = v.map((x) => (x && typeof x === 'object' ? countRo(x) : null)); return xs.length && xs.every(Boolean) && (xs.length < 2 || AND) ? listRo(xs) : null; }
+    if (v && typeof v === 'object' && Number.isFinite(v.n)) return countRo(v);
+    return null;
+  };
   return {
     lib, world, m, dictionary: dict, fold,
     /** Analyses of a word in the grammar's shape. `raw` keeps the diacritics when the text had them; a clitic hyphen is split off ("mută-mi" = mută + mi). */
@@ -57,6 +91,26 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
       const enclitic = clitic && CLITICS.has(fold(clitic)) ? fold(clitic) : null;
       if (clitic && !enclitic) return [];
       return readings(head).map((r) => toEntry(r, enclitic)).filter(Boolean).filter((a) => !enclitic || a.pos === 'verb');
+    },
+    /**
+     * COMPOSED REPLIES (spec 06 "Composed replies", reviewer 2026-11-15 03:15 item 2): the Romanian of a reply the application composes, from its frame `say = { act, roles }`, by the
+     * language world's template of the act (`w.lang.ro.template act=`) and the library's `realise`; null when there is no template or a word has no Romanian lemma (the caller then
+     * goes on as before). Roles: an English noun or colour (its lemma by the dictionary's sense), a number, a count `{ n, noun, colour? }` ("7 noduri", "o casă albastră", "20 de
+     * flori") or a list of counts ("un soare galben, 2 nori și o pasăre albastră"). No Romanian sentence is written here: the words are the template's and the dictionary's.
+     */
+    composeRo(say) {
+      const template = say?.act ? lib.templateFor(m, say.act) : null;
+      if (!template) return null;
+      const roles = {};
+      for (const [k, v] of Object.entries(say.roles ?? {})) {
+        const x = roleRo(v);
+        if (x == null) return null;
+        roles[k] = x;
+      }
+      const out = run(template, roles);
+      if (!out) return null;
+      const t = out.charAt(0).toUpperCase() + out.slice(1);
+      return /[.!?]$/.test(t) ? t : `${t}.`;
     },
     /** The wires a Romanian session loads, for the report: bytes of the wire text and of the dictionary files read so far. */
     loaded: () => ({ wires: facts.wires.length, dictionaryFiles: dict.loaded() }),

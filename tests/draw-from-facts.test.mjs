@@ -132,17 +132,21 @@ test('the built-in kinds are described as facts; the ones the facts can say full
 test('diagram.sketch: "a diagram shaped like a house" is an arrangement along the outline of the catalog house: nodes on its corners, joined in order, in both reasoners', async () => {
   const { outlineOf, pointsAlong } = await import('../worlds/diagram.sketch/engine.mjs');
   const hull = outlineOf(THINGS.house);
-  assert.equal(hull.length, 6, 'the house outline: two wall corners, two eaves, the roof top, the chimney');
+  // the silhouette (reviewer 2026-11-15 03:15 item 1): a symmetric gable, the two eaves, vertical walls; the one-sided chimney is a detail inside it
+  assert.deepEqual(hull, [[50, 15], [88, 45], [80, 45], [80, 95], [20, 95], [20, 45], [12, 45]], 'the house outline: gable top, right eave, wall, wall foot, wall foot, wall, left eave');
   assert.equal(pointsAlong(hull, 12).length, 12);
   for (const reasoner of ['ops', 'matrix']) {
     const s = engines[reasoner].createSession({ language: 'en' });
     const r = await s.send('Make a diagram shaped like a house.');
-    assert.match(r.text, /in the shape of a house: 6 nodes on its outline, joined in order/, reasoner);
+    assert.match(r.text, /in the shape of a house: 7 nodes on its outline, joined in order/, reasoner);
     const st = s.state('diagram.sketch');
-    assert.equal(st.shapes.length, 6, reasoner);
-    assert.equal(st.edges.length, 6, `${reasoner}: a closed outline`);
+    assert.equal(st.shapes.length, 7, reasoner);
+    assert.equal(st.edges.length, 7, `${reasoner}: a closed outline`);
     const top = st.shapes.reduce((a, b) => (b.y < a.y ? b : a));
-    assert.match(top.name, /^(?:roof|chimney)_top/, `${reasoner}: the highest node is on the roof`);
+    assert.equal(top.name, 'c1', `${reasoner}: the highest node (the gable top) is the first one, unnamed`);
+    assert.ok(st.shapes.every((x) => !x.label), `${reasoner}: no content was given, so the nodes carry no names of parts`);
+    const left = st.shapes.filter((x) => x.x < 400), right = st.shapes.filter((x) => x.x > 400);
+    assert.equal(left.length, right.length, `${reasoner}: a symmetric gable`);
     const r2 = await s.send('Draw a diagram in house form.');
     assert.match(r2.text, /outline of a house/, `${reasoner}: "in house form" (the owner's Romanian through the translator)`);
     const n = await engines[reasoner].createSession({ language: 'en' }).send('Make a diagram shaped like a blorp.');

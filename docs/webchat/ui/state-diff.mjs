@@ -20,6 +20,23 @@ export function snapshotState(state) {
   return out;
 }
 
+/**
+ * THE TURN BASELINE (reviewer 2026-11-15 03:15 item 5): the page's snapshot before the turn, plus the worlds the turn loaded (lazy loading) as they were when it started
+ * (`loaded`: { worldId: state }, their initial state). A world loaded during the turn is not "changed (was none)": only what the turn did to it counts.
+ */
+export function turnBaseline(pageBefore, loaded) {
+  const out = { ...(pageBefore ?? {}) };
+  for (const [id, text] of Object.entries(snapshotState(loaded))) if (!(id in out)) out[id] = text;
+  return out;
+}
+
+/** The "after" side of the turn: worlds that neither the baseline nor the turn's end had (`endIds`: loaded after the turn, by a background load) are left out. */
+export function turnAfter(after, base, endIds) {
+  if (!Array.isArray(endIds)) return after;
+  const keep = new Set([...Object.keys(base ?? {}), ...endIds]);
+  return Object.fromEntries(Object.entries(after ?? {}).filter(([id]) => keep.has(id)));
+}
+
 const isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);
 const num = (n) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100));
 const plural = (w, n) => (n === 1 ? w : /(?:s|x|ch|sh)$/.test(w) ? `${w}es` : /[^aeiou]y$/.test(w) ? `${w.slice(0, -1)}ies` : `${w}s`);

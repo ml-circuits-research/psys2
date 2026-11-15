@@ -76,6 +76,7 @@ async function ownerTurn(pg, text) {
     const bot = [...document.querySelectorAll('.p2-msg.is-bot')].at(-1);
     const rec = JSON.parse(localStorage.getItem('psys2.webchat.phrases') ?? '[]').filter((r) => r.text === text).at(-1) ?? null;
     return { wallMs, reply: bot?.querySelector('.p2-bubble')?.innerText ?? '', chips: [...(bot?.querySelectorAll('.p2-example, .p2-pagechip') ?? [])].map((b) => b.textContent.trim()),
+      bar: [...document.querySelectorAll('.p2-examples:not([hidden]) .p2-example, .p2-exbar:not([hidden]) .p2-example')].map((b) => b.textContent.trim()), replyVia: rec?.replyVia ?? rec?.detail?.replyVia ?? rec?.translation?.replyVia ?? null,
       english: rec?.english ?? null, perfMs: rec?.detail?.perf?.totalMs ?? null, knowledgeMs: rec?.detail?.perf?.stages?.knowledge?.ms ?? null, pattern: rec?.routing?.pieces?.map((p) => p.pattern) ?? [],
       changes: rec?.happened?.changes ?? [], viewEffects: rec?.happened?.viewEffects ?? [] };
   }, text, wallMs);
@@ -110,6 +111,13 @@ async function ownerTurns() {
   console.log(`INFO  diagram state: ${nodes} nodes, ${edges} lines`);
   check('owner 2 "deseneaza o diagrama in forma de casa": nodes on a house outline', (nodes == null ? true : nodes >= 5 && edges >= nodes) && /contur|schi[țţ]|cas[ăae]\b/i.test(b.reply) && b.changes.some((c) => c.world === 'diagram.sketch'), `${nodes} nodes, ${edges} lines; ${b.reply.slice(0, 80)}`);
   check('owner 2: the Romanian reply says "noduri" and reads "joined in order" as such', /\bnoduri\b/.test(b.reply) && !/s-a alăturat/.test(b.reply), b.reply);
+  // reviewer 2026-11-15 03:15 items 1-3: the silhouette (symmetric gable, unnamed nodes), the reply composed from the language world's template, the example bar of the Diagram page
+  check('owner 2: the reply is composed from the template (not machine-translated)', /^Am desenat o diagramă în formă de casă: \d+ noduri pe contur, unite în ordine\.$/.test(b.reply.trim()), b.reply);
+  const xs = (st?.shapes ?? []).map((x) => x.x), mid = xs.length ? (Math.min(...xs) + Math.max(...xs)) / 2 : 0;
+  check('owner 2: a symmetric gable and no part names on the nodes', st == null || ((st.shapes ?? []).every((x) => !x.label) && xs.filter((x) => x < mid - 1).length === xs.filter((x) => x > mid + 1).length), JSON.stringify((st?.shapes ?? []).map((x) => [x.name, x.label, x.x, x.y])));
+  const bar = await pg.$$eval('.p2-example', (e) => e.filter((b) => b.offsetParent && !b.closest('.p2-msg')).map((b) => b.textContent.trim()));
+  console.log(`INFO  owner 2 example bar: ${JSON.stringify(bar)}`);
+  check('owner 2: the example bar has no English chips of other pages', !bar.some((c) => /^(Remove|Play|Add|Change|Make|Show|Draw|Move|Connect)\b/.test(c) || /bird|seventh|chord|sun\b/i.test(c)), JSON.stringify(bar));
   console.log(`INFO  owner 2 reply time: ${b.wallMs} ms wall, ${b.perfMs} ms engine`);
   // a world that had no state before the turn (loaded lazily) is not a change the turn made
   for (const [tag, r] of [['owner 1', a], ['owner 2', b]]) {
