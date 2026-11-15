@@ -321,6 +321,7 @@ import { withSubject, polishReply } from '../translate/register.mjs';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs';
 import { intentStep, weakReading, cutWorld } from './intent.mjs';
 import { knownEnglishWord } from '../translate/en-ro.mjs';
+import { proposeReading, negationWords } from './proposer.mjs';
 import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
@@ -1635,6 +1636,12 @@ export class DialogSession {
     let cands = [];
     const contextRepair = this._contextRepairOf(lang, tr);
     try { cands = await gatherCandidates(text, { from: lang, to: 'en', translator: tr.rules ? tr : { rules: tr }, abortable: (p, stage) => guard.abortable(p, stage), contextRepair, isEnglish: this._doorIsEnglish(tr), kept: this._doorKept() }); } catch (e) { if (e instanceof TurnAborted) throw e; cands = []; }
+    // THE ARMS OF THE TRANSLATION MEASURE (Q48 proposal 2 item 3; a measuring hook, off by default): 'model' keeps only the machine translator's candidates (after the source repair
+    // too); 'both' keeps every candidate and puts the rules' first, so that a tie of the reading goes to the rules. Unset: today's chain.
+    const arm = this.engine.translationArm ?? null;
+    if (arm === 'model') cands = cands.filter((c) => !/rules/.test(String(c.source)) && !c.voice && !c.glossed);
+    else if (arm === 'both') cands = [...cands.filter((c) => /rules/.test(String(c.source))), ...cands.filter((c) => !/rules/.test(String(c.source)))];
+    if (!cands.length && arm === 'model') return null;
     if (!cands.length) {
       const translation = await guard.abortable((tr.rules ?? tr).translate(text, { from: lang, to: 'en' }), 'translate');
       const english = textOf(translation);
@@ -1691,7 +1698,8 @@ export class DialogSession {
     if (languageCommand(text)) return { why: 'language command' };
     const en = await this._doorEnglish(text, opts);
     if (!en) return { why: 'not translated' };
-    const { lang, english, translation } = en;
+    const { lang, translation } = en;
+    let english = en.english;   // let: an accepted proposal of the request proposer (Q48) is read in its place
     // an answer to the timeline's own yes / no question ("Shall I take them all back?"): the dialogue's, before any reading of a request
     const pd = this.discourse.pending;
     if (pd?.expected === 'yes/no' && pd.accept === 'undoTo' && this.engine.interp.lang?.yesNo?.(english)) return this._doorTimeline({ text, opts, lang, english, translation, tabWorld, act: 'undo', live, flat: null, answer: true });
@@ -1707,12 +1715,12 @@ export class DialogSession {
     // THE OPEN STATE AS FACTS (owner 19:10): the things the world shows, told into a fork of its live request World (the spell repair reads their names; references resolve to them)
     const shown = this.isession.state[tabWorld] ? (() => { try { const r = this.engine.interp.hook(this.isession, tabWorld, 'referents', {}); return Array.isArray(r) ? r : []; } catch { return []; } })() : [];
     const present = stateWorld(lib, live, shown);
-    const q = readTurn(lib, live, language, english, { dialogue: dlg, known: knownHere, worlds: present.world && present.world !== live ? [present.world] : [] });
+    let q = readTurn(lib, live, language, english, { dialogue: dlg, known: knownHere, worlds: present.world && present.world !== live ? [present.world] : [] });
     // the words of the person's own language the contextual repair put right before the translation (Q39 S3) and its asks are recorded on the request (trace.request); they are not said in the
     // reply yet: "I read X as Y" has no Romanian phrase (needs the reply phrase in the language world, questions.md), and the machine translation of it is not fit to show
     if (en.repairs?.length) q.sourceRepairs = en.repairs.map((r) => ({ said: r.from, as: r.to, source: r.source }));
     if (en.asks?.length) q.asks = [...(q.asks ?? []), ...en.asks.map((a) => ({ ...a, language: lang }))];
-    const flat = { act: q.act, target: q.target, facts: q.facts, reaction: q.reaction, unread: q.unread, used: q.used, corrections: q.corrections, english: q.english, source: 'sopworld', ...(q.sourceRepairs ? { sourceRepairs: q.sourceRepairs } : {}), ...(q.asks?.length ? { asks: q.asks } : {}) };
+    let flat = { act: q.act, target: q.target, facts: q.facts, reaction: q.reaction, unread: q.unread, used: q.used, corrections: q.corrections, english: q.english, source: 'sopworld', ...(q.sourceRepairs ? { sourceRepairs: q.sourceRepairs } : {}), ...(q.asks?.length ? { asks: q.asks } : {}) };
     const why = (w) => ({ why: w, q: flat });
     // A MESSAGE OF SEVERAL REQUESTS ("draw a sky, then draw a sun"): the library's clause splitter (the language world's cut points) cuts the English where every clause reads as
     // a request with an act and no unread word; each clause is a turn of the door of its own (one step each, undone last first). A list of things stays one clause.
@@ -1736,6 +1744,24 @@ export class DialogSession {
         }
         if (done.length) return { reply: done.at(-1).reply, route: `clauses (part) ${done.map((d) => d.route).join(' | ')}` };
       }
+    }
+    // THE REQUEST PROPOSER (Q48; behind a flag: engine.proposer is installed only when asked, PSYS2_PROPOSER=1 in Node): one more candidate reading. The model proposes a phrasing
+    // (the turn's words without the ones it finds change nothing, the act's verb when the act has no word); the rules read that phrasing over the same open world, and it is taken
+    // only when that reading is complete, agrees with the proposal and keeps every number, negation and name (src/dialog/proposer.mjs). Then the door goes on as for any reading.
+    if (this.engine.proposer && !opts._clause) {
+      let pr = null;
+      try {
+        const read = (t) => { try { return readTurn(lib, live, language, t, { dialogue: dlg, known: knownHere, worlds: present.world && present.world !== live ? [present.world] : [] }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; return null; } };
+        pr = await proposeReading(this.engine.proposer, { q, english, world: tabWorld, read, negations: (this.engine._proposerNeg ??= negationWords(language)) });
+      } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; pr = { accepted: false, log: { why: `error ${e.message}` } }; }
+      if (pr.accepted) {
+        const rulesQ = { unread: q.unread, act: q.act, english };
+        q = pr.q; english = pr.english;
+        q.corrections = [...(q.corrections ?? []), { said: rulesQ.english, as: pr.english }];   // the tier `guessed`: the reply says the reading ("I read ... as ..."), as it says a repaired slip
+        if (en.repairs?.length) q.sourceRepairs = en.repairs.map((r) => ({ said: r.from, as: r.to, source: r.source }));
+        flat = { act: q.act, target: q.target, facts: q.facts, reaction: q.reaction, unread: q.unread, used: q.used, corrections: q.corrections, english: q.english, source: 'proposer', rules: rulesQ, ...(q.sourceRepairs ? { sourceRepairs: q.sourceRepairs } : {}) };
+      }
+      if (pr.log) flat.proposer = pr.log;
     }
     // A REACTION THAT CHANGES NOTHING (praise, thanks: w.dialogue.revision `does=none`, data asked through reviseRequest; reviewer 22:45): read on every declared tab before the tab's acts, answered with the dialogue's own reply,
     // no plan and no undo step (a message of the reaction alone: no act, no thing, no unread word, nothing but a manner cue beside it, which the praise word also is)

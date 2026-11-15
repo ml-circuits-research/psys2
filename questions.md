@@ -852,3 +852,15 @@ The intent step (spec 03 7.9f, src/dialog/intent.mjs) chooses with the library's
 *Order proposed.* Migration continues (Drawing scenes, Documents, avatar). In parallel a small experiment: generator → pairs → fine-tune on Drawing + Diagram → candidate source behind a flag → measure. Then the Romanian cleaner + model comparison on real rows.
 
 *Asked:* is the design right (proposer as a candidate source, never deciding; data from declarations)? Which model size / latency bound do you accept? Is the Romanian order (measure before switching) right? What would make you reject it (patch smells in a learned form: training on the test turns only, a model that executes, labels copied from old patterns)?
+
+**Q49 [KNOW] (worker, 2026-11-16, from the Q48 stage 0 table) — cue words the language world lacks, seen in today's real turns (not local rows; for the catalog's w.lang.en).**
+Each is a real turn the rules left unread or read wrong because the language world has no cue for the phrase; a model that drops the word would change the meaning, so they belong in w.lang.en as cues:
+- "further" / "more to the left|right" / "a bit more" as a step of a place direction (r0066, r0114, r0115, r0116, r0124, r0128; owner RO 12, 15 "și mai sus" = "even higher"): `place.*.more` has "further left" but not "further" alone after a verb or "even higher" as a continuation.
+- "a bit" before a comparative ("a bit bigger", "a bit thicker": r0574, r0583) as a small step.
+- "thicker" / "thinner" / "dashed" / "two-way" for links (r0570, r0578, r0583, r0584): line attributes (also a capability: (b)).
+- "leave the X" / "keep the X" = do not change X (r0063 "dar lasă lacul", owner RO 33).
+- "different corners" / "different places" = spread over distinct places (r0126, r0131, r0132).
+- "elements" / "items" / "the elements of the diagram" = all the things of the open world (owner RO 2, 3, 4, 8; r0557): an anaphor with refers=all.
+- "the layout" as a noun after "change" ("change the layout to a column", r0558).
+- "over the water" / "above the lake" as a place relative to a thing (r0059, owner RO 33 "deasupra apei").
+**Needs sopworld 0.154 named references (being vendored by the migration worker):** 19 turns name things of the open state: circle1, rectangle1, a1, c1, "called A" / "called B", "connect A to B" (real r0561, r0562, r0564, r0567, r0568, r0569, r0574, r0575, r0578-r0582, r0585) and the owner's diagram nodes results / summary / problems / work done (owner RO 11, 13, 14, 18, 19). Not a proposer's job: only the state says which thing a name is.

@@ -1,0 +1,36 @@
+{
+ "a": "training/results/real-2026-11-15-matrixproposer-off.json",
+ "b": "training/results/real-2026-11-15-matrixproposer-on.json",
+ "totalsA": {
+  "unjudged-other_world": 52,
+  "executed-unjudged": 76,
+  "right": 129,
+  "unjudged-refused": 104,
+  "wrong-exec": 27,
+  "honest": 117,
+  "unjudged-not_understood": 97,
+  "unjudged-asked": 3
+ },
+ "totalsB": {
+  "unjudged-other_world": 52,
+  "executed-unjudged": 76,
+  "right": 129,
+  "unjudged-refused": 104,
+  "wrong-exec": 27,
+  "honest": 117,
+  "unjudged-not_understood": 97,
+  "unjudged-asked": 3
+ },
+ "won": [],
+ "lost": [],
+ "changed": [
+  {
+   "id": "#r0278",
+   "text": "n ai înțeles desenează maimuță",
+   "a": "unjudged-refused",
+   "b": "unjudged-refused",
+   "replyA": "I did not understand \"n\", \"understood\", \"draw\" here.",
+   "replyB": "I cannot make monkey in the drawing yet."
+  }
+ ]
+}

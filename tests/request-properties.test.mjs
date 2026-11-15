@@ -16,6 +16,7 @@ const engines = {
   en: await createEngine({ loader }),
   ro: await createEngine({ loader, translator: createTranslator() }),
 };
+if (process.env.PSYS2_PROPOSER === '1') { const { installProposer } = await import('../scripts/lib/proposer-node.mjs'); for (const e of Object.values(engines)) await installProposer(e); }   // the request proposer (Q48), measured behind its flag
 const TAB = { diagram: 'diagram', draw: 'draw', docs: 'editor', map: 'map', charts: 'charts', music: 'music' };
 const session = (lang, tab) => { const s = engines[lang].createSession({ language: lang }); s.setWorldState('ui.shell', { activeTab: TAB[tab] }); return s; };
 

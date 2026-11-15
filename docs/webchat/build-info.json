@@ -1,5 +1,5 @@
 {
-  "version": "e048bf3463",
+  "version": "068a75485f",
   "worlds": [
     "acts",
     "art.draw",
@@ -62,7 +62,7 @@
     "lib/dialog/followup.mjs": "a0ef77d024f0e067",
     "lib/dialog/foreign-reading.mjs": "c468c3cf05a584ec",
     "lib/dialog/honest-done.mjs": "685e6a89ddf4c3dd",
-    "lib/dialog/index.mjs": "eead89f65cef6117",
+    "lib/dialog/index.mjs": "35f9c9215cab1840",
     "lib/dialog/intent.mjs": "a9a118cc948fb72d",
     "lib/dialog/knowledge-lookup.mjs": "21c30ab2d9cc5510",
     "lib/dialog/meta-worlds.mjs": "6a31f3b44e6337cc",
@@ -70,6 +70,7 @@
     "lib/dialog/normalizer-runtime.mjs": "5f70a7886b4a8475",
     "lib/dialog/person-view.mjs": "6edfee63b3e56cd0",
     "lib/dialog/person.mjs": "ebf31281df9a44e8",
+    "lib/dialog/proposer.mjs": "864bbc94a77a065c",
     "lib/dialog/relative.mjs": "ebb842269cbc25bb",
     "lib/dialog/request.mjs": "47b6194ffd8d1b62",
     "lib/dialog/runtime-config.mjs": "0246f8032f1ba841",
@@ -687,8 +688,8 @@
     "worlds/words/zo.json": "001841dabf5d9de7",
     "worlds/words.bloom.json": "2b7992132f0ff72e"
   },
-  "builtAt": "2026-11-15T21:43:18.604Z",
-  "commit": "546ac13a-dirty",
+  "builtAt": "2026-11-15T23:06:30.502Z",
+  "commit": "9fa10af8-dirty",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "assets": {
     "app.mjs": "52cf9cb7bf",
@@ -717,7 +718,7 @@
     "lib/dialog/followup.mjs": "88af56c068",
     "lib/dialog/foreign-reading.mjs": "79d8decc9c",
     "lib/dialog/honest-done.mjs": "80e9d07ff4",
-    "lib/dialog/index.mjs": "a94a2b95e3",
+    "lib/dialog/index.mjs": "3b098e8dc7",
     "lib/dialog/intent.mjs": "5e4cf030ab",
     "lib/dialog/knowledge-lookup.mjs": "226fe8b10b",
     "lib/dialog/meta-worlds.mjs": "c23e417243",
@@ -725,6 +726,7 @@
     "lib/dialog/normalizer-runtime.mjs": "0cb684354c",
     "lib/dialog/person-view.mjs": "ceeabdb255",
     "lib/dialog/person.mjs": "70f75bd107",
+    "lib/dialog/proposer.mjs": "b3c21ed7d7",
     "lib/dialog/relative.mjs": "4d9503cc42",
     "lib/dialog/request.mjs": "d6ea905c56",
     "lib/dialog/runtime-config.mjs": "282e39754f",
