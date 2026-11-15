@@ -1,0 +1,38 @@
+# k.units/shards/words: the English words of k.units (its types, keys and values), stored beside the world (owner's
+# decision 2026-11-15 08:10); tools/build-catalog.mjs reads them as the world's own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the types and keys of this world.
+@k.units.word.unit core.word text=unit text=units text=measure means=k.units.unit core.source="hand-core 1"
+@k.units.word.currency core.word text=currency text=currencies text=money means=k.units.currency core.source="hand-core 1"
+@k.units.word.symbol core.word text=symbol text=abbreviation means=k.units.unit.symbol core.source="hand-core 1"
+@k.units.word.factor core.word text=convert text=conversion text=factor means=k.units.unit.factor core.source="hand-core 1"
+@k.units.word.quantity core.word text=quantity text=measures means=k.units.unit.quantity core.source="hand-core 1"
+@k.units.word.measure core.word text=measured text="in which unit" means=k.units.measure core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.units.word.key.quantity core.word text=quantity means=k.units.quantity core.source="hand-core 1"
+@k.units.word.key.quantity.base core.word text=base means=k.units.quantity.base core.source="hand-core 1"
+@k.units.word.key.unit.quantity core.word text=measure text=kind means=k.units.unit.quantity core.source="hand-core 1"
+@k.units.word.key.unit.offset core.word text=offset means=k.units.unit.offset core.source="hand-core 1"
+@k.units.word.key.unit.system core.word text=system means=k.units.unit.system core.source="hand-core 1"
+@k.units.word.key.measure.type core.word text=type means=k.units.measure.type core.source="hand-core 1"
+@k.units.word.key.measure.key core.word text=key means=k.units.measure.key core.source="hand-core 1"
+@k.units.word.key.measure.unit core.word text=unit means=k.units.measure.unit core.source="hand-core 1"
+@k.units.word.key.measure.counts core.word text=counts means=k.units.measure.counts core.source="hand-core 1"
+@k.units.word.key.measure.frame core.word text=frame means=k.units.measure.frame core.source="hand-core 1"
+@k.units.word.key.measure.plain core.word text=plain means=k.units.measure.plain core.source="hand-core 1"
+@k.units.word.key.measure.ordinal core.word text=ordinal means=k.units.measure.ordinal core.source="hand-core 1"
+@k.units.word.key.measure.approximate core.word text=approximate means=k.units.measure.approximate core.source="hand-core 1"
+@k.units.word.key.currency.name core.word text=name means=k.units.currency.name core.source="hand-core 1"
+@k.units.word.key.currency.name_plural core.word text="name plural" means=k.units.currency.name_plural core.source="hand-core 1"
+@k.units.word.key.currency.unit core.word text=unit text=money means=k.units.currency.unit core.source="hand-core 1"
+@k.units.word.key.currency.unit_plural core.word text="unit plural" means=k.units.currency.unit_plural core.source="hand-core 1"
+@k.units.word.key.currency.symbol core.word text=symbol text=sign means=k.units.currency.symbol core.source="hand-core 1"
+@k.units.word.key.currency.narrow core.word text=narrow means=k.units.currency.narrow core.source="hand-core 1"
+@k.units.word.key.currency.decimals core.word text=decimals means=k.units.currency.decimals core.source="hand-core 1"
+@k.units.word.key.currency.minor core.word text=minor text=cent text=cents means=k.units.currency.minor core.source="hand-core 1"
+@k.units.word.key.currency.minor_plural core.word text="minor plural" means=k.units.currency.minor_plural core.source="hand-core 1"
+@k.units.word.key.currency.country core.word text=country text=where text=used means=k.units.currency.country core.source="hand-core 1"

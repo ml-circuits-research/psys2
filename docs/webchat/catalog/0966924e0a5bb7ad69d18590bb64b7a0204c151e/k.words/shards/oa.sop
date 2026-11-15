@@ -1,0 +1,17 @@
+# k.words/shards/oa: senses of the words from "oaf" to "oatmeal" (first letters "oa").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.oaf.noun.1 k.words.sense word=oaf pos=noun n=1 supersense=noun.person gloss="an awkward stupid person" synonym=lout synonym=clod synonym=stumblebum synonym=goon synonym=lubber synonym=lummox synonym=lump synonym=gawk is_a="clumsy person" core.source="wordnet 3.1"
+@k.words.oak.noun.1 k.words.sense word=oak pos=noun n=1 supersense=noun.plant gloss="the hard durable wood of any oak; used especially for furniture and flooring" is_a=wood core.source="wordnet 3.1"
+@k.words.oak.noun.2 k.words.sense word=oak pos=noun n=2 supersense=noun.plant gloss="a deciduous tree of the genus Quercus; has acorns and lobed leaves" synonym="oak tree" is_a=tree core.source="wordnet 3.1"
+@k.words.oakland.noun.1 k.words.sense word=Oakland pos=noun n=1 supersense=noun.location gloss="a city in western California on San Francisco Bay opposite San Francisco; primarily and industrial urban center" instance_of=city instance_of=port part_of=California core.source="wordnet 3.1"
+@k.words.oakland.spelling.Oakland core.word text=oakland means=Oakland of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.oar.noun.1 k.words.sense word=oar pos=noun n=1 supersense=noun.artifact gloss="an implement used to propel or steer a boat" is_a=implement kind_of=implement kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.oasis.noun.1 k.words.sense word=oasis pos=noun n=1 supersense=noun.location gloss="a fertile tract in a desert (where the water table approaches the surface)" is_a=tract part_of=desert core.source="wordnet 3.1"
+@k.words.oasis.noun.2 k.words.sense word=oasis pos=noun n=2 supersense=noun.artifact gloss="a shelter serving as a place of safety or sanctuary" synonym=haven is_a=shelter core.source="wordnet 3.1"
+@k.words.oath.noun.2 k.words.sense word=oath pos=noun n=2 supersense=noun.communication gloss="a commitment to tell the truth (especially in a court of law); to lie under oath is to become subject to prosecution for perjury" synonym=swearing is_a=commitment core.source="wordnet 3.1"
+@k.words.oath.noun.3 k.words.sense word=oath pos=noun n=3 supersense=noun.communication gloss="a solemn promise, usually invoking a divine witness, regarding your future acts or behavior" is_a=promise core.source="wordnet 3.1"
+@k.words.oatmeal.noun.1 k.words.sense word=oatmeal pos=noun n=1 supersense=noun.food gloss="porridge made of rolled oats" synonym=burgoo is_a=porridge kind_of=porridge kind_of=dish kind_of=nutriment kind_of=food kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.oatmeal.noun.2 k.words.sense word=oatmeal pos=noun n=2 supersense=noun.food gloss="meal made from rolled or ground oats" synonym="rolled oats" is_a=meal kind_of=meal kind_of=foodstuff kind_of=food kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

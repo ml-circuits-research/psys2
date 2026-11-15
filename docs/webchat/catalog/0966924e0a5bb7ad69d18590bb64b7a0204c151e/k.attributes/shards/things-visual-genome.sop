@@ -1,0 +1,219 @@
+# k.attributes/shards/things-visual-genome: the usual colour of common things that the catalog lacked, from Visual Genome's object attributes: the modal basic colour of the sense's synset when its colour words are said at least 20 times and it holds at least 50 % of them. Hand check (sources/coverage/kr6-visual-genome-colour-audit.tsv): 26 of 133 checked wrong (20 %), 107 checked right published of 140. Attribution: Visual Genome (Krishna et al., 2017), CC BY 4.0.
+# sources: visual-genome 1.4 (Visual Genome, Krishna et al. 2017, CC BY 4.0: object attributes aggregated, questions.md Q80)
+# license: CC-BY-4.0
+# script: tools/import/attributes-data.mjs
+
+# antelope: antelope.n.01, brown 27 of 33 colour mentions
+@k.attributes.thing.vg.antelope k.attributes.thing name=antelope colour=brown core.source="visual-genome 1.4"
+# asparagus: asparagus.n.01, green 34 of 34 colour mentions
+@k.attributes.thing.vg.asparagus k.attributes.thing name=asparagus colour=green core.source="visual-genome 1.4"
+# bagel: bagel.n.01, brown 22 of 31 colour mentions
+@k.attributes.thing.vg.bagel k.attributes.thing name=bagel colour=brown core.source="visual-genome 1.4"
+# banana: banana.n.01, yellow 1928 of 3136 colour mentions
+@k.attributes.thing.vg.banana k.attributes.thing name=banana colour=yellow core.source="visual-genome 1.4"
+# bandage: bandage.n.01, white 21 of 26 colour mentions
+@k.attributes.thing.vg.bandage k.attributes.thing name=bandage colour=white core.source="visual-genome 1.4"
+# basil: basil.n.01, green 37 of 37 colour mentions
+@k.attributes.thing.vg.basil k.attributes.thing name=basil colour=green core.source="visual-genome 1.4"
+# basin: basin.n.01, white 36 of 56 colour mentions
+@k.attributes.thing.vg.basin k.attributes.thing name=basin colour=white core.source="visual-genome 1.4"
+# bathrobe: bathrobe.n.01, white 14 of 22 colour mentions
+@k.attributes.thing.vg.bathrobe k.attributes.thing name=bathrobe colour=white core.source="visual-genome 1.4"
+# bathtub: bathtub.n.01, white 525 of 657 colour mentions
+@k.attributes.thing.vg.bathtub k.attributes.thing name=bathtub colour=white core.source="visual-genome 1.4"
+# bean: bean.n.01, green 209 of 350 colour mentions
+@k.attributes.thing.vg.bean k.attributes.thing name=bean colour=green core.source="visual-genome 1.4"
+# beet: beet.n.01, red 27 of 38 colour mentions
+@k.attributes.thing.vg.beet k.attributes.thing name=beet colour=red core.source="visual-genome 1.4"
+# berry: berry.n.01, red 145 of 193 colour mentions
+@k.attributes.thing.vg.berry k.attributes.thing name=berry colour=red core.source="visual-genome 1.4"
+# boulder: boulder.n.01, grey 95 of 166 colour mentions
+@k.attributes.thing.vg.boulder k.attributes.thing name=boulder colour=grey core.source="visual-genome 1.4"
+# bread: bread.n.01, brown 275 of 496 colour mentions
+@k.attributes.thing.vg.bread k.attributes.thing name=bread colour=brown core.source="visual-genome 1.4"
+# briefcase: briefcase.n.01, black 46 of 84 colour mentions
+@k.attributes.thing.vg.briefcase k.attributes.thing name=briefcase colour=black core.source="visual-genome 1.4"
+# broccoli: broccoli.n.01, green 1008 of 1041 colour mentions
+@k.attributes.thing.vg.broccoli k.attributes.thing name=broccoli colour=green core.source="visual-genome 1.4"
+# bulb: bulb.n.01, white 65 of 108 colour mentions
+@k.attributes.thing.vg.bulb k.attributes.thing name=bulb colour=white core.source="visual-genome 1.4"
+# bun: bun.n.01, brown 130 of 244 colour mentions
+@k.attributes.thing.vg.bun k.attributes.thing name=bun colour=brown core.source="visual-genome 1.4"
+# butter: butter.n.01, yellow 21 of 24 colour mentions
+@k.attributes.thing.vg.butter k.attributes.thing name=butter colour=yellow core.source="visual-genome 1.4"
+# camera: camera.n.01, black 397 of 513 colour mentions
+@k.attributes.thing.vg.camera k.attributes.thing name=camera colour=black core.source="visual-genome 1.4"
+# cauliflower: cauliflower.n.01, white 59 of 90 colour mentions
+@k.attributes.thing.vg.cauliflower k.attributes.thing name=cauliflower colour=white core.source="visual-genome 1.4"
+# cellphone: cellular_telephone.n.01, black 196 of 354 colour mentions
+@k.attributes.thing.vg.cellphone k.attributes.thing name=cellphone colour=black core.source="visual-genome 1.4"
+# cliff: cliff.n.01, brown 21 of 40 colour mentions
+@k.attributes.thing.vg.cliff k.attributes.thing name=cliff colour=brown core.source="visual-genome 1.4"
+# cookie: cookie.n.01, brown 35 of 69 colour mentions
+@k.attributes.thing.vg.cookie k.attributes.thing name=cookie colour=brown core.source="visual-genome 1.4"
+# corn: corn.n.01, yellow 85 of 92 colour mentions
+@k.attributes.thing.vg.corn k.attributes.thing name=corn colour=yellow core.source="visual-genome 1.4"
+# cracker: cracker.n.01, brown 18 of 36 colour mentions
+@k.attributes.thing.vg.cracker k.attributes.thing name=cracker colour=brown core.source="visual-genome 1.4"
+# crapper: toilet.n.02, white 22 of 37 colour mentions
+@k.attributes.thing.vg.crapper k.attributes.thing name=crapper colour=white core.source="visual-genome 1.4"
+# cucumber: cucumber.n.01, green 119 of 120 colour mentions
+@k.attributes.thing.vg.cucumber k.attributes.thing name=cucumber colour=green core.source="visual-genome 1.4"
+# cuff: cuff.n.01, white 38 of 74 colour mentions
+@k.attributes.thing.vg.cuff k.attributes.thing name=cuff colour=white core.source="visual-genome 1.4"
+# desk: desk.n.01, brown 318 of 635 colour mentions
+@k.attributes.thing.vg.desk k.attributes.thing name=desk colour=brown core.source="visual-genome 1.4"
+# dish: dish.n.01, white 454 of 698 colour mentions
+@k.attributes.thing.vg.dish k.attributes.thing name=dish colour=white core.source="visual-genome 1.4"
+# dishwasher: dishwasher.n.01, white 139 of 241 colour mentions
+@k.attributes.thing.vg.dishwasher k.attributes.thing name=dishwasher colour=white core.source="visual-genome 1.4"
+# dough: dough.n.01, white 19 of 27 colour mentions
+@k.attributes.thing.vg.dough k.attributes.thing name=dough colour=white core.source="visual-genome 1.4"
+# dresser: chest_of_drawers.n.01, brown 108 of 160 colour mentions
+@k.attributes.thing.vg.dresser k.attributes.thing name=dresser colour=brown core.source="visual-genome 1.4"
+# driveway: driveway.n.01, grey 14 of 23 colour mentions
+@k.attributes.thing.vg.driveway k.attributes.thing name=driveway colour=grey core.source="visual-genome 1.4"
+# dryer: dryer.n.01, white 22 of 40 colour mentions
+@k.attributes.thing.vg.dryer k.attributes.thing name=dryer colour=white core.source="visual-genome 1.4"
+# extinguisher: fire_extinguisher.n.01, red 70 of 84 colour mentions
+@k.attributes.thing.vg.extinguisher k.attributes.thing name=extinguisher colour=red core.source="visual-genome 1.4"
+# freezer: deep-freeze.n.01, white 39 of 53 colour mentions
+@k.attributes.thing.vg.freezer k.attributes.thing name=freezer colour=white core.source="visual-genome 1.4"
+# fridge: electric_refrigerator.n.01, white 246 of 329 colour mentions
+@k.attributes.thing.vg.fridge k.attributes.thing name=fridge colour=white core.source="visual-genome 1.4"
+# goose: goose.n.01, white 35 of 54 colour mentions
+@k.attributes.thing.vg.goose k.attributes.thing name=goose colour=white core.source="visual-genome 1.4"
+# grate: grate.n.01, black 43 of 86 colour mentions
+@k.attributes.thing.vg.grate k.attributes.thing name=grate colour=black core.source="visual-genome 1.4"
+# gravy: gravy.n.01, brown 34 of 48 colour mentions
+@k.attributes.thing.vg.gravy k.attributes.thing name=gravy colour=brown core.source="visual-genome 1.4"
+# grill: grillroom.n.01, black 94 of 141 colour mentions
+@k.attributes.thing.vg.grill k.attributes.thing name=grill colour=black core.source="visual-genome 1.4"
+# gun: gun.n.01, black 21 of 29 colour mentions
+@k.attributes.thing.vg.gun k.attributes.thing name=gun colour=black core.source="visual-genome 1.4"
+# ham: ham.n.01, pink 31 of 37 colour mentions
+@k.attributes.thing.vg.ham k.attributes.thing name=ham colour=pink core.source="visual-genome 1.4"
+# hanky: handkerchief.n.01, white 34 of 61 colour mentions
+@k.attributes.thing.vg.hanky k.attributes.thing name=hanky colour=white core.source="visual-genome 1.4"
+# heater: heater.n.01, white 40 of 50 colour mentions
+@k.attributes.thing.vg.heater k.attributes.thing name=heater colour=white core.source="visual-genome 1.4"
+# hole: hole.n.01, black 53 of 78 colour mentions
+@k.attributes.thing.vg.hole k.attributes.thing name=hole colour=black core.source="visual-genome 1.4"
+# horse: horse.n.01, brown 2397 of 4440 colour mentions
+@k.attributes.thing.vg.horse k.attributes.thing name=horse colour=brown core.source="visual-genome 1.4"
+# ipod: ipod.n.01, white 44 of 78 colour mentions
+@k.attributes.thing.vg.ipod k.attributes.thing name=ipod colour=white core.source="visual-genome 1.4"
+# juice: juice.n.01, orange 113 of 148 colour mentions
+@k.attributes.thing.vg.juice k.attributes.thing name=juice colour=orange core.source="visual-genome 1.4"
+# keypad: computer_keyboard.n.01, black 32 of 63 colour mentions
+@k.attributes.thing.vg.keypad k.attributes.thing name=keypad colour=black core.source="visual-genome 1.4"
+# lamb: lamb.n.01, white 115 of 173 colour mentions
+@k.attributes.thing.vg.lamb k.attributes.thing name=lamb colour=white core.source="visual-genome 1.4"
+# lighthouse: beacon.n.03, white 74 of 131 colour mentions
+@k.attributes.thing.vg.lighthouse k.attributes.thing name=lighthouse colour=white core.source="visual-genome 1.4"
+# mast: mast.n.01, white 29 of 51 colour mentions
+@k.attributes.thing.vg.mast k.attributes.thing name=mast colour=white core.source="visual-genome 1.4"
+# mattress: mattress.n.01, white 66 of 105 colour mentions
+@k.attributes.thing.vg.mattress k.attributes.thing name=mattress colour=white core.source="visual-genome 1.4"
+# microphone: microphone.n.01, black 95 of 121 colour mentions
+@k.attributes.thing.vg.microphone k.attributes.thing name=microphone colour=black core.source="visual-genome 1.4"
+# mound: mound.n.01, brown 46 of 74 colour mentions
+@k.attributes.thing.vg.mound k.attributes.thing name=mound colour=brown core.source="visual-genome 1.4"
+# muffin: muffin.n.01, brown 17 of 28 colour mentions
+@k.attributes.thing.vg.muffin k.attributes.thing name=muffin colour=brown core.source="visual-genome 1.4"
+# mushroom: mushroom.n.01, brown 66 of 115 colour mentions
+@k.attributes.thing.vg.mushroom k.attributes.thing name=mushroom colour=brown core.source="visual-genome 1.4"
+# napkin: napkin.n.01, white 1109 of 1528 colour mentions
+@k.attributes.thing.vg.napkin k.attributes.thing name=napkin colour=white core.source="visual-genome 1.4"
+# nut: nut.n.01, brown 21 of 37 colour mentions
+@k.attributes.thing.vg.nut k.attributes.thing name=nut colour=brown core.source="visual-genome 1.4"
+# pan: pan.n.01, black 153 of 241 colour mentions
+@k.attributes.thing.vg.pan k.attributes.thing name=pan colour=black core.source="visual-genome 1.4"
+# parsley: parsley.n.01, green 55 of 55 colour mentions
+@k.attributes.thing.vg.parsley k.attributes.thing name=parsley colour=green core.source="visual-genome 1.4"
+# pastry: pastry.n.01, brown 77 of 119 colour mentions
+@k.attributes.thing.vg.pastry k.attributes.thing name=pastry colour=brown core.source="visual-genome 1.4"
+# pavement: pavement.n.01, grey 289 of 474 colour mentions
+@k.attributes.thing.vg.pavement k.attributes.thing name=pavement colour=grey core.source="visual-genome 1.4"
+# pea: pea.n.01, green 156 of 160 colour mentions
+@k.attributes.thing.vg.pea k.attributes.thing name=pea colour=green core.source="visual-genome 1.4"
+# pear: pear.n.01, green 84 of 130 colour mentions
+@k.attributes.thing.vg.pear k.attributes.thing name=pear colour=green core.source="visual-genome 1.4"
+# pepperoni: pepperoni.n.01, red 193 of 198 colour mentions
+@k.attributes.thing.vg.pepperoni k.attributes.thing name=pepperoni colour=red core.source="visual-genome 1.4"
+# pew: pew.n.01, brown 25 of 31 colour mentions
+@k.attributes.thing.vg.pew k.attributes.thing name=pew colour=brown core.source="visual-genome 1.4"
+# phone: telephone.n.01, black 769 of 1430 colour mentions
+@k.attributes.thing.vg.phone k.attributes.thing name=phone colour=black core.source="visual-genome 1.4"
+# pickle: pickle.n.01, green 134 of 135 colour mentions
+@k.attributes.thing.vg.pickle k.attributes.thing name=pickle colour=green core.source="visual-genome 1.4"
+# pier: pier.n.01, brown 13 of 23 colour mentions
+@k.attributes.thing.vg.pier k.attributes.thing name=pier colour=brown core.source="visual-genome 1.4"
+# pineapple: pineapple.n.01, yellow 32 of 57 colour mentions
+@k.attributes.thing.vg.pineapple k.attributes.thing name=pineapple colour=yellow core.source="visual-genome 1.4"
+# plate: home_plate.n.01, white 217 of 222 colour mentions
+@k.attributes.thing.vg.plate k.attributes.thing name=plate colour=white core.source="visual-genome 1.4"
+# radiator: radiator.n.01, white 92 of 112 colour mentions
+@k.attributes.thing.vg.radiator k.attributes.thing name=radiator colour=white core.source="visual-genome 1.4"
+# radish: radish.n.01, red 43 of 51 colour mentions
+@k.attributes.thing.vg.radish k.attributes.thing name=radish colour=red core.source="visual-genome 1.4"
+# rice: rice.n.01, white 188 of 282 colour mentions
+@k.attributes.thing.vg.rice k.attributes.thing name=rice colour=white core.source="visual-genome 1.4"
+# runway: track.n.09, grey 76 of 121 colour mentions
+@k.attributes.thing.vg.runway k.attributes.thing name=runway colour=grey core.source="visual-genome 1.4"
+# sack: sack.n.01, brown 57 of 93 colour mentions
+@k.attributes.thing.vg.sack k.attributes.thing name=sack colour=brown core.source="visual-genome 1.4"
+# sailboat: sailboat.n.01, white 98 of 133 colour mentions
+@k.attributes.thing.vg.sailboat k.attributes.thing name=sailboat colour=white core.source="visual-genome 1.4"
+# salad: salad.n.01, green 96 of 121 colour mentions
+@k.attributes.thing.vg.salad k.attributes.thing name=salad colour=green core.source="visual-genome 1.4"
+# sandwich: sandwich.n.01, brown 42 of 79 colour mentions
+@k.attributes.thing.vg.sandwich k.attributes.thing name=sandwich colour=brown core.source="visual-genome 1.4"
+# sausage: sausage.n.01, brown 62 of 108 colour mentions
+@k.attributes.thing.vg.sausage k.attributes.thing name=sausage colour=brown core.source="visual-genome 1.4"
+# shower: shower.n.01, white 43 of 53 colour mentions
+@k.attributes.thing.vg.shower k.attributes.thing name=shower colour=white core.source="visual-genome 1.4"
+# sidewalk: sidewalk.n.01, grey 680 of 1031 colour mentions
+@k.attributes.thing.vg.sidewalk k.attributes.thing name=sidewalk colour=grey core.source="visual-genome 1.4"
+# slab: slab.n.01, grey 25 of 44 colour mentions
+@k.attributes.thing.vg.slab k.attributes.thing name=slab colour=grey core.source="visual-genome 1.4"
+# spinach: spinach.n.01, green 94 of 96 colour mentions
+@k.attributes.thing.vg.spinach k.attributes.thing name=spinach colour=green core.source="visual-genome 1.4"
+# stove: stove.n.01, white 335 of 621 colour mentions
+@k.attributes.thing.vg.stove k.attributes.thing name=stove colour=white core.source="visual-genome 1.4"
+# stump: stump.n.01, brown 45 of 64 colour mentions
+@k.attributes.thing.vg.stump k.attributes.thing name=stump colour=brown core.source="visual-genome 1.4"
+# sunglasses: sunglasses.n.01, black 763 of 994 colour mentions
+@k.attributes.thing.vg.sunglasses k.attributes.thing name=sunglasses colour=black core.source="visual-genome 1.4"
+# surfboard: surfboard.n.01, white 1861 of 3623 colour mentions
+@k.attributes.thing.vg.surfboard k.attributes.thing name=surfboard colour=white core.source="visual-genome 1.4"
+# sweatpants: sweat_pants.n.01, grey 41 of 66 colour mentions
+@k.attributes.thing.vg.sweatpants k.attributes.thing name=sweatpants colour=grey core.source="visual-genome 1.4"
+# taxi: cab.n.03, yellow 171 of 237 colour mentions
+@k.attributes.thing.vg.taxi k.attributes.thing name=taxi colour=yellow core.source="visual-genome 1.4"
+# telephone: telephone.n.01, black 769 of 1430 colour mentions
+@k.attributes.thing.vg.telephone k.attributes.thing name=telephone colour=black core.source="visual-genome 1.4"
+# thermostat: thermostat.n.01, white 21 of 22 colour mentions
+@k.attributes.thing.vg.thermostat k.attributes.thing name=thermostat colour=white core.source="visual-genome 1.4"
+# tombstone: gravestone.n.01, grey 23 of 24 colour mentions
+@k.attributes.thing.vg.tombstone k.attributes.thing name=tombstone colour=grey core.source="visual-genome 1.4"
+# tripod: tripod.n.01, black 17 of 24 colour mentions
+@k.attributes.thing.vg.tripod k.attributes.thing name=tripod colour=black core.source="visual-genome 1.4"
+# tub: bathtub.n.01, white 525 of 657 colour mentions
+@k.attributes.thing.vg.tub k.attributes.thing name=tub colour=white core.source="visual-genome 1.4"
+# veg: vegetable.n.01, green 762 of 1001 colour mentions
+@k.attributes.thing.vg.veg k.attributes.thing name=veg colour=green core.source="visual-genome 1.4"
+# veggie: vegetable.n.01, green 762 of 1001 colour mentions
+@k.attributes.thing.vg.veggie k.attributes.thing name=veggie colour=green core.source="visual-genome 1.4"
+# vine: vine.n.01, green 64 of 83 colour mentions
+@k.attributes.thing.vg.vine k.attributes.thing name=vine colour=green core.source="visual-genome 1.4"
+# wharf: pier.n.01, brown 13 of 23 colour mentions
+@k.attributes.thing.vg.wharf k.attributes.thing name=wharf colour=brown core.source="visual-genome 1.4"
+# windmill: windmill.n.01, white 14 of 22 colour mentions
+@k.attributes.thing.vg.windmill k.attributes.thing name=windmill colour=white core.source="visual-genome 1.4"
+# wire: wire.n.01, black 504 of 927 colour mentions
+@k.attributes.thing.vg.wire k.attributes.thing name=wire colour=black core.source="visual-genome 1.4"
+# yacht: yacht.n.01, white 32 of 38 colour mentions
+@k.attributes.thing.vg.yacht k.attributes.thing name=yacht colour=white core.source="visual-genome 1.4"
+# zucchini: zucchini.n.01, green 23 of 26 colour mentions
+@k.attributes.thing.vg.zucchini k.attributes.thing name=zucchini colour=green core.source="visual-genome 1.4"

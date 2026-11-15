@@ -1,0 +1,239 @@
+# k.procedures/shards/everyday: 23 everyday procedures a person may ask a flowchart of (making tea, washing hands, planting a seed, brushing teeth, crossing the road, keeping food safe, stop, drop and roll, drop, cover and hold on, covering a cough, making a sandwich, boiling an egg, making toast, cooking pasta, making the bed, doing the laundry, washing the dishes, setting the table, packing a school bag, feeding a pet, watering a plant, getting dressed, tying shoelaces, sending a letter; block 07:30 item 2): their steps, decisions and order, each said to be cited, paraphrased (facts read in a source, our words) or written here (own); not methods of the planner.
+# sources: hand-core 1 (hand-written in this repository: tools/procedures-core.mjs; the instructions cited are named by `cite`; the steps of a procedure with basis=cited quote a work of the US government, public domain, marked core.license=public-domain)
+# license: CC0-1.0 AND public-domain
+# script: tools/procedures-core.mjs
+
+# making tea
+@k.procedures.howto.making_tea k.procedures.howto name="making tea" about="a cup of tea with a tea bag, as it is usually made" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.making_tea.1 k.procedures.howto_step howto="making tea" n=1 about="Boil water" role=process core.source="hand-core 1"
+@k.procedures.howto_step.making_tea.2 k.procedures.howto_step howto="making tea" n=2 about="Put a tea bag in a cup" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.making_tea.3 k.procedures.howto_step howto="making tea" n=3 about="Pour the hot water into the cup" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.making_tea.4 k.procedures.howto_step howto="making tea" n=4 about="Let it steep for a few minutes" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.making_tea.5 k.procedures.howto_step howto="making tea" n=5 about="Take out the tea bag" role=process after=4 core.source="hand-core 1"
+@k.procedures.howto_step.making_tea.6 k.procedures.howto_step howto="making tea" n=6 about="Milk or sugar?" role=decision after=5 core.source="hand-core 1"
+@k.procedures.howto_step.making_tea.7 k.procedures.howto_step howto="making tea" n=7 about="Add milk or sugar" role=process after=6 branch=yes core.source="hand-core 1"
+@k.procedures.howto_step.making_tea.8 k.procedures.howto_step howto="making tea" n=8 about="Drink the tea" role=process after=6 after=7 branch=no core.source="hand-core 1"
+@k.procedures.word.howto.making_tea core.word text="making a cup of tea" text="tea making" text="how to make tea" means="making tea" of=k.procedures.howto.name core.source="hand-core 1"
+
+# washing hands
+@k.procedures.howto.washing_hands k.procedures.howto name="washing hands" about="washing hands with soap and water, in the five steps of the CDC (wet, lather, scrub, rinse, dry)" basis=cited cite="Centers for Disease Control and Prevention (CDC), \"When and How to Wash Your Hands\", Handwashing in Community Settings (2023)" core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.washing_hands.1 k.procedures.howto_step howto="washing hands" n=1 about="Wet your hands" role=process detail="Wet your hands with clean, running water (warm or cold), turn off the tap, and apply soap." core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.washing_hands.2 k.procedures.howto_step howto="washing hands" n=2 about="Lather with soap" role=process after=1 detail="Lather your hands by rubbing them together with the soap. Lather the backs of your hands, between your fingers, and under your nails." core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.washing_hands.3 k.procedures.howto_step howto="washing hands" n=3 about="Scrub for 20 seconds" role=process after=2 detail="Scrub your hands for at least 20 seconds." core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.washing_hands.4 k.procedures.howto_step howto="washing hands" n=4 about="Rinse your hands" role=process after=3 detail="Rinse your hands well under clean, running water." core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.washing_hands.5 k.procedures.howto_step howto="washing hands" n=5 about="Dry your hands" role=process after=4 detail="Dry your hands using a clean towel or an air dryer." core.license=public-domain core.source="hand-core 1"
+@k.procedures.word.howto.washing_hands core.word text="washing your hands" text=handwashing text="hand washing" text="how to wash your hands" text="how to wash hands" means="washing hands" of=k.procedures.howto.name core.source="hand-core 1"
+
+# planting a seed
+@k.procedures.howto.planting_a_seed k.procedures.howto name="planting a seed" about="a seed sown in a pot, as it is usually done" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.planting_a_seed.1 k.procedures.howto_step howto="planting a seed" n=1 about="Fill a pot with soil" role=process core.source="hand-core 1"
+@k.procedures.howto_step.planting_a_seed.2 k.procedures.howto_step howto="planting a seed" n=2 about="Make a small hole in the soil" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.planting_a_seed.3 k.procedures.howto_step howto="planting a seed" n=3 about="Put the seed in the hole" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.planting_a_seed.4 k.procedures.howto_step howto="planting a seed" n=4 about="Cover the seed with soil" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.planting_a_seed.5 k.procedures.howto_step howto="planting a seed" n=5 about="Water the soil" role=process after=4 core.source="hand-core 1"
+@k.procedures.howto_step.planting_a_seed.6 k.procedures.howto_step howto="planting a seed" n=6 about="Put the pot in a warm, light place" role=process after=5 core.source="hand-core 1"
+@k.procedures.howto_step.planting_a_seed.7 k.procedures.howto_step howto="planting a seed" n=7 about="Is the soil dry?" role=decision after=6 core.source="hand-core 1"
+@k.procedures.howto_step.planting_a_seed.8 k.procedures.howto_step howto="planting a seed" n=8 about="Water the soil again" role=process after=7 branch=yes core.source="hand-core 1"
+@k.procedures.howto_step.planting_a_seed.9 k.procedures.howto_step howto="planting a seed" n=9 about="Wait for the seed to sprout" role=process after=7 after=8 branch=no core.source="hand-core 1"
+@k.procedures.word.howto.planting_a_seed core.word text="sowing a seed" text="planting seeds" text="sowing seeds" text="how to plant a seed" text="how to sow seeds" means="planting a seed" of=k.procedures.howto.name core.source="hand-core 1"
+
+# brushing teeth
+@k.procedures.howto.brushing_teeth k.procedures.howto name="brushing teeth" about="brushing the teeth twice a day with a soft brush, after the steps the American Dental Association gives" basis=paraphrased cite="American Dental Association, \"Brushing Your Teeth\", MouthHealthy (mouthhealthy.org, read 2026-11-15; facts only, no text taken)" core.source="hand-core 1"
+@k.procedures.howto_step.brushing_teeth.1 k.procedures.howto_step howto="brushing teeth" n=1 about="Tilt the brush towards the gums" role=process core.source="hand-core 1"
+@k.procedures.howto_step.brushing_teeth.2 k.procedures.howto_step howto="brushing teeth" n=2 about="Brush gently back and forth, one tooth at a time" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.brushing_teeth.3 k.procedures.howto_step howto="brushing teeth" n=3 about="Clean the outside, the inside and the tops of the teeth" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.brushing_teeth.4 k.procedures.howto_step howto="brushing teeth" n=4 about="Turn the brush upright for the inside of the front teeth" role=process after=3 core.source="hand-core 1"
+@k.procedures.word.howto.brushing_teeth core.word text="brushing your teeth" text="tooth brushing" text=toothbrushing text="how to brush your teeth" text="how to brush teeth" means="brushing teeth" of=k.procedures.howto.name core.source="hand-core 1"
+
+# crossing the road
+@k.procedures.howto.crossing_the_road k.procedures.howto name="crossing the road" about="crossing a road on foot, after the six steps of the Green Cross Code (think, stop, look, wait, look and listen again, arrive alive)" basis=paraphrased cite="The Green Cross Code (UK road safety for pedestrians), as given by Milton Keynes City Council, \"Green Cross Code\" (milton-keynes.gov.uk, read 2026-11-15; facts only, no text taken)" core.source="hand-core 1"
+@k.procedures.howto_step.crossing_the_road.1 k.procedures.howto_step howto="crossing the road" n=1 about="Think: choose a safe place to cross" role=process detail="A crossing with lights or stripes, a bridge or a subway is safest." core.source="hand-core 1"
+@k.procedures.howto_step.crossing_the_road.2 k.procedures.howto_step howto="crossing the road" n=2 about="Stop near the edge of the pavement" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.crossing_the_road.3 k.procedures.howto_step howto="crossing the road" n=3 about="Look both ways and listen" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.crossing_the_road.4 k.procedures.howto_step howto="crossing the road" n=4 about="Is traffic coming?" role=decision after=3 core.source="hand-core 1"
+@k.procedures.howto_step.crossing_the_road.5 k.procedures.howto_step howto="crossing the road" n=5 about="Wait until it has gone by" role=process after=4 branch=yes core.source="hand-core 1"
+@k.procedures.howto_step.crossing_the_road.6 k.procedures.howto_step howto="crossing the road" n=6 about="Cross in a straight line" role=process after=4 after=5 branch=no core.source="hand-core 1"
+@k.procedures.howto_step.crossing_the_road.7 k.procedures.howto_step howto="crossing the road" n=7 about="Keep looking and listening until you are across" role=process after=6 core.source="hand-core 1"
+@k.procedures.word.howto.crossing_the_road core.word text="crossing the street" text="crossing a road" text="green cross code" text="how to cross the road" text="how to cross the street" means="crossing the road" of=k.procedures.howto.name core.source="hand-core 1"
+
+# keeping food safe
+@k.procedures.howto.keeping_food_safe k.procedures.howto name="keeping food safe" about="the four steps to food safety at home: clean, separate, cook, chill" basis=cited cite="FoodSafety.gov (U.S. Department of Health and Human Services), \"4 Steps to Food Safety\" (read 2026-11-15)" core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.keeping_food_safe.1 k.procedures.howto_step howto="keeping food safe" n=1 about="Clean" role=process detail="Wash cutting boards, dishes, utensils, and countertops with hot, soapy water." core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.keeping_food_safe.2 k.procedures.howto_step howto="keeping food safe" n=2 about="Separate" role=process after=1 detail="Use separate cutting boards and plates for produce, meat, poultry, seafood, and eggs." core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.keeping_food_safe.3 k.procedures.howto_step howto="keeping food safe" n=3 about="Cook" role=process after=2 detail="Use a food thermometer to be sure your food is safe." core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.keeping_food_safe.4 k.procedures.howto_step howto="keeping food safe" n=4 about="Chill" role=process after=3 detail="Refrigerate perishable foods within 2 hours." core.license=public-domain core.source="hand-core 1"
+@k.procedures.word.howto.keeping_food_safe core.word text="food safety" text="safe food handling" text="clean separate cook chill" text="how to keep food safe" means="keeping food safe" of=k.procedures.howto.name core.source="hand-core 1"
+
+# stop, drop and roll
+@k.procedures.howto.stop_drop_and_roll k.procedures.howto name="stop, drop and roll" about="what to do if your clothes catch fire, as the U.S. Fire Administration teaches it" basis=cited cite="U.S. Fire Administration (FEMA), \"Stop, drop and roll\" pictograph (usfa.fema.gov, read 2026-11-15)" core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.stop_drop_and_roll.1 k.procedures.howto_step howto="stop, drop and roll" n=1 about="Stop" role=process detail="If your clothes catch fire, stop, drop and roll." core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.stop_drop_and_roll.2 k.procedures.howto_step howto="stop, drop and roll" n=2 about="Drop to the ground and cover your face" role=process after=1 detail="Stop, drop to the ground, and cover your face with your hands." core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.stop_drop_and_roll.3 k.procedures.howto_step howto="stop, drop and roll" n=3 about="Roll until the fire is out" role=process after=2 detail="Roll over and over or back and forth until the fire is out." core.license=public-domain core.source="hand-core 1"
+@k.procedures.word.howto.stop_drop_and_roll core.word text="stop drop and roll" text="if your clothes catch fire" text="what to do if your clothes catch fire" means="stop, drop and roll" of=k.procedures.howto.name core.source="hand-core 1"
+
+# drop, cover and hold on
+@k.procedures.howto.drop_cover_and_hold_on k.procedures.howto name="drop, cover and hold on" about="what to do while the ground shakes in an earthquake, as Ready.gov describes it" basis=cited cite="Ready.gov (FEMA), \"Earthquakes\": Survive DURING, Drop, Cover, then Hold On (read 2026-11-15)" core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.drop_cover_and_hold_on.1 k.procedures.howto_step howto="drop, cover and hold on" n=1 about="Drop to your hands and knees" role=process detail="Drop to your hands and knees." core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.drop_cover_and_hold_on.2 k.procedures.howto_step howto="drop, cover and hold on" n=2 about="Cover your head and neck" role=process after=1 detail="Cover your head and neck with your arms." core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.drop_cover_and_hold_on.3 k.procedures.howto_step howto="drop, cover and hold on" n=3 about="Hold on until the shaking stops" role=process after=2 detail="Hold on to any sturdy furniture until the shaking stops." core.license=public-domain core.source="hand-core 1"
+@k.procedures.word.howto.drop_cover_and_hold_on core.word text="drop cover and hold on" text="what to do in an earthquake" text="earthquake safety" means="drop, cover and hold on" of=k.procedures.howto.name core.source="hand-core 1"
+
+# covering a cough
+@k.procedures.howto.covering_a_cough k.procedures.howto name="covering a cough" about="covering a cough or a sneeze so as not to spread germs, as the CDC describes it" basis=cited cite="Centers for Disease Control and Prevention (CDC), \"Healthy Habits: Coughing and Sneezing\" (cdc.gov, read 2026-11-15)" core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.covering_a_cough.1 k.procedures.howto_step howto="covering a cough" n=1 about="Do you have a tissue?" role=decision core.source="hand-core 1"
+@k.procedures.howto_step.covering_a_cough.2 k.procedures.howto_step howto="covering a cough" n=2 about="Cough or sneeze into a tissue" role=process after=1 branch=yes detail="Cover your mouth and nose with a tissue when you cough or sneeze" core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.covering_a_cough.3 k.procedures.howto_step howto="covering a cough" n=3 about="Throw the tissue in the trash" role=process after=2 detail="Throw used tissues in the trash" core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.covering_a_cough.4 k.procedures.howto_step howto="covering a cough" n=4 about="Cough or sneeze into your elbow" role=process after=1 branch=no detail="If you don't have a tissue, cough or sneeze into your elbow, not your hands" core.license=public-domain core.source="hand-core 1"
+@k.procedures.howto_step.covering_a_cough.5 k.procedures.howto_step howto="covering a cough" n=5 about="Wash your hands" role=process after=3 after=4 detail="added here, not in the source: washing hands, the procedure of the CDC above" core.license=public-domain core.source="hand-core 1"
+@k.procedures.word.howto.covering_a_cough core.word text="covering coughs and sneezes" text="cough etiquette" text="how to cover a cough" text="how to sneeze" means="covering a cough" of=k.procedures.howto.name core.source="hand-core 1"
+
+# making a sandwich
+@k.procedures.howto.making_a_sandwich k.procedures.howto name="making a sandwich" about="a sandwich with a filling between two slices of bread, as it is usually made" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.making_a_sandwich.1 k.procedures.howto_step howto="making a sandwich" n=1 about="Take two slices of bread" role=process core.source="hand-core 1"
+@k.procedures.howto_step.making_a_sandwich.2 k.procedures.howto_step howto="making a sandwich" n=2 about="Spread butter on the bread" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.making_a_sandwich.3 k.procedures.howto_step howto="making a sandwich" n=3 about="Put the filling on one slice" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.making_a_sandwich.4 k.procedures.howto_step howto="making a sandwich" n=4 about="Put the other slice on top" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.making_a_sandwich.5 k.procedures.howto_step howto="making a sandwich" n=5 about="Cut it in half?" role=decision after=4 core.source="hand-core 1"
+@k.procedures.howto_step.making_a_sandwich.6 k.procedures.howto_step howto="making a sandwich" n=6 about="Cut the sandwich in half" role=process after=5 branch=yes core.source="hand-core 1"
+@k.procedures.howto_step.making_a_sandwich.7 k.procedures.howto_step howto="making a sandwich" n=7 about="Serve the sandwich" role=process after=5 after=6 branch=no core.source="hand-core 1"
+@k.procedures.word.howto.making_a_sandwich core.word text="sandwich making" text="how to make a sandwich" means="making a sandwich" of=k.procedures.howto.name core.source="hand-core 1"
+
+# boiling an egg
+@k.procedures.howto.boiling_an_egg k.procedures.howto name="boiling an egg" about="an egg boiled in its shell, soft or hard, as it is usually done" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.boiling_an_egg.1 k.procedures.howto_step howto="boiling an egg" n=1 about="Put the egg in a pan" role=process core.source="hand-core 1"
+@k.procedures.howto_step.boiling_an_egg.2 k.procedures.howto_step howto="boiling an egg" n=2 about="Cover it with cold water" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.boiling_an_egg.3 k.procedures.howto_step howto="boiling an egg" n=3 about="Bring the water to the boil" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.boiling_an_egg.4 k.procedures.howto_step howto="boiling an egg" n=4 about="Soft or hard?" role=decision after=3 core.source="hand-core 1"
+@k.procedures.howto_step.boiling_an_egg.5 k.procedures.howto_step howto="boiling an egg" n=5 about="Boil it for about 5 minutes" role=process after=4 branch=yes detail="soft" core.source="hand-core 1"
+@k.procedures.howto_step.boiling_an_egg.6 k.procedures.howto_step howto="boiling an egg" n=6 about="Boil it for about 10 minutes" role=process after=4 branch=no detail="hard" core.source="hand-core 1"
+@k.procedures.howto_step.boiling_an_egg.7 k.procedures.howto_step howto="boiling an egg" n=7 about="Cool the egg in cold water" role=process after=5 after=6 core.source="hand-core 1"
+@k.procedures.howto_step.boiling_an_egg.8 k.procedures.howto_step howto="boiling an egg" n=8 about="Peel the egg" role=process after=7 core.source="hand-core 1"
+@k.procedures.word.howto.boiling_an_egg core.word text="boiling eggs" text="boiled egg" text="how to boil an egg" text="how to boil eggs" means="boiling an egg" of=k.procedures.howto.name core.source="hand-core 1"
+
+# making toast
+@k.procedures.howto.making_toast k.procedures.howto name="making toast" about="a slice of bread toasted in a toaster" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.making_toast.1 k.procedures.howto_step howto="making toast" n=1 about="Put a slice of bread in the toaster" role=process core.source="hand-core 1"
+@k.procedures.howto_step.making_toast.2 k.procedures.howto_step howto="making toast" n=2 about="Set how brown it should be" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.making_toast.3 k.procedures.howto_step howto="making toast" n=3 about="Press the lever down" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.making_toast.4 k.procedures.howto_step howto="making toast" n=4 about="Wait until the toast pops up" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.making_toast.5 k.procedures.howto_step howto="making toast" n=5 about="Is it brown enough?" role=decision after=4 core.source="hand-core 1"
+@k.procedures.howto_step.making_toast.6 k.procedures.howto_step howto="making toast" n=6 about="Toast it a little longer" role=process after=5 branch=yes core.source="hand-core 1"
+@k.procedures.howto_step.making_toast.7 k.procedures.howto_step howto="making toast" n=7 about="Spread butter or jam on it" role=process after=5 after=6 branch=no core.source="hand-core 1"
+@k.procedures.word.howto.making_toast core.word text="toasting bread" text="how to make toast" means="making toast" of=k.procedures.howto.name core.source="hand-core 1"
+
+# cooking pasta
+@k.procedures.howto.cooking_pasta k.procedures.howto name="cooking pasta" about="dried pasta boiled in salted water, as it is usually cooked" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.cooking_pasta.1 k.procedures.howto_step howto="cooking pasta" n=1 about="Boil a large pan of water" role=process core.source="hand-core 1"
+@k.procedures.howto_step.cooking_pasta.2 k.procedures.howto_step howto="cooking pasta" n=2 about="Add salt to the water" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.cooking_pasta.3 k.procedures.howto_step howto="cooking pasta" n=3 about="Put the pasta in the water" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.cooking_pasta.4 k.procedures.howto_step howto="cooking pasta" n=4 about="Stir it now and then" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.cooking_pasta.5 k.procedures.howto_step howto="cooking pasta" n=5 about="Cook it for the time on the packet" role=process after=4 core.source="hand-core 1"
+@k.procedures.howto_step.cooking_pasta.6 k.procedures.howto_step howto="cooking pasta" n=6 about="Is it soft enough?" role=decision after=5 core.source="hand-core 1"
+@k.procedures.howto_step.cooking_pasta.7 k.procedures.howto_step howto="cooking pasta" n=7 about="Cook it a minute longer" role=process after=6 branch=no core.source="hand-core 1"
+@k.procedures.howto_step.cooking_pasta.8 k.procedures.howto_step howto="cooking pasta" n=8 about="Drain the pasta" role=process after=6 after=7 branch=yes core.source="hand-core 1"
+@k.procedures.howto_step.cooking_pasta.9 k.procedures.howto_step howto="cooking pasta" n=9 about="Add the sauce" role=process after=8 core.source="hand-core 1"
+@k.procedures.word.howto.cooking_pasta core.word text="boiling pasta" text="how to cook pasta" text="how to make pasta" means="cooking pasta" of=k.procedures.howto.name core.source="hand-core 1"
+
+# making the bed
+@k.procedures.howto.making_the_bed k.procedures.howto name="making the bed" about="a bed made in the morning, as it is usually done" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.making_the_bed.1 k.procedures.howto_step howto="making the bed" n=1 about="Take off the pillows" role=process core.source="hand-core 1"
+@k.procedures.howto_step.making_the_bed.2 k.procedures.howto_step howto="making the bed" n=2 about="Straighten the sheet" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.making_the_bed.3 k.procedures.howto_step howto="making the bed" n=3 about="Shake out the duvet" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.making_the_bed.4 k.procedures.howto_step howto="making the bed" n=4 about="Spread the duvet over the bed" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.making_the_bed.5 k.procedures.howto_step howto="making the bed" n=5 about="Put the pillows back" role=process after=4 core.source="hand-core 1"
+@k.procedures.word.howto.making_the_bed core.word text="making your bed" text="bed making" text="how to make the bed" text="how to make a bed" means="making the bed" of=k.procedures.howto.name core.source="hand-core 1"
+
+# doing the laundry
+@k.procedures.howto.doing_the_laundry k.procedures.howto name="doing the laundry" about="clothes washed in a washing machine and dried, as it is usually done" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.doing_the_laundry.1 k.procedures.howto_step howto="doing the laundry" n=1 about="Sort the clothes by colour" role=process core.source="hand-core 1"
+@k.procedures.howto_step.doing_the_laundry.2 k.procedures.howto_step howto="doing the laundry" n=2 about="Put the clothes in the washing machine" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.doing_the_laundry.3 k.procedures.howto_step howto="doing the laundry" n=3 about="Add detergent" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.doing_the_laundry.4 k.procedures.howto_step howto="doing the laundry" n=4 about="Choose the programme and start the machine" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.doing_the_laundry.5 k.procedures.howto_step howto="doing the laundry" n=5 about="Take the clothes out when it stops" role=process after=4 core.source="hand-core 1"
+@k.procedures.howto_step.doing_the_laundry.6 k.procedures.howto_step howto="doing the laundry" n=6 about="Can they go in the dryer?" role=decision after=5 core.source="hand-core 1"
+@k.procedures.howto_step.doing_the_laundry.7 k.procedures.howto_step howto="doing the laundry" n=7 about="Dry them in the dryer" role=process after=6 branch=yes core.source="hand-core 1"
+@k.procedures.howto_step.doing_the_laundry.8 k.procedures.howto_step howto="doing the laundry" n=8 about="Hang them up to dry" role=process after=6 branch=no core.source="hand-core 1"
+@k.procedures.howto_step.doing_the_laundry.9 k.procedures.howto_step howto="doing the laundry" n=9 about="Fold the clothes and put them away" role=process after=7 after=8 core.source="hand-core 1"
+@k.procedures.word.howto.doing_the_laundry core.word text="washing clothes" text="doing laundry" text=laundry text="how to do the laundry" text="how to wash clothes" means="doing the laundry" of=k.procedures.howto.name core.source="hand-core 1"
+
+# washing the dishes
+@k.procedures.howto.washing_the_dishes k.procedures.howto name="washing the dishes" about="dishes washed by hand in a sink, as it is usually done" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.washing_the_dishes.1 k.procedures.howto_step howto="washing the dishes" n=1 about="Scrape the food off the dishes" role=process core.source="hand-core 1"
+@k.procedures.howto_step.washing_the_dishes.2 k.procedures.howto_step howto="washing the dishes" n=2 about="Fill the sink with hot, soapy water" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.washing_the_dishes.3 k.procedures.howto_step howto="washing the dishes" n=3 about="Wash each dish with a sponge" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.washing_the_dishes.4 k.procedures.howto_step howto="washing the dishes" n=4 about="Rinse it in clean water" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.washing_the_dishes.5 k.procedures.howto_step howto="washing the dishes" n=5 about="Put it on the rack to dry" role=process after=4 core.source="hand-core 1"
+@k.procedures.howto_step.washing_the_dishes.6 k.procedures.howto_step howto="washing the dishes" n=6 about="Are there more dishes?" role=decision after=5 core.source="hand-core 1"
+@k.procedures.howto_step.washing_the_dishes.7 k.procedures.howto_step howto="washing the dishes" n=7 about="Wash the next dish" role=process after=6 branch=yes core.source="hand-core 1"
+@k.procedures.howto_step.washing_the_dishes.8 k.procedures.howto_step howto="washing the dishes" n=8 about="Empty the sink" role=process after=6 after=7 branch=no core.source="hand-core 1"
+@k.procedures.word.howto.washing_the_dishes core.word text="washing up" text="doing the dishes" text=dishwashing text="how to wash the dishes" text="how to wash dishes" means="washing the dishes" of=k.procedures.howto.name core.source="hand-core 1"
+
+# setting the table
+@k.procedures.howto.setting_the_table k.procedures.howto name="setting the table" about="a table set for a meal, one place for each person" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.setting_the_table.1 k.procedures.howto_step howto="setting the table" n=1 about="Put a plate at each place" role=process core.source="hand-core 1"
+@k.procedures.howto_step.setting_the_table.2 k.procedures.howto_step howto="setting the table" n=2 about="Put the fork on the left of the plate" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.setting_the_table.3 k.procedures.howto_step howto="setting the table" n=3 about="Put the knife and spoon on the right" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.setting_the_table.4 k.procedures.howto_step howto="setting the table" n=4 about="Put a glass above the knife" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.setting_the_table.5 k.procedures.howto_step howto="setting the table" n=5 about="Put a napkin at each place" role=process after=4 core.source="hand-core 1"
+@k.procedures.howto_step.setting_the_table.6 k.procedures.howto_step howto="setting the table" n=6 about="Put the food and drinks in the middle" role=process after=5 core.source="hand-core 1"
+@k.procedures.word.howto.setting_the_table core.word text="laying the table" text="how to set the table" text="how to lay the table" means="setting the table" of=k.procedures.howto.name core.source="hand-core 1"
+
+# packing a school bag
+@k.procedures.howto.packing_a_school_bag k.procedures.howto name="packing a school bag" about="a school bag packed the evening before a school day" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.packing_a_school_bag.1 k.procedures.howto_step howto="packing a school bag" n=1 about="Look at tomorrow's timetable" role=process core.source="hand-core 1"
+@k.procedures.howto_step.packing_a_school_bag.2 k.procedures.howto_step howto="packing a school bag" n=2 about="Put in the books and notebooks for each lesson" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.packing_a_school_bag.3 k.procedures.howto_step howto="packing a school bag" n=3 about="Put in the pencil case" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.packing_a_school_bag.4 k.procedures.howto_step howto="packing a school bag" n=4 about="Is there sport tomorrow?" role=decision after=3 core.source="hand-core 1"
+@k.procedures.howto_step.packing_a_school_bag.5 k.procedures.howto_step howto="packing a school bag" n=5 about="Pack the sports kit" role=process after=4 branch=yes core.source="hand-core 1"
+@k.procedures.howto_step.packing_a_school_bag.6 k.procedures.howto_step howto="packing a school bag" n=6 about="Put in the lunch box and a water bottle" role=process after=4 after=5 branch=no core.source="hand-core 1"
+@k.procedures.howto_step.packing_a_school_bag.7 k.procedures.howto_step howto="packing a school bag" n=7 about="Close the bag and put it by the door" role=process after=6 core.source="hand-core 1"
+@k.procedures.word.howto.packing_a_school_bag core.word text="packing your school bag" text="packing a schoolbag" text="how to pack a school bag" means="packing a school bag" of=k.procedures.howto.name core.source="hand-core 1"
+
+# feeding a pet
+@k.procedures.howto.feeding_a_pet k.procedures.howto name="feeding a pet" about="a cat or a dog fed at home, as it is usually done" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.feeding_a_pet.1 k.procedures.howto_step howto="feeding a pet" n=1 about="Wash the bowl" role=process core.source="hand-core 1"
+@k.procedures.howto_step.feeding_a_pet.2 k.procedures.howto_step howto="feeding a pet" n=2 about="Measure out the food" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.feeding_a_pet.3 k.procedures.howto_step howto="feeding a pet" n=3 about="Put the food in the bowl" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.feeding_a_pet.4 k.procedures.howto_step howto="feeding a pet" n=4 about="Fill the water bowl with fresh water" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.feeding_a_pet.5 k.procedures.howto_step howto="feeding a pet" n=5 about="Put the bowls in their place" role=process after=4 core.source="hand-core 1"
+@k.procedures.word.howto.feeding_a_pet core.word text="feeding the cat" text="feeding the dog" text="how to feed a pet" means="feeding a pet" of=k.procedures.howto.name core.source="hand-core 1"
+
+# watering a plant
+@k.procedures.howto.watering_a_plant k.procedures.howto name="watering a plant" about="a pot plant watered at home" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.watering_a_plant.1 k.procedures.howto_step howto="watering a plant" n=1 about="Touch the soil" role=process core.source="hand-core 1"
+@k.procedures.howto_step.watering_a_plant.2 k.procedures.howto_step howto="watering a plant" n=2 about="Is the soil dry?" role=decision after=1 core.source="hand-core 1"
+@k.procedures.howto_step.watering_a_plant.3 k.procedures.howto_step howto="watering a plant" n=3 about="Pour water on the soil until it drains out" role=process after=2 branch=yes core.source="hand-core 1"
+@k.procedures.howto_step.watering_a_plant.4 k.procedures.howto_step howto="watering a plant" n=4 about="Empty the saucer" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.watering_a_plant.5 k.procedures.howto_step howto="watering a plant" n=5 about="Check again in a few days" role=process after=2 after=4 branch=no core.source="hand-core 1"
+@k.procedures.word.howto.watering_a_plant core.word text="watering plants" text="watering the plants" text="how to water a plant" means="watering a plant" of=k.procedures.howto.name core.source="hand-core 1"
+
+# getting dressed
+@k.procedures.howto.getting_dressed k.procedures.howto name="getting dressed" about="getting dressed in the morning" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.getting_dressed.1 k.procedures.howto_step howto="getting dressed" n=1 about="Look at the weather" role=process core.source="hand-core 1"
+@k.procedures.howto_step.getting_dressed.2 k.procedures.howto_step howto="getting dressed" n=2 about="Choose clothes for the day" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.getting_dressed.3 k.procedures.howto_step howto="getting dressed" n=3 about="Put on underwear and socks" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.getting_dressed.4 k.procedures.howto_step howto="getting dressed" n=4 about="Put on trousers or a skirt" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.getting_dressed.5 k.procedures.howto_step howto="getting dressed" n=5 about="Put on a shirt or a top" role=process after=4 core.source="hand-core 1"
+@k.procedures.howto_step.getting_dressed.6 k.procedures.howto_step howto="getting dressed" n=6 about="Is it cold?" role=decision after=5 core.source="hand-core 1"
+@k.procedures.howto_step.getting_dressed.7 k.procedures.howto_step howto="getting dressed" n=7 about="Put on a jumper" role=process after=6 branch=yes core.source="hand-core 1"
+@k.procedures.howto_step.getting_dressed.8 k.procedures.howto_step howto="getting dressed" n=8 about="Put on your shoes" role=process after=6 after=7 branch=no core.source="hand-core 1"
+@k.procedures.word.howto.getting_dressed core.word text=dressing text="how to get dressed" means="getting dressed" of=k.procedures.howto.name core.source="hand-core 1"
+
+# tying shoelaces
+@k.procedures.howto.tying_shoelaces k.procedures.howto name="tying shoelaces" about="shoelaces tied in a bow (the loop, swoop and pull way)" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.tying_shoelaces.1 k.procedures.howto_step howto="tying shoelaces" n=1 about="Cross the laces and pull them tight" role=process core.source="hand-core 1"
+@k.procedures.howto_step.tying_shoelaces.2 k.procedures.howto_step howto="tying shoelaces" n=2 about="Make a loop with one lace" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.tying_shoelaces.3 k.procedures.howto_step howto="tying shoelaces" n=3 about="Wrap the other lace around the loop" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.tying_shoelaces.4 k.procedures.howto_step howto="tying shoelaces" n=4 about="Push it through the hole to make a second loop" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.tying_shoelaces.5 k.procedures.howto_step howto="tying shoelaces" n=5 about="Pull both loops tight" role=process after=4 core.source="hand-core 1"
+@k.procedures.word.howto.tying_shoelaces core.word text="tying your shoes" text="tying a shoelace" text="how to tie shoelaces" text="how to tie your shoes" means="tying shoelaces" of=k.procedures.howto.name core.source="hand-core 1"
+
+# sending a letter
+@k.procedures.howto.sending_a_letter k.procedures.howto name="sending a letter" about="a letter sent by post" basis=own core.source="hand-core 1"
+@k.procedures.howto_step.sending_a_letter.1 k.procedures.howto_step howto="sending a letter" n=1 about="Write the letter" role=process core.source="hand-core 1"
+@k.procedures.howto_step.sending_a_letter.2 k.procedures.howto_step howto="sending a letter" n=2 about="Fold it and put it in an envelope" role=process after=1 core.source="hand-core 1"
+@k.procedures.howto_step.sending_a_letter.3 k.procedures.howto_step howto="sending a letter" n=3 about="Seal the envelope" role=process after=2 core.source="hand-core 1"
+@k.procedures.howto_step.sending_a_letter.4 k.procedures.howto_step howto="sending a letter" n=4 about="Write the address on the envelope" role=process after=3 core.source="hand-core 1"
+@k.procedures.howto_step.sending_a_letter.5 k.procedures.howto_step howto="sending a letter" n=5 about="Stick a stamp on it" role=process after=4 core.source="hand-core 1"
+@k.procedures.howto_step.sending_a_letter.6 k.procedures.howto_step howto="sending a letter" n=6 about="Put it in a post box" role=process after=5 core.source="hand-core 1"
+@k.procedures.word.howto.sending_a_letter core.word text="posting a letter" text="mailing a letter" text="how to send a letter" text="how to post a letter" means="sending a letter" of=k.procedures.howto.name core.source="hand-core 1"

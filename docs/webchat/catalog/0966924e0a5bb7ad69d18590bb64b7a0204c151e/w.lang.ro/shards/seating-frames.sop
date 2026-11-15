@@ -1,0 +1,32 @@
+# w.lang.ro/shards/seating-frames: the Romanian mirrors of the English frames the seating application needs (reviewer
+# block 2026-11-15, w.seating version 3): a guest named and placed at a table ("Adaugă un invitat numit Ana la masa 1"),
+# a table for a number of people ("Adaugă o masă pentru 4"); "Fă masa 1 albastră" is ro.change.value of the shard frames.
+# Each names the English frame it says (`en`).
+# sources: hand-core 1 (written by hand in this repository; own)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.ro.frame.ro.make.name.place w.lang.ro.frame name=ro.make.name.place en=acts.make.name.place act=make set=acts priority=14 needs=in role=thing role=value role=rel role=place example="Adaugă un invitat numit Ana la masa 1." core.source="hand-core 1"
+@w.lang.ro.part.ro.make.name.place.1 w.lang.ro.part frame=ro.make.name.place at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.ro.part.ro.make.name.place.2 w.lang.ro.part frame=ro.make.name.place at=2 is=verb act=make core.source="hand-core 1"
+@w.lang.ro.part.ro.make.name.place.3 w.lang.ro.part frame=ro.make.name.place at=3 is=phrase phrase=clitic.joined optional=yes core.source="hand-core 1"
+@w.lang.ro.part.ro.make.name.place.4 w.lang.ro.part frame=ro.make.name.place at=4 is=det optional=yes core.source="hand-core 1"
+@w.lang.ro.part.ro.make.name.place.5 w.lang.ro.part frame=ro.make.name.place at=5 is=role role=thing takes=words core.source="hand-core 1"
+@w.lang.ro.part.ro.make.name.place.6 w.lang.ro.part frame=ro.make.name.place at=6 is=word word="numit" word="numită" word="numiți" word="numite" word="cu numele" word="chemat" word="chemată" core.source="hand-core 1"
+@w.lang.ro.part.ro.make.name.place.7 w.lang.ro.part frame=ro.make.name.place at=7 is=role role=value takes=words core.source="hand-core 1"
+@w.lang.ro.part.ro.make.name.place.8 w.lang.ro.part frame=ro.make.name.place at=8 is=role role=rel takes=prep core.source="hand-core 1"
+@w.lang.ro.part.ro.make.name.place.9 w.lang.ro.part frame=ro.make.name.place at=9 is=det optional=yes core.source="hand-core 1"
+@w.lang.ro.part.ro.make.name.place.10 w.lang.ro.part frame=ro.make.name.place at=10 is=role role=place takes=words core.source="hand-core 1"
+@w.lang.ro.frame.ro.make.for w.lang.ro.frame name=ro.make.for en=acts.make.for act=make set=acts priority=13 role=thing role=value example="Adaugă o masă pentru 4." core.source="hand-core 1"
+@w.lang.ro.part.ro.make.for.1 w.lang.ro.part frame=ro.make.for at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.ro.part.ro.make.for.2 w.lang.ro.part frame=ro.make.for at=2 is=verb act=make core.source="hand-core 1"
+@w.lang.ro.part.ro.make.for.3 w.lang.ro.part frame=ro.make.for at=3 is=phrase phrase=clitic.joined optional=yes core.source="hand-core 1"
+@w.lang.ro.part.ro.make.for.4 w.lang.ro.part frame=ro.make.for at=4 is=det optional=yes core.source="hand-core 1"
+@w.lang.ro.part.ro.make.for.5 w.lang.ro.part frame=ro.make.for at=5 is=role role=thing takes=words core.source="hand-core 1"
+@w.lang.ro.part.ro.make.for.6 w.lang.ro.part frame=ro.make.for at=6 is=word word="pentru" word="de" word="cu locuri pentru" word="cu loc pentru" core.source="hand-core 1"
+@w.lang.ro.part.ro.make.for.7 w.lang.ro.part frame=ro.make.for at=7 is=role role=value takes=number core.source="hand-core 1"
+@w.lang.ro.part.ro.make.for.8 w.lang.ro.part frame=ro.make.for at=8 is=word word="persoane" word="oameni" word="invitați" word="locuri" optional=yes core.source="hand-core 1"
+
+# The request template that mirrors w.lang.en's make.for (w.lang.ro's requests are one to one with the English act templates).
+@w.lang.ro.request.make.for w.lang.ro.request name=make.for act=make shape=kind.value.seats role=kind role=value text="adaugă {art@kind} {kind} pentru {value}." example="Adaugă o masă pentru 4." core.source="hand-core 1"
+@w.lang.ro.fill.make_for.art w.lang.ro.fill template=make.for role=art lemma=un core.source="hand-core 1"

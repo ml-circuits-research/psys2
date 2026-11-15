@@ -1,0 +1,6 @@
+# k.words/shards/ao: senses of the words from "aorta" to "aorta" (first letters "ao").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.aorta.noun.1 k.words.sense word=aorta pos=noun n=1 supersense=noun.body gloss="the large trunk artery that carries blood from the left ventricle of the heart to branch arteries" is_a=artery core.source="wordnet 3.1"

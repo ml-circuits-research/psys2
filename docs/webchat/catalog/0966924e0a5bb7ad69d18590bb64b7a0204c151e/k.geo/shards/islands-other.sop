@@ -1,0 +1,20 @@
+# k.geo/shards/islands-other: 15 islands of no country k.geo knows: name, country, archipelago, area (km²), centre, Wikidata item.
+# sources: wikidata-islands 2026-11-15 (Wikidata, CC0-1.0)
+# license: CC0-1.0
+# script: tools/import/geo-places.mjs
+
+@k.geo.island.Ameland k.geo.island name=Ameland lat=53.45 lon=5.79 wikidata=Q56651316 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.Disko_Island k.geo.island name="Disko Island" area=8612 lat=69.75 lon=-53.5 wikidata=Q1228827 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.Goeree-Overflakkee k.geo.island name=Goeree-Overflakkee lat=51.75 lon=4.12 wikidata=Q933459 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.Greenland k.geo.island name=Greenland area=2130800 lat=72 lon=-40 wikidata=Q4148644 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.Hoeksche_Waard k.geo.island name="Hoeksche Waard" lat=51.77 lon=4.47 wikidata=Q571696 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.IJsselmonde k.geo.island name=IJsselmonde lat=51.87 lon=4.52 wikidata=Q1653954 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.Saint_Helena k.geo.island name="Saint Helena" lat=-15.96 lon=-5.71 wikidata=Q34497 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.Schiermonnikoog k.geo.island name=Schiermonnikoog lat=53.49 lon=6.23 wikidata=Q208011 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.Schouwen-Duiveland k.geo.island name=Schouwen-Duiveland lat=51.67 lon=3.88 wikidata=Q10079 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.Terschelling k.geo.island name=Terschelling lat=53.4 lon=5.33 wikidata=Q204412 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.Texel k.geo.island name=Texel archipelago="Frisian Islands" lat=53.08 lon=4.83 wikidata=Q47009672 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.Vlieland k.geo.island name=Vlieland lat=53.26 lon=4.96 wikidata=Q207851 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.Voorne-Putten k.geo.island name=Voorne-Putten lat=51.87 lon=4.17 wikidata=Q2051339 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.Walcheren k.geo.island name=Walcheren lat=51.52 lon=3.58 wikidata=Q738237 core.source="wikidata-islands 2026-11-15"
+@k.geo.island.Wieringen k.geo.island name=Wieringen lat=52.9 lon=4.97 wikidata=Q669547 core.source="wikidata-islands 2026-11-15"

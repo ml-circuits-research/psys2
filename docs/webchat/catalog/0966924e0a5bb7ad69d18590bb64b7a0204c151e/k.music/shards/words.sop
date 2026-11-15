@@ -1,0 +1,38 @@
+# k.music/shards/words: the English words of k.music (its types, keys and values), stored beside the world (owner's
+# decision 2026-11-15 08:10); tools/build-catalog.mjs reads them as the world's own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the types of this world.
+@k.music.word.note core.word text=note text=notes text=pitch means=k.music.note core.source="hand-core 1"
+@k.music.word.interval core.word text=interval text=intervals means=k.music.interval core.source="hand-core 1"
+@k.music.word.key core.word text=key text=keys text="key signature" means=k.music.key core.source="hand-core 1"
+@k.music.word.scale core.word text=scale text=scales means=k.music.scale core.source="hand-core 1"
+@k.music.word.chord core.word text=chord text=chords text=triad text=triads means=k.music.chord core.source="hand-core 1"
+@k.music.word.sharps core.word text=sharp text=sharps means=k.music.key.sharps core.source="hand-core 1"
+@k.music.word.flats core.word text=flat text=flats means=k.music.key.flats core.source="hand-core 1"
+@k.music.word.relative core.word text=relative text="relative minor" text="relative major" means=k.music.key.relative core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.music.word.key.note.letter core.word text=letter means=k.music.note.letter core.source="hand-core 1"
+@k.music.word.key.note.accidental core.word text=accidental means=k.music.note.accidental core.source="hand-core 1"
+@k.music.word.key.note.pitch_class core.word text="pitch class" text=semitones means=k.music.note.pitch_class core.source="hand-core 1"
+@k.music.word.key.note.enharmonic core.word text=enharmonic means=k.music.note.enharmonic core.source="hand-core 1"
+@k.music.word.key.interval.semitones core.word text=semitones means=k.music.interval.semitones core.source="hand-core 1"
+@k.music.word.key.interval.number core.word text=number means=k.music.interval.number core.source="hand-core 1"
+@k.music.word.key.interval.quality core.word text=quality means=k.music.interval.quality core.source="hand-core 1"
+@k.music.word.key.key.tonic core.word text=tonic means=k.music.key.tonic core.source="hand-core 1"
+@k.music.word.key.key.mode core.word text=mode means=k.music.key.mode core.source="hand-core 1"
+@k.music.word.key.key.signature core.word text=signature text="key signature" means=k.music.key.signature core.source="hand-core 1"
+@k.music.word.key.key.parallel core.word text=parallel means=k.music.key.parallel core.source="hand-core 1"
+@k.music.word.key.key.enharmonic core.word text=enharmonic means=k.music.key.enharmonic core.source="hand-core 1"
+@k.music.word.key.key.scale core.word text=scale means=k.music.key.scale core.source="hand-core 1"
+@k.music.word.key.key.chord core.word text=chord text=chords text=triads means=k.music.key.chord core.source="hand-core 1"
+@k.music.word.key.scale.tonic core.word text=tonic means=k.music.scale.tonic core.source="hand-core 1"
+@k.music.word.key.scale.type core.word text=type text=kind means=k.music.scale.type core.source="hand-core 1"
+@k.music.word.key.scale.note core.word text=note text=notes text=in means=k.music.scale.note core.source="hand-core 1"
+@k.music.word.key.scale.key core.word text=key means=k.music.scale.key core.source="hand-core 1"
+@k.music.word.key.chord.root core.word text=root means=k.music.chord.root core.source="hand-core 1"
+@k.music.word.key.chord.quality core.word text=quality text=kind text=type means=k.music.chord.quality core.source="hand-core 1"
+@k.music.word.key.chord.note core.word text=note text=notes text=in means=k.music.chord.note core.source="hand-core 1"

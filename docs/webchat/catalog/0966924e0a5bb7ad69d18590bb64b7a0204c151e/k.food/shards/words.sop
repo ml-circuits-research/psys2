@@ -1,0 +1,22 @@
+# k.food/shards/words: the English words of k.food (its types, keys and values), stored beside the world (owner's
+# decision 2026-11-15 08:10); tools/build-catalog.mjs reads them as the world's own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the type and keys of this world.
+@k.food.word.food core.word text=food text=foods means=k.food.food core.source="hand-core 1"
+@k.food.word.kind core.word text=kind means=k.food.food.kind core.source="hand-core 1"
+@k.food.word.colour core.word text=colour text=color means=k.food.food.colour core.source="hand-core 1"
+@k.food.word.grows_on core.word text=grows text=grow means=k.food.food.grows_on core.source="hand-core 1"
+@k.food.word.comes_from core.word text=comes text=made means=k.food.food.comes_from core.source="hand-core 1"
+@k.food.word.eaten core.word text=eaten text=raw text=cooked means=k.food.food.eaten core.source="hand-core 1"
+@k.food.word.made_of core.word text=ingredients text=ingredient text="made of" text=contains means=k.food.food.made_of core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.food.word.key.food.kind core.word text="kind of" means=k.food.food.kind core.source="hand-core 1"
+@k.food.word.key.food.botanically core.word text=botanically means=k.food.food.botanically core.source="hand-core 1"
+@k.food.word.key.food.grows_on core.word text="grows on" means=k.food.food.grows_on core.source="hand-core 1"
+@k.food.word.key.food.comes_from core.word text="comes from" means=k.food.food.comes_from core.source="hand-core 1"
+@k.food.word.key.food.drawing core.word text=drawing means=k.food.food.drawing core.source="hand-core 1"
+@k.food.word.key.food.made_of core.word text=made text="made from" text=make text=recipe means=k.food.food.made_of core.source="hand-core 1"

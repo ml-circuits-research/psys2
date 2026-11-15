@@ -1,0 +1,11 @@
+# w.lang.ro/shards/words-w.person: the Romanian word for each kind of the world schema w.person (the library's Q79, reviewer 16:45),
+# so a host names a kind in Romanian with no wordOf of its own; the word is a lemma of the hand dictionary where it has
+# one (its gender and plural from its class: masă, mese). Not in English vocab.json (an English index).
+# sources: hand-core 1 (written by hand in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.ro.word.w.person.world core.word text="profil" means=w.person of=std.schema.world.name core.source="hand-core 1"
+@w.lang.ro.word.w.person.person core.word text="persoană" means=w.person.person core.source="hand-core 1"
+@w.lang.ro.word.w.person.relative core.word text="rudă" means=w.person.relative core.source="hand-core 1"
+@w.lang.ro.word.w.person.taste core.word text="preferință" means=w.person.taste core.source="hand-core 1"

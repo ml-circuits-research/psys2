@@ -1,0 +1,40 @@
+# k.space/shards/words: the English words of k.space (its types, keys and values), stored beside the world (owner's
+# decision 2026-11-15 08:10); tools/build-catalog.mjs reads them as the world's own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the types and keys of this world.
+@k.space.word.body core.word text=space text="solar system" means=k.space.body core.source="hand-core 1"
+@k.space.word.orbits core.word text=orbits text=orbit text=around means=k.space.body.orbits core.source="hand-core 1"
+@k.space.word.order core.word text=order means=k.space.body.order core.source="hand-core 1"
+@k.space.word.moons core.word text=moons means=k.space.body.moons core.source="hand-core 1"
+@k.space.word.rings core.word text=rings text=ring means=k.space.body.rings core.source="hand-core 1"
+@k.space.word.size core.word text=size text=largest text=smallest means=k.space.body.size_rank core.source="hand-core 1"
+@k.space.word.day core.word text=day text=turn text=spin means=k.space.body.day_hours_about core.source="hand-core 1"
+@k.space.word.diameter core.word text=diameter text=wide text=width means=k.space.body.diameter_about core.source="hand-core 1"
+@k.space.word.distance core.word text=distance text=far means=k.space.body.distance_about core.source="hand-core 1"
+@k.space.word.why core.word text=why means=k.space.body.colour_why core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.space.word.key.body.kind core.word text=kind means=k.space.body.kind core.source="hand-core 1"
+@k.space.word.key.body.size core.word text=size means=k.space.body.size core.source="hand-core 1"
+@k.space.word.key.body.size_rank core.word text="size rank" means=k.space.body.size_rank core.source="hand-core 1"
+@k.space.word.key.body.group core.word text=group means=k.space.body.group core.source="hand-core 1"
+@k.space.word.key.body.moons_about core.word text=moons means=k.space.body.moons_about core.source="hand-core 1"
+@k.space.word.key.body.orbit_years core.word text="orbit years" text=year means=k.space.body.orbit_years core.source="hand-core 1"
+@k.space.word.key.body.in core.word text=in means=k.space.body.in core.source="hand-core 1"
+@k.space.word.key.body.drawing core.word text=drawing means=k.space.body.drawing core.source="hand-core 1"
+@k.space.word.key.body.colour_why core.word text="colour why" means=k.space.body.colour_why core.source="hand-core 1"
+@k.space.word.key.body.day_hours_about core.word text="day hours" means=k.space.body.day_hours_about core.source="hand-core 1"
+@k.space.word.key.body.orbit_days_about core.word text="orbit days" means=k.space.body.orbit_days_about core.source="hand-core 1"
+@k.space.word.key.body.temperature_about core.word text=temperature text=hot text=cold text=warm means=k.space.body.temperature_about core.source="hand-core 1"
+@k.space.word.key.body.age_years_about core.word text="age years" text=old means=k.space.body.age_years_about core.source="hand-core 1"
+@k.space.word.key.body.light_years_about core.word text="light years" means=k.space.body.light_years_about core.source="hand-core 1"
+@k.space.word.key.kind core.word text=kind means=k.space.kind core.source="hand-core 1"
+@k.space.word.key.kind.material core.word text=material text=made text="made of" means=k.space.kind.material core.source="hand-core 1"
+@k.space.word.key.kind.orbits core.word text=orbits means=k.space.kind.orbits core.source="hand-core 1"
+@k.space.word.key.kind.has core.word text=has means=k.space.kind.has core.source="hand-core 1"
+@k.space.word.key.kind.does core.word text=does means=k.space.kind.does core.source="hand-core 1"
+@k.space.word.key.kind.drawing core.word text=drawing means=k.space.kind.drawing core.source="hand-core 1"
+@k.space.word.key.kind.about core.word text=about means=k.space.kind.about core.source="hand-core 1"

@@ -1,0 +1,10 @@
+# w.lang.ro/shards/words-w.list: the Romanian word for each kind of the world schema w.list (the library's Q79, reviewer 16:45),
+# so a host names a kind in Romanian with no wordOf of its own; the word is a lemma of the hand dictionary where it has
+# one (its gender and plural from its class: masă, mese). Not in English vocab.json (an English index).
+# sources: hand-core 1 (written by hand in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.ro.word.w.list.world core.word text="listă" means=w.list of=std.schema.world.name core.source="hand-core 1"
+@w.lang.ro.word.w.list.list core.word text="listă" means=w.list.list core.source="hand-core 1"
+@w.lang.ro.word.w.list.item core.word text="articol" means=w.list.item core.source="hand-core 1"

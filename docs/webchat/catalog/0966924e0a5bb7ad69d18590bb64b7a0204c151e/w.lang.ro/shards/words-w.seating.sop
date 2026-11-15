@@ -1,0 +1,11 @@
+# w.lang.ro/shards/words-w.seating: the Romanian word for each kind of the world schema w.seating (the library's Q79, reviewer 16:45),
+# so a host names a kind in Romanian with no wordOf of its own; the word is a lemma of the hand dictionary where it has
+# one (its gender and plural from its class: masă, mese). Not in English vocab.json (an English index).
+# sources: hand-core 1 (written by hand in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.ro.word.w.seating.world core.word text="plan de așezare" means=w.seating of=std.schema.world.name core.source="hand-core 1"
+@w.lang.ro.word.w.seating.table core.word text="masă" means=w.seating.table core.source="hand-core 1"
+@w.lang.ro.word.w.seating.seat core.word text="loc" means=w.seating.seat core.source="hand-core 1"
+@w.lang.ro.word.w.seating.guest core.word text="invitat" means=w.seating.guest core.source="hand-core 1"

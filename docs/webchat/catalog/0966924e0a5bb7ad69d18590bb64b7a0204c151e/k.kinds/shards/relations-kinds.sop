@@ -1,0 +1,25 @@
+# k.kinds/shards/relations-kinds: the keys of the types of k.kinds read as relations: 20 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.kinds.constraint.structure k.kinds.relation type=k.kinds.constraint key=structure subject=constraint object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.constraint.name k.kinds.relation type=k.kinds.constraint key=name subject=constraint object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.constraint.kind k.kinds.relation type=k.kinds.constraint key=kind subject=constraint object=kind found=schema core.source="hand-core 1"
+@k.kinds.relation.k.kinds.constraint.on k.kinds.relation type=k.kinds.constraint key=on subject=constraint object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.constraint.about k.kinds.relation type=k.kinds.constraint key=about subject=constraint object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.kinds.constraint.world k.kinds.relation type=k.kinds.constraint key=world subject=constraint object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.constraint.by k.kinds.relation type=k.kinds.constraint key=by subject=constraint object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.kind.is_a k.kinds.relation type=k.kinds.kind key=is_a subject=kind object=kind found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.kind.kind_of k.kinds.relation type=k.kinds.kind key=kind_of subject=kind object=kind found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.kind.derived k.kinds.relation type=k.kinds.kind key=derived subject=kind object=boolean found=schema core.source="hand-core 1"
+@k.kinds.relation.k.kinds.parent.name k.kinds.relation type=k.kinds.parent key=name subject=parent object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.parent.is_a k.kinds.relation type=k.kinds.parent key=is_a subject=parent object=kind object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.parent.dimension k.kinds.relation type=k.kinds.parent key=dimension subject=parent object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.kinds.parent.from k.kinds.relation type=k.kinds.parent key=from subject=parent object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.parent.key k.kinds.relation type=k.kinds.parent key=key subject=parent object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.parent.value k.kinds.relation type=k.kinds.parent key=value subject=parent object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.parent.group k.kinds.relation type=k.kinds.parent key=group subject=parent object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.parent.sense k.kinds.relation type=k.kinds.parent key=sense subject=parent object=value object_type=k.attributes.kind found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.sensitivity.sensitive k.kinds.relation type=k.kinds.sensitivity key=sensitive subject=sensitivity object=value object_type=k.kinds.sensitivity found=value core.source="hand-core 1"
+@k.kinds.relation.k.kinds.sensitivity.sense k.kinds.relation type=k.kinds.sensitivity key=sense subject=sensitivity object=word found=value core.source="hand-core 1"

@@ -18,9 +18,9 @@
 
 import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs?v=18f06ec836';
 import { routeEdges, segBoxDist, boxOf } from './arrows.mjs?v=3346b422bb';
-import * as space from '../space/space.mjs?v=c7e07062fb';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
+import * as space from '../space/space.mjs?v=da302c7b07';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42';
-import * as DG from '../../lib/knowledge/diagram-world.mjs?v=162e12bdb3';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
+import * as DG from '../../lib/knowledge/diagram-world.mjs?v=1758817b12';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const TAB = 'diagram';
@@ -934,4 +934,102 @@ export function checkReferents(ctx, { action, args = {} } = {}) {
   if (!missing.length) return undefined;
   const have = (state.shapes ?? []).filter((x) => !x.layer && !x.template).map((x) => x.name);
   return { missing, here: have.length ? have.join(', ') : null, where: 'diagram', offer: `${missing.map((x) => `add a rectangle called ${x.name}`).join(' and ')} and connect ${names[0]} to ${names[1]}` };
+}
+
+// ---- spec 28: the diagram as the goal of a request (w.request) ----------------------------------------------------------------------------------------------
+/**
+ * What the turn made, for the check of a request (spec 28 section 4): the shapes that are not in `before` (the world state before the turn), their kinds, the arrows among them.
+ * Read-only.
+ */
+export function requestResult(ctx, { before = null } = {}) {
+  const s = ctx.state ?? {};
+  const had = new Set((before?.shapes ?? []).map((x) => x.id ?? x.name));
+  const made = (s.shapes ?? []).filter((x) => !x.layer && !x.template && !had.has(x.id ?? x.name));
+  const names = new Set(made.map((x) => x.name));
+  const kinds = {};
+  for (const x of made) kinds[x.shape] = (kinds[x.shape] ?? 0) + 1;
+  const links = (s.edges ?? []).filter((e) => names.has(e.from) || names.has(e.to)).length;
+  // a diagram the knowledge composed in this turn (a kind with its own shapes and links: a flowchart of steps, a list) is the knowledge's answer to the defaults
+  const composed = !!s.composed && JSON.stringify(s.composed) !== JSON.stringify(before?.composed ?? null) && made.length > 0;
+  return { parts: made.length, kinds, links, extent: made.reduce((a, x) => a + (x.size ?? 0), 0), composed };
+}
+
+/** A small deterministic generator (the session's seed): "random" is varied, and the same seed gives the same diagram. */
+const rngOf = (seed) => { let a = (Number(seed) >>> 0) || 1; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
+
+/**
+ * PLAN A DIAGRAM FOR A REQUEST (spec 28 section 4, step 5). `goal`: { range: [lo, hi], kinds: [wanted shapes], not: [shapes not wanted], notAll, varied, shapes: [the expected shapes],
+ * arrows, layout, topic, seed }. The nodes and arrows come from the knowledge (k.diagrams through src/knowledge/diagram-world.mjs: a sampled diagram, or one about the topic), cut or
+ * filled to the count; the shapes honour the kinds asked and not wanted; a named layout tidies it. Returns { status, value, assumed }.
+ */
+export function planRequest(ctx, goal = {}) {
+  if (!K) return NOT_READY();
+  if (!DL) return no('The diagram knowledge is still loading. Please say that again in a moment.', 'missing');
+  const s = ensure(ctx);
+  const rnd = rngOf(goal.seed ?? Math.floor(Math.random() * 2 ** 31));
+  const [lo, hi] = goal.range ?? [5, 9];
+  const n = Math.max(1, lo + Math.floor(rnd() * (hi - lo + 1)));
+  const world = DG.diagramWorldOf(DL, ctx.knowledge);
+  const assumed = [];
+  // the knowledge's diagram: about the topic, else sampled; the closest in size to n
+  let got = null;
+  if (goal.topic) { const r = DG.composeForRequest(DL, world, { topic: goal.topic }, { seed: Math.floor(rnd() * 1e9), max: Math.max(n, 9) }); if (!r.why) got = r; }
+  for (let i = 0; !got?.diagram || (got.diagram.nodes.length < n && i < 6); i++) {
+    if (i >= 6) break;
+    const r = DG.sampleDiagrams(DL, world, { seed: Math.floor(rnd() * 1e9), min: Math.min(n, 4), max: Math.max(n, 9) });
+    if (!r.why && (!got || Math.abs(r.diagram.nodes.length - n) < Math.abs(got.diagram.nodes.length - n))) got = r;
+  }
+  const src = got?.diagram ?? { nodes: [], edges: [], directed: true, kind: 'network' };
+  // cut to n in the order of the arrows from the first node (a tree keeps its root and its upper levels), or fill with numbered steps joined to a node before
+  const keep = [], seen = new Set(), adj = new Map();
+  for (const e of src.edges ?? []) { if (!adj.has(e.from)) adj.set(e.from, []); adj.get(e.from).push(e.to); }
+  const queue = src.nodes.length ? [src.nodes[0].id] : [];
+  while (queue.length && keep.length < n) { const id = queue.shift(); if (seen.has(id)) continue; seen.add(id); keep.push(id); for (const t of adj.get(id) ?? []) queue.push(t); }
+  for (const x of src.nodes) if (keep.length < n && !seen.has(x.id)) { seen.add(x.id); keep.push(x.id); }
+  const nodes = keep.map((id) => ({ ...src.nodes.find((x) => x.id === id) }));
+  const edges = (src.edges ?? []).filter((e) => keep.includes(e.from) && keep.includes(e.to)).map((e) => ({ ...e }));
+  for (let k = nodes.length; k < n; k++) { const id = `fill${k}`; nodes.push({ id, label: `${goal.topic ? String(goal.topic).replace(/^(?:a|an|the)\s+/, '') : 'Step'} ${k + 1}`, shape: 'rectangle', x: 0, y: 0 }); if (nodes.length > 1) edges.push({ from: nodes[Math.floor(rnd() * (nodes.length - 1))].id, to: id }); }
+  // a diagram with arrows has no loose boxes: a node with no arrow is joined to the one before it
+  if (goal.arrows) for (let k = 1; k < nodes.length; k++) if (!edges.some((e) => e.from === nodes[k].id || e.to === nodes[k].id)) edges.push({ from: nodes[k - 1].id, to: nodes[k].id });
+  // shapes: the kinds asked, never a kind not wanted; "not all X" and a diagram of the default kind have two or three shapes (the steps, the branch points, the leaves)
+  const not = new Set(goal.not ?? []);
+  const pool = (goal.kinds?.length ? goal.kinds : (goal.shapes?.length ? goal.shapes : ['rectangle', 'diamond', 'ellipse', 'circle'])).filter((k) => !not.has(k));
+  const allowed = pool.length ? pool : ['rectangle', 'diamond', 'ellipse', 'circle', 'square', 'hexagon'].filter((k) => !not.has(k));
+  const out = new Map(), inn = new Map();
+  for (const e of edges) { out.set(e.from, (out.get(e.from) ?? 0) + 1); inn.set(e.to, (inn.get(e.to) ?? 0) + 1); }
+  for (const [i, x] of nodes.entries()) {
+    let sh = goal.kinds?.length ? goal.kinds[i % goal.kinds.length] : (DG.ENGINE_SHAPE[x.shape] ?? 'rectangle');
+    if (not.has(sh) || !allowed.includes(sh)) {
+      const role = !inn.get(x.id) ? 0 : (out.get(x.id) ?? 0) > 1 ? 1 : !(out.get(x.id) ?? 0) ? 2 : 0;
+      sh = allowed[role % allowed.length];
+    }
+    x.engine = sh;
+  }
+  const distinct = new Set(nodes.map((x) => x.engine));
+  if ((goal.notAll || (!goal.kinds?.length && goal.varied)) && distinct.size < 2 && nodes.length > 1 && allowed.length > 1) {
+    const other = allowed.find((k) => k !== nodes[0].engine);
+    for (const [i, x] of nodes.entries()) if (i > 0 && (i % 2 === 1 || !(out.get(x.id) ?? 0))) x.engine = other;
+  }
+  // onto the engine: the shapes and the arrows, then the layout
+  const taken = new Set(s.shapes.flatMap((x) => [x.name, x.id].filter(Boolean)));
+  const d = { ...src, nodes: nodes.map((x) => ({ ...x, x: x.x ?? 0, y: x.y ?? 0, shape: x.engine })), edges, directed: !!goal.arrows || src.directed !== false, groups: [], line: false };
+  const list = DG.engineNodes(d, taken);
+  let i = 0;
+  for (const nd of list) if (nd.args?.action === 'create') { nd.args.shape = d.nodes[i++]?.shape ?? nd.args.shape; }
+  const res = execute(ctx, s, list, { place: false });
+  if (res.status !== 'supported') return res;
+  const made = (s.last ?? []).slice();
+  const layout = goal.layout && goal.layout !== 'layers' ? goal.layout : (edges.length ? 'tree' : 'grid');
+  if (!goal.layout) assumed.push(`The diagram is a ${layout}.`);
+  if (made.length > 1) { try { arrangeLayout(ctx, { text: `arrange ${made.join(', ')} as a ${layout}` }); } catch { /* the engine's places stay */ } }
+  s.last = made;
+  s.composed = { kind: src.kind, topic: got?.topic ?? goal.topic ?? null };
+  if (goal.rangeAssumed) assumed.push(`I chose ${nodes.length} nodes.`);
+  const kinds = [...new Set(nodes.map((x) => x.engine))];
+  const cnt = (k) => nodes.filter((x) => x.engine === k).length;
+  const topic = got?.topic ? ` about ${got.topic}` : '';
+  // short plain sentences with a subject (they survive the translation of the reply, reviewer 2026-11-15 13:10 item 3)
+  const said = `I drew a diagram with ${nodes.length} node${nodes.length === 1 ? '' : 's'}${edges.length ? ` and ${edges.length} arrow${edges.length === 1 ? '' : 's'}` : ''}.${got?.topic ? ` It is about ${got.topic}.` : ''} The nodes are ${kinds.map((k) => `${cnt(k)} ${cnt(k) === 1 ? k : `${k}s`}`).join(' and ')}.`;
+  open(ctx);
+  return ok(said, { assumed });
 }

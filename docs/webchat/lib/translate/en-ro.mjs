@@ -1,8 +1,8 @@
 // English -> Romanian translation of short answers (rule based, browser-safe).
 // Reverse use of the bilingual lexicon plus a small clause generator and answer frames.
 import { tokenize, splitSentences, foldKey } from './normalize.mjs?v=6d473eb091';
-import * as M from './morphology.ro.mjs?v=1a500300fa';
-import * as L from './lexicon.ro-en.mjs?v=5e92d6102d';
+import * as M from './morphology.ro.mjs?v=24c7474a97';
+import * as L from './lexicon.ro-en.mjs?v=e72842636f';
 import * as E from './inflect.en.mjs?v=5b2e62d57a';
 import { placeRo, MULTIWORD_EN } from './places.ro-en.mjs?v=97dc087c2a';
 import { translateReplySentence } from './replies.en-ro.mjs?v=ee5e64f590';

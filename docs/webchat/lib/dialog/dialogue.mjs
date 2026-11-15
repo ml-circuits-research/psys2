@@ -24,13 +24,14 @@
  * through `ctx.sessionFacts()` and the operation things.show of session.things (spec 23); this module only offers the facts.
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { en } from '../lang/en.mjs?v=8f226ecd72';
-import { GRAMMAR } from './continuation.mjs?v=21e48736aa';
+import { RequestDialogue } from './request.mjs?v=6637e881bd';
+import { en } from '../lang/en.mjs?v=37bb133489';
+import { GRAMMAR } from './continuation.mjs?v=d96947a118';
 import { touched } from './followup.mjs?v=88af56c068';
-import { relativeTurn } from './relative.mjs?v=612810b92d';
-import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=a815012811';
+import { relativeTurn } from './relative.mjs?v=4d9503cc42';
+import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=b15d2b1fc3';
 import { classify, describeReferent, plain } from './meta.mjs?v=aa6dfcad14';
-import { compareTimes, loadTime } from '../knowledge/time.mjs?v=bbe1a45627';
+import { compareTimes, loadTime } from '../knowledge/time.mjs?v=6a6b6d5c99';
 
 const LOG_LIMIT = 60;
 const FOCUS_WINDOW = 30;
@@ -70,12 +71,13 @@ export class Dialogue {
   constructor(session) {
     this.s = session;
     this.log = [];        // one plain record per turn, oldest first (JSON: part of the memory and of the undo snapshot)
+    this.requests = new RequestDialogue();   // the live w.dialogue (spec 28): per tab world the last request, its result and the state before it
     this.note = null;     // what this turn's reading did (the fill sources of a completed fragment), moved into its record
   }
 
   // ---- memory -------------------------------------------------------------------------------------------------------------------------------------
-  toJSON() { return { v: 1, log: this.log.map((r) => ({ ...r })) }; }
-  load(json) { if (json && json.v === 1 && Array.isArray(json.log)) this.log = json.log.map((r) => ({ ...r })); return this; }
+  toJSON() { return { v: 1, log: this.log.map((r) => ({ ...r })), ...(this.requests ? { requests: this.requests.toJSON() } : {}) }; }   // requests: the live w.dialogue of spec 28 (src/dialog/request.mjs)
+  load(json) { if (json && json.v === 1 && Array.isArray(json.log)) { this.log = json.log.map((r) => ({ ...r })); this.requests = new RequestDialogue().load(json.requests); } return this; }
 
   get lang() { return this.s.engine.interp.lang; }
   get disc() { return this.s.discourse; }

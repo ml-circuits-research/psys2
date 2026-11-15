@@ -1,0 +1,25 @@
+# k.objects/shards/stand-ins-kinds-wordnet: 10 common things with no drawing at all, drawn by the drawing of their kind (a stand-in: the host says "drawn as a ..."), the parent one step up in k.kinds from WordNet, where the edge is about the sense kept (the same gloss). Written by tools/stand-ins-kinds.mjs.
+# sources: wordnet 3.1 (Princeton WordNet 3.1, the hypernyms read through k.kinds.parent)
+# license: WordNet-3.0
+# script: tools/stand-ins-kinds.mjs
+
+# bagging (coarse fabric used for bags or sacks): a kind of fabric, by k.words.sense
+@k.objects.kinds.bagging k.objects.stand_in name=bagging drawing=fabric core.source="wordnet 3.1"
+# beret (a cap with no brim or bill): a kind of cap, by k.words.sense
+@k.objects.kinds.beret k.objects.stand_in name=beret drawing=cap core.source="wordnet 3.1"
+# cauldron (a very large pot that is used for boiling): a kind of pot, by k.words.sense
+@k.objects.kinds.cauldron k.objects.stand_in name=cauldron drawing=pot core.source="wordnet 3.1"
+# flipper (a shoe for swimming): a kind of shoe, by k.words.sense
+@k.objects.kinds.flipper k.objects.stand_in name=flipper drawing=shoe core.source="wordnet 3.1"
+# headset (receiver consisting of a pair of headphones): a kind of telephone receiver, by k.words.sense
+@k.objects.kinds.headset k.objects.stand_in name=headset drawing="telephone receiver" core.source="wordnet 3.1"
+# sauerkraut (shredded cabbage fermented in brine): a kind of dish, by k.words.sense
+@k.objects.kinds.sauerkraut k.objects.stand_in name=sauerkraut drawing=dish core.source="wordnet 3.1"
+# sesame (East Indian annual erect herb): a kind of herb, by k.words.sense
+@k.objects.kinds.sesame k.objects.stand_in name=sesame drawing=herb core.source="wordnet 3.1"
+# stagecoach (a large coach-and-four formerly used to carry passengers and mail on regular routes between towns): a kind of coach, by k.words.sense
+@k.objects.kinds.stagecoach k.objects.stand_in name=stagecoach drawing=coach core.source="wordnet 3.1"
+# toothpick (pick consisting of a small strip of wood or plastic): a kind of pick, by k.words.sense
+@k.objects.kinds.toothpick k.objects.stand_in name=toothpick drawing=pick core.source="wordnet 3.1"
+# viola (any of the numerous plants of the genus Viola): a kind of herb, by k.words.sense
+@k.objects.kinds.viola k.objects.stand_in name=viola drawing=herb core.source="wordnet 3.1"

@@ -1,0 +1,52 @@
+# k.story/shards/words: the English words of k.story (its types, keys and values), stored beside the world (owner's
+# decision 2026-11-15 08:10); tools/build-catalog.mjs reads them as the world's own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the types of this world.
+@k.story.word.element core.word text="story element" text="story elements" text="element of a story" text=plot text="story structure" means=k.story.element core.source="hand-core 1"
+@k.story.word.goal core.word text=goal text=goals text=quest text=aim means=k.story.goal core.source="hand-core 1"
+@k.story.word.obstacle core.word text=obstacle text=obstacles text=problem text=difficulty text="in the way" means=k.story.obstacle core.source="hand-core 1"
+@k.story.word.constraint core.word text=constraint text=constraints text=rule text=rules means=k.story.constraint core.source="hand-core 1"
+@k.story.word.source core.word text=source text=sources text=reference text=references means=k.story.source core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.story.word.key.source.cite core.word text=cite means=k.story.source.cite core.source="hand-core 1"
+@k.story.word.key.source.year core.word text=year means=k.story.source.year core.source="hand-core 1"
+@k.story.word.key.source.doi core.word text=doi means=k.story.source.doi core.source="hand-core 1"
+@k.story.word.key.source.finding core.word text=finding means=k.story.source.finding core.source="hand-core 1"
+@k.story.word.key.element.n core.word text=n means=k.story.element.n core.source="hand-core 1"
+@k.story.word.key.element.min core.word text=min means=k.story.element.min core.source="hand-core 1"
+@k.story.word.key.element.max core.word text=max means=k.story.element.max core.source="hand-core 1"
+@k.story.word.key.element.part core.word text=part means=k.story.element.part core.source="hand-core 1"
+@k.story.word.key.element.move core.word text=move means=k.story.element.move core.source="hand-core 1"
+@k.story.word.key.element.fills core.word text=fills means=k.story.element.fills core.source="hand-core 1"
+@k.story.word.key.element.propp core.word text=propp means=k.story.element.propp core.source="hand-core 1"
+@k.story.word.key.element.grammar core.word text=grammar means=k.story.element.grammar core.source="hand-core 1"
+@k.story.word.key.element.arc core.word text=arc means=k.story.element.arc core.source="hand-core 1"
+@k.story.word.key.element.about core.word text=about means=k.story.element.about core.source="hand-core 1"
+@k.story.word.key.element.source core.word text=source means=k.story.element.source core.source="hand-core 1"
+@k.story.word.key.element.own core.word text=own means=k.story.element.own core.source="hand-core 1"
+@k.story.word.key.goal.act core.word text=act means=k.story.goal.act core.source="hand-core 1"
+@k.story.word.key.goal.target core.word text=target means=k.story.goal.target core.source="hand-core 1"
+@k.story.word.key.goal.place_kind core.word text="place kind" means=k.story.goal.place_kind core.source="hand-core 1"
+@k.story.word.key.goal.propp core.word text=propp means=k.story.goal.propp core.source="hand-core 1"
+@k.story.word.key.goal.about core.word text=about means=k.story.goal.about core.source="hand-core 1"
+@k.story.word.key.goal.source core.word text=source means=k.story.goal.source core.source="hand-core 1"
+@k.story.word.key.goal.own core.word text=own means=k.story.goal.own core.source="hand-core 1"
+@k.story.word.key.obstacle.blocks core.word text=blocks means=k.story.obstacle.blocks core.source="hand-core 1"
+@k.story.word.key.obstacle.how core.word text=how means=k.story.obstacle.how core.source="hand-core 1"
+@k.story.word.key.obstacle.overcome_by core.word text="overcome by" means=k.story.obstacle.overcome_by core.source="hand-core 1"
+@k.story.word.key.obstacle.means core.word text=means means=k.story.obstacle.means core.source="hand-core 1"
+@k.story.word.key.obstacle.tried_by core.word text="tried by" means=k.story.obstacle.tried_by core.source="hand-core 1"
+@k.story.word.key.obstacle.about core.word text=about means=k.story.obstacle.about core.source="hand-core 1"
+@k.story.word.key.obstacle.source core.word text=source means=k.story.obstacle.source core.source="hand-core 1"
+@k.story.word.key.obstacle.own core.word text=own means=k.story.obstacle.own core.source="hand-core 1"
+@k.story.word.key.constraint.element core.word text=element means=k.story.constraint.element core.source="hand-core 1"
+@k.story.word.key.constraint.relation core.word text=relation means=k.story.constraint.relation core.source="hand-core 1"
+@k.story.word.key.constraint.other core.word text=other means=k.story.constraint.other core.source="hand-core 1"
+@k.story.word.key.constraint.strength core.word text=strength means=k.story.constraint.strength core.source="hand-core 1"
+@k.story.word.key.constraint.about core.word text=about means=k.story.constraint.about core.source="hand-core 1"
+@k.story.word.key.constraint.source core.word text=source means=k.story.constraint.source core.source="hand-core 1"
+@k.story.word.key.constraint.own core.word text=own means=k.story.constraint.own core.source="hand-core 1"

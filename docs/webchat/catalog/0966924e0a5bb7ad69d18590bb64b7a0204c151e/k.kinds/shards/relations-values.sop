@@ -1,0 +1,29 @@
+# k.kinds/shards/relations-values: the keys of the types of k.values read as relations: 24 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.values.coloured.colour k.kinds.relation type=k.values.coloured key=colour subject=coloured object=value object_type=k.colours.basic found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.values.comparative.text k.kinds.relation type=k.values.comparative key=text subject=comparative object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.values.comparative.scale k.kinds.relation type=k.values.comparative key=scale subject=comparative object=value object_type=k.values.scale found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.values.comparative.way k.kinds.relation type=k.values.comparative key=way subject=comparative object=value object_type=k.values.direction found=value core.source="hand-core 1"
+@k.kinds.relation.k.values.comparative.degree k.kinds.relation type=k.values.comparative key=degree subject=comparative object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.values.direction.axis k.kinds.relation type=k.values.direction key=axis subject=direction object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.values.direction.x k.kinds.relation type=k.values.direction key=x subject=direction object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.values.direction.y k.kinds.relation type=k.values.direction key=y subject=direction object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.values.direction.opposite k.kinds.relation type=k.values.direction key=opposite subject=direction object=value object_type=k.values.direction found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.values.fill.about k.kinds.relation type=k.values.fill key=about subject=fill object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.values.position.column k.kinds.relation type=k.values.position key=column subject=position object=value object_type=k.values.position found=value core.source="hand-core 1"
+@k.kinds.relation.k.values.position.row k.kinds.relation type=k.values.position key=row subject=position object=value object_type=k.values.position found=value core.source="hand-core 1"
+@k.kinds.relation.k.values.position.depth k.kinds.relation type=k.values.position key=depth subject=position object=value object_type=k.values.position found=value core.source="hand-core 1"
+@k.kinds.relation.k.values.reply.opposite k.kinds.relation type=k.values.reply key=opposite subject=reply object=value object_type=k.values.reply found=value core.source="hand-core 1"
+@k.kinds.relation.k.values.scale.about k.kinds.relation type=k.values.scale key=about subject=scale object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.values.scale.steps k.kinds.relation type=k.values.scale key=steps subject=scale object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.values.set_word.picks k.kinds.relation type=k.values.set_word key=picks subject="set word" object=value object_type=k.values.set_word found=value core.source="hand-core 1"
+@k.kinds.relation.k.values.set_word.manner k.kinds.relation type=k.values.set_word key=manner subject="set word" object=value object_type=k.values.set_word found=value core.source="hand-core 1"
+@k.kinds.relation.k.values.set_word.about k.kinds.relation type=k.values.set_word key=about subject="set word" object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.values.shade.lightness k.kinds.relation type=k.values.shade key=lightness subject=shade object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.values.shade.saturation k.kinds.relation type=k.values.shade key=saturation subject=shade object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.values.step.scale k.kinds.relation type=k.values.step key=scale subject=step object=value object_type=k.values.scale found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.values.step.name k.kinds.relation type=k.values.step key=name subject=step object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.values.step.rank k.kinds.relation type=k.values.step key=rank subject=step object=number found=schema core.source="hand-core 1"

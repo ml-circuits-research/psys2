@@ -2,8 +2,8 @@
  * Lexicon index shared by the formalizer, router and renderer. Browser-safe.
  * Built once per WorldSet (memoized).
  */
-import { singularLemma } from '../formalizer/rules/lemma.mjs?v=99f25611ee';
-import { OpenWords, probeOf } from '../knowledge/open-words.mjs?v=07763ed0e6';
+import { singularLemma } from '../formalizer/rules/lemma.mjs?v=b810124a5c';
+import { OpenWords, probeOf } from '../knowledge/open-words.mjs?v=5bf8ab9446';
 
 /** Index of every lexicon of every loaded world. */
 export function lexIndex(set) {

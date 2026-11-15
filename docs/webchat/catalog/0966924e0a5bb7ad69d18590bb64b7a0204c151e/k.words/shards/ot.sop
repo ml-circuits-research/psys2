@@ -1,0 +1,20 @@
+# k.words/shards/ot: senses of the words from "other" to "ottoman" (first letters "ot").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.other.adjective.1 k.words.sense word=other pos=adjective n=1 supersense=adj.all gloss="not the same one or ones already mentioned or implied" opposite=same core.source="wordnet 3.1"
+@k.words.other.adjective.2 k.words.sense word=other pos=adjective n=2 supersense=adj.all gloss="recently past" near_opposite=present near_opposite=future core.source="wordnet 3.1"
+@k.words.other.adjective.3 k.words.sense word=other pos=adjective n=3 supersense=adj.all gloss="belonging to the distant past" synonym=early synonym=former near_opposite=present near_opposite=future core.source="wordnet 3.1"
+@k.words.otherwise.adjective.1 k.words.sense word=otherwise pos=adjective n=1 supersense=adj.all gloss="other than as supposed or expected" near_opposite=same core.source="wordnet 3.1"
+@k.words.otherwise.adverb.1 k.words.sense word=otherwise pos=adverb n=1 supersense=adv.all gloss="in other respects or ways" core.source="wordnet 3.1"
+@k.words.otherwise.adverb.2 k.words.sense word=otherwise pos=adverb n=2 supersense=adv.all gloss="in another and different manner" synonym=differently core.source="wordnet 3.1"
+@k.words.otis.noun.1 k.words.sense word=Otis pos=noun n=1 supersense=noun.person gloss="United States inventor who manufactured the first elevator with a safety device (1811-1861)" synonym="Elisha Graves Otis" instance_of=inventor instance_of=industrialist core.source="wordnet 3.1"
+@k.words.otis.noun.2 k.words.sense word=Otis pos=noun n=2 supersense=noun.animal gloss="type genus of the Otididae: European bustard" synonym="genus Otis" is_a="bird genus" core.source="wordnet 3.1"
+@k.words.otis.spelling.Otis core.word text=otis means=Otis of=k.words.sense.word core.source="wordnet 3.1"
+@k.words.otter.noun.1 k.words.sense word=otter pos=noun n=1 supersense=noun.substance gloss="the fur of an otter" is_a=fur kind_of=fur kind_of="animal skin" kind_of="animal product" kind_of="animal material" kind_of=material kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.otter.noun.2 k.words.sense word=otter pos=noun n=2 supersense=noun.animal gloss="freshwater carnivorous mammal having webbed and clawed feet and dark brown fur" is_a="musteline mammal" kind_of="musteline mammal" kind_of=carnivore kind_of=placental kind_of=mammal kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.ottoman.noun.1 k.words.sense word=Ottoman pos=noun n=1 supersense=noun.person gloss="a Turk (especially a Turk who is a member of the tribe of Osman I)" synonym="Ottoman Turk" synonym=Osmanli is_a=Turk core.source="wordnet 3.1"
+@k.words.ottoman.noun.2 k.words.sense word=Ottoman pos=noun n=2 supersense=noun.group gloss="the Turkish dynasty that ruled the Ottoman Empire from the 13th century to its dissolution after World War I" synonym="Ottoman dynasty" is_a=dynasty core.source="wordnet 3.1"
+@k.words.ottoman.noun.3 k.words.sense word=ottoman pos=noun n=3 supersense=noun.artifact gloss="thick cushion used as a seat" synonym=pouf synonym=pouffe synonym=puff synonym=hassock is_a=seat core.source="wordnet 3.1"
+@k.words.ottoman.spelling.Ottoman core.word text=ottoman means=Ottoman of=k.words.sense.word core.source="wordnet 3.1"

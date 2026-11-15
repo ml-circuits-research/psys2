@@ -1,0 +1,37 @@
+# k.interest/shards/words: the English words of k.interest (its types, keys and values), stored beside the world (owner's
+# decision 2026-11-15 08:10); tools/build-catalog.mjs reads them as the world's own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the types of this world.
+@k.interest.word.world core.word text=interest text=interesting text=interestingness text=curiosity text=boring text=dull means=k.interest.feature core.source="hand-core 1"
+@k.interest.word.source core.word text=source text=sources text=reference text=references text=paper text=papers means=k.interest.source core.source="hand-core 1"
+@k.interest.word.appraisal core.word text=appraisal text=appraisals means=k.interest.appraisal core.source="hand-core 1"
+@k.interest.word.measure core.word text=measure text=measures means=k.interest.measure core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.interest.word.key.source.cite core.word text=cite means=k.interest.source.cite core.source="hand-core 1"
+@k.interest.word.key.source.year core.word text=year means=k.interest.source.year core.source="hand-core 1"
+@k.interest.word.key.source.doi core.word text=doi means=k.interest.source.doi core.source="hand-core 1"
+@k.interest.word.key.source.finding core.word text=finding means=k.interest.source.finding core.source="hand-core 1"
+@k.interest.word.key.appraisal.about core.word text=about means=k.interest.appraisal.about core.source="hand-core 1"
+@k.interest.word.key.appraisal.combine core.word text=combine means=k.interest.appraisal.combine core.source="hand-core 1"
+@k.interest.word.key.appraisal.base core.word text=base means=k.interest.appraisal.base core.source="hand-core 1"
+@k.interest.word.key.appraisal.source core.word text=source means=k.interest.appraisal.source core.source="hand-core 1"
+@k.interest.word.key.appraisal.own core.word text=own means=k.interest.appraisal.own core.source="hand-core 1"
+@k.interest.word.key.measure.scope core.word text=scope means=k.interest.measure.scope core.source="hand-core 1"
+@k.interest.word.key.measure.reads core.word text=reads means=k.interest.measure.reads core.source="hand-core 1"
+@k.interest.word.key.measure.gives core.word text=gives means=k.interest.measure.gives core.source="hand-core 1"
+@k.interest.word.key.measure.about core.word text=about means=k.interest.measure.about core.source="hand-core 1"
+@k.interest.word.key.feature.appraisal core.word text=appraisal means=k.interest.feature.appraisal core.source="hand-core 1"
+@k.interest.word.key.feature.measure core.word text=measure means=k.interest.feature.measure core.source="hand-core 1"
+@k.interest.word.key.feature.shape core.word text=shape means=k.interest.feature.shape core.source="hand-core 1"
+@k.interest.word.key.feature.start_at core.word text="start at" means=k.interest.feature.start_at core.source="hand-core 1"
+@k.interest.word.key.feature.peak_at core.word text="peak at" means=k.interest.feature.peak_at core.source="hand-core 1"
+@k.interest.word.key.feature.full_at core.word text="full at" means=k.interest.feature.full_at core.source="hand-core 1"
+@k.interest.word.key.feature.weight_min core.word text="weight min" means=k.interest.feature.weight_min core.source="hand-core 1"
+@k.interest.word.key.feature.weight_max core.word text="weight max" means=k.interest.feature.weight_max core.source="hand-core 1"
+@k.interest.word.key.feature.about core.word text=about means=k.interest.feature.about core.source="hand-core 1"
+@k.interest.word.key.feature.source core.word text=source means=k.interest.feature.source core.source="hand-core 1"
+@k.interest.word.key.feature.own core.word text=own means=k.interest.feature.own core.source="hand-core 1"

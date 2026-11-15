@@ -1,0 +1,30 @@
+# k.kinds/shards/material-conceptnet: 25 up edges: what a thing is made of, by the materials k.attributes takes from ConceptNet (shard things-conceptnet, KR6).
+# sources: conceptnet 5.7 (ConceptNet 5 (conceptnet.io), derived in part from Open Mind Common Sense, Wiktionary, WordNet and other sources: the values k.attributes takes from it, shard things-conceptnet)
+# license: CC-BY-SA-4.0
+# script: tools/kinds-core.mjs
+
+@k.kinds.parent.bacon.thing_made_of_pig k.kinds.parent name=bacon is_a="thing made of pig" dimension=material from=k.attributes.thing key=material value=pig core.source="conceptnet 5.7"
+@k.kinds.parent.banjo.thing_made_of_wood k.kinds.parent name=banjo is_a="thing made of wood" dimension=material from=k.attributes.thing key=material value=wood core.source="conceptnet 5.7"
+@k.kinds.parent.binder.thing_made_of_metal k.kinds.parent name=binder is_a="thing made of metal" dimension=material from=k.attributes.thing key=material value=metal core.source="conceptnet 5.7"
+@k.kinds.parent.binder.thing_made_of_plastic k.kinds.parent name=binder is_a="thing made of plastic" dimension=material from=k.attributes.thing key=material value=plastic core.source="conceptnet 5.7"
+@k.kinds.parent.bomb.thing_made_of_explosives k.kinds.parent name=bomb is_a="thing made of explosives" dimension=material from=k.attributes.thing key=material value=explosives core.source="conceptnet 5.7"
+@k.kinds.parent.bomb.thing_made_of_shrapnel k.kinds.parent name=bomb is_a="thing made of shrapnel" dimension=material from=k.attributes.thing key=material value=shrapnel core.source="conceptnet 5.7"
+@k.kinds.parent.bread.thing_made_of_dough k.kinds.parent name=bread is_a="thing made of dough" dimension=material from=k.attributes.thing key=material value=dough core.source="conceptnet 5.7"
+@k.kinds.parent.bread.thing_made_of_wheat k.kinds.parent name=bread is_a="thing made of wheat" dimension=material from=k.attributes.thing key=material value=wheat core.source="conceptnet 5.7"
+@k.kinds.parent.butter.thing_made_of_milk k.kinds.parent name=butter is_a="thing made of milk" dimension=material from=k.attributes.thing key=material value=milk core.source="conceptnet 5.7"
+@k.kinds.parent.cake.thing_made_of_egg k.kinds.parent name=cake is_a="thing made of egg" dimension=material from=k.attributes.thing key=material value=egg core.source="conceptnet 5.7"
+@k.kinds.parent.cake.thing_made_of_flour k.kinds.parent name=cake is_a="thing made of flour" dimension=material from=k.attributes.thing key=material value=flour core.source="conceptnet 5.7"
+@k.kinds.parent.cheese.thing_made_of_bacteria k.kinds.parent name=cheese is_a="thing made of bacteria" dimension=material from=k.attributes.thing key=material value=bacteria core.source="conceptnet 5.7"
+@k.kinds.parent.cheese.thing_made_of_milk k.kinds.parent name=cheese is_a="thing made of milk" dimension=material from=k.attributes.thing key=material value=milk core.source="conceptnet 5.7"
+@k.kinds.parent.donut.thing_made_of_sugar k.kinds.parent name=donut is_a="thing made of sugar" dimension=material from=k.attributes.thing key=material value=sugar core.source="conceptnet 5.7"
+@k.kinds.parent.highway.thing_made_of_asphalt k.kinds.parent name=highway is_a="thing made of asphalt" dimension=material from=k.attributes.thing key=material value=asphalt core.source="conceptnet 5.7"
+@k.kinds.parent.ipod.thing_made_of_microchips k.kinds.parent name=ipod is_a="thing made of microchips" dimension=material from=k.attributes.thing key=material value=microchips core.source="conceptnet 5.7"
+@k.kinds.parent.ipod.thing_made_of_plastic k.kinds.parent name=ipod is_a="thing made of plastic" dimension=material from=k.attributes.thing key=material value=plastic core.source="conceptnet 5.7"
+@k.kinds.parent.lemonade.thing_made_of_lemons k.kinds.parent name=lemonade is_a="thing made of lemons" dimension=material from=k.attributes.thing key=material value=lemons core.source="conceptnet 5.7"
+@k.kinds.parent.pancake.thing_made_of_flour k.kinds.parent name=pancake is_a="thing made of flour" dimension=material from=k.attributes.thing key=material value=flour core.source="conceptnet 5.7"
+@k.kinds.parent.pickle.thing_made_of_cucumbers k.kinds.parent name=pickle is_a="thing made of cucumbers" dimension=material from=k.attributes.thing key=material value=cucumbers core.source="conceptnet 5.7"
+@k.kinds.parent.pickle.thing_made_of_vinegar k.kinds.parent name=pickle is_a="thing made of vinegar" dimension=material from=k.attributes.thing key=material value=vinegar core.source="conceptnet 5.7"
+@k.kinds.parent.sausage.thing_made_of_meat k.kinds.parent name=sausage is_a="thing made of meat" dimension=material from=k.attributes.thing key=material value=meat core.source="conceptnet 5.7"
+@k.kinds.parent.soup.thing_made_of_water k.kinds.parent name=soup is_a="thing made of water" dimension=material from=k.attributes.thing key=material value=water core.source="conceptnet 5.7"
+@k.kinds.parent.wicket.thing_made_of_stumps k.kinds.parent name=wicket is_a="thing made of stumps" dimension=material from=k.attributes.thing key=material value=stumps core.source="conceptnet 5.7"
+@k.kinds.parent.wine.thing_made_of_fruit k.kinds.parent name=wine is_a="thing made of fruit" dimension=material from=k.attributes.thing key=material value=fruit core.source="conceptnet 5.7"

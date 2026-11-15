@@ -1,0 +1,111 @@
+# w.lang.en/shards/hand-cues: the English phrasings that set the constraints of a w.request request (negation, counts and
+# ranges, amounts, scale words, places, manners, layouts, with, about, length) and the reactions of w.dialogue to the
+# last result ("not this", "too much", "you overdid it", "bigger", "redo", "put it back", "thanks", insults). Reviewer
+# block 2026-11-15 14:00 (owner's GO). Data only: a reader (the library's readRequest) matches the cues, the longest and
+# highest priority first, and an operand the cue takes; what no cue and no frame takes is a w.request unread fact.
+# sources: hand-core 1 (English usage, written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# Negation of a kind: the kind after the cue is not wanted ("not a circle", "no circles", "without arrows", "instead of circles", "anything but circles"); "not all" / "not only" lets the kind appear but not as every thing.
+@w.lang.en.cue.not w.lang.en.cue name=not on=kind want=no lead="not" lead="no" lead="not a" lead="not an" lead="not any" lead="none of the" lead="never" takes=kind priority=2 example="a diagram, not circles" example="no circles please" core.source="hand-core 1"
+@w.lang.en.cue.without w.lang.en.cue name=without on=kind want=no lead="without" lead="with no" lead="minus" lead="except" lead="except for" lead="but no" lead="leave out" lead="skip the" takes=kind priority=2 example="a pond without ducks" core.source="hand-core 1"
+@w.lang.en.cue.instead_of w.lang.en.cue name=instead_of on=kind want=no lead="instead of" lead="rather than" lead="other than" lead="anything but" lead="anything except" takes=kind priority=3 example="squares instead of circles" core.source="hand-core 1"
+@w.lang.en.cue.not_all w.lang.en.cue name=not_all on=kind want=not_all lead="not all" lead="not only" lead="not just" lead="not every" lead="not everything" lead="not all of them" lead="not all the same" takes=kind priority=4 example="not all circles" example="not only circles" core.source="hand-core 1"
+@w.lang.en.cue.mixed w.lang.en.cue name=mixed on=kind want=not_all lead="different shapes" lead="various shapes" lead="mixed shapes" lead="a mix of shapes" lead="different kinds" lead="various kinds" takes=none priority=3 example="use different shapes" core.source="hand-core 1"
+
+# A count: a number, a range or a named amount (the amounts and their ranges are k.expect.amount).
+@w.lang.en.cue.count.exact w.lang.en.cue name=count.exact on=count bound=exact lead="exactly" lead="just" lead="only" takes=number priority=2 example="exactly 6 nodes" core.source="hand-core 1"
+@w.lang.en.cue.count.min w.lang.en.cue name=count.min on=count bound=min lead="at least" lead="no fewer than" lead="no less than" lead="minimum" lead="a minimum of" takes=number priority=3 example="at least 5 nodes" core.source="hand-core 1"
+@w.lang.en.cue.count.more_than w.lang.en.cue name=count.more_than on=count bound=min lead="more than" lead="over" lead="above" takes=number priority=2 example="more than 4 trees" core.source="hand-core 1"
+@w.lang.en.cue.count.max w.lang.en.cue name=count.max on=count bound=max lead="at most" lead="no more than" lead="up to" lead="maximum" lead="a maximum of" lead="not more than" takes=number priority=3 example="at most 8 boxes" core.source="hand-core 1"
+@w.lang.en.cue.count.fewer_than w.lang.en.cue name=count.fewer_than on=count bound=max lead="fewer than" lead="less than" lead="under" lead="below" takes=number priority=2 example="fewer than 10 steps" core.source="hand-core 1"
+@w.lang.en.cue.count.about w.lang.en.cue name=count.about on=count bound=about lead="about" lead="around" lead="roughly" lead="approximately" lead="some" takes=number priority=2 example="about 7 nodes" core.source="hand-core 1"
+@w.lang.en.cue.count.or_so w.lang.en.cue name=count.or_so on=count bound=about trail="or so" trail="or thereabouts" trail="ish" takes=number priority=2 example="7 or so nodes" core.source="hand-core 1"
+@w.lang.en.cue.count.between w.lang.en.cue name=count.between on=count bound=range lead="between" between="and" takes=range priority=3 example="between 5 and 10 nodes" core.source="hand-core 1"
+@w.lang.en.cue.count.from_to w.lang.en.cue name=count.from_to on=count bound=range lead="from" between="to" takes=range priority=3 example="from 5 to 10 nodes" core.source="hand-core 1"
+@w.lang.en.cue.count.range w.lang.en.cue name=count.range on=count bound=range between="-" between="to" between="or" takes=range priority=2 example="5-10 nodes" example="5 to 10 nodes" example="3 or 4 ducks" core.source="hand-core 1"
+@w.lang.en.cue.count.couple w.lang.en.cue name=count.couple on=count amount=couple lead="a couple of" lead="a couple" lead="a pair of" lead="two or three" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.count.few w.lang.en.cue name=count.few on=count amount=few lead="a few" lead="few" lead="some" lead="a small number of" takes=none priority=2 example="a few water plants" core.source="hand-core 1"
+@w.lang.en.cue.count.several w.lang.en.cue name=count.several on=count amount=several lead="several" lead="a number of" lead="various" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.count.handful w.lang.en.cue name=count.handful on=count amount=handful lead="a handful of" lead="a handful" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.count.many w.lang.en.cue name=count.many on=count amount=many lead="many" lead="lots of" lead="a lot of" lead="plenty of" lead="loads of" lead="tons of" lead="a bunch of" lead="numerous" takes=none priority=2 example="many trees" core.source="hand-core 1"
+@w.lang.en.cue.count.dozen w.lang.en.cue name=count.dozen on=count amount=dozen lead="a dozen" lead="dozen" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.count.one w.lang.en.cue name=count.one on=count amount=one lead="a single" lead="one single" lead="just one" lead="only one" takes=none priority=3 core.source="hand-core 1"
+
+# Size of each thing and extent of the whole on the k.expect scale (tiny, small, default, big, huge); a comparative steps it.
+@w.lang.en.cue.size.tiny w.lang.en.cue name=size.tiny on=size value=tiny lead="tiny" lead="very small" lead="minuscule" lead="teeny" lead="little tiny" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.size.small w.lang.en.cue name=size.small on=size value=small lead="small" lead="little" lead="mini" lead="compact" takes=none priority=2 example="a small house" core.source="hand-core 1"
+@w.lang.en.cue.size.big w.lang.en.cue name=size.big on=size value=big lead="big" lead="large" lead="larger" lead="great big" takes=none priority=2 example="a big tree" core.source="hand-core 1"
+@w.lang.en.cue.size.huge w.lang.en.cue name=size.huge on=size value=huge lead="huge" lead="very big" lead="very large" lead="enormous" lead="giant" lead="gigantic" lead="massive" lead="immense" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.size.up w.lang.en.cue name=size.up on=size step=up lead="bigger" lead="larger" lead="make it bigger" lead="scale up" lead="enlarge" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.size.down w.lang.en.cue name=size.down on=size step=down lead="smaller" lead="make it smaller" lead="scale down" lead="shrink" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.extent.small w.lang.en.cue name=extent.small on=extent value=small lead="in a corner" lead="in the corner" lead="in one corner" lead="a small part of" lead="off to the side" takes=none priority=3 example="draw a pond in a corner" core.source="hand-core 1"
+@w.lang.en.cue.extent.huge w.lang.en.cue name=extent.huge on=extent value=huge lead="the whole page" lead="the whole canvas" lead="full page" lead="full screen" lead="everywhere" lead="all over" lead="fill the page" lead="filling the canvas" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.extent.half w.lang.en.cue name=extent.half on=extent value=default lead="half the page" lead="half the canvas" lead="half of the page" takes=none priority=3 core.source="hand-core 1"
+
+# Attribute: a value of an attribute of the things ("in red", "coloured blue", "all green"); the value word is a k.values or k.colours value.
+@w.lang.en.cue.attribute.colour w.lang.en.cue name=attribute.colour on=attribute attribute=colour lead="in" lead="coloured" lead="colored" lead="painted" lead="all" lead="in the colour" lead="in the color" takes=value priority=1 example="circles in red" example="a house painted blue" core.source="hand-core 1"
+@w.lang.en.cue.attribute.colour_noun w.lang.en.cue name=attribute.colour_noun on=attribute attribute=colour trail="coloured" trail="colored" trail="ones" takes=value priority=1 example="red coloured boxes" core.source="hand-core 1"
+
+# Place: where the result or a part of it goes (a k.layouts anchor or a thing).
+@w.lang.en.cue.place.corner w.lang.en.cue name=place.corner on=place value=corner relation=in lead="in a corner" lead="in the corner" lead="in one corner" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.place.top_left w.lang.en.cue name=place.top_left on=place value=top_left relation=in lead="in the top left" lead="top left" lead="upper left" takes=none priority=4 core.source="hand-core 1"
+@w.lang.en.cue.place.top_right w.lang.en.cue name=place.top_right on=place value=top_right relation=in lead="in the top right" lead="top right" lead="upper right" takes=none priority=4 core.source="hand-core 1"
+@w.lang.en.cue.place.bottom_left w.lang.en.cue name=place.bottom_left on=place value=bottom_left relation=in lead="in the bottom left" lead="bottom left" lead="lower left" takes=none priority=4 core.source="hand-core 1"
+@w.lang.en.cue.place.bottom_right w.lang.en.cue name=place.bottom_right on=place value=bottom_right relation=in lead="in the bottom right" lead="bottom right" lead="lower right" takes=none priority=4 core.source="hand-core 1"
+@w.lang.en.cue.place.left w.lang.en.cue name=place.left on=place value=left relation=at lead="on the left" lead="to the left" lead="at the left" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.place.right w.lang.en.cue name=place.right on=place value=right relation=at lead="on the right" lead="to the right" lead="at the right" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.place.top w.lang.en.cue name=place.top on=place value=top relation=at lead="at the top" lead="on top" lead="in the sky" lead="up high" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.place.bottom w.lang.en.cue name=place.bottom on=place value=bottom relation=at lead="at the bottom" lead="below" lead="on the ground" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.place.centre w.lang.en.cue name=place.centre on=place value=centre relation=in lead="in the middle" lead="in the centre" lead="in the center" lead="centred" lead="centered" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.place.near w.lang.en.cue name=place.near on=place relation=next_to lead="next to" lead="beside" lead="near" lead="close to" lead="by" takes=thing priority=2 core.source="hand-core 1"
+@w.lang.en.cue.place.in w.lang.en.cue name=place.in on=place relation=in lead="in" lead="inside" lead="within" takes=thing priority=1 core.source="hand-core 1"
+@w.lang.en.cue.place.on w.lang.en.cue name=place.on on=place relation=on lead="on" lead="on top of" takes=thing priority=1 core.source="hand-core 1"
+
+# Manner: how it should look or be done. random = varied within the typical range of k.expect, never the minimum.
+@w.lang.en.cue.manner.nice w.lang.en.cue name=manner.nice on=manner value=nice lead="nice" lead="nicer" lead="pretty" lead="prettier" lead="beautiful" lead="lovely" lead="good looking" lead="cool" lead="fancy" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.manner.better w.lang.en.cue name=manner.better on=manner value=better lead="better" lead="improve" lead="improved" lead="cleaner" lead="more readable" lead="clearer" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.manner.tidy w.lang.en.cue name=manner.tidy on=manner value=tidy lead="tidy" lead="tidier" lead="neat" lead="neater" lead="organised" lead="organized" lead="aligned" lead="clean" lead="orderly" lead="in order" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.manner.random w.lang.en.cue name=manner.random on=manner value=random lead="random" lead="randomly" lead="any" lead="whatever" lead="surprise me" lead="something" lead="anything" lead="some random" takes=none priority=2 example="a random diagram" core.source="hand-core 1"
+@w.lang.en.cue.manner.logical w.lang.en.cue name=manner.logical on=manner value=logical lead="logical" lead="logically" lead="that makes sense" lead="sensible" lead="meaningful" lead="realistic" lead="real" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.manner.simple w.lang.en.cue name=manner.simple on=manner value=simple lead="simple" lead="simpler" lead="basic" lead="plain" lead="minimal" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.manner.detailed w.lang.en.cue name=manner.detailed on=manner value=detailed lead="detailed" lead="more detailed" lead="complex" lead="rich" lead="elaborate" lead="full" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.manner.colourful w.lang.en.cue name=manner.colourful on=manner value=colourful lead="colourful" lead="colorful" lead="in colour" lead="in color" lead="bright" lead="more colour" lead="more color" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.manner.symmetric w.lang.en.cue name=manner.symmetric on=manner value=symmetric lead="symmetric" lead="symmetrical" lead="balanced" lead="even" takes=none priority=2 core.source="hand-core 1"
+
+# Layout: the arrangement (a k.layouts layout or a k.diagrams layout).
+@w.lang.en.cue.layout.better w.lang.en.cue name=layout.better on=layout value=better lead="better layout" lead="a better layout" lead="nicer layout" lead="arrange it better" lead="lay it out better" lead="better arrangement" takes=none priority=4 example="not all circles, better layout" core.source="hand-core 1"
+@w.lang.en.cue.layout.grid w.lang.en.cue name=layout.grid on=layout value=grid lead="in a grid" lead="as a grid" lead="in rows and columns" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.layout.circle w.lang.en.cue name=layout.circle on=layout value=ring lead="in a circle" lead="in a ring" lead="around a circle" lead="circular" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.layout.row w.lang.en.cue name=layout.row on=layout value=row lead="in a row" lead="in a line" lead="side by side" lead="left to right" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.layout.column w.lang.en.cue name=layout.column on=layout value=column lead="in a column" lead="stacked" lead="one under another" lead="top to bottom" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.layout.tree w.lang.en.cue name=layout.tree on=layout value=tree lead="as a tree" lead="like a tree" lead="hierarchical" lead="as a hierarchy" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.layout.radial w.lang.en.cue name=layout.radial on=layout value=radial lead="radial" lead="around the centre" lead="around the center" lead="from the middle out" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.layout.layout w.lang.en.cue name=layout.layout on=layout lead="layout" lead="arrangement" lead="arranged as" lead="laid out as" takes=value priority=1 core.source="hand-core 1"
+
+# With: parts the result is to have ("with arrows", "with water plants and a duck": each noun after "with" and its joiners is one constraint).
+@w.lang.en.cue.with w.lang.en.cue name=with on=with lead="with" lead="having" lead="that has" lead="which has" lead="containing" lead="including" lead="plus" lead="and also" lead="add" takes=kind priority=1 example="a pond with water plants and a duck" example="a diagram with arrows" core.source="hand-core 1"
+
+# About: the topic ("about the water cycle", "on dragons").
+@w.lang.en.cue.about w.lang.en.cue name=about on=about lead="about" lead="on the topic of" lead="on" lead="regarding" lead="concerning" lead="of" lead="explaining" lead="showing" lead="describing" lead="for" takes=topic priority=1 example="a story about a dragon" example="a diagram of the water cycle" core.source="hand-core 1"
+
+# Length of a text: a number of words, sentences, paragraphs, chapters or pages; the number comes from the count cues before it.
+@w.lang.en.cue.length.word w.lang.en.cue name=length.word on=length trail="words" trail="word" takes=number unit=word priority=2 example="a story of 3 words" core.source="hand-core 1"
+@w.lang.en.cue.length.sentence w.lang.en.cue name=length.sentence on=length trail="sentences" trail="sentence" trail="lines" trail="line" takes=number unit=sentence priority=2 example="a story of 3 sentences" core.source="hand-core 1"
+@w.lang.en.cue.length.paragraph w.lang.en.cue name=length.paragraph on=length trail="paragraphs" trail="paragraph" takes=number unit=paragraph priority=2 example="a story of 3 paragraphs" core.source="hand-core 1"
+@w.lang.en.cue.length.chapter w.lang.en.cue name=length.chapter on=length trail="chapters" trail="chapter" trail="parts" trail="sections" takes=number unit=chapter priority=2 example="a story of 3 chapters" core.source="hand-core 1"
+@w.lang.en.cue.length.page w.lang.en.cue name=length.page on=length trail="pages" trail="page" takes=number unit=page priority=2 example="a story of 3 pages" core.source="hand-core 1"
+@w.lang.en.cue.length.short w.lang.en.cue name=length.short on=length value=small lead="short" lead="shorter" lead="brief" lead="quick" lead="a short" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.length.long w.lang.en.cue name=length.long on=length value=big lead="long" lead="longer" lead="a long" lead="lengthy" lead="extended" takes=none priority=2 core.source="hand-core 1"
+
+# Reactions to the last result (w.dialogue): the turn revises the last request (w.dialogue.revision says how).
+@w.lang.en.cue.reaction.reject w.lang.en.cue name=reaction.reject on=reaction value=reject lead="not this" lead="not that" lead="no" lead="nope" lead="wrong" lead="that is wrong" lead="that's wrong" lead="this is wrong" lead="not what i asked" lead="not what i wanted" lead="not what i meant" lead="that is not it" lead="that's not it" lead="i did not ask for that" lead="i didn't ask for that" lead="no not like that" lead="not like this" lead="i do not like it" lead="i don't like it" lead="bad" lead="ugly" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.reaction.expectation w.lang.en.cue name=reaction.expectation on=reaction value=refine lead="my expectation was" lead="i expected" lead="i wanted" lead="i meant" lead="what i meant was" lead="what i wanted was" lead="i was expecting" takes=topic priority=4 example="my expectation was a diagram with 5-10 nodes, not a circle" core.source="hand-core 1"
+@w.lang.en.cue.reaction.reduce w.lang.en.cue name=reaction.reduce on=reaction value=reduce step=down lead="too much" lead="too many" lead="you overdid it" lead="overdone" lead="too big" lead="too busy" lead="too crowded" lead="too cluttered" lead="fewer" lead="less" lead="tone it down" lead="calm down" lead="way too much" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.reaction.enlarge w.lang.en.cue name=reaction.enlarge on=reaction value=enlarge step=up lead="too little" lead="too few" lead="too small" lead="more" lead="bigger" lead="make it bigger" lead="not enough" lead="add more" lead="needs more" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.reaction.refine w.lang.en.cue name=reaction.refine on=reaction value=refine lead="better" lead="improve it" lead="make it better" lead="but" lead="but with" lead="only" lead="also" lead="and make" takes=topic priority=1 example="not all circles, better layout" core.source="hand-core 1"
+@w.lang.en.cue.reaction.redo w.lang.en.cue name=reaction.redo on=reaction value=redo lead="redo" lead="redo it" lead="do it again" lead="again" lead="try again" lead="another one" lead="one more time" lead="start over" lead="make another" lead="different one" lead="something else" lead="another" takes=none priority=2 core.source="hand-core 1"
+@w.lang.en.cue.reaction.put_back w.lang.en.cue name=reaction.put_back on=reaction value=put_back lead="put it back" lead="put back" lead="as it was" lead="go back" lead="revert" lead="restore it" lead="the previous one" lead="the old one was better" lead="bring it back" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.reaction.thanks w.lang.en.cue name=reaction.thanks on=reaction value=thanks lead="thanks" lead="thank you" lead="thx" lead="great" lead="perfect" lead="nice" lead="good" lead="well done" lead="awesome" lead="love it" lead="that is it" lead="that's it" lead="exactly" takes=none priority=1 core.source="hand-core 1"
+@w.lang.en.cue.reaction.frustration w.lang.en.cue name=reaction.frustration on=reaction value=frustration lead="stupid" lead="idiot" lead="you are stupid" lead="you're stupid" lead="useless" lead="you are useless" lead="dumb" lead="terrible" lead="awful" lead="are you kidding" lead="come on" lead="seriously" lead="what is this" lead="what the hell" lead="wtf" lead="ugh" lead="you never listen" lead="this is stupid" lead="stupidities" lead="nonsense" lead="rubbish" lead="garbage" takes=none priority=2 core.source="hand-core 1"

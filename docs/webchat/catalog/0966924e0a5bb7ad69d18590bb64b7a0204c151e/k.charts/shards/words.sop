@@ -1,0 +1,53 @@
+# k.charts/shards/words: the English words of k.charts (its types, keys and values), stored beside the world (owner's
+# decision 2026-11-15 08:10); tools/build-catalog.mjs reads them as the world's own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the types of this world.
+@k.charts.word.kind core.word text="kind of chart" text="kinds of chart" text="chart type" text="type of chart" text="type of graph" means=k.charts.kind core.source="hand-core 1"
+@k.charts.word.encoding core.word text=encoding text="visual encoding" text="visual channel" means=k.charts.encoding core.source="hand-core 1"
+@k.charts.word.relationship core.word text="what the data shows" text="data relationship" means=k.charts.relationship core.source="hand-core 1"
+@k.charts.word.rule core.word text="which chart" text="best chart" text="right chart" text="chart choice" means=k.charts.rule core.source="hand-core 1"
+@k.charts.word.rank core.word text="ranking of encodings" text="most accurate" means=k.charts.rank core.source="hand-core 1"
+
+# Words for the kinds of chart and the relationships (another name a request uses for them).
+@k.charts.word.name.bar_chart core.word text="bar graph" text="column chart" text="bar diagram" means="bar chart" of=k.charts.kind.name core.source="hand-core 1"
+@k.charts.word.name.line_chart core.word text="line graph" text="line plot" text="trend chart" means="line chart" of=k.charts.kind.name core.source="hand-core 1"
+@k.charts.word.name.pie_chart core.word text="pie graph" text="circle graph" means="pie chart" of=k.charts.kind.name core.source="hand-core 1"
+@k.charts.word.name.scatter_plot core.word text="scatter chart" text="scatter graph" text=scatterplot text="xy plot" means="scatter plot" of=k.charts.kind.name core.source="hand-core 1"
+@k.charts.word.name.stacked_bar_chart core.word text="stacked bar graph" text="stacked column chart" means="stacked bar chart" of=k.charts.kind.name core.source="hand-core 1"
+@k.charts.word.name.grouped_bar_chart core.word text="clustered bar chart" text="side-by-side bar chart" means="grouped bar chart" of=k.charts.kind.name core.source="hand-core 1"
+@k.charts.word.name.area_chart core.word text="area graph" text="stacked area chart" means="area chart" of=k.charts.kind.name core.source="hand-core 1"
+@k.charts.word.rel.time_series core.word text="trend over time" text="change over time" text="over time" means="time series" of=k.charts.relationship.name core.source="hand-core 1"
+@k.charts.word.rel.part_to_whole core.word text="share of a whole" means="part-to-whole" of=k.charts.relationship.name core.source="hand-core 1"
+@k.charts.word.rel.ranking core.word text="from largest to smallest" text="top ten" means=ranking of=k.charts.relationship.name core.source="hand-core 1"
+@k.charts.word.rel.distribution core.word text="how the values spread" means=distribution of=k.charts.relationship.name core.source="hand-core 1"
+@k.charts.word.rel.correlation core.word text="how two things vary together" text="related to" means=correlation of=k.charts.relationship.name core.source="hand-core 1"
+@k.charts.word.rel.nominal_comparison core.word text="compare categories" means="nominal comparison" of=k.charts.relationship.name core.source="hand-core 1"
+@k.charts.word.rel.deviation core.word text="difference from a target" text="above or below" means=deviation of=k.charts.relationship.name core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.charts.word.key.source.cite core.word text=cite means=k.charts.source.cite core.source="hand-core 1"
+@k.charts.word.key.source.year core.word text=year means=k.charts.source.year core.source="hand-core 1"
+@k.charts.word.key.kind.form core.word text=form means=k.charts.kind.form core.source="hand-core 1"
+@k.charts.word.key.kind.mark core.word text=mark means=k.charts.kind.mark core.source="hand-core 1"
+@k.charts.word.key.kind.encoding core.word text=encoding means=k.charts.kind.encoding core.source="hand-core 1"
+@k.charts.word.key.kind.x core.word text=x means=k.charts.kind.x core.source="hand-core 1"
+@k.charts.word.key.kind.y core.word text=y means=k.charts.kind.y core.source="hand-core 1"
+@k.charts.word.key.kind.whole core.word text=whole means=k.charts.kind.whole core.source="hand-core 1"
+@k.charts.word.key.kind.about core.word text=about means=k.charts.kind.about core.source="hand-core 1"
+@k.charts.word.key.kind.source core.word text=source means=k.charts.kind.source core.source="hand-core 1"
+@k.charts.word.key.encoding.about core.word text=about means=k.charts.encoding.about core.source="hand-core 1"
+@k.charts.word.key.rank.data core.word text=data means=k.charts.rank.data core.source="hand-core 1"
+@k.charts.word.key.rank.source core.word text=source means=k.charts.rank.source core.source="hand-core 1"
+@k.charts.word.key.rank.rank core.word text=rank means=k.charts.rank.rank core.source="hand-core 1"
+@k.charts.word.key.relationship.about core.word text=about means=k.charts.relationship.about core.source="hand-core 1"
+@k.charts.word.key.relationship.source core.word text=source means=k.charts.relationship.source core.source="hand-core 1"
+@k.charts.word.key.rule.kind core.word text=kind means=k.charts.rule.kind core.source="hand-core 1"
+@k.charts.word.key.rule.rank core.word text=rank means=k.charts.rule.rank core.source="hand-core 1"
+@k.charts.word.key.rule.categories_max core.word text="categories max" means=k.charts.rule.categories_max core.source="hand-core 1"
+@k.charts.word.key.rule.series core.word text=series means=k.charts.rule.series core.source="hand-core 1"
+@k.charts.word.key.rule.points_min core.word text="points min" means=k.charts.rule.points_min core.source="hand-core 1"
+@k.charts.word.key.rule.about core.word text=about means=k.charts.rule.about core.source="hand-core 1"
+@k.charts.word.key.rule.source core.word text=source means=k.charts.rule.source core.source="hand-core 1"

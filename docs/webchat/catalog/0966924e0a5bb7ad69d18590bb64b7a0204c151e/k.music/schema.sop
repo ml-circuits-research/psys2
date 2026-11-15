@@ -1,0 +1,69 @@
+# k.music: the values of music notation: note names with their accidentals, intervals, keys (G major, E minor) with
+# their key signatures and relative keys, scales (the G major scale) and chords (C, Dm, C7, Cmaj7) with their notes.
+# For reading the musical value a person names ("play the G major scale", "what notes are in a C7 chord", "which key
+# has five sharps"): each is a typed value with its parts as keys, so a reader binds the letter, the accidental and
+# the kind, and cannot read "G's major scale" as the scale of another note.
+# sources: hand-core 1 (written by rule in this repository: the note letters, the semitone patterns of the scales
+# and chords and the order of sharps and flats of Western music theory)
+# license: CC0-1.0
+# script: none (hand-written); the shards are written by tools/music-core.mjs
+
+@k.music core.module name=k.music version=1 exports=note exports=interval exports=key exports=scale exports=chord core.source="hand-core 1"
+
+# A note name (a pitch class as it is spelled): its `letter` (C to B), its `accidental` (natural, sharp, flat, double
+# sharp, double flat) and `pitch_class`, the semitones above C (0 to 11; B# is 0, Cb is 11). The `name` is written as
+# the music world writes it: the letter, then # for each sharp or b for each flat ("C", "F#", "Bb", "F##", "Bbb").
+# `enharmonic` names the other spellings of the same pitch class (C# and Db).
+@k.music.note core.type of=k.music.note shared=true closed=true core.source="hand-core 1"
+@k.music.note.name core.slot of=k.music.note key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.music.note.letter core.slot of=k.music.note key=letter required=true enum=C enum=D enum=E enum=F enum=G enum=A enum=B core.source="hand-core 1"
+@k.music.note.accidental core.slot of=k.music.note key=accidental required=true enum=natural enum=sharp enum=flat enum="double sharp" enum="double flat" core.source="hand-core 1"
+@k.music.note.pitch_class core.slot of=k.music.note key=pitch_class required=true kind=integer min=0 max=11 core.source="hand-core 1"
+@k.music.note.enharmonic core.slot of=k.music.note key=enharmonic many=true kind=atom kind=string type=k.music.note by=name core.source="hand-core 1"
+
+# An interval between two notes: `semitones` (0 to 12), its `number` (1 a unison, 3 a third, 8 an octave) and its
+# `quality` (perfect, major, minor, augmented, diminished). The tritone is the augmented fourth and the diminished fifth.
+@k.music.interval core.type of=k.music.interval shared=true closed=true core.source="hand-core 1"
+@k.music.interval.name core.slot of=k.music.interval key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.music.interval.semitones core.slot of=k.music.interval key=semitones required=true kind=integer min=0 max=12 core.source="hand-core 1"
+@k.music.interval.number core.slot of=k.music.interval key=number required=true kind=integer min=1 max=8 core.source="hand-core 1"
+@k.music.interval.quality core.slot of=k.music.interval key=quality required=true enum=perfect enum=major enum=minor enum=augmented enum=diminished core.source="hand-core 1"
+
+# A key (the 15 major and 15 minor keys of the circle of fifths, up to seven sharps or flats): its `tonic` and `mode`;
+# its key signature: how many `sharps` or `flats` (never both; C major and A minor have neither) and which notes they
+# are (`signature`, in the order they are written: F# C# G# ... or Bb Eb Ab ...); its `relative` key (the other mode
+# with the same signature: E minor for G major), its `parallel` key (the other mode on the same tonic, where it is one
+# of these keys), its `enharmonic` key (F# major and Gb major), its `scale`, and its seven triads in order of the
+# degrees (`chord`: I ii iii IV V vi vii° of a major key, i ii° III iv v VI VII of a minor key).
+@k.music.key core.type of=k.music.key shared=true closed=true core.source="hand-core 1"
+@k.music.key.name core.slot of=k.music.key key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.music.key.tonic core.slot of=k.music.key key=tonic required=true kind=atom kind=string type=k.music.note by=name core.source="hand-core 1"
+@k.music.key.mode core.slot of=k.music.key key=mode required=true enum=major enum=minor core.source="hand-core 1"
+@k.music.key.sharps core.slot of=k.music.key key=sharps kind=integer min=0 max=7 core.source="hand-core 1"
+@k.music.key.flats core.slot of=k.music.key key=flats excludes=sharps kind=integer min=0 max=7 core.source="hand-core 1"
+@k.music.key.signature core.slot of=k.music.key key=signature many=true kind=atom kind=string type=k.music.note by=name core.source="hand-core 1"
+@k.music.key.relative core.slot of=k.music.key key=relative required=true kind=atom kind=string type=k.music.key by=name core.source="hand-core 1"
+@k.music.key.parallel core.slot of=k.music.key key=parallel kind=atom kind=string type=k.music.key by=name core.source="hand-core 1"
+@k.music.key.enharmonic core.slot of=k.music.key key=enharmonic kind=atom kind=string type=k.music.key by=name core.source="hand-core 1"
+@k.music.key.scale core.slot of=k.music.key key=scale required=true kind=atom kind=string type=k.music.scale by=name core.source="hand-core 1"
+@k.music.key.chord core.slot of=k.music.key key=chord many=true kind=atom kind=string type=k.music.chord by=name core.source="hand-core 1"
+
+# A scale on a tonic: its `name` ("G major scale"), `tonic`, `type` (major, minor: the natural minor, harmonic minor,
+# melodic minor: its rising form, major pentatonic, minor pentatonic) and its notes from the tonic up (`note`, in
+# order, each once); `key` names the key whose scale it is or whose tonic and mode it shares.
+@k.music.scale core.type of=k.music.scale shared=true closed=true core.source="hand-core 1"
+@k.music.scale.name core.slot of=k.music.scale key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.music.scale.tonic core.slot of=k.music.scale key=tonic required=true kind=atom kind=string type=k.music.note by=name core.source="hand-core 1"
+@k.music.scale.type core.slot of=k.music.scale key=type required=true enum=major enum=minor enum="harmonic minor" enum="melodic minor" enum="major pentatonic" enum="minor pentatonic" core.source="hand-core 1"
+@k.music.scale.note core.slot of=k.music.scale key=note many=true required=true kind=atom kind=string type=k.music.note by=name core.source="hand-core 1"
+@k.music.scale.key core.slot of=k.music.scale key=key kind=atom kind=string type=k.music.key by=name core.source="hand-core 1"
+
+# A chord: its `name` as a chord symbol ("C", "Dm", "C7", "Cmaj7", "Bdim", "F#m7b5"), its `root`, its `quality`
+# (major, minor, diminished, augmented, dominant seventh, major seventh, minor seventh, diminished seventh, half
+# diminished seventh, suspended second, suspended fourth, major sixth) and its notes from the root up (`note`, in
+# order, each once).
+@k.music.chord core.type of=k.music.chord shared=true closed=true core.source="hand-core 1"
+@k.music.chord.name core.slot of=k.music.chord key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.music.chord.root core.slot of=k.music.chord key=root required=true kind=atom kind=string type=k.music.note by=name core.source="hand-core 1"
+@k.music.chord.quality core.slot of=k.music.chord key=quality required=true enum=major enum=minor enum=diminished enum=augmented enum="dominant seventh" enum="major seventh" enum="minor seventh" enum="diminished seventh" enum="half diminished seventh" enum="suspended second" enum="suspended fourth" enum="major sixth" core.source="hand-core 1"
+@k.music.chord.note core.slot of=k.music.chord key=note many=true required=true kind=atom kind=string type=k.music.note by=name core.source="hand-core 1"

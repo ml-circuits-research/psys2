@@ -1,0 +1,20 @@
+# k.feelings/shards/words: the English words of k.feelings (its types, keys and values), stored beside the world (owner's
+# decision 2026-11-15 08:10); tools/build-catalog.mjs reads them as the world's own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the type and keys of this world.
+@k.feelings.word.feeling core.word text=feeling text=feelings text=feel text=feels text=emotion text=emotions text=mood means=k.feelings.feeling core.source="hand-core 1"
+@k.feelings.word.caused_by core.word text=cause text=causes text=why text=because means=k.feelings.feeling.caused_by core.source="hand-core 1"
+@k.feelings.word.opposite core.word text=opposite means=k.feelings.feeling.opposite core.source="hand-core 1"
+@k.feelings.word.looks_like core.word text="looks like" text="same face" text=alike means=k.feelings.feeling.looks_like core.source="hand-core 1"
+@k.feelings.word.expression core.word text=expression text=face text=looks means=k.feelings.feeling.expression core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.feelings.word.key.feeling.tone core.word text=tone text=good text=bad means=k.feelings.feeling.tone core.source="hand-core 1"
+@k.feelings.word.key.feeling.mouth core.word text=mouth means=k.feelings.feeling.mouth core.source="hand-core 1"
+@k.feelings.word.key.feeling.eyebrows core.word text=eyebrows means=k.feelings.feeling.eyebrows core.source="hand-core 1"
+@k.feelings.word.key.feeling.eyes core.word text=eyes means=k.feelings.feeling.eyes core.source="hand-core 1"
+@k.feelings.word.key.feeling.cheeks core.word text=cheeks means=k.feelings.feeling.cheeks core.source="hand-core 1"
+@k.feelings.word.key.feeling.caused_by core.word text="caused by" means=k.feelings.feeling.caused_by core.source="hand-core 1"
