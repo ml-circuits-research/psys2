@@ -1,4 +1,5 @@
-// E3 (spec 03 section 2c): operation descriptions generate patterns, opt-in only (PSYS_GEN_PATTERNS).
+// E3 (spec 03 section 2c): operation descriptions. The loader's pattern generator and its switch PSYS_GEN_PATTERNS were deleted in P6 (spec 16 section 15);
+// describePatterns stays a pure function (tested here), and describe.sop is read in full only by the reader route (PSYS2_READER).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
@@ -6,9 +7,9 @@ import { loadWorlds } from '../src/worlds/index.mjs';
 import { parse } from '../src/soplang/index.mjs';
 import { describePatterns, makeArg, emitKey, readDescriptionWires, descriptionFor, wordToken } from '../src/worlds/describe.mjs';
 
-const load = async (mode) => {
-  if (mode) globalThis.PSYS_GEN_PATTERNS = mode; else delete globalThis.PSYS_GEN_PATTERNS;
-  try { return await loadWorlds(createFsLoader({ roots: [DEFAULT_ROOT] })); } finally { delete globalThis.PSYS_GEN_PATTERNS; }
+const load = async (reader) => {
+  if (reader) globalThis.PSYS2_READER = reader; else delete globalThis.PSYS2_READER;
+  try { return await loadWorlds(createFsLoader({ roots: [DEFAULT_ROOT] })); } finally { delete globalThis.PSYS2_READER; }
 };
 const WORLDS = ['kids.shop', 'docs.editor', 'kids.arith', 'kids.tasks', 'kids.time'];
 
@@ -41,42 +42,18 @@ test('a quantified optional item expands to every count form and drops the absen
   assert.ok(list.some((p) => p.emit.includes('count=1')));
 });
 
-test('kids.common small talk: 6 descriptions load clean, generate one pattern each and keep every hand-written pattern', async () => {
-  const set = await load('add');
-  const base = await load(null);
-  const w = set.worlds.get('kids.common');
-  assert.equal(w.descriptions.length, 6);
-  assert.deepEqual(w.errors.filter((e) => e.file === 'describe.sop'), []);
-  assert.equal(w.generated.patterns.length, 6);
-  assert.equal(w.patterns.length, base.worlds.get('kids.common').patterns.length + 6);
-});
-
-test('descriptions are not read unless PSYS_GEN_PATTERNS is set', async () => {
+test('descriptions are not read in full unless the reader route is on', async () => {
   const set = await load(null);
-  for (const id of WORLDS) { const w = set.worlds.get(id); assert.equal(w.descriptions.length, 0); assert.equal(w.generated, null); }
+  for (const id of WORLDS) assert.equal(set.worlds.get(id).descriptions.length, 0);
 });
 
-test('every description of the three worlds loads clean and generates patterns', async () => {
-  const set = await load('add');
-  const base = await load(null);
-  for (const id of WORLDS) {
+test('every description loads clean (read with the reader route on)', async () => {
+  const set = await load('fill');
+  assert.equal(set.worlds.get('kids.common').descriptions.length, 6);
+  for (const id of ['kids.common', ...WORLDS]) {
     const w = set.worlds.get(id);
-    assert.ok(w.descriptions.length >= (id === 'docs.editor' ? 5 : 10), `${id}: ${w.descriptions.length} descriptions`);   // docs.editor is a schema world: its acts are generated, only the descriptions of its own operations are written
+    assert.ok(id === 'kids.common' || w.descriptions.length >= (id === 'docs.editor' ? 5 : 10), `${id}: ${w.descriptions.length} descriptions`);
     assert.deepEqual(w.errors.filter((e) => e.file === 'describe.sop'), [], `${id}: describe.sop errors`);
-    assert.ok(id === 'docs.editor' || w.generated.patterns.length >= w.descriptions.length, `${id}: generated ${w.generated.patterns.length}`);
-    assert.equal(w.patterns.length, base.worlds.get(id).patterns.length + w.generated.patterns.length, `${id}: add keeps every hand-written pattern`);
     for (const d of w.descriptions) assert.equal(emitKey(d.emit), d.op, `${d.id}: op differs from the key of its emit`);
-  }
-});
-
-test('`only` replaces the hand-written patterns of the described operations', async () => {
-  const set = await load('only');
-  const base = await load(null);
-  for (const id of WORLDS) {
-    const w = set.worlds.get(id);
-    assert.ok(w.generated.replaced.length > 0, `${id}: nothing replaced`);
-    assert.ok(w.patterns.length < base.worlds.get(id).patterns.length + w.generated.patterns.length);
-    const keys = new Set(w.descriptions.map((d) => d.op));
-    assert.ok(w.patterns.filter((p) => !p.generatedFrom).every((p) => !keys.has(emitKey(p.emit))), `${id}: a hand-written pattern of a described operation stayed`);
   }
 });

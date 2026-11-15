@@ -41,7 +41,7 @@ On top of the library's order, one host criterion (item 2; item 1 is the library
 1. **A question whose answer is not computed yet lacks nothing** is the library's own since sopworld 0.13.1 (J1: `score` understands a question given as a wire, and a computed answer not made yet is not a lack). The host's zeroing of the `lacks` of a question reading, which sopworld 0.12 made necessary, is gone; `libraryOrder` and the host order are the same list. Gate: `training/results/e2-j1-2026-11-12.md`.
 2. (removed 2026-11-15 with `no-game`: a move in a game that is not running came last.)
 
-An action the matrix does not declare is scored too (sopworld 0.12): the library judges it by a fallback (referents, slots, denies) and says so in `judged` / `judgedBy`; `ReasonerSession.score` passes both through and adds `libVeto`, the reasons of the library's `veto(result)` for the reading. `libVeto` is recorded in `wa`; it is a veto kind (`library`, every reason but `inconsistent`, `nothing` and `action-unavailable`) only when `PSYS2_WA_KINDS` asks for it (measured in `training/results/e2-world-aware-2026-11-12b.md`).
+An action the matrix does not declare is scored too (sopworld 0.12): the library judges it by a fallback (referents, slots, denies) and says so in `judged` / `judgedBy`; `ReasonerSession.score` passes both through and adds `libVeto`, the reasons of the library's `veto(result)` for the reading. `libVeto` is recorded in `wa` (trace only). It was an opt-in veto kind (`library`) behind `PSYS2_WA_KINDS` (measured in `training/results/e2-world-aware-2026-11-12b.md`, never a default); the kind and the switch were deleted in P6 (section 15).
 
 `choose` reorders only when the library's first reading differs from the router's (a tie keeps the router's order). Not implemented, and why: the dispatcher's top-k (the encoder strategy returns one reading per clause), the library's split candidates for compound messages as an acting reading (since READER-ROUTE: section 7, behind its own option), the dialogue layer's follow-up readings (the discourse layer changes its state before it reads, so a second reading would have to be undone), the Romanian translator route (one candidate).
 
@@ -83,7 +83,7 @@ The library's reader core (`interpret` over the English `core.word` facts of a w
 
 ### 7.2 The option
 
-`reader` is a session option of `engine.createSession` (`'off' | 'fill' | 'choose'`, default `'off'`; a per-message option of `send` overrides it; the environment variable `PSYS2_READER` sets the default of command-line tools; `scripts/e1-collect.mjs --reader <mode>` passes it to the evaluation). `describe.sop` is read by the loader only when the flag is on (as with `PSYS_GEN_PATTERNS`; it is `PSYS2_READER` at engine creation). With `off` nothing in this section runs and the turn is byte for byte the shipped one.
+`reader` is a session option of `engine.createSession` (`'off' | 'fill' | 'choose'`, default `'off'`; a per-message option of `send` overrides it; the environment variable `PSYS2_READER` sets the default of command-line tools; `scripts/e1-collect.mjs --reader <mode>` passes it to the evaluation). `describe.sop` is read in full by the loader only when the flag is on (`PSYS2_READER` at engine creation; otherwise only its `slot=` declarations). With `off` nothing in this section runs and the turn is byte for byte the shipped one.
 
 | mode | what it does |
 | --- | --- |
@@ -205,6 +205,8 @@ The library's `learnRules(world, cases, { heldOut, related, admit, min })` anti-
 
 ## 11. Typed paraphrase rewrite rules at read time (called paraphrase rewrite rules until 0.111; sopworld 0.89 `liftTokens`, now `delexicalise`, `learnFormOperators({ world })`; `PSYS2_FORMOPS=on`, default off)
 
+**Status (P6, 2026-11-15): deleted.** `PSYS2_FORMOPS` (+ `_FILE`, `_ALL`, `_CATALOG`) and `PSYS2_CANON` (the inverse operators of `canonicalise`), `src/dialog/form-operators.mjs`, `engine.setFormOperators`, `scripts/lib/formops-host.mjs`, `scripts/learn-operators.mjs`, `scripts/strict-operators.mjs`, `tests/form-operators.test.mjs` and the eval-ablation voices `v-formops` / `v-canon` are gone: both steps were off everywhere, the browser had no operators, and the measurements gave no held-out gain (form operators: +2 right on the training third, 0 on the held-out third, one new wrong; canonicalise: no row read through a canonical rewrite). The pairs (`training/eval/form-pairs.jsonl`) stay as data. The text below describes the step as it was.
+
 Code: `src/dialog/form-operators.mjs` (pure: `applyOperator`, `formOperatorTexts`), the first step of `withVariants` in `src/dialog/variants.mjs`, `engine.setFormOperators({ lib, world, operators })`; host side `scripts/lib/formops-host.mjs` (learning and installing; node only), `scripts/learn-operators.mjs` (learning, coverage, `--ops-out`). Tests: `tests/form-operators.test.mjs`.
 
 A request is content x form x context; the form varies by few operators. The library lifts the words of an aligned pair (a variant and its canonical sentence) through a typed world (a thing becomes `<its type>`, a number `<num>`, function words stay), aligns the shared runs as variables and clusters the rules `from => to`. The library admits an operator when it has support >= 2 or brings every held-out variant back to its canonical sentence.
@@ -304,6 +306,11 @@ Code: `src/dialog/foreign-reading.mjs` (`reviewForeign`, `notFull`, `confidentTy
 | `PSYS2_FOREIGN` | on | `src/dialog/foreign-reading.mjs` | kept (section 14) |
 | `PSYS2_TYPED`, `PSYS2_ALTERNATIONS`, `PSYS2_NEAR`, `PSYS2_SLOTS`, `PSYS2_RUNON`, `PSYS2_ENSEMBLE` | off (`=on`) | `src/dialog/variants.mjs`, `src/dialog/index.mjs` | diagnostic switches (this section) |
 | `PSYS2_KNOWLEDGE` | unset | `src/loaders/knowledge-source.mjs` | kept (a location, not a behaviour) |
+| `PSYS2_WA_KINDS` | unset | `src/dialog/world-aware.mjs` | **deleted** with the opt-in `library` veto kind and e2's `veto-library` mode (experiment only) |
+| `PSYS2_FORMOPS` (+ `_FILE`, `_ALL`, `_CATALOG`), `PSYS2_CANON` | off | `src/dialog/variants.mjs`, `scripts/lib/formops-host.mjs` | **deleted** with their voices and scripts (section 11) |
+| `PSYS_FRAME_RANK` | off | `src/formalizer/routing.mjs` | **deleted** (ADR-007 amendment L9: measured and rejected; the matcher still reports `frameLiterals`) |
+| `PSYS_GEN_PATTERNS` (also `globalThis`) | off | `src/worlds/index.mjs` | **deleted** with the loader's pattern generator and the E3 scripts (spec 03 section 2c) |
+| `PSYS2_PILOT_ROOTS`, `PSYS2_T1_ROOTS` | unset | `src/loaders/fs-loader.mjs`, `scripts/exp-transfer.mjs`, `scripts/pilot-tests.mjs` | **deleted** (`worlds-pilot/` no longer exists) |
 | `PSYS2_DEBUG_OPS` | unset | `src/interpreter/index.mjs` | kept (debug print) |
 
 Test and script plumbing (never read by the runtime): `PSYS2_SUITE`, `PSYS2_SAMPLE_SEED`, `PSYS2_CHANGED_WORLDS`, `PSYS2_FAILURES_OUT`, `PSYS2_KNOWN_FAILURES`, `PSYS2_NET_LOG`, `PSYS2_EVAL_DIR`, `PSYS2_HELDOUT_DIR`, `PSYS2_MT_CACHE`, `PSYS2_MT_NETWORK`, `PSYS2_ORT`, `PSYS2_CATALOG_CACHE`: kept.

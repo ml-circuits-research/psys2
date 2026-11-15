@@ -26,7 +26,6 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 import { sessionOptions } from '../src/dialog/runtime-config.mjs';
 import { formalize, setProto } from '../src/formalizer/rules/index.mjs';
-import { installFormOperators } from './lib/formops-host.mjs';
 import { createFacts } from '../src/knowledge/facts.mjs';
 import { createKnowledgeSource } from '../src/loaders/knowledge-source.mjs';
 import { createSwitchTranslator } from '../docs/webchat/ui/translation.mjs';
@@ -83,9 +82,7 @@ export const CONFIGS = {
   'v-all': { note: 'voice: rules-C + every symbolic reading step switched on (since P6, 2026-11-15, all of them are off by default)', mode: 'rules', set: {}, env: { PSYS2_TYPED: 'on', PSYS2_ALTERNATIONS: 'on', PSYS2_NEAR: 'on', PSYS2_SLOTS: 'on', PSYS2_RUNON: 'on', PSYS2_ENSEMBLE: 'on' } },
   'v-rules': { note: 'voice: rules-C alone (typed step, alternations, near words, slot types all off)', mode: 'rules', set: {}, env: VOICE_OFF },
   'v-typed': { note: 'voice: rules-C + the typed step (proposeByTypes) only', mode: 'rules', set: {}, env: { ...VOICE_OFF, PSYS2_TYPED: 'on' } },
-  'v-formops': { note: 'voice: rules-C + the typed form operators (PSYS2_FORMOPS=on) only', mode: 'rules', set: {}, env: { ...VOICE_OFF, PSYS2_FORMOPS: 'on' } },
   'v-alt': { note: 'voice: rules-C + the alternation rules (w.lang.en.alternation of the catalog) only', mode: 'rules', set: {}, env: { ...VOICE_OFF, PSYS2_ALTERNATIONS: 'on' } },
-  'v-canon': { note: 'voice: rules-C + readCanonical (0.91 canonicalise: fillers + the catalog alternation rules; PSYS2_CANON=on) only', mode: 'rules', set: {}, env: { ...VOICE_OFF, PSYS2_ALTERNATIONS: 'on', PSYS2_CANON: 'on' } },
   'v-enc-n1': { note: 'voice: the neural dispatcher (segmentation + world prior) + the T5 normaliser fallback; the rules read', mode: 'encoder+n1', set: { nxStrategy: 'rules' }, env: VOICE_OFF },
   'v-neural': { note: 'voice: the neural reader first (NX) + dispatcher + normaliser, symbolic steps off', mode: 'encoder+n1', set: { nxStrategy: 'neural' }, env: VOICE_OFF },
   'enc-neural-n1': { note: 'model first (NX neural) with the normalizer', mode: 'encoder+n1', set: { nxStrategy: 'neural' } },
@@ -315,7 +312,6 @@ async function setupEnv(wd) {
     const scratch = engine.createSession({ formalizer: 'rules', language: 'en' }).isession;
     segmenter = (text) => formalize(text, { worlds: engine.set, router: engine.router, source: 'input', session: scratch }).segments.map((s) => s.span);
   }
-  await installFormOperators(engine);   // PSYS2_FORMOPS=on: the typed form operators (spec 16 section 11); nothing otherwise
   const rt = await openNodeRuntime({ engine, mode: cfg.mode, ortPath: wd.ort, ortThreads: wd.ortThreads, overrides: cfg.set, partsExtra: segmenter ? { segmenter } : null });
   return { engine, ownerEngine: engine, settings: rt.settings, info: rt.info, factsOwner, factsFull };
 }
