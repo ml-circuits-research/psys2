@@ -102,11 +102,6 @@
    "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
   },
   {
-   "file": "clauses-in-sequence.test.mjs",
-   "name": "other worlds: a thing made in the first clause is named by \"it\" in the second",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
    "file": "commonsense.test.mjs",
    "name": "a second sun and a car in the sky are warned about, the sun at night too",
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
@@ -792,11 +787,6 @@
    "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
   },
   {
-   "file": "system-map.test.mjs",
-   "name": "the trace of a turn lists the steps in the vocabulary of the page",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
    "file": "textgen.test.mjs",
    "name": "std.summarize (real library): pasted text and the open document are summarised by the extractive summariser; a document answer cites its sentences",
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
@@ -907,64 +897,24 @@
    "reason": "needs the planner's soft facts (deduceState: \"a fish is usually at water\") said as reply facts of a run through the binding [LIB]; the warning sentence was the board's glue"
   },
   {
-   "file": "dialogue.test.mjs",
-   "name": "ops: \"X, not Y\" does not hand the negated clause to the tab",
-   "reason": "needs the change sense of \"make\" for a thing that is there and named definitely or by \"it\" (planRequest referencePlan, questions.md Q45 (6) [LIB]); the door says it cannot change it, and makes nothing"
-  },
-  {
-   "file": "dialogue.test.mjs",
-   "name": "matrix: \"X, not Y\" does not hand the negated clause to the tab",
-   "reason": "needs the change sense of \"make\" for a thing that is there and named definitely or by \"it\" (planRequest referencePlan, questions.md Q45 (6) [LIB]); the door says it cannot change it, and makes nothing"
-  },
-  {
-   "file": "scene-referents.test.mjs",
-   "name": "the whole path: a slipped noun acts on the thing of the scene and says what was assumed",
-   "reason": "needs the change sense of \"make\" for a thing that is there and named definitely or by \"it\" (planRequest referencePlan, questions.md Q45 (6) [LIB]); the door says it cannot change it, and makes nothing"
-  },
-  {
-   "file": "reasoner-restore.test.mjs",
-   "name": "both reasoners: undo survives a restart",
-   "reason": "needs the change sense of \"make\" for a thing that is there and named definitely or by \"it\" (planRequest referencePlan, questions.md Q45 (6) [LIB]); the door says it cannot change it, and makes nothing"
-  },
-  {
    "file": "ro-rp5.test.mjs",
    "name": "drawing: move into the water, ask where when the place is missing, delete all the fish",
-   "reason": "needs a move said by the key it changes (done.change has no key role, Q45 (4) [LIB]), the ground band in the view, and \"the fish\" as plural by the reader [LIB]; the missing-place question was the door's glue"
+   "reason": "needs \"all the fish\" (an irregular plural with \"all\") as every fish of the view in the reference step [LIB], and a place said by a kind made with the things (\"three fish in water\": the water made) [LIB]"
   },
   {
    "file": "ro-rp5.test.mjs",
    "name": "a translator that returns the Romanian text unchanged is retried through the rules translator",
-   "reason": "pins \"3 fish in water\" made with their water (the board's makes-place glue) and \"delete the fish\" as all of them: needs a place made by the planner when it is a kind the world makes (Q42 (7) [LIB]) and \"fish\" as plural [LIB]"
-  },
-  {
-   "file": "ro-rp5.test.mjs",
-   "name": "RP5b: missing-place prompt and chart help are Romanian",
-   "reason": "pins the door's own missing-place sentence (glue); the binding refuses with refused.missing_value of the language world"
+   "reason": "the retry works (\"Delete all the fish\" is read); needs \"all the fish\" (an irregular plural with \"all\") as every fish of the view in the reference step [LIB]"
   },
   {
    "file": "ro-rp5.test.mjs",
    "name": "RP5b: moving a thing into the water says \"în apă\" and adds the water when there is none",
-   "reason": "needs done.change with a key role (Q45 (4) [LIB]) and the ground band as a thing of the view; the sentence was the door's glue"
-  },
-  {
-   "file": "world-aware.test.mjs",
-   "name": "choose: the reading the open tab can take wins over a move in a game that is not running; veto alone keeps the router order",
-   "reason": "pins \"moved the house\": a move through the binding is said from the diff, and done.change has no key role to say it as a move (Q45 (4) [LIB])"
+   "reason": "needs a move into a region said with its relation (\"into the water\": done.change with the relation) and the ground band as a thing of the view (the water added said by the diff) [LIB]"
   },
   {
    "file": "completeness.test.mjs",
    "name": "arbitration on typed worlds: \"put the boxes in a circle\" on the diagram tab is the diagram's (arrangement), not the avatar's; with PSYS2_COMPLETE=off the avatar still takes it",
    "reason": "pins the old router with PSYS2_COMPLETE=off: the Diagram is a declared tab on the binding now, so the door reads the turn (and says it cannot take a layout for a place: needs \"put X in a circle\" read as arrange, questions.md Q46 [LIB])"
-  },
-  {
-   "file": "dialogue.test.mjs",
-   "name": "ops: a fragment with no verb inherits the verb of the focus; the tab gets a complete request",
-   "reason": "needs reviseRequest to take a fragment that names a new kind (\"a sun\" after \"draw a fish\") as a new request with the last act, not a revision of the last result (sopworld 0.153; the deleted host stand-in withTargetKind gave the revision both kinds) [LIB]"
-  },
-  {
-   "file": "dialogue.test.mjs",
-   "name": "matrix: a fragment with no verb inherits the verb of the focus; the tab gets a complete request",
-   "reason": "needs reviseRequest to take a fragment that names a new kind (\"a sun\" after \"draw a fish\") as a new request with the last act, not a revision of the last result (sopworld 0.153; the deleted host stand-in withTargetKind gave the revision both kinds) [LIB]"
   }
  ]
 }

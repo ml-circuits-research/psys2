@@ -89,5 +89,7 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.cannot_act_any w.lang.en.reply name=cannot.act.any count=one role=act role=world text="I cannot {act} in the {world} yet."
 @w.lang.en.reply.local.not_understood_undo w.lang.en.reply name=not_understood.undo count=one role=words text="I did not understand {words} here, so I took nothing back."
 @w.lang.en.reply.local.nothing_like w.lang.en.reply name=nothing.like count=one role=words text="I found nothing like {words} among what was done, so I took nothing back."
+@w.lang.en.reply.local.missing_place w.lang.en.reply name=refused.missing_value.place count=one role=key text="Where should it go? You can say, for example, \\"move the tree to the left\\", \\"put the cat next to the house\\" or \\"move it to the top right corner\\"."
+@w.lang.en.reply.local.done_whole w.lang.en.reply name=done.whole count=one role=whole role=parts text="The {whole} now has {parts}."
 @w.lang.en.reply.local.cannot_do w.lang.en.reply name=cannot.do count=one role=words role=world text="I cannot do {words} in the {world} yet."
 `;
