@@ -22,7 +22,8 @@ export function storyOptions(lang) {
   const aux = new Set(words(safe(() => [...en.words('aux')], [])));
   const phrase = (id) => words(safe(() => lang?.phrase?.(id), []));
   const verbs = {};
-  for (const eff of EFFECTS) for (const p of phrase(`lang.story.${eff}`)) {
+  // the catalog's typed possession effects first (k.actions holds / money, K5: acts.possession.<effect>), then lang.common's stand-ins for the verbs k.actions has no effect for
+  for (const eff of EFFECTS) for (const p of [...phrase(`acts.possession.${eff}`), ...phrase(`lang.story.${eff}`)]) {
     const toks = p.split(/[ _]+/).filter(Boolean);
     const v = toks.find((t) => !aux.has(t)) ?? toks[0];
     if (v && !(v in verbs)) verbs[v] = eff;

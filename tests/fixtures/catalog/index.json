@@ -6188,7 +6188,6 @@
     "k.values.scale",
     "k.values.set_word",
     "k.values.shade",
-    "k.values.shape",
     "k.values.step"
    ],
    "depends": [],
@@ -6496,8 +6495,8 @@
     {
      "id": "k.values/shards/psys2",
      "path": "k.values/shards/psys2.sop",
-     "wires": 15,
-     "bytes": 2599,
+     "wires": 12,
+     "bytes": 2256,
      "keys": [
       "bright",
       "dark",
@@ -6505,9 +6504,6 @@
       "light",
       "no",
       "pale",
-      "polygon",
-      "quadrilateral",
-      "rhombus",
       "soft",
       "yes"
      ],
@@ -6694,49 +6690,6 @@
       "random",
       "same",
       "some"
-     ],
-     "sources": [
-      "hand-core-1"
-     ],
-     "license": "CC0-1.0",
-     "warnings": []
-    },
-    {
-     "id": "k.values/shards/shapes",
-     "path": "k.values/shards/shapes.sop",
-     "wires": 60,
-     "bytes": 6791,
-     "keys": [
-      "arc",
-      "arrow",
-      "circle",
-      "cone",
-      "crescent",
-      "cross",
-      "cube",
-      "cuboid",
-      "curve",
-      "cylinder",
-      "diamond",
-      "dot",
-      "heart",
-      "hexagon",
-      "line",
-      "octagon",
-      "oval",
-      "parallelogram",
-      "pentagon",
-      "pyramid",
-      "rectangle",
-      "ring",
-      "semicircle",
-      "sphere",
-      "spiral",
-      "square",
-      "star",
-      "trapezoid",
-      "triangle",
-      "zigzag"
      ],
      "sources": [
       "hand-core-1"

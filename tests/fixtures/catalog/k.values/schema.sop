@@ -1,11 +1,11 @@
 # k.values: the words for values (colour names are in k.colours). Ordered scales (size, amount, degree and
-# more) with their steps and comparatives, shape names, directions and positions in a picture, set words (all,
+# more) with their steps and comparatives, directions and positions in a picture, set words (all,
 # each, random, same, different), number words and ordinals. For reading the value a person names in a request.
 # sources: hand-core 1 (the schema and the hand-written shards); psys2-worlds 6b63b2ba (shard psys2)
 # license: CC0-1.0
 # script: none (hand-written); the shards are written by tools/values-core.mjs
 
-@k.values core.module name=k.values version=2 imports=k.named exports=scale exports=step exports=comparative exports=shape exports=direction exports=position exports=set_word exports=number exports=shade exports=reply exports=fill exports=coloured core.source="hand-core 1"
+@k.values core.module name=k.values version=2 imports=k.named exports=scale exports=step exports=comparative exports=direction exports=position exports=set_word exports=number exports=shade exports=reply exports=fill exports=coloured core.source="hand-core 1"
 
 # Colour names live in k.colours (KR2, reviewer 14:45): k.colours.colour (name, rgb, family, basic=true on the 11 basic
 # terms); k.values.colour is gone.
@@ -38,9 +38,6 @@
 
 # A shape name. `solid=true`: a shape with depth (cube, sphere); otherwise flat. What a shape has (sides, corners)
 # and which things have it are not here.
-@k.values.shape core.type of=k.values.shape shared=true closed=true core.source="hand-core 1"
-@k.values.shape.name core.slot of=k.values.shape key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
-@k.values.shape.solid core.slot of=k.values.shape key=solid kind=boolean core.source="hand-core 1"
 
 # A direction of movement. `axis` groups directions that are answers to the same question; `opposite` names the
 # contrary one. `x` and `y` are the step in a picture, x to the right and y downwards as in k.objects (up: x=0
@@ -78,7 +75,6 @@
 @k.values.number.value_about core.slot of=k.values.number key=value_about excludes=value kind=number core.source="hand-core 1"
 
 # Words for the types of this world.
-@k.values.word.shape core.word text=shape text=shapes means=k.values.shape core.source="hand-core 1"
 @k.values.word.direction core.word text=direction text=directions means=k.values.direction core.source="hand-core 1"
 @k.values.word.position core.word text=position text=positions means=k.values.position core.source="hand-core 1"
 @k.values.word.number core.word text=number text=numbers means=k.values.number core.source="hand-core 1"
@@ -114,7 +110,6 @@
 @k.values.word.key.comparative.scale core.word text=scale means=k.values.comparative.scale core.source="hand-core 1"
 @k.values.word.key.comparative.way core.word text=way means=k.values.comparative.way core.source="hand-core 1"
 @k.values.word.key.comparative.degree core.word text=degree means=k.values.comparative.degree core.source="hand-core 1"
-@k.values.word.key.shape.solid core.word text=solid means=k.values.shape.solid core.source="hand-core 1"
 @k.values.word.key.direction.axis core.word text=axis means=k.values.direction.axis core.source="hand-core 1"
 @k.values.word.key.direction.x core.word text=x means=k.values.direction.x core.source="hand-core 1"
 @k.values.word.key.direction.y core.word text=y means=k.values.direction.y core.source="hand-core 1"

@@ -466,6 +466,77 @@
     word=forward
     word=backward
 
+@phrase.acts.possession.set core.phrase
+    frame=false
+    doc="Verbs whose effect on what the doer holds is set (k.actions holds / money, K5), in every form."
+    alt=hold
+    alt=holds
+    alt=held
+    alt=have
+    alt=has
+    alt=had
+
+@phrase.acts.possession.add core.phrase
+    frame=false
+    doc="Verbs whose effect on what the doer holds is add (k.actions holds / money, K5), in every form."
+    alt=buy
+    alt=buys
+    alt=bought
+    alt=win
+    alt=wins
+    alt=won
+    alt=receive
+    alt=receives
+    alt=received
+    alt=get
+    alt=gets
+    alt=got
+    alt=get_back
+    alt=gets_back
+    alt=got_back
+    alt=find
+    alt=finds
+    alt=found
+
+@phrase.acts.possession.remove core.phrase
+    frame=false
+    doc="Verbs whose effect on what the doer holds is remove (k.actions holds / money, K5), in every form."
+    alt=eat
+    alt=eats
+    alt=ate
+    alt=eaten
+    alt=sell
+    alt=sells
+    alt=sold
+    alt=spend
+    alt=spends
+    alt=spent
+    alt=pay
+    alt=pays
+    alt=paid
+    alt=break
+    alt=breaks
+    alt=broke
+    alt=broken
+    alt=lose
+    alt=loses
+    alt=lost
+    alt=fly_away
+    alt=flies_away
+    alt=flew_away
+    alt=flown_away
+    alt=leave
+    alt=leaves
+    alt=left
+
+@phrase.acts.possession.give core.phrase
+    frame=false
+    doc="Verbs whose effect on what the doer holds is give (k.actions holds / money, K5), in every form."
+    alt=give
+    alt=gives
+    alt=gave
+    alt=given
+
 @lex.acts.layout core.lexicon
     class=trigger
     doc="Words of an arrangement: the layouts of k.layouts and the adverbs of a line-up."

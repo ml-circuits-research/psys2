@@ -9,7 +9,7 @@
  */
 export const CATALOG_PIN = Object.freeze({
   repo: 'https://github.com/ml-circuits-research/sop-knowledge-worlds',
-  commit: '7ecf82db79603dc624885693c697cf9389e9219d',   // 2026-11-15 the catalog head (w.person, k.layouts outlines + shape frames, w.lang.ro reply/request templates, w.lang.en.fn, k.colours the one home of colour names, K3-K7, K10, w.list v4, sensitivity key): every generated file names it
+  commit: '085bc0dab1f6f2817815ca789a36259b3c01ae4e',   // 2026-11-15 the catalog head (w.lang.ro.fn, frames and dictionary as data, plural categories, words shards, k.kinds arrangement; before: w.person, k.layouts outlines + shape frames, w.lang.ro reply/request templates, w.lang.en.fn, k.colours the one home of colour names, K3-K7, K10, w.list v4, sensitivity key): every generated file names it
   path: 'docs/worlds',
 });
 

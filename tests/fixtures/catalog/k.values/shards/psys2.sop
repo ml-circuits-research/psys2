@@ -1,4 +1,4 @@
-# k.values/shards/psys2: from the PSys2 drawing world and lexicon: 3 shape names (polygon, quadrilateral, rhombus), 6 shade words with how they change a colour, and the words for yes (26) and no (16).
+# k.values/shards/psys2: from the PSys2 drawing world and lexicon: 6 shade words with how they change a colour, and the words for yes (26) and no (16).
 # sources: psys2-worlds 6b63b2ba (the hand-written knowledge of the PSys2 tab worlds, the project's own data)
 # license: CC0-1.0
 # script: tools/import/psys2.mjs
@@ -15,6 +15,3 @@
 @k.values.psys2.reply.no k.values.reply name=no opposite=yes core.source="psys2-worlds 6b63b2ba"
 @k.values.psys2.word.reply.yes core.word text="that is right" text="that is correct" text="sure thing" text="yes please" text="of course" text="you bet" text="for sure" text=yeah text=yep text=yup text=yea text=yah text=ya text=sure text=ok text=okay text=please text=correct text=right text=absolutely text=definitely text=certainly text=affirmative text=exactly text=indeed means=yes of=k.values.reply.name core.source="psys2-worlds 6b63b2ba"
 @k.values.psys2.word.reply.no core.word text="no thank you" text="of course not" text="not at all" text="nuh uh" text="no thanks" text="no way" text="not really" text="absolutely not" text="definitely not" text="certainly not" text=nope text=nah text=nay text=naw text=negative means=no of=k.values.reply.name core.source="psys2-worlds 6b63b2ba"
-@k.values.psys2.shape.polygon k.values.shape name=polygon core.source="psys2-worlds 6b63b2ba"
-@k.values.psys2.shape.quadrilateral k.values.shape name=quadrilateral core.source="psys2-worlds 6b63b2ba"
-@k.values.psys2.shape.rhombus k.values.shape name=rhombus core.source="psys2-worlds 6b63b2ba"

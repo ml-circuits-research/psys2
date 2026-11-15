@@ -4832,11 +4832,6 @@
 @phrase.lang.story.set core.phrase
     frame=false
     doc="A story verb that states how many an owner holds (storyState effect set): Tom has 15 apples; Ana is holding 4 pears."
-    alt=has
-    alt=have
-    alt=had
-    alt=holds
-    alt=hold
     alt=is_holding
     alt=was_holding
     alt=owns
@@ -4848,47 +4843,22 @@
 @phrase.lang.story.add core.phrase
     frame=false
     doc="A story verb that adds to what an owner holds (storyState effect add): Mia found a coin; Ben bought a pencil."
-    alt=finds
-    alt=found
-    alt=gets
-    alt=got
-    alt=receives
-    alt=received
-    alt=buys
-    alt=bought
     alt=picks
     alt=picked
     alt=collects
     alt=collected
     alt=gathers
     alt=gathered
-    alt=wins
-    alt=won
     alt=earns
     alt=earned
 
 @phrase.lang.story.remove core.phrase
     frame=false
     doc="A story verb that takes from what an owner holds (storyState effect remove): Ben lost 3 marbles; Tom ate 2 apples; One flies away."
-    alt=loses
-    alt=lost
-    alt=eats
-    alt=ate
-    alt=eaten
-    alt=breaks
-    alt=broke
-    alt=broken
-    alt=spends
-    alt=spent
-    alt=sells
-    alt=sold
     alt=drops
     alt=dropped
     alt=uses
     alt=used
-    alt=flies_away
-    alt=fly_away
-    alt=flew_away
     alt=runs_away
     alt=ran_away
     alt=escapes
@@ -4897,10 +4867,6 @@
 @phrase.lang.story.give core.phrase
     frame=false
     doc="A story verb that moves an amount from an owner to another (storyState effect give): He gives 12 to Ana; Ana gave Tom an apple."
-    alt=gives
-    alt=give
-    alt=gave
-    alt=given
     alt=hands
     alt=handed
     alt=passes
