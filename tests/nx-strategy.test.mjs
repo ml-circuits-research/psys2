@@ -118,15 +118,15 @@ test('with the rules formalizer chosen no model is used, whatever the strategy',
 const fakeMeta = { ops: ['none', 'request:tasks.add'], labels: ['O'], trained_worlds: ['kids.tasks'] };
 const fakeRuntime = (nx = null) => ({ rankFull: async () => ({ worlds: [], nx }), segment: async () => ({ enc: { offsets: [] }, probs: [] }) });
 
-test('the untrained-world rule: user.profile is not a trained world, its rules read the text', () => {
+test('the untrained-world rule: art.draw is not a trained world, its rules read the text', () => {   // ported from user.profile (ADR-010)
   const nx = createNxStrategy({ runtime: fakeRuntime(), meta: fakeMeta });
   nx.attach(engine);
   const s = engine.createSession({ language: 'en' });
   const o = { worlds: engine.set, session: s.isession, context: s.context(), router: engine.router };
-  assert.equal(nx.untrainedReads('I work at Acme', o), true);
+  assert.equal(nx.untrainedReads('draw a red house', o), true);
   assert.equal(nx.untrainedReads(GOOD, o), false);
   // the pattern index never offers a pattern of an untrained world as a candidate
-  assert.ok(![...nx.model.trained].includes('user.profile'));
+  assert.ok(![...nx.model.trained].includes('art.draw'));
 });
 
 test('a model without the heads reads nothing (the rules keep their answer)', async () => {

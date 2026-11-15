@@ -15,7 +15,7 @@ import { precompile as precompileRules, registerClauseStarters } from '../formal
 import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=de571d2078';
 import { validateWorldSet } from '../worlds/validate.mjs?v=57ef1b4dc3';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=fc8700c1e7';
-import { createInterpreter } from '../interpreter/index.mjs?v=511d90e7aa';
+import { createInterpreter } from '../interpreter/index.mjs?v=2789b243e5';
 import { createReasoner } from '../reasoner/index.mjs?v=f0150c4467';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=6a17763e99';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=be82752df3';
@@ -35,10 +35,10 @@ import { checkValues } from './value-check.mjs?v=862bd4d857';
 import { attachValues } from '../knowledge/values.mjs?v=a137742733';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=64050d59a4';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=cf4f1fcab5';
-import { Discourse } from './discourse.mjs?v=f84b60689d';
+import { Discourse } from './discourse.mjs?v=a7dd70b8f3';
 import { Dialogue } from './dialogue.mjs?v=52f8785d70';
 import { turnSteps } from './steps.mjs?v=44af51b084';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=f82274318e';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=ecd2c8aee6';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=322b3a41cd';
 import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=430a4c0a23';
 import { proposeByTypes } from './typed-reader.mjs?v=7812db5b24';
@@ -50,7 +50,7 @@ import { loadMetaWorlds } from './meta-worlds.mjs?v=286870b7bc';
 import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=b47710756a';
 import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=55a86b717e';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
-import { panel } from '../astra/where.mjs?v=970c7b26f1';
+import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
 import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=113c6084e1';
 
@@ -1483,6 +1483,11 @@ export class DialogSession {
         const fbMode = translator.fallbackMode?.() === 'fallback';   // M4: `_send` chose the English among the candidates (`override`); without one the language pack's rules translate (translators off, soft limit, nothing translated)
         translation = override?.translation ?? await perf.time('translate', () => guard.abortable((fbMode ? translator.rules ?? translator : translator).translate(heard, { from: lang, to: 'en' }), 'translate'));
         english = override?.english ?? textOf(translation) ?? text;
+        // a machine translator that returns the source text unchanged translated nothing: the language pack's rules translator is asked once (RP5)
+        if (!override && translator.rules && translator.rules !== translator && english.trim().toLowerCase() === String(heard).trim().toLowerCase()) {
+          const again = await perf.time('translate', () => guard.abortable(translator.rules.translate(heard, { from: lang, to: 'en' }), 'translate'));
+          if (textOf(again)?.trim()) { translation = again; english = textOf(again); }
+        }
         // INVARIANT (every turn gets a reply): a translator that cannot map a sentence ("negation could not be mapped") returns an empty text; the message then stays as typed, so that the reading is poor and says so (or the browser Translator is asked)
         if (!english.trim() && text.trim()) { english = text; translation = { ...(translation ?? {}), text, alignment: [], unknown: [], notes: [...(translation?.notes ?? []), 'the rules translation was empty'], confidence: 0 }; }
       } else lang = 'en';

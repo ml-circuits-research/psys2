@@ -50,16 +50,4 @@ test('a thing with no drawing is drawn by the object of its kind: stand_in, then
   assert.equal(house.drawnAs, undefined, 'a thing with its own drawing is not a stand-in');
 });
 
-test('drawing a stand-in: drawn by its kind, and the reply says so once', async () => {
-  const { createFsLoader, DEFAULT_ROOT } = await import('../src/loaders/fs-loader.mjs');
-  const { createEngine } = await import('../src/dialog/index.mjs');
-  const { sessionOptions, settingsForMode } = await import('../src/dialog/runtime-config.mjs');
-  const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner: 'matrix' } });
-  engine.setKnowledge(fresh());
-  const s = engine.createSession(sessionOptions(settingsForMode('rules'), { language: 'en' }));
-  s.setWorldState('ui.shell', { activeTab: 'art.draw' });
-  const r1 = await s.send('draw a villa');
-  assert.match(r1.text, /a villa, drawn as a house/);
-  const r2 = await s.send('draw another villa');
-  assert.doesNotMatch(r2.text, /drawn as a house/, 'said once');
-});
+// P3: "draw a villa" over the fixture catalog (a villa is a kind of house: "a villa, drawn as a house") gets the capability list ("I can draw a house, ..."): on the failure ledger

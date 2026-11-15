@@ -39,7 +39,8 @@ export const FAMILIES = ['reference', 'ellipsis', 'clarification', 'correction',
 const EXPECT_KEYS = new Set(['state', 'forbid_state', 'answer', 'answer_any', 'forbid_answer', 'effects', 'status', 'none']);
 
 export function loadDialogues(file) {
-  return readFileSync(file, 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l));
+  // a dialogue with `retired` (ADR-010 tab cut, the w.face avatar) is kept in the file for the record and is never run or validated
+  return readFileSync(file, 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l)).filter((d) => !d.retired);
 }
 
 // ---- validation (mechanical, no pipeline): schema + every state expectation refers to a real field of a real world state --------------

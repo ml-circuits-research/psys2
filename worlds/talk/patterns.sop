@@ -109,7 +109,7 @@
     doc="Frame: the order of months, seasons, days or planets. A sentence and a line with points."
 
 @pat.talk.after core.pattern
-    canonical="What comes after March?"
+    example="What comes after March?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.after] {x:words(2)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.neighbour arg.x=\"{x}\" arg.dir=after"
     kind=question
@@ -120,7 +120,7 @@
     doc="Frame: what comes after X on a line of months, seasons, days or planets."
 
 @pat.talk.before core.pattern
-    canonical="What comes before Friday?"
+    example="What comes before Friday?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.before] {x:words(2)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.neighbour arg.x=\"{x}\" arg.dir=before"
     kind=question
@@ -238,7 +238,6 @@
     doc="Follow-up without a subject: is the current topic bigger than another thing."
 
 @pat.talk.it.compare.bare core.pattern
-    canonical="Bigger than Earth?"
     match="[$lang.connective]? [$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.compar] than [$lang.know.det]? {b:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.compare arg.b=\"{b}\""
     kind=question
@@ -246,6 +245,7 @@
     tabClaim=true
     priority=11
     example="Bigger than Mars?"
+    example="Bigger than Earth?"
     doc="Fragment without a subject: is the current topic bigger than another thing (the same as the question with it)."
 
 @pat.talk.change.colour core.pattern
@@ -476,7 +476,7 @@
     doc="Frame: is X a Y. Yes or no from the categories of X in the catalog (the kind slots of its records, their types, the is-a of its senses)."
 
 @pat.talk.count.in core.pattern
-    canonical="How many minutes are in an hour?"
+    example="How many minutes are in an hour?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.know.count] {p:words(2)} [$lang.talk.inunit] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.count arg.o=\"{o}\" arg.p=\"{p}\""
     kind=question

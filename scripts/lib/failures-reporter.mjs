@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // node:test reporter for scripts/run-tests.mjs: the usual spec output, plus one JSON line per failed test (leaf tests only) appended to the file named by
-// PSYS2_FAILURES_OUT, so that the runner can split the failures into known (tests/known-failures.json) and new ones.
+// PSYS2_FAILURES_OUT, so that the runner can list every failure at the end of the run (no failure is forgiven: P3, 2026-11-15).
 import { appendFileSync } from 'node:fs';
 import { basename } from 'node:path';
 import { Readable } from 'node:stream';
 import { spec } from 'node:test/reporters';
 
-export default async function* knownFailuresReporter(source) {
+export default async function* failuresReporter(source) {
   const out = process.env.PSYS2_FAILURES_OUT;
   async function* tap() {
     for await (const ev of source) {

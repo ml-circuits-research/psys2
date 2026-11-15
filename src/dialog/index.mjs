@@ -1483,6 +1483,11 @@ export class DialogSession {
         const fbMode = translator.fallbackMode?.() === 'fallback';   // M4: `_send` chose the English among the candidates (`override`); without one the language pack's rules translate (translators off, soft limit, nothing translated)
         translation = override?.translation ?? await perf.time('translate', () => guard.abortable((fbMode ? translator.rules ?? translator : translator).translate(heard, { from: lang, to: 'en' }), 'translate'));
         english = override?.english ?? textOf(translation) ?? text;
+        // a machine translator that returns the source text unchanged translated nothing: the language pack's rules translator is asked once (RP5)
+        if (!override && translator.rules && translator.rules !== translator && english.trim().toLowerCase() === String(heard).trim().toLowerCase()) {
+          const again = await perf.time('translate', () => guard.abortable(translator.rules.translate(heard, { from: lang, to: 'en' }), 'translate'));
+          if (textOf(again)?.trim()) { translation = again; english = textOf(again); }
+        }
         // INVARIANT (every turn gets a reply): a translator that cannot map a sentence ("negation could not be mapped") returns an empty text; the message then stays as typed, so that the reading is poor and says so (or the browser Translator is asked)
         if (!english.trim() && text.trim()) { english = text; translation = { ...(translation ?? {}), text, alignment: [], unknown: [], notes: [...(translation?.notes ?? []), 'the rules translation was empty'], confidence: 0 }; }
       } else lang = 'en';

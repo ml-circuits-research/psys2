@@ -256,7 +256,7 @@
     emit="@{_} core.request action=tasks.pending arg.list=to-do"
     kind=request
     priority=10
-    example="What do I still have to do?"
+    canonical="What do I still have to do?"
 
 @pat.kids.tasks.pend2 core.pattern
     match="what do i [still]? [have|need] to buy"
@@ -273,7 +273,6 @@
     example="What is still left on my shopping list?"
 
 @pat.kids.tasks.pend4 core.pattern
-    canonical="What is left to do?"
     match="what is [still]? left to do"
     emit="@{_} core.request action=tasks.pending arg.list=to-do"
     kind=request
@@ -1245,7 +1244,6 @@
     example="Remaining tasks?"
 
 @pat.kids.tasks.sw.pending.todo core.pattern
-    canonical="What's still open for me?"
     match="[$kids.tasks.g1_i_need_to_find_out]? [$kids.tasks.g1_i_need_to_find_out]? [$kids.tasks.g64_what_else] [things|items|tasks|chores|jobs|errands|stuff]? [$kids.tasks.g60_am_i_supposed_to]? [still|else|yet|even|now|next|also|left]? [$kids.tasks.g66_have_got]? [still|else|yet|even|now|next|also|left]? [on_my_to_do_list|on_the_to_do_list|to_take_care_of|on_my_to_do|to_do_next|to_get_done|to_work_on|left_to_do|on_my_plate|on_my_list|on_the_list|on_my_agenda|on_my_schedule|on_the_agenda|to_do|to_finish|to_complete|to_handle|to_fix|to_tackle|to_start|not_done|todo|left|open|pending|undone|unfinished|outstanding|remaining] [$lang.tail.filler|so_far|this_week|after_that|still|else|even|next|also|left]? [$lang.tail.filler|$kids.tasks.g3_thx_a_lot]? [$lang.tail.filler|$kids.tasks.g8_exactly]?"
     emit="@{_} core.request action=tasks.pending arg.list=to-do"
     kind=request

@@ -70,7 +70,8 @@ test('parallel and opposite arrows between the same two shapes are spread apart'
 // DIAG3b: the tree templates with the user's own shapes around them (the probe of the reviewer's browser check).
 const treeCases = [
   ['tree picture + shapes', await session(['draw a red circle', 'make a tree', 'add a box', 'add a box', 'draw a circle', 'connect circle1 and rectangle1', 'connect c1 to r1'])],
-  ['hierarchy (tree like shape) + shapes', await session(['draw a red circle', 'create a diagram', 'add to the diagram a tree liek shape', 'add a box', 'add a box', 'draw a circle', 'connect circle1 and rectangle1', 'connect all elements'])],
+  // ported: "create a diagram" draws a random diagram since spec 14 section 9 (random seed), so the probe left it out to stay the same every run
+  ['hierarchy (tree like shape) + shapes', await session(['draw a red circle', 'add to the diagram a tree liek shape', 'add a box', 'add a box', 'draw a circle', 'connect circle1 and rectangle1', 'connect all elements'])],
 ];
 for (const c of treeCases) diagrams.push(c);
 test('tree templates: no two attachment points of one shape closer than 10 px', () => {

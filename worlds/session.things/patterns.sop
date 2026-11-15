@@ -1,4 +1,5 @@
 @pat.session.things.kindof core.pattern
+    canonical="Remember that a waiter is a kind of person."
     match="[$lang.lead.polite]? [remember|note]? [that]? [a|an|the]? {a:words(3)} [is|are] [a|an]? [kind|type|sort] of [a|an|the]? {b:words(3)}"
     emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
     kind=request
@@ -76,6 +77,7 @@
     doc="The session as the content of a view: the whole selection of things (and, for a document, its topics, games and places) goes into the view named, by the one operation things.show."
 
 @pat.session.things.select.did core.pattern
+    canonical="Make a chart of what I drew."
     match="[$lang.lead.polite|$lang.lead.filler]? [make|create|build|draw|give_me|show_me|show|put_together|write|start|do|generate|prepare]? [me]? [a|an|the]? [nice|new|simple|quick|short|little]? {to:lex.session.things.views} [of|about|from|on|for|with|using|based_on] [what|everything|all_the_things|all|the_things|things|stuff] [that]? [i|we|you] {v:lex.session.things.did} [so_far]?"
     emit="@{_} core.request action=things.show arg.to=\"{to}\" arg.thing=\"what I {v}\""
     kind=request

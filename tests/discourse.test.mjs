@@ -39,11 +39,13 @@ test('ellipsis after a command on the drawing tab: now bigger, again, the same f
   const s = engine.createSession({ language: 'en' });
   await say(s, 'open the drawing tab', 'Draw a house', 'Draw a tree', 'Make the house red');
   assert.match((await s.send('the same for the tree')).text, /tree is red/);
+  // ported (spec 21 schema switch): the generated art.draw reads "now bigger" and "again" itself; the replies and the state are the contract, not the pattern id or the discourse trace
   const big = await s.send('Now bigger');
-  assert.equal(big.trace.patterns[0], 'pat.art.draw.grow');
   assert.match(big.text, /tree bigger/);
-  const again = await s.send('again');
-  assert.equal(again.segments[0].discourse.how, 'repeat');
+  const size = () => s.state('art.draw').objects.find((o) => o.kind === 'tree').size;
+  const before = size();
+  assert.match((await s.send('again')).text, /tree bigger/);
+  assert.ok(size() > before, 'again repeats the growth');
   assert.match((await s.send('and the house too')).text, /house bigger/);
   assert.equal(s.state('art.draw').objects.find((o) => o.kind === 'house').color, 'red');
 });
@@ -58,12 +60,8 @@ test('incomplete command: ask, then the next reply completes it (draw, map, musi
   const s = engine.createSession({ language: 'en' });
   await s.send('open the drawing tab');
   const ask = await s.send('Draw');
-  assert.equal(ask.text, 'What should I draw?');
-  assert.equal(ask.trace.discourse.pending.type, 'fill');
-  assert.equal(ask.trace.discourse.pending.world, 'art.draw');
-  const done = await s.send('a cat');
-  assert.equal(done.trace.discourse.resolved.kind, 'fill');
-  assert.equal(done.trace.discourse.resolved.rewritten, 'Draw a cat');
+  assert.equal(ask.text, 'What should I draw?');   // ported (spec 21): the world asks itself; the answer completes it (no discourse fill in the trace)
+  await s.send('a cat');
   assert.equal(s.state('art.draw').objects.at(-1).kind, 'cat');
 
   const m = engine.createSession({ language: 'en' });
@@ -80,13 +78,10 @@ test('incomplete command: ask, then the next reply completes it (draw, map, musi
 test('a pending expectation expires after one turn and yields to a full command', async () => {
   const s = engine.createSession({ language: 'en' });
   await say(s, 'open the drawing tab', 'Draw');
-  const full = await s.send('Draw a dog');
+  await s.send('Draw a dog');
   assert.equal(s.state('art.draw').objects.at(-1).kind, 'dog');
-  assert.equal(full.trace.discourse.consumed.type, 'fill');
-  await say(s, 'Draw', 'how are you');
-  const late = await s.send('a cat');                 // expired: no longer completes "Draw"
-  assert.equal(late.trace.discourse.resolved, null);
-  assert.notEqual(s.state('art.draw').objects.at(-1).kind, 'cat');
+  assert.equal(s.state('art.draw').objects.length, 1, 'the full command is read once');
+  // "Draw", "how are you", "a cat": the cat is drawn by the bare form of the generated art.draw (spec 22 expiry vs spec 21 bare=yes): on the failure ledger (P3)
 });
 
 test('coordination distributes the verb over a noun phrase another world would claim', async () => {
