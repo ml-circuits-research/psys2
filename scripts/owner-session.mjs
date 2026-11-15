@@ -112,7 +112,8 @@ async function main() {
     const after = s.state();
     // `setup`: the turn is judged on its own result; then the session goes back to before it and the owner's state is built by plain English requests (independent of any random
     // draw or catalog version: the later turns name the owner's things), unjudged
-    if (r.setup) { s.restore(setupSnap); for (const e of r.setup) { try { await s.send(e, sendOptions(settings, { lang: 'en', language: 'en' }, createBudget())); } catch { /* the next lines say what is missing */ } } }
+    // the fixture is built by the readers (`request: false`): it is the owner's state, not a measured turn ("a hexagon called summary" needs names in the request reader, Q42)
+    if (r.setup) { s.restore(setupSnap); for (const e of r.setup) { try { await s.send(e, { ...sendOptions(settings, { lang: 'en', language: 'en' }, createBudget()), request: false }); } catch { /* the next lines say what is missing */ } } }
     if (process.env.OWNER_STATE && String(r.turn ?? r.id) === process.env.OWNER_STATE) console.error(JSON.stringify(after[TAB_WORLD[r.tab]] ?? null).slice(0, 6000));
     const changed = JSON.stringify(visibleState(before)) !== JSON.stringify(visibleState(after));
     const content = contentChanged(Object.fromEntries(Object.entries(before).map(([k, v]) => [k, JSON.stringify(v)])), after);

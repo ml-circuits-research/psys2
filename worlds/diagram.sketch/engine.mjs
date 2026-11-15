@@ -871,7 +871,7 @@ export function referents(ctx) {
   const s = ensure(ctx);
   const salient = new Set(s.last ?? []);
   return s.shapes.filter((x) => x.layer !== 'background').map((x) => ({
-    id: x.name, kind: x.shape, noun: x.shape, words: [x.shape, x.name.toLowerCase()],
+    id: x.name, kind: x.shape, name: x.name, noun: x.shape, words: [x.shape, x.name.toLowerCase()],
     attrs: { color: x.color, size: x.size, x: x.x, y: x.y }, salient: salient.has(x.name), sig: JSON.stringify([x.name, x.shape, x.x, x.y, x.size, x.color, x.label]),
   }));
 }
@@ -957,6 +957,47 @@ export function requestResult(ctx, { before = null } = {}) {
 }
 
 /**
+ * AN ACT ON SHAPES THAT ARE THERE (spec 28 section 12; request.sop `psys2.op act=place|change|remove op=requestAct`): the door resolved the shapes (`a.ids`: their names) and read
+ * the roles; the engine carries them out with its own commands (move, set, delete), one step. `a`: { act, ids, place: { value, relation, ids }, attribute, value, size: { value, step } }.
+ */
+const SPOT = { centre: 'center', center: 'center', top: 'top', bottom: 'bottom', left: 'left', right: 'right', top_left: 'topLeft', top_right: 'topRight', bottom_left: 'bottomLeft', bottom_right: 'bottomRight', corner: 'bottomLeft' };
+const ENGINE_SIZE = { tiny: 'tiny', small: 'small', medium: 'medium', default: 'medium', big: 'large', large: 'large', huge: 'huge' };
+export function requestAct(ctx, a = {}) {
+  if (!K) return NOT_READY();
+  const s = ensure(ctx);
+  const names = (a.ids ?? []).filter((n) => s.shapes.some((x) => x.name === n));
+  if (!names.length) return no('There is no such shape in the diagram.', 'missing');
+  let args = null;
+  if (a.act === 'remove') args = { action: 'delete', target: names };
+  else if (a.act === 'place') {
+    const p = String(a.place?.value ?? '');
+    const anchor = (a.place?.ids ?? []).find((n) => s.shapes.some((x) => x.name === n));
+    if (['up', 'down', 'left', 'right'].includes(p) && a.place?.relation === 'direction') args = { action: 'move', target: names, direction: p };
+    else if (SPOT[p]) args = { action: 'move', target: names, region: SPOT[p] };
+    else if (anchor) args = { action: 'move', target: names, position: 'rightOf', anchor };
+    else return no(`Where should ${names.join(' and ')} go? For example "up", "to the left" or "to the middle".`, 'missing');
+  } else if (a.act === 'change') {
+    if (a.attribute === 'colour' && a.value) args = { action: 'set', target: names, color: String(a.value).toLowerCase() };
+    else if (a.size?.value && ENGINE_SIZE[a.size.value]) args = { action: 'set', target: names, size: ENGINE_SIZE[a.size.value] };
+    else if (a.size?.step) args = { action: 'resize', target: names, scale: a.size.step === 'up' ? 1.5 : 0.67 };
+    else return no(`What should change about ${names.join(' and ')}? A colour or a size.`, 'missing');
+  } else return no(`I cannot ${a.act} shapes yet.`, 'unsupported');
+  const at0 = new Map(s.shapes.map((x) => [x.name, `${x.x},${x.y}`]));
+  const r = execute(ctx, s, [{ id: 'ra1', type: 'command', args }], { place: false });
+  if (r.status === 'supported') s.last = names.filter((n) => s.shapes.some((x) => x.name === n));
+  // a move that left every shape where it was: it is already at that edge (said plainly, not "nothing changed")
+  if (r.status === 'supported' && args.action === 'move' && names.every((n) => at0.get(n) === (() => { const x = s.shapes.find((q) => q.name === n); return x ? `${x.x},${x.y}` : null; })())) {
+    const edge = { up: 'up', down: 'down', left: 'on the left side', right: 'on the right side' }[args.direction];   // plain words that survive the translation of the reply
+    return ok(`${names.join(' and ')} ${names.length > 1 ? 'are' : 'is'} already ${edge ?? 'there'}.`, { names, plain: true });
+  }
+  if (r.status === 'supported' && names.length > 2 && args.action !== 'move') {   // many shapes: one sentence, not one per shape
+    const what = args.action === 'delete' ? `I deleted ${names.length} shapes.` : args.color ? `I made ${names.length} shapes ${args.color}.` : `I changed the size of ${names.length} shapes.`;
+    return { ...r, value: what, note: what, names: [] };
+  }
+  return r.status === 'supported' ? { ...r, names } : r;
+}
+
+/**
  * ARROWS FOR THE NODES THAT HAVE NONE ("add arrows", a request whose target is the link): every node with no arrow is joined to the node before it in reading order (top to bottom,
  * left to right), the first one to the node after it. One undo step. Returns { status, value }.
  */
@@ -997,6 +1038,22 @@ export function planRequest(ctx, goal = {}) {
   const rnd = rngOf(goal.seed ?? Math.floor(Math.random() * 2 ** 31));
   const [lo, hi] = goal.range ?? [5, 9];
   const n = Math.max(1, lo + Math.floor(rnd() * (hi - lo + 1)));
+  // THINGS OF KINDS, NOT A DIAGRAM ("draw three circles"): the shapes asked, with no topic and no arrows (a diagram of the knowledge is a request for a diagram)
+  if (goal.plan?.roles?.mode === 'kind' && !goal.arrows && !goal.topic) {
+    const not = new Set(goal.not ?? []);
+    const kinds = (goal.kinds?.length ? goal.kinds : ['circle']).filter((k) => !not.has(k));
+    if (!kinds.length) return no('Every shape I could draw was ruled out.', 'unsupported');
+    const list = Array.from({ length: n }, (_, i) => ({ id: `pk${i}`, type: 'command', args: { action: 'create', shape: kinds[i % kinds.length] } }));
+    const res = execute(ctx, s, list, { place: false });
+    if (res.status !== 'supported') return res;
+    const made = (s.last ?? []).slice();
+    if (made.length > 1) { try { arrangeLayout(ctx, { text: `arrange ${made.join(', ')} as a ${made.length <= 6 ? 'row' : 'grid'}` }); } catch { /* the engine's places stay */ } }
+    s.last = made;
+    const cnt = (k) => list.filter((x) => x.args.shape === k).length;
+    const shown = [...new Set(list.map((x) => x.args.shape))].map((k) => (cnt(k) === 1 ? `${/^[aeiou]/.test(k) ? 'an' : 'a'} ${k}` : `${cnt(k)} ${k}s`));
+    open(ctx);
+    return ok(`I drew ${shown.length > 1 ? `${shown.slice(0, -1).join(', ')} and ${shown.at(-1)}` : shown[0]}.`, { plain: true });
+  }
   const world = DG.diagramWorldOf(DL, ctx.knowledge);
   const assumed = [];
   // the knowledge's diagram: about the topic, else sampled; the closest in size to n
@@ -1061,5 +1118,5 @@ export function planRequest(ctx, goal = {}) {
   // short plain sentences with a subject (they survive the translation of the reply, reviewer 2026-11-15 13:10 item 3)
   const said = `I drew a diagram with ${nodes.length} node${nodes.length === 1 ? '' : 's'}${edges.length ? ` and ${edges.length} arrow${edges.length === 1 ? '' : 's'}` : ''}.${got?.topic ? ` It is about ${got.topic}.` : ''} The nodes are ${kinds.map((k) => `${cnt(k)} ${cnt(k) === 1 ? k : `${k}s`}`).join(' and ')}.`;
   open(ctx);
-  return ok(said, { assumed });
+  return ok(said, { assumed, names: got?.topic ? [String(got.topic)] : [] });   // the topic is a label of the knowledge: a name in the reply, never translated word by word
 }

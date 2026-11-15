@@ -2410,7 +2410,10 @@ export function planRequest(ctx, goal = {}) {
     const texts = [];
     for (const [k, e] of items) {
       budget.tick('draw.plan');
-      const x = k === 'sky' && colour ? skyColour(ctx, colour) : k === 'sky' || Object.hasOwn(GROUND_WORDS, k) ? ground(ctx, { g: k }) : add(ctx, { kind: k, n: String(e.n), ...(sz ? { m1: sz } : {}), ...(colour ? { m2: String(colour).toLowerCase() } : {}), where: goal.placeWords ?? (goal.place && PLACE[goal.place] ? PLACE[goal.place] : '') });
+      const one = { kind: k, n: String(e.n), ...(sz ? { m1: sz } : {}), ...(colour ? { m2: String(colour).toLowerCase() } : {}) };
+      // the place in the user's words first ("in the sky": the board warns when a thing does not belong there), else the plan's place in the board's words ("in the corner")
+      let x = k === 'sky' && colour ? skyColour(ctx, colour) : k === 'sky' || Object.hasOwn(GROUND_WORDS, k) ? ground(ctx, { g: k }) : add(ctx, { ...one, where: goal.placeWords ?? (goal.place && PLACE[goal.place] ? PLACE[goal.place] : '') });
+      if (x?.status !== 'supported' && goal.placeWords && goal.place && PLACE[goal.place]) x = add(ctx, { ...one, where: PLACE[goal.place] });
       if (x?.status === 'supported') texts.push(String(x.value ?? '').trim()); else cannot.push({ key: 'kind', words: [...e.said][0], why: 'I cannot draw that yet' });
     }
     return texts.length ? ok(texts.join(' '), { cannot, plain: true }) : no('I could not draw any of it.', 'unsupported');
@@ -2441,6 +2444,90 @@ export function planRequest(ctx, goal = {}) {
   if (goal.plan?.roles?.mode === 'kind') { const xs = said.map(one1); return ok(`I drew ${xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}` : xs[0]}${at}.`, { cannot, plain: true }); }   // things of kinds, not a scene: what was drawn
   if (goal.target && items.size === 1 && items.has(drawnAs[goal.target] ?? goal.target)) return ok(`I drew ${said[0] === `1 ${kindName(main)}` ? `a ${size ? `${size} ` : ''}${kindName(main)}` : said[0]}${at}.`, { cannot, plain: true });   // a thing, not a scene of parts
   return ok(goal.target ? `I drew a ${size ? `${size} ` : ''}${targetName}${at}. It has ${list}.` : `I drew ${list}${at}.`, { cannot });
+}
+
+/**
+ * AN ACT ON THINGS OF THE PICTURE (spec 28 section 11; request.sop `psys2.op act=place|change|remove op=requestAct`): the door resolved the things (`a.ids`, the board's own object
+ * ids from its referents) and read the roles; the board only carries them out, as one undo step. `a`: { act, ids, place: { value, relation, ids }, attribute, value, size: { value,
+ * step } }. A role the board cannot take is said, never replaced by a guess.
+ */
+const STEP = 70;
+export function requestAct(ctx, a = {}) {
+  const s = ensure(ctx);
+  const objs = (a.ids ?? []).map((id) => byId(s, id)).filter(Boolean);
+  if (!objs.length) return no('There is nothing like that in the picture.', 'missing');
+  const one = objs.length === 1;
+  const byKind = new Map(); for (const o of objs) byKind.set(kindKey(o), [...(byKind.get(kindKey(o)) ?? []), o]);   // one phrase per kind: "the cat, the 8 flowers and the 2 trees"
+  const name = one ? sayObj(objs[0]) : andList([...byKind.values()].map((g) => (g.length === 1 ? sayObj(g[0]) : `the ${g.length} ${pluralOfKind(kindKey(g[0]), g.length)}`)));
+  if (a.act === 'remove') {
+    return oneStep(ctx, `removed ${name}`, () => {
+      remember(s, `removed ${name}`);
+      const gone = new Set(objs.map((o) => o.id));
+      s.objects = s.objects.filter((o) => !gone.has(o.id));
+      s.last = []; if (s.selected && gone.has(s.selected)) s.selected = null;
+      open(ctx);
+      return ok(`I removed ${name}.`);
+    });
+  }
+  if (a.act === 'place') {
+    const p = String(a.place?.value ?? '');
+    const dir = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[p];
+    const region = dir ? null : regionIn(p.split('_'));   // the board's own reader of region words (top, left, centre, sky, ground ...)
+    const anchor = (a.place?.ids ?? []).map((id) => byId(s, id)).find(Boolean);
+    const groundWord = !anchor && !dir && !region ? GROUND_WORDS[p] ?? null : null;   // "into the water", "onto the sand": the ground band of the board, made when there is none
+    if (groundWord) {
+      return oneStep(ctx, `moved ${name}`, () => {
+        remember(s, `moved ${name}`);
+        const added = s.ground !== groundWord;
+        if (added) { s.ground = groundWord; s.groundColor = GROUND_COLOR[groundWord]; }
+        for (const o of objs) { budget.tick('draw.act'); placeRegion(s, o, 'ground'); }
+        s.last = objs.map((o) => o.id);
+        open(ctx);
+        return ok(`I moved ${name} ${groundWord === 'sea' ? 'into the water' : groundWord === 'snow' ? 'onto the snow' : `onto the ${GROUND_NAME[groundWord]}`}.${added ? ` There was no ${GROUND_NAME[groundWord]}, so I added it to the ground.` : ''}`);
+      });
+    }
+    if (!dir && !region && !anchor) return no('Where should it go? You can say, for example, "move the tree to the left", "put the cat next to the house" or "move it to the top right corner".', 'missing');
+    return oneStep(ctx, `moved ${name}`, () => {
+      remember(s, `moved ${name}`);
+      for (const o of objs) {
+        budget.tick('draw.act');
+        if (dir) { o.x += dir[0] * STEP; o.y += dir[1] * STEP; clampIn(o); }
+        else if (anchor) placeRelative(s, o, a.place.relation === 'in' || a.place.relation === 'on' ? a.place.relation : 'next', [anchor]);
+        else placeRegion(s, o, region);
+      }
+      s.last = objs.map((o) => o.id);
+      open(ctx);
+      const where = dir ? { up: 'up', down: 'down', left: 'to the left side', right: 'to the right side' }[p] : anchor ? `${a.place.relation === 'in' ? 'into' : 'next to'} ${sayObj(anchor)}` : region === 'center' ? 'to the middle' : `to the ${region}`;
+      return ok(`I moved ${name} ${where}.`);
+    });
+  }
+  if (a.act === 'change') {
+    if (a.attribute === 'colour' && a.value) {
+      const color = colorFrom([String(a.value).toLowerCase()]);
+      if (!color) return no(`I do not know the colour "${a.value}".`);
+      return oneStep(ctx, `made ${name} ${a.value}`, () => {
+        remember(s, `made ${name} ${a.value}`);
+        for (const o of objs) o.color = color;
+        s.last = objs.map((o) => o.id);
+        open(ctx);
+        return ok(`I made ${name} ${a.value}.`);
+      });
+    }
+    if (a.size?.value || a.size?.step) {
+      const factor = a.size.value ? SIZE_WORDS[a.size.value === 'default' ? 'normal' : a.size.value] : null;
+      const by = a.size.step === 'up' ? 1.4 : a.size.step === 'down' ? 0.7 : null;
+      if (!factor && !by) return no(`I do not know the size "${a.size.value}". Try tiny, small, big or huge.`);
+      return oneStep(ctx, `resized ${name}`, () => {
+        remember(s, `resized ${name}`);
+        for (const o of objs) { const k = KINDS[kindKey(o)]; o.size = Math.round(factor ? (k?.size ?? o.size) * factor : o.size * by); if (onGround(kindKey(o))) clampIn(o); }
+        s.last = objs.map((o) => o.id);
+        open(ctx);
+        return ok(`${cap1(name)} ${one ? 'is' : 'are'} ${factor ? a.size.value : by > 1 ? 'bigger' : 'smaller'} now.`);
+      });
+    }
+    return no(`What should change about ${name}? The colour or the size?`, 'missing');
+  }
+  return no(`I cannot ${a.act} things in the picture yet.`, 'unsupported');
 }
 
 /**
