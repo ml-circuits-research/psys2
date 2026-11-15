@@ -19,7 +19,9 @@
  *                                                            replays every session (fresh session per session, turns in order). THE HEADLINE is the shipped mode (P1, reviewer 2026-11-15 01:15:
  *                                                            the page's settings, the encoder formalizer, the catalog at the pinned commit, seeded random choices) and writes
  *                                                            training/results/real-2026-11-15-<reasoner>.json; `--mode rules` is the named diagnostic (…-<reasoner>-rules.json)
- *   node scripts/real-set.mjs diff <result a> <result b>     the rows that differ (ms ignored): two runs of one tree must give none
+ *   node scripts/real-set.mjs diff <result a> <result b>     the rows that differ (ms and ticks ignored): two runs of one tree must give none
+ *   node scripts/real-set.mjs sites [<result>] [--top N]     the budget ticks per site (scripts/lib/tick-profile.mjs): top sites by total and by growth with the session
+ *                                                            (every run row carries `pos` and `tk: { total, sites }`, the file a top-level `ticks` profile; SCAN-PROFILE)
  *   node scripts/real-set.mjs ledger [--write]               closes the open ledger rows of removed worlds (ADR-010) and adds the failing real turns that have no open real row
  *   node scripts/real-set.mjs report                         the outcome table of both reasoners + the REAL failures grouped by cause (training/eval/real-failures-2026-11-15.{json,md})
  *   node scripts/real-set.mjs flag                           adds `real: true|false` to every row of training/eval/failures.jsonl by source (idempotent)
@@ -37,6 +39,7 @@ import { fileURLToPath } from 'node:url';
 import { causeOf } from './lib/failure-cause.mjs';
 import { isRealRow, realDialogueIds } from './lib/real-source.mjs';
 import { buildInfo, freshness } from './lib/measure-build.mjs';
+import { profileSites, formatProfile } from './lib/tick-profile.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SET = join(REPO, 'training/eval/real-2026-11-15.jsonl');
@@ -176,6 +179,7 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 
   const { createKnowledgeSource } = await import('../src/loaders/knowledge-source.mjs');
   const { createLayeredSource } = await import('../src/knowledge/bundled-source.mjs');
   const { pinnedCatalog } = await import('./lib/catalog-pin.mjs');
+  const { createBudget } = await import('../src/dialog/budget.mjs');
   const catalog = pinnedCatalog();
   const rules = createTranslator();
   // --bergamot <cacheDir>: the on-device model (Bergamot ro-en / en-ro in node) as the MT source, as the shipped chain has it (the browser Translator API does not exist in node); --voice: the Romanian grammar voice (src/translate/voice-ro.mjs)
@@ -215,7 +219,7 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 
     fake = RUN_EPOCH;
     const s = engine.createSession(sessionOptions(settings, { language: 'en' }));
     s.fastPath = settings.fastPath === true;   // as engine-worker.mjs applySettings
-    for (const r of turns) {
+    for (const [pos, r] of turns.entries()) {
       if (r.init) for (const [w, patch] of Object.entries(r.init)) s.setWorldState(w, patch);
       // a removed tab (ADR-010) is shown as the page shows it now: the Chat (Talk) tab; an old tab name is the tab's current id
       if (r.tab) s.setWorldState('ui.shell', { activeTab: REMOVED.tabs.has(r.tab) ? 'talk' : (TAB_ALIAS[r.tab] ?? r.tab) });
@@ -223,11 +227,13 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 
       const tabWorld = s.context?.().tabWorld ?? tabWorldOfRow(r);   // the tab the turn was typed in (read before the turn: a turn that switches tab and acts there is not "its own tab")
       const t0 = performance.now();
       let reply = null, error = null;
+      const tb = createBudget();   // the turn's budget (the default limits), passed in so its ticks per site are read on every outcome (SCAN-PROFILE)
       // the send options of docs/webchat/app.mjs (the page's turn), without the deadline (none in node: a measurement does not depend on the machine's load)
-      const opts = { mode: r.mode === 'voice' ? 'voice' : undefined, language: r.lang === 'ro' ? 'ro' : 'en', formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, worldAware: settings.worldAware ?? 'veto', fastPath: settings.fastPath === true, nx: settings.nxStrategy };
+      const opts = { mode: r.mode === 'voice' ? 'voice' : undefined, language: r.lang === 'ro' ? 'ro' : 'en', formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, worldAware: settings.worldAware ?? 'veto', fastPath: settings.fastPath === true, nx: settings.nxStrategy, budget: tb };
       try { reply = await s.send(r.text, opts); } catch (e) { error = e.message; }
       const ms = Math.round(performance.now() - t0);
-      if (!reply) { out.push({ id: r.id, outcome: 'not_understood', verdict: r.judge === 'state' ? 'wrong' : 'open', error, ms }); continue; }
+      const tk = { total: tb.ticks, sites: { ...tb.bySite } };   // ticks per site of the turn (deterministic; `diff` ignores it like ms)
+      if (!reply) { out.push({ id: r.id, outcome: 'not_understood', verdict: r.judge === 'state' ? 'wrong' : 'open', error, ms, pos, tk }); continue; }
       const after = s.state();
       const english = reply.trace?.replyEnglish ?? reply.text;
       const worlds = [...new Set(reply.segments.map((x) => x.world ?? x.match?.worldId).filter(Boolean))];
@@ -236,7 +242,7 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 
       const stateChanged = strip(before) !== strip(after);
       const acted = stateChanged || effects.length > 0 || reply.statuses.some((x) => x === 'supported');
       const outcome = outcomeOf({ unparsedAll, acted, statuses: reply.statuses, worlds, tabWorld, meta: META });
-      const rec = { id: r.id, outcome, ms, reply: english.slice(0, 220), worlds, statuses: reply.statuses, ...(reply.tooComplex ? { budget: reply.budgetExceeded?.site ?? true } : {}) };   // budget: the step budget ran out (deterministic ticks), where
+      const rec = { id: r.id, outcome, ms, reply: english.slice(0, 220), worlds, statuses: reply.statuses, pos, tk, ...(reply.tooComplex ? { budget: reply.budgetExceeded?.site ?? true } : {}) };   // budget: the step budget ran out (deterministic ticks), where
       if (r.judge === 'state' && r.check?.regress) {
         // an owner `ok` turn must still be done by the tab's world: another tab's world taking it (other_world) or nothing understood is never right (P1 b)
         rec.verdict = outcome !== 'not_understood' && outcome !== 'other_world' && (outcome === 'executed' || outcome === r.check.was) ? 'right' : 'wrong';
@@ -266,7 +272,10 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 
   mkdirSync(dirname(file), { recursive: true });
   // P1 c: the result carries what was measured: the build and tree, the mode and its settings, the catalog commit, the model files, the seed
   const head = { reasoner, mode, tag, mt: !!mt, voice, date: new RealDate().toISOString().slice(0, 10), ...build0, catalog: { commit: catalog.commit, url: catalog.url }, seed, settings: runtimeSettings(settings), model };
-  writeFileSync(file, `${JSON.stringify({ ...head, rows: out }, null, 1)}\n`);
+  const profile = profileSites(out);   // from every site of every turn; a row then keeps its 12 busiest sites (the file stays small)
+  for (const x of out) if (x.tk) x.tk.sites = Object.fromEntries(Object.entries(x.tk.sites).sort((p, q) => q[1] - p[1]).slice(0, 12));
+  writeFileSync(file, `${JSON.stringify({ ...head, ticks: { total: profile.total, sites: profile.sites }, rows: out }, null, 1)}\n`);
+  console.log(formatProfile(profile));
   console.log(`wrote ${file} (${out.length} turns; mode ${mode}, catalog ${catalog.short}, seed ${seed}, build ${build0.build}, tree ${build0.tree})`);
 }
 
@@ -444,7 +453,7 @@ export function headline() {
 
 /** Rows of two result files that differ in anything but the time taken (P1 a: two runs of one tree must give identical rows). */
 export function diffRows(a, b) {
-  const key = (x) => JSON.stringify({ ...x, ms: undefined });
+  const key = (x) => JSON.stringify({ ...x, ms: undefined, tk: undefined });
   const bb = new Map(b.rows.map((x) => [x.id, x]));
   return a.rows.filter((x) => !bb.has(x.id) || key(x) !== key(bb.get(x.id))).map((x) => ({ id: x.id, a: { ...x, ms: undefined }, b: bb.get(x.id) ? { ...bb.get(x.id), ms: undefined } : null }));
 }
@@ -459,6 +468,11 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     console.log(`${d.length} of ${a.rows.length} rows differ (ms ignored)`);
     for (const x of d.slice(0, 40)) console.log(JSON.stringify(x));
     process.exit(d.length ? 1 : 0);
+  }
+  else if (cmd === 'sites') {   // the per-site tick profile of a result file (top by total and by growth with the session)
+    const f = process.argv.slice(3).find((x) => !x.startsWith('--')) ?? RES('matrix');
+    const res = JSON.parse(readFileSync(resolve(f), 'utf8'));
+    console.log(formatProfile(res.ticks ? { turns: res.rows.length, ...res.ticks } : profileSites(res.rows), Number(arg('top', 15))));   // the file's own profile (all sites); rows keep their 12 busiest
   }
   else if (cmd === 'report') report();
   else if (cmd === 'ledger') ledger({ write: process.argv.includes('--write') });
