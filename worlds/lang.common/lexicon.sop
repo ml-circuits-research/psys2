@@ -5275,3 +5275,141 @@
     alt=please
     alt=thanks
     alt=ty
+
+# ---- THE INTENT STEP (src/dialog/intent.mjs, spec 03 section 7.9f): words that say which act a turn may mean, when the reading of the open world is weak.
+# Each group names a kind of reading; the step proposes the open world's own requests for it and the world's reader decides which one it reads.
+
+@phrase.lang.intent.improve core.phrase
+    frame=false
+    doc="Wishes that the open thing look better: read as the open world's improve (tidy) act."
+    alt=more_beautiful
+    alt=beautiful
+    alt=prettier
+    alt=more_pretty
+    alt=nicer
+    alt=more_nice
+    alt=neater
+    alt=tidier
+    alt=more_tidy
+    alt=more_orderly
+    alt=orderly
+    alt=more_ordered
+    alt=more_organised
+    alt=more_organized
+    alt=cleaner
+    alt=better_looking
+    alt=look_better
+    alt=look_nicer
+    alt=look_good
+    alt=look_nice
+
+@phrase.lang.intent.arrange core.phrase
+    frame=false
+    doc="Verbs that mean the open world's arrange act (lay the things out again, in a layout or along an outline)."
+    alt=rearrange
+    alt=re_arrange
+    alt=lay_out
+    alt=relayout
+    alt=reorganise
+    alt=reorganize
+    alt=organise
+    alt=organize
+    alt=sit
+    alt=seat
+    alt=order
+    alt=sort_out
+    alt=put_in_order
+    alt=tidy_up
+
+@phrase.lang.intent.overdo core.phrase
+    frame=false
+    doc="A complaint that the last result has too much: read as removing some of what is there (about half of each group of four or more, else of two or more)."
+    alt=exaggerated
+    alt=exaggerate
+    alt=exaggerating
+    alt=overdid
+    alt=overdone
+    alt=overdo
+    alt=over_the_top
+    alt=too_many
+    alt=too_much
+    alt=way_too_many
+    alt=extra_items
+    alt=extra_elements
+    alt=extra_things
+    alt=the_extra
+    alt=excessive
+    alt=in_excess
+
+@phrase.lang.intent.about_you core.phrase
+    frame=false
+    doc="Talk about the assistant (frustration, an insult, doubt that it understands): answered calmly, with what it can do on the open tab; nothing changes."
+    alt=are_you_stupid
+    alt=are_you_dumb
+    alt=are_you_an_idiot
+    alt=are_you_crazy
+    alt=are_you_kidding
+    alt=you_stupid
+    alt=you_idiot
+    alt=you_are_stupid
+    alt=you_are_dumb
+    alt=you_are_useless
+    alt=you_are_an_idiot
+    alt=you_do_not_understand
+    alt=you_do_not_really_understand
+    alt=you_never_understand
+    alt=you_understand_nothing
+    alt=you_do_not_get_it
+    alt=you_are_not_listening
+    alt=are_you_listening
+
+@phrase.lang.intent.back core.phrase
+    frame=false
+    doc="A correction that puts a thing back where it was before its last change: read as taking back that thing's last change."
+    alt=where_it_was
+    alt=where_he_was
+    alt=where_she_was
+    alt=where_they_were
+    alt=back_where
+    alt=put_back
+    alt=move_back
+    alt=go_back
+    alt=back_to_its_place
+    alt=returned
+    alt=return
+
+@phrase.lang.intent.wrong core.phrase
+    frame=false
+    doc="A leading word that says the last result was wrong; the rest of the clause is what the user wants instead."
+    alt=wrong
+    alt=no
+    alt=not
+    alt=not_that
+    alt=nope
+    alt=mistake
+
+@phrase.lang.intent.pointer core.phrase
+    frame=false
+    doc="Pointing words that stand for a thing just talked about (in that, into it, there); read as the last thing of the previous turn that the open world has."
+    alt=in_that
+    alt=into_that
+    alt=in_that_one
+    alt=in_it
+    alt=into_it
+    alt=in_there
+    alt=over_there
+    alt=in_this
+
+@phrase.lang.intent.text core.phrase
+    frame=false
+    doc="Kinds of text the documents world composes; with any verb (or a word the translator could not render) they are read as the open world's write act."
+    alt=story
+    alt=tale
+    alt=fairy_tale
+    alt=poem
+
+@phrase.lang.intent.bare core.phrase
+    frame=false
+    doc="Requests a bare name of the open tab may stand for (a capitalised word that is no direction or position), tried in this order; the open world's reader keeps the ones it reads."
+    alt=show
+    alt=where_is
