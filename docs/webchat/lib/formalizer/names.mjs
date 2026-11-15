@@ -13,8 +13,8 @@
  *     time budget (`budgetMs`, the best candidates found so far are returned) cap the effort whatever the message looks like.
  */
 import { lexIndex } from '../worlds/lexicon.mjs?v=7f0cf3631e';
-import { editDistance } from './rules/index.mjs?v=a815012811';
-import { isKnownWord, spellBudget, spellVocabulary } from './spell.mjs?v=a815012811';
+import { editDistance } from './rules/index.mjs?v=5069f90072';
+import { isKnownWord, spellBudget, spellVocabulary } from './spell.mjs?v=5069f90072';
 
 const WORD = /[A-Za-zÀ-ɏ]+/g;
 const QUOTE = /"[^"]*"|“[^”]*”/g;

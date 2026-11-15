@@ -5,7 +5,7 @@
  * Content = a world's state without its memory of the turn (the last act, the log, revision counters, selections, saved copies, undo stacks): a move that went nowhere still
  * writes the log, and the log is not what the user sees. Browser-safe, no imports.
  */
-const MEMORY = /^(?:last\w*|log|prev\w*|saved|selected|selection|focus|advised|counter|history|future|undo|redo|rev|seq|edgeSeq|nextId|order|version|pending|clicked|t|time|ts|at|updated|turn)$/i;
+const MEMORY = /^(?:last\w*|log|prev\w*|saved|selected|selection|focus|advised|counter|history|future|undo|redo|rev|seq|edgeSeq|nextId|order|version|pending|clicked|t|time|ts|at|updated|turn|keptNote)$/i;
 const NOT_CONTENT = /^(?:ui\.help|session\.dialogue|session\.conversation|talk)$/;
 /** A bare success claim: the whole line says only that it worked. */
 export const BARE_DONE = /^\s*(?:done|ok(?:ay)?|all done|ok,? done|there you go)\s*[.!]?\s*$/i;

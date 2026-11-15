@@ -4,8 +4,8 @@
  * slot, or a free-text role. The words a pattern's `...` skipped, and the content words of a free-text capture that are words of the readers themselves (question words, the verbs of
  * other acts), are UNREAD; with the typed worlds (spec 16 section 13, the default source) a free-text slot is unread when its world's types do not accept its words. Browser-safe. `PSYS2_COMPLETE=off` turns the consequences off for A/B runs (the measurement is still recorded on the segment).
  */
-import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs?v=a815012811';
-import { unreadBy, thingWordsOf } from './typed-world.mjs?v=a815012811';
+import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs?v=5069f90072';
+import { unreadBy, thingWordsOf } from './typed-world.mjs?v=5069f90072';
 
 const word = (t) => (t.kind === 'word' || t.kind === 'number') && !t.filler;
 /** Content words (not function words, not fillers) of a token list. */
@@ -48,12 +48,23 @@ export function annotateUnread(matches, set = null, context = null) {
   const foreign = set && globalThis.process?.env?.PSYS2_COMPLETE_FOREIGN === '1';
   const typed = completeSource() === 'typed';
   const typedFor = typed && set?.typedFor ? (id) => set.typedFor(id) : null;
-  const thingMemo = new Map(), things = (id) => { if (!thingMemo.has(id)) thingMemo.set(id, thingWordsOf(set, id, context)); return thingMemo.get(id); };   // once per world per sentence
-  const wholeMemo = new Map(), readsWhole = (id, view) => {   // the world's own reader reads the clause whole (hook readsWhole): once per world per sentence
+  // once per world per sentence: the words of the session's things of the world; for a world with no typed bundle (a generated or test world) also its own vocabulary (patterns, lexicons)
+  const thingMemo = new Map(), things = (id) => {
+    if (!thingMemo.has(id)) {
+      let r = thingWordsOf(set, id, context);
+      if (typedFor && !typedFor(id)) { try { const v = worldVocabulary(set, id); if (v?.has) { const base = r; r = { has: (w) => !!base?.has(w) || v.has(w) }; } } catch { /* the things alone */ } }
+      thingMemo.set(id, r);
+    }
+    return thingMemo.get(id);
+  };
+  // the world's own reader reads the clause whole (hook readsWhole), the raw words `words` (the ones the world's words did not read) included: once per world, sentence and words.
+  // A hook that cannot tell (an engine still loading) answers false: an unread word is never accepted on trust.
+  const wholeMemo = new Map(), readsWhole = (id, view, words = []) => {
     // the clause as typed: tokens that touch are joined ("a1" is one name, not "a 1")
     const spaced = view.map((t, i) => (i && Number.isFinite(t.start) && t.start === view[i - 1].end ? '' : i ? ' ' : '') + String(t.raw ?? '')).join('');
-    if (!wholeMemo.has(id)) { const ex = set?.get?.(id)?.ops?.executor; let r = false; try { r = !!ex?.readsWhole?.({ text: spaced, state: context?.states?.[id] ?? null, phrase: phraseOfSet(set) }); } catch { r = false; } wholeMemo.set(id, r); }
-    return wholeMemo.get(id);
+    const key = `${id}\u0001${spaced}\u0001${words.join(' ')}`;
+    if (!wholeMemo.has(key)) { const ex = set?.get?.(id)?.ops?.executor; let r = false; try { r = ex?.readsWhole?.({ text: spaced, words, state: context?.states?.[id] ?? null, phrase: phraseOfSet(set) }) === true; } catch { r = false; } wholeMemo.set(key, r); }
+    return wholeMemo.get(key);
   };
   const lowerOf = (t) => t.lower ?? String(t.raw).toLowerCase();
   const content = (t) => word(t) && !FUNCTION_WORDS.has(lowerOf(t));
