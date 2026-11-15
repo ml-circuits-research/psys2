@@ -1,4 +1,6 @@
 @pic acts.schema
+    # forms of the catalog this world does not read on its own tab in a fresh session (Q23, tests/canonical-examples.test.mjs): never offered as help; the gaps are ledger rows (class "generated canonical examples")
+    canonical.not=ask.last
     noun="drawing"
     doc="The drawing board as a schema (pilot of art.draw, spec 21 and 23): things of any drawable kind of the knowledge (k.objects, stand-ins), regions (the sky, the ground, lakes), groups; colour, size and place; the acts make, remove, change, place (words and layouts of the space module), group, take apart, copy, pick, ask, save, send. The renderer, the scene composition and the drawing from facts stay in worlds/art.draw (scene.mjs, ops.mjs); hooks.mjs maps the roles of an act onto them."
     hooks=hooks.mjs
@@ -8,6 +10,7 @@
     own=newDrawing:draw.new
     own=openTab:draw.open
     sample=house
+    sample.word=draw
     dir=yes
     layout=yes
     bare=yes

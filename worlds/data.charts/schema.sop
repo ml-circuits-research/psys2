@@ -1,4 +1,18 @@
 @chart acts.schema
+    # forms of the catalog this world does not read on its own tab in a fresh session (Q23, tests/canonical-examples.test.mjs): never offered as help; the gaps are ledger rows (class "generated canonical examples")
+    canonical.not=ask.last
+    canonical.not=copy.n
+    canonical.not=remove.all
+    canonical.not=change.as
+    canonical.not=change.want
+    canonical.not=change.nice
+    canonical.not=change.would
+    canonical.not=change.is.value
+    canonical.not=change.on
+    canonical.not=change.off
+    canonical.not=change.turn
+    canonical.not=change.un
+    canonical.not=change.sort.stop
     noun="chart"
     doc="Charts as a schema (spec 21): a chart holds bars (points, slices) with a label and a value; a chart has a type, a title, an axis, colours, a legend, an order. Chart.js draws the state (chart.mjs: the renderer, the data readers of what people have, prices, lists and legs, the statistics); the schema only says what is said."
     hooks=hooks.mjs

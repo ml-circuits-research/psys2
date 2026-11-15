@@ -197,15 +197,15 @@ const real = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT]
 const TOOL_WORLDS = ['ui.shell', 'ui.avatar', 'docs.editor'];
 
 test('every pattern example of a tool world is understood', async () => {
-  // P3: the examples of a generated schema world (ui.avatar, docs.editor) are the shared templates' sentences with the seating sample left in ("Kick the guest Ann
-  // out." for the face): the generator defect is on the failure ledger (class "generated canonical examples"); here every pattern has an example and the
-  // hand-built tool world's examples are all read
+  // A generated schema world (ui.avatar, docs.editor) is covered again (Q23): its examples are written with its own sample things (worlds/acts/acts.mjs exampleOf);
+  // every example of a pattern it offers (one with a canonical example) is read. A form it does not offer (written about another world's things, or declined with
+  // canonical.not=: "I will call you Robi.", "Change pears to 6." in the editor) is a ledger row (class "generated canonical examples"), not checked here.
   const { existsSync } = await import('node:fs');
   for (const id of TOOL_WORLDS) {
     const generated = existsSync(new URL(`../worlds/${id}/schema.sop`, import.meta.url));
     for (const p of real.set.get(id).patterns) {
       assert.ok(p.examples.length >= 1, `${p.id} has no example`);
-      if (generated) continue;
+      if (generated && !p.canonical?.length) continue;
       for (const ex of sampled(p.examples, { key: (e) => `${p.id}|${e}`, world: id })) {
         const r = await real.createSession().send(ex);
         assert.ok(!r.statuses.includes('unparsed'), `${id}: "${ex}" is not understood`);

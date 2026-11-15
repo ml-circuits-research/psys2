@@ -16,7 +16,7 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Add a guest at document."
+    example="Add a guest at table 1."
 
 @pat.docs.editor.make.n core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -33,7 +33,7 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Add a guest called Ann at document."
+    example="Add a guest called Ann at table 1."
 
 @pat.docs.editor.remove core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -41,7 +41,8 @@
     kind=request
     priority=10
     tabPriority=18
-    example="Remove the guest Ann."
+    example="Remove the document."
+    canonical="Remove the document."
 
 @pat.docs.editor.remove.out core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [kick|throw|take|send|get|put] [$acts.det]? {thing:words} [out|away|off_the_list] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -49,7 +50,7 @@
     kind=request
     priority=11
     tabPriority=19
-    example="Kick the guest Ann out."
+    example="Kick the document out."
 
 @pat.docs.editor.remove.place core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:words} [from|out_of|off] [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -57,7 +58,7 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Remove the guests from document."
+    example="Remove the guests from table 1."
 
 @pat.docs.editor.change.of core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.docs.editor.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -65,8 +66,8 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Change the colour of document to red."
-    canonical="Change the colour of document to red."
+    example="Change the colour of the document to red."
+    canonical="Change the colour of the document to red."
 
 @pat.docs.editor.change.attr core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.docs.editor.attrs} [to|be|as|into] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -74,7 +75,7 @@
     kind=request
     priority=13
     tabPriority=21
-    example="Set document seats to 6."
+    example="Set the document seats to 6."
 
 @pat.docs.editor.change.value core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to|be|as|into]? {value:lex.docs.editor.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -82,8 +83,8 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Make document blue."
-    canonical="Make document blue."
+    example="Make the document blue."
+    canonical="Make the document blue."
 
 @pat.docs.editor.change.add core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.docs.editor.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -91,7 +92,7 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Add 2 seats to document."
+    example="Add 2 seats to the document."
 
 @pat.docs.editor.change.add1 core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {attribute:lex.docs.editor.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -99,7 +100,7 @@
     kind=request
     priority=13
     tabPriority=21
-    example="Add a seat to document."
+    example="Add a seat to the document."
 
 @pat.docs.editor.change.less core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] {amount:number} {attribute:lex.docs.editor.attrs} from [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -107,7 +108,7 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Remove 2 seats from document."
+    example="Remove 2 seats from the document."
 
 @pat.docs.editor.change.less1 core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {attribute:lex.docs.editor.attrs} from [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -115,7 +116,7 @@
     kind=request
     priority=13
     tabPriority=21
-    example="Remove a seat from document."
+    example="Remove a seat from the document."
 
 @pat.docs.editor.change.cmp.more core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.docs.editor.more} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -123,8 +124,8 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Make document bigger."
-    canonical="Make document bigger."
+    example="Make the document bigger."
+    canonical="Make the document bigger."
 
 @pat.docs.editor.change.cmp.less core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.docs.editor.less} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -132,8 +133,8 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Make document smaller."
-    canonical="Make document smaller."
+    example="Make the document smaller."
+    canonical="Make the document smaller."
 
 @pat.docs.editor.place core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -141,7 +142,7 @@
     kind=request
     priority=11
     tabPriority=19
-    example="Put the guest Ann at document."
+    example="Put the guest Ann at table 2."
 
 @pat.docs.editor.group core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.group] [$acts.det]? {thing:words} [together]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -176,7 +177,8 @@
     kind=request
     priority=5
     tabPriority=13
-    example="Move the guest."
+    example="Move the document."
+    canonical="Move the document."
 
 @pat.docs.editor.change.bare core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -184,8 +186,8 @@
     kind=request
     priority=5
     tabPriority=13
-    example="Change document."
-    canonical="Change document."
+    example="Change the document."
+    canonical="Change the document."
 
 @pat.docs.editor.send.bare core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -193,8 +195,8 @@
     kind=request
     priority=5
     tabPriority=13
-    example="Send document."
-    canonical="Send document."
+    example="Send the document."
+    canonical="Send the document."
 
 @pat.docs.editor.pick core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.pick] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -202,8 +204,7 @@
     kind=request
     priority=10
     tabPriority=18
-    example="Select document."
-    canonical="Select document."
+    example="Select the document."
 
 @pat.docs.editor.copy core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -211,8 +212,8 @@
     kind=request
     priority=10
     tabPriority=18
-    example="Copy document."
-    canonical="Copy document."
+    example="Copy the document."
+    canonical="Copy the document."
 
 @pat.docs.editor.send core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:words} to [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -220,8 +221,7 @@
     kind=request
     priority=11
     tabPriority=19
-    example="Send document to the diagram."
-    canonical="Send document to the diagram."
+    example="Send table 2 to the diagram."
 
 @pat.docs.editor.ask.what core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] [is|are] [$acts.det]? {attribute:lex.docs.editor.attrs} of [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -229,8 +229,8 @@
     kind=question
     priority=12
     tabPriority=20
-    example="What is the colour of document?"
-    canonical="What is the colour of document?"
+    example="What is the colour of the document?"
+    canonical="What is the colour of the document?"
 
 @pat.docs.editor.ask.what.is core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] {attribute:lex.docs.editor.attrs} [is|are] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -238,8 +238,7 @@
     kind=question
     priority=12
     tabPriority=20
-    example="What colour is document?"
-    canonical="What colour is document?"
+    example="What colour is the document?"
 
 @pat.docs.editor.change.should core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [should|must|has_to|needs_to] [be|become|turn] {value:lex.docs.editor.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -247,7 +246,8 @@
     kind=request
     priority=12
     tabPriority=20
-    example="document should be blue."
+    example="The document should be blue."
+    canonical="The document should be blue."
 
 @pat.docs.editor.change.needs core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_want|i_need|make|let|give]? [$acts.det]? {thing:words} [needs|to_have|should_have|must_have|has|gets] {value:number} {attribute:lex.docs.editor.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -255,7 +255,7 @@
     kind=request
     priority=12
     tabPriority=20
-    example="document needs 6 seats."
+    example="The document needs 6 seats."
 
 @pat.docs.editor.ask.at core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|who] [is|are|sits|sit|stands|stand] [there]? {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -263,8 +263,8 @@
     kind=question
     priority=12
     tabPriority=20
-    example="Who is at document?"
-    canonical="Who is at document?"
+    example="Who is at table 1?"
+    canonical="Who is at table 1?"
 
 @pat.docs.editor.ask.count.attr core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {attribute:lex.docs.editor.attrs} [does|do|has|have] [$acts.det]? {thing:words} [have|has|got]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -272,7 +272,7 @@
     kind=question
     priority=14
     tabPriority=22
-    example="How many seats does document have?"
+    example="How many seats does the document have?"
 
 @pat.docs.editor.ask.count core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {thing:words} [are|do_i_have|have_i_got|is]? [there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -289,7 +289,7 @@
     kind=question
     priority=13
     tabPriority=21
-    example="How many guests are at document?"
+    example="How many guests are at table 1?"
 
 @pat.docs.editor.ask.where core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? where [is|are] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -298,7 +298,6 @@
     priority=12
     tabPriority=20
     example="Where is Ann?"
-    canonical="Where is Ann?"
 
 @pat.docs.editor.ask.why core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? why [is|are|did|do|was|were|does] {rest:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -306,8 +305,8 @@
     kind=question
     priority=11
     tabPriority=19
-    example="Why is document blue?"
-    canonical="Why is document blue?"
+    example="Why is the document blue?"
+    canonical="Why is the document blue?"
 
 @pat.docs.editor.ask.last core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? what [did|have] you [just]? [do|done|change|changed] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -352,7 +351,6 @@
     priority=13
     tabPriority=21
     example="Is there a house in my picture?"
-    canonical="Is there a house in my picture?"
 
 @pat.docs.editor.ask.exists.have core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [do|does|did|can] [i|we|you|u]? have [$acts.det]? [any|some]? {thing:words} [in|on|at|of]? [my|the|this|our]? {noun:lex.docs.editor.nouns?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -361,7 +359,6 @@
     priority=12
     tabPriority=20
     example="Do I have a house in my picture?"
-    canonical="Do I have a house in my picture?"
 
 @pat.docs.editor.ask.exists.noun core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [does|do] [$acts.det]? [my|the|this]? {noun:lex.docs.editor.nouns} have [$acts.det]? [any|some]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -370,7 +367,6 @@
     priority=12
     tabPriority=20
     example="Does my picture have a house?"
-    canonical="Does my picture have a house?"
 
 @pat.docs.editor.ask.exists.any core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [any|some] {thing:words} [in_there|in_here|there|here|in_it] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -387,7 +383,6 @@
     priority=8
     tabPriority=16
     example="Is a house in there?"
-    canonical="Is a house in there?"
 
 @pat.docs.editor.ask.exists.color core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [is|are] [$acts.det]? {thing:words} {value:lex.docs.editor.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -396,7 +391,6 @@
     priority=9
     tabPriority=17
     example="Is the house red?"
-    canonical="Is the house red?"
 
 @pat.docs.editor.ask.describe core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe|explain|summarise|summarize|list|show|tell_me_about|tell_me] [$acts.det]? [my|the|this|our]? [whats_in|what_is_in|whats_on|what_is_on]? {noun:lex.docs.editor.nouns} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -405,7 +399,6 @@
     priority=11
     tabPriority=19
     example="Describe my picture."
-    canonical="Describe my picture."
 
 @pat.docs.editor.ask.describe.whats core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe|explain|summarise|summarize|list|show|tell_me|tell_us] [whats_in|what_is_in|whats_on|what_is_on|what_s_on|what_s_in|what_is_there_in|what_is_there_on] [$acts.det]? [my|the|this|our]? {noun:lex.docs.editor.nouns} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -422,7 +415,6 @@
     priority=14
     tabPriority=22
     example="What is in my picture?"
-    canonical="What is in my picture?"
 
 @pat.docs.editor.ask.describe.made core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|let_me_know]? [what|whats] [did_i|have_i|i|we|did_we|have_we] [draw|drew|drawn|make|made|add|added|put|do|done|create|created|paint|painted] [so_far|today|here]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -431,7 +423,6 @@
     priority=11
     tabPriority=19
     example="What did I draw?"
-    canonical="What did I draw?"
 
 @pat.docs.editor.ask.describe.see core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|whats|which] [things|objects|shapes]? [can_you_see|do_you_see|can_i_see|do_i_see|are_there|is_there|is_visible|have_i_got] [in|on]? [my|the|this]? {noun:lex.docs.editor.nouns} [right_now|now|there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -440,7 +431,6 @@
     priority=14
     tabPriority=22
     example="What can you see in my picture?"
-    canonical="What can you see in my picture?"
 
 @pat.docs.editor.ask.options core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|list|show|tell_me|show_me|name] [the]? {thing:words} [can_i|could_i|can_you|may_i|do_you_know|are_there|are_available|do_i_have|do_you_have|can_we|is_available|options] [use|draw|pick|choose|have|change]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -449,7 +439,6 @@
     priority=11
     tabPriority=19
     example="What colours can I use?"
-    canonical="What colours can I use?"
 
 @pat.docs.editor.ask.options.what core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|whats] [can_i|could_i|can_you|can_u|could_u|can_we|may_i|do_you_know|do_i_have] [draw|add|make|use|paint|do|put|sketch|pick|choose] [to_my_picture|to_the_picture|to_my_drawing|to_it|in_my_picture|here]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -458,7 +447,6 @@
     priority=11
     tabPriority=19
     example="What can I draw?"
-    canonical="What can I draw?"
 
 @pat.docs.editor.ask.options.show core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show_me|tell_me|list|name] [what|which] [i|you|we] [can|could] [draw|add|make|use|paint|do|put|sketch] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -467,7 +455,6 @@
     priority=11
     tabPriority=19
     example="Show me what I can draw."
-    canonical="Show me what I can draw."
 
 @pat.docs.editor.ask.options.verb core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [list|show|name|tell_me] [$acts.det]? [the|all|all_the|all_of_the|your]? {thing:words} [list|options|available|you_know|i_can_use|i_can_add|i_can_draw|i_can_make]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -476,7 +463,6 @@
     priority=6
     tabPriority=14
     example="List the things I can draw."
-    canonical="List the things I can draw."
 
 @pat.docs.editor.ask.options.short core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {thing:words} [list|options|available|are_available|do_i_have|can_i_use] [please|pls|plz]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -493,7 +479,6 @@
     priority=12
     tabPriority=20
     example="Count the houses."
-    canonical="Count the houses."
 
 @pat.docs.editor.ask.count.number core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|let_me_know]? [the_number_of|number_of|count_of|total_number_of|the_count_of|the_total_of] [$acts.det]? {thing:words} [in|on|at|of]? [my|the|this|our]? {noun:lex.docs.editor.nouns?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -526,7 +511,6 @@
     priority=13
     tabPriority=21
     example="Tell me how many houses there are."
-    canonical="Tell me how many houses there are."
 
 @pat.docs.editor.ask.where.did core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|let_me_know]? [where|which_spot|which_place|which_part|what_place] [is|are|did|do|can_i_see|can_i_find|will_i_find|should_i_look_for|do_i_find]? [i_find|i_see|you_put|you_draw|you_place]? [$acts.det]? {thing:words} [go|now|exactly|are|is|in|at|located|live]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -535,7 +519,6 @@
     priority=12
     tabPriority=20
     example="Where did the house go?"
-    canonical="Where did the house go?"
 
 @pat.docs.editor.ask.where.find core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [find|locate|point_to|point_at|look_for|spot] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -544,7 +527,6 @@
     priority=11
     tabPriority=19
     example="Find the house."
-    canonical="Find the house."
 
 @pat.docs.editor.ask.where.of core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [location_of|position_of|place_of|whereabouts_of|spot_of] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -569,7 +551,6 @@
     priority=12
     tabPriority=20
     example="Tell me the colour of the house."
-    canonical="Tell me the colour of the house."
 
 @pat.docs.editor.ask.colour.painted core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|whats|what_s|what_is|what_colour_is|what_color_is|which_colour_is|which_color_is] [$acts.det]? {thing:words} [painted|coloured|colored|drawn|made] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -594,7 +575,6 @@
     priority=11
     tabPriority=19
     example="Make another house."
-    canonical="Make another house."
 
 @pat.docs.editor.copy.n core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} more [of_them|of_it|of_that]? {thing:words?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -620,7 +600,6 @@
     priority=13
     tabPriority=21
     example="Make the house a bit bigger."
-    canonical="Make the house a bit bigger."
 
 @pat.docs.editor.change.cmp.less.amt core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {amount:lex.space.amounts?} {value:lex.docs.editor.less} {amount2:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -629,7 +608,6 @@
     priority=13
     tabPriority=21
     example="Make the house a bit smaller."
-    canonical="Make the house a bit smaller."
 
 @pat.docs.editor.change.cmp.should core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [needs_to_be|should_be|must_be|has_to_be|is_too|is_not] {amount:lex.space.amounts?} {value:lex.docs.editor.more} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -638,7 +616,6 @@
     priority=12
     tabPriority=20
     example="The house needs to be a lot bigger."
-    canonical="The house needs to be a lot bigger."
 
 @pat.docs.editor.change.cmp.short.more core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} {amount:lex.space.amounts?} {value:lex.docs.editor.more} [please|pls|plz|thx|thanks]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -679,7 +656,6 @@
     priority=12
     tabPriority=20
     example="Enlarge the house a lot."
-    canonical="Enlarge the house a lot."
 
 @pat.docs.editor.change.shrink core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [shrink|reduce|compress|minimise|minimize|deflate|scale_down|make_smaller] [$acts.det]? {thing:words} {amount:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -688,7 +664,6 @@
     priority=12
     tabPriority=20
     example="Shrink the house."
-    canonical="Shrink the house."
 
 @pat.docs.editor.change.same core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to_be]? [the_same_size_as|the_same_size_like|same_size_as|as_big_as|as_large_as|as_small_as|as_tall_as|the_same_as|equal_in_size_to] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -697,7 +672,6 @@
     priority=15
     tabPriority=23
     example="Make the tree the same size as the house."
-    canonical="Make the tree the same size as the house."
 
 @pat.docs.editor.change.same.short core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [the_same_size_as|same_size_as|as_big_as|as_large_as|as_small_as|the_same_as] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -706,7 +680,6 @@
     priority=13
     tabPriority=21
     example="The same size as the house."
-    canonical="The same size as the house."
 
 @pat.docs.editor.change.times core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.docs.editor.factor} [as_big|as_large|as_tall|as_wide|as_small|as_big_as_it_is|the_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -715,7 +688,6 @@
     priority=12
     tabPriority=20
     example="Make the house twice as big."
-    canonical="Make the house twice as big."
 
 @pat.docs.editor.change.times.short core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {value:lex.docs.editor.factor} [as_big|as_large|as_tall|as_wide|as_small|the_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -732,7 +704,6 @@
     priority=13
     tabPriority=21
     example="Move the house up a bit."
-    canonical="Move the house up a bit."
 
 @pat.docs.editor.remove.all core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [clear|wipe|erase|delete|remove|empty|scrap|clean|get_rid_of|throw_away] [everything|all|it_all|all_of_it|all_off|all_of_this] [off|away|out|ok|okay|please|pls]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -750,7 +721,6 @@
     priority=12
     tabPriority=20
     example="Clear the picture."
-    canonical="Clear the picture."
 
 @pat.docs.editor.remove.new core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [start|begin|open|get|give_me|make|let_s_start|lets_start|i_want|i_need|show_me]? [a|an|another]? [new|fresh|blank|clean|empty] {noun:lex.docs.editor.nouns?} [sheet|sheet_of_paper|of_paper|page|canvas|start]? [of_paper]? [please|pls]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -759,7 +729,6 @@
     priority=12
     tabPriority=20
     example="Start a new picture."
-    canonical="Start a new picture."
 
 @pat.docs.editor.pick.none core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [deselect|unselect|unpick|unmark|unhighlight|untick|unselected] [everything|all|it|that|this|them|the_selection|the_highlight|the_highlights]? [please|pls|plz]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -802,7 +771,6 @@
     priority=11
     tabPriority=19
     example="Save my picture as SVG."
-    canonical="Save my picture as SVG."
 
 @pat.docs.editor.save.download core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [download|export|get] [$acts.det]? {noun:lex.docs.editor.nouns} [as|in|to|under|called|a]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -811,7 +779,6 @@
     priority=11
     tabPriority=19
     example="Download the drawing as a PNG."
-    canonical="Download the drawing as a PNG."
 
 @pat.docs.editor.undo.verb core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.undo] [that|it|this|the_last|my_last|the|one]? [thing|change|step|action|move|one|drawing]? [back]? [please|pls|plz]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -829,7 +796,6 @@
     priority=14
     tabPriority=22
     example="Turn the house into a tiny one."
-    canonical="Turn the house into a tiny one."
 
 @pat.docs.editor.change.value.size.up core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [blow|scale|build|make|puff|pump|grow] [$acts.det]? {thing:words} up [to|into]? [a|an]? {value:lex.docs.editor.values} [size|sized|in_size]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -846,7 +812,6 @@
     priority=14
     tabPriority=22
     example="The house should be medium size."
-    canonical="The house should be medium size."
 
 @pat.docs.editor.change.with core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [fill|fill_in|colour|color|paint|cover|colour_in|color_in|dye|tint] [$acts.det]? {thing:words} [with|in|using] [$acts.det]? {value:lex.docs.editor.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -855,7 +820,6 @@
     priority=15
     tabPriority=23
     example="Fill the sun with yellow."
-    canonical="Fill the sun with yellow."
 
 @pat.docs.editor.change.in core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} in {value:lex.docs.editor.values} [please|pls|plz|thx|thanks]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -872,7 +836,6 @@
     priority=13
     tabPriority=21
     example="Fill in the star."
-    canonical="Fill in the star."
 
 @pat.docs.editor.ask.near core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|whats|what_s|anything|is_anything|is_there_anything|what_is|what_things_are|which_things_are] [right|just]? [near|nearby|close_to|around] [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -897,7 +860,6 @@
     priority=13
     tabPriority=21
     example="Make it a pie chart."
-    canonical="Make it a pie chart."
 
 @pat.docs.editor.change.as core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show|plot|draw|display|present|chart|switch|convert|change|turn|make] [$acts.det]? {thing:words} [as|into|to|in_to] [$acts.det]? {value:lex.docs.editor.values} {noun:lex.docs.editor.nouns?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -932,7 +894,6 @@
     priority=11
     tabPriority=19
     example="I want the bars green."
-    canonical="I want the bars green."
 
 @pat.docs.editor.change.nice core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? [nice|lovely|pretty|good|really|very|sort_of|kind_of|bit_more]? {value:lex.docs.editor.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -941,7 +902,6 @@
     priority=12
     tabPriority=20
     example="Paint the bars a nice green."
-    canonical="Paint the bars a nice green."
 
 @pat.docs.editor.change.would core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {value:lex.docs.editor.values} [would_be|is|looks|would_look|will_be|should_be] [nicer|better|best|good|great|prettier|nice|fine] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -959,7 +919,6 @@
     priority=11
     tabPriority=19
     example="The bars are teal now."
-    canonical="The bars are teal now."
 
 @pat.docs.editor.change.like core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [like|as|in|with] [$acts.det]? {value:lex.docs.editor.values} {attribute:lex.docs.editor.attrs?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -984,7 +943,6 @@
     priority=10
     tabPriority=18
     example="I prefer a bar chart."
-    canonical="I prefer a bar chart."
 
 @pat.docs.editor.change.name core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [call|name|title|label|rename|retitle] [$acts.det]? {thing:words} [to|as]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -993,7 +951,6 @@
     priority=12
     tabPriority=20
     example="Call it Fruit."
-    canonical="Call it Fruit."
 
 @pat.docs.editor.change.name.to core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [rename|relabel|retitle|change_the_name_of] [$acts.det]? {thing:words} [to|into|as] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1002,7 +959,6 @@
     priority=14
     tabPriority=22
     example="Rename pears to cherries."
-    canonical="Rename pears to cherries."
 
 @pat.docs.editor.change.swap.for core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [swap|replace|exchange|trade|switch] [$acts.det]? {thing:words} [for|with] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1011,7 +967,6 @@
     priority=12
     tabPriority=20
     example="Swap grapes for melons."
-    canonical="Swap grapes for melons."
 
 @pat.docs.editor.change.should.text core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {attribute:lex.docs.editor.attrs} [should_be|is|will_be|shall_be|must_be|needs_to_be|becomes] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1020,7 +975,6 @@
     priority=12
     tabPriority=20
     example="The title should be Snacks."
-    canonical="The title should be Snacks."
 
 @pat.docs.editor.change.use.as core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [use|put|set|take|make|have] {value:words} [as|for] [$acts.det]? {attribute:lex.docs.editor.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1029,7 +983,6 @@
     priority=13
     tabPriority=21
     example="Use Zoo as the title."
-    canonical="Use Zoo as the title."
 
 @pat.docs.editor.change.colon core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {attribute:lex.docs.editor.attrs} {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1038,7 +991,6 @@
     priority=4
     tabPriority=12
     example="Title: My fruit."
-    canonical="Title: My fruit."
 
 @pat.docs.editor.change.on core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show|display|bring|turn_on|enable|switch_on|put_on|give_me|show_me|bring_back|add] [$acts.det]? {attribute:lex.docs.editor.attrs} [back|on|again]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1047,7 +999,6 @@
     priority=12
     tabPriority=20
     example="Show the legend."
-    canonical="Show the legend."
 
 @pat.docs.editor.change.off core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [hide|turn_off|disable|switch_off|stop|kill|remove|drop|delete|get_rid_of|lose|skip|cut] [$acts.det]? {attribute:lex.docs.editor.attrs} [off|away|out|hidden]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1056,7 +1007,6 @@
     priority=12
     tabPriority=20
     example="Hide the legend."
-    canonical="Hide the legend."
 
 @pat.docs.editor.change.turn core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take|turn|switch|put|get|send|bring] [$acts.det]? {attribute:lex.docs.editor.attrs} {value:lex.docs.editor.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1065,7 +1015,6 @@
     priority=13
     tabPriority=21
     example="Take the legend off."
-    canonical="Take the legend off."
 
 @pat.docs.editor.change.switch core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {attribute:lex.docs.editor.attrs} {value:lex.docs.editor.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1082,7 +1031,6 @@
     priority=6
     tabPriority=14
     example="No stacking."
-    canonical="No stacking."
 
 @pat.docs.editor.change.un core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [un|do_not|dont|stop|no_longer] {attribute:lex.docs.editor.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1091,7 +1039,6 @@
     priority=6
     tabPriority=14
     example="Stop stacking."
-    canonical="Stop stacking."
 
 @pat.docs.editor.ask.what.thing core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what_is|whats|what_s|what_are|how_much_is|how_much_are|how_big_is|how_big_are|how_many_is] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1100,7 +1047,6 @@
     priority=7
     tabPriority=15
     example="What is plums?"
-    canonical="What is plums?"
 
 @pat.docs.editor.ask.attr.tell core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|give_me|what_is|whats|what_s] [$acts.det]? {thing:words} {attribute:lex.docs.editor.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1109,7 +1055,6 @@
     priority=8
     tabPriority=16
     example="Tell me the pears number."
-    canonical="Tell me the pears number."
 
 @pat.docs.editor.change.chart.without core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} [without|with_no|minus] [$acts.det]? {attribute:lex.docs.editor.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1126,7 +1071,6 @@
     priority=12
     tabPriority=20
     example="Change pears to 6."
-    canonical="Change pears to 6."
 
 @pat.docs.editor.change.is.number core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [is|are|should_be|must_be|will_be|equals|has|have|is_now|are_now|needs_to_be] {value:number} [now|instead|not_3|not_8|please]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1135,7 +1079,6 @@
     priority=11
     tabPriority=19
     example="The pears are 4 now."
-    canonical="The pears are 4 now."
 
 @pat.docs.editor.change.is.number.not core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [is|are|should_be|must_be] {value:number} [not|and_not|instead_of|rather_than] {rest:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1144,7 +1087,6 @@
     priority=13
     tabPriority=21
     example="Plums are 2 not 8."
-    canonical="Plums are 2 not 8."
 
 @pat.docs.editor.change.fix.number core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [wait|no|oops|sorry|actually]? [$acts.det]? {thing:words} [is|are] {value:number} [not|and_not|instead_of] {rest:rest} [fix_it|correct_it|change_it]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1153,7 +1095,6 @@
     priority=13
     tabPriority=21
     example="Wait, pears are 6 not 3, fix it."
-    canonical="Wait, pears are 6 not 3, fix it."
 
 @pat.docs.editor.change.bare.number core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? {thing:words} {value:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1170,7 +1111,6 @@
     priority=13
     tabPriority=21
     example="Increase apples by 2."
-    canonical="Increase apples by 2."
 
 @pat.docs.editor.change.by.less core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [decrease|lower|reduce|cut|drop|take|bring_down|push_down|down|shrink|subtract] [$acts.det]? {thing:words} by {amount:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1179,7 +1119,6 @@
     priority=13
     tabPriority=21
     example="Lower apples by 2."
-    canonical="Lower apples by 2."
 
 @pat.docs.editor.change.plus core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [plus|and] {amount:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1236,7 +1175,6 @@
     priority=13
     tabPriority=21
     example="Multiply kiwis by 3."
-    canonical="Multiply kiwis by 3."
 
 @pat.docs.editor.change.divide.by core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [divide|split|cut] [$acts.det]? {thing:words} by {amount:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1245,7 +1183,6 @@
     priority=13
     tabPriority=21
     example="Divide kiwis by two."
-    canonical="Divide kiwis by two."
 
 @pat.docs.editor.change.cut.half core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [cut|reduce|bring_down] [$acts.det]? {thing:words} by half [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1254,7 +1191,6 @@
     priority=16
     tabPriority=24
     example="Cut the plums by half."
-    canonical="Cut the plums by half."
 
 @pat.docs.editor.remove.nomore core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [no_more|no] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1263,7 +1199,6 @@
     priority=5
     tabPriority=13
     example="No more bananas."
-    canonical="No more bananas."
 
 @pat.docs.editor.remove.dont core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_dont_want|i_do_not_want|i_no_longer_want|we_dont_need|i_dont_need|dont_want|do_not_want|i_dont_like] [$acts.det]? {thing:words} [anymore|any_more|in_it|on_it|in_there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1272,7 +1207,6 @@
     priority=12
     tabPriority=20
     example="I don't want pears anymore."
-    canonical="I don't want pears anymore."
 
 @pat.docs.editor.remove.off core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} off [the|my|this|that]? {noun:lex.docs.editor.nouns} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1289,7 +1223,6 @@
     priority=11
     tabPriority=19
     example="Take all the values out."
-    canonical="Take all the values out."
 
 @pat.docs.editor.remove.chart core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [delete|remove|get_rid_of|throw_away|scrap|trash|drop|bin|lose] [$acts.det]? {thing:lex.docs.editor.kinds} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1298,7 +1231,6 @@
     priority=14
     tabPriority=22
     example="Delete this chart."
-    canonical="Delete this chart."
 
 @pat.docs.editor.make.in core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [include|put|insert|stick|throw|pop|slip|tuck] [$acts.det]? {thing:words} [in|into|on|onto|to] [$acts.det]? [the|this|my|that]? {noun:lex.docs.editor.nouns} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1339,7 +1271,6 @@
     priority=12
     tabPriority=20
     example="Go to chart 1."
-    canonical="Go to chart 1."
 
 @pat.docs.editor.pick.ord core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {amount:lex.lang.ordinal} {thing:words?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1348,7 +1279,6 @@
     priority=5
     tabPriority=13
     example="The second chart."
-    canonical="The second chart."
 
 @pat.docs.editor.pick.next core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [go_to|show|show_me|open|switch_to]? [$acts.det]? [next|following|one_after] {thing:words?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1357,7 +1287,6 @@
     priority=6
     tabPriority=14
     example="The next chart."
-    canonical="The next chart."
 
 @pat.docs.editor.pick.prev core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [go_to|go_back_to|show|show_me|open|switch_to|back_to]? [$acts.det]? [previous|prev|prior|one_before|last_one] {thing:words?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1366,7 +1295,6 @@
     priority=6
     tabPriority=14
     example="The previous chart."
-    canonical="The previous chart."
 
 @pat.docs.editor.pick.number core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {thing:lex.docs.editor.kinds} [number|no|num|nr]? {amount:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1392,7 +1320,6 @@
     priority=6
     tabPriority=14
     example="Make it stacked."
-    canonical="Make it stacked."
 
 @pat.docs.editor.change.adj.short core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {attribute:lex.docs.editor.attrs} [please|pls|plz|thx|thanks|now] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1433,7 +1360,7 @@
     kind=request
     priority=15
     tabPriority=23
-    example="Put a guest named Maria at document."
+    example="Put a guest named Maria at table 1."
 
 @pat.docs.editor.make.blank core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [start|begin|add|insert|create|make|open]? [$acts.det]? [new|next|blank|empty|another|fresh] {thing:lex.docs.editor.kinds} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1520,7 +1447,6 @@
     priority=14
     tabPriority=22
     example="Add a link to example dot com on the word krill."
-    canonical="Add a link to example dot com on the word krill."
 
 @pat.docs.editor.change.link.to core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [link|hyperlink] [$acts.det]? {thing:words} [to|with] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -2064,6 +1990,8 @@
     kind=request
     priority=11
     example="Condense the document in a paragraph."
+    example="Summarize the document in a paragraph."
+    canonical="Summarize the document in a paragraph."
 
 @pat.docs.editor.digest.text core.pattern
     match="[can_you|could_you]? [summarize|summarise|condense] [the_following|this_text|following_text] {t:rest}"
@@ -2088,6 +2016,7 @@
     priority=17
     tabPriority=25
     example="Write an essay about volcanoes."
+    canonical="Write an essay about volcanoes."
 
 @pat.docs.editor.compose.shape core.pattern
     match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.editor.doctypes} [about|on] {topic:words} [with|of]? {c:number} [chapters|sections|slides] [of|with|each_with|and]? {s:number} [subchapters|subsections|sub_chapters|sections]"

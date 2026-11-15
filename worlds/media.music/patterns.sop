@@ -25,7 +25,7 @@
     kind=request
     priority=13
     tabPriority=21
-    example="Add a guest called Ann."
+    example="Add a song called Ann."
 
 @pat.media.music.make.name.p core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} [called|named] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -33,7 +33,7 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Place a guest named Ann."
+    example="Place a song named Ann."
 
 @pat.media.music.remove core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -41,7 +41,8 @@
     kind=request
     priority=10
     tabPriority=18
-    example="Remove the guest Ann."
+    example="Remove the song."
+    canonical="Remove the song."
 
 @pat.media.music.remove.out core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [kick|throw|take|send|get|put] [$acts.det]? {thing:words} [out|away|off_the_list] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -49,7 +50,7 @@
     kind=request
     priority=11
     tabPriority=19
-    example="Kick the guest Ann out."
+    example="Kick the song out."
 
 @pat.media.music.change.of core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.media.music.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -57,8 +58,7 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Change the colour of song to red."
-    canonical="Change the colour of song to red."
+    example="Change the colour of the song to red."
 
 @pat.media.music.change.attr core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.media.music.attrs} [to|be|as|into] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -66,7 +66,7 @@
     kind=request
     priority=13
     tabPriority=21
-    example="Set song seats to 6."
+    example="Set the song seats to 6."
 
 @pat.media.music.change.value core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to|be|as|into]? {value:lex.media.music.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -74,8 +74,7 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Make song blue."
-    canonical="Make song blue."
+    example="Make the song blue."
 
 @pat.media.music.change.add core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.media.music.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -83,7 +82,7 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Add 2 seats to song."
+    example="Add 2 seats to the song."
 
 @pat.media.music.change.add1 core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {attribute:lex.media.music.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -91,7 +90,7 @@
     kind=request
     priority=13
     tabPriority=21
-    example="Add a seat to song."
+    example="Add a seat to the song."
 
 @pat.media.music.change.less core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] {amount:number} {attribute:lex.media.music.attrs} from [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -99,7 +98,7 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Remove 2 seats from song."
+    example="Remove 2 seats from the song."
 
 @pat.media.music.change.less1 core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {attribute:lex.media.music.attrs} from [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -107,7 +106,7 @@
     kind=request
     priority=13
     tabPriority=21
-    example="Remove a seat from song."
+    example="Remove a seat from the song."
 
 @pat.media.music.change.cmp.more core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.media.music.more} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -115,8 +114,8 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Make song bigger."
-    canonical="Make song bigger."
+    example="Make the song bigger."
+    canonical="Make the song bigger."
 
 @pat.media.music.change.cmp.less core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.media.music.less} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -124,8 +123,8 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Make song smaller."
-    canonical="Make song smaller."
+    example="Make the song smaller."
+    canonical="Make the song smaller."
 
 @pat.media.music.change.bare core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -133,8 +132,8 @@
     kind=request
     priority=5
     tabPriority=13
-    example="Change song."
-    canonical="Change song."
+    example="Change the song."
+    canonical="Change the song."
 
 @pat.media.music.pick core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.pick] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -142,8 +141,8 @@
     kind=request
     priority=10
     tabPriority=18
-    example="Select song."
-    canonical="Select song."
+    example="Select the song."
+    canonical="Select the song."
 
 @pat.media.music.ask.what core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] [is|are] [$acts.det]? {attribute:lex.media.music.attrs} of [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -151,8 +150,7 @@
     kind=question
     priority=12
     tabPriority=20
-    example="What is the colour of song?"
-    canonical="What is the colour of song?"
+    example="What is the colour of the song?"
 
 @pat.media.music.ask.what.is core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] {attribute:lex.media.music.attrs} [is|are] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -160,8 +158,7 @@
     kind=question
     priority=12
     tabPriority=20
-    example="What colour is song?"
-    canonical="What colour is song?"
+    example="What colour is the song?"
 
 @pat.media.music.change.should core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [should|must|has_to|needs_to] [be|become|turn] {value:lex.media.music.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -169,7 +166,7 @@
     kind=request
     priority=12
     tabPriority=20
-    example="song should be blue."
+    example="The song should be blue."
 
 @pat.media.music.change.needs core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_want|i_need|make|let|give]? [$acts.det]? {thing:words} [needs|to_have|should_have|must_have|has|gets] {value:number} {attribute:lex.media.music.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -177,7 +174,7 @@
     kind=request
     priority=12
     tabPriority=20
-    example="song needs 6 seats."
+    example="The song needs 6 seats."
 
 @pat.media.music.ask.count.attr core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {attribute:lex.media.music.attrs} [does|do|has|have] [$acts.det]? {thing:words} [have|has|got]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -185,7 +182,7 @@
     kind=question
     priority=14
     tabPriority=22
-    example="How many seats does song have?"
+    example="How many seats does the song have?"
 
 @pat.media.music.ask.count core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {thing:words} [are|do_i_have|have_i_got|is]? [there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -202,8 +199,7 @@
     kind=question
     priority=11
     tabPriority=19
-    example="Why is song blue?"
-    canonical="Why is song blue?"
+    example="Why is the song blue?"
 
 @pat.media.music.ask.last core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? what [did|have] you [just]? [do|done|change|changed] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -212,7 +208,6 @@
     priority=11
     tabPriority=19
     example="What did you just do?"
-    canonical="What did you just do?"
 
 @pat.media.music.undo core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.undo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -230,7 +225,6 @@
     priority=16
     tabPriority=24
     example="Redo that."
-    canonical="Redo that."
 
 @pat.media.music.change.cmp.more.amt core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {amount:lex.space.amounts?} {value:lex.media.music.more} {amount2:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -239,7 +233,6 @@
     priority=13
     tabPriority=21
     example="Make the house a bit bigger."
-    canonical="Make the house a bit bigger."
 
 @pat.media.music.change.cmp.less.amt core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {amount:lex.space.amounts?} {value:lex.media.music.less} {amount2:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -248,7 +241,6 @@
     priority=13
     tabPriority=21
     example="Make the house a bit smaller."
-    canonical="Make the house a bit smaller."
 
 @pat.media.music.change.cmp.should core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [needs_to_be|should_be|must_be|has_to_be|is_too|is_not] {amount:lex.space.amounts?} {value:lex.media.music.more} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -257,7 +249,6 @@
     priority=12
     tabPriority=20
     example="The house needs to be a lot bigger."
-    canonical="The house needs to be a lot bigger."
 
 @pat.media.music.change.cmp.short.more core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} {amount:lex.space.amounts?} {value:lex.media.music.more} [please|pls|plz|thx|thanks]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -298,7 +289,6 @@
     priority=12
     tabPriority=20
     example="Enlarge the house a lot."
-    canonical="Enlarge the house a lot."
 
 @pat.media.music.change.shrink core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [shrink|reduce|compress|minimise|minimize|deflate|scale_down|make_smaller] [$acts.det]? {thing:words} {amount:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -307,7 +297,6 @@
     priority=12
     tabPriority=20
     example="Shrink the house."
-    canonical="Shrink the house."
 
 @pat.media.music.change.same core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to_be]? [the_same_size_as|the_same_size_like|same_size_as|as_big_as|as_large_as|as_small_as|as_tall_as|the_same_as|equal_in_size_to] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -316,7 +305,6 @@
     priority=15
     tabPriority=23
     example="Make the tree the same size as the house."
-    canonical="Make the tree the same size as the house."
 
 @pat.media.music.change.same.short core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [the_same_size_as|same_size_as|as_big_as|as_large_as|as_small_as|the_same_as] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -325,7 +313,6 @@
     priority=13
     tabPriority=21
     example="The same size as the house."
-    canonical="The same size as the house."
 
 @pat.media.music.change.times core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.media.music.factor} [as_big|as_large|as_tall|as_wide|as_small|as_big_as_it_is|the_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -334,7 +321,6 @@
     priority=12
     tabPriority=20
     example="Make the house twice as big."
-    canonical="Make the house twice as big."
 
 @pat.media.music.change.times.short core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {value:lex.media.music.factor} [as_big|as_large|as_tall|as_wide|as_small|the_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -351,7 +337,6 @@
     priority=14
     tabPriority=22
     example="Turn the house into a tiny one."
-    canonical="Turn the house into a tiny one."
 
 @pat.media.music.change.value.size.up core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [blow|scale|build|make|puff|pump|grow] [$acts.det]? {thing:words} up [to|into]? [a|an]? {value:lex.media.music.values} [size|sized|in_size]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -368,7 +353,6 @@
     priority=14
     tabPriority=22
     example="The house should be medium size."
-    canonical="The house should be medium size."
 
 @pat.media.music.change.with core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [fill|fill_in|colour|color|paint|cover|colour_in|color_in|dye|tint] [$acts.det]? {thing:words} [with|in|using] [$acts.det]? {value:lex.media.music.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -377,7 +361,6 @@
     priority=15
     tabPriority=23
     example="Fill the sun with yellow."
-    canonical="Fill the sun with yellow."
 
 @pat.media.music.change.in core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} in {value:lex.media.music.values} [please|pls|plz|thx|thanks]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -394,7 +377,6 @@
     priority=13
     tabPriority=21
     example="Fill in the star."
-    canonical="Fill in the star."
 
 @pat.media.music.change.value.d core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:lex.media.music.values} {noun:lex.media.music.nouns?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -403,7 +385,6 @@
     priority=13
     tabPriority=21
     example="Make it a pie chart."
-    canonical="Make it a pie chart."
 
 @pat.media.music.change.as core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show|plot|draw|display|present|chart|switch|convert|change|turn|make] [$acts.det]? {thing:words} [as|into|to|in_to] [$acts.det]? {value:lex.media.music.values} {noun:lex.media.music.nouns?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -412,7 +393,6 @@
     priority=13
     tabPriority=21
     example="Show it as a line."
-    canonical="Show it as a line."
 
 @pat.media.music.change.value.first core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {value:lex.media.music.values} {thing:lex.media.music.kinds?} {noun:lex.media.music.nouns?} [instead|again|please|pls|now|then]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -429,7 +409,6 @@
     priority=10
     tabPriority=18
     example="Use rainbow colors."
-    canonical="Use rainbow colors."
 
 @pat.media.music.change.want core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [i_want|i_d_like|i_would_like|i_need|we_want|can_i_have|could_i_have|let_s_have|lets_have] [$acts.det]? {thing:words} {value:lex.media.music.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -438,7 +417,6 @@
     priority=11
     tabPriority=19
     example="I want the bars green."
-    canonical="I want the bars green."
 
 @pat.media.music.change.nice core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? [nice|lovely|pretty|good|really|very|sort_of|kind_of|bit_more]? {value:lex.media.music.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -447,7 +425,6 @@
     priority=12
     tabPriority=20
     example="Paint the bars a nice green."
-    canonical="Paint the bars a nice green."
 
 @pat.media.music.change.would core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {value:lex.media.music.values} [would_be|is|looks|would_look|will_be|should_be] [nicer|better|best|good|great|prettier|nice|fine] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -456,7 +433,6 @@
     priority=9
     tabPriority=17
     example="Pink would be nicer."
-    canonical="Pink would be nicer."
 
 @pat.media.music.change.is.value core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [is|are|looks|look|turns|turned|became|become|is_now|are_now|now_is|now_are] {value:lex.media.music.values} [now|instead|please]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -465,7 +441,6 @@
     priority=11
     tabPriority=19
     example="The bars are teal now."
-    canonical="The bars are teal now."
 
 @pat.media.music.change.like core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [like|as|in|with] [$acts.det]? {value:lex.media.music.values} {attribute:lex.media.music.attrs?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -490,7 +465,6 @@
     priority=10
     tabPriority=18
     example="I prefer a bar chart."
-    canonical="I prefer a bar chart."
 
 @pat.media.music.change.name core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [call|name|title|label|rename|retitle] [$acts.det]? {thing:words} [to|as]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -499,7 +473,6 @@
     priority=12
     tabPriority=20
     example="Call it Fruit."
-    canonical="Call it Fruit."
 
 @pat.media.music.change.name.to core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [rename|relabel|retitle|change_the_name_of] [$acts.det]? {thing:words} [to|into|as] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -508,7 +481,6 @@
     priority=14
     tabPriority=22
     example="Rename pears to cherries."
-    canonical="Rename pears to cherries."
 
 @pat.media.music.change.swap.for core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [swap|replace|exchange|trade|switch] [$acts.det]? {thing:words} [for|with] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -517,7 +489,6 @@
     priority=12
     tabPriority=20
     example="Swap grapes for melons."
-    canonical="Swap grapes for melons."
 
 @pat.media.music.change.should.text core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {attribute:lex.media.music.attrs} [should_be|is|will_be|shall_be|must_be|needs_to_be|becomes] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -526,7 +497,6 @@
     priority=12
     tabPriority=20
     example="The title should be Snacks."
-    canonical="The title should be Snacks."
 
 @pat.media.music.change.use.as core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [use|put|set|take|make|have] {value:words} [as|for] [$acts.det]? {attribute:lex.media.music.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -535,7 +505,6 @@
     priority=13
     tabPriority=21
     example="Use Zoo as the title."
-    canonical="Use Zoo as the title."
 
 @pat.media.music.change.colon core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {attribute:lex.media.music.attrs} {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -544,7 +513,6 @@
     priority=4
     tabPriority=12
     example="Title: My fruit."
-    canonical="Title: My fruit."
 
 @pat.media.music.change.on core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show|display|bring|turn_on|enable|switch_on|put_on|give_me|show_me|bring_back|add] [$acts.det]? {attribute:lex.media.music.attrs} [back|on|again]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -553,7 +521,6 @@
     priority=12
     tabPriority=20
     example="Show the legend."
-    canonical="Show the legend."
 
 @pat.media.music.change.off core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [hide|turn_off|disable|switch_off|stop|kill|remove|drop|delete|get_rid_of|lose|skip|cut] [$acts.det]? {attribute:lex.media.music.attrs} [off|away|out|hidden]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -562,7 +529,6 @@
     priority=12
     tabPriority=20
     example="Hide the legend."
-    canonical="Hide the legend."
 
 @pat.media.music.change.turn core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take|turn|switch|put|get|send|bring] [$acts.det]? {attribute:lex.media.music.attrs} {value:lex.media.music.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -571,7 +537,6 @@
     priority=13
     tabPriority=21
     example="Take the legend off."
-    canonical="Take the legend off."
 
 @pat.media.music.change.switch core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {attribute:lex.media.music.attrs} {value:lex.media.music.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -588,7 +553,6 @@
     priority=6
     tabPriority=14
     example="No stacking."
-    canonical="No stacking."
 
 @pat.media.music.change.un core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [un|do_not|dont|stop|no_longer] {attribute:lex.media.music.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -597,7 +561,6 @@
     priority=6
     tabPriority=14
     example="Stop stacking."
-    canonical="Stop stacking."
 
 @pat.media.music.ask.what.thing core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what_is|whats|what_s|what_are|how_much_is|how_much_are|how_big_is|how_big_are|how_many_is] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -606,7 +569,6 @@
     priority=7
     tabPriority=15
     example="What is plums?"
-    canonical="What is plums?"
 
 @pat.media.music.ask.attr.tell core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|give_me|what_is|whats|what_s] [$acts.det]? {thing:words} {attribute:lex.media.music.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -615,7 +577,6 @@
     priority=8
     tabPriority=16
     example="Tell me the pears number."
-    canonical="Tell me the pears number."
 
 @pat.media.music.change.chart.without core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} [without|with_no|minus] [$acts.det]? {attribute:lex.media.music.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -632,7 +593,6 @@
     priority=12
     tabPriority=20
     example="Change pears to 6."
-    canonical="Change pears to 6."
 
 @pat.media.music.change.is.number core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [is|are|should_be|must_be|will_be|equals|has|have|is_now|are_now|needs_to_be] {value:number} [now|instead|not_3|not_8|please]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -641,7 +601,6 @@
     priority=11
     tabPriority=19
     example="The pears are 4 now."
-    canonical="The pears are 4 now."
 
 @pat.media.music.change.is.number.not core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [is|are|should_be|must_be] {value:number} [not|and_not|instead_of|rather_than] {rest:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -650,7 +609,6 @@
     priority=13
     tabPriority=21
     example="Plums are 2 not 8."
-    canonical="Plums are 2 not 8."
 
 @pat.media.music.change.fix.number core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [wait|no|oops|sorry|actually]? [$acts.det]? {thing:words} [is|are] {value:number} [not|and_not|instead_of] {rest:rest} [fix_it|correct_it|change_it]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -659,7 +617,6 @@
     priority=13
     tabPriority=21
     example="Wait, pears are 6 not 3, fix it."
-    canonical="Wait, pears are 6 not 3, fix it."
 
 @pat.media.music.change.bare.number core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? {thing:words} {value:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -676,7 +633,6 @@
     priority=13
     tabPriority=21
     example="Increase apples by 2."
-    canonical="Increase apples by 2."
 
 @pat.media.music.change.by.less core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [decrease|lower|reduce|cut|drop|take|bring_down|push_down|down|shrink|subtract] [$acts.det]? {thing:words} by {amount:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -685,7 +641,6 @@
     priority=13
     tabPriority=21
     example="Lower apples by 2."
-    canonical="Lower apples by 2."
 
 @pat.media.music.change.plus core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [plus|and] {amount:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -742,7 +697,6 @@
     priority=13
     tabPriority=21
     example="Multiply kiwis by 3."
-    canonical="Multiply kiwis by 3."
 
 @pat.media.music.change.divide.by core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [divide|split|cut] [$acts.det]? {thing:words} by {amount:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -751,7 +705,6 @@
     priority=13
     tabPriority=21
     example="Divide kiwis by two."
-    canonical="Divide kiwis by two."
 
 @pat.media.music.change.cut.half core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [cut|reduce|bring_down] [$acts.det]? {thing:words} by half [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -760,7 +713,6 @@
     priority=16
     tabPriority=24
     example="Cut the plums by half."
-    canonical="Cut the plums by half."
 
 @pat.media.music.remove.nomore core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [no_more|no] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -769,7 +721,6 @@
     priority=5
     tabPriority=13
     example="No more bananas."
-    canonical="No more bananas."
 
 @pat.media.music.remove.dont core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_dont_want|i_do_not_want|i_no_longer_want|we_dont_need|i_dont_need|dont_want|do_not_want|i_dont_like] [$acts.det]? {thing:words} [anymore|any_more|in_it|on_it|in_there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -778,7 +729,6 @@
     priority=12
     tabPriority=20
     example="I don't want pears anymore."
-    canonical="I don't want pears anymore."
 
 @pat.media.music.remove.off core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} off [the|my|this|that]? {noun:lex.media.music.nouns} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -795,7 +745,6 @@
     priority=11
     tabPriority=19
     example="Take all the values out."
-    canonical="Take all the values out."
 
 @pat.media.music.remove.chart core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [delete|remove|get_rid_of|throw_away|scrap|trash|drop|bin|lose] [$acts.det]? {thing:lex.media.music.kinds} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -804,7 +753,6 @@
     priority=14
     tabPriority=22
     example="Delete this chart."
-    canonical="Delete this chart."
 
 @pat.media.music.make.in core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [include|put|insert|stick|throw|pop|slip|tuck] [$acts.det]? {thing:words} [in|into|on|onto|to] [$acts.det]? [the|this|my|that]? {noun:lex.media.music.nouns} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -845,7 +793,6 @@
     priority=12
     tabPriority=20
     example="Go to chart 1."
-    canonical="Go to chart 1."
 
 @pat.media.music.pick.ord core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {amount:lex.lang.ordinal} {thing:words?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -854,7 +801,6 @@
     priority=5
     tabPriority=13
     example="The second chart."
-    canonical="The second chart."
 
 @pat.media.music.pick.next core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [go_to|show|show_me|open|switch_to]? [$acts.det]? [next|following|one_after] {thing:words?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -863,7 +809,6 @@
     priority=6
     tabPriority=14
     example="The next chart."
-    canonical="The next chart."
 
 @pat.media.music.pick.prev core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [go_to|go_back_to|show|show_me|open|switch_to|back_to]? [$acts.det]? [previous|prev|prior|one_before|last_one] {thing:words?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -872,7 +817,6 @@
     priority=6
     tabPriority=14
     example="The previous chart."
-    canonical="The previous chart."
 
 @pat.media.music.pick.number core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {thing:lex.media.music.kinds} [number|no|num|nr]? {amount:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -889,7 +833,6 @@
     priority=6
     tabPriority=14
     example="Make it stacked."
-    canonical="Make it stacked."
 
 @pat.media.music.change.adj.short core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {attribute:lex.media.music.attrs} [please|pls|plz|thx|thanks|now] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1472,6 +1415,7 @@
     tabPriority=22
     example="What is playing?"
     example="What are you playing?"
+    canonical="What is playing?"
 
 @pat.media.music.s.isplaying core.pattern
     match="[is|are] [the_music|you|it|anything|something|the_piano] [playing|on] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
@@ -2515,6 +2459,7 @@
     example="Louder."
     example="Make it louder."
     example="Play it a bit louder."
+    canonical="Make it louder."
 
 @pat.media.music.quiet.make core.pattern
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [make|turn|play|have|set|put|do]? [$media.music.g11_it]? {deg:lex.media.music.degrees?} [quieter|softer|more_quietly|more_softly|more_quiet] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
@@ -2540,6 +2485,7 @@
     example="Shift it an octave up."
     example="Move it one octave down."
     example="An octave higher."
+    canonical="Move it one octave down."
 
 @pat.media.music.transpose.to core.pattern
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [transpose|shift|move|change|put|take|play|sing|modulate|try] [$media.music.g11_it]? [to|into|in] [the]? [key_of|key]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
@@ -2549,6 +2495,7 @@
     example="Transpose it to D major."
     example="Play it in G."
     example="Move it to the key of A minor."
+    canonical="Transpose it to D major."
 
 @pat.media.music.tempo.fast2 core.pattern
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [speed|step|bump|pick|hurry|crank|raise|push|up|increase|quicken|accelerate|go] [$media.music.g66_it]? [up|faster|quicker|more_quickly] {deg:lex.media.music.degrees?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
@@ -2595,6 +2542,8 @@
     priority=9
     example="Key of D major please."
     example="Key = D major."
+    example="The key of D major please."
+    canonical="The key of D major please."
 
 @pat.media.music.r2.scale.pentmin.root core.pattern
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g6_play]? [a|an|the|some|my|your|that]? {root:lex.media.music.notes} [$media.music.g38_minor_pentatonic] [scale|mode]? {dir:lex.media.music.directions?} [$media.music.g10_on]? {inst:lex.media.music.instruments?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
@@ -2631,6 +2580,7 @@
     example="Run it back."
     example="Say it again."
     example="Play that again please."
+    canonical="Play that again please."
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.stop.any core.pattern
@@ -2642,6 +2592,7 @@
     example="Cut it out."
     example="I want it to stop."
     example="Stop that noise."
+    canonical="Stop that noise."
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.tempo.fast.cmp core.pattern
@@ -2655,6 +2606,7 @@
     example="It should be faster."
     example="Make it go faster."
     example="Quicker."
+    canonical="I want it faster."
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.vol.tooloud core.pattern
@@ -2700,6 +2652,7 @@
     example="The sound should be piano."
     example="Go back to piano."
     example="Instrument flute pls."
+    canonical="I prefer the piano."
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.oct.toohigh core.pattern
