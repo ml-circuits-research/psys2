@@ -2,9 +2,9 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "64c0e52a",
-  "tree": "77958b4c4333f0eb",
-  "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
+  "build": "37228eaf",
+  "tree": "df960cd854e3b3d9",
+  "catalog": "085bc0dab1f6f2817815ca789a36259b3c01ae4e",
   "seed": 20261115,
   "formalizer": "encoder"
  },
@@ -13,17 +13,17 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 175,
+   "right": 177,
    "partly": 9,
-   "wrong": 23,
+   "wrong": 21,
    "open": 11,
    "changed": 55,
    "unjudged": 332,
    "outcome": {
-    "executed": 330,
+    "executed": 333,
     "refused": 2,
-    "asked": 14,
-    "not_understood": 167,
+    "asked": 12,
+    "not_understood": 166,
     "other_world": 92
    },
    "by_source": {
@@ -75,7 +75,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 105
+     "right": 107
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -88,17 +88,17 @@
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 175,
+   "right": 177,
    "partly": 9,
-   "wrong": 23,
+   "wrong": 21,
    "open": 11,
    "changed": 55,
    "unjudged": 332,
    "outcome": {
-    "executed": 330,
+    "executed": 333,
     "refused": 2,
-    "asked": 14,
-    "not_understood": 167,
+    "asked": 12,
+    "not_understood": 166,
     "other_world": 92
    },
    "by_source": {
@@ -150,7 +150,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 105
+     "right": 107
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 231,
- "failing_ops": 231,
+ "failing_matrix": 229,
+ "failing_ops": 229,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -338,33 +338,31 @@
    "both_reasoners": 3
   },
   {
-   "cause": "diagram.sketch: not understood",
+   "cause": "diagram.sketch: acted; the state is not the expected one",
    "count": 2,
    "wrong": 2,
    "partly": 0,
    "rows": [
     {
+     "id": "r0024",
+     "verdict": "wrong",
+     "text": "paint three new nodes",
+     "tab": "diagram",
+     "reply": "What should change about circle 1, square 1, square 2, square 3 and square 4? Try a color, size, shape, outline or label.",
+     "failing": [
+      "state:shapes.length=$+3"
+     ]
+    },
+    {
      "id": "r0552",
      "verdict": "wrong",
      "text": "create a diagram",
      "tab": "diagram",
-     "reply": "I drew a diagram with 5 nodes and 4 arrows. It is about China. The nodes are 1 rectangle and 4 diamonds. The diagram is a tree. I chose 5 nodes.",
+     "reply": "I drew a random timeline diagram with four shapes. It is about water cycle. It is on top of what was there; undo takes it away.",
      "failing": [
       "state:shapes.length=1",
       "answer:Keep the current one",
-      "answer:Templates",
-      "not_understood"
-     ]
-    },
-    {
-     "id": "r0564",
-     "verdict": "wrong",
-     "text": "lable arraw between circle1 and rectangle1",
-     "tab": "diagram",
-     "reply": "I did not catch what to do with arrow. I can add, remove, change, move, connect and group; for example \"Add a circle.\". I did not use these words: \"lable\", \"arr",
-     "failing": [
-      "answer:What should the label",
-      "not_understood"
+      "answer:Templates"
      ]
     }
    ],
@@ -394,35 +392,6 @@
      "reply": "What text should I add?",
      "failing": [
       "state:blocks.length=6"
-     ]
-    }
-   ],
-   "both_reasoners": 2
-  },
-  {
-   "cause": "kids.shapes: acted; the reply does not say what the check asks",
-   "count": 2,
-   "wrong": 2,
-   "partly": 0,
-   "rows": [
-    {
-     "id": "r0610",
-     "verdict": "wrong",
-     "text": "how is a circle different from other shapes",
-     "tab": "robot",
-     "reply": "I do not know what sets a circle apart from the others yet.",
-     "failing": [
-      "answer:round shape with no sides"
-     ]
-    },
-    {
-     "id": "r0611",
-     "verdict": "wrong",
-     "text": "what makes a square special",
-     "tab": "robot",
-     "reply": "I do not know what sets a square apart from the others yet.",
-     "failing": [
-      "answer:4 sides"
      ]
     }
    ],
@@ -531,25 +500,6 @@
    "both_reasoners": 1
   },
   {
-   "cause": "diagram.sketch: acted; the state is not the expected one",
-   "count": 1,
-   "wrong": 1,
-   "partly": 0,
-   "rows": [
-    {
-     "id": "r0024",
-     "verdict": "wrong",
-     "text": "paint three new nodes",
-     "tab": "diagram",
-     "reply": "What should change about circle 1, square 1, square 2, square 3 and square 4? Try a color, size, shape, outline or label.",
-     "failing": [
-      "state:shapes.length=$+3"
-     ]
-    }
-   ],
-   "both_reasoners": 1
-  },
-  {
    "cause": "diagram.sketch: another world took the turn (art.draw)",
    "count": 1,
    "wrong": 1,
@@ -564,6 +514,26 @@
      "failing": [
       "state:edges[id=a1].color=red",
       "state:edges[id=a1].arrow=both"
+     ]
+    }
+   ],
+   "both_reasoners": 1
+  },
+  {
+   "cause": "diagram.sketch: not understood",
+   "count": 1,
+   "wrong": 1,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0564",
+     "verdict": "wrong",
+     "text": "lable arraw between circle1 and rectangle1",
+     "tab": "diagram",
+     "reply": "I did not catch what to do with arrow. I can add, remove, change, move, connect and group; for example \"Add a circle.\".",
+     "failing": [
+      "answer:What should the label",
+      "not_understood"
      ]
     }
    ],
@@ -786,9 +756,36 @@
    ]
   },
   {
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.real",
+   "count": 9,
+   "both_reasoners": 9,
+   "examples": [
+    {
+     "text": "draw a red circle",
+     "tab": "diagram",
+     "happened": "Drew a circle. [outcome: executed; partly; answer:c1]"
+    },
+    {
+     "text": "create a diagram",
+     "tab": "diagram",
+     "happened": "I drew a random timeline diagram with four shapes. It is about water cycle. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state"
+    },
+    {
+     "text": "add a box",
+     "tab": "diagram",
+     "happened": "Drew a rectangle. [outcome: executed; partly; answer:r1]"
+    },
+    {
+     "text": "connect all elements",
+     "tab": "diagram",
+     "happened": "Connected the circle → rectangle 1 and rectangle 1 → rectangle 2. [outcome: executed; partly; answer:a1 answer:a2]"
+    }
+   ]
+  },
+  {
    "cause": "unknown word (a word of the request is not known)",
-   "count": 10,
-   "both_reasoners": 10,
+   "count": 8,
+   "both_reasoners": 8,
    "examples": [
     {
      "text": "enervant da",
@@ -809,33 +806,6 @@
      "text": "desene asta",
      "tab": "map",
      "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
-    }
-   ]
-  },
-  {
-   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.real",
-   "count": 9,
-   "both_reasoners": 9,
-   "examples": [
-    {
-     "text": "draw a red circle",
-     "tab": "diagram",
-     "happened": "Drew a circle. [outcome: executed; partly; answer:c1]"
-    },
-    {
-     "text": "create a diagram",
-     "tab": "diagram",
-     "happened": "I drew a diagram with 5 nodes and 4 arrows. It is about China. The nodes are 1 rectangle and 4 diamonds. The diagram is a tree. I chose 5 nodes. [outcome: not_u"
-    },
-    {
-     "text": "add a box",
-     "tab": "diagram",
-     "happened": "Drew a rectangle. [outcome: executed; partly; answer:r1]"
-    },
-    {
-     "text": "connect all elements",
-     "tab": "diagram",
-     "happened": "Connected the circle → rectangle 1 and rectangle 1 → rectangle 2. [outcome: executed; partly; answer:a1 answer:a2]"
     }
    ]
   },

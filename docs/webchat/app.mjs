@@ -578,7 +578,7 @@ export async function mountPsys2(element, options = {}) {
       if (what === 'export') { const n = exportPhrases(); return n ? { ok: true } : { ok: false, detail: 'there are no phrases to export' }; }
       if (what === 'count') {
         if (!settings.logPhrases && !phrases.all().length) note('The phrase log is switched off, so I have not kept any phrases.');
-        else { const all = phrases.all(), n = all.filter((r) => r.source !== 'chip').length; note(`You have said ${n} ${n === 1 ? 'phrase' : 'phrases'} so far (${filterRecords(all, 'voice').length} by voice).`); }
+        else { const all = phrases.all(), n = all.filter((r) => r.source === 'human').length; note(`You have said ${n} ${n === 1 ? 'phrase' : 'phrases'} so far (${filterRecords(all, 'voice').length} by voice).`); }
         return { ok: true };
       }
       return { ok: false, detail: `unknown phrase log command "${what}"` };
@@ -604,7 +604,7 @@ export async function mountPsys2(element, options = {}) {
   const hostApi = {
     /** RANDOM (spec 25): texts the sampler gives for the tab (mode 'few' | 'actions' | 'one'); a tab shows them in its empty state instead of a list of its own. */
     sample: (mode, extra) => sampleItems(mode, extra).then((items) => items.map((i) => i.text)),
-    send: (text) => send(String(text), 'chip'),   // ignored (with a hint) while a turn runs
+    send: (text) => send(String(text), 'form'),   // a tab's form or control (logged as mode 'form'); ignored (with a hint) while a turn runs
     /** A card or control that moves the person to another tab (a transferred card): logged as a tab opened by a card. */
     openTab: (id) => { userTab(id, 'card'); },
     /** PROGRESS: tabs report a load (a world's data, a face set, a layout) to the one panel: start(id, label), step(id, label, done, total), end(id), fail(id, text, stillWorks). */
@@ -1791,11 +1791,11 @@ export async function mountPsys2(element, options = {}) {
   const plogList = h('ul', { class: 'p2-plog-list', 'aria-label': 'Logged phrases' });
   const plogCount = h('p', { class: 'p2-plog-count', 'aria-live': 'polite' });
   const plogActions = h('div', { class: 'p2-plog-actions' });
-  const MODE_ICON = { typed: '⌨', voice: '🎤', chip: '🔘' };
-  const MODE_NAME = { typed: 'typed', voice: 'spoken', chip: 'button' };
+  const MODE_ICON = { typed: '⌨', voice: '🎤', chip: '🔘', form: '📝' };
+  const MODE_NAME = { typed: 'typed', voice: 'spoken', chip: 'button', form: 'form' };
   /** One click: the share sheet where the browser offers one for files (phones), else a download. Returns the number of records. */
   function exportPhrases() {
-    const body = toJSON(phrases.all(), { includeChips: settings.exportButtons === true, diagnostics: diagnostics(), events: events.all(), app: globalThis.__psys2Build ?? null });
+    const body = toJSON(phrases.all(), { diagnostics: diagnostics(), events: events.all(), app: globalThis.__psys2Build ?? null });
     const n = JSON.parse(body).count;
     if (!n) { toast('No phrases to export yet'); return 0; }
     // the n-th export of the local day: psys2-15Nov.json, psys2-15Nov-2.json, ... (the counter is a per-viewer convenience: without storage every export is the first)
@@ -1817,8 +1817,8 @@ export async function mountPsys2(element, options = {}) {
   }
   function renderPhraseLog() {
     const all = phrases.all(), reasonsOf = failureReasons(all, events.all()), shown = (logFilter === 'failures' ? all.filter((r) => reasonsOf.has(r.id)) : filterRecords(all, logFilter)).slice().reverse();
-    const human = all.filter((r) => r.source !== 'chip').length;
-    plogCount.textContent = `${all.length} ${all.length === 1 ? 'entry' : 'entries'} (${human} typed or spoken by you, ${all.length - human} from buttons). ${settings.exportButtons === true ? 'Buttons are included in exports.' : 'Buttons are left out of exports unless you tick the box below.'}${lastExport && lastExport.where !== 'cancelled' ? ` Last export: ${lastExport.name}, ${lastExport.where === 'shared' ? 'sent through the share sheet' : 'saved in your Downloads folder'}.` : ''}`;
+    const human = all.filter((r) => r.source === 'human').length;
+    plogCount.textContent = `${all.length} ${all.length === 1 ? 'entry' : 'entries'} (${human} typed or spoken by you, ${all.length - human} from buttons or forms). Every message is in the export.${lastExport && lastExport.where !== 'cancelled' ? ` Last export: ${lastExport.name}, ${lastExport.where === 'shared' ? 'sent through the share sheet' : 'saved in your Downloads folder'}.` : ''}`;
     plogList.replaceChildren(...(shown.length ? shown : [null]).map((r) => {
       if (!r) return h('li', { class: 'p2-plog-empty' }, all.length ? 'Nothing matches this filter.' : settings.logPhrases ? 'Nothing logged yet. Say or type something.' : 'The log is switched off.');
       const status = summaryStatus(r), worlds = summaryWorlds(r).join(', '), vote = voteOf(r);
@@ -1842,7 +1842,6 @@ export async function mountPsys2(element, options = {}) {
     renderPhraseLog();
     return h('div', { class: 'p2-plog' }, h('strong', {}, 'History of my messages'),
       optCheck('logPhrases', settings.logPhrases, (v) => { settings.logPhrases = v; save(); renderPhraseLog(); }),
-      optCheck('exportButtons', settings.exportButtons === true, (v) => { settings.exportButtons = v; save(); renderPhraseLog(); }),
       plogCount, h('div', { class: 'p2-field' }, h('label', {}, 'Show '), fsel), plogList, plogActions);
   }
   let modelsAllowed = false;   // the models load after the page is usable (PERF): the rules answer meanwhile

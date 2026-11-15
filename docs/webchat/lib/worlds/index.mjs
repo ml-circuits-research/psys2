@@ -10,10 +10,9 @@ import { parse, get, getAll } from '../soplang/index.mjs?v=c57881f705';
 import { Legends } from '../legends/index.mjs?v=45bd60c654';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
 import { readDescriptionWires, slotDeclarations } from './describe.mjs?v=956f430777';
-import { checkPattern } from '../formalizer/rules/index.mjs?v=b15d2b1fc3';
-import { lexIndex } from './lexicon.mjs?v=9771542926';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=5069f90072';
+import { lexIndex } from './lexicon.mjs?v=7f0cf3631e';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
-import { parseDecl } from '../dialog/request.mjs?v=4c766a9c87';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];
 // Reasoner files (spec 15). `matrix.sop` and `mapping.sop` are data for src/reasoner. The `matrix.*.sop` extras are appended to the world's own
@@ -256,11 +255,6 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
   w.descReader = read;                                 // { descriptions, words, errors }: a language pack adds to it
   for (const m of read.errors) w.errors.push({ file: 'describe.sop', message: m });
   w.kbRaw = wires['kb.sop'];
-  if (files['request.sop'] != null) {   // spec 28: what the acts of the world honour (w.honour) and the defaults of what it makes (w.expect); not wires of the world's memory
-    const { wires: rq, errors: re } = parse(files['request.sop'], { source: `${id}/request.sop` });
-    for (const e of re) w.errors.push({ file: 'request.sop', ...e });
-    w.requestDecl = parseDecl(rq, txt, getAll);
-  }
   w.templates = wires['templates.sop'].filter((x) => x.type === 'core.template').map((x) => ({
     id: x.id, wire: x, worldId: id, for: txt(x, 'for'), status: txt(x, 'status') ?? 'supported',
     mode: txt(x, 'mode') ?? 'value', text: txt(x, 'text'), when: getAll(x, 'when').map((v) => v.v),
@@ -282,7 +276,7 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
   for (const id of ids) {
     const files = {};
     const matrix = reasoner === 'matrix';
-    await Promise.all([...FILES, 'describe.sop', 'typed.json', 'request.sop', ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
+    await Promise.all([...FILES, 'describe.sop', 'typed.json', ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
     let ops = null, fns = null, voice = null, toState = null, adopt = null, guard = null, isView = null, stateKey = null, assumed = null, undoWords = null, closeOffer = null, problem = null, whyWords = null;
     if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; adopt = m?.adopt ?? null; guard = m?.guard ?? null; isView = m?.isView ?? null; stateKey = m?.stateKey ?? null; assumed = m?.assumed ?? null; undoWords = m?.undoWords ?? null; closeOffer = m?.closeOffer ?? null; problem = m?.problem ?? null; whyWords = m?.why ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
     try { ops = await loader.loadOps(id); } catch (e) { ops = null; built.set(id + ':opsError', e); }

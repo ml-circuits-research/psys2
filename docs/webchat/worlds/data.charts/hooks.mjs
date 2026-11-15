@@ -3,9 +3,9 @@
 // the chart state of chart.mjs (the renderer, the readers of the other worlds, the statistics). The roles of an act are mapped onto those operations here; the words of the user are not read again:
 // the one thing read from the sentence is the data ("bikes 4 scooters 9"), which is the world's own parser (parseData). Nothing here names a verb, a colour or a type: values come from the
 // colour reader (values.mjs) and the schema's enums, kinds from the schema (executor.schema), bars by the label lookup of the chart.
-import * as C from './chart.mjs?v=dbb9ab761c';
-import * as G from './ops.mjs?v=5f1513fb41';
-import { animals } from '../../lib/knowledge/animals.mjs?v=652ea6b1f5';   // circular on purpose: only used inside functions, when the executor exists
+import * as C from './chart.mjs?v=9f61206650';
+import * as G from './ops.mjs?v=dab8e304af';
+import { animals } from '../../lib/knowledge/animals.mjs?v=78ec01b286';   // circular on purpose: only used inside functions, when the executor exists
 
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_']+/).filter(Boolean);
 const PRONOUN = /^(?:it|them|that|this|those|these|everything|all|each|every|one|ones|this one|that one|em)$/;
@@ -190,4 +190,15 @@ function sampleKnowledge(ctx) {
     bars: !(ctx?.state?.charts?.length) ? [] : all.filter((a) => a.legs[0] != null && /^\d+$/.test(a.legs[0]) && /^[a-z]+$/.test(a.name)).map((a) => `Add ${a.name} ${a.legs[0]}.`),
   };
 }
-export const hooks = { domain, accepts, sampleKnowledge };
+/**
+ * Does the world's own reader read the raw words of a catch-all reading (spec 16 section 13)? The data parser reads a LABEL with its value ("chart apples 5, pears 3", "bikes 4 scooters 9
+ * as a graph"): every word nobody else read (`words`) must be followed by a number within a short label. Words with no data ("chart zorbly glimfs") are not read: not executed.
+ */
+const isNum = (t) => /^-?\d+(?:[.,]\d+)?%?$/.test(t);
+function readsWhole({ text, words = null } = {}) {
+  const toks = String(text ?? '').match(/[\p{L}\p{N}.%'-]+/gu)?.map((t) => t.replace(/[.,]+$/, '')) ?? [];
+  if (!toks.some(isNum)) return false;
+  if (!words?.length) return C.parseData(String(text ?? '')).items.length > 0;
+  return words.every((w) => { const i = toks.findIndex((t) => t.toLowerCase() === String(w).toLowerCase()); return i >= 0 && toks.slice(i + 1, i + 4).some(isNum); });
+}
+export const hooks = { domain, accepts, sampleKnowledge, readsWhole };
