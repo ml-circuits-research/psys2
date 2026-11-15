@@ -16,6 +16,7 @@
 import { serialize, parse as parseOurs, ref as refValue, atom as atomValue, str as strValue } from '../soplang/index.mjs';
 import { budget as turnBudget } from '../dialog/budget.mjs';
 import { nsWorld, nsContext, strip } from './ns.mjs';
+import { entityName } from '../interpreter/render.mjs';
 
 /** Types the dialogue produces that the library must never be told (they are asked, not stated). */
 const NOT_FACTS = new Set(['core.question', 'core.request', 'core.answer', 'core.observation']);
@@ -535,6 +536,14 @@ export class ReasonerSession {
     if (!refused && !added) { for (const i of this._issues()) this.issueSeen.add(i.key); return null; }
     let why = refused ? refused.violations?.[0]?.why : unquote(first(added.w.attrs.why) ?? '');
     this.refused = this.refused.filter((r) => !ids.has(r.id));
+    // a statement about someone nobody introduced (no core.agent wire for the id it names): the user hears the name as said and that it is not known yet, never the
+    // library's check ("Must refer to a core.agent wire") nor the id (Q23, dlg.kidsB#037; general for every world of the matrix reasoner)
+    const nobody = /must refer to an? core\.agent wire/i.test(String(why ?? '')) ? this._unintroduced(facts, session) : null;
+    if (nobody) {
+      this._back(seg.marks, seg.ops, session, { restart: false });
+      for (const id of seg.ids) if (!this._held(id) && session.memory.get(id)) session.memory.retract(id, 'refused');
+      return { text: `I do not know ${nobody} yet.`, plain: true };
+    }
     // the world may say it in its own words (the issue and the facts are still in the library: it reads them before they are taken back)
     const ownerId = this.reasoner.ownerOfType(facts.find((w) => !w.type.startsWith('core.'))?.type);
     const hook = this.reasoner.problemOf.get(ownerId);
@@ -1318,12 +1327,22 @@ export class ReasonerSession {
     return env;
   }
 
+  /** The name of the first agent a statement refers to whose core.agent wire the session does not hold (the id without its prefix, capitalised), or null. */
+  _unintroduced(facts, session) {
+    for (const w of facts) for (const e of w.entries ?? []) {
+      const v = String(e.value?.v ?? '');
+      if (!/^e\.[a-z][\w]*$/i.test(v) || v === 'e.user' || v === 'e.assistant') continue;
+      if (session.memory.get(v)?.type === 'core.agent') continue;
+      return entityName(v);
+    }
+    return null;
+  }
   /** Display name of an entity for the words of a reply (the `name` of its wire in the instance in use, then in the others, else its id without the prefix). */
   _nameOf(id, inst = null) {
     const key = bare(id);
     let n = inst?.world.get(key)?.attrs?.name?.[0];
     if (n === undefined) for (const i of this.insts.values()) { n = i.world.get(key)?.attrs?.name?.[0]; if (n !== undefined) break; }
-    return n ? unquote(n) : String(id).replace(/^e\./, '').replace(/_/g, ' ');
+    return n ? unquote(n) : entityName(id);
   }
 
   /**

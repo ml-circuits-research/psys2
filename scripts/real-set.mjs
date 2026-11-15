@@ -28,9 +28,9 @@
  *   node scripts/real-set.mjs record [--allow-stale]         prints the series for scripts/learning-curve.mjs (right / judged of the REAL set, matrix reasoner); refuses a result file whose
  *                                                            measured tree is not the current one (scripts/lib/measure-build.mjs) unless --allow-stale
  *
- * RETIRED ROWS (ADR-010, the tab cut; reviewer 2026-11-14 23:50): a judged row that needs a removed world (it sits on a removed tab, or its expectation reads a removed world's
- * state or answer, or the logged reply came from one) is kept with `retired: { reason, tabs, worlds }` and its old check as `check_pre_cut`; its check becomes the clean refusal
- * (no visible state change, none of the surviving tab worlds acts: `world_not`). Retired rows are not counted in the headline; `report` prints them as a separate line.
+ * RETIRED RECORDS (one rule; reviewer 2026-11-15 04:00, Q23): a source record that carries the `retired` field (a dialogue of training/eval/dialogues.jsonl, an owner-log turn)
+ * is skipped: its rows stay in the set with `retired` (so the ids of the other rows do not move) and are never replayed, judged or counted. The script has no rule of its own
+ * about what is retired; the record says so (`retired: { reason, date }`).
  * Every result file records the build it was measured on (`build`, `tree`).
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
@@ -63,7 +63,7 @@ export function build() {
       const chk = sfx === '' ? checks[i] : null;
       const tab = r.tab ?? (r.activeWorld ? 'robot' : null);
       const lc = loggedClass(r.got?.status);
-      const base = { set: name, session: `${name}@${day(r.time)}`, i, tab, lang: r.lang ?? 'en', text: r.text, class: r.class ?? null, logged: { status: r.got?.status ?? null, answer: (r.got?.answer ?? '').slice(0, 200), outcome: lc }, time: r.time };
+      const base = { set: name, session: `${name}@${day(r.time)}`, i, tab, lang: r.lang ?? 'en', text: r.text, class: r.class ?? null, logged: { status: r.got?.status ?? null, answer: (r.got?.answer ?? '').slice(0, 200), outcome: lc }, time: r.time, ...(r.retired ? { retired: r.retired } : {}) };
       if (chk) add({ ...base, judge: 'state', check: { world: chk.world ?? 'art.draw', expect: chk }, source: 'owner-log' });
       else if (r.class === 'ok') add({ ...base, judge: 'state', check: { regress: true, was: lc ?? 'executed' }, source: 'owner-log' });
       else add({ ...base, judge: 'outcome', expected_note: r.expected ?? null, source: 'owner-log' });
@@ -82,7 +82,7 @@ export function build() {
   // real dialogues with expectations
   for (const d of jl('training/eval/dialogues.jsonl').filter((x) => (x.families ?? []).includes('real'))) {
     let tab = d.tab ?? null;
-    d.turns.forEach((t, i) => { if (t.tab) tab = t.tab; add({ set: `dialogues:${d.id}`, session: `dialogues:${d.id}`, i, tab, lang: 'en', mode: t.mode, text: t.message, class: (d.families ?? []).join(','), logged: {}, init: i === 0 ? d.init : undefined, judge: 'state', check: { world: d.world, expect: t.expect }, source: 'real-dialogue' }); });
+    d.turns.forEach((t, i) => { if (t.tab) tab = t.tab; add({ set: `dialogues:${d.id}`, session: `dialogues:${d.id}`, i, tab, lang: 'en', mode: t.mode, text: t.message, class: (d.families ?? []).join(','), logged: {}, init: i === 0 ? d.init : undefined, judge: 'state', check: { world: d.world, expect: t.expect }, source: 'real-dialogue', ...(d.retired ? { retired: d.retired } : {}) }); });
   }
   // Romanian originals of owner / phrase-log sources not already present
   const have = new Set(rows.map((r) => norm(r.text)));
@@ -98,7 +98,7 @@ export function build() {
     const name = `owner-exports/${f.replace(/\.json$/, '')}`;
     (JSON.parse(readFileSync(join(exDir, f), 'utf8')).records ?? []).filter((r) => r.source !== 'dry-run' && r.text).forEach((r, i) => add({ set: name, session: `${name}@${day(r.time)}`, i, tab: r.tab ?? r.routing?.activeTab ?? 'talk', lang: r.lang ?? 'en', mode: r.mode === 'voice' ? 'voice' : undefined, text: r.text, class: null, logged: { status: r.status ?? null, answer: String(r.detail?.answer ?? r.answer ?? '').slice(0, 200), outcome: loggedClass(r.status) }, time: r.time, judge: 'outcome', source: 'owner-export' }));
   }
-  for (const r of rows) { forbidThieves(r); retire(r); }
+  for (const r of rows) forbidThieves(r);
   writeFileSync(SET, `${rows.map((r) => JSON.stringify(r)).join('\n')}\n`);
   return rows;
 }
@@ -112,30 +112,16 @@ function forbidThieves(r) {
   r.check = { ...r.check, expect: { ...ex, world_not: THIEVES.filter((w) => !own.has(w)) } };
 }
 
-// ---------------------------------------------------------------- retired rows (ADR-010)
+// ---------------------------------------------------------------- removed tabs and worlds (ADR-010)
 /** The tabs and worlds ADR-010 removed, and the names a user or a reply gives them. */
 export const REMOVED = {
   tabs: new Set(['chess', 'tictactoe', 'hangman', 'guess', 'profile', 'reader']),
   worlds: /\b(?:games\.[\w.]+|user\.profile|docs\.reader)\b/,
   names: /\b(?:hangman|tic[- ]?tac[- ]?toe|noughts and crosses|chess|guess the animal|profile)\b/i,
 };
-/** The surviving worlds with a tab: a retired turn must not be taken by any of them (talk, the Chat tab the removed tabs fall back to, may answer; so may the cross-cutting worlds). */
+/** The surviving worlds with a tab (a forbid-only owner check must not be met by another tab's world). */
 const THIEVES = ['art.draw', 'media.music', 'diagram.sketch', 'geo.map', 'data.charts', 'plan.seating', 'plan.timeline', 'docs.editor'];
-function retire(r) {
-  if (r.judge !== 'state' || r.retired) return;
-  const ex = r.check?.expect ?? {};
-  const { world_not: _wn, reply_not: _rn, ...reads } = ex;   // forbidding a removed world is still a valid check
-  const why = [];
-  if (REMOVED.tabs.has(r.tab)) why.push(`typed on the removed ${r.tab} tab`);
-  if (REMOVED.worlds.test(JSON.stringify(reads)) || (REMOVED.worlds.test(r.check?.world ?? '') && Object.keys(reads).some((k) => /state|answer/.test(k) && REMOVED.worlds.test(JSON.stringify(reads[k]))))) why.push('the expectation reads a removed world');
-  else if (REMOVED.worlds.test(r.check?.world ?? '') && JSON.stringify(reads.answer ?? []).length > 2) why.push('the expectation is an answer of a removed world');
-  if (r.check?.regress && (REMOVED.names.test(r.text) || REMOVED.names.test(r.logged?.answer ?? ''))) why.push('the logged reply came from a removed world');
-  if (!why.length) return;
-  r.retired = { reason: `ADR-010 tab cut: ${why.join('; ')}`, tab: r.tab };
-  r.check_pre_cut = r.check;
-  r.check = { world: 'talk', expect: { unchanged: true, world_not: THIEVES.filter((w) => w !== tabWorldOfRow(r)) } };
-}
-/** The world of a row's (surviving) tab: a retired row on a surviving tab may still be read by its own world when nothing changes (a refusal there is clean). */
+/** The world of a row's tab. */
 const TAB_WORLD = { draw: 'art.draw', drawing: 'art.draw', music: 'media.music', diagram: 'diagram.sketch', map: 'geo.map', charts: 'data.charts', editor: 'docs.editor', documents: 'docs.editor' };
 const tabWorldOfRow = (r) => TAB_WORLD[r.tab] ?? null;
 /** Old tab names of the logs and their current tab ids (the page renamed `drawing` to `draw`). */
@@ -205,7 +191,7 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 
   const rows = jl('training/eval/real-2026-11-15.jsonl'.replace(/^/, ''));
   const META = new Set(['ui.shell', 'ui.help', 'talk', 'kids.common', 'conversation']);
   const bySession = new Map();
-  for (const r of rows) (bySession.get(r.session) ?? bySession.set(r.session, []).get(r.session)).push(r);
+  for (const r of rows) if (!r.retired) (bySession.get(r.session) ?? bySession.set(r.session, []).get(r.session)).push(r);   // a retired record is never replayed
   const out = [];
   const strip = (st) => JSON.stringify(visibleState(st));
   const RealDate = Date, realRandom = Math.random;
@@ -255,7 +241,7 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 
         for (const re of [].concat(ex.reply_not ?? [])) if (new RegExp(re, 'i').test(english)) bad.push(`reply_not:${re}`);
         if (ex.reply_any && ![].concat(ex.reply_any).some((re) => new RegExp(re, 'i').test(english))) bad.push(`reply_any:${ex.reply_any}`);
         for (const w of [].concat(ex.world_not ?? [])) if (worlds.includes(w)) bad.push(`world_not:${w}`);
-        if (!r.retired && (unparsedAll || reply.tooComplex) && !notUnderstoodOk(ex)) bad.push('not_understood');   // P1 b: a forbid-only check is not met by "I did not understand"
+        if ((unparsedAll || reply.tooComplex) && !notUnderstoodOk(ex)) bad.push('not_understood');   // P1 b: a forbid-only check is not met by "I did not understand"
         const cls = classify({ expect: ex }, items, { statuses: reply.statuses, unparsedAll, stateChanged, effects });
         rec.verdict = bad.length ? (cls === 'partly' ? 'partly' : 'wrong') : 'right';
         rec.failing = bad;
@@ -297,10 +283,10 @@ export const notUnderstoodOk = (ex) => ex.unchanged === true || [].concat(ex.sta
 const OUTCOMES = ['executed', 'refused', 'asked', 'not_understood', 'other_world'];
 export function tableOf(setRows, res) {
   const by = new Map(res.rows.map((x) => [x.id, x]));
-  const t = { turns: 0, judged: 0, right: 0, partly: 0, wrong: 0, open: 0, changed: 0, unjudged: 0, outcome: Object.fromEntries(OUTCOMES.map((o) => [o, 0])), by_source: {}, retired: { judged: 0, right: 0, partly: 0, wrong: 0 } };
+  const t = { turns: 0, judged: 0, right: 0, partly: 0, wrong: 0, open: 0, changed: 0, unjudged: 0, outcome: Object.fromEntries(OUTCOMES.map((o) => [o, 0])), by_source: {}, retired: 0 };
   for (const r of setRows) {
+    if (r.retired) { t.retired++; continue; }   // a retired record: skipped (counted as skipped turns only)
     const x = by.get(r.id); if (!x) continue;
-    if (r.retired) { if (['right', 'partly', 'wrong'].includes(x.verdict)) { t.retired.judged++; t.retired[x.verdict]++; } continue; }   // ADR-010: not in the headline, a line of its own
     t.turns++; t.outcome[x.outcome]++;
     const s = (t.by_source[r.set.replace(/^dialogues:.*/, 'real dialogues')] ??= { turns: 0, judged: 0, right: 0 });
     s.turns++;
@@ -359,15 +345,15 @@ function report() {
   const diag = existsSync(RES('matrix', '-rules')) ? JSON.parse(readFileSync(RES('matrix', '-rules'), 'utf8')) : null;
   const diagTable = diag?.mode === 'rules' ? tableOf(setRows, diag) : null;
   const measured = { mode: res.matrix.mode ?? null, build: res.matrix.build ?? null, tree: res.matrix.tree ?? null, catalog: res.matrix.catalog?.commit ?? null, seed: res.matrix.seed ?? null, formalizer: res.matrix.settings?.formalizer ?? null };
-  const doc = { date: '2026-11-15', measured, set: setRows.length, tables, ...(diagTable ? { diagnostic_rules_matrix: { right: diagTable.right, judged: diagTable.judged, partly: diagTable.partly, wrong: diagTable.wrong, retired: diagTable.retired, build: diag.build, tree: diag.tree } } : {}), failing_matrix: fm.length, failing_ops: fo.length, ops_only: opsOnly.length, causes: top, ledger_real_extra: extra.length };
+  const doc = { date: '2026-11-15', measured, set: setRows.length, tables, ...(diagTable ? { diagnostic_rules_matrix: { right: diagTable.right, judged: diagTable.judged, partly: diagTable.partly, wrong: diagTable.wrong, build: diag.build, tree: diag.tree } } : {}), failing_matrix: fm.length, failing_ops: fo.length, ops_only: opsOnly.length, causes: top, ledger_real_extra: extra.length };
   writeFileSync(join(REPO, 'training/eval/real-failures-2026-11-15.json'), `${JSON.stringify(doc, null, 1)}\n`);
   const md = [`# REAL failures by cause (2026-11-15)`, '', `Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: ${setRows.length} turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode ${measured.mode}: formalizer ${measured.formalizer}, the webchat's settings and send options; catalog at the pinned commit ${String(measured.catalog).slice(0, 12)}; seed ${measured.seed}; build ${measured.build}, tree ${measured.tree}), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by \`node scripts/real-set.mjs report\`.`, '',
-    `Headline (in scope, judged): ${tables.matrix.right}/${tables.matrix.judged} right (partly ${tables.matrix.partly}, wrong ${tables.matrix.wrong}); retired line (ADR-010, clean refusal expected): ${tables.matrix.retired.right}/${tables.matrix.retired.judged}.${diagTable ? ` Diagnostic, rules formalizer only: ${diagTable.right}/${diagTable.judged}.` : ''}`, '',
+    `Headline (in scope, judged): ${tables.matrix.right}/${tables.matrix.judged} right (partly ${tables.matrix.partly}, wrong ${tables.matrix.wrong}); ${tables.matrix.retired} turns of retired records skipped.${diagTable ? ` Diagnostic, rules formalizer only: ${diagTable.right}/${diagTable.judged}.` : ''}`, '',
     `Caveat: Romanian turns are replayed with the rules translator only (no browser Machine Translation in node: --bergamot runs the on-device model), so part of the Romanian causes is the missing translation backend, not the reader. Lazy world loading is not replayed (every world is loaded, as \`?psys2lazy=0\`).`, '', `Failing turns: matrix ${fm.length}, ops ${fo.length} (${opsOnly.length} fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): ${extra.length}.`, '', '| # | cause | turns | both | examples |', '| --- | --- | ---: | ---: | --- |',
     ...top.slice(0, 15).map((c, i) => `| ${i + 1} | ${c.cause.replace(/\|/g, '/').slice(0, 150)} | ${c.count} | ${c.both_reasoners} | ${c.examples.slice(0, 3).map((e) => `"${String(e.text).replace(/\|/g, '/').slice(0, 60)}" (${e.tab})`).join('; ')} |`), ''].join('\n');
   writeFileSync(join(REPO, 'training/eval/real-failures-2026-11-15.md'), md);
-  for (const [k, t] of Object.entries(tables)) console.log(`${k}: turns ${t.turns}, judged ${t.judged} (right ${t.right}, partly ${t.partly}, wrong ${t.wrong}), open ${t.open}, changed ${t.changed}, unjudged ${t.unjudged}; outcome ${JSON.stringify(t.outcome)}\n${k} retired (ADR-010, clean refusal expected): ${t.retired.right}/${t.retired.judged} right (partly ${t.retired.partly}, wrong ${t.retired.wrong})`);
-  if (diagTable) console.log(`diagnostic (rules formalizer only, matrix): judged ${diagTable.judged} (right ${diagTable.right}, partly ${diagTable.partly}, wrong ${diagTable.wrong}); retired ${diagTable.retired.right}/${diagTable.retired.judged}`);
+  for (const [k, t] of Object.entries(tables)) console.log(`${k}: turns ${t.turns}, judged ${t.judged} (right ${t.right}, partly ${t.partly}, wrong ${t.wrong}), open ${t.open}, changed ${t.changed}, unjudged ${t.unjudged}; outcome ${JSON.stringify(t.outcome)}; retired records skipped: ${t.retired} turns`);
+  if (diagTable) console.log(`diagnostic (rules formalizer only, matrix): judged ${diagTable.judged} (right ${diagTable.right}, partly ${diagTable.partly}, wrong ${diagTable.wrong})`);
   for (const [k, v] of Object.entries(res)) { const f = freshness(REPO, v); if (!f.fresh) console.log(`WARNING ${k}: ${f.why}`); if (v.mode !== 'shipped') console.log(`WARNING ${k}: mode ${v.mode ?? 'unrecorded'}, not the shipped one`); }
   console.log(md);
 }
@@ -448,7 +434,7 @@ export function headline() {
   // the headline is the shipped configuration only (P1 a); a result of another mode, or one without the catalog commit, is not a headline
   const notShipped = res.mode !== 'shipped' ? `the result is of mode ${res.mode ?? 'rules (unrecorded)'}, not the shipped one: node scripts/real-set.mjs run --reasoner matrix --ort <onnxruntime-node>` : !res.catalog?.commit ? 'the result records no catalog commit' : null;
   const stale = [f.fresh ? null : f.why, notShipped].filter(Boolean).join('; ') || null;
-  return { right: t.right, total: t.judged, turns: t.turns, retired: { right: t.retired.right, total: t.retired.judged }, build: res.build ?? null, tree: res.tree ?? null, mode: res.mode ?? null, catalog: res.catalog?.commit ?? null, seed: res.seed ?? null, ...(stale ? { stale } : {}) };
+  return { right: t.right, total: t.judged, turns: t.turns, retired_skipped: t.retired, build: res.build ?? null, tree: res.tree ?? null, mode: res.mode ?? null, catalog: res.catalog?.commit ?? null, seed: res.seed ?? null, ...(stale ? { stale } : {}) };
 }
 
 /** Rows of two result files that differ in anything but the time taken (P1 a: two runs of one tree must give identical rows). */

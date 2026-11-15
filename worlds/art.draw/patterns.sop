@@ -16,7 +16,7 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Add a guest at house."
+    example="Add a guest at table 1."
 
 @pat.art.draw.make.n core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -33,7 +33,7 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Add a guest called Ann at house."
+    example="Add a guest called Ann at table 1."
 
 @pat.art.draw.remove core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -41,7 +41,8 @@
     kind=request
     priority=10
     tabPriority=18
-    example="Remove the guest Ann."
+    example="Remove the house."
+    canonical="Remove the house."
 
 @pat.art.draw.remove.out core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [kick|throw|take|send|get|put] [$acts.det]? {thing:words} [out|away|off_the_list] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -49,7 +50,7 @@
     kind=request
     priority=11
     tabPriority=19
-    example="Kick the guest Ann out."
+    example="Kick the house out."
 
 @pat.art.draw.remove.place core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:words} [from|out_of|off] [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -57,7 +58,7 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Remove the guests from house."
+    example="Remove the guests from table 1."
 
 @pat.art.draw.change.of core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.art.draw.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -65,8 +66,8 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Change the colour of house to red."
-    canonical="Change the colour of house to red."
+    example="Change the colour of the house to red."
+    canonical="Change the colour of the house to red."
 
 @pat.art.draw.change.attr core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.art.draw.attrs} [to|be|as|into] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -74,7 +75,7 @@
     kind=request
     priority=13
     tabPriority=21
-    example="Set house seats to 6."
+    example="Set the house seats to 6."
 
 @pat.art.draw.change.value core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to|be|as|into]? {value:lex.art.draw.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -82,8 +83,8 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Make house blue."
-    canonical="Make house blue."
+    example="Make the house blue."
+    canonical="Make the house blue."
 
 @pat.art.draw.change.cmp.more core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.art.draw.more} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -91,8 +92,8 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Make house bigger."
-    canonical="Make house bigger."
+    example="Make the house bigger."
+    canonical="Make the house bigger."
 
 @pat.art.draw.change.cmp.less core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.art.draw.less} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -100,8 +101,8 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Make house smaller."
-    canonical="Make house smaller."
+    example="Make the house smaller."
+    canonical="Make the house smaller."
 
 @pat.art.draw.place core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -109,7 +110,7 @@
     kind=request
     priority=11
     tabPriority=19
-    example="Put the guest Ann at house."
+    example="Put the guest Ann at table 2."
 
 @pat.art.draw.group core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.group] [$acts.det]? {thing:words} [together]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -144,7 +145,8 @@
     kind=request
     priority=5
     tabPriority=13
-    example="Move the guest."
+    example="Move the house."
+    canonical="Move the house."
 
 @pat.art.draw.change.bare core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -152,8 +154,8 @@
     kind=request
     priority=5
     tabPriority=13
-    example="Change house."
-    canonical="Change house."
+    example="Change the house."
+    canonical="Change the house."
 
 @pat.art.draw.send.bare core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -161,8 +163,8 @@
     kind=request
     priority=5
     tabPriority=13
-    example="Send house."
-    canonical="Send house."
+    example="Send the house."
+    canonical="Send the house."
 
 @pat.art.draw.pick core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.pick] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -170,8 +172,8 @@
     kind=request
     priority=10
     tabPriority=18
-    example="Select house."
-    canonical="Select house."
+    example="Select the house."
+    canonical="Select the house."
 
 @pat.art.draw.copy core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -179,8 +181,8 @@
     kind=request
     priority=10
     tabPriority=18
-    example="Copy house."
-    canonical="Copy house."
+    example="Copy the house."
+    canonical="Copy the house."
 
 @pat.art.draw.send core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:words} to [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -188,8 +190,7 @@
     kind=request
     priority=11
     tabPriority=19
-    example="Send house to the diagram."
-    canonical="Send house to the diagram."
+    example="Send table 2 to the diagram."
 
 @pat.art.draw.ask.what core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] [is|are] [$acts.det]? {attribute:lex.art.draw.attrs} of [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -197,8 +198,8 @@
     kind=question
     priority=12
     tabPriority=20
-    example="What is the colour of house?"
-    canonical="What is the colour of house?"
+    example="What is the colour of the house?"
+    canonical="What is the colour of the house?"
 
 @pat.art.draw.ask.what.is core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] {attribute:lex.art.draw.attrs} [is|are] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -206,8 +207,8 @@
     kind=question
     priority=12
     tabPriority=20
-    example="What colour is house?"
-    canonical="What colour is house?"
+    example="What colour is the house?"
+    canonical="What colour is the house?"
 
 @pat.art.draw.change.should core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [should|must|has_to|needs_to] [be|become|turn] {value:lex.art.draw.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -215,7 +216,8 @@
     kind=request
     priority=12
     tabPriority=20
-    example="house should be blue."
+    example="The house should be blue."
+    canonical="The house should be blue."
 
 @pat.art.draw.ask.at core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|who] [is|are|sits|sit|stands|stand] [there]? {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -223,8 +225,7 @@
     kind=question
     priority=12
     tabPriority=20
-    example="Who is at house?"
-    canonical="Who is at house?"
+    example="Who is at table 1?"
 
 @pat.art.draw.ask.count core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {thing:words} [are|do_i_have|have_i_got|is]? [there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -241,7 +242,7 @@
     kind=question
     priority=13
     tabPriority=21
-    example="How many guests are at house?"
+    example="How many guests are at table 1?"
 
 @pat.art.draw.ask.where core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? where [is|are] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -250,7 +251,6 @@
     priority=12
     tabPriority=20
     example="Where is Ann?"
-    canonical="Where is Ann?"
 
 @pat.art.draw.ask.why core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? why [is|are|did|do|was|were|does] {rest:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -258,8 +258,8 @@
     kind=question
     priority=11
     tabPriority=19
-    example="Why is house blue?"
-    canonical="Why is house blue?"
+    example="Why is the house blue?"
+    canonical="Why is the house blue?"
 
 @pat.art.draw.ask.last core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? what [did|have] you [just]? [do|done|change|changed] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -268,7 +268,6 @@
     priority=11
     tabPriority=19
     example="What did you just do?"
-    canonical="What did you just do?"
 
 @pat.art.draw.undo core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.undo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -304,7 +303,6 @@
     priority=13
     tabPriority=21
     example="Move the eyes closer together."
-    canonical="Move the eyes closer together."
 
 @pat.art.draw.place.dir.bare core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} {rel:lex.acts.dir} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1144,7 +1142,7 @@
     kind=request
     priority=15
     tabPriority=23
-    example="Put a guest named Maria at house."
+    example="Put a guest named Maria at table 1."
 
 @pat.art.draw.deselect core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.deselect] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"

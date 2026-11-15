@@ -197,6 +197,7 @@
     tabPriority=19
     tabOnly=true
     example="Connect table 1 to table 2."
+    canonical="Connect table 1 to table 2."
 
 @pat.plan.seating.group core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.group] [$acts.det]? {thing:words} [together]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -256,6 +257,7 @@
     tabPriority=13
     tabOnly=true
     example="Connect table 1."
+    canonical="Connect table 1."
 
 @pat.plan.seating.send.bare core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -295,7 +297,6 @@
     tabPriority=19
     tabOnly=true
     example="Send table 2 to the diagram."
-    canonical="Send table 2 to the diagram."
 
 @pat.plan.seating.ask.what core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] [is|are] [$acts.det]? {attribute:lex.plan.seating.attrs} of [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -423,7 +424,6 @@
     tabPriority=24
     tabOnly=true
     example="Redo that."
-    canonical="Redo that."
 
 @pat.plan.seating.save core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.save] [it|this|everything]? [as|under|called]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -452,8 +452,8 @@
     priority=15
     tabPriority=23
     tabOnly=true
-    example="Put a guest named Maria at table 1."
-    canonical="Put a guest named Maria at table 1."
+    example="Put a guest named Ann at table 1."
+    canonical="Put a guest named Ann at table 1."
 
 @pat.plan.seating.deselect core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.deselect] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -463,4 +463,3 @@
     tabPriority=20
     tabOnly=true
     example="Deselect the circle."
-    canonical="Deselect the circle."

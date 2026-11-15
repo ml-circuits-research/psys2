@@ -1,4 +1,9 @@
 @doc acts.schema
+    # forms of the catalog this world does not read on its own tab in a fresh session (Q23, tests/canonical-examples.test.mjs): never offered as help; the gaps are ledger rows (class "generated canonical examples")
+    canonical.not=pick
+    canonical.not=ask.what.is
+    canonical.not=ask.options
+    canonical.not=change.link
     noun="document"
     doc="A document as a schema (spec 21): a document holds a title and blocks (sections, paragraphs, headings, lists with items, tables with cells); a block has a text, a style (marks and list styles), a level, a colour or highlight, an alignment and an order. The editor engine (editor.mjs, TipTap in the tab) keeps the state; the schema only says what is said. A view of the session things with the textual aspect (spec 23)."
     hooks=hooks.mjs

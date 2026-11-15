@@ -390,6 +390,8 @@
     kind=request
     priority=11
     example="Condense the document in a paragraph."
+    example="Summarize the document in a paragraph."
+    canonical="Summarize the document in a paragraph."
 
 @pat.docs.editor.digest.text core.pattern
     match="[can_you|could_you]? [summarize|summarise|condense] [the_following|this_text|following_text] {t:rest}"
@@ -414,6 +416,7 @@
     priority=17
     tabPriority=25
     example="Write an essay about volcanoes."
+    canonical="Write an essay about volcanoes."
 
 @pat.docs.editor.compose.shape core.pattern
     match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.editor.doctypes} [about|on] {topic:words} [with|of]? {c:number} [chapters|sections|slides] [of|with|each_with|and]? {s:number} [subchapters|subsections|sub_chapters|sections]"
