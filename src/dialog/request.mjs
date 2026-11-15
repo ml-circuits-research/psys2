@@ -94,27 +94,6 @@ export function kindNames(live) {
   return out;
 }
 
-/**
- * The expectation of a thing (spec 28 section 8): the live world's own k.expect facts first, then the catalog's, as the host's check shape: { count: [min, max], chapters, kinds,
- * words, with: ['arrow'] when its links are needed, small / big count factors of k.expect.scale }. Used to check what a reader already did; the plan itself is the library's.
- */
-export function expectOf(live, language, thing) {
-  if (!thing) return null;
-  const t = String(thing).toLowerCase();
-  const find = (w) => ofType(w, 'k.expect.make').find((r) => String(one(r, 'thing') ?? '').toLowerCase() === t);
-  const m = find(live) ?? find(language);
-  if (!m) return null;
-  const parts = [...ofType(live, 'k.expect.part'), ...ofType(language, 'k.expect.part')].filter((r) => String(one(r, 'of') ?? '').toLowerCase() === t);
-  const factor = (step) => num(ofType(language, 'k.expect.scale').find((s) => one(s, 'step') === step), 'count_factor');
-  const length = num(m, 'length');
-  const chaptered = one(m, 'unit') === 'chapter';
-  return {
-    of: t, count: chaptered ? null : [num(m, 'min'), num(m, 'max')], chapters: chaptered ? [num(m, 'min'), num(m, 'max')] : null, kinds: num(m, 'kinds_min') ?? 1,
-    words: length && one(m, 'length_unit') === 'word' ? [Math.round(length * 0.75), Math.round(length * 1.25)] : null,
-    with: parts.some((p) => one(p, 'group') === 'link' && (num(p, 'min') ?? 0) > 0) ? ['arrow'] : [], small: factor('small'), big: factor('big'),
-  };
-}
-
 /** Edit distance with a cap (above the cap: cap + 1). */
 function editDistance(a, b, cap) {
   let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
@@ -163,55 +142,6 @@ export function readTurn(lib, live, language, english, { dialogue = null, known 
     request, act: request.act ?? null, target: request.target ?? null, facts: request.facts ?? [], reaction: request.reactions?.[0]?.value ?? null,
     unread: [...new Set((request.unread ?? []).map((u) => String(u.text ?? u.words ?? u).toLowerCase()))].filter((u) => !regionNames(live).has(u) && !STOP.has(u)), used: request.used ?? [], corrections: fix.corrections, english: fix.text,
   };
-}
-
-const STEP_FACTOR = { tiny: 0.4, small: 0.6, default: 1, big: 1.5, huge: 2.2 };
-/** The range of parts a request asks for: an explicit count or range, else the expectation of the target scaled by the size step and the count step. */
-export function wantedRange(q, exp) {
-  const c = q.facts.find((f) => f.key === 'count' && (f.n != null || f.min != null));
-  if (c) return c.n != null ? [c.n, c.n] : [c.min, c.max];
-  if (!exp?.count) return null;
-  let [lo, hi] = exp.count;
-  const size = q.facts.find((f) => f.key === 'size' || f.key === 'extent')?.step;
-  const step = q.facts.find((f) => f.key === 'count' && f.step)?.step;
-  if (size === 'small' || step === 'few') { const k = exp.small ?? STEP_FACTOR.small; hi = Math.max(1, Math.min(lo - 1, Math.round(hi * k))); lo = Math.max(1, Math.round(lo * k)); if (hi < lo) hi = lo; }
-  if (size === 'big' || step === 'many') { const k = exp.big ?? STEP_FACTOR.big; lo = hi + 1; hi = Math.round(hi * k) + 1; }
-  return [lo, hi];
-}
-
-/**
- * Check what a reader already did against the request: the violations. `res` the open world's measure of what the turn made ({ parts, kinds: {k: n}, links, words, chapters, composed }),
- * `exp` the expectation of the request's target (or null). A violation hands the request to the library's plan.
- */
-export function violations(q, res, exp) {
-  const out = [];
-  if (!res) return out;
-  const kinds = res.kinds ?? {};
-  const kindN = Object.values(kinds).filter((n) => n > 0).length;
-  for (const f of q.facts) {
-    if (f.key === 'kind' && f.neg && !f.all && (kinds[f.value] ?? 0) > 0) out.push({ key: 'kind', fact: f });
-    if (f.key === 'kind' && f.neg && f.all && kindN < 2) out.push({ key: 'kind', fact: f });
-    if (f.key === 'length' && f.unit === 'chapter' && res.chapters != null && res.chapters !== f.n) out.push({ key: 'length', fact: f });
-  }
-  // a count of one kind ("5 clouds and one sun") is that kind's number in the result; a count of the whole's parts ("6 nodes") is the number of parts
-  const perKind = q.facts.filter((f) => f.key === 'count' && f.n != null && f.of && kinds[f.of] !== undefined);
-  for (const f of perKind) if (kinds[f.of] !== f.n) out.push({ key: 'count', fact: f });
-  const explicitCount = q.facts.some((f) => f.key === 'count' && (f.n != null || f.min != null) && !perKind.includes(f));
-  if (perKind.length && !explicitCount) return out;
-  const r = res.composed && !explicitCount ? null : q.target || explicitCount ? wantedRange({ facts: q.facts.filter((f) => !perKind.includes(f)) }, exp) : null;
-  const wantedKind = q.facts.find((f) => f.key === 'kind' && !f.neg && f.value !== q.target)?.value;
-  const parts = wantedKind && !q.target ? (kinds[wantedKind] ?? res.parts) : res.parts;
-  if (r && parts != null && (parts < r[0] || parts > r[1])) out.push({ key: 'count', range: r });
-  if (q.target && exp && (exp.with ?? []).includes('arrow') && !res.composed && res.links === 0 && (res.parts ?? 0) > 1) out.push({ key: 'with', value: 'arrow' });   // a composed diagram's links are its kind's
-  if (q.facts.some((f) => f.key === 'manner' && f.value === 'random') && !res.composed && !wantedKind && kindN < 2 && (res.parts ?? 0) > 2) out.push({ key: 'manner', value: 'random' });   // random is varied
-  if (q.facts.some((f) => f.key === 'with' && /^(?:arrows?|links?)$/.test(String(f.value))) && res.links === 0 && (res.parts ?? 0) > 1) out.push({ key: 'with', value: 'arrow' });
-  const len = q.facts.find((f) => f.key === 'size' || (f.key === 'length' && f.step));
-  if (len && exp?.words && res.words != null) {
-    const [lo, hi] = exp.words;
-    if (len.step === 'small' && res.words > Math.round(lo * (exp.small ?? 0.6))) out.push({ key: 'length', step: 'small' });
-    if (len.step === 'big' && res.words <= hi) out.push({ key: 'length', step: 'big' });
-  }
-  return out;
 }
 
 /** The live w.dialogue of a session: per tab world { request, result, before }. JSON in the memory and the snapshot. */

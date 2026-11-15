@@ -9,7 +9,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 
 // The ratchet: the number of cases of each property that held at the last landing (baseline 2026-11-15 before spec 28: see worker-log.md).
-const MIN = { P1: 55, P2: 17, P3: 5, P4: 9, P5: 7, P6: 5, P7: 3, P8: 7 };   // 2026-11-15 sopworld 0.150 switch: 118/140 (P1 now every form of negation, 66 cases; a margin for the sampled plans)
+const MIN = { P1: 55, P2: 17, P3: 5, P4: 10, P5: 7, P6: 7, P7: 3, P8: 7, P9: 12, P10: 1, P11: 0 };   // 2026-11-15 the door (no fallback on declared tabs): 136/160 at landing; P10 and P11 wait for the open world's things as facts of the live request World (worker-log)
 
 const loader = createFsLoader(DEFAULT_ROOT);
 const engines = {
@@ -136,6 +136,16 @@ add('P8', 'diagram', ['draw a diagram with 6 nodes in 3 chapters'], ['desenează
 add('P8', 'music', ['play a happy song with 3 chapters'], ['cântă un cântec vesel cu 3 capitole'], (r) => /chapter|capitol/i.test(r[0].reply));
 add('P8', 'map', ['show Tenerife with 3 chapters'], ['arată Tenerife cu 3 capitole'], (r) => /chapter|capitol/i.test(r[0].reply));
 add('P8', 'charts', ['make a bar chart with 5 bars about bees, with a duck'], ['fă un grafic cu bare cu 5 bare despre albine, cu o rață'], (r) => /duck|rață|rata/i.test(r[0].reply));
+
+// P9 (reasoning cycle, 15:20 block): no executed result violates a hard constraint said in the turn: a kind not wanted never appears, whatever else the turn did (nothing made counts)
+for (const k of ['circle', 'square', 'diamond']) add('P9', 'diagram', [`make a flowchart without ${k}s`], [`fă o schemă logică fără ${RO_KIND[k][0]}`], (r) => !r[0].m.kinds.has(k));
+for (const [k, ro] of [['bird', 'păsări'], ['tree', 'copaci'], ['fish', 'pești']]) add('P9', 'draw', [`paint a lake scene with no ${k === 'fish' ? 'fish' : `${k}s`}`], [`pictează un lac fără ${ro}`], (r) => !r[0].m.kinds.has(k) && !(k === 'bird' && r[0].m.kinds.has('duck')));
+// P10: a reference word resolves to a thing that makes the request satisfiable ("in it" after a pond is the pond)
+add('P10', 'draw', ['draw a pond', 'add a duck in it'], ['desenează un iaz', 'adaugă o rață în el'], (r) => r[1].m.kindList.filter((k) => k === 'bird' || k === 'duck').length > r[0].m.kindList.filter((k) => k === 'bird' || k === 'duck').length);
+add('P10', 'diagram', ['draw a diagram with 4 nodes', 'add 2 more nodes to it'], ['desenează o diagramă cu 4 noduri', 'adaugă încă 2 noduri la ea'], (r) => r[1].m.parts === r[0].m.parts + 2);
+// P11: after three things of one style a fourth takes that style unless told otherwise (induction over the live world)
+add('P11', 'draw', ['draw 3 big trees', 'draw a tree'], ['desenează 3 copaci mari', 'desenează un copac'], (r) => r[1].m.kindList.length === 4 && r[1].m.extent - r[0].m.extent >= r[0].m.extent / 3 - 1);
+add('P11', 'diagram', ['draw 3 squares', 'draw a node'], ['desenează 3 pătrate', 'desenează un nod'], (r) => r[1].m.parts === 4 && r[1].m.kindList.every((k) => k === 'square'));
 
 // ---- run --------------------------------------------------------------------------------------------------------------------------------------------
 const results = [];

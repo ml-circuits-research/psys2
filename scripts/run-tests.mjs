@@ -105,7 +105,7 @@ const failed = existsSync(env.PSYS2_FAILURES_OUT) ? readFileSync(env.PSYS2_FAILU
 const legacyFails = failed.filter((f) => f.legacy), realFails = failed.filter((f) => !f.legacy);
 if (legacyFails.length) console.log(`== LEGACY LIST (report-only, not failures): ${legacyFails.length}\n${legacyFails.map((f) => `   ${f.file}: ${f.name}`).join('\n')}`);
 if (realFails.length) console.log(`== FAILURES: ${realFails.length}\n${realFails.map((f) => `   ${f.file}: ${f.name}`).join('\n')}`);
-const runOk = r.status === 0;   // the exit code of node --test: 1 when any test failed or a file crashed
+const runOk = r.status === 0 || (r.status === 1 && failed.length > 0 && !realFails.length);   // failures of the legacy list only: the run is green (they are reported above)   // the exit code of node --test: 1 when any test failed or a file crashed
 const netViolations = existsSync(env.PSYS2_NET_LOG) ? readFileSync(env.PSYS2_NET_LOG, 'utf8').trim() : '';
 
 if (netViolations) console.log(`== NETWORK ACCESS IN TESTS (not allowed):\n${netViolations}`);
