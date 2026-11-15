@@ -4,10 +4,10 @@
 // w.list's two types is built from them for each sum, so nothing computed is stored. Prices: an entry's own, else the sample price list (prices.sample.mjs, H1).
 // No item, price or phrase is listed here: the readings are the catalog's frames (patterns.sop, generated), the number words and determiners w.lang.en's. Browser-safe.
 import { World, listSums, listMeant } from '../../lib/vendor/sopworld/sopworld.mjs?v=33f5b1e4fd';
-import { en } from '../../lib/lang/en.mjs?v=37915f671a';
-import { pluralize, singularLemma } from '../../lib/formalizer/rules/lemma.mjs?v=551c807f5c';
+import { en } from '../../lib/lang/en.mjs?v=24a2dfb4e6';
+import { pluralize, singularLemma } from '../../lib/formalizer/rules/lemma.mjs?v=9ffe311f37';
 import { SAMPLE_PRICES, SAMPLE_CURRENCY } from './prices.sample.mjs?v=1e37605e83';
-import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=d99e65c9ec';
+import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=4fba5d0be8';
 
 export function initialState() { return { lists: [], n: 0 }; }
 

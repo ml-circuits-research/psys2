@@ -24,11 +24,11 @@
  * A refused reading becomes an unparsed clause (the honest not-understood path); `seg.foreign = { world, why }` records it.
  * `PSYS2_FOREIGN=off` turns the review off (A/B runs).
  */
-import { FUNCTION_WORDS, spellVocabulary, isKnownWord, spellBudget } from '../formalizer/spell.mjs?v=f43790816b';
-import { targetsOf } from '../formalizer/typed-world.mjs?v=f43790816b';
-import { slipDistance, stemsOf } from './scene-referents.mjs?v=b0abbd3363';
+import { FUNCTION_WORDS, spellVocabulary, isKnownWord, spellBudget, sameStem } from '../formalizer/spell.mjs?v=b76a2e641f';
+import { targetsOf } from '../formalizer/typed-world.mjs?v=b76a2e641f';
+import { slipDistance, stemsOf } from './scene-referents.mjs?v=60ec5da0f1';
 import { lexIndex } from '../worlds/lexicon.mjs?v=2b73282059';
-import { tabOfWorld } from '../worlds/index.mjs?v=6d91759413';
+import { tabOfWorld } from '../worlds/index.mjs?v=513dc20b9f';
 
 export const foreignOn = () => globalThis.process?.env?.PSYS2_FOREIGN !== 'off';
 
@@ -115,7 +115,7 @@ export function confidentTypo(c, known = () => false) {
   const from = String(c.from ?? '').toLowerCase().replace(/\s+/g, ''), to = String(c.to ?? '').toLowerCase().replace(/\s+/g, '');
   if (!to || from === to) return true;
   if (words(c.to).every((w) => FUNCTION_WORDS.has(w))) return true;
-  if (words(c.from).length === 1 && known(from)) return false;
+  if (words(c.from).length === 1 && known(from)) return sameStem(from, to);   // a real word is not a typo of another, but two inflected forms of one stem are one word mis-inflected ("flyes" -> "flies")
   const budget = spellBudget(from);
   if (!budget) return false;
   if (from[0] !== to[0] && !(from[0] === to[1] && from[1] === to[0])) return false;

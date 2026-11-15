@@ -13,7 +13,9 @@ import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42
 import * as space from '../space/space.mjs?v=15c16cca4d';
 import { habitatSentence } from '../../lib/knowledge/commonsense.mjs?v=a83dfa4db3';
 import { colourName, numberValue } from '../../lib/knowledge/values.mjs?v=2bd2c8e37d';   // the one colour reader (k.values)
-import * as R from './records.mjs?v=e1fd0150ee';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
+import * as R from './records.mjs?v=192aa31ab7';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
+import { World, contrastOf } from '../../lib/vendor/sopworld/sopworld.mjs?v=33f5b1e4fd';   // the library's contrast of a kind among its siblings (talk.contrast)
+import { pluralize as pluralOf } from '../../lib/formalizer/rules/lemma.mjs?v=9ffe311f37';
 
 export const MAX_CARDS = 40;
 const MAX_PARTS = 60;
@@ -443,6 +445,45 @@ export function listWhich(ctx, { k, v, verb } = {}) {
   return ok(text, { values: shown });
 }
 
+/**
+ * How a thing differs from the other things of its kind (real rows r0610 "how is a circle different from other shapes", r0611 "what makes a square special"; Q18 L4): the
+ * library's contrastOf over a World of the catalog's records of the thing's own type (all of them, loaded by the host: `listNeeds`), the rarest values first. Said from the
+ * values themselves: a true flag is a word before the noun ("round"), a flag with two words follows it ("with equal sides"), a count of 0 is "no", another count its number.
+ */
+export function contrast(ctx, { o, k } = {}) {
+  const x = clean(o);
+  const th = ctx.knowledge?.peek?.(x);
+  if (!th) return no('missing', NONE);
+  const types = [...new Set(R.records(th, x).map((r) => r.type))];
+  for (const type of types) {
+    const all = ctx.knowledge?.peekWires?.(type) ?? [];
+    if (all.length < 2) continue;
+    const w = new World();
+    const val = (v) => (/^[\w.-]+$/.test(String(v)) ? String(v) : JSON.stringify(String(v)));
+    w.tell(all.map((r, i) => `@c${i} ${type} ${Object.entries(r.f ?? {}).flatMap(([key, vs]) => (/^[a-z_]+$/.test(key) ? [].concat(vs).map((v) => `${key}=${val(v)}`) : [])).join(' ')}`).join('\n'));
+    const c = contrastOf(w, x, { type });
+    if (!c.contrasts?.length) continue;
+    // the values that are flags or counts (a word list such as a sound or a habitat is not a contrast to say), the rare ones, in the order of the catalog's record
+    const order = Object.keys(R.records(th, x).find((r) => r.type === type)?.f ?? {});
+    const scalar = c.contrasts.filter((y) => /^(?:true|false|\d+(?:\.\d+)?)$/.test(y.value));
+    const rare = scalar.filter((y) => y.share <= 0.5);
+    const picked = (rare.length ? rare : scalar.slice(0, 1)).sort((p, q) => order.indexOf(p.key) - order.indexOf(q.key));
+    const adj = [], withs = [];
+    for (const { key, value } of picked) {
+      const words = key.replace(/_/g, ' ');
+      if (value === 'true') (key.includes('_') ? withs : adj).push(words);
+      else if (value === 'false') continue;
+      else if (/^\d+(?:\.\d+)?$/.test(value)) withs.push(`${Number(value) === 0 ? 'no' : value} ${words}`);
+    }
+    if (!adj.length && !withs.length) continue;
+    const noun = R.typeNoun(type).split(' ').at(-1);   // the noun of the type (k.shapes.shape: shape), whatever word the question used for the others
+    const parts = [adj.join(', '), noun].filter(Boolean).join(' ');
+    const text = `${cap(an(x))} is ${an(parts)}${withs.length ? ` with ${withs.length > 1 ? `${withs.slice(0, -1).join(', ')} and ${withs.at(-1)}` : withs[0]}` : ''}, unlike the other ${pluralOf(noun)}.`;
+    return ok(text, { values: picked.map((y) => `${y.key}=${y.value}`) });
+  }
+  return no('missing', `I do not know what sets ${an(x)} apart from the others yet.`);
+}
+
 /** What do A and B make (red and blue): the `gives` of the mix wire that has both, in either order; the wires of the type "mix" were loaded by the host. */
 export function mix(ctx, { a, b } = {}) {
   const x = clean(a), y = clean(b);
@@ -522,12 +563,12 @@ export function scope(ctx) {
 // ---------------------------------------------------------------- host hooks
 /** Spec 17: the things of a request that the host should look up in the catalog before the operation runs. */
 export function openSlots(ctx, { action, args = {} } = {}) {
-  const names = action === 'talk.look' || action === 'talk.parts' || action === 'talk.kind' || action === 'talk.ask' ? [args.o] : action === 'talk.count' ? [args.o, args.p] : action === 'talk.isa' ? [args.o, args.c] : action === 'talk.can' ? [args.o] : action === 'talk.list' ? [args.v] : action === 'talk.has' ? [args.o] : action === 'talk.change' ? [args.x] : action === 'talk.compare' ? [args.a, args.b] : action === 'talk.neighbour' ? [args.x] : [];
+  const names = action === 'talk.look' || action === 'talk.parts' || action === 'talk.kind' || action === 'talk.ask' ? [args.o] : action === 'talk.count' ? [args.o, args.p] : action === 'talk.isa' ? [args.o, args.c] : action === 'talk.can' ? [args.o] : action === 'talk.list' ? [args.v] : action === 'talk.has' ? [args.o] : action === 'talk.change' ? [args.x] : action === 'talk.compare' ? [args.a, args.b] : action === 'talk.neighbour' ? [args.x] : action === 'talk.contrast' ? [args.o] : [];
   return names.map(clean).filter((n) => n && n.split(' ').length <= 3 && !PRON.test(n));
 }
 /** Host hook: the words of the types whose wires an operation lists or looks up (loaded before it runs, `ctx.knowledge.peekWires`). */
 export function listNeeds(ctx, { action, args = {} } = {}) {
-  return action === 'talk.list' ? [args.k] : action === 'talk.mix' ? ['mix'] : [];
+  return action === 'talk.list' ? [args.k] : action === 'talk.mix' ? ['mix'] : action === 'talk.contrast' ? [args.k ?? args.o].filter(Boolean) : [];
 }
 
 const words = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];

@@ -3,9 +3,9 @@
 // carried across sentences and turns as `prior`); this file only gathers the words the library needs from the language world and lang.common, and says the
 // library's result in English. No name, item or number is listed here. Browser-safe.
 import { storyState } from '../../lib/vendor/sopworld/sopworld.mjs?v=33f5b1e4fd';
-import { en } from '../../lib/lang/en.mjs?v=37915f671a';
-import { pluralize } from '../../lib/formalizer/rules/lemma.mjs?v=551c807f5c';
-import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=d99e65c9ec';   // the catalog's money words (k.units through w.lang.en)
+import { en } from '../../lib/lang/en.mjs?v=24a2dfb4e6';
+import { pluralize } from '../../lib/formalizer/rules/lemma.mjs?v=9ffe311f37';
+import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=4fba5d0be8';   // the catalog's money words (k.units through w.lang.en)
 
 export function initialState() { return { story: null, turns: 0 }; }
 
