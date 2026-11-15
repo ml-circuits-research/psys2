@@ -77,4 +77,17 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.state_count_other w.lang.en.reply name=state.count count=other role=kind role=number text="There are {number} {kind:num=pl}."
 @w.lang.en.reply.local.state_empty_one w.lang.en.reply name=state.empty count=one text="There is nothing here yet."
 @w.lang.en.reply.local.nothing_same_one w.lang.en.reply name=nothing.same count=one text="That is what is there already."
+# The door's honest answers as reply facts (src/dialog/index.mjs _doorHonest; Q43 [KNOW]): what was not understood or cannot be done, said in every language by the same names.
+@w.lang.en.reply.local.not_understood_here w.lang.en.reply name=not_understood.here count=one role=world text="I did not understand that as something to do in the {world}."
+@w.lang.en.reply.local.not_understood_words w.lang.en.reply name=not_understood.words count=one role=words text="I did not understand {words} here."
+@w.lang.en.reply.local.not_understood_part w.lang.en.reply name=not_understood.part count=one role=done role=words text="I understood {done}, but not {words}, so I did nothing."
+@w.lang.en.reply.local.cannot_ask w.lang.en.reply name=cannot.ask count=one role=world text="I cannot answer questions about the {world} yet."
+@w.lang.en.reply.local.cannot_make w.lang.en.reply name=cannot.make count=one role=world text="I could not make that in the {world}."
+@w.lang.en.reply.local.cannot_plan w.lang.en.reply name=cannot.plan count=one role=words text="I could not plan {words} as you said, so I made nothing."
+@w.lang.en.reply.local.cannot_revise w.lang.en.reply name=cannot.revise count=one role=world text="There is nothing in the {world} that I made and could change that way yet."
+@w.lang.en.reply.local.cannot_act_kind w.lang.en.reply name=cannot.act.kind count=one role=act role=kind role=world text="I cannot {act} {kind} in the {world} yet."
+@w.lang.en.reply.local.cannot_act_any w.lang.en.reply name=cannot.act.any count=one role=act role=world text="I cannot {act} in the {world} yet."
+@w.lang.en.reply.local.not_understood_undo w.lang.en.reply name=not_understood.undo count=one role=words text="I did not understand {words} here, so I took nothing back."
+@w.lang.en.reply.local.nothing_like w.lang.en.reply name=nothing.like count=one role=words text="I found nothing like {words} among what was done, so I took nothing back."
+@w.lang.en.reply.local.cannot_do w.lang.en.reply name=cannot.do count=one role=words role=world text="I cannot do {words} in the {world} yet."
 `;

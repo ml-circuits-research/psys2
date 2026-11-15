@@ -118,8 +118,24 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
   /** One role of a composed reply in Romanian: a lemma for realise (noun or colour), a number, a count, or a list of counts. */
   const AND = world.ofType('w.lang.ro.particle').find((p) => String(p.attrs.meaning?.[0] ?? '').replace(/"/g, '') === 'and')?.attrs.form?.[0]?.replace(/"/g, '') ?? null;   // the language world's "and"
   const listRo = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} ${AND} ${xs.at(-1)}`);
+  // a list of English nouns said as text ("ponds, forests, water lilies"): each by its lemma (a plural by the English plural's lemma, said plural); a kind the dictionary has no
+  // lemma for is said by its own name, quoted, as the names of things are (its Romanian word is a [KNOW] ask), never dropped
+  const singularEn = (w) => (/ies$/.test(w) ? `${w.slice(0, -3)}y` : /(?:ch|sh|s|x|z)es$/.test(w) ? w.slice(0, -2) : /s$/.test(w) ? w.slice(0, -1) : null);
+  const listText = (v) => {
+    const out = [];
+    for (const x of String(v).split(', ').map((y) => y.trim()).filter(Boolean)) {
+      const one = lemmaOf(x, 'noun') ?? lemmaOf(x, 'adjective');
+      if (one) { out.push(one); continue; }
+      const sg = singularEn(x), base = sg ? lemmaOf(sg, 'noun') : null;
+      const pl = base ? run('{x:num=pl,case=nomacc,def=no}', { x: base }) : null;
+      out.push(pl || `„${x}”`);
+    }
+    return out.join(', ');
+  };
   const roleRo = (v) => {
     if (typeof v === 'number') return String(v);
+    if (typeof v === 'string' && /^\d+(?:\.\d+)?$/.test(v)) return v;   // a number said as text (an assumed count)
+    if (typeof v === 'string' && v.includes(', ')) return listText(v);   // a list said as text (assumed kinds, the kinds a world can make)
     if (typeof v === 'string') return lemmaOf(v, 'noun') ?? lemmaOf(v, 'adjective');
     if (Array.isArray(v)) { const xs = v.map((x) => (x && typeof x === 'object' ? countRo(x) : null)); return xs.length && xs.every(Boolean) && (xs.length < 2 || AND) ? listRo(xs) : null; }
     if (v && typeof v === 'object' && Number.isFinite(v.n)) return countRo(v);
@@ -194,7 +210,8 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
       // a reply that would drop a role the act gives ("7 nodes on its outline") comes after the reply of the act's own name that says it
       const mapped = REPLY_OF[say.act]?.(say.roles ?? {}), own = { name: say.act, roles: say.roles ?? {} };
       const drops = mapped?.uses && Object.keys(say.roles ?? {}).some((k) => !mapped.uses.includes(k));
-      for (const how of drops ? [own, mapped] : [mapped, own]) { const t = how && this.reply(how); if (t) return t; }
+      const byAct = typeof say.roles?.act === 'string' ? { name: `${say.act}.${say.roles.act}`, roles: say.roles } : null;   // a reply of an act said by <name>.<act> when the language has one (can.make: "pot face"), as a fact with a key is said by <name>.<key>
+      for (const how of [byAct, ...(drops ? [own, mapped] : [mapped, own])]) { const t = how && this.reply(how); if (t) return t; }
       return null;
     },
     /**
@@ -215,8 +232,11 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
       const cat = plural(n), pick = replies.find((x) => bare(x.attrs.count?.[0]) === cat) ?? replies.find((x) => bare(x.attrs.count?.[0]) === 'other') ?? replies[0];
       const roles = {}, lemmas = new Set();
       for (const f of world.ofType('w.lang.ro.fill')) if (bare(f.attrs.template?.[0]) === how.name) roles[bare(f.attrs.role[0])] = bare(f.attrs.lemma[0]);
+      const said = bare(pick.attrs.text[0]);
       for (const [k, v] of Object.entries(how.roles)) {
-        const x = roleRo(v);
+        if (!new RegExp(`\\{${k}[:}@]|@${k}\\}`).test(said)) continue;   // a role the language's sentence does not say needs no word ("aici" for the world's name)
+        let x = roleRo(v);
+        if (x == null && k === 'value' && typeof v === 'string' && new RegExp(`\\{${k}\\}`).test(said) && !new RegExp(`@${k}\\}`).test(said)) { roles[k] = `„${v}”`; continue; }   // the value of a key said as it is (no inflection, nothing agrees with it: "am presupus {value} pentru ..."): a name the dictionary has no word for is quoted, as the names of things are
         if (x == null) return null;
         roles[k] = x;
         if (typeof v === 'string') lemmas.add(k);

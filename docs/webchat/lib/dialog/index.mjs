@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=d625e9d308';
+import { composeReply, sayOf } from './composed-reply.mjs?v=bc1bcb05d5';
 import { reviewForeign } from './foreign-reading.mjs?v=79d8decc9c';
 import { installTextGen } from './textgen.mjs?v=a8831e42a2';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=ff05a8582c';
@@ -27,7 +27,7 @@ import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=36494dd717'
 import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=f0ba8543a7';
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=e8977fbdec';
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=6d31d42c6e';
+import { langRoNow } from '../translate/frames-ro.mjs?v=fde35e1fb8';
 import { repairInContext } from '../translate/source-repair.mjs?v=e721161854';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=ff05a8582c';
 import { lexIndex } from '../worlds/lexicon.mjs?v=f0499f971c';
@@ -41,7 +41,7 @@ import { attachValues } from '../knowledge/values.mjs?v=0d60c4bf76';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3ebe6cdc98';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f39042bd20';
 import { Discourse } from './discourse.mjs?v=422ad5cc94';
-import { Dialogue } from './dialogue.mjs?v=10c026eced';
+import { Dialogue } from './dialogue.mjs?v=66af0cba80';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=1e9911155e';
 import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=bc80c9df4f';
@@ -236,10 +236,21 @@ export async function translateParts(parts, translator, lang, userWords = null, 
     const say = run.length === 1 && run[0].say && lang !== 'en' && compose ? await compose(run[0].say, lang) : null;
     if (say) { out.push({ text: fitFragment(src, say), translate: true, src }); routes.push('composed'); continue; }
     // several composed sentences in a row ("Moved alfa up. Moved beta up."): each from its template, when every one of them has one
-    if (run.length > 1 && lang !== 'en' && compose && run.every((p) => p.say || (p.join && !p.text.trim()))) {
+    if (run.length > 1 && lang !== 'en' && compose && run.some((p) => p.say)) {
+      // several sentences in a row, some composed ("Moved alfa up. Moved beta up."; the door's reply facts): each composed sentence from its template, every other one through the
+      // translators on its own (a sentence with no template never sends the composed ones back to English)
       const each = [];
-      for (const p of run) { if (!p.say) { each.push(p.text); continue; } const t = await compose(p.say, lang); if (!t) break; each.push(fitFragment(p.text, t)); }
-      if (each.length === run.length) { out.push({ text: each.join(''), translate: true, src }); routes.push('composed'); continue; }
+      let whole = true;
+      for (const p of run) {
+        if (p.join && !p.text.trim()) { each.push(p.text); continue; }
+        const t = p.say ? await compose(p.say, lang) : null;
+        if (t) { each.push(fitFragment(p.text, t)); continue; }
+        const c = await choose(p.text, { fallback: p.fallback ?? null });
+        if (c.route) routes.push(c.route);
+        if (c.incomplete || !c.text) { whole = false; break; }
+        each.push(fitFragment(p.text, c.text));
+      }
+      if (whole) { out.push({ text: each.join(''), translate: true, src }); routes.push('composed'); continue; }
     }
     const c = await choose(src, { fallback: run.length === 1 ? run[0].fallback : null });
     if (c.route) { out.push({ text: fitFragment(src, c.text), translate: true, src }); routes.push(c.route); continue; }
@@ -291,6 +302,34 @@ function soundAlikes(text, tabWorld) {
 const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 /** A turn the old readers handled (the door did not take it): `trace.legacy`, with the door's reason. */
 /** The segment of the world that took a turn through the door (the readers' segments record theirs), with the slips the request read (as the readers record their corrections). */
+/**
+ * THE DOOR'S REPLY AS REPLY FACTS (spec 28 section 14; spec 06 "Composed replies"): one part per fact `{ reply, roles }` (sayRequest's facts, or a reply name the door says), its English
+ * said by the language world (`<name>.<key>` first when the fact has a key, as sayRequest says it), its frame `say: { act: <name>, roles }` for the user's language pack (w.lang.ro reply
+ * rows), so that a reply reaches every language by the same names and never by a sentence of code. `lead`: parts said before (the reader's repairs). Returns null when the facts'
+ * English is not the text given (the reply is then said as it is, through the translators): nothing changes in English.
+ */
+function factParts(lib, language, facts, text = null) {
+  if (!lib || !language || !Array.isArray(facts) || !facts.length) return null;
+  const parts = [];
+  for (const f of facts) {
+    const roles = Object.fromEntries(Object.entries(f.roles ?? {}).filter(([, v]) => v != null && v !== ''));
+    const names = roles.key ? [`${f.reply}.${roles.key}`, f.reply] : [f.reply];
+    let said = null;
+    const words = Object.fromEntries(Object.entries(roles).map(([k, v]) => [k, Array.isArray(v?.names) ? v.names.map((w) => `"${w}"`).join(', ') : v]));   // the person's own words, quoted
+    for (const n of names) { let t = null; try { t = lib.replyFrom?.(language, n, words) ?? null; } catch { t = null; } if (t) { said = { name: n, text: typeof t === 'string' ? t : t.text ?? String(t) }; break; } }
+    if (!said) return null;
+    parts.push({ text: said.text, translate: true, say: { act: said.name, roles } });
+  }
+  const out = parts.flatMap((p, i) => (i ? [{ text: ' ', translate: false, join: true }, p] : [p]));
+  if (text != null && out.map((p) => p.text).join('').trim() !== String(text).trim()) return null;
+  return out;
+}
+/** One reply name of the language world as the door's reply: `{ text, parts }`, or null when the language has no such reply. */
+function sayFact(lib, language, reply, roles = {}) {
+  const parts = factParts(lib, language, [{ reply, roles }]);
+  return parts ? { text: parts.map((p) => p.text).join(''), parts } : null;
+}
+
 function stampDoor(r, tabWorld, text, q) {
   r.trace ??= {};
   const corrections = (q?.corrections ?? []).map((c) => ({ from: c.said, to: c.as }));
@@ -321,7 +360,7 @@ import { withSubject, polishReply } from '../translate/register.mjs?v=45588e0a13
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=80e9d07ff4';
 import { intentStep, weakReading, cutWorld } from './intent.mjs?v=5e4cf030ab';
 import { knownEnglishWord } from '../translate/en-ro.mjs?v=cbd133aecd';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=9c09e23d7f';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=2c4c9ffd63';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1763,7 +1802,7 @@ export class DialogSession {
       try { rv = lib.reviseRequest(dlg.result ? dlg : { ...dlg, last: bare, result: { status: 'current' } }, bare, { revisions: language, catalog: [language] }); } catch { rv = null; }
       const said = rv && !rv.request ? replyOf(lib, language, rv.reply ?? '', {}) : null;
       if (said?.text) {
-        const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, say: said.text });
+        const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, say: said.text, parts: factParts(lib, language, [{ reply: said.name, roles: {} }], said.text) ?? undefined });
         r.trace.request = flat;
         return { reply: r, route: `reaction ${rv.reaction}` };
       }
@@ -1862,7 +1901,7 @@ export class DialogSession {
       let said = null;
       try { const answer = lib.askWorld(question, q.request, { live, bindings: tools, view: prims.view, catalog: [language] }); said = lib.sayRequest(q.request, { capabilities: answer.capabilities, answer: answer.facts }, sayOpts); } catch { said = null; }
       if (said?.text) {
-        const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, say: said.text });
+        const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, say: said.text, parts: factParts(lib, language, said.facts, said.text) ?? undefined });
         r.trace.request = { ...flat, ask: question };
         return { reply: r, route: `ask ${question}` };
       }
@@ -1916,7 +1955,9 @@ export class DialogSession {
       try { said = lib.sayRequest(req, { ...plan, run, revised: replace && run.ok && !run.same, reply: rev?.reply }, sayOpts); } catch { said = null; }
       const done = run.ok && !run.same;
       const read = (q.corrections ?? []).length ? `I read ${q.corrections.map((c) => `"${c.said}" as "${c.as}"`).join(', ')}. ` : '';   // what the reader repaired is said, as every door reply says it
-      return { reply: read + (said?.text || ''), status: done ? 'supported' : 'unsupported', info: { kind: 'door' }, frame: done ? { world: tabWorld, text: english, act: req.act ?? 'make' } : null };
+      const facts = factParts(lib, language, said?.facts, said?.text ?? '');
+      const parts = facts ? [...(read ? [{ text: read, translate: true }] : []), ...facts] : null;
+      return { reply: read + (said?.text || ''), ...(parts ? { parts } : {}), status: done ? 'supported' : 'unsupported', info: { kind: 'door' }, frame: done ? { world: tabWorld, text: english, act: req.act ?? 'make' } : null };
     } });
     if (replaces && run?.ok) this.discourse.actions = this.discourse.actions.filter((x) => x !== replaces);
     if (run?.ok) {
@@ -1960,21 +2001,25 @@ export class DialogSession {
     const name = (live?.ofType?.('std.schema.world')?.[0]?.attrs?.name?.[0]) ?? 'open tab';
     const q = door?.q ?? null;
     const why = String(door?.why ?? '');
-    const list = (ws) => ws.map((w) => `"${w}"`).join(', ');
-    let say;
+    const list = (ws) => ({ names: ws.map((w) => String(w)) });   // the person's own words: said as they are, quoted, in every language
+    // what the door could not take, as a reply fact of the language world (the reason of `door.why`, not a sentence of code): every language says it by the same name
+    let fact;
     const cl = q?.unread?.length ? clausesOf(q.english ?? text, requestLanguage(lib), q.unread) : [];
-    if (cl.some((c) => !c.unread) && cl.some((c) => c.unread)) say = `I understood ${list(cl.filter((c) => !c.unread).map((c) => c.text))}, but not ${list(cl.filter((c) => c.unread).map((c) => c.text))}, so I did nothing.`;   // a clause next to one not understood never runs (destructive or not)
-    else if (q?.unread?.length) say = `I did not understand ${list(q.unread)} here.`;
-    else if (why === 'question') say = `I cannot answer questions about the ${name} yet.`;
-    else if (/^act (\S+)(?: (.+))? not declared$/.test(why)) { const [, act, thing] = why.match(/^act (\S+)(?: (.+))? not declared$/); say = `I cannot ${act}${thing ? ` ${thing.replace(/_/g, ' ')}` : ''} in the ${name} yet.`; }
-    else if (/^refers to the (.+) of the open world$/.test(why)) say = `I cannot change the ${why.match(/^refers to the (.+) of the open world$/)[1]} in the ${name} yet.`;
-    else if (/^(?:plan drops|not declared:) (.+)$/.test(why)) say = `I cannot do ${why.replace(/^(?:plan drops|not declared:) /, '')} in the ${name} yet.`;
-    else if (/^executor/.test(why) || /^no plan/.test(why)) say = `I could not make that in the ${name}.`;
-    else if (/^plan breaks (.+)$/.test(why)) say = `I could not plan ${why.replace(/^plan breaks /, '')} as you said, so I made nothing.`;
-    else if (/^reaction \S+ with no result$/.test(why) || /not a revision$/.test(why)) say = `There is nothing in the ${name} that I made and could change that way yet.`;
-    else say = `I did not understand that as something to do in the ${name}.`;
+    if (cl.some((c) => !c.unread) && cl.some((c) => c.unread)) fact = ['not_understood.part', { done: list(cl.filter((c) => !c.unread).map((c) => c.text)), words: list(cl.filter((c) => c.unread).map((c) => c.text)) }];   // a clause next to one not understood never runs (destructive or not)
+    else if (q?.unread?.length) fact = ['not_understood.words', { words: list(q.unread) }];
+    else if (why === 'question') fact = ['cannot.ask', { world: name }];
+    else if (/^act (\S+)(?: (.+))? not declared$/.test(why)) { const [, act, thing] = why.match(/^act (\S+)(?: (.+))? not declared$/); fact = thing ? ['cannot.act.kind', { act, kind: thing.replace(/_/g, ' '), world: name }] : ['cannot.act.any', { act, world: name }]; }
+    else if (/^refers to the (.+) of the open world$/.test(why)) fact = ['cannot.act', { act: 'change', thing: why.match(/^refers to the (.+) of the open world$/)[1], world: name }];
+    else if (/^(?:plan drops|not declared:) (.+)$/.test(why)) fact = ['cannot.do', { words: why.replace(/^(?:plan drops|not declared:) /, ''), world: name }];
+    else if (/^executor/.test(why) || /^no plan/.test(why) || why === 'no executor') fact = ['cannot.make', { world: name }];
+    else if (/^plan breaks (.+)$/.test(why)) fact = ['cannot.plan', { words: why.replace(/^plan breaks /, '') }];
+    else if (/^reaction \S+ with no result$/.test(why) || /not a revision$/.test(why)) fact = ['cannot.revise', { world: name }];
+    else fact = ['not_understood.here', { world: name }];
+    const lang0 = requestLanguage(lib);
+    const said = sayFact(lib, lang0, fact[0], fact[1]);
+    const say = said?.text ?? `I did not understand that as something to do in the ${name}.`;
     const en = await this._doorEnglish(text, opts).catch(() => null);
-    const r = await this._sendCore(text, { ...opts, ...(en?.lang ? { language: en.lang } : {}) }, { english: en?.english ?? text, translation: en?.translation ?? null, say });
+    const r = await this._sendCore(text, { ...opts, ...(en?.lang ? { language: en.lang } : {}) }, { english: en?.english ?? text, translation: en?.translation ?? null, say, ...(said ? { parts: said.parts } : {}) });
     r.trace.request = q;
     if (Array.isArray(r.statuses)) r.statuses = ['unsupported'];
     return r;
@@ -1992,11 +2037,15 @@ export class DialogSession {
       const m = answer ? await this.discourse.meta(en, pend, sid) : await this.discourse.undoRedo(en);   // `answer`: the turn answers the timeline's own question ("Shall I take them all back?")
       if (answer && !m) return { reply: 'I did not understand that as an answer to my question.', status: 'unsupported', info: { kind: 'intent' } };
       if (m) return { ...m, status: m.status ?? 'supported' };
-      if (unread.length || named) return { reply: unread.length ? `I did not understand ${unread.map((w) => `"${w}"`).join(', ')} here, so I took nothing back.` : `I found nothing like "${String(named).replace(/_/g, ' ')}" among what was done, so I took nothing back.`, status: 'unsupported', info: { kind: 'intent' } };   // "undo the unicorn": nothing that was done; "undo the house" with no such step never takes back another
-      if (!op || typeof world?.ops?.[op] !== 'function') return { reply: `I cannot ${act} in the ${name} yet.`, status: 'unsupported', info: { kind: 'intent' } };
+      const lib = this.engine.sopworld, language = requestLanguage(lib);
+      if (unread.length || named) { const f = unread.length ? sayFact(lib, language, 'not_understood.undo', { words: { names: unread } }) : sayFact(lib, language, 'nothing.like', { words: { names: [String(named).replace(/_/g, ' ')] } }); return { reply: f?.text ?? 'I took nothing back.', ...(f ? { parts: f.parts } : {}), status: 'unsupported', info: { kind: 'intent' } }; }   // "undo the unicorn": nothing that was done; "undo the house" with no such step never takes back another
+      if (!op || typeof world?.ops?.[op] !== 'function') { const f = sayFact(lib, language, 'cannot.act.any', { act, world: name }); return { reply: f?.text ?? `I cannot ${act} here yet.`, ...(f ? { parts: f.parts } : {}), status: 'unsupported', info: { kind: 'intent' } }; }
       const r = this._runWorldAct(tabWorld, op, {});
-      const said = String(r?.value ?? r?.note ?? '').trim() || (r?.reply ? replyOf(this.engine.sopworld, requestLanguage(this.engine.sopworld), r.reply, {})?.text : '') || (act === 'undo' ? 'There is nothing to undo.' : 'There is nothing to redo.');   // a tool says what it did by a reply fact's name (done.undo, nothing.undo)
-      return { reply: said, status: r?.status ?? 'missing', info: { kind: 'door' }, frame: r?.status === 'supported' ? { world: tabWorld, text: en, act } : null };
+      const did = r?.status === 'supported';
+      const said = String(r?.value ?? r?.note ?? '').trim() || (r?.reply ? replyOf(lib, language, r.reply, {})?.text : '') || sayFact(lib, language, `nothing.${act}`)?.text || '';   // a tool says what it did by a reply fact's name (done.undo, nothing.undo)
+      // the reply fact of the step (done.undo / done.redo, nothing.undo / nothing.redo): the world's English words stay what it said; every other language says the fact
+      const fact = r?.reply ?? (did ? `done.${act}` : `nothing.${act}`);
+      return { reply: said, parts: [{ text: said, translate: true, say: { act: fact, roles: {} } }], status: r?.status ?? 'missing', info: { kind: 'door' }, frame: did ? { world: tabWorld, text: en, act } : null };
     };
     const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, run });
     r.trace.request = flat;
@@ -2116,7 +2165,12 @@ export class DialogSession {
     parts.push(reaction ? head?.text ?? '' : '', String(done.value ?? '').trim(), arrange || (done.plain && !(done.cannot ?? []).length) ? '' : said?.text ?? '');   // an arrangement (or an act that used none of the plan's assumptions) says only what it did
     if (replaces) this.discourse.actions = this.discourse.actions.filter((x) => x !== replaces);
     const sayText = parts.filter(Boolean).join(' ');
-    const r = await this._sendCore(text, sendOpts, { english, translation, say: sayText, parts: namedParts(sayText, done.names), before, frame: { world: tabWorld, text: english, act: goalReq.act ?? 'make' } });
+    // the parts of the reply: the world's own words (translated), the library's reply facts (composed in the user's language, spec 28 section 14)
+    const factsOf = (x) => (x?.text ? factParts(lib, language, x.facts, x.text) ?? [{ text: x.text, translate: true }] : []);
+    const pieces = [...(q.corrections.length ? [{ text: parts[0], translate: true }] : []), ...(reaction ? factsOf(head) : []), ...(String(done.value ?? '').trim() ? [{ text: String(done.value).trim(), translate: true }] : []), ...(arrange || (done.plain && !(done.cannot ?? []).length) ? [] : factsOf(said))];
+    const joined = pieces.flatMap((p, i) => (i ? [{ text: ' ', translate: false, join: true }, p] : [p]));
+    const factParts1 = joined.map((p) => p.text).join('') === sayText ? joined : null;
+    const r = await this._sendCore(text, sendOpts, { english, translation, say: sayText, parts: namedParts(sayText, done.names) ?? factParts1 ?? undefined, before, frame: { world: tabWorld, text: english, act: goalReq.act ?? 'make' } });
     record.turn = this._msg;
     this.dialogue.requests.record(tabWorld, record);
     r.trace.request = { ...flat, revised: reaction ? (goalReq.facts ?? null) : null, plan: { roles: plan.roles, assumed: plan.assumed, notHonoured: plan.notHonoured, steps: plan.steps?.length ?? 0, result } };
