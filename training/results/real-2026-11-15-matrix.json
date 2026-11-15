@@ -5,8 +5,8 @@
  "mt": false,
  "voice": false,
  "date": "2026-11-15",
- "build": "dc3a0a8a",
- "tree": "713a0da48f3165b7",
+ "build": "a0467d29",
+ "tree": "bb0d3b914c9971de",
  "catalog": {
   "commit": "590bc64f8777115c3c44de36378a68e75bf7eb09",
   "url": "https://cdn.jsdelivr.net/gh/ml-circuits-research/sop-knowledge-worlds@590bc64f8777115c3c44de36378a68e75bf7eb09/docs/worlds"
@@ -36,7 +36,7 @@
  },
  "ticks": {
   "total": {
-   "sum": 38471993,
+   "sum": 38472030,
    "p50": 24633,
    "max": 1088171
   },
@@ -235,7 +235,7 @@
    },
    {
     "site": "scene.walk",
-    "sum": 255013,
+    "sum": 255016,
     "share": 0.7,
     "turns": 544,
     "p50": 336,
@@ -355,11 +355,11 @@
    },
    {
     "site": "diagram.outline",
-    "sum": 108508,
+    "sum": 108536,
     "share": 0.3,
     "turns": 1,
-    "p50": 108508,
-    "max": 108508,
+    "p50": 108536,
+    "max": 108536,
     "early": 527,
     "late": 0,
     "growth": 0,
@@ -643,14 +643,14 @@
    },
    {
     "site": "followup.touched",
-    "sum": 13352,
+    "sum": 13358,
     "share": 0,
     "turns": 334,
     "p50": 10,
     "max": 456,
     "early": 8,
     "late": 35,
-    "growth": 4.5,
+    "growth": 4.48,
     "slope": 0.4
    },
    {
@@ -1979,7 +1979,7 @@
   {
    "id": "r0001",
    "outcome": "other_world",
-   "ms": 1845,
+   "ms": 1769,
    "reply": "I drew a white house. I drew a green house.",
    "worlds": [
     "art.draw"
@@ -2011,7 +2011,7 @@
   {
    "id": "r0002",
    "outcome": "executed",
-   "ms": 30,
+   "ms": 29,
    "reply": "I drew a yellow house.",
    "worlds": [
     "art.draw"
@@ -2073,7 +2073,7 @@
   {
    "id": "r0004",
    "outcome": "other_world",
-   "ms": 22,
+   "ms": 23,
    "reply": "I drew a green house.",
    "worlds": [
     "art.draw"
@@ -2104,7 +2104,7 @@
   {
    "id": "r0005",
    "outcome": "other_world",
-   "ms": 20,
+   "ms": 21,
    "reply": "I drew a yellow house.",
    "worlds": [
     "art.draw"
@@ -2135,7 +2135,7 @@
   {
    "id": "r0006",
    "outcome": "not_understood",
-   "ms": 695,
+   "ms": 666,
    "reply": "I did not understand \"she knows what their grandma could trade charcoal Chicago\". For example: \"Add a circle.\" or \"What is the colour of the circle?\" I did not know the words: she, knows, what, their, grandma, could, tra",
    "worlds": [],
    "statuses": [
@@ -2167,7 +2167,7 @@
   {
    "id": "r0007",
    "outcome": "not_understood",
-   "ms": 215,
+   "ms": 208,
    "reply": "I did not understand \"Des\". For example: \"Add a circle.\" or \"What is the colour of the circle?\"",
    "worlds": [],
    "statuses": [
@@ -2197,7 +2197,7 @@
   {
    "id": "r0008",
    "outcome": "executed",
-   "ms": 261,
+   "ms": 257,
    "reply": "Drew a circle.",
    "worlds": [
     "diagram.sketch"
@@ -2229,7 +2229,7 @@
   {
    "id": "r0009",
    "outcome": "executed",
-   "ms": 310,
+   "ms": 289,
    "reply": "Drew 4 squares.",
    "worlds": [
     "diagram.sketch"
@@ -2261,7 +2261,7 @@
   {
    "id": "r0010",
    "outcome": "asked",
-   "ms": 39,
+   "ms": 37,
    "reply": "I understood only part of \"Make a layout more beautiful\": I did not use \"beautiful\", so I did not do it. What did you mean?",
    "worlds": [
     "diagram.sketch"
@@ -2324,7 +2324,7 @@
   {
    "id": "r0012",
    "outcome": "executed",
-   "ms": 26,
+   "ms": 24,
    "reply": "That arrow already connects circle 1 and square 1. That arrow already connects square 1 and square 2. That arrow already connects square 2 and square 3. That arrow already connects square 3 and square 4.",
    "worlds": [
     "diagram.sketch"
@@ -2355,7 +2355,7 @@
   {
    "id": "r0013",
    "outcome": "not_understood",
-   "ms": 319,
+   "ms": 318,
    "reply": "That sounds like something about you. I cannot keep facts about you here.",
    "worlds": [],
    "statuses": [
@@ -2385,7 +2385,7 @@
   {
    "id": "r0014",
    "outcome": "asked",
-   "ms": 26,
+   "ms": 28,
    "reply": "I understood only part of \"make a better layout\": I did not use \"better\", so I did not do it. What did you mean?",
    "worlds": [
     "diagram.sketch"
@@ -2417,7 +2417,7 @@
   {
    "id": "r0015",
    "outcome": "executed",
-   "ms": 22,
+   "ms": 20,
    "reply": "Because you said \"Connect all the shapes\": That arrow already connects circle 1 and square 1. That arrow already connects square 1 and square 2. That arrow already connects square 2 and square 3. That arrow already conne",
    "worlds": [
     "diagram.sketch"
@@ -2481,7 +2481,7 @@
   {
    "id": "r0017",
    "outcome": "executed",
-   "ms": 341,
+   "ms": 344,
    "reply": "I drew a yellow house and 3 clouds.",
    "worlds": [
     "art.draw"
@@ -2512,7 +2512,7 @@
   {
    "id": "r0018",
    "outcome": "executed",
-   "ms": 38,
+   "ms": 39,
    "reply": "Which shape? c1 (top left), s1 (top left), s2 (top center), s3 (top center) and s4 (top right). Reply with a name.",
    "worlds": [
     "diagram.sketch"
@@ -2544,7 +2544,7 @@
   {
    "id": "r0019",
    "outcome": "not_understood",
-   "ms": 432,
+   "ms": 422,
    "reply": "I did not understand \"for their grandma do it\". For example: \"Add a circle.\" or \"What is the colour of the circle?\" I did not know the words: for, their, grandma, do, it.",
    "worlds": [],
    "statuses": [
@@ -2574,7 +2574,7 @@
   {
    "id": "r0020",
    "outcome": "not_understood",
-   "ms": 454,
+   "ms": 435,
    "reply": "I did not understand \"medicine as a train no door soup linear current\". For example: \"Add a circle.\" or \"What is the colour of the circle?\" I did not know the words: medicine, as, a, train, no, door, soup, linear, curren",
    "worlds": [],
    "statuses": [
@@ -2604,7 +2604,7 @@
   {
    "id": "r0021",
    "outcome": "not_understood",
-   "ms": 587,
+   "ms": 566,
    "reply": "I did not understand \"listen as a train order noise that's Opera\". Did you mean \"What are the planets in order?\"? I did not know the words: listen, as, a, train, order, noise, that's.",
    "worlds": [],
    "statuses": [
@@ -2634,7 +2634,7 @@
   {
    "id": "r0022",
    "outcome": "not_understood",
-   "ms": 544,
+   "ms": 514,
    "reply": "I did not understand \"this inaza train order Noy\". For example: \"Add a circle.\" or \"What is the colour of the circle?\" I did not know the words: this, inaza, train, order.",
    "worlds": [],
    "statuses": [
@@ -2664,7 +2664,7 @@
   {
    "id": "r0023",
    "outcome": "executed",
-   "ms": 429,
+   "ms": 413,
    "reply": "What should change about circle 1, square 1, square 2, square 3 and square 4? Try a color, size, shape, outline or label.",
    "worlds": [
     "diagram.sketch"
@@ -2695,7 +2695,7 @@
   {
    "id": "r0024",
    "outcome": "executed",
-   "ms": 389,
+   "ms": 369,
    "reply": "What should change about circle 1, square 1, square 2, square 3 and square 4? Try a color, size, shape, outline or label.",
    "worlds": [
     "diagram.sketch"
@@ -2729,7 +2729,7 @@
   {
    "id": "r0025",
    "outcome": "not_understood",
-   "ms": 262,
+   "ms": 246,
    "reply": "That sounds like something about you. I cannot keep facts about you here.",
    "worlds": [],
    "statuses": [
@@ -2759,7 +2759,7 @@
   {
    "id": "r0026",
    "outcome": "not_understood",
-   "ms": 296,
+   "ms": 287,
    "reply": "I did not understand \"magnavator person\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" I did not know the words: magnavator, person.",
    "worlds": [],
    "statuses": [
@@ -2789,7 +2789,7 @@
   {
    "id": "r0027",
    "outcome": "other_world",
-   "ms": 66,
+   "ms": 67,
    "reply": "I drew a blue person.",
    "worlds": [
     "art.draw"
@@ -2820,7 +2820,7 @@
   {
    "id": "r0028",
    "outcome": "not_understood",
-   "ms": 366,
+   "ms": 352,
    "reply": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" I did not know the words: old, woman.",
    "worlds": [],
    "statuses": [
@@ -2853,7 +2853,7 @@
   {
    "id": "r0029",
    "outcome": "not_understood",
-   "ms": 185,
+   "ms": 173,
    "reply": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -2886,7 +2886,7 @@
   {
    "id": "r0030",
    "outcome": "not_understood",
-   "ms": 213,
+   "ms": 216,
    "reply": "I did not understand \"what character is on screen\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -2915,7 +2915,7 @@
   {
    "id": "r0031",
    "outcome": "not_understood",
-   "ms": 178,
+   "ms": 173,
    "reply": "I did not understand \"make a maroon\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -2944,7 +2944,7 @@
   {
    "id": "r0032",
    "outcome": "executed",
-   "ms": 242,
+   "ms": 231,
    "reply": "Now I look happy.",
    "worlds": [
     "ui.avatar"
@@ -2976,7 +2976,7 @@
   {
    "id": "r0033",
    "outcome": "not_understood",
-   "ms": 180,
+   "ms": 174,
    "reply": "I did not understand \"first Richard\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" I did not know the word: first.",
    "worlds": [],
    "statuses": [
@@ -3006,7 +3006,7 @@
   {
    "id": "r0034",
    "outcome": "other_world",
-   "ms": 100,
+   "ms": 96,
    "reply": "I drew a ball.",
    "worlds": [
     "art.draw"
@@ -3038,7 +3038,7 @@
   {
    "id": "r0035",
    "outcome": "executed",
-   "ms": 145,
+   "ms": 133,
    "reply": "I drew a crocodile.",
    "worlds": [
     "art.draw"
@@ -3069,7 +3069,7 @@
   {
    "id": "r0036",
    "outcome": "executed",
-   "ms": 21,
+   "ms": 23,
    "reply": "I made a copy of the crocodile.",
    "worlds": [
     "art.draw"
@@ -3101,7 +3101,7 @@
   {
    "id": "r0037",
    "outcome": "executed",
-   "ms": 23,
+   "ms": 22,
    "reply": "I drew a blue crocodile.",
    "worlds": [
     "art.draw"
@@ -3132,7 +3132,7 @@
   {
    "id": "r0038",
    "outcome": "executed",
-   "ms": 154,
+   "ms": 149,
    "reply": "I turned the crocodile 30 degrees. (I read \"roteste\" as \"rotate\")",
    "worlds": [
     "art.draw"
@@ -3164,7 +3164,7 @@
   {
    "id": "r0039",
    "outcome": "executed",
-   "ms": 124,
+   "ms": 125,
    "reply": "I can not find a leg in your picture.",
    "worlds": [
     "art.draw"
@@ -3230,7 +3230,7 @@
   {
    "id": "r0041",
    "outcome": "executed",
-   "ms": 245,
+   "ms": 231,
    "reply": "The crocodile is blue now. There are 4 crocodiles, so I took the last one. You can say \"the first crocodile\" or \"all the crocodiles\". I can not find a black thing in your picture.",
    "worlds": [
     "art.draw"
@@ -3263,7 +3263,7 @@
   {
    "id": "r0042",
    "outcome": "executed",
-   "ms": 177,
+   "ms": 171,
    "reply": "I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon and shapes like a circle, a square, a star or a heart. What ",
    "worlds": [
     "art.draw"
@@ -3359,7 +3359,7 @@
   {
    "id": "r0045",
    "outcome": "executed",
-   "ms": 246,
+   "ms": 222,
    "reply": "I moved the crocodiles in the blue lake. (I read \"corcodiles\" as \"crocodiles\")",
    "worlds": [
     "art.draw"
@@ -3391,7 +3391,7 @@
   {
    "id": "r0046",
    "outcome": "executed",
-   "ms": 235,
+   "ms": 214,
    "reply": "I moved the crocodiles in the blue lake. The crocodile is no longer in the lake. The crocodile is no longer in the lake. The crocodile is no longer in the lake.",
    "worlds": [
     "art.draw"
@@ -3423,7 +3423,7 @@
   {
    "id": "r0047",
    "outcome": "executed",
-   "ms": 45,
+   "ms": 43,
    "reply": "I drew 3 crocodiles.",
    "worlds": [
     "art.draw"
@@ -3455,7 +3455,7 @@
   {
    "id": "r0048",
    "outcome": "executed",
-   "ms": 176,
+   "ms": 172,
    "reply": "I moved the crocodiles in the blue lake. The crocodile is no longer in the lake. The crocodile is no longer in the lake. The crocodile is no longer in the lake.",
    "worlds": [
     "art.draw"
@@ -3487,7 +3487,7 @@
   {
    "id": "r0049",
    "outcome": "executed",
-   "ms": 188,
+   "ms": 180,
    "reply": "A thing can not be next to itself!",
    "worlds": [
     "art.draw"
@@ -3519,7 +3519,7 @@
   {
    "id": "r0050",
    "outcome": "executed",
-   "ms": 182,
+   "ms": 165,
    "reply": "A thing can not be next to itself!",
    "worlds": [
     "art.draw"
@@ -3551,7 +3551,7 @@
   {
    "id": "r0051",
    "outcome": "executed",
-   "ms": 363,
+   "ms": 339,
    "reply": "I drew a blue lake.",
    "worlds": [
     "art.draw"
@@ -3583,7 +3583,7 @@
   {
    "id": "r0052",
    "outcome": "executed",
-   "ms": 206,
+   "ms": 184,
    "reply": "the crocodile can not go there: it is in the lake.",
    "worlds": [
     "art.draw"
@@ -3617,7 +3617,7 @@
   {
    "id": "r0053",
    "outcome": "executed",
-   "ms": 48,
+   "ms": 46,
    "reply": "I drew a blue lake.",
    "worlds": [
     "art.draw"
@@ -3649,7 +3649,7 @@
   {
    "id": "r0054",
    "outcome": "executed",
-   "ms": 184,
+   "ms": 165,
    "reply": "the crocodile can not go there: it is in the lake.",
    "worlds": [
     "art.draw"
@@ -3683,7 +3683,7 @@
   {
    "id": "r0055",
    "outcome": "executed",
-   "ms": 212,
+   "ms": 193,
    "reply": "the crocodile can not go there: it is in the lake.",
    "worlds": [
     "art.draw"
@@ -3717,7 +3717,7 @@
   {
    "id": "r0056",
    "outcome": "executed",
-   "ms": 65,
+   "ms": 58,
    "reply": "I can not find houses in your picture.",
    "worlds": [
     "art.draw"
@@ -3749,7 +3749,7 @@
   {
    "id": "r0057",
    "outcome": "executed",
-   "ms": 44,
+   "ms": 41,
    "reply": "I can not find houses in your picture.",
    "worlds": [
     "art.draw"
@@ -3781,7 +3781,7 @@
   {
    "id": "r0058",
    "outcome": "executed",
-   "ms": 124,
+   "ms": 111,
    "reply": "I drew a light blue sky behind everything and a yellow sun.",
    "worlds": [
     "art.draw"
@@ -3813,7 +3813,7 @@
   {
    "id": "r0059",
    "outcome": "executed",
-   "ms": 366,
+   "ms": 337,
    "reply": "Which thing do you mean? You can say the house, the tree, the sun, it, or everything.",
    "worlds": [
     "art.draw"
@@ -3845,7 +3845,7 @@
   {
    "id": "r0060",
    "outcome": "executed",
-   "ms": 101,
+   "ms": 95,
    "reply": "The sky is already there: it is light blue. You can change its color and a yellow sun.",
    "worlds": [
     "art.draw"
@@ -3877,7 +3877,7 @@
   {
    "id": "r0061",
    "outcome": "executed",
-   "ms": 45,
+   "ms": 41,
    "reply": "I can not find houses in your picture.",
    "worlds": [
     "art.draw"
@@ -3909,7 +3909,7 @@
   {
    "id": "r0062",
    "outcome": "executed",
-   "ms": 44,
+   "ms": 40,
    "reply": "I added grass to the ground.",
    "worlds": [
     "art.draw"
@@ -3941,7 +3941,7 @@
   {
    "id": "r0063",
    "outcome": "executed",
-   "ms": 102,
+   "ms": 97,
    "reply": "I drew a blue lake.",
    "worlds": [
     "art.draw"
@@ -3973,7 +3973,7 @@
   {
    "id": "r0064",
    "outcome": "executed",
-   "ms": 262,
+   "ms": 234,
    "reply": "Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\".",
    "worlds": [
     "art.draw"
@@ -4007,7 +4007,7 @@
   {
    "id": "r0065",
    "outcome": "executed",
-   "ms": 456,
+   "ms": 408,
    "reply": "I can not find a house in your picture.",
    "worlds": [
     "art.draw"
@@ -4039,7 +4039,7 @@
   {
    "id": "r0066",
    "outcome": "not_understood",
-   "ms": 713,
+   "ms": 638,
    "reply": "I did not understand \"muta si mai la stinga\". For example: \"Add a house.\" or \"What is the colour of the house?\"",
    "worlds": [],
    "statuses": [
@@ -4072,7 +4072,7 @@
   {
    "id": "r0067",
    "outcome": "executed",
-   "ms": 435,
+   "ms": 389,
    "reply": "I can not find a house in your picture.",
    "worlds": [
     "art.draw"
@@ -4106,7 +4106,7 @@
   {
    "id": "r0068",
    "outcome": "executed",
-   "ms": 589,
+   "ms": 515,
    "reply": "I drew a red home. (a home, drawn as a house.) I did not understand \"nu prima acasa, cea din mijloc\". Did you mean \"Cum sună do central?\" or \"Câți herți are do central?\"?",
    "worlds": [
     "art.draw"
@@ -4141,7 +4141,7 @@
   {
    "id": "r0069",
    "outcome": "executed",
-   "ms": 459,
+   "ms": 415,
    "reply": "I can not find a house in your picture.",
    "worlds": [
     "art.draw"
@@ -4175,7 +4175,7 @@
   {
    "id": "r0070",
    "outcome": "executed",
-   "ms": 439,
+   "ms": 426,
    "reply": "I drew a blue lake. I drew a duck. I did not understand \"fa-mu un desen cu un lac, o rata, o vila, nori, soare ,iarba\". For example: \"Add a house.\" or \"What is the colour of the house?\" I drew 3 clouds. I drew a yellow s",
    "worlds": [
     "art.draw"
@@ -4211,7 +4211,7 @@
   {
    "id": "r0071",
    "outcome": "executed",
-   "ms": 47,
+   "ms": 45,
    "reply": "I drew a lake: a sun, 2 clouds, 2 birds, 2 mountains, 5 evergreen trees, a lake, a pier, a tent, 2 people, 3 rocks, a frog, a rowing boat, a sailboat, 2 swans, 3 ducks and 3 fish. I put the 2 swans on the water of the la",
    "worlds": [
     "art.draw"
@@ -4242,7 +4242,7 @@
   {
    "id": "r0072",
    "outcome": "executed",
-   "ms": 78,
+   "ms": 71,
    "reply": "I drew a duck.",
    "worlds": [
     "art.draw"
@@ -4273,7 +4273,7 @@
   {
    "id": "r0073",
    "outcome": "executed",
-   "ms": 58,
+   "ms": 52,
    "reply": "I drew a blue lake.",
    "worlds": [
     "art.draw"
@@ -4304,7 +4304,7 @@
   {
    "id": "r0074",
    "outcome": "executed",
-   "ms": 182,
+   "ms": 180,
    "reply": "I put the duck on the water of the lake.",
    "worlds": [
     "art.draw"
@@ -4335,7 +4335,7 @@
   {
    "id": "r0075",
    "outcome": "executed",
-   "ms": 309,
+   "ms": 289,
    "reply": "I don't know how to draw a via yet. (I read \"vila\" as \"via\")",
    "worlds": [
     "art.draw"
@@ -4366,7 +4366,7 @@
   {
    "id": "r0076",
    "outcome": "executed",
-   "ms": 366,
+   "ms": 342,
    "reply": "I drew a yellow house. I drew 2 orange fish. (Fish usually live in water, not on the ground. Fish usually live in water, not on the ground.)",
    "worlds": [
     "art.draw"
@@ -4398,7 +4398,7 @@
   {
    "id": "r0077",
    "outcome": "executed",
-   "ms": 38,
+   "ms": 36,
    "reply": "I drew a yellow house.",
    "worlds": [
     "art.draw"
@@ -4429,7 +4429,7 @@
   {
    "id": "r0078",
    "outcome": "executed",
-   "ms": 72,
+   "ms": 65,
    "reply": "I added grass to the ground.",
    "worlds": [
     "art.draw"
@@ -4460,7 +4460,7 @@
   {
    "id": "r0079",
    "outcome": "executed",
-   "ms": 55,
+   "ms": 52,
    "reply": "I drew a grass above the blue lake.",
    "worlds": [
     "art.draw"
@@ -4491,7 +4491,7 @@
   {
    "id": "r0080",
    "outcome": "executed",
-   "ms": 1022,
+   "ms": 957,
    "reply": "I did not understand \"nu inlocui lacul, deasupra, ai loc\". For example: \"Add a house.\" or \"What is the colour of the house?\" I drew a log. I drew a log. (I read \"loc\" as \"log\") (I read \"loc\" as \"log\")",
    "worlds": [
     "art.draw"
@@ -4524,7 +4524,7 @@
   {
    "id": "r0081",
    "outcome": "not_understood",
-   "ms": 769,
+   "ms": 918,
    "reply": "I did not understand \"ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum\". Did you mean \"Vreau un puzzle și plătesc 10 lei. Ce este restul?\"? I did not understand \"ar trebui sa schimbi aceste voila s",
    "worlds": [],
    "statuses": [
@@ -4554,7 +4554,7 @@
   {
    "id": "r0082",
    "outcome": "not_understood",
-   "ms": 972,
+   "ms": 1844,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"The other one.\" or \"Add the wheel too.\". I cannot talk about ",
    "worlds": [],
    "statuses": [
@@ -4584,7 +4584,7 @@
   {
    "id": "r0083",
    "outcome": "executed",
-   "ms": 800,
+   "ms": 1235,
    "reply": "I don't know how to draw a cel yet.",
    "worlds": [
     "art.draw"
@@ -4615,7 +4615,7 @@
   {
    "id": "r0084",
    "outcome": "executed",
-   "ms": 49,
+   "ms": 90,
    "reply": "I drew 5 clouds.",
    "worlds": [
     "art.draw"
@@ -4646,7 +4646,7 @@
   {
    "id": "r0085",
    "outcome": "executed",
-   "ms": 623,
+   "ms": 1022,
    "reply": "I did not understand where to put it (\"to 5\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\".",
    "worlds": [
     "art.draw"
@@ -4677,7 +4677,7 @@
   {
    "id": "r0086",
    "outcome": "executed",
-   "ms": 50,
+   "ms": 102,
    "reply": "I drew a yellow sun.",
    "worlds": [
     "art.draw"
@@ -4708,7 +4708,7 @@
   {
    "id": "r0087",
    "outcome": "executed",
-   "ms": 45,
+   "ms": 62,
    "reply": "I drew a yellow sun.",
    "worlds": [
     "art.draw"
@@ -4739,7 +4739,7 @@
   {
    "id": "r0088",
    "outcome": "executed",
-   "ms": 899,
+   "ms": 1704,
    "reply": "I moved the sun up. I do not know what \"it to put like this down bu default\" is about. The last thing I did: I moved the sun up, because you said \"Move the sun more up\".",
    "worlds": [
     "art.draw"
@@ -4771,7 +4771,7 @@
   {
    "id": "r0089",
    "outcome": "executed",
-   "ms": 80,
+   "ms": 133,
    "reply": "The sky is blue now.",
    "worlds": [
     "art.draw"
@@ -4802,7 +4802,7 @@
   {
    "id": "r0090",
    "outcome": "executed",
-   "ms": 124,
+   "ms": 168,
    "reply": "What should I draw? There are 3: the left lake, the middle lake and the right lake. Which one do you mean?",
    "worlds": [
     "art.draw"
@@ -4834,7 +4834,7 @@
   {
    "id": "r0091",
    "outcome": "executed",
-   "ms": 1036,
+   "ms": 1240,
    "reply": "I drew a lake: a sun, 2 clouds, 2 birds, 2 mountains, 5 evergreen trees, a lake, a pier, a tent, 2 people, 3 rocks, a frog, a rowing boat, a sailboat, 2 swans, 3 ducks and 3 fish. I put the 2 swans on the water of the la",
    "worlds": [
     "art.draw"
@@ -4866,7 +4866,7 @@
   {
    "id": "r0092",
    "outcome": "executed",
-   "ms": 640,
+   "ms": 710,
    "reply": "I don't know how to draw a leagan yet.",
    "worlds": [
     "art.draw"
@@ -4897,7 +4897,7 @@
   {
    "id": "r0093",
    "outcome": "executed",
-   "ms": 463,
+   "ms": 531,
    "reply": "I drew a pink child on top of the orange fish. (a child, drawn as a person.)",
    "worlds": [
     "art.draw"
@@ -4928,7 +4928,7 @@
   {
    "id": "r0094",
    "outcome": "other_world",
-   "ms": 547,
+   "ms": 561,
    "reply": "OK, more down, stay on leagan not him.",
    "worlds": [
     "session.things"
@@ -4959,7 +4959,7 @@
   {
    "id": "r0095",
    "outcome": "executed",
-   "ms": 649,
+   "ms": 640,
    "reply": "I moved the child on the left. The child is no longer on the fish.",
    "worlds": [
     "art.draw"
@@ -4990,7 +4990,7 @@
   {
    "id": "r0096",
    "outcome": "executed",
-   "ms": 710,
+   "ms": 673,
    "reply": "I moved the child left.",
    "worlds": [
     "art.draw"
@@ -5021,7 +5021,7 @@
   {
    "id": "r0097",
    "outcome": "executed",
-   "ms": 451,
+   "ms": 432,
    "reply": "I moved the child on the left.",
    "worlds": [
     "art.draw"
@@ -5052,7 +5052,7 @@
   {
    "id": "r0098",
    "outcome": "executed",
-   "ms": 543,
+   "ms": 519,
    "reply": "I moved the child on the ground.",
    "worlds": [
     "art.draw"
@@ -5083,7 +5083,7 @@
   {
    "id": "r0099",
    "outcome": "executed",
-   "ms": 731,
+   "ms": 594,
    "reply": "What should I draw? I did not understand \"fa si o fetita\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: fetita.",
    "worlds": [
     "art.draw"
@@ -5115,7 +5115,7 @@
   {
    "id": "r0100",
    "outcome": "executed",
-   "ms": 162,
+   "ms": 205,
    "reply": "I drew a pink boy. (a boy, drawn as a person.)",
    "worlds": [
     "art.draw"
@@ -5146,7 +5146,7 @@
   {
    "id": "r0101",
    "outcome": "executed",
-   "ms": 637,
+   "ms": 698,
    "reply": "I drew a yellow house.",
    "worlds": [
     "art.draw"
@@ -5177,7 +5177,7 @@
   {
    "id": "r0102",
    "outcome": "executed",
-   "ms": 728,
+   "ms": 704,
    "reply": "I am not sure how “Did feita not” fits what we were doing. Please say the whole request. I don't know how to draw a before yet.",
    "worlds": [
     "art.draw"
@@ -5209,7 +5209,7 @@
   {
    "id": "r0103",
    "outcome": "not_understood",
-   "ms": 476,
+   "ms": 471,
    "reply": "I did not understand \"feitia am zis, am gresit feita\". Did you mean \"Feitia sand.\"? That sounds like something about you. I cannot keep facts about you here. I did not know the words: feitia, feita.",
    "worlds": [],
    "statuses": [
@@ -5239,7 +5239,7 @@
   {
    "id": "r0104",
    "outcome": "executed",
-   "ms": 259,
+   "ms": 257,
    "reply": "I drew a yellow house. The sky is already there: it is blue. You can change its color.",
    "worlds": [
     "art.draw"
@@ -5271,7 +5271,7 @@
   {
    "id": "r0105",
    "outcome": "executed",
-   "ms": 397,
+   "ms": 380,
    "reply": "I drew a yellow house.",
    "worlds": [
     "art.draw"
@@ -5302,7 +5302,7 @@
   {
    "id": "r0106",
    "outcome": "executed",
-   "ms": 476,
+   "ms": 381,
    "reply": "There are 4: the left person, the second person, the right person and the third person. Which one do you mean?",
    "worlds": [
     "art.draw"
@@ -5333,7 +5333,7 @@
   {
    "id": "r0107",
    "outcome": "executed",
-   "ms": 529,
+   "ms": 516,
    "reply": "I drew a grandfather: a person, glasses and a walking stick. I put the glasses on the eyes of the person and the walking stick on the right hand of the person. I drew a duck.",
    "worlds": [
     "art.draw"
@@ -5396,7 +5396,7 @@
   {
    "id": "r0109",
    "outcome": "other_world",
-   "ms": 361,
+   "ms": 365,
    "reply": "I can't find Draw a on any of your lists, so I cannot mark it as done. (I read \"goat\" as \"got\")",
    "worlds": [
     "kids.tasks"
@@ -5427,7 +5427,7 @@
   {
    "id": "r0110",
    "outcome": "executed",
-   "ms": 373,
+   "ms": 393,
    "reply": "I drew a goat.",
    "worlds": [
     "art.draw"
@@ -5458,7 +5458,7 @@
   {
    "id": "r0111",
    "outcome": "other_world",
-   "ms": 462,
+   "ms": 481,
    "reply": "I can't find zoboara, fixeaza on any of your lists. (I read \"goat\" as \"got\") I understood only part of that: I did not use \"The\".",
    "worlds": [
     "kids.tasks"
@@ -5489,7 +5489,7 @@
   {
    "id": "r0112",
    "outcome": "executed",
-   "ms": 368,
+   "ms": 366,
    "reply": "Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\".",
    "worlds": [
     "art.draw"
@@ -5520,7 +5520,7 @@
   {
    "id": "r0113",
    "outcome": "executed",
-   "ms": 412,
+   "ms": 419,
    "reply": "A goat is a kind of thing. I moved the lakes down.",
    "worlds": [
     "art.draw"
@@ -5551,7 +5551,7 @@
   {
    "id": "r0114",
    "outcome": "executed",
-   "ms": 165,
+   "ms": 177,
    "reply": "A goat is a kind of thing. I moved the lakes right.",
    "worlds": [
     "art.draw"
@@ -5582,7 +5582,7 @@
   {
    "id": "r0115",
    "outcome": "executed",
-   "ms": 486,
+   "ms": 492,
    "reply": "A goat is a kind of thing. I moved the lakes right.",
    "worlds": [
     "art.draw"
@@ -5613,7 +5613,7 @@
   {
    "id": "r0116",
    "outcome": "executed",
-   "ms": 664,
+   "ms": 622,
    "reply": "A goat is a kind of thing. I moved the lakes down.",
    "worlds": [
     "art.draw"
@@ -5644,7 +5644,7 @@
   {
    "id": "r0117",
    "outcome": "executed",
-   "ms": 542,
+   "ms": 567,
    "reply": "What should I draw? I added grass to the ground.",
    "worlds": [
     "art.draw"
@@ -5676,7 +5676,7 @@
   {
    "id": "r0118",
    "outcome": "executed",
-   "ms": 466,
+   "ms": 500,
    "reply": "I don't know how to draw a magar yet.",
    "worlds": [
     "art.draw"
@@ -5707,7 +5707,7 @@
   {
    "id": "r0119",
    "outcome": "executed",
-   "ms": 454,
+   "ms": 475,
    "reply": "I drew a cow. (The sun is usually in the sky, not on the ground.)",
    "worlds": [
     "art.draw"
@@ -5738,7 +5738,7 @@
   {
    "id": "r0120",
    "outcome": "not_understood",
-   "ms": 658,
+   "ms": 681,
    "reply": "I did not understand \"muta vaca mai jos, sa nu mai zboare\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not understand \"muta vaca mai jos, sa nu mai zboare\". For example: \"Add a house.\" or \"Wh",
    "worlds": [],
    "statuses": [
@@ -5768,7 +5768,7 @@
   {
    "id": "r0121",
    "outcome": "not_understood",
-   "ms": 19,
+   "ms": 20,
    "reply": "You said \"muta vaca mai jos, sa nu mai zboare\". I could not read those parts as a whole request, so I did not do anything with it (not read: \"muta vaca mai jos\", \"sa nu mai zboare\"). What I answered: Nu am încă o formula",
    "worlds": [],
    "statuses": [
@@ -5797,7 +5797,7 @@
   {
    "id": "r0122",
    "outcome": "executed",
-   "ms": 608,
+   "ms": 656,
    "reply": "A cow is a kind of thing. I moved the lakes down.",
    "worlds": [
     "art.draw"
@@ -5828,7 +5828,7 @@
   {
    "id": "r0123",
    "outcome": "executed",
-   "ms": 147,
+   "ms": 155,
    "reply": "A cow is a kind of thing. I moved the lakes down.",
    "worlds": [
     "art.draw"
@@ -5859,7 +5859,7 @@
   {
    "id": "r0124",
    "outcome": "executed",
-   "ms": 718,
+   "ms": 819,
    "reply": "Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\".",
    "worlds": [
     "art.draw"
@@ -5890,7 +5890,7 @@
   {
    "id": "r0125",
    "outcome": "executed",
-   "ms": 431,
+   "ms": 485,
    "reply": "There are 5: the left house, the second house, the third house, the fourth house and the right house. Which one do you mean?",
    "worlds": [
     "art.draw"
@@ -5921,7 +5921,7 @@
   {
    "id": "r0126",
    "outcome": "executed",
-   "ms": 520,
+   "ms": 562,
    "reply": "I moved the fish up.",
    "worlds": [
     "art.draw"
@@ -5952,7 +5952,7 @@
   {
    "id": "r0127",
    "outcome": "executed",
-   "ms": 602,
+   "ms": 559,
    "reply": "I moved the fish up.",
    "worlds": [
     "art.draw"
@@ -5983,7 +5983,7 @@
   {
    "id": "r0128",
    "outcome": "executed",
-   "ms": 113,
+   "ms": 109,
    "reply": "I moved the fish on the left.",
    "worlds": [
     "art.draw"
@@ -6014,7 +6014,7 @@
   {
    "id": "r0129",
    "outcome": "executed",
-   "ms": 544,
+   "ms": 591,
    "reply": "I moved the fish right.",
    "worlds": [
     "art.draw"
@@ -6045,7 +6045,7 @@
   {
    "id": "r0130",
    "outcome": "not_understood",
-   "ms": 1100,
+   "ms": 1269,
    "reply": "I did not understand \"asta e centru, nu e dreapta\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not understand \"asta e centru, nu e dreapta\". For example: \"Add a house.\" or \"What is the colour",
    "worlds": [],
    "statuses": [
@@ -6075,7 +6075,7 @@
   {
    "id": "r0131",
    "outcome": "executed",
-   "ms": 954,
+   "ms": 1108,
    "reply": "I put the 8 fishes each in its own corner. (I read \"coreners\" as \"corners\")",
    "worlds": [
     "art.draw"
@@ -6106,7 +6106,7 @@
   {
    "id": "r0132",
    "outcome": "executed",
-   "ms": 699,
+   "ms": 809,
    "reply": "I put the 8 fishes each in its own corner.",
    "worlds": [
     "art.draw"
@@ -6137,7 +6137,7 @@
   {
    "id": "r0133",
    "outcome": "executed",
-   "ms": 50,
+   "ms": 53,
    "reply": "I have nothing like eyegases on my face. Ask me \"what do you have on?\".",
    "worlds": [
     "ui.avatar"
@@ -6168,7 +6168,7 @@
   {
    "id": "r0134",
    "outcome": "not_understood",
-   "ms": 39,
+   "ms": 42,
    "reply": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -6197,7 +6197,7 @@
   {
    "id": "r0135",
    "outcome": "executed",
-   "ms": 80,
+   "ms": 89,
    "reply": "I put on lashes green eyes.",
    "worlds": [
     "ui.avatar"
@@ -6228,7 +6228,7 @@
   {
    "id": "r0136",
    "outcome": "executed",
-   "ms": 11,
+   "ms": 13,
    "reply": "An eyeglasses is a kind of glasses. I have no glasses already.",
    "worlds": [
     "ui.avatar"
@@ -6259,7 +6259,7 @@
   {
    "id": "r0137",
    "outcome": "executed",
-   "ms": 12,
+   "ms": 15,
    "reply": "An eyeglasses is a kind of glasses. I put on round glasses.",
    "worlds": [
     "ui.avatar"
@@ -6290,7 +6290,7 @@
   {
    "id": "r0138",
    "outcome": "executed",
-   "ms": 38,
+   "ms": 41,
    "reply": "I already have a bow hat.",
    "worlds": [
     "ui.avatar"
@@ -6352,7 +6352,7 @@
   {
    "id": "r0140",
    "outcome": "executed",
-   "ms": 203,
+   "ms": 209,
    "reply": "Here are more things you can say on the Talk tab: \"What does a lighthouse look like\", \"No, the other one\", \"What is a bicycle\", \"Make it red\" or \"What are the parts of a house\". I can tell what a thing can do, like a pen",
    "worlds": [
     "ui.help",
@@ -6385,7 +6385,7 @@
   {
    "id": "r0141",
    "outcome": "other_world",
-   "ms": 81,
+   "ms": 76,
    "reply": "I drew a red car.",
    "worlds": [
     "art.draw"
@@ -6416,7 +6416,7 @@
   {
    "id": "r0142",
    "outcome": "executed",
-   "ms": 22,
+   "ms": 25,
    "reply": "I drew 10 red cars.",
    "worlds": [
     "art.draw"
@@ -6447,7 +6447,7 @@
   {
    "id": "r0143",
    "outcome": "executed",
-   "ms": 24,
+   "ms": 27,
    "reply": "I drew 12 red cars (12 is plenty!).",
    "worlds": [
     "art.draw"
@@ -6478,7 +6478,7 @@
   {
    "id": "r0144",
    "outcome": "executed",
-   "ms": 157,
+   "ms": 175,
    "reply": "I don't know how to draw colors yet. (I read \"colours\" as \"colors\")",
    "worlds": [
     "art.draw"
@@ -6509,7 +6509,7 @@
   {
    "id": "r0145",
    "outcome": "executed",
-   "ms": 29,
+   "ms": 31,
    "reply": "I drew 3 red cars.",
    "worlds": [
     "art.draw"
@@ -6540,7 +6540,7 @@
   {
    "id": "r0146",
    "outcome": "executed",
-   "ms": 30,
+   "ms": 37,
    "reply": "An elephant: five-toed pachyderm. Legs: 4; covering: skin; sound: trumpet; habitat: savanna and forest. It can swim. It cannot climb and fly. You find it on the ground or in the forest or in the savanna.",
    "worlds": [
     "talk"
@@ -6571,7 +6571,7 @@
   {
    "id": "r0147",
    "outcome": "other_world",
-   "ms": 67,
+   "ms": 69,
    "reply": "I drew 2 elephants.",
    "worlds": [
     "art.draw"
@@ -6602,7 +6602,7 @@
   {
    "id": "r0148",
    "outcome": "executed",
-   "ms": 18,
+   "ms": 19,
    "reply": "I do not know your name yet. Tell me: \"my name is ...\".",
    "worlds": [
     "kids.common"
@@ -6633,7 +6633,7 @@
   {
    "id": "r0149",
    "outcome": "other_world",
-   "ms": 337,
+   "ms": 357,
    "reply": "OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\".",
    "worlds": [
     "data.charts"
@@ -6664,7 +6664,7 @@
   {
    "id": "r0150",
    "outcome": "executed",
-   "ms": 279,
+   "ms": 315,
    "reply": "OK, a new empty bar chart called \"Chart 2\". Add data, for example: \"add apples 5\".",
    "worlds": [
     "data.charts"
@@ -6715,7 +6715,7 @@
   {
    "id": "r0152",
    "outcome": "executed",
-   "ms": 505,
+   "ms": 521,
    "reply": "OK, a new document called \"The current discussion\". (I read \"docuemnt\" as \"document\")",
    "worlds": [
     "docs.editor"
@@ -6746,7 +6746,7 @@
   {
    "id": "r0153",
    "outcome": "not_understood",
-   "ms": 409,
+   "ms": 422,
    "reply": "I did not understand \"Chnage the tile of the document to Disucssion\". Did you mean \"Change the time of the document to Disucssion.\"?",
    "worlds": [],
    "statuses": [
@@ -6775,7 +6775,7 @@
   {
    "id": "r0163",
    "outcome": "executed",
-   "ms": 69,
+   "ms": 73,
    "reply": "Here is Khartoum: capital of Sudan · 4.8 million people.",
    "worlds": [
     "geo.map"
@@ -6806,7 +6806,7 @@
   {
    "id": "r0164",
    "outcome": "executed",
-   "ms": 34,
+   "ms": 35,
    "reply": "I drew a boy: t-shirt green shoulders, a thin neck, round ears, a round head, a grin mouth, a small nose, round brown eyes, straight dark brown eyebrows, spikes dark brown hair and a cap. Now I look angry.",
    "worlds": [
     "ui.avatar"
@@ -6837,7 +6837,7 @@
   {
    "id": "r0165",
    "outcome": "executed",
-   "ms": 23,
+   "ms": 26,
    "reply": "I already have a cap.",
    "worlds": [
     "ui.avatar"
@@ -6899,7 +6899,7 @@
   {
    "id": "r0167",
    "outcome": "not_understood",
-   "ms": 56,
+   "ms": 61,
    "reply": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -6928,7 +6928,7 @@
   {
    "id": "r0168",
    "outcome": "executed",
-   "ms": 57,
+   "ms": 66,
    "reply": "I have a long head now.",
    "worlds": [
     "ui.avatar"
@@ -6959,7 +6959,7 @@
   {
    "id": "r0169",
    "outcome": "not_understood",
-   "ms": 122,
+   "ms": 126,
    "reply": "I did not understand \"now be a human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -6988,7 +6988,7 @@
   {
    "id": "r0170",
    "outcome": "not_understood",
-   "ms": 89,
+   "ms": 95,
    "reply": "I am not sure how “a women” fits what we were doing. Please say the whole request.",
    "worlds": [],
    "statuses": [
@@ -7017,7 +7017,7 @@
   {
    "id": "r0171",
    "outcome": "not_understood",
-   "ms": 117,
+   "ms": 123,
    "reply": "I did not understand \"become a women\". Did you mean \"Become a woman.\"?",
    "worlds": [],
    "statuses": [
@@ -7046,7 +7046,7 @@
   {
    "id": "r0172",
    "outcome": "executed",
-   "ms": 95,
+   "ms": 99,
    "reply": "I cannot take off my eyes: a face needs one.",
    "worlds": [
     "ui.avatar"
@@ -7077,7 +7077,7 @@
   {
    "id": "r0173",
    "outcome": "executed",
-   "ms": 140,
+   "ms": 155,
    "reply": "I already have a big smile mouth.",
    "worlds": [
     "ui.avatar"
@@ -7108,7 +7108,7 @@
   {
    "id": "r0174",
    "outcome": "executed",
-   "ms": 30,
+   "ms": 36,
    "reply": "I have a wide head now.",
    "worlds": [
     "ui.avatar"
@@ -7139,7 +7139,7 @@
   {
    "id": "r0175",
    "outcome": "executed",
-   "ms": 19,
+   "ms": 24,
    "reply": "I put on a smile mouth.",
    "worlds": [
     "ui.avatar"
@@ -7170,7 +7170,7 @@
   {
    "id": "r0176",
    "outcome": "executed",
-   "ms": 108,
+   "ms": 112,
    "reply": "I put on a big smile mouth.",
    "worlds": [
     "ui.avatar"
@@ -7201,7 +7201,7 @@
   {
    "id": "r0177",
    "outcome": "executed",
-   "ms": 46,
+   "ms": 50,
    "reply": "I have a neutral mouth now.",
    "worlds": [
     "ui.avatar"
@@ -7232,7 +7232,7 @@
   {
    "id": "r0178",
    "outcome": "executed",
-   "ms": 77,
+   "ms": 84,
    "reply": "OK, I added a heading, 2 chapters and a paragraph. Say \"write ...\" to fill them in. I did not keep the name Two Chapters And A Paragraph.",
    "worlds": [
     "docs.editor"
@@ -7263,7 +7263,7 @@
   {
    "id": "r0179",
    "outcome": "executed",
-   "ms": 13,
+   "ms": 16,
    "reply": "OK, I started chapter 4.",
    "worlds": [
     "docs.editor"
@@ -7294,7 +7294,7 @@
   {
    "id": "r0180",
    "outcome": "executed",
-   "ms": 22,
+   "ms": 28,
    "reply": "What text should I add?",
    "worlds": [
     "docs.editor"
@@ -7379,7 +7379,7 @@
   {
    "id": "r0183",
    "outcome": "not_understood",
-   "ms": 7,
+   "ms": 3,
    "reply": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -7408,7 +7408,7 @@
   {
    "id": "r0184",
    "outcome": "not_understood",
-   "ms": 3,
+   "ms": 6,
    "reply": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -7437,7 +7437,7 @@
   {
    "id": "r0185",
    "outcome": "not_understood",
-   "ms": 6,
+   "ms": 3,
    "reply": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -7495,7 +7495,7 @@
   {
    "id": "r0187",
    "outcome": "not_understood",
-   "ms": 3,
+   "ms": 7,
    "reply": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -7524,7 +7524,7 @@
   {
    "id": "r0188",
    "outcome": "not_understood",
-   "ms": 5,
+   "ms": 3,
    "reply": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -7553,7 +7553,7 @@
   {
    "id": "r0189",
    "outcome": "not_understood",
-   "ms": 139,
+   "ms": 145,
    "reply": "I am not sure how “new name” fits what we were doing. Please say the whole request.",
    "worlds": [],
    "statuses": [
@@ -7582,7 +7582,7 @@
   {
    "id": "r0190",
    "outcome": "not_understood",
-   "ms": 7,
+   "ms": 3,
    "reply": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -7611,7 +7611,7 @@
   {
    "id": "r0191",
    "outcome": "other_world",
-   "ms": 102,
+   "ms": 101,
    "reply": "I drew a yellow sun and a yellow house.",
    "worlds": [
     "art.draw"
@@ -7642,7 +7642,7 @@
   {
    "id": "r0192",
    "outcome": "other_world",
-   "ms": 801,
+   "ms": 823,
    "reply": "I did not catch what to remember. You can say \"a villa is a kind of house\", \"my dog is called Rex\", \"ducks can float\" or \"fish live in water\".",
    "worlds": [
     "session.things"
@@ -7673,7 +7673,7 @@
   {
    "id": "r0193",
    "outcome": "not_understood",
-   "ms": 478,
+   "ms": 505,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -7702,7 +7702,7 @@
   {
    "id": "r0194",
    "outcome": "other_world",
-   "ms": 593,
+   "ms": 638,
    "reply": "OK, Tom has 15 apples. OK, Tom gave Ana 12 apples. Tom has 3 apples.",
    "worlds": [
     "kids.arith"
@@ -7733,7 +7733,7 @@
   {
    "id": "r0195",
    "outcome": "other_world",
-   "ms": 619,
+   "ms": 677,
    "reply": "OK, Tom has 5 apples. That does not add up. Tom only had 5 apples, so Tom cannot give away 8. Tom has 5 apples.",
    "worlds": [
     "kids.arith"
@@ -7765,7 +7765,7 @@
   {
    "id": "r0196",
    "outcome": "executed",
-   "ms": 26,
+   "ms": 32,
    "reply": "OK, new paragraph. What goes in it?",
    "worlds": [
     "docs.editor"
@@ -7796,7 +7796,7 @@
   {
    "id": "r0197",
    "outcome": "not_understood",
-   "ms": 599,
+   "ms": 623,
    "reply": "I did not understand \"are the new paragraph\". Did you mean \"Add the new paragraph.\"?",
    "worlds": [],
    "statuses": [
@@ -7825,7 +7825,7 @@
   {
    "id": "r0198",
    "outcome": "executed",
-   "ms": 18,
+   "ms": 16,
    "reply": "OK, new line. What goes on it?",
    "worlds": [
     "docs.editor"
@@ -7856,7 +7856,7 @@
   {
    "id": "r0199",
    "outcome": "asked",
-   "ms": 22,
+   "ms": 25,
    "reply": "I could not find \"new chapter\" in the document.",
    "worlds": [
     "docs.editor"
@@ -7887,7 +7887,7 @@
   {
    "id": "r0200",
    "outcome": "not_understood",
-   "ms": 18,
+   "ms": 22,
    "reply": "I did not understand \"Chester\". Did you mean \"New chapters.\"?",
    "worlds": [],
    "statuses": [
@@ -7916,7 +7916,7 @@
   {
    "id": "r0201",
    "outcome": "other_world",
-   "ms": 555,
+   "ms": 586,
    "reply": "OK, Tom has 10 bees. OK, Tom lost 1 bee. Tom has 9 bees.",
    "worlds": [
     "kids.arith"
@@ -7947,7 +7947,7 @@
   {
    "id": "r0202",
    "outcome": "executed",
-   "ms": 32,
+   "ms": 34,
    "reply": "The sky is dark blue now.",
    "worlds": [
     "art.draw"
@@ -7978,7 +7978,7 @@
   {
    "id": "r0203",
    "outcome": "executed",
-   "ms": 171,
+   "ms": 177,
    "reply": "I drew 5 clouds. I drew a yellow sun. (There is usually only one sun.)",
    "worlds": [
     "art.draw"
@@ -8010,7 +8010,7 @@
   {
    "id": "r0204",
    "outcome": "executed",
-   "ms": 28,
+   "ms": 34,
    "reply": "I drew 3 clouds.",
    "worlds": [
     "art.draw"
@@ -8041,7 +8041,7 @@
   {
    "id": "r0205",
    "outcome": "not_understood",
-   "ms": 439,
+   "ms": 463,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -8070,7 +8070,7 @@
   {
    "id": "r0206",
    "outcome": "not_understood",
-   "ms": 152,
+   "ms": 164,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -8099,7 +8099,7 @@
   {
    "id": "r0207",
    "outcome": "not_understood",
-   "ms": 154,
+   "ms": 159,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -8128,7 +8128,7 @@
   {
    "id": "r0208",
    "outcome": "not_understood",
-   "ms": 139,
+   "ms": 143,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -8157,7 +8157,7 @@
   {
    "id": "r0209",
    "outcome": "not_understood",
-   "ms": 22,
+   "ms": 23,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -8186,7 +8186,7 @@
   {
    "id": "r0210",
    "outcome": "not_understood",
-   "ms": 203,
+   "ms": 217,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -8215,7 +8215,7 @@
   {
    "id": "r0211",
    "outcome": "not_understood",
-   "ms": 113,
+   "ms": 123,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -8244,7 +8244,7 @@
   {
    "id": "r0212",
    "outcome": "not_understood",
-   "ms": 71,
+   "ms": 76,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -8273,7 +8273,7 @@
   {
    "id": "r0213",
    "outcome": "not_understood",
-   "ms": 100,
+   "ms": 103,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -8302,7 +8302,7 @@
   {
    "id": "r0214",
    "outcome": "not_understood",
-   "ms": 74,
+   "ms": 75,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -8351,7 +8351,7 @@
   {
    "id": "r0216",
    "outcome": "executed",
-   "ms": 12,
+   "ms": 13,
    "reply": "Hello! What would you like to talk about?",
    "worlds": [
     "kids.common"
@@ -8382,7 +8382,7 @@
   {
    "id": "r0217",
    "outcome": "not_understood",
-   "ms": 3,
+   "ms": 8,
    "reply": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -8442,7 +8442,7 @@
   {
    "id": "r0219",
    "outcome": "executed",
-   "ms": 114,
+   "ms": 122,
    "reply": "I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know.",
    "worlds": [
     "kids.common"
@@ -8473,7 +8473,7 @@
   {
    "id": "r0220",
    "outcome": "not_understood",
-   "ms": 203,
+   "ms": 222,
    "reply": "I did not understand \"Become an emoji\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -8502,7 +8502,7 @@
   {
    "id": "r0221",
    "outcome": "executed",
-   "ms": 18,
+   "ms": 16,
    "reply": "I put on a smile mouth.",
    "worlds": [
     "ui.avatar"
@@ -8533,7 +8533,7 @@
   {
    "id": "r0222",
    "outcome": "executed",
-   "ms": 148,
+   "ms": 155,
    "reply": "I cannot take off my eyes: a face needs one.",
    "worlds": [
     "ui.avatar"
@@ -8564,7 +8564,7 @@
   {
    "id": "r0223",
    "outcome": "executed",
-   "ms": 42,
+   "ms": 52,
    "reply": "I put on a wide head. I have no red head yet.",
    "worlds": [
     "ui.avatar"
@@ -8595,7 +8595,7 @@
   {
    "id": "r0224",
    "outcome": "executed",
-   "ms": 16,
+   "ms": 21,
    "reply": "You are welcome.",
    "worlds": [
     "kids.common"
@@ -8626,7 +8626,7 @@
   {
    "id": "r0225",
    "outcome": "not_understood",
-   "ms": 2464,
+   "ms": 2512,
    "reply": "I did not understand \"coming back to knowning me, what auestions do you have\". Did you mean \"What pets do I have?\" or \"What lists do I have?\"?",
    "worlds": [],
    "statuses": [
@@ -8655,7 +8655,7 @@
   {
    "id": "r0226",
    "outcome": "refused",
-   "ms": 892,
+   "ms": 905,
    "reply": "The title stays the title. You can make it bigger, center it or format it; to get a heading, add one.",
    "worlds": [
     "docs.editor"
@@ -8686,7 +8686,7 @@
   {
    "id": "r0227",
    "outcome": "executed",
-   "ms": 28,
+   "ms": 26,
    "reply": "OK, I started chapter 5, \"One\".",
    "worlds": [
     "docs.editor"
@@ -8748,7 +8748,7 @@
   {
    "id": "r0229",
    "outcome": "executed",
-   "ms": 15,
+   "ms": 17,
    "reply": "Playing \"Ode to Joy\" on the piano at 108 beats per minute. It is in C major.",
    "worlds": [
     "media.music"
@@ -8779,7 +8779,7 @@
   {
    "id": "r0230",
    "outcome": "executed",
-   "ms": 11,
+   "ms": 8,
    "reply": "Playing \"Ode to Joy\" again on the piano at 108 beats per minute.",
    "worlds": [
     "media.music"
@@ -8810,7 +8810,7 @@
   {
    "id": "r0231",
    "outcome": "executed",
-   "ms": 12,
+   "ms": 8,
    "reply": "Playing \"Ode to Joy\" again on the piano at 108 beats per minute.",
    "worlds": [
     "media.music"
@@ -8841,7 +8841,7 @@
   {
    "id": "r0232",
    "outcome": "executed",
-   "ms": 12,
+   "ms": 11,
    "reply": "Playing \"Ode to Joy\" again on the piano at 108 beats per minute.",
    "worlds": [
     "media.music"
@@ -8872,7 +8872,7 @@
   {
    "id": "r0233",
    "outcome": "executed",
-   "ms": 767,
+   "ms": 786,
    "reply": "Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major.",
    "worlds": [
     "media.music"
@@ -8903,7 +8903,7 @@
   {
    "id": "r0234",
    "outcome": "executed",
-   "ms": 91,
+   "ms": 83,
    "reply": "Drew a circle.",
    "worlds": [
     "diagram.sketch"
@@ -8934,7 +8934,7 @@
   {
    "id": "r0235",
    "outcome": "executed",
-   "ms": 794,
+   "ms": 739,
    "reply": "I drew a random flowchart diagram with four shapes. It is about set a table. It is on top of what was there; undo takes it away.",
    "worlds": [
     "diagram.sketch"
@@ -8965,7 +8965,7 @@
   {
    "id": "r0236",
    "outcome": "executed",
-   "ms": 49,
+   "ms": 47,
    "reply": "Drew a hierarchy of Role 1, Role 2, Role 3, Role 4, Role 5, Role 6 and Role 7 as the group Hierarchy1.",
    "worlds": [
     "diagram.sketch"
@@ -8996,7 +8996,7 @@
   {
    "id": "r0237",
    "outcome": "executed",
-   "ms": 159,
+   "ms": 169,
    "reply": "Drew a rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -9027,7 +9027,7 @@
   {
    "id": "r0238",
    "outcome": "executed",
-   "ms": 31,
+   "ms": 27,
    "reply": "Connected the circle → make the table, a chair for each → a plate for each, a plate for each → a cup for each, a cup for each → r3 and 6 more. That arrow already connects make the table and a chair for each. That arrow a",
    "worlds": [
     "diagram.sketch"
@@ -9058,7 +9058,7 @@
   {
    "id": "r0239",
    "outcome": "executed",
-   "ms": 133,
+   "ms": 136,
    "reply": "Connected the circle → a chair for each.",
    "worlds": [
     "diagram.sketch"
@@ -9089,7 +9089,7 @@
   {
    "id": "r0240",
    "outcome": "executed",
-   "ms": 51,
+   "ms": 58,
    "reply": "The arrow the circle → a chair for each now says “label1”.",
    "worlds": [
     "diagram.sketch"
@@ -9120,7 +9120,7 @@
   {
    "id": "r0241",
    "outcome": "asked",
-   "ms": 29,
+   "ms": 30,
    "reply": "What should the label of a20 (the circle → a_chair_for_each) say?",
    "worlds": [
     "diagram.sketch"
@@ -9151,7 +9151,7 @@
   {
    "id": "r0242",
    "outcome": "not_understood",
-   "ms": 478,
+   "ms": 496,
    "reply": "I did not catch what to do with arrow. I can add, remove, change, move, connect and group; for example \"Add a circle.\".",
    "worlds": [],
    "statuses": [
@@ -9180,7 +9180,7 @@
   {
    "id": "r0243",
    "outcome": "executed",
-   "ms": 688,
+   "ms": 697,
    "reply": "Circle 1 → a chair for each already says \"label1\".",
    "worlds": [
     "diagram.sketch"
@@ -9211,7 +9211,7 @@
   {
    "id": "r0244",
    "outcome": "not_understood",
-   "ms": 168,
+   "ms": 174,
    "reply": "A cow has 4 legs.",
    "worlds": [],
    "statuses": [
@@ -9240,7 +9240,7 @@
   {
    "id": "r0245",
    "outcome": "not_understood",
-   "ms": 41,
+   "ms": 43,
    "reply": "I did not understand \"make the Roboto person\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -9269,7 +9269,7 @@
   {
    "id": "r0246",
    "outcome": "executed",
-   "ms": 172,
+   "ms": 177,
    "reply": "I took that as: \"make yourself cartoon\" I have a long head now.",
    "worlds": [
     "ui.avatar"
@@ -9300,7 +9300,7 @@
   {
    "id": "r0247",
    "outcome": "not_understood",
-   "ms": 159,
+   "ms": 156,
    "reply": "I did not understand \"becoming emoji\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -9329,7 +9329,7 @@
   {
    "id": "r0248",
    "outcome": "not_understood",
-   "ms": 151,
+   "ms": 160,
    "reply": "I did not understand \"become emoji\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -9358,7 +9358,7 @@
   {
    "id": "r0249",
    "outcome": "executed",
-   "ms": 27,
+   "ms": 26,
    "reply": "I drew a woman.",
    "worlds": [
     "ui.avatar"
@@ -9389,7 +9389,7 @@
   {
    "id": "r0250",
    "outcome": "not_understood",
-   "ms": 194,
+   "ms": 198,
    "reply": "I did not understand \"fii în boi\". Did you mean \"Fii în băiat.\"? I did not know the word: boi.",
    "worlds": [],
    "statuses": [
@@ -9418,7 +9418,7 @@
   {
    "id": "r0251",
    "outcome": "executed",
-   "ms": 17,
+   "ms": 19,
    "reply": "I drew a boy: t-shirt green shoulders, a thin neck, round ears, a round head, a grin mouth, a small nose, round brown eyes, straight dark brown eyebrows, spikes dark brown hair and a cap.",
    "worlds": [
     "ui.avatar"
@@ -9449,7 +9449,7 @@
   {
    "id": "r0252",
    "outcome": "not_understood",
-   "ms": 181,
+   "ms": 177,
    "reply": "I did not understand \"fii bucuros\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -9509,7 +9509,7 @@
   {
    "id": "r0254",
    "outcome": "not_understood",
-   "ms": 218,
+   "ms": 228,
    "reply": "I did not understand \"și Angie\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -9538,7 +9538,7 @@
   {
    "id": "r0255",
    "outcome": "not_understood",
-   "ms": 236,
+   "ms": 240,
    "reply": "I did not understand \"cu robotul meu\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -9567,7 +9567,7 @@
   {
    "id": "r0256",
    "outcome": "executed",
-   "ms": 32,
+   "ms": 33,
    "reply": "I have a tongue out mouth now.",
    "worlds": [
     "ui.avatar"
@@ -9598,7 +9598,7 @@
   {
    "id": "r0257",
    "outcome": "not_understood",
-   "ms": 246,
+   "ms": 260,
    "reply": "I did not understand \"Ce personaj este pe ecran\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -9627,7 +9627,7 @@
   {
    "id": "r0258",
    "outcome": "not_understood",
-   "ms": 174,
+   "ms": 183,
    "reply": "I did not understand \"fii un carton\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -9718,7 +9718,7 @@
   {
    "id": "r0261",
    "outcome": "not_understood",
-   "ms": 386,
+   "ms": 398,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Turn it into a diagram.\" or \"Add it to my drawing.\".",
    "worlds": [],
    "statuses": [
@@ -9747,7 +9747,7 @@
   {
    "id": "r0262",
    "outcome": "not_understood",
-   "ms": 338,
+   "ms": 337,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -9805,7 +9805,7 @@
   {
    "id": "r0264",
    "outcome": "not_understood",
-   "ms": 586,
+   "ms": 578,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\". I did not kno",
    "worlds": [],
    "statuses": [
@@ -9834,7 +9834,7 @@
   {
    "id": "r0265",
    "outcome": "not_understood",
-   "ms": 463,
+   "ms": 458,
    "reply": "That sounds like something about you. I cannot keep facts about you here.",
    "worlds": [],
    "statuses": [
@@ -9863,7 +9863,7 @@
   {
    "id": "r0266",
    "outcome": "asked",
-   "ms": 511,
+   "ms": 515,
    "reply": "I don't know that yet. I understood only part of that: I did not use \"what?\".",
    "worlds": [
     "talk"
@@ -9894,7 +9894,7 @@
   {
    "id": "r0267",
    "outcome": "not_understood",
-   "ms": 573,
+   "ms": 562,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -9923,7 +9923,7 @@
   {
    "id": "r0268",
    "outcome": "refused",
-   "ms": 623,
+   "ms": 633,
    "reply": "Sorry, I did not understand that. Could you say it another way? I understood only part of that: I did not use \"With whom speaks with\" and \"when I made me?\".",
    "worlds": [
     "kids.common"
@@ -9954,7 +9954,7 @@
   {
    "id": "r0269",
    "outcome": "executed",
-   "ms": 21,
+   "ms": 22,
    "reply": "On the documents tab you can say, for example: \"Which tab am I on\", \"Turn on the microphone\", \"Turn on hands-free mode\", \"Set the speech rate to 1.5\" or \"Switch to Romanian\". Say \"more examples\" for others.",
    "worlds": [
     "ui.help"
@@ -9985,7 +9985,7 @@
   {
    "id": "r0270",
    "outcome": "other_world",
-   "ms": 32,
+   "ms": 34,
    "reply": "I could not find \"What can a father\" in the document.",
    "worlds": [
     "docs.editor"
@@ -10016,7 +10016,7 @@
   {
    "id": "r0271",
    "outcome": "executed",
-   "ms": 19,
+   "ms": 18,
    "reply": "I drew a yellow house.",
    "worlds": [
     "art.draw"
@@ -10047,7 +10047,7 @@
   {
    "id": "r0272",
    "outcome": "executed",
-   "ms": 19,
+   "ms": 20,
    "reply": "I drew a green house.",
    "worlds": [
     "art.draw"
@@ -10109,7 +10109,7 @@
   {
    "id": "r0274",
    "outcome": "executed",
-   "ms": 434,
+   "ms": 436,
    "reply": "A salt is a kind of ground. I added grass to the ground.",
    "worlds": [
     "art.draw"
@@ -10140,7 +10140,7 @@
   {
    "id": "r0275",
    "outcome": "executed",
-   "ms": 35,
+   "ms": 36,
    "reply": "I drew a yellow sun.",
    "worlds": [
     "art.draw"
@@ -10171,7 +10171,7 @@
   {
    "id": "r0276",
    "outcome": "other_world",
-   "ms": 259,
+   "ms": 265,
    "reply": "I do not know a place called you.",
    "worlds": [
     "geo.map"
@@ -10202,7 +10202,7 @@
   {
    "id": "r0277",
    "outcome": "executed",
-   "ms": 343,
+   "ms": 347,
    "reply": "I drew a monkey.",
    "worlds": [
     "art.draw"
@@ -10233,7 +10233,7 @@
   {
    "id": "r0278",
    "outcome": "executed",
-   "ms": 36,
+   "ms": 39,
    "reply": "I drew a monkey.",
    "worlds": [
     "art.draw"
@@ -10264,7 +10264,7 @@
   {
    "id": "r0279",
    "outcome": "executed",
-   "ms": 45,
+   "ms": 46,
    "reply": "I drew a black line.",
    "worlds": [
     "art.draw"
@@ -10295,7 +10295,7 @@
   {
    "id": "r0280",
    "outcome": "executed",
-   "ms": 81,
+   "ms": 85,
    "reply": "I drew a small blue fish. I made a pond for the fish.",
    "worlds": [
     "art.draw"
@@ -10326,7 +10326,7 @@
   {
    "id": "r0281",
    "outcome": "executed",
-   "ms": 354,
+   "ms": 351,
    "reply": "I drew an orange fish. I put the fish in the pond. I understood only part of that: I did not use \"more\".",
    "worlds": [
     "art.draw"
@@ -10357,7 +10357,7 @@
   {
    "id": "r0282",
    "outcome": "executed",
-   "ms": 69,
+   "ms": 62,
    "reply": "I drew a father: a person.",
    "worlds": [
     "art.draw"
@@ -10388,7 +10388,7 @@
   {
    "id": "r0283",
    "outcome": "executed",
-   "ms": 26,
+   "ms": 29,
    "reply": "I added water to the ground.",
    "worlds": [
     "art.draw"
@@ -10419,7 +10419,7 @@
   {
    "id": "r0284",
    "outcome": "executed",
-   "ms": 41,
+   "ms": 42,
    "reply": "I added water to the ground.",
    "worlds": [
     "art.draw"
@@ -10450,7 +10450,7 @@
   {
    "id": "r0285",
    "outcome": "executed",
-   "ms": 32,
+   "ms": 31,
    "reply": "I drew an orange fish. I put the fish in the pond. (Houses usually stand on the ground, not in the water. Houses usually stand on the ground, not in the water.)",
    "worlds": [
     "art.draw"
@@ -10512,7 +10512,7 @@
   {
    "id": "r0287",
    "outcome": "executed",
-   "ms": 403,
+   "ms": 304,
    "reply": "There is no stays thing here.",
    "worlds": [
     "art.draw"
@@ -10543,7 +10543,7 @@
   {
    "id": "r0288",
    "outcome": "executed",
-   "ms": 36,
+   "ms": 35,
    "reply": "I drew 3 orange fish at the bottom.",
    "worlds": [
     "art.draw"
@@ -10574,7 +10574,7 @@
   {
    "id": "r0289",
    "outcome": "executed",
-   "ms": 463,
+   "ms": 441,
    "reply": "I did not understand where to move it (\"in water from air\"). Try \"to the left\", \"a bit higher\", \"next to the sun\" or \"to the top right corner\".",
    "worlds": [
     "art.draw"
@@ -10605,7 +10605,7 @@
   {
    "id": "r0290",
    "outcome": "executed",
-   "ms": 291,
+   "ms": 283,
    "reply": "I moved the fish in the blue lake. There are 18 fish, so I took the last one. You can say \"the first fish\" or \"all the fish\".",
    "worlds": [
     "art.draw"
@@ -10636,7 +10636,7 @@
   {
    "id": "r0291",
    "outcome": "not_understood",
-   "ms": 280,
+   "ms": 270,
    "reply": "I did not understand \"faci tu\". Did you mean \"Fă 2 mai.\" or \"Fă alt casă.\"?",
    "worlds": [],
    "statuses": [
@@ -10665,7 +10665,7 @@
   {
    "id": "r0292",
    "outcome": "executed",
-   "ms": 251,
+   "ms": 248,
    "reply": "Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\".",
    "worlds": [
     "art.draw"
@@ -10696,7 +10696,7 @@
   {
    "id": "r0293",
    "outcome": "not_understood",
-   "ms": 267,
+   "ms": 257,
    "reply": "I did not understand \"enervant da\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: enervant.",
    "worlds": [],
    "statuses": [
@@ -10725,7 +10725,7 @@
   {
    "id": "r0294",
    "outcome": "executed",
-   "ms": 206,
+   "ms": 204,
    "reply": "the fish can not go there: it is in the lake.",
    "worlds": [
     "art.draw"
@@ -10756,7 +10756,7 @@
   {
    "id": "r0295",
    "outcome": "not_understood",
-   "ms": 3,
+   "ms": 2,
    "reply": "the fish can not go there: it is in the lake.",
    "worlds": [],
    "statuses": [
@@ -10785,7 +10785,7 @@
   {
    "id": "r0296",
    "outcome": "not_understood",
-   "ms": 275,
+   "ms": 272,
    "reply": "I did not understand \"face un caca\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: caca.",
    "worlds": [],
    "statuses": [
@@ -10814,7 +10814,7 @@
   {
    "id": "r0297",
    "outcome": "not_understood",
-   "ms": 8,
+   "ms": 5,
    "reply": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -10843,7 +10843,7 @@
   {
    "id": "r0298",
    "outcome": "executed",
-   "ms": 263,
+   "ms": 261,
    "reply": "Drew 3 circles.",
    "worlds": [
     "diagram.sketch"
@@ -10874,7 +10874,7 @@
   {
    "id": "r0299",
    "outcome": "executed",
-   "ms": 277,
+   "ms": 263,
    "reply": "Drew 3 circles.",
    "worlds": [
     "diagram.sketch"
@@ -10905,7 +10905,7 @@
   {
    "id": "r0300",
    "outcome": "executed",
-   "ms": 244,
+   "ms": 235,
    "reply": "Drew 3 circles.",
    "worlds": [
     "diagram.sketch"
@@ -10936,7 +10936,7 @@
   {
    "id": "r0301",
    "outcome": "executed",
-   "ms": 55,
+   "ms": 56,
    "reply": "I drew 3 red circles.",
    "worlds": [
     "art.draw"
@@ -10967,7 +10967,7 @@
   {
    "id": "r0302",
    "outcome": "executed",
-   "ms": 22,
+   "ms": 25,
    "reply": "OK, here is the Drawing tab.",
    "worlds": [
     "ui.shell"
@@ -10998,7 +10998,7 @@
   {
    "id": "r0303",
    "outcome": "executed",
-   "ms": 224,
+   "ms": 217,
    "reply": "Drew a circle.",
    "worlds": [
     "diagram.sketch"
@@ -11029,7 +11029,7 @@
   {
    "id": "r0304",
    "outcome": "executed",
-   "ms": 194,
+   "ms": 192,
    "reply": "Drew a circle.",
    "worlds": [
     "diagram.sketch"
@@ -11060,7 +11060,7 @@
   {
    "id": "r0305",
    "outcome": "executed",
-   "ms": 51,
+   "ms": 54,
    "reply": "I drew an uncle: a person.",
    "worlds": [
     "art.draw"
@@ -11091,7 +11091,7 @@
   {
    "id": "r0306",
    "outcome": "executed",
-   "ms": 42,
+   "ms": 39,
    "reply": "I took away 3 red circles.",
    "worlds": [
     "art.draw"
@@ -11153,7 +11153,7 @@
   {
    "id": "r0308",
    "outcome": "executed",
-   "ms": 36,
+   "ms": 41,
    "reply": "I took away the small blue fish and 6 orange fish.",
    "worlds": [
     "art.draw"
@@ -11184,7 +11184,7 @@
   {
    "id": "r0309",
    "outcome": "executed",
-   "ms": 264,
+   "ms": 255,
    "reply": "I already have a smile mouth.",
    "worlds": [
     "ui.avatar"
@@ -11215,7 +11215,7 @@
   {
    "id": "r0310",
    "outcome": "not_understood",
-   "ms": 42,
+   "ms": 41,
    "reply": "I did not understand \"faci un robot pește\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -11304,7 +11304,7 @@
   {
    "id": "r0313",
    "outcome": "not_understood",
-   "ms": 123,
+   "ms": 122,
    "reply": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta.",
    "worlds": [],
    "statuses": [
@@ -11362,7 +11362,7 @@
   {
    "id": "r0315",
    "outcome": "not_understood",
-   "ms": 141,
+   "ms": 142,
    "reply": "I did not understand \"desene asta o\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta.",
    "worlds": [],
    "statuses": [
@@ -11422,7 +11422,7 @@
   {
    "id": "r0317",
    "outcome": "not_understood",
-   "ms": 233,
+   "ms": 241,
    "reply": "I did not understand \"desene asta o inimioară\". For example: \"Add a pin.\" or \"What is the colour of the pin?\" I did not know the word: asta.",
    "worlds": [],
    "statuses": [
@@ -11480,7 +11480,7 @@
   {
    "id": "r0319",
    "outcome": "not_understood",
-   "ms": 260,
+   "ms": 265,
    "reply": "I did not understand \"desene asta o inimioară ce\". Did you mean \"Ce am desenat?\" or \"Ce pot desena?\"? I did not know the word: asta.",
    "worlds": [],
    "statuses": [
@@ -11509,7 +11509,7 @@
   {
    "id": "r0320",
    "outcome": "executed",
-   "ms": 13,
+   "ms": 10,
    "reply": "You are already on the Drawing tab.",
    "worlds": [
     "ui.shell"
@@ -11540,7 +11540,7 @@
   {
    "id": "r0321",
    "outcome": "executed",
-   "ms": 12,
+   "ms": 14,
    "reply": "What should I draw?",
    "worlds": [
     "art.draw"
@@ -11571,7 +11571,7 @@
   {
    "id": "r0322",
    "outcome": "executed",
-   "ms": 196,
+   "ms": 208,
    "reply": "I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon and shapes like a circle, a square, a star or a heart. What ",
    "worlds": [
     "art.draw"
@@ -11631,7 +11631,7 @@
   {
    "id": "r0324",
    "outcome": "executed",
-   "ms": 24,
+   "ms": 25,
    "reply": "I drew a red heart.",
    "worlds": [
     "art.draw"
@@ -11693,7 +11693,7 @@
   {
    "id": "r0326",
    "outcome": "not_understood",
-   "ms": 23,
+   "ms": 24,
    "reply": "I did not understand \"o\". For example: \"Add a house.\" or \"What is the colour of the house?\"",
    "worlds": [],
    "statuses": [
@@ -11722,7 +11722,7 @@
   {
    "id": "r0327",
    "outcome": "executed",
-   "ms": 171,
+   "ms": 176,
    "reply": "What should I draw?",
    "worlds": [
     "art.draw"
@@ -11782,7 +11782,7 @@
   {
    "id": "r0329",
    "outcome": "executed",
-   "ms": 20,
+   "ms": 19,
    "reply": "I drew a red heart.",
    "worlds": [
     "art.draw"
@@ -11844,7 +11844,7 @@
   {
    "id": "r0331",
    "outcome": "not_understood",
-   "ms": 237,
+   "ms": 246,
    "reply": "I did not catch what to do with thing. I can add, remove, change, move, group and select; for example \"Add a house.\".",
    "worlds": [],
    "statuses": [
@@ -11873,7 +11873,7 @@
   {
    "id": "r0332",
    "outcome": "executed",
-   "ms": 234,
+   "ms": 237,
    "reply": "I did not understand where to put it (\"to draw a\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\".",
    "worlds": [
     "art.draw"
@@ -11904,7 +11904,7 @@
   {
    "id": "r0333",
    "outcome": "executed",
-   "ms": 22,
+   "ms": 20,
    "reply": "I drew a red heart.",
    "worlds": [
     "art.draw"
@@ -11935,7 +11935,7 @@
   {
    "id": "r0334",
    "outcome": "executed",
-   "ms": 193,
+   "ms": 182,
    "reply": "I did not understand where to put it (\"to draw a heart\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\".",
    "worlds": [
     "art.draw"
@@ -11966,7 +11966,7 @@
   {
    "id": "r0335",
    "outcome": "executed",
-   "ms": 162,
+   "ms": 168,
    "reply": "I did not understand where to put it (\"to draw a heart\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\".",
    "worlds": [
     "art.draw"
@@ -11997,7 +11997,7 @@
   {
    "id": "r0336",
    "outcome": "executed",
-   "ms": 14,
+   "ms": 15,
    "reply": "What should I draw?",
    "worlds": [
     "art.draw"
@@ -12028,7 +12028,7 @@
   {
    "id": "r0337",
    "outcome": "executed",
-   "ms": 262,
+   "ms": 261,
    "reply": "I drew a red heart. What should I draw? I understood only part of that: I did not use \"to\".",
    "worlds": [
     "art.draw"
@@ -12060,7 +12060,7 @@
   {
    "id": "r0338",
    "outcome": "executed",
-   "ms": 183,
+   "ms": 186,
    "reply": "I did not understand where to put it (\"to draw a heart a house\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\".",
    "worlds": [
     "art.draw"
@@ -12091,7 +12091,7 @@
   {
    "id": "r0339",
    "outcome": "executed",
-   "ms": 175,
+   "ms": 179,
    "reply": "I did not understand where to put it (\"to draw a heart\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\".",
    "worlds": [
     "art.draw"
@@ -12153,7 +12153,7 @@
   {
    "id": "r0341",
    "outcome": "not_understood",
-   "ms": 136,
+   "ms": 143,
    "reply": "I did not understand \"asta\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: asta.",
    "worlds": [],
    "statuses": [
@@ -12182,7 +12182,7 @@
   {
    "id": "r0342",
    "outcome": "not_understood",
-   "ms": 545,
+   "ms": 554,
    "reply": "I did not understand \"desene asta inimioară\". For example: \"Add a pin.\" or \"What is the colour of the pin?\" I did not know the word: asta.",
    "worlds": [],
    "statuses": [
@@ -12242,7 +12242,7 @@
   {
    "id": "r0344",
    "outcome": "not_understood",
-   "ms": 18,
+   "ms": 22,
    "reply": "I did not understand \"o\". For example: \"Add a pin.\" or \"What is the colour of the pin?\"",
    "worlds": [],
    "statuses": [
@@ -12271,7 +12271,7 @@
   {
    "id": "r0345",
    "outcome": "other_world",
-   "ms": 23,
+   "ms": 19,
    "reply": "I drew a yellow house.",
    "worlds": [
     "art.draw"
@@ -12302,7 +12302,7 @@
   {
    "id": "r0346",
    "outcome": "executed",
-   "ms": 21,
+   "ms": 19,
    "reply": "I drew a yellow house.",
    "worlds": [
     "art.draw"
@@ -12333,7 +12333,7 @@
   {
    "id": "r0347",
    "outcome": "not_understood",
-   "ms": 224,
+   "ms": 232,
    "reply": "I can't find “It to draw it” in the picture. In the picture I can see: 5 red hearts and 2 yellow houses.",
    "worlds": [],
    "statuses": [
@@ -12362,7 +12362,7 @@
   {
    "id": "r0348",
    "outcome": "executed",
-   "ms": 211,
+   "ms": 218,
    "reply": "I did not understand where to put it (\"to be\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\".",
    "worlds": [
     "art.draw"
@@ -12393,7 +12393,7 @@
   {
    "id": "r0349",
    "outcome": "not_understood",
-   "ms": 307,
+   "ms": 308,
    "reply": "I did not understand \"dacă ești calm desenează\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: calm.",
    "worlds": [],
    "statuses": [
@@ -12422,7 +12422,7 @@
   {
    "id": "r0350",
    "outcome": "executed",
-   "ms": 424,
+   "ms": 404,
    "reply": "I did not understand where to put it (\"to be if you are calm to draw\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\".",
    "worlds": [
     "art.draw"
@@ -12453,7 +12453,7 @@
   {
    "id": "r0351",
    "outcome": "not_understood",
-   "ms": 38,
+   "ms": 40,
    "reply": "I did not understand \"o\". For example: \"Add a house.\" or \"What is the colour of the house?\"",
    "worlds": [],
    "statuses": [
@@ -12482,7 +12482,7 @@
   {
    "id": "r0352",
    "outcome": "executed",
-   "ms": 585,
+   "ms": 574,
    "reply": "I did not understand where to put it (\"to be\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\". I did not understand \"desenează o casă e o desenat dacă ești calm desenează o\". ",
    "worlds": [
     "art.draw"
@@ -12514,7 +12514,7 @@
   {
    "id": "r0353",
    "outcome": "executed",
-   "ms": 19,
+   "ms": 18,
    "reply": "I drew a red heart.",
    "worlds": [
     "art.draw"
@@ -12545,7 +12545,7 @@
   {
    "id": "r0354",
    "outcome": "executed",
-   "ms": 289,
+   "ms": 283,
    "reply": "I did not understand where to put it (\"to be\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\". I drew a red heart.",
    "worlds": [
     "art.draw"
@@ -12577,7 +12577,7 @@
   {
    "id": "r0355",
    "outcome": "not_understood",
-   "ms": 148,
+   "ms": 150,
    "reply": "I did not understand \"știi\". Did you mean \"Ninge.\"?",
    "worlds": [],
    "statuses": [
@@ -12606,7 +12606,7 @@
   {
    "id": "r0356",
    "outcome": "executed",
-   "ms": 424,
+   "ms": 411,
    "reply": "I did not understand where to put it (\"to be\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\". I drew a red heart. I understood only part of that: I did not use \"only\".",
    "worlds": [
     "art.draw"
@@ -12669,7 +12669,7 @@
   {
    "id": "r0358",
    "outcome": "other_world",
-   "ms": 757,
+   "ms": 770,
    "reply": "I did not understand where to put it (\"to be\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\". I drew a red heart.",
    "worlds": [
     "art.draw"
@@ -12730,7 +12730,7 @@
   {
    "id": "r0360",
    "outcome": "other_world",
-   "ms": 916,
+   "ms": 917,
    "reply": "I did not understand where to put it (\"to be\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\". I drew a red heart.",
    "worlds": [
     "art.draw"
@@ -12762,7 +12762,7 @@
   {
    "id": "r0361",
    "outcome": "not_understood",
-   "ms": 57,
+   "ms": 58,
    "reply": "I did not understand \"o\". For example: \"Add a document.\" or \"What is the colour of the document?\"",
    "worlds": [],
    "statuses": [
@@ -12791,7 +12791,7 @@
   {
    "id": "r0362",
    "outcome": "other_world",
-   "ms": 886,
+   "ms": 819,
    "reply": "I did not understand where to put it (\"to be\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\". I drew a red heart. I did not catch what to do with thing. I can add, remove, ch",
    "worlds": [
     "art.draw"
@@ -12824,7 +12824,7 @@
   {
    "id": "r0363",
    "outcome": "executed",
-   "ms": 451,
+   "ms": 295,
    "reply": "I did not understand where to put it (\"to be\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\". I drew a red heart.",
    "worlds": [
     "art.draw"
@@ -12856,7 +12856,7 @@
   {
    "id": "r0364",
    "outcome": "executed",
-   "ms": 19,
+   "ms": 16,
    "reply": "What should I draw?",
    "worlds": [
     "art.draw"
@@ -12887,7 +12887,7 @@
   {
    "id": "r0365",
    "outcome": "executed",
-   "ms": 32,
+   "ms": 24,
    "reply": "I drew a red heart.",
    "worlds": [
     "art.draw"
@@ -12918,7 +12918,7 @@
   {
    "id": "r0366",
    "outcome": "executed",
-   "ms": 29,
+   "ms": 21,
    "reply": "I drew a red heart.",
    "worlds": [
     "art.draw"
@@ -12949,7 +12949,7 @@
   {
    "id": "r0367",
    "outcome": "executed",
-   "ms": 27,
+   "ms": 25,
    "reply": "I drew a red heart.",
    "worlds": [
     "art.draw"
@@ -12980,7 +12980,7 @@
   {
    "id": "r0368",
    "outcome": "executed",
-   "ms": 296,
+   "ms": 175,
    "reply": "I drew a park: a sun, 2 clouds, 3 birds, a kite, 6 trees, 3 bushes, a path, 3 benches, a fountain, a pond, 8 flowers, 4 people, 2 dogs, 4 pigeons, a squirrel, a ball, a bicycle, a trash bin, 2 lamp posts and 3 ducks. I p",
    "worlds": [
     "art.draw"
@@ -13011,7 +13011,7 @@
   {
    "id": "r0369",
    "outcome": "executed",
-   "ms": 500,
+   "ms": 263,
    "reply": "I drew a pink park. (a park, drawn as a person.)",
    "worlds": [
     "art.draw"
@@ -13042,7 +13042,7 @@
   {
    "id": "r0370",
    "outcome": "executed",
-   "ms": 103,
+   "ms": 62,
    "reply": "I drew a red heart.",
    "worlds": [
     "art.draw"
@@ -13073,7 +13073,7 @@
   {
    "id": "r0371",
    "outcome": "executed",
-   "ms": 87,
+   "ms": 65,
    "reply": "I drew a red heart.",
    "worlds": [
     "art.draw"
@@ -13133,7 +13133,7 @@
   {
    "id": "r0373",
    "outcome": "executed",
-   "ms": 357,
+   "ms": 167,
    "reply": "Hello! What would you like to talk about?",
    "worlds": [
     "kids.common"
@@ -13164,7 +13164,7 @@
   {
    "id": "r0374",
    "outcome": "not_understood",
-   "ms": 526,
+   "ms": 212,
    "reply": "I did not understand \"ce Hai\". For example: \"Add a house.\" or \"What is the colour of the house?\"",
    "worlds": [],
    "statuses": [
@@ -13193,7 +13193,7 @@
   {
    "id": "r0375",
    "outcome": "not_understood",
-   "ms": 773,
+   "ms": 195,
    "reply": "I did not understand \"ce îl\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: îl.",
    "worlds": [],
    "statuses": [
@@ -13222,7 +13222,7 @@
   {
    "id": "r0376",
    "outcome": "not_understood",
-   "ms": 474,
+   "ms": 244,
    "reply": "I did not understand \"ce Hai ce îl\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: îl.",
    "worlds": [],
    "statuses": [
@@ -13251,7 +13251,7 @@
   {
    "id": "r0377",
    "outcome": "not_understood",
-   "ms": 373,
+   "ms": 183,
    "reply": "I did not understand \"înnebunești\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: înnebunești.",
    "worlds": [],
    "statuses": [
@@ -13280,7 +13280,7 @@
   {
    "id": "r0378",
    "outcome": "not_understood",
-   "ms": 683,
+   "ms": 330,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the words: îl, înnebunești.",
    "worlds": [],
    "statuses": [
@@ -13309,7 +13309,7 @@
   {
    "id": "r0379",
    "outcome": "not_understood",
-   "ms": 497,
+   "ms": 213,
    "reply": "I am not sure how “A head” fits what we were doing. Please say the whole request.",
    "worlds": [],
    "statuses": [
@@ -13338,7 +13338,7 @@
   {
    "id": "r0380",
    "outcome": "not_understood",
-   "ms": 815,
+   "ms": 468,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the words: îl, înnebunești.",
    "worlds": [],
    "statuses": [
@@ -13367,7 +13367,7 @@
   {
    "id": "r0381",
    "outcome": "not_understood",
-   "ms": 860,
+   "ms": 264,
    "reply": "I did not understand \"tot ai\". Did you mean \"What do I still have to do?\"?",
    "worlds": [],
    "statuses": [
@@ -13396,7 +13396,7 @@
   {
    "id": "r0382",
    "outcome": "executed",
-   "ms": 1698,
+   "ms": 577,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul tot ai zis\". Did you mean \"What do I still have to do?\" or \"What does the document say?\"? I drew a pink park. I did not know the words: îl, înnebunești.",
    "worlds": [
     "art.draw"
@@ -13428,7 +13428,7 @@
   {
    "id": "r0383",
    "outcome": "not_understood",
-   "ms": 918,
+   "ms": 335,
    "reply": "I did not understand \"de\". For example: \"Add a house.\" or \"What is the colour of the house?\"",
    "worlds": [],
    "statuses": [
@@ -13457,7 +13457,7 @@
   {
    "id": "r0384",
    "outcome": "not_understood",
-   "ms": 3040,
+   "ms": 743,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul tot ai zis de multe\". Did you mean \"What do I still have to do?\" or \"What does the document say?\"? I did not understand \"ce Hai ce îl înnebunești de cap sărac",
    "worlds": [],
    "statuses": [
@@ -13487,7 +13487,7 @@
   {
    "id": "r0385",
    "outcome": "not_understood",
-   "ms": 2414,
+   "ms": 725,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the words: îl, înnebunești.",
    "worlds": [],
    "statuses": [
@@ -13516,7 +13516,7 @@
   {
    "id": "r0386",
    "outcome": "not_understood",
-   "ms": 1404,
+   "ms": 708,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the words: îl, înnebunești.",
    "worlds": [],
    "statuses": [
@@ -13545,7 +13545,7 @@
   {
    "id": "r0387",
    "outcome": "not_understood",
-   "ms": 1728,
+   "ms": 479,
    "reply": "I did not understand \"ia\". Did you mean \"Fă 2 mai.\" or \"Fă alt casă.\"?",
    "worlds": [],
    "statuses": [
@@ -13574,7 +13574,7 @@
   {
    "id": "r0388",
    "outcome": "not_understood",
-   "ms": 2792,
+   "ms": 1038,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul ia toate\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\" I did not know the words: îl, înnebunești.",
    "worlds": [],
    "statuses": [
@@ -13603,7 +13603,7 @@
   {
    "id": "r0389",
    "outcome": "not_understood",
-   "ms": 1427,
+   "ms": 495,
    "reply": "I did not understand \"comenzile\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\"",
    "worlds": [],
    "statuses": [
@@ -13632,7 +13632,7 @@
   {
    "id": "r0390",
    "outcome": "not_understood",
-   "ms": 2570,
+   "ms": 903,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul ia toate comenzile\". Did you mean \"Scoate toate valorile.\" or \"Ce face roșu și albastru face?\"? I did not understand \"ce Hai ce îl înnebunești de cap săracul ",
    "worlds": [],
    "statuses": [
@@ -13662,7 +13662,7 @@
   {
    "id": "r0391",
    "outcome": "not_understood",
-   "ms": 984,
+   "ms": 434,
    "reply": "I did not understand \"foarte\". Did you mean \"Marchează fiecare capitală din Europa.\"?",
    "worlds": [],
    "statuses": [
@@ -13691,7 +13691,7 @@
   {
    "id": "r0392",
    "outcome": "not_understood",
-   "ms": 1860,
+   "ms": 931,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul ia toate comenzile foarte sensibile\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\" I did not understand \"ce Hai ce îl înnebunești de cap săr",
    "worlds": [],
    "statuses": [
@@ -13721,7 +13721,7 @@
   {
    "id": "r0393",
    "outcome": "not_understood",
-   "ms": 896,
+   "ms": 504,
    "reply": "I did not understand \"Uite\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\"",
    "worlds": [],
    "statuses": [
@@ -13750,7 +13750,7 @@
   {
    "id": "r0394",
    "outcome": "not_understood",
-   "ms": 2597,
+   "ms": 1097,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul ia toate comenzile foarte sensibile Uite\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\" I did not understand \"ce Hai ce îl înnebunești de ca",
    "worlds": [],
    "statuses": [
@@ -13780,7 +13780,7 @@
   {
    "id": "r0395",
    "outcome": "other_world",
-   "ms": 1121,
+   "ms": 572,
    "reply": "I drew a mother: a person.",
    "worlds": [
     "art.draw"
@@ -13811,7 +13811,7 @@
   {
    "id": "r0396",
    "outcome": "not_understood",
-   "ms": 2767,
+   "ms": 1335,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul ia toate comenzile foarte sensibile Uite mama ce\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\" I did not understand \"ce Hai ce îl înnebuneș",
    "worlds": [],
    "statuses": [
@@ -13842,7 +13842,7 @@
   {
    "id": "r0397",
    "outcome": "other_world",
-   "ms": 123,
+   "ms": 51,
    "reply": "What should I draw?",
    "worlds": [
     "art.draw"
@@ -13873,7 +13873,7 @@
   {
    "id": "r0398",
    "outcome": "not_understood",
-   "ms": 2206,
+   "ms": 1144,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"The other one.\" or \"Add the wheel too.\". I cannot talk about ",
    "worlds": [],
    "statuses": [
@@ -13905,7 +13905,7 @@
   {
    "id": "r0399",
    "outcome": "not_understood",
-   "ms": 1551,
+   "ms": 698,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -13934,7 +13934,7 @@
   {
    "id": "r0400",
    "outcome": "not_understood",
-   "ms": 2663,
+   "ms": 1261,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"The other one.\" or \"Add the wheel too.\". I cannot talk about ",
    "worlds": [],
    "statuses": [
@@ -13966,7 +13966,7 @@
   {
    "id": "r0401",
    "outcome": "not_understood",
-   "ms": 22,
+   "ms": 7,
    "reply": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -13995,7 +13995,7 @@
   {
    "id": "r0402",
    "outcome": "other_world",
-   "ms": 127,
+   "ms": 56,
    "reply": "What should I draw?",
    "worlds": [
     "art.draw"
@@ -14026,7 +14026,7 @@
   {
    "id": "r0403",
    "outcome": "not_understood",
-   "ms": 2232,
+   "ms": 966,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Make it bigger.\" or \"Make it red.\".",
    "worlds": [],
    "statuses": [
@@ -14055,7 +14055,7 @@
   {
    "id": "r0404",
    "outcome": "other_world",
-   "ms": 97,
+   "ms": 56,
    "reply": "What should I draw?",
    "worlds": [
     "art.draw"
@@ -14086,7 +14086,7 @@
   {
    "id": "r0405",
    "outcome": "not_understood",
-   "ms": 1598,
+   "ms": 809,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Make it bigger.\" or \"Make it red.\".",
    "worlds": [],
    "statuses": [
@@ -14115,7 +14115,7 @@
   {
    "id": "r0406",
    "outcome": "other_world",
-   "ms": 81,
+   "ms": 53,
    "reply": "What should I draw?",
    "worlds": [
     "art.draw"
@@ -14146,7 +14146,7 @@
   {
    "id": "r0407",
    "outcome": "other_world",
-   "ms": 152,
+   "ms": 80,
    "reply": "I added water to the ground.",
    "worlds": [
     "art.draw"
@@ -14177,7 +14177,7 @@
   {
    "id": "r0408",
    "outcome": "other_world",
-   "ms": 170,
+   "ms": 60,
    "reply": "What should I draw?",
    "worlds": [
     "art.draw"
@@ -14208,7 +14208,7 @@
   {
    "id": "r0409",
    "outcome": "not_understood",
-   "ms": 2442,
+   "ms": 1082,
    "reply": "I did not understand \"Da face face apă face un\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\"",
    "worlds": [],
    "statuses": [
@@ -14237,7 +14237,7 @@
   {
    "id": "r0410",
    "outcome": "other_world",
-   "ms": 134,
+   "ms": 67,
    "reply": "I added water to the ground.",
    "worlds": [
     "art.draw"
@@ -14268,7 +14268,7 @@
   {
    "id": "r0411",
    "outcome": "other_world",
-   "ms": 131,
+   "ms": 81,
    "reply": "There is no he to give to make ground here.",
    "worlds": [
     "art.draw"
@@ -14299,7 +14299,7 @@
   {
    "id": "r0412",
    "outcome": "not_understood",
-   "ms": 1323,
+   "ms": 782,
    "reply": "I did not understand \"faci\". Did you mean \"Make it louder.\" or \"Make the song bigger.\"?",
    "worlds": [],
    "statuses": [
@@ -14328,7 +14328,7 @@
   {
    "id": "r0413",
    "outcome": "not_understood",
-   "ms": 934,
+   "ms": 663,
    "reply": "I did not understand \"Da face face apă face un mare faci un\". Did you mean \"Ne fă un document cu text merge la mare.\"?",
    "worlds": [],
    "statuses": [
@@ -14357,7 +14357,7 @@
   {
    "id": "r0414",
    "outcome": "other_world",
-   "ms": 108,
+   "ms": 84,
    "reply": "There is no he to give to make ground here.",
    "worlds": [
     "art.draw"
@@ -14388,7 +14388,7 @@
   {
    "id": "r0415",
    "outcome": "not_understood",
-   "ms": 833,
+   "ms": 566,
    "reply": "I did not understand \"un mami\". For example: \"Add a chart.\" or \"What is the colour of chart 2?\" I did not know the word: mami.",
    "worlds": [],
    "statuses": [
@@ -14417,7 +14417,7 @@
   {
    "id": "r0416",
    "outcome": "not_understood",
-   "ms": 749,
+   "ms": 479,
    "reply": "I did not understand \"Da face face apă face un mare faci un mami\". Did you mean \"Ne fă un document cu text merge la mare.\"? I did not know the word: mami.",
    "worlds": [],
    "statuses": [
@@ -14446,7 +14446,7 @@
   {
    "id": "r0417",
    "outcome": "other_world",
-   "ms": 73,
+   "ms": 66,
    "reply": "I added water to the ground.",
    "worlds": [
     "art.draw"
@@ -14477,7 +14477,7 @@
   {
    "id": "r0418",
    "outcome": "other_world",
-   "ms": 141,
+   "ms": 96,
    "reply": "There is no he to give to make sea mami ground here.",
    "worlds": [
     "art.draw"
@@ -14508,7 +14508,7 @@
   {
    "id": "r0419",
    "outcome": "not_understood",
-   "ms": 171,
+   "ms": 142,
    "reply": "I did not catch what to do with face. I can add, remove, change, copy, select and tell; for example \"Add a hat.\".",
    "worlds": [],
    "statuses": [
@@ -14537,7 +14537,7 @@
   {
    "id": "r0420",
    "outcome": "executed",
-   "ms": 107,
+   "ms": 88,
    "reply": "I took that as: \"make yourself human\" I have a long head now.",
    "worlds": [
     "ui.avatar"
@@ -14568,7 +14568,7 @@
   {
    "id": "r0421",
    "outcome": "executed",
-   "ms": 29,
+   "ms": 23,
    "reply": "I can chat, draw pictures, charts and diagrams, do sums, talk about shopping, time and things, keep your lists, edit documents, show places on a map, play music, Seating plan, Timeline, and change my face. Ask me \"what c",
    "worlds": [
     "ui.help"
@@ -14599,7 +14599,7 @@
   {
    "id": "r0422",
    "outcome": "other_world",
-   "ms": 27,
+   "ms": 20,
    "reply": "Here is Bucharest: capital of Romania · 1.9 million people.",
    "worlds": [
     "geo.map"
@@ -14630,7 +14630,7 @@
   {
    "id": "r0423",
    "outcome": "not_understood",
-   "ms": 194,
+   "ms": 161,
    "reply": "Do you want me to change face? Say it with a name or a number, for example \"Change the colour of the hat to red.\".",
    "worlds": [],
    "statuses": [
@@ -14659,7 +14659,7 @@
   {
    "id": "r0424",
    "outcome": "not_understood",
-   "ms": 678,
+   "ms": 482,
    "reply": "I did not understand \"make bigger yes and a red had\". Did you mean \"Make bigger eyes and a red had.\"?",
    "worlds": [],
    "statuses": [
@@ -14688,7 +14688,7 @@
   {
    "id": "r0425",
    "outcome": "not_understood",
-   "ms": 458,
+   "ms": 295,
    "reply": "I did not catch what to do with eyes. I can add, remove, change, copy, select and tell; for example \"Add a hat.\".",
    "worlds": [],
    "statuses": [
@@ -14717,7 +14717,7 @@
   {
    "id": "r0426",
    "outcome": "not_understood",
-   "ms": 694,
+   "ms": 589,
    "reply": "I did not understand \"why you turned it in a robot, this ia wrong\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -14746,7 +14746,7 @@
   {
    "id": "r0427",
    "outcome": "not_understood",
-   "ms": 46,
+   "ms": 41,
    "reply": "I am not sure how “turn it in a human again” fits what we were doing. Please say the whole request.",
    "worlds": [],
    "statuses": [
@@ -14775,7 +14775,7 @@
   {
    "id": "r0428",
    "outcome": "executed",
-   "ms": 447,
+   "ms": 374,
    "reply": "I put on lashes blue eyes.",
    "worlds": [
     "ui.avatar"
@@ -14806,7 +14806,7 @@
   {
    "id": "r0429",
    "outcome": "executed",
-   "ms": 11,
+   "ms": 10,
    "reply": "You are on the robot tab. You can say, for example: \"Which tab am I on\", \"Turn on the microphone\" or \"Turn on hands-free mode\". Ask \"what can you do?\" for the whole list, \"more examples\" for others, or \"how do I ...?\" to",
    "worlds": [
     "ui.help"
@@ -14837,7 +14837,7 @@
   {
    "id": "r0430",
    "outcome": "executed",
-   "ms": 20,
+   "ms": 16,
    "reply": "On the robot tab you can say, for example: \"Set the speech rate to 1.5\", \"Switch to Romanian\", \"Could you start reading aloud\", \"I want to hear you\" or \"Please do not listen\". Say \"more examples\" for others.",
    "worlds": [
     "ui.help"
@@ -14868,7 +14868,7 @@
   {
    "id": "r0431",
    "outcome": "not_understood",
-   "ms": 407,
+   "ms": 381,
    "reply": "I did not understand \"look suprised\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -14897,7 +14897,7 @@
   {
    "id": "r0432",
    "outcome": "not_understood",
-   "ms": 625,
+   "ms": 558,
    "reply": "I did not understand \"give tourself a random look\". Did you mean \"Give yourself a beard.\"?",
    "worlds": [],
    "statuses": [
@@ -14926,7 +14926,7 @@
   {
    "id": "r0433",
    "outcome": "not_understood",
-   "ms": 422,
+   "ms": 419,
    "reply": "I did not understand \"fa-mi avatarul ca om\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -14955,7 +14955,7 @@
   {
    "id": "r0434",
    "outcome": "not_understood",
-   "ms": 334,
+   "ms": 330,
    "reply": "I did not understand \"fa avatarul ca om\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -14984,7 +14984,7 @@
   {
    "id": "r0435",
    "outcome": "not_understood",
-   "ms": 380,
+   "ms": 367,
    "reply": "I did not understand \"fa-i ochii mari\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -15013,7 +15013,7 @@
   {
    "id": "r0436",
    "outcome": "executed",
-   "ms": 345,
+   "ms": 350,
    "reply": "Hello! What would you like to talk about? I did not understand \"express fear\". Did you mean \"Express ear.\"? (I read \"eys\" as \"eyo\")",
    "worlds": [
     "kids.common"
@@ -15045,7 +15045,7 @@
   {
    "id": "r0437",
    "outcome": "not_understood",
-   "ms": 311,
+   "ms": 320,
    "reply": "I did not understand \"fa ochii mari\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -15074,7 +15074,7 @@
   {
    "id": "r0438",
    "outcome": "not_understood",
-   "ms": 313,
+   "ms": 309,
    "reply": "I did not understand \"fa ochi visatori\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -15103,7 +15103,7 @@
   {
    "id": "r0439",
    "outcome": "executed",
-   "ms": 306,
+   "ms": 321,
    "reply": "I already have lashes blue eyes.",
    "worlds": [
     "ui.avatar"
@@ -15134,7 +15134,7 @@
   {
    "id": "r0440",
    "outcome": "executed",
-   "ms": 24,
+   "ms": 25,
    "reply": "I already have lashes blue eyes and I put on half closed blue eyes.",
    "worlds": [
     "ui.avatar"
@@ -15165,7 +15165,7 @@
   {
    "id": "r0441",
    "outcome": "not_understood",
-   "ms": 217,
+   "ms": 233,
    "reply": "I did not understand \"b1\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -15194,7 +15194,7 @@
   {
    "id": "r0442",
    "outcome": "not_understood",
-   "ms": 216,
+   "ms": 223,
    "reply": "I did not understand \"c3\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -15223,7 +15223,7 @@
   {
    "id": "r0443",
    "outcome": "not_understood",
-   "ms": 194,
+   "ms": 195,
    "reply": "I did not understand \"c1\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -15252,7 +15252,7 @@
   {
    "id": "r0444",
    "outcome": "other_world",
-   "ms": 79,
+   "ms": 78,
    "reply": "OK, here is a bar chart with 3 items: apples 5, pears 3 and plums 8.",
    "worlds": [
     "data.charts"
@@ -15283,7 +15283,7 @@
   {
    "id": "r0445",
    "outcome": "not_understood",
-   "ms": 55,
+   "ms": 61,
    "reply": "Do you want me to add neck? Say it with a name or a number, for example \"Add a hat.\".",
    "worlds": [],
    "statuses": [
@@ -15312,7 +15312,7 @@
   {
    "id": "r0446",
    "outcome": "not_understood",
-   "ms": 161,
+   "ms": 171,
    "reply": "I did not understand \"next\". Did you mean \"Neat.\"?",
    "worlds": [],
    "statuses": [
@@ -15341,7 +15341,7 @@
   {
    "id": "r0447",
    "outcome": "other_world",
-   "ms": 50,
+   "ms": 45,
    "reply": "I can not find a house in your picture. Your picture is empty. Try \"draw a red house\". Draw a house first, or say \"draw ... next to a house\".",
    "worlds": [
     "art.draw"
@@ -15372,7 +15372,7 @@
   {
    "id": "r0448",
    "outcome": "other_world",
-   "ms": 32,
+   "ms": 20,
    "reply": "I drew a yellow sun.",
    "worlds": [
     "art.draw"
@@ -15403,7 +15403,7 @@
   {
    "id": "r0449",
    "outcome": "other_world",
-   "ms": 393,
+   "ms": 333,
    "reply": "I can not find a cloud in your picture.",
    "worlds": [
     "art.draw"
@@ -15434,7 +15434,7 @@
   {
    "id": "r0450",
    "outcome": "not_understood",
-   "ms": 28,
+   "ms": 35,
    "reply": "I did not understand \"add more clouds\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -15463,7 +15463,7 @@
   {
    "id": "r0451",
    "outcome": "other_world",
-   "ms": 8,
+   "ms": 7,
    "reply": "I drew a yellow sun. (There is usually only one sun.)",
    "worlds": [
     "art.draw"
@@ -15494,7 +15494,7 @@
   {
    "id": "r0452",
    "outcome": "other_world",
-   "ms": 9,
+   "ms": 5,
    "reply": "I drew a yellow sun.",
    "worlds": [
     "art.draw"
@@ -15525,7 +15525,7 @@
   {
    "id": "r0453",
    "outcome": "other_world",
-   "ms": 20,
+   "ms": 27,
    "reply": "I drew a girl.",
    "worlds": [
     "art.draw"
@@ -15556,7 +15556,7 @@
   {
    "id": "r0454",
    "outcome": "other_world",
-   "ms": 212,
+   "ms": 225,
    "reply": "I drew a pink man. (a man, drawn as a person.)",
    "worlds": [
     "art.draw"
@@ -15587,7 +15587,7 @@
   {
    "id": "r0455",
    "outcome": "other_world",
-   "ms": 30,
+   "ms": 32,
    "reply": "I drew 2 blue people.",
    "worlds": [
     "art.draw"
@@ -15618,7 +15618,7 @@
   {
    "id": "r0456",
    "outcome": "other_world",
-   "ms": 25,
+   "ms": 29,
    "reply": "I drew a yellow house.",
    "worlds": [
     "art.draw"
@@ -15649,7 +15649,7 @@
   {
    "id": "r0457",
    "outcome": "other_world",
-   "ms": 34,
+   "ms": 37,
    "reply": "I drew a big yellow house (bigger than the house I had).",
    "worlds": [
     "art.draw"
@@ -15680,7 +15680,7 @@
   {
    "id": "r0458",
    "outcome": "other_world",
-   "ms": 29,
+   "ms": 32,
    "reply": "I drew a big yellow house (bigger than the house I had).",
    "worlds": [
     "art.draw"
@@ -15711,7 +15711,7 @@
   {
    "id": "r0459",
    "outcome": "not_understood",
-   "ms": 383,
+   "ms": 392,
    "reply": "I did not understand \"bugger house pls\". Did you mean \"Make the house bigger.\" or \"Make the house a bit bigger.\"?",
    "worlds": [],
    "statuses": [
@@ -15740,7 +15740,7 @@
   {
    "id": "r0460",
    "outcome": "other_world",
-   "ms": 28,
+   "ms": 29,
    "reply": "I made the house bigger. There are 3 houses, so I took the last one. You can say \"the first house\" or \"all the houses\".",
    "worlds": [
     "art.draw"
@@ -15771,7 +15771,7 @@
   {
    "id": "r0461",
    "outcome": "other_world",
-   "ms": 29,
+   "ms": 25,
    "reply": "I drew a red house.",
    "worlds": [
     "art.draw"
@@ -15802,7 +15802,7 @@
   {
    "id": "r0462",
    "outcome": "executed",
-   "ms": 243,
+   "ms": 259,
    "reply": "Now I look happy.",
    "worlds": [
     "ui.avatar"
@@ -15833,7 +15833,7 @@
   {
    "id": "r0463",
    "outcome": "not_understood",
-   "ms": 422,
+   "ms": 454,
    "reply": "Do you want me to change face? Say it with a name or a number, for example \"Change the colour of the hat to red.\".",
    "worlds": [],
    "statuses": [
@@ -15862,7 +15862,7 @@
   {
    "id": "r0464",
    "outcome": "not_understood",
-   "ms": 362,
+   "ms": 369,
    "reply": "I did not understand \"now in a women\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -15891,7 +15891,7 @@
   {
    "id": "r0465",
    "outcome": "executed",
-   "ms": 284,
+   "ms": 294,
    "reply": "I do not know the avatar.",
    "worlds": [
     "ui.avatar"
@@ -15922,7 +15922,7 @@
   {
    "id": "r0466",
    "outcome": "executed",
-   "ms": 350,
+   "ms": 333,
    "reply": "I do not have a face called women. I know baby, child, girl, boy, woman, man, old woman, old man, bearded man, woman with curly hair, robot, alien, clown and queen. To keep this one, say \"save this as women\".",
    "worlds": [
     "ui.avatar"
@@ -15953,7 +15953,7 @@
   {
    "id": "r0467",
    "outcome": "executed",
-   "ms": 465,
+   "ms": 447,
    "reply": "I have a wide head now.",
    "worlds": [
     "ui.avatar"
@@ -15984,7 +15984,7 @@
   {
    "id": "r0468",
    "outcome": "executed",
-   "ms": 31,
+   "ms": 33,
    "reply": "I drew a girl.",
    "worlds": [
     "ui.avatar"
@@ -16015,7 +16015,7 @@
   {
    "id": "r0469",
    "outcome": "other_world",
-   "ms": 213,
+   "ms": 201,
    "reply": "I drew a pink man. (a man, drawn as a person.)",
    "worlds": [
     "art.draw"
@@ -16046,7 +16046,7 @@
   {
    "id": "r0470",
    "outcome": "other_world",
-   "ms": 235,
+   "ms": 211,
    "reply": "I drew 3 clouds. I drew 2 yellow suns. (There is usually only one sun.)",
    "worlds": [
     "art.draw"
@@ -16078,7 +16078,7 @@
   {
    "id": "r0471",
    "outcome": "other_world",
-   "ms": 188,
+   "ms": 184,
    "reply": "A city does not contain cities.",
    "worlds": [
     "geo.map"
@@ -16109,7 +16109,7 @@
   {
    "id": "r0472",
    "outcome": "not_understood",
-   "ms": 193,
+   "ms": 186,
    "reply": "I did not understand \"get me to New\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -16138,7 +16138,7 @@
   {
    "id": "r0473",
    "outcome": "other_world",
-   "ms": 21,
+   "ms": 23,
    "reply": "Here is New York: city of the United States · 19 million people.",
    "worlds": [
     "geo.map"
@@ -16169,7 +16169,7 @@
   {
    "id": "r0474",
    "outcome": "other_world",
-   "ms": 13,
+   "ms": 14,
    "reply": "Here is New York: city of the United States · 19 million people.",
    "worlds": [
     "geo.map"
@@ -16200,7 +16200,7 @@
   {
    "id": "r0475",
    "outcome": "not_understood",
-   "ms": 112,
+   "ms": 104,
    "reply": "I did not understand \"B1\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -16258,7 +16258,7 @@
   {
    "id": "r0477",
    "outcome": "not_understood",
-   "ms": 215,
+   "ms": 210,
    "reply": "I did not understand \"B2\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -16287,7 +16287,7 @@
   {
    "id": "r0478",
    "outcome": "not_understood",
-   "ms": 223,
+   "ms": 224,
    "reply": "I did not understand \"C2\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -16316,7 +16316,7 @@
   {
    "id": "r0479",
    "outcome": "executed",
-   "ms": 30,
+   "ms": 28,
    "reply": "I drew a man.",
    "worlds": [
     "ui.avatar"
@@ -16347,7 +16347,7 @@
   {
    "id": "r0480",
    "outcome": "executed",
-   "ms": 29,
+   "ms": 33,
    "reply": "I drew a man.",
    "worlds": [
     "ui.avatar"
@@ -16378,7 +16378,7 @@
   {
    "id": "r0481",
    "outcome": "not_understood",
-   "ms": 553,
+   "ms": 543,
    "reply": "I did not catch what to do with face. I can add, remove, change, copy, select and tell; for example \"Add a hat.\".",
    "worlds": [],
    "statuses": [
@@ -16439,7 +16439,7 @@
   {
    "id": "r0483",
    "outcome": "executed",
-   "ms": 33,
+   "ms": 36,
    "reply": "Playing again at 125 beats per minute (it was 100).",
    "worlds": [
     "media.music"
@@ -16471,7 +16471,7 @@
   {
    "id": "r0484",
    "outcome": "executed",
-   "ms": 7,
+   "ms": 6,
    "reply": "Stopped.",
    "worlds": [
     "media.music"
@@ -16503,7 +16503,7 @@
   {
    "id": "r0511",
    "outcome": "executed",
-   "ms": 36,
+   "ms": 35,
    "reply": "I have a long head now.",
    "worlds": [
     "ui.avatar"
@@ -16537,7 +16537,7 @@
   {
    "id": "r0512",
    "outcome": "not_understood",
-   "ms": 54,
+   "ms": 56,
    "reply": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -16571,7 +16571,7 @@
   {
    "id": "r0513",
    "outcome": "executed",
-   "ms": 33,
+   "ms": 35,
    "reply": "I have a wide head now.",
    "worlds": [
     "ui.avatar"
@@ -16605,7 +16605,7 @@
   {
    "id": "r0514",
    "outcome": "executed",
-   "ms": 143,
+   "ms": 153,
    "reply": "I have a long head now.",
    "worlds": [
     "ui.avatar"
@@ -16639,7 +16639,7 @@
   {
    "id": "r0515",
    "outcome": "executed",
-   "ms": 108,
+   "ms": 111,
    "reply": "I already have a big smile mouth.",
    "worlds": [
     "ui.avatar"
@@ -16671,7 +16671,7 @@
   {
    "id": "r0516",
    "outcome": "executed",
-   "ms": 40,
+   "ms": 45,
    "reply": "I have a round head now.",
    "worlds": [
     "ui.avatar"
@@ -16705,7 +16705,7 @@
   {
    "id": "r0517",
    "outcome": "executed",
-   "ms": 110,
+   "ms": 117,
    "reply": "I cannot take off my mouth: a face needs one.",
    "worlds": [
     "ui.avatar"
@@ -16739,7 +16739,7 @@
   {
    "id": "r0518",
    "outcome": "executed",
-   "ms": 39,
+   "ms": 41,
    "reply": "I have a neutral mouth now.",
    "worlds": [
     "ui.avatar"
@@ -16771,7 +16771,7 @@
   {
    "id": "r0519",
    "outcome": "executed",
-   "ms": 86,
+   "ms": 85,
    "reply": "I have a long head now.",
    "worlds": [
     "ui.avatar"
@@ -16805,7 +16805,7 @@
   {
    "id": "r0520",
    "outcome": "executed",
-   "ms": 92,
+   "ms": 96,
    "reply": "I put on a smile mouth.",
    "worlds": [
     "ui.avatar"
@@ -16839,7 +16839,7 @@
   {
    "id": "r0521",
    "outcome": "executed",
-   "ms": 28,
+   "ms": 30,
    "reply": "I put on a big smile mouth.",
    "worlds": [
     "ui.avatar"
@@ -16871,7 +16871,7 @@
   {
    "id": "r0522",
    "outcome": "executed",
-   "ms": 39,
+   "ms": 40,
    "reply": "I put on a frown mouth.",
    "worlds": [
     "ui.avatar"
@@ -16937,7 +16937,7 @@
   {
    "id": "r0524",
    "outcome": "executed",
-   "ms": 36,
+   "ms": 35,
    "reply": "I have a wide head now.",
    "worlds": [
     "ui.avatar"
@@ -17035,7 +17035,7 @@
   {
    "id": "r0527",
    "outcome": "executed",
-   "ms": 85,
+   "ms": 87,
    "reply": "OK, I added a heading, 2 chapters and a paragraph. Say \"write ...\" to fill them in. I did not keep the name Two Chapters And A Paragraph.",
    "worlds": [
     "docs.editor"
@@ -17167,7 +17167,7 @@
   {
    "id": "r0531",
    "outcome": "not_understood",
-   "ms": 106,
+   "ms": 104,
    "reply": "I did not understand \"are the new paragraph\". Did you mean \"Add the new paragraph.\"?",
    "worlds": [],
    "statuses": [
@@ -17235,7 +17235,7 @@
   {
    "id": "r0533",
    "outcome": "not_understood",
-   "ms": 66,
+   "ms": 63,
    "reply": "I did not understand \"Chester\". Did you mean \"Center.\"?",
    "worlds": [],
    "statuses": [
@@ -17299,7 +17299,7 @@
   {
    "id": "r0542",
    "outcome": "not_understood",
-   "ms": 17,
+   "ms": 16,
    "reply": "OK, Tom lost 1 bee.",
    "worlds": [
     "kids.arith"
@@ -17329,7 +17329,7 @@
   {
    "id": "r0543",
    "outcome": "other_world",
-   "ms": 20,
+   "ms": 21,
    "reply": "Tom has 9 bees.",
    "worlds": [
     "kids.arith"
@@ -17361,7 +17361,7 @@
   {
    "id": "r0544",
    "outcome": "executed",
-   "ms": 95,
+   "ms": 92,
    "reply": "I drew 5 clouds. I drew a yellow sun.",
    "worlds": [
     "art.draw"
@@ -17394,7 +17394,7 @@
   {
    "id": "r0545",
    "outcome": "executed",
-   "ms": 28,
+   "ms": 30,
    "reply": "I drew 3 clouds.",
    "worlds": [
     "art.draw"
@@ -17460,7 +17460,7 @@
   {
    "id": "r0547",
    "outcome": "executed",
-   "ms": 21,
+   "ms": 24,
    "reply": "You are already on the Music tab.",
    "worlds": [
     "ui.shell"
@@ -17556,7 +17556,7 @@
   {
    "id": "r0550",
    "outcome": "executed",
-   "ms": 36,
+   "ms": 34,
    "reply": "Playing \"Mary Had a Little Lamb\" again on the piano at 110 beats per minute.",
    "worlds": [
     "media.music"
@@ -17588,7 +17588,7 @@
   {
    "id": "r0551",
    "outcome": "executed",
-   "ms": 64,
+   "ms": 55,
    "reply": "Drew a circle.",
    "worlds": [
     "diagram.sketch"
@@ -17622,7 +17622,7 @@
   {
    "id": "r0552",
    "outcome": "executed",
-   "ms": 64,
+   "ms": 66,
    "reply": "I drew a random timeline diagram with four shapes. It is about day. It is on top of what was there; undo takes it away.",
    "worlds": [
     "diagram.sketch"
@@ -17632,7 +17632,7 @@
    ],
    "pos": 1,
    "tk": {
-    "total": 3544,
+    "total": 3547,
     "sites": {
      "matcher.backtrack": 2120,
      "rules.pattern": 444,
@@ -17658,7 +17658,7 @@
   {
    "id": "r0553",
    "outcome": "executed",
-   "ms": 40,
+   "ms": 37,
    "reply": "Drew a hierarchy of Role 1, Role 2, Role 3, Role 4, Role 5, Role 6 and Role 7 as the group Hierarchy1 (there was no free room on the canvas, so it is drawn over the drawing; say where to put it (e.g. \"move it to the top ",
    "worlds": [
     "diagram.sketch"
@@ -17668,7 +17668,7 @@
    ],
    "pos": 2,
    "tk": {
-    "total": 6709,
+    "total": 6715,
     "sites": {
      "matcher.backtrack": 4120,
      "rules.pattern": 934,
@@ -17677,7 +17677,7 @@
      "index.readString": 126,
      "index.run": 92,
      "normalize.push3": 72,
-     "scene.walk": 67,
+     "scene.walk": 70,
      "open-words.place": 65,
      "diagram.layout": 62,
      "index.atomRun": 36,
@@ -17690,7 +17690,7 @@
   {
    "id": "r0554",
    "outcome": "executed",
-   "ms": 41,
+   "ms": 48,
    "reply": "Drew a circle.",
    "worlds": [
     "diagram.sketch"
@@ -17722,7 +17722,7 @@
   {
    "id": "r0555",
    "outcome": "executed",
-   "ms": 75,
+   "ms": 78,
    "reply": "Drew a rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -17756,7 +17756,7 @@
   {
    "id": "r0556",
    "outcome": "executed",
-   "ms": 84,
+   "ms": 88,
    "reply": "Drew a rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -17788,7 +17788,7 @@
   {
    "id": "r0557",
    "outcome": "executed",
-   "ms": 22,
+   "ms": 24,
    "reply": "Connected the circle → rectangle 1 and rectangle 1 → rectangle 2.",
    "worlds": [
     "diagram.sketch"
@@ -17855,7 +17855,7 @@
   {
    "id": "r0559",
    "outcome": "executed",
-   "ms": 45,
+   "ms": 49,
    "reply": "Drew a circle.",
    "worlds": [
     "diagram.sketch"
@@ -17887,7 +17887,7 @@
   {
    "id": "r0560",
    "outcome": "executed",
-   "ms": 68,
+   "ms": 69,
    "reply": "Drew a rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -17919,7 +17919,7 @@
   {
    "id": "r0561",
    "outcome": "executed",
-   "ms": 57,
+   "ms": 61,
    "reply": "Connected the circle → the rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -17953,7 +17953,7 @@
   {
    "id": "r0562",
    "outcome": "executed",
-   "ms": 46,
+   "ms": 47,
    "reply": "The arrow the circle → the rectangle now says “label1”.",
    "worlds": [
     "diagram.sketch"
@@ -17985,7 +17985,7 @@
   {
    "id": "r0563",
    "outcome": "asked",
-   "ms": 26,
+   "ms": 27,
    "reply": "What should the label of a1 (the circle → the rectangle) say?",
    "worlds": [
     "diagram.sketch"
@@ -18017,7 +18017,7 @@
   {
    "id": "r0564",
    "outcome": "not_understood",
-   "ms": 358,
+   "ms": 378,
    "reply": "I did not catch what to do with arrow. I can add, remove, change, move, connect and group; for example \"Add a circle.\".",
    "worlds": [],
    "statuses": [
@@ -18050,7 +18050,7 @@
   {
    "id": "r0565",
    "outcome": "executed",
-   "ms": 43,
+   "ms": 47,
    "reply": "Drew a circle.",
    "worlds": [
     "diagram.sketch"
@@ -18082,7 +18082,7 @@
   {
    "id": "r0566",
    "outcome": "executed",
-   "ms": 46,
+   "ms": 54,
    "reply": "Drew a rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -18114,7 +18114,7 @@
   {
    "id": "r0567",
    "outcome": "executed",
-   "ms": 49,
+   "ms": 58,
    "reply": "Connected the circle → the rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -18146,7 +18146,7 @@
   {
    "id": "r0568",
    "outcome": "executed",
-   "ms": 276,
+   "ms": 317,
    "reply": "The arrow the circle → the rectangle now says “label1”.",
    "worlds": [
     "diagram.sketch"
@@ -18178,7 +18178,7 @@
   {
    "id": "r0569",
    "outcome": "executed",
-   "ms": 34,
+   "ms": 39,
    "reply": "The arrow the circle → the rectangle now says “uses”.",
    "worlds": [
     "diagram.sketch"
@@ -18212,7 +18212,7 @@
   {
    "id": "r0570",
    "outcome": "executed",
-   "ms": 361,
+   "ms": 394,
    "reply": "The arrow the circle → the rectangle is now dashed and thicker (3 px).",
    "worlds": [
     "diagram.sketch"
@@ -18244,7 +18244,7 @@
   {
    "id": "r0571",
    "outcome": "executed",
-   "ms": 25,
+   "ms": 26,
    "reply": "Removed the arrow the circle → the rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -18276,7 +18276,7 @@
   {
    "id": "r0572",
    "outcome": "executed",
-   "ms": 41,
+   "ms": 43,
    "reply": "Drew a circle.",
    "worlds": [
     "diagram.sketch"
@@ -18308,7 +18308,7 @@
   {
    "id": "r0573",
    "outcome": "executed",
-   "ms": 51,
+   "ms": 60,
    "reply": "Drew a rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -18340,7 +18340,7 @@
   {
    "id": "r0574",
    "outcome": "executed",
-   "ms": 34,
+   "ms": 38,
    "reply": "the circle is now large.",
    "worlds": [
     "diagram.sketch"
@@ -18372,7 +18372,7 @@
   {
    "id": "r0575",
    "outcome": "executed",
-   "ms": 220,
+   "ms": 241,
    "reply": "Drew A and B.",
    "worlds": [
     "diagram.sketch"
@@ -18404,7 +18404,7 @@
   {
    "id": "r0576",
    "outcome": "executed",
-   "ms": 43,
+   "ms": 49,
    "reply": "Connected A → B.",
    "worlds": [
     "diagram.sketch"
@@ -18436,7 +18436,7 @@
   {
    "id": "r0577",
    "outcome": "executed",
-   "ms": 30,
+   "ms": 36,
    "reply": "A is now green; B is now green.",
    "worlds": [
     "diagram.sketch"
@@ -18468,7 +18468,7 @@
   {
    "id": "r0578",
    "outcome": "other_world",
-   "ms": 652,
+   "ms": 756,
    "reply": "I can not find a red thing in your picture. Your picture is empty. Try \"draw a red house\".",
    "worlds": [
     "art.draw"
@@ -18503,7 +18503,7 @@
   {
    "id": "r0579",
    "outcome": "executed",
-   "ms": 75,
+   "ms": 82,
    "reply": "Drew A.",
    "worlds": [
     "diagram.sketch"
@@ -18535,7 +18535,7 @@
   {
    "id": "r0580",
    "outcome": "executed",
-   "ms": 124,
+   "ms": 137,
    "reply": "Drew B.",
    "worlds": [
     "diagram.sketch"
@@ -18567,7 +18567,7 @@
   {
    "id": "r0581",
    "outcome": "executed",
-   "ms": 26,
+   "ms": 29,
    "reply": "Connected A → B.",
    "worlds": [
     "diagram.sketch"
@@ -18599,7 +18599,7 @@
   {
    "id": "r0582",
    "outcome": "executed",
-   "ms": 28,
+   "ms": 33,
    "reply": "The arrow B → A was reversed, it now goes B → A.",
    "worlds": [
     "diagram.sketch"
@@ -18633,7 +18633,7 @@
   {
    "id": "r0583",
    "outcome": "executed",
-   "ms": 40,
+   "ms": 46,
    "reply": "The arrow B → A is now thicker (2.5 px).",
    "worlds": [
     "diagram.sketch"
@@ -18665,7 +18665,7 @@
   {
    "id": "r0584",
    "outcome": "executed",
-   "ms": 35,
+   "ms": 41,
    "reply": "The arrow B → A is now thinner (1.7 px).",
    "worlds": [
     "diagram.sketch"
@@ -18697,7 +18697,7 @@
   {
    "id": "r0585",
    "outcome": "executed",
-   "ms": 24,
+   "ms": 26,
    "reply": "Selected the arrow B → A.",
    "worlds": [
     "diagram.sketch"
@@ -18729,7 +18729,7 @@
   {
    "id": "r0586",
    "outcome": "other_world",
-   "ms": 85,
+   "ms": 97,
    "reply": "OK, today is Friday.",
    "worlds": [
     "kids.time"
@@ -18759,7 +18759,7 @@
   {
    "id": "r0587",
    "outcome": "other_world",
-   "ms": 18,
+   "ms": 20,
    "reply": "Tomorrow is Saturday.",
    "worlds": [
     "kids.time"
@@ -18791,7 +18791,7 @@
   {
    "id": "r0588",
    "outcome": "executed",
-   "ms": 10,
+   "ms": 13,
    "reply": "You are welcome.",
    "worlds": [
     "kids.common"
@@ -18823,7 +18823,7 @@
   {
    "id": "r0589",
    "outcome": "executed",
-   "ms": 64,
+   "ms": 70,
    "reply": "Thanks for telling me. I cannot do anything with that yet. Tell me what you would like to do, or say help.",
    "worlds": [
     "kids.common"
@@ -18855,7 +18855,7 @@
   {
    "id": "r0590",
    "outcome": "other_world",
-   "ms": 21,
+   "ms": 24,
    "reply": "I added call grandma to your to-do list.",
    "worlds": [
     "kids.tasks"
@@ -18887,7 +18887,7 @@
   {
    "id": "r0591",
    "outcome": "executed",
-   "ms": 7,
+   "ms": 12,
    "reply": "You are welcome.",
    "worlds": [
     "kids.common"
@@ -18919,7 +18919,7 @@
   {
    "id": "r0592",
    "outcome": "other_world",
-   "ms": 22,
+   "ms": 25,
    "reply": "I could not find \"you are happy\" in the document.",
    "worlds": [
     "docs.editor"
@@ -18953,7 +18953,7 @@
   {
    "id": "r0593",
    "outcome": "other_world",
-   "ms": 13,
+   "ms": 14,
    "reply": "I could not find \"you are sad\" in the document.",
    "worlds": [
     "docs.editor"
@@ -18987,7 +18987,7 @@
   {
    "id": "r0594",
    "outcome": "executed",
-   "ms": 7,
+   "ms": 11,
    "reply": "You are welcome.",
    "worlds": [
     "kids.common"
@@ -19019,7 +19019,7 @@
   {
    "id": "r0595",
    "outcome": "not_understood",
-   "ms": 103,
+   "ms": 120,
    "reply": "I don't know what an on u is.",
    "worlds": [],
    "statuses": [
@@ -19052,7 +19052,7 @@
   {
    "id": "r0596",
    "outcome": "executed",
-   "ms": 73,
+   "ms": 84,
    "reply": "There is no you here.",
    "worlds": [
     "ui.avatar"
@@ -19086,7 +19086,7 @@
   {
    "id": "r0597",
    "outcome": "executed",
-   "ms": 10,
+   "ms": 13,
    "reply": "You are welcome.",
    "worlds": [
     "kids.common"
@@ -19118,7 +19118,7 @@
   {
    "id": "r0598",
    "outcome": "other_world",
-   "ms": 481,
+   "ms": 569,
    "reply": "10 lei is not enough. A puzzle costs 18 lei.",
    "worlds": [
     "kids.shop"
@@ -19150,7 +19150,7 @@
   {
    "id": "r0599",
    "outcome": "other_world",
-   "ms": 474,
+   "ms": 560,
    "reply": "Your change from 10 lei is 6 lei.",
    "worlds": [
     "kids.shop"
@@ -19182,7 +19182,7 @@
   {
    "id": "r0600",
    "outcome": "executed",
-   "ms": 11,
+   "ms": 13,
    "reply": "You are welcome.",
    "worlds": [
     "kids.common"
@@ -19214,7 +19214,7 @@
   {
    "id": "r0610",
    "outcome": "not_understood",
-   "ms": 181,
+   "ms": 197,
    "reply": "I did not understand \"how is a circle different from other shapes\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
    "worlds": [],
    "statuses": [
@@ -19247,7 +19247,7 @@
   {
    "id": "r0611",
    "outcome": "not_understood",
-   "ms": 151,
+   "ms": 165,
    "reply": "I did not understand \"what makes a square special\". Did you mean \"What is a bicycle made of?\" or \"What do red and blue make?\"?",
    "worlds": [],
    "statuses": [
@@ -19312,7 +19312,7 @@
   {
    "id": "r0622",
    "outcome": "executed",
-   "ms": 304,
+   "ms": 342,
    "reply": "Your change from 20 lei is 13 lei.",
    "worlds": [
     "kids.shop"
@@ -19344,7 +19344,7 @@
   {
    "id": "r0623",
    "outcome": "executed",
-   "ms": 19,
+   "ms": 23,
    "reply": "A pencil costs 2 lei.",
    "worlds": [
     "kids.shop"
@@ -19376,7 +19376,7 @@
   {
    "id": "r0624",
    "outcome": "refused",
-   "ms": 373,
+   "ms": 598,
    "reply": "10 lei is not enough. A puzzle costs 18 lei.",
    "worlds": [
     "kids.shop"
@@ -19408,7 +19408,7 @@
   {
    "id": "r0625",
    "outcome": "other_world",
-   "ms": 699,
+   "ms": 812,
    "reply": "Your change from 20 lei is 13 lei.",
    "worlds": [
     "kids.shop"
@@ -19440,7 +19440,7 @@
   {
    "id": "r0626",
    "outcome": "other_world",
-   "ms": 21,
+   "ms": 24,
    "reply": "A ball costs 5 lei.",
    "worlds": [
     "kids.shop"
@@ -19472,7 +19472,7 @@
   {
    "id": "r0627",
    "outcome": "other_world",
-   "ms": 543,
+   "ms": 618,
    "reply": "Your change from 10 lei is 6 lei.",
    "worlds": [
     "kids.shop"
@@ -19504,7 +19504,7 @@
   {
    "id": "r0631",
    "outcome": "executed",
-   "ms": 189,
+   "ms": 209,
    "reply": "I drew a green house. I drew a yellow house.",
    "worlds": [
     "art.draw"
@@ -19537,7 +19537,7 @@
   {
    "id": "r0632",
    "outcome": "executed",
-   "ms": 324,
+   "ms": 347,
    "reply": "I drew a red circle. I drew a blue circle.",
    "worlds": [
     "art.draw"
@@ -19570,7 +19570,7 @@
   {
    "id": "r0633",
    "outcome": "executed",
-   "ms": 66,
+   "ms": 77,
    "reply": "I drew a green tree.",
    "worlds": [
     "art.draw"
@@ -19602,7 +19602,7 @@
   {
    "id": "r0634",
    "outcome": "executed",
-   "ms": 187,
+   "ms": 200,
    "reply": "I drew 2 orange cats.",
    "worlds": [
     "art.draw"
@@ -19637,7 +19637,7 @@
   {
    "id": "r0635",
    "outcome": "executed",
-   "ms": 254,
+   "ms": 260,
    "reply": "I drew a yellow house. I made a copy of the house.",
    "worlds": [
     "art.draw"
@@ -19672,7 +19672,7 @@
   {
    "id": "r0636",
    "outcome": "executed",
-   "ms": 21,
+   "ms": 20,
    "reply": "I drew a yellow sun.",
    "worlds": [
     "art.draw"
@@ -19738,7 +19738,7 @@
   {
    "id": "r0645",
    "outcome": "executed",
-   "ms": 86,
+   "ms": 95,
    "reply": "An eyes is a kind of thing. The sun is blue now. There are 3 suns, so I took the last one. You can say \"the first sun\" or \"all the suns\".",
    "worlds": [
     "art.draw"
@@ -19772,7 +19772,7 @@
   {
    "id": "r0646",
    "outcome": "executed",
-   "ms": 29,
+   "ms": 28,
    "reply": "The sun is blue now.",
    "worlds": [
     "art.draw"
@@ -19804,7 +19804,7 @@
   {
    "id": "r0650",
    "outcome": "executed",
-   "ms": 49,
+   "ms": 48,
    "reply": "I drew a sunny scene for you: a yellow sun, 2 clouds, a grey mountain, a blue house, 2 green trees, 2 pink flowers, a brown dog and a blue bird. You can change anything, for example \"make the house blue\".",
    "worlds": [
     "art.draw"
@@ -19835,7 +19835,7 @@
   {
    "id": "r0651",
    "outcome": "executed",
-   "ms": 115,
+   "ms": 128,
    "reply": "I drew a diagram in the shape of a house: 7 nodes on its outline, joined in order.",
    "worlds": [
     "diagram.sketch"
@@ -19845,9 +19845,9 @@
    ],
    "pos": 1,
    "tk": {
-    "total": 126483,
+    "total": 126511,
     "sites": {
-     "diagram.outline": 108508,
+     "diagram.outline": 108536,
      "translate.frame": 12014,
      "matcher.backtrack": 2548,
      "emit.substituteEmit": 480,
