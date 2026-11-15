@@ -471,3 +471,10 @@ Own tests (matrix) 410 -> 452 of 454; ledger rows 41 of 43 closed, by seven mech
 - A probe of the symptom before blaming the library: "random colour always red" looked like the library's LCG bug; the trace showed a catch-all question pattern reading "Change the circle to a random" as the thing. Read the segment's pattern id first.
 - A removal that cannot change behaviour still needs the run: the webchat freshness test fails on any src change until the bundle is rebuilt, so every src commit is followed by a rebuild commit.
 - The real set has 13-14 rows of random content (songs, random diagrams) that differ between two runs of the same code: compare verdicts, not reply texts, when judging a refactor.
+## 2026-11-15 Owner export 22:43: a reading that swallows words must not call itself complete
+- A catch-all pattern (`{pre} diagram {post}`) is a hand-over to a reader, not a reading. If nobody checks its leftovers, completeness, arbitration and the ensemble all see "complete" and the reader's default (one circle) becomes the answer. Leftovers are checked in every world; when a world has its own reader, ask the reader whether it read the whole clause.
+- Give the reader the clause as typed: joining tokens with spaces turned the name "a1" into "a 1" and the engine read a bare create.
+- A read-only hook must not create state: `state[w] ??= {}` in a query ctx made a drawing turn "change" two other worlds, and the UI turned that into view effects. Write the invariant as a test (a turn's changes are within its addressed worlds).
+- 6 s that hits a bound exactly (knowledge 6,001 ms) is a bound, not work: look for the sequential awaits behind it. A make with no kind is not a plan goal; shard reads of one lookup run side by side.
+- A machine translator reads our subjectless replies ("Drew a circle.") as third person. Fix the source we give it (add "I"), and keep one register on the way back using the morphology we already have.
+- Chips are suggestions in context: a random lemma of a 33k vocabulary gives "Add a weapon.". What comes next comes from the knowledge about the picture (the scenes its kinds are in).
