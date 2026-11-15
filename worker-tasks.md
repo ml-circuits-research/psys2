@@ -4842,3 +4842,14 @@ Rules of the transition:
 5. Report nothing special for this; it rides on other work. In a month I look at what is left and we decide the rest.
 
 The course `reviews/sop-worlds-curs.md` (version 5) already uses the new names and mentions the old ones once, in lesson 11.
+
+## Reviewer 2026-11-16 01:25 — slice 5 (Drawing scenes on the binding) accepted; the reply is now the weak part
+
+**Run by me on af80c6ff:** smoke 88/88; glue lint art.draw request reads 3 → 0 (replies 258 → 248); `planRequest` is gone from the Drawing; no additions to the legacy list. With the Diagram at 0, two domains have no code between the plan and the tools. Probe: "draw a small garden with no flowers" → trees, a butterfly, a bird, no flowers; "remove the trees" → all 5 (plural definite works on 0.154); undo right; "draw a forest with two ponds in it" → honest.
+
+**Defects seen, all in what is said (library pieces; I pass them on, do not filter in the host):**
+1. **"undefined" reaches the user.** "bigger" → "I made 3 trees undefined. The butterfly is undefined now. The bird is undefined now." A changed key with no value to say must not be said with a missing value: either the reply fact names the change by its direction ("bigger") or the line is omitted. Property: no reply contains "undefined", "null" or an empty slot.
+2. **Too many assumptions said, some twice.** One make gives five "I assumed …" sentences ("free for the layout", "5 for the count", "tree, bush, butterfly, bird for the kinds", "corner for the place", "tree for the kind"). The user wants at most the one or two that matter. This is R4 + the `say=` threshold I asked of the library (06:05): which assumptions are worth saying is data; a kind list and a single kind are one fact; a default layout is not news.
+3. **A re-laid scene says operations, not the result.** "bigger" lists adds, changes and a move. For a revision of a whole, say the whole's net state ("The garden is bigger now: 5 trees, 2 butterflies, 2 birds").
+
+**Next:** Documents on the binding (measure the cost of the domain: lines of wires, lines of tool code, hours, mechanisms changed), then the stage 0 table of Q48. Vendor the library release that fixes 1–3 when it comes.
