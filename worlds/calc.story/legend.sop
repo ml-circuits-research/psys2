@@ -1,0 +1,5 @@
+@legend.calc.story core.legend
+    namespace=calc.story
+    version=0.1.0
+    imports=core
+    doc="Word problems. State: story (the library's storyState result carried across turns: state, steps, starts, unknown, focus), turns (how many sentences were read)."

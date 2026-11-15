@@ -639,3 +639,23 @@
     example="Which animals have 6 legs?"
     example="Which shapes have no corners?"
     doc="Frame: which K have N P. The names whose numeric slot P holds N (sides, corners, legs); no P is zero."
+
+@pat.talk.contrast.from core.pattern
+    canonical="How is a circle different from other shapes?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.contrastlead] [$lang.know.det]? {o:words(2,noun)} [$lang.talk.contrastrel] [$lang.talk.others]? {k:words(2)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.contrast arg.o=\"{o}\" arg.k=\"{k}\""
+    kind=question
+    tabOnly=false
+    priority=10
+    example="How is a circle different from other shapes?"
+    doc="Frame: how is X different from the other Ks. The keys where X's value is rare among its siblings (the library's contrastOf over the catalog's records of X's type)."
+
+@pat.talk.contrast.special core.pattern
+    canonical="What makes a square special?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? what [makes|make] [$lang.know.det]? {o:words(2,noun)} [$lang.talk.special] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.contrast arg.o=\"{o}\""
+    kind=question
+    tabOnly=false
+    priority=10
+    example="What makes a square special?"
+    doc="Frame: what makes X special. The same answer, the siblings of X's own kind."

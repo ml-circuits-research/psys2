@@ -3,9 +3,9 @@
 // (worlds/diagram.sketch/engine.mjs): the engine reads the sentence the user said (`req.text`, the same way the old cue patterns handed it over) and runs it on its own state.
 // The act only says which engine command family the sentence belongs to. `unread`: when no form of the grammar read a sentence in the open Diagram tab, the engine's own
 // reader gets it (its legend knows layouts, templates, queries, facts and rules that the act grammar does not have yet: those are the holes the coverage grid lists).
-import * as E from './engine.mjs?v=3879407c99';
+import * as E from './engine.mjs?v=a8e201d63e';
 import SOPKit from './engine/logic.mjs?v=07f03fb3da';
-import { parseDiagramRequest } from '../../lib/knowledge/diagram-world.mjs?v=10c4737288';
+import { parseDiagramRequest } from '../../lib/knowledge/diagram-world.mjs?v=b499637450';
 
 const by = { make: 'create', remove: 'delete', change: 'set', place: 'move', connect: 'connect', pick: 'select', copy: 'duplicate' };
 /** A clause that depends on the one before it ("... and connect A to it", cut at the "and"): the pronoun is the thing the last command made or named (state.last, the engine's own "it"). */

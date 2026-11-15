@@ -1,0 +1,17 @@
+@op.plan.list.make core.operation
+    impl=make
+    semantics=action
+    action=list.make
+    doc="The act make on w.list: what the user wants (one thing or several, with an amount) becomes entries of the shopping list the request means (listMeant); a list already paid for is settled, so a new purchase starts a new list."
+
+@op.plan.list.change core.operation
+    impl=change
+    semantics=action
+    action=list.change
+    doc="The act change on a w.list list: the money tendered at the till (I pay 10 lei) or the budget (I start with 30 lei), in the currency said."
+
+@op.plan.list.ask core.operation
+    impl=ask
+    semantics=action
+    action=list.ask
+    doc="The act ask on w.list: the price of a thing (mode price), whether the budget covers it (afford), the change (change: from the tendered money, or from the money and things the question names), what is left of the budget (left); every sum is the library's listSums, computed and never stored."
