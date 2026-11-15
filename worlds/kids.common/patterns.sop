@@ -255,7 +255,6 @@
     example="Can I get your name?"
 
 @pat.kids.common.w.who.f5 core.pattern
-    canonical="Who is speaking to me?"
     match="[$kids.common.g1_hey]? [explain|tell_me|say]? [who|whos] [is]? [this|that|you|u|r|talking_to_me|speaking|there|youre|you_are|talking|speaking_to_me]? [u|you|r|are|be|is]? [talking_to_me|speaking|there|this|talking|speaking_to_me]? [to_me]? [$lang.tail.filler|exactly|actually]?"
     emit="@{_} core.request action=chat.who"
     kind=question
