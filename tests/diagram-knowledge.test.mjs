@@ -64,6 +64,39 @@ test('the request says which structure it means: the parts of a thing, its kinds
   assert.match(asked('tree', 'the cities of France'), /k\.geo\.city/);
 });
 
+test('one request, one diagram: every fill is tried, a word of the request names the order (`by=`), else the knowledge\'s first; the seed does not choose', () => {
+  const labels = (topic, seed) => DG.composeForRequest(lib, world, { kind: 'timeline', topic }, { seed }).diagram.nodes.map((n) => n.label);
+  for (const seed of [1, 2, 3, 7, 11, 1234567]) {
+    assert.deepEqual(labels('the planets by distance', seed), ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'], `seed ${seed}`);
+    assert.equal(labels('the planets by size', seed)[0], 'Jupiter', `seed ${seed}: by=size`);
+    assert.deepEqual(labels('the planets', seed), labels('the planets', 1), `seed ${seed}: no word names an order, the first fill of the knowledge`);
+  }
+});
+
+test('a timeline is drawn on its line: its events in order joined by plain segments (k.diagrams: edges=none, structure=sequence)', () => {
+  const d = DG.composeForRequest(lib, world, { kind: 'timeline', topic: 'the planets by distance' }).diagram;
+  assert.equal(d.edges.length, 0, 'no edges by the knowledge');
+  assert.equal(d.line, true);
+  const conns = DG.engineNodes(d).filter((n) => n.args.action === 'connect');
+  assert.equal(conns.length, d.nodes.length - 1);
+  assert.ok(conns.every((c) => c.args.arrow === 'none'));
+  assert.deepEqual(conns.map((c) => c.args.from), ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus']);
+  assert.ok(!DG.composeForRequest(lib, world, { kind: 'cycle', topic: 'seasons' }).diagram.line, 'a kind with edges draws its own');
+});
+
+test('what the knowledge says is not for a person (`user_facing=false`) is never drawn, sampled or offered', () => {
+  const hidden = world.ofType('k.procedures.method').filter((f) => f.attrs.user_facing?.[0] === 'false').map((f) => String(f.attrs.name[0]).replace(/^"|"$/g, ''));
+  assert.ok(hidden.length >= 5, 'the bundled subset carries the methods and their key');
+  assert.ok(hidden.includes('a face of a role'));
+  for (const m of hidden) for (const kind of ['flowchart', 'pipeline']) { const r = DG.composeForRequest(lib, world, { kind, topic: m }); assert.ok(r.why || !hidden.includes(r.topic), `${kind} of ${m}: ${r.topic}`); }   // (a shorter window may name a method that is: "set a table")
+  assert.ok(DG.composeForRequest(lib, world, { kind: 'flowchart', topic: 'a face of a role' }).why);
+  const shown = world.ofType('k.procedures.method').find((f) => f.attrs.user_facing?.[0] === 'true');
+  assert.ok(DG.composeForRequest(lib, world, { kind: 'flowchart', topic: String(shown.attrs.name[0]).replace(/^"|"$/g, '') }).diagram, 'a user-facing method is drawn');
+  const low = hidden.map((x) => x.toLowerCase());
+  for (let s = 1; s <= 60; s++) { const r = DG.sampleDiagrams(lib, world, { seed: s }); assert.ok(!low.includes(String(r.topic).toLowerCase()), `seed ${s}: ${r.topic}`); }
+  for (const t of DG.diagramSentences(lib, world)) assert.ok(!low.some((m) => t.toLowerCase().includes(` of ${m}.`)), t);
+});
+
 test('engine nodes: one create per node at the place the layout gave, one connect per edge, the arrows of the kind; names are the labels, unique', () => {
   const d = DG.composeForRequest(lib, world, { kind: 'cycle', topic: 'seasons' }).diagram;
   const nodes = DG.engineNodes(d, new Set(['spring']));

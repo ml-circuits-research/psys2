@@ -147,6 +147,9 @@ test('diagram.sketch: "a diagram shaped like a house" is an arrangement along th
     assert.ok(st.shapes.every((x) => !x.label), `${reasoner}: no content was given, so the nodes carry no names of parts`);
     const left = st.shapes.filter((x) => x.x < 400), right = st.shapes.filter((x) => x.x > 400);
     assert.equal(left.length, right.length, `${reasoner}: a symmetric gable`);
+    // reviewer 2026-11-15 04:50: no two nodes on the outline overlap (the eaves next to the wall tops): they are sized to the shortest edge
+    const box = (x) => ({ w: x.w ?? x.size, h: x.h ?? x.size });
+    for (const [i, a] of st.shapes.entries()) for (const b of st.shapes.slice(i + 1)) assert.ok(Math.abs(a.x - b.x) >= (box(a).w + box(b).w) / 2 || Math.abs(a.y - b.y) >= (box(a).h + box(b).h) / 2, `${reasoner}: ${a.name} overlaps ${b.name}`);
     const r2 = await s.send('Draw a diagram in house form.');
     assert.match(r2.text, /outline of a house/, `${reasoner}: "in house form" (the owner's Romanian through the translator)`);
     const n = await engines[reasoner].createSession({ language: 'en' }).send('Make a diagram shaped like a blorp.');
@@ -154,7 +157,17 @@ test('diagram.sketch: "a diagram shaped like a house" is an arrangement along th
     const m = engines[reasoner].createSession({ language: 'en' });
     await m.send('Draw a circle called A, a circle called B, a circle called C, a circle called D.');
     assert.match((await m.send('Arrange them in the shape of a house.')).text, /placed the 4 shapes on the outline of a house/, reasoner);
+    const many = engines[reasoner].createSession({ language: 'en' });
+    await many.send('Draw 14 circles.');
+    await many.send('Arrange them in the shape of a house.');
+    const sh = many.state('diagram.sketch').shapes;
+    for (const [i, a] of sh.entries()) for (const b of sh.slice(i + 1)) assert.ok(Math.hypot(a.x - b.x, a.y - b.y) >= ((a.w ?? a.size) + (b.w ?? b.size)) / 2, `${reasoner}: ${sh.length} shapes on the outline: ${a.name} overlaps ${b.name}`);
   }
+  // the rule itself: corners closer than the smallest node merge; otherwise one size that fits the shortest edge
+  const { fitOnOutline } = await import('../worlds/diagram.sketch/engine.mjs');
+  assert.deepEqual(fitOnOutline([[0, 0], [300, 0], [300, 300], [0, 300]]), { points: [[0, 0], [300, 0], [300, 300], [0, 300]], size: null }, 'room enough: the usual size');
+  assert.equal(fitOnOutline([[0, 0], [300, 0], [340, 0], [300, 300], [0, 300]]).size, 30, 'a 40 px edge: nodes of 30 px');
+  assert.equal(fitOnOutline([[0, 0], [300, 0], [310, 0], [300, 300], [0, 300]]).points.length, 4, 'a 10 px edge: one node');
   // the engine's own layouts are unchanged
   const c = engines.ops.createSession({ language: 'en' });
   await c.send('Draw three rectangles in the diagram.');
