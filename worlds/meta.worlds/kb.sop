@@ -6,13 +6,13 @@
     id=art.draw kind=tab run=none tab=draw catalog=yes
     name=drawing name=paint name=picture name=drawing_board name=canvas
     act=door act=corner act=roof act=dark act=wheel act=night act=um act=art
-    act=degree act=doodle act=organise act=upside act=deselect act=three act=organize act=distribute
-    act=landscape act=masterpiece act=mind act=mirror act=painting act=scene
-    actshared=draw actshared=save actshared=everything actshared=look actshared=nice actshared=surprise actshared=anything actshared=blow
-    actshared=arrange actshared=png actshared=selected actshared=highlight actshared=memorize actshared=preserve actshared=archive actshared=sized
-    actshared=swivel actshared=twin actshared=unpick actshared=unselect actshared=unselected actshared=whatever actshared=bundle actshared=click
-    actshared=compress actshared=deflate actshared=detach actshared=disconnect actshared=drew actshared=inflate actshared=minimise actshared=minimize
-    actshared=press actshared=puff actshared=pump actshared=sever actshared=tap
+    act=degree act=organise act=upside act=three act=organize act=distribute act=landscape act=masterpiece
+    act=mind act=mirror act=painting act=scene
+    actshared=draw actshared=save actshared=everything actshared=deselect actshared=look actshared=nice actshared=surprise actshared=anything
+    actshared=blow actshared=arrange actshared=png actshared=selected actshared=highlight actshared=memorize actshared=preserve actshared=archive
+    actshared=sized actshared=swivel actshared=twin actshared=unpick actshared=unselected actshared=whatever actshared=bundle actshared=compress
+    actshared=deflate actshared=detach actshared=disconnect actshared=drew actshared=inflate actshared=minimise actshared=minimize actshared=press
+    actshared=puff actshared=pump actshared=sever actshared=ungroup actshared=unhook actshared=unlink actshared=available
     thing=object thing=house thing=home thing=cottage thing=hut thing=tree thing=pine thing=palm
     thing=sun thing=cloud thing=car thing=automobile thing=truck thing=daisy thing=tulip thing=sunflower
     thing=cat thing=kitten thing=kitty thing=dog thing=puppy thing=fish thing=goldfish thing=bird
@@ -31,10 +31,10 @@
     act=kiwis act=table act=percent act=percentage act=content act=visualize act=amount act=prepare
     act=average act=mean act=image act=paste act=result act=report act=bananas act=csv
     act=editor act=gdoc act=entry act=express act=fraction act=pct act=proportion act=text
-    act=capture act=clipboard act=gsheet act=outrun act=photo act=represent act=screenshot
-    actshared=make actshared=house actshared=show actshared=download actshared=draw actshared=copy actshared=send actshared=stacking
+    act=capture act=clipboard act=gsheet act=outrun act=photo act=represent act=screenshot act=stat
+    actshared=make actshared=house actshared=show actshared=draw actshared=copy actshared=download actshared=send actshared=stacking
     actshared=against actshared=versus actshared=vs actshared=update actshared=create actshared=include actshared=build actshared=hide
-    actshared=rename actshared=export actshared=scale actshared=convert actshared=share
+    actshared=rename actshared=scale actshared=convert actshared=share
     thing=plot thing=point thing=bar thing=slice thing=segment thing=pie thing=doughnut thing=donut
     thing=radar thing=polar thing=scatter thing=aquamarine thing=chartreuse thing=terracotta thing=burlywood thing=firebrick
     thing=gainsboro thing=goldenrod thing=turquoise thing=burgundy thing=chestnut thing=cornsilk thing=honeydew thing=lavender
@@ -51,9 +51,9 @@
     name=diagram name=diagram_editor name=flowchart name=flow_chart name=org_chart name=sketchpad name=canvas name=sketch
     claim=adjust claim=along claim=alter claim=arranged claim=assemble claim=away claim=become claim=bend
     claim=bind claim=break claim=bunch claim=called claim=cancel claim=carry claim=categorize claim=changed
-    claim=choose claim=classify claim=clip claim=close claim=cluster claim=collect claim=combine claim=construct
-    claim=correct claim=couple claim=darken claim=decrease claim=describe claim=destroy claim=disassemble claim=dismantle
-    claim=divide claim=doe claim=done claim=dye claim=edit claim=go claim=take claim=what
+    claim=choose claim=classify claim=click claim=clip claim=close claim=cluster claim=collect claim=combine
+    claim=construct claim=correct claim=couple claim=darken claim=decrease claim=describe claim=deselect claim=destroy
+    claim=disassemble claim=dismantle claim=divide claim=doe claim=done claim=go claim=take claim=what
     act=mar act=rule act=front act=active act=evenly act=labeled act=path act=along
     act=key act=reached act=let' act=default act=blorp act=cluster act=directly act=downstream
     act=drum act=exec act=member act=reachable act=siz act=parent act=arranged act=loosen
@@ -75,14 +75,13 @@
     core.source="generated:meta.worlds/cards"
     id=docs.editor kind=module run=none
     act=dictation act=pear act=shopping act=selected act=bread act=bar act=checkbox act=world
-    act=fox act=numbered act=compose act=plan act=reopen act=selection act=uncheck act=unmark
-    act=untick act=food act=italic act=krill act=statistic act=whale act=condense act=dictating
-    act=hyperlink act=lived act=nd
+    act=fox act=numbered act=compose act=plan act=reopen act=selection act=food act=italic
+    act=krill act=statistic act=whale act=condense act=dictating act=hyperlink act=lived act=nd
     actshared=house actshared=write actshared=undo actshared=new actshared=turn actshared=read actshared=stop actshared=start
-    actshared=milk actshared=download actshared=insert actshared=select actshared=apple actshared=legend actshared=plum actshared=stacking
-    actshared=kiwis actshared=scale actshared=create actshared=rename actshared=shrink actshared=exchange actshared=resize actshared=convert
-    actshared=invert actshared=recolor actshared=recolour actshared=straighten actshared=transform actshared=reverse actshared=revert actshared=egg
-    actshared=hello
+    actshared=download actshared=milk actshared=insert actshared=select actshared=apple actshared=legend actshared=deselect actshared=plum
+    actshared=stacking actshared=kiwis actshared=scale actshared=create actshared=rename actshared=shrink actshared=exchange actshared=resize
+    actshared=convert actshared=invert actshared=recolor actshared=recolour actshared=straighten actshared=transform actshared=reverse actshared=revert
+    actshared=egg actshared=hello actshared=unmark actshared=untick
     thing=file thing=section thing=chapter thing=subsection thing=subheading thing=freetext thing=text thing=word
     thing=something thing=paragraph thing=para thing=paras thing=graf thing=heading thing=header thing=headline
     thing=hed thing=title thing=checklist thing=bullet thing=entry thing=todo thing=quote thing=blockquote
@@ -102,9 +101,8 @@
     act=colored act=coloured act=shaded act=borough act=burg act=european act=metro act=metropolise
     act=municipality act=settlement act=shade act=capitol act=coordinate act=currency act=japan act=land
     act=bordering act=african act=asian act=dist act=emphasised act=emphasized act=glowing act=lat
-    act=latitude
     actshared=which actshared=where actshared=go actshared=everything actshared=see actshared=wipe actshared=out actshared=what'
-    actshared=speak actshared=display actshared=move
+    actshared=speak actshared=deselect actshared=display actshared=move
     thing=country thing=nation thing=city thing=town thing=capital thing=continent thing=region thing=highlight
     thing=seas thing=pin thing=marker thing=flag thing=route thing=path thing=label thing=caption
     thing=view thing=atla thing=globe thing=north thing=south thing=east thing=west thing=northeast
@@ -178,12 +176,12 @@
     name=task
     act=list act=finished act=reminder act=milk act=finish act=reading act=didn't act=completed
     act=done act=checked act=ticked act=ditch act=cross act=pending act=complete act=flush
-    act=purge act=todo act=wipe act=forget act=yet act=remind act=undone act=alert
-    act=crossed act=handled act=sorted act=toss act=tick act=kill act=ping act=outstanding
-    act=rm act=strike act=trash act=scratch act=nudge act=alarm act=bin act=hwmany
-    act=jot act=unbought act=dump act=unfinished act=upon act=among act=abolish act=feed
-    act=fetched act=memo act=notification act=obliterate act=outta act=uncrossed act=unticked
-    actshared=check actshared=drop actshared=clear actshared=delete
+    act=purge act=todo act=forget act=yet act=remind act=undone act=alert act=crossed
+    act=handled act=sorted act=toss act=tick act=kill act=ping act=outstanding act=rm
+    act=strike act=trash act=scratch act=alarm act=bin act=hwmany act=jot act=unbought
+    act=dump act=unfinished act=upon act=among act=abolish act=feed act=fetched act=memo
+    act=notification act=obliterate act=outta act=uncrossed act=unticked
+    actshared=check actshared=wipe actshared=clear actshared=delete actshared=remove actshared=include
     thing=shop thing=grocery thing=homework thing=chore thing=errand thing=wishlist thing=packing thing=garden
     thing=party thing=birthday thing=gift thing=present thing=toy thing=holiday thing=trip thing=camping
     thing=bedtime thing=weekend thing=cleaning thing=cooking thing=pet
@@ -290,10 +288,10 @@
     id=ui.avatar kind=module run=none
     name=avatar
     claim=add claim=assemble claim=avatar claim=become claim=build claim=call claim=called claim=change
-    claim=construct claim=create claim=draw claim=face claim=feel claim=generate claim=get claim=give
-    claim=let claim=look claim=make claim=myself claim=name claim=named claim=paint claim=place
-    claim=produce claim=put claim=rename claim=robot claim=sketch claim=stick claim=turn claim=ur
-    claim=urself claim=yourself
+    claim=construct claim=create claim=doodle claim=draw claim=face claim=feel claim=generate claim=get
+    claim=give claim=let claim=look claim=make claim=myself claim=name claim=named claim=paint
+    claim=place claim=produce claim=put claim=rename claim=robot claim=scribble claim=sketch claim=stick
+    claim=turn claim=ur claim=urself claim=yourself
     act=yourself act=wearing act=happy act=urself act=feel act=myself act=animate act=customise
     act=customize act=tweak act=wear act=unknown
     actshared=lunch actshared=become actshared=recover actshared=retrieve actshared=import actshared=reload
