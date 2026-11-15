@@ -208,7 +208,7 @@ export function violations(q, res, exp) {
     if ((exp.with ?? []).includes('arrow') && !res.composed && res.links === 0 && (res.parts ?? 0) > 1) out.push({ key: 'with', value: 'arrow' });   // a composed diagram's links are its kind's
     for (const w of exp.parts ?? []) if (!q.facts.some((f) => f.key === 'kind' && f.neg && f.value === w) && res.kinds && !(kinds[w] > 0) && (res.parts ?? 0) > 0 && exp.must?.includes(w)) out.push({ key: 'with', value: w });
   }
-  if (q.facts.some((f) => f.key === 'manner' && f.value === 'random') && !q.facts.some((f) => f.key === 'kind' && !f.neg && !f.generic) && kindN < 2 && (res.parts ?? 0) > 2) out.push({ key: 'manner', value: 'random' });   // random is varied, never all of one kind
+  if (q.facts.some((f) => f.key === 'manner' && f.value === 'random') && !res.composed && !q.facts.some((f) => f.key === 'kind' && !f.neg && !f.generic) && kindN < 2 && (res.parts ?? 0) > 2) out.push({ key: 'manner', value: 'random' });   // random is varied, never all of one kind
   if (q.facts.some((f) => f.key === 'with' && f.value === 'arrow') && res.links === 0 && (res.parts ?? 0) > 1) out.push({ key: 'with', value: 'arrow' });
   const len = q.facts.find((f) => f.key === 'size' || (f.key === 'length' && f.step));
   if (len && exp?.words && res.words != null) {

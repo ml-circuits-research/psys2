@@ -1665,7 +1665,7 @@ export class DialogSession {
     const missing = cannot.filter((c) => !shown.includes(String(c.words).toLowerCase().split(' ').at(-1)));
     if (missing.length) add.push(['I cannot do this here:', missing.map((c) => c.words)]);
     const unread = (q.unread ?? []).filter((w) => !shown.includes(w));
-    if (unread.length && !/did not understand|could not read|understood only part/i.test(shown)) add.push(['I did not use these words:', unread]);
+    if (unread.length && (reply.statuses ?? []).every((x) => x === 'supported') && !/did not understand|could not read|understood only part/i.test(shown)) add.push(['I did not use these words:', unread]);   // a refusal or a question back already says what it could not do
     if (!add.length) return reply;
     const lang = opts?.language ?? this.language;
     const tr = this.engine.translator;
