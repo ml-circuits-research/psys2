@@ -2146,7 +2146,7 @@ export const count = guard((ctx, args, s) => {
   const desc = `${color ? `${color} ` : ''}${label}`;
   const n = list.length;
   if (k.kind === '*') return ok(n === 0 ? (s.objects.length ? `There is nothing ${color ?? ''} in your picture.`.replace('  ', ' ') : 'Your picture is empty. There is nothing in it yet.') : `There ${n === 1 ? `is 1 ${color ? `${color} ` : ''}thing` : `are ${n} ${desc}`} in your picture.`);
-  return ok(n === 0 ? `There are no ${desc} in your picture.` : `There ${n === 1 ? `is 1 ${color ? `${color} ` : ''}${k.kind}` : `are ${n} ${desc}`} in your picture.`);
+  return ok(n === 0 ? `There are no ${desc} in your picture.` : `There ${n === 1 ? `is 1 ${color ? `${color} ` : ''}${pluralOfKind(k.kind, 1)}` : `are ${n} ${desc}`} in your picture.`);
 });
 
 export const exists = guard((ctx, args, s) => {

@@ -5,8 +5,8 @@
  * Measurement only: no classifier, no runtime behaviour change.
  *
  * Paths (English sets, `scripts/eval-ablation.mjs` configs `v-*`, each with every other symbolic reading step off):
- *   v-rules    rules-C alone                       v-typed   + the typed step (proposeByTypes)       v-formops + the typed form operators (PSYS2_FORMOPS=on)
- *   v-alt      + the catalog's alternation rules   v-canon   + readCanonical (0.91; fillers + the alternation rules, PSYS2_CANON=on)
+ *   v-rules    rules-C alone                       v-typed   + the typed step (proposeByTypes)
+ *   v-alt      + the catalog's alternation rules   (v-formops and v-canon were deleted with their switches in P6)
  *   v-enc-n1   the neural dispatcher + the T5 normaliser fallback, the rules read             v-neural  the NX neural reader first + dispatcher + normaliser
  * Romanian (`scripts/measure-ro-en-meaning.mjs --rows`): the MT paths rules, model (Bergamot), m4+model (the shipped chain), grammar, on training/eval/ro-en-meaning/rows.jsonl.
  *
@@ -14,7 +14,7 @@
  * signatures of what they did are equal (English sets: visible state afterwards + answer values + effects; Romanian: the reading key of the English the path made).
  *   union            any path right (the bound an oracle choosing among the paths gets)
  *   agreement-only   answer only when at least two paths agree on the same signature (a tie between two agreed signatures is silence); right when the agreed answer is right
- *   families         the symbolic paths count as ONE voice (the first of rules, typed, formops, alt, canon that answers) and the neural ones as one (enc-n1, then neural): the agreement is then between independent readers
+ *   families         the symbolic paths count as ONE voice (the first of rules, typed, alt that answers) and the neural ones as one (enc-n1, then neural): the agreement is then between independent readers
  *
  *   node scripts/measure-voices.mjs --run [--dir <rows dir>] [--knowledge <catalog dir>] [--ort <onnxruntime-node entry>] [--heavy <heavy.sh>] [--configs a,b]   run the English paths (one eval-ablation process each)
  *   node scripts/measure-voices.mjs --report [--dir <rows dir>] [--ro-rows <file from measure-ro-en-meaning --rows>] --out training/eval/voices-2026-11-15.json
@@ -28,8 +28,8 @@ import { fileURLToPath } from 'node:url';
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
 const flag = (k) => process.argv.includes(`--${k}`);
-export const EN_PATHS = ['v-rules', 'v-typed', 'v-formops', 'v-alt', 'v-canon', 'v-enc-n1', 'v-neural'];
-export const SYMBOLIC = ['v-rules', 'v-typed', 'v-formops', 'v-alt', 'v-canon'], NEURAL = ['v-enc-n1', 'v-neural'];
+export const EN_PATHS = ['v-rules', 'v-typed', 'v-alt', 'v-enc-n1', 'v-neural'];
+export const SYMBOLIC = ['v-rules', 'v-typed', 'v-alt'], NEURAL = ['v-enc-n1', 'v-neural'];
 export const EN_SETS = ['paraphrases-rt', 'paraphrases-rt-changed', 'typos', 'loose-words', 'operational'];
 const DIR = resolve(arg('dir', join(REPO, 'training/runs/voices-2026-11-15')));
 

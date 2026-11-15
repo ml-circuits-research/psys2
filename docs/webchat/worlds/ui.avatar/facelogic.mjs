@@ -453,6 +453,16 @@ export function faceHas(ctx, a, data) {
   const c = cl[0], slot = pickSlot(data, f, c, { wantPresent: true }), has = f.slots[slot] !== NONE && (!c.variant || c.variant.some((o) => o.name === f.slots[slot]));
   return ok(has ? `Yes, I have ${phraseOf(data, f, slot)}.` : `No, I have ${f.slots[slot] === NONE ? `no ${plain(nounOf(slot))}` : phraseOf(data, f, slot)}.`);
 }
+/** "What is the colour of the hat?": the part as it is drawn now (its colour is in the phrase when it has one), or that it is not worn. */
+export function facePartColour(ctx, a, data) {
+  if (!data) return noFaces();
+  const f = faceOf(ctx, data), cl = clausesOf(data, wordsOf(a)).filter((c) => c.slots.length);
+  if (!cl.length) return no(`I have no ${plain(wordsOf(a).join(' '))} on my face.`);
+  const slot = pickSlot(data, f, cl[0], { wantPresent: true });
+  if (f.slots[slot] === NONE) return ok(`I have no ${plain(nounOf(slot))} on now.`);
+  const role = indexOf(data).roleOf[slot], col = f.paint?.[slot] ?? (role && role !== 'skin' ? f.colours[role] : null);
+  return ok(col ? `My ${plain(nounOf(slot))} is ${plain(col)}: I have ${phraseOf(data, f, slot)}.` : `I have ${phraseOf(data, f, slot)}; it has its own colours.`);
+}
 export function faceParts(ctx, a, data) {
   if (!data) return noFaces();
   return ok(`I am a drawn face. You can change my ${joinAnd(data.slots.map((s) => plain(s.name)))}, their size and place, my colours, and my expression (${joinAnd(Object.keys(data.expressions).filter((n) => n !== 'talking'))}). Ask "what hats are there?" for the choices.`);

@@ -5,6 +5,8 @@ import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 
+// the steps are named diagnostic switches, off by default since P6 (spec 16 section 15): this file tests them switched on
+for (const k of ['PSYS2_NEAR', 'PSYS2_ALTERNATIONS', 'PSYS2_SLOTS']) process.env[k] = 'on';
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner: 'matrix' } });
 const session = (tab) => { const s = engine.createSession({ language: 'en' }); s.setWorldState('ui.shell', { activeTab: tab }); return s; };
 /** A catalog that only knows some word senses and alternations (the shapes of k.words and w.lang.en). */
@@ -28,10 +30,10 @@ test('near words: without the catalog nothing changes (the clause stays unread)'
   assert.ok(r.segments[0].unparsed);
 });
 
-test('near words: the switch PSYS2_NEAR=off skips the step', async () => {
+test('near words: off by default (P6): without PSYS2_NEAR=on the step is skipped', async () => {
   engine.setKnowledge(facts(SENSES));
-  process.env.PSYS2_NEAR = 'off';
-  try { const r = await session('chat').send('What pets do I possess?'); assert.ok(r.segments[0].unparsed); } finally { delete process.env.PSYS2_NEAR; engine.setKnowledge(null); }
+  delete process.env.PSYS2_NEAR;
+  try { const r = await session('chat').send('What pets do I possess?'); assert.ok(r.segments[0].unparsed); } finally { process.env.PSYS2_NEAR = 'on'; engine.setKnowledge(null); }
 });
 
 test('all or nothing: a word with no near word the worlds know stays unread', async () => {

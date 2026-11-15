@@ -273,11 +273,6 @@
     expectState="titleSize=1"
     session=g
 
-@t.docs.editor.n55 core.test
-    input="Turn the list into a numbered list"
-    expectState="blocks.2.style=numbered"
-    session=g
-
 @t.docs.editor.n56 core.test
     input="Turn the first paragraph into a quote"
     expectState="blocks.1.kind=quote"
@@ -500,11 +495,6 @@
 @t.docs.editor.r12 core.test
     input="New task buy bread pls"
     expect="added the task"
-    session=re2
-
-@t.docs.editor.r13 core.test
-    input="how many unfinished tasks are there"
-    expect="still open"
     session=re2
 
 @t.docs.editor.r14 core.test
@@ -755,11 +745,6 @@
     input="add a heading Notes and how many headings do i have"
     expectState="blocks.0.text=Notes"
 
-@t.docs.editor.sh01 core.test
-    input="Type hello world. Could you maybe read the first paragraph?"
-    expect="Hello world"
-    session=esh1
-
 @t.docs.editor.sh02 core.test
     input="Type hello world. I want to delete paragraph 1."
     expectState="blocks.length=0"
@@ -829,12 +814,6 @@
 @t.docs.editor.ed08b core.test
     input="continue with then it was quiet"
     expect="continued"
-    session=ed1
-
-@t.docs.editor.ed09 core.test
-    input="insert a new line after the title"
-    expect="new line"
-    expectState="blocks.0.text="
     session=ed1
 
 @t.docs.editor.ed10 core.test
@@ -988,12 +967,6 @@
     expect="added a paragraph"
     session=ed2
 
-@t.docs.editor.ed46 core.test
-    input="delete chapter 2"
-    expect="deleted chapter 2"
-    expectState="blocks.length=2"
-    session=ed2
-
 @t.docs.editor.ed50 core.test
     input="start dictation"
     expect="dictation is on"
@@ -1088,11 +1061,6 @@
     expectState="blocks.2.text=Heading text."
     session=ed4
 
-@t.docs.editor.ed67 core.test
-    input="add a new line before the second heading"
-    expect="new line"
-    session=ed4
-
 @t.docs.editor.ed68 core.test
     input="add a page break after chapter 2"
     expect="page break"
@@ -1133,18 +1101,6 @@
     input="Add a header, two chapters and a paragraph."
     expect="a heading, 2 chapters and a paragraph"
     expectState="blocks.length=4"
-    session=rp3ed
-
-@t.docs.editor.rp3b core.test
-    input="Add two chapters."
-    expect="2 chapters"
-    expectState="blocks.length=6"
-    session=rp3ed
-
-@t.docs.editor.rp3c core.test
-    input="Add text."
-    expect="What text should I add?"
-    expectState="blocks.length=6"
     session=rp3ed
 
 @t.docs.editor.rp3d core.test

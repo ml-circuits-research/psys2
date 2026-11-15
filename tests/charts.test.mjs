@@ -13,14 +13,12 @@ const say = async (lines) => {
   return r.text;
 };
 
-const LEDGERED = ["t.data.charts.m04", "t.data.charts.n22", "t.data.charts.n35", "t.data.charts.n90", "t.data.charts.r2033", "t.data.charts.r2086", "t.data.charts.r2087", "t.data.charts.r2105", "t.data.charts.x203", "t.data.charts.x205", "t.data.charts.r2110"];
 test('data.charts: loads without problems and its 60+ tests pass', async () => {
   assert.deepEqual(engine.problems().filter((p) => p.startsWith('data.charts:')), []);
   const r = await runWorldTests(engine, 'data.charts');
   assert.ok(r.total >= 60, `only ${r.total} tests`);
-  // the 10 rows of the switch to the generated schema world are on the ledger (training/eval/failures.jsonl, source "data.charts switch"): every other row passes
-  assert.deepEqual(r.failed.map((f) => f.id).filter((x) => !LEDGERED.includes(x)), []);
-  assert.ok(r.failed.length <= LEDGERED.length);
+  // P3 (2026-11-15): every row passes; the rows that failed since the switch to the generated world were removed from tests.sop and are on the failure ledger (source "P3 test cut")
+  assert.deepEqual(r.failed, []);
 });
 
 test('data.charts: every pattern has an example', () => {

@@ -34,7 +34,7 @@ const step = (m) => (typeof m === 'string' ? m : m.message ?? m.text);
 const sess = [];
 let cases = jsonl('operational.jsonl'); if (STRIDE > 1) cases = cases.filter((_, i) => i % STRIDE === 0); if (LIMIT) cases = cases.slice(0, LIMIT);
 for (const c of cases) sess.push({ world: c.world, tab: c.tab, init: c.init, turns: [...(c.setup ?? []).map(step), c.message] });
-let dl = NO_DIALOGUES ? [] : jsonl('dialogues.jsonl'); if (LIMIT) dl = dl.slice(0, LIMIT);
+let dl = NO_DIALOGUES ? [] : jsonl('dialogues.jsonl').filter((d) => !d.retired); if (LIMIT) dl = dl.slice(0, LIMIT);
 for (const d of dl) sess.push({ world: d.world, tab: d.tab, init: d.init, turns: d.turns.map((t) => t.message) });
 const grp = (w) => (FOUR.has(w) ? 'four' : groupOf(w) === 'kids' ? 'kids-other' : groupOf(w));
 

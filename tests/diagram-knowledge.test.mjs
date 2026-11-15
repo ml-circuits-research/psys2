@@ -90,7 +90,8 @@ test('random diagrams: kind x topic from knowledge, varied, labelled, never only
     assert.ok(!r.why, `seed ${s}`);
     const d = r.diagram;
     assert.ok(d.nodes.length >= 4 && d.nodes.every((n) => n.label), `seed ${s}: ${d.kind} of ${r.topic}`);
-    assert.ok(!d.nodes.every((n) => /^(?:circle|dot)$/.test(n.shape)) || d.edges.length >= d.nodes.length - 1, `seed ${s}`);
+    // ported: a timeline is dots on its line with no edges by the knowledge (k.diagrams.kind.timeline edges=none, shape=dot "a dot on the line at the event's time")
+    assert.ok(!d.nodes.every((n) => /^(?:circle|dot)$/.test(n.shape)) || d.edges.length >= d.nodes.length - 1 || d.kind === 'timeline', `seed ${s}`);
     assert.ok(DG.composeForRequest(lib, world, { kind: d.kind, topic: r.topic }).diagram, `the sample is a request the reader answers: ${d.kind} of ${r.topic}`);
     seen.add(`${d.kind}|${r.topic}`); kinds.add(d.kind);
   }

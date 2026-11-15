@@ -131,13 +131,13 @@ test('typed.json of every world is current (scripts/build-typed-worlds.mjs --che
   for (const [id, text] of Object.entries(files)) assert.equal(await readFile(new URL(`../worlds/${id}/typed.json`, import.meta.url), 'utf8').catch(() => null), text, `worlds/${id}/typed.json is stale: run node scripts/build-typed-worlds.mjs`);
 });
 
-test('the ensemble (PSYS2_ENSEMBLE, default on): the voices are pooled and the library decides (std.decide kind ensemble); off keeps the sequence', async () => {
+test('the ensemble (PSYS2_ENSEMBLE=on, a diagnostic switch since P6): the voices are pooled and the library decides (std.decide kind ensemble); without it the sequence', async () => {
   const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner: 'matrix' } });
   const senses = [{ id: 's1', type: 'k.words.sense', f: { word: ['possess'], pos: ['verb'], n: ['1'], synonym: ['have'] } }];
   engine.setKnowledge({ wires: async (type, { key } = {}) => senses.filter((r) => r.type === type && (key == null || [r.f.word?.[0], ...(r.f.synonym ?? [])].includes(key))), thing: async () => null, peek: () => undefined });
-  const say = (v) => withEnv('PSYS2_ENSEMBLE', v, async () => { const s = engine.createSession({ language: 'en' }); s.setWorldState('ui.shell', { activeTab: 'chat' }); return s.send('What pets do I possess?'); });
+  const say = (v) => withEnv('PSYS2_NEAR', 'on', () => withEnv('PSYS2_ENSEMBLE', v, async () => { const s = engine.createSession({ language: 'en' }); s.setWorldState('ui.shell', { activeTab: 'chat' }); return s.send('What pets do I possess?'); }));
   try {
-    const on = await say(null), off = await say('off');
+    const on = await say('on'), off = await say(null);
     assert.match(on.text, /not told me about any pets/i);
     assert.equal(on.segments[0].variant?.via, 'near');
     assert.deepEqual(on.segments[0].variant?.ensemble?.voices, ['near']);

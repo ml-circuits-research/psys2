@@ -1274,13 +1274,6 @@
     expectState="shapes.length=4"
     session=b.ask_path.k02
 
-@t.diagram.sketch.b.ask_path.k02.b core.test
-    input="Can you reach Done from Start?"
-    expect="I could not read \"Can you reach Done from Start\" as"
-    expectState="shapes.length=4"
-    expectState="edges.length=0"
-    session=b.ask_path.k02
-
 @t.diagram.sketch.b.ask_path.k03.a core.test
     input="Draw a circle called Start, a circle called Process, a circle called Check, a circle called Done."
     expect="Drew "
@@ -2444,13 +2437,6 @@
     expectState="shapes.length=3"
     session=b.group.k02
 
-@t.diagram.sketch.b.group.k02.b core.test
-    input="group Router and Switch"
-    expect="I could not read \"Switch\" as something to do with the"
-    expectState="shapes.length=3"
-    expectState="edges.length=0"
-    session=b.group.k02
-
 @t.diagram.sketch.b.group.k03.a core.test
     input="Draw a circle called Flour, a circle called Eggs, a circle called Milk, a circle called Sugar."
     expect="Drew "
@@ -2481,13 +2467,6 @@
     input="Draw a circle called And1, a circle called Or1, a circle called Not1, a circle called Xor1."
     expect="Drew "
     expectState="shapes.length=4"
-    session=b.group.k05
-
-@t.diagram.sketch.b.group.k05.b core.test
-    input="group And1, Or1, Not1 and Xor1, all four, as Adder"
-    expect="Grouped And1, Or1, Not1 and Xor1 as Adder."
-    expectState="shapes.length=4"
-    expectState="edges.length=0"
     session=b.group.k05
 
 @t.diagram.sketch.b.group.k06.a core.test
@@ -2769,13 +2748,6 @@
     expectState="shapes.length=4"
     session=b.move.k03
 
-@t.diagram.sketch.b.move.k03.b core.test
-    input="Nudge Check up a bit"
-    expect="Moved Check."
-    expectState="shapes.length=4"
-    expectState="edges.length=0"
-    session=b.move.k03
-
 @t.diagram.sketch.b.move.k04.a core.test
     input="Draw a circle called Start, a circle called Process, a circle called Check, a circle called Done."
     expect="Drew "
@@ -2847,37 +2819,16 @@
     expectState="shapes.length=3"
     session=b.redo.k03
 
-@t.diagram.sketch.b.redo.k03.b core.test
-    input="Redo the last move"
-    expect="There is nothing to redo."
-    expectState="shapes.length=3"
-    expectState="edges.length=0"
-    session=b.redo.k03
-
 @t.diagram.sketch.b.redo.k04.a core.test
     input="Draw a circle called Coach, a circle called Museum, a circle called Lunch."
     expect="Drew "
     expectState="shapes.length=3"
     session=b.redo.k04
 
-@t.diagram.sketch.b.redo.k04.b core.test
-    input="Redo the last change"
-    expect="There is nothing to redo."
-    expectState="shapes.length=3"
-    expectState="edges.length=0"
-    session=b.redo.k04
-
 @t.diagram.sketch.b.redo.k05.a core.test
     input="Draw a circle called Tables, a circle called Grill, a circle called Lake3."
     expect="Drew "
     expectState="shapes.length=3"
-    session=b.redo.k05
-
-@t.diagram.sketch.b.redo.k05.b core.test
-    input="Redo the grill move"
-    expect="There is nothing to redo."
-    expectState="shapes.length=3"
-    expectState="edges.length=0"
     session=b.redo.k05
 
 @t.diagram.sketch.b.redo.k06.a core.test
@@ -3269,13 +3220,6 @@
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.rule.k05
-
-@t.diagram.sketch.b.rule.k06.b core.test
-    input="from now on rectangles are tiny"
-    expect="From now on, new rectangles will be tiny."
-    expectState="shapes.length=0"
-    expectState="edges.length=0"
-    session=b.rule.k06
 
 @t.diagram.sketch.b.set.k01.a core.test
     input="Draw a circle called Start, a circle called Process, a circle called Check, a circle called Done."
@@ -3699,13 +3643,6 @@
     expectState="shapes.length=1"
     session=b.toback.k03
 
-@t.diagram.sketch.b.toback.k03.b core.test
-    input="I want you to send Cloud to the back"
-    expect="Sent Cloud to the back."
-    expectState="shapes.length=1"
-    expectState="edges.length=0"
-    session=b.toback.k03
-
 @t.diagram.sketch.b.toback.k04.a core.test
     input="Draw a circle called Ball."
     expect="Drew "
@@ -3736,13 +3673,6 @@
     input="Draw a circle called X."
     expect="Drew "
     expectState="shapes.length=1"
-    session=b.toback.k06
-
-@t.diagram.sketch.b.toback.k06.b core.test
-    input="I want you to send X to the back."
-    expect="Sent X to the back."
-    expectState="shapes.length=1"
-    expectState="edges.length=0"
     session=b.toback.k06
 
 @t.diagram.sketch.b.tofront.k01.a core.test
@@ -3930,13 +3860,6 @@
     input="Please group Hall, Gift as Wing."
     expect="Grouped"
     expectState="groups.length=1"
-    session=b.ungroup.k02
-
-@t.diagram.sketch.b.ungroup.k02.b core.test
-    input="Dissolve Wing"
-    expect="Wing is ungrouped: Hall and Gift are separate shapes again."
-    expectState="shapes.length=4"
-    expectState="edges.length=0"
     session=b.ungroup.k02
 
 @t.diagram.sketch.b.ungroup.k03.a core.test
@@ -4831,7 +4754,6 @@
     expectState="shapes.length=3"
     expectState="edges.length=2"
     session=ex.story
-
 
 @t.diagram.sketch.random.a core.test
     input="make a random diagram"

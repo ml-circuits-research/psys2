@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// TRANSFER (spec 23, worker-tasks 21:30): experiments T1 and T2 over the views of the session things: the pilot avatar (worlds-pilot/ui.avatar), the seating plan
+// TRANSFER (spec 23, worker-tasks 21:30): experiments T1 and T2 over the views of the session things: the avatar (worlds/ui.avatar), the seating plan
 // (worlds/plan.seating), Talk (worlds/talk), the chart (worlds/data.charts, numeric: a thing counts as one of its kind), the document (worlds/docs.editor, textual) and, as T6-lite, the
 // timeline (worlds/plan.timeline, a view declared by a schema alone: things with a temporal aspect). The chart, the document and the timeline are columns of the matrix (they take things);
 // they do not yet publish things of their own, so no row is made in them. No code per pair of views is involved: every transfer is the one operation things.show (the `send` act of a schema world or Talk's
@@ -13,7 +13,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
-process.env.PSYS2_PILOT_ROOTS = process.env.PSYS2_T1_ROOTS ?? (arg('--only', null) === 't3' ? path.join(REPO, 'no-pilot-roots') : path.join(REPO, 'worlds-pilot'));   // T3 measures the real drawing board (worlds/art.draw), so no pilot shadows it   // with --draw the drawing board (worlds-pilot/art.draw) is a fourth view   // the pilot avatar shadows worlds/ui.avatar until the executor switch lands
+// (the pilot avatar of worlds-pilot/ and the switches PSYS2_PILOT_ROOTS / PSYS2_T1_ROOTS were deleted in P6: every experiment runs the worlds of worlds/)   // T3 measures the real drawing board (worlds/art.draw), so no pilot shadows it   // with --draw the drawing board (worlds-pilot/art.draw) is a fourth view   // the pilot avatar shadows worlds/ui.avatar until the executor switch lands
 const { createFsLoader, DEFAULT_ROOT } = await import('../src/loaders/fs-loader.mjs');
 const { createEngine } = await import('../src/dialog/index.mjs');
 const { createFacts } = await import('../src/knowledge/facts.mjs');

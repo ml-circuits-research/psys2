@@ -293,7 +293,6 @@
     example="Which days are the weekend?"
 
 @pat.kids.time.q.list.weekend.b core.pattern
-    canonical="What are the weekend days?"
     match="[what|which] are the weekend days"
     emit="@{_} core.question type=kids.time.dayinfo seek=name mode=list where.kind=weekend"
     kind=question
@@ -315,7 +314,6 @@
     example="What are the months of the year?"
 
 @pat.kids.time.q.list.seasons core.pattern
-    canonical="What are the seasons?"
     match="[what|which] are the seasons [of_the_year]?"
     emit="@{_} core.question type=kids.time.seasoninfo seek=name mode=list"
     kind=question
@@ -628,7 +626,6 @@
     example="What time is it?"
 
 @pat.kids.time.q.time.now.b core.pattern
-    canonical="What is the time?"
     match="what is the time [now|right_now]?"
     emit="@{_} core.question type=kids.time.reading seek=time"
     kind=question

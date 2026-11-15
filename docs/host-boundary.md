@@ -55,7 +55,7 @@ items are in `handover/<module>/` (copies; the bridges here are deleted when the
 
 | path | verdict | reason |
 | --- | --- | --- |
-| `worlds-pilot/` | stays | pilot output of the schema generators (art.draw, diagram.sketch) used for the switch measurements; deleted with the bridges. |
+| `worlds-pilot/` | deleted | pilot output of the schema generators (art.draw, diagram.sketch); the folder is gone and its switch `PSYS2_PILOT_ROOTS` was deleted in P6. |
 | `scripts/build-schema-world.mjs`, `build-acts-lexicon.mjs`, `act-agreement-rules.mjs`, `gen-act-tagger-data.mjs`, `coverage-grid.mjs`, `build-space-lexicon.mjs` | lib (`std.acts` / `std.space` tools) | schema generators and the coverage grid. |
 | `scripts/build-thing-catalog.mjs`, `build-knowledge-lookup-set.mjs` | lib (`std.knowledge` tools) | catalog and bundle generation (the bundle generator must grow beyond objects). |
 | `scripts/analyze-failures.mjs`, `build-failure-ledger.mjs` | lib (`tools/`): format and grouper; stay: cause signals and replays | `handover/failure-ledger/`. |

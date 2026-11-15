@@ -9,49 +9,48 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=016fe20fc3';
-import { reviewForeign } from './foreign-reading.mjs?v=0f5596d6b7';
+import { reviewForeign } from './foreign-reading.mjs?v=6d703a7567';
 import { installTextGen } from './textgen.mjs?v=c5b4f3a539';
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=fc8700c1e7';
-import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=de571d2078';
-import { validateWorldSet } from '../worlds/validate.mjs?v=57ef1b4dc3';
-import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=fc8700c1e7';
-import { createInterpreter } from '../interpreter/index.mjs?v=511d90e7aa';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=c7231fb71e';
+import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=27c546ba1b';
+import { validateWorldSet } from '../worlds/validate.mjs?v=31dd1dd998';
+import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=c7231fb71e';
+import { createInterpreter } from '../interpreter/index.mjs?v=2789b243e5';
 import { createReasoner } from '../reasoner/index.mjs?v=f0150c4467';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=6a17763e99';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=be82752df3';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=891eb06982';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=66e20c5cb8';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=4a3da2a627';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=edb481efb8';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=05e10defd5';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=2b9c0d99f3';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=35096114f4';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=1794f7417d';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=fc8700c1e7';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=c7231fb71e';
 import { lexIndex } from '../worlds/lexicon.mjs?v=815848016d';
 import { perf } from '../formalizer/perf.mjs?v=b81e032a17';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=82a55329d9';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=060b2ad0ab';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=01bf8b7820';
-import { checkValues } from './value-check.mjs?v=862bd4d857';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=945e2b792b';
+import { checkValues } from './value-check.mjs?v=4140cc886e';
 import { attachValues } from '../knowledge/values.mjs?v=a137742733';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=64050d59a4';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=cf4f1fcab5';
-import { Discourse } from './discourse.mjs?v=f84b60689d';
-import { Dialogue } from './dialogue.mjs?v=52f8785d70';
+import { Discourse } from './discourse.mjs?v=936915d9ab';
+import { Dialogue } from './dialogue.mjs?v=6adc1ec1e7';
 import { turnSteps } from './steps.mjs?v=44af51b084';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=f82274318e';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=322b3a41cd';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=430a4c0a23';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=145be6f597';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=613dca2efc';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=12420eaeb3';
 import { proposeByTypes } from './typed-reader.mjs?v=7812db5b24';
-import { withVariants } from './variants.mjs?v=8c8bd2064b';
-import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=fc8700c1e7';
-import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=fc8700c1e7';
-import { repairFromScene } from './scene-referents.mjs?v=b1de7bbf22';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=286870b7bc';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=b47710756a';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=55a86b717e';
+import { withVariants, anyVoiceOn } from './variants.mjs?v=eed8c78611';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=c7231fb71e';
+import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=c7231fb71e';
+import { repairFromScene } from './scene-referents.mjs?v=94b44af25f';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=0f80b31a5d';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=b2aa625d47';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=b4fbedf047';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
-import { panel } from '../astra/where.mjs?v=970c7b26f1';
+import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
 import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=113c6084e1';
 
@@ -143,7 +142,7 @@ const NO_RULES = { translate: (text) => ({ text: '', alignment: [], unknown: [St
  * translated together, `translate: false` parts (quoted user text, already translated examples) are kept verbatim.
  * A part with `fallback` is replaced by the translation of the fallback text when the translator reports unknown words.
  */
-export async function translateParts(parts, translator, lang, userWords = null, compose = composeReply) {
+export async function translateParts(parts, translator, lang, userWords = null) {
   const flat = parts.map((p) => ({ ...p }));
   let complete = true;   // RD5: a reply is either fully translated or left in English, never mixed
   // M4, output side (spec 06): one path for every language. The candidates of a run are the machine translators' (the browser Translator, the on-device model: each
@@ -204,10 +203,6 @@ export async function translateParts(parts, translator, lang, userWords = null, 
     i = j;
     const src = run.map((p) => p.text).join('');
     if (!src.trim()) { out.push({ text: src, translate: false }); continue; }
-    // COMPOSED REPLIES (spec 06): a sentence the application composed from a frame is said from the language world's template, before any translator (owner rule: the
-    // translators are for free text)
-    const say = run.length === 1 && run[0].say && lang !== 'en' && compose ? await compose(run[0].say, lang) : null;
-    if (say) { out.push({ text: fitFragment(src, say), translate: true, src }); routes.push('composed'); continue; }
     const c = await choose(src, { fallback: run.length === 1 ? run[0].fallback : null });
     if (c.route) { out.push({ text: fitFragment(src, c.text), translate: true, src }); routes.push(c.route); continue; }
     if (c.incomplete) complete = false;
@@ -219,7 +214,7 @@ export async function translateParts(parts, translator, lang, userWords = null, 
       routes.length = 0; routes.push('ro-generic');
       const quoted = flat.filter((p) => p.quote && !p.example && !p.reading).map((p) => (/^".*"$/s.test(p.text) ? `„${p.text.slice(1, -1)}”` : p.text));
       result = [{ text: NO_RO_REPLY + (quoted.length ? ` (${quoted.join(', ')})` : ''), translate: false }];
-    } else result = flat.map(({ join, fallback, en, src, incomplete, say: _say, ...p }) => (join ? { text: p.text, translate: false } : { ...p, text: en ?? p.text }));
+    } else result = flat.map(({ join, fallback, en, src, incomplete, ...p }) => (join ? { text: p.text, translate: false } : { ...p, text: en ?? p.text }));
   } else {
     if (fb && !routes.length && out.some((p) => p.translate)) routes.push('rules-translate');
     result = out.map(({ src, en, ...p }) => p);
@@ -793,7 +788,7 @@ export class DialogSession {
 
   _withTypedReader(formal) {
     const lib = this.engine.sopworld;
-    if (!lib?.typedLexicon || globalThis.process?.env?.PSYS2_TYPED === 'off') return formal;   // PSYS2_TYPED=off: the step is skipped (before/after measurements)
+    if (!lib?.typedLexicon || globalThis.process?.env?.PSYS2_TYPED !== 'on') return formal;   // off unless PSYS2_TYPED=on (P6, spec 16 section 15: no reply of the shipped real set changes)
     const segments = formal.segments.map((seg) => {
       try {
         if (seg.unparsed || !seg.match?.worldId || !seg.wires?.length) return seg;
@@ -1488,6 +1483,11 @@ export class DialogSession {
         const fbMode = translator.fallbackMode?.() === 'fallback';   // M4: `_send` chose the English among the candidates (`override`); without one the language pack's rules translate (translators off, soft limit, nothing translated)
         translation = override?.translation ?? await perf.time('translate', () => guard.abortable((fbMode ? translator.rules ?? translator : translator).translate(heard, { from: lang, to: 'en' }), 'translate'));
         english = override?.english ?? textOf(translation) ?? text;
+        // a machine translator that returns the source text unchanged translated nothing: the language pack's rules translator is asked once (RP5)
+        if (!override && translator.rules && translator.rules !== translator && english.trim().toLowerCase() === String(heard).trim().toLowerCase()) {
+          const again = await perf.time('translate', () => guard.abortable(translator.rules.translate(heard, { from: lang, to: 'en' }), 'translate'));
+          if (textOf(again)?.trim()) { translation = again; english = textOf(again); }
+        }
         // INVARIANT (every turn gets a reply): a translator that cannot map a sentence ("negation could not be mapped") returns an empty text; the message then stays as typed, so that the reading is poor and says so (or the browser Translator is asked)
         if (!english.trim() && text.trim()) { english = text; translation = { ...(translation ?? {}), text, alignment: [], unknown: [], notes: [...(translation?.notes ?? []), 'the rules translation was empty'], confidence: 0 }; }
       } else lang = 'en';
@@ -1558,7 +1558,7 @@ export class DialogSession {
       formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router });
     }
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
-    if (!icpt && !pre && !meta && formal.segments.some((x) => x.unparsed || isIncomplete(x))) { try { formal = await perf.time('variants', () => withVariants(this, formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; } }   // spec 16 section 10: an unparsed clause read again (alternations, near words, slot types), the world deciding
+    if (!icpt && !pre && !meta && anyVoiceOn() && formal.segments.some((x) => x.unparsed || isIncomplete(x))) { try { formal = await perf.time('variants', () => withVariants(this, formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; } }   // spec 16 section 10: an unparsed clause read again (alternations, near words, slot types), the world deciding
     if (!icpt && !pre && !meta && formal.segments.length) formal = await perf.time('typed', async () => this._withTypedReader(formal));   // spec 16 section 9: a refused reading is read again by the types of its words
     // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
     if (!icpt && !pre && !meta && this.engine.knowledge && formal.segments.length) {
@@ -1688,7 +1688,7 @@ export class DialogSession {
         const rendered = interp.render(this.isession, r);
         // RD9: a loose word that reads as "open this tab" ("robot" in "square eyes robot pls") must not add "You are already on the Talk tab." to the real answer
         const idleTab = seg.match?.worldId === 'ui.shell' && /\.bare/.test(seg.match.patternId ?? '') && /^You are already on the .+ tab\.$/.test(rendered) && segments.some((x) => x !== seg && !x.unparsed && x.match?.worldId && x.match.worldId !== 'ui.shell');
-        if (!idleTab) { const say = sayOf(r.envelope, rendered); lines.push([T(rendered, say ? { say } : {})]); }
+        if (!idleTab) lines.push([T(rendered)]);
         statuses.push(r.status);
         if (r.status === 'supported') { const wid = seg.match?.worldId; const t = tabOfWorld(set, wid); if (wid === 'ui.shell') followTab = null; else if (t) { followTab = t; followSeg = seg; } }   // an explicit navigation later in the message wins over the tab of an earlier segment
         ops.push(...r.ops);
@@ -1759,7 +1759,7 @@ export class DialogSession {
     let englishParts = [];
     lines.forEach((ln, i) => { if (i) englishParts.push({ text: ' ', translate: true, join: true }); englishParts.push(...ln); });
     const englishReply = englishParts.map((p) => p.text).join('');
-    let parts = englishParts.map(({ join, fallback, say: _say, ...p }) => (join ? { text: p.text, translate: false } : p));
+    let parts = englishParts.map(({ join, fallback, ...p }) => (join ? { text: p.text, translate: false } : p));
     let reply = englishReply;
     let replyRoutes = [];
     if (lang !== 'en' && translator) {
@@ -1768,7 +1768,7 @@ export class DialogSession {
         reply = parts.map((p) => p.text).join('');
         replyRoutes = parts.routes ?? [];
         for (const via of replyRoutes) translator.note?.(via, { direction: 'en->ro', strategy: via === 'translator-out' ? 'browser-api' : 'rules' });
-      } catch { parts = englishParts.map(({ join, fallback, say: _say, ...p }) => p); reply = englishReply; }
+      } catch { parts = englishParts.map(({ join, fallback, ...p }) => p); reply = englishReply; }
     }
     disc.noteShown(this._msg, reply);
     if (icpt?.reply) { disc.icptTurn = { turn: this._msg, text: english, reply: icpt.reply, world: icpt.worldId }; disc.noteWorld(icpt.worldId, english, icpt.reply, this._msg); }
@@ -1829,9 +1829,6 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
   const engine = {
     knowledge: options.knowledge ?? null,
-    /** Typed form operators ({ lib, world, operators }) for the step behind PSYS2_FORMOPS=on (spec 16 section 11); null = none. A host that has a typed world gives them; nothing is learnt here. */
-    formOperators: options.formOperators ?? null,
-    setFormOperators(fo) { engine.formOperators = fo ?? null; },
     /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
     setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; attachValues(cat); attachOpenWords(cat); attachArrangement(cat); },   // the colour and number readers (k.values) take the catalog's words in place of the bundled subset
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,

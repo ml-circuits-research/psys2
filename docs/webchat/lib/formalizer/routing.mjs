@@ -38,7 +38,7 @@
  */
 
 import { en } from '../lang/en.mjs?v=37915f671a';
-import { completeOn } from './completeness.mjs?v=fc8700c1e7';
+import { completeOn } from './completeness.mjs?v=c7231fb71e';
 
 /**
  * The library's decision for several worlds that read one sentence (sopworld 0.104 `arbitrate` decides with std.decide kind `world`: coverage, then the open tab, then priority). The host
@@ -303,13 +303,9 @@ export function createRouter({ id = 'policy', model = null } = {}) {
 }
 
 /** Order inside a tier: priority, literal words, fewer wildcard tokens, word-overlap score, pattern order. */
-/** L9 flag: rank by content literals first, then by frame (phrase macro) literals. Off by default; globalThis.PSYS_FRAME_RANK = true / env PSYS_FRAME_RANK=1 turns it on. */
-const frameRank = () => globalThis.PSYS_FRAME_RANK === true || (typeof process !== 'undefined' && process.env?.PSYS_FRAME_RANK === '1');
-const content = (m) => m.literals - (m.frameLiterals ?? 0);
+/** All literals count (ADR-007 amendment L9: ranking by content literals first was measured and rejected; its flag PSYS_FRAME_RANK was deleted in P6). */
 function inTier(wscore) {
-  const byLiterals = frameRank()
-    ? (a, b) => content(b) - content(a) || (b.frameLiterals ?? 0) - (a.frameLiterals ?? 0)
-    : (a, b) => b.literals - a.literals;
+  const byLiterals = (a, b) => b.literals - a.literals;
   return (a, b) => (b.rank ?? b.pattern.priority) - (a.rank ?? a.pattern.priority) || byLiterals(a, b) || a.skips - b.skips
     || wscore(b.pattern.worldId) - wscore(a.pattern.worldId) || a.order - b.order;
 }

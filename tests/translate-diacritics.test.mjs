@@ -83,7 +83,7 @@ test('Romanian equivalence set with the diacritics stripped: detection and trans
     if (translate(s, { from: 'ro', to: 'en' }).text === translate(ro, { from: 'ro', to: 'en' }).text) same++;
   }
   console.log(`diacritics stripped: ${detected}/${twins.length} detected as Romanian, ${same}/${twins.length} translate exactly like the original`);
-  assert.ok(twins.length >= 400);
+  assert.ok(twins.length >= 350);   // 413 before the 53 game twins left with ADR-010 (P3)
   assert.ok(detected / twins.length >= 0.9, `detected ${detected}/${twins.length}`);
   assert.ok(same / twins.length >= 0.93, `same translation ${same}/${twins.length}`);
 });

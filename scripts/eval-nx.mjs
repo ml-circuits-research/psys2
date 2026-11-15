@@ -79,7 +79,7 @@ function buildItems(sets, limit) {
     for (const r of filler) push({ kind: 'rec', set: 'nxdev-filler', id: r.id, world: r.world, tab: r.context?.tab ?? null, setup: r.context?.prev ?? [], text: r.text, gold: { op: 'none', slots: [] }, split: 'dev' });
   }
   if (want('operational')) for (const [f, set] of [['operational.jsonl', 'operational'], ['operational-long.jsonl', 'operational-long']]) for (const c of jl(MAIN + 'training/eval/' + f)) push({ kind: 'op', set, c });
-  if (want('dialogues')) for (const d of jl(MAIN + 'training/eval/dialogues.jsonl')) push({ kind: 'dlg', set: 'dialogues', d });
+  if (want('dialogues')) for (const d of jl(MAIN + 'training/eval/dialogues.jsonl').filter((x) => !x.retired)) push({ kind: 'dlg', set: 'dialogues', d });
   if (want('gold')) for (const g of jl(join(REPO, 'training/nx/gold/pilot-300.jsonl'))) push({ kind: 'rec', set: `gold-${g.subset}`, id: g.id, world: g.world, tab: g.tab, setup: g.context ?? [], text: g.text, gold: { op: g.op, slots: g.slots.map((s) => ({ key: s.key, value: s.value })) } });
   if (want('nxtest')) {
     const recs = jl(MAIN + 'training/dataset/nx/free-rules.jsonl');

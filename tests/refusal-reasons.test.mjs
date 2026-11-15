@@ -30,7 +30,7 @@ test('reasonOf derives the reason', () => {
 });
 
 test('interpreter envelopes carry a reason', async () => {
-  const bad = await envOf('Make your eyes wobbly');
+  const bad = await envOf('Open the wobbly tab');   // ported (spec 21): the w.face avatar reads "make your eyes wobbly" as a make of eyes it has; the shell still refuses an unknown value
   assert.equal(bad?.reason, 'unknown_argument');
   const s = engine.createSession({ language: 'en' });
   const env = engine.interp.runAction(s.isession, 'no.such.action', {});
@@ -61,32 +61,33 @@ test('execution_error is never a valid example', async () => {
 });
 
 test('unknown_argument is a penalised fallback and never blocks other candidates', async () => {
-  const t = 'Make your eyes wobbly';
-  const r = await validator.validate(one(t, W(['ui.avatar', 0.9], ['kids.arith', 0.05])));
+  const t = 'Open the wobbly tab';   // ported from the avatar's unknown eyes (spec 21 w.face switch) to the shell's unknown tab
+  const r = await validator.validate(one(t, W(['ui.shell', 0.9], ['kids.arith', 0.05])));
   const att = r.trace.segmentations[0].pieces[0].attempts;
-  const swallow = att.find((a) => a.world === 'ui.avatar' && a.variant === 'original');
+  const swallow = att.find((a) => a.world === 'ui.shell' && a.variant === 'original');
   assert.equal(swallow.unknownArg, true);
   assert.ok(att.some((a) => a.world === 'kids.arith'), 'other candidates were still tried');
   assert.ok(swallow.score < Math.log(0.9) - 4, 'carries the unknownArgPenalty');
 });
 
-test('probe: unknown eyes "wobbly" does not win when the simplified text recovers (value checker off: the rewrite replaces the word of the user)', async () => {
-  const t = 'Make your eyes wobbly';
-  const r = await validator.validate({ id: 't', text: t, context: {}, segmentations: [{ score: 0, segments: [{ start: 0, end: t.length, text: t, simplified: 'Make your eyes round', worlds: W(['ui.avatar', 0.9]) }] }] }, { checkValues: false });
+test('probe: an unknown tab "wobbly" does not win when the simplified text recovers (value checker off: the rewrite replaces the word of the user)', async () => {
+  const t = 'Open the wobbly tab';   // ported from the avatar's unknown eyes (spec 21 w.face switch)
+  const r = await validator.validate({ id: 't', text: t, context: {}, segmentations: [{ score: 0, segments: [{ start: 0, end: t.length, text: t, simplified: 'Open the map tab', worlds: W(['ui.shell', 0.9]) }] }] }, { checkValues: false });
   assert.equal(r.status, 'understood');
   assert.equal(r.produced[0].textUsed, 'simplified');
   for (const p of r.produced) assert.doesNotMatch(p.sop, /setPartUnknown/);
   // without any recovery the swallowed reading is only a last-resort fallback, flagged in the trace
-  const r2 = await validator.validate(one(t, W(['ui.avatar', 0.9])));
+  const r2 = await validator.validate(one(t, W(['ui.shell', 0.9])));
   assert.equal(r2.trace.segmentations[0].pieces[0].attempts[0].unknownArg, true);
 });
 
-test('probe: F4 expansion makes "Make your eyes and body blue" two clean blue parts', async () => {
+test('probe: F4 expansion makes "Make your eyes and hair blue" two clean blue parts', async () => {
+  // ported (spec 21 w.face): the face has hair, not a body ("Make your eyes and body blue" is read as a make of the eyes: on the failure ledger, P3)
   const s = engine.createSession({ language: 'en' });
-  const r = await s.send('Make your eyes and body blue');
+  const r = await s.send('Make your eyes and hair blue');
   assert.equal(r.answers.length, 2);
   for (const a of r.answers) assert.equal(a.envelope.status, 'supported');
-  const t = 'Make your eyes and body blue';
+  const t = 'Make your eyes and hair blue';
   const v = await validator.validate(one(t, W(['ui.avatar', 0.9])));
   for (const p of v.produced) assert.doesNotMatch(p.sop, /setPartUnknown/);
 });

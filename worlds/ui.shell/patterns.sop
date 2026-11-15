@@ -1,5 +1,4 @@
 @pat.ui.shell.back core.pattern
-    canonical="Go back."
     match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [go_back|back|previous_tab|go_to_the_previous_tab|take_me_back|switch_back|go_back_to_the_previous_tab|return_to_the_last_tab|return_to_the_previous_tab|go_to_the_tab_before|go_to_the_last_tab|return_to_the_tab_before|return|go_to_the_previous_one] [$ui.shell.g4_pls]?"
     emit="@{_} core.request action=ui.back"
     kind=request
@@ -470,12 +469,14 @@
     example="Take me back to where i came from"
 
 @pat.ui.shell.back.v5 core.pattern
+    canonical="Go back to the previous tab."
     match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$ui.shell.g1_we_could]? [return_to|go_back_to|back_to|take_me_back_to|get_me_back_to|bring_me_back_to|jump_back_to|switch_back_to|go_to|switch_to|take_me_to|go_back|back|return|take_me_back|switch_back] [to]? [the]? [previous|last|prior|preceding|former|earlier|one_before|tab_before|old|1_before] [one|tab|page|screen|panel|window|view|1]? [$lang.tail.filler|$ui.shell.g2_for_a_moment]?"
     emit="@{_} core.request action=ui.back"
     kind=request
     priority=11
     example="Back to the previous screen"
     example="Go back to the last one"
+    example="Go back to the previous tab."
 
 @pat.ui.shell.plog.count2 core.pattern
     match="[$lang.lead.filler|pls|plz|hi|hello|right]? [$lang.lead.polite|$ui.shell.g1_we_could]? [so|and]? [how_many|hw_many|how_much|tell_me_how_many|can_you_tell_me_how_many|could_you_tell_me_how_many|what_is_the_number_of|whats_the_number_of|what_is_the_count_of|whats_the_count_of|number_of|the_number_of|total_number_of|the_total_number_of|count_of|the_count_of|tell_me_the_number_of|tell_me_the_count_of|count_all|count|the_total_of|total_of|total] [of]? [my|the|all_my|all_the|all]? [phrases|phrase|sentences|sentence|things|messages|commands|lines|utterances|requests|inputs|texts] ... [said|say|spoken|spoke|typed|dictated|told|log|logged|history|session|entered|written] ... [$lang.tail.filler|$ui.shell.g2_for_a_moment]?"
