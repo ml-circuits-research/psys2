@@ -1,0 +1,12 @@
+@tpl.calc.story.tell core.template
+    for=action.story.tell
+    text="{value}"
+
+@tpl.calc.story.ask core.template
+    for=action.story.ask
+    text="{value}"
+
+@tpl.calc.story.tell.conflicting core.template
+    for=action.story.tell
+    status=conflicting
+    text="{value}"

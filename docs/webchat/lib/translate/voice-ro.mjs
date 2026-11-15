@@ -13,7 +13,7 @@
 export function createRoGrammarVoice({ loadLexicon = null, unimorph = false } = {}) {
   let ready = null;
   const load = () => (ready ??= (async () => {
-    const [{ grammarRoEn }, lang] = await Promise.all([import('./grammar-ro.mjs?v=87ccf4ce26'), loadLexicon ? Promise.resolve(null) : import('../lang/ro.mjs?v=69cc4e992e')]);
+    const [{ grammarRoEn }, lang] = await Promise.all([import('./grammar-ro.mjs?v=87ccf4ce26'), loadLexicon ? Promise.resolve(null) : import('../lang/ro.mjs?v=c6447bd38c')]);
     const lexicon = loadLexicon ? await loadLexicon() : await lang.openLangRo({ unimorph });
     return { grammarRoEn, lexicon };
   })());

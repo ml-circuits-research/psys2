@@ -147,3 +147,9 @@
     semantics=action
     action=talk.can
     doc="Can X V: yes when the can slot of the thing (any world of the catalog, the common sense facts) says V, no when its cannot slot does, else what is not known."
+
+@op.talk.contrast core.operation
+    impl=contrast
+    semantics=action
+    action=talk.contrast
+    doc="How a thing differs from the other things of its kind (a circle among the flat shapes): the library's contrastOf over the catalog's records of the thing's type, the rarest values first."

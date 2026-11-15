@@ -5,6 +5,7 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { applyCoveragePolicy, PATTERN_COVERAGE_POLICY } from '../src/formalizer/rules/index.mjs';
 
 const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
+await engine.prepareMeta();   // the page's router (spec 20): the shop sentence is cut into its pieces (want, pay, change) by meta.worlds, as on the page
 const ask = async (tab, text) => {
   const s = engine.createSession({ language: 'en', formalizer: 'rules' });
   if (tab) s.setWorldState('ui.shell', { activeTab: tab });

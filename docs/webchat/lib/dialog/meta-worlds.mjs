@@ -15,9 +15,9 @@
  * weight and never outvotes a block.
  */
 import { GRAMMAR, PERSON } from './continuation.mjs?v=265d0f7308';
-import { sceneThings } from './scene-referents.mjs?v=21d2cbe933';
+import { sceneThings } from './scene-referents.mjs?v=30e68b8d40';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { slipDistance, stemsOf } from './scene-referents.mjs?v=21d2cbe933';
+import { slipDistance, stemsOf } from './scene-referents.mjs?v=30e68b8d40';
 
 /** The forms a word can have besides its lemma: plural and case endings (scene referents), and -ing / -ed ("splitting", "coloured", "dividing"). */
 const stemForms = (w) => {
@@ -62,7 +62,7 @@ export const DEFAULT_PRIOR = Object.freeze({ max: 60, min: 8, span: 45 });
 export async function loadMetaWorlds(set, { lib = null, priorWeight = DEFAULT_PRIOR } = {}) {
   const w = set.get('meta.worlds');
   if (!w?.raw?.legend || !w.raw.kb || !w.raw.matrix) return null;
-  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=0e5fd8eed8');
+  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=33f5b1e4fd');
   const base = new lib.World({});
   for (const [what, text] of [['legend', w.raw.legend], ['kb', w.raw.kb], ['matrix', w.raw.matrix]]) {
     const r = base.load(text);
