@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "d7634350",
-  "tree": "c9ffe263b6d0b1db",
+  "build": "7becef4e",
+  "tree": "20f9288aa318a591",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,16 +13,16 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 128,
-   "partly": 3,
-   "wrong": 76,
-   "open": 53,
-   "changed": 13,
+   "right": 131,
+   "partly": 2,
+   "wrong": 74,
+   "open": 50,
+   "changed": 16,
    "unjudged": 332,
    "outcome": {
-    "executed": 146,
-    "refused": 252,
-    "asked": 3,
+    "executed": 159,
+    "refused": 236,
+    "asked": 6,
     "not_understood": 109,
     "other_world": 95
    },
@@ -30,12 +30,12 @@
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 39
+     "right": 40
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
      "judged": 11,
-     "right": 1
+     "right": 2
     },
     "owner-log-2026-11-13c": {
      "turns": 24,
@@ -75,7 +75,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 82
+     "right": 83
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -88,16 +88,16 @@
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 128,
-   "partly": 3,
-   "wrong": 76,
-   "open": 53,
-   "changed": 13,
+   "right": 131,
+   "partly": 2,
+   "wrong": 74,
+   "open": 50,
+   "changed": 16,
    "unjudged": 332,
    "outcome": {
-    "executed": 146,
-    "refused": 252,
-    "asked": 3,
+    "executed": 159,
+    "refused": 236,
+    "asked": 6,
     "not_understood": 109,
     "other_world": 95
    },
@@ -105,12 +105,12 @@
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 39
+     "right": 40
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
      "judged": 11,
-     "right": 1
+     "right": 2
     },
     "owner-log-2026-11-13c": {
      "turns": 24,
@@ -150,7 +150,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 82
+     "right": 83
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -169,32 +169,32 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 393,
- "failing_ops": 393,
+ "failing_matrix": 378,
+ "failing_ops": 378,
  "ops_only": 0,
  "judged_causes": [
   {
    "cause": "diagram.sketch: acted; the state is not the expected one",
-   "count": 26,
+   "count": 24,
    "wrong": 24,
-   "partly": 2,
+   "partly": 0,
    "rows": [
     {
      "id": "r0024",
      "verdict": "wrong",
      "text": "paint three new nodes",
      "tab": "diagram",
-     "reply": "I cannot change in the diagram yet.",
+     "reply": "What should I change? Nothing in the diagram goes by that name.",
      "failing": [
       "state:shapes.length=$+3"
      ]
     },
     {
      "id": "r0551",
-     "verdict": "partly",
+     "verdict": "wrong",
      "text": "draw a red circle",
      "tab": "diagram",
-     "reply": "I drew a diagram with 1 node. It is about ship. The nodes are 1 circle.",
+     "reply": "I drew a circle.",
      "failing": [
       "state:shapes[name=c1].color=red",
       "answer:c1"
@@ -205,7 +205,7 @@
      "verdict": "wrong",
      "text": "create a diagram",
      "tab": "diagram",
-     "reply": "I drew a diagram with 7 nodes and 6 arrows. It is about making toast. The nodes are 4 rectangles and 3 circles. I assumed red for the colour.",
+     "reply": "I drew a diagram with 7 nodes and 6 arrows. It is about making toast. The nodes are 4 rectangles and 3 circles.",
      "failing": [
       "state:shapes.length=1",
       "answer:Keep the current one",
@@ -217,30 +217,9 @@
      "verdict": "wrong",
      "text": "draw a red circle",
      "tab": "diagram",
-     "reply": "I drew a diagram with 1 node. It is about year. The nodes are 1 circle.",
+     "reply": "I drew a circle.",
      "failing": [
       "state:shapes[name=c1].color=red"
-     ]
-    },
-    {
-     "id": "r0555",
-     "verdict": "wrong",
-     "text": "add a box",
-     "tab": "diagram",
-     "reply": "I drew a diagram with 1 node. It is about water cycle. The nodes are 1 rectangle. I assumed red for the colour.",
-     "failing": [
-      "state:shapes[name=r1].shape=rectangle",
-      "answer:r1"
-     ]
-    },
-    {
-     "id": "r0556",
-     "verdict": "partly",
-     "text": "add a box",
-     "tab": "diagram",
-     "reply": "I drew a diagram with 1 node. It is about butterfly life cycle. The nodes are 1 rectangle.",
-     "failing": [
-      "state:shapes[name=r2].shape=rectangle"
      ]
     },
     {
@@ -256,6 +235,17 @@
       "state:edges[id=a2].to=r2",
       "answer:a1",
       "answer:a2"
+     ]
+    },
+    {
+     "id": "r0558",
+     "verdict": "wrong",
+     "text": "change the layout to a column",
+     "tab": "diagram",
+     "reply": "What should I change? Nothing in the diagram goes by that name.",
+     "failing": [
+      "state:shapes[name=c1].x=@shapes[name=r1].x",
+      "state:shapes[name=r2].x=@shapes[name=r1].x"
      ]
     },
     {
@@ -320,16 +310,6 @@
      "failing": [
       "state:edges[id=a1].style=dashed",
       "state:edges[id=a1].width>2"
-     ]
-    },
-    {
-     "id": "r0572",
-     "verdict": "wrong",
-     "text": "draw a red circle",
-     "tab": "diagram",
-     "reply": "I drew a diagram with 1 node. It is about gun. The nodes are 1 circle.",
-     "failing": [
-      "state:shapes[name=c1].size=62"
      ]
     },
     {
@@ -461,12 +441,12 @@
      ]
     }
    ],
-   "both_reasoners": 26
+   "both_reasoners": 24
   },
   {
    "cause": "Romanian: art.draw: acted; the reply does not say what the check asks",
-   "count": 21,
-   "wrong": 21,
+   "count": 19,
+   "wrong": 19,
    "partly": 0,
    "rows": [
     {
@@ -514,19 +494,9 @@
      "verdict": "wrong",
      "text": "muta casele mai sus",
      "tab": "draw",
-     "reply": "I did not understand \"higher\" here.",
+     "reply": "I cannot place house in the drawing yet.",
      "failing": [
       "reply_any:moved the houses"
-     ]
-    },
-    {
-     "id": "r0053",
-     "verdict": "wrong",
-     "text": "si mai sus",
-     "tab": "draw",
-     "reply": "I did not understand \"higher\" here.",
-     "failing": [
-      "reply_not:do not know what|did not understand"
      ]
     },
     {
@@ -534,7 +504,7 @@
      "verdict": "wrong",
      "text": "muta casele mai sus",
      "tab": "draw",
-     "reply": "I did not understand \"higher\" here.",
+     "reply": "I cannot place house in the drawing yet.",
      "failing": [
       "reply_any:moved the houses"
      ]
@@ -544,7 +514,7 @@
      "verdict": "wrong",
      "text": "muta crocodilii mai jos",
      "tab": "draw",
-     "reply": "I did not understand \"lower\" here.",
+     "reply": "I cannot place crocodile in the drawing yet.",
      "failing": [
       "reply_any:moved the crocodiles"
      ]
@@ -560,13 +530,13 @@
      ]
     },
     {
-     "id": "r0065",
+     "id": "r0064",
      "verdict": "wrong",
-     "text": "muta prima casa mai la stinga si mai jos",
+     "text": "pune si un lac",
      "tab": "draw",
-     "reply": "I did not understand \"further\", \"lower\" here.",
+     "reply": "Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\".",
      "failing": [
-      "reply_not:did not understand|do not know what"
+      "reply_not:Where should it go|did not understand"
      ]
     },
     {
@@ -632,7 +602,7 @@
      "verdict": "wrong",
      "text": "muta capra mai jos",
      "tab": "draw",
-     "reply": "I did not understand \"lower\" here.",
+     "reply": "I cannot place goat in the drawing yet.",
      "failing": []
     },
     {
@@ -648,19 +618,11 @@
      "verdict": "wrong",
      "text": "muta vaca mai jos",
      "tab": "draw",
-     "reply": "I did not understand \"lower\" here.",
-     "failing": []
-    },
-    {
-     "id": "r0125",
-     "verdict": "wrong",
-     "text": "muta casa mai sus",
-     "tab": "draw",
-     "reply": "I did not understand \"higher\" here.",
+     "reply": "I cannot place cow in the drawing yet.",
      "failing": []
     }
    ],
-   "both_reasoners": 21
+   "both_reasoners": 19
   },
   {
    "cause": "art.draw: acted; the state is not the expected one",
@@ -771,7 +733,7 @@
      "verdict": "wrong",
      "text": "the un si up not udner clouds",
      "tab": "draw",
-     "reply": "I did not understand \"un\", \"si\", \"up\" here.",
+     "reply": "I did not understand \"un\", \"si\" here.",
      "failing": [
       "answer:above",
       "forbid:answer without \"did not understand\""
@@ -897,6 +859,35 @@
    "both_reasoners": 4
   },
   {
+   "cause": "diagram.sketch: acted; the reply does not say what the check asks",
+   "count": 2,
+   "wrong": 1,
+   "partly": 1,
+   "rows": [
+    {
+     "id": "r0555",
+     "verdict": "partly",
+     "text": "add a box",
+     "tab": "diagram",
+     "reply": "I drew a rectangle.",
+     "failing": [
+      "answer:r1"
+     ]
+    },
+    {
+     "id": "r0564",
+     "verdict": "wrong",
+     "text": "lable arraw between circle1 and rectangle1",
+     "tab": "diagram",
+     "reply": "I did not understand \"1\" here.",
+     "failing": [
+      "answer:What should the label"
+     ]
+    }
+   ],
+   "both_reasoners": 2
+  },
+  {
    "cause": "talk: another world took the turn (art.draw)",
    "count": 2,
    "wrong": 2,
@@ -980,25 +971,6 @@
    "both_reasoners": 2
   },
   {
-   "cause": "diagram.sketch: acted; the reply does not say what the check asks",
-   "count": 1,
-   "wrong": 1,
-   "partly": 0,
-   "rows": [
-    {
-     "id": "r0564",
-     "verdict": "wrong",
-     "text": "lable arraw between circle1 and rectangle1",
-     "tab": "diagram",
-     "reply": "I did not understand \"1\" here.",
-     "failing": [
-      "answer:What should the label"
-     ]
-    }
-   ],
-   "both_reasoners": 1
-  },
-  {
    "cause": "diagram.sketch: acted; the status is not the expected one",
    "count": 1,
    "wrong": 1,
@@ -1009,7 +981,7 @@
      "verdict": "wrong",
      "text": "label link",
      "tab": "diagram",
-     "reply": "I cannot change link in the diagram yet.",
+     "reply": "There is no link in the diagram.",
      "failing": [
       "answer:What should the label of a1",
       "status:missing"
@@ -1088,7 +1060,7 @@
      "verdict": "wrong",
      "text": "Desenați un cerc roșu",
      "tab": "diagram",
-     "reply": "I drew a diagram with 1 node. It is about car. The nodes are 1 circle.",
+     "reply": "I drew a circle.",
      "failing": [
       "state:shapes[last].color=red"
      ]
@@ -1120,8 +1092,8 @@
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 147,
-   "both_reasoners": 147,
+   "count": 138,
+   "both_reasoners": 138,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -1147,8 +1119,8 @@
   },
   {
    "cause": "translation residue / wrong sense / source typo",
-   "count": 34,
-   "both_reasoners": 34,
+   "count": 33,
+   "both_reasoners": 33,
    "examples": [
     {
      "text": "an old woman",
@@ -1228,28 +1200,28 @@
   },
   {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.real",
-   "count": 27,
-   "both_reasoners": 27,
+   "count": 26,
+   "both_reasoners": 26,
    "examples": [
     {
      "text": "draw a red circle",
      "tab": "diagram",
-     "happened": "I drew a diagram with 1 node. It is about ship. The nodes are 1 circle. [outcome: executed; partly; state:shapes[name=c1].color=red answer:c1]"
+     "happened": "I drew a circle. [outcome: executed; wrong; state:shapes[name=c1].color=red answer:c1]"
     },
     {
      "text": "create a diagram",
      "tab": "diagram",
-     "happened": "I drew a diagram with 7 nodes and 6 arrows. It is about making toast. The nodes are 4 rectangles and 3 circles. I assumed red for the colour. [outcome: executed"
+     "happened": "I drew a diagram with 7 nodes and 6 arrows. It is about making toast. The nodes are 4 rectangles and 3 circles. [outcome: executed; wrong; state:shapes.length=1"
     },
     {
      "text": "draw a red circle",
      "tab": "diagram",
-     "happened": "I drew a diagram with 1 node. It is about year. The nodes are 1 circle. [outcome: executed; wrong; state:shapes[name=c1].color=red]"
+     "happened": "I drew a circle. [outcome: executed; wrong; state:shapes[name=c1].color=red]"
     },
     {
      "text": "add a box",
      "tab": "diagram",
-     "happened": "I drew a diagram with 1 node. It is about water cycle. The nodes are 1 rectangle. I assumed red for the colour. [outcome: executed; wrong; state:shapes[name=r1]"
+     "happened": "I drew a rectangle. [outcome: executed; partly; answer:r1]"
     }
    ]
   },
@@ -1309,18 +1281,13 @@
   },
   {
    "cause": "continuation / correction / why-question",
-   "count": 16,
-   "both_reasoners": 16,
+   "count": 15,
+   "both_reasoners": 15,
    "examples": [
     {
      "text": "dar lasa lacul",
      "tab": "draw",
      "happened": "I did not understand \"leave\" here. [outcome: refused; wrong; reply_not:Where should it go|did not understand]"
-    },
-    {
-     "text": "pe lac",
-     "tab": "draw",
-     "happened": "I cannot do on the lake in the drawing yet. [outcome: refused; open]"
     },
     {
      "text": "nu inlocui lacul, deasupra, ai loc",
@@ -1331,19 +1298,19 @@
      "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
      "tab": "draw",
      "happened": "I understood \"You should change this to want\", but not \"ta-da makes only prostii oricum like\", so I did nothing. [outcome: refused; open]"
+    },
+    {
+     "text": "cum ai ajuns a deschisi joculd e sah? e ridicol",
+     "tab": "chess",
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
     }
    ]
   },
   {
    "cause": "amount / relation / set distribution",
-   "count": 12,
-   "both_reasoners": 12,
+   "count": 11,
+   "both_reasoners": 11,
    "examples": [
-    {
-     "text": "muta prima casa mai la stinga si mai jos",
-     "tab": "draw",
-     "happened": "I did not understand \"further\", \"lower\" here. [outcome: refused; wrong; reply_not:did not understand|do not know what]"
-    },
     {
      "text": "muta si mai la stinga",
      "tab": "draw",
@@ -1358,6 +1325,11 @@
      "text": "deseneaza un copil pe leagan",
      "tab": "draw",
      "happened": "I cannot make child in the drawing yet. [outcome: refused; open]"
+    },
+    {
+     "text": "muta capra mai jos , si mai in stinga",
+     "tab": "draw",
+     "happened": "I understood \"Move the goat lower\", but not \"further to the left\", so I did nothing. [outcome: refused; open]"
     }
    ]
   },
@@ -1396,7 +1368,7 @@
     {
      "text": "Desenați un cerc roșu",
      "tab": "diagram",
-     "happened": "I drew a diagram with 1 node. It is about car. The nodes are 1 circle. [outcome: executed; wrong; state:shapes[last].color=red]"
+     "happened": "I drew a circle. [outcome: executed; wrong; state:shapes[last].color=red]"
     },
     {
      "text": "conectează toate formele",
@@ -1406,19 +1378,19 @@
     {
      "text": "paint Street New nodes",
      "tab": "diagram",
-     "happened": "I cannot change street in the diagram yet. [outcome: refused]"
+     "happened": "There is no street in the diagram. [outcome: refused]"
     },
     {
      "text": "paint three new nodes",
      "tab": "diagram",
-     "happened": "I cannot change in the diagram yet. [outcome: refused; wrong; state:shapes.length=$+3]"
+     "happened": "What should I change? Nothing in the diagram goes by that name. [outcome: refused; wrong; state:shapes.length=$+3]"
     }
    ]
   },
   {
    "cause": "fragment / list split",
-   "count": 9,
-   "both_reasoners": 9,
+   "count": 8,
+   "both_reasoners": 8,
    "examples": [
     {
      "text": "fa-mu un desen cu un lac, o rata, o vila, nori, soare ,iarba",
@@ -1431,14 +1403,14 @@
      "happened": "I cannot do sky in the drawing yet. [outcome: refused; open]"
     },
     {
-     "text": "un soare",
-     "tab": "draw",
-     "happened": "I cannot do sun in the drawing yet. [outcome: refused; open]"
-    },
-    {
      "text": "deseneaza si un magar, dar sa nu zboare, pe iarba",
      "tab": "draw",
      "happened": "I understood \"on the grass\", but not \"Draw a magar\", \"too to not fly\", so I did nothing. [outcome: refused; open]"
+    },
+    {
+     "text": "eyeglasses",
+     "tab": "robot",
+     "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; open]"
     }
    ]
   },
@@ -1470,33 +1442,6 @@
    ]
   },
   {
-   "cause": "unknown word (a word of the request is not known)",
-   "count": 5,
-   "both_reasoners": 5,
-   "examples": [
-    {
-     "text": "si mai sus",
-     "tab": "draw",
-     "happened": "I did not understand \"higher\" here. [outcome: refused; wrong; reply_not:do not know what|did not understand]"
-    },
-    {
-     "text": "desene asta",
-     "tab": "map",
-     "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
-    },
-    {
-     "text": "desene asta o",
-     "tab": "map",
-     "happened": "I did not understand \"desene asta o\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not"
-    },
-    {
-     "text": "un mami",
-     "tab": "charts",
-     "happened": "I did not understand \"un mami\". For example: \"Add a chart.\" or \"What is the colour of chart 2?\" I did not know the word: mami. [outcome: not_understood]"
-    }
-   ]
-  },
-  {
    "cause": "unknown kind (no drawing / stand-in)",
    "count": 4,
    "both_reasoners": 4,
@@ -1520,6 +1465,33 @@
      "text": "deseneaza un bunic",
      "tab": "draw",
      "happened": "I did not understand \"grandfather\" here. [outcome: refused; open]"
+    }
+   ]
+  },
+  {
+   "cause": "unknown word (a word of the request is not known)",
+   "count": 4,
+   "both_reasoners": 4,
+   "examples": [
+    {
+     "text": "desene asta",
+     "tab": "map",
+     "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
+    },
+    {
+     "text": "desene asta o",
+     "tab": "map",
+     "happened": "I did not understand \"desene asta o\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not"
+    },
+    {
+     "text": "un mami",
+     "tab": "charts",
+     "happened": "I did not understand \"un mami\". For example: \"Add a chart.\" or \"What is the colour of chart 2?\" I did not know the word: mami. [outcome: not_understood]"
+    },
+    {
+     "text": "whats on u",
+     "tab": "robot",
+     "happened": "I don't know what an on u is. [outcome: not_understood; wrong; answer:wear not_understood]"
     }
    ]
   },
