@@ -11,7 +11,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const FILE = fileURLToPath(new URL('../tests/legacy-list.json', import.meta.url));
-const NEVER = [/Romanian replies are never mixed/, /typos are corrected against the world of the open tab/, /is fresh|not stale|from the current tree/, /^P\d+: at least/];
+const NEVER = [/Romanian replies are never mixed/, /^vendor:/, /typos are corrected against the world of the open tab/, /is fresh|not stale|from the current tree/, /^P\d+: at least/];
 const NEEDS = [
   [/undo|redo|history/i, 'needs undo / redo as acts of the request door (the reasoner timeline as a declared act)'],
   [/question|how many|what is selected|answered from|reads? it|count/i, 'needs questions answered from factsOf of the live world (no question act on the door yet)'],

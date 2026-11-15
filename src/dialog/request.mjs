@@ -86,61 +86,21 @@ const num = (r, k) => (one(r, k) == null || one(r, k) === '' ? null : Number(one
 /** The region names a live world declares (std.schema.region): words of a request about its layers, read by the world's executor. */
 const regionNames = (live) => new Set(ofType(live, 'std.schema.region').map((r) => one(r, 'name')).filter(Boolean));
 
-/** The kind names a live world declares (its std.schema.kind, the parts of its expectations): the vocabulary of the slips the host corrects before the library reads. */
-export function kindNames(live) {
-  const out = new Set();
-  for (const r of ofType(live, 'std.schema.kind')) { const k = one(r, 'of'); if (k) out.add(k); }
-  for (const r of ofType(live, 'core.word')) for (const t of r.text ?? []) out.add(String(t).replace(/^"|"$/g, ''));
-  return out;
-}
-
-/** Edit distance with a cap (above the cap: cap + 1). */
-function editDistance(a, b, cap) {
-  let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
-  for (let i = 1; i <= a.length; i++) {
-    const cur = [i]; let low = i;
-    for (let j = 1; j <= b.length; j++) { cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1), j > 1 && i > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1] ? prev[j - 2] + 1 : Infinity); low = Math.min(low, cur[j]); }
-    if (low > cap) return cap + 1;
-    prev = cur;
-  }
-  return prev[b.length];
-}
-
-/**
- * Slips of the request's own words ("ndes", "arraws", "eiagram", "expectatiom", "creare"): a word no dictionary has, one edit from a word of the request vocabulary (two for long words),
- * is that word. The vocabulary is data: the live world's kinds and words, the verbs of k.actions, the words of the cues. Returns { text, corrections }.
- */
-export function correctSlips(english, { live, language, known = null } = {}) {
-  const vocab = new Set();
-  for (const k of kindNames(live)) { vocab.add(k); vocab.add(`${k}s`); }
-  for (const r of ofType(language, 'k.actions.verb')) for (const k of ['name', 'text', 'base']) { const v = one(r, k); if (v) vocab.add(v.toLowerCase()); }
-  for (const r of ofType(language, 'w.lang.en.cue')) for (const k of ['lead', 'trail', 'between']) for (const p of r[k] ?? []) for (const w of String(p).replace(/^"|"$/g, '').toLowerCase().split(/\s+/)) vocab.add(w);
-  for (const w of ['nodes', 'arrows', 'chapters', 'expectation']) vocab.add(w);
-  const words = [...vocab].filter((w) => w.length >= 4 && /^[a-z]+$/.test(w));
-  const corrections = [];
-  const text = String(english).replace(/[A-Za-z]+/g, (raw) => {
-    budget.tick('request.slip');
-    const w = raw.toLowerCase();
-    if (w.length < 4 || vocab.has(w) || STOP.has(w) || (typeof known === 'function' && known(w))) return raw;
-    let best = null;
-    for (const v of words) { if (Math.abs(v.length - w.length) > 2) continue; const d = editDistance(w, v, 2); if (d <= (w.length >= 7 ? 2 : 1) && (!best || d < best.d)) best = { v, d }; }
-    if (!best) return raw;
-    corrections.push({ said: w, as: best.v });
-    return best.v;
-  }).replace(/([a-z])(\d)/gi, '$1 $2');   // "eiagram5-10": a word glued to a number
-  return { text, corrections };
-}
 
 /**
  * Read one turn with the library (readRequest) into the host's shape: { act, target, facts (flat: key, value, neg, all, n, min, max, unit, step, of), reaction, unread, used,
  * corrections, request (the library's own) }.
  */
-export function readTurn(lib, live, language, english, { dialogue = null, known = null } = {}) {
-  const fix = correctSlips(english, { live, language, known });
-  const request = lib.readRequest(live, fix.text, { language, catalog: [language], dialogue: dialogue ?? {} });
+export function readTurn(lib, live, language, english, { dialogue = null, known = null, worlds = [] } = {}) {
+  // the slips are one candidate source of the reader (sopworld 0.151 readRequest `spell`: the open world's words, the other live worlds, the dialogue, the language); a word the
+  // language has (`known`, the host's dictionary of English) is never a slip, so a reading that would repair one is read again without repair
+  const ctx = { language, catalog: [language], dialogue: dialogue ?? {} };
+  let request = lib.readRequest(live, english, { ...ctx, spell: { worlds } });
+  if ((request.spell?.repairs ?? []).some((r) => typeof known === 'function' && known(String(r.from ?? r.said ?? '').toLowerCase()))) request = lib.readRequest(live, english, ctx);
+  const corrections = (request.spell?.repairs ?? []).map((r) => ({ said: r.from ?? r.said, as: r.to ?? r.as }));
   return {
     request, act: request.act ?? null, target: request.target ?? null, facts: request.facts ?? [], reaction: request.reactions?.[0]?.value ?? null,
-    unread: [...new Set((request.unread ?? []).map((u) => String(u.text ?? u.words ?? u).toLowerCase()))].filter((u) => !regionNames(live).has(u) && !STOP.has(u)), used: request.used ?? [], corrections: fix.corrections, english: fix.text,
+    unread: [...new Set((request.unread ?? []).map((u) => String(u.text ?? u.words ?? u).toLowerCase()))].filter((u) => !regionNames(live).has(u) && !STOP.has(u)), used: request.used ?? [], corrections, asks: request.spell?.asks ?? [], english,
   };
 }
 

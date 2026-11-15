@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=638e907b00';
+import { composeReply, sayOf } from './composed-reply.mjs?v=8ba443c46c';
 import { reviewForeign } from './foreign-reading.mjs?v=79d8decc9c';
 import { installTextGen } from './textgen.mjs?v=a8831e42a2';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=ff05a8582c';
@@ -18,7 +18,7 @@ import { validateWorldSet } from '../worlds/validate.mjs?v=f0bbfe4db3';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=ff05a8582c';
 import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=e8a1f00976';
 import { createInterpreter } from '../interpreter/index.mjs?v=d604aa1cfc';
-import { createReasoner } from '../reasoner/index.mjs?v=4e3633b156';
+import { createReasoner } from '../reasoner/index.mjs?v=678a7a8eac';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=ef142ac40e';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=2c08312adb';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
@@ -39,19 +39,19 @@ import { attachValues } from '../knowledge/values.mjs?v=0d60c4bf76';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3ebe6cdc98';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f39042bd20';
 import { Discourse } from './discourse.mjs?v=2aa77d7f4a';
-import { Dialogue } from './dialogue.mjs?v=5ac5fda492';
+import { Dialogue } from './dialogue.mjs?v=7b73f8311f';
 import { turnSteps } from './steps.mjs?v=44af51b084';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=1e9911155e';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=14eb575777';
-import { personTurn } from './person.mjs?v=fc90f1fc51';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=92671a37d7';
+import { personTurn } from './person.mjs?v=cf3762d663';
 import { proposeByTypes } from './typed-reader.mjs?v=ecd7342ebe';
-import { withVariants, anyVoiceOn } from './variants.mjs?v=a8e1b29b06';
+import { withVariants, anyVoiceOn } from './variants.mjs?v=31da8a4ba4';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=ff05a8582c';
 import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=ff05a8582c';
 import { repairFromScene } from './scene-referents.mjs?v=71b2b4cd5b';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=dd668504c9';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=9cdd8be42f';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=36ad87668c';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=31fb738b59';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=6913fe1bf3';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=ffe4866283';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -293,7 +293,7 @@ import { languageCommand } from '../translate/language-command.mjs?v=af45c6bf2e'
 import { withSubject, polishReply } from '../translate/register.mjs?v=45588e0a13';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=80e9d07ff4';
 import { intentStep, weakReading } from './intent.mjs?v=30d2fcc4e2';
-import { requestLanguage, liveWorld, readTurn, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=5e06318eb1';
+import { requestLanguage, liveWorld, readTurn, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=91eda965b5';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1571,7 +1571,7 @@ export class DialogSession {
     const decl = tabWorld && declaredWorld(this.engine.set.get(tabWorld));   // the world declares what it can do (request.sop) and carries a plan out (its planRequest operation)
     const off = opts.request === false || globalThis.process?.env?.PSYS2_REQUEST === 'off' || guard.soft();   // PSYS2_REQUEST=off: the A/B of the request step
     if (!decl || off) return markLegacy(await this._sendRead(text, opts), off ? 'off' : 'no request declarations');
-    if (this.engine.sopworld === undefined) this.engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=8f63c8c711').catch(() => null);
+    if (this.engine.sopworld === undefined) this.engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=1a46c4b8fc').catch(() => null);
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(this.engine.sopworld, null);   // the executors of the door (docs.editor composes) run before the core
     let door = null;
     try { door = await perf.time('door', () => this._door(text, opts, tabWorld)); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door]', e); door = { why: 'door error' }; }
@@ -1868,7 +1868,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=8f63c8c711').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=1a46c4b8fc').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.editor (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
@@ -2274,7 +2274,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   // `set`, `reasoner` and `interp` are replaced by `engine.reload(loader)` (LAZY LOADING: the worlds a message needs are added to a running engine); everything below reads them through these bindings.
   let set = await loadWorlds(loader, { reasoner: mode });
   let reasoner = mode === 'matrix' ? await createReasoner(set) : null;
-  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=8f63c8c711')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
+  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=1a46c4b8fc')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
   let interp = createInterpreter(set, { ...options, reasoner });
   attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
