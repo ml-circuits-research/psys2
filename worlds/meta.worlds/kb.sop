@@ -52,8 +52,8 @@
     act=editor act=fruit act=gdoc act=kiwis act=legend act=plum act=entry act=beyond
     act=express act=fraction act=pct act=proportion act=text act=capture act=clipboard act=gsheet
     act=outrun act=photo act=represent act=screenshot
-    actshared=make actshared=show actshared=send actshared=versus actshared=vs actshared=draw actshared=create actshared=update
-    actshared=build actshared=include actshared=hide actshared=rename actshared=scale actshared=convert actshared=share actshared=export
+    actshared=make actshared=show actshared=send actshared=versus actshared=vs actshared=draw actshared=update actshared=build
+    actshared=create actshared=include actshared=hide actshared=rename actshared=scale actshared=convert actshared=share actshared=export
     thing=plot thing=point thing=bar thing=slice thing=segment thing=pie thing=doughnut thing=donut
     thing=radar thing=polar thing=scatter thing=lightgoldenrodyellow thing=mediumspringgreen thing=mediumaquamarine thing=mediumslateblue thing=mediumturquoise
     thing=mediumvioletred thing=blanchedalmond thing=cornflowerblue thing=darkolivegreen thing=lightslategray thing=lightslategrey thing=lightsteelblue thing=mediumseagreen
@@ -93,10 +93,10 @@
 @card.docs.editor meta.worlds.card
     core.source="generated:meta.worlds/cards"
     id=docs.editor kind=module run=none
-    act=dictation act=shopping act=selected act=bread act=checkbox act=world act=fox act=numbered
-    act=compose act=plan act=reopen act=selection
+    act=dictation act=shopping act=selected act=bread act=checkbox act=compose act=world act=fox
+    act=numbered act=plan act=reopen act=selection
     actshared=write actshared=undo actshared=read actshared=turn actshared=new actshared=stop actshared=start actshared=milk
-    actshared=insert actshared=paint actshared=scale actshared=create actshared=rename actshared=shrink actshared=exchange actshared=resize
+    actshared=insert actshared=create actshared=paint actshared=scale actshared=rename actshared=shrink actshared=exchange actshared=resize
     actshared=edit actshared=convert actshared=switch actshared=invert actshared=recolor actshared=recolour actshared=straighten actshared=transform
     actshared=decrease actshared=dye actshared=enlarge actshared=increase actshared=replace actshared=reverse actshared=tint actshared=correct
     actshared=expand actshared=spin actshared=hide actshared=magnify actshared=alter actshared=bend actshared=darken actshared=flip

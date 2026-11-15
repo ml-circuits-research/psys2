@@ -9,6 +9,8 @@
 // The sentences stay the library's (`std.compose` over the language world's templates, `clauseOf` for a linking fact): this module chooses WHAT to write about, not how.
 // Browser-safe: no `node:*`.
 
+import { budget } from './budget.mjs';
+
 const bare = (v) => String(v ?? '').replace(/^"|"$/g, '').replace(/^\$/, '');
 const META = new Set(['name', 'about', 'source', 'own', 'cite', 'derived', 'named', 'code', 'code2', 'lat', 'lon', 'drawing', 'count', 'where', 'example', 'result']);
 const SKIP_TYPE = /^(?:core\.|k\.genres|k\.interest|w\.lang|k\.story|joins)/;
@@ -105,6 +107,7 @@ export function readLongTopic(kw, text, { subjects = null } = {}) {
     const toks = p.toLowerCase().replace(/[^a-z0-9' -]/g, ' ').split(/\s+/).filter(Boolean);
     const used = [];
     for (let i = 0; i < toks.length;) {
+      budget.tick('compose.longTopic');
       let hit = null, len = 0;
       for (let n = Math.min(3, toks.length - i); n >= 1 && !hit; n--) { const name = knownName(kw, toks.slice(i, i + n).join(' ')); if (name && !/^\d+$/.test(name) && toks[i].length > 2 && isThing(kw, name)) { hit = name; len = n; } }
       if (hit) { used.push(hit); count.set(hit, (count.get(hit) ?? 0) + 1); if (!first.has(hit)) first.set(hit, pi * 100 + i); i += len; continue; }

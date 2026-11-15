@@ -5,7 +5,7 @@
 
 import { knowledgeWorld, languageWorld, randomTopics, topicIndex } from './compose-world.mjs?v=1b991dfb07';
 import { englishOf } from '../lang/en-generate.mjs?v=84a99c355e';
-import { relatedTopics, readLongTopic, isLongTopic, knownName, wordCount, nameIndex, PRIMARY } from './compose-plan.mjs?v=cb0e51c14e';
+import { relatedTopics, readLongTopic, isLongTopic, knownName, wordCount, nameIndex, PRIMARY } from './compose-plan.mjs?v=b890bea99a';
 
 const pick = (lib, name) => (typeof lib?.[name] === 'function' ? lib[name] : typeof lib?.std?.[name] === 'function' ? lib.std[name] : null);
 const clip = (n, lo, hi, def) => { const v = Math.round(Number(n)); return Math.min(hi, Math.max(lo, Number.isFinite(v) ? v : def)); };
