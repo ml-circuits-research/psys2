@@ -49,15 +49,26 @@ export default {
     const field = (label, name, type, value, extra = {}) => { const i = h('input', { name, type, value, ...extra }); form.append(h('label', { class: 'pe-field' }, h('span', {}, label), i)); return i; };
     const fType = h('select', { name: 'type' }, ...[['essay', 'Essay'], ['scientific article', 'Scientific article'], ['presentation', 'Presentation'], ['story', 'Story'], ['report', 'Report']].map(([v, l]) => h('option', { value: v }, l)));
     form.append(h('label', { class: 'pe-field' }, h('span', {}, 'Type'), fType));
-    const fTopic = field('Topic (empty = random)', 'topic', 'text', '', { placeholder: 'volcanoes' });
+    // the topic is a text area (owner request 2026-11-15): a name, or several lines saying what the document should be about; it grows with what is typed
+    const fTopic = h('textarea', { name: 'topic', rows: 2, class: 'pe-topic', placeholder: 'volcanoes — or a few lines: what it should be about, the things to cover' });
+    const grow = () => { fTopic.style.height = 'auto'; fTopic.style.height = `${Math.min(fTopic.scrollHeight + 2, 320)}px`; };
+    fTopic.addEventListener('input', grow);
+    form.append(h('label', { class: 'pe-field pe-field-wide' }, h('span', {}, 'Topic (empty = random)'), fTopic));
     const fCh = field('Chapters', 'chapters', 'number', '3', { min: 1, max: 12 }), fSub = field('Subchapters each', 'subchapters', 'number', '2', { min: 0, max: 6 }), fWords = field('About words', 'words', 'number', '600', { min: 50, max: 5000, step: 50 });
     form.append(h('button', { class: 'pe-gen', type: 'submit' }, 'Write it'));
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const topic = fTopic.value.trim().replace(/[.,;:!?]+$/, '');
-      const ty = fType.value, unit = ty === 'presentation' ? 'sections' : 'chapters';
+      const raw = fTopic.value.replace(/\s+/g, ' ').trim();
+      const ty = fType.value, unit = ty === 'presentation' ? 'sections' : 'chapters', an = /^[aeiou]/.test(ty) ? 'an' : 'a';
+      const words = Math.min(5000, Math.max(50, Number(fWords.value) || 600));
+      // a long topic (several words or sentences) goes whole, in quotes, after "about the following:" so that no sentence of it is read as a request of its own;
+      // the size is always sent (it was dropped when there were no subchapters)
+      const long = raw.split(' ').length > 4 || /[.!?;]\s/.test(raw);
+      const topic = raw.replace(/[.,;:!?]+$/, '');
       const subs = Number(fSub.value) > 0 && ty !== 'presentation' && ty !== 'story' ? ` of ${fSub.value} subchapters` : '';
-      host.send(topic ? `write ${/^[aeiou]/.test(ty) ? 'an' : 'a'} ${ty} about ${topic} with ${fCh.value} ${unit}${subs}${subs ? `, about ${fWords.value} words` : ''}` : `write ${/^[aeiou]/.test(ty) ? 'an' : 'a'} ${ty} about anything`);
+      host.send(!topic ? `write ${an} ${ty} about anything`
+        : long ? `write ${an} ${ty} of ${words} words about the following: "${raw.replace(/"/g, "'")}"`
+          : `write ${an} ${ty} about ${topic} with ${fCh.value} ${unit}${subs}, about ${words} words`);
       form.hidden = true;
     });
     let destroyed = false;
