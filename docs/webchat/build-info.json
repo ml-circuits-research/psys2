@@ -1,5 +1,5 @@
 {
-  "version": "09ed5900d8",
+  "version": "ec21e03d08",
   "worlds": [
     "acts",
     "art.draw",
@@ -681,8 +681,8 @@
     "worlds/words/zo.json": "4c17adee896c939e",
     "worlds/words.bloom.json": "66f161e5b154ea11"
   },
-  "builtAt": "2026-11-15T02:57:01.816Z",
-  "commit": "dc027420",
+  "builtAt": "2026-11-15T02:58:27.438Z",
+  "commit": "85b1d889",
   "catalog": "ab3b2ab868ba27868f88d2dbdfce3433a699ece6",
   "assets": {
     "app.mjs": "4132660e15",
@@ -861,7 +861,7 @@
     "ui/dispatcher-host.mjs": "b7c79577fd",
     "ui/editor.mjs": "4e4dbd381f",
     "ui/engine-client.mjs": "1006887b79",
-    "ui/engine-worker.mjs": "bb52aa4c89",
+    "ui/engine-worker.mjs": "a1904253be",
     "ui/failures.mjs": "c3bee734c9",
     "ui/feedback.mjs": "ddd1432c05",
     "ui/input-history.mjs": "62beafbd63",

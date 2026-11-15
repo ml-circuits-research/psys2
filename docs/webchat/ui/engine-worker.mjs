@@ -29,6 +29,12 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let engine = null, session = null, settings = {}, mods = null, testHooks = false, faultNow = null;
 const active = new Map();            // request id -> AbortController of a send or dry read that runs
 const turnRunning = () => [...active.values()].some((c) => !c.dry);
+/**
+ * A load that is not the turn's own starts only when no turn runs (owner check 2026-11-15: a Romanian session's background load of every world started during the first turn;
+ * reading the worlds' files ticked against the TURN's step budget, "compute budget exceeded at index.readString", and the charts and talk worlds were reported as not loaded).
+ * A turn's own loads come before its reading (no budget is installed then) and wait for a load in progress through the one lock.
+ */
+const turnIdle = async () => { while (turnRunning()) await sleep(20); };
 let dispatcherEnc = null, normalizerHost = null, dispatcherInfo = null;
 let worldLoader = null, loaders = null, rulesMod = null, wordMod = null, tabWorlds = {}, universe = null;   // LAZY LOADING: the world index, the library modules the loader needs, tab id -> world id, the worlds this page may use (tests)
 const loadedIds = new Set();
@@ -200,7 +206,7 @@ async function init(m) {
   applySettings(null);
   if (m.restoreState) restoreStates(m.restoreState, m.restoreMeta);
   if (m.prepareModels && dispatcherEnc && settings.formalizer === 'encoder') dispatcherEnc.prepare().catch(() => {});
-  if (otherLanguage) rules.then(() => sleep(0)).then(() => ensureWorlds(worldLoader.ids(), 'language (background)')).catch(() => {});   // after the first paint and the rule compilation, never inside a turn's wait
+  if (otherLanguage) rules.then(() => sleep(0)).then(turnIdle).then(() => ensureWorlds(worldLoader.ids(), 'language (background)')).catch(() => {});   // after the first paint and the rule compilation, never inside a turn's wait
   return { worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget };
 }
 
@@ -374,12 +380,12 @@ const handlers = {
     const chipsIn = async (mod, items, language) => { const lang = language ? mods.lang.normalize(language) : 'en'; if (lang !== 'en') { try { await mods.translate.loadRoEn?.(); } catch { /* the rules have what they have */ } } return mod.chipsInLanguage(items, lang, engine.translator); };
     const tabWorld = (m.tab && (tabWorlds[m.tab] ?? worldLoader.ids().find((id) => worldLoader.info(id).tab?.id === m.tab))) || null;
     const tabOfWorld = (id) => worldLoader.info(id)?.tab?.id ?? Object.keys(tabWorlds).find((t) => tabWorlds[t] === id) ?? null;   // the page's tab plugins name the world of each tab (the built-in Documents tab too)
-    if (tabWorld && !loadedIds.has(tabWorld)) await ensureWorlds([tabWorld], 'dice');
+    if (tabWorld && !loadedIds.has(tabWorld)) { await turnIdle(); await ensureWorlds([tabWorld], 'dice'); }
     const loaded = () => sampler.worlds();
     // `onlyTab` (the example bar of a page, reviewer 2026-11-15 03:15 item 3): only the open page's world, never the examples of other pages
     const orderOf = () => (m.onlyTab ? (tabWorld && loaded().includes(tabWorld) ? [tabWorld] : []) : [...new Set([tabWorld, ...recentWorlds, ...loaded()].filter((id) => id && loaded().includes(id)))]);
     let order = orderOf();
-    if (!order.length && m.mode !== 'actions' && !m.onlyTab && worldLoader.info(DEFAULT_DICE_WORLD)) { await ensureWorlds([DEFAULT_DICE_WORLD], 'dice'); order = orderOf(); }   // nothing sampleable is loaded yet (lazy loading): the drawing board is the smallest general world
+    if (!order.length && m.mode !== 'actions' && !m.onlyTab && worldLoader.info(DEFAULT_DICE_WORLD)) { await turnIdle(); await ensureWorlds([DEFAULT_DICE_WORLD], 'dice'); order = orderOf(); }   // nothing sampleable is loaded yet (lazy loading): the drawing board is the smallest general world
     const item = (r) => ({ text: r.text, world: r.world, tab: tabOfWorld(r.world), act: r.frame?.action ?? null, thing: r.frame?.args?.thing ?? null });
     const count = Math.min(Math.max(Number(m.count) || 4, 1), 6);
     if (m.mode === 'actions') {
