@@ -11,8 +11,8 @@ const engine = await createEngine({ loader: createFsLoader() });
 const worlds = engine.set.list().filter((w) => w.patterns.length);
 const TAB = { 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman', 'docs.editor': 'editor', 'ui.avatar': 'robot' };
 const tabOf = (w) => w.tab?.id ?? TAB[w.id];
-// operations that only exist as a follow-up, a refusal, or are owned by the shell / the open game (see scripts/mark-canonical.mjs), and one question that its twin covers
-const EXEMPT = new Set(['chat.ask', 'shop.reviseLast', 'shop.revise', 'draw.askKind', 'docr.pickSection', 'chess.pick', 'music.askWhat', 'geo.askPlace', 'geo.unknown', 'avatar.setPartUnknown', 'draw.open', 'draw.keep', 'ui.newGame', 'ui.hint', 'ui.playGame', 'things.undo',   // ui.playGame: the inert game-tab rule for declared tabs (ADR-010); things.undo: only after a lesson (a follow-up)
+// operations that only exist as a follow-up (story.ask: a question about a story in focus, calc.story; list.ask: plan.list's questions stand behind kids.shop while it is on, ADR-011), a refusal, or are owned by the shell / the open game (see scripts/mark-canonical.mjs), and one question that its twin covers
+const EXEMPT = new Set(['chat.ask', 'story.ask', 'list.ask', 'shop.reviseLast', 'shop.revise', 'draw.askKind', 'docr.pickSection', 'chess.pick', 'music.askWhat', 'geo.askPlace', 'geo.unknown', 'avatar.setPartUnknown', 'draw.open', 'draw.keep', 'ui.newGame', 'ui.hint', 'ui.playGame', 'things.undo',   // ui.playGame: the inert game-tab rule for declared tabs (ADR-010); things.undo: only after a lesson (a follow-up)
   'core.question:kids.shapes.shape/sides',
   // generated worlds (Q23): redo and load only after an undo or a save (follow-ups: "There is nothing to redo."); music's transpose by an interval has only the fragment
   // "Up a whole tone." (transposing is offered by "Transpose it to D major."; "go up a whole tone" is misread as a song: a ledger row)

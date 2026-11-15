@@ -82,7 +82,7 @@ export function build() {
   // real dialogues with expectations
   for (const d of jl('training/eval/dialogues.jsonl').filter((x) => (x.families ?? []).includes('real'))) {
     let tab = d.tab ?? null;
-    d.turns.forEach((t, i) => { if (t.tab) tab = t.tab; add({ set: `dialogues:${d.id}`, session: `dialogues:${d.id}`, i, tab, lang: 'en', mode: t.mode, text: t.message, class: (d.families ?? []).join(','), logged: {}, init: i === 0 ? d.init : undefined, judge: 'state', check: { world: d.world, expect: t.expect }, source: 'real-dialogue', ...(d.retired ? { retired: d.retired } : {}) }); });
+    d.turns.forEach((t, i) => { if (t.tab) tab = t.tab; add({ set: `dialogues:${d.id}`, session: `dialogues:${d.id}`, i, tab, lang: 'en', mode: t.mode, text: t.message, class: (d.families ?? []).join(','), logged: {}, init: i === 0 ? d.init : undefined, judge: 'state', check: { world: d.world, expect: t.expect }, source: 'real-dialogue', ...(d.retired ? { retired: d.retired } : {}), ...(t.note ? { note: t.note } : {}) }); });
   }
   // Romanian originals of owner / phrase-log sources not already present
   const have = new Set(rows.map((r) => norm(r.text)));
