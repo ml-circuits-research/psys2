@@ -108,7 +108,7 @@ export function change(ctx, { attribute, value, currency } = {}) {
   const n = Number(value);
   if (!Number.isFinite(n)) return { status: 'missing', note: 'How much money?' };
   const lst = attribute === 'budget' ? meant(st) : meant(st, { create: true });
-  if (attribute === 'budget') lst.budget = n; else lst.tendered = n;
+  if (attribute === 'budget') lst.budget = n; else { lst.tendered = n; lst.settled = true; }   // money handed over at the till closes the basket: the change is asked of it, the next thing wanted starts a new list
   if (currency) { lst.currencyWord = /s$|^lei$/.test(String(currency).toLowerCase()) ? String(currency).toLowerCase() : `${String(currency).toLowerCase()}s`; }
   return { status: 'supported', value: attribute === 'budget' ? `OK, you have ${money(n, lst)}.` : `OK, you pay ${money(n, lst)}.` };
 }
