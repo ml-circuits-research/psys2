@@ -25,7 +25,7 @@ import { LANG_EN_SHARDS } from '../src/lang/en.mjs';
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 /** The scripts that bundle the rest of the catalog (each takes the same catalog folder, or none for the pin, and --check). build-bundled-subset runs build-bundled-geo,
  * build-acts-lexicon and build-default-face itself; build-bundled-names reads the animals bundle the subset writes, so it comes after it. */
-export const CATALOG_BUNDLES = ['build-bundled-subset.mjs', 'build-bundled-names.mjs', 'build-bundled-compose.mjs', 'build-bundled-diagrams.mjs', 'build-bundled-genres.mjs', 'build-bundled-interest.mjs', 'build-bundled-person.mjs'];
+export const CATALOG_BUNDLES = ['build-bundled-subset.mjs', 'build-bundled-names.mjs', 'build-bundled-compose.mjs', 'build-bundled-diagrams.mjs', 'build-bundled-genres.mjs', 'build-bundled-interest.mjs', 'build-bundled-person.mjs', 'build-lang-ro.mjs'];
 const NOT_READ = new Set(['w.lang.en.phrase', 'w.lang.en.role_map']);
 const QUOTED = '"(?:[^"\\\\]|\\\\.)*"';
 const DROP = new RegExp(`\\s(?:core\\.source|doc|note)=(?:${QUOTED}|\\S+)`, 'g');

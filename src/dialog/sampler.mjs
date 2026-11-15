@@ -175,7 +175,7 @@ export function createSampler(lib, { worldOf, thingsOf, historyOf, knowledgeOf }
         if (shown.has(text) && f.action !== 'undo' && attempt < 5) continue;
         texts.add(text); shown.add(text);
         const named = f.action === 'make' ? sw.entries.get(String(f.args?.kind ?? ''))?.entry : null;   // a thing named from knowledge says its own act (a question about a distance is an ask)
-        const frame = { ...f, ...(named?.act ? { action: named.act } : {}), args: { ...f.args, ...(by(f) ? { thing: by(f).id } : {}) } };
+        const frame = { ...f, ...(named?.act ? { action: named.act } : {}), args: { ...f.args, ...(by(f) ? { thing: by(f).id, thingNoun: String(by(f).noun ?? by(f).kind ?? '').replace(/^composite:/, '') } : {}) } };   // the noun of the thing: a chip in another language is composed from it
         out.push({ text, frame, world: worldId });
         for (let i = 0; i < 2; i++) seen.push({ action: frame.action, args: { kind: f.args?.kind } });   // novelty: a kind or an act used counts double, so the next press looks elsewhere
         if (f.action === 'undo') { mine.n = Math.max(0, mine.n - 1); mine.undone = true; }
@@ -225,19 +225,44 @@ export function engineSampler(lib, engine, session) {
  * CHIPS IN THE SELECTED LANGUAGE (spec 25; reviewer 2026-11-15 03:15 item 3): a chip is a command the sampler rendered in English; in a session of another language it is shown (and
  * sent) in that language, by the rules translator (its reply tables and grammar, never a machine translator), and a chip it cannot say completely is left out: never an English chip
  * on a page in another language. Each item keeps its English text in `en`. `translator` is the engine's (its `rules` when it switches between translators).
- * NATURAL OR NOTHING (reviewer 2026-11-15 04:50 decision 3): a chip in another language is shown only when it is natural. Natural = composed from the language world's act
+ * NATURAL OR NOTHING (reviewer 2026-11-15 04:50 decision 3; 05:30: composed): a chip in another language is first COMPOSED from the language world's request templates (`requestOf`, the pack's `request`); otherwise it is shown only when it is natural. Natural = composed from the language world's act
  * templates (pending: w.lang.ro request templates, questions.md Q25 K4; no language has them yet), or a rules translation that the grammar realised with no calque (the
  * translator's `calques`: a construction said word for word, "Ce este mărimea de c1?" for "What is the size of c1?"). A chip that is not natural is left out rather than shown.
  */
 const norm = (s) => String(s ?? '').toLowerCase().replace(/[.!?,"„”]/g, '').replace(/\b([a-z]+) (\d+)\b/g, '$1$2').replace(/\s+/g, ' ').trim();   // the reader splits a name like c1 into c 1 and still reads it
 const ID = /\b[a-z]+\d+\b/gi;
+/** The roles of a chip's frame as the language world's request templates name them (act, kind, thing, value, attribute, number), or null when a role has no word. */
+export function requestOf(frame) {
+  const a = frame?.args ?? {}, roles = {};
+  if (!frame?.action) return null;
+  if (a.kind != null) roles.kind = String(a.kind).replace(/^composite:/, '').replace(/_/g, ' ');
+  if (a.thing != null) { if (!a.thingNoun) return null; roles.thing = a.thingNoun.replace(/_/g, ' '); }
+  if (a.value != null) roles.value = String(a.value).replace(/^"|"$/g, '').replace(/_/g, ' ');
+  if (a.attr != null) roles.attribute = String(a.attr).replace(/_/g, ' ');
+  const n = Number(a.amount ?? a.number);
+  if (Number.isFinite(n) && (a.amount ?? a.number) != null) roles.number = n;
+  return { act: frame.action, roles };
+}
+const packs = new Map();
+/** The language pack that composes requests (Romanian: src/lang/ro.mjs, loaded lazily), or null. */
+async function packOf(lang) {
+  if (lang !== 'ro') return null;
+  if (!packs.has(lang)) packs.set(lang, import('../lang/ro.mjs').then((m) => m.openLangRo()).catch(() => null));
+  return packs.get(lang);
+}
+
 export async function chipsInLanguage(items, lang, translator) {
   if (!lang || lang === 'en' || !items?.length) return items ?? [];
   const rules = translator?.rules ?? translator;
-  if (!rules?.translate) return [];
+  const pack = await packOf(lang);
+  if (!rules?.translate && !pack) return [];
   const out = [];
   for (const it of items) {
     try {
+      // COMPOSED (reviewer 2026-11-15 05:30, Q25 K4): the chip's frame said by the language world's request template of its act and roles (w.lang.ro.request), not translated
+      const req = pack?.request ? requestOf(it.frame) : null, composed = req ? pack.request(req) : null;
+      if (composed) { out.push({ ...it, text: composed, en: it.text, composed: true }); continue; }
+      if (!rules?.translate) continue;
       // a name like c1 (a diagram node, a seat) is kept as it is, as the reply tables keep a name ({w}): it goes through the translator as a name it does not touch
       const ids = [...new Set(it.text.match(ID) ?? [])], hold = (i) => `Zq${'abcdefghij'[i]}`;
       const r = await rules.translate(ids.reduce((t, id, i) => t.replace(new RegExp(`\\b${id}\\b`, 'g'), hold(i)), it.text), { from: 'en', to: lang });

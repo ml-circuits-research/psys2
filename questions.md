@@ -720,3 +720,12 @@ PSys2 now keeps what the user says about themselves as w.person facts of the ses
 [LIB]
 - **L1 `readFrames` for English**: it reads a determiner, a numeral and the list particle by `form=` (`w.lang.ro.det form=`), but w.lang.en writes `w.lang.en.det text=`, `w.lang.en.numeral text= value=` and has no `w.lang.en.particle kind=conjunction meaning=and`. The host gives these in the library's shape to the frames' World (an adapter in src/dialog/person.mjs); wanted: `readFrames` reads `text=` too (or the language world's key names are an option), and an "and" for lists.
 - **L2 `readFrames` and apostrophes**: tokens keep the apostrophe ("don't") while the frames write "dont" / "i m": the host removes apostrophes before reading.
+
+## Q29 [KNOW] [LIB] (worker, 2026-11-15) — Romanian replies and chips on the catalog's templates: what is missing
+PSys2 now composes Romanian replies from `w.lang.ro.reply` (name, CLDR count, roles) and chips from `w.lang.ro.request` (act, roles); src/lang/ro.local.mjs keeps only what the catalog lacks, in the catalog's key shape.
+[KNOW]
+- **K1 three reply names the application composes**: `diagram.shaped` ("am desenat o diagramă în formă de {thing}: {nodes} pe contur, unite în ordine"; done.make.shape would say it if the dictionary had **`diagramă`** with the sense k.words.diagram.noun.1), `diagram.shaped.placed` ("am așezat cele {shapes} pe un contur în formă de {thing}, în sensul acelor de ceasornic, de sus"), `draw.scene` ("am desenat o scenă însorită pentru tine: {things}. Poți schimba orice, de exemplu „fă {example} {colour}”"). Wanted: these as `w.lang.ro.reply` (and `w.lang.en.reply`) names, or general names the host can map to (done.place.shape: placed along an outline; done.make.scene: a scene with a list).
+- **K2 lemmas with senses**: `nod` (k.words.node.noun.1), `diagramă`, `contur`, `scenă`.
+- **K3 requests with roles the chips use and the templates lack**: an ask chip ("What is the size of c1?": act ask, roles thing + attribute) has `ask.attribute` with shape topic.thing.what (role topic), not thing + attribute; the sampler's question chips are therefore still translated (and left out when only a calque).
+[LIB]
+- **L1 `realise` defaults**: the vendored realise (0.129) returns null for a lemma slot without all three features (`{kind}`, `{kind:num=pl}`); the catalog's templates leave the defaults out. The host adds num=sg, case=nomacc, def=no (src/lang/ro.mjs); wanted: the `base` option (or the template's defaults) applied by realise.
