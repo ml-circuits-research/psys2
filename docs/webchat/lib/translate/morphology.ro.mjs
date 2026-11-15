@@ -1,6 +1,6 @@
 // Romanian morphology: generates inflected forms from the lexicon and indexes them by
 // diacritic-insensitive key, so analysis is a table lookup (browser-safe).
-import { nouns, verbs, adjectives, words, names, numberWords } from './lexicon.ro-en.mjs?v=e72842636f';
+import { nouns, verbs, adjectives, words, names, numberWords } from './lexicon.ro-en.mjs?v=ce4e24b759';
 import { foldKey } from './normalize.mjs?v=6d473eb091';
 import { places } from './places.ro-en.mjs?v=97dc087c2a';
 import { pluralEn, pastEn } from './inflect.en.mjs?v=5b2e62d57a';

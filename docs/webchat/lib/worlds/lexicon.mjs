@@ -3,7 +3,7 @@
  * Built once per WorldSet (memoized).
  */
 import { singularLemma } from '../formalizer/rules/lemma.mjs?v=b810124a5c';
-import { OpenWords, probeOf } from '../knowledge/open-words.mjs?v=5bf8ab9446';
+import { OpenWords, probeOf } from '../knowledge/open-words.mjs?v=3ebe6cdc98';
 
 /** Index of every lexicon of every loaded world. */
 export function lexIndex(set) {

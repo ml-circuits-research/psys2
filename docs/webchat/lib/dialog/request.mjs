@@ -16,7 +16,7 @@ const NUM = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eigh
 const STOP = new Set('a an the of to in on at for with and or but is are was were be been being it its this that these those there here i you he she we they me my your our his her their them us do does did please just also so then very some any can could would should will shall may might must have has had am get got make made let lets want like one'.split(' '));
 const ACT = { draw: 'make', make: 'make', create: 'make', add: 'make', build: 'make', generate: 'make', give: 'make', put: 'make', paint: 'make', design: 'make', sketch: 'make', produce: 'make',
   write: 'write', compose: 'write', type: 'write', tell: 'write', play: 'play', sing: 'play', show: 'show', find: 'show', open: 'show',
-  arrange: 'arrange', break: 'arrange', split: 'arrange', divide: 'arrange', organise: 'arrange', organize: 'arrange', layout: 'arrange', lay: 'arrange', order: 'arrange', sort: 'arrange' };
+  arrange: 'arrange', break: 'arrange', split: 'arrange', divide: 'arrange', organise: 'arrange', organize: 'arrange', lay: 'arrange', order: 'arrange', sort: 'arrange' };
 const LENGTH_UNITS = /^(?:chapters?|paragraphs?|sections?|words?|pages?|parts?|verses?)$/;
 const WITH_STOP = /^(?:and|with|about|in|on|that|which|not|but|without)$/;
 
@@ -41,7 +41,7 @@ const findAll = (ws, alts) => { const out = []; for (let i = 0; i < ws.length; i
  * Read one request (the bridge reader). `english` the English of the turn; `world` the open tab's world (its schema kinds and request.sop); `first` the first reading
  * ({ complete, act }); `last` the last request of the tab (for reactions). Returns a w.request instance.
  */
-export function readRequest(english, { lang, world, kindWords = new Set(), first = null, lib = null, last = null } = {}) {
+export function readRequest(english, { lang, world, kindWords = new Set(), first = null, lib = null, last = null, known = null } = {}) {
   if (typeof lib?.readRequest === 'function') {
     try { const r = lib.readRequest(world, english, { dialogue: last }); if (r && Array.isArray(r.facts)) return { ...r, source: 'lib' }; } catch { /* the bridge reads */ }
   }
@@ -50,12 +50,25 @@ export function readRequest(english, { lang, world, kindWords = new Set(), first
   const use = (i, n = 1) => { for (let k = i; k < i + n; k++) if (ws[k]) used.add(k); };
   const G = groups(lang);
   const decl = declOf(world);
+  // slips of the reader's own words ("ndes", "arraws", "eiagram", "expectatiom", "creare"): a word no dictionary has, one edit from a word of this reader (two for long words), is that word
+  const corrections = [];
+  {
+    const vocab = new Set([...Object.keys(ACT), ...kindWords, ...[...kindWords].map((k) => `${k}s`), ...(decl ? [...decl.expect.keys()] : []), ...(decl?.layouts ?? []), 'nodes', 'arrows', 'layout', 'chapters', 'words', 'paragraphs',
+      ...Object.values(G).flat().flat()].filter((w) => w.length >= 4));
+    for (let i = 0; i < ws.length; i++) {
+      const w = ws[i];
+      if (w.length < 4 || vocab.has(w) || STOP.has(w) || /\d/.test(w) || (typeof known === 'function' && known(w))) continue;
+      let best = null;
+      for (const v of vocab) { if (Math.abs(v.length - w.length) > 2) continue; const d = editDistance(w, v, 2); if (d <= (w.length >= 7 ? 2 : 1) && (!best || d < best.d)) best = { v, d }; }
+      if (best) { corrections.push({ said: w, as: best.v }); ws[i] = best.v; }
+    }
+  }
   const facts = [];
   const fact = (f) => { if (!facts.some((x) => x.key === f.key && x.value === f.value && !!x.neg === !!f.neg)) facts.push(f); };
   const targets = new Set(decl ? [...decl.expect.keys()] : []);
   // act: the first verb the table knows (an imperative or after "to"/"please"/"can you")
   let act = null;
-  for (let i = 0; i < ws.length && i < 8; i++) { budget.tick('request.act'); if (Object.hasOwn(ACT, ws[i]) && ACT[ws[i]]) { act = ACT[ws[i]]; use(i); break; } }
+  for (let i = 0; i < ws.length && i < 8; i++) { budget.tick('request.act'); if (Object.hasOwn(ACT, ws[i]) && ACT[ws[i]] && (i === 0 || /^(?:please|,|you|to|and|then|now|lets|us|me|just|also|i|want|wanted)$/.test(ws[i - 1]))) { act = ACT[ws[i]]; use(i); break; } }   // a verb of the request leads its clause (an imperative); "a nice layout" is a noun
   // reactions (a turn about the last result)
   const hit = (g) => findAll(ws, G[g] ?? []);
   const reaction = (() => {
@@ -103,7 +116,12 @@ export function readRequest(english, { lang, world, kindWords = new Set(), first
     budget.tick('request.kind');
     const s = singular(ws[i]);
     const afterPrep = /^(?:in|into|on|onto|under|near|by|to|from|above|below|behind|beside|of)$/.test(ws[i - 1] ?? '') || /^(?:in|into|on|onto|under|near|by|to|from|above|below|behind|beside)$/.test(ws[i - 2] ?? '') && /^(?:a|an|the|this|that)$/.test(ws[i - 1] ?? '');
-    if (!target && (targets.has(s) || targets.has(ws[i])) && !afterPrep) { target = targets.has(s) ? s : ws[i]; use(i); continue; }   // "put the houses in the pond": a place, not the thing made
+    if (!target && (targets.has(s) || targets.has(ws[i])) && !afterPrep) {
+      target = targets.has(s) ? s : ws[i]; use(i);
+      // "make the diagram more beautiful": the thing that is there, changed; only a thing said with a / an / no article is a new one
+      if (/^(?:the|this|that|my|our|your|it)$/.test(ws[i - 1] ?? '') && act === 'make' && !/^(?:draw|create|add|build|generate|paint|sketch|design|produce)$/.test(ws.find((w) => Object.hasOwn(ACT, w)) ?? '')) act = 'change';
+      continue;
+    }   // "put the houses in the pond": a place, not the thing made
     if (negated.has(i)) continue;
     if (kindWords.has(s) && !facts.some((f) => f.key === 'count' && f.of === s && !kindWords.has(s))) {
       const generic = decl?.generic?.has(s);
@@ -156,7 +174,7 @@ export function readRequest(english, { lang, world, kindWords = new Set(), first
   if (ab >= 0) {
     let k = ab + 1; const topic = [];
     while (k < ws.length && !/^(?:with|in|that|which|not|but)$/.test(ws[k]) && !/^\d+$/.test(ws[k])) { topic.push(ws[k]); k++; }
-    if (topic.length) { fact({ key: 'about', value: topic.filter((w) => !/^(?:a|an|the)$/.test(w)).join(' ') }); use(ab, k - ab); }
+    if (topic.length) { fact({ key: 'about', value: topic.join(' ') }); use(ab, k - ab); }
   }
   // place ("in the corner" is read as a small extent above; "in Tenerife" is the map's): a capitalised name after in / at / of
   // the first reading: a complete reading uses every word it read
@@ -168,7 +186,19 @@ export function readRequest(english, { lang, world, kindWords = new Set(), first
     if (Object.hasOwn(ACT, ws[i])) continue;
     unread.push(ws[i]);
   }
-  return { act: act ?? first?.act ?? null, target, facts, reaction, used: [...used].map((i) => ws[i]).concat((first?.complete ? [] : [])), unread: [...new Set(unread)], english, source: 'bridge' };
+  return { corrections, act: act ?? first?.act ?? null, target, facts, reaction, used: [...used].map((i) => ws[i]).concat((first?.complete ? [] : [])), unread: [...new Set(unread)], english, source: 'bridge' };
+}
+
+/** Edit distance with a cap (above the cap: cap + 1). */
+function editDistance(a, b, cap) {
+  let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i]; let low = i;
+    for (let j = 1; j <= b.length; j++) { cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1), j > 1 && i > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1] ? prev[j - 2] + 1 : Infinity); low = Math.min(low, cur[j]); }
+    if (low > cap) return cap + 1;
+    prev = cur;
+  }
+  return prev[b.length];
 }
 
 const STEP_FACTOR = { tiny: 0.5, small: 0.6, default: 1, big: 1.6, huge: 2.2 };
@@ -213,7 +243,7 @@ export function violations(q, res, exp) {
   const len = q.facts.find((f) => f.key === 'size' || (f.key === 'length' && f.step));
   if (len && exp?.words && res.words != null) {
     const [lo, hi] = exp.words;
-    if (len.step === 'small' && res.words >= lo) out.push({ key: 'length', step: 'small' });
+    if (len.step === 'small' && res.words > Math.round(lo * (exp.small ?? 0.6))) out.push({ key: 'length', step: 'small' });   // short: below the small step of the usual length
     if (len.step === 'big' && res.words <= hi) out.push({ key: 'length', step: 'big' });
   }
   return out;
@@ -261,7 +291,7 @@ export function reviseRequest(last, q, { lib = null, result = null } = {}) {
     const main = Object.entries(result.kinds).sort((a, b) => b[1] - a[1])[0]?.[0];
     if (main && !q.facts.some((f) => f.key === 'kind') && !facts.some((x) => x.key === 'kind' && x.neg)) facts.push({ key: 'kind', value: main, neg: true, all: true });
   }
-  return { ...last, facts, reaction: q.reaction, revisedFrom: last.english, english: q.english, unread: q.unread, used: q.used };
+  return { ...last, facts, reaction: q.reaction, revisedFrom: last.english, english: q.english, unread: q.unread, used: q.used, corrections: q.corrections ?? [] };
 }
 
 /** The live w.dialogue of a session: per tab world { request, result, before, assumed, cannot, viaPlan }. JSON in the memory and the snapshot. */
@@ -279,6 +309,7 @@ const factWords = (f) => (f.key === 'count' ? (f.n != null ? `${f.n}` : f.min !=
 export function sayRequest(q, plan, { lib = null, cannot = [], revised = false } = {}) {
   if (typeof lib?.sayRequest === 'function') { try { const t = lib.sayRequest(q, plan); if (typeof t === 'string' && t) return t; } catch { /* the bridge says it */ } }
   const out = [];
+  if (q.corrections?.length) out.push(`I read ${q.corrections.map((c) => `"${c.said}" as "${c.as}"`).join(', ')}.`);
   if (revised) out.push('I changed the last result.');   // short plain sentences with a subject: they survive the translation of the reply
   if (plan?.value) out.push(String(plan.value).trim());
   if (plan?.assumed?.length) out.push(...plan.assumed);

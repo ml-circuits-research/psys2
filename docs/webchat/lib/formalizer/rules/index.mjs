@@ -7,26 +7,26 @@
  */
 import { guard } from '../guard.mjs?v=82a55329d9';
 import { perf } from '../perf.mjs?v=b81e032a17';
-import { lexIndex } from '../../worlds/lexicon.mjs?v=7f0cf3631e';
-import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=d9beb26cad';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=b0dc3269da';
+import { lexIndex } from '../../worlds/lexicon.mjs?v=f0499f971c';
+import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=58963d395d';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=bdd333504c';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
-import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=5069f90072';
-import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=2dc54c12bc';
-import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=97cbcc77ac';
-import { en } from '../../lang/en.mjs?v=8f226ecd72';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
+import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=ff05a8582c';
+import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=4b1e7beddb';
+import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=c8e7d9b55e';
+import { en } from '../../lang/en.mjs?v=37bb133489';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse } from '../../soplang/index.mjs?v=c57881f705';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
-import { annotateUnread } from '../completeness.mjs?v=5069f90072';
-import { isCatchAll } from '../typed-world.mjs?v=5069f90072';
+import { annotateUnread } from '../completeness.mjs?v=ff05a8582c';
+import { isCatchAll } from '../typed-world.mjs?v=ff05a8582c';
 
-export { FormSession } from './session.mjs?v=2dc54c12bc';
-export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=5069f90072';
-export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=d9beb26cad';
-export { compilePattern, matchTokens } from './matcher.mjs?v=b0dc3269da';
-export { singularLemma, pluralize } from './lemma.mjs?v=99f25611ee';
+export { FormSession } from './session.mjs?v=4b1e7beddb';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=ff05a8582c';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=58963d395d';
+export { compilePattern, matchTokens } from './matcher.mjs?v=bdd333504c';
+export { singularLemma, pluralize } from './lemma.mjs?v=b810124a5c';
 
 const compiledCache = new WeakMap();
 /** Compile (memoized) a pattern object; returns { compiled } or { error }. */

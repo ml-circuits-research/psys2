@@ -7,7 +7,7 @@ import * as D from './engine.mjs?v=5d7f11bd0d';
 import * as space from '../space/space.mjs?v=da302c7b07';
 import { splitThings } from '../acts/acts.mjs?v=dd4cd2d356';
 import { partsOf, kindKey, kindName } from './scene.mjs?v=ed7e433935';
-import * as P from './plan.mjs?v=8753ca0185';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
+import * as P from './plan.mjs?v=cc73c7ea64';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const TAIL = new Set(['there', 'here', 'now', 'added', 'drawn', 'too', 'also', 'please', 'pls', 'plz', 'thx', 'thanks', 'are', 'is', 'again', 'exactly', 'go']);   // words a role slot took that belong to the frame ("how many trees there are")
