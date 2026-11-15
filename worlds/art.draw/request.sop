@@ -1,0 +1,41 @@
+# Spec 28: what the acts of the drawing board honour (w.honour), the words of the request reader (w.words) and the defaults of the scenes it makes (w.expect) until k.expect / k.scenes.has
+# are in the catalog pin. parts= the kinds of a scene (the board's own kinds); must= the part that makes it that scene; count= the number of parts.
+
+@art.draw.honour.make w.honour
+    act=make
+    keys=kind,count,size,with,place,manner
+
+@art.draw.honour.arrange w.honour
+    act=arrange
+    keys=layout
+
+@art.draw.words w.words
+    kind=lake,river,tree,flower,fish,bird,duck,frog,cloud,sun,house,cat,dog,boat,mountain,hill,person,rock,grass
+    layout=layers
+
+@art.draw.expect.pond w.expect
+    of=pond
+    count=4..6
+    parts=lake,flower,fish,bird
+    must=lake
+    small=0.6
+    big=1.6
+    source="own, hand-checked (owner 2026-11-15: a small lake in a corner, maybe some water plants and a duck)"
+
+@art.draw.expect.forest w.expect
+    of=forest
+    count=5..7
+    parts=tree
+    must=tree
+    small=0.5
+    big=1.6
+    source="own, hand-checked"
+
+@art.draw.expect.garden w.expect
+    of=garden
+    count=6..8
+    parts=flower,tree,grass,bird
+    must=flower
+    small=0.6
+    big=1.5
+    source="own, hand-checked"
