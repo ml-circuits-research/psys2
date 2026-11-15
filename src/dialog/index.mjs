@@ -1298,7 +1298,7 @@ export class DialogSession {
       }
       if (g) guard.check('end');   // (checks the shared guard)   // a stage that swallowed the abort must not let a half-done turn through
       if (bt && tb.exceeded) throw tb.exceeded;   // a stage that swallowed BudgetExceeded must not let a half-done turn through
-      if (own && reply && typeof reply === 'object') reply.perf = perf.end();
+      if (own && reply && typeof reply === 'object') { reply.perf = perf.end(); if (bt && reply.perf) reply.perf.ticks = { total: tb.ticks, sites: { ...tb.bySite } }; }   // the turn's ticks per site next to its stage times (SCAN-PROFILE)
       if (bt && reply && typeof reply === 'object') reply.budget = budgetReport(tb);
       return reply;
     } catch (e) {
