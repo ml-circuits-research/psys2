@@ -1504,6 +1504,7 @@ export class DialogSession {
 
     const stateBefore = Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
     this.isession.form.turn = this._msg;   // the ids made while this turn is read say which turn made them (spec 15, "Namespaces")
+    this.isession.form.forgetUnheld((id) => this.isession.memory.get(id)?.type === 'core.agent');   // an agent is known to the reader only while the session holds its wire (Q23: a lost trial reading never hides an introduction)
     this.isession.rs?.beginTurn(this._msg);   // the library as it is now is what this turn can be taken back to (spec 15)
     this.isession.effects = [];
     const disc = this.discourse;
@@ -1706,7 +1707,7 @@ export class DialogSession {
         // a statement that cannot be true next to what is already known ("Tom has 3 apples" then "Tom ate 5") is said to the user and taken back (ops
         // reasoner; the matrix keeps it and flags it, spec 15): the world's `checkStatement` hook names the problem
         const rsWhy = this.isession.rs?.refuseFacts(facts, this.isession);
-        const bad = this.isession.rs ? (rsWhy ? `That does not add up. ${rsWhy}` : null) : this._refuseFacts(seg.match?.worldId, facts);
+        const bad = this.isession.rs ? (rsWhy ? (rsWhy.plain ? rsWhy.text : `That does not add up. ${rsWhy}`) : null) : this._refuseFacts(seg.match?.worldId, facts);
         if (bad) { lines.push([T(bad)]); statuses.push('conflicting'); }
         else {
           const ex = this.isession.rs?.ackExtras(facts);   // matrix reasoner: a default the library filled is told with the acknowledgement
