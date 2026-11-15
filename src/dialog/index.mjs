@@ -9,6 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
+import { composeReply, sayOf } from './composed-reply.mjs';
 import { reviewForeign } from './foreign-reading.mjs';
 import { installTextGen } from './textgen.mjs';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs';
@@ -142,7 +143,7 @@ const NO_RULES = { translate: (text) => ({ text: '', alignment: [], unknown: [St
  * translated together, `translate: false` parts (quoted user text, already translated examples) are kept verbatim.
  * A part with `fallback` is replaced by the translation of the fallback text when the translator reports unknown words.
  */
-export async function translateParts(parts, translator, lang, userWords = null) {
+export async function translateParts(parts, translator, lang, userWords = null, compose = composeReply) {
   const flat = parts.map((p) => ({ ...p }));
   let complete = true;   // RD5: a reply is either fully translated or left in English, never mixed
   // M4, output side (spec 06): one path for every language. The candidates of a run are the machine translators' (the browser Translator, the on-device model: each
@@ -203,6 +204,10 @@ export async function translateParts(parts, translator, lang, userWords = null) 
     i = j;
     const src = run.map((p) => p.text).join('');
     if (!src.trim()) { out.push({ text: src, translate: false }); continue; }
+    // COMPOSED REPLIES (spec 06): a sentence the application composed from a frame is said from the language world's template, before any translator (owner rule: the
+    // translators are for free text)
+    const say = run.length === 1 && run[0].say && lang !== 'en' && compose ? await compose(run[0].say, lang) : null;
+    if (say) { out.push({ text: fitFragment(src, say), translate: true, src }); routes.push('composed'); continue; }
     const c = await choose(src, { fallback: run.length === 1 ? run[0].fallback : null });
     if (c.route) { out.push({ text: fitFragment(src, c.text), translate: true, src }); routes.push(c.route); continue; }
     if (c.incomplete) complete = false;
@@ -214,7 +219,7 @@ export async function translateParts(parts, translator, lang, userWords = null) 
       routes.length = 0; routes.push('ro-generic');
       const quoted = flat.filter((p) => p.quote && !p.example && !p.reading).map((p) => (/^".*"$/s.test(p.text) ? `„${p.text.slice(1, -1)}”` : p.text));
       result = [{ text: NO_RO_REPLY + (quoted.length ? ` (${quoted.join(', ')})` : ''), translate: false }];
-    } else result = flat.map(({ join, fallback, en, src, incomplete, ...p }) => (join ? { text: p.text, translate: false } : { ...p, text: en ?? p.text }));
+    } else result = flat.map(({ join, fallback, en, src, incomplete, say: _say, ...p }) => (join ? { text: p.text, translate: false } : { ...p, text: en ?? p.text }));
   } else {
     if (fb && !routes.length && out.some((p) => p.translate)) routes.push('rules-translate');
     result = out.map(({ src, en, ...p }) => p);
@@ -1688,7 +1693,7 @@ export class DialogSession {
         const rendered = interp.render(this.isession, r);
         // RD9: a loose word that reads as "open this tab" ("robot" in "square eyes robot pls") must not add "You are already on the Talk tab." to the real answer
         const idleTab = seg.match?.worldId === 'ui.shell' && /\.bare/.test(seg.match.patternId ?? '') && /^You are already on the .+ tab\.$/.test(rendered) && segments.some((x) => x !== seg && !x.unparsed && x.match?.worldId && x.match.worldId !== 'ui.shell');
-        if (!idleTab) lines.push([T(rendered)]);
+        if (!idleTab) { const say = sayOf(r.envelope, rendered); lines.push([T(rendered, say ? { say } : {})]); }
         statuses.push(r.status);
         if (r.status === 'supported') { const wid = seg.match?.worldId; const t = tabOfWorld(set, wid); if (wid === 'ui.shell') followTab = null; else if (t) { followTab = t; followSeg = seg; } }   // an explicit navigation later in the message wins over the tab of an earlier segment
         ops.push(...r.ops);
@@ -1759,7 +1764,7 @@ export class DialogSession {
     let englishParts = [];
     lines.forEach((ln, i) => { if (i) englishParts.push({ text: ' ', translate: true, join: true }); englishParts.push(...ln); });
     const englishReply = englishParts.map((p) => p.text).join('');
-    let parts = englishParts.map(({ join, fallback, ...p }) => (join ? { text: p.text, translate: false } : p));
+    let parts = englishParts.map(({ join, fallback, say: _say, ...p }) => (join ? { text: p.text, translate: false } : p));
     let reply = englishReply;
     let replyRoutes = [];
     if (lang !== 'en' && translator) {
@@ -1768,7 +1773,7 @@ export class DialogSession {
         reply = parts.map((p) => p.text).join('');
         replyRoutes = parts.routes ?? [];
         for (const via of replyRoutes) translator.note?.(via, { direction: 'en->ro', strategy: via === 'translator-out' ? 'browser-api' : 'rules' });
-      } catch { parts = englishParts.map(({ join, fallback, ...p }) => p); reply = englishReply; }
+      } catch { parts = englishParts.map(({ join, fallback, say: _say, ...p }) => p); reply = englishReply; }
     }
     disc.noteShown(this._msg, reply);
     if (icpt?.reply) { disc.icptTurn = { turn: this._msg, text: english, reply: icpt.reply, world: icpt.worldId }; disc.noteWorld(icpt.worldId, english, icpt.reply, this._msg); }
