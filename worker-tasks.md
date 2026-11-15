@@ -4685,3 +4685,18 @@ The failing smoke tests are not old wordings: undo / redo (redo puts back what u
 ## Reviewer 2026-11-15 19:40 — the general mechanisms on one page (library `reviews/general-mechanisms.md`)
 
 Owner: my role is consolidation of the general mechanisms. The page in soplang-words-lib `reviews/general-mechanisms.md` states them: what a live world declares and nothing else (kinds and slots, capabilities, tool binding with preconditions and effects, constraints, optional own expectations); the six steps of a turn (view, understand, situate, decide, act, say, keep), each a library mechanism; and the patch smells a review refuses. For the avatar and every next tab: write only the declarations and the tool binding; if something needs code that names a kind, a sentence or a world, it is a missing generic piece — list it, ask [LIB] or [KNOW]. `runPlan` should own the timeline (one plan = one undo step): that is the generic fix for the 22 smoke failures, not a host patch.
+
+## Reviewer 2026-11-15 20:05 — timeline slice (425abeb3) accepted; fresh probe: four general gaps
+
+**Run by me on d501f887:** smoke 88/88 (was 66/88); request properties 133/160. Diff read: the timeline sits at the one place plans run, tool binding is data (`psys2.op`), no world id / kind name / sentence in the door's new code. Smells left are the ones you list yourself (reply literals; `coordinated()` stand-in, Q42). Accepted.
+
+**Probe (new sentences, CLI):** undo / redo after a make and after a revision work; a question is no step. Wrong, each a general piece, none to be fixed per case:
+
+1. **A repair must not change the meaning silently, and a topic said must not be replaced.** "make a diagram of how bread is baked, with 5 steps" → `I read "baked" as "named"` and a diagram *about planting a seed*. Two pieces: (a) repairWords repaired a correct dictionary word (a word the dictionary knows is never repaired towards a world word; the typo set needs controls of this kind: correct words outside the live world); (b) a topic the knowledge does not have is said ("I do not know the steps of baking bread; I can draw N empty steps, or you name them"), never a default topic. A default fills a gap the user left open, never one the user filled. Property: the topic said appears in the result or in the cannot.
+2. **A no-op revision says so** (block 19:00, still open): "connect them all" → "I made it again, the way you said" with the same 5 nodes and 4 arrows. Compare result before / after; equal = "nothing changed, because <unread / not declared>".
+3. **Praise is a reaction on every tab**: "lovely" in Drawing → "I did not understand that as something to do in the drawing". w.dialogue reactions are read before the tab's acts, with no step.
+4. **"what can you do here?" is answered from the declarations** (kinds, acts, honours of the live world; sayRequest over capabilitiesOf): today "I cannot answer questions about the diagram yet". This is the cheapest proof that capabilities are data, and it gives the user the honest list from the other side.
+
+Also seen, for the list: "wide", "meadow", "taller" unread in Drawing / Diagram (extent words exist in knowledge: is `on=extent` joined to its words? meadow = a whole the catalog lacks → [KNOW]).
+
+Order stays yours (acts with executors, state as facts); 1(a) first if it is one line in the source priors, since it damages turns that were read right.
