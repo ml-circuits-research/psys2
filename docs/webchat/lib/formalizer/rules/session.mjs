@@ -45,6 +45,16 @@ export class FormSession {
     return f;
   }
 
+  /**
+   * Forget the agents whose entity wire the session does not hold (Q23, dlg.kidsB#037): a trial reading of a world that lost the turn ("how many apples does Ben
+   * have?" read by talk, tried by kids.arith) or a statement taken back registered them here, so the next "Ben has 4 apples" made no `core.agent` wire and the
+   * world saw a reference to nobody ("Must refer to a core.agent wire", or the id "e.ben" in the reply). `held(id)` says whether the session holds the wire.
+   */
+  forgetUnheld(held) {
+    for (const [id, a] of this.agents) if (!a.special && !held(id)) this.agents.delete(id);
+    this.recent = this.recent.filter((id) => this.agents.has(id));
+  }
+
   nextSeq() { return ++this._seq; }
   /** A new wire id: `w7`, or `t12_w7` while turn 12 is being read (the counter is the session's, so an id is never made twice either way). */
   freshId(prefix = 'w') { const n = ++this._ids; return this.turn == null ? prefix + n : `t${this.turn}_${prefix}${n}`; }

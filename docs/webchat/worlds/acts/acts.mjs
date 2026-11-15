@@ -97,6 +97,9 @@ export function parseSchema(wires) {
   if (vals(sw, 'lex').length) schema.lexicons = vals(sw, 'lex');   // shared lexicons beyond acts / space / lang the world defines itself (lexicon.extra.sop)
   if (val(sw, 'boost')) schema.boost = Number(val(sw, 'boost'));
   if (val(sw, 'sample')) schema.sample = val(sw, 'sample');
+  for (const [k, key] of [['sample.other', 'sampleOther'], ['sample.place', 'samplePlace'], ['sample.name', 'sampleName']]) if (val(sw, k)) schema[key] = val(sw, k);   // the world's own things of its examples (exampleOf)
+  if (vals(sw, 'sample.word').length) schema.sampleWords = vals(sw, 'sample.word');
+  if (vals(sw, 'canonical.not').length) schema.canonicalNot = vals(sw, 'canonical.not');   // frame ids whose example this world does not read on its own tab: never offered as help (the gap is a ledger row)
   if (vals(sw, 'thing').length) schema.things = vals(sw, 'thing').map((t) => { const [path, kind, id, name, only] = String(t).split(':'); return { path, kind, ...(id ? { id } : {}), ...(name ? { name } : {}), ...(String(only ?? '').split('+').includes('dice') ? { diceOnly: true } : {}), ...(/(?:^|\+)active=(\w+)/.exec(only ?? '') ? { active: /(?:^|\+)active=(\w+)/.exec(only)[1] } : {}) }; });   // thing=<state path>:<kind>[:<id key>[:<name key>]]: where the world keeps the things a person can point at when they are not `state.items` (spec 25: the referents are derived from the schema and the state, the same way in every world)
   if (vals(sw, 'canonical').length) schema.canonical = vals(sw, 'canonical');   // frame-id prefixes whose examples are offered as help (a reader's "Add a document." is a true but useless example): `canonical=r.` marks the frames of the set that names its own
   if (val(sw, 'hooks')) schema.hooks = val(sw, 'hooks');   // a sibling module with the world's hooks (knowledge, domain effects, projection): host code the schema cannot say
@@ -179,8 +182,6 @@ const expandCore = (m, ns) => m.replace(/\[V\.(\w+)\|/g, '[$acts.verb.$1|').repl
 const wordsLex = (id, doc, words, cls = 'modifier', extend = null, open = null) => `@${id} core.lexicon\n    class=${cls}\n    doc=${JSON.stringify(doc)}\n${extend ? `    extends=${extend}\n` : ''}${open?.[0] === '@colour' ? '    open=colour\n' : open?.length ? `    open=knowledge\n${open.map((c) => `    catalog=${c}\n`).join('')}` : ''}${words.map((w) => `    word=${w.replace(/\s+/g, '_')}`).join('\n')}\n`;
 
 /** The generated files of a schema world: { 'lexicon.sop', 'patterns.sop', 'operations.sop', 'templates.sop' } as text. `ns` is the world's namespace. */
-/** An example is offered to people only when every noun of the seating plan it was written with is a word of this schema (a form written about seats is not shown in a world with none). */
-const sayable = (schema, ex) => [...ex.matchAll(/\b(seats?|guests?|tables?)\b/gi)].every((m) => [...kindWords(schema), ...attrWords(schema)].some((w) => w.toLowerCase() === m[1].toLowerCase()));
 export function generate(schema, ns, actsUrl = '../acts/acts.mjs', isCanon = () => false) {
   const note = `@gen.${ns}.note core.note\n    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."\n`;
   const lex = [note,
@@ -198,7 +199,7 @@ export function generate(schema, ns, actsUrl = '../acts/acts.mjs', isCanon = () 
   const boost = Number(schema.boost ?? 0);   // a world whose signals (named shapes, arrows, chart words) beat the open tab of another world
   for (const f of forms) {
     const emit = `@{_} core.request action=${ns}.${f.act}${f.mode ? ` arg.mode=${f.mode}` : ''}${Object.entries(f.lit ?? {}).map(([k, v]) => ` arg.${k}=\\"${v}\\"`).join('')}${f.args.map((a) => ` arg.${a}=\\"{${a}}\\"`).join('')} arg.text=\\"{segment}\\"`;
-    pats.push(`@pat.${ns}.${f.id} core.pattern\n    match="${expandMatch(f.match, ns)}"\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority + boost}\n    tabPriority=${(f.tabPriority ?? f.priority + 8) + boost}\n${schema.flags?.signal ? "    signal=true\n" : ""}${CLAIMING.has(f.id) || schema.flags?.claim ? '    tabClaim=true\n' : ''}${(f.tabOnly ?? (schema.tabOnly || (schema.flags?.tabUndo && (f.act === 'undo' || f.act === 'redo')))) ? "    tabOnly=true\n" : ""}    example=${JSON.stringify(exampleOf(schema, f))}\n${isCanon(exampleOf(schema, f)) && sayable(schema, exampleOf(schema, f)) && (!schema.canonical || schema.canonical.some((x) => f.id.startsWith(x))) ? `    canonical=${JSON.stringify(exampleOf(schema, f))}\n` : ''}`);
+    pats.push(`@pat.${ns}.${f.id} core.pattern\n    match="${expandMatch(f.match, ns)}"\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority + boost}\n    tabPriority=${(f.tabPriority ?? f.priority + 8) + boost}\n${schema.flags?.signal ? "    signal=true\n" : ""}${CLAIMING.has(f.id) || schema.flags?.claim ? '    tabClaim=true\n' : ''}${(f.tabOnly ?? (schema.tabOnly || (schema.flags?.tabUndo && (f.act === 'undo' || f.act === 'redo')))) ? "    tabOnly=true\n" : ""}    example=${JSON.stringify(exampleOf(schema, f))}\n${canonicalOf(schema, f, isCanon) ? `    canonical=${JSON.stringify(exampleOf(schema, f))}\n` : ''}`);
   }
   const used = [...new Set(forms.map((f) => f.act))];
   const own = (schema.own ?? []).map((o) => o.split(':'));
@@ -227,9 +228,64 @@ export const declaredExecutor = (json, hooks = {}) => ({
   sampleKnowledge: (ctx) => { try { return hooks.sampleKnowledge?.(ctx) ?? {}; } catch { return {}; } },
 });
 
+/**
+ * The example of a form for this world (Q23, reviewer 2026-11-15 04:00: canonical examples from the world's OWN sample things and kinds). The catalog writes the shared forms about a
+ * seating plan (tables, guests, Ann) and a drawing (a house in my picture); a world says which of its things stand in for them:
+ *   sample=<kind>          the thing of its examples (table -> it; a guest, when the world has no guests -> it)
+ *   sample.other=<kind>    a second thing ("Connect table 1 to table 2", "next to the tree"); default: the sample
+ *   sample.place=<kind>    the thing others are in or at ("Add a guest at table 1"); without it a form about a place has no example of this world
+ *   sample.name=<name>     a name a thing of the world may have ("Ann")
+ *   sample.word=<word>     other words the world's examples may use as they are (the bars of a chart: "pears")
+ * A number is kept only for a numbered kind ("table 2" -> "chart 2", else "the circle").
+ */
+const article = (det, w) => (/^an?$/i.test(det) ? `${det[0] === 'A' ? 'A' : 'a'}${/^[aeiou]/i.test(w) ? 'n' : ''}` : det);
+const exampleOf = (schema, f) => {
+  const s = schema.sample;
+  if (!s) return f.example;
+  const plural = (k) => schema.kinds[k]?.plural ?? `${k}s`;
+  const numbered = (k) => !!schema.kinds[k]?.numbered;
+  const hasKind = (w) => kindWords(schema).some((x) => x.toLowerCase() === w.toLowerCase());
+  const atPlace = f.args.includes('place') && f.act !== 'connect';   // "connect table 1 to table 2": the place of connect is the second thing
+  if (atPlace && !schema.samplePlace) return f.example;   // a form about a place, in a world that names none: left as written (not sayable here, so never canonical)
+  let n = 0;
+  const thing = (det, num, kind) => {
+    const k = kind ?? (n++ ? (schema.sampleOther ?? s) : s);
+    if (num && numbered(k)) return `${det ? `${article(det.trim(), k)} ` : ''}${k}${num}`;
+    return `${det ? article(det.trim(), k) : 'the'} ${k}`;
+  };
+  const cap = (t, m) => (/^[A-Z]/.test(m) ? t[0].toUpperCase() + t.slice(1) : t);
+  let ex = f.example;
+  if (!hasKind('guest')) {
+    ex = ex.replace(/\b((?:an?|the) )?guests\b/gi, (m, det) => cap(`${det ?? ''}${plural(s)}`, m))
+      .replace(/\b((?:an?|the) )?guest(?: (?!called|named)[A-Z]\w*)?\b/g, (m, det) => cap(thing(det, null, s), m));
+  }
+  ex = ex.replace(/\b((?:an?|the) )?tables\b/gi, (m, det) => cap(`${det ?? ''}${plural(atPlace ? schema.samplePlace : s)}`, m))
+    .replace(/\b((?:an?|the) )?table( \d+)?\b/gi, (m, det, num) => cap(thing(det, num, atPlace ? schema.samplePlace : undefined), m));
+  if (schema.sampleName) ex = ex.replace(/\b(?:Ann|Maria)\b/g, schema.sampleName);
+  return ex;
+};
+/**
+ * The nouns the catalog writes its shared examples with. An example is offered to people (canonical) only when every one of these it uses is a word of this world: one of its kinds,
+ * attributes or values, the noun and view words, the sample words of its schema, a colour when it has a colour attribute, and an everyday thing when a kind takes any thing of the
+ * knowledge (the drawing). So the charts never offer "Is there a house in my picture?" and the avatar never "Kick the guest Ann out." (Q23).
+ */
+const EXAMPLE_PEOPLE = ['ann', 'maria'];
+const EXAMPLE_COLOURS = ['red', 'blue', 'green', 'pink', 'yellow', 'teal', 'purple', 'colour', 'color', 'colours', 'colors', 'rainbow', 'pastel'];
+const EXAMPLE_THINGS = ['house', 'houses', 'tree', 'sun', 'star', 'stars', 'sky', 'cloud', 'door', 'snow', 'car', 'boat', 'paper', 'cat', 'dog', 'sofa', 'bed', 'hat', 'crown', 'wheel', 'cake', 'slices', 'scissors', 'card', 'deck', 'boxes', 'circle', 'square'];
+const EXAMPLE_WORLD = ['draw', 'drew', 'table', 'tables', 'guest', 'guests', 'seat', 'seats', 'picture', 'drawing', 'page', 'chart', 'charts', 'bar', 'bars', 'graph', 'pie', 'legend', 'title', 'stacking', 'stacked', 'arrow', 'arrows', 'shape', 'diagram', 'flowchart', 'teams',
+  'pears', 'cherries', 'grapes', 'melons', 'plums', 'apples', 'kiwis', 'bananas', 'fruit', 'snacks', 'zoo', 'bikes', 'scooters', 'values', 'eyes', 'glasses', 'beard', 'nose', 'expression'];
+const EXAMPLE_NOUNS = new Set([...EXAMPLE_PEOPLE, ...EXAMPLE_COLOURS, ...EXAMPLE_THINGS, ...EXAMPLE_WORLD]);
+function worldWords(schema) {
+  const w = new Set([...kindWords(schema), ...attrWords(schema), ...valueWords(schema), schema.noun, ...(schema.view?.words ?? []), schema.sample, schema.sampleOther, schema.samplePlace, schema.sampleName, ...(schema.sampleWords ?? [])]
+    .filter(Boolean).flatMap((x) => String(x).toLowerCase().split(/[\s_]+/)).flatMap((x) => [x, `${x}s`, singular(x)]));
+  if (anyColour(schema) || Object.values(schema.attrs).some((a) => a.type === 'colour')) for (const c of EXAMPLE_COLOURS) w.add(c);
+  if (Object.values(schema.kinds).some((k) => k.any)) for (const t of EXAMPLE_THINGS) w.add(t);
+  return w;
+}
+const sayable = (schema, ex) => { const own = worldWords(schema); return (ex.toLowerCase().match(/[a-z]+/g) ?? []).every((t) => !EXAMPLE_NOUNS.has(t) || own.has(t)); };
+/** The canonical example of a form for this world, or null: the world's example, a clean sentence, every example noun of it the world's own, and in the frames the schema offers. */
+const canonicalOf = (schema, f, isCanon) => { const ex = exampleOf(schema, f); return isCanon(ex) && sayable(schema, ex) && !schema.canonicalNot?.includes(f.id) && (!schema.canonical || schema.canonical.some((x) => f.id.startsWith(x))) ? ex : null; };
 /** Help examples of a world, one per form it has (the canonical examples of its generated patterns). */
-/** The example of a form for this world: the forms are written about tables; `sample=<kind>` says which kind a world uses in its examples. */
-const exampleOf = (schema, f) => (schema.sample ? f.example.replace(/\btables\b/gi, (m) => (schema.kinds[schema.sample]?.plural ?? `${schema.sample}s`)).replace(/\btable( \d+)?\b/gi, schema.sample) : f.example);
 export const examples = (schema) => formsFor(schema).map((f) => exampleOf(schema, f));
 /** The words of the `meta.worlds` card: act words, thing words (kinds and attributes), the frame words. Generated, so a schema world needs no hand-made card. */
 export function card(schema) {
