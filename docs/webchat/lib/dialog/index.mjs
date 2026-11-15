@@ -10,10 +10,10 @@
  * Without it all input is treated as English.
  */
 import { composeReply, sayOf } from './composed-reply.mjs?v=22ed9b4e0b';
-import { reviewForeign } from './foreign-reading.mjs?v=e2d6a7bb9f';
+import { reviewForeign } from './foreign-reading.mjs?v=f0ad058d81';
 import { installTextGen } from './textgen.mjs?v=a8831e42a2';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=b15d2b1fc3';
-import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=1245e8cc5c';
+import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=32dbe8d52f';
 import { validateWorldSet } from '../worlds/validate.mjs?v=75926f8dad';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=b15d2b1fc3';
 import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=e8a1f00976';
@@ -38,10 +38,10 @@ import { checkValues } from './value-check.mjs?v=ecdb41a5a2';
 import { attachValues } from '../knowledge/values.mjs?v=0d60c4bf76';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=5bf8ab9446';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f39042bd20';
-import { Discourse } from './discourse.mjs?v=d44439697b';
-import { Dialogue } from './dialogue.mjs?v=c8e3f058f9';
+import { Discourse } from './discourse.mjs?v=b1554d5921';
+import { Dialogue } from './dialogue.mjs?v=d842fb3b3d';
 import { turnSteps } from './steps.mjs?v=44af51b084';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=d96129b561';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=637191b3b9';
 import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=dfdc369a7d';
 import { personTurn } from './person.mjs?v=2aaf2fdacf';
 import { proposeByTypes } from './typed-reader.mjs?v=ecd7342ebe';
@@ -276,7 +276,7 @@ import { languageCommand } from '../translate/language-command.mjs?v=af45c6bf2e'
 import { withSubject, polishReply } from '../translate/register.mjs?v=70784114d4';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=46f9b50001';
 import { intentStep, weakReading } from './intent.mjs?v=30d2fcc4e2';
-import { readRequest, reviseRequest, violations, notHonoured, wantedRange, sayRequest } from './request.mjs?v=6637e881bd';
+import { readRequest, reviseRequest, violations, notHonoured, wantedRange, sayRequest } from './request.mjs?v=4c766a9c87';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1665,7 +1665,7 @@ export class DialogSession {
     const missing = cannot.filter((c) => !shown.includes(String(c.words).toLowerCase().split(' ').at(-1)));
     if (missing.length) add.push(['I cannot do this here:', missing.map((c) => c.words)]);
     const unread = (q.unread ?? []).filter((w) => !shown.includes(w));
-    if (unread.length && !/did not understand|could not read|understood only part/i.test(shown)) add.push(['I did not use these words:', unread]);
+    if (unread.length && (reply.statuses ?? []).every((x) => x === 'supported') && !/did not understand|could not read|understood only part/i.test(shown)) add.push(['I did not use these words:', unread]);   // a refusal or a question back already says what it could not do
     if (!add.length) return reply;
     const lang = opts?.language ?? this.language;
     const tr = this.engine.translator;
