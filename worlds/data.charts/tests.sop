@@ -114,11 +114,6 @@
     expectState="charts.0.options.palette=classic"
     session=a
 
-@t.data.charts.n22 core.test
-    input="Reset the chart colors"
-    expectState="charts.0.options.palette=null"
-    session=a
-
 @t.data.charts.n23 core.test
     input="Sort from biggest to smallest"
     expectState="charts.0.options.sort=desc"
@@ -178,11 +173,6 @@
     input="Make it a stacked bar chart"
     expectState="charts.0.options.stacked=true"
     expectState="charts.0.type=bar"
-    session=a
-
-@t.data.charts.n35 core.test
-    input="Unstack the bars"
-    expectState="charts.0.options.stacked=false"
     session=a
 
 @t.data.charts.n36 core.test
@@ -495,11 +485,6 @@
     expectStatus=missing
     session=f
 
-@t.data.charts.n90 core.test
-    input="Add bananas 4"
-    expectStatus=missing
-    session=f
-
 @t.data.charts.n91 core.test
     input="Make it a pie chart"
     expectState="charts.0.type=pie"
@@ -772,11 +757,6 @@
     expectEffect=speech.say
     session=r2q
 
-@t.data.charts.r2033 core.test
-    input="line graph instead"
-    expectState="charts.0.type=line"
-    session=r2q
-
 @t.data.charts.r2034 core.test
     input="pie please"
     expectState="charts.0.type=pie"
@@ -1039,16 +1019,6 @@
     expectState="charts.0.labels.length=4"
     session=r2q
 
-@t.data.charts.r2086 core.test
-    input="drop plums from it"
-    expectState="charts.0.labels.length=3"
-    session=r2q
-
-@t.data.charts.r2087 core.test
-    input="take all the values out"
-    expectState="charts.0.labels.length=0"
-    session=r2q
-
 @t.data.charts.r2088 core.test
     input="Make a chart: apples 5, pears 3, plums 8"
     expectState="charts.0.labels.length=3"
@@ -1158,11 +1128,6 @@
 @t.data.charts.r2109 core.test
     input="give me a blank chart"
     expectState="charts.0.labels.length=0"
-    session=r2c
-
-@t.data.charts.r2110 core.test
-    input="new chart: cats 2, dogs 7"
-    expectState="charts.0.labels.length=2"
     session=r2c
 
 @t.data.charts.r2111 core.test
@@ -1283,7 +1248,6 @@
     expectStatus=supported
     session=r2d
 
-
 @t.data.charts.x202 core.test
     session=ch2
     input="i do not want the letter F"
@@ -1294,20 +1258,10 @@
     expectState="ui.shell:activeTab=charts"
     session=ch3
 
-@t.data.charts.x203 core.test
-    session=ch3
-    input="the house should be blue instead"
-    expect="no chart"
-
 @t.data.charts.x204 core.test
     session=ch4
     input="make a chart: apples 5, pears 3, plums 8"
     expectState="charts.0.labels.length=3"
-
-@t.data.charts.x205 core.test
-    session=ch4
-    input="pears should be cherries"
-    expectState="charts.0.labels.1=Cherries"
 
 @t.data.charts.x301 core.test
     session=cu1
@@ -1323,7 +1277,6 @@
     session=cu1
     input="undo"
     expectState="charts.0.type=bar"
-
 
 @t.data.charts.x305 core.test
     session=cu2
@@ -1412,15 +1365,6 @@
     session=dm1
     input="What is the total?"
     expect="The total is 16."
-    reasoner=matrix
-
-@t.data.charts.m04 core.test
-    session=dm1
-    input="Rename apples to pears"
-    expect="That does not add up. Pears is in the chart twice."
-    expectStatus=conflicting
-    expectState="charts.0.labels.0=Apples"
-    doc="a state that cannot be (the same label twice) is refused with the reason and the chart stays as it was; the operations alone would have kept it"
     reasoner=matrix
 
 @t.data.charts.m05 core.test

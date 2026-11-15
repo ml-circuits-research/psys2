@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "04987ded",
-  "tree": "b246a0839e0404e9",
+  "build": "20543e2c",
+  "tree": "704d91aa5c7742d2",
   "catalog": "ab3b2ab868ba27868f88d2dbdfce3433a699ece6",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -14,17 +14,17 @@
    "turns": 579,
    "judged": 181,
    "right": 130,
-   "partly": 13,
-   "wrong": 38,
+   "partly": 14,
+   "wrong": 37,
    "open": 13,
    "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 330,
+    "executed": 331,
     "refused": 3,
-    "asked": 8,
-    "not_understood": 168,
-    "other_world": 70
+    "asked": 6,
+    "not_understood": 170,
+    "other_world": 69
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -94,17 +94,17 @@
    "turns": 579,
    "judged": 181,
    "right": 130,
-   "partly": 13,
-   "wrong": 38,
+   "partly": 14,
+   "wrong": 37,
    "open": 13,
    "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 330,
+    "executed": 331,
     "refused": 3,
-    "asked": 8,
-    "not_understood": 169,
-    "other_world": 69
+    "asked": 6,
+    "not_understood": 171,
+    "other_world": 68
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -185,14 +185,14 @@
   "build": "04987ded",
   "tree": "b246a0839e0404e9"
  },
- "failing_matrix": 252,
- "failing_ops": 252,
+ "failing_matrix": 253,
+ "failing_ops": 253,
  "ops_only": 0,
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 66,
-   "both_reasoners": 66,
+   "count": 67,
+   "both_reasoners": 67,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -218,8 +218,8 @@
   },
   {
    "cause": "bare word or two-word fragment not read",
-   "count": 33,
-   "both_reasoners": 33,
+   "count": 32,
+   "both_reasoners": 32,
    "examples": [
     {
      "text": "mcdavatara human",
@@ -229,7 +229,7 @@
     {
      "text": "yes",
      "tab": "guess",
-     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
+     "happened": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
     },
     {
      "text": "no",
@@ -272,8 +272,8 @@
   },
   {
    "cause": "sentence not read by any world (no cause key)",
-   "count": 29,
-   "both_reasoners": 29,
+   "count": 30,
+   "both_reasoners": 30,
    "examples": [
     {
      "text": "now be a human",
@@ -286,27 +286,22 @@
      "happened": "I did not understand \"become a women\". Did you mean \"Become a woman.\"? [outcome: not_understood]"
     },
     {
+     "text": "let’s play guess the animal",
+     "tab": "guess",
+     "happened": "OK, I wrote a new paragraph (5 words). [outcome: not_understood]"
+    },
+    {
      "text": "start x and 0",
      "tab": "tictactoe",
      "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
-    },
-    {
-     "text": "are the new paragraph",
-     "tab": "editor",
-     "happened": "I did not understand \"are the new paragraph\". Did you mean \"Add the new paragraph.\"? [outcome: not_understood]"
     }
    ]
   },
   {
    "cause": "a world other than the open tab took the turn",
-   "count": 26,
-   "both_reasoners": 26,
+   "count": 25,
+   "both_reasoners": 25,
    "examples": [
-    {
-     "text": "let’s play guess the animal",
-     "tab": "guess",
-     "happened": "What should I play? For example a note, a chord or a song. I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the o"
-    },
     {
      "text": "draw a sun and a house",
      "tab": "tictactoe",
@@ -321,6 +316,11 @@
      "text": "Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?",
      "tab": "robot",
      "happened": "OK, Tom has 15 apples. OK, Tom gave Ana 12 apples. Tom has 3 apples. [outcome: other_world]"
+    },
+    {
+     "text": "Tom has 5 apples. He gives 8 to Ana. How many apples does Tom have?",
+     "tab": "robot",
+     "happened": "OK, Tom has 5 apples. That does not add up. Tom only had 5 apples, so Tom cannot give away 8. Tom has 5 apples. [outcome: other_world]"
     }
    ]
   },
@@ -364,7 +364,7 @@
     {
      "text": "create a diagram",
      "tab": "diagram",
-     "happened": "I drew a random network diagram with nine shapes. It is about Serbia. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:shape"
+     "happened": "I drew a random timeline diagram with four shapes. It is about seasons. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:sha"
     },
     {
      "text": "add a box",
@@ -386,7 +386,7 @@
     {
      "text": "sa fie diferite",
      "tab": "draw",
-     "happened": "I did not understand \"sa fie diferite\". Did you mean \"Încearcă o pălărie diferită.\"? [outcome: not_understood; wrong; not_understood]"
+     "happened": "I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon "
     },
     {
      "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
@@ -396,7 +396,7 @@
     {
      "text": "cum ai ajuns a deschisi joculd e sah? e ridicol",
      "tab": "chess",
-     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"T"
     },
     {
      "text": "mai jos, sta pe leagan nu pe el",
@@ -429,6 +429,33 @@
      "text": "desene asta",
      "tab": "map",
      "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
+    }
+   ]
+  },
+  {
+   "cause": "fragment / list split",
+   "count": 5,
+   "both_reasoners": 5,
+   "examples": [
+    {
+     "text": "eyeglasses",
+     "tab": "robot",
+     "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; open]"
+    },
+    {
+     "text": "a women",
+     "tab": "robot",
+     "happened": "I am not sure how “a women” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+    },
+    {
+     "text": "new game",
+     "tab": "guess",
+     "happened": "I am not sure how “new name” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+    },
+    {
+     "text": "cap",
+     "tab": "draw",
+     "happened": "I am not sure how “A head” fits what we were doing. Please say the whole request. [outcome: not_understood]"
     }
    ]
   },
@@ -510,33 +537,6 @@
      "text": "muta casa din dreapta mai la dreapta",
      "tab": "draw",
      "happened": "I can not find a house in your picture. [outcome: executed; wrong; reply_not:took the last one|can not find]"
-    }
-   ]
-  },
-  {
-   "cause": "fragment / list split",
-   "count": 4,
-   "both_reasoners": 4,
-   "examples": [
-    {
-     "text": "eyeglasses",
-     "tab": "robot",
-     "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; open]"
-    },
-    {
-     "text": "a women",
-     "tab": "robot",
-     "happened": "I am not sure how “a women” fits what we were doing. Please say the whole request. [outcome: not_understood]"
-    },
-    {
-     "text": "cap",
-     "tab": "draw",
-     "happened": "I am not sure how “A head” fits what we were doing. Please say the whole request. [outcome: not_understood]"
-    },
-    {
-     "text": "turn it in a human again",
-     "tab": "robot",
-     "happened": "I am not sure how “turn it in a human again” fits what we were doing. Please say the whole request. [outcome: not_understood]"
     }
    ]
   },

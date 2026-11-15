@@ -13,15 +13,20 @@ const list = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', '
 export function initialState() { return { things: [], views: {}, learned: [], n: 0 }; }
 
 /** The aspects of a stored thing, from what the session's knowledge says about its kind (the settled lookup, learned wires included). */
+// The aspects depend on the kind, the name, which attributes it has (not their values), whether it has parts, what the view declares and what the knowledge says: they are kept
+// under that key by the knowledge (`memo`, OVERLAY-MEMO, spec 06 "Compute budgets") while the knowledge answers the same, since every operation call syncs every object of the
+// picture (a turn asked the aspects of each object, and a `peek` of each of its ancestors, again for every call). A copy is handed out (the thing keeps its own).
 function aspectsFor(ctx) {
   const k = ctx.knowledge;
-  const lend = (p) => { const t = k?.peek?.(p); return t ? Object.keys(aspectsOf({ kind: p, th: t })).filter((a) => a !== 'textual' && a !== 'relational') : []; };
+  const memo = typeof k?.memo === 'function' ? (name, key, build) => k.memo(name, key, build) : (_n, _k, build) => build();
+  const lend = (p) => memo('things.lend', p, () => { const t = k?.peek?.(p); return t ? Object.keys(aspectsOf({ kind: p, th: t })).filter((a) => a !== 'textual' && a !== 'relational') : []; });
   return (t, it = {}) => {
     const kind = String(t.kind).toLowerCase().replace(/_/g, ' ');
-    return aspectsOf({
+    const key = JSON.stringify([kind, t.name ?? null, Object.keys(t.attrs ?? {}), !!t.parts?.length, it.declared ?? [], it.attrTypes ?? {}]);
+    return { ...memo('things.aspects', key, () => aspectsOf({
       kind, attrs: t.attrs, parts: t.parts, th: k?.peek?.(t.name ? t.name : kind) ?? k?.peek?.(kind) ?? null, declared: it.declared ?? [], attrTypes: it.attrTypes ?? {},
       ancestors: k?.ancestors?.(kind) ?? [], lend,
-    });
+    })) };
   };
 }
 

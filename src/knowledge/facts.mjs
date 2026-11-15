@@ -56,6 +56,14 @@ export function parseFact(line) {
 
 const one = (r, k) => r.f[k]?.[0];
 
+/** A Map whose generation moves on every change: what `peek` can answer is the same while the generation is (readers that derive data from settled lookups key it on `generation()`). */
+class GenMap extends Map {
+  gen = 0;
+  set(k, v) { this.gen++; return super.set(k, v); }
+  delete(k) { this.gen++; return super.delete(k); }
+  clear() { this.gen++; super.clear(); }
+}
+
 export function createFacts({ source, name = 'catalog' }) {
   let vocab = null, vocabLoading = null;
   const shards = new Map();   // shard id -> Promise<facts[]>
@@ -64,7 +72,7 @@ export function createFacts({ source, name = 'catalog' }) {
   const parsedShard = async (sid) => { if (!parsed.has(sid)) { const lines = await loadShard(sid); try { parsed.set(sid, parseShard(lines.join('\n'))); } catch { parsed.set(sid, null); } } return parsed.get(sid); };
   let index = null, indexLoading = null;   // index.json of the catalog: worlds { id, exports (types), shards: [{ id, keys, sources }] }
   let down = false;           // the last read of the vocabulary or of a shard found the catalog unreachable (offline, too slow); cleared by the next good read
-  const things = new Map();   // lemma -> thing | null  (settled lookups, readable synchronously through `peek`)
+  const things = new GenMap();   // lemma -> thing | null  (settled lookups, readable synchronously through `peek`); its generation moves with every change (OVERLAY-MEMO)
 
   const loadVocab = () => vocabLoading ??= (async () => {
     const t = clock();
@@ -396,6 +404,8 @@ export function createFacts({ source, name = 'catalog' }) {
     },
     /** The settled lookup of a word, or undefined when it has not been looked up (a synchronous read for operations: `ctx.knowledge.peek`). null = looked up, not known. */
     peek(word) { for (const lc of lemmaCandidates(word)) if (things.has(lc)) return things.get(lc); return undefined; },
+    /** The generation of the settled lookups: `peek` gives the same answers while it is the same (OVERLAY-MEMO: the session overlay keys its cache on it). */
+    generation: () => things.gen,
     /**
      * How many `kind` ("legs") a thing has: the number a word sense states ("eight legs"), else the parts of its drawing (`from: 'parts'`: a picture, not a fact: the
      * hand-written cat shows two legs of four). null when nothing says.

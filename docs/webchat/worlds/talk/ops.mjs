@@ -10,10 +10,10 @@
 // the host through `openSlots`, spec 17), or from the basic things shipped with the drawing world. No fact: the plain "I don't know that yet" and no card.
 // Effect: talk.card { id } asks the Talk tab to show the card inside the answer; chat.suggest { items } shows suggestions as chips.
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42';
-import * as space from '../space/space.mjs?v=15c16cca4d';
-import { habitatSentence } from '../../lib/knowledge/commonsense.mjs?v=7fdbc6c294';
-import { colourName, numberValue } from '../../lib/knowledge/values.mjs?v=2bd2c8e37d';   // the one colour reader (k.values)
-import * as R from './records.mjs?v=55fbdcf4e2';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
+import * as space from '../space/space.mjs?v=72e3867df9';
+import { habitatSentence } from '../../lib/knowledge/commonsense.mjs?v=a83dfa4db3';
+import { colourName, numberValue } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
+import * as R from './records.mjs?v=96444d922d';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
 
 export const MAX_CARDS = 40;
 const MAX_PARTS = 60;
@@ -136,7 +136,7 @@ function whatSentence(r, ctx) {
   if (own && sense) t += ` ${own}`;
   if (cs?.can?.length) t += ` It can ${list(cs.can)}.`;
   if (cs?.cannot?.length) t += ` It cannot ${list(cs.cannot)}.`;
-  if (cs?.material?.length) t += ` It is made of ${list(cs.material)}.`;
+  if (cs?.made_of?.length) t += ` It is made of ${list(cs.made_of)}.`;
   { const where = habitatSentence(ctx?.knowledge, name); if (where) t += ` ${where}`; }   // where it lives: the catalog or what the user taught, one lookup shared with the other views (src/knowledge/commonsense.mjs)
   return t;
 }
@@ -169,7 +169,7 @@ export function parts(ctx, { o, made } = {}) {
   }
   const topic = topicFor(ctx, r.name);
   const ns = partNames(r.parts), cs = r.th?.commonsense;
-  const material = made && cs?.material?.length ? `${cap(an(r.name))} is made of ${list(cs.material)}. ` : '';
+  const material = made && cs?.made_of?.length ? `${cap(an(r.name))} is made of ${list(cs.made_of)}. ` : '';
   if (!ns.length) {
     const t = material ? `${material.trim()} I do not know its parts yet.` : `I have a picture of ${an(r.name)}, but its parts have no names yet.`;
     return no('missing', t);

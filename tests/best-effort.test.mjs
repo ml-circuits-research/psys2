@@ -19,12 +19,7 @@ test('loose words are read as the most sensible sentence and the reply says so',
   assert.match(r.text, /I did not use "robot"/);
 });
 
-test('with the default world-aware veto, a guess that leaves out "robot" is offered, not executed', { todo: 'known failure, ledger class two readings: the generated bare form needs the kind at the end of the phrase, so the guess "square eyes" is not a candidate of the best-effort reader' }, async () => {
-  const s = engine.createSession({ language: 'en', formalizer: 'rules', bestEffort: true });
-  s.setWorldState('ui.shell', { activeTab: 'robot' });
-  const r = await s.send('square eyes robot pls');
-  assert.match(r.text, /Did you mean/);
-});
+// P3: "square eyes robot pls" with the default veto (the guess is not a candidate of the best-effort reader) is on the failure ledger; the todo marker is gone
 
 test('switched off, loose words stay "not understood"', async () => {
   const r = await ask('robot', 'square eyes robot pls', false);

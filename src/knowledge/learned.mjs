@@ -185,7 +185,33 @@ export function withLearned(base, read, readMem = null, memStore = null) {
   const o = Object.create(base);
   o.base = base;
   const any = (f) => f.mine.length || f.own.length || f.mem.length || f.typed.length;
-  o.peek = (word) => { const th = base.peek(word); return any(forWord(word)) ? merge(word, th ?? null, (p) => o.peek(p)) : th; };
+  // THE ANSWERS of `peek` and `ancestors`, kept while nothing they read changes (OVERLAY-MEMO, spec 06 "Compute budgets"): the catalog's settled lookups (its `generation()`), the lessons
+  // (`all()`'s key) and the session memory (the store's `memo`, dropped on the next `add`, shared with the dry-run clones). `session.things` syncs every object of the picture on every
+  // operation call (its aspects: `peek` of the kind, `ancestors` of the kind, a `peek` of each ancestor) and the drawing board asks where each kind lives for every object near every
+  // spot it tries, so a turn asked the same few words thousands of times and the work grew with the picture. A hit costs one `learned.mem` tick; a merged record is handed out
+  // as a copy (its lists too), as before, a catalog record as the catalog hands it out. Without a catalog generation or a memory store nothing is kept (the old path).
+  let local = null;
+  const answers = () => {
+    const g = base.generation?.();
+    if (g == null) return null;
+    all();
+    const key = `${g}|${seen}`;
+    const st = readMem ? memStore?.() ?? null : null;
+    const holder = readMem ? (typeof st?.memo === 'function' ? st.memo('learned.overlay', () => ({ key: null })) : null) : (local ??= { key: null });
+    if (!holder) return null;
+    if (holder.key !== key) { holder.key = key; holder.peek = new Map(); holder.anc = new Map(); holder.derived = new Map(); }
+    return holder;
+  };
+  const copyOf = (x) => (x && x.learned ? { ...x, senses: [...(x.senses ?? [])], objects: [...(x.objects ?? [])], wires: [...(x.wires ?? [])] } : x);
+  const peekNow = (word) => { const th = base.peek(word); return any(forWord(word)) ? merge(word, th ?? null, (p) => o.peek(p)) : th; };
+  o.peek = (word) => {
+    const c = answers();
+    if (!c) return peekNow(word);
+    const k = String(word);
+    budget.tick('learned.mem');
+    if (!c.peek.has(k)) c.peek.set(k, peekNow(word));
+    return copyOf(c.peek.get(k));
+  };
   o.thing = async (word) => {
     const th = await base.thing(word);
     const f = forWord(word);
@@ -201,7 +227,26 @@ export function withLearned(base, read, readMem = null, memStore = null) {
   o.own = (kindWord) => [...all().filter((w) => w.type === 'session.learned.own').map((w) => ({ kind: one(w, 'kind'), name: one(w, 'name') })), ...ownFromMemory()]
     .filter((x) => !kindWord || lemmaCandidates(kindWord).map((c) => c.replace(/_/g, ' ')).includes(x.kind));
   /** The kinds above a word in the is-a chain, learned first: ['house', 'building']. A synchronous read of what is settled. */
+  /**
+   * Data a reader derives from what this knowledge answers (a thing's aspects, where a kind lives), kept under the same key as `peek` (OVERLAY-MEMO): `build()` runs once per `name`, `key`
+   * and state of the catalog, the lessons and the memory. The reader must hand out copies of what it gets when it changes them. Without a cache (no catalog generation, no store) it builds every time.
+   */
+  o.memo = (name, key, build) => {
+    const c = answers();
+    if (!c) return build();
+    budget.tick('knowledge.memo');
+    const k = `${name}\u0000${key}`;
+    if (!c.derived.has(k)) c.derived.set(k, build());
+    return c.derived.get(k);
+  };
   o.ancestors = (word) => {
+    const c = answers();
+    if (!c) return ancestorsNow(word);
+    const k = String(word);
+    if (!c.anc.has(k)) c.anc.set(k, ancestorsNow(word));
+    return [...c.anc.get(k)];
+  };
+  const ancestorsNow = (word) => {
     const out = [], seen = new Set();
     let up = [word];
     for (let i = 0; i < 6 && up.length; i++) {

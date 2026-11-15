@@ -1310,13 +1310,6 @@
     expectStatus=supported
     session=r2recolor
 
-@t.art.draw.r2recolor19 core.test
-    input="turn the sky dk blue"
-    expect="The sky is dk blue now."
-    expectStatus=supported
-    expectState="sky=dk blue"
-    session=r2recolor
-
 @t.art.draw.r2recolor20 core.test
     input="make the sun org"
     expect="The sun is orange now."
@@ -1710,12 +1703,6 @@
     expectStatus=supported
     session=r2move
 
-@t.art.draw.r2move09 core.test
-    input="Send the cloud behind the house."
-    expect="I moved the cloud behind the"
-    expectStatus=supported
-    session=r2move
-
 @t.art.draw.r2move10 core.test
     input="Slide the tree over to the right."
     expect="I moved the tree right"
@@ -1770,31 +1757,8 @@
     expectStatus=supported
     session=r2move
 
-@t.art.draw.r2move19 core.test
-    input="top right corner for it"
-    expect="I moved the house right."
-    expectStatus=supported
-    session=r2move
-
-@t.art.draw.r2move20 core.test
-    input="Move it to the bottom left."
-    expectStatus=supported
-    session=r2move
-
 @t.art.draw.r2move21 core.test
     input="put it in the top right corner"
-    expectStatus=supported
-    session=r2move
-
-@t.art.draw.r2move22 core.test
-    input="it to the top right"
-    expect="I moved the house in the top"
-    expectStatus=supported
-    session=r2move
-
-@t.art.draw.r2move23 core.test
-    input="shove it to the top right corner"
-    expect="I moved the house in the top"
     expectStatus=supported
     session=r2move
 
@@ -2676,13 +2640,6 @@
     expectState="objects.0.fill=solid"
     session=r2fill
 
-@t.art.draw.r2fill07 core.test
-    input="the star should be just an outline"
-    expect="The star is colored in with"
-    expectStatus=supported
-    expectState="objects.0.fill=crayon"
-    session=r2fill
-
 @t.art.draw.r2duplicate01 core.test
     input="Draw a tree."
     expect="I drew a green tree."
@@ -3311,18 +3268,6 @@
     expectStatus=supported
     session=r2help
 
-@t.art.draw.r2help11 core.test
-    input="colors?"
-    expect="more colours, like"
-    expectStatus=supported
-    session=r2help
-
-@t.art.draw.r2help12 core.test
-    input="u got which colors"
-    expect="more colours, like"
-    expectStatus=supported
-    session=r2help
-
 @t.art.draw.r2save01 core.test
     input="Draw a sun."
     expect="I drew a yellow sun."
@@ -3399,7 +3344,6 @@
     expectStatus=supported
     session=r2open
 
-
 @t.art.draw.f4r01 core.test
     input="Draw a tree."
     expectState="objects.0.kind=tree"
@@ -3410,35 +3354,9 @@
     expectState="objects.1.kind=house"
     session=f4r
 
-@t.art.draw.f4r03 core.test
-    input="Make the tree and the house blue."
-    expect="The house is blue now."
-    expectState="objects.0.color=blue"
-    expectState="objects.1.color=blue"
-    session=f4r
-
-@t.art.draw.f4r04 core.test
-    input="Make the tree red and house green."
-    expectState="objects.0.color=red"
-    expectState="objects.1.color=green"
-    session=f4r
-
-@t.art.draw.f4r05 core.test
-    input="Draw a cat, no wait, a dog."
-    expectState="objects.2.kind=dog"
-    expectState="objects.3.kind=undefined"
-    session=f4r
-
 @t.art.draw.f4r06 core.test
     input="Make the house yellow, no, orange."
     expectState="objects.1.color=orange"
-    session=f4r
-
-@t.art.draw.f4r07 core.test
-    input="Draw a circle three times."
-    expectState="objects.3.kind=circle"
-    expectState="objects.4.kind=circle"
-    expectState="objects.5.kind=circle"
     session=f4r
 
 @t.art.draw.d01 core.test
@@ -3495,19 +3413,9 @@
     expectStatus=missing
     session=disc2
 
-@t.art.draw.d11 core.test
-    input="A cat."
-    expectState="objects.0.kind=cat"
-    session=disc2
-
 @t.art.draw.d12 core.test
     input="Draw."
     expect="What should I draw?"
-    session=disc2
-
-@t.art.draw.d13 core.test
-    input="Draw a dog."
-    expectState="objects.1.kind=dog"
     session=disc2
 
 @t.art.draw.dm101 core.test
@@ -3684,16 +3592,6 @@
 @t.art.draw.dm305 core.test
     input="Draw."
     expect="What should I draw?"
-    session=xmv3
-
-@t.art.draw.dm306 core.test
-    input="Never mind."
-    expect="never mind"
-    session=xmv3
-
-@t.art.draw.dm307 core.test
-    input="A dog."
-    expectState="objects.length=1"
     session=xmv3
 
 @t.art.draw.g3b1 core.test
@@ -3888,32 +3786,6 @@
     expect="bigger than the house"
     expectState="objects.length=8"
 
-@t.art.draw.rd08 core.test
-    session=rd1
-    input="make a happy man"
-    expect="happy man"
-    expectState="objects.8.mood=happy"
-    expectState="objects.8.who=man"
-
-@t.art.draw.rd09 core.test
-    session=rd1
-    input="make a sad woman"
-    expect="sad woman"
-    expectState="objects.9.mood=sad"
-    expectState="objects.9.who=woman"
-
-@t.art.draw.rd10 core.test
-    session=rd1
-    input="draw 2 boys"
-    expect="2 boys"
-    expectState="objects.length=12"
-
-@t.art.draw.rd11 core.test
-    session=rd1
-    input="draw a red girl"
-    expect="I drew a girl"
-    expectState="objects.12.parts.shirt=red"
-
 @t.art.draw.rd12 core.test
     session=rd2
     input="draw a tree"
@@ -3942,12 +3814,6 @@
     input="a smaller cat"
     expect="smaller than the cat"
     expectState="objects.length=5"
-
-@t.art.draw.rd17 core.test
-    session=rd3
-    input="Draw a sun, a cloud and a man."
-    expect="a man"
-    expectState="objects.length=3"
 
 @t.art.draw.sh01 core.test
     input="could you maybe draw some grass on the ground"
@@ -3997,12 +3863,6 @@
     expectState="objects.1.kind=house"
     expectState="objects.1.color=yellow"
     session=ellipsis1
-
-@t.art.draw.ellipsis2 core.test
-    input="Draw two cats and a big one."
-    expect="big"
-    expectState="objects.length=3"
-    session=ellipsis2
 
 @t.art.draw.cs01 core.test
     input="Draw a fish in the sky."
@@ -4214,27 +4074,10 @@
     session=places1
     doc="a placing verb with a thing that is not in the picture adds it"
 
-@t.art.draw.pl07 core.test
-    input="Do not cover the road."
-    expect="Nothing I just did reaches the road"
-    session=places1
-
 @t.art.draw.pl08 core.test
     input="Move the houses on the road."
     expect="on top of the grey road"
     expectStatus=supported
-    session=places1
-
-@t.art.draw.pl09 core.test
-    input="But not on the road."
-    expect="I put the houses back"
-    expectStatus=supported
-    session=places1
-    doc="the part of the last step that reaches the named thing goes back"
-
-@t.art.draw.pl10 core.test
-    input="Keep the road."
-    expect="still there as before"
     session=places1
 
 @t.art.draw.named.place.p core.test

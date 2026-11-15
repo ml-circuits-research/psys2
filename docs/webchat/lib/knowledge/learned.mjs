@@ -5,11 +5,11 @@
  * catalog with those wires overlaid, with the same API (`peek`, `thing`, `wires`), so a view that reads the catalog reads the lesson with no code of its own.
  * Browser-safe: no `node:*`. The catalog is shared by all sessions; the learned wires belong to one session (the caller gives `read`, a function returning the wire lines).
  *
- * The wires written: a kind-of fact is a word sense (`k.words.sense ... is_a=`), an ability or a material is a fact of the thing's attributes (`k.attributes.thing ... can= / material=`: their one home in the catalog, KR1), a habitat or an inability a commonsense fact (`k.commonsense.thing ... cannot= / at=`), a thing of
+ * The wires written: a kind-of fact is a word sense (`k.words.sense ... is_a=`), an ability or a habitat is a commonsense fact (`k.commonsense.thing ... can= / cannot= / at= / made_of=`), a thing of
  * the user is `session.learned.own kind= name= owner=user`.
  */
-import { parseFact, lemmaCandidates } from './facts.mjs?v=6783ebd4ee';
-import { parseTeachTyped } from './teach-typed.mjs?v=99f165f967';
+import { parseFact, lemmaCandidates } from './facts.mjs?v=d211b8920c';
+import { parseTeachTyped } from './teach-typed.mjs?v=00495dbd36';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 // TEMPORARY (until k.actions / k.commonsense carry the abilities of kinds): the verbs read as an ability when a bare plural says them ("ducks float"). Other forms need no list.
@@ -43,12 +43,12 @@ export function parseTeach(text, typing = null) {
     return { form: 'is_a', subject: a, object: b, line: `k.words.sense word=${q(a)} pos=noun n=0 gloss=${q(`a kind of ${b}`)} is_a=${q(b)}`, say: `OK, ${a === 'a' ? '' : 'a '}${a} is a kind of ${b}.` };
   }
   if ((m = /^(.+?) (?:can't|cant|cannot|can not) (\w+)$/.exec(t)) && !/^(?:what|who|which|how|where|when|why)\b/.test(m[1])) { const a = lemmaOf(m[1]); return { form: 'cannot', subject: a, object: m[2], line: `k.commonsense.thing name=${q(a)} cannot=${q(m[2])}`, say: `OK, ${m[1]} cannot ${m[2]}.` }; }
-  if ((m = /^(.+?) can (\w+(?: \w+)?)$/.exec(t)) && !/^(?:what|who|which|how|where|when|why|you|i|we|can)\b/.test(m[1])) { const a = lemmaOf(m[1]); return { form: 'can', subject: a, object: m[2], line: `k.attributes.thing name=${q(a)} can=${q(m[2])}`, say: `OK, ${m[1]} can ${m[2]}.` }; }
+  if ((m = /^(.+?) can (\w+(?: \w+)?)$/.exec(t)) && !/^(?:what|who|which|how|where|when|why|you|i|we|can)\b/.test(m[1])) { const a = lemmaOf(m[1]); return { form: 'can', subject: a, object: m[2], line: `k.commonsense.thing name=${q(a)} can=${q(m[2])}`, say: `OK, ${m[1]} can ${m[2]}.` }; }
   if ((m = /^(.+?) (?:live|lives|stay|stays|sleep|sleeps|stand|stands|grow|grows|float|floats|swim|swims|fly|flies|drive|drives|run|runs) (?:in|on|at|under|near) (.+)$/.exec(t)) && !/^(?:where|who|what|which|how|do|does|i|we|you)\b/.test(m[1])) { const a = lemmaOf(m[1]), b = strip(m[2]); return { form: 'at', subject: a, object: b, line: `k.commonsense.thing name=${q(a)} at=${q(b)}`, say: `OK, ${m[0]}.` }; }
   // a count with no schema to type it (no catalog): kept as a commonsense fact of the thing, `has="4 legs"`, which the count reader of the overlay also reads
   if ((m = /^(?:an? |the )?([a-z]+(?: [a-z]+)?) (?:has|have|has got|have got) (\d+) ([a-z]+)$/.exec(t)) && !/^(?:i|you|we|they|he|she|it|my|your)\b/.test(m[1])) { const a = lemmaOf(m[1]); return { form: 'count', subject: a, object: `${m[2]} ${m[3]}`, line: `k.commonsense.thing name=${q(a)} has=${q(`${m[2]} ${m[3]}`)}`, say: `OK, ${t}.`}; }
-  if ((m = /^(.+?) (?:is|are) made (?:of|from|out of) (.+)$/.exec(t))) { const a = lemmaOf(m[1]), b = strip(m[2]); return { form: 'made_of', subject: a, object: b, line: `k.attributes.thing name=${q(a)} material=${q(b)}`, say: `OK, ${m[1]} is made of ${b}.` }; }
-  if ((m = new RegExp(`^(.+?s|\\w+) (${ABILITY_SEED.join('|')})s?$`).exec(t)) && !/[,;]|\b(?:it|he|she|they|is|are|eats?|has|have)\b/.test(m[1]) && !/^(?:i|you|we|they|it|he|she|what|who|do|does|can|please|let|lets)\b/.test(m[1])) { const a = lemmaOf(m[1]); return { form: 'can', subject: a, object: m[2], line: `k.attributes.thing name=${q(a)} can=${q(m[2])}`, say: `OK, ${m[1]} ${m[2]}.` }; }
+  if ((m = /^(.+?) (?:is|are) made (?:of|from|out of) (.+)$/.exec(t))) { const a = lemmaOf(m[1]), b = strip(m[2]); return { form: 'made_of', subject: a, object: b, line: `k.commonsense.thing name=${q(a)} made_of=${q(b)}`, say: `OK, ${m[1]} is made of ${b}.` }; }
+  if ((m = new RegExp(`^(.+?s|\\w+) (${ABILITY_SEED.join('|')})s?$`).exec(t)) && !/[,;]|\b(?:it|he|she|they|is|are|eats?|has|have)\b/.test(m[1]) && !/^(?:i|you|we|they|it|he|she|what|who|do|does|can|please|let|lets)\b/.test(m[1])) { const a = lemmaOf(m[1]); return { form: 'can', subject: a, object: m[2], line: `k.commonsense.thing name=${q(a)} can=${q(m[2])}`, say: `OK, ${m[1]} ${m[2]}.` }; }
   return null;
 }
 
@@ -129,7 +129,7 @@ export function withLearned(base, read, readMem = null, memStore = null) {
   const memWiresAll = () => memWires(null);
   const forWord = (word) => {
     const cands = lemmaCandidates(word).map((c) => c.replace(/_/g, ' '));
-    const mine = all().filter((w) => (w.type === 'k.words.sense' && cands.includes(String(one(w, 'word')).toLowerCase())) || ((w.type === 'k.commonsense.thing' || w.type === 'k.attributes.thing') && cands.includes(String(one(w, 'name')).toLowerCase())));
+    const mine = all().filter((w) => (w.type === 'k.words.sense' && cands.includes(String(one(w, 'word')).toLowerCase())) || (w.type === 'k.commonsense.thing' && cands.includes(String(one(w, 'name')).toLowerCase())));
     // a statement taught by type (`k.animals.animal name="zebra" legs="4"`, `k.attributes.thing name="zebra" colour="black"`): a record of the thing at the TAUGHT tier, before the catalog's own
     const typed = all().filter((w) => /^k\./.test(w.type) && w.type !== 'k.words.sense' && w.type !== 'k.commonsense.thing' && cands.includes(String(one(w, 'name') ?? '').toLowerCase()));
     const own = all().filter((w) => w.type === 'session.learned.own' && cands.includes(String(one(w, 'name')).toLowerCase()));
@@ -157,7 +157,7 @@ export function withLearned(base, read, readMem = null, memStore = null) {
       if (w.type === 'k.words.sense') out.senses.unshift({ pos: 'noun', n: 0, gloss: one(w, 'gloss') ?? '', synonyms: [], isA: w.f.is_a ?? [], shard: 'session.learned' });
       else {
         const cs = out.commonsense = { ...(out.commonsense ?? {}), shard: out.commonsense?.shard ?? 'session.learned' };
-        for (const k of ['can', 'cannot', 'at', 'material', 'has', 'used_for']) if (w.f[k]) cs[k] = [...new Set([...(cs[k] ?? []), ...w.f[k]])];
+        for (const k of ['can', 'cannot', 'at', 'made_of', 'has', 'used_for']) if (w.f[k]) cs[k] = [...new Set([...(cs[k] ?? []), ...w.f[k]])];
         cs.name ??= [out.name];
       }
     }
@@ -185,7 +185,33 @@ export function withLearned(base, read, readMem = null, memStore = null) {
   const o = Object.create(base);
   o.base = base;
   const any = (f) => f.mine.length || f.own.length || f.mem.length || f.typed.length;
-  o.peek = (word) => { const th = base.peek(word); return any(forWord(word)) ? merge(word, th ?? null, (p) => o.peek(p)) : th; };
+  // THE ANSWERS of `peek` and `ancestors`, kept while nothing they read changes (OVERLAY-MEMO, spec 06 "Compute budgets"): the catalog's settled lookups (its `generation()`), the lessons
+  // (`all()`'s key) and the session memory (the store's `memo`, dropped on the next `add`, shared with the dry-run clones). `session.things` syncs every object of the picture on every
+  // operation call (its aspects: `peek` of the kind, `ancestors` of the kind, a `peek` of each ancestor) and the drawing board asks where each kind lives for every object near every
+  // spot it tries, so a turn asked the same few words thousands of times and the work grew with the picture. A hit costs one `learned.mem` tick; a merged record is handed out
+  // as a copy (its lists too), as before, a catalog record as the catalog hands it out. Without a catalog generation or a memory store nothing is kept (the old path).
+  let local = null;
+  const answers = () => {
+    const g = base.generation?.();
+    if (g == null) return null;
+    all();
+    const key = `${g}|${seen}`;
+    const st = readMem ? memStore?.() ?? null : null;
+    const holder = readMem ? (typeof st?.memo === 'function' ? st.memo('learned.overlay', () => ({ key: null })) : null) : (local ??= { key: null });
+    if (!holder) return null;
+    if (holder.key !== key) { holder.key = key; holder.peek = new Map(); holder.anc = new Map(); holder.derived = new Map(); }
+    return holder;
+  };
+  const copyOf = (x) => (x && x.learned ? { ...x, senses: [...(x.senses ?? [])], objects: [...(x.objects ?? [])], wires: [...(x.wires ?? [])] } : x);
+  const peekNow = (word) => { const th = base.peek(word); return any(forWord(word)) ? merge(word, th ?? null, (p) => o.peek(p)) : th; };
+  o.peek = (word) => {
+    const c = answers();
+    if (!c) return peekNow(word);
+    const k = String(word);
+    budget.tick('learned.mem');
+    if (!c.peek.has(k)) c.peek.set(k, peekNow(word));
+    return copyOf(c.peek.get(k));
+  };
   o.thing = async (word) => {
     const th = await base.thing(word);
     const f = forWord(word);
@@ -201,7 +227,26 @@ export function withLearned(base, read, readMem = null, memStore = null) {
   o.own = (kindWord) => [...all().filter((w) => w.type === 'session.learned.own').map((w) => ({ kind: one(w, 'kind'), name: one(w, 'name') })), ...ownFromMemory()]
     .filter((x) => !kindWord || lemmaCandidates(kindWord).map((c) => c.replace(/_/g, ' ')).includes(x.kind));
   /** The kinds above a word in the is-a chain, learned first: ['house', 'building']. A synchronous read of what is settled. */
+  /**
+   * Data a reader derives from what this knowledge answers (a thing's aspects, where a kind lives), kept under the same key as `peek` (OVERLAY-MEMO): `build()` runs once per `name`, `key`
+   * and state of the catalog, the lessons and the memory. The reader must hand out copies of what it gets when it changes them. Without a cache (no catalog generation, no store) it builds every time.
+   */
+  o.memo = (name, key, build) => {
+    const c = answers();
+    if (!c) return build();
+    budget.tick('knowledge.memo');
+    const k = `${name}\u0000${key}`;
+    if (!c.derived.has(k)) c.derived.set(k, build());
+    return c.derived.get(k);
+  };
   o.ancestors = (word) => {
+    const c = answers();
+    if (!c) return ancestorsNow(word);
+    const k = String(word);
+    if (!c.anc.has(k)) c.anc.set(k, ancestorsNow(word));
+    return [...c.anc.get(k)];
+  };
+  const ancestorsNow = (word) => {
     const out = [], seen = new Set();
     let up = [word];
     for (let i = 0; i < 6 && up.length; i++) {

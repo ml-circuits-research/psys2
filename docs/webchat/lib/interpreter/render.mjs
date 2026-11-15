@@ -8,8 +8,8 @@
  *  - `:plural` pluralizes unless the context number (`value`, else `count`, `n`) equals 1.
  *  - A template whose placeholders cannot all be resolved is skipped (next candidate or fallback).
  */
-import { lexIndex } from '../worlds/lexicon.mjs?v=28fee97a62';
-import { pluralize } from '../formalizer/rules/lemma.mjs?v=9ffe311f37';
+import { lexIndex } from '../worlds/lexicon.mjs?v=815848016d';
+import { pluralize } from '../formalizer/rules/lemma.mjs?v=551c807f5c';
 
 const PLACEHOLDER = /\{([A-Za-z_][\w.]*)((?::[a-z]+)*)\}/g;
 
@@ -150,8 +150,9 @@ export function fallbackText(env, { mode = 'value', ask } = {}) {
       return `${val(env.value)}${u}`;
     }
     case 'missing': return `I don't know yet.${ask ? ' ' + ask : ''}`;
-    case 'conflicting': return `I have conflicting information: ${listText((env.alternatives ?? []).map(String))}.`;
-    case 'ambiguous': return `That is ambiguous: ${listText((env.alternatives ?? []).map(String))}.`;
+    // a conflict or an ambiguity with no alternatives to name says nothing: it is answered as not known yet (never "I have conflicting information: .")
+    case 'conflicting': return (env.alternatives ?? []).length ? `I have conflicting information: ${listText(env.alternatives.map(String))}.` : `I don't know yet.${ask ? ' ' + ask : ''}`;
+    case 'ambiguous': return (env.alternatives ?? []).length ? `That is ambiguous: ${listText(env.alternatives.map(String))}.` : `I don't know yet.${ask ? ' ' + ask : ''}`;
     case 'unsupported': return "I can't do that yet.";
     case 'budget': return 'That needed more effort than I am allowed to spend.';
     default: return 'Something went wrong while I worked on that.';

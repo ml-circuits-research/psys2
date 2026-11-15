@@ -38,7 +38,7 @@ function buildItems(sets, limit) {
   const want = (s) => sets.includes(s);
   if (want('operational')) for (const c of jl(pick('training/eval/operational.jsonl'))) push({ kind: 'op', set: 'operational', c });
   if (want('operational-ro')) for (const c of jl(pick('training/eval/operational-ro.jsonl'))) push({ kind: 'op', set: 'operational-ro', c });
-  if (want('dialogues')) for (const d of jl(pick('training/eval/dialogues.jsonl'))) push({ kind: 'dlg', set: 'dialogues', d });
+  if (want('dialogues')) for (const d of jl(pick('training/eval/dialogues.jsonl')).filter((x) => !x.retired)) push({ kind: 'dlg', set: 'dialogues', d });
   if (want('gold')) for (const g of jl(join(REPO, 'training/nx/gold/pilot-300.jsonl'))) push({ kind: 'rec', set: `gold-${g.subset}`, id: g.id, world: g.world, tab: g.tab, setup: g.context ?? [], text: g.text, gold: { op: g.op, slots: g.slots.map((s) => ({ key: s.key, value: s.value })) } });
   if (want('loose')) jl(pick('training/eval/loose-words.jsonl')).forEach((r, i) => { r.id ??= `${r.world}#L${i + 1}`; push({ kind: 'loose', set: 'loose-words', row: r }); });
   if (want('typos')) {

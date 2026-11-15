@@ -129,7 +129,7 @@ async function parity(limit) {
     cases[name] = Object.fromEntries(rows.map((r) => [r.id, r.outcome]));
     out[name].replies = Object.fromEntries(rows.filter((r) => isThree(r.world)).map((r) => [r.id, r.reply]));
   }
-  let ds = jsonl(join(REPO, 'training/eval/dialogues.jsonl'));
+  let ds = jsonl(join(REPO, 'training/eval/dialogues.jsonl')).filter((d) => !d.retired);
   if (limit) ds = ds.slice(0, limit);
   const turns = [];
   const dcases = {};

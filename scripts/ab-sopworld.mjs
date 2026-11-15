@@ -51,7 +51,7 @@ function addCases(set, file, ro = false) {
   for (const c of rows) ss.push({ set, id: c.id, world: c.world, lang: ro ? 'ro' : 'en', tab: c.tab, init: c.init, turns: [...(c.setup ?? []).map(step), step(c.message)], exp: 'case', src: c });
 }
 function addDialogues() {
-  let rows = jsonl(E('dialogues.jsonl')); if (IDS) rows = rows.filter((d) => IDS.has(d.id)); if (LIMIT) rows = rows.slice(0, LIMIT);
+  let rows = jsonl(E('dialogues.jsonl')).filter((d) => !d.retired); if (IDS) rows = rows.filter((d) => IDS.has(d.id)); if (LIMIT) rows = rows.slice(0, LIMIT);
   for (const d of rows) ss.push({ set: 'dialogues', id: d.id, world: d.world, lang: 'en', tab: d.tab, init: d.init, turns: d.turns.map((t) => ({ message: t.message, tab: t.tab, mode: t.mode })), exp: 'dialogue', src: d });
 }
 function addSingles(set, rows, mapper) { for (const r of (LIMIT ? rows.slice(0, LIMIT) : rows)) ss.push({ set, ...mapper(r) }); }
