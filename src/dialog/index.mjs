@@ -1604,7 +1604,7 @@ export class DialogSession {
       revised = reaction !== 'redo';
       base = lastRec.before;
     } else {
-      const act = q.act;
+      const act = q.act ?? (q.reaction === 'refine' && q.target ? 'make' : null);   // "my expectation was a nice diagram ..." with nothing to revise: a new request with the whole set
       const question = /\?\s*$/.test(english.trim()) || /^(?:is|are|does|do|did|how|what|which|who|where|can|could|why|when|was|were|will|would|should|has|have)\b/i.test(english.trim());
       if (question || q.unread.length) return await this._requestNotes(opts, first, q, cannot);   // a question is never a make; words no reader read are asked about, never planned around
       if (act !== 'make' && !(act === 'arrange' && q.facts.some((f) => f.key === 'layout'))) return await this._requestNotes(opts, first, q, cannot);
