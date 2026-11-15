@@ -206,14 +206,17 @@ test('one undo: "undo that" and the undo of the dialogue layer are the same rewi
   sameAsLibrary(c.s, ['kids.shop']);
 });
 
-test('the setting is part of the webchat defaults: matrix, a saved ops of an older version is migrated once, a later explicit ops is kept', async () => {
+test('the webchat has no reasoner setting: matrix is the product, ops is a test oracle only (reviewer decision 2026-11-15)', async () => {
   const { DEFAULT_SETTINGS, SETTINGS_VERSION, migrateSettings } = await import('../docs/webchat/ui/settings.mjs');
-  assert.equal(DEFAULT_SETTINGS.reasoner, 'matrix');
-  assert.equal(migrateSettings({ reasoner: 'magic', settingsVersion: SETTINGS_VERSION }).settings.reasoner, 'matrix');
-  assert.equal(migrateSettings({ reasoner: 'ops', settingsVersion: 3 }).settings.reasoner, 'matrix', 'the old default is not a choice: migrated once');
-  assert.equal(migrateSettings({ reasoner: 'ops', settingsVersion: 3 }).migrated, true);
-  assert.equal(migrateSettings({ reasoner: 'ops', settingsVersion: SETTINGS_VERSION }).settings.reasoner, 'ops', 'an explicit choice after the migration is respected');
-  assert.equal(migrateSettings({ reasoner: 'matrix', settingsVersion: 2 }).settings.reasoner, 'matrix');
+  const { EXPERIMENTS, OPTIONS } = await import('../docs/webchat/ui/settings-catalog.mjs');
+  assert.ok(!('reasoner' in DEFAULT_SETTINGS));
+  assert.ok(!EXPERIMENTS.some((x) => x.key === 'reasoner') && !OPTIONS.some((o) => o.key === 'reasoner'), 'no row can select ops');
+  for (const v of [3, SETTINGS_VERSION]) {
+    const m = migrateSettings({ reasoner: 'ops', settingsVersion: v });
+    assert.ok(!('reasoner' in m.settings), `a saved ops of version ${v} is dropped`); assert.equal(m.migrated, true);
+  }
+  const { readFileSync } = await import('node:fs');
+  assert.match(readFileSync(new URL('../docs/webchat/ui/engine-worker.mjs', import.meta.url), 'utf8'), /createEngine\([^\n]*reasoner: 'matrix'/, 'the engine worker always starts the matrix');
 });
 
 test('the build ships the library and the fns of matrix worlds, versioned like every module of the engine worker', async () => {

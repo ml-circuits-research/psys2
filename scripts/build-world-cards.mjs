@@ -94,7 +94,7 @@ const readOpt = (f) => (existsSync(f) ? readFileSync(f, 'utf8') : '');
 const quoted = (text, key) => [...text.matchAll(new RegExp(`^\\s+${key}="((?:[^"\\\\]|\\\\.)*)"`, 'gm'))].map((m) => m[1].replace(/\\"/g, '"'));
 
 /**
- * What else a world says about itself, from files it ships (spec 20): the words of its operation descriptions (`describe.sop`: the verbs and the examples), the operation names (`operations.sop`), the questions its legend asks, the
+ * What else a world says about itself, from files it ships (spec 20): the words of its operation descriptions (`describe.sop`: the verbs and the examples; since 2026-11-15 no world ships wording there, so this part is empty), the operation names (`operations.sop`), the questions its legend asks, the
  * inputs of its tests (`tests.sop`), and the words of its `trigger` lexicons. Returns { verbs: [word], texts: [string] } where each text is one message the
  * world's authors say it takes.
  */

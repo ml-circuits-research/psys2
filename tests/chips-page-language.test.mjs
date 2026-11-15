@@ -36,3 +36,15 @@ test('the chips are in the selected language: translated by the rules, a chip th
   assert.deepEqual(await chipsInLanguage(items, 'en', tr), items, 'English: unchanged');
   assert.deepEqual(await chipsInLanguage(items, 'ro', null), [], 'no translator: no chip rather than an English one');
 });
+
+test('natural or nothing (reviewer 2026-11-15 04:50 decision 3): a chip the grammar can only say word for word is left out, a natural one is kept', async () => {
+  const tr = createTranslator();
+  const items = [{ text: 'What is the size of c1?', world: 'diagram.sketch' }, { text: 'Set the size of c1 to big.', world: 'diagram.sketch' }, { text: 'Remove the roof of the house.', world: 'art.draw' }, { text: 'Remove the sun.', world: 'art.draw' }];
+  const ro = await chipsInLanguage(items, 'ro', tr);
+  assert.ok(!ro.some((x) => /mărimea de|acoperișul de/.test(x.text)), `no genitive calque: ${ro.map((x) => x.text).join(' | ')}`);
+  assert.ok(!ro.some((x) => x.en === 'What is the size of c1?'), '"Ce este mărimea de c1?" is not shown');
+  assert.deepEqual(ro.map((x) => x.text), ['Scoate soarele.'], 'the natural chip stays');
+  // the translator still answers (a reply keeps its text) and lists what it said word for word
+  const r = await tr.translate('What is the size of the circle?', { from: 'en', to: 'ro' });
+  assert.ok(r.text && r.calques.some((c) => c.kind === 'of-genitive'));
+});

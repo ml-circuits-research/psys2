@@ -432,6 +432,7 @@ function realizeClause(items, ctx, c = {}) {
   const kAux = items.findIndex((x) => x.t === 'aux' || x.t === 'verb');
   const whItem = items.find((x) => x.t === 'wh');
   if (kAux < 0) {
+    if (items.some((x) => x.t === 'np' && x.head) && items.some((x) => x.t !== 'np' && x.t !== 'punct' && x.t !== 'comma')) calque(ctx, 'no-verb', items);   // a clause with no verb said word by word (a noun phrase alone is fine)
     for (const it of items) out.push(...realizeLoose(it, ctx));
     return out;
   }
@@ -489,7 +490,7 @@ function realizeClause(items, ctx, c = {}) {
     main = first; consumed = 1;
     if (main.form === 'past' || main.form === 'pp') tenseEn = 'past';
   }
-  if (!main) { for (const it of items) out.push(...realizeLoose(it, ctx)); return out; }
+  if (!main) { calque(ctx, 'no-verb', items); for (const it of items) out.push(...realizeLoose(it, ctx)); return out; }
   const after = rest.slice(consumed);
   const subjPre = pre.filter((x) => x.t === 'np' || x.t === 'pron');
   const subjItems = invSubj.length ? invSubj : subjPre;
@@ -609,6 +610,7 @@ function realizeClause(items, ctx, c = {}) {
     if (it.t === 'prep') {
       const nx = after[k + 1];
       if (nx && (nx.t === 'np' || nx.t === 'pron') && !skip.has(nx)) {
+        if (it.en === 'of' && nx.t === 'np' && (nx.def || nx.head?.kind === 'name')) calque(ctx, 'of-genitive', [it, nx]);   // "the size of c1" said "mărimea de c1": Romanian takes a genitive here, the grammar has none for it yet
         rem.push(piece(roPrep(it, verbE, nx), it.tok));
         if (nx.t === 'np') rem.push(...realizeNP(nx, ctx, { afterPrep: true, neg: doNeg })); else rem.push(piece(nx.info.acc === 'mă' ? 'mine' : nx.key, nx.tok));
         k++; continue;
@@ -661,6 +663,15 @@ function realizeWh(wh, items, ctx) {
   }
   out.push(piece(WH_EN[wh.kind], wh.tok));
   return out;
+}
+
+/**
+ * CALQUES: a construction this grammar says word for word, which is understandable but not natural Romanian ("mărimea de c1" for "the size of c1"; a clause with no verb
+ * read). The text is still returned (a reply keeps it); `calques` lists them so a caller that must show only natural Romanian (the example chips, src/dialog/sampler.mjs) can leave the sentence out.
+ */
+function calque(ctx, kind, items) {
+  const src = items.map((x) => x?.tok ?? x?.head?.tok).filter(Boolean);
+  ctx.calques.push({ kind, span: src.length ? [Math.min(...src.map((t) => t.start)), Math.max(...src.map((t) => t.end))] : null });
 }
 
 function realizeLoose(it, ctx) {
@@ -832,7 +843,7 @@ function translateEnRoGrammar(original) {
   const source = String(original ?? '');
   const toks = mergePlaces(tokenize(source));
   const sents = splitSentences(toks);
-  const ctx = { unknown: [], notes: [], content: 0, mapped: 0 };
+  const ctx = { unknown: [], notes: [], calques: [], content: 0, mapped: 0 };
   const results = [];
   for (const s of sents) {
     const end = [];
@@ -844,7 +855,7 @@ function translateEnRoGrammar(original) {
   }
   const { text, alignment } = assembleRo(results);
   const confidence = ctx.content === 0 ? (text ? 1 : 0) : Math.max(0, Math.min(1, (ctx.content - ctx.unknown.length) / ctx.content));
-  return { text, alignment, unknown: ctx.unknown, notes: ctx.notes, confidence: Math.round(confidence * 1000) / 1000 };
+  return { text, alignment, unknown: ctx.unknown, notes: ctx.notes, calques: ctx.calques, confidence: Math.round(confidence * 1000) / 1000 };
 }
 
 /** True when the lowercase word is known to the English side (lexicon or function word list). */
@@ -956,11 +967,11 @@ export function translateEnRo(original) {
 function translateEnRoInner(original) {
   const source = String(original ?? '');
   const t = source.trim();
-  if (CANONICAL_RO[t]) return { text: source.replace(t, CANONICAL_RO[t]), alignment: [], unknown: [], notes: ['canonical example'], confidence: 1 };
+  if (CANONICAL_RO[t]) return { text: source.replace(t, CANONICAL_RO[t]), alignment: [], unknown: [], notes: ['canonical example'], calques: [], confidence: 1 };
   const sentences = splitReply(source);
   if (sentences.length <= 1 && !sentences.some((x) => translateReplySentence(x, (t) => t))) return withQuoteGuard(source, translateEnRoGrammar(source));
   const sub = (x) => { const r = translateEnRoGrammar(x.replace(/^(.)/, (c, a) => (/[A-Z]/.test(a) ? a.toLowerCase() : a))); return r.text && !r.unknown.length && !r.untranslatable?.length ? r.text.replace(/[.!?]$/, '').replace(/^\p{Lu}/u, (c) => (/^[A-Z]/.test(x) ? c : c.toLowerCase())) : null; };
-  const unknown = [], notes = [];
+  const unknown = [], notes = [], calques = [];
   let text = '';
   for (const sen of sentences) {
     const lead = /^\s*/.exec(sen)[0], trail = /\s*$/.exec(sen)[0];
@@ -968,10 +979,10 @@ function translateEnRoInner(original) {
     let ro = core ? (CANONICAL_RO[core] ?? translateReplySentence(core, sub)) : '';
     if (ro == null) {
       const r = withQuoteGuard(core, translateEnRoGrammar(core));
-      unknown.push(...r.unknown); notes.push(...r.notes);
+      unknown.push(...r.unknown); notes.push(...r.notes); calques.push(...(r.calques ?? []));
       ro = r.text;
     }
     text += lead + ro + trail;
   }
-  return { text, alignment: [], unknown, notes, confidence: unknown.length ? 0.5 : 1 };
+  return { text, alignment: [], unknown, notes, calques, confidence: unknown.length ? 0.5 : 1 };
 }

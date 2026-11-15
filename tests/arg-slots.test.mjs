@@ -23,6 +23,6 @@ test('slot= of core.describe.arg is read; only the declarations of a describe.so
   assert.match(cut, /slot=t\.k/);
   assert.doesNotMatch(cut, /words|describe\.b/);
   assert.equal(slotDeclarations('@x core.describe\n    op=x\n'), '');
-  // a described world with wording keeps the old rule: not read unless the generator or the reader asks
+  // no world ships wording any more (the reader route was deleted 2026-11-15): nothing is read for kids.shop
   assert.equal(engine.set.get('kids.shop').descriptions.length, 0);
 });

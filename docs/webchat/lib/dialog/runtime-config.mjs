@@ -9,7 +9,7 @@
 import { createDispatcherFormalizer } from './encoder-dispatch.mjs?v=d2b1544c11';
 import { createNxStrategy, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=6744d2206b';
 
-import { RUNTIME_DEFAULTS } from './runtime-defaults.mjs?v=3a55de5f9e';
+import { RUNTIME_DEFAULTS } from './runtime-defaults.mjs?v=17cdbfc2f2';
 export { RUNTIME_DEFAULTS };
 
 /**
@@ -51,7 +51,7 @@ export function policyFromSettings(settings) {
 
 /** Options of `engine.createSession` for a settings object. */
 export function sessionOptions(settings, extra = {}) {
-  return { ...(settings.routing ? { routing: settings.routing } : {}), formalizer: settings.formalizer, nx: normalizeNxStrategy(settings.nxStrategy), spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, suspect: settings.suspectWords !== false, ...(settings.reader && settings.reader !== 'off' ? { reader: settings.reader } : {}), ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
+  return { ...(settings.routing ? { routing: settings.routing } : {}), formalizer: settings.formalizer, nx: normalizeNxStrategy(settings.nxStrategy), spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, suspect: settings.suspectWords !== false, ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
 }
 
 /**

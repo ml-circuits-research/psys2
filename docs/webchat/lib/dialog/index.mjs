@@ -9,15 +9,15 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=0929491499';
-import { reviewForeign } from './foreign-reading.mjs?v=09384116f6';
+import { composeReply, sayOf } from './composed-reply.mjs?v=e574aec660';
+import { reviewForeign } from './foreign-reading.mjs?v=dce03b08ad';
 import { installTextGen } from './textgen.mjs?v=98e39438ab';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=847724fd89';
-import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=0e8bca29ae';
+import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=2259b3aee1';
 import { validateWorldSet } from '../worlds/validate.mjs?v=2089456bdf';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=847724fd89';
 import { createInterpreter } from '../interpreter/index.mjs?v=fc277d9644';
-import { createReasoner } from '../reasoner/index.mjs?v=d7fa9c97d2';
+import { createReasoner } from '../reasoner/index.mjs?v=5994f55761';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=068bcdef6e';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=6744d2206b';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
@@ -36,20 +36,19 @@ import { checkValues } from './value-check.mjs?v=ff743b3b7d';
 import { attachValues } from '../knowledge/values.mjs?v=2bd2c8e37d';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=5a7b64a4a8';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=c244bd0acd';
-import { Discourse } from './discourse.mjs?v=723338fea4';
+import { Discourse } from './discourse.mjs?v=0dc8c7311d';
 import { Dialogue } from './dialogue.mjs?v=0b4bc02a31';
 import { turnSteps } from './steps.mjs?v=44af51b084';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=b331b67a6b';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=6a08c17675';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=e8f3e8748d';
-import { proposeByTypes } from './typed-reader.mjs?v=a6c3b57e4d';
-import { withVariants, anyVoiceOn } from './variants.mjs?v=214414118c';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=4ba0a44e39';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=ac13d6f9c6';
+import { proposeByTypes } from './typed-reader.mjs?v=3123a14aa8';
+import { withVariants, anyVoiceOn } from './variants.mjs?v=09faf1407d';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=847724fd89';
 import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=847724fd89';
 import { repairFromScene } from './scene-referents.mjs?v=30e68b8d40';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=a4b2902a72';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=775ddcbdb6';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=42c5d45b80';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=92b3416a6f';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=dd8acffb0c';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=c4f54dfb20';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -62,7 +61,6 @@ const plainSegment = (s) => ({
   unparsed: s.unparsed, discourse: s.discourse ?? null, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy, reading: s.strategy === 'model' ? 'model' : 'rules', corrections: s.corrections ?? [], ignored: s.ignored ?? [], dispatch: s.dispatch ?? null,
   ...(s.nx ? { nx: { op: s.nx.op, world: s.nx.world, pattern: s.nx.pattern, p: s.nx.p, spans: s.nx.spans } } : {}),
   wires: s.wires.map((w) => w.id),
-  ...(s.reader ? { reader: s.reader } : {}),
 });
 
 /** Up to two example sentences from the closest world (or any world as a fallback). */
@@ -287,13 +285,11 @@ function tooComplexReply(session, text, e, b) {
 export const isModelTimeout = (e) => !!e && e.name !== 'TurnAborted' && (['OrtTimeout', 'AbortError', 'TimeoutError'].includes(e.name) || /timed out|timeout|aborted/i.test(String(e.message ?? e)));
 
 export class DialogSession {
-  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader, routing, suspect = true } = {}) {
+  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, routing, suspect = true } = {}) {
     this.routing = routing;   // spec 20: dispatcher (default) | symbolic | symbolic+encoder
     this.engine = engine;
     /** World-aware reading (spec 16): 'off' (default) | 'veto' | 'choose' | 'observe'. The environment variable PSYS2_WORLD_AWARE sets the default for command-line tools; an explicit option wins. */
     this.worldAware = normalizeWorldAware(worldAware ?? globalThis.process?.env?.PSYS2_WORLD_AWARE);
-    /** READER-ROUTE (spec 16 section 7): the library's reader over the `core.word` facts as a third source of readings: 'off' (default) | 'fill' (readings for clauses nobody read) | 'choose' (and a reading that beats one that leaves words out). */
-    this.reader = normalizeReader(reader ?? globalThis.process?.env?.PSYS2_READER);
     /** NX reading strategy (ADR-009): 'hybrid' (default) | 'neural' | 'rules'. Only used with the encoder formalizer and when `engine.formalizers.nx` is ready; otherwise the rules path answers. */
     this.nx = normalizeNxStrategy(nx);
     /** Best effort with loose words (spec 03 section 7.15): after everything else failed, execute the most sensible reading of the content words (off in the library, on in the shipped settings). */
@@ -731,42 +727,6 @@ export class DialogSession {
     const real = await formalizers.rules.formalize(best.c.text, { ...opts, worlds: restrictedSet(set, [best.c.world]) });
     const segments = real.segments.map((x, k) => ({ ...x, span: seg.span, strategy: 'rules', corrections: [], ignored: [], ...(k === 0 ? { bestEffort: { took: best.c.text, ignored: best.c.ignored, world: best.c.world }, ...(waPick ? { pick: waPick } : {}) } : {}) }));
     return { segments };
-  }
-
-  /**
-   * READER-ROUTE (spec 16 section 7): for each clause the library's reader (`interpret` over the English `core.word` facts) is asked for a reading. A clause nobody read
-   * takes the reader's reading when it is unambiguous and leaves nothing out; in `choose` mode a clause that was read but leaves words out, or that the world refuses,
-   * takes it when the library's `rank` puts it first. Every decision is on the segment (`reader`). Never throws: a failure keeps the reading.
-   */
-  async _withReader(formal, mode) {
-    const ctx = this.context();
-    const worldOrder = [ctx.tabWorld, ctx.modalWorld, ctx.gameWorld, ...(ctx.recentWorlds ?? [])].filter((w, i, a) => w && a.indexOf(w) === i);
-    const inWorlds = [ctx.tabWorld, ctx.modalWorld, ctx.gameWorld].filter(Boolean);   // the worlds the user is in: the reader reads only these
-    const segments = [];
-    for (const seg of formal.segments) {
-      budget.tick('dialog.reader');
-      let out = null;
-      try {
-        if (seg.unparsed) {
-          const r = readerSegments(this, seg, { worldOrder, allowed: inWorlds, freeWorlds: inWorlds });
-          out = r.segments && !r.ambiguous ? r.segments : null;
-          if (out && this.isession?.rs) {   // the reading must be one the world instance can take (the library's `score`): a refusal by the rules is an answer, not a reason to drop it
-            const sc = this.isession.rs.score(out.map((x) => ({ wires: x.wires })));
-            if (sc.results.some((c) => c.judged && c.ok === false && !(c.violations ?? []).length)) out = null;
-          }
-          if (!out) { segments.push(r.info?.accepted ? { ...seg, reader: { ...r.info, used: false, ambiguous: !!r.ambiguous } } : seg); continue; }
-          segments.push(...out.map((x) => ({ ...x, reader: { ...x.reader, used: true, from: 'unparsed' } })));
-          continue;
-        }
-        if (mode === 'choose' && seg.wires?.length) {
-          const r = chooseReader(this, seg, { worldOrder, freeWorlds: inWorlds });
-          if (r?.segments) { segments.push(...r.segments); continue; }
-          if (r?.note) { segments.push({ ...seg, reader: r.note }); continue; }
-        }
-      } catch { /* keep the reading */ }
-      segments.push(seg);
-    }
-    return { ...formal, segments, wires: segments.flatMap((x) => x.wires ?? []) };
   }
 
   /**
@@ -1453,9 +1413,9 @@ export class DialogSession {
     return r;
   }
 
-  async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
+  async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=bf1ab27553').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=33f5b1e4fd').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.editor (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
@@ -1563,7 +1523,6 @@ export class DialogSession {
     if (!icpt && !pre && !meta && (bestEffort ?? this.bestEffort) && formal.segments.length === 1 && formal.segments[0].unparsed) {   // one unparsed clause: a fragment of a longer message is never guessed
       formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router });
     }
-    { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
     if (!icpt && !pre && !meta && anyVoiceOn() && formal.segments.some((x) => x.unparsed || isIncomplete(x))) { try { formal = await perf.time('variants', () => withVariants(this, formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; } }   // spec 16 section 10: an unparsed clause read again (alternations, near words, slot types), the world deciding
     if (!icpt && !pre && !meta && formal.segments.length) formal = await perf.time('typed', async () => this._withTypedReader(formal));   // spec 16 section 9: a refused reading is read again by the types of its words
     // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
@@ -1824,12 +1783,12 @@ function attachTyped(engine, set) {
 
 /** Create the dialog engine: loads and checks all worlds. */
 export async function createEngine({ loader, translator = null, options = {}, formalizers = {} }) {
-  // Reasoner switch (spec 15): 'matrix' (default) or 'ops' (the fallback; the worlds that say reasoner=matrix answer through the sopworld library). The option wins over PSYS2_REASONER.
+  // Reasoner (spec 15): 'matrix' is the product (the worlds that say reasoner=matrix answer through the sopworld library); 'ops' is the named test oracle, selected only by code that compares the two. The option wins over PSYS2_REASONER.
   const mode = (options.reasoner ?? globalThis.process?.env?.PSYS2_REASONER) === 'ops' ? 'ops' : 'matrix';
   // `set`, `reasoner` and `interp` are replaced by `engine.reload(loader)` (LAZY LOADING: the worlds a message needs are added to a running engine); everything below reads them through these bindings.
   let set = await loadWorlds(loader, { reasoner: mode });
   let reasoner = mode === 'matrix' ? await createReasoner(set) : null;
-  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=bf1ab27553')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
+  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=33f5b1e4fd')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
   let interp = createInterpreter(set, { ...options, reasoner });
   attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
