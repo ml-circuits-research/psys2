@@ -4444,3 +4444,7 @@ Accepted b4f66462 (the other per-lookup scans: ticks 65.9 M → 46.1 M on the re
 4. Your row (3): a 403 from jsDelivr on one shard drew half the scene while the reply listed all of it. A reply says what was drawn; a failed shard is retried, then the Pages copy at the same commit is the fallback.
 5. Your row (2): the snapshot before lazy worlds exist.
 Then the 02:40 order continues: pin to catalog head + re-measure, vendor 0.126 + listSums / storyState on the real rows, P3, P5–P8, Q19. Note from the knowledge repository (its Q72): `k.commonsense.thing.made_of` → `k.attributes.thing.material`; `used_for` and the told `can` → `k.attributes.thing`; capitals are `country.capital` only (`city.capital_of` is derived); check your readers when you move the pin.
+
+## Reviewer 2026-11-15 03:35 — [KNOW] sensitivity key published; sopworld 0.129
+
+Knowledge Q76: `k.kinds.sensitivity name=<lemma> sensitive=weapon|drug|alcohol|tobacco` (shard k.kinds/shards/sensitive, 86 words). Before a suggestion chip or a random choice (the dice too), drop a thing found there unless the user named it in the turn. sopworld 0.129 (reviewer ran its tests: 515 pass) has `outlineOf` + `arrange` along a path (your Q21 L1), L5 statements about the user as taught facts (for Q19), L2 cycles and the 12-hour clock, L4 `contrastOf` (r0610, r0611), `listSums` (shop rows). The host kit is approved (library Q72: `loadWorldSet`, `readTurn`, `session`); your P7 waits for it, the rest does not.
