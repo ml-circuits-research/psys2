@@ -19,3 +19,4 @@ training/experiments/browser-limits/www-nx/*
 !training/experiments/browser-limits/www-nx/index.html
 !training/experiments/browser-limits/www-nx/lora.html
 training/results/nx5/*.json
+.cache/

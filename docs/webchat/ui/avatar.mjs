@@ -7,7 +7,6 @@
 // The face MOVES by rules: the host emits events (reply with its text and outcome, thinking, the voice speaking) and worlds/ui.avatar/motion.mjs (a thin call of the library's std.motion over the
 // knowledge world `k.motion`, read from the catalog; the bundled subset worlds/ui.avatar/default-motion.mjs, generated from it, moves the face before the catalog arrives and offline) answers which
 // eyes, brows and mouth to lay over the face now. Nothing moves while the page is hidden, and prefers-reduced-motion is honoured.
-const KNOWLEDGE_URL = 'https://ml-circuits-research.github.io/sop-knowledge-worlds/worlds';
 const FADE_MS = 380;
 const plain = (t) => String(t).replace(/_/g, ' ');
 const nounOf = (slot) => plain(slot.split('_')[0]);
@@ -97,6 +96,7 @@ export function createAvatar(container, host = null) {
     loading = (async () => {
       try {
         const [draw, logic, { DEFAULT_FACE }, motionMod, { DEFAULT_MOTION }, { createFacts }, { createKnowledgeSource }, { createCachedSource }, lib] = await Promise.all(['worlds/ui.avatar/facedraw.mjs', 'worlds/ui.avatar/facelogic.mjs', 'worlds/ui.avatar/default-face.mjs', 'worlds/ui.avatar/motion.mjs', 'worlds/ui.avatar/default-motion.mjs', 'lib/knowledge/facts.mjs', 'lib/loaders/knowledge-source.mjs', 'lib/loaders/knowledge-cache.mjs', 'lib/vendor/sopworld/sopworld.mjs'].map((p) => import(asset(p))));
+        const { KNOWLEDGE_URL } = await import(asset('lib/knowledge/catalog-pin.mjs'));   // the catalog at the pinned commit (P4)
         const src = createCachedSource({ source: createKnowledgeSource(host?.knowledgeUrl?.() || KNOWLEDGE_URL), caches: globalThis.caches });
         const facts = createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((r) => setTimeout(() => r(null), 6000))]) } });
         mods = { draw, logic, motionMod, lib }; data = DEFAULT_FACE; shown = ''; motionRules = mods.motionMod.parseMotion(lib, DEFAULT_MOTION); startMotion(); draw_();   // the bundled fallback face first: the avatar never waits for the network

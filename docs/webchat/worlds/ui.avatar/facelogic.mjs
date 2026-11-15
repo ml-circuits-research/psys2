@@ -8,7 +8,7 @@
 //   shows), refs (the things of the face: the referents of this world), history / future (undo, redo), n (a counter) }.
 // Browser-safe: imports the shared space module, the English of the catalog (src/lang/en.mjs: the words a request skips, the negations) and the comparatives of k.values.
 import * as space from '../space/space.mjs?v=72e3867df9';
-import { en } from '../../lib/lang/en.mjs?v=136be736fc';
+import { en } from '../../lib/lang/en.mjs?v=37915f671a';
 import { comparativeWords } from '../../lib/knowledge/values.mjs?v=a137742733';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };

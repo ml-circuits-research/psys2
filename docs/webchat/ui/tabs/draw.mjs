@@ -6,7 +6,6 @@ import { createRenderer, PAPER } from './draw/render.mjs';
 
 const VENDOR = new URL('../../vendor/draw/rough.mjs', import.meta.url);
 const SCENE_ASSET = 'worlds/art.draw/scene.mjs';
-const KNOWLEDGE_URL = 'https://ml-circuits-research.github.io/sop-knowledge-worlds/worlds';
 const W = 1000, H = 700;
 
 const CRAYONS = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'brown', 'black', 'white', 'grey'];
@@ -151,7 +150,7 @@ function make(holder, host) {
       asking.add(o.thing);
       (async () => {
         try {
-          facts ??= await Promise.all([import(host.asset('lib/knowledge/facts.mjs')), import(host.asset('lib/loaders/knowledge-source.mjs'))]).then(([f, k]) => f.createFacts({ source: k.createKnowledgeSource(KNOWLEDGE_URL) }));
+          facts ??= await Promise.all([import(host.asset('lib/knowledge/facts.mjs')), import(host.asset('lib/loaders/knowledge-source.mjs')), import(host.asset('lib/knowledge/catalog-pin.mjs'))]).then(([f, k, pin]) => f.createFacts({ source: k.createKnowledgeSource(pin.KNOWLEDGE_URL) }));   // the catalog at the pinned commit (P4)
           const th = await facts.thing(o.thing), parts = th?.objects?.[0]?.parts;
           if (parts?.length) { scene.registerThings(new Map([[th.name, parts]])); if (!destroyed) { sync(state); schedule(); } }
         } catch { /* the picture shows without it */ }
