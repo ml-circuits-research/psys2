@@ -1,0 +1,11 @@
+@op.calc.story.tell core.operation
+    impl=tell
+    semantics=action
+    action=story.tell
+    doc="A sentence of a story changes what an owner holds (has, gets, loses, gives): read by the library's storyState against the story so far; a change that takes more than the owner holds is refused with the reason."
+
+@op.calc.story.ask core.operation
+    impl=ask
+    semantics=action
+    action=story.ask
+    doc="A question about the story: how many an owner holds (or all together, at first, how many more, who has the most), answered by storyState from the story so far."

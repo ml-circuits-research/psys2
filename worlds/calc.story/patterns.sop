@@ -1,0 +1,38 @@
+# Word problems (calc.story). Every pattern hands the sentence to the library's storyState (arg.text = the segment); the words are lang.common's (ADR-007).
+# The world declines a reading the library cannot read whole, or a question when no story is in focus (ops.mjs `accepts`), so the next world reads it. A question
+# it keeps is one its own story answers, so its question patterns rank above the general question frames (talk's "how many legs does a spider have").
+
+@pat.calc.story.event core.pattern
+    match="[$lang.lead.filler]? {who:word} [$lang.story.when]? [$lang.story.set|$lang.story.add|$lang.story.remove|$lang.story.give] {rest:rest}"
+    emit="@{_} core.request action=story.tell arg.text=\"{segment}\""
+    kind=statement
+    priority=6
+    example="Tom has 15 apples."
+    example="He gives 12 to Ana."
+    example="Mia found a coin."
+    doc="A sentence of a story: an owner (a name, a pronoun, I, or a number as subject), a verb of holding, getting, losing or giving, an amount and an item."
+
+@pat.calc.story.event.bare core.pattern
+    match="[$lang.lead.filler]? {who:word} [$lang.story.when]? [$lang.story.remove|$lang.story.add]"
+    emit="@{_} core.request action=story.tell arg.text=\"{segment}\""
+    kind=statement
+    priority=6
+    example="One flies away."
+    doc="A sentence of a story with a number as subject and nothing after the verb: that many of the item in focus, of the owner in focus."
+
+@pat.calc.story.ask core.pattern
+    match="[$lang.lead.filler]? [$lang.story.ask] {rest:rest}"
+    emit="@{_} core.request action=story.ask arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    example="How many apples does Tom have?"
+    example="How many apples do they have together?"
+    doc="A question about the story in focus: how many an owner holds, all together, at first, how many more."
+
+@pat.calc.story.who core.pattern
+    match="[$lang.lead.filler]? [$lang.story.who] {rest:rest}"
+    emit="@{_} core.request action=story.ask arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    example="Who has the most apples?"
+    doc="Who of the story's owners holds the most or the least of an item."

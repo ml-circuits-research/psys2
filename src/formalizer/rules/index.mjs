@@ -613,7 +613,9 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     const ends = body.length ? body : tokens.filter((t) => t.kind !== 'qmark');
     const first = ends[0] ?? tokens[0], last = ends[ends.length - 1] ?? tokens[tokens.length - 1];
     const span = expanded ? expanded.span : [first.start, last.end];
-    const segText = expanded ? joinText(tokens) : text.slice(span[0], span[1]);
+    // {segment} is the sentence as it was read: a respelled word ("flyes" read as "flies") is handed to the world's own reader in its read form, the reply names the respelling
+    const respelled = tokens.some((t) => t.kind === 'word' && Number.isFinite(t.start) && typeof t.raw === 'string' && text.slice(t.start, t.end) !== t.raw);
+    const segText = expanded || respelled ? joinText(tokens) : text.slice(span[0], span[1]);
     const ranked = rankMatches(tokens, isQuestion, set, env, lex, ctx, router);
     const { worlds: scores, decision } = ranked;
     let matches = ranked.matches, pickNote = null;
@@ -1081,8 +1083,19 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     outs.forEach((r, idx) => { for (const x of r) x.cut = { by: 'cards', piece: pieces[idx].k }; out.push(...r); });
     return out.length > 1 ? out : (form.restore(stateAfter), null);
   };
+  // SENTENCES IN SEQUENCE (spec 03 "Clauses in sequence", the same rule one level up): a sentence after the first is read over the state the sentences before it leave
+  // ("Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?": the second sentence's "he" and the question need the story the first one starts). Only with
+  // `ctx.project` (the dialog's dry run on a copy of the session) and only while every sentence before it is read; the context is put back after the loop, nothing is committed.
+  const seqSaved = { states: ctx.states, recentWorlds: ctx.recentWorlds, lastWorld: ctx.lastWorld };
+  try {
   for (const s of analyze(text)) {
     s.tokens = dropStyleIn(splitPossessives(s.tokens, lex));
+    if (segments.length && typeof ctx.project === 'function' && segments.every((x) => !x.unparsed)) {
+      budget.tick('rules.sequence');
+      let proj = null;
+      try { proj = ctx.project(segments); } catch { proj = null; }
+      if (proj?.states) { const ws = [...new Set([...(proj.worlds ?? []), ...(seqSaved.recentWorlds ?? [])])]; ctx.states = proj.states; ctx.recentWorlds = ws; ctx.lastWorld = ws[0] ?? seqSaved.lastWorld; }
+    }
     const stateBefore = form.snapshot();
     const first = readSentence(s, s.tokens);
     const starters = PROTO.cutter ? STARTERS.get(set.parent ?? set) : null;
@@ -1118,6 +1131,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     if (third) { segments.push(...third.done); continue; }
     segments.push(first.fallback);
   }
+  } finally { ctx.states = seqSaved.states; ctx.recentWorlds = seqSaved.recentWorlds; ctx.lastWorld = seqSaved.lastWorld; }
   for (const seg of segments) wires.push(...seg.wires);
   return { segments, wires };
 }

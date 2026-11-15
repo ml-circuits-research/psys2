@@ -1,0 +1,74 @@
+# Word problems read by the library's storyState (kids plan L1; real turns r0194, r0195, r0201, r0541-r0543).
+
+@t.calc.story.n1 core.test
+    session=apples
+    input="Tom has 15 nuts."
+    expect="OK, Tom has 15 nuts."
+
+@t.calc.story.n2 core.test
+    session=apples
+    input="He gives 12 to Ana."
+    expect="OK, Tom gave Ana 12 nuts."
+
+@t.calc.story.n3 core.test
+    session=apples
+    input="How many nuts does Tom have?"
+    expect="Tom has 3 nuts."
+
+@t.calc.story.n4 core.test
+    session=apples
+    input="How many nuts does Ana have?"
+    expect="Ana has 12 nuts."
+
+@t.calc.story.n5 core.test
+    session=refuse
+    input="Tom has 5 nuts."
+    expect="OK, Tom has 5 nuts."
+
+@t.calc.story.n6 core.test
+    session=refuse
+    doc="Giving more than is held is refused with the reason (r0195)."
+    input="He gives 8 to Ana."
+    expect="Tom only had 5 nuts, so Tom cannot give away 8."
+    expectStatus=conflicting
+
+@t.calc.story.n7 core.test
+    session=bees
+    input="Tom has 10 seeds."
+    expect="OK, Tom has 10 seeds."
+
+@t.calc.story.n8 core.test
+    session=bees
+    doc="A number as subject: one of the item in focus, of the owner in focus (r0542)."
+    input="One flies away."
+    expect="OK, Tom lost 1 seed."
+
+@t.calc.story.n9 core.test
+    session=bees
+    input="How many seed Tom has ?"
+    expect="Tom has 9 seeds."
+
+@t.calc.story.n10 core.test
+    session=most
+    input="Ana has 3 nuts."
+    expect="OK, Ana has 3 nuts."
+
+@t.calc.story.n11 core.test
+    session=most
+    input="Ion has 5 nuts."
+    expect="OK, Ion has 5 nuts."
+
+@t.calc.story.n12 core.test
+    session=most
+    input="Who has the most nuts?"
+    expect="Ion has the most nuts."
+
+@t.calc.story.n13 core.test
+    session=found
+    input="Mia found a carrot."
+    expect="OK, Mia got 1 carrot."
+
+@t.calc.story.n14 core.test
+    doc="A bare word with no story in focus is not a story sentence (plan H7: the answers to the removed profile tab)."
+    input="Research"
+    expectStatus=unparsed

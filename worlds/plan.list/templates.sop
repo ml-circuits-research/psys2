@@ -1,0 +1,16 @@
+@tpl.plan.list.make core.template
+    for=action.list.make
+    text="{value}"
+
+@tpl.plan.list.change core.template
+    for=action.list.change
+    text="{value}"
+
+@tpl.plan.list.ask core.template
+    for=action.list.ask
+    text="{value}"
+
+@tpl.plan.list.ask.conflicting core.template
+    for=action.list.ask
+    status=conflicting
+    text="{value}"

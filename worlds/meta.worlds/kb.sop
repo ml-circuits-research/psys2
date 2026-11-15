@@ -23,6 +23,14 @@
     frame=what_color frame=what_colors frame=where_are frame=is_anything frame=is_house frame=which_colors frame=which_colour frame=which_spot
     frame=which_thing frame=how_about
 
+@card.calc.story meta.worlds.card
+    core.source="generated:meta.worlds/cards"
+    id=calc.story kind=module run=none
+    act=nut act=seed act=owned
+    actshared=escaped actshared=sold actshared=gathered actshared=escape actshared=sell actshared=earn actshared=broken actshared=earned
+    actshared=eaten actshared=picked actshared=kept
+    frame=who_has
+
 @card.data.charts meta.worlds.card
     core.source="generated:meta.worlds/cards"
     id=data.charts kind=tab run=none tab=charts
@@ -63,11 +71,11 @@
     actshared=dismantle actshared=lump actshared=merge actshared=pair actshared=slice actshared=uncouple actshared=unfasten actshared=untie
     thing=circle thing=square thing=rectangle thing=triangle thing=diamond thing=ellipse thing=ellip thing=oval
     thing=hexagon thing=star thing=box thing=node thing=arrow thing=connection thing=link thing=edge
-    thing=text thing=label thing=caption thing=everything thing=red thing=yellow thing=gold thing=lime
-    thing=green thing=teal thing=cyan thing=blue thing=navy thing=indigo thing=purple thing=magenta
-    thing=pink thing=brown thing=gray thing=black thing=white thing=newest thing=new thing=last
-    thing=latest thing=oldest thing=first thing=earliest
-    thingshared=shape thingshared=dot thingshared=note thingshared=orange
+    thing=text thing=label thing=caption thing=everything thing=red thing=yellow thing=lime thing=green
+    thing=teal thing=cyan thing=blue thing=navy thing=indigo thing=purple thing=magenta thing=pink
+    thing=brown thing=gray thing=black thing=white thing=newest thing=new thing=last thing=latest
+    thing=oldest thing=first thing=earliest
+    thingshared=shape thingshared=dot thingshared=note thingshared=orange thingshared=gold
     frame=which_shape frame=is_done frame=is_start frame=which_rules frame=which_shapes frame=is_connected frame=what_rules frame=which_circle
     frame=are_start frame=does_sensor
 
@@ -119,13 +127,13 @@
     slot=number slot=agent
     name=arith
     act=ate act=lost act=found act=broken act=eat act=break act=plus act=fewer
-    act=lose act=didnt act=doesnt act=broke act=received act=extra act=never act=together
-    act=dont act=subtract act=donate act=combined act=divided act=collected act=eaten act=greater
-    act=won act=collect act=dropped act=several act=pass act=win act=donated act=crawl
-    act=disappear act=doubled act=escape act=sell act=threw act=additional act=cracked act=devoured
-    act=gathered act=gobbled act=greatest act=maximum act=misplaced act=munched act=ruined
+    act=lose act=didnt act=doesnt act=extra act=received act=never act=broke act=together
+    act=dont act=subtract act=combined act=divided act=donate act=greater act=several act=collect
+    act=collected act=won act=eaten act=dropped act=pass act=crawl act=disappear act=doubled
+    act=win act=donated act=threw act=additional act=cracked act=devoured act=gobbled act=greatest
+    act=maximum act=misplaced act=munched act=ruined act=smashed act=snapped act=whoever
     actshared=gave actshared=who actshared=bought actshared=got actshared=give actshared=less actshared=minus actshared=altogether
-    actshared=vs actshared=find actshared=own actshared=receive actshared=versus
+    actshared=vs actshared=find actshared=own actshared=versus actshared=receive
     thing=plum thing=peach thing=cherry thing=grape thing=lemon thing=strawberry thing=sweet thing=candy
     thing=cake thing=cupcake thing=lollipop thing=egg thing=marble thing=card thing=coin thing=stamp
     thing=button thing=shell thing=stone thing=rock thing=stick thing=leaf thing=crayon thing=marker
@@ -133,7 +141,7 @@
     thingshared=apple thingshared=pear thingshared=orange thingshared=banana thingshared=biscuit thingshared=chocolate thingshared=sandwich thingshared=sticker
     thingshared=flower thingshared=pencil thingshared=pen thingshared=eraser thingshared=ruler thingshared=notebook thingshared=book thingshared=doll
     thingshared=kite thingshared=balloon thingshared=puzzle thingshared=block
-    frame=has_apples frame=who_has frame=has_marbles frame=has_pencils frame=has_stickers frame=is_divided frame=is_plus frame=is_half
+    frame=has_apples frame=has_marbles frame=has_pencils frame=has_stickers frame=who_has frame=is_divided frame=is_plus frame=is_half
     frame=does_tom frame=has_pears
 
 @card.kids.common meta.worlds.card
@@ -160,7 +168,7 @@
     act=spend act=buying act=purchase act=when act=back act=leu act=spare act=leftover
     act=enough act=paying act=owe act=difference act=using act=fine act=getting act=purchasing
     act=total act=paid act=afford act=purchased act=offer act=fund act=bill act=doable
-    act=possible act=purse act=once act=bought act=cash act=wallet act=spent act=sufficient
+    act=possible act=purse act=once act=bought act=cash act=wallet act=sufficient act=spent
     act=affordable act=run act=pocket act=allowance act=bank act=coin act=imagine act=budget
     act=dough act=saving act=suppose act=assuming act=giving act=sum act=adequate
     actshared=change actshared=get actshared=after actshared=give actshared=take
@@ -182,7 +190,7 @@
     act=rm act=strike act=trash act=scratch act=nudge act=alarm act=bin act=hwmany
     act=jot act=unbought act=dump act=unfinished act=upon act=among act=abolish act=feed
     act=fetched act=memo act=notification act=obliterate act=outta act=uncrossed act=unticked
-    actshared=check actshared=drop actshared=clear actshared=delete
+    actshared=check actshared=clear actshared=drop actshared=delete
     thing=shop thing=grocery thing=homework thing=chore thing=errand thing=wishlist thing=packing thing=garden
     thing=party thing=birthday thing=gift thing=present thing=toy thing=holiday thing=trip thing=camping
     thing=bedtime thing=weekend thing=cleaning thing=cooking thing=pet
@@ -228,6 +236,19 @@
     thingshared=note
     frame=what_notes frame=what_key frame=what_chord frame=who_wrote frame=does_middle frame=how_does frame=what_instruments frame=which_songs
     frame=how_fast frame=is_c
+
+@card.plan.list meta.worlds.card
+    core.source="generated:meta.worlds/cards"
+    id=plan.list kind=module run=none
+    slot=number
+    act=pencil act=ball act=puzzle
+    thing=afghani thing=afghanis thing=agora thing=agorot thing=ariary thing=baht thing=balboa thing=balboas
+    thing=ban thing=bani thing=birr thing=boliviano thing=buck thing=cedi thing=cedis thing=cent
+    thing=centavo thing=centime thing=dalasi thing=dalasis thing=denar thing=denari thing=dinar thing=dirham
+    thing=dobra thing=dobras thing=dollar thing=dong thing=dram thing=emalangeni thing=escudo thing=euro
+    thing=fen thing=florin thing=forint thing=franc thing=gourde thing=greenback thing=grosz thing=groszy
+    thing=guarani thing=guaranis thing=guilder thing=haler thing=haleru thing=hryvnia thing=hryvnias
+    thingshared=gold
 
 @card.plan.seating meta.worlds.card
     core.source="generated:meta.worlds/cards"

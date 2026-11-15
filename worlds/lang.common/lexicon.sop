@@ -4782,3 +4782,120 @@
     alt=do_you_remember
     alt=can_you_remember
     alt=do_you_know
+
+# Word problems (calc.story, kids plan Q18 L1): the verbs of a story and their effect for the library's storyState (set / add / remove / give, one group each).
+# TEMPORARY until k.actions carries typed possession effects (Q18 K5: holds=add|remove|give|set); then the groups are read from the catalog. One-word forms are what
+# storyState reads as the verb; a two-word form ("flies away") is a phrase for the pattern, its first word the verb.
+@phrase.lang.story.set core.phrase
+    frame=false
+    doc="A story verb that states how many an owner holds (storyState effect set): Tom has 15 apples; Ana is holding 4 pears."
+    alt=has
+    alt=have
+    alt=had
+    alt=holds
+    alt=hold
+    alt=is_holding
+    alt=was_holding
+    alt=owns
+    alt=own
+    alt=owned
+    alt=keeps
+    alt=kept
+
+@phrase.lang.story.add core.phrase
+    frame=false
+    doc="A story verb that adds to what an owner holds (storyState effect add): Mia found a coin; Ben bought a pencil."
+    alt=finds
+    alt=found
+    alt=gets
+    alt=got
+    alt=receives
+    alt=received
+    alt=buys
+    alt=bought
+    alt=picks
+    alt=picked
+    alt=collects
+    alt=collected
+    alt=gathers
+    alt=gathered
+    alt=wins
+    alt=won
+    alt=earns
+    alt=earned
+
+@phrase.lang.story.remove core.phrase
+    frame=false
+    doc="A story verb that takes from what an owner holds (storyState effect remove): Ben lost 3 marbles; Tom ate 2 apples; One flies away."
+    alt=loses
+    alt=lost
+    alt=eats
+    alt=ate
+    alt=eaten
+    alt=breaks
+    alt=broke
+    alt=broken
+    alt=spends
+    alt=spent
+    alt=sells
+    alt=sold
+    alt=drops
+    alt=dropped
+    alt=uses
+    alt=used
+    alt=flies_away
+    alt=fly_away
+    alt=flew_away
+    alt=runs_away
+    alt=ran_away
+    alt=escapes
+    alt=escaped
+
+@phrase.lang.story.give core.phrase
+    frame=false
+    doc="A story verb that moves an amount from an owner to another (storyState effect give): He gives 12 to Ana; Ana gave Tom an apple."
+    alt=gives
+    alt=give
+    alt=gave
+    alt=given
+    alt=hands
+    alt=handed
+    alt=passes
+    alt=passed
+    alt=donates
+    alt=donated
+
+@phrase.lang.story.when core.phrase
+    frame=false
+    doc="Adverbs between the owner and the verb of a story sentence (Tom now has 3; Mia just found a coin)."
+    alt=now
+    alt=just
+    alt=then
+    alt=also
+    alt=still
+    alt=has_just
+    alt=did_not
+    alt=does_not
+    alt=didnt
+    alt=doesnt
+
+@phrase.lang.story.ask core.phrase
+    frame=false
+    doc="The lead of a question about how many an owner of a story holds."
+    alt=how_many
+    alt=how_much
+
+@phrase.lang.story.who core.phrase
+    frame=false
+    doc="The lead of a question about which owner of a story holds the most or the least."
+    alt=who
+    alt=whose
+
+@phrase.lang.story.all core.phrase
+    frame=false
+    doc="Words that ask for the amounts of all the owners of a story together (storyState all)."
+    alt=together
+    alt=altogether
+    alt=total
+    alt=combined
+    alt=all

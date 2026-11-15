@@ -1,0 +1,67 @@
+# Lists of w.list v3 and the shop, every sum by the library's listSums (kids plan K1, K6, L3; real turns r0598, r0599, r0622-r0627).
+
+@t.plan.list.n1 core.test
+    session=puzzle
+    input="I want a puzzle."
+    expect="OK, a puzzle."
+
+@t.plan.list.n2 core.test
+    session=puzzle
+    input="I pay 10 lei."
+    expect="OK, you pay 10 lei."
+
+@t.plan.list.n3 core.test
+    session=puzzle
+    doc="Short money: the library's listSums says what is missing (r0598)."
+    input="What is the change?"
+    expect="10 lei is not enough. A puzzle costs 18 lei."
+    expectStatus=conflicting
+
+@t.plan.list.n4 core.test
+    session=pencils
+    doc="Quantity x price, then the change (r0599)."
+    input="I want 2 pencils and I give the cashier 10 lei. How much change do I get?"
+    expect="Your change from 10 lei is 6 lei."
+
+@t.plan.list.n5 core.test
+    session=basket
+    doc="Two things and the money in one sentence, the change in the next (r0622)."
+    input="I would like a ball and a pencil and pay with 20 lei. what's the change"
+    expect="Your change from 20 lei is 13 lei."
+
+@t.plan.list.n6 core.test
+    session=basket
+    doc="A paid list is settled: the next purchase starts a new list (r0624 after r0622)."
+    input="I want a puzzle and I pay 10 lei. What is the change?"
+    expect="10 lei is not enough. A puzzle costs 18 lei."
+
+@t.plan.list.n7 core.test
+    session=price
+    input="How much does a pencil cost?"
+    expect="A pencil costs 2 lei."
+
+@t.plan.list.n8 core.test
+    session=price
+    input="How much do 3 pencils cost?"
+    expect="3 pencils cost 6 lei."
+
+@t.plan.list.n9 core.test
+    session=wallet
+    input="I start with 30 lei."
+    expect="OK, you have 30 lei."
+
+@t.plan.list.n10 core.test
+    session=wallet
+    input="Can I buy 3 pencils?"
+    expect="Yes, 3 pencils cost 6 lei and you have 30 lei."
+
+@t.plan.list.n11 core.test
+    session=from
+    input="What is the change from 20 lei for a ball and a pencil?"
+    expect="Your change from 20 lei is 13 lei."
+
+@t.plan.list.n12 core.test
+    session=arith
+    doc="A sum is not a price: the shop declines it."
+    input="How much is 2 plus 2?"
+    expect="4"

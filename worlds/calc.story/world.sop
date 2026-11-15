@@ -1,0 +1,12 @@
+@world.calc.story core.world
+    namespace=calc.story
+    version=0.1.0
+    legend=$legend.calc.story
+    imports=world.core
+    imports=world.lang.common
+    formalization=rules
+    language=en
+    status=fixture
+    title="Word problems"
+    summary="word problems"
+    doc="A general world, not a tab (kids plan, ADR-011, Q18 L1): a story of quantities that owners hold (Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?) is read by the library's storyState, sentence by sentence and across turns (the story is the world state). The library decides the owner (a name, a pronoun for the last owner, I, or a number as subject: One flies away), the amount (a number, a or an for one) and the item, refuses giving or losing more than is held with the reason, and answers how many an owner holds, all together, at first, how many more, who has the most. Nothing here lists names or things: the number words, pronouns and function words come from the language world (w.lang.en through src/lang/en.mjs), the verbs and their effects from lang.common's phrase groups lang.story.* until k.actions has typed possession effects (Q18 K5). Hand-built platform fixture, not produced by the C1 workflow."
