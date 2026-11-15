@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "0915f906",
-  "tree": "904c31b259a7f78e",
+  "build": "230506dd",
+  "tree": "b33804223759cfab",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -14,14 +14,14 @@
    "turns": 605,
    "judged": 207,
    "right": 129,
-   "partly": 2,
-   "wrong": 76,
+   "partly": 3,
+   "wrong": 75,
    "open": 52,
    "changed": 14,
    "unjudged": 332,
    "outcome": {
-    "executed": 155,
-    "refused": 243,
+    "executed": 160,
+    "refused": 238,
     "asked": 3,
     "not_understood": 109,
     "other_world": 95
@@ -30,12 +30,12 @@
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 38
+     "right": 37
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
      "judged": 11,
-     "right": 1
+     "right": 2
     },
     "owner-log-2026-11-13c": {
      "turns": 24,
@@ -89,14 +89,14 @@
    "turns": 605,
    "judged": 207,
    "right": 129,
-   "partly": 2,
-   "wrong": 76,
+   "partly": 3,
+   "wrong": 75,
    "open": 52,
    "changed": 14,
    "unjudged": 332,
    "outcome": {
-    "executed": 155,
-    "refused": 243,
+    "executed": 160,
+    "refused": 238,
     "asked": 3,
     "not_understood": 109,
     "other_world": 95
@@ -105,12 +105,12 @@
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 38
+     "right": 37
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
      "judged": 11,
-     "right": 1
+     "right": 2
     },
     "owner-log-2026-11-13c": {
      "turns": 24,
@@ -169,35 +169,34 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 384,
- "failing_ops": 384,
+ "failing_matrix": 383,
+ "failing_ops": 383,
  "ops_only": 0,
  "judged_causes": [
   {
    "cause": "diagram.sketch: acted; the state is not the expected one",
-   "count": 24,
-   "wrong": 24,
+   "count": 23,
+   "wrong": 23,
    "partly": 0,
    "rows": [
+    {
+     "id": "r0014",
+     "verdict": "wrong",
+     "text": "make a better layout",
+     "tab": "diagram",
+     "reply": "I added a square. I assumed square for the target. I assumed white for the colour. I assumed default for the size. I assumed 1 for the count. I could not do a b",
+     "failing": [
+      "state:shapes.length=$+0"
+     ]
+    },
     {
      "id": "r0024",
      "verdict": "wrong",
      "text": "paint three new nodes",
      "tab": "diagram",
-     "reply": "There is nothing like that in the diagram.",
+     "reply": "I cannot do three new nodes in the diagram yet.",
      "failing": [
       "state:shapes.length=$+3"
-     ]
-    },
-    {
-     "id": "r0551",
-     "verdict": "wrong",
-     "text": "draw a red circle",
-     "tab": "diagram",
-     "reply": "I drew a circle.",
-     "failing": [
-      "state:shapes[name=c1].color=red",
-      "answer:c1"
      ]
     },
     {
@@ -205,21 +204,11 @@
      "verdict": "wrong",
      "text": "create a diagram",
      "tab": "diagram",
-     "reply": "I drew a diagram with 7 nodes and 6 arrows. It is about making toast. The nodes are 4 rectangles and 3 circles.",
+     "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed tree for the layout. I assumed 7 for the count. I assumed rectangle, circ",
      "failing": [
       "state:shapes.length=1",
       "answer:Keep the current one",
       "answer:Templates"
-     ]
-    },
-    {
-     "id": "r0554",
-     "verdict": "wrong",
-     "text": "draw a red circle",
-     "tab": "diagram",
-     "reply": "I drew a circle.",
-     "failing": [
-      "state:shapes[name=c1].color=red"
      ]
     },
     {
@@ -242,7 +231,7 @@
      "verdict": "wrong",
      "text": "change the layout to a column",
      "tab": "diagram",
-     "reply": "There is nothing like that in the diagram.",
+     "reply": "I did not understand \"layout\" here.",
      "failing": [
       "state:shapes[name=c1].x=@shapes[name=r1].x",
       "state:shapes[name=r2].x=@shapes[name=r1].x"
@@ -338,7 +327,7 @@
      "verdict": "wrong",
      "text": "connect them with a dashed arrow",
      "tab": "diagram",
-     "reply": "I did not understand that as something to do in the diagram.",
+     "reply": "Nothing changed. I could not do connect: this world does not connect.",
      "failing": [
       "state:edges[id=a1].style=dashed",
       "state:edges[id=a1].from=A",
@@ -350,7 +339,7 @@
      "verdict": "wrong",
      "text": "make both green",
      "tab": "diagram",
-     "reply": "I did not understand that as something to do in the diagram.",
+     "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed diagram for the target. I assumed tree for the layout. I assumed 7 for th",
      "failing": [
       "state:shapes[name=A].color=green",
       "state:shapes[name=B].color=green"
@@ -441,12 +430,12 @@
      ]
     }
    ],
-   "both_reasoners": 24
+   "both_reasoners": 23
   },
   {
    "cause": "Romanian: art.draw: acted; the reply does not say what the check asks",
-   "count": 22,
-   "wrong": 22,
+   "count": 21,
+   "wrong": 21,
    "partly": 0,
    "rows": [
     {
@@ -534,7 +523,7 @@
      "verdict": "wrong",
      "text": "muta crocodilii mai jos",
      "tab": "draw",
-     "reply": "Nothing changed. There is no crocodile here. I could not do lower: this world does not take place for place. I could not do crocodiles: this world does not take",
+     "reply": "Nothing changed. There is no crocodile here. I could not do lower: this world does not take place for place.",
      "failing": [
       "reply_any:moved the crocodiles"
      ]
@@ -606,7 +595,7 @@
      "verdict": "wrong",
      "text": "muta copilul pe iarba",
      "tab": "draw",
-     "reply": "Nothing changed. There is no child here. I could not do on the grass: this world does not take place for place. I could not do child: this world does not take k",
+     "reply": "Nothing changed. There is no child here. I could not do on the grass: this world does not take place for place.",
      "failing": []
     },
     {
@@ -622,7 +611,7 @@
      "verdict": "wrong",
      "text": "muta capra mai jos",
      "tab": "draw",
-     "reply": "Nothing changed. There is no goat here. I could not do lower: this world does not take place for place. I could not do goat: this world does not take kind for p",
+     "reply": "Nothing changed. There is no goat here. I could not do lower: this world does not take place for place.",
      "failing": []
     },
     {
@@ -638,19 +627,11 @@
      "verdict": "wrong",
      "text": "muta vaca mai jos",
      "tab": "draw",
-     "reply": "Nothing changed. There is no cow here. I could not do lower: this world does not take place for place. I could not do cow: this world does not take kind for pla",
-     "failing": []
-    },
-    {
-     "id": "r0125",
-     "verdict": "wrong",
-     "text": "muta casa mai sus",
-     "tab": "draw",
-     "reply": "Which house? There are 2.",
+     "reply": "Nothing changed. There is no cow here. I could not do lower: this world does not take place for place.",
      "failing": []
     }
    ],
-   "both_reasoners": 22
+   "both_reasoners": 21
   },
   {
    "cause": "art.draw: acted; the state is not the expected one",
@@ -663,7 +644,7 @@
      "verdict": "wrong",
      "text": "draw a green house and a yellow one",
      "tab": "draw",
-     "reply": "I added a house. I assumed 1 for the count.",
+     "reply": "I added a house.",
      "failing": [
       "state:art.draw:objects[kind=house].color=green",
       "state:art.draw:objects.length=2",
@@ -688,7 +669,7 @@
      "verdict": "wrong",
      "text": "draw a tree",
      "tab": "draw",
-     "reply": "I added a tree. I assumed 1 for the count.",
+     "reply": "I added a tree.",
      "failing": [
       "state:art.draw:objects.length=5"
      ]
@@ -709,7 +690,7 @@
      "verdict": "wrong",
      "text": "draw a house and another yellow one",
      "tab": "draw",
-     "reply": "I added a house. I assumed 1 for the count.",
+     "reply": "I added a house.",
      "failing": [
       "state:art.draw:objects.length=5",
       "answer:yellow house"
@@ -720,7 +701,7 @@
      "verdict": "wrong",
      "text": "draw a sun",
      "tab": "draw",
-     "reply": "I added a sun. I assumed 1 for the count.",
+     "reply": "I added a sun.",
      "failing": [
       "state:art.draw:objects.length=6"
      ]
@@ -882,16 +863,26 @@
   },
   {
    "cause": "diagram.sketch: acted; the reply does not say what the check asks",
-   "count": 2,
+   "count": 3,
    "wrong": 1,
-   "partly": 1,
+   "partly": 2,
    "rows": [
+    {
+     "id": "r0551",
+     "verdict": "partly",
+     "text": "draw a red circle",
+     "tab": "diagram",
+     "reply": "I added a circle.",
+     "failing": [
+      "answer:c1"
+     ]
+    },
     {
      "id": "r0555",
      "verdict": "partly",
      "text": "add a box",
      "tab": "diagram",
-     "reply": "I drew a rectangle.",
+     "reply": "I added a rectangle.",
      "failing": [
       "answer:r1"
      ]
@@ -904,6 +895,35 @@
      "reply": "I did not understand \"1\" here.",
      "failing": [
       "answer:What should the label"
+     ]
+    }
+   ],
+   "both_reasoners": 3
+  },
+  {
+   "cause": "Romanian: art.draw: acted; the state is not the expected one",
+   "count": 2,
+   "wrong": 2,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0019",
+     "verdict": "wrong",
+     "text": "for their grandma do it",
+     "tab": "diagram",
+     "reply": "I made it again, the way you said. I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I removed the square. I assumed diagram for the ",
+     "failing": [
+      "unchanged"
+     ]
+    },
+    {
+     "id": "r0036",
+     "verdict": "wrong",
+     "text": "inca un crocodil",
+     "tab": "draw",
+     "reply": "There is nothing in the drawing that I made and could change that way yet.",
+     "failing": [
+      "state:objects.length=$+1"
      ]
     }
    ],
@@ -1003,7 +1023,7 @@
      "verdict": "wrong",
      "text": "label link",
      "tab": "diagram",
-     "reply": "There is no link in the diagram.",
+     "reply": "Nothing changed. There is no link here.",
      "failing": [
       "answer:What should the label of a1",
       "status:missing"
@@ -1053,44 +1073,6 @@
    "both_reasoners": 1
   },
   {
-   "cause": "Romanian: art.draw: acted; the state is not the expected one",
-   "count": 1,
-   "wrong": 1,
-   "partly": 0,
-   "rows": [
-    {
-     "id": "r0036",
-     "verdict": "wrong",
-     "text": "inca un crocodil",
-     "tab": "draw",
-     "reply": "There is nothing in the drawing that I made and could change that way yet.",
-     "failing": [
-      "state:objects.length=$+1"
-     ]
-    }
-   ],
-   "both_reasoners": 1
-  },
-  {
-   "cause": "Romanian: diagram.sketch: acted; the state is not the expected one",
-   "count": 1,
-   "wrong": 1,
-   "partly": 0,
-   "rows": [
-    {
-     "id": "r0008",
-     "verdict": "wrong",
-     "text": "Desenați un cerc roșu",
-     "tab": "diagram",
-     "reply": "I drew a circle.",
-     "failing": [
-      "state:shapes[last].color=red"
-     ]
-    }
-   ],
-   "both_reasoners": 1
-  },
-  {
    "cause": "Romanian: ui.avatar: not understood",
    "count": 1,
    "wrong": 1,
@@ -1109,13 +1091,32 @@
     }
    ],
    "both_reasoners": 1
+  },
+  {
+   "cause": "ui.avatar: acted; the state is not the expected one",
+   "count": 1,
+   "wrong": 1,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0646",
+     "verdict": "wrong",
+     "text": "make the first sun blue",
+     "tab": "draw",
+     "reply": "I added a sun.",
+     "failing": [
+      "state:art.draw:objects.length=3"
+     ]
+    }
+   ],
+   "both_reasoners": 1
   }
  ],
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 141,
-   "both_reasoners": 141,
+   "count": 140,
+   "both_reasoners": 140,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -1222,28 +1223,28 @@
   },
   {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.real",
-   "count": 26,
-   "both_reasoners": 26,
+   "count": 25,
+   "both_reasoners": 25,
    "examples": [
     {
      "text": "draw a red circle",
      "tab": "diagram",
-     "happened": "I drew a circle. [outcome: executed; wrong; state:shapes[name=c1].color=red answer:c1]"
+     "happened": "I added a circle. [outcome: executed; partly; answer:c1]"
     },
     {
      "text": "create a diagram",
      "tab": "diagram",
-     "happened": "I drew a diagram with 7 nodes and 6 arrows. It is about making toast. The nodes are 4 rectangles and 3 circles. [outcome: executed; wrong; state:shapes.length=1"
-    },
-    {
-     "text": "draw a red circle",
-     "tab": "diagram",
-     "happened": "I drew a circle. [outcome: executed; wrong; state:shapes[name=c1].color=red]"
+     "happened": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed tree for the layout. I assumed 7 for the count. I assumed rectangle, circ"
     },
     {
      "text": "add a box",
      "tab": "diagram",
-     "happened": "I drew a rectangle. [outcome: executed; partly; answer:r1]"
+     "happened": "I added a rectangle. [outcome: executed; partly; answer:r1]"
+    },
+    {
+     "text": "connect all elements",
+     "tab": "diagram",
+     "happened": "I did not understand \"elements\" here. [outcome: refused; wrong; state:edges.length=2 state:edges[id=a1].from=c1 state:edges[id=a1].to=r1 state:edges[id=a2].to=r"
     }
    ]
   },
@@ -1388,24 +1389,24 @@
    "both_reasoners": 9,
    "examples": [
     {
-     "text": "Desenați un cerc roșu",
-     "tab": "diagram",
-     "happened": "I drew a circle. [outcome: executed; wrong; state:shapes[last].color=red]"
-    },
-    {
      "text": "conectează toate formele",
      "tab": "diagram",
      "happened": "I did not understand \"shapes\" here. [outcome: refused]"
     },
     {
+     "text": "make a better layout",
+     "tab": "diagram",
+     "happened": "I added a square. I assumed square for the target. I assumed white for the colour. I assumed default for the size. I assumed 1 for the count. I could not do a b"
+    },
+    {
      "text": "paint Street New nodes",
      "tab": "diagram",
-     "happened": "There is no street in the diagram. [outcome: refused]"
+     "happened": "Nothing changed. There is no street here. [outcome: refused]"
     },
     {
      "text": "paint three new nodes",
      "tab": "diagram",
-     "happened": "There is nothing like that in the diagram. [outcome: refused; wrong; state:shapes.length=$+3]"
+     "happened": "I cannot do three new nodes in the diagram yet. [outcome: refused; wrong; state:shapes.length=$+3]"
     }
    ]
   },
@@ -1415,14 +1416,14 @@
    "both_reasoners": 8,
    "examples": [
     {
-     "text": "fa-mu un desen cu un lac, o rata, o vila, nori, soare ,iarba",
+     "text": "o casa si 2 pesti",
      "tab": "draw",
-     "happened": "I cannot do a villa, the grass in the drawing yet. [outcome: refused; open]"
+     "happened": "I could not plan 2 fish as you said, so I made nothing. [outcome: refused; open]"
     },
     {
      "text": "un cer cu 5 nori",
      "tab": "draw",
-     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; open]"
+     "happened": "Nothing changed. I could not do A sky with 5 clouds: 2 made, the request said 1. [outcome: refused; open]"
     },
     {
      "text": "deseneaza si un magar, dar sa nu zboare, pe iarba",
@@ -1471,7 +1472,7 @@
     {
      "text": "draw a green house and a yellow one",
      "tab": "draw",
-     "happened": "I added a house. I assumed 1 for the count. [outcome: executed; wrong; state:art.draw:objects[kind=house].color=green state:art.draw:objects.length=2 answer:gre"
+     "happened": "I added a house. [outcome: executed; wrong; state:art.draw:objects[kind=house].color=green state:art.draw:objects.length=2 answer:green house answer:yellow hous"
     },
     {
      "text": "add a red circle and a blue one",
@@ -1481,7 +1482,7 @@
     {
      "text": "draw a tree",
      "tab": "draw",
-     "happened": "I added a tree. I assumed 1 for the count. [outcome: executed; wrong; state:art.draw:objects.length=5]"
+     "happened": "I added a tree. [outcome: executed; wrong; state:art.draw:objects.length=5]"
     },
     {
      "text": "draw two cats and a big one",
@@ -1608,6 +1609,23 @@
    ]
   },
   {
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.cb-c",
+   "count": 2,
+   "both_reasoners": 2,
+   "examples": [
+    {
+     "text": "make your eyes blue",
+     "tab": "draw",
+     "happened": "I cannot make eye in the drawing yet. [outcome: refused; wrong; answer:eyes]"
+    },
+    {
+     "text": "make the first sun blue",
+     "tab": "draw",
+     "happened": "I added a sun. [outcome: executed; wrong; state:art.draw:objects.length=3]"
+    }
+   ]
+  },
+  {
    "cause": "foreign-world reading",
    "count": 1,
    "both_reasoners": 1,
@@ -1628,18 +1646,6 @@
      "text": "Chnage the tile of the document to Disucssion",
      "tab": "editor",
      "happened": "I did not understand \"chnage\", \"tile\" here. [outcome: refused; open]"
-    }
-   ]
-  },
-  {
-   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.cb-c",
-   "count": 1,
-   "both_reasoners": 1,
-   "examples": [
-    {
-     "text": "make your eyes blue",
-     "tab": "draw",
-     "happened": "I cannot make eye in the drawing yet. [outcome: refused; wrong; answer:eyes]"
     }
    ]
   }
