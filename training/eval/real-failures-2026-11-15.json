@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "7c75a5f9",
-  "tree": "98c11f2dc8ba2da1",
+  "build": "e838d108",
+  "tree": "dd1c47bb365b0b58",
   "catalog": "ab3b2ab868ba27868f88d2dbdfce3433a699ece6",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -16,15 +16,15 @@
    "right": 131,
    "partly": 13,
    "wrong": 37,
-   "open": 12,
-   "changed": 54,
+   "open": 11,
+   "changed": 55,
    "unjudged": 332,
    "outcome": {
-    "executed": 338,
+    "executed": 342,
     "refused": 3,
     "asked": 8,
-    "not_understood": 160,
-    "other_world": 70
+    "not_understood": 155,
+    "other_world": 71
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -96,15 +96,15 @@
    "right": 131,
    "partly": 13,
    "wrong": 37,
-   "open": 12,
-   "changed": 54,
+   "open": 11,
+   "changed": 55,
    "unjudged": 332,
    "outcome": {
-    "executed": 338,
+    "executed": 342,
     "refused": 3,
     "asked": 8,
-    "not_understood": 161,
-    "other_world": 69
+    "not_understood": 156,
+    "other_world": 70
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -185,14 +185,14 @@
   "build": "eb38ea45",
   "tree": "c13f13f4b2fbf6df"
  },
- "failing_matrix": 246,
- "failing_ops": 246,
+ "failing_matrix": 242,
+ "failing_ops": 242,
  "ops_only": 0,
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 70,
-   "both_reasoners": 70,
+   "count": 66,
+   "both_reasoners": 66,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -259,14 +259,14 @@
      "happened": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of hat?\" I did not know the words: old, woman. [outcome: not_understood; w"
     },
     {
-     "text": "muta fetita linga baiat",
-     "tab": "draw",
-     "happened": "What should I draw? [outcome: not_understood; open]"
-    },
-    {
      "text": "desneaza o capra",
      "tab": "draw",
      "happened": "I can't find Draw a on any of your lists, so I cannot mark it as done. (I read \"goat\" as \"got\") [outcome: other_world; open]"
+    },
+    {
+     "text": "și Angie",
+     "tab": "robot",
+     "happened": "I did not understand \"și Angie\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
     }
    ]
   },
