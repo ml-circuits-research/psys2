@@ -3198,3 +3198,6 @@ Judged: forest no birds RIGHT; less trees RIGHT (also made smaller); house on th
 
 ## Coordinator 2026-11-15 19:45 — owner: acceptance in two phases
 Owner clarified: (1) now, in the move from patches to generic mechanisms, losing cases that only patches won (and that do not generalise) does not matter; (2) after the patches are gone, a regression needs very good arguments, and lost functionality is acceptable only for a large gain, on the order of 1 lost per 10 won, each loss listed honestly as "needs <generic piece>". Passed to the skills rewrite (acceptance criteria) and applies to all landings.
+
+## Coordinator 2026-11-15 19:55 — reviewer 19:05: the 22 smoke failures are real; assigned first
+My mistake at the 19:10 merge: merge5 accepted the smoke run because the 22 failures were on the tagged legacy list; they are undo / redo timeline, destructive clause beside an unread one, questions not undo steps, load state — behaviours the owner uses. Assigned to the acts worker as the first slice (off the legacy list, generic: a request is one undo step, a revision replaces the last step, a question is not a step), plus a re-check of the whole legacy list for page behaviour. From now on I read the legacy list's additions before a merge.
