@@ -275,7 +275,7 @@ import { LIMITS } from './time-limits.mjs?v=3dc818f0e6';
 import { languageCommand } from '../translate/language-command.mjs?v=af45c6bf2e';
 import { withSubject, polishReply } from '../translate/register.mjs?v=93be3be4ed';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=46f9b50001';
-import { intentStep, weakReading } from './intent.mjs?v=02b47b00db';
+import { intentStep, weakReading } from './intent.mjs?v=9bfc9f0e34';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1517,7 +1517,7 @@ export class DialogSession {
   async _send(text, opts = {}) {
     const snap = opts.intent === false || guard.soft() ? null : this.snapshot();
     const prevTurn = this.dialogue?.log?.at?.(-1) ?? null;
-    const dry = new Map();   // CLASS G: the dry readings of this turn's pre-turn state (see `_dry`), shared by the translation candidates and the intent step
+    const dry = new Map();   // CLASS G: the dry readings of this turn's pre-turn state (see `_dryReading`), shared by the translation candidates and the intent step
     this._preDry = dry;
     let first;
     try { first = await this._sendFirst(text, opts); } finally { this._preDry = null; }
@@ -1528,7 +1528,7 @@ export class DialogSession {
     view.engine = this.engine; view.isession = snap.isession.clone(); view.isession.sessionFacts = this.isession.sessionFacts; view._recentWorlds = [...(snap.recent ?? [])];
     view.discourse = this.discourse; view.dialogue = { log: prevTurn ? [prevTurn] : [] }; view._routing = this._routing; view._preDry = dry;
     let alt = null;
-    try { const vocab = spellVocabulary(this.engine.set); alt = await perf.time('intent', () => intentStep(view, first.trace?.english ?? text, { understand: (e) => view._understands(e), read: (e) => view._dry(e), known: (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!this.engine.translator?.rules?.knownEnglish?.(w) })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; alt = null; }
+    try { const vocab = spellVocabulary(this.engine.set); alt = await perf.time('intent', () => intentStep(view, first.trace?.english ?? text, { understand: (e) => view._understands(e), read: (e) => view._dryReading(e), known: (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!this.engine.translator?.rules?.knownEnglish?.(w) })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; alt = null; }
     if (!alt) return first;
     this.restore(snap);
     const r = await perf.time('intent.reread', () => this._sendCore(text, opts, { english: alt.english, translation: first.translation ?? null, assumed: alt.assumed, left: alt.left ?? [], say: alt.say ?? null }));
@@ -1546,14 +1546,14 @@ export class DialogSession {
   }
 
   /** Points of trouble of a reading of one candidate English in the active tab: 0 = the reader understands all of it (nothing unparsed, ignored or partial; every wire supported; no other world's reading). */
-  async _understands(english) { return this._dry(english); }
+  async _understands(english) { return this._dryReading(english); }
 
   /**
    * The same, synchronous (the rules formalizer and the interpreter's resolve are synchronous): what the library's `clauses` and `chooseRewrite` call as `read`.
    * CLASS G: the readings of one turn's pre-turn state are kept in `_preDry` (a Map the turn opens in `_send`; the candidates of the translation and the intent step
    * read the same English on the same state, so each is read once). `unfilled` counts the required keys a reading leaves open (status `missing`).
    */
-  _dry(english) {
+  _dryReading(english) {
     const memo = this._preDry;
     if (memo?.has(english)) { perf.count('understands.memo'); return memo.get(english); }
     const r = perf.timeSync('understands', () => this._understandsRun(english));

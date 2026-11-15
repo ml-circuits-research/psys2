@@ -209,7 +209,7 @@ function cutClauses(lib, english, { read, whole, verbs = new Set() }) {
  *   way    a direction word at the end in its plain form ("above" -> "up"), the way the open world's moves say it
  * The steps are applied one by one and together; the dry reading decides.
  */
-function repairs(clause, { prevVerb, known, things, verbs }) {
+function repairs(clause, { prevVerb, known, things, verbs, readsInPart = true }) {
   const out = [];
   const raw = clause.trim().replace(/[.!?]+$/, '');
   const toks = raw.split(/\s+/);
@@ -218,7 +218,8 @@ function repairs(clause, { prevVerb, known, things, verbs }) {
   const steps = [];
   // a word right after a determiner or a number names the thing asked for ("draw a blorp": the world says it does not know it); it is never dropped
   const keep = low.map((w, i) => !w || /^\d/.test(w) || STOP.has(w) || known(w) || isThing(w) || DIRECTION.test(w) || ORDINAL.includes(w) || /^(?:a|an|the|this|that|some|\d+)$/.test(low[i - 1] ?? '') || /^(?:named|called)$/.test(low[i - 1] ?? ''));
-  if (keep.some((k) => !k) && keep.some((k, i) => k && !STOP.has(low[i]))) steps.push(['drop', (ts) => ts.filter((_, i) => keep[i])]);
+  // only a clause the open world already reads in part, and at most two words: an unread sentence (pasted prose) is never cut down to what happens to read
+  if (readsInPart && keep.filter((k) => !k).length <= 2 && keep.some((k) => !k) && keep.some((k, i) => k && !STOP.has(low[i]))) steps.push(['drop', (ts) => ts.filter((_, i) => keep[i])]);
   const isVerb = (w) => !!w && !STOP.has(w) && verbs.has(w);   // a world's canonical sentences may open with a determiner ("the circle is red"): not a verb
   // only a clause that opens with the thing it is about (a determiner, an ordinal, a name): never a question ("where is the water") or a clause with a verb of its own
   const thingFirst = /^(?:the|a|an|this|that|these|those|its|their)$/.test(low[0] ?? '') || ORDINAL.includes(low[0]) || isThing(low[0]);
@@ -288,7 +289,7 @@ export async function intentStep(dialog, english, { understand, read = null, kno
     if (!c.text.trim()) continue;
     const lead = words(c.text).find((w) => !STOP.has(w));
     const props = [...proposals(c.text, { phrase, lang, state, previous, worldWords, known }).slice(0, 12).map((p) => ({ text: p.text, via: p.via, cost: p.cost, explains: p.cue, say: p.say })),
-      ...(several ? repairs(c.text, { prevVerb, known, things: names, verbs: worldWords.verbs }) : [])];   // repairs come from the clauses around: messages of several clauses only
+      ...(several ? repairs(c.text, { prevVerb, known, things: names, verbs: worldWords.verbs, readsInPart: dry(c.text).issues < 3 }) : [])];   // repairs come from the clauses around: messages of several clauses only
     const selfRead = dry(c.text);
     const ownVerb = lead && (worldWords.verbs.has(lead) || selfRead.issues <= 1) && !DIRECTION.test(lead) && !ORDINAL.includes(lead) ? lead : null;   // a clause that reads, or opens with a verb of the open world, gives its verb to the next
     if (selfRead.issues === 0 || !props.length) { if (ownVerb) prevVerb = ownVerb; log.push({ clause: c.text, kept: 'self' }); continue; }

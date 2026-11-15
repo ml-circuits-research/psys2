@@ -10,9 +10,9 @@ const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROO
 test('a turn reads one English text once on its pre-turn state', async () => {
   const s = engine.createSession({ language: 'en' });
   s._preDry = new Map();
-  const a = s._dry('draw a house'), b = s._dry('draw a house');
+  const a = s._dryReading('draw a house'), b = s._dryReading('draw a house');
   assert.equal(a, b);
   assert.equal(s._preDry.size, 1);
   s._preDry = null;
-  assert.notEqual(s._dry('draw a house'), a, 'outside a turn nothing is kept');
+  assert.notEqual(s._dryReading('draw a house'), a, 'outside a turn nothing is kept');
 });
