@@ -12,7 +12,7 @@ const worlds = engine.set.list().filter((w) => w.patterns.length);
 const TAB = { 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman', 'docs.editor': 'editor', 'ui.avatar': 'robot' };
 const tabOf = (w) => w.tab?.id ?? TAB[w.id];
 // operations that only exist as a follow-up, a refusal, or are owned by the shell / the open game (see scripts/mark-canonical.mjs), and one question that its twin covers
-const EXEMPT = new Set(['chat.ask', 'shop.reviseLast', 'shop.revise', 'draw.askKind', 'docr.pickSection', 'chess.pick', 'music.askWhat', 'geo.askPlace', 'geo.unknown', 'avatar.setPartUnknown', 'draw.open', 'draw.keep', 'ui.newGame', 'ui.hint', 'ui.playGame',   // ui.playGame: the inert game-tab rule for declared tabs (ADR-010)
+const EXEMPT = new Set(['chat.ask', 'shop.reviseLast', 'shop.revise', 'draw.askKind', 'docr.pickSection', 'chess.pick', 'music.askWhat', 'geo.askPlace', 'geo.unknown', 'avatar.setPartUnknown', 'draw.open', 'draw.keep', 'ui.newGame', 'ui.hint', 'ui.playGame', 'things.undo',   // ui.playGame: the inert game-tab rule for declared tabs (ADR-010); things.undo: only after a lesson (a follow-up)
   'core.question:kids.shapes.shape/sides']);
 const allCanonical = new Set(worlds.flatMap((w) => w.patterns.flatMap((p) => p.canonical ?? [])));
 // P3: the generated schema worlds (a schema.sop, spec 21) take their canonical examples from the shared form templates without putting in their own kinds

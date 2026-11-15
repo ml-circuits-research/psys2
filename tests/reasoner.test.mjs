@@ -49,7 +49,7 @@ test('matrix mode: the worlds that opt in, the library loads without problems, t
 });
 
 test('parity gate (switch on): kids.shop 168, kids.tasks 241, kids.arith 243, kids.time 227 (kids.shapes and kids.animals left for session.things, 2026-11-14; the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 168], ['kids.tasks', 241], ['kids.arith', 243], ['kids.time', 227], ['data.charts', 267], ['art.draw', 577], ['diagram.sketch', 768]]) {
+  for (const [id, n] of [['kids.shop', 168], ['kids.tasks', 241], ['kids.arith', 243], ['kids.time', 227], ['data.charts', 267], ['art.draw', 577], ['diagram.sketch', 773]]) {
     const r = await runWorldTests(matrix, id);
     // P3 (2026-11-15): every row passes; the rows that failed since the switches to the generated worlds were removed from tests.sop and are on the failure ledger (source "P3 test cut")
     assert.deepEqual(r.failed.map((f) => f.id), [], id);   /* dlg04: on the ledger since KNOWLEDGE-OUT step 5 (spelling: vocabulary counts lost with deleted patterns) */ assert.equal(r.total, n);

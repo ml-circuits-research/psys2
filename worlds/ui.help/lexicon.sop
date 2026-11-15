@@ -429,7 +429,6 @@
 @lex.ui.help.areas core.lexicon
     class=noun
     doc="The words that name an area of the app (a tab, a world), as the kb of ui.help knows them: the same list as the words of kb.sop (tests/reasoner-ui.test.mjs checks it)."
-    word=animals
     word=arith
     word=atlas
     word=avatar
@@ -437,7 +436,6 @@
     word=chart
     word=charts
     word=chat
-    word=colors
     word=diagram
     word=diagram_editor
     word=diagrams
@@ -463,7 +461,6 @@
     word=piano
     word=picture
     word=pictures
-    word=shapes
     word=sheet_music
     word=shop
     word=shopping
