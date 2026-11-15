@@ -2947,3 +2947,8 @@ Gates on d3c170a8: npm test 0 failures; real set 177/207 matrix and ops (delta 0
 
 ## 2026-11-15 status (coordinator)
 Merged 2c6f3aa5: spec 28 request and dialogue step (w.request / w.dialogue / k.expect from knowledge 0966924e), Documents honours chapters/short; properties 86-87/96; owner sessions on the new fixture: Romanian 25/43 (main before 21/43), English 14/16 (9/16); real set 177/207 delta 0; npm test 0. Library sopworld 0.149 released (readRequest/reviseRequest/planRequest/runPlan/sayRequest); 0.150 in progress (factsOf + deduce/abduce/induce, P9-P11). Next in psys2: switch to 0.149 functions (no per-world planner), Charts by request.sop only, layers.
+
+## Coordinator 2026-11-15 15:50 — reviewer 15:40 block assigned; library 0.150 released
+- Reviewer 15:40 forwarded to the psys2 agent in this order: (1) P1 rewritten to generate every negation form × every makeable kind and fail on "no circles" first, then the generic reader/planner fix; (2) reduce reactions with quantity words, "add arrows" links unlinked nodes; (3) revisions keep unrevised slots (topic); (4) pond without "1 lake", story title comma. Own probes (new sentences, per property, per tab, EN+RO) pasted in this log after each landing.
+- Owner-session fixture: from now on ONE fixture, the setup-based one. What changed: the checks file gained a `setup` field, so the state a turn depends on is built by running the earlier turns instead of being assumed; 30/43 was on the old assumed-state fixture, 25/43 (main 21/43) on the setup-based one. Only the latter is reported from now.
+- sopworld 0.150.0 released (library 4bf5814): factsOf, deduce/abduce/induce cycle in planRequest, P9–P11, Q84 open. psys2 agent told to vendor 0.150 directly.
