@@ -14,7 +14,7 @@ const SLANG = new Set(['ur', 'u', 'r', 'pls', 'plz', 'wat', 'gonna', 'wanna', 'g
   'ditch', 'flush', 'scrap', 'crank', 'blow', 'bump', 'nudge', 'oops', 'yay', 'nope', 'nop', 'altogether', 'gotta', 'dumb', 'bolden', 'hilight', 'wordcount', 'qxd', 'exd', 'mov', 'bb']);
 const STARTERS = new Set(('no not one separate group what how which who whom whose where why when is are am was were can could do does did would will may might shall should has have had there this that these those it ' +
   'i my we you your the a an if please let lets let\'s what\'s who\'s where\'s how\'s ' +
-  'tell show make play add go give take turn list put read change count delete try remove undo redo select move clear start set zoom draw copy cut paste stop describe check switch get open ' +
+  'tell show make play add go give take turn list put read change count delete try remove undo redo select move clear start set zoom draw copy cut paste stop describe check switch get open connect ' +
   'mark highlight pay use say download call remember explain sort underline italicize embolden rename save export pick write scroll summarize look find display increase decrease raise ' +
   'lower reset restart resign create compare search close keep speak sketch paint fill erase rotate flip duplicate insert join split replace align justify promote castle capture drop ' +
   'enlarge shrink wear hide swap spread divide multiply subtract mute unmute loop pause continue compose transpose sing hit press choose forget introduce teach ask repeat help guess ' +

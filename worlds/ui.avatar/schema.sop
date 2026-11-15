@@ -11,6 +11,12 @@
     acts=ask
     acts=place
     limit.items=100
+    # forms of the catalog this world does not read on its own tab in a fresh session (Q23, tests/canonical-examples.test.mjs): never offered as help; the gaps are ledger rows (class "generated canonical examples")
+    canonical.not=ask.why
+    canonical.not=ask.last
+    canonical.not=load
+    canonical.not=change.call.2
+    canonical.not=change.name.called
     noun="face"
     hooks=hooks.mjs
     acts=undo

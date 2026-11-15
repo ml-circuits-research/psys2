@@ -12,7 +12,7 @@
  */
 import { lexIndex } from '../worlds/lexicon.mjs?v=2b73282059';
 import { isNumberWord } from './rules/numbers.mjs?v=9320e0aad6';
-import { FUNCTION_WORDS, ABBREVIATIONS, worldVocabulary } from './spell.mjs?v=f43790816b';
+import { FUNCTION_WORDS, ABBREVIATIONS, worldVocabulary } from './spell.mjs?v=8d155b8e32';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
 const WORD_RE = /[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu;

@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "ed01fe7a",
-  "tree": "1eae8304c123d6d0",
+  "build": "dc3a0a8a",
+  "tree": "713a0da48f3165b7",
   "catalog": "590bc64f8777115c3c44de36378a68e75bf7eb09",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -11,16 +11,16 @@
  "set": 651,
  "tables": {
   "matrix": {
-   "turns": 579,
-   "judged": 181,
-   "right": 130,
-   "partly": 14,
-   "wrong": 37,
+   "turns": 578,
+   "judged": 180,
+   "right": 129,
+   "partly": 18,
+   "wrong": 33,
    "open": 13,
    "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 331,
+    "executed": 330,
     "refused": 3,
     "asked": 6,
     "not_understood": 170,
@@ -73,9 +73,9 @@
      "right": 0
     },
     "real dialogues": {
-     "turns": 105,
-     "judged": 105,
-     "right": 70
+     "turns": 104,
+     "judged": 104,
+     "right": 69
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -83,24 +83,19 @@
      "right": 0
     }
    },
-   "retired": {
-    "judged": 72,
-    "right": 65,
-    "partly": 0,
-    "wrong": 7
-   }
+   "retired": 73
   },
   "ops": {
-   "turns": 579,
-   "judged": 181,
-   "right": 130,
-   "partly": 14,
-   "wrong": 37,
+   "turns": 578,
+   "judged": 180,
+   "right": 129,
+   "partly": 18,
+   "wrong": 33,
    "open": 13,
    "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 331,
+    "executed": 330,
     "refused": 3,
     "asked": 6,
     "not_understood": 171,
@@ -153,9 +148,9 @@
      "right": 0
     },
     "real dialogues": {
-     "turns": 105,
-     "judged": 105,
-     "right": 70
+     "turns": 104,
+     "judged": 104,
+     "right": 69
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -163,25 +158,14 @@
      "right": 0
     }
    },
-   "retired": {
-    "judged": 72,
-    "right": 65,
-    "partly": 0,
-    "wrong": 7
-   }
+   "retired": 73
   }
  },
  "diagnostic_rules_matrix": {
-  "right": 132,
-  "judged": 181,
+  "right": 131,
+  "judged": 180,
   "partly": 13,
   "wrong": 36,
-  "retired": {
-   "judged": 72,
-   "right": 69,
-   "partly": 0,
-   "wrong": 3
-  },
   "build": "04987ded",
   "tree": "b246a0839e0404e9"
  },
@@ -224,7 +208,7 @@
     {
      "text": "mcdavatara human",
      "tab": "robot",
-     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
+     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
     },
     {
      "text": "yes",
@@ -251,12 +235,12 @@
     {
      "text": "she knows what their grandma could trade charcoal Chicago",
      "tab": "diagram",
-     "happened": "I did not understand \"she knows what their grandma could trade charcoal Chicago\". For example: \"Add a circle.\" or \"What is the colour of circle?\" I did not know"
+     "happened": "I did not understand \"she knows what their grandma could trade charcoal Chicago\". For example: \"Add a circle.\" or \"What is the colour of the circle?\" I did not "
     },
     {
      "text": "an old woman",
      "tab": "robot",
-     "happened": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of hat?\" I did not know the words: old, woman. [outcome: not_understood; w"
+     "happened": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" I did not know the words: old, woman. [outcome: not_understoo"
     },
     {
      "text": "feitia am zis, am gresit feita",
@@ -278,7 +262,7 @@
     {
      "text": "now be a human",
      "tab": "robot",
-     "happened": "I did not understand \"now be a human\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
+     "happened": "I did not understand \"now be a human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
     },
     {
      "text": "become a women",
@@ -332,22 +316,22 @@
     {
      "text": "make the avatar an emoji",
      "tab": "robot",
-     "happened": "I have a long head now. [outcome: executed; wrong; state:character=emoji]"
+     "happened": "I have a long head now. [outcome: executed; partly; status:unsupported]"
     },
     {
      "text": "mcdavatara human",
      "tab": "robot",
-     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; wrong; state:character=person forbi"
+     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; wrong; answer:person | human | "
     },
     {
      "text": "make the avatar an emoji",
      "tab": "robot",
-     "happened": "I have a wide head now. [outcome: executed; wrong; state:character=emoji]"
+     "happened": "I have a wide head now. [outcome: executed; partly; status:unsupported]"
     },
     {
      "text": "make the avatar a person make the avatar a person send",
      "tab": "robot",
-     "happened": "I have a long head now. [outcome: executed; partly; state:character=person]"
+     "happened": "I have a long head now. [outcome: executed; partly; answer:person | human | girl | boy | woman | man | child]"
     }
    ]
   },
@@ -413,17 +397,17 @@
     {
      "text": "enervant da",
      "tab": "draw",
-     "happened": "I did not understand \"enervant da\". For example: \"Add a house.\" or \"What is the colour of house?\" I did not know the word: enervant. [outcome: not_understood]"
+     "happened": "I did not understand \"enervant da\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: enervant. [outcome: not_understoo"
     },
     {
      "text": "face un caca",
      "tab": "draw",
-     "happened": "I did not understand \"face un caca\". For example: \"Add a house.\" or \"What is the colour of house?\" I did not know the word: caca. [outcome: not_understood]"
+     "happened": "I did not understand \"face un caca\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: caca. [outcome: not_understood]"
     },
     {
      "text": "asta",
      "tab": "draw",
-     "happened": "I did not understand \"asta\". For example: \"Add a house.\" or \"What is the colour of house?\" I did not know the word: asta. [outcome: not_understood]"
+     "happened": "I did not understand \"asta\". For example: \"Add a house.\" or \"What is the colour of the house?\" I did not know the word: asta. [outcome: not_understood]"
     },
     {
      "text": "desene asta",
@@ -440,7 +424,7 @@
     {
      "text": "eyeglasses",
      "tab": "robot",
-     "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; open]"
+     "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; open]"
     },
     {
      "text": "a women",
@@ -482,7 +466,7 @@
     {
      "text": "how is a circle different from other shapes",
      "tab": "robot",
-     "happened": "I did not understand \"how is a circle different from other shapes\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; wrong; a"
+     "happened": "I did not understand \"how is a circle different from other shapes\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; wron"
     }
    ]
   },
@@ -504,12 +488,12 @@
     {
      "text": "what character is on screen",
      "tab": "robot",
-     "happened": "I did not understand \"what character is on screen\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
+     "happened": "I did not understand \"what character is on screen\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
     },
     {
      "text": "make a cartoon",
      "tab": "robot",
-     "happened": "I did not understand \"make a maroon\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood]"
+     "happened": "I did not understand \"make a maroon\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
     }
    ]
   },
@@ -521,7 +505,7 @@
     {
      "text": "muta si mai la stinga",
      "tab": "draw",
-     "happened": "I did not understand \"muta si mai la stinga\". For example: \"Add a house.\" or \"What is the colour of house?\" [outcome: not_understood; wrong; reply_not:did not u"
+     "happened": "I did not understand \"muta si mai la stinga\". For example: \"Add a house.\" or \"What is the colour of the house?\" [outcome: not_understood; wrong; reply_not:did n"
     },
     {
      "text": "muta casa din mijloc mai la dreapta",
@@ -587,7 +571,7 @@
     {
      "text": "an old woman",
      "tab": "robot",
-     "happened": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; wrong; reply_not:did not understand not"
+     "happened": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; wrong; reply_not:did not understand"
     }
    ]
   },

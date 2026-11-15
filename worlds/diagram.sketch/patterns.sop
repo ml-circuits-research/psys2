@@ -31,7 +31,7 @@
     tabPriority=35
     signal=true
     tabClaim=true
-    example="Add a guest called Ann."
+    example="Add a circle called Ann."
 
 @pat.diagram.sketch.make.name.p core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} [called|named] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -41,7 +41,7 @@
     tabPriority=36
     signal=true
     tabClaim=true
-    example="Place a guest named Ann."
+    example="Place a circle named Ann."
 
 @pat.diagram.sketch.remove core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -51,7 +51,8 @@
     tabPriority=32
     signal=true
     tabClaim=true
-    example="Remove the guest Ann."
+    example="Remove the circle."
+    canonical="Remove the circle."
 
 @pat.diagram.sketch.remove.out core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [kick|throw|take|send|get|put] [$acts.det]? {thing:words} [out|away|off_the_list] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -61,7 +62,7 @@
     tabPriority=33
     signal=true
     tabClaim=true
-    example="Kick the guest Ann out."
+    example="Kick the circle out."
 
 @pat.diagram.sketch.change.of core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.diagram.sketch.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -71,8 +72,8 @@
     tabPriority=36
     signal=true
     tabClaim=true
-    example="Change the colour of circle to red."
-    canonical="Change the colour of circle to red."
+    example="Change the colour of the circle to red."
+    canonical="Change the colour of the circle to red."
 
 @pat.diagram.sketch.change.attr core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.diagram.sketch.attrs} [to|be|as|into] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -82,7 +83,7 @@
     tabPriority=35
     signal=true
     tabClaim=true
-    example="Set circle seats to 6."
+    example="Set the circle seats to 6."
 
 @pat.diagram.sketch.change.value core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to|be|as|into]? {value:lex.diagram.sketch.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -92,8 +93,8 @@
     tabPriority=34
     signal=true
     tabClaim=true
-    example="Make circle blue."
-    canonical="Make circle blue."
+    example="Make the circle blue."
+    canonical="Make the circle blue."
 
 @pat.diagram.sketch.change.cmp.more core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.diagram.sketch.more} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -103,8 +104,8 @@
     tabPriority=34
     signal=true
     tabClaim=true
-    example="Make circle bigger."
-    canonical="Make circle bigger."
+    example="Make the circle bigger."
+    canonical="Make the circle bigger."
 
 @pat.diagram.sketch.change.cmp.less core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.diagram.sketch.less} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -114,8 +115,8 @@
     tabPriority=34
     signal=true
     tabClaim=true
-    example="Make circle smaller."
-    canonical="Make circle smaller."
+    example="Make the circle smaller."
+    canonical="Make the circle smaller."
 
 @pat.diagram.sketch.connect core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.connect] [$acts.det]? {thing:words} [to|with|and] [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -125,7 +126,8 @@
     tabPriority=33
     signal=true
     tabClaim=true
-    example="Connect circle to circle."
+    example="Connect the circle to the square."
+    canonical="Connect the circle to the square."
 
 @pat.diagram.sketch.group core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.group] [$acts.det]? {thing:words} [together]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -168,8 +170,8 @@
     tabPriority=27
     signal=true
     tabClaim=true
-    example="Change circle."
-    canonical="Change circle."
+    example="Change the circle."
+    canonical="Change the circle."
 
 @pat.diagram.sketch.connect.bare core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.connect] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -179,7 +181,8 @@
     tabPriority=27
     signal=true
     tabClaim=true
-    example="Connect circle."
+    example="Connect the circle."
+    canonical="Connect the circle."
 
 @pat.diagram.sketch.pick core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.pick] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -189,8 +192,8 @@
     tabPriority=32
     signal=true
     tabClaim=true
-    example="Select circle."
-    canonical="Select circle."
+    example="Select the circle."
+    canonical="Select the circle."
 
 @pat.diagram.sketch.copy core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -200,8 +203,8 @@
     tabPriority=32
     signal=true
     tabClaim=true
-    example="Copy circle."
-    canonical="Copy circle."
+    example="Copy the circle."
+    canonical="Copy the circle."
 
 @pat.diagram.sketch.ask.what core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] [is|are] [$acts.det]? {attribute:lex.diagram.sketch.attrs} of [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -211,8 +214,8 @@
     tabPriority=34
     signal=true
     tabClaim=true
-    example="What is the colour of circle?"
-    canonical="What is the colour of circle?"
+    example="What is the colour of the circle?"
+    canonical="What is the colour of the circle?"
 
 @pat.diagram.sketch.ask.what.is core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] {attribute:lex.diagram.sketch.attrs} [is|are] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -222,8 +225,8 @@
     tabPriority=34
     signal=true
     tabClaim=true
-    example="What colour is circle?"
-    canonical="What colour is circle?"
+    example="What colour is the circle?"
+    canonical="What colour is the circle?"
 
 @pat.diagram.sketch.change.should core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [should|must|has_to|needs_to] [be|become|turn] {value:lex.diagram.sketch.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -233,7 +236,8 @@
     tabPriority=34
     signal=true
     tabClaim=true
-    example="circle should be blue."
+    example="The circle should be blue."
+    canonical="The circle should be blue."
 
 @pat.diagram.sketch.ask.count core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {thing:words} [are|do_i_have|have_i_got|is]? [there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -254,8 +258,8 @@
     tabPriority=33
     signal=true
     tabClaim=true
-    example="Why is circle blue?"
-    canonical="Why is circle blue?"
+    example="Why is the circle blue?"
+    canonical="Why is the circle blue?"
 
 @pat.diagram.sketch.ask.about core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe|tell_me_about|explain] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -323,7 +327,6 @@
     signal=true
     tabClaim=true
     example="Move the eyes closer together."
-    canonical="Move the eyes closer together."
 
 @pat.diagram.sketch.place.dir.bare core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} {rel:lex.acts.dir} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -387,7 +390,6 @@
     signal=true
     tabClaim=true
     example="Make a diagram shaped like a house."
-    canonical="Make a diagram shaped like a house."
 
 @pat.diagram.sketch.read.frame.end core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? {pre:words} diagram [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -420,7 +422,6 @@
     signal=true
     tabClaim=true
     example="Draw a shape in the form of a house."
-    canonical="Draw a shape in the form of a house."
 
 @pat.diagram.sketch.bare.mod core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {pre:words} {thing:lex.diagram.sketch.kinds} [at_me|a_little|twice]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"

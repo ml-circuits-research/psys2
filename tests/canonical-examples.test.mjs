@@ -13,13 +13,26 @@ const TAB = { 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.han
 const tabOf = (w) => w.tab?.id ?? TAB[w.id];
 // operations that only exist as a follow-up, a refusal, or are owned by the shell / the open game (see scripts/mark-canonical.mjs), and one question that its twin covers
 const EXEMPT = new Set(['chat.ask', 'shop.reviseLast', 'shop.revise', 'draw.askKind', 'docr.pickSection', 'chess.pick', 'music.askWhat', 'geo.askPlace', 'geo.unknown', 'avatar.setPartUnknown', 'draw.open', 'draw.keep', 'ui.newGame', 'ui.hint', 'ui.playGame', 'things.undo',   // ui.playGame: the inert game-tab rule for declared tabs (ADR-010); things.undo: only after a lesson (a follow-up)
-  'core.question:kids.shapes.shape/sides']);
+  'core.question:kids.shapes.shape/sides',
+  // generated worlds (Q23): redo and load only after an undo or a save (follow-ups: "There is nothing to redo."); music's transpose by an interval has only the fragment
+  // "Up a whole tone." (transposing is offered by "Transpose it to D major."; "go up a whole tone" is misread as a song: a ledger row)
+  'media.music.redo', 'plan.seating.redo', 'plan.timeline.redo', 'ui.avatar.load', 'music.transpose']);
 const allCanonical = new Set(worlds.flatMap((w) => w.patterns.flatMap((p) => p.canonical ?? [])));
-// P3: the generated schema worlds (a schema.sop, spec 21) take their canonical examples from the shared form templates without putting in their own kinds
-// (data.charts offers "Is there a house in my picture?", docs.editor "Where is Ann?") and leave many operations without one: a defect of
-// scripts/build-schema-world.mjs, on the failure ledger (source "P3 test cut", class "generated canonical examples"). The two checks below hold for the hand-built worlds.
+// The generated schema worlds (a schema.sop, spec 21) are covered again (Q23): scripts/build-schema-world.mjs writes their canonical examples from the world's own sample
+// things and kinds (worlds/acts/acts.mjs exampleOf: sample=, sample.other=, sample.place=, sample.name=, sample.word=), offers no example with another world's nouns, and leaves
+// out the forms a world does not read (canonical.not=, each a ledger row).
 const generated = (w) => existsSync(new URL(`../worlds/${w.id}/schema.sop`, import.meta.url));
-const handBuilt = worlds.filter((w) => !generated(w));
+
+test('a generated world offers no example written about another world (no house in the charts, no guest Ann at the face)', () => {
+  const foreign = /\b(?:house|houses|guest|guests|Ann|seats?)\b/;
+  const own = { 'art.draw': /house/, 'plan.seating': /guest|Ann|seat/ };
+  const bad = [];
+  for (const w of worlds.filter(generated)) for (const c of new Set(w.patterns.flatMap((p) => p.canonical ?? []))) {
+    const m = c.match(foreign);
+    if (m && !(own[w.id] && own[w.id].test(m[0]))) bad.push(`${w.id}: ${c}`);
+  }
+  assert.deepEqual(bad, []);
+});
 
 test('canonical examples are clean sentences and also examples of their pattern', () => {
   assert.ok(allCanonical.size > 600, `only ${allCanonical.size} canonical examples`);
@@ -38,7 +51,7 @@ test('the sentences from the real dialogue are not canonical', () => {
 
 test('every world has a canonical example for each of its main operations', () => {
   const lacking = [];
-  for (const w of handBuilt) {
+  for (const w of worlds) {
     const ops = new Map();
     for (const p of w.patterns) { const k = operationKey(p); ops.set(k, (ops.get(k) ?? 0) + (p.canonical?.length ?? 0)); }
     for (const [k, n] of ops) if (!n && !EXEMPT.has(k)) lacking.push(`${w.id} ${k}`);
@@ -49,7 +62,7 @@ test('every world has a canonical example for each of its main operations', () =
 
 test('every canonical example is understood by its own world on its own tab', async () => {
   const bad = [];
-  for (const w of handBuilt) {
+  for (const w of worlds) {
     for (const c of sampled([...new Set(w.patterns.flatMap((p) => p.canonical ?? []))], { key: (x) => `${w.id}|${x}`, world: w.id })) {
       const s = engine.createSession({ language: 'en' });
       if (tabOf(w)) s.setWorldState('ui.shell', { activeTab: tabOf(w) });

@@ -16,7 +16,7 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Add a guest at chart."
+    example="Add a guest at table 1."
 
 @pat.data.charts.make.n core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -33,7 +33,7 @@
     kind=request
     priority=13
     tabPriority=21
-    example="Add a guest called Ann."
+    example="Add a chart called Ann."
 
 @pat.data.charts.make.name.p core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} [called|named] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -41,7 +41,7 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Place a guest named Ann."
+    example="Place a chart named Ann."
 
 @pat.data.charts.make.name.place core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words} [called|named] {value:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -49,7 +49,7 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Add a guest called Ann at chart."
+    example="Add a guest called Ann at table 1."
 
 @pat.data.charts.remove core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -57,7 +57,8 @@
     kind=request
     priority=10
     tabPriority=18
-    example="Remove the guest Ann."
+    example="Remove the chart."
+    canonical="Remove the chart."
 
 @pat.data.charts.remove.out core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [kick|throw|take|send|get|put] [$acts.det]? {thing:words} [out|away|off_the_list] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -65,7 +66,7 @@
     kind=request
     priority=11
     tabPriority=19
-    example="Kick the guest Ann out."
+    example="Kick the chart out."
 
 @pat.data.charts.remove.place core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:words} [from|out_of|off] [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -73,7 +74,7 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Remove the guests from chart."
+    example="Remove the guests from table 1."
 
 @pat.data.charts.change.of core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.data.charts.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -81,8 +82,8 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Change the colour of chart to red."
-    canonical="Change the colour of chart to red."
+    example="Change the colour of chart 2 to red."
+    canonical="Change the colour of chart 2 to red."
 
 @pat.data.charts.change.attr core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.data.charts.attrs} [to|be|as|into] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -90,7 +91,7 @@
     kind=request
     priority=13
     tabPriority=21
-    example="Set chart seats to 6."
+    example="Set chart 2 seats to 6."
 
 @pat.data.charts.change.value core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to|be|as|into]? {value:lex.data.charts.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -98,8 +99,8 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Make chart blue."
-    canonical="Make chart blue."
+    example="Make chart 2 blue."
+    canonical="Make chart 2 blue."
 
 @pat.data.charts.change.add core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.data.charts.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -107,7 +108,7 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Add 2 seats to chart."
+    example="Add 2 seats to chart 1."
 
 @pat.data.charts.change.add1 core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {attribute:lex.data.charts.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -115,7 +116,7 @@
     kind=request
     priority=13
     tabPriority=21
-    example="Add a seat to chart."
+    example="Add a seat to chart 1."
 
 @pat.data.charts.change.less core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] {amount:number} {attribute:lex.data.charts.attrs} from [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -123,7 +124,7 @@
     kind=request
     priority=14
     tabPriority=22
-    example="Remove 2 seats from chart."
+    example="Remove 2 seats from chart 1."
 
 @pat.data.charts.change.less1 core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {attribute:lex.data.charts.attrs} from [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -131,7 +132,7 @@
     kind=request
     priority=13
     tabPriority=21
-    example="Remove a seat from chart."
+    example="Remove a seat from chart 1."
 
 @pat.data.charts.change.cmp.more core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.data.charts.more} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -139,8 +140,8 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Make chart bigger."
-    canonical="Make chart bigger."
+    example="Make chart 1 bigger."
+    canonical="Make chart 1 bigger."
 
 @pat.data.charts.change.cmp.less core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.data.charts.less} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -148,8 +149,8 @@
     kind=request
     priority=12
     tabPriority=20
-    example="Make chart smaller."
-    canonical="Make chart smaller."
+    example="Make chart 1 smaller."
+    canonical="Make chart 1 smaller."
 
 @pat.data.charts.change.bare core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -157,8 +158,8 @@
     kind=request
     priority=5
     tabPriority=13
-    example="Change chart."
-    canonical="Change chart."
+    example="Change chart 2."
+    canonical="Change chart 2."
 
 @pat.data.charts.send.bare core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -166,8 +167,8 @@
     kind=request
     priority=5
     tabPriority=13
-    example="Send chart."
-    canonical="Send chart."
+    example="Send chart 1."
+    canonical="Send chart 1."
 
 @pat.data.charts.pick core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.pick] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -175,8 +176,8 @@
     kind=request
     priority=10
     tabPriority=18
-    example="Select chart."
-    canonical="Select chart."
+    example="Select chart 2."
+    canonical="Select chart 2."
 
 @pat.data.charts.copy core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -184,8 +185,8 @@
     kind=request
     priority=10
     tabPriority=18
-    example="Copy chart."
-    canonical="Copy chart."
+    example="Copy chart 2."
+    canonical="Copy chart 2."
 
 @pat.data.charts.send core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:words} to [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -193,8 +194,7 @@
     kind=request
     priority=11
     tabPriority=19
-    example="Send chart to the diagram."
-    canonical="Send chart to the diagram."
+    example="Send table 2 to the diagram."
 
 @pat.data.charts.ask.what core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] [is|are] [$acts.det]? {attribute:lex.data.charts.attrs} of [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -202,8 +202,8 @@
     kind=question
     priority=12
     tabPriority=20
-    example="What is the colour of chart?"
-    canonical="What is the colour of chart?"
+    example="What is the colour of chart 2?"
+    canonical="What is the colour of chart 2?"
 
 @pat.data.charts.ask.what.is core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] {attribute:lex.data.charts.attrs} [is|are] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -211,8 +211,8 @@
     kind=question
     priority=12
     tabPriority=20
-    example="What colour is chart?"
-    canonical="What colour is chart?"
+    example="What colour is chart 2?"
+    canonical="What colour is chart 2?"
 
 @pat.data.charts.change.should core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [should|must|has_to|needs_to] [be|become|turn] {value:lex.data.charts.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -220,7 +220,7 @@
     kind=request
     priority=12
     tabPriority=20
-    example="chart should be blue."
+    example="Chart 2 should be blue."
 
 @pat.data.charts.change.needs core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_want|i_need|make|let|give]? [$acts.det]? {thing:words} [needs|to_have|should_have|must_have|has|gets] {value:number} {attribute:lex.data.charts.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -228,7 +228,7 @@
     kind=request
     priority=12
     tabPriority=20
-    example="chart needs 6 seats."
+    example="Chart 1 needs 6 seats."
 
 @pat.data.charts.ask.at core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|who] [is|are|sits|sit|stands|stand] [there]? {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -236,8 +236,7 @@
     kind=question
     priority=12
     tabPriority=20
-    example="Who is at chart?"
-    canonical="Who is at chart?"
+    example="Who is at table 1?"
 
 @pat.data.charts.ask.count.attr core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {attribute:lex.data.charts.attrs} [does|do|has|have] [$acts.det]? {thing:words} [have|has|got]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -245,7 +244,7 @@
     kind=question
     priority=14
     tabPriority=22
-    example="How many seats does chart have?"
+    example="How many seats does chart 1 have?"
 
 @pat.data.charts.ask.count core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {thing:words} [are|do_i_have|have_i_got|is]? [there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -262,7 +261,7 @@
     kind=question
     priority=13
     tabPriority=21
-    example="How many guests are at chart?"
+    example="How many guests are at table 1?"
 
 @pat.data.charts.ask.where core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? where [is|are] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -271,7 +270,6 @@
     priority=12
     tabPriority=20
     example="Where is Ann?"
-    canonical="Where is Ann?"
 
 @pat.data.charts.ask.why core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? why [is|are|did|do|was|were|does] {rest:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -279,8 +277,8 @@
     kind=question
     priority=11
     tabPriority=19
-    example="Why is chart blue?"
-    canonical="Why is chart blue?"
+    example="Why is chart 2 blue?"
+    canonical="Why is chart 2 blue?"
 
 @pat.data.charts.ask.last core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? what [did|have] you [just]? [do|done|change|changed] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -289,7 +287,6 @@
     priority=11
     tabPriority=19
     example="What did you just do?"
-    canonical="What did you just do?"
 
 @pat.data.charts.undo core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.undo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -316,7 +313,6 @@
     priority=13
     tabPriority=21
     example="Is there a house in my picture?"
-    canonical="Is there a house in my picture?"
 
 @pat.data.charts.ask.exists.have core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [do|does|did|can] [i|we|you|u]? have [$acts.det]? [any|some]? {thing:words} [in|on|at|of]? [my|the|this|our]? {noun:lex.data.charts.nouns?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -325,7 +321,6 @@
     priority=12
     tabPriority=20
     example="Do I have a house in my picture?"
-    canonical="Do I have a house in my picture?"
 
 @pat.data.charts.ask.exists.noun core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [does|do] [$acts.det]? [my|the|this]? {noun:lex.data.charts.nouns} have [$acts.det]? [any|some]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -334,7 +329,6 @@
     priority=12
     tabPriority=20
     example="Does my picture have a house?"
-    canonical="Does my picture have a house?"
 
 @pat.data.charts.ask.exists.any core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [any|some] {thing:words} [in_there|in_here|there|here|in_it] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -351,7 +345,6 @@
     priority=8
     tabPriority=16
     example="Is a house in there?"
-    canonical="Is a house in there?"
 
 @pat.data.charts.ask.exists.color core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [is|are] [$acts.det]? {thing:words} {value:lex.data.charts.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -360,7 +353,6 @@
     priority=9
     tabPriority=17
     example="Is the house red?"
-    canonical="Is the house red?"
 
 @pat.data.charts.ask.describe core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe|explain|summarise|summarize|list|show|tell_me_about|tell_me] [$acts.det]? [my|the|this|our]? [whats_in|what_is_in|whats_on|what_is_on]? {noun:lex.data.charts.nouns} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -369,7 +361,6 @@
     priority=11
     tabPriority=19
     example="Describe my picture."
-    canonical="Describe my picture."
 
 @pat.data.charts.ask.describe.whats core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe|explain|summarise|summarize|list|show|tell_me|tell_us] [whats_in|what_is_in|whats_on|what_is_on|what_s_on|what_s_in|what_is_there_in|what_is_there_on] [$acts.det]? [my|the|this|our]? {noun:lex.data.charts.nouns} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -386,7 +377,6 @@
     priority=14
     tabPriority=22
     example="What is in my picture?"
-    canonical="What is in my picture?"
 
 @pat.data.charts.ask.describe.made core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|let_me_know]? [what|whats] [did_i|have_i|i|we|did_we|have_we] [draw|drew|drawn|make|made|add|added|put|do|done|create|created|paint|painted] [so_far|today|here]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -395,7 +385,6 @@
     priority=11
     tabPriority=19
     example="What did I draw?"
-    canonical="What did I draw?"
 
 @pat.data.charts.ask.describe.see core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|whats|which] [things|objects|shapes]? [can_you_see|do_you_see|can_i_see|do_i_see|are_there|is_there|is_visible|have_i_got] [in|on]? [my|the|this]? {noun:lex.data.charts.nouns} [right_now|now|there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -404,7 +393,6 @@
     priority=14
     tabPriority=22
     example="What can you see in my picture?"
-    canonical="What can you see in my picture?"
 
 @pat.data.charts.ask.options core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|list|show|tell_me|show_me|name] [the]? {thing:words} [can_i|could_i|can_you|may_i|do_you_know|are_there|are_available|do_i_have|do_you_have|can_we|is_available|options] [use|draw|pick|choose|have|change]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -422,7 +410,6 @@
     priority=11
     tabPriority=19
     example="What can I draw?"
-    canonical="What can I draw?"
 
 @pat.data.charts.ask.options.show core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show_me|tell_me|list|name] [what|which] [i|you|we] [can|could] [draw|add|make|use|paint|do|put|sketch] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -431,7 +418,6 @@
     priority=11
     tabPriority=19
     example="Show me what I can draw."
-    canonical="Show me what I can draw."
 
 @pat.data.charts.ask.options.verb core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [list|show|name|tell_me] [$acts.det]? [the|all|all_the|all_of_the|your]? {thing:words} [list|options|available|you_know|i_can_use|i_can_add|i_can_draw|i_can_make]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -440,7 +426,6 @@
     priority=6
     tabPriority=14
     example="List the things I can draw."
-    canonical="List the things I can draw."
 
 @pat.data.charts.ask.options.short core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {thing:words} [list|options|available|are_available|do_i_have|can_i_use] [please|pls|plz]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -457,7 +442,6 @@
     priority=12
     tabPriority=20
     example="Count the houses."
-    canonical="Count the houses."
 
 @pat.data.charts.ask.count.number core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|let_me_know]? [the_number_of|number_of|count_of|total_number_of|the_count_of|the_total_of] [$acts.det]? {thing:words} [in|on|at|of]? [my|the|this|our]? {noun:lex.data.charts.nouns?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -490,7 +474,6 @@
     priority=13
     tabPriority=21
     example="Tell me how many houses there are."
-    canonical="Tell me how many houses there are."
 
 @pat.data.charts.ask.where.did core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|let_me_know]? [where|which_spot|which_place|which_part|what_place] [is|are|did|do|can_i_see|can_i_find|will_i_find|should_i_look_for|do_i_find]? [i_find|i_see|you_put|you_draw|you_place]? [$acts.det]? {thing:words} [go|now|exactly|are|is|in|at|located|live]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -499,7 +482,6 @@
     priority=12
     tabPriority=20
     example="Where did the house go?"
-    canonical="Where did the house go?"
 
 @pat.data.charts.ask.where.find core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [find|locate|point_to|point_at|look_for|spot] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -508,7 +490,6 @@
     priority=11
     tabPriority=19
     example="Find the house."
-    canonical="Find the house."
 
 @pat.data.charts.ask.where.of core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [location_of|position_of|place_of|whereabouts_of|spot_of] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -533,7 +514,6 @@
     priority=12
     tabPriority=20
     example="Tell me the colour of the house."
-    canonical="Tell me the colour of the house."
 
 @pat.data.charts.ask.colour.painted core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|whats|what_s|what_is|what_colour_is|what_color_is|which_colour_is|which_color_is] [$acts.det]? {thing:words} [painted|coloured|colored|drawn|made] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -558,7 +538,6 @@
     priority=11
     tabPriority=19
     example="Make another house."
-    canonical="Make another house."
 
 @pat.data.charts.copy.n core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} more [of_them|of_it|of_that]? {thing:words?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -567,7 +546,6 @@
     priority=12
     tabPriority=20
     example="Make 2 more."
-    canonical="Make 2 more."
 
 @pat.data.charts.copy.short core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} [copy|twin|duplicate|clone] [please|pls|plz]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -584,7 +562,6 @@
     priority=13
     tabPriority=21
     example="Make the house a bit bigger."
-    canonical="Make the house a bit bigger."
 
 @pat.data.charts.change.cmp.less.amt core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {amount:lex.space.amounts?} {value:lex.data.charts.less} {amount2:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -593,7 +570,6 @@
     priority=13
     tabPriority=21
     example="Make the house a bit smaller."
-    canonical="Make the house a bit smaller."
 
 @pat.data.charts.change.cmp.should core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [needs_to_be|should_be|must_be|has_to_be|is_too|is_not] {amount:lex.space.amounts?} {value:lex.data.charts.more} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -602,7 +578,6 @@
     priority=12
     tabPriority=20
     example="The house needs to be a lot bigger."
-    canonical="The house needs to be a lot bigger."
 
 @pat.data.charts.change.cmp.short.more core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} {amount:lex.space.amounts?} {value:lex.data.charts.more} [please|pls|plz|thx|thanks]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -643,7 +618,6 @@
     priority=12
     tabPriority=20
     example="Enlarge the house a lot."
-    canonical="Enlarge the house a lot."
 
 @pat.data.charts.change.shrink core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [shrink|reduce|compress|minimise|minimize|deflate|scale_down|make_smaller] [$acts.det]? {thing:words} {amount:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -652,7 +626,6 @@
     priority=12
     tabPriority=20
     example="Shrink the house."
-    canonical="Shrink the house."
 
 @pat.data.charts.change.same core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to_be]? [the_same_size_as|the_same_size_like|same_size_as|as_big_as|as_large_as|as_small_as|as_tall_as|the_same_as|equal_in_size_to] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -661,7 +634,6 @@
     priority=15
     tabPriority=23
     example="Make the tree the same size as the house."
-    canonical="Make the tree the same size as the house."
 
 @pat.data.charts.change.same.short core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [the_same_size_as|same_size_as|as_big_as|as_large_as|as_small_as|the_same_as] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -670,7 +642,6 @@
     priority=13
     tabPriority=21
     example="The same size as the house."
-    canonical="The same size as the house."
 
 @pat.data.charts.change.times core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.data.charts.factor} [as_big|as_large|as_tall|as_wide|as_small|as_big_as_it_is|the_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -679,7 +650,6 @@
     priority=12
     tabPriority=20
     example="Make the house twice as big."
-    canonical="Make the house twice as big."
 
 @pat.data.charts.change.times.short core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {value:lex.data.charts.factor} [as_big|as_large|as_tall|as_wide|as_small|the_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -696,7 +666,6 @@
     priority=12
     tabPriority=20
     example="Clear everything."
-    canonical="Clear everything."
 
 @pat.data.charts.remove.all.noun core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [clear|wipe|erase|delete|remove|empty|scrap|clean|get_rid_of|throw_away] [the|my|this|our]? [whole|entire|all_of_the]? {noun:lex.data.charts.nouns} [off|away|out|ok|okay|please|pls]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -705,7 +674,6 @@
     priority=12
     tabPriority=20
     example="Clear the picture."
-    canonical="Clear the picture."
 
 @pat.data.charts.remove.new core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [start|begin|open|get|give_me|make|let_s_start|lets_start|i_want|i_need|show_me]? [a|an|another]? [new|fresh|blank|clean|empty] {noun:lex.data.charts.nouns?} [sheet|sheet_of_paper|of_paper|page|canvas|start]? [of_paper]? [please|pls]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -714,7 +682,6 @@
     priority=12
     tabPriority=20
     example="Start a new picture."
-    canonical="Start a new picture."
 
 @pat.data.charts.change.value.size core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|get|let|change|blow_up|scale_up|scale|resize] [$acts.det]? {thing:words} [to_be|to|up_to|into|be|as]? [a|an]? {value:lex.data.charts.values} [size|sized|sized_one|one|in_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -723,7 +690,6 @@
     priority=14
     tabPriority=22
     example="Turn the house into a tiny one."
-    canonical="Turn the house into a tiny one."
 
 @pat.data.charts.change.value.size.up core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [blow|scale|build|make|puff|pump|grow] [$acts.det]? {thing:words} up [to|into]? [a|an]? {value:lex.data.charts.values} [size|sized|in_size]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -740,7 +706,6 @@
     priority=14
     tabPriority=22
     example="The house should be medium size."
-    canonical="The house should be medium size."
 
 @pat.data.charts.change.with core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [fill|fill_in|colour|color|paint|cover|colour_in|color_in|dye|tint] [$acts.det]? {thing:words} [with|in|using] [$acts.det]? {value:lex.data.charts.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -749,7 +714,6 @@
     priority=15
     tabPriority=23
     example="Fill the sun with yellow."
-    canonical="Fill the sun with yellow."
 
 @pat.data.charts.change.in core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} in {value:lex.data.charts.values} [please|pls|plz|thx|thanks]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -766,7 +730,6 @@
     priority=13
     tabPriority=21
     example="Fill in the star."
-    canonical="Fill in the star."
 
 @pat.data.charts.ask.near core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|whats|what_s|anything|is_anything|is_there_anything|what_is|what_things_are|which_things_are] [right|just]? [near|nearby|close_to|around] [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -800,7 +763,6 @@
     priority=13
     tabPriority=21
     example="Show it as a line."
-    canonical="Show it as a line."
 
 @pat.data.charts.change.value.first core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {value:lex.data.charts.values} {thing:lex.data.charts.kinds?} {noun:lex.data.charts.nouns?} [instead|again|please|pls|now|then]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -826,7 +788,6 @@
     priority=11
     tabPriority=19
     example="I want the bars green."
-    canonical="I want the bars green."
 
 @pat.data.charts.change.nice core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? [nice|lovely|pretty|good|really|very|sort_of|kind_of|bit_more]? {value:lex.data.charts.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -835,7 +796,6 @@
     priority=12
     tabPriority=20
     example="Paint the bars a nice green."
-    canonical="Paint the bars a nice green."
 
 @pat.data.charts.change.would core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {value:lex.data.charts.values} [would_be|is|looks|would_look|will_be|should_be] [nicer|better|best|good|great|prettier|nice|fine] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -844,7 +804,6 @@
     priority=9
     tabPriority=17
     example="Pink would be nicer."
-    canonical="Pink would be nicer."
 
 @pat.data.charts.change.is.value core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [is|are|looks|look|turns|turned|became|become|is_now|are_now|now_is|now_are] {value:lex.data.charts.values} [now|instead|please]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -853,7 +812,6 @@
     priority=11
     tabPriority=19
     example="The bars are teal now."
-    canonical="The bars are teal now."
 
 @pat.data.charts.change.like core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [like|as|in|with] [$acts.det]? {value:lex.data.charts.values} {attribute:lex.data.charts.attrs?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -887,7 +845,6 @@
     priority=12
     tabPriority=20
     example="Call it Fruit."
-    canonical="Call it Fruit."
 
 @pat.data.charts.change.name.to core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [rename|relabel|retitle|change_the_name_of] [$acts.det]? {thing:words} [to|into|as] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -896,7 +853,6 @@
     priority=14
     tabPriority=22
     example="Rename pears to cherries."
-    canonical="Rename pears to cherries."
 
 @pat.data.charts.change.swap.for core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [swap|replace|exchange|trade|switch] [$acts.det]? {thing:words} [for|with] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -905,7 +861,6 @@
     priority=12
     tabPriority=20
     example="Swap grapes for melons."
-    canonical="Swap grapes for melons."
 
 @pat.data.charts.change.should.text core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {attribute:lex.data.charts.attrs} [should_be|is|will_be|shall_be|must_be|needs_to_be|becomes] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -914,7 +869,6 @@
     priority=12
     tabPriority=20
     example="The title should be Snacks."
-    canonical="The title should be Snacks."
 
 @pat.data.charts.change.use.as core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [use|put|set|take|make|have] {value:words} [as|for] [$acts.det]? {attribute:lex.data.charts.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -923,7 +877,6 @@
     priority=13
     tabPriority=21
     example="Use Zoo as the title."
-    canonical="Use Zoo as the title."
 
 @pat.data.charts.change.colon core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {attribute:lex.data.charts.attrs} {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -932,7 +885,6 @@
     priority=4
     tabPriority=12
     example="Title: My fruit."
-    canonical="Title: My fruit."
 
 @pat.data.charts.change.on core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show|display|bring|turn_on|enable|switch_on|put_on|give_me|show_me|bring_back|add] [$acts.det]? {attribute:lex.data.charts.attrs} [back|on|again]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -941,7 +893,6 @@
     priority=12
     tabPriority=20
     example="Show the legend."
-    canonical="Show the legend."
 
 @pat.data.charts.change.off core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [hide|turn_off|disable|switch_off|stop|kill|remove|drop|delete|get_rid_of|lose|skip|cut] [$acts.det]? {attribute:lex.data.charts.attrs} [off|away|out|hidden]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -950,7 +901,6 @@
     priority=12
     tabPriority=20
     example="Hide the legend."
-    canonical="Hide the legend."
 
 @pat.data.charts.change.turn core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take|turn|switch|put|get|send|bring] [$acts.det]? {attribute:lex.data.charts.attrs} {value:lex.data.charts.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -959,7 +909,6 @@
     priority=13
     tabPriority=21
     example="Take the legend off."
-    canonical="Take the legend off."
 
 @pat.data.charts.change.switch core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {attribute:lex.data.charts.attrs} {value:lex.data.charts.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -985,7 +934,6 @@
     priority=6
     tabPriority=14
     example="Stop stacking."
-    canonical="Stop stacking."
 
 @pat.data.charts.ask.what.thing core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what_is|whats|what_s|what_are|how_much_is|how_much_are|how_big_is|how_big_are|how_many_is] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -994,7 +942,6 @@
     priority=7
     tabPriority=15
     example="What is plums?"
-    canonical="What is plums?"
 
 @pat.data.charts.ask.attr.tell core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|give_me|what_is|whats|what_s] [$acts.det]? {thing:words} {attribute:lex.data.charts.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1003,7 +950,6 @@
     priority=8
     tabPriority=16
     example="Tell me the pears number."
-    canonical="Tell me the pears number."
 
 @pat.data.charts.change.chart.without core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} [without|with_no|minus] [$acts.det]? {attribute:lex.data.charts.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1020,7 +966,6 @@
     priority=12
     tabPriority=20
     example="Change pears to 6."
-    canonical="Change pears to 6."
 
 @pat.data.charts.change.is.number core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [is|are|should_be|must_be|will_be|equals|has|have|is_now|are_now|needs_to_be] {value:number} [now|instead|not_3|not_8|please]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1029,7 +974,6 @@
     priority=11
     tabPriority=19
     example="The pears are 4 now."
-    canonical="The pears are 4 now."
 
 @pat.data.charts.change.is.number.not core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [is|are|should_be|must_be] {value:number} [not|and_not|instead_of|rather_than] {rest:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1038,7 +982,6 @@
     priority=13
     tabPriority=21
     example="Plums are 2 not 8."
-    canonical="Plums are 2 not 8."
 
 @pat.data.charts.change.fix.number core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [wait|no|oops|sorry|actually]? [$acts.det]? {thing:words} [is|are] {value:number} [not|and_not|instead_of] {rest:rest} [fix_it|correct_it|change_it]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1047,7 +990,6 @@
     priority=13
     tabPriority=21
     example="Wait, pears are 6 not 3, fix it."
-    canonical="Wait, pears are 6 not 3, fix it."
 
 @pat.data.charts.change.bare.number core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? {thing:words} {value:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1064,7 +1006,6 @@
     priority=13
     tabPriority=21
     example="Increase apples by 2."
-    canonical="Increase apples by 2."
 
 @pat.data.charts.change.by.less core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [decrease|lower|reduce|cut|drop|take|bring_down|push_down|down|shrink|subtract] [$acts.det]? {thing:words} by {amount:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1073,7 +1014,6 @@
     priority=13
     tabPriority=21
     example="Lower apples by 2."
-    canonical="Lower apples by 2."
 
 @pat.data.charts.change.plus core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [plus|and] {amount:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1130,7 +1070,6 @@
     priority=13
     tabPriority=21
     example="Multiply kiwis by 3."
-    canonical="Multiply kiwis by 3."
 
 @pat.data.charts.change.divide.by core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [divide|split|cut] [$acts.det]? {thing:words} by {amount:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1139,7 +1078,6 @@
     priority=13
     tabPriority=21
     example="Divide kiwis by two."
-    canonical="Divide kiwis by two."
 
 @pat.data.charts.change.cut.half core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [cut|reduce|bring_down] [$acts.det]? {thing:words} by half [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1148,7 +1086,6 @@
     priority=16
     tabPriority=24
     example="Cut the plums by half."
-    canonical="Cut the plums by half."
 
 @pat.data.charts.remove.nomore core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [no_more|no] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1157,7 +1094,6 @@
     priority=5
     tabPriority=13
     example="No more bananas."
-    canonical="No more bananas."
 
 @pat.data.charts.remove.dont core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_dont_want|i_do_not_want|i_no_longer_want|we_dont_need|i_dont_need|dont_want|do_not_want|i_dont_like] [$acts.det]? {thing:words} [anymore|any_more|in_it|on_it|in_there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1166,7 +1102,6 @@
     priority=12
     tabPriority=20
     example="I don't want pears anymore."
-    canonical="I don't want pears anymore."
 
 @pat.data.charts.remove.off core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} off [the|my|this|that]? {noun:lex.data.charts.nouns} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1319,7 +1254,6 @@
     priority=11
     tabPriority=19
     example="Stop sorting."
-    canonical="Stop sorting."
 
 @pat.data.charts.make.name.place.p core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} [called|named] {value:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1327,7 +1261,7 @@
     kind=request
     priority=15
     tabPriority=23
-    example="Put a guest named Maria at chart."
+    example="Put a guest named Maria at table 1."
 
 @pat.data.charts.deselect core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.deselect] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1336,7 +1270,6 @@
     priority=12
     tabPriority=20
     example="Deselect the circle."
-    canonical="Deselect the circle."
 
 # ---- patterns.extra.sop (hand-written, appended by the generator)
 @pat.data.charts.create.refresh core.pattern

@@ -1,4 +1,8 @@
 @map acts.schema
+    # forms of the catalog this world does not read on its own tab in a fresh session (Q23, tests/canonical-examples.test.mjs): never offered as help; the gaps are ledger rows (class "generated canonical examples")
+    canonical.not=ask.what.is
+    canonical.not=ask.options
+    canonical.not=ask.is.what
     noun="map"
     doc="The map as a schema (spec 21 section 12): places (any place of k.geo, found by lookup), pins, routes, labels and the view of the map; a place has a name, a colour (highlighted), a capital, a population ...; the view has a zoom and a centre. The renderer (Leaflet over the offline outlines, docs/webchat/ui/tabs/map.mjs), the projection and zoom fitting, the distances and the geolocation stay the world's own (map.mjs); the places come from the catalog (places.mjs). Hand-built platform fixture, not produced by the C1 workflow."
     hooks=hooks.mjs

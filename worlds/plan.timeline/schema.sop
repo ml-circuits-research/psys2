@@ -12,6 +12,8 @@
     acts=connect
     acts=group
     limit.items=100
+    # forms of the catalog this world does not read on its own tab in a fresh session (Q23, tests/canonical-examples.test.mjs): never offered as help; the gaps are ledger rows (class "generated canonical examples")
+    canonical.not=redo
     noun="timeline"
     acts=send
     acts=undo
@@ -21,6 +23,10 @@
     limit.history=30
     tabOnly=yes
     hooks=hooks.mjs
+    # the things of its examples (Q23: canonical examples from the world's own sample things; worlds/acts/acts.mjs exampleOf)
+    sample=event
+    sample.place=timeline
+    sample.name=Launch
 
 @time.timeline acts.kind
     plural=timelines

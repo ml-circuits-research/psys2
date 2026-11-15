@@ -1,6 +1,8 @@
 # The host's own part of the timeline world (truly own): what the published schema w.timeline cannot say. The rest of schema.sop is generated from the catalog
 # (scripts/import-w-schema.mjs <catalog> w.timeline worlds/plan.timeline).
 @time acts.schema
+    # forms of the catalog this world does not read on its own tab in a fresh session (Q23, tests/canonical-examples.test.mjs): never offered as help; the gaps are ledger rows (class "generated canonical examples")
+    canonical.not=redo
     noun="timeline"
     acts=send
     acts=undo
@@ -10,6 +12,10 @@
     limit.history=30
     tabOnly=yes
     hooks=hooks.mjs
+    # the things of its examples (Q23: canonical examples from the world's own sample things; worlds/acts/acts.mjs exampleOf)
+    sample=event
+    sample.place=timeline
+    sample.name=Launch
 
 @time.view acts.view
     aspects=temporal
