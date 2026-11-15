@@ -73,7 +73,7 @@ export function forgetLast(lines, count = 1) {
 }
 
 /** The knowledge catalog with the learned wires of a session overlaid. `read()` returns the wire lines (text); the overlay is rebuilt only when they change. */
-export function withLearned(base, read, readMem = null) {
+export function withLearned(base, read, readMem = null, memStore = null) {
   if (!base) return base;
   let seen = '', wires = [];
   const all = () => {
@@ -86,21 +86,43 @@ export function withLearned(base, read, readMem = null) {
   // What the worlds of the session were told in their own statements (the wires they keep: `kids.animals.animal name=duck can_swim=true`, a pet `kind=dog called=Rex`): every non-core wire of the
   // session memory that carries a name (name / word / called) is a record of that name for the overlay, in any world, with no table of types.
   const NAMEY = /^(?:name|word|called)$/;
-  const memWires = (cands) => {
-    const all0 = !cands;
-    if (!readMem) return [];
-    const out = [], all = readMem() ?? [];
+  // THE INDEX of those records, built once per state of the memory (LEARNED-MEM-INDEX, spec 06 "Compute budgets"): every catalog lookup of a turn (each word of each
+  // candidate reading, each translation candidate, each encoder pass) used to scan the whole session memory, which grows with the picture, so a long draw session ran
+  // out of the step budget at `learned.mem`. `memStore()` returns the memory's store (src/interpreter/memory.mjs WireStore), whose `memo` keeps the index until the next
+  // wire is added and shares it with the dry-run clones of the session: the index is built once per contents (one tick per wire), a lookup costs one tick per candidate
+  // word. Without a store the index is built per lookup.
+  const memIndex = () => { const st = memStore?.() ?? null; return typeof st?.memo === 'function' ? st.memo('learned.mem', buildMemIndex) : buildMemIndex(); };
+  const buildMemIndex = () => {
+    const all = readMem() ?? [];
     const byId = new Map(all.map((w) => [w.id, w]));
     const tail = (k) => String(k).split('.').at(-1);
+    const recs = [], byName = new Map();
     for (const w of all) {
       budget.tick('learned.mem');
       if (/^(?:core|session|ui|meta)\./.test(w.type) || w.entries.some((e) => e.key === 'core.status' && e.value?.v === 'retracted')) continue;
       const f = {};
       for (const e of w.entries) { let v = String(e.value?.v ?? ''); if (byId.get(v.replace(/^\$/, ''))) { const r = byId.get(v.replace(/^\$/, '')); v = String(r.entries.find((x) => /(?:^|\.)name$/.test(x.key))?.value?.v ?? v); } (f[tail(e.key)] ??= []).push(v); }
-      const hit = all0 ? [null, f.called ?? f.name ?? ['']] : Object.entries(f).find(([k, vs]) => NAMEY.test(k) && vs.some((v) => cands.includes(v.toLowerCase().replace(/_/g, ' '))));
+      const rec = { i: recs.length, id: w.id, type: w.type, f };
+      recs.push(rec);
+      for (const [k, vs] of Object.entries(f)) if (NAMEY.test(k)) for (const v of vs) { const n = v.toLowerCase().replace(/_/g, ' '); const l = byName.get(n) ?? byName.set(n, []).get(n); if (l.at(-1) !== rec) l.push(rec); }
+    }
+    return { recs, byName };
+  };
+  const memWires = (cands) => {
+    if (!readMem) return [];
+    const { recs, byName } = memIndex();
+    let pick = recs;
+    if (cands) {
+      const set = new Set();
+      for (const c of cands) { budget.tick('learned.mem'); for (const r of byName.get(c) ?? []) set.add(r); }
+      pick = [...set].sort((a, b) => a.i - b.i);   // memory order, as the scan gave it
+    }
+    const out = [];
+    for (const r of pick) {
+      const f = r.f;
+      const hit = !cands ? [null, f.called ?? f.name ?? ['']] : Object.entries(f).find(([k, vs]) => NAMEY.test(k) && vs.some((v) => cands.includes(v.toLowerCase().replace(/_/g, ' '))));
       if (!hit) continue;
-      if (!f.name) f.name = [hit[1][0]];
-      out.push({ id: w.id, type: w.type, f, shard: 'session.memory' });
+      out.push({ id: r.id, type: r.type, f: f.name ? { ...f } : { ...f, name: [hit[1][0]] }, shard: 'session.memory' });   // a copy: the index is shared by every lookup
     }
     return out;
   };
