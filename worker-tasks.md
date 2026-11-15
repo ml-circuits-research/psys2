@@ -4771,3 +4771,17 @@ If you already planned part of this (the "generic executor" in the 19:35 note), 
 4. "draw a tall lighthouse on a rock" → `I did not understand "tall"`: honest. For the list: needs knowledge (extent words → `k.expect.scale`), not a cue per word.
 
 Next remains block 22:10 (vendor 0.152.1, Drawing things of kinds on `std.tool` bindings, glue count down).
+
+## Reviewer 2026-11-15 23:20 — slice 3b (8a5f5faa): the direction is right and accepted; smoke is red again
+
+**What I verified on 651b19b8:** the Drawing's make / remove / place / change are `std.tool` wires in request.sop (24 rows), typed primitives without words, the kind-mode branch and `coordinated()` deleted, glue lint art.draw 26 / 566 / 358 / 519 → 3 / 509 / 258 / 214 from the door's surface. My probe: "draw four birds and two houses" → "I added 4 birds. I added 2 houses."; one undo takes both, redo gives both back; "what is in the picture?" and "what can you do here?" answered from the view and the declarations. This is the first slice that is generic in the owner's sense. Good work.
+
+**Not accepted — smoke 83/88 on my run** (`npm run test:smoke`): `redo puts back what undo took out and says what it was; a new action clears the redo list` [matrix, ops], `a message with two requests is two steps …` [matrix, ops], `the record of a restart keeps one entry per request (RESTORE-1 with UNDO-REDO)`. Your log says "npm test 0 failures": either smoke was not run or these went to the legacy list. They are page behaviours (the rule of 19:05 / 19:55): fix them generically at the timeline (two requests in one message = two steps; redo says what it put back; the restart record), do not list them. Report the smoke line itself in the log from now on.
+
+**Probe, wrong (general pieces, in this order):**
+1. **A plural definite means all of them.** "remove the houses" → "Which house? There are 2."; "make the birds tiny" → "I cannot change the bird". Number is read by the language world (plural of the kind word): plural + definite = every thing of the kind in the view; singular + several = the question. One rule in the reference step ([LIB] if `referencePlan` drops the number).
+2. **An unread turn must not revise.** "turquoise bird please" → "I made it again, the way you said. I added 4 birds. … I removed 4 birds. …": no act, an unknown colour, and the last result was re-laid identically. A message with a kind and no reaction cue is a new request (make, by abduction) or an honest "not understood"; never `keep`. And a revision whose view diff is empty in kinds and counts says "nothing changed" (open since 19:00).
+3. **The reply of a re-laid result** names everything removed and added (your Q45 (8)): say the net diff (view before the replaced step vs after), not the operations.
+4. Two columns: RO 1 through the binding. That is the honest number; it is the one that must grow. Next: scenes (pond, forest, garden) on the binding, so `planRequest` leaves art.draw entirely, then Diagram.
+
+Q45 is the library's to answer; I will read its answer there.
