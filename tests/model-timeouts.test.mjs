@@ -34,6 +34,7 @@ test('encoder timeout: the rules answer, the turn says so, the host is told once
   assert.equal(readingOf(r1), base, 'the rules read it exactly as without a model');
   assert.equal(r1.trace.formalizer.modelTimeouts?.[0]?.stage, 'encoder');
   assert.equal(r1.trace.formalizer.modelTimeoutCount, 1);
+  s.setWorldState('ui.shell', { activeTab: 'talk' });   // the first message opened the Drawing tab, a declared tab: its requests go through the request door, which runs no model (spec 28 section 10); back on Talk the readers (and the model) read again
   const r2 = await s.send('draw a blue house');
   assert.equal(r2.trace.formalizer.modelTimeoutCount, 2);
   assert.deepEqual(told.map((t) => [t.first, t.count]), [[true, 1], [false, 2]], 'first is true once per session');

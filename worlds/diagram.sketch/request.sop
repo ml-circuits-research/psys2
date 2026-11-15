@@ -42,3 +42,6 @@
 # The door (reviewer 2026-11-15 16:40): the wholes whose requests this world plans through the library (a request of a single thing goes through the door only with a constraint the readers cannot honour). Read by src/dialog/request.mjs doorWholes.
 @door psys2.door world=diagram whole=diagram whole=link
 @e.link k.expect.make thing=link made_in=diagram unit=link min=1 max=12 typical=4 about="the arrows of a diagram: added where a node has none"
+# The session timeline (reviewer 2026-11-15 19:05): the world's own undo and redo, the operations the door calls for the acts undo / redo of k.actions (src/dialog/request.mjs actOperation).
+@op.undo psys2.op world=diagram act=undo op=diagramUndo
+@op.redo psys2.op world=diagram act=redo op=diagramRedo

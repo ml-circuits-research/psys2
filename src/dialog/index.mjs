@@ -293,7 +293,7 @@ import { languageCommand } from '../translate/language-command.mjs';
 import { withSubject, polishReply } from '../translate/register.mjs';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs';
 import { intentStep, weakReading } from './intent.mjs';
-import { requestLanguage, liveWorld, readTurn, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs';
+import { requestLanguage, liveWorld, readTurn, actOperation, clausesOf, coordinated, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1629,6 +1629,9 @@ export class DialogSession {
     const en = await this._doorEnglish(text, opts);
     if (!en) return { why: 'not translated' };
     const { lang, english, translation } = en;
+    // an answer to the timeline's own yes / no question ("Shall I take them all back?"): the dialogue's, before any reading of a request
+    const pd = this.discourse.pending;
+    if (pd?.expected === 'yes/no' && pd.accept === 'undoTo' && this.engine.interp.lang?.yesNo?.(english)) return this._doorTimeline({ text, opts, lang, english, translation, tabWorld, act: 'undo', live, flat: null, answer: true });
     const rd = this.dialogue.requests;
     const lastRec = rd.last(tabWorld);
     const vocab = spellVocabulary(set);
@@ -1638,6 +1641,9 @@ export class DialogSession {
     const flat = { act: q.act, target: q.target, facts: q.facts, reaction: q.reaction, unread: q.unread, used: q.used, corrections: q.corrections, english: q.english, source: 'sopworld' };
     const why = (w) => ({ why: w, q: flat });
     if (isQuestion(english, language)) return why('question');
+    // UNDO / REDO are acts of the session's timeline (k.actions undo, redo), not of the tab world's request: the timeline answers ("redo", "undo the whole message", "undo the
+    // house"), else the world's own undo or redo declared in its request.sop (psys2.op act=undo op=...) takes back its last step (reviewer 2026-11-15 19:05)
+    if (q.act === 'undo' || q.act === 'redo') return this._doorTimeline({ text, opts, lang, english, translation, tabWorld, act: q.act, live, flat, unread: q.unread, named: q.target ?? q.facts.find((f) => f.key === 'kind' && !f.neg)?.value ?? null });
     if (!q.act && !q.target && !q.reaction && !(lastRec && q.request.constraints?.length)) return why('nothing read');   // constraints only count against a last result (a refine)
     if (q.unread.length) return why(`unread: ${q.unread.join(' ')}`);
     const state = this.isession.state[tabWorld] ?? null;
@@ -1679,6 +1685,13 @@ export class DialogSession {
     // no thing named: the door's only when a count names the unit of a whole this world makes ("draw 6 nodes"); "add a paragraph ..." is not a story to guess
     if (!thing && !(req.constraints ?? []).some((c) => c.on === 'count' && c.of && unitOfWhole(live, language, c.of))) return why('no thing named');
     if (!cap.honours.some((h) => h.act === act && (!thing || !h.of.length || h.of.includes(thing) || (act === 'make' && madeIn(live, language, thing))))) return why(`act ${act}${thing ? ` ${thing}` : ''} not declared`);   // a whole the catalog expects made in this world (k.expect.make made_in) is this world's to make
+    // a whole the world makes with an operation of its own (request.sop `psys2.op act= of= op=`: a new page) is that operation, one step, with nothing guessed
+    const ownOp = thing && actOperation(live, act, thing);
+    if (ownOp && typeof world?.ops?.[ownOp] === 'function') {
+      const others = (req.constraints ?? []).filter((c) => !(c.on === 'kind' && c.value === thing));
+      if (others.length) return why(`not declared: ${others.map((c) => c.words ?? c.on).join(', ')}`);
+      return this._doorOp({ text, opts, lang, english, translation, tabWorld, act, op: ownOp, args: {}, flat });
+    }
     if (thing && hasThing(state, thing) && new RegExp(`\\b(?:the|this|that)\\s+(?:\\w+\\s+)?${thing.replace(/[^a-z ]/gi, '')}`, 'i').test(english)) return why(`refers to the ${thing} of the open world`);
     let dry = null;
     withSubkindsNegated(req, live, world.requestText);
@@ -1705,7 +1718,9 @@ export class DialogSession {
     const why = String(door?.why ?? '');
     const list = (ws) => ws.map((w) => `"${w}"`).join(', ');
     let say;
-    if (q?.unread?.length) say = `I did not understand ${list(q.unread)} here.`;
+    const cl = q?.unread?.length ? clausesOf(q.english ?? text, requestLanguage(lib), q.unread) : [];
+    if (cl.some((c) => !c.unread) && cl.some((c) => c.unread)) say = `I understood ${list(cl.filter((c) => !c.unread).map((c) => c.text))}, but not ${list(cl.filter((c) => c.unread).map((c) => c.text))}, so I did nothing.`;   // a clause next to one not understood never runs (destructive or not)
+    else if (q?.unread?.length) say = `I did not understand ${list(q.unread)} here.`;
     else if (why === 'question') say = `I cannot answer questions about the ${name} yet.`;
     else if (/^act (\S+)(?: (.+))? not declared$/.test(why)) { const [, act, thing] = why.match(/^act (\S+)(?: (.+))? not declared$/); say = `I cannot ${act}${thing ? ` ${thing.replace(/_/g, ' ')}` : ''} in the ${name} yet.`; }
     else if (/^refers to the (.+) of the open world$/.test(why)) say = `I cannot change the ${why.match(/^refers to the (.+) of the open world$/)[1]} in the ${name} yet.`;
@@ -1719,6 +1734,49 @@ export class DialogSession {
     r.trace.request = q;
     if (Array.isArray(r.statuses)) r.statuses = ['unsupported'];
     return r;
+  }
+
+  /**
+   * An undo or a redo on a declared tab, inside the turn (so that it is not itself a step): the timeline's own answer first (discourse `undoRedo`: redo of what the timeline took
+   * back, "undo the whole message", "undo the house"), else the world's declared undo / redo operation (its own history). Nothing here is per world.
+   */
+  async _doorTimeline({ text, opts, lang, english, translation, tabWorld, act, live, flat, unread = [], named = null, answer = false }) {
+    const world = this.engine.set.get(tabWorld);
+    const op = actOperation(live, act);
+    const name = (live?.ofType?.('std.schema.world')?.[0]?.attrs?.name?.[0]) ?? 'open tab';
+    const run = async (en, { pend, sid } = {}) => {
+      const m = answer ? await this.discourse.meta(en, pend, sid) : await this.discourse.undoRedo(en);   // `answer`: the turn answers the timeline's own question ("Shall I take them all back?")
+      if (answer && !m) return { reply: 'I did not understand that as an answer to my question.', status: 'unsupported', info: { kind: 'intent' } };
+      if (m) return { ...m, status: m.status ?? 'supported' };
+      if (unread.length || named) return { reply: unread.length ? `I did not understand ${unread.map((w) => `"${w}"`).join(', ')} here, so I took nothing back.` : `I found nothing like "${String(named).replace(/_/g, ' ')}" among what was done, so I took nothing back.`, status: 'unsupported', info: { kind: 'intent' } };   // "undo the unicorn": nothing that was done; "undo the house" with no such step never takes back another
+      if (!op || typeof world?.ops?.[op] !== 'function') return { reply: `I cannot ${act} in the ${name} yet.`, status: 'unsupported', info: { kind: 'intent' } };
+      const r = this._runWorldAct(tabWorld, op, {});
+      const said = String(r?.value ?? r?.note ?? '').trim() || (act === 'undo' ? 'There is nothing to undo.' : 'There is nothing to redo.');
+      return { reply: said, status: r?.status ?? 'missing', info: { kind: 'door' }, frame: r?.status === 'supported' ? { world: tabWorld, text: en, act } : null };
+    };
+    const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, run });
+    r.trace.request = flat;
+    return { reply: r, route: `timeline ${act}` };
+  }
+
+  /** A declared operation of the open world carried out as one step of this turn (inside the turn, so that the timeline keeps it): its own words are the reply. */
+  async _doorOp({ text, opts, lang, english, translation, tabWorld, act, op, args, flat }) {
+    const run = () => {
+      const r = this._runWorldAct(tabWorld, op, args);
+      const said = String(r?.value ?? r?.note ?? '').trim() || 'I could not do that.';
+      return { reply: said, status: r?.status ?? 'missing', info: { kind: 'door' }, frame: r?.status === 'supported' ? { world: tabWorld, text: english, act } : null };
+    };
+    const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, run });
+    r.trace.request = flat;
+    if (Array.isArray(r.statuses) && !r.statuses.length) r.statuses.push('supported');
+    return { reply: r, route: `op ${op}` };
+  }
+
+  /** The state of every world before a door act and the library's mark of this turn (the turn `_sendCore` will open): the act and its turn are one undo step. */
+  _doorBegin() {
+    const before = Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
+    this.isession.rs?.beginTurn(this._msg + 1);
+    return before;
   }
 
   /** Plan a request with the library and let the open world carry it out (the door's tail); `{ reply, route }`, or `{ why }` when the world's executor does not take the plan. */
@@ -1737,6 +1795,9 @@ export class DialogSession {
     try { plan = lib.planRequest(live, goalReq, { catalog: [language], dialogue: dlg, seed, vary: !!rev?.vary }); } catch { plan = null; }
     // a thing the world declares as one of its kinds, whose catalog parts it cannot make ("a house": walls, a roof, a door): planned as that kind itself (stand-in, Q40 [LIB])
     if (!plan?.ok && !plan?.cannot?.length && goalReq.target && lib.capabilitiesOf(live).kinds.get(goalReq.target)?.has('make')) { try { const p2 = lib.planRequest(live, goalReq, { catalog: [language], dialogue: dlg, seed, vary: !!rev?.vary, sources: lib.REQUEST_SOURCES.filter((x) => x !== 'expect') }); if (p2?.ok) plan = p2; } catch { /* the first plan stands */ } }
+    // THINGS SAID TOGETHER ("draw a sky and a sun", "a sun, a cloud and a bird"): a plan of things of kinds that keeps only the first is planned again kind by kind, each with its
+    // own count and the constraints said of all (stand-in until planRequest plans coordinated kinds itself, questions.md Q42 [LIB])
+    if (plan?.ok && plan.roles?.mode === 'kind') plan = coordinated(lib, live, goalReq, plan, { catalog: [language], dialogue: dlg, seed, vary: !!rev?.vary }) ?? plan;
     if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door] plan', route, JSON.stringify({ ok: plan?.ok, roles: plan?.roles, nh: plan?.notHonoured, cannot: plan?.cannot })?.slice(0, 600));
     if (!plan?.ok && arrange) plan = { ok: true, roles: { layout: q.facts.find((f) => f.key === 'layout')?.value }, steps: [], assumed: [], notHonoured: plan?.notHonoured ?? [], target: goalReq.target };   // an arrangement of what is there: the world's own act on its things
     if (!plan?.ok && plan?.cannot?.length) {   // the library's reasoning found the plan cannot hold: nothing is made, the reasons are said
@@ -1758,6 +1819,10 @@ export class DialogSession {
     const lost = (plan.steps ?? []).some((st) => st.item) ? wanted.filter((k) => !planned.has(k)) : [];
     if (lost.length) return { why: `plan drops ${lost.join(', ')}`, q: flat };
     const snap = this.snapshot();
+    // ONE STEP PER REQUEST (reviewer 2026-11-15 19:05): the turn's state before the act; a revision REPLACES the step of the result it revises (its state before is that step's)
+    let before = this._doorBegin();
+    const replaces = base !== undefined && lastRec?.turn != null && this.discourse.actions[0]?.turn === lastRec.turn ? this.discourse.actions[0] : null;
+    if (replaces) before = { ...before, ...replaces.before };
     if (base !== undefined) this.isession.state[tabWorld] = base ? structuredClone(base) : (typeof world.ops.initialState === 'function' ? world.ops.initialState() : {});
     const beforePlan = this.isession.state[tabWorld] ? structuredClone(this.isession.state[tabWorld]) : null;
     const goal = { ...goalOf(plan, { facts: goalReq.facts ?? flat.facts, target: goalReq.target ?? q.target }, { seed }), declared: declarationsOf(live, english), placeWords: (goalReq.constraints ?? []).find((c) => c.on === 'place' && c.want !== 'no')?.words ?? null };   // the place in the user's words ("in the sky"): the world reads it as it reads a place
@@ -1780,8 +1845,10 @@ export class DialogSession {
     try { said = lib.sayRequest(goalReq, { assumed, notHonoured: [...(plan.notHonoured ?? []), ...(done.cannot ?? []).map((c) => ({ on: c.key, words: c.words, why: c.why ?? 'the knowledge has no more', code: 'world' }))], reason: plan.cannot }, { language }); } catch { said = null; }
     const parts = [];
     if (q.corrections.length) parts.push(`I read ${q.corrections.map((c) => `"${c.said}" as "${c.as}"`).join(', ')}.`);
-    parts.push(reaction ? head?.text ?? '' : '', String(done.value ?? '').trim(), arrange || done.plain ? '' : said?.text ?? '');   // an arrangement (or an act that used none of the plan's assumptions) says only what it did
-    const r = await this._sendCore(text, sendOpts, { english, translation, say: parts.filter(Boolean).join(' ') });
+    parts.push(reaction ? head?.text ?? '' : '', String(done.value ?? '').trim(), arrange || (done.plain && !(done.cannot ?? []).length) ? '' : said?.text ?? '');   // an arrangement (or an act that used none of the plan's assumptions) says only what it did
+    if (replaces) this.discourse.actions = this.discourse.actions.filter((x) => x !== replaces);
+    const r = await this._sendCore(text, sendOpts, { english, translation, say: parts.filter(Boolean).join(' '), before, frame: { world: tabWorld, text: english, act: goalReq.act ?? 'make' } });
+    record.turn = this._msg;
     this.dialogue.requests.record(tabWorld, record);
     r.trace.request = { ...flat, revised: reaction ? (goalReq.facts ?? null) : null, plan: { roles: plan.roles, assumed: plan.assumed, notHonoured: plan.notHonoured, steps: plan.steps?.length ?? 0, result } };
     if (Array.isArray(r.worlds) && !r.worlds.includes(tabWorld)) r.worlds.push(tabWorld);
@@ -1933,17 +2000,18 @@ export class DialogSession {
     const selfCorrections = await perf.time('correct', () => this._correct(english));
     if (selfCorrections.corrections.length) english = selfCorrections.text;
 
-    const stateBefore = Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
+    // the door carried its act out before this call (spec 28 section 10): the state before the turn and the library's mark are the ones it took before it acted (one undo step)
+    const stateBefore = override?.before ?? Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
     this.isession.form.turn = this._msg;   // the ids made while this turn is read say which turn made them (spec 15, "Namespaces")
     this.isession.form.forgetUnheld((id) => this.isession.memory.get(id)?.type === 'core.agent');   // an agent is known to the reader only while the session holds its wire (Q23: a lost trial reading never hides an introduction)
-    this.isession.rs?.beginTurn(this._msg);   // the library as it is now is what this turn can be taken back to (spec 15)
+    if (!override?.before) this.isession.rs?.beginTurn(this._msg);   // the library as it is now is what this turn can be taken back to (spec 15)
     this.isession.effects = [];
     const disc = this.discourse;
     const tabBefore = this.isession.state['ui.shell']?.activeTab;
     const pend = disc.takePending();   // an expectation lives for one turn (spec 11)
     const icpt = interp.intercept(this.isession, english);   // modal input (spec 07 section 2)
     let pre = null;   // discourse resolution (spec 11): the reply fills a pending argument, or a fragment is an ellipsis of an earlier frame
-    let meta = override?.say ? { reply: override.say, status: 'supported', info: { kind: 'intent', dialogue: 'about-you' } } : null;  // meta-dialogue (spec 11 sections 6-14): cancel, repeat, explain, feedback, topic, list mode, repair, degree, references
+    let meta = override?.run ? await override.run(english, { pend, sid }) : override?.say ? { reply: override.say, status: 'supported', info: override.info ?? { kind: 'intent', dialogue: 'about-you' } } : null;  // meta-dialogue (spec 11 sections 6-14): cancel, repeat, explain, feedback, topic, list mode, repair, degree, references
     let formalText = english;
     // THE PERSON OF THE SESSION (Q19, spec 23): a statement or a question about the user read by the catalog's person frames, or the interview, is kept as w.person facts before any world reads it
     let personSeg = null;
@@ -2236,6 +2304,7 @@ export class DialogSession {
     if (icpt?.reply) { disc.icptTurn = { turn: this._msg, text: english, reply: icpt.reply, world: icpt.worldId }; disc.noteWorld(icpt.worldId, english, icpt.reply, this._msg); }
     if (!disc.pending) disc.openConfirm(englishReply, this._msg);
     this.isession.rs?.adoptState(this.isession);   // whatever else changed the state of a world with `adopt` in this turn (another world's request) is taken over before the turn is kept
+    { const fr = override?.frame ?? meta?.frame; if (fr) disc.recordDoorFrame({ ...fr, turn: this._msg, reply: englishReply }); }   // the door's act is a frame of this turn, as a reader's request is
     this.isession.rs?.commitTurn(this._msg, english);   // a turn that changed the library keeps its mark: what "undo that" and the undo of the dialogue layer rewind to (spec 15)
     disc.commitTurn({ turn: this._msg, text: english, before: stateBefore, kind: ['undo', 'redo'].includes(meta?.info?.kind) ? 'keep' : segments.some((x) => /undo/i.test(x.match?.patternId ?? '')) ? 'undo' : segments.some((x) => /redo/i.test(x.match?.patternId ?? '')) ? 'redo' : null });
     disc.noteNavigation({ text: english, tabBefore: tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab, turn: this._msg });

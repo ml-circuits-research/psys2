@@ -12,7 +12,7 @@
  */
 import { budget } from './budget.mjs?v=00bce6e369';
 import { BUNDLED_REQUEST } from '../knowledge/bundled-request.mjs?v=d6c9c5d2e1';
-import { REQUEST_LOCAL } from '../lang/en.request.local.mjs?v=7ecc905fbb';
+import { REQUEST_LOCAL } from '../lang/en.request.local.mjs?v=5f0ec03ed3';
 
 const STOP = new Set('a an the of to in on at for with and or but is are was were be been being it its this that these those there here i you he she we they me my your our his her their them us do does did please just also so then very some any can could would should will shall may might must have has had am get got let lets want like one'.split(' '));
 
@@ -102,6 +102,51 @@ export function readTurn(lib, live, language, english, { dialogue = null, known 
     request, act: request.act ?? null, target: request.target ?? null, facts: request.facts ?? [], reaction: request.reactions?.[0]?.value ?? null,
     unread: [...new Set((request.unread ?? []).map((u) => String(u.text ?? u.words ?? u).toLowerCase()))].filter((u) => !regionNames(live).has(u) && !STOP.has(u)), used: request.used ?? [], corrections, asks: request.spell?.asks ?? [], english,
   };
+}
+
+/**
+ * The clauses of a turn as typed, cut at the joiners of the language world (w.lang.en.closed class=conjunction from w.lang.en.joiner, and the comma), each with whether a word of
+ * it is unread: what the honest reply names as understood and not understood ("I understood "clear everything", but not "zork the plimp""). Never a host list of English words.
+ */
+const joinerWords = new WeakMap();
+export function clausesOf(english, language, unread = []) {
+  let jw = joinerWords.get(language ?? {});
+  if (!jw) { jw = new Set(); for (const r of ofType(language, 'w.lang.en.closed')) if (one(r, 'class') === 'conjunction' && (r.from ?? []).map((x) => String(x).replace(/^"|"$/g, '')).includes('w.lang.en.joiner')) for (const t of r.text ?? []) jw.add(String(t).replace(/^"|"$/g, '').toLowerCase()); if (language) joinerWords.set(language, jw); }
+  const out = []; let cur = [];
+  const flush = () => { if (cur.length) out.push(cur); cur = []; };
+  for (const m of String(english ?? '').matchAll(/[\p{L}\p{N}'_-]+|[,;]/gu)) { const w = m[0]; if (w === ',' || w === ';' || jw.has(w.toLowerCase())) flush(); else cur.push(w); }
+  flush();
+  const un = new Set(unread.map((x) => String(x).toLowerCase()));
+  return out.map((ws) => ({ text: ws.join(' '), unread: ws.some((w) => un.has(w.toLowerCase())) }));
+}
+
+/**
+ * A plan of things of kinds that dropped kinds said beside the first ("a sky and a sun" planned as one sky): each wanted kind is planned as its own request (its own count, the
+ * constraints said of every kind), and the item steps are joined. Null when nothing was dropped or a part cannot be planned. Stand-in, questions.md Q42 [LIB].
+ */
+export function coordinated(lib, live, req, plan, opts) {
+  const wanted = [...new Set((req.constraints ?? []).filter((c) => c.on === 'kind' && c.want === 'yes' && c.value && c.origin !== 'lineage').map((c) => c.value))];
+  const planned = new Set((plan.steps ?? []).filter((st) => st.item && st.args?.kind).map((st) => st.args.kind));
+  if (wanted.length < 2 || wanted.every((k) => planned.has(k))) return null;
+  const steps = [], assumed = [], notHonoured = [];
+  for (const k of wanted) {
+    budget.tick('door.coordinated');
+    const own = (c) => (c.on === 'kind' ? c.want !== 'yes' || c.value === k : c.on === 'count' ? !c.of || c.of === k : true);
+    const sub = { ...req, target: k, constraints: (req.constraints ?? []).filter(own) };
+    let p = null;
+    try { p = lib.planRequest(live, sub, opts); } catch { p = null; }
+    if (!p?.ok) return null;
+    steps.push(...(p.steps ?? []).filter((st) => st.item || !steps.length));
+    assumed.push(...(p.assumed ?? []).filter((a) => !assumed.some((x) => x.key === a.key)));
+    notHonoured.push(...(p.notHonoured ?? []).filter((x) => !notHonoured.some((y) => y.on === x.on && y.words === x.words)));
+  }
+  return { ...plan, steps, assumed, notHonoured, roles: { ...plan.roles, kinds: wanted, count: steps.filter((st) => st.item).length } };
+}
+
+/** The world operation a live world declares for an act (`psys2.op world= act= op=` of request.sop): the one executor path of the door's acts that are not plans (undo, redo). */
+export function actOperation(live, act, of = null) {
+  const r = ofType(live, 'psys2.op').find((x) => one(x, 'act') === act && (of ? one(x, 'of') === of : !one(x, 'of')));
+  return r ? one(r, 'op') : null;
 }
 
 /** The live w.dialogue of a session: per tab world { request, result, before }. JSON in the memory and the snapshot. */

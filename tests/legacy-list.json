@@ -443,7 +443,7 @@
   },
   {
    "file": "editor-ed.test.mjs",
-   "name": "Romanian dictation: \"r\u00e2nd nou\" and \"paragraf nou\" are commands",
+   "name": "Romanian dictation: \"rând nou\" and \"paragraf nou\" are commands",
    "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
   },
   {
@@ -657,26 +657,6 @@
    "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
   },
   {
-   "file": "invariants.test.mjs",
-   "name": "matrix: a destructive clause next to a clause that is not understood does not run",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
-   "file": "invariants.test.mjs",
-   "name": "matrix: a question is not a step of undo and redo",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "invariants.test.mjs",
-   "name": "ops: a destructive clause next to a clause that is not understood does not run",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
-   "file": "invariants.test.mjs",
-   "name": "ops: a question is not a step of undo and redo",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
    "file": "knowledge-lookup.test.mjs",
    "name": "delete / move / connect with a catalog hit: the plain refusal, never a gloss",
    "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
@@ -700,16 +680,6 @@
    "file": "lang-holes.test.mjs",
    "name": "lang-holes cases: every closed hole and every control is right; the open hole (never) is only reported",
    "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
-   "file": "lazy-loading.test.mjs",
-   "name": "a state the page sets while a world is loading is kept (a tab click during the load of the tab world)",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "lazy-loading.test.mjs",
-   "name": "UNDO AFTER A RELOAD: the snapshots of earlier turns survive a world load (draw, a message that loads another world, undo takes back the drawing)",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
   },
   {
    "file": "learned-mem-budget.test.mjs",
@@ -818,7 +788,7 @@
   },
   {
    "file": "ro-rp5.test.mjs",
-   "name": "RP5b: \"diagram\u0103\" is the diagram, \"\u00een diagram\u0103\" names the Diagram world, off the Drawing tab",
+   "name": "RP5b: \"diagramă\" is the diagram, \"în diagramă\" names the Diagram world, off the Drawing tab",
    "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
   },
   {
@@ -828,7 +798,7 @@
   },
   {
    "file": "ro-rp5.test.mjs",
-   "name": "RP5b: moving a thing into the water says \"\u00een ap\u0103\" and adds the water when there is none",
+   "name": "RP5b: moving a thing into the water says \"în apă\" and adds the water when there is none",
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
   },
   {
@@ -838,7 +808,7 @@
   },
   {
    "file": "ro-rp5.test.mjs",
-   "name": "RP5c: open the Diagram tab by command after Drawing turns, then \"deseneaz\u0103 trei cercuri\" draws in the Diagram",
+   "name": "RP5c: open the Diagram tab by command after Drawing turns, then \"desenează trei cercuri\" draws in the Diagram",
    "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
   },
   {
@@ -1005,86 +975,6 @@
    "file": "turn-scope.test.mjs",
    "name": "the what-happened diff counts a world loaded during the turn from its initial state, not as \"(was none)\"",
    "reason": "needs questions answered from factsOf of the live world (no question act on the door yet)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "\"undo the house\" takes back a named earlier step alone when the later ones do not touch it [matrix]",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "\"undo the house\" takes back a named earlier step alone when the later ones do not touch it [ops]",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "\"undo the house\" when a later step rests on the same picture asks, and \"yes\" takes both back, \"no\" leaves everything [matrix]",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "\"undo the house\" when a later step rests on the same picture asks, and \"yes\" takes both back, \"no\" leaves everything [ops]",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "\"undo the whole message\" takes back every request of the last message, and one redo puts them back [matrix]",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "\"undo the whole message\" takes back every request of the last message, and one redo puts them back [ops]",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "a message with two requests is two steps: undo takes back the last request and says which, then the other [matrix]",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "a message with two requests is two steps: undo takes back the last request and says which, then the other [ops]",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "one request that makes three things is one step [matrix]",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "one request that makes three things is one step [ops]",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "redo puts back what undo took out and says what it was; a new action clears the redo list [matrix]",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "redo puts back what undo took out and says what it was; a new action clears the redo list [ops]",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "redo through a tab switch: what was undone in the drawing comes back after visiting another tab [matrix]",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "redo with nothing undone says so [matrix]",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "redo with nothing undone says so [ops]",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "undo-redo.test.mjs",
-   "name": "the record of a restart keeps one entry per request (RESTORE-1 with UNDO-REDO)",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
   },
   {
    "file": "voice-repair.test.mjs",
