@@ -1589,8 +1589,10 @@ export class DialogSession {
     const measure = (before) => interp.hook(this.isession, tabWorld, 'requestResult', { before });
     const expOf = (r) => decl.expect.get(r.target) ?? (decl.expect.size === 1 && (r.facts.some((f) => f.key === 'count' && !f.of) || r.facts.some((f) => f.key === 'count' && decl.generic.has(f.of)) || r.facts.some((f) => f.key === 'kind' && f.all)) ? [...decl.expect.values()][0] : null);
     const cannot = notHonoured(q, decl);
+    // a question is never a request to make nor a reaction ("how many shapes are there?")
+    if (/\?\s*$/.test(english.trim()) || /^(?:is|are|does|do|did|how|what|which|who|where|why|when|was|were|has|have)\b/i.test(english.trim())) return await this._requestNotes(opts, first, q, cannot);
     // a reaction to the last result of this tab: the last request revised, the last result replaced
-    const constraintsOnly = !q.act && !q.target && q.facts.length > 0;
+    const constraintsOnly =!q.act && !q.target && q.facts.length > 0;
     let reaction = q.reaction && !['thanks', 'frustration'].includes(q.reaction) ? q.reaction : (q.reaction === 'frustration' && constraintsOnly ? 'refine' : null);
     // a turn of constraints only (no act, no thing) about the last result: a refine, also when a reader carried out something else with it ("not all circles, better layout" read as a correction)
     if (!reaction && constraintsOnly && lastRec && (!complete || q.facts.some((f) => (f.key === 'kind' && f.neg) || ['manner', 'count', 'size', 'layout'].includes(f.key)))) reaction = 'refine';
