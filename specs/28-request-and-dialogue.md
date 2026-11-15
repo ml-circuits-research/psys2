@@ -132,3 +132,11 @@ The bridge reader, the host revision and the host reply are gone. Per turn: the 
   object takes the last act's things. A key the act does not honour is named; a thing that is not there is said; nothing is guessed.
 - **Make**: an indefinite pronoun with `refers=any` ("something", "whatever you want") names the world's own whole; a general whole is sampled among the wholes the world plans (its own
   `psys2.door` wholes before the catalog's); a place said by a kind the world makes that is not there is made by the world; a place that names the world itself is the world.
+- **Tools and their binding (coordinator 20:xx; reviewer general-mechanisms item 3)**: a world's tools are small operations on its state with **no words** (arguments: ids of its
+  things, a direction, a region id, ids of a thing to go next to, an attribute and a value or a step; result `{ status, changed, added }` or `{ status: 'missing', code }`):
+  Drawing `removeThings`, `moveThings`, `setThings`; Diagram `removeShapes`, `moveShapes`, `setShapes` (the engine's own commands). The **binding** is SOP in request.sop:
+  `psys2.tool world= act= op= when="<role path>[=<value>]" arg="<argument>:<role path>" effect= reply=` — the first row whose preconditions hold runs; the arguments come
+  from the roles of the request (`things`, `place.value`, `place.relation`, `place.ids`, `attribute`, `value`, `size.value`, `size.step`). **Replies** are the language
+  world's reply facts (`w.lang.en.reply name=done.place.up|done.place.next|done.place.region|done.place.into|done.change|done.change.size.up|done.remove|done.none|
+  done.added.band|cannot.*|ask.which`, said by the library's `replyFrom`; local rows in src/lang/en.request.local.mjs until the catalog has them); names of things stay
+  names in every language. One host path (`bindingFor`, `_doorTool`) until the library's runPlan carries bindings out (questions.md Q42 (3), (14)).

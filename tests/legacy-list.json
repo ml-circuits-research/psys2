@@ -213,18 +213,8 @@
   },
   {
    "file": "dialogue.test.mjs",
-   "name": "matrix: \"X, not Y\" does not hand the negated clause to the tab",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "dialogue.test.mjs",
    "name": "matrix: a complaint never acts; it offers to undo the last action and \"yes\" does",
    "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "dialogue.test.mjs",
-   "name": "matrix: a fragment with no verb inherits the verb of the focus; the tab gets a complete request",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
   },
   {
    "file": "dialogue.test.mjs",
@@ -263,18 +253,8 @@
   },
   {
    "file": "dialogue.test.mjs",
-   "name": "ops: \"X, not Y\" does not hand the negated clause to the tab",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "dialogue.test.mjs",
    "name": "ops: a complaint never acts; it offers to undo the last action and \"yes\" does",
    "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "dialogue.test.mjs",
-   "name": "ops: a fragment with no verb inherits the verb of the focus; the tab gets a complete request",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
   },
   {
    "file": "dialogue.test.mjs",
@@ -557,11 +537,6 @@
    "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
   },
   {
-   "file": "ellipsis-one.test.mjs",
-   "name": "\"one\" elsewhere is untouched",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
    "file": "followup-last-action.test.mjs",
    "name": "matrix: a move that is asked for something that does not exist is still refused (only a placing verb adds)",
    "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
@@ -743,16 +718,6 @@
   },
   {
    "file": "ro-rp5.test.mjs",
-   "name": "a translator that returns the Romanian text unchanged is retried through the rules translator",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "ro-rp5.test.mjs",
-   "name": "drawing: move into the water, ask where when the place is missing, delete all the fish",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
-   "file": "ro-rp5.test.mjs",
    "name": "drawing: sound-alike \"sare\" is the sun, dash, undrawable animal, coordinated adjectives, diminutives",
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
   },
@@ -787,24 +752,9 @@
    "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
   },
   {
-   "file": "sampler-next.test.mjs",
-   "name": "the sampler: with next-step knowledge the chips offer it instead of the built-in nouns; a turn prefetches what the next chips read (never awaited by the turn)",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
    "file": "sampler.test.mjs",
    "name": "the dice follows the state: a walk on the drawing board is executed every time, and it reaches things that exist",
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "scene-referents.test.mjs",
-   "name": "repairFromScene: a slip in a noun of the scene becomes that noun, the plural stays a plural, known and distant words are left alone",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
-   "file": "scene-referents.test.mjs",
-   "name": "the scene nouns come from the state of the worlds, the open tab first",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
   },
   {
    "file": "several-clauses.test.mjs",
