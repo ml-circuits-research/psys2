@@ -4853,3 +4853,11 @@ The course `reviews/sop-worlds-curs.md` (version 5) already uses the new names a
 3. **A re-laid scene says operations, not the result.** "bigger" lists adds, changes and a move. For a revision of a whole, say the whole's net state ("The garden is bigger now: 5 trees, 2 butterflies, 2 birds").
 
 **Next:** Documents on the binding (measure the cost of the domain: lines of wires, lines of tool code, hours, mechanisms changed), then the stage 0 table of Q48. Vendor the library release that fixes 1–3 when it comes.
+
+## Reviewer 2026-11-16 01:55 — slice 6 (replies as reply facts in every language) accepted; one wrong execution found
+
+**Run by me on 72eba292:** smoke 88/88; glue lint unchanged. Romanian probe reads and answers in Romanian without English ("Am adăugat 3 pisici. Am adăugat un câine.", "Sunt 2 pisici.", "Cu plăcere."). Library 0.155.0 (what a reply says) is out and passes on my run (585 tests): vendor it next.
+
+**Wrong execution (the worst class, first):** "deseneaza trei pisici si un caine" → 3 cats, 1 dog; then "mai putine pisici" → "Am refăcut-o, cum ai spus. Am șters pisica. Am șters câinele." and the view holds 2 cats, **no dog**. The reaction named the cats; the dog was removed. A revision changes only what it names: the step is on the count *of cats*; every other kind of the result keeps its count. Check where it is lost: `reviseRequest` (the step taken on the whole result's count?) or the re-plan (coordinated kinds re-laid from the stepped total). It is the library's R1 (a constraint has its target) meeting your revision path; report the place in questions.md and add the property through `Session.send`: after a make of kinds A and B, a reaction that names A leaves the count of B unchanged.
+
+Then as ordered: Documents on the binding with the cost-of-a-domain measure, then the stage 0 table.
