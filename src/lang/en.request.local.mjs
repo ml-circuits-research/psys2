@@ -7,4 +7,6 @@ export const REQUEST_LOCAL = `
 @w.lang.en.cue.local.layers w.lang.en.cue name=layout.layers on=layout value=layers lead="in layers" lead="into layers" lead="break in" lead="break into" lead="split in" lead="split into" lead="divide into" lead="layers" takes=none priority=3 example="break in 3 layers: water, land and sky"
 @w.lang.en.cue.local.range w.lang.en.cue name=count.range.more on=count bound=range between="until" between="up to" between="through" takes=range priority=2 example="6 until 8 nodes"
 @w.lang.en.cue.local.without w.lang.en.cue name=without.more on=kind want=no lead="anything but" lead="everything but" lead="anything except" lead="other than" lead="but no" takes=kind priority=3 example="anything but circles"
+@k.actions.verb.local.start k.actions.verb text=start act=make sense=1 gloss="bring into being; begin a new one" object=thing
+@k.actions.verb.local.begin k.actions.verb text=begin act=make sense=1 gloss="start a new one" object=thing
 `;

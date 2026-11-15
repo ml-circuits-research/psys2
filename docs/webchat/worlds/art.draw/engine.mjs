@@ -1195,6 +1195,15 @@ function parseMoreSpec(words) {
   return args;
 }
 
+/** The sky in a colour said ("a red sky", "make the sky red"): the background band, one step. */
+function skyColour(ctx, colour) {
+  const s = ensure(ctx);
+  const c = colorFrom([String(colour).toLowerCase()]);
+  if (!c) return no(`I do not know the colour "${colour}".`);
+  if (s.sky === c) return ok(`The sky is already ${colour}.`);
+  return oneStep(ctx, `made the sky ${colour}`, () => { remember(s, `made the sky ${colour}`); s.sky = c; s.mood = null; open(ctx); return ok(`I made the sky ${colour}.`); });
+}
+
 /** "add grass", "add some sand": the ground cover. */
 export const ground = guard((ctx, args, s) => {
   // the sky and the ground are backgrounds, not objects: a band behind everything (a small list here; drawable things should later come from a knowledge world)
@@ -2389,23 +2398,22 @@ export function planRequest(ctx, goal = {}) {
     budget.tick('draw.plan');
     if (st.action !== 'make' || !st.item || !st.args?.kind) continue;
     const said = String(st.args.kind), k = drawnAs[said] ?? said;
-    if (!kindOfWord(k) && !UNDRAWABLE.has(k)) { if (!cannot.some((c) => c.words === said)) cannot.push({ key: 'kind', words: said, why: 'I cannot draw that yet' }); continue; }
+    if (!kindOfWord(k) && !UNDRAWABLE.has(k) && k !== 'sky' && !Object.hasOwn(GROUND_WORDS, k)) { if (!cannot.some((c) => c.words === said)) cannot.push({ key: 'kind', words: said, why: 'I cannot draw that yet' }); continue; }
     const e = items.get(k) ?? { n: 0, said: new Set() };
     e.n++; e.said.add(said); items.set(k, e);
   }
   if (!items.size) return no(`I cannot draw ${goal.target ? `a ${goal.target}` : 'that'} with the things I know how to draw.`, 'unsupported');
   if (goal.plan?.roles?.mode === 'kind') {   // things of kinds, not a scene: the board draws each the way it draws a thing (its place from the facts, its colour, its warnings), and says so
+    // each kind said is a request of its own ("draw a sky and a sun": two steps of undo, as two clauses are), each with the board's own words for its step ("drew a yellow sun")
     const sz = goal.size === 'small' || goal.size === 'tiny' ? 'small' : goal.size === 'big' || goal.size === 'huge' ? 'big' : null;
+    const colour = (goal.request?.facts ?? []).find((f) => f.key === 'attribute' && f.attribute === 'colour' && !f.neg)?.value ?? null;   // a colour said ("draw a red house")
     const texts = [];
-    const r0 = oneStep(ctx, 'drew the things asked', () => {
-      for (const [k, e] of items) {
-        budget.tick('draw.plan');
-        const x = add(ctx, { kind: k, n: String(e.n), ...(sz ? { m1: sz } : {}), where: goal.placeWords ?? (goal.place && PLACE[goal.place] ? PLACE[goal.place] : '') });
-        if (x?.status === 'supported') texts.push(String(x.value ?? '').trim()); else cannot.push({ key: 'kind', words: [...e.said][0], why: 'I cannot draw that yet' });
-      }
-      return texts.length ? ok('') : no('I could not draw any of it.', 'unsupported');
-    });
-    return r0?.status === 'supported' ? ok(texts.join(' '), { cannot, plain: true }) : r0;
+    for (const [k, e] of items) {
+      budget.tick('draw.plan');
+      const x = k === 'sky' && colour ? skyColour(ctx, colour) : k === 'sky' || Object.hasOwn(GROUND_WORDS, k) ? ground(ctx, { g: k }) : add(ctx, { kind: k, n: String(e.n), ...(sz ? { m1: sz } : {}), ...(colour ? { m2: String(colour).toLowerCase() } : {}), where: goal.placeWords ?? (goal.place && PLACE[goal.place] ? PLACE[goal.place] : '') });
+      if (x?.status === 'supported') texts.push(String(x.value ?? '').trim()); else cannot.push({ key: 'kind', words: [...e.said][0], why: 'I cannot draw that yet' });
+    }
+    return texts.length ? ok(texts.join(' '), { cannot, plain: true }) : no('I could not draw any of it.', 'unsupported');
   }
   const size =goal.size === 'small' || goal.size === 'tiny' ? 'small' : goal.size === 'big' || goal.size === 'huge' ? 'big' : null;
   const where = PLACE[goal.place] ?? (size === 'small' ? PLACE.corner : PLACE.bottom);
@@ -2415,6 +2423,7 @@ export function planRequest(ctx, goal = {}) {
     for (const [k, e] of items) {
       const one = { kind: k, n: String(e.n), ...(k === main && size ? { m1: size } : {}) };
       let ok1 = null;
+      if (k === 'sky' || Object.hasOwn(GROUND_WORDS, k)) { const x = ground(ctx, { g: k }); if (x?.status === 'supported') { said.push(k === 'sky' ? 'the sky' : GROUND_NAME[GROUND_WORDS[k]] ?? k); continue; } }   // a background of the scene (its ground, its sky): the board's own band
       for (const w of k === main ? [where, ''] : [`next to the ${main}`, where, '']) { const x = add(ctx, { ...one, where: w }); if (x?.status === 'supported') { ok1 = x; break; } }
       if (!ok1) { cannot.push({ key: 'kind', words: [...e.said][0], why: 'I cannot draw that yet' }); continue; }
       said.push(`${e.n} ${e.n === 1 ? kindName(k) : pluralOfKind(k, e.n)}`);

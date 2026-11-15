@@ -105,3 +105,16 @@ The bridge reader, the host revision and the host reply are gone. Per turn: the 
 - **No fallback:** what the door cannot take is said honestly (unread words, an act or a thing the world does not declare, a question, a plan it cannot keep). The old readers of a declared world never run. Worlds without declarations (the shell, help, the conversation, Charts, Map, Music) still answer through `_sendRead`, marked `trace.legacy = true` with the reason in `trace.door`; the share of legacy turns is reported with every landing.
 - `psys2.door world=<name> whole=<kind>` (request.sop) names the wholes a world plans; the catalog's wholes made in the world (k.expect.make made_in = its std.schema.world name) are added as its kinds (host stand-in until capabilitiesOf reads them, questions.md Q40).
 - Tests that pin a reader, a wording or a route the door replaced are on the legacy list (`tests/legacy-list.json`, or `legacyOnly` in the file): run and reported apart by `scripts/run-tests.mjs`, never counted. Properties P1–P11 run through `Session.send`.
+
+## 11. The timeline of the door (reviewer 2026-11-15 19:05, 19:40)
+- **One plan = one undo step.** The door takes the state of every world and the library's mark of the turn *before* it carries a plan out (`_doorBegin`), and the turn records a
+  frame of the request (`Discourse.recordDoorFrame`, the same frame a reader's request leaves), so "undo", "undo the whole message", "undo the house" and "what did you do?" see
+  it. A **revision replaces** the step of the result it revises (its state before is that step's). A **question** is no step; an undo or a redo is no step.
+- **Undo / redo are acts of the session timeline** (k.actions undo / redo, read by readRequest): the timeline answers first (redo, the whole message, a named step and its
+  yes / no question), else the world's own undo / redo declared in request.sop (`psys2.op world= act=undo op=<operation>`). An undo that names something no step did takes
+  nothing back; an undo with unread words takes nothing back.
+- **Tool binding** (request.sop): `psys2.op world= act= [of=<kind>] op=<operation>` binds an act (and the whole it makes) to one operation of the world: a new page is the board's
+  fresh sheet (`act=make of=page op=newDrawing`), carried out inside the turn as one step. Host until the library publishes the binding (questions.md Q42 [LIB]).
+- **Things said together** ("a sky and a sun") are planned kind by kind and carried out as one request each (each its own step in the world's history), stand-in `coordinated`.
+- **A partly read turn never acts**: the reply names the clauses understood and those not understood ("I understood "clear everything", but not "zork the plimp", so I did
+  nothing"), cut at the joiners of the language world.

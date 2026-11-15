@@ -17,6 +17,7 @@
 @s.size core.slot of=thing key=size enum=tiny enum=small enum=medium enum=big enum=huge
 @s.in core.slot of=thing key=in
 @s.thing_place core.slot of=thing key=place enum=corner enum=top enum=bottom enum=left enum=right enum=center
+@s.thing_colour core.slot of=thing key=colour kind=string
 @t.water core.type of=water extends=thing closed=true
 @k.water std.schema.kind of=water world=drawing acts=make acts=remove
 @t.flower core.type of=flower extends=thing closed=true
@@ -33,6 +34,8 @@
 @k.cloud std.schema.kind of=cloud world=drawing acts=make acts=remove
 @t.sun core.type of=sun extends=thing closed=true
 @k.sun std.schema.kind of=sun world=drawing acts=make acts=remove
+@t.sky core.type of=sky extends=thing closed=true
+@k.sky std.schema.kind of=sky world=drawing acts=make acts=remove
 @t.house core.type of=house extends=thing closed=true
 @k.house std.schema.kind of=house world=drawing acts=make acts=remove
 @t.fish core.type of=fish extends=thing closed=true
@@ -59,7 +62,7 @@
 @k.goldfish std.schema.kind of=goldfish world=drawing acts=make acts=remove
 @t.duck core.type of=duck extends=bird closed=true
 @k.duck std.schema.kind of=duck world=drawing acts=make acts=remove
-@h.make std.schema.honours world=drawing act=make on=kind on=count on=size on=extent on=place on=with on=manner on=layout of=pond of=forest of=garden of="water" of="water lily" of="reed" of="duck" of="goldfish" of="flower" of="tree" of="bush" of="butterfly" of="bird" of="cloud" of="sun" of="house" of="fish" of="boat" of="cat" of="dog" of="mountain" of="lake" of="river" of="hill"
+@h.make std.schema.honours world=drawing act=make on=kind on=count on=size on=extent on=place on=with on=manner on=layout on=attribute of=pond of=forest of=garden of="water" of="water lily" of="reed" of="duck" of="goldfish" of="flower" of="tree" of="bush" of="butterfly" of="bird" of="cloud" of="sky" of="sun" of="house" of="fish" of="boat" of="cat" of="dog" of="mountain" of="lake" of="river" of="hill"
 @h.arrange std.schema.honours world=drawing act=arrange on=layout of=picture of=pond of=forest of=garden
 @e.forest k.expect.make thing=forest made_in=drawing unit=part min=5 max=7 typical=6 kinds_min=1 kinds_max=2 layout=free
 @e.forest.tree k.expect.part of=forest part=tree group=plant min=5 max=7 typical=6 needed=yes
@@ -73,6 +76,16 @@
 @layer.land std.schema.region world=drawing name=land kind=house kind=tree kind=flower kind=bush kind=grass kind=fence kind=bench kind=stone kind=cat kind=dog kind=mountain kind=hill kind=person kind=car
 @layer.sky std.schema.region world=drawing name=sky kind=sun kind=cloud kind=bird kind=butterfly kind=moon kind=rainbow kind=balloon kind=rocket
 @wd.woods core.word text=woods means=forest
+@wd.picture core.word text=picture text=drawing text=canvas means=picture
+@t.page core.type of=page extends=std.schema.thing closed=true
+@k.page std.schema.kind of=page world=drawing acts=make
+@wd.page core.word text=page text=sheet text=paper means=page
+@h.page std.schema.honours world=drawing act=make of=page
 @wd.things core.word text=thing text=things text=items means=part
 # The door (reviewer 2026-11-15 16:40): the wholes whose requests this world plans through the library. Read by src/dialog/request.mjs doorWholes.
 @door psys2.door world=drawing whole=pond whole=forest whole=garden
+# The session timeline (reviewer 2026-11-15 19:05): the world's own undo and redo, the operations the door calls for the acts undo / redo of k.actions (src/dialog/request.mjs actOperation).
+@op.undo psys2.op world=drawing act=undo op=undo
+@op.redo psys2.op world=drawing act=redo op=redo
+# A whole the world makes with an operation of its own, not by a plan of parts: a new page is the board's fresh sheet (the old one stays for undo).
+@op.page psys2.op world=drawing act=make of=page op=newDrawing

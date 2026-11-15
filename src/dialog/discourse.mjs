@@ -546,6 +546,22 @@ export class Discourse {
     return out;
   }
 
+  /**
+   * A request the door carried out (spec 28 section 10; reviewer 19:05): the same frame a reader's request leaves, so that the turn is one step of the timeline (undo, redo,
+   * "what did you do?"). `act` undo / redo marks the world's own undo or redo, as a reader's undo pattern does; a question leaves a question frame (not a step).
+   */
+  recordDoorFrame({ turn, world, text, act = 'make', kind = 'request', reply = null }) {
+    const t = String(text ?? '').trim().replace(/[?!.]+$/g, '');
+    if (!t || NO_FRAME(world)) return null;
+    const frame = { turn, world, patternId: `door.${world}.${act}`, kind, text: kind === 'question' ? `${t}?` : t, slots: [], args: [], op: act, reply, opId: null, door: true };
+    this.frames.unshift(frame);
+    this.frames.length = Math.min(this.frames.length, FRAME_LIMIT);
+    return frame;
+  }
+
+  /** "redo", "undo all of that", "undo the sun": the timeline's own answer, or null when the tab world answers a plain undo / redo itself (the door asks this first). */
+  undoRedo(text) { return this._undoRedo(text); }
+
   /** End of turn: when the turn changed the state of a world, keep what is needed to take it back (undo, repair). */
   commitTurn({ turn, text, before, kind = null }) {
     const st = this.dialog.isession.state;
