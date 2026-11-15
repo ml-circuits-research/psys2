@@ -8,7 +8,7 @@
 - **Neural models propose.** A small dispatcher (DistilBERT) cuts a message into parts and proposes which world each part belongs to; a small normalizer (FLAN-T5 small) rewrites a part only when nothing else reads it.
 - **Symbolic worlds decide.** Formal rules (SOP Lang) turn each part into wires, a value checker confirms that numbers, names and negations are the ones you said, and a world must validate the meaning before anything happens.
 - **It tells you what it did not understand.** Partial understanding, spell checking, best-effort reading and a discourse layer (follow-ups, clarifications) work on top; what no world validates is refused, never invented.
-- **Worlds and tabs.** Each world is a small package of knowledge, operations and tests (arithmetic, shopping, animals, drawing, diagrams, charts, maps, music, seating, a timeline, documents with the editor, an avatar, and more); most have a tab in the page.
+- **Worlds and tabs.** Each world is a small package of knowledge, operations and tests (arithmetic, shopping, animals, drawing, diagrams, charts, maps, music, documents with the editor, an avatar, and more); most have a tab in the page.
 - **Small enough for the page.** The models are tiny enough to run in the page: about 64 MB (dispatcher) plus 95 MB (normalizer), downloaded once and cached in your browser.
 
 ```text

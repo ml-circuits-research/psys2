@@ -46,5 +46,22 @@ export function compose(ctx, { type, topic, chapters, subchapters, words, seed }
   }
   createDoc(ctx, c.title, blocks);
   finish(ctx.state);
-  return ok(`I wrote the ${String(c.type ?? 'essay').replace(/-/g, ' ')} "${c.title}": ${ctx.state.stats?.words ?? 0} words in ${c.chapters.length} ${c.chapters.length === 1 ? 'chapter' : 'chapters'}. ${c.short?.length ? `My knowledge was short of what you asked (${c.short[0]}), so it is smaller and not padded. ` : ''}It is open in the Documents tab.`, { data: { composed: true } });
+  // the size asked is honoured as far as the knowledge goes, and said when it does not (owner request 2026-11-15): never padded
+  const written = c.words ?? ctx.state.stats?.words ?? 0, asked = c.asked ?? null, topicNp = c.title.replace(/^All about /, '');
+  const sections = c.chapters.reduce((n, ch) => n + ch.subchapters.length, 0);
+  const size = asked && written < asked * 0.8
+    ? `I could write about ${fmt(written)} words about ${topicNp} from what I know (you asked for ${fmt(asked)}); I did not pad it with repetition. `
+    : c.short?.length && !asked ? `My knowledge was short of what you asked (${c.short[0]}), so it is smaller and not padded. ` : '';
+  const read = c.read ? usedNote(c.read) : '';
+  return ok(`I wrote the ${String(c.type ?? 'essay').replace(/-/g, ' ')} "${c.title}": ${fmt(written)} words in ${c.chapters.length} ${c.chapters.length === 1 ? 'chapter' : 'chapters'}${sections > c.chapters.length ? ` and ${sections} sections` : ''}. ${read}${size}It is open in the Documents tab.`, { data: { composed: true } });
+}
+
+const fmt = (n) => Number(n).toLocaleString('en-US');
+const quoteList = (xs) => xs.map((x) => `"${x.length > 60 ? `${x.slice(0, 59)}…` : x}"`).join(', ');
+/** What was taken from a topic written as a paragraph: the subject, the subtopics and the words that chose the facts; the phrases nothing was taken from. */
+function usedNote(r) {
+  const used = [`${r.topic} (the subject)`, ...r.subtopics.slice(0, 8), ...(r.linked ?? []).slice(0, 6), ...r.keys.slice(0, 6).map((k) => `"${k.replace(/_/g, ' ')}"`)];
+  const unused = r.unused.slice(0, 4), unlinked = (r.unlinked ?? []).slice(0, 4);
+  const and = (xs) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}` : xs[0]);
+  return `From your topic I used ${and(used)}. ${unlinked.length ? `I know ${and(unlinked)}, but nothing that links ${unlinked.length > 1 ? 'them' : 'it'} to ${r.topic}, so I left ${unlinked.length > 1 ? 'them' : 'it'} out. ` : ''}${unused.length ? `I found nothing I know in ${quoteList(unused)}${r.unused.length > unused.length ? ` and ${r.unused.length - unused.length} more` : ''}. ` : ''}`;
 }

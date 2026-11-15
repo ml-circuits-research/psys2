@@ -317,14 +317,14 @@
     doc="Send the card to the Diagram tab: the parts become boxes linked to the thing."
 
 @pat.talk.send.view core.pattern
-    canonical="Show it in the seating plan."
+    canonical="Show it in the drawing."
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [send|show|put|move|give] [it|this|that]? [to|in|on|into|onto] [the|my]? {to:words(3)}"
     emit="@{_} core.request action=talk.send arg.to=\"{to}\""
     kind=request
     tabOnly=true
     tabClaim=true
     priority=12
-    example="Send it to the seating plan."
+    example="Send it to the drawing."
     example="Show it on the avatar."
     doc="Select the thing of the topic into any other view of the session things (spec 23): the store says what the view can take."
 

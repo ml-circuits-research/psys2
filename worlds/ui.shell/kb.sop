@@ -7,8 +7,6 @@
 @kb.shell.tab.diagram ui.shell.known id=diagram title="Diagram" world=diagram.sketch core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.tab.map ui.shell.known id=map title="Map" world=geo.map core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.tab.music ui.shell.known id=music title="Music" world=media.music core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
-@kb.shell.tab.seating ui.shell.known id=seating title="Seating" world=plan.seating core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
-@kb.shell.tab.timeline ui.shell.known id=timeline title="Timeline" world=plan.timeline core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 
 @kb.shell.alias.editor ui.shell.alias word=editor tab=editor core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.alias.document ui.shell.alias word=document tab=editor core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
@@ -39,9 +37,6 @@
 @kb.shell.alias.piano ui.shell.alias word=piano tab=music core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.alias.keyboard ui.shell.alias word=keyboard tab=music core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.alias.sheet_music ui.shell.alias word=sheet_music tab=music core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
-@kb.shell.alias.seating ui.shell.alias word=seating tab=seating core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
-@kb.shell.alias.seating_plan ui.shell.alias word=seating_plan tab=seating core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
-@kb.shell.alias.timeline ui.shell.alias word=timeline tab=timeline core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.alias.talk ui.shell.alias word=talk tab=talk core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.alias.avatar ui.shell.alias word=avatar tab=avatar core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.alias.robot ui.shell.alias word=robot tab=avatar core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"

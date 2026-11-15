@@ -40,7 +40,6 @@ items are in `handover/<module>/` (copies; the bridges here are deleted when the
 | `worlds/common.sense/` | SKW (facts) | 62 general facts; become k.scenes / k.commonsense entries. `handover/common.sense/`. |
 | `worlds/meta.worlds/` | lib (rules, `std.route`); cards stay generated here | the routing rules are general; the cards (kb.sop, 509 lines) are facts about this application's worlds. `handover/meta.worlds/`. |
 | `worlds/lang.common/` | split | number words, colour words and similar to SKW (k.values); `core.phrase` groups of yes / no / politeness / the English dialogue phrases stay (ADR-007, English host content). |
-| `worlds/plan.seating/`, `worlds/plan.timeline/` | SKW (schemas) | SOP-only reusable schemas; generated files stay host. `handover/sop-knowledge-worlds/`. |
 | `worlds/art.draw/` | stays (tab) | drawing tool schema and renderer glue; its colour tables, plurals, `BUILTIN` drawings and `things.catalog.mjs` are general facts to SKW (k.objects, k.values, k.words) and are removed by KNOWLEDGE-OUT. |
 | `worlds/diagram.sketch/` | stays (tab) | diagram tool; its lexicon colours and ask forms read knowledge by lookup. |
 | `worlds/data.charts/`, `worlds/docs.editor/`, `worlds/docs.reader/`, `worlds/ui.avatar/` | stay (tabs) | tool schemas and renderers; their colour names and default face come from the catalog. |
@@ -94,5 +93,4 @@ Order inside one turn, and where each general piece sits (copies in `handover/tu
 | knowledge-loader | 0 | 931 | 119 | std.knowledge |
 | turn-pipeline | 0 | about 900 general of 2,764 in the files | 0 | std.turn |
 | failure-ledger | 0 | 0 | 160 | tools |
-| plan.seating, plan.timeline | 264 | 0 | 0 | SKW |
-| **total** | **2,401** | **about 6,000** | **887** | |
+| **total** | **2,137** | **about 6,000** | **887** | |

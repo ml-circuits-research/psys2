@@ -54,7 +54,6 @@
     word=asked
     word=painted
     word=sketched
-    word=seated
     word=planned
     word=wrote
     word=typed
@@ -72,12 +71,10 @@
     word=summary
     word=report
     word=notes
-    word=timeline
     word=calendar
     word=drawing
     word=picture
     word=avatar
-    word=seating
     word=conversation
     word=map
     word=atlas

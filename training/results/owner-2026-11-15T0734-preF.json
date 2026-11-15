@@ -1,0 +1,1996 @@
+{
+ "date": "2026-11-15T10:43:55.027Z",
+ "reasoner": "matrix",
+ "mt": true,
+ "encoder": true,
+ "summary": {
+  "session": {
+   "right": 30,
+   "total": 43,
+   "medianMs": 314,
+   "withheld": 0,
+   "falseDone": 0
+  },
+  "variants": {
+   "right": 27,
+   "total": 35,
+   "byClass": {
+    "A": {
+     "right": 3,
+     "total": 5
+    },
+    "B": {
+     "right": 5,
+     "total": 5
+    },
+    "C": {
+     "right": 3,
+     "total": 5
+    },
+    "D": {
+     "right": 4,
+     "total": 5
+    },
+    "E": {
+     "right": 4,
+     "total": 5
+    },
+    "F": {
+     "right": 4,
+     "total": 5
+    },
+    "G": {
+     "right": 4,
+     "total": 5
+    }
+   },
+   "medianMs": 172
+  }
+ },
+ "rows": [
+  {
+   "set": "session",
+   "context": true,
+   "id": 0,
+   "class": null,
+   "text": "adaugă un cerc",
+   "tab": "diagram",
+   "ms": 50,
+   "judged": false,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat un cerc.",
+   "english": "Drew a circle."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 1,
+   "class": null,
+   "text": "creaza o diagrama random",
+   "tab": "diagram",
+   "ms": 312,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat o diagramă aleatorie de tip flux, cu șase forme. Este despre raport. Este peste ce era deja acolo; „anulează” o elimină.",
+   "english": "I drew a random pipeline diagram with six shapes. It is about report. It is on top of what was there; undo takes it away."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 2,
+   "class": null,
+   "text": "aseaza elementele diagramei ca un hexagon",
+   "tab": "diagram",
+   "ms": 334,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am pus cele 7 forme pe conturul unui hexagon, în sensul acelor de ceasant de sus.",
+   "english": "I placed the 7 shapes on the outline of a hexagon, clockwise from the top."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 3,
+   "class": null,
+   "text": "aseaza elementele diagramei ca un hexagon cu cercul in mijloc",
+   "tab": "diagram",
+   "ms": 281,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am plasat cele 6 forme pe conturul unui hexagon, în sensul acelor de ceas din partea de sus, și cercul din mijloc.",
+   "english": "I placed the 6 shapes on the outline of a hexagon, clockwise from the top, and the circle in the middle."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 4,
+   "class": null,
+   "text": "aseaza mai bine elementele diagramei",
+   "tab": "diagram",
+   "ms": 142,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat cercul, „summary”, „introduction”, „work done”, „results” și 2 mai mult. Am aranjat 7 forme ca un copac, de la stânga la dreapta. c1 nu are legături, așa că stă lângă copac.",
+   "english": "Moved the circle, summary, introduction, work done, results and 2 more. Arranged 7 shapes as a tree, left to right. c1 has no links, so it stands beside the tree."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 5,
+   "class": null,
+   "text": "reaseaza diagrama",
+   "tab": "diagram",
+   "ms": 77,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": false,
+   "reply": "Am aranjat 7 forme ca un copac, de la stânga la dreapta. c1 nu are legături, așa că stă lângă copac.",
+   "english": "Arranged 7 shapes as a tree, left to right. c1 has no links, so it stands beside the tree."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 6,
+   "class": null,
+   "text": "fa diagrama mai frumoasa",
+   "tab": "diagram",
+   "ms": 355,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": false,
+   "reply": "Am luat asta ca: îmbunătățirea diagramei. Aspectul are deja un scor de 98,4/100 și nimic din ceea ce am încercat scoruri mai mari, așa că l-am lăsat așa cum este.",
+   "english": "I took that as: improve the diagram. The layout already scores 98.4/100 and nothing I tried scores higher, so I left it as it is."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 7,
+   "class": null,
+   "text": "reaseaza",
+   "tab": "diagram",
+   "ms": 65,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": false,
+   "reply": "Am aranjat 7 forme ca un copac, de la stânga la dreapta. c1 nu are legături, așa că stă lângă copac.",
+   "english": "Arranged 7 shapes as a tree, left to right. c1 has no links, so it stands beside the tree."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 8,
+   "class": null,
+   "text": "punr elementele din mijloc mai sus",
+   "tab": "diagram",
+   "ms": 172,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=results].y<$+0 (196)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat al treilea hexagon în sus.",
+   "english": "I moved the third hexagon up."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 9,
+   "class": null,
+   "text": "sterge cercul",
+   "tab": "diagram",
+   "ms": 240,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am șters cercul 1.",
+   "english": "Deleted circle 1."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 10,
+   "class": null,
+   "text": "pune primul si ultimul  od mao jos iar nodul din centru mai sus",
+   "tab": "diagram",
+   "ms": 1396,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=summary].y>$+0 (196)",
+    "state:diagram.sketch:shapes[name=next_steps].y>$+0 (196)",
+    "reply_not:Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins|nu am f[aă]cut|Ce ai vrut|doar o parte"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat al treilea hexagon în jos. Ce formă ar trebui să mă mişc? Nume it, de exemplu \"cerc de mișcare1\". Nu am putut citi \"în centrul de mai sus\" ca ceva de-a face cu diagrama. Nu am putut găsi o acțiune în \"glăbit în centrul de sus\". Am ",
+   "english": "I moved the third hexagon down. Which shape should I move? Name it, e.g. \"move circle1\". I could not read \"lump in the center above\" as something to do with the diagram. I couldn't find an action in \"lump in the center above\". I understood "
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 11,
+   "class": null,
+   "text": "muta results mai sus",
+   "tab": "diagram",
+   "ms": 460,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat „results” în sus.",
+   "english": "Moved results up."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 12,
+   "class": null,
+   "text": "si mai sus",
+   "tab": "diagram",
+   "ms": 50,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=results].y<$+0 (116)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat al treilea hexagon în sus.",
+   "english": "I moved the third hexagon up."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 13,
+   "class": null,
+   "text": "muta work done si problems mai sus",
+   "tab": "diagram",
+   "ms": 830,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat „work done” în sus. Am mutat „problems” în sus.",
+   "english": "Moved work done up. Moved problems up."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 14,
+   "class": null,
+   "text": "muta summary pe la mijloc",
+   "tab": "diagram",
+   "ms": 541,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat „summary” la dreapta.",
+   "english": "Moved summary to the right."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 15,
+   "class": null,
+   "text": "mai jos",
+   "tab": "diagram",
+   "ms": 722,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: muti-o pe „summary”. M-am mutat în jos pe „summary”.",
+   "english": "I took that as: move summary down. Moved summary down."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 16,
+   "class": null,
+   "text": "nu problems , revina vu probls unde era",
+   "tab": "diagram",
+   "ms": 355,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: pune-o pe „problems” înapoi unde era. M-am mutat în jos pe „problems”.",
+   "english": "I took that as: put problems back where it was. Moved problems down."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 17,
+   "class": null,
+   "text": "gresit, muta problems mai sus",
+   "tab": "diagram",
+   "ms": 459,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat „problems” în sus.",
+   "english": "Moved problems up."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 18,
+   "class": null,
+   "text": "muta summary mai jos",
+   "tab": "diagram",
+   "ms": 152,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat „summary” în jos.",
+   "english": "Moved summary down."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 19,
+   "class": null,
+   "text": "muta problems mai sus",
+   "tab": "diagram",
+   "ms": 161,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat „problems” în sus.",
+   "english": "Moved problems up."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 20,
+   "class": null,
+   "text": "fa un desen random",
+   "tab": "diagram",
+   "ms": 125,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Am înțeles doar o parte din „Make a drawing random”: Nu am folosit „drawing” și „random”, aşa că n-am făcut-o. Ce ai vrut să spui?",
+   "english": "I understood only part of \"Make a drawing random\": I did not use \"drawing\" and \"random\", so I did not do it. What did you mean?"
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 21,
+   "class": null,
+   "text": "deseneaza ceva random",
+   "tab": "diagram",
+   "ms": 258,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat o diagramă aleatorie de tip flux, cu cinci forme. Este despre poveste. Este peste ce era deja acolo; „anulează” o elimină.",
+   "english": "I drew a random pipeline diagram with five shapes. It is about story. It is on top of what was there; undo takes it away."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 22,
+   "class": null,
+   "text": "unde este paris",
+   "tab": "editor",
+   "ms": 132,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Paris este capitala de Franța, în Europa( 48.87 N, 2.33 E), cu despre 9.9 million oameni.",
+   "english": "Paris is the capital of France, in Europe (48.87 N, 2.33 E), with about 9.9 million people."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 23,
+   "class": null,
+   "text": "arata-mi paris pe harta",
+   "tab": "map",
+   "ms": 110,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": false,
+   "content": false,
+   "reply": "Harta este centrată pe Paris la zoom 8 (hartă offline country). Nu există markere, evidențieri sau linii.",
+   "english": "The map is centred on Paris at zoom 8 (offline country map). There are no markers, highlights or lines."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 24,
+   "class": null,
+   "text": "deseneaza ceva frumos",
+   "tab": "draw",
+   "ms": 49,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat o scenă însorită pentru tine: un soare galben, 2 nori, un munte gri, o casă albastră, 2 copaci verzi, 2 flori roz, un câine maro și o pasăre albastră. Poți schimba orice, de exemplu „fă casa albastră”.",
+   "english": "I drew a sunny scene for you: a yellow sun, 2 clouds, a grey mountain, a blue house, 2 green trees, 2 pink flowers, a brown dog and a blue bird. You can change anything, for example \"make the house blue\"."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 25,
+   "class": null,
+   "text": "deseneaza o casa",
+   "tab": "draw",
+   "ms": 161,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat o casă galbenă.",
+   "english": "I drew a yellow house."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 26,
+   "class": null,
+   "text": "deseneaza orice vrei tu",
+   "tab": "draw",
+   "ms": 72,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat o scenă însorită pentru tine: 2 nori, un munte gri, o casă portocalie, 2 copaci verzi, o floare galbenă, o floare roz, o pisică portocalie și o pasăre albastră. Poți schimba orice, de exemplu „fă casa albastră”.",
+   "english": "I drew a sunny scene for you: 2 clouds, a grey mountain, an orange house, 2 green trees, a yellow flower, a pink flower, an orange cat and a blue bird. You can change anything, for example \"make the house blue\"."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 27,
+   "class": null,
+   "text": "sterge desenul",
+   "tab": "draw",
+   "ms": 62,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "OK, am curățat imaginea (22 de lucruri). Poţi să spui \"undo\" ca să-l recuperezi.",
+   "english": "OK, I cleared the picture (22 things). You can say \"undo\" to get it back."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 28,
+   "class": null,
+   "text": "deseneaza un tablou cu un lac",
+   "tab": "draw",
+   "ms": 494,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:art.draw:objects.length>$+0 (0)"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles unde să-l pun (\"cu lacul\"). Poți spune, de exemplu, \"în colțul din dreapta sus\", \"lând la soare\" sau \"sub copac\".",
+   "english": "I did not understand where to put it (\"with lake\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\"."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 29,
+   "class": null,
+   "text": "deseneaza un pond",
+   "tab": "draw",
+   "ms": 246,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat un iaz: un soare, 3 libelule, un iaz, 2 copaci, 2 tufișuri, o bancă, 5 ierburi, un melc, 3 pietre, 3 rațe, 3 broaște, 4 nuferi, 3 peștișori de aur și un heron. Am pus cele 3 rațe pe apa iazului, cele 3 broaște pe apa iazului și c",
+   "english": "I drew a pond: a sun, 3 dragonflys, a pond, 2 trees, 2 bushes, a bench, 5 grasses, a snail, 3 stones, 3 ducks, 3 frogs, 4 water lilys, 3 goldfishes and a heron. I put the 3 ducks on the water of the pond, the 3 frogs on the water of the pon"
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 30,
+   "class": null,
+   "text": "ai exagerat",
+   "tab": "draw",
+   "ms": 530,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: scoate a patra iarbă şi iarba a cincea. Am luat 2 ierburi.",
+   "english": "I took that as: remove the fourth grass and the fifth grass. I took away 2 grasses."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 31,
+   "class": null,
+   "text": "sterge elementele in plus, exgarat de mukte elemente, unde este apa?",
+   "tab": "draw",
+   "ms": 1104,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_any:ap[aă]|iaz|lac"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: scoate a treia libelulă. Am plecat pe dinafă „exgart by the time”: Nu am putut să-l citesc. Am luat libelula. Pot să-ţi spun doar unde sunt lucrurile pe care le-ai tras.",
+   "english": "I took that as: remove the third dragonfly. I left out \"exgart by the time\": I could not read it. I took away the dragonfly. I can only tell you where the things you drew are."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 32,
+   "class": null,
+   "text": "pune pestii in ala",
+   "tab": "draw",
+   "ms": 521,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: pui peștele în apă. Există 3: peștișori aurii din stânga, peștii de aur din mijloc și peștii de aur din dreapta. La care vrei să spui?",
+   "english": "I took that as: put the fish in the water. There are 3: the left goldfish, the middle goldfish and the right goldfish. Which one do you mean?"
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 33,
+   "class": null,
+   "text": "lasa plantele de apa ij apa, pune iarba deasupra apei, lasa cerul albastru azuriu",
+   "tab": "draw",
+   "ms": 744,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:Nu g[aă]sesc|Nu exist[aă]"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Nu există plante de părăsire teren aici. Nu găsesc \"apă lasă cerul albastru auriu\".",
+   "english": "There is no leave plants ground here. I can not find \"water leave the blue sky golden\"."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 34,
+   "class": null,
+   "text": "plantele de apa am zis",
+   "tab": "draw",
+   "ms": 158,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "world:art.draw got -",
+    "reply_not:Nu g[aă]sesc|Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins|nu am f[aă]cut|Ce ai vrut|doar o parte"
+   ],
+   "worlds": [],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu găsesc „plantele spuse despre” în imagine. În imagine pot vedea: un soare galben, 2 libelule, un iaz, 2 copaci verzi, 2 tufișuri, o bancă, 3 ierburi, un melc, 3 pietre, 3 rațe, 3 broaște, 4 nuferi, 3 nuci, 3 pescari aurii și un heron.",
+   "english": "I can't find “plants said of the” in the picture. In the picture I can see: a yellow sun, 2 dragonflys, a pond, 2 green trees, 2 bushes, a bench, 3 grasses, a snail, 3 stones, 3 ducks, 3 frogs, 4 water lilys, 3 goldfishes and a heron."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 35,
+   "class": null,
+   "text": "ada pestii jos pe primul nivel",
+   "tab": "draw",
+   "ms": 374,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "world:art.draw got -",
+    "changed"
+   ],
+   "worlds": [],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înţeles „ada pestii jos pe primul nivel”. Ai vrut să spui „Adaugă pește jos pe nivelul prim.”?",
+   "english": "I did not understand \"ada pestii jos pe primul nivel\". Did you mean \"Adaugă pește jos pe nivelul prim.\"?"
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 36,
+   "class": null,
+   "text": "muta pestii pe primul nivel",
+   "tab": "draw",
+   "ms": 327,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat peştişorii de aur deasupra peştilor de aur.",
+   "english": "I moved the goldfishes on top of the goldfish."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 37,
+   "class": null,
+   "text": "imparte diagrama pe 3 nivele: apa, iarba/peisaj/cer",
+   "tab": "draw",
+   "ms": 690,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "world:art.draw got diagram.sketch",
+    "changed"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": false,
+   "reply": "Unde trebuie să fie rezumatul? Încerci \"move rezumatul de mai jos ...\" sau \"mișcați rezumatul lăsat de 50\".",
+   "english": "Where should summary go? Try \"move summary below …\" or \"move summary left by 50\"."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 38,
+   "class": null,
+   "text": "muta elementele logic pe cele trei nivele",
+   "tab": "draw",
+   "ms": 514,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "world:art.draw got -",
+    "changed",
+    "reply_not:Unde ar trebui|Where should|Nu am [îi]n[tţț]eles"
+   ],
+   "worlds": [],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înţeles „muta elementele logic pe cele trei nivele”. De exemplu: „Se adaugă o casă.” sau „Care este culoarea casei?”",
+   "english": "I did not understand \"muta elementele logic pe cele trei nivele\". For example: \"Add a house.\" or \"What is the colour of the house?\""
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 39,
+   "class": null,
+   "text": "nu prea intelegi ce-ti zic, esti stupid?",
+   "tab": "draw",
+   "ms": 1590,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Îmi pare rău, nu am primit o parte din ceea ce ai spus. Pe fila Drawing pot, de exemplu: \"Adaugă o casă\" sau \"Adaugă 3 case\". Spune-mi ce vrei într-o propoziţie scurtă şi o voi face.",
+   "english": "Sorry, I did not get some of what you said. On the Drawing tab I can, for example: \"Add a house\" or \"Add 3 houses\". Tell me what you want in a short sentence and I will do it."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 40,
+   "class": null,
+   "text": "fa-mi o piveste despre un lac  unde un povestitor scrie o poveste despre broaste",
+   "tab": "editor",
+   "ms": 1201,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: scrie o poveste despre un lac. Am scris povestea \"Totul despre un lac\": 102 cuvinte în 5 capitole. Cunoștințele mele au fost în afară de ceea ce ați întrebat (2 propoziții nu au nici un șablon care să se potrivească: să int",
+   "english": "I took that as: write a story about a lake. I wrote the story \"All about a lake\": 102 words in 5 chapters. My knowledge was short of what you asked (2 sentences have no template that fits: introduce character, state goal), so it is smaller "
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 41,
+   "class": null,
+   "text": "conoune o poveste cu 3 capitole despre un lac",
+   "tab": "editor",
+   "ms": 791,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:docs.editor:stats.words>=$+30 (103)",
+    "state:docs.editor:blocks.length>=$+3 (10)"
+   ],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: scrie o poveste despre un lac. Am scris povestea \"Totul despre un lac\": 103 cuvinte în 5 capitole. Cunoștințele mele au fost în afară de ceea ce ați întrebat (2 propoziții nu au nici un șablon care să se potrivească: să int",
+   "english": "I took that as: write a story about a lake. I wrote the story \"All about a lake\": 103 words in 5 chapters. My knowledge was short of what you asked (2 sentences have no template that fits: introduce character, state goal), so it is smaller "
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 42,
+   "class": null,
+   "text": "arat-mi parisul",
+   "tab": "map",
+   "ms": 84,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": false,
+   "content": false,
+   "reply": "Aici este Parisul: capitala Franței · 9,9 milioane de oameni.",
+   "english": "Here is Paris: capital of France · 9.9 million people."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 43,
+   "class": null,
+   "text": "tenerife",
+   "tab": "map",
+   "ms": 314,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": false,
+   "content": false,
+   "reply": "Am luat asta ca: unde este Tenerife. Nu cunosc un loc numit Tenerife. Cunosc fiecare țară și capitală, orașe cu 500.000 de oameni sau mai mult, și orașe românești și moldovenești cu 30.000 sau mai mult.",
+   "english": "I took that as: where is Tenerife. I do not know a place called Tenerife. I know every country and capital, cities with 500,000 people or more, and Romanian and Moldovan towns with 30,000 or more."
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează trei cercuri",
+   "tab": "diagram",
+   "ms": 113,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat 3 cercuri.",
+   "english": "Drew 3 circles."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "A1",
+   "class": "A",
+   "text": "ordonează cercurile pe un rând",
+   "tab": "diagram",
+   "ms": 84,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat cercul 1, cercul 2 și cercul 3. Am aranjat 3 forme ca un rând.",
+   "english": "Moved circle 1, circle 2 and circle 3. Arranged 3 shapes as a row."
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează doi copaci și o casă",
+   "tab": "draw",
+   "ms": 216,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat 2 copaci verzi și o casă galbenă.",
+   "english": "I drew 2 green trees and a yellow house."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "A2",
+   "class": "A",
+   "text": "rearanjează desenul",
+   "tab": "draw",
+   "ms": 278,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:art.draw:objects.length=$+0 (1)"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: aranjează desenul. Am pus 2 copaci verzi și casa galbenă împreună ca un grup. Poţi să-l muţi, să-l reiau, să-l copiezi sau să-l desfaci ca orice alt lucru.",
+   "english": "I took that as: arrange the drawing. I put 2 green trees and the yellow house together as a group. You can move it, resize it, copy it or take it apart like any other thing."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "A3",
+   "class": "A",
+   "text": "du-mă la madrid",
+   "tab": "map",
+   "ms": 61,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Aici este Madrid: capitala Spaniei · 5,6 milioane de oameni.",
+   "english": "Here is Madrid: capital of Spain · 5.6 million people."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "A4",
+   "class": "A",
+   "text": "scrie un paragraf despre munți",
+   "tab": "editor",
+   "ms": 132,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:docs.editor:stats.words>=$+5 (2)"
+   ],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": true,
+   "content": true,
+   "reply": "OK, am adăugat un paragraf (2 cuvinte).",
+   "english": "OK, I added a paragraph (2 words)."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "A5",
+   "class": "A",
+   "text": "desenează o pisică portocalie",
+   "tab": "draw",
+   "ms": 132,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat o pisică portocalie.",
+   "english": "I drew an orange cat."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "B1",
+   "class": "B",
+   "text": "unde e roma",
+   "tab": "map",
+   "ms": 187,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Roma este capitala Italiei, în Europa (41,90 N, 12.48 E), cu aproximativ 3,3 milioane de locuitori.",
+   "english": "Rome is the capital of Italy, in Europe (41.90 N, 12.48 E), with about 3.3 million people."
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează cinci cercuri",
+   "tab": "diagram",
+   "ms": 107,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat 5 cercuri.",
+   "english": "Drew 5 circles."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "B2",
+   "class": "B",
+   "text": "pune cercurile ca un pentagon",
+   "tab": "diagram",
+   "ms": 351,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Vrei să-mi mut forma? Spune-o cu un nume or un număr, de exemplu \"Mută ochii mai aproape împreună\".",
+   "english": "Do you want me to move shape? Say it with a name or a number, for example \"Move the eyes closer together.\"."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "B3",
+   "class": "B",
+   "text": "câte cuvinte are documentul?",
+   "tab": "editor",
+   "ms": 61,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": true,
+   "content": true,
+   "reply": "Documentul este gol.",
+   "english": "The document is empty."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "B4",
+   "class": "B",
+   "text": "fă un grafic cu vânzările pe luni",
+   "tab": "charts",
+   "ms": 97,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "data.charts"
+   ],
+   "tabAfter": "charts",
+   "changed": true,
+   "content": true,
+   "reply": "OK, o nouă diagramă de bară goală numită \"Chart 1\". Adaugă date, de exemplu: \"adaugă mere 5\".",
+   "english": "OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "B5",
+   "class": "B",
+   "text": "cât de mare e franța",
+   "tab": "map",
+   "ms": 85,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Franța acoperă 551.695 de kilometri pătrați.",
+   "english": "France covers 551,695 square kilometres."
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează un pătrat numit start",
+   "tab": "diagram",
+   "ms": 184,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat-o pe „start”.",
+   "english": "Drew start."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "C1",
+   "class": "C",
+   "text": "mută start la stânga",
+   "tab": "diagram",
+   "ms": 172,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat „start” la stânga.",
+   "english": "Moved start to the left."
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează un cerc numit alfa și un pătrat numit beta",
+   "tab": "diagram",
+   "ms": 250,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "I-am desenat pe „alfa” şi pe „beta”.",
+   "english": "Drew alfa and beta."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "C2",
+   "class": "C",
+   "text": "mută alfa și beta în jos",
+   "tab": "diagram",
+   "ms": 403,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat „alfa” în jos. Am mutat „beta” în jos.",
+   "english": "Moved alfa down. Moved beta down."
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează un cerc numit gamma",
+   "tab": "diagram",
+   "ms": 129,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat-o pe „gamma”.",
+   "english": "Drew gamma."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "C3",
+   "class": "C",
+   "text": "mută delta în sus",
+   "tab": "diagram",
+   "ms": 241,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Ce formă ar trebui să mă mişcă? Nume it, de exemplu \"cerc de mișcare1\".",
+   "english": "Which shape should I move? Name it, e.g. \"move circle1\"."
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează o casă",
+   "tab": "draw",
+   "ms": 37,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat o casă galbenă.",
+   "english": "I drew a yellow house."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "C4",
+   "class": "C",
+   "text": "fă casa roșie",
+   "tab": "draw",
+   "ms": 62,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:art.draw:objects.length=$+0 (2)"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat o casă roşie.",
+   "english": "I drew a red house."
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează un cerc numit ana",
+   "tab": "diagram",
+   "ms": 110,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat-o pe „ana”.",
+   "english": "Drew ana."
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "mută ana sus de tot",
+   "tab": "diagram",
+   "ms": 158,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "O formă nu poate fi plasată în raport cu ea însăşi.",
+   "english": "A shape can't be placed relative to itself."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "C5",
+   "class": "C",
+   "text": "mută ana mai sus",
+   "tab": "diagram",
+   "ms": 213,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=ana].y<$+0 (70)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Unde ar trebui să meargă „ana”? Încerci \"move „ana” de mai jos ...\" sau \"move „ana” stânga cu 50\".",
+   "english": "Where should ana go? Try \"move ana below …\" or \"move ana left by 50\"."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "D1",
+   "class": "D",
+   "text": "cântă ceva vesel",
+   "tab": "music",
+   "ms": 135,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:Nu [sș]tiu"
+   ],
+   "worlds": [
+    "media.music"
+   ],
+   "tabAfter": "music",
+   "changed": false,
+   "content": true,
+   "reply": "Nu știu un cântec chema„ ceva vesel”. Te știu Twinkle, Twinkle, stea, fericit Birthday la, Ode la bucurie, Frère Jacques și Mary a avut un Little Lamb și 5 mai. Tu can also spune„ juca C D E F G”.",
+   "english": "I do not know a song called \"something cheerful\". I know Twinkle, Twinkle, Little Star, Happy Birthday to You, Ode to Joy, Frère Jacques and Mary Had a Little Lamb and 5 more. You can also say \"play C D E F G\"."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "D2",
+   "class": "D",
+   "text": "desenează ceva",
+   "tab": "charts",
+   "ms": 138,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "data.charts"
+   ],
+   "tabAfter": "charts",
+   "changed": true,
+   "content": true,
+   "reply": "OK, o nouă diagramă de bară goală numită \"Chart 1\". Adaugă date, de exemplu: \"adaugă mere 5\".",
+   "english": "OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "D3",
+   "class": "D",
+   "text": "desenează ceva frumos",
+   "tab": "diagram",
+   "ms": 355,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat o diagramă aleatorie a copacilor cu nouă forme. Este vorba despre „Canada”.",
+   "english": "I drew a random tree diagram with nine shapes. It is about Canada."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "D4",
+   "class": "D",
+   "text": "arată ceva interesant",
+   "tab": "map",
+   "ms": 201,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": false,
+   "content": true,
+   "reply": "Harta este centrată în apropiere de Agadez la zoom 2 (hartă offline country). Nu există markere, evidențieri sau linii.",
+   "english": "The map is centred near Agadez at zoom 2 (offline country map). There are no markers, highlights or lines."
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează doi copaci",
+   "tab": "draw",
+   "ms": 51,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat 2 copaci verzi.",
+   "english": "I drew 2 green trees."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "D5",
+   "class": "D",
+   "text": "mută copacii mai sus",
+   "tab": "draw",
+   "ms": 125,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat copacii mai sus.",
+   "english": "I moved the trees higher."
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează patru pătrate",
+   "tab": "diagram",
+   "ms": 100,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat 4 pătrate.",
+   "english": "Drew 4 squares."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "E1",
+   "class": "E",
+   "text": "fă-l mai ordonat",
+   "tab": "diagram",
+   "ms": 351,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": false,
+   "reply": "Am luat asta ca: îmbunătățirea diagramei. Aspectul marchează deja 100/100 și nimic din ce am încercat scoruri mai mari, așa că l-am lăsat așa cum este.",
+   "english": "I took that as: improve the diagram. The layout already scores 100/100 and nothing I tried scores higher, so I left it as it is."
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează cinci flori",
+   "tab": "draw",
+   "ms": 47,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat 5 flori roz.",
+   "english": "I drew 5 pink flowers."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "E2",
+   "class": "E",
+   "text": "sunt prea multe",
+   "tab": "draw",
+   "ms": 260,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am luat asta ca: scoate a patra floare și a cincea floare. Am luat 2 flori roz.",
+   "english": "I took that as: remove the fourth flower and the fifth flower. I took away 2 pink flowers."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "E3",
+   "class": "E",
+   "text": "lisabona",
+   "tab": "map",
+   "ms": 52,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Aici este Lisabona: capitala Portugaliei · 2,8 milioane de oameni.",
+   "english": "Here is Lisbon: capital of Portugal · 2.8 million people."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "E4",
+   "class": "E",
+   "text": "ești prost?",
+   "tab": "draw",
+   "ms": 249,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Îmi pare rău, nu am primit o parte din ceea ce ai spus. Pe fila Drawing pot, de exemplu: \"Adaugă o casă\" sau \"Adaugă 3 case\". Spune-mi ce vrei într-o propoziţie scurtă şi o voi face.",
+   "english": "Sorry, I did not get some of what you said. On the Drawing tab I can, for example: \"Add a house\" or \"Add 3 houses\". Tell me what you want in a short sentence and I will do it."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "E5",
+   "class": "E",
+   "text": "scrie-mi o poveste despre un urs",
+   "tab": "editor",
+   "ms": 243,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": true,
+   "content": true,
+   "reply": "Am scris povestea \"Totul despre un urs\": 103 cuvinte în 5 capitole. Cunoștințele mele au fost în afară de ceea ce ați întrebat (2 propoziții nu au nici un șablon care să se potrivească: să introducă caracterul, scopul de stat), deci este ma",
+   "english": "I wrote the story \"All about a bear\": 103 words in 5 chapters. My knowledge was short of what you asked (2 sentences have no template that fits: introduce character, state goal), so it is smaller and not padded. It is open in the Documents "
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "F1",
+   "class": "F",
+   "text": "desenează o casă, pune un copac lângă ea și fă cerul albastru",
+   "tab": "draw",
+   "ms": 296,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat o casă galbenă. Am desenat un copac verde lângă casa galbenă. Cerul este albastru acum.",
+   "english": "I drew a yellow house. I drew a green tree next to the yellow house. The sky is blue now."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "F2",
+   "class": "F",
+   "text": "desenează trei cercuri, leagă-le între ele și pune primul mai sus",
+   "tab": "diagram",
+   "ms": 333,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:edges.length>=$+2 (0)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat 3 cercuri. Am mutat cercul stâng în sus.",
+   "english": "Drew 3 circles. I moved the left circle up."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "F3",
+   "class": "F",
+   "text": "arată-mi roma și apoi du-te la paris",
+   "tab": "map",
+   "ms": 413,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Nu cunosc un loc numit roma. Aici este Parisul: capitala Franței · 9,9 milioane de oameni.",
+   "english": "I do not know a place called roma. Here is Paris: capital of France · 9.9 million people."
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează un lac",
+   "tab": "draw",
+   "ms": 196,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat un lac: un soare, 2 nori, 2 păsări, 2 munți, 5 copaci veșnic verzi, un lac, un dig, un cort, 2 oameni, 3 pietre, o broască, o barcă cu vâsle, o barcă cu vâsle, 2 lebede, 3 rațe și 3 pești. Am pus cele 2 lebede pe apa lacului, cel",
+   "english": "I drew a lake: a sun, 2 clouds, 2 birds, 2 mountains, 5 evergreen trees, a lake, a pier, a tent, 2 people, 3 rocks, a frog, a rowing boat, a sailboat, 2 swans, 3 ducks and 3 fish. I put the 2 swans on the water of the lake, the 3 ducks on t"
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "F4",
+   "class": "F",
+   "text": "pune peștii în apă, adaugă trei rațe și șterge soarele",
+   "tab": "draw",
+   "ms": 602,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat peştele în lacul albastru. Am scos 3 raţe. Am luat soarele galben.",
+   "english": "I moved the fish in the blue lake. I drew 3 ducks. I took away the yellow sun."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "F5",
+   "class": "F",
+   "text": "scrie un titlu despre mare, apoi un paragraf despre valuri",
+   "tab": "editor",
+   "ms": 333,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": true,
+   "content": true,
+   "reply": "OK, am adăugat titlul \"The Sea\"; este titlul documentului. OK, am adăugat un paragraf (2 cuvinte).",
+   "english": "OK, I added the heading \"The sea\"; it is the title of the document. OK, I added a paragraph (2 words)."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "G1",
+   "class": "G",
+   "text": "desenează un câine",
+   "tab": "draw",
+   "ms": 121,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat un câine brun.",
+   "english": "I drew a brown dog."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "G2",
+   "class": "G",
+   "text": "adaugă un pătrat",
+   "tab": "diagram",
+   "ms": 80,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am desenat o piaţă.",
+   "english": "Drew a square."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "G3",
+   "class": "G",
+   "text": "arată-mi berlinul",
+   "tab": "map",
+   "ms": 73,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Aici este Berlin: capitala Germaniei · 3,4 milioane de oameni.",
+   "english": "Here is Berlin: capital of Germany · 3.4 million people."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "G4",
+   "class": "G",
+   "text": "adaugă un paragraf despre ploaie",
+   "tab": "editor",
+   "ms": 54,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": true,
+   "content": true,
+   "reply": "OK, am adăugat un paragraf (1 cuvinte).",
+   "english": "OK, I added a paragraph (1 words)."
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "G5",
+   "class": "G",
+   "text": "cântă o melodie",
+   "tab": "music",
+   "ms": 145,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:Nu [sș]tiu"
+   ],
+   "worlds": [
+    "media.music"
+   ],
+   "tabAfter": "music",
+   "changed": false,
+   "content": true,
+   "reply": "Nu știu un cântec chema„ s cânta un cântec”. Te știu Twinkle, Twinkle, stea, fericit Birthday la, Ode la bucurie, Frère Jacques și Mary a avut un Little Lamb și 5 mai. Tu can also spune„ juca C D E F G”.",
+   "english": "I do not know a song called \"s singing a song\". I know Twinkle, Twinkle, Little Star, Happy Birthday to You, Ode to Joy, Frère Jacques and Mary Had a Little Lamb and 5 more. You can also say \"play C D E F G\"."
+  }
+ ]
+}
