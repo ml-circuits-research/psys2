@@ -735,7 +735,7 @@ export function shapedLike(ctx, args = {}) {
     const nodes = [...own].sort((p, q) => (p.order ?? 0) - (q.order ?? 0)).map((x, i) => ({ id: `m${i + 1}`, type: 'command', args: { action: 'move', target: x.name, at: `${at[i][0]},${at[i][1]}` } }));
     const r = execute(ctx, s, nodes, { place: false });
     if (r.status !== 'supported') return r;
-    return { ...r, value: `I placed the ${own.length} shapes on the outline of ${a} ${thing}, clockwise from the top.` };
+    return { ...r, value: `I placed the ${own.length} shapes on the outline of ${a} ${thing}, clockwise from the top.`, say: { act: 'diagram.shaped.placed', roles: { thing, shapes: { n: own.length, noun: 'shape' } } } };   // say: the frame a reply in another language is composed from (spec 06)
   }
   const corners = poly.length > 10 ? pointsAlong(poly, 8) : poly;
   // the user gave no content: the nodes are unnamed (circle 1, circle 2 ... in the order of the outline), not named after the parts they sit on
@@ -744,7 +744,7 @@ export function shapedLike(ctx, args = {}) {
   nodes.push({ id: 'oc', type: 'command', args: { action: 'connect', from: names, pairing: 'chain', arrow: 'none' } }, { id: 'oz', type: 'command', args: { action: 'connect', from: names[names.length - 1], to: names[0], arrow: 'none' } });
   const r = execute(ctx, s, nodes, { place: false });
   if (r.status !== 'supported') return r;
-  return { ...r, value: `I drew a diagram in the shape of ${a} ${thing}: ${corners.length} nodes on its outline, joined in order.` };
+  return { ...r, value: `I drew a diagram in the shape of ${a} ${thing}: ${corners.length} nodes on its outline, joined in order.`, say: { act: 'diagram.shaped', roles: { thing, nodes: { n: corners.length, noun: 'node' } } } };
 }
 
 export const distribute = make({ type: 'command', name: 'distribute' });
