@@ -66,8 +66,34 @@ export async function buildFaces(facts) {
     for (const w of colourW) (colours[one(w, 'of')] ??= {})[one(w, 'name')] = { rgb: one(w, 'rgb'), shade: one(w, 'shade'), natural: one(w, 'natural') === 'true' };
     const data = { frame: { w: 100, h: 100 }, style, layout: null, slots, presets, expressions, colours, aliases: {} };
     await addAliases(facts, data);
+    data.presetAliases = await presetAliases(facts, Object.keys(presets));
     return data;
   } catch { return null; }
+}
+
+/**
+ * The other names of each preset, from the catalog's word senses (k.words; CHARACTER REQUESTS, spec 07 "Drawn face"): the synonyms of the first noun sense of a one-word preset
+ * ("kid" for child, "automaton" for robot) and the kinds it is, read up its `kind_of` chain to the head of its supersense (noun.person -> "person"), kept only when at least two
+ * presets share them, so "a person" means the human presets and an accidental first sense (the queen of an insect colony) adds nothing. { word: [preset names] }; {} when the
+ * catalog has no word senses. No word of ours: the presets, the senses and the cut are all data.
+ */
+export async function presetAliases(facts, names) {
+  const own = new Map(), kinds = new Map();
+  const push = (m, k, v) => { const x = lc(k).replace(/_/g, ' ').trim(); if (x && x.length > 1 && !names.includes(x)) (m.get(x) ?? m.set(x, new Set()).get(x)).add(v); };
+  await Promise.all(names.filter((n) => !/\s/.test(n)).map(async (name) => {
+    try {
+      const sense = (await facts.wires('k.words.sense', { key: name })).find((w) => lc(one(w, 'word')) === name && one(w, 'pos') === 'noun' && num(w, 'n') === 1);
+      if (!sense) return;
+      for (const syn of many(sense, 'synonym')) push(own, syn, name);
+      const head = String(one(sense, 'supersense') ?? '').split('.')[1], chain = many(sense, 'kind_of'), stop = head ? chain.indexOf(head) : -1;
+      for (const k of chain.slice(0, stop + 1)) push(kinds, k, name);
+    } catch { /* no word senses */ }
+  }));
+  const out = {};
+  for (const [w, set] of own) out[w] = [...set];
+  for (const [w, set] of kinds) if (set.size >= 2) out[w] = [...new Set([...(out[w] ?? []), ...set])];
+  for (const w of Object.keys(out)) out[w].sort((a, b) => names.indexOf(a) - names.indexOf(b));
+  return Object.fromEntries(Object.entries(out).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));   // one order whatever order the reads finished in (a generated file must not change between runs)
 }
 
 /** The other names of each slot, from the catalog: the `holds` words of the face layout and the synonyms of the slot's noun (k.words). A failed read leaves the names the slots already have. */
