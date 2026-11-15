@@ -3252,3 +3252,13 @@ The 22 smoke tests the door had put on the legacy list are real breaks; they are
 
 **Gates** (rules mode): npm test 0 failures except real-result-fresh (ORT; coordinator refreshed slice 2's) and system-map's "trace of a turn" (on the legacy list) — smoke 88/88; owner RO 17/43, EN 11/16 (unchanged by the refactor); properties unchanged.
 **Two columns** (reviewer 20:45): RO 17 right = 7 through the declared binding (T11, T12, T13, T14, T18, T19 moveShapes; T27 removeThings) + 7 through hand-written glue (planRequest executors: T1, T21, T24, T25, T28, T29, T40) + 3 legacy (Map). EN 11 right = 0 through the binding (T5, T11-T13 are honest refusals read through the door: nothing there) + 5 through glue (T1, T6, T8, T9, T16) + 6 honest answers (T2, T5, T11, T12, T13, T14).
+
+## 2026-11-15 glue lint (reviewer 20:45 item 1; acts worker)
+`scripts/glue-lint.mjs` (and `tests/glue-lint.test.mjs`, report-only): per declared world, in every file reachable by relative imports from its ops.mjs (the vendored library excepted), the reads of the request / plan / facts, the string literals equal to a word the world declares in request.sop (a kind, a slot enum value), reply sentences in code, and regular expressions run on text. Baseline on 968e8069 + this commit:
+| world | files | request reads | word literals | replies | text regex |
+| --- | --- | --- | --- | --- | --- |
+| art.draw | 37 | 26 | 566 | 358 | 519 |
+| data.charts | 23 | 0 | 26 | 262 | 279 |
+| diagram.sketch | 34 | 2 | 1159 | 381 | 827 |
+| docs.editor | 26 | 1 | 9 | 351 | 344 |
+(The reachable set includes the shared modules the worlds import: the old readers, src/knowledge/diagram-world.mjs, the acts executor; the counts fall as planRequest executors and the old readers leave the door's path.)
