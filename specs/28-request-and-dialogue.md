@@ -140,3 +140,7 @@ The bridge reader, the host revision and the host reply are gone. Per turn: the 
   world's reply facts (`w.lang.en.reply name=done.place.up|done.place.next|done.place.region|done.place.into|done.change|done.change.size.up|done.remove|done.none|
   done.added.band|cannot.*|ask.which`, said by the library's `replyFrom`; local rows in src/lang/en.request.local.mjs until the catalog has them); names of things stay
   names in every language. One host path (`bindingFor`, `_doorTool`) until the library's runPlan carries bindings out (questions.md Q42 (3), (14)).
+
+## 13. Reactions before acts; the source repair (reviewer 2026-11-15 21:10; Q39 S3)
+- **A reaction with no change request never runs a plan.** On every declared tab, a turn whose reading is a reaction cue of the dialogue world (w.dialogue.revision `does=none`: thanks, praise) with no act, no thing, no unread word and no constraint but the praise word itself (a manner cue made of the cue's own words, "nice") is answered with the dialogue's reply (`welcome`), with or without a result, and is no undo step (property P12: the view is unchanged and "undo" after it takes back the work before it). Cue words are data (`w.lang.en.cue reaction.thanks`, local rows in `src/lang/en.request.local.mjs`, [KNOW]).
+- **Romanian words are repaired against the live worlds before translation** as one candidate source of the door's reading: spec 05 "Contextual repair of the source".
