@@ -14,7 +14,7 @@
 @k.forest std.schema.kind of=forest world=drawing acts=make acts=remove
 @k.garden std.schema.kind of=garden world=drawing acts=make acts=remove
 @t.thing core.type of=thing extends=std.schema.thing closed=true
-@s.size core.slot of=thing key=size enum=tiny enum=small enum=medium enum=big enum=huge
+@s.size core.slot of=thing key=size enum=tiny enum=small enum=default enum=big enum=huge
 @s.in core.slot of=thing key=in
 @s.thing_place core.slot of=thing key=place enum=corner enum=top enum=bottom enum=left enum=right enum=center
 @s.thing_colour core.slot of=thing key=colour kind=string
@@ -62,7 +62,7 @@
 @k.goldfish std.schema.kind of=goldfish world=drawing acts=make acts=remove
 @t.duck core.type of=duck extends=bird closed=true
 @k.duck std.schema.kind of=duck world=drawing acts=make acts=remove
-@h.make std.schema.honours world=drawing act=make on=kind on=count on=size on=extent on=place on=with on=manner on=layout on=attribute of=picture of=pond of=forest of=garden of="water" of="water lily" of="reed" of="duck" of="goldfish" of="flower" of="tree" of="bush" of="butterfly" of="bird" of="cloud" of="sky" of="sun" of="house" of="fish" of="boat" of="cat" of="dog" of="mountain" of="lake" of="river" of="hill"
+@h.make std.schema.honours world=drawing act=make on=kind on=count on=size on=extent on=place on=with on=manner on=layout on=attribute of=picture of=pond of=forest of=garden of="water" of=water_lily of=reed of="duck" of="goldfish" of="flower" of="tree" of="bush" of="butterfly" of="bird" of="cloud" of="sky" of="sun" of="house" of="fish" of="boat" of="cat" of="dog" of="mountain" of="lake" of="river" of="hill"
 @h.arrange std.schema.honours world=drawing act=arrange on=layout of=picture of=pond of=forest of=garden
 @e.forest k.expect.make thing=forest made_in=drawing unit=part min=5 max=7 typical=6 kinds_min=1 kinds_max=2 layout=free
 @e.forest.tree k.expect.part of=forest part=tree group=plant min=5 max=7 typical=6 needed=yes
@@ -72,9 +72,9 @@
 @as.goldfish std.schema.drawn world=drawing kind=goldfish as=fish
 @as.duck std.schema.drawn world=drawing kind=duck as=bird
 @as.bush std.schema.drawn world=drawing kind=bush as=tree
-@layer.water std.schema.region world=drawing name=water kind=water kind=lake kind=river kind=fish kind=goldfish kind=duck kind=boat kind=frog kind="water lily" kind=reed
-@layer.land std.schema.region world=drawing name=land kind=house kind=tree kind=flower kind=bush kind=grass kind=fence kind=bench kind=stone kind=cat kind=dog kind=mountain kind=hill kind=person kind=car
-@layer.sky std.schema.region world=drawing name=sky kind=sun kind=cloud kind=bird kind=butterfly kind=moon kind=rainbow kind=balloon kind=rocket
+@layer.water std.schema.region world=drawing name=water holds=water holds=lake holds=river holds=fish holds=goldfish holds=duck holds=boat holds=frog holds="water lily" holds=reed
+@layer.land std.schema.region world=drawing name=land holds=house holds=tree holds=flower holds=bush holds=grass holds=fence holds=bench holds=stone holds=cat holds=dog holds=mountain holds=hill holds=person holds=car
+@layer.sky std.schema.region world=drawing name=sky holds=sun holds=cloud holds=bird holds=butterfly holds=moon holds=rainbow holds=balloon holds=rocket
 @wd.woods core.word text=woods means=forest
 @wd.picture core.word text=picture text=drawing text=canvas means=picture
 @t.page core.type of=page extends=std.schema.thing closed=true
@@ -85,8 +85,8 @@
 # The door (reviewer 2026-11-15 16:40): the wholes whose requests this world plans through the library. Read by src/dialog/request.mjs doorWholes.
 @door psys2.door world=drawing whole=pond whole=forest whole=garden
 # The session timeline (reviewer 2026-11-15 19:05): the world's own undo and redo, the operations the door calls for the acts undo / redo of k.actions (src/dialog/request.mjs actOperation).
-@op.undo psys2.op world=drawing act=undo op=undo
-@op.redo psys2.op world=drawing act=redo op=redo
+@op.undo psys2.op world=drawing act=undo op=drawUndo
+@op.redo psys2.op world=drawing act=redo op=drawRedo
 # A whole the world makes with an operation of its own, not by a plan of parts: a new page is the board's fresh sheet (the old one stays for undo).
 @op.page psys2.op world=drawing act=make of=page op=newDrawing
 # Acts on the things that are there (spec 28 section 12): what each honours, and the one operation of the world that carries them out (the door resolves the things and the roles).
@@ -95,13 +95,36 @@
 @h.change std.schema.honours world=drawing act=change on=attribute on=size of=thing
 @h.remove std.schema.honours world=drawing act=remove of=thing of=picture
 @wd.colour core.word text=color text=colour means=colour
-# TOOL BINDING (spec 28 section 12; reviewer general-mechanisms item 3): act + roles -> one operation of the world (a tool with no words), the arguments taken from the
-# roles of the request (`arg=<tool argument>:<role path>`, `:=` a constant), the preconditions (`when=<role path>` present, or `<path>=<value>`), the effect it has (data), and the
-# reply facts the host says it with (w.lang.en.reply / w.lang.ro.reply; `{place.value}` is filled from the roles). The first row whose preconditions hold is run.
-@tool.remove psys2.tool world=drawing act=remove op=removeThings arg="ids:things" effect="the things are no longer there" reply="done.remove"
-@tool.place.dir psys2.tool world=drawing act=place op=moveThings when="place.relation=direction" arg="ids:things" arg="direction:place.value" effect="the things are one step further that way" reply="done.place.{place.value}"
-@tool.place.next psys2.tool world=drawing act=place op=moveThings when="place.ids" arg="ids:things" arg="anchor:place.ids" arg="relation:place.relation" effect="the things are next to (or in) the thing named" reply="done.place.next"
-@tool.place.into psys2.tool world=drawing act=place op=moveThings when="place.value" when="place.relation=in" arg="ids:things" arg="region:place.value" effect="the things are in the region named" reply="done.place.into"
-@tool.place.region psys2.tool world=drawing act=place op=moveThings when="place.value" arg="ids:things" arg="region:place.value" effect="the things are in the region named" reply="done.place.region"
-@tool.change.attr psys2.tool world=drawing act=change op=setThings when="attribute" arg="ids:things" arg="attribute:attribute" arg="value:value" effect="the things have the value" reply="done.change"
-@tool.change.size psys2.tool world=drawing act=change op=setThings when="size" arg="ids:things" arg="attribute:=size" arg="value:size.value" arg="step:size.step" effect="the things have the size, or one step more or less" reply="done.change.size.{size.step}"
+# TOOL BINDING (spec 28 section 12; reviewer 2026-11-15 20:45; sopworld 0.152.1 std.tool): the board's primitives with their typed parameters (std.tool.op / std.tool.param), the act of a
+# plan step bound to one primitive with its arguments' sources (std.tool.bind / std.tool.arg), the preconditions (needs=) and the effect on the view (makes / removes / changes).
+# The library's runPlan fills the arguments (said, revised, the plan's values, the expectations below), translates a value the parameter does not take by knowledge (tiny -> small by
+# k.expect.scale; a water lily -> a flower by std.schema.drawn), checks, calls the primitive (worlds/art.draw/engine.mjs: no words, no defaults) and reads the view before and after.
+@tool core.use world=std.tool
+@op.add std.tool.op name=addThings world=drawing param=kind param=n param=size param=colour param=place param=anchor effect=makes doc="draw n things of a kind of the board"
+@pa.add.kind std.tool.param op=addThings name=kind type=thing required=true accepts=house accepts=tree accepts=sun accepts=cloud accepts=flower accepts=cat accepts=dog accepts=fish accepts=bird accepts=boat accepts=mountain accepts=hill accepts=lake accepts=river
+@pa.add.n std.tool.param op=addThings name=n kind=integer min=1 max=12 default=1
+@pa.add.size std.tool.param op=addThings name=size type=k.expect.scale by=step accepts=small accepts=default accepts=big
+@b.add std.tool.bind world=drawing act=make of=thing op=addThings makes=thing
+@a.add.kind std.tool.arg bind=$b.add param=kind from=step.kind
+@a.add.n std.tool.arg bind=$b.add param=n from=step.count
+@a.add.size std.tool.arg bind=$b.add param=size from=step.size
+@a.add.colour std.tool.arg bind=$b.add param=colour from=step.colour
+@a.add.place std.tool.arg bind=$b.add param=place from=step.place
+@a.add.anchor std.tool.arg bind=$b.add param=anchor from=custom.thingAt
+@op.sky std.tool.op name=paintSky world=drawing param=colour effect=makes doc="the sky band behind everything, in a colour"
+@b.sky std.tool.bind world=drawing act=make of=sky op=paintSky arg=colour<-step.colour makes=thing
+@op.remove std.tool.op name=removeThings world=drawing param=ids effect=removes
+@b.remove std.tool.bind world=drawing act=remove of=thing op=removeThings arg=ids<-step.things needs=exists(ids) removes=ids
+@op.move std.tool.op name=moveThings world=drawing param=ids param=place param=anchor effect=changes
+@c.thingAt std.tool.custom name=thingAt world=drawing kind=search in=place out=anchor doc="the newest thing of the kind a place names (next to it)"
+@b.move std.tool.bind world=drawing act=place of=thing op=moveThings arg=ids<-step.things arg=place<-step.place arg=anchor<-custom.thingAt needs=exists(ids)
+@op.set std.tool.op name=setThings world=drawing param=ids param=colour param=size effect=changes
+@pa.set.size std.tool.param op=setThings name=size type=k.expect.scale by=step accepts=small accepts=default accepts=big
+@b.set std.tool.bind world=drawing act=change of=thing op=setThings arg=ids<-step.things arg=colour<-step.colour arg=size<-step.size needs=exists(ids)
+# What the acts on the things that are there honour (the library's reference step resolves the things by kind, the values said before the kind, "it" / "them")
+@h.remove.kind std.schema.honours world=drawing act=remove on=kind on=count on=attribute of=thing
+@h.change.kind std.schema.honours world=drawing act=change on=kind on=attribute on=size of=thing
+@h.place.kind std.schema.honours world=drawing act=place on=kind on=place of=thing
+# Defaults are expectations (k.expect.value ... when.), chosen by the library and said in `assumed`
+@x.small.place k.expect.value of=thing on=place value=corner when.size=small about="a small thing goes in a corner"
+@x.sky.colour k.expect.value of=sky on=colour value=blue about="the sky is blue unless said"

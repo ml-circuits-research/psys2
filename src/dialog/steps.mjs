@@ -39,3 +39,15 @@ export function turnSteps({ segments = [], operations = [], statuses = [], rec =
     { id: 'reply', pick: [...new Set(statuses)], by: 'render', alternatives: [new Set(statuses).size] },
   ];
 }
+
+/**
+ * The steps of a turn the request door carried out (spec 28): the world is the open tab's (the door decided it), the operations are the door's (the tool primitives the library's
+ * runPlan called, or the world's executor). The steps were taken inside the turn before the door stamped its world on the trace; this adds what the door decided.
+ */
+export function withDoor(steps = [], { world, ops = [] } = {}) {
+  return steps.map((st) => {
+    if (st.id === 'world' && world && !st.pick.includes(world)) return { ...st, pick: [...st.pick, world], by: [...[].concat(st.by ?? []), 'door'], alternatives: st.alternatives.length ? st.alternatives : [1] };
+    if (st.id === 'apply' && ops.length && !st.pick.length) return { ...st, pick: ops, by: world ? [world] : [], alternatives: [ops.length] };
+    return st;
+  });
+}
