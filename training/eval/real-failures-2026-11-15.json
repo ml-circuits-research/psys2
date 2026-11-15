@@ -2,9 +2,9 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "1b702fe8",
-  "tree": "4f98b0972f0f7f02",
-  "catalog": "ab3b2ab868ba27868f88d2dbdfce3433a699ece6",
+  "build": "d47cfd7b",
+  "tree": "5ca99840d92cb347",
+  "catalog": "590bc64f8777115c3c44de36378a68e75bf7eb09",
   "seed": 20261115,
   "formalizer": "encoder"
  },
@@ -364,7 +364,7 @@
     {
      "text": "create a diagram",
      "tab": "diagram",
-     "happened": "I drew a random timeline diagram with four shapes. It is about seasons. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:sha"
+     "happened": "I drew a random timeline diagram with four shapes. It is about day. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:shapes."
     },
     {
      "text": "add a box",
