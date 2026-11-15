@@ -356,6 +356,19 @@ function groupPhrase(objs, { positions = false } = {}) {
   });
 }
 
+/** The groups of groupPhrase as counts { n, noun, colour? } for a composed reply; null when a group has a size, a mood or a preset person (said in English words only). */
+function groupFrames(objs) {
+  const groups = new Map();
+  for (const o of objs) {
+    if (sizeWord(o) || o.mood || o.who) return null;
+    const c = effectiveColor(o), colour = c && !(kindKey(o) === 'cloud' && !o.color) && !(kindKey(o) === 'moon' && !o.color) ? (o.color ?? c) : null;   // the colours describeObject / groupPhrase say
+    const key = `${kindKey(o)}|${colour ?? ''}`;
+    if (!groups.has(key)) groups.set(key, { n: 0, noun: kindName(kindKey(o)), ...(colour ? { colour } : {}) });
+    groups.get(key).n++;
+  }
+  return [...groups.values()];
+}
+
 // ---- noun phrases: who is meant ---------------------------------------------------------------------------------------
 const LOC_START = new Set(['on', 'in', 'at', 'near', 'next', 'beside', 'by', 'under', 'above', 'below', 'over', 'behind', 'between', 'inside', 'underneath', 'beneath', 'close']);
 const POS_WORDS = { ...space.POSITIONS, lower: 'bottom' };   // the words of the place of a thing are the module's
@@ -1056,6 +1069,7 @@ const addInner = guard((ctx, args, s) => {
   }
   const askedFor = String(args.kt ?? args.kind ?? '').toLowerCase().replace(/s$/, '');
   if (!spec0.kind && UNDRAWABLE.has(askedFor) && !ctx.knowledge?.peek(askedFor)?.objects?.length) return no(`I cannot draw ${/^[aeiou]/.test(askedFor) ? 'an' : 'a'} ${askedFor} yet. I can draw a cat, a dog, a fish or a bird. What would you like?`);
+  if ((!spec0.kind || spec0.kind === '*') && ctx.knowledge?.unreachable?.() && !kindOfWord(askedFor)) return no("I can't reach the picture catalog right now, so I can only draw the basic things.", 'unsupported');   // a catalog thing whose drawing did not arrive: not the list of what the board knows
   if (!spec0.kind || spec0.kind === '*') return no('I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon and shapes like a circle, a square, a star or a heart. What would you like?');
   // a tail with more things: "... and a tree"
   const withParts0 = parseWith(spec0.kind, words0);
@@ -2236,7 +2250,8 @@ export const scene = guard((ctx, args, s) => {
   made.push(make(['cat', 'dog'][Math.floor(rnd(s) * 2)]), make('bird'));
   s.last = made.map((o) => o.id);
   open(ctx);
-  return ok(`I drew a sunny scene for you: ${andList(groupPhrase(made))}. You can change anything, for example "make the house blue".`);
+  const things = groupFrames(made);   // the frame a reply in another language is composed from (spec 06 "Composed replies"); none when a group says more than a count, a kind and a colour
+  return ok(`I drew a sunny scene for you: ${andList(groupPhrase(made))}. You can change anything, for example "make the house blue".`, things ? { say: { act: 'draw.scene', roles: { things, example: 'house', colour: 'blue' } } } : undefined);
 });
 
 export const openTab = guard((ctx) => {

@@ -32,7 +32,7 @@ import { failureReasons, filterFailures, toFailuresJSON, failuresFilename, creat
 import { createProgress } from './ui/progress.mjs';
 import { startAssets, assetUrl, manifest as assetManifest } from './ui/assets.mjs';
 import { createEventLog, describeTarget, tapKind } from './ui/action-log.mjs';
-import { snapshotState, describeChanges } from './ui/state-diff.mjs';
+import { snapshotState, describeChanges, turnBaseline, turnAfter } from './ui/state-diff.mjs';
 
 const HERE = new URL('.', import.meta.url);
 
@@ -613,6 +613,8 @@ export async function mountPsys2(element, options = {}) {
     setWorldState: (worldId, patch) => session?.setWorldState?.(worldId, patch),
     textGen: () => textGenReady,   // { summarizer, composer }: each has `available`
     asset: (path) => assetUrl(base, path),   // the file's URL with its content hash (ui/assets.mjs): cached forever under it
+    /** The parts of a catalog thing as the engine drew it ({ name, parts } or null); undefined without an engine worker (the tab then reads the catalog itself). */
+    thingParts: (name) => (engineClient ? engineClient.call('thing-parts', { name }).catch(() => null) : Promise.resolve(undefined)),
     knowledgeUrl: () => settings.knowledgeUrl || '',   // the catalog the engine reads (the avatar tab reads its faces from the same one)
     /** Put an element inside the answer being shown (the Talk tab's cards); false when there is no answer to put it in. */
     attach: (node) => { if (!currentBot || !node) return false; currentBot.bubble.append(node); return true; },
@@ -1042,7 +1044,8 @@ export async function mountPsys2(element, options = {}) {
    * the state before and after (ui/state-diff.mjs, no code per world), plus the view effects (tab switch, a tab's world changed, effects that ran).
    */
   function buildHappened(tn, reply, botMsg, effects) {
-    const changes = describeChanges(tn.snapBefore, snapshotState(session.state?.()));
+    const base = turnBaseline(tn.snapBefore, session.loadedBefore?.());   // a world loaded for the turn counts from its initial state
+    const changes = describeChanges(base, turnAfter(snapshotState(session.state?.()), base, session.turnWorlds?.()));   // and a world loaded after the turn is not its change
     const worlds = [...new Set((reply.segments ?? []).map((sg) => sg.match?.worldId).filter(Boolean))];
     const shown = (tn.shown ?? []).map((x) => {
       const clone = x.bubble.cloneNode(true); clone.querySelectorAll('.p2-chips-row').forEach((n) => n.remove());
@@ -1189,8 +1192,10 @@ export async function mountPsys2(element, options = {}) {
     if (destroyed || !engineClient || options.suggestions === false) return;
     const my = ++sugSeq, onChat = phone && page === 'chat', tab = onChat ? 'talk' : view, talk = onChat || !tab;
     let items = [];
-    try { items = await sampleItems(talk ? 'few' : 'actions', { tab, count: talk ? 4 : 5 }); } catch { items = []; }
-    if (!items.length && !talk) { try { items = await sampleItems('few', { tab: 'talk', count: 4 }); } catch { items = []; } }   // a page with no acts of its own shows the examples of the conversation
+    const lang = language.get();   // the chips are in the selected language (the worker leaves out a chip it cannot say in it)
+    try { items = await sampleItems(talk ? 'few' : 'actions', { tab, count: talk ? 4 : 5, language: lang }); } catch { items = []; }
+    // a page with no acts for its thing yet shows examples of ITS OWN world (reviewer 2026-11-15 03:15 item 3: never the chips of other pages)
+    if (!items.length && !talk) { try { items = await sampleItems('few', { tab, count: 4, onlyTab: true, language: lang }); } catch { items = []; } }
     if (my !== sugSeq || destroyed) return;
     exBar.replaceChildren(...items.map((it) => h('button', { class: 'p2-example', type: 'button', onclick: () => { if (it.tab && it.tab !== 'robot' && tabBtns[it.tab] && view !== it.tab) userTab(it.tab, 'example'); send(it.text, 'chip', { example: true }); input.focus(); } }, it.text)));
     exBar.hidden = !items.length;
@@ -1318,6 +1323,7 @@ export async function mountPsys2(element, options = {}) {
     session?.setWorldState?.(SHELL, { language: lang });   // the shell world's state follows the selector, so that "speak Romanian" is a change and not a no-op
     renderLangSelect(); checkBrowserTranslator(lang); tl.prepare(lang).then(() => { renderSettings(); loadVoiceWords(lang); }, () => {}); loadVoiceWords(lang); voiceNotice(lang);   // MT-SERIOUS: the model of the language downloads now (lazily: only when it is selected)
     hintEl?.remove(); hintEl = null;
+    refreshSuggestions();   // the example bar is in the selected language
     if (reason === 'hint') { const said = `Switched to ${langName(lang, { own: false })}.`; localized(said, lang).then((t) => note(t)); }   // a switch command confirms in its own reply, in the new language
   });
   on(langSel, 'change', () => setLanguage(langSel.value, 'selector'));
@@ -1995,7 +2001,7 @@ export async function mountPsys2(element, options = {}) {
   if (options.onboarding !== false) {
     const chips = h('div', { class: 'p2-chips-row' });   // the welcome examples come from the sampler too, a moment after the page
     addMessage('bot', GREETING, { children: chips, className: 'is-hint' });
-    sampleItems('few', { tab: 'talk', count: 4 }).then((items) => { for (const it of items) chips.append(h('button', { class: 'p2-example', type: 'button', onclick: () => { if (it.tab && tabBtns[it.tab] && view !== it.tab) userTab(it.tab, 'example'); send(it.text, 'chip', { example: true }); input.focus(); } }, it.text)); }).catch(() => {});
+    sampleItems('few', { tab: 'talk', count: 4, language: language.get() }).then((items) => { for (const it of items) chips.append(h('button', { class: 'p2-example', type: 'button', onclick: () => { if (it.tab && tabBtns[it.tab] && view !== it.tab) userTab(it.tab, 'example'); send(it.text, 'chip', { example: true }); input.focus(); } }, it.text)); }).catch(() => {});
   }
   const handle = {
     engine, session, settings, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => showTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },

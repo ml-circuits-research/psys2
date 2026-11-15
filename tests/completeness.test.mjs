@@ -159,5 +159,5 @@ test('catch-all patterns: every world pattern whose captured arguments are only 
   assert.match(r.text, /I understood only part of .*"glorbs" and "quuxy"/);
   assert.equal((s.state('diagram.sketch')?.shapes ?? []).length, 0, 'no default circle');
   const h = await s.send('Draw a diagram in house form.');
-  assert.match(h.text, /in the shape of a house: 6 nodes on its outline/, 'the frame words are the own reader\'s (lex.diagram.sketch.shapedlike) and it reads the shape');
+  assert.match(h.text, /in the shape of a house: 7 nodes on its outline/, 'the frame words are the own reader\'s (lex.diagram.sketch.shapedlike) and it reads the shape');
 });

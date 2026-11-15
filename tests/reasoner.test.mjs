@@ -414,7 +414,7 @@ test('kids.animals: a scripted session says the same as the ops reasoner, word f
 test('session.things (was kids.animals): what was taught is a lesson of the session and goes with undo (the questions about animals are the Talk tab\'s frames over the catalog)', async () => {
   const s = matrix.createSession({ language: 'en' });
   await s.send('A zebra can swim.', {});
-  assert.deepEqual(s.isession.state['session.things'].learned, ['@learned.1 k.commonsense.thing name="zebra" can="swim" core.source="user"']);
+  assert.deepEqual(s.isession.state['session.things'].learned, ['@learned.1 k.attributes.thing name="zebra" can="swim" core.source="user"']);
   assert.equal((await s.send('undo that', {})).text, 'OK, I forgot what you taught me about zebras.');
   assert.deepEqual(s.isession.state['session.things'].learned, []);
 });

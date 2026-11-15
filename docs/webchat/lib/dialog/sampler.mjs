@@ -3,9 +3,10 @@
 // weighted by recency and novelty; this module only (1) states a tab's world to the library (its schema and the things the session holds, as facts), (2) renders a frame as
 // a sentence, and (3) keeps a host check that a change really changes something. There is NO generator of our own: no list of examples, no placeholders to fill.
 // Browser-safe: no `node:*` imports; the library module and the world registry are passed in.
-import { colourWordSet, colourLexiconWords } from '../knowledge/values.mjs?v=a137742733';
-import { languageWorld } from './compose-world.mjs?v=0ab8c2fade';
+import { colourWordSet, colourLexiconWords } from '../knowledge/values.mjs?v=2bd2c8e37d';
+import { languageWorld } from './compose-world.mjs?v=97d66663a7';
 import { englishOf } from '../lang/en-generate.mjs?v=84a99c355e';
+import { prefetchSensitive, sensitiveMap, dropSensitive } from '../knowledge/sensitive.mjs?v=45d6df6ec8';
 
 const NOT_SAMPLED = new Set(['place', 'connect', 'group', 'send', 'save', 'load', 'redo']);   // acts the library cannot frame (a place, a second thing, a host act): left to typing
 const FUNCTION_WORDS = new Set(['to', 'from', 'at', 'until', 'in', 'on', 'by', 'of']);   // attributes named like prepositions cannot be said in "Set X <attr> to V"
@@ -192,6 +193,8 @@ export function createSampler(lib, { worldOf, thingsOf, historyOf, knowledgeOf }
  * `session()` gives the current session (it can be replaced by a restore).
  */
 export function engineSampler(lib, engine, session) {
+  const saidNow = () => { try { const r = session().dialogue?.log?.at(-1); return r ? `${r.text ?? ''} ${r.said ?? ''}` : ''; } catch { return ''; } };   // the user's words of the last turn (its English and as typed)
+  prefetchSensitive(engine.knowledge);
   const schemaWorld = (id) => engine.set.list().find((y) => y.id === id)?.ops?.executor;
   const sampler = createSampler(lib, {
     worldOf: (id) => { const x = schemaWorld(id); return x?.schema ? { schema: x.schema, executor: x } : null; },
@@ -201,6 +204,10 @@ export function engineSampler(lib, engine, session) {
       try { const readable = new Set(colourLexiconWords()); lists.colours = [...colourWordSet()].filter((c) => readable.has(c)); }   // the colours the readers take as colour words (not "cherry", a fruit)
       catch { /* no colours: the schema's own */ }
       try { Object.assign(lists, schemaWorld(id)?.sampleKnowledge?.({ state: session().state(id) ?? {}, knowledge: engine.knowledge, world: engine.set.get(id), mode }) ?? {}); } catch { /* the world's lists are optional */ }
+      // SENSITIVE THINGS (src/knowledge/sensitive.mjs): a thing the catalog marks sensitive is never in a list the chips or the dice draw from, unless the user named it in the turn
+      prefetchSensitive(engine.knowledge);
+      const map = sensitiveMap(engine.knowledge), said = saidNow();
+      if (map.size) for (const k of Object.keys(lists)) if (Array.isArray(lists[k])) lists[k] = dropSensitive(lists[k], { map, said });
       return lists;
     },
     thingsOf: (id) => {
@@ -209,5 +216,34 @@ export function engineSampler(lib, engine, session) {
   });
   /** Ids of the worlds the dice can draw from (a schema world with a sampleable kind), and a map tab id -> world id. */
   const worlds = () => engine.set.list().filter((w) => w.ops?.executor?.schema).map((w) => w.id);
-  return { ...sampler, worlds };
+  // and never in a sampled item (a world's own list or a schema value the filter above did not see)
+  const clean = (items) => { const map = sensitiveMap(engine.knowledge); return map.size ? dropSensitive(items, { map, said: saidNow() }) : items; };
+  return { ...sampler, worlds, sample: (...a) => clean(sampler.sample(...a)), actions: (...a) => clean(sampler.actions(...a)), dice: (...a) => { const r = sampler.dice(...a); return r && clean([r]).length ? r : null; } };
+}
+
+/**
+ * CHIPS IN THE SELECTED LANGUAGE (spec 25; reviewer 2026-11-15 03:15 item 3): a chip is a command the sampler rendered in English; in a session of another language it is shown (and
+ * sent) in that language, by the rules translator (its reply tables and grammar, never a machine translator), and a chip it cannot say completely is left out: never an English chip
+ * on a page in another language. Each item keeps its English text in `en`. `translator` is the engine's (its `rules` when it switches between translators).
+ */
+const norm = (s) => String(s ?? '').toLowerCase().replace(/[.!?,"„”]/g, '').replace(/\b([a-z]+) (\d+)\b/g, '$1$2').replace(/\s+/g, ' ').trim();   // the reader splits a name like c1 into c 1 and still reads it
+const ID = /\b[a-z]+\d+\b/gi;
+export async function chipsInLanguage(items, lang, translator) {
+  if (!lang || lang === 'en' || !items?.length) return items ?? [];
+  const rules = translator?.rules ?? translator;
+  if (!rules?.translate) return [];
+  const out = [];
+  for (const it of items) {
+    try {
+      // a name like c1 (a diagram node, a seat) is kept as it is, as the reply tables keep a name ({w}): it goes through the translator as a name it does not touch
+      const ids = [...new Set(it.text.match(ID) ?? [])], hold = (i) => `Zq${'abcdefghij'[i]}`;
+      const r = await rules.translate(ids.reduce((t, id, i) => t.replace(new RegExp(`\\b${id}\\b`, 'g'), hold(i)), it.text), { from: 'en', to: lang });
+      const text = ids.reduce((t, id, i) => t?.replace(new RegExp(`\\b${hold(i)}\\b`, 'g'), id), typeof r === 'string' ? r : r?.text);
+      if (!text || r?.unknown?.length || r?.untranslatable?.length || (translator?.leftovers?.(text, lang) ?? rules.leftovers?.(text, lang) ?? []).length) continue;
+      // read back: the chip, when tapped, is read as the same command (the reading of a chip is the world's, so a chip that would read otherwise is not offered)
+      const back = await rules.translate(text, { from: lang, to: 'en' });
+      if (norm(typeof back === 'string' ? back : back?.text) === norm(it.text)) out.push({ ...it, text: text.trim(), en: it.text });
+    } catch { /* this chip is left out */ }
+  }
+  return out;
 }

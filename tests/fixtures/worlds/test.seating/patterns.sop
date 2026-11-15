@@ -403,3 +403,11 @@
     priority=15
     tabPriority=23
     example="Put a guest named Maria at table 1."
+
+@pat.test.seating.deselect core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.deselect] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=test.seating.pick arg.mode=none arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Deselect the circle."

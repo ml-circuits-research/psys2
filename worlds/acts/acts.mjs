@@ -161,8 +161,10 @@ const kindWords = (s) => [...new Set(Object.values(s.kinds).flatMap((k) => [k.na
  * otherwise the pattern would claim a sentence that no executor of that world can run, and the sentence would end in "did not understand" (spec 21).
  */
 export const CORE_ROLES = new Set(['thing', 'rel', 'place', 'amount', 'amount2', 'value', 'attribute', 'rest', 'pre', 'post', 'm1', 'm2', 'kind']);
-/** Catalog frames that carry core roles only but that no executor runs (the act takes no such role): "Undo the colour change" (undo takes none, and its verbs include "reset" and "go back"), "Copy the star to the corner", "Save the drawing to my files". A world that runs one says `reads=` for it, which is not possible for these: they wait for an executor. */
-const NO_EXECUTOR = new Set(['undo.thing', 'copy.place', 'save.place', 'save.thing', 'load.from']);
+/** Catalog frames that carry core roles only but that no executor runs (the act takes no such role): "Undo the colour change" (undo takes none, and its verbs include "reset" and "go back"), "Redo the colour change"
+ * (redo takes none: the executor redoes the last undone step whatever the thing; generated once k.actions had redo verbs, catalog fea0fecb), "Copy the star to the corner", "Save the drawing to my files".
+ * A world that runs one says `reads=` for it, which is not possible for these: they wait for an executor. */
+const NO_EXECUTOR = new Set(['undo.thing', 'redo.thing', 'copy.place', 'save.place', 'save.thing', 'load.from']);
 const SHARED_LEXICONS = /^(acts|space|lang)\./;
 /** The forms a world gets: those whose condition the schema meets, whose act the world declares, whose verb group k.actions has (a frame for "redo the colour change" has no verb of k.actions), whose roles and shared lexicons the world reads. */
 export function formsFor(schema) {
@@ -934,12 +936,13 @@ export function createExecutor(schema, hooks = {}) {
       const lib = EFFECT_ACTS.includes(act) ? fx().sentence(ctx, [act], [() => dom(ctx, req) ?? { declined: true }], (o) => o.declined || o.status === 'supported') : null;
       const r = lib ? (lib.results[0]?.declined ? undefined : lib.results[0]) : dom(ctx, req);
       if (r) {
+        const said0 = r.value;   // a composed reply's frame (say) stays only while the text is the world's own
         if (!hooks.noState) init(st);   // `noState`: the world keeps its own state shape (the map's `focus` is a place, not the executor's selection) and no act log
         if (r.status === 'supported' && !hooks.noState) { st.log.push({ act, mode: req.mode ?? null, text: req.text, roles: roleView(req), diff: null, reply: String(r.value ?? r.note ?? ''), guesses: [] }); if (st.log.length > 50) st.log.shift(); st.lastAct = st.log[st.log.length - 1]; }
         if (r.status === 'supported' && act === 'make') { const lost = unkeptName(req); const t = String(r.value ?? r.note ?? ''); const kept = () => JSON.stringify(ctx.state ?? {}, (k, v) => (['log', 'lastAct', 'history', 'pending', 'redo', 'future'].includes(k) ? undefined : v)).toLowerCase().includes(String(req.value).trim().toLowerCase()); if (lost && !t.toLowerCase().includes(lost.toLowerCase()) && !kept()) { const said = /^[^.!?]*\.$/.test(t) ? `${t.slice(0, -1)}; I did not keep the name ${lost}.` : `${t} I did not keep the name ${lost}.`; r.value = said; r.note = said; } }   // a name said for a thing of a kind that is not `named` is never dropped silently (spec 21)
         // a domain hook that answers a make without its text by a question ("What should the heading say?") asked for the value role: the next message is the answer (spec 21, fallback 4)
         if (r.status !== 'supported' && act === 'make' && req.thing && String(req.thing).trim() && (req.value == null || req.value === '') && /\?\s*$/.test(String(r.note ?? r.value ?? ''))) { st.pending = { type: 'role', role: 'value', text: true, req: { ...req }, guess: `${act} ${req.thing ?? ''}`.trim() }; st.inputMode = 'confirm'; }
-        return r.status === 'supported' ? { status: 'supported', note: r.value ?? r.note, value: r.value ?? r.note, ...(r.effect ? { effect: r.effect } : {}), ...(lib?.diff ? { diff: lib.diff } : {}) } : { status: r.status, note: r.note ?? r.value, value: r.note ?? r.value };
+        return r.status === 'supported' ? { status: 'supported', note: r.value ?? r.note, value: r.value ?? r.note, ...(r.effect ? { effect: r.effect } : {}), ...(lib?.diff ? { diff: lib.diff } : {}), ...(r.say && r.value === said0 ? { say: r.say } : {}) } : { status: r.status, note: r.note ?? r.value, value: r.note ?? r.value };
       }
     }
     if (hooks.noState) return { status: 'missing', note: `I cannot do that on the ${schema.noun}.`, value: `I cannot do that on the ${schema.noun}.` };   // a world with its own state answers every act through its domain hooks

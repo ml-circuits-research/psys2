@@ -18,16 +18,16 @@ import {
   W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, SHADES,
   canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind, kindKey, kindName, thingOfWord, COMPOSITE, thingGroups, partCount,
   registerThings, partGuessed, isThing, ensureCustom, registerShape, piecesOf, groupOf, thingOfKey, partsOf,
-} from './scene.mjs?v=0882bbcd68';
+} from './scene.mjs?v=04b6f3a58b';
 
-import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
+import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/values.mjs?v=2bd2c8e37d';   // the one colour reader (k.values)
 import { habitat, adviceFor } from '../../lib/knowledge/commonsense.mjs?v=a83dfa4db3';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
-import { readNounPhrase, foldRelative } from '../../lib/lang/np-resolve.mjs?v=ddb4bc8d03';   // the one host resolver of noun phrases   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
-import * as space from '../space/space.mjs?v=72e3867df9';
-import * as rel from '../space/pieces.mjs?v=c8d95ac4f1';
-import * as solver from '../space/solver.mjs?v=68f53cdf8f';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
+import { readNounPhrase, foldRelative } from '../../lib/lang/np-resolve.mjs?v=3035119849';   // the one host resolver of noun phrases   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
+import * as space from '../space/space.mjs?v=15c16cca4d';
+import * as rel from '../space/pieces.mjs?v=ac37cbb2f0';
+import * as solver from '../space/solver.mjs?v=cb88050fb5';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
 
-export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=0882bbcd68';
+export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=04b6f3a58b';
 
 // The turn's step budget (a no-op outside a turn): placement and name resolution are searches whose cost grows with the picture.
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
@@ -354,6 +354,19 @@ function groupPhrase(objs, { positions = false } = {}) {
     words.push(o.who ? WHO_PRESET[o.who].plural : pluralOfKind(kindKey(o), g.length));
     return `${g.length} ${words.join(' ')}`;
   });
+}
+
+/** The groups of groupPhrase as counts { n, noun, colour? } for a composed reply; null when a group has a size, a mood or a preset person (said in English words only). */
+function groupFrames(objs) {
+  const groups = new Map();
+  for (const o of objs) {
+    if (sizeWord(o) || o.mood || o.who) return null;
+    const c = effectiveColor(o), colour = c && !(kindKey(o) === 'cloud' && !o.color) && !(kindKey(o) === 'moon' && !o.color) ? (o.color ?? c) : null;   // the colours describeObject / groupPhrase say
+    const key = `${kindKey(o)}|${colour ?? ''}`;
+    if (!groups.has(key)) groups.set(key, { n: 0, noun: kindName(kindKey(o)), ...(colour ? { colour } : {}) });
+    groups.get(key).n++;
+  }
+  return [...groups.values()];
 }
 
 // ---- noun phrases: who is meant ---------------------------------------------------------------------------------------
@@ -1056,6 +1069,7 @@ const addInner = guard((ctx, args, s) => {
   }
   const askedFor = String(args.kt ?? args.kind ?? '').toLowerCase().replace(/s$/, '');
   if (!spec0.kind && UNDRAWABLE.has(askedFor) && !ctx.knowledge?.peek(askedFor)?.objects?.length) return no(`I cannot draw ${/^[aeiou]/.test(askedFor) ? 'an' : 'a'} ${askedFor} yet. I can draw a cat, a dog, a fish or a bird. What would you like?`);
+  if ((!spec0.kind || spec0.kind === '*') && ctx.knowledge?.unreachable?.() && !kindOfWord(askedFor)) return no("I can't reach the picture catalog right now, so I can only draw the basic things.", 'unsupported');   // a catalog thing whose drawing did not arrive: not the list of what the board knows
   if (!spec0.kind || spec0.kind === '*') return no('I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon and shapes like a circle, a square, a star or a heart. What would you like?');
   // a tail with more things: "... and a tree"
   const withParts0 = parseWith(spec0.kind, words0);
@@ -2236,7 +2250,8 @@ export const scene = guard((ctx, args, s) => {
   made.push(make(['cat', 'dog'][Math.floor(rnd(s) * 2)]), make('bird'));
   s.last = made.map((o) => o.id);
   open(ctx);
-  return ok(`I drew a sunny scene for you: ${andList(groupPhrase(made))}. You can change anything, for example "make the house blue".`);
+  const things = groupFrames(made);   // the frame a reply in another language is composed from (spec 06 "Composed replies"); none when a group says more than a count, a kind and a colour
+  return ok(`I drew a sunny scene for you: ${andList(groupPhrase(made))}. You can change anything, for example "make the house blue".`, things ? { say: { act: 'draw.scene', roles: { things, example: 'house', colour: 'blue' } } } : undefined);
 });
 
 export const openTab = guard((ctx) => {

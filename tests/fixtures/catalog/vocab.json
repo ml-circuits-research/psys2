@@ -62,8 +62,8 @@
  ],
  "light": [
   "k.faces/shards/colours",
-  "k.actions/shards/actions-make-change",
-  "k.values/shards/scales"
+  "k.values/shards/scales",
+  "k.actions/shards/actions-make-change"
  ],
  "metal grey": [
   "k.faces/shards/colours"
@@ -106,8 +106,8 @@
  ],
  "skin": [
   "k.faces/shards/colours",
-  "k.actions/shards/actions-make-change",
-  "k.body/shards/core"
+  "k.body/shards/core",
+  "k.actions/shards/actions-make-change"
  ],
  "tan": [
   "k.faces/shards/colours",
@@ -165,9 +165,10 @@
  ],
  "drop": [
   "k.faces/shards/plain-earrings",
+  "k.shapes/shards/shapes",
   "k.actions/shards/actions-hands",
   "k.actions/shards/verbs-place",
-  "k.shapes/shards/shapes"
+  "k.actions/shards/verbs-remove"
  ],
  "earrings": [
   "k.faces/shards/plain-earrings",
@@ -262,8 +263,8 @@
  ],
  "narrow": [
   "k.faces/shards/plain-eyes",
-  "k.actions/shards/verbs-change",
-  "k.values/shards/scales"
+  "k.values/shards/scales",
+  "k.actions/shards/verbs-change"
  ],
  "oval": [
   "k.faces/shards/plain-eyes",
@@ -379,8 +380,8 @@
   "k.objects/shards/animals",
   "k.objects/shards/figures",
   "k.layouts/shards/layouts",
-  "k.actions/shards/actions-move",
-  "k.body/shards/core"
+  "k.body/shards/core",
+  "k.actions/shards/actions-move"
  ],
  "heart": [
   "k.faces/shards/plain-head",
@@ -650,10 +651,10 @@
   "k.objects/shards/sky",
   "k.objects/shards/vehicles",
   "k.words/shards/co-1",
-  "k.actions/shards/actions-make-change",
-  "k.actions/shards/verbs-change",
   "k.words/shards/co-1",
-  "k.attributes/shards/attributes"
+  "k.attributes/shards/attributes",
+  "k.actions/shards/actions-make-change",
+  "k.actions/shards/verbs-change"
  ],
  "door": [
   "k.objects/shards/buildings",
@@ -742,9 +743,9 @@
   "k.objects/shards/nature",
   "k.objects/shards/sky",
   "k.objects/shards/vehicles",
-  "k.actions/shards/acts",
   "k.units/shards/measures",
-  "k.attributes/shards/attributes"
+  "k.attributes/shards/attributes",
+  "k.actions/shards/acts"
  ],
  "parts": [
   "k.objects/shards/buildings",
@@ -755,9 +756,9 @@
   "k.objects/shards/sky",
   "k.objects/shards/vehicles",
   "k.words/shards/pa",
-  "k.actions/shards/acts",
   "k.words/shards/pa",
-  "k.attributes/shards/attributes"
+  "k.attributes/shards/attributes",
+  "k.actions/shards/acts"
  ],
  "picture": [
   "k.objects/shards/buildings",
@@ -1153,16 +1154,16 @@
  ],
  "centre": [
   "k.objects/shards/nature",
-  "k.actions/shards/verbs-place",
-  "k.values/shards/directions"
+  "k.values/shards/directions",
+  "k.actions/shards/verbs-place"
  ],
  "flower": [
   "k.objects/shards/nature",
   "k.words/shards/fl",
-  "k.actions/shards/actions-body-social-nature",
   "k.commonsense/shards/core",
   "k.words/shards/fl",
-  "k.scenes/shards/things-f"
+  "k.scenes/shards/things-f",
+  "k.actions/shards/actions-body-social-nature"
  ],
  "flowers": [
   "k.objects/shards/nature"
@@ -1481,11 +1482,12 @@
  ],
  "make": [
   "k.words/shards/ma",
+  "k.words/shards/ma",
   "k.actions/shards/actions-make-change",
   "k.actions/shards/acts",
+  "k.actions/shards/families",
   "k.actions/shards/verbs-change",
-  "k.actions/shards/verbs-make",
-  "k.words/shards/ma"
+  "k.actions/shards/verbs-make"
  ],
  "many": [
   "k.words/shards/ma",
@@ -1493,9 +1495,9 @@
  ],
  "march": [
   "k.words/shards/ma",
-  "k.actions/shards/actions-move",
   "k.words/shards/ma",
-  "k.time/shards/calendar"
+  "k.time/shards/calendar",
+  "k.actions/shards/actions-move"
  ],
  "mars": [
   "k.words/shards/ma",
@@ -1629,9 +1631,9 @@
  ],
  "bridge": [
   "k.words/shards/br",
-  "k.actions/shards/verbs-connect",
   "k.words/shards/br",
-  "k.scenes/shards/things-b"
+  "k.scenes/shards/things-b",
+  "k.actions/shards/verbs-connect"
  ],
  "built": [
   "k.words/shards/bu",
@@ -1698,8 +1700,8 @@
  ],
  "come": [
   "k.words/shards/co-1",
-  "k.actions/shards/actions-move",
-  "k.words/shards/co-1"
+  "k.words/shards/co-1",
+  "k.actions/shards/actions-move"
  ],
  "comet": [
   "k.words/shards/co-1",
@@ -1764,8 +1766,8 @@
  ],
  "eat": [
   "k.words/shards/ea",
-  "k.actions/shards/actions-body-social-nature",
-  "k.words/shards/ea"
+  "k.words/shards/ea",
+  "k.actions/shards/actions-body-social-nature"
  ],
  "egg": [
   "k.words/shards/eg",
@@ -1861,9 +1863,9 @@
  ],
  "hand": [
   "k.words/shards/ha",
-  "k.actions/shards/verbs-send",
   "k.body/shards/core",
-  "k.words/shards/ha"
+  "k.words/shards/ha",
+  "k.actions/shards/verbs-send"
  ],
  "have": [
   "k.words/shards/ha",
@@ -1953,9 +1955,9 @@
  ],
  "kind": [
   "k.words/shards/ki",
-  "k.actions/shards/acts",
   "k.words/shards/ki",
-  "k.attributes/shards/attributes"
+  "k.attributes/shards/attributes",
+  "k.actions/shards/acts"
  ],
  "kite": [
   "k.words/shards/ki",
@@ -1964,8 +1966,8 @@
  ],
  "know": [
   "k.words/shards/kn",
-  "k.actions/shards/actions-mind-talk",
-  "k.words/shards/kn"
+  "k.words/shards/kn",
+  "k.actions/shards/actions-mind-talk"
  ],
  "knowledge": [
   "k.words/shards/kn",
@@ -1997,8 +1999,8 @@
  ],
  "look": [
   "k.words/shards/lo",
-  "k.actions/shards/actions-mind-talk",
-  "k.words/shards/lo"
+  "k.words/shards/lo",
+  "k.actions/shards/actions-mind-talk"
  ],
  "mean": [
   "k.words/shards/me",
@@ -2088,9 +2090,9 @@
  ],
  "other": [
   "k.words/shards/ot",
-  "k.actions/shards/acts",
   "k.values/shards/sets",
-  "k.words/shards/ot"
+  "k.words/shards/ot",
+  "k.actions/shards/acts"
  ],
  "owl": [
   "k.words/shards/ow",
@@ -2124,10 +2126,10 @@
  ],
  "plant": [
   "k.words/shards/pl",
-  "k.actions/shards/actions-make-change",
   "k.words/shards/pl",
   "k.scenes/shards/things-p",
-  "k.attributes/shards/attributes"
+  "k.attributes/shards/attributes",
+  "k.actions/shards/actions-make-change"
  ],
  "rabbit": [
   "k.words/shards/ra",
@@ -2160,8 +2162,8 @@
  ],
  "run": [
   "k.words/shards/ru",
-  "k.actions/shards/actions-move",
-  "k.words/shards/ru"
+  "k.words/shards/ru",
+  "k.actions/shards/actions-move"
  ],
  "sahara": [
   "k.words/shards/sa",
@@ -2201,14 +2203,14 @@
  ],
  "show": [
   "k.words/shards/sh",
+  "k.words/shards/sh",
   "k.actions/shards/actions-mind-talk",
-  "k.actions/shards/verbs-change",
-  "k.words/shards/sh"
+  "k.actions/shards/verbs-change"
  ],
  "sleep": [
   "k.words/shards/sl",
-  "k.actions/shards/actions-body-social-nature",
-  "k.words/shards/sl"
+  "k.words/shards/sl",
+  "k.actions/shards/actions-body-social-nature"
  ],
  "snake": [
   "k.words/shards/sn",
@@ -2220,9 +2222,9 @@
  ],
  "sound": [
   "k.words/shards/so",
-  "k.actions/shards/actions-body-social-nature",
   "k.words/shards/so",
-  "k.attributes/shards/attributes"
+  "k.attributes/shards/attributes",
+  "k.actions/shards/actions-body-social-nature"
  ],
  "soup": [
   "k.words/shards/so",
@@ -2237,8 +2239,8 @@
  ],
  "talk": [
   "k.words/shards/ta",
-  "k.actions/shards/actions-mind-talk",
-  "k.words/shards/ta"
+  "k.words/shards/ta",
+  "k.actions/shards/actions-mind-talk"
  ],
  "teeth": [
   "k.words/shards/te",
@@ -2246,9 +2248,9 @@
  ],
  "tell": [
   "k.words/shards/te",
+  "k.words/shards/te",
   "k.actions/shards/actions-mind-talk",
-  "k.actions/shards/verbs-ask",
-  "k.words/shards/te"
+  "k.actions/shards/verbs-ask"
  ],
  "tent": [
   "k.words/shards/te",
@@ -2261,8 +2263,8 @@
  ],
  "thing": [
   "k.words/shards/th",
-  "k.actions/shards/acts",
-  "k.words/shards/th"
+  "k.words/shards/th",
+  "k.actions/shards/acts"
  ],
  "things": [
   "k.words/shards/th",
@@ -2303,10 +2305,11 @@
  ],
  "undo": [
   "k.words/shards/un",
+  "k.words/shards/un",
   "k.actions/shards/actions-hands",
   "k.actions/shards/acts",
-  "k.actions/shards/verbs-undo",
-  "k.words/shards/un"
+  "k.actions/shards/families",
+  "k.actions/shards/verbs-undo"
  ],
  "vegetable": [
   "k.words/shards/ve",
@@ -2337,8 +2340,8 @@
  ],
  "whisper": [
   "k.words/shards/wh",
-  "k.actions/shards/actions-mind-talk",
-  "k.words/shards/wh"
+  "k.words/shards/wh",
+  "k.actions/shards/actions-mind-talk"
  ],
  "why": [
   "k.words/shards/wh",
@@ -2381,9 +2384,9 @@
  ],
  "ring": [
   "k.layouts/shards/names",
-  "k.actions/shards/actions-body-social-nature",
   "k.values/shards/shapes",
-  "k.shapes/shards/shapes"
+  "k.shapes/shards/shapes",
+  "k.actions/shards/actions-body-social-nature"
  ],
  "scatter": [
   "k.layouts/shards/names",
@@ -2531,8 +2534,8 @@
   "k.actions/shards/actions-body-social-nature"
  ],
  "drink": [
-  "k.actions/shards/actions-body-social-nature",
-  "k.attributes/shards/attributes"
+  "k.attributes/shards/attributes",
+  "k.actions/shards/actions-body-social-nature"
  ],
  "drizzle": [
   "k.actions/shards/actions-body-social-nature"
@@ -2711,8 +2714,8 @@
   "k.actions/shards/actions-body-social-nature"
  ],
  "perch": [
-  "k.actions/shards/actions-body-social-nature",
-  "k.animals/shards/fish"
+  "k.animals/shards/fish",
+  "k.actions/shards/actions-body-social-nature"
  ],
  "play": [
   "k.actions/shards/actions-body-social-nature"
@@ -2751,6 +2754,7 @@
   "k.actions/shards/actions-body-social-nature",
   "k.actions/shards/actions-hands",
   "k.actions/shards/acts",
+  "k.actions/shards/families",
   "k.actions/shards/verbs-remove"
  ],
  "rest": [
@@ -2768,6 +2772,7 @@
  "send": [
   "k.actions/shards/actions-body-social-nature",
   "k.actions/shards/acts",
+  "k.actions/shards/families",
   "k.actions/shards/verbs-send"
  ],
  "settle": [
@@ -2818,17 +2823,17 @@
   "k.actions/shards/actions-body-social-nature"
  ],
  "snow": [
-  "k.actions/shards/actions-body-social-nature",
-  "k.values/shards/colours-css"
+  "k.values/shards/colours-css",
+  "k.actions/shards/actions-body-social-nature"
  ],
  "snow down": [
   "k.actions/shards/actions-body-social-nature"
  ],
  "split": [
+  "k.geo/shards/europe",
   "k.actions/shards/actions-body-social-nature",
   "k.actions/shards/actions-make-change",
-  "k.actions/shards/verbs-take_apart",
-  "k.geo/shards/europe"
+  "k.actions/shards/verbs-take_apart"
  ],
  "sprout": [
   "k.actions/shards/actions-body-social-nature"
@@ -3027,8 +3032,8 @@
   "k.actions/shards/actions-hands"
  ],
  "knot": [
-  "k.actions/shards/actions-hands",
-  "k.units/shards/core"
+  "k.units/shards/core",
+  "k.actions/shards/actions-hands"
  ],
  "lay": [
   "k.actions/shards/actions-hands",
@@ -3054,9 +3059,9 @@
   "k.actions/shards/actions-hands"
  ],
  "lower": [
+  "k.values/shards/scales",
   "k.actions/shards/actions-hands",
-  "k.actions/shards/verbs-place",
-  "k.values/shards/scales"
+  "k.actions/shards/verbs-place"
  ],
  "offer": [
   "k.actions/shards/actions-hands"
@@ -3079,10 +3084,11 @@
   "k.actions/shards/actions-hands"
  ],
  "place": [
+  "k.attributes/shards/attributes",
   "k.actions/shards/actions-hands",
   "k.actions/shards/acts",
-  "k.actions/shards/verbs-place",
-  "k.attributes/shards/attributes"
+  "k.actions/shards/families",
+  "k.actions/shards/verbs-place"
  ],
  "pour": [
   "k.actions/shards/actions-hands"
@@ -3134,7 +3140,8 @@
   "k.actions/shards/actions-hands"
  ],
  "shove": [
-  "k.actions/shards/actions-hands"
+  "k.actions/shards/actions-hands",
+  "k.actions/shards/verbs-place"
  ],
  "shut": [
   "k.actions/shards/actions-hands"
@@ -3159,7 +3166,8 @@
   "k.actions/shards/verbs-pick"
  ],
  "tap": [
-  "k.actions/shards/actions-hands"
+  "k.actions/shards/actions-hands",
+  "k.actions/shards/verbs-pick"
  ],
  "throw": [
   "k.actions/shards/actions-hands"
@@ -3178,8 +3186,9 @@
   "k.actions/shards/actions-hands"
  ],
  "touch": [
+  "k.body/shards/core",
   "k.actions/shards/actions-hands",
-  "k.body/shards/core"
+  "k.actions/shards/verbs-pick"
  ],
  "tow": [
   "k.actions/shards/actions-hands"
@@ -3288,6 +3297,7 @@
  "connect": [
   "k.actions/shards/actions-make-change",
   "k.actions/shards/acts",
+  "k.actions/shards/families",
   "k.actions/shards/verbs-connect"
  ],
  "construct": [
@@ -3295,8 +3305,8 @@
   "k.actions/shards/verbs-make"
  ],
  "cook": [
-  "k.actions/shards/actions-make-change",
-  "k.people/shards/roles-jobs"
+  "k.people/shards/roles-jobs",
+  "k.actions/shards/actions-make-change"
  ],
  "cover": [
   "k.actions/shards/actions-make-change"
@@ -3315,8 +3325,8 @@
   "k.actions/shards/actions-make-change"
  ],
  "curve": [
-  "k.actions/shards/actions-make-change",
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.actions/shards/actions-make-change"
  ],
  "cut": [
   "k.actions/shards/actions-make-change",
@@ -3347,7 +3357,8 @@
   "k.actions/shards/verbs-take_apart"
  ],
  "doodle": [
-  "k.actions/shards/actions-make-change"
+  "k.actions/shards/actions-make-change",
+  "k.actions/shards/verbs-make"
  ],
  "draw": [
   "k.actions/shards/actions-make-change",
@@ -3609,6 +3620,7 @@
  "take apart": [
   "k.actions/shards/actions-make-change",
   "k.actions/shards/acts",
+  "k.actions/shards/families",
   "k.actions/shards/verbs-take_apart"
  ],
  "take the lid off": [
@@ -3645,8 +3657,8 @@
   "k.actions/shards/actions-make-change"
  ],
  "water": [
-  "k.actions/shards/actions-make-change",
-  "k.food/shards/other"
+  "k.food/shards/other",
+  "k.actions/shards/actions-make-change"
  ],
  "wet": [
   "k.actions/shards/actions-make-change"
@@ -3658,7 +3670,8 @@
   "k.actions/shards/actions-make-change"
  ],
  "wipe": [
-  "k.actions/shards/actions-make-change"
+  "k.actions/shards/actions-make-change",
+  "k.actions/shards/verbs-remove"
  ],
  "wipe dry": [
   "k.actions/shards/actions-make-change"
@@ -3683,6 +3696,7 @@
  "ask": [
   "k.actions/shards/actions-mind-talk",
   "k.actions/shards/acts",
+  "k.actions/shards/families",
   "k.actions/shards/verbs-ask"
  ],
  "bark": [
@@ -3736,9 +3750,9 @@
   "k.actions/shards/actions-mind-talk"
  ],
  "count": [
+  "k.units/shards/measures",
   "k.actions/shards/actions-mind-talk",
-  "k.actions/shards/verbs-ask",
-  "k.units/shards/measures"
+  "k.actions/shards/verbs-ask"
  ],
  "cry": [
   "k.actions/shards/actions-mind-talk"
@@ -3883,6 +3897,7 @@
  "pick": [
   "k.actions/shards/actions-mind-talk",
   "k.actions/shards/acts",
+  "k.actions/shards/families",
   "k.actions/shards/verbs-pick"
  ],
  "point out": [
@@ -3902,6 +3917,7 @@
  ],
  "question": [
   "k.actions/shards/actions-mind-talk",
+  "k.actions/shards/families",
   "k.actions/shards/verbs-ask"
  ],
  "read": [
@@ -3976,8 +3992,8 @@
   "k.actions/shards/actions-mind-talk"
  ],
  "smell": [
-  "k.actions/shards/actions-mind-talk",
-  "k.body/shards/core"
+  "k.body/shards/core",
+  "k.actions/shards/actions-mind-talk"
  ],
  "sniff": [
   "k.actions/shards/actions-mind-talk"
@@ -4008,8 +4024,8 @@
   "k.actions/shards/actions-mind-talk"
  ],
  "taste": [
-  "k.actions/shards/actions-mind-talk",
-  "k.body/shards/core"
+  "k.body/shards/core",
+  "k.actions/shards/actions-mind-talk"
  ],
  "teach": [
   "k.actions/shards/actions-mind-talk"
@@ -4118,9 +4134,9 @@
   "k.actions/shards/actions-move"
  ],
  "fly": [
-  "k.actions/shards/actions-move",
   "k.animals/shards/invertebrates",
-  "k.geo/shards/oceania"
+  "k.geo/shards/oceania",
+  "k.actions/shards/actions-move"
  ],
  "follow": [
   "k.actions/shards/actions-move"
@@ -4254,8 +4270,8 @@
   "k.actions/shards/verbs-change"
  ],
  "spring": [
-  "k.actions/shards/actions-move",
-  "k.time/shards/calendar"
+  "k.time/shards/calendar",
+  "k.actions/shards/actions-move"
  ],
  "sprint": [
   "k.actions/shards/actions-move"
@@ -4301,18 +4317,20 @@
   "k.actions/shards/actions-move"
  ],
  "amount": [
-  "k.actions/shards/acts",
-  "k.values/shards/scales"
+  "k.values/shards/scales",
+  "k.actions/shards/acts"
  ],
  "attribute": [
   "k.actions/shards/acts"
  ],
  "change": [
   "k.actions/shards/acts",
+  "k.actions/shards/families",
   "k.actions/shards/verbs-change"
  ],
  "copy": [
   "k.actions/shards/acts",
+  "k.actions/shards/families",
   "k.actions/shards/verbs-copy"
  ],
  "criterion": [
@@ -4325,26 +4343,28 @@
   "k.actions/shards/acts"
  ],
  "group": [
+  "k.values/shards/numbers",
   "k.actions/shards/acts",
-  "k.actions/shards/verbs-group",
-  "k.values/shards/numbers"
+  "k.actions/shards/families",
+  "k.actions/shards/verbs-group"
  ],
  "load": [
   "k.actions/shards/acts",
+  "k.actions/shards/families",
   "k.actions/shards/verbs-load"
  ],
  "material": [
-  "k.actions/shards/acts",
-  "k.attributes/shards/attributes"
+  "k.attributes/shards/attributes",
+  "k.actions/shards/acts"
  ],
  "means": [
   "k.actions/shards/acts"
  ],
  "name": [
+  "k.attributes/shards/attributes",
   "k.actions/shards/acts",
   "k.actions/shards/verbs-ask",
-  "k.actions/shards/verbs-change",
-  "k.attributes/shards/attributes"
+  "k.actions/shards/verbs-change"
  ],
  "old value": [
   "k.actions/shards/acts"
@@ -4356,9 +4376,10 @@
   "k.actions/shards/acts"
  ],
  "save": [
+  "k.geo/shards/africa",
   "k.actions/shards/acts",
-  "k.actions/shards/verbs-save",
-  "k.geo/shards/africa"
+  "k.actions/shards/families",
+  "k.actions/shards/verbs-save"
  ],
  "source": [
   "k.actions/shards/acts"
@@ -4367,8 +4388,8 @@
   "k.actions/shards/acts"
  ],
  "tool": [
-  "k.actions/shards/acts",
-  "k.attributes/shards/attributes"
+  "k.attributes/shards/attributes",
+  "k.actions/shards/acts"
  ],
  "topic": [
   "k.actions/shards/acts"
@@ -4412,7 +4433,8 @@
   "k.actions/shards/verbs-change"
  ],
  "as": [
-  "k.actions/shards/verbs-change"
+  "k.actions/shards/verbs-change",
+  "k.actions/shards/verbs-save"
  ],
  "blow up": [
   "k.actions/shards/verbs-change"
@@ -4560,8 +4582,8 @@
   "k.actions/shards/verbs-connect"
  ],
  "couple": [
-  "k.actions/shards/verbs-connect",
-  "k.values/shards/numbers"
+  "k.values/shards/numbers",
+  "k.actions/shards/verbs-connect"
  ],
  "hook up": [
   "k.actions/shards/verbs-connect"
@@ -4570,8 +4592,8 @@
   "k.actions/shards/verbs-connect"
  ],
  "nail": [
-  "k.actions/shards/verbs-connect",
-  "k.body/shards/core"
+  "k.body/shards/core",
+  "k.actions/shards/verbs-connect"
  ],
  "pin": [
   "k.actions/shards/verbs-connect"
@@ -4634,8 +4656,8 @@
   "k.actions/shards/verbs-group"
  ],
  "pair": [
-  "k.actions/shards/verbs-group",
-  "k.values/shards/numbers"
+  "k.values/shards/numbers",
+  "k.actions/shards/verbs-group"
  ],
  "pile": [
   "k.actions/shards/verbs-group"
@@ -4647,19 +4669,21 @@
   "k.actions/shards/verbs-group"
  ],
  "bring back": [
-  "k.actions/shards/verbs-load"
+  "k.actions/shards/verbs-load",
+  "k.actions/shards/verbs-redo"
  ],
  "bring up": [
   "k.actions/shards/verbs-load"
  ],
  "download": [
-  "k.actions/shards/verbs-load"
+  "k.actions/shards/verbs-save"
  ],
  "fetch": [
   "k.actions/shards/verbs-load"
  ],
  "get back": [
-  "k.actions/shards/verbs-load"
+  "k.actions/shards/verbs-load",
+  "k.actions/shards/verbs-redo"
  ],
  "import": [
   "k.actions/shards/verbs-load"
@@ -4700,8 +4724,8 @@
   "k.actions/shards/verbs-make"
  ],
  "at": [
-  "k.actions/shards/verbs-pick",
-  "k.attributes/shards/attributes"
+  "k.attributes/shards/attributes",
+  "k.actions/shards/verbs-pick"
  ],
  "highlight": [
   "k.actions/shards/verbs-pick"
@@ -4728,8 +4752,8 @@
   "k.actions/shards/verbs-pick"
  ],
  "tick": [
-  "k.actions/shards/verbs-pick",
-  "k.animals/shards/invertebrates"
+  "k.animals/shards/invertebrates",
+  "k.actions/shards/verbs-pick"
  ],
  "align": [
   "k.actions/shards/verbs-place"
@@ -4750,7 +4774,8 @@
   "k.actions/shards/verbs-place"
  ],
  "put back": [
-  "k.actions/shards/verbs-place"
+  "k.actions/shards/verbs-place",
+  "k.actions/shards/verbs-redo"
  ],
  "put in": [
   "k.actions/shards/verbs-place"
@@ -4846,11 +4871,12 @@
   "k.actions/shards/verbs-send"
  ],
  "export": [
+  "k.actions/shards/verbs-save",
   "k.actions/shards/verbs-send"
  ],
  "forward": [
-  "k.actions/shards/verbs-send",
-  "k.values/shards/directions"
+  "k.values/shards/directions",
+  "k.actions/shards/verbs-send"
  ],
  "message": [
   "k.actions/shards/verbs-send"
@@ -21352,5 +21378,114 @@
  ],
  "worm": [
   "k.attributes/shards/things-living"
+ ],
+ "deselect": [
+  "k.actions/shards/acts",
+  "k.actions/shards/families",
+  "k.actions/shards/verbs-deselect"
+ ],
+ "redo": [
+  "k.actions/shards/acts",
+  "k.actions/shards/families",
+  "k.actions/shards/verbs-redo"
+ ],
+ "acts by what they need": [
+  "k.actions/shards/families"
+ ],
+ "acts on a kind": [
+  "k.actions/shards/families"
+ ],
+ "acts on a thing": [
+  "k.actions/shards/families"
+ ],
+ "acts that need no filler": [
+  "k.actions/shards/families"
+ ],
+ "change of a value": [
+  "k.actions/shards/families"
+ ],
+ "change of place": [
+  "k.actions/shards/families"
+ ],
+ "change of the world": [
+  "k.actions/shards/families"
+ ],
+ "creation": [
+  "k.actions/shards/families"
+ ],
+ "destruction": [
+  "k.actions/shards/families"
+ ],
+ "existence": [
+  "k.actions/shards/families"
+ ],
+ "history": [
+  "k.actions/shards/families"
+ ],
+ "joining": [
+  "k.actions/shards/families"
+ ],
+ "keeping": [
+  "k.actions/shards/families"
+ ],
+ "no change of things": [
+  "k.actions/shards/families"
+ ],
+ "separating": [
+  "k.actions/shards/families"
+ ],
+ "structure": [
+  "k.actions/shards/families"
+ ],
+ "the work itself": [
+  "k.actions/shards/families"
+ ],
+ "view": [
+  "k.actions/shards/families"
+ ],
+ "reset": [
+  "k.actions/shards/verbs-change"
+ ],
+ "uncheck": [
+  "k.actions/shards/verbs-deselect"
+ ],
+ "unhighlight": [
+  "k.actions/shards/verbs-deselect"
+ ],
+ "unmark": [
+  "k.actions/shards/verbs-deselect"
+ ],
+ "unselect": [
+  "k.actions/shards/verbs-deselect"
+ ],
+ "untick": [
+  "k.actions/shards/verbs-deselect"
+ ],
+ "scribble": [
+  "k.actions/shards/verbs-make"
+ ],
+ "whip up": [
+  "k.actions/shards/verbs-make"
+ ],
+ "click": [
+  "k.actions/shards/verbs-pick"
+ ],
+ "on": [
+  "k.actions/shards/verbs-pick"
+ ],
+ "nudge": [
+  "k.actions/shards/verbs-place"
+ ],
+ "scoot": [
+  "k.actions/shards/verbs-place"
+ ],
+ "do again": [
+  "k.actions/shards/verbs-redo"
+ ],
+ "in": [
+  "k.actions/shards/verbs-save"
+ ],
+ "step back": [
+  "k.actions/shards/verbs-undo"
  ]
 }

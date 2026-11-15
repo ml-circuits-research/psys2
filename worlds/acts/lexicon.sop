@@ -96,6 +96,7 @@
     alt=smooth
     alt=increase
     alt=decrease
+    alt=reset
 
 @phrase.acts.verb.connect core.phrase
     frame=false
@@ -132,6 +133,16 @@
     alt=imitate
     alt=make_a_copy_of
 
+@phrase.acts.verb.deselect core.phrase
+    frame=false
+    doc="Verbs of the act deselect (k.actions)."
+    alt=deselect
+    alt=unselect
+    alt=unmark
+    alt=unhighlight
+    alt=untick
+    alt=uncheck
+
 @phrase.acts.verb.group core.phrase
     frame=false
     doc="Verbs of the act group (k.actions)."
@@ -163,7 +174,6 @@
     alt=retrieve
     alt=recover
     alt=import
-    alt=download
     alt=read
     alt=bring_back
     alt=get_back
@@ -191,6 +201,9 @@
     alt=put_together
     alt=set_up
     alt=put_on
+    alt=doodle
+    alt=scribble
+    alt=whip_up
 
 @phrase.acts.verb.pick core.phrase
     frame=false
@@ -207,6 +220,9 @@
     alt=point
     alt=prefer
     alt=opt
+    alt=click
+    alt=tap
+    alt=touch
 
 @phrase.acts.verb.place core.phrase
     frame=false
@@ -244,6 +260,18 @@
     alt=insert
     alt=scatter
     alt=spread_out
+    alt=shove
+    alt=nudge
+    alt=scoot
+
+@phrase.acts.verb.redo core.phrase
+    frame=false
+    doc="Verbs of the act redo (k.actions)."
+    alt=redo
+    alt=do_again
+    alt=put_back
+    alt=bring_back
+    alt=get_back
 
 @phrase.acts.verb.remove core.phrase
     frame=false
@@ -269,6 +297,8 @@
     alt=cut_out
     alt=cross_out
     alt=take_off
+    alt=wipe
+    alt=drop
 
 @phrase.acts.verb.save core.phrase
     frame=false
@@ -285,6 +315,8 @@
     alt=archive
     alt=memorize
     alt=hold_on_to
+    alt=download
+    alt=export
 
 @phrase.acts.verb.send core.phrase
     frame=false
@@ -347,6 +379,7 @@
     alt=roll_back
     alt=revert
     alt=go_back
+    alt=step_back
 
 @phrase.acts.det core.phrase
     doc="Determiners before a thing."
