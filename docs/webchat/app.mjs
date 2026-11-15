@@ -1598,7 +1598,6 @@ export async function mountPsys2(element, options = {}) {
       const pick = x.values.some(([v]) => v === cur) ? cur : x.default;
       const sel = select(x.values.map(([v, l]) => [String(v), l]), String(pick), (v) => {
         settings[x.key] = x.boolean ? v === 'true' : v;
-        if (x.key === 'reasoner') settings.reasoner = v === 'ops' ? 'ops' : 'matrix';
         save();
         if (x.restart) Promise.resolve(engineClient?.restart?.(x.id)).catch(() => {});
         else engineClient?.applySettings?.(settings);

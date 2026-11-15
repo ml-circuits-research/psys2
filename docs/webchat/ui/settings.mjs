@@ -26,7 +26,6 @@ export const DEFAULT_SETTINGS = {
   helperModel: true,              // Settings › Reading › use the helper model for typos and long sentences; formalizer ('encoder' | 'rules') follows it, nxStrategy is always 'rules'
   ...RUNTIME_DEFAULTS,            // formalizer, encoderAcceptRefused, partialUnderstanding, normalizer, spellcheck: one definition shared with the evaluators (src/dialog/runtime-config.mjs)
   timeLimits: { ...TIME_LIMIT_DEFAULTS },   // ms; clamped on use (src/dialog/time-limits.mjs)
-  reasoner: 'matrix',             // Settings › Developer › Reasoner (spec 15): 'matrix' (default; the worlds that ship a matrix answer through the sopworld library) | 'ops' (the fallback); read when the engine starts
   lazyWorlds: true,               // Settings › Developer › Experiments (specs/06 "Lazy loading"): load the worlds a message needs (default) | false: every world at start (`?psys2lazy=0` does the same); read when the engine starts
   worldAware: 'veto',             // Settings › Developer › World-aware reading (spec 16): 'veto' (default, user decision 2026-11-12) | 'choose' | 'observe' | 'off'
   fastPath: true,                 // webchat: the rules answer at once when they read the whole message (PERF); the model is for the rest
@@ -38,7 +37,7 @@ export const DEFAULT_SETTINGS = {
  *   v1 (no `settingsVersion`): the default formalizer was 'rules'. A saved 'rules' is migrated to 'encoder' once, because it was the
  *   default and not necessarily a choice; every later explicit choice is saved with the current version and respected.
  *   v3 (LANG-FIXED): the language is always 'en' or 'ro': a saved 'auto' (or anything else) becomes the browser language (`ro*` -> ro, otherwise en) and is saved.
- *   v4 (matrix is the default, user decision 2026-11-11): the reasoner was saved as 'ops' by the old default and a saved value cannot tell a choice from that default, so every saved 'ops' becomes 'matrix' once; a later explicit 'ops' is saved with v4 and respected.
+ *   v4 (matrix is the default, user decision 2026-11-11). Since 2026-11-15 (reviewer decision: matrix is the product, ops a test oracle only) there is no reasoner setting: a saved `reasoner` of any version is dropped.
  *   v6 (defaults by the numbers, 2026-11-14): `reading` is gone (rules read; `helperModel` on/off decides whether the small model helps), `normalizer` is off until the user downloads it, `editHead` off, routing A ('dispatcher') becomes C.
  *   v5 (SETTINGS-COHERENT): "Formalizer" and "Reading strategy" became one `reading` choice. Two overlapping selects could not be told apart, so a value saved by either cannot be told from a
  *   confused choice: every saved profile is reset to hybrid once; a later explicit choice is saved with v5 and respected (a v5 profile without `reading` takes it from formalizer / nxStrategy).
@@ -61,8 +60,8 @@ export function migrateSettings(saved, navLang = globalThis.navigator?.language)
   if ('speechLang' in s) { delete s.speechLang; migrated = true; }
   s.handsFree = false;   // FREEZE: the listening state is never persisted; every page load starts with the microphone off (an older saved `true` no longer starts it)
   if (s.formalizer !== 'rules' && s.formalizer !== 'encoder') s.formalizer = DEFAULT_SETTINGS.formalizer;
-  if (from < 4) { if (s.reasoner === 'ops') s.reasoner = 'matrix'; migrated = true; }
-  if (s.reasoner !== 'ops') s.reasoner = 'matrix';   // an unknown saved value is the default
+  if (from < 4) migrated = true;
+  if ('reasoner' in s) { delete s.reasoner; migrated = true; }   // matrix is the product reasoner (reviewer decision 2026-11-15): the page never selects ops (a test oracle only, spec 15), so a saved choice is dropped
   if (from < 6) {   // defaults by the numbers: the old `reading` choice (hybrid | model | rules) is gone, the normalizer is an optional download (a saved `true` was the old default), the edit head is removed
     s.helperModel = true; s.normalizer = false; s.editHead = false; delete s.reading; migrated = true;
   }

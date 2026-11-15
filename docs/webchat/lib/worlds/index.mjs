@@ -20,9 +20,7 @@ const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operat
 const MATRIX_FILES = ['matrix.sop', 'mapping.sop'];
 const MATRIX_EXTRAS = { 'patterns.sop': 'matrix.patterns.sop', 'operations.sop': 'matrix.operations.sop', 'templates.sop': 'matrix.templates.sop' };
 // Operation descriptions (E3, spec 03 section 2c): the loader no longer generates patterns from describe.sop (the switch PSYS_GEN_PATTERNS and its generator were deleted
-// in P6, spec 16 section 15: off everywhere, never measured as a gain). describe.sop gives its `slot=` declarations, and its words to the reader route below.
-/** READER-ROUTE (spec 16 section 7): the reader needs the English words of `describe.sop` (not its generated patterns), so the file is read when the reader is on (`PSYS2_READER` = fill or choose). */
-const readerOn = () => { const m = globalThis.PSYS2_READER ?? globalThis.process?.env?.PSYS2_READER; return m === 'fill' || m === 'choose'; };
+// in P6, spec 16 section 15: off everywhere, never measured as a gain). describe.sop gives only its `slot=` declarations (spec 16 section 8; the reader route that read its words was deleted 2026-11-15).
 const worldIdOf = (s) => (s.startsWith('world.') ? s.slice(6) : s);
 const txt = (w, k) => get(w, k)?.v;
 
@@ -37,7 +35,7 @@ export class World {
     this.lexicons = [];
     this.phrases = [];   // core.phrase macros (spec 03 section 2.5)
     this.patterns = [];
-    this.descriptions = [];   // core.describe declarations (spec 03 section 2c), read in full only with PSYS2_READER
+    this.descriptions = [];   // core.describe declarations (spec 03 section 2c), only the declarations with a `slot=` argument
     this.shapes = [];    // core.shape declarations (spec 03 section 2b); their patterns are generated at load and appended to `patterns`
     this.operations = [];
     this.kbRaw = [];
@@ -190,7 +188,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
     // templates: the extras go first (the renderer tries the templates of a status in file order, so a matrix-mode wording wins); patterns and operations: order does not matter
     for (const [base, extra] of Object.entries(MATRIX_EXTRAS)) if (files[extra] != null) files[base] = base === 'templates.sop' ? files[extra] + '\n' + (files[base] ?? '') : (files[base] ?? '') + '\n' + files[extra];
   }
-  const wires = Object.fromEntries([...FILES, 'describe.sop'].map((f) => [f, readEntries(w, f, f === 'describe.sop' && !readerOn() ? slotDeclarations(files[f]) || null : files[f])]));
+  const wires = Object.fromEntries([...FILES, 'describe.sop'].map((f) => [f, readEntries(w, f, f === 'describe.sop' ? slotDeclarations(files[f]) || null : files[f])]));
   w.manifest = wires['world.sop'].find((x) => x.type === 'core.world') ?? null;
   if (!w.manifest) w.errors.push({ message: 'world.sop has no core.world wire' });
   else {

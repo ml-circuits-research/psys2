@@ -15,9 +15,9 @@ const press = async (c, selector, label) => {
   await c.pg.waitForFunction((n) => !window.psys2.busy && !document.querySelector('.p2-msg.is-typing') && document.querySelectorAll('.p2-msg.is-bot:not(.is-typing)').length > n, { timeout: 30000, polling: 20 }, n).catch(() => {});
   return c.pg.evaluate(() => [...document.querySelectorAll('.p2-msg.is-bot:not([data-runaway])')].at(-1)?.querySelector('.p2-bubble')?.innerText ?? '');
 };
-export const drawScenarios = ({ openChat, MATRIX, OPS, check, say }) => ({
+export const drawScenarios = ({ openChat, MATRIX, check, say }) => ({
   async undoredo(o) {
-    for (const [label, settings] of [['matrix', MATRIX], ['ops', OPS ?? { ...MATRIX, reasoner: 'ops', settingsVersion: 4 }]]) {
+    for (const [label, settings] of [['matrix', MATRIX]]) {   // the page runs only the matrix (ops is a test oracle, spec 15)
       const c = await openChat({ ...o, settings });
       const st = async (w) => JSON.parse(await c.state())[w] ?? {};
       const kinds = async () => (await st('art.draw')).objects?.map((x) => x.kind).join(',') ?? '';

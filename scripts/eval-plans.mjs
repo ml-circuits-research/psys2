@@ -11,7 +11,7 @@ const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? proces
 const here = path.resolve(import.meta.dirname, '..');
 const root = path.resolve(arg('--root', here));
 const verbose = process.argv.includes('--verbose');
-const reasoner = arg('--reasoner', 'ops');
+const reasoner = arg('--reasoner', 'matrix');   // the product reasoner (spec 15); ops only as the test oracle
 const known = process.env.PSYS2_KNOWLEDGE;
 if (!known) { console.error('PSYS2_KNOWLEDGE (the catalog docs/worlds folder) is not set'); process.exit(2); }
 const imp = (p) => import(pathToFileURL(path.join(root, p)).href);

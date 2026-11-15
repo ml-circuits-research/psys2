@@ -4,7 +4,7 @@
  * takes the verb of the clause before it: the library does that), `interpret` reads them into candidate splits, `score` judges them on the instance and `veto` says
  * whether the top reading may be answered. Read-only: nothing is told to the world. Browser-safe: no `node:*` imports; the world is the library's.
  *
- * Measurement only for now (`scripts/e2-splits.mjs`): the readings are not turned into dialogue wires, so nothing is acted on.
+ * Measurement only (the reader route and `scripts/e2-splits.mjs` were deleted 2026-11-15): the readings are not turned into dialogue wires, so nothing is acted on.
  */
 
 const CLAUSE_SPLIT = /\s*(?:[.;?!]+|,|\band then\b|\bthen\b|\band also\b|\balso\b|\band\b)\s*/i;
