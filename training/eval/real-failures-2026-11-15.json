@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "e664d98b",
-  "tree": "bf1b26753358c8ce",
+  "build": "20543e2c",
+  "tree": "704d91aa5c7742d2",
   "catalog": "ab3b2ab868ba27868f88d2dbdfce3433a699ece6",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -364,7 +364,7 @@
     {
      "text": "create a diagram",
      "tab": "diagram",
-     "happened": "I drew a random network diagram with nine shapes. It is about Serbia. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:shape"
+     "happened": "I drew a random timeline diagram with four shapes. It is about seasons. It is on top of what was there; undo takes it away. [outcome: executed; wrong; state:sha"
     },
     {
      "text": "add a box",
