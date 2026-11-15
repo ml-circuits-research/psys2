@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "1b702fe8",
-  "tree": "4f98b0972f0f7f02",
+  "build": "baa5c6d6",
+  "tree": "c2ff46d01aaae4ce",
   "catalog": "ab3b2ab868ba27868f88d2dbdfce3433a699ece6",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,17 +13,17 @@
   "matrix": {
    "turns": 579,
    "judged": 181,
-   "right": 130,
-   "partly": 14,
-   "wrong": 37,
+   "right": 132,
+   "partly": 15,
+   "wrong": 34,
    "open": 13,
    "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 331,
-    "refused": 3,
+    "executed": 334,
+    "refused": 2,
     "asked": 6,
-    "not_understood": 170,
+    "not_understood": 168,
     "other_world": 69
    },
    "by_source": {
@@ -75,7 +75,7 @@
     "real dialogues": {
      "turns": 105,
      "judged": 105,
-     "right": 70
+     "right": 72
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -93,17 +93,17 @@
   "ops": {
    "turns": 579,
    "judged": 181,
-   "right": 130,
-   "partly": 14,
-   "wrong": 37,
+   "right": 132,
+   "partly": 15,
+   "wrong": 34,
    "open": 13,
    "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 331,
-    "refused": 3,
+    "executed": 334,
+    "refused": 2,
     "asked": 6,
-    "not_understood": 171,
+    "not_understood": 169,
     "other_world": 68
    },
    "by_source": {
@@ -155,7 +155,7 @@
     "real dialogues": {
      "turns": 105,
      "judged": 105,
-     "right": 70
+     "right": 72
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -185,8 +185,8 @@
   "build": "04987ded",
   "tree": "b246a0839e0404e9"
  },
- "failing_matrix": 253,
- "failing_ops": 253,
+ "failing_matrix": 251,
+ "failing_ops": 251,
  "ops_only": 0,
  "causes": [
   {
@@ -326,8 +326,8 @@
   },
   {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
-   "count": 16,
-   "both_reasoners": 16,
+   "count": 15,
+   "both_reasoners": 15,
    "examples": [
     {
      "text": "make the avatar an emoji",
@@ -391,7 +391,7 @@
     {
      "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
      "tab": "draw",
-     "happened": "I did not understand \"ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum\". Did you mean \"Vreau un puzzle și plătesc 10 lei. Ce este restul?"
+     "happened": "I did not understand \"ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum\". For example: \"Add a house.\" or \"What is the colour of house?\" I "
     },
     {
      "text": "cum ai ajuns a deschisi joculd e sah? e ridicol",
@@ -460,33 +460,6 @@
    ]
   },
   {
-   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.gaps",
-   "count": 5,
-   "both_reasoners": 5,
-   "examples": [
-    {
-     "text": "would you say you are happy",
-     "tab": "robot",
-     "happened": "I could not find \"you are happy\" in the document. [outcome: other_world; wrong; answer:happy]"
-    },
-    {
-     "text": "would you say you are sad",
-     "tab": "robot",
-     "happened": "I could not find \"you are sad\" in the document. [outcome: other_world; wrong; answer:sad]"
-    },
-    {
-     "text": "what is on you",
-     "tab": "robot",
-     "happened": "There is no you here. [outcome: executed; partly; answer:wear]"
-    },
-    {
-     "text": "how is a circle different from other shapes",
-     "tab": "robot",
-     "happened": "I did not understand \"how is a circle different from other shapes\". For example: \"Add a hat.\" or \"What is the colour of hat?\" [outcome: not_understood; wrong; a"
-    }
-   ]
-  },
-  {
    "cause": "acted on a partly understood sentence",
    "count": 4,
    "both_reasoners": 4,
@@ -537,6 +510,28 @@
      "text": "muta casa din dreapta mai la dreapta",
      "tab": "draw",
      "happened": "I can not find a house in your picture. [outcome: executed; wrong; reply_not:took the last one|can not find]"
+    }
+   ]
+  },
+  {
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.gaps",
+   "count": 3,
+   "both_reasoners": 3,
+   "examples": [
+    {
+     "text": "would you say you are happy",
+     "tab": "robot",
+     "happened": "I could not find \"you are happy\" in the document. [outcome: other_world; wrong; answer:happy]"
+    },
+    {
+     "text": "would you say you are sad",
+     "tab": "robot",
+     "happened": "I could not find \"you are sad\" in the document. [outcome: other_world; wrong; answer:sad]"
+    },
+    {
+     "text": "what is on you",
+     "tab": "robot",
+     "happened": "There is no you here. [outcome: executed; partly; answer:wear]"
     }
    ]
   },
@@ -624,6 +619,18 @@
      "text": "set title to Title 1",
      "tab": "editor",
      "happened": "The title stays the title. You can make it bigger, center it or format it; to get a heading, add one. [outcome: refused]"
+    }
+   ]
+  },
+  {
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.gaps1b",
+   "count": 1,
+   "both_reasoners": 1,
+   "examples": [
+    {
+     "text": "I would like a ball and a pencil and pay with 20 lei. what's the change",
+     "tab": "shop",
+     "happened": "OK, a ball. I did not understand \"a pencil\". Did you mean \"I buy 3 pencils.\" or \"Ben bought a pencil.\"? OK, you pay 20 lei. I did not understand \"what's the cha"
     }
    ]
   },

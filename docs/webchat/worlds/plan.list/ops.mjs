@@ -7,10 +7,12 @@ import { World, listSums, listMeant } from '../../lib/vendor/sopworld/sopworld.m
 import { en } from '../../lib/lang/en.mjs?v=37915f671a';
 import { pluralize, singularLemma } from '../../lib/formalizer/rules/lemma.mjs?v=551c807f5c';
 import { SAMPLE_PRICES, SAMPLE_CURRENCY } from './prices.sample.mjs?v=1e37605e83';
+import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=d99e65c9ec';
 
 export function initialState() { return { lists: [], n: 0 }; }
 
 const safe = (f, d) => { try { return f() ?? d; } catch { return d; } };
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const DETS = new Set(safe(() => [...en.words('det')], []).filter((w) => !/^\w+$/.test(w) || !en.numerals()[w]));
 const NUMS = safe(() => en.numerals(), {});
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -23,6 +25,7 @@ function entryOf(phrase, amount) {
   const toks = String(phrase ?? '').toLowerCase().replace(/[?.!,]/g, ' ').split(/\s+/).filter(Boolean);
   let quantity = amount !== undefined && amount !== null && amount !== '' && Number.isFinite(Number(amount)) ? Number(amount) : null;
   while (toks.length > 1 && (DETS.has(toks[0]) || /^\d+(?:\.\d+)?$/.test(toks[0]) || NUMS[toks[0]] !== undefined)) {
+    budget.tick('list.entry');
     const t = toks.shift();
     if (quantity === null && /^\d+(?:\.\d+)?$/.test(t)) quantity = Number(t); else if (quantity === null && NUMS[t] !== undefined) quantity = NUMS[t];
   }
@@ -81,6 +84,7 @@ const priced = (st, thing) => { const lst = st?.lists?.at?.(-1); return entriesO
  *  list or a price the user stated: "how much is 2 plus 2" is not a price), the change or what is left of a list that exists or of the things and money the question names. */
 export function accepts({ action, mode, roles = {}, state } = {}) {
   if (!/^list\./.test(action ?? '')) return true;
+  for (const r of ['currency', 'unit']) if (roles[r] !== undefined && !MONEY_WORDS.has(String(roles[r]).toLowerCase())) return false;   // a money word of the catalog (k.units), "10 apples" is no payment
   if (roles.thing !== undefined && !nounPhrases(roles.thing)) return false;
   // the shop sells what is on its price list: a purchase of a thing with no price (the sample list or one the user stated) is not this shop's ("I buy a rocket")
   if (action === 'list.make' && roles.thing !== undefined && !entriesOf(roles.thing).every((e) => (state?.lists?.at?.(-1)?.prices?.[key(e.text)] ?? SAMPLE_PRICES[key(e.text)]) !== undefined)) return false;
@@ -104,7 +108,7 @@ export function change(ctx, { attribute, value, currency } = {}) {
   const n = Number(value);
   if (!Number.isFinite(n)) return { status: 'missing', note: 'How much money?' };
   const lst = attribute === 'budget' ? meant(st) : meant(st, { create: true });
-  if (attribute === 'budget') lst.budget = n; else lst.tendered = n;
+  if (attribute === 'budget') lst.budget = n; else { lst.tendered = n; lst.settled = true; }   // money handed over at the till closes the basket: the change is asked of it, the next thing wanted starts a new list
   if (currency) { lst.currencyWord = /s$|^lei$/.test(String(currency).toLowerCase()) ? String(currency).toLowerCase() : `${String(currency).toLowerCase()}s`; }
   return { status: 'supported', value: attribute === 'budget' ? `OK, you have ${money(n, lst)}.` : `OK, you pay ${money(n, lst)}.` };
 }

@@ -9,51 +9,51 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=016fe20fc3';
-import { reviewForeign } from './foreign-reading.mjs?v=6d703a7567';
+import { composeReply, sayOf } from './composed-reply.mjs?v=e574aec660';
+import { reviewForeign } from './foreign-reading.mjs?v=a5fe9872f3';
 import { installTextGen } from './textgen.mjs?v=c5b4f3a539';
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=c7231fb71e';
-import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=27c546ba1b';
-import { validateWorldSet } from '../worlds/validate.mjs?v=31dd1dd998';
-import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=c7231fb71e';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=f1c261f0a3';
+import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=6196b32fec';
+import { validateWorldSet } from '../worlds/validate.mjs?v=1efa9aa884';
+import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=f1c261f0a3';
 import { createInterpreter } from '../interpreter/index.mjs?v=2789b243e5';
-import { createReasoner } from '../reasoner/index.mjs?v=f0150c4467';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=891eb06982';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=66e20c5cb8';
+import { createReasoner } from '../reasoner/index.mjs?v=3e3334e291';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=c7ef15448e';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=543dd022a2';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
-import { splitSentences } from '../formalizer/rules/normalize.mjs?v=4a3da2a627';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=2b9c0d99f3';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=35096114f4';
+import { splitSentences } from '../formalizer/rules/normalize.mjs?v=48d13a9e86';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=623da9481a';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=5417760d80';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=1794f7417d';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=c7231fb71e';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=f1c261f0a3';
 import { lexIndex } from '../worlds/lexicon.mjs?v=815848016d';
 import { perf } from '../formalizer/perf.mjs?v=b81e032a17';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=82a55329d9';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=060b2ad0ab';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=945e2b792b';
-import { checkValues } from './value-check.mjs?v=4140cc886e';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=db77c67500';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=886391ff66';
+import { checkValues } from './value-check.mjs?v=db65d3bfc0';
 import { attachValues } from '../knowledge/values.mjs?v=a137742733';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=64050d59a4';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=cf4f1fcab5';
-import { Discourse } from './discourse.mjs?v=936915d9ab';
-import { Dialogue } from './dialogue.mjs?v=6adc1ec1e7';
+import { Discourse } from './discourse.mjs?v=80216990e1';
+import { Dialogue } from './dialogue.mjs?v=291291af1d';
 import { turnSteps } from './steps.mjs?v=44af51b084';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=145be6f597';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=613dca2efc';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=12420eaeb3';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=51c23dc413';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=2cc3abf892';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=4805605940';
 import { proposeByTypes } from './typed-reader.mjs?v=7812db5b24';
-import { withVariants, anyVoiceOn } from './variants.mjs?v=eed8c78611';
-import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=c7231fb71e';
-import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=c7231fb71e';
-import { repairFromScene } from './scene-referents.mjs?v=94b44af25f';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=0f80b31a5d';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=b2aa625d47';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=b4fbedf047';
+import { withVariants, anyVoiceOn } from './variants.mjs?v=55b15b4e90';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=f1c261f0a3';
+import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=f1c261f0a3';
+import { repairFromScene } from './scene-referents.mjs?v=1503798779';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=ecfc202194';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=725352a226';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=e8d4a4a98f';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
-import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=113c6084e1';
+import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=84868be7c7';
 
 export { runWorldTests } from './test-runner.mjs?v=635e001b3e';
 
@@ -1455,7 +1455,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=0e5fd8eed8').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=33f5b1e4fd').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.editor (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
@@ -1828,7 +1828,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   // `set`, `reasoner` and `interp` are replaced by `engine.reload(loader)` (LAZY LOADING: the worlds a message needs are added to a running engine); everything below reads them through these bindings.
   let set = await loadWorlds(loader, { reasoner: mode });
   let reasoner = mode === 'matrix' ? await createReasoner(set) : null;
-  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=0e5fd8eed8')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
+  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=33f5b1e4fd')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
   let interp = createInterpreter(set, { ...options, reasoner });
   attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`

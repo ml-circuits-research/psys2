@@ -333,7 +333,8 @@
     act=claude act=confused act=copilot act=explained act=few
     actshared=why actshared=recognize actshared=recognise actshared=follow actshared=option actshared=hear
     thing=arith thing=canvas thing=chat thing=drawing thing=editor thing=flowchart thing=keyboard thing=music
-    thing=piano thing=shop thing=sketch thing=sketchpad thing=sum thing=talk thing=time
+    thing=piano thing=problem thing=shop thing=sketch thing=sketchpad thing=story thing=sum thing=talk
+    thing=time
     thingshared=atlas thingshared=avatar thingshared=chart thingshared=diagram thingshared=doc thingshared=document thingshared=draw thingshared=face
     thingshared=graph thingshared=list thingshared=map thingshared=paint thingshared=picture thingshared=shopping thingshared=task thingshared=thing
     frame=how_to frame=what_commands frame=why_did frame=how_were frame=is_psys frame=was_wrong frame=were_you frame=what_else
