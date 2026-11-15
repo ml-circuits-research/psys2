@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=bc1bcb05d5';
+import { composeReply, sayOf } from './composed-reply.mjs?v=13f1029992';
 import { reviewForeign } from './foreign-reading.mjs?v=79d8decc9c';
 import { installTextGen } from './textgen.mjs?v=a8831e42a2';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=ff05a8582c';
@@ -18,7 +18,7 @@ import { validateWorldSet } from '../worlds/validate.mjs?v=f0bbfe4db3';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=ff05a8582c';
 import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=e8a1f00976';
 import { createInterpreter } from '../interpreter/index.mjs?v=d604aa1cfc';
-import { createReasoner } from '../reasoner/index.mjs?v=13a617c17f';
+import { createReasoner } from '../reasoner/index.mjs?v=9dd8094e09';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=ef142ac40e';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=2c08312adb';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
@@ -27,7 +27,7 @@ import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=36494dd717'
 import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=f0ba8543a7';
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=e8977fbdec';
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=fde35e1fb8';
+import { langRoNow } from '../translate/frames-ro.mjs?v=7e15954b13';
 import { repairInContext } from '../translate/source-repair.mjs?v=e721161854';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=ff05a8582c';
 import { lexIndex } from '../worlds/lexicon.mjs?v=f0499f971c';
@@ -41,19 +41,19 @@ import { attachValues } from '../knowledge/values.mjs?v=0d60c4bf76';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3ebe6cdc98';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f39042bd20';
 import { Discourse } from './discourse.mjs?v=422ad5cc94';
-import { Dialogue } from './dialogue.mjs?v=66af0cba80';
+import { Dialogue } from './dialogue.mjs?v=0d441e5fbb';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=1e9911155e';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=bc80c9df4f';
-import { personTurn } from './person.mjs?v=9eec997e28';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=9171f9197e';
+import { personTurn } from './person.mjs?v=2b34abedff';
 import { proposeByTypes } from './typed-reader.mjs?v=ecd7342ebe';
-import { withVariants, anyVoiceOn } from './variants.mjs?v=f2e60c528e';
+import { withVariants, anyVoiceOn } from './variants.mjs?v=5e2981458b';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=ff05a8582c';
 import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=ff05a8582c';
 import { repairFromScene } from './scene-referents.mjs?v=71b2b4cd5b';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=84f921fb77';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=9e99c77abe';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=0b5252786f';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=aa9ca96c40';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=fa5750062a';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=d4027b3587';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -318,7 +318,9 @@ function factParts(lib, language, facts, text = null) {
     const words = Object.fromEntries(Object.entries(roles).map(([k, v]) => [k, Array.isArray(v?.names) ? v.names.map((w) => `"${w}"`).join(', ') : v]));   // the person's own words, quoted
     for (const n of names) { let t = null; try { t = lib.replyFrom?.(language, n, words) ?? null; } catch { t = null; } if (t) { said = { name: n, text: typeof t === 'string' ? t : t.text ?? String(t) }; break; } }
     if (!said) return null;
-    parts.push({ text: said.text, translate: true, say: { act: said.name, roles } });
+    // a list of counts the fact also gives as data (done.whole: `kinds`, `numbers`) is framed as counts, so that a language says each one with its own noun
+    const sayRoles = Array.isArray(f.kinds) && Array.isArray(f.numbers) && f.kinds.length === f.numbers.length && typeof roles.parts === 'string' ? { ...roles, parts: f.kinds.map((k, i) => ({ n: f.numbers[i], noun: k })) } : roles;
+    parts.push({ text: said.text, translate: true, say: { act: said.name, roles: sayRoles } });
   }
   const out = parts.flatMap((p, i) => (i ? [{ text: ' ', translate: false, join: true }, p] : [p]));
   if (text != null && out.map((p) => p.text).join('').trim() !== String(text).trim()) return null;
@@ -361,7 +363,7 @@ import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=
 import { intentStep, weakReading, cutWorld } from './intent.mjs?v=5e4cf030ab';
 import { knownEnglishWord } from '../translate/en-ro.mjs?v=cbd133aecd';
 import { proposeReading, negationWords } from './proposer.mjs?v=b3c21ed7d7';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=2c4c9ffd63';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=7fdf6caf4a';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1636,7 +1638,7 @@ export class DialogSession {
    */
   async _send(text, opts = {}) {
     const tabWorld = this.context().tabWorld;
-    if (tabWorld && this.engine.set.get(tabWorld)?.requestText && this.engine.sopworld === undefined) this.engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=e5e77ae162').catch(() => null);
+    if (tabWorld && this.engine.set.get(tabWorld)?.requestText && this.engine.sopworld === undefined) this.engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=163eceaabd').catch(() => null);
     const decl = tabWorld && declaredWorld(this.engine.set.get(tabWorld), this.engine.sopworld);   // the world declares what it can do (request.sop) and carries a plan out (its planRequest operation, or its bound tool primitives)
     const off = opts.request === false || globalThis.process?.env?.PSYS2_REQUEST === 'off' || guard.soft();   // PSYS2_REQUEST=off: the A/B of the request step
     if (!decl || off) return markLegacy(await this._sendRead(text, opts), off ? 'off' : 'no request declarations');
@@ -1938,7 +1940,8 @@ export class DialogSession {
     if (lastRec?.via === 'tool') { try { rev = lib.reviseRequest(dlg, q.request, { revisions: language, catalog: [language], live: lib.mirrorState(live, prims.view).world }); } catch { rev = null; } }   // over the state: a make that refers to things there is a change of its own, not a revision
     if (rev?.sort === 'reaction' && (!q.act || q.act === (lastRec.request?.act ?? 'make')) && (!q.act || q.request.refers === 'last' || ['redo', 'reduce', 'enlarge'].includes(q.reaction))) {   // an act on the things there ("put it in the corner", "remove it") is not a revision of the request that made them
       if (!rev.request) return null;   // thanks, frustration: the dialogue's own reply
-      req = rev.request; replace = !!rev.replace;   // a reaction that replaces the last result ("fewer dogs")
+      replace = !!rev.replace;   // a reaction that replaces the last result ("fewer dogs")
+      req = replace || !q.act ? rev.request : q.request;   // a turn with its own act that replaces nothing ("make the house bigger": the change sense of make) is its own request
     } else if (rev?.reaction === 'continue' && rev.request && !q.act && !(q.request.constraints ?? []).some((c) => c.on === 'place')) req = rev.request;   // a fragment of kinds continues the dialogue's act with a new request ("a sun" after "draw a fish": sopworld 0.154); one read with a place ("I like cats": "like" as a relation) is no fragment of a request (questions.md [LIB])
     if (!req.act || !tools.binds.some((b) => b.act === req.act)) return null;
     // a thing the world makes with no binding for its kind (a page: request.sop psys2.op) is not the binding's
@@ -1991,7 +1994,7 @@ export class DialogSession {
       rd.trimTimeline(tabWorld);
       rd.record(tabWorld, { request: { ...plainRequest(req), act: plan.act ?? req.act }, flat: { ...flat, target: req.target ?? flat.target },   /* the act planned: a make in the change sense is a change */ result: run.result ? { count: run.result.count, kinds: run.result.kinds, links: run.result.links, things: run.result.things ?? [] } : null, seed, previous: lastRec?.request ?? null, previousSeed: lastRec?.seed ?? null, via: 'tool', turn: this._msg });
     }
-    const status = run?.ok && !run.same ? 'supported' : 'unsupported';
+    const status = run?.ok && !run.same ? 'supported' : [run?.failed, ...(run?.failed?.because ?? []), ...(plan?.replies ?? [])].some((x) => /missing/.test(String(x?.code ?? x?.reply ?? x?.name ?? ''))) ? 'missing' : 'unsupported';   // a value the act needs and nobody said ("move the fish": where?) is missing, as the readers' answers say it
     r.trace.request = { ...flat, revised: replace ? (req.facts ?? null) : null, plan: { roles: plan.roles, assumed: plan.assumed, notHonoured: plan.notHonoured, steps: plan.steps?.length ?? 0 }, tool: { calls: (run?.calls ?? []).map((c) => ({ op: c.op, args: c.args })), assumed: run?.assumed ?? [], failed: run?.failed ?? null, step: run?.step ?? null } };
     if (Array.isArray(r.statuses)) r.statuses = [status];
     if (Array.isArray(r.answers) && !r.answers.length) r.answers.push({ id: null, to: `door.${tabWorld}`, kind: 'action', status, value: null, text: r.text, via: 'door', sentence: english });
@@ -2296,7 +2299,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=e5e77ae162').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=163eceaabd').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.editor (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
@@ -2704,7 +2707,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   // `set`, `reasoner` and `interp` are replaced by `engine.reload(loader)` (LAZY LOADING: the worlds a message needs are added to a running engine); everything below reads them through these bindings.
   let set = await loadWorlds(loader, { reasoner: mode });
   let reasoner = mode === 'matrix' ? await createReasoner(set) : null;
-  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=e5e77ae162')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
+  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=163eceaabd')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
   let interp = createInterpreter(set, { ...options, reasoner });
   attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
