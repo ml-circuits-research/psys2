@@ -4,8 +4,8 @@
  * slot, or a free-text role. The words a pattern's `...` skipped, and the content words of a free-text capture that are words of the readers themselves (question words, the verbs of
  * other acts), are UNREAD; with the typed worlds (spec 16 section 13, the default source) a free-text slot is unread when its world's types do not accept its words. Browser-safe. `PSYS2_COMPLETE=off` turns the consequences off for A/B runs (the measurement is still recorded on the segment).
  */
-import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs?v=2129df1f93';
-import { unreadBy, thingWordsOf } from './typed-world.mjs?v=2129df1f93';
+import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs?v=48e66970d8';
+import { unreadBy, thingWordsOf } from './typed-world.mjs?v=48e66970d8';
 
 const word = (t) => (t.kind === 'word' || t.kind === 'number') && !t.filler;
 /** Content words (not function words, not fillers) of a token list. */

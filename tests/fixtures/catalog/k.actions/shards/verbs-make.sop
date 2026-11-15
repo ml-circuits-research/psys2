@@ -1,6 +1,6 @@
-# k.actions/shards/verbs-make: 15 verbs and phrasal verbs that mean the act "make" (make, create, draw, sketch, paint, build, construct, produce ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
-# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 15 verbs; which act a sense means and the roles are a language model's reading, named=model)
-# sources: hand-core 1 (hand-written in this repository: 0 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# k.actions/shards/verbs-make: 18 verbs and phrasal verbs that mean the act "make" (make, create, draw, sketch, paint, build, construct, produce ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 16 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 2 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
 # license: WordNet-3.0
 # script: tools/acts-core.mjs
 
@@ -19,6 +19,9 @@
 @k.actions.verb.make.put_together k.actions.verb text="put together" act=make sense=1 gloss="create by putting components or members together" object=kind separable=true named=model core.source="wordnet 3.1"
 @k.actions.verb.make.set_up k.actions.verb text="set up" act=make sense=2 gloss="create by putting components or members together" object=kind separable=true named=model core.source="wordnet 3.1"
 @k.actions.verb.make.put_on k.actions.verb text="put on" act=make sense=2 gloss="add to something existing" object=kind named=model core.source="wordnet 3.1"
+@k.actions.verb.make.doodle k.actions.verb text=doodle act=make sense=1 gloss="make a doodle; draw aimlessly" object=kind named=model core.source="wordnet 3.1"
+@k.actions.verb.make.scribble k.actions.verb text=scribble act=make object=kind core.source="hand-core 1"
+@k.actions.verb.make.whip_up k.actions.verb text="whip up" act=make object=kind separable=true core.source="hand-core 1"
 
 # Markings: after this verb, the word marks the role.
 @k.actions.marking.make.add.to k.actions.marking verb=add act=make marker=to role=place core.source="hand-core 1"

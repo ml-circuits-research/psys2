@@ -3,8 +3,8 @@
 // weighted by recency and novelty; this module only (1) states a tab's world to the library (its schema and the things the session holds, as facts), (2) renders a frame as
 // a sentence, and (3) keeps a host check that a change really changes something. There is NO generator of our own: no list of examples, no placeholders to fill.
 // Browser-safe: no `node:*` imports; the library module and the world registry are passed in.
-import { colourWordSet, colourLexiconWords } from '../knowledge/values.mjs?v=a137742733';
-import { languageWorld } from './compose-world.mjs?v=0ab8c2fade';
+import { colourWordSet, colourLexiconWords } from '../knowledge/values.mjs?v=2bd2c8e37d';
+import { languageWorld } from './compose-world.mjs?v=97d66663a7';
 import { englishOf } from '../lang/en-generate.mjs?v=84a99c355e';
 
 const NOT_SAMPLED = new Set(['place', 'connect', 'group', 'send', 'save', 'load', 'redo']);   // acts the library cannot frame (a place, a second thing, a host act): left to typing

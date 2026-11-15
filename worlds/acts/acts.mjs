@@ -158,8 +158,10 @@ const kindWords = (s) => [...new Set(Object.values(s.kinds).flatMap((k) => [k.na
  * otherwise the pattern would claim a sentence that no executor of that world can run, and the sentence would end in "did not understand" (spec 21).
  */
 export const CORE_ROLES = new Set(['thing', 'rel', 'place', 'amount', 'amount2', 'value', 'attribute', 'rest', 'pre', 'post', 'm1', 'm2', 'kind']);
-/** Catalog frames that carry core roles only but that no executor runs (the act takes no such role): "Undo the colour change" (undo takes none, and its verbs include "reset" and "go back"), "Copy the star to the corner", "Save the drawing to my files". A world that runs one says `reads=` for it, which is not possible for these: they wait for an executor. */
-const NO_EXECUTOR = new Set(['undo.thing', 'copy.place', 'save.place', 'save.thing', 'load.from']);
+/** Catalog frames that carry core roles only but that no executor runs (the act takes no such role): "Undo the colour change" (undo takes none, and its verbs include "reset" and "go back"), "Redo the colour change"
+ * (redo takes none: the executor redoes the last undone step whatever the thing; generated once k.actions had redo verbs, catalog fea0fecb), "Copy the star to the corner", "Save the drawing to my files".
+ * A world that runs one says `reads=` for it, which is not possible for these: they wait for an executor. */
+const NO_EXECUTOR = new Set(['undo.thing', 'redo.thing', 'copy.place', 'save.place', 'save.thing', 'load.from']);
 const SHARED_LEXICONS = /^(acts|space|lang)\./;
 /** The forms a world gets: those whose condition the schema meets, whose act the world declares, whose verb group k.actions has (a frame for "redo the colour change" has no verb of k.actions), whose roles and shared lexicons the world reads. */
 export function formsFor(schema) {

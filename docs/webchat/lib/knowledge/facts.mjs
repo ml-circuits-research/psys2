@@ -38,6 +38,15 @@ export function lemmaCandidates(word) {
   return out;
 }
 
+/** What a thing usually is made of, can do and is used for: their one home is k.attributes.thing (KR1, catalog 590bc64; k.commonsense.thing made_of / used_for / can before); the commonsense record of a thing carries them. */
+const MOVED_TO_ATTRIBUTES = ['material', 'can', 'used_for'];
+/** The facts of one thing from several wires (k.commonsense.thing, k.attributes.thing, several shards) as one record: key -> values (no duplicates), `shard` of the first; null for none. */
+const mergeFacts = (list) => {
+  if (!list.length) return null;
+  const out = { shard: list[0].shard };
+  for (const f of list) for (const [k, v] of Object.entries(f)) if (k !== 'shard') out[k] = [...new Set([...(out[k] ?? []), ...v])];
+  return out;
+};
 /** One `.sop` fact line as { id, type, f } (f: key -> list of values) through the shared `parseLine`; null for a comment or a blank line. */
 export function parseFact(line) {
   if (line.charCodeAt(0) !== 64) return null;
@@ -214,6 +223,7 @@ export function createFacts({ source, name = 'catalog' }) {
         if (line.charCodeAt(0) !== 64 || !line.toLowerCase().includes(needle)) continue;
         const r = parseFact(line);
         if (!r) continue;
+        if (r.type === 'k.attributes.thing' && one(r, 'name') === lemma) { const moved = Object.fromEntries(MOVED_TO_ATTRIBUTES.filter((k) => r.f[k]).map((k) => [k, r.f[k]])); if (Object.keys(moved).length) commonsense.push({ ...moved, shard: sid }); }   // and it stays a record of its own (below)
         if (r.type === 'k.commonsense.thing' && one(r, 'name') === lemma) commonsense.push({ ...r.f, shard: sid });
         else if (r.type === 'k.words.sense' && String(one(r, 'word')).toLowerCase() === lemma) senses.push({ pos: one(r, 'pos'), n: Number(one(r, 'n') ?? 0), gloss: one(r, 'gloss') ?? '', synonyms: r.f.synonym ?? [], isA: r.f.is_a ?? [], shard: sid });
         else if (!r.type.startsWith('k.objects.') || r.type === 'k.objects.stand_in') { if ([...Object.values(r.f)].some((v) => v.some((x) => String(x).toLowerCase() === lemma))) others.push({ id: r.id, type: r.type, f: r.f, shard: sid }); }
@@ -233,7 +243,7 @@ export function createFacts({ source, name = 'catalog' }) {
     senses.sort((a, b) => a.n - b.n);
     const out = {
       name: lemma, word, shards: hit.shards, loaded: [...new Set([...objects.values()].map((o) => o.shard).concat(commonsense.map((c) => c.shard), senses.map((s) => s.shard)))],
-      objects: [...objects.values()].filter((o) => o.parts.length), commonsense: commonsense[0] ?? null, senses,
+      objects: [...objects.values()].filter((o) => o.parts.length), commonsense: mergeFacts(commonsense), senses,
       wires: others,   // every other wire of its shards that names the lemma (any world: k.scenes, k.people, k.layouts, ...), generically
     };
     if (!out.objects.length) await drawnAs(out, lemma, depth, walk);   // the depth is carried down: a kind-of cycle (legs is a leg, a leg is legs) must end after two steps

@@ -17,7 +17,8 @@ const RAW = {
   'k.words/shards/co.sop': '@k.words.comet.noun.1 k.words.sense word=comet pos=noun n=1 gloss="a small icy body that travels around the sun" core.source="t"',
   'k.words/shards/sp.sop': '@k.words.spider.noun.1 k.words.sense word=spider pos=noun n=1 gloss="a predatory arachnid with eight legs" core.source="t"',
   'k.commonsense/shards/core.sop': [
-    '@k.commonsense.tree k.commonsense.thing name=tree at=forest made_of=wood size=large',
+    '@k.commonsense.tree k.commonsense.thing name=tree at=forest size=large',
+    '@k.attributes.tree k.attributes.thing name=tree material=wood',
     '@k.commonsense.fish k.commonsense.thing name=fish at=water can=swim',
     '@k.commonsense.bird k.commonsense.thing name=bird at=sky can=fly can=sing',
   ].join('\n'),

@@ -1,0 +1,12 @@
+# k.actions/shards/verbs-deselect: 6 verbs and phrasal verbs that mean the act "deselect" (deselect, unselect, unmark, unhighlight, untick, uncheck ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 0 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 6 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.deselect.deselect k.actions.verb text=deselect act=deselect object=thing core.source="hand-core 1"
+@k.actions.verb.deselect.unselect k.actions.verb text=unselect act=deselect object=thing core.source="hand-core 1"
+@k.actions.verb.deselect.unmark k.actions.verb text=unmark act=deselect object=thing core.source="hand-core 1"
+@k.actions.verb.deselect.unhighlight k.actions.verb text=unhighlight act=deselect object=thing core.source="hand-core 1"
+@k.actions.verb.deselect.untick k.actions.verb text=untick act=deselect object=thing core.source="hand-core 1"
+@k.actions.verb.deselect.uncheck k.actions.verb text=uncheck act=deselect object=thing core.source="hand-core 1"

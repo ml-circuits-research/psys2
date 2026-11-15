@@ -1,6 +1,6 @@
-# k.actions/shards/verbs-place: 33 verbs and phrasal verbs that mean the act "place" (place, put, set, lay, position, move, shift, relocate ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
-# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 33 verbs; which act a sense means and the roles are a language model's reading, named=model)
-# sources: hand-core 1 (hand-written in this repository: 0 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# k.actions/shards/verbs-place: 36 verbs and phrasal verbs that mean the act "place" (place, put, set, lay, position, move, shift, relocate ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 35 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 1 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
 # license: WordNet-3.0
 # script: tools/acts-core.mjs
 
@@ -37,3 +37,6 @@
 @k.actions.verb.place.insert k.actions.verb text=insert act=place sense=2 gloss="place, fit, or thrust (something) into another thing" object=thing named=model core.source="wordnet 3.1"
 @k.actions.verb.place.scatter k.actions.verb text=scatter act=place sense=3 gloss="distribute loosely" object=thing named=model core.source="wordnet 3.1"
 @k.actions.verb.place.spread_out k.actions.verb text="spread out" act=place sense=3 gloss="strew or distribute over an area" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.place.shove k.actions.verb text=shove act=place sense=3 gloss="press or force" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.place.nudge k.actions.verb text=nudge act=place sense=1 gloss="to push against gently" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.place.scoot k.actions.verb text=scoot act=place object=thing core.source="hand-core 1"

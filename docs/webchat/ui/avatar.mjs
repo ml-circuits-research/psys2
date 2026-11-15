@@ -96,8 +96,8 @@ export function createAvatar(container, host = null) {
     loading = (async () => {
       try {
         const [draw, logic, { DEFAULT_FACE }, motionMod, { DEFAULT_MOTION }, { createFacts }, { createKnowledgeSource }, { createCachedSource }, lib] = await Promise.all(['worlds/ui.avatar/facedraw.mjs', 'worlds/ui.avatar/facelogic.mjs', 'worlds/ui.avatar/default-face.mjs', 'worlds/ui.avatar/motion.mjs', 'worlds/ui.avatar/default-motion.mjs', 'lib/knowledge/facts.mjs', 'lib/loaders/knowledge-source.mjs', 'lib/loaders/knowledge-cache.mjs', 'lib/vendor/sopworld/sopworld.mjs'].map((p) => import(asset(p))));
-        const { KNOWLEDGE_URL } = await import(asset('lib/knowledge/catalog-pin.mjs'));   // the catalog at the pinned commit (P4)
-        const src = createCachedSource({ source: createKnowledgeSource(host?.knowledgeUrl?.() || KNOWLEDGE_URL), caches: globalThis.caches });
+        const { KNOWLEDGE_URLS } = await import(asset('lib/knowledge/catalog-pin.mjs'));   // the catalog at the pinned commit (P4), its mirrors when one fails
+        const src = createCachedSource({ source: createKnowledgeSource(host?.knowledgeUrl?.() || KNOWLEDGE_URLS), caches: globalThis.caches });
         const facts = createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((r) => setTimeout(() => r(null), 6000))]) } });
         mods = { draw, logic, motionMod, lib }; data = DEFAULT_FACE; shown = ''; motionRules = mods.motionMod.parseMotion(lib, DEFAULT_MOTION); startMotion(); draw_();   // the bundled fallback face first: the avatar never waits for the network
         host?.progress?.start?.('faces', 'Loading the face set', { quiet: true });   // PROGRESS: recorded, never shown while it loads (the fallback face is already drawn: this is an upgrade); said only when it cannot be had

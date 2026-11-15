@@ -12,7 +12,7 @@ export const ASK_HINTS = {
   where: ['habitat', 'at', 'in', 'continent', 'region', 'country', 'located', 'place', 'orbits', 'part_of', 'comes_from', 'grows_on'],
   for: ['used_for', 'does', 'for'],
   do: ['does', 'can', 'used_for'],
-  made: ['made_of', 'comes_from'], mean: ['gloss'], kind: ['is_a', 'kind', 'class'], type: ['is_a', 'kind', 'class'],
+  made: ['material', 'made_of', 'comes_from'], mean: ['gloss'], kind: ['is_a', 'kind', 'class'], type: ['is_a', 'kind', 'class'],
 };
 /** The size words in order, for a catalog whose schema does not list them (the schema's own enum wins). */
 const SIZE_SCALE = ['tiny', 'small', 'medium', 'large', 'huge'];

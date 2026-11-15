@@ -136,7 +136,7 @@ function whatSentence(r, ctx) {
   if (own && sense) t += ` ${own}`;
   if (cs?.can?.length) t += ` It can ${list(cs.can)}.`;
   if (cs?.cannot?.length) t += ` It cannot ${list(cs.cannot)}.`;
-  if (cs?.made_of?.length) t += ` It is made of ${list(cs.made_of)}.`;
+  if (cs?.material?.length) t += ` It is made of ${list(cs.material)}.`;
   { const where = habitatSentence(ctx?.knowledge, name); if (where) t += ` ${where}`; }   // where it lives: the catalog or what the user taught, one lookup shared with the other views (src/knowledge/commonsense.mjs)
   return t;
 }
@@ -169,7 +169,7 @@ export function parts(ctx, { o, made } = {}) {
   }
   const topic = topicFor(ctx, r.name);
   const ns = partNames(r.parts), cs = r.th?.commonsense;
-  const material = made && cs?.made_of?.length ? `${cap(an(r.name))} is made of ${list(cs.made_of)}. ` : '';
+  const material = made && cs?.material?.length ? `${cap(an(r.name))} is made of ${list(cs.material)}. ` : '';
   if (!ns.length) {
     const t = material ? `${material.trim()} I do not know its parts yet.` : `I have a picture of ${an(r.name)}, but its parts have no names yet.`;
     return no('missing', t);

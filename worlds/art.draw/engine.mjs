@@ -1056,6 +1056,7 @@ const addInner = guard((ctx, args, s) => {
   }
   const askedFor = String(args.kt ?? args.kind ?? '').toLowerCase().replace(/s$/, '');
   if (!spec0.kind && UNDRAWABLE.has(askedFor) && !ctx.knowledge?.peek(askedFor)?.objects?.length) return no(`I cannot draw ${/^[aeiou]/.test(askedFor) ? 'an' : 'a'} ${askedFor} yet. I can draw a cat, a dog, a fish or a bird. What would you like?`);
+  if ((!spec0.kind || spec0.kind === '*') && ctx.knowledge?.unreachable?.() && !kindOfWord(askedFor)) return no("I can't reach the picture catalog right now, so I can only draw the basic things.", 'unsupported');   // a catalog thing whose drawing did not arrive: not the list of what the board knows
   if (!spec0.kind || spec0.kind === '*') return no('I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon and shapes like a circle, a square, a star or a heart. What would you like?');
   // a tail with more things: "... and a tree"
   const withParts0 = parseWith(spec0.kind, words0);

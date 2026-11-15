@@ -53,12 +53,14 @@ test('compose: a kind x a topic whose knowledge has the structure; the structure
   assert.ok(map.diagram.nodes.some((n) => n.label === 'wing'));
   assert.equal(DG.composeForRequest(lib, world, { kind: 'tree', topic: 'cities of France' }).diagram.nodes[0].label, 'France', 'the knowledge\'s spelling');
   // a fill with no topic key holds for any topic: a request is never answered with the elements of a story or the aspects of a thing
-  for (const [kind, topic] of [['timeline', 'the planets by distance'], ['mind map', 'unicorns'], ['flowchart', 'making tea'], ['tree', 'a blorp']]) assert.ok(DG.composeForRequest(lib, world, { kind, topic }).why, `${kind} of ${topic}`);
+  for (const [kind, topic] of [['mind map', 'unicorns'], ['tree', 'a blorp']]) assert.ok(DG.composeForRequest(lib, world, { kind, topic }).why, `${kind} of ${topic}`);
+  // the catalog at the pin has an order of the planets by distance and the steps of making tea (k.space.body order, k.procedures.howto; catalog 590bc64): they compose now
+  for (const [kind, topic] of [['timeline', 'the planets by distance'], ['flowchart', 'making tea']]) assert.ok(!DG.composeForRequest(lib, world, { kind, topic }).why, `${kind} of ${topic}`);
 });
 
 test('the request says which structure it means: the parts of a thing, its kinds, its cities', () => {
   const asked = (kind, topic) => DG.composeForRequest(lib, world, { kind, topic }).diagram.fill;
-  assert.match(asked('tree', 'the parts of a house'), /k\.parts\.usual/);
+  assert.match(asked('tree', 'the parts of a house'), /k\.parts\.(?:usual|whole)/);   // the parts of a whole (k.parts.whole, catalog 590bc64) or the usual parts
   assert.match(asked('tree', 'the cities of France'), /k\.geo\.city/);
 });
 
