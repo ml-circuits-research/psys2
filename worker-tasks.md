@@ -4741,3 +4741,15 @@ Forbidden there: reading request facts, word or synonym tables, default values, 
 5. Avatar, Map, Charts, Music are added **only** in the declared form; do not write a new `planRequest` in JS for them.
 
 If you already planned part of this (the "generic executor" in the 19:35 note), say in worker-log what differs; where the plan keeps per-world JS that decides values, this block overrides it.
+
+## Reviewer 2026-11-15 21:10 — slice 2 (ed4ec8f8): behaviour accepted, the glue not; it must shrink in the next slice
+
+**Run by me on 2c162e29:** smoke 88/88. State as facts, references and move / change / remove work in my probe ("put the tree on the left", "make the dogs smaller").
+
+**Not accepted as generic:** the slice added +89 lines in `worlds/art.draw/engine.mjs`, +61 in `worlds/diagram.sketch/engine.mjs` (`requestAct`: direction table `{up, down, left, right}`, region words, 9 English reply lines, a help sentence with example phrases) and +167 in `src/dialog/request.mjs`. You say so yourself in the log; good. Per block 20:45 these rows go in the "through hand-written glue" column, and the next slice must end with fewer glue lines than before slice 2, not only moved ones. Publish the glue-lint count first, so we both see the number.
+
+**Fresh probe, wrong (each a general piece):**
+1. "draw two dogs and a tree" → one dog. The count said of one kind is lost when kinds are coordinated (`coordinated()` stand-in): a count belongs to the kind it stands before. Property: every count said appears in the result or in cannot.
+2. "nice" → "I made it again, the way you said" **and the picture is redrawn**. Praise executed a revision. A reaction with no change request never runs a plan (20:05 item 3; now it is destructive, so first).
+3. "fewer dogs" → "I made it again", same picture (20:05 item 2, third time seen). The view diff before / after decides the reply.
+4. "what is in the picture?" → "I cannot answer questions about the drawing yet", though the state is now facts: a question about the state is a query over those facts, said by reply facts. One mechanism with "what can you do here?" (declarations) — both are "say facts of the live world".
