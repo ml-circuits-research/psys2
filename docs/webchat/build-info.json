@@ -1,5 +1,5 @@
 {
-  "version": "7e5e4d00d5",
+  "version": "4e2f0818a9",
   "worlds": [
     "acts",
     "art.draw",
@@ -65,8 +65,8 @@
     "lib/dialog/followup.mjs": "a0ef77d024f0e067",
     "lib/dialog/foreign-reading.mjs": "225b4bbd3aa44b86",
     "lib/dialog/honest-done.mjs": "5ccf97cb0abb644b",
-    "lib/dialog/index.mjs": "09e5f86c5d26733e",
-    "lib/dialog/intent.mjs": "b70f0e497894fd91",
+    "lib/dialog/index.mjs": "bebe5fa43da572ba",
+    "lib/dialog/intent.mjs": "6bbaff53aeece700",
     "lib/dialog/knowledge-lookup.mjs": "c1a2a93fd7598a4a",
     "lib/dialog/meta-worlds.mjs": "d291dff865b031be",
     "lib/dialog/meta.mjs": "5314f650e6529b5d",
@@ -688,8 +688,8 @@
     "worlds/words/zo.json": "9b3b325f5ddb185e",
     "worlds/words.bloom.json": "352a51e94639fd67"
   },
-  "builtAt": "2026-11-15T11:18:43.208Z",
-  "commit": "8fc7ba0f-dirty",
+  "builtAt": "2026-11-15T11:37:54.585Z",
+  "commit": "39a4182f-dirty",
   "catalog": "085bc0dab1f6f2817815ca789a36259b3c01ae4e",
   "assets": {
     "app.mjs": "55011f2b7f",
@@ -717,8 +717,8 @@
     "lib/dialog/followup.mjs": "88af56c068",
     "lib/dialog/foreign-reading.mjs": "ce2e99c912",
     "lib/dialog/honest-done.mjs": "46f9b50001",
-    "lib/dialog/index.mjs": "d44ae319c5",
-    "lib/dialog/intent.mjs": "9a313a0563",
+    "lib/dialog/index.mjs": "543bb1baef",
+    "lib/dialog/intent.mjs": "02b47b00db",
     "lib/dialog/knowledge-lookup.mjs": "f47284e5c8",
     "lib/dialog/meta-worlds.mjs": "46f8914d7f",
     "lib/dialog/meta.mjs": "aa6dfcad14",

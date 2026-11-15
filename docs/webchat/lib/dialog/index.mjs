@@ -275,7 +275,7 @@ import { LIMITS } from './time-limits.mjs?v=3dc818f0e6';
 import { languageCommand } from '../translate/language-command.mjs?v=af45c6bf2e';
 import { withSubject, polishReply } from '../translate/register.mjs?v=93be3be4ed';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=46f9b50001';
-import { intentStep, weakReading } from './intent.mjs?v=9a313a0563';
+import { intentStep, weakReading } from './intent.mjs?v=02b47b00db';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1528,7 +1528,7 @@ export class DialogSession {
     view.engine = this.engine; view.isession = snap.isession.clone(); view.isession.sessionFacts = this.isession.sessionFacts; view._recentWorlds = [...(snap.recent ?? [])];
     view.discourse = this.discourse; view.dialogue = { log: prevTurn ? [prevTurn] : [] }; view._routing = this._routing; view._preDry = dry;
     let alt = null;
-    try { const vocab = spellVocabulary(this.engine.set); alt = await perf.time('intent', () => intentStep(view, first.trace?.english ?? text, { understand: (e) => view._understands(e), known: (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!this.engine.translator?.rules?.knownEnglish?.(w) })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; alt = null; }
+    try { const vocab = spellVocabulary(this.engine.set); alt = await perf.time('intent', () => intentStep(view, first.trace?.english ?? text, { understand: (e) => view._understands(e), read: (e) => view._dry(e), known: (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!this.engine.translator?.rules?.knownEnglish?.(w) })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; alt = null; }
     if (!alt) return first;
     this.restore(snap);
     const r = await perf.time('intent.reread', () => this._sendCore(text, opts, { english: alt.english, translation: first.translation ?? null, assumed: alt.assumed, left: alt.left ?? [], say: alt.say ?? null }));
@@ -1930,6 +1930,24 @@ export class DialogSession {
     // HONEST REPLIES (class C): a line that only claims success while no world's content changed says that nothing changed
     if (lines.some((ln) => ln.length === 1 && BARE_DONE.test(ln[0].text ?? '')) && !this.isession.effects.some((e) => e.name !== 'chat.suggest') && !contentChanged(stateBefore, this.isession.state)) {
       for (let i = 0; i < lines.length; i++) if (lines[i].length === 1 && BARE_DONE.test(lines[i][0].text ?? '')) lines[i] = [T(NOTHING_CHANGED)];
+    }
+    // CLASS F: the replies of a turn of several clauses that say the same act of different things are one sentence ("Moved work done up. Moved problems up." ->
+    // "Moved work done and problems up.", composed as one in another language: "Am mutat „work done” și „problems” în sus.")
+    for (let i = 0; i + 1 < lines.length; i++) {
+      budget.tick('index.joinReplies');
+      const a = lines[i], b = lines[i + 1];
+      const sa = a.length === 1 ? a[0].say : null, sb = b.length === 1 ? b[0].say : null;
+      const na = sa?.roles?.things?.names, nb = sb?.roles?.things?.names;
+      if (!Array.isArray(na) || !Array.isArray(nb) || sa.act !== sb.act || na.length + nb.length > 5) continue;
+      const rest = (s) => JSON.stringify({ ...s.roles, things: undefined });
+      if (rest(sa) !== rest(sb)) continue;
+      const names = [...na, ...nb];
+      const list = names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : names[0];
+      const at = a[0].text.indexOf(na.length > 1 ? `${na.slice(0, -1).join(', ')} and ${na.at(-1)}` : na[0]);
+      if (at < 0) continue;
+      const old = na.length > 1 ? `${na.slice(0, -1).join(', ')} and ${na.at(-1)}` : na[0];
+      lines.splice(i, 2, [{ ...a[0], text: a[0].text.slice(0, at) + list + a[0].text.slice(at + old.length), say: { ...sa, roles: { ...sa.roles, things: { ...sa.roles.things, names } } } }]);
+      i--;
     }
     // THE INTENT STEP: what was assumed is said first ("I took "make it nicer" as: improve the diagram."), in the user's language through the translator
     if (override?.assumed?.length) lines.unshift([T(`I took that as: ${override.assumed.map((a) => a.as).join('; ')}.`), ...(override.left?.length ? [T(' I left out '), { text: override.left.map((x) => `"${x}"`).join(', '), translate: false, quote: true }, T(': I could not read it.')] : [])]);

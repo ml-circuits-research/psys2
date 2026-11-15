@@ -14,14 +14,16 @@
  * a calm reply and what the open tab can do, without any change. It runs only after a weak first reading and never keeps a candidate that reads worse than the clause.
  */
 import { budget } from './budget.mjs';
+import { LANG_EN_FACTS } from '../lang/en.facts.generated.mjs';
 
-/** The criteria of a choice of kind `intent` (std.decide facts: the library's `choose` reads them from a World). Lower is better unless dir=max. */
-export const INTENT_CRITERIA = `
-@std.decide.c.intent.1 std.decide.criterion of=intent n=1 name=reads measure=issues dir=min about="points of trouble of the open world's dry reading (unread 3, partial 2, refused 2, another world 2)"
-@std.decide.c.intent.2 std.decide.criterion of=intent n=2 name=covers measure=uncovered dir=min about="content words of the clause the reading neither uses nor explains"
-@std.decide.c.intent.3 std.decide.criterion of=intent n=3 name=previous measure=previous dir=max about="it names a thing of the previous turn or continues its act"
-@std.decide.c.intent.4 std.decide.criterion of=intent n=4 name=cost measure=cost dir=min about="how far the reading is from the words said"
-`;
+// The criteria of the choice are the library's (std.decide kind `intent`, sopworld 0.148: reads, covers, slots, present, previous, cost); `chooseRewrite` measures and chooses.
+
+/** The library World of the language's clause cut points (w.lang.en shards clauses, determiners, numbers): what `clauses` cuts at. Built once per library. */
+const cutWorlds = new WeakMap();
+function cutWorld(lib) {
+  if (!cutWorlds.has(lib)) { const w = new lib.World(); for (const k of ['clauses', 'determiners', 'numbers']) if (LANG_EN_FACTS[k]) w.tell(LANG_EN_FACTS[k]); cutWorlds.set(lib, w); }
+  return cutWorlds.get(lib);
+}
 
 const STOP = new Set('a an the of to in on at for with and or but is are was were be been it its this that these those there here i you he she we they me my your our his her their them us do does did not no yes so then too very more most some any all please just also what which who where how why when can could would should will shall may might must have has had am'.split(' '));
 const words = (t) => String(t ?? '').toLowerCase().replace(/n't\b/g, ' not').replace(/'re\b/g, ' are').replace(/'m\b/g, ' am').replace(/'s\b/g, ' is').match(/[a-z0-9]+/g) ?? [];
@@ -171,10 +173,82 @@ function previousNouns(text) {
  * Propose and choose. `dialog` is the DialogSession (its state is the one before the turn), `english` the first reading's English. Returns null (keep the first reading),
  * or { english, assumed: [{ said, as }], say?, log }.
  */
-export async function intentStep(dialog, english, { understand, known = () => false }) {
+
+/**
+ * CLASS F: the clauses of a message of several instructions, cut by the library's `clauses` (sopworld 0.148: the language world's cut points, the cutting whose
+ * clauses read best wins, a thing of several words is never cut). A clause's reading is the open world's dry reading: the words it reads, less three per point of
+ * trouble. Thin host guard until the library's list rule knows a direction (Q36 [LIB]): a clause that still reads badly and holds "and" before a determiner
+ * ("... down and the node in the centre up", joined by the library as a list of things) is cut there too when both halves read better.
+ * Returns [{ text, sep }] like `splitClauses`, or null (one clause, or the library is not there).
+ */
+function cutClauses(lib, english, { read, whole, verbs = new Set() }) {
+  if (!lib?.clauses || !/[,;]|\b(?:and|then|also|but)\b|\s(?:what|where|which|who|when|why|how)\b/i.test(english)) return null;
+  const count = (t) => (String(t).match(/[\p{L}\p{N}'-]+/gu) ?? []).length;
+  const score = (t) => { const r = read(t); return { literal: count(t) - 3 * (r?.issues ?? 3), captured: r?.issues ?? 3 }; };
+  let cut = null;
+  try { cut = lib.clauses(cutWorld(lib), english, { read: score, whole }); } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; cut = null; }
+  if (!cut?.length) return null;
+  const out = [];
+  for (const c of cut) {
+    budget.tick('intent.cut');
+    // both sides say where (a direction) or what (a verb of the open world): two requests, not a list of things
+    const m = /^(.*\S)\s+and\s+((?:the|a|an|this|that)\s.*)$/i.exec(c.text);
+    const says = (t) => words(t).some((w) => DIRECTION.test(w) || verbs.has(w));
+    if (m && (read(c.text)?.issues ?? 0) > 0 && says(m[1]) && says(m[2])) { out.push(m[1], m[2]); continue; }
+    out.push(c.text);
+  }
+  if (out.length < 2) return null;
+  const q = /\?\s*$/.test(english);
+  return out.map((t, i) => ({ text: t, sep: i < out.length - 1 ? ', ' : (q ? '?' : '') }));
+}
+
+/**
+ * CLASS F: repairs of a clause from the clauses around it and from the open world (each a rewrite for `chooseRewrite`, cost = the steps applied):
+ *   drop   the words no dictionary and no world knows ("put the first and last od mao down": "od mao" is a translation's leftover)
+ *   verb   a clause with no verb of the open world takes the verb of the clause before it ("..., and the middle one up" -> "move the middle one up")
+ *   way    a direction word at the end in its plain form ("above" -> "up"), the way the open world's moves say it
+ * The steps are applied one by one and together; the dry reading decides.
+ */
+function repairs(clause, { prevVerb, known, things, verbs }) {
+  const out = [];
+  const raw = clause.trim().replace(/[.!?]+$/, '');
+  const toks = raw.split(/\s+/);
+  const low = toks.map((t) => t.toLowerCase().replace(/[^\p{L}\p{N}'-]/gu, ''));
+  const isThing = (w) => things.some((n) => words(n).includes(w));
+  const steps = [];
+  // a word right after a determiner or a number names the thing asked for ("draw a blorp": the world says it does not know it); it is never dropped
+  const keep = low.map((w, i) => !w || /^\d/.test(w) || STOP.has(w) || known(w) || isThing(w) || DIRECTION.test(w) || ORDINAL.includes(w) || /^(?:a|an|the|this|that|some|\d+)$/.test(low[i - 1] ?? '') || /^(?:named|called)$/.test(low[i - 1] ?? ''));
+  if (keep.some((k) => !k) && keep.some((k, i) => k && !STOP.has(low[i]))) steps.push(['drop', (ts) => ts.filter((_, i) => keep[i])]);
+  const isVerb = (w) => !!w && !STOP.has(w) && verbs.has(w);   // a world's canonical sentences may open with a determiner ("the circle is red"): not a verb
+  // only a clause that opens with the thing it is about (a determiner, an ordinal, a name): never a question ("where is the water") or a clause with a verb of its own
+  const thingFirst = /^(?:the|a|an|this|that|these|those|its|their)$/.test(low[0] ?? '') || ORDINAL.includes(low[0]) || isThing(low[0]);
+  if (prevVerb && thingFirst && !/\?\s*$/.test(clause) && !isVerb(low[0]) && !isVerb(low.find((w) => !STOP.has(w)))) steps.push(['verb', (ts) => [prevVerb, ...ts]]);
+  const WAY = { above: 'up', higher: 'up', upwards: 'up', below: 'down', lower: 'down', downwards: 'down' };
+  if (WAY[low.at(-1)]) steps.push(['way', (ts) => [...ts.slice(0, -1), WAY[low.at(-1)]]]);
+  if (!steps.length) return out;
+  const add = (picked) => {
+    let ts = [...toks];   // the steps in order on the clause's own tokens: `drop` first (it decides by position)
+    for (const [name, f] of steps) if (picked.includes(name)) ts = f(ts);
+    const text = ts.join(' ').trim();
+    if (text && text !== raw && !out.some((c) => c.text === text)) out.push({ text, via: `repair:${picked.join('+')}`, cost: picked.length, explains: picked.includes('drop') ? low.filter((_, i) => !keep[i]) : [] });
+  };
+  const names = steps.map(([n]) => n);
+  for (const n of names) add([n]);
+  if (names.length > 1) add(names);
+  if (names.length > 2) for (let i = 0; i < names.length; i++) add(names.filter((_, k) => k !== i));
+  return out;
+}
+
+/**
+ * Propose and choose. `dialog` is the DialogSession (its state is the one before the turn), `english` the first reading's English. `read(text)` is the open world's
+ * dry reading, synchronous ({ issues, unfilled }); `understand` its asynchronous form. Returns null (keep the first reading), or { english, assumed: [{ said, as }], say?, log }.
+ */
+export async function intentStep(dialog, english, { understand, read = null, known = () => false }) {
   const { engine } = dialog;
   const lang = engine.interp.lang, lib = engine.sopworld;
-  if (!lib?.choose || !lib?.World) return null;
+  if (!lib?.chooseRewrite || !lib?.World) return null;
+  const dry = read ?? null;
+  if (!dry) return null;
   const phrase = (id) => (lang.phrase(id) ?? []).map((a) => String(a).toLowerCase());
   const ctx = dialog.context();
   const tabWorld = ctx.tabWorld;
@@ -185,10 +259,10 @@ export async function intentStep(dialog, english, { understand, known = () => fa
   const worldWords = worldWordsOf(engine.set, tabWorld);
   const prevRec = dialog.dialogue?.log?.at?.(-1);
   const previous = previousNouns(prevRec?.text ?? '');
-  previous.thingNames = thingsOf(state).filter((t) => t.name && near(words(prevRec?.text ?? ''), t.name)).map((t) => t.name);   // the things of the open world the previous turn named
-  const world = new lib.World();
-  try { world.load(INTENT_CRITERIA); } catch { return null; }
-  const clauses = splitClauses(english);
+  const things = thingsOf(state);
+  previous.thingNames = things.filter((t) => t.name && near(words(prevRec?.text ?? ''), t.name)).map((t) => t.name);   // the things of the open world the previous turn named
+  const names = things.map((t) => t.name).filter(Boolean);
+  const clauses = cutClauses(lib, english, { read: dry, verbs: worldWords.verbs, whole: [...names, ...things.map((t) => t.kind).filter((k) => k.includes(' '))] }) ?? splitClauses(english);
   const log = [];
   let changed = false;
   const assumed = [];
@@ -204,52 +278,66 @@ export async function intentStep(dialog, english, { understand, known = () => fa
     if (m) {
       const verb = m[1].toLowerCase().replace(/(sh|ch|x|ss)es$/, '$1').replace(/([^s])s$/, '$1');
       const t = `${verb} ${m[2]}`;
-      if ((await understand(t)).issues <= (await understand(c.text)).issues) { log.push({ clause: c.text, imperative: t }); c.text = t; changed = true; }
+      if (dry(t).issues <= dry(c.text).issues) { log.push({ clause: c.text, imperative: t }); c.text = t; changed = true; }
     }
   }
+  const several = clauses.filter((x) => x.text.trim()).length > 1;
+  let prevVerb = null;
   for (const c of clauses) {
     budget.tick('intent.clause');
     if (!c.text.trim()) continue;
-    const props = proposals(c.text, { phrase, lang, state, previous, worldWords, known });
-    if (!props.length) continue;
+    const lead = words(c.text).find((w) => !STOP.has(w));
+    const props = [...proposals(c.text, { phrase, lang, state, previous, worldWords, known }).slice(0, 12).map((p) => ({ text: p.text, via: p.via, cost: p.cost, explains: p.cue, say: p.say })),
+      ...(several ? repairs(c.text, { prevVerb, known, things: names, verbs: worldWords.verbs }) : [])];   // repairs come from the clauses around: messages of several clauses only
+    const selfRead = dry(c.text);
+    const ownVerb = lead && (worldWords.verbs.has(lead) || selfRead.issues <= 1) && !DIRECTION.test(lead) && !ORDINAL.includes(lead) ? lead : null;   // a clause that reads, or opens with a verb of the open world, gives its verb to the next
+    if (selfRead.issues === 0 || !props.length) { if (ownVerb) prevVerb = ownVerb; log.push({ clause: c.text, kept: 'self' }); continue; }
+    // CLASS G: the cheapest rewrites first; the first that reads completely ends the search (a reading with no trouble cannot be beaten on `reads`, and a dearer one loses on cost)
+    props.sort((a, b) => a.cost - b.cost);
+    // exact: a rewrite read with no trouble and no word left uncovered can be beaten only by one that also names the previous turn's thing, or tied (one question) at its cost
     const content = words(c.text).filter((w) => !STOP.has(w));
-    const score = async (text, via, cost, cue) => {
-      const u = await understand(text);
-      const tw = new Set(words(text));
-      const uncovered = content.filter((w) => !tw.has(w) && !cue.includes(w)).length;
-      const prevHit = previous.some((p) => words(p).every((w) => tw.has(w))) ? 1 : 0;
-      return { text, via, cost, issues: u.issues, uncovered, previous: prevHit };
-    };
-    const cands = [await score(c.text, 'self', 0, [])];
-    if (cands[0].issues === 0) { log.push({ clause: c.text, kept: 'self' }); continue; }
-    for (const p of props.slice(0, 12)) cands.push(await score(p.text, p.via, p.cost, p.cue));
-    const r = lib.choose(world, 'intent', cands, { seed: null });
-    const best = r.best;
+    const plain = (p) => { const tw = new Set(words(p.text)), ex = new Set((p.explains ?? []).flatMap(words)); return { uncovered: content.filter((w) => !tw.has(w) && !ex.has(w)).length, previous: previous.some((n) => words(n).every((w) => tw.has(w))) ? 1 : 0 }; };
+    const tried = [];
+    let stop = null;
+    for (const [i, p] of props.entries()) {
+      if (stop && p.cost > stop.cost) break;
+      tried.push(p);
+      if (stop) continue;
+      const v = plain(p);
+      if (v.uncovered === 0 && dry(p.text).issues === 0 && (v.previous === 1 || !props.slice(i + 1).some((q) => { const w = plain(q); return w.uncovered === 0 && w.previous === 1; }))) stop = p;
+    }
+    const r = lib.chooseRewrite(c.text, tried, { read: dry, stop: STOP, previous });
+    const best = r.chosen;
     // two different kinds of reading as good as each other on every criterion but cost: ONE concrete question with the two options (a message of one clause)
     const second = r.order.find((x) => x !== best && x.via !== 'self' && x.via !== best.via);
-    if (clauses.filter((x) => x.text.trim()).length === 1 && best.via !== 'self' && second && best.issues === 0 && second.issues === 0 && second.uncovered === best.uncovered && second.previous === best.previous && Math.abs(second.cost - best.cost) < 1) {
+    if (!several && best.via !== 'self' && second && best.issues === 0 && second.issues === 0 && second.uncovered === best.uncovered && second.previous === best.previous && Math.abs(second.cost - best.cost) < 1) {
       const sayOf = (x) => props.find((p) => p.text === x.text)?.say ?? x.text;
       log.push({ clause: c.text, ask: [best.text, second.text] });
       return { english, say: `Do you mean "${sayOf(best)}" or "${sayOf(second)}"?`, assumed: [], log };
     }
-    log.push({ clause: c.text, chosen: best.text, via: best.via, cands: cands.map((x) => [x.text, x.via, x.issues, x.uncovered, x.cost]) });
-    if (best.via !== 'self' && best.issues < cands[0].issues) {
+    log.push({ clause: c.text, chosen: best.text, via: best.via, why: r.why, cands: r.order.map((x) => [x.text, x.via, x.issues, x.uncovered, x.cost]) });
+    // a repair is taken when it reads strictly better than the clause and nearly completely (at most one open point: a question the world then asks); otherwise the clause stays and, unread, is named
+    if (r.changed && (!String(best.via).startsWith('repair:') || best.issues <= 1)) {
       changed = true;
       assumed.push({ said: c.text, as: props.find((p) => p.text === best.text)?.say ?? best.text, via: best.via });
       c.text = best.text;
       c.read = true;
-    }
+      const bl = words(best.text).find((w) => !STOP.has(w));
+      if (bl) prevVerb = bl;
+    } else if (ownVerb) prevVerb = ownVerb;
   }
   if (!changed) return null;
   // do the part that is read and name the rest: a clause no reading reads at all (a garbled word) is left out, said, and does not hold back the clauses that are read
   const left = [];
   if (assumed.length) for (const c of clauses) {
     if (!c.text.trim() || c.read) continue;
-    if ((await understand(c.text)).issues >= 3) { left.push(c.text); log.push({ clause: c.text, left: true }); c.text = ''; }
+    if (dry(c.text).issues >= 3) { left.push(c.text); log.push({ clause: c.text, left: true }); c.text = ''; }
   }
   const kept = clauses.filter((c) => c.text.trim());
   if (!kept.length) return null;
-  return { english: kept.map((c, i) => c.text + (i < kept.length - 1 ? c.sep || ', ' : '')).join(''), assumed, left, log };
+  const out = kept.map((c, i) => c.text + (i < kept.length - 1 ? c.sep || ', ' : c.sep === '?' ? '?' : '')).join('');
+  if (!assumed.length && !log.some((l) => l.dropped || l.imperative)) return null;
+  return { english: out, assumed, left, log };
 }
 
 const TAB_NOUNS = ['diagram', 'picture', 'drawing', 'document', 'chart', 'map', 'song', 'list', 'timeline', 'calendar', 'plan'];
