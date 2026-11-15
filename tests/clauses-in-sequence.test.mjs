@@ -72,8 +72,3 @@ test('diagram.sketch: "it" is the shape the first clause made (the reader gets t
   assert.equal(named[0].color, 'red');
 });
 
-test('seating: a pronoun in the second clause names the table the first made', async () => {
-  const s = session('seating');
-  await s.send('add a table and make it square');
-  assert.equal(s.state('plan.seating').items[0].attrs.shape, 'square');
-});

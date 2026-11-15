@@ -24,7 +24,7 @@ const per = Number(arg('per', 40));
 const only = arg('world', null);
 
 const roots = [path.join(REPO, 'worlds-pilot')].filter(existsSync);   // the engine loads the real worlds (DEFAULT_ROOT) and the pilots; NOT the test fixtures: a fixture world (test.seating) has no tab and answered the sentences of the other tabs
-// every schema world: the pilots and the real worlds with a schema.sop (the fixture seating world is left out: the real plan.seating reads the same sentences)
+// every schema world: the pilots and the real worlds with a schema.sop (the fixture seating world is left out: it has no tab)
 const scan = [path.join(REPO, 'worlds-pilot'), path.join(REPO, 'worlds')].filter(existsSync);
 // declaration-only schemas (declare=yes) are in the grid when the sampler serves them and a reply can be judged: not user.profile (its questions are about stored data: on an empty profile the honest answer is "I do not know yet", which the refusal test reads as a miss)
 const NOT_JUDGEABLE = new Set([]);

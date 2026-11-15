@@ -71,8 +71,8 @@ if (sources.has('holes')) {
   for (const r of await runHoleCases()) add({ kind: 'lang-hole', text: r.text, tab: r.tab, happened: r.happened, expected: r.expected, class: `lang-hole:${r.hole}`, source: `lang-holes#${r.id}`, outcome: r.outcome });
 }
 
-const VIEW_WORLD = { avatar: 'ui.avatar', seating: 'plan.seating', talk: 'talk', draw: 'art.draw', chart: 'data.charts', doc: 'docs.editor', time: 'plan.timeline', map: 'geo.map' };
-const VIEW_TAB = { avatar: 'robot', seating: 'seating', talk: 'talk', draw: 'draw', chart: 'charts', doc: 'editor', time: 'talk', map: 'talk' };
+const VIEW_WORLD = { avatar: 'ui.avatar', talk: 'talk', draw: 'art.draw', chart: 'data.charts', doc: 'docs.editor', map: 'geo.map' };
+const VIEW_TAB = { avatar: 'robot', talk: 'talk', draw: 'draw', chart: 'charts', doc: 'editor', map: 'talk' };
 if (sources.has('transfer')) {
   const dir = mkdtempSync(join(tmpdir(), 'cases-transfer-'));
   const rows = [];
@@ -85,7 +85,7 @@ if (sources.has('transfer')) {
   const out = (v) => (v.startsWith('wrong') ? 'wrong' : v);   // right | na | wrong
   for (const r of rows) {
     if (r.exp === 'T1') add({ kind: 'transfer', exp: 'T1', text: r.text, tab: VIEW_TAB[r.from], happened: `${r.reply} [${r.verdict}]`, expected: `${r.expect === 'ok' ? 'the thing arrives with its words kept' : 'a plain refusal: not applicable'} (${r.thing})`, class: `transfer:T1:${r.from}>${r.to}`, source: `T1 thing transfer (matrix) ${r.thing} > ${r.to}`, outcome: out(r.verdict), pair: `${VIEW_WORLD[r.from]}>${VIEW_WORLD[r.to]}` });
-    else if (r.exp === 'T2') add({ kind: 'transfer', exp: 'T2', text: r.ask, tab: { talk: 'talk', seating: 'seating', avatar: 'avatar' }[r.view], happened: `${r.reply} [${r.verdict}]`, expected: `the taught fact "${r.fact}" (taught in ${r.taughtIn}) is used or refused plainly in ${r.view}`, class: `transfer:T2:${r.taughtIn}>${r.view}`, source: 'T2 taught-fact transfer (matrix) scripts/exp-transfer.mjs', outcome: out(r.verdict), cause: r.cause, ...(r.other ? { pair: `${VIEW_WORLD[r.taughtIn]}>${VIEW_WORLD[r.view]}` } : {}) });
+    else if (r.exp === 'T2') add({ kind: 'transfer', exp: 'T2', text: r.ask, tab: { talk: 'talk', avatar: 'avatar' }[r.view], happened: `${r.reply} [${r.verdict}]`, expected: `the taught fact "${r.fact}" (taught in ${r.taughtIn}) is used or refused plainly in ${r.view}`, class: `transfer:T2:${r.taughtIn}>${r.view}`, source: 'T2 taught-fact transfer (matrix) scripts/exp-transfer.mjs', outcome: out(r.verdict), cause: r.cause, ...(r.other ? { pair: `${VIEW_WORLD[r.taughtIn]}>${VIEW_WORLD[r.view]}` } : {}) });
     else if (r.exp === 'T3') add({ kind: 'transfer', exp: 'T3', text: r.ask ?? `(no probe) ${r.fact}`, tab: { drawing: 'draw', diagram: 'diagram', talk: 'talk' }[r.view], happened: `${r.reply} [${r.verdict}]`, expected: `the fact "${r.fact}" (${r.taught ? 'taught in a sentence' : 'in the catalog'}) shows in the answer: ${[].concat(r.expect ?? 'na').join(' / ')}`, class: `transfer:T3:knowledge>${r.view}`, source: 'T3 rule transfer (matrix) scripts/exp-transfer.mjs', outcome: out(r.verdict), cause: r.cause, pair: `knowledge>${{ drawing: 'art.draw', diagram: 'diagram.sketch', talk: 'talk' }[r.view]}` });
   }
 }

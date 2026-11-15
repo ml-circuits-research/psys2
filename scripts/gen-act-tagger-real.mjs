@@ -4,7 +4,7 @@
 // Sources (English only; the English side of a translated row is used when the row has one): the three owner logs (training/eval/owner-log-2026-11-13*.jsonl), the failure ledger
 // (training/eval/failures.jsonl), the round-trip paraphrases (training/eval/paraphrases-rt-2026-11-12.jsonl).
 // Each message is replayed through the whole rule pipeline (the engine: rules clause splitter + the card-driven clause cutter), so the PIECES are the engine's segments (segment first, then tag).
-// A piece is ACCEPTED when its winning reading is a request of one of the schema worlds (ui.avatar, diagram.sketch, plan.seating, plan.timeline, worlds-pilot/art.draw) that the acts
+// A piece is ACCEPTED when its winning reading is a request of one of the schema worlds (ui.avatar, diagram.sketch, worlds-pilot/art.draw; plan.seating and plan.timeline were removed, ADR-012) that the acts
 // grammar names an act for (the same table as scripts/act-agreement-rules.mjs); its act is that act and its spans are the reading's slots (thing, set, attribute, value, place, amount).
 // Everything else is `none` (not a request to a doing world: arithmetic, chat, games, knowledge questions, declined or not understood). The replay runs in the row's own tab and in the
 // five doing tabs; the row's own tab wins a disagreement, otherwise the plurality; ties are dropped. The TAGGER sees none of this (no tab, no history).
@@ -28,9 +28,9 @@ const CAT = path.join(REPO, 'tests/fixtures/catalog');
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner: 'matrix' } });
 engine.setKnowledge(createFacts({ source: { text: async (p) => { try { return readFileSync(path.join(CAT, p), 'utf8'); } catch { return null; } } } }));
 
-const DOING = { 'ui.avatar': 'robot', 'diagram.sketch': 'diagram', 'plan.seating': 'seating', 'plan.timeline': 'timeline', 'art.draw': 'draw' };
+const DOING = { 'ui.avatar': 'robot', 'diagram.sketch': 'diagram', 'art.draw': 'draw' };
 const TABS = Object.values(DOING);
-const TAB_ALIAS = { avatar: 'robot', seating: 'seating', draw: 'draw', diagram: 'diagram', timeline: 'timeline' };
+const TAB_ALIAS = { avatar: 'robot', draw: 'draw', diagram: 'diagram' };
 // last word(s) of the action -> act (the table of scripts/act-agreement-rules.mjs)
 const ACT_OF = [
   [/(^|[._])(add|create|make|new|draw|insert|spawn|put_on|dress|wear|give|put)$/, 'make'], [/(^|[._])(remove|delete|erase|clear|drop|take_off|undo_item|kill)$/, 'remove'],
@@ -56,7 +56,7 @@ const add = (text, tab, source) => {
 };
 for (const f of ['owner-log-2026-11-13', 'owner-log-2026-11-13b', 'owner-log-2026-11-13c']) for (const r of read(`training/eval/${f}.jsonl`)) add(r.lang === 'en' || !r.lang ? r.text : r.english, r.tab, f.replace('owner-log-2026-', 'ownerlog'));
 for (const r of read('training/eval/failures.jsonl')) add(r.language === 'en' || r.lang === 'en' || (!r.language && !r.lang) ? r.text : r.english, r.tab, 'ledger');
-const RT_TAB = { robot: 'robot', draw: 'draw', diagram: 'diagram', seating: 'seating', timeline: 'timeline' };
+const RT_TAB = { robot: 'robot', draw: 'draw', diagram: 'diagram' };
 for (const r of read('training/eval/paraphrases-rt-2026-11-12.jsonl')) add(r.message, RT_TAB[r.world] ?? 'talk', 'paraphrase-rt');
 console.error(`messages: ${msgs.length}`);
 

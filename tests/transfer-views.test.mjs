@@ -47,9 +47,9 @@ for (const reasoner of ['ops', 'matrix']) {
     assert.deepEqual(s.state('geo.map').markers.map((m) => m.name).sort(), ['France', 'Paris']);
     r = await s.send('show it on the map');
     assert.match(r.text, /has no position on Earth to show in the map/, r.text);
-    tab('seating'); await s.send('add a table');
-    r = await s.send('send table 1 to the chart');
-    assert.match(r.text, /tables 1/, `a send names the chart: it is not chart data ("send table 1"): ${r.text}`);
+    tab('draw'); await s.send('draw a house');
+    r = await s.send('send the house to the chart');
+    assert.match(r.text, /houses 1/, `a send names the chart: it is not chart data ("send the house"): ${r.text}`);
     assert.doesNotMatch(readFileSync(path.resolve(import.meta.dirname, '../worlds/talk/ops.mjs'), 'utf8'), /to === 'map'/);
   });
 }

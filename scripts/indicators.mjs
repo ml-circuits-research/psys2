@@ -4,12 +4,12 @@
  * The scaling indicators of Q10 item 1 (owner-agreed, 2026-11-14), recorded in training/eval/indicators.json and shown by scripts/landing-table.mjs next to the other measures that count:
  *
  *   seating60     a new world from a schema alone: the share of 60 natural requests (scripts/exp-seating.mjs, written without seeing the grammar) answered right. The judging is BY HAND (the reply is read against the
- *                 state), so it is set with `--set seating60 <right> <total> "<note>"`; `--seating` re-runs exp-seating and records how many requests the rules READ (not the judged number).
+ *                 state), so it is set with `--set seating60 <right> <total> "<note>"`; (exp-seating was removed with the seating world, ADR-012) how many requests the rules READ (not the judged number).
  *   robustness    the three robustness sets (typos, loose-words, paraphrases-rt) in the rules configuration: `--ablation <dir>/rules-C.json` (the result file of scripts/eval-ablation.mjs, outcome right / total without skipped rows).
  *   richest       the richest world on acts: the schema world with the most schema lines, the share of ITS OWN tests it passes (`--richest`, runs `test-world <id>`; a pilot under worlds-pilot is run with `--root worlds-pilot`).
  *   Cross-world captures (a world answering another world's sentence; target 0) are not stored: landing-table.mjs counts them live from the case corpus (groups "wrong world routing" and "foreign-world reading").
  *
- *   node scripts/indicators.mjs --ablation <file> | --richest | --seating | --set seating60 31 60 "by hand, ..."   (any combination; prints the file)
+ *   node scripts/indicators.mjs --ablation <file> | --richest | --set seating60 31 60 "by hand, ..."   (any combination; prints the file)
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -59,13 +59,6 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   if (at('--ablation') >= 0) data.robustness = { ...stamp, config: 'rules-C', paraphrasesDate: data.robustness?.paraphrasesDate ?? '2026-11-14', ...robustness(argv[at('--ablation') + 1]) };   // paraphrasesDate: the sets are the re-judged ones (meaning same / changed)
   if (at('--richest') >= 0) data.richest = { ...stamp, ...richest() };
   if (at('--set') >= 0) { const i = at('--set'); data[argv[i + 1]] = { ...stamp, right: Number(argv[i + 2]), total: Number(argv[i + 3]), note: argv[i + 4] ?? '' }; }
-  if (at('--seating') >= 0) {
-    const dir = mkdtempSync(join(tmpdir(), 'indicators-')), out = join(dir, 'seating.jsonl');
-    spawnSync('node', ['scripts/exp-seating.mjs', '--out', out], { cwd: REPO, encoding: 'utf8', timeout: 600000 });
-    const rows = readFileSync(out, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
-    rmSync(dir, { recursive: true, force: true });
-    data.seating60 = { ...(data.seating60 ?? {}), read: rows.filter((x) => x.pattern && x.pattern !== 'unknown').length, readOf: rows.length, readDate: stamp.date };
-  }
   writeFileSync(FILE, `${JSON.stringify(data, null, 1)}\n`);
   console.log(JSON.stringify(data, null, 1));
 }

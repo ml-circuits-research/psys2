@@ -1,5 +1,5 @@
 // TRANSFER first slice (spec 23): the session store of things, aspects, views, session.learned. Targeted tests: the pure modules, and one conversation per reasoner that moves things between
-// three views (seating plan, Talk, avatar) with no code per pair of views.
+// views (drawing, Talk, avatar, map) with no code per pair of views.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -54,20 +54,20 @@ test('aspects come from knowledge, the schema of the view and the attributes; th
   const face = { id: 'a', noun: 'face', aspects: ['visual'] };
   assert.match(whyNot({ kind: 'idea', aspects: plain }, face), /An idea has no picture to show in the face/);
   assert.equal(whyNot({ kind: 'table', aspects: t }, face), null);
-  assert.equal(viewByWords([{ id: 'plan.seating', noun: 'seating plan', words: ['seating'] }, { id: 'talk', noun: 'conversation', words: ['talk'] }], 'the seating plan tab').id, 'plan.seating');
+  assert.equal(viewByWords([{ id: 'test.plan', noun: 'floor plan', words: ['floor'] }, { id: 'talk', noun: 'conversation', words: ['talk'] }], 'the floor plan tab').id, 'test.plan');
 });
 
 test('the store keeps the identity of a thing; the view that made it owns kind, name and parts; a view changes an attribute only by what it changed', () => {
   const st = ensure({});
   const A = () => ({}), item = (o) => ({ key: 'k', kind: 'table', ...o });
-  const { ids } = sync(st, 'plan.seating', [item({ attrs: { seats: 4, colour: 'white' } })], A);
+  const { ids } = sync(st, 'test.plan', [item({ attrs: { seats: 4, colour: 'white' } })], A);
   const id = ids.k;
   sync(st, 'talk', [item({ thingId: id, kind: 'WRONG', attrs: { seats: 99 } })], A);   // a stale copy in another view
   assert.equal(st.things[0].kind, 'table'); assert.equal(st.things[0].attrs.seats, 4, 'the first publication of another view overwrites nothing');
-  sync(st, 'plan.seating', [item({ thingId: id, attrs: { seats: 6, colour: 'white' } })], A);
+  sync(st, 'test.plan', [item({ thingId: id, attrs: { seats: 6, colour: 'white' } })], A);
   sync(st, 'talk', [item({ thingId: id, attrs: { seats: 99, colour: 'red' } })], A);   // the second shows what talk changed: seats unchanged since its last copy (99 -> 99), colour red
   assert.equal(st.things[0].attrs.seats, 6); assert.equal(st.things[0].attrs.colour, 'red');
-  sync(st, 'plan.seating', [], A);
+  sync(st, 'test.plan', [], A);
   assert.equal(st.things.length, 1, 'still shown in talk');
   sync(st, 'talk', [], A);
   assert.equal(st.things.length, 0, 'a thing no view shows is dropped');
@@ -75,33 +75,29 @@ test('the store keeps the identity of a thing; the view that made it owns kind, 
 });
 
 for (const reasoner of ['ops', 'matrix']) {
-  test(`${reasoner}: a table made in the seating plan is shown in Talk and a thing of Talk in the seating plan, by the one operation; what a view cannot take is said plainly`, async () => {
+  test(`${reasoner}: a house drawn in the drawing is shown in Talk and a thing of Talk in the drawing, by the one operation; what a view cannot take is said plainly`, async () => {
     const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
     engine.setKnowledge(catalog());
-    for (const w of ['table', 'hat', 'bicycle', 'house']) await engine.knowledge.thing(w);
+    for (const w of ['hat', 'bicycle', 'house']) await engine.knowledge.thing(w);
     const s = engine.createSession({ language: 'en' });
     const tab = (t) => s.setWorldState('ui.shell', { activeTab: t });
-    tab('seating');
-    await s.send('add a table'); await s.send('make table 1 blue'); await s.send('add a guest called Ann at table 1');
-    let r = await s.send('send table 1 to the talk');
-    assert.match(r.text, /^Here is table 1 from the seating plan/);
-    const card = s.state('talk').cards.at(-1);
-    assert.equal(card.kind, 'drawing'); assert.equal(card.data.tint, 'blue', 'the colour travelled with the thing');
-    r = await s.send('send Ann to the avatar');
-    assert.match(r.text, /^Ann is not something the face has/, 'a guest has no place on a face: said plainly, nothing changed');
+    tab('draw');
+    await s.send('draw a house'); await s.send('make the house blue');
+    let r = await s.send('send the house to the talk');
+    assert.match(r.text, /^Here is a house from the drawing/);
+    assert.ok(s.state('talk').cards.length, 'a card in Talk');
+    r = await s.send('send it to the avatar');
+    assert.match(r.text, /^A house is not something the face has/, 'a house has no place on a face: said plainly, nothing changed');
     tab('talk');
     await s.send('What does a bicycle look like?');
-    r = await s.send('send it to the seating plan');
-    assert.match(r.text, /A bicycle is not something the seating plan has/);
-    r = await s.send('What does a house look like?');
+    r = await s.send('send it to the map');
+    assert.match(r.text, /A bicycle has no position on Earth to show in the map/);
     tab('robot');
     await s.send('put on a hat');
     r = await s.send('send the hat to the talk');
     assert.match(r.text, /^Here is a hat from the face/);
     const things = s.state('session.things').things;
-    assert.ok(things.find((t) => t.kind === 'table').shown.includes('talk'));
-    const guest = Object.keys(things.find((t) => t.kind === 'guest').aspects);
-    assert.ok(guest.includes('social') && !guest.includes('numeric'), 'a guest is a person: social, no numbers');
+    assert.ok(things.find((t) => t.kind === 'house').shown.includes('talk'));
   });
 
   test(`${reasoner}: what the user teaches in one view is read in the others at the knowledge tier`, async () => {
@@ -110,10 +106,10 @@ for (const reasoner of ['ops', 'matrix']) {
     for (const w of ['house', 'person']) await engine.knowledge.thing(w);
     const s = engine.createSession({ language: 'en' });
     const tab = (t) => s.setWorldState('ui.shell', { activeTab: t });
-    tab('seating');
+    tab('draw');
     assert.match((await s.send('a waiter is a kind of person')).text, /^OK, a waiter is a kind of person/);
-    assert.match((await s.send('add a waiter called Sam')).text, /A waiter is a kind of guest\. I added guest Sam/);
     tab('talk');
+    assert.match((await s.send('What kind of thing is a waiter?')).text, /A waiter is a kind of person/);
     assert.match((await s.send('a villa is a kind of house')).text, /^OK, a villa is a kind of house/);
     await engine.knowledge.thing('villa');
     assert.match((await s.send('What kind of thing is a villa?')).text, /A villa is a kind of house/);
@@ -123,52 +119,44 @@ for (const reasoner of ['ops', 'matrix']) {
 
 test('select: "what I drew", "the things in the plan" and "the discussion" name sets of things by the view that holds them; a view that counts takes anything', () => {
   const st = ensure({ things: [
-    { id: 'a', kind: 'house', shown: ['art.draw'], aspects: {} }, { id: 'b', kind: 'table', shown: ['plan.seating'], aspects: {} }, { id: 'c', kind: 'guest', name: 'Ann', shown: ['plan.seating'], aspects: {} },
+    { id: 'a', kind: 'house', shown: ['art.draw'], aspects: {} }, { id: 'b', kind: 'table', shown: ['docs.editor'], aspects: {} }, { id: 'c', kind: 'person', name: 'Ann', shown: ['docs.editor'], aspects: {} },
   ] });
-  const views = [{ id: 'plan.seating', noun: 'seating plan', words: ['seating', 'plan'] }, { id: 'art.draw', noun: 'drawing board', words: ['draw', 'drawing'] }];
+  const views = [{ id: 'docs.editor', noun: 'document', words: ['document', 'plan'] }, { id: 'art.draw', noun: 'drawing board', words: ['draw', 'drawing'] }];
   assert.deepEqual(select(st, 'what I drew', views).things.map((t) => t.id), ['a']);
   assert.deepEqual(select(st, 'things in the plan', views).things.map((t) => t.id), ['b', 'c']);
   assert.equal(select(st, 'the discussion', views).things.length, 3);
   assert.equal(select(st, 'the discussion', views).session, true);
   assert.deepEqual(select(st, 'Ann', views).things.map((t) => t.id), ['c']);
   assert.equal(whyNot({ kind: 'hat', aspects: { visual: 'knowledge' } }, { noun: 'chart', aspects: ['numeric'], counts: true }), null);
-  assert.match(whyNot({ kind: 'hat', aspects: { visual: 'knowledge' } }, { noun: 'timeline', aspects: ['temporal'] }), /has no time to show in the timeline/);
+  assert.match(whyNot({ kind: 'hat', aspects: { visual: 'knowledge' } }, { noun: 'calendar', aspects: ['temporal'] }), /has no time to show in the calendar/);
 });
 
 for (const reasoner of ['ops', 'matrix']) {
-  test(`${reasoner}: a chart and a document of "what I drew" / "the discussion" are selections of session things into views (one request each); a document is made with its text in one request; a timeline is a view from a schema alone`, async () => {
+  test(`${reasoner}: a chart and a document of "what I drew" / "the discussion" are selections of session things into views (one request each); a document is made with its text in one request`, async () => {
     const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
     engine.setKnowledge(catalog());
-    for (const w of ['table', 'monday', 'march', 'bicycle']) await engine.knowledge.thing(w);
+    for (const w of ['bicycle']) await engine.knowledge.thing(w);
     const s = engine.createSession({ language: 'en' });
     const tab = (t) => s.setWorldState('ui.shell', { activeTab: t });
     tab('draw'); await s.send('draw 3 cars'); await s.send('draw a house');
-    tab('seating'); await s.send('add a table'); await s.send('add a guest called Ann at table 1');
+    tab('talk'); await s.send('What does a bicycle look like?');
     tab('charts');
     let r = await s.send('make a chart of what I drew');
     assert.match(r.text, /cars 3 and houses 1/, r.text);
     const chart = s.state('data.charts').charts[0];
     assert.deepEqual([chart.labels, chart.datasets[0].data], [['Cars', 'Houses'], [3, 1]]);
     r = await s.send('create a chart about the current discussion');
-    assert.match(r.text, /tables 1/, r.text);
+    assert.match(r.text, /bicycles 1/, r.text);
     await s.send('undo');
     assert.deepEqual(s.state('data.charts').charts[0].labels, ['Cars', 'Houses'], 'one step to undo for the whole selection');
     tab('editor');
     r = await s.send('create a document about the current discussion');
     assert.match(r.text, /document called "About the discussion" with \d sections/, r.text);
     const doc = s.state('docs.editor');
-    assert.ok(doc.blocks.some((b) => b.kind === 'heading' && /drawing/i.test(b.text)) && doc.blocks.some((b) => b.kind === 'heading' && /seating plan/i.test(b.text)), 'one section per view the things come from');
-    assert.ok(doc.blocks.some((b) => b.kind === 'list' && b.items.some((i) => /Ann/.test(i))));
+    assert.ok(doc.blocks.some((b) => b.kind === 'heading' && /drawing/i.test(b.text)), 'one section per view the things come from');
+    assert.ok(doc.blocks.some((b) => b.kind === 'list' && b.items.some((i) => /bicycle/i.test(i))), JSON.stringify(doc.blocks));
     r = await s.send('make a document called Holiday with the text "We go to the sea. We swim."');
     assert.match(r.text, /document called "Holiday" with 1 block/, r.text);
     assert.equal(s.state('docs.editor').blocks[0].text, 'We go to the sea. We swim.');
-    // the timeline: things with a time only
-    tab('talk');
-    await s.send('What is Monday?');
-    r = await s.send('send it to the timeline');
-    assert.match(r.text, /I put event Monday in the timeline/, r.text);
-    await s.send('What does a bicycle look like?');
-    r = await s.send('send it to the timeline');
-    assert.match(r.text, /A bicycle has no time to show in the timeline/, r.text);
   });
 }
