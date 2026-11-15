@@ -1517,18 +1517,21 @@ export class DialogSession {
   async _send(text, opts = {}) {
     const snap = opts.intent === false || guard.soft() ? null : this.snapshot();
     const prevTurn = this.dialogue?.log?.at?.(-1) ?? null;
-    const first = await this._sendFirst(text, opts);
+    const dry = new Map();   // CLASS G: the dry readings of this turn's pre-turn state (see `_dry`), shared by the translation candidates and the intent step
+    this._preDry = dry;
+    let first;
+    try { first = await this._sendFirst(text, opts); } finally { this._preDry = null; }
     if (!snap || !weakReading(first)) return first;
     // THE INTENT STEP (spec 03 section 7.9f): the first reading was weak; on a copy of the session as it was before the turn, propose what the user may mean and choose
     // (src/dialog/intent.mjs). The live session is touched only when a reading is chosen: then it goes back to before the turn and the turn is read again.
     const view = Object.create(DialogSession.prototype);
     view.engine = this.engine; view.isession = snap.isession.clone(); view.isession.sessionFacts = this.isession.sessionFacts; view._recentWorlds = [...(snap.recent ?? [])];
-    view.discourse = this.discourse; view.dialogue = { log: prevTurn ? [prevTurn] : [] }; view._routing = this._routing;
+    view.discourse = this.discourse; view.dialogue = { log: prevTurn ? [prevTurn] : [] }; view._routing = this._routing; view._preDry = dry;
     let alt = null;
     try { const vocab = spellVocabulary(this.engine.set); alt = await perf.time('intent', () => intentStep(view, first.trace?.english ?? text, { understand: (e) => view._understands(e), known: (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!this.engine.translator?.rules?.knownEnglish?.(w) })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; alt = null; }
     if (!alt) return first;
     this.restore(snap);
-    const r = await this._sendCore(text, opts, { english: alt.english, translation: first.translation ?? null, assumed: alt.assumed, left: alt.left ?? [], say: alt.say ?? null });
+    const r = await perf.time('intent.reread', () => this._sendCore(text, opts, { english: alt.english, translation: first.translation ?? null, assumed: alt.assumed, left: alt.left ?? [], say: alt.say ?? null }));
     r.trace.intent = { from: first.trace?.english ?? null, assumed: alt.assumed, log: alt.log };
     if (first.trace?.candidates) r.trace.candidates = first.trace.candidates;
     if (first.trace?.via) r.trace.via = first.trace.via;
@@ -1538,20 +1541,35 @@ export class DialogSession {
   async _sendFirst(text, opts = {}) {
     const tr = this.engine.translator;
     const wantedLang = opts.language ?? this.language;
-    if (!tr || tr.fallbackMode?.() !== 'fallback' || wantedLang === 'en' || guard.soft()) return this._sendCore(text, opts);
+    if (!tr || tr.fallbackMode?.() !== 'fallback' || wantedLang === 'en' || guard.soft()) { this._preDry = null; return this._sendCore(text, opts); }
     return this._sendByCandidates(text, opts);
   }
 
   /** Points of trouble of a reading of one candidate English in the active tab: 0 = the reader understands all of it (nothing unparsed, ignored or partial; every wire supported; no other world's reading). */
-  async _understands(english) {
+  async _understands(english) { return this._dry(english); }
+
+  /**
+   * The same, synchronous (the rules formalizer and the interpreter's resolve are synchronous): what the library's `clauses` and `chooseRewrite` call as `read`.
+   * CLASS G: the readings of one turn's pre-turn state are kept in `_preDry` (a Map the turn opens in `_send`; the candidates of the translation and the intent step
+   * read the same English on the same state, so each is read once). `unfilled` counts the required keys a reading leaves open (status `missing`).
+   */
+  _dry(english) {
+    const memo = this._preDry;
+    if (memo?.has(english)) { perf.count('understands.memo'); return memo.get(english); }
+    const r = perf.timeSync('understands', () => this._understandsRun(english));
+    memo?.set(english, r);
+    return r;
+  }
+
+  _understandsRun(english) {
     const { set, formalizers, interp } = this.engine;
     const f = this.forkForValidation();
     const ctx = f.context();
-    const res = await formalizers.rules.formalize(splitAnswerList(interp.lang.stripFiller(english) || english), { worlds: set, session: f.isession, source: 'candidate', context: ctx, router: this._router });
+    const res = formalizers.rules.formalize(splitAnswerList(interp.lang.stripFiller(english) || english), { worlds: set, session: f.isession, source: 'candidate', context: ctx, router: this._router });
     const segs = res.segments ?? [];
-    if (!segs.length) return { issues: 9 };
+    if (!segs.length) return { issues: 9, unfilled: 0 };
     const HOME = /^(ui|session|user|meta|common|lang|core)\b|^talk$/;
-    let issues = 0;
+    let issues = 0, unfilled = 0;
     for (const sg of segs) {
       budget.tick('index.understands');
       issues += (sg.unparsed ? 3 : 0) + (sg.ignored?.length ?? 0) + (sg.partial ? 2 : 0) + (sg.bestEffort ? 2 : 0);
@@ -1559,9 +1577,9 @@ export class DialogSession {
       if (w && ctx.tabWorld && w !== ctx.tabWorld && !HOME.test(w)) issues += 2;   // a reading in another world than the open tab is not an understanding in it
       if (sg.unparsed) continue;
       f.isession.add(sg.wires);
-      for (const wire of sg.wires) { const r = interp.resolve(f.isession, wire); if (r?.status && r.status !== 'supported') issues += r.status === 'unsupported' || r.status === 'error' ? 2 : 1; }
+      for (const wire of sg.wires) { const r = interp.resolve(f.isession, wire); if (r?.status && r.status !== 'supported') { issues += r.status === 'unsupported' || r.status === 'error' ? 2 : 1; if (r.status === 'missing') unfilled++; } }
     }
-    return { issues };
+    return { issues, unfilled };
   }
 
   /**
@@ -1580,9 +1598,10 @@ export class DialogSession {
     // a word no dictionary of the language has, with no word of the language near it ("tenerife"; "desenaza" is a typo of desenează, not a name), is a name: a candidate that keeps it is not rejected for it
     const srcVocab = tr.rules?.sourceVocabulary?.(lang);
     const isName = tr.rules?.glossWord ? (w) => !nearAny(w, srcVocab) && !(tr.rules.glossWord(w, lang) ?? []).length && !(tr.rules.knownEnglish?.(fold(w))) : null;
-    const cands = await gatherCandidates(text, { from: lang, to: 'en', translator: tr, abortable: (p, stage) => guard.abortable(p, stage), isEnglish, kept });
-    if (!cands.length) return this._sendCore(text, opts);   // nothing translated it: the core says so (MT-SERIOUS)
-    const pick = await chooseCandidate(cands, text, { understand: (e) => this._understands(e), isEnglish, soft: () => guard.soft(), kept, isName });
+    const cands = await perf.time('candidates.gather', () => gatherCandidates(text, { from: lang, to: 'en', translator: tr, abortable: (p, stage) => guard.abortable(p, stage), isEnglish, kept }));
+    if (!cands.length) { this._preDry = null; return this._sendCore(text, opts); }   // nothing translated it: the core says so (MT-SERIOUS)
+    const pick = await perf.time('candidates.choose', () => chooseCandidate(cands, text, { understand: (e) => this._understands(e), isEnglish, soft: () => guard.soft(), kept, isName }));
+    this._preDry = null;   // the turn now runs: the state is no longer the pre-turn one
     if (!pick.chosen) return this._sendCore(text, opts);
     const c = pick.chosen, machine = c.source === 'browser' || c.source === 'model' || /^(?:repaired|glossed)-(browser|model)$/.test(c.source);
     const r = await this._sendCore(text, opts, { english: c.text, translation: c.translation });
