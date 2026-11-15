@@ -3,8 +3,8 @@
 // carried across sentences and turns as `prior`); this file only gathers the words the library needs from the language world and lang.common, and says the
 // library's result in English. No name, item or number is listed here. Browser-safe.
 import { storyState } from '../../lib/vendor/sopworld/sopworld.mjs?v=bf1ab27553';
-import { en } from '../../lib/lang/en.mjs?v=24a2dfb4e6';
-import { pluralize } from '../../lib/formalizer/rules/lemma.mjs?v=9ffe311f37';
+import { en } from '../../lib/lang/en.mjs?v=8f226ecd72';
+import { pluralize } from '../../lib/formalizer/rules/lemma.mjs?v=99f25611ee';
 import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=4fba5d0be8';   // the catalog's money words (k.units through w.lang.en)
 
 export function initialState() { return { story: null, turns: 0 }; }
@@ -22,7 +22,8 @@ export function storyOptions(lang) {
   const aux = new Set(words(safe(() => [...en.words('aux')], [])));
   const phrase = (id) => words(safe(() => lang?.phrase?.(id), []));
   const verbs = {};
-  for (const eff of EFFECTS) for (const p of phrase(`lang.story.${eff}`)) {
+  // the catalog's typed possession effects first (k.actions holds / money, K5: acts.possession.<effect>), then lang.common's stand-ins for the verbs k.actions has no effect for
+  for (const eff of EFFECTS) for (const p of [...phrase(`acts.possession.${eff}`), ...phrase(`lang.story.${eff}`)]) {
     const toks = p.split(/[ _]+/).filter(Boolean);
     const v = toks.find((t) => !aux.has(t)) ?? toks[0];
     if (v && !(v in verbs)) verbs[v] = eff;

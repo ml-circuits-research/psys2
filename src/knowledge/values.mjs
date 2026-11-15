@@ -39,6 +39,8 @@ let SPELLING = { ...LOCAL_SPELLING };
 
 /** A derived form of a colour name (its plural "reds", an adjective "sandy", "golden", "silvery"): the grammar reads it, the colour reader does not respell it (a sandy floor is a floor of sand). */
 const derived = (t, to) => t.length > to.length && t.startsWith(to.slice(0, Math.max(3, to.length - 1))) && /(?:s|es|y|ey|en|ish)$/.test(t) && !t.includes(' ');
+/** Two colour names side by side ("blue green", a word of k.colours for teal): the grammar reads them (a colour and a value: "the table that is blue green"), not the colour reader. */
+const compound = (k) => k.includes(' ') && k.split(' ').every((w) => state.colours.has(w));
 function absorb(wires) {
   const colours = new Map(), numbers = new Map(), spelling = {};
   for (const w of wires) {
@@ -105,7 +107,7 @@ export function colourName(words) {
   wake();
   const raw = lc(Array.isArray(words) ? words.join(' ') : words);
   if (raw && state.colours.has(raw)) return raw;   // a name that is a colour of its own ("teal") is never read as another name of a colour (k.colours: teal is also a word for turquoise)
-  const t = SPELLING[raw] ?? raw.split(' ').map((w) => (state.colours.has(w) ? w : SPELLING[w] ?? w)).join(' ');
+  const t = (compound(raw) ? null : SPELLING[raw]) ?? raw.split(' ').map((w) => (state.colours.has(w) ? w : SPELLING[w] ?? w)).join(' ');
   return t && state.colours.has(t) ? t : null;
 }
 export const colourHex = (name) => state.colours.get(colourName(name))?.rgb ?? null;
@@ -121,7 +123,7 @@ export const colourLexiconWords = () => colourPhrases().filter((p) => { const c 
 /** Is `word` one of the colours people mean first: a basic or core colour of the catalog or a colour-first name (red, orange, violet)? A colour name that is only a shade of a basic colour ("peru" is brown) stays free for a name of the catalog's geography. */
 export function isCoreColour(word) { const p = colourName(word); if (!p) return false; const c = state.colours.get(p); return !c || !!c.core || c.basic === c.name || COLOUR_FIRST.has(p); }
 /** Every phrase that reads as a colour: the names and the spellings (for building a recogniser), longest first. */
-export const colourPhrases = () => [...state.colours.keys(), ...Object.keys(SPELLING)].sort((a, b) => b.length - a.length || a.localeCompare(b));
+export const colourPhrases = () => [...state.colours.keys(), ...Object.keys(SPELLING).filter((k) => !compound(k))].sort((a, b) => b.length - a.length || a.localeCompare(b));
 /** The basic colours (the catalog's `basic` values: a name that is its own basic colour), in the catalog's order. */
 export const basicColourNames = () => [...state.colours.values()].filter((c) => c.basic === c.name).map((c) => c.name);
 /** Is `word` a colour name (spelling and shorthand included)? */

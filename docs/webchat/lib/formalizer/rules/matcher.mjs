@@ -4,9 +4,9 @@
  * Syntax elements: word, [a|b|c], [a|b]?, {name:class}, {name:class?}, ...
  * Slot classes: number, ordinal, word, words, noun, <lexicon id>, agent, unit.
  */
-import { isFillerWord } from './normalize.mjs?v=fd96f11b4f';
+import { isFillerWord } from './normalize.mjs?v=d9beb26cad';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
-import { en } from '../../lang/en.mjs?v=24a2dfb4e6';
+import { en } from '../../lang/en.mjs?v=8f226ecd72';
 
 /** Quantity unit table: lowercase token -> canonical symbol. */
 export const UNIT_TABLE = new Map(Object.entries({

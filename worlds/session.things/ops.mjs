@@ -10,7 +10,7 @@ const no = (status, note) => ({ status, note });
 const an = (n) => `${/^[aeiou]/i.test(n) && !/^(?:uni|use|eu|one)/i.test(n) ? 'an' : 'a'} ${n}`;
 const list = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
 
-export function initialState() { return { things: [], views: {}, learned: [], n: 0 }; }
+export function initialState() { return { things: [], views: {}, learned: [], n: 0, person: null }; }   // person: the person of the session (w.person facts, src/dialog/person.mjs, spec 23 section 12)
 
 /** The aspects of a stored thing, from what the session's knowledge says about its kind (the settled lookup, learned wires included). */
 // The aspects depend on the kind, the name, which attributes it has (not their values), whether it has parts, what the view declares and what the knowledge says: they are kept

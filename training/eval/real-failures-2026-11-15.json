@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "586016cb",
-  "tree": "245c822722773a1e",
+  "build": "25492edc",
+  "tree": "1a2f18da4cbac97e",
   "catalog": "085bc0dab1f6f2817815ca789a36259b3c01ae4e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -162,12 +162,12 @@
   }
  },
  "diagnostic_rules_matrix": {
-  "right": 156,
+  "right": 160,
   "judged": 207,
-  "partly": 13,
-  "wrong": 38,
-  "build": "04987ded",
-  "tree": "b246a0839e0404e9"
+  "partly": 19,
+  "wrong": 28,
+  "build": "25492edc",
+  "tree": "1a2f18da4cbac97e"
  },
  "failing_matrix": 252,
  "failing_ops": 252,

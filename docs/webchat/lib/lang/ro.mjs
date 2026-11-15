@@ -21,13 +21,20 @@ const gloss = (sense) => {
   m = /^k\.colours\.psys2\.(.+)$/.exec(s);
   return m ? m[1] : null;
 };
+const bare = (v) => String(v ?? '').replace(/^"|"$/g, '');
+/** The CLDR plural category of a count in Romanian (one, few, other), the category the catalog's reply templates are written per. */
+const plural = (n) => { try { return new Intl.PluralRules('ro').select(n); } catch { return n === 1 ? 'one' : n === 0 || (n % 100 >= 1 && n % 100 <= 19) ? 'few' : 'other'; } };
+/** A world's own act said with the catalog's reply that says the same thing (the rest have no catalog reply yet: questions.md [KNOW]). */
+const REPLY_OF = {
+  'diagram.shaped': (r) => ({ name: 'done.make.shape', roles: { kind: 'diagram', shape: r.thing } }),
+};
 const posOf = (cls) => (cls?.startsWith('v.') ? 'verb' : cls?.startsWith('a.') ? 'adj' : 'noun');
 
 export async function openLangRo({ facts = null, unimorph = false, gloss: glossFor = null, local: withLocal = true } = {}) {
-  facts ??= (await import('./ro.facts.generated.mjs?v=9d4f7daed3')).LANG_RO_FACTS;
-  const local = withLocal ? (await import('./ro.local.mjs?v=71e90d0f84')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
+  facts ??= (await import('./ro.facts.generated.mjs?v=268c444d52')).LANG_RO_FACTS;
+  const local = withLocal ? (await import('./ro.local.mjs?v=535f17e19c')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
   // the large dictionary (3,466 lemmas derived from UniMorph, CC BY-SA 3.0, no senses) is a module of its own, loaded only when asked for; for a letter the hand file comes first, then the derived rows
-  const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=7b06d02ad7')).LANG_RO_UNIMORPH : {};
+  const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=56f524c863')).LANG_RO_UNIMORPH : {};
   const text = (letter) => [facts.dictionary[letter], local.dictionary[letter], extra[letter]].filter(Boolean).join('\n');
   const lib = await import('../vendor/sopworld/sopworld.mjs?v=bf1ab27553');
   const world = new lib.World();
@@ -93,21 +100,52 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
       return readings(head).map((r) => toEntry(r, enclitic)).filter(Boolean).filter((a) => !enclitic || a.pos === 'verb');
     },
     /**
-     * COMPOSED REPLIES (spec 06 "Composed replies", reviewer 2026-11-15 03:15 item 2): the Romanian of a reply the application composes, from its frame `say = { act, roles }`, by the
-     * language world's template of the act (`w.lang.ro.template act=`) and the library's `realise`; null when there is no template or a word has no Romanian lemma (the caller then
-     * goes on as before). Roles: an English noun or colour (its lemma by the dictionary's sense), a number, a count `{ n, noun, colour? }` ("7 noduri", "o casă albastră", "20 de
-     * flori") or a list of counts ("un soare galben, 2 nori și o pasăre albastră"). No Romanian sentence is written here: the words are the template's and the dictionary's.
+     * COMPOSED REPLIES (spec 06 "Composed replies", reviewer 2026-11-15 03:15 item 2 and 05:30): the Romanian of a reply the application composes, from its frame `say = { act, roles }`,
+     * by the language world's reply templates in the catalog's key shape (`w.lang.ro.reply name= count= act= role= text=`: the same 15 names as w.lang.en.reply, one text per CLDR plural
+     * category one / few / other of the role `number`; `w.lang.ro.fill template= role= lemma=` the words a template brings, such as its article) and the library's `realise`; null when
+     * there is no reply of that name or a word has no Romanian lemma (the caller then goes on as before). A world's own act is said with the catalog's name that says the same thing
+     * (REPLY_OF: "a diagram in the shape of a house" is done.make.shape with the kind "diagram"). Roles: an English noun or colour (its lemma by the dictionary's sense), a number, a
+     * count `{ n, noun, colour? }` ("7 noduri", "o casă albastră", "20 de flori") or a list of counts. No Romanian sentence is written here.
      */
     composeRo(say) {
-      const template = say?.act ? lib.templateFor(m, say.act) : null;
-      if (!template) return null;
-      const roles = {};
-      for (const [k, v] of Object.entries(say.roles ?? {})) {
+      if (!say?.act) return null;
+      // the catalog's reply of the same meaning first; the reply of the act's own name (the catalog's, or a local one in the catalog's shape) when that one cannot be said
+      for (const how of [REPLY_OF[say.act]?.(say.roles ?? {}), { name: say.act, roles: say.roles ?? {} }]) { const t = how && this.reply(how); if (t) return t; }
+      return null;
+    },
+    /**
+     * A REQUEST in Romanian (composed chips, reviewer 2026-11-15 05:30): `{ act, roles }` (roles kind, thing, value, attribute, number as English words) by the catalog's request template
+     * of that act whose roles are exactly the ones given (`w.lang.ro.request act= role= count= text=`, mirroring w.lang.en's act templates), or null.
+     */
+    request({ act, roles = {} } = {}) {
+      const keys = Object.keys(roles).sort().join(' ');
+      const fits = world.ofType('w.lang.ro.request').filter((x) => bare(x.attrs.act?.[0]) === act && (x.attrs.role ?? []).map(bare).sort().join(' ') === keys);
+      for (const name of [...new Set(fits.map((x) => bare(x.attrs.name[0])))]) { const t = this.reply({ name, roles }, 'w.lang.ro.request'); if (t) return t; }
+      return null;
+    },
+    /** One reply (or request) of the catalog's shape: { name, roles } -> the Romanian sentence, or null. */
+    reply(how, type = 'w.lang.ro.reply') {
+      const replies = world.ofType(type).filter((x) => bare(x.attrs.name?.[0]) === how.name);
+      if (!replies.length) return null;
+      const n = Number.isFinite(how.roles.number) ? how.roles.number : 1;
+      const cat = plural(n), pick = replies.find((x) => bare(x.attrs.count?.[0]) === cat) ?? replies.find((x) => bare(x.attrs.count?.[0]) === 'other') ?? replies[0];
+      const roles = {}, lemmas = new Set();
+      for (const f of world.ofType('w.lang.ro.fill')) if (bare(f.attrs.template?.[0]) === how.name) roles[bare(f.attrs.role[0])] = bare(f.attrs.lemma[0]);
+      for (const [k, v] of Object.entries(how.roles)) {
         const x = roleRo(v);
         if (x == null) return null;
         roles[k] = x;
+        if (typeof v === 'string') lemmas.add(k);
       }
-      const out = run(template, roles);
+      // ADAPTER (questions.md [LIB]): the vendored realise words a lemma only with all three features; the catalog's templates leave the defaults out ("{kind}", "{kind:num=pl}"), so the
+      // missing ones are the defaults of a reply: singular, nominative-accusative, indefinite. A count, a number or a list is text already.
+      const text = bare(pick.attrs.text[0]).replace(/\{(\w+)(?::([^}@]*))?(@\w+)?\}/g, (all, name, feats, agree) => {
+        if (!lemmas.has(name)) return all;
+        const f = Object.fromEntries(String(feats ?? '').split(',').filter(Boolean).map((x) => x.split('=')));
+        const full = { num: 'sg', case: 'nomacc', def: 'no', ...f };
+        return `{${name}:${Object.entries(full).map(([k, v]) => `${k}=${v}`).join(',')}${agree ?? ''}}`;
+      });
+      const out = run(text, roles);
       if (!out) return null;
       const t = out.charAt(0).toUpperCase() + out.slice(1);
       return /[.!?]$/.test(t) ? t : `${t}.`;
