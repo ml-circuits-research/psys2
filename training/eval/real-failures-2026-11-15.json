@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "ef2d994a",
-  "tree": "d382e6670adb08eb",
+  "build": "5fd9ac9f",
+  "tree": "b11f126fdb453a94",
   "catalog": "085bc0dab1f6f2817815ca789a36259b3c01ae4e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,17 +13,17 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 159,
-   "partly": 17,
+   "right": 167,
+   "partly": 9,
    "wrong": 31,
    "open": 13,
    "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 333,
+    "executed": 332,
     "refused": 2,
     "asked": 7,
-    "not_understood": 168,
+    "not_understood": 169,
     "other_world": 95
    },
    "by_source": {
@@ -75,7 +75,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 99
+     "right": 107
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -88,17 +88,17 @@
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 159,
-   "partly": 17,
+   "right": 167,
+   "partly": 9,
    "wrong": 31,
    "open": 13,
    "changed": 53,
    "unjudged": 332,
    "outcome": {
-    "executed": 333,
+    "executed": 332,
     "refused": 2,
     "asked": 7,
-    "not_understood": 168,
+    "not_understood": 169,
     "other_world": 95
    },
    "by_source": {
@@ -150,7 +150,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 99
+     "right": 107
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -169,9 +169,566 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 250,
- "failing_ops": 250,
+ "failing_matrix": 243,
+ "failing_ops": 243,
  "ops_only": 0,
+ "judged_causes": [
+  {
+   "cause": "Romanian: art.draw: acted; the reply does not say what the check asks",
+   "count": 8,
+   "wrong": 8,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0039",
+     "verdict": "wrong",
+     "text": "fa picioarele corocilului negre",
+     "tab": "draw",
+     "reply": "I can not find a leg in your picture.",
+     "failing": [
+      "reply_any:legs of the crocodile are black|has no leg|has these parts"
+     ]
+    },
+    {
+     "id": "r0052",
+     "verdict": "wrong",
+     "text": "muta casele mai sus",
+     "tab": "draw",
+     "reply": "the crocodile can not go there: it is in the lake.",
+     "failing": [
+      "reply_any:moved the houses"
+     ]
+    },
+    {
+     "id": "r0054",
+     "verdict": "wrong",
+     "text": "muta casele mai sus",
+     "tab": "draw",
+     "reply": "the crocodile can not go there: it is in the lake.",
+     "failing": [
+      "reply_any:moved the houses"
+     ]
+    },
+    {
+     "id": "r0055",
+     "verdict": "wrong",
+     "text": "muta crocodilii mai jos",
+     "tab": "draw",
+     "reply": "the crocodile can not go there: it is in the lake.",
+     "failing": [
+      "reply_any:moved the crocodiles"
+     ]
+    },
+    {
+     "id": "r0064",
+     "verdict": "wrong",
+     "text": "pune si un lac",
+     "tab": "draw",
+     "reply": "Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\".",
+     "failing": [
+      "reply_not:Where should it go|did not understand"
+     ]
+    },
+    {
+     "id": "r0067",
+     "verdict": "wrong",
+     "text": "muta casa din mijloc mai la dreapta",
+     "tab": "draw",
+     "reply": "I can not find a house in your picture.",
+     "failing": [
+      "reply_not:took the last one|can not find"
+     ]
+    },
+    {
+     "id": "r0068",
+     "verdict": "wrong",
+     "text": "nu prima acasa, cea din mijloc",
+     "tab": "draw",
+     "reply": "I drew a red home. (a home, drawn as a house.) I did not understand \"nu prima acasa, cea din mijloc\". Did you mean \"Cum sună do central?\" or \"Câți herți are do ",
+     "failing": [
+      "reply_not:did not understand|Where should it go"
+     ]
+    },
+    {
+     "id": "r0069",
+     "verdict": "wrong",
+     "text": "muta casa din dreapta mai la dreapta",
+     "tab": "draw",
+     "reply": "I can not find a house in your picture.",
+     "failing": [
+      "reply_not:took the last one|can not find"
+     ]
+    }
+   ],
+   "both_reasoners": 8
+  },
+  {
+   "cause": "diagram.sketch: acted; the reply does not say what the check asks",
+   "count": 6,
+   "wrong": 0,
+   "partly": 6,
+   "rows": [
+    {
+     "id": "r0551",
+     "verdict": "partly",
+     "text": "draw a red circle",
+     "tab": "diagram",
+     "reply": "Drew a circle.",
+     "failing": [
+      "answer:c1"
+     ]
+    },
+    {
+     "id": "r0555",
+     "verdict": "partly",
+     "text": "add a box",
+     "tab": "diagram",
+     "reply": "Drew a rectangle.",
+     "failing": [
+      "answer:r1"
+     ]
+    },
+    {
+     "id": "r0557",
+     "verdict": "partly",
+     "text": "connect all elements",
+     "tab": "diagram",
+     "reply": "Connected the circle → rectangle 1 and rectangle 1 → rectangle 2.",
+     "failing": [
+      "answer:a1",
+      "answer:a2"
+     ]
+    },
+    {
+     "id": "r0561",
+     "verdict": "partly",
+     "text": "connect circle1 and rectangle1",
+     "tab": "diagram",
+     "reply": "Connected the circle → the rectangle.",
+     "failing": [
+      "answer:a1"
+     ]
+    },
+    {
+     "id": "r0569",
+     "verdict": "partly",
+     "text": "label a1 as uses",
+     "tab": "diagram",
+     "reply": "The arrow the circle → the rectangle now says “uses”.",
+     "failing": [
+      "answer:a1"
+     ]
+    },
+    {
+     "id": "r0582",
+     "verdict": "partly",
+     "text": "reverse a1",
+     "tab": "diagram",
+     "reply": "The arrow B → A was reversed, it now goes B → A.",
+     "failing": [
+      "answer:a1"
+     ]
+    }
+   ],
+   "both_reasoners": 6
+  },
+  {
+   "cause": "ui.avatar: not understood",
+   "count": 4,
+   "wrong": 4,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0029",
+     "verdict": "wrong",
+     "text": "an old woman",
+     "tab": "robot",
+     "reply": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
+     "failing": [
+      "reply_not:did not understand",
+      "not_understood"
+     ]
+    },
+    {
+     "id": "r0512",
+     "verdict": "wrong",
+     "text": "mcdavatara human",
+     "tab": "robot",
+     "reply": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
+     "failing": [
+      "answer:person | human | girl | boy | woman | man | child",
+      "forbid:answer without \"did not understand\"",
+      "not_understood"
+     ]
+    },
+    {
+     "id": "r0523",
+     "verdict": "wrong",
+     "text": "tongue out",
+     "tab": "robot",
+     "reply": "I did not catch what to do with face. I can add, remove, change, copy, select and tell; for example \"Add a hat.\".",
+     "failing": [
+      "answer:tongue",
+      "not_understood"
+     ]
+    },
+    {
+     "id": "r0595",
+     "verdict": "wrong",
+     "text": "whats on u",
+     "tab": "robot",
+     "reply": "I don't know what an on u is.",
+     "failing": [
+      "answer:wear",
+      "not_understood"
+     ]
+    }
+   ],
+   "both_reasoners": 4
+  },
+  {
+   "cause": "art.draw: acted; the state is not the expected one",
+   "count": 3,
+   "wrong": 3,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0634",
+     "verdict": "wrong",
+     "text": "draw two cats and a big one",
+     "tab": "draw",
+     "reply": "I drew 2 orange cats.",
+     "failing": [
+      "state:art.draw:objects.length=3",
+      "answer:big"
+     ]
+    },
+    {
+     "id": "r0635",
+     "verdict": "wrong",
+     "text": "draw a house and another yellow one",
+     "tab": "draw",
+     "reply": "I drew a yellow house. I made a copy of the house.",
+     "failing": [
+      "state:art.draw:objects.length=5"
+     ]
+    },
+    {
+     "id": "r0636",
+     "verdict": "wrong",
+     "text": "draw a sun",
+     "tab": "draw",
+     "reply": "I drew a yellow sun.",
+     "failing": [
+      "state:art.draw:objects.length=6"
+     ]
+    }
+   ],
+   "both_reasoners": 3
+  },
+  {
+   "cause": "Romanian: art.draw: not understood",
+   "count": 3,
+   "wrong": 3,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0006",
+     "verdict": "wrong",
+     "text": "she knows what their grandma could trade charcoal Chicago",
+     "tab": "diagram",
+     "reply": "I did not understand \"she knows what their grandma could trade charcoal Chicago\". For example: \"Add a circle.\" or \"What is the colour of the circle?\" I did not ",
+     "failing": [
+      "unchanged"
+     ]
+    },
+    {
+     "id": "r0043",
+     "verdict": "wrong",
+     "text": "sa fie diferite",
+     "tab": "draw",
+     "reply": "I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon ",
+     "failing": [
+      "not_understood"
+     ]
+    },
+    {
+     "id": "r0066",
+     "verdict": "wrong",
+     "text": "muta si mai la stinga",
+     "tab": "draw",
+     "reply": "I did not understand \"muta si mai la stinga\". For example: \"Add a house.\" or \"What is the colour of the house?\"",
+     "failing": [
+      "reply_not:did not understand|do not know what",
+      "not_understood"
+     ]
+    }
+   ],
+   "both_reasoners": 3
+  },
+  {
+   "cause": "diagram.sketch: acted; the state is not the expected one",
+   "count": 2,
+   "wrong": 2,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0024",
+     "verdict": "wrong",
+     "text": "paint three new nodes",
+     "tab": "diagram",
+     "reply": "What should change about circle 1, square 1, square 2, square 3 and square 4? Try a color, size, shape, outline or label.",
+     "failing": [
+      "state:shapes.length=$+3"
+     ]
+    },
+    {
+     "id": "r0552",
+     "verdict": "wrong",
+     "text": "create a diagram",
+     "tab": "diagram",
+     "reply": "I drew a random timeline diagram with four shapes. It is about water cycle. It is on top of what was there; undo takes it away.",
+     "failing": [
+      "state:shapes.length=1",
+      "answer:Keep the current one",
+      "answer:Templates"
+     ]
+    }
+   ],
+   "both_reasoners": 2
+  },
+  {
+   "cause": "docs.editor: acted; the state is not the expected one",
+   "count": 2,
+   "wrong": 1,
+   "partly": 1,
+   "rows": [
+    {
+     "id": "r0528",
+     "verdict": "wrong",
+     "text": "add two chapters",
+     "tab": "editor",
+     "reply": "OK, I started chapter 3.",
+     "failing": [
+      "state:blocks.length=6"
+     ]
+    },
+    {
+     "id": "r0529",
+     "verdict": "partly",
+     "text": "add text",
+     "tab": "editor",
+     "reply": "What text should I add?",
+     "failing": [
+      "state:blocks.length=6"
+     ]
+    }
+   ],
+   "both_reasoners": 2
+  },
+  {
+   "cause": "talk: another world took the turn (art.draw)",
+   "count": 2,
+   "wrong": 2,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0141",
+     "verdict": "wrong",
+     "text": "draw a car",
+     "tab": "talk",
+     "reply": "I drew a red car.",
+     "failing": []
+    },
+    {
+     "id": "r0147",
+     "verdict": "wrong",
+     "text": "draw 2 elephants",
+     "tab": "talk",
+     "reply": "I drew 2 elephants.",
+     "failing": []
+    }
+   ],
+   "both_reasoners": 2
+  },
+  {
+   "cause": "ui.avatar: acted; the reply does not say what the check asks",
+   "count": 2,
+   "wrong": 1,
+   "partly": 1,
+   "rows": [
+    {
+     "id": "r0596",
+     "verdict": "partly",
+     "text": "what is on you",
+     "tab": "robot",
+     "reply": "There is no you here.",
+     "failing": [
+      "answer:wear"
+     ]
+    },
+    {
+     "id": "r0645",
+     "verdict": "wrong",
+     "text": "make your eyes blue",
+     "tab": "draw",
+     "reply": "An eyes is a kind of thing. The sun is blue now. There are 3 suns, so I took the last one. You can say \"the first sun\" or \"all the suns\".",
+     "failing": [
+      "forbid:answer without \"sun\""
+     ]
+    }
+   ],
+   "both_reasoners": 2
+  },
+  {
+   "cause": "ui.avatar: another world took the turn (docs.editor)",
+   "count": 2,
+   "wrong": 2,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0592",
+     "verdict": "wrong",
+     "text": "would you say you are happy",
+     "tab": "robot",
+     "reply": "I could not find \"you are happy\" in the document.",
+     "failing": [
+      "answer:happy"
+     ]
+    },
+    {
+     "id": "r0593",
+     "verdict": "wrong",
+     "text": "would you say you are sad",
+     "tab": "robot",
+     "reply": "I could not find \"you are sad\" in the document.",
+     "failing": [
+      "answer:sad"
+     ]
+    }
+   ],
+   "both_reasoners": 2
+  },
+  {
+   "cause": "art.draw: acted; the reply does not say what the check asks",
+   "count": 1,
+   "wrong": 0,
+   "partly": 1,
+   "rows": [
+    {
+     "id": "r0545",
+     "verdict": "partly",
+     "text": "the un si up not udner clouds",
+     "tab": "draw",
+     "reply": "I drew 3 clouds.",
+     "failing": [
+      "answer:above"
+     ]
+    }
+   ],
+   "both_reasoners": 1
+  },
+  {
+   "cause": "diagram.sketch: another world took the turn (art.draw)",
+   "count": 1,
+   "wrong": 1,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0578",
+     "verdict": "wrong",
+     "text": "make the arrow between A and B red and two-way",
+     "tab": "diagram",
+     "reply": "I can not find a red thing in your picture. Your picture is empty. Try \"draw a red house\".",
+     "failing": [
+      "state:edges[id=a1].color=red",
+      "state:edges[id=a1].arrow=both"
+     ]
+    }
+   ],
+   "both_reasoners": 1
+  },
+  {
+   "cause": "diagram.sketch: not understood",
+   "count": 1,
+   "wrong": 1,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0564",
+     "verdict": "wrong",
+     "text": "lable arraw between circle1 and rectangle1",
+     "tab": "diagram",
+     "reply": "I did not catch what to do with arrow. I can add, remove, change, move, connect and group; for example \"Add a circle.\".",
+     "failing": [
+      "answer:What should the label",
+      "not_understood"
+     ]
+    }
+   ],
+   "both_reasoners": 1
+  },
+  {
+   "cause": "docs.editor: acted; the reply does not say what the check asks",
+   "count": 1,
+   "wrong": 1,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0532",
+     "verdict": "wrong",
+     "text": "on the new chapter",
+     "tab": "editor",
+     "reply": "I could not find \"new chapter\" in the document.",
+     "failing": [
+      "answer:chapter"
+     ]
+    }
+   ],
+   "both_reasoners": 1
+  },
+  {
+   "cause": "docs.editor: not understood",
+   "count": 1,
+   "wrong": 1,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0533",
+     "verdict": "wrong",
+     "text": "Chester",
+     "tab": "editor",
+     "reply": "I did not understand \"Chester\". Did you mean \"Center.\"?",
+     "failing": [
+      "state:blocks.length=2",
+      "answer:chapter",
+      "not_understood"
+     ]
+    }
+   ],
+   "both_reasoners": 1
+  },
+  {
+   "cause": "Romanian: ui.avatar: not understood",
+   "count": 1,
+   "wrong": 1,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0028",
+     "verdict": "wrong",
+     "text": "an old woman",
+     "tab": "robot",
+     "reply": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" I did not know the words: old, woman.",
+     "failing": [
+      "reply_not:did not understand",
+      "not_understood"
+     ]
+    }
+   ],
+   "both_reasoners": 1
+  }
+ ],
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
@@ -228,6 +785,33 @@
    ]
   },
   {
+   "cause": "sentence not read by any world (no cause key)",
+   "count": 31,
+   "both_reasoners": 31,
+   "examples": [
+    {
+     "text": "now be a human",
+     "tab": "robot",
+     "happened": "I did not understand \"now be a human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
+    },
+    {
+     "text": "become a women",
+     "tab": "robot",
+     "happened": "I did not understand \"become a women\". Did you mean \"Become a woman.\"? [outcome: not_understood]"
+    },
+    {
+     "text": "let’s play guess the animal",
+     "tab": "guess",
+     "happened": "OK, I wrote a new paragraph (5 words). [outcome: not_understood]"
+    },
+    {
+     "text": "start x and 0",
+     "tab": "tictactoe",
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
+    }
+   ]
+  },
+  {
    "cause": "translation residue / wrong sense / source typo",
    "count": 30,
    "both_reasoners": 30,
@@ -255,33 +839,6 @@
    ]
   },
   {
-   "cause": "sentence not read by any world (no cause key)",
-   "count": 30,
-   "both_reasoners": 30,
-   "examples": [
-    {
-     "text": "now be a human",
-     "tab": "robot",
-     "happened": "I did not understand \"now be a human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
-    },
-    {
-     "text": "become a women",
-     "tab": "robot",
-     "happened": "I did not understand \"become a women\". Did you mean \"Become a woman.\"? [outcome: not_understood]"
-    },
-    {
-     "text": "let’s play guess the animal",
-     "tab": "guess",
-     "happened": "OK, I wrote a new paragraph (5 words). [outcome: not_understood]"
-    },
-    {
-     "text": "start x and 0",
-     "tab": "tictactoe",
-     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
-    }
-   ]
-  },
-  {
    "cause": "a world other than the open tab took the turn",
    "count": 25,
    "both_reasoners": 25,
@@ -305,33 +862,6 @@
      "text": "Tom has 5 apples. He gives 8 to Ana. How many apples does Tom have?",
      "tab": "robot",
      "happened": "OK, Tom has 5 apples. That does not add up. Tom only had 5 apples, so Tom cannot give away 8. Tom has 5 apples. [outcome: other_world]"
-    }
-   ]
-  },
-  {
-   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
-   "count": 15,
-   "both_reasoners": 15,
-   "examples": [
-    {
-     "text": "make the avatar an emoji",
-     "tab": "robot",
-     "happened": "I have a long head now. [outcome: executed; partly; status:unsupported]"
-    },
-    {
-     "text": "mcdavatara human",
-     "tab": "robot",
-     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; wrong; answer:person | human | "
-    },
-    {
-     "text": "make the avatar an emoji",
-     "tab": "robot",
-     "happened": "I have a wide head now. [outcome: executed; partly; status:unsupported]"
-    },
-    {
-     "text": "make the avatar a person make the avatar a person send",
-     "tab": "robot",
-     "happened": "I have a long head now. [outcome: executed; partly; answer:person | human | girl | boy | woman | man | child]"
     }
    ]
   },
@@ -413,6 +943,33 @@
      "text": "desene asta",
      "tab": "map",
      "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
+    }
+   ]
+  },
+  {
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
+   "count": 7,
+   "both_reasoners": 7,
+   "examples": [
+    {
+     "text": "mcdavatara human",
+     "tab": "robot",
+     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; wrong; answer:person | human | "
+    },
+    {
+     "text": "tongue out",
+     "tab": "robot",
+     "happened": "I did not catch what to do with face. I can add, remove, change, copy, select and tell; for example \"Add a hat.\". [outcome: not_understood; wrong; answer:tongue"
+    },
+    {
+     "text": "add two chapters",
+     "tab": "editor",
+     "happened": "OK, I started chapter 3. [outcome: executed; wrong; state:blocks.length=6]"
+    },
+    {
+     "text": "add text",
+     "tab": "editor",
+     "happened": "What text should I add? [outcome: executed; partly; state:blocks.length=6]"
     }
    ]
   },

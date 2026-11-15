@@ -473,5 +473,6 @@
     word=talk
     word=tasks
     word=things
-    word=time
+    word=calendar
+    word=hours
     word=world_map

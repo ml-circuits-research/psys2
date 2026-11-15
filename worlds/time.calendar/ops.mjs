@@ -10,6 +10,8 @@ import { BUNDLED_TIME } from '../../src/knowledge/bundled-time.mjs';
 import { parseLine } from '../../src/knowledge/catalog.mjs';
 import { en } from '../../src/lang/en.mjs';
 
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
+
 export function initialState() { return { today: null, month: null, season: null, clock: null, date: null }; }
 
 // ---------------------------------------------------------------- k.time
@@ -78,8 +80,8 @@ function wordsOf(phrase) {
   const put = (w, tag) => { if (w && !tags.has(w)) tags.set(w, tag); };
   for (const [g, tag] of [['overmorrow', 'd+2'], ['ereyesterday', 'd-2'], ['today', 'd0'], ['tomorrow', 'd+1'], ['yesterday', 'd-1'], ['later', 'later'], ['earlier', 'earlier'], ['until', 'until'], ['count', 'count'], ['list', 'list'], ['clock', 'clock']]) for (const w of ph(`lang.time.${g}`)) put(w, tag);
   const glue = new Set();
-  for (const c of ['det', 'aux', 'prep', 'wh']) for (const w of (() => { try { return [...en.words(c)]; } catch { return []; } })()) glue.add(low(w).replace(/_/g, ' '));
-  for (const w of Object.keys((() => { try { return en.refers('session.agent'); } catch { return {}; } })())) glue.add(w);
+  for (const c of ['det', 'aux', 'prep', 'wh']) for (const w of (() => { try { return [...en.words(c)]; } catch { return []; } })()) { budget.tick('time.words'); glue.add(low(w).replace(/_/g, ' ')); }
+  for (const w of Object.keys((() => { try { return en.refers('session.agent'); } catch { return {}; } })())) { budget.tick('time.words'); glue.add(w); }
   for (const g of ['lang.lead.filler', 'lang.tail.filler', 'lang.lead.polite', 'lang.time.glue']) for (const p of ph(g)) for (const w of p.split(' ')) glue.add(w);
   for (const w of [...glue]) { const r = (() => { try { return en.timeRelation(w); } catch { return null; } })(); if (r?.rel === 'after') put(w, 'later'); else if (r?.rel === 'before') put(w, 'earlier'); else if (r?.rel === 'until') put(w, 'until'); }
   const numbers = (() => { try { return en.numerals(); } catch { return {}; } })();
@@ -93,6 +95,7 @@ function tokensOf(text, W) {
   const raw = low(text).replace(/o\s*'?\s*clock\b/g, "o'clock").replace(/(\d)\s*(am|pm|a\.m\.|p\.m\.)/g, '$1 $2').replace(/'s\b/g, ' is').match(/\d{1,2}:\d{2}|-?\d+(?:\.\d+)?|[\p{L}']+/gu) ?? [];
   const toks = [];
   for (let i = 0; i < raw.length;) {
+    budget.tick('time.tokens');
     let hit = null;
     for (let n = Math.min(W.max, raw.length - i); n >= 1 && !hit; n--) {
       const p = raw.slice(i, i + n).join(' ');
@@ -122,6 +125,7 @@ function tokensOf(text, W) {
 function clocksOf(toks) {
   const out = [];
   for (let i = 0; i < toks.length; i++) {
+    budget.tick('time.clocks');
     const t = toks[i], n = toks[i + 1];
     if (t.kind === 'clockphrase' && n?.kind === 'num') { const h = n.value; out.push({ at: i, end: i + 1, hour: h, minutes: readClock(`${t.w.replace(/^a /, '')} ${h}`) ?? ((h % 12) * 60 + t.minutes), text: `${t.w} ${h}` }); i++; }
     else if (t.kind === 'num' && (n?.kind === 'oclock' || n?.kind === 'ampm')) { const pm = n.kind === 'ampm' && n.pm; out.push({ at: i, end: i + 1, hour: t.value, minutes: readClock(`${t.value} ${n.kind === 'ampm' ? (pm ? 'pm' : 'am') : "o'clock"}`), text: `${t.value} ${n.w}` }); i++; }
@@ -143,6 +147,7 @@ function convert(n, from, to) {
   for (const exactOnly of [true, false]) {
     const seen = new Map([[from, { k: 1, about: false }]]), queue = [from];
     while (queue.length) {
+      budget.tick('time.convert');
       const x = queue.shift(), at = seen.get(x);
       for (const e of edges) if (e.a === x && !seen.has(e.b) && (!exactOnly || !e.about)) { seen.set(e.b, { k: at.k * e.k, about: at.about || e.about }); queue.push(e.b); }
     }

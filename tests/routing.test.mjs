@@ -121,7 +121,7 @@ test('cross-world knowledge questions still work when the tab world has no match
   const q = await onTab('editor', 'What day comes after Monday?');
   assert.equal(q.r.text, 'The day after Monday is Tuesday.');
   assert.equal(q.d.winner.worldId, 'time.calendar');
-  assert.ok(q.d.tier >= 4);
+  assert.ok(q.d.tier >= 3);   // time.calendar's order pattern is a signal of its world (tier 3); the editor has no match
 });
 
 test('the trace carries the decision, the runner-up and the context', async () => {

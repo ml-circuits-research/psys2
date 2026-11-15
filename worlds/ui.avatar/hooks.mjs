@@ -89,9 +89,10 @@ export const hooks = {
       return W((c, q, d) => {
         const dir = { other: 'different', next: 'next', prev: 'previous' }[q.mode];
         if (dir) return F.faceChange(c, { dir, words: words(q, ['thing']) }, d);
-        if (q.mode === 'be') return severalActs(c, words(q, ['value']), d) ?? F.faceRestyle(c, { words: words(q, ['value']) }, d);
+        if (q.mode === 'be') return severalActs(c, words(q, ['value']), d) ?? F.faceRestyle(c, { words: words(q, ['value']), self: true }, d);
         if (q.mode === 'more' || q.mode === 'less') return F.faceResize(c, { words: words(q, ['thing']), dir: SIZE.test(q.value ?? '') ? q.value : q.mode === 'less' ? 'smaller' : 'bigger' }, d);
-        if (!q.thing || SELF.test(String(q.thing).trim())) return severalActs(c, q.value ?? '', d) ?? F.faceRestyle(c, { words: `face ${q.value ?? ''}` }, d);   // "paint yourself green", "make yourself happy"
+        // "paint yourself green", "make yourself happy", "make the avatar a robot": the avatar itself is the thing (CHARACTER REQUESTS, spec 07); no part is invented
+        if (!q.thing || SELF.test(String(q.thing).trim())) return severalActs(c, q.value ?? '', d) ?? F.faceRestyle(c, { words: q.value ?? '', self: true }, d);
         const cl = F.clausesOf(d, F.tokens(q.value ?? ''));
         if (cl.some((x) => x.colours.length) && !cl.some((x) => x.slots.length)) return F.faceColour(c, { words: words(q, ['thing', 'value']) }, d);
         if (SIZE.test(q.value ?? '')) return F.faceResize(c, { words: words(q, ['thing']), dir: q.value }, d);

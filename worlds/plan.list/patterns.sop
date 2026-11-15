@@ -85,7 +85,6 @@
     emit="@{_} core.request action=list.change arg.attribute=\"money\" arg.value=\"{value}\" arg.currency=\"{currency}\" arg.text=\"{segment}\""
     kind=request
     priority=10
-    signal=true
     example="I start with 30 lei."
 
 @pat.plan.list.wallet.left core.pattern
@@ -93,5 +92,4 @@
     emit="@{_} core.request action=list.ask arg.mode=left arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=10
-    signal=true
     example="How much money is left?"

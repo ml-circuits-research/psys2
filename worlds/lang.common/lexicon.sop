@@ -5143,6 +5143,7 @@
     alt=forward
     alt=ahead
     alt=comes_after
+    alt=after
 
 @phrase.lang.time.earlier core.phrase
     frame=false
@@ -5154,6 +5155,7 @@
     alt=prior
     alt=last
     alt=comes_before
+    alt=before
 
 @phrase.lang.time.until core.phrase
     frame=false
@@ -5205,6 +5207,17 @@
     frame=false
     doc="Words a question about the calendar or the clock says around its parts that tell nothing by themselves (what day will it be, if it is Monday, do you know the time). The reader of time.calendar passes over them."
     alt=be
+    alt=is
+    alt=was
+    alt=the
+    alt=in
+    alt=of
+    alt=are
+    alt=has
+    alt=have
+    alt=does
+    alt=do
+    alt=will_be
     alt=it
     alt=its
     alt=it's

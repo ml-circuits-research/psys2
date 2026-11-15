@@ -38,7 +38,6 @@
     kind=question
     priority=14
     example="Which season is March in?"
-    canonical="Which season is March in?"
 
 @pat.time.calendar.read.month.lead core.pattern
     match="[$lang.lead.filler]? {x:lex.time.calendar.month} {post:rest}"
@@ -67,7 +66,6 @@
     kind=question
     priority=14
     example="Which months are in summer?"
-    canonical="Which months are in summer?"
 
 @pat.time.calendar.read.season.lead core.pattern
     match="[$lang.lead.filler]? {x:lex.time.calendar.season} {post:rest}"
@@ -174,6 +172,49 @@
     kind=question
     priority=14
     example="What time will it be in 2 hours?"
+
+# The order of a cycle said with the unit and no free words ("what day comes after Monday"): a signal of this world, read whole even on the Talk tab; without the unit ("what comes after March") it stays Talk's (its cards), and so does the order of months (Talk's own rows: "Which month comes before January?").
+@pat.time.calendar.order.weekday core.pattern
+    match="[$lang.lead.filler]? [$lang.time.list]? [$lang.time.glue]? {u:lex.time.calendar.unit} [$lang.time.glue]? [$lang.time.later|$lang.time.earlier] {x:lex.time.calendar.weekday} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    signal=true
+    example="What day comes after Monday?"
+    canonical="What day comes after Monday?"
+
+@pat.time.calendar.order.season core.pattern
+    match="[$lang.lead.filler]? [$lang.time.list]? [$lang.time.glue]? {u:lex.time.calendar.unit} [$lang.time.glue]? [$lang.time.later|$lang.time.earlier] {x:lex.time.calendar.season} [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    signal=true
+    example="What season comes after winter?"
+
+# A question of one member and the words of the calendar only ("Which season is March in?", "Which months are in summer?", "How many days has April?"): no free words, a signal of this world.
+@pat.time.calendar.member.weekday core.pattern
+    match="[$lang.lead.filler]? [$lang.time.list|$lang.time.count]? [$lang.time.glue]? {u:lex.time.calendar.unit?} [$lang.time.glue]? [$lang.time.glue]? {x:lex.time.calendar.weekday} [$lang.time.glue]? {v:lex.time.calendar.unit?} [$lang.time.glue]? [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=13
+    signal=true
+    example="How many days until Saturday?"
+
+@pat.time.calendar.member.month core.pattern
+    match="[$lang.lead.filler]? [$lang.time.list|$lang.time.count]? [$lang.time.glue]? {u:lex.time.calendar.unit?} [$lang.time.glue]? [$lang.time.glue]? {x:lex.time.calendar.month} [$lang.time.glue]? {v:lex.time.calendar.unit?} [$lang.time.glue]? [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=13
+    signal=true
+    example="Which season is March in?"
+
+@pat.time.calendar.member.season core.pattern
+    match="[$lang.lead.filler]? [$lang.time.list|$lang.time.count]? [$lang.time.glue]? {u:lex.time.calendar.unit?} [$lang.time.glue]? [$lang.time.glue]? {x:lex.time.calendar.season} [$lang.time.glue]? {v:lex.time.calendar.unit?} [$lang.time.glue]? [$lang.tail.filler|please]?"
+    emit="@{_} core.request action=time.read arg.text=\"{segment}\""
+    kind=question
+    priority=13
+    signal=true
+    example="Which months are in summer?"
 
 # ---- GENERATED below this line by scripts/build-time-world.mjs from the catalog (w.lang.en shard time-frames). Never edited by hand.
 

@@ -2,9 +2,9 @@
 // ui.avatar (spec 21): the hooks of the schema world. The acts (make, remove, change, place, ask, undo, redo, save, load) are read by the generated grammar; what an act
 // DOES on a face is the face logic over the catalog k.faces (worlds/ui.avatar/facelogic.mjs, state.face), reached through `domain`. The roles are joined back into the words
 // the face logic reads (it finds slot, variant, colour, feature, preset and mood by itself over the catalog data). Nothing here names a slot, a variant or an accessory.
-import * as F from './facelogic.mjs?v=b6daff786d';
-import { DEFAULT_FACE } from './default-face.mjs?v=2487141e2d';
-import { animate, dataOf, ensure, setName, askName } from './own.mjs?v=383a8e1dd1';
+import * as F from './facelogic.mjs?v=5b428de6cf';
+import { DEFAULT_FACE } from './default-face.mjs?v=1639c9de8d';
+import { animate, dataOf, ensure, setName, askName } from './own.mjs?v=e0e085fd6a';
 
 const MOMENTS = new Set(['wink', 'nod', 'dance', 'wave', 'spin', 'jump', 'bounce', 'wiggle', 'blink']);
 const SIZE = /^(bigger|larger|longer|wider|smaller|tinier|shorter|narrower)$/;
@@ -89,9 +89,10 @@ export const hooks = {
       return W((c, q, d) => {
         const dir = { other: 'different', next: 'next', prev: 'previous' }[q.mode];
         if (dir) return F.faceChange(c, { dir, words: words(q, ['thing']) }, d);
-        if (q.mode === 'be') return severalActs(c, words(q, ['value']), d) ?? F.faceRestyle(c, { words: words(q, ['value']) }, d);
+        if (q.mode === 'be') return severalActs(c, words(q, ['value']), d) ?? F.faceRestyle(c, { words: words(q, ['value']), self: true }, d);
         if (q.mode === 'more' || q.mode === 'less') return F.faceResize(c, { words: words(q, ['thing']), dir: SIZE.test(q.value ?? '') ? q.value : q.mode === 'less' ? 'smaller' : 'bigger' }, d);
-        if (!q.thing || SELF.test(String(q.thing).trim())) return severalActs(c, q.value ?? '', d) ?? F.faceRestyle(c, { words: `face ${q.value ?? ''}` }, d);   // "paint yourself green", "make yourself happy"
+        // "paint yourself green", "make yourself happy", "make the avatar a robot": the avatar itself is the thing (CHARACTER REQUESTS, spec 07); no part is invented
+        if (!q.thing || SELF.test(String(q.thing).trim())) return severalActs(c, q.value ?? '', d) ?? F.faceRestyle(c, { words: q.value ?? '', self: true }, d);
         const cl = F.clausesOf(d, F.tokens(q.value ?? ''));
         if (cl.some((x) => x.colours.length) && !cl.some((x) => x.slots.length)) return F.faceColour(c, { words: words(q, ['thing', 'value']) }, d);
         if (SIZE.test(q.value ?? '')) return F.faceResize(c, { words: words(q, ['thing']), dir: q.value }, d);

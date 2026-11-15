@@ -17,13 +17,13 @@
  */
 import { perf } from '../formalizer/perf.mjs?v=b81e032a17';
 import { guard } from '../formalizer/guard.mjs?v=82a55329d9';
-import { formalize, FormSession } from '../formalizer/index.mjs?v=a5ed5e8a5f';
-import { youTarget } from '../formalizer/rules/index.mjs?v=829f2647e9';
+import { formalize, FormSession } from '../formalizer/index.mjs?v=2d3ba5abcd';
+import { youTarget } from '../formalizer/rules/index.mjs?v=a815012811';
 import { serialize } from '../soplang/index.mjs?v=c57881f705';
-import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs?v=829f2647e9';
+import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs?v=a815012811';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=bf0251be42';
-import { checkValues } from './value-check.mjs?v=be9f312a9a';
-import { wildTokens } from '../formalizer/routing.mjs?v=829f2647e9';
+import { checkValues } from './value-check.mjs?v=56a356c601';
+import { wildTokens } from '../formalizer/routing.mjs?v=a815012811';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 /** Default policy; every weight is an option. */

@@ -57,7 +57,7 @@ export function build(catalog) {
   const pats = [head];
   // a frame that asks about money or states an amount of money (a price, the change, a budget, the money paid) is a signal of this world: it beats the open tab's catch-all
   // reading ("What is the change?" on the Chat tab is not a definition); a frame that only names a thing ("I want a ball") is not, so the drawing tab keeps "I want a red house"
-  const signal = (f) => f.act === 'ask' || f.args.some((r) => ['value', 'currency', 'money', 'unit'].includes(r));
+  const signal = (f) => !f.id.startsWith('wallet.') && (f.act === 'ask' || f.args.some((r) => ['value', 'currency', 'money', 'unit'].includes(r)));   // (the wallet stands behind kids.shop while it is on: no signal either)
   for (const f of frames) {
     const emit = `@{_} core.request action=list.${f.act}${f.mode ? ` arg.mode=${f.mode}` : ''}${Object.entries(f.lit ?? {}).map(([k, v]) => ` arg.${k}=\\"${v}\\"`).join('')}${f.args.map((a) => ` arg.${a}=\\"{${a}}\\"`).join('')} arg.text=\\"{segment}\\"`;
     pats.push(`@pat.${NS}.${f.id} core.pattern\n    match=${q(expand(f.match, lexNames))}\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority + behind(f)}\n${signal(f) ? '    signal=true\n' : ''}    example=${q(f.example)}\n${CANONICAL.has(f.id) ? `    canonical=${q(f.example)}\n` : ''}`);

@@ -1,0 +1,50 @@
+PASS  deployed build equals main  (live 5e1d804fe2, expected 5e1d804fe2)
+OWNER1 {"wallMs":911,"reply":"Am desenat o scenă însorită pentru tine: un soare galben, 2 nori, un munte gri, o casă albastră, 2 copaci verzi, 2 flori roz, un câine maro și o pasăre albastră. Poți schimba orice, de exemplu „fă casa albastră”.","chips":["Drawing"],"bar":["Scoate soarele."],"replyVia":null,"english":"Draw something random","perfMs":888,"knowledgeMs":0.4,"pattern":[],"changes":[{"world":"art.draw","changes":["objects: +1 sun","objects: +2 clouds","objects: +1 mountain","objects: +1 house","objects: +2 trees","objects: +2 flowers","objects: +1 dog","objects: +1 bird"]},{"world":"session.things","changes":["things: +1 sun","things: +2 clouds","things: +1 mountain","things: +1 house","things: +2 trees","things: +2 flowers","things: +1 dog","things: +1 bird"]}],"viewEffects":[{"kind":"view","tab":"draw","world":"art.draw"}]}
+PASS  owner 1 "deseneaza ceva random": reply under 2 s  (911 ms wall, 888 ms engine, knowledge 0.4 ms)
+PASS  owner 1: drew a scene  (Am desenat o scenă însorită pentru tine: un soare galben, 2 )
+PASS  owner 1: informal singular register (no plural / polite forms)
+PASS  owner 1: first person  (Am desenat o scenă însorită pentru tine: un soare galben, 2 )
+PASS  owner 1: no weapon chip  (["Drawing"])
+PASS  owner 1: seating / timeline untouched
+PASS  owner 1: the picture catalog is reachable (no "could not be reached" notice)
+INFO  owner 1 objects in the state: ["sun","cloud","cloud","mountain","house","tree","tree","flower","flower","dog","bird"]
+OWNER2 {"wallMs":93,"reply":"Am desenat o diagramă în formă de casă: 7 noduri pe contur, unite în ordine.","chips":["Diagram"],"bar":["Scoate c1."],"replyVia":null,"english":"Draw a diagram in house form","perfMs":80,"knowledgeMs":2.6,"pattern":[],"changes":[{"world":"diagram.sketch","changes":["shapes: +7 circles","edges: +7 items","edge seq 7 (was 0)","order 7 (was 0)","last: +7 items","items: 0 items","counter {…} (was none)","saved {…} (was none)"]}],"viewEffects":[{"kind":"view","tab":"diagram","world":"diagram.sketch"}]}
+INFO  diagram state: 7 nodes, 7 lines
+PASS  owner 2 "deseneaza o diagrama in forma de casa": nodes on a house outline  (7 nodes, 7 lines; Am desenat o diagramă în formă de casă: 7 noduri pe contur, unite în ordine.)
+PASS  owner 2: the Romanian reply says "noduri" and reads "joined in order" as such  (Am desenat o diagramă în formă de casă: 7 noduri pe contur, unite în ordine.)
+PASS  owner 2: the reply is composed from the template (not machine-translated)  (Am desenat o diagramă în formă de casă: 7 noduri pe contur, unite în ordine.)
+PASS  owner 2: a symmetric gable and no part names on the nodes  ([["c1",null,400,60],["c2",null,581,203],["c3",null,543,203],["c4",null,543,440],["c5",null,258,440],["c6",null,258,203],["c7",null,220,203]])
+INFO  owner 2 node boxes on the canvas: [[187,106,203,122],[289,187,305,203],[268,187,284,203],[268,321,284,337],[106,321,122,337],[106,187,122,203],[85,187,101,203]]
+PASS  owner 2: the house nodes do not overlap on the canvas  (7 nodes; overlapping pairs none)
+INFO  owner 2 example bar: ["Scoate c1."]
+PASS  owner 2: the example bar has no English chips of other pages  (["Scoate c1."])
+INFO  owner 2 reply time: 93 ms wall, 80 ms engine
+PASS  owner 1: the log names only worlds the turn changed (no "(was none)" first states)
+PASS  owner 2: the log names only worlds the turn changed (no "(was none)" first states)
+PASS  owner 2: informal singular register (no plural / polite forms)
+PASS  owner 2: first person  (Am desenat o diagramă în formă de casă: 7 noduri pe contur, )
+PASS  owner 2: no weapon chip  (["Diagram"])
+PASS  owner 2: seating / timeline untouched
+PERSON {"text":"I have two kids","wallMs":455,"perfMs":1635,"reply":"OK, you have 2 children. I will remember that.","pattern":[]}
+PERSON {"text":"I like cats, dogs and horses","wallMs":248,"perfMs":232,"reply":"OK, you like cats, dogs and horses. I will remember that.","pattern":[]}
+PERSON {"text":"what do you know about me","wallMs":173,"perfMs":168,"reply":"Here is what I know about you: you have 2 children; you like cats, dogs and horses. It stays in this conversation. Nothing leaves this device.","pattern":[]}
+PASS  person 1 "I have two kids": acknowledged without an error reply  (OK, you have 2 children. I will remember that.)
+PASS  person 2 "I like cats, dogs and horses": acknowledged without an error reply  (OK, you like cats, dogs and horses. I will remember that.)
+PASS  person 3 "what do you know about me": names the kids  (Here is what I know about you: you have 2 children; you like cats, dogs and horses. It stays in this conversation. Nothing leaves this device.)
+PASS  person 3: names the likes (cats, dogs, horses)  (Here is what I know about you: you have 2 children; you like cats, dogs and horses. It stays in this conversation. Nothing leaves this device.)
+PRIVACY {"shown":true,"rows":[["Family","2 × child"],["Likes","cat, dog, horse"]],"button":true,"disabled":false,"text":"What I know about you\n\nWhat you told me about yourself in this conversation (\"my name is Ana\", \"I have two kids\", \"I like cats\"). It stays on this device, only for this conversation, and is never sent.\n\nFamily\n2 × child\nLikes\ncat, dog, horse\nForget what you know about me"}
+PASS  Settings › Privacy shows the family fact (two kids)  (2 × child)
+PASS  Settings › Privacy shows the likes (cats, dogs, horses)  (cat, dog, horse)
+PASS  Settings › Privacy has an enabled "Forget what you know about me" button
+PRIVACY-AFTER {"shown":true,"rows":[],"button":true,"disabled":true,"text":"What I know about you\n\nWhat you told me about yourself in this conversation (\"my name is Ana\", \"I have two kids\", \"I like cats\"). It stays on this device, only for this conversation, and is never sent.\n\nNothing yet.\n\nForget what you know about me"}
+PASS  "Forget what you know about me" clears the facts  ([])
+PERSON {"text":"what do you know about me (after forget)","wallMs":1248,"reply":"Me is a state in New England."}
+PASS  after forgetting, "what do you know about me" no longer names the kids or the likes  (Me is a state in New England.)
+FAIL  after forgetting, "what do you know about me" is still answered by the person profile ("nothing yet"), not by another world  (1248 ms: Me is a state in New England.)
+PASS  no page errors
+LOG {
+ "pageErrors": [],
+ "consoleErrors": [],
+ "failed": [],
+ "http4xx5xx": []
+}
