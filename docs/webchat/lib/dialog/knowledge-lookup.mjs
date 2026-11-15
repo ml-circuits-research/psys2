@@ -11,7 +11,7 @@
  */
 import { leftOut, requestOf } from './world-aware.mjs?v=c4f54dfb20';
 import { planHostOf } from '../plan/host.mjs?v=0b6aa60a87';
-import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=b499637450';
+import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=130ddb664a';
 import { guard } from '../formalizer/guard.mjs?v=82a55329d9';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
