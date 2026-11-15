@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Operations of session.things (spec 23): learn (session.learned), sync (a view publishes its things), show (select things into a view), list. Browser-safe.
-import { parseTeach, learn as learnWire, forgetLast } from '../../lib/knowledge/learned.mjs?v=957f7aa3c2';
-import { lemmaCandidates } from '../../lib/knowledge/facts.mjs?v=d211b8920c';
+import { parseTeach, learn as learnWire, forgetLast } from '../../lib/knowledge/learned.mjs?v=b87027b738';
+import { lemmaCandidates } from '../../lib/knowledge/facts.mjs?v=f4a0d167c2';
 import { ASPECTS, aspectsOf, ensure, labelOf, select, sync as syncStore, viewByWords, whyNot } from './things.mjs?v=f904abbe0f';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };

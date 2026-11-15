@@ -2,12 +2,34 @@
 // Builds tests/fixtures/catalog/ (the small local copy of the knowledge catalog that tests read; tests never touch the network) from a checkout of the real catalog:
 //   node scripts/make-catalog-fixture.mjs <path to sop-knowledge-worlds/docs/worlds>
 // k.faces: every slot of the hand-written style keeps the variants the presets use plus the first two others; the other worlds are hand-sized samples in the same format.
-import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
 import path from 'node:path';
+//   node scripts/make-catalog-fixture.mjs <catalog folder> --world k.actions     refreshes only a world the fixture copies WHOLE (k.actions: the act verbs of worlds/acts are generated from
+//   it, tests/acts.test.mjs compares them with the pinned catalog's): its schema, shards, index entry and vocabulary, the rest of the fixture as it is (used when the catalog pin moves)
 const src = process.argv[2];
-if (!src) { console.error('usage: node scripts/make-catalog-fixture.mjs <catalog docs/worlds folder>'); process.exit(1); }
+if (!src) { console.error('usage: node scripts/make-catalog-fixture.mjs <catalog docs/worlds folder> [--world k.actions]'); process.exit(1); }
 const out = path.join(import.meta.dirname, '../tests/fixtures/catalog');
 const real = JSON.parse(readFileSync(path.join(src, 'index.json'), 'utf8'));
+const WHOLE = new Set(['k.actions']);
+if (process.argv.includes('--world')) {
+  const id = process.argv[process.argv.indexOf('--world') + 1];
+  if (!WHOLE.has(id)) { console.error(`--world: only a world the fixture copies whole (${[...WHOLE].join(', ')})`); process.exit(1); }
+  const w = real.worlds.find((x) => x.id === id);
+  const index = JSON.parse(readFileSync(path.join(out, 'index.json'), 'utf8')), vocab = JSON.parse(readFileSync(path.join(out, 'vocab.json'), 'utf8'));
+  rmSync(path.join(out, id), { recursive: true, force: true });
+  mkdirSync(path.join(out, id, 'shards'), { recursive: true });
+  writeFileSync(path.join(out, w.schema), readFileSync(path.join(src, w.schema), 'utf8'));
+  const sh = w.shards.map((x) => { const text = readFileSync(path.join(src, x.path), 'utf8'); writeFileSync(path.join(out, x.path), text); return { id: x.id, path: x.path, wires: text.split('\n').filter((l) => l.startsWith('@')).length, bytes: text.length, keys: x.keys, sources: x.sources, license: 'CC0-1.0', warnings: [] }; });
+  const at = index.worlds.findIndex((x) => x.id === id);
+  index.worlds[at] = { id, version: w.version, schema: w.schema, exports: w.exports, depends: [], shards: sh };
+  for (const k of Object.keys(vocab)) vocab[k] = vocab[k].filter((s) => !s.startsWith(`${id}/`));
+  for (const s of sh) for (const k of s.keys) (vocab[k.toLowerCase()] ??= []).push(s.id);
+  for (const k of Object.keys(vocab)) if (!vocab[k].length) delete vocab[k];   // the words keep their order: a small diff
+  writeFileSync(path.join(out, 'index.json'), JSON.stringify(index, null, 1));
+  writeFileSync(path.join(out, 'vocab.json'), JSON.stringify(vocab, null, 1));
+  console.log(`${id}: ${sh.length} shards (version ${w.version}) -> ${out}`);
+  process.exit(0);
+}
 const faces = real.worlds.find((w) => w.id === 'k.faces');
 const hand = faces.shards.filter((s) => s.sources.every((x) => x.startsWith('hand-core')));
 const presets = readFileSync(path.join(src, 'k.faces/shards/presets.sop'), 'utf8');

@@ -613,6 +613,8 @@ export async function mountPsys2(element, options = {}) {
     setWorldState: (worldId, patch) => session?.setWorldState?.(worldId, patch),
     textGen: () => textGenReady,   // { summarizer, composer }: each has `available`
     asset: (path) => assetUrl(base, path),   // the file's URL with its content hash (ui/assets.mjs): cached forever under it
+    /** The parts of a catalog thing as the engine drew it ({ name, parts } or null); undefined without an engine worker (the tab then reads the catalog itself). */
+    thingParts: (name) => (engineClient ? engineClient.call('thing-parts', { name }).catch(() => null) : Promise.resolve(undefined)),
     knowledgeUrl: () => settings.knowledgeUrl || '',   // the catalog the engine reads (the avatar tab reads its faces from the same one)
     /** Put an element inside the answer being shown (the Talk tab's cards); false when there is no answer to put it in. */
     attach: (node) => { if (!currentBot || !node) return false; currentBot.bubble.append(node); return true; },

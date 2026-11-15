@@ -385,10 +385,11 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const outDir = i > 0 ? path.resolve(process.argv[i + 1]) : undefined;
   const m = process.argv.indexOf('--models');
   const models = m > 0 ? (process.argv[m + 1] && !process.argv[m + 1].startsWith('--') ? process.argv[m + 1] : true) : null;
-  // P4: the bundled English and the generated schema worlds must be those of the pinned catalog; a stale bundle fails the build (--no-catalog-check skips it, offline)
+  // P4: the bundled English, every bundled subset (src/knowledge/bundled-*.mjs, the act verbs, the default face) and the generated schema worlds must be those of the pinned catalog;
+  // build-lang-en --check checks them all and a stale one fails the build (--no-catalog-check skips it, offline)
   if (!process.argv.includes('--no-catalog-check')) {
     try { execFileSync(process.execPath, [path.join(REPO, 'scripts/build-lang-en.mjs'), '--check'], { stdio: 'inherit' }); }
-    catch { console.error('webchat: REFUSED: the bundled English or a schema world is stale against the pinned catalog (src/knowledge/catalog-pin.mjs): node scripts/build-lang-en.mjs'); process.exit(1); }
+    catch { console.error('webchat: REFUSED: the bundled English, a bundled subset or a schema world is stale against the pinned catalog (src/knowledge/catalog-pin.mjs): node scripts/build-lang-en.mjs'); process.exit(1); }
   }
   await buildWebchat({ outDir, models, metaOnly: process.argv.includes('--meta-only'), log: console.log });
 }

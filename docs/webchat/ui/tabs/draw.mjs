@@ -150,8 +150,13 @@ function make(holder, host) {
       asking.add(o.thing);
       (async () => {
         try {
-          facts ??= await Promise.all([import(host.asset('lib/knowledge/facts.mjs')), import(host.asset('lib/loaders/knowledge-source.mjs')), import(host.asset('lib/knowledge/catalog-pin.mjs'))]).then(([f, k, pin]) => f.createFacts({ source: k.createKnowledgeSource(pin.KNOWLEDGE_URL) }));   // the catalog at the pinned commit (P4)
-          const th = await facts.thing(o.thing), parts = th?.objects?.[0]?.parts;
+          // the engine's own copy first: the reply listed what the engine drew, so the page draws those very parts (live finding 2026-11-15: a second copy got a 403 the engine's did not)
+          let th = await host.thingParts?.(o.thing);
+          if (th === undefined) {   // no engine worker: the tab reads the catalog at the pinned commit itself, through its mirrors (P4)
+            facts ??= await Promise.all([import(host.asset('lib/knowledge/facts.mjs')), import(host.asset('lib/loaders/knowledge-source.mjs')), import(host.asset('lib/knowledge/catalog-pin.mjs'))]).then(([f, k, pin]) => f.createFacts({ source: k.createKnowledgeSource(pin.KNOWLEDGE_URLS) }));
+            const t = await facts.thing(o.thing); th = t ? { name: t.name, parts: t.objects?.[0]?.parts } : null;
+          }
+          const parts = th?.parts;
           if (parts?.length) { scene.registerThings(new Map([[th.name, parts]])); if (!destroyed) { sync(state); schedule(); } }
         } catch { /* the picture shows without it */ }
         asking.delete(o.thing);

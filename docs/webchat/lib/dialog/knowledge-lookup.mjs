@@ -9,9 +9,9 @@
  *   (no veto hook: an action on a referent that must exist in the world - delete, move, color, connect, select - is refused in the world's plain words whatever the catalog knows; a hit never replaces that refusal with a gloss)
  * The catalog is `engine.knowledge` (`createEngine({ options: { knowledge } })`); without it every function here does nothing and the dialog is as it was.
  */
-import { leftOut, requestOf } from './world-aware.mjs?v=e8d4a4a98f';
-import { planHostOf } from '../plan/host.mjs?v=0b6aa60a87';
-import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=ec0407dcd9';
+import { leftOut, requestOf } from './world-aware.mjs?v=c8210b0787';
+import { planHostOf } from '../plan/host.mjs?v=340a189763';
+import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=10c4737288';
 import { guard } from '../formalizer/guard.mjs?v=82a55329d9';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
@@ -53,7 +53,7 @@ export function answerFrom(frame, th, catalog) {
       if (!c) return { text: `I know what ${a} is, but not how many ${frame.part} it has.`, status: 'missing' };
       return c.from === 'gloss' ? { text: `${cap(a)} has ${c.n} ${frame.part}.`, status: 'supported' } : { text: `My picture of ${a} has ${c.n} ${frame.part}.`, status: 'supported' };
     }
-    case 'made': return cs?.made_of?.length ? { text: `${cap(a)} is made of ${list(cs.made_of)}.`, status: 'supported' } : { text: `I know what ${a} is, but not what it is made of.`, status: 'missing' };
+    case 'made': return cs?.material?.length ? { text: `${cap(a)} is made of ${list(cs.material)}.`, status: 'supported' } : { text: `I know what ${a} is, but not what it is made of.`, status: 'missing' };
     case 'where': return cs?.at?.length ? { text: `${cap(a)} is usually found at the ${list(cs.at)}.`, status: 'supported' } : { text: `I know what ${a} is, but not where to find it.`, status: 'missing' };
     case 'can': return cs?.can?.length ? { text: `${cap(a)} can ${list(cs.can)}.`, status: 'supported' } : { text: `I know what ${a} is, but not what it can do.`, status: 'missing' };
     default: return null;

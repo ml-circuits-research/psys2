@@ -1,5 +1,5 @@
-# k.actions/shards/verbs-change: 69 verbs and phrasal verbs that mean the act "change" (change, modify, alter, adjust, correct, edit, update, make ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
-# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 60 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# k.actions/shards/verbs-change: 70 verbs and phrasal verbs that mean the act "change" (change, modify, alter, adjust, correct, edit, update, make ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 61 verbs; which act a sense means and the roles are a language model's reading, named=model)
 # sources: hand-core 1 (hand-written in this repository: 9 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
 # license: WordNet-3.0
 # script: tools/acts-core.mjs
@@ -73,6 +73,7 @@
 @k.actions.verb.change.smooth k.actions.verb text=smooth act=change sense=1 gloss="make smooth or smoother, as if by rubbing" object=thing attribute=shape value=smooth named=model core.source="wordnet 3.1"
 @k.actions.verb.change.increase k.actions.verb text=increase act=change sense=2 gloss="make bigger or more" object=attribute value=more named=model core.source="wordnet 3.1"
 @k.actions.verb.change.decrease k.actions.verb text=decrease act=change sense=2 gloss="make smaller" object=attribute value=less named=model core.source="wordnet 3.1"
+@k.actions.verb.change.reset k.actions.verb text=reset act=change sense=1 sense=2 gloss="set anew" object=thing value=default named=model core.source="wordnet 3.1"
 
 # Markings: after this verb, the word marks the role.
 @k.actions.marking.change.convert.into k.actions.marking verb=convert act=change marker=into role=value core.source="hand-core 1"
@@ -141,3 +142,4 @@
 @k.actions.marking.change.decrease.of k.actions.marking verb=decrease act=change marker=of role=thing core.source="hand-core 1"
 @k.actions.marking.change.decrease.by k.actions.marking verb=decrease act=change marker=by role=amount core.source="hand-core 1"
 @k.actions.marking.change.decrease.to k.actions.marking verb=decrease act=change marker=to role=value core.source="hand-core 1"
+@k.actions.marking.change.reset.to k.actions.marking verb=reset act=change marker=to role=value core.source="hand-core 1"

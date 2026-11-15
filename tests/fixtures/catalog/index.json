@@ -2445,12 +2445,14 @@
   },
   {
    "id": "k.actions",
-   "version": "2",
+   "version": "3",
    "schema": "k.actions/schema.sop",
    "exports": [
     "k.actions.act",
     "k.actions.action",
+    "k.actions.family",
     "k.actions.marking",
+    "k.actions.member",
     "k.actions.role",
     "k.actions.similar",
     "k.actions.verb"
@@ -3142,8 +3144,8 @@
     {
      "id": "k.actions/shards/acts",
      "path": "k.actions/shards/acts.sop",
-     "wires": 66,
-     "bytes": 12261,
+     "wires": 75,
+     "bytes": 14160,
      "keys": [
       "amount",
       "ask",
@@ -3152,6 +3154,7 @@
       "connect",
       "copy",
       "criterion",
+      "deselect",
       "direction",
       "format",
       "group",
@@ -3169,6 +3172,7 @@
       "pick",
       "place",
       "recipient",
+      "redo",
       "remove",
       "replacement",
       "save",
@@ -3182,6 +3186,54 @@
       "topic",
       "undo",
       "value"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.actions/shards/families",
+     "path": "k.actions/shards/families.sop",
+     "wires": 52,
+     "bytes": 9892,
+     "keys": [
+      "acts by what they need",
+      "acts on a kind",
+      "acts on a thing",
+      "acts that need no filler",
+      "ask",
+      "change",
+      "change of a value",
+      "change of place",
+      "change of the world",
+      "connect",
+      "copy",
+      "creation",
+      "deselect",
+      "destruction",
+      "existence",
+      "group",
+      "history",
+      "joining",
+      "keeping",
+      "load",
+      "make",
+      "no change of things",
+      "pick",
+      "place",
+      "question",
+      "redo",
+      "remove",
+      "save",
+      "send",
+      "separating",
+      "structure",
+      "take apart",
+      "the work itself",
+      "undo",
+      "view"
      ],
      "sources": [
       "hand-core-1"
@@ -3227,8 +3279,8 @@
     {
      "id": "k.actions/shards/verbs-change",
      "path": "k.actions/shards/verbs-change.sop",
-     "wires": 135,
-     "bytes": 22303,
+     "wires": 137,
+     "bytes": 22589,
      "keys": [
       "adjust",
       "alter",
@@ -3276,6 +3328,7 @@
       "recolour",
       "rename",
       "replace",
+      "reset",
       "resize",
       "reverse",
       "rotate",
@@ -3369,6 +3422,25 @@
      "warnings": []
     },
     {
+     "id": "k.actions/shards/verbs-deselect",
+     "path": "k.actions/shards/verbs-deselect.sop",
+     "wires": 6,
+     "bytes": 1376,
+     "keys": [
+      "deselect",
+      "uncheck",
+      "unhighlight",
+      "unmark",
+      "unselect",
+      "untick"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
      "id": "k.actions/shards/verbs-group",
      "path": "k.actions/shards/verbs-group.sop",
      "wires": 19,
@@ -3404,12 +3476,11 @@
     {
      "id": "k.actions/shards/verbs-load",
      "path": "k.actions/shards/verbs-load.sop",
-     "wires": 14,
-     "bytes": 3140,
+     "wires": 13,
+     "bytes": 2894,
      "keys": [
       "bring back",
       "bring up",
-      "download",
       "fetch",
       "get back",
       "import",
@@ -3432,14 +3503,15 @@
     {
      "id": "k.actions/shards/verbs-make",
      "path": "k.actions/shards/verbs-make.sop",
-     "wires": 22,
-     "bytes": 4325,
+     "wires": 25,
+     "bytes": 4712,
      "keys": [
       "add",
       "assemble",
       "build",
       "construct",
       "create",
+      "doodle",
       "draw",
       "from",
       "generate",
@@ -3450,9 +3522,11 @@
       "put on",
       "put together",
       "put up",
+      "scribble",
       "set up",
       "sketch",
-      "to"
+      "to",
+      "whip up"
      ],
      "sources": [
       "hand-core-1",
@@ -3464,14 +3538,16 @@
     {
      "id": "k.actions/shards/verbs-pick",
      "path": "k.actions/shards/verbs-pick.sop",
-     "wires": 16,
-     "bytes": 3361,
+     "wires": 21,
+     "bytes": 3879,
      "keys": [
       "at",
       "choose",
+      "click",
       "for",
       "highlight",
       "mark",
+      "on",
       "opt",
       "over",
       "pick",
@@ -3481,8 +3557,10 @@
       "select",
       "single out",
       "take",
+      "tap",
       "tick",
-      "to"
+      "to",
+      "touch"
      ],
      "sources": [
       "hand-core-1",
@@ -3494,8 +3572,8 @@
     {
      "id": "k.actions/shards/verbs-place",
      "path": "k.actions/shards/verbs-place.sop",
-     "wires": 33,
-     "bytes": 6554,
+     "wires": 36,
+     "bytes": 6957,
      "keys": [
       "align",
       "bring",
@@ -3511,6 +3589,7 @@
       "line up",
       "lower",
       "move",
+      "nudge",
       "place",
       "position",
       "pull",
@@ -3523,16 +3602,37 @@
       "raise",
       "relocate",
       "scatter",
+      "scoot",
       "set",
       "set down",
       "shift",
+      "shove",
       "slide",
       "spread out",
       "stick",
       "transfer"
      ],
      "sources": [
+      "hand-core-1",
       "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.actions/shards/verbs-redo",
+     "path": "k.actions/shards/verbs-redo.sop",
+     "wires": 5,
+     "bytes": 1271,
+     "keys": [
+      "bring back",
+      "do again",
+      "get back",
+      "put back",
+      "redo"
+     ],
+     "sources": [
+      "hand-core-1"
      ],
      "license": "CC0-1.0",
      "warnings": []
@@ -3540,8 +3640,8 @@
     {
      "id": "k.actions/shards/verbs-remove",
      "path": "k.actions/shards/verbs-remove.sop",
-     "wires": 23,
-     "bytes": 4837,
+     "wires": 25,
+     "bytes": 5092,
      "keys": [
       "cancel",
       "clear",
@@ -3551,6 +3651,7 @@
       "destroy",
       "discard",
       "do away with",
+      "drop",
       "eliminate",
       "erase",
       "from",
@@ -3563,6 +3664,7 @@
       "take out",
       "throw away",
       "throw out",
+      "wipe",
       "wipe off",
       "wipe out"
      ],
@@ -3576,12 +3678,16 @@
     {
      "id": "k.actions/shards/verbs-save",
      "path": "k.actions/shards/verbs-save.sop",
-     "wires": 12,
-     "bytes": 2765,
+     "wires": 18,
+     "bytes": 3654,
      "keys": [
       "archive",
+      "as",
       "back up",
+      "download",
+      "export",
       "hold on to",
+      "in",
       "keep",
       "memorize",
       "preserve",
@@ -3674,13 +3780,14 @@
     {
      "id": "k.actions/shards/verbs-undo",
      "path": "k.actions/shards/verbs-undo.sop",
-     "wires": 8,
-     "bytes": 1838,
+     "wires": 9,
+     "bytes": 1947,
      "keys": [
       "go back",
       "restore",
       "revert",
       "roll back",
+      "step back",
       "take back",
       "to",
       "undo"
