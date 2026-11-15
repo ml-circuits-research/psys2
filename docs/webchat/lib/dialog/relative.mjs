@@ -27,6 +27,7 @@ const slug = (s) => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '_').re
 function directionsIn(ws, dirs) {
   const out = [];
   for (let i = 0; i < ws.length; i++) {
+    budget.tick('relative.dirs');
     const d = dirs.find((x) => x.every((w, k) => ws[i + k] === w));
     if (d) { out.push(d.join(' ')); i += d.length - 1; }
   }

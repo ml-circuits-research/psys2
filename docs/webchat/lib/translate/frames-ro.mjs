@@ -12,6 +12,8 @@
  *
  * Anything else (no frame, another act) returns null and the rules translator reads the sentence as before. The facts are the bundled w.lang.ro (src/lang/ro.mjs), loaded with the rules (`loadFramesRo`).
  */
+import { budget } from '../dialog/budget.mjs?v=00bce6e369';
+
 let langRo = null, loading = null;
 /** Loads the bundled w.lang.ro once (the translator's loadRoEn waits for it, so that a ro -> en translation stays synchronous afterwards). */
 export const loadFramesRo = () => (loading ??= import('../lang/ro.mjs?v=71af621368').then((m) => m.openLangRo()).then((x) => (langRo = x), () => null));
@@ -52,7 +54,7 @@ export function frameMoveRoEn(text, rules) {
   const toks = (r.tokens ?? []).map(fold);
   const verbAt = b.verb ? toks.indexOf(fold(b.verb.form)) : -1;
   // the first direction (or its amount) in the tokens: the thing is what stands between the verb and it
-  const firstOf = (role) => { if (!role?.text) return -1; const w = fold(role.text).split(/\s+/); for (let i = Math.max(0, verbAt + 1); i < toks.length; i++) if (w.every((x, k) => toks[i + k] === x)) return i; return -1; };
+  const firstOf = (role) => { if (!role?.text) return -1; const w = fold(role.text).split(/\s+/); for (let i = Math.max(0, verbAt + 1); i < toks.length; i++) { budget.tick('frames-ro.find'); if (w.every((x, k) => toks[i + k] === x)) return i; } return -1; };
   const dirAt = [firstOf(b.roles.amount), firstOf(b.roles.rel)].filter((i) => i >= 0).sort((x, y) => x - y)[0] ?? toks.length;
   const focus = new Set((ro.world.ofType('w.lang.ro.phrase').find((p) => String(p.attrs.name?.[0]).replace(/"/g, '') === 'focus')?.attrs.item ?? []).map((x) => fold(String(x).replace(/^"|"$/g, ''))));
   const even = (i) => i > 0 && focus.has(toks[i - 1]);   // "și mai": the focus particle right before the amount
@@ -60,8 +62,8 @@ export function frameMoveRoEn(text, rules) {
   if (b.roles.thing) {
     const words = toks.slice(verbAt + 1, dirAt).filter((w) => !focus.has(w));
     const said = src.split(/\s+/).slice(verbAt + 1, dirAt).filter((w) => !focus.has(fold(w))).join(' ');
-    const en = said ? String(rules(said)?.text ?? '').replace(/[.!?]+$/, '').trim() : '';
-    if (!words.length || !en) return null;
+    const tr = said ? rules(said) : null, en = String(tr?.text ?? '').replace(/[.!?]+$/, '').trim();
+    if (!words.length || !en || tr?.unknown?.length) return null;   // a thing the rules cannot read alone ("al doilea paragraf"): the rules read the whole sentence
     thing = /^(?:the|a|an|it|them|this|that|these|those)\b/i.test(en) || /^\d/.test(en) ? en.charAt(0).toLowerCase() + en.slice(1) : `the ${en.toLowerCase()}`;
   }
   const d1 = dirEnglish(b.roles.rel.text, b.roles.amount, even(firstOf(b.roles.amount)), rules);
