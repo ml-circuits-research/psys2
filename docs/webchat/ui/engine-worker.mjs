@@ -100,7 +100,7 @@ function applySettings(s, extra) {
   if (extra?.prepare && settings.formalizer === 'encoder' && dispatcherEnc) dispatcherEnc.prepare().catch(() => {});
 }
 
-const KNOWLEDGE_URL = 'https://ml-circuits-research.github.io/sop-knowledge-worlds/worlds', KNOWLEDGE_FETCH_MS = 8000;
+const KNOWLEDGE_FETCH_MS = 8000;   // the catalog URL is the pinned one (lib/knowledge/catalog-pin.mjs, P4), read in init
 // ---------- boot ----------
 async function init(m) {
   Object.assign(ver, m.versions ?? {});
@@ -161,6 +161,7 @@ async function init(m) {
     const [{ createFacts }, { createKnowledgeSource }, { createLayeredSource }] = await Promise.all([imp('lib/knowledge/facts.mjs'), imp('lib/loaders/knowledge-source.mjs'), imp('lib/knowledge/bundled-source.mjs')]);
     const { createCachedSource } = await imp('lib/loaders/knowledge-cache.mjs');
     const { knowledgeTimeoutMs } = await imp('lib/loaders/knowledge-source.mjs');
+    const { KNOWLEDGE_URL } = await imp('lib/knowledge/catalog-pin.mjs');   // the catalog at the pinned commit, not the moving Pages head (P4)
     const src = createCachedSource({ source: createKnowledgeSource(settings.knowledgeUrl || KNOWLEDGE_URL), caches: globalThis.caches, onCacheEvent: (e) => evt('knowledge-cache', e) });
     // the bundled subset (colours, number words, the drawings of the built-in kinds: generated from the catalog) answers for a catalog that cannot be reached; the catalog replaces it when it can
     knowledgeFacts = createFacts({ source: createLayeredSource({ text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), knowledgeTimeoutMs(p) + 2000))]) }) });

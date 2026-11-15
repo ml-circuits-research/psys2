@@ -1,7 +1,8 @@
 // The thin lang.en module (src/lang/en.mjs) reads the English facts of the catalog world w.lang.en: the generated bundle is fresh, every wire parses, and the module answers the questions its callers ask.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
+import { CATALOG_PIN } from '../src/knowledge/catalog-pin.mjs';
 import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
 import { parse } from '../src/soplang/index.mjs';
@@ -13,10 +14,13 @@ import { LANG_EN_FACTS } from '../src/lang/en.facts.generated.mjs';
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 // the catalog checkout (docs/worlds of sop-knowledge-worlds): PSYS2_KNOWLEDGE, a folder; the freshness and the equality of the catalog reader with the bundle are checked only where it is at hand
-const CATALOG = process.env.PSYS2_KNOWLEDGE && !/^https?:/.test(process.env.PSYS2_KNOWLEDGE) ? process.env.PSYS2_KNOWLEDGE : null;
+// P4: the bundle is generated from the catalog at the pin (src/knowledge/catalog-pin.mjs); its checkout (.cache/catalog/<commit>, scripts/lib/catalog-pin.mjs) is read when it exists (no network in a test)
+const PIN_ROOT = join(process.env.PSYS2_CATALOG_CACHE || join(REPO, '.cache'), 'catalog', CATALOG_PIN.commit);
+const PINNED = existsSync(join(PIN_ROOT, '.complete')) ? join(PIN_ROOT, CATALOG_PIN.path) : null;
+const CATALOG = process.env.PSYS2_KNOWLEDGE && !/^https?:/.test(process.env.PSYS2_KNOWLEDGE) ? process.env.PSYS2_KNOWLEDGE : PINNED;
 
-test('the generated facts module is fresh against the catalog (node scripts/build-lang-en.mjs <catalog>)', { skip: !CATALOG && 'no catalog folder in PSYS2_KNOWLEDGE' }, () => {
-  assert.equal(readFileSync(join(REPO, 'src/lang/en.facts.generated.mjs'), 'utf8'), render(CATALOG));
+test('the generated facts module is fresh against the pinned catalog (node scripts/build-lang-en.mjs --check)', { skip: !PINNED && 'the pinned catalog is not checked out (node scripts/build-lang-en.mjs --check makes it)' }, () => {
+  assert.equal(readFileSync(join(REPO, 'src/lang/en.facts.generated.mjs'), 'utf8'), render(PINNED, CATALOG_PIN.commit));
 });
 
 test('every bundled shard parses with no error and carries only w.lang.en wires; the local facts too', () => {

@@ -16,14 +16,14 @@
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=82a55329d9';
 import { budget, isBudgetExceeded } from '../dialog/budget.mjs?v=00bce6e369';
 import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=c57881f705';
-import { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
-import { Renderer, fallbackText, listText } from './render.mjs?v=129a52a0f1';
-import { FormSession } from '../formalizer/rules/session.mjs?v=b56c914a5e';
+import { Memory, WireStore } from './memory.mjs?v=723ca93429';
+import { Renderer, fallbackText, listText } from './render.mjs?v=66d0a79ce4';
+import { FormSession } from '../formalizer/rules/session.mjs?v=a16dcc4940';
 import { makeLang } from './lang.mjs?v=404d50e9dd';
-import { withLearned } from '../knowledge/learned.mjs?v=73e66c98fc';
+import { withLearned } from '../knowledge/learned.mjs?v=4061e5fdb5';
 
-export { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
-export { Renderer } from './render.mjs?v=129a52a0f1';
+export { Memory, WireStore } from './memory.mjs?v=723ca93429';
+export { Renderer } from './render.mjs?v=66d0a79ce4';
 
 const STATUSES = new Set(['supported', 'missing', 'conflicting', 'ambiguous', 'unsupported', 'budget', 'error']);
 /**
@@ -382,7 +382,7 @@ export class Interpreter {
   _knowledgeFor(session) {
     const base = this.knowledge;
     if (!base) return null;
-    if (!session._kn || session._kn.base !== base) session._kn = { base, kn: withLearned(base, () => session.state['session.things']?.learned, () => session.memory?.own?.all?.()) };
+    if (!session._kn || session._kn.base !== base) session._kn = { base, kn: withLearned(base, () => session.state['session.things']?.learned, () => session.memory?.own?.all?.(), () => session.memory?.own ?? null) };
     return session._kn.kn;
   }
 

@@ -16,7 +16,7 @@ import { openChat } from './test-webchat-turns.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2), opt = (k, d) => { const i = args.indexOf(`--${k}`); return i >= 0 ? args[i + 1] : d; };
 const DELAY = Number(opt('delay', 2500));
-const CAT = 'https://ml-circuits-research.github.io/sop-knowledge-worlds/worlds/';
+const CAT = `${(await import('../src/knowledge/catalog-pin.mjs')).KNOWLEDGE_URL}/`;   // the pinned catalog URL the page reads (P4)
 let bad = 0;
 const check = (n, ok, d = '') => { if (!ok) bad++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${n}${d ? `  (${d})` : ''}`); };
 
