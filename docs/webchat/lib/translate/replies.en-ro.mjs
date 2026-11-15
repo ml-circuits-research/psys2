@@ -356,6 +356,9 @@ const TABLE = [
   ['I put {t} on your {lst} list.', 'Am pus {t} pe lista ta de {lst}.'], ['Done!', 'Gata!'], ['I added {t} to your {lst} list.', 'Am adăugat {t} pe lista ta de {lst}.'],
   ['You did not say which list, so I assumed your {lst} list.', 'Nu ai spus ce listă, așa că am presupus lista ta de {lst}.'],
   ['I assumed {t}.', 'Am presupus {t}.'],
+  // the `assumed` reply fact of sayRequest (w.lang.en.reply name=assumed, "I assumed {value} for the {key}."), per request key, until w.lang.ro has the row (questions.md Q47 [KNOW])
+  ['I assumed {t} for the layout.', 'Am presupus {t} pentru aranjare.'], ['I assumed {t} for the colour.', 'Am presupus {t} pentru culoare.'], ['I assumed {t} for the size.', 'Am presupus {t} pentru mărime.'],
+  ['I assumed {t} for the kinds.', 'Am presupus {t} pentru forme.'], ['I assumed {t} for the count.', 'Am presupus {t} pentru număr.'], ['I assumed {t} for the place.', 'Am presupus {t} pentru loc.'], ['I assumed {t} for the target.', 'Am presupus {t} pentru ce fac.'], ['I assumed {t} for the kind.', 'Am presupus {t} pentru formă.'], ['I assumed {t} for the anchor.', 'Am presupus {t} pentru reper.'],
   ['I have not put anything on a list yet.', 'Încă nu am pus nimic pe nicio listă.'],
   ['Because you marked {t} as done on your {lst} list.', 'Pentru că ai marcat {t} ca terminat pe lista ta de {lst}.'],
   ['I do not see that as done on any list.', 'Nu văd asta ca terminat pe nicio listă.'],

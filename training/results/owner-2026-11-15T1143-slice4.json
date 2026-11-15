@@ -1,0 +1,711 @@
+{
+ "date": "2026-11-15T21:28:44.386Z",
+ "reasoner": "matrix",
+ "mt": false,
+ "encoder": false,
+ "summary": {
+  "session": {
+   "right": 12,
+   "total": 16,
+   "medianMs": 201,
+   "withheld": 0,
+   "falseDone": 0,
+   "ms": {
+    "median": 201,
+    "p90": 991,
+    "max": 1351
+   }
+  },
+  "variants": {
+   "right": 0,
+   "total": 0,
+   "byClass": {},
+   "medianMs": null,
+   "ms": null
+  }
+ },
+ "rows": [
+  {
+   "set": "session",
+   "context": false,
+   "id": 1,
+   "class": null,
+   "text": "creare a random diagram",
+   "tab": "diagram",
+   "ms": 1351,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "I read \"creare\" as \"create\". I added a diagram. I added 3 circles. I added 2 rectangles. I added 2 ellipses. I added 6 links. I assumed layers for the layout. I assumed 7 for the count. I assumed circle, rectangle, oval for the kinds. I ass",
+   "english": "I read \"creare\" as \"create\". I added a diagram. I added 3 circles. I added 2 rectangles. I added 2 ellipses. I added 6 links. I assumed layers for the layout. I assumed 7 for the count. I assumed circle, rectangle, oval for the kinds. I ass",
+   "stages": {
+    "total": 1350.4,
+    "stages": {
+     "door": "1x 228.7",
+     "init.compilePattern": "2901x 59.6",
+     "correct": "1x 0.2",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "facts.index": 309876,
+     "diagram.layout": 95,
+     "ops.call": 14,
+     "followup.touched": 14,
+     "diagram.name": 7,
+     "voice.tight": 4
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 2,
+   "class": null,
+   "text": "this is stupid, my expectatiom was to get a nice eiagram5-10 ndes, arraws, nice layout, not a circle",
+   "tab": "diagram",
+   "ms": 991,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "I understood \"this is stupid\", \"arraws\", \"nice layout\", \"not a circle\", but not \"my expectatiom was to get a nice eiagram5-10 ndes\", so I did nothing.",
+   "english": "I understood \"this is stupid\", \"arraws\", \"nice layout\", \"not a circle\", but not \"my expectatiom was to get a nice eiagram5-10 ndes\", so I did nothing.",
+   "stages": {
+    "total": 991.2,
+    "stages": {
+     "door": "1x 401.6",
+     "intent": "1x 318.4",
+     "understands": "16x 313.8",
+     "dialogue": "3x 113.2",
+     "formalize": "2x 102.4",
+     "intent.reread": "1x 63.6",
+     "rules": "2x 39.7",
+     "lenient": "1x 7.9",
+     "person": "2x 4.8",
+     "interpret": "3x 4.6",
+     "discourse": "2x 4",
+     "names": "1x 2",
+     "knowledge": "4x 0.8",
+     "correct": "3x 0.1",
+     "typed": "1x 0.1",
+     "understands.memo": "16x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 59016,
+     "spell.edit": 17497,
+     "rules.pattern": 9749,
+     "matcher.attempt": 6993,
+     "emit.substituteEmit": 2900,
+     "index.readString": 2393
+    }
+   },
+   "door": "honest: unread: ndes",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 3,
+   "class": null,
+   "text": "you are saying that I am stupid?",
+   "tab": "diagram",
+   "ms": 201,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:I did not understand"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "I did not understand \"saying\" here.",
+   "english": "I did not understand \"saying\" here.",
+   "stages": {
+    "total": 200.9,
+    "stages": {
+     "door": "1x 114.6",
+     "formalize": "1x 59.9",
+     "lenient": "1x 52",
+     "intent": "1x 8.6",
+     "understands": "1x 8.2",
+     "rules": "1x 7.8",
+     "interpret": "2x 2.8",
+     "discourse": "2x 2.1",
+     "names": "1x 0.9",
+     "dialogue": "2x 0.5",
+     "person": "1x 0.3",
+     "knowledge": "3x 0.3",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 8768,
+     "spell.edit": 7999,
+     "rules.pattern": 2450,
+     "matcher.attempt": 1558,
+     "normalize.push3": 273,
+     "open-words.place": 226
+    }
+   },
+   "door": "honest: question",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 4,
+   "class": null,
+   "text": "you are stupid",
+   "tab": "diagram",
+   "ms": 65,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "unchanged"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Sorry, I will try again. I made it again, the way you said. I added 4 diamonds. I added an ellipse. I removed 3 circles. I removed 2 rectangles. The diagram is radial now. I assumed radial for the layout. I assumed 7 for the count. I assume",
+   "english": "Sorry, I will try again. I made it again, the way you said. I added 4 diamonds. I added an ellipse. I removed 3 circles. I removed 2 rectangles. The diagram is radial now. I assumed radial for the layout. I assumed 7 for the count. I assume",
+   "stages": {
+    "total": 65.3,
+    "stages": {
+     "door": "1x 65",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "diagram.layout": 6065,
+     "ops.call": 18,
+     "followup.touched": 14,
+     "door.state": 7,
+     "diagram.name": 7,
+     "voice.tight": 3
+    }
+   },
+   "door": "bound make (revision)",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 5,
+   "class": null,
+   "text": "Change the colour of the circle to purple.",
+   "tab": "diagram",
+   "ms": 56,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nothing changed. There is no circle here.",
+   "english": "Nothing changed. There is no circle here.",
+   "stages": {
+    "total": 56.4,
+    "stages": {
+     "door": "1x 56",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "voice.tight": 8,
+     "door.state": 7,
+     "expand.splitAnswerList": 1
+    }
+   },
+   "door": "bound change",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 6,
+   "class": null,
+   "text": "add 5 random nodes",
+   "tab": "diagram",
+   "ms": 64,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "I added a diagram. I added 2 ellipses. I added a diamond. I added 2 rectangles. I added 4 links. I assumed diagram for the target. I assumed circle for the layout. I assumed white for the colour. I assumed default for the size. I assumed ov",
+   "english": "I added a diagram. I added 2 ellipses. I added a diamond. I added 2 rectangles. I added 4 links. I assumed diagram for the target. I assumed circle for the layout. I assumed white for the colour. I assumed default for the size. I assumed ov",
+   "stages": {
+    "total": 63.9,
+    "stages": {
+     "door": "1x 63.6",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "diagram.layout": 34806,
+     "followup.touched": 24,
+     "ops.call": 10,
+     "door.state": 7,
+     "diagram.name": 5,
+     "voice.tight": 4
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 7,
+   "class": null,
+   "text": "not all circles, better layout",
+   "tab": "diagram",
+   "ms": 65,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "I made it again, the way you said. The diagram is tree now. I assumed diagram for the target. I assumed tree for the layout. I assumed white for the colour. I assumed default for the size. I assumed oval, diamond, rectangle for the kinds. I",
+   "english": "I made it again, the way you said. The diagram is tree now. I assumed diagram for the target. I assumed tree for the layout. I assumed white for the colour. I assumed default for the size. I assumed oval, diamond, rectangle for the kinds. I",
+   "stages": {
+    "total": 65.1,
+    "stages": {
+     "door": "1x 64.7",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "diagram.layout": 34833,
+     "followup.touched": 24,
+     "ops.call": 13,
+     "door.state": 12,
+     "voice.tight": 5,
+     "diagram.name": 5
+    }
+   },
+   "door": "bound make (revision)",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 8,
+   "class": null,
+   "text": "write a story about ancient hobbits with 5 chapters",
+   "tab": "editor",
+   "ms": 244,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": true,
+   "content": true,
+   "reply": "I wrote the story \"All about ancient hobbits\": 95 words in 5 chapters. I could write about 95 words about ancient hobbits from what I know (you asked for 500); I did not pad it with repetition. It is open in the Documents tab.",
+   "english": "I wrote the story \"All about ancient hobbits\": 95 words in 5 chapters. I could write about 95 words about ancient hobbits from what I know (you asked for 500); I did not pad it with repetition. It is open in the Documents tab.",
+   "stages": {
+    "total": 243.6,
+    "stages": {
+     "door": "1x 243.1",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "model.sentenceRanges": 12,
+     "followup.touched": 10,
+     "voice.tight": 9,
+     "door.lineage": 3,
+     "sopworld.chase": 2,
+     "ops.call": 1
+    }
+   },
+   "door": "request",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 9,
+   "class": null,
+   "text": "create a random picture",
+   "tab": "draw",
+   "ms": 202,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I drew a pond. It has 3 flowers, 1 bird and 3 fish. I assumed layers for the layout. I assumed 8 for the count.",
+   "english": "I drew a pond. It has 3 flowers, 1 bird and 3 fish. I assumed layers for the layout. I assumed 8 for the count.",
+   "stages": {
+    "total": 201.6,
+    "stages": {
+     "door": "1x 201.2",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "interpreter.visit": 726,
+     "ops.call": 81,
+     "index.descendants": 77,
+     "art.place": 64,
+     "knowledge.memo": 19,
+     "art.np": 16
+    }
+   },
+   "door": "request",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 10,
+   "class": null,
+   "text": "break in 3 layers: eater, land and sky",
+   "tab": "draw",
+   "ms": 925,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "I understood \"land\", \"sky\", but not \"break in 3 layers eater\", so I did nothing.",
+   "english": "I understood \"land\", \"sky\", but not \"break in 3 layers eater\", so I did nothing.",
+   "stages": {
+    "total": 925,
+    "stages": {
+     "door": "1x 743.7",
+     "formalize": "1x 108.3",
+     "rules": "1x 84.6",
+     "knowledge": "3x 60.7",
+     "interpret": "2x 1.9",
+     "discourse": "2x 0.6",
+     "person": "1x 0.3",
+     "dialogue": "2x 0.2",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 7587,
+     "meta.worlds.near": 7182,
+     "scene.edit": 4548,
+     "rules.pattern": 2933,
+     "facts.index": 2481,
+     "emit.substituteEmit": 1982
+    }
+   },
+   "door": "honest: unread: 3 eater",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 11,
+   "class": null,
+   "text": "Change the colour of the sun to black.",
+   "tab": "draw",
+   "ms": 101,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nothing changed. There is no sun here.",
+   "english": "Nothing changed. There is no sun here.",
+   "stages": {
+    "total": 100.7,
+    "stages": {
+     "door": "1x 100.3",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "interpreter.visit": 66,
+     "door.state": 8,
+     "voice.tight": 8,
+     "ops.call": 7,
+     "index.descendants": 7,
+     "expand.splitAnswerList": 1
+    }
+   },
+   "door": "bound change",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 12,
+   "class": null,
+   "text": "Change the colour of the sun to black.",
+   "tab": "draw",
+   "ms": 102,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nothing changed. There is no sun here.",
+   "english": "Nothing changed. There is no sun here.",
+   "stages": {
+    "total": 101.8,
+    "stages": {
+     "door": "1x 101.2",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "interpreter.visit": 66,
+     "door.state": 8,
+     "voice.tight": 8,
+     "ops.call": 7,
+     "index.descendants": 7,
+     "expand.splitAnswerList": 1
+    }
+   },
+   "door": "bound change",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 13,
+   "class": null,
+   "text": "Change the size of the sun to big.",
+   "tab": "draw",
+   "ms": 98,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nothing changed. There is no sun here.",
+   "english": "Nothing changed. There is no sun here.",
+   "stages": {
+    "total": 98.4,
+    "stages": {
+     "door": "1x 97.9",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "interpreter.visit": 66,
+     "door.state": 8,
+     "voice.tight": 8,
+     "ops.call": 7,
+     "index.descendants": 7,
+     "expand.splitAnswerList": 1
+    }
+   },
+   "door": "bound change",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 14,
+   "class": null,
+   "text": "Change the fill of the sun to solid.",
+   "tab": "draw",
+   "ms": 287,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "I did not understand \"fill\" here.",
+   "english": "I did not understand \"fill\" here.",
+   "stages": {
+    "total": 286.9,
+    "stages": {
+     "door": "1x 200.2",
+     "knowledge": "3x 31.6",
+     "formalize": "1x 29.9",
+     "rules": "1x 24",
+     "intent": "1x 18.7",
+     "understands": "1x 18.3",
+     "interpret": "2x 1.4",
+     "discourse": "2x 0.7",
+     "person": "1x 0.3",
+     "dialogue": "2x 0.2",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 7220,
+     "rules.pattern": 916,
+     "interpreter.visit": 792,
+     "matcher.attempt": 700,
+     "emit.substituteEmit": 416,
+     "index.run": 142
+    }
+   },
+   "door": "honest: unread: fill",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 15,
+   "class": null,
+   "text": "make sunt green",
+   "tab": "draw",
+   "ms": 253,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed",
+    "reply_any:green"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "I did not understand \"sunt\" here.",
+   "english": "I did not understand \"sunt\" here.",
+   "stages": {
+    "total": 253.1,
+    "stages": {
+     "door": "1x 200.9",
+     "formalize": "1x 31.5",
+     "rules": "1x 22",
+     "intent": "1x 13.4",
+     "understands": "1x 13.1",
+     "lenient": "1x 9.3",
+     "interpret": "2x 1.4",
+     "names": "1x 0.8",
+     "dialogue": "2x 0.6",
+     "discourse": "2x 0.4",
+     "person": "1x 0.2",
+     "knowledge": "3x 0.2",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 7775,
+     "spell.edit": 1833,
+     "rules.pattern": 1147,
+     "matcher.attempt": 1111,
+     "interpreter.visit": 396,
+     "emit.substituteEmit": 172
+    }
+   },
+   "door": "honest: unread: sunt",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 16,
+   "class": null,
+   "text": "add a small pond",
+   "tab": "draw",
+   "ms": 110,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I drew a small pond in a corner. It has 1 flower, 1 bird and 1 fish. I assumed 4 for the count.",
+   "english": "I drew a small pond in a corner. It has 1 flower, 1 bird and 1 fish. I assumed 4 for the count.",
+   "stages": {
+    "total": 109.6,
+    "stages": {
+     "door": "1x 109.2",
+     "correct": "1x 0.4",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "interpreter.visit": 726,
+     "ops.call": 81,
+     "index.descendants": 77,
+     "art.place": 75,
+     "art.np": 36,
+     "knowledge.memo": 24
+    }
+   },
+   "door": "request",
+   "legacy": false
+  }
+ ]
+}

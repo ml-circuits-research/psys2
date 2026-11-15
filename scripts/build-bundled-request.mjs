@@ -8,7 +8,7 @@ import path from 'node:path';
 import { catalogFolder, emit, done, stamp } from './lib/generated.mjs';
 
 const TYPES = {
-  'w.lang.en': ['cue', 'det', 'prep', 'pron', 'skip', 'number', 'inflect', 'irregular', 'reply', 'count', 'onset', 'anaphor', 'wh', 'closed'].map((t) => `w.lang.en.${t}`),
+  'w.lang.en': ['cue', 'det', 'prep', 'pron', 'skip', 'number', 'inflect', 'irregular', 'reply', 'count', 'onset', 'anaphor', 'wh', 'closed', 'rule', 'construction', 'word'].map((t) => `w.lang.en.${t}`),   // rule / construction / word: the NP grammar ("everything": set=all; sopworld 0.153 requestLanguage)
   'k.actions': ['k.actions.verb'],
   'k.expect': ['k.expect.amount', 'k.expect.scale', 'k.expect.make', 'k.expect.part'],
   'w.dialogue': ['w.dialogue.revision'],
@@ -27,7 +27,7 @@ for (const [world, types] of Object.entries(TYPES)) {
   walk(path.join(dir, world));
   for (const f of files) for (const l of readFileSync(f, 'utf8').split('\n')) {
     const t = l.startsWith('@') ? l.split(/\s+/)[1] : null;
-    if (!t || !want.has(t) || /=\?[a-z]/.test(l)) continue;   // a pattern of a rule (a variable) is not a fact to bundle
+    if (!t || !want.has(t) || (/=\?[a-z]/.test(l) && !/^w\.lang\.en\.(?:rule|construction)$/.test(t))) continue;   // a pattern of a rule (a variable) is not a fact to bundle, except the grammar's own rules
     lines.push(l.replace(DROP, ''));
     counts[t] = (counts[t] ?? 0) + 1;
   }

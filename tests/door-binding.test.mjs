@@ -58,3 +58,53 @@ test('values the tool does not take are translated by knowledge, defaults are ex
   assert.match(r.text, /corner for the place/);
   assert.equal(s.state()['art.draw'].objects[0].color, 'red');
 });
+
+// Spec 28 section 14, slice 4: the Diagram on the declared binding (worlds/diagram.sketch/request.sop std.tool wires, tool.mjs primitives): a diagram is a whole the library plans
+// with its nodes and links; properties through Session.send.
+const diagram = () => { const s = engine.createSession({ language: 'en' }); s.setWorldState('ui.shell', { activeTab: 'diagram' }); return s; };
+const dg = (s) => s.state()['diagram.sketch'] ?? { shapes: [], edges: [] };
+const shapes = (s) => { const k = {}; for (const x of dg(s).shapes ?? []) k[x.shape] = (k[x.shape] ?? 0) + 1; return k; };
+
+test('diagram: a range and a kind not wanted are kept; the nodes are linked; one request is one undo step (session and the tab\'s own history)', async () => {
+  const s = diagram();
+  const r = await s.send('draw a diagram with 6 to 8 nodes, no circles');
+  const n = dg(s).shapes.length;
+  assert.equal(r.trace.door, 'bound make', r.text);
+  assert.ok(n >= 6 && n <= 8, r.text);
+  assert.ok(!shapes(s).circle, r.text);
+  assert.equal(dg(s).edges.length, n - 1, `a tree of ${n} nodes: ${r.text}`);
+  assert.equal(dg(s).undo.length, 1, 'the calls of one plan are one entry of the engine\'s undo');
+  await s.send('undo');
+  assert.equal(dg(s).shapes.length, 0);
+});
+
+test('diagram: a count said of one kind is kept; "fewer nodes" cuts the same structure; questions and praise are no step', async () => {
+  const s = diagram();
+  const r = await s.send('make me a diagram of 6 boxes but no diamonds');
+  assert.deepEqual(shapes(s), { rectangle: 6 }, r.text);
+  const fewer = await s.send('fewer nodes');
+  const m = dg(s).shapes.length;
+  assert.ok(m < 6 && m >= 1, fewer.text);
+  assert.deepEqual(Object.keys(shapes(s)), ['rectangle'], fewer.text);
+  assert.equal(dg(s).edges.length, m - 1, `still connected: ${fewer.text}`);
+  const before = JSON.stringify([dg(s).shapes, dg(s).edges]);
+  for (const t of ['how many nodes?', 'what can you do here?', 'nice']) {
+    const q = await s.send(t);
+    assert.equal(JSON.stringify([dg(s).shapes, dg(s).edges]), before, `${t}: ${q.text}`);
+  }
+  const q = await s.send('how many rectangles are there?');
+  assert.match(q.text, new RegExp(`There (?:are ${m} rectangles|is one rectangle)`), q.text);
+});
+
+test('diagram: acts on the shapes there go through the binding (change, remove); things of kinds stand free', async () => {
+  const s = diagram();
+  const r = await s.send('draw three circles');
+  assert.deepEqual(shapes(s), { circle: 3 }, r.text);
+  assert.equal(dg(s).edges.length, 0, r.text);
+  const c = await s.send('change the circles to red');
+  assert.ok(dg(s).shapes.every((x) => x.color === 'red'), c.text);
+  assert.equal(c.trace.door, 'bound change', c.text);
+  const d = await s.send('remove the circles');
+  assert.equal(dg(s).shapes.length, 0, d.text);
+  assert.equal(d.trace.door, 'bound remove', d.text);
+});

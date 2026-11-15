@@ -21,95 +21,12 @@ import { routeEdges, segBoxDist, boxOf } from './arrows.mjs';
 import * as space from '../space/space.mjs';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs';
 import * as DG from '../../src/knowledge/diagram-world.mjs';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
-const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
-
-const TAB = 'diagram';
-const MAX_HISTORY = 30;
-let K = null, loading = null, sys = null, sysOf = null;
-
-/** Starts loading the engine (once). Returns a promise of the engine kit. */
-export function loadEngine() {
-  loading ??= import('./engine/logic.mjs').then((m) => { K = m.default; return K; });
-  return loading;
-}
-export const engineReady = () => !!K;
+import { budget, TAB, MAX_HISTORY, K, loadEngine, engineReady, initialState, ensure, ok, no, open, WORLD_KEYS, PREFIX, KIND_OF_PREFIX, ID_RE, LONG_RE, shapeOf, idOf, nextId, assignIds, systemFor, writeBack, resetSystem } from "./core.mjs";
+export { loadEngine, engineReady, initialState, PREFIX, shapeOf, idOf };
 /** Async hook called by the dialog layer before this world's operations run (spec 04): the first sentence waits for the engine instead of being refused. */
 let DL = null;   // the library module, once loaded: composing a diagram needs it (spec 14 section 9)
 if (typeof process !== 'undefined' && process.versions?.node) DL = await DG.diagramLibrary().catch(() => null);   // under Node at once; a browser fetches it with the engine
 export const prepare = () => Promise.all([loadEngine(), DG.diagramLibrary().then((l) => { DL = l; return l; }).catch(() => null)]);
-if (typeof process !== 'undefined' && process.versions?.node) await loadEngine();
-
-export function initialState() {
-  return {
-    shapes: [], edges: [], rules: [], seq: {}, edgeSeq: 0, ruleSeq: 0, order: 0, frame: { x: 0, y: 0 }, frames: [], groups: [],
-    last: [], selected: null, pending: null, undo: [], redo: [], rev: 0,
-  };
-}
-function ensure(ctx) {
-  const s = ctx.state, d = initialState();
-  for (const k of Object.keys(d)) if (s[k] === undefined) s[k] = d[k];
-  if (s.shapes.some((x) => !x.id) || s.edges.some((e) => /^e\d+$/.test(e.id))) { assignIds(s); s.rev = (s.rev ?? 0) + 1; }
-  return s;
-}
-
-const ok = (value, extra) => ({ status: 'supported', value, ...extra });
-const no = (note, status = 'unsupported') => ({ status, note });
-const open = (ctx) => { try { ctx.request('ui.openTab', { tab: TAB }); } catch { /* the shell may not know the tab */ } };
-const WORLD_KEYS = ['shapes', 'edges', 'rules', 'seq', 'edgeSeq', 'ruleSeq', 'order', 'frame', 'frames', 'groups', 'facts'];
-
-// ---- short ids (DIAG3) ------------------------------------------------------------------------------------------------
-// Every shape has a short id by kind (c1 circle, r1 rectangle, s1 square, d1 diamond, e1 ellipse, t1 triangle, h1 hexagon, k1 star, x1 text) and every arrow
-// an id a1, a2. An unnamed shape is named by its id; a shape the user named keeps its name and carries the id in `id`. The old long names (circle1,
-// rectangle1, box1) stay aliases: they resolve to the shape of the same number and kind. The engine is patched here, not edited (patchWorld).
-export const PREFIX = { circle: 'c', rectangle: 'r', square: 's', diamond: 'd', ellipse: 'e', triangle: 't', hexagon: 'h', star: 'k', text: 'x' };
-const LONG_OF = { box: 'rectangle', rect: 'rectangle', oval: 'ellipse', rhombus: 'diamond', ...Object.fromEntries(Object.keys(PREFIX).map((k) => [k, k])) };
-const KIND_OF_PREFIX = Object.fromEntries(Object.entries(PREFIX).map(([k, v]) => [v, k]));
-const ID_RE = /^([crsdetxhk])(\d+)$/i;
-const LONG_RE = new RegExp(`^(${Object.keys(LONG_OF).join('|')})(\\d+)$`, 'i');
-/** The shape a token names: its name, its short id, or the old long name (circle1 = c1). */
-export function shapeOf(state, token) {
-  if (token == null) return null;
-  const l = String(token).toLowerCase(), ss = state.shapes ?? [];
-  const exact = ss.find((x) => x.name.toLowerCase() === l) ?? ss.find((x) => x.id && x.id.toLowerCase() === l);
-  if (exact) return exact;
-  const m = LONG_RE.exec(l);
-  if (m) {
-    const kind = LONG_OF[m[1].toLowerCase()], id = `${PREFIX[kind]}${m[2]}`;
-    // "rectangle1" is the first rectangle the person drew: shapes a template made do not count (their ids follow the same numbering)
-    const own = ss.filter((x) => !x.template && !x.layer);
-    const byId = own.find((x) => (x.id ?? '').toLowerCase() === id || x.name.toLowerCase() === id);
-    if (byId) return byId;
-    if (ss.some((x) => x.template && x.shape === kind)) return own.filter((x) => x.shape === kind).sort((a, b) => (a.order ?? 0) - (b.order ?? 0))[Number(m[2]) - 1] ?? null;
-    return ss.find((x) => (x.id ?? '').toLowerCase() === id || x.name.toLowerCase() === id) ?? null;
-  }
-  return null;
-}
-export const idOf = (x) => x.id ?? (ID_RE.test(x.name) ? x.name.toLowerCase() : x.name);
-/** The next free short id of a kind; the counter is the engine's own `seq`. */
-function nextId(state, kind) {
-  const p = PREFIX[kind] ?? 'z';
-  const used = new Set((state.shapes ?? []).flatMap((x) => [x.name.toLowerCase(), (x.id ?? '').toLowerCase()]));
-  let id;
-  do { budget.tick('diagram.name'); state.seq[kind] = (state.seq[kind] || 0) + 1; id = `${p}${state.seq[kind]}`; } while (used.has(id));
-  return id;
-}
-function patchWorld(w) {
-  const find0 = w.find.bind(w);
-  w.find = function (name) { return find0(name) ?? (name == null ? null : shapeOf(this.state, name)); };
-  w.nextName = function (shape) { return nextId(this.state, shape); };
-  w.newEdge = function (from, to, o) { return Object.assign({ id: `a${++this.state.edgeSeq}`, from, to, style: 'solid', arrow: 'forward', label: null, color: null }, o || {}); };
-}
-/** Gives every shape that has no id one (named shapes keep their names), and migrates old arrow ids (e1 -> a1). */
-function assignIds(s) {
-  for (const x of s.shapes) {
-    x.kind = x.shape;   // the kind of the shape (circle, rectangle ...) under the name tests and the state readers use
-    if (x.id) continue;
-    const m = ID_RE.exec(x.name);
-    x.id = m && KIND_OF_PREFIX[m[1].toLowerCase()] === x.shape ? x.name.toLowerCase() : nextId(s, x.shape);
-  }
-  const taken = new Set(s.edges.map((e) => e.id));
-  for (const e of s.edges) if (/^e\d+$/.test(e.id)) { let n = 0, id; do { budget.tick('diagram.name'); id = `a${++n}`; } while (taken.has(id)); taken.add(id); e.id = id; s.edgeSeq = Math.max(s.edgeSeq ?? 0, n); }
-}
 const edgeOf = (s, id) => s.edges.find((e) => e.id.toLowerCase() === String(id).toLowerCase()) ?? null;
 /** "c1 → r1": the ends of an arrow (a named shape shows its name and its id). */
 const endName = (s, n) => plain(s, n);
@@ -136,32 +53,6 @@ function drawnPhrase(s, names) {
   return [...kinds, ...out];
 }
 const arrowText = (s, e) => `${endName(s, e.from)} ${e.arrow === 'forward' ? '→' : e.arrow === 'both' ? '↔' : '—'} ${endName(s, e.to)}`;
-
-// ---- the engine bound to a state --------------------------------------------------------------------------------------
-/** One engine system (the legend and plugins are built once); its world is loaded from `s` before and written back after each run. */
-function systemFor(s) {
-  if (!sys) { sys = K.createSystem(); patchWorld(sys.world); }
-  const w = sys.world;
-  if (sysOf !== s || w.rev !== s.rev) {
-    w.state = structuredClone(Object.fromEntries(WORLD_KEYS.filter((k) => s[k] !== undefined).map((k) => [k, s[k]])));
-    w.undoStack = s.undo; w.redoStack = s.redo;
-    sysOf = s;
-  }
-  return sys;
-}
-function writeBack(s) {
-  const w = sys.world;
-  const was = JSON.stringify(WORLD_KEYS.map((k) => s[k] ?? null)), undo0 = s.undo?.length ?? 0;
-  for (const k of WORLD_KEYS) { if (w.state[k] === undefined) delete s[k]; else s[k] = w.state[k]; }
-  s.undo = w.undoStack; s.redo = w.redoStack;
-  assignIds(s);
-  while (s.undo.length > MAX_HISTORY) { budget.tick('ops.writeBack'); s.undo.shift(); }
-  while (s.redo.length > MAX_HISTORY) { budget.tick('ops.writeBack2'); s.redo.shift(); }
-  // the revision counts changes of the diagram: a run that read it (a question, a refused request) leaves it as it was
-  if (JSON.stringify(WORLD_KEYS.map((k) => s[k] ?? null)) !== was || (s.undo?.length ?? 0) !== undo0) s.rev = (s.rev ?? 0) + 1;
-  w.rev = s.rev;
-  w.state = structuredClone(Object.fromEntries(WORLD_KEYS.filter((k) => s[k] !== undefined).map((k) => [k, s[k]])));   // the state of the context is never aliased by the engine
-}
 /** Every token that names a shape: its name, its short id and its old long name (circle1 for c1). */
 const longName = (x) => { const m = ID_RE.exec(idOf(x)); return m ? `${KIND_OF_PREFIX[m[1].toLowerCase()]}${m[2]}` : null; };
 const nameTokens = (s) => [...new Set(s.shapes.flatMap((x) => [x.name, x.id, longName(x)]).filter(Boolean).concat((s.groups ?? []).map((g) => g.name)))];
@@ -824,7 +715,7 @@ export const kit = () => K;
 /** The 24 diagram templates by name (the legend of the engine). */
 export const templateNames = (s) => [...new Set(systemFor(s).engine.legend.lexicon('template').values())];
 const offer = (s) => `Templates: ${listing(templateNames(s))}. Say for example "make a ${['tree', 'cycle', 'pyramid', 'flowchart'][s.shapes.length % 4]}" or just start drawing.`;
-const clear = (ctx, s) => { Object.assign(s, initialState()); sysOf = null; open(ctx); };
+const clear = (ctx, s) => { Object.assign(s, initialState()); resetSystem(); open(ctx); };
 
 /** "create / start / new diagram": with shapes on the canvas it asks whether to keep them; "clear the canvas" starts empty at once. */
 export const newDiagram = (ctx, args = {}) => {
@@ -936,183 +827,4 @@ export function checkReferents(ctx, { action, args = {} } = {}) {
   if (!missing.length) return undefined;
   const have = (state.shapes ?? []).filter((x) => !x.layer && !x.template).map((x) => x.name);
   return { missing, here: have.length ? have.join(', ') : null, where: 'diagram', offer: `${missing.map((x) => `add a rectangle called ${x.name}`).join(' and ')} and connect ${names[0]} to ${names[1]}` };
-}
-
-// ---- spec 28: the diagram as the goal of a request (w.request) ----------------------------------------------------------------------------------------------
-/**
- * What the turn made, for the check of a request (spec 28 section 4): the shapes that are not in `before` (the world state before the turn), their kinds, the arrows among them.
- * Read-only.
- */
-export function requestResult(ctx, { before = null } = {}) {
-  const s = ctx.state ?? {};
-  const had = new Set((before?.shapes ?? []).map((x) => x.id ?? x.name));
-  const made = (s.shapes ?? []).filter((x) => !x.layer && !x.template && !had.has(x.id ?? x.name));
-  const names = new Set(made.map((x) => x.name));
-  const kinds = {};
-  for (const x of made) kinds[x.shape] = (kinds[x.shape] ?? 0) + 1;
-  const links = (s.edges ?? []).filter((e) => names.has(e.from) || names.has(e.to)).length;
-  // a diagram the knowledge composed in this turn (a kind with its own shapes and links: a flowchart of steps, a list) is the knowledge's answer to the defaults
-  const composed = !!s.composed && JSON.stringify(s.composed) !== JSON.stringify(before?.composed ?? null);
-  return { parts: made.length, kinds, links, extent: made.reduce((a, x) => a + (x.size ?? 0), 0), composed };
-}
-
-/**
- * TOOLS OF THE DIAGRAM (spec 28 section 12): the engine's own commands (delete, move, set, resize) on shapes named by the host, with no words. Arguments: `ids` (shape names), a
- * direction (up, down, left, right), a region id (the canvas regions of the engine: top, bottom, left, right, centre, corner, top_left ...), the ids of a shape to go next to, an
- * attribute (colour, size) and a value (a colour; a step of the scale) or a step (up / down). One undo step each. Result: { status, changed: [names] } or { status: 'missing', code }.
- * Bound in request.sop (psys2.tool); the host says what was done from the language world's reply facts.
- */
-const SPOT = { centre: 'center', center: 'center', top: 'top', bottom: 'bottom', left: 'left', right: 'right', top_left: 'topLeft', top_right: 'topRight', bottom_left: 'bottomLeft', bottom_right: 'bottomRight', corner: 'bottomLeft' };   // the region ids of the requests in the engine's names
-const ENGINE_SIZE = { tiny: 'tiny', small: 'small', medium: 'medium', default: 'medium', big: 'large', large: 'large', huge: 'huge' };
-function shapeTool(ctx, ids, args) {
-  if (!K) return NOT_READY();
-  const s = ensure(ctx);
-  const names = (ids ?? []).filter((n) => s.shapes.some((x) => x.name === n));
-  if (!names.length) return { status: 'missing', value: '', code: 'no_things' };
-  const a = args(names);
-  if (!a) return { status: 'missing', value: '', code: 'no_place' };
-  const at0 = JSON.stringify(s.shapes.filter((x) => names.includes(x.name)).map((x) => [x.x, x.y, x.color, x.size, x.w, x.h]));
-  const r = execute(ctx, s, [{ id: 'tool1', type: 'command', args: a }], { place: false });
-  if (r.status !== 'supported') return { status: r.status, value: '', code: 'refused' };
-  s.last = names.filter((n) => s.shapes.some((x) => x.name === n));
-  const now = JSON.stringify(s.shapes.filter((x) => names.includes(x.name)).map((x) => [x.x, x.y, x.color, x.size, x.w, x.h]));
-  return { status: 'supported', value: '', changed: a.action === 'delete' || now !== at0 ? names : [] };
-}
-export const removeShapes = (ctx, { ids } = {}) => shapeTool(ctx, ids, (names) => ({ action: 'delete', target: names }));
-export const moveShapes = (ctx, { ids, direction = null, region = null, anchor = null } = {}) => shapeTool(ctx, ids, (names) => {
-  const to = [].concat(anchor ?? []).find((n) => ensure(ctx).shapes.some((x) => x.name === n));
-  if (['up', 'down', 'left', 'right'].includes(direction)) return { action: 'move', target: names, direction };
-  if (to) return { action: 'move', target: names, position: 'rightOf', anchor: to };
-  if (SPOT[region]) return { action: 'move', target: names, region: SPOT[region] };
-  return null;
-});
-export const setShapes = (ctx, { ids, attribute, value = null, step = null } = {}) => shapeTool(ctx, ids, (names) => {
-  if (attribute === 'colour' && value) return { action: 'set', target: names, color: String(value).toLowerCase() };
-  if (attribute === 'size' && value && ENGINE_SIZE[value]) return { action: 'set', target: names, size: ENGINE_SIZE[value] };
-  if (attribute === 'size' && step) return { action: 'resize', target: names, scale: step === 'up' ? 1.5 : 0.67 };
-  return null;
-});
-
-/**
- * ARROWS FOR THE NODES THAT HAVE NONE ("add arrows", a request whose target is the link): every node with no arrow is joined to the node before it in reading order (top to bottom,
- * left to right), the first one to the node after it. One undo step. Returns { status, value }.
- */
-function linkLoose(ctx, s) {
-  const nodes = (s.shapes ?? []).filter((x) => !x.layer && !x.template).slice().sort((a, b) => (a.y ?? 0) - (b.y ?? 0) || (a.x ?? 0) - (b.x ?? 0));
-  if (nodes.length < 2) return no('I need two shapes to connect. Draw them first, for example "draw a diagram with 5 nodes".', 'missing');
-  const linked = (x) => (s.edges ?? []).some((e) => e.from === x.name || e.to === x.name);
-  const pairs = [];
-  for (const [i, x] of nodes.entries()) {
-    budget.tick('diagram.links');
-    if (linked(x) || pairs.some(([a, b]) => a === x.name || b === x.name)) continue;
-    const y = i > 0 ? nodes[i - 1] : nodes[1];
-    pairs.push(i > 0 ? [y.name, x.name] : [x.name, y.name]);
-  }
-  if (!pairs.length) return ok('Every node already has an arrow.', { plain: true });
-  const res = execute(ctx, s, pairs.map(([from, to], k) => ({ id: `lk${k}`, type: 'command', args: { action: 'connect', from, to } })), { place: false });
-  if (res.status !== 'supported') return res;
-  open(ctx);
-  return ok(`I added ${pairs.length} arrow${pairs.length === 1 ? '' : 's'}, so that every node has one.`, { plain: true });
-}
-
-/** A small deterministic generator (the session's seed): "random" is varied, and the same seed gives the same diagram. */
-const rngOf = (seed) => { let a = (Number(seed) >>> 0) || 1; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
-
-/**
- * PLAN A DIAGRAM FOR A REQUEST (spec 28 section 4, step 5). `goal`: { range: [lo, hi], kinds: [wanted shapes], not: [shapes not wanted], notAll, varied, shapes: [the expected shapes],
- * arrows, layout, topic, seed }. The nodes and arrows come from the knowledge (k.diagrams through src/knowledge/diagram-world.mjs: a sampled diagram, or one about the topic), cut or
- * filled to the count; the shapes honour the kinds asked and not wanted; a named layout tidies it. Returns { status, value, assumed }.
- */
-export function planRequest(ctx, goal = {}) {
-  if (!K) return NOT_READY();
-  if (!DL) return no('The diagram knowledge is still loading. Please say that again in a moment.', 'missing');
-  const s = ensure(ctx);
-  if (goal.target === 'link') return linkLoose(ctx, s);
-  const drawnAs = goal.declared?.drawn ?? {};   // a kind of the expectations drawn as one of the engine's shapes (request.sop std.schema.drawn: oval as ellipse)
-  if (goal.kinds?.includes('link')) goal = { ...goal, arrows: true, kinds: goal.kinds.filter((k) => k !== 'link') };   // "with arrows": the links of the diagram, never a shape
-  if (goal.kinds?.length) goal = { ...goal, kinds: [...new Set(goal.kinds.map((k) => drawnAs[k] ?? k))] };
-  const rnd = rngOf(goal.seed ?? Math.floor(Math.random() * 2 ** 31));
-  const [lo, hi] = goal.range ?? [5, 9];
-  const n = Math.max(1, lo + Math.floor(rnd() * (hi - lo + 1)));
-  // THINGS OF KINDS, NOT A DIAGRAM ("draw three circles"): the shapes asked, with no topic and no arrows (a diagram of the knowledge is a request for a diagram)
-  if (goal.plan?.roles?.mode === 'kind' && !goal.arrows && !goal.topic) {
-    const not = new Set(goal.not ?? []);
-    const kinds = (goal.kinds?.length ? goal.kinds : ['circle']).filter((k) => !not.has(k));
-    if (!kinds.length) return no('Every shape I could draw was ruled out.', 'unsupported');
-    const list = Array.from({ length: n }, (_, i) => ({ id: `pk${i}`, type: 'command', args: { action: 'create', shape: kinds[i % kinds.length] } }));
-    const res = execute(ctx, s, list, { place: false });
-    if (res.status !== 'supported') return res;
-    const made = (s.last ?? []).slice();
-    if (made.length > 1) { try { arrangeLayout(ctx, { text: `arrange ${made.join(', ')} as a ${made.length <= 6 ? 'row' : 'grid'}` }); } catch { /* the engine's places stay */ } }
-    s.last = made;
-    const cnt = (k) => list.filter((x) => x.args.shape === k).length;
-    const shown = [...new Set(list.map((x) => x.args.shape))].map((k) => (cnt(k) === 1 ? `${/^[aeiou]/.test(k) ? 'an' : 'a'} ${k}` : `${cnt(k)} ${k}s`));
-    open(ctx);
-    return ok(`I drew ${shown.length > 1 ? `${shown.slice(0, -1).join(', ')} and ${shown.at(-1)}` : shown[0]}.`, { plain: true });
-  }
-  const world = DG.diagramWorldOf(DL, ctx.knowledge);
-  const assumed = [];
-  // the knowledge's diagram: about the topic, else sampled; the closest in size to n
-  let got = null;
-  if (goal.topic) { const r = DG.composeForRequest(DL, world, { topic: goal.topic }, { seed: Math.floor(rnd() * 1e9), max: Math.max(n, 9) }); if (!r.why) got = r; }
-  for (let i = 0; !got?.diagram || (got.diagram.nodes.length < n && i < 6); i++) {
-    if (i >= 6) break;
-    const r = DG.sampleDiagrams(DL, world, { seed: Math.floor(rnd() * 1e9), min: Math.min(n, 4), max: Math.max(n, 9) });
-    if (!r.why && (!got || Math.abs(r.diagram.nodes.length - n) < Math.abs(got.diagram.nodes.length - n))) got = r;
-  }
-  const src = got?.diagram ?? { nodes: [], edges: [], directed: true, kind: 'network' };
-  // cut to n in the order of the arrows from the first node (a tree keeps its root and its upper levels), or fill with numbered steps joined to a node before
-  const keep = [], seen = new Set(), adj = new Map();
-  for (const e of src.edges ?? []) { if (!adj.has(e.from)) adj.set(e.from, []); adj.get(e.from).push(e.to); }
-  const queue = src.nodes.length ? [src.nodes[0].id] : [];
-  while (queue.length && keep.length < n) { budget.tick('diagram.plan'); const id = queue.shift(); if (seen.has(id)) continue; seen.add(id); keep.push(id); for (const t of adj.get(id) ?? []) queue.push(t); }
-  for (const x of src.nodes) if (keep.length < n && !seen.has(x.id)) { seen.add(x.id); keep.push(x.id); }
-  const nodes = keep.map((id) => ({ ...src.nodes.find((x) => x.id === id) }));
-  const plainShapes = goal.plan?.roles?.mode === 'kind' && !goal.arrows;   // "draw seven circles": shapes, not a diagram of arrows ("add arrows" links them)
-  const edges = plainShapes ? [] : (src.edges ?? []).filter((e) => keep.includes(e.from) && keep.includes(e.to)).map((e) => ({ ...e }));
-  for (let k = nodes.length; k < n; k++) { const id = `fill${k}`; nodes.push({ id, label: `${goal.topic ? String(goal.topic).replace(/^(?:a|an|the)\s+/, '') : 'Step'} ${k + 1}`, shape: 'rectangle', x: 0, y: 0 }); if (nodes.length > 1 && !plainShapes) edges.push({ from: nodes[Math.floor(rnd() * (nodes.length - 1))].id, to: id }); }
-  // a diagram with arrows has no loose boxes: a node with no arrow is joined to the one before it
-  if (goal.arrows) for (let k = 1; k < nodes.length; k++) if (!edges.some((e) => e.from === nodes[k].id || e.to === nodes[k].id)) edges.push({ from: nodes[k - 1].id, to: nodes[k].id });
-  // shapes: the kinds asked, never a kind not wanted; "not all X" and a diagram of the default kind have two or three shapes (the steps, the branch points, the leaves)
-  const not = new Set(goal.not ?? []);
-  const pool = (goal.kinds?.length ? goal.kinds : (goal.shapes?.length ? goal.shapes : ['rectangle', 'diamond', 'ellipse', 'circle'])).filter((k) => !not.has(k));
-  const allowed = pool.length ? pool : ['rectangle', 'diamond', 'ellipse', 'circle', 'square', 'hexagon'].filter((k) => !not.has(k));
-  const out = new Map(), inn = new Map();
-  for (const e of edges) { out.set(e.from, (out.get(e.from) ?? 0) + 1); inn.set(e.to, (inn.get(e.to) ?? 0) + 1); }
-  for (const [i, x] of nodes.entries()) {
-    let sh = goal.kinds?.length ? goal.kinds[i % goal.kinds.length] : (DG.ENGINE_SHAPE[x.shape] ?? 'rectangle');
-    if (not.has(sh) || !allowed.includes(sh)) {
-      const role = !inn.get(x.id) ? 0 : (out.get(x.id) ?? 0) > 1 ? 1 : !(out.get(x.id) ?? 0) ? 2 : 0;
-      sh = allowed[role % allowed.length];
-    }
-    x.engine = sh;
-  }
-  const distinct = new Set(nodes.map((x) => x.engine));
-  if ((goal.notAll || (!goal.kinds?.length && goal.varied)) && distinct.size < 2 && nodes.length > 1 && allowed.length > 1) {
-    const other = allowed.find((k) => k !== nodes[0].engine);
-    for (const [i, x] of nodes.entries()) if (i > 0 && (i % 2 === 1 || !(out.get(x.id) ?? 0))) x.engine = other;
-  }
-  // onto the engine: the shapes and the arrows, then the layout
-  const taken = new Set(s.shapes.flatMap((x) => [x.name, x.id].filter(Boolean)));
-  const d = { ...src, nodes: nodes.map((x) => ({ ...x, x: x.x ?? 0, y: x.y ?? 0, shape: x.engine })), edges, directed: !!goal.arrows || src.directed !== false, groups: [], line: false };
-  const list = DG.engineNodes(d, taken);
-  let i = 0;
-  for (const nd of list) if (nd.args?.action === 'create') { nd.args.shape = d.nodes[i++]?.shape ?? nd.args.shape; }
-  const res = execute(ctx, s, list, { place: false });
-  if (res.status !== 'supported') return res;
-  const made = (s.last ?? []).slice();
-  const ENGINE_LAYOUT = { top_down: 'tree', hierarchy: 'tree', left_right: 'row', ring: 'circle', radial: 'radial', tree: 'tree', grid: 'grid', row: 'row', column: 'column', circle: 'circle' };   // the expectation's layout names in the engine's words
-  const layout = ENGINE_LAYOUT[goal.layout] ?? (edges.length ? 'tree' : 'grid');
-  if (!goal.layout) assumed.push(`The diagram is a ${layout}.`);
-  if (made.length > 1) { try { arrangeLayout(ctx, { text: `arrange ${made.join(', ')} as a ${layout}` }); } catch { /* the engine's places stay */ } }
-  s.last = made;
-  s.composed = { kind: src.kind, topic: got?.topic ?? goal.topic ?? null };
-  if (goal.rangeAssumed) assumed.push(`I chose ${nodes.length} nodes.`);
-  const kinds = [...new Set(nodes.map((x) => x.engine))];
-  const cnt = (k) => nodes.filter((x) => x.engine === k).length;
-  const topic = got?.topic ? ` about ${got.topic}` : '';
-  // short plain sentences with a subject (they survive the translation of the reply, reviewer 2026-11-15 13:10 item 3)
-  const said = `I drew a diagram with ${nodes.length} node${nodes.length === 1 ? '' : 's'}${edges.length ? ` and ${edges.length} arrow${edges.length === 1 ? '' : 's'}` : ''}.${got?.topic ? ` It is about ${got.topic}.` : ''} The nodes are ${kinds.map((k) => `${cnt(k)} ${cnt(k) === 1 ? k : `${k}s`}`).join(' and ')}.`;
-  open(ctx);
-  return ok(said, { assumed, names: got?.topic ? [String(got.topic)] : [] });   // the topic is a label of the knowledge: a name in the reply, never translated word by word
 }

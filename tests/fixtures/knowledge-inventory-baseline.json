@@ -90,7 +90,7 @@
  "diagram.sketch|table|worlds/diagram.sketch/engine/logic.mjs:OPS_WHOLE_ACTIONS": 13,
  "diagram.sketch|table|worlds/diagram.sketch/engine/templates.mjs:SCHEMES": 17,
  "diagram.sketch|table|worlds/diagram.sketch/engine/templates.mjs:SCHEME_CUES": 40,
- "diagram.sketch|table|worlds/diagram.sketch/engine.mjs:WORLD_KEYS": 11,
+ "diagram.sketch|table|worlds/diagram.sketch/core.mjs:WORLD_KEYS": 11,
  "diagram.sketch|table|worlds/diagram.sketch/engine.mjs:NUMBER_WORD": 11,
  "diagram.sketch|table|worlds/diagram.sketch/engine.mjs:ACTIONS": 32,
  "diagram.sketch|table|worlds/diagram.sketch/engine.mjs:ASKS": 17,
