@@ -21,7 +21,7 @@
 import { readFile, writeFile, readdir, mkdir, rm, cp, stat } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { slotDeclarations } from '../src/worlds/describe.mjs';
 
@@ -372,7 +372,8 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   for (const sub of ['lib', 'worlds']) {
     for (const f of await walk(path.join(outDir, sub))) files[`${sub}/${f}`] = sha(await readFile(path.join(outDir, sub, f)));
   }
-  const info = { version, worlds: ids, tabs: tabFiles, dispatcherModel: !!modelFiles, files, builtAt, commit, assets };
+  const { CATALOG_PIN } = await import(pathToFileURL(path.join(root, 'src/knowledge/catalog-pin.mjs')).href);
+  const info = { version, worlds: ids, tabs: tabFiles, dispatcherModel: !!modelFiles, files, builtAt, commit, catalog: CATALOG_PIN.commit, assets };   // catalog: the pinned catalog commit the page reads (P4)
   await writeFile(path.join(outDir, 'build-info.json'), JSON.stringify(info, null, 2) + '\n');
   log(`webchat: ${ids.length} worlds, ${Object.keys(files).length} files -> ${outDir}`);
   return info;
@@ -384,5 +385,10 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const outDir = i > 0 ? path.resolve(process.argv[i + 1]) : undefined;
   const m = process.argv.indexOf('--models');
   const models = m > 0 ? (process.argv[m + 1] && !process.argv[m + 1].startsWith('--') ? process.argv[m + 1] : true) : null;
+  // P4: the bundled English and the generated schema worlds must be those of the pinned catalog; a stale bundle fails the build (--no-catalog-check skips it, offline)
+  if (!process.argv.includes('--no-catalog-check')) {
+    try { execFileSync(process.execPath, [path.join(REPO, 'scripts/build-lang-en.mjs'), '--check'], { stdio: 'inherit' }); }
+    catch { console.error('webchat: REFUSED: the bundled English or a schema world is stale against the pinned catalog (src/knowledge/catalog-pin.mjs): node scripts/build-lang-en.mjs'); process.exit(1); }
+  }
   await buildWebchat({ outDir, models, metaOnly: process.argv.includes('--meta-only'), log: console.log });
 }

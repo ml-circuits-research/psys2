@@ -27,7 +27,25 @@ export const FILE = join(REPO, 'training/eval/learning-curve.jsonl');
 const jsonl = (f) => (existsSync(f) ? readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : []);
 /** Points recorded before the rename (0.111: cousins -> related cases) carry the series as `cousinsReal`: it is the same series, read as `relatedReal`. */
 export const renamed = (pts) => pts.map((p) => (p.cousinsReal && !p.relatedReal ? { ...p, relatedReal: p.cousinsReal } : p));
-export const history = () => renamed(jsonl(FILE));
+/**
+ * P1 c: a point is labelled by the commit that WROTE it (git blame of the curve file), not by the HEAD it was recorded on: `--record` runs before the commit that adds the
+ * line, so the stored `build` is that commit's parent (the 142 point said b4241aff but was written by 7d4712ae). A point keeps its stored value as `recordedOn`; a line not
+ * committed yet is labelled `uncommitted`. Outside a checkout the stored value stays.
+ */
+export function writers(file = FILE) {
+  const r = spawnSync('git', ['blame', '--line-porcelain', '--', file], { cwd: REPO, encoding: 'utf8', maxBuffer: 64 << 20 });
+  if (r.status !== 0) return null;
+  const out = [];
+  for (const l of r.stdout.split('\n')) { const m = /^([0-9a-f]{40}) \d+ (\d+)/.exec(l); if (m) out[Number(m[2]) - 1] = /^0+$/.test(m[1]) ? 'uncommitted' : m[1].slice(0, 8); }
+  return out;
+}
+export const history = () => {
+  if (!existsSync(FILE)) return [];
+  const lines = readFileSync(FILE, 'utf8').split('\n'), w = writers();
+  const pts = [];
+  lines.forEach((l, i) => { if (l.trim()) { const p = JSON.parse(l); pts.push(w ? { ...p, recordedOn: p.build, build: w[i] ?? 'uncommitted' } : p); } });
+  return renamed(pts);
+};
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
 /** The general mechanisms now in the repository (the x of the curve). */
@@ -66,7 +84,7 @@ export async function currentPoint(note = '') {
   const build = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: REPO, encoding: 'utf8' }).stdout.trim();
   const same = ind.robustness?.paraphrasesDate ? ind.robustness['paraphrases-rt'] : null;   // only after the re-judging (meaning kept) does the set mean "paraphrases"
   let real = null;
-  try { const h = realHeadline(); real = h.total ? { right: h.right, total: h.total, turns: h.turns, ...(h.retired?.total ? { retired: h.retired } : {}), measuredOn: h.build, ...(h.stale ? { stale: h.stale } : {}) } : null; } catch { /* the real set was not run yet (node scripts/real-set.mjs run) */ }   // headline = in-scope judged turns; retired (ADR-010) rows are a line of their own; a result not from the current files is flagged
+  try { const h = realHeadline(); real = h.total ? { right: h.right, total: h.total, turns: h.turns, ...(h.retired?.total ? { retired: h.retired } : {}), measuredOn: h.build, tree: h.tree, mode: h.mode, catalog: h.catalog, seed: h.seed, ...(h.stale ? { stale: h.stale } : {}) } : null; } catch { /* the real set was not run yet (node scripts/real-set.mjs run) */ }   // headline = in-scope judged turns; retired (ADR-010) rows are a line of their own; a result not from the current files is flagged
   const rb = ind.robustness?.paraphrasesDate ? ind.robustness : null;
   return { date: new Date().toISOString().slice(0, 10), build, mechanisms: await mechanisms(),
     ...(real ? { real } : {}),
@@ -149,7 +167,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const argv = process.argv.slice(2);
   if (argv.includes('--record')) {
     const note = argv[argv.indexOf('--record') + 1]?.startsWith('--') ? '' : (argv[argv.indexOf('--record') + 1] ?? '');
-    const p = await currentPoint(note), last = history().at(-1);
+    const p = await currentPoint(note), last = jsonl(FILE).at(-1);   // the stored point (its `build` is the HEAD it was recorded on)
     if (p.real?.stale && !argv.includes('--allow-stale')) { console.error(`REFUSED: the REAL-set result is not from the current files (${p.real.stale}). Run node scripts/real-set.mjs run --reasoner matrix first, or pass --allow-stale.`); process.exit(1); }
     const same = last && last.build === p.build && JSON.stringify({ ...last, note: '' }) === JSON.stringify({ ...p, note: '' });
     if (same) console.log('no change since the last point; nothing appended');
