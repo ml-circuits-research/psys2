@@ -107,10 +107,15 @@ function coordinates({ action, mode, roles = {}, text }) {
  * Does the engine's reader read the WHOLE clause (spec 16 section 13: the raw leftovers of a catch-all reading are then read)? A shape frame ("in the shape of a house", "in house form"),
  * a diagram request of a kind or a topic, or any command or question the engine names beyond a bare "create" (no shape, name, label: the engine's default for words it does not know).
  */
-function readsWhole({ text, state } = {}) {
+function readsWhole({ text, state, words = null } = {}) {
   const t = String(text ?? '');
-  if (shapedOf(t) || parseDiagramRequest(t)) return true;
-  if (!E.engineReady()) { E.loadEngine(); return true; }   // the engine is still loading (lazy in a browser): it cannot be asked yet, the reading is not held for that
+  if (parseDiagramRequest(t)) return true;
+  // a shape frame reads the name of its shape ("shaped like a blorp", "in xyzzy form"), not the words around it: the words nobody else read (`words`) must be that name
+  const sh = shapedOf(t);
+  if (sh) { const named = new Set(String(sh.name ?? sh.said ?? '').toLowerCase().split(/[\s-]+/).filter(Boolean)); if (!words?.length || words.every((w) => named.has(String(w).toLowerCase()))) return true; }
+  // the engine is still loading (lazy in a browser): it cannot tell, and a reader that cannot tell has not read the clause (owner export 2026-11-15T11:43: answering true here let
+  // "creare a random diagram" through as complete, and the engine then drew its default circle). The dialog makes the open tab's engine ready before reading (Session.send).
+  if (!E.engineReady()) { E.loadEngine(); return false; }
   const n = engineNode(t, state);
   return !!n && !(n.type === 'command' && n.args?.action === 'create' && Object.keys(n.args).length === 1);
 }

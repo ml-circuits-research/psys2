@@ -12,18 +12,18 @@ import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDist
 import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=b0dc3269da';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
-import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=a815012811';
+import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=5069f90072';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=2dc54c12bc';
 import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=97cbcc77ac';
 import { en } from '../../lang/en.mjs?v=8f226ecd72';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse } from '../../soplang/index.mjs?v=c57881f705';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
-import { annotateUnread } from '../completeness.mjs?v=a815012811';
-import { isCatchAll } from '../typed-world.mjs?v=a815012811';
+import { annotateUnread } from '../completeness.mjs?v=5069f90072';
+import { isCatchAll } from '../typed-world.mjs?v=5069f90072';
 
 export { FormSession } from './session.mjs?v=2dc54c12bc';
-export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=a815012811';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=5069f90072';
 export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=d9beb26cad';
 export { compilePattern, matchTokens } from './matcher.mjs?v=b0dc3269da';
 export { singularLemma, pluralize } from './lemma.mjs?v=99f25611ee';

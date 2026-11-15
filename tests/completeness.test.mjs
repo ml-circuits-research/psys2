@@ -161,3 +161,42 @@ test('catch-all patterns: every world pattern whose captured arguments are only 
   const h = await s.send('Draw a diagram in house form.');
   assert.match(h.text, /in the shape of a house: 7 nodes on its outline/, 'the frame words are the own reader\'s (lex.diagram.sketch.shapedlike) and it reads the shape');
 });
+
+// EVERY catch-all pattern of every world (found by its raw-text arguments, not by name; owner export 2026-11-15T11:43: "creare a random diagram" drew a circle through
+// pat.diagram.sketch.read.frame.end, arg.pre="creare a random", complete): with content words the world does not read in its raw arguments, the reading is not complete and not executed.
+test('no catch-all pattern of any world executes when its raw arguments hold words the world does not read', async () => {
+  const { isCatchAll } = await import('../src/formalizer/typed-world.mjs');
+  const { contentChanged } = await import('../src/dialog/honest-done.mjs');
+  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
+  const phrases = new Map(), lexicons = new Map();
+  for (const w of engine.set.list()) { for (const p of w.phrases ?? []) phrases.set(p.id, p.alts); for (const l of w.lexicons ?? []) lexicons.set(l.id, [...(l.words ?? [])]); }
+  const NONSENSE = { pre: 'zorbly glimfs', post: 'quaxen trumbic', rest: 'zorbly glimfs' };
+  const first = (id) => (phrases.get(id)?.[0] ?? []).join(' ') || String(lexicons.get(id)?.[0] ?? '').replace(/_/g, ' ');
+  // a sentence the pattern reads: optional parts left out, the first alternative of a choice, the nonsense in each raw argument, a word of its lexicon in a typed slot
+  const sentence = (p) => String(p.match).match(/\{[^}]+\}|\[[^\]]+\]\??|\S+/g).filter((el) => !el.endsWith(']?')).map((el) => {
+    if (el.startsWith('{')) { const [name, cls] = el.slice(1, -1).split(':'); return NONSENSE[name] ?? (cls?.startsWith('lex.') ? String(lexicons.get(cls)?.[0] ?? 'thing').replace(/_/g, ' ') : 'Tom'); }
+    if (el.startsWith('[')) { const alt = el.slice(1, -1).split('|')[0]; return alt.startsWith('$') ? first(alt.slice(1)) : alt.replace(/_/g, ' '); }
+    return el.replace(/_/g, ' ');
+  }).filter(Boolean).join(' ');
+  const all = engine.set.list().flatMap((w) => (w.patterns ?? []).filter((p) => isCatchAll(p)).map((p) => ({ w, p })));
+  assert.ok(all.length >= 20, `catch-all patterns found: ${all.length}`);
+  let read = 0;
+  const bad = [];
+  for (const { w, p } of all) {
+    const text = sentence(p), s = engine.createSession({ language: 'en' });
+    if (w.tab?.id) s.setWorldState('ui.shell', { activeTab: w.tab.id });
+    const before = { [w.id]: JSON.stringify(s.state(w.id) ?? null) };
+    const r = await s.send(text);
+    const mine = (r.segments ?? []).filter((x) => x.match?.patternId === p.id);
+    if (mine.length) read++;
+    for (const x of mine) if (!x.match.unread?.length || !x.match.catchAll) bad.push(`${p.id} "${text}": complete (unread ${JSON.stringify(x.match.unread)})`);
+    if (contentChanged(before, { [w.id]: s.state(w.id) ?? null })) bad.push(`${p.id} "${text}": ${w.id} changed ("${String(r.text).slice(0, 80)}")`);
+  }
+  assert.deepEqual(bad, []);
+  assert.ok(read >= all.length / 2, `the catch-all itself read ${read} of ${all.length} sentences (the generator must reach the patterns)`);
+  // a world's own reader (hook readsWhole) accepts raw words only when it reads them, never words it cannot tell (an engine still loading answers false, src/formalizer/completeness.mjs)
+  for (const w of engine.set.list()) {
+    const ex = w.ops?.executor;
+    if (typeof ex?.readsWhole === 'function') assert.notEqual(ex.readsWhole({ text: 'zorbly glimfs quaxen', words: ['zorbly', 'glimfs', 'quaxen'], state: null }), true, `${w.id} readsWhole`);
+  }
+});

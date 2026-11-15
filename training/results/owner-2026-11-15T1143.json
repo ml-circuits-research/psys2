@@ -1,0 +1,371 @@
+{
+ "date": "2026-11-15T12:20:20.213Z",
+ "reasoner": "matrix",
+ "mt": false,
+ "encoder": true,
+ "summary": {
+  "session": {
+   "right": 9,
+   "total": 16,
+   "medianMs": 52,
+   "withheld": 0,
+   "falseDone": 0
+  },
+  "variants": {
+   "right": 0,
+   "total": 0,
+   "byClass": {},
+   "medianMs": null
+  }
+ },
+ "rows": [
+  {
+   "set": "session",
+   "context": false,
+   "id": 1,
+   "class": null,
+   "text": "creare a random diagram",
+   "tab": "diagram",
+   "ms": 1207,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes.length>=$+3 (0)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": true,
+   "reply": "I understood only part of \"creare a random diagram\": I did not use \"creare\" and \"random\", so I did not do it. What did you mean?",
+   "english": "I understood only part of \"creare a random diagram\": I did not use \"creare\" and \"random\", so I did not do it. What did you mean?"
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 2,
+   "class": null,
+   "text": "this is stupid, my expectatiom was to get a nice eiagram5-10 ndes, arraws, nice layout, not a circle",
+   "tab": "diagram",
+   "ms": 1322,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes.length>=5 (1)",
+    "reply_not:took that as: a circle|something about you|facts about you"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "I took that as: a circle. I left out \"this is stupid\": I could not read it. That sounds like something about you. I cannot keep facts about you here. There is nothing to arrange. Drew a circle.",
+   "english": "I took that as: a circle. I left out \"this is stupid\": I could not read it. That sounds like something about you. I cannot keep facts about you here. There is nothing to arrange. Drew a circle."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 3,
+   "class": null,
+   "text": "you are saying that I am stupid?",
+   "tab": "diagram",
+   "ms": 323,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:I did not understand"
+   ],
+   "worlds": [],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "I did not understand \"saying that I am stupid\". For example: \"Add a circle.\" or \"What is the colour of the circle?\"",
+   "english": "I did not understand \"saying that I am stupid\". For example: \"Add a circle.\" or \"What is the colour of the circle?\""
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 4,
+   "class": null,
+   "text": "you are stupid",
+   "tab": "diagram",
+   "ms": 1,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Oh no, sorry about that, I got it wrong. Shall I undo it? Say \"yes\" to undo, or tell me what you meant.",
+   "english": "Oh no, sorry about that, I got it wrong. Shall I undo it? Say \"yes\" to undo, or tell me what you meant."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 5,
+   "class": null,
+   "text": "Change the colour of the circle to purple.",
+   "tab": "diagram",
+   "ms": 405,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "the circle is now purple.",
+   "english": "the circle is now purple."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 6,
+   "class": null,
+   "text": "add 5 random nodes",
+   "tab": "diagram",
+   "ms": 28,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:^Drew 5 circles"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Drew 5 circles.",
+   "english": "Drew 5 circles."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 7,
+   "class": null,
+   "text": "not all circles, better layout",
+   "tab": "diagram",
+   "ms": 12,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed",
+    "reply_not:Drew 5 circles"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": false,
+   "reply": "OK, I took that back. Drew 5 circles.",
+   "english": "OK, I took that back. Drew 5 circles."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 8,
+   "class": null,
+   "text": "write a story about ancient hobbits with 5 chapters",
+   "tab": "editor",
+   "ms": 656,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": true,
+   "content": true,
+   "reply": "I wrote the story \"All about ancient hobbits\": 103 words in 5 chapters. My knowledge was short of what you asked (2 sentences have no template that fits: introduce character, state goal), so it is smaller and not padded. It is open in the D",
+   "english": "I wrote the story \"All about ancient hobbits\": 103 words in 5 chapters. My knowledge was short of what you asked (2 sentences have no template that fits: introduce character, state goal), so it is smaller and not padded. It is open in the D"
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 9,
+   "class": null,
+   "text": "create a random picture",
+   "tab": "draw",
+   "ms": 25,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I drew a sunny scene for you: a yellow sun, 2 clouds, a grey mountain, a blue house, 2 green trees, 2 pink flowers, a brown dog and a blue bird. You can change anything, for example \"make the house blue\".",
+   "english": "I drew a sunny scene for you: a yellow sun, 2 clouds, a grey mountain, a blue house, 2 green trees, 2 pink flowers, a brown dog and a blue bird. You can change anything, for example \"make the house blue\"."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 10,
+   "class": null,
+   "text": "break in 3 layers: eater, land and sky",
+   "tab": "draw",
+   "ms": 565,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:already there"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "The sky is already there: it is light blue. You can change its color.",
+   "english": "The sky is already there: it is light blue. You can change its color."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 11,
+   "class": null,
+   "text": "Change the colour of the sun to black.",
+   "tab": "draw",
+   "ms": 52,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "The sun is black now.",
+   "english": "The sun is black now."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 12,
+   "class": null,
+   "text": "Change the colour of the sun to black.",
+   "tab": "draw",
+   "ms": 35,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "The sun is black now.",
+   "english": "The sun is black now."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 13,
+   "class": null,
+   "text": "Change the size of the sun to big.",
+   "tab": "draw",
+   "ms": 34,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "The sun is big now.",
+   "english": "The sun is big now."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 14,
+   "class": null,
+   "text": "Change the fill of the sun to solid.",
+   "tab": "draw",
+   "ms": 32,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "The sun is filled in now.",
+   "english": "The sun is filled in now."
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 15,
+   "class": null,
+   "text": "make sunt green",
+   "tab": "draw",
+   "ms": 39,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "The sun is green now. (I read \"sunt\" as \"sun\")",
+   "english": "The sun is green now. (I read \"sunt\" as \"sun\")"
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 16,
+   "class": null,
+   "text": "add a small pond",
+   "tab": "draw",
+   "ms": 186,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:art.draw:objects.length<=$+6 (44)"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I drew a pond: a sun, 3 dragonflys, a pond, 2 trees, 2 bushes, a bench, 5 grasses, a snail, 3 stones, 3 ducks, 3 frogs, 4 water lilys, 3 goldfishes and a heron. I put the 3 ducks on the water of the pond, the 3 frogs on the water of the pon",
+   "english": "I drew a pond: a sun, 3 dragonflys, a pond, 2 trees, 2 bushes, a bench, 5 grasses, a snail, 3 stones, 3 ducks, 3 frogs, 4 water lilys, 3 goldfishes and a heron. I put the 3 ducks on the water of the pond, the 3 frogs on the water of the pon"
+  }
+ ]
+}

@@ -24,18 +24,17 @@ test('cap drops the oldest, filters, JSONL and text', async () => {
   assert.deepEqual(l.map((r) => r.id), ['2', '3', '4', '5', '6']);
   const a = await rec('What day comes after Monday?'), b = await rec('blah zorp quux', { mode: 'voice' }), c = await rec('Open the editor', { mode: 'chip' });
   const all = [a, b, c];
-  const head = JSON.parse(toJSON(all, { includeChips: true, app: { commit: 'abc1234', version: 'v9' } }));
+  const head = JSON.parse(toJSON(all, { app: { commit: 'abc1234', version: 'v9' } }));
   assert.deepEqual(Object.keys(head).slice(0, 3), ['format', 'app', 'turns']);   // the first lines: the app build and the number of turns
   assert.deepEqual(head.app, { build: 'abc1234', version: 'v9' });
-  assert.equal(head.turns, 2);   // the button press is not a turn
+  assert.equal(head.turns, 3); assert.equal(head.typed, 2);   // every message is a turn; `typed` counts the ones the person typed or said
   assert.deepEqual(filterRecords(all, 'misses'), [b]);
   assert.deepEqual(filterRecords(all, 'voice'), [b]);
   const lines = toJSONL(all).trim().split('\n').map((x) => JSON.parse(x));
-  assert.equal(lines.length, 2, 'chips excluded');
+  assert.equal(lines.length, 3, 'every message is a record, chips included');
   for (const k of ['english', 'lang', 'mode', 'status', 'tab', 'text', 'time', 'worlds', 'id', 'segments', 'source']) assert.ok(k in lines[0], k);   // the export is the complete record
   assert.equal(lines[1].status, 'unparsed');
-  assert.equal(toJSONL(all, { includeChips: true }).trim().split('\n').length, 3);
-  assert.deepEqual(JSON.parse(toJSON(all)).records.map((r) => r.text), ['What day comes after Monday?', 'blah zorp quux']);
+  assert.deepEqual(JSON.parse(toJSON(all)).records.map((r) => r.text), ['What day comes after Monday?', 'blah zorp quux', 'Open the editor']);
   assert.equal(exportFilename(new Date(2026, 10, 15, 8, 34)), 'psys2-15Nov.json');   // the local day and the English month (owner 2026-11-15)
   assert.equal(exportFilename(new Date(2026, 10, 15, 9, 0), 2), 'psys2-15Nov-2.json');
   assert.deepEqual(nextExportNumber({ day: '2026-11-15', n: 1 }, '2026-11-15'), { n: 2, next: { day: '2026-11-15', n: 2 } });
@@ -113,4 +112,27 @@ test('FB: feedback object, state hash, detail, filters and the complete JSON exp
   assert.equal(e.detail.readings[0].wires, '1 wires');
   assert.equal(e.segments[0].pattern, 'draw.house');
   assert.ok(e.detail.state.before && e.detail.state.after);
+});
+
+// owner export 2026-11-15T11:43 (training/eval/owner-exports/phrase-log-2026-11-15T1143-en.json): the events held 16 messages, the records 10; the chip turns and the
+// Documents story sent by the tab's "Write it" form, marked "Not what I wanted" with a text, were missing. Every message (typed, voice, chip, form) is a record, with its feedback.
+test('every message of a session is a record of the export, with its feedback (typed, voice, chip, form)', async () => {
+  const { readFileSync } = await import('node:fs');
+  const exp = JSON.parse(readFileSync(fileURLToPath(new URL('../training/eval/owner-exports/phrase-log-2026-11-15T1143-en.json', import.meta.url)), 'utf8'));
+  const msgs = exp.events.filter((e) => e.kind === 'message');
+  assert.ok(msgs.length > exp.records.length, 'the export this test reproduces lost messages');
+  const mem = { d: {}, getItem(k) { return this.d[k] ?? null; }, setItem(k, v) { this.d[k] = v; } };
+  const s = createStore(mem);
+  const story = msgs.find((e) => /hobbits/.test(e.target));
+  for (const e of msgs) s.add(buildRecord({ text: e.target, mode: e === story ? 'form' : e.mode, tab: e.tab, reply: null, id: e.recId, now: Date.parse(e.time) }));
+  s.add(buildRecord({ text: 'what is the weather', mode: 'voice', tab: 'talk', reply: null, id: 'pvoice' }));
+  s.update(story.recId, (r) => ({ feedback: nextFeedback(r.feedback, { vote: 'down', wanted: 'a story with 5 chapters about hobbits' }) }));
+  const out = JSON.parse(toJSON(s.all(), { events: exp.events }));
+  assert.deepEqual(out.records.map((r) => r.id), [...msgs.map((e) => e.recId), 'pvoice'], 'every message is a record, in order');
+  assert.equal(out.turns, msgs.length + 1);
+  const st = out.records.find((r) => r.id === story.recId);
+  assert.equal(st.mode, 'form'); assert.equal(st.source, 'form');
+  assert.equal(st.feedback.vote, 'down'); assert.equal(st.feedback.wanted, 'a story with 5 chapters about hobbits');
+  assert.ok(out.records.some((r) => r.mode === 'chip') && out.records.some((r) => r.mode === 'voice') && out.records.some((r) => r.mode === 'typed'));
+  assert.equal(toJSONL(s.all()).trim().split('\n').length, msgs.length + 1);
 });

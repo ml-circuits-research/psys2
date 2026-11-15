@@ -6,7 +6,7 @@ import { reactionOf } from './action-log.mjs';
 
 export const LOG_KEY = 'psys2.webchat.phrases';
 export const LOG_CAP = 5000;
-export const MODES = ['typed', 'voice', 'chip'];
+export const MODES = ['typed', 'voice', 'chip', 'form'];   // form: a message a tab's form or control composed and sent (host.send: the Documents "Write it" form)
 
 const newId = (now) => `p${now.toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 
@@ -38,7 +38,7 @@ export function buildRecord({ text, mode = 'typed', language = 'en', tab = null,
     ...(via.length ? { via: [...new Set(via)] } : {}),
     ...(reply?.trace?.candidates?.length ? { candidates: reply.trace.candidates.slice(0, 8).map((c) => ({ ...c, text: String(c.text ?? '').slice(0, 300), ...(c.repaired ? { repaired: String(c.repaired).slice(0, 300) } : {}) })) } : {}),   // M4: every candidate English, which one was chosen, and why the others were not (source words, checker, issues)
     id: id ?? newId(now), time: new Date(now).toISOString(), text: String(text ?? ''), mode: MODES.includes(mode) ? mode : 'typed',
-    source: mode === 'chip' ? 'chip' : 'human', lang: reply?.lang ?? language, english, tab, segments,
+    source: mode === 'chip' ? 'chip' : mode === 'form' ? 'form' : 'human', lang: reply?.lang ?? language, english, tab, segments,
     unparsed: segments.some((s) => s.unparsed), formalizer,
     feedback: reply?.feedback ?? reply?.trace?.feedback ?? null,   // 'negative' when the person said the last answer was wrong (spec 11 section 13)
     selectedLang: language,   // LANG-FIXED: the language selected in the interface when the phrase was sent
@@ -149,19 +149,23 @@ export function routingOf(r) {
     : (r?.segments ?? []).map((s) => ({ text: s.text ?? null, chosen: s.world ?? null, pattern: s.pattern ?? null, candidates: [] }));
   return { activeTab: r?.tab ?? null, activeWorld: r?.tabWorld ?? null, chosen: [...new Set(pieces.map((p) => p.chosen).filter(Boolean))], pieces };
 }
-/** Chips are not human phrasing: excluded unless includeChips. */
-export function selectForExport(list, { includeChips = false } = {}) { return list.filter((r) => includeChips || r.source !== 'chip'); }
+/**
+ * The records of an export: EVERY message is a record (owner export 2026-11-15T11:43: the chip turns and a Documents story with its "Not what I wanted" text were left out),
+ * whatever its mode (typed, voice, a chip, an example, a tab form's message), with its feedback; a record keeps its `source` ('human' | 'chip' | 'form') so a reader can tell them apart.
+ */
+export function selectForExport(list) { return (list ?? []).filter((r) => r && typeof r === 'object'); }
 /** One JSON document: { format, exported, count, records } (the learning loop reads this and the older JSONL alike). */
-export function toJSON(list, { includeChips = false, diagnostics = null, events = null, app = null } = {}) {
+export function toJSON(list, { diagnostics = null, events = null, app = null } = {}) {
   const ev = Array.isArray(events) ? events : null;
-  const records = selectForExport(list, { includeChips }).map((r) => exportRecord(r, ev));
+  const records = selectForExport(list).map((r) => exportRecord(r, ev));
   // format 3 adds `events` (every user action and progress step, in order); format 2 files (no `events`) still load everywhere. The first lines say the app build and the
-  // number of turns (owner 2026-11-15): `app` = window.__psys2Build ({ commit, version }), `turns` = the typed and spoken turns (button presses are not turns)
-  const turns = records.filter((r) => r.source !== 'chip' && r.source !== 'dry-run').length;
-  return `${JSON.stringify({ format: ev ? 'psys2-phrase-log/3' : 'psys2-phrase-log/2', app: app ? { build: app.commit ?? null, version: app.version ?? null } : null, turns, exported: new Date().toISOString(), count: records.length, ...(diagnostics ? { diagnostics } : {}), ...(ev ? { eventCount: ev.length, events: ev } : {}), records }, null, 1)}\n`;
+  // number of turns (owner 2026-11-15): `app` = window.__psys2Build ({ commit, version }), `turns` = every message sent (typed, spoken, chip, form), `typed` = the ones the person typed or said
+  const typed = records.filter((r) => r.source === 'human').length;
+  return `${JSON.stringify({ format: ev ? 'psys2-phrase-log/3' : 'psys2-phrase-log/2', app: app ? { build: app.commit ?? null, version: app.version ?? null } : null, turns: records.length, typed, exported: new Date().toISOString(), count: records.length, ...(diagnostics ? { diagnostics } : {}), ...(ev ? { eventCount: ev.length, events: ev } : {}), records }, null, 1)}\n`;
 }
-export function toJSONL(list, { includeChips = false } = {}) {
-  return selectForExport(list, { includeChips }).map((r) => JSON.stringify(exportRecord(r))).join('\n') + (list.length ? '\n' : '');
+export function toJSONL(list) {
+  const out = selectForExport(list);
+  return out.map((r) => JSON.stringify(exportRecord(r))).join('\n') + (out.length ? '\n' : '');
 }
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 /** The history file's name (owner 2026-11-15): the LOCAL day and the English month abbreviation, `psys2-15Nov.json`; the n-th export of the same day `psys2-15Nov-<n>.json`. */
