@@ -16,6 +16,7 @@
 @t.thing core.type of=thing extends=std.schema.thing closed=true
 @s.size core.slot of=thing key=size enum=tiny enum=small enum=medium enum=big enum=huge
 @s.in core.slot of=thing key=in
+@s.thing_place core.slot of=thing key=place enum=corner enum=top enum=bottom enum=left enum=right enum=center
 @t.water core.type of=water extends=thing closed=true
 @k.water std.schema.kind of=water world=drawing acts=make acts=remove
 @t.flower core.type of=flower extends=thing closed=true
@@ -71,3 +72,7 @@
 @layer.water std.schema.region world=drawing name=water kind=water kind=lake kind=river kind=fish kind=goldfish kind=duck kind=boat kind=frog kind="water lily" kind=reed
 @layer.land std.schema.region world=drawing name=land kind=house kind=tree kind=flower kind=bush kind=grass kind=fence kind=bench kind=stone kind=cat kind=dog kind=mountain kind=hill kind=person kind=car
 @layer.sky std.schema.region world=drawing name=sky kind=sun kind=cloud kind=bird kind=butterfly kind=moon kind=rainbow kind=balloon kind=rocket
+@wd.woods core.word text=woods means=forest
+@wd.things core.word text=thing text=things text=items means=part
+# The door (reviewer 2026-11-15 16:40): the wholes whose requests this world plans through the library. Read by src/dialog/request.mjs doorWholes.
+@door psys2.door world=drawing whole=pond whole=forest whole=garden

@@ -113,3 +113,9 @@ export function withCatalogIndex(files) {
   return out;
 }
 
+
+/**
+ * A test that only pins an old wording or route of the readers the request door now replaces (reviewer 2026-11-15 16:40, coordinator: the old tests report, they do not gate):
+ * `test(name, legacyOnly('why'), fn)` runs it and reports a failure as a TODO, never as a red suite. Each use is listed with its reason in worker-log.md (the legacy list).
+ */
+export const legacyOnly = (reason) => ({ todo: `legacy, report-only: ${reason}` });

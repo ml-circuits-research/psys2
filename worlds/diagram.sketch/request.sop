@@ -27,7 +27,18 @@
 @k.hexagon std.schema.kind of=hexagon world=diagram acts=make acts=remove acts=connect
 @t.star core.type of=star extends=node closed=true
 @k.star std.schema.kind of=star world=diagram acts=make acts=remove acts=connect
-@h.make std.schema.honours world=diagram act=make on=kind on=count on=size on=layout on=manner on=with on=about on=attribute of=diagram of=circle of=square of=rectangle of=diamond of=ellipse of=triangle of=hexagon of=star
+@t.oval core.type of=oval extends=node closed=true
+@k.oval std.schema.kind of=oval world=diagram acts=make acts=remove acts=connect
+@as.oval std.schema.drawn world=diagram kind=oval as=ellipse
+@h.make std.schema.honours world=diagram act=make on=kind on=count on=size on=layout on=manner on=with on=about on=attribute of=diagram of=flowchart of="tree diagram" of=cycle of=timeline of="mind map" of="org chart" of=network of=pipeline of=circle of=square of=rectangle of=diamond of=ellipse of=triangle of=hexagon of=star of=oval
+@t.link core.type of=link extends=std.schema.thing closed=true
+@k.link std.schema.kind of=link world=diagram acts=make acts=remove
+@h.link std.schema.honours world=diagram act=make on=count on=kind of=link
 @h.arrange std.schema.honours world=diagram act=arrange on=layout on=manner of=diagram of=node
 @wd.link core.word text=arrow text=arrows text=link text=links text=lines text=connections means=link
 @fill.diagram std.schema.fill world=diagram of=diagram from=k.diagrams about="the labels, the topic and the arrows of a diagram come from the knowledge's diagrams (the world's own fill of its parts)"
+@wd.box core.word text=box text=boxes means=rectangle
+@wd.step core.word text=step text=steps means=node
+# The door (reviewer 2026-11-15 16:40): the wholes whose requests this world plans through the library (a request of a single thing goes through the door only with a constraint the readers cannot honour). Read by src/dialog/request.mjs doorWholes.
+@door psys2.door world=diagram whole=diagram whole=link
+@e.link k.expect.make thing=link made_in=diagram unit=link min=1 max=12 typical=4 about="the arrows of a diagram: added where a node has none"

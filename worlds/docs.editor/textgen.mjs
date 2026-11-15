@@ -82,7 +82,8 @@ export function requestResult(ctx) {
 export function planRequest(ctx, goal = {}) {
   const f = goal.request?.facts ?? [];
   const exp = goal.expect ?? {};
-  const ch = f.find((x) => x.key === 'length' && x.unit === 'chapter')?.n;
+  const chSaid = f.find((x) => x.key === 'length' && x.unit === 'chapter')?.n;
+  const ch = chSaid ?? (Number.isInteger(goal.count) && goal.count > 0 && goal.count <= 12 ? goal.count : undefined);   // the plan's count of the text's unit (chapters) when none was said
   const said = f.find((x) => x.key === 'length' && x.unit === 'word')?.n;
   const [lo, hi] = exp.words ?? [150, 300];
   const words = said ?? (goal.size === 'small' ? Math.max(30, Math.round(lo * (exp.small ?? 0.4))) : goal.size === 'big' ? Math.round(hi * (exp.big ?? 3)) : undefined);
@@ -105,7 +106,8 @@ export function planRequest(ctx, goal = {}) {
   }
   finish(st);
   const n = heads().length, w = st.stats?.words ?? 0;
-  if (changed) r.value = `I wrote the ${goal.target ?? 'text'} "${st.title}": ${fmt(w)} words in ${n} ${n === 1 ? "chapter" : "chapters"}.${w < (said ?? 0) * 0.8 ? ` I know only enough for ${w} words about this; I did not pad it.` : ''} It is open in the Documents tab.`;
+  if (changed && !chSaid && !(words && !said && goal.size === 'small')) r.value = String(r.value).replace(/in \d+ chapters?/, `in ${heads().length} ${heads().length === 1 ? 'chapter' : 'chapters'}`);   // the plan's count of chapters: the composer's own words, with the count
+  else if (changed) r.value = `I wrote the ${goal.target ?? 'text'} "${st.title}": ${fmt(w)} words in ${n} ${n === 1 ? "chapter" : "chapters"}.${w < (said ?? 0) * 0.8 ? ` I know only enough for ${w} words about this; I did not pad it.` : ''} It is open in the Documents tab.`;
   r.cannot = cannot;
   return r;
 }

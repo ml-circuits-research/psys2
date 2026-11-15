@@ -8,7 +8,7 @@ import path from 'node:path';
 import { catalogFolder, emit, done, stamp } from './lib/generated.mjs';
 
 const TYPES = {
-  'w.lang.en': ['cue', 'det', 'prep', 'pron', 'skip', 'number', 'inflect', 'irregular', 'reply', 'count', 'onset', 'anaphor'].map((t) => `w.lang.en.${t}`),
+  'w.lang.en': ['cue', 'det', 'prep', 'pron', 'skip', 'number', 'inflect', 'irregular', 'reply', 'count', 'onset', 'anaphor', 'wh', 'closed'].map((t) => `w.lang.en.${t}`),
   'k.actions': ['k.actions.verb'],
   'k.expect': ['k.expect.amount', 'k.expect.scale', 'k.expect.make', 'k.expect.part'],
   'w.dialogue': ['w.dialogue.revision'],

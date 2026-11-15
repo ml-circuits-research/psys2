@@ -1,0 +1,61 @@
+# The door probe (reviewer 2026-11-15 16:10 sentences, then new sentences of our own per property, per tab, English and Romanian). scripts/request-probe.mjs <this file>
+:tab draw
+draw a big forest, no birds
+less trees
+put a house on the left
+:new
+:tab draw
+paint a lake scene without birds
+:new
+:tab editor
+write a long report about volcanoes in 4 chapters
+shorter
+:new
+:tab editor
+write a short story about a fox
+make it longer
+:new
+:tab diagram
+make me a diagram of 6 boxes but no diamonds
+add arrows
+:new
+:tab diagram
+draw a flowchart with five steps, without rectangles
+fewer nodes
+anything but circles
+:new
+:tab diagram
+draw seven circles
+add arrows
+:new
+:tab diagram
+sketch a mind map with 4 to 6 nodes, not all ellipses
+too many
+again
+:new
+:tab draw
+draw a garden without flowers
+bigger
+:new
+:tab draw
+make a tiny pond in the corner
+not so many things
+:new
+:tab draw
+draw 3 clouds and a sun
+how many clouds are there?
+:new
+:tab diagram
+desenează o diagramă cu 5 noduri, fără cercuri
+prea multe
+:new
+:tab draw
+desenează o pădure mare fără păsări
+mai puțini copaci
+:new
+:tab draw
+desenează un iaz mic
+mai mare
+:new
+:tab editor
+scrie o poveste scurtă despre o vulpe

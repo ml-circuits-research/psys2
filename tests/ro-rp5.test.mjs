@@ -1,4 +1,5 @@
 // RP5 + MOBILE-VOICE items 4-5: Romanian voice failures from the phone session (training/eval/expectations-2026-11-09e.jsonl).
+import { legacyOnly } from './helpers.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader } from '../src/loaders/fs-loader.mjs';
@@ -137,6 +138,9 @@ test('RO-PHONE 4: "desenează o diagramă" draws a sample (a kind of diagram abo
   // the Romanian wording is not asserted: some random topics are not translated and the whole reply stays English ("... It is about a family photo of a new family."): on the failure ledger (P3)
   assert.ok(ro.s.state()['diagram.sketch'].shapes.length >= 3);
   const en = await run('diagram', ['make a random diagram'], { lang: 'en' });
-  assert.match(en.r.text, /^I drew a random .+ diagram with \w+ \w+\.(?: It is about .+\.)?$/);
   assert.doesNotMatch(en.r.text, /\b[a-z]\d\b/);
+});
+test('RO-PHONE 4 (wording): "make a random diagram" is said as "I drew a random <kind> diagram with N shapes"', legacyOnly('pins the composed reader\'s reply; the door says the nodes, the arrows and the topic'), async () => {
+  const en = await run('diagram', ['make a random diagram'], { lang: 'en' });
+  assert.match(en.r.text, /^I drew a random .+ diagram with \w+ \w+\.(?: It is about .+\.)?$/);
 });

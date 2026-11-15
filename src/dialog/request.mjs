@@ -31,8 +31,51 @@ export function requestLanguage(lib) {
 export function liveWorld(lib, world) {
   if (!lib?.World || !world?.requestText) return null;
   if (world._requestLive !== undefined) return world._requestLive;
-  try { const w = new lib.World(); const r = w.load(world.requestText); world._requestLive = r?.ok === false ? null : w; } catch { world._requestLive = null; }
+  const load = (text) => { try { const w = new lib.World(); const r = w.load(text); return r?.ok === false ? null : w; } catch { return null; } };
+  world._requestLive = load(world.requestText);
+  let extra = '';
+  if (world._requestLive) try { extra = catalogWholes(world._requestLive, requestLanguage(lib), world.requestText); } catch { extra = ''; }
+  if (extra) world._requestLive = load(`${world.requestText}\n${extra}`) ?? world._requestLive;   // one load: the schema is compiled with the catalog's wholes
   return world._requestLive;
+}
+
+/**
+ * The wholes the catalog expects made in a live world (k.expect.make made_in = its std.schema.world name: "lake scene", "flowchart") are kinds of that world: each is told as a kind
+ * of the world's own whole (its type and its make honours), so that the library reads and plans it like the declared ones. Stand-in until capabilitiesOf reads the catalog's
+ * expectations itself (questions.md Q40 [LIB]).
+ */
+function catalogWholes(live, language, text) {
+  const name = one(ofType(live, 'std.schema.world')[0], 'name');
+  if (!name || !language) return '';
+  const kinds = new Set(ofType(live, 'std.schema.kind').map((r) => one(r, 'of')));
+  const types = new Map([...String(text).matchAll(/^@\S+ core\.type of=("[^"]+"|\S+) extends=(\S+)/gm)].map((m) => [m[1].replace(/^"|"$/g, ''), m[2]]));
+  const make = ofType(live, 'std.schema.honours').find((h) => one(h, 'act') === 'make');
+  if (!make) return '';
+  const wholes = [...ofType(live, 'k.expect.make'), ...ofType(language, 'k.expect.make')].filter((r) => one(r, 'made_in') === name).map((r) => one(r, 'thing'));
+  const ref = wholes.find((t) => kinds.has(t) && types.has(t));
+  if (!ref) return '';
+  const parent = types.get(ref) === 'std.schema.thing' ? ref : types.get(ref);
+  const on = (make.on ?? []).map((x) => `on=${String(x).replace(/^"|"$/g, '')}`).join(' ');
+  const lines = [];
+  const esc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const own = new Set(ofType(live, 'k.expect.make').map((r) => one(r, 'thing')));
+  for (const [i, t] of [...new Set(wholes)].entries()) {
+    // the world's own wholes keep their declarations; their catalog expectation is copied beside the others', so that the world's first whole stays the default target
+    if (t && kinds.has(t) && !own.has(t) && (t === ref || t === parent || types.get(t) === parent) && /^[a-z][a-z_]*$/i.test(t)) for (const m of BUNDLED_REQUEST.matchAll(new RegExp(`^@(\\S+) (k\\.expect\\.make) (.*thing=${esc(t)}(?:\\s.*)?)$`, 'gm'))) {
+      lines.push(`@cwo${i} ${m[2]} ${m[3]}`);
+      for (const [j, p] of [...BUNDLED_REQUEST.matchAll(new RegExp(`^@\\S+ (k\\.expect\\.part of=${esc(t)}\\s.*)$`, 'gm'))].entries()) lines.push(`@cwo${i}.p${j} ${p[1]}`);
+    }
+    if (!t || kinds.has(t) || types.has(t) || !/^[a-z][a-z_ ]*$/i.test(t)) continue;
+    // a name of several words is not matched by the library when quoted (questions.md Q40 [LIB]): it is the kind `lake_scene`, its words a core.word, its expectations copied
+    const id = t.replace(/ /g, '_');
+    lines.push(`@cw${i}.t core.type of=${id} extends=${parent} closed=true`, `@cw${i}.k std.schema.kind of=${id} world=${name} acts=make acts=remove`, `@cw${i}.h std.schema.honours world=${name} act=make ${on} of=${id}`, `@cw${i}.d psys2.door world=${name} whole=${id}`);
+    if (id !== t) {
+      lines.push(`@cw${i}.w core.word text="${t}" means=${id}`);
+      const re = new RegExp(`^@(\\S+) (k\\.expect\\.(?:make|part)) (.*(?:thing|of)="${esc(t)}".*)$`, 'gm');
+      for (const m of BUNDLED_REQUEST.matchAll(re)) lines.push(`@cw${i}.${m[1].replace(/[^\w.]/g, '_')} ${m[2]} ${m[3].replace(new RegExp(`(thing|of)="${esc(t)}"`), `$1=${id}`)}`);
+    }
+  }
+  return lines.join('\n');
 }
 
 /** The facts of a type in a library World, as { attr: [values] } records. */
@@ -211,5 +254,62 @@ export function declarationsOf(live, english = '') {
   return { drawn, regions, named: regions.filter((r) => r.at >= 0).map((r) => r.name), fill };
 }
 
+/** Whether the catalog (or the live world) expects a thing to be made in the live world: k.expect.make made_in = the world's std.schema.world name. */
+export function madeIn(live, language, thing) {
+  const name = one(ofType(live, 'std.schema.world')[0], 'name');
+  const t = String(thing ?? '').toLowerCase();
+  return !!name && !!t && [...ofType(live, 'k.expect.make'), ...ofType(language, 'k.expect.make')].some((r) => String(one(r, 'thing') ?? '').toLowerCase() === t && one(r, 'made_in') === name);
+}
+
+/**
+ * A kind not wanted is not wanted with its subkinds and the kinds drawn as it ("no birds" is no duck either): the request gets a `want=no` constraint for each kind of the live
+ * world whose type extends it (core.type, through its parents) or that it draws as it (std.schema.drawn). Stand-in until the library excludes the lineage itself (Q40 [LIB] 1).
+ */
+export function withSubkindsNegated(req, live, text) {
+  const parent = new Map([...String(text ?? '').matchAll(/^@\S+ core\.type of=("[^"]+"|\S+) extends=(\S+)/gm)].map((m) => [m[1].replace(/^"|"$/g, ''), m[2].replace(/^"|"$/g, '')]));
+  const drawnAs = new Map(ofType(live, 'std.schema.drawn').map((r) => [one(r, 'kind'), one(r, 'as')]));
+  const isUnder = (k, x) => { let c = k; for (let i = 0; i < 6 && c; i++) { if (c === x || drawnAs.get(c) === x) return true; c = parent.get(c); } return false; };
+  const no = (req.constraints ?? []).filter((c) => c.on === 'kind' && c.want === 'no' && c.value);
+  const add = [];
+  for (const c of no) for (const k of new Set([...parent.keys(), ...drawnAs.keys()])) if (k && k !== c.value && isUnder(k, c.value) && !no.some((x) => x.value === k) && !add.some((x) => x.value === k)) add.push({ ...c, value: k, origin: 'lineage' });
+  if (add.length) req.constraints = [...req.constraints, ...add];
+  return req;
+}
+
+/** The wholes a live world plans through the door (its `psys2.door whole=` facts, and the catalog's wholes told by catalogWholes). */
+export function doorWholes(live) {
+  return new Set(ofType(live, 'psys2.door').flatMap((r) => (r.whole ?? []).map((x) => String(x).replace(/^"|"$/g, ''))));
+}
+
+/** A constraint the readers cannot honour, so that a request of single things still goes through the door: a kind not wanted, a range or an amount, a manner, a layout, a topic, a length, parts it must have. */
+export const strongConstraint = (c) => (c.on === 'kind' && c.want !== 'yes') || (c.on === 'count' && (c.min !== undefined || c.amount !== undefined)) || ['manner', 'layout', 'about', 'length', 'with'].includes(c.on);
+
+/** Whether a word is the unit of a whole made in the live world (k.expect.make unit, made_in = its world name): "nodes" of a diagram. */
+export function unitOfWhole(live, language, unit) {
+  const name = one(ofType(live, 'std.schema.world')[0], 'name');
+  return !!name && [...ofType(live, 'k.expect.make'), ...ofType(language, 'k.expect.make')].some((r) => one(r, 'made_in') === name && one(r, 'unit') === unit);
+}
+
 /** A library request as plain data (its enumerable fields: act, target, refers, text, constraints, reactions, unread): what w.dialogue keeps across snapshots. */
 export const plainRequest = (r) => { try { return JSON.parse(JSON.stringify(r ?? null)); } catch { return null; } };
+
+/**
+ * A question is never a request to make nor a reaction ("how many shapes are there?", "is it red"): a turn ending in "?", or starting with a question word of the language world
+ * (w.lang.en.wh at question-start) or an auxiliary of its closed words (w.lang.en.closed class=auxiliary) that is not an imperative lead ("can you draw ..." stays a request).
+ */
+const questionWords = new WeakMap();
+export function isQuestion(english, language) {
+  const t = String(english ?? '').trim().toLowerCase();
+  if (/\?\s*$/.test(t)) return true;
+  if (!language) return false;
+  let qw = questionWords.get(language);
+  if (!qw) {
+    qw = new Set();
+    const strip = (x) => String(x).replace(/^"|"$/g, '');
+    for (const r of ofType(language, 'w.lang.en.wh')) if ((r.in ?? []).map(strip).includes('question-start')) for (const x of r.text ?? []) qw.add(strip(x));
+    for (const r of ofType(language, 'w.lang.en.closed')) if (one(r, 'class') === 'auxiliary' && !(r.from ?? []).map(strip).includes('w.lang.en.imperative.lead')) for (const x of r.text ?? []) qw.add(strip(x));
+    questionWords.set(language, qw);
+  }
+  const ws = t.split(/[\s,]+/);
+  return [ws.slice(0, 2).join(' '), ws[0]].some((w) => qw.has(w));
+}

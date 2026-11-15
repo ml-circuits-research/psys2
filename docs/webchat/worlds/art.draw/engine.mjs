@@ -2382,7 +2382,7 @@ const PLACE = { corner: 'in the bottom left corner', top: 'at the top', bottom: 
  * cannot draw is said (`cannot`), never replaced by a guess. `goal.layout === 'layers'`: the picture in bands of the declared regions (std.schema.region). One undo step.
  */
 export function planRequest(ctx, goal = {}) {
-  if (goal.layout === 'layers') return arrangeLayers(ctx, goal);
+  if (goal.layout === 'layers' && (goal.request?.facts ?? []).some((f) => f.key === 'layout' && f.value === 'layers')) return arrangeLayers(ctx, goal);   // layers when they were said (a sampled layout never cuts the picture)
   const drawnAs = goal.declared?.drawn ?? {};
   const items = new Map(), cannot = [];
   for (const st of goal.steps ?? []) {
@@ -2394,7 +2394,20 @@ export function planRequest(ctx, goal = {}) {
     e.n++; e.said.add(said); items.set(k, e);
   }
   if (!items.size) return no(`I cannot draw ${goal.target ? `a ${goal.target}` : 'that'} with the things I know how to draw.`, 'unsupported');
-  const size = goal.size === 'small' || goal.size === 'tiny' ? 'small' : goal.size === 'big' || goal.size === 'huge' ? 'big' : null;
+  if (goal.plan?.roles?.mode === 'kind') {   // things of kinds, not a scene: the board draws each the way it draws a thing (its place from the facts, its colour, its warnings), and says so
+    const sz = goal.size === 'small' || goal.size === 'tiny' ? 'small' : goal.size === 'big' || goal.size === 'huge' ? 'big' : null;
+    const texts = [];
+    const r0 = oneStep(ctx, 'drew the things asked', () => {
+      for (const [k, e] of items) {
+        budget.tick('draw.plan');
+        const x = add(ctx, { kind: k, n: String(e.n), ...(sz ? { m1: sz } : {}), where: goal.placeWords ?? (goal.place && PLACE[goal.place] ? PLACE[goal.place] : '') });
+        if (x?.status === 'supported') texts.push(String(x.value ?? '').trim()); else cannot.push({ key: 'kind', words: [...e.said][0], why: 'I cannot draw that yet' });
+      }
+      return texts.length ? ok('') : no('I could not draw any of it.', 'unsupported');
+    });
+    return r0?.status === 'supported' ? ok(texts.join(' '), { cannot, plain: true }) : r0;
+  }
+  const size =goal.size === 'small' || goal.size === 'tiny' ? 'small' : goal.size === 'big' || goal.size === 'huge' ? 'big' : null;
   const where = PLACE[goal.place] ?? (size === 'small' ? PLACE.corner : PLACE.bottom);
   const [main] = items.keys();
   const said = [];
@@ -2410,9 +2423,15 @@ export function planRequest(ctx, goal = {}) {
   });
   if (r?.status !== 'supported') return r;
   // the whole is its first part (a pond is its water): the rest are what it has
-  const rest = goal.target && said.length > 1 ? said.slice(1) : said;
+  const surface = [...(goal.steps ?? [])].find((st) => st.item && st.args?.kind)?.args.kind === "water";   // a scene whose first part is its water (a pond): the water is the whole, not a thing it has
+  const rest = goal.target && said.length > 1 && surface ? said.slice(1) : said;
+  const targetName = String(goal.target ?? "").replace(/_/g, " ");
   const list = rest.length > 1 ? `${rest.slice(0, -1).join(', ')} and ${rest.at(-1)}` : rest[0];
-  return ok(goal.target ? `I drew a ${size ? `${size} ` : ''}${goal.target}${where === PLACE.corner ? ' in a corner' : ''}. It has ${list}.` : `I drew ${list}.`, { cannot });
+  const at = goal.place && PLACE[goal.place] ? ` ${PLACE[goal.place]}` : where === PLACE.corner ? ' in a corner' : '';
+  const one1 = (x) => x.replace(/^1 (.+)$/, (m, k) => `${/^[aeiou]/.test(k) ? 'an' : 'a'} ${k}`);
+  if (goal.plan?.roles?.mode === 'kind') { const xs = said.map(one1); return ok(`I drew ${xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}` : xs[0]}${at}.`, { cannot, plain: true }); }   // things of kinds, not a scene: what was drawn
+  if (goal.target && items.size === 1 && items.has(drawnAs[goal.target] ?? goal.target)) return ok(`I drew ${said[0] === `1 ${kindName(main)}` ? `a ${size ? `${size} ` : ''}${kindName(main)}` : said[0]}${at}.`, { cannot, plain: true });   // a thing, not a scene of parts
+  return ok(goal.target ? `I drew a ${size ? `${size} ` : ''}${targetName}${at}. It has ${list}.` : `I drew ${list}${at}.`, { cannot });
 }
 
 /**

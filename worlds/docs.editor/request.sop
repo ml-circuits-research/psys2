@@ -22,3 +22,5 @@
 @e.story k.expect.make thing=story made_in=document unit=chapter min=3 max=5 typical=5 length_unit=word length=150 about="what this world writes from the knowledge it has: about 150 words in its parts"
 @e.essay k.expect.make thing=essay made_in=document unit=chapter min=3 max=5 typical=3 length_unit=word length=300
 @e.report k.expect.make thing=report made_in=document unit=chapter min=4 max=6 typical=5 length_unit=word length=300
+# The door (reviewer 2026-11-15 16:40): the wholes whose requests this world plans through the library. Read by src/dialog/request.mjs doorWholes.
+@door psys2.door world=documents whole=story whole=essay whole=report whole=poem
