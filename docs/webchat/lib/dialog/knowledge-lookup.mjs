@@ -9,9 +9,9 @@
  *   (no veto hook: an action on a referent that must exist in the world - delete, move, color, connect, select - is refused in the world's plain words whatever the catalog knows; a hit never replaces that refusal with a gloss)
  * The catalog is `engine.knowledge` (`createEngine({ options: { knowledge } })`); without it every function here does nothing and the dialog is as it was.
  */
-import { leftOut, requestOf } from './world-aware.mjs?v=6d5a977922';
-import { planHostOf } from '../plan/host.mjs?v=ba1bc7b73e';
-import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=361e3abaa7';
+import { leftOut, requestOf } from './world-aware.mjs?v=6d0cb17f4e';
+import { planHostOf } from '../plan/host.mjs?v=ed38f2ca4d';
+import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=5e4354c660';
 import { guard } from '../formalizer/guard.mjs?v=82a55329d9';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
@@ -22,7 +22,12 @@ const list = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', '
 const firstClause = (g) => String(g).split(/;\s*/)[0].replace(/^\([^)]*\)\s*/, '').trim();
 
 
-export const knowledgeOf = (dialog) => dialog?.engine?.knowledge ?? null;
+/** The catalog as this session reads it: the shared catalog with what the session was taught overlaid (the taught tier, src/knowledge/learned.mjs), or the bare catalog without a session. */
+export const knowledgeOf = (dialog) => {
+  const base = dialog?.engine?.knowledge ?? null;
+  if (!base || !dialog.isession || typeof dialog.engine.interp?._knowledgeFor !== 'function') return base;
+  return dialog.engine.interp._knowledgeFor(dialog.isession) ?? base;
+};
 
 /** The answer to a frame about a thing the catalog knows: `{ text, status }`; the plain "I don't know" when the thing says nothing about the question. */
 export function answerFrom(frame, th, catalog) {

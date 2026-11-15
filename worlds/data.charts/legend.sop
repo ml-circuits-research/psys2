@@ -6,7 +6,6 @@
     imports=kids.arith
     imports=kids.shop
     imports=kids.tasks
-    imports=kids.animals
     doc="Charts drawn by Chart.js: the chart types, their data and the options people can change by talking. The state holds the charts; the legend describes what one chart is."
 
 @data.charts.chart core.type

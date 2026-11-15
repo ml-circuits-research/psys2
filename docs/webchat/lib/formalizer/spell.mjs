@@ -9,10 +9,10 @@
  *   const { text, corrections } = spellCorrect('make bigger yes and red lips', { vocab: worldVocabulary(set, 'ui.avatar') });
  *   // text = 'make bigger eyes and red lips', corrections = [{ from: 'yes', to: 'eyes', span: [12, 15], kind: 'spell' }]
  */
-import { vocabularyOf, openVocab, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs?v=2b41fea3ab';
+import { vocabularyOf, openVocab, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs?v=38440cb2a1';
 import { isNumberWord } from './rules/numbers.mjs?v=e4898df942';
 import { guard } from './guard.mjs?v=82a55329d9';
-import { namingTables } from './routing.mjs?v=2b41fea3ab';
+import { namingTables } from './routing.mjs?v=38440cb2a1';
 import { lexIndex } from '../worlds/lexicon.mjs?v=3a5d2c43c2';
 
 /** Common English function words: never corrected, and valid correction targets (typos of "the", "and", "with" ...). */
@@ -157,12 +157,17 @@ const matchCase = (src, out) => (/^[A-Z]/.test(src) ? out[0].toUpperCase() + out
  * @returns {{ text: string, corrections: { from: string, to: string, span: [number, number], kind: 'abbreviation'|'spell' }[] }}
  */
 /** The words the attached knowledge catalog has in its vocabulary (registered by `attachOpenWords` under Symbol.for('psys2.catalogWords'), no import between the layers): a word the catalog knows is a real word, never "corrected" into another ("comet" is not "comes"). */
+/** A word of the bundled subsets of the catalog (registered by the host under a symbol): a real word that no world lexicon lists any more, never a typo of another. The candidate and alternate readers keep ignoring the catalog vocabulary as before ("clean" may still be read as "clear"); only `spellCorrect` trusts it. */
+const outsideKnown = (w) => w.length >= 3 && !!globalThis[Symbol.for('psys2.bundledWords')]?.(w);
+
 export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = true, spelling = true, protect = null, short = false } = {}) {
   const quoted = [...text.matchAll(QUOTE_RE)].map((m) => [m.index, m.index + m[0].length]);
   const keep = new Set([...FUNCTION_WORDS, ...vocab]);
   // Context anchoring: a word the active world (`protect`, the open tab's vocabulary) knows is never changed, and a content word (4+ letters)
   // that another world knows is not "corrected" into a word of this world: that would change both the world and the noun ("boat" -> "coat").
-  const known = (w) => !!protect?.has(w) || (w.length >= 3 && !!globalThis[Symbol.for('psys2.catalogWords')]?.(w)) || (w.length >= 3 && !!vocab.global?.has(w)) || (w.length >= 4 && !!vocab.world && !vocab.has(w) && !!vocab.nouns?.has(w));
+  // the bundled subsets of the catalog (the animals of k.animals, registered by src/dialog/index.mjs from src/knowledge/bundled-names.mjs under Symbol.for('psys2.bundledWords')) are real words too, with or without a catalog attached
+  const bundled = globalThis[Symbol.for('psys2.bundledWords')];
+  const known = (w) => !!protect?.has(w) || (w.length >= 3 && !!globalThis[Symbol.for('psys2.catalogWords')]?.(w)) || (w.length >= 3 && !!bundled?.(w)) || (w.length >= 3 && !!vocab.global?.has(w)) || (w.length >= 4 && !!vocab.world && !vocab.has(w) && !!vocab.nouns?.has(w));
   const cands = [...vocab].filter((w) => w.length >= 2 && /^[a-z]+$/.test(w) && !Object.hasOwn(ABBREVIATIONS, w));
   for (const w of FUNCTION_WORDS) if (w.length >= 2 && !vocab.has(w)) cands.push(w);
   const corrections = [];
@@ -224,7 +229,7 @@ export function spellCandidates(text, { vocab, protect = null, maxPerWord = 5 } 
     const raw = m[0], start = m.index, end = start + raw.length, lower = raw.toLowerCase();
     const isFirst = first; first = false;
     if (quoted.some(([a, b]) => start >= a && end <= b) || !/^[a-z]+$/.test(lower) || (!isFirst && /^[A-Z]/.test(raw))) continue;
-    if (isKnown(lower, keep) || protect?.has(lower) || (lower.length >= 3 && vocab.global?.has(lower)) || (lower.length >= 4 && vocab.world && !vocab.has(lower) && vocab.nouns?.has(lower))) continue;
+    if (isKnown(lower, keep) || protect?.has(lower) || outsideKnown(lower) || (lower.length >= 3 && vocab.global?.has(lower)) || (lower.length >= 4 && vocab.world && !vocab.has(lower) && vocab.nouns?.has(lower))) continue;
     const maxEdits = spellBudget(lower);
     if (!maxEdits) continue;
     const letters = [...lower].sort().join('');
@@ -256,7 +261,7 @@ export function spellAlternates(text, { vocab, maxPerWord = 4, maxTexts = 12, pr
     guard.check('spell');   // a long message times vocabulary size: a cancellation point per word
     const raw = m[0], start = m.index, end = start + raw.length, lower = raw.toLowerCase();
     const isFirst = first; first = false;
-    if (protect?.has(lower) || (lower.length >= 4 && vocab.nouns?.has(lower) && (!vocab.world || !vocab.has(lower)))) continue;   // known in the active tab / a content noun of another world
+    if (protect?.has(lower) || outsideKnown(lower) || (lower.length >= 4 && vocab.nouns?.has(lower) && (!vocab.world || !vocab.has(lower)))) continue;   // known in the active tab / a content noun of another world
     if (!(short ? /^[a-z]{2,}$/ : /^[a-z]{3,}$/).test(lower) || FUNCTION_WORDS.has(lower) || isNumberWord(lower) || (!isFirst && /^[A-Z]/.test(raw)) || quoted.some(([a, b]) => start >= a && end <= b)) continue;
     let n = 0;
     for (const w of cands) {

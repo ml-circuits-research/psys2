@@ -24,7 +24,7 @@ test('the cards are generated, not stale (node scripts/build-world-cards.mjs --w
 test('size gate: a card is a few lines, and the cards are a small part of what the worlds say', () => {
   const kb = readFileSync(CARDS_FILE, 'utf8');
   const cards = kb.split(/\n(?=@card\.)/).slice(1);
-  assert.ok(cards.length >= 20);
+  assert.ok(cards.length >= 15);   // one card per world that routes (18 after kids.animals and kids.shapes left, 2026-11-14)
   for (const c of cards) assert.ok(c.split('\n').filter((l) => l.trim()).length <= 40, c.slice(0, 40));
   let patterns = 0;
   for (const w of engine.set.list()) patterns += (w.raw?.patterns ?? '').length || 0;

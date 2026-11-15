@@ -5,7 +5,6 @@
     imports=world.core
     imports=world.kids.common
     imports=world.kids.tasks
-    imports=world.kids.animals
     imports=world.kids.arith
     imports=world.space
     formalization=rules

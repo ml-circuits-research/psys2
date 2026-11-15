@@ -10,7 +10,7 @@ import { parse, get, getAll } from '../soplang/index.mjs?v=c57881f705';
 import { Legends } from '../legends/index.mjs?v=bd9891747c';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
 import { describePatterns, descriptionFor, readDescriptionWires, slotDeclarations, emitKey, EN } from './describe.mjs?v=956f430777';
-import { checkPattern } from '../formalizer/rules/index.mjs?v=2b41fea3ab';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=38440cb2a1';
 import { lexIndex } from './lexicon.mjs?v=3a5d2c43c2';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 

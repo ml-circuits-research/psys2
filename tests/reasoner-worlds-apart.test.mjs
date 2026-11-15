@@ -18,7 +18,7 @@ const say = async (e, lines) => { const s = open(e); const out = []; for (const 
 
 test('grouping: the conversation worlds share one instance, every other matrix world has its own, and the composite is declared in world.sop', async () => {
   const r = matrix.reasoner;
-  const conv = ['kids.shop', 'kids.arith', 'kids.tasks', 'kids.time', 'kids.animals', 'kids.shapes'];
+  const conv = ['kids.shop', 'kids.arith', 'kids.tasks', 'kids.time'];
   assert.deepEqual(matrix.set.get('session.conversation').compose.sort(), [...conv].sort(), 'declared, not automatic');
   for (const id of conv) assert.equal(r.instKey(id), 'session.conversation', id);
   for (const id of ['ui.shell', 'ui.help']) assert.equal(r.instKey(id), id, id);
@@ -40,7 +40,7 @@ test('facts of the conversation reach the other instances only as agents: a name
   assert.equal(out[3], 'Your name is Ana.');
   const sh = s.isession.rs.of('ui.shell');
   assert.ok(sh.ofType('core.agent').length >= 1, 'the agents are copied into the shell');
-  assert.equal(sh.ofType('kids.animals.pet').length, 0, 'the pet of the conversation is not in the shell');
+  assert.equal(s.isession.state['session.things'].learned.length, 1, 'the pet is a lesson of the session (session.things), not a wire of any instance');
 });
 
 test('shared people: "Ana has 3 apples / she eats 1 / how many" is 2, with another tab world used in between', async () => {
