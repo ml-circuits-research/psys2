@@ -8,7 +8,9 @@
  *   - verbatim:  every lexicon that carries `keep=verbatim` (the currency unit "lei"); protected whatever the case;
  *   - tabs:      the tab id, title and aliases of every manifest, protected only as "the <Name> tab" (a bare "draw" is a verb);
  *   - titles:    the `title` and `aka` values of knowledge entities that have a `title` (song titles), whatever the case;
- *   - session:   names the user told this session (`extra`), protected with a capital letter.
+ *   - session:   names the user told this session (`extra`), protected with a capital letter;
+ *   - things:    the names of the things in the open tab's world (`things`: a diagram's "work done", "summary"), protected whatever the case (owner 2026-11-15:
+ *                "Moved work done." came back as "M-am mutat de la muncă"; the model never translates the names of the things on the screen).
  * Numbers need no placeholder: the translation checker already requires them to survive.
  */
 
@@ -48,18 +50,44 @@ export function sessionNames(session) {
   return [...agents.values()].filter((a) => !a.special && a.name).map((a) => String(a.name));
 }
 
+/** The names of the things in the open tab's world: the `name` / `label` / `title` of the things (items with `x` or `kind`) of its top-level lists, as words ("work_done" -> "work done"); a name
+ *  with a digit (an internal id: "circle1") or longer than four words is left out. [] when there is no session or no tab world. */
+export function worldThingNames(session) {
+  let st = null;
+  try { const w = session?.context?.().tabWorld; st = w ? session?.isession?.state?.[w] : null; } catch { st = null; }
+  if (!st || typeof st !== 'object') return [];
+  const out = new Set();
+  for (const [key, v] of Object.entries(st)) {
+    if (!Array.isArray(v) || /^(?:last\w*|log|history|future|undo|redo|prev\w*|saved)$/i.test(key)) continue;   // the world's memory of past turns is no thing on the screen
+    for (const it of v.slice(0, 200)) {
+      if (!it || typeof it !== 'object' || !(typeof it.x === 'number' || typeof it.kind === 'string')) continue;   // a thing: placed (x) or of a kind
+      for (const k of ['name', 'label', 'title']) {
+        const x = typeof it[k] === 'string' ? it[k].replace(/_/g, ' ').trim() : '';
+        if (x.length >= 3 && x.length <= 40 && !/\d/.test(x) && /^[\p{L}' -]+$/u.test(x) && x.split(/\s+/).length <= 4) out.add(x);
+      }
+    }
+  }
+  return [...out];
+}
+
 const PLACE = (i) => `Zorq${[...i.toString(26)].map((c) => 'abcdefghijklmnopqrstuvwxyz'[parseInt(c, 26)]).join('')}`;   // letters only (digits would mix with the numbers the checker compares); survived every model tried
+
+/** A placeholder as the model may give it back: the first letter with a diacritic ("Zorqa" -> "Ţorqa"). */
+const loose = (p) => `[ZŢȚŽzţțž]${p.slice(1)}`;
 
 const re = (alts, flags) => alts.length ? new RegExp(`(?<![${LETTER}])(?:${alts.map((a) => a.split(' ').map(escapeRe).join('[\\s_]+')).join('|')})(?![${LETTER}])`, flags) : null;
 
 /**
- * Replaces the keep-list words of `text` by placeholders. `keep` = { verbatim, names, tabs } (keepListOf), `extra` = names told in the session.
+ * Replaces the keep-list words of `text` by placeholders. `keep` = { verbatim, names, tabs } (keepListOf), `extra` = names told in the session, `things` = worldThingNames.
  * Returns { text, found: [[placeholder, surface]...], restore(out) } where restore returns null when a placeholder did not survive the model.
  */
-export function protectText(text, keep, { extra = [] } = {}) {
+export function protectText(text, keep, { extra = [], things = [], quoteThings = false } = {}) {
   let s = String(text ?? '');
   const found = [];
   const put = (m) => { const p = PLACE(found.length); found.push([p, m]); return p; };
+  const th = re(things.map(words).filter((x) => x.length >= 3).sort((a, b) => b.length - a.length), 'giu');   // the things on the screen: whatever the case, first (longest first)
+  const quoted = new Set();   // into another language a thing's name comes back quoted („work done”): it is a name, not an English word left over
+  if (th) s = s.replace(th, (m, off, all) => { const p = put(m); if (quoteThings && !/[„"“]$/.test(all.slice(0, off))) quoted.add(p); return p; });
   if (keep) {
     const v = re(keep.verbatim, 'giu');
     if (v) s = s.replace(v, put);
@@ -75,9 +103,9 @@ export function protectText(text, keep, { extra = [] } = {}) {
   const restore = (out) => {
     let r = String(out ?? '');
     for (const [p, surface] of found) {
-      const rx = new RegExp(`(?<![${LETTER}])${p}(?![${LETTER}])`, 'i');
+      const rx = new RegExp(`(?<![${LETTER}])${loose(p)}(?![${LETTER}])`, 'i');
       if (!rx.test(r)) return null;
-      r = r.replace(new RegExp(`(?<![${LETTER}])${p}(?![${LETTER}])`, 'gi'), () => surface);
+      r = r.replace(new RegExp(`(?<![${LETTER}])${loose(p)}(?![${LETTER}])`, 'gi'), () => (quoted.has(p) ? `„${surface}”` : surface));
     }
     return r;
   };
@@ -92,8 +120,8 @@ export function protectedTranslate(translate, getKeep) {
   return async (text, from, to, ...rest) => {
     let info;
     try { info = getKeep?.(); } catch { info = null; }
-    if (!info || (!info.keep && !(info.extra?.length))) return translate(text, from, to, ...rest);
-    const p = protectText(text, info.keep, { extra: info.extra ?? [] });
+    if (!info || (!info.keep && !(info.extra?.length) && !(info.things?.length))) return translate(text, from, to, ...rest);
+    const p = protectText(text, info.keep, { extra: info.extra ?? [], things: info.things ?? [], quoteThings: to !== 'en' });
     if (!p.found.length) return translate(text, from, to, ...rest);
     const out = await translate(p.text, from, to, ...rest);
     const back = p.restore(out);

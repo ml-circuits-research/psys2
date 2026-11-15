@@ -152,16 +152,27 @@ export function routingOf(r) {
 /** Chips are not human phrasing: excluded unless includeChips. */
 export function selectForExport(list, { includeChips = false } = {}) { return list.filter((r) => includeChips || r.source !== 'chip'); }
 /** One JSON document: { format, exported, count, records } (the learning loop reads this and the older JSONL alike). */
-export function toJSON(list, { includeChips = false, diagnostics = null, events = null } = {}) {
+export function toJSON(list, { includeChips = false, diagnostics = null, events = null, app = null } = {}) {
   const ev = Array.isArray(events) ? events : null;
   const records = selectForExport(list, { includeChips }).map((r) => exportRecord(r, ev));
-  // format 3 adds `events` (every user action and progress step, in order); format 2 files (no `events`) still load everywhere
-  return `${JSON.stringify({ format: ev ? 'psys2-phrase-log/3' : 'psys2-phrase-log/2', exported: new Date().toISOString(), count: records.length, ...(diagnostics ? { diagnostics } : {}), ...(ev ? { eventCount: ev.length, events: ev } : {}), records }, null, 1)}\n`;
+  // format 3 adds `events` (every user action and progress step, in order); format 2 files (no `events`) still load everywhere. The first lines say the app build and the
+  // number of turns (owner 2026-11-15): `app` = window.__psys2Build ({ commit, version }), `turns` = the typed and spoken turns (button presses are not turns)
+  const turns = records.filter((r) => r.source !== 'chip' && r.source !== 'dry-run').length;
+  return `${JSON.stringify({ format: ev ? 'psys2-phrase-log/3' : 'psys2-phrase-log/2', app: app ? { build: app.commit ?? null, version: app.version ?? null } : null, turns, exported: new Date().toISOString(), count: records.length, ...(diagnostics ? { diagnostics } : {}), ...(ev ? { eventCount: ev.length, events: ev } : {}), records }, null, 1)}\n`;
 }
 export function toJSONL(list, { includeChips = false } = {}) {
   return selectForExport(list, { includeChips }).map((r) => JSON.stringify(exportRecord(r))).join('\n') + (list.length ? '\n' : '');
 }
-export const exportFilename = (d = new Date()) => `psys2-phrases-${d.toISOString().slice(0, 10).replace(/-/g, '')}.json`;
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+/** The history file's name (owner 2026-11-15): the LOCAL day and the English month abbreviation, `psys2-15Nov.json`; the n-th export of the same day `psys2-15Nov-<n>.json`. */
+export const exportFilename = (d = new Date(), n = 1) => `psys2-${d.getDate()}${MONTHS[d.getMonth()]}${n > 1 ? `-${n}` : ''}.json`;
+/** The local day of a date as YYYY-MM-DD (the key of the per-day export counter). */
+export const localDay = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+/** The next number of an export on day `day`, from the stored counter `{ day, n }` (another day starts again at 1). Pure: returns { n, next } where `next` is what to store. */
+export function nextExportNumber(stored, day) {
+  const n = stored && stored.day === day && Number.isInteger(stored.n) ? stored.n + 1 : 1;
+  return { n, next: { day, n } };
+}
 
 /** localStorage-backed store; every storage access is guarded. */
 export function createStore(storage = globalThis.localStorage, { cap = LOG_CAP, key = LOG_KEY } = {}) {

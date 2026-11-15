@@ -220,9 +220,21 @@ export function nodesOf(kind, args, s, legend = null) {
 // ---- replies --------------------------------------------------------------------------------------------------------
 const listing = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a[a.length - 1]}`);
 const few = (a, n) => (a.length > n ? listing([...a.slice(0, n), `${a.length - n} more`]) : listing(a));
-/** Turns the effects of a run into one or two plain sentences (ported from summarize() of engine/ui.js). */
-function summarize(result, s) {
-  const adds = [], links = [], unlinks = [], dels = [], moved = [], changed = [], renames = [], rules = [], said = [], answers = [], edgeSets = [];
+/** The way a shape went, from where it was (`from`) to where it is: "up", "down and to the left"; null when it did not move. The canvas y grows downwards. */
+function wayMoved(from, to) {
+  if (!from || !to) return null;
+  const dx = Math.round(Number(to.x) - Number(from.x)), dy = Math.round(Number(to.y) - Number(from.y));
+  if (!dx && !dy) return null;
+  const v = dy < 0 ? 'up' : dy > 0 ? 'down' : null, h = dx < 0 ? 'to the left' : dx > 0 ? 'to the right' : null;
+  return Math.abs(dy) >= 2 * Math.abs(dx) ? v : Math.abs(dx) >= 2 * Math.abs(dy) ? h : `${v} and ${h}`;
+}
+/**
+ * Turns the effects of a run into one or two plain sentences (ported from summarize() of engine/ui.js). `from` (name -> {x, y} before the run) makes the reply say what
+ * changed (owner 2026-11-15, class C): a move says which way each shape went, a shape set to where it already was is not "moved", and a run that changed nothing says so
+ * ("Nothing changed.") instead of "Done.".
+ */
+function summarize(result, s, from = null) {
+  const adds = [], links = [], unlinks = [], dels = [], moved = [], changed = [], renames = [], rules = [], said = [], answers = [], edgeSets = [], ways = new Map();
   for (const st of result.steps) {
     let ownAnswer = false;
     if (st.node.type === 'mention' || st.error || st.skipped) continue;
@@ -238,7 +250,12 @@ function summarize(result, s) {
       else if (p.op === 'reorder') said.push(p.to === 'front' ? `Brought ${p.name} to the front.` : `Sent ${p.name} to the back.`);
       else if (p.op === 'edgeSet') { if (p.edge) { edgeSets.push(p); ownAnswer = true; } }
       else if (p.op === 'set') {
-        if ('x' in p.props && !moved.includes(p.name)) moved.push(p.name);
+        if ('x' in p.props && !moved.includes(p.name)) {
+          const now = s.shapes.find((x) => x.name === p.name);
+          const way = from ? wayMoved(from.get(p.name), now) : undefined;
+          if (way !== null) moved.push(p.name);
+          if (way) ways.set(p.name, way);
+        }
         const ch = Object.entries(p.props).filter(([k]) => k !== 'x' && k !== 'y').map(([k, v]) => (k === 'size' ? K.sizeName(v) : k === 'label' ? `labeled “${v}”` : k === 'outline' ? (v ? `${v} outline` : 'no outline') : k === 'shape' ? `a ${v}` : String(v)));
         if (ch.length) changed.push(`${plain(s, p.name)} is now ${listing(ch)}`);
       }
@@ -251,15 +268,22 @@ function summarize(result, s) {
   if (links.length) out.push(`Connected ${few(links, 4)}.`);
   if (renames.length) out.push(`Renamed ${listing(renames)}.`);
   if (changed.length) out.push(changed.slice(0, 4).join('; ') + (changed.length > 4 ? `; and ${changed.length - 4} more.` : '.'));
-  if (moved.length) out.push(`Moved ${few(moved.map((n) => plain(s, n)), 5)}.`);
+  if (moved.length) {
+    // the way is said when the move is the whole reply and every shape went the same way ("Moved work done and problems up."); an arrangement, a spacing or a fit says
+    // what it did in its own sentence, where a way per shape would only be noise
+    const w = new Set(moved.map((n) => ways.get(n) ?? ''));
+    const way = !answers.length && !said.length && w.size === 1 ? [...w][0] : '';
+    out.push(`Moved ${few(moved.map((n) => plain(s, n)), 5)}${way ? ` ${way}` : ''}.`);
+  }
   out.push(...edgeSentences(edgeSets, s));
   if (unlinks.length) out.push(`Removed the arrow${unlinks.length > 1 ? 's' : ''} ${few(unlinks, 4)}.`);
   if (dels.length) out.push(`Deleted ${few(dels, 6)}.`);
   for (const r of rules) out.push(`From now on, new ${r.shape ? `${r.shape}s` : 'shapes'} will be ${['size', 'color'].filter((k) => r[k]).map((k) => r[k]).join(' ')}${r.outline ? ` with a ${r.outline} outline` : ''}.`);
   out.push(...said.map((x) => x.replace(/^Reverted 1 turn\.$/, 'Undid the last change.').replace(/^Re-applied 1 turn\.$/, 'Redid it.')));
   out.push(...answers);
-  return out.join(' ') || 'Done.';
+  return out.join(' ') || NOTHING;
 }
+const NOTHING = 'Nothing changed.';
 
 /** One sentence per changed arrow: "The arrow circle 1 → rectangle 1 now says “uses” and is now dashed and thicker (3 px)." */
 function edgeSentences(sets, s) {
@@ -396,6 +420,7 @@ function placeFree(s, names) {
 function execute(ctx, s, nodes, { place = true } = {}) {
   const system = systemFor(s);
   const before = system.world.state.shapes.length;
+  const from = new Map((s.shapes ?? []).map((x) => [x.name, { x: x.x, y: x.y }]));
   let result;
   try { result = system.engine.run(nodes); } catch (e) { return no(`I could not do that (${e?.message ?? e}).`, 'error'); }
   writeBack(s);
@@ -414,15 +439,15 @@ function execute(ctx, s, nodes, { place = true } = {}) {
   if (result.changed || s.shapes.length !== before) open(ctx);
   if (!result.ok) {
     const err = result.error;
-    const text = summarize({ steps: result.steps.filter((st) => !st.error) }, s);
+    const text = summarize({ steps: result.steps.filter((st) => !st.error) }, s, from);
     const said = shortNames(s, /^What should change about /.test(err?.message ?? '') ? plainIds(s, err.message) : (err?.message ?? 'I could not do that.'));
     const clarify = err && err.name === 'Clarify';
-    if (result.partial && /^Done\.?$/.test(text.trim())) return no(said, 'missing');   // nothing was done: the reply is the question, not "Done. But: ..."
+    if (result.partial && text.trim() === NOTHING) return no(said, 'missing');   // nothing was done: the reply is the question, not "Done. But: ..."
     if (result.partial) return ok(`${shortNames(s, text)} But: ${said}`);
     return no(said, clarify ? 'missing' : 'unsupported');
   }
   open(ctx);
-  return ok(`${s.keptNote ? `${s.keptNote} ` : ''}${shortNames(s, summarize(result, s))}`);
+  return ok(`${s.keptNote ? `${s.keptNote} ` : ''}${shortNames(s, summarize(result, s, from))}`);
 }
 
 /** What the dice may say on this tab: a diagram of each kind about a topic the knowledge can draw (src/knowledge/diagram-world.mjs); nothing until the library is loaded. */

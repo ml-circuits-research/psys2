@@ -100,7 +100,11 @@ function originalSentence(original, seg, alignment) {
 function fitFragment(src, out) {
   const lead = src.match(/^\s*/)[0], trail = src.match(/\s*$/)[0];
   let core = out.trim();
-  if (/^[a-z]/.test(src.trim()) && core) core = core[0].toLowerCase() + core.slice(1);
+  // a fragment that continues a sentence (", so I did not do it.") keeps its leading punctuation, which a translator drops, and starts in lower case
+  const punct = src.trim().match(/^[,;:]\s*/)?.[0] ?? '';
+  if (punct && !core.startsWith(punct.trim())) core = `${punct}${core}`;
+  const body = src.trim().slice(punct.length);
+  if (/^[a-z]/.test(body) && core) { const i = punct && core.startsWith(punct.trim()) ? core.search(/\p{L}/u) : 0; if (i >= 0) core = core.slice(0, i) + core[i].toLowerCase() + core.slice(i + 1); }
   return lead + core + trail;
 }
 
@@ -125,8 +129,6 @@ function quoteUserWords(text, userWords) {
 
 /** Most Translator calls one turn may make as fallback (each is bounded by the bridge deadline; the turn guard bounds the sum). */
 const MAX_FALLBACK_CALLS = 6;
-/** The last line of a Romanian reply nothing could translate (RO-TRANSLATE-FALLBACK): the session never shows English. */
-const NO_RO_REPLY = 'Nu am încă o formulare în română pentru acest răspuns.';
 /** A clause whose wire asks to remove, clear, reset or replace something (the action's last name part: draw.clearAll, draw.remove, geo.clearAll ...). */
 const DESTRUCTIVE_ACTION = /^(clear|remove|delete|erase|reset|restart|wipe|discard|forget|empty|drop|replace|undo|redo|destroy)/i;
 function isDestructive(seg) {
@@ -152,7 +154,7 @@ export async function translateParts(parts, translator, lang, userWords = null, 
   const ownRules = fb && (translator.rules?.supports?.('en', lang) ?? true);
   const prim = fb ? (ownRules ? (translator.rules ?? translator) : NO_RULES) : translator;
   const routes = [];
-  let fbCalls = 0, dead = false;   // after a failed machine round in this reply the rules write the rest
+  let fbCalls = 0, dead = false, leftOnly = false;   // after a failed machine round in this reply the rules write the rest; `leftOnly`: a machine round gave a checked text that failed only for English words left over
   const viaMachine = async (text) => {
     if (!fb || !translator.candidatesViaMT || fbCalls >= MAX_FALLBACK_CALLS || guard.soft() || dead) return null;
     fbCalls++;
@@ -161,6 +163,7 @@ export async function translateParts(parts, translator, lang, userWords = null, 
       // before the call; the Romanian that comes back is put in one register (the informal singular)
       const cs = await guard.abortable(translator.candidatesViaMT(withSubject(text), { from: 'en', to: lang }), 'translate');
       const ok = (cs ?? []).find((c) => !c.rejected && c.text && !(typeof translator.leftovers === 'function' && translator.leftovers(c.text, lang).length));
+      if (!ok && (cs ?? []).some((c) => c.text && !c.rejected)) leftOnly = true;   // only English words left over: translating the whole reply may still do
       if (!ok) dead = true;
       if (!ok) return null;
       const tr = ok.translation ?? { text: ok.text };
@@ -214,10 +217,28 @@ export async function translateParts(parts, translator, lang, userWords = null, 
   }
   let result;
   if (!complete) {   // keep the whole reply in English: translated runs and the examples (which carry their English text in `en`) revert; quoted user text stays as typed
-    if (fb && lang === 'ro') {   // never English in a Romanian session: the quoted words of the user stay, the sentence around them is a fixed Romanian line
-      routes.length = 0; routes.push('ro-generic');
-      const quoted = flat.filter((p) => p.quote && !p.example && !p.reading).map((p) => (/^".*"$/s.test(p.text) ? `„${p.text.slice(1, -1)}”` : p.text));
-      result = [{ text: NO_RO_REPLY + (quoted.length ? ` (${quoted.join(', ')})` : ''), translate: false }];
+    if (fb && lang !== 'en') {
+      // A REPLY IS NEVER WITHHELD (owner 2026-11-15, class B): what the run-by-run chooser could not complete goes to the machine translator as one whole reply (checked for
+      // numbers, names and negation; a few English words left are accepted when they are the user's own or few); without one, the best partial translation is shown
+      // (the rules' runs, the rest in English). Never a fixed line that says nothing.
+      const whole = flat.map((p) => (p.join ? p.text : p.translate ? p.text : (p.en ?? p.text))).join('');
+      const userText = flat.filter((p) => p.quote).map((p) => p.text).join(' ').toLowerCase();
+      let wholeText = null;
+      if (translator.candidatesViaMT && leftOnly && fbCalls < MAX_FALLBACK_CALLS && !guard.soft()) {
+        try {
+          const cs = await guard.abortable(translator.candidatesViaMT(withSubject(whole), { from: 'en', to: lang }), 'translate');
+          const words = (t) => String(t).split(/\s+/).filter(Boolean).length;
+          const ok = (cs ?? []).find((c) => {
+            if (c.rejected || !c.text || c.text.trim() === whole.trim()) return false;
+            const left = (typeof translator.leftovers === 'function' ? translator.leftovers(c.text, lang) : []).filter((w) => !userText.includes(String(w?.word ?? w).toLowerCase()));
+            return left.length <= Math.max(1, Math.floor(words(c.text) / 5));
+          });
+          if (ok) wholeText = polishReply(textOf(ok.translation ?? ok) ?? ok.text, lang);
+        } catch (e) { if (e instanceof TurnAborted) throw e; }
+      }
+      routes.length = 0;
+      if (wholeText) { routes.push('translator-out-whole'); result = [{ text: wholeText, translate: false }]; }
+      else { routes.push('rules-partial'); result = out.map(({ src, en, ...p }) => p); }
     } else result = flat.map(({ join, fallback, en, src, incomplete, say: _say, ...p }) => (join ? { text: p.text, translate: false } : { ...p, text: en ?? p.text }));
   } else {
     if (fb && !routes.length && out.some((p) => p.translate)) routes.push('rules-translate');
@@ -245,6 +266,7 @@ const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 import { LIMITS } from './time-limits.mjs';
 import { languageCommand } from '../translate/language-command.mjs';
 import { withSubject, polishReply } from '../translate/register.mjs';
+import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1767,6 +1789,10 @@ export class DialogSession {
       lines.push([T(`I did not know the word${unknownWords.length > 1 ? 's' : ''}: `), { text: unknownWords.map((u) => u.word).join(', '), translate: false, quote: true }, { text: '.', translate: false }]);
     }
     if (tInterp) perf.add('interpret', performance.now() - tInterp);
+    // HONEST REPLIES (class C): a line that only claims success while no world's content changed says that nothing changed
+    if (lines.some((ln) => ln.length === 1 && BARE_DONE.test(ln[0].text ?? '')) && !this.isession.effects.some((e) => e.name !== 'chat.suggest') && !contentChanged(stateBefore, this.isession.state)) {
+      for (let i = 0; i < lines.length; i++) if (lines[i].length === 1 && BARE_DONE.test(lines[i][0].text ?? '')) lines[i] = [T(NOTHING_CHANGED)];
+    }
     let englishParts = [];
     lines.forEach((ln, i) => { if (i) englishParts.push({ text: ' ', translate: true, join: true }); englishParts.push(...ln); });
     const englishReply = englishParts.map((p) => p.text).join('');

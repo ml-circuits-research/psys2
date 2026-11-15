@@ -151,8 +151,8 @@ async function init(m) {
   const bundleBytes = startIds.reduce((s, id) => s + (worldLoader.info(id)?.bytes ?? 0), 0);
   // The browser Translation API and language detector exist on the page only: the worker asks the page for them, with a deadline (then the rules answer)
   const backend = tr.createRemoteBackend({ kinds: m.browser ?? {}, call: (op, payload) => new Promise((resolve, reject) => { const id = ++btSeq; btPending.set(id, { resolve, reject }); post({ type: 'bt', id, op, ...payload }); }).finally(() => {}) });
-  // MT keep-list (spec 05): the app's own words (currency, names, titles, tab names) are placeholders around the model; the engine and session exist by the first call
-  { const kl = await imp('lib/translate/keep-list.mjs'); const raw = backend.translate; backend.translate = kl.protectedTranslate(raw, () => (engine ? { keep: kl.keepListOf(engine.set), extra: kl.sessionNames(session) } : null)); }
+  // MT keep-list (spec 05): the app's own words (currency, names, titles, tab names, the names of the things in the open tab) are placeholders around the model; the engine and session exist by the first call
+  { const kl = await imp('lib/translate/keep-list.mjs'); const raw = backend.translate; backend.translate = kl.protectedTranslate(raw, () => (engine ? { keep: kl.keepListOf(engine.set), extra: kl.sessionNames(session), things: kl.worldThingNames(session) } : null)); }
   // Q13: the Romanian grammar voice (setting `roGrammar`, off by default): loaded on its first Romanian message, the language world and the library only then
   let roVoice = null;
   const roGrammarVoice = { name: 'grammar', async propose(t, o) { roVoice ??= (await imp('lib/translate/voice-ro.mjs')).createRoGrammarVoice(); return roVoice.propose(t, o); } };

@@ -14,7 +14,7 @@ function withDeadline(promise, ms, { label = 'operation' } = {}) {
 
 const NEG_SRC = /\b(nu|nici|niciun|nicio|fara|fără|nimic|niciodata|niciodată|not|no|never|n't)\b/i;
 const NEG_EN = /\b(not|no|never|none|nothing|nobody|without|neither|nor|cannot)\b|n't\b/i;
-const NEG_RO = /\b(nu|nici|niciun|nicio|fara|fără|nimic|niciodată|niciodata)\b/i;
+const NEG_RO = /(?<!\p{L})(?:nu|nici|niciun|nicio|fara|fără|nimic|niciodată|niciodata)(?!\p{L})|(?<!\p{L})n-(?=\p{L})/iu;   // "n-am făcut" is "nu am făcut" (the contracted negation)
 const WH_EN = /^(what|who|whom|whose|where|when|why|how|which|do|does|did|is|are|am|was|were|can|could|will|would|have|has)\b/i;
 // only true question words: "e ora 25" / "are 3 mere" / "ai dreptate" are statements unless they end in "?"
 const WH_RO = /^(ce|cine|unde|când|cand|de ce|cum|care|câte|cate|câți|cați|cât|cat)\b/i;

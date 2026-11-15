@@ -2153,7 +2153,7 @@
 
 @t.diagram.sketch.b.fact.k04.b core.test
     input="Check is above Process"
-    expect="Moved Check."
+    expect="Moved Check to the left."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.fact.k04
@@ -2724,7 +2724,7 @@
 
 @t.diagram.sketch.b.move.k01.b core.test
     input="Put Check under Done"
-    expect="Moved Check."
+    expect="Moved Check down and to the right."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.move.k01
@@ -2737,7 +2737,7 @@
 
 @t.diagram.sketch.b.move.k02.b core.test
     input="Shift Process to the left by 40 pixels"
-    expect="Moved Process."
+    expect="Moved Process to the left."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.move.k02
@@ -2756,7 +2756,7 @@
 
 @t.diagram.sketch.b.move.k04.b core.test
     input="Shift Start down by 30px"
-    expect="Moved Start."
+    expect="Moved Start down."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.move.k04
@@ -2769,7 +2769,7 @@
 
 @t.diagram.sketch.b.move.k05.b core.test
     input="Place Done between Start and Check"
-    expect="Moved Done."
+    expect="Moved Done to the left."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.move.k05
@@ -2782,7 +2782,7 @@
 
 @t.diagram.sketch.b.move.k06.b core.test
     input="move Done below Start"
-    expect="Moved Done."
+    expect="Moved Done to the left."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.move.k06

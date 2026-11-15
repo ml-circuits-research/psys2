@@ -27,7 +27,7 @@ import { turnRecord, summarize, outcomeOf, executedActs } from './lib/dialog/con
 import { personView } from './lib/dialog/person-view.mjs';
 import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
-import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf, exportRecord } from './ui/phrase-log.mjs';
+import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, localDay, nextExportNumber, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf, exportRecord } from './ui/phrase-log.mjs';
 import { createFeedback } from './ui/feedback.mjs';
 import { failureReasons, filterFailures, toFailuresJSON, failuresFilename, createFailureSender, validEndpoint, FAILURE_REASON_TEXT } from './ui/failures.mjs';
 import { createProgress } from './ui/progress.mjs';
@@ -938,16 +938,22 @@ export async function mountPsys2(element, options = {}) {
   // Off: nothing of it is loaded, recorded or kept. On: ui/debug.mjs is imported once and keeps a ring buffer of the last 200 turns.
   let dbg = null, dbgLoading = null;
   const voiceEnd = (recId) => { try { return (recId && phrases.all().find((r) => r.id === recId)?.endType) || null; } catch { return null; } };
+  /** Saves a file: on a phone the share sheet with the file (Web Share), else (or when sharing fails) a download. Says the file name and where it went; resolves to
+   *  { name, where: 'shared' | 'downloads' | 'cancelled' }. */
   async function saveFile(name, text, mime = 'application/json') {
     const download = () => {
       const url = URL.createObjectURL(new Blob([text], { type: mime }));
       const a = h('a', { href: url, download: name, hidden: true }); document.body.append(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 5000); toast(`Downloaded ${name}`);
+      setTimeout(() => URL.revokeObjectURL(url), 5000); toast(`Saved ${name} to your Downloads folder`);
+      return { name, where: 'downloads' };
     };
     let file = null;
     try { file = typeof File === 'function' ? new File([text], name, { type: mime }) : null; } catch { file = null; }
-    if (file && navigator.canShare?.({ files: [file] }) && navigator.share) navigator.share({ files: [file], title: name }).then(() => toast(`Shared ${name}`), (e) => { if (e?.name !== 'AbortError') download(); });   // cancelled sheet: nothing more
-    else download();
+    if (file && navigator.canShare?.({ files: [file] }) && navigator.share) {
+      return navigator.share({ files: [file], title: name }).then(() => { toast(`Shared ${name} (sent where you chose in the share sheet)`); return { name, where: 'shared' }; },
+        (e) => (e?.name === 'AbortError' ? { name, where: 'cancelled' } : download()));   // cancelled sheet: nothing more
+    }
+    return download();
   }
   function syncDebugButton() {
     const on = settings.devMode === true && !!tabBtns[view];
@@ -1789,12 +1795,18 @@ export async function mountPsys2(element, options = {}) {
   const MODE_NAME = { typed: 'typed', voice: 'spoken', chip: 'button' };
   /** One click: the share sheet where the browser offers one for files (phones), else a download. Returns the number of records. */
   function exportPhrases() {
-    const body = toJSON(phrases.all(), { includeChips: settings.exportButtons === true, diagnostics: diagnostics(), events: events.all() });
+    const body = toJSON(phrases.all(), { includeChips: settings.exportButtons === true, diagnostics: diagnostics(), events: events.all(), app: globalThis.__psys2Build ?? null });
     const n = JSON.parse(body).count;
     if (!n) { toast('No phrases to export yet'); return 0; }
-    saveFile(exportFilename(), body);
+    // the n-th export of the local day: psys2-15Nov.json, psys2-15Nov-2.json, ... (the counter is a per-viewer convenience: without storage every export is the first)
+    const now = new Date();
+    let num = 1;
+    try { const k = 'psys2.exportCount', st = JSON.parse(globalThis.localStorage?.getItem(k) ?? 'null'); const r = nextExportNumber(st, localDay(now)); num = r.n; globalThis.localStorage?.setItem(k, JSON.stringify(r.next)); } catch { num = 1; }
+    const name = exportFilename(now, num);
+    saveFile(name, body).then((r) => { lastExport = r; if (!settingsEl.hidden) renderPhraseLog(); }, () => {});
     return n;
   }
+  let lastExport = null;   // { name, where } of the last history export: shown under the list (the owner could not find the file on the phone)
   /** "Download failures only": export format 3 with only the failure turns, two turns before and after each, and the events that belong to them. */
   function exportFailures() {
     const body = toFailuresJSON(phrases.all(), { events: events.all(), diagnostics: diagnostics() });
@@ -1806,7 +1818,7 @@ export async function mountPsys2(element, options = {}) {
   function renderPhraseLog() {
     const all = phrases.all(), reasonsOf = failureReasons(all, events.all()), shown = (logFilter === 'failures' ? all.filter((r) => reasonsOf.has(r.id)) : filterRecords(all, logFilter)).slice().reverse();
     const human = all.filter((r) => r.source !== 'chip').length;
-    plogCount.textContent = `${all.length} ${all.length === 1 ? 'entry' : 'entries'} (${human} typed or spoken by you, ${all.length - human} from buttons). ${settings.exportButtons === true ? 'Buttons are included in exports.' : 'Buttons are left out of exports unless you tick the box below.'}`;
+    plogCount.textContent = `${all.length} ${all.length === 1 ? 'entry' : 'entries'} (${human} typed or spoken by you, ${all.length - human} from buttons). ${settings.exportButtons === true ? 'Buttons are included in exports.' : 'Buttons are left out of exports unless you tick the box below.'}${lastExport && lastExport.where !== 'cancelled' ? ` Last export: ${lastExport.name}, ${lastExport.where === 'shared' ? 'sent through the share sheet' : 'saved in your Downloads folder'}.` : ''}`;
     plogList.replaceChildren(...(shown.length ? shown : [null]).map((r) => {
       if (!r) return h('li', { class: 'p2-plog-empty' }, all.length ? 'Nothing matches this filter.' : settings.logPhrases ? 'Nothing logged yet. Say or type something.' : 'The log is switched off.');
       const status = summaryStatus(r), worlds = summaryWorlds(r).join(', '), vote = voteOf(r);
