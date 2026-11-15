@@ -66,7 +66,9 @@ const objectNames = new Set((await facts.wires('k.objects.object')).map((w) => S
 const verbal = new Set();
 for (const w of colours) { const n = w.f.name[0]; if (n.includes(' ')) continue; const th = await facts.thing(n); if (th?.senses.some((x) => x.pos === 'verb')) verbal.add(n); }
 for (const w of colours) { const n = w.f.name[0]; if (objectNames.has(n) || verbal.has(n)) w.f.thing = ['true']; }
-put('k.colours/shards/bundled', `${colours.length} colour names of k.colours with their RGB and family (thing= and core= derived from k.objects, k.words and the hand-written colours)`, colours, colours.map((w) => w.f.name[0]));
+// the other words for colours (chat spellings: blk, grn, light-blue): core.word of k.colours names
+const colourWords = (await facts.wires('core.word', { world: 'k.colours' })).filter((w) => (w.f.of ?? []).includes('k.colours.colour.name') && w.f.means?.[0]);
+put('k.colours/shards/bundled', `${colours.length} colour names of k.colours with their RGB and family (thing= and core= derived from k.objects, k.words and the hand-written colours), ${colourWords.length} other words for colours`, [...colours, ...colourWords], colours.map((w) => w.f.name[0]));
 put('k.values/shards/bundled', `${numbers.length} number words of k.values`, numbers, numbers.map((w) => w.f.text[0]));
 
 // the drawings of the built-in kinds of the drawing board: object, parts and points as the catalog has them

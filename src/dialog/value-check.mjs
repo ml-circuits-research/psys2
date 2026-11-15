@@ -21,6 +21,7 @@ import { isColourWord } from '../knowledge/values.mjs';
 import { editDistance } from '../formalizer/rules/normalize.mjs';
 import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs';
 import { budget } from './budget.mjs';
+import { en } from '../lang/en.mjs';
 
 export const COLORS = { has: (w) => isColourWord(w) };   // the colour names of the catalog (the one reader, k.values), single words
 const NEG = new Set("not no never without nothing none nobody nowhere neither nor cannot cant dont doesnt didnt isnt arent wasnt werent wont wouldnt shouldnt couldnt hasnt havent hadnt aint don't doesn't didn't isn't aren't wasn't weren't won't wouldn't shouldn't couldn't hasn't haven't hadn't can't ain't".split(/\s+/));
@@ -29,7 +30,8 @@ const QUOTE_RE = /"([^"]*)"|“([^”]*)”/g;
 const ORDINAL = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, last: 'last', next: 'next' };
 
 /** Chat fillers and abbreviations: never values. */
-const FILLERS = new Set([...Object.keys(ABBREVIATIONS), ...'lol haha hehe lmao yo yep yup nope hmm hm um uh er ah oh ok okay yeah so well like kinda sorta stuff thing things maybe actually basically really simply just kindly asap'.split(' ')]);
+// the catalog's fillers, politeness and hesitation (w.lang.en.fn) and words it does not class yet (TEMPORARY, Q30: chat words, vague nouns and adverbs)
+const FILLERS = new Set([...Object.keys(ABBREVIATIONS), ...['filler', 'politeness', 'hesitation'].flatMap((v) => [...en.fn(v)]).filter((w) => !w.includes(' ')), ...'lol haha hehe lmao yo yep yup nope oh yeah kinda sorta stuff thing things maybe really simply asap'.split(' ')]);
 const NOT_A_NUMBER_BEFORE = new Set('the which this that each every another any my your his her their our a an no new old next last first big small little red green blue yellow pink black white one'.split(' '));
 
 const lc = (s) => s.toLowerCase().replace(/’/g, "'");
