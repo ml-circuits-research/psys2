@@ -217,7 +217,8 @@ export const hooks = {
       const t = tOf(r);
       if (/^(?:everything|all|all of it|the picture|the drawing)$/i.test(t)) return D.clearEverything(ctx, {});
       if (PRONOUN.test(t)) return D.removeIt(ctx, {});
-      return D.remove(ctx, { phrase: t });
+      const n = String(r.amount ?? '').trim();   // "remove 2 flowers": the count the reading took apart goes back with the thing (the board removes that many)
+      return D.remove(ctx, { phrase: n && !t.startsWith(n) && /^(?:\d+|two|three|four|five|six|seven|eight|nine|ten)$/i.test(n) ? `${n} ${t}` : t });
     },
     change: (ctx, r) => {
       if (r.mode === 'turn') {   // "turn it into sunset", "turn the house into a tiny one": the turn verb of a change of value

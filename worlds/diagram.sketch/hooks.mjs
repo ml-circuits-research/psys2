@@ -42,7 +42,7 @@ domain.ask = (ctx, r) => (['why', 'last'].includes(r.mode) ? undefined : run(E.a
 /** The world's own reader (act `own`): the engine reads the sentence itself, a question or a command. */
 domain.own = (ctx, r) => {
   const sh = shapedOf(r.text);
-  if (sh) return E.shapedLike(ctx, { o: sh.name ?? sh.said });
+  if (sh) return E.shapedLike(ctx, { o: sh.name ?? sh.said, text: r.text });
   const n = engineNode(String(r.text ?? ''), ctx.state);
   const fn = !n ? null : n.type === 'question' ? E.ask_describe : n.type === 'command' ? E[n.args?.action] : null;   // the family the engine names is the function that runs it (a name or an unknown one is the engine's to refuse)
   const text = String(r.text ?? '').trim();

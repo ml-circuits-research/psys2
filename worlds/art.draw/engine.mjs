@@ -395,13 +395,20 @@ export function parseNP(text) {
   if (ofAt > 0) { np.partOf = parseNP(words.slice(ofAt + 1).join(' ')); words = words.slice(0, ofAt); }
   const colorWords = [];
   for (let i = 0; i < words.length; i++) {
+    budget.tick('art.np.word');
     const w = words[i];
+    // a thing of two words ("water lilies", "fire truck"): the pair is the kind, before either word is read alone ("water" alone is the ground)
+    if (i + 1 < words.length && !np.kind && !DET_ALL.has(w) && !DET_SKIP.has(w)) {
+      const pair = kindOfWord(`${w} ${words[i + 1]}`) ?? (/ies$/.test(words[i + 1]) ? kindOfWord(`${w} ${words[i + 1].slice(0, -3)}y`) : /s$/.test(words[i + 1]) ? kindOfWord(`${w} ${words[i + 1].slice(0, -1)}`) : null);
+      if (pair && pair.kind !== '*') { np.kind = pair.kind; np.plural ||= pair.plural || /s$/.test(words[i + 1]); i++; continue; }
+    }
     if (DET_ALL.has(w)) { np.all = true; continue; }
     if (w === 'everything' || w === 'all') { np.special = 'everything'; continue; }
     if (PRONOUN_ONE.has(w) && words.length <= 2) { np.pron = 'one'; continue; }
     if (PRONOUN_MANY.has(w) && words.length <= 2) { np.pron = 'many'; continue; }
     if (w === 'other') { np.other = true; continue; }
     if (Object.hasOwn(space.COUNTS, w) && w !== 'both' && words[i + 1] !== 'of') { np.count = space.COUNTS[w]; np.plural = true; continue; }
+    if (/^\d+$/.test(w) && Number(w) >= 2 && words[i + 1] !== 'of' && i < words.length - 1) { np.count = Number(w); np.plural = true; continue; }   // a count in digits: 2 ducks
     if (DET_SKIP.has(w)) continue;
     if (Object.hasOwn(ORDINALS, w)) { np.ordinal = ORDINALS[w]; continue; }
     if (Object.hasOwn(SUPERLATIVE, w)) { np.size = SUPERLATIVE[w]; np.superlative = true; continue; }
@@ -412,6 +419,8 @@ export function parseNP(text) {
     if (w === 'water' && waterBody()) { np.kind ??= waterBody(); continue; }   // "the water" is the lake or the river of the picture, when it has one
     if (w === 'sky') { np.special = 'sky'; continue; }
     if (w === 'background' || w === 'paper' || w === 'page' || w === 'canvas') { np.special = 'background'; continue; }
+    // a word that names the ground and things of the picture ("grass"): with an ordinal, a count or a side it is those things ("the fourth grass"), never the ground
+    if (Object.hasOwn(GROUND_WORDS, w) && (np.ordinal || np.count || np.pos) && !np.kind) { const own = (curScene?.objects ?? []).find((o) => kindName(kindKey(o)) === w); if (own) { np.kind = kindKey(own); continue; } }
     if (Object.hasOwn(GROUND_WORDS, w) || w === 'ground' || w === 'floor') { np.special = 'ground'; np.groundWord = GROUND_WORDS[w] ?? null; continue; }
     if (w === 'picture' || w === 'drawing' || w === 'painting' || w === 'everything') { np.special = 'everything'; continue; }
     const owner = np.partOf?.kind && np.partOf.kind !== '*' ? np.partOf.kind : null;   // "a door of the house": a word that is a part of the owner is that part, not the kind of the same name
@@ -445,7 +454,13 @@ function findPartWord(w) {
 /** Objects that match a parsed noun phrase, with what to do about several matches. */
 function matches(s, np) {
   let list = s.objects.slice();
-  if (np.kind && np.kind !== '*') list = list.filter((o) => kindKey(o) === np.kind || ((o.shape || /~/.test(np.kind)) && kindName(kindKey(o)) === kindName(np.kind)));   // a group named like a built-in kind, or equal pieces of other shapes, answer to the word
+  if (np.kind && np.kind !== '*') {
+    const all = list;
+    list = list.filter((o) => kindKey(o) === np.kind || ((o.shape || /~/.test(np.kind)) && kindName(kindKey(o)) === kindName(np.kind)));   // a group named like a built-in kind, or equal pieces of other shapes, answer to the word
+    // nothing of that kind: a compound whose head is the word answers to it ("the fish" are the goldfish, "the lilies" the water lilies): the head of an English compound is its last part
+    const head = String(kindName(np.kind)).toLowerCase();
+    if (!list.length && head.length >= 3) list = all.filter((o) => { const n = String(kindName(kindKey(o))).toLowerCase(); return n !== head && (n.endsWith(` ${head}`) || (n.endsWith(head) && n.length - head.length >= 3)); });
+  }
   if (np.part && np.partKinds) list = list.filter((o) => np.partKinds.includes(kindKey(o)));
   if (np.color) list = list.filter((o) => sameColorName(effectiveColor(o), np.color) || sameColorName(partColor(o, np.part), np.color));
   return list;
@@ -1845,7 +1860,9 @@ export const remove = guard((ctx, args, s) => {
     if (r.special === 'ground') { if (s.ground) specials.push(`the ${GROUND_NAME[s.ground]}`); s.ground = null; s.groundColor = null; continue; }
     if (r.special === 'background') { s.background = 'white'; specials.push('the background color'); continue; }
     if (r.note) notes.push(r.note);
-    for (const o of r.objs) if (!removed.includes(o)) removed.push(o);
+    // "remove 2 ducks" of 3: two go (the newest first), not all of them (a count is what was asked)
+    const objs = r.np?.count && !r.np.all && r.objs.length > r.np.count ? [...r.objs].sort((a, b) => (b.z ?? 0) - (a.z ?? 0)).slice(0, r.np.count) : r.objs;
+    for (const o of objs) if (!removed.includes(o)) removed.push(o);
   }
   if (!removed.length && !specials.length) { s.history.pop(); return no('There was nothing to take away.', 'missing'); }
   s.objects = s.objects.filter((o) => !removed.includes(o));

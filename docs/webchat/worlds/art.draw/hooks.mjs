@@ -3,11 +3,11 @@
 // grammar; what an act DOES on the picture is the scene of worlds/art.draw (ops.mjs: the scene operations, the noun-phrase resolution, the placement over the space module; scene.mjs: the
 // renderer's geometry and the drawing from facts). The roles of an act are joined back into the words those operations read. Nothing here names a kind, a colour or a part: kinds and
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
-import * as D from './engine.mjs?v=0a64a903b1';
+import * as D from './engine.mjs?v=55dcbc121e';
 import * as space from '../space/space.mjs?v=c7e07062fb';
 import { splitThings } from '../acts/acts.mjs?v=98db37cd62';
 import { partsOf, kindKey, kindName } from './scene.mjs?v=e70f16ba54';
-import * as P from './plan.mjs?v=2bf29b75ab';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
+import * as P from './plan.mjs?v=33b9585ea3';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const TAIL = new Set(['there', 'here', 'now', 'added', 'drawn', 'too', 'also', 'please', 'pls', 'plz', 'thx', 'thanks', 'are', 'is', 'again', 'exactly', 'go']);   // words a role slot took that belong to the frame ("how many trees there are")
@@ -217,7 +217,8 @@ export const hooks = {
       const t = tOf(r);
       if (/^(?:everything|all|all of it|the picture|the drawing)$/i.test(t)) return D.clearEverything(ctx, {});
       if (PRONOUN.test(t)) return D.removeIt(ctx, {});
-      return D.remove(ctx, { phrase: t });
+      const n = String(r.amount ?? '').trim();   // "remove 2 flowers": the count the reading took apart goes back with the thing (the board removes that many)
+      return D.remove(ctx, { phrase: n && !t.startsWith(n) && /^(?:\d+|two|three|four|five|six|seven|eight|nine|ten)$/i.test(n) ? `${n} ${t}` : t });
     },
     change: (ctx, r) => {
       if (r.mode === 'turn') {   // "turn it into sunset", "turn the house into a tiny one": the turn verb of a change of value

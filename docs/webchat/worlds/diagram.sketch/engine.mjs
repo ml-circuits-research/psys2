@@ -633,7 +633,20 @@ export const ungroup = make({ type: 'command', name: 'ungroup' });
 export const connect = make({ type: 'command', name: 'connect' });
 export const disconnect = make({ type: 'command', name: 'disconnect' });
 export const align = make({ type: 'command', name: 'align' });
-export const arrange = make({ type: 'command', name: 'arrange' });
+const arrangeLayout = make({ type: 'command', name: 'arrange' });
+/**
+ * ARRANGE AS A THING OF THE CATALOG (owner's session 2026-11-15, class E): "arrange the elements as a hexagon" names an outline of k.layouts, not a layout of the engine (row, grid, tree ...):
+ * it is the arrangement along that outline (shapedLike), with "with X in the middle" kept. Any other arrangement is the engine's own.
+ */
+export const arrange = (ctx, args = {}) => {
+  const t = String(args.text ?? '');
+  const m = /\b(?:as|like|into|in)\s+(?:an?\s+)?([a-z]+)(?:[\s-]+(?:shape|form|outline))?\b/gi;
+  for (const x of t.matchAll(m)) {
+    const noun = x[1].toLowerCase();
+    if (!LAYOUT_WORDS.has(noun) && DL && DG.outlineNamed(noun) && !/^(?:the|a|an|middle|centre|center)$/.test(noun)) return shapedLike(ctx, { o: noun, text: t });
+  }
+  return arrangeLayout(ctx, args);
+};
 
 // ---- "a diagram shaped like a house" (DRAW-FROM-FACTS; the outlines of k.layouts, Q21) -------------------------------------------------------------------------
 const LAYOUT_WORDS = new Set(['row', 'column', 'line', 'grid', 'circle', 'stack', 'cluster', 'ring', 'triangle', 'square', 'pyramid', 'tree', 'layers', 'radial', 'hierarchy', 'organic']);
@@ -733,15 +746,21 @@ export function shapedLike(ctx, args = {}) {
   const x0 = Math.min(...poly.map((p) => p[0])), x1 = Math.max(...poly.map((p) => p[0])), y0 = Math.min(...poly.map((p) => p[1])), y1 = Math.max(...poly.map((p) => p[1]));
   const k = Math.min(640 / Math.max(1, x1 - x0), 380 / Math.max(1, y1 - y0));
   const canvas = ([x, y]) => [Math.round(400 + (x - (x0 + x1) / 2) * k), Math.round(250 + (y - (y0 + y1) / 2) * k)];
-  const own = s.shapes.filter((x) => !x.template && !x.layer && x.shape !== 'text');
+  // "with the circle in the middle": that shape goes to the centre of the outline, the others along it
+  const midSaid = String(args.middle ?? (/\bwith\s+(?:the\s+)?(.+?)\s+(?:in|at|to|into)\s+the\s+(?:middle|centre|center)\b/i.exec(String(args.text ?? ''))?.[1] ?? '')).trim();
+  const all = s.shapes.filter((x) => !x.template && !x.layer && x.shape !== 'text');
+  const mid = midSaid ? (shapeOf(s, midSaid) ?? (() => { const k = midSaid.toLowerCase().replace(/s$/, ''); const hits = all.filter((x) => x.shape === k || String(x.label ?? '').toLowerCase() === midSaid.toLowerCase()); return hits.length === 1 ? hits[0] : null; })()) : null;
+  const own = all.filter((x) => x !== mid);
   if (own.length >= 3) {
     const at = pointsAlong(poly, own.length).map(canvas), fit = fitOnOutline(at, { min: 0 }).size;   // evenly spaced: no corner merges, a shape bigger than the spacing is made to fit
     const nodes = [...own].sort((p, q) => (p.order ?? 0) - (q.order ?? 0)).flatMap((x, i) => {
       const move = { id: `m${i + 1}`, type: 'command', args: { action: 'move', target: x.name, at: `${at[i][0]},${at[i][1]}` } }, b = K.dims(x), k = fit ? fit / Math.max(b.w, b.h) : 1;
       return k < 1 ? [move, { id: `z${i + 1}`, type: 'command', args: { action: 'resize', target: x.name, width: Math.max(10, Math.round(b.w * k)), height: Math.max(10, Math.round(b.h * k)) } }] : [move];
     });
+    if (mid) nodes.push({ id: 'mc', type: 'command', args: { action: 'move', target: mid.name, at: '400,250' } });
     const r = execute(ctx, s, nodes, { place: false });
     if (r.status !== 'supported') return r;
+    if (mid) return { ...r, value: `I placed the ${own.length} shapes on the outline of ${a} ${thing}, clockwise from the top, and ${plain(s, mid.name)} in the middle.` };
     return { ...r, value: `I placed the ${own.length} shapes on the outline of ${a} ${thing}, clockwise from the top.`, say: { act: 'diagram.shaped.placed', roles: { thing, shapes: { n: own.length, noun: 'shape' } } } };   // say: the frame a reply in another language is composed from (spec 06)
   }
   const { points: corners, size } = fitOnOutline((poly.length > 10 ? pointsAlong(poly, 8) : poly).map(canvas));

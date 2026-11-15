@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "a6c5287d",
-  "tree": "69f873226c488e4f",
+  "build": "efd01268",
+  "tree": "19cc8502b7842a60",
   "catalog": "085bc0dab1f6f2817815ca789a36259b3c01ae4e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -22,8 +22,8 @@
    "outcome": {
     "executed": 333,
     "refused": 2,
-    "asked": 10,
-    "not_understood": 168,
+    "asked": 12,
+    "not_understood": 166,
     "other_world": 92
    },
    "by_source": {
@@ -97,8 +97,8 @@
    "outcome": {
     "executed": 333,
     "refused": 2,
-    "asked": 10,
-    "not_understood": 168,
+    "asked": 12,
+    "not_understood": 166,
     "other_world": 92
    },
    "by_source": {
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 231,
- "failing_ops": 231,
+ "failing_matrix": 229,
+ "failing_ops": 229,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -648,33 +648,6 @@
    ]
   },
   {
-   "cause": "bare word or two-word fragment not read",
-   "count": 32,
-   "both_reasoners": 32,
-   "examples": [
-    {
-     "text": "mcdavatara human",
-     "tab": "robot",
-     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
-    },
-    {
-     "text": "yes",
-     "tab": "guess",
-     "happened": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
-    },
-    {
-     "text": "no",
-     "tab": "guess",
-     "happened": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
-    },
-    {
-     "text": "yes",
-     "tab": "guess",
-     "happened": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
-    }
-   ]
-  },
-  {
    "cause": "sentence not read by any world (no cause key)",
    "count": 31,
    "both_reasoners": 31,
@@ -725,6 +698,33 @@
      "text": "și Angie",
      "tab": "robot",
      "happened": "I did not understand \"și Angie\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
+    }
+   ]
+  },
+  {
+   "cause": "bare word or two-word fragment not read",
+   "count": 30,
+   "both_reasoners": 30,
+   "examples": [
+    {
+     "text": "mcdavatara human",
+     "tab": "robot",
+     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
+    },
+    {
+     "text": "yes",
+     "tab": "guess",
+     "happened": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
+    },
+    {
+     "text": "no",
+     "tab": "guess",
+     "happened": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
+    },
+    {
+     "text": "yes",
+     "tab": "guess",
+     "happened": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
     }
    ]
   },

@@ -1,19 +1,19 @@
 # REAL failures by cause (2026-11-15)
 
-Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit 085bc0dab1f6; seed 20261115; build a6c5287d, tree 69f873226c488e4f), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
+Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit 085bc0dab1f6; seed 20261115; build efd01268, tree 19cc8502b7842a60), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
 
 Headline (in scope, judged): 177/207 right (partly 9, wrong 21); 46 turns of retired records skipped. Diagnostic, rules formalizer only: 160/207.
 
 Caveat: Romanian turns are replayed with the rules translator only (no browser Machine Translation in node: --bergamot runs the on-device model), so part of the Romanian causes is the missing translation backend, not the reader. Lazy world loading is not replayed (every world is loaded, as `?psys2lazy=0`).
 
-Failing turns: matrix 231, ops 231 (0 fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): 1.
+Failing turns: matrix 229, ops 229 (0 fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): 1.
 
 | # | cause | turns | both | examples |
 | --- | --- | ---: | ---: | --- |
 | 1 | Romanian turn not read (translation or reader) | 61 | 61 | "desenează o casă albă și una verde" (robot); "deseneaza o casa verde" (robot); "deseneaza o casa verde" (robot) |
-| 2 | bare word or two-word fragment not read | 32 | 32 | "mcdavatara human" (robot); "yes" (guess); "no" (guess) |
-| 3 | sentence not read by any world (no cause key) | 31 | 31 | "now be a human" (robot); "become a women" (robot); "let’s play guess the animal" (guess) |
-| 4 | translation residue / wrong sense / source typo | 30 | 30 | "an old woman" (robot); "desneaza o capra" (draw); "fii în boi" (robot) |
+| 2 | sentence not read by any world (no cause key) | 31 | 31 | "now be a human" (robot); "become a women" (robot); "let’s play guess the animal" (guess) |
+| 3 | translation residue / wrong sense / source typo | 30 | 30 | "an old woman" (robot); "desneaza o capra" (draw); "fii în boi" (robot) |
+| 4 | bare word or two-word fragment not read | 30 | 30 | "mcdavatara human" (robot); "yes" (guess); "no" (guess) |
 | 5 | a world other than the open tab took the turn | 25 | 25 | "draw a sun and a house" (tictactoe); "yes, it eats meat" (draw); "Tom has 15 apples. He gives 12 to Ana. How many apples does " (robot) |
 | 6 | judged wrong (state / answer expected is not there): dialogues:dlg.real | 9 | 9 | "draw a red circle" (diagram); "create a diagram" (diagram); "add a box" (diagram) |
 | 7 | unknown word (a word of the request is not known) | 8 | 8 | "enervant da" (draw); "face un caca" (draw); "asta" (draw) |
