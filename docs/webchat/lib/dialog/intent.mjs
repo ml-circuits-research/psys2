@@ -35,7 +35,7 @@ export function splitClauses(english) {
   const out = [];
   const re = /\s*(?:[,;]|(?<=[?!.]))\s+/g;
   let at = 0, m;
-  while ((m = re.exec(english))) { out.push({ text: english.slice(at, m.index), sep: m[0] }); at = m.index + m[0].length; }
+  while ((m = re.exec(english))) { budget.tick('intent.split'); out.push({ text: english.slice(at, m.index), sep: m[0] }); at = m.index + m[0].length; }
   out.push({ text: english.slice(at), sep: '' });
   return out.filter((c) => c.text.trim() || c.sep);
 }

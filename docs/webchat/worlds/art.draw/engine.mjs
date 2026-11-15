@@ -395,6 +395,7 @@ export function parseNP(text) {
   if (ofAt > 0) { np.partOf = parseNP(words.slice(ofAt + 1).join(' ')); words = words.slice(0, ofAt); }
   const colorWords = [];
   for (let i = 0; i < words.length; i++) {
+    budget.tick('art.np.word');
     const w = words[i];
     // a thing of two words ("water lilies", "fire truck"): the pair is the kind, before either word is read alone ("water" alone is the ground)
     if (i + 1 < words.length && !np.kind && !DET_ALL.has(w) && !DET_SKIP.has(w)) {
