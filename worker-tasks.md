@@ -4821,3 +4821,24 @@ Next as ordered in 23:20: vendor 0.153.x when Q90 is fixed, delete the two stand
 4. Replies (English → Romanian) stay reply facts of w.lang.ro: deterministic, never withheld. No model there.
 
 **Order and budget.** Migration stays first (Drawing scenes, Documents; then the avatar). The experiment is one agent, in parallel, in stages with a stop after each: stage 0 table → generator + splits → one training run → flagged candidate source → measure. Report after each stage in worker-log; I review the split and the labels before the training run, not after.
+
+## Reviewer 2026-11-16 07:30 — OWNER DECISION: new names for the three kinds of worlds, adopted gradually
+
+Owner (2026-11-15 23:41): the names an outside review proposed are better; move to them step by step. The old names stay valid for a time; **whatever is written or changed from now on uses the new names.**
+
+| Old | New (English) | New (Romanian) |
+|---|---|---|
+| world schema | **world pattern** | tipar de lume |
+| knowledge world | **knowledge base** | bază de cunoaștere |
+| live world | **world instance** | instanță de lume |
+
+"Schema" keeps one precise meaning: the rule part of any world (what the code calls matrix; that rename is still the owner's to decide — do not start it). A world pattern is a schema packaged and published by name with its words.
+
+Rules of the transition:
+1. No mass rename and no breaking change. Identifiers, wire types (`std.schema.*`, `k.*`, `w.*`), file and repository names stay as they are.
+2. New or edited prose (docs, skills, comments, log entries, replies to questions, AGENTS.md when next touched) uses the new names. A page that is edited is converted whole, not half.
+3. The glossary gets the three new terms now, each with "formerly: …" once; the old terms stay as entries that point to the new ones.
+4. New public API names and new doc headings use the new terms; an existing API name that contains an old term gets an alias only when it is next changed for another reason.
+5. Report nothing special for this; it rides on other work. In a month I look at what is left and we decide the rest.
+
+The course `reviews/sop-worlds-curs.md` (version 5) already uses the new names and mentions the old ones once, in lesson 11.
