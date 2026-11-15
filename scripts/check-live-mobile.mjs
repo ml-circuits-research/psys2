@@ -4,7 +4,10 @@
  * Mobile-layout screenshots and checks on the DEPLOYED page: waits until the live build equals the expected version, then
  * phone 390x844 (chat, menu open and what it lists, drawing page after a command with toast and reply chip, summary panel, avatar popup, a composition from the Documents page, dice)
  * and desktop 1280x800 (chat with a page beside it). Records page errors / console errors / failed requests.
- *   PUPPETEER_CORE=... node scripts/check-live-mobile.mjs --expect <version> [--wait 600] [--out docs/landing/2026-11-15-mobile]
+ * `--owner` adds the owner's two phone turns (training/eval/owner-exports/phrase-log-2026-11-14T2243.json): a fresh phone session with Romanian selected,
+ * "deseneaza ceva random" on the Drawing page (reply under 2 s) and "deseneaza o diagrama in forma de casa" on the Diagram page (nodes on a house outline);
+ * both answer in the informal singular and the first person, offer no weapon chip and leave seating / timeline untouched. `--owner-only` runs just those.
+ *   PUPPETEER_CORE=... node scripts/check-live-mobile.mjs --expect <version> [--wait 600] [--out docs/landing/2026-11-15-mobile] [--owner | --owner-only]
  */
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
@@ -32,13 +35,14 @@ check('deployed build equals main', !expect || live === expect, `live ${live}, e
 const pp = await loadPuppeteer();
 const browser = await pp.launch({ executablePath: opt('chrome', '/usr/bin/google-chrome'), headless: true, args: ['--no-sandbox'] });
 const log = { pageErrors: [], consoleErrors: [], failed: [], bad: [] };
-async function open(viewport, tag) {
+async function open(viewport, tag, settings = null) {
   const pg = await browser.newPage();
   await pg.setViewport(viewport);
+  if (settings) await pg.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify(s)); } catch { /* ignore */ } }, settings);
   pg.on('pageerror', (e) => log.pageErrors.push(`${tag}: ${String(e).slice(0, 200)}`));
   pg.on('console', (m) => { if (m.type() === 'error') log.consoleErrors.push(`${tag}: ${m.text().slice(0, 200)}`); });
   pg.on('requestfailed', (r) => log.failed.push(`${tag}: ${r.url().slice(0, 140)} ${r.failure()?.errorText}`));
-  pg.on('response', (r) => { if (r.status() >= 400) log.bad.push(`${tag}: ${r.status()} ${r.url().slice(0, 140)}`); });
+  pg.on('response', (r) => { if (r.status() >= 400) log.bad.push(`${tag}: ${r.status()} ${r.url().slice(0, 220)}`); });
   await pg.goto(URL_, { waitUntil: 'domcontentloaded' });
   await pg.waitForFunction(() => document.querySelector('.p2-msg.is-hint'), { timeout: 120000, polling: 50 });
   return pg;
@@ -53,8 +57,74 @@ async function say(pg, text, timeout = 60000) {
 const shot = (pg, name) => pg.screenshot({ path: path.join(out, name), type: 'png' });
 const idle = (pg) => pg.waitForFunction(() => !window.psys2.busy, { timeout: 60000, polling: 50 }).catch(() => {});
 
+const PHONE = { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true };
+const toPage = async (pg, name) => {   // through the Pages menu, as the owner did
+  await pg.tap('.p2-burger'); await sleep(300);
+  await pg.evaluate((name) => [...document.querySelectorAll('.p2-menu-item')].find((b) => b.textContent.trim() === name)?.click(), name);
+  await sleep(800);
+};
+// the owner's turn: wall time from Enter to the reply, the phrase-log record (perf, what happened), the chips offered
+async function ownerTurn(pg, text) {
+  const n = await pg.$$eval('.p2-msg.is-bot:not(.is-typing)', (e) => e.length);
+  await pg.type('input.p2-text', text, { delay: 0 });
+  const t0 = Date.now();
+  await pg.keyboard.press('Enter');
+  await pg.waitForFunction((n) => document.querySelectorAll('.p2-msg.is-bot:not(.is-typing)').length > n, { timeout: 60000, polling: 20 }, n).catch(() => {});
+  const wallMs = Date.now() - t0;
+  await idle(pg); await sleep(600);
+  return pg.evaluate((text, wallMs) => {
+    const bot = [...document.querySelectorAll('.p2-msg.is-bot')].at(-1);
+    const rec = JSON.parse(localStorage.getItem('psys2.webchat.phrases') ?? '[]').filter((r) => r.text === text).at(-1) ?? null;
+    return { wallMs, reply: bot?.querySelector('.p2-bubble')?.innerText ?? '', chips: [...(bot?.querySelectorAll('.p2-example, .p2-pagechip') ?? [])].map((b) => b.textContent.trim()),
+      english: rec?.english ?? null, perfMs: rec?.detail?.perf?.totalMs ?? null, knowledgeMs: rec?.detail?.perf?.stages?.knowledge?.ms ?? null, pattern: rec?.routing?.pieces?.map((p) => p.pattern) ?? [],
+      changes: rec?.happened?.changes ?? [], viewEffects: rec?.happened?.viewEffects ?? [] };
+  }, text, wallMs);
+}
+const PLURAL = /\b(pute[țţ]i|face[țţ]i|vre[țţ]i|dori[țţ]i|alege[țţ]i|spune[țţ]i|încerca[țţ]i|schimba[țţ]i|adăuga[țţ]i|ave[țţ]i|dumneavoastră|vă)\b/i;
+function registerChecks(tag, r) {
+  check(`${tag}: informal singular register (no plural / polite forms)`, !PLURAL.test(r.reply), (r.reply.match(PLURAL) ?? [''])[0]);
+  check(`${tag}: first person`, /\b(am|eu|îmi|mi-am|mi)\b/i.test(r.reply), r.reply.slice(0, 60));
+  check(`${tag}: no weapon chip`, !r.chips.some((c) => /weapon|arm[ăa]\b/i.test(c)), JSON.stringify(r.chips));
+  const touched = [...r.changes.map((c) => c.world), ...r.viewEffects.map((v) => v.world ?? v.tab ?? '')].filter((w) => /seating|timeline/.test(w));
+  check(`${tag}: seating / timeline untouched`, touched.length === 0, touched.join(', '));
+}
+async function ownerTurns() {
+  const pg = await open(PHONE, 'owner', { settingsVersion: 3, language: 'ro' });
+  await idle(pg); await sleep(4000);   // the owner typed about 10 s after the page loaded
+  await toPage(pg, 'Drawing');
+  const a = await ownerTurn(pg, 'deseneaza ceva random');
+  console.log('OWNER1 ' + JSON.stringify(a));
+  check('owner 1 "deseneaza ceva random": reply under 2 s', a.wallMs < 2000, `${a.wallMs} ms wall, ${a.perfMs} ms engine, knowledge ${a.knowledgeMs} ms`);
+  check('owner 1: drew a scene', /desenat/i.test(a.reply) && a.changes.some((c) => c.world === 'art.draw'), a.reply.slice(0, 60));
+  registerChecks('owner 1', a);
+  const objs = await pg.evaluate(() => { try { return (window.psys2.session.state()['art.draw']?.objects ?? []).map((o) => o.kind); } catch { return null; } });
+  const down = await pg.evaluate(() => /picture catalog could not be reached|Catalogul de imagini nu a putut fi atins/i.test(document.body.innerText));
+  check('owner 1: the picture catalog is reachable (no "could not be reached" notice)', !down);
+  console.log(`INFO  owner 1 objects in the state: ${JSON.stringify(objs)}`);
+  await shot(pg, 'owner-1-random-drawing.png');
+  await toPage(pg, 'Diagram');
+  const b = await ownerTurn(pg, 'deseneaza o diagrama in forma de casa');
+  console.log('OWNER2 ' + JSON.stringify(b));
+  const st = await pg.evaluate(() => { try { return window.psys2.session.state()['diagram.sketch'] ?? null; } catch { return null; } });
+  const nodes = st?.shapes?.length ?? null, edges = st?.edges?.length ?? null;
+  console.log(`INFO  diagram state: ${nodes} nodes, ${edges} lines`);
+  check('owner 2 "deseneaza o diagrama in forma de casa": nodes on a house outline', (nodes == null ? true : nodes >= 5 && edges >= nodes) && /contur|schi[țţ]|cas[ăae]\b/i.test(b.reply) && b.changes.some((c) => c.world === 'diagram.sketch'), `${nodes} nodes, ${edges} lines; ${b.reply.slice(0, 80)}`);
+  check('owner 2: the Romanian reply says "noduri" and reads "joined in order" as such', /\bnoduri\b/.test(b.reply) && !/s-a alăturat/.test(b.reply), b.reply);
+  console.log(`INFO  owner 2 reply time: ${b.wallMs} ms wall, ${b.perfMs} ms engine`);
+  // a world that had no state before the turn (loaded lazily) is not a change the turn made
+  for (const [tag, r] of [['owner 1', a], ['owner 2', b]]) {
+    const fresh = r.changes.filter((c) => c.changes.every((x) => /\(was none\)$/.test(x))).map((c) => c.world);
+    check(`${tag}: the log names only worlds the turn changed (no "(was none)" first states)`, fresh.length === 0, fresh.join(', '));
+  }
+  registerChecks('owner 2', b);
+  await shot(pg, 'owner-2-house-diagram.png');
+  await pg.close();
+}
+
 try {
-  const pg = await open({ width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true }, 'phone');
+  if (args.includes('--owner') || args.includes('--owner-only')) await ownerTurns();
+  if (!args.includes('--owner-only')) {
+  const pg = await open(PHONE, 'phone');
   await shot(pg, 'phone-1-chat.png');
   await pg.tap('.p2-burger'); await sleep(400);
   const items = await pg.$$eval('#p2-menu [role=menuitem]', (e) => e.map((x) => x.textContent.trim()));
@@ -129,6 +199,7 @@ try {
   await dk.keyboard.press('Enter'); await idle(dk); await sleep(800);
   await shot(dk, 'desktop-1-chat.png');
   await dk.close();
+  }
 
   check('no page errors', log.pageErrors.length === 0, log.pageErrors.slice(0, 3).join(' | '));
 } finally { await browser.close(); }
