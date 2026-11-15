@@ -6,6 +6,7 @@
 import { colourWordSet, colourLexiconWords } from '../knowledge/values.mjs?v=a137742733';
 import { languageWorld } from './compose-world.mjs?v=0ab8c2fade';
 import { englishOf } from '../lang/en-generate.mjs?v=84a99c355e';
+import { prefetchSensitive, sensitiveMap, dropSensitive } from '../knowledge/sensitive.mjs?v=45d6df6ec8';
 
 const NOT_SAMPLED = new Set(['place', 'connect', 'group', 'send', 'save', 'load', 'redo']);   // acts the library cannot frame (a place, a second thing, a host act): left to typing
 const FUNCTION_WORDS = new Set(['to', 'from', 'at', 'until', 'in', 'on', 'by', 'of']);   // attributes named like prepositions cannot be said in "Set X <attr> to V"
@@ -192,6 +193,8 @@ export function createSampler(lib, { worldOf, thingsOf, historyOf, knowledgeOf }
  * `session()` gives the current session (it can be replaced by a restore).
  */
 export function engineSampler(lib, engine, session) {
+  const saidNow = () => { try { const r = session().dialogue?.log?.at(-1); return r ? `${r.text ?? ''} ${r.said ?? ''}` : ''; } catch { return ''; } };   // the user's words of the last turn (its English and as typed)
+  prefetchSensitive(engine.knowledge);
   const schemaWorld = (id) => engine.set.list().find((y) => y.id === id)?.ops?.executor;
   const sampler = createSampler(lib, {
     worldOf: (id) => { const x = schemaWorld(id); return x?.schema ? { schema: x.schema, executor: x } : null; },
@@ -201,6 +204,10 @@ export function engineSampler(lib, engine, session) {
       try { const readable = new Set(colourLexiconWords()); lists.colours = [...colourWordSet()].filter((c) => readable.has(c)); }   // the colours the readers take as colour words (not "cherry", a fruit)
       catch { /* no colours: the schema's own */ }
       try { Object.assign(lists, schemaWorld(id)?.sampleKnowledge?.({ state: session().state(id) ?? {}, knowledge: engine.knowledge, world: engine.set.get(id), mode }) ?? {}); } catch { /* the world's lists are optional */ }
+      // SENSITIVE THINGS (src/knowledge/sensitive.mjs): a thing the catalog marks sensitive is never in a list the chips or the dice draw from, unless the user named it in the turn
+      prefetchSensitive(engine.knowledge);
+      const map = sensitiveMap(engine.knowledge), said = saidNow();
+      if (map.size) for (const k of Object.keys(lists)) if (Array.isArray(lists[k])) lists[k] = dropSensitive(lists[k], { map, said });
       return lists;
     },
     thingsOf: (id) => {
@@ -209,7 +216,9 @@ export function engineSampler(lib, engine, session) {
   });
   /** Ids of the worlds the dice can draw from (a schema world with a sampleable kind), and a map tab id -> world id. */
   const worlds = () => engine.set.list().filter((w) => w.ops?.executor?.schema).map((w) => w.id);
-  return { ...sampler, worlds };
+  // and never in a sampled item (a world's own list or a schema value the filter above did not see)
+  const clean = (items) => { const map = sensitiveMap(engine.knowledge); return map.size ? dropSensitive(items, { map, said: saidNow() }) : items; };
+  return { ...sampler, worlds, sample: (...a) => clean(sampler.sample(...a)), actions: (...a) => clean(sampler.actions(...a)), dice: (...a) => { const r = sampler.dice(...a); return r && clean([r]).length ? r : null; } };
 }
 
 /**
