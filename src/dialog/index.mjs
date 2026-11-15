@@ -1602,19 +1602,22 @@ export class DialogSession {
     if (/\?\s*$/.test(english.trim()) || /^(?:is|are|does|do|did|how|what|which|who|where|why|when|was|were|has|have)\b/i.test(english.trim())) return this._requestNotes(opts, first, flat, []);
     let rev = null;
     try { rev = lib.reviseRequest(dlg, q.request, { revisions: language, catalog: [language] }); } catch { rev = null; }
-    let reaction = lastRec && rev?.sort === 'reaction' ? rev.reaction : null;
+    // a reaction is a turn the words say is one (a reaction cue: too many, again, not this ...) with no new act of its own; thanks and frustration change nothing (the readers' reply stands)
+    let reaction = lastRec && rev?.sort === 'reaction' && q.reaction && !['thanks', 'frustration'].includes(q.reaction) && (!q.act || ['redo', 'reduce', 'enlarge'].includes(q.reaction)) ? rev.reaction : null;
+    if (['thanks', 'frustration'].includes(q.reaction) && !q.act && !q.target) return this._requestNotes(opts, first, flat, []);
     // the same request again ("draw a random diagram" twice): another result in place of the last one, varied, never a second one on top
     const sameAgain = !reaction && lastRec && q.act && q.target && lastRec.flat?.target === q.target && q.facts.some((f) => f.key === 'manner' && f.value === 'random') && JSON.stringify(q.facts) === JSON.stringify(lastRec.flat?.facts ?? null);   // random again: another sample
     if (sameAgain && rev) { reaction = 'redo'; rev = { ...rev, sort: 'reaction', reaction: 'redo', request: rev.request ?? q.request, vary: true, seed: (lastRec.seed ?? 1) + 7919 }; }
     // a turn of constraints only (no act, no thing, nothing unread) after a planned result refines it ("not all circles, better layout"): the last request with the constraints said in place of
     // those of the same key (the library's revision `add`; stand-in until reviseRequest reads such a turn as a refine itself, questions.md Q40)
-    if (!reaction && lastRec?.via === 'plan' && !q.act && !q.target && q.request.constraints?.length && !q.unread.length && !q.facts.some((f) => f.key === 'layout' && f.value === 'layers')) {
-      const last = plainRequest(lastRec.request), said = q.request.constraints;
+    if ((!reaction || reaction === 'refine') && lastRec?.via === 'plan' && !q.act && !q.target && q.request.constraints?.length && !q.unread.length && !q.facts.some((f) => f.key === 'layout' && f.value === 'layers')) {
+      const last = plainRequest(lastRec.request), said = q.request.constraints.filter((c) => !(c.on === 'layout' && c.value === 'better'));   // "better layout" in a revision of a make: the plan lays it out (not an arrangement of its own)
       const constraints = [...(last.constraints ?? []).filter((c) => !said.some((x) => x.on === c.on && (x.on !== 'kind' || x.value === c.value))), ...said];
       const facts = [...(lastRec.flat?.facts ?? []).filter((f) => !q.facts.some((x) => x.key === f.key && (x.key !== 'kind' || x.value === f.value))), ...q.facts];
-      const request = Object.assign(last, { constraints, revisedFrom: last.text ?? null }); Object.defineProperty(request, 'facts', { value: facts, enumerable: false });
+      const request = Object.assign(last, { act: last.act ?? 'make', constraints }); Object.defineProperty(request, 'facts', { value: facts, enumerable: false });
       reaction = 'refine'; rev = { sort: 'reaction', reaction: 'refine', request, replace: true, seed: lastRec.seed ?? 1 };
     }
+    if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error("[request] turn", JSON.stringify({ reaction, via: lastRec?.via, act: q.act, target: q.target, rev: rev?.sort, cons: q.request.constraints?.length, unread: q.unread }));
     // the open world itself read the turn completely ("now bigger", "make another one" are its own acts on the last thing): a reaction to the last request only when no reader of
     // the tab carried it out, or when it states what was expected (a refine carries a whole constraint set)
     const tabRead = complete && !first.trace.intent && segs.every((sg) => sg.match?.worldId === tabWorld);   // the intent step's guess is not the world's own reading
@@ -1622,7 +1625,7 @@ export class DialogSession {
     if (reaction && q.unread.length) reaction = null;   // words no reader read are never planned around
     if (reaction && !rev?.request) return this._requestNotes(opts, first, flat, []);   // thanks, frustration: the reply of the readers stands
     // a layout said with no act and no new thing ("break in 3 layers: water, land and sky") arranges what the open world holds: the act arrange of its declared capabilities
-    const arrangeOnly = !q.act && !q.target && q.facts.some((f) => f.key === 'layout') && !q.unread.length && !!beforeState;
+    const arrangeOnly = !q.act && !q.target && q.facts.some((f) => f.key === 'layout' && f.value !== 'better') && !q.unread.length && !!beforeState;   // a named layout ("better" is a manner of the result, not an arrangement)
     if (!reaction && !arrangeOnly && this.context().tabWorld !== tabWorld) return first;   // the turn moved to another tab (a reaction to the last result of the tab is read against it: the move is undone)
     let goalReq = null, base = null;
     if (arrangeOnly) { reaction = null;   // an arrangement of what is there, never a redo of the last request

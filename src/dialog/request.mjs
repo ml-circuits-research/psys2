@@ -118,7 +118,7 @@ export function readTurn(lib, live, language, english, { dialogue = null, known 
   const request = lib.readRequest(live, fix.text, { language, catalog: [language], dialogue: dialogue ?? {} });
   return {
     request, act: request.act ?? null, target: request.target ?? null, facts: request.facts ?? [], reaction: request.reactions?.[0]?.value ?? null,
-    unread: [...new Set((request.unread ?? []).map((u) => String(u.text ?? u.words ?? u).toLowerCase()))].filter((u) => !regionNames(live).has(u)), used: request.used ?? [], corrections: fix.corrections, english: fix.text,
+    unread: [...new Set((request.unread ?? []).map((u) => String(u.text ?? u.words ?? u).toLowerCase()))].filter((u) => !regionNames(live).has(u) && !STOP.has(u)), used: request.used ?? [], corrections: fix.corrections, english: fix.text,
   };
 }
 
