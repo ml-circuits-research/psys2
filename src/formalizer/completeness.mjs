@@ -44,7 +44,9 @@ export function annotateUnread(matches, set = null, context = null) {
   const typedFor = typed && set?.typedFor ? (id) => set.typedFor(id) : null;
   const thingMemo = new Map(), things = (id) => { if (!thingMemo.has(id)) thingMemo.set(id, thingWordsOf(set, id, context)); return thingMemo.get(id); };   // once per world per sentence
   const wholeMemo = new Map(), readsWhole = (id, view) => {   // the world's own reader reads the clause whole (hook readsWhole): once per world per sentence
-    if (!wholeMemo.has(id)) { const ex = set?.get?.(id)?.ops?.executor; let r = false; try { r = !!ex?.readsWhole?.({ text: view.map((t) => String(t.raw ?? '')).join(' '), state: context?.states?.[id] ?? null }); } catch { r = false; } wholeMemo.set(id, r); }
+    // the clause as typed: tokens that touch are joined ("a1" is one name, not "a 1")
+    const spaced = view.map((t, i) => (i && Number.isFinite(t.start) && t.start === view[i - 1].end ? '' : i ? ' ' : '') + String(t.raw ?? '')).join('');
+    if (!wholeMemo.has(id)) { const ex = set?.get?.(id)?.ops?.executor; let r = false; try { r = !!ex?.readsWhole?.({ text: spaced, state: context?.states?.[id] ?? null }); } catch { r = false; } wholeMemo.set(id, r); }
     return wholeMemo.get(id);
   };
   const lowerOf = (t) => t.lower ?? String(t.raw).toLowerCase();
