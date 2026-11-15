@@ -4855,9 +4855,9 @@
 
 @t.diagram.sketch.shaped.a core.test
     input="Make a diagram shaped like a house."
-    expect="I drew a diagram in the shape of a house: 6 nodes on its outline, joined in order."
-    expectState="shapes.length=6"
-    expectState="edges.length=6"
+    expect="I drew a diagram in the shape of a house: 7 nodes on its outline, joined in order."
+    expectState="shapes.length=7"
+    expectState="edges.length=7"
     session=shaped.a
 
 @t.diagram.sketch.shaped.b core.test
@@ -4866,23 +4866,23 @@
     session=shaped.b
 
 @t.diagram.sketch.shaped.c core.test
-    input="What shape is roof_top?"
-    expect="roof top is a circle."
+    input="What shape is c1?"
+    expect="c1 is a circle."
     session=shaped.a
 
 @t.diagram.sketch.shaped.d core.test
     input="How many circles are there?"
-    expect="There are 6 circles."
+    expect="There are 7 circles."
     session=shaped.a
 
 @t.diagram.sketch.shaped.e core.test
-    input="What is connected to roof_right?"
-    expect="roof right connects to body bottom right"
+    input="What is connected to c2?"
+    expect="c2 connects to c3"
     session=shaped.a
 
 @t.diagram.sketch.shaped.box.a core.test
     input="Add a box shaped like a house."
-    expect="I drew a diagram in the shape of a house: 6 nodes on its outline"
+    expect="I drew a diagram in the shape of a house: 7 nodes on its outline"
     session=shaped.box.a
 
 @t.diagram.sketch.shaped.box.b core.test
@@ -4897,7 +4897,7 @@
 
 @t.diagram.sketch.shaped.form.a core.test
     input="Draw a diagram in house form."
-    expect="I drew a diagram in the shape of a house: 6 nodes on its outline"
+    expect="I drew a diagram in the shape of a house: 7 nodes on its outline"
     doc="Owner export 2026-11-14 22:43 ('deseneaza o diagrama in forma de casa' through the translator): it drew one circle and said it was done."
     session=shaped.form.a
 
