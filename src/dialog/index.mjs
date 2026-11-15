@@ -1616,12 +1616,12 @@ export class DialogSession {
         continue;
       }
       // a specific explanation ("I do not speak klingon") comes before the world's graded fallback
-      const waSay = seg.unparsed && waMode !== 'off' && waMode !== 'observe' ? explainUnparsed(this, seg.text) : null;
+      const waSay = seg.unparsed && !(seg.foreign?.guessed && seg.suggestions?.length) && waMode !== 'off' && waMode !== 'observe' ? explainUnparsed(this, seg.text) : null;   // a guessed respelling offered as "Did you mean" (spec 16 section 14 rule 4) is asked first
       if (waSay) { lines.push([T(waSay)]); statuses.push('unsupported'); continue; }
       // honest scope: the world of the open tab may refuse a message it cannot talk about, in its own words, with the nearest things it can (hook `outOfScope`, the Talk tab)
       if (seg.unparsed) {
         const cx = this.context(), tw = cx.tabWorld ?? cx.lastWorld;   // no tab open: the world last used says what it can do
-        const oos = tw ? this.engine.interp.hook(this.isession, tw, 'outOfScope', { text: seg.text }) : undefined;
+        const oos = tw && !(seg.foreign?.guessed && seg.suggestions?.length) ? this.engine.interp.hook(this.isession, tw, 'outOfScope', { text: seg.text }) : undefined;
         if (typeof oos?.say === 'string' && oos.say) {
           if (set.get('ui.help')) (this.isession.state['ui.help'] ??= {}).lastUnparsed = { text: seg.text, world: tw, suggestions: oos.suggest ?? [] };   // the help still knows what was not understood ("why not?")
           lines.push([T(oos.say)]);

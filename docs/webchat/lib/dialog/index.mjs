@@ -9,14 +9,14 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { reviewForeign } from './foreign-reading.mjs?v=b075254d38';
+import { reviewForeign } from './foreign-reading.mjs?v=80f04d10de';
 import { installTextGen } from './textgen.mjs?v=c5b4f3a539';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=2129df1f93';
 import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=5333124e0f';
 import { validateWorldSet } from '../worlds/validate.mjs?v=c444cfe92a';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=2129df1f93';
-import { createInterpreter } from '../interpreter/index.mjs?v=2a83edbc06';
-import { createReasoner } from '../reasoner/index.mjs?v=0b9d7ed038';
+import { createInterpreter } from '../interpreter/index.mjs?v=1bd577e754';
+import { createReasoner } from '../reasoner/index.mjs?v=f0150c4467';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=f4a0fda696';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=69901a053c';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
@@ -39,16 +39,16 @@ import { Discourse } from './discourse.mjs?v=ff06fb88d2';
 import { Dialogue } from './dialogue.mjs?v=23ebc7afd3';
 import { turnSteps } from './steps.mjs?v=44af51b084';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=dc384b934d';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=dbaafaa3f0';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=501562da8a';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=f54979c57f';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=2ac5f80f1b';
 import { proposeByTypes } from './typed-reader.mjs?v=7812db5b24';
-import { withVariants } from './variants.mjs?v=b7e160e554';
+import { withVariants } from './variants.mjs?v=433f08a545';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=2129df1f93';
 import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=2129df1f93';
 import { repairFromScene } from './scene-referents.mjs?v=9dae83505f';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=238feeb861';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=bd0fe28318';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=7d120782a9';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=2989e545d6';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=0fec71c088';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=4916f4811a';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=970c7b26f1';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -1450,7 +1450,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=7db210d009').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=0e5fd8eed8').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.editor (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
@@ -1616,12 +1616,12 @@ export class DialogSession {
         continue;
       }
       // a specific explanation ("I do not speak klingon") comes before the world's graded fallback
-      const waSay = seg.unparsed && waMode !== 'off' && waMode !== 'observe' ? explainUnparsed(this, seg.text) : null;
+      const waSay = seg.unparsed && !(seg.foreign?.guessed && seg.suggestions?.length) && waMode !== 'off' && waMode !== 'observe' ? explainUnparsed(this, seg.text) : null;   // a guessed respelling offered as "Did you mean" (spec 16 section 14 rule 4) is asked first
       if (waSay) { lines.push([T(waSay)]); statuses.push('unsupported'); continue; }
       // honest scope: the world of the open tab may refuse a message it cannot talk about, in its own words, with the nearest things it can (hook `outOfScope`, the Talk tab)
       if (seg.unparsed) {
         const cx = this.context(), tw = cx.tabWorld ?? cx.lastWorld;   // no tab open: the world last used says what it can do
-        const oos = tw ? this.engine.interp.hook(this.isession, tw, 'outOfScope', { text: seg.text }) : undefined;
+        const oos = tw && !(seg.foreign?.guessed && seg.suggestions?.length) ? this.engine.interp.hook(this.isession, tw, 'outOfScope', { text: seg.text }) : undefined;
         if (typeof oos?.say === 'string' && oos.say) {
           if (set.get('ui.help')) (this.isession.state['ui.help'] ??= {}).lastUnparsed = { text: seg.text, world: tw, suggestions: oos.suggest ?? [] };   // the help still knows what was not understood ("why not?")
           lines.push([T(oos.say)]);
@@ -1818,7 +1818,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   // `set`, `reasoner` and `interp` are replaced by `engine.reload(loader)` (LAZY LOADING: the worlds a message needs are added to a running engine); everything below reads them through these bindings.
   let set = await loadWorlds(loader, { reasoner: mode });
   let reasoner = mode === 'matrix' ? await createReasoner(set) : null;
-  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=7db210d009')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
+  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=0e5fd8eed8')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
   let interp = createInterpreter(set, { ...options, reasoner });
   attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
