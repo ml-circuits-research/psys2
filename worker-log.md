@@ -2902,3 +2902,6 @@ Live build 8bcf1a91a9 = main d144a73b (classes B, C, A, D, E). Owner session 30/
 
 ## 2026-11-15 owner requests (coordinator)
 Owner: (1) remove the Timeline and Seating tabs from the demo (incomplete, not helping); (2) compositions are far too short (asked 5,000 words, got short paragraphs): honour the size as far as the knowledge allows and say when it runs out; a long multi-line topic box; from a long topic take what is understood (phrases, content words, known topics) and make it credible. One agent assigned; F+G continue.
+
+## 2026-11-15 spec 28 (request worker)
+Baseline of tests/request-properties.test.mjs before any change (96 generated cases, en + ro): P1 3/22, P2 10/20, P3 2/8, P4 2/14, P5 0/10, P6 6/8, P7 0/6, P8 7/8; total 30/96. Ratchet MIN starts at 0.
