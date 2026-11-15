@@ -225,6 +225,9 @@ export function engineSampler(lib, engine, session) {
  * CHIPS IN THE SELECTED LANGUAGE (spec 25; reviewer 2026-11-15 03:15 item 3): a chip is a command the sampler rendered in English; in a session of another language it is shown (and
  * sent) in that language, by the rules translator (its reply tables and grammar, never a machine translator), and a chip it cannot say completely is left out: never an English chip
  * on a page in another language. Each item keeps its English text in `en`. `translator` is the engine's (its `rules` when it switches between translators).
+ * NATURAL OR NOTHING (reviewer 2026-11-15 04:50 decision 3): a chip in another language is shown only when it is natural. Natural = composed from the language world's act
+ * templates (pending: w.lang.ro request templates, questions.md Q25 K4; no language has them yet), or a rules translation that the grammar realised with no calque (the
+ * translator's `calques`: a construction said word for word, "Ce este mărimea de c1?" for "What is the size of c1?"). A chip that is not natural is left out rather than shown.
  */
 const norm = (s) => String(s ?? '').toLowerCase().replace(/[.!?,"„”]/g, '').replace(/\b([a-z]+) (\d+)\b/g, '$1$2').replace(/\s+/g, ' ').trim();   // the reader splits a name like c1 into c 1 and still reads it
 const ID = /\b[a-z]+\d+\b/gi;
@@ -240,6 +243,7 @@ export async function chipsInLanguage(items, lang, translator) {
       const r = await rules.translate(ids.reduce((t, id, i) => t.replace(new RegExp(`\\b${id}\\b`, 'g'), hold(i)), it.text), { from: 'en', to: lang });
       const text = ids.reduce((t, id, i) => t?.replace(new RegExp(`\\b${hold(i)}\\b`, 'g'), id), typeof r === 'string' ? r : r?.text);
       if (!text || r?.unknown?.length || r?.untranslatable?.length || (translator?.leftovers?.(text, lang) ?? rules.leftovers?.(text, lang) ?? []).length) continue;
+      if (r?.calques?.length) continue;   // understandable, not natural: left out (natural or nothing)
       // read back: the chip, when tapped, is read as the same command (the reading of a chip is the world's, so a chip that would read otherwise is not offered)
       const back = await rules.translate(text, { from: lang, to: 'en' });
       if (norm(typeof back === 'string' ? back : back?.text) === norm(it.text)) out.push({ ...it, text: text.trim(), en: it.text });

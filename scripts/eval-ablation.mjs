@@ -58,22 +58,18 @@ export const CONFIGS = {
   'shipped': { note: 'the shipped default since 2026-11-14: encoder (segmentation + prior), rules read, no normalizer, routing C', mode: 'encoder', set: {} },
   'shipped-old': { note: 'the shipped default of the ablation report: encoder + normalizer + hybrid reading + routing C', mode: 'encoder+n1', set: { nxStrategy: 'hybrid' } },
   'enc-neural': { note: 'model first (NX neural), no normalizer', mode: 'encoder', set: { nxStrategy: 'neural' } },
-  // the symbolic readers that exist in the library and are off by default (spec 16): world-aware reading and the READER-ROUTE library reader (env switches read when the session is made)
+  // the symbolic readers that exist in the library and are off by default (spec 16): world-aware reading (env switch read when the session is made; the READER-ROUTE configurations went with the route, deleted 2026-11-15)
   'rules-WAveto': { note: 'no model; world-aware reading = veto (PSYS2_WORLD_AWARE)', mode: 'rules', set: {}, env: { PSYS2_WORLD_AWARE: 'veto' } },
   'rules-WAchoose': { note: 'no model; world-aware reading = choose', mode: 'rules', set: {}, env: { PSYS2_WORLD_AWARE: 'choose' } },
-  'rules-RDfill': { note: 'no model; READER-ROUTE = fill (the library reader reads clauses nobody read)', mode: 'rules', set: {}, env: { PSYS2_READER: 'fill' } },
-  'rules-RDchoose': { note: 'no model; READER-ROUTE = choose', mode: 'rules', set: {}, env: { PSYS2_READER: 'choose' } },
-  'rules-WAchoose-RDchoose': { note: 'no model; world-aware = choose and READER-ROUTE = choose', mode: 'rules', set: {}, env: { PSYS2_WORLD_AWARE: 'choose', PSYS2_READER: 'choose' } },
   'rules-suspect': { note: 'no model; PROTOTYPE suspect-word leniency (a completely read segment with an unknown word one slip from a known word is spell-corrected like an unparsed one)', mode: 'rules', set: { suspectWords: true } },
   'enc-suspect': { note: 'as enc-C plus the suspect-word leniency prototype', mode: 'encoder', set: { nxStrategy: 'rules', suspectWords: true } },
   'rules-also': { note: 'no model; PROTOTYPE "also" joins clauses like "then" in the rules clause splitter', mode: 'rules', set: {}, proto: { also: true } },
   'rules-also-suspect': { note: 'no model; both prototypes (also-joiner, suspect-word leniency)', mode: 'rules', set: { suspectWords: true }, proto: { also: true } },
-  // since 2026-11-13 suspect-word leniency, "also" as a joiner and READER-ROUTE fill are on by default (spec 03 7.17); these configurations switch them off one by one for the before / after tables
-  'rules-off': { note: 'no model; suspect-word leniency, "also" joiner and READER-ROUTE all OFF (the state of the ablation report)', mode: 'rules', set: { suspectWords: false, reader: 'off' }, proto: { also: false } },
-  'rules-d-suspect': { note: 'no model; only the suspect-word leniency on', mode: 'rules', set: { suspectWords: true, reader: 'off' }, proto: { also: false } },
-  'rules-d-also': { note: 'no model; only "also" as a clause joiner on', mode: 'rules', set: { suspectWords: false, reader: 'off' }, proto: { also: true } },
-  'rules-d-fill': { note: 'no model; only READER-ROUTE fill on', mode: 'rules', set: { suspectWords: false, reader: 'fill' }, proto: { also: false } },
-  'rules-d-suspect-also': { note: 'no model; suspect-word leniency and "also" on, READER-ROUTE off', mode: 'rules', set: { suspectWords: true, reader: 'off' }, proto: { also: true } },
+  // since 2026-11-13 suspect-word leniency and "also" as a joiner are on by default (READER-ROUTE fill was measured and left off, its route deleted 2026-11-15) (spec 03 7.17); these configurations switch them off one by one for the before / after tables
+  'rules-off': { note: 'no model; suspect-word leniency and "also" joiner OFF (the state of the ablation report)', mode: 'rules', set: { suspectWords: false }, proto: { also: false } },
+  'rules-d-suspect': { note: 'no model; only the suspect-word leniency on', mode: 'rules', set: { suspectWords: true }, proto: { also: false } },
+  'rules-d-also': { note: 'no model; only "also" as a clause joiner on', mode: 'rules', set: { suspectWords: false }, proto: { also: true } },
+  'rules-d-suspect-also': { note: 'no model; suspect-word leniency and "also" on', mode: 'rules', set: { suspectWords: true }, proto: { also: true } },
   // the card-driven clause cutter (spec 03 7.17) switched off, for the before / after of section 1
   'rules-nocut': { note: 'no model; defaults (suspect, also) but the card-driven clause cutter OFF', mode: 'rules', set: {}, proto: { cutter: false } },
   'enc-C-nocut': { note: 'enc-C with the card-driven clause cutter OFF', mode: 'encoder', set: { nxStrategy: 'rules' }, proto: { cutter: false } },
