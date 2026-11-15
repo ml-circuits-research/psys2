@@ -1,0 +1,8 @@
+@tpl.calc.arith.compute core.template
+    for=action.calc.compute
+    text="{value}"
+
+@tpl.calc.arith.compute.conflicting core.template
+    for=action.calc.compute
+    status=conflicting
+    text="{note}"

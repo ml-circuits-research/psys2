@@ -72,3 +72,14 @@
     doc="A bare word with no story in focus is not a story sentence (plan H7: the answers to the removed profile tab)."
     input="Research"
     expectStatus=unparsed
+
+@t.calc.story.n15 core.test
+    session=half
+    input="Ion has 6 nuts."
+    expect="OK, Ion has 6 nuts."
+
+@t.calc.story.n16 core.test
+    session=half
+    doc="A comparison with a factor of the catalog's K4 words (half as many as: factor 0.5)."
+    input="Ana has half as many nuts as Ion."
+    expect="OK, Ana has 3 nuts."
