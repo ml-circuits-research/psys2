@@ -2,13 +2,13 @@
 // geo.map (spec 21 section 12): the hooks of the schema world. The acts (make, remove, change, pick, ask, send, undo, redo) are read by the generated grammar; what an act DOES on the map is the
 // operations of map.mjs (the projection and zoom fitting, the view state, the distances). The roles of an act are mapped onto those operations here; the places named in them come by lookup from
 // the catalog (places.mjs), never from a table of this world. Nothing here lists a place, a verb or a colour: kinds and attributes come from the schema, place words from the catalog vocabulary.
-import * as M from './map.mjs?v=a6dff53a46';
+import * as M from './map.mjs?v=51cc0efc2e';
 import { knowsPlace, provideBundledGeo } from '../../lib/knowledge/open-words.mjs?v=3ebe6cdc98';
 import { BUNDLED_GEO } from '../../lib/knowledge/bundled-geo.mjs?v=27017b5fd0';
 import { keyOf, lookup, peekIndex } from './places.mjs?v=81ecc9de2a';
-import * as G from './ops.mjs?v=a6dff53a46';
+import * as G from './ops.mjs?v=51cc0efc2e';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
-import { ACT_VERBS } from '../../worlds/acts/acts.mjs?v=dd4cd2d356';   // circular on purpose: only used inside functions, when the executor exists
+import { ACT_VERBS } from '../../worlds/acts/acts.mjs?v=500a05f67d';   // circular on purpose: only used inside functions, when the executor exists
 
 provideBundledGeo(BUNDLED_GEO);   // the open-words reader knows the bundled places once this world is loaded (LAZY-LOAD-3)
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_'’-]+/).filter(Boolean);

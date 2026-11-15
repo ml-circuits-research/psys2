@@ -9,7 +9,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 
 // The ratchet: the number of cases of each property that held at the last landing (baseline 2026-11-15 before spec 28: see worker-log.md).
-const MIN = { P1: 19, P2: 17, P3: 6, P4: 12, P5: 9, P6: 5, P7: 4, P8: 7 };   // 2026-11-15 spec 28 + Documents: 87/96 (a margin of one for the sampled diagrams)
+const MIN = { P1: 55, P2: 17, P3: 5, P4: 9, P5: 7, P6: 5, P7: 3, P8: 7 };   // 2026-11-15 sopworld 0.150 switch: 118/140 (P1 now every form of negation, 66 cases; a margin for the sampled plans)
 
 const loader = createFsLoader(DEFAULT_ROOT);
 const engines = {
@@ -54,7 +54,22 @@ for (const k of ['circle', 'square', 'diamond', 'triangle']) {
   add('P1', 'diagram', [`draw 6 nodes, not all ${k}s`], [`desenează 6 noduri, nu toate ${RO_KIND[k][0]}`], (r) => r[0].m.parts >= 2 && r[0].m.kinds.size > 1);
 }
 add('P1', 'diagram', ['make a diagram that is not a circle'], ['fă o diagramă care nu este un cerc'], (r) => r[0].m.parts >= 2);
-add('P1', 'draw', ['draw a pond without ducks'], ['desenează un iaz fără rațe'], (r) => r[0].m.parts > 0 && !r[0].m.kinds.has('duck'));
+// reviewer 2026-11-15 15:40 item 1: every form of negation the language has (no X, not X, without X, anything but X; not all X), with a count or a range, for every kind each world makes
+const NEG_EN = [(k) => `no ${k}s`, (k) => `not ${k}s`, (k) => `without ${k}s`, (k) => `anything but ${k}s`];
+const NEG_RO = [(k) => `fără ${k}`, (k) => `nu ${k}`];
+for (const k of ['circle', 'square', 'diamond', 'rectangle', 'triangle']) {
+  const ro = RO_KIND[k]?.[0] ?? `${k}s`;
+  for (const [i, neg] of NEG_EN.entries()) add('P1', 'diagram', [`draw a diagram with ${i % 2 ? '6 to 8' : '7'} nodes, ${neg(k)}`], null, (r) => r[0].m.parts > 0 && !r[0].m.kinds.has(k));
+  for (const neg of NEG_RO) cases.push({ p: 'P1', lang: 'ro', tab: 'diagram', turns: [`desenează o diagramă cu 6 până la 8 noduri, ${neg(ro)}`], ok: (r) => r[0].m.parts > 0 && !r[0].m.kinds.has(k) });
+}
+// the board draws some kinds as others (request.sop std.schema.drawn): "no ducks" is no bird of the pond either
+const DRAWN = { duck: ['duck', 'bird'], fish: ['fish'], flower: ['flower'] };
+for (const [k, ro] of [['duck', 'rațe'], ['fish', 'pești'], ['flower', 'flori']]) {
+  for (const neg of NEG_EN.slice(0, 3)) add('P1', 'draw', [`draw a pond, ${neg(k).replace(/fishs/, 'fish')}`], null, (r) => r[0].m.parts > 0 && !DRAWN[k].some((x) => r[0].m.kinds.has(x)));
+  cases.push({ p: 'P1', lang: 'ro', tab: 'draw', turns: [`desenează un iaz fără ${ro}`], ok: (r) => r[0].m.parts > 0 && !DRAWN[k].some((x) => r[0].m.kinds.has(x)) });
+}
+add('P1', 'diagram', ['draw a diagram with 6 to 8 nodes, no circles'], ['desenează o diagramă cu 6 până la 8 noduri, fără cercuri'], (r) => r[0].m.parts >= 6 && r[0].m.parts <= 8 && !r[0].m.kinds.has('circle'));
+add('P1', 'draw', ['draw a pond without ducks'], ['desenează un iaz fără rațe'], (r) => r[0].m.parts > 0 && !r[0].m.kinds.has('duck') && !r[0].m.kinds.has('bird'));
 add('P1', 'draw', ['draw a garden with no flowers'], ['desenează o grădină fără flori'], (r) => r[0].m.parts > 0 && !r[0].m.kinds.has('flower'));
 
 // P2: a count or a range is respected

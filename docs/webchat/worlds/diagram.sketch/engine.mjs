@@ -20,7 +20,7 @@ import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs?v=
 import { routeEdges, segBoxDist, boxOf } from './arrows.mjs?v=3346b422bb';
 import * as space from '../space/space.mjs?v=da302c7b07';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42';
-import * as DG from '../../lib/knowledge/diagram-world.mjs?v=1758817b12';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
+import * as DG from '../../lib/knowledge/diagram-world.mjs?v=c535b24b4d';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const TAB = 'diagram';
@@ -1021,7 +1021,8 @@ export function planRequest(ctx, goal = {}) {
   const res = execute(ctx, s, list, { place: false });
   if (res.status !== 'supported') return res;
   const made = (s.last ?? []).slice();
-  const layout = goal.layout && goal.layout !== 'layers' ? goal.layout : (edges.length ? 'tree' : 'grid');
+  const ENGINE_LAYOUT = { top_down: 'tree', hierarchy: 'tree', left_right: 'row', ring: 'circle', radial: 'radial', tree: 'tree', grid: 'grid', row: 'row', column: 'column', circle: 'circle' };   // the expectation's layout names in the engine's words
+  const layout = ENGINE_LAYOUT[goal.layout] ?? (edges.length ? 'tree' : 'grid');
   if (!goal.layout) assumed.push(`The diagram is a ${layout}.`);
   if (made.length > 1) { try { arrangeLayout(ctx, { text: `arrange ${made.join(', ')} as a ${layout}` }); } catch { /* the engine's places stay */ } }
   s.last = made;
