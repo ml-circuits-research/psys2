@@ -8,8 +8,9 @@
 // A sentence whose negation or question word could not be mapped is not translated: it is omitted from
 // `text` and reported in the extra field `untranslatable: [{span, reason}]` (confidence 0).
 import { tokenize, foldKey } from './normalize.mjs?v=6d473eb091';
-import { analyze, placeOf, surfaceForms } from './morphology.ro.mjs?v=af92ea5710';
-import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord, knownEnglishWord } from './en-ro.mjs?v=98d0a9bb0f';
+import { analyze, placeOf, surfaceForms } from './morphology.ro.mjs?v=1a500300fa';
+import { frameMoveRoEn, loadFramesRo } from './frames-ro.mjs?v=4ff48499ab';
+import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord, knownEnglishWord } from './en-ro.mjs?v=515f47a41b';
 
 // Romanian evidence, in points (a rough log-odds of "Romanian" against "English"), for words typed with OR without diacritics.
 // Words that are also English words ("cat", "care", "la", "fa", "pune", "do"...) carry only a small weight by themselves;
@@ -137,7 +138,7 @@ export function detectLanguage(text) {
 // that sets `globalThis.__psys2LazyRoEn` before importing this module loads them on demand: `loadRoEn()` (the host calls it when the language is not English), and a ro -> en `translate` that
 // finds them missing returns a promise that waits for them (every caller of the rules awaits the answer).
 let roEn = null, roEnLoading = null;
-export function loadRoEn() { return roEn ? Promise.resolve(roEn) : (roEnLoading ??= import('./ro-en.mjs?v=362ca336ac').then((m) => (roEn = m.translateRoEn), (e) => { roEnLoading = null; throw e; })); }
+export function loadRoEn() { return roEn ? Promise.resolve(roEn) : (roEnLoading ??= Promise.all([import('./ro-en.mjs?v=f2b93acfb9'), loadFramesRo()]).then(([m]) => (roEn = m.translateRoEn), (e) => { roEnLoading = null; throw e; })); }   // with the w.lang.ro frames (frames-ro.mjs)
 /** True when the Romanian -> English rules are in memory. */
 export const roEnLoaded = () => !!roEn;
 if (!globalThis.__psys2LazyRoEn) await loadRoEn();
@@ -150,7 +151,15 @@ export function translate(text, opts = {}) {
   if (from === to && (from === 'ro' || from === 'en')) {
     return { text: source, alignment: source ? [{ src: [0, source.length], tgt: [0, source.length] }] : [], unknown: [], notes: ['source and target language are the same'], confidence: 1 };
   }
-  if (from === 'ro' && to === 'en') return roEn ? roEn(source) : loadRoEn().then((f) => f(source));
+  if (from === 'ro' && to === 'en') {
+    // a move the catalog's w.lang.ro frames read whole (the library's readFrames) is realised from its frame; everything else is the rules translator's (frames-ro.mjs)
+    const viaFrames = (f) => {
+      let fr = null;
+      if (opts.frames !== false) { try { fr = frameMoveRoEn(source, (t) => f(t)); } catch { fr = null; } }
+      return fr ? { text: fr.text, alignment: [{ src: [0, source.length], tgt: [0, fr.text.length] }], unknown: [], notes: fr.notes, confidence: 0.9, frame: fr.frame } : f(source);
+    };
+    return roEn ? viaFrames(roEn) : loadRoEn().then(viaFrames);
+  }
   if (from === 'en' && to === 'ro') return translateEnRo(source);
   return { text: '', alignment: [], unknown: [], notes: [`unsupported language pair ${from} -> ${to}`], confidence: 0, untranslatable: source ? [{ span: [0, source.length], reason: `unsupported language pair ${from} -> ${to}` }] : [] };
 }
@@ -173,5 +182,5 @@ export function createTranslator() {
 
 export { foldKey };
 export { normalizeText } from './normalize.mjs?v=6d473eb091';
-export { lemmaOfNoun, analyzeVerbForm, stripAdjAgreement } from './morphology.ro.mjs?v=af92ea5710';
+export { lemmaOfNoun, analyzeVerbForm, stripAdjAgreement } from './morphology.ro.mjs?v=1a500300fa';
 export default { detectLanguage, translate, createTranslator, loadRoEn };

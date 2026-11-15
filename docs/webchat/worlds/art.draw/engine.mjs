@@ -24,8 +24,8 @@ import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/v
 import { habitat, adviceFor } from '../../lib/knowledge/commonsense.mjs?v=a83dfa4db3';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
 import { readNounPhrase, foldRelative } from '../../lib/lang/np-resolve.mjs?v=b8f1b1e0f1';   // the one host resolver of noun phrases   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
 import * as space from '../space/space.mjs?v=c7e07062fb';
-import * as rel from '../space/pieces.mjs?v=6b32c71834';
-import * as solver from '../space/solver.mjs?v=0f8d962a2b';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
+import * as rel from '../space/pieces.mjs?v=3447877ddd';
+import * as solver from '../space/solver.mjs?v=948c103400';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
 
 export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=e70f16ba54';
 
@@ -84,7 +84,7 @@ const ORDINALS = { ...space.ORDINALS, final: -1 };
 const ORDINAL_WORD = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
 const NUMBERS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50, hundred: 100 };
 const QUANTITY = { more: 3, some: 3, few: 3, several: 4, couple: 2, many: 6, lots: 7, loads: 7, bunch: 5, plenty: 6 };
-const DIFFERENT = new Set(['different', 'various', 'varied', 'assorted', 'diverse', 'distinct', 'mixed', 'dissimilar', 'unlike']);
+export const DIFFERENT = new Set(['different', 'various', 'varied', 'assorted', 'diverse', 'distinct', 'mixed', 'dissimilar', 'unlike']);
 /** Things whose colour is what they are: a different sun is a different size, not a different colour. */
 const FIXED_COLOR = new Set(['sun', 'moon', 'rainbow', 'cloud', 'person', 'tree', 'mountain']);
 const VARY_COLORS = () => basicColourNames().filter((c) => !['black', 'white', 'grey'].includes(c));   // the basic colours of the catalog, bright ones
@@ -1583,9 +1583,13 @@ export const move = guard((ctx, args, s) => {
   const res = applyDest(s, r.objs, d);
   const putBack = () => { for (const b of before) { const o = byId(s, b.id); if (o) { o.x = b.x; o.y = b.y; o.z = b.z; } } s.history.pop(); };
   if (res.error) { putBack(); return no(res.error, 'missing'); }
+  const containNotes = [];
   if (d.kind === 'step') for (const o of r.objs) {   // a refusal with its plain reason: a thing that stands on another is not pushed into it
     const b0 = before.find((b) => b.id === o.id), ck = rel.checkMove(store, plist0, o.id, o.x - b0.x, o.y - b0.y, { names });
     if (!ck.ok) { putBack(); return no(ck.reason); }
+    // a thing in a container (the crocodile in the lake) moves inside it as far as it can; one already at the edge leaves it (spec 19, checkMove)
+    if (ck.clampTo) { o.x = b0.x + ck.clampTo.dx; o.y = b0.y + ck.clampTo.dy; containNotes.push(ck.reason); }
+    if (ck.leaves) { rel.retract(store, 'in', ck.leaves.a, ck.leaves.b); containNotes.push(ck.reason); }
   }
   if (d.kind === 'step' || d.kind === 'abs') {   // the user asked to keep two things apart and has not taken it back: a move does not bring them together
     const mp = Object.fromEntries(pieceList(s).map((p) => [p.id, p])), skip = new Set([...movedIds, ...carried.keys()]);
@@ -1608,12 +1612,13 @@ export const move = guard((ctx, args, s) => {
     for (const o of r.objs) for (const f of store.facts.filter((g) => g.a === o.id && rel.RELS[g.rel]?.carries && !movedIds.has(g.b) && !carried.has(g.b))) if (!rel.holdsFact(f, all1, FRAME, 4)) dropped.push(f);
     store.facts = store.facts.filter((f) => !dropped.includes(f));
     for (const f of dropped) tails.push(`${cap1(names[f.a])} is no longer ${f.rel === 'in' ? 'in' : f.rel === 'on' ? 'on' : 'attached to'} ${names[f.b]}.`);
+    for (const c of containNotes) tails.push(cap1(c));
     if (d.kind === 'rel') { const refs = d.refs.map((x) => resolveNP(s, parseNP(x)).objs[0]).filter(Boolean); keepRelation(s, r.objs, { rightof: 'rightof', leftof: 'leftof', next: 'next', above: 'above', below: 'below', on: 'on', in: 'in', front: 'front', behind: 'behind' }[d.rel] ?? d.rel, refs); }
     const pj = s.pendingJoin; delete s.pendingJoin;
     for (const j of pj?.joined ?? []) rel.propose(store, j.how === 'under' ? { rel: 'on', a: j.to, b: j.id, source: pj.touch ? 'said' : 'rule:join-near', tier: pj.touch ? 'said' : 'knowledge' } : { rel: j.how === 'on' ? 'on' : 'attached_to', a: j.id, b: j.to, source: pj.touch ? 'said' : 'rule:join-near', tier: pj.touch ? 'said' : 'knowledge' }, { names });
     if (wish.touch) { const mp = pieceList(s); for (const o of r.objs) for (const p of mp) if (p.id !== o.id && !movedIds.has(p.id)) rel.retract(store, 'apart_from', o.id, p.id); }
     if (wish.apart) { const mp = pieceList(s), near = mp.filter((p) => !movedIds.has(p.id) && r.objs.some((o) => { const q = mp.find((x) => x.id === o.id); return q && space.gap(q, p) < FRAME.w * 0.12; })); keepContact(s, r.objs, r.objs.length ? near.map((p) => byId(s, p.id)) : [], { apart: true }); if (near.length) tails.push(`I will keep ${r.objs.length === 1 ? names[r.objs[0].id] : 'them'} apart from ${near.map((p) => names[p.id]).join(' and ')} until you say otherwise.`); }
-    if (tails.length) r.note = [r.note, ...tails].filter(Boolean).join(' ');
+    if (tails.length) r.note = [r.note, ...new Set(tails)].filter(Boolean).join(' ');   // one sentence per fact said (three crocodiles leaving the lake: said once)
   }
   s.lastMove = d.kind === 'step' ? d.memory : null;   // what "further" repeats
   s.lastMoveInfo = { dest, kind: kindKey(r.objs[0]), before };   // what "no, the middle one" corrects
@@ -1854,6 +1859,33 @@ export const remove = guard((ctx, args, s) => {
 export const removeIt = guard((ctx, args, s) => {
   { const r = shared(ctx, 'removeIt'); if (r) return r; }
   return remove(ctx, { phrase: 'it' });
+});
+
+/** "make them different", "the houses should be different": several things of the picture get a colour each (one that has its colour by nature, a size each); already different -> said. */
+export const makeDifferent = guard((ctx, args, s) => {
+  const phrase = String(args.phrase ?? 'them').trim();
+  const np = parseNP(phrase);
+  const objs = /^(?:them|they|those|these|it|all|all of them|both|both of them)$/i.test(phrase) ? (s.last ?? []).map((id) => byId(s, id)).filter(Boolean)
+    : np.plural && np.kind && !np.color && !np.ordinal ? sameKind(s, np.kind) : resolveNP(s, np).objs ?? [];   // "the houses": every house
+  if (objs.length < 2) return no(objs.length ? `There is only ${sayObj(objs[0])}: different from what? You can say "draw 3 different houses".` : 'Which things should be different? For example "make the houses different".', 'missing');
+  const say = () => andList(objs.map((o) => describeObject(o, { article: 'a', size: false })));
+  const fixed = objs.every((o) => FIXED_COLOR.has(kindKey(o)));
+  const key = (o) => (fixed ? o.size : effectiveColor(o));
+  if (new Set(objs.map(key)).size === objs.length) return ok(`They are already different: ${say()}.`);
+  remember(s, 'made them different');
+  if (fixed) { objs.forEach((o, i) => { o.size = Math.round((KINDS[kindKey(o)]?.size ?? o.size) * VARY_SIZES[i % VARY_SIZES.length]); }); }
+  else {
+    const used = new Set(), free = VARY_COLORS().map(canonColor);
+    for (const o of objs) {   // the first of each colour keeps it; the others take a colour no one of them has
+      const c = effectiveColor(o);
+      if (!used.has(c)) { used.add(c); continue; }
+      const n = free.find((x) => !used.has(x) && !objs.some((p) => effectiveColor(p) === x));
+      if (n) { o.color = n; used.add(n); }
+    }
+  }
+  s.last = objs.map((o) => o.id);
+  open(ctx);
+  return ok(`I made them different: ${say()}.`);
 });
 
 export const clear = guard((ctx, args, s) => {

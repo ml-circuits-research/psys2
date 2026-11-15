@@ -206,7 +206,8 @@ export function makeLang(source) {
     return null;
   };
 
-  return { phrase, stripPolite, except, redo, undoAll, undoNamed, know, yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
+  const lexicon = (id) => (source.lexicon?.(id) ?? []).map((w) => String(w).toLowerCase().replace(/_/g, ' '));   // a core.lexicon's words (multi-word items with spaces)
+  return { phrase, lexicon, stripPolite, except, redo, undoAll, undoNamed, know, yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
 }
 
 export default makeLang;

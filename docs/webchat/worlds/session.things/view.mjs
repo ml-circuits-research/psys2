@@ -11,6 +11,8 @@ import { aspectOfAttr } from './things.mjs?v=f904abbe0f';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const lc = (s) => String(s ?? '').toLowerCase();
 const singular = (w) => (/ies$/.test(w) ? `${w.slice(0, -3)}y` : /(?:ses|xes|ches|shes)$/.test(w) ? w.slice(0, -2) : /s$/.test(w) && !/ss$/.test(w) ? w.slice(0, -1) : w);
+/** Every singular a plural may have: "houses" is "house" (drop -s) as well as "bus" from "buses" (drop -es); the kind lexicon decides which one is a word. */
+const singulars = (w) => [...new Set([w, singular(w), /s$/.test(w) && !/ss$/.test(w) ? w.slice(0, -1) : w])];
 const SKIP = new Set(['a', 'an', 'the', 'my', 'our', 'your', 'this', 'that', 'another', 'some', 'it', 'them', 'all', 'every', 'each', 'first', 'second', 'third', 'last', 'new', 'more']);
 const an = (n) => `${/^[aeiou]/i.test(n) && !/^(?:uni|use|eu|one)/i.test(n) ? 'an' : 'a'} ${n}`;
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
@@ -20,7 +22,7 @@ export function withView(schema, ns, hooks = {}) {
   if (!schema.view) return hooks;
   const kinds = Object.values(schema.kinds);
   const cur = { ctx: null, adopting: null, note: '' };
-  const kindOf = (w) => kinds.find((k) => w === k.name || w === k.plural || k.words.includes(w) || singular(w) === k.name || k.words.includes(singular(w)));
+  const kindOf = (w) => kinds.find((k) => w === k.plural || singulars(w).some((x) => x === k.name || k.words.includes(x)));
   const attrTypes = Object.fromEntries(Object.values(schema.attrs).map((a) => [a.name, a.type]));
   const toks = (t) => lc(t).replace(/[^a-z0-9' -]+/g, ' ').split(/\s+/).filter(Boolean);
   const kn = () => cur.ctx?.knowledge ?? null;
@@ -95,7 +97,7 @@ export function withView(schema, ns, hooks = {}) {
     cur.ctx = ctx;
     const want = lc(req.thing ?? 'it').replace(/\b(?:the|a|an|my|your)\b/g, ' ').replace(/\s+/g, ' ').trim();
     const mine = itemsOf(ctx).map((t) => ({ ...t, thingId: t.thingId ?? (ctx.state.thingIds ?? {})[t.key] }));
-    const hit = mine.filter((t) => !want || /^(?:it|them|all|everything)$/.test(want) || [t.kind, t.name, plain(t.kind)].some((x) => x && (lc(x) === want || lc(x) === singular(want))) || (/^(?:me|myself|yourself|face|avatar)$/.test(want) && t.kind === 'face'));
+    const hit = mine.filter((t) => !want || /^(?:it|them|all|everything)$/.test(want) || [t.kind, t.name, plain(t.kind)].some((x) => x && singulars(want).includes(lc(x))) || (/^(?:me|myself|yourself|face|avatar)$/.test(want) && t.kind === 'face'));
     if (!hit.length) {   // not a thing of this world: the session store knows every thing of the session by its words
       const r = ctx.request('things.show', { thing: want, to: req.place ?? '', from: ns });
       return r?.status === 'supported' ? { status: 'supported', value: String(r.value) } : { status: 'unsupported', note: String(r?.note ?? `I have no ${want || 'thing'} to send.`) };
@@ -120,7 +122,7 @@ export function viewOps(X, schema, ns, H = {}) {
   });
   const view = () => ({ status: 'supported', value: declaration(), note: `${ns} is a view of the session things` });
   const kinds = Object.values(schema.kinds);
-  const kindOf = (w) => kinds.find((k) => w === k.name || w === k.plural || k.words.includes(w) || singular(w) === k.name || k.words.includes(singular(w)));
+  const kindOf = (w) => kinds.find((k) => w === k.plural || singulars(w).some((x) => x === k.name || k.words.includes(x)));
   /** Where a kind of thing is at home, said when this world has no such kind: the other views (declared in the store) that do. */
   function adopt(ctx, { thing } = {}) {
     if (!thing?.kind) return { status: 'unsupported', note: 'I was given nothing to take.' };

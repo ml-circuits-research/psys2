@@ -8,7 +8,7 @@
 // (3) overlap removal by the smallest move (what carries something moves it too); (4) the check. If the check fails (a relation cannot be kept, an overlap cannot be removed, the
 // step budget ran out) the answer keeps the LAST VALID state (the input positions) and says which relation could not be kept.
 import { overlaps, gap, boxOf, planLayout, readingOrder } from './space.mjs?v=c7e07062fb';
-import { RELS, tierRank, holdsFact, carriedBy, why } from './pieces.mjs?v=6b32c71834';
+import { RELS, tierRank, holdsFact, carriedBy, why } from './pieces.mjs?v=3447877ddd';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const round = (v) => Math.round(v);

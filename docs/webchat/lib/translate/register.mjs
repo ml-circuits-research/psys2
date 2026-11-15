@@ -7,7 +7,7 @@
 //  - Romanian side: one register, the informal singular (the app says "tu"). `informalRo(text)` turns the second person plural of a verb into the singular (an imperative at
 //    the start of a sentence or a quote, "faceți casa albastră" -> "fă casa albastră"; else the present, "Puteți schimba" -> "Poți schimba"), from the Romanian morphology of
 //    the rules translator (no list of verb forms here), and the formal pronouns into the informal ones.
-import { analyzeVerbForm, verbPresent } from './morphology.ro.mjs?v=af92ea5710';
+import { analyzeVerbForm, verbPresent } from './morphology.ro.mjs?v=1a500300fa';
 
 /** English past tenses that do not end in -ed (the verbs of the app's own replies and the common irregulars). Not a past that is also a base form (put, set, cut, read: "Put a hat on." is an imperative) or an auxiliary (did: "Did you mean ..."). */
 const IRREGULAR_PAST = new Set(['drew', 'made', 'took', 'gave', 'sent', 'wrote', 'undid', 'redid', 'built', 'found', 'left', 'kept', 'threw', 'hid', 'lit', 'ran', 'sang',
