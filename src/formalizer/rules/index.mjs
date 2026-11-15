@@ -614,7 +614,9 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     const first = ends[0] ?? tokens[0], last = ends[ends.length - 1] ?? tokens[tokens.length - 1];
     const span = expanded ? expanded.span : [first.start, last.end];
     // {segment} is the sentence as it was read: a respelled word ("flyes" read as "flies") is handed to the world's own reader in its read form, the reply names the respelling
-    const respelled = tokens.some((t) => t.kind === 'word' && Number.isFinite(t.start) && typeof t.raw === 'string' && text.slice(t.start, t.end) !== t.raw);
+    // (a respelling: one whole word of letters replaced by another; a contraction or an expansion ("let's", "where's": several tokens over one span) keeps the typed text)
+    const respelled = tokens.some((t) => t.kind === 'word' && Number.isFinite(t.start) && typeof t.raw === 'string' && /^\p{L}+$/u.test(t.raw) && /^\p{L}+$/u.test(text.slice(t.start, t.end))
+      && text.slice(t.start, t.end).toLowerCase() !== t.raw.toLowerCase() && tokens.filter((o) => o.start === t.start).length === 1);
     const segText = expanded || respelled ? joinText(tokens) : text.slice(span[0], span[1]);
     const ranked = rankMatches(tokens, isQuestion, set, env, lex, ctx, router);
     const { worlds: scores, decision } = ranked;
