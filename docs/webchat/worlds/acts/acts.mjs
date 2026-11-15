@@ -879,7 +879,9 @@ export function createExecutor(schema, hooks = {}) {
       if (r) {
         if (!hooks.noState) init(st);   // `noState`: the world keeps its own state shape (the map's `focus` is a place, not the executor's selection) and no act log
         if (r.status === 'supported' && !hooks.noState) { st.log.push({ act, mode: req.mode ?? null, text: req.text, roles: roleView(req), diff: null, reply: String(r.value ?? r.note ?? ''), guesses: [] }); if (st.log.length > 50) st.log.shift(); st.lastAct = st.log[st.log.length - 1]; }
-        if (r.status === 'supported' && act === 'make') { const lost = unkeptName(req); const t = String(r.value ?? r.note ?? ''); if (lost && !t.toLowerCase().includes(lost.toLowerCase())) { const said = /^[^.!?]*\.$/.test(t) ? `${t.slice(0, -1)}; I did not keep the name ${lost}.` : `${t} I did not keep the name ${lost}.`; r.value = said; r.note = said; } }   // a name said for a thing of a kind that is not `named` is never dropped silently (spec 21)
+        if (r.status === 'supported' && act === 'make') { const lost = unkeptName(req); const t = String(r.value ?? r.note ?? ''); const kept = () => JSON.stringify(ctx.state ?? {}, (k, v) => (['log', 'lastAct', 'history', 'pending', 'redo', 'future'].includes(k) ? undefined : v)).toLowerCase().includes(String(req.value).trim().toLowerCase()); if (lost && !t.toLowerCase().includes(lost.toLowerCase()) && !kept()) { const said = /^[^.!?]*\.$/.test(t) ? `${t.slice(0, -1)}; I did not keep the name ${lost}.` : `${t} I did not keep the name ${lost}.`; r.value = said; r.note = said; } }   // a name said for a thing of a kind that is not `named` is never dropped silently (spec 21)
+        // a domain hook that answers a make without its text by a question ("What should the heading say?") asked for the value role: the next message is the answer (spec 21, fallback 4)
+        if (r.status !== 'supported' && act === 'make' && (req.value == null || req.value === '') && /\?\s*$/.test(String(r.note ?? r.value ?? ''))) { st.pending = { type: 'role', role: 'value', text: true, req: { ...req }, guess: `${act} ${req.thing ?? ''}`.trim() }; st.inputMode = 'confirm'; }
         return r.status === 'supported' ? { status: 'supported', note: r.value ?? r.note, value: r.value ?? r.note, ...(r.effect ? { effect: r.effect } : {}), ...(lib?.diff ? { diff: lib.diff } : {}) } : { status: r.status, note: r.note ?? r.value, value: r.note ?? r.value };
       }
     }
@@ -906,7 +908,9 @@ export function createExecutor(schema, hooks = {}) {
     if (yn === 'yes') { /* "yes" confirms the guess: run as asked */ }
     else if (p.role === 'thing' && p.candidates) { const hit = p.candidates.map((id) => st.items.find((i) => i.id === id)).filter(Boolean).find((i) => toks(t).some((w) => w === String(i.n) || (i.name && w === i.name.toLowerCase()) || ORD[w] === p.candidates.indexOf(i.id) + 1)); if (!hit) return { handled: false }; req.thing = label(hit); }
     else if (p.role === 'attribute') { const a = attrByWord(toks(t).pop() ?? ''); if (!a) { const v = Object.values(schema.attrs).find((x) => valueOf(x, t) !== undefined); if (v) { req.attribute = v.name; req.value = t; } else return { handled: false }; } else req.attribute = a.name; }
+    else if (p.role === 'value' && p.text) { if (/[?]/.test(t)) return { handled: false }; req.value = t.replace(/[.!]+$/, ''); }   // the text a block asked for: any length
     else if (p.role === 'value' || p.role === 'place' || p.role === 'thing') { if (t.split(/\s+/).length > 4 || /[?]/.test(t)) return { handled: false }; req[p.role] = t; }
+    if (hooks.domain?.[req.act]) { const { act: a, ...args } = req; const r = operation0(ctx, a, args); return { handled: true, reply: r.note }; }   // the world's own effect answers, as the request would have
     const res = run(init(st), req);
     return { handled: true, reply: res.note };
   }
