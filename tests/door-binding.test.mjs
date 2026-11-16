@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
+import { createTranslator } from '../src/translate/index.mjs';
 
 const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
 const drawing = () => { const s = engine.createSession({ language: 'en' }); s.setWorldState('ui.shell', { activeTab: 'draw' }); return s; };
@@ -37,6 +38,42 @@ test('praise runs no plan; "fewer" revises the last result through the binding; 
   assert.equal(kinds(s).dog, 1, fewer.text);
   assert.equal(kinds(s).tree, 1, fewer.text);
   assert.match(fewer.text, /^I made it again, the way you said\./);   // the diff of a re-laid result names every thing moved or redone (questions.md Q45 (8))
+});
+
+let roEngine = null;
+test('a revision changes only what it names: after a make of kinds A and B, a reaction naming A leaves the count of B unchanged (EN + RO; reviewer 01:55)', async () => {
+  for (const [lang, make, react, a, b] of [
+    ['en', 'draw three cats and a dog', 'fewer cats', 'cat', 'dog'],
+    ['en', 'draw two dogs and three trees', 'more dogs', 'dog', 'tree'],
+    ['ro', 'deseneaza trei pisici si un caine', 'mai putine pisici', 'cat', 'dog'],
+  ]) {
+    const s = (lang === 'ro' ? (roEngine ??= await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() })) : engine).createSession({ language: lang }); s.setWorldState('ui.shell', { activeTab: 'draw' });
+    await s.send(make);
+    const before = kinds(s);
+    const r = await s.send(react);
+    assert.notEqual(kinds(s)[a], before[a], `${lang} ${react}: the named kind changes: ${r.text}`);
+    assert.equal(kinds(s)[b], before[b], `${lang} ${react}: the other kind keeps its count: ${r.text}`);
+  }
+});
+
+test('a general whole is planned as one of its subkind wholes and carried out (the count said of the general kind is the target one; Q92 (1))', async () => {
+  for (const said of ['draw a random picture', 'draw a picture with a lake']) {
+    const s = drawing();
+    const r = await s.send(said);
+    assert.equal(r.trace.door, 'bound make', `${said}: ${r.text}`);
+    assert.ok((s.state()['art.draw'].objects ?? []).length > 1, `${said}: ${r.text}`);
+  }
+});
+
+test('a place said by a thing of the view goes to that thing with the relation said (step.region, step.relation; Q92 (2))', async () => {
+  const s = drawing();
+  await s.send('draw a lake');
+  await s.send('draw three fish');
+  const r = await s.send('move all the fish into the water');
+  const objs = s.state()['art.draw'].objects, lake = objs.find((o) => o.kind === 'lake');
+  const fish = objs.filter((o) => o.kind === 'fish');
+  assert.equal(fish.length, 3, r.text);
+  for (const f of fish) assert.ok(Math.abs(f.x - lake.x) < 1 && Math.abs(f.y - lake.y) < 1, `every fish is in the lake: ${r.text}`);
 });
 
 test('questions about the state and about what the world can do are facts of the live world (askWorld), no step', async () => {

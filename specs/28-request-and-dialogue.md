@@ -167,3 +167,12 @@ The bridge reader, the host revision and the host reply are gone. Per turn: the 
 - **Consulted only on a signal**: the rules' reading has unread words or no act. A turn the rules read whole with an act never reaches the model. The proposer reads the spell-repaired words (spelling stays the symbolic repair's).
 - **Then the door goes on as for any reading** (capabilities, planRequest over the declarations, P9); the turn records `trace.request.source = 'proposer'`, `trace.request.rules` (what the rules read) and `trace.request.proposer` (the proposal, its phrasing, why it was taken or not). The tier is `guessed`: the reply says the reading through the corrections ("I read "i want a boat on the lake" as "make a boat on the lake"").
 - **Flag**: `engine.proposer` is installed only when asked (`PSYS2_PROPOSER=1` in Node: `scripts/lib/proposer-node.mjs`; the browser would pass onnxruntime-web and the fetched model to the same `createProposer`, lazily on the first signal). Off by default.
+
+## 17. The reading of a Romanian turn without the machine translator (reviewer 2026-11-16 02:30, Q50)
+The door's candidate readings of a turn in a language with a rules translator come from the rules chain only (spec 05, "Reading fallback"): `gatherCandidates` is called with `machine: machineReads(lang, engine.machineReading)`. The reading-based choice among the candidates (fewest unread words, ties to the earlier) is unchanged. Off by data (`src/translate/reading-policy.mjs`), back with `engine.machineReading = { ro: true }` / `PSYS2_RO_MODEL=1`.
+
+## 18. sopworld 0.156.0 at the door (slice 9)
+- P9 (no executed result breaks a said count) accepts a count of a kind the plan's target is one of (`kindLineage(plan.target)` includes the count's `of`): a general whole planned as one of its subkind wholes ("a random picture" as a forest) is the target's.
+- Whether the bindings make the thing is asked of the plan's target, not the said one.
+- A place said by a thing of the view reaches a tool as `step.region` (the thing's id) and `step.relation` (the relation said); the tool's own names of the relation are `std.tool.value` rows of its request.sop.
+- The `revised` flag given to `sayRequest` is the library's own `toolSession` expression (`reaction && run.ok && !run.same && !plan.reference`); the host says nothing of its own about a remake.

@@ -221,9 +221,9 @@ const norm = (t) => String(t ?? '').trim().replace(/\s+/g, ' ').toLowerCase();
 /**
  * All candidate Englishes of `text`, in the order of preference: the browser Translator, the on-device model, the rules translator, then one repaired candidate
  * (translated by the first machine translator that answered, else by the rules). Each: { source, text, translation, rejected? }.
- * `translator` is the switch translator of the host (`candidatesViaMT`, `rules`); anything missing is skipped. Never throws.
+ * `translator` is the switch translator of the host (`candidatesViaMT`, `rules`); anything missing is skipped. `machine: false`: no machine translator is asked (reading-policy.mjs). Never throws.
  */
-export async function gatherCandidates(text, { from, to = 'en', translator, abortable = (p) => p, isEnglish = null, kept = null, contextRepair = null }) {
+export async function gatherCandidates(text, { from, to = 'en', translator, abortable = (p) => p, isEnglish = null, kept = null, contextRepair = null, machine = true }) {
   const out = [], seen = new Set();
   const add = (source, translation, extra = {}) => {
     const t = textOf(translation).trim();
@@ -236,7 +236,7 @@ export async function gatherCandidates(text, { from, to = 'en', translator, abor
     return c;
   };
   const rules = translator?.rules, hasRules = !!rules && (rules.supports?.(from, to) ?? true);
-  const viaMT = async (s) => { try { return (await abortable(translator?.candidatesViaMT?.(s, { from, to }) ?? [], 'translate')) ?? []; } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; return []; } };
+  const viaMT = async (s) => { if (!machine) return []; try { return (await abortable(translator?.candidatesViaMT?.(s, { from, to }) ?? [], 'translate')) ?? []; } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; return []; } };
   const viaRules = async (s) => { if (!hasRules) return null; try { const r = await abortable(rules.translate(s, { from, to }), 'translate'); return textOf(r) && !r?.untranslatable?.length ? r : null; } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; return null; } };
   budget.tick('candidates.gather');
   // Q13: the grammar voices propose first (they abstain outside their frames); the choice below still takes a candidate only if the reader understands it

@@ -2380,7 +2380,8 @@ export { describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, plac
  *   kind    a kind of the board (scene.mjs KINDS)              n       how many            size   small | default | big (a grade the param accepts)
  *   colour  a colour of the catalog                             place   a region id of the canvas (scene.mjs REGIONS, `_` for a space; corner), a band of request.sop's
  *                                                                        std.schema.region (water, land, sky), or a direction (up, down)
- *   anchor  the id of a thing to go next to                     ids     the ids of the things acted on (a scene's id stands for its things)
+ *   anchor  the id of a thing to go next to (moveThings: the step's region, a thing of the view)   ids   the ids of the things acted on (a scene's id stands for its things)
+ *   relation  moveThings: how to stand to the anchor (next, in, on, above, below, front, behind, leftof, rightof, around; default next)
  *   whole   the id of a scene made by startScene: the things made in it stand together (next to its first thing, else in its region)
  * A call is all or nothing; the calls of one session step are one entry of the board's history (`step`, `label`: given by the host). Result: { status, changed } or { status: 'missing', code } (the host passes a refusal to the library as { ok: false, code }).
  * `toolView` is the board's state as facts for the library's view (id, kind, colour, size grade, region); `thingAt` is the declared custom search (std.tool.custom) that finds
@@ -2452,7 +2453,7 @@ export function removeThings(ctx, { ids, step = null, label = null } = {}) {
     return toolDone({ changed: [...gone] });
   });
 }
-export function moveThings(ctx, { ids, place = null, anchor = null, step = null, label = null } = {}) {
+export function moveThings(ctx, { ids, place = null, anchor = null, relation = null, step = null, label = null } = {}) {
   const s = ensure(ctx), objs = objsOf(s, ids);
   if (!objs.length) return toolNo('no_things');
   const to = objsOf(s, anchor).find((o) => !objs.includes(o)) ?? null;
@@ -2465,7 +2466,7 @@ export function moveThings(ctx, { ids, place = null, anchor = null, step = null,
     for (const o of objs) {
       budget.tick('draw.tool');
       if (dir) { o.x += dir[0] * STEP; o.y += dir[1] * STEP; clampIn(o); }
-      else if (to) placeRelative(s, o, 'next', [to]);
+      else if (to) placeRelative(s, o, relation ?? 'next', [to]);   // the relations placeRelative draws; request.sop std.tool.value gives the tool's names
       else placeRegion(s, o, band ? 'ground' : area);
     }
     s.last = objs.map((o) => o.id);

@@ -31,8 +31,9 @@ function backendOf(translate, { kind = 'translator' } = {}) {
 const okBackend = (calls = []) => backendOf(async (t, f, to) => { calls.push({ t, f, to }); return fake.translate(t, f, to); });
 const mk = (rules, backend, strategy = 'auto') => createSwitchTranslator({ rules, backend, getStrategy: () => strategy });
 
-async function session(translator, reasoner = 'matrix') {
-  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator, reasoner });
+// the machine reading of a Romanian turn is off by default (reviewer 2026-11-16 02:30, Q50; src/translate/reading-policy.mjs): these tests exercise the mechanism with it put back
+async function session(translator, reasoner = 'matrix', machineReading = { ro: true }) {
+  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator, reasoner, options: { machineReading } });
   return engine.createSession(sessionOptions(settingsForMode('rules'), { language: 'ro' }));
 }
 
@@ -58,6 +59,14 @@ for (const reasoner of ['matrix', 'ops']) {
     assert.ok(tr.usage.some((u) => u.via === 'translator-in' && u.strategy === 'browser-api'));
   });
 }
+
+test('input: by default a Romanian turn is read by the rules chain only; the Translator is not asked to read it (Q50)', async () => {
+  const calls = [];
+  const s = await session(mk(base, okBackend(calls)), 'matrix', null);
+  const r = await s.send('mă cheamă Ana', { language: 'ro' });
+  assert.notEqual(r.trace.via, 'translator-in', r.text);
+  assert.ok(!calls.some((c) => c.f === 'ro' && c.to === 'en'), 'no ro->en call');
+});
 
 test('input (M4): with a Translator present it is asked and its English is a candidate (chosen by understanding); the rules read when it is missing or fails', async () => {
   const calls = [];
