@@ -7,7 +7,7 @@
 // object color, sh: lightness shift, f: fill override, t: stroke thickness in units, r: rotation in degrees }:
 //   rect/ellipse {x,y,w,h}   poly/line/curve {pts:[[x,y]...]}   arc {x,y,w,h,a0,a1} (radians, top half = PI..2*PI)
 
-import { THINGS, THING_WORDS, KIND_THINGS } from './things.catalog.mjs?v=77966d9c42';
+import { THINGS, THING_WORDS, KIND_THINGS } from './things.catalog.mjs?v=c8443d536d';
 import { colourName, colourHex } from '../../lib/knowledge/values.mjs?v=5e82673c11';   // the one colour reader (k.values): no colour table in this world
 
 export const W = 1000, H = 700;

@@ -9,12 +9,12 @@
 // The frame of the question decides the card (look, parts, count, compare, order); the things come from the knowledge catalog by lookup (`ctx.knowledge.peek`, filled by
 // the host through `openSlots`, spec 17), or from the basic things shipped with the drawing world. No fact: the plain "I don't know that yet" and no card.
 // Effect: talk.card { id } asks the Talk tab to show the card inside the answer; chat.suggest { items } shows suggestions as chips.
-import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42';
+import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=c8443d536d';
 import * as space from '../space/space.mjs?v=bc58946003';
 import { habitatSentence } from '../../lib/knowledge/commonsense.mjs?v=a83dfa4db3';
 import { colourName, numberValue } from '../../lib/knowledge/values.mjs?v=5e82673c11';   // the one colour reader (k.values)
-import * as R from './records.mjs?v=7f505e9e97';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
-import { World, contrastOf } from '../../lib/vendor/sopworld/sopworld.mjs?v=c75044ce3c';   // the library's contrast of a kind among its siblings (talk.contrast)
+import * as R from './records.mjs?v=214ce690e6';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
+import { World, contrastOf } from '../../lib/vendor/sopworld/sopworld.mjs?v=d9c5cf21f4';   // the library's contrast of a kind among its siblings (talk.contrast)
 import { pluralize as pluralOf } from '../../lib/formalizer/rules/lemma.mjs?v=f9ae5362f0';
 
 export const MAX_CARDS = 40;

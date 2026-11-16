@@ -19,8 +19,8 @@
 import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs?v=18f06ec836';
 import { routeEdges, segBoxDist, boxOf } from './arrows.mjs?v=3346b422bb';
 import * as space from '../space/space.mjs?v=bc58946003';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
-import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42';
-import * as DG from '../../lib/knowledge/diagram-world.mjs?v=d6de879825';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
+import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=c8443d536d';
+import * as DG from '../../lib/knowledge/diagram-world.mjs?v=8dcec2f801';   // diagrams composed from knowledge (spec 14 section 9): kinds, topics, the library's composeDiagram / sampleDiagram   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
 import { budget, TAB, MAX_HISTORY, K, loadEngine, engineReady, initialState, ensure, ok, no, open, WORLD_KEYS, PREFIX, KIND_OF_PREFIX, ID_RE, LONG_RE, shapeOf, idOf, nextId, assignIds, systemFor, writeBack, resetSystem } from "./core.mjs?v=d9b5984d33";
 export { loadEngine, engineReady, initialState, PREFIX, shapeOf, idOf };
 /** Async hook called by the dialog layer before this world's operations run (spec 04): the first sentence waits for the engine instead of being refused. */

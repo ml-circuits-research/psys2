@@ -6,7 +6,7 @@
 // module never imports them. Browser-safe.
 import {
   W, H, HORIZON, GROUND_BASE, KINDS, REGIONS, SHADES, canonColor, defaultColor, bbox, placeInRegion, regionOf, kindKey, kindName, COMPOSITE, isThing, ensureCustom, thingOfKey,
-} from './scene.mjs?v=7eac4d26a4';
+} from './scene.mjs?v=c3177eb612';
 import { habitat } from '../../lib/knowledge/commonsense.mjs?v=a83dfa4db3';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
 
 // The turn's step budget (a no-op outside a turn): placement is a search whose cost grows with the picture.

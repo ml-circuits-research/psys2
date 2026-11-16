@@ -3,11 +3,11 @@
 // grammar; what an act DOES on the picture is the scene of worlds/art.draw (ops.mjs: the scene operations, the noun-phrase resolution, the placement over the space module; scene.mjs: the
 // renderer's geometry and the drawing from facts). The roles of an act are joined back into the words those operations read. Nothing here names a kind, a colour or a part: kinds and
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
-import * as D from './engine.mjs?v=b6e2cd2362';
+import * as D from './engine.mjs?v=e7b4934562';
 import * as space from '../space/space.mjs?v=bc58946003';
-import { splitThings } from '../acts/acts.mjs?v=e23e2be678';
-import { partsOf, kindKey, kindName } from './scene.mjs?v=7eac4d26a4';
-import * as P from './plan.mjs?v=1de9c8c970';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
+import { splitThings } from '../acts/acts.mjs?v=e3be2830fb';
+import { partsOf, kindKey, kindName } from './scene.mjs?v=c3177eb612';
+import * as P from './plan.mjs?v=fd689157d8';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const TAIL = new Set(['there', 'here', 'now', 'added', 'drawn', 'too', 'also', 'please', 'pls', 'plz', 'thx', 'thanks', 'are', 'is', 'again', 'exactly', 'go']);   // words a role slot took that belong to the frame ("how many trees there are")

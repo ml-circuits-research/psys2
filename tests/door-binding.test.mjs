@@ -37,7 +37,7 @@ test('praise runs no plan; "fewer" revises the last result through the binding; 
   const fewer = await s.send('fewer dogs');
   assert.equal(kinds(s).dog, 1, fewer.text);
   assert.equal(kinds(s).tree, 1, fewer.text);
-  assert.match(fewer.text, /^I made it again, the way you said\./);   // the diff of a re-laid result names every thing moved or redone (questions.md Q45 (8))
+  assert.match(fewer.text, /^I removed the dog\./);   // sopworld 0.157 (Q93 (1)): done.revise is said only after a remake ("again"), not after a step reaction ("fewer"); the diff names what was removed
 });
 
 let roEngine = null;
