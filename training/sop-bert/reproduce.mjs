@@ -7,7 +7,9 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 import { outcomes } from './historical-outcomes.mjs';
 import { nextContext } from './upstream/docs/js/vss-composer.js';
 
-const [runtime, modelPath, dataPath, output] = process.argv.slice(2);
+const [runtime, modelPath, dataPath, output, threadArg = "4"] = process.argv.slice(2);
+const threads = Number(threadArg);
+if (!Number.isInteger(threads) || threads < 1 || threads > 64) throw new Error("CPU thread count must be an integer from 1 to 64");
 if (!output) throw new Error('Usage: node reproduce.mjs <transformers.node.mjs> <model-folder> <heldout.jsonl> <output-prefix>');
 const manifest = JSON.parse(readFileSync(new URL('provenance.json', import.meta.url)));
 const hash = (data) => createHash('sha256').update(data).digest('hex');
@@ -33,7 +35,7 @@ T.env.allowLocalModels = true; T.env.allowRemoteModels = false; T.env.useBrowser
 T.env.localModelPath = dirname(resolve(modelPath)) + '/';
 const name = basename(resolve(modelPath));
 const tokenizer = await T.AutoTokenizer.from_pretrained(name, { local_files_only: true });
-const model = await T.AutoModel.from_pretrained(name, { device: 'cpu', dtype: 'q8', local_files_only: true, session_options: { intraOpNumThreads: 4 } });
+const model = await T.AutoModel.from_pretrained(name, { device: 'cpu', dtype: 'q8', local_files_only: true, session_options: { intraOpNumThreads: threads } });
 const models = Object.assign({ device: 'cpu', dtype: 'q8', enumModel: name, qaModel: name }, NeuralKit.makeReader(T, tokenizer, model));
 const neural = NeuralKit.create(K.createSystem().engine, () => { throw new Error('Unexpected Rules fallback'); });
 neural.setModels(models); neural.setStrategy('finetuned');
@@ -57,7 +59,7 @@ try {
 } finally { await model.dispose(); }
 const result = { sourceCommit: manifest.commit, modelSHA256: manifest.externalModel.find((r) => r.path.endsWith('.onnx')).sha256,
   heldoutSHA256: split.heldoutSHA256, node: process.version, architecture: process.arch, runtimeEntrySHA256: hash(readFileSync(runtime)),
-  seconds: (performance.now() - start) / 1000, counts,
+  seconds: (performance.now() - start) / 1000, intraOpNumThreads: threads, counts,
   rightPercent: counts.right / counts.requested * 100, wrongPercent: counts.wrong / counts.requested * 100,
   notDonePercent: counts.notDone / counts.requested * 100, extraPer100: counts.extra / counts.requested * 100,
   executionPrecision: counts.right / (counts.right + counts.wrong + counts.extra) * 100,

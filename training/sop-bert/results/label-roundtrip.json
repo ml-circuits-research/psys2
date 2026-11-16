@@ -1,0 +1,69 @@
+{
+  "sourceCommit": "ac33631635314bf00e14e222809e8aa4ab934f38",
+  "inputSHA256": "d51dc24ae171daa959ad0c4a88df22a05a13d0536840f755c15075ece1bb86e8",
+  "readerSHA256": "a55e62dab84b67e8b7292d324d4772cfd9a1d143d04dc6064630359cf136d8b1",
+  "runtimeEntrySHA256": "ee3b84624fee88b9db4b85be1fbfde1e2637957ee92eaaaaa720edbca5448e6c",
+  "mode": "gold labels through original loss targets and browser decoder; no learned inference",
+  "coverage": "original train, historical heldout and sample; given gold spans isolate label/decode loss; cut tags audited separately",
+  "counts": {
+    "train": {
+      "messages": 5269,
+      "requests": 15683,
+      "labelExact": 14475,
+      "changed": 1205,
+      "unsupported": 3,
+      "extraKeys": 0,
+      "cutExact": 5266,
+      "cutDifferent": 3,
+      "wordpieceTruncatedRows": 0
+    },
+    "heldout": {
+      "messages": 585,
+      "requests": 1711,
+      "labelExact": 1611,
+      "changed": 100,
+      "unsupported": 0,
+      "extraKeys": 0,
+      "cutExact": 585,
+      "cutDifferent": 0,
+      "wordpieceTruncatedRows": 0
+    },
+    "eval_sample1000": {
+      "messages": 1000,
+      "requests": 4858,
+      "labelExact": 4439,
+      "changed": 417,
+      "unsupported": 2,
+      "extraKeys": 0,
+      "cutExact": 998,
+      "cutDifferent": 2,
+      "wordpieceTruncatedRows": 0
+    }
+  },
+  "causes": {
+    "overlapping_or_unlocatable_span": 5
+  },
+  "fieldLosses": {
+    "target": 711,
+    "from": 274,
+    "anchor": 183,
+    "arrow": 530,
+    "position": 41,
+    "to": 154,
+    "distance": 1,
+    "count": 1
+  },
+  "duplicateClassValues": {
+    "arrow": [
+      "none"
+    ]
+  },
+  "duplicateValueRows": {
+    "arrow": 530
+  },
+  "explicitValuesEncodedAsAbsent": {
+    "arrow": 530,
+    "desc:notColor": 1
+  },
+  "gate": "fail"
+}

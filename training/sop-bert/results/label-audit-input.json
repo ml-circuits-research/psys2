@@ -1,0 +1,23 @@
+{
+  "sourceCommit": "ac33631635314bf00e14e222809e8aa4ab934f38",
+  "counts": {
+    "train_messages": 5269,
+    "train_requests": 15683,
+    "heldout_messages": 585,
+    "heldout_requests": 1711,
+    "eval_sample1000_messages": 1000,
+    "eval_sample1000_requests": 4858
+  },
+  "inputSHA256": "d51dc24ae171daa959ad0c4a88df22a05a13d0536840f755c15075ece1bb86e8",
+  "readerSHA256": "a55e62dab84b67e8b7292d324d4772cfd9a1d143d04dc6064630359cf136d8b1",
+  "duplicateClassValues": {
+    "arrow": [
+      "none"
+    ]
+  },
+  "explicitValuesEncodedAsAbsent": {
+    "arrow": 530,
+    "desc:notColor": 1
+  },
+  "classTargetSource": "def class_targets(self, row):\n        return [vals.index(row[\"classes\"][k]) if row[\"classes\"].get(k) in vals else 0 for k, vals in self.classes]"
+}

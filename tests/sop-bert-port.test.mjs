@@ -33,3 +33,33 @@ test('historical evaluation summary matches every retained row and preserves mis
   assert.equal(summary.reproducedToReportedPrecision, false);
   assert.notEqual(summary.rightPercent.toFixed(1), summary.historicalReportedRightPercent.toFixed(1));
 });
+
+test('gold-label audit accounts for every original request and exposes a failed exact gate', () => {
+  const summary = json('results/label-roundtrip.json');
+  const rows = readFileSync(new URL('results/label-roundtrip.jsonl', root), 'utf8').trim().split('\n').map(JSON.parse);
+  assert.equal(new Set(rows.map((r) => r.id)).size, 6854);
+  const prepared = json('results/label-audit-input.json');
+  assert.equal(summary.inputSHA256, prepared.inputSHA256);
+  assert.equal(summary.readerSHA256, prepared.readerSHA256);
+  for (const [split, counts] of Object.entries(summary.counts)) {
+    const messages = rows.filter((r) => r.split === split), requests = messages.flatMap((r) => r.rows);
+    assert.equal(messages.length, counts.messages);
+    assert.equal(requests.length, counts.requests);
+    assert.equal(requests.filter((r) => r.status === 'exact').length, counts.labelExact);
+    assert.equal(requests.filter((r) => r.status === 'changed').length, counts.changed);
+    assert.equal(requests.filter((r) => r.status === 'unsupported').length, counts.unsupported);
+    assert.equal(counts.requests, counts.labelExact + counts.changed + counts.unsupported);
+    assert.equal(messages.filter((r) => !r.cutExact).length, counts.cutDifferent);
+    for (const request of requests.filter((r) => r.status === 'exact')) {
+      assert.deepEqual(request.differences, []); assert.deepEqual(request.extraKeys, []);
+    }
+  }
+  assert.equal(summary.gate, 'fail');
+  assert.equal(summary.explicitValuesEncodedAsAbsent.arrow, 530);
+  assert.equal(summary.explicitValuesEncodedAsAbsent['desc:notColor'], 1);
+});
+
+test('changing CPU thread count preserves every measured historical reading', () => {
+  assert.equal(json('results/historical-single-thread.json').intraOpNumThreads, 1);
+  assert.deepEqual(readFileSync(new URL('results/historical-arm64.jsonl', root)), readFileSync(new URL('results/historical-single-thread.jsonl', root)));
+});
