@@ -4026,3 +4026,11 @@ What I could not verify and did not claim: (i) that the generated tests.sop / da
 
 ## Coordinator 2026-11-16 ~13:00 — OWNER: no per-message language detection; the selector decides
 Owner (sense): stop the language detection, it burns effort and does not work. Use the selector: if Romanian is selected the message is Romanian, or at most "Romglish" (mixed words), and goes through the translator. This replaces reviewer 10:20 item 3(a) and 10:40 item 1. The worker on detection was stopped; nothing of it was merged. The tightened owner-session checks are merged (a532608f): 2026-11-16 right 11 / partly 12 / honest 23 / wrong 5; 2026-11-15 RO 8 / 5 / 26 / 4; EN 7 / 2 / 5 / 2 (turn lists and A–G tags in the checks worker's entry). The checks worker also found that the false-done gate does not count step counters (stepGroup / toolStep) as non-content, so a false "moved" can pass — logged as a host item. Waiting for the owner's signal before any further work.
+
+## 2026-11-16 — Worker commit/push access probe (done; documentation-only exception)
+
+- Owner request: make a minor documentation change and verify commit and push. Added `WORKER-HANDOFF.md`, linking the existing control-task, question and progress protocol. No runtime, test, world or generated file changed.
+- Base commit: `db7bc3c71ba8`. `git diff --check` and `git push --dry-run origin main` passed.
+- `npm test -- --jobs 1` was started against the existing runtime and encountered failures, including missing-part replies, taking a house apart, grouping things and tab protection. The extended run was stopped once the baseline failures were established; no passing full-suite result is claimed. Browser checks were unavailable because `PUPPETEER_CORE` was unset.
+- The owner explicitly authorized an exception to AGENTS.md's green-test-before-commit rule for this documentation-only probe, with the failures recorded here. This exception does not apply to future runtime changes.
+- This entry and the handoff note share one commit; find it with `git log -- WORKER-HANDOFF.md`.
