@@ -43,6 +43,9 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.which w.lang.ro.reply name=ask.which count=one role=thing role=list text="la care {thing} te referi: {list}?"
 @w.lang.ro.reply.local.undo_did w.lang.ro.reply name=done.undo.did count=one role=did text="am anulat ultima schimbare"
 @w.lang.ro.reply.local.redo_did w.lang.ro.reply name=done.redo.did count=one role=did text="am refăcut ultima schimbare"
+# The parts of a genre the knowledge names (sopworld 0.165 done.parts; Q102 [KNOW]: the catalog's w.lang.ro has no row, and the part names are said as the knowledge gives them until it has their Romanian words)
+@w.lang.ro.reply.local.done_parts w.lang.ro.reply name=done.parts count=one role=whole role=parts text="{whole:def=yes} are părțile: {parts}"
+@w.lang.ro.reply.local.no_other w.lang.ro.reply name=refused.no_other count=one role=thing role=key text="{thing:def=yes} nu are altă {key:num=sg,case=nomacc,def=no}"
 @w.lang.ro.reply.local.nothing_known w.lang.ro.reply name=refused.nothing_known count=one role=about text="încă nu știu nimic despre {about}"
 @w.lang.ro.reply.local.no_composer w.lang.ro.reply name=refused.no_composer count=one text="încă nu pot scrie compuneri: biblioteca nu are un compozitor (std.compose) în această versiune"
 @w.lang.ro.reply.local.page w.lang.ro.reply name=done.page count=one text="iată o foaie nouă. Ce desenăm?"

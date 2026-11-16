@@ -247,7 +247,7 @@ const packs = new Map();
 /** The language pack that composes requests (Romanian: src/lang/ro.mjs, loaded lazily), or null. */
 async function packOf(lang) {
   if (lang !== 'ro') return null;
-  if (!packs.has(lang)) packs.set(lang, import('../lang/ro.mjs?v=0611cdff17').then((m) => m.openLangRo()).catch(() => null));
+  if (!packs.has(lang)) packs.set(lang, import('../lang/ro.mjs?v=7f7a384f07').then((m) => m.openLangRo()).catch(() => null));
   return packs.get(lang);
 }
 
