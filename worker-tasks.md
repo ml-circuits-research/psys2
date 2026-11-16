@@ -5275,3 +5275,19 @@ The owner, verbatim in substance: nothing of the old system remains; everything 
 | Order | One commit series, tested at each step: (1) make the new engine the only route and delete the switch; (2) delete the unreachable old code and its tests; (3) widen coverage by declarations (selector plus result, size, then one request per area). Publish to Pages after step 1 so the owner sees only the new system. |
 
 Small decisions inside this (which helper is still called, file layout) are yours; ask me only if a deletion would remove something a declared tool needs.
+
+## 2026-11-16 21:50 (Rome) — OWNER: do it in parallel, basics in all four areas now
+
+The owner is right that the areas and tools are naturally parallel; widening one construction at a time is the wrong shape. On the frozen phase-0 contracts, run these lanes at the same time, each with its own agent, each landing behind tests:
+
+| Lane | Delivers |
+|---|---|
+| Drawing | Basic acts on drawn things through declared tools: make, place (move, relation to another thing), change (colour, size, any declared key), remove; questions about the board; selector plus result ("make the red circle blue"). |
+| Diagram (charts included) | Make nodes and links, connect/disconnect, change node keys, layout, remove; a chart from given values; questions. |
+| Document | Write a text of a genre about a topic, change tone and length, reorder and remove sections; questions. |
+| Calendar | Make, move, change, cancel a meeting with people, day, time, length, room; the overlap rule as a declared deny with the nearest free time; questions. |
+| Reader (shared) | General productions from the verb-frame licences (verb + object, + result predicate, + prepositional goal, questions) so every act above is read by declarations, not one rule per sentence; then SOP-BERT trained on `data/haiku-v1` and `haiku-v2`, with heads from `heads/inventory.json`, replacing the grammar where its gate passes. |
+| Library (shared) | The reply assessments the lanes need, beyond exact property equality: existence (made / removed), relation (placed in/on/next to), numeric and time comparison (moved later, longer), each typed like `assessPropertyChange`. |
+| Removal | The old system removal from 21:45, in parallel, not before the lanes. |
+
+Lanes depend only on the published contracts; where a lane needs an assessment the library has not published yet, it lands the effect and replies "done, not yet verified" honestly, and switches to the assessment when it lands. Publish to Pages as lanes land, so the owner sees the four areas grow tonight.
