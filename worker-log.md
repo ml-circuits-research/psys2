@@ -4613,3 +4613,24 @@ Six bridge tests pass. Browser artifact rebuilt. Final active gate: 192 total, 1
 Adopted the trainer owner's confirmed `psys2.raw-structural-model/2` value policy: 63 outputs, typed source-span/declared-symbol modes, separate copy pointer and auxiliary-only original value bank. Internal mode/copy heads never become RAW fields. Copied values come exclusively from exact source ranges inside predicted wider value evidence and request; missing/invalid pointers refuse. Symbol projection remains unresolved until an explicit declared mapping is supplied. Auxiliary value-bank ties do not authorize a value or fabricate a graph failure; malformed auxiliary shapes remain invalid output. V1 output fixture remains byte-for-byte unchanged.
 
 Shared generated v2 fixture covers all 63 outputs and source-only normalization. Tests also cover unknown/absent/symbol modes, Unicode copies, missing wider spans, outside-parent pointers and disagreement with auxiliary values. Final active gate: 193 total, 192 passed, zero failed, one optional artifact skip. No new model inference/training/calibration or application activation occurred; previous actual v1 replay and fixture baseline remain unchanged. The original v1 inference manifest records the old predictor hash; this version is a distinct source revision, not a rewritten frozen run.
+
+## 2026-11-17 — Source-only BIO request cutter
+
+Added train-request-cutter.py, pure fixture tests and request-cutter specification.
+The full source audit verifies all 308 Haiku file hashes, original annotation
+lists/text, exact split/exclusion identities and complete row coverage before BIO
+labels. Retains all 28,959 TRAIN / 3,308 CAL rows, including 611 / 81 negatives.
+Three TRAIN rows have nine ambiguous spans and receive masked supervision; CAL
+has no ambiguous spans. Overlap/boundary/truncation diagnostics never invent cuts.
+Illegal I-after-O globally refuses decoding; no boundary repair or language rules.
+Train-only balanced BIO loss, >=3 epochs, calibration early stopping and frozen
+best-checkpoint proof include separate positive/empty span-exact metrics.
+
+Checks: 14 pure Python fixture tests pass; full raw corpus audit passes. Actual
+CPU smoke (8 rows/split, 2 optimizer steps, 1 explicitly marked smoke epoch)
+passes with clean auxiliary encoder warm start SHA68ca1038...; no model artifact
+saved, no inference activation/confidence claimed. OutsideGit evidence:
+.session-control/request-cutter-audit-verified.json and
+.session-control/request-cutter-smoke-v1/{final-verification.json,preparation.json}.
+The small smoke model produces invalid BIO transitions, correctly reported
+unresolved. Full GPU training follows this immutable source commit.
