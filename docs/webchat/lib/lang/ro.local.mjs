@@ -43,6 +43,8 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.redo_did w.lang.ro.reply name=done.redo.did count=one role=did text="am refăcut ultima schimbare"
 @w.lang.ro.reply.local.nothing_known w.lang.ro.reply name=refused.nothing_known count=one role=about text="încă nu știu nimic despre {about}"
 @w.lang.ro.reply.local.no_composer w.lang.ro.reply name=refused.no_composer count=one text="încă nu pot scrie compuneri: biblioteca nu are un compozitor (std.compose) în această versiune"
+@w.lang.ro.reply.local.needed w.lang.ro.reply name=refused.needed count=one role=thing text="nu pot scoate {thing:def=yes}: o față are nevoie de așa ceva"
+@w.lang.ro.reply.local.no_colour w.lang.ro.reply name=refused.no_colour count=one role=thing role=value text="{thing:def=yes} nu poate fi {value}"
 @w.lang.ro.reply.local.change_about_1 w.lang.ro.reply name=done.change.about count=one role=thing role=value text="{thing:def=yes} este acum despre {value}"
 @w.lang.ro.reply.local.page w.lang.ro.reply name=done.page count=one text="iată o foaie nouă. Ce desenăm?"
 @w.lang.ro.reply.local.page_kept w.lang.ro.reply name=done.page.kept count=one text="iată o foaie nouă! Desenul vechi este încă acolo dacă spui „anulează”."
