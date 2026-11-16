@@ -36,7 +36,11 @@ test('webchat build produces a bundle the browser loader can run', async () => {
     for (const id of ['ui.shell', 'ui.help', 'meta.worlds']) assert.doesNotMatch(bundle.worlds[id].files['kb.sop'], /\b(?:geo\.map|media\.music)\b/);
     assert.equal(Object.values(index.actions).some((id) => ['geo.map', 'media.music'].includes(id)), false);
     assert.equal(index.words.ids.some((id) => ['geo.map', 'media.music'].includes(id)), false);
-    const engine = await createEngine({ loader: createBundleLoader(bundle) });
+    const engine = await createEngine({ loader: createBundleLoader(bundle), options: { applicationAreas: index.retiredAreas } });
+    const unavailable = await engine.createSession().send('surprise me', { view: 'music' });
+    assert.equal(unavailable.text, 'Music is not part of this application.');
+    assert.deepEqual(unavailable.effects, []);
+    assert.equal(unavailable.unavailableArea.world, 'media.music');
     const reply = await engine.createSession().send('hello');
     assert.match(reply.text, /^Hello/);
   } finally {

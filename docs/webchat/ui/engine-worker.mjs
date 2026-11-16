@@ -159,7 +159,7 @@ async function init(m) {
   const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend, languages: lang.LANGS, voices: () => (settings.roGrammar ? [roGrammarVoice] : []) });
   evt('boot-step', { id: 'worlds', op: 'end', bytes: bundleBytes, count: startIds.length });
   evt('boot-step', { id: 'reasoner', op: 'start' });
-  engine = await dialog.createEngine({ loader: loadersMod.createBundleLoader(bundle), translator, options: { reasoner: 'matrix' } });   // the product reasoner (spec 15): the page never selects ops, the test oracle
+  engine = await dialog.createEngine({ loader: loadersMod.createBundleLoader(bundle), translator, options: { reasoner: 'matrix', applicationAreas: worldLoader.index.retiredAreas ?? [] } });   // the product reasoner (spec 15): the page never selects ops, the test oracle
   try { await engine.prepareMeta?.(); } catch { /* the policy router answers alone (spec 20) */ }   // meta.worlds: the default router (C)
   evt('boot-step', { id: 'reasoner', op: 'end' });
   // The knowledge catalog (spec 17): the sop-knowledge-worlds copy on GitHub Pages, read lazily (nothing is fetched until a message needs a thing the board or the
@@ -208,7 +208,7 @@ async function init(m) {
   if (m.restoreState) restoreStates(m.restoreState, m.restoreMeta);
   if (m.prepareModels && dispatcherEnc && settings.formalizer === 'encoder') dispatcherEnc.prepare().catch(() => {});
   if (otherLanguage) rules.then(() => sleep(0)).then(turnIdle).then(() => ensureWorlds(worldLoader.ids(), 'language (background)')).catch(() => {});   // after the first paint and the rule compilation, never inside a turn's wait
-  return { worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget };
+  return { retiredAreas: worldLoader.index.retiredAreas ?? [], worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget };
 }
 
 function restoreStates(state, meta) {
@@ -309,7 +309,7 @@ const handlers = {
         const added = await ensureWorlds(lacking, 'action');
         if (added.length) { snap = session.snapshot(); before = stateOf(); if (m.undoId != null) snaps.set(m.undoId, snap); budget = newBudget(); translator.resetUsage?.(); reply = await read(); } else reply = await read();
       }
-      if (incomplete(reply) && !allLoaded()) {   // not understood, or understood with words guessed or left out: read it again with every world (the reading is then the one a full start gives)
+      if (!reply.unavailableArea && incomplete(reply) && !allLoaded()) {   // not understood, or understood with words guessed or left out: read it again with every world (the reading is then the one a full start gives)
         try { session.restore(snap); } catch { /* keep */ }
         const added = await ensureWorlds(worldLoader.ids(), 'second reading');
         if (added.length) {

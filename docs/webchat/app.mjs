@@ -5,6 +5,7 @@
 //   const psys2 = await mountPsys2(document.querySelector('#chat'), { tabs: ['robot'], worlds: ['core', 'kids.common'] });
 //
 // The host renders world state (`reply.state`, `session.state()`) and executes effects from an allow-list.
+import { retiredArea, unavailableAreaMessage } from './lib/dialog/application-areas.mjs';
 import { h } from './ui/util.mjs';
 import { createInputHistory } from './ui/input-history.mjs';
 import { createAvatar } from './ui/avatar.mjs';
@@ -1947,6 +1948,11 @@ export async function mountPsys2(element, options = {}) {
     // LAZY LOADING: the worker reads the small routing index and loads the always-loaded worlds and the open tab's world; every other world loads when a tab opens, when the words of a message say so, or when the user names it
     const info = await engineClient.boot({ browser: { translator: browserBackend.translatorKind(), detector: browserDetectorKind(), mt: true }, tabWorld: tabDefs.find((t) => t.id === view)?.world ?? null, tabWorlds: Object.fromEntries(tabDefs.map((t) => [t.id, t.world])), onlyWorlds: options.worlds ?? null, lazyWorlds: !/[?&]psys2lazy=0/.test(globalThis.location?.search ?? ''), dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
     for (const id of info.worlds) loadedWorlds.add(id);
+    try {
+      const oldArea = options.persist === false ? null : decodeURIComponent(String(location.hash).slice(1)) || localStorage.getItem('psys2.webchat.tab');
+      const unavailable = retiredArea(info.retiredAreas, oldArea);
+      if (unavailable) note(unavailableAreaMessage(unavailable));
+    } catch { /* unavailable storage or malformed fragment does not prevent boot */ }
     for (const id of ['worlds', 'reasoner']) if (progress.state(id) !== 'done') progress.end(id, id === 'worlds' ? { label: `Loaded ${info.worlds.length} worlds` } : {});   // the worker ends them as it goes; whatever it did not end is over now (a step must never stay open after the boot)
     engine = { worlds: () => (info.known ?? info.worlds).map((id) => ({ id })), loaded: () => [...loadedWorlds], problems: () => info.problems ?? [], get set() { return introEngine?.set ?? { list: () => [] }; } };
     if (info.problems?.length) console.warn('PSys2 world problems:', info.problems);

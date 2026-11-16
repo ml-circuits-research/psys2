@@ -28,6 +28,12 @@ export function validateDependencies(set) {
 
 export async function createDemoLoader({ root = DEFAULT_ROOT } = {}) {
   const composition = JSON.parse(await readFile(new URL('./demo-composition.json', import.meta.url), 'utf8'));
+  const retiredAreas = composition.retiredAreas ?? [];
+  const areaIds = new Set();
+  for (const area of retiredAreas) {
+    if (!area.id || !area.world || !area.label || area.status !== 'retired' || areaIds.has(area.id) || composition.worlds.includes(area.world)) throw new Error('Invalid retired area declaration');
+    areaIds.add(area.id);
+  }
   const loader = await selectWorlds(createFsLoader({ roots: [root] }), composition.worlds);
   const set = await loadWorlds(loader, { reasoner: 'matrix' });
   validateDependencies(set);
@@ -35,5 +41,5 @@ export async function createDemoLoader({ root = DEFAULT_ROOT } = {}) {
   // not every source fixture that happens to share the checkout.
   const kb = await buildAll({ set });
   kb['meta.worlds'] = cardsText(await buildCards(set));
-  return { ...loader, readFile: (id, file) => file === 'kb.sop' && Object.hasOwn(kb, id) ? Promise.resolve(kb[id]) : loader.readFile(id, file) };
+  return { ...loader, retiredAreas, readFile: (id, file) => file === 'kb.sop' && Object.hasOwn(kb, id) ? Promise.resolve(kb[id]) : loader.readFile(id, file) };
 }

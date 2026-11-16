@@ -1,29 +1,73 @@
 # REAL failures by cause (2026-11-15)
 
-Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit c9d5d0a9308b; seed 20261115; build 4fb1c663, tree 61b71d1e64577d89), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
+Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit c9d5d0a9308b; seed 20261115; build 48c71282, tree 676faac8f598e7b5), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
 
-Headline (in scope, judged): 131/207 right (partly 7, wrong 69); 46 turns of retired records skipped. Diagnostic, rules formalizer only: 160/207.
+Whole-set judged denominator retained: 207; right 124, partly 7, wrong 69. Surviving-area cohort: 124/200 right. Retired areas: 41 turns (7 judged), honest refusal 41. Separately, 46 previously retired records skipped. Diagnostic, rules formalizer only: 160/207.
+
+| Retired-area row | Area | Current verdict | Historical-check verdict |
+|---|---|---|---|
+| r0163 | map | honest | open |
+| r0228 | music | honest | unjudged |
+| r0229 | music | honest | unjudged |
+| r0230 | music | honest | unjudged |
+| r0231 | music | honest | unjudged |
+| r0232 | music | honest | unjudged |
+| r0233 | music | honest | unjudged |
+| r0313 | map | honest | unjudged |
+| r0314 | map | honest | unjudged |
+| r0315 | map | honest | unjudged |
+| r0316 | map | honest | unjudged |
+| r0317 | map | honest | unjudged |
+| r0318 | map | honest | unjudged |
+| r0319 | map | honest | unjudged |
+| r0342 | map | honest | unjudged |
+| r0343 | map | honest | unjudged |
+| r0344 | map | honest | unjudged |
+| r0345 | map | honest | unjudged |
+| r0388 | music | honest | unjudged |
+| r0389 | music | honest | unjudged |
+| r0390 | music | honest | unjudged |
+| r0391 | music | honest | unjudged |
+| r0392 | music | honest | unjudged |
+| r0393 | music | honest | unjudged |
+| r0394 | music | honest | unjudged |
+| r0395 | music | honest | unjudged |
+| r0396 | music | honest | unjudged |
+| r0408 | music | honest | unjudged |
+| r0409 | music | honest | unjudged |
+| r0410 | music | honest | unjudged |
+| r0411 | music | honest | unjudged |
+| r0412 | music | honest | unjudged |
+| r0413 | music | honest | unjudged |
+| r0418 | music | honest | unjudged |
+| r0482 | music | honest | wrong |
+| r0483 | music | honest | wrong |
+| r0484 | music | honest | wrong |
+| r0547 | music | honest | wrong |
+| r0548 | music | honest | wrong |
+| r0549 | music | honest | wrong |
+| r0550 | music | honest | wrong |
 
 Caveat: Romanian turns are replayed with the rules translator only (no browser Machine Translation in node: --bergamot runs the on-device model), so part of the Romanian causes is the missing translation backend, not the reader. Lazy world loading is not replayed (every world is loaded, as `?psys2lazy=0`).
 
-Failing turns: matrix 363, ops 363 (0 fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): 1.
+Failing turns: matrix 336, ops 336 (0 fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): 1.
 
 | # | cause | turns | both | examples |
 | --- | --- | ---: | ---: | --- |
-| 1 | Romanian turn not read (translation or reader) | 138 | 138 | "desenează o casă albă și una verde" (robot); "deseneaza o casa verde" (robot); "deseneaza o casa verde" (robot) |
-| 2 | refused: the request names something the world does not support | 68 | 68 | "mcdavatara human" (robot); "now be a human" (robot); "make the avatar to geta big smile" (robot) |
-| 3 | translation residue / wrong sense / source typo | 26 | 26 | "fa un cel cu 5 nori si un soare" (draw); "fa cerul alabastru" (draw); "muta copilul deseneat anterior in stinga" (draw) |
-| 4 | judged wrong (state / answer expected is not there): dialogues:dlg.real | 24 | 24 | "draw a red circle" (diagram); "create a diagram" (diagram); "add a box" (diagram) |
-| 5 | judged wrong (state / answer expected is not there): dialogues:dlg.rp3 | 17 | 17 | "make the avatar an emoji" (robot); "mcdavatara human" (robot); "make the avatar an emoji" (robot) |
-| 6 | a world other than the open tab took the turn | 16 | 16 | "let’s play guess the animal" (guess); "draw a sun and a house" (tictactoe); "yes, it eats meat" (draw) |
-| 7 | continuation / correction / why-question | 15 | 15 | "nu si peste apa" (draw); "pe lac" (draw); "nu inlocui lacul, deasupra, ai loc" (draw) |
-| 8 | bare word or two-word fragment not read | 13 | 13 | "yes" (guess); "no" (guess); "yes" (guess) |
+| 1 | Romanian turn not read (translation or reader) | 124 | 124 | "desenează o casă albă și una verde" (robot); "deseneaza o casa verde" (robot); "deseneaza o casa verde" (robot) |
+| 2 | refused: the request names something the world does not support | 72 | 72 | "mcdavatara human" (robot); "now be a human" (robot); "make the avatar to geta big smile" (robot) |
+| 3 | judged wrong (state / answer expected is not there): dialogues:dlg.real | 24 | 24 | "draw a red circle" (diagram); "create a diagram" (diagram); "add a box" (diagram) |
+| 4 | judged wrong (state / answer expected is not there): dialogues:dlg.rp3 | 17 | 17 | "make the avatar an emoji" (robot); "mcdavatara human" (robot); "make the avatar an emoji" (robot) |
+| 5 | continuation / correction / why-question | 15 | 15 | "nu si peste apa" (draw); "pe lac" (draw); "nu inlocui lacul, deasupra, ai loc" (draw) |
+| 6 | translation residue / wrong sense / source typo | 15 | 15 | "fa un cel cu 5 nori si un soare" (draw); "fa cerul alabastru" (draw); "muta copilul deseneat anterior in stinga" (draw) |
+| 7 | bare word or two-word fragment not read | 13 | 13 | "yes" (guess); "no" (guess); "yes" (guess) |
+| 8 | a world other than the open tab took the turn | 12 | 12 | "draw a sun and a house" (tictactoe); "yes, it eats meat" (draw); "Tom has 15 apples. He gives 12 to Ana. How many apples does " (robot) |
 | 9 | acted on a partly understood sentence | 7 | 7 | "conectează toate formele" (diagram); "make a better layout" (diagram); "paint Street New nodes" (diagram) |
 | 10 | amount / relation / set distribution | 7 | 7 | "fa niste iarba deauspa lacului" (draw); "muta capra mai jos , si mai in stinga" (draw); "muta pestii in colturi diferite sus" (draw) |
 | 11 | judged wrong (state / answer expected is not there): dialogues:dlg.ellipsis1 | 6 | 6 | "draw a green house and a yellow one" (draw); "add a red circle and a blue one" (draw); "draw a tree" (draw) |
-| 12 | unknown word (a word of the request is not known) | 4 | 4 | "move corcodiles in lake" (draw); "desene asta" (map); "desene asta o" (map) |
-| 13 | unknown kind (no drawing / stand-in) | 4 | 4 | "deseneaa un mic lac, o balta" (draw); "muta copilul linga leagan, in stinga" (draw); "fa un bunic linga rata" (draw) |
-| 14 | judged wrong (state / answer expected is not there): dialogues:dlg.gaps | 4 | 4 | "would you say you are happy" (robot); "would you say you are sad" (robot); "whats on u" (robot) |
+| 12 | unknown kind (no drawing / stand-in) | 4 | 4 | "deseneaa un mic lac, o balta" (draw); "muta copilul linga leagan, in stinga" (draw); "fa un bunic linga rata" (draw) |
+| 13 | judged wrong (state / answer expected is not there): dialogues:dlg.gaps | 4 | 4 | "would you say you are happy" (robot); "would you say you are sad" (robot); "whats on u" (robot) |
+| 14 | sentence not read by any world (no cause key) | 3 | 3 | "let’s play guess the animal" (guess); "start x and 0" (tictactoe); "listat Tic Tac Toe" (tictactoe) |
 | 15 | foreign-world reading | 2 | 2 | "an old woman" (robot); "put a hat" (robot) |
 
 ## In scope, judged wrong or partly, by cause (76 turns)

@@ -9,6 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
+import { retiredArea, unavailableAreaReply } from './application-areas.mjs';
 import { composeReply, sayOf } from './composed-reply.mjs';
 import { reviewForeign } from './foreign-reading.mjs';
 import { installTextGen } from './textgen.mjs';
@@ -1676,6 +1677,8 @@ export class DialogSession {
    * legacy share is what the request path cannot read yet. On a declared tab nothing falls back to the old readers of a declared world (owner 17:55): see below.
    */
   async _send(text, opts = {}) {
+    const unavailable = retiredArea(this.engine.applicationAreas, opts.view);
+    if (unavailable) return unavailableAreaReply(unavailable, text);
     const tabWorld = this.context().tabWorld;
     if (tabWorld && this.engine.set.get(tabWorld)?.requestText && this.engine.sopworld === undefined) this.engine.sopworld = await import('../vendor/sopworld/sopworld.mjs').catch(() => null);
     const decl = tabWorld && declaredWorld(this.engine.set.get(tabWorld), this.engine.sopworld);   // the world declares what it can do (request.sop) and carries a plan out (its planRequest operation, or its bound tool primitives)
@@ -2838,6 +2841,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
   const engine = {
+    applicationAreas: structuredClone(options.applicationAreas ?? []),
     knowledge: options.knowledge ?? null,
     /** Who reads the person's words (src/translate/reading-policy.mjs): { <lang>: true } puts the machine translator back as a reading candidate (Node: PSYS2_RO_MODEL=1). */
     machineReading: options.machineReading ?? (globalThis.process?.env?.PSYS2_RO_MODEL === '1' ? { ro: true } : null),

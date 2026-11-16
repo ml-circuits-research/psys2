@@ -288,7 +288,7 @@ async function writeWorldIndex({ root, outDir, loader, bundle, ids, log }) {
   for (const [bk, entries] of Object.entries(ix.buckets)) { const txt = JSON.stringify(entries); await writeFile(path.join(outDir, 'worlds/words', `${bk}.json`), txt); buckets[bk] = sha(Buffer.from(txt)).slice(0, 10); }   // bucket -> hash: the worker fetches `words/<bk>.json?v=<hash>`
   const bloomTxt = JSON.stringify(ix.bloom);
   await writeFile(path.join(outDir, 'worlds/words.bloom.json'), bloomTxt);
-  await writeFile(path.join(outDir, 'worlds/index.json'), JSON.stringify({ version: 2, always: ALWAYS, T, actions, words: { design: 'B', ids: ix.ids, buckets, bloom: { path: 'worlds/words.bloom.json', hash: sha(Buffer.from(bloomTxt)).slice(0, 10) } }, worlds }) + '\n');
+  await writeFile(path.join(outDir, 'worlds/index.json'), JSON.stringify({ version: 2, retiredAreas: loader.retiredAreas ?? [], always: ALWAYS, T, actions, words: { design: 'B', ids: ix.ids, buckets, bloom: { path: 'worlds/words.bloom.json', hash: sha(Buffer.from(bloomTxt)).slice(0, 10) } }, worlds }) + '\n');
   log?.(`webchat: world index ${ids.length} worlds, ${ix.inv.size} words, ${Object.keys(ix.buckets).length} buckets`);
 }
 

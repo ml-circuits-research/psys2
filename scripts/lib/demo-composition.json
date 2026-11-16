@@ -25,5 +25,19 @@
     "ui.avatar",
     "ui.help",
     "ui.shell"
+  ],
+  "retiredAreas": [
+    {
+      "id": "map",
+      "world": "geo.map",
+      "label": "Map",
+      "status": "retired"
+    },
+    {
+      "id": "music",
+      "world": "media.music",
+      "label": "Music",
+      "status": "retired"
+    }
   ]
 }

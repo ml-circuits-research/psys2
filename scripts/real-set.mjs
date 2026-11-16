@@ -49,6 +49,8 @@ import { profileSites, formatProfile } from './lib/tick-profile.mjs';
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SET = join(REPO, 'training/eval/real-2026-11-15.jsonl');
 const RES = (r, tag = '') => join(REPO, `training/results/real-2026-11-15-${r}${tag}.json`);
+const APPLICATION = JSON.parse(readFileSync(new URL('./lib/demo-composition.json', import.meta.url), 'utf8'));
+export const retiredAreaOf = (row) => (APPLICATION.retiredAreas ?? []).find((area) => area.id === row.tab) ?? null;
 const jl = (f) => readFileSync(join(REPO, f), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
 const norm = (s) => String(s ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
@@ -181,7 +183,8 @@ export async function openShipped({ reasoner = 'matrix', mode = 'shipped', ortPa
   const translator = createSwitchTranslator({ rules, getStrategy: () => 'auto', voices: () => (roVoice ? [roVoice] : []), backend: mt ? mtBackend : { translatorKind: () => null, detectorKind: () => null, translate: async () => { throw new Error('none'); }, detect: async () => { throw new Error('none'); }, prepare: async () => {}, state: () => 'none' } });
   // the page's settings (a first visit: no saved profile), with the reasoner of this run; the rules diagnostic switches the helper model off as Settings › Reading does
   const settings = applyReading({ ...DEFAULT_SETTINGS, reasoner, ...(mode === 'rules' ? { helperModel: false } : {}) });
-  engine = await createEngine({ loader: await createDemoLoader(), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });
+  const demoLoader = await createDemoLoader();
+  engine = await createEngine({ loader: demoLoader, translator, options: { applicationAreas: demoLoader.retiredAreas, reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });
   try { await engine.prepareMeta?.(); } catch { /* the policy router answers alone (spec 20), as on the page */ }
   if (process.env.PSYS2_TRANSLATION_ARM) engine.translationArm = process.env.PSYS2_TRANSLATION_ARM;   // the arms of the Romanian translation measure (Q48 proposal 2): model | both
   if (process.env.PSYS2_PROPOSER === '1') await (await import('./lib/proposer-node.mjs')).installProposer(engine, { ortPath });   // the request proposer (Q48), behind its flag
@@ -199,7 +202,7 @@ export async function openShipped({ reasoner = 'matrix', mode = 'shipped', ortPa
 }
 
 /** The send options of docs/webchat/app.mjs for a row (the page's turn), without the deadline. */
-export const sendOptions = (settings, r, budget) => ({ mode: r.mode === 'voice' ? 'voice' : undefined, language: r.lang === 'ro' ? 'ro' : 'en', formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, worldAware: settings.worldAware ?? 'veto', fastPath: settings.fastPath === true, nx: settings.nxStrategy, budget });
+export const sendOptions = (settings, r, budget) => ({ ...(retiredAreaOf(r) ? { view: r.tab } : {}), mode: r.mode === 'voice' ? 'voice' : undefined, language: r.lang === 'ro' ? 'ro' : 'en', formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, worldAware: settings.worldAware ?? 'veto', fastPath: settings.fastPath === true, nx: settings.nxStrategy, budget });
 
 /**
  * Replays the set. `mode`:
@@ -282,6 +285,11 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 
         // the owner reported this turn as a problem: not countable as right by machine
         rec.verdict = outcome === 'executed' && norm(english) !== norm(r.logged?.answer) ? 'changed' : 'open';
       } else rec.verdict = null;   // unjudgeable
+      if (reply.unavailableArea && retiredAreaOf(r)?.id === reply.unavailableArea.id) {
+        rec.retiredArea = reply.unavailableArea;
+        rec.historicalVerdict = rec.verdict;
+        if (!stateChanged && !effects.length && outcome === 'refused') rec.verdict = 'honest';
+      }
       out.push(rec);
     }
   }
@@ -314,23 +322,28 @@ export const notUnderstoodOk = (ex) => ex.unchanged === true || [].concat(ex.sta
 
 // ---------------------------------------------------------------- report
 const OUTCOMES = ['executed', 'refused', 'asked', 'not_understood', 'other_world'];
-export function tableOf(setRows, res) {
+export function tableOf(setRows, res, { splitAreas = true } = {}) {
   const by = new Map(res.rows.map((x) => [x.id, x]));
-  const t = { turns: 0, judged: 0, right: 0, partly: 0, wrong: 0, open: 0, changed: 0, unjudged: 0, outcome: Object.fromEntries(OUTCOMES.map((o) => [o, 0])), by_source: {}, retired: 0 };
+  const t = { turns: 0, judged: 0, right: 0, partly: 0, wrong: 0, honest: 0, open: 0, changed: 0, unjudged: 0, outcome: Object.fromEntries(OUTCOMES.map((o) => [o, 0])), by_source: {}, retired: 0 };
   for (const r of setRows) {
     if (r.retired) { t.retired++; continue; }   // a retired record: skipped (counted as skipped turns only)
     const x = by.get(r.id); if (!x) continue;
     t.turns++; t.outcome[x.outcome]++;
     const s = (t.by_source[r.set.replace(/^dialogues:.*/, 'real dialogues')] ??= { turns: 0, judged: 0, right: 0 });
     s.turns++;
-    if (x.verdict === 'right' || x.verdict === 'partly' || x.verdict === 'wrong') { t.judged++; t[x.verdict]++; s.judged++; if (x.verdict === 'right') s.right++; }
-    else if (x.verdict === 'open') t.open++; else if (x.verdict === 'changed') t.changed++; else t.unjudged++;
+    if (x.verdict === 'right' || x.verdict === 'partly' || x.verdict === 'wrong' || (x.verdict === 'honest' && r.judge === 'state')) { t.judged++; t[x.verdict]++; s.judged++; if (x.verdict === 'right') s.right++; }
+    else if (x.verdict === 'honest') { t.honest++; t.unjudged++; } else if (x.verdict === 'open') t.open++; else if (x.verdict === 'changed') t.changed++; else t.unjudged++;
+  }
+  if (splitAreas) {
+    t.survivingAreas = tableOf(setRows.filter((r) => !retiredAreaOf(r)), res, { splitAreas: false });
+    t.retiredAreas = tableOf(setRows.filter((r) => retiredAreaOf(r)), res, { splitAreas: false });
+    t.retiredAreas.rows = setRows.filter((r) => !r.retired && retiredAreaOf(r) && by.has(r.id)).map((r) => ({ id: r.id, area: retiredAreaOf(r).id, verdict: by.get(r.id).verdict, historicalVerdict: by.get(r.id).historicalVerdict ?? null }));
   }
   return t;
 }
 
 /** A failing turn (a work item): judged wrong / partly; an owner-reported turn still open; an unjudged turn nobody understood, refused, or that a world other than the tab's took. */
-const isFailure = (r, x) => !r.retired && (x.verdict === 'wrong' || x.verdict === 'partly' || x.verdict === 'open' || (x.verdict === null && ['not_understood', 'refused', 'other_world'].includes(x.outcome)));
+const isFailure = (r, x) => !r.retired && !retiredAreaOf(r) && (x.verdict === 'wrong' || x.verdict === 'partly' || x.verdict === 'open' || (x.verdict === null && ['not_understood', 'refused', 'other_world'].includes(x.outcome)));
 
 const GENERIC = new Set(['other / wrong result', 'not understood (no cause key)']);
 /** The cause of a real failing turn: the ledger's causeOf, refined for the generic groups by what the reply says. */
@@ -379,7 +392,7 @@ export function judgedFailures(setRows, res) {
   const by = new Map(res.rows.map((x) => [x.id, x])), groups = new Map();
   for (const r of setRows) {
     const x = by.get(r.id);
-    if (r.retired || !x || (x.verdict !== 'wrong' && x.verdict !== 'partly')) continue;
+    if (r.retired || retiredAreaOf(r) || !x || (x.verdict !== 'wrong' && x.verdict !== 'partly')) continue;
     const c = judgedCause(r, x);
     (groups.get(c) ?? groups.set(c, []).get(c)).push({ id: r.id, verdict: x.verdict, text: r.text, tab: r.tab, reply: String(x.reply ?? '').slice(0, 160), failing: x.failing ?? [] });
   }
@@ -412,7 +425,9 @@ function report() {
   const doc = { date: '2026-11-15', measured, set: setRows.length, tables, ...(diagTable ? { diagnostic_rules_matrix: { right: diagTable.right, judged: diagTable.judged, partly: diagTable.partly, wrong: diagTable.wrong, build: diag.build, tree: diag.tree } } : {}), failing_matrix: fm.length, failing_ops: fo.length, ops_only: opsOnly.length, judged_causes: judged, causes: top, ledger_real_extra: extra.length };
   writeFileSync(join(REPO, 'training/eval/real-failures-2026-11-15.json'), `${JSON.stringify(doc, null, 1)}\n`);
   const md = [`# REAL failures by cause (2026-11-15)`, '', `Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: ${setRows.length} turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode ${measured.mode}: formalizer ${measured.formalizer}, the webchat's settings and send options; catalog at the pinned commit ${String(measured.catalog).slice(0, 12)}; seed ${measured.seed}; build ${measured.build}, tree ${measured.tree}), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by \`node scripts/real-set.mjs report\`.`, '',
-    `Headline (in scope, judged): ${tables.matrix.right}/${tables.matrix.judged} right (partly ${tables.matrix.partly}, wrong ${tables.matrix.wrong}); ${tables.matrix.retired} turns of retired records skipped.${diagTable ? ` Diagnostic, rules formalizer only: ${diagTable.right}/${diagTable.judged}.` : ''}`, '',
+    `Whole-set judged denominator retained: ${tables.matrix.judged}; right ${tables.matrix.right}, partly ${tables.matrix.partly}, wrong ${tables.matrix.wrong}. Surviving-area cohort: ${tables.matrix.survivingAreas.right}/${tables.matrix.survivingAreas.judged} right. Retired areas: ${tables.matrix.retiredAreas.turns} turns (${tables.matrix.retiredAreas.judged} judged), honest refusal ${tables.matrix.retiredAreas.honest}. Separately, ${tables.matrix.retired} previously retired records skipped.${diagTable ? ` Diagnostic, rules formalizer only: ${diagTable.right}/${diagTable.judged}.` : ''}`, '',
+    '| Retired-area row | Area | Current verdict | Historical-check verdict |', '|---|---|---|---|',
+    ...tables.matrix.retiredAreas.rows.map((r) => `| ${r.id} | ${r.area} | ${r.verdict ?? 'unjudged'} | ${r.historicalVerdict ?? 'unjudged'} |`), '',
     `Caveat: Romanian turns are replayed with the rules translator only (no browser Machine Translation in node: --bergamot runs the on-device model), so part of the Romanian causes is the missing translation backend, not the reader. Lazy world loading is not replayed (every world is loaded, as \`?psys2lazy=0\`).`, '', `Failing turns: matrix ${fm.length}, ops ${fo.length} (${opsOnly.length} fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): ${extra.length}.`, '', '| # | cause | turns | both | examples |', '| --- | --- | ---: | ---: | --- |',
     ...top.slice(0, 15).map((c, i) => `| ${i + 1} | ${c.cause.replace(/\|/g, '/').slice(0, 150)} | ${c.count} | ${c.both_reasoners} | ${c.examples.slice(0, 3).map((e) => `"${String(e.text).replace(/\|/g, '/').slice(0, 60)}" (${e.tab})`).join('; ')} |`), '',
     `## In scope, judged wrong or partly, by cause (${judged.reduce((n, g) => n + g.count, 0)} turns)`, '',
@@ -421,6 +436,7 @@ function report() {
     ...judged.map((g, i) => `| ${i + 1} | ${g.cause.replace(/\|/g, '/')} | ${g.count} | ${g.wrong} | ${g.partly} | ${g.both_reasoners} | ${g.rows.slice(0, 2).map((y) => `${y.id} "${String(y.text).replace(/\|/g, '/').slice(0, 50)}" (${y.tab}) -> "${y.reply.replace(/\|/g, '/').slice(0, 60)}"`).join('; ')}${g.rows.length > 2 ? `; also ${g.rows.slice(2).map((y) => y.id).join(', ')}` : ''} |`), ''].join('\n');
   writeFileSync(join(REPO, 'training/eval/real-failures-2026-11-15.md'), md);
   for (const [k, t] of Object.entries(tables)) console.log(`${k}: turns ${t.turns}, judged ${t.judged} (right ${t.right}, partly ${t.partly}, wrong ${t.wrong}), open ${t.open}, changed ${t.changed}, unjudged ${t.unjudged}; outcome ${JSON.stringify(t.outcome)}; retired records skipped: ${t.retired} turns`);
+  for (const [k, t] of Object.entries(tables)) console.log(`${k}: surviving areas ${t.survivingAreas.right}/${t.survivingAreas.judged}; retired areas ${t.retiredAreas.turns} turns, ${t.retiredAreas.judged} judged, ${t.retiredAreas.honest} honest refusals; overall denominator ${t.judged}`);
   if (diagTable) console.log(`diagnostic (rules formalizer only, matrix): judged ${diagTable.judged} (right ${diagTable.right}, partly ${diagTable.partly}, wrong ${diagTable.wrong})`);
   for (const k of Object.keys(res)) console.log(deltaReport(k).lines.join('\n'));   // every landing reports its delta as row ids
   for (const [k, v] of Object.entries(res)) { const f = freshness(REPO, v); if (!f.fresh) console.log(`WARNING ${k}: ${f.why}`); if (v.mode !== 'shipped') console.log(`WARNING ${k}: mode ${v.mode ?? 'unrecorded'}, not the shipped one`); }
@@ -543,6 +559,7 @@ export function deltaReport(reasoner, commit = null) {
   const rows = deltaRows(prev, cur);
   const tA = tableOf(prev.set, prev.res), tB = tableOf(cur.set, cur.res);
   const lines = [`delta ${reasoner} vs ${prev.commit} (build ${prev.res.build ?? '?'} -> ${cur.res.build ?? '?'}): ${tA.right}/${tA.judged} -> ${tB.right}/${tB.judged}; ${rows.length} rows changed verdict or scope`];
+  lines.push(`  surviving-area cohort: ${tA.survivingAreas.right}/${tA.survivingAreas.judged} -> ${tB.survivingAreas.right}/${tB.survivingAreas.judged}; retired-area turns ${tB.retiredAreas.turns} (judged ${tB.retiredAreas.judged}, honest ${tB.retiredAreas.honest}); overall judged denominator ${tB.judged}`);
   for (const d of rows) lines.push(`  ${d.id} [${d.kind}] ${d.before} -> ${d.after} (${d.tab ?? '-'}) "${String(d.text).slice(0, 70)}"${d.kind === 'verdict' ? `\n      before: ${String(d.reply_before).slice(0, 110)}\n      after:  ${String(d.reply_after).slice(0, 110)}` : ''}`);
   return { lines, rows, commit: prev.commit };
 }

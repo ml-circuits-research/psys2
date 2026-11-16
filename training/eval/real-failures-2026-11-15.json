@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "4fb1c663",
-  "tree": "61b71d1e64577d89",
+  "build": "48c71282",
+  "tree": "676faac8f598e7b5",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,18 +13,19 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 131,
+   "right": 124,
    "partly": 7,
    "wrong": 69,
+   "honest": 41,
    "open": 40,
-   "changed": 26,
-   "unjudged": 332,
+   "changed": 25,
+   "unjudged": 333,
    "outcome": {
-    "executed": 182,
-    "refused": 287,
+    "executed": 168,
+    "refused": 333,
     "asked": 12,
-    "not_understood": 54,
-    "other_world": 70
+    "not_understood": 34,
+    "other_world": 58
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -75,7 +76,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 78
+     "right": 71
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -83,23 +84,389 @@
      "right": 0
     }
    },
-   "retired": 46
+   "retired": 46,
+   "survivingAreas": {
+    "turns": 564,
+    "judged": 200,
+    "right": 124,
+    "partly": 7,
+    "wrong": 69,
+    "honest": 0,
+    "open": 40,
+    "changed": 25,
+    "unjudged": 299,
+    "outcome": {
+     "executed": 168,
+     "refused": 292,
+     "asked": 12,
+     "not_understood": 34,
+     "other_world": 58
+    },
+    "by_source": {
+     "owner-log-2026-11-13": {
+      "turns": 69,
+      "judged": 55,
+      "right": 41
+     },
+     "owner-log-2026-11-13b": {
+      "turns": 63,
+      "judged": 11,
+      "right": 4
+     },
+     "owner-log-2026-11-13c": {
+      "turns": 23,
+      "judged": 10,
+      "right": 8
+     },
+     "real-phrases-2026-11-09c": {
+      "turns": 62,
+      "judged": 0,
+      "right": 0
+     },
+     "real-phrases-2026-11-09d": {
+      "turns": 10,
+      "judged": 0,
+      "right": 0
+     },
+     "real-phrases-2026-11-09e": {
+      "turns": 67,
+      "judged": 0,
+      "right": 0
+     },
+     "real-phrases-2026-11-09f-mobile": {
+      "turns": 81,
+      "judged": 0,
+      "right": 0
+     },
+     "real-dialogue-2026-11-09": {
+      "turns": 49,
+      "judged": 0,
+      "right": 0
+     },
+     "real-dialogue-2026-11-09b": {
+      "turns": 14,
+      "judged": 0,
+      "right": 0
+     },
+     "real dialogues": {
+      "turns": 124,
+      "judged": 124,
+      "right": 71
+     },
+     "owner-exports/phrase-log-2026-11-14T2243": {
+      "turns": 2,
+      "judged": 0,
+      "right": 0
+     }
+    },
+    "retired": 46
+   },
+   "retiredAreas": {
+    "turns": 41,
+    "judged": 7,
+    "right": 0,
+    "partly": 0,
+    "wrong": 0,
+    "honest": 41,
+    "open": 0,
+    "changed": 0,
+    "unjudged": 34,
+    "outcome": {
+     "executed": 0,
+     "refused": 41,
+     "asked": 0,
+     "not_understood": 0,
+     "other_world": 0
+    },
+    "by_source": {
+     "owner-log-2026-11-13c": {
+      "turns": 1,
+      "judged": 0,
+      "right": 0
+     },
+     "real-phrases-2026-11-09c": {
+      "turns": 6,
+      "judged": 0,
+      "right": 0
+     },
+     "real-phrases-2026-11-09f-mobile": {
+      "turns": 27,
+      "judged": 0,
+      "right": 0
+     },
+     "real dialogues": {
+      "turns": 7,
+      "judged": 7,
+      "right": 0
+     }
+    },
+    "retired": 0,
+    "rows": [
+     {
+      "id": "r0163",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": "open"
+     },
+     {
+      "id": "r0228",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0229",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0230",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0231",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0232",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0233",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0313",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0314",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0315",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0316",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0317",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0318",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0319",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0342",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0343",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0344",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0345",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0388",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0389",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0390",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0391",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0392",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0393",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0394",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0395",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0396",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0408",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0409",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0410",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0411",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0412",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0413",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0418",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0482",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     },
+     {
+      "id": "r0483",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     },
+     {
+      "id": "r0484",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     },
+     {
+      "id": "r0547",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     },
+     {
+      "id": "r0548",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     },
+     {
+      "id": "r0549",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     },
+     {
+      "id": "r0550",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     }
+    ]
+   }
   },
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 131,
+   "right": 124,
    "partly": 7,
    "wrong": 69,
+   "honest": 41,
    "open": 40,
-   "changed": 26,
-   "unjudged": 332,
+   "changed": 25,
+   "unjudged": 333,
    "outcome": {
-    "executed": 182,
-    "refused": 287,
+    "executed": 168,
+    "refused": 333,
     "asked": 12,
-    "not_understood": 54,
-    "other_world": 70
+    "not_understood": 34,
+    "other_world": 58
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -150,7 +517,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 78
+     "right": 71
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -158,7 +525,372 @@
      "right": 0
     }
    },
-   "retired": 46
+   "retired": 46,
+   "survivingAreas": {
+    "turns": 564,
+    "judged": 200,
+    "right": 124,
+    "partly": 7,
+    "wrong": 69,
+    "honest": 0,
+    "open": 40,
+    "changed": 25,
+    "unjudged": 299,
+    "outcome": {
+     "executed": 168,
+     "refused": 292,
+     "asked": 12,
+     "not_understood": 34,
+     "other_world": 58
+    },
+    "by_source": {
+     "owner-log-2026-11-13": {
+      "turns": 69,
+      "judged": 55,
+      "right": 41
+     },
+     "owner-log-2026-11-13b": {
+      "turns": 63,
+      "judged": 11,
+      "right": 4
+     },
+     "owner-log-2026-11-13c": {
+      "turns": 23,
+      "judged": 10,
+      "right": 8
+     },
+     "real-phrases-2026-11-09c": {
+      "turns": 62,
+      "judged": 0,
+      "right": 0
+     },
+     "real-phrases-2026-11-09d": {
+      "turns": 10,
+      "judged": 0,
+      "right": 0
+     },
+     "real-phrases-2026-11-09e": {
+      "turns": 67,
+      "judged": 0,
+      "right": 0
+     },
+     "real-phrases-2026-11-09f-mobile": {
+      "turns": 81,
+      "judged": 0,
+      "right": 0
+     },
+     "real-dialogue-2026-11-09": {
+      "turns": 49,
+      "judged": 0,
+      "right": 0
+     },
+     "real-dialogue-2026-11-09b": {
+      "turns": 14,
+      "judged": 0,
+      "right": 0
+     },
+     "real dialogues": {
+      "turns": 124,
+      "judged": 124,
+      "right": 71
+     },
+     "owner-exports/phrase-log-2026-11-14T2243": {
+      "turns": 2,
+      "judged": 0,
+      "right": 0
+     }
+    },
+    "retired": 46
+   },
+   "retiredAreas": {
+    "turns": 41,
+    "judged": 7,
+    "right": 0,
+    "partly": 0,
+    "wrong": 0,
+    "honest": 41,
+    "open": 0,
+    "changed": 0,
+    "unjudged": 34,
+    "outcome": {
+     "executed": 0,
+     "refused": 41,
+     "asked": 0,
+     "not_understood": 0,
+     "other_world": 0
+    },
+    "by_source": {
+     "owner-log-2026-11-13c": {
+      "turns": 1,
+      "judged": 0,
+      "right": 0
+     },
+     "real-phrases-2026-11-09c": {
+      "turns": 6,
+      "judged": 0,
+      "right": 0
+     },
+     "real-phrases-2026-11-09f-mobile": {
+      "turns": 27,
+      "judged": 0,
+      "right": 0
+     },
+     "real dialogues": {
+      "turns": 7,
+      "judged": 7,
+      "right": 0
+     }
+    },
+    "retired": 0,
+    "rows": [
+     {
+      "id": "r0163",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": "open"
+     },
+     {
+      "id": "r0228",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0229",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0230",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0231",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0232",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0233",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0313",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0314",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0315",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0316",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0317",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0318",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0319",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0342",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0343",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0344",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0345",
+      "area": "map",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0388",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0389",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0390",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0391",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0392",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0393",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0394",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0395",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0396",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0408",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0409",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0410",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0411",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0412",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0413",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0418",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": null
+     },
+     {
+      "id": "r0482",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     },
+     {
+      "id": "r0483",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     },
+     {
+      "id": "r0484",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     },
+     {
+      "id": "r0547",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     },
+     {
+      "id": "r0548",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     },
+     {
+      "id": "r0549",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     },
+     {
+      "id": "r0550",
+      "area": "music",
+      "verdict": "honest",
+      "historicalVerdict": "wrong"
+     }
+    ]
+   }
   }
  },
  "diagnostic_rules_matrix": {
@@ -169,8 +901,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 363,
- "failing_ops": 363,
+ "failing_matrix": 336,
+ "failing_ops": 336,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -1079,8 +1811,8 @@
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 138,
-   "both_reasoners": 138,
+   "count": 124,
+   "both_reasoners": 124,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -1106,8 +1838,8 @@
   },
   {
    "cause": "refused: the request names something the world does not support",
-   "count": 68,
-   "both_reasoners": 68,
+   "count": 72,
+   "both_reasoners": 72,
    "examples": [
     {
      "text": "mcdavatara human",
@@ -1128,33 +1860,6 @@
      "text": "the the next mouth",
      "tab": "robot",
      "happened": "Nothing changed. The mouth has no other variant. [outcome: refused]"
-    }
-   ]
-  },
-  {
-   "cause": "translation residue / wrong sense / source typo",
-   "count": 26,
-   "both_reasoners": 26,
-   "examples": [
-    {
-     "text": "fa un cel cu 5 nori si un soare",
-     "tab": "draw",
-     "happened": "I understood \"a sun\", but not \"Make a cel with 5 clouds\", so I did nothing. [outcome: refused; open]"
-    },
-    {
-     "text": "fa cerul alabastru",
-     "tab": "draw",
-     "happened": "Nothing changed. The sky is already blue. [outcome: refused; open]"
-    },
-    {
-     "text": "muta copilul deseneat anterior in stinga",
-     "tab": "draw",
-     "happened": "I did not understand \"deseneat\", \"previous\" here. [outcome: refused; open]"
-    },
-    {
-     "text": "muta fetita linga baiat",
-     "tab": "draw",
-     "happened": "I did not understand \"linga\" here. [outcome: refused; open]"
     }
    ]
   },
@@ -1213,33 +1918,6 @@
    ]
   },
   {
-   "cause": "a world other than the open tab took the turn",
-   "count": 16,
-   "both_reasoners": 16,
-   "examples": [
-    {
-     "text": "let’s play guess the animal",
-     "tab": "guess",
-     "happened": "What should I play? For example a note, a chord or a song. I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the o"
-    },
-    {
-     "text": "draw a sun and a house",
-     "tab": "tictactoe",
-     "happened": "I drew a yellow sun and a yellow house. [outcome: other_world]"
-    },
-    {
-     "text": "yes, it eats meat",
-     "tab": "draw",
-     "happened": "I did not catch what to remember. You can say \"a villa is a kind of house\", \"my dog is called Rex\", \"ducks can float\" or \"fish live in water\". [outcome: other_w"
-    },
-    {
-     "text": "Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?",
-     "tab": "robot",
-     "happened": "OK, Tom has 15 apples. OK, Tom gave Ana 12 apples. Tom has 3 apples. [outcome: other_world]"
-    }
-   ]
-  },
-  {
    "cause": "continuation / correction / why-question",
    "count": 15,
    "both_reasoners": 15,
@@ -1267,6 +1945,33 @@
    ]
   },
   {
+   "cause": "translation residue / wrong sense / source typo",
+   "count": 15,
+   "both_reasoners": 15,
+   "examples": [
+    {
+     "text": "fa un cel cu 5 nori si un soare",
+     "tab": "draw",
+     "happened": "I understood \"a sun\", but not \"Make a cel with 5 clouds\", so I did nothing. [outcome: refused; open]"
+    },
+    {
+     "text": "fa cerul alabastru",
+     "tab": "draw",
+     "happened": "Nothing changed. The sky is already blue. [outcome: refused; open]"
+    },
+    {
+     "text": "muta copilul deseneat anterior in stinga",
+     "tab": "draw",
+     "happened": "I did not understand \"deseneat\", \"previous\" here. [outcome: refused; open]"
+    },
+    {
+     "text": "muta fetita linga baiat",
+     "tab": "draw",
+     "happened": "I did not understand \"linga\" here. [outcome: refused; open]"
+    }
+   ]
+  },
+  {
    "cause": "bare word or two-word fragment not read",
    "count": 13,
    "both_reasoners": 13,
@@ -1274,7 +1979,7 @@
     {
      "text": "yes",
      "tab": "guess",
-     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
+     "happened": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
     },
     {
      "text": "no",
@@ -1290,6 +1995,33 @@
      "text": "no",
      "tab": "guess",
      "happened": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
+    }
+   ]
+  },
+  {
+   "cause": "a world other than the open tab took the turn",
+   "count": 12,
+   "both_reasoners": 12,
+   "examples": [
+    {
+     "text": "draw a sun and a house",
+     "tab": "tictactoe",
+     "happened": "I drew a yellow sun and a yellow house. [outcome: other_world]"
+    },
+    {
+     "text": "yes, it eats meat",
+     "tab": "draw",
+     "happened": "I did not catch what to remember. You can say \"a villa is a kind of house\", \"my dog is called Rex\", \"ducks can float\" or \"fish live in water\". [outcome: other_w"
+    },
+    {
+     "text": "Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?",
+     "tab": "robot",
+     "happened": "OK, Tom has 15 apples. OK, Tom gave Ana 12 apples. Tom has 3 apples. [outcome: other_world]"
+    },
+    {
+     "text": "Tom has 5 apples. He gives 8 to Ana. How many apples does Tom have?",
+     "tab": "robot",
+     "happened": "OK, Tom has 5 apples. That does not add up. Tom only had 5 apples, so Tom cannot give away 8. Tom has 5 apples. [outcome: other_world]"
     }
    ]
   },
@@ -1375,33 +2107,6 @@
    ]
   },
   {
-   "cause": "unknown word (a word of the request is not known)",
-   "count": 4,
-   "both_reasoners": 4,
-   "examples": [
-    {
-     "text": "move corcodiles in lake",
-     "tab": "draw",
-     "happened": "I did not understand \"corcodiles\" here. [outcome: refused; wrong; reply_not:do not know what|did not understand]"
-    },
-    {
-     "text": "desene asta",
-     "tab": "map",
-     "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
-    },
-    {
-     "text": "desene asta o",
-     "tab": "map",
-     "happened": "I did not understand \"desene asta o\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not"
-    },
-    {
-     "text": "un mami",
-     "tab": "charts",
-     "happened": "I did not understand \"un mami\". For example: \"Add a chart.\" or \"What is the colour of chart 2?\" I did not know the word: mami. [outcome: not_understood]"
-    }
-   ]
-  },
-  {
    "cause": "unknown kind (no drawing / stand-in)",
    "count": 4,
    "both_reasoners": 4,
@@ -1456,6 +2161,28 @@
    ]
   },
   {
+   "cause": "sentence not read by any world (no cause key)",
+   "count": 3,
+   "both_reasoners": 3,
+   "examples": [
+    {
+     "text": "let’s play guess the animal",
+     "tab": "guess",
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"T"
+    },
+    {
+     "text": "start x and 0",
+     "tab": "tictactoe",
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
+    },
+    {
+     "text": "listat Tic Tac Toe",
+     "tab": "tictactoe",
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
+    }
+   ]
+  },
+  {
    "cause": "foreign-world reading",
    "count": 2,
    "both_reasoners": 2,
@@ -1469,6 +2196,23 @@
      "text": "put a hat",
      "tab": "robot",
      "happened": "Nothing changed. The hat is already there. [outcome: refused; open]"
+    }
+   ]
+  },
+  {
+   "cause": "unknown word (a word of the request is not known)",
+   "count": 2,
+   "both_reasoners": 2,
+   "examples": [
+    {
+     "text": "move corcodiles in lake",
+     "tab": "draw",
+     "happened": "I did not understand \"corcodiles\" here. [outcome: refused; wrong; reply_not:do not know what|did not understand]"
+    },
+    {
+     "text": "un mami",
+     "tab": "charts",
+     "happened": "I did not understand \"un mami\". For example: \"Add a chart.\" or \"What is the colour of chart 2?\" I did not know the word: mami. [outcome: not_understood]"
     }
    ]
   },
@@ -1524,23 +2268,6 @@
    ]
   },
   {
-   "cause": "sentence not read by any world (no cause key)",
-   "count": 2,
-   "both_reasoners": 2,
-   "examples": [
-    {
-     "text": "start x and 0",
-     "tab": "tictactoe",
-     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
-    },
-    {
-     "text": "listat Tic Tac Toe",
-     "tab": "tictactoe",
-     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
-    }
-   ]
-  },
-  {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.cb-c",
    "count": 2,
    "both_reasoners": 2,
@@ -1566,18 +2293,6 @@
      "text": "Chnage the tile of the document to Disucssion",
      "tab": "editor",
      "happened": "I did not understand \"chnage\", \"tile\" here. [outcome: refused; open]"
-    }
-   ]
-  },
-  {
-   "cause": "fragment / list split",
-   "count": 1,
-   "both_reasoners": 1,
-   "examples": [
-    {
-     "text": "new game",
-     "tab": "guess",
-     "happened": "I am not sure how “new name” fits what we were doing. Please say the whole request. [outcome: not_understood]"
     }
    ]
   }
