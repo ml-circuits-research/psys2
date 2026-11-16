@@ -5336,3 +5336,16 @@ First class × area table accepted as the honest baseline: 1,648 honest, 0 right
 | Reader | Per the 22:55 decision the table moves when SOP-BERT is wired; run it again with the first checkpoint and put both the SOP-BERT and the calibration numbers in worker-log. |
 
 Observation queries with population coverage accepted (`test-new-engine` passes on my side): they are what "question" and "check" need.
+
+## 2026-11-16 23:15 (Rome) — Review 20 (reviewer; SOP-BERT training, calibration, export, only reader: c4b1ee34..094d0676)
+
+`node scripts/test-new-engine.mjs` 133 / 133 on my side. Accepted: full clean epoch (872k candidate rows, matrix ids excluded), per-concept-head calibration for all 72 heads, frozen export verified against the real Transformers runtime, SOP-BERT the only app reader, seeding through declared tools.
+
+The consequence the owner must not be surprised by: the app now understands nothing (model-provider-unavailable) until the graph decoder exists, so the next steps are on the critical path, in this order of urgency but worked in parallel:
+
+| Point | Request |
+|---|---|
+| Graph decoder | Heads → `std.request` graph (cutter spans, target, constraints with key/operator/phase/polarity, question, turn), with the calibrated confidence gate; below the gate one precise question or an honest "not understood". Validated by `inspectRequest`, then the same resolution and assessment. |
+| Quantisation | q8 vs FP32 max absolute error 0.617 is large for logits: measure accuracy per concept head on q8 before shipping it, or ship FP16/FP32 if q8 loses calibration. |
+| Measures | 95.3% pair and 94.0% span accuracy are auxiliary; report the end-to-end class × area table and the owner replay as soon as the decoder runs, with per-cell wrong counts. |
+| Weak heads | List the concept heads below their gate on calibration; I will generate targeted data for them. |
