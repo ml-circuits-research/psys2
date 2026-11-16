@@ -939,7 +939,8 @@
   {
    "file": "pilot-avatar.test.mjs",
    "name": "ops: several acts in one sentence are ONE undo step",
-   "reason": "avatar on the binding (slice A1): same sentence as \"an angry boy\": needs Q96 LIB 3 (the step rule itself holds: tests/avatar-binding)"
+   "reason": "avatar on the binding (slice A1): same sentence as \"an angry boy\": needs Q96 LIB 3 (the step rule itself holds: tests/avatar-binding)",
+   "returns_with": "0.162 expressions"
   },
   {
    "file": "pilot-avatar.test.mjs",
@@ -949,7 +950,8 @@
   {
    "file": "pilot-avatar.test.mjs",
    "name": "matrix: several acts in one sentence are ONE undo step",
-   "reason": "avatar on the binding (slice A1): same sentence as \"an angry boy\": needs Q96 LIB 3 (the step rule itself holds: tests/avatar-binding)"
+   "reason": "avatar on the binding (slice A1): same sentence as \"an angry boy\": needs Q96 LIB 3 (the step rule itself holds: tests/avatar-binding)",
+   "returns_with": "0.162 expressions"
   },
   {
    "file": "pilot-avatar.test.mjs",

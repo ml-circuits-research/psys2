@@ -239,7 +239,7 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
         if (!new RegExp(`\\{${k}[:}@]|@${k}\\}`).test(said)) continue;   // a role the language's sentence does not say needs no word ("aici" for the world's name)
         if (typeof v === 'string' && /^[“"„].*[”"]$/s.test(v) && new RegExp(`\\{${k}\\}`).test(said)) { roles[k] = `„${v.slice(1, -1)}”`; continue; }   // a name already quoted (the title a tool gave what it made): said as it is, in the language's quotes
         let x = (k === 'value' && typeof v === 'string' ? lemmaOf(v, 'adjective') : null) ?? roleRo(v);   // a value said of a kind is its adjective first ("orange": portocaliu, not the fruit)
-        if (x == null && (k === 'value' || k === 'topic') && typeof v === 'string' && new RegExp(`\\{${k}\\}`).test(said) && !new RegExp(`@${k}\\}`).test(said)) { roles[k] = `„${v}”`; continue; }   // a value said as it is (no inflection, nothing agrees with it: "am presupus {value} pentru ...", "este despre {topic}"): a name the dictionary has no word for is quoted, as the names of things are
+        if (x == null && (k === 'value' || k === 'name') && typeof v === 'string' && new RegExp(`\\{${k}\\}`).test(said) && !new RegExp(`@${k}\\}`).test(said)) { roles[k] = `„${v}”`; continue; }   // a value said as it is (no inflection, nothing agrees with it: "am presupus {value} pentru ...", "este despre {topic}"): a name the dictionary has no word for is quoted, as the names of things are
         if (x == null) return null;
         roles[k] = x;
         if (typeof v === 'string') lemmas.add(k);

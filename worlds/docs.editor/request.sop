@@ -18,6 +18,9 @@
 @s.in core.slot of=chapter key=in
 @k.chapter std.schema.kind of=chapter world=documents acts=make
 @h.make std.schema.honours world=documents act=make on=kind on=about on=length on=size on=count of=story of=essay of=report of=poem of=chapter
+# What the tool can write is the knowledge's list of genres (k.genres.genre: essay, report, story, presentation, scientific article), taken by join, with the world's own kinds above (slice 13.3)
+@kinds.genres std.schema.kinds world=documents from=k.genres.genre key=name acts=make
+@h.make.genres std.schema.honours world=documents act=make on=kind on=about on=length on=size on=count of=k.genres.genre
 @wa.make core.word text=write text=compose text=type means=make
 @e.story k.expect.make thing=story made_in=document unit=chapter min=3 max=5 typical=5 length_unit=word length=150 about="what this world writes from the knowledge it has: about 150 words in its parts"
 @e.essay k.expect.make thing=essay made_in=document unit=chapter min=3 max=5 typical=3 length_unit=word length=300
@@ -38,10 +41,10 @@
 # writes the whole in one call and the chapters' step keeps the text to their count. The defaults are the k.expect rows above (length by kind; short / long by k.expect.scale).
 @tool core.use world=std.tool
 @op.write std.tool.op name=writeText world=documents param=kind param=about param=words param=chapters effect=makes doc="a text of a kind about a topic, written by the composer (never padded)"
-@pa.write.kind std.tool.param op=writeText name=kind type=text required=true accepts=story accepts=essay accepts=report accepts=poem
+@pa.write.kind std.tool.param op=writeText name=kind type=kind required=true
 @pa.write.words std.tool.param op=writeText name=words kind=integer min=20 max=3000
 @pa.write.chapters std.tool.param op=writeText name=chapters kind=integer min=1 max=12
-@b.write std.tool.bind world=documents act=make of=text op=writeText arg=kind<-step.kind arg=about<-step.about arg=words<-step.length arg=chapters<-plan.count makes=thing
+@b.write std.tool.bind world=documents act=make of=text of=k.genres.genre op=writeText arg=kind<-step.kind arg=about<-step.about arg=words<-step.length arg=chapters<-plan.count makes=thing
 @op.chapters std.tool.op name=keepChapters world=documents param=n effect=changes doc="the text keeps at most n chapters (fewer: what the knowledge holds)"
 @pa.chapters.n std.tool.param op=keepChapters name=n kind=integer min=1 max=12
 @b.chapters std.tool.bind world=documents act=make of=chapter op=keepChapters arg=n<-step.count
