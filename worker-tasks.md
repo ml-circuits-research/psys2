@@ -4971,3 +4971,13 @@ Run by me on e68b9212: smoke 89/89; glue lint 0 / 0 / 0 in all four domains; no 
 - **Spell guard:** "write a short letter about a villa" → no repair now ("I know nothing about villa in my knowledge yet": honest; the topic knowledge is a [KNOW] matter). "draw a lettre" → `I read "lettre" as "letter"`: a real typo repaired and said. Accepted.
 - **Q96 switch** behind one flag, default off: as asked. It waits for the owner.
 - **Two things from the probe, both the library's rule on a request that is only partly possible (its block 10:00, not answered yet):** "draw a villa and a swing" → "Nothing changed. I have no drawing of a swing yet." — the villa could be made and the swing named as missing; today the whole request is dropped. And "I baked a cake, draw it" → `I did not understand "baked", "draw" here.` — naming "draw" as not understood is wrong to a user (the word is known; what is not understood is the clause before it). The reply should name the clause it could not read, as it does for "… and zorp it gently". I pass both to the library.
+
+## Reviewer 2026-11-16 09:25 — 0.165 vendored, Documents parts accepted; "longer" / "shorter" on a text still does nothing
+
+Run by me on cccb433e: smoke 89/89; no additions to the legacy list. Library 0.166.0 passes on my run (647 tests): vendor it (it has the coordinated-kind rule: the unread kind named and the rest made).
+
+Probe: "write a short letter about a fox" → "I added a letter. The letter is about a fox. The letter has a greeting, an opening, a body, a closing, a signature. I assumed 150 for the length." The parts from the knowledge are right.
+
+1. **"longer" → "Nothing changed. That is what is there already."** (and "shorter" earlier: refused). Asked in 05:35 item 1, third probe now. It is the owner's own turn from his first session. The step on length must reach the tool: declare the change of length for texts and bind it (re-write at the stepped length as one undo step). Until it works, the reply must not say the text is already longer.
+2. **"short" was said and the reply says "I assumed 150 for the length".** Either 150 is the scale's "short" (then it is not an assumption: it is what the user asked, say "a short letter") or "short" was not applied (then it is a dropped requirement). Check which; a value derived from a word the user said has origin `said`.
+3. A letter titled “All about the fox” is the story's title pattern on a letter; the title of each genre comes from its knowledge (a letter has a greeting line, not a title), or no title is said.
