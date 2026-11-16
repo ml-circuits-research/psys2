@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=1ff87d1a81';
+import { composeReply, sayOf } from './composed-reply.mjs?v=c61f098537';
 import { reviewForeign } from './foreign-reading.mjs?v=ac90e6b4da';
 import { installTextGen } from './textgen.mjs?v=ece14360d9';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=1c7c025d63';
@@ -28,7 +28,7 @@ import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voi
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=bb754b8305';
 import { machineReads } from '../translate/reading-policy.mjs?v=96bd6cc0e4';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=180752cdbd';
+import { langRoNow } from '../translate/frames-ro.mjs?v=12c72776e7';
 import { repairInContext } from '../translate/source-repair.mjs?v=db5b883c67';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=1c7c025d63';
 import { lexIndex } from '../worlds/lexicon.mjs?v=2dce0c5460';
@@ -42,10 +42,10 @@ import { attachValues } from '../knowledge/values.mjs?v=c3d5c59521';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=5e17031144';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=2413a09df2';
 import { Discourse } from './discourse.mjs?v=fc5187385a';
-import { Dialogue } from './dialogue.mjs?v=2fb718fd03';
+import { Dialogue } from './dialogue.mjs?v=ed5a4af294';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=851c397620';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=73df08128c';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext, knowledgeOf, within } from './knowledge-lookup.mjs?v=73df08128c';
 import { personTurn } from './person.mjs?v=ae12912122';
 import { proposeByTypes } from './typed-reader.mjs?v=8125e24fc4';
 import { withVariants, anyVoiceOn } from './variants.mjs?v=07846a32e1';
@@ -364,7 +364,7 @@ import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=
 import { intentStep, weakReading, cutWorld } from './intent.mjs?v=c1291bdff9';
 import { knownEnglishWord } from '../translate/en-ro.mjs?v=cbd133aecd';
 import { proposeReading, negationWords } from './proposer.mjs?v=b3c21ed7d7';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint, madeAgainstSaid } from './request.mjs?v=584d43e017';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint, madeAgainstSaid } from './request.mjs?v=ed686e86b7';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1955,7 +1955,10 @@ export class DialogSession {
     if (!req.act || !tools.binds.some((b) => b.act === req.act)) return null;
     // a thing the world makes with no binding for its kind (a page: request.sop psys2.op) is not the binding's
     // (checked on the plan's target: a general whole with no expectation of its own, "a random picture", is planned as one of its subkind wholes the bindings make: sopworld 0.156)
-    const boundMake = (kind) => tools.binds.some((b) => b.act === 'make' && (!b.of.length || lib.kindLineage(kind, { live, catalog: [language] }).some((k) => b.of.includes(k))));
+    // a binding's `of=` names a kind by its lineage, or the type the kind is joined from (std.schema.kinds from=: sopworld 0.160, as the library's runPlan picks the binding)
+    let joinedKinds = null;
+    const bindLineage = (kind) => { joinedKinds ??= (() => { try { return lib.capabilitiesOf(live, { catalog: [language] }).joined ?? new Map(); } catch { return new Map(); } })(); const j = joinedKinds.get?.(kind); return [...lib.kindLineage(kind, { live, catalog: [language] }), ...(j?.from ? [j.from] : [])]; };
+    const boundMake = (kind) => tools.binds.some((b) => b.act === 'make' && (!b.of.length || bindLineage(kind).some((k) => b.of.includes(k))));
     const timeline = rd.timeline(tabWorld);
     if (replace && !(timeline.done.at(-1)?.diff?.added ?? []).every((t) => prims.view().some((x) => x.id === t.id))) replace = false;   // the last entry was taken back (the session's undo): there is nothing to replace
     this._requestSeed = ((this._requestSeed ?? Math.floor(Math.random() * 2 ** 31)) * 1103515245 + 12345) >>> 0;
@@ -1984,8 +1987,15 @@ export class DialogSession {
     }
     // a plan whose steps the bindings do not all cover (a scene of parts whose whole the world binds no primitive to: a pond) is the world's executor's; one the bindings cover
     // (things of kinds, a diagram with its nodes and arrows) runs through them
-    const bound = (st) => tools.binds.some((b) => b.act === st.action && (!b.of.length || (st.args?.kind ? lib.kindLineage(st.args.kind, { live, catalog: [language] }) : []).some((k) => b.of.includes(k)) || (st.args?.kind === undefined && st.args?.thing !== undefined)));
+    const bound = (st) => tools.binds.some((b) => b.act === st.action && (!b.of.length || (st.args?.kind ? bindLineage(st.args.kind) : []).some((k) => b.of.includes(k)) || (st.args?.kind === undefined && st.args?.thing !== undefined)));
     if (req.act === 'make' && (plan.ok ? !(plan.steps ?? []).every(bound) : !(plan.cannot?.length || plan.notHonoured?.length || plan.replies?.length))) return null;   // a question back (which one?) is the plan's answer
+    // the kinds the plan makes that the world takes only by join (std.schema.kinds, not a std.schema.kind of its own: a goat, a child, a frog in a pond) are looked up in the knowledge
+    // catalog before the tool runs, as the readers' preloadThings does: the tool draws them from what the lazy loader holds (ctx.knowledge.peek). Bounded: twelve kinds, one
+    // catalog deadline; no catalog, nothing loaded
+    try { const cat = knowledgeOf(this), joined = cat ? (() => { try { return lib.capabilitiesOf(live, { catalog: [language] }).joined; } catch { return null; } })() : null;
+      const own = new Set((live.ofType?.('std.schema.kind') ?? []).map((r) => String(r.attrs?.of?.[0] ?? '')));
+      const kinds = [...new Set((plan.steps ?? []).map((st) => st.args?.kind).filter((k) => k && !own.has(String(k)) && joined?.has?.(k) && (typeof cat.peek !== "function" || cat.peek(String(k).replace(/_/g, " ")) === undefined)))].slice(0, 12);
+      if (kinds.length) { try { await guard.untimed(() => within(this, Promise.all(kinds.map((k) => cat.thing(String(k).replace(/_/g, ' ')).catch(() => null))))); } catch { /* the tool then says it cannot draw it */ } } } catch { /* a catalog that cannot be asked loads nothing: the tool says what it cannot draw */ }
     // one step per request: a revision replaces the session step of the result it revises
     const replaces = replace && lastRec?.turn != null && this.discourse.actions[0]?.turn === lastRec.turn ? this.discourse.actions[0] : null;
     const before = replaces ? { ...this._doorBegin(), ...replaces.before } : undefined;
