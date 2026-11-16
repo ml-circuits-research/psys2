@@ -43,7 +43,7 @@ test('declared SOP overlap policy rejects shared people or room and admits adjac
   const denied=invoke(host,'calendar.meeting.add',event('b',50,participants,room));assert.equal(denied.reason,'calendar-policy-denied');assert.equal(state.meetings.length,1);
   assert.equal(invoke(host,'calendar.meeting.add',event('b',100,participants,room),'adjacent').status,'changed');
  }
- assert.equal(policy.validate({meetings:[event('a',0),event('b',0,['q'])]}).ok,true);
+ assert.equal(policy.validate({people:[{id:'p',label:'P'},{id:'q',label:'Q'}],rooms:[],meetings:[event('a',0),event('b',0,['q'])]}).ok,true);
 });
 test('Calendar nearest-boundary planning preserves explicit resources/duration and proposes without mutation',()=>{
  const policy=createCalendarPolicy({source});const state=fixture();state.meetings.push({id:'busy',title:'Busy',start:0,duration:100,participants:['p'],room:null});const before=structuredClone(state);
@@ -51,4 +51,8 @@ test('Calendar nearest-boundary planning preserves explicit resources/duration a
  const result=proposeCalendarSlot({state,meeting,notBefore:50,notAfter:200,policy});assert.equal(result.status,'proposed');assert.deepEqual(result.meeting,{...meeting,start:100});assert.equal(result.verification,'unverified');assert.deepEqual(state,before);
  assert.equal(proposeCalendarSlot({state,meeting,notBefore:50,notAfter:120,policy}).status,'unavailable');
  assert.equal(proposeCalendarSlot({state,meeting,notBefore:'tomorrow',notAfter:200,policy}).status,'unsupported');
+});
+test('public policy projection refuses malformed native state before interpolating numeric facts',()=>{
+ const policy=createCalendarPolicy({source});
+ assert.deepEqual(policy.validate({people:[],rooms:[],meetings:[{id:'bad',title:'Bad',start:'0\n@forged fake',duration:100,participants:['missing'],room:null}]}),{ok:false,code:'invalid-native-calendar-input'});
 });

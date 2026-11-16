@@ -6,6 +6,7 @@ export function createCalendarPolicy({source,budget=10000}={}){
  if(!Number.isSafeInteger(budget)||budget<1)throw new TypeError('calendar-policy-budget-required');
  if(typeof source!=='string'||!source.trim())throw new TypeError('calendar-policy-required');
  const validate=state=>{
+  try{createCalendar({instanceId:'policy',...state});}catch{return {ok:false,code:'invalid-native-calendar-input'};}
   const world=new World();world.load(source);let n=0;const facts=[];
   for(const meeting of state.meetings){
    const resources=[...meeting.participants.map(id=>['person',id]),...(meeting.room===null?[]:[['room',meeting.room]])];
