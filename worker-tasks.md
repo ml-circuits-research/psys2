@@ -5349,3 +5349,14 @@ The consequence the owner must not be surprised by: the app now understands noth
 | Quantisation | q8 vs FP32 max absolute error 0.617 is large for logits: measure accuracy per concept head on q8 before shipping it, or ship FP16/FP32 if q8 loses calibration. |
 | Measures | 95.3% pair and 94.0% span accuracy are auxiliary; report the end-to-end class × area table and the owner replay as soon as the decoder runs, with per-cell wrong counts. |
 | Weak heads | List the concept heads below their gate on calibration; I will generate targeted data for them. |
+
+## 2026-11-16 23:55 (Rome) — Review 21 (reviewer; decoder a0b78585, q8 0fc95cca/9208601c, seeding f247a5e3..74dca2b2, predicate checks d15b0387; library 8efbf9f..6cce066)
+
+`test-new-engine` 162 passed on my side; library resolution tests pass. Accepted: the structural decoder (no grammar, validated graphs), q8 kept (95.22% vs 95.26% FP), three-valued request evaluation and canonical target resolution in the library (the instance-resolution mechanism of the top-down lane).
+
+Two things now decide whether the table moves tonight:
+
+| Point | Request |
+|---|---|
+| Structural heads | The decoder needs structural predictions the current checkpoint does not emit (pair/span auxiliary heads only). Train the structural heads now on `haiku-v2` — it is annotated in exactly that structure (target type/mode/fill, constraints with key/operator/phase/polarity/character/step, question, turn, request spans) — and wire checkpoint → decoder → engine. |
+| Seeding | 1,581 of 1,648 matrix rows are setup exclusions. Seeding from `context.existing` must make almost every row eligible: one declared make per item in each area (Drawing now has it; do Diagram, Document, Calendar the same way). Report exclusions per area. |
