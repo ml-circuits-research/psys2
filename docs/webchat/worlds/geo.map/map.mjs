@@ -11,9 +11,9 @@
 // Data: the places come by lookup from the catalog's k.geo (places.mjs); the world has no knowledge base of its own.
 
 import { buildIndex, lookup } from './places.mjs?v=2c3d3ee1e7';
-import { askBridge } from '../acts/ask-lib.mjs?v=f088419a88';   // questions over attributes and relations answered by the library (sopworld `ask`)
-import { viewOf } from '../acts/view-lib.mjs?v=12dfa7f1ce';   // the acts on the view's own attributes (zoom, layer) by the library (sopworld std.schema.view state=)
-import * as G from './ops.mjs?v=f527165e58';   // circular on purpose: the schema's executor, read inside functions only
+import { askBridge } from '../acts/ask-lib.mjs?v=55eed4ae17';   // questions over attributes and relations answered by the library (sopworld `ask`)
+import { viewOf } from '../acts/view-lib.mjs?v=6681a37e1a';   // the acts on the view's own attributes (zoom, layer) by the library (sopworld std.schema.view state=)
+import * as G from './ops.mjs?v=4e92ba2685';   // circular on purpose: the schema's executor, read inside functions only
 let VIEW = null;
 /** The view bridge of this world's schema (`@map.view` and its attributes: zoom, centre, layer): the library checks the value and computes the step; the state stays this module's. */
 const viewLib = () => (VIEW ??= viewOf(G.executor.schema, 'view'));
