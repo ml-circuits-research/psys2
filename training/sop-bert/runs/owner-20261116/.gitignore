@@ -1,0 +1,6 @@
+*
+!.gitignore
+!README.md
+!environment.json
+!run-manifest.json
+!summary.json

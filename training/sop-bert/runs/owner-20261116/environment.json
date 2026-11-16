@@ -1,0 +1,23 @@
+{
+  "python": "3.12.3",
+  "architecture": "aarch64",
+  "packages": {
+    "torch": "2.14.1+cu130",
+    "numpy": "2.5.4",
+    "transformers": "5.22.2",
+    "tokenizers": "0.23.3",
+    "onnx": "1.23.2",
+    "onnxruntime": "1.31.1",
+    "accelerate": "1.15.0"
+  },
+  "purpose": "local GPU availability only; no training/API compatibility claim",
+  "cudaRuntime": "13.0",
+  "cudaAvailable": true,
+  "device": "NVIDIA GB10",
+  "capability": [
+    12,
+    1
+  ],
+  "arithmeticResult": 6,
+  "gpuSmokePassed": true
+}

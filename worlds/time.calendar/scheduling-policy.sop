@@ -1,0 +1,7 @@
+# Half-open intervals. Only shared resources cause a conflict.
+@calendar.policy.a calendar.policy.interval event=?a resource=?r start=?as end=?ae
+@calendar.policy.b calendar.policy.interval event=?b resource=?r start=?bs end=?be
+@calendar.policy.distinct core.check fn=neq args=?a args=?b
+@calendar.policy.first core.check fn=lt args=?as args=?be
+@calendar.policy.second core.check fn=lt args=?bs args=?ae
+@calendar.policy.overlap core.deny when=$calendar.policy.a when=$calendar.policy.b if=$calendar.policy.distinct if=$calendar.policy.first if=$calendar.policy.second why="Shared calendar resource overlaps"

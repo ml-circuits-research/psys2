@@ -1,0 +1,6 @@
+# Reproduce owner-20261116 GPU bootstrap on aarch64/CUDA13.
+# Torch requires its matching CUDA13 wheel source for this platform.
+torch==2.14.1+cu130
+numpy==2.5.4
+transformers==5.22.2
+tokenizers==0.23.3
