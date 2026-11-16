@@ -55,13 +55,23 @@ test('names: a 60-word noise message completes end to end in bounded time', asyn
 });
 
 // ---- capability check ---------------------------------------------------------------------------------------------------------------
-for (const tab of ['tictactoe', 'chess', 'map', 'draw', 'music']) {
+// on a tab that declares nothing the old readers still answer (every world alike); on a declared tab (the Drawing) the request crosses to the domain that reads it through the
+// new reading path (spec 28 section 29): "make the avatar a man" does; "change vatar to a man" (a change to a kind, read as a place) is on the honest list (needs: a change to a kind [LIB])
+for (const tab of ['tictactoe', 'chess', 'map', 'music']) {
   test(`capability: "change vatar to a man" on ${tab} reaches the avatar, not the editor`, async () => {
     const r = await open(tab).send('change vatar to a man');
     assert.ok(worldsOf(r).includes('ui.avatar'), r.text);
     assert.ok(!/could not find/.test(r.text), r.text);
   });
 }
+test('capability: "make the avatar a man" on the Drawing tab crosses to the avatar, says so, and leaves the tab', async () => {
+  const s = open('draw');
+  const r = await s.send('make the avatar a man');
+  assert.ok(worldsOf(r).includes('ui.avatar') || r.trace?.door?.startsWith('elsewhere ui.avatar'), r.text);
+  assert.match(r.text, /^This was for the avatar\./);
+  assert.equal(s.state('ui.avatar').face.base, 'man');
+  assert.equal(s.state('ui.shell').activeTab, 'draw');
+});
 // "change red to blue" on the empty editor tab and "change cat to dog" with the cat in the document (both not understood) are on the failure ledger (P3)
 
 // ---- RD1b: a word valid in some world is never corrected ------------------------------------------------------------------------------

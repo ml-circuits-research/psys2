@@ -26,6 +26,7 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.cannot_make w.lang.ro.reply name=cannot.make count=one text="nu am putut face asta aici"
 @w.lang.ro.reply.local.cannot_plan w.lang.ro.reply name=cannot.plan count=one role=words text="nu am putut plănui {words} cum ai spus, așa că nu am făcut nimic"
 @w.lang.ro.reply.local.cannot_revise w.lang.ro.reply name=cannot.revise count=one text="aici nu este încă nimic făcut de mine care să se poată schimba așa"
+@w.lang.ro.reply.local.elsewhere w.lang.ro.reply name=done.elsewhere count=one role=world text="asta a fost pentru {world:def=no}"
 @w.lang.ro.reply.local.cannot_do w.lang.ro.reply name=cannot.do count=one role=words text="încă nu pot face {words} aici"
 @w.lang.ro.reply.local.cannot_act w.lang.ro.reply name=cannot.act count=one text="încă nu pot face asta aici"
 @w.lang.ro.reply.local.cannot_act_kind w.lang.ro.reply name=cannot.act.kind count=one role=kind text="încă nu pot face asta cu {kind:num=pl} aici"

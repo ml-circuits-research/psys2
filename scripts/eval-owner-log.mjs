@@ -27,7 +27,6 @@ const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
 const flag = (k) => process.argv.includes(`--${k}`);
 
-const popup = process.env.PSYS2_AVATAR_POPUP === '1';
 export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11-13.jsonl'), checks = join(REPO, 'training/eval/owner-log-checks.json'), onReply = null, onEngine = null } = {}) {
   const rows = readFileSync(log, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
   let chk = {};
@@ -35,7 +34,7 @@ export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11
   // The translator of the phone / no-browser-Translator path of the webchat: rules first, a fixed Romanian line for a reply they cannot write (so the Romanian reply is checkable)
   const rules = createTranslator();
   const translator = createSwitchTranslator({ rules, getStrategy: () => 'auto', backend: { translatorKind: () => null, detectorKind: () => null, translate: async () => { throw new Error('none'); }, detect: async () => { throw new Error('none'); }, prepare: async () => {}, state: () => 'none' } });
-  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator, options: popup ? { flags: { avatarPopupThroughDoor: true } } : {} });
+  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator });
   // The knowledge catalog of the owner's browser, from the repository copy (knowledge/k.objects) plus a crocodile fixture (the online catalog had one).
   const kdir = join(REPO, 'knowledge'), fx = join(REPO, 'training/eval/owner-log-knowledge');
   const source = { text: async (p) => {
@@ -51,13 +50,12 @@ export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11
   for (const [i, r] of rows.entries()) {
     if (!s || r.time.slice(0, 10) !== prevDay) s = engine.createSession(sessionOptions(settings, { language: 'en' }));
     prevDay = r.time.slice(0, 10);
-    const popupTurn = popup && (r.tab === 'robot' || (r.activeWorld && !r.tab));   // PSYS2_AVATAR_POPUP=1: the avatar turns are typed in the popup over the Talk tab (flag avatarPopupThroughDoor ON)
-    s.setWorldState('ui.shell', { activeTab: popupTurn ? 'talk' : r.tab });
-    if (r.activeWorld && !r.tab && !popupTurn) s.setWorldState('ui.shell', { activeTab: 'robot' });
+    s.setWorldState('ui.shell', { activeTab: r.tab });
+    if (r.activeWorld && !r.tab) s.setWorldState('ui.shell', { activeTab: 'robot' });
     const before = s.state();
     const t0 = performance.now();
     let reply = null, error = null;
-    try { reply = await s.send(r.text, { ...(r.lang === 'ro' ? { language: 'ro' } : {}), ...(popupTurn ? { view: 'avatar' } : {}) }); } catch (e) { error = e.message; }
+    try { reply = await s.send(r.text, r.lang === 'ro' ? { language: 'ro' } : {}); } catch (e) { error = e.message; }
     const ms = performance.now() - t0;
     const rec = { i, class: r.class, tab: r.tab, lang: r.lang, text: r.text, expected: r.expected ?? null, logged: r.got?.answer ?? null, ms: Math.round(ms), error };
     if (reply) {

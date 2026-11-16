@@ -1,52 +1,52 @@
-// The owner session 2026-11-16 07:43-07:55, build 8404d7bc (training/eval/owner-exports/phrase-log-2026-11-16T0751.json): every message in order; per turn the INTENT and a checkable expectation (scripts/owner-session.mjs). Acceptance measure: right / honest / wrong.
-{"turn":1,"tab":"draw","lang":"ro","mode":"typed","text":"deseneaza un peisaj cu apa, pamint, cer, nori, soare, 2 case diferite","intent":"draw a landscape with water, ground, sky, clouds, sun and 2 different houses","expect":{"changed":true}}
-{"turn":2,"tab":"draw","lang":"ro","mode":"typed","text":"deseneaza un peisaj cu apa, pamint, cer","intent":"draw a landscape with water, ground and sky","expect":{"changed":true}}
-{"turn":3,"tab":"draw","lang":"ro","mode":"typed","text":"deseneaza un peisaj random","intent":"draw a random landscape","expect":{"changed":true}}
-{"turn":4,"tab":"draw","lang":"ro","mode":"typed","text":"deseneaza ceva","intent":"draw something","expect":{"changed":true}}
-{"turn":5,"tab":"draw","lang":"ro","mode":"typed","text":"altceva","intent":"draw something else (a different thing)","expect":{"changed":true}}
-{"turn":6,"tab":"draw","lang":"ro","mode":"typed","text":"altceva","intent":"draw something else again","expect":{"changed":true}}
-{"turn":7,"tab":"draw","lang":"ro","mode":"typed","text":"deseneaza o casa","intent":"draw a house","expect":{"changed":true}}
-{"turn":8,"tab":"draw","lang":"ro","mode":"typed","text":"aseaza totul mai natural","intent":"arrange everything more naturally","expect":{"changed":true}}
-{"turn":9,"tab":"draw","lang":"ro","mode":"typed","text":"aseaza elementele mai bine","intent":"arrange the elements better","expect":{"changed":true}}
-{"turn":10,"tab":"draw","lang":"ro","mode":"typed","text":"pune o rata","intent":"add a duck","expect":{"changed":true,"state":["art.draw:objects[last].kind=duck"]}}
-{"turn":11,"tab":"draw","lang":"ro","mode":"typed","text":"pe lac","intent":"(fragment of the last request) put the duck on the lake","expect":{"changed":true}}
-{"turn":12,"tab":"draw","lang":"ro","mode":"typed","text":"pune rata pe lac","intent":"put the duck on the lake","expect":{"changed":true}}
-{"turn":13,"tab":"draw","lang":"ro","mode":"typed","text":"cum nu exista?","intent":"question about the last reply (why: there is no lake?); an honest answer or explanation, no change","expect":{"changed":false}}
-{"turn":14,"tab":"draw","lang":"en","mode":"typed","text":"add a green duck","intent":"add a green duck","expect":{"changed":true,"state":["art.draw:objects[last].kind=duck"]}}
-{"turn":15,"tab":"draw","lang":"en","mode":"typed","text":"move the green duck in water","intent":"move the green duck into the water","expect":{"changed":true}}
-{"turn":16,"tab":"draw","lang":"en","mode":"chip","text":"Change the colour of the green bird to yellow.","intent":"change the colour of the green bird to yellow","expect":{"changed":true}}
-{"turn":17,"tab":"draw","lang":"en","mode":"typed","text":"move it to the lake","intent":"move it (the last named thing) to the lake","expect":{"changed":true}}
-{"turn":18,"tab":"draw","lang":"en","mode":"typed","text":"move the house over water","intent":"move the house over the water","expect":{"changed":true,"state":["art.draw:objects[kind=house].y>=@objects[kind=lake].y"],"reply_not":"corner"}}
-{"turn":19,"tab":"draw","lang":"en","mode":"typed","text":"move the birds near lake","intent":"move the birds near the lake","expect":{"changed":true}}
-{"turn":20,"tab":"draw","lang":"en","mode":"typed","text":"the lake is not there","intent":"statement: the lake is not there; no change claimed","expect":{"changed":false}}
-{"turn":21,"tab":"draw","lang":"en","mode":"typed","text":"move the house down","intent":"move the house down","expect":{"changed":true,"state":["art.draw:objects[kind=house].y>$+0"]}}
-{"turn":22,"tab":"draw","lang":"en","mode":"typed","text":"down","intent":"down: repeat the last move, same thing, same direction","expect":{"changed":true,"state":["art.draw:objects[kind=house].y>$+0"]}}
-{"turn":23,"tab":"draw","lang":"en","mode":"typed","text":"down","intent":"down: repeat again","expect":{"changed":true,"state":["art.draw:objects[kind=house].y>$+0"]}}
-{"turn":24,"tab":"draw","lang":"en","mode":"typed","text":"move the flowers down","intent":"move the flowers down","expect":{"changed":true,"state":["art.draw:objects[kind=flower].y>$+0"]}}
-{"turn":25,"tab":"draw","lang":"en","mode":"typed","text":"down","intent":"down: repeat for the flowers","expect":{"changed":true,"state":["art.draw:objects[kind=flower].y>$+0"]}}
-{"turn":26,"tab":"draw","lang":"en","mode":"typed","text":"the pond up","intent":"the pond up","expect":{"changed":true,"state":["art.draw:objects[kind=lake].y<$+0"]}}
-{"turn":27,"tab":"draw","lang":"en","mode":"typed","text":"move th epond upper","intent":"move the pond upper","expect":{"changed":true,"state":["art.draw:objects[kind=lake].y<$+0"]}}
-{"turn":28,"tab":"draw","lang":"en","mode":"typed","text":"move the lake upper","intent":"move the lake upper","expect":{"changed":true,"state":["art.draw:objects[kind=lake].y<$+0"]}}
-{"turn":29,"tab":"draw","lang":"en","mode":"typed","text":"move the watter upper","intent":"move the water upper","expect":{"changed":true,"state":["art.draw:objects[kind=lake].y<$+0"]}}
-{"turn":30,"tab":"draw","lang":"en","mode":"typed","text":"put more patches for green","intent":"put more patches of green","expect":{"changed":true}}
-{"turn":31,"tab":"draw","lang":"en","mode":"typed","text":"put  green grass","intent":"put green grass","expect":{"changed":true}}
-{"turn":32,"tab":"draw","lang":"en","mode":"typed","text":"more","intent":"more: add more of the last thing","expect":{"changed":true}}
-{"turn":33,"tab":"draw","lang":"ro","mode":"typed","text":"aseaza un leagan","intent":"place a swing","expect":{"changed":true}}
-{"turn":34,"tab":"draw","lang":"ro","mode":"typed","text":"pune un leagan","intent":"put a swing","expect":{"changed":true}}
-{"turn":35,"tab":"draw","lang":"ro","mode":"typed","text":"pune un copil pe leagan","intent":"put a child on the swing","expect":{"changed":true}}
-{"turn":36,"tab":"draw","lang":"ro","mode":"typed","text":"deseneaaza un copil","intent":"draw a child","expect":{"changed":true}}
-{"turn":37,"tab":"draw","lang":"ro","mode":"typed","text":"pune-l pe leagan","intent":"put him on the swing","expect":{"changed":true}}
-{"turn":38,"tab":"draw","lang":"ro","mode":"typed","text":"copilul nu e un skeleton, fa un copil real","intent":"the child is not a skeleton, make a real child","expect":{"changed":true}}
-{"turn":39,"tab":"draw","lang":"ro","mode":"typed","text":"desneaza un bunic","intent":"draw a grandfather","expect":{"changed":true}}
-{"turn":40,"tab":"draw","lang":"ro","mode":"typed","text":"deseneaza o fetita","intent":"draw a girl","expect":{"changed":true}}
-{"turn":41,"tab":"draw","lang":"ro","mode":"typed","text":"pune culori random la petalele florilor","intent":"give random colours to the petals of the flowers","expect":{"changed":true}}
-{"turn":42,"tab":"draw","lang":"ro","mode":"typed","text":"schimba avatarul sa fie un robot","intent":"change the avatar to a robot","expect":{"changed":true}}
-{"turn":43,"tab":"draw","lang":"en","mode":"typed","text":"make the avatar a man","intent":"make the avatar a man","expect":{"changed":true}}
-{"turn":44,"tab":"draw","lang":"en","mode":"form","text":"become a boy","intent":"become a boy","expect":{"changed":true}}
-{"turn":45,"tab":"draw","lang":"en","mode":"form","text":"become a boy","intent":"become a boy","expect":{"changed":true}}
-{"turn":46,"tab":"draw","lang":"en","mode":"form","text":"become a man","intent":"become a man","expect":{"changed":true}}
-{"turn":47,"tab":"draw","lang":"en","mode":"form","text":"look surprised","intent":"look surprised","expect":{"changed":true}}
-{"turn":48,"tab":"draw","lang":"en","mode":"form","text":"look sad","intent":"look sad","expect":{"changed":true}}
-{"turn":49,"tab":"draw","lang":"en","mode":"form","text":"become a woman with curly hair","intent":"become a woman with curly hair","expect":{"changed":true}}
-{"turn":50,"tab":"draw","lang":"en","mode":"form","text":"become a bearded man","intent":"become a bearded man","expect":{"changed":true}}
-{"turn":51,"tab":"draw","lang":"en","mode":"form","text":"become a bearded man","intent":"become a bearded man (again)","expect":{"changed":true}}
+// The owner's session 2026-11-16 07:43-07:51 on the page, build 8404d7bc (training/eval/owner-exports/phrase-log-2026-11-16T0751.json): EVERY message in order, 51 turns, all on the Drawing tab; lang = the language selector at the time (T16-T33 English). T44-T51 were sent by the avatar popup's cards and chips while the popup was open (`view: "avatar"`, as the page tells it); T42-T43 were typed with the popup closed. Per turn the user's INTENT and a checkable expectation (scripts/owner-session.mjs --checks this file). `partly`: a weaker expectation that is not right but not wrong either (a turn that did part of what was asked). Typos are the owner's own.
+{"turn": 1, "tab": "draw", "lang": "ro", "text": "deseneaza un peisaj cu apa, pamint, cer, nori, soare, 2 case diferite", "intent": "draw a landscape with water, ground, sky, clouds, a sun and two different houses", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+5"], "reply_not": "too complex|prea complex"}, "partly": {"changed": true}}
+{"turn": 2, "tab": "draw", "lang": "ro", "text": "deseneaza un peisaj cu apa, pamint, cer", "intent": "draw a landscape with water, ground and sky", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+3"]}, "partly": {"changed": true}}
+{"turn": 3, "tab": "draw", "lang": "ro", "text": "deseneaza un peisaj random", "intent": "draw a random landscape", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+3"]}, "partly": {"changed": true}}
+{"turn": 4, "tab": "draw", "lang": "ro", "text": "deseneaza ceva", "intent": "draw something (anything)", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+1"]}}
+{"turn": 5, "tab": "draw", "lang": "ro", "text": "altceva", "intent": "something else: a different drawing in place of the last one", "expect": {"world": "art.draw", "changed": true}}
+{"turn": 6, "tab": "draw", "lang": "ro", "text": "altceva", "intent": "something else again", "expect": {"world": "art.draw", "changed": true}}
+{"turn": 7, "tab": "draw", "lang": "ro", "text": "deseneaza o casa", "intent": "add a house", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+1"], "reply_any": "cas"}}
+{"turn": 8, "tab": "draw", "lang": "ro", "text": "aseaza totul mai natural", "intent": "arrange everything more naturally (things where they belong), nothing added", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length=$+0"]}}
+{"turn": 9, "tab": "draw", "lang": "ro", "text": "aseaza elementele mai bine", "intent": "arrange the elements better, nothing added", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length=$+0"]}}
+{"turn": 10, "tab": "draw", "lang": "ro", "text": "pune o rata", "intent": "add a duck (kept as a duck, even if drawn with the bird's picture)", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+1"], "reply_any": "ra[tțţ][aă]"}, "partly": {"changed": true}}
+{"turn": 11, "tab": "draw", "lang": "ro", "text": "pe lac", "intent": "(fragment continuing the last request) the duck on the lake", "expect": {"world": "art.draw", "changed": true}}
+{"turn": 12, "tab": "draw", "lang": "ro", "text": "pune rata pe lac", "intent": "put the duck on the lake", "expect": {"world": "art.draw", "changed": true, "reply_not": "nu exist"}}
+{"turn": 13, "tab": "draw", "lang": "ro", "text": "cum nu exista?", "intent": "a complaint ('how does it not exist?'): explain, change nothing", "expect": {"changed": false, "reply_any": "ra[tțţ][aă]|pas[aă]re|duck|bird"}}
+{"turn": 14, "tab": "draw", "lang": "ro", "text": "add a green duck", "intent": "add a green duck (English typed while the selector was Romanian)", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+1"], "reply_any": "duck|ra[tțţ][aă]"}, "partly": {"changed": true}}
+{"turn": 15, "tab": "draw", "lang": "ro", "text": "move the green duck in water", "intent": "move the green duck into the water", "expect": {"world": "art.draw", "changed": true, "reply_not": "nu exist|no duck|there is no"}}
+{"turn": 16, "tab": "draw", "lang": "en", "mode": "chip", "text": "Change the colour of the green bird to yellow.", "intent": "(suggestion chip) the green bird turns yellow", "expect": {"world": "art.draw", "changed": true, "reply_any": "yellow"}}
+{"turn": 17, "tab": "draw", "lang": "en", "text": "move it to the lake", "intent": "move the bird (it) to the lake", "expect": {"world": "art.draw", "changed": true}}
+{"turn": 18, "tab": "draw", "lang": "en", "text": "move the house over water", "intent": "move the house over the water (there is no sea)", "expect": {"world": "art.draw", "changed": true, "reply_not": "sea"}}
+{"turn": 19, "tab": "draw", "lang": "en", "text": "move the birds near lake", "intent": "move the birds near the lake", "expect": {"world": "art.draw", "changed": true, "reply_not": "to the top"}}
+{"turn": 20, "tab": "draw", "lang": "en", "text": "the lake is not there", "intent": "a complaint: the lake is not where the reply said; change nothing", "expect": {"changed": false}}
+{"turn": 21, "tab": "draw", "lang": "en", "text": "move the house down", "intent": "move the house down", "expect": {"world": "art.draw", "changed": true, "reply_not": "to the down"}, "partly": {"changed": true}}
+{"turn": 22, "tab": "draw", "lang": "en", "text": "down", "intent": "repeat the last move: the house down again", "expect": {"world": "art.draw", "changed": true, "reply_not": "left|to the down"}, "partly": {"changed": true, "reply_not": "left"}}
+{"turn": 23, "tab": "draw", "lang": "en", "text": "down", "intent": "the house down again", "expect": {"world": "art.draw", "changed": true, "reply_not": "left|to the down", "or_reply": "bottom|edge|already"}, "partly": {"changed": true, "reply_not": "left"}}
+{"turn": 24, "tab": "draw", "lang": "en", "text": "move the flowers down", "intent": "move the flowers down (all of them, and the reply counts what moved)", "expect": {"world": "art.draw", "changed": true, "reply_not": "to the down"}, "partly": {"changed": true}}
+{"turn": 25, "tab": "draw", "lang": "en", "text": "down", "intent": "the flowers down again", "expect": {"world": "art.draw", "changed": true, "reply_not": "to the down", "or_reply": "bottom|edge|already"}, "partly": {"changed": true}}
+{"turn": 26, "tab": "draw", "lang": "en", "text": "the pond up", "intent": "(fragment) move the pond up", "expect": {"world": "art.draw", "changed": true}}
+{"turn": 27, "tab": "draw", "lang": "en", "text": "move th epond upper", "intent": "move the pond higher", "expect": {"world": "art.draw", "changed": true}}
+{"turn": 28, "tab": "draw", "lang": "en", "text": "move the lake upper", "intent": "move the lake higher", "expect": {"world": "art.draw", "changed": true}}
+{"turn": 29, "tab": "draw", "lang": "en", "text": "move the watter upper", "intent": "move the water higher", "expect": {"world": "art.draw", "changed": true}}
+{"turn": 30, "tab": "draw", "lang": "en", "text": "put more patches for green", "intent": "add more green patches (grass)", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+1"]}}
+{"turn": 31, "tab": "draw", "lang": "en", "text": "put  green grass", "intent": "add green grass", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+1"], "reply_not": "a green grass"}, "partly": {"changed": true}}
+{"turn": 32, "tab": "draw", "lang": "en", "text": "more", "intent": "more grass", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+1"], "reply_not": "a green grass"}, "partly": {"changed": true}}
+{"turn": 33, "tab": "draw", "lang": "en", "text": "aseaza un leagan", "intent": "put a swing (Romanian typed while the selector was English)", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+1"]}}
+{"turn": 34, "tab": "draw", "lang": "ro", "text": "pune un leagan", "intent": "add a swing", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+1"]}}
+{"turn": 35, "tab": "draw", "lang": "ro", "text": "pune un copil pe leagan", "intent": "add a child on the swing (a make with a place)", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+1"]}}
+{"turn": 36, "tab": "draw", "lang": "ro", "text": "deseneaaza un copil", "intent": "draw a child", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+1"]}}
+{"turn": 37, "tab": "draw", "lang": "ro", "text": "pune-l pe leagan", "intent": "put him on the swing", "expect": {"world": "art.draw", "changed": true, "or_reply": "deja|already"}}
+{"turn": 38, "tab": "draw", "lang": "ro", "text": "copilul nu e un skeleton, fa un copil real", "intent": "the child is not a skeleton: draw a real child", "expect": {"world": "art.draw", "changed": true}}
+{"turn": 39, "tab": "draw", "lang": "ro", "text": "desneaza un bunic", "intent": "draw a grandfather", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+1"]}}
+{"turn": 40, "tab": "draw", "lang": "ro", "text": "deseneaza o fetita", "intent": "draw a little girl", "expect": {"world": "art.draw", "changed": true, "state": ["art.draw:objects.length>=$+1"]}}
+{"turn": 41, "tab": "draw", "lang": "ro", "text": "pune culori random la petalele florilor", "intent": "random colours on the petals of the flowers", "expect": {"world": "art.draw", "changed": true}}
+{"turn": 42, "tab": "draw", "lang": "ro", "text": "schimba avatarul sa fie un robot", "intent": "(typed on the Drawing, popup closed) the avatar becomes a robot: read by the avatar's domain, not the open tab", "expect": {"world": "ui.avatar", "tab": "draw", "state": ["ui.avatar:face.base=robot"]}}
+{"turn": 43, "tab": "draw", "lang": "ro", "text": "make the avatar a man", "intent": "(English typed with the Romanian selector, popup closed) the avatar becomes a man", "expect": {"world": "ui.avatar", "tab": "draw", "state": ["ui.avatar:face.base=man"]}}
+{"turn": 44, "tab": "draw", "lang": "ro", "view": "avatar", "mode": "form", "text": "become a boy", "intent": "(the avatar popup's card) the avatar becomes a boy", "expect": {"world": "ui.avatar", "tab": "draw", "state": ["ui.avatar:face.base=boy"]}}
+{"turn": 45, "tab": "draw", "lang": "ro", "view": "avatar", "mode": "form", "text": "become a boy", "intent": "(the same card again) already a boy: say so", "expect": {"world": "ui.avatar", "tab": "draw", "state": ["ui.avatar:face.base=boy"], "reply_not": "did not understand|Nu am [îi]n[tţț]eles"}}
+{"turn": 46, "tab": "draw", "lang": "ro", "view": "avatar", "mode": "form", "text": "become a man", "intent": "(card) the avatar becomes a man", "expect": {"world": "ui.avatar", "tab": "draw", "state": ["ui.avatar:face.base=man"]}}
+{"turn": 47, "tab": "draw", "lang": "ro", "view": "avatar", "mode": "form", "text": "look surprised", "intent": "(chip) the avatar looks surprised", "expect": {"world": "ui.avatar", "tab": "draw", "state": ["ui.avatar:face.expression=surprised"]}}
+{"turn": 48, "tab": "draw", "lang": "ro", "view": "avatar", "mode": "form", "text": "look sad", "intent": "(chip) the avatar looks sad", "expect": {"world": "ui.avatar", "tab": "draw", "state": ["ui.avatar:face.expression=sad"]}}
+{"turn": 49, "tab": "draw", "lang": "ro", "view": "avatar", "mode": "form", "text": "become a woman with curly hair", "intent": "(card) the avatar becomes the preset 'woman with curly hair'", "expect": {"world": "ui.avatar", "tab": "draw", "state": ["ui.avatar:face.base=woman with curly hair"]}}
+{"turn": 50, "tab": "draw", "lang": "ro", "view": "avatar", "mode": "form", "text": "become a bearded man", "intent": "(card) the avatar becomes the preset 'bearded man'", "expect": {"world": "ui.avatar", "tab": "draw", "state": ["ui.avatar:face.base=bearded man"]}}
+{"turn": 51, "tab": "draw", "lang": "ro", "view": "avatar", "mode": "form", "text": "become a bearded man", "intent": "(the same card again) already a bearded man: say so", "expect": {"world": "ui.avatar", "tab": "draw", "state": ["ui.avatar:face.base=bearded man"], "reply_not": "did not understand|Nu am [îi]n[tţț]eles"}}
