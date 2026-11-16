@@ -105,7 +105,7 @@ for (const reasoner of ['ops', 'matrix']) {
     const say = (n) => (n === 'wink' ? 'wink' : `look ${n}`);
     const bad = [];
     for (const other of names.filter((n) => n !== 'wink')) {
-      const s = fresh('robot');
+      const s = fresh('talk');   // the avatar is a popup over every tab (ambient); its tab runs the declared binding, where expressions are not read yet (worker-log: needs Q96 (3))
       const expr = () => s.state()['ui.avatar']?.face?.expression ?? '';
       const drawn = (transient) => shownExpression(s.state()['ui.avatar']?.face, transient);
       const check = (what) => { for (const tr of [null, 'smile', 'surprised']) if (drawn(tr) !== expr()) bad.push(`${other}: ${what}: view draws ${drawn(tr)} (flash ${tr}) but the state holds ${expr()}`); };

@@ -35,8 +35,21 @@ export function liveWorld(lib, world) {
   world._requestLive = load(world.requestText);
   let extra = '';
   if (world._requestLive) try { extra = catalogWholes(world._requestLive, requestLanguage(lib), world.requestText); } catch { extra = ''; }
+  if (world._requestLive) try { extra = [extra, joinedHonours(lib, world._requestLive, requestLanguage(lib))].filter(Boolean).join('\n'); } catch { /* the joins stay the library's */ }
   if (extra) world._requestLive = load(`${world.requestText}\n${extra}`) ?? world._requestLive;   // one load: the schema is compiled with the catalog's wholes
   return world._requestLive;
+}
+
+/**
+ * The kinds a world takes by join (std.schema.kinds from=<catalog type>), honoured with their kind for the acts of the join (std.schema.honours act= on=kind of=<kind>), so that the
+ * reader's lexicon has them before the catalog's other words (a part "eye" of a face of k.expect.part does not take "eyes") and the world's own words of them (core.word) reach them:
+ * sopworld 0.160's readRequest reads no joined kind. Host stand-in until the reader takes them (questions.md Q96 (1) [LIB]). No code here is per world.
+ */
+function joinedHonours(lib, live, language) {
+  if (typeof lib?.joinedKinds !== 'function' || !language || !ofType(live, 'std.schema.kinds').length) return '';
+  const byActs = new Map();
+  for (const [k, j] of lib.joinedKinds(live, [language])) for (const a of j.acts) (byActs.get(`${j.world}|${a}`) ?? byActs.set(`${j.world}|${a}`, []).get(`${j.world}|${a}`)).push(/^[a-z][\w-]*$/i.test(k) ? k : JSON.stringify(k));
+  return [...byActs].map(([wa, ks], i) => { const [w, a] = wa.split('|'); return `@jh${i} std.schema.honours world=${w} act=${a} on=kind ${ks.map((k) => `of=${k}`).join(' ')}`; }).join('\n');
 }
 
 /**

@@ -66,7 +66,7 @@ test('an already aborted signal changes nothing', async () => {
 });
 
 test('abort in the middle of a turn that already changed the state (host undo snapshot) restores the state', async () => {
-  const s = fresh('robot');
+  const s = fresh('talk');   // a turn that changes the state (the robot tab is the avatar's declared tab: "make a house and a man" is not the avatar's)
   const undo = s.snapshot();
   const before = JSON.stringify(s.state());
   const reply = await s.send('make a house and a man');

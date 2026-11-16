@@ -2,7 +2,7 @@
 // The published words and expectations a request needs (spec 28; sopworld 0.149 readRequest / reviseRequest / planRequest / sayRequest), bundled from the knowledge catalog. GENERATED:
 //   node scripts/build-bundled-request.mjs [<catalog folder (docs/worlds of sop-knowledge-worlds)>] [--check]     (no folder: the catalog at the pin; --check: exit 1 when stale)
 // Writes src/knowledge/bundled-request.mjs: one SOP text with the w.lang.en cues, closed words, number words, inflection and replies; the k.actions verbs; the k.expect amounts,
-// scale, makes and parts; the w.dialogue revisions; the k.colours names (the types of the library's own example, examples/request-app.mjs requestLanguage). Sources dropped.
+// scale, makes and parts; the w.dialogue revisions; the k.colours names; the k.faces slots, presets and expressions (the avatar joins its kinds from them); (the types of the library's own example, examples/request-app.mjs requestLanguage). Sources dropped.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { catalogFolder, emit, done, stamp } from './lib/generated.mjs';
@@ -13,6 +13,7 @@ const TYPES = {
   'k.expect': ['k.expect.amount', 'k.expect.scale', 'k.expect.make', 'k.expect.part'],
   'w.dialogue': ['w.dialogue.revision'],
   'k.colours': ['k.colours.basic', 'k.colours.colour'],
+  'k.faces': ['k.faces.slot', 'k.faces.preset', 'k.faces.expression'],   // the avatar's kinds by join (worlds/ui.avatar/request.sop std.schema.kinds): the parts of a face, the presets, the expressions
 };
 const { dir, commit } = await catalogFolder();
 const QUOTED = '"(?:[^"\\\\]|\\\\.)*"';

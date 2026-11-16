@@ -10,9 +10,10 @@
 import * as space from '../space/space.mjs';
 import { en } from '../../src/lang/en.mjs';
 import { comparativeWords } from '../../src/knowledge/values.mjs';
+import { NONE, DEFAULT_PRESET, slotOf, newFace, faceOf, snap, mark, apply, put, neighbours, centre, SCALE_MIN, SCALE_MAX } from './face.mjs';   // the face's state and its algorithms are the tool's (face.mjs)
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
-export const NONE = 'none';
+export { NONE, DEFAULT_PRESET, newFace, faceOf, neighbours };
 const ok = (value) => ({ status: 'supported', value });
 const no = (note) => ({ status: 'unsupported', note });
 // No interjection openers (M4: replies are plain English, translated whole).
@@ -26,7 +27,6 @@ const article = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
 const detOf = (...kinds) => [...en.facts()].filter((w) => w.type === 'lang.en.det' && kinds.includes(w.attrs.kind?.[0])).map((w) => String(w.attrs.text[0]).toLowerCase());
 const FUNCTION_WORDS = new Set([...detOf('article', 'possessive', 'demonstrative', 'quantifier'), ...en.words('pron'), ...en.words('aux'), ...en.words('fn', 'face')]);
 const NEGATIONS = new Set([...en.words('neg')]);
-const HISTORY = 40;
 
 /** Words of a text: lowercase, letters, digits and the hyphen. */
 export const tokens = (t) => lc(t).replace(/[^\p{L}\p{N}\s'-]+/gu, ' ').split(/\s+/).filter(Boolean);
@@ -125,37 +125,6 @@ export function clausesOf(data, words, opts = {}) {
 }
 
 // ---- the state ----------------------------------------------------------------------------------------------------------------------------------------------------
-export const DEFAULT_PRESET = 'girl';
-const slotOf = (data, name) => data.slots.find((s) => s.name === name);
-export function newFace(data, preset = DEFAULT_PRESET) {
-  const p = data.presets[preset] ?? data.presets[DEFAULT_PRESET] ?? Object.values(data.presets)[0];
-  const f = { v: 2, slots: {}, colours: { ...p.colours }, paint: {}, adj: {}, expression: '', base: p.name, name: '', saved: {}, options: null, n: 0, history: [], future: [], refs: [] };
-  for (const s of data.slots) f.slots[s.name] = p.slots[s.name] ?? NONE;
-  return f;
-}
-/** The face of the state, complete (a state of an earlier version is filled in; an old saved avatar of the DiceBear characters maps once to the nearest preset). */
-export function faceOf(ctx, data) {
-  const s = ctx.state;
-  if (!s.face || typeof s.face !== 'object' || s.face.v !== 2) {
-    const old = s.face ?? null;
-    s.face = newFace(data, nearestPreset(data, s));
-    if (old?.saved && typeof old.saved === 'object') s.face.saved = old.saved;
-    for (const k of Object.keys(s)) if (!['face', 'name'].includes(k)) delete s[k];
-  }
-  const f = s.face, d = newFace(data, f.base);
-  for (const k of Object.keys(d.slots)) f.slots[k] ??= NONE;
-  f.colours = { ...d.colours, ...f.colours }; f.paint ??= {}; f.adj ??= {}; f.saved ??= {}; f.history ??= []; f.future ??= []; f.expression ??= '';
-  return f;
-}
-/** The preset named like the character of an old saved avatar (robot, ...), else the default; the one place that knows the old state. */
-function nearestPreset(data, s) {
-  for (const w of [s?.character, s?.kind]) if (w && data.presets[lc(w).replace(/_/g, ' ')]) return lc(w).replace(/_/g, ' ');
-  return DEFAULT_PRESET;
-}
-const snap = (f) => ({ slots: { ...f.slots }, colours: { ...f.colours }, paint: { ...f.paint }, adj: structuredClone(f.adj), expression: f.expression, base: f.base });
-/** Takes a snapshot for undo before a change (one step per request); the redo list is dropped. */
-function mark(f) { f.history.push(snap(f)); if (f.history.length > HISTORY) f.history.shift(); f.future = []; f.options = null; }
-const apply = (f, s) => Object.assign(f, structuredClone(s));
 
 // ---- saying what the face is ------------------------------------------------------------------------------------------------------------------------------------
 const nounOf = (slot) => slot.split('_')[0];
@@ -210,12 +179,6 @@ function pickSlot(data, face, c, { wantPresent = false } = {}) {
 }
 const colourRole = (data, c, slot) => c.colours.find((x) => x.of === indexOf(data).roleOf[slot] || x.of === null) ?? c.colours[0] ?? null;
 
-/** Sets a slot to a variant; a variant the expression overrides is the user's choice now (the rest of the expression is kept as chosen parts). */
-function put(data, face, slot, name) {
-  const e = data.expressions[face.expression];
-  if (e && slot in e.over) { for (const [k, v] of Object.entries(e.over)) if (k !== slot) face.slots[k] = v; face.expression = ''; }
-  face.slots[slot] = name;
-}
 function paintSlot(data, face, slot, col) {
   const role = indexOf(data).roleOf[slot];
   if (role && col.of === role) { face.colours[role] = col.name; return `${plain(col.name)} ${plain(nounOf(slot))}`.trim(); }
@@ -345,19 +308,7 @@ export function faceColour(ctx, a, data) {
 }
 
 // ---- size and place ---------------------------------------------------------------------------------------------------------------------------------------------------
-const SCALE_MIN = 0.6, SCALE_MAX = 1.5, STEP = 1.15;
-const centre = (s, face) => { const a = face.adj[s.name] ?? {}, k = a.s ?? 1; return { x: s.x + s.w / 2 + (a.dx ?? 0), y: s.y + s.h / 2 + (a.dy ?? 0), w: s.w * k, h: s.h * k }; };
-/** The slots that follow a resized slot, by where their boxes lie (no names): those inside it keep their place in it; those resting on its top edge ride on it. */
-export function neighbours(data, slot) {
-  const inside = [], riders = [];
-  for (const o of data.slots) {
-    if (o.name === slot.name) continue;
-    const cx = o.x + o.w / 2, cy = o.y + o.h / 2;
-    if (cx > slot.x && cx < slot.x + slot.w && cy > slot.y && cy < slot.y + slot.h && o.w < slot.w) inside.push(o);
-    else if (o.y < slot.y && o.y + o.h > slot.y && o.x < slot.x + slot.w && o.x + o.w > slot.x && o.w >= slot.w * 0.6 && o.z > slot.z) riders.push(o);
-  }
-  return { inside, riders };
-}
+const STEP = 1.15;
 export function faceResize(ctx, a, data) {
   if (!data) return noFaces();
   const f = faceOf(ctx, data), cl = clausesOf(data, wordsOf(a)).filter((c) => c.slots.length);

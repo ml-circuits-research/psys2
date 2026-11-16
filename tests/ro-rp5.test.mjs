@@ -57,7 +57,7 @@ test('RP5b: "diagramă" is the diagram, "în diagramă" names the Diagram world,
   assert.match((await rules.translate('diagramă', { from: 'ro', to: 'en' })).text, /diagram/i);
   assert.match((await rules.translate('un grafic', { from: 'ro', to: 'en' })).text, /chart/);
   // on the Drawing tab art.draw reads "in the diagram" as a place of its own ("I did not understand where to put it"): on the failure ledger (P3)
-  for (const tab of ['robot', 'diagram']) {
+  for (const tab of ['talk', 'diagram']) {   // off the Drawing tab: Talk (the robot tab is the avatar's declared tab since the avatar moved onto the binding)
     const { r, s } = await run(tab, ['desenează trei cercuri în diagramă']);
     assert.equal(s.state()['ui.shell'].activeTab, 'diagram', tab);
     assert.equal(s.state()['diagram.sketch'].shapes.length, 3, tab);
