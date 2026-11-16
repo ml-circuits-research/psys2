@@ -9,56 +9,56 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=1d3eb6e330';
-import { reviewForeign } from './foreign-reading.mjs?v=79d8decc9c';
+import { composeReply, sayOf } from './composed-reply.mjs?v=9f0f6415fb';
+import { reviewForeign } from './foreign-reading.mjs?v=ee9c581226';
 import { installTextGen } from './textgen.mjs?v=a8831e42a2';
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=ff05a8582c';
-import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=ca19719ad4';
-import { validateWorldSet } from '../worlds/validate.mjs?v=f0bbfe4db3';
-import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=ff05a8582c';
-import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=e8a1f00976';
-import { createInterpreter } from '../interpreter/index.mjs?v=d604aa1cfc';
-import { createReasoner } from '../reasoner/index.mjs?v=3e3802602a';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=ef142ac40e';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=2c08312adb';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=3898ce1a32';
+import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=ba48a414aa';
+import { validateWorldSet } from '../worlds/validate.mjs?v=d6d1e62ada';
+import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=3898ce1a32';
+import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=eeb0da323c';
+import { createInterpreter } from '../interpreter/index.mjs?v=e526433a51';
+import { createReasoner } from '../reasoner/index.mjs?v=c71a8f3572';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=ee99fed862';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=3ae4f200f5';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
-import { splitSentences } from '../formalizer/rules/normalize.mjs?v=58963d395d';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=36494dd717';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=f0ba8543a7';
+import { splitSentences } from '../formalizer/rules/normalize.mjs?v=68ef599cf9';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=508ae8deaf';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=65bd0dd4a3';
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=2d04b92a2e';
 import { machineReads } from '../translate/reading-policy.mjs?v=96bd6cc0e4';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=5ccf612a4a';
+import { langRoNow } from '../translate/frames-ro.mjs?v=343ff65a69';
 import { repairInContext } from '../translate/source-repair.mjs?v=e721161854';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=ff05a8582c';
-import { lexIndex } from '../worlds/lexicon.mjs?v=f0499f971c';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=3898ce1a32';
+import { lexIndex } from '../worlds/lexicon.mjs?v=81a2069b08';
 import { perf } from '../formalizer/perf.mjs?v=b81e032a17';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=82a55329d9';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=c7505fc0dd';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=7710042509';
-import { checkValues } from './value-check.mjs?v=9f806bb103';
-import { attachValues } from '../knowledge/values.mjs?v=0d60c4bf76';
-import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3ebe6cdc98';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=fc1d52ece9';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=1f44a9eda1';
+import { checkValues } from './value-check.mjs?v=0cd294de33';
+import { attachValues } from '../knowledge/values.mjs?v=59791a2827';
+import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=ec9adbb9a2';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f39042bd20';
-import { Discourse } from './discourse.mjs?v=422ad5cc94';
-import { Dialogue } from './dialogue.mjs?v=0c0fa17afb';
+import { Discourse } from './discourse.mjs?v=08f83dac64';
+import { Dialogue } from './dialogue.mjs?v=c9d193797a';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=1e9911155e';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=a6bab7ea96';
-import { personTurn } from './person.mjs?v=ce7283503e';
-import { proposeByTypes } from './typed-reader.mjs?v=ecd7342ebe';
-import { withVariants, anyVoiceOn } from './variants.mjs?v=2c2f521009';
-import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=ff05a8582c';
-import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=ff05a8582c';
-import { repairFromScene } from './scene-referents.mjs?v=71b2b4cd5b';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=536f2c2248';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=854e190dce';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=9edcb8862f';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=7cdc96fc1d';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=7c9872d269';
+import { personTurn } from './person.mjs?v=b15606d80d';
+import { proposeByTypes } from './typed-reader.mjs?v=09d598eb1d';
+import { withVariants, anyVoiceOn } from './variants.mjs?v=6301b7f1dd';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=3898ce1a32';
+import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=3898ce1a32';
+import { repairFromScene } from './scene-referents.mjs?v=45b3294276';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=187cbf4703';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=1e6f91cf53';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=81eedb4f28';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
-import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=c8e7d9b55e';
+import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=5d7376aadc';
 
 export { runWorldTests } from './test-runner.mjs?v=635e001b3e';
 
@@ -364,7 +364,7 @@ import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=
 import { intentStep, weakReading, cutWorld } from './intent.mjs?v=5e4cf030ab';
 import { knownEnglishWord } from '../translate/en-ro.mjs?v=cbd133aecd';
 import { proposeReading, negationWords } from './proposer.mjs?v=b3c21ed7d7';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=0da7330ab7';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=734ec10249';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1964,7 +1964,10 @@ export class DialogSession {
     if (!plan) return null;
     if (req.act === 'make' && (plan.target ?? req.target) && !boundMake(plan.target ?? req.target)) return null;
     if (!plan.ok && (plan.notHonoured ?? []).some((x) => x.code === 'no_target')) return null;   // nothing named: the door's other paths say it
-    if (req.act === 'make' && !req.target && !(req.constraints ?? []).length && (plan.assumed ?? []).some((a) => a.key === 'target')) return null;   // a bare "draw" (nothing said but the act): never a whole guessed from the world (the door asks, as on every path); "something random", "5 nodes" are the planner's
+    if (req.act === 'make' && !req.target && !(req.constraints ?? []).length && (plan.assumed ?? []).some((a) => a.key === 'target')) return null;
+    // a whole guessed while the turn names a thing of its own that is not a target ("add a paragraph about rain": a part, not a story to write over the open document) is not the
+    // binding's, unless a count names that unit ("draw 6 nodes"); with no thing named at all ("draw whatever you want") the planner's guess stands
+    if (req.act === 'make' && !req.target && (plan.assumed ?? []).some((a) => a.key === 'target') && (q.request.mentions ?? []).some((m) => m.kind) && !(req.constraints ?? []).some((c) => c.on === 'count' && c.of && unitOfWhole(live, language, c.of))) return null;   // a bare "draw" (nothing said but the act): never a whole guessed from the world (the door asks, as on every path); "something random", "5 nodes" are the planner's
     if (replace && (plan.notHonoured ?? []).length) return null;   // a reaction with words the world does not take ("I like horses") is not a revision of its result
     // P9: a plan that breaks a count said of one kind ("6 boxes" planned as 3 boxes and 3 circles) is never carried out; the honest reply names it
     if (plan.ok) {
@@ -2011,14 +2014,14 @@ export class DialogSession {
   /**
    * The primitives table of a bound world for the library's runPlan: each op and custom function its std.tool wires declare, from the world's operations (an op runs as an act of
    * this turn: `{ status: 'supported' }`, else a refusal `{ ok: false, code }`; a custom search is called with its arguments and the view), the view (the world's `toolView`
-   * operation: its state as facts). No snapshot / restore: the library's timeline takes a plan back by the inverse of its diff through the bindings, so an id is never given twice. No code here is per world.
+   * operation: its state as facts; a refusal may carry the tool's reply fact name and roles). No snapshot / restore: the library's timeline takes a plan back by the inverse of its diff through the bindings, so an id is never given twice. No code here is per world.
    */
   _toolPrimitives(tabWorld, tools, labelBox = null) {
     const labelOf = () => (labelBox && typeof labelBox === 'object' ? labelBox.text : labelBox);
     const world = this.engine.set.get(tabWorld);
     const ops = world?.ops ?? {};
     const out = {};
-    for (const name of tools.ops.keys()) if (typeof ops[name] === 'function') out[name] = (args) => { const r = this._runWorldAct(tabWorld, name, { ...args, step: `turn${this._msg}`, label: labelOf() }); return r?.status === 'supported' ? r : { ok: false, code: r?.code ?? 'refused', reply: 'why.nothing', roles: {} }; };
+    for (const name of tools.ops.keys()) if (typeof ops[name] === 'function') out[name] = (args) => { const r = this._runWorldAct(tabWorld, name, { ...args, step: `turn${this._msg}`, label: labelOf() }); return r?.status === 'supported' ? r : { ok: false, code: r?.code ?? 'refused', reply: r?.reply ?? 'why.nothing', roles: r?.roles ?? {} }; };   // a tool's refusal may name its reply fact (refused.nothing_known)
     for (const name of tools.customs.keys()) if (typeof ops[name] === 'function') out[name] = (args, view) => ops[name](args, view);
     const state = () => { if (!this.isession.state[tabWorld]) this.isession.state[tabWorld] = typeof ops.initialState === 'function' ? ops.initialState() : {}; return this.isession.state[tabWorld]; };
     out.view = () => (typeof ops.toolView === 'function' ? ops.toolView({ state: state() }) : []);

@@ -7,7 +7,7 @@
 import {
   W, H, HORIZON, GROUND_BASE, KINDS, REGIONS, SHADES, canonColor, defaultColor, bbox, placeInRegion, regionOf, kindKey, kindName, COMPOSITE, isThing, ensureCustom, thingOfKey,
 } from './scene.mjs';
-import { habitat } from '../../src/knowledge/commonsense.mjs';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
+import { habitat } from '../../src/knowledge/habitat.mjs';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
 
 // The turn's step budget (a no-op outside a turn): placement is a search whose cost grows with the picture.
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
@@ -58,14 +58,14 @@ export function ensure(ctx) {
   B.scene = s;
   return s;
 }
-const knownAnchor = (kind) => { const z = habitat(B.know, String(kind).replace(/_/g, ' '))?.zones?.[0]; return z ?? null; };   // delegation: a kind this world has no row for is asked of the knowledge tier
+const knownAnchor = (kind) => { const z = habitat(B.know, String(kind).replace(/_/g, ' '))?.zones?.[0]; return z ?? null; };   // delegation: a kind this world has no row for is asked of the knowledge tier   // glue-lint: tool-data (kind name)
 export const anchorOf = (kind) => B.usual.get(kind) ?? knownAnchor(kind) ?? (KINDS[kind]?.region ? 'ground' : 'any');   // a place (lake, road, field) lies on the ground
 export const onGround = (kind) => ['ground', 'horizon'].includes(anchorOf(kind));
 export const byId = (s, id) => s.objects.find((o) => o.id === id);
 export const effectiveColor = (o) => o.color ?? defaultColor(kindKey(o));
 export const open = (ctx) => { try { ctx.request('ui.openTab', { tab: TAB }); } catch { /* the shell may not know the tab */ } };
 export const rnd = (s) => { s.seed = (Math.imul(s.seed, 1664525) + 1013904223) >>> 0; return s.seed / 4294967296; };
-export const idNum = (o) => Number(String(o.id).replace(/\D/g, '')) || 0;
+export const idNum = (o) => Number(String(o.id).replace(/\D/g, '')) || 0;   // glue-lint: tool-data (thing id)
 /** A colour of the catalog from colour words (a shade and a colour). */
 export function colorFrom(words, fallback = null) {
   let shade = null, color = null;
@@ -372,7 +372,7 @@ export function addThing(s, spec) {
  * `toolView` is the board's state as facts for the library's view (id, kind, colour, size grade, region); `thingAt` is the declared custom search (std.tool.custom).
  */
 const STEP = 70;
-const plainId = (id) => String(id).replace(/^\$/, '');
+const plainId = (id) => String(id).replace(/^\$/, '');   // glue-lint: tool-data (thing id)
 const sceneOf = (s, id) => (id == null ? null : (s.scenes ?? []).find((sc) => sc.id === plainId(id)) ?? null);
 /** The things of ids: a thing by its id, a scene by the things in it. */
 const objsOf = (s, ids) => [...new Set([].concat(ids ?? []).flatMap((id) => { const sc = sceneOf(s, id); return sc ? sc.members : [plainId(id)]; }))].map((id) => byId(s, id)).filter(Boolean);
@@ -398,7 +398,7 @@ function toolStep(ctx, { step = null, label = null } = {}, fn) {
 const DIRECTION = { up: [0, -1], down: [0, 1] };
 /** The board's grades (the size param accepts small, default, big) as factors of a kind's own size. */
 const GRADE = { small: 0.65, default: 1, big: 1.5 };
-const regionId = (place) => (place == null ? null : Object.hasOwn(REGIONS, String(place).replace(/_/g, ' ')) ? String(place).replace(/_/g, ' ') : null);   // the place values in the tool's own names (request.sop std.tool.value: corner -> bottom_left)
+const regionId = (place) => (place == null ? null : Object.hasOwn(REGIONS, String(place).replace(/_/g, ' ')) ? String(place).replace(/_/g, ' ') : null);   // the place values in the tool's own names (request.sop std.tool.value: corner -> bottom_left)   // glue-lint: tool-data (region id)
 const bandOf = (place) => (place != null && Object.hasOwn(GROUND_COLOR, place) ? place : place === 'ground' ? 'ground' : null);
 const gradeFactor = (size) => (size ? GRADE[size] ?? null : 1);
 /** A scene: a whole the things made in it belong to (they stand together; an act on the scene is an act on its things). */

@@ -11,7 +11,7 @@
  * A hit says only WHICH knowledge to load. It never decides the world of a message (spec 17, section 3).
  */
 
-import { parseLine, parseShard } from './catalog.mjs?v=0372695257';
+import { parseLine, parseShard } from './catalog.mjs?v=339ac7a09d';
 import { buildFaces } from './faces.mjs?v=30a5c18338';
 
 const NUMBER_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12 };
