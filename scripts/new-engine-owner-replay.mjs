@@ -16,21 +16,22 @@ for (const row of input) {
   if (!session) { session = { isession: { state: { 'art.draw': initialState(), 'ui.shell': {} } }, newEngineJournal: [] }; sessions.set(key, session); }
   const tab = row.context.tab;
   session.isession.state['ui.shell'].activeTab = tab;
-  const before = JSON.stringify(session.isession.state), reply = runNewEngine(session, row.text, { language: 'en' });
+  const before = JSON.stringify(session.isession.state), reply = await runNewEngine(session, row.text, { language: 'en' });
   const unchanged = before === JSON.stringify(session.isession.state);
   const refused = reply.statuses.every(status => status === 'unsupported');
   // Without an independently reviewed state-intent check, success is never promoted to right.
   const verdict = refused && unchanged && reply.effects.length === 0 && reply.text.trim() ? 'honest' : 'needs-review';
-  rows.push({ id: row.id, text: row.text, session: key, tab, area: row.area, retired: retired.has(tab), verdict,
+  rows.push({ classes: Array.isArray(row.classes) && row.classes.length ? row.classes : ['unclassified'], classificationStatus: Array.isArray(row.classes) && row.classes.length ? 'source-declared' : 'pending-reviewed-intent-tags', id: row.id, text: row.text, session: key, tab, area: row.area, retired: retired.has(tab), verdict,
     reason: reply.trace.reason ?? null, reply: reply.text, unchanged, legacy: reply.trace.legacy,
     source: { ...row.source, originalText: undefined }, contextualSetupReplayed: false });
 }
 const summary = Object.fromEntries(['right', 'partly', 'honest', 'wrong', 'needs-review'].map(verdict => [verdict, rows.filter(row => row.verdict === verdict).length]));
 const result = { source: { libraryCommit: pin, path, sha256: createHash('sha256').update(raw).digest('hex') },
   scope: '205 reviewed English development rows; sessions replay in recorded order from empty native Drawing state. Historical external UI actions and hand-gloss setup commands are not reconstructed. This measures truthful refusal and observed effects, not semantic success against provisional labels.',
+  classCounts: Object.fromEntries([...new Set(rows.flatMap(row => row.classes))].sort().map(name => [name, rows.filter(row => row.classes.includes(name)).length])),
   summary, retired: rows.filter(row => row.retired).length, rows };
 writeFileSync('training/results/new-engine-owner-english.json', JSON.stringify(result, null, 2) + '\n');
 const escape = text => String(text).replaceAll('|', '\\|').replaceAll('\n', ' ');
-writeFileSync('training/results/new-engine-owner-english.md', '# New-engine English owner replay\n\n' + result.scope + '\n\n' + JSON.stringify(summary) + `; retired rows: ${result.retired}. No legacy column.\n\n| Row | Tab | Retired | Verdict | Message | Reply |\n|---|---|---|---|---|---|\n` + rows.map(row => [row.id, row.tab, row.retired, row.verdict, row.text, row.reply].map(escape).join(' | ')).map(row => '| ' + row + ' |').join('\n') + '\n');
+writeFileSync('training/results/new-engine-owner-english.md', '# New-engine English owner replay\n\n' + result.scope + '\n\n' + JSON.stringify(summary) + `; retired rows: ${result.retired}. No legacy column.\n\n| Row | Classes | Tab | Retired | Verdict | Message | Reply |\n|---|---|---|---|---|---|---|\n` + rows.map(row => [row.id, row.classes.join(', '), row.tab, row.retired, row.verdict, row.text, row.reply].map(escape).join(' | ')).map(row => '| ' + row + ' |').join('\n') + '\n');
 console.log(JSON.stringify({ summary, retired: result.retired, rows: rows.length }));
 if (summary.wrong || summary['needs-review'] || rows.some(row => row.legacy !== false)) process.exitCode = 1;

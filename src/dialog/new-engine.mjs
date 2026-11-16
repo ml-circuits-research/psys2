@@ -1,8 +1,11 @@
-// Opt-in, bounded existing-object property path. Vocabulary and readings are declarations.
+// Sole request route with declared providers; bounded property execution remains assessed. Vocabulary and readings are declarations.
 import { World, compileGrammarOverlay, readGrammarRequests, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs';
 import SOURCE from './new-engine-source.mjs';
+import * as api from '../vendor/sopworld/sopworld.mjs';
+import { createGeneralEnglishReader, englishRequestMappings } from './reader-compat/general.mjs';
 import { resolvePropertyValue, selectPropertyObject } from './property-selection.mjs';
 import { NEW_ENGINE_AREAS } from './new-engine-areas.mjs';
+import { flatRequestProjection } from './request-projection.mjs';
 const hosts = new WeakMap();
 let grammar;
 const first = (wire, key) => wire?.attrs[key]?.[0];
@@ -15,7 +18,13 @@ function reader() {
     const world = World.fromJSON(SOURCE.snapshot);
     const compiled = compileGrammarOverlay(world, { types: SOURCE.types });
     if (!compiled.ok) throw new Error('Declared reader could not compile');
-    grammar = { world, compiled };
+    const phraseWorld = World.fromJSON(SOURCE.phraseSnapshot), frameWorld = World.fromJSON(SOURCE.frameSnapshot);
+    const mappings = englishRequestMappings(api, frameWorld);
+    if (!mappings.ok) throw new Error('Declared request mappings could not compile');
+    const general = createGeneralEnglishReader(api);
+    const generalCompiled = general.compile({ phraseWorld, frameWorld, mappings: mappings.mappings });
+    if (!generalCompiled.ok) throw new Error('Declared general reader could not compile');
+    grammar = { world, compiled, general, generalCompiled };
   }
   return grammar;
 }
@@ -38,7 +47,6 @@ export function runNewEngine(session, text, options = {}) {
   if (typeof text !== 'string' || !text.trim() || text.length > 65536) return refusal('reading', { unsupported: 'A bounded nonempty English message is required.' });
   const tab = options.view ?? session.isession.state['ui.shell']?.activeTab;
   const area = NEW_ENGINE_AREAS[tab];
-  if (!area) return refusal('area');
   if (options.language && options.language !== 'en') return refusal('language');
   const prior = options.invocation && (session.newEngineJournal || []).find(record => record.invocation === options.invocation);
   if (prior) {
@@ -46,8 +54,16 @@ export function runNewEngine(session, text, options = {}) {
     return reply('This invocation was already recorded. No new operation was performed.', false,
       { replayed: true, historicalReceipt: { ...structuredClone(prior.receipt), replayed: true }, journal: structuredClone(prior) });
   }
-  const { world: source, compiled } = reader();
-  const reading = readGrammarRequests(source, text, { compiled, ...SOURCE.options, max: 32 });
+  const { world: source, compiled, general, generalCompiled } = reader();
+  // Parallel declared proposal sources, never an old-route fallback. Distinct
+  // graphs remain alternatives until an explicit semantic equivalence proof.
+  const providers = [
+    { id: 'property-profile', result: readGrammarRequests(source, text, { compiled, ...SOURCE.options, max: 32 }) },
+    { id: 'general-frames', result: general.read(generalCompiled, text) },
+  ];
+  const candidates = providers.flatMap(provider => provider.result.coverage?.complete
+    ? provider.result.candidates.map(candidate => ({ ...candidate, provider: provider.id })) : []);
+  const reading = { candidates, coverage: { complete: candidates.length > 0 }, providers };
   if (!reading.coverage?.complete || reading.candidates.length !== 1) return refusal('reading', { reading });
   return executeRequestCandidate(session, reading.candidates[0], text, options);
 }
@@ -56,7 +72,6 @@ export function runNewEngine(session, text, options = {}) {
 export function executeRequestCandidate(session, candidate, text, options = {}) {
   const tab = options.view ?? session.isession.state['ui.shell']?.activeTab;
   const area = NEW_ENGINE_AREAS[tab];
-  if (!area) return refusal('area');
   const prior = options.invocation && (session.newEngineJournal || []).find(record => record.invocation === options.invocation);
   if (prior) {
     if (prior.text !== text || prior.area !== tab || prior.reading.wires !== candidate?.wires) return refusal('identity');
@@ -77,8 +92,15 @@ export function executeRequestCandidate(session, candidate, text, options = {}) 
   evidence.load('@request.module core.use world=std.request\n@trace.module core.use world=std.trace\n@reply.module core.use world=std.reply');
   if (!evidence.tell(candidate.wires).ok || !inspectRequest(evidence, candidate.request).ok) return refusal('structure');
   const request = evidence.get(candidate.request), targets = evidence.ofType('std.request.target'), conditions = evidence.ofType('std.request.constraint');
-  const target = targets[0], condition = evidence.get(first(request, 'root')?.slice(1));
+  const projection = flatRequestProjection(candidate);
+  const structureSummary = projection.ok ? `I read a ${projection.request.mood} request with act ${projection.request.act}`
+    + (projection.targets.length ? ` about ${projection.targets.map(target => `${target.mode} ${target.kind || 'target'}`).join(', ')}` : '')
+    + (projection.results.length ? ` and ${projection.results.length} result constraint(s)` : '') + '.' : undefined;
+  if (!area) return refusal('area', { understood: structureSummary, reading: candidate, projection: projection.ok ? undefined : projection });
+  const target = targets[0];
   const selector = evidence.get(first(target, 'selector')?.slice(1));
+  const results = conditions.filter(item => item.id !== selector?.id);
+  const condition = first(request, 'root') ? evidence.get(first(request, 'root').slice(1)) : results.length === 1 ? results[0] : null;
   const allowed = (wire, keys) => wire && Object.keys(wire.attrs).every(key => keys.includes(key));
   const equality = wire => wire?.type === 'std.request.constraint' && first(wire, 'operator') === 'eq'
     && first(wire, 'polarity') === 'positive' && wire.attrs.value?.length === 1
@@ -93,7 +115,7 @@ export function executeRequestCandidate(session, candidate, text, options = {}) 
     || (first(target, 'determiner') && first(target, 'determiner') !== 'definite')
     || (selector && (!equality(selector) || first(selector, 'character') !== 'assumption'))
     || ['std.request.group', 'std.request.not', 'std.request.quant', 'std.request.value'].some(type => evidence.ofType(type).length))
-    return refusal('structure', { reading: candidate, unsupported: 'one positive required equality and optional positive assumed equality selector' });
+    return refusal('structure', { understood: structureSummary, reading: candidate, unsupported: 'one positive required equality and optional positive assumed equality selector' });
   const binding = area.bindings.find(item => item.act === first(request, 'act') && item.concept === first(condition, 'concept'));
   const selectorBinding = selector && area.bindings.find(item => item.concept === first(selector, 'concept'));
   if (!binding || (selector && !selectorBinding)) return refusal('structure', { reading: candidate, unsupported: 'undeclared property binding' });

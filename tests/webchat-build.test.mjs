@@ -55,7 +55,7 @@ test('webchat build produces a bundle the browser loader can run', async () => {
     assert.equal(index.words.ids.some((id) => ['geo.map', 'media.music'].includes(id)), false);
     const engine = await createEngine({ loader: createBundleLoader(bundle), options: { applicationAreas: index.retiredAreas } });
     const unavailable = await engine.createSession().send('surprise me', { view: 'music' });
-    assert.equal(unavailable.trace.reason, 'area');
+    assert.equal(unavailable.trace.reason, 'reading', 'unread input remains explicit even in an unsupported area');
     assert.equal(unavailable.trace.legacy, false);
     assert.deepEqual(unavailable.effects, []);
 

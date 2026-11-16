@@ -4212,3 +4212,36 @@ Fetched owner/review63adee65 immediately. Stopped full-v2 at729600examples/22800
 Implemented hashed exclusion before candidate-bank construction and a training guard requiring exclusion metadata. Regenerated data-v3-clean:872071train/99566calibration candidate rows,134/134keys; streamed audit finds zero excluded-ID overlap in both splits and all1648 source exclusions found. Restarted full-v3-clean from original pretrained encoder only. Compressed pairs load into RAM; old derived JSONL archived losslessly after decompressed SHA verification, preserving meaningful model/data artifacts and1.1GB disk reserve. Exclusion fixture passes, including no reserved-only negative-label leakage. Full clean run/calibration remain pending. New lane ownership follows functional class: training/calibration and question/check across all four areas; Calendar native/policy remains published groundwork, not a full area-success claim.
 
 Clean-restart source checks: exclusion/instance fixture 1/1 passed, Python compile checks passed, active new-engine `npm test`98/98 passed after canonical map regeneration, `git diff --check` passed. Training already running on audited compressed clean data with successful initial optimizer steps; no calibration result yet. Exact published exclusion source is origin63adee65:`training/eval/functional-matrix/exclude-from-training.json`.
+
+### 2026-11-16 — Functional-class baseline through the sole engine
+
+Development matrix replay: 1,648 honest no-effect refusals, zero right/partly/wrong/unreviewed executions. This baseline is not successful understanding: 1,635 rows have incomplete native setup and are labelled explicitly; annotated context is retained without fabricated state. Owner replay remains 205 honest, zero wrong, all 205 currently unclassified because source class tags are absent. Q114 records the classification/setup request. The table counts class membership (rows can occur in more than one class); each cell is right / partly / honest / wrong.
+
+| Class | Drawing | Diagram | Document | Calendar |
+|---|---|---|---|---|
+| arrange / layout | 0/0/10/0 | 0/0/25/0 | 0/0/6/0 | 0/0/6/0 |
+| check | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| connect / group | 0/0/17/0 | 0/0/25/0 | 0/0/12/0 | 0/0/6/0 |
+| create | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| cross-area | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| follow-up, undo | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| move / place | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| no request | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| objection | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| propose | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| question | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| relative change | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| remove | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| select by description | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| set property | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| sets, or, not | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| several requests | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+| soft wishes | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 | 0/0/25/0 |
+
+### 2026-11-16 — General declared reader and functional instrumentation integrated
+
+- Adopted published library `2f99032d9988074829f1f7f46ebc87ea0685ac76` (0.197.0, build `7b6e4694941c`) as the single application/codec bundle, with byte-identical compatibility modules and knowledge `7fbcf774e21c168e1c1b5f9dbd4e95b51a186825`. Reproducible generation retains separate phrase and frame snapshots. Both the general frame provider and existing property provider run as parallel declared proposals; neither is a retired-route fallback. Distinct candidate graphs are not collapsed by a semantic shorthand.
+- The existing assessed native property executor now accepts one rootless flat result, as allowed by the standard contract. General resultative and selector-plus-result readings reach that same effect/observation/typed-claim path. Unsupported areas can retain the validated reading and explicit missing capability without effect. Full flat conjunctions are retained by the shared admission view; unsupported graph types/attributes remain explicit refusals.
+- Added batch orchestration using public all-graph preflight and dependency frontier, with complete per-field projection witnesses and historical replay preservation. This boundary is preparation for class-owned area mappings: native receipts stay unverified and block all dependent entries; it does not yet claim multi-action semantic success or full area registration.
+- Final active gate: 105/105 passed, zero failures/skips/TODO. The first full run had two obsolete assertions that no general phrase support existed / area refusal happened before reading; updated them to verify the newly supported selector reading and truthful no-effect refusal. A subsequent whitespace-only source cleanup regenerated artifacts; map/fingerprint tests passed 3/3. Diff check passed. Real Chromium at the normal URL passed owner property wording, multiword colour, unknown refusal, no legacy-option route, auxiliary no-op APIs, non-English refusal, undo/restart persistence and native no-op; visible purple circle had 748 pixels. A separate actual worker turn using the general resultative wording set native colour to purple and added one history entry.
+- Functional matrix after this landing: 1,648 honest / 0 wrong / 0 unreviewed executions, with 1,635 context-incomplete rows explicitly retained; class table above remains unchanged. Owner replay: 205 honest / 0 wrong, with pending class annotations explicitly unclassified. These are refusal/observation measurements, not newly claimed correct-intent wins. Training correction `edaac259` independently passed the active 99-test baseline and both replays before publication. Class-owned create/remove, property and query projections continue in parallel.

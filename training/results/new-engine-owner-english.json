@@ -5,6 +5,9 @@
     "sha256": "a1836c8a8f178e15e6019bc19996285defb3ebbc9f1d68ea640aa698fbe615f5"
   },
   "scope": "205 reviewed English development rows; sessions replay in recorded order from empty native Drawing state. Historical external UI actions and hand-gloss setup commands are not reconstructed. This measures truthful refusal and observed effects, not semantic success against provisional labels.",
+  "classCounts": {
+    "unclassified": 205
+  },
   "summary": {
     "right": 0,
     "partly": 0,
@@ -15,6 +18,10 @@
   "retired": 0,
   "rows": [
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:001",
       "text": "creare a random diagram",
       "session": "owner-en-2026-11-15",
@@ -22,8 +29,8 @@
       "area": "diagram",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -38,6 +45,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:002",
       "text": "this is stupid, my expectatiom was to get a nice eiagram5-10 ndes, arraws, nice layout, not a circle",
       "session": "owner-en-2026-11-15",
@@ -45,8 +56,8 @@
       "area": "diagram",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -61,6 +72,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:003",
       "text": "you are saying that I am stupid?",
       "session": "owner-en-2026-11-15",
@@ -68,8 +83,8 @@
       "area": "diagram",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -84,6 +99,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:004",
       "text": "you are stupid",
       "session": "owner-en-2026-11-15",
@@ -91,8 +110,8 @@
       "area": "diagram",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -107,6 +126,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:005",
       "text": "Change the colour of the circle to purple.",
       "session": "owner-en-2026-11-15",
@@ -115,7 +138,7 @@
       "retired": false,
       "verdict": "honest",
       "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reply": "I read a do request with act change about existing circle and 1 result constraint(s). This area does not yet support the new request path. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -130,6 +153,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:006",
       "text": "add 5 random nodes",
       "session": "owner-en-2026-11-15",
@@ -137,8 +164,8 @@
       "area": "diagram",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -153,6 +180,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:007",
       "text": "not all circles, better layout",
       "session": "owner-en-2026-11-15",
@@ -160,8 +191,8 @@
       "area": "diagram",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -176,6 +207,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:008",
       "text": "write a story about ancient hobbits with 5 chapters",
       "session": "owner-en-2026-11-15",
@@ -183,8 +218,8 @@
       "area": "documents",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -199,6 +234,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:009",
       "text": "create a random picture",
       "session": "owner-en-2026-11-15",
@@ -222,6 +261,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:010",
       "text": "break in 3 layers: eater, land and sky",
       "session": "owner-en-2026-11-15",
@@ -245,6 +288,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:011",
       "text": "Change the colour of the sun to black.",
       "session": "owner-en-2026-11-15",
@@ -268,6 +315,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:012",
       "text": "Change the colour of the sun to black.",
       "session": "owner-en-2026-11-15",
@@ -291,6 +342,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:013",
       "text": "Change the size of the sun to big.",
       "session": "owner-en-2026-11-15",
@@ -314,6 +369,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:014",
       "text": "Change the fill of the sun to solid.",
       "session": "owner-en-2026-11-15",
@@ -337,6 +396,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:015",
       "text": "make sunt green",
       "session": "owner-en-2026-11-15",
@@ -360,6 +423,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-en-2026-11-15:016",
       "text": "add a small pond",
       "session": "owner-en-2026-11-15",
@@ -383,6 +450,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:014",
       "text": "add a green duck",
       "session": "owner-mixed-2026-11-16",
@@ -406,6 +477,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:015",
       "text": "move the green duck in water",
       "session": "owner-mixed-2026-11-16",
@@ -429,6 +504,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:016",
       "text": "Change the colour of the green bird to yellow.",
       "session": "owner-mixed-2026-11-16",
@@ -452,6 +531,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:017",
       "text": "move it to the lake",
       "session": "owner-mixed-2026-11-16",
@@ -475,6 +558,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:018",
       "text": "move the house over water",
       "session": "owner-mixed-2026-11-16",
@@ -498,6 +585,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:019",
       "text": "move the birds near lake",
       "session": "owner-mixed-2026-11-16",
@@ -521,6 +612,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:020",
       "text": "the lake is not there",
       "session": "owner-mixed-2026-11-16",
@@ -544,6 +639,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:021",
       "text": "move the house down",
       "session": "owner-mixed-2026-11-16",
@@ -567,6 +666,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:022",
       "text": "down",
       "session": "owner-mixed-2026-11-16",
@@ -590,6 +693,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:023",
       "text": "down",
       "session": "owner-mixed-2026-11-16",
@@ -613,6 +720,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:024",
       "text": "move the flowers down",
       "session": "owner-mixed-2026-11-16",
@@ -636,6 +747,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:025",
       "text": "down",
       "session": "owner-mixed-2026-11-16",
@@ -659,6 +774,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:026",
       "text": "the pond up",
       "session": "owner-mixed-2026-11-16",
@@ -682,6 +801,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:027",
       "text": "move th epond upper",
       "session": "owner-mixed-2026-11-16",
@@ -705,6 +828,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:028",
       "text": "move the lake upper",
       "session": "owner-mixed-2026-11-16",
@@ -728,6 +855,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:029",
       "text": "move the watter upper",
       "session": "owner-mixed-2026-11-16",
@@ -751,6 +882,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:030",
       "text": "put more patches for green",
       "session": "owner-mixed-2026-11-16",
@@ -774,6 +909,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:031",
       "text": "put  green grass",
       "session": "owner-mixed-2026-11-16",
@@ -797,6 +936,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:032",
       "text": "more",
       "session": "owner-mixed-2026-11-16",
@@ -820,6 +963,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:043",
       "text": "make the avatar a man",
       "session": "owner-mixed-2026-11-16",
@@ -843,6 +990,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:044",
       "text": "become a boy",
       "session": "owner-mixed-2026-11-16",
@@ -866,6 +1017,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:045",
       "text": "become a boy",
       "session": "owner-mixed-2026-11-16",
@@ -889,6 +1044,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:046",
       "text": "become a man",
       "session": "owner-mixed-2026-11-16",
@@ -912,6 +1071,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:047",
       "text": "look surprised",
       "session": "owner-mixed-2026-11-16",
@@ -935,6 +1098,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:048",
       "text": "look sad",
       "session": "owner-mixed-2026-11-16",
@@ -958,6 +1125,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:049",
       "text": "become a woman with curly hair",
       "session": "owner-mixed-2026-11-16",
@@ -981,6 +1152,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:050",
       "text": "become a bearded man",
       "session": "owner-mixed-2026-11-16",
@@ -1004,6 +1179,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-mixed-2026-11-16:051",
       "text": "become a bearded man",
       "session": "owner-mixed-2026-11-16",
@@ -1027,6 +1206,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:001",
       "text": "draw a white house and a green one",
       "session": "owner-hand-gloss:real:001",
@@ -1034,8 +1217,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -1049,6 +1232,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:002",
       "text": "draw a house",
       "session": "owner-hand-gloss:real:002",
@@ -1071,6 +1258,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:003",
       "text": "draw a green house",
       "session": "owner-hand-gloss:real:003",
@@ -1078,8 +1269,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -1093,6 +1284,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:006",
       "text": "draw a red circle",
       "session": "owner-hand-gloss:real:006",
@@ -1100,8 +1295,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -1115,6 +1310,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:007",
       "text": "draw four squares",
       "session": "owner-hand-gloss:real:007",
@@ -1122,8 +1321,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -1137,6 +1336,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:008",
       "text": "make a nicer layout",
       "session": "owner-hand-gloss:real:008",
@@ -1144,8 +1347,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -1159,6 +1362,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:009",
       "text": "connect all the shapes",
       "session": "owner-hand-gloss:real:009",
@@ -1166,8 +1373,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -1181,6 +1388,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:011",
       "text": "draw a house and three clouds",
       "session": "owner-hand-gloss:real:011",
@@ -1203,6 +1414,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:012",
       "text": "how can I change the shape of a diagram",
       "session": "owner-hand-gloss:real:012",
@@ -1210,8 +1425,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -1225,6 +1440,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:021",
       "text": "draw a ball",
       "session": "owner-hand-gloss:real:021",
@@ -1232,8 +1451,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -1247,6 +1466,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:022",
       "text": "draw a crocodile",
       "session": "owner-hand-gloss:real:022",
@@ -1269,6 +1492,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:023",
       "text": "another crocodile",
       "session": "owner-hand-gloss:real:023",
@@ -1291,6 +1518,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:024",
       "text": "draw a blue crocodile",
       "session": "owner-hand-gloss:real:024",
@@ -1313,6 +1544,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:025",
       "text": "rotate the blue crocodile by 30 degrees",
       "session": "owner-hand-gloss:real:025",
@@ -1335,6 +1570,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:026",
       "text": "make the crocodile's legs black",
       "session": "owner-hand-gloss:real:026",
@@ -1357,6 +1596,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:028",
       "text": "make the blue crocodile's leg black",
       "session": "owner-hand-gloss:real:028",
@@ -1379,6 +1622,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:029",
       "text": "draw 3 different houses",
       "session": "owner-hand-gloss:real:029",
@@ -1401,6 +1648,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:033",
       "text": "move the crocodiles into the lake",
       "session": "owner-hand-gloss:real:033",
@@ -1423,6 +1674,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:035",
       "text": "move the crocodiles into the lake",
       "session": "owner-hand-gloss:real:035",
@@ -1445,6 +1700,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:036",
       "text": "move the houses above the lake",
       "session": "owner-hand-gloss:real:036",
@@ -1467,6 +1726,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:037",
       "text": "move the houses above the water",
       "session": "owner-hand-gloss:real:037",
@@ -1489,6 +1752,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:039",
       "text": "move the houses higher",
       "session": "owner-hand-gloss:real:039",
@@ -1511,6 +1778,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:040",
       "text": "and even higher",
       "session": "owner-hand-gloss:real:040",
@@ -1533,6 +1804,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:041",
       "text": "move the crocodiles lower",
       "session": "owner-hand-gloss:real:041",
@@ -1555,6 +1830,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:043",
       "text": "put grass under the houses",
       "session": "owner-hand-gloss:real:043",
@@ -1562,8 +1841,8 @@
       "area": "drawing",
       "retired": false,
       "verdict": "honest",
-      "reason": "reading",
-      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
+      "reason": "structure",
+      "reply": "This request needs a capability that is not yet supported. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -1577,6 +1856,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:044",
       "text": "put a blue sky and a sun",
       "session": "owner-hand-gloss:real:044",
@@ -1599,6 +1882,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:046",
       "text": "put sky and sun",
       "session": "owner-hand-gloss:real:046",
@@ -1621,6 +1908,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:047",
       "text": "put grass under the houses",
       "session": "owner-hand-gloss:real:047",
@@ -1628,8 +1919,8 @@
       "area": "drawing",
       "retired": false,
       "verdict": "honest",
-      "reason": "reading",
-      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
+      "reason": "structure",
+      "reply": "This request needs a capability that is not yet supported. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -1643,6 +1934,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:048",
       "text": "put some grass",
       "session": "owner-hand-gloss:real:048",
@@ -1665,6 +1960,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:050",
       "text": "put a lake too",
       "session": "owner-hand-gloss:real:050",
@@ -1687,6 +1986,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:051",
       "text": "move the first house further left and lower",
       "session": "owner-hand-gloss:real:051",
@@ -1709,6 +2012,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:052",
       "text": "move even more to the left",
       "session": "owner-hand-gloss:real:052",
@@ -1731,6 +2038,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:053",
       "text": "move the middle house more to the right",
       "session": "owner-hand-gloss:real:053",
@@ -1753,6 +2064,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:055",
       "text": "move the house on the right more to the right",
       "session": "owner-hand-gloss:real:055",
@@ -1775,6 +2090,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:056",
       "text": "make a drawing with a lake, a duck, a villa, clouds, sun, grass",
       "session": "owner-hand-gloss:real:056",
@@ -1797,6 +2116,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:057",
       "text": "draw a lake",
       "session": "owner-hand-gloss:real:057",
@@ -1819,6 +2142,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:058",
       "text": "draw a duck",
       "session": "owner-hand-gloss:real:058",
@@ -1841,6 +2168,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:060",
       "text": "move the duck onto the lake",
       "session": "owner-hand-gloss:real:060",
@@ -1863,6 +2194,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:061",
       "text": "draw a villa",
       "session": "owner-hand-gloss:real:061",
@@ -1885,6 +2220,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:062",
       "text": "a house and 2 fish",
       "session": "owner-hand-gloss:real:062",
@@ -1907,6 +2246,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:063",
       "text": "move the house onto the ground",
       "session": "owner-hand-gloss:real:063",
@@ -1929,6 +2272,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:064",
       "text": "make some grass above the lake",
       "session": "owner-hand-gloss:real:064",
@@ -1951,6 +2298,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:068",
       "text": "make a sky with 5 clouds and a sun",
       "session": "owner-hand-gloss:real:068",
@@ -1973,6 +2324,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:069",
       "text": "a sky with 5 clouds",
       "session": "owner-hand-gloss:real:069",
@@ -1995,6 +2350,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:070",
       "text": "give me 5 clouds",
       "session": "owner-hand-gloss:real:070",
@@ -2017,6 +2376,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:071",
       "text": "a sun",
       "session": "owner-hand-gloss:real:071",
@@ -2039,6 +2402,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:072",
       "text": "draw a sun",
       "session": "owner-hand-gloss:real:072",
@@ -2061,6 +2428,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:073",
       "text": "move the sun higher",
       "session": "owner-hand-gloss:real:073",
@@ -2083,6 +2454,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:074",
       "text": "make the sky blue",
       "session": "owner-hand-gloss:real:074",
@@ -2105,6 +2480,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:075",
       "text": "make a small lake on the left too",
       "session": "owner-hand-gloss:real:075",
@@ -2127,6 +2506,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:076",
       "text": "draw a small lake, a pond",
       "session": "owner-hand-gloss:real:076",
@@ -2149,6 +2532,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:077",
       "text": "draw a swing",
       "session": "owner-hand-gloss:real:077",
@@ -2171,6 +2558,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:078",
       "text": "draw a child on the swing",
       "session": "owner-hand-gloss:real:078",
@@ -2193,6 +2584,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:080",
       "text": "move the child next to the swing, on the left",
       "session": "owner-hand-gloss:real:080",
@@ -2215,6 +2610,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:082",
       "text": "move the child to the left",
       "session": "owner-hand-gloss:real:082",
@@ -2237,6 +2636,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:083",
       "text": "move the child onto the grass",
       "session": "owner-hand-gloss:real:083",
@@ -2259,6 +2662,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:084",
       "text": "make a little girl too",
       "session": "owner-hand-gloss:real:084",
@@ -2281,6 +2688,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:085",
       "text": "move the girl next to the boy",
       "session": "owner-hand-gloss:real:085",
@@ -2303,6 +2714,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:086",
       "text": "move the girl in front of the house",
       "session": "owner-hand-gloss:real:086",
@@ -2325,6 +2740,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:091",
       "text": "make a grandfather next to the duck",
       "session": "owner-hand-gloss:real:091",
@@ -2347,6 +2766,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:092",
       "text": "draw a grandfather",
       "session": "owner-hand-gloss:real:092",
@@ -2369,6 +2792,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:093",
       "text": "draw a goat",
       "session": "owner-hand-gloss:real:093",
@@ -2391,6 +2818,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:094",
       "text": "draw a goat",
       "session": "owner-hand-gloss:real:094",
@@ -2413,6 +2844,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:096",
       "text": "move the goat next to the duck",
       "session": "owner-hand-gloss:real:096",
@@ -2435,6 +2870,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:097",
       "text": "move the goat lower",
       "session": "owner-hand-gloss:real:097",
@@ -2457,6 +2896,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:098",
       "text": "more to the right",
       "session": "owner-hand-gloss:real:098",
@@ -2479,6 +2922,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:099",
       "text": "move the goat more to the right",
       "session": "owner-hand-gloss:real:099",
@@ -2501,6 +2948,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:100",
       "text": "move the goat lower, and more to the left",
       "session": "owner-hand-gloss:real:100",
@@ -2523,6 +2974,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:101",
       "text": "draw a donkey too, but not flying, on the grass",
       "session": "owner-hand-gloss:real:101",
@@ -2545,6 +3000,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:102",
       "text": "draw a donkey",
       "session": "owner-hand-gloss:real:102",
@@ -2567,6 +3026,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:103",
       "text": "draw a cow",
       "session": "owner-hand-gloss:real:103",
@@ -2589,6 +3052,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:104",
       "text": "move the cow lower, so it does not fly any more",
       "session": "owner-hand-gloss:real:104",
@@ -2611,6 +3078,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:106",
       "text": "move the cow lower",
       "session": "owner-hand-gloss:real:106",
@@ -2633,6 +3104,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:107",
       "text": "and even lower",
       "session": "owner-hand-gloss:real:107",
@@ -2655,6 +3130,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:108",
       "text": "move the cow even lower and more to the right",
       "session": "owner-hand-gloss:real:108",
@@ -2677,6 +3156,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:109",
       "text": "move the house higher",
       "session": "owner-hand-gloss:real:109",
@@ -2699,6 +3182,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:110",
       "text": "move the fish into different corners at the top",
       "session": "owner-hand-gloss:real:110",
@@ -2721,6 +3208,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:111",
       "text": "move a fish to the top left",
       "session": "owner-hand-gloss:real:111",
@@ -2743,6 +3234,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:112",
       "text": "more to the left",
       "session": "owner-hand-gloss:real:112",
@@ -2765,6 +3260,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:113",
       "text": "move a fish into the right corner",
       "session": "owner-hand-gloss:real:113",
@@ -2787,6 +3286,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:140",
       "text": "add 10 and 4 for me",
       "session": "owner-hand-gloss:real:140",
@@ -2794,8 +3297,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -2809,6 +3312,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:142",
       "text": "Zoe has 14 marbles. Zoe eats 8. How many marbles does Zoe have left?",
       "session": "owner-hand-gloss:real:142",
@@ -2816,8 +3323,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -2831,6 +3338,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:143",
       "text": "Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have in total?",
       "session": "owner-hand-gloss:real:143",
@@ -2838,8 +3349,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -2853,6 +3364,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:144",
       "text": "Zoe has 4 pears. Zoe buys 1 more. How many pears does Zoe have?",
       "session": "owner-hand-gloss:real:144",
@@ -2860,8 +3375,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -2875,6 +3390,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:147",
       "text": "remove the thing from the chest",
       "session": "owner-hand-gloss:real:147",
@@ -2882,8 +3401,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -2897,6 +3416,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:149",
       "text": "wear a hat",
       "session": "owner-hand-gloss:real:149",
@@ -2904,8 +3427,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -2919,6 +3442,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:151",
       "text": "a quick one: what is the capital of Japan",
       "session": "owner-hand-gloss:real:151",
@@ -2926,8 +3453,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -2941,6 +3468,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:155",
       "text": "how many days are in a week. what do red and yellow make, what day comes after Monday",
       "session": "owner-hand-gloss:real:155",
@@ -2948,8 +3479,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -2963,6 +3494,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:157",
       "text": "how many days are in a week. what sound does a cow make and then how many legs does a spider have",
       "session": "owner-hand-gloss:real:157",
@@ -2970,8 +3505,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -2985,6 +3520,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:158",
       "text": "draw 2 trees, then what sound does a cow make",
       "session": "owner-hand-gloss:real:158",
@@ -2992,8 +3531,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3007,6 +3546,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:161",
       "text": "what sound does a cow make",
       "session": "owner-hand-gloss:real:161",
@@ -3014,8 +3557,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3029,6 +3572,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:170",
       "text": "I have 12 lei. A pencil costs 2 lei. How much money do I have left after buying 2 pencils?",
       "session": "owner-hand-gloss:real:170",
@@ -3036,8 +3583,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3051,6 +3598,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:171",
       "text": "if it is 5 o'clock what time was it 2 hours ago",
       "session": "owner-hand-gloss:real:171",
@@ -3058,8 +3609,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3073,6 +3624,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:172",
       "text": "how many sides does a square have",
       "session": "owner-hand-gloss:real:172",
@@ -3080,8 +3635,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3095,6 +3650,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:173",
       "text": "can a duck fly",
       "session": "owner-hand-gloss:real:173",
@@ -3102,8 +3661,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3117,6 +3676,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:174",
       "text": "what is a calf",
       "session": "owner-hand-gloss:real:174",
@@ -3124,8 +3687,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3139,6 +3702,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:178",
       "text": "can you delete the house for me",
       "session": "owner-hand-gloss:real:178",
@@ -3146,8 +3713,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3161,6 +3728,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:179",
       "text": "blue house and red tree",
       "session": "owner-hand-gloss:real:179",
@@ -3168,8 +3739,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3183,6 +3754,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:180",
       "text": "draw a house and a tree",
       "session": "owner-hand-gloss:real:180",
@@ -3190,8 +3765,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3205,6 +3780,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:181",
       "text": "put the house at 200, 300",
       "session": "owner-hand-gloss:real:181",
@@ -3212,8 +3791,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3227,6 +3806,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:182",
       "text": "what is the capital of France",
       "session": "owner-hand-gloss:real:182",
@@ -3234,8 +3817,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3249,6 +3832,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:183",
       "text": "highlighted Italy and Portugal",
       "session": "owner-hand-gloss:real:183",
@@ -3256,8 +3843,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3271,6 +3858,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:184",
       "text": "zoom out",
       "session": "owner-hand-gloss:real:184",
@@ -3278,8 +3869,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3293,6 +3884,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:185",
       "text": "new chart: cats 2, dogs 7",
       "session": "owner-hand-gloss:real:185",
@@ -3300,8 +3895,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3315,6 +3910,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:186",
       "text": "make it a line chart",
       "session": "owner-hand-gloss:real:186",
@@ -3322,8 +3921,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3337,6 +3936,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:187",
       "text": "sort it",
       "session": "owner-hand-gloss:real:187",
@@ -3344,8 +3947,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3359,6 +3962,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:189",
       "text": "add bananas to 4 and make it a pie chart",
       "session": "owner-hand-gloss:real:189",
@@ -3366,8 +3973,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3381,6 +3988,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:191",
       "text": "what notes are in a major chord",
       "session": "owner-hand-gloss:real:191",
@@ -3388,8 +3999,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3403,6 +4014,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:192",
       "text": "what chord is C E G",
       "session": "owner-hand-gloss:real:192",
@@ -3410,8 +4025,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3425,6 +4040,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:193",
       "text": "play G major scale",
       "session": "owner-hand-gloss:real:193",
@@ -3432,8 +4051,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3447,6 +4066,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:194",
       "text": "switch to flute",
       "session": "owner-hand-gloss:real:194",
@@ -3454,8 +4077,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3469,6 +4092,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:195",
       "text": "the tempo is too slow",
       "session": "owner-hand-gloss:real:195",
@@ -3476,8 +4103,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3491,6 +4118,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:196",
       "text": "set the tempo to 120 and play the D major scale",
       "session": "owner-hand-gloss:real:196",
@@ -3498,8 +4129,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3513,6 +4144,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:197",
       "text": "I think you would look better with square eyes",
       "session": "owner-hand-gloss:real:197",
@@ -3520,8 +4155,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3535,6 +4170,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:198",
       "text": "get rid of the antenna",
       "session": "owner-hand-gloss:real:198",
@@ -3542,8 +4181,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3557,6 +4196,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:200",
       "text": "tell me the notes of a G major chord",
       "session": "owner-hand-gloss:real:200",
@@ -3564,8 +4207,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3579,6 +4222,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:202",
       "text": "what is the day after tomorrow if today is Monday",
       "session": "owner-hand-gloss:real:202",
@@ -3586,8 +4233,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3601,6 +4248,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:204",
       "text": "scratch the last thing I added",
       "session": "owner-hand-gloss:real:204",
@@ -3608,8 +4259,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3623,6 +4274,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:205",
       "text": "make the paragraph italic",
       "session": "owner-hand-gloss:real:205",
@@ -3630,8 +4285,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3645,6 +4300,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:207",
       "text": "show the first result",
       "session": "owner-hand-gloss:real:207",
@@ -3652,8 +4311,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3667,6 +4326,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:209",
       "text": "start a new chapter called The Cave",
       "session": "owner-hand-gloss:real:209",
@@ -3674,8 +4337,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3689,6 +4352,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:211",
       "text": "write once upon a time there was a fox",
       "session": "owner-hand-gloss:real:211",
@@ -3696,8 +4363,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3711,6 +4378,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:213",
       "text": "move the first paragraph down",
       "session": "owner-hand-gloss:real:213",
@@ -3718,8 +4389,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3733,6 +4404,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:220",
       "text": "what is the weather today",
       "session": "owner-hand-gloss:real:220",
@@ -3740,8 +4415,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3755,6 +4430,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:221",
       "text": "the colour of the body should be red",
       "session": "owner-hand-gloss:real:221",
@@ -3762,8 +4441,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3777,6 +4456,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:222",
       "text": "make a person",
       "session": "owner-hand-gloss:real:222",
@@ -3784,8 +4467,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3799,6 +4482,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:223",
       "text": "wear a hat and glasses",
       "session": "owner-hand-gloss:real:223",
@@ -3806,8 +4493,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3821,6 +4508,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:225",
       "text": "what colour is your body",
       "session": "owner-hand-gloss:real:225",
@@ -3828,8 +4519,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3843,6 +4534,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:226",
       "text": "make your body green, no, yellow",
       "session": "owner-hand-gloss:real:226",
@@ -3850,8 +4545,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3865,6 +4560,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:229",
       "text": "what is the best move",
       "session": "owner-hand-gloss:real:229",
@@ -3872,8 +4571,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3887,6 +4586,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:230",
       "text": "a quick one: what day is 3 days after Friday",
       "session": "owner-hand-gloss:real:230",
@@ -3894,8 +4597,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3909,6 +4612,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:232",
       "text": "put your eyes back the way they were",
       "session": "owner-hand-gloss:real:232",
@@ -3916,8 +4623,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3931,6 +4638,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:233",
       "text": "show my phrase log",
       "session": "owner-hand-gloss:real:233",
@@ -3938,8 +4649,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3953,6 +4664,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:236",
       "text": "connect c1 with End",
       "session": "owner-hand-gloss:real:236",
@@ -3960,8 +4675,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3975,6 +4690,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:237",
       "text": "delete the dragon",
       "session": "owner-hand-gloss:real:237",
@@ -3982,8 +4701,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -3997,6 +4716,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:240",
       "text": "draw 3 circles",
       "session": "owner-hand-gloss:real:240",
@@ -4019,6 +4742,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:241",
       "text": "I do not want a house",
       "session": "owner-hand-gloss:real:241",
@@ -4041,6 +4768,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:242",
       "text": "my name is Andrei",
       "session": "owner-hand-gloss:real:242",
@@ -4063,6 +4794,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:247",
       "text": "be a boy",
       "session": "owner-hand-gloss:real:247",
@@ -4070,8 +4805,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -4085,6 +4820,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:248",
       "text": "be happy",
       "session": "owner-hand-gloss:real:248",
@@ -4092,8 +4831,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -4107,6 +4846,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:249",
       "text": "be nervous",
       "session": "owner-hand-gloss:real:249",
@@ -4114,8 +4857,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -4129,6 +4872,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:253",
       "text": "which character is on the screen",
       "session": "owner-hand-gloss:real:253",
@@ -4136,8 +4883,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -4151,6 +4898,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:256",
       "text": "be a child",
       "session": "owner-hand-gloss:real:256",
@@ -4158,8 +4909,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -4173,6 +4924,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:257",
       "text": "start x and zero",
       "session": "owner-hand-gloss:real:257",
@@ -4180,8 +4935,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -4195,6 +4950,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:266",
       "text": "draw a house",
       "session": "owner-hand-gloss:real:266",
@@ -4217,6 +4976,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:267",
       "text": "draw a green house",
       "session": "owner-hand-gloss:real:267",
@@ -4239,6 +5002,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:268",
       "text": "draw three clouds",
       "session": "owner-hand-gloss:real:268",
@@ -4261,6 +5028,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:269",
       "text": "draw a sun",
       "session": "owner-hand-gloss:real:269",
@@ -4283,6 +5054,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:272",
       "text": "draw a monkey",
       "session": "owner-hand-gloss:real:272",
@@ -4305,6 +5080,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:275",
       "text": "draw a small blue fish",
       "session": "owner-hand-gloss:real:275",
@@ -4327,6 +5106,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:278",
       "text": "draw water",
       "session": "owner-hand-gloss:real:278",
@@ -4349,6 +5132,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:281",
       "text": "draw fish",
       "session": "owner-hand-gloss:real:281",
@@ -4371,6 +5158,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:283",
       "text": "draw three fish in the water",
       "session": "owner-hand-gloss:real:283",
@@ -4393,6 +5184,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:285",
       "text": "move the fish from the air into the water",
       "session": "owner-hand-gloss:real:285",
@@ -4415,6 +5210,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:287",
       "text": "move the fish",
       "session": "owner-hand-gloss:real:287",
@@ -4437,6 +5236,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:293",
       "text": "draw three circles",
       "session": "owner-hand-gloss:real:293",
@@ -4444,8 +5247,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -4459,6 +5262,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:294",
       "text": "draw three circles in the diagram",
       "session": "owner-hand-gloss:real:294",
@@ -4466,8 +5273,8 @@
       "area": "unassigned",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -4481,6 +5288,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:300",
       "text": "delete all the red circles",
       "session": "owner-hand-gloss:real:300",
@@ -4503,6 +5314,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:302",
       "text": "delete the fish",
       "session": "owner-hand-gloss:real:302",
@@ -4525,6 +5340,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:303",
       "text": "make a big mouth",
       "session": "owner-hand-gloss:real:303",
@@ -4532,8 +5351,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {
@@ -4547,6 +5366,10 @@
       "contextualSetupReplayed": false
     },
     {
+      "classes": [
+        "unclassified"
+      ],
+      "classificationStatus": "pending-reviewed-intent-tags",
       "id": "owner-hand-gloss:real:304",
       "text": "make a fish robot",
       "session": "owner-hand-gloss:real:304",
@@ -4554,8 +5377,8 @@
       "area": "outside-scope",
       "retired": false,
       "verdict": "honest",
-      "reason": "area",
-      "reply": "This area does not yet support the new request path. Nothing changed.",
+      "reason": "reading",
+      "reply": "I could not obtain one complete, unambiguous reading. Nothing changed.",
       "unchanged": true,
       "legacy": false,
       "source": {

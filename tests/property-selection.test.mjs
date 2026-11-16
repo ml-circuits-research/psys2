@@ -73,7 +73,12 @@ test('unknown, ambiguous, unsupported or overlapping selectors never mutate stat
   }
   const s = session([{ id: 'other', kind: 'square', color: '#008000' }, { id: 'irrelevant', kind: 'circle' }]);
   assert.equal(executeRequestCandidate(s, graph('green', 'purple', 'square'), 'structural fixture').trace.assessment, 'changed');
-  assert.equal(runNewEngine(s, 'make the green square purple').trace.reason, 'reading', 'no new phrase support claimed');
+  const after = structuredClone(s.isession.state);
+  assert.equal(runNewEngine(s, 'make the green square purple').trace.reason, 'target', 'general reader resolves the selector but the previous effect removed its matching value');
+  assert.deepEqual(s.isession.state, after);
+  const fresh = session([{ id: 'new-square', kind: 'square', color: '#008000' }]);
+  assert.equal(runNewEngine(fresh, 'make the green square purple').trace.assessment, 'changed');
+  assert.equal(fresh.isession.state['art.draw'].objects[0].color, '#800080');
 });
 test('selector binding never reads a different result-property slot', () => {
   const before = observation([object(1, 'native:rough'), object(2, 'native:smooth')]);

@@ -172,3 +172,14 @@ test('saved non-English session settings are refused without invoking old transl
   assert.equal(result.trace.reason, 'language'); assert.equal(result.trace.legacy, false);
   assert.deepEqual(session.isession.state, before);
 });
+
+test('general frame provider reaches the existing assessed property path without a synthetic root', () => {
+  const session = setup();
+  const result = runNewEngine(session, 'make the circle purple');
+  assert.equal(result.trace.assessment, 'changed');
+  assert.equal(session.isession.state['art.draw'].objects[0].color, '#800080');
+  assert.equal(result.trace.journal.reading.provider, 'general-frames');
+  const graph = World.fromJSON(result.trace.journal.evidence);
+  assert.equal(graph.get('r').attrs.root, undefined);
+  assert.equal(graph.get('claim').attrs.status[0], 'changed');
+});
