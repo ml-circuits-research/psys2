@@ -1,6 +1,6 @@
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {executeRequestCandidate} from './new-engine.mjs?v=528e2a511e';
+import {executeRequestCandidate} from './new-engine.mjs?v=72a7b8e592';
 const hash=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 function approved(gate,provenance,candidate,context){

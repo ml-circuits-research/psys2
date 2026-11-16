@@ -5,9 +5,9 @@
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
 import * as D from './engine.mjs?v=72673bf9b5';
 import * as space from '../space/space.mjs?v=42696277df';
-import { splitThings } from '../acts/acts.mjs?v=fea07d1a54';
+import { splitThings } from '../acts/acts.mjs?v=dd13e4a485';
 import { partsOf, kindKey, kindName } from './scene.mjs?v=cd2ed9328d';
-import * as P from './plan.mjs?v=44b565c0cd';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
+import * as P from './plan.mjs?v=dd9fe76745';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const TAIL = new Set(['there', 'here', 'now', 'added', 'drawn', 'too', 'also', 'please', 'pls', 'plz', 'thx', 'thanks', 'are', 'is', 'again', 'exactly', 'go']);   // words a role slot took that belong to the frame ("how many trees there are")

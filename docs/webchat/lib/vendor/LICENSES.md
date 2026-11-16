@@ -3,7 +3,7 @@
 ## sopworld 0.198.0 (one file, unmodified)
 
 - Source: https://github.com/ml-circuits-research/soplang-words-lib (same owner as this repository)
-- Pinned commit: `a4725a15e266941c2a42c36ce535cab5ea09ab0f` (published release 0.198.0, build `6a58079a1970`). See `sopworld/provenance.json` for the exact source and hash.
+- Pinned commit: `37ec8f1510ec3d685627d58aa0bbe5245d9afac8` (published release 0.199.0, build `119eed91e1e1`). See `sopworld/provenance.json` for the exact source and hash.
 - Vendored file: `src/vendor/sopworld/sopworld.mjs`, the library's built single file `docs/sopworld.mjs` (1517627 bytes, sha256 `6c4be97b01539dbd259c6999410ac76b0a61ceb7907baf543743c783106bd2ae`), copied byte for byte. Never patch it here: a workaround goes into `src/reasoner/` and a defect into the list of library issues in `worker-log.md`.
 - `src/vendor/sopworld/tools/scan-loops.mjs`: the library's own loop scanner (`tools/scan-loops.mjs`), copied byte for byte; `tests/reasoner.test.mjs` runs it on the vendored file.
 - Licence: MIT (below). Compatible with AGPL-3.0-only.

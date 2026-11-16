@@ -5,7 +5,7 @@ import { spawnSync } from 'node:child_process';
 const fixed = [
   'new-engine.test.mjs', 'reader-routing.test.mjs', 'functional-context-seeding.test.mjs', 'declared-dispatch.test.mjs', 'native-selection.test.mjs', 'observation-query.test.mjs', 'property-selection.test.mjs', 'drawing-property-host.test.mjs',
   'calendar-host.test.mjs', 'calendar-observation.test.mjs', 'face-preparation.test.mjs',
-  'model-graph-decoder.test.mjs', 'bootstrap-onnx-calibration.test.mjs', 'structural-supervision-audit.test.mjs', 'request-label-codec.test.mjs', 'sop-bert-bootstrap.test.mjs', 'inventory-bootstrap-inference.test.mjs', 'webchat-assets.test.mjs', 'webchat-build.test.mjs',
+  'request-check.test.mjs', 'model-graph-decoder.test.mjs', 'bootstrap-onnx-calibration.test.mjs', 'structural-supervision-audit.test.mjs', 'request-label-codec.test.mjs', 'sop-bert-bootstrap.test.mjs', 'inventory-bootstrap-inference.test.mjs', 'webchat-assets.test.mjs', 'webchat-build.test.mjs',
   'system-map.test.mjs', 'loop-guard.test.mjs',
 ];
 const lanes = readdirSync(new URL('../tests/', import.meta.url)).filter(name => name.endsWith('-declared-host.test.mjs'));
