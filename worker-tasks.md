@@ -5038,3 +5038,12 @@ The owner: "we are back to particular patches; we are fooling ourselves". The pl
 2. **Phase 0, measurement:** the tightened checks of block 11:30 on the three sessions, and an inventory as numbers per domain and for the host: local reply rows (`*.local.mjs`, en and ro), `drawn as` rows, expectations on a particular thing, region / direction tables, question texts, per-case stand-ins left in the door. Table in worker-log.
 
 **Do not add** local reply rows, cues, `drawn as` rows or per-thing expectations for a failing turn. A failing turn goes on the register with the general piece (A–G of the plan) it needs.
+
+## Reviewer 2026-11-16 12:20 — OWNER DECISION: case-driven work stops now
+
+Owner (10:16): "we get nowhere with the current style; first the approach must be cleaned and generalised." He also asked that the general layer start from all the general concepts (a legend world: thing, kind, part, quality, scale, quantity, relation, place, time, change, act, role, cause, kinds of statement, agent, capability, tool — course lessons 27–29 in soplang-words-lib `reviews/sop-worlds-curs.md`), always from the general to the particular, and approved a **calendar** as the proof domain and a real new domain of the page.
+
+**For you, until the legend-world design is approved:**
+1. Finish only: the avatar on the same reading path with requests that reach the domain able to serve them (the page's own cards included), the language of each message detected, and the tightened checks + the inventory of particular rows (blocks 11:30, 11:50). Nothing else is merged.
+2. **Prepare, on paper, for the rewrite:** for each of the four domains, the list of its kinds and slots with the concept each one realises (thing / quality + which / place + relation / time / quantity / role), and what in its `request.sop` and local rows would disappear if questions, fragments, comparatives, realisation by lineage and reply frames came from the legend world. This is the domain side of the library's design page; put it in worker-log.
+3. **The calendar:** do not build it yet. Write its declaration by hand in the proposed form (meetings, rooms, people; start, duration, place, participants; no overlap for a person or a room) as the test of the design, next to the library's page.
