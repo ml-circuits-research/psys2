@@ -88,6 +88,7 @@ export function nonWords(candidate, input, isEnglish, { kept = null, glossed = n
 // ---- glossed candidates ---------------------------------------------------------------------------------------------------------------------------
 
 export const MAX_GLOSSED = 3;   // glossed candidates added per message
+export const MAX_SENSES = 3;    // candidates of other senses (lexicon-ro.mjs) added per message
 
 const capLike = (raw, en) => (/^\p{Lu}/u.test(raw) ? en.charAt(0).toUpperCase() + en.slice(1) : en);
 const escRe = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -223,11 +224,11 @@ const norm = (t) => String(t ?? '').trim().replace(/\s+/g, ' ').toLowerCase();
  * (translated by the first machine translator that answered, else by the rules). Each: { source, text, translation, rejected? }.
  * `translator` is the switch translator of the host (`candidatesViaMT`, `rules`); anything missing is skipped. `machine: false`: no machine translator is asked (reading-policy.mjs). Never throws.
  */
-export async function gatherCandidates(text, { from, to = 'en', translator, abortable = (p) => p, isEnglish = null, kept = null, contextRepair = null, machine = true }) {
+export async function gatherCandidates(text, { from, to = 'en', translator, abortable = (p) => p, isEnglish = null, kept = null, contextRepair = null, machine = true, prefer = null }) {
   const out = [], seen = new Set();
-  const add = (source, translation, extra = {}) => {
+  const add = (source, translation, extra = {}, cap = MAX_CANDIDATES) => {
     const t = textOf(translation).trim();
-    if (!t || out.length >= MAX_CANDIDATES) return null;
+    if (!t || out.length >= cap) return null;
     const key = norm(t);
     if (seen.has(key)) return null;
     seen.add(key);
@@ -237,7 +238,7 @@ export async function gatherCandidates(text, { from, to = 'en', translator, abor
   };
   const rules = translator?.rules, hasRules = !!rules && (rules.supports?.(from, to) ?? true);
   const viaMT = async (s) => { if (!machine) return []; try { return (await abortable(translator?.candidatesViaMT?.(s, { from, to }) ?? [], 'translate')) ?? []; } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; return []; } };
-  const viaRules = async (s) => { if (!hasRules) return null; try { const r = await abortable(rules.translate(s, { from, to }), 'translate'); return textOf(r) && !r?.untranslatable?.length ? r : null; } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; return null; } };
+  const viaRules = async (s, senses = null) => { if (!hasRules) return null; try { const r = await abortable(rules.translate(s, { from, to, prefer, ...(senses ? { senses } : {}) }), 'translate'); return textOf(r) && !r?.untranslatable?.length ? r : null; } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; return null; } };
   budget.tick('candidates.gather');
   // Q13: the grammar voices propose first (they abstain outside their frames); the choice below still takes a candidate only if the reader understands it
   try { for (const v of (await abortable(translator?.candidatesViaVoices?.(text, { from, to }) ?? [], 'translate')) ?? []) add(v.source, v.translation ?? v.text, { voice: true, frame: v.frame }); } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; }
@@ -273,6 +274,17 @@ export async function gatherCandidates(text, { from, to = 'en', translator, abor
     }
     if (rep?.asks?.length) out.asks = rep.asks;
   }
+  // THE SENSE IS CHOSEN BY THE READING (reviewer 2026-11-16 03:30 item 2): a form with several senses in the one lookup (lexicon-ro.mjs: the open world's words, the translator's
+  // entries, the dictionary) gives one more rules candidate per other sense, one form at a time, in the lookup's order; the reader keeps the one it reads best, a tie the earlier one
+  let senseCands = 0;
+  for (const amb of r?.senses ?? []) {
+    for (const en of amb.options) {
+      if (en === amb.chosen || senseCands >= MAX_SENSES) continue;
+      budget.tick('candidates.sense');
+      const rs = await viaRules(text, { [amb.key]: en });
+      if (rs && add('rules-sense', rs, { sense: { from: amb.word, to: en, was: amb.chosen } }, MAX_CANDIDATES + MAX_SENSES)) senseCands++;
+    }
+  }
   // the words the candidates failed on, glossed from the language's dictionary (`rules.glossWord`)
   if (rules?.glossWord && isEnglish) {
     // a typo the dictionary repairs ("punr" -> pune, all the near words being forms of one lemma) goes to the machine translator once more in the repaired source
@@ -281,7 +293,7 @@ export async function gatherCandidates(text, { from, to = 'en', translator, abor
       const fixed = text.replace(WORD, (raw) => { budget.tick('candidates.gloss'); if (raw.length < 3 || kept?.has(fold(raw))) return raw; let g = []; try { g = rules.glossWord(raw, from) ?? []; } catch { g = []; } const to = g[0]?.repaired; if (!to || fold(to) === fold(raw)) return raw; changes.push({ from: raw, to, kind: 'dictionary' }); return matchCase(raw, to); });
       if (changes.length) { const m2 = (await viaMT(fixed)).find((m) => !m.rejected); if (m2) add(`repaired-${m2.source}`, m2.translation ?? m2.text, { repaired: fixed, changes }); }
     }
-    for (const c of glossCandidates(out, text, { gloss: (w) => rules.glossWord(w, from), isEnglish, kept })) { if (out.length >= MAX_CANDIDATES + MAX_GLOSSED) break; out.push(c); seen.add(norm(c.text)); }
+    for (const c of glossCandidates(out, text, { gloss: (w) => rules.glossWord(w, from), isEnglish, kept })) { if (out.length >= MAX_CANDIDATES + MAX_SENSES + MAX_GLOSSED) break; out.push(c); seen.add(norm(c.text)); }
   }
   return out;
 }
@@ -311,7 +323,7 @@ export async function chooseCandidate(cands, input, { understand, isEnglish, sof
   if (!pool.length) return { chosen: null, log };
   if (pool.length === 1) { log[pool[0]].chosen = true; return { chosen: cands[pool[0]], log }; }
   let best = -1, bestIssues = Infinity;
-  for (const i of pool.slice(0, MAX_CANDIDATES + MAX_GLOSSED)) {
+  for (const i of pool.slice(0, MAX_CANDIDATES + MAX_SENSES + MAX_GLOSSED)) {
     budget.tick('candidates.choose');
     if (best >= 0 && soft()) break;
     let issues = 9;

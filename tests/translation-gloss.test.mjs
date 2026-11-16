@@ -67,11 +67,13 @@ test('gloss (w.lang.ro): every sense of the lemma, inflected as the form; a typo
   const tr = createTranslator();
   assert.deepEqual(tr.glossWord('aseaza', 'ro').map((g) => g.en), ['sit', 'arrange']);
   assert.deepEqual(tr.glossWord('exagerat', 'ro').map((g) => g.en), ['exaggerated']);
-  assert.deepEqual(tr.glossWord('elementele', 'ro').map((g) => g.en), ['elements']);
+  assert.deepEqual(tr.glossWord('elementele', 'ro').map((g) => g.en), ['items', 'elements'], 'the one lookup: the translator\'s entry, then the dictionary\'s sense');
   const punr = tr.glossWord('punr', 'ro');
   assert.equal(punr[0]?.en, 'put');
   assert.equal(punr[0]?.repaired, 'pune');
   assert.deepEqual(tr.glossWord('mukte', 'ro'), [], 'munte and multe are both near: no guess');
+  assert.deepEqual(tr.glossWord('azuriu', 'ro'), [], 'a dictionary repair is a slip only: azuriu is not auriu (golden)');
+  assert.deepEqual(tr.glossWord('leagă', 'ro'), [], 'leagă is not leagăn (swing)');
   assert.deepEqual(tr.glossWord('tenerife', 'ro'), []);
   assert.deepEqual(tr.glossWord('aseaza', 'xx'), [], 'a language with no dictionary has no gloss');
 });

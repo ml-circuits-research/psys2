@@ -149,6 +149,8 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
       const [head] = lib.splitClitics(m, String(form ?? '').toLowerCase());
       return new Set(readings(head).map((r) => r.lemma));
     },
+    /** Every English sense of a lemma in the dictionary rows, in their order (several rows of one lemma: așeza "sit", "arrange"); `pos` 'noun' | 'verb' | 'adj'. */
+    sensesOfLemma(lemma, pos) { return (sensesOf().get(lemma) ?? []).filter((s) => !pos || s.pos === pos).map((s) => s.en); },
     /** True when the morphology reads the form as a form of a dictionary lemma (an inflection, diacritics typed away): such a word is the language's, never a typo. */
     knows(form) {
       const raw = String(form ?? '').toLowerCase();

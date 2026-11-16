@@ -7,6 +7,7 @@ import * as M from './morphology.ro.mjs';
 import * as E from './inflect.en.mjs';
 import { FRAMES } from './phrases.ro-en.mjs';
 import { budget } from '../dialog/budget.mjs';
+import { lookupRo, hasDictionaryReading } from './lexicon-ro.mjs';
 
 // ------------------------------------------------------------------ static tables
 
@@ -57,13 +58,22 @@ const SPECIAL_LISTVERBS = new Set(['adăuga', 'pune', 'scrie']);
 const pc = (en, tok, extra = {}) => ({ en, src: tok ? [tok.start, tok.end] : null, ...extra });
 const pspan = (en, s, e, extra = {}) => ({ en, src: [s, e], ...extra });
 
+// the options of one call of translateRoEn: `senses` { folded form: English sense } chosen by the caller (a sense candidate), `prefer` the open world's English words; `seen` the forms
+// with several senses met in the call (reported as `senses` on the result, so that the caller can make the other senses' candidates)
+// `dict`: the forms the first pass left unknown, which the second pass reads by the dictionary (a word the translator handles by itself never gets a dictionary reading)
+const CALL = { senses: null, prefer: null, seen: [], dict: null };
+
 function analysesOf(tok) {
   if (!tok.an) {
     if (tok.synth) tok.an = tok.synth;
     else if (tok.kind === 'word') {
-      let an = M.analyzeRaw(tok.raw, !!tok.diaFree);
+      // the one lookup (lexicon-ro.mjs): the open world's senses, the translator's entries, the dictionary; the call's chosen sense of the form, else the first
+      const opts = lookupRo(tok.raw, { diaFree: !!tok.diaFree, prefer: CALL.prefer, dictionary: !!CALL.dict?.has(tok.key) });
+      const want = CALL.senses?.[tok.key];
+      const pick = (want && opts.find((o) => o.en === want)) || opts[0];
+      if (opts.filter((o) => o.en).length > 1 && !CALL.seen.some((x) => x.key === tok.key)) CALL.seen.push({ word: tok.raw, key: tok.key, span: [tok.start, tok.end], chosen: pick.en, options: opts.map((o) => o.en).filter(Boolean) });
       // names are only taken when capitalized (handled in the NP parser)
-      tok.an = an;
+      tok.an = pick ? pick.analyses : [];
     } else tok.an = [];
   }
   return tok.an;
@@ -1706,7 +1716,26 @@ function splitHyphens(text) {
     .replace(new RegExp(`${L}(\\p{L}{3,})-(ul|a|le|lui)${R}`, 'giu'), (m, a, b) => `${a}${' '.repeat(b.length + 1)}`);
 }
 
-export function translateRoEn(original) {
+export function translateRoEn(original, { senses = null, prefer = null } = {}) {
+  const saved = { ...CALL, seen: CALL.seen };
+  CALL.senses = senses; CALL.prefer = prefer; CALL.seen = []; CALL.dict = null;
+  try {
+    let res = translateRoEnCall(original);
+    // the words the translator left as they were typed are read by the dictionary (the one lookup's third source): a candidate, never a leftover
+    if (res.unknown.length) {
+      CALL.dict = new Set(res.unknown.filter((u) => foldKey(u.word).length >= 3 && hasDictionaryReading(u.word)).map((u) => foldKey(u.word)));   // as the gloss: a form of fewer than 3 letters is never read by the dictionary alone
+      const seen = CALL.seen;
+      CALL.seen = [];
+      const again = CALL.dict.size ? translateRoEnCall(original) : null;   // no second pass when the dictionary knows none of them
+      if (again && again.unknown.length < res.unknown.length && !(again.untranslatable?.length > (res.untranslatable?.length ?? 0))) res = again;
+      else CALL.seen = seen;
+    }
+    if (CALL.seen.length) res.senses = CALL.seen;
+    return res;
+  } finally { Object.assign(CALL, saved); }
+}
+
+function translateRoEnCall(original) {
   const source = splitHyphens(String(original ?? ''));
   const toks = tokenize(source);
   const diaFree = !/[ăâîșțĂÂÎȘȚşţŞŢ]/.test(source);

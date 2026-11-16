@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=1d3eb6e330';
+import { composeReply, sayOf } from './composed-reply.mjs?v=067886f7e8';
 import { reviewForeign } from './foreign-reading.mjs?v=79d8decc9c';
 import { installTextGen } from './textgen.mjs?v=a8831e42a2';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=ff05a8582c';
@@ -25,11 +25,11 @@ import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f70
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=58963d395d';
 import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=36494dd717';
 import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=f0ba8543a7';
-import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=2d04b92a2e';
+import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=bb754b8305';
 import { machineReads } from '../translate/reading-policy.mjs?v=96bd6cc0e4';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=5ccf612a4a';
-import { repairInContext } from '../translate/source-repair.mjs?v=e721161854';
+import { langRoNow } from '../translate/frames-ro.mjs?v=07dbea42b4';
+import { repairInContext } from '../translate/source-repair.mjs?v=db5b883c67';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=ff05a8582c';
 import { lexIndex } from '../worlds/lexicon.mjs?v=f0499f971c';
 import { perf } from '../formalizer/perf.mjs?v=b81e032a17';
@@ -1677,7 +1677,10 @@ export class DialogSession {
     // fewest words unread in the open world (ties: the earlier candidate). The translators are the system boundary; the reading is the door's.
     let cands = [];
     const contextRepair = this._contextRepairOf(lang, tr);
-    try { cands = await gatherCandidates(text, { from: lang, to: 'en', machine: machineReads(lang, this.engine.machineReading), translator: tr.rules ? tr : { rules: tr }, abortable: (p, stage) => guard.abortable(p, stage), contextRepair, isEnglish: this._doorIsEnglish(tr), kept: this._doorKept() }); } catch (e) { if (e instanceof TurnAborted) throw e; cands = []; }
+    // the open world instance's English words: their senses come first in the one lookup of the source words (src/translate/lexicon-ro.mjs), so a tie of the reading keeps them
+    let prefer = null;
+    try { const tw = this.context().tabWorld, lw = tw ? liveWorld(this.engine.sopworld, this.engine.set.get(tw)) : null; prefer = lw && this.engine.sopworld?.worldWords ? this.engine.sopworld.worldWords(lw) : null; } catch { prefer = null; }
+    try { cands = await gatherCandidates(text, { from: lang, to: 'en', machine: machineReads(lang, this.engine.machineReading), translator: tr.rules ? tr : { rules: tr }, abortable: (p, stage) => guard.abortable(p, stage), contextRepair, isEnglish: this._doorIsEnglish(tr), kept: this._doorKept(), prefer }); } catch (e) { if (e instanceof TurnAborted) throw e; cands = []; }
     // THE ARMS OF THE TRANSLATION MEASURE (Q48 proposal 2 item 3; a measuring hook, off by default): 'model' keeps only the machine translator's candidates (after the source repair
     // too); 'both' keeps every candidate and puts the rules' first, so that a tie of the reading goes to the rules. Unset: today's chain.
     const arm = this.engine.translationArm ?? null;
@@ -1693,7 +1696,10 @@ export class DialogSession {
     const live = tabWorld ? liveWorld(lib, this.engine.set.get(tabWorld)) : null, language = requestLanguage(lib);
     const score = (c) => { if (!live || !language) return 0; try { const q = readTurn(lib, live, language, c.text, {}); return q.unread.length * 2 + (q.act || q.target || q.reaction ? 0 : 1); } catch { return 9; } };
     let best = cands[0], bestScore = score(cands[0]);
-    for (const c of cands.slice(1)) { budget.tick('door.candidates'); const sc = score(c); if (sc < bestScore) { best = c; bestScore = sc; } }
+    // a tie keeps the earlier candidate, except that the open world instance's sense of a word wins a tie against the translator's sense of it (src/translate/lexicon-ro.mjs)
+    const worldSense = (c) => !!c?.sense && !!prefer?.has?.(String(c.sense.to).toLowerCase()) && !prefer.has(String(c.sense.was ?? '').toLowerCase());
+    for (const c of cands.slice(1)) { budget.tick('door.candidates'); const sc = score(c); if (sc < bestScore || (sc === bestScore && best.source === 'rules' && worldSense(c))) { best = c; bestScore = sc; } }
+    if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door] candidates:', cands.map((c) => `${c.source}: ${c.text} (${score(c)})`).join(' | '));
     const recent = (this._recentSource ??= []);
     if (recent.at(-1) !== text) { recent.push(text); if (recent.length > 12) recent.shift(); }
     return { lang, english: best.text, translation: best.translation ?? null, repairs: (best.changes ?? []).filter((c) => c.kind === 'context'), asks: best.asks ?? cands.asks ?? [], changes: best.changes ?? [] };

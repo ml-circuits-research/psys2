@@ -9,9 +9,11 @@
 // `text` and reported in the extra field `untranslatable: [{span, reason}]` (confidence 0).
 import { tokenize, foldKey } from './normalize.mjs?v=6d473eb091';
 import { analyze, placeOf, surfaceForms } from './morphology.ro.mjs?v=8bcf5dc68f';
-import { frameMoveRoEn, loadFramesRo, langRoNow } from './frames-ro.mjs?v=5ccf612a4a';
-import { within } from './candidates.mjs?v=2d04b92a2e';
+import { frameMoveRoEn, loadFramesRo, langRoNow } from './frames-ro.mjs?v=07dbea42b4';
+import { within } from './candidates.mjs?v=bb754b8305';
 import { pluralEn, pastEn } from './inflect.en.mjs?v=5b2e62d57a';
+import { sensesRo } from './lexicon-ro.mjs?v=f413ffb553';
+import { DICTIONARY_MAX_COST } from './source-repair.mjs?v=db5b883c67';
 import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord, knownEnglishWord } from './en-ro.mjs?v=cbd133aecd';
 
 // Romanian evidence, in points (a rough log-odds of "Romanian" against "English"), for words typed with OR without diacritics.
@@ -140,7 +142,7 @@ export function detectLanguage(text) {
 // that sets `globalThis.__psys2LazyRoEn` before importing this module loads them on demand: `loadRoEn()` (the host calls it when the language is not English), and a ro -> en `translate` that
 // finds them missing returns a promise that waits for them (every caller of the rules awaits the answer).
 let roEn = null, roEnLoading = null;
-export function loadRoEn() { return roEn ? Promise.resolve(roEn) : (roEnLoading ??= Promise.all([import('./ro-en.mjs?v=e6579b2d8e'), loadFramesRo()]).then(([m]) => (roEn = m.translateRoEn), (e) => { roEnLoading = null; throw e; })); }   // with the w.lang.ro frames (frames-ro.mjs)
+export function loadRoEn() { return roEn ? Promise.resolve(roEn) : (roEnLoading ??= Promise.all([import('./ro-en.mjs?v=51a1858920'), loadFramesRo()]).then(([m]) => (roEn = m.translateRoEn), (e) => { roEnLoading = null; throw e; })); }   // with the w.lang.ro frames (frames-ro.mjs)
 /** True when the Romanian -> English rules are in memory. */
 export const roEnLoaded = () => !!roEn;
 if (!globalThis.__psys2LazyRoEn) await loadRoEn();
@@ -157,8 +159,9 @@ export function translate(text, opts = {}) {
     // a move the catalog's w.lang.ro frames read whole (the library's readFrames) is realised from its frame; everything else is the rules translator's (frames-ro.mjs)
     const viaFrames = (f) => {
       let fr = null;
-      if (opts.frames !== false) { try { fr = frameMoveRoEn(source, (t) => f(t)); } catch { fr = null; } }
-      return fr ? { text: fr.text, alignment: [{ src: [0, source.length], tgt: [0, fr.text.length] }], unknown: [], notes: fr.notes, confidence: 0.9, frame: fr.frame } : f(source);
+      const o = { senses: opts.senses ?? null, prefer: opts.prefer ?? null };   // the sense chosen per form and the open world's words (lexicon-ro.mjs)
+      if (opts.frames !== false) { try { fr = frameMoveRoEn(source, (t) => f(t, o)); } catch { fr = null; } }
+      return fr ? { text: fr.text, alignment: [{ src: [0, source.length], tgt: [0, fr.text.length] }], unknown: [], notes: fr.notes, confidence: 0.9, frame: fr.frame } : f(source, o);
     };
     return roEn ? viaFrames(roEn) : loadRoEn().then(viaFrames);
   }
@@ -187,7 +190,12 @@ export function createTranslator() {
       const ro = lang === 'ro' ? langRoNow() : null;
       if (!ro?.glossWord) return [];
       const out = [], seen = new Set();
-      let gl = ro.glossWord(word, { within });
+      // the one lookup first (lexicon-ro.mjs: the translator's entries, then the dictionary, every sense); a form no source knows goes to the dictionary's typo repair below
+      const known = sensesRo(String(word ?? ''), { diaFree: !/[ăâîșțşţ]/i.test(String(word ?? '')) });
+      let gl = known.length ? known.map((x) => ({ en: x.en, pos: x.pos, lemma: x.lemma, pp: x.pp ?? null, features: { tense: x.features.tense === 'part' ? 'part' : null, num: x.features.num } })) : ro.glossWord(word, { within });
+      // a repair by the dictionary alone is a slip, never another word: the same bound as the contextual repair (a neighbouring key, a swap, an accent: source-repair.mjs)
+      // ("azuriu" is not "auriu", "leagă" is not "leagăn"; "punr" is "pune"; the cut-off passed is 1: the library's row pruning stops before a swap of 0.6 is counted)
+      if (gl[0]?.repaired && ro.lib?.editCost && ro.lib.editCost(foldKey(word), foldKey(gl[0].repaired), 1) > DICTIONARY_MAX_COST) gl = [];
       // a repaired word stands only when every word of the language pack as near as the repair is a form of the same lemma ("punr": pun, pune, puna -> pune; "mukte": munte, multe -> no guess)
       if (gl[0]?.repaired) {
         const k = foldKey(word), lemma = gl[0].lemma, d = within(k, foldKey(lemma), 2);
@@ -199,7 +207,7 @@ export function createTranslator() {
       }
       for (const g of gl) {
         const f = g.features ?? {};
-        const en = g.pos === 'verb' && f.tense === 'part' ? pastEn(g.en) : g.pos === 'noun' && f.num === 'pl' ? pluralEn(g.en) : g.en;
+        const en = g.pos === 'verb' && f.tense === 'part' ? (g.pp ?? pastEn(g.en)) : g.pos === 'noun' && f.num === 'pl' ? pluralEn(g.en) : g.en;
         if (!seen.has(en)) { seen.add(en); out.push({ en, lemma: g.lemma, ...(g.repaired ? { repaired: g.repaired } : {}) }); }
       }
       return out;
