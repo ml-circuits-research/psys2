@@ -1,23 +1,18 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// What the catalog's request words (w.lang.en.cue, catalog pin 0966924e) lack yet, in the catalog's own shape, told after the bundled facts (src/dialog/request.mjs requestLanguage).
+// What the catalog's request words (w.lang.en.cue, catalog pin 7042ea70) lack yet, in the catalog's own shape, told after the bundled facts (src/dialog/request.mjs requestLanguage).
 // The reply rows (w.lang.en.reply) say the door's acts on things and its honest answers (Q43 [KNOW]).
 // Each row goes when the catalog publishes a cue of that meaning (questions.md Q41 [KNOW]). Data only: no code reads these rows by name.
 export const REQUEST_LOCAL = `
 @w.lang.en.cue.local.reduce w.lang.en.cue name=reaction.reduce.more on=reaction value=reduce step=down lead="too long" lead="not so many" lead="not that many" lead="not so much" lead="shorter" lead="too large" lead="less of them" takes=none priority=3 example="not so many nodes"
 @w.lang.en.cue.local.praise w.lang.en.cue name=reaction.thanks.more on=reaction value=thanks lead="lovely" lead="beautiful" lead="wonderful" lead="gorgeous" lead="fantastic" lead="excellent" lead="very nice" lead="so nice" lead="looks good" lead="looks great" takes=none priority=1 example="lovely"
 @w.lang.en.cue.local.layout_nice w.lang.en.cue name=layout.better.more on=layout value=better lead="nice layout" lead="a nice layout" lead="good layout" lead="neat layout" lead="tidy layout" takes=none priority=4 example="arrows, nice layout"
-@w.lang.en.cue.local.layers w.lang.en.cue name=layout.layers on=layout value=layers lead="in layers" lead="into layers" lead="break in" lead="break into" lead="split in" lead="split into" lead="divide into" lead="layers" takes=none priority=3 example="break in 3 layers: water, land and sky"
 @w.lang.en.cue.local.range w.lang.en.cue name=count.range.more on=count bound=range between="until" between="up to" between="through" takes=range priority=2 example="6 until 8 nodes"
 @w.lang.en.cue.local.without w.lang.en.cue name=without.more on=kind want=no lead="anything but" lead="everything but" lead="anything except" lead="other than" lead="but no" takes=kind priority=3 example="anything but circles"
-@w.lang.en.cue.local.up w.lang.en.cue name=place.up.more on=place value=up relation=direction lead="up" lead="higher" lead="upwards" lead="upward" lead="further up" lead="a bit higher" lead="even higher" lead="up higher" lead="more up" takes=none priority=3 example="move results up"
-@w.lang.en.cue.local.down w.lang.en.cue name=place.down.more on=place value=down relation=direction lead="down" lead="lower" lead="downwards" lead="downward" lead="further down" lead="a bit lower" lead="even lower" lead="more down" takes=none priority=3 example="move summary lower"
 @w.lang.en.cue.local.centre w.lang.en.cue name=place.centre.more on=place value=centre relation=in lead="to the middle" lead="to the centre" lead="to the center" lead="around the middle" lead="in the centre of" lead="the middle" lead="middle" takes=none priority=3 example="move summary to the middle"
-@w.lang.en.cue.local.left w.lang.en.cue name=place.left.more on=place value=left relation=direction lead="left" lead="further left" lead="more to the left" takes=none priority=2 example="move it left"
-@w.lang.en.cue.local.right w.lang.en.cue name=place.right.more on=place value=right relation=direction lead="right" lead="further right" lead="more to the right" takes=none priority=2 example="move it right"
 @w.lang.en.cue.local.to_value w.lang.en.cue name=attribute.to on=attribute lead="to" lead="into" takes=value priority=1 example="change the colour of the circle to purple"
 @w.lang.en.cue.local.attribute_of w.lang.en.cue name=attribute.of.thing on=kind lead="the colour of" lead="the color of" lead="colour of" lead="color of" lead="the size of" lead="size of" takes=kind priority=4 example="change the size of the sun to big"
 @w.lang.en.cue.local.water w.lang.en.cue name=place.into on=place relation=in lead="into" takes=thing priority=2 example="move the cat into the water"
-@w.lang.en.pron.local.all w.lang.en.pron text=everything text=all text="all of it" text="all of them" text="every thing" refers=all example="erase everything"
+@w.lang.en.pron.local.all w.lang.en.pron text=all refers=all example="erase everything"
 @w.lang.en.pron.local.any w.lang.en.pron text=something text=anything text="whatever you want" text="anything you want" text="whatever you like" text="what you want" refers=any example="draw something random"
 @k.actions.verb.local.start k.actions.verb text=start act=make sense=1 gloss="bring into being; begin a new one" object=thing
 @k.actions.verb.local.begin k.actions.verb text=begin act=make sense=1 gloss="start a new one" object=thing
@@ -57,16 +52,8 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.change_about_1 w.lang.en.reply name=done.change.about count=one role=thing role=value text="The {thing} is about {value} now."
 @w.lang.en.reply.local.page w.lang.en.reply name=done.page count=one text="Here is a fresh sheet of paper. What shall we draw?"
 @w.lang.en.reply.local.page_kept w.lang.en.reply name=done.page.kept count=one text="Here is a fresh sheet of paper! Your old picture is still there if you say “undo”."
-@w.lang.en.reply.local.change_place_1 w.lang.en.reply name=done.change.place count=one role=thing role=value text="I moved the {thing} to the {value}."
-@w.lang.en.reply.local.change_place_n w.lang.en.reply name=done.change.place count=other role=thing role=number role=value text="I moved {number} {thing:num=pl} to the {value}."
-@w.lang.en.reply.local.change_size_1 w.lang.en.reply name=done.change.size count=one role=thing role=value text="The {thing} is {value} now."
-@w.lang.en.reply.local.change_size_n w.lang.en.reply name=done.change.size count=other role=thing role=number role=value text="I made {number} {thing:num=pl} {value}."
 @w.lang.en.reply.local.change_name w.lang.en.reply name=done.change act=change role=name role=value text="{name} is {value} now."
-@w.lang.en.reply.local.size_up_1 w.lang.en.reply name=done.change.size.up count=one act=change role=thing text="The {thing} is bigger now."
-@w.lang.en.reply.local.size_up_n w.lang.en.reply name=done.change.size.up count=other act=change role=thing role=number text="The {number} {thing:num=pl} are bigger now."
 @w.lang.en.reply.local.size_up_name w.lang.en.reply name=done.change.size.up act=change role=name text="{name} is bigger now."
-@w.lang.en.reply.local.size_down_1 w.lang.en.reply name=done.change.size.down count=one act=change role=thing text="The {thing} is smaller now."
-@w.lang.en.reply.local.size_down_n w.lang.en.reply name=done.change.size.down count=other act=change role=thing role=number text="The {number} {thing:num=pl} are smaller now."
 @w.lang.en.reply.local.size_down_name w.lang.en.reply name=done.change.size.down act=change role=name text="{name} is smaller now."
 @w.lang.en.reply.local.remove_name w.lang.en.reply name=done.remove act=remove role=name text="I removed {name}."
 @w.lang.en.reply.local.remove_n w.lang.en.reply name=done.remove count=other act=remove role=thing role=number text="I removed the {number} {thing:num=pl}."
@@ -80,14 +67,6 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.not_key w.lang.en.reply name=cannot.key role=words role=world text="I cannot do \\"{words}\\" in the {world} yet."
 # The questions the door answers by saying facts of the live world (sopworld 0.152.1 askWorld, WORLD_QUESTIONS) and their replies: the library's proposal for w.lang.en
 # (soplang-words-lib examples/tool-app.mjs PROPOSED_EN, its questions.md Q87 1), local until the catalog publishes them ([KNOW]).
-@w.lang.en.cue.local.ask_capabilities w.lang.en.cue name=ask.capabilities on=reaction value=capabilities lead="what can you do" lead="what can i do here" lead="what can i do" lead="what do you do" lead="help" takes=none priority=4 example="what can you do here?"
-@w.lang.en.cue.local.ask_state w.lang.en.cue name=ask.state on=reaction value=state lead="how many" lead="what is" lead="what's" lead="what is there" lead="what do you have" takes=none priority=3 example="what is in the picture?"
-@w.lang.en.reply.local.can_one w.lang.en.reply name=can count=one role=act role=kinds text="I can {act}: {kinds}."
-@w.lang.en.reply.local.can_say_one w.lang.en.reply name=can.say count=one role=act role=keys text="When I {act}, you can say the {keys}."
-@w.lang.en.reply.local.state_count_one w.lang.en.reply name=state.count count=one role=kind role=number text="There is one {kind}."
-@w.lang.en.reply.local.state_count_other w.lang.en.reply name=state.count count=other role=kind role=number text="There are {number} {kind:num=pl}."
-@w.lang.en.reply.local.state_empty_one w.lang.en.reply name=state.empty count=one text="There is nothing here yet."
-@w.lang.en.reply.local.nothing_same_one w.lang.en.reply name=nothing.same count=one text="That is what is there already."
 # The door's honest answers as reply facts (src/dialog/index.mjs _doorHonest; Q43 [KNOW]): what was not understood or cannot be done, said in every language by the same names.
 @w.lang.en.reply.local.not_understood_here w.lang.en.reply name=not_understood.here count=one role=world text="I did not understand that as something to do in the {world}."
 @w.lang.en.reply.local.not_understood_words w.lang.en.reply name=not_understood.words count=one role=words text="I did not understand {words} here."
@@ -101,6 +80,7 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.not_understood_undo w.lang.en.reply name=not_understood.undo count=one role=words text="I did not understand {words} here, so I took nothing back."
 @w.lang.en.reply.local.nothing_like w.lang.en.reply name=nothing.like count=one role=words text="I found nothing like {words} among what was done, so I took nothing back."
 @w.lang.en.reply.local.missing_place w.lang.en.reply name=refused.missing_value.place count=one role=key text="Where should it go? You can say, for example, \\"move the tree to the left\\", \\"put the cat next to the house\\" or \\"move it to the top right corner\\"."
-@w.lang.en.reply.local.done_whole w.lang.en.reply name=done.whole count=one role=whole role=parts text="The {whole} now has {parts}."
 @w.lang.en.reply.local.cannot_do w.lang.en.reply name=cannot.do count=one role=words role=world text="I cannot do {words} in the {world} yet."
+@w.lang.en.reply.local.done_about w.lang.en.reply name=done.about count=one role=whole role=topic text="The {whole} is about {topic}."
+@w.lang.en.reply.local.done_title w.lang.en.reply name=done.title count=one role=whole role=title text="The {whole} is called {title}."
 `;

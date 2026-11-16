@@ -1,0 +1,30 @@
+# k.colours/shards/words: the English words of k.colours (its types, keys and values), stored beside the world (owner's
+# decision 2026-11-15 08:10); tools/build-catalog.mjs reads them as the world's own words.
+# sources: hand-core 1 (written in this repository; the block at the end by tools/key-words.mjs)
+# license: CC0-1.0
+# script: none (hand-written); the block of word wires for keys: tools/key-words.mjs
+
+# Words for the types and keys of this world.
+@k.colours.word.colour core.word text=colour text=colours text=color text=colors text=coloured text=colored means=k.colours.colour core.source="hand-core 1"
+@k.colours.word.basic core.word text=basic text="basic colour" text="basic colours" means=k.colours.basic core.source="hand-core 1"
+@k.colours.word.rgb core.word text=rgb text=RGB text="colour value" text=hex means=k.colours.colour.rgb core.source="hand-core 1"
+@k.colours.word.rgb_about core.word text="usual rgb" text="usual value" means=k.colours.colour.rgb_about core.source="hand-core 1"
+@k.colours.word.css core.word text=css text="css name" means=k.colours.colour.css core.source="hand-core 1"
+@k.colours.word.family core.word text=family text="kind of" means=k.colours.colour.family core.source="hand-core 1"
+@k.colours.word.tone core.word text=light text=dark text=pale means=k.colours.colour.tone core.source="hand-core 1"
+@k.colours.word.temperature core.word text=warm text=cool means=k.colours.colour.temperature core.source="hand-core 1"
+@k.colours.word.lighter core.word text=lighter text=paler means=k.colours.colour.lighter core.source="hand-core 1"
+@k.colours.word.darker core.word text=darker text=deeper means=k.colours.colour.darker core.source="hand-core 1"
+@k.colours.word.complement core.word text=complement text=complementary text=opposite means=k.colours.colour.complement core.source="hand-core 1"
+@k.colours.word.mix core.word text=mix text=mixes text=mixed text=mixing text=make text=makes means=k.colours.mix core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.colours.word.key.colour.basic core.word text=basic means=k.colours.colour.basic core.source="hand-core 1"
+@k.colours.word.key.colour.rgb_about core.word text=rgb means=k.colours.colour.rgb_about core.source="hand-core 1"
+@k.colours.word.key.colour.tone core.word text=tone means=k.colours.colour.tone core.source="hand-core 1"
+@k.colours.word.key.colour.temperature core.word text=temperature means=k.colours.colour.temperature core.source="hand-core 1"
+@k.colours.word.key.colour.kind core.word text=kind means=k.colours.colour.kind core.source="hand-core 1"
+@k.colours.word.key.colour.thing core.word text=thing means=k.colours.colour.thing core.source="hand-core 1"
+@k.colours.word.key.basic.derived core.word text=derived means=k.colours.basic.derived core.source="hand-core 1"
+@k.colours.word.key.mix.b core.word text=b means=k.colours.mix.b core.source="hand-core 1"
+@k.colours.word.key.mix.gives core.word text=gives means=k.colours.mix.gives core.source="hand-core 1"

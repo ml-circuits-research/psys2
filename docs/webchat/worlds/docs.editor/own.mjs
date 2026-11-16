@@ -5,7 +5,7 @@
 export {
   initialState, summary, view, adopt, make as makeDocument, dictate, dictateStop, read, download, stats, mentions, isEmpty, whatIs, say, fromList, holdings, fillTable, whatSelected, checkTask, countTasks, listTasks,
   addHeading, addList, addParagraph, undo as docUndo, redo as docRedo,
-} from './editor.mjs?v=df0161e411';
-export { digest, compose } from './textgen.mjs?v=7700472af8';   // the summary and the composition (spec 26), from the library's std.summarize / std.compose
+} from './editor.mjs?v=b1aa21faaf';
+export { digest, compose } from './textgen.mjs?v=e0e0da4915';   // the summary and the composition (spec 26), from the library's std.summarize / std.compose
 /** Spec 28: the tool primitives the request door runs (request.sop std.tool wires), the document's view and its own undo / redo (document.mjs). */
-export { writeText, keepChapters, toolView, undoStep, redoStep } from './document.mjs?v=c52da76964';
+export { writeText, keepChapters, toolView, undoStep, redoStep } from './document.mjs?v=eb6acbb2b0';

@@ -2,8 +2,8 @@
 // `compose` (a document written from knowledge, from `std.compose`, into the editor). The adapters (src/dialog/textgen.mjs) are installed by the engine in a well-known
 // global once the library is loaded; without them these operations decline plainly. There is no local generator and no fallback text. Browser-safe.
 // (Moved here from docs.reader when the document-analysis tab was removed: one Documents tab, the editor with the composition and the summary.)
-import { allTexts } from './model.mjs?v=50dd410b17';
-import { createDoc, finish } from './editor.mjs?v=df0161e411';
+import { allTexts } from './model.mjs?v=a77defa019';
+import { createDoc, finish } from './editor.mjs?v=b1aa21faaf';
 
 const textGen = () => globalThis[Symbol.for('psys2.textgen')] ?? null;
 const no = (status, note) => ({ status, note });

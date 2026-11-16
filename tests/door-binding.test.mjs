@@ -161,3 +161,17 @@ test('diagram: acts on the shapes there go through the binding (change, remove);
   assert.equal(dg(s).shapes.length, 0, d.text);
   assert.equal(d.trace.door, 'bound remove', d.text);
 });
+
+test('every attribute value said in a make is in the view after it, on the thing of its kind (EN + RO; coordinated attributes)', async () => {
+  const ro = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });
+  for (const [lang, said] of [['en', 'draw a red boat and a blue house'], ['ro', 'desenează o barcă roșie și o casă albastră']]) {
+    const s = (lang === 'ro' ? ro : engine).createSession({ language: lang });
+    s.setWorldState('ui.shell', { activeTab: 'draw' });
+    const r = await s.send(said);
+    const colour = (k) => (s.state()['art.draw']?.objects ?? []).filter((o) => o.kind === k).map((o) => o.colour ?? o.color);
+    assert.deepEqual(colour('boat'), ['red'], `${lang}: ${r.text}`);
+    assert.deepEqual(colour('house'), ['blue'], `${lang}: ${r.text}`);
+  }
+});
+// [LIB] the said colours are in the view but not in the words: "draw a red boat and a blue house" is said "I added a boat. I added a house." and "what is in the picture?" "There is one boat. There is one house.".
+// sayRequest's make branch takes `outcome.roles.colour` (one value for the whole turn) for done.make.value, not the per-kind `attribute of=<kind>` constraints; askWorld's state facts carry no attributes.

@@ -1,5 +1,5 @@
 {
- "version": "bf74dcc83660",
+ "version": "79ea2f3f580e",
  "sopworld": "94cffa2",
  "worlds": [
   {
@@ -39995,8 +39995,8 @@
     {
      "id": "k.layouts/shards/layouts",
      "path": "k.layouts/shards/layouts.sop",
-     "wires": 180,
-     "bytes": 31924,
+     "wires": 186,
+     "bytes": 33198,
      "keys": [
       "above",
       "aligned_column",
@@ -40042,6 +40042,8 @@
       "item",
       "joined_to",
       "landscape",
+      "layer",
+      "layers",
       "left_of",
       "moustache",
       "mouth",
@@ -50713,8 +50715,8 @@
     {
      "id": "k.objects/shards/stand-ins-hand",
      "path": "k.objects/shards/stand-ins-hand.sop",
-     "wires": 140,
-     "bytes": 14700,
+     "wires": 141,
+     "bytes": 14813,
      "keys": [
       "acrobat",
       "actor",
@@ -50853,6 +50855,7 @@
       "waiter",
       "water hole",
       "water lily",
+      "water plant",
       "windsock",
       "workbench",
       "worker"
@@ -92021,7 +92024,7 @@
   },
   {
    "id": "w.lang.en",
-   "version": "4",
+   "version": "5",
    "schema": "w.lang.en/schema.sop",
    "exports": [
     "w.lang.en.alternation",
@@ -92347,8 +92350,8 @@
     {
      "id": "w.lang.en/shards/closed-classes",
      "path": "w.lang.en/shards/closed-classes.sop",
-     "wires": 279,
-     "bytes": 38712,
+     "wires": 290,
+     "bytes": 40194,
      "keys": [
       "'s",
       "a",
@@ -92363,6 +92366,10 @@
       "ah",
       "aint",
       "all",
+      "all of it",
+      "all of them",
+      "all the elements",
+      "all the items",
       "along",
       "also",
       "always",
@@ -92415,9 +92422,13 @@
       "earlier than",
       "eight",
       "eighth",
+      "elements",
       "eleven",
       "er",
       "every",
+      "every element",
+      "every item",
+      "every thing",
       "everything",
       "except",
       "few",
@@ -92464,6 +92475,7 @@
       "isn't",
       "isnt",
       "it",
+      "items",
       "its",
       "just",
       "kinda",
@@ -92545,6 +92557,8 @@
       "thanks",
       "that",
       "the",
+      "the elements",
+      "the items",
       "the other",
       "the others",
       "their",
@@ -93180,8 +93194,8 @@
     {
      "id": "w.lang.en/shards/hand-arrangements",
      "path": "w.lang.en/shards/hand-arrangements.sop",
-     "wires": 65,
-     "bytes": 10619,
+     "wires": 67,
+     "bytes": 10921,
      "keys": [
       "across the page",
       "all over",
@@ -93219,6 +93233,8 @@
       "in a straight line",
       "in a table",
       "in a tree",
+      "in layers",
+      "in levels",
       "in rows and columns",
       "in the corners",
       "in the form of",
@@ -93248,6 +93264,31 @@
       "top to bottom",
       "upwards",
       "vertically"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "w.lang.en/shards/hand-cues-more",
+     "path": "w.lang.en/shards/hand-cues-more.sop",
+     "wires": 36,
+     "bytes": 11463,
+     "keys": [
+      "all of it",
+      "all of them",
+      "all the elements",
+      "all the items",
+      "elements",
+      "every element",
+      "every item",
+      "every thing",
+      "everything",
+      "items",
+      "the elements",
+      "the items"
      ],
      "sources": [
       "hand-core-1"
@@ -93945,8 +93986,8 @@
     {
      "id": "w.lang.en/shards/replies",
      "path": "w.lang.en/shards/replies.sop",
-     "wires": 68,
-     "bytes": 12768,
+     "wires": 95,
+     "bytes": 18923,
      "keys": [],
      "sources": [
       "hand-core-1"
@@ -94115,8 +94156,8 @@
     {
      "id": "w.lang.ro/shards/closed",
      "path": "w.lang.ro/shards/closed.sop",
-     "wires": 240,
-     "bytes": 32318,
+     "wires": 245,
+     "bytes": 32904,
      "keys": [],
      "sources": [
       "hand-core-1"
@@ -94151,8 +94192,8 @@
     {
      "id": "w.lang.ro/shards/frames",
      "path": "w.lang.ro/shards/frames.sop",
-     "wires": 347,
-     "bytes": 54349,
+     "wires": 357,
+     "bytes": 57290,
      "keys": [],
      "sources": [
       "hand-core-1"
@@ -94163,8 +94204,8 @@
     {
      "id": "w.lang.ro/shards/irregular",
      "path": "w.lang.ro/shards/irregular.sop",
-     "wires": 235,
-     "bytes": 34877,
+     "wires": 299,
+     "bytes": 44386,
      "keys": [],
      "sources": [
       "hand-core-1"
@@ -94187,8 +94228,8 @@
     {
      "id": "w.lang.ro/shards/replies",
      "path": "w.lang.ro/shards/replies.sop",
-     "wires": 90,
-     "bytes": 16584,
+     "wires": 123,
+     "bytes": 24010,
      "keys": [],
      "sources": [
       "hand-core-1"
@@ -94435,7 +94476,7 @@
      "path": "docs/worlds/w.lang.ro/dictionary",
      "format": "tsv",
      "files": 21,
-     "bytes": 16198,
+     "bytes": 16752,
      "sources": [
       "hand-core-1"
      ],
@@ -94807,7 +94848,7 @@
   },
   {
    "id": "w.dialogue",
-   "version": "1",
+   "version": "2",
    "schema": "w.dialogue/schema.sop",
    "depends": [
     "w.request"
@@ -94942,8 +94983,8 @@
      ]
     }
    ],
-   "wires": 110,
-   "bytes": 18536,
+   "wires": 111,
+   "bytes": 19069,
    "sources": [
     "hand-core-1"
    ],
@@ -94952,7 +94993,7 @@
   },
   {
    "id": "w.document",
-   "version": "1",
+   "version": "2",
    "schema": "w.document/schema.sop",
    "depends": [],
    "about": "written documents: chapters, sections, paragraphs, slides and sentences, each sentence with the facts it states",
@@ -94987,6 +95028,7 @@
       "register",
       "language",
       "seed",
+      "words",
       "about"
      ],
      "words": [
@@ -95115,8 +95157,8 @@
      ]
     }
    ],
-   "wires": 95,
-   "bytes": 15368,
+   "wires": 97,
+   "bytes": 15824,
    "sources": [
     "hand-core-1"
    ],

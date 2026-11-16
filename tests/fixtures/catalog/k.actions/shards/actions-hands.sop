@@ -1,7 +1,7 @@
-# k.actions/shards/actions-hands: 32 actions of handling a thing: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; the other forms of the verbs; and 75 verbs and phrases that mean nearly the same.
-# sources: hand-core 1 (hand-written in this repository: tools/actions-data.mjs)
+# k.actions/shards/actions-hands: 32 actions of handling a thing: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; a form of a verb w.lang.en does not have (wetted); and 75 verbs and phrases that mean nearly the same.
+# sources: hand-core 1 (hand-written in this repository; this shard is the home of these facts: edit it here, reviewer 15:00 item 3; written from tools/actions-data.mjs until 2026-11-15)
 # license: CC0-1.0
-# script: tools/actions-core.mjs
+# script: none (hand-written)
 
 @k.actions.action.hold k.actions.action name=hold group=hands who=person who=monkey object=cup object=hand object=book object=balloon tool=hand result="the thing staying in the hand" holds=set opposite=drop example="A child holds a balloon." core.source="hand-core 1"
 @k.actions.action.carry k.actions.action name=carry group=hands who=person who=ant who=truck object=bag object=box object=baby object=bucket tool=bag tool=basket tool=backpack result="the thing being somewhere else" example="A postman carries a parcel." core.source="hand-core 1"
@@ -36,39 +36,8 @@
 @k.actions.action.wrap k.actions.action name=wrap group=hands who=person object=present object=sandwich object=baby tool=paper tool=ribbon tool=blanket where=Christmas where="birthday party" result="the thing covered all round" opposite=unwrap undone_by=unwrap example="She wraps a present in paper." core.source="hand-core 1"
 @k.actions.action.unwrap k.actions.action name=unwrap group=hands who=person object=present object=sweet object=sandwich tool=hand where=Christmas where="birthday party" result="the thing with its cover off" opposite=wrap undone_by=wrap example="The child unwraps a present." core.source="hand-core 1"
 
-# Words: the other forms of the verbs.
-@k.actions.word.action.hold core.word text=holds text=held text=holding means=hold of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.carry core.word text=carries text=carried text=carrying means=carry of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.lift core.word text=lifts text=lifted text=lifting means=lift of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.lower core.word text=lowers text=lowered text=lowering means=lower of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.push core.word text=pushes text=pushed text=pushing means=push of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.pull core.word text=pulls text=pulled text=pulling means=pull of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.throw core.word text=throws text=threw text=throwing means=throw of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.catch core.word text=catches text=caught text=catching means=catch of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.drop core.word text=drops text=dropped text=dropping means=drop of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.pick_up core.word text="picks up" text="picked up" text="picking up" means="pick up" of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.put core.word text=puts text=putting means=put of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.take core.word text=takes text=took text=taking means=take of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.get core.word text=gets text=got text=getting means=get of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.get_back core.word text="gets back" text="got back" text="getting back" means="get back" of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.have core.word text=has text=had text=having means=have of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.give core.word text=gives text=gave text=giving means=give of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.open core.word text=opens text=opened text=opening means=open of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.close core.word text=closes text=closed text=closing means=close of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.shake core.word text=shakes text=shook text=shaking means=shake of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.hit core.word text=hits text=hitting means=hit of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.kick core.word text=kicks text=kicked text=kicking means=kick of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.touch core.word text=touches text=touched text=touching means=touch of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.press core.word text=presses text=pressed text=pressing means=press of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.squeeze core.word text=squeezes text=squeezed text=squeezing means=squeeze of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.tie core.word text=ties text=tied text=tying means=tie of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.untie core.word text=unties text=untied text=untying means=untie of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.hang core.word text=hangs text=hung text=hanging means=hang of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.pour core.word text=pours text=poured text=pouring means=pour of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.fill core.word text=fills text=filled text=filling means=fill of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.empty core.word text=empties text=emptied text=emptying means=empty of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.wrap core.word text=wraps text=wrapped text=wrapping means=wrap of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.unwrap core.word text=unwraps text=unwrapped text=unwrapping means=unwrap of=k.actions.action.name core.source="hand-core 1"
+# Words: the forms of a verb that w.lang.en does not confirm (its forms are w.lang.en's, KR2).
+
 
 # Verbs and phrases that mean nearly the same as an action, or a kind of it.
 @k.actions.similar.grip.hold k.actions.similar name=grip action=hold core.source="hand-core 1"

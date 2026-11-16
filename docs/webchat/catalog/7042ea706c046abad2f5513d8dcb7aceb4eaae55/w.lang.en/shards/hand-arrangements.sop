@@ -1,4 +1,4 @@
-# w.lang.en/shards/hand-arrangements: 62 phrases that say how things are arranged (in a circle, in a grid, evenly, left to right, top to bottom), each joined to the arrangement and relation of k.layouts it names and to the layout of a w.diagram it asks for (block "04:40" item 4).
+# w.lang.en/shards/hand-arrangements: 64 phrases that say how things are arranged (in a circle, in a grid, evenly, left to right, top to bottom), each joined to the arrangement and relation of k.layouts it names and to the layout of a w.diagram it asks for (block "04:40" item 4).
 # sources: hand-core 1 (English, written in this repository)
 # license: CC0-1.0
 # script: none (hand-written)
@@ -68,3 +68,5 @@
 @w.lang.en.arrangement.along_the_edge w.lang.en.arrangement text="along the edge" layout=border core.source="hand-core 1"
 @w.lang.en.arrangement.around_the_edge w.lang.en.arrangement text="around the edge" layout=border core.source="hand-core 1"
 @w.lang.en.arrangement.overlapping w.lang.en.arrangement text=overlapping diagram_layout=overlapping core.source="hand-core 1"
+@w.lang.en.arrangement.in_layers w.lang.en.arrangement text="in layers" layout=layers relation=above direction=top_to_bottom core.source="hand-core 1"
+@w.lang.en.arrangement.in_levels w.lang.en.arrangement text="in levels" layout=layers relation=above direction=top_to_bottom core.source="hand-core 1"

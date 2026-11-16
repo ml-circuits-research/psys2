@@ -10,7 +10,7 @@
 # license: CC0-1.0
 # script: none (hand-written); the shards are written by tools/import/psys2-lang-en.mjs, except shards/hand-*.sop
 
-@w.lang.en core.module name=w.lang.en version=4 exports=det exports=pron exports=anaphor exports=prep exports=prep.time exports=number exports=ordinal exports=numeral exports=inflect exports=irregular exports=noun.exception exports=contraction exports=contraction.ending exports=cat exports=word exports=rule exports=construction exports=frame exports=part exports=fixed exports=phrase exports=lex exports=joiner exports=joiner.keep exports=frame_lead exports=correction exports=correction.lead exports=answer exports=wh exports=aux exports=neg exports=neg.imperative exports=neg.imperative.skip exports=imperative.lead exports=ellipsis.lead exports=ellipsis.trail exports=ellipsis.repeat exports=ellipsis.starter exports=ellipsis.param exports=coord.sep exports=coord.param exports=relpron exports=copula exports=partitive exports=other exports=choice exports=role_map exports=mode_map exports=template exports=phrasing exports=discourse exports=slot exports=onset exports=alternation exports=alternation_family exports=alternation_case exports=variant exports=skip exports=closed exports=class exports=ending exports=irregular_form exports=arrangement exports=calc exports=reply exports=fn exports=feeling_reply exports=count exports=cue core.source="psys2 78f45863"
+@w.lang.en core.module name=w.lang.en version=5 exports=det exports=pron exports=anaphor exports=prep exports=prep.time exports=number exports=ordinal exports=numeral exports=inflect exports=irregular exports=noun.exception exports=contraction exports=contraction.ending exports=cat exports=word exports=rule exports=construction exports=frame exports=part exports=fixed exports=phrase exports=lex exports=joiner exports=joiner.keep exports=frame_lead exports=correction exports=correction.lead exports=answer exports=wh exports=aux exports=neg exports=neg.imperative exports=neg.imperative.skip exports=imperative.lead exports=ellipsis.lead exports=ellipsis.trail exports=ellipsis.repeat exports=ellipsis.starter exports=ellipsis.param exports=coord.sep exports=coord.param exports=relpron exports=copula exports=partitive exports=other exports=choice exports=role_map exports=mode_map exports=template exports=phrasing exports=discourse exports=slot exports=onset exports=alternation exports=alternation_family exports=alternation_case exports=variant exports=skip exports=closed exports=class exports=ending exports=irregular_form exports=arrangement exports=calc exports=reply exports=fn exports=feeling_reply exports=count exports=cue core.source="psys2 78f45863"
 
 # ---- closed word classes ----
 # A determiner or quantifier. `in` names a view: one of the lists PSys2 kept in its modules (acts, expand, dialogue,
@@ -34,14 +34,14 @@
 @w.lang.en.det.before core.slot of=w.lang.en.det key=before enum=vowel enum=consonant core.source="hand-core 1"
 
 # A pronoun. `refers`: thing (a thing of the scene or of the dialogue), place, an agent by gender (m, f, any), or
-# the user, or the assistant. `case` may repeat (it: subject and object).
+# the user, the assistant, or `all` (every thing of the open world: "the elements", "the items"). `case` may repeat (it: subject and object).
 @w.lang.en.pron core.type of=w.lang.en.pron shared=true closed=true core.source="psys2 78f45863"
 @w.lang.en.pron.text core.slot of=w.lang.en.pron key=text id=true required=true kind=atom kind=string core.source="psys2 78f45863"
 @w.lang.en.pron.case core.slot of=w.lang.en.pron key=case many=true required=true enum=subject enum=object enum=possessive enum=demonstrative enum=locative core.source="psys2 78f45863"
 @w.lang.en.pron.person core.slot of=w.lang.en.pron key=person kind=integer min=1 max=3 core.source="psys2 78f45863"
 @w.lang.en.pron.number core.slot of=w.lang.en.pron key=number enum=sg enum=pl core.source="psys2 78f45863"
 @w.lang.en.pron.gender core.slot of=w.lang.en.pron key=gender enum=m enum=f enum=n core.source="psys2 78f45863"
-@w.lang.en.pron.refers core.slot of=w.lang.en.pron key=refers many=true required=true enum=thing enum=place enum=m enum=f enum=any enum=user enum=assistant core.source="psys2 78f45863"
+@w.lang.en.pron.refers core.slot of=w.lang.en.pron key=refers many=true required=true enum=thing enum=place enum=m enum=f enum=any enum=user enum=assistant enum=all core.source="psys2 78f45863"
 @w.lang.en.pron.distance core.slot of=w.lang.en.pron key=distance enum=near enum=far core.source="psys2 78f45863"
 @w.lang.en.pron.deictic core.slot of=w.lang.en.pron key=deictic kind=atom core.source="psys2 78f45863"
 @w.lang.en.pron.in core.slot of=w.lang.en.pron key=in many=true kind=atom core.source="psys2 78f45863"

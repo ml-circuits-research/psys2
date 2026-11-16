@@ -1,11 +1,11 @@
 # k.values: the words for values (colour names are in k.colours). Ordered scales (size, amount, degree and
 # more) with their steps and comparatives, directions and positions in a picture, set words (all,
-# each, random, same, different), number words and ordinals. For reading the value a person names in a request.
+# each, random, same, different); number words are in w.lang.en (w.lang.en.number). For reading the value a person names in a request.
 # sources: hand-core 1 (the schema and the hand-written shards); psys2-worlds 6b63b2ba (shard psys2)
 # license: CC0-1.0
 # script: none (hand-written); the shards are written by tools/values-core.mjs
 
-@k.values core.module name=k.values version=2 imports=k.named exports=scale exports=step exports=comparative exports=direction exports=position exports=set_word exports=number exports=shade exports=reply exports=fill exports=coloured core.source="hand-core 1"
+@k.values core.module name=k.values version=2 imports=k.named exports=scale exports=step exports=comparative exports=direction exports=position exports=set_word exports=shade exports=reply exports=fill exports=coloured core.source="hand-core 1"
 
 # Colour names live in k.colours (KR2, reviewer 14:45): k.colours.colour (name, rgb, family, basic=true on the 11 basic
 # terms); k.values.colour is gone.
@@ -66,18 +66,10 @@
 @k.values.set_word.manner core.slot of=k.values.set_word key=manner enum="one by one" enum=random enum=same enum=different enum=alternating enum="in order" core.source="hand-core 1"
 @k.values.set_word.about core.slot of=k.values.set_word key=about required=true kind=string core.source="hand-core 1"
 
-# A number word. `kind`: cardinal (three), ordinal (third), times (twice), multiple (double), group (dozen),
-# fraction (half). `value` is the number; a fraction that has no short decimal has `value_about` instead.
-@k.values.number core.type of=k.values.number shared=true closed=true core.source="hand-core 1"
-@k.values.number.text core.slot of=k.values.number key=text id=true required=true kind=atom kind=string core.source="hand-core 1"
-@k.values.number.kind core.slot of=k.values.number key=kind id=true required=true enum=cardinal enum=ordinal enum=times enum=multiple enum=group enum=fraction core.source="hand-core 1"
-@k.values.number.value core.slot of=k.values.number key=value kind=number core.source="hand-core 1"
-@k.values.number.value_about core.slot of=k.values.number key=value_about excludes=value kind=number core.source="hand-core 1"
 
 # Words for the types of this world.
 @k.values.word.direction core.word text=direction text=directions means=k.values.direction core.source="hand-core 1"
 @k.values.word.position core.word text=position text=positions means=k.values.position core.source="hand-core 1"
-@k.values.word.number core.word text=number text=numbers means=k.values.number core.source="hand-core 1"
 @k.values.word.scale core.word text=scale text=scales means=k.values.scale core.source="hand-core 1"
 
 # A fill: how a shape is filled in a picture (solid, outline, striped). A value of the role `value` of the act
@@ -120,9 +112,6 @@
 @k.values.word.key.set_word.picks core.word text=picks means=k.values.set_word.picks core.source="hand-core 1"
 @k.values.word.key.set_word.manner core.word text=manner means=k.values.set_word.manner core.source="hand-core 1"
 @k.values.word.key.set_word.about core.word text=about means=k.values.set_word.about core.source="hand-core 1"
-@k.values.word.key.number.kind core.word text=kind means=k.values.number.kind core.source="hand-core 1"
-@k.values.word.key.number.value core.word text=value means=k.values.number.value core.source="hand-core 1"
-@k.values.word.key.number.value_about core.word text=value means=k.values.number.value_about core.source="hand-core 1"
 @k.values.word.key.fill.about core.word text=about means=k.values.fill.about core.source="hand-core 1"
 @k.values.word.key.shade.lightness core.word text=lightness means=k.values.shade.lightness core.source="hand-core 1"
 @k.values.word.key.shade.saturation core.word text=saturation means=k.values.shade.saturation core.source="hand-core 1"

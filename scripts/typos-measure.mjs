@@ -46,7 +46,7 @@ for (const r of rows) {
       english = en?.english ?? r.text; srcRepairs = (en?.changes ?? []).filter((x) => fold(x.from) !== fold(x.to)).map((x) => ({ from: x.from, to: x.to, kind: x.kind }));   // diacritics put back are not repairs of a typo asks = en?.asks ?? [];
     }
     const kw = r.lang === 'ro' ? new Set((r.text.match(/[\p{L}]+/gu) ?? []).map(fold)) : null;   // as the door passes it: a word the translation left as written is the person's own
-    const q = readTurn(lib, live, language, english, { known: kw ? (w) => known(w) || kw.has(fold(w)) : known });
+    let q; try { q = readTurn(lib, live, language, english, { known: kw ? (w) => known(w) || kw.has(fold(w)) : known }); } catch (e) { console.error("CRASH", JSON.stringify(english), String(e.message).slice(0, 80)); q = { corrections: [], asks: [], request: null, unread: [], used: [] }; }
     fixes = [...q.corrections, ...srcRepairs.map((x) => ({ said: x.from, as: x.to, kind: x.kind }))]; asks = [...(q.asks ?? []), ...asks];
     if (proposer) {   // spell + proposer (Q48): the proposal reads the spell-repaired words; an accepted one is listed (on a control it is harm)
       const pr = await proposeReading(proposer, { q, english, world: TAB[r.tab], read: (t) => readTurn(lib, live, language, t, {}), negations: negationWords(language) });

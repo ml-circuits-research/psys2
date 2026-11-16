@@ -1,4 +1,4 @@
-# k.layouts/shards/layouts: 18 named arrangements (row, column, grid, ring, scatter, corners, stack, pyramid, tree, flow, radial, nested, border, outline, landscape, room, family photo, face): their places, how the places sit to each other, what is usually arranged so; and other names of the arrangements.
+# k.layouts/shards/layouts: 19 named arrangements (row, column, grid, ring, scatter, corners, stack, layers, pyramid, tree, flow, radial, nested, border, outline, landscape, room, family photo, face): their places, how the places sit to each other, what is usually arranged so; and other names of the arrangements.
 # sources: hand-core 1 (hand-written in this repository: tools/layouts-core.mjs)
 # license: CC0-1.0
 # script: tools/layouts-core.mjs
@@ -60,6 +60,13 @@
 @k.layouts.slot.stack.item k.layouts.slot layout=stack name=item count=many holds=thing core.source="hand-core 1"
 @k.layouts.relation.stack.item.on.item k.layouts.relation layout=stack a=item rel=on b=item among=neighbours core.source="hand-core 1"
 @k.layouts.relation.stack.item.aligned_column.item k.layouts.relation layout=stack a=item rel=aligned_column b=item among=all core.source="hand-core 1"
+
+# layers
+@k.layouts.layout.layers k.layouts.layout name=layers kind=repeating about="Horizontal bands one above the other, each a level or layer; the first is on top and each lies directly below the one before." ordered=true usual_for="the levels of a diagram" usual_for="sky, land and water of a picture" usual_for="the layers of a cake" usual_for="the floors of a building" usual_for="the layers of the earth" core.source="hand-core 1"
+@k.layouts.slot.layers.layer k.layouts.slot layout=layers name=layer count=many holds=thing holds=group arranged=row core.source="hand-core 1"
+@k.layouts.relation.layers.layer.above.layer k.layouts.relation layout=layers a=layer rel=above b=layer among=neighbours core.source="hand-core 1"
+@k.layouts.relation.layers.layer.aligned_column.layer k.layouts.relation layout=layers a=layer rel=aligned_column b=layer among=all core.source="hand-core 1"
+@k.layouts.relation.layers.layer.same_size.layer k.layouts.relation layout=layers a=layer rel=same_size b=layer among=all core.source="hand-core 1"
 
 # pyramid
 @k.layouts.layout.pyramid k.layouts.layout name=pyramid kind=repeating about="Rows on top of each other, each shorter than the one below." ordered=true usual_for="tins in a shop" usual_for="acrobats standing on each other" usual_for="oranges on a stall" usual_for="the steps of a podium" usual_for="bricks" core.source="hand-core 1"
@@ -209,6 +216,7 @@
 @k.layouts.word.layout.scatter core.word text=scatter text=scattered text="here and there" text=random text="spread out" text=sprinkled text="all over" means=scatter of=k.layouts.layout.name core.source="hand-core 1"
 @k.layouts.word.layout.corners core.word text=corners text="in the corners" text="four corners" text=corner means=corners of=k.layouts.layout.name core.source="hand-core 1"
 @k.layouts.word.layout.stack core.word text=stack text=stacks text=pile text=heap text=tower text="on top of each other" text=stacked text=piled means=stack of=k.layouts.layout.name core.source="hand-core 1"
+@k.layouts.word.layout.layers core.word text=layers text=levels text=strata text=tiers text=bands text=floors text="in layers" text="in levels" text="break in layers" means=layers of=k.layouts.layout.name core.source="hand-core 1"
 @k.layouts.word.layout.pyramid core.word text=pyramid text=pyramids text="triangle of things" text="human pyramid" means=pyramid of=k.layouts.layout.name core.source="hand-core 1"
 @k.layouts.word.layout.tree core.word text=tree text=trees text=hierarchy text="family tree" text=branches text="organisation chart" text=branching means=tree of=k.layouts.layout.name core.source="hand-core 1"
 @k.layouts.word.layout.flow core.word text=flow text=flows text=flowchart text="flow chart" text=sequence text=steps text=process text=chain text=timeline text="one after the other" means=flow of=k.layouts.layout.name core.source="hand-core 1"

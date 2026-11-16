@@ -1,7 +1,7 @@
-# k.actions/shards/actions-move: 31 actions of moving oneself: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; the other forms of the verbs; and 59 verbs and phrases that mean nearly the same.
-# sources: hand-core 1 (hand-written in this repository: tools/actions-data.mjs)
+# k.actions/shards/actions-move: 31 actions of moving oneself: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; a form of a verb w.lang.en does not have (wetted); and 59 verbs and phrases that mean nearly the same.
+# sources: hand-core 1 (hand-written in this repository; this shard is the home of these facts: edit it here, reviewer 15:00 item 3; written from tools/actions-data.mjs until 2026-11-15)
 # license: CC0-1.0
-# script: tools/actions-core.mjs
+# script: none (hand-written)
 
 @k.actions.action.walk k.actions.action name=walk group=move who=person who=animal where=park where="city street" where=forest result="being somewhere else" example="A person walks through the park." core.source="hand-core 1"
 @k.actions.action.run k.actions.action name=run group=move who=person who=animal where=park where=playground where="football pitch" result="being somewhere else fast" example="A dog runs across the field." core.source="hand-core 1"
@@ -35,38 +35,8 @@
 @k.actions.action.lead k.actions.action name=lead group=move who=person who=guide who="mother duck" object=person object=animal object=horse tool=leash tool=rope result="others coming along behind" opposite=follow example="A girl leads a horse by the rope." core.source="hand-core 1"
 @k.actions.action.chase k.actions.action name=chase group=move who=cat who=dog who="police officer" object=mouse object=cat object=ball object=thief result="catching or losing what runs away" example="The cat chases a mouse." core.source="hand-core 1"
 
-# Words: the other forms of the verbs.
-@k.actions.word.action.walk core.word text=walks text=walked text=walking means=walk of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.run core.word text=runs text=ran text=running means=run of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.jump core.word text=jumps text=jumped text=jumping means=jump of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.climb core.word text=climbs text=climbed text=climbing means=climb of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.swim core.word text=swims text=swam text=swimming means=swim of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.fly core.word text=flies text=flew text=flying means=fly of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.fly_away core.word text="flies away" text="flew away" text="flying away" means="fly away" of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.crawl core.word text=crawls text=crawled text=crawling means=crawl of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.fall core.word text=falls text=fell text=falling means=fall of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.rise core.word text=rises text=rose text=rising means=rise of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.slide core.word text=slides text=slid text=sliding means=slide of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.roll core.word text=rolls text=rolled text=rolling means=roll of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.ride core.word text=rides text=rode text=riding means=ride of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.drive core.word text=drives text=drove text=driving means=drive of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.sail core.word text=sails text=sailed text=sailing means=sail of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.row core.word text=rows text=rowed text=rowing means=row of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.dive core.word text=dives text=dived text=diving means=dive of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.float core.word text=floats text=floated text=floating means=float of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.sink core.word text=sinks text=sank text=sinking means=sink of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.dance core.word text=dances text=danced text=dancing means=dance of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.hop core.word text=hops text=hopped text=hopping means=hop of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.march core.word text=marches text=marched text=marching means=march of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.turn core.word text=turns text=turned text=turning means=turn of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.stop core.word text=stops text=stopped text=stopping means=stop of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.go core.word text=goes text=went text=going means=go of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.come core.word text=comes text=came text=coming means=come of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.leave core.word text=leaves text=left text=leaving means=leave of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.enter core.word text=enters text=entered text=entering means=enter of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.follow core.word text=follows text=followed text=following means=follow of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.lead core.word text=leads text=led text=leading means=lead of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.chase core.word text=chases text=chased text=chasing means=chase of=k.actions.action.name core.source="hand-core 1"
+# Words: the forms of a verb that w.lang.en does not confirm (its forms are w.lang.en's, KR2).
+
 
 # Verbs and phrases that mean nearly the same as an action, or a kind of it.
 @k.actions.similar.stroll.walk k.actions.similar name=stroll action=walk core.source="hand-core 1"

@@ -1857,7 +1857,7 @@ export class DialogSession {
     const state = this.isession.state[tabWorld] ?? null;
     let rev = null;
     try { rev = lib.reviseRequest(dlg, q.request, { revisions: language, catalog: [language] }); } catch { rev = null; }
-    const cap = lib.capabilitiesOf(live);
+    const cap = lib.capabilitiesOf(live, { catalog: [language] });
     const base = { text, opts, lang, english, translation, tabWorld, q, flat, lastRec, dlg, present };
     // 1. an arrangement of what the open world holds: a named layout said with no act, nothing but the layout and kinds (its regions), before any revision ("break it into 3 layers: water, land and sky")
     const layout = q.facts.find((f) => f.key === 'layout' && f.value !== 'better');
@@ -1892,12 +1892,12 @@ export class DialogSession {
       const whole = [...worldWholes(live)][0];
       if (whole) { req = Object.assign(plainRequest(req), { target: whole, refers: 'kind' }); Object.defineProperty(req, 'facts', { value: q.facts, enumerable: false }); }
     }
-    const isMade = (k) => !!k && cap.honours.some((h) => h.act === 'make' && (!h.of.length || h.of.includes(k)));
+    const isMade = (k) => !!k && lib.declares(live, 'make', k, { catalog: [language] });
     const act = req.act;
     const thing = req.target ?? q.facts.find((f) => f.key === 'kind' && !f.neg)?.value ?? null;
     // no thing named: the door's only when a count names the unit of a whole this world makes ("draw 6 nodes"); "add a paragraph ..." is not a story to guess
     if (!thing && !(req.constraints ?? []).some((c) => c.on === 'count' && c.of && unitOfWhole(live, language, c.of))) return why('no thing named');
-    if (!cap.honours.some((h) => h.act === act && (!thing || !h.of.length || h.of.includes(thing) || (act === 'make' && madeIn(live, language, thing))))) return why(`act ${act}${thing ? ` ${thing}` : ''} not declared`);   // a whole the catalog expects made in this world (k.expect.make made_in) is this world's to make
+    if (!(thing ? lib.declares(live, act, thing, { catalog: [language] }) || (act === 'make' && madeIn(live, language, thing) && cap.honours.some((h) => h.act === act)) : cap.honours.some((h) => h.act === act))) return why(`act ${act}${thing ? ` ${thing}` : ''} not declared`);   // a whole the catalog expects made in this world (k.expect.make made_in) is this world's to make
     // a whole the world makes with an operation of its own (request.sop `psys2.op act= of= op=`: a new page) is that operation, one step, with nothing guessed
     const ownOp = thing && actOperation(live, act, thing);
     if (ownOp && typeof world?.ops?.[ownOp] === 'function') {
@@ -2171,7 +2171,7 @@ export class DialogSession {
     const saidText = english.toLowerCase();
     const twin = (x) => (goalReq.constraints ?? []).some((c) => c.words === x.words && c.on !== x.on && plan.roles?.[c.on] != null);   // "in the corner" is a place AND an extent: the place honoured carries the words
     // a place said by a kind the world makes that is not there yet ("3 fish in water" on an empty page): the world makes the place with the things (stand-in, questions.md Q42 (7) [LIB])
-    const makesPlace = (x) => x.on === 'place' && x.code === 'value' && x.value && lib.capabilitiesOf(live).kinds.get(x.value)?.has('make');
+    const makesPlace = (x) => x.on === 'place' && x.code === 'value' && x.value && lib.capabilitiesOf(live, { catalog: [language] }).kinds.get(x.value)?.has('make');
     const dropped = (plan.notHonoured ?? []).filter((x) => !['one_kind', 'nothing_left'].includes(x.code) && x.words && saidText.includes(String(x.words).toLowerCase()) && !twin(x) && !makesPlace(x));
     if (dropped.length && !arrange) return { why: `plan drops ${dropped.map((x) => x.words).join(', ')}`, q: flat };
     const drawnAs = declarationsOf(live, '').drawn;
