@@ -41,7 +41,8 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
   world.load(facts.wires);
   if (local.wires.trim()) world.load(local.wires);
   const m = lib.morphOf(world, { types: { cls: 'w.lang.ro.class', ending: 'w.lang.ro.ending', irregular: 'w.lang.ro.irregular', fold: 'w.lang.ro.fold', split: 'w.lang.ro.split', template: 'w.lang.ro.template', vowel: 'w.lang.ro.vowel' } });
-  const dict = lib.dictionary({ read: (l) => text(l) || null, fold: (s) => lib.fold(m, s) });
+  // `overrides`: rows that correct a catalog row of the same lemma (its gender or class), read before it (the dictionary takes a lemma's first row); each is a [KNOW] ask
+  const dict = lib.dictionary({ read: [(l) => local.overrides?.[l] || null, (l) => text(l) || null], fold: (s) => lib.fold(m, s) });
   const fold = (s) => lib.fold(m, s);
   /** The library's readings of a form (exact spellings first). */
   function readings(form) {
@@ -61,12 +62,24 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
   const lemmaOf = (en, pos) => {
     if (!byEnglish) {
       byEnglish = new Map();
-      for (const rows of [facts.dictionary, local.dictionary]) for (const t of Object.values(rows ?? {})) for (const line of String(t).split('\n')) {
+      for (const rows of [local.dictionary, facts.dictionary]) for (const t of Object.values(rows ?? {})) for (const line of String(t).split('\n')) {   // the application's own rows first: a local row corrects the catalog's sense (scrisoare, not literă, for the letter one writes)
         const [lemma, , , sense] = line.split('\t'), g = /^k\.words\.(.+)\.(noun|adjective)\.\d+$/.exec(sense ?? '');
         if (g && !byEnglish.has(`${g[2]}|${g[1]}`)) byEnglish.set(`${g[2]}|${g[1]}`, lemma);
       }
     }
-    return byEnglish.get(`${pos}|${String(en).toLowerCase().replace(/ /g, '_')}`) ?? null;
+    const key = String(en).toLowerCase().replace(/ /g, '_');
+    return byEnglish.get(`${pos}|${key}`) ?? (pos === 'noun' ? wordOf(key) : null);
+  };
+  // the language world's own word for a name of the knowledge (core.word text= means=<name>: the slots of k.faces, "obraz" for cheeks, "coadă" for hair_back): the first of its texts
+  // the dictionary reads as a lemma; a word with no dictionary lemma is not said by its own name here (the caller quotes or translates)
+  let wordsByMeaning = null;
+  const wordOf = (name) => {
+    if (!wordsByMeaning) {
+      wordsByMeaning = new Map();
+      for (const w of world.ofType('core.word')) { const means = bare(w.attrs.means?.[0]).toLowerCase(); if (means && !wordsByMeaning.has(means)) wordsByMeaning.set(means, (w.attrs.text ?? []).map(bare)); }
+    }
+    for (const t of wordsByMeaning.get(name) ?? []) { if (/\s/.test(t)) continue; const r = readings(t.toLowerCase()).find((x) => posOf(x.class) === 'noun'); if (r && dict.lookup(r.lemma)) return r.lemma; }
+    return null;
   };
   // every sense of a lemma (a lemma may have several dictionary rows: așeza "sit" and "arrange"), from the rows in memory, built once
   let senses = null;
@@ -238,8 +251,9 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
       for (const [k, v] of Object.entries(how.roles)) {
         if (!new RegExp(`\\{${k}[:}@]|@${k}\\}`).test(said)) continue;   // a role the language's sentence does not say needs no word ("aici" for the world's name)
         if (typeof v === 'string' && /^[“"„].*[”"]$/s.test(v) && new RegExp(`\\{${k}\\}`).test(said)) { roles[k] = `„${v.slice(1, -1)}”`; continue; }   // a name already quoted (the title a tool gave what it made): said as it is, in the language's quotes
-        let x = (k === 'value' && typeof v === 'string' ? lemmaOf(v, 'adjective') : null) ?? roleRo(v);   // a value said of a kind is its adjective first ("orange": portocaliu, not the fruit)
-        if (x == null && (k === 'value' || k === 'name') && typeof v === 'string' && new RegExp(`\\{${k}\\}`).test(said) && !new RegExp(`@${k}\\}`).test(said)) { roles[k] = `„${v}”`; continue; }   // a value said as it is (no inflection, nothing agrees with it: "am presupus {value} pentru ...", "este despre {topic}"): a name the dictionary has no word for is quoted, as the names of things are
+        const v0 = typeof v === 'string' && new RegExp(`\\{art@${k}\\}`).test(said) ? v.replace(/^(?:a|an|the) /i, '') : v;   // the sentence brings its own article ("{art@value} {value}"): "a boy" is said by the noun's lemma
+        let x = (k === 'value' && typeof v0 === 'string' ? lemmaOf(v0, 'adjective') : null) ?? roleRo(v0);   // a value said of a kind is its adjective first ("orange": portocaliu, not the fruit)
+        if (x == null && (k === 'value' || k === 'name' || k === 'words') && typeof v === 'string' && new RegExp(`\\{${k}\\}`).test(said) && !new RegExp(`@${k}\\}`).test(said)) { roles[k] = `„${v}”`; continue; }   // a value said as it is (no inflection, nothing agrees with it: "am presupus {value} pentru ...", "este despre {topic}"): a name the dictionary has no word for is quoted, as the names of things are
         if (x == null) return null;
         roles[k] = x;
         if (typeof v === 'string') lemmas.add(k);

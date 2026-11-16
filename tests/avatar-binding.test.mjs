@@ -64,5 +64,5 @@ test('Romanian: a colour said lands in the view and the reply is Romanian', asyn
   const s = avatar(ro, 'ro');
   const r = await s.send('fă ochii albaștri');
   assert.equal(part(s, 'eyes').colour, 'blue', r.text);
-  assert.match(r.text, /^Ochii sunt albaștri/);
+  assert.match(r.text, /^Ochii sunt (?:acum )?albaștri/);   // composed by done.change.plural (the catalog's word order, "acum" before the value) since slice 14.3, translated before
 });

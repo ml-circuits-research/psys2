@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=296dee368b';
+import { composeReply, sayOf } from './composed-reply.mjs?v=3579520287';
 import { reviewForeign } from './foreign-reading.mjs?v=4ef049b181';
 import { installTextGen } from './textgen.mjs?v=0eb44cd703';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=f4503fb657';
@@ -28,7 +28,7 @@ import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voi
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=a7f7eb0703';
 import { machineReads } from '../translate/reading-policy.mjs?v=96bd6cc0e4';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=bfe848bcda';
+import { langRoNow } from '../translate/frames-ro.mjs?v=0668fe25ee';
 import { repairInContext } from '../translate/source-repair.mjs?v=db5b883c67';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=f4503fb657';
 import { lexIndex } from '../worlds/lexicon.mjs?v=ab38fd5b80';
@@ -42,7 +42,7 @@ import { attachValues } from '../knowledge/values.mjs?v=24c3ed2609';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=2ac1f1417a';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=e3ddce383e';
 import { Discourse } from './discourse.mjs?v=67f7744da8';
-import { Dialogue } from './dialogue.mjs?v=3224b4189c';
+import { Dialogue } from './dialogue.mjs?v=731ef55d60';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=40d19eee65';
 import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext, knowledgeOf, within } from './knowledge-lookup.mjs?v=11baf73ca2';
@@ -303,6 +303,17 @@ function soundAlikes(text, tabWorld) {
 const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 /** A turn the old readers handled (the door did not take it): `trace.legacy`, with the door's reason. */
 /** The segment of the world that took a turn through the door (the readers' segments record theirs), with the slips the request read (as the readers record their corrections). */
+/** Whether the language says a noun as a plural noun (an irregular pair whose singular is its plural: eyes, glasses), by its last word; built once per language world. */
+const pluralNouns = new WeakMap();
+const pluralNoun = (language, noun) => {
+  if (!language?.ofType) return false;
+  if (!pluralNouns.has(language)) {
+    const out = new Set();
+    for (const r of language.ofType('w.lang.en.irregular') ?? []) { const sg = String(r.attrs?.singular?.[0] ?? '').replace(/"/g, ''), pl = String(r.attrs?.plural?.[0] ?? '').replace(/"/g, ''); if (sg && sg === pl) out.add(sg.toLowerCase()); }
+    pluralNouns.set(language, out);
+  }
+  return pluralNouns.get(language).has(String(noun).split(' ').pop().toLowerCase());
+};
 /**
  * THE DOOR'S REPLY AS REPLY FACTS (spec 28 section 14; spec 06 "Composed replies"): one part per fact `{ reply, roles }` (sayRequest's facts, or a reply name the door says), its English
  * said by the language world (`<name>.<key>` first when the fact has a key, as sayRequest says it), its frame `say: { act: <name>, roles }` for the user's language pack (w.lang.ro reply
@@ -314,7 +325,9 @@ function factParts(lib, language, facts, text = null) {
   const parts = [];
   for (const f of facts) {
     const roles = Object.fromEntries(Object.entries(f.roles ?? {}).filter(([, v]) => v != null && v !== ''));
-    const names = roles.key ? [`${f.reply}.${roles.key}`, f.reply] : [f.reply];
+    const plain = roles.key ? [`${f.reply}.${roles.key}`, f.reply] : f.code && f.reply === 'not_honoured' ? [`${f.reply}.${f.code}`, f.reply] : [f.reply];   // what was not taken, by its code: a language that cannot say the library's English reason (`why`) says the code's own sentence
+    const noun = roles.thing ?? roles.kind;   // one thing named by a plural noun (eyes, glasses: the language's irregular pair whose singular is its plural) is said by `<reply>.plural`, as sayRequest says it
+    const names = typeof noun === 'string' && (roles.number ?? 1) === 1 && pluralNoun(language, noun) ? [...plain.map((n) => `${n}.plural`), ...plain] : plain;
     let said = null;
     const words = Object.fromEntries(Object.entries(roles).map(([k, v]) => [k, Array.isArray(v?.names) ? v.names.map((w) => `"${w}"`).join(', ') : v]));   // the person's own words, quoted
     for (const n of names) { let t = null; try { t = lib.replyFrom?.(language, n, words) ?? null; } catch { t = null; } if (t) { said = { name: n, text: typeof t === 'string' ? t : t.text ?? String(t) }; break; } }
@@ -364,7 +377,7 @@ import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=
 import { intentStep, weakReading, cutWorld } from './intent.mjs?v=47f4eabe3b';
 import { knownEnglishWord } from '../translate/en-ro.mjs?v=cbd133aecd';
 import { proposeReading, negationWords } from './proposer.mjs?v=b3c21ed7d7';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint, madeAgainstSaid } from './request.mjs?v=54a6b42177';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint, madeAgainstSaid } from './request.mjs?v=8df99373d8';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1966,6 +1979,8 @@ export class DialogSession {
     if (!replace && dlg?.last?.target && req.target && dlg.last.target !== req.target) dlg = { ...dlg, last: null, result: null };   // a new thing does not take the values of the last one: the dialogue's values hold within one thing
     // the dialogue follows the timeline: the last plan run through the binding (of the same thing, when the turn names no new kind), so that a count revision keeps its structure (the library's cutToCount / fillToCount)
     if (lastRec?.via === 'tool' && timeline.done.at(-1)?.plan && (!req.target || timeline.done.at(-1).plan.target === req.target) && !(q.request.constraints ?? []).some((c) => c.on === 'kind' && c.want === 'yes' && c.value && !(timeline.done.at(-1).plan.roles?.kinds ?? []).includes(c.value))) dlg = { ...dlg, lastPlan: timeline.done.at(-1).plan, lastRun: { made: timeline.done.at(-1).result?.things ?? [] } };
+    // a reply of the last turn that changed nothing and named a thing ("The hat is already there.", "The eyes are already green."): that thing is what "it" means now (the library's toolApp convention, sopworld 0.163 `plan.referent`; `_msg` is counted in `_sendCore`, after the door has read the turn)
+    if (this._doorNamed?.world === tabWorld && this._doorNamed.msg === this._msg) dlg = { ...dlg, lastRun: { made: this._doorNamed.ids } };
     const planOpts = { catalog: [language], dialogue: dlg, seed, vary: !!rev?.vary, replace: replace ? (timeline.done.at(-1)?.diff?.added ?? []).map((t) => t.id) : [] };
     const mirror = lib.mirrorState(live, prims.view, { catalog: [language] }).world;
     let plan = null;
@@ -2016,10 +2031,13 @@ export class DialogSession {
       const done = run.ok && !run.same;
       const read = (q.corrections ?? []).length ? `I read ${q.corrections.map((c) => `"${c.said}" as "${c.as}"`).join(', ')}. ` : '';   // what the reader repaired is said, as every door reply says it
       const facts = factParts(lib, language, said?.facts, said?.text ?? '');
+
       const parts = facts ? [...(read ? [{ text: read, translate: true }] : []), ...facts] : null;
       return { reply: read + (said?.text || ''), ...(parts ? { parts } : {}), status: done ? 'supported' : 'unsupported', info: { kind: 'door' }, frame: done ? { world: tabWorld, text: english, act: req.act ?? 'make' } : null };
     } });
     if (replaces && run?.ok) this.discourse.actions = this.discourse.actions.filter((x) => x !== replaces);
+    this._doorNamed = null;
+    if (run && !run.ok) { const named = plan.referent ?? (run.failed?.code === 'same' ? (plan.steps ?? []).flatMap((x) => [].concat(x.args?.ids ?? x.args?.thing ?? [])) : null) ?? ((plan.replies ?? []).some((x) => x.reply === 'refused.already') ? prims.view().filter((t) => (plan.replies ?? []).some((x) => x.reply === 'refused.already' && String(x.roles?.thing ?? '').replace(/ /g, '_') === String(t.kind))).map((t) => t.id) : null);   /* the things of the kind refused.already names: stand-in until 0.164 gives plan.referent (Q100 (1)) */ const ids = (named ?? []).map((id) => String(id).replace(/^\$/, '')).filter((id) => prims.view().some((t) => String(t.id) === id)); if (ids.length) this._doorNamed = { world: tabWorld, ids, msg: this._msg }; }
     if (run?.ok) {
       if (run.entry) { run.entry.turn = this._msg; run.entry.result = run.result; }   // the session turn of the plan: an undo of that turn is the timeline's
       rd.trimTimeline(tabWorld);

@@ -123,23 +123,24 @@ export function wearPreset(ctx, { preset, expression = null, step = null, label 
     return ok(['face']);
   });
 }
-/** A part is worn in a variant: the one said (`variant`), else the one it has stays, else the preset's (`worn`, the custom search); in a colour and a size when given. */
-export function putPart(ctx, { part, variant = null, worn = null, colour = null, size = null, step = null, label = null } = {}) {
+/** A part is worn in a variant: the one said, else the one it has, else the preset's (`variant`: the step's value, else the custom search presetVariant); in a colour and a size when given. */
+export function putPart(ctx, { part, variant = null, colour = null, size = null, step = null, label = null } = {}) {
   return toolStep(ctx, { step, label }, (f, data) => {
     const s = slotOf(data, plainName(part).replace(/ /g, '_')) ?? slotOf(data, part);   // glue-lint: tool-data (a slot id)
     if (!s) return refuse('no_part');
-    const v = variant ?? worn;   // the variant said ("a big smile"), else the one the preset wears (a part put on)
-    if (f.slots[s.name] === NONE || (variant != null && variant !== f.slots[s.name])) { if (!s.variants.some((x) => x.name === v)) return refuse('no_variant'); put(data, f, s.name, v); }
+    if (f.slots[s.name] === NONE || (variant != null && variant !== f.slots[s.name])) { if (!s.variants.some((x) => x.name === variant)) return refuse('no_variant'); put(data, f, s.name, variant); }
     if (colour != null && !paint(data, f, s.name, plainName(colour))) return refuse('no_colour', 'refused.no_colour', { thing: plainName(s.name), value: plainName(colour) });
     if (size != null) { if (!GRADE[size]) return refuse('no_value'); resize(data, f, s.name, GRADE[size]); (f.grade ??= {})[s.name] = size; }
     return ok([s.name]);
   });
 }
-/** Declared custom search (request.sop std.tool.custom presetVariant): the variant of a part in the preset the face is (the catalog's preset row), else the slot's first variant. */
+/** Declared custom search (request.sop std.tool.custom presetVariant): the variant a part has when it is worn (the view), else its variant in the preset the face is (the catalog's preset row), else the slot's first variant. */
 export function presetVariant({ part } = {}, view = []) {
   const data = faceData(null), s = slotOf(data, plainName(part).replace(/ /g, '_')) ?? slotOf(data, part);   // glue-lint: tool-data (a slot id)
   if (!s) return null;
-  const preset = data.presets[(view ?? []).find((t) => t?.id === 'face')?.preset]?.slots?.[s.name];
+  const worn = ((t) => t?.attrs?.variant ?? t?.variant)((view ?? []).find((t) => t?.id === s.name));   // the view's things carry their values as attrs (the library's view) or flat (the tool's own)
+  if (worn) return worn;   // the face's own state: what it wears stays
+  const face = (view ?? []).find((t) => t?.id === 'face'), preset = data.presets[face?.attrs?.preset ?? face?.preset]?.slots?.[s.name];
   return s.variants.some((v) => v.name === preset) ? preset : s.variants[0]?.name ?? null;
 }
 /** Parts are taken off; a part every face has is refused (said by the reply fact refused.needed). */
