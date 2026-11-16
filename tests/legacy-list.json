@@ -965,6 +965,11 @@
    "file": "rd10-names-capability.test.mjs",
    "name": "RD1b: \"red house big\" draws a big red house (no \"redo\")",
    "reason": "avatar on the binding (slice A1): no fallback on a declared tab: a drawing request from the avatar tab is said honestly; needs routing to the world a turn names before the door"
+  },
+  {
+   "file": "voice-repair.test.mjs",
+   "name": "rp3-03..06 avatar expressions as loose words, on every character",
+   "reason": "avatar on the binding (slice A1): \"make a big smile\", \"small smile\", \"make a frown\", \"the next mouth\" on the avatar tab: needs a variant of a part as a value the reader reads (k.faces.variant by slot) and next / another as a step over the variants (Q96 LIB 3)"
   }
  ]
 }
