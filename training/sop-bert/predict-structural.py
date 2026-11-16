@@ -14,7 +14,13 @@ def put(obj,path,value):
 def normalize_predictions(config,logits,text,area,model,offsets,sequences,attention,truncated=False):
  """One unbatched prediction; exact source offsets supplied by the fast tokenizer."""
  issues=[];ranges=[];aux={};R=config['maxRequests'];C=config['maxConstraints'];L=len(offsets)
+ v2=config.get('format')=='psys2.raw-structural-model/2'
  def issue(path,reason,**extra):issues.append({'path':path,'reason':reason,**extra})
+ if config.get('format')not in ['psys2.raw-structural-model/1','psys2.raw-structural-model/2']:raise ValueError('unsupported model format')
+ if v2:
+  policy={'modeHead':'c:valueMode','copyPointer':'c:copy_span','auxiliaryHeads':['c:value']}
+  modes=[{'kind':'absent'},{'kind':'unknown'},{'kind':'value','value':'source-span'},{'kind':'value','value':'declared-symbol'}]
+  if config.get('valuePolicy')!=policy or config['banks'].get('c:valueMode')!=modes or 'copy_span'not in config['constraintSpans']:raise ValueError('unsupported v2 value policy')
  expected={'count','presence','conditionCount',*config['banks']}
  for prefix,names in [('r',config['requestSpans']),('c',config['constraintSpans'])]:
   expected.update(prefix+':'+name+':'+suffix for name in names for suffix in ['state','start','end'])
@@ -36,7 +42,7 @@ def normalize_predictions(config,logits,text,area,model,offsets,sequences,attent
   if entry.get('kind')=='unknown':issue(path,'unknown-label',head=key);return
   if entry.get('kind')!='value'or 'value'not in entry:issue(path,'invalid-typed-bank-entry',head=key);return
   put(obj,key.split(':',1)[1].split('.'),entry['value'])
- def span(key,index,obj,path,within=None):
+ def span(key,index,obj,path,within=None,field=None):
   state=argmax(key+':state',index,3,path)
   if state==0:return None
   if state!=1:issue(path,'unresolved-span');return None
@@ -47,7 +53,7 @@ def normalize_predictions(config,logits,text,area,model,offsets,sequences,attent
    a,b=offsets[start][0],offsets[end][1]
    if not isinstance(a,int)or not isinstance(b,int)or a<0 or a>=b or b>len(text)or any(offsets[i][1]<=offsets[i][0]for i in range(start,end+1)):raise ValueError()
    if within is not None and not(within[0]<=a<b<=within[1]):raise ValueError()
-   literal=text[a:b];put(obj,key.split(':',1)[1].split('.'),literal);ranges.append({'path':path,'range':[a,b]});return [a,b]
+   literal=text[a:b];put(obj,(field or key.split(':',1)[1]).split('.'),literal);ranges.append({'path':path,'range':[a,b]});return [a,b]
   except (ValueError,TypeError,IndexError):issue(path,'invalid-source-pointer');return None
  count=argmax('count',[],R+2,['requestCount']);presence=argmax('presence',[],2,['requestCount']);requests=[]
  if count is None or count>R:
@@ -73,11 +79,26 @@ def normalize_predictions(config,logits,text,area,model,offsets,sequences,attent
    for ci in range(nc):
     condition={};cp=path+['constraints',str(ci)];obj['constraints'].append(condition)
     for key in config['banks']:
-     if key.startswith('c:'):category(key,[ri,ci],condition,cp+key[2:].split('.'))
+     if key.startswith('c:')and not(v2 and key in ['c:value','c:valueMode']):category(key,[ri,ci],condition,cp+key[2:].split('.'))
     for name in config['constraintSpans']:
+     if v2 and name=='copy_span':continue
      if request_range is None:
       if argmax('c:'+name+':state',[ri,ci],3,cp+[name])!=0:issue(cp+[name],'missing-parent-span')
      else:span('c:'+name,[ri,ci],condition,cp+[name],request_range)
+    if v2:
+     # The old closed value bank remains auxiliary and cannot emit a value.
+     try:
+      values=logits['c:value'][ri][ci]
+      if len(values)!=len(config['banks']['c:value'])or any(not isinstance(v,(int,float))or isinstance(v,bool)or not math.isfinite(v)for v in values):raise ValueError()
+      aux[json.dumps(['c:value',ri,ci])]=max(values)
+     except (KeyError,IndexError,TypeError,ValueError):issue(cp+['value'],'invalid-auxiliary-head-output')
+     mode=argmax('c:valueMode',[ri,ci],4,cp+['value'])
+     if mode==2:
+      outer=next((r['range']for r in reversed(ranges)if r['path']==cp+['value_span']),None)
+      if outer is None or request_range is None:issue(cp+['value'],'missing-copy-parent-span')
+      elif span('c:copy_span',[ri,ci],condition,cp+['value'],outer,field='value')is None:issue(cp+['value'],'missing-source-copy')
+     elif mode==3:issue(cp+['value'],'requires-declared-symbol-projection')
+     elif mode!=0:issue(cp+['value'],'unknown-value-mode')
  if truncated:issue([],'tokenizer-truncated')
  packet={'format':FORMAT,'source':{'text':text,'unit':'unicode-scalar'},'area':area,'model':model,'requestCount':count,'requests':requests,'coverage':{'complete':not issues,'truncated':bool(truncated)},'unresolved':issues,'ranges':ranges}
  return {'prediction':packet,'auxiliarySelectedLogits':aux,'graphConfidence':None,'executable':False}
