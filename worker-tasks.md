@@ -5028,3 +5028,13 @@ Rules for the checks (all three sessions; I review the file before any count is 
 6. Report per session: right / honest / wrong **and the list of turns in each**, so I can read them against the export.
 
 Re-count after tightening and publish. I expect the number to fall to near my count; that is the true starting point, and it is fine.
+
+## Reviewer 2026-11-16 11:50 — a generalisation plan is with the owner (soplang-words-lib `reviews/plan-generalizare.md`). Until he answers: three general items and phase 0 only
+
+The owner: "we are back to particular patches; we are fooling ourselves". The plan proposes a general layer (roles and relations, acts defined once, one step mechanism, general space, one tree of kinds with realisation by lineage, kinds of wholes, reply frames per act) and the rewrite of the request / reply layer, the knowledge data and the four domains over it. It is not approved yet.
+
+**Until he answers, do only:**
+1. The three general items already ordered: false "done" (done), the avatar on the same path with requests that cross domains (cards included), the language of each message detected.
+2. **Phase 0, measurement:** the tightened checks of block 11:30 on the three sessions, and an inventory as numbers per domain and for the host: local reply rows (`*.local.mjs`, en and ro), `drawn as` rows, expectations on a particular thing, region / direction tables, question texts, per-case stand-ins left in the door. Table in worker-log.
+
+**Do not add** local reply rows, cues, `drawn as` rows or per-thing expectations for a failing turn. A failing turn goes on the register with the general piece (A–G of the plan) it needs.
