@@ -4911,3 +4911,11 @@ Run by me on 978fdb0a: smoke 88/88; sopworld 0.157.0 vendored; no additions to t
 **One lexicon:** 2 of 30 recovered and no turn made right is a useful negative: the translation losses are not plumbing. So the remaining 28 go, grouped, to the knowledge repository (Q95 lists). My Romanian probe "scrie o scrisoare scurta despre o vila" → not one content word read ("o", "scrisoare", "scurta", "despre", "vila"): check this one by hand — if "despre" and "o" are not read, something earlier than vocabulary fails (the cleaner, the diacritics step or the sentence frame), and that would be a mechanism, not words.
 
 **Next:** vendor 0.159.0; the avatar as a declared domain (with its cost table); the Romanian check above; then the 8 wrong executions list.
+
+## Reviewer 2026-11-16 05:35 — 0.159 vendored: accepted; three things from the probe
+
+Run by me on 7f9c3f68: smoke 88/88; no additions to the legacy list. Library 0.160.0 passes on my run (617 tests) and carries "values said per kind in make replies" and "said attributes in a state answer": vendor it, then the coloured-make probe ("draw a green boat and a yellow sun" → today "I added a boat. I added a sun.") should say the colours.
+
+1. **"shorter" on a story → "Nothing changed. That cannot be done to a story here."** 0.159 has the length step for texts; the Documents domain does not declare it. Declare what the tool can do: `honours act=change on=length of=story|essay|report` with a binding to a primitive that shortens / lengthens (or re-writes with the stepped length as one undo step). This is the owner's own turn from the first session ("shorter" changed chapters); it should work now by declaration alone — count the lines it takes and add them to the cost table.
+2. **"The story is about fox."** The topic must be said as the user said it ("about a fox"): the reply fact takes the words of the `about` constraint, not the bare kind. No article rule in the host.
+3. The state answer for a document ("There is one story. There are 5 chapters.") should name the title when there is one thing: the 0.160 "said attributes in a state answer" should give it once the view exposes `title`.
