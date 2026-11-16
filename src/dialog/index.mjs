@@ -2059,7 +2059,7 @@ export class DialogSession {
       if (stBefore) { const v = verifyRun(run, stBefore, this.isession.state[tabWorld] ?? {}); run = v.run; if (v.dropped.length) { run.dropped = v.dropped.length; if (process.env.PSYS2_VERIFY_DEBUG) console.error("VERIFY dropped", JSON.stringify(v.dropped)); } }   // a "done" only from a diff the state confirms; else a refusal
       let said = null;
       const told = madeAgainstSaid(lib, live, language, req, plan, run, prims.view());   // what was made against what was said (short_of), the made whole's title (spec 28 section 20)
-      try { said = lib.sayRequest(req, { ...plan, ...told, run, revised: rev?.sort === 'reaction' && replace && run.ok && !run.same && !plan.reference, reply: rev?.reply }, sayOpts); } catch { said = null; }
+      try { said = lib.sayRequest(req, { ...plan, ...told, run, revised: rev?.sort === 'reaction' && replace && run.ok && !run.same && !plan.reference, reply: rev?.reply, ...(rev?.lengthStepped ? { lengthStepped: true } : {}) }, sayOpts); } catch { said = null; }
       const done = run.ok && !run.same;
       const read = (q.corrections ?? []).length ? `I read ${q.corrections.map((c) => `"${c.said}" as "${c.as}"`).join(', ')}. ` : '';   // what the reader repaired is said, as every door reply says it
       const facts = factParts(lib, language, said?.facts, said?.text ?? '');

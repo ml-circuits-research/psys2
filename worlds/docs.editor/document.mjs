@@ -107,10 +107,13 @@ export function writeText(ctx, { kind, about = null, words = null, chapters = nu
     }
   }
   stepCommit(s, step);
-  createDoc(ctx, c.title, blocks, { keep: true });
+  // the composer's title is applied only when the knowledge of the genre declares a title part (k.genres.part name=title); a genre whose plan names parts without one (a letter, a story) has no title
+  const titled = !(Array.isArray(parts) && parts.length) || parts.some((p) => String(p.name ?? '').toLowerCase() === 'title');
+  createDoc(ctx, titled ? c.title : '', blocks, { keep: true });
   s.kind = kind ?? c.type ?? 'text'; s.about = about ?? null; s.textSeq = (s.textSeq ?? 0) + 1; s.textId = `text${s.textSeq}`;   // a new text is a new thing of the view (the old one is gone with its chapters)
   sync(s);
-  return { ...done([s.textId, ...chapterHeads(s).map((b) => b.id)]), ...(Array.isArray(parts) && parts.length ? { parts: Object.fromEntries((parts).map((p) => [p.name, wrote[String(p.name).toLowerCase()] ?? 0])) } : {}) };
+  const length = blocks.reduce((n, b) => n + String(b.text ?? '').split(/\s+/).filter(Boolean).length, 0);   // the words written: the library says "it stays at N words" when a longer/shorter step cannot move it (sopworld 0.167)
+  return { ...done([s.textId, ...chapterHeads(s).map((b) => b.id)]), length, ...(Array.isArray(parts) && parts.length ? { parts: Object.fromEntries((parts).map((p) => [p.name, wrote[String(p.name).toLowerCase()] ?? 0])) } : {}) };
 }
 /** The text has at most n chapters: the later ones go (their sections with them). Fewer chapters than n are what the knowledge holds: nothing is padded. */
 export function keepChapters(ctx, { n, step = null } = {}) {
