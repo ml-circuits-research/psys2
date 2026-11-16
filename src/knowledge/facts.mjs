@@ -407,6 +407,8 @@ export function createFacts({ source, name = 'catalog' }) {
     },
     /** The settled lookup of a word, or undefined when it has not been looked up (a synchronous read for operations: `ctx.knowledge.peek`). null = looked up, not known. */
     peek(word) { for (const lc of lemmaCandidates(word)) if (things.has(lc)) return things.get(lc); return undefined; },
+    /** Whether the catalog's vocabulary has the word (one of its lemma candidates); null while the vocabulary is not loaded (no read is started here: synchronous, for the spell guard). */
+    knowsWord(word) { if (!vocab) return null; const v = vocab; return lemmaCandidates(String(word ?? '').toLowerCase()).some((lc) => Object.prototype.hasOwnProperty.call(v, lc)); },
     /** The generation of the settled lookups: `peek` gives the same answers while it is the same (OVERLAY-MEMO: the session overlay keys its cache on it). */
     generation: () => things.gen,
     /**

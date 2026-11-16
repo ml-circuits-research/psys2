@@ -10,51 +10,51 @@
  * Without it all input is treated as English.
  */
 import { composeReply, sayOf } from './composed-reply.mjs?v=3579520287';
-import { reviewForeign } from './foreign-reading.mjs?v=4ef049b181';
+import { reviewForeign } from './foreign-reading.mjs?v=f34cd513e4';
 import { installTextGen } from './textgen.mjs?v=0eb44cd703';
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=f4503fb657';
-import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=801d2be44d';
-import { validateWorldSet } from '../worlds/validate.mjs?v=6293bce12a';
-import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=f4503fb657';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=8ed1b3d1ae';
+import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=8e899c834b';
+import { validateWorldSet } from '../worlds/validate.mjs?v=2af8297b8d';
+import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=8ed1b3d1ae';
 import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=3302b74e00';
-import { createInterpreter } from '../interpreter/index.mjs?v=9ac2487c33';
-import { createReasoner } from '../reasoner/index.mjs?v=4f78e40ec3';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=e64f73f1cb';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=b0fb158284';
+import { createInterpreter } from '../interpreter/index.mjs?v=73cc8597b0';
+import { createReasoner } from '../reasoner/index.mjs?v=dd2d4c098e';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=b509058826';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=7661b7c9d2';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=e112c4028d';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=aff1c3c18d';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=24055d73ef';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=3a112c9ba5';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=87c25fd7da';
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=a7f7eb0703';
 import { machineReads } from '../translate/reading-policy.mjs?v=96bd6cc0e4';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
 import { langRoNow } from '../translate/frames-ro.mjs?v=0668fe25ee';
 import { repairInContext } from '../translate/source-repair.mjs?v=db5b883c67';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=f4503fb657';
-import { lexIndex } from '../worlds/lexicon.mjs?v=ab38fd5b80';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=8ed1b3d1ae';
+import { lexIndex } from '../worlds/lexicon.mjs?v=372ab17a7b';
 import { perf } from '../formalizer/perf.mjs?v=b81e032a17';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=82a55329d9';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=4eb8e3013d';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=a95735483e';
-import { checkValues } from './value-check.mjs?v=893f8a0623';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=b28edbcf13';
+import { checkValues } from './value-check.mjs?v=e34aa755e9';
 import { attachValues } from '../knowledge/values.mjs?v=24c3ed2609';
-import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=2ac1f1417a';
+import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=05229e4fa9';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=e3ddce383e';
-import { Discourse } from './discourse.mjs?v=67f7744da8';
-import { Dialogue } from './dialogue.mjs?v=731ef55d60';
+import { Discourse } from './discourse.mjs?v=e0ac43d3c5';
+import { Dialogue } from './dialogue.mjs?v=45da39b1a5';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=40d19eee65';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext, knowledgeOf, within } from './knowledge-lookup.mjs?v=11baf73ca2';
-import { personTurn } from './person.mjs?v=a48f90c886';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=d25569bd8a';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext, knowledgeOf, within } from './knowledge-lookup.mjs?v=f16f935042';
+import { personTurn } from './person.mjs?v=8ebe6c995a';
 import { proposeByTypes } from './typed-reader.mjs?v=e4a912a264';
-import { withVariants, anyVoiceOn } from './variants.mjs?v=96e94a56dc';
-import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=f4503fb657';
-import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=f4503fb657';
-import { repairFromScene } from './scene-referents.mjs?v=c8509273d3';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=96a9609ff3';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=a5b63bb605';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=1b5cea4ddc';
+import { withVariants, anyVoiceOn } from './variants.mjs?v=920b8fda32';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=8ed1b3d1ae';
+import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=8ed1b3d1ae';
+import { repairFromScene } from './scene-referents.mjs?v=3530d4cd64';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=8aaa123b50';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=275cf0942c';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=35248fc3e0';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -303,6 +303,28 @@ function soundAlikes(text, tabWorld) {
 const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 /** A turn the old readers handled (the door did not take it): `trace.legacy`, with the door's reason. */
 /** The segment of the world that took a turn through the door (the readers' segments record theirs), with the slips the request read (as the readers record their corrections). */
+/**
+ * THE SPELL GUARD (reviewer 07:55): whether any source of the reading has a word: the host's English dictionary and spell vocabulary, the language world's wires, every live world
+ * instance, the knowledge catalog's vocabulary when loaded. A repair is considered only for a token no source reads (the door re-reads without repair otherwise; readTurn `known`).
+ */
+export function spellKnown(lib, language, set, catalog = null) {
+  const vocab = spellVocabulary(set);
+  return (w) => { const k = String(w ?? '').toLowerCase(); return FUNCTION_WORDS.has(k) || vocab.has(k) || !!vocab.nouns?.has(k) || knownEnglishWord(k) || sourceWords(lib, language, set).has(k) || catalog?.knowsWord?.(k) === true; };
+}
+/** Every word a source of the reading has (the language world's wires: their names, texts, forms and leads; every live world instance's words): built once per language world and set of worlds. */
+const sourceWordsMemo = new WeakMap();
+function sourceWords(lib, language, set) {
+  if (!language) return new Set();
+  const key = language, ver = `${language.version ?? ''}|${set?.size ?? set?.worlds?.length ?? ''}`;
+  const hit = sourceWordsMemo.get(key);
+  if (hit && hit.ver === ver) return hit.words;
+  const out = new Set();
+  const add = (v) => { for (const w of String(v ?? '').replace(/^"|"$/g, '').toLowerCase().split(/[^a-z\u00c0-\u024f']+/)) if (w.length > 1) out.add(w); };
+  try { for (const [, x] of language.wires ?? []) for (const k of ['name', 'text', 'form', 'lead', 'singular', 'plural', 'means', 'of', 'thing', 'value']) for (const v of x.attrs?.[k] ?? []) if (typeof v === 'string') add(v.replace(/_/g, ' ')); } catch { /* a language world without wires: none */ }
+  try { for (const w of set?.values?.() ?? []) { const live = w?.requestText ? liveWorld(lib, w) : null; if (live) for (const x of lib.worldWords(live)) out.add(String(x).toLowerCase()); } } catch { /* the worlds' words are a bonus */ }
+  sourceWordsMemo.set(key, { ver, words: out });
+  return out;
+}
 /** Whether the language says a noun as a plural noun (an irregular pair whose singular is its plural: eyes, glasses), by its last word; built once per language world. */
 const pluralNouns = new WeakMap();
 const pluralNoun = (language, noun) => {
@@ -1779,7 +1801,12 @@ export class DialogSession {
     const rd = this.dialogue.requests;
     const lastRec = rd.last(tabWorld);
     const vocab = spellVocabulary(set);
-    const known = (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || knownEnglishWord(String(w ?? '').toLowerCase());   // a word of the language (the English dictionary, with or without a translator) is never a slip: "baked" is never repaired to "named" (reviewer 20:05 1(a))
+    // A REPAIR ONLY WHERE NO SOURCE READS THE WORD (reviewer 07:55; structural, no word list): a token that any source of the turn reads is never a slip: the host's English dictionary,
+    // the language world (every word of its wires: cues, irregulars, the catalog's kinds, values and words it carries), every live world instance's words, and the knowledge catalog's
+    // vocabulary when it is loaded. "villa" (a stand-in of the catalog) is never read as "via", "baked" never as "named".
+    const catNow = knowledgeOf(this);
+    if (catNow?.loadVocabFor) { try { await within(this, catNow.loadVocabFor((String(english).toLowerCase().match(/[a-z']{3,}/g) ?? []).slice(0, 24))); } catch { /* the catalog is a bonus source: offline, the other sources stand */ } }   // the catalog's vocabulary for the turn's words, under the catalog deadline
+    const known = spellKnown(lib, language, set, catNow);
     // a word the translation left as the person wrote it (a word of their own language no dictionary knew) is theirs, never a slip of English: the repair of the person's own language is the
     // contextual one before the translation (Q39 S3), so the English reader never "repairs" "stanca" to "stanza"
     const keptWords = lang === 'en' ? null : new Set((String(text).match(/[\p{L}]+/gu) ?? []).map((w) => w.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()));
