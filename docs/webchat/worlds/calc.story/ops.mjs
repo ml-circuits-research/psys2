@@ -2,7 +2,7 @@
 // Operations of calc.story (kids plan, ADR-011, Q18 L1): word problems read by the library's storyState. The story is the world state (the library's result,
 // carried across sentences and turns as `prior`); this file only gathers the words the library needs from the language world and lang.common, and says the
 // library's result in English. No name, item or number is listed here. Browser-safe.
-import { storyState } from '../../lib/vendor/sopworld/sopworld.mjs?v=48bccd2c01';
+import { storyState } from '../../lib/vendor/sopworld/sopworld.mjs?v=edec92187f';
 import { en } from '../../lib/lang/en.mjs?v=6675328a78';
 import { pluralize } from '../../lib/formalizer/rules/lemma.mjs?v=d3f044c9ff';
 import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=f8689c864a';

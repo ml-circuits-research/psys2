@@ -74,8 +74,9 @@ const TYPE_WORDS = { essay: 'essay', composition: 'essay', text: 'essay', piece:
 export const docTypeOf = (w) => (DOC_TYPES[String(w ?? '')] ? String(w) : TYPE_WORDS[String(w ?? '').toLowerCase().replace(/[\s-]+/g, '_')] ?? 'essay');
 
 /** The composition form / command roles, clamped to what a document can hold. topic empty = random; type defaults fill what is not said. */
-export function composeRequest({ type, topic = '', chapters, subchapters, words, seed } = {}) {
-  const ty = docTypeOf(type), d = DOC_TYPES[ty];
+export function composeRequest({ type, topic = '', chapters, subchapters, words, seed, genre = null } = {}) {
+  // `genre`: a kind of text the tool is given as the knowledge's own genre (a letter): composed as that genre, with the size defaults of an essay (its parts are the genre's)
+  const ty = genre ? String(genre).toLowerCase().replace(/[\s_]+/g, '-') : docTypeOf(type), d = DOC_TYPES[ty] ?? DOC_TYPES.essay;
   const t = String(topic ?? '').trim().replace(/^["“”']+|["“”']+$/g, '').trim();   // a long topic comes quoted from the form
   return { type: ty, topic: /^(?:anything|something|whatever|random|a random thing)?$/i.test(t) ? null : t, random: !t || /^(?:anything|something|whatever|random|a random thing)$/i.test(t),
     chapters: clip(chapters ?? d.chapters, 1, 12, d.chapters), subchapters: clip(subchapters ?? d.subchapters, 0, 6, d.subchapters), words: clip(words ?? d.words, 50, 5000, d.words), seed };
@@ -112,7 +113,7 @@ export function createComposer(lib, world = null) {
     composeNow(req) {
       const kw = world ?? knowledgeWorld(lib);
       const genre = lib.genreOf(kw, req.type);
-      if (!genre) return { why: `the knowledge has no genre for a ${DOC_TYPES[req.type].label.toLowerCase()} (no k.genres.genre ${req.type})` };
+      if (!genre) return { why: `the knowledge has no genre for a ${(DOC_TYPES[req.type]?.label ?? req.type).toLowerCase()} (no k.genres.genre ${req.type})` };
       const index = topicIndex(kw);
       // a topic written as a paragraph: the names the knowledge knows in it (the subject, the subtopics) and the keys of facts it names; the rest is said back as not used
       const long = req.topic && isLongTopic(req.topic) ? readLongTopic(kw, req.topic, { subjects: new Set(index.keys()) }) : null;

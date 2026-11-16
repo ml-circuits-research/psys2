@@ -40,11 +40,12 @@
 # plan step bound to one primitive with its arguments' sources. The library plans a text as its whole (kind, topic, length) and its chapters (k.expect.part above); the composer
 # writes the whole in one call and the chapters' step keeps the text to their count. The defaults are the k.expect rows above (length by kind; short / long by k.expect.scale).
 @tool core.use world=std.tool
-@op.write std.tool.op name=writeText world=documents param=kind param=about param=words param=chapters effect=makes doc="a text of a kind about a topic, written by the composer (never padded)"
+@op.write std.tool.op name=writeText world=documents param=kind param=about param=words param=chapters param=parts effect=makes doc="a text of a kind about a topic, written by the composer (never padded)"
 @pa.write.kind std.tool.param op=writeText name=kind type=kind required=true
 @pa.write.words std.tool.param op=writeText name=words kind=integer min=20 max=3000
 @pa.write.chapters std.tool.param op=writeText name=chapters kind=integer min=1 max=12
-@b.write std.tool.bind world=documents act=make of=text of=k.genres.genre op=writeText arg=kind<-step.kind arg=about<-step.about arg=words<-step.length arg=chapters<-plan.count makes=thing
+@pa.write.parts std.tool.param op=writeText name=parts doc="the parts the plan names for the genre (name, how many, moves), in order"
+@b.write std.tool.bind world=documents act=make of=text of=k.genres.genre op=writeText arg=kind<-step.kind arg=about<-step.about arg=words<-step.length arg=chapters<-plan.count arg=parts<-step.parts makes=thing
 @op.chapters std.tool.op name=keepChapters world=documents param=n effect=changes doc="the text keeps at most n chapters (fewer: what the knowledge holds)"
 @pa.chapters.n std.tool.param op=keepChapters name=n kind=integer min=1 max=12
 @b.chapters std.tool.bind world=documents act=make of=chapter op=keepChapters arg=n<-step.count

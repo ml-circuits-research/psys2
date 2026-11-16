@@ -95,6 +95,9 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.already w.lang.en.reply name=refused.already count=one role=thing text="The {thing} is already there."
 @w.lang.en.reply.local.no_default w.lang.en.reply name=refused.no_default count=one role=thing text="The {thing} has no default to go back to."
 @w.lang.en.reply.local.short_of_kind w.lang.en.reply name=short_of count=one role=made role=asked role=kind text="I could only make {made} of the {asked} {kind} you asked for."
+# sopworld 0.165 (Q102): the parts a genre of the knowledge names, and a step with no other value, in the catalog's shape so that every language says them by the same names ([KNOW])
+@w.lang.en.reply.local.done_parts w.lang.en.reply name=done.parts count=one role=whole role=parts text="The {whole} has {parts}."
+@w.lang.en.reply.local.no_other w.lang.en.reply name=refused.no_other count=one role=thing role=key text="The {thing} has no other {key}."
 @w.lang.en.reply.local.change_pl w.lang.en.reply name=done.change.plural count=one role=thing role=value text="The {thing} are {value} now."
 @w.lang.en.reply.local.change_size_pl w.lang.en.reply name=done.change.size.plural count=one role=thing role=value text="The {thing} are {value} now."
 @w.lang.en.reply.local.change_place_pl w.lang.en.reply name=done.change.place.plural count=one role=thing role=value text="I moved the {thing} to the {value}."

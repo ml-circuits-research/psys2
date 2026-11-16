@@ -81,16 +81,23 @@ const composeSeed = (s, type, topic) => { let h = (s?.blocks?.length ?? 0) + 1; 
 const stepCommit = (s, step) => { if (step && s.stepGroup === step && s.history?.length) return; commit(s); s.stepGroup = step ?? null; };
 const chapterHeads = (s) => s.blocks.filter((b) => b.kind === 'heading' && (b.level ?? 2) <= 2);
 
+/**
+ * The chapters the plan's parts name, in the plan's order: each part (`{ name, count }`, from the knowledge of the genre) takes the composition's chapters of that part, at most `count` of them.
+ * No parts named (a whole the world declares itself): the composition's chapters as they are. The names come from the plan, never from here.
+ */
+const partsOf = (chapters, parts) => (Array.isArray(parts) && parts.length
+  ? parts.flatMap((p) => chapters.filter((ch) => String(ch.part ?? '').toLowerCase() === String(p.name ?? '').toLowerCase()).slice(0, count(p.count) ?? undefined))
+  : chapters);
 /** A text of a kind about a topic, written by the composer into a new document: its chapters as level-2 headings, its sections as level-3 headings, each paragraph with its sources. */
-export function writeText(ctx, { kind, about = null, words = null, chapters = null, step = null } = {}) {
+export function writeText(ctx, { kind, about = null, words = null, chapters = null, parts = null, step = null } = {}) {
   const g = textGen()?.composer, s = ctx.state;
   if (!g?.available) return { ...refuse('no_composer'), reply: 'refused.no_composer' };   // said by the reply fact: this build has no composer
-  const r = g.compose({ type: kind ?? undefined, topic: about ?? undefined, chapters: count(chapters), words: count(words), seed: composeSeed(s, kind, about) });
+  const r = g.compose({ type: kind ?? undefined, topic: about ?? undefined, chapters: count(chapters), words: count(words), genre: kind ?? undefined, seed: composeSeed(s, kind, about) });
   if (!r?.composition) return { ...refuse('nothing_known'), ...(about ? { reply: 'refused.nothing_known', roles: { about: String(about) } } : {}) };   // said by the reply fact: what the knowledge has nothing of
   const c = r.composition, blocks = [];
-  for (const ch of c.chapters) {
+  for (const ch of partsOf(c.chapters, parts)) {
     budget.tick('docs.tool');
-    if (ch.title) blocks.push({ kind: 'heading', level: 2, text: ch.title });
+    if (ch.title) blocks.push({ kind: 'heading', level: 2, text: ch.title, ...(parts && ch.part ? { part: ch.part } : {}) });
     for (const sc of ch.subchapters) {
       if (sc.title) blocks.push({ kind: 'heading', level: 3, text: sc.title });
       blocks.push({ kind: 'paragraph', text: sc.sentences.map((x) => x.text).join(' '), from: [...new Set(sc.sentences.map((x) => x.source).filter(Boolean))] });
@@ -139,5 +146,5 @@ export function redoStep(ctx) {
 export function toolView(ctx) {
   const s = ctx.state;
   if (!s?.kind) return [];
-  return [{ id: s.textId ?? 'text', kind: s.kind, ...(s.about ? { about: s.about } : {}), ...(s.title ? { title: s.title } : {}), length: s.stats?.words ?? 0 }, ...chapterHeads(s).map((b) => ({ id: b.id, kind: 'chapter', in: s.textId ?? 'text', ...(b.text ? { title: b.text } : {}) }))];
+  return [{ id: s.textId ?? 'text', kind: s.kind, ...(s.about ? { about: s.about } : {}), ...(s.title ? { title: s.title } : {}), length: s.stats?.words ?? 0 }, ...chapterHeads(s).filter((b) => !b.part).map((b) => ({ id: b.id, kind: 'chapter', in: s.textId ?? 'text', ...(b.text ? { title: b.text } : {}) }))];
 }
