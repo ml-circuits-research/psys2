@@ -20,3 +20,17 @@ test('rootless conjunction evaluates all required predicates and quantifiers ret
  const w=make('@c std.request.constraint request=$r target=$t concept=tint operator=eq value=blue character=requirement polarity=positive\n@d std.request.constraint request=$r target=$t concept=size operator=eq value=large character=requirement polarity=positive');assert.equal(checkRequest(w,'r',setup()).truth,'unknown');
  const q=make('@b std.request.target request=$r mode=bound kind=toy.item\n@c std.request.constraint request=$r target=$b concept=tint operator=eq value=blue character=requirement polarity=positive\n@q std.request.quant request=$r kind=all target=$t bind=$b body=$c','root=$q');assert.equal(checkRequest(q,'r',setup()).truth,'true');const x=setup();x.observations[0].complete=false;assert.equal(checkRequest(q,'r',x).truth,'unknown');
 });
+
+test('reservation ledger bounds repeated leaves and invalidates the entire exhausted check',()=>{
+ const body=Array.from({length:8},(_,i)=>`@c${i} std.request.constraint request=$r target=$t concept=tint operator=eq value=blue character=requirement polarity=positive`).join('\n');
+ const w=make(body),input=setup();input.predicateBindings=Object.fromEntries(Array.from({length:8},(_,i)=>['c'+i,setup().predicateBindings.c]));
+ const low=checkRequest(w,'r',{...input,budget:16000});assert.equal(low.truth,'unknown');assert.equal(low.reason,'check-budget');assert.ok(low.work.charged<=16000);
+ assert.equal(checkRequest(w,'r',{...input,budget:200000}).truth,'true');
+ const or=make(body.split('\n').slice(0,2).join('\n')+'\n@g std.request.group request=$r operator=or member=$c0 member=$c1','root=$g');
+ const exhausted=checkRequest(or,'r',{...input,subBudget:1});assert.equal(exhausted.truth,'unknown');assert.equal(exhausted.reason,'check-budget');
+});
+test('many observed objects cannot reuse a small subordinate traversal budget',()=>{
+ const input=setup(),base=input.observations[0].objects[0];input.observations[0].objects=Array.from({length:1500},(_,i)=>({...base,id:'i'+i,source:'s'+i,inputs:[]}));
+ const result=checkRequest(make(),'r',{...input,budget:20000,subBudget:128});assert.equal(result.truth,'unknown');assert.equal(result.reason,'check-budget');assert.ok(result.work.charged<=20000);
+ assert.equal(checkRequest(make(),'r',{...setup(),maxBytes:10}).truth,'unknown');
+});

@@ -1,5 +1,5 @@
 {
-  "version": "087f1a6147",
+  "version": "342fdfc48c",
   "worlds": [
     "acts",
     "art.draw",
@@ -79,7 +79,7 @@
     "lib/dialog/proposer.mjs": "864bbc94a77a065c",
     "lib/dialog/reader-routing.mjs": "0a2940c662bb913e",
     "lib/dialog/relative.mjs": "86bdcccc600b28c5",
-    "lib/dialog/request-check.mjs": "a84ab8a47c2877c1",
+    "lib/dialog/request-check.mjs": "a92290c1835f7d94",
     "lib/dialog/request-projection.mjs": "93e8d45f5169e679",
     "lib/dialog/request.mjs": "1e64c61ac0231546",
     "lib/dialog/runtime-config.mjs": "13dc01dd1c77d587",
@@ -650,8 +650,8 @@
     "worlds/words/zo.json": "98c807997b12214c",
     "worlds/words.bloom.json": "1aee5298e6fe2c42"
   },
-  "builtAt": "2026-11-16T22:45:07.658Z",
-  "commit": "74dca2b2-dirty",
+  "builtAt": "2026-11-16T22:46:59.772Z",
+  "commit": "d15b0387-dirty",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "assets": {
     "app.mjs": "acad83ead9",
@@ -701,7 +701,7 @@
     "lib/dialog/proposer.mjs": "b3c21ed7d7",
     "lib/dialog/reader-routing.mjs": "aac0040a04",
     "lib/dialog/relative.mjs": "f081fe2052",
-    "lib/dialog/request-check.mjs": "59f4302394",
+    "lib/dialog/request-check.mjs": "dd77a5e10e",
     "lib/dialog/request-projection.mjs": "480b15d762",
     "lib/dialog/request.mjs": "f778d7b84d",
     "lib/dialog/runtime-config.mjs": "958ffd89bc",
