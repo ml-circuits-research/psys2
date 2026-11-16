@@ -4252,3 +4252,32 @@ Added `src/dialog/observation-query.mjs` with no area IDs, English parsing or ef
 Query identity follow-up: Drawing's existing native observer uses safe-integer IDs, while other hosts use strings. Query admission now accepts safe integers or nonempty strings without coercion; numeric17 and string"17" stay distinct, and repeated exact IDs refuse. New query tests5/5 and local active npm98/98 passed after canonical map regeneration. No query semantics or shared route changes.
 
 Query final correctness increment before owner primary-reader reprioritization: empty jobs now refuse; selection must carry a requested-population completeness certificate and matching explicit requestedScope. A complete day-view cannot answer all-days count or negative existence. Six query units and local active npm98/98 passed. Graph-wrapper draft handed to sole-route integration, remains uncommitted until tested against publishedquery0.198; no pending competing query edits. Training/calibration now primary lane; auxiliarymodel gap already recorded by root in questions.md, no duplicate added.
+
+### 2026-11-16 — Declared native selection and historical query preparation
+
+Integrated query aggregation lane commits `f4a806fe`, `bf7d440b`, `5e695c0f` as `41ffd3ac`, `8fb2d146`, `c88a88e6`. Native selection uses explicit canonical kind/source-type declarations and public exact-token equality guards; all considered objects and predicates remain in the witness. One unknown candidate prevents a unique-target effect. Requested population scope must match the observed scope, so a complete day-view cannot establish global absence/count. Input scans and token payloads charge the selection budget; duplicate identities and incompatible input metadata refuse. Numeric and string native IDs retain their types.
+
+Historical query aggregation requires nonempty jobs, explicit selection completeness and requested-scope correlation. Positive existence may retain a confirmed witness in a partial view; count, members, values and negative existence require complete selection. This remains preparation: no question grammar, typed query wrapper or new native mutation route is activated. New owner22:50 priority stops grammar widening and moves the reader lane to actual SOP-BERT export/inference; the primary-reader architecture review appended by the root worker is included in questions.md.
+
+Final active `npm test`: 117/117 passed, zero failures/skips/TODO; canonical maps and browser artifacts regenerated; diff check passed. Functional replay: 1,648 honest, zero wrong/unreviewed, with 1,635 context-incomplete rows. Owner replay: 205 honest, zero wrong, all pending class tags explicitly unclassified. No additional understanding or area-success claim is made by these native tests. Class/area table follows (right / partly / honest / wrong / needs-review; incomplete context count in parentheses).
+
+| Class | drawing | diagram | document | calendar |
+|---|---|---|---|---|
+| arrange / layout | 0/0/10/0/0 (10 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/6/0/0 (6 incomplete) | 0/0/6/0/0 (6 incomplete) |
+| check | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| connect / group | 0/0/17/0/0 (17 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/12/0/0 (12 incomplete) | 0/0/6/0/0 (6 incomplete) |
+| create | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (20 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| cross-area | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| follow-up, undo | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| move / place | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| no request | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| objection | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| propose | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| question | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| relative change | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| remove | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| select by description | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| set property | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| sets, or, not | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (24 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| several requests | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
+| soft wishes | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (18 incomplete) | 0/0/25/0/0 (25 incomplete) |

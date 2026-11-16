@@ -1,5 +1,5 @@
 {
-  "version": "9379ddcafd",
+  "version": "bcd4e047fe",
   "worlds": [
     "acts",
     "art.draw",
@@ -65,10 +65,12 @@
     "lib/dialog/knowledge-lookup.mjs": "f9f1f4b1b4b10164",
     "lib/dialog/meta-worlds.mjs": "567e93099021cc42",
     "lib/dialog/meta.mjs": "5314f650e6529b5d",
+    "lib/dialog/native-selection.mjs": "07c96e9d0e92522a",
     "lib/dialog/new-engine-areas.mjs": "4e937555cfb89f8d",
     "lib/dialog/new-engine-source.mjs": "f6cf85968d8714e4",
     "lib/dialog/new-engine.mjs": "37cae9c805ef2494",
     "lib/dialog/normalizer-runtime.mjs": "5f70a7886b4a8475",
+    "lib/dialog/observation-query.mjs": "8729d1952b1df87f",
     "lib/dialog/person-view.mjs": "6edfee63b3e56cd0",
     "lib/dialog/person.mjs": "b9ff02d9ba4de302",
     "lib/dialog/property-selection.mjs": "9db04c6147781209",
@@ -647,8 +649,8 @@
     "worlds/words/zo.json": "98c807997b12214c",
     "worlds/words.bloom.json": "1aee5298e6fe2c42"
   },
-  "builtAt": "2026-11-16T21:36:41.854Z",
-  "commit": "edaac259-dirty",
+  "builtAt": "2026-11-16T21:48:32.437Z",
+  "commit": "c88a88e6-dirty",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "assets": {
     "app.mjs": "acad83ead9",
@@ -684,10 +686,12 @@
     "lib/dialog/knowledge-lookup.mjs": "53f5c4df2e",
     "lib/dialog/meta-worlds.mjs": "25342f1bea",
     "lib/dialog/meta.mjs": "aa6dfcad14",
+    "lib/dialog/native-selection.mjs": "dd9e8720f9",
     "lib/dialog/new-engine-areas.mjs": "510334f8b4",
     "lib/dialog/new-engine-source.mjs": "0b0a01a103",
     "lib/dialog/new-engine.mjs": "e0c3786ca7",
     "lib/dialog/normalizer-runtime.mjs": "0cb684354c",
+    "lib/dialog/observation-query.mjs": "d1decad86a",
     "lib/dialog/person-view.mjs": "ceeabdb255",
     "lib/dialog/person.mjs": "aa38fe18f0",
     "lib/dialog/property-selection.mjs": "2fcde6640a",

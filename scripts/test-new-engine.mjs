@@ -3,7 +3,7 @@
 import { readdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 const fixed = [
-  'new-engine.test.mjs', 'declared-dispatch.test.mjs', 'property-selection.test.mjs', 'drawing-property-host.test.mjs',
+  'new-engine.test.mjs', 'declared-dispatch.test.mjs', 'native-selection.test.mjs', 'observation-query.test.mjs', 'property-selection.test.mjs', 'drawing-property-host.test.mjs',
   'calendar-host.test.mjs', 'calendar-observation.test.mjs', 'face-preparation.test.mjs',
   'request-label-codec.test.mjs', 'sop-bert-bootstrap.test.mjs', 'webchat-assets.test.mjs', 'webchat-build.test.mjs',
   'system-map.test.mjs', 'loop-guard.test.mjs',
