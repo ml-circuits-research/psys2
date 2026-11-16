@@ -5077,3 +5077,17 @@ Owner, 14:21: top-down, the worlds in parallel, the general mechanisms in the li
 **After the library publishes its phase-0 version (it will say so in its worker-tasks):** vendor it and write each area's complete declaration — kinds, slots with `means=`, capabilities, tool bindings, functions — one area per worker if you can run several in parallel. No glue code, no particular rows, no reply sentences.
 
 **Acceptance, unchanged:** the owner's sessions replayed turn by turn, right / partly / honest / wrong, wrong must stay 0; every failed turn goes to the register with the general mechanism it lacks. Smoke and glue-lint are hygiene.
+
+
+## 2026-11-16 14:35 (Rome) — OWNER: one session for all three repositories; use agents; keep the book up to date
+
+Correction to my 14:30 blocks: the owner says ONE session (the one on the DGX) works all three repositories (soplang-words-lib, PSys2, sop-knowledge-worlds). The 14:30 blocks in the three `worker-tasks.md` files are one plan for that session.
+
+| Rule | What it means |
+|---|---|
+| Use agents and parallelise what can be parallel | Library phase 0 (the contracts as modules, published version) comes first and alone, since everything else builds on it. Meanwhile, in parallel and independent of it: the PSys2 cleanup (map, music, charts area out; avatar into drawing), the calendar tool and the observation adapters, the knowledge migration ledger. After phase 0: one agent per library mechanism group, one per domain declaration (drawing, diagram, document, calendar), one or more for the knowledge migration. |
+| Agents must not collide | Give each agent disjoint files; the contracts of phase 0 are changed only by you, never by an agent working on a mechanism or a domain. Each agent states what it touched; you integrate, run the tests, and push. |
+| The book stays current | `soplang-words-lib/books/sop-worlds-teorie.md` is the specification and the owner wants it up to date: every landing updates the section it implements (what is now real vs proposed, what implementation showed to be wrong or missing), in the same change. The owner reads it; keep the owner rules for the text (Romanian, English terms once, wire examples in English, general rule then one explained example, two-column tables, no bullet lists, no declared limits). |
+| Acceptance | Unchanged: the owner's sessions replayed turn by turn, wrong stays 0; failed turns go to the register with the missing general mechanism. |
+
+I review every landing in the three repositories against its book section and run the examples.
