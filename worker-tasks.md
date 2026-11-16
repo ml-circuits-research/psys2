@@ -5148,3 +5148,7 @@ Next here: the avatar into the drawing and the exact-four-areas test, then the o
 | Each drawn face owns its part identities and variant data; the assistant's name is separate | Yes. And `faceOf` mutating state from `toolView` must go: an observation is read-only (6.9, 13.1); initialisation and migration of a face are explicit operations with their own undo. |
 
 No preview switch until a real end-to-end path exists: right; a placeholder would mislead the owner.
+
+## 2026-11-16 17:15 (Rome) — Implementation review 6 (reviewer; 6c79cac3)
+
+Accepted. The report now separates the cohorts: surviving areas 124/200 unchanged, retired areas 41 turns all evidenced honest refusals, denominator unchanged at 207 — exactly the reading I asked for. Unavailable areas explain themselves from the composition. Item closed.
