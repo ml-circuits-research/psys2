@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import {createNativeToolHost,copyHostData,nativeToken} from '../native-tool-host.mjs';
-import {createDoc,writeText,commit,sync,undoStep,redoStep} from './document.mjs';
+import {createDoc,writeText,commit,sync,undoStep,redoStep,addBlock} from './document.mjs';
 const text={type:'string',required:true},array={type:'array',required:true};
 export const DOCUMENT_TOOL_BINDINGS=[
  {id:'document.write',act:'make',on:'docs.editor.document',params:{title:text,blocks:array,genre:{type:'string'},topic:{type:'string'}}},
  {id:'document.compose',act:'make',on:'docs.editor.document',requires:['knowledge-composer'],params:{genre:text,topic:text,words:{type:'integer',min:1,max:100000},chapters:{type:'integer',min:1,max:100}}},
  {id:'document.rewrite',act:'change',on:'docs.editor.document',requires:['knowledge-rewriter'],params:{property:{type:'string',required:true,enum:['tone','length']},value:{type:'string',required:true}}},
+ {id:'document.block.make',act:'make',on:'docs.editor.block',params:{parent:text,kind:{type:'string',required:true,enum:['paragraph','heading','quote']},text:{type:'string',default:''},level:{type:'integer',min:3,max:6},name:{type:'string'}}},
+ {id:'document.section.make',act:'make',on:'docs.editor.section',params:{parent:text,text:{type:'string',default:''},level:{type:'integer',default:2,min:1,max:2},name:{type:'string'}}},
  {id:'document.block.change',act:'change',on:'docs.editor.block',params:{id:text,text:text}},
  {id:'document.block.remove',act:'remove',on:'docs.editor.block',params:{ids:array}},
  {id:'document.section.remove',act:'remove',on:'docs.editor.section',params:{ids:array}},
@@ -23,12 +25,23 @@ const view=s=>{
  if(!Array.isArray(s.blocks)||!Array.isArray(s.history)||!Array.isArray(s.future))throw new TypeError('invalid-document');
  const groups=new Map(sections(s).map(g=>[g.id,g])),rows=[];
  if(s.textId||s.blocks.length)rows.push({id:s.textId||'document',kind:'document',sourceType:'docs.editor.document',inputs:Object.entries({title:s.title,genre:s.kind,topic:s.about,length:s.stats.words}).map(([key,value])=>({binding:`document.${key}`,key,values:value===null||value===undefined?[]:[nativeToken(value)],...(key==='length'?{dimension:'count',unit:'word',frame:'document.text'}:{})}))});
- for(const b of s.blocks)rows.push({id:b.id,kind:groups.has(b.id)?'section':b.kind,sourceType:groups.has(b.id)?'docs.editor.section':'docs.editor.block',inputs:[{binding:'document.block.text',key:'text',values:typeof b.text==='string'?[nativeToken(b.text)]:[]}],...(groups.has(b.id)?{members:s.blocks.slice(groups.get(b.id).start,groups.get(b.id).end).map(x=>x.id)}:{})});
+ for(const b of s.blocks)rows.push({id:b.id,kind:groups.has(b.id)?'section':b.kind,sourceType:groups.has(b.id)?'docs.editor.section':'docs.editor.block',parent:s.textId,inputs:[{binding:'document.block.text',key:'text',values:typeof b.text==='string'?[nativeToken(b.text)]:[]},{binding:'document.block.name',key:'name',values:typeof b.name==='string'?[nativeToken(b.name)]:[]},{binding:'document.block.parent',key:'parent',values:s.textId?[nativeToken(s.textId)]:[]}],...(groups.has(b.id)?{members:s.blocks.slice(groups.get(b.id).start,groups.get(b.id).end).map(x=>x.id)}:{})});
  return rows;
 };
 export function createDocumentHost({state=initialDocumentState(),instanceId,composer=null,rewriter=null,...limits}={}){
  const stamp=(s,genre,topic)=>{s.kind=genre??'text';s.about=topic??null;s.textSeq=(s.textSeq??0)+1;s.textId=`text${s.textSeq}`;sync(s);};
+ const makeChild=(ctx,a,section)=>{
+  const s=ctx.state;if(!s.textId||a.parent!==s.textId)return fail('missing-parent-document');
+  if(!Number.isSafeInteger(s.nextId)||s.nextId<1||!Number.isSafeInteger(s.nextId+1)||s.blocks.some(b=>b.id===`b${s.nextId}`))return fail('native-id-collision');
+  if(!section&&a.kind!=='heading'&&Object.hasOwn(a,'level'))return fail('unexpected-heading-level');
+  const block={kind:section?'heading':a.kind,text:a.text};
+  if(block.kind==='heading')block.level=section?a.level:(a.level??3);
+  if(Object.hasOwn(a,'name'))block.name=a.name;
+  commit(s);const made=addBlock(s,block,s.blocks.length);sync(s);return done([made.id]);
+ };
  const handlers={
+  'document.block.make':(ctx,a)=>makeChild(ctx,a,false),
+  'document.section.make':(ctx,a)=>makeChild(ctx,a,true),
   'document.write':(ctx,a)=>{if(!validBlocks(a.blocks))return fail('invalid-content');createDoc(ctx,a.title,a.blocks);stamp(ctx.state,a.genre,a.topic);return done([ctx.state.textId,...ctx.state.blocks.map(b=>b.id)]);},
   'document.compose':(ctx,a,step)=>{if(!composer?.available||typeof composer.compose!=='function')return fail('missing-knowledge-composer');const bounded={available:true,compose:args=>{const result=copyHostData(composer.compose(args));const chapters=result?.composition?.chapters;if(!Array.isArray(chapters)||chapters.length>100||chapters.some(ch=>!Array.isArray(ch.subchapters)||ch.subchapters.length>100||ch.subchapters.some(sc=>!Array.isArray(sc.sentences)||sc.sentences.length>100)))return null;return result;}};return writeText({...ctx,composer:bounded},{kind:a.genre,about:a.topic,words:a.words,chapters:a.chapters,step});},
   'document.rewrite':(ctx,a)=>{if(!rewriter||typeof rewriter.rewrite!=='function')return fail('missing-knowledge-rewriter');const blocks=copyHostData(rewriter.rewrite({blocks:copyHostData(ctx.state.blocks),property:a.property,value:a.value}));if(!validBlocks(blocks))return fail('invalid-rewrite');const genre=ctx.state.kind,topic=ctx.state.about;createDoc(ctx,ctx.state.title,blocks);stamp(ctx.state,genre,topic);return done(ctx.state.blocks.map(b=>b.id));},

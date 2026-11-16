@@ -1,0 +1,7 @@
+# Document child creation
+
+The Document native adapter exposes `document.block.make` and `document.section.make`. Both require the explicit current parent document ID; an empty store or a different parent refuses. Neither operation creates a parent or replaces the document. Actual `addBlock`, `commit` and `sync` primitives append to the current block sequence and rebuild its renderer JSON while retaining the title, existing siblings and their identities.
+
+A block uses actual paragraph, quote or heading structure. Heading blocks use levels 3–6, default 3; section creation uses the existing section representation, a heading of level 1–2, default 2. Sections therefore retain the renderer's sequential membership semantics, not a fabricated nested container. Text is explicit or the declared empty-string default. Optional name metadata is separately observable and is not silently inserted into text. Each child observation exposes its parent document ID and native name/text property bindings.
+
+The native ID allocator is checked before mutation; collisions and invalid levels/kinds refuse. Staged validation, explicit invocation/version, replay receipts, policy rejection and byte limits use the shared transaction helper. Actual board history supports undo/redo; removal followed by restoration gets a fresh observation incarnation. Equal text changes remain no-ops. Creation receipts are unverified native effects, never semantic request success. This is a capability landing only; fixture parent/child preparation and semantic request mapping are separate.

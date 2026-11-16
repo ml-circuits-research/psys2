@@ -1,5 +1,5 @@
 {
-  "version": "deffd67ea9",
+  "version": "3c4d74ad28",
   "worlds": [
     "acts",
     "art.draw",
@@ -271,7 +271,7 @@
     "worlds/docs.editor/bundle.json": "876732b781b898b3",
     "worlds/docs.editor/coverage.md": "532dde81b41608d7",
     "worlds/docs.editor/datagen.mjs": "5e2eb5732fc989b1",
-    "worlds/docs.editor/declared-host.mjs": "bc7d2de8bebe86cd",
+    "worlds/docs.editor/declared-host.mjs": "b6643406b1873ba9",
     "worlds/docs.editor/document.mjs": "f24cc12c1dca0151",
     "worlds/docs.editor/editor.mjs": "f0318918e43611b4",
     "worlds/docs.editor/hooks.mjs": "2c096a6cbf18f830",
@@ -651,8 +651,8 @@
     "worlds/words/zo.json": "98c807997b12214c",
     "worlds/words.bloom.json": "1aee5298e6fe2c42"
   },
-  "builtAt": "2026-11-16T23:07:02.274Z",
-  "commit": "1dc7fb4f-dirty",
+  "builtAt": "2026-11-16T23:11:31.554Z",
+  "commit": "f18225f4-dirty",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "assets": {
     "app.mjs": "acad83ead9",
@@ -984,7 +984,7 @@
     "worlds/docs.editor/bundle.json": "876732b781",
     "worlds/docs.editor/coverage.md": "532dde81b4",
     "worlds/docs.editor/datagen.mjs": "9b6f0a265f",
-    "worlds/docs.editor/declared-host.mjs": "186c42a9cc",
+    "worlds/docs.editor/declared-host.mjs": "b72faec743",
     "worlds/docs.editor/document.mjs": "d1f3113f66",
     "worlds/docs.editor/editor.mjs": "9d6681d6eb",
     "worlds/docs.editor/hooks.mjs": "bc860ae9e2",
