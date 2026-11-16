@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "2f7f5fcc",
-  "tree": "8b436ed8e6916bd9",
+  "build": "4f984af8",
+  "tree": "f5490bef30d6ad50",
   "catalog": "7042ea706c046abad2f5513d8dcb7aceb4eaae55",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -764,7 +764,7 @@
      "verdict": "wrong",
      "text": "add two chapters",
      "tab": "editor",
-     "reply": "I added a story. I added 2 chapters. I assumed story for the target. I assumed 150 for the length.",
+     "reply": "I added a story. I added 2 chapters. The story is called “All about Uganda”. I assumed story for the target. I assumed 150 for the length.",
      "failing": [
       "state:blocks.length=6"
      ]
@@ -860,7 +860,7 @@
      "verdict": "partly",
      "text": "draw a red circle",
      "tab": "diagram",
-     "reply": "I added a circle.",
+     "reply": "I added a red circle.",
      "failing": [
       "answer:c1"
      ]
@@ -1244,7 +1244,7 @@
     {
      "text": "draw a red circle",
      "tab": "diagram",
-     "happened": "I added a circle. [outcome: executed; partly; answer:c1]"
+     "happened": "I added a red circle. [outcome: executed; partly; answer:c1]"
     },
     {
      "text": "create a diagram",
@@ -1340,7 +1340,7 @@
     {
      "text": "add two chapters",
      "tab": "editor",
-     "happened": "I added a story. I added 2 chapters. I assumed story for the target. I assumed 150 for the length. [outcome: executed; wrong; state:blocks.length=6]"
+     "happened": "I added a story. I added 2 chapters. The story is called “All about Uganda”. I assumed story for the target. I assumed 150 for the length. [outcome: executed; w"
     }
    ]
   },
