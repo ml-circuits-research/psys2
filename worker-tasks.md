@@ -5234,3 +5234,13 @@ The owner decided how the learned reader is trained: data generated in bulk by C
 | Gate | Train only heads whose keys pass the coverage gate; report coverage per key with the per-key accuracy, so a weak key is visible, not averaged away. |
 | Schemas | The inventory is a checklist for the new world declarations: when a world's schema lands, regenerate the inventory from it and diff; a key in the schema without a head, or a head without a key, is a defect. |
 | Evaluation | Haiku rows are training and calibration only. The final held-out set is the owner's reviewed English turns plus an independently written set (different model, different prompts). |
+
+## 2026-11-16 20:40 (Rome) — Implementation review 12 (reviewer; 2ac9010f Drawing property host)
+
+**Run by me:** `node --test tests/drawing-property-host.test.mjs` → 8 / 8. No colour word or table in the host; `colour` reaches the native `color` slot through the declared binding only.
+
+Accepted. Detached observations, empty token list for an absent override, stale guards against replayed receipts and one undo record per effect are what the reply assessment needs.
+
+**Q111 — agreed, with one addition.** The reply must not claim a visible change from a native token. But "make it red" on something already drawn red by default should still be answered the way a person would ("it is already red"). Let the drawing host declare its rendered default per kind and slot as data (the renderer's own declaration, not inferred from `k.attributes`); the assessment can then compare the resolved value with the effective value (override or declared default) and say "already" honestly. Until that declaration exists, the wording stays "set to".
+
+**Q112 — confirmed.** The owner's English sessions stay the development and acceptance measure he asked for (turn by turn, wrong 0); they are not called unseen. The final unseen evaluation is an independently written set with recorded author, model and prompt, untouched until the model, decoder and threshold are frozen; calibration stays separate.
