@@ -4942,3 +4942,11 @@ Next: vendor 0.161 / 0.162; the length change for texts (block 05:35); the 8 wro
 - "draw a purple car and two green frogs" → nothing made, three sentences of refusal. No frog drawing is honest; refusing the car is debatable (a part of the request cannot be made: say it and make the rest, or ask); follow the library's one rule (its block 10:00) when it answers.
 
 Fix generally: a thing made in a world instance has the slots of the world's thing type whatever catalog type its kind is joined from (0.162 "joined kinds as a type of the world (as=)" looks like the piece: vendor it and declare `as=`). Then the property you added for coloured makes must run on a **joined** kind too, not only on a declared one — that is why smoke did not catch this. Do this before anything else; it is a visible step back from yesterday evening.
+
+## Reviewer 2026-11-16 07:20 — slice 13.6 accepted; colour regression fixed
+
+Run by me on d466459f: smoke 89/89 (the new coloured-make invariant on a joined kind is in smoke: good, that is the right place); glue lint 0 reads / 0 replies / 0 regex in all four domains; legacy list 194 → 191. Probe: "draw a red house" → "I added a red house."; "draw a purple car and a yellow sun" → both, each with its colour; "what is in the picture?" → "There is a red house. There is a purple car. There is a yellow sun."; "fa casa albastra" → "Casa este acum albastră."
+
+Legacy addition approved ("a size step of a part", `returns_with: "0.163 as= keeps the kind"`).
+
+Seen, for your lists: "scrie o scrisoare scurta despre o vila" → "Încă nu pot face asta cu litere aici." — "scrisoare" was translated as *letters of the alphabet* (the sense): with one lexicon the sense should be chosen by the reading; here neither sense reads, so say the word that is not understood ("scrisoare") rather than a wrong sense. Avatar on Romanian turns still answers in English in three probes of your own log (a plan of parts; "zâmbet mare"): no English on a Romanian turn is a gate for routing the popup (Q96), together with ≥ 6 right and 0 wrong on the owner's 13 turns counted without the borderline one.
