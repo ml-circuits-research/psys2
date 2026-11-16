@@ -9,7 +9,10 @@ import { STEP_IDS, STEPS } from '../src/dialog/steps.mjs';
 import { generate, MAP_FILE, MAP_COPY } from '../scripts/build-system-map.mjs';
 
 test('the system map is generated, not stale (node scripts/build-system-map.mjs --write)', async () => {
+  const originalDate = Date, originalRandom = Math.random;
   const html = await generate();
+  assert.equal(Date, originalDate, 'the measurement restores the host clock');
+  assert.equal(Math.random, originalRandom, 'the measurement restores the host random source');
   assert.equal(readFileSync(MAP_FILE, 'utf8'), html);
   assert.equal(readFileSync(MAP_COPY, 'utf8'), html, 'the webchat copy is the same page');
   for (const st of STEPS) assert.ok(html.includes(st.label), st.label);

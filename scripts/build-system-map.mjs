@@ -112,6 +112,22 @@ const HELP = new Set(['fill', 'lookup', 'ask', 'layout']);   // kinds of ask tha
 const opWorld = (op) => /^op\.(.+)\.[^.]+$/.exec(String(typeof op === 'string' ? op : op?.op ?? ''))?.[1] ?? null;
 
 export async function measure() {
+  // Replaying the same logs must produce the same generated page. Runtime choices
+  // use both Math.random and Date.now; wall-clock performance measurements remain real.
+  const OriginalDate = Date, originalRandom = Math.random;
+  let randomState = 20261116, clock = OriginalDate.parse('2026-11-16T12:00:00Z');
+  Math.random = () => {
+    randomState = (randomState + 0x6D2B79F5) | 0;
+    let n = Math.imul(randomState ^ (randomState >>> 15), 1 | randomState);
+    n = (n + Math.imul(n ^ (n >>> 7), 61 | n)) ^ n;
+    return ((n ^ (n >>> 14)) >>> 0) / 4294967296;
+  };
+  class ReplayDate extends OriginalDate {
+    constructor(...args) { if (args.length) super(...args); else super(clock++); }
+    static now() { return clock++; }
+  }
+  globalThis.Date = ReplayDate;
+  try {
   const { replay } = await import('./eval-owner-log.mjs');
   const samples = Object.fromEntries(STEPS.map((s) => [s.id, { alt: [], by: {}, ran: 0 }]));
   const edges = new Map(), perWorld = {};
@@ -153,6 +169,10 @@ export async function measure() {
     });
   }
   return { samples, edges: [...edges].map(([k, n]) => { const [from, to, kind] = k.split('\t'); return { from, to, kind, n }; }).sort((a, b) => b.n - a.n || (a.from + a.to).localeCompare(b.from + b.to)), perWorld, turns, unparsed };
+  } finally {
+    globalThis.Date = OriginalDate;
+    Math.random = originalRandom;
+  }
 }
 
 // ---- rendering ----------------------------------------------------------------------------------------------------------------------------------------

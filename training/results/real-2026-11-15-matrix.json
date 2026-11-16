@@ -5,8 +5,8 @@
  "mt": false,
  "voice": false,
  "date": "2026-11-16",
- "build": "4fb1c663",
- "tree": "61b71d1e64577d89",
+ "build": "64c801be",
+ "tree": "7bb4e0338fda0a03",
  "catalog": {
   "commit": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "url": "https://cdn.jsdelivr.net/gh/ml-circuits-research/sop-knowledge-worlds@c9d5d0a9308bce06ceb805a358677318887c8ebc/docs/worlds"
@@ -35,22 +35,22 @@
  },
  "ticks": {
   "total": {
-   "sum": 26434892,
+   "sum": 26450726,
    "p50": 9197,
    "max": 1058312
   },
   "sites": [
    {
     "site": "matcher.backtrack",
-    "sum": 10282697,
-    "share": 38.9,
+    "sum": 10309065,
+    "share": 39,
     "turns": 365,
     "p50": 6108,
     "max": 543754,
-    "early": 8726,
-    "late": 25536,
-    "growth": 2.93,
-    "slope": 719.9
+    "early": 8724,
+    "late": 25651,
+    "growth": 2.94,
+    "slope": 723.1
    },
    {
     "site": "translate.frame",
@@ -66,39 +66,39 @@
    },
    {
     "site": "rules.pattern",
-    "sum": 2673775,
+    "sum": 2678951,
     "share": 10.1,
     "turns": 365,
     "p50": 1140,
     "max": 290995,
-    "early": 2348,
-    "late": 6710,
-    "growth": 2.86,
-    "slope": 183.4
-   },
-   {
-    "site": "spell.edit",
-    "sum": 1677338,
-    "share": 6.3,
-    "turns": 173,
-    "p50": 5208,
-    "max": 62937,
-    "early": 1417,
-    "late": 2936,
-    "growth": 2.07,
-    "slope": 24.4
+    "early": 2345,
+    "late": 6738,
+    "growth": 2.87,
+    "slope": 184.1
    },
    {
     "site": "matcher.attempt",
-    "sum": 1669672,
+    "sum": 1674271,
     "share": 6.3,
     "turns": 365,
     "p50": 951,
     "max": 114330,
-    "early": 1269,
-    "late": 4296,
-    "growth": 3.39,
-    "slope": 126.6
+    "early": 1270,
+    "late": 4314,
+    "growth": 3.4,
+    "slope": 127.1
+   },
+   {
+    "site": "spell.edit",
+    "sum": 1664808,
+    "share": 6.3,
+    "turns": 172,
+    "p50": 5282,
+    "max": 62937,
+    "early": 1396,
+    "late": 2937,
+    "growth": 2.1,
+    "slope": 25.4
    },
    {
     "site": "meta.worlds.near",
@@ -126,15 +126,15 @@
    },
    {
     "site": "emit.substituteEmit",
-    "sum": 564064,
+    "sum": 563872,
     "share": 2.1,
     "turns": 310,
     "p50": 456,
-    "max": 60368,
-    "early": 1153,
-    "late": 759,
-    "growth": 0.66,
-    "slope": -8.2
+    "max": 65248,
+    "early": 1173,
+    "late": 749,
+    "growth": 0.64,
+    "slope": -8.5
    },
    {
     "site": "scene.edit",
@@ -150,39 +150,39 @@
    },
    {
     "site": "normalize.push3",
-    "sum": 475496,
+    "sum": 475299,
     "share": 1.8,
     "turns": 366,
-    "p50": 120,
+    "p50": 115,
     "max": 28176,
-    "early": 291,
-    "late": 1286,
-    "growth": 4.42,
-    "slope": 43.1
+    "early": 292,
+    "late": 1287,
+    "growth": 4.41,
+    "slope": 43.2
    },
    {
     "site": "learned.mem",
-    "sum": 461433,
+    "sum": 459301,
     "share": 1.7,
     "turns": 287,
     "p50": 33,
-    "max": 30797,
-    "early": 184,
-    "late": 1196,
-    "growth": 6.51,
-    "slope": 18.8
+    "max": 35170,
+    "early": 185,
+    "late": 1172,
+    "growth": 6.35,
+    "slope": 18.5
    },
    {
     "site": "interpreter.visit",
-    "sum": 365012,
+    "sum": 362846,
     "share": 1.4,
     "turns": 400,
     "p50": 156,
     "max": 34122,
-    "early": 350,
-    "late": 815,
-    "growth": 2.33,
-    "slope": 5.2
+    "early": 355,
+    "late": 796,
+    "growth": 2.24,
+    "slope": 4.9
    },
    {
     "site": "facts.index",
@@ -198,55 +198,55 @@
    },
    {
     "site": "index.splitClauses",
-    "sum": 327069,
+    "sum": 325340,
     "share": 1.2,
     "turns": 365,
     "p50": 40,
     "max": 23545,
     "early": 126,
-    "late": 977,
-    "growth": 7.79,
-    "slope": 38.2
+    "late": 973,
+    "growth": 7.73,
+    "slope": 38
    },
    {
     "site": "knowledge.memo",
-    "sum": 255250,
+    "sum": 254497,
     "share": 1,
-    "turns": 191,
+    "turns": 192,
     "p50": 298,
-    "max": 12214,
+    "max": 13653,
     "early": 70,
-    "late": 713,
-    "growth": 10.17,
-    "slope": 12.2
+    "late": 705,
+    "growth": 10.02,
+    "slope": 12
    },
    {
     "site": "index.run",
-    "sum": 199489,
+    "sum": 199428,
     "share": 0.8,
     "turns": 310,
     "p50": 149,
-    "max": 19270,
-    "early": 382,
-    "late": 297,
-    "growth": 0.78,
-    "slope": -2.7
+    "max": 20825,
+    "early": 388,
+    "late": 294,
+    "growth": 0.76,
+    "slope": -2.8
    },
    {
     "site": "index.readString",
-    "sum": 123320,
+    "sum": 123318,
     "share": 0.5,
     "turns": 271,
-    "p50": 100,
-    "max": 13283,
-    "early": 293,
-    "late": 135,
-    "growth": 0.46,
-    "slope": -2.5
+    "p50": 92,
+    "max": 13638,
+    "early": 297,
+    "late": 133,
+    "growth": 0.45,
+    "slope": -2.6
    },
    {
     "site": "translate.tokenize",
-    "sum": 106342,
+    "sum": 106305,
     "share": 0.4,
     "turns": 293,
     "p50": 202,
@@ -258,10 +258,10 @@
    },
    {
     "site": "open-words.place",
-    "sum": 103735,
+    "sum": 103566,
     "share": 0.4,
     "turns": 365,
-    "p50": 73,
+    "p50": 72,
     "max": 6588,
     "early": 91,
     "late": 241,
@@ -270,15 +270,15 @@
    },
    {
     "site": "normalize.span",
-    "sum": 98737,
+    "sum": 98675,
     "share": 0.4,
     "turns": 366,
-    "p50": 26,
+    "p50": 25,
     "max": 5239,
     "early": 73,
     "late": 256,
-    "growth": 3.51,
-    "slope": 7.9
+    "growth": 3.49,
+    "slope": 8
    },
    {
     "site": "scene.walk",
@@ -318,86 +318,74 @@
    },
    {
     "site": "index.atomRun",
-    "sum": 62506,
+    "sum": 62476,
     "share": 0.2,
     "turns": 310,
     "p50": 57,
-    "max": 6700,
-    "early": 126,
-    "late": 84,
-    "growth": 0.67,
-    "slope": -0.9
+    "max": 7240,
+    "early": 128,
+    "late": 83,
+    "growth": 0.65,
+    "slope": -1
    },
    {
     "site": "index.visit",
-    "sum": 56183,
+    "sum": 56409,
     "share": 0.2,
     "turns": 229,
     "p50": 50,
-    "max": 2726,
-    "early": 21,
-    "late": 159,
-    "growth": 7.75,
-    "slope": 5.3
+    "max": 2788,
+    "early": 20,
+    "late": 160,
+    "growth": 7.97,
+    "slope": 5.4
    },
    {
     "site": "index.cardCuts",
-    "sum": 51579,
+    "sum": 51767,
     "share": 0.2,
     "turns": 321,
     "p50": 16,
     "max": 3990,
     "early": 14,
     "late": 160,
-    "growth": 11.75,
+    "growth": 11.8,
     "slope": 6.6
    },
    {
     "site": "index.skipWs",
-    "sum": 48171,
+    "sum": 48168,
     "share": 0.2,
     "turns": 310,
     "p50": 36,
-    "max": 5060,
-    "early": 92,
-    "late": 72,
-    "growth": 0.78,
+    "max": 5470,
+    "early": 94,
+    "late": 71,
+    "growth": 0.76,
     "slope": -0.7
    },
    {
     "site": "art.place",
-    "sum": 45138,
+    "sum": 45132,
     "share": 0.2,
-    "turns": 111,
+    "turns": 112,
     "p50": 96,
     "max": 6688,
     "early": 17,
     "late": 131,
-    "growth": 7.54,
+    "growth": 7.53,
     "slope": 1.3
    },
    {
     "site": "ops.call",
-    "sum": 42295,
+    "sum": 42031,
     "share": 0.2,
     "turns": 447,
     "p50": 14,
     "max": 4132,
-    "early": 41,
-    "late": 93,
-    "growth": 2.25,
-    "slope": 0.6
-   },
-   {
-    "site": "index.descendants",
-    "sum": 38308,
-    "share": 0.1,
-    "turns": 403,
-    "p50": 14,
-    "max": 3619,
-    "early": 36,
-    "late": 86,
-    "growth": 2.36,
+    "early": 42,
+    "late": 91,
+    "growth": 2.16,
     "slope": 0.6
    },
    {
@@ -413,84 +401,96 @@
     "slope": 0.9
    },
    {
+    "site": "index.descendants",
+    "sum": 38083,
+    "share": 0.1,
+    "turns": 403,
+    "p50": 14,
+    "max": 3619,
+    "early": 37,
+    "late": 84,
+    "growth": 2.26,
+    "slope": 0.5
+   },
+   {
     "site": "rules.readgroup",
-    "sum": 31931,
+    "sum": 31954,
     "share": 0.1,
     "turns": 365,
     "p50": 12,
     "max": 2974,
     "early": 33,
     "late": 73,
-    "growth": 2.18,
+    "growth": 2.19,
     "slope": 1.4
    },
    {
     "site": "acts.kind",
-    "sum": 26803,
+    "sum": 26875,
     "share": 0.1,
     "turns": 160,
     "p50": 56,
-    "max": 3120,
-    "early": 29,
+    "max": 3380,
+    "early": 30,
     "late": 53,
-    "growth": 1.81,
+    "growth": 1.74,
     "slope": 1.1
    },
    {
     "site": "rules.sentence",
-    "sum": 21263,
+    "sum": 21213,
     "share": 0.1,
     "turns": 365,
     "p50": 9,
     "max": 914,
     "early": 17,
     "late": 52,
-    "growth": 3.06,
+    "growth": 3.04,
     "slope": 1.3
    },
    {
     "site": "soplang.entry",
-    "sum": 20962,
+    "sum": 20953,
     "share": 0.1,
     "turns": 310,
     "p50": 16,
-    "max": 2104,
-    "early": 40,
+    "max": 2274,
+    "early": 41,
     "late": 31,
-    "growth": 0.76,
+    "growth": 0.74,
     "slope": -0.3
    },
    {
     "site": "things.aspects",
-    "sum": 20510,
+    "sum": 20440,
     "share": 0.1,
-    "turns": 141,
-    "p50": 91,
+    "turns": 142,
+    "p50": 90,
     "max": 1960,
     "early": 14,
-    "late": 49,
-    "growth": 3.54,
+    "late": 48,
+    "growth": 3.46,
     "slope": 0.7
    },
    {
     "site": "wordpiece.end",
-    "sum": 20147,
+    "sum": 20072,
     "share": 0.1,
     "turns": 225,
-    "p50": 87,
-    "max": 303,
+    "p50": 88,
+    "max": 261,
     "early": 24,
     "late": 39,
-    "growth": 1.63,
+    "growth": 1.61,
     "slope": 0.3
    },
    {
     "site": "rules.accepts",
-    "sum": 19998,
+    "sum": 20011,
     "share": 0.1,
     "turns": 343,
     "p50": 24,
-    "max": 1402,
+    "max": 1517,
     "early": 42,
     "late": 26,
     "growth": 0.62,
@@ -498,27 +498,15 @@
    },
    {
     "site": "index.chain",
-    "sum": 18681,
+    "sum": 18612,
     "share": 0.1,
     "turns": 311,
     "p50": 19,
-    "max": 831,
+    "max": 854,
     "early": 32,
-    "late": 30,
-    "growth": 0.93,
+    "late": 29,
+    "growth": 0.92,
     "slope": -0.1
-   },
-   {
-    "site": "wordpiece.start",
-    "sum": 17792,
-    "share": 0.1,
-    "turns": 225,
-    "p50": 83,
-    "max": 204,
-    "early": 21,
-    "late": 34,
-    "growth": 1.59,
-    "slope": 0.2
    },
    {
     "site": "best-effort.tokenize",
@@ -533,8 +521,20 @@
     "slope": 0.8
    },
    {
+    "site": "wordpiece.start",
+    "sum": 17738,
+    "share": 0.1,
+    "turns": 225,
+    "p50": 83,
+    "max": 192,
+    "early": 21,
+    "late": 34,
+    "growth": 1.58,
+    "slope": 0.2
+   },
+   {
     "site": "normalize.gameNames",
-    "sum": 17411,
+    "sum": 17430,
     "share": 0.1,
     "turns": 262,
     "p50": 17,
@@ -546,26 +546,26 @@
    },
    {
     "site": "normalize.fixpoint",
-    "sum": 16589,
+    "sum": 16624,
     "share": 0.1,
     "turns": 366,
     "p50": 9,
     "max": 537,
     "early": 19,
-    "late": 34,
-    "growth": 1.82,
+    "late": 35,
+    "growth": 1.81,
     "slope": 0.6
    },
    {
     "site": "dispatcher-runtime.wordTokens",
-    "sum": 15968,
+    "sum": 15913,
     "share": 0.1,
     "turns": 218,
     "p50": 79,
     "max": 183,
     "early": 19,
     "late": 30,
-    "growth": 1.59,
+    "growth": 1.58,
     "slope": 0.2
    },
    {
@@ -582,26 +582,26 @@
    },
    {
     "site": "translate.parse",
-    "sum": 13987,
+    "sum": 13982,
     "share": 0.1,
     "turns": 293,
     "p50": 26,
     "max": 473,
     "early": 8,
     "late": 33,
-    "growth": 3.89,
+    "growth": 3.88,
     "slope": 0.4
    },
    {
     "site": "art.np.word",
-    "sum": 13026,
+    "sum": 13076,
     "share": 0,
     "turns": 211,
-    "p50": 11,
-    "max": 2092,
-    "early": 25,
+    "p50": 10,
+    "max": 2257,
+    "early": 26,
     "late": 17,
-    "growth": 0.67,
+    "growth": 0.65,
     "slope": -0.2
    },
    {
@@ -618,50 +618,50 @@
    },
    {
     "site": "art.np",
-    "sum": 9064,
+    "sum": 9130,
     "share": 0,
     "turns": 211,
     "p50": 8,
-    "max": 1459,
-    "early": 15,
+    "max": 1579,
+    "early": 16,
     "late": 14,
-    "growth": 0.95,
+    "growth": 0.91,
     "slope": -0.1
    },
    {
     "site": "sopworld.chase",
-    "sum": 8377,
+    "sum": 8370,
     "share": 0,
     "turns": 294,
     "p50": 6,
     "max": 2040,
     "early": 7,
     "late": 21,
-    "growth": 3.28,
+    "growth": 3.25,
     "slope": 0.1
    },
    {
     "site": "things.sync",
-    "sum": 8349,
+    "sum": 8346,
     "share": 0,
-    "turns": 141,
+    "turns": 142,
     "p50": 35,
-    "max": 322,
+    "max": 316,
     "early": 5,
     "late": 20,
-    "growth": 4.17,
+    "growth": 4.14,
     "slope": 0.3
    },
    {
     "site": "normalize.isEnd",
-    "sum": 8271,
+    "sum": 8268,
     "share": 0,
     "turns": 293,
     "p50": 15,
     "max": 323,
     "early": 5,
     "late": 19,
-    "growth": 4.05,
+    "growth": 4.04,
     "slope": 0.3
    },
    {
@@ -702,26 +702,26 @@
    },
    {
     "site": "rules.kindelsewhere",
-    "sum": 5405,
+    "sum": 5497,
     "share": 0,
-    "turns": 189,
+    "turns": 188,
     "p50": 8,
-    "max": 1322,
+    "max": 1432,
     "early": 12,
     "late": 7,
-    "growth": 0.65,
+    "growth": 0.62,
     "slope": -0.1
    },
    {
     "site": "sopworld.validate",
-    "sum": 4812,
+    "sum": 4810,
     "share": 0,
     "turns": 294,
-    "p50": 4,
+    "p50": 5,
     "max": 441,
     "early": 5,
     "late": 10,
-    "growth": 1.93,
+    "growth": 1.91,
     "slope": 0
    },
    {
@@ -738,14 +738,14 @@
    },
    {
     "site": "soplang.wire",
-    "sum": 4712,
+    "sum": 4715,
     "share": 0,
     "turns": 310,
     "p50": 3,
-    "max": 492,
+    "max": 532,
     "early": 9,
     "late": 7,
-    "growth": 0.73,
+    "growth": 0.71,
     "slope": -0.1
    },
    {
@@ -786,26 +786,26 @@
    },
    {
     "site": "sopworld.match",
-    "sum": 4298,
+    "sum": 4293,
     "share": 0,
     "turns": 25,
     "p50": 4,
     "max": 2247,
     "early": 2,
     "late": 13,
-    "growth": 7.72,
+    "growth": 7.71,
     "slope": 0
    },
    {
     "site": "en-ro.mergePlaces",
-    "sum": 4164,
+    "sum": 4161,
     "share": 0,
     "turns": 182,
     "p50": 13,
     "max": 290,
     "early": 2,
     "late": 10,
-    "growth": 4.46,
+    "growth": 4.45,
     "slope": 0.2
    },
    {
@@ -834,7 +834,7 @@
    },
    {
     "site": "en-ro.mergeNumberWords",
-    "sum": 3780,
+    "sum": 3777,
     "share": 0,
     "turns": 182,
     "p50": 11,
@@ -858,7 +858,7 @@
    },
    {
     "site": "meta.worlds.route",
-    "sum": 3418,
+    "sum": 3416,
     "share": 0,
     "turns": 285,
     "p50": 14,
@@ -867,18 +867,6 @@
     "late": 7,
     "growth": 1.52,
     "slope": 0
-   },
-   {
-    "site": "variants.dropStyleIn",
-    "sum": 3375,
-    "share": 0,
-    "turns": 55,
-    "p50": 22,
-    "max": 603,
-    "early": 6,
-    "late": 3,
-    "growth": 0.52,
-    "slope": -0.1
    },
    {
     "site": "translate.clause",
@@ -891,6 +879,18 @@
     "late": 8,
     "growth": 4.38,
     "slope": 0.1
+   },
+   {
+    "site": "variants.dropStyleIn",
+    "sum": 3357,
+    "share": 0,
+    "turns": 55,
+    "p50": 22,
+    "max": 582,
+    "early": 6,
+    "late": 3,
+    "growth": 0.53,
+    "slope": -0.1
    },
    {
     "site": "ro-en.foldPP",
@@ -906,38 +906,38 @@
    },
    {
     "site": "translate.items",
-    "sum": 3003,
+    "sum": 3000,
     "share": 0,
     "turns": 182,
     "p50": 9,
     "max": 223,
     "early": 2,
     "late": 7,
-    "growth": 4.41,
+    "growth": 4.4,
     "slope": 0.1
    },
    {
     "site": "commonsense.habitat",
-    "sum": 2966,
+    "sum": 2978,
     "share": 0,
     "turns": 123,
     "p50": 10,
     "max": 702,
     "early": 4,
     "late": 6,
-    "growth": 1.37,
+    "growth": 1.36,
     "slope": 0
    },
    {
     "site": "sopworld.negation",
-    "sum": 2632,
+    "sum": 2616,
     "share": 0,
     "turns": 22,
     "p50": 20,
     "max": 736,
     "early": 2,
     "late": 8,
-    "growth": 4.41,
+    "growth": 4.38,
     "slope": 0
    },
    {
@@ -954,14 +954,14 @@
    },
    {
     "site": "sopworld.aggregate",
-    "sum": 2376,
+    "sum": 2374,
     "share": 0,
     "turns": 9,
     "p50": 75,
     "max": 1344,
     "early": 1,
     "late": 8,
-    "growth": 8.85,
+    "growth": 8.84,
     "slope": 0
    },
    {
@@ -978,7 +978,7 @@
    },
    {
     "site": "rules.actverb",
-    "sum": 2052,
+    "sum": 2048,
     "share": 0,
     "turns": 77,
     "p50": 10,
@@ -1014,11 +1014,11 @@
    },
    {
     "site": "space.words",
-    "sum": 1186,
+    "sum": 1179,
     "share": 0,
     "turns": 11,
     "p50": 115,
-    "max": 219,
+    "max": 212,
     "early": 0,
     "late": 3,
     "growth": 15.02,
@@ -1026,7 +1026,7 @@
    },
    {
     "site": "en-ro.realizeClause3",
-    "sum": 1158,
+    "sum": 1157,
     "share": 0,
     "turns": 163,
     "p50": 4,
@@ -1038,26 +1038,14 @@
    },
    {
     "site": "index.translateParts",
-    "sum": 1135,
+    "sum": 1134,
     "share": 0,
     "turns": 293,
     "p50": 2,
     "max": 28,
     "early": 1,
     "late": 3,
-    "growth": 3.69,
-    "slope": 0.1
-   },
-   {
-    "site": "things.views",
-    "sum": 999,
-    "share": 0,
-    "turns": 12,
-    "p50": 54,
-    "max": 243,
-    "early": 1,
-    "late": 2,
-    "growth": 1.44,
+    "growth": 3.68,
     "slope": 0.1
    },
    {
@@ -1071,6 +1059,18 @@
     "late": 2,
     "growth": 0.93,
     "slope": 0
+   },
+   {
+    "site": "things.views",
+    "sum": 972,
+    "share": 0,
+    "turns": 11,
+    "p50": 54,
+    "max": 243,
+    "early": 1,
+    "late": 1,
+    "growth": 1.35,
+    "slope": 0.1
    },
    {
     "site": "sopworld.withdraw",
@@ -1098,14 +1098,14 @@
    },
    {
     "site": "index.rejoin",
-    "sum": 850,
+    "sum": 838,
     "share": 0,
     "turns": 25,
     "p50": 8,
     "max": 206,
     "early": 1,
     "late": 2,
-    "growth": 2.09,
+    "growth": 2.16,
     "slope": 0
    },
    {
@@ -1134,7 +1134,7 @@
    },
    {
     "site": "dispatch.segmentation",
-    "sum": 706,
+    "sum": 705,
     "share": 0,
     "turns": 223,
     "p50": 4,
@@ -1170,14 +1170,14 @@
    },
    {
     "site": "sopworld.fluent",
-    "sum": 679,
+    "sum": 677,
     "share": 0,
     "turns": 8,
     "p50": 18,
     "max": 364,
     "early": 0,
     "late": 2,
-    "growth": 11.97,
+    "growth": 11.93,
     "slope": 0
    },
    {
@@ -1433,6 +1433,18 @@
     "slope": 0
    },
    {
+    "site": "acts.split",
+    "sum": 307,
+    "share": 0,
+    "turns": 27,
+    "p50": 6,
+    "max": 131,
+    "early": 1,
+    "late": 0,
+    "growth": 0.32,
+    "slope": 0
+   },
+   {
     "site": "dialog.lenient",
     "sum": 299,
     "share": 0,
@@ -1442,30 +1454,6 @@
     "early": 0,
     "late": 1,
     "growth": 4.77,
-    "slope": 0
-   },
-   {
-    "site": "acts.split",
-    "sum": 297,
-    "share": 0,
-    "turns": 27,
-    "p50": 6,
-    "max": 121,
-    "early": 1,
-    "late": 0,
-    "growth": 0.34,
-    "slope": 0
-   },
-   {
-    "site": "draw.words",
-    "sum": 286,
-    "share": 0,
-    "turns": 13,
-    "p50": 14,
-    "max": 54,
-    "early": 0,
-    "late": 1,
-    "growth": 10.76,
     "slope": 0
    },
    {
@@ -1482,11 +1470,11 @@
    },
    {
     "site": "acts.why",
-    "sum": 275,
+    "sum": 265,
     "share": 0,
     "turns": 2,
-    "p50": 245,
-    "max": 245,
+    "p50": 235,
+    "max": 235,
     "early": 0,
     "late": 0,
     "growth": null,
@@ -1494,14 +1482,14 @@
    },
    {
     "site": "view.knowledge",
-    "sum": 255,
+    "sum": 254,
     "share": 0,
-    "turns": 31,
+    "turns": 30,
     "p50": 4,
     "max": 54,
     "early": 1,
     "late": 0,
-    "growth": 0.35,
+    "growth": 0.34,
     "slope": 0
    },
    {
@@ -1514,6 +1502,18 @@
     "early": 0,
     "late": 1,
     "growth": null,
+    "slope": 0
+   },
+   {
+    "site": "draw.words",
+    "sum": 244,
+    "share": 0,
+    "turns": 12,
+    "p50": 14,
+    "max": 54,
+    "early": 0,
+    "late": 1,
+    "growth": 9.06,
     "slope": 0
    },
    {
@@ -1734,14 +1734,26 @@
    },
    {
     "site": "en-ro.realizeClause2",
-    "sum": 76,
+    "sum": 74,
     "share": 0,
-    "turns": 70,
+    "turns": 69,
     "p50": 1,
     "max": 3,
     "early": 0,
     "late": 0,
-    "growth": 4.58,
+    "growth": 4.4,
+    "slope": 0
+   },
+   {
+    "site": "ops.parseMoreSpec",
+    "sum": 73,
+    "share": 0,
+    "turns": 3,
+    "p50": 6,
+    "max": 65,
+    "early": 0,
+    "late": 0,
+    "growth": 0.02,
     "slope": 0
    },
    {
@@ -1781,18 +1793,6 @@
     "slope": 0
    },
    {
-    "site": "ops.parseMoreSpec",
-    "sum": 68,
-    "share": 0,
-    "turns": 3,
-    "p50": 6,
-    "max": 60,
-    "early": 0,
-    "late": 0,
-    "growth": 0.02,
-    "slope": 0
-   },
-   {
     "site": "draw.addArgs",
     "sum": 59,
     "share": 0,
@@ -1818,11 +1818,11 @@
    },
    {
     "site": "acts.run",
-    "sum": 51,
+    "sum": 50,
     "share": 0,
     "turns": 8,
     "p50": 5,
-    "max": 19,
+    "max": 18,
     "early": 0,
     "late": 0,
     "growth": 9.71,
@@ -2290,7 +2290,7 @@
   {
    "id": "r0001",
    "outcome": "refused",
-   "ms": 1545,
+   "ms": 1506,
    "reply": "Nothing changed. I could not do house: there is no house here.",
    "read": "Draw a white house and a green one",
    "worlds": [
@@ -2322,7 +2322,7 @@
   {
    "id": "r0002",
    "outcome": "executed",
-   "ms": 449,
+   "ms": 434,
    "reply": "I added a house.",
    "read": "Draw a house",
    "worlds": [
@@ -2354,7 +2354,7 @@
   {
    "id": "r0003",
    "outcome": "refused",
-   "ms": 46,
+   "ms": 42,
    "reply": "Nothing changed. I could not do house: there is no house here.",
    "read": "Draw a green house",
    "worlds": [
@@ -2418,7 +2418,7 @@
   {
    "id": "r0005",
    "outcome": "refused",
-   "ms": 34,
+   "ms": 30,
    "reply": "Nothing changed. I could not do house: there is no house here.",
    "read": "Draw a house",
    "worlds": [
@@ -2450,7 +2450,7 @@
   {
    "id": "r0006",
    "outcome": "refused",
-   "ms": 1610,
+   "ms": 1508,
    "reply": "I did not understand \"knows\", \"grandma\", \"trade\", \"chicago\" here.",
    "read": "She knows what their grandma could trade charcoal Chicago",
    "worlds": [
@@ -2483,7 +2483,7 @@
   {
    "id": "r0007",
    "outcome": "refused",
-   "ms": 206,
+   "ms": 181,
    "reply": "I did not understand \"often\" here.",
    "read": "Often",
    "worlds": [
@@ -2494,9 +2494,9 @@
    ],
    "pos": 6,
    "tk": {
-    "total": 16554,
+    "total": 15208,
     "sites": {
-     "spell.edit": 7691,
+     "spell.edit": 6414,
      "translate.frame": 2619,
      "matcher.backtrack": 2592,
      "meta.worlds.near": 1268,
@@ -2505,9 +2505,9 @@
      "scene.edit": 314,
      "translate.tokenize": 195,
      "interpreter.visit": 132,
-     "index.visit": 127,
      "scene.walk": 126,
-     "open-words.place": 94
+     "index.visit": 94,
+     "open-words.place": 69
     }
    },
    "verdict": "right",
@@ -2549,7 +2549,7 @@
   {
    "id": "r0009",
    "outcome": "executed",
-   "ms": 42,
+   "ms": 44,
    "reply": "I added 4 squares. I assumed row for the layout.",
    "read": "Draw 4 squares",
    "worlds": [
@@ -2582,7 +2582,7 @@
   {
    "id": "r0010",
    "outcome": "refused",
-   "ms": 226,
+   "ms": 215,
    "reply": "I did not understand \"layout\" here.",
    "read": "Make a layout more beautiful",
    "worlds": [
@@ -2615,7 +2615,7 @@
   {
    "id": "r0011",
    "outcome": "refused",
-   "ms": 206,
+   "ms": 183,
    "reply": "I did not understand \"kindses\" here.",
    "read": "Connect all the kindses",
    "worlds": [
@@ -2647,7 +2647,7 @@
   {
    "id": "r0012",
    "outcome": "refused",
-   "ms": 179,
+   "ms": 166,
    "reply": "I did not understand \"kindses\" here.",
    "read": "Connect all the kindses",
    "worlds": [
@@ -2679,7 +2679,7 @@
   {
    "id": "r0013",
    "outcome": "refused",
-   "ms": 181,
+   "ms": 176,
    "reply": "I cannot pick square in the diagram yet.",
    "read": "I take them",
    "worlds": [
@@ -2690,19 +2690,19 @@
    ],
    "pos": 12,
    "tk": {
-    "total": 18921,
+    "total": 19190,
     "sites": {
-     "matcher.backtrack": 7451,
+     "matcher.backtrack": 7564,
      "translate.frame": 5208,
-     "rules.pattern": 2507,
-     "matcher.attempt": 1663,
+     "rules.pattern": 2554,
+     "matcher.attempt": 1706,
      "spell.edit": 610,
      "translate.tokenize": 184,
-     "normalize.push3": 157,
+     "normalize.push3": 162,
      "scene.walk": 138,
      "emit.substituteEmit": 126,
-     "index.splitClauses": 88,
-     "open-words.place": 70,
+     "open-words.place": 95,
+     "index.splitClauses": 92,
      "wordpiece.start": 67
     }
    },
@@ -2712,7 +2712,7 @@
   {
    "id": "r0014",
    "outcome": "executed",
-   "ms": 15,
+   "ms": 14,
    "reply": "I added a square. I assumed square for the target. I assumed white for the colour. I could not do a better layout: nothing here has a layout.",
    "worlds": [
     "diagram.sketch"
@@ -2742,7 +2742,7 @@
   {
    "id": "r0015",
    "outcome": "refused",
-   "ms": 30,
+   "ms": 27,
    "reply": "I cannot answer questions about the diagram yet.",
    "worlds": [
     "diagram.sketch"
@@ -2774,7 +2774,7 @@
   {
    "id": "r0016",
    "outcome": "refused",
-   "ms": 48,
+   "ms": 40,
    "reply": "I cannot answer questions about the diagram yet.",
    "worlds": [
     "diagram.sketch"
@@ -2806,7 +2806,7 @@
   {
    "id": "r0017",
    "outcome": "executed",
-   "ms": 196,
+   "ms": 186,
    "reply": "I added a house. I added 3 clouds.",
    "read": "Draw a house and 3 clouds",
    "worlds": [
@@ -2838,7 +2838,7 @@
   {
    "id": "r0018",
    "outcome": "refused",
-   "ms": 159,
+   "ms": 154,
    "reply": "I did not understand \"shape\", \"change\" here.",
    "read": "How can the shape of a diagram change?",
    "worlds": [
@@ -2871,7 +2871,7 @@
   {
    "id": "r0019",
    "outcome": "refused",
-   "ms": 383,
+   "ms": 377,
    "reply": "I did not understand \"grandma\" here.",
    "read": "For their grandma do it",
    "worlds": [
@@ -2882,20 +2882,20 @@
    ],
    "pos": 18,
    "tk": {
-    "total": 71059,
+    "total": 74413,
     "sites": {
      "translate.frame": 17360,
-     "matcher.backtrack": 15746,
+     "matcher.backtrack": 17120,
      "candidates.repair": 11382,
      "meta.worlds.near": 8720,
+     "rules.pattern": 4202,
      "scene.edit": 4104,
-     "rules.pattern": 3822,
-     "matcher.attempt": 2957,
-     "spell.edit": 2089,
+     "matcher.attempt": 3253,
+     "spell.edit": 3214,
      "facts.index": 961,
-     "normalize.push3": 810,
+     "normalize.push3": 876,
      "translate.tokenize": 580,
-     "index.splitClauses": 332
+     "index.splitClauses": 358
     }
    },
    "verdict": "right",
@@ -2904,7 +2904,7 @@
   {
    "id": "r0020",
    "outcome": "refused",
-   "ms": 580,
+   "ms": 574,
    "reply": "I did not understand \"linear\", \"current\" here.",
    "read": "Medicine as a train no door soup linear current",
    "worlds": [
@@ -2915,19 +2915,19 @@
    ],
    "pos": 19,
    "tk": {
-    "total": 169740,
+    "total": 179730,
     "sites": {
-     "spell.edit": 56224,
+     "spell.edit": 62674,
+     "matcher.backtrack": 24009,
      "translate.frame": 23439,
-     "matcher.backtrack": 21692,
      "candidates.repair": 18684,
      "meta.worlds.near": 17840,
      "scene.edit": 15835,
-     "rules.pattern": 4849,
-     "matcher.attempt": 3204,
+     "rules.pattern": 5284,
+     "matcher.attempt": 3568,
+     "normalize.push3": 2083,
      "best-effort.tokenize": 2071,
-     "normalize.push3": 1883,
-     "index.splitClauses": 870,
+     "index.splitClauses": 988,
      "translate.tokenize": 819
     }
    },
@@ -2937,7 +2937,7 @@
   {
    "id": "r0021",
    "outcome": "refused",
-   "ms": 611,
+   "ms": 545,
    "reply": "I did not understand \"listen\", \"order\", \"noise\", \"that's\", \"opera\" here.",
    "read": "Listen as a train order noise that's Opera",
    "worlds": [
@@ -2948,11 +2948,11 @@
    ],
    "pos": 20,
    "tk": {
-    "total": 160248,
+    "total": 159213,
     "sites": {
      "matcher.backtrack": 34550,
      "meta.worlds.near": 29864,
-     "spell.edit": 28835,
+     "spell.edit": 27868,
      "translate.frame": 20859,
      "scene.edit": 15280,
      "candidates.repair": 8249,
@@ -2970,7 +2970,7 @@
   {
    "id": "r0022",
    "outcome": "refused",
-   "ms": 404,
+   "ms": 375,
    "reply": "I did not understand \"inaza\", \"order\", \"noy\" here.",
    "read": "This inaza train order Noy",
    "worlds": [
@@ -2981,19 +2981,19 @@
    ],
    "pos": 21,
    "tk": {
-    "total": 99849,
+    "total": 100093,
     "sites": {
-     "spell.edit": 25934,
-     "matcher.backtrack": 20049,
+     "spell.edit": 25935,
+     "matcher.backtrack": 20208,
      "meta.worlds.near": 15216,
      "translate.frame": 13044,
      "candidates.repair": 8779,
      "scene.edit": 6100,
-     "rules.pattern": 3426,
-     "matcher.attempt": 3011,
-     "normalize.push3": 1135,
+     "rules.pattern": 3454,
+     "matcher.attempt": 3039,
+     "normalize.push3": 1150,
      "translate.tokenize": 561,
-     "index.splitClauses": 514,
+     "index.splitClauses": 520,
      "index.visit": 286
     }
    },
@@ -3025,7 +3025,7 @@
   {
    "id": "r0024",
    "outcome": "refused",
-   "ms": 282,
+   "ms": 247,
    "reply": "I cannot do \"three new nodes\" in the diagram yet.",
    "worlds": [
     "diagram.sketch"
@@ -3059,7 +3059,7 @@
   {
    "id": "r0025",
    "outcome": "refused",
-   "ms": 295,
+   "ms": 283,
    "reply": "I did not understand \"destiny\" here.",
    "read": "My destiny",
    "worlds": [
@@ -3092,7 +3092,7 @@
   {
    "id": "r0026",
    "outcome": "refused",
-   "ms": 284,
+   "ms": 259,
    "reply": "I did not understand \"magnavator\" here.",
    "read": "Magnavator person",
    "worlds": [
@@ -3125,7 +3125,7 @@
   {
    "id": "r0027",
    "outcome": "refused",
-   "ms": 109,
+   "ms": 105,
    "reply": "I did not understand that as something to do in the avatar.",
    "worlds": [
     "ui.avatar"
@@ -3156,7 +3156,7 @@
   {
    "id": "r0028",
    "outcome": "refused",
-   "ms": 336,
+   "ms": 341,
    "reply": "I did not understand \"year\" here.",
    "read": "A year old woman",
    "worlds": [
@@ -3167,14 +3167,14 @@
    ],
    "pos": 27,
    "tk": {
-    "total": 40861,
+    "total": 40176,
     "sites": {
-     "matcher.backtrack": 13100,
+     "matcher.backtrack": 13092,
      "translate.frame": 7821,
-     "spell.edit": 6946,
+     "spell.edit": 6276,
      "candidates.repair": 2992,
-     "rules.pattern": 2242,
-     "matcher.attempt": 1919,
+     "rules.pattern": 2238,
+     "matcher.attempt": 1916,
      "normalize.push3": 803,
      "interpreter.visit": 462,
      "index.splitClauses": 454,
@@ -3191,7 +3191,7 @@
   {
    "id": "r0029",
    "outcome": "executed",
-   "ms": 7,
+   "ms": 11,
    "reply": "I added glasses. I added earrings. I removed the hat. The face is an old woman now.",
    "worlds": [
     "ui.avatar"
@@ -3217,7 +3217,7 @@
   {
    "id": "r0030",
    "outcome": "refused",
-   "ms": 155,
+   "ms": 157,
    "reply": "I cannot answer questions about the avatar yet.",
    "worlds": [
     "ui.avatar"
@@ -3248,7 +3248,7 @@
   {
    "id": "r0031",
    "outcome": "refused",
-   "ms": 177,
+   "ms": 171,
    "reply": "I did not understand \"cartoon\" here.",
    "worlds": [
     "ui.avatar"
@@ -3258,20 +3258,20 @@
    ],
    "pos": 30,
    "tk": {
-    "total": 31247,
+    "total": 31284,
     "sites": {
      "matcher.backtrack": 11037,
      "spell.edit": 6855,
      "meta.worlds.near": 4211,
      "scene.edit": 3805,
-     "rules.pattern": 1844,
+     "rules.pattern": 1846,
      "matcher.attempt": 1522,
      "scene.walk": 261,
-     "normalize.push3": 225,
+     "normalize.push3": 236,
      "interpreter.visit": 198,
      "emit.substituteEmit": 172,
      "acts.kind": 124,
-     "index.splitClauses": 97
+     "index.splitClauses": 105
     }
    },
    "verdict": null
@@ -3279,7 +3279,7 @@
   {
    "id": "r0032",
    "outcome": "executed",
-   "ms": 6,
+   "ms": 9,
    "reply": "The face is happy now.",
    "worlds": [
     "ui.avatar"
@@ -3304,7 +3304,7 @@
   {
    "id": "r0033",
    "outcome": "refused",
-   "ms": 174,
+   "ms": 169,
    "reply": "I did not understand \"richard\" here.",
    "read": "First Richard",
    "worlds": [
@@ -3337,7 +3337,7 @@
   {
    "id": "r0034",
    "outcome": "refused",
-   "ms": 30,
+   "ms": 31,
    "reply": "Nothing changed. I could not do ball: there is no ball here.",
    "read": "Draw a ball",
    "worlds": [
@@ -3370,7 +3370,7 @@
   {
    "id": "r0035",
    "outcome": "executed",
-   "ms": 193,
+   "ms": 191,
    "reply": "I added a crocodile.",
    "read": "Draw a crocodile",
    "worlds": [
@@ -3402,7 +3402,7 @@
   {
    "id": "r0036",
    "outcome": "refused",
-   "ms": 227,
+   "ms": 213,
    "reply": "There is nothing in the drawing that I made and could change that way yet.",
    "read": "Another crocodile",
    "worlds": [
@@ -3437,7 +3437,7 @@
   {
    "id": "r0037",
    "outcome": "executed",
-   "ms": 184,
+   "ms": 173,
    "reply": "I added a blue crocodile.",
    "read": "Draw a blue crocodile",
    "worlds": [
@@ -3469,7 +3469,7 @@
   {
    "id": "r0038",
    "outcome": "refused",
-   "ms": 40,
+   "ms": 42,
    "reply": "Nothing changed.",
    "read": "Rotate the blue crocodile at 30 degrees",
    "worlds": [
@@ -3504,7 +3504,7 @@
   {
    "id": "r0039",
    "outcome": "refused",
-   "ms": 289,
+   "ms": 270,
    "reply": "I did not understand \"legs\", \"corocilului\" here.",
    "read": "Make the legs corocilului black",
    "worlds": [
@@ -3539,7 +3539,7 @@
   {
    "id": "r0040",
    "outcome": "refused",
-   "ms": 316,
+   "ms": 310,
    "reply": "I did not understand \"piicorul\", \"corocilului\" here.",
    "read": "Piicorul corocilului blue",
    "worlds": [
@@ -3574,7 +3574,7 @@
   {
    "id": "r0041",
    "outcome": "refused",
-   "ms": 438,
+   "ms": 429,
    "reply": "I did not understand \"crocodile's\", \"leg\", \"color\" here.",
    "read": "Make the blue crocodile's leg of the black color",
    "worlds": [
@@ -3609,7 +3609,7 @@
   {
    "id": "r0042",
    "outcome": "refused",
-   "ms": 191,
+   "ms": 179,
    "reply": "I did not understand \"3\", \"different\" here.",
    "read": "Draw 3 different houses",
    "worlds": [
@@ -3642,7 +3642,7 @@
   {
    "id": "r0043",
    "outcome": "refused",
-   "ms": 102,
+   "ms": 95,
    "reply": "I did not understand \"different\" here.",
    "read": "Make them different",
    "worlds": [
@@ -3675,7 +3675,7 @@
   {
    "id": "r0044",
    "outcome": "executed",
-   "ms": 189,
+   "ms": 181,
    "reply": "I added a lake.",
    "read": "Draw a lake",
    "worlds": [
@@ -3708,7 +3708,7 @@
   {
    "id": "r0045",
    "outcome": "refused",
-   "ms": 358,
+   "ms": 346,
    "reply": "I did not understand \"corcodiles\" here.",
    "read": "Move corcodiles in lake",
    "worlds": [
@@ -3743,7 +3743,7 @@
   {
    "id": "r0046",
    "outcome": "executed",
-   "ms": 99,
+   "ms": 97,
    "reply": "I moved 2 crocodiles into the lake.",
    "read": "Move the crocodiles in the lake",
    "worlds": [
@@ -3776,7 +3776,7 @@
   {
    "id": "r0047",
    "outcome": "executed",
-   "ms": 46,
+   "ms": 43,
    "reply": "Nothing changed. The crocodile stayed as it was.",
    "read": "The crocodiles",
    "worlds": [
@@ -3809,7 +3809,7 @@
   {
    "id": "r0048",
    "outcome": "executed",
-   "ms": 49,
+   "ms": 46,
    "reply": "Nothing changed. The crocodile stayed as it was.",
    "read": "Move the crocodiles in the lake",
    "worlds": [
@@ -3842,7 +3842,7 @@
   {
    "id": "r0049",
    "outcome": "refused",
-   "ms": 48,
+   "ms": 45,
    "reply": "Nothing changed. There is no house here.",
    "read": "Move the houses above the lake",
    "worlds": [
@@ -3875,7 +3875,7 @@
   {
    "id": "r0050",
    "outcome": "refused",
-   "ms": 44,
+   "ms": 42,
    "reply": "Nothing changed. There is no house here.",
    "read": "Move the houses above the water",
    "worlds": [
@@ -3908,7 +3908,7 @@
   {
    "id": "r0051",
    "outcome": "refused",
-   "ms": 734,
+   "ms": 676,
    "reply": "I understood \"a lake\", but not \"Hai like ma desent a water still before\", so I did nothing.",
    "read": "Hai like ma desent a water still before, a lake",
    "worlds": [
@@ -3941,7 +3941,7 @@
   {
    "id": "r0052",
    "outcome": "refused",
-   "ms": 45,
+   "ms": 41,
    "reply": "Nothing changed. There is no house here.",
    "read": "Move the houses higher",
    "worlds": [
@@ -3976,7 +3976,7 @@
   {
    "id": "r0053",
    "outcome": "executed",
-   "ms": 46,
+   "ms": 40,
    "reply": "I moved 2 crocodiles to the center.",
    "read": "Even higher",
    "worlds": [
@@ -4009,7 +4009,7 @@
   {
    "id": "r0054",
    "outcome": "refused",
-   "ms": 40,
+   "ms": 39,
    "reply": "Nothing changed. There is no house here.",
    "read": "Move the houses higher",
    "worlds": [
@@ -4044,7 +4044,7 @@
   {
    "id": "r0055",
    "outcome": "executed",
-   "ms": 44,
+   "ms": 41,
    "reply": "I moved 2 crocodiles to the bottom.",
    "read": "Move the crocodiles lower",
    "worlds": [
@@ -4079,7 +4079,7 @@
   {
    "id": "r0056",
    "outcome": "refused",
-   "ms": 84,
+   "ms": 77,
    "reply": "Nothing changed. There is no grass here.",
    "read": "Put grass on under houses",
    "worlds": [
@@ -4112,7 +4112,7 @@
   {
    "id": "r0057",
    "outcome": "refused",
-   "ms": 42,
+   "ms": 38,
    "reply": "Nothing changed. There is no grass here.",
    "read": "Put the grass on under houses",
    "worlds": [
@@ -4145,7 +4145,7 @@
   {
    "id": "r0058",
    "outcome": "executed",
-   "ms": 350,
+   "ms": 320,
    "reply": "I added a blue sky. I added a sun. I assumed bottom for the place.",
    "read": "Put a blue sky and a sun",
    "worlds": [
@@ -4178,7 +4178,7 @@
   {
    "id": "r0059",
    "outcome": "refused",
-   "ms": 652,
+   "ms": 594,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "Not over the water",
    "worlds": [
@@ -4213,7 +4213,7 @@
   {
    "id": "r0060",
    "outcome": "asked",
-   "ms": 44,
+   "ms": 39,
    "reply": "Nothing changed. Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\".",
    "read": "Put a sky and a sun",
    "worlds": [
@@ -4246,7 +4246,7 @@
   {
    "id": "r0061",
    "outcome": "refused",
-   "ms": 41,
+   "ms": 45,
    "reply": "Nothing changed. There is no grass here.",
    "read": "Put the grass under houses",
    "worlds": [
@@ -4279,7 +4279,7 @@
   {
    "id": "r0062",
    "outcome": "executed",
-   "ms": 212,
+   "ms": 187,
    "reply": "I added 3 grasses.",
    "read": "Put some grass",
    "worlds": [
@@ -4312,7 +4312,7 @@
   {
    "id": "r0063",
    "outcome": "executed",
-   "ms": 205,
+   "ms": 180,
    "reply": "I made it again, the way you said. I added a lake.",
    "read": "But leave the lake",
    "worlds": [
@@ -4345,7 +4345,7 @@
   {
    "id": "r0064",
    "outcome": "asked",
-   "ms": 44,
+   "ms": 35,
    "reply": "Nothing changed. Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\".",
    "read": "Put a lake too",
    "worlds": [
@@ -4380,7 +4380,7 @@
   {
    "id": "r0065",
    "outcome": "refused",
-   "ms": 62,
+   "ms": 57,
    "reply": "Nothing changed. There is no house here.",
    "read": "Move the first house further to the left and lower",
    "worlds": [
@@ -4413,7 +4413,7 @@
   {
    "id": "r0066",
    "outcome": "executed",
-   "ms": 60,
+   "ms": 48,
    "reply": "I moved 2 grasses to the left. I moved the lake to the center.",
    "read": "Move it even further to the left",
    "worlds": [
@@ -4446,7 +4446,7 @@
   {
    "id": "r0067",
    "outcome": "refused",
-   "ms": 68,
+   "ms": 76,
    "reply": "Nothing changed. There is no house here.",
    "read": "Move the house in the middle further to the right",
    "worlds": [
@@ -4479,7 +4479,7 @@
   {
    "id": "r0068",
    "outcome": "refused",
-   "ms": 617,
+   "ms": 517,
    "reply": "I understood \"the one in the middle\", but not \"Not the first home\", so I did nothing.",
    "read": "Not the first home, the one in the middle",
    "worlds": [
@@ -4512,7 +4512,7 @@
   {
    "id": "r0069",
    "outcome": "refused",
-   "ms": 62,
+   "ms": 54,
    "reply": "Nothing changed. There is no house here.",
    "read": "Move the house on the right further to the right",
    "worlds": [
@@ -4545,7 +4545,7 @@
   {
    "id": "r0070",
    "outcome": "executed",
-   "ms": 419,
+   "ms": 354,
    "reply": "I added a garden. I added 5 flowers. I added 2 trees. I added a butterfly. I added 2 birds. I added a lake. I added a house. I added a cloud. I added a sun. I added a grass. I assumed 9 for the count.",
    "read": "Make a drawing with a lake, a duck, a villa, clouds, a sun, the grass",
    "worlds": [
@@ -4577,7 +4577,7 @@
   {
    "id": "r0071",
    "outcome": "executed",
-   "ms": 212,
+   "ms": 192,
    "reply": "I added a lake.",
    "read": "Draw a lake",
    "worlds": [
@@ -4609,7 +4609,7 @@
   {
    "id": "r0072",
    "outcome": "executed",
-   "ms": 207,
+   "ms": 197,
    "reply": "I added a bird.",
    "read": "Draw a duck",
    "worlds": [
@@ -4641,7 +4641,7 @@
   {
    "id": "r0073",
    "outcome": "refused",
-   "ms": 268,
+   "ms": 261,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "On the lake",
    "worlds": [
@@ -4673,7 +4673,7 @@
   {
    "id": "r0074",
    "outcome": "refused",
-   "ms": 48,
+   "ms": 43,
    "reply": "Nothing changed. There is no duck here.",
    "read": "Move a duck on the lake",
    "worlds": [
@@ -4705,7 +4705,7 @@
   {
    "id": "r0075",
    "outcome": "executed",
-   "ms": 259,
+   "ms": 224,
    "reply": "I added a house.",
    "read": "Draw a villa",
    "worlds": [
@@ -4737,7 +4737,7 @@
   {
    "id": "r0076",
    "outcome": "executed",
-   "ms": 210,
+   "ms": 195,
    "reply": "I added a house. I added 2 fish. I assumed make for the act.",
    "read": "A house and 2 fish",
    "worlds": [
@@ -4769,7 +4769,7 @@
   {
    "id": "r0077",
    "outcome": "executed",
-   "ms": 211,
+   "ms": 202,
    "reply": "I added a house.",
    "read": "Draw a house",
    "worlds": [
@@ -4801,7 +4801,7 @@
   {
    "id": "r0078",
    "outcome": "refused",
-   "ms": 263,
+   "ms": 245,
    "reply": "I did not understand \"pai\", \"moves\" here.",
    "read": "Pai moves the house on the ground",
    "worlds": [
@@ -4833,7 +4833,7 @@
   {
    "id": "r0079",
    "outcome": "refused",
-   "ms": 367,
+   "ms": 343,
    "reply": "I did not understand \"deauspa\" here.",
    "read": "Make the lake some grass deauspa",
    "worlds": [
@@ -4865,7 +4865,7 @@
   {
    "id": "r0080",
    "outcome": "refused",
-   "ms": 957,
+   "ms": 739,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "nu inlocui lacul, deasupra, ai loc",
    "worlds": [
@@ -4876,20 +4876,20 @@
    ],
    "pos": 10,
    "tk": {
-    "total": 399067,
+    "total": 379444,
     "sites": {
-     "matcher.backtrack": 117226,
+     "matcher.backtrack": 108601,
      "translate.frame": 61656,
-     "spell.edit": 39730,
-     "rules.pattern": 31181,
-     "learned.mem": 30797,
-     "matcher.attempt": 19115,
-     "emit.substituteEmit": 18094,
-     "interpreter.visit": 16830,
-     "knowledge.memo": 12214,
+     "learned.mem": 35170,
+     "rules.pattern": 29101,
+     "spell.edit": 26511,
+     "interpreter.visit": 18942,
+     "matcher.attempt": 18014,
+     "emit.substituteEmit": 16932,
+     "knowledge.memo": 13653,
      "meta.worlds.near": 9297,
      "scene.edit": 6981,
-     "index.run": 5788
+     "index.run": 5424
     }
    },
    "verdict": "open"
@@ -4897,7 +4897,7 @@
   {
    "id": "r0081",
    "outcome": "refused",
-   "ms": 895,
+   "ms": 831,
    "reply": "I did not understand \"voila\", \"ta\", \"da\", \"makes\", \"nonsenses\", \"oricum\" here.",
    "read": "You should change this voila and ta-da makes only nonsenses oricum like",
    "worlds": [
@@ -4908,20 +4908,20 @@
    ],
    "pos": 11,
    "tk": {
-    "total": 301124,
+    "total": 301338,
     "sites": {
      "translate.frame": 104348,
-     "matcher.backtrack": 65952,
+     "matcher.backtrack": 66099,
      "spell.edit": 48736,
      "candidates.repair": 23980,
-     "rules.pattern": 13439,
+     "rules.pattern": 13467,
      "meta.worlds.near": 12144,
      "scene.edit": 8439,
-     "matcher.attempt": 7582,
-     "normalize.push3": 3597,
+     "matcher.attempt": 7610,
+     "normalize.push3": 3602,
      "translate.tokenize": 2256,
      "emit.substituteEmit": 1768,
-     "index.splitClauses": 1160
+     "index.splitClauses": 1162
     }
    },
    "verdict": "open"
@@ -4929,7 +4929,7 @@
   {
    "id": "r0082",
    "outcome": "not_understood",
-   "ms": 562,
+   "ms": 550,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\". I cannot talk",
    "read": "How does ajuns have a open the game to be chess? i ridicol",
    "worlds": [],
@@ -4940,20 +4940,20 @@
    ],
    "pos": 12,
    "tk": {
-    "total": 261490,
+    "total": 255790,
     "sites": {
-     "matcher.backtrack": 75475,
-     "spell.edit": 43846,
+     "matcher.backtrack": 74525,
+     "spell.edit": 41406,
      "candidates.repair": 32385,
      "meta.worlds.near": 27584,
      "translate.frame": 26211,
-     "rules.pattern": 16889,
-     "matcher.attempt": 12678,
+     "rules.pattern": 16262,
+     "matcher.attempt": 12293,
      "scene.edit": 10432,
-     "normalize.push3": 2874,
      "translate.tokenize": 2530,
-     "index.splitClauses": 1467,
-     "open-words.place": 1421
+     "normalize.push3": 2264,
+     "open-words.place": 1375,
+     "index.splitClauses": 1079
     }
    },
    "verdict": "open"
@@ -4961,7 +4961,7 @@
   {
    "id": "r0083",
    "outcome": "refused",
-   "ms": 699,
+   "ms": 741,
    "reply": "I understood \"a sun\", but not \"Make a cel with 5 clouds\", so I did nothing.",
    "read": "Make a cel with 5 clouds and a sun",
    "worlds": [
@@ -4993,7 +4993,7 @@
   {
    "id": "r0084",
    "outcome": "executed",
-   "ms": 192,
+   "ms": 201,
    "reply": "I added a sky. I added 5 clouds. I assumed make for the act. I assumed blue for the colour.",
    "read": "A sky with 5 clouds",
    "worlds": [
@@ -5025,7 +5025,7 @@
   {
    "id": "r0085",
    "outcome": "refused",
-   "ms": 187,
+   "ms": 191,
    "reply": "I cannot send cloud in the drawing yet.",
    "read": "Give 5 clouds",
    "worlds": [
@@ -5057,7 +5057,7 @@
   {
    "id": "r0086",
    "outcome": "executed",
-   "ms": 200,
+   "ms": 204,
    "reply": "I added a sun. I assumed make for the act.",
    "read": "A sun",
    "worlds": [
@@ -5089,7 +5089,7 @@
   {
    "id": "r0087",
    "outcome": "executed",
-   "ms": 196,
+   "ms": 200,
    "reply": "I added a sun.",
    "read": "Draw a sun",
    "worlds": [
@@ -5121,7 +5121,7 @@
   {
    "id": "r0088",
    "outcome": "refused",
-   "ms": 549,
+   "ms": 536,
    "reply": "I understood \"Move the sun more up\", but not \"why is it to put like this down bu default\", so I did nothing.",
    "read": "Move the sun more up, why is it to put like this down bu default?",
    "worlds": [
@@ -5132,20 +5132,20 @@
    ],
    "pos": 18,
    "tk": {
-    "total": 139857,
+    "total": 137947,
     "sites": {
-     "matcher.backtrack": 44226,
+     "matcher.backtrack": 43571,
      "translate.frame": 33720,
-     "rules.pattern": 8409,
-     "emit.substituteEmit": 7398,
-     "matcher.attempt": 6140,
+     "rules.pattern": 8306,
+     "emit.substituteEmit": 7122,
+     "matcher.attempt": 6054,
      "learned.mem": 5637,
      "candidates.repair": 4949,
-     "interpreter.visit": 4158,
-     "index.readString": 2558,
+     "interpreter.visit": 4026,
      "spell.edit": 2545,
      "knowledge.memo": 2539,
-     "index.run": 2387
+     "index.readString": 2443,
+     "index.run": 2299
     }
    },
    "verdict": "open"
@@ -5153,7 +5153,7 @@
   {
    "id": "r0089",
    "outcome": "refused",
-   "ms": 104,
+   "ms": 98,
    "reply": "Nothing changed. The sky is already blue.",
    "read": "Make the sky blue",
    "worlds": [
@@ -5185,7 +5185,7 @@
   {
    "id": "r0090",
    "outcome": "executed",
-   "ms": 214,
+   "ms": 207,
    "reply": "I added a lake.",
    "read": "Make a small lake to the left too",
    "worlds": [
@@ -5217,7 +5217,7 @@
   {
    "id": "r0091",
    "outcome": "refused",
-   "ms": 319,
+   "ms": 321,
    "reply": "I understood \"a pond\", but not \"Deseneaa a small lake\", so I did nothing.",
    "read": "Deseneaa a small lake, a pond",
    "worlds": [
@@ -5249,7 +5249,7 @@
   {
    "id": "r0092",
    "outcome": "executed",
-   "ms": 245,
+   "ms": 244,
    "reply": "I added a swing.",
    "read": "Draw a swing",
    "worlds": [
@@ -5281,7 +5281,7 @@
   {
    "id": "r0093",
    "outcome": "executed",
-   "ms": 230,
+   "ms": 209,
    "reply": "I added a child. I could not do on the swing: there is no place swing here.",
    "read": "Draw a child on the swing",
    "worlds": [
@@ -5313,7 +5313,7 @@
   {
    "id": "r0094",
    "outcome": "other_world",
-   "ms": 474,
+   "ms": 333,
    "reply": "OK, more down, stay on the swing not him.",
    "read": "More down, stay on the swing not him",
    "worlds": [
@@ -5324,20 +5324,20 @@
    ],
    "pos": 24,
    "tk": {
-    "total": 92213,
+    "total": 88252,
     "sites": {
      "translate.frame": 34970,
-     "matcher.backtrack": 15352,
+     "matcher.backtrack": 14381,
      "facts.index": 9895,
-     "spell.edit": 7399,
-     "rules.pattern": 4993,
-     "emit.substituteEmit": 3316,
+     "spell.edit": 6464,
+     "rules.pattern": 4652,
      "candidates.repair": 3119,
-     "matcher.attempt": 2439,
-     "interpreter.visit": 2244,
-     "index.run": 1054,
-     "normalize.push3": 897,
-     "index.readString": 780
+     "emit.substituteEmit": 3076,
+     "matcher.attempt": 2232,
+     "interpreter.visit": 1716,
+     "index.run": 980,
+     "normalize.push3": 772,
+     "index.readString": 760
     }
    },
    "verdict": "open"
@@ -5345,7 +5345,7 @@
   {
    "id": "r0095",
    "outcome": "refused",
-   "ms": 735,
+   "ms": 650,
    "reply": "I understood \"to the left\", but not \"Move the child linga a swing\", so I did nothing.",
    "read": "Move the child linga a swing, to the left",
    "worlds": [
@@ -5356,7 +5356,7 @@
    ],
    "pos": 25,
    "tk": {
-    "total": 186818,
+    "total": 186832,
     "sites": {
      "translate.frame": 112296,
      "matcher.backtrack": 19662,
@@ -5377,7 +5377,7 @@
   {
    "id": "r0096",
    "outcome": "refused",
-   "ms": 609,
+   "ms": 605,
    "reply": "I did not understand \"deseneat\", \"previous\" here.",
    "read": "Move the child deseneat previous to the left",
    "worlds": [
@@ -5409,7 +5409,7 @@
   {
    "id": "r0097",
    "outcome": "executed",
-   "ms": 74,
+   "ms": 71,
    "reply": "I moved the child to the left.",
    "read": "Move the child to the left",
    "worlds": [
@@ -5441,7 +5441,7 @@
   {
    "id": "r0098",
    "outcome": "executed",
-   "ms": 69,
+   "ms": 65,
    "reply": "I put the child on the grass.",
    "read": "Move the child on the grass",
    "worlds": [
@@ -5473,7 +5473,7 @@
   {
    "id": "r0099",
    "outcome": "refused",
-   "ms": 211,
+   "ms": 212,
    "reply": "Nothing changed. I have no drawing of a girl yet.",
    "read": "Make a girl too",
    "worlds": [
@@ -5505,7 +5505,7 @@
   {
    "id": "r0100",
    "outcome": "refused",
-   "ms": 466,
+   "ms": 478,
    "reply": "I did not understand \"linga\" here.",
    "read": "Move a girl linga a boy",
    "worlds": [
@@ -5537,7 +5537,7 @@
   {
    "id": "r0101",
    "outcome": "refused",
-   "ms": 68,
+   "ms": 69,
    "reply": "Nothing changed. There is no girl here. I could not do of the house: this world does not take about for place.",
    "read": "Move a girl in the girl of the house",
    "worlds": [
@@ -5569,7 +5569,7 @@
   {
    "id": "r0102",
    "outcome": "refused",
-   "ms": 565,
+   "ms": 682,
    "reply": "I did not understand \"draw\", \"still\" here.",
    "read": "Did a girl not draw you still before?",
    "worlds": [
@@ -5601,7 +5601,7 @@
   {
    "id": "r0103",
    "outcome": "refused",
-   "ms": 532,
+   "ms": 921,
    "reply": "I understood \"I have wrong a girl\", but not \"Feitia said\", so I did nothing.",
    "read": "Feitia said, I have wrong a girl",
    "worlds": [
@@ -5633,7 +5633,7 @@
   {
    "id": "r0104",
    "outcome": "executed",
-   "ms": 171,
+   "ms": 359,
    "reply": "I put 2 fish on the sky.",
    "read": "move all the fish on the sky",
    "worlds": [
@@ -5665,7 +5665,7 @@
   {
    "id": "r0105",
    "outcome": "refused",
-   "ms": 72,
+   "ms": 109,
    "reply": "Nothing changed. There is no girl here. I could not do of the house: this world does not take about for place.",
    "read": "Move a girl in the girl of the house",
    "worlds": [
@@ -5697,7 +5697,7 @@
   {
    "id": "r0106",
    "outcome": "refused",
-   "ms": 66,
+   "ms": 175,
    "reply": "Nothing changed. There is no girl here. I could not do of the house: this world does not take about for place.",
    "read": "Move the girl in the girl of the house",
    "worlds": [
@@ -5729,7 +5729,7 @@
   {
    "id": "r0107",
    "outcome": "refused",
-   "ms": 453,
+   "ms": 861,
    "reply": "I did not understand \"linga\" here.",
    "read": "Make a grandfather linga a duck",
    "worlds": [
@@ -5740,20 +5740,20 @@
    ],
    "pos": 37,
    "tk": {
-    "total": 106178,
+    "total": 101874,
     "sites": {
-     "learned.mem": 16926,
+     "learned.mem": 15192,
      "translate.frame": 13152,
-     "knowledge.memo": 11846,
-     "matcher.backtrack": 10870,
-     "interpreter.visit": 10806,
-     "spell.edit": 8888,
+     "knowledge.memo": 11222,
+     "spell.edit": 11114,
+     "matcher.backtrack": 10816,
+     "interpreter.visit": 8574,
      "meta.worlds.near": 6938,
-     "art.place": 5443,
+     "art.place": 5435,
      "scene.edit": 3593,
      "candidates.repair": 3111,
-     "emit.substituteEmit": 2640,
-     "rules.pattern": 1428
+     "emit.substituteEmit": 1994,
+     "rules.pattern": 1400
     }
    },
    "verdict": "open"
@@ -5761,7 +5761,7 @@
   {
    "id": "r0108",
    "outcome": "refused",
-   "ms": 197,
+   "ms": 868,
    "reply": "Nothing changed. I have no drawing of a grandfather yet.",
    "read": "Draw a grandfather",
    "worlds": [
@@ -5793,7 +5793,7 @@
   {
    "id": "r0109",
    "outcome": "executed",
-   "ms": 244,
+   "ms": 736,
    "reply": "I added a goat.",
    "read": "Draw a goat",
    "worlds": [
@@ -5825,7 +5825,7 @@
   {
    "id": "r0110",
    "outcome": "executed",
-   "ms": 209,
+   "ms": 499,
    "reply": "I added a goat.",
    "read": "Draw a goat",
    "worlds": [
@@ -5857,7 +5857,7 @@
   {
    "id": "r0111",
    "outcome": "refused",
-   "ms": 552,
+   "ms": 1085,
    "reply": "I did not understand \"zoboara\", \"fixeaza\" here.",
    "read": "The goat zoboara, fixeaza",
    "worlds": [
@@ -5889,7 +5889,7 @@
   {
    "id": "r0112",
    "outcome": "refused",
-   "ms": 320,
+   "ms": 484,
    "reply": "I did not understand \"linga\" here.",
    "read": "Move the goat linga a duck",
    "worlds": [
@@ -5921,7 +5921,7 @@
   {
    "id": "r0113",
    "outcome": "refused",
-   "ms": 55,
+   "ms": 74,
    "reply": "Which goat? There are 2.",
    "read": "Move the goat lower",
    "worlds": [
@@ -5953,7 +5953,7 @@
   {
    "id": "r0114",
    "outcome": "refused",
-   "ms": 357,
+   "ms": 475,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "Further to the right",
    "worlds": [
@@ -5985,7 +5985,7 @@
   {
    "id": "r0115",
    "outcome": "refused",
-   "ms": 65,
+   "ms": 90,
    "reply": "Which goat? There are 2.",
    "read": "Move the goat further to the right",
    "worlds": [
@@ -6017,7 +6017,7 @@
   {
    "id": "r0116",
    "outcome": "refused",
-   "ms": 70,
+   "ms": 111,
    "reply": "Which goat? There are 2.",
    "read": "Move the goat lower and further to the left",
    "worlds": [
@@ -6049,7 +6049,7 @@
   {
    "id": "r0117",
    "outcome": "executed",
-   "ms": 219,
+   "ms": 293,
    "reply": "I added a donkey. I could not do on the grass: there is no place grass here.",
    "read": "Draw a donkey, but too to not fly, on the grass",
    "worlds": [
@@ -6081,7 +6081,7 @@
   {
    "id": "r0118",
    "outcome": "executed",
-   "ms": 194,
+   "ms": 257,
    "reply": "I added a donkey.",
    "read": "Draw a donkey",
    "worlds": [
@@ -6113,7 +6113,7 @@
   {
    "id": "r0119",
    "outcome": "executed",
-   "ms": 250,
+   "ms": 307,
    "reply": "I added a cow.",
    "read": "Draw a cow",
    "worlds": [
@@ -6145,7 +6145,7 @@
   {
    "id": "r0120",
    "outcome": "refused",
-   "ms": 1330,
+   "ms": 1759,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "muta vaca mai jos, sa nu mai zboare",
    "worlds": [
@@ -6156,20 +6156,20 @@
    ],
    "pos": 50,
    "tk": {
-    "total": 620758,
+    "total": 669077,
     "sites": {
-     "matcher.backtrack": 331722,
-     "rules.pattern": 102994,
+     "matcher.backtrack": 354791,
+     "rules.pattern": 110524,
      "translate.frame": 61425,
-     "spell.edit": 48283,
-     "matcher.attempt": 46463,
-     "normalize.push3": 4871,
-     "open-words.place": 4645,
+     "spell.edit": 56861,
+     "matcher.attempt": 50279,
+     "normalize.push3": 5435,
+     "open-words.place": 4686,
      "meta.worlds.near": 4504,
-     "index.splitClauses": 2820,
+     "index.splitClauses": 3188,
      "scene.edit": 2441,
-     "rules.readgroup": 2039,
-     "normalize.span": 1238
+     "rules.readgroup": 2358,
+     "normalize.span": 1391
     }
    },
    "verdict": "open"
@@ -6177,7 +6177,7 @@
   {
    "id": "r0121",
    "outcome": "refused",
-   "ms": 91,
+   "ms": 112,
    "reply": "I did not understand \"answer\" here.",
    "read": "Why did you not answer?",
    "worlds": [
@@ -6209,7 +6209,7 @@
   {
    "id": "r0122",
    "outcome": "executed",
-   "ms": 60,
+   "ms": 67,
    "reply": "I moved the cow to the corner.",
    "read": "Move the cow lower",
    "worlds": [
@@ -6241,7 +6241,7 @@
   {
    "id": "r0123",
    "outcome": "executed",
-   "ms": 56,
+   "ms": 66,
    "reply": "I moved the cow to the down.",
    "read": "Even lower",
    "worlds": [
@@ -6273,7 +6273,7 @@
   {
    "id": "r0124",
    "outcome": "executed",
-   "ms": 78,
+   "ms": 89,
    "reply": "I moved the cow to the right.",
    "read": "Move the cow lower and further to the right",
    "worlds": [
@@ -6305,7 +6305,7 @@
   {
    "id": "r0125",
    "outcome": "refused",
-   "ms": 54,
+   "ms": 64,
    "reply": "Which house? There are 4.",
    "read": "Move the house higher",
    "worlds": [
@@ -6337,7 +6337,7 @@
   {
    "id": "r0126",
    "outcome": "refused",
-   "ms": 84,
+   "ms": 92,
    "reply": "Nothing changed.",
    "read": "Move all the fish in different corners up",
    "worlds": [
@@ -6369,7 +6369,7 @@
   {
    "id": "r0127",
    "outcome": "executed",
-   "ms": 79,
+   "ms": 97,
    "reply": "I moved the fish to the corner.",
    "read": "Move a fish in the top left",
    "worlds": [
@@ -6401,7 +6401,7 @@
   {
    "id": "r0128",
    "outcome": "refused",
-   "ms": 56,
+   "ms": 65,
    "reply": "Nothing changed.",
    "read": "Further to the left",
    "worlds": [
@@ -6433,7 +6433,7 @@
   {
    "id": "r0129",
    "outcome": "executed",
-   "ms": 75,
+   "ms": 88,
    "reply": "I moved the fish to the right.",
    "read": "Move a fish in the corner on the right",
    "worlds": [
@@ -6465,7 +6465,7 @@
   {
    "id": "r0130",
    "outcome": "refused",
-   "ms": 86,
+   "ms": 104,
    "reply": "Nothing changed. There is no He set to be a center, it is not right here.",
    "read": "He set to be a center, it is not right",
    "worlds": [
@@ -6497,7 +6497,7 @@
   {
    "id": "r0131",
    "outcome": "refused",
-   "ms": 493,
+   "ms": 594,
    "reply": "I did not understand \"fishes\", \"different\", \"coreners\" here.",
    "read": "Move the fishes in different coreners",
    "worlds": [
@@ -6529,7 +6529,7 @@
   {
    "id": "r0132",
    "outcome": "refused",
-   "ms": 205,
+   "ms": 234,
    "reply": "I did not understand \"fishes\" here.",
    "worlds": [
     "art.draw"
@@ -6560,7 +6560,7 @@
   {
    "id": "r0133",
    "outcome": "refused",
-   "ms": 209,
+   "ms": 226,
    "reply": "I did not understand \"eyegases\" here.",
    "worlds": [
     "ui.avatar"
@@ -6591,7 +6591,7 @@
   {
    "id": "r0134",
    "outcome": "executed",
-   "ms": 5,
+   "ms": 11,
    "reply": "I added glasses. I assumed square for the variant.",
    "worlds": [
     "ui.avatar"
@@ -6614,7 +6614,7 @@
   {
    "id": "r0135",
    "outcome": "executed",
-   "ms": 7,
+   "ms": 5,
    "reply": "Nothing changed. The eyes are already green.",
    "worlds": [
     "ui.avatar"
@@ -6639,7 +6639,7 @@
   {
    "id": "r0136",
    "outcome": "executed",
-   "ms": 4,
+   "ms": 5,
    "reply": "I removed the glasses.",
    "worlds": [
     "ui.avatar"
@@ -6663,7 +6663,7 @@
   {
    "id": "r0137",
    "outcome": "executed",
-   "ms": 4,
+   "ms": 9,
    "reply": "I added glasses. I assumed square for the variant.",
    "worlds": [
     "ui.avatar"
@@ -6688,7 +6688,7 @@
   {
    "id": "r0138",
    "outcome": "refused",
-   "ms": 6,
+   "ms": 5,
    "reply": "Nothing changed. The hat is already there.",
    "worlds": [
     "ui.avatar"
@@ -6710,7 +6710,7 @@
   {
    "id": "r0139",
    "outcome": "executed",
-   "ms": 27,
+   "ms": 33,
    "reply": "Monster is an imaginary creature usually having various human and animal parts. Dimension: kind; from: k.objects.object; group: mulberry-celebration-item. You find it on the ground.",
    "worlds": [
     "talk"
@@ -6741,7 +6741,7 @@
   {
    "id": "r0140",
    "outcome": "executed",
-   "ms": 161,
+   "ms": 199,
    "reply": "Here are more things you can say on the Talk tab: \"What does a lighthouse look like\", \"No, the other one\", \"What is a bicycle\", \"Make it red\" or \"What are the parts of a house\". I can tell what a thing can do, like a pen",
    "worlds": [
     "ui.help",
@@ -6774,7 +6774,7 @@
   {
    "id": "r0141",
    "outcome": "other_world",
-   "ms": 132,
+   "ms": 141,
    "reply": "I drew a red car.",
    "worlds": [
     "art.draw"
@@ -6805,7 +6805,7 @@
   {
    "id": "r0142",
    "outcome": "executed",
-   "ms": 165,
+   "ms": 186,
    "reply": "I added 10 cars.",
    "worlds": [
     "art.draw"
@@ -6835,7 +6835,7 @@
   {
    "id": "r0143",
    "outcome": "executed",
-   "ms": 388,
+   "ms": 448,
    "reply": "I added 12 cars. I could only make 12 of the 1000 cars you asked for. I assumed make for the act. I assumed 12 for the n.",
    "worlds": [
     "art.draw"
@@ -6864,7 +6864,7 @@
   {
    "id": "r0144",
    "outcome": "refused",
-   "ms": 263,
+   "ms": 394,
    "reply": "I did not understand \"colours\" here.",
    "worlds": [
     "art.draw"
@@ -6895,7 +6895,7 @@
   {
    "id": "r0145",
    "outcome": "refused",
-   "ms": 143,
+   "ms": 159,
    "reply": "I did not understand \"assign\", \"colour\" here.",
    "worlds": [
     "art.draw"
@@ -6926,7 +6926,7 @@
   {
    "id": "r0146",
    "outcome": "executed",
-   "ms": 34,
+   "ms": 35,
    "reply": "An elephant: five-toed pachyderm. Legs: 4; covering: skin; sound: trumpet; habitat: savanna and forest. It can swim. It cannot climb and fly. You find it on the ground or in the forest or in the savanna.",
    "worlds": [
     "talk"
@@ -6957,7 +6957,7 @@
   {
    "id": "r0147",
    "outcome": "other_world",
-   "ms": 112,
+   "ms": 117,
    "reply": "I drew 2 elephants.",
    "worlds": [
     "art.draw"
@@ -6988,7 +6988,7 @@
   {
    "id": "r0148",
    "outcome": "executed",
-   "ms": 50,
+   "ms": 51,
    "reply": "I do not know your name yet. Tell me: \"my name is ...\".",
    "worlds": [
     "kids.common"
@@ -7019,7 +7019,7 @@
   {
    "id": "r0149",
    "outcome": "other_world",
-   "ms": 389,
+   "ms": 435,
    "reply": "OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\".",
    "worlds": [
     "data.charts"
@@ -7029,10 +7029,10 @@
    ],
    "pos": 16,
    "tk": {
-    "total": 57505,
+    "total": 57086,
     "sites": {
      "matcher.backtrack": 16505,
-     "spell.edit": 9769,
+     "spell.edit": 9350,
      "meta.worlds.near": 6354,
      "scene.edit": 5922,
      "rules.pattern": 4059,
@@ -7050,7 +7050,7 @@
   {
    "id": "r0150",
    "outcome": "executed",
-   "ms": 207,
+   "ms": 221,
    "reply": "OK, a new empty bar chart called \"Chart 2\". Add data, for example: \"add apples 5\".",
    "worlds": [
     "data.charts"
@@ -7081,7 +7081,7 @@
   {
    "id": "r0151",
    "outcome": "not_understood",
-   "ms": 4,
+   "ms": 7,
    "reply": "You asked me to create a chart about the current discussion, so I did it. What I answered: OK, a new empty bar chart called \"Chart 2\". Add data, for example: \"add apples 5\".",
    "worlds": [],
    "statuses": [
@@ -7102,7 +7102,7 @@
   {
    "id": "r0152",
    "outcome": "refused",
-   "ms": 454,
+   "ms": 490,
    "reply": "I cannot make document in the documents yet.",
    "worlds": [
     "docs.editor"
@@ -7133,7 +7133,7 @@
   {
    "id": "r0153",
    "outcome": "refused",
-   "ms": 546,
+   "ms": 624,
    "reply": "I did not understand \"chnage\", \"tile\" here.",
    "worlds": [
     "docs.editor"
@@ -7164,7 +7164,7 @@
   {
    "id": "r0163",
    "outcome": "executed",
-   "ms": 75,
+   "ms": 86,
    "reply": "Here is Khartoum: capital of Sudan · 4.8 million people.",
    "worlds": [
     "geo.map"
@@ -7195,7 +7195,7 @@
   {
    "id": "r0164",
    "outcome": "executed",
-   "ms": 11,
+   "ms": 9,
    "reply": "I removed the hair back. I removed the cheeks. I removed the glasses. The face is a boy now. The face is angry now.",
    "worlds": [
     "ui.avatar"
@@ -7223,7 +7223,7 @@
   {
    "id": "r0165",
    "outcome": "refused",
-   "ms": 5,
+   "ms": 10,
    "reply": "Nothing changed. The hat is already there.",
    "worlds": [
     "ui.avatar"
@@ -7245,7 +7245,7 @@
   {
    "id": "r0166",
    "outcome": "executed",
-   "ms": 20,
+   "ms": 19,
    "reply": "Hello! What would you like to talk about?",
    "worlds": [
     "kids.common"
@@ -7276,7 +7276,7 @@
   {
    "id": "r0167",
    "outcome": "refused",
-   "ms": 119,
+   "ms": 134,
    "reply": "I did not understand \"mcdavatara\", \"human\" here.",
    "worlds": [
     "ui.avatar"
@@ -7286,20 +7286,20 @@
    ],
    "pos": 1,
    "tk": {
-    "total": 27102,
+    "total": 27923,
     "sites": {
-     "spell.edit": 21081,
-     "matcher.backtrack": 2719,
+     "spell.edit": 21862,
+     "matcher.backtrack": 2727,
      "meta.worlds.near": 1000,
-     "rules.pattern": 528,
-     "matcher.attempt": 510,
+     "rules.pattern": 531,
+     "matcher.attempt": 513,
      "scene.edit": 376,
-     "normalize.push3": 176,
+     "normalize.push3": 192,
      "scene.walk": 110,
      "wordpiece.end": 87,
      "acts.kind": 80,
      "interpreter.visit": 66,
-     "index.splitClauses": 44
+     "index.splitClauses": 48
     }
    },
    "verdict": null
@@ -7307,7 +7307,7 @@
   {
    "id": "r0168",
    "outcome": "refused",
-   "ms": 171,
+   "ms": 183,
    "reply": "I did not understand \"send\" here.",
    "read": "Make the avatar a person the avatar a person to send",
    "worlds": [
@@ -7339,7 +7339,7 @@
   {
    "id": "r0169",
    "outcome": "refused",
-   "ms": 131,
+   "ms": 142,
    "reply": "I did not understand \"human\" here.",
    "worlds": [
     "ui.avatar"
@@ -7370,7 +7370,7 @@
   {
    "id": "r0170",
    "outcome": "executed",
-   "ms": 7,
+   "ms": 6,
    "reply": "I added earrings. I removed the cheeks. I removed the hat. The face is a woman now. I assumed 3 for the count.",
    "worlds": [
     "ui.avatar"
@@ -7395,7 +7395,7 @@
   {
    "id": "r0171",
    "outcome": "executed",
-   "ms": 4,
+   "ms": 6,
    "reply": "Nothing changed. I assumed 3 for the count.",
    "worlds": [
     "ui.avatar"
@@ -7420,7 +7420,7 @@
   {
    "id": "r0172",
    "outcome": "executed",
-   "ms": 7,
+   "ms": 5,
    "reply": "The eyes are big now.",
    "worlds": [
     "ui.avatar"
@@ -7445,7 +7445,7 @@
   {
    "id": "r0173",
    "outcome": "executed",
-   "ms": 4,
+   "ms": 8,
    "reply": "The mouth is big now.",
    "worlds": [
     "ui.avatar"
@@ -7470,7 +7470,7 @@
   {
    "id": "r0174",
    "outcome": "refused",
-   "ms": 42,
+   "ms": 46,
    "reply": "I could not make that in the avatar.",
    "worlds": [
     "ui.avatar"
@@ -7501,7 +7501,7 @@
   {
    "id": "r0175",
    "outcome": "asked",
-   "ms": 3,
+   "ms": 7,
    "reply": "Nothing changed. To what value?",
    "worlds": [
     "ui.avatar"
@@ -7521,7 +7521,7 @@
   {
    "id": "r0176",
    "outcome": "executed",
-   "ms": 3,
+   "ms": 5,
    "reply": "Nothing changed. The mouth is already big. I assumed change for the act.",
    "worlds": [
     "ui.avatar"
@@ -7568,7 +7568,7 @@
   {
    "id": "r0178",
    "outcome": "refused",
-   "ms": 142,
+   "ms": 158,
    "reply": "I understood \"two chapters\", \"a paragraph\", but not \"add a header\", so I did nothing.",
    "worlds": [
     "docs.editor"
@@ -7599,7 +7599,7 @@
   {
    "id": "r0179",
    "outcome": "refused",
-   "ms": 4,
+   "ms": 7,
    "reply": "Nothing changed.",
    "worlds": [
     "docs.editor"
@@ -7620,7 +7620,7 @@
   {
    "id": "r0180",
    "outcome": "refused",
-   "ms": 53,
+   "ms": 56,
    "reply": "I did not understand \"text\" here.",
    "worlds": [
     "docs.editor"
@@ -7651,7 +7651,7 @@
   {
    "id": "r0181",
    "outcome": "other_world",
-   "ms": 118,
+   "ms": 137,
    "reply": "What should I play? For example a note, a chord or a song. I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Th",
    "worlds": [
     "media.music"
@@ -7662,19 +7662,19 @@
    ],
    "pos": 15,
    "tk": {
-    "total": 38904,
+    "total": 39130,
     "sites": {
-     "matcher.backtrack": 15383,
-     "spell.edit": 9301,
+     "matcher.backtrack": 15438,
+     "spell.edit": 9493,
      "meta.worlds.near": 5072,
-     "rules.pattern": 2134,
+     "rules.pattern": 2150,
      "scene.edit": 1920,
-     "matcher.attempt": 1791,
-     "normalize.push3": 744,
+     "matcher.attempt": 1807,
      "emit.substituteEmit": 720,
-     "index.splitClauses": 296,
+     "normalize.push3": 716,
+     "index.splitClauses": 284,
      "index.run": 204,
-     "normalize.span": 163,
+     "normalize.span": 157,
      "scene.walk": 140
     }
    },
@@ -7683,7 +7683,7 @@
   {
    "id": "r0182",
    "outcome": "not_understood",
-   "ms": 94,
+   "ms": 108,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -7691,10 +7691,10 @@
    ],
    "pos": 16,
    "tk": {
-    "total": 33022,
+    "total": 33374,
     "sites": {
      "matcher.backtrack": 21237,
-     "spell.edit": 4778,
+     "spell.edit": 5130,
      "rules.pattern": 3057,
      "matcher.attempt": 2593,
      "normalize.push3": 338,
@@ -7712,7 +7712,7 @@
   {
    "id": "r0183",
    "outcome": "not_understood",
-   "ms": 3,
+   "ms": 6,
    "reply": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -7741,7 +7741,7 @@
   {
    "id": "r0184",
    "outcome": "not_understood",
-   "ms": 4,
+   "ms": 3,
    "reply": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -7770,7 +7770,7 @@
   {
    "id": "r0185",
    "outcome": "not_understood",
-   "ms": 3,
+   "ms": 7,
    "reply": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -7799,7 +7799,7 @@
   {
    "id": "r0186",
    "outcome": "not_understood",
-   "ms": 3,
+   "ms": 4,
    "reply": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -7857,7 +7857,7 @@
   {
    "id": "r0188",
    "outcome": "not_understood",
-   "ms": 3,
+   "ms": 6,
    "reply": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -7886,7 +7886,7 @@
   {
    "id": "r0189",
    "outcome": "not_understood",
-   "ms": 140,
+   "ms": 155,
    "reply": "I am not sure how “new name” fits what we were doing. Please say the whole request.",
    "worlds": [],
    "statuses": [
@@ -7915,7 +7915,7 @@
   {
    "id": "r0190",
    "outcome": "not_understood",
-   "ms": 3,
+   "ms": 4,
    "reply": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -7944,7 +7944,7 @@
   {
    "id": "r0191",
    "outcome": "other_world",
-   "ms": 180,
+   "ms": 182,
    "reply": "I drew a yellow sun and a yellow house.",
    "worlds": [
     "art.draw"
@@ -7975,7 +7975,7 @@
   {
    "id": "r0192",
    "outcome": "other_world",
-   "ms": 1306,
+   "ms": 1446,
    "reply": "I did not catch what to remember. You can say \"a villa is a kind of house\", \"my dog is called Rex\", \"ducks can float\" or \"fish live in water\".",
    "worlds": [
     "session.things"
@@ -8006,7 +8006,7 @@
   {
    "id": "r0193",
    "outcome": "not_understood",
-   "ms": 148,
+   "ms": 159,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -8014,11 +8014,11 @@
    ],
    "pos": 27,
    "tk": {
-    "total": 32661,
+    "total": 32713,
     "sites": {
-     "matcher.backtrack": 20001,
-     "rules.pattern": 3800,
-     "matcher.attempt": 3472,
+     "matcher.backtrack": 20031,
+     "rules.pattern": 3812,
+     "matcher.attempt": 3482,
      "emit.substituteEmit": 1176,
      "spell.edit": 665,
      "normalize.push3": 557,
@@ -8035,7 +8035,7 @@
   {
    "id": "r0194",
    "outcome": "other_world",
-   "ms": 444,
+   "ms": 470,
    "reply": "OK, Tom has 15 apples. OK, Tom gave Ana 12 apples. Tom has 3 apples.",
    "worlds": [
     "kids.arith"
@@ -8066,7 +8066,7 @@
   {
    "id": "r0195",
    "outcome": "other_world",
-   "ms": 544,
+   "ms": 564,
    "reply": "OK, Tom has 5 apples. That does not add up. Tom only had 5 apples, so Tom cannot give away 8. Tom has 5 apples.",
    "worlds": [
     "kids.arith"
@@ -8098,7 +8098,7 @@
   {
    "id": "r0196",
    "outcome": "refused",
-   "ms": 31,
+   "ms": 32,
    "reply": "I did not understand that as something to do in the documents.",
    "worlds": [
     "docs.editor"
@@ -8129,7 +8129,7 @@
   {
    "id": "r0197",
    "outcome": "refused",
-   "ms": 124,
+   "ms": 128,
    "reply": "I cannot answer questions about the documents yet.",
    "worlds": [
     "docs.editor"
@@ -8160,7 +8160,7 @@
   {
    "id": "r0198",
    "outcome": "refused",
-   "ms": 23,
+   "ms": 26,
    "reply": "I did not understand \"line\" here.",
    "worlds": [
     "docs.editor"
@@ -8191,7 +8191,7 @@
   {
    "id": "r0199",
    "outcome": "refused",
-   "ms": 36,
+   "ms": 42,
    "reply": "I did not understand that as something to do in the documents.",
    "worlds": [
     "docs.editor"
@@ -8222,7 +8222,7 @@
   {
    "id": "r0200",
    "outcome": "refused",
-   "ms": 99,
+   "ms": 100,
    "reply": "I did not understand \"chester\" here.",
    "worlds": [
     "docs.editor"
@@ -8253,7 +8253,7 @@
   {
    "id": "r0201",
    "outcome": "other_world",
-   "ms": 253,
+   "ms": 246,
    "reply": "OK, Tom has 10 bees. OK, Tom lost 1 bee. Tom has 9 bees.",
    "worlds": [
     "kids.arith"
@@ -8263,20 +8263,20 @@
    ],
    "pos": 35,
    "tk": {
-    "total": 43878,
+    "total": 40961,
     "sites": {
-     "matcher.backtrack": 14233,
-     "spell.edit": 9813,
-     "emit.substituteEmit": 4668,
-     "rules.pattern": 2877,
-     "matcher.attempt": 2271,
-     "index.run": 1951,
-     "normalize.push3": 1241,
-     "sopworld.chase": 782,
-     "sopworld.negation": 712,
-     "sopworld.match": 655,
-     "index.skipWs": 455,
-     "index.splitClauses": 428
+     "matcher.backtrack": 13801,
+     "spell.edit": 7754,
+     "emit.substituteEmit": 4580,
+     "rules.pattern": 2804,
+     "matcher.attempt": 2206,
+     "index.run": 1912,
+     "normalize.push3": 1214,
+     "sopworld.chase": 773,
+     "sopworld.negation": 696,
+     "sopworld.match": 650,
+     "index.skipWs": 446,
+     "index.splitClauses": 412
     }
    },
    "verdict": null
@@ -8284,7 +8284,7 @@
   {
    "id": "r0202",
    "outcome": "executed",
-   "ms": 156,
+   "ms": 167,
    "reply": "I added a dark blue sky.",
    "worlds": [
     "art.draw"
@@ -8315,7 +8315,7 @@
   {
    "id": "r0203",
    "outcome": "executed",
-   "ms": 160,
+   "ms": 156,
    "reply": "I added 5 clouds. I added a sun.",
    "worlds": [
     "art.draw"
@@ -8344,7 +8344,7 @@
   {
    "id": "r0204",
    "outcome": "refused",
-   "ms": 85,
+   "ms": 96,
    "reply": "I did not understand \"un\", \"si\" here.",
    "worlds": [
     "art.draw"
@@ -8375,7 +8375,7 @@
   {
    "id": "r0205",
    "outcome": "other_world",
-   "ms": 47,
+   "ms": 48,
    "reply": "I don't know how many apples Sinica had at the start. Please tell me the starting number.",
    "worlds": [
     "kids.arith"
@@ -8406,7 +8406,7 @@
   {
    "id": "r0206",
    "outcome": "asked",
-   "ms": 142,
+   "ms": 148,
    "reply": "I took that as: where is Reseaercher. I don't know that yet.",
    "worlds": [
     "talk"
@@ -8437,7 +8437,7 @@
   {
    "id": "r0207",
    "outcome": "asked",
-   "ms": 123,
+   "ms": 131,
    "reply": "I took that as: where is Axiologic. I don't know that yet.",
    "worlds": [
     "talk"
@@ -8447,13 +8447,13 @@
    ],
    "pos": 41,
    "tk": {
-    "total": 35898,
+    "total": 34616,
     "sites": {
-     "spell.edit": 13536,
-     "matcher.backtrack": 9491,
+     "spell.edit": 12241,
+     "matcher.backtrack": 9496,
      "meta.worlds.near": 3920,
-     "rules.pattern": 2054,
-     "matcher.attempt": 1747,
+     "rules.pattern": 2055,
+     "matcher.attempt": 1748,
      "scene.edit": 1110,
      "emit.substituteEmit": 926,
      "scene.walk": 570,
@@ -8468,7 +8468,7 @@
   {
    "id": "r0208",
    "outcome": "other_world",
-   "ms": 66,
+   "ms": 65,
    "reply": "I can't count the apples yet, because I don't know how many everyone has. Please tell me, for example: Tom has 3 apples.",
    "worlds": [
     "kids.arith"
@@ -8528,7 +8528,7 @@
   {
    "id": "r0210",
    "outcome": "not_understood",
-   "ms": 114,
+   "ms": 116,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -8557,7 +8557,7 @@
   {
    "id": "r0211",
    "outcome": "not_understood",
-   "ms": 85,
+   "ms": 82,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -8586,7 +8586,7 @@
   {
    "id": "r0212",
    "outcome": "other_world",
-   "ms": 99,
+   "ms": 97,
    "reply": "I don't know how many apples Research had at the start. Please tell me the starting number.",
    "worlds": [
     "kids.arith"
@@ -8617,7 +8617,7 @@
   {
    "id": "r0213",
    "outcome": "other_world",
-   "ms": 119,
+   "ms": 128,
    "reply": "I can't count the apples yet, because I don't know how many everyone has. Please tell me, for example: Tom has 3 apples.",
    "worlds": [
     "kids.arith"
@@ -8679,7 +8679,7 @@
   {
    "id": "r0215",
    "outcome": "not_understood",
-   "ms": 1,
+   "ms": 2,
    "reply": "I don't know how many apples Nothing had at the start. Please tell me the starting number.",
    "worlds": [],
    "statuses": [
@@ -8730,7 +8730,7 @@
   {
    "id": "r0217",
    "outcome": "not_understood",
-   "ms": 4,
+   "ms": 3,
    "reply": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "worlds": [],
    "statuses": [
@@ -8759,7 +8759,7 @@
   {
    "id": "r0218",
    "outcome": "executed",
-   "ms": 154,
+   "ms": 153,
    "reply": "My name is PSys2.",
    "worlds": [
     "kids.common"
@@ -8769,11 +8769,11 @@
    ],
    "pos": 52,
    "tk": {
-    "total": 28321,
+    "total": 28337,
     "sites": {
-     "matcher.backtrack": 16265,
+     "matcher.backtrack": 16278,
      "rules.pattern": 3595,
-     "matcher.attempt": 3221,
+     "matcher.attempt": 3224,
      "emit.substituteEmit": 1298,
      "interpreter.visit": 528,
      "normalize.push3": 456,
@@ -8790,7 +8790,7 @@
   {
    "id": "r0219",
    "outcome": "executed",
-   "ms": 124,
+   "ms": 125,
    "reply": "I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know.",
    "worlds": [
     "kids.common"
@@ -8800,11 +8800,11 @@
    ],
    "pos": 53,
    "tk": {
-    "total": 23368,
+    "total": 23367,
     "sites": {
-     "matcher.backtrack": 13814,
-     "rules.pattern": 3070,
-     "matcher.attempt": 2775,
+     "matcher.backtrack": 13816,
+     "rules.pattern": 3065,
+     "matcher.attempt": 2777,
      "scene.walk": 611,
      "emit.substituteEmit": 592,
      "interpreter.visit": 528,
@@ -8821,7 +8821,7 @@
   {
    "id": "r0220",
    "outcome": "refused",
-   "ms": 354,
+   "ms": 336,
    "reply": "I did not understand \"emoji\" here.",
    "worlds": [
     "ui.avatar"
@@ -8897,7 +8897,7 @@
   {
    "id": "r0223",
    "outcome": "refused",
-   "ms": 7,
+   "ms": 6,
    "reply": "Nothing changed. There is no face here.",
    "worlds": [
     "ui.avatar"
@@ -8919,7 +8919,7 @@
   {
    "id": "r0224",
    "outcome": "executed",
-   "ms": 19,
+   "ms": 17,
    "reply": "You are welcome.",
    "worlds": [
     "kids.common"
@@ -8950,7 +8950,7 @@
   {
    "id": "r0225",
    "outcome": "refused",
-   "ms": 2420,
+   "ms": 2429,
    "reply": "I understood \"what auestions do you have\", but not \"coming back to knowning me\", so I did nothing.",
    "worlds": [
     "ui.avatar"
@@ -8981,7 +8981,7 @@
   {
    "id": "r0226",
    "outcome": "refused",
-   "ms": 198,
+   "ms": 195,
    "reply": "I did not understand \"title\", \"1\" here.",
    "worlds": [
     "docs.editor"
@@ -9095,7 +9095,7 @@
   {
    "id": "r0230",
    "outcome": "executed",
-   "ms": 10,
+   "ms": 11,
    "reply": "Playing \"Ode to Joy\" again on the piano at 108 beats per minute.",
    "worlds": [
     "media.music"
@@ -9157,7 +9157,7 @@
   {
    "id": "r0232",
    "outcome": "executed",
-   "ms": 7,
+   "ms": 10,
    "reply": "Playing \"Ode to Joy\" again on the piano at 108 beats per minute.",
    "worlds": [
     "media.music"
@@ -9188,7 +9188,7 @@
   {
    "id": "r0233",
    "outcome": "executed",
-   "ms": 65,
+   "ms": 61,
    "reply": "Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major.",
    "worlds": [
     "media.music"
@@ -9219,7 +9219,7 @@
   {
    "id": "r0234",
    "outcome": "executed",
-   "ms": 8,
+   "ms": 10,
    "reply": "I added a red circle.",
    "worlds": [
     "diagram.sketch"
@@ -9247,7 +9247,7 @@
   {
    "id": "r0235",
    "outcome": "executed",
-   "ms": 12,
+   "ms": 16,
    "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed tree for the layout.",
    "worlds": [
     "diagram.sketch"
@@ -9275,7 +9275,7 @@
   {
    "id": "r0236",
    "outcome": "refused",
-   "ms": 83,
+   "ms": 88,
    "reply": "I did not understand \"liek\", \"shape\" here.",
    "worlds": [
     "diagram.sketch"
@@ -9306,7 +9306,7 @@
   {
    "id": "r0237",
    "outcome": "executed",
-   "ms": 12,
+   "ms": 17,
    "reply": "I added a rectangle. I assumed white for the colour. I assumed default for the size.",
    "worlds": [
     "diagram.sketch"
@@ -9333,7 +9333,7 @@
   {
    "id": "r0238",
    "outcome": "refused",
-   "ms": 8,
+   "ms": 6,
    "reply": "Nothing changed. I could not do connect: this world does not connect.",
    "worlds": [
     "diagram.sketch"
@@ -9355,7 +9355,7 @@
   {
    "id": "r0239",
    "outcome": "refused",
-   "ms": 96,
+   "ms": 103,
    "reply": "I did not understand \"1\" here.",
    "worlds": [
     "diagram.sketch"
@@ -9386,7 +9386,7 @@
   {
    "id": "r0240",
    "outcome": "refused",
-   "ms": 64,
+   "ms": 56,
    "reply": "I did not understand \"label\", \"1\" here.",
    "worlds": [
     "diagram.sketch"
@@ -9417,7 +9417,7 @@
   {
    "id": "r0241",
    "outcome": "refused",
-   "ms": 10,
+   "ms": 9,
    "reply": "Which link? There are 6.",
    "worlds": [
     "diagram.sketch"
@@ -9439,7 +9439,7 @@
   {
    "id": "r0242",
    "outcome": "refused",
-   "ms": 508,
+   "ms": 522,
    "reply": "I did not understand \"1\" here.",
    "worlds": [
     "diagram.sketch"
@@ -9449,7 +9449,7 @@
    ],
    "pos": 8,
    "tk": {
-    "total": 102125,
+    "total": 102175,
     "sites": {
      "matcher.backtrack": 28507,
      "meta.worlds.near": 26230,
@@ -9470,7 +9470,7 @@
   {
    "id": "r0243",
    "outcome": "refused",
-   "ms": 737,
+   "ms": 729,
    "reply": "I understood \"reactanle1 as label1\", but not \"label the arraw between circle1\", so I did nothing.",
    "worlds": [
     "diagram.sketch"
@@ -9480,15 +9480,15 @@
    ],
    "pos": 9,
    "tk": {
-    "total": 168861,
+    "total": 148823,
     "sites": {
-     "matcher.backtrack": 75484,
+     "matcher.backtrack": 63507,
      "meta.worlds.near": 19733,
-     "rules.pattern": 16339,
-     "spell.edit": 12516,
+     "rules.pattern": 12701,
      "scene.edit": 12284,
+     "spell.edit": 9596,
      "emit.substituteEmit": 9202,
-     "matcher.attempt": 7844,
+     "matcher.attempt": 6455,
      "index.readString": 4569,
      "index.run": 2840,
      "normalize.push3": 1626,
@@ -9501,7 +9501,7 @@
   {
    "id": "r0244",
    "outcome": "refused",
-   "ms": 199,
+   "ms": 209,
    "reply": "I did not understand \"legs\" here.",
    "worlds": [
     "ui.avatar"
@@ -9511,20 +9511,20 @@
    ],
    "pos": 0,
    "tk": {
-    "total": 43349,
+    "total": 46200,
     "sites": {
-     "matcher.backtrack": 18798,
-     "spell.edit": 11691,
-     "rules.pattern": 5501,
-     "matcher.attempt": 3856,
-     "normalize.push3": 966,
-     "index.splitClauses": 768,
-     "normalize.span": 245,
+     "matcher.backtrack": 20339,
+     "spell.edit": 11888,
+     "rules.pattern": 6119,
+     "matcher.attempt": 4342,
+     "normalize.push3": 969,
+     "index.splitClauses": 770,
+     "normalize.span": 246,
      "open-words.place": 244,
      "normalize.gameNames": 118,
      "index.visit": 117,
      "scene.walk": 108,
-     "rules.sentence": 96
+     "rules.sentence": 97
     }
    },
    "verdict": null
@@ -9563,7 +9563,7 @@
   {
    "id": "r0246",
    "outcome": "refused",
-   "ms": 227,
+   "ms": 241,
    "reply": "I did not understand \"cartoon\" here.",
    "worlds": [
     "ui.avatar"
@@ -9594,7 +9594,7 @@
   {
    "id": "r0247",
    "outcome": "refused",
-   "ms": 144,
+   "ms": 146,
    "reply": "I did not understand \"becoming\", \"emoji\" here.",
    "worlds": [
     "ui.avatar"
@@ -9604,19 +9604,19 @@
    ],
    "pos": 3,
    "tk": {
-    "total": 23713,
+    "total": 25730,
     "sites": {
-     "spell.edit": 12368,
-     "matcher.backtrack": 5500,
+     "spell.edit": 14383,
+     "matcher.backtrack": 5484,
      "meta.worlds.near": 2536,
-     "rules.pattern": 1073,
-     "matcher.attempt": 1026,
+     "rules.pattern": 1067,
+     "matcher.attempt": 1020,
      "scene.edit": 336,
-     "normalize.push3": 145,
+     "normalize.push3": 159,
      "scene.walk": 108,
+     "index.splitClauses": 80,
      "acts.kind": 80,
-     "open-words.place": 74,
-     "index.splitClauses": 72,
+     "open-words.place": 75,
      "interpreter.visit": 66
     }
    },
@@ -9625,7 +9625,7 @@
   {
    "id": "r0248",
    "outcome": "refused",
-   "ms": 92,
+   "ms": 94,
    "reply": "I did not understand \"emoji\" here.",
    "worlds": [
     "ui.avatar"
@@ -9635,20 +9635,20 @@
    ],
    "pos": 4,
    "tk": {
-    "total": 12084,
+    "total": 12655,
     "sites": {
      "matcher.backtrack": 4143,
-     "spell.edit": 2714,
+     "spell.edit": 3251,
      "meta.worlds.near": 2536,
      "rules.pattern": 814,
      "matcher.attempt": 771,
      "scene.edit": 336,
-     "normalize.push3": 138,
+     "normalize.push3": 156,
      "scene.walk": 108,
      "acts.kind": 80,
      "interpreter.visit": 66,
-     "open-words.place": 61,
-     "index.splitClauses": 42
+     "open-words.place": 62,
+     "index.splitClauses": 48
     }
    },
    "verdict": null
@@ -9656,7 +9656,7 @@
   {
    "id": "r0249",
    "outcome": "refused",
-   "ms": 90,
+   "ms": 93,
    "reply": "I did not understand \"te\" here.",
    "read": "Make te a woman",
    "worlds": [
@@ -9688,7 +9688,7 @@
   {
    "id": "r0250",
    "outcome": "refused",
-   "ms": 111,
+   "ms": 116,
    "reply": "I did not understand \"boi\" here.",
    "read": "Be in boi",
    "worlds": [
@@ -9699,20 +9699,20 @@
    ],
    "pos": 6,
    "tk": {
-    "total": 16905,
+    "total": 17584,
     "sites": {
      "translate.frame": 7857,
-     "matcher.backtrack": 3759,
-     "spell.edit": 1107,
-     "rules.pattern": 934,
-     "matcher.attempt": 661,
+     "matcher.backtrack": 3890,
+     "spell.edit": 1472,
+     "rules.pattern": 994,
+     "matcher.attempt": 708,
      "emit.substituteEmit": 412,
+     "normalize.push3": 283,
      "translate.tokenize": 280,
-     "normalize.push3": 253,
-     "index.splitClauses": 160,
+     "index.splitClauses": 180,
      "index.run": 133,
      "scene.walk": 108,
-     "normalize.span": 84
+     "normalize.span": 94
     }
    },
    "verdict": null
@@ -9720,7 +9720,7 @@
   {
    "id": "r0251",
    "outcome": "refused",
-   "ms": 55,
+   "ms": 62,
    "reply": "I cannot answer questions about the avatar yet.",
    "read": "Be a boy",
    "worlds": [
@@ -9752,7 +9752,7 @@
   {
    "id": "r0252",
    "outcome": "refused",
-   "ms": 135,
+   "ms": 138,
    "reply": "I did not understand \"glad\" here.",
    "read": "Be glad",
    "worlds": [
@@ -9763,20 +9763,20 @@
    ],
    "pos": 8,
    "tk": {
-    "total": 15314,
+    "total": 14182,
     "sites": {
      "translate.frame": 4644,
-     "matcher.backtrack": 4019,
-     "spell.edit": 3576,
-     "rules.pattern": 889,
-     "matcher.attempt": 749,
+     "matcher.backtrack": 3732,
+     "spell.edit": 2866,
+     "rules.pattern": 837,
+     "matcher.attempt": 706,
      "translate.tokenize": 407,
-     "normalize.push3": 120,
      "scene.walk": 108,
+     "normalize.push3": 104,
      "acts.kind": 80,
      "translate.np": 72,
      "interpreter.visit": 66,
-     "index.splitClauses": 58
+     "index.splitClauses": 48
     }
    },
    "verdict": null
@@ -9784,7 +9784,7 @@
   {
    "id": "r0253",
    "outcome": "refused",
-   "ms": 52,
+   "ms": 54,
    "reply": "I cannot answer questions about the avatar yet.",
    "read": "Be angry",
    "worlds": [
@@ -9816,7 +9816,7 @@
   {
    "id": "r0254",
    "outcome": "refused",
-   "ms": 123,
+   "ms": 126,
    "reply": "I did not understand \"angie\" here.",
    "read": "And Angie",
    "worlds": [
@@ -9848,7 +9848,7 @@
   {
    "id": "r0255",
    "outcome": "refused",
-   "ms": 127,
+   "ms": 125,
    "reply": "I did not understand that as something to do in the avatar.",
    "read": "With my robot",
    "worlds": [
@@ -9880,7 +9880,7 @@
   {
    "id": "r0256",
    "outcome": "refused",
-   "ms": 91,
+   "ms": 96,
    "reply": "I did not understand \"try\" here.",
    "read": "Try the next mouth",
    "worlds": [
@@ -9912,7 +9912,7 @@
   {
    "id": "r0257",
    "outcome": "refused",
-   "ms": 192,
+   "ms": 212,
    "reply": "I cannot answer questions about the avatar yet.",
    "read": "What character is on the screen?",
    "worlds": [
@@ -9944,7 +9944,7 @@
   {
    "id": "r0258",
    "outcome": "refused",
-   "ms": 210,
+   "ms": 212,
    "reply": "I did not understand \"carton\" here.",
    "read": "Be a carton",
    "worlds": [
@@ -9976,7 +9976,7 @@
   {
    "id": "r0259",
    "outcome": "refused",
-   "ms": 104,
+   "ms": 105,
    "reply": "I cannot answer questions about the avatar yet.",
    "read": "Be a child",
    "worlds": [
@@ -10008,7 +10008,7 @@
   {
    "id": "r0260",
    "outcome": "refused",
-   "ms": 58,
+   "ms": 55,
    "reply": "I cannot answer questions about the avatar yet.",
    "read": "Be a child",
    "worlds": [
@@ -10040,7 +10040,7 @@
   {
    "id": "r0261",
    "outcome": "not_understood",
-   "ms": 240,
+   "ms": 234,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Turn it into a diagram.\" or \"Add it to my drawing.\".",
    "read": "Turn on tic tac toe",
    "worlds": [],
@@ -10049,20 +10049,20 @@
    ],
    "pos": 17,
    "tk": {
-    "total": 87933,
+    "total": 86226,
     "sites": {
-     "matcher.backtrack": 40169,
-     "spell.edit": 20234,
-     "rules.pattern": 6476,
-     "matcher.attempt": 5233,
-     "normalize.push3": 2802,
+     "matcher.backtrack": 39980,
+     "spell.edit": 20231,
+     "rules.pattern": 6397,
+     "matcher.attempt": 5177,
+     "normalize.push3": 2676,
      "translate.frame": 2540,
-     "emit.substituteEmit": 2162,
-     "index.splitClauses": 1423,
-     "normalize.span": 746,
+     "emit.substituteEmit": 1504,
+     "index.splitClauses": 1374,
+     "normalize.span": 711,
      "index.visit": 668,
-     "variants.dropStyleIn": 603,
-     "index.run": 598
+     "variants.dropStyleIn": 582,
+     "open-words.place": 425
     }
    },
    "verdict": null
@@ -10070,7 +10070,7 @@
   {
    "id": "r0262",
    "outcome": "not_understood",
-   "ms": 220,
+   "ms": 202,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "worlds": [],
    "statuses": [
@@ -10078,19 +10078,19 @@
    ],
    "pos": 18,
    "tk": {
-    "total": 81162,
+    "total": 81109,
     "sites": {
      "matcher.backtrack": 38513,
-     "spell.edit": 18242,
-     "rules.pattern": 5964,
+     "spell.edit": 18240,
+     "rules.pattern": 5962,
      "matcher.attempt": 4997,
      "meta.worlds.near": 4504,
      "scene.edit": 2512,
-     "normalize.push3": 1739,
-     "index.splitClauses": 870,
+     "normalize.push3": 1718,
+     "index.splitClauses": 858,
      "index.visit": 698,
-     "open-words.place": 473,
-     "normalize.span": 435,
+     "open-words.place": 472,
+     "normalize.span": 429,
      "variants.dropStyleIn": 290
     }
    },
@@ -10099,7 +10099,7 @@
   {
    "id": "r0263",
    "outcome": "not_understood",
-   "ms": 7,
+   "ms": 5,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "read": "What?",
    "worlds": [],
@@ -10129,7 +10129,7 @@
   {
    "id": "r0264",
    "outcome": "not_understood",
-   "ms": 474,
+   "ms": 473,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\". I did not kno",
    "read": "say me a father domnul bujii",
    "worlds": [],
@@ -10138,19 +10138,19 @@
    ],
    "pos": 20,
    "tk": {
-    "total": 265566,
+    "total": 263279,
     "sites": {
-     "matcher.backtrack": 82288,
-     "spell.edit": 53423,
+     "matcher.backtrack": 82430,
+     "spell.edit": 50821,
      "meta.worlds.near": 32243,
      "translate.frame": 18255,
      "scene.edit": 18040,
      "candidates.repair": 16432,
-     "rules.pattern": 15400,
-     "matcher.attempt": 11491,
-     "normalize.push3": 3399,
-     "index.splitClauses": 2319,
-     "open-words.place": 2065,
+     "rules.pattern": 15462,
+     "matcher.attempt": 11533,
+     "normalize.push3": 3420,
+     "index.splitClauses": 2349,
+     "open-words.place": 2059,
      "emit.substituteEmit": 1338
     }
    },
@@ -10159,7 +10159,7 @@
   {
    "id": "r0265",
    "outcome": "not_understood",
-   "ms": 128,
+   "ms": 131,
    "reply": "That sounds like something about you. I cannot keep facts about you here.",
    "read": "I play a 1",
    "worlds": [],
@@ -10189,7 +10189,7 @@
   {
    "id": "r0266",
    "outcome": "asked",
-   "ms": 150,
+   "ms": 151,
    "reply": "I don't know that yet. I understood only part of that: I did not use \"what?\".",
    "read": "What do 3 do like 1 what?",
    "worlds": [
@@ -10200,17 +10200,17 @@
    ],
    "pos": 22,
    "tk": {
-    "total": 40991,
+    "total": 40632,
     "sites": {
-     "matcher.backtrack": 20227,
+     "matcher.backtrack": 20160,
      "translate.frame": 6252,
-     "rules.pattern": 5366,
-     "matcher.attempt": 4105,
-     "emit.substituteEmit": 1122,
-     "normalize.push3": 789,
-     "index.splitClauses": 476,
-     "index.run": 365,
-     "normalize.span": 240,
+     "rules.pattern": 5330,
+     "matcher.attempt": 4078,
+     "emit.substituteEmit": 1020,
+     "normalize.push3": 765,
+     "index.splitClauses": 466,
+     "index.run": 332,
+     "normalize.span": 233,
      "scene.walk": 166,
      "open-words.place": 150,
      "interpreter.visit": 132
@@ -10221,7 +10221,7 @@
   {
    "id": "r0267",
    "outcome": "not_understood",
-   "ms": 393,
+   "ms": 373,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "read": "But with whom speaks what you want?",
    "worlds": [],
@@ -10251,7 +10251,7 @@
   {
    "id": "r0268",
    "outcome": "refused",
-   "ms": 689,
+   "ms": 675,
    "reply": "Sorry, I did not understand that. Could you say it another way? I understood only part of that: I did not use \"With whom speaks with\" and \"when I made me?\".",
    "read": "With whom speaks with the robot of here when I made me?",
    "worlds": [
@@ -10283,7 +10283,7 @@
   {
    "id": "r0269",
    "outcome": "executed",
-   "ms": 48,
+   "ms": 51,
    "reply": "On the documents tab you can say, for example: \"Which tab am I on\", \"Turn on the microphone\", \"Turn on hands-free mode\", \"Set the speech rate to 1.5\" or \"Switch to Romanian\". Say \"more examples\" for others.",
    "read": "What do I say?",
    "worlds": [
@@ -10315,7 +10315,7 @@
   {
    "id": "r0270",
    "outcome": "refused",
-   "ms": 122,
+   "ms": 117,
    "reply": "I did not understand \"father\", \"say\" here.",
    "read": "What can a father say?",
    "worlds": [
@@ -10347,7 +10347,7 @@
   {
    "id": "r0271",
    "outcome": "executed",
-   "ms": 175,
+   "ms": 166,
    "reply": "I added a house.",
    "read": "Draw a house",
    "worlds": [
@@ -10379,7 +10379,7 @@
   {
    "id": "r0272",
    "outcome": "executed",
-   "ms": 172,
+   "ms": 164,
    "reply": "I added a green house.",
    "read": "Draw a green house",
    "worlds": [
@@ -10411,7 +10411,7 @@
   {
    "id": "r0273",
    "outcome": "executed",
-   "ms": 174,
+   "ms": 166,
    "reply": "I added 3 clouds.",
    "read": "Draw 3 clouds",
    "worlds": [
@@ -10443,7 +10443,7 @@
   {
    "id": "r0274",
    "outcome": "executed",
-   "ms": 174,
+   "ms": 176,
    "reply": "I added a salt.",
    "read": "Draw a salt",
    "worlds": [
@@ -10475,7 +10475,7 @@
   {
    "id": "r0275",
    "outcome": "refused",
-   "ms": 182,
+   "ms": 189,
    "reply": "I did not understand \"vizionează\", \"draw\" here.",
    "read": "Vizionează a sun draw a sun",
    "worlds": [
@@ -10507,7 +10507,7 @@
   {
    "id": "r0276",
    "outcome": "other_world",
-   "ms": 206,
+   "ms": 208,
    "reply": "I do not know a place called you.",
    "read": "You",
    "worlds": [
@@ -10539,7 +10539,7 @@
   {
    "id": "r0277",
    "outcome": "executed",
-   "ms": 179,
+   "ms": 349,
    "reply": "I added a monkey.",
    "read": "Draw a monkey",
    "worlds": [
@@ -10571,7 +10571,7 @@
   {
    "id": "r0278",
    "outcome": "refused",
-   "ms": 170,
+   "ms": 362,
    "reply": "I did not understand \"n\", \"understood\", \"draw\" here.",
    "read": "N understood to draw a monkey",
    "worlds": [
@@ -10603,7 +10603,7 @@
   {
    "id": "r0279",
    "outcome": "refused",
-   "ms": 160,
+   "ms": 279,
    "reply": "I did not understand \"dash\" here.",
    "read": "Draw a dash",
    "worlds": [
@@ -10635,7 +10635,7 @@
   {
    "id": "r0280",
    "outcome": "executed",
-   "ms": 183,
+   "ms": 329,
    "reply": "I added blue fish. I assumed corner for the place.",
    "read": "Draw a small blue fish",
    "worlds": [
@@ -10667,7 +10667,7 @@
   {
    "id": "r0281",
    "outcome": "refused",
-   "ms": 376,
+   "ms": 762,
    "reply": "I did not understand \"father\", \"draws\" here.",
    "read": "Your father draws a fish more",
    "worlds": [
@@ -10699,7 +10699,7 @@
   {
    "id": "r0282",
    "outcome": "refused",
-   "ms": 126,
+   "ms": 287,
    "reply": "I did not understand \"father\" here.",
    "read": "A father",
    "worlds": [
@@ -10731,7 +10731,7 @@
   {
    "id": "r0283",
    "outcome": "executed",
-   "ms": 183,
+   "ms": 577,
    "reply": "I added a lake.",
    "read": "Draw water",
    "worlds": [
@@ -10763,7 +10763,7 @@
   {
    "id": "r0284",
    "outcome": "refused",
-   "ms": 149,
+   "ms": 460,
    "reply": "I did not understand \"auto\" here.",
    "read": "Drawings auto a sea",
    "worlds": [
@@ -10795,7 +10795,7 @@
   {
    "id": "r0285",
    "outcome": "refused",
-   "ms": 220,
+   "ms": 713,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "Of fish",
    "worlds": [
@@ -10827,7 +10827,7 @@
   {
    "id": "r0286",
    "outcome": "executed",
-   "ms": 179,
+   "ms": 645,
    "reply": "I added fish.",
    "read": "Draw fish",
    "worlds": [
@@ -10859,7 +10859,7 @@
   {
    "id": "r0287",
    "outcome": "refused",
-   "ms": 185,
+   "ms": 355,
    "reply": "I did not understand \"stays\" here.",
    "read": "The fish stays in water",
    "worlds": [
@@ -10891,7 +10891,7 @@
   {
    "id": "r0288",
    "outcome": "executed",
-   "ms": 190,
+   "ms": 474,
    "reply": "I added 3 fish. I could not do in water: there is no place water here.",
    "read": "Draw 3 fish in water",
    "worlds": [
@@ -10923,7 +10923,7 @@
   {
    "id": "r0289",
    "outcome": "refused",
-   "ms": 289,
+   "ms": 444,
    "reply": "I did not understand \"air\" here.",
    "read": "The fish is in water from air",
    "worlds": [
@@ -10955,7 +10955,7 @@
   {
    "id": "r0290",
    "outcome": "refused",
-   "ms": 43,
+   "ms": 84,
    "reply": "Which fish? There are 5. I could not do of air: this world does not take about for place.",
    "read": "Move the fish of air in water",
    "worlds": [
@@ -10987,7 +10987,7 @@
   {
    "id": "r0291",
    "outcome": "refused",
-   "ms": 314,
+   "ms": 662,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "You make you",
    "worlds": [
@@ -11019,7 +11019,7 @@
   {
    "id": "r0292",
    "outcome": "refused",
-   "ms": 39,
+   "ms": 70,
    "reply": "Which fish? There are 5.",
    "read": "Move the fish",
    "worlds": [
@@ -11051,7 +11051,7 @@
   {
    "id": "r0293",
    "outcome": "refused",
-   "ms": 281,
+   "ms": 351,
    "reply": "I did not understand \"enervant\" here.",
    "read": "Enervant yes",
    "worlds": [
@@ -11083,7 +11083,7 @@
   {
    "id": "r0294",
    "outcome": "refused",
-   "ms": 44,
+   "ms": 53,
    "reply": "Which fish? There are 5.",
    "read": "Move the fish of up",
    "worlds": [
@@ -11115,7 +11115,7 @@
   {
    "id": "r0295",
    "outcome": "refused",
-   "ms": 239,
+   "ms": 365,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "Sorry",
    "worlds": [
@@ -11147,7 +11147,7 @@
   {
    "id": "r0296",
    "outcome": "refused",
-   "ms": 338,
+   "ms": 485,
    "reply": "I did not understand \"caca\" here.",
    "read": "Make a caca",
    "worlds": [
@@ -11179,7 +11179,7 @@
   {
    "id": "r0297",
    "outcome": "refused",
-   "ms": 237,
+   "ms": 341,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "Yes",
    "worlds": [
@@ -11211,7 +11211,7 @@
   {
    "id": "r0298",
    "outcome": "executed",
-   "ms": 36,
+   "ms": 40,
    "reply": "I added 3 circles. I assumed row for the layout.",
    "read": "Draw 3 circles",
    "worlds": [
@@ -11243,7 +11243,7 @@
   {
    "id": "r0299",
    "outcome": "executed",
-   "ms": 44,
+   "ms": 57,
    "reply": "I added 3 circles. I assumed white for the colour. I assumed default for the size.",
    "read": "Draw 3 circles in the diagram",
    "worlds": [
@@ -11275,7 +11275,7 @@
   {
    "id": "r0300",
    "outcome": "executed",
-   "ms": 39,
+   "ms": 56,
    "reply": "I added 3 circles. I assumed white for the colour. I assumed default for the size.",
    "read": "Draw 3 circles",
    "worlds": [
@@ -11307,7 +11307,7 @@
   {
    "id": "r0301",
    "outcome": "refused",
-   "ms": 293,
+   "ms": 314,
    "reply": "I did not understand \"te\", \"speriase\" here.",
    "read": "Te speriase or of circles",
    "worlds": [
@@ -11339,7 +11339,7 @@
   {
    "id": "r0302",
    "outcome": "executed",
-   "ms": 91,
+   "ms": 105,
    "reply": "OK, here is the Drawing tab.",
    "read": "Drawings",
    "worlds": [
@@ -11371,7 +11371,7 @@
   {
    "id": "r0303",
    "outcome": "refused",
-   "ms": 184,
+   "ms": 212,
    "reply": "I could not make that in the diagram.",
    "read": "so draw what you want",
    "worlds": [
@@ -11403,7 +11403,7 @@
   {
    "id": "r0304",
    "outcome": "refused",
-   "ms": 167,
+   "ms": 191,
    "reply": "I could not make that in the diagram.",
    "read": "Draw what you want",
    "worlds": [
@@ -11435,7 +11435,7 @@
   {
    "id": "r0305",
    "outcome": "refused",
-   "ms": 175,
+   "ms": 194,
    "reply": "I did not understand \"uncle\" here.",
    "read": "The uncle",
    "worlds": [
@@ -11467,7 +11467,7 @@
   {
    "id": "r0306",
    "outcome": "refused",
-   "ms": 55,
+   "ms": 56,
    "reply": "Nothing changed. There is no circle here. I could not do all the red: this world does not take attribute for remove.",
    "read": "Delete all the red circles",
    "worlds": [
@@ -11499,7 +11499,7 @@
   {
    "id": "r0307",
    "outcome": "refused",
-   "ms": 267,
+   "ms": 286,
    "reply": "I did not understand \"deleted\" here.",
    "read": "You deleted it",
    "worlds": [
@@ -11563,7 +11563,7 @@
   {
    "id": "r0309",
    "outcome": "executed",
-   "ms": 30,
+   "ms": 33,
    "reply": "The mouth is big now.",
    "read": "Make a big mouth",
    "worlds": [
@@ -11595,7 +11595,7 @@
   {
    "id": "r0310",
    "outcome": "refused",
-   "ms": 132,
+   "ms": 137,
    "reply": "I could not plan a robot fish as you said, so I made nothing.",
    "read": "You make a robot fish",
    "worlds": [
@@ -11627,7 +11627,7 @@
   {
    "id": "r0311",
    "outcome": "executed",
-   "ms": 207,
+   "ms": 248,
    "reply": "I added a forest. I added 6 trees.",
    "read": "Drawings",
    "worlds": [
@@ -11659,7 +11659,7 @@
   {
    "id": "r0312",
    "outcome": "refused",
-   "ms": 198,
+   "ms": 199,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "He set",
    "worlds": [
@@ -11691,7 +11691,7 @@
   {
    "id": "r0313",
    "outcome": "not_understood",
-   "ms": 162,
+   "ms": 160,
    "reply": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta.",
    "read": "Drawings asta",
    "worlds": [],
@@ -11751,7 +11751,7 @@
   {
    "id": "r0315",
    "outcome": "not_understood",
-   "ms": 212,
+   "ms": 211,
    "reply": "I did not understand \"desene asta o\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta.",
    "read": "Drawings asta a",
    "worlds": [],
@@ -11781,7 +11781,7 @@
   {
    "id": "r0316",
    "outcome": "other_world",
-   "ms": 44,
+   "ms": 45,
    "reply": "I drew a red heart.",
    "read": "A heart",
    "worlds": [
@@ -11813,7 +11813,7 @@
   {
    "id": "r0317",
    "outcome": "not_understood",
-   "ms": 310,
+   "ms": 314,
    "reply": "I did not understand \"desene asta o inimioară\". For example: \"Add a pin.\" or \"What is the colour of the pin?\" I did not know the word: asta.",
    "read": "Drawings asta a heart",
    "worlds": [],
@@ -11843,7 +11843,7 @@
   {
    "id": "r0318",
    "outcome": "not_understood",
-   "ms": 15,
+   "ms": 13,
    "reply": "I did not understand \"desene asta o inimioară\". For example: \"Add a pin.\" or \"What is the colour of the pin?\" I did not know the word: asta.",
    "read": "What?",
    "worlds": [],
@@ -11873,7 +11873,7 @@
   {
    "id": "r0319",
    "outcome": "not_understood",
-   "ms": 371,
+   "ms": 382,
    "reply": "I did not understand \"desene asta o inimioară ce\". Did you mean \"Ce am desenat?\" or \"Ce pot desena?\"? I did not know the word: asta.",
    "read": "Drawings asta a heart what?",
    "worlds": [],
@@ -11903,7 +11903,7 @@
   {
    "id": "r0320",
    "outcome": "executed",
-   "ms": 239,
+   "ms": 234,
    "reply": "I added a pond. I added a lake. I added 3 flowers. I added a bird. I added fish. I assumed make for the act. I assumed 6 for the count.",
    "read": "Drawing",
    "worlds": [
@@ -11935,7 +11935,7 @@
   {
    "id": "r0321",
    "outcome": "refused",
-   "ms": 113,
+   "ms": 111,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "Draw",
    "worlds": [
@@ -11967,7 +11967,7 @@
   {
    "id": "r0322",
    "outcome": "refused",
-   "ms": 200,
+   "ms": 207,
    "reply": "I did not understand \"draws\" here.",
    "read": "Drawing draws",
    "worlds": [
@@ -12031,7 +12031,7 @@
   {
    "id": "r0324",
    "outcome": "refused",
-   "ms": 136,
+   "ms": 143,
    "reply": "I did not understand \"draws\" here.",
    "read": "Drawing draws a heart",
    "worlds": [
@@ -12063,7 +12063,7 @@
   {
    "id": "r0325",
    "outcome": "refused",
-   "ms": 111,
+   "ms": 124,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "Draw",
    "worlds": [
@@ -12095,7 +12095,7 @@
   {
    "id": "r0326",
    "outcome": "refused",
-   "ms": 119,
+   "ms": 130,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "A",
    "worlds": [
@@ -12127,7 +12127,7 @@
   {
    "id": "r0327",
    "outcome": "refused",
-   "ms": 163,
+   "ms": 176,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "Draw a",
    "worlds": [
@@ -12159,7 +12159,7 @@
   {
    "id": "r0328",
    "outcome": "executed",
-   "ms": 207,
+   "ms": 216,
    "reply": "I added a heart. I assumed make for the act.",
    "read": "A heart",
    "worlds": [
@@ -12191,7 +12191,7 @@
   {
    "id": "r0329",
    "outcome": "executed",
-   "ms": 217,
+   "ms": 220,
    "reply": "I added a heart.",
    "read": "Draw a heart",
    "worlds": [
@@ -12223,7 +12223,7 @@
   {
    "id": "r0330",
    "outcome": "refused",
-   "ms": 255,
+   "ms": 275,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "Draw",
    "worlds": [
@@ -12255,7 +12255,7 @@
   {
    "id": "r0331",
    "outcome": "refused",
-   "ms": 258,
+   "ms": 278,
    "reply": "I did not understand \"draws\" here.",
    "read": "A heart draws",
    "worlds": [
@@ -12287,7 +12287,7 @@
   {
    "id": "r0332",
    "outcome": "refused",
-   "ms": 294,
+   "ms": 325,
    "reply": "I did not understand \"draw\" here.",
    "read": "Draw a heart to draw a",
    "worlds": [
@@ -12319,7 +12319,7 @@
   {
    "id": "r0333",
    "outcome": "executed",
-   "ms": 209,
+   "ms": 211,
    "reply": "I added a heart. I assumed make for the act.",
    "read": "A heart",
    "worlds": [
@@ -12351,7 +12351,7 @@
   {
    "id": "r0334",
    "outcome": "refused",
-   "ms": 252,
+   "ms": 269,
    "reply": "I did not understand \"draw\" here.",
    "read": "Draw a heart to draw a heart",
    "worlds": [
@@ -12383,7 +12383,7 @@
   {
    "id": "r0335",
    "outcome": "refused",
-   "ms": 185,
+   "ms": 190,
    "reply": "I did not understand \"draw\" here.",
    "read": "Draw a heart to draw a heart",
    "worlds": [
@@ -12415,7 +12415,7 @@
   {
    "id": "r0336",
    "outcome": "refused",
-   "ms": 105,
+   "ms": 104,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "Draw",
    "worlds": [
@@ -12447,7 +12447,7 @@
   {
    "id": "r0337",
    "outcome": "refused",
-   "ms": 382,
+   "ms": 413,
    "reply": "I did not understand \"draws\", \"draw\" here.",
    "read": "A heart draws a heart to draw a",
    "worlds": [
@@ -12479,7 +12479,7 @@
   {
    "id": "r0338",
    "outcome": "refused",
-   "ms": 269,
+   "ms": 271,
    "reply": "I did not understand \"draw\" here.",
    "read": "Draw a heart to draw a heart a house",
    "worlds": [
@@ -12511,7 +12511,7 @@
   {
    "id": "r0339",
    "outcome": "refused",
-   "ms": 197,
+   "ms": 188,
    "reply": "I did not understand \"draw\" here.",
    "read": "Draw a heart to draw a heart",
    "worlds": [
@@ -12543,7 +12543,7 @@
   {
    "id": "r0340",
    "outcome": "executed",
-   "ms": 223,
+   "ms": 212,
    "reply": "I added a forest. I added 6 trees. I assumed make for the act.",
    "read": "Drawings",
    "worlds": [
@@ -12575,7 +12575,7 @@
   {
    "id": "r0341",
    "outcome": "refused",
-   "ms": 203,
+   "ms": 201,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "He set",
    "worlds": [
@@ -12607,7 +12607,7 @@
   {
    "id": "r0342",
    "outcome": "not_understood",
-   "ms": 168,
+   "ms": 162,
    "reply": "I did not understand \"desene asta inimioară\". For example: \"Add a pin.\" or \"What is the colour of the pin?\" I did not know the word: asta.",
    "read": "Drawings asta a heart",
    "worlds": [],
@@ -12637,7 +12637,7 @@
   {
    "id": "r0343",
    "outcome": "other_world",
-   "ms": 43,
+   "ms": 40,
    "reply": "What should I draw?",
    "read": "Draw",
    "worlds": [
@@ -12669,7 +12669,7 @@
   {
    "id": "r0344",
    "outcome": "not_understood",
-   "ms": 35,
+   "ms": 36,
    "reply": "I did not understand \"o\". For example: \"Add a pin.\" or \"What is the colour of the pin?\"",
    "read": "A",
    "worlds": [],
@@ -12699,7 +12699,7 @@
   {
    "id": "r0345",
    "outcome": "other_world",
-   "ms": 46,
+   "ms": 42,
    "reply": "I drew a yellow house.",
    "read": "Draw a house",
    "worlds": [
@@ -12731,7 +12731,7 @@
   {
    "id": "r0346",
    "outcome": "executed",
-   "ms": 212,
+   "ms": 217,
    "reply": "I added a house.",
    "read": "Draw a house",
    "worlds": [
@@ -12763,7 +12763,7 @@
   {
    "id": "r0347",
    "outcome": "executed",
-   "ms": 232,
+   "ms": 220,
    "reply": "Nothing changed. That is what is there already.",
    "read": "It is to draw it",
    "worlds": [
@@ -12795,7 +12795,7 @@
   {
    "id": "r0348",
    "outcome": "executed",
-   "ms": 214,
+   "ms": 215,
    "reply": "I added a house.",
    "read": "Draw a house to be",
    "worlds": [
@@ -12827,7 +12827,7 @@
   {
    "id": "r0349",
    "outcome": "refused",
-   "ms": 430,
+   "ms": 400,
    "reply": "I did not understand \"calm\", \"draw\" here.",
    "read": "If you are calm to draw",
    "worlds": [
@@ -12838,20 +12838,20 @@
    ],
    "pos": 38,
    "tk": {
-    "total": 101490,
+    "total": 83969,
     "sites": {
-     "matcher.backtrack": 31114,
+     "matcher.backtrack": 30874,
      "translate.frame": 20832,
-     "rules.pattern": 9041,
-     "learned.mem": 6230,
-     "matcher.attempt": 5489,
+     "rules.pattern": 9096,
+     "matcher.attempt": 5465,
      "spell.edit": 5098,
-     "interpreter.visit": 4950,
-     "emit.substituteEmit": 2576,
-     "normalize.push3": 2197,
-     "knowledge.memo": 2040,
+     "normalize.push3": 2090,
      "candidates.repair": 1450,
-     "index.splitClauses": 1231
+     "interpreter.visit": 1254,
+     "index.splitClauses": 1251,
+     "meta.worlds.near": 634,
+     "best-effort.tokenize": 622,
+     "translate.tokenize": 590
     }
    },
    "verdict": null
@@ -12859,7 +12859,7 @@
   {
    "id": "r0350",
    "outcome": "refused",
-   "ms": 597,
+   "ms": 570,
    "reply": "I did not understand \"calm\", \"draw\" here.",
    "read": "Draw a house to be if you are calm to draw",
    "worlds": [
@@ -12870,7 +12870,7 @@
    ],
    "pos": 39,
    "tk": {
-    "total": 188424,
+    "total": 188463,
     "sites": {
      "translate.frame": 52236,
      "matcher.backtrack": 48723,
@@ -12891,7 +12891,7 @@
   {
    "id": "r0351",
    "outcome": "refused",
-   "ms": 303,
+   "ms": 261,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "A",
    "worlds": [
@@ -12923,7 +12923,7 @@
   {
    "id": "r0352",
    "outcome": "refused",
-   "ms": 672,
+   "ms": 715,
    "reply": "I did not understand \"calm\", \"draw\" here.",
    "read": "Draw a house to be if you are calm to draw a",
    "worlds": [
@@ -12955,7 +12955,7 @@
   {
    "id": "r0353",
    "outcome": "executed",
-   "ms": 221,
+   "ms": 200,
    "reply": "I added a heart. I assumed make for the act.",
    "read": "A heart",
    "worlds": [
@@ -12987,7 +12987,7 @@
   {
    "id": "r0354",
    "outcome": "refused",
-   "ms": 373,
+   "ms": 342,
    "reply": "I did not understand \"calm\", \"draw\" here.",
    "read": "Draw a house to be if you are calm to draw a heart",
    "worlds": [
@@ -13019,7 +13019,7 @@
   {
    "id": "r0355",
    "outcome": "refused",
-   "ms": 151,
+   "ms": 143,
    "reply": "I did not understand \"know\" here.",
    "read": "You know",
    "worlds": [
@@ -13051,7 +13051,7 @@
   {
    "id": "r0356",
    "outcome": "refused",
-   "ms": 621,
+   "ms": 541,
    "reply": "I did not understand \"calm\", \"draw\" here.",
    "read": "Draw a house to be if you are calm to draw a heart only",
    "worlds": [
@@ -13083,7 +13083,7 @@
   {
    "id": "r0357",
    "outcome": "executed",
-   "ms": 216,
+   "ms": 217,
    "reply": "I added a heart. I assumed make for the act.",
    "read": "The heart",
    "worlds": [
@@ -13115,7 +13115,7 @@
   {
    "id": "r0358",
    "outcome": "refused",
-   "ms": 572,
+   "ms": 524,
    "reply": "I did not understand \"calm\", \"draw\", \"heart\" here.",
    "read": "Draw a house to be if you are calm to draw a heart",
    "worlds": [
@@ -13147,7 +13147,7 @@
   {
    "id": "r0359",
    "outcome": "refused",
-   "ms": 379,
+   "ms": 380,
    "reply": "I did not understand \"know\", \"heart\", \"draw\" here.",
    "read": "You know only the heart to draw",
    "worlds": [
@@ -13179,7 +13179,7 @@
   {
    "id": "r0360",
    "outcome": "other_world",
-   "ms": 438,
+   "ms": 403,
    "reply": "I did not understand where to put it (\"to be\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\". I drew a red heart. I did not catch what to do with thing. I can add, remove, ch",
    "read": "Draw a house to be if you are calm to draw a heart only the heart",
    "worlds": [
@@ -13213,7 +13213,7 @@
   {
    "id": "r0361",
    "outcome": "refused",
-   "ms": 126,
+   "ms": 106,
    "reply": "I did not understand that as something to do in the documents.",
    "read": "A",
    "worlds": [
@@ -13245,7 +13245,7 @@
   {
    "id": "r0362",
    "outcome": "refused",
-   "ms": 476,
+   "ms": 434,
    "reply": "I did not understand \"calm\", \"draw\", \"heart\" here.",
    "read": "Draw a house to be if you are calm to draw a heart only the heart a heart",
    "worlds": [
@@ -13277,7 +13277,7 @@
   {
    "id": "r0363",
    "outcome": "refused",
-   "ms": 290,
+   "ms": 255,
    "reply": "I did not understand \"calm\", \"draw\" here.",
    "read": "Draw a house to be if you are calm to draw a heart",
    "worlds": [
@@ -13309,7 +13309,7 @@
   {
    "id": "r0364",
    "outcome": "refused",
-   "ms": 135,
+   "ms": 120,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "Draw",
    "worlds": [
@@ -13341,7 +13341,7 @@
   {
    "id": "r0365",
    "outcome": "executed",
-   "ms": 235,
+   "ms": 211,
    "reply": "I added a heart. I assumed make for the act.",
    "read": "A heart",
    "worlds": [
@@ -13373,7 +13373,7 @@
   {
    "id": "r0366",
    "outcome": "executed",
-   "ms": 223,
+   "ms": 220,
    "reply": "I added a heart.",
    "read": "Draw a heart",
    "worlds": [
@@ -13437,7 +13437,7 @@
   {
    "id": "r0368",
    "outcome": "refused",
-   "ms": 509,
+   "ms": 483,
    "reply": "I did not understand \"săracul\" here.",
    "read": "Săracul",
    "worlds": [
@@ -13469,7 +13469,7 @@
   {
    "id": "r0369",
    "outcome": "refused",
-   "ms": 401,
+   "ms": 385,
    "reply": "I did not understand \"săracul\" here.",
    "read": "Draw a heart săracul",
    "worlds": [
@@ -13501,7 +13501,7 @@
   {
    "id": "r0370",
    "outcome": "executed",
-   "ms": 228,
+   "ms": 221,
    "reply": "I added a heart.",
    "read": "Draw a heart",
    "worlds": [
@@ -13533,7 +13533,7 @@
   {
    "id": "r0371",
    "outcome": "executed",
-   "ms": 242,
+   "ms": 220,
    "reply": "I added a heart.",
    "read": "Draw a heart",
    "worlds": [
@@ -13565,7 +13565,7 @@
   {
    "id": "r0372",
    "outcome": "refused",
-   "ms": 67,
+   "ms": 63,
    "reply": "I cannot answer questions about the drawing yet.",
    "read": "What?",
    "worlds": [
@@ -13597,7 +13597,7 @@
   {
    "id": "r0373",
    "outcome": "executed",
-   "ms": 86,
+   "ms": 79,
    "reply": "Hello! What would you like to talk about?",
    "read": "Hai",
    "worlds": [
@@ -13629,7 +13629,7 @@
   {
    "id": "r0374",
    "outcome": "refused",
-   "ms": 196,
+   "ms": 192,
    "reply": "I did not understand \"hai\" here.",
    "read": "What Hai?",
    "worlds": [
@@ -13661,7 +13661,7 @@
   {
    "id": "r0375",
    "outcome": "refused",
-   "ms": 176,
+   "ms": 161,
    "reply": "I did not understand \"îl\" here.",
    "read": "What îl?",
    "worlds": [
@@ -13693,7 +13693,7 @@
   {
    "id": "r0376",
    "outcome": "refused",
-   "ms": 261,
+   "ms": 267,
    "reply": "I did not understand \"hai\", \"îl\" here.",
    "read": "What Hai what îl?",
    "worlds": [
@@ -13725,7 +13725,7 @@
   {
    "id": "r0377",
    "outcome": "refused",
-   "ms": 242,
+   "ms": 248,
    "reply": "I did not understand \"înnebunești\" here.",
    "read": "Înnebunești",
    "worlds": [
@@ -13768,20 +13768,20 @@
    ],
    "pos": 67,
    "tk": {
-    "total": 82094,
+    "total": 83033,
     "sites": {
-     "matcher.backtrack": 38213,
+     "matcher.backtrack": 39400,
      "translate.frame": 16173,
-     "rules.pattern": 9490,
-     "matcher.attempt": 7374,
+     "rules.pattern": 9592,
+     "matcher.attempt": 7612,
      "candidates.repair": 3474,
      "meta.worlds.near": 1232,
-     "normalize.push3": 1228,
-     "index.splitClauses": 976,
+     "normalize.push3": 1140,
+     "index.splitClauses": 884,
      "translate.tokenize": 555,
-     "open-words.place": 381,
+     "open-words.place": 379,
      "scene.edit": 376,
-     "spell.edit": 365
+     "scene.walk": 302
     }
    },
    "verdict": null
@@ -13789,7 +13789,7 @@
   {
    "id": "r0379",
    "outcome": "refused",
-   "ms": 378,
+   "ms": 365,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "A head",
    "worlds": [
@@ -13821,7 +13821,7 @@
   {
    "id": "r0380",
    "outcome": "refused",
-   "ms": 731,
+   "ms": 685,
    "reply": "I did not understand \"hai\", \"îl\", \"înnebunești\" here.",
    "read": "What Hai what îl înnebunești of the head săracul?",
    "worlds": [
@@ -13853,7 +13853,7 @@
   {
    "id": "r0381",
    "outcome": "refused",
-   "ms": 189,
+   "ms": 182,
    "reply": "I did not understand \"still\" here.",
    "read": "You still have",
    "worlds": [
@@ -13885,7 +13885,7 @@
   {
    "id": "r0382",
    "outcome": "refused",
-   "ms": 722,
+   "ms": 692,
    "reply": "I did not understand \"hai\", \"still\", \"say\", \"îl\", \"înnebunești\" here.",
    "read": "What did Hai still say what îl înnebunești of the head săracul?",
    "worlds": [
@@ -13917,7 +13917,7 @@
   {
    "id": "r0383",
    "outcome": "refused",
-   "ms": 320,
+   "ms": 297,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "Of",
    "worlds": [
@@ -13949,7 +13949,7 @@
   {
    "id": "r0384",
    "outcome": "refused",
-   "ms": 794,
+   "ms": 736,
    "reply": "I did not understand \"hai\", \"still\", \"say\", \"îl\", \"înnebunești\" here.",
    "read": "What did Hai still say of many what îl înnebunești of the head săracul?",
    "worlds": [
@@ -13981,7 +13981,7 @@
   {
    "id": "r0385",
    "outcome": "refused",
-   "ms": 612,
+   "ms": 592,
    "reply": "I did not understand \"hai\", \"îl\", \"înnebunești\" here.",
    "read": "What Hai what îl înnebunești of the head săracul?",
    "worlds": [
@@ -14013,7 +14013,7 @@
   {
    "id": "r0386",
    "outcome": "refused",
-   "ms": 611,
+   "ms": 566,
    "reply": "I did not understand \"hai\", \"îl\", \"înnebunești\" here.",
    "read": "What Hai what îl înnebunești of the head săracul?",
    "worlds": [
@@ -14045,7 +14045,7 @@
   {
    "id": "r0387",
    "outcome": "refused",
-   "ms": 182,
+   "ms": 157,
    "reply": "I did not understand that as something to do in the drawing.",
    "read": "Take",
    "worlds": [
@@ -14077,7 +14077,7 @@
   {
    "id": "r0388",
    "outcome": "not_understood",
-   "ms": 643,
+   "ms": 585,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul ia toate\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\" I did not know the words: îl, înnebunești.",
    "read": "What does Hai take all what îl înnebunești of the head the park?",
    "worlds": [],
@@ -14107,7 +14107,7 @@
   {
    "id": "r0389",
    "outcome": "not_understood",
-   "ms": 310,
+   "ms": 274,
    "reply": "I did not understand \"comenzile\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\"",
    "read": "The commands",
    "worlds": [],
@@ -14137,7 +14137,7 @@
   {
    "id": "r0390",
    "outcome": "not_understood",
-   "ms": 790,
+   "ms": 703,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul ia toate comenzile\". Did you mean \"Scoate toate valorile.\" or \"Ce face roșu și albastru face?\"? I did not understand \"ce Hai ce îl înnebunești de cap săracul ",
    "read": "What does Hai take all the commands what îl înnebunești of the head the park?",
    "worlds": [],
@@ -14147,17 +14147,17 @@
    ],
    "pos": 79,
    "tk": {
-    "total": 243969,
+    "total": 247993,
     "sites": {
-     "matcher.backtrack": 129258,
-     "rules.pattern": 29845,
-     "matcher.attempt": 21712,
+     "matcher.backtrack": 132233,
+     "rules.pattern": 30208,
+     "matcher.attempt": 22029,
      "translate.frame": 19487,
      "candidates.repair": 11151,
-     "spell.edit": 8775,
-     "normalize.push3": 7372,
-     "index.splitClauses": 5943,
-     "normalize.span": 1434,
+     "spell.edit": 8777,
+     "normalize.push3": 7557,
+     "index.splitClauses": 6029,
+     "normalize.span": 1470,
      "meta.worlds.near": 1232,
      "index.visit": 1144,
      "open-words.place": 927
@@ -14168,7 +14168,7 @@
   {
    "id": "r0391",
    "outcome": "not_understood",
-   "ms": 531,
+   "ms": 458,
    "reply": "I did not understand \"foarte\". Did you mean \"Marchează fiecare capitală din Europa.\"?",
    "read": "Very",
    "worlds": [],
@@ -14198,7 +14198,7 @@
   {
    "id": "r0392",
    "outcome": "not_understood",
-   "ms": 1214,
+   "ms": 1034,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul ia toate comenzile foarte sensibile\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\" I did not understand \"ce Hai ce îl înnebunești de cap săr",
    "read": "What does Hai take all the commands very sensibile what îl înnebunești of the head the park?",
    "worlds": [],
@@ -14229,7 +14229,7 @@
   {
    "id": "r0393",
    "outcome": "not_understood",
-   "ms": 975,
+   "ms": 695,
    "reply": "I did not understand \"Uite\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\"",
    "read": "He forgets",
    "worlds": [],
@@ -14259,30 +14259,31 @@
   {
    "id": "r0394",
    "outcome": "not_understood",
-   "ms": 1504,
+   "ms": 1322,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul ia toate comenzile foarte sensibile Uite\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\" I did not understand \"ce Hai ce îl înnebunești de ca",
    "read": "What does Hai take all the commands very sensibile what îl înnebunești of the head the park to forget?",
    "worlds": [],
    "statuses": [
     "unparsed",
+    "unparsed",
     "unparsed"
    ],
    "pos": 83,
    "tk": {
-    "total": 487726,
+    "total": 484212,
     "sites": {
-     "matcher.backtrack": 261198,
-     "rules.pattern": 61685,
-     "matcher.attempt": 43592,
+     "matcher.backtrack": 258341,
+     "rules.pattern": 60852,
+     "matcher.attempt": 43146,
      "translate.frame": 24705,
      "candidates.repair": 22359,
-     "normalize.push3": 17529,
-     "spell.edit": 17172,
-     "index.splitClauses": 12251,
+     "normalize.push3": 17963,
+     "spell.edit": 17189,
+     "index.splitClauses": 12227,
      "scene.edit": 6019,
      "meta.worlds.near": 4368,
-     "normalize.span": 3349,
-     "index.visit": 2467
+     "normalize.span": 3408,
+     "index.visit": 2448
     }
    },
    "verdict": null
@@ -14290,7 +14291,7 @@
   {
    "id": "r0395",
    "outcome": "not_understood",
-   "ms": 848,
+   "ms": 761,
    "reply": "I did not understand \"mama\". Did you mean \"No, the other one.\" or \"The house should look the other way.\"?",
    "read": "The mother",
    "worlds": [],
@@ -14320,31 +14321,30 @@
   {
    "id": "r0396",
    "outcome": "not_understood",
-   "ms": 1778,
+   "ms": 1602,
    "reply": "I did not understand \"ce Hai ce îl înnebunești de cap săracul ia toate comenzile foarte sensibile Uite mama ce\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\" I did not understand \"ce Hai ce îl înnebuneș",
    "read": "What does Hai take all the commands very sensibile what îl înnebunești of the head the park to forget the mother what?",
    "worlds": [],
    "statuses": [
     "unparsed",
-    "unparsed",
     "unparsed"
    ],
    "pos": 85,
    "tk": {
-    "total": 607070,
+    "total": 603522,
     "sites": {
-     "matcher.backtrack": 327859,
-     "rules.pattern": 77852,
-     "matcher.attempt": 54595,
+     "matcher.backtrack": 327165,
+     "rules.pattern": 77431,
+     "matcher.attempt": 54080,
      "translate.frame": 28341,
-     "normalize.push3": 24063,
+     "normalize.push3": 22995,
      "candidates.repair": 22361,
-     "index.splitClauses": 18916,
-     "spell.edit": 14560,
+     "index.splitClauses": 18550,
+     "spell.edit": 14541,
      "scene.edit": 9195,
      "meta.worlds.near": 8872,
-     "normalize.span": 4526,
-     "open-words.place": 3168
+     "normalize.span": 4343,
+     "open-words.place": 3253
     }
    },
    "verdict": null
@@ -14352,7 +14352,7 @@
   {
    "id": "r0397",
    "outcome": "other_world",
-   "ms": 68,
+   "ms": 59,
    "reply": "What should I draw?",
    "read": "Make",
    "worlds": [
@@ -14384,7 +14384,7 @@
   {
    "id": "r0398",
    "outcome": "not_understood",
-   "ms": 1652,
+   "ms": 1523,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"The other one.\" or \"Add the wheel too.\". I cannot talk about ",
    "read": "What does Hai take all the commands very sensibile what îl înnebunești of the head the park to forget the mother what programe does?",
    "worlds": [],
@@ -14396,20 +14396,20 @@
    ],
    "pos": 87,
    "tk": {
-    "total": 591310,
+    "total": 607862,
     "sites": {
-     "matcher.backtrack": 286926,
-     "rules.pattern": 69743,
-     "matcher.attempt": 48381,
-     "spell.edit": 39491,
+     "matcher.backtrack": 299574,
+     "rules.pattern": 71549,
+     "matcher.attempt": 50664,
+     "spell.edit": 39495,
      "candidates.repair": 36208,
      "translate.frame": 31815,
-     "normalize.push3": 21718,
-     "index.splitClauses": 17785,
+     "normalize.push3": 22347,
+     "index.splitClauses": 16551,
      "scene.edit": 9218,
      "meta.worlds.near": 8872,
-     "normalize.span": 4071,
-     "open-words.place": 3094
+     "normalize.span": 4159,
+     "open-words.place": 3014
     }
    },
    "verdict": null
@@ -14417,7 +14417,7 @@
   {
    "id": "r0399",
    "outcome": "not_understood",
-   "ms": 1333,
+   "ms": 1188,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
    "read": "My",
    "worlds": [],
@@ -14447,7 +14447,7 @@
   {
    "id": "r0400",
    "outcome": "not_understood",
-   "ms": 1995,
+   "ms": 1851,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"The other one.\" or \"Add the wheel too.\". I cannot talk about ",
    "read": "What does Hai take all the commands very sensibile what îl înnebunești of the head the park to forget the mother what programe does my?",
    "worlds": [],
@@ -14459,18 +14459,18 @@
    ],
    "pos": 89,
    "tk": {
-    "total": 717393,
+    "total": 710770,
     "sites": {
-     "matcher.backtrack": 382655,
-     "rules.pattern": 93102,
-     "matcher.attempt": 65346,
+     "matcher.backtrack": 380942,
+     "rules.pattern": 92850,
+     "matcher.attempt": 65076,
      "candidates.repair": 36209,
      "translate.frame": 33551,
      "normalize.push3": 28176,
      "index.splitClauses": 23545,
-     "spell.edit": 12336,
      "scene.edit": 9218,
      "meta.worlds.near": 8872,
+     "spell.edit": 7854,
      "normalize.span": 5239,
      "open-words.place": 3709
     }
@@ -14480,7 +14480,7 @@
   {
    "id": "r0401",
    "outcome": "not_understood",
-   "ms": 10,
+   "ms": 12,
    "reply": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do.",
    "read": "Yes",
    "worlds": [],
@@ -14510,7 +14510,7 @@
   {
    "id": "r0402",
    "outcome": "other_world",
-   "ms": 63,
+   "ms": 60,
    "reply": "What should I draw?",
    "read": "Make",
    "worlds": [
@@ -14542,7 +14542,7 @@
   {
    "id": "r0403",
    "outcome": "not_understood",
-   "ms": 1800,
+   "ms": 1597,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Make it bigger.\" or \"Make it red.\".",
    "read": "He gives to make",
    "worlds": [],
@@ -14572,7 +14572,7 @@
   {
    "id": "r0404",
    "outcome": "other_world",
-   "ms": 64,
+   "ms": 57,
    "reply": "What should I draw?",
    "read": "Make",
    "worlds": [
@@ -14604,7 +14604,7 @@
   {
    "id": "r0405",
    "outcome": "not_understood",
-   "ms": 1581,
+   "ms": 1431,
    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Make it bigger.\" or \"Make it red.\".",
    "read": "He gives to make",
    "worlds": [],
@@ -14634,7 +14634,7 @@
   {
    "id": "r0406",
    "outcome": "other_world",
-   "ms": 65,
+   "ms": 62,
    "reply": "What should I draw?",
    "read": "Make",
    "worlds": [
@@ -14666,7 +14666,7 @@
   {
    "id": "r0407",
    "outcome": "not_understood",
-   "ms": 118,
+   "ms": 108,
    "reply": "I did not understand \"Da face face apă\". For example: \"Add a chart.\" or \"What is the colour of chart 2?\"",
    "read": "He to give to make water",
    "worlds": [],
@@ -14696,7 +14696,7 @@
   {
    "id": "r0408",
    "outcome": "other_world",
-   "ms": 66,
+   "ms": 61,
    "reply": "What should I draw?",
    "read": "Make",
    "worlds": [
@@ -14728,7 +14728,7 @@
   {
    "id": "r0409",
    "outcome": "not_understood",
-   "ms": 1887,
+   "ms": 1649,
    "reply": "I did not understand \"Da face face apă face un\". For example: \"Adaugă un cântec.\" or \"Câte cântece sunt acolo?\"",
    "read": "He to give to make water a",
    "worlds": [],
@@ -14737,15 +14737,15 @@
    ],
    "pos": 98,
    "tk": {
-    "total": 577951,
+    "total": 580797,
     "sites": {
      "matcher.backtrack": 357050,
      "rules.pattern": 85068,
      "matcher.attempt": 60312,
      "normalize.push3": 20482,
      "index.splitClauses": 20225,
+     "spell.edit": 8750,
      "translate.frame": 6092,
-     "spell.edit": 5904,
      "normalize.span": 3800,
      "index.cardCuts": 3442,
      "open-words.place": 2027,
@@ -14758,7 +14758,7 @@
   {
    "id": "r0410",
    "outcome": "other_world",
-   "ms": 50,
+   "ms": 46,
    "reply": "I added water to the ground.",
    "read": "A sea",
    "worlds": [
@@ -14790,7 +14790,7 @@
   {
    "id": "r0411",
    "outcome": "other_world",
-   "ms": 73,
+   "ms": 66,
    "reply": "I added water to the ground.",
    "read": "He to give to make water a sea",
    "worlds": [
@@ -14822,7 +14822,7 @@
   {
    "id": "r0412",
    "outcome": "not_understood",
-   "ms": 1366,
+   "ms": 1224,
    "reply": "I did not understand \"faci\". Did you mean \"Make it louder.\" or \"Make the song bigger.\"?",
    "read": "You make",
    "worlds": [],
@@ -14852,7 +14852,7 @@
   {
    "id": "r0413",
    "outcome": "not_understood",
-   "ms": 983,
+   "ms": 923,
    "reply": "I did not understand \"Da face face apă face un mare faci un\". Did you mean \"Ne fă un document cu text merge la mare.\"?",
    "read": "He to give to make water a sea a",
    "worlds": [],
@@ -14882,7 +14882,7 @@
   {
    "id": "r0414",
    "outcome": "other_world",
-   "ms": 72,
+   "ms": 71,
    "reply": "I added water to the ground.",
    "read": "He to give to make water a sea",
    "worlds": [
@@ -14914,7 +14914,7 @@
   {
    "id": "r0415",
    "outcome": "not_understood",
-   "ms": 996,
+   "ms": 892,
    "reply": "I did not understand \"un mami\". For example: \"Add a chart.\" or \"What is the colour of chart 2?\" I did not know the word: mami.",
    "read": "A mami",
    "worlds": [],
@@ -14944,7 +14944,7 @@
   {
    "id": "r0416",
    "outcome": "not_understood",
-   "ms": 675,
+   "ms": 620,
    "reply": "I did not understand \"Da face face apă face un mare faci un mami\". Did you mean \"Ne fă un document cu text merge la mare.\"? I did not know the word: mami.",
    "read": "He to give to make water a sea a mami",
    "worlds": [],
@@ -14974,7 +14974,7 @@
   {
    "id": "r0417",
    "outcome": "other_world",
-   "ms": 49,
+   "ms": 47,
    "reply": "I added water to the ground.",
    "read": "A sea",
    "worlds": [
@@ -15006,7 +15006,7 @@
   {
    "id": "r0418",
    "outcome": "other_world",
-   "ms": 92,
+   "ms": 86,
    "reply": "There is no he to give to make sea mami ground here.",
    "read": "He to give to make water a sea a mami a sea",
    "worlds": [
@@ -15038,7 +15038,7 @@
   {
    "id": "r0419",
    "outcome": "refused",
-   "ms": 237,
+   "ms": 211,
    "reply": "I did not understand \"human\" here.",
    "worlds": [
     "ui.avatar"
@@ -15069,7 +15069,7 @@
   {
    "id": "r0420",
    "outcome": "refused",
-   "ms": 122,
+   "ms": 113,
    "reply": "I did not understand \"human\" here.",
    "worlds": [
     "ui.avatar"
@@ -15079,20 +15079,20 @@
    ],
    "pos": 1,
    "tk": {
-    "total": 11886,
+    "total": 11857,
     "sites": {
      "matcher.backtrack": 7697,
-     "rules.pattern": 1236,
+     "rules.pattern": 1235,
      "matcher.attempt": 1031,
      "spell.edit": 711,
      "emit.substituteEmit": 146,
-     "normalize.push3": 125,
      "acts.kind": 120,
+     "normalize.push3": 115,
      "scene.walk": 108,
      "interpreter.visit": 66,
-     "index.splitClauses": 51,
      "open-words.place": 48,
-     "index.run": 48
+     "index.run": 48,
+     "index.splitClauses": 45
     }
    },
    "verdict": null
@@ -15100,7 +15100,7 @@
   {
    "id": "r0421",
    "outcome": "executed",
-   "ms": 105,
+   "ms": 99,
    "reply": "I can chat, draw pictures, charts and diagrams, work out sums, solve word problems, do sums, talk about shopping and things, keep your lists, edit documents, show places on a map, play music, shop with a list and pay, co",
    "worlds": [
     "ui.help"
@@ -15131,7 +15131,7 @@
   {
    "id": "r0422",
    "outcome": "other_world",
-   "ms": 66,
+   "ms": 62,
    "reply": "Here is Bucharest: capital of Romania · 1.9 million people.",
    "worlds": [
     "geo.map"
@@ -15162,7 +15162,7 @@
   {
    "id": "r0423",
    "outcome": "refused",
-   "ms": 201,
+   "ms": 199,
    "reply": "I did not understand \"human\" here.",
    "worlds": [
     "ui.avatar"
@@ -15193,7 +15193,7 @@
   {
    "id": "r0424",
    "outcome": "refused",
-   "ms": 475,
+   "ms": 437,
    "reply": "I did not understand that as something to do in the avatar.",
    "worlds": [
     "ui.avatar"
@@ -15224,7 +15224,7 @@
   {
    "id": "r0425",
    "outcome": "refused",
-   "ms": 238,
+   "ms": 219,
    "reply": "I did not understand \"use\", \"cyclops\" here.",
    "worlds": [
     "ui.avatar"
@@ -15255,7 +15255,7 @@
   {
    "id": "r0426",
    "outcome": "refused",
-   "ms": 567,
+   "ms": 551,
    "reply": "I did not understand \"turned\", \"ia\" here.",
    "worlds": [
     "ui.avatar"
@@ -15286,7 +15286,7 @@
   {
    "id": "r0427",
    "outcome": "refused",
-   "ms": 111,
+   "ms": 101,
    "reply": "I did not understand \"human\" here.",
    "worlds": [
     "ui.avatar"
@@ -15317,7 +15317,7 @@
   {
    "id": "r0428",
    "outcome": "executed",
-   "ms": 8,
+   "ms": 4,
    "reply": "The eyes are blue now.",
    "worlds": [
     "ui.avatar"
@@ -15362,7 +15362,7 @@
   {
    "id": "r0430",
    "outcome": "executed",
-   "ms": 36,
+   "ms": 32,
    "reply": "On the robot tab you can say, for example: \"Which tab am I on\", \"Turn on the microphone\", \"Turn on hands-free mode\", \"Set the speech rate to 1.5\" or \"Switch to Romanian\". Say \"more examples\" for others.",
    "worlds": [
     "ui.help"
@@ -15393,7 +15393,7 @@
   {
    "id": "r0431",
    "outcome": "executed",
-   "ms": 11,
+   "ms": 10,
    "reply": "I read \"suprised\" as \"surprised\". The face is surprised now.",
    "worlds": [
     "ui.avatar"
@@ -15418,7 +15418,7 @@
   {
    "id": "r0432",
    "outcome": "refused",
-   "ms": 314,
+   "ms": 297,
    "reply": "I did not understand \"look\" here.",
    "worlds": [
     "ui.avatar"
@@ -15449,7 +15449,7 @@
   {
    "id": "r0433",
    "outcome": "refused",
-   "ms": 226,
+   "ms": 222,
    "reply": "I did not understand \"fa\", \"mi\", \"avatarul\", \"ca\", \"om\" here.",
    "worlds": [
     "ui.avatar"
@@ -15480,7 +15480,7 @@
   {
    "id": "r0434",
    "outcome": "refused",
-   "ms": 174,
+   "ms": 179,
    "reply": "I did not understand \"fa\", \"avatarul\", \"ca\", \"om\" here.",
    "worlds": [
     "ui.avatar"
@@ -15511,7 +15511,7 @@
   {
    "id": "r0435",
    "outcome": "refused",
-   "ms": 280,
+   "ms": 254,
    "reply": "I did not understand \"fa\", \"ochii\", \"mari\" here.",
    "worlds": [
     "ui.avatar"
@@ -15542,7 +15542,7 @@
   {
    "id": "r0436",
    "outcome": "executed",
-   "ms": 256,
+   "ms": 232,
    "reply": "Hello! What would you like to talk about? I did not understand \"express fear\". Did you mean \"Express ear.\"? (I read \"eys\" as \"eyo\")",
    "worlds": [
     "kids.common"
@@ -15574,7 +15574,7 @@
   {
    "id": "r0437",
    "outcome": "refused",
-   "ms": 321,
+   "ms": 301,
    "reply": "I did not understand \"fa\", \"ochii\", \"mari\" here.",
    "worlds": [
     "ui.avatar"
@@ -15605,7 +15605,7 @@
   {
    "id": "r0438",
    "outcome": "refused",
-   "ms": 175,
+   "ms": 178,
    "reply": "I did not understand \"fa\", \"ochi\", \"visatori\" here.",
    "worlds": [
     "ui.avatar"
@@ -15636,7 +15636,7 @@
   {
    "id": "r0439",
    "outcome": "executed",
-   "ms": 6,
+   "ms": 4,
    "reply": "The eyes are big now.",
    "worlds": [
     "ui.avatar"
@@ -15661,7 +15661,7 @@
   {
    "id": "r0440",
    "outcome": "refused",
-   "ms": 4,
+   "ms": 3,
    "reply": "Nothing changed.",
    "worlds": [
     "ui.avatar"
@@ -15683,7 +15683,7 @@
   {
    "id": "r0441",
    "outcome": "refused",
-   "ms": 46,
+   "ms": 43,
    "reply": "I did not understand \"b\", \"1\" here.",
    "worlds": [
     "ui.avatar"
@@ -15714,7 +15714,7 @@
   {
    "id": "r0442",
    "outcome": "refused",
-   "ms": 46,
+   "ms": 43,
    "reply": "I did not understand \"c\", \"3\" here.",
    "worlds": [
     "ui.avatar"
@@ -15745,7 +15745,7 @@
   {
    "id": "r0443",
    "outcome": "refused",
-   "ms": 46,
+   "ms": 43,
    "reply": "I did not understand \"c\", \"1\" here.",
    "worlds": [
     "ui.avatar"
@@ -15776,7 +15776,7 @@
   {
    "id": "r0444",
    "outcome": "other_world",
-   "ms": 156,
+   "ms": 144,
    "reply": "OK, here is a bar chart with 3 items: apples 5, pears 3 and plums 8.",
    "worlds": [
     "data.charts"
@@ -15807,7 +15807,7 @@
   {
    "id": "r0445",
    "outcome": "refused",
-   "ms": 14,
+   "ms": 13,
    "reply": "I read \"nect\" as \"next\". Nothing changed. I could not do next to a house: this world does not take place for make. I could not do cloud: there is no cloud here.",
    "worlds": [
     "ui.avatar"
@@ -15833,7 +15833,7 @@
   {
    "id": "r0446",
    "outcome": "refused",
-   "ms": 41,
+   "ms": 38,
    "reply": "I did not understand that as something to do in the avatar.",
    "worlds": [
     "ui.avatar"
@@ -15864,7 +15864,7 @@
   {
    "id": "r0447",
    "outcome": "refused",
-   "ms": 5,
+   "ms": 4,
    "reply": "Nothing changed. I could not do next to a house: this world does not take place for make. I could not do cloud: there is no cloud here.",
    "worlds": [
     "ui.avatar"
@@ -15886,7 +15886,7 @@
   {
    "id": "r0448",
    "outcome": "refused",
-   "ms": 8,
+   "ms": 7,
    "reply": "Nothing changed. I could not do sun: there is no sun here.",
    "worlds": [
     "ui.avatar"
@@ -15930,7 +15930,7 @@
   {
    "id": "r0450",
    "outcome": "executed",
-   "ms": 5,
+   "ms": 4,
    "reply": "Nothing changed. The eyes are already big.",
    "worlds": [
     "ui.avatar"
@@ -15955,7 +15955,7 @@
   {
    "id": "r0451",
    "outcome": "executed",
-   "ms": 10,
+   "ms": 8,
    "reply": "The eyes are huge now.",
    "worlds": [
     "ui.avatar"
@@ -15978,7 +15978,7 @@
   {
    "id": "r0452",
    "outcome": "executed",
-   "ms": 5,
+   "ms": 4,
    "reply": "Nothing changed. The eyes are already huge.",
    "worlds": [
     "ui.avatar"
@@ -16001,7 +16001,7 @@
   {
    "id": "r0453",
    "outcome": "executed",
-   "ms": 9,
+   "ms": 8,
    "reply": "The eyes are green now. The eyes are default now.",
    "worlds": [
     "ui.avatar"
@@ -16052,7 +16052,7 @@
   {
    "id": "r0455",
    "outcome": "refused",
-   "ms": 9,
+   "ms": 8,
    "reply": "Nothing changed. I could not do 2 people: this world does not take count for make. I could not do person: there is no person here.",
    "worlds": [
     "ui.avatar"
@@ -16096,7 +16096,7 @@
   {
    "id": "r0457",
    "outcome": "refused",
-   "ms": 69,
+   "ms": 66,
    "reply": "There is nothing in the avatar that I made and could change that way yet.",
    "worlds": [
     "ui.avatar"
@@ -16149,7 +16149,7 @@
   {
    "id": "r0459",
    "outcome": "refused",
-   "ms": 375,
+   "ms": 337,
    "reply": "I did not understand \"bugger\" here.",
    "worlds": [
     "ui.avatar"
@@ -16180,7 +16180,7 @@
   {
    "id": "r0460",
    "outcome": "refused",
-   "ms": 73,
+   "ms": 66,
    "reply": "There is nothing in the avatar that I made and could change that way yet.",
    "worlds": [
     "ui.avatar"
@@ -16211,7 +16211,7 @@
   {
    "id": "r0461",
    "outcome": "refused",
-   "ms": 10,
+   "ms": 8,
    "reply": "Nothing changed. I could not do house: there is no house here.",
    "worlds": [
     "ui.avatar"
@@ -16258,7 +16258,7 @@
   {
    "id": "r0463",
    "outcome": "asked",
-   "ms": 8,
+   "ms": 4,
    "reply": "Nothing changed. To what value? I could not do in a man: this world does not take place for change.",
    "worlds": [
     "ui.avatar"
@@ -16280,7 +16280,7 @@
   {
    "id": "r0464",
    "outcome": "refused",
-   "ms": 199,
+   "ms": 190,
    "reply": "I did not understand that as something to do in the avatar.",
    "worlds": [
     "ui.avatar"
@@ -16311,7 +16311,7 @@
   {
    "id": "r0465",
    "outcome": "executed",
-   "ms": 47,
+   "ms": 48,
    "reply": "OK, here is my face. It is the icon beside the input.",
    "worlds": [
     "ui.shell"
@@ -16342,7 +16342,7 @@
   {
    "id": "r0466",
    "outcome": "executed",
-   "ms": 7,
+   "ms": 6,
    "reply": "Nothing changed. That is what is there already.",
    "worlds": [
     "ui.avatar"
@@ -16365,7 +16365,7 @@
   {
    "id": "r0467",
    "outcome": "executed",
-   "ms": 10,
+   "ms": 9,
    "reply": "I added a hair back. I added earrings. I removed the beard. The face is a woman now. I assumed 3 for the count.",
    "worlds": [
     "ui.avatar"
@@ -16390,7 +16390,7 @@
   {
    "id": "r0468",
    "outcome": "refused",
-   "ms": 74,
+   "ms": 69,
    "reply": "I did not understand \"liek\" here.",
    "worlds": [
     "ui.avatar"
@@ -16421,7 +16421,7 @@
   {
    "id": "r0469",
    "outcome": "refused",
-   "ms": 10,
+   "ms": 9,
    "reply": "Nothing changed. I could not do house: there is no house here.",
    "worlds": [
     "ui.avatar"
@@ -16465,7 +16465,7 @@
   {
    "id": "r0471",
    "outcome": "other_world",
-   "ms": 124,
+   "ms": 112,
    "reply": "A city does not contain cities.",
    "worlds": [
     "geo.map"
@@ -16496,7 +16496,7 @@
   {
    "id": "r0472",
    "outcome": "refused",
-   "ms": 167,
+   "ms": 160,
    "reply": "I did not understand \"youk\" here.",
    "worlds": [
     "ui.avatar"
@@ -16527,7 +16527,7 @@
   {
    "id": "r0473",
    "outcome": "other_world",
-   "ms": 28,
+   "ms": 26,
    "reply": "Here is New York: city of the United States · 19 million people.",
    "worlds": [
     "geo.map"
@@ -16558,7 +16558,7 @@
   {
    "id": "r0474",
    "outcome": "other_world",
-   "ms": 83,
+   "ms": 77,
    "reply": "Here is New York: city of the United States · 19 million people.",
    "worlds": [
     "geo.map"
@@ -16589,7 +16589,7 @@
   {
    "id": "r0475",
    "outcome": "refused",
-   "ms": 46,
+   "ms": 42,
    "reply": "I did not understand \"b\", \"1\" here.",
    "worlds": [
     "ui.avatar"
@@ -16620,7 +16620,7 @@
   {
    "id": "r0476",
    "outcome": "refused",
-   "ms": 309,
+   "ms": 285,
    "reply": "I did not understand \"game\", \"tic\", \"tac\", \"toe\" here.",
    "worlds": [
     "ui.avatar"
@@ -16651,7 +16651,7 @@
   {
    "id": "r0477",
    "outcome": "refused",
-   "ms": 45,
+   "ms": 40,
    "reply": "I did not understand \"b\", \"2\" here.",
    "worlds": [
     "ui.avatar"
@@ -16682,7 +16682,7 @@
   {
    "id": "r0478",
    "outcome": "refused",
-   "ms": 45,
+   "ms": 38,
    "reply": "I did not understand \"c\", \"2\" here.",
    "worlds": [
     "ui.avatar"
@@ -16713,7 +16713,7 @@
   {
    "id": "r0479",
    "outcome": "asked",
-   "ms": 10,
+   "ms": 9,
    "reply": "I read \"vatar\" as \"avatar\". Nothing changed. To what value? I could not do man: this world does not take place for change.",
    "worlds": [
     "ui.avatar"
@@ -16736,7 +16736,7 @@
   {
    "id": "r0480",
    "outcome": "asked",
-   "ms": 7,
+   "ms": 6,
    "reply": "Nothing changed. To what value? I could not do man: this world does not take place for change.",
    "worlds": [
     "ui.avatar"
@@ -16758,7 +16758,7 @@
   {
    "id": "r0481",
    "outcome": "asked",
-   "ms": 8,
+   "ms": 7,
    "reply": "I read \"transfrom\" as \"transform\". Nothing changed. To what value? I could not do man: this world does not take place for change.",
    "worlds": [
     "ui.avatar"
@@ -16781,7 +16781,7 @@
   {
    "id": "r0482",
    "outcome": "executed",
-   "ms": 15,
+   "ms": 12,
    "reply": "Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major.",
    "worlds": [
     "media.music"
@@ -16813,7 +16813,7 @@
   {
    "id": "r0483",
    "outcome": "executed",
-   "ms": 40,
+   "ms": 39,
    "reply": "Playing again at 125 beats per minute (it was 100).",
    "worlds": [
     "media.music"
@@ -16845,7 +16845,7 @@
   {
    "id": "r0484",
    "outcome": "executed",
-   "ms": 12,
+   "ms": 7,
    "reply": "Stopped.",
    "worlds": [
     "media.music"
@@ -16877,7 +16877,7 @@
   {
    "id": "r0485",
    "outcome": "other_world",
-   "ms": 1,
+   "ms": 4,
    "reply": "I would like to know you better. What is your name? (Say \"stop\" to end the questions.)",
    "worlds": [
     "session.things"
@@ -17143,7 +17143,7 @@
   {
    "id": "r0507",
    "outcome": "other_world",
-   "ms": 10,
+   "ms": 7,
    "reply": "I would like to know you better. What is your name? (Say \"stop\" to end the questions.)",
    "worlds": [
     "session.things"
@@ -17167,7 +17167,7 @@
   {
    "id": "r0508",
    "outcome": "other_world",
-   "ms": 59,
+   "ms": 60,
    "reply": "Nice to meet you, Sînică. What do you do for a living?",
    "worlds": [
     "session.things"
@@ -17189,7 +17189,7 @@
   {
    "id": "r0509",
    "outcome": "other_world",
-   "ms": 10,
+   "ms": 9,
    "reply": "OK, I will stop asking. Say \"get to know me\" when you want to go on.",
    "worlds": [
     "session.things"
@@ -17211,7 +17211,7 @@
   {
    "id": "r0510",
    "outcome": "other_world",
-   "ms": 119,
+   "ms": 114,
    "reply": "Welcome back! What do you do for a living?",
    "worlds": [
     "session.things"
@@ -17234,7 +17234,7 @@
   {
    "id": "r0511",
    "outcome": "refused",
-   "ms": 222,
+   "ms": 202,
    "reply": "I did not understand \"emoji\" here.",
    "worlds": [
     "ui.avatar"
@@ -17244,10 +17244,10 @@
    ],
    "pos": 0,
    "tk": {
-    "total": 44756,
+    "total": 42765,
     "sites": {
      "matcher.backtrack": 19173,
-     "spell.edit": 9816,
+     "spell.edit": 7825,
      "meta.worlds.near": 5072,
      "rules.pattern": 3163,
      "matcher.attempt": 2391,
@@ -17268,7 +17268,7 @@
   {
    "id": "r0512",
    "outcome": "refused",
-   "ms": 105,
+   "ms": 101,
    "reply": "I did not understand \"mcdavatara\", \"human\" here.",
    "worlds": [
     "ui.avatar"
@@ -17278,9 +17278,9 @@
    ],
    "pos": 1,
    "tk": {
-    "total": 13920,
+    "total": 13924,
     "sites": {
-     "spell.edit": 8266,
+     "spell.edit": 8269,
      "matcher.backtrack": 2653,
      "meta.worlds.near": 1000,
      "rules.pattern": 513,
@@ -17290,7 +17290,7 @@
      "normalize.push3": 99,
      "acts.kind": 80,
      "interpreter.visit": 66,
-     "open-words.place": 42,
+     "open-words.place": 43,
      "door.elsewhere": 27
     }
    },
@@ -17337,7 +17337,7 @@
   {
    "id": "r0514",
    "outcome": "refused",
-   "ms": 87,
+   "ms": 85,
    "reply": "I did not understand \"make\", \"send\" here.",
    "worlds": [
     "ui.avatar"
@@ -17400,7 +17400,7 @@
   {
    "id": "r0516",
    "outcome": "refused",
-   "ms": 51,
+   "ms": 46,
    "reply": "I could not make that in the avatar.",
    "worlds": [
     "ui.avatar"
@@ -17462,7 +17462,7 @@
   {
    "id": "r0518",
    "outcome": "refused",
-   "ms": 9,
+   "ms": 4,
    "reply": "Nothing changed. The mouth has no other variant.",
    "worlds": [
     "ui.avatar"
@@ -17485,7 +17485,7 @@
   {
    "id": "r0519",
    "outcome": "refused",
-   "ms": 34,
+   "ms": 38,
    "reply": "I cannot make person in the avatar yet.",
    "worlds": [
     "ui.avatar"
@@ -17517,7 +17517,7 @@
   {
    "id": "r0520",
    "outcome": "executed",
-   "ms": 7,
+   "ms": 4,
    "reply": "The mouth is small now.",
    "worlds": [
     "ui.avatar"
@@ -17545,7 +17545,7 @@
   {
    "id": "r0521",
    "outcome": "asked",
-   "ms": 4,
+   "ms": 7,
    "reply": "Nothing changed. To what value?",
    "worlds": [
     "ui.avatar"
@@ -17596,7 +17596,7 @@
   {
    "id": "r0523",
    "outcome": "executed",
-   "ms": 8,
+   "ms": 4,
    "reply": "The mouth is tongue out now. I assumed change for the act.",
    "worlds": [
     "ui.avatar"
@@ -17622,7 +17622,7 @@
   {
    "id": "r0524",
    "outcome": "executed",
-   "ms": 8,
+   "ms": 11,
    "reply": "I added earrings. I removed the hair back. I removed the cheeks. I removed the eyebrows. I removed the hair front. The face is a robot now.",
    "worlds": [
     "ui.avatar"
@@ -17648,7 +17648,7 @@
   {
    "id": "r0525",
    "outcome": "executed",
-   "ms": 5,
+   "ms": 4,
    "reply": "The mouth is big now.",
    "worlds": [
     "ui.avatar"
@@ -17676,7 +17676,7 @@
   {
    "id": "r0526",
    "outcome": "executed",
-   "ms": 61,
+   "ms": 54,
    "reply": "You are already on the Documents tab.",
    "worlds": [
     "ui.shell"
@@ -17708,7 +17708,7 @@
   {
    "id": "r0527",
    "outcome": "refused",
-   "ms": 150,
+   "ms": 126,
    "reply": "I understood \"two chapters\", \"a paragraph\", but not \"add a header\", so I did nothing.",
    "worlds": [
     "docs.editor"
@@ -17742,7 +17742,7 @@
   {
    "id": "r0528",
    "outcome": "executed",
-   "ms": 256,
+   "ms": 233,
    "reply": "I added a story. I added 2 chapters. The story is called “All about Uganda”. I assumed story for the target. I assumed 150 for the length.",
    "worlds": [
     "docs.editor"
@@ -17772,7 +17772,7 @@
   {
    "id": "r0529",
    "outcome": "refused",
-   "ms": 43,
+   "ms": 39,
    "reply": "I did not understand \"text\" here.",
    "worlds": [
     "docs.editor"
@@ -17807,7 +17807,7 @@
   {
    "id": "r0530",
    "outcome": "executed",
-   "ms": 51,
+   "ms": 44,
    "reply": "You are already on the Documents tab.",
    "worlds": [
     "ui.shell"
@@ -17839,7 +17839,7 @@
   {
    "id": "r0531",
    "outcome": "refused",
-   "ms": 123,
+   "ms": 112,
    "reply": "I cannot answer questions about the documents yet.",
    "worlds": [
     "docs.editor"
@@ -17849,19 +17849,19 @@
    ],
    "pos": 1,
    "tk": {
-    "total": 18624,
+    "total": 18733,
     "sites": {
-     "matcher.backtrack": 10795,
-     "rules.pattern": 2577,
-     "matcher.attempt": 1939,
+     "matcher.backtrack": 10815,
+     "rules.pattern": 2607,
+     "matcher.attempt": 1949,
      "spell.edit": 1028,
+     "normalize.push3": 455,
      "emit.substituteEmit": 450,
-     "normalize.push3": 434,
-     "index.splitClauses": 159,
+     "index.splitClauses": 171,
      "index.run": 138,
      "open-words.place": 116,
      "scene.walk": 108,
-     "normalize.span": 84,
+     "normalize.span": 90,
      "wordpiece.start": 83
     }
    },
@@ -17874,7 +17874,7 @@
   {
    "id": "r0532",
    "outcome": "refused",
-   "ms": 35,
+   "ms": 33,
    "reply": "I did not understand that as something to do in the documents.",
    "worlds": [
     "docs.editor"
@@ -17909,7 +17909,7 @@
   {
    "id": "r0533",
    "outcome": "refused",
-   "ms": 92,
+   "ms": 88,
    "reply": "I did not understand \"chester\" here.",
    "worlds": [
     "docs.editor"
@@ -17945,7 +17945,7 @@
   {
    "id": "r0541",
    "outcome": "not_understood",
-   "ms": 26,
+   "ms": 24,
    "reply": "OK, Tom has 10 bees.",
    "worlds": [
     "kids.arith"
@@ -17975,7 +17975,7 @@
   {
    "id": "r0542",
    "outcome": "not_understood",
-   "ms": 63,
+   "ms": 60,
    "reply": "OK, Tom lost 1 bee.",
    "worlds": [
     "kids.arith"
@@ -18005,7 +18005,7 @@
   {
    "id": "r0543",
    "outcome": "other_world",
-   "ms": 29,
+   "ms": 26,
    "reply": "Tom has 9 bees.",
    "worlds": [
     "kids.arith"
@@ -18037,7 +18037,7 @@
   {
    "id": "r0544",
    "outcome": "executed",
-   "ms": 174,
+   "ms": 170,
    "reply": "I added 5 clouds. I added a sun.",
    "worlds": [
     "art.draw"
@@ -18068,7 +18068,7 @@
   {
    "id": "r0545",
    "outcome": "refused",
-   "ms": 87,
+   "ms": 86,
    "reply": "I did not understand \"un\", \"si\" here.",
    "worlds": [
     "art.draw"
@@ -18103,7 +18103,7 @@
   {
    "id": "r0546",
    "outcome": "executed",
-   "ms": 183,
+   "ms": 172,
    "reply": "I added a sun. I assumed make for the act. I could not do under the clouds: there is no place cloud here.",
    "worlds": [
     "art.draw"
@@ -18133,7 +18133,7 @@
   {
    "id": "r0547",
    "outcome": "executed",
-   "ms": 21,
+   "ms": 22,
    "reply": "You are already on the Music tab.",
    "worlds": [
     "ui.shell"
@@ -18165,7 +18165,7 @@
   {
    "id": "r0548",
    "outcome": "executed",
-   "ms": 12,
+   "ms": 10,
    "reply": "Playing \"Jingle Bells\" on the piano at 120 beats per minute. It is in C major.",
    "worlds": [
     "media.music"
@@ -18197,7 +18197,7 @@
   {
    "id": "r0549",
    "outcome": "executed",
-   "ms": 13,
+   "ms": 12,
    "reply": "Playing \"Mary Had a Little Lamb\" on the piano at 110 beats per minute. It is in C major.",
    "worlds": [
     "media.music"
@@ -18229,7 +18229,7 @@
   {
    "id": "r0550",
    "outcome": "executed",
-   "ms": 39,
+   "ms": 34,
    "reply": "Playing \"Mary Had a Little Lamb\" again on the piano at 110 beats per minute.",
    "worlds": [
     "media.music"
@@ -18261,7 +18261,7 @@
   {
    "id": "r0551",
    "outcome": "executed",
-   "ms": 6,
+   "ms": 10,
    "reply": "I added a red circle.",
    "worlds": [
     "diagram.sketch"
@@ -18292,7 +18292,7 @@
   {
    "id": "r0552",
    "outcome": "executed",
-   "ms": 16,
+   "ms": 13,
    "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed tree for the layout.",
    "worlds": [
     "diagram.sketch"
@@ -18325,7 +18325,7 @@
   {
    "id": "r0553",
    "outcome": "refused",
-   "ms": 79,
+   "ms": 75,
    "reply": "I did not understand \"liek\", \"shape\" here.",
    "worlds": [
     "diagram.sketch"
@@ -18357,7 +18357,7 @@
   {
    "id": "r0554",
    "outcome": "executed",
-   "ms": 6,
+   "ms": 9,
    "reply": "I added a red circle.",
    "worlds": [
     "diagram.sketch"
@@ -18386,7 +18386,7 @@
   {
    "id": "r0555",
    "outcome": "executed",
-   "ms": 10,
+   "ms": 5,
    "reply": "I added a rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -18416,7 +18416,7 @@
   {
    "id": "r0556",
    "outcome": "executed",
-   "ms": 6,
+   "ms": 9,
    "reply": "I added a rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -18444,7 +18444,7 @@
   {
    "id": "r0557",
    "outcome": "refused",
-   "ms": 8,
+   "ms": 3,
    "reply": "Nothing changed. I could not do connect: this world does not connect.",
    "worlds": [
     "diagram.sketch"
@@ -18474,7 +18474,7 @@
   {
    "id": "r0558",
    "outcome": "refused",
-   "ms": 62,
+   "ms": 59,
    "reply": "I could not make that in the diagram.",
    "worlds": [
     "diagram.sketch"
@@ -18509,7 +18509,7 @@
   {
    "id": "r0559",
    "outcome": "executed",
-   "ms": 10,
+   "ms": 5,
    "reply": "I added a red circle.",
    "worlds": [
     "diagram.sketch"
@@ -18538,7 +18538,7 @@
   {
    "id": "r0560",
    "outcome": "executed",
-   "ms": 5,
+   "ms": 8,
    "reply": "I added a rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -18566,7 +18566,7 @@
   {
    "id": "r0561",
    "outcome": "refused",
-   "ms": 73,
+   "ms": 68,
    "reply": "I did not understand \"1\" here.",
    "worlds": [
     "diagram.sketch"
@@ -18602,7 +18602,7 @@
   {
    "id": "r0562",
    "outcome": "refused",
-   "ms": 277,
+   "ms": 239,
    "reply": "I did not understand \"label\", \"1\" here.",
    "worlds": [
     "diagram.sketch"
@@ -18636,7 +18636,7 @@
   {
    "id": "r0563",
    "outcome": "refused",
-   "ms": 7,
+   "ms": 4,
    "reply": "Nothing changed. There is no link here.",
    "worlds": [
     "diagram.sketch"
@@ -18662,7 +18662,7 @@
   {
    "id": "r0564",
    "outcome": "refused",
-   "ms": 526,
+   "ms": 471,
    "reply": "I did not understand \"1\" here.",
    "worlds": [
     "diagram.sketch"
@@ -18672,7 +18672,7 @@
    ],
    "pos": 5,
    "tk": {
-    "total": 105572,
+    "total": 105570,
     "sites": {
      "matcher.backtrack": 32317,
      "meta.worlds.near": 26230,
@@ -18696,7 +18696,7 @@
   {
    "id": "r0565",
    "outcome": "executed",
-   "ms": 10,
+   "ms": 8,
    "reply": "I added a red circle.",
    "worlds": [
     "diagram.sketch"
@@ -18725,7 +18725,7 @@
   {
    "id": "r0566",
    "outcome": "executed",
-   "ms": 10,
+   "ms": 5,
    "reply": "I added a rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -18753,7 +18753,7 @@
   {
    "id": "r0567",
    "outcome": "refused",
-   "ms": 61,
+   "ms": 59,
    "reply": "I did not understand \"1\" here.",
    "worlds": [
     "diagram.sketch"
@@ -18787,7 +18787,7 @@
   {
    "id": "r0568",
    "outcome": "refused",
-   "ms": 513,
+   "ms": 462,
    "reply": "I understood \"reactanle1 as label1\", but not \"label the arraw between circle1\", so I did nothing.",
    "worlds": [
     "diagram.sketch"
@@ -18797,7 +18797,7 @@
    ],
    "pos": 3,
    "tk": {
-    "total": 115259,
+    "total": 115223,
     "sites": {
      "matcher.backtrack": 54973,
      "meta.worlds.near": 19733,
@@ -18821,7 +18821,7 @@
   {
    "id": "r0569",
    "outcome": "refused",
-   "ms": 267,
+   "ms": 248,
    "reply": "I did not understand \"1\", \"uses\" here.",
    "worlds": [
     "diagram.sketch"
@@ -18831,20 +18831,20 @@
    ],
    "pos": 4,
    "tk": {
-    "total": 47881,
+    "total": 48255,
     "sites": {
-     "matcher.backtrack": 29232,
-     "spell.edit": 6001,
-     "rules.pattern": 4657,
-     "matcher.attempt": 3378,
+     "matcher.backtrack": 30126,
+     "spell.edit": 5282,
+     "rules.pattern": 4813,
+     "matcher.attempt": 3494,
      "emit.substituteEmit": 924,
-     "normalize.push3": 844,
-     "index.splitClauses": 536,
-     "normalize.span": 271,
+     "normalize.push3": 818,
+     "index.splitClauses": 514,
      "index.run": 270,
+     "normalize.span": 260,
      "index.visit": 181,
      "index.atomRun": 138,
-     "normalize.gameNames": 124
+     "normalize.gameNames": 119
     }
    },
    "verdict": "wrong",
@@ -18856,7 +18856,7 @@
   {
    "id": "r0570",
    "outcome": "refused",
-   "ms": 531,
+   "ms": 478,
    "reply": "I did not understand \"1\", \"thicker\", \"dashed\" here.",
    "worlds": [
     "diagram.sketch"
@@ -18891,7 +18891,7 @@
   {
    "id": "r0571",
    "outcome": "refused",
-   "ms": 83,
+   "ms": 75,
    "reply": "I did not understand \"1\" here.",
    "worlds": [
     "diagram.sketch"
@@ -18923,7 +18923,7 @@
   {
    "id": "r0572",
    "outcome": "executed",
-   "ms": 6,
+   "ms": 5,
    "reply": "I added a red circle.",
    "worlds": [
     "diagram.sketch"
@@ -18952,7 +18952,7 @@
   {
    "id": "r0573",
    "outcome": "executed",
-   "ms": 11,
+   "ms": 9,
    "reply": "I added a rectangle.",
    "worlds": [
     "diagram.sketch"
@@ -19007,7 +19007,7 @@
   {
    "id": "r0575",
    "outcome": "refused",
-   "ms": 271,
+   "ms": 239,
    "reply": "I did not understand \"called\", \"b\" here.",
    "worlds": [
     "diagram.sketch"
@@ -19042,7 +19042,7 @@
   {
    "id": "r0576",
    "outcome": "refused",
-   "ms": 3,
+   "ms": 2,
    "reply": "Nothing changed. I could not do connect: this world does not connect.",
    "worlds": [
     "diagram.sketch"
@@ -19068,7 +19068,7 @@
   {
    "id": "r0577",
    "outcome": "executed",
-   "ms": 13,
+   "ms": 11,
    "reply": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed diagram for the target. I assumed tree for the layout.",
    "worlds": [
     "diagram.sketch"
@@ -19099,7 +19099,7 @@
   {
    "id": "r0578",
    "outcome": "refused",
-   "ms": 812,
+   "ms": 749,
    "reply": "I understood \"make the arrow between A\", \"two-way\", but not \"B red\", so I did nothing.",
    "worlds": [
     "diagram.sketch"
@@ -19134,7 +19134,7 @@
   {
    "id": "r0579",
    "outcome": "refused",
-   "ms": 97,
+   "ms": 89,
    "reply": "I did not understand \"called\" here.",
    "worlds": [
     "diagram.sketch"
@@ -19168,7 +19168,7 @@
   {
    "id": "r0580",
    "outcome": "refused",
-   "ms": 83,
+   "ms": 79,
    "reply": "I did not understand \"called\", \"b\" here.",
    "worlds": [
     "diagram.sketch"
@@ -19202,7 +19202,7 @@
   {
    "id": "r0581",
    "outcome": "refused",
-   "ms": 38,
+   "ms": 34,
    "reply": "I did not understand \"b\" here.",
    "worlds": [
     "diagram.sketch"
@@ -19236,7 +19236,7 @@
   {
    "id": "r0582",
    "outcome": "refused",
-   "ms": 75,
+   "ms": 72,
    "reply": "I did not understand \"1\" here.",
    "worlds": [
     "diagram.sketch"
@@ -19272,7 +19272,7 @@
   {
    "id": "r0583",
    "outcome": "refused",
-   "ms": 252,
+   "ms": 226,
    "reply": "I did not understand \"1\", \"bit\", \"thicker\" here.",
    "worlds": [
     "diagram.sketch"
@@ -19306,7 +19306,7 @@
   {
    "id": "r0584",
    "outcome": "refused",
-   "ms": 121,
+   "ms": 106,
    "reply": "I did not understand \"1\", \"thinner\" here.",
    "worlds": [
     "diagram.sketch"
@@ -19316,19 +19316,19 @@
    ],
    "pos": 5,
    "tk": {
-    "total": 24269,
+    "total": 22448,
     "sites": {
-     "matcher.backtrack": 7732,
-     "spell.edit": 6511,
+     "matcher.backtrack": 7412,
+     "spell.edit": 5383,
      "meta.worlds.near": 3648,
      "scene.edit": 1568,
-     "rules.pattern": 1137,
-     "emit.substituteEmit": 1008,
-     "matcher.attempt": 936,
-     "index.run": 305,
-     "normalize.push3": 198,
-     "index.atomRun": 152,
-     "index.readString": 144,
+     "rules.pattern": 1081,
+     "emit.substituteEmit": 882,
+     "matcher.attempt": 880,
+     "index.run": 268,
+     "normalize.push3": 177,
+     "index.readString": 136,
+     "index.atomRun": 133,
      "scene.walk": 108
     }
    },
@@ -19340,7 +19340,7 @@
   {
    "id": "r0585",
    "outcome": "refused",
-   "ms": 40,
+   "ms": 36,
    "reply": "I did not understand \"1\" here.",
    "worlds": [
     "diagram.sketch"
@@ -19375,7 +19375,7 @@
   {
    "id": "r0586",
    "outcome": "other_world",
-   "ms": 153,
+   "ms": 144,
    "reply": "OK, today is Friday.",
    "worlds": [
     "time.calendar"
@@ -19385,20 +19385,20 @@
    ],
    "pos": 0,
    "tk": {
-    "total": 22626,
+    "total": 23152,
     "sites": {
-     "matcher.backtrack": 5439,
+     "matcher.backtrack": 5677,
      "meta.worlds.near": 4504,
      "scene.edit": 3632,
      "emit.substituteEmit": 1778,
-     "rules.pattern": 1531,
+     "rules.pattern": 1636,
      "spell.edit": 1296,
-     "matcher.attempt": 1163,
+     "matcher.attempt": 1258,
      "index.run": 593,
-     "normalize.push3": 462,
+     "normalize.push3": 507,
      "index.readString": 302,
      "time.words": 216,
-     "index.atomRun": 143
+     "index.splitClauses": 163
     }
    },
    "verdict": "right",
@@ -19407,7 +19407,7 @@
   {
    "id": "r0587",
    "outcome": "other_world",
-   "ms": 69,
+   "ms": 65,
    "reply": "Tomorrow is Saturday.",
    "worlds": [
     "time.calendar"
@@ -19461,7 +19461,7 @@
   {
    "id": "r0589",
    "outcome": "executed",
-   "ms": 74,
+   "ms": 69,
    "reply": "Thanks for telling me. I cannot do anything with that yet. Tell me what you would like to do, or say help.",
    "worlds": [
     "kids.common"
@@ -19493,7 +19493,7 @@
   {
    "id": "r0590",
    "outcome": "other_world",
-   "ms": 73,
+   "ms": 70,
    "reply": "I added call grandma to your to-do list.",
    "worlds": [
     "kids.tasks"
@@ -19547,7 +19547,7 @@
   {
    "id": "r0592",
    "outcome": "refused",
-   "ms": 72,
+   "ms": 65,
    "reply": "I did not understand \"say\" here.",
    "worlds": [
     "ui.avatar"
@@ -19581,7 +19581,7 @@
   {
    "id": "r0593",
    "outcome": "refused",
-   "ms": 40,
+   "ms": 39,
    "reply": "I did not understand \"say\" here.",
    "worlds": [
     "ui.avatar"
@@ -19637,7 +19637,7 @@
   {
    "id": "r0595",
    "outcome": "refused",
-   "ms": 151,
+   "ms": 149,
    "reply": "I did not understand \"whats\" here.",
    "worlds": [
     "ui.avatar"
@@ -19671,7 +19671,7 @@
   {
    "id": "r0596",
    "outcome": "executed",
-   "ms": 7,
+   "ms": 4,
    "reply": "There is one face. There is one hair back. There are shoulders. There is one neck. There are ears. There is one head. There are cheeks. There is one mouth. There is one nose. There are eyes. There are eyebrows. There is ",
    "worlds": [
     "ui.avatar"
@@ -19718,7 +19718,7 @@
   {
    "id": "r0598",
    "outcome": "other_world",
-   "ms": 552,
+   "ms": 518,
    "reply": "OK, a puzzle. OK, you pay 10 lei. 10 lei is not enough. A puzzle costs 18 lei.",
    "worlds": [
     "plan.list"
@@ -19752,7 +19752,7 @@
   {
    "id": "r0599",
    "outcome": "other_world",
-   "ms": 670,
+   "ms": 630,
    "reply": "OK, 2 pencils. OK, you pay 10 lei. Your change from 10 lei is 6 lei.",
    "worlds": [
     "plan.list"
@@ -19786,7 +19786,7 @@
   {
    "id": "r0600",
    "outcome": "executed",
-   "ms": 15,
+   "ms": 13,
    "reply": "You are welcome.",
    "worlds": [
     "kids.common"
@@ -19818,7 +19818,7 @@
   {
    "id": "r0610",
    "outcome": "executed",
-   "ms": 53,
+   "ms": 44,
    "reply": "A circle is a round shape with no sides and no corners, unlike the other shapes.",
    "worlds": [
     "talk"
@@ -19850,7 +19850,7 @@
   {
    "id": "r0611",
    "outcome": "executed",
-   "ms": 87,
+   "ms": 78,
    "reply": "A square is a shape with 4 sides, 4 corners and equal sides, unlike the other shapes.",
    "worlds": [
     "talk"
@@ -19907,7 +19907,7 @@
   {
    "id": "r0622",
    "outcome": "executed",
-   "ms": 689,
+   "ms": 634,
    "reply": "OK, a ball and a pencil. OK, you pay 20 lei. Your change from 20 lei is 13 lei.",
    "worlds": [
     "plan.list"
@@ -19941,7 +19941,7 @@
   {
    "id": "r0623",
    "outcome": "executed",
-   "ms": 207,
+   "ms": 192,
    "reply": "A pencil costs 2 lei.",
    "worlds": [
     "kids.shop"
@@ -19973,7 +19973,7 @@
   {
    "id": "r0624",
    "outcome": "executed",
-   "ms": 329,
+   "ms": 319,
    "reply": "OK, a puzzle. OK, you pay 10 lei. 10 lei is not enough. A puzzle costs 18 lei.",
    "worlds": [
     "plan.list"
@@ -20007,7 +20007,7 @@
   {
    "id": "r0625",
    "outcome": "other_world",
-   "ms": 887,
+   "ms": 800,
    "reply": "Your change from 20 lei is 13 lei.",
    "worlds": [
     "kids.shop"
@@ -20017,20 +20017,20 @@
    ],
    "pos": 0,
    "tk": {
-    "total": 320385,
+    "total": 344574,
     "sites": {
-     "matcher.backtrack": 130393,
-     "emit.substituteEmit": 60368,
-     "rules.pattern": 26010,
-     "index.run": 19270,
-     "interpreter.visit": 15972,
-     "matcher.attempt": 15280,
-     "index.readString": 12618,
-     "index.atomRun": 6700,
-     "index.skipWs": 5060,
-     "normalize.push3": 3196,
-     "acts.kind": 3120,
-     "learned.mem": 2520
+     "matcher.backtrack": 139748,
+     "emit.substituteEmit": 65248,
+     "rules.pattern": 27984,
+     "index.run": 20825,
+     "interpreter.visit": 17292,
+     "matcher.attempt": 16354,
+     "index.readString": 13638,
+     "index.atomRun": 7240,
+     "index.skipWs": 5470,
+     "acts.kind": 3380,
+     "normalize.push3": 3366,
+     "learned.mem": 2730
     }
    },
    "verdict": "right",
@@ -20039,7 +20039,7 @@
   {
    "id": "r0626",
    "outcome": "other_world",
-   "ms": 73,
+   "ms": 68,
    "reply": "A ball costs 5 lei.",
    "worlds": [
     "kids.shop"
@@ -20071,7 +20071,7 @@
   {
    "id": "r0627",
    "outcome": "other_world",
-   "ms": 938,
+   "ms": 824,
    "reply": "OK, 2 pencils. OK, you pay 10 lei. Your change from 10 lei is 6 lei.",
    "worlds": [
     "plan.list"
@@ -20105,7 +20105,7 @@
   {
    "id": "r0631",
    "outcome": "executed",
-   "ms": 176,
+   "ms": 163,
    "reply": "I added a yellow house.",
    "worlds": [
     "art.draw"
@@ -20141,7 +20141,7 @@
   {
    "id": "r0632",
    "outcome": "refused",
-   "ms": 433,
+   "ms": 384,
    "reply": "I cannot make circle in the drawing yet.",
    "worlds": [
     "art.draw"
@@ -20177,7 +20177,7 @@
   {
    "id": "r0633",
    "outcome": "executed",
-   "ms": 169,
+   "ms": 154,
    "reply": "I added a tree.",
    "worlds": [
     "art.draw"
@@ -20210,7 +20210,7 @@
   {
    "id": "r0634",
    "outcome": "executed",
-   "ms": 179,
+   "ms": 157,
    "reply": "I added 2 cats.",
    "worlds": [
     "art.draw"
@@ -20244,7 +20244,7 @@
   {
    "id": "r0635",
    "outcome": "executed",
-   "ms": 174,
+   "ms": 158,
    "reply": "I added a yellow house.",
    "worlds": [
     "art.draw"
@@ -20278,7 +20278,7 @@
   {
    "id": "r0636",
    "outcome": "executed",
-   "ms": 175,
+   "ms": 162,
    "reply": "I added a sun.",
    "worlds": [
     "art.draw"
@@ -20310,7 +20310,7 @@
   {
    "id": "r0637",
    "outcome": "other_world",
-   "ms": 20,
+   "ms": 18,
    "reply": "OK, you like chess, music and maps. I will remember that.",
    "worlds": [
     "session.things"
@@ -20376,7 +20376,7 @@
   {
    "id": "r0640",
    "outcome": "other_world",
-   "ms": 7,
+   "ms": 2,
    "reply": "Here is what I know about you: you are 45; you have 2 children; you like chess, music and maps. It stays in this conversation. Nothing leaves this device.",
    "worlds": [
     "session.things"
@@ -20398,7 +20398,7 @@
   {
    "id": "r0641",
    "outcome": "executed",
-   "ms": 182,
+   "ms": 172,
    "reply": "I added a house.",
    "worlds": [
     "art.draw"
@@ -20430,7 +20430,7 @@
   {
    "id": "r0642",
    "outcome": "other_world",
-   "ms": 53,
+   "ms": 49,
    "reply": "OK, you have 2 children. I will remember that.",
    "worlds": [
     "session.things"
@@ -20454,7 +20454,7 @@
   {
    "id": "r0643",
    "outcome": "other_world",
-   "ms": 62,
+   "ms": 60,
    "reply": "OK, you have a daughter. I will remember that.",
    "worlds": [
     "session.things"
@@ -20478,7 +20478,7 @@
   {
    "id": "r0644",
    "outcome": "executed",
-   "ms": 172,
+   "ms": 154,
    "reply": "I added 3 suns.",
    "worlds": [
     "art.draw"
@@ -20508,7 +20508,7 @@
   {
    "id": "r0645",
    "outcome": "refused",
-   "ms": 286,
+   "ms": 250,
    "reply": "I cannot make eye in the drawing yet.",
    "worlds": [
     "art.draw"
@@ -20542,7 +20542,7 @@
   {
    "id": "r0646",
    "outcome": "executed",
-   "ms": 181,
+   "ms": 163,
    "reply": "I added a blue sun.",
    "worlds": [
     "art.draw"
@@ -20596,7 +20596,7 @@
   {
    "id": "r0648",
    "outcome": "other_world",
-   "ms": 2,
+   "ms": 1,
    "reply": "OK, you are 46. I will remember that for this conversation.",
    "worlds": [
     "session.things"
@@ -20639,7 +20639,7 @@
   {
    "id": "r0650",
    "outcome": "executed",
-   "ms": 51,
+   "ms": 49,
    "reply": "I added a pond. I added a lake. I added 2 flowers. I added a bird. I added fish. I assumed pond for the target. I assumed 5 for the count.",
    "read": "Draw something random",
    "worlds": [
@@ -20671,7 +20671,7 @@
   {
    "id": "r0651",
    "outcome": "refused",
-   "ms": 239,
+   "ms": 231,
    "reply": "I did not understand \"shaped\" here.",
    "read": "Draw a house shaped diagram",
    "worlds": [
