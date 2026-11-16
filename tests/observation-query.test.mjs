@@ -2,7 +2,7 @@ import {test} from 'node:test';import assert from 'node:assert/strict';
 import {evaluateQueryJobs} from '../src/dialog/observation-query.mjs';
 const fixture=(complete=true)=>({instanceId:'instance',scope:'all-objects',version:'7',complete,objects:[{id:'a',kind:'item',source:'incarnation-a',sourceType:'native.item',version:'7',inputs:[{binding:'native.value',source:'incarnation-a',sourceType:'native.item',key:'value',version:'7',values:['"red"']}]},{id:'b',kind:'item',source:'incarnation-b',sourceType:'native.item',version:'7',inputs:[]}]});
 const binding={id:'native.value',sourceType:'native.item',key:'value',concept:'colour'};
-const selection=(sources=['incarnation-a'])=>({instanceId:'instance',scope:'all-objects',version:'7',sources,unknownSources:[]});
+const selection=(sources=['incarnation-a'])=>({instanceId:'instance',scope:'all-objects',version:'7',sources,unknownSources:[],complete:true,coverage:{requestedScope:'all-objects'}});
 const run=(operation,sel=selection(),observation=fixture(),extra={})=>evaluateQueryJobs([{id:'query',operation,selection:sel,...extra}],{observations:[observation],bindings:[binding]});
 test('generic query aggregation keeps selected-set identity and exact property input provenance',()=>{
  assert.equal(run('count',selection(['incarnation-a','incarnation-b'])).answers[0].value,2);
@@ -32,4 +32,11 @@ test('native numeric and string IDs retain their types and cannot alias by coerc
  const observation=fixture();observation.objects[0].id=17;observation.objects[1].id='17';
  const result=run('members',selection(['incarnation-a','incarnation-b']),observation);assert.equal(result.status,'answered');assert.deepEqual(result.answers[0].value.map(o=>o.id),[17,'17']);
  observation.objects[1].id=17;assert.equal(run('count',selection(),observation).status,'unsupported');
+});
+test('empty query batches and complete views without requested-population coverage cannot answer',()=>{
+ assert.equal(evaluateQueryJobs([],{observations:[fixture()]}).reason,'missing-query-jobs');
+ const uncertified={...selection(),complete:false};assert.equal(run('count',uncertified).reason,'incomplete-query-population');
+ const view=fixture();view.scope='day-view';const selected={...selection([]),scope:'day-view',coverage:{requestedScope:'all-days'}};
+ assert.equal(run('count',selected,view).reason,'requested-population-scope-mismatch');
+ assert.equal(run('exists',selected,view).reason,'requested-population-scope-mismatch');
 });

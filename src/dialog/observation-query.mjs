@@ -12,10 +12,12 @@ export function evaluateQueryJobs(jobs,{observations,bindings=[],maxSteps=100000
  let steps=0;const tick=()=>{if(++steps>maxSteps)throw Error('query-budget');};
  try{
   const input=copyHostData({jobs,observations,bindings},{maxBytes});const answers=[];
+  if(!Array.isArray(input.jobs)||!input.jobs.length)return refuse('missing-query-jobs');
   for(const job of input.jobs){
    tick();if(!operations.has(job.operation)||typeof job.id!=='string'||(job.operation==='values'?typeof job.concept!=='string':Object.hasOwn(job,'concept')))return refuse('invalid-query-job');
    const selection=job.selection;
-   if(!selection||!Array.isArray(selection.sources)||!Array.isArray(selection.unknownSources)||new Set(selection.sources).size!==selection.sources.length)return refuse('unresolved-target');
+   if(!selection||typeof selection.complete!=='boolean'||!Array.isArray(selection.sources)||!Array.isArray(selection.unknownSources)||new Set(selection.sources).size!==selection.sources.length)return refuse('unresolved-target');
+   if(!text(selection.coverage?.requestedScope)||selection.coverage.requestedScope!==selection.scope)return refuse('requested-population-scope-mismatch');
    const scopes=input.observations.filter(o=>{tick();return o.instanceId===selection.instanceId&&o.scope===selection.scope&&o.version===selection.version;});
    if(scopes.length!==1)return refuse('ambiguous-observation');const observation=scopes[0];
    if(!text(observation.instanceId)||!text(observation.scope)||!text(observation.version)||typeof observation.complete!=='boolean'||!Array.isArray(observation.objects))return refuse('invalid-observation');
@@ -28,7 +30,7 @@ export function evaluateQueryJobs(jobs,{observations,bindings=[],maxSteps=100000
    for(const source of selection.sources){tick();const object=bySource.get(source);if(!object)return refuse('foreign-selection');selected.push(object);}
    const unknown=new Set(selection.unknownSources);
    for(const source of unknown){tick();if(!bySource.has(source)||selection.sources.includes(source))return refuse('invalid-unknown-selection');}
-   const complete=observation.complete&&unknown.size===0;
+   const complete=selection.complete&&observation.complete&&unknown.size===0;
    if(!complete&&!(job.operation==='exists'&&selected.length))return refuse('incomplete-query-population');
    const answer={id:job.id,operation:job.operation,objects:selected.map(identity),evidence:{observation,selection}};
    if(job.operation==='count')answer.value=selected.length;
