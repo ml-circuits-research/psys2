@@ -927,11 +927,6 @@
    "reason": "avatar on the binding (slice A1): pins the old readers' hold / ask on the avatar tab (\"remove the boxes from the face\"); the door never executes a half-read turn and says what it did not read"
   },
   {
-   "file": "conversation-summary.test.mjs",
-   "name": "log c: the failures and the questions asked back are listed, the outcome words are the avatar's",
-   "reason": "avatar on the binding (slice A1): replays an owner log on the robot tab with the old readers' wordings; on the door the avatar's turns are said by reply facts (Q96 LIB 8)"
-  },
-  {
    "file": "pilot-avatar.test.mjs",
    "name": "matrix: decline: a thing that is not a face part is read by the next world (draw a house on the Avatar tab goes to art.draw)",
    "reason": "avatar on the binding (slice A1): no fallback on a declared tab (spec 28 section 10): a request of another world from the avatar tab is said honestly; needs routing to the world a turn names before the door (as on every declared tab)"
@@ -952,10 +947,16 @@
    "reason": "avatar on the binding (slice A1): \"make a big smile\", \"small smile\", \"make a frown\", \"the next mouth\" on the avatar tab: needs a variant of a part as a value the reader reads (k.faces.variant by slot) and next / another as a step over the variants (Q96 LIB 3)"
   },
   {
-   "file": "avatar-binding.test.mjs",
-   "name": "a value said lands in the view: a colour and a size step of a part (the change sense of make; size by k.expect.scale)",
-   "reason": "sopworld 0.162 as=part (asked by the coordinator): mirrorState tells a joined part as the type `part`, so \"make the eyes bigger\" twice plans big again from the default (the thing's kind and grade are not found); needs the kind kept with as= (questions.md Q99 [LIB])",
-   "returns_with": "0.163 as= keeps the kind"
+   "file": "pilot-avatar.test.mjs",
+   "name": "ops: focus: \"make it red\" after \"put on a hat\" means the hat",
+   "reason": "sopworld 0.163 single=true (approved by the coordinator): \"put on a hat\" with a hat on says refused.already (was a silent no-op) and the thing it names is not the referent of \"it\" in the next turn; needs <a thing named by refused.already / nothing.same.value is the referent of it> (questions.md Q100 [LIB])",
+   "returns_with": "0.164 it after refused.already"
+  },
+  {
+   "file": "pilot-avatar.test.mjs",
+   "name": "matrix: focus: \"make it red\" after \"put on a hat\" means the hat",
+   "reason": "sopworld 0.163 single=true (approved by the coordinator): \"put on a hat\" with a hat on says refused.already (was a silent no-op) and the thing it names is not the referent of \"it\" in the next turn; needs <a thing named by refused.already / nothing.same.value is the referent of it> (questions.md Q100 [LIB])",
+   "returns_with": "0.164 it after refused.already"
   }
  ]
 }
