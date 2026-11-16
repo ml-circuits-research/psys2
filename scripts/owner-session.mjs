@@ -22,6 +22,19 @@
  *   state / forbid_state   items of scripts/lib/operational-check.mjs ("diagram.sketch:shapes.length=5", "shapes[name=results].y<$+0": went up)
  *   or_reply   a regex: when the reply matches it, `changed` / `state` may fail (the reply says why it could not: "already at the top")
  *   reply_any / reply_not  regexes (case-insensitive) over the shown (Romanian) reply; every reply_any must match
+ *   INTENT over the things of a world (reviewer 2026-11-16 11:30; selectors `duck`, `lake|pond`, `*`, `bird[color=yellow]`; kind = a thing's kind, thing or name; `W:` = world):
+ *   count      ["W:SEL OP N" | "W:SEL OP $+N"]   how many such things (N more than before)
+ *   delta      ["W:SEL.FIELD OP"]                every such thing's field after OP before ("house.y>": went down; "flower.color|parts!=")
+ *   only       ["W:SEL"]                         nothing but SEL changed, appeared or disappeared
+ *   unchanged  ["W"]                             the world's things did not change (a request for another domain)
+ *   same       ["W:path"]                        the value at path is the same before and after (the preset when only the expression is asked)
+ *   rel / forbid_rel  ["W:SEL REL[_all] SEL"]    place relation (in on over near above below left_of right_of amid) to some / every B; forbid: to none
+ *   layout     ["W:SEL ring|row|column"]; spread (no two things on each other); differs (most kinds differ from before: "altceva"); kinds ["W:new|all>=N"]
+ *   either     [expect, ...]                     one of the alternatives holds
+ *   reply_clean  no internal names (water_lily, the role "target"), and in a Romanian reply no English fragment (a quote the user did not write, an English
+ *              function word, a word of the English reply left untranslated)
+ *   partly     (on the line, beside expect) a weaker real intent: right when it holds and the content changed
+ * Every judged turn also fails when the reply says "nothing changed" while the content changed.
  *   max_ms     the turn must take at most this long (class G)
  * Two invariants hold for EVERY turn (classes B and C): the reply is never withheld (the fixed "no Romanian wording" line), and "done" (Făcut / Gata / Done) is never said when
  * the visible state did not change.
@@ -31,7 +44,7 @@ import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { openShipped, sendOptions, REAL_SEED } from './real-set.mjs';
 import { visibleState } from './lib/visible-state.mjs';
-import { evaluateCase } from './lib/operational-check.mjs';
+import { evaluateCase, statePath } from './lib/operational-check.mjs';
 import { contentChanged } from '../src/dialog/honest-done.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -54,14 +67,175 @@ export const CLAIMS_CHANGE = /\b(?:I (?:added|moved|made|changed|put|removed|dre
  *  claims nothing (a refusal, a question, an explanation); wrong = everything else (a wrong change, or a false "done"). */
 export function verdictOf(row, out, bad) {
   if (!bad.length) return 'right';
-  if (out.content && row.partly && !judge({ expect: row.partly }, out).length) return 'partly';
+  if (out.content && row.partly && !judge({ ...row, expect: row.partly }, out).length) return 'partly';
   if (!out.content && !CLAIMS_CHANGE.test(out.shown) && !CLAIMS_CHANGE.test(out.english ?? '')) return 'honest';
   return 'wrong';
 }
 
+// ---- intent assertions over the THINGS of a world (reviewer 2026-11-16 11:30): generic over every world that keeps a list of things with a kind and a place (Drawing's
+// objects, Diagram's shapes, ...); no per-turn code. A selector names things: `duck`, `lake|pond|water` (any of), `*` (all), with optional filters `bird[color=yellow]`;
+// a kind matches a thing's `kind`, `thing` (a composite drawing) or `name` (a named node), case-insensitive, `_` = space. `W:` prefixes the world (default: the row's world,
+// else the tab's world).
+const THING_LISTS = ['objects', 'shapes', 'things', 'items', 'blocks'];
+export const thingsOf = (ws) => { for (const k of THING_LISTS) if (Array.isArray(ws?.[k])) return ws[k]; return []; };
+const low = (x) => String(x ?? '').toLowerCase().replace(/_/g, ' ').trim();
+const kindsOf = (t) => [t.kind, t.thing, t.name].filter((x) => x !== undefined && x !== null && x !== '').map(low);
+function parseSel(sel) {
+  const m = String(sel).trim().match(/^([^[]+?)(?:\[([^\]]*)\])?$/);
+  const kinds = m ? m[1].split('|').map(low) : [low(sel)];
+  const filters = m?.[2] ? m[2].split(',').map((f) => f.split('=').map((x) => x.trim())) : [];
+  return (t) => (kinds.includes('*') || kindsOf(t).some((k) => kinds.includes(k))) && filters.every(([k, v]) => low(t[k]) === low(v));
+}
+const splitWorld = (spec, dflt) => { const m = String(spec).match(/^([a-z]\w*\.[\w.]*):(.*)$/); return m ? [m[1], m[2].trim()] : [dflt, String(spec).trim()]; };
+const cmp = (a, op, b) => (op === '=' ? a === b : op === '!=' ? a !== b : op === '<' ? a < b : op === '>' ? a > b : op === '<=' ? a <= b : a >= b);
+/** Geometry of a thing: centre and half extent (x, y = centre; size = extent, as Drawing and Diagram keep them). */
+const geo = (t) => ({ x: Number(t.x), y: Number(t.y), h: Number(t.size ?? Math.max(t.w ?? 0, t.h ?? 0) ?? 0) / 2 });
+/** A place relation of A to B: in / on / over (A's centre inside B's extent), near (the extents nearly touch), above / below / left_of / right_of (by centre). */
+export function related(a, rel, b) {
+  const A = geo(a), B = geo(b);
+  if ([A.x, A.y, B.x, B.y].some(Number.isNaN)) return false;
+  const dx = A.x - B.x, dy = A.y - B.y;
+  if (rel === 'in' || rel === 'on' || rel === 'over' || rel === 'inside') return Math.abs(dx) <= B.h && Math.abs(dy) <= B.h;
+  if (rel === 'near') return Math.hypot(dx, dy) <= A.h + B.h + 60;
+  if (rel === 'above') return dy < 0;
+  if (rel === 'below') return dy > 0;
+  if (rel === 'left_of') return dx < 0;
+  if (rel === 'right_of') return dx > 0;
+  throw new Error(`relation ${rel}`);
+}
+const strip = (t) => JSON.stringify(Object.fromEntries(Object.entries(t ?? {}).filter(([k]) => !/^(?:z|order|seq)$/.test(k))));
+const kindSet = (ws) => new Set([...thingsOf(ws).map((t) => low(t.thing ?? t.kind)), ...(ws?.scenes ?? []).map((s) => `scene:${low(s.kind)}`)]);
+
+/** The intent assertions of an `expect` (see the header): a list of failures. */
+export function intentFailures(ex, { before, after }, dflt) {
+  const bad = [];
+  const ws = (st, w) => st?.[w] ?? {};
+  for (const spec of [].concat(ex.count ?? [])) {   // "W:SEL OP N" or "W:SEL OP $+N" (N more than before)
+    const [w, rest] = splitWorld(spec, dflt);
+    const m = rest.match(/^(.+?)\s*(<=|>=|!=|=|<|>)\s*(\$)?([+-]?\d+)$/);
+    if (!m) { bad.push(`count:bad spec ${spec}`); continue; }
+    const pick = parseSel(m[1]);
+    const n0 = thingsOf(ws(before, w)).filter(pick).length, n1 = thingsOf(ws(after, w)).filter(pick).length;
+    const want = m[3] ? n0 + Number(m[4]) : Number(m[4]);
+    if (!cmp(n1, m[2], want)) bad.push(`count:${spec} (${n0}->${n1})`);
+  }
+  for (const spec of [].concat(ex.delta ?? [])) {   // "W:SEL.FIELD OP": every such thing present before and after has after OP before ("house.y>": went down); FIELD may be
+    // `a|b` (the fields taken together, compared by value: "flower.color|parts!=": their colour changed in either field)
+    const [w, rest] = splitWorld(spec, dflt);
+    const m = rest.match(/^(.+?)\.([\w|]+)\s*(<=|>=|!=|=|<|>)$/);
+    if (!m) { bad.push(`delta:bad spec ${spec}`); continue; }
+    const pick = parseSel(m[1]), fields = m[2].split('|');
+    const val = (t) => (fields.length === 1 && typeof t[fields[0]] === 'number' ? t[fields[0]] : JSON.stringify(fields.map((f) => t[f] ?? null)));
+    const pre = new Map(thingsOf(ws(before, w)).filter(pick).map((t) => [t.id, t]));
+    const pairs = thingsOf(ws(after, w)).filter((t) => pick(t) && pre.has(t.id)).map((t) => [val(pre.get(t.id)), val(t)]);
+    const fails = pairs.filter(([a, b]) => !cmp(b, m[3], a));
+    if (!pairs.length || fails.length) bad.push(`delta:${spec} (${pairs.length ? pairs.map(([a, b]) => `${a}->${b}`).join(' ').slice(0, 160) : 'none'})`);
+  }
+  for (const spec of [].concat(ex.only ?? [])) {   // "W:SEL": nothing else changed, appeared or disappeared (what must NOT change when the sentence names one thing); a thing
+    // that matches SEL before or after (a bird that turned from green to yellow) is the named one
+    const [w, sel] = splitWorld(spec, dflt);
+    const pick = parseSel(sel), b0 = thingsOf(ws(before, w)), a0 = thingsOf(ws(after, w));
+    const named = new Set([...b0, ...a0].filter(pick).map((t) => t.id));
+    const pre = new Map(b0.filter((t) => !named.has(t.id)).map((t) => [t.id, strip(t)]));
+    const post = new Map(a0.filter((t) => !named.has(t.id)).map((t) => [t.id, strip(t)]));
+    const moved = [...new Set([...pre.keys(), ...post.keys()])].filter((id) => pre.get(id) !== post.get(id));
+    if (moved.length) bad.push(`only:${spec} (also ${moved.map((id) => { const t = a0.find((x) => x.id === id) ?? b0.find((x) => x.id === id); return `${t?.thing ?? t?.name ?? t?.kind}:${id}`; }).slice(0, 6).join(',')})`);
+  }
+  for (const w of [].concat(ex.unchanged ?? [])) {   // "W": the things of that world did not change at all (a request for another domain)
+    if (JSON.stringify(thingsOf(ws(before, w)).map(strip)) !== JSON.stringify(thingsOf(ws(after, w)).map(strip))) bad.push(`unchanged:${w}`);
+  }
+  for (const spec of [].concat(ex.same ?? [])) {   // "W:path": the value at that path is the same before and after (the preset stays when only the expression is asked)
+    const [w, path] = splitWorld(spec, dflt);
+    const a = JSON.stringify(statePath(ws(before, w), path) ?? null), b = JSON.stringify(statePath(ws(after, w), path) ?? null);
+    if (a !== b) bad.push(`same:${spec} (${a.slice(0, 60)} -> ${b.slice(0, 60)})`);
+  }
+  for (const [key, neg] of [['rel', false], ['forbid_rel', true]]) {
+    // "W:SEL REL SEL": every A stands in REL to some B (at least one A and one B); `REL_all`: to every B ("lake below_all tree|house": the water is the lowest band);
+    // `amid`: A's centre lies at the centre of the Bs taken together (within their mean half extent); forbid_rel: no A does to any B
+    for (const spec of [].concat(ex[key] ?? [])) {
+      const [w, rest] = splitWorld(spec, dflt);
+      const m = rest.match(/^(.+?)\s+(in|on|over|inside|near|above|below|left_of|right_of|amid)(_all)?\s+(.+)$/);
+      if (!m) { bad.push(`${key}:bad spec ${spec}`); continue; }
+      const all = thingsOf(ws(after, w)), A = all.filter(parseSel(m[1])), B = all.filter(parseSel(m[4]));
+      let holds;
+      if (m[2] === 'amid') {
+        const g = B.map(geo), cx = g.reduce((t, q) => t + q.x, 0) / (g.length || 1), cy = g.reduce((t, q) => t + q.y, 0) / (g.length || 1), r = g.reduce((t, q) => t + q.h, 0) / (g.length || 1);
+        holds = A.map((x) => { const q = geo(x); return Math.hypot(q.x - cx, q.y - cy) <= Math.max(r, 30); });
+      } else {
+        const others = (x) => B.filter((y) => y !== x);
+        holds = A.map((x) => (m[3] ? others(x).length > 0 && others(x).every((y) => related(x, m[2], y)) : others(x).some((y) => related(x, m[2], y))));
+      }
+      if (neg ? holds.some(Boolean) : !A.length || !B.length || !holds.every(Boolean)) bad.push(`${key}:${spec} (${A.length} vs ${B.length}, holds ${holds.filter(Boolean).length})`);
+    }
+  }
+  for (const spec of [].concat(ex.kinds ?? [])) {   // "W:new>=2" / "W:all>=2": distinct kinds among the things added this turn / among all things (random means varied)
+    const [w, rest] = splitWorld(spec, dflt);
+    const m = rest.match(/^(new|all)\s*(<=|>=|=|<|>)\s*(\d+)$/);
+    if (!m) { bad.push(`kinds:bad spec ${spec}`); continue; }
+    const old = new Set(thingsOf(ws(before, w)).map((t) => t.id));
+    const ts = thingsOf(ws(after, w)).filter((t) => m[1] === 'all' || !old.has(t.id));
+    const n = new Set(ts.map((t) => low(t.thing ?? t.kind))).size;
+    if (!cmp(n, m[2], Number(m[3]))) bad.push(`kinds:${spec} (${n})`);
+  }
+  if (ex.either) {   // a list of alternative expectations (the same assertion keys); at least one must hold ("a random drawing here, or on the Drawing tab")
+    const alts = ex.either.map((alt) => [...intentFailures(alt, { before, after }, dflt), ...evaluateCase({ world: dflt, expect: { state: alt.state, forbid_state: alt.forbid_state } }, { before, after, replyText: '', effects: [], statuses: [] }).filter((it) => !it.ok).map((it) => `${it.kind}:${it.spec}`)]);
+    if (!alts.some((f) => !f.length)) bad.push(`either:${alts.map((f) => f.join(' & ')).join(' | ')}`);
+  }
+  for (const spec of [].concat(ex.layout ?? [])) {   // "W:SEL ring|row|column": the things lie on a ring (distance to their centre within 20%) or in a row / column
+    const [w, rest] = splitWorld(spec, dflt);
+    const m = rest.match(/^(.+?)\s+(ring|row|column)$/);
+    const ts = m ? thingsOf(ws(after, w)).filter(parseSel(m[1])).map(geo) : [];
+    let ok = ts.length >= 3;
+    if (ok && m[2] === 'ring') { const cx = ts.reduce((s, t) => s + t.x, 0) / ts.length, cy = ts.reduce((s, t) => s + t.y, 0) / ts.length; const d = ts.map((t) => Math.hypot(t.x - cx, t.y - cy)), mean = d.reduce((s, x) => s + x, 0) / d.length; ok = mean > 20 && d.every((x) => Math.abs(x - mean) <= 0.2 * mean); }
+    if (ok && m[2] !== 'ring') { const k = m[2] === 'row' ? 'y' : 'x', v = ts.map((t) => t[k]); ok = Math.max(...v) - Math.min(...v) <= 25; }
+    if (!ok) bad.push(`layout:${spec}`);
+  }
+  if (ex.spread) {   // "W" or true: no two things sit on each other (centres within 0.6 of the smaller half extent), a thing at least twice the other's size excepted (a container)
+    const [w] = splitWorld(ex.spread === true ? '' : ex.spread, dflt);
+    const ts = thingsOf(ws(after, w)).map(geo), hits = [];
+    for (let i = 0; i < ts.length; i++) for (let j = i + 1; j < ts.length; j++) { const a = ts[i], b = ts[j], s = Math.min(a.h, b.h); if (Math.max(a.h, b.h) >= 2 * s) continue; if (Math.abs(a.x - b.x) < 0.6 * s && Math.abs(a.y - b.y) < 0.6 * s) hits.push(`${i}/${j}`); }
+    if (hits.length) bad.push(`spread:${hits.length} overlapping`);
+  }
+  if (ex.differs) {   // true or "W": a different picture: most of the kinds differ from before (Jaccard of the kind sets below 0.5)
+    const [w] = splitWorld(ex.differs === true ? '' : ex.differs, dflt);
+    const a = kindSet(ws(before, w)), b = kindSet(ws(after, w)), inter = [...a].filter((k) => b.has(k)).length, uni = new Set([...a, ...b]).size;
+    if (!b.size || (uni && inter / uni >= 0.5)) bad.push(`differs:${[...a].join(',')} -> ${[...b].join(',')}`);
+  }
+  return bad;
+}
+
+// ---- reply checks (reviewer 11:30 rule 5) ----
+/** Internal names in a reply: an identifier (water_lily) or the internal role "target" said as a word. */
+export const INTERNAL = /\b[a-z]+_[a-z_]+\b|\bfor the target\b|pentru (?:[țţt]int[aă]|ce fac)\b/i;
+const RO_REPLY = /[ăâîșşțţ]|\b(?:Am|Nu|este|acum|aici|pentru)\b/;
+const EN_FUNCTION = /\b(?:the|is|I|you|to|now|here|did|not|moved|added|with|and|of|it|was|for|this)\b/;
+const words = (s) => (String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').match(/\p{L}+/gu) ?? []);
+/** Failures of `reply_clean`: no internal name; in a Romanian reply no English fragment (a quoted piece the user did not write, an English function word, or a word of the
+ *  English reply left untranslated that the user did not write). */
+export function replyCleanFailures(shown, english, text) {
+  const bad = [];
+  const m = String(shown).match(INTERNAL);
+  if (m) bad.push(`internal:${m[0]}`);
+  if (!RO_REPLY.test(shown)) return bad;
+  const said = new Set(words(text));
+  const echo = (w) => said.has(w) || [...said].some((u) => u.length >= 4 && (u.startsWith(w) || w.startsWith(u)));
+  const quoted = [...String(shown).matchAll(/[„"“]([^"”“]+)["”“]/g)].map((q) => q[1]);
+  for (const q of quoted) if (words(q).some((w) => !echo(w))) { bad.push(`english-quote:${q}`); break; }
+  const bare = String(shown).replace(/[„"“][^"”“]*["”“]/g, ' ');
+  const f = bare.match(EN_FUNCTION);
+  if (f) bad.push(`english-word:${f[0]}`);
+  const en = new Set(words(english).filter((w) => w.length >= 3));
+  const left = words(bare).filter((w) => w.length >= 3 && en.has(w) && !echo(w));
+  if (left.length) bad.push(`english-left:${[...new Set(left)].join(',')}`);
+  return bad;
+}
+/** The reply says nothing changed while the content changed (what the reply says must equal the state). */
+export const SAYS_UNCHANGED = /Nothing changed|Nu s-a schimbat nimic/i;
+
 export function judge(row, out) {
   const ex = row.expect ?? {};
   const bad = invariantFailures(out);
+  if (out.content && SAYS_UNCHANGED.test(out.shown) && !/\b(?:I|Am) (?:added|moved|made|changed|ad[aă]ugat|mutat|f[aă]cut|schimbat)\b/i.test(out.shown)) bad.push('says-unchanged');
   const worlds = [].concat(ex.world ?? []);
   if (worlds.length && !worlds.some((w) => out.worlds.includes(w))) bad.push(`world:${worlds.join('|')} got ${out.worlds.join(',') || '-'}`);
   if (ex.tab && out.tabAfter !== ex.tab) bad.push(`tab:${ex.tab} got ${out.tabAfter}`);
@@ -69,6 +243,8 @@ export function judge(row, out) {
   if (ex.changed === true && !out.content) effect.push('changed');
   if (ex.changed === false && out.content) effect.push('unchanged');
   for (const it of evaluateCase({ world: worlds[0] ?? null, expect: { state: ex.state, forbid_state: ex.forbid_state } }, { before: out.before, after: out.after, replyText: '', effects: [], statuses: [] })) if (!it.ok) effect.push(`${it.kind}:${it.spec}${it.actual !== undefined ? ` (${it.actual})` : ''}`);
+  effect.push(...intentFailures(ex, out, worlds[0] ?? TAB_WORLD[row.tab] ?? null));
+  if (ex.reply_clean) bad.push(...replyCleanFailures(out.shown, out.english, row.text));
   if (!(effect.length && ex.or_reply && new RegExp(ex.or_reply, 'i').test(out.shown))) bad.push(...effect);
   for (const re of [].concat(ex.reply_any ?? [])) if (!new RegExp(re, 'i').test(out.shown)) bad.push(`reply_any:${re}`);
   for (const re of [].concat(ex.reply_not ?? [])) if (new RegExp(re, 'i').test(out.shown)) bad.push(`reply_not:${re}`);
@@ -126,9 +302,11 @@ async function main() {
     // draw or catalog version: the later turns name the owner's things), unjudged
     // the fixture is built by the readers (`request: false`): it is the owner's state, not a measured turn ("a hexagon called summary" needs names in the request reader, Q42)
     if (r.setup) { s.restore(setupSnap); for (const e of r.setup) { try { await s.send(e, { ...sendOptions(settings, { lang: 'en', language: 'en' }, createBudget()), request: false }); } catch { /* the next lines say what is missing */ } } }
-    if (process.env.OWNER_STATE && String(r.turn ?? r.id) === process.env.OWNER_STATE) console.error(JSON.stringify(after[TAB_WORLD[r.tab]] ?? null).slice(0, 6000));
+    if (process.env.OWNER_STATE && (process.env.OWNER_STATE === 'all' || String(r.turn ?? r.id) === process.env.OWNER_STATE)) console.error(`STATE T${r.turn ?? r.id} ${JSON.stringify(Object.fromEntries(Object.entries(after).filter(([w]) => w !== 'session.things').map(([w, v]) => [w, JSON.stringify(v) === JSON.stringify(before[w]) ? '=' : v])))}`);   // OWNER_STATE=all: every turn's changed worlds
     const changed = JSON.stringify(visibleState(before)) !== JSON.stringify(visibleState(after));
-    const content = contentChanged(Object.fromEntries(Object.entries(before).map(([k, v]) => [k, JSON.stringify(v)])), after);
+    // the turn's step counters (Drawing `stepGroup`, Diagram `toolStep`) are bookkeeping, not content: a move that went nowhere and only advanced them is not a change
+    const noStep = (st) => Object.fromEntries(Object.entries(st).map(([k, v]) => [k, v && typeof v === 'object' && !Array.isArray(v) && ('stepGroup' in v || 'toolStep' in v) ? { ...v, stepGroup: undefined, toolStep: undefined } : v]));
+    const content = contentChanged(Object.fromEntries(Object.entries(noStep(before)).map(([k, v]) => [k, JSON.stringify(v)])), noStep(after));
     return { r, error, out: { before, after, changed, content, ms, shown: reply?.text ?? '', english: reply?.trace?.replyEnglish ?? '', read: reply?.trace?.english ?? '', worlds: [...new Set((reply?.segments ?? []).map((x) => x.world ?? x.match?.worldId).filter(Boolean))], tabAfter: after['ui.shell']?.activeTab ?? null, perf: reply?.perf ?? null, door: reply?.trace?.door ?? null, legacy: !!reply?.trace?.legacy } };
   };
   for (const [key, turns] of sessions) {
@@ -169,7 +347,7 @@ async function main() {
   for (const v of vars) { const c = (byClass[v.class ?? '?'] ??= { right: 0, total: 0 }); c.total++; if (v.right) c.right++; }
   for (const [k, c] of Object.entries(byClass)) c.ms = timing(rows.filter((x) => x.set === 'variant' && !x.context && (x.class ?? '?') === k));
   const summary = {
-    session: { right: sess.filter((x) => x.right).length, total: sess.length, verdicts: Object.fromEntries(['right', 'partly', 'honest', 'wrong'].map((v) => [v, sess.filter((x) => x.verdict === v).length])), medianMs: median(rows.filter((x) => x.set === 'session' && !x.context).map((x) => x.ms)), withheld: rows.filter((x) => x.set === 'session' && x.invariant.includes('withheld')).length, falseDone: rows.filter((x) => x.set === 'session' && x.invariant.includes('false-done')).length, ms: timing(rows.filter((x) => x.set === 'session' && !x.context)) },
+    session: { right: sess.filter((x) => x.right).length, total: sess.length, verdicts: Object.fromEntries(['right', 'partly', 'honest', 'wrong'].map((v) => [v, sess.filter((x) => x.verdict === v).length])), turns: Object.fromEntries(['right', 'partly', 'honest', 'wrong'].map((v) => [v, sess.filter((x) => x.verdict === v).map((x) => x.id)])),medianMs: median(rows.filter((x) => x.set === 'session' && !x.context).map((x) => x.ms)), withheld: rows.filter((x) => x.set === 'session' && x.invariant.includes('withheld')).length, falseDone: rows.filter((x) => x.set === 'session' && x.invariant.includes('false-done')).length, ms: timing(rows.filter((x) => x.set === 'session' && !x.context)) },
     variants: { right: vars.filter((x) => x.right).length, total: vars.length, byClass, medianMs: median(rows.filter((x) => x.set === 'variant' && !x.context).map((x) => x.ms)), ms: timing(rows.filter((x) => x.set === 'variant' && !x.context)) },
   };
   const file = join(REPO, `training/results/${name}${tag ? `-${tag}` : ''}.json`);
