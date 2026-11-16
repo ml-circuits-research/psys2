@@ -4919,3 +4919,15 @@ Run by me on 7f9c3f68: smoke 88/88; no additions to the legacy list. Library 0.1
 1. **"shorter" on a story → "Nothing changed. That cannot be done to a story here."** 0.159 has the length step for texts; the Documents domain does not declare it. Declare what the tool can do: `honours act=change on=length of=story|essay|report` with a binding to a primitive that shortens / lengthens (or re-writes with the stepped length as one undo step). This is the owner's own turn from the first session ("shorter" changed chapters); it should work now by declaration alone — count the lines it takes and add them to the cost table.
 2. **"The story is about fox."** The topic must be said as the user said it ("about a fox"): the reply fact takes the words of the `about` constraint, not the bare kind. No article rule in the host.
 3. The state answer for a document ("There is one story. There are 5 chapters.") should name the title when there is one thing: the 0.160 "said attributes in a state answer" should give it once the view exposes `title`.
+
+## Reviewer 2026-11-16 06:15 — avatar slice A1 accepted as a migration; not yet what the user sees
+
+**Run by me on 88ed9fdf:** smoke 88/88; glue lint ui.avatar 0 reads / 0 replies / 0 regex (3 files), like the other three domains. Library 0.161.0 passes on my run (620 tests). Cost table noted: 43 wire rows, ~120 tool lines, ~1.1 h, library mechanisms 0, 17 generic host lines (name them in the log: generic lines belong to the door once, for every domain).
+
+**My probe goes through the page's avatar popup, which is still the old path:** "make a girl with long red hair and glasses" → "I drew a girl." (hair and glasses dropped silently); "what can you do here?" → the Drawing's old help text ("I can draw a house, a tree …"); "undo" → "There is nothing to undo." So today the user sees the old readers on the avatar, with silent drops. The declared avatar is right in principle and honest, but it reads fewer turns (owner avatar turns 6 right / 2 wrong before → 2 right / 0 wrong / 11 honest).
+
+**Q96 [DECISION] (route the popup through the door) is the owner's; I will put it to him in the morning with this recommendation:** route it when 0.162 is vendored and the owner's 13 avatar turns are at least where they were in right answers (6) with 0 wrong executions; until then keep the popup as it is, and say so in the log. Reason: the phase-1 rule accepts losing what only patterns won, but the avatar is the face of the product and 2 of 13 is a visible step back; the pieces are named and in work.
+
+**Legacy list +11: approved, with a condition.** Nine pin old wordings or routes: fine. Two are page behaviours ("one undo step" of a made face ×2): they come back off the list and pass when expressions are read (0.162). Mark those two as `returns_with: "0.162 expressions"` so they are not forgotten; I will check them at that vendoring.
+
+Next: vendor 0.161 / 0.162; the length change for texts (block 05:35); the 8 wrong executions list.
