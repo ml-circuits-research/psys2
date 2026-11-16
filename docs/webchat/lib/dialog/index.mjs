@@ -1653,7 +1653,7 @@ export class DialogSession {
     const snap0 = this.snapshot();
     const first = await this._sendRead(text, opts);
     const hit = [...new Set((first?.trace?.segments ?? first?.segments ?? []).map((sg) => sg.match?.worldId ?? sg.world).filter(Boolean))];
-    if (hit.length && !hit.some((w) => declaredWorld(this.engine.set.get(w), this.engine.sopworld))) return markLegacy(first, `${door?.why ?? 'not read'}; answered by ${hit.join(', ')} (no declarations)`);
+    if (hit.length && !hit.some((w) => w === tabWorld ? declaredWorld(this.engine.set.get(w), this.engine.sopworld) : declaredWorld(this.engine.set.get(w), this.engine.sopworld) && !this.engine.set.get(w)?.ambient)) return markLegacy(first, `${door?.why ?? 'not read'}; answered by ${hit.join(', ')} (no declarations, or an ambient world off its tab)`);   // an ambient world (the avatar popup over every tab) is declared on its own tab only
     this.restore(snap0);
     const honest = await this._doorHonest(text, opts, tabWorld, door);
     stampDoor(honest, tabWorld, text, door?.q); honest.trace.legacy = false; honest.trace.door = `honest: ${door?.why ?? 'not read'}`;
