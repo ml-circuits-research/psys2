@@ -24,7 +24,7 @@
  * through `ctx.sessionFacts()` and the operation things.show of session.things (spec 23); this module only offers the facts.
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { RequestDialogue } from './request.mjs?v=09b2a456a1';
+import { RequestDialogue } from './request.mjs?v=ed686e86b7';
 import { en } from '../lang/en.mjs?v=185de688b8';
 import { GRAMMAR } from './continuation.mjs?v=7afe519f0b';
 import { touched } from './followup.mjs?v=88af56c068';

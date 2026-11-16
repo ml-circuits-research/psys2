@@ -102,4 +102,5 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.state_count_value_1 w.lang.en.reply name=state.count.value count=one role=kind role=number role=value text="There is a {value} {kind}."
 @w.lang.en.reply.local.state_count_value_n w.lang.en.reply name=state.count.value count=other role=kind role=number role=value text="There are {number} {value} {kind:num=pl}."
 @w.lang.en.reply.local.short_of_unit w.lang.en.reply name=short_of count=one role=made role=asked role=unit text="I could only make {made} {unit:num=pl} of the {asked} you asked for."
+@w.lang.en.reply.local.no_drawing w.lang.en.reply name=refused.no_drawing count=one role=kind text="I have no drawing of a {kind} yet."
 `;

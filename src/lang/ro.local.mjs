@@ -42,6 +42,8 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.state_count_value_few w.lang.ro.reply name=state.count.value count=few role=kind role=number role=value text="sunt {number} {kind:num=pl} {value:num=pl@kind}"
 @w.lang.ro.reply.local.state_count_value_n w.lang.ro.reply name=state.count.value count=other role=kind role=number role=value text="sunt {number} de {kind:num=pl} {value:num=pl@kind}"
 @w.lang.ro.reply.local.short_of w.lang.ro.reply name=short_of count=one role=made role=asked text="am putut face doar {made} din cele {asked} cerute"
+@w.lang.ro.reply.local.no_drawing w.lang.ro.reply name=refused.no_drawing count=one role=kind text="încă nu am un desen pentru {art@kind} {kind}"
+@w.lang.ro.fill.local.no_drawing_art w.lang.ro.fill template=refused.no_drawing role=art lemma=un
 @w.lang.ro.irregular.local.poveste.pl w.lang.ro.irregular lemma=poveste form=povești num=pl case=nomacc def=no
 @w.lang.ro.irregular.local.poveste.pl_def w.lang.ro.irregular lemma=poveste form=poveștile num=pl case=nomacc def=yes
 @w.lang.ro.irregular.local.cuvant.pl w.lang.ro.irregular lemma=cuvânt form=cuvinte num=pl case=nomacc def=no

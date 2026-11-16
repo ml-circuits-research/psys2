@@ -29,8 +29,8 @@ import * as solver from '../space/solver.mjs?v=54f1f0c539';
 import {
   B, initialState, GROUND_COLOR, ensure as boardEnsure, anchorOf, onGround, byId, effectiveColor, open, rnd, idNum, colorFrom, sizeWord, snapshot, restore, remember, oneStep as boardOneStep,
   crowd, overlapRatio, clampIn, defaultSpot, placeRegion, defaultSpotOn, placeRelative, makeObject, Z_LAYER, addThing as boardAddThing,
-} from './board.mjs?v=a21e766dc0';   // the board itself: state, history, placement, tool primitives (this module builds the word operations on it)
-export { initialState } from './board.mjs?v=a21e766dc0';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
+} from './board.mjs?v=e3b8a6b8ca';   // the board itself: state, history, placement, tool primitives (this module builds the word operations on it)
+export { initialState } from './board.mjs?v=e3b8a6b8ca';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
 
 export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=d061bce6fc';
 
@@ -2085,4 +2085,4 @@ export function summary(ctx) {
 export { describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, placePhrase, effectiveColor, sameColorName, drawingNP };
 
 /** The tool primitives, the view and the declared search of the request door are the board's (board.mjs); re-exported for the callers of this module. */
-export { startScene, addThings, removeThings, moveThings, setThings, paintSky, toolView, thingAt, newPage, undoStep, redoStep } from './board.mjs?v=a21e766dc0';
+export { startScene, addThings, removeThings, moveThings, setThings, paintSky, toolView, thingAt, newPage, undoStep, redoStep } from './board.mjs?v=e3b8a6b8ca';
