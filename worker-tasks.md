@@ -5325,3 +5325,14 @@ The owner asked why the reader work being reported is the hand-written grammar. 
 Supersedes 22:50. No juggling between readers: the app has one reader, SOP-BERT, made good enough to beat any rule system. Safety does not come from a second reader: it comes from SOP-BERT's calibrated confidence (below the threshold → one precise question or an honest "not understood", never a guess) and from the validation, resolution against the actual world and assessment that every reading already goes through. Explanations come from the request graph and the journal, not from the grammar.
 
 Do: put the reader agents on SOP-BERT only — train, calibrate, export to the browser, wire it as the reader of the only engine, and remove the grammar path from the app in the same change (the library's generic composition mechanisms may stay in the library, unused by the app). Until the checkpoint is wired, the app answers honestly as now. Make it good by data and heads, not by rules: where the class × area table shows a weak cell, generate more data for that class and retrain. Report the class × area table with SOP-BERT after each training round.
+
+## 2026-11-16 23:00 (Rome) — Review 19 (reviewer; 1a2bf707 functional-class replay; observation queries b9c663dd..8f48c077)
+
+First class × area table accepted as the honest baseline: 1,648 honest, 0 right, 0 wrong. Two things before it can move:
+
+| Point | Request |
+|---|---|
+| 1,635 rows "incomplete native setup" | The rows carry `context.existing` (name, kind). Seed the area state from it through the area's own declared make tool, one call per item (kind, name, defaults for the rest), before the row is read — generically, no per-row fixtures. Without this, every class that acts on an existing thing (set, move, remove, select, follow-up) can never be right, whatever the reader. Count rows whose seeding fails separately. |
+| Reader | Per the 22:55 decision the table moves when SOP-BERT is wired; run it again with the first checkpoint and put both the SOP-BERT and the calibration numbers in worker-log. |
+
+Observation queries with population coverage accepted (`test-new-engine` passes on my side): they are what "question" and "check" need.
