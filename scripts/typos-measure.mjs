@@ -4,11 +4,11 @@
  * THE REAL TYPO SET THROUGH THE DOOR (Q39 S4; metric in training/eval/README.md): each row's text is read as the door reads it (the rules translation for Romanian, then
  * readRequest with `spell` over the tab's live world, sopworld 0.151) and scored right / wrong / asked / missed by its hand-judged typos. Controls: any change is wrong.
  *
- *   node scripts/typos-measure.mjs [--set training/eval/typos-real-2026-11-15.jsonl] [--dump]
+ *   node scripts/typos-measure.mjs [--set training/eval/typos-real-2026-11-15.jsonl] [--dump] [--no-catalog]
  */
 import { readFileSync } from 'node:fs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
-import { createEngine } from '../src/dialog/index.mjs';
+import { createEngine, spellKnown } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 import { requestLanguage, liveWorld, readTurn } from '../src/dialog/request.mjs';
 import { spellVocabulary, FUNCTION_WORDS } from '../src/formalizer/spell.mjs';
@@ -23,7 +23,18 @@ const engine2 = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), trans
 engine2.sopworld = lib0;
 const language = requestLanguage(lib);
 const vocab = spellVocabulary(engine.set);
-const known = (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!tr.rules?.knownEnglish?.(w) || !!tr.knownEnglish?.(w);   // as the door passes it
+// the knowledge catalog at the pin, as the page loads it (its vocabulary is one source of the spell guard); --no-catalog: the offline door (the other sources only)
+let catalog = null;
+if (!process.argv.includes('--no-catalog')) {
+  const { pinnedCatalog } = await import('./lib/catalog-pin.mjs');
+  const { createFacts } = await import('../src/knowledge/facts.mjs');
+  const { createKnowledgeSource } = await import('../src/loaders/knowledge-source.mjs');
+  const { createLayeredSource } = await import('../src/knowledge/bundled-source.mjs');
+  const src = createKnowledgeSource(pinnedCatalog().dir);
+  catalog = createFacts({ source: createLayeredSource({ text: (p) => src.text(p).catch(() => null) }) });
+}
+const doorKnown = spellKnown(lib, language, engine.set, catalog);   // the door's spell guard (reviewer 07:55): a word any source reads is never repaired
+const known = (w) => doorKnown(w) || !!tr.rules?.knownEnglish?.(w) || !!tr.knownEnglish?.(w);
 const TAB = { draw: 'art.draw', diagram: 'diagram.sketch', editor: 'docs.editor', docs: 'docs.editor' };
 const fold = (w) => String(w).normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 const tally = {};
@@ -46,6 +57,7 @@ for (const r of rows) {
       english = en?.english ?? r.text; srcRepairs = (en?.changes ?? []).filter((x) => fold(x.from) !== fold(x.to)).map((x) => ({ from: x.from, to: x.to, kind: x.kind }));   // diacritics put back are not repairs of a typo asks = en?.asks ?? [];
     }
     const kw = r.lang === 'ro' ? new Set((r.text.match(/[\p{L}]+/gu) ?? []).map(fold)) : null;   // as the door passes it: a word the translation left as written is the person's own
+    if (catalog) await catalog.loadVocabFor((String(english).toLowerCase().match(/[a-z']{3,}/g) ?? []).slice(0, 24));
     let q; try { q = readTurn(lib, live, language, english, { known: kw ? (w) => known(w) || kw.has(fold(w)) : known }); } catch (e) { console.error("CRASH", JSON.stringify(english), String(e.message).slice(0, 80)); q = { corrections: [], asks: [], request: null, unread: [], used: [] }; }
     fixes = [...q.corrections, ...srcRepairs.map((x) => ({ said: x.from, as: x.to, kind: x.kind }))]; asks = [...(q.asks ?? []), ...asks];
     if (proposer) {   // spell + proposer (Q48): the proposal reads the spell-repaired words; an accepted one is listed (on a control it is harm)

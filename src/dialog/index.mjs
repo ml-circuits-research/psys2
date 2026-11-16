@@ -303,6 +303,28 @@ function soundAlikes(text, tabWorld) {
 const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 /** A turn the old readers handled (the door did not take it): `trace.legacy`, with the door's reason. */
 /** The segment of the world that took a turn through the door (the readers' segments record theirs), with the slips the request read (as the readers record their corrections). */
+/**
+ * THE SPELL GUARD (reviewer 07:55): whether any source of the reading has a word: the host's English dictionary and spell vocabulary, the language world's wires, every live world
+ * instance, the knowledge catalog's vocabulary when loaded. A repair is considered only for a token no source reads (the door re-reads without repair otherwise; readTurn `known`).
+ */
+export function spellKnown(lib, language, set, catalog = null) {
+  const vocab = spellVocabulary(set);
+  return (w) => { const k = String(w ?? '').toLowerCase(); return FUNCTION_WORDS.has(k) || vocab.has(k) || !!vocab.nouns?.has(k) || knownEnglishWord(k) || sourceWords(lib, language, set).has(k) || catalog?.knowsWord?.(k) === true; };
+}
+/** Every word a source of the reading has (the language world's wires: their names, texts, forms and leads; every live world instance's words): built once per language world and set of worlds. */
+const sourceWordsMemo = new WeakMap();
+function sourceWords(lib, language, set) {
+  if (!language) return new Set();
+  const key = language, ver = `${language.version ?? ''}|${set?.size ?? set?.worlds?.length ?? ''}`;
+  const hit = sourceWordsMemo.get(key);
+  if (hit && hit.ver === ver) return hit.words;
+  const out = new Set();
+  const add = (v) => { for (const w of String(v ?? '').replace(/^"|"$/g, '').toLowerCase().split(/[^a-z\u00c0-\u024f']+/)) if (w.length > 1) out.add(w); };
+  try { for (const [, x] of language.wires ?? []) for (const k of ['name', 'text', 'form', 'lead', 'singular', 'plural', 'means', 'of', 'thing', 'value']) for (const v of x.attrs?.[k] ?? []) if (typeof v === 'string') add(v.replace(/_/g, ' ')); } catch { /* a language world without wires: none */ }
+  try { for (const w of set?.values?.() ?? []) { const live = w?.requestText ? liveWorld(lib, w) : null; if (live) for (const x of lib.worldWords(live)) out.add(String(x).toLowerCase()); } } catch { /* the worlds' words are a bonus */ }
+  sourceWordsMemo.set(key, { ver, words: out });
+  return out;
+}
 /** Whether the language says a noun as a plural noun (an irregular pair whose singular is its plural: eyes, glasses), by its last word; built once per language world. */
 const pluralNouns = new WeakMap();
 const pluralNoun = (language, noun) => {
@@ -1779,7 +1801,12 @@ export class DialogSession {
     const rd = this.dialogue.requests;
     const lastRec = rd.last(tabWorld);
     const vocab = spellVocabulary(set);
-    const known = (w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || knownEnglishWord(String(w ?? '').toLowerCase());   // a word of the language (the English dictionary, with or without a translator) is never a slip: "baked" is never repaired to "named" (reviewer 20:05 1(a))
+    // A REPAIR ONLY WHERE NO SOURCE READS THE WORD (reviewer 07:55; structural, no word list): a token that any source of the turn reads is never a slip: the host's English dictionary,
+    // the language world (every word of its wires: cues, irregulars, the catalog's kinds, values and words it carries), every live world instance's words, and the knowledge catalog's
+    // vocabulary when it is loaded. "villa" (a stand-in of the catalog) is never read as "via", "baked" never as "named".
+    const catNow = knowledgeOf(this);
+    if (catNow?.loadVocabFor) { try { await within(this, catNow.loadVocabFor((String(english).toLowerCase().match(/[a-z']{3,}/g) ?? []).slice(0, 24))); } catch { /* the catalog is a bonus source: offline, the other sources stand */ } }   // the catalog's vocabulary for the turn's words, under the catalog deadline
+    const known = spellKnown(lib, language, set, catNow);
     // a word the translation left as the person wrote it (a word of their own language no dictionary knew) is theirs, never a slip of English: the repair of the person's own language is the
     // contextual one before the translation (Q39 S3), so the English reader never "repairs" "stanca" to "stanza"
     const keptWords = lang === 'en' ? null : new Set((String(text).match(/[\p{L}]+/gu) ?? []).map((w) => w.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()));

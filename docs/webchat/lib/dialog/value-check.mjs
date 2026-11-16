@@ -19,7 +19,7 @@
 import { isNumberWord, parseNumberRun } from '../formalizer/rules/numbers.mjs?v=3302b74e00';
 import { isColourWord } from '../knowledge/values.mjs?v=24c3ed2609';
 import { editDistance } from '../formalizer/rules/normalize.mjs?v=e112c4028d';
-import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=f4503fb657';
+import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=8ed1b3d1ae';
 import { budget } from './budget.mjs?v=00bce6e369';
 import { en } from '../lang/en.mjs?v=6675328a78';
 

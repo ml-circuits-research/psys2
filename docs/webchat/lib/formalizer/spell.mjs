@@ -9,12 +9,12 @@
  *   const { text, corrections } = spellCorrect('make bigger yes and red lips', { vocab: worldVocabulary(set, 'ui.avatar') });
  *   // text = 'make bigger eyes and red lips', corrections = [{ from: 'yes', to: 'eyes', span: [12, 15], kind: 'spell' }]
  */
-import { vocabularyOf, openVocab, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs?v=f4503fb657';
+import { vocabularyOf, openVocab, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs?v=8ed1b3d1ae';
 import { isNumberWord } from './rules/numbers.mjs?v=3302b74e00';
 import { guard } from './guard.mjs?v=82a55329d9';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
-import { namingTables } from './routing.mjs?v=f4503fb657';
-import { lexIndex } from '../worlds/lexicon.mjs?v=ab38fd5b80';
+import { namingTables } from './routing.mjs?v=8ed1b3d1ae';
+import { lexIndex } from '../worlds/lexicon.mjs?v=372ab17a7b';
 
 /** Common English function words: never corrected, and valid correction targets (typos of "the", "and", "with" ...). */
 export const FUNCTION_WORDS = new Set((
