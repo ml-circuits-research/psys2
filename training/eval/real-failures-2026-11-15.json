@@ -2,9 +2,9 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "10ba55a6",
-  "tree": "f0499657a8571925",
-  "catalog": null,
+  "build": "4fb1c663",
+  "tree": "61b71d1e64577d89",
+  "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "seed": 20261115,
   "formalizer": "encoder"
  },
@@ -20,8 +20,8 @@
    "changed": 26,
    "unjudged": 332,
    "outcome": {
-    "executed": 179,
-    "refused": 290,
+    "executed": 182,
+    "refused": 287,
     "asked": 12,
     "not_understood": 54,
     "other_world": 70
@@ -95,8 +95,8 @@
    "changed": 26,
    "unjudged": 332,
    "outcome": {
-    "executed": 179,
-    "refused": 290,
+    "executed": 182,
+    "refused": 287,
     "asked": 12,
     "not_understood": 54,
     "other_world": 70
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 366,
- "failing_ops": 366,
+ "failing_matrix": 363,
+ "failing_ops": 363,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -1106,8 +1106,8 @@
   },
   {
    "cause": "refused: the request names something the world does not support",
-   "count": 71,
-   "both_reasoners": 71,
+   "count": 68,
+   "both_reasoners": 68,
    "examples": [
     {
      "text": "mcdavatara human",
@@ -1120,14 +1120,14 @@
      "happened": "I did not understand \"human\" here. [outcome: refused]"
     },
     {
-     "text": "become a women",
-     "tab": "robot",
-     "happened": "I did not understand \"become\" here. [outcome: refused]"
-    },
-    {
      "text": "make the avatar to geta big smile",
      "tab": "robot",
      "happened": "I could not make that in the avatar. [outcome: refused]"
+    },
+    {
+     "text": "the the next mouth",
+     "tab": "robot",
+     "happened": "Nothing changed. The mouth has no other variant. [outcome: refused]"
     }
    ]
   },
