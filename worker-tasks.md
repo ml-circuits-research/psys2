@@ -5118,3 +5118,11 @@ Overlap removed from the calendar tool; the policy now lives in the world declar
 `node --test tests/shell-composition.test.mjs` → 2 / 2; REAL set unchanged (131/207), as expected for infrastructure. Accepted: stale aliases and actions of a previous composition can no longer route or execute.
 
 **Q106 — accepted.** Remove Map, Music and the charts area from the demo through an explicit application composition that lists only drawing, diagram, document and calendar, rather than deleting the worlds' files now. Conditions: the demo build must not be able to load the retired worlds (a test that the composition of the shipped page has exactly the four areas); the retired worlds stay only as fixtures of general infrastructure tests (lazy loading, short names), marked as fixtures; when those tests move to neutral fixtures, the files go. The avatar popup folds into the drawing in the same composition change or the next.
+
+## 2026-11-16 16:30 (Rome) — OWNER: a preview on GitHub Pages as early as possible
+
+The owner asks when he can try the new system on the published page. Plan for it from the start, so he sees the new path long before it replaces the old one:
+
+- Ship the new path on the page behind a preview switch (a URL parameter such as `?engine=new`), old path the default, as soon as ONE request goes end to end through it (reading → request wires → resolution → plan → tool → observation → reply with its explanation). The calendar is the natural first area (its host exists); a simple drawing request next.
+- Every later landing that touches the new path updates the preview the same day, with a line in the page's build info saying which areas and constructions it covers, so the owner knows what to try.
+- The preview is judged on his English turns per area as they become covered; the default switches only when the new path is at least equal turn by turn with no new wrong execution (the rule already agreed).
