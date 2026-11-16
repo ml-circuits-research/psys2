@@ -32,11 +32,11 @@ const posOf = (cls) => (cls?.startsWith('v.') ? 'verb' : cls?.startsWith('a.') ?
 
 export async function openLangRo({ facts = null, unimorph = false, gloss: glossFor = null, local: withLocal = true } = {}) {
   facts ??= (await import('./ro.facts.generated.mjs?v=02be2dcbd3')).LANG_RO_FACTS;
-  const local = withLocal ? (await import('./ro.local.mjs?v=4cb7fa62f1')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
+  const local = withLocal ? (await import('./ro.local.mjs?v=bd7ffae7c5')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
   // the large dictionary (3,466 lemmas derived from UniMorph, CC BY-SA 3.0, no senses) is a module of its own, loaded only when asked for; for a letter the hand file comes first, then the derived rows
   const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=723f88d67c')).LANG_RO_UNIMORPH : {};
   const text = (letter) => [facts.dictionary[letter], local.dictionary[letter], extra[letter]].filter(Boolean).join('\n');
-  const lib = await import('../vendor/sopworld/sopworld.mjs?v=e5577c1d2e');
+  const lib = await import('../vendor/sopworld/sopworld.mjs?v=6ad3713775');
   const world = new lib.World();
   world.load(facts.wires);
   if (local.wires.trim()) world.load(local.wires);
@@ -239,7 +239,7 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
         if (!new RegExp(`\\{${k}[:}@]|@${k}\\}`).test(said)) continue;   // a role the language's sentence does not say needs no word ("aici" for the world's name)
         if (typeof v === 'string' && /^[“"„].*[”"]$/s.test(v) && new RegExp(`\\{${k}\\}`).test(said)) { roles[k] = `„${v.slice(1, -1)}”`; continue; }   // a name already quoted (the title a tool gave what it made): said as it is, in the language's quotes
         let x = (k === 'value' && typeof v === 'string' ? lemmaOf(v, 'adjective') : null) ?? roleRo(v);   // a value said of a kind is its adjective first ("orange": portocaliu, not the fruit)
-        if (x == null && (k === 'value' || k === 'topic') && typeof v === 'string' && new RegExp(`\\{${k}\\}`).test(said) && !new RegExp(`@${k}\\}`).test(said)) { roles[k] = `„${v}”`; continue; }   // a value said as it is (no inflection, nothing agrees with it: "am presupus {value} pentru ...", "este despre {topic}"): a name the dictionary has no word for is quoted, as the names of things are
+        if (x == null && (k === 'value' || k === 'name') && typeof v === 'string' && new RegExp(`\\{${k}\\}`).test(said) && !new RegExp(`@${k}\\}`).test(said)) { roles[k] = `„${v}”`; continue; }   // a value said as it is (no inflection, nothing agrees with it: "am presupus {value} pentru ...", "este despre {topic}"): a name the dictionary has no word for is quoted, as the names of things are
         if (x == null) return null;
         roles[k] = x;
         if (typeof v === 'string') lemmas.add(k);

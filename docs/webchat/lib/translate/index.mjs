@@ -9,10 +9,10 @@
 // `text` and reported in the extra field `untranslatable: [{span, reason}]` (confidence 0).
 import { tokenize, foldKey } from './normalize.mjs?v=6d473eb091';
 import { analyze, placeOf, surfaceForms } from './morphology.ro.mjs?v=8bcf5dc68f';
-import { frameMoveRoEn, loadFramesRo, langRoNow } from './frames-ro.mjs?v=12c72776e7';
+import { frameMoveRoEn, loadFramesRo, langRoNow } from './frames-ro.mjs?v=7c3e58b7f0';
 import { within } from './candidates.mjs?v=bb754b8305';
 import { pluralEn, pastEn } from './inflect.en.mjs?v=5b2e62d57a';
-import { sensesRo } from './lexicon-ro.mjs?v=3622958266';
+import { sensesRo } from './lexicon-ro.mjs?v=d0e519126b';
 import { DICTIONARY_MAX_COST } from './source-repair.mjs?v=db5b883c67';
 import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord, knownEnglishWord } from './en-ro.mjs?v=cbd133aecd';
 
@@ -142,7 +142,7 @@ export function detectLanguage(text) {
 // that sets `globalThis.__psys2LazyRoEn` before importing this module loads them on demand: `loadRoEn()` (the host calls it when the language is not English), and a ro -> en `translate` that
 // finds them missing returns a promise that waits for them (every caller of the rules awaits the answer).
 let roEn = null, roEnLoading = null;
-export function loadRoEn() { return roEn ? Promise.resolve(roEn) : (roEnLoading ??= Promise.all([import('./ro-en.mjs?v=0d41910a13'), loadFramesRo()]).then(([m]) => (roEn = m.translateRoEn), (e) => { roEnLoading = null; throw e; })); }   // with the w.lang.ro frames (frames-ro.mjs)
+export function loadRoEn() { return roEn ? Promise.resolve(roEn) : (roEnLoading ??= Promise.all([import('./ro-en.mjs?v=8adc0343ac'), loadFramesRo()]).then(([m]) => (roEn = m.translateRoEn), (e) => { roEnLoading = null; throw e; })); }   // with the w.lang.ro frames (frames-ro.mjs)
 /** True when the Romanian -> English rules are in memory. */
 export const roEnLoaded = () => !!roEn;
 if (!globalThis.__psys2LazyRoEn) await loadRoEn();
