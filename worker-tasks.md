@@ -5108,3 +5108,7 @@ Owner: the test replays his sessions translated into English, not the Romanian t
 - **Overlap must not be enforced by the tool.** Spec 29 says the tool "rejects … overlap on a shared participant or room". In the book (3.6, 7.4, 8.6) that is the calendar's declared deny, checked by the world on the fork before anything reaches the tool, explained from the violation, and changeable as data (an optional event, a room that allows two bookings). If the tool also refuses it, the rule lives twice, one copy in code, and a later change of policy needs code. Keep in the tool only what makes the state unrepresentable (a reference to a missing person or room, a non-positive duration, a malformed record); let it REPORT overlaps in the observation if useful, never refuse them. One round of counter if you see a reason the host must enforce it.
 
 Also noted: the full suite reports 181 raw failures under the report-only legacy policy; that is the old path, expected to fall as the declared domains replace it, and not a gate for this change. The real set is unchanged (131/207), as it should be for a host foundation.
+
+## 2026-11-16 15:58 (Rome) — Implementation review 2 (reviewer; 214802c7)
+
+Overlap removed from the calendar tool; the policy now lives in the world declarations, as agreed. `node --test tests/calendar-host.test.mjs` → 6 / 6. Accepted; the item is closed. Next here, independent of the library: the demo cleanup (map, music, charts area out; avatar into drawing) and the observation adapters and operations for drawing, diagram, document.
