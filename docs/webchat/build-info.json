@@ -1,5 +1,5 @@
 {
-  "version": "1abf3ae447",
+  "version": "3a7b5f3156",
   "worlds": [
     "acts",
     "art.draw",
@@ -66,6 +66,7 @@
     "lib/dialog/knowledge-lookup.mjs": "b85605f718549ee9",
     "lib/dialog/meta-worlds.mjs": "75137e22c3242f5e",
     "lib/dialog/meta.mjs": "5314f650e6529b5d",
+    "lib/dialog/model-graph-decoder.mjs": "5d753a4bc836471d",
     "lib/dialog/native-selection.mjs": "b4562399ad9f08e7",
     "lib/dialog/new-engine-areas.mjs": "4e937555cfb89f8d",
     "lib/dialog/new-engine-source.mjs": "28989e78c6052d17",
@@ -647,8 +648,8 @@
     "worlds/words/zo.json": "98c807997b12214c",
     "worlds/words.bloom.json": "1aee5298e6fe2c42"
   },
-  "builtAt": "2026-11-16T22:07:06.982Z",
-  "commit": "c0937ba8-dirty",
+  "builtAt": "2026-11-16T22:33:20.927Z",
+  "commit": "f91b5083-dirty",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "assets": {
     "app.mjs": "acad83ead9",
@@ -685,6 +686,7 @@
     "lib/dialog/knowledge-lookup.mjs": "ab82b04ca0",
     "lib/dialog/meta-worlds.mjs": "0d16beff54",
     "lib/dialog/meta.mjs": "aa6dfcad14",
+    "lib/dialog/model-graph-decoder.mjs": "f68e7b98a9",
     "lib/dialog/native-selection.mjs": "cbe5bd4951",
     "lib/dialog/new-engine-areas.mjs": "510334f8b4",
     "lib/dialog/new-engine-source.mjs": "e31b4adb7f",
