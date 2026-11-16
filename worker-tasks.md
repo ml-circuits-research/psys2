@@ -5058,3 +5058,9 @@ For you now, on paper only, added to the preparation of block 12:20:
 1. What removing the Charts domain touches (tab, patterns, code, tests, legacy list, owner-session rows) and what of its drawing code would become a tool of the Diagram (bars and lines placed on an axis by a node's quantity).
 2. The same list for Music.
 3. The calendar's tools and view (add, move, change, remove a meeting; rooms and people as resources), against the declaration in the theory, lesson 32, and the published `w.calendar`.
+
+## 2026-11-16 13:30 — reviewer: owner decisions that touch the application (paper only, no code yet)
+
+- The MAP is removed from the demo (owner: "harta nu contează, poți să o scoți din demo"), like Music. Charts become a kind of diagram (already said, block 13:20). The avatar becomes a kind of drawing (a face is a drawn thing with parts), not a separate domain. So the demo has four work areas: drawing, diagrams, documents, calendar.
+- Scope: everything is redone ("refacem tot … fără compromisuri"); the bar is the behaviour a user would expect if a language model were in control. The proof is textual: for any reply the system explains in plain text why (declaration, rule, source of each value).
+- The book is now written by the library session: soplang-words-lib `books/sop-worlds-teorie.md`; the plan is `refactoring/sop-worlds-schimbari.md`. Nothing to implement until the owner approves the design. On paper only: list what removing Map, Music, Charts-as-domain and the avatar popup touches (files, tests, session rows), so the removal can be one clean change later.
