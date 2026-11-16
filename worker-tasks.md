@@ -5211,3 +5211,26 @@ Accepted. A lossless encoding of published graphs, with absence, explicit `none`
 One small point: the 21k-line library copy under `training/sop-bert/contracts/` is a second pin beside the app's. Keep it only if the training scripts cannot import the app's pinned bundle; if they can, point at that one and record the hash, so there is one library version in the repository to bump.
 
 Next on the critical path is still the PSys2 side of the first Drawing request behind `?engine=new` (preview switch, host reads the validated request, resolves the instance, applies the effect, trace with before/after, reply). The training smoke test can run beside it.
+
+## 2026-11-16 20:30 (Rome) — Reader data and head design (reviewer, on the owner's direction)
+
+The owner decided how the learned reader is trained: data generated in bulk by Claude Haiku from what the worlds declare, several thousand rows per area; a separate cutter head for long messages; then reading heads derived from the worlds' schemas, so that every wire type and every key of every wire type has its head and enough examples. Not one model answering everything at once. That is how diagram-vss-demo reached its result (cutter + one head per legend question, 32 questions for one area).
+
+**Delivered in `training/sop-bert/` (commit efb5f4ce):**
+
+| Item | Content |
+|---|---|
+| `data/haiku-v1/` | 15,919 validated rows (drawing 3,997, diagram 3,987, document 3,998, calendar 3,937), 64 batches with varied style and theme; README states the limits. Good for the cutter, mood, act, target fill and the shared heads it covers. |
+| `heads/inventory.json` | Per (wire type, key) inventory: 21 wire types, 134 keys, from book chapter 7, the old worlds' real operations and parameters, and `std.request`. Each key has its head kind (class, step, span, fill, number, candidate) and the legend concept it means; 72 concept heads, 18 shared across areas (name 13 keys, reference 9, count 8, colour 8...). |
+| `heads/COVERAGE-haiku-v1.txt` | v1 mapped onto the inventory: 23 of 134 keys pass the gate (at least 300 examples per key, at least 40 per closed value); 62 keys have none. |
+
+**Coming (v2, generating now):** rows annotated directly in the general request form (target with type/mode/fill/determiner/kind; constraints each with `<type>.<key>`, value, operator, phase selector/result, polarity, character, step, measure/unit, anchor, scope, group; question with ask and asked key; turn with fragment/objection/repeat/area), targeted batch by batch at the uncovered keys, until every key passes the gate. Validator `validate_v2.py` checks keys and values against the inventory.
+
+**Asks for the training side:**
+
+| Point | Request |
+|---|---|
+| Head layout | One encoder; the cutter as its own token head; per-request heads generated from `inventory.json`: one head per concept (wire type given as input context), span keys as role tags of one token head, reference keys with a fill head, number keys as span plus value, candidate keys scored against declared candidates. No head list written by hand in the training code. |
+| Gate | Train only heads whose keys pass the coverage gate; report coverage per key with the per-key accuracy, so a weak key is visible, not averaged away. |
+| Schemas | The inventory is a checklist for the new world declarations: when a world's schema lands, regenerate the inventory from it and diff; a key in the schema without a head, or a head without a key, is a defect. |
+| Evaluation | Haiku rows are training and calibration only. The final held-out set is the owner's reviewed English turns plus an independently written set (different model, different prompts). |
