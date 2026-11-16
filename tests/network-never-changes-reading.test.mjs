@@ -45,7 +45,8 @@ for (const mode of ['rejected', 'hanging']) {
     const OFFLINE = /I can't reach the picture catalog right now, so I can only draw the basic things\./;   // the one intended addition of an unreachable catalog (spec 17): said after the reading, which is unchanged
     for (let i = 0; i < out.length; i++) {
       assert.deepEqual(out[i].segments, baseline.out[i].segments, `"${out[i].said}" read differently with fetch ${mode}`);
-      if (!OFFLINE.test(out[i].text)) assert.equal(out[i].text, baseline.out[i].text, `"${out[i].said}" answered differently with fetch ${mode}`);
+      const LOADING = /My knowledge is still loading, so I cannot say yet\./;   // the second intended difference (reviewer 2026-11-16): a refusal that a missing catalog row may have caused says the knowledge is still loading, instead of "no drawing of X"; the reading is unchanged
+      if (!OFFLINE.test(out[i].text) && !LOADING.test(out[i].text)) assert.equal(out[i].text, baseline.out[i].text, `"${out[i].said}" answered differently with fetch ${mode}`);
     }
     assert.ok(out[0].segments.every((x) => !x.unparsed) && /Paris/.test(out[0].text), out[0].text);   // the map reads Paris from the bundled k.geo subset, generated from the catalog
     assert.ok(calls.length > 0, 'the catalog was asked (the test exercises the lookup path)');

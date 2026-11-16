@@ -39,14 +39,16 @@ async function loadTranslator() {
 function parseArgs(argv) {
   const roots = [];
   const rest = [];
+  let noCatalog = false;
   for (let i = 0; i < argv.length; i++) {
     budget.tick('cli.parseArgs');
     if (argv[i] === '--root') roots.push(argv[++i]);
+    else if (argv[i] === '--no-catalog') noCatalog = true;
     else if (argv[i] === '--reasoner') i++;   // read by applyReasonerFlag
     else if (argv[i].startsWith('--reasoner=')) continue;
     else rest.push(argv[i]);
   }
-  return { roots: roots.length ? [...roots, DEFAULT_ROOT] : [DEFAULT_ROOT], rest };
+  return { roots: roots.length ? [...roots, DEFAULT_ROOT] : [DEFAULT_ROOT], rest, noCatalog };
 }
 
 async function makeEngine(roots) {
@@ -84,8 +86,11 @@ async function cmdTestWorld(roots, target) {
   return bad ? 1 : 0;
 }
 
-async function cmdChat(roots) {
+async function cmdChat(roots, { noCatalog = false } = {}) {
   const engine = await makeEngine(roots);
+  // the page's knowledge by default (the pinned catalog, read from the site copy, no network); --no-catalog runs without
+  if (noCatalog) console.log('no catalog (--no-catalog)');
+  else { const { attachPinnedCatalog, catalogLine } = await import('../scripts/lib/pinned-knowledge.mjs'); console.log(catalogLine(await attachPinnedCatalog(engine))); }
   const session = engine.createSession({ language: 'auto' });
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
   console.log('PSys2 chat. Worlds: ' + engine.worlds().map((w) => w.id).join(', ') + '. Type :memory, :trace or :quit.');
@@ -133,10 +138,10 @@ async function cmdFormalize(roots, text) {
 }
 
 async function main() {
-  const { roots, rest } = parseArgs(process.argv.slice(2));
+  const { roots, rest, noCatalog } = parseArgs(process.argv.slice(2));
   const [cmd, arg] = rest;
   switch (cmd) {
-    case 'chat': return cmdChat(roots);
+    case 'chat': return cmdChat(roots, { noCatalog });
     case 'test-world': return cmdTestWorld(roots, arg);
     case 'parse': return arg ? cmdParse(arg) : usage();
     case 'formalize': return arg ? cmdFormalize(roots, rest.slice(1).join(' ')) : usage();
@@ -145,7 +150,7 @@ async function main() {
 }
 
 function usage() {
-  console.error('usage: node src/cli.mjs chat | test-world <id|all> | parse <file.sop> | formalize "<text>"  [--root <dir>] [--reasoner ops|matrix]');
+  console.error('usage: node src/cli.mjs chat [--no-catalog] | test-world <id|all> | parse <file.sop> | formalize "<text>"  [--root <dir>] [--reasoner ops|matrix]');
   return 2;
 }
 

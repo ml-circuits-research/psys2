@@ -48,6 +48,7 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.undo_did w.lang.en.reply name=done.undo.did count=one role=did text="OK, I undid it ({did})."
 @w.lang.en.reply.local.redo_did w.lang.en.reply name=done.redo.did count=one role=did text="OK, I did it again ({did})."
 @w.lang.en.reply.local.nothing_known w.lang.en.reply name=refused.nothing_known count=one role=about text="I know nothing about {about} in my knowledge yet."
+@w.lang.en.reply.local.knowledge_loading w.lang.en.reply name=refused.knowledge_loading count=one text="My knowledge is still loading, so I cannot say yet. Please try again in a moment."
 @w.lang.en.reply.local.no_composer w.lang.en.reply name=refused.no_composer count=one text="I cannot write compositions yet: the library has no composer (std.compose) in this build."
 # The slots of k.faces are named by plural nouns (eyes, glasses): their plural is the word itself (questions.md Q96 (5) [KNOW], w.lang.en.irregular)
 @w.lang.en.irregular.local.eyes w.lang.en.irregular singular=eyes plural=eyes

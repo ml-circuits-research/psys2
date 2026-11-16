@@ -14,11 +14,11 @@
  *     formalizer, restricted to the frame's world. It is accepted only when the result is fully understood there.
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
-import { restrictedSet } from '../formalizer/spell.mjs?v=5efa7ea51f';
+import { restrictedSet } from '../formalizer/spell.mjs?v=da53a6f0d3';
 import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=6128b3a8dd';
 import { lastUnfinished } from '../astra/where.mjs?v=09b4059350';
-import { runDiscussionCommand } from '../astra/session.mjs?v=e5f1ac3410';
-import { tabOfWorld } from '../worlds/index.mjs?v=d90eb6eb74';
+import { runDiscussionCommand } from '../astra/session.mjs?v=e029c21c92';
+import { tabOfWorld } from '../worlds/index.mjs?v=b7cbb37752';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=aa6dfcad14';
 import { budget } from './budget.mjs?v=00bce6e369';
 import { en } from '../lang/en.mjs?v=edece7402d';

@@ -93,6 +93,7 @@ export function writeText(ctx, { kind, about = null, words = null, chapters = nu
   const g = textGen()?.composer, s = ctx.state;
   if (!g?.available) return { ...refuse('no_composer'), reply: 'refused.no_composer' };   // said by the reply fact: this build has no composer
   const r = g.compose({ type: kind ?? undefined, topic: about ?? undefined, chapters: count(chapters), words: count(words), genre: kind ?? undefined, seed: composeSeed(s, kind, about) });
+  if (!r?.composition && ctx.knowledge?.loadState?.() === 'loading') return { ...refuse('nothing_known'), reply: 'refused.knowledge_loading' };   // the catalog is not (fully) read yet: one generic reply fact
   if (!r?.composition) return { ...refuse('nothing_known'), ...(about ? { reply: 'refused.nothing_known', roles: { about: String(about) } } : {}) };   // said by the reply fact: what the knowledge has nothing of
   const c = r.composition, blocks = [];
   const wrote = {};   // what was written, per part name: the library says short_of for a part that came out shorter than the plan named (sopworld 0.166)

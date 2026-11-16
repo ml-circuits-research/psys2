@@ -33,8 +33,10 @@ fewer nodes
 anything but circles
 `;
 
-const lines = (process.argv[2] ? readFileSync(process.argv[2], 'utf8') : DEFAULT).split('\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
+const lines = (process.argv[2] && !process.argv[2].startsWith('--') ? readFileSync(process.argv[2], 'utf8') : DEFAULT).split('\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
 const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });
+const catInfo = process.argv.includes('--no-catalog') ? null : await (await import('./lib/pinned-knowledge.mjs')).attachPinnedCatalog(engine);   // the page's catalog (reviewer 2026-11-16)
+console.log(catInfo ? `catalog ${catInfo.short} loaded, ${catInfo.bases} bases` : 'no catalog (--no-catalog)');
 const TABWORLD = { diagram: 'diagram.sketch', draw: 'art.draw', editor: 'docs.editor', charts: 'data.charts', map: 'geo.map', music: 'media.music' };
 const measure = (st, tab) => {
   const w = st[TABWORLD[tab]] ?? {};

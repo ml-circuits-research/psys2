@@ -7,7 +7,7 @@ import * as M from './morphology.ro.mjs?v=8bcf5dc68f';
 import * as E from './inflect.en.mjs?v=5b2e62d57a';
 import { FRAMES } from './phrases.ro-en.mjs?v=1342e78bf5';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
-import { lookupRo, hasDictionaryReading } from './lexicon-ro.mjs?v=da904e4441';
+import { lookupRo, hasDictionaryReading } from './lexicon-ro.mjs?v=76a7f68f03';
 
 // ------------------------------------------------------------------ static tables
 
