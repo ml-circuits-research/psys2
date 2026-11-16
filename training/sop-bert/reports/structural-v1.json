@@ -1,0 +1,1516 @@
+{
+  "format": "sop.raw-structural-baseline",
+  "version": 1,
+  "executable": false,
+  "wholeGraphConfidence": null,
+  "verification": {
+    "format": "sop.structural-run-verification",
+    "version": 1,
+    "executable": false,
+    "wholeGraphConfidence": null,
+    "checkpointSha256": "2891e4fd7a270cf1f3315da8c47e5aa570cf859dca53733ad06d6f11c4cd790d",
+    "trainerSha256": "3902b374e19284805b416091cb7836d7031e73c964b55b0a7b870902e3d442a8",
+    "configSha256": "4a2708bad96a5ae940b0599764dc8f4343b58afc0054546f0e704932a14c85e8",
+    "runManifestSha256": "61b14c72c08b1fe89341aabb9dd9843dd0e45d5f7fdacb5c2016a7c015c9539c",
+    "summarySha256": "9557c70a9b686cf74013c9c4742e8a0084d41571191198f8b7b0d0d484ab5a01",
+    "verifierSha256": "de3ab5d638a928da5093b87401fec5d6441600e6775fbccf2612ee468cf6b0d8",
+    "steps": 1810,
+    "epoch": 1,
+    "rowsAudited": {
+      "train": 28959,
+      "calibration": 3308
+    },
+    "excludedIdOverlap": 0,
+    "exclusionSha256": "66b1ab7f205bedf08c15e3e83f98e3de217922d179e89ae8b99c29a938e29e77",
+    "sourceFilesVerified": 308,
+    "effectiveRawInputAndSupervisionSha256": {
+      "train": "9ad21e3aa9b00108975e8d5db3106bff49d9709b0255c97f1ed8117f21c83f1f",
+      "calibration": "77d3ddf23c9b66fba332d618798970977d950ac6cb8272c75d44f4ce884ab752"
+    },
+    "note": "Effective hash excludes unused canonical teacher decorations; actual source/context/raw annotations/version order retained. No graph correctness or confidence verified."
+  },
+  "inputAndArchitecture": {
+    "format": "psys2.raw-structural-model/1",
+    "modelKind": "structural-graph",
+    "canonicalInference": false,
+    "rawPredictionFormat": "psys2.raw-structural-predictions/1",
+    "decoderTarget": "psys2.structural-predictions/1",
+    "maxRequests": 7,
+    "maxConstraints": 10,
+    "requestFields": [
+      "act",
+      "mood",
+      "target.type",
+      "target.mode",
+      "target.fill",
+      "target.determiner",
+      "target.kind",
+      "target.count",
+      "target.ordinal",
+      "target.quantifier",
+      "question.ask",
+      "question.asked_key",
+      "turn.fragment",
+      "turn.objection",
+      "turn.repeat_count",
+      "turn.area"
+    ],
+    "constraintFields": [
+      "key",
+      "value",
+      "operator",
+      "phase",
+      "polarity",
+      "character",
+      "scope",
+      "group",
+      "step",
+      "measure",
+      "unit",
+      "variety",
+      "anchor_fill"
+    ],
+    "requestSpans": [
+      "span",
+      "trigger",
+      "target.kind_span",
+      "target.name_span",
+      "target.description_span",
+      "target.count_span"
+    ],
+    "constraintSpans": [
+      "value_span",
+      "measure_span",
+      "anchor_span"
+    ],
+    "spanStates": [
+      "absent",
+      "present",
+      "unresolved"
+    ],
+    "reservedIndices": {
+      "absent": 0,
+      "unknown": 1
+    },
+    "unknownIsNotAbsence": true,
+    "counts": "exact 0..train maximum; extra logit is overflow/unknown, never clipped",
+    "input": "source text paired with actual supplied area/context JSON only; no annotation fields",
+    "canonicalBinding": "separate declaration-only bridge; raw descriptors and unresolved preserved",
+    "graphConfidence": "absent until independent whole-graph calibration",
+    "encoder": "/home/salboaie/work/sopworlds/.session-control/hf-cache/models--distilbert--distilbert-base-uncased/snapshots/12040accade4e8a0f71eabdb258fecc2e7e948be",
+    "maxLength": 192,
+    "initialEncoderCheckpointSha256": "68ca1038ccca8932282aede8f430cf261655a8543ba21230ee531794676b4d08"
+  },
+  "bankSizes": {
+    "r:act": 22,
+    "r:mood": 6,
+    "r:target.type": 17,
+    "r:target.mode": 5,
+    "r:target.fill": 8,
+    "r:target.determiner": 4,
+    "r:target.kind": 749,
+    "r:target.count": 22,
+    "r:target.ordinal": 19,
+    "r:target.quantifier": 10,
+    "r:question.ask": 21,
+    "r:question.asked_key": 93,
+    "r:turn.fragment": 9,
+    "r:turn.objection": 9,
+    "r:turn.repeat_count": 8,
+    "r:turn.area": 6,
+    "c:key": 105,
+    "c:value": 4067,
+    "c:operator": 12,
+    "c:phase": 4,
+    "c:polarity": 4,
+    "c:character": 5,
+    "c:scope": 4,
+    "c:group": 4,
+    "c:step": 6,
+    "c:measure": 77,
+    "c:unit": 15,
+    "c:variety": 7,
+    "c:anchor_fill": 5
+  },
+  "preprocessing": {
+    "train": {
+      "rows": 28959,
+      "truncated": 1,
+      "sourceTruncatedRows": 0,
+      "contextTruncatedRows": 1,
+      "rawV2Representable": 14344,
+      "unresolvedSpan:r:trigger": 155,
+      "unresolvedSpan:r:span": 9,
+      "unresolvedSpan:c:anchor_span": 11,
+      "unresolvedSpan:c:value_span": 127,
+      "unresolvedSpan:r:target.kind_span": 90,
+      "unresolvedSpan:r:target.count_span": 2,
+      "unresolvedSpan:r:target.name_span": 43
+    },
+    "calibration": {
+      "rows": 3308,
+      "truncated": 0,
+      "sourceTruncatedRows": 0,
+      "contextTruncatedRows": 0,
+      "rawV2Representable": 1377,
+      "unresolvedSpan:r:trigger": 19,
+      "unseenLabel:c:value": 317,
+      "unresolvedSpan:r:target.kind_span": 13,
+      "unseenLabel:r:target.kind": 46,
+      "unresolvedSpan:c:value_span": 8,
+      "unresolvedSpan:r:target.name_span": 6,
+      "unresolvedSpan:c:anchor_span": 2,
+      "unseenLabel:r:target.count": 1
+    }
+  },
+  "summary": {
+    "epoch": 1,
+    "steps": 1810,
+    "trainRows": 28959,
+    "trainLoss": 0.6813035443553304,
+    "seconds": 190.20889377593994,
+    "conditionalHeadMetrics": {
+      "r:act": {
+        "support": 2000,
+        "correct": 1526,
+        "unseenTruth": 0,
+        "accuracy": 0.763
+      },
+      "r:mood": {
+        "support": 2000,
+        "correct": 1932,
+        "unseenTruth": 0,
+        "accuracy": 0.966
+      },
+      "r:target.type": {
+        "support": 2000,
+        "correct": 1493,
+        "unseenTruth": 0,
+        "accuracy": 0.7465
+      },
+      "r:target.mode": {
+        "support": 2000,
+        "correct": 1855,
+        "unseenTruth": 0,
+        "accuracy": 0.9275
+      },
+      "r:target.fill": {
+        "support": 2000,
+        "correct": 1397,
+        "unseenTruth": 0,
+        "accuracy": 0.6985
+      },
+      "r:target.determiner": {
+        "support": 2000,
+        "correct": 1666,
+        "unseenTruth": 0,
+        "accuracy": 0.833
+      },
+      "r:target.kind": {
+        "support": 2000,
+        "correct": 1025,
+        "unseenTruth": 46,
+        "accuracy": 0.5125
+      },
+      "r:target.count": {
+        "support": 2000,
+        "correct": 1961,
+        "unseenTruth": 1,
+        "accuracy": 0.9805
+      },
+      "r:target.ordinal": {
+        "support": 2000,
+        "correct": 1952,
+        "unseenTruth": 0,
+        "accuracy": 0.976
+      },
+      "r:target.quantifier": {
+        "support": 2000,
+        "correct": 1925,
+        "unseenTruth": 0,
+        "accuracy": 0.9625
+      },
+      "r:question.ask": {
+        "support": 2000,
+        "correct": 1816,
+        "unseenTruth": 0,
+        "accuracy": 0.908
+      },
+      "r:question.asked_key": {
+        "support": 2000,
+        "correct": 1816,
+        "unseenTruth": 0,
+        "accuracy": 0.908
+      },
+      "r:turn.fragment": {
+        "support": 2000,
+        "correct": 1969,
+        "unseenTruth": 0,
+        "accuracy": 0.9845
+      },
+      "r:turn.objection": {
+        "support": 2000,
+        "correct": 1941,
+        "unseenTruth": 0,
+        "accuracy": 0.9705
+      },
+      "r:turn.repeat_count": {
+        "support": 2000,
+        "correct": 1988,
+        "unseenTruth": 0,
+        "accuracy": 0.994
+      },
+      "r:turn.area": {
+        "support": 2000,
+        "correct": 1976,
+        "unseenTruth": 0,
+        "accuracy": 0.988
+      },
+      "c:key": {
+        "support": 2549,
+        "correct": 864,
+        "unseenTruth": 0,
+        "accuracy": 0.33895645351118087
+      },
+      "c:value": {
+        "support": 2549,
+        "correct": 198,
+        "unseenTruth": 317,
+        "accuracy": 0.07767752059631228
+      },
+      "c:operator": {
+        "support": 2549,
+        "correct": 2171,
+        "unseenTruth": 0,
+        "accuracy": 0.8517065515888583
+      },
+      "c:phase": {
+        "support": 2549,
+        "correct": 2365,
+        "unseenTruth": 0,
+        "accuracy": 0.9278148293448412
+      },
+      "c:polarity": {
+        "support": 2549,
+        "correct": 2457,
+        "unseenTruth": 0,
+        "accuracy": 0.9639074146724206
+      },
+      "c:character": {
+        "support": 2549,
+        "correct": 2499,
+        "unseenTruth": 0,
+        "accuracy": 0.9803844644958808
+      },
+      "c:scope": {
+        "support": 2549,
+        "correct": 2473,
+        "unseenTruth": 0,
+        "accuracy": 0.9701843860337387
+      },
+      "c:group": {
+        "support": 2549,
+        "correct": 2482,
+        "unseenTruth": 0,
+        "accuracy": 0.9737151824244802
+      },
+      "c:step": {
+        "support": 2549,
+        "correct": 2502,
+        "unseenTruth": 0,
+        "accuracy": 0.9815613966261278
+      },
+      "c:measure": {
+        "support": 2549,
+        "correct": 2439,
+        "unseenTruth": 0,
+        "accuracy": 0.9568458218909376
+      },
+      "c:unit": {
+        "support": 2549,
+        "correct": 2453,
+        "unseenTruth": 0,
+        "accuracy": 0.962338171832091
+      },
+      "c:variety": {
+        "support": 2549,
+        "correct": 2516,
+        "unseenTruth": 0,
+        "accuracy": 0.9870537465672813
+      },
+      "c:anchor_fill": {
+        "support": 2549,
+        "correct": 2470,
+        "unseenTruth": 0,
+        "accuracy": 0.9690074539034915
+      },
+      "count": {
+        "overflowTruth": 0,
+        "support": 3308,
+        "correct": 3052,
+        "unseenTruth": 0,
+        "accuracy": 0.9226118500604595
+      },
+      "presence": {
+        "support": 3308,
+        "correct": 3295,
+        "unseenTruth": 0,
+        "accuracy": 0.9960701330108828
+      },
+      "conditionCount": {
+        "overflowTruth": 0,
+        "support": 2000,
+        "correct": 1307,
+        "unseenTruth": 0,
+        "accuracy": 0.6535
+      },
+      "r:span:state": {
+        "support": 3760,
+        "correct": 3760,
+        "unseenTruth": 0,
+        "accuracy": 1.0
+      },
+      "r:span:start": {
+        "support": 3760,
+        "correct": 2977,
+        "unseenTruth": 0,
+        "accuracy": 0.7917553191489362
+      },
+      "r:span:end": {
+        "support": 3760,
+        "correct": 2903,
+        "unseenTruth": 0,
+        "accuracy": 0.7720744680851064
+      },
+      "r:trigger:state": {
+        "support": 3760,
+        "correct": 3741,
+        "unseenTruth": 0,
+        "accuracy": 0.9949468085106383
+      },
+      "r:trigger:start": {
+        "support": 3741,
+        "correct": 2909,
+        "unseenTruth": 0,
+        "accuracy": 0.7775995723068698
+      },
+      "r:trigger:end": {
+        "support": 3741,
+        "correct": 2654,
+        "unseenTruth": 0,
+        "accuracy": 0.7094359796845763
+      },
+      "r:target.kind_span:state": {
+        "support": 2000,
+        "correct": 1586,
+        "unseenTruth": 0,
+        "accuracy": 0.793
+      },
+      "r:target.kind_span:start": {
+        "support": 880,
+        "correct": 752,
+        "unseenTruth": 0,
+        "accuracy": 0.8545454545454545
+      },
+      "r:target.kind_span:end": {
+        "support": 880,
+        "correct": 777,
+        "unseenTruth": 0,
+        "accuracy": 0.8829545454545454
+      },
+      "r:target.name_span:state": {
+        "support": 2000,
+        "correct": 1723,
+        "unseenTruth": 0,
+        "accuracy": 0.8615
+      },
+      "r:target.name_span:start": {
+        "support": 385,
+        "correct": 299,
+        "unseenTruth": 0,
+        "accuracy": 0.7766233766233767
+      },
+      "r:target.name_span:end": {
+        "support": 385,
+        "correct": 313,
+        "unseenTruth": 0,
+        "accuracy": 0.812987012987013
+      },
+      "r:target.description_span:state": {
+        "support": 2000,
+        "correct": 1815,
+        "unseenTruth": 0,
+        "accuracy": 0.9075
+      },
+      "r:target.description_span:start": {
+        "support": 243,
+        "correct": 214,
+        "unseenTruth": 0,
+        "accuracy": 0.8806584362139918
+      },
+      "r:target.description_span:end": {
+        "support": 243,
+        "correct": 214,
+        "unseenTruth": 0,
+        "accuracy": 0.8806584362139918
+      },
+      "r:target.count_span:state": {
+        "support": 2000,
+        "correct": 1962,
+        "unseenTruth": 0,
+        "accuracy": 0.981
+      },
+      "r:target.count_span:start": {
+        "support": 38,
+        "correct": 37,
+        "unseenTruth": 0,
+        "accuracy": 0.9736842105263158
+      },
+      "r:target.count_span:end": {
+        "support": 38,
+        "correct": 38,
+        "unseenTruth": 0,
+        "accuracy": 1.0
+      },
+      "c:value_span:state": {
+        "support": 2549,
+        "correct": 2499,
+        "unseenTruth": 0,
+        "accuracy": 0.9803844644958808
+      },
+      "c:value_span:start": {
+        "support": 2499,
+        "correct": 1225,
+        "unseenTruth": 0,
+        "accuracy": 0.49019607843137253
+      },
+      "c:value_span:end": {
+        "support": 2499,
+        "correct": 1271,
+        "unseenTruth": 0,
+        "accuracy": 0.5086034413765507
+      },
+      "c:measure_span:state": {
+        "support": 2549,
+        "correct": 2507,
+        "unseenTruth": 0,
+        "accuracy": 0.9835229501765398
+      },
+      "c:measure_span:start": {
+        "support": 49,
+        "correct": 46,
+        "unseenTruth": 0,
+        "accuracy": 0.9387755102040817
+      },
+      "c:measure_span:end": {
+        "support": 49,
+        "correct": 43,
+        "unseenTruth": 0,
+        "accuracy": 0.8775510204081632
+      },
+      "c:anchor_span:state": {
+        "support": 2549,
+        "correct": 2470,
+        "unseenTruth": 0,
+        "accuracy": 0.9690074539034915
+      },
+      "c:anchor_span:start": {
+        "support": 85,
+        "correct": 72,
+        "unseenTruth": 0,
+        "accuracy": 0.8470588235294118
+      },
+      "c:anchor_span:end": {
+        "support": 85,
+        "correct": 80,
+        "unseenTruth": 0,
+        "accuracy": 0.9411764705882353
+      }
+    },
+    "v2RawTensorExactLowerBound": {
+      "correct": 16,
+      "rows": 1698,
+      "accuracy": 0.009422850412249705
+    },
+    "scope": "Counts, source ranges and raw annotation fields, not canonical graph or request confidence",
+    "executable": false
+  },
+  "interpretation": "First weak baseline: V2 exact16/17 no-request,0/1681nonempty (1360representable). No correct complete command established. Per-head absent/present/unseen support separated; conditional accuracy is not graph confidence or execution truth.",
+  "frozenEvaluation": {
+    "format": "sop.frozen-structural-audit",
+    "version": 1,
+    "executable": false,
+    "confidenceFitted": false,
+    "checkpointSha256": "2891e4fd7a270cf1f3315da8c47e5aa570cf859dca53733ad06d6f11c4cd790d",
+    "trainerSha256": "3902b374e19284805b416091cb7836d7031e73c964b55b0a7b870902e3d442a8",
+    "configSha256": "4a2708bad96a5ae940b0599764dc8f4343b58afc0054546f0e704932a14c85e8",
+    "dataSha256": "cbf8a5a1bdc027c73d4bcdced97ea7c5dce83a0628cc6d525167490279038377",
+    "evaluatorSha256": "5982960eb0cb1cca5966d229b400aee4d55da4391c9059fa7feefb1a550c549e",
+    "precision": "CUDA BF16",
+    "v2RawTensorExact": {
+      "nonempty": {
+        "rows": 1681,
+        "representable": 1360,
+        "correct": 0
+      },
+      "no_request": {
+        "rows": 17,
+        "representable": 17,
+        "correct": 16
+      }
+    },
+    "requestCountPresenceConfusion": {
+      "tp": 3224,
+      "presenceCountDisagreements": 0,
+      "tn": 71,
+      "fp": 10,
+      "fn": 3
+    },
+    "headBuckets": {
+      "r:act": {
+        "absent": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        },
+        "present_known": {
+          "support": 2000,
+          "correct": 1526,
+          "predictedUnknown": 0,
+          "accuracy": 0.763
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:mood": {
+        "absent": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        },
+        "present_known": {
+          "support": 2000,
+          "correct": 1932,
+          "predictedUnknown": 0,
+          "accuracy": 0.966
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:target.type": {
+        "absent": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        },
+        "present_known": {
+          "support": 2000,
+          "correct": 1493,
+          "predictedUnknown": 0,
+          "accuracy": 0.7465
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:target.mode": {
+        "absent": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        },
+        "present_known": {
+          "support": 2000,
+          "correct": 1855,
+          "predictedUnknown": 0,
+          "accuracy": 0.9275
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:target.fill": {
+        "absent": {
+          "support": 541,
+          "correct": 491,
+          "predictedUnknown": 0,
+          "accuracy": 0.9075785582255084
+        },
+        "present_known": {
+          "support": 1459,
+          "correct": 906,
+          "predictedUnknown": 0,
+          "accuracy": 0.6209732693625771
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:target.determiner": {
+        "absent": {
+          "support": 229,
+          "correct": 34,
+          "predictedUnknown": 0,
+          "accuracy": 0.14847161572052403
+        },
+        "present_known": {
+          "support": 1771,
+          "correct": 1632,
+          "predictedUnknown": 0,
+          "accuracy": 0.9215132693393563
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:target.kind": {
+        "absent": {
+          "support": 916,
+          "correct": 864,
+          "predictedUnknown": 0,
+          "accuracy": 0.9432314410480349
+        },
+        "present_known": {
+          "support": 1038,
+          "correct": 161,
+          "predictedUnknown": 0,
+          "accuracy": 0.15510597302504817
+        },
+        "present_unseen": {
+          "support": 46,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        }
+      },
+      "r:target.count": {
+        "absent": {
+          "support": 1961,
+          "correct": 1961,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "present_known": {
+          "support": 38,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        },
+        "present_unseen": {
+          "support": 1,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        }
+      },
+      "r:target.ordinal": {
+        "absent": {
+          "support": 1952,
+          "correct": 1952,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "present_known": {
+          "support": 48,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:target.quantifier": {
+        "absent": {
+          "support": 1918,
+          "correct": 1918,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "present_known": {
+          "support": 82,
+          "correct": 7,
+          "predictedUnknown": 0,
+          "accuracy": 0.08536585365853659
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:question.ask": {
+        "absent": {
+          "support": 1776,
+          "correct": 1766,
+          "predictedUnknown": 0,
+          "accuracy": 0.9943693693693694
+        },
+        "present_known": {
+          "support": 224,
+          "correct": 50,
+          "predictedUnknown": 0,
+          "accuracy": 0.22321428571428573
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:question.asked_key": {
+        "absent": {
+          "support": 1777,
+          "correct": 1768,
+          "predictedUnknown": 0,
+          "accuracy": 0.9949352841868317
+        },
+        "present_known": {
+          "support": 223,
+          "correct": 48,
+          "predictedUnknown": 0,
+          "accuracy": 0.21524663677130046
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:turn.fragment": {
+        "absent": {
+          "support": 1969,
+          "correct": 1969,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "present_known": {
+          "support": 31,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:turn.objection": {
+        "absent": {
+          "support": 1941,
+          "correct": 1941,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "present_known": {
+          "support": 59,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:turn.repeat_count": {
+        "absent": {
+          "support": 1988,
+          "correct": 1988,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "present_known": {
+          "support": 12,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:turn.area": {
+        "absent": {
+          "support": 1976,
+          "correct": 1976,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "present_known": {
+          "support": 24,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "c:key": {
+        "absent": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        },
+        "present_known": {
+          "support": 2549,
+          "correct": 864,
+          "predictedUnknown": 0,
+          "accuracy": 0.33895645351118087
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "c:value": {
+        "absent": {
+          "support": 50,
+          "correct": 31,
+          "predictedUnknown": 0,
+          "accuracy": 0.62
+        },
+        "present_known": {
+          "support": 2182,
+          "correct": 167,
+          "predictedUnknown": 0,
+          "accuracy": 0.07653528872593951
+        },
+        "present_unseen": {
+          "support": 317,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        }
+      },
+      "c:operator": {
+        "absent": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        },
+        "present_known": {
+          "support": 2549,
+          "correct": 2171,
+          "predictedUnknown": 0,
+          "accuracy": 0.8517065515888583
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "c:phase": {
+        "absent": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        },
+        "present_known": {
+          "support": 2549,
+          "correct": 2365,
+          "predictedUnknown": 0,
+          "accuracy": 0.9278148293448412
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "c:polarity": {
+        "absent": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        },
+        "present_known": {
+          "support": 2549,
+          "correct": 2457,
+          "predictedUnknown": 0,
+          "accuracy": 0.9639074146724206
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "c:character": {
+        "absent": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        },
+        "present_known": {
+          "support": 2549,
+          "correct": 2499,
+          "predictedUnknown": 0,
+          "accuracy": 0.9803844644958808
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "c:scope": {
+        "absent": {
+          "support": 2464,
+          "correct": 2460,
+          "predictedUnknown": 0,
+          "accuracy": 0.9983766233766234
+        },
+        "present_known": {
+          "support": 85,
+          "correct": 13,
+          "predictedUnknown": 0,
+          "accuracy": 0.15294117647058825
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "c:group": {
+        "absent": {
+          "support": 2482,
+          "correct": 2482,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "present_known": {
+          "support": 67,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "c:step": {
+        "absent": {
+          "support": 2499,
+          "correct": 2497,
+          "predictedUnknown": 0,
+          "accuracy": 0.9991996798719488
+        },
+        "present_known": {
+          "support": 50,
+          "correct": 5,
+          "predictedUnknown": 0,
+          "accuracy": 0.1
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "c:measure": {
+        "absent": {
+          "support": 2439,
+          "correct": 2439,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "present_known": {
+          "support": 110,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "c:unit": {
+        "absent": {
+          "support": 2450,
+          "correct": 2416,
+          "predictedUnknown": 0,
+          "accuracy": 0.9861224489795918
+        },
+        "present_known": {
+          "support": 99,
+          "correct": 37,
+          "predictedUnknown": 0,
+          "accuracy": 0.37373737373737376
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "c:variety": {
+        "absent": {
+          "support": 2516,
+          "correct": 2516,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "present_known": {
+          "support": 33,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "c:anchor_fill": {
+        "absent": {
+          "support": 2461,
+          "correct": 2419,
+          "predictedUnknown": 0,
+          "accuracy": 0.982933766761479
+        },
+        "present_known": {
+          "support": 88,
+          "correct": 51,
+          "predictedUnknown": 0,
+          "accuracy": 0.5795454545454546
+        },
+        "present_unseen": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "count": {
+        "annotated": {
+          "support": 3308,
+          "correct": 3052,
+          "predictedUnknown": 0,
+          "accuracy": 0.9226118500604595
+        }
+      },
+      "presence": {
+        "annotated": {
+          "support": 3308,
+          "correct": 3295,
+          "predictedUnknown": 0,
+          "accuracy": 0.9960701330108828
+        }
+      },
+      "conditionCount": {
+        "annotated": {
+          "support": 2000,
+          "correct": 1307,
+          "predictedUnknown": 0,
+          "accuracy": 0.6535
+        }
+      },
+      "r:span:state": {
+        "absent": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        },
+        "present": {
+          "support": 3760,
+          "correct": 3760,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "unresolved": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:span:start": {
+        "annotated": {
+          "support": 3760,
+          "correct": 2977,
+          "predictedUnknown": 0,
+          "accuracy": 0.7917553191489362
+        }
+      },
+      "r:span:end": {
+        "annotated": {
+          "support": 3760,
+          "correct": 2903,
+          "predictedUnknown": 0,
+          "accuracy": 0.7720744680851064
+        }
+      },
+      "r:trigger:state": {
+        "absent": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        },
+        "present": {
+          "support": 3741,
+          "correct": 3741,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "unresolved": {
+          "support": 19,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        }
+      },
+      "r:trigger:start": {
+        "annotated": {
+          "support": 3741,
+          "correct": 2909,
+          "predictedUnknown": 0,
+          "accuracy": 0.7775995723068698
+        }
+      },
+      "r:trigger:end": {
+        "annotated": {
+          "support": 3741,
+          "correct": 2654,
+          "predictedUnknown": 0,
+          "accuracy": 0.7094359796845763
+        }
+      },
+      "r:target.kind_span:state": {
+        "absent": {
+          "support": 1107,
+          "correct": 845,
+          "predictedUnknown": 0,
+          "accuracy": 0.7633242999096658
+        },
+        "present": {
+          "support": 880,
+          "correct": 741,
+          "predictedUnknown": 0,
+          "accuracy": 0.8420454545454545
+        },
+        "unresolved": {
+          "support": 13,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        }
+      },
+      "r:target.kind_span:start": {
+        "annotated": {
+          "support": 880,
+          "correct": 752,
+          "predictedUnknown": 0,
+          "accuracy": 0.8545454545454545
+        }
+      },
+      "r:target.kind_span:end": {
+        "annotated": {
+          "support": 880,
+          "correct": 777,
+          "predictedUnknown": 0,
+          "accuracy": 0.8829545454545454
+        }
+      },
+      "r:target.name_span:state": {
+        "absent": {
+          "support": 1609,
+          "correct": 1517,
+          "predictedUnknown": 0,
+          "accuracy": 0.9428216283405843
+        },
+        "present": {
+          "support": 385,
+          "correct": 206,
+          "predictedUnknown": 0,
+          "accuracy": 0.535064935064935
+        },
+        "unresolved": {
+          "support": 6,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        }
+      },
+      "r:target.name_span:start": {
+        "annotated": {
+          "support": 385,
+          "correct": 299,
+          "predictedUnknown": 0,
+          "accuracy": 0.7766233766233767
+        }
+      },
+      "r:target.name_span:end": {
+        "annotated": {
+          "support": 385,
+          "correct": 313,
+          "predictedUnknown": 0,
+          "accuracy": 0.812987012987013
+        }
+      },
+      "r:target.description_span:state": {
+        "absent": {
+          "support": 1757,
+          "correct": 1706,
+          "predictedUnknown": 0,
+          "accuracy": 0.970973249857712
+        },
+        "present": {
+          "support": 243,
+          "correct": 109,
+          "predictedUnknown": 0,
+          "accuracy": 0.448559670781893
+        },
+        "unresolved": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:target.description_span:start": {
+        "annotated": {
+          "support": 243,
+          "correct": 214,
+          "predictedUnknown": 0,
+          "accuracy": 0.8806584362139918
+        }
+      },
+      "r:target.description_span:end": {
+        "annotated": {
+          "support": 243,
+          "correct": 214,
+          "predictedUnknown": 0,
+          "accuracy": 0.8806584362139918
+        }
+      },
+      "r:target.count_span:state": {
+        "absent": {
+          "support": 1962,
+          "correct": 1962,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "present": {
+          "support": 38,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        },
+        "unresolved": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "r:target.count_span:start": {
+        "annotated": {
+          "support": 38,
+          "correct": 37,
+          "predictedUnknown": 0,
+          "accuracy": 0.9736842105263158
+        }
+      },
+      "r:target.count_span:end": {
+        "annotated": {
+          "support": 38,
+          "correct": 38,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        }
+      },
+      "c:value_span:state": {
+        "absent": {
+          "support": 42,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        },
+        "present": {
+          "support": 2499,
+          "correct": 2499,
+          "predictedUnknown": 0,
+          "accuracy": 1.0
+        },
+        "unresolved": {
+          "support": 8,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        }
+      },
+      "c:value_span:start": {
+        "annotated": {
+          "support": 2499,
+          "correct": 1225,
+          "predictedUnknown": 0,
+          "accuracy": 0.49019607843137253
+        }
+      },
+      "c:value_span:end": {
+        "annotated": {
+          "support": 2499,
+          "correct": 1271,
+          "predictedUnknown": 0,
+          "accuracy": 0.5086034413765507
+        }
+      },
+      "c:measure_span:state": {
+        "absent": {
+          "support": 2500,
+          "correct": 2495,
+          "predictedUnknown": 0,
+          "accuracy": 0.998
+        },
+        "present": {
+          "support": 49,
+          "correct": 12,
+          "predictedUnknown": 0,
+          "accuracy": 0.24489795918367346
+        },
+        "unresolved": {
+          "support": 0,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": null
+        }
+      },
+      "c:measure_span:start": {
+        "annotated": {
+          "support": 49,
+          "correct": 46,
+          "predictedUnknown": 0,
+          "accuracy": 0.9387755102040817
+        }
+      },
+      "c:measure_span:end": {
+        "annotated": {
+          "support": 49,
+          "correct": 43,
+          "predictedUnknown": 0,
+          "accuracy": 0.8775510204081632
+        }
+      },
+      "c:anchor_span:state": {
+        "absent": {
+          "support": 2462,
+          "correct": 2420,
+          "predictedUnknown": 0,
+          "accuracy": 0.9829406986190089
+        },
+        "present": {
+          "support": 85,
+          "correct": 50,
+          "predictedUnknown": 0,
+          "accuracy": 0.5882352941176471
+        },
+        "unresolved": {
+          "support": 2,
+          "correct": 0,
+          "predictedUnknown": 0,
+          "accuracy": 0.0
+        }
+      },
+      "c:anchor_span:start": {
+        "annotated": {
+          "support": 85,
+          "correct": 72,
+          "predictedUnknown": 0,
+          "accuracy": 0.8470588235294118
+        }
+      },
+      "c:anchor_span:end": {
+        "annotated": {
+          "support": 85,
+          "correct": 80,
+          "predictedUnknown": 0,
+          "accuracy": 0.9411764705882353
+        }
+      }
+    },
+    "preprocessing": {
+      "rows": 3308,
+      "truncated": 0,
+      "sourceTruncatedRows": 0,
+      "contextTruncatedRows": 0,
+      "rawV2Representable": 1377,
+      "unresolvedSpan:r:trigger": 19,
+      "unseenLabel:c:value": 317,
+      "unresolvedSpan:r:target.kind_span": 13,
+      "unseenLabel:r:target.kind": 46,
+      "unresolvedSpan:c:value_span": 8,
+      "unresolvedSpan:r:target.name_span": 6,
+      "unresolvedSpan:c:anchor_span": 2,
+      "unseenLabel:r:target.count": 1
+    },
+    "boundary": "Conditional raw labels and representation support; canonical graph/intent/execution truth separate. Unseen value labels never count as correct; no-request and nonempty exactness separated."
+  }
+}
