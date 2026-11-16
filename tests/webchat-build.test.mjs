@@ -32,6 +32,13 @@ test('webchat build produces a bundle the browser loader can run', async () => {
       assert.equal(host.observe().complete, true);
       assert.ok(host.bindings().length > 0, 'built native capabilities load with shared dependencies');
     }
+    const calendar = await import(url('worlds/time.calendar/declared-host.mjs'));
+    const scheduling = await import(url('worlds/time.calendar/scheduling.mjs'));
+    const calendarBundle = JSON.parse(await readFile(path.join(out, 'worlds/time.calendar/bundle.json'), 'utf8'));
+    const policy = scheduling.createCalendarPolicy({ source: calendarBundle.files['scheduling-policy.sop'] });
+    const calendarHost = calendar.createCalendarHost({ instanceId: 'built-calendar', validate: policy.validate });
+    assert.equal(calendarHost.observe().complete, true);
+    assert.equal(policy.validate({ people: [], rooms: [], meetings: [] }).ok, true);
     const { createBundleLoader } = await import(url('lib/loaders/bundle-loader.mjs'));
     const { createEngine } = await import(url('lib/dialog/index.mjs'));
     // worlds/index.json is the small routing index (LAZY LOADING); every world's files are in its own bundle.json
