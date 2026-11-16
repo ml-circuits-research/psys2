@@ -5,6 +5,7 @@ import { runNewEngine } from '../src/dialog/new-engine.mjs';
 import { initialState } from '../worlds/art.draw/board.mjs';
 import { World, str } from '../src/vendor/sopworld/sopworld.mjs';
 import { fixtureEngine } from './helpers.mjs';
+import sourceSnapshot from '../src/dialog/new-engine-source.mjs';
 const sentence = 'Change the colour of the circle to purple.';
 const setup = (objects = [{ id: 17, kind: 'circle', color: 'red' }]) => {
   const state = initialState(); state.objects = objects;
@@ -28,6 +29,8 @@ test('published reader, real host, observations and retained typed claim execute
   assert.equal(witness.binding, 'art.draw.object.colour');
   assert.ok(witness.facts.includes('k.colours.css.purple'));
   assert.equal(field(world, 'source', 'text'), sentence);
+  assert.deepEqual(result.trace.journal.reading.evidence.nodes, [{ id: 'condition', source: 'source', ranges: [[35, 41]] }]);
+  assert.equal(Object.hasOwn(result.trace.journal.reading.evidence, 'constraint'), false);
   assert.equal(session.newEngineJournal.length, 1);
 });
 test('exact no-op has its own observation evidence but no additional undo or changed claim', () => {
@@ -111,4 +114,29 @@ test('evicted journal entries cannot turn native receipt replay into fresh evide
   assert.equal(session.newEngineJournal.length, 0);
   assert.equal(runNewEngine(session, 'Change the colour of the circle to blue.', { invocation: 'evicted' }).trace.reason, 'identity');
   assert.equal(session.isession.state['art.draw'].objects[0].color, '#800080');
+});
+
+test('every declared colour name retains exact-value execution or honest unresolved-value refusal', () => {
+  const source = World.fromJSON(sourceSnapshot.snapshot), names = new Map();
+  for (const fact of source.ofType('k.colours.colour')) {
+    const name = str(fact.attrs.name?.[0]);
+    if (!name) continue;
+    const values = names.get(name) ?? new Set();
+    for (const token of fact.attrs.rgb ?? []) { const value = str(token); if (/^#[0-9a-f]{6}$/i.test(value)) values.add(value.toLowerCase()); }
+    names.set(name, values);
+  }
+  assert.ok(names.size > 150, 'use the whole declared family, including multiword names');
+  for (const [name, values] of names) {
+    const session = setup([{ id: 17, kind: 'circle', color: 'legacy-native' }]);
+    const result = runNewEngine(session, `change the colour of the circle to ${name}`);
+    if (values.size === 1) {
+      assert.equal(result.trace.assessment, 'changed', name);
+      assert.equal(session.isession.state['art.draw'].objects[0].color, [...values][0], name);
+      assert.equal(session.isession.state['art.draw'].history.length, 1, name);
+    } else {
+      assert.deepEqual(result.statuses, ['unsupported'], name);
+      assert.equal(session.isession.state['art.draw'].objects[0].color, 'legacy-native', name);
+      assert.equal(session.isession.state['art.draw'].history.length, 0, name);
+    }
+  }
 });

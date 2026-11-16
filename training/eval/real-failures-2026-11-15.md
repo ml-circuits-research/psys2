@@ -1,6 +1,6 @@
 # REAL failures by cause (2026-11-15)
 
-Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit c9d5d0a9308b; seed 20261115; build 2ac9010f, tree d6491ebbe15ddfcd), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
+Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit c9d5d0a9308b; seed 20261115; build b35866b5, tree fc1385c4bb9731e2), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
 
 Whole-set judged denominator retained: 207; right 124, partly 7, wrong 69. Surviving-area cohort: 124/200 right. Retired areas: 41 turns (7 judged), honest refusal 41. Separately, 46 previously retired records skipped. Diagnostic, rules formalizer only: 160/207.
 

@@ -1,6 +1,6 @@
 // Opt-in, bounded existing-object property path. Vocabulary and readings are declarations.
-import { World, compileGrammarOverlay, readGrammarRequests, inspectRequest, assessPropertyChange, quote, str } from '../vendor/sopworld/sopworld.mjs?v=c99da19e8d';
-import SOURCE from './new-engine-source.mjs?v=ae7130fdcc';
+import { World, compileGrammarOverlay, readGrammarRequests, inspectRequest, assessPropertyChange, quote, str } from '../vendor/sopworld/sopworld.mjs?v=75fc12fd08';
+import SOURCE from './new-engine-source.mjs?v=9269bd8c85';
 import { NEW_ENGINE_AREAS } from './new-engine-areas.mjs?v=510334f8b4';
 const hosts = new WeakMap();
 let grammar;
