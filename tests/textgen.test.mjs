@@ -125,8 +125,9 @@ test('Documents replies name what was made (topic, title), say a shortfall again
   try {
     const s = docs();
     const r = await s.send('write a story about a fox');
-    assert.match(r.text, /The story is about fox\./, r.text);
+    assert.match(r.text, /The story is about a fox\./, r.text);   // the topic in the person's words (sopworld 0.161)
     assert.match(r.text, /The story is called “All about the fox”\./, r.text);
+    assert.match((await s.send('what is in the document?')).text, /There is one story, “All about the fox”\./);   // a lone thing named by its title (0.161 state.count.named)
     const heads = (st) => st.blocks.filter((b) => b.kind === 'heading' && (b.level ?? 2) <= 2).length;
     const n0 = heads(s.state()['docs.editor']);
     const shorter = await s.send('shorter');
