@@ -2612,13 +2612,12 @@
       }
     }
   },
-  "fullReportSha256": "c4b82a26ba75a70416f2c0010adfa89eb47dbb0d6c9aa28698cf28bd518be55f",
+  "fullReportSha256": "8da3a8d5b1c43962b8501d85cebd58502292e14288b35c3c805fe7fb6ea3f58f",
   "fullReportLocation": ".session-control/structural-v1-dev-replay.json",
   "reviewBoundary": "The sole nonempty typed graph is not a semantic success: make sure the intro is under 100 words became ask/answer with no numeric constraint. No graph is approved for execution.",
   "nonemptyGraphRows": [
     "matrix:document-v2b02-0068"
   ],
   "normalizerFixtureSha256": "661624158c570e17a0045cc5476164530f8fd089cc8c05f749d217c10c35f650",
-  "fullReportSHA256": "8da3a8d5b1c43962b8501d85cebd58502292e14288b35c3c805fe7fb6ea3f58f",
   "noRequestInterpretation": "92 matrix no-request predictions agree with annotated empty requests; five omit annotated nonempty requests and are proposal errors. Two owner no-request proposals are unscored because request annotations are pending. The sole nonempty typed graph also omits a numeric requirement. Closed app execution does not make these semantic predictions correct."
 }
