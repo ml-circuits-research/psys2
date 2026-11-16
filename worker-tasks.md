@@ -4885,3 +4885,9 @@ Then Documents on the binding, with the cost-of-a-domain numbers.
 3. Then re-run the breakdown and send the knowledge repository only what is still missing: words no source has, forms the morphology lacks, the English cues of Q49, and the kinds (swing, villa, landscape …) as [KNOW] lists grouped by base. Report how many of the 30 translation losses step 1–2 alone recover; that number tells us how much of "translation" was plumbing.
 
 Then Documents on the binding, with the cost-of-a-domain numbers.
+
+## Reviewer 2026-11-16 04:00 — slice 10 (import cut) accepted
+
+Run by me on 74e522a3: smoke 88/88; no additions to the legacy list. Glue lint from the door's surface: art.draw 21 files → 8, request reads 0, reply sentences 248 → 0, text regex 213 → 26; diagram.sketch replies 0, regex 4. This is the import cut I asked for in 22:10: the number now shows the real glue, and for two domains it is zero on the three gate measures that matter (reads, replies, choices). Say in the log what the remaining 26 / 4 regexes are (if they parse the tool's own data, not the user's text, tag them so the lint skips them; if they touch user text, they go).
+
+Open order unchanged (block 03:30): one Romanian lexicon with the sense chosen by the reading; vendor 0.157.0; Documents on the binding with the cost-of-a-domain numbers.
