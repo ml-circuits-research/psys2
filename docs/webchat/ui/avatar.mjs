@@ -60,6 +60,9 @@ function ensureCss() {
 }
 
 /** What a tap on a variant says (typed into the chat like any other command): the same words as a person would use. */
+/** What the face cards and the expression chips say (a tap types it into the chat like any other request; tests/avatar-cards.test.mjs reads every one through the product path). */
+export const presetSay = (name) => `become ${/^[aeiou]/.test(name) ? 'an' : 'a'} ${plain(name)}`;
+export const expressionSay = (name) => (name === 'wink' ? 'wink' : `look ${name}`);
 export const variantSay = (slot, name) => (name === 'none' ? `remove the ${nounOf(slot)}` : `swap the ${nounOf(slot)} for ${plain(name)}`);
 
 /**
@@ -178,10 +181,10 @@ export function createAvatar(container, host = null) {
     const thumb = (f, label) => mods.draw.renderFace(data, f, { label, bg: '#e8edf5' });
     // the fallback draws only the default preset: the catalog's other faces are cards once it has arrived
     const names = Object.keys(data.presets).filter((n) => full || n === 'girl');
-    const cards = names.map((n) => card(plain(n)[0].toUpperCase() + plain(n).slice(1), `become ${/^[aeiou]/.test(n) ? 'an' : 'a'} ${plain(n)}`, thumb(mods.logic.newFace(data, n), n), face.base === n && !face.name));
+    const cards = names.map((n) => card(plain(n)[0].toUpperCase() + plain(n).slice(1), presetSay(n), thumb(mods.logic.newFace(data, n), n), face.base === n && !face.name));
     for (const v of Object.values(face.saved ?? {})) cards.push(card(v.name, `be ${v.name}`, thumb({ ...mods.logic.newFace(data, v.base), slots: v.slots, colours: v.colours, paint: v.paint, adj: v.adj }, v.name), face.name === v.name));
     facesEl.replaceChildren(...cards); facesEl.hidden = !cards.length;
-    chipsEl.replaceChildren(...Object.keys(data.expressions).filter((e) => e !== 'talking').map((e) => { const b = el('button', 'p2-avatar-chip', { type: 'button', title: `Say: look ${e}` }); b.textContent = e[0].toUpperCase() + e.slice(1); b.addEventListener('click', () => say(e === 'wink' ? 'wink' : `look ${e}`)); return b; }));
+    chipsEl.replaceChildren(...Object.keys(data.expressions).filter((e) => e !== 'talking').map((e) => { const b = el('button', 'p2-avatar-chip', { type: 'button', title: `Say: ${expressionSay(e)}` }); b.textContent = e[0].toUpperCase() + e.slice(1); b.addEventListener('click', () => say(expressionSay(e))); return b; }));
     const o = face.options;
     if (o) { optsEl.replaceChildren(...o.variants.map((n) => card(n === 'none' ? 'None' : plain(n), variantSay(o.slot, n), n === 'none' ? '' : mods.draw.variantSvg(data, face, o.slot, n, { size: 52 }), face.slots[o.slot] === n))); optsEl.hidden = false; } else { optsEl.replaceChildren(); optsEl.hidden = true; }
   }

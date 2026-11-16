@@ -382,6 +382,8 @@ function stampDoor(r, tabWorld, text, q) {
 }
 /** A world on the request door: it declares its capabilities (request.sop) and carries a plan out (an operation planRequest). Charts, Map, Music join as they get both. */
 const declaredWorld = (w, lib = null) => !!(w?.requestText && (typeof w?.ops?.planRequest === 'function' || (lib && boundTools(lib, liveWorld(lib, w), requestLanguage(lib)))));   // request.sop, and a plan is carried out by its planRequest operation or by the primitives its std.tool wires bind
+/** Whether a world instance declares a kind: one of its own kinds or types, or a kind it joins or derives from one of its types (its lineage goes past the name). */
+const declaresKind = (lib, live, language, kind) => { const k = String(kind); try { if ((live.ofType?.('std.schema.kind') ?? []).some((r) => String(r.attrs?.of?.[0]) === k) || (live.ofType?.('core.type') ?? []).some((r) => String(r.attrs?.of?.[0]) === k)) return true; return lib.kindLineage(k, { live, catalog: [language] }).length > 1; } catch { return false; } };
 const markLegacy = (r, why) => { if (r && typeof r === 'object') { r.trace ??= {}; r.trace.legacy = true; r.trace.door = why; } return r; };
 /** A request with another act (a stand-in decision of the dialogue world; the library's facts kept). */
 const withAct = (req, act) => { const facts = req.facts; const r = Object.assign(plainRequest(req), { act }); Object.defineProperty(r, 'facts', { value: facts, enumerable: false }); return r; };
@@ -393,8 +395,6 @@ const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 
 /** Time budget of the leniency stage (spelling variants and partial windows) of one message, in ms; past it the best reading so far stands (turn guard, spec 06). */
 import { LIMITS } from './time-limits.mjs';
-import { FLAGS } from './flags.mjs';
-import { popupView } from './avatar-popup.mjs';
 import { languageCommand } from '../translate/language-command.mjs';
 import { withSubject, polishReply } from '../translate/register.mjs';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs';
@@ -661,8 +661,8 @@ export class DialogSession {
   context() {
     const BUILTIN = { robot: 'ui.avatar', avatar: 'ui.avatar', editor: 'docs.editor', documents: 'docs.editor' };
     const st = this.isession.state;
-    const activeTab = this._view ?? st['ui.shell']?.activeTab ?? null;   // POPUP-ROUTE: the view of the avatar popup while a turn runs through it (flag avatarPopupThroughDoor)
-    const tabWorld = activeTab ? (this.engine.set.list().find((w) => w.tab?.id === activeTab)?.id ?? BUILTIN[activeTab] ?? null) : null;
+    const activeTab = this._view ?? st['ui.shell']?.activeTab ?? null;   // the view a turn is read in: the one the host tells (a view that is not a tab, the avatar popup), else the shell's tab
+    const tabWorld = this._viewWorld ?? (activeTab ? (this.engine.set.list().find((w) => w.tab?.id === activeTab)?.id ?? BUILTIN[activeTab] ?? null) : null);   // _viewWorld: the world a request crossed to for this turn (_doorElsewhere)
     const modalWorld = Object.keys(st).find((id) => st[id]?.inputMode) ?? null;
     const gameWorld = st['ui.shell']?.activeGame ?? null;
     const recentWorlds = [...(this._recentWorlds ?? [])];
@@ -1535,7 +1535,7 @@ export class DialogSession {
     // the open tab's world reads with its own engine (ops `prepare()`, lazy in a browser, spec 04): ready BEFORE the sentence is read, so its reader (hook readsWhole) can answer
     // whether it reads the clause; a reader that cannot tell yet reads nothing (owner export 2026-11-15T11:43, the first turn on the Diagram tab)
     { const tab = this.isession.state?.['ui.shell']?.activeTab, tw = tab ? this.engine.set.list().find((w) => w.tab?.id === tab) : null, prep = tw ? this.engine.set.get(tw.id)?.ops?.prepare : null; if (typeof prep === 'function') { try { await guard.untimed(() => prep()); } catch { /* its reader then says it cannot tell */ } } }
-    const outerView = this._view; this._view = outerView ?? popupView(this.engine.flags, opts);   // POPUP-ROUTE
+    const outerView = this._view; this._view = outerView ?? (typeof opts.view === 'string' && opts.view ? opts.view : null);   // the view the host tells for this turn (spec 28 section 21): read in it, the shell's tab untouched
     try {
       const reply = await this._send(text, opts);
       // INVARIANT (every turn gets a reply): a message that produced no words at all (bare punctuation, an empty reading) is answered, quoting what was typed
@@ -1558,7 +1558,7 @@ export class DialogSession {
         throw e instanceof TurnAborted ? e : new TurnAborted(guard.tripped, guard.trippedStage);
       }
       throw e;
-    } finally { this._view = outerView; /* POPUP-ROUTE */ if (own) perf.end(); guard.release(g); releaseBudget(bt); }
+    } finally { this._view = outerView; if (own) perf.end(); guard.release(g); releaseBudget(bt); }
   }
 
   /**
@@ -1685,17 +1685,60 @@ export class DialogSession {
     let door = null;
     try { door = await perf.time('door', () => this._door(text, opts, tabWorld)); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door]', e); door = { why: 'door error' }; }
     if (door?.reply) { stampDoor(door.reply, tabWorld, text, door.reply.trace?.request ?? door.q); door.reply.trace.legacy = false; door.reply.trace.door = door.route ?? 'plan'; return door.reply; }
+    if (door?.q?.unread?.length) { const el = await this._doorElsewhere(text, opts, tabWorld, door.q.english); if (el) return el; }   // a request the open tab cannot read, read by the domain that can (spec 28 section 29)
     if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door] legacy:', door?.why, JSON.stringify(door?.q ?? null)?.slice(0, 300));
     // NO FALLBACK ON A DECLARED TAB (owner 2026-11-15 17:55): the old patterns of the declared worlds never run. The worlds that declare nothing yet (the shell's tabs, help,
     // the conversation) may still answer, marked legacy; a reading by a declared world is taken back and the turn is said honestly.
     const snap0 = this.snapshot();
     const first = await this._sendRead(text, opts);
     const hit = [...new Set((first?.trace?.segments ?? first?.segments ?? []).map((sg) => sg.match?.worldId ?? sg.world).filter(Boolean))];
-    if (hit.length && !hit.some((w) => w === tabWorld ? declaredWorld(this.engine.set.get(w), this.engine.sopworld) : declaredWorld(this.engine.set.get(w), this.engine.sopworld) && !this.engine.set.get(w)?.ambient)) return markLegacy(first, `${door?.why ?? 'not read'}; answered by ${hit.join(', ')} (no declarations, or an ambient world off its tab)`);   // an ambient world (the avatar popup over every tab) is declared on its own tab only
+    if (hit.length && !hit.some((w) => declaredWorld(this.engine.set.get(w), this.engine.sopworld))) return markLegacy(first, `${door?.why ?? 'not read'}; answered by ${hit.join(', ')} (no declarations)`);
     this.restore(snap0);
     const honest = await this._doorHonest(text, opts, tabWorld, door);
     stampDoor(honest, tabWorld, text, door?.q); honest.trace.legacy = false; honest.trace.door = `honest: ${door?.why ?? 'not read'}`;
     return honest;
+  }
+
+  /**
+   * A REQUEST READ BY THE DOMAIN THAT CAN READ IT (spec 28 section 29; reviewer 2026-11-16 10:20 item 2). The open tab's world left words of the turn unread; every other world
+   * instance that declares what it can do reads the same English with its own declarations (its repairs said as every door reply says them), and the one whose reading names an act, leaves no word unread and names no target kind it does not declare
+   * takes the turn when it carries it out (its content changes; else the turn is taken back): it is read, planned, run and said in that world's view (the world of the turn for its duration: the shell's tab is untouched), and the reply first says which domain
+   * acted (`done.elsewhere`). None or several such worlds: nothing is taken here (the open tab's honest reply stands). One rule, no world named.
+   */
+  async _doorElsewhere(text, opts, tabWorld, english) {
+    const lib = this.engine.sopworld, language = requestLanguage(lib);
+    if (!english || opts._clause || opts._elsewhere || !language || typeof lib?.readRequest !== 'function') return null;
+    const known = spellKnown(lib, language, this.engine.set, knowledgeOf(this));
+    const fits = [];
+    for (const w of this.engine.set.list()) {
+      budget.tick('door.elsewhere');
+      const live = w.id !== tabWorld && declaredWorld(w, lib) ? liveWorld(lib, w) : null;
+      if (!live) continue;
+      let q = null;
+      try { q = readTurn(lib, live, language, english, { known }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; continue; }
+      if (q?.act && !q.unread.length && (!q.target || declaresKind(lib, live, language, q.target))) fits.push({ id: w.id, live });
+    }
+    if (fits.length !== 1) return null;
+    const [{ id, live }] = fits;
+    const outer = this._viewWorld, snap = this.snapshot(), before = { [id]: JSON.stringify(this.isession.state[id]) };
+    this._viewWorld = id;
+    let d = null;
+    try { d = await this._door(text, { ...opts, _elsewhere: true }, id); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; d = null; } finally { this._viewWorld = outer; }
+    if (!d?.reply || !contentChanged(before, { [id]: this.isession.state[id] })) { this.restore(snap); return null; }   // only a domain that carries the request out takes it: otherwise the open tab's honest reply stands
+    const r = d.reply;
+    stampDoor(r, id, text, r.trace?.request ?? d.q); r.trace.legacy = false; r.trace.door = `elsewhere ${id}: ${d.route ?? 'plan'}`;
+    const name = live.ofType?.('std.schema.world')?.[0]?.attrs?.name?.[0] ?? null;
+    const said = name ? sayFact(lib, language, 'done.elsewhere', { world: name }) : null;
+    if (said) {
+      let pre = said.parts;
+      if (r.lang && r.lang !== 'en' && this.engine.translator) { try { pre = await translateParts(said.parts, this.engine.translator, r.lang); } catch { pre = null; } }
+      if (pre?.length) {
+        const t = pre.map((p) => p.text).join('');
+        r.text = `${t} ${r.text}`; r.parts = [...pre.map(({ say: _s, ...p }) => p), { text: ' ', translate: false }, ...(r.parts ?? [])];
+        if (r.trace) r.trace.replyEnglish = `${said.text} ${r.trace.replyEnglish ?? ''}`.trim();
+      }
+    }
+    return r;
   }
 
   /** The language and the English of a turn for the door, before anything runs (an explicit language is the language; 'auto' detects without touching the session's language). */
@@ -2798,7 +2841,6 @@ export async function createEngine({ loader, translator = null, options = {}, fo
     machineReading: options.machineReading ?? (globalThis.process?.env?.PSYS2_RO_MODEL === '1' ? { ro: true } : null),
     /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
     setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; attachValues(cat); attachOpenWords(cat); attachArrangement(cat); },   // the colour and number readers (k.values) take the catalog's words in place of the bundled subset
-    flags: { ...FLAGS, ...(options.flags ?? {}) },
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,
     /** meta.worlds (spec 20): loaded by `prepareMeta()` (a host that sets `routing` to symbolic awaits it once); null until then. */
     meta: null,

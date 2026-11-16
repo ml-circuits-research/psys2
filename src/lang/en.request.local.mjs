@@ -16,6 +16,8 @@ export const REQUEST_LOCAL = `
 @w.lang.en.pron.local.any w.lang.en.pron text=something text=anything text="whatever you want" text="anything you want" text="whatever you like" text="what you want" refers=any example="draw something random"
 @k.actions.verb.local.start k.actions.verb text=start act=make sense=1 gloss="bring into being; begin a new one" object=thing
 @k.actions.verb.local.begin k.actions.verb text=begin act=make sense=1 gloss="start a new one" object=thing
+@k.actions.verb.local.become k.actions.verb text=become act=make sense=1 gloss="come to be something else (a kind said: the thing becomes one of that kind)" object=kind
+@k.actions.verb.local.look k.actions.verb text=look act=change sense=2 gloss="have the appearance of (a value said of how something looks)" object=thing complement=value
 @w.lang.en.reply.local.place_up_1 w.lang.en.reply name=done.place.up count=one act=place role=thing text="I moved the {thing} up."
 @w.lang.en.reply.local.place_up_n w.lang.en.reply name=done.place.up count=other act=place role=thing role=number text="I moved the {number} {thing:num=pl} up."
 @w.lang.en.reply.local.place_up_name w.lang.en.reply name=done.place.up act=place role=name text="I moved {name} up."
@@ -87,6 +89,7 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.not_understood_undo w.lang.en.reply name=not_understood.undo count=one role=words text="I did not understand {words} here, so I took nothing back."
 @w.lang.en.reply.local.nothing_like w.lang.en.reply name=nothing.like count=one role=words text="I found nothing like {words} among what was done, so I took nothing back."
 @w.lang.en.reply.local.missing_place w.lang.en.reply name=refused.missing_value.place count=one role=key text="Where should it go? You can say, for example, \\"move the tree to the left\\", \\"put the cat next to the house\\" or \\"move it to the top right corner\\"."
+@w.lang.en.reply.local.elsewhere w.lang.en.reply name=done.elsewhere count=one role=world text="This was for the {world}."
 @w.lang.en.reply.local.cannot_do w.lang.en.reply name=cannot.do count=one role=words role=world text="I cannot do {words} in the {world} yet."
 # sopworld 0.163: replies the library says in its own English when the language world has none (nothing.same.value, refused.already, refused.no_default) and the <reply>.plural
 # sentences of one thing named by a plural noun (eyes, glasses), in the catalog's shape so that every language says them by the same names ([KNOW] questions.md Q101)

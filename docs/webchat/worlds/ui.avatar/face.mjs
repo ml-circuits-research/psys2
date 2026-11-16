@@ -118,7 +118,7 @@ export function wearPreset(ctx, { preset, expression = null, step = null, label 
   return toolStep(ctx, { step, label }, (f, data) => {
     const name = data.presets[preset] ? preset : data.presets[plainName(preset)] ? plainName(preset) : null;
     if (!name) return refuse('no_preset');
-    Object.assign(f, newFace(data, name), { saved: f.saved, history: f.history, future: f.future, n: f.n, name: f.name, stepGroup: f.stepGroup, options: null });
+    Object.assign(f, newFace(data, name), { saved: f.saved, history: f.history, future: f.future, n: f.n, name: f.name, stepGroup: f.stepGroup, options: null, expression: f.expression });   // the mood stays through a change of look unless one is said
     if (expression != null && !wearExpression(data, f, expression)) return refuse('no_value');
     return ok(['face']);
   });
