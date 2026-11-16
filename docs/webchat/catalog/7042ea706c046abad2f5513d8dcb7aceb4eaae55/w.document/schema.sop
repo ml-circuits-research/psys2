@@ -9,7 +9,7 @@
 # script: none (hand-written)
 # needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later)
 
-@w.document core.module name=w.document version=1 exports=document exports=chapter exports=section exports=paragraph exports=slide exports=sentence core.source="hand-core 1"
+@w.document core.module name=w.document version=2 exports=document exports=chapter exports=section exports=paragraph exports=slide exports=sentence core.source="hand-core 1"
 @w.document.world std.schema.world name=w.document doc="written documents: chapters, sections, paragraphs, slides and sentences, each sentence with the facts it states" core.source="hand-core 1"
 
 # A document. `title`; `genre` names a genre of k.genres (scientific article, essay, story, report, presentation);
@@ -23,6 +23,8 @@
 @w.document.document.register core.slot of=w.document.document key=register kind=atom type=k.genres.register by=name core.source="hand-core 1"
 @w.document.document.language core.slot of=w.document.document key=language kind=atom core.source="hand-core 1"
 @w.document.document.seed core.slot of=w.document.document key=seed kind=integer min=0 step=1 core.source="hand-core 1"
+# `words` the number of words in the text of the document, counted by the host over its sentences (psys2 Q51: "how many words does the document have?"); the world holds it, it does not count.
+@w.document.document.words core.slot of=w.document.document key=words kind=integer min=0 step=1 core.source="hand-core 1"
 @w.document.document.about core.slot of=w.document.document key=about kind=string core.source="hand-core 1"
 
 # A chapter of a document (a part of a story, the introduction of an article). `title`; `document` refers to its
@@ -113,6 +115,7 @@
 @w.document.word.topic core.word text=topic text=about text=subject means=w.document.document.topic core.source="hand-core 1"
 @w.document.word.register core.word text=register text=style text=tone means=w.document.document.register core.source="hand-core 1"
 @w.document.word.language core.word text=language means=w.document.document.language core.source="hand-core 1"
+@w.document.word.words core.word text=words text="word count" text=length text=size means=w.document.document.words core.source="hand-core 1"
 @w.document.word.seed core.word text=seed means=w.document.document.seed core.source="hand-core 1"
 @w.document.word.n.chapter core.word text=number text=position text=place text=order means=w.document.chapter.n core.source="hand-core 1"
 @w.document.word.n.section core.word text=number text=position text=place text=order means=w.document.section.n core.source="hand-core 1"

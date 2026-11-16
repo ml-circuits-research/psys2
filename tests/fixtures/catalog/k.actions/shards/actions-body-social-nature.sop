@@ -1,7 +1,7 @@
-# k.actions/shards/actions-body-social-nature: 47 actions of the body; with others; what weather, plants and things do: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; the other forms of the verbs; and 121 verbs and phrases that mean nearly the same.
-# sources: hand-core 1 (hand-written in this repository: tools/actions-data.mjs)
+# k.actions/shards/actions-body-social-nature: 47 actions of the body; with others; what weather, plants and things do: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; a form of a verb w.lang.en does not have (wetted); and 121 verbs and phrases that mean nearly the same.
+# sources: hand-core 1 (hand-written in this repository; this shard is the home of these facts: edit it here, reviewer 15:00 item 3; written from tools/actions-data.mjs until 2026-11-15)
 # license: CC0-1.0
-# script: tools/actions-core.mjs
+# script: none (hand-written)
 
 @k.actions.action.eat k.actions.action name=eat group=body who=person who=animal object=apple object=bread object=grass object=soup object=cake tool=spoon tool=fork tool=mouth where=kitchen where=restaurant where=picnic result="not being hungry; the food being gone" holds=remove example="A rabbit eats a carrot." core.source="hand-core 1"
 @k.actions.action.drink k.actions.action name=drink group=body who=person who=animal object=water object=milk object=juice object=tea tool=cup tool=glass tool=bottle tool=straw where=kitchen where=cafe result="not being thirsty" example="A cat drinks milk." core.source="hand-core 1"
@@ -51,54 +51,8 @@
 @k.actions.action.hatch k.actions.action name=hatch group=nature who=chick who=bird who=turtle who=crocodile object=egg where=farm where=spring result="a young animal out of its egg" example="A chick hatches from the egg." core.source="hand-core 1"
 @k.actions.action.ring k.actions.action name=ring group=nature who=bell who=phone who="alarm clock" where=classroom result="a clear sound" example="The school bell rings." core.source="hand-core 1"
 
-# Words: the other forms of the verbs.
-@k.actions.word.action.eat core.word text=eats text=ate text=eating means=eat of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.drink core.word text=drinks text=drank text=drinking means=drink of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.bite core.word text=bites text=bit text=biting means=bite of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.chew core.word text=chews text=chewed text=chewing means=chew of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.sleep core.word text=sleeps text=slept text=sleeping means=sleep of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.wake core.word text=wakes text=woke text=waking means=wake of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.sit core.word text=sits text=sat text=sitting means=sit of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.stand core.word text=stands text=stood text=standing means=stand of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.lie core.word text=lies text=lay text=lying means=lie of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.breathe core.word text=breathes text=breathed text=breathing means=breathe of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.yawn core.word text=yawns text=yawned text=yawning means=yawn of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.sneeze core.word text=sneezes text=sneezed text=sneezing means=sneeze of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.wear core.word text=wears text=wore text=wearing means=wear of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.put_on core.word text="puts on" text="putting on" means="put on" of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.take_off core.word text="takes off" text="took off" text="taking off" means="take off" of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.help core.word text=helps text=helped text=helping means=help of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.play core.word text=plays text=played text=playing means=play of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.work core.word text=works text=worked text=working means=work of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.share core.word text=shares text=shared text=sharing means=share of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.hug core.word text=hugs text=hugged text=hugging means=hug of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.kiss core.word text=kisses text=kissed text=kissing means=kiss of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.wave core.word text=waves text=waved text=waving means=wave of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.visit core.word text=visits text=visited text=visiting means=visit of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.wait core.word text=waits text=waited text=waiting means=wait of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.meet core.word text=meets text=met text=meeting means=meet of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.fight core.word text=fights text=fought text=fighting means=fight of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.feed core.word text=feeds text=fed text=feeding means=feed of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.buy core.word text=buys text=bought text=buying means=buy of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.sell core.word text=sells text=sold text=selling means=sell of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.spend core.word text=spends text=spent text=spending means=spend of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.pay core.word text=pays text=paid text=paying means=pay of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.win core.word text=wins text=won text=winning means=win of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.send core.word text=sends text=sent text=sending means=send of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.receive core.word text=receives text=received text=receiving means=receive of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.thank core.word text=thanks text=thanked text=thanking means=thank of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.rain core.word text=rains text=rained text=raining means=rain of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.snow core.word text=snows text=snowed text=snowing means=snow of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.shine core.word text=shines text=shone text=shining means=shine of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.glow core.word text=glows text=glowed text=glowing means=glow of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.blow core.word text=blows text=blew text=blowing means=blow of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.flow core.word text=flows text=flowed text=flowing means=flow of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.grow core.word text=grows text=grew text=growing means=grow of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.shrink core.word text=shrinks text=shrank text=shrinking means=shrink of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.bloom core.word text=blooms text=bloomed text=blooming means=bloom of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.wilt core.word text=wilts text=wilted text=wilting means=wilt of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.hatch core.word text=hatches text=hatched text=hatching means=hatch of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.ring core.word text=rings text=rang text=ringing means=ring of=k.actions.action.name core.source="hand-core 1"
+# Words: the forms of a verb that w.lang.en does not confirm (its forms are w.lang.en's, KR2).
+
 
 # Verbs and phrases that mean nearly the same as an action, or a kind of it.
 @k.actions.similar.munch.eat k.actions.similar name=munch action=eat core.source="hand-core 1"

@@ -1,4 +1,4 @@
-# w.lang.en/shards/closed-classes: the class of each of the 265 closed-class words of this world's word lists (279 facts: a word of several classes has one fact per class; `from` names the lists it is in), derived from those lists by the tables of the script
+# w.lang.en/shards/closed-classes: the class of each of the 276 closed-class words of this world's word lists (290 facts: a word of several classes has one fact per class; `from` names the lists it is in), derived from those lists by the tables of the script
 # sources: hand-core 1 (the classes, written in this repository; the words are those of the lists named in `from`)
 # license: CC0-1.0
 # script: tools/lang-en-closed.mjs
@@ -17,6 +17,10 @@
 @w.lang.en.closed.ah.interjection w.lang.en.closed text=ah class=interjection from=w.lang.en.correction.lead core.source="hand-core 1"
 @w.lang.en.closed.aint.auxiliary w.lang.en.closed text=aint class=auxiliary from=w.lang.en.neg core.source="hand-core 1"
 @w.lang.en.closed.all.determiner w.lang.en.closed text=all class=determiner from=w.lang.en.partitive from=w.lang.en.word core.source="hand-core 1"
+@w.lang.en.closed.all_of_it.pronoun w.lang.en.closed text="all of it" class=pronoun from=w.lang.en.pron core.source="hand-core 1"
+@w.lang.en.closed.all_of_them.pronoun w.lang.en.closed text="all of them" class=pronoun from=w.lang.en.pron core.source="hand-core 1"
+@w.lang.en.closed.all_the_elements.pronoun w.lang.en.closed text="all the elements" class=pronoun from=w.lang.en.pron core.source="hand-core 1"
+@w.lang.en.closed.all_the_items.pronoun w.lang.en.closed text="all the items" class=pronoun from=w.lang.en.pron core.source="hand-core 1"
 @w.lang.en.closed.along.preposition w.lang.en.closed text=along class=preposition from=w.lang.en.prep core.source="hand-core 1"
 @w.lang.en.closed.also.adverb w.lang.en.closed text=also class=adverb from=w.lang.en.ellipsis.lead from=w.lang.en.ellipsis.trail from=w.lang.en.imperative.lead from=w.lang.en.joiner from=w.lang.en.skip core.source="hand-core 1"
 @w.lang.en.closed.always.adverb w.lang.en.closed text=always class=adverb from=w.lang.en.frame_lead core.source="hand-core 1"
@@ -69,10 +73,14 @@
 @w.lang.en.closed.earlier_than.preposition w.lang.en.closed text="earlier than" class=preposition from=w.lang.en.prep.time core.source="hand-core 1"
 @w.lang.en.closed.eight.numeral w.lang.en.closed text=eight class=numeral from=w.lang.en.det from=w.lang.en.numeral core.source="hand-core 1"
 @w.lang.en.closed.eighth.ordinal w.lang.en.closed text=eighth class=ordinal from=w.lang.en.ordinal core.source="hand-core 1"
+@w.lang.en.closed.elements.pronoun w.lang.en.closed text=elements class=pronoun from=w.lang.en.pron core.source="hand-core 1"
 @w.lang.en.closed.eleven.numeral w.lang.en.closed text=eleven class=numeral from=w.lang.en.numeral core.source="hand-core 1"
 @w.lang.en.closed.er.interjection w.lang.en.closed text=er class=interjection from=w.lang.en.correction.lead from=w.lang.en.skip core.source="hand-core 1"
 @w.lang.en.closed.every.determiner w.lang.en.closed text=every class=determiner from=w.lang.en.partitive from=w.lang.en.word core.source="hand-core 1"
-@w.lang.en.closed.everything.pronoun w.lang.en.closed text=everything class=pronoun from=w.lang.en.word core.source="hand-core 1"
+@w.lang.en.closed.every_element.pronoun w.lang.en.closed text="every element" class=pronoun from=w.lang.en.pron core.source="hand-core 1"
+@w.lang.en.closed.every_item.pronoun w.lang.en.closed text="every item" class=pronoun from=w.lang.en.pron core.source="hand-core 1"
+@w.lang.en.closed.every_thing.pronoun w.lang.en.closed text="every thing" class=pronoun from=w.lang.en.pron core.source="hand-core 1"
+@w.lang.en.closed.everything.pronoun w.lang.en.closed text=everything class=pronoun from=w.lang.en.pron from=w.lang.en.word core.source="hand-core 1"
 @w.lang.en.closed.except.preposition w.lang.en.closed text=except class=preposition from=w.lang.en.word core.source="hand-core 1"
 @w.lang.en.closed.few.determiner w.lang.en.closed text=few class=determiner from=w.lang.en.det core.source="hand-core 1"
 @w.lang.en.closed.fifth.ordinal w.lang.en.closed text=fifth class=ordinal from=w.lang.en.ordinal core.source="hand-core 1"
@@ -120,6 +128,7 @@
 @w.lang.en.closed.isnqt.auxiliary w.lang.en.closed text=isn't class=auxiliary from=w.lang.en.word core.source="hand-core 1"
 @w.lang.en.closed.isnt.auxiliary w.lang.en.closed text=isnt class=auxiliary from=w.lang.en.neg core.source="hand-core 1"
 @w.lang.en.closed.it.pronoun w.lang.en.closed text=it class=pronoun from=w.lang.en.anaphor from=w.lang.en.pron core.source="hand-core 1"
+@w.lang.en.closed.items.pronoun w.lang.en.closed text=items class=pronoun from=w.lang.en.pron core.source="hand-core 1"
 @w.lang.en.closed.its.determiner w.lang.en.closed text=its class=determiner from=w.lang.en.det from=w.lang.en.joiner.keep core.source="hand-core 1"
 @w.lang.en.closed.just.adverb w.lang.en.closed text=just class=adverb from=w.lang.en.skip core.source="hand-core 1"
 @w.lang.en.closed.kinda.adverb w.lang.en.closed text=kinda class=adverb from=w.lang.en.answer core.source="hand-core 1"
@@ -206,6 +215,8 @@
 @w.lang.en.closed.that.determiner w.lang.en.closed text=that class=determiner from=w.lang.en.det from=w.lang.en.word core.source="hand-core 1"
 @w.lang.en.closed.that.pronoun w.lang.en.closed text=that class=pronoun from=w.lang.en.anaphor from=w.lang.en.pron from=w.lang.en.relpron from=w.lang.en.word core.source="hand-core 1"
 @w.lang.en.closed.the.determiner w.lang.en.closed text=the class=determiner from=w.lang.en.det from=w.lang.en.word core.source="hand-core 1"
+@w.lang.en.closed.the_elements.pronoun w.lang.en.closed text="the elements" class=pronoun from=w.lang.en.pron core.source="hand-core 1"
+@w.lang.en.closed.the_items.pronoun w.lang.en.closed text="the items" class=pronoun from=w.lang.en.pron core.source="hand-core 1"
 @w.lang.en.closed.the_other.determiner w.lang.en.closed text="the other" class=determiner from=w.lang.en.other core.source="hand-core 1"
 @w.lang.en.closed.the_others.pronoun w.lang.en.closed text="the others" class=pronoun from=w.lang.en.other core.source="hand-core 1"
 @w.lang.en.closed.their.determiner w.lang.en.closed text=their class=determiner from=w.lang.en.det core.source="hand-core 1"

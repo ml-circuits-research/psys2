@@ -1,7 +1,7 @@
-# k.actions/shards/actions-mind-talk: 37 actions of the senses; the mind; speech, sounds and signs: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; the other forms of the verbs; and 91 verbs and phrases that mean nearly the same.
-# sources: hand-core 1 (hand-written in this repository: tools/actions-data.mjs)
+# k.actions/shards/actions-mind-talk: 37 actions of the senses; the mind; speech, sounds and signs: who or what does it, to what, with what, where, what comes of it, the opposite and what undoes it, an example; a form of a verb w.lang.en does not have (wetted); and 91 verbs and phrases that mean nearly the same.
+# sources: hand-core 1 (hand-written in this repository; this shard is the home of these facts: edit it here, reviewer 15:00 item 3; written from tools/actions-data.mjs until 2026-11-15)
 # license: CC0-1.0
-# script: tools/actions-core.mjs
+# script: none (hand-written)
 
 @k.actions.action.see k.actions.action name=see group=sense who=person who=animal object=bird object=light object=friend object=colour tool=eye tool=glasses tool=telescope result="knowing what is there" example="An owl sees well in the dark." core.source="hand-core 1"
 @k.actions.action.look k.actions.action name=look group=sense who=person who=animal object=picture object=sky object=book object=map tool=eye tool="magnifying glass" result="the eyes turned to the thing" example="The children look at the stars." core.source="hand-core 1"
@@ -41,44 +41,8 @@
 @k.actions.action.frown k.actions.action name=frown group=talk who=person tool=eyebrow tool=mouth result="showing that one is cross or does not understand" opposite=smile example="He frowns at the hard sum." core.source="hand-core 1"
 @k.actions.action.bark k.actions.action name=bark group=talk who=dog who=fox who=seal result="a short loud sound" example="The dog barks at the postman." core.source="hand-core 1"
 
-# Words: the other forms of the verbs.
-@k.actions.word.action.see core.word text=sees text=saw text=seeing means=see of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.look core.word text=looks text=looked text=looking means=look of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.watch core.word text=watches text=watched text=watching means=watch of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.hear core.word text=hears text=heard text=hearing means=hear of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.listen core.word text=listens text=listened text=listening means=listen of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.smell core.word text=smells text=smelled text=smelling means=smell of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.taste core.word text=tastes text=tasted text=tasting means=taste of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.think core.word text=thinks text=thought text=thinking means=think of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.know core.word text=knows text=knew text=knowing means=know of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.learn core.word text=learns text=learned text=learning means=learn of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.teach core.word text=teaches text=taught text=teaching means=teach of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.remember core.word text=remembers text=remembered text=remembering means=remember of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.forget core.word text=forgets text=forgot text=forgetting means=forget of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.read core.word text=reads text=reading means=read of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.count core.word text=counts text=counted text=counting means=count of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.measure core.word text=measures text=measured text=measuring means=measure of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.weigh core.word text=weighs text=weighed text=weighing means=weigh of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.find core.word text=finds text=found text=finding means=find of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.lose core.word text=loses text=lost text=losing means=lose of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.hide core.word text=hides text=hid text=hiding means=hide of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.show core.word text=shows text=showed text=showing means=show of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.search core.word text=searches text=searched text=searching means=search of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.choose core.word text=chooses text=chose text=choosing means=choose of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.say core.word text=says text=said text=saying means=say of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.talk core.word text=talks text=talked text=talking means=talk of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.ask core.word text=asks text=asked text=asking means=ask of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.answer core.word text=answers text=answered text=answering means=answer of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.tell core.word text=tells text=told text=telling means=tell of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.shout core.word text=shouts text=shouted text=shouting means=shout of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.whisper core.word text=whispers text=whispered text=whispering means=whisper of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.sing core.word text=sings text=sang text=singing means=sing of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.call core.word text=calls text=called text=calling means=call of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.laugh core.word text=laughs text=laughed text=laughing means=laugh of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.cry core.word text=cries text=cried text=crying means=cry of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.smile core.word text=smiles text=smiled text=smiling means=smile of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.frown core.word text=frowns text=frowned text=frowning means=frown of=k.actions.action.name core.source="hand-core 1"
-@k.actions.word.action.bark core.word text=barks text=barked text=barking means=bark of=k.actions.action.name core.source="hand-core 1"
+# Words: the forms of a verb that w.lang.en does not confirm (its forms are w.lang.en's, KR2).
+
 
 # Verbs and phrases that mean nearly the same as an action, or a kind of it.
 @k.actions.similar.spot.see k.actions.similar name=spot action=see core.source="hand-core 1"

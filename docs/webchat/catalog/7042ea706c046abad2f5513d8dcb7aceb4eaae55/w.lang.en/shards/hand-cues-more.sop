@@ -1,0 +1,69 @@
+# w.lang.en/shards/hand-cues-more: cue words of real turns that the rules left unread (psys2 Q49 and Q51 D, 2026-11-16):
+# a step "further" or "even higher" after a move, "a bit" before a comparative, thicker / thinner / dashed / two-way
+# for links, "leave the X" / "keep the X" (do not change X), "different corners", "the layout" as the object of a
+# change, "over the water" as a place relative to a thing, and the words that mean all the things of the open world
+# ("the elements", "the items"). Same shape as hand-cues (data only: the library's readRequest matches the cues, the
+# longest and highest priority first). Written by a language model from the failing turns (named in `example`).
+# sources: hand-core 1 (written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# A move that goes on the same way: "further" alone after a verb, "a bit more", "even more" (the direction is the one of the last move).
+@w.lang.en.cue.place.further w.lang.en.cue name=place.further on=place value=more relation=direction lead="further" lead="even further" lead="a bit further" lead="a little further" lead="farther" lead="a bit more" lead="a little more" lead="even more" lead="some more" lead="still more" takes=none priority=2 example="move it further" example="a bit more" core.source="hand-core 1"
+@w.lang.en.cue.place.up w.lang.en.cue name=place.up on=place value=up relation=direction lead="up" lead="higher" lead="upwards" lead="upward" lead="further up" lead="a bit higher" lead="even higher" lead="up higher" lead="more up" takes=none priority=3 example="move the sun even higher" core.source="hand-core 1"
+@w.lang.en.cue.place.down w.lang.en.cue name=place.down on=place value=down relation=direction lead="down" lead="lower" lead="downwards" lead="downward" lead="further down" lead="a bit lower" lead="even lower" lead="more down" takes=none priority=3 example="move the lake even lower" core.source="hand-core 1"
+@w.lang.en.cue.place.left_step w.lang.en.cue name=place.left_step on=place value=left relation=direction lead="left" lead="further left" lead="more to the left" lead="a bit to the left" takes=none priority=2 example="move it more to the left" core.source="hand-core 1"
+@w.lang.en.cue.place.right_step w.lang.en.cue name=place.right_step on=place value=right relation=direction lead="right" lead="further right" lead="more to the right" lead="a bit to the right" takes=none priority=2 example="move it more to the right" core.source="hand-core 1"
+
+# A small step before a comparative: "a bit bigger", "a bit thicker" (one fifth of a scale step, not a whole one).
+@w.lang.en.cue.size.a_bit_up w.lang.en.cue name=size.a_bit_up on=size step=up amount=slight lead="a bit bigger" lead="a little bigger" lead="slightly bigger" lead="a bit larger" lead="a little larger" lead="a bit taller" lead="a bit wider" takes=none priority=4 example="make it a bit bigger" core.source="hand-core 1"
+@w.lang.en.cue.size.a_bit_down w.lang.en.cue name=size.a_bit_down on=size step=down amount=slight lead="a bit smaller" lead="a little smaller" lead="slightly smaller" lead="a bit shorter" lead="a bit narrower" takes=none priority=4 example="make it a bit smaller" core.source="hand-core 1"
+
+# The look of a link between two things (a diagram's edge): thickness, line style, direction (w.diagram.edge.direction: forward, both, none).
+@w.lang.en.cue.attribute.thicker w.lang.en.cue name=attribute.thicker on=attribute attribute=thickness value=thick step=up lead="thicker" lead="thick" lead="bolder" lead="heavier" takes=none priority=3 example="make the arrows thicker" core.source="hand-core 1"
+@w.lang.en.cue.attribute.thinner w.lang.en.cue name=attribute.thinner on=attribute attribute=thickness value=thin step=down lead="thinner" lead="thin" lead="finer" lead="lighter" takes=none priority=3 example="make the lines thinner" core.source="hand-core 1"
+@w.lang.en.cue.attribute.dashed w.lang.en.cue name=attribute.dashed on=attribute attribute=line_style value=dashed lead="dashed" lead="dotted" lead="broken" lead="with dashes" takes=none priority=3 example="make the link dashed" core.source="hand-core 1"
+@w.lang.en.cue.attribute.two_way w.lang.en.cue name=attribute.two_way on=attribute attribute=direction value=both lead="two-way" lead="two way" lead="both ways" lead="in both directions" lead="bidirectional" lead="double-headed" lead="with arrows at both ends" takes=none priority=3 example="make the link two-way" core.source="hand-core 1"
+
+# "leave the X" / "keep the X": the thing named is not changed by this request (the rest is).
+@w.lang.en.cue.reaction.keep w.lang.en.cue name=reaction.keep on=reaction value=keep lead="leave the" lead="leave" lead="keep the" lead="keep" lead="do not touch the" lead="don't touch the" lead="leave alone the" lead="but leave the" lead="but keep the" takes=kind priority=3 example="draw a pond, but leave the lake" core.source="hand-core 1"
+
+# Spread over distinct places: "in different corners", "in different places".
+@w.lang.en.cue.place.distinct w.lang.en.cue name=place.distinct on=place value=distinct relation=in lead="in different corners" lead="in different places" lead="in different spots" lead="in different parts" lead="in separate corners" lead="in separate places" lead="each in its own corner" lead="each in its own place" lead="one in each corner" takes=none priority=4 example="put them in different corners" core.source="hand-core 1"
+
+# "the layout" as the thing changed ("change the layout to a column": the value follows).
+@w.lang.en.cue.layout.object w.lang.en.cue name=layout.object on=layout lead="the layout" lead="change the layout to" lead="change the layout into" lead="change the arrangement to" lead="switch the layout to" lead="make the layout" takes=value priority=3 example="change the layout to a column" core.source="hand-core 1"
+
+# A place relative to a thing: "over the water", "above the lake", "under the tree".
+@w.lang.en.cue.place.over w.lang.en.cue name=place.over on=place relation=above lead="over" lead="above" lead="over the" lead="above the" lead="high above" lead="on top of" takes=thing priority=2 example="the sun over the water" example="a bird above the lake" core.source="hand-core 1"
+@w.lang.en.cue.place.under w.lang.en.cue name=place.under on=place relation=below lead="under" lead="below" lead="beneath" lead="underneath" takes=thing priority=2 example="a fish under the boat" core.source="hand-core 1"
+
+# The questions the door answers by saying what is in the live world (library askWorld, WORLD_QUESTIONS; replies state.count, state.empty, can, can.say).
+@w.lang.en.cue.ask.capabilities w.lang.en.cue name=ask.capabilities on=reaction value=capabilities lead="what can you do" lead="what can i do here" lead="what can i do" lead="what do you do" lead="what can you draw" lead="help" takes=none priority=4 example="what can you do here?" core.source="hand-core 1"
+@w.lang.en.cue.ask.state w.lang.en.cue name=ask.state on=reaction value=state lead="how many" lead="what is" lead="what's" lead="what is there" lead="what do you have" lead="what is in" lead="what is on" takes=none priority=3 example="what is in the picture?" example="how many fish are there?" core.source="hand-core 1"
+
+# All the things of the open world, as an object ("move the elements", "erase the items", "the elements of the diagram").
+@w.lang.en.pron.all.elements w.lang.en.pron text="elements" case=object person=3 number=pl refers=all in=acts in=dialogue core.source="hand-core 1"
+@w.lang.en.pron.all.items w.lang.en.pron text="items" case=object person=3 number=pl refers=all in=acts in=dialogue core.source="hand-core 1"
+@w.lang.en.pron.all.the.elements w.lang.en.pron text="the elements" case=object person=3 number=pl refers=all in=acts in=dialogue core.source="hand-core 1"
+@w.lang.en.pron.all.the.items w.lang.en.pron text="the items" case=object person=3 number=pl refers=all in=acts in=dialogue core.source="hand-core 1"
+@w.lang.en.pron.all.all.the.elements w.lang.en.pron text="all the elements" case=object person=3 number=pl refers=all in=acts in=dialogue core.source="hand-core 1"
+@w.lang.en.pron.all.all.the.items w.lang.en.pron text="all the items" case=object person=3 number=pl refers=all in=acts in=dialogue core.source="hand-core 1"
+@w.lang.en.pron.all.every.element w.lang.en.pron text="every element" case=object person=3 number=pl refers=all in=acts in=dialogue core.source="hand-core 1"
+@w.lang.en.pron.all.every.item w.lang.en.pron text="every item" case=object person=3 number=pl refers=all in=acts in=dialogue core.source="hand-core 1"
+@w.lang.en.pron.all.everything w.lang.en.pron text="everything" case=object person=3 number=pl refers=all in=acts in=dialogue core.source="hand-core 1"
+@w.lang.en.pron.all.all.of.it w.lang.en.pron text="all of it" case=object person=3 number=pl refers=all in=acts in=dialogue core.source="hand-core 1"
+@w.lang.en.pron.all.all.of.them w.lang.en.pron text="all of them" case=object person=3 number=pl refers=all in=acts in=dialogue core.source="hand-core 1"
+@w.lang.en.pron.all.every.thing w.lang.en.pron text="every thing" case=object person=3 number=pl refers=all in=acts in=dialogue core.source="hand-core 1"
+
+# Levels and layers of a picture or a diagram (k.layouts layout layers): "break in 3 layers", "split the diagram into 3 levels".
+@w.lang.en.cue.layout.layers w.lang.en.cue name=layout.layers on=layout value=layers lead="in layers" lead="into layers" lead="in levels" lead="into levels" lead="break in" lead="break into" lead="split in" lead="split into" lead="divide into" lead="layers" lead="levels" takes=none priority=3 example="break in 3 layers: water, land and sky" example="split the diagram into 3 levels" core.source="hand-core 1"
+
+# A corner of the picture as a place ("the corner on the right", "the right corner"): the side is the attribute, the place is k.layouts.joins side=corner / the corners layout.
+@w.lang.en.cue.place.corner_right w.lang.en.cue name=place.corner_right on=place value=corner relation=in attribute=right lead="in the corner on the right" lead="the corner on the right" lead="in the right corner" lead="the right corner" lead="in the right-hand corner" takes=none priority=4 example="the sun in the corner on the right" core.source="hand-core 1"
+@w.lang.en.cue.place.corner_left w.lang.en.cue name=place.corner_left on=place value=corner relation=in attribute=left lead="in the corner on the left" lead="the corner on the left" lead="in the left corner" lead="the left corner" lead="in the left-hand corner" takes=none priority=4 example="a bird in the left corner" core.source="hand-core 1"
+@w.lang.en.cue.place.corner_top w.lang.en.cue name=place.corner_top on=place value=corner relation=in attribute=top lead="in the top corner" lead="in the upper corner" lead="the top corner" takes=none priority=3 core.source="hand-core 1"
+@w.lang.en.cue.place.corner_bottom w.lang.en.cue name=place.corner_bottom on=place value=corner relation=in attribute=bottom lead="in the bottom corner" lead="in the lower corner" lead="the bottom corner" takes=none priority=3 core.source="hand-core 1"
+
+# Turning by an amount (a rotation in degrees): the number before "degrees" is the amount (k.units.unit.degree).
+@w.lang.en.cue.attribute.rotation w.lang.en.cue name=attribute.rotation on=attribute attribute=rotation unit=degree trail="degrees" trail="degree" trail="deg" takes=number priority=3 example="rotate the crocodile by 30 degrees" core.source="hand-core 1"

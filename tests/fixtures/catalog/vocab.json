@@ -1936,8 +1936,7 @@
  ],
  "eighth": [
   "k.words/shards/ei",
-  "k.words/shards/ei",
-  "k.values/shards/numbers"
+  "k.words/shards/ei"
  ],
  "elephant": [
   "k.words/shards/el",
@@ -1959,13 +1958,11 @@
  ],
  "fifth": [
   "k.words/shards/fi",
-  "k.words/shards/fi",
-  "k.values/shards/numbers"
+  "k.words/shards/fi"
  ],
  "first": [
   "k.words/shards/fi",
   "k.words/shards/fi",
-  "k.values/shards/numbers",
   "k.values/shards/sets"
  ],
  "food": [
@@ -2243,8 +2240,7 @@
  ],
  "one": [
   "k.words/shards/on",
-  "k.words/shards/on",
-  "k.values/shards/numbers"
+  "k.words/shards/on"
  ],
  "opposite": [
   "k.words/shards/op",
@@ -2361,8 +2357,7 @@
  ],
  "seventh": [
   "k.words/shards/se",
-  "k.words/shards/se",
-  "k.values/shards/numbers"
+  "k.words/shards/se"
  ],
  "shell": [
   "k.words/shards/sh",
@@ -2440,8 +2435,7 @@
  ],
  "third": [
   "k.words/shards/th",
-  "k.words/shards/th",
-  "k.values/shards/numbers"
+  "k.words/shards/th"
  ],
  "time": [
   "k.words/shards/ti",
@@ -4530,8 +4524,7 @@
  "group": [
   "k.actions/shards/acts",
   "k.actions/shards/families",
-  "k.actions/shards/verbs-group",
-  "k.values/shards/numbers"
+  "k.actions/shards/verbs-group"
  ],
  "load": [
   "k.actions/shards/acts",
@@ -4769,8 +4762,7 @@
   "k.actions/shards/verbs-connect"
  ],
  "couple": [
-  "k.actions/shards/verbs-connect",
-  "k.values/shards/numbers"
+  "k.actions/shards/verbs-connect"
  ],
  "hook up": [
   "k.actions/shards/verbs-connect"
@@ -4844,8 +4836,7 @@
   "k.actions/shards/verbs-group"
  ],
  "pair": [
-  "k.actions/shards/verbs-group",
-  "k.values/shards/numbers"
+  "k.actions/shards/verbs-group"
  ],
  "pile": [
   "k.actions/shards/verbs-group"
@@ -5175,8 +5166,7 @@
   "k.attributes/shards/things-living"
  ],
  "cardinal": [
-  "k.animals/shards/birds",
-  "k.values/shards/numbers"
+  "k.animals/shards/birds"
  ],
  "cassowary": [
   "k.animals/shards/birds"
@@ -7390,16 +7380,14 @@
   "k.time/shards/calendar"
  ],
  "quarter": [
-  "k.time/shards/calendar",
-  "k.values/shards/numbers"
+  "k.time/shards/calendar"
  ],
  "saturday": [
   "k.time/shards/calendar"
  ],
  "second": [
   "k.units/shards/core",
-  "k.time/shards/calendar",
-  "k.values/shards/numbers"
+  "k.time/shards/calendar"
  ],
  "summer": [
   "k.time/shards/calendar"
@@ -8103,651 +8091,8 @@
  "up": [
   "k.values/shards/directions"
  ],
- "billion": [
-  "k.values/shards/numbers"
- ],
- "double": [
-  "k.values/shards/numbers"
- ],
- "dozen": [
-  "k.values/shards/numbers"
- ],
- "eight": [
-  "k.values/shards/numbers"
- ],
- "eighteen": [
-  "k.values/shards/numbers"
- ],
- "eighteenth": [
-  "k.values/shards/numbers"
- ],
- "eightieth": [
-  "k.values/shards/numbers"
- ],
- "eighty": [
-  "k.values/shards/numbers"
- ],
- "eighty-eight": [
-  "k.values/shards/numbers"
- ],
- "eighty-eighth": [
-  "k.values/shards/numbers"
- ],
- "eighty-fifth": [
-  "k.values/shards/numbers"
- ],
- "eighty-first": [
-  "k.values/shards/numbers"
- ],
- "eighty-five": [
-  "k.values/shards/numbers"
- ],
- "eighty-four": [
-  "k.values/shards/numbers"
- ],
- "eighty-fourth": [
-  "k.values/shards/numbers"
- ],
- "eighty-nine": [
-  "k.values/shards/numbers"
- ],
- "eighty-ninth": [
-  "k.values/shards/numbers"
- ],
- "eighty-one": [
-  "k.values/shards/numbers"
- ],
- "eighty-second": [
-  "k.values/shards/numbers"
- ],
- "eighty-seven": [
-  "k.values/shards/numbers"
- ],
- "eighty-seventh": [
-  "k.values/shards/numbers"
- ],
- "eighty-six": [
-  "k.values/shards/numbers"
- ],
- "eighty-sixth": [
-  "k.values/shards/numbers"
- ],
- "eighty-third": [
-  "k.values/shards/numbers"
- ],
- "eighty-three": [
-  "k.values/shards/numbers"
- ],
- "eighty-two": [
-  "k.values/shards/numbers"
- ],
- "eleven": [
-  "k.values/shards/numbers"
- ],
- "eleventh": [
-  "k.values/shards/numbers"
- ],
- "fifteen": [
-  "k.values/shards/numbers"
- ],
- "fifteenth": [
-  "k.values/shards/numbers"
- ],
- "fiftieth": [
-  "k.values/shards/numbers"
- ],
- "fifty": [
-  "k.values/shards/numbers"
- ],
- "fifty-eight": [
-  "k.values/shards/numbers"
- ],
- "fifty-eighth": [
-  "k.values/shards/numbers"
- ],
- "fifty-fifth": [
-  "k.values/shards/numbers"
- ],
- "fifty-first": [
-  "k.values/shards/numbers"
- ],
- "fifty-five": [
-  "k.values/shards/numbers"
- ],
- "fifty-four": [
-  "k.values/shards/numbers"
- ],
- "fifty-fourth": [
-  "k.values/shards/numbers"
- ],
- "fifty-nine": [
-  "k.values/shards/numbers"
- ],
- "fifty-ninth": [
-  "k.values/shards/numbers"
- ],
- "fifty-one": [
-  "k.values/shards/numbers"
- ],
- "fifty-second": [
-  "k.values/shards/numbers"
- ],
- "fifty-seven": [
-  "k.values/shards/numbers"
- ],
- "fifty-seventh": [
-  "k.values/shards/numbers"
- ],
- "fifty-six": [
-  "k.values/shards/numbers"
- ],
- "fifty-sixth": [
-  "k.values/shards/numbers"
- ],
- "fifty-third": [
-  "k.values/shards/numbers"
- ],
- "fifty-three": [
-  "k.values/shards/numbers"
- ],
- "fifty-two": [
-  "k.values/shards/numbers"
- ],
- "five": [
-  "k.values/shards/numbers"
- ],
- "fortieth": [
-  "k.values/shards/numbers"
- ],
- "forty": [
-  "k.values/shards/numbers"
- ],
- "forty-eight": [
-  "k.values/shards/numbers"
- ],
- "forty-eighth": [
-  "k.values/shards/numbers"
- ],
- "forty-fifth": [
-  "k.values/shards/numbers"
- ],
- "forty-first": [
-  "k.values/shards/numbers"
- ],
- "forty-five": [
-  "k.values/shards/numbers"
- ],
- "forty-four": [
-  "k.values/shards/numbers"
- ],
- "forty-fourth": [
-  "k.values/shards/numbers"
- ],
- "forty-nine": [
-  "k.values/shards/numbers"
- ],
- "forty-ninth": [
-  "k.values/shards/numbers"
- ],
- "forty-one": [
-  "k.values/shards/numbers"
- ],
- "forty-second": [
-  "k.values/shards/numbers"
- ],
- "forty-seven": [
-  "k.values/shards/numbers"
- ],
- "forty-seventh": [
-  "k.values/shards/numbers"
- ],
- "forty-six": [
-  "k.values/shards/numbers"
- ],
- "forty-sixth": [
-  "k.values/shards/numbers"
- ],
- "forty-third": [
-  "k.values/shards/numbers"
- ],
- "forty-three": [
-  "k.values/shards/numbers"
- ],
- "forty-two": [
-  "k.values/shards/numbers"
- ],
- "four": [
-  "k.values/shards/numbers"
- ],
- "fourteen": [
-  "k.values/shards/numbers"
- ],
- "fourteenth": [
-  "k.values/shards/numbers"
- ],
- "fourth": [
-  "k.values/shards/numbers"
- ],
- "fraction": [
-  "k.values/shards/numbers"
- ],
  "half": [
-  "k.values/shards/numbers",
   "k.values/shards/sets"
- ],
- "half a dozen": [
-  "k.values/shards/numbers"
- ],
- "hundred": [
-  "k.values/shards/numbers"
- ],
- "hundredth": [
-  "k.values/shards/numbers"
- ],
- "million": [
-  "k.values/shards/numbers"
- ],
- "millionth": [
-  "k.values/shards/numbers"
- ],
- "multiple": [
-  "k.values/shards/numbers"
- ],
- "nine": [
-  "k.values/shards/numbers"
- ],
- "nineteen": [
-  "k.values/shards/numbers"
- ],
- "nineteenth": [
-  "k.values/shards/numbers"
- ],
- "ninetieth": [
-  "k.values/shards/numbers"
- ],
- "ninety": [
-  "k.values/shards/numbers"
- ],
- "ninety-eight": [
-  "k.values/shards/numbers"
- ],
- "ninety-eighth": [
-  "k.values/shards/numbers"
- ],
- "ninety-fifth": [
-  "k.values/shards/numbers"
- ],
- "ninety-first": [
-  "k.values/shards/numbers"
- ],
- "ninety-five": [
-  "k.values/shards/numbers"
- ],
- "ninety-four": [
-  "k.values/shards/numbers"
- ],
- "ninety-fourth": [
-  "k.values/shards/numbers"
- ],
- "ninety-nine": [
-  "k.values/shards/numbers"
- ],
- "ninety-ninth": [
-  "k.values/shards/numbers"
- ],
- "ninety-one": [
-  "k.values/shards/numbers"
- ],
- "ninety-second": [
-  "k.values/shards/numbers"
- ],
- "ninety-seven": [
-  "k.values/shards/numbers"
- ],
- "ninety-seventh": [
-  "k.values/shards/numbers"
- ],
- "ninety-six": [
-  "k.values/shards/numbers"
- ],
- "ninety-sixth": [
-  "k.values/shards/numbers"
- ],
- "ninety-third": [
-  "k.values/shards/numbers"
- ],
- "ninety-three": [
-  "k.values/shards/numbers"
- ],
- "ninety-two": [
-  "k.values/shards/numbers"
- ],
- "ninth": [
-  "k.values/shards/numbers"
- ],
- "once": [
-  "k.values/shards/numbers"
- ],
- "ordinal": [
-  "k.values/shards/numbers"
- ],
- "quadruple": [
-  "k.values/shards/numbers"
- ],
- "seven": [
-  "k.values/shards/numbers"
- ],
- "seventeen": [
-  "k.values/shards/numbers"
- ],
- "seventeenth": [
-  "k.values/shards/numbers"
- ],
- "seventieth": [
-  "k.values/shards/numbers"
- ],
- "seventy": [
-  "k.values/shards/numbers"
- ],
- "seventy-eight": [
-  "k.values/shards/numbers"
- ],
- "seventy-eighth": [
-  "k.values/shards/numbers"
- ],
- "seventy-fifth": [
-  "k.values/shards/numbers"
- ],
- "seventy-first": [
-  "k.values/shards/numbers"
- ],
- "seventy-five": [
-  "k.values/shards/numbers"
- ],
- "seventy-four": [
-  "k.values/shards/numbers"
- ],
- "seventy-fourth": [
-  "k.values/shards/numbers"
- ],
- "seventy-nine": [
-  "k.values/shards/numbers"
- ],
- "seventy-ninth": [
-  "k.values/shards/numbers"
- ],
- "seventy-one": [
-  "k.values/shards/numbers"
- ],
- "seventy-second": [
-  "k.values/shards/numbers"
- ],
- "seventy-seven": [
-  "k.values/shards/numbers"
- ],
- "seventy-seventh": [
-  "k.values/shards/numbers"
- ],
- "seventy-six": [
-  "k.values/shards/numbers"
- ],
- "seventy-sixth": [
-  "k.values/shards/numbers"
- ],
- "seventy-third": [
-  "k.values/shards/numbers"
- ],
- "seventy-three": [
-  "k.values/shards/numbers"
- ],
- "seventy-two": [
-  "k.values/shards/numbers"
- ],
- "single": [
-  "k.values/shards/numbers"
- ],
- "six": [
-  "k.values/shards/numbers"
- ],
- "sixteen": [
-  "k.values/shards/numbers"
- ],
- "sixteenth": [
-  "k.values/shards/numbers"
- ],
- "sixth": [
-  "k.values/shards/numbers"
- ],
- "sixtieth": [
-  "k.values/shards/numbers"
- ],
- "sixty": [
-  "k.values/shards/numbers"
- ],
- "sixty-eight": [
-  "k.values/shards/numbers"
- ],
- "sixty-eighth": [
-  "k.values/shards/numbers"
- ],
- "sixty-fifth": [
-  "k.values/shards/numbers"
- ],
- "sixty-first": [
-  "k.values/shards/numbers"
- ],
- "sixty-five": [
-  "k.values/shards/numbers"
- ],
- "sixty-four": [
-  "k.values/shards/numbers"
- ],
- "sixty-fourth": [
-  "k.values/shards/numbers"
- ],
- "sixty-nine": [
-  "k.values/shards/numbers"
- ],
- "sixty-ninth": [
-  "k.values/shards/numbers"
- ],
- "sixty-one": [
-  "k.values/shards/numbers"
- ],
- "sixty-second": [
-  "k.values/shards/numbers"
- ],
- "sixty-seven": [
-  "k.values/shards/numbers"
- ],
- "sixty-seventh": [
-  "k.values/shards/numbers"
- ],
- "sixty-six": [
-  "k.values/shards/numbers"
- ],
- "sixty-sixth": [
-  "k.values/shards/numbers"
- ],
- "sixty-third": [
-  "k.values/shards/numbers"
- ],
- "sixty-three": [
-  "k.values/shards/numbers"
- ],
- "sixty-two": [
-  "k.values/shards/numbers"
- ],
- "ten": [
-  "k.values/shards/numbers"
- ],
- "tenth": [
-  "k.values/shards/numbers"
- ],
- "thirteen": [
-  "k.values/shards/numbers"
- ],
- "thirteenth": [
-  "k.values/shards/numbers"
- ],
- "thirtieth": [
-  "k.values/shards/numbers"
- ],
- "thirty": [
-  "k.values/shards/numbers"
- ],
- "thirty-eight": [
-  "k.values/shards/numbers"
- ],
- "thirty-eighth": [
-  "k.values/shards/numbers"
- ],
- "thirty-fifth": [
-  "k.values/shards/numbers"
- ],
- "thirty-first": [
-  "k.values/shards/numbers"
- ],
- "thirty-five": [
-  "k.values/shards/numbers"
- ],
- "thirty-four": [
-  "k.values/shards/numbers"
- ],
- "thirty-fourth": [
-  "k.values/shards/numbers"
- ],
- "thirty-nine": [
-  "k.values/shards/numbers"
- ],
- "thirty-ninth": [
-  "k.values/shards/numbers"
- ],
- "thirty-one": [
-  "k.values/shards/numbers"
- ],
- "thirty-second": [
-  "k.values/shards/numbers"
- ],
- "thirty-seven": [
-  "k.values/shards/numbers"
- ],
- "thirty-seventh": [
-  "k.values/shards/numbers"
- ],
- "thirty-six": [
-  "k.values/shards/numbers"
- ],
- "thirty-sixth": [
-  "k.values/shards/numbers"
- ],
- "thirty-third": [
-  "k.values/shards/numbers"
- ],
- "thirty-three": [
-  "k.values/shards/numbers"
- ],
- "thirty-two": [
-  "k.values/shards/numbers"
- ],
- "thousand": [
-  "k.values/shards/numbers"
- ],
- "thousandth": [
-  "k.values/shards/numbers"
- ],
- "three": [
-  "k.values/shards/numbers"
- ],
- "three quarters": [
-  "k.values/shards/numbers"
- ],
- "thrice": [
-  "k.values/shards/numbers"
- ],
- "times": [
-  "k.values/shards/numbers"
- ],
- "trio": [
-  "k.values/shards/numbers"
- ],
- "triple": [
-  "k.values/shards/numbers"
- ],
- "twelfth": [
-  "k.values/shards/numbers"
- ],
- "twelve": [
-  "k.values/shards/numbers"
- ],
- "twentieth": [
-  "k.values/shards/numbers"
- ],
- "twenty": [
-  "k.values/shards/numbers"
- ],
- "twenty-eight": [
-  "k.values/shards/numbers"
- ],
- "twenty-eighth": [
-  "k.values/shards/numbers"
- ],
- "twenty-fifth": [
-  "k.values/shards/numbers"
- ],
- "twenty-first": [
-  "k.values/shards/numbers"
- ],
- "twenty-five": [
-  "k.values/shards/numbers"
- ],
- "twenty-four": [
-  "k.values/shards/numbers"
- ],
- "twenty-fourth": [
-  "k.values/shards/numbers"
- ],
- "twenty-nine": [
-  "k.values/shards/numbers"
- ],
- "twenty-ninth": [
-  "k.values/shards/numbers"
- ],
- "twenty-one": [
-  "k.values/shards/numbers"
- ],
- "twenty-second": [
-  "k.values/shards/numbers"
- ],
- "twenty-seven": [
-  "k.values/shards/numbers"
- ],
- "twenty-seventh": [
-  "k.values/shards/numbers"
- ],
- "twenty-six": [
-  "k.values/shards/numbers"
- ],
- "twenty-sixth": [
-  "k.values/shards/numbers"
- ],
- "twenty-third": [
-  "k.values/shards/numbers"
- ],
- "twenty-three": [
-  "k.values/shards/numbers"
- ],
- "twenty-two": [
-  "k.values/shards/numbers"
- ],
- "twice": [
-  "k.values/shards/numbers"
- ],
- "two": [
-  "k.values/shards/numbers"
- ],
- "zero": [
-  "k.values/shards/numbers"
  ],
  "a bit": [
   "k.values/shards/scales"
@@ -22686,5 +22031,11 @@
  ],
  "fire": [
   "k.layouts/shards/psys2"
+ ],
+ "layer": [
+  "k.layouts/shards/layouts"
+ ],
+ "layers": [
+  "k.layouts/shards/layouts"
  ]
 }

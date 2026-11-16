@@ -4516,8 +4516,14 @@
  "all around": [
   "k.layouts/shards/layouts"
  ],
+ "all of it": [
+  "w.lang.en/shards/closed-classes",
+  "w.lang.en/shards/hand-cues-more"
+ ],
  "all of them": [
-  "k.values/shards/sets"
+  "k.values/shards/sets",
+  "w.lang.en/shards/closed-classes",
+  "w.lang.en/shards/hand-cues-more"
  ],
  "all over": [
   "k.layouts/shards/layouts",
@@ -4525,6 +4531,14 @@
  ],
  "all the": [
   "k.values/shards/sets"
+ ],
+ "all the elements": [
+  "w.lang.en/shards/closed-classes",
+  "w.lang.en/shards/hand-cues-more"
+ ],
+ "all the items": [
+  "w.lang.en/shards/closed-classes",
+  "w.lang.en/shards/hand-cues-more"
  ],
  "all together": [
   "w.lang.en/shards/arithmetic"
@@ -12462,6 +12476,7 @@
  ],
  "bands": [
   "k.kinds/shards/part_of",
+  "k.layouts/shards/layouts",
   "k.objects/shards/things",
   "k.parts/shards/psys2"
  ],
@@ -19739,6 +19754,9 @@
  ],
  "break apart": [
   "k.actions/shards/verbs-take_apart"
+ ],
+ "break in layers": [
+  "k.layouts/shards/layouts"
  ],
  "break out": [
   "k.actions/shards/actions-body-social-nature"
@@ -47715,7 +47733,9 @@
  ],
  "elements": [
   "k.words/shards/el",
-  "k.words/shards/frequency-e"
+  "k.words/shards/frequency-e",
+  "w.lang.en/shards/closed-classes",
+  "w.lang.en/shards/hand-cues-more"
  ],
  "elena": [
   "k.people/shards/given-names-e"
@@ -49742,6 +49762,14 @@
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/grammar"
  ],
+ "every element": [
+  "w.lang.en/shards/closed-classes",
+  "w.lang.en/shards/hand-cues-more"
+ ],
+ "every item": [
+  "w.lang.en/shards/closed-classes",
+  "w.lang.en/shards/hand-cues-more"
+ ],
  "every one": [
   "k.values/shards/sets"
  ],
@@ -49750,6 +49778,10 @@
  ],
  "every second": [
   "k.values/shards/sets"
+ ],
+ "every thing": [
+  "w.lang.en/shards/closed-classes",
+  "w.lang.en/shards/hand-cues-more"
  ],
  "everyday procedure": [
   "k.procedures/schema.sop"
@@ -49761,7 +49793,8 @@
   "k.values/shards/scales",
   "k.values/shards/sets",
   "w.lang.en/shards/closed-classes",
-  "w.lang.en/shards/grammar"
+  "w.lang.en/shards/grammar",
+  "w.lang.en/shards/hand-cues-more"
  ],
  "everything else": [
   "k.values/shards/sets"
@@ -55028,6 +55061,9 @@
  ],
  "floorboard": [
   "k.kinds/shards/part_of-wordnet-2"
+ ],
+ "floors": [
+  "k.layouts/shards/layouts"
  ],
  "flop": [
   "k.words/shards/fl",
@@ -72251,6 +72287,14 @@
  "in future": [
   "w.lang.en/shards/clauses"
  ],
+ "in layers": [
+  "k.layouts/shards/layouts",
+  "w.lang.en/shards/hand-arrangements"
+ ],
+ "in levels": [
+  "k.layouts/shards/layouts",
+  "w.lang.en/shards/hand-arrangements"
+ ],
  "in order of": [
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/hand-joins"
@@ -74345,6 +74389,8 @@
   "w.list/schema.sop"
  ],
  "items": [
+  "w.lang.en/shards/closed-classes",
+  "w.lang.en/shards/hand-cues-more",
   "w.list/schema.sop"
  ],
  "items_without_point": [
@@ -82513,6 +82559,7 @@
   "k.kinds/shards/relations-motion",
   "k.kinds/shards/relations-wearables",
   "k.kinds/shards/structures",
+  "k.layouts/shards/layouts",
   "k.motion/schema.sop",
   "k.objects/shards/things-3",
   "k.units/shards/measures",
@@ -82522,6 +82569,7 @@
   "w.map/schema.sop"
  ],
  "layers": [
+  "k.layouts/shards/layouts",
   "k.motion/schema.sop"
  ],
  "laying": [
@@ -84085,6 +84133,7 @@
   "k.values/shards/scales",
   "k.words/shards/frequency-l",
   "k.words/shards/le",
+  "w.document/schema.sop",
   "w.lang.en/shards/hand-grammar"
  ],
  "length unit": [
@@ -84411,6 +84460,9 @@
   "k.attributes/shards/drawn-noto",
   "k.attributes/shards/same-l",
   "k.objects/shards/noto-music-01"
+ ],
+ "levels": [
+  "k.layouts/shards/layouts"
  ],
  "levente": [
   "k.people/shards/given-names-l"
@@ -129744,6 +129796,7 @@
   "k.values/shards/scales",
   "k.words/shards/frequency-s",
   "k.words/shards/si",
+  "w.document/schema.sop",
   "w.face/schema.sop",
   "w.lang.en/shards/hand-grammar",
   "w.seating/schema.sop"
@@ -135690,6 +135743,9 @@
  "strat": [
   "k.objects/shards/noto-musical-instrument-01"
  ],
+ "strata": [
+  "k.layouts/shards/layouts"
+ ],
  "strategy": [
   "k.words/shards/frequency-s",
   "k.words/shards/st"
@@ -141022,6 +141078,10 @@
  "the cat is sitting by the door": [
   "w.lang.en/shards/alternations"
  ],
+ "the elements": [
+  "w.lang.en/shards/closed-classes",
+  "w.lang.en/shards/hand-cues-more"
+ ],
  "the fewest": [
   "w.lang.en/shards/arithmetic"
  ],
@@ -141036,6 +141096,10 @@
  ],
  "the house was painted by the girl": [
   "w.lang.en/shards/alternations"
+ ],
+ "the items": [
+  "w.lang.en/shards/closed-classes",
+  "w.lang.en/shards/hand-cues-more"
  ],
  "the last one": [
   "k.values/shards/sets"
@@ -143926,6 +143990,9 @@
  ],
  "tiered seat": [
   "k.kinds/shards/part_of-wordnet-3"
+ ],
+ "tiers": [
+  "k.layouts/shards/layouts"
  ],
  "ties": [
   "k.wearables/shards/wearables"
@@ -153902,6 +153969,9 @@
   "k.objects/shards/noto-game-01",
   "k.scenes/shards/things-w"
  ],
+ "water plant": [
+  "k.objects/shards/stand-ins-hand"
+ ],
  "water vascular system": [
   "k.kinds/shards/part_of-wordnet-3"
  ],
@@ -156842,6 +156912,9 @@
  "word class": [
   "w.lang.en/schema.sop"
  ],
+ "word count": [
+  "w.document/schema.sop"
+ ],
  "word_band": [
   "k.interest/shards/features"
  ],
@@ -156855,6 +156928,7 @@
   "k.words/schema.sop",
   "k.words/shards/frequency-w",
   "k.words/shards/wo",
+  "w.document/schema.sop",
   "w.request/schema.sop"
  ],
  "words left": [

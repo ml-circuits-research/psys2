@@ -3,4 +3,4 @@
 // custom search; undo / redo / a new page (request.sop psys2.op). A scene (pond, forest, garden) is a whole the library plans with its parts and runs through the same
 // primitives (startScene, then addThings in it). All of it is the board's (board.mjs: state, history, placement); the word operations of the old readers (engine.mjs) are not
 // reachable from here. The door reaches the world through these names only; scripts/glue-lint.mjs measures the glue from this file. Browser-safe.
-export { startScene, addThings, removeThings, moveThings, setThings, paintSky, toolView, thingAt, newPage, undoStep, redoStep } from './board.mjs?v=eee5d3eff9';
+export { startScene, addThings, removeThings, moveThings, setThings, paintSky, toolView, thingAt, newPage, undoStep, redoStep } from './board.mjs?v=d23ee91bd0';

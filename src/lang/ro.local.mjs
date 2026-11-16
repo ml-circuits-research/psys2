@@ -14,14 +14,6 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.place_next_n w.lang.ro.reply name=done.place.next count=other act=place role=thing role=number role=target text="am mutat cele {number} {thing:num=pl} lângă {target:def=yes}"
 @w.lang.ro.reply.local.none_1 w.lang.ro.reply name=done.none count=one role=thing text="{thing:def=yes} este deja acolo"
 @w.lang.ro.reply.local.none_n w.lang.ro.reply name=done.none count=other role=thing role=number text="cele {number} {thing:num=pl} sunt deja acolo"
-@w.lang.ro.reply.local.change_size_up_1 w.lang.ro.reply name=done.change.size.up count=one act=change role=thing text="{thing:def=yes} este mai mare acum"
-@w.lang.ro.reply.local.change_size_down_1 w.lang.ro.reply name=done.change.size.down count=one act=change role=thing text="{thing:def=yes} este mai mic acum"
-@w.lang.ro.reply.local.state_count_one w.lang.ro.reply name=state.count count=one role=kind role=number text="este {art@kind} {kind}"
-@w.lang.ro.reply.local.state_count_few w.lang.ro.reply name=state.count count=few role=kind role=number text="sunt {number} {kind:num=pl}"
-@w.lang.ro.reply.local.state_count_other w.lang.ro.reply name=state.count count=other role=kind role=number text="sunt {number} de {kind:num=pl}"
-@w.lang.ro.fill.local.state_count_art w.lang.ro.fill template=state.count role=art lemma=un
-@w.lang.ro.reply.local.state_empty w.lang.ro.reply name=state.empty count=one text="aici nu este încă nimic"
-@w.lang.ro.reply.local.nothing_same w.lang.ro.reply name=nothing.same count=one text="asta este deja acolo"
 @w.lang.ro.reply.local.no_place w.lang.ro.reply name=cannot.no_place count=one text="unde să fie? poți spune, de exemplu, „mută copacul la stânga”"
 @w.lang.ro.reply.local.no_value w.lang.ro.reply name=cannot.no_value count=one text="ce să schimb și în ce? culoarea sau mărimea"
 @w.lang.ro.reply.local.refused w.lang.ro.reply name=cannot.refused count=one text="nu am putut face asta"
@@ -39,7 +31,6 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.not_understood_undo w.lang.ro.reply name=not_understood.undo count=one role=words text="nu am înțeles {words} aici, așa că nu am anulat nimic"
 @w.lang.ro.reply.local.nothing_like w.lang.ro.reply name=nothing.like count=one role=words text="nu am găsit nimic ca {words} printre ce am făcut, așa că nu am anulat nimic"
 @w.lang.ro.reply.local.missing_place w.lang.ro.reply name=refused.missing_value.place count=one role=key text="unde ar trebui să meargă? Poți spune, de exemplu, „mută copacul la stânga”, „pune pisica lângă casă” sau „mută-l în colțul din dreapta sus”"
-@w.lang.ro.reply.local.done_whole w.lang.ro.reply name=done.whole count=one role=whole role=parts text="acum {whole:def=yes} are {parts}"
 @w.lang.ro.reply.local.cannot_key w.lang.ro.reply name=cannot.key count=one role=words text="încă nu pot face {words} aici"
 @w.lang.ro.reply.local.no_things w.lang.ro.reply name=cannot.no_things count=one role=thing text="aici nu există {art@thing} {thing}"
 @w.lang.ro.fill.local.no_things_art w.lang.ro.fill template=cannot.no_things role=art lemma=un
@@ -48,40 +39,12 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.redo_did w.lang.ro.reply name=done.redo.did count=one role=did text="am refăcut ultima schimbare"
 @w.lang.ro.reply.local.page w.lang.ro.reply name=done.page count=one text="iată o foaie nouă. Ce desenăm?"
 @w.lang.ro.reply.local.page_kept w.lang.ro.reply name=done.page.kept count=one text="iată o foaie nouă! Desenul vechi este încă acolo dacă spui „anulează”."
-@w.lang.ro.reply.local.change_place_1 w.lang.ro.reply name=done.change.place count=one role=thing role=value text="am mutat {thing:def=yes} la {value:def=yes}"
-@w.lang.ro.reply.local.change_place_n w.lang.ro.reply name=done.change.place count=other role=thing role=number role=value text="am mutat {number} {thing:num=pl} la {value:def=yes}"
-@w.lang.ro.reply.local.change_size_1 w.lang.ro.reply name=done.change.size count=one role=thing role=value text="{thing:def=yes} este acum {value@thing}"
-@w.lang.ro.reply.local.change_size_n w.lang.ro.reply name=done.change.size count=other role=thing role=number role=value text="am făcut {number} {thing:num=pl} {value:num=pl@thing}"
-@w.lang.ro.reply.local.size_up_n w.lang.ro.reply name=done.change.size.up count=other act=change role=thing role=number text="cele {number} {thing:num=pl} sunt mai mari acum"
-@w.lang.ro.reply.local.size_down_n w.lang.ro.reply name=done.change.size.down count=other act=change role=thing role=number text="cele {number} {thing:num=pl} sunt mai mici acum"
-@w.lang.ro.reply.local.can_make w.lang.ro.reply name=can.make count=one role=kinds text="pot face: {kinds}"
-@w.lang.ro.reply.local.can_say_make w.lang.ro.reply name=can.say.make count=one role=keys text="când fac ceva, poți spune {keys}"
-@w.lang.ro.reply.local.can_remove w.lang.ro.reply name=can.remove count=one role=kinds text="pot șterge: {kinds}"
-@w.lang.ro.reply.local.can_say_remove w.lang.ro.reply name=can.say.remove count=one role=keys text="când șterg ceva, poți spune {keys}"
-@w.lang.ro.reply.local.can_place w.lang.ro.reply name=can.place count=one role=kinds text="pot muta: {kinds}"
-@w.lang.ro.reply.local.can_say_place w.lang.ro.reply name=can.say.place count=one role=keys text="când mut ceva, poți spune {keys}"
-@w.lang.ro.reply.local.can_change w.lang.ro.reply name=can.change count=one role=kinds text="pot schimba: {kinds}"
-@w.lang.ro.reply.local.can_say_change w.lang.ro.reply name=can.say.change count=one role=keys text="când schimb ceva, poți spune {keys}"
-@w.lang.ro.reply.local.can_arrange w.lang.ro.reply name=can.arrange count=one role=kinds text="pot aranja: {kinds}"
-@w.lang.ro.reply.local.can_say_arrange w.lang.ro.reply name=can.say.arrange count=one role=keys text="când aranjez ceva, poți spune {keys}"
-@w.lang.ro.reply.local.can_connect w.lang.ro.reply name=can.connect count=one role=kinds text="pot lega: {kinds}"
-@w.lang.ro.reply.local.can_say_connect w.lang.ro.reply name=can.say.connect count=one role=keys text="când leg ceva, poți spune {keys}"
-@w.lang.ro.irregular.local.aseza.pres_3_sg_ea w.lang.ro.irregular lemma=așeza form=așează tense=pres person=3 num=sg
-@w.lang.ro.irregular.local.aseza.pres_3_pl_ea w.lang.ro.irregular lemma=așeza form=așează tense=pres person=3 num=pl
-@w.lang.ro.irregular.local.aseza.imper_2_sg_ea w.lang.ro.irregular lemma=așeza form=așează tense=imper person=2 num=sg
-@w.lang.ro.irregular.local.aseza.subj_3_sg_ea w.lang.ro.irregular lemma=așeza form=așeze tense=subj person=3 num=sg
 @w.lang.ro.irregular.local.aseza.pres_3_sg_a w.lang.ro.irregular lemma=așeza form=așază tense=pres person=3 num=sg
 @w.lang.ro.irregular.local.aseza.pres_3_pl_a w.lang.ro.irregular lemma=așeza form=așază tense=pres person=3 num=pl
 @w.lang.ro.irregular.local.aseza.imper_2_sg_a w.lang.ro.irregular lemma=așeza form=așază tense=imper person=2 num=sg
-@w.lang.ro.irregular.local.aseza.subj_3_sg_a w.lang.ro.irregular lemma=așeza form=așeze tense=subj person=3 num=sg
-@w.lang.ro.irregular.local.reaseza.pres_3_sg_ea w.lang.ro.irregular lemma=reașeza form=reașează tense=pres person=3 num=sg
-@w.lang.ro.irregular.local.reaseza.pres_3_pl_ea w.lang.ro.irregular lemma=reașeza form=reașează tense=pres person=3 num=pl
-@w.lang.ro.irregular.local.reaseza.imper_2_sg_ea w.lang.ro.irregular lemma=reașeza form=reașează tense=imper person=2 num=sg
-@w.lang.ro.irregular.local.reaseza.subj_3_sg_ea w.lang.ro.irregular lemma=reașeza form=reașeze tense=subj person=3 num=sg
 @w.lang.ro.irregular.local.reaseza.pres_3_sg_a w.lang.ro.irregular lemma=reașeza form=reașază tense=pres person=3 num=sg
 @w.lang.ro.irregular.local.reaseza.pres_3_pl_a w.lang.ro.irregular lemma=reașeza form=reașază tense=pres person=3 num=pl
 @w.lang.ro.irregular.local.reaseza.imper_2_sg_a w.lang.ro.irregular lemma=reașeza form=reașază tense=imper person=2 num=sg
-@w.lang.ro.irregular.local.reaseza.subj_3_sg_a w.lang.ro.irregular lemma=reașeza form=reașeze tense=subj person=3 num=sg
 @w.lang.ro.reply.local.done_place_up w.lang.ro.reply name=done.place.up count=other role=things text="am mutat {things} în sus"
 @w.lang.ro.reply.local.done_place_down w.lang.ro.reply name=done.place.down count=other role=things text="am mutat {things} în jos"
 @w.lang.ro.reply.local.done_place_left w.lang.ro.reply name=done.place.left count=other role=things text="am mutat {things} la stânga"

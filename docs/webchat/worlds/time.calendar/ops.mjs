@@ -6,9 +6,9 @@
 // k.time, the numbers, prepositions and question words of w.lang.en (src/lang/en.mjs) and lang.common's lang.time.* phrase groups; a sentence it does not read whole is
 // declined (`accepts`). No day, month or season is listed in this file. Browser-safe.
 import { World, cycleAdd, cycleDiff, statedDay, readClock, writeClock } from '../../lib/vendor/sopworld/sopworld.mjs?v=c75044ce3c';
-import { BUNDLED_TIME } from '../../lib/knowledge/bundled-time.mjs?v=47d3b8489a';
+import { BUNDLED_TIME } from '../../lib/knowledge/bundled-time.mjs?v=38a852270c';
 import { parseLine } from '../../lib/knowledge/catalog.mjs?v=0372695257';
-import { en } from '../../lib/lang/en.mjs?v=37bb133489';
+import { en } from '../../lib/lang/en.mjs?v=185de688b8';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 

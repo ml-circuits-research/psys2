@@ -10,7 +10,7 @@
 # script: none (hand-written)
 # needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION)
 
-@w.dialogue core.module name=w.dialogue version=1 imports=w.request exports=session exports=tab exports=turn exports=result exports=assumption exports=question exports=revision core.source="hand-core 1"
+@w.dialogue core.module name=w.dialogue version=2 imports=w.request exports=session exports=tab exports=turn exports=result exports=assumption exports=question exports=revision core.source="hand-core 1"
 @w.dialogue.world std.schema.world name=w.dialogue doc="the conversation of a session as state: last request and result per tab, reactions, assumptions, open questions" core.source="hand-core 1"
 
 # A session: `name` its id as the host knows it, `language` the language the person writes in (en, ro: a message in
@@ -39,7 +39,7 @@
 @w.dialogue.turn.text core.slot of=w.dialogue.turn key=text kind=string core.source="hand-core 1"
 @w.dialogue.turn.sort core.slot of=w.dialogue.turn key=sort required=true enum=request enum=reaction enum=question enum=answer enum=talk core.source="hand-core 1"
 @w.dialogue.turn.request core.slot of=w.dialogue.turn key=request type=w.request.request core.source="hand-core 1"
-@w.dialogue.turn.reaction core.slot of=w.dialogue.turn key=reaction enum=reject enum=reduce enum=enlarge enum=refine enum=redo enum=put_back enum=thanks enum=frustration core.source="hand-core 1"
+@w.dialogue.turn.reaction core.slot of=w.dialogue.turn key=reaction enum=reject enum=reduce enum=enlarge enum=refine enum=redo enum=put_back enum=thanks enum=frustration enum=continue core.source="hand-core 1"
 @w.dialogue.turn.on_result core.slot of=w.dialogue.turn key=on_result type=w.dialogue.result core.source="hand-core 1"
 
 # A result: what a request produced in a tab. `request` the request it satisfies; `thing` (many) the ids of the things
@@ -78,11 +78,12 @@
 # in `direction` down or up, or its count by the scale's count factor: "too much", "bigger"), add (the constraints said
 # in the reaction are added, replacing those `on` the same key: "not all circles, better layout"), keep (the request is
 # done again unchanged with a new seed: "redo", "another one"), undo (the last result is put back: "put it back"),
-# none (nothing changes: "thanks"). `replaces=yes`: the new result replaces the last one (it is not piled on). `reply`
+# none (nothing changes: "thanks"), inherit (a fragment with no act of its own takes the last request's `on`, the act:
+# "a sun" after "draw a fish" is a new request with the act of the last one; reaction `continue`, psys2 Q51 / sopworld 0.154). `replaces=yes`: the new result replaces the last one (it is not piled on). `reply`
 # the w.lang.* reply name the reply opens with (an apology for a frustration).
 @w.dialogue.revision core.type of=w.dialogue.revision shared=true closed=true core.source="hand-core 1"
-@w.dialogue.revision.reaction core.slot of=w.dialogue.revision key=reaction id=true required=true enum=reject enum=reduce enum=enlarge enum=refine enum=redo enum=put_back enum=thanks enum=frustration core.source="hand-core 1"
-@w.dialogue.revision.does core.slot of=w.dialogue.revision key=does id=true required=true enum=flip enum=step enum=add enum=keep enum=undo enum=none core.source="hand-core 1"
+@w.dialogue.revision.reaction core.slot of=w.dialogue.revision key=reaction id=true required=true enum=reject enum=reduce enum=enlarge enum=refine enum=redo enum=put_back enum=thanks enum=frustration enum=continue core.source="hand-core 1"
+@w.dialogue.revision.does core.slot of=w.dialogue.revision key=does id=true required=true enum=flip enum=step enum=add enum=keep enum=undo enum=none enum=inherit core.source="hand-core 1"
 @w.dialogue.revision.on core.slot of=w.dialogue.revision key=on id=true kind=atom core.source="hand-core 1"
 @w.dialogue.revision.direction core.slot of=w.dialogue.revision key=direction enum=up enum=down core.source="hand-core 1"
 @w.dialogue.revision.replaces core.slot of=w.dialogue.revision key=replaces enum=yes enum=no core.source="hand-core 1"
@@ -97,6 +98,7 @@
 @w.dialogue.revision.refine.add w.dialogue.revision reaction=refine does=add replaces=yes about="not all circles, better layout, with arrows: the constraints said are added to the last request, replacing those on the same key" core.source="hand-core 1"
 @w.dialogue.revision.redo.keep w.dialogue.revision reaction=redo does=keep replaces=yes about="redo, again, another one: the same request with a new seed" core.source="hand-core 1"
 @w.dialogue.revision.put_back.undo w.dialogue.revision reaction=put_back does=undo replaces=no about="put it back, as it was: the last result is undone and the one before is current again" core.source="hand-core 1"
+@w.dialogue.revision.continue.inherit w.dialogue.revision reaction=continue does=inherit on=act replaces=no about="a fragment that names only a kind (a sun, two cats) goes on with the act of the last request: a new request with that act, nothing replaced" core.source="hand-core 1"
 @w.dialogue.revision.thanks.none w.dialogue.revision reaction=thanks does=none replaces=no reply=welcome about="thanks, great: nothing changes" core.source="hand-core 1"
 @w.dialogue.revision.frustration.flip w.dialogue.revision reaction=frustration does=flip on=kind replaces=yes reply=sorry about="an insult or frustration: an apology, and the last result is treated as rejected (redone without its kinds unless the person says more)" core.source="hand-core 1"
 

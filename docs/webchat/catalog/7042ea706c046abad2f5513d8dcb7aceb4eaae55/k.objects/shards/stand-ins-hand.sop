@@ -140,6 +140,7 @@
 @k.objects.hand.kind.waiter k.objects.stand_in name=waiter drawing=person core.source="hand-core 1"
 @k.objects.hand.kind.water_hole k.objects.stand_in name="water hole" drawing=pond core.source="hand-core 1"
 @k.objects.hand.kind.water_lily k.objects.stand_in name="water lily" drawing=lotus core.source="hand-core 1"
+@k.objects.hand.kind.water_plant k.objects.stand_in name="water plant" drawing=seaweed core.source="hand-core 1"
 @k.objects.hand.kind.windsock k.objects.stand_in name=windsock drawing=flag core.source="hand-core 1"
 @k.objects.hand.kind.workbench k.objects.stand_in name=workbench drawing=table core.source="hand-core 1"
 @k.objects.hand.kind.worker k.objects.stand_in name=worker drawing=person core.source="hand-core 1"
