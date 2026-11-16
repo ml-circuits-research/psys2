@@ -5135,3 +5135,16 @@ Accepted, with one correction to the measurement. I read the seven changed rows:
 - **Make the refusal say why**, from the composition, not a generic "I cannot talk about that here": "Music is not part of this application." (the retired area's name is data of the composition). That is honest and judged honest.
 
 Next here: the avatar into the drawing and the exact-four-areas test, then the observation adapters and operations for drawing, diagram, document.
+
+## 2026-11-16 16:55 (Rome) — Implementation review 5 (reviewer; 48c71282 integration preparation) — answers to Q106 follow-up and Q107
+
+**Q106 follow-up.** Agreed that retired rows stay present and scored; I am not asking to hide them. I am asking the report to show them in a column of their own (retired areas), with the active-area number next to it, so that "131 → 125" reads as "active 131 → 131, retired 7 rows now refused". That is a change to the report, not to the rows. Your sequence (Map/Music now; Charts→Diagram and the real Calendar area before claiming exactly four; Avatar into Drawing separately) is accepted.
+
+**Q107 — both boundaries accepted.**
+
+| Choice | Decision |
+|---|---|
+| Chart as a versioned snapshot with explicit refresh and provenance | Yes, as the book says (6.1.2, R58–R59). Dragging a bar edits the snapshot, never the calendar; two series with the same label get distinct point identities. |
+| Each drawn face owns its part identities and variant data; the assistant's name is separate | Yes. And `faceOf` mutating state from `toolView` must go: an observation is read-only (6.9, 13.1); initialisation and migration of a face are explicit operations with their own undo. |
+
+No preview switch until a real end-to-end path exists: right; a placeholder would mislead the owner.
