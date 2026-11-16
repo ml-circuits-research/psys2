@@ -3483,3 +3483,41 @@ Model only vs today: won r0019 ("for their grandma do it" no longer re-runs the 
   | variants 35 | 17 (binding 5) | 18 (binding 7) |
   Per turn (on -> off): WON T11 / T19 "muta results|problems mai sus" (model: "Where should it go?" -> moved up), T28 "deseneaza un tablou cu un lac" (model read "painting", not declared -> a pond), T40 "fa-mi o piveste despre un lac …" (model read "pier" -> the story), VC4 "fă casa roșie" (added a house -> the house is red), VE2 "sunt prea multe" (honest -> reduced), VG5 "cântă o melodie"; LOST T41 "conoune o poveste cu 3 capitole" (97 -> 91 words, the story's word-count check: noise run to run), VE4 "ești prost?" ("prost" unread instead of the question reply), VF3 "arată-mi roma și apoi du-te la paris" (the model read both places; the rules read Rome and leave the rest unread). Files: training/results/owner-2026-11-15T0734-v156-mt-on.json / -mt-off.json.
   RO typo rows (scripts/typos-measure.mjs, which reads through the rules chain by design): identical on / off — all 111: right 59, wrong 3, asked 6, missed 43; ro 50: right 29, wrong 1, asked 3, missed 17; controls 47/48. The breakdown of the 30 translation losses and the 8 wrong executions is the analysis agent's, not done here.
+## Reviewer task 2026-11-16 02:30 — translation breakdown, the wrong executions, [KNOW] lists, class d recount (analysis only; no src/ or worlds/ change)
+Build 90d91301, sopworld 0.155.0, rules chain without the model (`real-set.mjs run --mode rules`, `owner-session.mjs`, the engine's `trace.english` for the English read). The stage 0 per-turn labels were not stored, so the turns were re-labelled by hand on today's main (the result files stayed in the scratchpad, not committed). Full tables are in questions.md Q51.
+
+**1. Translation (class e), by primary cause, one per distinct turn (56 turns, wider than stage 0's 30: it also counts turns that fail at knowledge afterwards)**
+| cause | real set (30) | owner RO (26) | examples |
+| --- | --- | --- | --- |
+| Romanian word the rules lack | 7 | 14 | vilă r0075, baltă r0091, leagăn r0093, înlocui r0080, păi r0078, fixează r0111; reașeza, ordonează, prost, exagerat, peisaj, valuri, ăla (the gloss layer knows several: it is a bridge, not new data) |
+| form the morphology lacks | 9 | 4 | "linga" (lângă without diacritics) r0095/0100/0107/0112, definite "rata" -> "a duck" r0074, deseneat r0096, "să nu mai zboare" r0120, typo genitives r0039/0040; nivele, "muta" read as 3rd person (session 17) |
+| wrong sense chosen | 10 | 5 | încă un r0036, la 30 de grade r0038, pune și un X r0064, în fața casei r0101/04/05/06 ("the girl of the house"), asta r0130, "de culoare X" r0041; în plus, împarte, în jos, du-te, mai sus |
+| word order | 4 | 1 | r0079, r0102, r0103, r0117; session 34 |
+| other | 0 | 2 | lost first clause with "ea" -> "her" (F1), frame path "scrie = type" (A4) |
+Two guesses worse than unread: azuriu is repaired to "golden" (auriu) and leagă to "swing" (leagăn) by the gloss repair.
+
+**2. The wrong executions of the rules-only chain (8 on the real set per the proposer worker's arm: r0019, r0070, r0071, r0077, r0086, r0087, r0089, r0090)** — checked against the visible state after each turn, today:
+| turn | text | first failing piece | should be "not understood"? |
+| --- | --- | --- | --- |
+| r0019 | for their grandma do it (English text logged as ro, owner class ignored) | reading: "for their grandma" unread, "do it" repeats the last make: "The diagram now has 4 rectangles ..." | **yes**: unread words that mattered (a recipient), a bare "do it" must not repeat |
+| r0070 | fa-mu un desen cu un lac, o rata, o vila, nori, soare, iarba | now refused ("I could not make that in the drawing"), no longer an execution | no longer applies; honest |
+| r0071, r0077, r0087, r0089, r0090 | deseneaza un lac / o casa / un soare; fa cerul alabastru; fa si un lac mic in stinga | **none**: the state is right (lake added; house at 870,492; sun added; sky = blue; small lake 182 wide at the left). They are "changed" rows (owner-reported, reply differs from the logged one), never judged by a machine | no: they should stay executed; not wrong executions |
+| r0086 | un soare | none: "A sun" added with "I assumed make for the act" (a fragment) | no |
+Today two other rows are in the class: r0129 "muta un peste in coltul din dreapta" ("Move a fish in the corner on the right"): the reply says "Nothing changed. I could not do in the corner" while the fish moved (y 67 -> 633, x unchanged): first failing piece = the place "in the corner on the right" (extent unread) yet another part executed; **should have been "not understood"** (an unread place that mattered; a reply that denies a change that happened is also a saying fault). And r0076 / r0127 are right on state ("o casa si 2 pesti": house + 2 fish; fish to the top left). So the true wrong executions are 2 (r0019, r0129), both an unread part that mattered.
+
+**3.** The [KNOW] lists are Q51 in questions.md (Romanian words 17 entries, forms 11, senses 20, English cues 9 groups, knowledge gaps 12 groups).
+
+**4. Class d (executed / said, 18 at stage 0) recounted on 0.155**
+| where | turn | what | class now |
+| --- | --- | --- | --- |
+| owner RO | 12 "si mai sus" | "I made it again, the way you said. I moved the hexagon to the up": wrong thing moved | d |
+| owner RO | 14 "muta summary pe la mijloc" | "I moved the hexagon to the bottom" (translation "on to the middle", phrase "pe la") | d (with e) |
+| owner RO | 41 story, 3 chapters | the plan writes 79 words / 3 chapters; the state check expects +30 words and +3 blocks: not verified, likely a check artefact | unverified |
+| owner EN | 4 "you are stupid" | "Sorry, I will try again. The diagram now has 4 diamonds ...": a redo | d |
+| real RO | r0129 | see 2 | d |
+| real RO | r0071, r0077, r0087, r0089, r0090 (and r0086) | right on state | **gone from d** (never wrong) |
+| real EN | r0551 "draw a red circle", r0555 "add a box" | "I added a circle." does not say the name (c1 / r1) the user needs | d (said) |
+| real EN | r0552 "create a diagram" with one open | creates a second diagram, expected to ask keep / templates | d (dialogue policy) |
+| real EN | r0577 "make both green", r0646 "make the first sun blue" | "make" read as create ("I added a sun") | borderline (a); **expected to go with 0.156** (make = change sense, a reference plan never remakes) — to confirm after vendoring |
+| real EN | r0631, r0634, r0635 ellipsis "a yellow one", "a big one"; r0633, r0636 cascade | one of the pair lost / count off because an earlier turn failed | (a), not d |
+So d is 7 strict (owner RO 2, owner EN 1, real RO 1, real EN 3) plus 2 borderline make-turns (0.156) and 1 unverified, against 18 at stage 0: the six real RO "changed" rows were never wrong executions. 0.156 is not vendored here; expected to also lift owner 28 / EN 9 / r0070 ("a picture with a lake", "a random picture") and "all the fish" (owner 32, 36).

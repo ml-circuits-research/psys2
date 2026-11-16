@@ -878,3 +878,98 @@ Host side of Q92 done: (1) the door's P9 check takes a count of a kind the plan'
 3. **"a picture with a lake"** -> a pond with **2 lakes** (a lake said in the singular planned twice), and "I assumed 6 for the count" said; RO the same ("Am adăugat 2 lacuri").
 4. **"draw a lake with three fish"** -> refused "2 made, the request said 1" (the same on 0.155: not a regression).
 5. **The reply of a move to a thing** says the regions of the view, not the relation: "I moved 2 fish to the bottom. I moved the fish to the water." for "into the water"; on a Romanian turn this reply comes out in English (the region value `bottom` has no Romanian word for the `done.change.place` row) [KNOW for the word]. A reply fact `done.place.<relation>` with the region thing (`am mutat peștii în lac`) would say what was done; the step has `region` and `relation`, so the library can say it.
+**Q51 [KNOW] (reviewer task 2026-11-16 02:30, analysis only; build 90d91301, sopworld 0.155.0, rules chain without the model) — what the knowledge repository is asked to add, from the translation breakdown, Q49 and stage 0 class c.**
+Method: the per-turn stage 0 labels were not stored, so I re-labelled by hand on today's main: the real set Romanian rows that are not right on a declared tab (scripts/real-set.mjs run --mode rules, 293 RO rows) and the owner RO session + variants (scripts/owner-session.mjs), each text put through the engine to read the English it actually gets. Each row below names ONE primary cause; "gloss" = the dictionary (`glossWord`) knows the word but the rules translator's lexicon does not, so the word is left in Romanian (a bridge between the two layers is also a fix). Where the same turn would still fail afterwards for another reason, it is noted.
+
+**A. w.lang.ro: words the rules lack (turn needing it)**
+| Romanian | English | turn(s) | note |
+| --- | --- | --- | --- |
+| vilă / vila | villa | r0075 (r0070 reads it) | gloss has it; left as "vila" after a typo repair of the verb |
+| baltă / balta | pond, puddle | r0091 | gloss has it |
+| leagăn / leagan | swing | r0093 (r0092 reads it) | gloss has it; "pe leagan" left; kind swing is also missing (C) |
+| a înlocui | replace | r0080 | gloss has it; "ai loc" = you have room (a avea loc) |
+| păi | well (particle) | r0078 | |
+| prostii; oricum | nonsense; anyway | r0081 | |
+| fixează | fix, set | r0111 | |
+| ăla / ala | that one | owner session 32 | |
+| peisaj | landscape | session 37 | |
+| logic | logically | session 38 | |
+| valuri | waves | variant F5 | |
+| prost; stupid | stupid, dumb | variant E4, session 39 | |
+| a ordona / ordonat | order, arrange / tidy | variants A1, E1 | |
+| a reașeza, a rearanja | rearrange | session 5, 7, variant A2 | gloss has "rearrange" (reaseaza, rearanjează) |
+| a exagera (ai exagerat) | overdo | session 30 | gloss has "exaggerated" |
+| azuriu | azure | session 33 | **wrong repair today: gloss repairs it to "golden" (auriu)**; a wrong guess, worse than unread |
+| a lega (leagă-le) | link, connect | variant F2 | **wrong repair today: "swing" (leagă -> leagăn)** |
+
+**B. w.lang.ro: forms the morphology lacks**
+| form | should read | turn(s) |
+| --- | --- | --- |
+| "linga" (lângă without diacritics, i for â) | next to | r0095, r0100, r0107, r0112 |
+| "pamint" (pământ, i for â) | ground | r0078 (gloss has it, rules do not) |
+| definite -a / -ița nouns read as indefinite: "rata", "fetita" | the duck, the girl | r0074 ("Move a duck"), r0100, r0101, r0104, r0105 |
+| deseneat (participle, one-letter variant of desenat) | drawn | r0096 |
+| subjunctive "să nu (mai) zboare" | should (no longer) fly | r0117, r0120 (r0120 not translated at all) |
+| 1st person perfect "am zis", "am greșit" | I said, I made a mistake | r0103, session 34 |
+| imperative "muta" after a comma or interjection read as 3rd person "he moves" | move | session 17 ("greșit, mută problems mai sus"), r0078 |
+| plural nivele (nivel) | levels | sessions 37, 38 ("cele trei nivele") |
+| 2nd person questions with fronted verb ("nu prea înțelegi ce-ți zic, ești stupid?"; "unde era") | not translated at all | sessions 39, 16 |
+| genitive of a typo ("corocilului", "piicorul") | crocodile's, leg | r0039, r0040 (spelling repair not reached) |
+| typo repairs not reached: "deseneaa", "deauspa", "zoboara", "ada" (adu) | draw, above, flies, bring | r0091, r0079, r0111, session 35 |
+
+**C. w.lang.ro: senses and word order chosen wrong (current English -> should be)**
+| turn | Romanian | current English | should be | cause |
+| --- | --- | --- | --- | --- |
+| r0028 | an old woman (English text, logged as ro) | A year old woman | unchanged | sense: ro "an" = year read inside English text (language misdetected) |
+| r0036 | inca un crocodil | Another crocodile | one more crocodile (add) | sense: încă un = one more |
+| r0038 | roteste ... la 30 de grade | Rotate the blue crocodile at 30 degrees | by 30 degrees | sense of la + degrees |
+| r0064 | pune si un lac | Put a lake too | Add a lake too | sense: pune with no place = add |
+| r0101, r0104, r0105, r0106 | muta fetita in fata casei | Move a girl in the girl of the house | Move the girl in front of the house | sense: în fața = in front of (fata read as girl) |
+| r0130 | asta e centru, nu e dreapta | He set to be a center ... | This is the center, not the right side | sense: asta read as a sta |
+| r0041 | ... de culoare neagra | ... of the black color | black | phrase "de culoare X" = X |
+| session 31 | elementele in plus | the items in plus | the extra items | sense: în plus = extra |
+| session 37 | imparte diagrama pe 3 nivele | Share the diagram on 3 ... | Split the diagram into 3 levels | sense: a împărți = split/divide |
+| variant C2 | mută alfa și beta în jos | Move alfa and beta in down | down | sense: în jos |
+| variant F3 | du-te la paris | take at Paris | go to Paris | sense: du-te = go |
+| variant E1 | fă-l mai ordonat | Make it still ordonat | tidier | sense: mai + adjective = comparative |
+| session 13 | muta work done si problems mai sus | Move work done and problems more up | higher | sense: "mai sus" after an unknown name is literal |
+| session 14 | muta summary pe la mijloc | Move summary on to the middle | around the middle | phrase "pe la" |
+| variant F1 | desenează o casă, pune un copac lângă ea și fă cerul albastru | put a tree next to her and make the sky blue | draw a house, put a tree next to it ... | other: the first clause is lost; ea (a thing) = it, not her |
+| variant A4 | scrie un paragraf despre munți | Type un paragraf despre munți | Write a paragraph about mountains | other: the "scrie = type" frame path leaves the rest untranslated |
+| r0079 | fa niste iarba deauspa lacului | Make the lake some grass deauspa | Make some grass above the lake | order: genitive after a preposition read as an indirect object |
+| r0102 | nu ai desenat o feita tu mai inainte? | Did feita not draw a you still before? | Did you not draw a girl earlier? | order: question with subject after the verb group |
+| r0103 | feitia am zis, am gresit feita | Feitia said, I have wrong feita | I said "fetița", I made a mistake | order: fronted object |
+| r0117 | deseneaza si un magar, dar sa nu zboare, pe iarba | Draw a donkey, but too to not fly ... | Draw a donkey too, but it should not fly ... | order: "si" moves; subjunctive |
+| session 34 | plantele de apa am zis | The plants said of the water | I said the water plants | order + am zis |
+
+Counts by primary cause, one cause per distinct turn (56 turns: 30 real set + 26 owner session / variants; stage 0 had 30 in all, so mine is wider: it also counts turns that fail at knowledge afterwards): word lacking 21, form lacking 13, wrong sense 15, word order 5, other 2 (lost clause, frame path). Rows where the repaired English still fails on a missing kind afterwards: r0093 (swing, child), r0101-r0106 (girl, boy), r0107 (grandfather), r0111 (goat flies).
+
+**D. w.lang.en cue words (the ≈12 of Q49; turn that needs each)**
+| cue | turn(s) |
+| --- | --- |
+| "further" (alone, after a verb) / "more to the left" as a step | r0066, r0114, r0115, r0116, r0124, r0128; owner 12, 15 |
+| "even higher" / "even lower" as a continuation | r0053, r0123; owner 12 |
+| "a bit" before a comparative; thicker / thinner | r0574, r0583 (r0570, r0578, r0583, r0584 lines: also capability) |
+| dashed, two-way (link attributes) | r0570, r0578, r0584 |
+| "leave the X" / "keep the X" = do not change X | r0063; owner 33 |
+| "different corners" / "different places" = distinct places | r0126, r0131, r0132 |
+| "elements" / "items" = all things of the open world | owner 2, 3, 4, 8; r0557 |
+| "the layout" as the object of change | r0558 |
+| "over the water" / "above the lake" = relative place | r0059; owner 33 |
+
+**E. Knowledge gaps (stage 0 class c; the catalog, not language)**
+| base | missing | turn(s) |
+| --- | --- | --- |
+| art.draw kinds | swing | r0092, r0093, r0094, r0095 |
+| art.draw kinds | child; girl; boy | r0093, r0097, r0098; r0099-r0106; r0100 |
+| art.draw kinds | grandfather | r0107, r0108 |
+| art.draw kinds | goat; cow; donkey | r0109, r0110, r0112, r0113, r0115, r0116; r0119, r0122, r0124; r0117, r0118 |
+| art.draw kinds | villa as a kind of house; pond / puddle | r0070, r0075; r0091 |
+| art.draw parts | leg of an animal (crocodile) | r0039, r0040, r0041 |
+| art.draw values | rotation in degrees | r0038 |
+| art.draw places | "corner" as an extent of the picture ("the corner on the right", "top left") | r0129; r0126 |
+| art.draw kinds | water plants; azure (colour) | owner 33, 34 |
+| art.draw structure | levels / layers (first level; water, grass, sky) | owner 36, 37, 38; owner EN 10 ("break in 3 layers") |
+| geo.map places | Tenerife (islands) | owner 43 |
+| docs.editor facts | the word count of a document | variant B3 |
+Not reproduced from stage 0 (labels not stored): the 4 EN class c rows; the table above is what I found today, 22 rows of real + owner Romanian turns. Items the library 0.156.0 should already cover (to check after vendoring): "a picture with a lake" / "a random picture" as a whole of a subkind (owner 28, owner EN 9, r0070), "all the fish" (owner 32, 36; variant F4).
