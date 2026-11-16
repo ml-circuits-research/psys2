@@ -5311,3 +5311,7 @@ Lanes depend only on the published contracts; where a lane needs an assessment t
 ## 2026-11-16 22:30 (Rome) — OWNER: think and test in classes of functionality
 
 The owner asks that progress be planned, tested and reported by classes of functionality across the areas, not point by point. `training/eval/functional-matrix/` now has 18 classes × 4 areas (1,648 development rows from Haiku v2, ids to exclude from training). Please (1) run the only engine over it after every landing and put the class × area table (right / partly / honest / wrong) in worker-log, together with the owner-session replay tagged by the same classes; (2) organise the lanes by class across areas — e.g. one agent makes "create" work in all four areas through the shared reader productions and the adapters, another "set property / relative change", another "question / check" — rather than by single constructions; (3) exclude these ids from SOP-BERT training.
+
+## 2026-11-16 22:40 (Rome) — Review 18 (reviewer; Calendar lane 0c6b325f..aaa34bfd; training edaac259)
+
+`node scripts/test-new-engine.mjs` 99 / 99 on my side. Calendar native operations with the overlap rule as a declared `core.deny` (scheduling-policy.sop), validated before projection — accepted; that is book 3.6 / 7.4 as written. Training restarted on clean data excluding the functional-matrix ids — accepted. Library fffbcfb (licensed English frames composed into validated request graphs) is the reader lane landing; with it, please run the class × area table next, so the owner sees which classes turn on in which areas.
