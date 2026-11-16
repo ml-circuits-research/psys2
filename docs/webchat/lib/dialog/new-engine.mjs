@@ -1,12 +1,14 @@
 // Opt-in, bounded existing-object property path. Vocabulary and readings are declarations.
-import { World, compileGrammarOverlay, readGrammarRequests, inspectRequest, assessPropertyChange, quote, str } from '../vendor/sopworld/sopworld.mjs?v=75fc12fd08';
-import SOURCE from './new-engine-source.mjs?v=9269bd8c85';
+import { World, compileGrammarOverlay, readGrammarRequests, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs?v=abd908d0be';
+import SOURCE from './new-engine-source.mjs?v=5d33c47732';
+import { resolvePropertyValue, selectPropertyObject } from './property-selection.mjs?v=bb98c9ca76';
 import { NEW_ENGINE_AREAS } from './new-engine-areas.mjs?v=510334f8b4';
 const hosts = new WeakMap();
 let grammar;
 const first = (wire, key) => wire?.attrs[key]?.[0];
 const line = (id, type, attrs) => `@${id} ${type} ` + Object.entries(attrs).flatMap(([key, values]) => values.map(value => `${key}=${value}`)).join(' ');
 const input = (id, value) => line(id, 'std.trace.input', { source: [quote(value.source)], version: [quote(value.version)], 'source.type': [value.sourceType], key: [value.key], values: [quote(JSON.stringify(value.values))] });
+const JOURNAL_IDS = new Set(['request.module', 'trace.module', 'reply.module', 'trace.request', 'before.input', 'expected.input', 'semantic.input', 'step', 'after.input', 'before.observation', 'after.observation', 'claim', 'reply']);
 const uuid = () => globalThis.crypto.randomUUID();
 function reader() {
   if (!grammar) {
@@ -29,7 +31,7 @@ function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'], answers: [], segments: [],
     state: {}, effects: [], newEngine: true, trace: { legacy: false, engine: 'new', ...trace } };
 }
-const refusal = (reason, trace) => reply(`${messages[reason]} Nothing changed.`, false, { reason, ...trace });
+const refusal = (reason, trace) => reply(`${trace?.understood ? trace.understood + ' ' : ''}${messages[reason]} Nothing changed.`, false, { reason, ...trace });
 
 /** The caller owns UI selection and boundary translation; this runner never invokes a legacy reader. */
 export function runNewEngine(session, text, options = {}) {
@@ -46,31 +48,60 @@ export function runNewEngine(session, text, options = {}) {
   const { world: source, compiled } = reader();
   const reading = readGrammarRequests(source, text, { compiled, ...SOURCE.options, max: 32 });
   if (!reading.coverage?.complete || reading.candidates.length !== 1) return refusal('reading', { reading });
-  const candidate = reading.candidates[0], evidence = new World();
+  return executeRequestCandidate(session, reading.candidates[0], text, options);
+}
+
+/** Execute a detached, validated graph. This is not a claim of reader coverage. */
+export function executeRequestCandidate(session, candidate, text, options = {}) {
+  const tab = options.view ?? session.isession.state['ui.shell']?.activeTab;
+  const area = NEW_ENGINE_AREAS[tab];
+  if (!area) return refusal('area');
+  const prior = options.invocation && (session.newEngineJournal || []).find(record => record.invocation === options.invocation);
+  if (prior) {
+    if (prior.text !== text || prior.area !== tab || prior.reading.wires !== candidate?.wires) return refusal('identity');
+    return reply('This invocation was already recorded. No new operation was performed.', false,
+      { replayed: true, historicalReceipt: { ...structuredClone(prior.receipt), replayed: true }, journal: structuredClone(prior) });
+  }
+  if (options.language && options.language !== 'en') return refusal('language');
+  let wires;
+  try {
+    if (typeof candidate?.wires !== 'string' || candidate.wires.length > 65536) return refusal('structure');
+    wires = parse(candidate.wires);
+    if (wires.length > 64 || new Set(wires.map(wire => wire.id)).size !== wires.length
+      || wires.some(wire => JOURNAL_IDS.has(wire.id) || !['std.request', 'std.request.source', 'std.request.target', 'std.request.constraint'].includes(wire.type))
+      || wires.filter(wire => wire.type === 'std.request').length !== 1) return refusal('structure', { reading: candidate });
+  } catch { return refusal('structure'); }
+  const { world: source } = reader();
+  const evidence = new World();
   evidence.load('@request.module core.use world=std.request\n@trace.module core.use world=std.trace\n@reply.module core.use world=std.reply');
   if (!evidence.tell(candidate.wires).ok || !inspectRequest(evidence, candidate.request).ok) return refusal('structure');
   const request = evidence.get(candidate.request), targets = evidence.ofType('std.request.target'), conditions = evidence.ofType('std.request.constraint');
-  const target = targets[0], condition = conditions[0];
-  if (targets.length !== 1 || conditions.length !== 1 || first(request, 'mood') !== 'do'
-    || first(request, 'root') !== '$' + condition.id || first(condition, 'target') !== '$' + target.id
-    || first(target, 'mode') !== 'existing' || target.attrs.selector || target.attrs.name
+  const target = targets[0], condition = evidence.get(first(request, 'root')?.slice(1));
+  const selector = evidence.get(first(target, 'selector')?.slice(1));
+  const allowed = (wire, keys) => wire && Object.keys(wire.attrs).every(key => keys.includes(key));
+  const equality = wire => wire?.type === 'std.request.constraint' && first(wire, 'operator') === 'eq'
+    && first(wire, 'polarity') === 'positive' && wire.attrs.value?.length === 1
+    && first(wire, 'target') === '$' + target.id
+    && allowed(wire, ['request', 'target', 'concept', 'operator', 'value', 'character', 'polarity', 'source', 'source.start', 'source.end']);
+  if (!allowed(request, ['act', 'mood', 'source', 'root'])
+    || str(first(evidence.get(first(request, 'source')?.slice(1)), 'text')) !== text
+    || targets.length !== 1 || conditions.length !== (selector ? 2 : 1) || first(request, 'mood') !== 'do'
+    || !equality(condition) || first(condition, 'character') !== 'requirement'
+    || first(target, 'mode') !== 'existing'
+    || !allowed(target, ['request', 'mode', 'kind', 'determiner', 'selector', 'source', 'source.start', 'source.end'])
     || (first(target, 'determiner') && first(target, 'determiner') !== 'definite')
-    || first(condition, 'operator') !== 'eq' || first(condition, 'character') !== 'requirement' || first(condition, 'polarity') !== 'positive'
-    || ['std.request.group', 'std.request.not', 'std.request.quant', 'std.request.value'].some(type => evidence.ofType(type).length)) return refusal('structure');
+    || (selector && (!equality(selector) || first(selector, 'character') !== 'assumption'))
+    || ['std.request.group', 'std.request.not', 'std.request.quant', 'std.request.value'].some(type => evidence.ofType(type).length))
+    return refusal('structure', { reading: candidate, unsupported: 'one positive required equality and optional positive assumed equality selector' });
   const binding = area.bindings.find(item => item.act === first(request, 'act') && item.concept === first(condition, 'concept'));
-  if (!binding) return refusal('structure');
+  const selectorBinding = selector && area.bindings.find(item => item.concept === first(selector, 'concept'));
+  if (!binding || (selector && !selectorBinding)) return refusal('structure', { reading: candidate, unsupported: 'undeclared property binding' });
   const semanticValue = str(first(condition, 'value'));
-  const matches = [];
-  for (const fact of source.ofType(binding.valueType)) {
-    if ((fact.attrs[binding.nameKey] || []).some(value => str(value) === semanticValue)) {
-      for (const value of fact.attrs[binding.valueKey] || []) {
-        const native = area.normalize(str(value), binding);
-        if (native !== null) matches.push({ id: fact.id, type: fact.type, native });
-      }
-    }
-  }
-  const values = [...new Set(matches.map(item => item.native))];
-  if (values.length !== 1) return refusal('value');
+  const understood = `I understood a request to set ${binding.concept} to ${semanticValue} on an existing ${str(first(target, 'kind'))}`
+    + (selector ? ` whose stored ${selectorBinding.concept} equals ${str(first(selector, 'value'))}.` : '.');
+  const resolved = resolvePropertyValue(source, area, binding, semanticValue), { values, facts: matches } = resolved;
+  const selectedValue = selector && resolvePropertyValue(source, area, selectorBinding, str(first(selector, 'value')));
+  if (!resolved.ok || (selector && !selectedValue.ok)) return refusal('value', { understood, reading: candidate, resultMapping: resolved, selectorMapping: selectedValue });
   const state = session.isession.state[area.world];
   let host, before;
   try {
@@ -79,9 +110,9 @@ export function runNewEngine(session, text, options = {}) {
     if (!host) { host = area.createHost({ state, instanceId: uuid(), bindings: area.bindings }); hosts.set(state, host); }
     before = host.observe();
   } catch { return refusal('state'); }
-  const objects = before.objects.filter(object => object.kind === str(first(target, 'kind')));
-  if (!before.complete || objects.length !== 1) return refusal('target');
-  const object = objects[0], nativeBefore = object.inputs.find(item => item.binding === binding.id);
+  const selection = selectPropertyObject(before, { kind: str(first(target, 'kind')), selector: selector?.id, binding: selectorBinding, resolved: selectedValue }, { normalize: area.normalize });
+  if (!selection.ok) return refusal('target', { understood, reading: candidate, selection });
+  const object = selection.object, nativeBefore = object.inputs.find(item => item.binding === binding.id);
   if (!nativeBefore) return refusal('state');
   const invocation = options.invocation ?? uuid(), expected = { source: JSON.stringify({ binding: binding.id, facts: matches.map(item => item.id) }), version: SOURCE.knowledgePin,
     sourceType: 'psys2.property.mapping', key: binding.key, values: [quote(values[0])] };
@@ -111,7 +142,7 @@ export function runNewEngine(session, text, options = {}) {
       ? `Set ${binding.concept} to ${semanticValue} (${values[0]}) for ${object.kind} ${object.id}.`
       : `${object.kind} ${object.id} already has the stored ${binding.concept} ${semanticValue} (${values[0]}).`;
     final.load(line('reply', 'std.trace.reply', { request: ['$trace.request'], step: ['$step'], text: [quote(said)] }));
-    const journal = { invocation, text, area: tab, libraryPin: SOURCE.libraryPin, knowledgePin: SOURCE.knowledgePin, reading: candidate, receipt, evidence: final.toJSON() };
+    const journal = { invocation, text, area: tab, libraryPin: SOURCE.libraryPin, knowledgePin: SOURCE.knowledgePin, reading: candidate, selection, receipt, evidence: final.toJSON() };
     const records = session.newEngineJournal ?? [];
     session.newEngineJournal = [...records.slice(-127), structuredClone(journal)];
     return { ...reply(said, true, { assessment: assessed.assessment.status, journal }), state: { [area.world]: structuredClone(session.isession.state[area.world]) } };

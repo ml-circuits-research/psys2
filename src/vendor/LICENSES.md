@@ -1,10 +1,10 @@
 # Licences of vendored code in src/
 
-## sopworld 0.193.0 (one file, unmodified)
+## sopworld 0.194.0 (one file, unmodified)
 
 - Source: https://github.com/ml-circuits-research/soplang-words-lib (same owner as this repository)
-- Pinned commit: `7587ce7acff92e0613dd0e4cec4db37aed23d986` (published release 0.193.0, build `880ba8cf3531`). See `sopworld/provenance.json` for the exact source and hash.
-- Vendored file: `src/vendor/sopworld/sopworld.mjs`, the library's built single file `docs/sopworld.mjs` (1494540 bytes, sha256 `a6840b4fa23b29737fa7264565ed0dd0757cee38e58b5d20394d5c2bfbde751d`), copied byte for byte. Never patch it here: a workaround goes into `src/reasoner/` and a defect into the list of library issues in `worker-log.md`.
+- Pinned commit: `cabeaa6700a60d0f0aa1ba74ecafcd3b19cfc5a8` (published release 0.194.0, build `52820ca22100`). See `sopworld/provenance.json` for the exact source and hash.
+- Vendored file: `src/vendor/sopworld/sopworld.mjs`, the library's built single file `docs/sopworld.mjs` (1498236 bytes, sha256 `f3829fbfa08cdbafefd5c613ac835b107ba1282d13d9003e62d720b0d13e14ce`), copied byte for byte. Never patch it here: a workaround goes into `src/reasoner/` and a defect into the list of library issues in `worker-log.md`.
 - `src/vendor/sopworld/tools/scan-loops.mjs`: the library's own loop scanner (`tools/scan-loops.mjs`), copied byte for byte; `tests/reasoner.test.mjs` runs it on the vendored file.
 - Licence: MIT (below). Compatible with AGPL-3.0-only.
 - Runs offline: nothing is fetched at run time. Loaded lazily (`import('../vendor/sopworld/sopworld.mjs')`) only when the Reasoner setting is `matrix`.

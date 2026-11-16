@@ -6,7 +6,7 @@ import { World } from '../src/vendor/sopworld/sopworld.mjs';
 const knowledge = new URL('../../sop-knowledge-worlds/', import.meta.url).pathname;
 const pin = 'ef0a1b27c0e7be6fff4fb1fa3790bd3a9a2f850e';
 const git = (...args) => execFileSync('git', ['-C', knowledge, ...args], { encoding: 'utf8', maxBuffer: 80_000_000 });
-const libraryPin = '7587ce7acff92e0613dd0e4cec4db37aed23d986';
+const libraryPin = 'cabeaa6700a60d0f0aa1ba74ecafcd3b19cfc5a8';
 const profilePath = 'compat/psys2/reader/request-profile.mjs';
 const profileText = execFileSync('git', ['-C', new URL('../../soplang-words-lib/', import.meta.url).pathname, 'show', `${libraryPin}:${profilePath}`], { encoding: 'utf8' });
 const profileUrl = `data:text/javascript,${encodeURIComponent(profileText)}`;

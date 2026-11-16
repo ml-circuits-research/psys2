@@ -19,7 +19,7 @@ const rejects = (fn, code) => assert.throws(fn, (e) => e instanceof LabelCodecEr
 
 test('training validator shares the exact application library pin', () => {
   const root = new URL('../src/vendor/sopworld/', import.meta.url), manifest = JSON.parse(readFileSync(new URL('provenance.json', root)));
-  assert.equal(manifest.release, '0.193.0');
+  assert.equal(manifest.release, '0.194.0');
   assert.equal(createHash('sha256').update(readFileSync(new URL('sopworld.mjs', root))).digest('hex'), manifest.sha256);
 });
 
