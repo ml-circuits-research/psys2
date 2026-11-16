@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "63458e8f",
-  "tree": "bab6608fe1166e38",
+  "build": "29641572",
+  "tree": "efabed58d41279d3",
   "catalog": "7042ea706c046abad2f5513d8dcb7aceb4eaae55",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,16 +13,16 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 122,
-   "partly": 6,
-   "wrong": 79,
-   "open": 44,
-   "changed": 22,
+   "right": 130,
+   "partly": 7,
+   "wrong": 70,
+   "open": 40,
+   "changed": 26,
    "unjudged": 332,
    "outcome": {
-    "executed": 160,
-    "refused": 308,
-    "asked": 11,
+    "executed": 179,
+    "refused": 288,
+    "asked": 12,
     "not_understood": 54,
     "other_world": 72
    },
@@ -30,7 +30,7 @@
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 39
+     "right": 41
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -40,7 +40,7 @@
     "owner-log-2026-11-13c": {
      "turns": 24,
      "judged": 10,
-     "right": 5
+     "right": 8
     },
     "real-phrases-2026-11-09c": {
      "turns": 68,
@@ -75,7 +75,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 74
+     "right": 77
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -88,16 +88,16 @@
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 122,
-   "partly": 6,
-   "wrong": 79,
-   "open": 44,
-   "changed": 22,
+   "right": 130,
+   "partly": 7,
+   "wrong": 70,
+   "open": 40,
+   "changed": 26,
    "unjudged": 332,
    "outcome": {
-    "executed": 160,
-    "refused": 308,
-    "asked": 11,
+    "executed": 179,
+    "refused": 288,
+    "asked": 12,
     "not_understood": 54,
     "other_world": 72
    },
@@ -105,7 +105,7 @@
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 39
+     "right": 41
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -115,7 +115,7 @@
     "owner-log-2026-11-13c": {
      "turns": 24,
      "judged": 10,
-     "right": 5
+     "right": 8
     },
     "real-phrases-2026-11-09c": {
      "turns": 68,
@@ -150,7 +150,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 74
+     "right": 77
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 386,
- "failing_ops": 386,
+ "failing_matrix": 369,
+ "failing_ops": 369,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -423,223 +423,9 @@
    "both_reasoners": 22
   },
   {
-   "cause": "ui.avatar: acted; the reply does not say what the check asks",
-   "count": 20,
-   "wrong": 16,
-   "partly": 4,
-   "rows": [
-    {
-     "id": "r0029",
-     "verdict": "wrong",
-     "text": "an old woman",
-     "tab": "robot",
-     "reply": "I did not understand that as something to do in the avatar.",
-     "failing": [
-      "reply_not:did not understand"
-     ]
-    },
-    {
-     "id": "r0032",
-     "verdict": "wrong",
-     "text": "make it happy",
-     "tab": "robot",
-     "reply": "I did not understand \"happy\" here.",
-     "failing": [
-      "reply_not:Which shape|did not understand"
-     ]
-    },
-    {
-     "id": "r0511",
-     "verdict": "wrong",
-     "text": "make the avatar an emoji",
-     "tab": "robot",
-     "reply": "I did not understand \"emoji\" here.",
-     "failing": [
-      "forbid:answer without \"did not understand\""
-     ]
-    },
-    {
-     "id": "r0512",
-     "verdict": "wrong",
-     "text": "mcdavatara human",
-     "tab": "robot",
-     "reply": "I did not understand \"mcdavatara\", \"human\" here.",
-     "failing": [
-      "answer:person | human | girl | boy | woman | man | child",
-      "forbid:answer without \"did not understand\""
-     ]
-    },
-    {
-     "id": "r0513",
-     "verdict": "wrong",
-     "text": "make the avatar an emoji",
-     "tab": "robot",
-     "reply": "I did not understand \"emoji\" here.",
-     "failing": [
-      "forbid:answer without \"did not understand\""
-     ]
-    },
-    {
-     "id": "r0514",
-     "verdict": "wrong",
-     "text": "make the avatar a person make the avatar a person send",
-     "tab": "robot",
-     "reply": "I did not understand \"make\", \"send\" here.",
-     "failing": [
-      "answer:person | human | girl | boy | woman | man | child",
-      "forbid:answer without \"did not understand\""
-     ]
-    },
-    {
-     "id": "r0515",
-     "verdict": "partly",
-     "text": "make a big smile",
-     "tab": "robot",
-     "reply": "Nothing changed. I assumed smile for the variant. I could not do big: nothing here has a size.",
-     "failing": [
-      "answer:big smile"
-     ]
-    },
-    {
-     "id": "r0516",
-     "verdict": "wrong",
-     "text": "make the avatar to geta big smile",
-     "tab": "robot",
-     "reply": "I could not make that in the avatar.",
-     "failing": [
-      "answer:big smile"
-     ]
-    },
-    {
-     "id": "r0517",
-     "verdict": "partly",
-     "text": "big smile",
-     "tab": "robot",
-     "reply": "Nothing changed. I assumed make for the act. I assumed smile for the variant. I could not do big: nothing here has a size.",
-     "failing": [
-      "answer:big smile"
-     ]
-    },
-    {
-     "id": "r0518",
-     "verdict": "wrong",
-     "text": "the the next mouth",
-     "tab": "robot",
-     "reply": "I did not understand that as something to do in the avatar.",
-     "failing": [
-      "answer:mouth",
-      "forbid:answer without \"did not understand\""
-     ]
-    },
-    {
-     "id": "r0520",
-     "verdict": "wrong",
-     "text": "small smile",
-     "tab": "robot",
-     "reply": "I did not understand that as something to do in the avatar.",
-     "failing": [
-      "answer:small smile",
-      "forbid:answer without \"did not understand\""
-     ]
-    },
-    {
-     "id": "r0521",
-     "verdict": "wrong",
-     "text": "open mouth",
-     "tab": "robot",
-     "reply": "Nothing changed. To what value?",
-     "failing": [
-      "answer:open mouth | mouth"
-     ]
-    },
-    {
-     "id": "r0522",
-     "verdict": "wrong",
-     "text": "make a frown",
-     "tab": "robot",
-     "reply": "I read \"frown\" as \"crown\". Nothing changed. I could not do crown: there is no crown here.",
-     "failing": [
-      "answer:frown"
-     ]
-    },
-    {
-     "id": "r0523",
-     "verdict": "wrong",
-     "text": "tongue out",
-     "tab": "robot",
-     "reply": "I did not understand \"tongue\", \"out\" here.",
-     "failing": [
-      "answer:tongue",
-      "forbid:answer without \"did not understand\""
-     ]
-    },
-    {
-     "id": "r0525",
-     "verdict": "partly",
-     "text": "big smile",
-     "tab": "robot",
-     "reply": "Nothing changed. I assumed make for the act. I assumed smile for the variant. I could not do big: nothing here has a size.",
-     "failing": [
-      "answer:big smile"
-     ]
-    },
-    {
-     "id": "r0592",
-     "verdict": "wrong",
-     "text": "would you say you are happy",
-     "tab": "robot",
-     "reply": "I did not understand \"say\", \"happy\" here.",
-     "failing": [
-      "answer:happy"
-     ]
-    },
-    {
-     "id": "r0593",
-     "verdict": "wrong",
-     "text": "would you say you are sad",
-     "tab": "robot",
-     "reply": "I did not understand \"say\", \"sad\" here.",
-     "failing": [
-      "answer:sad"
-     ]
-    },
-    {
-     "id": "r0595",
-     "verdict": "wrong",
-     "text": "whats on u",
-     "tab": "robot",
-     "reply": "I did not understand \"whats\" here.",
-     "failing": [
-      "answer:wear"
-     ]
-    },
-    {
-     "id": "r0596",
-     "verdict": "partly",
-     "text": "what is on you",
-     "tab": "robot",
-     "reply": "There is one face. There is one hair back. There is one shoulders. There is one neck. There is one ears. There is one head. There is one cheeks. There is one mo",
-     "failing": [
-      "answer:wear"
-     ]
-    },
-    {
-     "id": "r0645",
-     "verdict": "wrong",
-     "text": "make your eyes blue",
-     "tab": "draw",
-     "reply": "I cannot make eye in the drawing yet.",
-     "failing": [
-      "answer:eyes"
-     ]
-    }
-   ],
-   "both_reasoners": 20
-  },
-  {
    "cause": "Romanian: art.draw: acted; the reply does not say what the check asks",
-   "count": 16,
-   "wrong": 16,
+   "count": 17,
+   "wrong": 17,
    "partly": 0,
    "rows": [
     {
@@ -647,7 +433,7 @@
      "verdict": "wrong",
      "text": "roteste crocodilul albastru la 30 de grade",
      "tab": "draw",
-     "reply": "Nothing changed. There is no crocodile here.",
+     "reply": "Nothing changed.",
      "failing": [
       "reply_any:turned the crocodile"
      ]
@@ -677,7 +463,7 @@
      "verdict": "wrong",
      "text": "fa piciorul corcodilului albastru de culoare neagra",
      "tab": "draw",
-     "reply": "I did not understand \"leg\" here.",
+     "reply": "I did not understand \"leg\", \"color\" here.",
      "failing": [
       "reply_not:did not understand|composite"
      ]
@@ -720,6 +506,16 @@
      "reply": "I moved 2 crocodiles to the bottom.",
      "failing": [
       "reply_any:moved the crocodiles"
+     ]
+    },
+    {
+     "id": "r0059",
+     "verdict": "wrong",
+     "text": "nu si peste apa",
+     "tab": "draw",
+     "reply": "I did not understand that as something to do in the drawing.",
+     "failing": [
+      "reply_not:did not understand|is blue now"
      ]
     },
     {
@@ -785,8 +581,180 @@
      "verdict": "wrong",
      "text": "muta casa mai sus",
      "tab": "draw",
-     "reply": "Which house? There are 2.",
+     "reply": "Which house? There are 4.",
      "failing": []
+    }
+   ],
+   "both_reasoners": 17
+  },
+  {
+   "cause": "ui.avatar: acted; the reply does not say what the check asks",
+   "count": 16,
+   "wrong": 11,
+   "partly": 5,
+   "rows": [
+    {
+     "id": "r0511",
+     "verdict": "wrong",
+     "text": "make the avatar an emoji",
+     "tab": "robot",
+     "reply": "I did not understand \"emoji\" here.",
+     "failing": [
+      "forbid:answer without \"did not understand\""
+     ]
+    },
+    {
+     "id": "r0512",
+     "verdict": "wrong",
+     "text": "mcdavatara human",
+     "tab": "robot",
+     "reply": "I did not understand \"mcdavatara\", \"human\" here.",
+     "failing": [
+      "answer:person | human | girl | boy | woman | man | child",
+      "forbid:answer without \"did not understand\""
+     ]
+    },
+    {
+     "id": "r0513",
+     "verdict": "wrong",
+     "text": "make the avatar an emoji",
+     "tab": "robot",
+     "reply": "I did not understand \"emoji\" here.",
+     "failing": [
+      "forbid:answer without \"did not understand\""
+     ]
+    },
+    {
+     "id": "r0514",
+     "verdict": "wrong",
+     "text": "make the avatar a person make the avatar a person send",
+     "tab": "robot",
+     "reply": "I did not understand \"make\", \"send\" here.",
+     "failing": [
+      "answer:person | human | girl | boy | woman | man | child",
+      "forbid:answer without \"did not understand\""
+     ]
+    },
+    {
+     "id": "r0515",
+     "verdict": "partly",
+     "text": "make a big smile",
+     "tab": "robot",
+     "reply": "The mouth is big now. I assumed smile for the worn.",
+     "failing": [
+      "answer:big smile"
+     ]
+    },
+    {
+     "id": "r0516",
+     "verdict": "wrong",
+     "text": "make the avatar to geta big smile",
+     "tab": "robot",
+     "reply": "I could not make that in the avatar.",
+     "failing": [
+      "answer:big smile"
+     ]
+    },
+    {
+     "id": "r0517",
+     "verdict": "partly",
+     "text": "big smile",
+     "tab": "robot",
+     "reply": "Nothing changed. I assumed make for the act. I assumed smile for the worn.",
+     "failing": [
+      "answer:big smile"
+     ]
+    },
+    {
+     "id": "r0518",
+     "verdict": "wrong",
+     "text": "the the next mouth",
+     "tab": "robot",
+     "reply": "I did not understand that as something to do in the avatar.",
+     "failing": [
+      "answer:mouth",
+      "forbid:answer without \"did not understand\""
+     ]
+    },
+    {
+     "id": "r0520",
+     "verdict": "partly",
+     "text": "small smile",
+     "tab": "robot",
+     "reply": "The mouth is small now. I assumed smile for the worn.",
+     "failing": [
+      "answer:small smile"
+     ]
+    },
+    {
+     "id": "r0521",
+     "verdict": "wrong",
+     "text": "open mouth",
+     "tab": "robot",
+     "reply": "Nothing changed. To what value?",
+     "failing": [
+      "answer:open mouth | mouth"
+     ]
+    },
+    {
+     "id": "r0525",
+     "verdict": "partly",
+     "text": "big smile",
+     "tab": "robot",
+     "reply": "The mouth is big now. I assumed make for the act. I assumed smile for the worn.",
+     "failing": [
+      "answer:big smile"
+     ]
+    },
+    {
+     "id": "r0592",
+     "verdict": "wrong",
+     "text": "would you say you are happy",
+     "tab": "robot",
+     "reply": "I did not understand \"say\" here.",
+     "failing": [
+      "answer:happy"
+     ]
+    },
+    {
+     "id": "r0593",
+     "verdict": "wrong",
+     "text": "would you say you are sad",
+     "tab": "robot",
+     "reply": "I did not understand \"say\" here.",
+     "failing": [
+      "answer:sad"
+     ]
+    },
+    {
+     "id": "r0595",
+     "verdict": "wrong",
+     "text": "whats on u",
+     "tab": "robot",
+     "reply": "I did not understand \"whats\" here.",
+     "failing": [
+      "answer:wear"
+     ]
+    },
+    {
+     "id": "r0596",
+     "verdict": "partly",
+     "text": "what is on you",
+     "tab": "robot",
+     "reply": "There is one face. There is one hair back. There are shoulders. There is one neck. There are ears. There is one head. There are cheeks. There is one mouth. Ther",
+     "failing": [
+      "answer:wear"
+     ]
+    },
+    {
+     "id": "r0645",
+     "verdict": "wrong",
+     "text": "make your eyes blue",
+     "tab": "draw",
+     "reply": "I cannot make eye in the drawing yet.",
+     "failing": [
+      "answer:eyes"
+     ]
     }
    ],
    "both_reasoners": 16
@@ -802,12 +770,11 @@
      "verdict": "wrong",
      "text": "draw a green house and a yellow one",
      "tab": "draw",
-     "reply": "I added a house.",
+     "reply": "I added a yellow house.",
      "failing": [
       "state:art.draw:objects[kind=house].color=green",
       "state:art.draw:objects.length=2",
-      "answer:green house",
-      "answer:yellow house"
+      "answer:green house"
      ]
     },
     {
@@ -848,10 +815,9 @@
      "verdict": "wrong",
      "text": "draw a house and another yellow one",
      "tab": "draw",
-     "reply": "I added a house.",
+     "reply": "I added a yellow house.",
      "failing": [
-      "state:art.draw:objects.length=5",
-      "answer:yellow house"
+      "state:art.draw:objects.length=5"
      ]
     },
     {
@@ -866,52 +832,6 @@
     }
    ],
    "both_reasoners": 6
-  },
-  {
-   "cause": "art.draw: acted; the reply does not say what the check asks",
-   "count": 4,
-   "wrong": 4,
-   "partly": 0,
-   "rows": [
-    {
-     "id": "r0142",
-     "verdict": "wrong",
-     "text": "10 cars",
-     "tab": "draw",
-     "reply": "I did not understand that as something to do in the drawing.",
-     "failing": []
-    },
-    {
-     "id": "r0143",
-     "verdict": "wrong",
-     "text": "1000 cars",
-     "tab": "draw",
-     "reply": "I did not understand that as something to do in the drawing.",
-     "failing": []
-    },
-    {
-     "id": "r0545",
-     "verdict": "wrong",
-     "text": "the un si up not udner clouds",
-     "tab": "draw",
-     "reply": "I did not understand \"un\", \"si\" here.",
-     "failing": [
-      "answer:above",
-      "forbid:answer without \"did not understand\""
-     ]
-    },
-    {
-     "id": "r0546",
-     "verdict": "wrong",
-     "text": "the sun is under the clouds",
-     "tab": "draw",
-     "reply": "I did not understand that as something to do in the drawing.",
-     "failing": [
-      "forbid:answer without \"did not understand\""
-     ]
-    }
-   ],
-   "both_reasoners": 4
   },
   {
    "cause": "docs.editor: acted; the state is not the expected one",
@@ -1005,35 +925,6 @@
    "both_reasoners": 3
   },
   {
-   "cause": "Romanian: art.draw: acted; the state is not the expected one",
-   "count": 2,
-   "wrong": 2,
-   "partly": 0,
-   "rows": [
-    {
-     "id": "r0019",
-     "verdict": "wrong",
-     "text": "for their grandma do it",
-     "tab": "diagram",
-     "reply": "The diagram now has 4 rectangles, 3 circles. I assumed diagram for the target. I assumed default for the size.",
-     "failing": [
-      "unchanged"
-     ]
-    },
-    {
-     "id": "r0036",
-     "verdict": "wrong",
-     "text": "inca un crocodil",
-     "tab": "draw",
-     "reply": "Nothing changed. That is what is there already.",
-     "failing": [
-      "state:objects.length=$+1"
-     ]
-    }
-   ],
-   "both_reasoners": 2
-  },
-  {
    "cause": "talk: another world took the turn (art.draw)",
    "count": 2,
    "wrong": 2,
@@ -1057,6 +948,26 @@
     }
    ],
    "both_reasoners": 2
+  },
+  {
+   "cause": "art.draw: acted; the reply does not say what the check asks",
+   "count": 1,
+   "wrong": 1,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0545",
+     "verdict": "wrong",
+     "text": "the un si up not udner clouds",
+     "tab": "draw",
+     "reply": "I did not understand \"un\", \"si\" here.",
+     "failing": [
+      "answer:above",
+      "forbid:answer without \"did not understand\""
+     ]
+    }
+   ],
+   "both_reasoners": 1
   },
   {
    "cause": "diagram.sketch: acted; the status is not the expected one",
@@ -1119,18 +1030,20 @@
    "both_reasoners": 1
   },
   {
-   "cause": "robot: acted; the reply does not say what the check asks",
+   "cause": "Romanian: art.draw: acted; the state is not the expected one",
    "count": 1,
    "wrong": 1,
    "partly": 0,
    "rows": [
     {
-     "id": "r0164",
+     "id": "r0036",
      "verdict": "wrong",
-     "text": "make the avatar a angry boy",
-     "tab": "robot",
-     "reply": "I did not understand \"angry\" here.",
-     "failing": []
+     "text": "inca un crocodil",
+     "tab": "draw",
+     "reply": "Nothing changed. That is what is there already.",
+     "failing": [
+      "state:objects.length=$+1"
+     ]
     }
    ],
    "both_reasoners": 1
@@ -1165,7 +1078,7 @@
      "verdict": "wrong",
      "text": "make the first sun blue",
      "tab": "draw",
-     "reply": "I added a sun.",
+     "reply": "I added a blue sun.",
      "failing": [
       "state:art.draw:objects.length=3"
      ]
@@ -1177,8 +1090,8 @@
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 140,
-   "both_reasoners": 140,
+   "count": 138,
+   "both_reasoners": 138,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -1204,8 +1117,8 @@
   },
   {
    "cause": "refused: the request names something the world does not support",
-   "count": 75,
-   "both_reasoners": 75,
+   "count": 71,
+   "both_reasoners": 71,
    "examples": [
     {
      "text": "mcdavatara human",
@@ -1218,27 +1131,22 @@
      "happened": "I did not understand \"human\" here. [outcome: refused]"
     },
     {
-     "text": "a women",
-     "tab": "robot",
-     "happened": "I did not understand that as something to do in the avatar. [outcome: refused]"
-    },
-    {
      "text": "become a women",
      "tab": "robot",
      "happened": "I did not understand \"become\" here. [outcome: refused]"
+    },
+    {
+     "text": "make the avatar to geta big smile",
+     "tab": "robot",
+     "happened": "I could not make that in the avatar. [outcome: refused]"
     }
    ]
   },
   {
    "cause": "translation residue / wrong sense / source typo",
-   "count": 28,
-   "both_reasoners": 28,
+   "count": 26,
+   "both_reasoners": 26,
    "examples": [
-    {
-     "text": "desneaza o vila",
-     "tab": "draw",
-     "happened": "I did not understand \"villa\" here. [outcome: refused; open]"
-    },
     {
      "text": "fa un cel cu 5 nori si un soare",
      "tab": "draw",
@@ -1253,6 +1161,11 @@
      "text": "muta copilul deseneat anterior in stinga",
      "tab": "draw",
      "happened": "I did not understand \"deseneat\", \"previous\" here. [outcome: refused; open]"
+    },
+    {
+     "text": "muta fetita linga baiat",
+     "tab": "draw",
+     "happened": "I did not understand \"linga\" here. [outcome: refused; open]"
     }
    ]
   },
@@ -1284,33 +1197,6 @@
    ]
   },
   {
-   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
-   "count": 21,
-   "both_reasoners": 21,
-   "examples": [
-    {
-     "text": "make the avatar an emoji",
-     "tab": "robot",
-     "happened": "I did not understand \"emoji\" here. [outcome: refused; wrong; forbid:answer without \"did not understand\"]"
-    },
-    {
-     "text": "mcdavatara human",
-     "tab": "robot",
-     "happened": "I did not understand \"mcdavatara\", \"human\" here. [outcome: refused; wrong; answer:person | human | girl | boy | woman | man | child forbid:answer without \"did n"
-    },
-    {
-     "text": "make the avatar an emoji",
-     "tab": "robot",
-     "happened": "I did not understand \"emoji\" here. [outcome: refused; wrong; forbid:answer without \"did not understand\"]"
-    },
-    {
-     "text": "make the avatar a person make the avatar a person send",
-     "tab": "robot",
-     "happened": "I did not understand \"make\", \"send\" here. [outcome: refused; wrong; answer:person | human | girl | boy | woman | man | child forbid:answer without \"did not unde"
-    }
-   ]
-  },
-  {
    "cause": "a world other than the open tab took the turn",
    "count": 18,
    "both_reasoners": 18,
@@ -1338,10 +1224,42 @@
    ]
   },
   {
-   "cause": "continuation / correction / why-question",
-   "count": 14,
-   "both_reasoners": 14,
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
+   "count": 18,
+   "both_reasoners": 18,
    "examples": [
+    {
+     "text": "make the avatar an emoji",
+     "tab": "robot",
+     "happened": "I did not understand \"emoji\" here. [outcome: refused; wrong; forbid:answer without \"did not understand\"]"
+    },
+    {
+     "text": "mcdavatara human",
+     "tab": "robot",
+     "happened": "I did not understand \"mcdavatara\", \"human\" here. [outcome: refused; wrong; answer:person | human | girl | boy | woman | man | child forbid:answer without \"did n"
+    },
+    {
+     "text": "make the avatar an emoji",
+     "tab": "robot",
+     "happened": "I did not understand \"emoji\" here. [outcome: refused; wrong; forbid:answer without \"did not understand\"]"
+    },
+    {
+     "text": "make the avatar a person make the avatar a person send",
+     "tab": "robot",
+     "happened": "I did not understand \"make\", \"send\" here. [outcome: refused; wrong; answer:person | human | girl | boy | woman | man | child forbid:answer without \"did not unde"
+    }
+   ]
+  },
+  {
+   "cause": "continuation / correction / why-question",
+   "count": 15,
+   "both_reasoners": 15,
+   "examples": [
+    {
+     "text": "nu si peste apa",
+     "tab": "draw",
+     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; wrong; reply_not:did not understand|is blue now]"
+    },
     {
      "text": "pe lac",
      "tab": "draw",
@@ -1356,11 +1274,6 @@
      "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
      "tab": "draw",
      "happened": "I did not understand \"voila\", \"ta\", \"da\", \"makes\", \"oricum\" here. [outcome: refused; open]"
-    },
-    {
-     "text": "cum ai ajuns a deschisi joculd e sah? e ridicol",
-     "tab": "chess",
-     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
     }
    ]
   },
@@ -1453,7 +1366,7 @@
     {
      "text": "draw a green house and a yellow one",
      "tab": "draw",
-     "happened": "I added a house. [outcome: executed; wrong; state:art.draw:objects[kind=house].color=green state:art.draw:objects.length=2 answer:green house answer:yellow hous"
+     "happened": "I added a yellow house. [outcome: executed; wrong; state:art.draw:objects[kind=house].color=green state:art.draw:objects.length=2 answer:green house]"
     },
     {
      "text": "add a red circle and a blue one",
@@ -1469,33 +1382,6 @@
      "text": "draw two cats and a big one",
      "tab": "draw",
      "happened": "I added 2 cats. [outcome: executed; wrong; state:art.draw:objects.length=3 answer:big]"
-    }
-   ]
-  },
-  {
-   "cause": "foreign-world reading",
-   "count": 4,
-   "both_reasoners": 4,
-   "examples": [
-    {
-     "text": "an old woman",
-     "tab": "robot",
-     "happened": "I did not understand \"year\" here. [outcome: refused; wrong; reply_not:did not understand]"
-    },
-    {
-     "text": "an old woman",
-     "tab": "robot",
-     "happened": "I did not understand that as something to do in the avatar. [outcome: refused; wrong; reply_not:did not understand]"
-    },
-    {
-     "text": "make it happy",
-     "tab": "robot",
-     "happened": "I did not understand \"happy\" here. [outcome: refused; wrong; reply_not:Which shape|did not understand]"
-    },
-    {
-     "text": "put a hat",
-     "tab": "robot",
-     "happened": "Nothing changed. Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\""
     }
    ]
   },
@@ -1561,12 +1447,12 @@
     {
      "text": "would you say you are happy",
      "tab": "robot",
-     "happened": "I did not understand \"say\", \"happy\" here. [outcome: refused; wrong; answer:happy]"
+     "happened": "I did not understand \"say\" here. [outcome: refused; wrong; answer:happy]"
     },
     {
      "text": "would you say you are sad",
      "tab": "robot",
-     "happened": "I did not understand \"say\", \"sad\" here. [outcome: refused; wrong; answer:sad]"
+     "happened": "I did not understand \"say\" here. [outcome: refused; wrong; answer:sad]"
     },
     {
      "text": "whats on u",
@@ -1576,24 +1462,19 @@
     {
      "text": "what is on you",
      "tab": "robot",
-     "happened": "There is one face. There is one hair back. There is one shoulders. There is one neck. There is one ears. There is one head. There is one cheeks. There is one mo"
+     "happened": "There is one face. There is one hair back. There are shoulders. There is one neck. There are ears. There is one head. There are cheeks. There is one mouth. Ther"
     }
    ]
   },
   {
-   "cause": "avatar part not an operation of the avatar world",
-   "count": 3,
-   "both_reasoners": 3,
+   "cause": "foreign-world reading",
+   "count": 2,
+   "both_reasoners": 2,
    "examples": [
     {
-     "text": "remove eyegases",
+     "text": "an old woman",
      "tab": "robot",
-     "happened": "I did not understand \"eyegases\" here. [outcome: refused; open]"
-    },
-    {
-     "text": "remove eyeglasses",
-     "tab": "robot",
-     "happened": "Nothing changed. There is no glasses here. [outcome: refused; open]"
+     "happened": "I did not understand \"year\" here. [outcome: refused; wrong; reply_not:did not understand]"
     },
     {
      "text": "put a hat",
@@ -1603,41 +1484,19 @@
    ]
   },
   {
-   "cause": "judged wrong (state / answer expected is not there): owner-log-2026-11-13c",
-   "count": 3,
-   "both_reasoners": 3,
-   "examples": [
-    {
-     "text": "10 cars",
-     "tab": "draw",
-     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; wrong]"
-    },
-    {
-     "text": "1000 cars",
-     "tab": "draw",
-     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; wrong]"
-    },
-    {
-     "text": "make the avatar a angry boy",
-     "tab": "robot",
-     "happened": "I did not understand \"angry\" here. [outcome: refused; wrong]"
-    }
-   ]
-  },
-  {
-   "cause": "fragment / list split",
+   "cause": "avatar part not an operation of the avatar world",
    "count": 2,
    "both_reasoners": 2,
    "examples": [
     {
-     "text": "eyeglasses",
+     "text": "remove eyegases",
      "tab": "robot",
-     "happened": "I did not understand that as something to do in the avatar. [outcome: refused; open]"
+     "happened": "I did not understand \"eyegases\" here. [outcome: refused; open]"
     },
     {
-     "text": "new game",
-     "tab": "guess",
-     "happened": "I am not sure how “new name” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+     "text": "put a hat",
+     "tab": "robot",
+     "happened": "Nothing changed. Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\""
     }
    ]
   },
@@ -1705,7 +1564,7 @@
     {
      "text": "make the first sun blue",
      "tab": "draw",
-     "happened": "I added a sun. [outcome: executed; wrong; state:art.draw:objects.length=3]"
+     "happened": "I added a blue sun. [outcome: executed; wrong; state:art.draw:objects.length=3]"
     }
    ]
   },
@@ -1718,6 +1577,18 @@
      "text": "Chnage the tile of the document to Disucssion",
      "tab": "editor",
      "happened": "I did not understand \"chnage\", \"tile\" here. [outcome: refused; open]"
+    }
+   ]
+  },
+  {
+   "cause": "fragment / list split",
+   "count": 1,
+   "both_reasoners": 1,
+   "examples": [
+    {
+     "text": "new game",
+     "tab": "guess",
+     "happened": "I am not sure how “new name” fits what we were doing. Please say the whole request. [outcome: not_understood]"
     }
    ]
   }
