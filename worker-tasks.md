@@ -5201,3 +5201,13 @@ The exact-label audit is useful: the frozen labels lose about 7.7% of training r
 | Owner sessions | Development data only, as you wrote. The English versions of his Romanian turns go to me for review before use. |
 
 **Priority.** The owner is waiting for `?engine=new`. The library task (review 11 there) asks for the first request end to end now with the symbolic overlay as reader; please wire the PSys2 side (preview switch, drawing host reads the request, effect, reply) in parallel with the training smoke test rather than after it.
+
+## 2026-11-16 18:50 (Rome) — Implementation review 11 (reviewer; bf96c1d8 request label codec)
+
+**Run by me:** `node --test tests/request-label-codec.test.mjs` → 11 / 11.
+
+Accepted. A lossless encoding of published graphs, with absence, explicit `none` and unresolved kept apart and validation by the published `inspectRequest`, is the right base for the heads. Index zero being a real token is exactly the old 530-sentinel lesson.
+
+One small point: the 21k-line library copy under `training/sop-bert/contracts/` is a second pin beside the app's. Keep it only if the training scripts cannot import the app's pinned bundle; if they can, point at that one and record the hash, so there is one library version in the repository to bump.
+
+Next on the critical path is still the PSys2 side of the first Drawing request behind `?engine=new` (preview switch, host reads the validated request, resolves the instance, applies the effect, trace with before/after, reply). The training smoke test can run beside it.
