@@ -33,3 +33,23 @@ Undo is conditional and last-change-only. A new independent edit prevents undoin
 Tests exercise arbitrary identities and resources, overlapping observations without an embedded scheduling policy, stale updates, idempotent replay, removal integrity, all operation families' undo, isolation of observations, and HTML escaping. They establish host behavior, not owner-session language acceptance. No existing conversational case is claimed as solved by these primitives alone.
 
 The generated system-map validation must be reproducible. Its owner-log measurement uses a fixed pseudorandom sequence and clock while generating the report, and restores the host's original `Math.random` and `Date` in `finally`. This fixes the existing generator's changing operation maximum without changing runtime behavior or weakening the generated-file equality test. Wall-clock performance measurement remains real.
+
+## Comparing observations and operation receipts
+
+`calendar-observation.mjs` is a pure host adapter over the native records above. It is not a SOP observation/change/trace binding or a conversational reply mechanism. `calendarObservationIssue` validates this local observation envelope using the same structural checks as the store. A partial observation is insufficient for this comparison: a missing meeting in a partial read must never become a reported removal. The complete flag covers only the local store, not all external calendars or recurrence instances.
+
+`compareCalendarObservations(before, after)` requires complete valid observations from the same lifetime instance, in nondecreasing version order. It matches records by native identity, never title or label. It returns copied added/removed/changed records and the names of changed fields. Fact order and participant-set order are immaterial. A source changing kind under an identity is visible as a kind change, rather than silently merged by label. Different instances, stale reads, missing observations and incomplete reads return `unknown`; conflicting values at the same version return `inconsistent`.
+
+The result keeps both source identities, versions and completeness flags. `stateEqual` describes values, while `versionChanged` describes history: adding then undoing a meeting can restore exactly the same values at a newer version. Consequently equal snapshots do not prove that no operations happened between them. The adapter never modifies its inputs or calls a tool.
+
+`compareCalendarReceipt({before, receipt, after})` also requires an independently supplied post-read. A successful invocation acknowledgement alone does not confirm the observed effect. The receipt must identify the same instance, a one-version transition, and its complete stored post-observation. That observation is compared with the supplied current read, not treated as a replacement for it.
+
+| Status | Evidence and limits |
+| --- | --- |
+| `confirmed` | A fresh receipt matches the baseline version, its post-state matches the independent read at the receipt's version, and a change is observed. This establishes consistency of these trusted local records, not cryptographic proof of causality. |
+| `receipt_replay` | The tool returned a historical receipt at its original version, and the surrounding reads are unchanged. `newExecution` is false. |
+| `historical` | The current read is newer than the receipt's post-state. Its differences remain available, but the receipt does not establish the present effect. Concurrent edits or undo may have changed it. |
+| `not_executed` | A refusal from this instance has a version within the supplied read interval. The attached comparison still exposes any independent concurrent changes; the status does not mean the entire store stayed unchanged. |
+| `unknown` / `inconsistent` | Missing, partial, mismatched, stale or contradictory evidence prevents confirmation. The reason and available comparisons remain explicit. |
+
+A replay receipt can report a `currentVersion` later than its stored post-observation. A post-read older than that version is rejected as stale even when its values match the historical receipt. No current-effect claim is made by looking only at the replay's old observation. The adapter does not infer intent satisfaction, scheduling policy, external coverage or successful reply wording. Those require the complete declared world and published shared contracts before the calendar vertical slice can be connected.

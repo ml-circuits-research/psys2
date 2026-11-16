@@ -55,6 +55,23 @@ function checkState(state) {
   return null;
 }
 
+/** Validate the existing local observation contract without creating or mutating a calendar. */
+export function calendarObservationIssue(observation) {
+  if (observation == null) return invalid('missing_observation');
+  if (!data(observation) || !keys(observation, ['instanceId', 'version', 'complete', 'timeUnit', 'timeOrigin', 'facts'])
+    || !id(observation.instanceId) || !Number.isSafeInteger(observation.version) || observation.version < 0
+    || typeof observation.complete !== 'boolean' || observation.timeUnit !== 'millisecond' || observation.timeOrigin !== 'unix'
+    || !Array.isArray(observation.facts)) return invalid('invalid_observation');
+  if (!observation.complete) return invalid('incomplete_observation');
+  const state = { people: [], rooms: [], meetings: [] }, groups = { person: 'people', room: 'rooms', meeting: 'meetings' };
+  for (const fact of observation.facts) {
+    if (!plain(fact) || !Object.hasOwn(groups, fact.kind)) return invalid('invalid_fact');
+    const { kind, ...record } = fact;
+    state[groups[kind]].push(record);
+  }
+  return checkState(state);
+}
+
 /** A local, in-memory calendar. The caller supplies stable identity and fully resolved values. */
 export function createCalendar({ instanceId, people = [], rooms = [], meetings = [] } = {}) {
   if (!id(instanceId) || ![people, rooms, meetings].every(Array.isArray)) throw new TypeError('Invalid calendar snapshot');
