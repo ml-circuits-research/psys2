@@ -5315,3 +5315,7 @@ The owner asks that progress be planned, tested and reported by classes of funct
 ## 2026-11-16 22:40 (Rome) — Review 18 (reviewer; Calendar lane 0c6b325f..aaa34bfd; training edaac259)
 
 `node scripts/test-new-engine.mjs` 99 / 99 on my side. Calendar native operations with the overlap rule as a declared `core.deny` (scheduling-policy.sop), validated before projection — accepted; that is book 3.6 / 7.4 as written. Training restarted on clean data excluding the functional-matrix ids — accepted. Library fffbcfb (licensed English frames composed into validated request graphs) is the reader lane landing; with it, please run the class × area table next, so the owner sees which classes turn on in which areas.
+
+## 2026-11-16 22:50 (Rome) — OWNER: SOP-BERT is the reader; the grammar is not the main path
+
+The owner asked why the reader work being reported is the hand-written grammar. His decision stands: SOP-BERT is the reader of the app; the grammar is only fallback and explainer. So: (1) stop widening the grammar beyond what the current tests need; (2) put the reader agents on SOP-BERT: finish the first training run, report per-concept-head numbers on calibration, export to the browser (Transformers.js / ONNX as in the original port) and wire it as the reader of the only engine, with its output going through the same validation, resolution and assessment; (3) run the class × area table with SOP-BERT as soon as a checkpoint exists, beside the grammar column, and switch the app to SOP-BERT where it is better with zero wrong.
