@@ -5156,3 +5156,19 @@ Accepted. The report now separates the cohorts: surviving areas 124/200 unchange
 ## 2026-11-16 17:50 (Rome) — Implementation review 7 (reviewer; 91e38a3c faces)
 
 `node --test tests/face-preparation.test.mjs` → 6 / 6; real set unchanged (surviving 124/200, retired 41 honest). Accepted: faces are now observed read-only and preparing a face is an explicit operation with undo, as agreed in Q107.
+
+## 2026-11-16 18:05 (Rome) — OWNER: bring SOP-BERT (DistilBERT) from diagram-vss-demo into PSys2 as the learned reader
+
+Owner, 17:39: the repositories are all his, licences do not matter here, it is fine to have it in PSys2; use DistilBERT; take training data from those repositories as needed. Evidence and the plan: soplang-words-lib `worker-tasks.md`, block 18:00 (SOP-BERT 83.8 % vs VSS 78 % vs Rules 73 % on held-out; on a fresh set from another writer, at ≤ 3 % confidently wrong, SOP-BERT does 37 % of requests right, VSS 6–10 %).
+
+Source: `ml-circuits-research/diagram-vss-demo` — `training/neural/` (finetune.py, finetune_roles.py, make_data.py, make_roles.py, roles_roundtrip.*, ALL_DATA.md, ROLES_ROUNDTRIP.md), `docs/js/neural.js` and `neural-confidence.js` (browser decoding, Transformers.js), `training/sketch/` (the annotated message folders `llm_train/*`, `llm_bench/fresh*`, the risk–coverage and precision scripts and PRECISION.md / FRESH2_*), `docs/model/neural/sop-bert` (the shipped model, for comparison only).
+
+| Step | What |
+|---|---|
+| 1. Port | Bring the training code, the data folders and the browser decoder into PSys2 under `training/sop-bert/` and the engine's reader directory, with a PROVENANCE note (source commit). Reproduce diagram-vss-demo's held-out number with the ported code before changing anything (one run). |
+| 2. Retarget | Replace the per-key heads of the diagram legend with heads for the general request description of the library (0.176–0.183: act, mood, targets with selectors, constraints by concept / operator / relation / value, logical nodes, source spans). Keep the cutter. One model for the four areas. |
+| 3. Data | Convert the diagram demo's annotated messages to the general description (they are diagram-area data); add annotated requests for drawing, documents, calendar written the same way (by a model, as fresh1/fresh2 were), the reviewed English versions of the owner's turns as development data, and a held-out set never used for labels or rules. Run the roundtrip check: every gold label decodes back to its gold; silent wrong labels fixed before training. |
+| 4. Gate | Precision of execution with the risk–coverage curve, threshold chosen on held-out data, below it ask with the reason (diagram-vss-demo's metric). Report per turn on the owner's English sessions: right / partly / asked / wrong. |
+| 5. Wire in | The model is a reader of the new path (the `?engine=new` preview); its description is verified by resolution in the instance like any other reading; the symbolic grammar remains fallback and explainer. |
+
+This can start now with one agent: steps 1 and 3 do not wait for the rest of phase 0; step 2 uses the request contracts already published (0.176–0.183).
