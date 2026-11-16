@@ -1,5 +1,5 @@
 {
-  "version": "3a7b5f3156",
+  "version": "c684b3a2ff",
   "worlds": [
     "acts",
     "art.draw",
@@ -229,6 +229,7 @@
     "worlds/art.draw/bundle.json": "859d287ce4918a9c",
     "worlds/art.draw/coverage.md": "e028db6e48c71587",
     "worlds/art.draw/datagen.mjs": "735b33ac0ed66819",
+    "worlds/art.draw/declared-host.mjs": "b676a449b4a5729d",
     "worlds/art.draw/engine.mjs": "eb4e2a56d06ecf50",
     "worlds/art.draw/hooks.mjs": "455e23211f464d4f",
     "worlds/art.draw/ops.mjs": "530aeb7887e07177",
@@ -648,8 +649,8 @@
     "worlds/words/zo.json": "98c807997b12214c",
     "worlds/words.bloom.json": "1aee5298e6fe2c42"
   },
-  "builtAt": "2026-11-16T22:33:20.927Z",
-  "commit": "f91b5083-dirty",
+  "builtAt": "2026-11-16T22:39:10.756Z",
+  "commit": "f247a5e3-dirty",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "assets": {
     "app.mjs": "acad83ead9",
@@ -939,6 +940,7 @@
     "worlds/art.draw/bundle.json": "859d287ce4",
     "worlds/art.draw/coverage.md": "e028db6e48",
     "worlds/art.draw/datagen.mjs": "d7812a682c",
+    "worlds/art.draw/declared-host.mjs": "338cbb1af4",
     "worlds/art.draw/engine.mjs": "72673bf9b5",
     "worlds/art.draw/hooks.mjs": "a537dce49e",
     "worlds/art.draw/ops.mjs": "8e1a538114",
