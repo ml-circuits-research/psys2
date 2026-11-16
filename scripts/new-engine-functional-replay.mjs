@@ -2,7 +2,7 @@
 import {readFileSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {routeNewEngine as runNewEngine} from '../src/dialog/reader-routing.mjs';
-import {initialState as drawing} from '../worlds/art.draw/board.mjs';
+import {createDrawingHost,initialDrawingState as drawing} from '../worlds/art.draw/declared-host.mjs';
 import {createDiagramHost,initialDiagramState as diagram} from '../worlds/diagram.sketch/declared-host.mjs';
 import {createDocumentHost,initialDocumentState as document} from '../worlds/docs.editor/declared-host.mjs';
 import {initialChartState as charts} from '../worlds/data.charts/declared-host.mjs';
@@ -14,7 +14,7 @@ const tabs={drawing:'draw',diagram:'diagram',document:'editor',calendar:'calenda
 for(const row of input){
  const state={'art.draw':drawing(),'diagram.sketch':diagram(),'docs.editor':document(),'data.charts':charts(),'time.calendar':{people:[],rooms:[],meetings:[]},'ui.shell':{activeTab:tabs[row.world]}};
  const instanceId=`functional-setup-${createHash('sha256').update(row.id).digest('hex').slice(0,24)}`;
- const host=row.world==='diagram'?await createDiagramHost({state:state['diagram.sketch'],instanceId}):row.world==='document'?createDocumentHost({state:state['docs.editor'],instanceId}):row.world==='calendar'?createCalendarHost({state:state['time.calendar'],instanceId}):null;
+ const host=row.world==='drawing'?createDrawingHost({state:state['art.draw'],instanceId}):row.world==='diagram'?await createDiagramHost({state:state['diagram.sketch'],instanceId}):row.world==='document'?createDocumentHost({state:state['docs.editor'],instanceId}):row.world==='calendar'?createCalendarHost({state:state['time.calendar'],instanceId}):null;
  const setup=await seedFunctionalContext({context:row.context??{},host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS[row.world]??[],invocationPrefix:instanceId});
  const setupComplete=setup.ok;
  // Retain setup correlation without duplicating each full native state per receipt.

@@ -52,5 +52,12 @@ test('matrix setup mappings retain missing content and times as failures',async(
  for(const [area,host,kind]of [['document',createDocumentHost({instanceId:'matrix.doc'}),'document'],['calendar',createCalendarHost({instanceId:'matrix.calendar'}),'meeting']]){
  const result=await seedFunctionalContext({host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS[area],context:{existing:[{name:'Example',kind}]}});
  assert.equal(result.ok,false);assert.equal(result.counters.calls,0);assert.ok(result.failures.some(f=>f.reason==='missing-native-argument'));}
- assert.deepEqual(FUNCTIONAL_NATIVE_BINDINGS.drawing,[]);
+ assert.ok(FUNCTIONAL_NATIVE_BINDINGS.drawing.length>0);
+});
+
+import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
+test('matrix Drawing setup preserves actual native names and kinds without a reader',async()=>{
+ const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'matrix.drawing'});
+ const result=await seedFunctionalContext({host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS.drawing,context:{existing:[{name:'Named circle',kind:'circle'},{name:'Named tree',kind:'tree'}]}});
+ assert.equal(result.ok,true);assert.equal(result.counters.calls,2);assert.deepEqual(state.objects.map(o=>o.name),['Named circle','Named tree']);assert.deepEqual(state.objects.map(o=>o.kind),['circle','tree']);
 });
