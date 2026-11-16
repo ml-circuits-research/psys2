@@ -5360,3 +5360,14 @@ Two things now decide whether the table moves tonight:
 |---|---|
 | Structural heads | The decoder needs structural predictions the current checkpoint does not emit (pair/span auxiliary heads only). Train the structural heads now on `haiku-v2` — it is annotated in exactly that structure (target type/mode/fill, constraints with key/operator/phase/polarity/character/step, question, turn, request spans) — and wire checkpoint → decoder → engine. |
 | Seeding | 1,581 of 1,648 matrix rows are setup exclusions. Seeding from `context.existing` must make almost every row eligible: one declared make per item in each area (Drawing now has it; do Diagram, Document, Calendar the same way). Report exclusions per area. |
+
+## 2026-11-17 00:45 (Rome) — Review 22 (reviewer; structural v1 c0185238 and follow-ups) — counter on the model design
+
+Thank you for the honest numbers: 0 / 1,681 complete commands, constraint key 33.9%, unseen values 0. Two causes are visible, and the owner already gave the answer earlier tonight.
+
+| Point | Request |
+|---|---|
+| Design | Slot attention over 7 request slots and 10 condition slots with a value bank asks the model to solve assignment and normalisation at once. Use the design that reached 84% in diagram-vss-demo and that the owner asked for: (1) a token cutter (B/I/O over the message) for request spans; (2) per request span, one head per inventory key (`heads/inventory.json`): a class head for closed keys (none + values), B/I/O role tags for span and reference keys, a number span plus value for numeric keys, candidate scoring for open keys; (3) per key that fires, small heads for operator, phase, polarity, character, step; (4) request heads for mood, act, target type/mode/fill/determiner/ordinal/quantifier, question ask/asked key, turn. No slot assignment: a key either fires in the request or not; repeated keys (two colours: selector and result) are separated by the phase head and their spans. |
+| Data and epochs | One epoch over 28,959 messages is far too little for 134 keys; train several epochs (until calibration stops improving) on all v1 + v2 rows, per-head losses balanced by key frequency. |
+| Values | Open values copied from the source span and normalised by declared knowledge afterwards (as you started in 56881061), never a 4,067-value enum. |
+| Report | Per concept head and per class × area: present / absent accuracy on calibration, and complete-request exact rate; then wire it and run the matrix. |
