@@ -29,3 +29,19 @@
 @w.lang.ro.word.k.faces.expression.sleepy core.word text=somnoros text=adormit text=obosit means=sleepy of=k.faces.expression.name core.source="hand-core 1"
 @w.lang.ro.word.k.faces.expression.wink core.word text=clipește text="a clipit" means=wink of=k.faces.expression.name core.source="hand-core 1"
 
+
+# Presets (the named faces of k.faces.preset). "o bătrână" is the old woman (psys2 Q101 item 4); a preset is read as a noun phrase, so each word is the noun the person says.
+@w.lang.ro.word.k.faces.preset.baby core.word text=bebeluș text=bebe text=copilaș means=baby of=k.faces.preset.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.preset.child core.word text=copil text=copilul means=child of=k.faces.preset.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.preset.girl core.word text=fată text=fetiță text=fata means=girl of=k.faces.preset.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.preset.boy core.word text=băiat text=băiețel text=băiatul means=boy of=k.faces.preset.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.preset.woman core.word text=femeie text=femeia text=doamnă means=woman of=k.faces.preset.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.preset.man core.word text=bărbat text=bărbatul text=domn means=man of=k.faces.preset.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.preset.old_woman core.word text=bătrână text=bătrâna text="femeie în vârstă" text="femeie bătrână" text=babă means="old woman" of=k.faces.preset.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.preset.old_man core.word text=bătrân text=bătrânul text="bărbat în vârstă" text="bărbat bătrân" text=moș means="old man" of=k.faces.preset.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.preset.bearded_man core.word text="bărbat cu barbă" text="om cu barbă" text=bărbos means="bearded man" of=k.faces.preset.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.preset.woman_with_curly_hair core.word text="femeie cu părul creț" text="femeie cu păr creț" text="femeie cu bucle" means="woman with curly hair" of=k.faces.preset.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.preset.robot core.word text=robot text=robotul means=robot of=k.faces.preset.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.preset.alien core.word text=extraterestru text=marțian text=alien means=alien of=k.faces.preset.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.preset.clown core.word text=clovn text=clovnul text=paiață means=clown of=k.faces.preset.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.preset.queen core.word text=regină text=regina means=queen of=k.faces.preset.name core.source="hand-core 1"

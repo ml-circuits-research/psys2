@@ -9,13 +9,13 @@
 // The frame of the question decides the card (look, parts, count, compare, order); the things come from the knowledge catalog by lookup (`ctx.knowledge.peek`, filled by
 // the host through `openSlots`, spec 17), or from the basic things shipped with the drawing world. No fact: the plain "I don't know that yet" and no card.
 // Effect: talk.card { id } asks the Talk tab to show the card inside the answer; chat.suggest { items } shows suggestions as chips.
-import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=818fbaad3c';
-import * as space from '../space/space.mjs?v=9084fb3d4e';
+import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=e80e46533e';
+import * as space from '../space/space.mjs?v=42696277df';
 import { habitatSentence } from '../../lib/knowledge/commonsense.mjs?v=f2f7f64a3a';
-import { colourName, numberValue } from '../../lib/knowledge/values.mjs?v=24c3ed2609';   // the one colour reader (k.values)
-import * as R from './records.mjs?v=1f6c44a625';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
-import { World, contrastOf } from '../../lib/vendor/sopworld/sopworld.mjs?v=edec92187f';   // the library's contrast of a kind among its siblings (talk.contrast)
-import { pluralize as pluralOf } from '../../lib/formalizer/rules/lemma.mjs?v=d3f044c9ff';
+import { colourName, numberValue } from '../../lib/knowledge/values.mjs?v=db60f56a52';   // the one colour reader (k.values)
+import * as R from './records.mjs?v=7fd647134b';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
+import { World, contrastOf } from '../../lib/vendor/sopworld/sopworld.mjs?v=d1f326a339';   // the library's contrast of a kind among its siblings (talk.contrast)
+import { pluralize as pluralOf } from '../../lib/formalizer/rules/lemma.mjs?v=2aad69e017';
 
 export const MAX_CARDS = 40;
 const MAX_PARTS = 60;

@@ -62,9 +62,10 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
   const lemmaOf = (en, pos) => {
     if (!byEnglish) {
       byEnglish = new Map();
+      const senseNo = new Map();
       for (const rows of [local.dictionary, facts.dictionary]) for (const t of Object.values(rows ?? {})) for (const line of String(t).split('\n')) {   // the application's own rows first: a local row corrects the catalog's sense (scrisoare, not literă, for the letter one writes)
-        const [lemma, , , sense] = line.split('\t'), g = /^k\.words\.(.+)\.(noun|adjective)\.\d+$/.exec(sense ?? '');
-        if (g && !byEnglish.has(`${g[2]}|${g[1]}`)) byEnglish.set(`${g[2]}|${g[1]}`, lemma);
+        const [lemma, , , sense] = line.split('\t'), g = /^k\.words\.(.+)\.(noun|adjective)\.(\d+)$/.exec(sense ?? '');
+        if (g && !(senseNo.get(`${g[2]}|${g[1]}`) <= Number(g[3]))) { byEnglish.set(`${g[2]}|${g[1]}`, lemma); senseNo.set(`${g[2]}|${g[1]}`, Number(g[3])); }   // the lowest sense number of a word wins (letter.noun.1 scrisoare, not noun.2 literă); the first row at a number wins
       }
     }
     const key = String(en).toLowerCase().replace(/ /g, '_');

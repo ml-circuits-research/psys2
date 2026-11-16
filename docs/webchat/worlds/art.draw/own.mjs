@@ -2,13 +2,13 @@
 // art.draw (pilot, spec 21 and 23): what the schema cannot say and other code calls. The drawing board itself (scene.mjs: the renderer's geometry, the scene composition and the
 // drawing from facts; ops.mjs: the scene operations) stays in worlds/art.draw; this file re-exports what the dialog layer and other worlds reach by name and gives the discourse hooks
 // (referents, openSlots, checkReferents) the words of the acts (`art.draw.make` -> the board's `draw.add`). Browser-safe.
-import * as D from './engine.mjs?v=59ff1c3698';
-import { addArgs, tOf } from './hooks.mjs?v=7b62e48a30';
-import { goalOf, goalFromText, goalWord, goalWords, layoutGoal, liveOf, whyPlan as whyOfPlan } from './plan.mjs?v=23cf994fad';
+import * as D from './engine.mjs?v=2570caf732';
+import { addArgs, tOf } from './hooks.mjs?v=10571a9737';
+import { goalOf, goalFromText, goalWord, goalWords, layoutGoal, liveOf, whyPlan as whyOfPlan } from './plan.mjs?v=a62072f6e7';
 
-export { initialState, summary } from './engine.mjs?v=59ff1c3698';
+export { initialState, summary } from './engine.mjs?v=2570caf732';
 /** Discourse hook (after a turn, never awaited by one): the catalog wires the next suggestions read (hooks.mjs nextThings). */
-export { nextNeeds } from './hooks.mjs?v=7b62e48a30';
+export { nextNeeds } from './hooks.mjs?v=10571a9737';
 /** Other worlds ask the board by its old action names: Talk draws with draw.add, Talk undo with draw.undo, the tab has "new" and "open". */
 export const add = D.add;
 export const drawUndo = D.undo;
@@ -54,4 +54,4 @@ export const planLive = (ctx) => liveOf(ctx.state);
 /** Discourse hook: why the newest change was made, when a plan made it (the method and its steps, from the knowledge that holds them). */
 export const whyPlan = (ctx) => whyOfPlan(ctx);
 /** Spec 28: the tool primitives the request door runs (request.sop std.tool wires): a scene as a whole with its things, things of kinds, acts on the things there. */
-export { startScene, addThings, addJoined, removeThings, moveThings, setThings, paintSky, toolView, thingAt, newPage, undoStep, redoStep } from "./board.mjs?v=6393730fc6";
+export { startScene, addThings, addJoined, removeThings, moveThings, setThings, paintSky, toolView, thingAt, newPage, undoStep, redoStep } from "./board.mjs?v=d197ee8805";

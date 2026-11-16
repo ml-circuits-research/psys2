@@ -18,21 +18,21 @@ import {
   W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, SHADES,
   canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind, kindKey, kindName, thingOfWord, COMPOSITE, thingGroups, partCount,
   registerThings, partGuessed, isThing, ensureCustom, registerShape, piecesOf, groupOf, thingOfKey, partsOf,
-} from './scene.mjs?v=bbb41aa486';
+} from './scene.mjs?v=cd2ed9328d';
 
-import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/values.mjs?v=24c3ed2609';   // the one colour reader (k.values)
+import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/values.mjs?v=db60f56a52';   // the one colour reader (k.values)
 import { adviceFor } from '../../lib/knowledge/commonsense.mjs?v=f2f7f64a3a';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
-import { readNounPhrase, foldRelative } from '../../lib/lang/np-resolve.mjs?v=6e58a18779';   // the one host resolver of noun phrases   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
-import * as space from '../space/space.mjs?v=9084fb3d4e';
-import * as rel from '../space/pieces.mjs?v=d6690c0ee4';
-import * as solver from '../space/solver.mjs?v=d31f537c80';
+import { readNounPhrase, foldRelative } from '../../lib/lang/np-resolve.mjs?v=25ca6abd13';   // the one host resolver of noun phrases   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
+import * as space from '../space/space.mjs?v=42696277df';
+import * as rel from '../space/pieces.mjs?v=010c217a1e';
+import * as solver from '../space/solver.mjs?v=85fb09489a';
 import {
   B, initialState, GROUND_COLOR, ensure as boardEnsure, anchorOf, onGround, byId, effectiveColor, open, rnd, idNum, colorFrom, sizeWord, snapshot, restore, remember, oneStep as boardOneStep,
   crowd, overlapRatio, clampIn, defaultSpot, placeRegion, defaultSpotOn, placeRelative, makeObject, Z_LAYER, addThing as boardAddThing,
-} from './board.mjs?v=6393730fc6';   // the board itself: state, history, placement, tool primitives (this module builds the word operations on it)
-export { initialState } from './board.mjs?v=6393730fc6';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
+} from './board.mjs?v=d197ee8805';   // the board itself: state, history, placement, tool primitives (this module builds the word operations on it)
+export { initialState } from './board.mjs?v=d197ee8805';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
 
-export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=bbb41aa486';
+export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=cd2ed9328d';
 
 // The turn's step budget (a no-op outside a turn): placement and name resolution are searches whose cost grows with the picture.
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
@@ -2085,4 +2085,4 @@ export function summary(ctx) {
 export { describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, placePhrase, effectiveColor, sameColorName, drawingNP };
 
 /** The tool primitives, the view and the declared search of the request door are the board's (board.mjs); re-exported for the callers of this module. */
-export { startScene, addThings, removeThings, moveThings, setThings, paintSky, toolView, thingAt, newPage, undoStep, redoStep } from './board.mjs?v=6393730fc6';
+export { startScene, addThings, removeThings, moveThings, setThings, paintSky, toolView, thingAt, newPage, undoStep, redoStep } from './board.mjs?v=d197ee8805';
