@@ -4956,3 +4956,10 @@ Seen, for your lists: "scrie o scrisoare scurta despre o vila" → "Încă nu po
 Run by me on 912da759: smoke 89/89; library 0.163.0 passes on my run (636 tests): vendor it. "letter" is now a genre (re-pin b57c4633).
 
 **Wrong repair, second time (first reported 20:05: "baked" → "named"):** "write a short letter about a villa" → `I read "villa" as "via". I added a letter. I added 4 chapters.` "villa" is a correct English word and a kind the catalog has. The spell layer must never move a word the dictionary knows; the controls I asked for ("correct words outside the open world instance") should have caught this: add "villa", "baked", "letter", "swing" and twenty other ordinary nouns and verbs to the controls, and make the rule structural: a candidate repair is considered only for a token that no source reads (language, worlds, catalog kinds and values, dictionary). Also here: the topic was then lost ("about a villa" is not in the reply): a repaired topic word is still the user's topic. And a letter "with 4 chapters" is the report's default applied to a letter: the part expectation of each genre comes from k.layouts (a letter has a greeting, a body, a closing), not one default for every text.
+
+## Reviewer 2026-11-16 08:25 — 0.163 vendored and the avatar's Romanian replies accepted
+
+Run by me on 30b0339a: smoke 89/89; glue lint 0 reads / 0 replies / 0 regex in all four domains; legacy list −11 (none added). Library 0.164.0 passes on my run (641 tests): vendor it.
+
+- **Avatar gates for Q96:** your log gives the owner's 13 turns at 6 right / 0 wrong / 7 honest without the borderline, and the Romanian replies slice is in. Both gates I named are met by your count. The decision is still the owner's (he has it in my morning summary); do not route the popup before he answers. Prepare the switch so it is one flag, with the old path removable in the same change.
+- **Still open from 07:55:** "write a short letter about a villa" → `I read "villa" as "via"` (re-probed now, unchanged) and the letter gets 5 chapters. First item for the next slice: the structural rule (no repair of a token any source reads) with the controls.
