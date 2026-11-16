@@ -8,19 +8,18 @@ const meeting = (id, start, participants = ['p1'], room = 'r1') => ({ id, title:
 const command = (tool, operation, args, operationId = `op.${tool.observe().version}`) => ({ operationId, expectedVersion: tool.observe().version, operation, args });
 const call = (tool, operation, args, operationId) => tool.call(command(tool, operation, args, operationId));
 
-test('calendar mutations confirm the observed state; only resource overlaps conflict', () => {
-  const tool = createCalendar(initial());
-  assert.equal(call(tool, 'meeting.add', meeting('a', 0)).ok, true);
-  for (const [people, room] of [[['p1'], 'r2'], [['p2'], 'r1']]) {
-    const result = call(tool, 'meeting.add', meeting('b', 30000, people, room));
-    assert.equal(result.issue.code, 'resource_conflict');
-    assert.equal(tool.observe().version, 1);
-  }
-  assert.equal(call(tool, 'meeting.add', meeting('b', 0, ['p2'], 'r2')).ok, true);
-  const adjacent = call(tool, 'meeting.add', meeting('c', 60000));
-  assert.equal(adjacent.ok, true);
-  assert.deepEqual(adjacent.observation, tool.observe());
-  assert.equal(tool.observe().facts.filter((f) => f.kind === 'meeting').length, 3);
+test('calendar observations preserve overlapping bookings; policy belongs to the world', () => {
+  const booked = [meeting('a', 0), meeting('b', 30000)];
+  const tool = createCalendar({ ...initial(), meetings: booked });
+  assert.deepEqual(tool.observe().facts.filter((f) => f.kind === 'meeting').map(({ kind, ...record }) => record), booked);
+  const added = call(tool, 'meeting.add', meeting('c', 45000));
+  assert.equal(added.ok, true, 'the tool must not hard-code the world overlap deny');
+  assert.deepEqual(added.observation, tool.observe());
+  const moved = call(tool, 'meeting.move', { id: 'c', start: 0 }, 'move');
+  assert.equal(moved.ok, true, 'moving into an overlap is representable host state');
+  assert.equal(tool.observe().facts.find((f) => f.id === 'c').start, 0);
+  assert.equal(call(tool, 'undo', { operationId: 'move' }, 'undo.move').ok, true);
+  assert.equal(tool.observe().facts.find((f) => f.id === 'c').start, 45000);
 });
 
 test('invalid input and resource references are atomic refusals', () => {

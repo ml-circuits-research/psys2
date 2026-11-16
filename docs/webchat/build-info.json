@@ -1,5 +1,5 @@
 {
-  "version": "94549cc9d5",
+  "version": "b4cc234963",
   "worlds": [
     "acts",
     "art.draw",
@@ -325,7 +325,7 @@
     "worlds/talk/ops.mjs": "67e0f47a95b83b6c",
     "worlds/talk/records.mjs": "c8aab0f4af1c56e0",
     "worlds/time.calendar/bundle.json": "260e6bd40f7dc61e",
-    "worlds/time.calendar/calendar-tool.mjs": "2799484feeeea620",
+    "worlds/time.calendar/calendar-tool.mjs": "037e4ce106e7399e",
     "worlds/time.calendar/calendar-view.mjs": "4f4f64b027ff3333",
     "worlds/time.calendar/ops.mjs": "b168080c6ca2937d",
     "worlds/ui.avatar/bundle.json": "2a4489c796ac6a3e",
@@ -699,8 +699,8 @@
     "worlds/words/zo.json": "001841dabf5d9de7",
     "worlds/words.bloom.json": "60cdedf58ecfa4eb"
   },
-  "builtAt": "2026-11-16T14:16:20.968Z",
-  "commit": "64c801be-dirty",
+  "builtAt": "2026-11-16T14:47:55.826Z",
+  "commit": "ff7dcb2a-dirty",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "assets": {
     "app.mjs": "4f64878992",
@@ -1082,7 +1082,7 @@
     "worlds/talk/ops.mjs": "0591d19c0f",
     "worlds/talk/records.mjs": "74277d0dbf",
     "worlds/time.calendar/bundle.json": "260e6bd40f",
-    "worlds/time.calendar/calendar-tool.mjs": "cbf29c601a",
+    "worlds/time.calendar/calendar-tool.mjs": "ff5d1bf8a5",
     "worlds/time.calendar/calendar-view.mjs": "ef9a6456cb",
     "worlds/time.calendar/ops.mjs": "09e70bb5fd",
     "worlds/ui.avatar/bundle.json": "2a4489c796",

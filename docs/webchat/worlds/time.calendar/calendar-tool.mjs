@@ -52,15 +52,7 @@ function checkState(state) {
     const missing = meeting.participants.filter((person) => !people.has(person));
     if (missing.length || (meeting.room !== null && !rooms.has(meeting.room))) return invalid('missing_resource', { id: meeting.id });
   }
-  const conflicts = [];
-  for (let a = 0; a < state.meetings.length; a++) for (let b = a + 1; b < state.meetings.length; b++) {
-    const left = state.meetings[a], right = state.meetings[b];
-    if (left.start >= right.start + right.duration || right.start >= left.start + left.duration) continue;
-    const shared = left.participants.filter((person) => right.participants.includes(person));
-    if (left.room !== null && left.room === right.room) shared.push(left.room);
-    if (shared.length) conflicts.push({ meetings: [left.id, right.id], resources: shared });
-  }
-  return conflicts.length ? invalid('resource_conflict', { conflicts }) : null;
+  return null;
 }
 
 /** A local, in-memory calendar. The caller supplies stable identity and fully resolved values. */
