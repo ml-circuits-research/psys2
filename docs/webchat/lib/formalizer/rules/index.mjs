@@ -7,23 +7,23 @@
  */
 import { guard } from '../guard.mjs?v=82a55329d9';
 import { perf } from '../perf.mjs?v=b81e032a17';
-import { lexIndex } from '../../worlds/lexicon.mjs?v=a7dd629bbb';
+import { lexIndex } from '../../worlds/lexicon.mjs?v=54cc00df9b';
 import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=6128b3a8dd';
 import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=2923e63484';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
-import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=5efa7ea51f';
+import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=da53a6f0d3';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=352d6703c5';
 import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=f60cd3bcf0';
 import { en } from '../../lang/en.mjs?v=edece7402d';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse } from '../../soplang/index.mjs?v=c57881f705';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
-import { annotateUnread } from '../completeness.mjs?v=5efa7ea51f';
-import { isCatchAll } from '../typed-world.mjs?v=5efa7ea51f';
+import { annotateUnread } from '../completeness.mjs?v=da53a6f0d3';
+import { isCatchAll } from '../typed-world.mjs?v=da53a6f0d3';
 
 export { FormSession } from './session.mjs?v=352d6703c5';
-export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=5efa7ea51f';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=da53a6f0d3';
 export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=6128b3a8dd';
 export { compilePattern, matchTokens } from './matcher.mjs?v=2923e63484';
 export { singularLemma, pluralize } from './lemma.mjs?v=2aad69e017';

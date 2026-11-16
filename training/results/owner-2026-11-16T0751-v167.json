@@ -1,0 +1,2352 @@
+{
+ "date": "2026-11-16T08:38:43.076Z",
+ "reasoner": "matrix",
+ "mt": false,
+ "encoder": false,
+ "summary": {
+  "verdicts": {
+   "right": 26,
+   "honest": 22,
+   "wrong": 3,
+   "of": 51
+  },
+  "session": {
+   "right": 26,
+   "total": 51,
+   "medianMs": 81,
+   "withheld": 0,
+   "falseDone": 0,
+   "ms": {
+    "median": 81,
+    "p90": 268,
+    "max": 2202
+   }
+  },
+  "variants": {
+   "right": 0,
+   "total": 0,
+   "byClass": {},
+   "medianMs": null,
+   "ms": null
+  }
+ },
+ "rows": [
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 1,
+   "class": null,
+   "text": "deseneaza un peisaj cu apa, pamint, cer, nori, soare, 2 case diferite",
+   "tab": "draw",
+   "ms": 2202,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "That was too complex for me — try a shorter sentence.",
+   "english": "That was too complex for me — try a shorter sentence.",
+   "read": "deseneaza un peisaj cu apa, pamint, cer, nori, soare, 2 case diferite",
+   "stages": null,
+   "door": null,
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 2,
+   "class": null,
+   "text": "deseneaza un peisaj cu apa, pamint, cer",
+   "tab": "draw",
+   "ms": 268,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Am înțeles „a ground” și „a sky”, dar nu „Draw a landscape with the water”, așa că nu am făcut nimic.",
+   "english": "I understood \"a ground\", \"a sky\", but not \"Draw a landscape with the water\", so I did nothing.",
+   "read": "Draw a landscape with the water, a ground, a sky",
+   "stages": {
+    "total": 268,
+    "stages": {
+     "door": "1x 114.9",
+     "formalize": "1x 31.5",
+     "candidates.gather": "1x 25.5",
+     "rules": "1x 25.3",
+     "interpret": "2x 2.7",
+     "discourse": "2x 2.3",
+     "dialogue": "2x 0.3",
+     "person": "1x 0.2",
+     "knowledge": "3x 0.2",
+     "correct": "2x 0.1",
+     "candidates.choose": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 115193,
+     "candidates.repair": 6227,
+     "matcher.backtrack": 5731,
+     "translate.tokenize": 1354,
+     "rules.pattern": 1208,
+     "translate.np": 1008
+    }
+   },
+   "door": "honest: unread: landscape",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 3,
+   "class": null,
+   "text": "deseneaza un peisaj random",
+   "tab": "draw",
+   "ms": 164,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „landscape” aici.",
+   "english": "I did not understand \"landscape\" here.",
+   "read": "Draw a landscape random",
+   "stages": {
+    "total": 164.2,
+    "stages": {
+     "door": "1x 77.2",
+     "candidates.gather": "1x 13.7",
+     "formalize": "1x 9.8",
+     "intent": "1x 9.4",
+     "understands": "1x 7.5",
+     "rules": "1x 6.1",
+     "candidates.choose": "1x 3.9",
+     "interpret": "2x 1.8",
+     "dialogue": "2x 0.6",
+     "knowledge": "3x 0.6",
+     "discourse": "2x 0.5",
+     "person": "1x 0.2",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 41754,
+     "candidates.repair": 6218,
+     "matcher.backtrack": 2376,
+     "translate.tokenize": 997,
+     "interpreter.visit": 660,
+     "rules.pattern": 454
+    }
+   },
+   "door": "honest: unread: landscape",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 4,
+   "class": null,
+   "text": "deseneaza ceva",
+   "tab": "draw",
+   "ms": 64,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o baltă. Am adăugat un lac. Am adăugat 5 flori. Am adăugat o pasăre. Am presupus iaz pentru ce fac. Am presupus 7 pentru numărul.",
+   "english": "I added a pond. I added a lake. I added 5 flowers. I added a bird. I assumed pond for the target. I assumed 7 for the count.",
+   "read": "Draw something",
+   "stages": {
+    "total": 64.3,
+    "stages": {
+     "door": "1x 64.1",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 3472,
+     "interpreter.visit": 516,
+     "verify.things": 140,
+     "verify.content": 140,
+     "translate.tokenize": 133,
+     "art.place": 46
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 5,
+   "class": null,
+   "text": "altceva",
+   "tab": "draw",
+   "ms": 67,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Nu s-a schimbat nimic. Nu am putut schimba nimic la floare.",
+   "english": "Nothing changed. The flower stayed as it was.",
+   "read": "Something else",
+   "stages": {
+    "total": 67.2,
+    "stages": {
+     "door": "1x 66.9",
+     "correct": "1x 0.1",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 868,
+     "interpreter.visit": 720,
+     "verify.things": 330,
+     "verify.content": 330,
+     "ops.call": 56,
+     "index.descendants": 48
+    }
+   },
+   "door": "bound make (revision)",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 6,
+   "class": null,
+   "text": "altceva",
+   "tab": "draw",
+   "ms": 57,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Acum balta are un lac, 6 flori și un pește. Am presupus iaz pentru ce fac.",
+   "english": "The pond now has a lake, 6 flowers, a fish. I assumed pond for the target.",
+   "read": "Something else",
+   "stages": {
+    "total": 57,
+    "stages": {
+     "door": "1x 56.7",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "interpreter.visit": 876,
+     "translate.frame": 868,
+     "verify.things": 427,
+     "verify.content": 427,
+     "translate.tokenize": 83,
+     "ops.call": 70
+    }
+   },
+   "door": "bound make (revision)",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 7,
+   "class": null,
+   "text": "deseneaza o casa",
+   "tab": "draw",
+   "ms": 240,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o casă.",
+   "english": "I added a house.",
+   "read": "Draw a house",
+   "stages": {
+    "total": 239.8,
+    "stages": {
+     "door": "1x 239.5",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5226,
+     "facts.index": 5084,
+     "verify.things": 478,
+     "verify.content": 478,
+     "facts.wires": 420,
+     "art.place": 243
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 8,
+   "class": null,
+   "text": "aseaza totul mai natural",
+   "tab": "draw",
+   "ms": 533,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „totul”, „still” și „natural” aici.",
+   "english": "I did not understand \"totul\", \"still\", \"natural\" here.",
+   "read": "Arrange totul still natural",
+   "stages": {
+    "total": 532.8,
+    "stages": {
+     "door": "1x 193",
+     "formalize": "1x 100.2",
+     "lenient": "1x 90.2",
+     "understands": "4x 53.2",
+     "candidates.choose": "1x 45.2",
+     "interpret": "2x 22.1",
+     "candidates.gather": "1x 17",
+     "intent": "1x 11",
+     "rules": "1x 9.7",
+     "bestEffort": "1x 6.6",
+     "names": "1x 1.4",
+     "discourse": "2x 0.8",
+     "dialogue": "2x 0.5",
+     "person": "1x 0.3",
+     "knowledge": "3x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "understands.memo": "3x 0"
+    },
+    "ticks": {
+     "translate.frame": 48656,
+     "matcher.backtrack": 27859,
+     "spell.edit": 14946,
+     "candidates.repair": 14473,
+     "rules.pattern": 4680,
+     "matcher.attempt": 4240
+    }
+   },
+   "door": "honest: unread: totul still natural",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 9,
+   "class": null,
+   "text": "aseaza elementele mai bine",
+   "tab": "draw",
+   "ms": 235,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles asta ca pe ceva de făcut aici.",
+   "english": "I did not understand that as something to do in the drawing.",
+   "read": "Arrange the items better",
+   "stages": {
+    "total": 234.6,
+    "stages": {
+     "formalize": "1x 69.8",
+     "lenient": "1x 63.5",
+     "door": "1x 52.2",
+     "understands": "4x 23.6",
+     "bestEffort": "1x 20.3",
+     "candidates.choose": "1x 17.7",
+     "candidates.gather": "1x 12.9",
+     "interpret": "2x 7.8",
+     "intent": "1x 6.3",
+     "rules": "1x 6.1",
+     "discourse": "2x 0.9",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.2",
+     "names": "1x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "understands.memo": "3x 0"
+    },
+    "ticks": {
+     "translate.frame": 62604,
+     "matcher.backtrack": 17537,
+     "spell.edit": 8213,
+     "rules.pattern": 3697,
+     "best-effort.tokenize": 3133,
+     "candidates.repair": 3115
+    }
+   },
+   "door": "honest: no thing named",
+   "legacy": false
+  },
+  {
+   "verdict": "wrong",
+   "set": "session",
+   "context": false,
+   "id": 10,
+   "class": null,
+   "text": "pune o rata",
+   "tab": "draw",
+   "ms": 192,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:art.draw:objects[last].kind=duck (bird)"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o pasăre.",
+   "english": "I added a bird.",
+   "read": "Put a duck",
+   "stages": {
+    "total": 192.3,
+    "stages": {
+     "door": "1x 191.9",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2638,
+     "verify.things": 540,
+     "verify.content": 540,
+     "interpreter.visit": 156,
+     "translate.np": 43,
+     "translate.tokenize": 29
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 11,
+   "class": null,
+   "text": "pe lac",
+   "tab": "draw",
+   "ms": 428,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles asta ca pe ceva de făcut aici.",
+   "english": "I did not understand that as something to do in the drawing.",
+   "read": "On the lake",
+   "stages": {
+    "total": 428.3,
+    "stages": {
+     "knowledge": "3x 199.2",
+     "door": "1x 173.7",
+     "formalize": "1x 9.5",
+     "dialogue": "2x 6.1",
+     "interpret": "2x 5.6",
+     "rules": "1x 3.8",
+     "candidates.gather": "1x 3.1",
+     "discourse": "2x 0.4",
+     "person": "1x 0.2",
+     "candidates.choose": "1x 0",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5229,
+     "matcher.backtrack": 2444,
+     "knowledge.memo": 1132,
+     "interpreter.visit": 990,
+     "art.place": 891,
+     "learned.mem": 618
+    }
+   },
+   "door": "honest: no act",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 12,
+   "class": null,
+   "text": "pune rata pe lac",
+   "tab": "draw",
+   "ms": 44,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu s-a schimbat nimic. Aici nu există o rață.",
+   "english": "Nothing changed. There is no duck here.",
+   "read": "Put a duck on the lake",
+   "stages": {
+    "total": 43.6,
+    "stages": {
+     "door": "1x 43.3",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 3511,
+     "translate.np": 47,
+     "translate.tokenize": 38,
+     "candidates.residue": 20,
+     "translate.render": 11,
+     "door.state": 11
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 13,
+   "class": null,
+   "text": "cum nu exista?",
+   "tab": "draw",
+   "ms": 146,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „exist” aici.",
+   "english": "I did not understand \"exist\" here.",
+   "read": "How does he not exist?",
+   "stages": {
+    "total": 146,
+    "stages": {
+     "door": "1x 66.8",
+     "formalize": "1x 31",
+     "lenient": "1x 23.6",
+     "interpret": "2x 9.4",
+     "rules": "1x 7.2",
+     "intent": "1x 5.4",
+     "understands": "1x 5.3",
+     "candidates.gather": "1x 3.1",
+     "bestEffort": "1x 1",
+     "discourse": "2x 0.4",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.2",
+     "names": "1x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 7926,
+     "matcher.backtrack": 7726,
+     "spell.edit": 5158,
+     "rules.pattern": 1830,
+     "matcher.attempt": 1495,
+     "translate.tokenize": 285
+    }
+   },
+   "door": "honest: question",
+   "legacy": false
+  },
+  {
+   "verdict": "wrong",
+   "set": "session",
+   "context": false,
+   "id": 14,
+   "class": null,
+   "text": "add a green duck",
+   "tab": "draw",
+   "ms": 151,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:art.draw:objects[last].kind=duck (bird)"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I added a bird.",
+   "english": "I added a bird.",
+   "stages": {
+    "total": 150.5,
+    "stages": {
+     "door": "1x 150.2",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "verify.things": 588,
+     "verify.content": 588,
+     "interpreter.visit": 156,
+     "art.place": 22,
+     "ops.call": 14,
+     "index.descendants": 13
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 15,
+   "class": null,
+   "text": "move the green duck in water",
+   "tab": "draw",
+   "ms": 20,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nothing changed. There is no duck here. I could not do green: this world does not take attribute for place.",
+   "english": "Nothing changed. There is no duck here. I could not do green: this world does not take attribute for place.",
+   "stages": {
+    "total": 20.5,
+    "stages": {
+     "door": "1x 20.1",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "door.state": 12,
+     "voice.tight": 6,
+     "expand.splitAnswerList": 1
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 16,
+   "class": null,
+   "text": "Change the colour of the green bird to yellow.",
+   "tab": "draw",
+   "ms": 21,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "The bird is yellow now.",
+   "english": "The bird is yellow now.",
+   "stages": {
+    "total": 21.2,
+    "stages": {
+     "door": "1x 20.7",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "verify.things": 624,
+     "verify.content": 624,
+     "interpreter.visit": 156,
+     "ops.call": 14,
+     "index.descendants": 13,
+     "door.state": 12
+    }
+   },
+   "door": "bound change",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 17,
+   "class": null,
+   "text": "move it to the lake",
+   "tab": "draw",
+   "ms": 23,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Nothing changed. The bird stayed as it was.",
+   "english": "Nothing changed. The bird stayed as it was.",
+   "stages": {
+    "total": 22.6,
+    "stages": {
+     "door": "1x 22.2",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "verify.things": 636,
+     "verify.content": 636,
+     "interpreter.visit": 90,
+     "door.state": 12,
+     "ops.call": 7,
+     "index.descendants": 6
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "verdict": "wrong",
+   "set": "session",
+   "context": false,
+   "id": 18,
+   "class": null,
+   "text": "move the house over water",
+   "tab": "draw",
+   "ms": 24,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:art.draw:objects[kind=house].y>=@objects[kind=lake].y (102)",
+    "reply_not:corner"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I moved the house to the corner.",
+   "english": "I moved the house to the corner.",
+   "stages": {
+    "total": 24,
+    "stages": {
+     "door": "1x 23.6",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "verify.things": 636,
+     "verify.content": 636,
+     "interpreter.visit": 156,
+     "ops.call": 14,
+     "index.descendants": 13,
+     "door.state": 12
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 19,
+   "class": null,
+   "text": "move the birds near lake",
+   "tab": "draw",
+   "ms": 21,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I moved the bird to the top. I moved the bird to the lake.",
+   "english": "I moved the bird to the top. I moved the bird to the lake.",
+   "stages": {
+    "total": 20.8,
+    "stages": {
+     "door": "1x 20.3",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "verify.things": 636,
+     "verify.content": 636,
+     "interpreter.visit": 156,
+     "art.place": 36,
+     "ops.call": 14,
+     "index.descendants": 13
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 20,
+   "class": null,
+   "text": "the lake is not there",
+   "tab": "draw",
+   "ms": 19,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nothing changed. Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\".",
+   "english": "Nothing changed. Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\".",
+   "stages": {
+    "total": 19.2,
+    "stages": {
+     "door": "1x 18.8",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "door.state": 12,
+     "voice.tight": 5,
+     "expand.splitAnswerList": 1
+    }
+   },
+   "door": "bound null",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 21,
+   "class": null,
+   "text": "move the house down",
+   "tab": "draw",
+   "ms": 22,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I moved the house to the down.",
+   "english": "I moved the house to the down.",
+   "stages": {
+    "total": 22,
+    "stages": {
+     "door": "1x 21.6",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "verify.things": 636,
+     "verify.content": 636,
+     "interpreter.visit": 156,
+     "ops.call": 14,
+     "index.descendants": 13,
+     "door.state": 12
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 22,
+   "class": null,
+   "text": "down",
+   "tab": "draw",
+   "ms": 20,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I moved the house to the left.",
+   "english": "I moved the house to the left.",
+   "stages": {
+    "total": 20.1,
+    "stages": {
+     "door": "1x 19.6",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "verify.things": 636,
+     "verify.content": 636,
+     "interpreter.visit": 156,
+     "ops.call": 14,
+     "index.descendants": 13,
+     "door.state": 12
+    }
+   },
+   "door": "bound place (revision)",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 23,
+   "class": null,
+   "text": "down",
+   "tab": "draw",
+   "ms": 21,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I moved the house to the down.",
+   "english": "I moved the house to the down.",
+   "stages": {
+    "total": 21.4,
+    "stages": {
+     "door": "1x 20.9",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "verify.things": 636,
+     "verify.content": 636,
+     "interpreter.visit": 156,
+     "ops.call": 14,
+     "index.descendants": 13,
+     "door.state": 12
+    }
+   },
+   "door": "bound place (revision)",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 24,
+   "class": null,
+   "text": "move the flowers down",
+   "tab": "draw",
+   "ms": 23,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I moved 6 flowers to the down.",
+   "english": "I moved 6 flowers to the down.",
+   "stages": {
+    "total": 23.4,
+    "stages": {
+     "door": "1x 20.7",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "verify.things": 636,
+     "verify.content": 636,
+     "interpreter.visit": 156,
+     "ops.call": 14,
+     "index.descendants": 13,
+     "door.state": 12
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 25,
+   "class": null,
+   "text": "down",
+   "tab": "draw",
+   "ms": 20,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I moved 6 flowers to the down.",
+   "english": "I moved 6 flowers to the down.",
+   "stages": {
+    "total": 20,
+    "stages": {
+     "door": "1x 19.5",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "verify.things": 636,
+     "verify.content": 636,
+     "interpreter.visit": 156,
+     "ops.call": 14,
+     "index.descendants": 13,
+     "door.state": 12
+    }
+   },
+   "door": "bound place (revision)",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 26,
+   "class": null,
+   "text": "the pond up",
+   "tab": "draw",
+   "ms": 71,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed",
+    "state:art.draw:objects[kind=lake].y<$+0 (520)"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "I did not understand that as something to do in the drawing.",
+   "english": "I did not understand that as something to do in the drawing.",
+   "stages": {
+    "total": 70.9,
+    "stages": {
+     "formalize": "1x 22.1",
+     "door": "1x 16.7",
+     "knowledge": "3x 11.3",
+     "dialogue": "2x 9.3",
+     "rules": "1x 3.9",
+     "interpret": "2x 3.5",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "correct": "2x 0.1",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 2698,
+     "facts.wires": 2398,
+     "facts.index": 2117,
+     "learned.mem": 1417,
+     "interpreter.visit": 990,
+     "rules.pattern": 554
+    }
+   },
+   "door": "honest: no act",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 27,
+   "class": null,
+   "text": "move th epond upper",
+   "tab": "draw",
+   "ms": 105,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed",
+    "state:art.draw:objects[kind=lake].y<$+0 (520)"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "I did not understand \"th\", \"upper\" here.",
+   "english": "I did not understand \"th\", \"upper\" here.",
+   "stages": {
+    "total": 104.9,
+    "stages": {
+     "door": "1x 51.2",
+     "interpret": "2x 11.2",
+     "formalize": "1x 11.1",
+     "intent": "1x 9.1",
+     "understands": "1x 8.8",
+     "rules": "1x 4.4",
+     "knowledge": "3x 2.7",
+     "dialogue": "2x 1.1",
+     "discourse": "2x 0.5",
+     "person": "1x 0.4",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 3261,
+     "meta.worlds.near": 2536,
+     "scene.edit": 957,
+     "learned.mem": 944,
+     "interpreter.visit": 594,
+     "emit.substituteEmit": 512
+    }
+   },
+   "door": "honest: unread: th upper",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 28,
+   "class": null,
+   "text": "move the lake upper",
+   "tab": "draw",
+   "ms": 50,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed",
+    "state:art.draw:objects[kind=lake].y<$+0 (520)"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "I did not understand \"upper\" here.",
+   "english": "I did not understand \"upper\" here.",
+   "stages": {
+    "total": 50.2,
+    "stages": {
+     "door": "1x 15.1",
+     "formalize": "1x 13",
+     "intent": "1x 11.5",
+     "understands": "1x 11.1",
+     "rules": "1x 5.5",
+     "discourse": "2x 2.9",
+     "interpret": "2x 1.7",
+     "dialogue": "2x 0.9",
+     "knowledge": "3x 0.5",
+     "person": "1x 0.2",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 3144,
+     "learned.mem": 1889,
+     "interpreter.visit": 858,
+     "knowledge.memo": 732,
+     "rules.pattern": 596,
+     "matcher.attempt": 484
+    }
+   },
+   "door": "honest: unread: upper",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 29,
+   "class": null,
+   "text": "move the watter upper",
+   "tab": "draw",
+   "ms": 116,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed",
+    "state:art.draw:objects[kind=lake].y<$+0 (520)"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "I did not understand \"upper\" here.",
+   "english": "I did not understand \"upper\" here.",
+   "stages": {
+    "total": 116.3,
+    "stages": {
+     "door": "1x 48.3",
+     "formalize": "1x 46.4",
+     "intent": "1x 9.8",
+     "understands": "1x 9.7",
+     "rules": "1x 7.2",
+     "interpret": "2x 2.7",
+     "knowledge": "3x 0.6",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 9225,
+     "spell.edit": 3602,
+     "meta.worlds.near": 2394,
+     "rules.pattern": 1934,
+     "matcher.attempt": 1542,
+     "scene.edit": 1182
+    }
+   },
+   "door": "honest: unread: upper",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 30,
+   "class": null,
+   "text": "put more patches for green",
+   "tab": "draw",
+   "ms": 81,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "I did not understand \"patches\" here.",
+   "english": "I did not understand \"patches\" here.",
+   "stages": {
+    "total": 81.3,
+    "stages": {
+     "door": "1x 47.3",
+     "formalize": "1x 13.9",
+     "intent": "1x 12.3",
+     "understands": "1x 12.2",
+     "rules": "1x 5.8",
+     "interpret": "2x 1.8",
+     "knowledge": "3x 0.5",
+     "discourse": "2x 0.4",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 3066,
+     "learned.mem": 1889,
+     "knowledge.memo": 732,
+     "interpreter.visit": 726,
+     "rules.pattern": 596,
+     "matcher.attempt": 456
+    }
+   },
+   "door": "honest: unread: patches",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 31,
+   "class": null,
+   "text": "put  green grass",
+   "tab": "draw",
+   "ms": 156,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I added a green grass.",
+   "english": "I added a green grass.",
+   "stages": {
+    "total": 155.5,
+    "stages": {
+     "door": "1x 155.1",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "verify.things": 649,
+     "verify.content": 649,
+     "interpreter.visit": 156,
+     "ops.call": 14,
+     "index.descendants": 13,
+     "knowledge.memo": 13
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 32,
+   "class": null,
+   "text": "more",
+   "tab": "draw",
+   "ms": 28,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I added a green grass.",
+   "english": "I added a green grass.",
+   "stages": {
+    "total": 27.7,
+    "stages": {
+     "door": "1x 27.1",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "verify.things": 688,
+     "verify.content": 688,
+     "interpreter.visit": 246,
+     "ops.call": 21,
+     "index.descendants": 19,
+     "followup.touched": 14
+    }
+   },
+   "door": "bound make (revision)",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 33,
+   "class": null,
+   "text": "aseaza un leagan",
+   "tab": "draw",
+   "ms": 188,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Încă nu pot face asta cu leagăne aici.",
+   "english": "I cannot group swing in the drawing yet.",
+   "read": "Arrange a swing",
+   "stages": {
+    "total": 188,
+    "stages": {
+     "knowledge": "3x 64.2",
+     "door": "1x 42.9",
+     "understands": "2x 17.6",
+     "candidates.choose": "1x 17.6",
+     "formalize": "1x 10.6",
+     "candidates.gather": "1x 9",
+     "rules": "1x 5.5",
+     "interpret": "2x 4.3",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 31338,
+     "candidates.repair": 6215,
+     "learned.mem": 3437,
+     "matcher.backtrack": 2676,
+     "knowledge.memo": 1721,
+     "facts.index": 1683
+    }
+   },
+   "door": "honest: act group swing not declared",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 34,
+   "class": null,
+   "text": "pune un leagan",
+   "tab": "draw",
+   "ms": 172,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat un leagăn.",
+   "english": "I added a swing.",
+   "read": "Put a swing",
+   "stages": {
+    "total": 172.2,
+    "stages": {
+     "door": "1x 171.6",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5277,
+     "verify.things": 740,
+     "verify.content": 740,
+     "interpreter.visit": 156,
+     "translate.tokenize": 80,
+     "translate.np": 76
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 35,
+   "class": null,
+   "text": "pune un copil pe leagan",
+   "tab": "draw",
+   "ms": 51,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu s-a schimbat nimic. Aici nu există un copil.",
+   "english": "Nothing changed. There is no child here.",
+   "read": "Put a child on the swing",
+   "stages": {
+    "total": 51.3,
+    "stages": {
+     "door": "1x 50.7",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 8773,
+     "translate.tokenize": 131,
+     "translate.np": 122,
+     "translate.render": 25,
+     "candidates.residue": 22,
+     "translate.parse": 20
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 36,
+   "class": null,
+   "text": "deseneaaza un copil",
+   "tab": "draw",
+   "ms": 220,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat un copil.",
+   "english": "I added a child.",
+   "read": "Draw a child",
+   "stages": {
+    "total": 219.7,
+    "stages": {
+     "door": "1x 219.2",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5226,
+     "verify.things": 792,
+     "verify.content": 792,
+     "facts.index": 494,
+     "interpreter.visit": 156,
+     "translate.tokenize": 133
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 37,
+   "class": null,
+   "text": "pune-l pe leagan",
+   "tab": "draw",
+   "ms": 56,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Pun copilul pe swing.",
+   "english": "I put the child on the swing.",
+   "read": "Put it on the swing",
+   "stages": {
+    "total": 55.7,
+    "stages": {
+     "door": "1x 55.1",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5219,
+     "verify.things": 831,
+     "verify.content": 831,
+     "interpreter.visit": 156,
+     "translate.tokenize": 139,
+     "translate.np": 48
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 38,
+   "class": null,
+   "text": "copilul nu e un skeleton, fa un copil real",
+   "tab": "draw",
+   "ms": 511,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „skeleton” și „make” aici.",
+   "english": "I did not understand \"skeleton\", \"make\" here.",
+   "read": "The child is not a skeleton, you make a child real",
+   "stages": {
+    "total": 510.9,
+    "stages": {
+     "candidates.choose": "1x 151.7",
+     "understands": "2x 137.5",
+     "door": "1x 130.1",
+     "formalize": "1x 72.8",
+     "rules": "1x 63.3",
+     "knowledge": "3x 55.1",
+     "candidates.gather": "1x 14.2",
+     "interpret": "2x 9",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 56107,
+     "translate.frame": 38764,
+     "rules.pattern": 15877,
+     "candidates.repair": 15392,
+     "matcher.attempt": 7651,
+     "learned.mem": 3054
+    }
+   },
+   "door": "honest: unread: skeleton make",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 39,
+   "class": null,
+   "text": "desneaza un bunic",
+   "tab": "draw",
+   "ms": 226,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu s-a schimbat nimic. Încă nu am un desen pentru un bunic.",
+   "english": "Nothing changed. I have no drawing of a grandfather yet.",
+   "read": "Draw a grandfather",
+   "stages": {
+    "total": 226.2,
+    "stages": {
+     "door": "1x 225.6",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5226,
+     "facts.index": 181,
+     "translate.tokenize": 126,
+     "translate.np": 64,
+     "interpreter.visit": 30,
+     "candidates.residue": 18
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 40,
+   "class": null,
+   "text": "deseneaza o fetita",
+   "tab": "draw",
+   "ms": 209,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu s-a schimbat nimic. Încă nu am un desen pentru o fată.",
+   "english": "Nothing changed. I have no drawing of a girl yet.",
+   "read": "Draw a girl",
+   "stages": {
+    "total": 209.2,
+    "stages": {
+     "door": "1x 208.6",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5226,
+     "translate.tokenize": 97,
+     "translate.np": 62,
+     "interpreter.visit": 30,
+     "door.state": 16,
+     "translate.render": 14
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 41,
+   "class": null,
+   "text": "pune culori random la petalele florilor",
+   "tab": "draw",
+   "ms": 442,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „colors” și „petalele” aici.",
+   "english": "I did not understand \"colors\", \"petalele\" here.",
+   "read": "Put the flowers colors random at petalele",
+   "stages": {
+    "total": 442,
+    "stages": {
+     "door": "1x 195.6",
+     "candidates.choose": "1x 38.1",
+     "candidates.gather": "1x 27.4",
+     "understands": "2x 26.7",
+     "knowledge": "3x 25.6",
+     "formalize": "1x 21.4",
+     "rules": "1x 10",
+     "interpret": "2x 3.6",
+     "intent": "1x 0.5",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "understands.memo": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 31452,
+     "candidates.repair": 18215,
+     "matcher.backtrack": 6705,
+     "spell.edit": 6466,
+     "learned.mem": 4181,
+     "knowledge.memo": 2235
+    }
+   },
+   "door": "honest: unread: colors petalele",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 42,
+   "class": null,
+   "text": "schimba avatarul sa fie un robot",
+   "tab": "draw",
+   "ms": 164,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „avatar” aici.",
+   "english": "I did not understand \"avatar\" here.",
+   "read": "Change the avatar to be a robot",
+   "stages": {
+    "total": 164.4,
+    "stages": {
+     "door": "1x 80.2",
+     "formalize": "1x 31.8",
+     "rules": "1x 18.2",
+     "candidates.gather": "1x 3.8",
+     "interpret": "2x 2.8",
+     "knowledge": "3x 0.6",
+     "discourse": "2x 0.4",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 15675,
+     "matcher.backtrack": 3537,
+     "learned.mem": 3389,
+     "knowledge.memo": 1788,
+     "interpreter.visit": 792,
+     "rules.pattern": 509
+    }
+   },
+   "door": "honest: unread: avatar",
+   "legacy": false
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 43,
+   "class": null,
+   "text": "make the avatar a man",
+   "tab": "draw",
+   "ms": 174,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "ui.avatar"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I do not have a face called a. I know baby, child, girl, boy, woman, man, old woman, old man, bearded man, woman with curly hair, robot, alien, clown and queen. To keep this one, say \"save this as a\".",
+   "english": "I do not have a face called a. I know baby, child, girl, boy, woman, man, old woman, old man, bearded man, woman with curly hair, robot, alien, clown and queen. To keep this one, say \"save this as a\".",
+   "stages": {
+    "total": 174.2,
+    "stages": {
+     "knowledge": "3x 91.5",
+     "door": "1x 40.5",
+     "formalize": "1x 18.5",
+     "intent": "1x 15.8",
+     "understands": "1x 15.6",
+     "rules": "1x 13.3",
+     "dialogue": "2x 2",
+     "interpret": "1x 1.9",
+     "discourse": "2x 0.4",
+     "person": "1x 0.2",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "facts.index": 23910,
+     "matcher.backtrack": 5838,
+     "facts.wires": 2121,
+     "rules.pattern": 844,
+     "spell.edit": 708,
+     "matcher.attempt": 672
+    }
+   },
+   "door": "unread: avatar; answered by ui.avatar (no declarations, or an ambient world off its tab)",
+   "legacy": true
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 44,
+   "class": null,
+   "text": "become a boy",
+   "tab": "draw",
+   "ms": 59,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "ui.avatar"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I drew a boy: t-shirt green shoulders, a thin neck, round ears, a round head, a grin mouth, a small nose, round brown eyes, straight dark brown eyebrows, spikes dark brown hair and a cap.",
+   "english": "I drew a boy: t-shirt green shoulders, a thin neck, round ears, a round head, a grin mouth, a small nose, round brown eyes, straight dark brown eyebrows, spikes dark brown hair and a cap.",
+   "stages": {
+    "total": 59.3,
+    "stages": {
+     "door": "1x 44.7",
+     "formalize": "1x 9.9",
+     "rules": "1x 6.5",
+     "discourse": "2x 0.4",
+     "interpret": "1x 0.4",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.1",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 869,
+     "rules.pattern": 208,
+     "matcher.attempt": 155,
+     "scene.walk": 151,
+     "emit.substituteEmit": 144,
+     "interpreter.visit": 132
+    }
+   },
+   "door": "unread: become; answered by ui.avatar (no declarations, or an ambient world off its tab)",
+   "legacy": true
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 45,
+   "class": null,
+   "text": "become a boy",
+   "tab": "draw",
+   "ms": 57,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "ui.avatar"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I drew a boy: t-shirt green shoulders, a thin neck, round ears, a round head, a grin mouth, a small nose, round brown eyes, straight dark brown eyebrows, spikes dark brown hair and a cap.",
+   "english": "I drew a boy: t-shirt green shoulders, a thin neck, round ears, a round head, a grin mouth, a small nose, round brown eyes, straight dark brown eyebrows, spikes dark brown hair and a cap.",
+   "stages": {
+    "total": 57.2,
+    "stages": {
+     "door": "1x 46.3",
+     "formalize": "1x 6.5",
+     "rules": "1x 3.4",
+     "discourse": "2x 0.4",
+     "interpret": "1x 0.4",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.1",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 869,
+     "rules.pattern": 208,
+     "matcher.attempt": 155,
+     "scene.walk": 151,
+     "emit.substituteEmit": 144,
+     "interpreter.visit": 132
+    }
+   },
+   "door": "unread: become; answered by ui.avatar (no declarations, or an ambient world off its tab)",
+   "legacy": true
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 46,
+   "class": null,
+   "text": "become a man",
+   "tab": "draw",
+   "ms": 57,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "ui.avatar"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I drew a man: shirt blue shoulders, a thick neck, round ears, a square head, a stubble brown beard, a neutral mouth, a medium nose, oval blue eyes, thick brown eyebrows and short brown hair.",
+   "english": "I drew a man: shirt blue shoulders, a thick neck, round ears, a square head, a stubble brown beard, a neutral mouth, a medium nose, oval blue eyes, thick brown eyebrows and short brown hair.",
+   "stages": {
+    "total": 56.7,
+    "stages": {
+     "door": "1x 44.6",
+     "formalize": "1x 7.9",
+     "rules": "1x 5",
+     "discourse": "2x 0.3",
+     "interpret": "1x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.1",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 869,
+     "rules.pattern": 207,
+     "matcher.attempt": 155,
+     "scene.walk": 151,
+     "emit.substituteEmit": 144,
+     "interpreter.visit": 132
+    }
+   },
+   "door": "unread: become; answered by ui.avatar (no declarations, or an ambient world off its tab)",
+   "legacy": true
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 47,
+   "class": null,
+   "text": "look surprised",
+   "tab": "draw",
+   "ms": 51,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "ui.avatar"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Now I look surprised.",
+   "english": "Now I look surprised.",
+   "stages": {
+    "total": 51.2,
+    "stages": {
+     "door": "1x 38.8",
+     "formalize": "1x 8",
+     "rules": "1x 5.1",
+     "discourse": "2x 0.4",
+     "interpret": "1x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.1",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 773,
+     "scene.walk": 151,
+     "rules.pattern": 146,
+     "emit.substituteEmit": 144,
+     "matcher.attempt": 142,
+     "interpreter.visit": 132
+    }
+   },
+   "door": "nothing read; answered by ui.avatar (no declarations, or an ambient world off its tab)",
+   "legacy": true
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 48,
+   "class": null,
+   "text": "look sad",
+   "tab": "draw",
+   "ms": 26,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "ui.avatar"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Now I look sad.",
+   "english": "Now I look sad.",
+   "stages": {
+    "total": 25.6,
+    "stages": {
+     "door": "1x 16.1",
+     "formalize": "1x 5.5",
+     "rules": "1x 2.7",
+     "discourse": "2x 0.3",
+     "interpret": "1x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.1",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 775,
+     "scene.walk": 151,
+     "rules.pattern": 146,
+     "emit.substituteEmit": 144,
+     "matcher.attempt": 142,
+     "interpreter.visit": 132
+    }
+   },
+   "door": "nothing read; answered by ui.avatar (no declarations, or an ambient world off its tab)",
+   "legacy": true
+  },
+  {
+   "verdict": "right",
+   "set": "session",
+   "context": false,
+   "id": 49,
+   "class": null,
+   "text": "become a woman with curly hair",
+   "tab": "draw",
+   "ms": 81,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "ui.avatar"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "I have long curly brown hair now.",
+   "english": "I have long curly brown hair now.",
+   "stages": {
+    "total": 81.4,
+    "stages": {
+     "door": "1x 68.1",
+     "formalize": "1x 8.9",
+     "rules": "1x 5.4",
+     "discourse": "2x 0.4",
+     "interpret": "1x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.1",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 1121,
+     "rules.pattern": 263,
+     "matcher.attempt": 168,
+     "scene.walk": 151,
+     "emit.substituteEmit": 144,
+     "interpreter.visit": 132
+    }
+   },
+   "door": "unread: become; answered by ui.avatar (no declarations, or an ambient world off its tab)",
+   "legacy": true
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 50,
+   "class": null,
+   "text": "become a bearded man",
+   "tab": "draw",
+   "ms": 190,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "I did not understand \"become\", \"bearded\" here.",
+   "english": "I did not understand \"become\", \"bearded\" here.",
+   "stages": {
+    "total": 189.9,
+    "stages": {
+     "knowledge": "3x 80.5",
+     "door": "1x 72.7",
+     "formalize": "1x 17.7",
+     "interpret": "2x 5.6",
+     "rules": "1x 3.6",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "correct": "2x 0.1",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "learned.mem": 4056,
+     "knowledge.memo": 2718,
+     "interpreter.visit": 1320,
+     "matcher.backtrack": 923,
+     "art.place": 864,
+     "scene.walk": 302
+    }
+   },
+   "door": "honest: unread: become bearded",
+   "legacy": false
+  },
+  {
+   "verdict": "honest",
+   "set": "session",
+   "context": false,
+   "id": 51,
+   "class": null,
+   "text": "become a bearded man",
+   "tab": "draw",
+   "ms": 113,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "I did not understand \"become\", \"bearded\" here.",
+   "english": "I did not understand \"become\", \"bearded\" here.",
+   "stages": {
+    "total": 113.3,
+    "stages": {
+     "door": "1x 71.6",
+     "formalize": "1x 22.1",
+     "rules": "1x 5",
+     "interpret": "2x 4.9",
+     "knowledge": "3x 1.5",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "correct": "2x 0.1",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "learned.mem": 5591,
+     "knowledge.memo": 4284,
+     "interpreter.visit": 1518,
+     "matcher.backtrack": 923,
+     "art.place": 576,
+     "scene.walk": 302
+    }
+   },
+   "door": "honest: unread: become bearded",
+   "legacy": false
+  }
+ ]
+}

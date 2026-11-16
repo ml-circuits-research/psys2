@@ -93,6 +93,7 @@ export function writeText(ctx, { kind, about = null, words = null, chapters = nu
   const g = textGen()?.composer, s = ctx.state;
   if (!g?.available) return { ...refuse('no_composer'), reply: 'refused.no_composer' };   // said by the reply fact: this build has no composer
   const r = g.compose({ type: kind ?? undefined, topic: about ?? undefined, chapters: count(chapters), words: count(words), genre: kind ?? undefined, seed: composeSeed(s, kind, about) });
+  if (!r?.composition && ctx.knowledge?.loadState?.() === 'loading') return { ...refuse('nothing_known'), reply: 'refused.knowledge_loading' };   // the catalog is not (fully) read yet: one generic reply fact
   if (!r?.composition) return { ...refuse('nothing_known'), ...(about ? { reply: 'refused.nothing_known', roles: { about: String(about) } } : {}) };   // said by the reply fact: what the knowledge has nothing of
   const c = r.composition, blocks = [];
   const wrote = {};   // what was written, per part name: the library says short_of for a part that came out shorter than the plan named (sopworld 0.166)
@@ -106,10 +107,13 @@ export function writeText(ctx, { kind, about = null, words = null, chapters = nu
     }
   }
   stepCommit(s, step);
-  createDoc(ctx, c.title, blocks, { keep: true });
+  // the composer's title is applied only when the knowledge of the genre declares a title part (k.genres.part name=title); a genre whose plan names parts without one (a letter, a story) has no title
+  const titled = !(Array.isArray(parts) && parts.length) || parts.some((p) => String(p.name ?? '').toLowerCase() === 'title');
+  createDoc(ctx, titled ? c.title : '', blocks, { keep: true });
   s.kind = kind ?? c.type ?? 'text'; s.about = about ?? null; s.textSeq = (s.textSeq ?? 0) + 1; s.textId = `text${s.textSeq}`;   // a new text is a new thing of the view (the old one is gone with its chapters)
   sync(s);
-  return { ...done([s.textId, ...chapterHeads(s).map((b) => b.id)]), ...(Array.isArray(parts) && parts.length ? { parts: Object.fromEntries((parts).map((p) => [p.name, wrote[String(p.name).toLowerCase()] ?? 0])) } : {}) };
+  const length = blocks.reduce((n, b) => n + String(b.text ?? '').split(/\s+/).filter(Boolean).length, 0);   // the words written: the library says "it stays at N words" when a longer/shorter step cannot move it (sopworld 0.167)
+  return { ...done([s.textId, ...chapterHeads(s).map((b) => b.id)]), length, ...(Array.isArray(parts) && parts.length ? { parts: Object.fromEntries((parts).map((p) => [p.name, wrote[String(p.name).toLowerCase()] ?? 0])) } : {}) };
 }
 /** The text has at most n chapters: the later ones go (their sections with them). Fewer chapters than n are what the knowledge holds: nothing is padded. */
 export function keepChapters(ctx, { n, step = null } = {}) {

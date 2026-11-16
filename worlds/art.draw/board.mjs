@@ -431,6 +431,7 @@ function catalogKind(ctx, kind) {
 export function addJoined(ctx, args = {}) { return addThings(ctx, { ...args, joined: true }); }
 export function addThings(ctx, { kind, n = 1, size = null, colour = null, place = null, anchor = null, whole = null, step = null, label = null, joined = false } = {}) {
   const s = ensure(ctx), key = boardKind(kind) ?? (joined ? catalogKind(ctx, kind) : null), scene = sceneOf(s, whole);
+  if (!key && joined && ctx.knowledge?.loadState?.() === 'loading') return { ...toolNo('no_drawing'), reply: 'refused.knowledge_loading' };   // the catalog is not (fully) read yet: said by one generic reply fact, not "no drawing of X"
   if (!key) return joined ? { ...toolNo('no_drawing'), reply: 'refused.no_drawing', roles: { kind: String(kind).replace(/_/g, ' ') } } : toolNo('no_kind');   // a joined kind the catalog has no drawing of (or no catalog): said by its reply fact   // glue-lint: tool-data (a catalog name with its spaces)
   const factor = gradeFactor(size), color = colour ? colorFrom([String(colour).toLowerCase()]) : null;
   if (!factor || (colour && !color)) return toolNo('no_value');

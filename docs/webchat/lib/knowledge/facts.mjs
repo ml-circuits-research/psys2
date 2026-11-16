@@ -396,6 +396,11 @@ export function createFacts({ source, name = 'catalog' }) {
     peekParts: () => partsData,
     /** True when the catalog could not be read last time (offline or too slow): a miss then is "I cannot reach it", not "it does not exist". */
     unreachable: () => down,
+    /**
+     * The catalog's load state, for a refusal that a missing row may have caused: 'ready' (the index or the vocabulary was read and the last read was good), else 'loading' (nothing read yet, or the
+     * last read found the catalog unreachable and falls back to the bundled subset: it is asked again later). One generic reply (refused.knowledge_loading) says it, never "unknown".
+     */
+    loadState: () => (down || (index == null && vocab == null) ? 'loading' : 'ready'),
     /** Asks the catalog again now (the backoff of an unreachable read is not waited for): what was read from the bundled subset or not at all is forgotten; a good read stays. Returns true when something was reset. */
     refresh() {
       if (!down) return false;
