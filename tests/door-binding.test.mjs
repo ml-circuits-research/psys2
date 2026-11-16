@@ -97,8 +97,8 @@ test('questions about the state and about what the world can do are facts of the
   await s.send('draw two dogs and a tree');
   const before = JSON.stringify(s.state()['art.draw']);
   const what = await s.send('what is in the picture?');
-  assert.match(what.text, /2 dogs/);
-  assert.match(what.text, /one tree/);
+  assert.match(what.text, /2 (?:\w+ )?dogs/);   // few things: their attributes are said (sopworld 0.160 state.count.value: "There are 2 brown dogs.")
+  assert.match(what.text, /(?:one|a \w+) tree/);
   const can = await s.send('what can you do here?');
   assert.match(can.text, /^I can make: /);
   assert.equal(JSON.stringify(s.state()['art.draw']), before);

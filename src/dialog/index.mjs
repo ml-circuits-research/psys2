@@ -364,7 +364,7 @@ import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs';
 import { intentStep, weakReading, cutWorld } from './intent.mjs';
 import { knownEnglishWord } from '../translate/en-ro.mjs';
 import { proposeReading, negationWords } from './proposer.mjs';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint, madeAgainstSaid } from './request.mjs';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1777,7 +1777,7 @@ export class DialogSession {
     const present = stateWorld(lib, live, shown);
     const tools = boundTools(lib, live, language);
     let mirrored = null;   // a bound world: its view as things of the declarations, the state the library reads names from and plans on (as its toolSession does)
-    if (tools) { try { mirrored = lib.mirrorState(live, this._toolPrimitives(tabWorld, tools).view).world; } catch { mirrored = null; } }
+    if (tools) { try { mirrored = lib.mirrorState(live, this._toolPrimitives(tabWorld, tools).view, { catalog: [language] }).world; } catch { mirrored = null; } }
     let q = readTurn(lib, live, language, english, { dialogue: dlg, known: knownHere, worlds: present.world && present.world !== live ? [present.world] : [], state: mirrored });
     // the words of the person's own language the contextual repair put right before the translation (Q39 S3) and its asks are recorded on the request (trace.request); they are not said in the
     // reply yet: "I read X as Y" has no Romanian phrase (needs the reply phrase in the language world, questions.md), and the machine translation of it is not fit to show
@@ -1946,7 +1946,7 @@ export class DialogSession {
     if (q.act === 'undo' || q.act === 'redo' || q.unread.length || isQuestion(english, language)) return null;
     const rd = this.dialogue.requests;
     let req = q.request, replace = false, rev = null;
-    if (lastRec?.via === 'tool') { try { rev = lib.reviseRequest(dlg, q.request, { revisions: language, catalog: [language], live: lib.mirrorState(live, prims.view).world }); } catch { rev = null; } }   // over the state: a make that refers to things there is a change of its own, not a revision
+    if (lastRec?.via === 'tool') { try { rev = lib.reviseRequest(dlg, q.request, { revisions: language, catalog: [language], live: lib.mirrorState(live, prims.view, { catalog: [language] }).world }); } catch { rev = null; } }   // over the state: a make that refers to things there is a change of its own, not a revision
     if (rev?.sort === 'reaction' && (!q.act || q.act === (lastRec.request?.act ?? 'make')) && (!q.act || q.request.refers === 'last' || ['redo', 'reduce', 'enlarge'].includes(q.reaction))) {   // an act on the things there ("put it in the corner", "remove it") is not a revision of the request that made them
       if (!rev.request) return null;   // thanks, frustration: the dialogue's own reply
       replace = !!rev.replace;   // a reaction that replaces the last result ("fewer dogs")
@@ -1964,7 +1964,7 @@ export class DialogSession {
     // the dialogue follows the timeline: the last plan run through the binding (of the same thing, when the turn names no new kind), so that a count revision keeps its structure (the library's cutToCount / fillToCount)
     if (lastRec?.via === 'tool' && timeline.done.at(-1)?.plan && (!req.target || timeline.done.at(-1).plan.target === req.target) && !(q.request.constraints ?? []).some((c) => c.on === 'kind' && c.want === 'yes' && c.value && !(timeline.done.at(-1).plan.roles?.kinds ?? []).includes(c.value))) dlg = { ...dlg, lastPlan: timeline.done.at(-1).plan, lastRun: { made: timeline.done.at(-1).result?.things ?? [] } };
     const planOpts = { catalog: [language], dialogue: dlg, seed, vary: !!rev?.vary, replace: replace ? (timeline.done.at(-1)?.diff?.added ?? []).map((t) => t.id) : [] };
-    const mirror = lib.mirrorState(live, prims.view).world;
+    const mirror = lib.mirrorState(live, prims.view, { catalog: [language] }).world;
     let plan = null;
     try { plan = lib.planRequest(mirror, req, planOpts); } catch (e) { if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door] bound plan', e); plan = null; }
     if (!plan) return null;
@@ -1995,7 +1995,8 @@ export class DialogSession {
       try { const adds = (plan.steps ?? []).filter((st) => st.action === 'make' && st.args?.kind).map((st, i) => ({ id: `planned${i}`, kind: st.args.kind, attrs: {} })); const pre = adds.length ? lib.sayRequest(req, { ...plan, assumed: [], run: { ok: true, diff: { added: adds, removed: [], changed: [] } } }, sayOpts)?.text ?? '' : ''; const did = pre.split(/(?<=\.)\s+/).filter((x) => /^I /.test(x) && !/^I assumed /.test(x)).map((x) => x.replace(/^I /, '').replace(/\.$/, '')).join(', '); if (did) label.text = did; } catch { /* the person's words stand */ }
       try { run = lib.runPlan(plan, tools, prims, { view: prims.view, timeline, replace, request: req, live, catalog: [language] }); } catch (e) { run = { ok: false, diff: { added: [], removed: [], changed: [] }, failed: { code: 'tool_error', reply: 'why.nothing', roles: {}, detail: String(e?.message ?? e) } }; }
       let said = null;
-      try { said = lib.sayRequest(req, { ...plan, run, revised: rev?.sort === 'reaction' && replace && run.ok && !run.same && !plan.reference, reply: rev?.reply }, sayOpts); } catch { said = null; }
+      const told = madeAgainstSaid(lib, live, language, req, plan, run, prims.view());   // what was made against what was said (short_of), the made whole's title (spec 28 section 20)
+      try { said = lib.sayRequest(req, { ...plan, ...told, run, revised: rev?.sort === 'reaction' && replace && run.ok && !run.same && !plan.reference, reply: rev?.reply }, sayOpts); } catch { said = null; }
       const done = run.ok && !run.same;
       const read = (q.corrections ?? []).length ? `I read ${q.corrections.map((c) => `"${c.said}" as "${c.as}"`).join(', ')}. ` : '';   // what the reader repaired is said, as every door reply says it
       const facts = factParts(lib, language, said?.facts, said?.text ?? '');

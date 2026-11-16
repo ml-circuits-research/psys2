@@ -53,9 +53,9 @@ export function addBlock(s, block, index = s._ins ?? s.blocks.length) {
 }
 export const show = (ctx) => { try { ctx.request('ui.openTab', { tab: 'editor' }); } catch { /* the shell may not know the tab */ } };
 /** A new document of blocks (the old one is one undo away). */
-export function createDoc(ctx, title, blocks) {
+export function createDoc(ctx, title, blocks, { keep = false } = {}) {
   const s = ctx.state;
-  commit(s);
+  if (!keep) commit(s);
   s.title = title; s.titleMarks = []; s.titleAlign = 'left'; s.titleSize = 0; s.blocks = []; s.dictBlock = null; s.selection = null; s.kind = null; s.about = null;
   for (const b of blocks) addBlock(s, b);
   s.cursor = 0;
@@ -77,10 +77,12 @@ const refuse = (code) => ({ status: 'missing', value: '', code });
 const count = (x) => { const v = Number(x); return Number.isFinite(v) && v > 0 ? Math.round(v) : undefined; };
 /** The seed of a composition: a function of the session (how many blocks the document holds) and the request, so a dry run and the real run write the same text, and the next request another. */
 const composeSeed = (s, type, topic) => { let h = (s?.blocks?.length ?? 0) + 1; for (const ch of `${type ?? ''}|${topic ?? ''}`) h = (Math.imul(h, 31) + ch.charCodeAt(0)) >>> 0; return h % 100000 + 1; };
+/** The calls of one session step (`step`, given by the host) are one entry of the document's history: only the first call of a step commits. */
+const stepCommit = (s, step) => { if (step && s.stepGroup === step && s.history?.length) return; commit(s); s.stepGroup = step ?? null; };
 const chapterHeads = (s) => s.blocks.filter((b) => b.kind === 'heading' && (b.level ?? 2) <= 2);
 
 /** A text of a kind about a topic, written by the composer into a new document: its chapters as level-2 headings, its sections as level-3 headings, each paragraph with its sources. */
-export function writeText(ctx, { kind, about = null, words = null, chapters = null } = {}) {
+export function writeText(ctx, { kind, about = null, words = null, chapters = null, step = null } = {}) {
   const g = textGen()?.composer, s = ctx.state;
   if (!g?.available) return { ...refuse('no_composer'), reply: 'refused.no_composer' };   // said by the reply fact: this build has no composer
   const r = g.compose({ type: kind ?? undefined, topic: about ?? undefined, chapters: count(chapters), words: count(words), seed: composeSeed(s, kind, about) });
@@ -94,18 +96,31 @@ export function writeText(ctx, { kind, about = null, words = null, chapters = nu
       blocks.push({ kind: 'paragraph', text: sc.sentences.map((x) => x.text).join(' '), from: [...new Set(sc.sentences.map((x) => x.source).filter(Boolean))] });
     }
   }
-  createDoc(ctx, c.title, blocks);
+  stepCommit(s, step);
+  createDoc(ctx, c.title, blocks, { keep: true });
   s.kind = kind ?? c.type ?? 'text'; s.about = about ?? null; s.textSeq = (s.textSeq ?? 0) + 1; s.textId = `text${s.textSeq}`;   // a new text is a new thing of the view (the old one is gone with its chapters)
   sync(s);
   return done([s.textId, ...chapterHeads(s).map((b) => b.id)]);
 }
 /** The text has at most n chapters: the later ones go (their sections with them). Fewer chapters than n are what the knowledge holds: nothing is padded. */
-export function keepChapters(ctx, { n } = {}) {
+export function keepChapters(ctx, { n, step = null } = {}) {
   const s = ctx.state, k = count(n);
   if (!s.kind) return refuse('no_text');
   const heads = chapterHeads(s);
-  if (k && heads.length > k) { const from = s.blocks.indexOf(heads[k]); s.blocks = s.blocks.slice(0, from); sync(s); show(ctx); }
+  if (k && heads.length > k) { stepCommit(s, step); const from = s.blocks.indexOf(heads[k]); s.blocks = s.blocks.slice(0, from); sync(s); show(ctx); }
   return done(chapterHeads(s).map((b) => b.id));
+}
+/** The text and the chapters named go (the inverse of a write: a revision takes the last text back before it writes the new one). Ids no longer there are already gone. */
+export function removeText(ctx, { ids = [], step = null } = {}) {
+  const s = ctx.state, gone = new Set([].concat(ids ?? []).map(String));
+  if (!s.kind) return done([]);
+  if (gone.has(String(s.textId ?? 'text'))) { stepCommit(s, step); s.blocks = []; s.title = ''; s.kind = null; s.about = null; s.textId = null; s.cursor = 0; sync(s); show(ctx); return done([...gone]); }
+  const heads = chapterHeads(s), cut = heads.filter((b) => gone.has(b.id));
+  if (!cut.length) return done([]);
+  stepCommit(s, step);
+  for (const h of cut) { const i = s.blocks.indexOf(h), next = heads[heads.indexOf(h) + 1]; const j = next ? s.blocks.indexOf(next) : s.blocks.length; s.blocks.splice(i, j - i); }
+  sync(s); show(ctx);
+  return done(cut.map((b) => b.id));
 }
 /** The document's own undo / redo, said by the reply facts done.undo / nothing.undo (done.redo / nothing.redo). */
 export function undoStep(ctx) {
@@ -120,9 +135,9 @@ export function redoStep(ctx) {
   s.history.push(snap(s)); restore(s, s.future.pop()); sync(s); show(ctx);
   return { status: 'supported', value: '', reply: 'done.redo' };
 }
-/** The document as facts (the library's view): the text a request wrote (its kind and topic) and its chapters. A document not written by a request is not a thing of the view. */
+/** The document as facts (the library's view): the text a request wrote (its kind, topic, title and length in words) and its chapters. A document not written by a request is not a thing of the view. */
 export function toolView(ctx) {
   const s = ctx.state;
   if (!s?.kind) return [];
-  return [{ id: s.textId ?? 'text', kind: s.kind, ...(s.about ? { about: s.about } : {}) }, ...chapterHeads(s).map((b) => ({ id: b.id, kind: 'chapter', in: s.textId ?? 'text' }))];
+  return [{ id: s.textId ?? 'text', kind: s.kind, ...(s.about ? { about: s.about } : {}), ...(s.title ? { title: s.title } : {}), length: s.stats?.words ?? 0 }, ...chapterHeads(s).map((b) => ({ id: b.id, kind: 'chapter', in: s.textId ?? 'text', ...(b.text ? { title: b.text } : {}) }))];
 }

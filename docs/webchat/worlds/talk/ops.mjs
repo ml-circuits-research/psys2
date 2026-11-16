@@ -13,8 +13,8 @@ import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=c8443d536d
 import * as space from '../space/space.mjs?v=bc58946003';
 import { habitatSentence } from '../../lib/knowledge/commonsense.mjs?v=f2f7f64a3a';
 import { colourName, numberValue } from '../../lib/knowledge/values.mjs?v=c3d5c59521';   // the one colour reader (k.values)
-import * as R from './records.mjs?v=1e72d9eb28';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
-import { World, contrastOf } from '../../lib/vendor/sopworld/sopworld.mjs?v=4298a5482e';   // the library's contrast of a kind among its siblings (talk.contrast)
+import * as R from './records.mjs?v=bedf81730d';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
+import { World, contrastOf } from '../../lib/vendor/sopworld/sopworld.mjs?v=e5577c1d2e';   // the library's contrast of a kind among its siblings (talk.contrast)
 import { pluralize as pluralOf } from '../../lib/formalizer/rules/lemma.mjs?v=f9ae5362f0';
 
 export const MAX_CARDS = 40;

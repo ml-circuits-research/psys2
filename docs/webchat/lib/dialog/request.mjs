@@ -12,7 +12,7 @@
  */
 import { budget } from './budget.mjs?v=00bce6e369';
 import { BUNDLED_REQUEST } from '../knowledge/bundled-request.mjs?v=237fc4196c';
-import { REQUEST_LOCAL } from '../lang/en.request.local.mjs?v=ee84063be7';
+import { REQUEST_LOCAL } from '../lang/en.request.local.mjs?v=f6125920e8';
 
 const STOP = new Set('a an the of to in on at for with and or but is are was were be been being it its this that these those there here i you he she we they me my your our his her their them us do does did please just also so then very some any can could would should will shall may might must have has had am get got let lets want like one'.split(' '));
 
@@ -183,11 +183,13 @@ export function actOperation(live, act, of = null) {
 /**
  * A make of the world's own whole and nothing else ("start a new drawing": the reading marks a kind that names the world itself `world: true`, and nothing is said of it: no count,
  * manner, part, topic or value) is the world's own make operation when it declares one (request.sop `psys2.op act=make of=<page>`): a fresh page, never a whole sampled among
- * its subkinds (questions.md Q93 (6)). Returns the operation's name or null.
+ * its subkinds (questions.md Q93 (6)). The kind is said afresh: sopworld 0.159 marks a kind after a modifier of the language world's `det meaning=one-more` ("new") `fresh`,
+ * so "start a new drawing" is the page and "draw a drawing" is not (Q94 (1)). Returns the operation's name or null.
  */
 export function worldWholeOperation(live, request) {
   const cs = request?.constraints ?? [];
   if (request?.act !== 'make' || !cs.length || !cs.every((c) => c.on === 'kind' && c.want === 'yes' && c.world)) return null;
+  if (!request.fresh && !cs.some((c) => c.fresh)) return null;
   const r = ofType(live, 'psys2.op').find((x) => one(x, 'act') === 'make' && one(x, 'of'));
   return r ? one(r, 'op') : null;
 }
@@ -327,6 +329,38 @@ export const strongConstraint = (c) => (c.on === 'kind' && c.want !== 'yes') || 
 export function unitOfWhole(live, language, unit) {
   const name = one(ofType(live, 'std.schema.world')[0], 'name');
   return !!name && [...ofType(live, 'k.expect.make'), ...ofType(language, 'k.expect.make')].some((r) => one(r, 'made_in') === name && one(r, 'unit') === unit);
+}
+
+/**
+ * WHAT WAS MADE AGAINST WHAT WAS SAID (spec 28 section 20; sopworld 0.159 `outcome.short`, "the host's own"): after a run through the bindings, a count said of a kind
+ * (`count of=K`, or a length in a unit that is a kind of the made things: "in 7 chapters") of which fewer things were made, and a length said in another unit ("500 words")
+ * more than the made whole's `length` in the view, are `short` entries `{ made, asked, kind | unit }` (said by `short_of`). Never an assumed value. And the title the tool gave
+ * the whole it made (its `title` in the view) is the whole's title for `done.title` when none was said (host stand-in, questions.md Q96 [LIB]). No world is named: every bound
+ * world whose view says these keys gets them.
+ */
+export function madeAgainstSaid(lib, live, language, request, plan, run, view) {
+  if (!run?.ok || run.same) return {};
+  const ids = new Set([...(run.result?.things ?? []), ...(run.diff?.added ?? []).map((t) => t.id)].map(String));
+  const made = (view ?? []).filter((t) => ids.has(String(t.id)));
+  if (!made.length) return {};
+  const whole = made.find((t) => String(t.id) === String(run.result?.whole ?? '')) ?? null;
+  const lineage = (k) => { try { return lib.kindLineage(k, { live, catalog: [language] }); } catch { return [k]; } };
+  const ofKind = (k) => made.filter((t) => lineage(t.kind).includes(k)).length;
+  const short = [];
+  for (const c of request?.constraints ?? []) {
+    if ((c.origin ?? 'said') !== 'said' || (c.want ?? 'yes') !== 'yes' || !Number.isFinite(Number(c.number))) continue;
+    const asked = Number(c.number);
+    if (c.on === 'count' && c.of) { const n = ofKind(c.of); if (n < asked) short.push({ made: n, asked, kind: c.of }); }
+    else if (c.on === 'length' && c.unit) {
+      if (made.some((t) => lineage(t.kind).includes(c.unit))) { const n = ofKind(c.unit); if (n < asked) short.push({ made: n, asked, kind: c.unit }); }
+      else if (whole && Number.isFinite(Number(whole.length)) && Number(whole.length) < asked) short.push({ made: Number(whole.length), asked, unit: c.unit });
+    }
+  }
+  const out = {};
+  if (short.length) out.short = [...short, ...[].concat(plan?.short ?? []).filter((x) => x && !short.some((y) => (y.kind ?? y.unit) === (x.kind ?? x.unit)))];
+  const first = plan?.steps?.[0];
+  if (whole?.title && first?.args && first.args.kind === whole.kind && first.args.title === undefined) out.steps = [{ ...first, args: { ...first.args, title: `\u201c${whole.title}\u201d` } }, ...plan.steps.slice(1)];
+  return out;
 }
 
 /** A library request as plain data (its enumerable fields: act, target, refers, text, constraints, reactions, unread): what w.dialogue keeps across snapshots. */
