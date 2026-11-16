@@ -72,7 +72,13 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,budget=200
     const prop=lookup('properties',{area:raw.area,key:condition.key});
     if(prop){c.concept=prop.canonical;anchor([...path,'concept'],condition.value_span,prop.sourceWire,true,['constraints',String(ci),'value_span']);}else unresolved('unresolved-canonical-property-binding',[...path,'concept']);
     if(has(condition,'value')){
-     if(['literal','string'].includes(prop?.valueKind)&&typeof condition.value==='string'){c.value={kind:prop.valueKind,value:condition.value};anchor([...path,'value'],condition.value_span||condition.value,null,false,['constraints',String(ci),condition.value_span?'value_span':'value']);}else unresolved('unresolved-value-representation',[...path,'value']);
+     if(['literal','string'].includes(prop?.valueKind)&&typeof condition.value==='string'){
+      const supplied=has(condition,'value_span'),literal=supplied?condition.value_span:condition.value;
+      const identity=typeof literal==='string'&&literal.length>0&&literal===condition.value;
+      const normalization=identity?null:lookup('valueNormalizations',{area:raw.area,key:condition.key,canonical:prop.canonical,source:literal,value:condition.value,valueKind:prop.valueKind});
+      if(identity||normalization){c.value={kind:prop.valueKind,value:condition.value};anchor([...path,'value'],literal,normalization?.sourceWire??null,false,['constraints',String(ci),supplied?'value_span':'value']);}
+      else unresolved('unresolved-source-value-normalization',[...path,'value']);
+     }else unresolved('unresolved-value-representation',[...path,'value']);
     }
     if(!['eq','less.equal','greater.equal','degree','region'].includes(condition.operator))unresolved('requires-operator-reference-projection',path);
     if(['each','group'].includes(condition.scope))c.scope=condition.scope;else if(has(condition,'scope'))unresolved('unknown-condition-scope',[...path,'scope']);

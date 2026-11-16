@@ -28,3 +28,16 @@ test('negative utterances, source-safe literal values, bounds and provenance rem
  assert.equal(bridgeRawStructure(raw(sample()),{bindings,bindingSha256,budget:1}).packet,null);
  const noProvenance={...bindings,kinds:[{...bindings.kinds[0],sourceSnapshotSHA:'bad'}]};assert.ok(bridgeRawStructure(raw(sample()),{bindings:noProvenance,bindingSha256}).diagnostics.length);
 });
+
+test('value anchors require identity or a unique source-backed declared normalization',()=>{
+ const mismatched=raw({...sample(),span:'set widget blue',constraints:[{...condition('red'),value_span:'blue'}]});
+ const refusal=bridge(mismatched);assert.ok(refusal.diagnostics.some(d=>d.reason==='unresolved-source-value-normalization'));assert.equal(refusal.decoded.candidates.length,0);
+ const normalized=raw({...sample(),span:'set widget two',constraints:[{...condition('2'),value_span:'two'}]});
+ const numeric={...bindings,properties:[{...bindings.properties[0],valueKind:'literal'}]};
+ assert.ok(bridgeRawStructure(normalized,{bindings:numeric,bindingSha256}).diagnostics.some(d=>d.reason==='unresolved-source-value-normalization'));
+ const record={area:'toy',key:'item.tint',canonical:'tint',source:'two',value:'2',valueKind:'literal',sourceWire:'fixture.number.two',...source};
+ const declared={...numeric,valueNormalizations:[record]};const result=bridgeRawStructure(normalized,{bindings:declared,bindingSha256});assert.deepEqual(result.diagnostics,[]);assert.equal(result.decoded.candidates.length,1);const projected=result.packet.hypotheses[0].requests[0];assert.deepEqual(projected.constraints[0].value,{kind:'literal',value:'2'});assert.equal(projected.evidence.find(e=>e.path.at(-1)==='value').declaration,'fixture.number.two');
+ for(const rows of [[record,{...record,sourceWire:'fixture.other'}],[{...record,sourceSnapshotSHA:'bad'}],[{...record,key:'other.quantity'}]])assert.ok(bridgeRawStructure(normalized,{bindings:{...numeric,valueNormalizations:rows},bindingSha256}).diagnostics.length);
+ const unicode=raw({...sample(),span:'set widget 🟦',constraints:[condition('🟦')]});assert.equal(bridge(unicode).decoded.candidates.length,1);
+ const empty=raw({...sample(),constraints:[{...condition('cerulean'),value_span:''}]});assert.ok(bridge(empty).diagnostics.some(d=>d.reason==='unresolved-source-value-normalization'));
+});
