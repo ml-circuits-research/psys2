@@ -2054,7 +2054,9 @@ export class DialogSession {
     const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, ...(before ? { before } : {}), run: () => {
       // the history entry of a make says what the plan adds, in the reply facts' words ("added a sun"), so an undo or a redo says what it took back ("OK, I undid it (added a sun)")
       try { const adds = (plan.steps ?? []).filter((st) => st.action === 'make' && st.args?.kind).map((st, i) => ({ id: `planned${i}`, kind: st.args.kind, attrs: {} })); const pre = adds.length ? lib.sayRequest(req, { ...plan, assumed: [], run: { ok: true, diff: { added: adds, removed: [], changed: [] } } }, sayOpts)?.text ?? '' : ''; const did = pre.split(/(?<=\.)\s+/).filter((x) => /^I /.test(x) && !/^I assumed /.test(x)).map((x) => x.replace(/^I /, '').replace(/\.$/, '')).join(', '); if (did) label.text = did; } catch { /* the person's words stand */ }
+      let stBefore = null; try { stBefore = JSON.parse(JSON.stringify(this.isession.state[tabWorld] ?? {})); } catch { stBefore = null; }   // the world's real state before the plan: the hard gate checks the diff against it (src/dialog/verify-run.mjs)
       try { run = lib.runPlan(plan, tools, prims, { view: prims.view, timeline, replace, request: req, live, catalog: [language] }); } catch (e) { run = { ok: false, diff: { added: [], removed: [], changed: [] }, failed: { code: 'tool_error', reply: 'why.nothing', roles: {}, detail: String(e?.message ?? e) } }; }
+      if (stBefore) { const v = verifyRun(run, stBefore, this.isession.state[tabWorld] ?? {}); run = v.run; if (v.dropped.length) { run.dropped = v.dropped.length; if (process.env.PSYS2_VERIFY_DEBUG) console.error("VERIFY dropped", JSON.stringify(v.dropped)); } }   // a "done" only from a diff the state confirms; else a refusal
       let said = null;
       const told = madeAgainstSaid(lib, live, language, req, plan, run, prims.view());   // what was made against what was said (short_of), the made whole's title (spec 28 section 20)
       try { said = lib.sayRequest(req, { ...plan, ...told, run, revised: rev?.sort === 'reaction' && replace && run.ok && !run.same && !plan.reference, reply: rev?.reply }, sayOpts); } catch { said = null; }
@@ -2851,6 +2853,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
 
 // The names of the bundled animals are real words for the speller with or without a catalog attached (spec 23 section 11): "cow" is never "corrected" into "wow". A small generated list
 // (src/knowledge/bundled-names.mjs), registered under a symbol so that the formalizer imports nothing of the knowledge layer.
+import { verifyRun } from './verify-run.mjs';
 import { BUNDLED_NAMES } from '../knowledge/bundled-names.mjs';
 {
   const names = new Set(BUNDLED_NAMES);

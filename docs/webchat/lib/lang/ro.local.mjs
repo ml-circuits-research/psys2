@@ -46,6 +46,7 @@ export const LANG_RO_LOCAL = {
 # The parts of a genre the knowledge names (sopworld 0.165 done.parts; Q102 [KNOW]: the catalog's w.lang.ro has no row, and the part names are said as the knowledge gives them until it has their Romanian words)
 @w.lang.ro.reply.local.nothing_known w.lang.ro.reply name=refused.nothing_known count=one role=about text="încă nu știu nimic despre {about}"
 @w.lang.ro.reply.local.knowledge_loading w.lang.ro.reply name=refused.knowledge_loading count=one text="cunoștințele încă se încarcă, deci nu pot spune încă. Mai încearcă într-o clipă"
+@w.lang.ro.reply.local.unchanged w.lang.ro.reply name=refused.unchanged count=one role=thing text="nu am putut schimba nimic la {thing}"
 @w.lang.ro.reply.local.no_composer w.lang.ro.reply name=refused.no_composer count=one text="încă nu pot scrie compuneri: biblioteca nu are un compozitor (std.compose) în această versiune"
 @w.lang.ro.reply.local.page w.lang.ro.reply name=done.page count=one text="iată o foaie nouă. Ce desenăm?"
 @w.lang.ro.reply.local.page_kept w.lang.ro.reply name=done.page.kept count=one text="iată o foaie nouă! Desenul vechi este încă acolo dacă spui „anulează”."

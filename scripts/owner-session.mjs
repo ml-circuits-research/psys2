@@ -33,6 +33,8 @@ import { openShipped, sendOptions, REAL_SEED } from './real-set.mjs';
 import { visibleState } from './lib/visible-state.mjs';
 import { evaluateCase } from './lib/operational-check.mjs';
 import { contentChanged } from '../src/dialog/honest-done.mjs';
+import { contentOf } from '../src/dialog/verify-run.mjs';
+const META_WORLDS = new Set(['ui.shell', 'ui.help', 'talk', 'conversation', 'kids.common']);
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
@@ -46,6 +48,16 @@ export function invariantFailures({ shown, content: changed }) {
   if (WITHHELD.test(shown)) bad.push('withheld');
   if (!changed && DONE_WORDS.test(shown)) bad.push('false-done');   // `changed`: the CONTENT of a world changed (src/dialog/honest-done.mjs), not only its log
   return bad;
+}
+
+/** A reply that says something was changed (EN and RO claim verbs). With no change of the world's content it is a FALSE DONE: wrong, whatever the check says (hard gate, reviewer 2026-11-16 10:20). */
+export const CLAIMS = /(?<!\bnu )(?<!\bnot )\b(?:I (?:added|moved|put|placed|changed|made|drew|removed|set|turned|painted|gave|arranged)|Am (?:ad[aă]ugat|mutat|pus|schimbat|f[aă]cut|desenat|[sș]ters|eliminat|colorat|a[sș]ezat|ref[aă]cut))\b/i;
+/** right / honest / wrong of one judged turn (the owner-session measure): wrong = an error, a false done, a claimed change that did not happen, or a change that was not asked; honest = the check fails but nothing changed and nothing was claimed (a refusal, a question); right = every check holds. */
+export function classifyTurn({ bad, out, error }) {
+  if (error) return 'wrong';
+  if (!out.content && CLAIMS.test(out.shown)) return 'wrong';
+  if (bad.length === 0) return 'right';
+  return out.content ? 'wrong' : 'honest';
 }
 
 export function judge(row, out) {
@@ -116,7 +128,9 @@ async function main() {
     if (r.setup) { s.restore(setupSnap); for (const e of r.setup) { try { await s.send(e, { ...sendOptions(settings, { lang: 'en', language: 'en' }, createBudget()), request: false }); } catch { /* the next lines say what is missing */ } } }
     if (process.env.OWNER_STATE && String(r.turn ?? r.id) === process.env.OWNER_STATE) console.error(JSON.stringify(after[TAB_WORLD[r.tab]] ?? null).slice(0, 6000));
     const changed = JSON.stringify(visibleState(before)) !== JSON.stringify(visibleState(after));
-    const content = contentChanged(Object.fromEntries(Object.entries(before).map(([k, v]) => [k, JSON.stringify(v)])), after);
+    // the HARD measure of a change: the content of some world's state (logs, selection and history aside, src/dialog/verify-run.mjs), not its log
+    const content = Object.keys(after).some((w) => !META_WORLDS.has(w) && contentOf(before[w]) !== contentOf(after[w]));
+    void contentChanged;
     return { r, error, out: { before, after, changed, content, ms, shown: reply?.text ?? '', english: reply?.trace?.replyEnglish ?? '', read: reply?.trace?.english ?? '', worlds: [...new Set((reply?.segments ?? []).map((x) => x.world ?? x.match?.worldId).filter(Boolean))], tabAfter: after['ui.shell']?.activeTab ?? null, perf: reply?.perf ?? null, door: reply?.trace?.door ?? null, legacy: !!reply?.trace?.legacy } };
   };
   for (const [key, turns] of sessions) {
@@ -142,7 +156,8 @@ async function main() {
       const { after, before, ms } = out;
       const judged = r.expect && Object.keys(r.expect).length > 0;
       const bad = error ? [`error:${error}`] : judge(r, out);
-      const row = { set: r.set, context: !!r.context, id: r.turn ?? r.id, class: r.class ?? null, text: r.text, tab: r.tab, ms, judged, right: judged ? bad.length === 0 : null, invariant: invariantFailures(out), failing: bad, worlds: out.worlds, tabAfter: out.tabAfter, changed: out.changed, content: out.content, reply: out.shown.slice(0, 240), english: out.english.slice(0, 240), ...(r.lang && r.lang !== 'en' && out.read ? { read: String(out.read).slice(0, 240) } : {}), stages: stagesOf(out.perf), door: out.door, legacy: out.legacy };
+      const verdict = judged ? classifyTurn({ bad, out, error }) : (!out.content && CLAIMS.test(out.shown) ? 'wrong' : null);
+      const row = { verdict, set: r.set, context: !!r.context, id: r.turn ?? r.id, class: r.class ?? null, text: r.text, tab: r.tab, ms, judged, right: judged ? bad.length === 0 : null, invariant: invariantFailures(out), failing: bad, worlds: out.worlds, tabAfter: out.tabAfter, changed: out.changed, content: out.content, reply: out.shown.slice(0, 240), english: out.english.slice(0, 240), ...(r.lang && r.lang !== 'en' && out.read ? { read: String(out.read).slice(0, 240) } : {}), stages: stagesOf(out.perf), door: out.door, legacy: out.legacy };
       rows.push(row);
       if (dump) {
         const ch = Object.keys(after).filter((w) => JSON.stringify(visibleState({ [w]: before[w] })) !== JSON.stringify(visibleState({ [w]: after[w] })));
@@ -156,7 +171,9 @@ async function main() {
   const byClass = {};
   for (const v of vars) { const c = (byClass[v.class ?? '?'] ??= { right: 0, total: 0 }); c.total++; if (v.right) c.right++; }
   for (const [k, c] of Object.entries(byClass)) c.ms = timing(rows.filter((x) => x.set === 'variant' && !x.context && (x.class ?? '?') === k));
+  const tally = (xs) => ({ right: xs.filter((x) => x.verdict === 'right').length, honest: xs.filter((x) => x.verdict === 'honest').length, wrong: xs.filter((x) => x.verdict === 'wrong').length, of: xs.length });
   const summary = {
+    verdicts: tally(rows.filter((x) => x.set === 'session' && !x.context && (x.judged || x.verdict))),
     session: { right: sess.filter((x) => x.right).length, total: sess.length, medianMs: median(rows.filter((x) => x.set === 'session' && !x.context).map((x) => x.ms)), withheld: rows.filter((x) => x.set === 'session' && x.invariant.includes('withheld')).length, falseDone: rows.filter((x) => x.set === 'session' && x.invariant.includes('false-done')).length, ms: timing(rows.filter((x) => x.set === 'session' && !x.context)) },
     variants: { right: vars.filter((x) => x.right).length, total: vars.length, byClass, medianMs: median(rows.filter((x) => x.set === 'variant' && !x.context).map((x) => x.ms)), ms: timing(rows.filter((x) => x.set === 'variant' && !x.context)) },
   };

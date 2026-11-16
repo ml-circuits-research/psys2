@@ -160,8 +160,8 @@ export async function openShipped({ reasoner = 'matrix', mode = 'shipped', ortPa
   const { createFacts } = await import('../src/knowledge/facts.mjs');
   const { createKnowledgeSource } = await import('../src/loaders/knowledge-source.mjs');
   const { createLayeredSource } = await import('../src/knowledge/bundled-source.mjs');
-  const { pinnedCatalog } = await import('./lib/catalog-pin.mjs');
-  const catalog = pinnedCatalog();
+  const { pinnedCatalogDir } = await import('./lib/pinned-knowledge.mjs');   // the site's own copy of the pinned catalog (no network), else the checkout
+  const catalog = { dir: await pinnedCatalogDir() };
   const rules = createTranslator();
   // --bergamot <cacheDir>: the on-device model (Bergamot ro-en / en-ro in node) as the MT source, as the shipped chain has it (the browser Translator API does not exist in node); --voice: the Romanian grammar voice (src/translate/voice-ro.mjs)
   let mt = null;

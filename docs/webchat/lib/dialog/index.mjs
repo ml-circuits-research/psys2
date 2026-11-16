@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=71447f1f02';
+import { composeReply, sayOf } from './composed-reply.mjs?v=b504723ff7';
 import { reviewForeign } from './foreign-reading.mjs?v=70f8a02322';
 import { installTextGen } from './textgen.mjs?v=04e7eda0ab';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=da53a6f0d3';
@@ -28,7 +28,7 @@ import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voi
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=a7f7eb0703';
 import { machineReads } from '../translate/reading-policy.mjs?v=96bd6cc0e4';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=033592fe1a';
+import { langRoNow } from '../translate/frames-ro.mjs?v=b679d0f8cd';
 import { repairInContext } from '../translate/source-repair.mjs?v=db5b883c67';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=da53a6f0d3';
 import { lexIndex } from '../worlds/lexicon.mjs?v=54cc00df9b';
@@ -42,7 +42,7 @@ import { attachValues } from '../knowledge/values.mjs?v=db60f56a52';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=c31fc8b474';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=0fdb196224';
 import { Discourse } from './discourse.mjs?v=02f33fdb28';
-import { Dialogue } from './dialogue.mjs?v=ac98523216';
+import { Dialogue } from './dialogue.mjs?v=a2016399e8';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=e029c21c92';
 import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext, knowledgeOf, within } from './knowledge-lookup.mjs?v=b7759544b6';
@@ -401,7 +401,7 @@ import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=
 import { intentStep, weakReading, cutWorld } from './intent.mjs?v=dbcbe40391';
 import { knownEnglishWord } from '../translate/en-ro.mjs?v=cbd133aecd';
 import { proposeReading, negationWords } from './proposer.mjs?v=b3c21ed7d7';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint, madeAgainstSaid } from './request.mjs?v=a40259a4a9';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint, madeAgainstSaid } from './request.mjs?v=2b42beb787';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -2054,7 +2054,9 @@ export class DialogSession {
     const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, ...(before ? { before } : {}), run: () => {
       // the history entry of a make says what the plan adds, in the reply facts' words ("added a sun"), so an undo or a redo says what it took back ("OK, I undid it (added a sun)")
       try { const adds = (plan.steps ?? []).filter((st) => st.action === 'make' && st.args?.kind).map((st, i) => ({ id: `planned${i}`, kind: st.args.kind, attrs: {} })); const pre = adds.length ? lib.sayRequest(req, { ...plan, assumed: [], run: { ok: true, diff: { added: adds, removed: [], changed: [] } } }, sayOpts)?.text ?? '' : ''; const did = pre.split(/(?<=\.)\s+/).filter((x) => /^I /.test(x) && !/^I assumed /.test(x)).map((x) => x.replace(/^I /, '').replace(/\.$/, '')).join(', '); if (did) label.text = did; } catch { /* the person's words stand */ }
+      let stBefore = null; try { stBefore = JSON.parse(JSON.stringify(this.isession.state[tabWorld] ?? {})); } catch { stBefore = null; }   // the world's real state before the plan: the hard gate checks the diff against it (src/dialog/verify-run.mjs)
       try { run = lib.runPlan(plan, tools, prims, { view: prims.view, timeline, replace, request: req, live, catalog: [language] }); } catch (e) { run = { ok: false, diff: { added: [], removed: [], changed: [] }, failed: { code: 'tool_error', reply: 'why.nothing', roles: {}, detail: String(e?.message ?? e) } }; }
+      if (stBefore) { const v = verifyRun(run, stBefore, this.isession.state[tabWorld] ?? {}); run = v.run; if (v.dropped.length) { run.dropped = v.dropped.length; if (process.env.PSYS2_VERIFY_DEBUG) console.error("VERIFY dropped", JSON.stringify(v.dropped)); } }   // a "done" only from a diff the state confirms; else a refusal
       let said = null;
       const told = madeAgainstSaid(lib, live, language, req, plan, run, prims.view());   // what was made against what was said (short_of), the made whole's title (spec 28 section 20)
       try { said = lib.sayRequest(req, { ...plan, ...told, run, revised: rev?.sort === 'reaction' && replace && run.ok && !run.same && !plan.reference, reply: rev?.reply }, sayOpts); } catch { said = null; }
@@ -2851,6 +2853,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
 
 // The names of the bundled animals are real words for the speller with or without a catalog attached (spec 23 section 11): "cow" is never "corrected" into "wow". A small generated list
 // (src/knowledge/bundled-names.mjs), registered under a symbol so that the formalizer imports nothing of the knowledge layer.
+import { verifyRun } from './verify-run.mjs?v=4fcd239e2d';
 import { BUNDLED_NAMES } from '../knowledge/bundled-names.mjs?v=b99051eb18';
 {
   const names = new Set(BUNDLED_NAMES);
