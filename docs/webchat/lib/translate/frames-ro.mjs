@@ -18,7 +18,7 @@ let langRo = null, loading = null;
 /** Loads the bundled w.lang.ro once (the translator's loadRoEn waits for it, so that a ro -> en translation stays synchronous afterwards). */
 /** The bundled w.lang.ro once loaded (null before): the dictionary gloss of the candidates reads it. */
 export const langRoNow = () => langRo;
-export const loadFramesRo = () => (loading ??= import('../lang/ro.mjs?v=a70bb654dc').then((m) => m.openLangRo()).then((x) => (langRo = x), () => null));
+export const loadFramesRo = () => (loading ??= import('../lang/ro.mjs?v=e900982b1b').then((m) => m.openLangRo()).then((x) => (langRo = x), () => null));
 
 const fold = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const MOVES = /^acts\.more\.place\.dir\.(?:amt|two)$/;   // the reference frames (en=) of the moves this module realises

@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "4f984af8",
-  "tree": "f5490bef30d6ad50",
+  "build": "e660d9a5",
+  "tree": "cc7c7800274f38dc",
   "catalog": "7042ea706c046abad2f5513d8dcb7aceb4eaae55",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,24 +13,24 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 130,
-   "partly": 3,
-   "wrong": 74,
-   "open": 49,
-   "changed": 17,
+   "right": 117,
+   "partly": 6,
+   "wrong": 84,
+   "open": 53,
+   "changed": 13,
    "unjudged": 332,
    "outcome": {
-    "executed": 161,
-    "refused": 235,
-    "asked": 4,
-    "not_understood": 109,
-    "other_world": 96
+    "executed": 130,
+    "refused": 336,
+    "asked": 11,
+    "not_understood": 53,
+    "other_world": 75
    },
    "by_source": {
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 38
+     "right": 37
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -40,7 +40,7 @@
     "owner-log-2026-11-13c": {
      "turns": 24,
      "judged": 10,
-     "right": 6
+     "right": 5
     },
     "real-phrases-2026-11-09c": {
      "turns": 68,
@@ -75,7 +75,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 85
+     "right": 74
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -88,24 +88,24 @@
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 130,
-   "partly": 3,
-   "wrong": 74,
-   "open": 49,
-   "changed": 17,
+   "right": 117,
+   "partly": 6,
+   "wrong": 84,
+   "open": 53,
+   "changed": 13,
    "unjudged": 332,
    "outcome": {
-    "executed": 161,
-    "refused": 235,
-    "asked": 4,
-    "not_understood": 109,
-    "other_world": 96
+    "executed": 130,
+    "refused": 336,
+    "asked": 11,
+    "not_understood": 53,
+    "other_world": 75
    },
    "by_source": {
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 38
+     "right": 37
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
@@ -115,7 +115,7 @@
     "owner-log-2026-11-13c": {
      "turns": 24,
      "judged": 10,
-     "right": 6
+     "right": 5
     },
     "real-phrases-2026-11-09c": {
      "turns": 68,
@@ -150,7 +150,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 85
+     "right": 74
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 384,
- "failing_ops": 384,
+ "failing_matrix": 413,
+ "failing_ops": 413,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -622,6 +622,220 @@
    "both_reasoners": 21
   },
   {
+   "cause": "ui.avatar: acted; the reply does not say what the check asks",
+   "count": 20,
+   "wrong": 16,
+   "partly": 4,
+   "rows": [
+    {
+     "id": "r0029",
+     "verdict": "wrong",
+     "text": "an old woman",
+     "tab": "robot",
+     "reply": "I did not understand that as something to do in the avatar.",
+     "failing": [
+      "reply_not:did not understand"
+     ]
+    },
+    {
+     "id": "r0032",
+     "verdict": "wrong",
+     "text": "make it happy",
+     "tab": "robot",
+     "reply": "I did not understand \"happy\" here.",
+     "failing": [
+      "reply_not:Which shape|did not understand"
+     ]
+    },
+    {
+     "id": "r0511",
+     "verdict": "wrong",
+     "text": "make the avatar an emoji",
+     "tab": "robot",
+     "reply": "I did not understand \"emoji\" here.",
+     "failing": [
+      "forbid:answer without \"did not understand\""
+     ]
+    },
+    {
+     "id": "r0512",
+     "verdict": "wrong",
+     "text": "mcdavatara human",
+     "tab": "robot",
+     "reply": "I did not understand \"mcdavatara\", \"human\" here.",
+     "failing": [
+      "answer:person | human | girl | boy | woman | man | child",
+      "forbid:answer without \"did not understand\""
+     ]
+    },
+    {
+     "id": "r0513",
+     "verdict": "wrong",
+     "text": "make the avatar an emoji",
+     "tab": "robot",
+     "reply": "I did not understand \"emoji\" here.",
+     "failing": [
+      "forbid:answer without \"did not understand\""
+     ]
+    },
+    {
+     "id": "r0514",
+     "verdict": "wrong",
+     "text": "make the avatar a person make the avatar a person send",
+     "tab": "robot",
+     "reply": "I did not understand \"make\", \"send\" here.",
+     "failing": [
+      "answer:person | human | girl | boy | woman | man | child",
+      "forbid:answer without \"did not understand\""
+     ]
+    },
+    {
+     "id": "r0515",
+     "verdict": "partly",
+     "text": "make a big smile",
+     "tab": "robot",
+     "reply": "Nothing changed. I assumed smile for the variant. I could not do big: nothing here has a size.",
+     "failing": [
+      "answer:big smile"
+     ]
+    },
+    {
+     "id": "r0516",
+     "verdict": "wrong",
+     "text": "make the avatar to geta big smile",
+     "tab": "robot",
+     "reply": "I could not make that in the avatar.",
+     "failing": [
+      "answer:big smile"
+     ]
+    },
+    {
+     "id": "r0517",
+     "verdict": "partly",
+     "text": "big smile",
+     "tab": "robot",
+     "reply": "Nothing changed. I assumed make for the act. I assumed smile for the variant. I could not do big: nothing here has a size.",
+     "failing": [
+      "answer:big smile"
+     ]
+    },
+    {
+     "id": "r0518",
+     "verdict": "wrong",
+     "text": "the the next mouth",
+     "tab": "robot",
+     "reply": "I did not understand that as something to do in the avatar.",
+     "failing": [
+      "answer:mouth",
+      "forbid:answer without \"did not understand\""
+     ]
+    },
+    {
+     "id": "r0520",
+     "verdict": "wrong",
+     "text": "small smile",
+     "tab": "robot",
+     "reply": "I did not understand that as something to do in the avatar.",
+     "failing": [
+      "answer:small smile",
+      "forbid:answer without \"did not understand\""
+     ]
+    },
+    {
+     "id": "r0521",
+     "verdict": "wrong",
+     "text": "open mouth",
+     "tab": "robot",
+     "reply": "Nothing changed. To what value?",
+     "failing": [
+      "answer:open mouth | mouth"
+     ]
+    },
+    {
+     "id": "r0522",
+     "verdict": "wrong",
+     "text": "make a frown",
+     "tab": "robot",
+     "reply": "I read \"frown\" as \"crown\". Nothing changed. I could not do crown: there is no crown here.",
+     "failing": [
+      "answer:frown"
+     ]
+    },
+    {
+     "id": "r0523",
+     "verdict": "wrong",
+     "text": "tongue out",
+     "tab": "robot",
+     "reply": "I did not understand \"tongue\", \"out\" here.",
+     "failing": [
+      "answer:tongue",
+      "forbid:answer without \"did not understand\""
+     ]
+    },
+    {
+     "id": "r0525",
+     "verdict": "partly",
+     "text": "big smile",
+     "tab": "robot",
+     "reply": "Nothing changed. I assumed make for the act. I assumed smile for the variant. I could not do big: nothing here has a size.",
+     "failing": [
+      "answer:big smile"
+     ]
+    },
+    {
+     "id": "r0592",
+     "verdict": "wrong",
+     "text": "would you say you are happy",
+     "tab": "robot",
+     "reply": "I did not understand \"say\", \"happy\" here.",
+     "failing": [
+      "answer:happy"
+     ]
+    },
+    {
+     "id": "r0593",
+     "verdict": "wrong",
+     "text": "would you say you are sad",
+     "tab": "robot",
+     "reply": "I did not understand \"say\", \"sad\" here.",
+     "failing": [
+      "answer:sad"
+     ]
+    },
+    {
+     "id": "r0595",
+     "verdict": "wrong",
+     "text": "whats on u",
+     "tab": "robot",
+     "reply": "I did not understand \"whats\" here.",
+     "failing": [
+      "answer:wear"
+     ]
+    },
+    {
+     "id": "r0596",
+     "verdict": "partly",
+     "text": "what is on you",
+     "tab": "robot",
+     "reply": "There is one face. There is one hair back. There is one shoulders. There is one neck. There is one ears. There is one head. There is one cheeks. There is one mo",
+     "failing": [
+      "answer:wear"
+     ]
+    },
+    {
+     "id": "r0645",
+     "verdict": "wrong",
+     "text": "make your eyes blue",
+     "tab": "draw",
+     "reply": "I cannot make eye in the drawing yet.",
+     "failing": [
+      "answer:eyes"
+     ]
+    }
+   ],
+   "both_reasoners": 20
+  },
+  {
    "cause": "art.draw: acted; the state is not the expected one",
    "count": 6,
    "wrong": 6,
@@ -796,60 +1010,6 @@
    "both_reasoners": 4
   },
   {
-   "cause": "ui.avatar: not understood",
-   "count": 4,
-   "wrong": 4,
-   "partly": 0,
-   "rows": [
-    {
-     "id": "r0029",
-     "verdict": "wrong",
-     "text": "an old woman",
-     "tab": "robot",
-     "reply": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
-     "failing": [
-      "reply_not:did not understand",
-      "not_understood"
-     ]
-    },
-    {
-     "id": "r0512",
-     "verdict": "wrong",
-     "text": "mcdavatara human",
-     "tab": "robot",
-     "reply": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\"",
-     "failing": [
-      "answer:person | human | girl | boy | woman | man | child",
-      "forbid:answer without \"did not understand\"",
-      "not_understood"
-     ]
-    },
-    {
-     "id": "r0523",
-     "verdict": "wrong",
-     "text": "tongue out",
-     "tab": "robot",
-     "reply": "I did not catch what to do with face. I can add, remove, change, copy, select and tell; for example \"Add a hat.\".",
-     "failing": [
-      "answer:tongue",
-      "not_understood"
-     ]
-    },
-    {
-     "id": "r0595",
-     "verdict": "wrong",
-     "text": "whats on u",
-     "tab": "robot",
-     "reply": "I don't know what an on u is.",
-     "failing": [
-      "answer:wear",
-      "not_understood"
-     ]
-    }
-   ],
-   "both_reasoners": 4
-  },
-  {
    "cause": "diagram.sketch: acted; the reply does not say what the check asks",
    "count": 3,
    "wrong": 1,
@@ -943,64 +1103,6 @@
    "both_reasoners": 2
   },
   {
-   "cause": "ui.avatar: acted; the reply does not say what the check asks",
-   "count": 2,
-   "wrong": 1,
-   "partly": 1,
-   "rows": [
-    {
-     "id": "r0596",
-     "verdict": "partly",
-     "text": "what is on you",
-     "tab": "robot",
-     "reply": "There is no you here.",
-     "failing": [
-      "answer:wear"
-     ]
-    },
-    {
-     "id": "r0645",
-     "verdict": "wrong",
-     "text": "make your eyes blue",
-     "tab": "draw",
-     "reply": "I cannot make eye in the drawing yet.",
-     "failing": [
-      "answer:eyes"
-     ]
-    }
-   ],
-   "both_reasoners": 2
-  },
-  {
-   "cause": "ui.avatar: another world took the turn (docs.editor)",
-   "count": 2,
-   "wrong": 2,
-   "partly": 0,
-   "rows": [
-    {
-     "id": "r0592",
-     "verdict": "wrong",
-     "text": "would you say you are happy",
-     "tab": "robot",
-     "reply": "I could not find \"you are happy\" in the document.",
-     "failing": [
-      "answer:happy"
-     ]
-    },
-    {
-     "id": "r0593",
-     "verdict": "wrong",
-     "text": "would you say you are sad",
-     "tab": "robot",
-     "reply": "I could not find \"you are sad\" in the document.",
-     "failing": [
-      "answer:sad"
-     ]
-    }
-   ],
-   "both_reasoners": 2
-  },
-  {
    "cause": "diagram.sketch: acted; the status is not the expected one",
    "count": 1,
    "wrong": 1,
@@ -1061,7 +1163,24 @@
    "both_reasoners": 1
   },
   {
-   "cause": "Romanian: ui.avatar: not understood",
+   "cause": "robot: acted; the reply does not say what the check asks",
+   "count": 1,
+   "wrong": 1,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0164",
+     "verdict": "wrong",
+     "text": "make the avatar a angry boy",
+     "tab": "robot",
+     "reply": "I did not understand \"angry\" here.",
+     "failing": []
+    }
+   ],
+   "both_reasoners": 1
+  },
+  {
+   "cause": "Romanian: ui.avatar: acted; the reply does not say what the check asks",
    "count": 1,
    "wrong": 1,
    "partly": 0,
@@ -1071,10 +1190,9 @@
      "verdict": "wrong",
      "text": "an old woman",
      "tab": "robot",
-     "reply": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" I did not know the words: old, woman.",
+     "reply": "I did not understand \"year\" here.",
      "failing": [
-      "reply_not:did not understand",
-      "not_understood"
+      "reply_not:did not understand"
      ]
     }
    ],
@@ -1103,41 +1221,63 @@
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 145,
-   "both_reasoners": 145,
+   "count": 155,
+   "both_reasoners": 155,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
      "tab": "robot",
-     "happened": "I drew a white house. I drew a green house. [outcome: other_world]"
+     "happened": "Nothing changed. I could not do house: there is no house here. [outcome: refused]"
     },
     {
      "text": "deseneaza o casa verde",
      "tab": "robot",
-     "happened": "I drew a green house. [outcome: other_world]"
+     "happened": "Nothing changed. I could not do house: there is no house here. [outcome: refused]"
     },
     {
      "text": "deseneaza o casa verde",
      "tab": "robot",
-     "happened": "I drew a green house. [outcome: other_world]"
+     "happened": "Nothing changed. I could not do house: there is no house here. [outcome: refused]"
     },
     {
      "text": "deseneaza o casa",
      "tab": "robot",
-     "happened": "I drew a yellow house. [outcome: other_world]"
+     "happened": "Nothing changed. I could not do house: there is no house here. [outcome: refused]"
+    }
+   ]
+  },
+  {
+   "cause": "refused: the request names something the world does not support",
+   "count": 75,
+   "both_reasoners": 75,
+   "examples": [
+    {
+     "text": "mcdavatara human",
+     "tab": "robot",
+     "happened": "I did not understand \"mcdavatara\", \"human\" here. [outcome: refused]"
+    },
+    {
+     "text": "now be a human",
+     "tab": "robot",
+     "happened": "I did not understand \"human\" here. [outcome: refused]"
+    },
+    {
+     "text": "a women",
+     "tab": "robot",
+     "happened": "I did not understand that as something to do in the avatar. [outcome: refused]"
+    },
+    {
+     "text": "become a women",
+     "tab": "robot",
+     "happened": "I did not understand \"become\" here. [outcome: refused]"
     }
    ]
   },
   {
    "cause": "translation residue / wrong sense / source typo",
-   "count": 34,
-   "both_reasoners": 34,
+   "count": 30,
+   "both_reasoners": 30,
    "examples": [
-    {
-     "text": "an old woman",
-     "tab": "robot",
-     "happened": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" I did not know the words: old, woman. [outcome: not_understoo"
-    },
     {
      "text": "desneaza o vila",
      "tab": "draw",
@@ -1152,87 +1292,11 @@
      "text": "fa cerul alabastru",
      "tab": "draw",
      "happened": "Nothing changed. [outcome: refused; open]"
-    }
-   ]
-  },
-  {
-   "cause": "a world other than the open tab took the turn",
-   "count": 31,
-   "both_reasoners": 31,
-   "examples": [
-    {
-     "text": "let’s play guess the animal",
-     "tab": "guess",
-     "happened": "What should I play? For example a note, a chord or a song. I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the o"
     },
     {
-     "text": "draw a sun and a house",
-     "tab": "tictactoe",
-     "happened": "I drew a yellow sun and a yellow house. [outcome: other_world]"
-    },
-    {
-     "text": "yes, it eats meat",
+     "text": "muta copilul deseneat anterior in stinga",
      "tab": "draw",
-     "happened": "I did not catch what to remember. You can say \"a villa is a kind of house\", \"my dog is called Rex\", \"ducks can float\" or \"fish live in water\". [outcome: other_w"
-    },
-    {
-     "text": "Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?",
-     "tab": "robot",
-     "happened": "OK, Tom has 15 apples. OK, Tom gave Ana 12 apples. Tom has 3 apples. [outcome: other_world]"
-    }
-   ]
-  },
-  {
-   "cause": "sentence not read by any world (no cause key)",
-   "count": 28,
-   "both_reasoners": 28,
-   "examples": [
-    {
-     "text": "now be a human",
-     "tab": "robot",
-     "happened": "I did not understand \"now be a human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
-    },
-    {
-     "text": "become a women",
-     "tab": "robot",
-     "happened": "I did not understand \"become a women\". Did you mean \"Become a woman.\"? [outcome: not_understood]"
-    },
-    {
-     "text": "start x and 0",
-     "tab": "tictactoe",
-     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
-    },
-    {
-     "text": "Become an emoji",
-     "tab": "robot",
-     "happened": "I did not understand \"Become an emoji\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
-    }
-   ]
-  },
-  {
-   "cause": "bare word or two-word fragment not read",
-   "count": 24,
-   "both_reasoners": 24,
-   "examples": [
-    {
-     "text": "mcdavatara human",
-     "tab": "robot",
-     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
-    },
-    {
-     "text": "yes",
-     "tab": "guess",
-     "happened": "I did not understand \"yes\". Did you mean \"Eyes.\"? [outcome: not_understood]"
-    },
-    {
-     "text": "no",
-     "tab": "guess",
-     "happened": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
-    },
-    {
-     "text": "yes",
-     "tab": "guess",
-     "happened": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
+     "happened": "I did not understand \"deseneat\", \"previous\" here. [outcome: refused; open]"
     }
    ]
   },
@@ -1264,29 +1328,56 @@
    ]
   },
   {
-   "cause": "refused: the request names something the world does not support",
+   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
+   "count": 21,
+   "both_reasoners": 21,
+   "examples": [
+    {
+     "text": "make the avatar an emoji",
+     "tab": "robot",
+     "happened": "I did not understand \"emoji\" here. [outcome: refused; wrong; forbid:answer without \"did not understand\"]"
+    },
+    {
+     "text": "mcdavatara human",
+     "tab": "robot",
+     "happened": "I did not understand \"mcdavatara\", \"human\" here. [outcome: refused; wrong; answer:person | human | girl | boy | woman | man | child forbid:answer without \"did n"
+    },
+    {
+     "text": "make the avatar an emoji",
+     "tab": "robot",
+     "happened": "I did not understand \"emoji\" here. [outcome: refused; wrong; forbid:answer without \"did not understand\"]"
+    },
+    {
+     "text": "make the avatar a person make the avatar a person send",
+     "tab": "robot",
+     "happened": "I did not understand \"make\", \"send\" here. [outcome: refused; wrong; answer:person | human | girl | boy | woman | man | child forbid:answer without \"did not unde"
+    }
+   ]
+  },
+  {
+   "cause": "a world other than the open tab took the turn",
    "count": 18,
    "both_reasoners": 18,
    "examples": [
     {
-     "text": "add a header, two chapters and a paragraph",
-     "tab": "editor",
-     "happened": "I understood \"two chapters\", \"a paragraph\", but not \"add a header\", so I did nothing. [outcome: refused]"
+     "text": "let’s play guess the animal",
+     "tab": "guess",
+     "happened": "What should I play? For example a note, a chord or a song. I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the o"
     },
     {
-     "text": "add 2 new chapters",
-     "tab": "editor",
-     "happened": "Nothing changed. [outcome: refused]"
+     "text": "draw a sun and a house",
+     "tab": "tictactoe",
+     "happened": "I drew a yellow sun and a yellow house. [outcome: other_world]"
     },
     {
-     "text": "add text",
-     "tab": "editor",
-     "happened": "I did not understand \"text\" here. [outcome: refused]"
+     "text": "yes, it eats meat",
+     "tab": "draw",
+     "happened": "I did not catch what to remember. You can say \"a villa is a kind of house\", \"my dog is called Rex\", \"ducks can float\" or \"fish live in water\". [outcome: other_w"
     },
     {
-     "text": "add a new paragraph",
-     "tab": "editor",
-     "happened": "I did not understand that as something to do in the documents. [outcome: refused]"
+     "text": "Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?",
+     "tab": "robot",
+     "happened": "OK, Tom has 15 apples. OK, Tom gave Ana 12 apples. Tom has 3 apples. [outcome: other_world]"
     }
    ]
   },
@@ -1318,29 +1409,29 @@
    ]
   },
   {
-   "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
-   "count": 10,
-   "both_reasoners": 10,
+   "cause": "bare word or two-word fragment not read",
+   "count": 13,
+   "both_reasoners": 13,
    "examples": [
     {
-     "text": "mcdavatara human",
-     "tab": "robot",
-     "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; wrong; answer:person | human | "
+     "text": "yes",
+     "tab": "guess",
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
     },
     {
-     "text": "tongue out",
-     "tab": "robot",
-     "happened": "I did not catch what to do with face. I can add, remove, change, copy, select and tell; for example \"Add a hat.\". [outcome: not_understood; wrong; answer:tongue"
+     "text": "no",
+     "tab": "guess",
+     "happened": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
     },
     {
-     "text": "add a header, two chapters and a paragraph",
-     "tab": "editor",
-     "happened": "I understood \"two chapters\", \"a paragraph\", but not \"add a header\", so I did nothing. [outcome: refused; wrong; state:blocks.length=4]"
+     "text": "yes",
+     "tab": "guess",
+     "happened": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
     },
     {
-     "text": "add two chapters",
-     "tab": "editor",
-     "happened": "I added a story. I added 2 chapters. The story is called “All about Uganda”. I assumed story for the target. I assumed 150 for the length. [outcome: executed; w"
+     "text": "no",
+     "tab": "guess",
+     "happened": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
     }
    ]
   },
@@ -1399,33 +1490,6 @@
    ]
   },
   {
-   "cause": "unknown word (a word of the request is not known)",
-   "count": 6,
-   "both_reasoners": 6,
-   "examples": [
-    {
-     "text": "move corcodiles in lake",
-     "tab": "draw",
-     "happened": "I did not understand \"corcodiles\" here. [outcome: refused; wrong; reply_not:do not know what|did not understand]"
-    },
-    {
-     "text": "si mai sus",
-     "tab": "draw",
-     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; wrong; reply_not:do not know what|did not understand]"
-    },
-    {
-     "text": "desene asta",
-     "tab": "map",
-     "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
-    },
-    {
-     "text": "desene asta o",
-     "tab": "map",
-     "happened": "I did not understand \"desene asta o\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not"
-    }
-   ]
-  },
-  {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.ellipsis1",
    "count": 6,
    "both_reasoners": 6,
@@ -1453,29 +1517,56 @@
    ]
   },
   {
-   "cause": "fragment / list split",
+   "cause": "unknown word (a word of the request is not known)",
    "count": 5,
    "both_reasoners": 5,
    "examples": [
     {
-     "text": "deseneaza si un magar, dar sa nu zboare, pe iarba",
+     "text": "move corcodiles in lake",
      "tab": "draw",
-     "happened": "I understood \"on the grass\", but not \"Draw a donkey\", \"too to not fly\", so I did nothing. [outcome: refused; open]"
+     "happened": "I did not understand \"corcodiles\" here. [outcome: refused; wrong; reply_not:do not know what|did not understand]"
     },
     {
-     "text": "eyeglasses",
+     "text": "si mai sus",
+     "tab": "draw",
+     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; wrong; reply_not:do not know what|did not understand]"
+    },
+    {
+     "text": "desene asta",
+     "tab": "map",
+     "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
+    },
+    {
+     "text": "desene asta o",
+     "tab": "map",
+     "happened": "I did not understand \"desene asta o\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not"
+    }
+   ]
+  },
+  {
+   "cause": "foreign-world reading",
+   "count": 4,
+   "both_reasoners": 4,
+   "examples": [
+    {
+     "text": "an old woman",
      "tab": "robot",
-     "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; open]"
+     "happened": "I did not understand \"year\" here. [outcome: refused; wrong; reply_not:did not understand]"
     },
     {
-     "text": "a women",
+     "text": "an old woman",
      "tab": "robot",
-     "happened": "I am not sure how “a women” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+     "happened": "I did not understand that as something to do in the avatar. [outcome: refused; wrong; reply_not:did not understand]"
     },
     {
-     "text": "new game",
-     "tab": "guess",
-     "happened": "I am not sure how “new name” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+     "text": "make it happy",
+     "tab": "robot",
+     "happened": "I did not understand \"happy\" here. [outcome: refused; wrong; reply_not:Which shape|did not understand]"
+    },
+    {
+     "text": "put a hat",
+     "tab": "robot",
+     "happened": "Nothing changed. Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\""
     }
    ]
   },
@@ -1508,23 +1599,94 @@
   },
   {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.gaps",
-   "count": 3,
-   "both_reasoners": 3,
+   "count": 4,
+   "both_reasoners": 4,
    "examples": [
     {
      "text": "would you say you are happy",
      "tab": "robot",
-     "happened": "I could not find \"you are happy\" in the document. [outcome: other_world; wrong; answer:happy]"
+     "happened": "I did not understand \"say\", \"happy\" here. [outcome: refused; wrong; answer:happy]"
     },
     {
      "text": "would you say you are sad",
      "tab": "robot",
-     "happened": "I could not find \"you are sad\" in the document. [outcome: other_world; wrong; answer:sad]"
+     "happened": "I did not understand \"say\", \"sad\" here. [outcome: refused; wrong; answer:sad]"
+    },
+    {
+     "text": "whats on u",
+     "tab": "robot",
+     "happened": "I did not understand \"whats\" here. [outcome: refused; wrong; answer:wear]"
     },
     {
      "text": "what is on you",
      "tab": "robot",
-     "happened": "There is no you here. [outcome: executed; partly; answer:wear]"
+     "happened": "There is one face. There is one hair back. There is one shoulders. There is one neck. There is one ears. There is one head. There is one cheeks. There is one mo"
+    }
+   ]
+  },
+  {
+   "cause": "fragment / list split",
+   "count": 3,
+   "both_reasoners": 3,
+   "examples": [
+    {
+     "text": "deseneaza si un magar, dar sa nu zboare, pe iarba",
+     "tab": "draw",
+     "happened": "I understood \"on the grass\", but not \"Draw a donkey\", \"too to not fly\", so I did nothing. [outcome: refused; open]"
+    },
+    {
+     "text": "eyeglasses",
+     "tab": "robot",
+     "happened": "I did not understand that as something to do in the avatar. [outcome: refused; open]"
+    },
+    {
+     "text": "new game",
+     "tab": "guess",
+     "happened": "I am not sure how “new name” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+    }
+   ]
+  },
+  {
+   "cause": "avatar part not an operation of the avatar world",
+   "count": 3,
+   "both_reasoners": 3,
+   "examples": [
+    {
+     "text": "remove eyegases",
+     "tab": "robot",
+     "happened": "I did not understand \"eyegases\" here. [outcome: refused; open]"
+    },
+    {
+     "text": "remove eyeglasses",
+     "tab": "robot",
+     "happened": "Nothing changed. There is no glasses here. [outcome: refused; open]"
+    },
+    {
+     "text": "put a hat",
+     "tab": "robot",
+     "happened": "Nothing changed. Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\""
+    }
+   ]
+  },
+  {
+   "cause": "judged wrong (state / answer expected is not there): owner-log-2026-11-13c",
+   "count": 3,
+   "both_reasoners": 3,
+   "examples": [
+    {
+     "text": "10 cars",
+     "tab": "draw",
+     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; wrong]"
+    },
+    {
+     "text": "1000 cars",
+     "tab": "draw",
+     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; wrong]"
+    },
+    {
+     "text": "make the avatar a angry boy",
+     "tab": "robot",
+     "happened": "I did not understand \"angry\" here. [outcome: refused; wrong]"
     }
    ]
   },
@@ -1563,23 +1725,6 @@
    ]
   },
   {
-   "cause": "judged wrong (state / answer expected is not there): owner-log-2026-11-13c",
-   "count": 2,
-   "both_reasoners": 2,
-   "examples": [
-    {
-     "text": "10 cars",
-     "tab": "draw",
-     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; wrong]"
-    },
-    {
-     "text": "1000 cars",
-     "tab": "draw",
-     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; wrong]"
-    }
-   ]
-  },
-  {
    "cause": "session as content (about the discussion)",
    "count": 2,
    "both_reasoners": 2,
@@ -1597,6 +1742,23 @@
    ]
   },
   {
+   "cause": "sentence not read by any world (no cause key)",
+   "count": 2,
+   "both_reasoners": 2,
+   "examples": [
+    {
+     "text": "start x and 0",
+     "tab": "tictactoe",
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
+    },
+    {
+     "text": "listat Tic Tac Toe",
+     "tab": "tictactoe",
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
+    }
+   ]
+  },
+  {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.cb-c",
    "count": 2,
    "both_reasoners": 2,
@@ -1610,18 +1772,6 @@
      "text": "make the first sun blue",
      "tab": "draw",
      "happened": "I added a sun. [outcome: executed; wrong; state:art.draw:objects.length=3]"
-    }
-   ]
-  },
-  {
-   "cause": "foreign-world reading",
-   "count": 1,
-   "both_reasoners": 1,
-   "examples": [
-    {
-     "text": "an old woman",
-     "tab": "robot",
-     "happened": "I did not understand \"an old woman\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; wrong; reply_not:did not understand"
     }
    ]
   },

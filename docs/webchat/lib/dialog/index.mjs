@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=0657fb1323';
+import { composeReply, sayOf } from './composed-reply.mjs?v=1ff87d1a81';
 import { reviewForeign } from './foreign-reading.mjs?v=ac90e6b4da';
 import { installTextGen } from './textgen.mjs?v=ece14360d9';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=1c7c025d63';
@@ -28,7 +28,7 @@ import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voi
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=bb754b8305';
 import { machineReads } from '../translate/reading-policy.mjs?v=96bd6cc0e4';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=eb081373b0';
+import { langRoNow } from '../translate/frames-ro.mjs?v=180752cdbd';
 import { repairInContext } from '../translate/source-repair.mjs?v=db5b883c67';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=1c7c025d63';
 import { lexIndex } from '../worlds/lexicon.mjs?v=2dce0c5460';
@@ -42,7 +42,7 @@ import { attachValues } from '../knowledge/values.mjs?v=c3d5c59521';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=5e17031144';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=2413a09df2';
 import { Discourse } from './discourse.mjs?v=fc5187385a';
-import { Dialogue } from './dialogue.mjs?v=394d0064f0';
+import { Dialogue } from './dialogue.mjs?v=2fb718fd03';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=851c397620';
 import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=73df08128c';
@@ -364,7 +364,7 @@ import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=
 import { intentStep, weakReading, cutWorld } from './intent.mjs?v=c1291bdff9';
 import { knownEnglishWord } from '../translate/en-ro.mjs?v=cbd133aecd';
 import { proposeReading, negationWords } from './proposer.mjs?v=b3c21ed7d7';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint, madeAgainstSaid } from './request.mjs?v=09b2a456a1';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint, madeAgainstSaid } from './request.mjs?v=584d43e017';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1653,7 +1653,7 @@ export class DialogSession {
     const snap0 = this.snapshot();
     const first = await this._sendRead(text, opts);
     const hit = [...new Set((first?.trace?.segments ?? first?.segments ?? []).map((sg) => sg.match?.worldId ?? sg.world).filter(Boolean))];
-    if (hit.length && !hit.some((w) => declaredWorld(this.engine.set.get(w), this.engine.sopworld))) return markLegacy(first, `${door?.why ?? 'not read'}; answered by ${hit.join(', ')} (no declarations)`);
+    if (hit.length && !hit.some((w) => w === tabWorld ? declaredWorld(this.engine.set.get(w), this.engine.sopworld) : declaredWorld(this.engine.set.get(w), this.engine.sopworld) && !this.engine.set.get(w)?.ambient)) return markLegacy(first, `${door?.why ?? 'not read'}; answered by ${hit.join(', ')} (no declarations, or an ambient world off its tab)`);   // an ambient world (the avatar popup over every tab) is declared on its own tab only
     this.restore(snap0);
     const honest = await this._doorHonest(text, opts, tabWorld, door);
     stampDoor(honest, tabWorld, text, door?.q); honest.trace.legacy = false; honest.trace.door = `honest: ${door?.why ?? 'not read'}`;
