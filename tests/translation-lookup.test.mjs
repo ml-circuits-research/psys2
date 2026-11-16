@@ -42,3 +42,14 @@ test('the candidates: one more rules candidate per other sense, after the defaul
   assert.ok(i >= 0 && j > i, cands.map((c) => c.source).join(','));
   assert.ok(cands.some((c) => /arrange/i.test(c.text)) && cands.some((c) => /^Sit/.test(c.text)));
 });
+
+test('a dictation frame (a raw slot) is one reading: the translation without it is a candidate of its own, after it (reviewer 05:05: "scrie o scrisoare scurta despre o vila")', async () => {
+  const t = 'scrie o scrisoare scurta despre o vila';
+  const r = en(t);
+  assert.ok(r.verbatim && /^Type o scrisoare/.test(r.text), r.text);
+  assert.equal(en(t, { verbatim: false }).text, 'Write a short letter about a villa');
+  const cands = await gatherCandidates(t, { from: 'ro', to: 'en', translator: { rules: tr }, machine: false });
+  const i = cands.findIndex((c) => c.source === 'rules'), j = cands.findIndex((c) => c.source === 'rules-plain');
+  assert.ok(i >= 0 && j > i, cands.map((c) => c.source).join(','));
+  assert.ok(!en('scrie o poveste despre o vulpe').verbatim, 'a frame of its own (a kind of text) is no dictation');
+});

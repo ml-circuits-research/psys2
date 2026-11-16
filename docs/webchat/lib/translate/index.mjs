@@ -10,7 +10,7 @@
 import { tokenize, foldKey } from './normalize.mjs?v=6d473eb091';
 import { analyze, placeOf, surfaceForms } from './morphology.ro.mjs?v=8bcf5dc68f';
 import { frameMoveRoEn, loadFramesRo, langRoNow } from './frames-ro.mjs?v=7c3e58b7f0';
-import { within } from './candidates.mjs?v=bb754b8305';
+import { within } from './candidates.mjs?v=a7f7eb0703';
 import { pluralEn, pastEn } from './inflect.en.mjs?v=5b2e62d57a';
 import { sensesRo } from './lexicon-ro.mjs?v=d0e519126b';
 import { DICTIONARY_MAX_COST } from './source-repair.mjs?v=db5b883c67';
@@ -142,7 +142,7 @@ export function detectLanguage(text) {
 // that sets `globalThis.__psys2LazyRoEn` before importing this module loads them on demand: `loadRoEn()` (the host calls it when the language is not English), and a ro -> en `translate` that
 // finds them missing returns a promise that waits for them (every caller of the rules awaits the answer).
 let roEn = null, roEnLoading = null;
-export function loadRoEn() { return roEn ? Promise.resolve(roEn) : (roEnLoading ??= Promise.all([import('./ro-en.mjs?v=8adc0343ac'), loadFramesRo()]).then(([m]) => (roEn = m.translateRoEn), (e) => { roEnLoading = null; throw e; })); }   // with the w.lang.ro frames (frames-ro.mjs)
+export function loadRoEn() { return roEn ? Promise.resolve(roEn) : (roEnLoading ??= Promise.all([import('./ro-en.mjs?v=b24184d921'), loadFramesRo()]).then(([m]) => (roEn = m.translateRoEn), (e) => { roEnLoading = null; throw e; })); }   // with the w.lang.ro frames (frames-ro.mjs)
 /** True when the Romanian -> English rules are in memory. */
 export const roEnLoaded = () => !!roEn;
 if (!globalThis.__psys2LazyRoEn) await loadRoEn();
@@ -159,7 +159,7 @@ export function translate(text, opts = {}) {
     // a move the catalog's w.lang.ro frames read whole (the library's readFrames) is realised from its frame; everything else is the rules translator's (frames-ro.mjs)
     const viaFrames = (f) => {
       let fr = null;
-      const o = { senses: opts.senses ?? null, prefer: opts.prefer ?? null };   // the sense chosen per form and the open world's words (lexicon-ro.mjs)
+      const o = { senses: opts.senses ?? null, prefer: opts.prefer ?? null, verbatim: opts.verbatim !== false };   // the sense chosen per form and the open world's words (lexicon-ro.mjs)
       if (opts.frames !== false) { try { fr = frameMoveRoEn(source, (t) => f(t, o)); } catch { fr = null; } }
       return fr ? { text: fr.text, alignment: [{ src: [0, source.length], tgt: [0, fr.text.length] }], unknown: [], notes: fr.notes, confidence: 0.9, frame: fr.frame } : f(source, o);
     };

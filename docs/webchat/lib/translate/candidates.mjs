@@ -238,7 +238,7 @@ export async function gatherCandidates(text, { from, to = 'en', translator, abor
   };
   const rules = translator?.rules, hasRules = !!rules && (rules.supports?.(from, to) ?? true);
   const viaMT = async (s) => { if (!machine) return []; try { return (await abortable(translator?.candidatesViaMT?.(s, { from, to }) ?? [], 'translate')) ?? []; } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; return []; } };
-  const viaRules = async (s, senses = null) => { if (!hasRules) return null; try { const r = await abortable(rules.translate(s, { from, to, prefer, ...(senses ? { senses } : {}) }), 'translate'); return textOf(r) && !r?.untranslatable?.length ? r : null; } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; return null; } };
+  const viaRules = async (s, senses = null, extra = {}) => { if (!hasRules) return null; try { const r = await abortable(rules.translate(s, { from, to, prefer, ...(senses ? { senses } : {}), ...extra }), 'translate'); return textOf(r) && !r?.untranslatable?.length ? r : null; } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; return null; } };
   budget.tick('candidates.gather');
   // Q13: the grammar voices propose first (they abstain outside their frames); the choice below still takes a candidate only if the reader understands it
   try { for (const v of (await abortable(translator?.candidatesViaVoices?.(text, { from, to }) ?? [], 'translate')) ?? []) add(v.source, v.translation ?? v.text, { voice: true, frame: v.frame }); } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; }
@@ -246,6 +246,9 @@ export async function gatherCandidates(text, { from, to = 'en', translator, abor
   for (const m of mt) add(m.source, m.translation ?? m.text, m.rejected ? { rejected: m.rejected, ...(m.soft ? { soft: true } : {}) } : {});
   const r = await viaRules(text);
   if (r) add('rules', r);
+  // A FRAME THAT KEEPS THE WORDS AS TYPED (dictation: "scrie {rest:raw}" -> "type {rest}") is one reading, not the only one: the translation without it is a candidate of its own,
+  // and the reading chooses (fewest unread words; a tie keeps the dictation) — "scrie o scrisoare scurtă despre o vilă" is a request to write, "scrie salut lume" stays dictation
+  if (r?.verbatim) { const plain = await viaRules(text, null, { verbatim: false }); if (plain) add('rules-plain', plain); }
   // one candidate after the spelling repair, by the first translator that is available
   const vocab = rules?.sourceVocabulary?.(from);
   if (vocab) {
