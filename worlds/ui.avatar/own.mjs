@@ -34,5 +34,7 @@ export const animate = (ctx, { anim } = {}) => {
   ctx.effect('avatar.animate', { name });
   return ok({ wave: 'I wave at you!', nod: 'I nod.', dance: 'I dance!', shake: 'I shake my head.', spin: 'Wheee!', jump: 'I jump!', bounce: 'I bounce!', wiggle: 'I wiggle.' }[name] ?? `OK, ${name}!`);
 };
+/** Spec 28 section 14: the tool primitives the request door runs (request.sop std.tool wires), the face's view and its own undo / redo (face.mjs). */
+export { wearPreset, putPart, takeOff, setParts, moveParts, toolView, presetVariant, undoStep, redoStep } from './face.mjs';
 /** The drawing world hands "make your nose bigger" over when "your ..." names no object: { part, words: the size word }. */
 export const setPartUnknown = (ctx, a = {}) => { ensure(ctx); return a.part ? F.faceResize(ctx, { words: a.part, dir: /small|tini|little|short|narrow|half/.test(String(a.words ?? '')) ? 'smaller' : 'bigger' }, dataOf(ctx)) : no('Which part?'); };

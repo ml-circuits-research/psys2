@@ -915,6 +915,61 @@
    "file": "completeness.test.mjs",
    "name": "arbitration on typed worlds: \"put the boxes in a circle\" on the diagram tab is the diagram's (arrangement), not the avatar's; with PSYS2_COMPLETE=off the avatar still takes it",
    "reason": "pins the old router with PSYS2_COMPLETE=off: the Diagram is a declared tab on the binding now, so the door reads the turn (and says it cannot take a layout for a place: needs \"put X in a circle\" read as arrange, questions.md Q46 [LIB])"
+  },
+  {
+   "file": "best-effort.test.mjs",
+   "name": "loose words are read as the most sensible sentence and the reply says so",
+   "reason": "avatar on the binding (slice A1): \"square eyes robot pls\" on the avatar tab: needs a variant of a part as a value the reader reads (k.faces.variant by slot) and a preset said with a part (Q96 LIB 3)"
+  },
+  {
+   "file": "completeness.test.mjs",
+   "name": "completeness end to end: an incomplete destructive reading is not executed (hold), and a clarifying ask replaces a half-read one (ask)",
+   "reason": "avatar on the binding (slice A1): pins the old readers' hold / ask on the avatar tab (\"remove the boxes from the face\"); the door never executes a half-read turn and says what it did not read"
+  },
+  {
+   "file": "conversation-summary.test.mjs",
+   "name": "log c: the failures and the questions asked back are listed, the outcome words are the avatar's",
+   "reason": "avatar on the binding (slice A1): replays an owner log on the robot tab with the old readers' wordings; on the door the avatar's turns are said by reply facts (Q96 LIB 8)"
+  },
+  {
+   "file": "pilot-avatar.test.mjs",
+   "name": "ops: two acts in one sentence (an angry boy = the preset boy and the expression angry)",
+   "reason": "avatar on the binding (slice A1): needs expressions read as values of a slot typed by k.faces.expression without the wrong make of Q96 LIB 3"
+  },
+  {
+   "file": "pilot-avatar.test.mjs",
+   "name": "ops: several acts in one sentence are ONE undo step",
+   "reason": "avatar on the binding (slice A1): same sentence as \"an angry boy\": needs Q96 LIB 3 (the step rule itself holds: tests/avatar-binding)"
+  },
+  {
+   "file": "pilot-avatar.test.mjs",
+   "name": "matrix: two acts in one sentence (an angry boy = the preset boy and the expression angry)",
+   "reason": "avatar on the binding (slice A1): needs expressions read as values of a slot typed by k.faces.expression without the wrong make of Q96 LIB 3"
+  },
+  {
+   "file": "pilot-avatar.test.mjs",
+   "name": "matrix: several acts in one sentence are ONE undo step",
+   "reason": "avatar on the binding (slice A1): same sentence as \"an angry boy\": needs Q96 LIB 3 (the step rule itself holds: tests/avatar-binding)"
+  },
+  {
+   "file": "pilot-avatar.test.mjs",
+   "name": "matrix: decline: a thing that is not a face part is read by the next world (draw a house on the Avatar tab goes to art.draw)",
+   "reason": "avatar on the binding (slice A1): no fallback on a declared tab (spec 28 section 10): a request of another world from the avatar tab is said honestly; needs routing to the world a turn names before the door (as on every declared tab)"
+  },
+  {
+   "file": "pilot-avatar.test.mjs",
+   "name": "matrix: the acts cover the phrases the chat lost: eyes closer together, bare eyeglasses, do you have glasses, add and remove eyeglasses",
+   "reason": "avatar on the binding (slice A1): needs mirrored-pair moves (closer together), a bare kind as an act, yes / no questions of the state, and w.face words for the slots (Q96 LIB 2, 6; KNOW)"
+  },
+  {
+   "file": "rd10-names-capability.test.mjs",
+   "name": "RD1b: \"red house big\" draws a big red house (no \"redo\")",
+   "reason": "avatar on the binding (slice A1): no fallback on a declared tab: a drawing request from the avatar tab is said honestly; needs routing to the world a turn names before the door"
+  },
+  {
+   "file": "voice-repair.test.mjs",
+   "name": "rp3-03..06 avatar expressions as loose words, on every character",
+   "reason": "avatar on the binding (slice A1): \"make a big smile\", \"small smile\", \"make a frown\", \"the next mouth\" on the avatar tab: needs a variant of a part as a value the reader reads (k.faces.variant by slot) and next / another as a step over the variants (Q96 LIB 3)"
   }
  ]
 }

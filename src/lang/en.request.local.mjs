@@ -49,6 +49,17 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.redo_did w.lang.en.reply name=done.redo.did count=one role=did text="OK, I did it again ({did})."
 @w.lang.en.reply.local.nothing_known w.lang.en.reply name=refused.nothing_known count=one role=about text="I know nothing about {about} in my knowledge yet."
 @w.lang.en.reply.local.no_composer w.lang.en.reply name=refused.no_composer count=one text="I cannot write compositions yet: the library has no composer (std.compose) in this build."
+# The slots of k.faces are named by plural nouns (eyes, glasses): their plural is the word itself (questions.md Q96 (5) [KNOW], w.lang.en.irregular)
+@w.lang.en.irregular.local.eyes w.lang.en.irregular singular=eyes plural=eyes
+@w.lang.en.irregular.local.ears w.lang.en.irregular singular=ears plural=ears
+@w.lang.en.irregular.local.eyebrows w.lang.en.irregular singular=eyebrows plural=eyebrows
+@w.lang.en.irregular.local.cheeks w.lang.en.irregular singular=cheeks plural=cheeks
+@w.lang.en.irregular.local.glasses w.lang.en.irregular singular=glasses plural=glasses
+@w.lang.en.irregular.local.earrings w.lang.en.irregular singular=earrings plural=earrings
+@w.lang.en.irregular.local.shoulders w.lang.en.irregular singular=shoulders plural=shoulders
+@w.lang.en.irregular.local.accessories w.lang.en.irregular singular=accessories plural=accessories
+@w.lang.en.reply.local.needed w.lang.en.reply name=refused.needed count=one role=thing text="I cannot take off the {thing}: a face needs one."
+@w.lang.en.reply.local.no_colour w.lang.en.reply name=refused.no_colour count=one role=thing role=value text="The {thing} cannot be {value}."
 @w.lang.en.reply.local.change_about_1 w.lang.en.reply name=done.change.about count=one role=thing role=value text="The {thing} is about {value} now."
 @w.lang.en.reply.local.change_length_1 w.lang.en.reply name=done.change.length count=one role=thing role=value text="The {thing} has {value} words now."
 @w.lang.en.reply.local.change_title_1 w.lang.en.reply name=done.change.title count=one role=thing role=value text="The {thing} is called “{value}” now."

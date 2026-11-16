@@ -58,10 +58,10 @@ test('veto: "connect Start to End" with no End offers to add it, and "yes" does'
 });
 
 test('veto: "switch to klingon" lists the languages the app has, from the ui.shell knowledge base', async () => {
-  const s = await session('veto', 'robot');
+  const s = await session('veto', 'map');   // a tab with no declarations (the robot tab is the avatar's declared tab: an unknown language there is said as unread, as on every declared tab)
   const r = await s.send('switch to klingon');
   assert.equal(r.text, 'I do not speak klingon. The languages I have: English and Romanian.');
-  const off = await (await session('off', 'robot')).send('switch to klingon');
+  const off = await (await session('off', 'map')).send('switch to klingon');
   assert.match(off.text, /I did not (understand|catch)/);
   const ok = await s.send('switch to romanian');
   assert.doesNotMatch(ok.text, /I do not speak/);

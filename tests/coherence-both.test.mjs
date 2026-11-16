@@ -13,7 +13,7 @@ const settings = settingsForMode('rules');
 const engines = { ops: await engineWith('ops'), matrix: await engineWith('matrix') };
 const say = async (e, lines, language = 'en') => {
   const s = e.createSession(sessionOptions(settings, { language }));
-  s.setWorldState('ui.shell', { activeTab: 'robot' });
+  s.setWorldState('ui.shell', { activeTab: 'talk' });
   const out = [];
   for (const l of lines) out.push((await s.send(l, language === 'en' ? {} : { language })).text);
   return { s, out };
