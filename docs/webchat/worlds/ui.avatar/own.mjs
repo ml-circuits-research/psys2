@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // ui.avatar (spec 21): the operations that are not acts: the name, a moment of the stage (wave, nod, dance ...), and what other worlds call
 // (avatar.nameOf, avatar.setPartUnknown). The face itself is changed by the acts of the schema (hooks.mjs). Browser-safe.
-import * as F from './facelogic.mjs?v=4f4b130443';
+import * as F from './facelogic.mjs?v=7fad5ef048';
+import { newFace } from './face.mjs?v=29240b25c0';
 import { DEFAULT_FACE } from './default-face.mjs?v=9a9dc8d5bf';
 
 export const ok = (value) => ({ status: 'supported', value });
@@ -12,7 +13,7 @@ export const dataOf = (ctx) => ctx.knowledge?.peekFaces?.() ?? DEFAULT_FACE;
 export const ensure = (ctx) => { ctx.state.name = typeof ctx.state.name === 'string' && ctx.state.name ? ctx.state.name : DEFAULT_NAME; return ctx.state; };
 
 /** The engine seeds the state of a tool world at the start of a session: the avatar has its name before anything is said. */
-export function initialState() { return { name: DEFAULT_NAME }; }
+export function initialState() { return { name: DEFAULT_NAME, face: newFace(DEFAULT_FACE) }; }
 
 export const setName = (ctx, { name } = {}) => {
   const n = String(name ?? '').trim().replace(/[.!?]+$/, '');
@@ -35,6 +36,6 @@ export const animate = (ctx, { anim } = {}) => {
   return ok({ wave: 'I wave at you!', nod: 'I nod.', dance: 'I dance!', shake: 'I shake my head.', spin: 'Wheee!', jump: 'I jump!', bounce: 'I bounce!', wiggle: 'I wiggle.' }[name] ?? `OK, ${name}!`);
 };
 /** Spec 28 section 14: the tool primitives the request door runs (request.sop std.tool wires), the face's view and its own undo / redo (face.mjs). */
-export { wearPreset, putPart, takeOff, setParts, moveParts, toolView, presetVariant, undoStep, redoStep } from './face.mjs?v=8a62d2d4b8';
+export { wearPreset, putPart, takeOff, setParts, moveParts, toolView, presetVariant, undoStep, redoStep } from './face.mjs?v=29240b25c0';
 /** The drawing world hands "make your nose bigger" over when "your ..." names no object: { part, words: the size word }. */
 export const setPartUnknown = (ctx, a = {}) => { ensure(ctx); return a.part ? F.faceResize(ctx, { words: a.part, dir: /small|tini|little|short|narrow|half/.test(String(a.words ?? '')) ? 'smaller' : 'bigger' }, dataOf(ctx)) : no('Which part?'); };

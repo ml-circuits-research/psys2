@@ -2,6 +2,7 @@
 // ui.avatar (spec 21): the operations that are not acts: the name, a moment of the stage (wave, nod, dance ...), and what other worlds call
 // (avatar.nameOf, avatar.setPartUnknown). The face itself is changed by the acts of the schema (hooks.mjs). Browser-safe.
 import * as F from './facelogic.mjs';
+import { newFace } from './face.mjs';
 import { DEFAULT_FACE } from './default-face.mjs';
 
 export const ok = (value) => ({ status: 'supported', value });
@@ -12,7 +13,7 @@ export const dataOf = (ctx) => ctx.knowledge?.peekFaces?.() ?? DEFAULT_FACE;
 export const ensure = (ctx) => { ctx.state.name = typeof ctx.state.name === 'string' && ctx.state.name ? ctx.state.name : DEFAULT_NAME; return ctx.state; };
 
 /** The engine seeds the state of a tool world at the start of a session: the avatar has its name before anything is said. */
-export function initialState() { return { name: DEFAULT_NAME }; }
+export function initialState() { return { name: DEFAULT_NAME, face: newFace(DEFAULT_FACE) }; }
 
 export const setName = (ctx, { name } = {}) => {
   const n = String(name ?? '').trim().replace(/[.!?]+$/, '');

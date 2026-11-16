@@ -10,7 +10,7 @@
 import * as space from '../space/space.mjs?v=42696277df';
 import { en } from '../../lib/lang/en.mjs?v=edece7402d';
 import { comparativeWords } from '../../lib/knowledge/values.mjs?v=db60f56a52';
-import { NONE, DEFAULT_PRESET, slotOf, newFace, faceOf, snap, mark, apply, put, neighbours, centre, SCALE_MIN, SCALE_MAX } from './face.mjs?v=8a62d2d4b8';   // the face's state and its algorithms are the tool's (face.mjs)
+import { NONE, DEFAULT_PRESET, slotOf, newFace, faceOf, snap, mark, apply, put, neighbours, centre, SCALE_MIN, SCALE_MAX } from './face.mjs?v=29240b25c0';   // the face's state and its algorithms are the tool's (face.mjs)
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 export { NONE, DEFAULT_PRESET, newFace, faceOf, neighbours };

@@ -205,11 +205,12 @@ export function redoStep(ctx) {
 }
 /** The face as facts (the library's view): the face (its preset and expression) and each part it shows (its variant, colour and size grade). Reads the state, never changes it. */
 export function toolView(ctx) {
-  const data = faceData(ctx), f = ctx.state?.face?.v === 2 ? ctx.state.face : newFace(data);
+  const data = faceData(ctx), f = ctx.state?.face;
+  if (!f || f.v !== 2) return [];
   const placeOf = (n) => { const a = f.adj?.[n] ?? {}, v = Math.sign(Math.round(a.dy ?? 0)), h = Math.sign(Math.round(a.dx ?? 0)); return [v < 0 ? 'up' : v > 0 ? 'down' : '', h < 0 ? 'left' : h > 0 ? 'right' : ''].filter(Boolean).join(' ') || null; };   // where a part is moved to from its place, in the tool's directions
   const colourOf = (n) => f.paint?.[n] ?? (roleOf(data, n) ? f.colours?.[roleOf(data, n)] : null) ?? null;
   return [
-    { id: 'face', kind: 'face', preset: f.base, ...(f.expression ? { expression: f.expression } : {}) },
-    ...data.slots.filter((s) => f.slots[s.name] && f.slots[s.name] !== NONE).map((s) => ({ id: s.name, kind: s.name, variant: f.slots[s.name], colour: colourOf(s.name), size: f.grade?.[s.name] ?? 'default', ...(placeOf(s.name) ? { place: placeOf(s.name) } : {}) })),
+    { id: 'face', kind: 'face', ...(f.base ? { preset: f.base } : {}), ...(f.expression ? { expression: f.expression } : {}) },
+    ...data.slots.filter((s) => f.slots?.[s.name] && f.slots[s.name] !== NONE).map((s) => ({ id: s.name, kind: s.name, variant: f.slots[s.name], colour: colourOf(s.name), size: f.grade?.[s.name] ?? 'default', ...(placeOf(s.name) ? { place: placeOf(s.name) } : {}) })),
   ];
 }
