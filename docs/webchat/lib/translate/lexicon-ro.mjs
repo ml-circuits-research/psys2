@@ -14,7 +14,7 @@
  */
 import { analyzeRaw } from './morphology.ro.mjs?v=8bcf5dc68f';
 import { foldKey } from './normalize.mjs?v=6d473eb091';
-import { langRoNow } from './frames-ro.mjs?v=07dbea42b4';
+import { langRoNow } from './frames-ro.mjs?v=318f40fd05';
 import { pastEn } from './inflect.en.mjs?v=5b2e62d57a';
 
 const CONTENT = new Set(['noun', 'verb', 'adj']);
