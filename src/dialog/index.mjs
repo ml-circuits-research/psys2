@@ -471,6 +471,7 @@ export class DialogSession {
     /** Persistent discussions and world instances (spec 13, ADR-008): bookkeeping around the turn, never changes a reading. */
     this.astra = createSessionAstra(this);
     this.sources = new Map();
+    this.newEngineJournal = [];
     this._msg = 0;
     this.isession.add(this.isession.form.initDefaults());
   }
@@ -1532,10 +1533,10 @@ export class DialogSession {
     const tb = opts.budget ?? createBudget();
     const bt = installBudget(tb, { force: !!opts.budget });
     const snap = g || bt ? (opts.undo ?? this.snapshot()) : null;   // a host that passes `undo` (its own snapshot) restores the session itself
-    if (this.engine.knowledge) await guard.untimed(() => openWordsReady(text));   // open classes (lexicons with open=knowledge) are read by lookup: the vocabulary is loaded before the sentence is read
+    if (opts.engine !== 'new' && this.engine.knowledge) await guard.untimed(() => openWordsReady(text));   // open classes (lexicons with open=knowledge) are read by lookup: the vocabulary is loaded before the sentence is read
     // the open tab's world reads with its own engine (ops `prepare()`, lazy in a browser, spec 04): ready BEFORE the sentence is read, so its reader (hook readsWhole) can answer
     // whether it reads the clause; a reader that cannot tell yet reads nothing (owner export 2026-11-15T11:43, the first turn on the Diagram tab)
-    { const tab = this.isession.state?.['ui.shell']?.activeTab, tw = tab ? this.engine.set.list().find((w) => w.tab?.id === tab) : null, prep = tw ? this.engine.set.get(tw.id)?.ops?.prepare : null; if (typeof prep === 'function') { try { await guard.untimed(() => prep()); } catch { /* its reader then says it cannot tell */ } } }
+    if (opts.engine !== 'new') { const tab = this.isession.state?.['ui.shell']?.activeTab, tw = tab ? this.engine.set.list().find((w) => w.tab?.id === tab) : null, prep = tw ? this.engine.set.get(tw.id)?.ops?.prepare : null; if (typeof prep === 'function') { try { await guard.untimed(() => prep()); } catch { /* its reader then says it cannot tell */ } } }
     const outerView = this._view; this._view = outerView ?? (typeof opts.view === 'string' && opts.view ? opts.view : null);   // the view the host tells for this turn (spec 28 section 21): read in it, the shell's tab untouched
     try {
       const reply = await this._send(text, opts);
@@ -1572,12 +1573,13 @@ export class DialogSession {
     try { astra = this.astra ? astraSnapshot(this.astra) : null; } catch { astra = null; }
     let rs = null;
     try { rs = this.isession.rs?.timelineJSON() ?? null; } catch { rs = null; }   // the library instances and the undo timeline (spec 15); absent on the ops reasoner
-    return { v: 1, discourse: this.discourse.toJSON(), dialogue: this.dialogue.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], ...(rs ? { rs } : {}) };
+    return { v: 1, ...(this.newEngineJournal.length ? { newEngineJournal: structuredClone(this.newEngineJournal) } : {}), discourse: this.discourse.toJSON(), dialogue: this.dialogue.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], ...(rs ? { rs } : {}) };
   }
 
   /** Puts a `memoryJSON()` record back (a bad record changes nothing it cannot read). Runs no effect. */
   restoreMemory(mem) {
     if (!mem || typeof mem !== 'object' || mem.v !== 1) return false;
+    if (Array.isArray(mem.newEngineJournal)) this.newEngineJournal = structuredClone(mem.newEngineJournal.slice(-128));
     this.discourse.load(mem.discourse);
     if (mem.dialogue) this.dialogue.load(mem.dialogue);
     if (mem.astra && this.astra) { try { astraRestore(this.astra, mem.astra); } catch { /* the discussions start empty */ } }
@@ -1601,6 +1603,7 @@ export class DialogSession {
     return {
       isession: this.isession.clone(), msg: this._msg, recent: [...(this._recentWorlds ?? [])], lang: [this._sessionLang, this._weakRo],
       discourse: { ...dis, frames: [...dis.frames], actions: [...dis.actions], topics: [...dis.topics], lastByWorld: { ...dis.lastByWorld } },
+      newEngineJournal: structuredClone(this.newEngineJournal),
       sources: new Set(this.sources.keys()), astra: this.astra?.capture(), dialogue: this.dialogue.toJSON(),
     };
   }
@@ -1635,6 +1638,7 @@ export class DialogSession {
   restore(snap) {
     if (!snap) return;
     this.isession = snap.isession; this._msg = snap.msg; this._recentWorlds = snap.recent; [this._sessionLang, this._weakRo] = snap.lang;
+    this.newEngineJournal = structuredClone(snap.newEngineJournal ?? []);
     Object.assign(this.discourse, snap.discourse);
     this.astra?.rollback(snap.astra);
     if (snap.dialogue) this.dialogue.load(snap.dialogue);
@@ -1677,6 +1681,7 @@ export class DialogSession {
    * legacy share is what the request path cannot read yet. On a declared tab nothing falls back to the old readers of a declared world (owner 17:55): see below.
    */
   async _send(text, opts = {}) {
+    if (opts.engine === 'new') return (await import('./new-engine.mjs')).runNewEngine(this, text, opts);
     const unavailable = retiredArea(this.engine.applicationAreas, opts.view);
     if (unavailable) return unavailableAreaReply(unavailable, text);
     const tabWorld = this.context().tabWorld;

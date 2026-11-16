@@ -842,7 +842,7 @@ export async function mountPsys2(element, options = {}) {
     let reply;
     const sentLang = language.get();   // LANG-FIXED: the language this turn was read in
     try {
-      reply = await withDeadline(session.send(text, { view: avatarOpen ? 'avatar' : undefined, mode: mode === 'voice' ? 'voice' : undefined, language: sentLang, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, worldAware: settings.worldAware ?? 'veto', fastPath: settings.fastPath === true, nx: settings.nxStrategy,
+      reply = await withDeadline(session.send(text, { engine: new URLSearchParams(location.search).get('engine') === 'new' ? 'new' : undefined, view: avatarOpen ? 'avatar' : undefined, mode: mode === 'voice' ? 'voice' : undefined, language: sentLang, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, worldAware: settings.worldAware ?? 'veto', fastPath: settings.fastPath === true, nx: settings.nxStrategy,
         correction: tn.correction ?? undefined, signal: tn.ctl.signal, hardMs: remaining, softMs: remaining * TURN_LIMITS.softFraction, undo: tn.undo }), remaining + LOAD_WAIT_CAP_MS + 300, { signal: tn.ctl.signal, label: 'turn' });
     } catch (e) {
       if (e instanceof TurnAborted && engineClient?.stage) e.stage = engineClient.stage;   // the stage the engine worker reported last (the page-side deadline only knows 'turn')

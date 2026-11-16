@@ -304,12 +304,12 @@ const handlers = {
       reply = await read();
       // a turn that asked for an action of a world that is not loaded (a world asks another world's action): load that world and read the turn again
       const lacking = worldLoader.ofActions(session.takeMissed?.()).filter((id) => !loadedIds.has(id) && allowed(id));
-      if (lacking.length) {
+      if (m.opts?.engine !== 'new' && lacking.length) {
         try { session.restore(snap); } catch { /* keep */ }
         const added = await ensureWorlds(lacking, 'action');
         if (added.length) { snap = session.snapshot(); before = stateOf(); if (m.undoId != null) snaps.set(m.undoId, snap); budget = newBudget(); translator.resetUsage?.(); reply = await read(); } else reply = await read();
       }
-      if (!reply.unavailableArea && incomplete(reply) && !allLoaded()) {   // not understood, or understood with words guessed or left out: read it again with every world (the reading is then the one a full start gives)
+      if (m.opts?.engine !== 'new' && !reply.unavailableArea && incomplete(reply) && !allLoaded()) {   // not understood, or understood with words guessed or left out: read it again with every world (the reading is then the one a full start gives)
         try { session.restore(snap); } catch { /* keep */ }
         const added = await ensureWorlds(worldLoader.ids(), 'second reading');
         if (added.length) {

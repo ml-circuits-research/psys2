@@ -20,11 +20,14 @@ const ops = await engineWith('ops');
 test('vendor: the library is the pinned file, unmodified, and passes its own loop scan', () => {
   const notes = readFileSync(path.join(ROOT, 'src/vendor/LICENSES.md'), 'utf8');
   const file = readFileSync(path.join(ROOT, 'src/vendor/sopworld/sopworld.mjs'));
-  assert.match(notes, /714770a/, 'the commit is named');
-  assert.match(notes, /build `b68c886a2157`/, 'the build is recorded');
+  const pin = JSON.parse(readFileSync(path.join(ROOT, 'src/vendor/sopworld/provenance.json'), 'utf8'));
+  assert.equal(pin.commit, '1b85af087b9e6c35603621e993e2550e4922ddf3');
+  assert.ok(notes.includes(pin.commit), 'the current commit is named');
+  assert.ok(notes.includes('build `' + pin.build + '`'), 'the current build is recorded');
+  assert.equal(createHash('sha256').update(file).digest('hex'), pin.sha256);
   assert.match(notes, new RegExp(`${file.length} bytes`), 'the size is recorded');
   assert.match(notes, new RegExp(createHash('sha256').update(file).digest('hex')), 'the sha256 of the vendored file is recorded');
-  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.167\.0 /);
+  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.192\.0 /);
   assert.equal(scan(path.join(ROOT, 'src/vendor/sopworld')).join('\n'), '', 'the library\'s own scanner finds no unguarded loop in the vendored file');
   assert.ok(readFileSync(path.join(ROOT, 'src/vendor/sopworld/LICENSE'), 'utf8').startsWith('MIT License'));
 });

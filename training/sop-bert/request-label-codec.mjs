@@ -1,6 +1,6 @@
 // Training-only lossless labels for a published single-command std.request graph.
 // No language interpretation, model heads, instance resolution or execution.
-import { World, parse, str, inspectRequest } from './contracts/sopworld-0.188.0.mjs';
+import { World, parse, str, inspectRequest } from '../../src/vendor/sopworld/sopworld.mjs';
 export const LABEL_FORMAT = 'psys2.request-labels/1';
 export const LABEL_LIMITS = Object.freeze({ nodes: 256, values: 8192, characters: 262144, unresolved: 256, candidates: 64 });
 const TYPES = new Set(['std.request', ...['source', 'target', 'constraint', 'not', 'group', 'quant', 'value'].map((x) => 'std.request.' + x)]);
