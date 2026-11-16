@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "30b0339a",
-  "tree": "bb5f1b9511952d19",
+  "build": "771edee9",
+  "tree": "f8d1f627aee64060",
   "catalog": "b57c463341073d523c172db4d0decd7bc0b32450",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -463,7 +463,7 @@
      "verdict": "wrong",
      "text": "fa piciorul corcodilului albastru de culoare neagra",
      "tab": "draw",
-     "reply": "I did not understand \"leg\", \"color\" here.",
+     "reply": "I did not understand \"crocodile's\", \"leg\", \"color\" here.",
      "failing": [
       "reply_not:did not understand|composite"
      ]
@@ -1273,7 +1273,7 @@
     {
      "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
      "tab": "draw",
-     "happened": "I did not understand \"voila\", \"ta\", \"da\", \"makes\", \"oricum\" here. [outcome: refused; open]"
+     "happened": "I did not understand \"voila\", \"ta\", \"da\", \"makes\", \"nonsenses\", \"oricum\" here. [outcome: refused; open]"
     }
    ]
   },
