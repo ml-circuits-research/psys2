@@ -1,5 +1,5 @@
 """Frozen checkpoint per-key calibration. Oracle field instances, never graph accuracy."""
-import argparse,collections,hashlib,json,os
+import argparse,collections,hashlib,json,os,gzip
 from pathlib import Path
 
 def sha(path):
@@ -31,12 +31,13 @@ def main():
             count['spanRequested']+=int(bool(span));count['spanAligned']+=int(exact)
             if exact:count['spanCorrect']+=int(spans[i,:,0].argmax().item()==indices[0]and spans[i,:,1].argmax().item()==indices[-1])
     rows=[]
-    with args.data.open() as stream:
+    with (gzip.open(args.data,'rt')if args.data.suffix=='.gz'else args.data.open())as stream:
         for line in stream:
             rows.append(json.loads(line))
             if len(rows)==args.batch:evaluate(rows);rows=[]
     if rows:evaluate(rows)
+    for key in manifest['inventoryData']['fieldCoverage']:counts[key]
     if sha(checkpoint)!=checkpoint_hash:raise RuntimeError('checkpoint changed during calibration')
-    result={'format':'sop.inventory-bootstrap.calibration','version':1,'executable':False,'conditioning':'gold field instance, key, phase and candidate; not graph prediction','checkpointSha256':checkpoint_hash,'dataSha256':sha(args.data),'evaluatorSha256':sha(Path(__file__)),'keys':{key:{**{name:c[name]for name in ['pairs','correct','positivePairs','tp','fp','fn','tn','spanRequested','spanAligned','spanCorrect']},'pairAccuracy':c['correct']/c['pairs'],'positivePrecision':c['tp']/(c['tp']+c['fp'])if c['tp']+c['fp']else None,'positiveRecall':c['tp']/(c['tp']+c['fn'])if c['tp']+c['fn']else None,'spanExact':c['spanCorrect']/c['spanAligned']if c['spanAligned']else None}for key,c in sorted(counts.items())}}
+    result={'format':'sop.inventory-bootstrap.calibration','version':1,'executable':False,'conditioning':'gold field instance, key, phase and candidate; not graph prediction','threshold':'fixed logit>=0; no calibration fitting','unsupportedCalibrationKeys':sorted(key for key,c in counts.items()if not c['pairs']),'checkpointSha256':checkpoint_hash,'dataSha256':sha(args.data),'evaluatorSha256':sha(Path(__file__)),'keys':{key:{**{name:c[name]for name in ['pairs','correct','positivePairs','tp','fp','fn','tn','spanRequested','spanAligned','spanCorrect']},'pairAccuracy':c['correct']/c['pairs']if c['pairs']else None,'positivePrecision':c['tp']/(c['tp']+c['fp'])if c['tp']+c['fp']else None,'positiveRecall':c['tp']/(c['tp']+c['fn'])if c['tp']+c['fn']else None,'spanExact':c['spanCorrect']/c['spanAligned']if c['spanAligned']else None}for key,c in sorted(counts.items())}}
     args.out.write_text(json.dumps(result,indent=2)+'\n')
 if __name__=='__main__':main()

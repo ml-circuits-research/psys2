@@ -1,7 +1,7 @@
 """Inventory-conditioned encoder bootstrap. Not a graph decoder or executable reader.
 Preserves request/constraint-instance and selector/result labels as separate examples.
 """
-import argparse, ast, collections, hashlib, json, random, os, shutil
+import argparse, ast, collections, hashlib, json, random, os, shutil, gzip, io
 from pathlib import Path
 
 def digest(path): return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -13,7 +13,10 @@ def literal_maps(path):
                 if isinstance(target,ast.Name) and target.id in wanted: result[target.id]=ast.literal_eval(node.value)
     return result
 
-def prepare(root,out):
+def prepare(root,out,exclude_path=None,compressed=False):
+    excluded=set(json.loads(exclude_path.read_text()))if exclude_path else set()
+    if any(not isinstance(x,str)for x in excluded):raise ValueError("invalid-exclusion-manifest")
+    excluded_found=set();excluded_counts=collections.Counter()
     inventory_path=root/'heads/inventory.json'; inventory=json.loads(inventory_path.read_text())
     keys={f'{area}.{typ}.{key}':spec for area,types in inventory.items() for typ,row in types.items() for key,spec in row['keys'].items()}
     aliases=literal_maps(root/'heads/coverage_v1.py'); fields=[]; diagnostics=collections.Counter(); rows=collections.Counter(); sources=[]
@@ -39,7 +42,10 @@ def prepare(root,out):
             rel=str(file.relative_to(root)); sources.append({'path':rel,'sha256':digest(file)})
             for line in file.read_text().splitlines():
                 if not line.strip(): continue
-                row=json.loads(line); area=row['world']; rows[version+':'+area]+=1
+                row=json.loads(line); area=row['world']
+                if row['id']in excluded:
+                    excluded_found.add(row['id']);excluded_counts[version+':'+area]+=1;continue
+                rows[version+':'+area]+=1
                 identity=rel+':'+row['id']; split='calibration' if int(hashlib.sha256(identity.encode()).hexdigest()[:8],16)%10==0 else 'train'
                 for ri,request in enumerate(row['requests']):
                     def put(path,key,value,phase='unspecified',hint=None):emit(row,request,ri,path,key,value,phase,hint,rel,split)
@@ -76,7 +82,11 @@ def prepare(root,out):
         if field['split']=='train':pools[field['key']].add(field['candidate'])
     count=collections.Counter(); coverage=collections.Counter(); span_count=0
     out.mkdir(parents=True,exist_ok=True)
-    handles={split:(out/(split+'.jsonl')).open('w') for split in ['train','calibration']}
+    suffix='.jsonl.gz'if compressed else '.jsonl'
+    def output(split):
+        path=out/(split+suffix)
+        return io.TextIOWrapper(gzip.GzipFile(filename='',fileobj=path.open('wb'),mode='wb',mtime=0),encoding='utf-8')if compressed else path.open('w')
+    handles={split:output(split)for split in ['train','calibration']}
     try:
         for field in fields:
             candidates=sorted(pools[field['key']]-{field['candidate']}); seed=int(hashlib.sha256(field['id'].encode()).hexdigest()[:12],16); rng=random.Random(seed); negatives=rng.sample(candidates,min(2,len(candidates)))
@@ -87,7 +97,7 @@ def prepare(root,out):
             coverage[field['key']]+=1;span_count+=field['span'] is not None
     finally:
         for handle in handles.values():handle.close()
-    manifest={'format':'sop.inventory-bootstrap','version':1,'executable':False,'scope':'oracle-conditioned field-instance scoring and source spans; not graph reconstruction','inventorySha256':digest(inventory_path),'v1MappingSha256':digest(root/'heads/coverage_v1.py'),'sources':sources,'messageCounts':dict(rows),'fieldInstances':len(fields),'pairCounts':dict(count),'spanInstances':span_count,'keysCovered':len(coverage),'keysTotal':len(keys),'fieldCoverage':dict(coverage),'diagnostics':dict(diagnostics),'candidateBank':'declared closed values plus observed TRAIN labels only; not a deployment inventory','calibration':'deterministic source-row 10% partition; never final unseen evaluation','outputs':{s:digest(out/(s+'.jsonl')) for s in handles}}
+    manifest={'format':'sop.inventory-bootstrap','version':1,'executable':False,'scope':'oracle-conditioned field-instance scoring and source spans; not graph reconstruction','inventorySha256':digest(inventory_path),'v1MappingSha256':digest(root/'heads/coverage_v1.py'),'sources':sources,'messageCounts':dict(rows),'fieldInstances':len(fields),'pairCounts':dict(count),'spanInstances':span_count,'keysCovered':len(coverage),'keysTotal':len(keys),'fieldCoverage':dict(coverage),'diagnostics':dict(diagnostics),'candidateBank':'declared closed values plus observed TRAIN labels only; not a deployment inventory','calibration':'deterministic source-row 10% partition; never final unseen evaluation','exclusion':{'manifestSha256':digest(exclude_path)if exclude_path else None,'requestedIds':len(excluded),'foundIds':len(excluded_found),'missingIds':sorted(excluded-excluded_found),'excludedMessageCounts':dict(excluded_counts),'beforeCandidateBank':True},'compression':'gzip'if compressed else 'none','outputs':{s:digest(out/(s+suffix)) for s in handles}}
     (out/'data-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');print(json.dumps({k:manifest[k]for k in ['messageCounts','fieldInstances','pairCounts','spanInstances','keysCovered','keysTotal']},indent=2),flush=True)
 
 def train(args):
@@ -98,15 +108,19 @@ def train(args):
     random.seed(args.seed);np.random.seed(args.seed);torch.manual_seed(args.seed);torch.set_num_threads(2)
     class Lines(Dataset):
         def __init__(self,path):
-            self.path=path;self.offsets=[]
+            self.path=path;self.offsets=[];self.rows=None
+            if path.suffix=='.gz':
+                with gzip.open(path,'rt')as stream:self.rows=[json.loads(line)for i,line in enumerate(stream)if not args.limit or i<args.limit]
+                return
             with path.open('rb') as f:
                 while True:
                     pos=f.tell();line=f.readline()
                     if not line:break
                     self.offsets.append(pos)
                     if args.limit and len(self.offsets)>=args.limit:break
-        def __len__(self):return len(self.offsets)
+        def __len__(self):return len(self.rows)if self.rows is not None else len(self.offsets)
         def __getitem__(self,i):
+            if self.rows is not None:return self.rows[i]
             with self.path.open('rb')as f:f.seek(self.offsets[i]);return json.loads(f.readline())
     tokenizer=AutoTokenizer.from_pretrained(args.encoder,local_files_only=True);encoder=AutoModel.from_pretrained(args.encoder,local_files_only=True,attn_implementation='eager')
     class Bootstrap(nn.Module):
@@ -134,7 +148,9 @@ def train(args):
             alignment['spanRequested']+=bool(span);alignment['spanAligned']+=exact;alignment['spanUnaligned']+=bool(span)and not exact
             starts.append(indices[0]if exact else -100);ends.append(indices[-1]if exact else -100)
         return {k:v.to('cuda')for k,v in encoded.items()},torch.tensor([r['label']for r in rows],device='cuda',dtype=torch.float32),torch.tensor(starts,device='cuda'),torch.tensor(ends,device='cuda')
-    datasets={s:Lines(args.data/(s+'.jsonl'))for s in ['train','calibration']};steps=0;history=[];started=time.time()
+    data_manifest=json.loads((args.data/'data-manifest.json').read_text())
+    if not data_manifest.get('exclusion',{}).get('manifestSha256'):raise RuntimeError('training-exclusion-manifest-required')
+    datasets={s:Lines(args.data/(s+('.jsonl.gz'if data_manifest.get('compression')=='gzip'else '.jsonl')))for s in ['train','calibration']};steps=0;history=[];started=time.time()
     for epoch in range(args.epochs):
         model.train();total=0;loss_sum=0
         loader=DataLoader(datasets['train'],batch_size=args.batch,shuffle=True,collate_fn=collate,generator=torch.Generator().manual_seed(args.seed+epoch))
@@ -155,7 +171,7 @@ def train(args):
         save_weights(epoch+1,steps);tokenizer.save_pretrained(args.out/'tokenizer');(args.out/'summary.json').write_text(json.dumps({'history':history,'purpose':'non-executable inventory-conditioned bootstrap; no graph/instance/execution score'},indent=2)+'\n');print(json.dumps(result),flush=True)
 
 def main():
-    p=argparse.ArgumentParser();sub=p.add_subparsers(dest='command',required=True);a=sub.add_parser('prepare');a.add_argument('--root',type=Path,required=True);a.add_argument('--out',type=Path,required=True);t=sub.add_parser('train');t.add_argument('--data',type=Path,required=True);t.add_argument('--out',type=Path,required=True);t.add_argument('--encoder',required=True);t.add_argument('--epochs',type=int,default=1);t.add_argument('--batch',type=int,default=16);t.add_argument('--maxlen',type=int,default=192);t.add_argument('--lr',type=float,default=3e-5);t.add_argument('--seed',type=int,default=20261116);t.add_argument('--limit',type=int,default=0);args=p.parse_args();args.out.mkdir(parents=True,exist_ok=True)
-    if args.command=='prepare':prepare(args.root,args.out)
+    p=argparse.ArgumentParser();sub=p.add_subparsers(dest='command',required=True);a=sub.add_parser('prepare');a.add_argument('--root',type=Path,required=True);a.add_argument('--out',type=Path,required=True);a.add_argument('--exclude-ids',type=Path);a.add_argument('--gzip',action='store_true');t=sub.add_parser('train');t.add_argument('--data',type=Path,required=True);t.add_argument('--out',type=Path,required=True);t.add_argument('--encoder',required=True);t.add_argument('--epochs',type=int,default=1);t.add_argument('--batch',type=int,default=16);t.add_argument('--maxlen',type=int,default=192);t.add_argument('--lr',type=float,default=3e-5);t.add_argument('--seed',type=int,default=20261116);t.add_argument('--limit',type=int,default=0);args=p.parse_args();args.out.mkdir(parents=True,exist_ok=True)
+    if args.command=='prepare':prepare(args.root,args.out,args.exclude_ids,args.gzip)
     else:train(args)
 if __name__=='__main__':main()
