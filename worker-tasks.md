@@ -5047,3 +5047,14 @@ Owner (10:16): "we get nowhere with the current style; first the approach must b
 1. Finish only: the avatar on the same reading path with requests that reach the domain able to serve them (the page's own cards included), the language of each message detected, and the tightened checks + the inventory of particular rows (blocks 11:30, 11:50). Nothing else is merged.
 2. **Prepare, on paper, for the rewrite:** for each of the four domains, the list of its kinds and slots with the concept each one realises (thing / quality + which / place + relation / time / quantity / role), and what in its `request.sop` and local rows would disappear if questions, fragments, comparatives, realisation by lineage and reply frames came from the legend world. This is the domain side of the library's design page; put it in worker-log.
 3. **The calendar:** do not build it yet. Write its declaration by hand in the proposed form (meetings, rooms, people; start, duration, place, participants; no overlap for a person or a room) as the test of the design, next to the library's page.
+
+## Reviewer 2026-11-16 13:20 — OWNER: four domains; charts into diagrams; music out for now
+
+Owner (10:43): the application's domains are **drawing, diagrams, documents, calendar**. "We eliminate chart: it is too small, it can be a world we put inside diagram, so that we have chart support there. We eliminate music for the moment." Documentation gives examples only from these four.
+
+The two documents he is reviewing are in soplang-words-lib `reviews/`: `sop-worlds-teorie.md` (version 10, the target state, one lesson per domain with its declaration) and `sop-worlds-schimbari.md` (what changes, by zone; section 5 is yours, 5.3 the domains, 5.4 the task list). **They are not yet the work order: he corrects the second by hand first.** Still open with him: the map (out for now, or on declarations after the calendar) and the avatar (fifth domain, or part of the drawing).
+
+For you now, on paper only, added to the preparation of block 12:20:
+1. What removing the Charts domain touches (tab, patterns, code, tests, legacy list, owner-session rows) and what of its drawing code would become a tool of the Diagram (bars and lines placed on an axis by a node's quantity).
+2. The same list for Music.
+3. The calendar's tools and view (add, move, change, remove a meeting; rooms and people as resources), against the declaration in the theory, lesson 32, and the published `w.calendar`.
