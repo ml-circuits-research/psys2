@@ -20,7 +20,7 @@ def audit(root,exclusion_path):
     structural_names={'id','request_id','target_id','constraint_id','owner','request','target_ref','root','selector','result','member','members','bind','body','of','goal','after','group_id','group_ref','quantifier_id','quantifier_ref'}
     def group(split,version,area):
         key=split+':'+version+':'+area
-        if key not in stats:stats[key]={'counts':collections.Counter({k:0 for k in ['rows','requests','emptyRequestRows','requestObjectsWithExplicitId','targetObjectsWithExplicitId','constraintObjectsWithExplicitId','explicitSourceCoordinateFields','nestedTargetObjects','nestedConstraintObjects','requestsWithSelectorAndResultPhase','constraintTypePrefixEqualsTargetType','constraintTypePrefixDiffersFromTargetType']}),'paths':collections.defaultdict(collections.Counter),'requestCountHistogram':collections.Counter(),'constraintCountHistogram':collections.Counter(),'phases':collections.Counter(),'groups':collections.Counter(),'quantifiers':collections.Counter(),'scopes':collections.Counter(),'operators':collections.Counter(),'anchorFill':collections.Counter(),'units':collections.Counter(),'questionOperations':collections.Counter(),'structuralFieldNames':collections.Counter(),'spanEvidence':collections.Counter()}
+        if key not in stats:stats[key]={'counts':collections.Counter({k:0 for k in ['rows','requests','emptyRequestRows','requestObjectsWithExplicitId','targetObjectsWithExplicitId','constraintObjectsWithExplicitId','explicitSourceCoordinateFields','nestedTargetObjects','nestedConstraintObjects','requestsWithSelectorAndResultPhase','constraintTypePrefixEqualsTargetType','constraintTypePrefixDiffersFromTargetType','requestSpansUniqueInSource','requestSpansAmbiguousInSource','requestSpansMissingInSource','childSpansMechanicallyRecoverable','flatPhasePartitionShape']}),'paths':collections.defaultdict(collections.Counter),'requestCountHistogram':collections.Counter(),'constraintCountHistogram':collections.Counter(),'phases':collections.Counter(),'groups':collections.Counter(),'quantifiers':collections.Counter(),'modeQuantifiers':collections.Counter(),'scopes':collections.Counter(),'operators':collections.Counter(),'anchorFill':collections.Counter(),'units':collections.Counter(),'questionOperations':collections.Counter(),'structuralFieldNames':collections.Counter(),'spanEvidence':collections.Counter()}
         return stats[key]
     for version in ['haiku-v1','haiku-v2']:
         for path in sorted((root/'data'/version).glob('*/*.jsonl')):
@@ -44,8 +44,13 @@ def audit(root,exclusion_path):
                     g['counts']['requests']+=1
                     if not isinstance(request,dict):g['counts']['malformedRequests']+=1;continue
                     target=request.get('target');constraints=request.get('constraints')or []
+                    request_span=request.get('span');n=occurrences(row.get('text',''),request_span)
+                    g['counts']['requestSpansUniqueInSource'if n==1 else 'requestSpansAmbiguousInSource'if n>1 else 'requestSpansMissingInSource']+=1
+                    simple={'eq','less.equal','greater.equal','degree','region'}
+                    if version=='haiku-v2'and isinstance(target,dict)and target.get('mode')in ['new','existing']and 'quantifier'not in target and isinstance(constraints,list)and all(isinstance(c,dict)and c.get('operator')in simple and c.get('phase')in ['selector','result']and c.get('value')is not None and not any(k in c for k in ['group','scope','variety'])for c in constraints):g['counts']['flatPhasePartitionShape']+=1
                     g['counts']['requestObjectsWithExplicitId']+=any(k in request for k in ['id','request_id'])
                     if isinstance(target,dict):
+                        g['modeQuantifiers'][json.dumps([target.get('mode'),target.get('quantifier')])]+=1
                         g['counts']['nestedTargetObjects']+=1;g['counts']['targetObjectsWithExplicitId']+=any(k in target for k in ['id','target_id'])
                         if 'quantifier'in target:g['quantifiers'][json.dumps(target['quantifier'],sort_keys=True)]+=1
                     if isinstance(constraints,list):
@@ -68,7 +73,9 @@ def audit(root,exclusion_path):
                                 if key=='span'or key.endswith('_span'):
                                     g['spanEvidence'][field+':'+type_name(item)]+=1
                                     if isinstance(item,str)and isinstance(row.get('text'),str):
-                                        n=occurrences(row['text'],item);g['spanEvidence'][field+':matchesInRow='+('0'if not n else '1'if n==1 else 'many')]+=1
+                                        n=occurrences(row['text'],item)
+                                        if field!='request.span'and occurrences(row['text'],request_span)==1 and occurrences(request_span,item)==1:g['counts']['childSpansMechanicallyRecoverable']+=1
+                                        g['spanEvidence'][field+':matchesInRow='+('0'if not n else '1'if n==1 else 'many')]+=1
                                 if key in ['source.start','source.end','source_start','source_end']:g['counts']['explicitSourceCoordinateFields']+=1
                                 evidence(item,field)
                         elif isinstance(value,list):
