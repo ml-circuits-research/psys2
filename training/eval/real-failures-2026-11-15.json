@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "59f785be",
-  "tree": "d9276c009ab901ae",
+  "build": "a9b778dd",
+  "tree": "8f7d61d8bb0a7472",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -21,10 +21,10 @@
    "unjudged": 332,
    "outcome": {
     "executed": 157,
-    "refused": 240,
+    "refused": 239,
     "asked": 4,
     "not_understood": 109,
-    "other_world": 95
+    "other_world": 96
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -96,10 +96,10 @@
    "unjudged": 332,
    "outcome": {
     "executed": 157,
-    "refused": 240,
+    "refused": 239,
     "asked": 4,
     "not_understood": 109,
-    "other_world": 95
+    "other_world": 96
    },
    "by_source": {
     "owner-log-2026-11-13": {
@@ -1171,7 +1171,7 @@
     {
      "text": "desneaza o vila",
      "tab": "draw",
-     "happened": "I did not understand \"vila\" here. [outcome: refused; open]"
+     "happened": "I did not understand \"villa\" here. [outcome: refused; open]"
     },
     {
      "text": "fa un cel cu 5 nori si un soare",
@@ -1409,7 +1409,7 @@
     {
      "text": "conectează toate formele",
      "tab": "diagram",
-     "happened": "I did not understand \"shapes\" here. [outcome: refused]"
+     "happened": "I did not understand \"kindses\" here. [outcome: refused]"
     },
     {
      "text": "make a better layout",
@@ -1517,12 +1517,12 @@
     {
      "text": "deseneaa un mic lac, o balta",
      "tab": "draw",
-     "happened": "I did not understand \"deseneaa\", \"balta\" here. [outcome: refused; open]"
+     "happened": "I understood \"a pond\", but not \"Deseneaa a small lake\", so I did nothing. [outcome: refused; open]"
     },
     {
      "text": "muta copilul linga leagan, in stinga",
      "tab": "draw",
-     "happened": "I understood \"to the left\", but not \"Move the child linga leagan\", so I did nothing. [outcome: refused; open]"
+     "happened": "I understood \"to the left\", but not \"Move the child linga a swing\", so I did nothing. [outcome: refused; open]"
     },
     {
      "text": "fa un bunic linga rata",
