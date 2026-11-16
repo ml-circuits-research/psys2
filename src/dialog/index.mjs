@@ -393,6 +393,8 @@ const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 
 /** Time budget of the leniency stage (spelling variants and partial windows) of one message, in ms; past it the best reading so far stands (turn guard, spec 06). */
 import { LIMITS } from './time-limits.mjs';
+import { FLAGS } from './flags.mjs';
+import { popupView } from './avatar-popup.mjs';
 import { languageCommand } from '../translate/language-command.mjs';
 import { withSubject, polishReply } from '../translate/register.mjs';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs';
@@ -659,7 +661,7 @@ export class DialogSession {
   context() {
     const BUILTIN = { robot: 'ui.avatar', avatar: 'ui.avatar', editor: 'docs.editor', documents: 'docs.editor' };
     const st = this.isession.state;
-    const activeTab = st['ui.shell']?.activeTab ?? null;
+    const activeTab = this._view ?? st['ui.shell']?.activeTab ?? null;   // POPUP-ROUTE: the view of the avatar popup while a turn runs through it (flag avatarPopupThroughDoor)
     const tabWorld = activeTab ? (this.engine.set.list().find((w) => w.tab?.id === activeTab)?.id ?? BUILTIN[activeTab] ?? null) : null;
     const modalWorld = Object.keys(st).find((id) => st[id]?.inputMode) ?? null;
     const gameWorld = st['ui.shell']?.activeGame ?? null;
@@ -1533,6 +1535,7 @@ export class DialogSession {
     // the open tab's world reads with its own engine (ops `prepare()`, lazy in a browser, spec 04): ready BEFORE the sentence is read, so its reader (hook readsWhole) can answer
     // whether it reads the clause; a reader that cannot tell yet reads nothing (owner export 2026-11-15T11:43, the first turn on the Diagram tab)
     { const tab = this.isession.state?.['ui.shell']?.activeTab, tw = tab ? this.engine.set.list().find((w) => w.tab?.id === tab) : null, prep = tw ? this.engine.set.get(tw.id)?.ops?.prepare : null; if (typeof prep === 'function') { try { await guard.untimed(() => prep()); } catch { /* its reader then says it cannot tell */ } } }
+    const outerView = this._view; this._view = outerView ?? popupView(this.engine.flags, opts);   // POPUP-ROUTE
     try {
       const reply = await this._send(text, opts);
       // INVARIANT (every turn gets a reply): a message that produced no words at all (bare punctuation, an empty reading) is answered, quoting what was typed
@@ -1555,7 +1558,7 @@ export class DialogSession {
         throw e instanceof TurnAborted ? e : new TurnAborted(guard.tripped, guard.trippedStage);
       }
       throw e;
-    } finally { if (own) perf.end(); guard.release(g); releaseBudget(bt); }
+    } finally { this._view = outerView; /* POPUP-ROUTE */ if (own) perf.end(); guard.release(g); releaseBudget(bt); }
   }
 
   /**
@@ -2795,6 +2798,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
     machineReading: options.machineReading ?? (globalThis.process?.env?.PSYS2_RO_MODEL === '1' ? { ro: true } : null),
     /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
     setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; attachValues(cat); attachOpenWords(cat); attachArrangement(cat); },   // the colour and number readers (k.values) take the catalog's words in place of the bundled subset
+    flags: { ...FLAGS, ...(options.flags ?? {}) },
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,
     /** meta.worlds (spec 20): loaded by `prepareMeta()` (a host that sets `routing` to symbolic awaits it once); null until then. */
     meta: null,
