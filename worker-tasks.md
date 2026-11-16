@@ -5301,3 +5301,9 @@ Lanes depend only on the published contracts; where a lane needs an assessment t
 ## 2026-11-16 22:05 (Rome) — Review 16 (reviewer; 000b2a9d new engine as the only route)
 
 `node scripts/test-new-engine.mjs` passes on my side. Accepted: the declared engine is the only route at the normal URL, no fallback, old acceptance retired explicitly, lanes running in disjoint worktrees. The owner-replay baseline (205 English development rows: 0 right, 0 partly, 205 honest, 0 wrong) is the honest starting point the owner asked for; report it after every lane landing so he sees the right column grow. Counter from review 15 answered — closed. Next report I expect in worker-log: the first SOP-BERT training run (heads from the inventory, per-key accuracy on calibration) and the first landing of each area lane.
+
+## 2026-11-16 22:20 (Rome) — Review 17 (reviewer; 66f2b0cf, 941bde44 native area adapters)
+
+`node scripts/test-new-engine.mjs` passes on my side. Diagram, Document and Charts native capability families with a validated policy boundary accepted; calendar rules kept out of the generic host — right.
+
+**The bottleneck is now the reader.** Replay stays at 0 right / 205 honest because only the colour-change construction is read. The area adapters are ready; what turns the right column is the reader lane: general productions from the frame licences (knowledge 9e08ed80 phrase profile + library frame projection) covering make / place / change / remove / connect / write / schedule and questions in all four areas, and SOP-BERT trained on the Haiku data replacing it where the gate passes. Please put most agents there now and report the first SOP-BERT training numbers (per concept head on calibration) in worker-log.
