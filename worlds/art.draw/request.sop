@@ -112,7 +112,8 @@
 @pa.add.kind std.tool.param op=addThings name=kind type=thing required=true accepts=house accepts=tree accepts=sun accepts=cloud accepts=flower accepts=cat accepts=dog accepts=fish accepts=bird accepts=boat accepts=mountain accepts=hill accepts=lake accepts=river accepts=butterfly
 @pa.add.n std.tool.param op=addThings name=n kind=integer min=1 max=12 default=1
 @pa.add.size std.tool.param op=addThings name=size type=k.expect.scale by=step accepts=small accepts=default accepts=big
-@b.add std.tool.bind world=drawing act=make of=thing op=addThings makes=thing
+# the board's own kinds by name (a kind joined as=thing is a thing too, and goes to addJoined below: the catalog draws it)
+@b.add std.tool.bind world=drawing act=make of=water of=water_lily of=reed of=duck of=goldfish of=flower of=tree of=bush of=butterfly of=bird of=cloud of=sun of=house of=fish of=boat of=cat of=dog of=mountain of=lake of=river of=hill op=addThings makes=thing
 @a.add.kind std.tool.arg bind=$b.add param=kind from=step.kind
 @a.add.n std.tool.arg bind=$b.add param=n from=step.count
 @a.add.size std.tool.arg bind=$b.add param=size from=step.size
@@ -165,27 +166,27 @@
 # KINDS BY JOIN (sopworld 0.160; reviewer 05:05 slice 2): every object of the catalog (k.objects.object, with its stand-ins: a villa is drawn as the house) and every kind of person
 # (k.people.kind) is a kind of this world for its acts; the board draws one through the catalog's lazy loader (a joined kind is drawn by its catalog object, or its stand-in's).
 # A joined kind is never planned as a whole by the catalog's k.expect.make: the wholes the board draws are its declared kinds (pond, forest, garden above: std.schema.kind, the forest with its own k.expect.make; the parts of pond and garden are the catalog's).
-@kinds.objects std.schema.kinds world=drawing from=k.objects.object key=name acts=make acts=remove acts=place acts=change
-@kinds.people std.schema.kinds world=drawing from=k.people.kind key=name acts=make acts=remove acts=place acts=change
-@h.make.joined std.schema.honours world=drawing act=make on=kind on=count on=size on=place on=attribute on=with of=k.objects.object of=k.people.kind
-@h.remove.joined std.schema.honours world=drawing act=remove on=kind on=count on=attribute of=k.objects.object of=k.people.kind
-@h.change.joined std.schema.honours world=drawing act=change on=kind on=attribute on=size of=k.objects.object of=k.people.kind
-@h.place.joined std.schema.honours world=drawing act=place on=kind on=place of=k.objects.object of=k.people.kind
+@kinds.objects std.schema.kinds world=drawing from=k.objects.object key=name stand_in=k.objects.stand_in as=thing acts=make acts=remove acts=place acts=change
+@kinds.people std.schema.kinds world=drawing from=k.people.kind key=name as=thing acts=make acts=remove acts=place acts=change
+@h.make.joined std.schema.honours world=drawing act=make on=kind on=count on=size on=place on=attribute on=with of=k.objects.object of=k.objects.stand_in of=k.people.kind
+@h.remove.joined std.schema.honours world=drawing act=remove on=kind on=count on=attribute of=k.objects.object of=k.objects.stand_in of=k.people.kind
+@h.change.joined std.schema.honours world=drawing act=change on=kind on=attribute on=size of=k.objects.object of=k.objects.stand_in of=k.people.kind
+@h.place.joined std.schema.honours world=drawing act=place on=kind on=place of=k.objects.object of=k.objects.stand_in of=k.people.kind
 # a joined kind is drawn by addJoined: the same primitive as addThings, whose kind parameter takes every declared kind (no accepts list: the board looks the kind up in the catalog)
 @op.addj std.tool.op name=addJoined world=drawing param=kind param=n param=size param=colour param=place param=anchor param=whole effect=makes doc="draw n things of a kind the world takes from the catalog"
 @pa.addj.kind std.tool.param op=addJoined name=kind type=kind required=true
 @pa.addj.n std.tool.param op=addJoined name=n kind=integer min=1 max=12 default=1
 @pa.addj.size std.tool.param op=addJoined name=size type=k.expect.scale by=step accepts=small accepts=default accepts=big
 @pa.addj.place std.tool.param op=addJoined name=place kind=atom
-@b.addj std.tool.bind world=drawing act=make of=k.objects.object of=k.people.kind op=addJoined arg=kind<-step.kind arg=n<-step.count arg=size<-step.size arg=colour<-step.colour arg=place<-step.place arg=anchor<-custom.thingAt arg=whole<-step.in makes=thing
-@b.remove.joined std.tool.bind world=drawing act=remove of=k.objects.object of=k.people.kind op=removeThings arg=ids<-step.things needs=exists(ids) removes=ids
-@b.move.joined std.tool.bind world=drawing act=place of=k.objects.object of=k.people.kind op=moveThings arg=ids<-step.things arg=place<-step.place arg=anchor<-step.region arg=relation<-step.relation needs=exists(ids)
-@b.set.joined std.tool.bind world=drawing act=change of=k.objects.object of=k.people.kind op=setThings arg=ids<-step.things arg=colour<-step.colour arg=size<-step.size needs=exists(ids)
+@b.addj std.tool.bind world=drawing act=make of=k.objects.object of=k.objects.stand_in of=k.people.kind op=addJoined arg=kind<-step.kind arg=n<-step.count arg=size<-step.size arg=colour<-step.colour arg=place<-step.place arg=anchor<-custom.thingAt arg=whole<-step.in makes=thing
+@b.remove.joined std.tool.bind world=drawing act=remove of=k.objects.object of=k.objects.stand_in of=k.people.kind op=removeThings arg=ids<-step.things needs=exists(ids) removes=ids
+@b.move.joined std.tool.bind world=drawing act=place of=k.objects.object of=k.objects.stand_in of=k.people.kind op=moveThings arg=ids<-step.things arg=place<-step.place arg=anchor<-step.region arg=relation<-step.relation needs=exists(ids)
+@b.set.joined std.tool.bind world=drawing act=change of=k.objects.object of=k.objects.stand_in of=k.people.kind op=setThings arg=ids<-step.things arg=colour<-step.colour arg=size<-step.size needs=exists(ids)
 # The board's own wholes with the parts it draws by itself (reviewer 05:05 slice 2: what the board draws as wholes is its own k.expect.make): the catalog's pond and garden less the
 # parts that are only joined kinds (frog, stone, grass, fence, bench: drawn when asked, "a pond with a frog", never needed by a scene, so a scene never waits for the catalog)
 @e.pond k.expect.make thing=pond made_in=drawing unit=part min=4 max=9 typical=6 kinds_min=3 kinds_max=4 layout=free
 @e.pond.water k.expect.part of=pond part=water group=water min=1 max=1 typical=1 needed=yes
-@e.pond.lily k.expect.part of=pond part="water lily" group=plant min=2 max=5 typical=3
+@e.pond.lily k.expect.part of=pond part=water_lily group=plant min=2 max=5 typical=3
 @e.pond.reed k.expect.part of=pond part=reed group=plant min=0 max=4 typical=2
 @e.pond.duck k.expect.part of=pond part=duck group=animal min=0 max=2 typical=1
 @e.pond.goldfish k.expect.part of=pond part=goldfish group=animal min=0 max=3 typical=1

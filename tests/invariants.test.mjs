@@ -110,3 +110,22 @@ for (const reasoner of ['ops', 'matrix']) {
     assert.deepEqual(wrong, [], 'refusals of a world that is not the open tab, for an act the open tab has');
   });
 }
+
+// 4. A value said in a make is never dropped silently (reviewer 2026-11-16 06:50, R2): on the Drawing, of a kind the world declares (boat) and of kinds it takes by join
+// (car, house: k.objects.object as=thing), alone and coordinated, EN + RO: the value is on the thing in the view and the reply says it.
+test('a colour said in a make is on the thing made and in the reply, for a declared kind and for joined kinds (EN + RO)', async () => {
+  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });
+  const cases = [
+    ['en', 'draw a red boat', { boat: 'red' }, /red boat/], ['en', 'draw a purple car', { car: 'purple' }, /purple car/], ['en', 'draw a red house', { house: 'red' }, /red house/],
+    ['en', 'draw a purple car and a blue house', { car: 'purple', house: 'blue' }, /purple car.*blue house/],
+    ['ro', 'desenează o mașină mov', { car: 'purple' }, /mașină mov/], ['ro', 'desenează o casă roșie', { house: 'red' }, /casă roșie/],
+  ];
+  for (const [lang, said, want, words] of cases) {
+    const s = engine.createSession({ language: lang });
+    s.setWorldState('ui.shell', { activeTab: 'draw' });
+    const r = await s.send(said);
+    const view = engine.set.get('art.draw').ops.toolView({ state: s.state()['art.draw'] });
+    for (const [kind, colour] of Object.entries(want)) assert.deepEqual(view.filter((t) => t.kind === kind).map((t) => t.colour), [colour], `${lang} "${said}": ${r.text}`);
+    assert.match(r.text, words, `${lang} "${said}"`);
+  }
+});

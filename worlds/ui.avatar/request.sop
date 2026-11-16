@@ -9,12 +9,13 @@
 @t.face core.type of=face extends=std.schema.thing closed=true
 @s.face.expression core.slot of=face key=expression type=k.faces.expression by=name
 @k.face std.schema.kind of=face world=avatar acts=change
-@j.preset std.schema.kinds world=avatar from=k.faces.preset key=name acts=make
+@j.preset std.schema.kinds world=avatar from=k.faces.preset key=name as=face acts=make
 # The parts of the face: one kind per slot of k.faces (eyes, mouth, nose, hat, glasses ...), with a colour, a size grade and a variant.
 @t.part core.type of=part extends=std.schema.thing closed=true
 @s.part.colour core.slot of=part key=colour kind=string
 @s.part.size core.slot of=part key=size type=k.expect.scale by=step
-@j.part std.schema.kinds world=avatar from=k.faces.slot key=name acts=make acts=remove acts=change acts=place
+@s.part.variant core.slot of=part key=variant type=k.faces.variant by=name match=kind:slot
+@j.part std.schema.kinds world=avatar from=k.faces.slot key=name as=part acts=make acts=remove acts=change acts=place
 # What each act honours (for every kind of the world: the parts, the presets and the face; a key an act does not take is refused by name)
 @h.make std.schema.honours world=avatar act=make on=kind on=attribute on=size
 @h.change std.schema.honours world=avatar act=change on=kind on=attribute on=size
@@ -34,9 +35,9 @@
 @op.undo psys2.op world=avatar act=undo op=undoStep
 @op.redo psys2.op world=avatar act=redo op=redoStep
 # TOOL BINDING: the face's primitives with their typed parameters, each act of a plan step bound to one primitive with its arguments' sources.
-@op.preset std.tool.op name=wearPreset world=avatar param=preset effect=changes doc="the face becomes a preset of k.faces"
-@b.preset std.tool.bind world=avatar act=make of=k.faces.preset op=wearPreset arg=preset<-step.kind
-@op.put std.tool.op name=putPart world=avatar param=part param=variant param=colour param=size effect=changes doc="a part of the face is worn in a variant (the one it has stays), in a colour and a size"
+@op.preset std.tool.op name=wearPreset world=avatar param=preset param=expression effect=changes doc="the face becomes a preset of k.faces"
+@b.preset std.tool.bind world=avatar act=make of=k.faces.preset op=wearPreset arg=preset<-step.kind arg=expression<-step.expression
+@op.put std.tool.op name=putPart world=avatar param=part param=variant param=worn param=colour param=size effect=changes doc="a part of the face is worn in a variant (the one it has stays), in a colour and a size"
 @c.presetVariant std.tool.custom name=presetVariant world=avatar kind=search in=part out=variant doc="the variant of a part in the preset the face is (k.faces.preset), else the slot's first"
 @pa.put.size std.tool.param op=putPart name=size type=k.expect.scale by=step accepts=tiny accepts=small accepts=default accepts=big accepts=huge
 @pa.put.part std.tool.param op=putPart name=part required=true
@@ -44,12 +45,12 @@
 @v.put.hair std.tool.value op=putPart param=part value=hair as=hair_front
 @v.put.ear std.tool.value op=putPart param=part value=ear as=ears
 @v.put.eyebrow std.tool.value op=putPart param=part value=eyebrow as=eyebrows
-@b.put std.tool.bind world=avatar act=make op=putPart arg=part<-step.kind arg=variant<-custom.presetVariant arg=colour<-step.colour arg=size<-step.size
+@b.put std.tool.bind world=avatar act=make op=putPart arg=part<-step.kind arg=variant<-step.variant arg=worn<-custom.presetVariant arg=colour<-step.colour arg=size<-step.size
 @op.off std.tool.op name=takeOff world=avatar param=ids effect=removes doc="parts of the face are taken off (a part every face has is refused)"
 @b.off std.tool.bind world=avatar act=remove op=takeOff arg=ids<-step.things needs=exists(ids) removes=ids
-@op.set std.tool.op name=setParts world=avatar param=ids param=colour param=size effect=changes doc="parts of the face take a colour or a size grade"
+@op.set std.tool.op name=setParts world=avatar param=ids param=colour param=size param=variant param=expression effect=changes doc="parts of the face take a colour or a size grade"
 @pa.set.size std.tool.param op=setParts name=size type=k.expect.scale by=step accepts=tiny accepts=small accepts=default accepts=big accepts=huge
-@b.set std.tool.bind world=avatar act=change op=setParts arg=ids<-step.things arg=colour<-step.colour arg=size<-step.size needs=exists(ids)
+@b.set std.tool.bind world=avatar act=change op=setParts arg=ids<-step.things arg=colour<-step.colour arg=size<-step.size arg=variant<-step.variant arg=expression<-step.expression needs=exists(ids)
 @op.move std.tool.op name=moveParts world=avatar param=ids param=place effect=changes doc="parts of the face move a step in a direction, within the face"
 @pa.move.place std.tool.param op=moveParts name=place kind=atom
 @b.move std.tool.bind world=avatar act=place op=moveParts arg=ids<-step.things arg=place<-step.place needs=exists(ids)

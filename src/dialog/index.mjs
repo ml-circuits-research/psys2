@@ -1952,7 +1952,7 @@ export class DialogSession {
       replace = !!rev.replace;   // a reaction that replaces the last result ("fewer dogs")
       req = replace || !q.act ? rev.request : q.request;   // a turn with its own act that replaces nothing ("make the house bigger": the change sense of make) is its own request
     } else if (rev?.reaction === 'continue' && rev.request && !q.act && !(q.request.constraints ?? []).some((c) => c.on === 'place')) req = rev.request;   // a fragment of kinds continues the dialogue's act with a new request ("a sun" after "draw a fish": sopworld 0.154); one read with a place ("I like cats": "like" as a relation) is no fragment of a request (questions.md [LIB])
-    if (!req.act || !tools.binds.some((b) => b.act === req.act)) return null;
+    if (req.act && !tools.binds.some((b) => b.act === req.act)) return null;   // no act said: the planner decides it from the world's declarations (sopworld 0.162: a noun phrase alone is a make, "put a hat" a make when it is not there, "make it happy" a change of the thing with that key)
     // a thing the world makes with no binding for its kind (a page: request.sop psys2.op) is not the binding's
     // (checked on the plan's target: a general whole with no expectation of its own, "a random picture", is planned as one of its subkind wholes the bindings make: sopworld 0.156)
     // a binding's `of=` names a kind by its lineage, or the type the kind is joined from (std.schema.kinds from=: sopworld 0.160, as the library's runPlan picks the binding)
@@ -1971,13 +1971,18 @@ export class DialogSession {
     let plan = null;
     try { plan = lib.planRequest(mirror, req, planOpts); } catch (e) { if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door] bound plan', e); plan = null; }
     if (!plan) return null;
-    if (req.act === 'make' && (plan.target ?? req.target) && !boundMake(plan.target ?? req.target)) return null;
+    const act = plan.act ?? req.act;   // the act planned (0.162 may decide it, or make a place a make)
+    if (!act || !tools.binds.some((b) => b.act === act)) return null;
+    if (act === 'make' && (plan.target ?? req.target) && !boundMake(plan.target ?? req.target)) return null;
     if (!plan.ok && (plan.notHonoured ?? []).some((x) => x.code === 'no_target')) return null;   // nothing named: the door's other paths say it
-    if (req.act === 'make' && !req.target && !(req.constraints ?? []).length && (plan.assumed ?? []).some((a) => a.key === 'target')) return null;
+    if (act === 'make' && !req.target && !(req.constraints ?? []).length && (plan.assumed ?? []).some((a) => a.key === 'target')) return null;
     // a whole guessed while the turn names a thing of its own that is not a target ("add a paragraph about rain": a part, not a story to write over the open document) is not the
     // binding's, unless a count names that unit ("draw 6 nodes"); with no thing named at all ("draw whatever you want") the planner's guess stands
-    if (req.act === 'make' && !req.target && (plan.assumed ?? []).some((a) => a.key === 'target') && (q.request.mentions ?? []).some((m) => m.kind) && !(req.constraints ?? []).some((c) => c.on === 'count' && c.of && unitOfWhole(live, language, c.of))) return null;   // a bare "draw" (nothing said but the act): never a whole guessed from the world (the door asks, as on every path); "something random", "5 nodes" are the planner's
+    if (act === 'make' && !req.target && (plan.assumed ?? []).some((a) => a.key === 'target') && (q.request.mentions ?? []).some((m) => m.kind) && !(req.constraints ?? []).some((c) => c.on === 'count' && c.of && unitOfWhole(live, language, c.of))) return null;   // a bare "draw" (nothing said but the act): never a whole guessed from the world (the door asks, as on every path); "something random", "5 nodes" are the planner's
     if (replace && (plan.notHonoured ?? []).length) return null;   // a reaction with words the world does not take ("I like horses") is not a revision of its result
+    // P9 (spec 28 section 10): a move with no place said whose other words the act does not take ("put a heart on the chest": "on the chest" is no place of the act, "heart" no key
+    // of a move) is not carried out and not asked about: the honest reply names what was not taken, in every language (the door's cannot.do)
+    if (act === 'place' && !(req.constraints ?? []).some((c) => c.on === 'place') && (plan.notHonoured ?? []).some((n) => n.code === 'not_declared')) return { why: `not declared: ${plan.notHonoured.filter((n) => n.code === 'not_declared').map((n) => n.words).join(', ')}`, q: flat };
     // P9: a plan that breaks a count said of one kind ("6 boxes" planned as 3 boxes and 3 circles) is never carried out; the honest reply names it
     if (plan.ok) {
       const planned = {};
@@ -1988,7 +1993,7 @@ export class DialogSession {
     // a plan whose steps the bindings do not all cover (a scene of parts whose whole the world binds no primitive to: a pond) is the world's executor's; one the bindings cover
     // (things of kinds, a diagram with its nodes and arrows) runs through them
     const bound = (st) => tools.binds.some((b) => b.act === st.action && (!b.of.length || (st.args?.kind ? bindLineage(st.args.kind) : []).some((k) => b.of.includes(k)) || (st.args?.kind === undefined && st.args?.thing !== undefined)));
-    if (req.act === 'make' && (plan.ok ? !(plan.steps ?? []).every(bound) : !(plan.cannot?.length || plan.notHonoured?.length || plan.replies?.length))) return null;   // a question back (which one?) is the plan's answer
+    if (act === 'make' && (plan.ok ? !(plan.steps ?? []).every(bound) : !(plan.cannot?.length || plan.notHonoured?.length || plan.replies?.length))) return null;   // a question back (which one?) is the plan's answer
     // the kinds the plan makes that the world takes only by join (std.schema.kinds, not a std.schema.kind of its own: a goat, a child, a frog in a pond) are looked up in the knowledge
     // catalog before the tool runs, as the readers' preloadThings does: the tool draws them from what the lazy loader holds (ctx.knowledge.peek). Bounded: twelve kinds, one
     // catalog deadline; no catalog, nothing loaded

@@ -933,28 +933,6 @@
   },
   {
    "file": "pilot-avatar.test.mjs",
-   "name": "ops: two acts in one sentence (an angry boy = the preset boy and the expression angry)",
-   "reason": "avatar on the binding (slice A1): needs expressions read as values of a slot typed by k.faces.expression without the wrong make of Q96 LIB 3"
-  },
-  {
-   "file": "pilot-avatar.test.mjs",
-   "name": "ops: several acts in one sentence are ONE undo step",
-   "reason": "avatar on the binding (slice A1): same sentence as \"an angry boy\": needs Q96 LIB 3 (the step rule itself holds: tests/avatar-binding)",
-   "returns_with": "0.162 expressions"
-  },
-  {
-   "file": "pilot-avatar.test.mjs",
-   "name": "matrix: two acts in one sentence (an angry boy = the preset boy and the expression angry)",
-   "reason": "avatar on the binding (slice A1): needs expressions read as values of a slot typed by k.faces.expression without the wrong make of Q96 LIB 3"
-  },
-  {
-   "file": "pilot-avatar.test.mjs",
-   "name": "matrix: several acts in one sentence are ONE undo step",
-   "reason": "avatar on the binding (slice A1): same sentence as \"an angry boy\": needs Q96 LIB 3 (the step rule itself holds: tests/avatar-binding)",
-   "returns_with": "0.162 expressions"
-  },
-  {
-   "file": "pilot-avatar.test.mjs",
    "name": "matrix: decline: a thing that is not a face part is read by the next world (draw a house on the Avatar tab goes to art.draw)",
    "reason": "avatar on the binding (slice A1): no fallback on a declared tab (spec 28 section 10): a request of another world from the avatar tab is said honestly; needs routing to the world a turn names before the door (as on every declared tab)"
   },
@@ -972,6 +950,12 @@
    "file": "voice-repair.test.mjs",
    "name": "rp3-03..06 avatar expressions as loose words, on every character",
    "reason": "avatar on the binding (slice A1): \"make a big smile\", \"small smile\", \"make a frown\", \"the next mouth\" on the avatar tab: needs a variant of a part as a value the reader reads (k.faces.variant by slot) and next / another as a step over the variants (Q96 LIB 3)"
+  },
+  {
+   "file": "avatar-binding.test.mjs",
+   "name": "a value said lands in the view: a colour and a size step of a part (the change sense of make; size by k.expect.scale)",
+   "reason": "sopworld 0.162 as=part (asked by the coordinator): mirrorState tells a joined part as the type `part`, so \"make the eyes bigger\" twice plans big again from the default (the thing's kind and grade are not found); needs the kind kept with as= (questions.md Q99 [LIB])",
+   "returns_with": "0.163 as= keeps the kind"
   }
  ]
 }

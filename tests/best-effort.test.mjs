@@ -22,7 +22,7 @@ test('loose words are read as the most sensible sentence and the reply says so',
 // P3: "square eyes robot pls" with the default veto (the guess is not a candidate of the best-effort reader) is on the failure ledger; the todo marker is gone
 
 test('switched off, loose words stay "not understood"', async () => {
-  const r = await ask('robot', 'square eyes robot pls', false);
+  const r = await ask('robot', 'square eyes zorbly pls', false);   // a word nothing reads (sopworld 0.162 reads "square eyes robot": a robot face with square eyes, no longer loose words)
   assert.match(r.text, /did not (understand|catch)/);
 });
 
