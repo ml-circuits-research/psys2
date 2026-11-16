@@ -31,7 +31,7 @@ function run(ctx, s, nodes, step) {
   return r;
 }
 const madeBy = (r) => (r?.steps ?? []).flatMap((st) => (st.patches ?? []).filter((p) => p.op === 'add').map((p) => p.shape.name));
-const shapesOf = (s, ids) => [].concat(ids ?? []).map((id) => String(id).replace(/^\$/, '')).filter((n) => s.shapes.some((x) => x.name === n));
+const shapesOf = (s, ids) => [].concat(ids ?? []).map((id) => String(id).replace(/^\$/, '')).filter((n) => s.shapes.some((x) => x.name === n));   // glue-lint: tool-data (shape id)
 const wholeOf = (s, id) => (s.wholes ?? []).find((w) => w.id === id) ?? null;
 /** The shapes of a whole laid out again by its layout, once the links it was made with are all there (a layout of the whole costs a pass over the canvas). */
 function relay(ctx, s, w, step) {

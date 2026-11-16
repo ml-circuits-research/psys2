@@ -15,10 +15,10 @@
  *   numberWords(kind)       the number words of a kind, or every one
  *   numberWordOf(n, kind)   12 -> "twelve", 3 -> "third" (ordinal)
  */
-import { parseLine } from './catalog.mjs?v=0372695257';
+import { parseLine } from './catalog.mjs?v=339ac7a09d';
 import { BUNDLED_VALUES } from './bundled-values.mjs?v=701226a975';
 
-const lc = (s) => String(s ?? '').toLowerCase().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
+const lc = (s) => String(s ?? '').toLowerCase().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();   // glue-lint: tool-data (colour name)
 const state = { colours: new Map(), numbers: new Map(), comparatives: [], from: 'none', loading: null };
 /**
  * TEMPORARY seed of the comparatives of k.values (`k.values.comparative text= scale= way=`): the bundled subset (bundled-values.mjs) does not carry them yet and the catalog's are read on the first
@@ -38,7 +38,7 @@ const LOCAL_SPELLING = { gray: 'grey' };
 let SPELLING = { ...LOCAL_SPELLING };
 
 /** A derived form of a colour name (its plural "reds", an adjective "sandy", "golden", "silvery"): the grammar reads it, the colour reader does not respell it (a sandy floor is a floor of sand). */
-const derived = (t, to) => t.length > to.length && t.startsWith(to.slice(0, Math.max(3, to.length - 1))) && /(?:s|es|y|ey|en|ish)$/.test(t) && !t.includes(' ');
+const derived = (t, to) => t.length > to.length && t.startsWith(to.slice(0, Math.max(3, to.length - 1))) && /(?:s|es|y|ey|en|ish)$/.test(t) && !t.includes(' ');   // glue-lint: tool-data (colour name)
 /** Two colour names side by side ("blue green", a word of k.colours for teal): the grammar reads them (a colour and a value: "the table that is blue green"), not the colour reader. */
 const compound = (k) => k.includes(' ') && k.split(' ').every((w) => state.colours.has(w));
 function absorb(wires) {

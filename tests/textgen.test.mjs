@@ -116,7 +116,7 @@ test('arbitration: "write a report about ..." on the Documents tab is the compos
   installTextGen({}, null);
   assert.match((await docs().send('Write a report about sea animals')).text, /cannot write compositions yet/);
   installTextGen(lib, null);
-  try { assert.match((await docs().send('Write a report about owl')).text, /I wrote the report/); } finally { delete globalThis[TEXTGEN_GLOBAL]; }
+  try { assert.match((await docs().send('Write a report about owl')).text, /^I added a report\./); } finally { delete globalThis[TEXTGEN_GLOBAL]; }   // Documents on the binding (spec 28 section 14): the reply is the view's diff said by reply facts
 });
 
 // ---- the measurement (reviewer 14:45 item 3, summaries): owner-log b and c replayed; the paragraph names every world used and every taught fact in at most 3 sentences

@@ -26,7 +26,7 @@ export function initialState() {
 export function ensure(ctx) {
   const s = ctx.state, d = initialState();
   for (const k of Object.keys(d)) if (s[k] === undefined) s[k] = d[k];
-  if (s.shapes.some((x) => !x.id) || s.edges.some((e) => /^e\d+$/.test(e.id))) { assignIds(s); s.rev = (s.rev ?? 0) + 1; }
+  if (s.shapes.some((x) => !x.id) || s.edges.some((e) => /^e\d+$/.test(e.id))) { assignIds(s); s.rev = (s.rev ?? 0) + 1; }   // glue-lint: tool-data (arrow id)
   return s;
 }
 
@@ -43,7 +43,7 @@ export const PREFIX = { circle: 'c', rectangle: 'r', square: 's', diamond: 'd', 
 export const LONG_OF = { box: 'rectangle', rect: 'rectangle', oval: 'ellipse', rhombus: 'diamond', ...Object.fromEntries(Object.keys(PREFIX).map((k) => [k, k])) };
 export const KIND_OF_PREFIX = Object.fromEntries(Object.entries(PREFIX).map(([k, v]) => [v, k]));
 export const ID_RE = /^([crsdetxhk])(\d+)$/i;
-export const LONG_RE = new RegExp(`^(${Object.keys(LONG_OF).join('|')})(\\d+)$`, 'i');
+export const LONG_RE = new RegExp(`^(${Object.keys(LONG_OF).join('|')})(\\d+)$`, 'i');   // glue-lint: tool-data (shape id)
 /** The shape a token names: its name, its short id, or the old long name (circle1 = c1). */
 export function shapeOf(state, token) {
   if (token == null) return null;
@@ -86,7 +86,7 @@ export function assignIds(s) {
     x.id = m && KIND_OF_PREFIX[m[1].toLowerCase()] === x.shape ? x.name.toLowerCase() : nextId(s, x.shape);
   }
   const taken = new Set(s.edges.map((e) => e.id));
-  for (const e of s.edges) if (/^e\d+$/.test(e.id)) { let n = 0, id; do { budget.tick('diagram.name'); id = `a${++n}`; } while (taken.has(id)); taken.add(id); e.id = id; s.edgeSeq = Math.max(s.edgeSeq ?? 0, n); }
+  for (const e of s.edges) if (/^e\d+$/.test(e.id)) { let n = 0, id; do { budget.tick('diagram.name'); id = `a${++n}`; } while (taken.has(id)); taken.add(id); e.id = id; s.edgeSeq = Math.max(s.edgeSeq ?? 0, n); }   // glue-lint: tool-data (arrow id)
 }
 
 // ---- the engine bound to a state --------------------------------------------------------------------------------------

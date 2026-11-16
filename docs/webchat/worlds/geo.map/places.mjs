@@ -7,7 +7,7 @@
 // Browser-safe: no imports beyond the sibling data module.
 import { REGIONS } from './regions.mjs?v=b9782a3da0';
 import { BUNDLED_GEO } from '../../lib/knowledge/bundled-geo.mjs?v=964e6992d5';
-import { parseLine } from '../../lib/knowledge/catalog.mjs?v=0372695257';
+import { parseLine } from '../../lib/knowledge/catalog.mjs?v=339ac7a09d';
 
 const fold = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 /** "St. George's" -> "st_georges": the form of a name in a lexicon and in an argument of the map's operations. */

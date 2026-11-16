@@ -14,7 +14,7 @@ export const PLAN_WORLDS = [
 ];
 /** What "is a kind of" is for the planner: the kind chain of the people (a man is a person, a doctor is a person). */
 const KIND_KEYS = ['is_a', 'kind_of', 'is', 'age'];
-import { parseLine } from '../knowledge/catalog.mjs?v=0372695257';
+import { parseLine } from '../knowledge/catalog.mjs?v=339ac7a09d';
 export const PLAN_CHAIN = [{ type: 'k.people.kind', keys: [...KIND_KEYS, 'drawing'] }, { type: 'k.people.role', keys: [...KIND_KEYS, 'drawing'] }];
 
 const hosts = new WeakMap();
@@ -50,7 +50,7 @@ export function createPlanHost(cat) {
     async load(words = []) {
       const set = new Set(words.flatMap((w) => { const x = String(w).toLowerCase(); return [x, x.replace(/s$/, ''), x.replace(/ies$/, 'y')]; }));
       try {
-        lib ??= await import('../vendor/sopworld/sopworld.mjs?v=d9c5cf21f4');
+        lib ??= await import('../vendor/sopworld/sopworld.mjs?v=4298a5482e');
         await Promise.all(PLAN_WORLDS.map((spec) => addWorld(spec, set)));   // the plan worlds together, not one after another
         if (!loaded.get('k.procedures')?.shards.size) return false;
         if (built !== version) {

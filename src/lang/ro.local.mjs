@@ -10,6 +10,8 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.diagram_shaped_placed w.lang.ro.reply name=diagram.shaped.placed count=other role=thing role=shapes text="am așezat cele {shapes} pe un contur în formă de {thing:num=sg,case=nomacc,def=no}, în sensul acelor de ceasornic, de sus"
 @w.lang.ro.reply.local.draw_scene w.lang.ro.reply name=draw.scene count=other role=things role=example role=colour text="am desenat o scenă însorită pentru tine: {things}. Poți schimba orice, de exemplu „fă {example:num=sg,case=nomacc,def=yes} {colour@example}”"
 # The door's reply facts the catalog's w.lang.ro does not have yet (the names of src/lang/en.request.local.mjs, Q43 / Q47 [KNOW]): its acts on things, the questions about the state and the capabilities, and the honest answers.
+@w.lang.ro.reply.local.place_in_1 w.lang.ro.reply name=done.place.in count=one role=thing role=value text="am mutat {thing:def=yes} în {value:def=no}"
+@w.lang.ro.reply.local.place_in_n w.lang.ro.reply name=done.place.in count=other role=thing role=number role=value text="am mutat {number} {thing:num=pl} în {value:def=no}"
 @w.lang.ro.reply.local.place_next_1 w.lang.ro.reply name=done.place.next count=one act=place role=thing role=target text="am mutat {thing:def=yes} lângă {target:def=yes}"
 @w.lang.ro.reply.local.place_next_n w.lang.ro.reply name=done.place.next count=other act=place role=thing role=number role=target text="am mutat cele {number} {thing:num=pl} lângă {target:def=yes}"
 @w.lang.ro.reply.local.none_1 w.lang.ro.reply name=done.none count=one role=thing text="{thing:def=yes} este deja acolo"
@@ -31,12 +33,17 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.not_understood_undo w.lang.ro.reply name=not_understood.undo count=one role=words text="nu am înțeles {words} aici, așa că nu am anulat nimic"
 @w.lang.ro.reply.local.nothing_like w.lang.ro.reply name=nothing.like count=one role=words text="nu am găsit nimic ca {words} printre ce am făcut, așa că nu am anulat nimic"
 @w.lang.ro.reply.local.missing_place w.lang.ro.reply name=refused.missing_value.place count=one role=key text="unde ar trebui să meargă? Poți spune, de exemplu, „mută copacul la stânga”, „pune pisica lângă casă” sau „mută-l în colțul din dreapta sus”"
+@w.lang.ro.reply.local.done_about w.lang.ro.reply name=done.about count=one role=whole role=topic text="{whole:def=yes} este despre {topic}"
+@w.lang.ro.reply.local.done_title w.lang.ro.reply name=done.title count=one role=whole role=title text="{whole:def=yes} se numește {title}"
 @w.lang.ro.reply.local.cannot_key w.lang.ro.reply name=cannot.key count=one role=words text="încă nu pot face {words} aici"
 @w.lang.ro.reply.local.no_things w.lang.ro.reply name=cannot.no_things count=one role=thing text="aici nu există {art@thing} {thing}"
 @w.lang.ro.fill.local.no_things_art w.lang.ro.fill template=cannot.no_things role=art lemma=un
 @w.lang.ro.reply.local.which w.lang.ro.reply name=ask.which count=one role=thing role=list text="la care {thing} te referi: {list}?"
 @w.lang.ro.reply.local.undo_did w.lang.ro.reply name=done.undo.did count=one role=did text="am anulat ultima schimbare"
 @w.lang.ro.reply.local.redo_did w.lang.ro.reply name=done.redo.did count=one role=did text="am refăcut ultima schimbare"
+@w.lang.ro.reply.local.nothing_known w.lang.ro.reply name=refused.nothing_known count=one role=about text="încă nu știu nimic despre {about}"
+@w.lang.ro.reply.local.no_composer w.lang.ro.reply name=refused.no_composer count=one text="încă nu pot scrie compuneri: biblioteca nu are un compozitor (std.compose) în această versiune"
+@w.lang.ro.reply.local.change_about_1 w.lang.ro.reply name=done.change.about count=one role=thing role=value text="{thing:def=yes} este acum despre {value}"
 @w.lang.ro.reply.local.page w.lang.ro.reply name=done.page count=one text="iată o foaie nouă. Ce desenăm?"
 @w.lang.ro.reply.local.page_kept w.lang.ro.reply name=done.page.kept count=one text="iată o foaie nouă! Desenul vechi este încă acolo dacă spui „anulează”."
 @w.lang.ro.irregular.local.aseza.pres_3_sg_a w.lang.ro.irregular lemma=așeza form=așază tense=pres person=3 num=sg

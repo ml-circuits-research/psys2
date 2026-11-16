@@ -34,6 +34,10 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.place_region_1 w.lang.en.reply name=done.place.region count=one act=place role=thing role=region text="I moved the {thing} to the {region}."
 @w.lang.en.reply.local.place_region_n w.lang.en.reply name=done.place.region count=other act=place role=thing role=number role=region text="I moved the {number} {thing:num=pl} to the {region}."
 @w.lang.en.reply.local.place_region_name w.lang.en.reply name=done.place.region act=place role=name role=region text="I moved {name} to the {region}."
+@w.lang.en.reply.local.place_in_1 w.lang.en.reply name=done.place.in count=one role=thing role=value text="I moved the {thing} into the {value}."
+@w.lang.en.reply.local.place_in_n w.lang.en.reply name=done.place.in count=other role=thing role=number role=value text="I moved {number} {thing:num=pl} into the {value}."
+@w.lang.en.reply.local.place_on_1 w.lang.en.reply name=done.place.on count=one role=thing role=value text="I put the {thing} on the {value}."
+@w.lang.en.reply.local.place_on_n w.lang.en.reply name=done.place.on count=other role=thing role=number role=value text="I put {number} {thing:num=pl} on the {value}."
 @w.lang.en.reply.local.place_into_1 w.lang.en.reply name=done.place.into count=one act=place role=thing role=region text="I moved the {thing} into the {region}."
 @w.lang.en.reply.local.place_into_n w.lang.en.reply name=done.place.into count=other act=place role=thing role=number role=region text="I moved the {number} {thing:num=pl} into the {region}."
 @w.lang.en.reply.local.place_none_1 w.lang.en.reply name=done.none count=one role=thing text="The {thing} is already there."
@@ -43,6 +47,9 @@ export const REQUEST_LOCAL = `
 # done.change with its key (sopworld 0.153.0: a reply fact with a key is said by <name>.<key>); the library's proposal in examples/tool-app.mjs PROPOSED_EN, local until published (questions.md Q47 [KNOW])
 @w.lang.en.reply.local.undo_did w.lang.en.reply name=done.undo.did count=one role=did text="OK, I undid it ({did})."
 @w.lang.en.reply.local.redo_did w.lang.en.reply name=done.redo.did count=one role=did text="OK, I did it again ({did})."
+@w.lang.en.reply.local.nothing_known w.lang.en.reply name=refused.nothing_known count=one role=about text="I know nothing about {about} in my knowledge yet."
+@w.lang.en.reply.local.no_composer w.lang.en.reply name=refused.no_composer count=one text="I cannot write compositions yet: the library has no composer (std.compose) in this build."
+@w.lang.en.reply.local.change_about_1 w.lang.en.reply name=done.change.about count=one role=thing role=value text="The {thing} is about {value} now."
 @w.lang.en.reply.local.page w.lang.en.reply name=done.page count=one text="Here is a fresh sheet of paper. What shall we draw?"
 @w.lang.en.reply.local.page_kept w.lang.en.reply name=done.page.kept count=one text="Here is a fresh sheet of paper! Your old picture is still there if you say “undo”."
 @w.lang.en.reply.local.change_name w.lang.en.reply name=done.change act=change role=name role=value text="{name} is {value} now."
@@ -74,4 +81,6 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.nothing_like w.lang.en.reply name=nothing.like count=one role=words text="I found nothing like {words} among what was done, so I took nothing back."
 @w.lang.en.reply.local.missing_place w.lang.en.reply name=refused.missing_value.place count=one role=key text="Where should it go? You can say, for example, \\"move the tree to the left\\", \\"put the cat next to the house\\" or \\"move it to the top right corner\\"."
 @w.lang.en.reply.local.cannot_do w.lang.en.reply name=cannot.do count=one role=words role=world text="I cannot do {words} in the {world} yet."
+@w.lang.en.reply.local.done_about w.lang.en.reply name=done.about count=one role=whole role=topic text="The {whole} is about {topic}."
+@w.lang.en.reply.local.done_title w.lang.en.reply name=done.title count=one role=whole role=title text="The {whole} is called {title}."
 `;

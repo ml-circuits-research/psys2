@@ -16,10 +16,10 @@
  *     of the candidate has a counterpart in the source. A word the world knows may be dropped or added (that is the point of simplifying).
  * `{ ok, reason }`; with `vocab` absent only the first four checks run.
  */
-import { isNumberWord, parseNumberRun } from '../formalizer/rules/numbers.mjs?v=8aa66ad379';
-import { isColourWord } from '../knowledge/values.mjs?v=5e82673c11';
-import { editDistance } from '../formalizer/rules/normalize.mjs?v=4529cdd4aa';
-import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=385bb5110e';
+import { isNumberWord, parseNumberRun } from '../formalizer/rules/numbers.mjs?v=cf09df9c89';
+import { isColourWord } from '../knowledge/values.mjs?v=c3d5c59521';
+import { editDistance } from '../formalizer/rules/normalize.mjs?v=86415f957e';
+import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=1c7c025d63';
 import { budget } from './budget.mjs?v=00bce6e369';
 import { en } from '../lang/en.mjs?v=185de688b8';
 

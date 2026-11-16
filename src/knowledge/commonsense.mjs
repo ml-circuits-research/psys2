@@ -8,49 +8,12 @@
  * Sources, all read through `peek`: `k.commonsense.thing at=` (a catalog fact or a taught one, the overlay merges them), `k.scenes.thing place=` (the usual place in a picture, `th.wires`). The kind-of chain
  * is followed (`ancestors`): a villa stands where a house stands, unless it has a place of its own.
  */
-const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
+import { habitat, zoneOfWord, ZONES } from './habitat.mjs';
+export { habitat, zoneOfWord, ZONES };
 const lc = (s) => String(s ?? '').toLowerCase().replace(/_/g, ' ').trim();
-
-// TEMPORARY (until k.commonsense has a place hierarchy): which broad zone of a picture a place word belongs to. A zone is where the drawing board puts a thing: the sky, the ground, the water.
-export const ZONES = {
-  water: ['water', 'sea', 'ocean', 'lake', 'pond', 'river', 'stream', 'bay', 'harbour', 'harbor'],
-  sky: ['sky', 'air', 'clouds'],
-  ground: ['ground', 'land', 'grass', 'road', 'street', 'field', 'garden', 'forest', 'park', 'town', 'village', 'farm', 'hill', 'mountain', 'meadow', 'beach', 'desert', 'rails', 'track'],
-};
-export const zoneOfWord = (w) => { const x = lc(w).replace(/^(?:the|a|an)\s+/, ''); return Object.keys(ZONES).find((z) => ZONES[z].includes(x)) ?? null; };
 const PREP = { water: 'in', sky: 'in the', ground: 'on the' };
 /** "in water", "in the sky", "on the ground", "on the road": a place word with its preposition. */
 export const placePhrase = (w) => { const x = lc(w).replace(/^(?:the|a|an)\s+/, ''); const z = zoneOfWord(x); if (z === 'water') return x === 'water' ? 'in water' : `in the ${x}`; if (z === 'sky') return 'in the sky'; return `${/^(?:road|street|rails|track|beach|field|ground|grass)$/.test(x) ? 'on' : 'in'} the ${x}`; };
-
-/**
- * The usual places of a kind: `{ at: ['water'], zones: ['water'], source: 'catalog' | 'scenes' | 'learned', via }` or null when the knowledge says nothing. `via` is the kind whose place it is when it
- * comes from above in the kind-of chain (a villa: house).
- */
-export function habitat(knowledge, word, depth = 0) {
-  // kept per word while the knowledge answers the same (OVERLAY-MEMO: the drawing board asks for every object near every spot it tries); a copy is handed out
-  if (depth === 0 && typeof knowledge?.memo === 'function' && word) {
-    const h = knowledge.memo('habitat', lc(word), () => habitatOf(knowledge, word, 0));
-    return h ? { ...h, at: [...h.at], zones: [...h.zones] } : null;
-  }
-  return habitatOf(knowledge, word, depth);
-}
-function habitatOf(knowledge, word, depth) {
-  budget.tick('commonsense.habitat');
-  const k = knowledge;
-  if (!k?.peek || !word || depth > 4) return null;
-  const w = lc(word);
-  const th = k.peek(w);
-  const at = [];
-  let source = th?.learned && th?.commonsense?.shard === 'session.learned' ? 'learned' : 'catalog';
-  for (const x of th?.wires ?? []) { if (String(x.type).startsWith('k.scenes.thing')) for (const p of x.f?.place ?? []) { const v = lc(p); if (v && v !== 'on thing' && v !== 'indoors' && !at.includes(v)) { at.push(v); if (source === 'catalog') source = 'scenes'; } } }   // the usual place of a picture first: it is one of the broad zones
-  for (const v of (th?.commonsense?.at ?? []).map(lc)) if (!at.includes(v)) at.push(v);
-  if (at.length) return { at, zones: [...new Set(at.map(zoneOfWord).filter(Boolean))], source, via: null };
-  for (const p of (k.ancestors?.(w) ?? []).slice(0, 3)) {
-    const h = habitat(k, p, depth + 1);
-    if (h) return { ...h, via: h.via ?? p };
-  }
-  return null;
-}
 
 /** What to say, short, when a thing of a kind is put in a place its usual places do not include; null when it is fine or the knowledge says nothing. `name` is the kind as the user says it. */
 export function adviceFor(knowledge, name, placeWord) {

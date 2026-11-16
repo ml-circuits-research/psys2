@@ -1,0 +1,4369 @@
+{
+ "date": "2026-11-16T02:20:27.180Z",
+ "reasoner": "matrix",
+ "mt": false,
+ "encoder": false,
+ "summary": {
+  "session": {
+   "right": 15,
+   "total": 43,
+   "medianMs": 331,
+   "withheld": 0,
+   "falseDone": 0,
+   "ms": {
+    "median": 331,
+    "p90": 976,
+    "max": 1481
+   }
+  },
+  "variants": {
+   "right": 17,
+   "total": 35,
+   "byClass": {
+    "A": {
+     "right": 2,
+     "total": 5,
+     "ms": {
+      "median": 315,
+      "p90": 712,
+      "max": 712
+     }
+    },
+    "B": {
+     "right": 4,
+     "total": 5,
+     "ms": {
+      "median": 175,
+      "p90": 341,
+      "max": 341
+     }
+    },
+    "C": {
+     "right": 2,
+     "total": 5,
+     "ms": {
+      "median": 285,
+      "p90": 839,
+      "max": 839
+     }
+    },
+    "D": {
+     "right": 3,
+     "total": 5,
+     "ms": {
+      "median": 50,
+      "p90": 215,
+      "max": 215
+     }
+    },
+    "E": {
+     "right": 2,
+     "total": 5,
+     "ms": {
+      "median": 415,
+      "p90": 818,
+      "max": 818
+     }
+    },
+    "F": {
+     "right": 0,
+     "total": 5,
+     "ms": {
+      "median": 514,
+      "p90": 973,
+      "max": 973
+     }
+    },
+    "G": {
+     "right": 4,
+     "total": 5,
+     "ms": {
+      "median": 113,
+      "p90": 222,
+      "max": 222
+     }
+    }
+   },
+   "medianMs": 215,
+   "ms": {
+    "median": 215,
+    "p90": 818,
+    "max": 973
+   }
+  }
+ },
+ "rows": [
+  {
+   "set": "session",
+   "context": true,
+   "id": 0,
+   "class": null,
+   "text": "adaugă un cerc",
+   "tab": "diagram",
+   "ms": 1550,
+   "judged": false,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat un cerc.",
+   "english": "I added a circle.",
+   "stages": {
+    "total": 1549.5,
+    "stages": {
+     "door": "1x 426.2",
+     "init.compilePattern": "2901x 62.9",
+     "correct": "1x 0.2",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "facts.index": 309877,
+     "translate.frame": 2659,
+     "translate.np": 43,
+     "translate.tokenize": 38,
+     "candidates.residue": 12,
+     "translate.render": 10
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 1,
+   "class": null,
+   "text": "creaza o diagrama random",
+   "tab": "diagram",
+   "ms": 159,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o diagramă. Am adăugat 3 cercuri. Am adăugat 4 elipse. Am adăugat 6 legături. Am presupus cerc pentru aranjarea. Am presupus 7 pentru numărul.",
+   "english": "I added a diagram. I added 3 circles. I added 4 ellipses. I added 6 links. I assumed circle for the layout. I assumed 7 for the count.",
+   "stages": {
+    "total": 159,
+    "stages": {
+     "door": "1x 158.7",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 3481,
+     "translate.tokenize": 198,
+     "diagram.layout": 73,
+     "translate.np": 39,
+     "translate.parse": 18,
+     "candidates.residue": 16
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 2,
+   "class": null,
+   "text": "aseaza elementele diagramei ca un hexagon",
+   "tab": "diagram",
+   "ms": 454,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed",
+    "reply_any:hexagon"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles asta ca pe ceva de făcut aici.",
+   "english": "I did not understand that as something to do in the diagram.",
+   "stages": {
+    "total": 454.1,
+    "stages": {
+     "door": "1x 236.5",
+     "candidates.choose": "1x 23",
+     "understands": "1x 18",
+     "formalize": "1x 12.9",
+     "rules": "1x 10.6",
+     "candidates.gather": "1x 8.1",
+     "intent": "1x 1.8",
+     "knowledge": "3x 0.4",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "interpret": "2x 0.2",
+     "discourse": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "understands.memo": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 15672,
+     "candidates.repair": 6224,
+     "matcher.backtrack": 3242,
+     "rules.pattern": 784,
+     "translate.tokenize": 638,
+     "matcher.attempt": 500
+    }
+   },
+   "door": "honest: no thing named",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 3,
+   "class": null,
+   "text": "aseaza elementele diagramei ca un hexagon cu cercul in mijloc",
+   "tab": "diagram",
+   "ms": 434,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed",
+    "state:diagram.sketch:shapes[kind=circle].x>=300 (80)",
+    "state:diagram.sketch:shapes[kind=circle].y>=150 (70)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles asta ca pe ceva de făcut aici.",
+   "english": "I did not understand that as something to do in the diagram.",
+   "stages": {
+    "total": 434.4,
+    "stages": {
+     "door": "1x 220.8",
+     "candidates.choose": "1x 15.6",
+     "formalize": "1x 15.2",
+     "understands": "1x 13",
+     "rules": "1x 13",
+     "candidates.gather": "1x 8.1",
+     "intent": "1x 0.6",
+     "person": "1x 0.4",
+     "dialogue": "2x 0.3",
+     "discourse": "2x 0.3",
+     "knowledge": "3x 0.3",
+     "interpret": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "understands.memo": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 26145,
+     "candidates.repair": 6236,
+     "matcher.backtrack": 4358,
+     "rules.pattern": 1040,
+     "translate.tokenize": 794,
+     "matcher.attempt": 622
+    }
+   },
+   "door": "honest: no thing named",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 4,
+   "class": null,
+   "text": "aseaza mai bine elementele diagramei",
+   "tab": "diagram",
+   "ms": 439,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins|nu am f[aă]cut|Ce ai vrut|doar o parte"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles asta ca pe ceva de făcut aici.",
+   "english": "I did not understand that as something to do in the diagram.",
+   "stages": {
+    "total": 439.2,
+    "stages": {
+     "door": "1x 212.7",
+     "candidates.choose": "1x 31.1",
+     "understands": "2x 28.4",
+     "formalize": "1x 15.6",
+     "rules": "1x 7.5",
+     "candidates.gather": "1x 6.6",
+     "interpret": "2x 3.3",
+     "person": "1x 0.3",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.2",
+     "discourse": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 13047,
+     "candidates.repair": 6221,
+     "matcher.backtrack": 4652,
+     "rules.pattern": 1018,
+     "matcher.attempt": 700,
+     "translate.tokenize": 608
+    }
+   },
+   "door": "honest: no thing named",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 5,
+   "class": null,
+   "text": "reaseaza diagrama",
+   "tab": "diagram",
+   "ms": 386,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins|nu am f[aă]cut|Ce ai vrut|doar o parte"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „reaseaza” aici.",
+   "english": "I did not understand \"reaseaza\" here.",
+   "stages": {
+    "total": 386.2,
+    "stages": {
+     "door": "1x 232.5",
+     "formalize": "1x 11.4",
+     "candidates.choose": "1x 5.7",
+     "candidates.gather": "1x 5.3",
+     "rules": "1x 4.4",
+     "interpret": "2x 2.2",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.2",
+     "discourse": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "candidates.repair": 9236,
+     "translate.frame": 5217,
+     "matcher.backtrack": 1117,
+     "translate.tokenize": 431,
+     "diagram.layout": 339,
+     "rules.pattern": 267
+    }
+   },
+   "door": "honest: unread: reaseaza",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 6,
+   "class": null,
+   "text": "fa diagrama mai frumoasa",
+   "tab": "diagram",
+   "ms": 146,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes.length=$+0 (14)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o diagramă. Am adăugat 4 dreptunghiuri. Am adăugat 3 cercuri. Am adăugat 6 legături. Am presupus alb pentru culoarea. Am presupus „default” pentru mărimea.",
+   "english": "I added a diagram. I added 4 rectangles. I added 3 circles. I added 6 links. I assumed white for the colour. I assumed default for the size.",
+   "stages": {
+    "total": 145.9,
+    "stages": {
+     "door": "1x 145.6",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "diagram.layout": 23882,
+     "translate.frame": 7016,
+     "translate.tokenize": 286,
+     "translate.np": 86,
+     "translate.parse": 26,
+     "followup.touched": 26
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 7,
+   "class": null,
+   "text": "reaseaza",
+   "tab": "diagram",
+   "ms": 389,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins|nu am f[aă]cut|Ce ai vrut|doar o parte"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „reaseaza” aici.",
+   "english": "I did not understand \"reaseaza\" here.",
+   "stages": {
+    "total": 389.3,
+    "stages": {
+     "door": "1x 229.7",
+     "formalize": "1x 13.7",
+     "rules": "1x 7.8",
+     "candidates.gather": "1x 6.9",
+     "interpret": "2x 5.5",
+     "candidates.choose": "1x 4.2",
+     "knowledge": "3x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "discourse": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "candidates.repair": 9233,
+     "translate.frame": 2604,
+     "diagram.layout": 969,
+     "matcher.backtrack": 630,
+     "scene.edit": 597,
+     "meta.worlds.near": 392
+    }
+   },
+   "door": "honest: nothing read",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 8,
+   "class": null,
+   "text": "punr elementele din mijloc mai sus",
+   "tab": "diagram",
+   "ms": 511,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed",
+    "state:diagram.sketch:shapes[name=work_done].y<$+0 (120)",
+    "state:diagram.sketch:shapes[name=results].y<$+0 (120)",
+    "reply_not:Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins|nu am f[aă]cut|Ce ai vrut|doar o parte"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles asta ca pe ceva de făcut aici.",
+   "english": "I did not understand that as something to do in the diagram.",
+   "stages": {
+    "total": 511.3,
+    "stages": {
+     "door": "1x 256.6",
+     "formalize": "1x 26.6",
+     "rules": "1x 16.8",
+     "intent": "1x 15.4",
+     "understands": "1x 15.2",
+     "candidates.gather": "1x 11.3",
+     "interpret": "2x 0.6",
+     "candidates.choose": "1x 0.3",
+     "knowledge": "3x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "discourse": "2x 0.1",
+     "typed": "1x 0.1",
+     "correct": "2x 0"
+    },
+    "ticks": {
+     "translate.frame": 22642,
+     "matcher.backtrack": 5460,
+     "candidates.repair": 1508,
+     "rules.pattern": 1034,
+     "matcher.attempt": 760,
+     "translate.tokenize": 600
+    }
+   },
+   "door": "honest: no thing named",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 9,
+   "class": null,
+   "text": "sterge cercul",
+   "tab": "diagram",
+   "ms": 125,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes.length=$-1 (14)",
+    "forbid:diagram.sketch:shapes[kind=circle].kind=circle (circle)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Care cerc? sunt 4.",
+   "english": "Which circle? There are 4.",
+   "stages": {
+    "total": 125.1,
+    "stages": {
+     "door": "1x 124.7",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 3500,
+     "translate.tokenize": 68,
+     "translate.np": 48,
+     "door.state": 26,
+     "translate.render": 12,
+     "candidates.residue": 10
+    }
+   },
+   "door": "bound remove",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 10,
+   "class": null,
+   "text": "pune primul si ultimul  od mao jos iar nodul din centru mai sus",
+   "tab": "diagram",
+   "ms": 847,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=summary].y>$+0 (120)",
+    "state:diagram.sketch:shapes[name=next_steps].y>$+0 (120)",
+    "reply_not:Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins|nu am f[aă]cut|Ce ai vrut|doar o parte"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Am înțeles „Put the first” și „the node in the center more up”, dar nu „the last od mao down”, așa că nu am făcut nimic.",
+   "english": "I understood \"Put the first\", \"the node in the center more up\", but not \"the last od mao down\", so I did nothing.",
+   "stages": {
+    "total": 846.7,
+    "stages": {
+     "formalize": "2x 281.2",
+     "intent": "1x 252.5",
+     "understands": "5x 250.1",
+     "door": "1x 191.1",
+     "rules": "2x 177.2",
+     "intent.reread": "1x 92.1",
+     "candidates.gather": "1x 21",
+     "interpret": "3x 8.1",
+     "dialogue": "4x 0.7",
+     "knowledge": "6x 0.6",
+     "person": "2x 0.4",
+     "discourse": "4x 0.3",
+     "candidates.choose": "1x 0.1",
+     "correct": "3x 0.1",
+     "typed": "2x 0",
+     "understands.memo": "8x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 79057,
+     "translate.frame": 73518,
+     "rules.pattern": 23581,
+     "matcher.attempt": 11156,
+     "emit.substituteEmit": 7972,
+     "index.run": 2612
+    }
+   },
+   "door": "honest: unread: od mao",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 11,
+   "class": null,
+   "text": "muta results mai sus",
+   "tab": "diagram",
+   "ms": 136,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat hexagonul la sus.",
+   "english": "I moved the hexagon to the up.",
+   "stages": {
+    "total": 136.2,
+    "stages": {
+     "door": "1x 135.8",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 4361,
+     "translate.tokenize": 171,
+     "translate.np": 38,
+     "door.state": 26,
+     "followup.touched": 26,
+     "translate.parse": 22
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 12,
+   "class": null,
+   "text": "si mai sus",
+   "tab": "diagram",
+   "ms": 129,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=results].y<$+0 (55)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat hexagonul la sus.",
+   "english": "I moved the hexagon to the up.",
+   "stages": {
+    "total": 129.2,
+    "stages": {
+     "door": "1x 128.8",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 874,
+     "translate.tokenize": 109,
+     "door.state": 26,
+     "followup.touched": 26,
+     "translate.parse": 14,
+     "candidates.residue": 10
+    }
+   },
+   "door": "bound place (revision)",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 13,
+   "class": null,
+   "text": "muta work done si problems mai sus",
+   "tab": "diagram",
+   "ms": 608,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=work_done].y<$+0 (120)",
+    "state:diagram.sketch:shapes[name=problems].y<$+0 (120)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Am înțeles „problems more up”, dar nu „Move work done”, așa că nu am făcut nimic.",
+   "english": "I understood \"problems more up\", but not \"Move work done\", so I did nothing.",
+   "stages": {
+    "total": 608.1,
+    "stages": {
+     "door": "1x 331.6",
+     "formalize": "1x 82",
+     "intent": "1x 78.8",
+     "understands": "3x 78.1",
+     "rules": "1x 72.8",
+     "candidates.gather": "1x 12.9",
+     "interpret": "2x 3.2",
+     "dialogue": "2x 0.7",
+     "knowledge": "3x 0.5",
+     "person": "1x 0.2",
+     "discourse": "2x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "understands.memo": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 31434,
+     "matcher.backtrack": 15810,
+     "rules.pattern": 4430,
+     "emit.substituteEmit": 3666,
+     "matcher.attempt": 2465,
+     "index.run": 1176
+    }
+   },
+   "door": "honest: unread: work done",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 14,
+   "class": null,
+   "text": "muta summary pe la mijloc",
+   "tab": "diagram",
+   "ms": 167,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=summary].y<=380 (415)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat hexagonul la bottom.",
+   "english": "I moved the hexagon to the bottom.",
+   "stages": {
+    "total": 167.3,
+    "stages": {
+     "door": "1x 166.9",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 4362,
+     "translate.tokenize": 124,
+     "translate.np": 42,
+     "door.state": 26,
+     "followup.touched": 26,
+     "translate.parse": 22
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 15,
+   "class": null,
+   "text": "mai jos",
+   "tab": "diagram",
+   "ms": 247,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=summary].y>$+0 (415)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles asta ca pe ceva de făcut aici.",
+   "english": "I did not understand that as something to do in the diagram.",
+   "stages": {
+    "total": 246.5,
+    "stages": {
+     "door": "1x 122.4",
+     "dialogue": "2x 24.4",
+     "discourse": "2x 16.8",
+     "candidates.gather": "1x 6.3",
+     "interpret": "2x 1",
+     "knowledge": "1x 0.3",
+     "person": "1x 0.2",
+     "candidates.choose": "1x 0",
+     "correct": "2x 0"
+    },
+    "ticks": {
+     "translate.frame": 2622,
+     "matcher.backtrack": 1629,
+     "rules.pattern": 309,
+     "emit.substituteEmit": 304,
+     "matcher.attempt": 301,
+     "index.run": 98
+    }
+   },
+   "door": "honest: no thing named",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 16,
+   "class": null,
+   "text": "nu problems , revina vu probls unde era",
+   "tab": "diagram",
+   "ms": 1062,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=problems].y>$+0 (120)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles asta ca pe ceva de făcut aici.",
+   "english": "I did not understand that as something to do in the diagram.",
+   "stages": {
+    "total": 1061.7,
+    "stages": {
+     "lenient": "3x 870.5",
+     "formalize": "1x 812.9",
+     "door": "1x 73.7",
+     "rules": "1x 34.3",
+     "intent": "1x 18",
+     "understands": "3x 17.5",
+     "interpret": "2x 16.2",
+     "bestEffort": "1x 7.8",
+     "translate": "2x 7",
+     "candidates.gather": "1x 4.3",
+     "names": "3x 1.4",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "discourse": "2x 0.1",
+     "knowledge": "3x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "understands.memo": "4x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 67450,
+     "translate.frame": 55244,
+     "spell.edit": 24481,
+     "rules.pattern": 20270,
+     "matcher.attempt": 10937,
+     "candidates.repair": 6227
+    }
+   },
+   "door": "honest: not translated",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 17,
+   "class": null,
+   "text": "gresit, muta problems mai sus",
+   "tab": "diagram",
+   "ms": 729,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=problems].y<$+0 (120)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Am înțeles „Wrong”, dar nu „he moves problems more up”, așa că nu am făcut nimic.",
+   "english": "I understood \"Wrong\", but not \"he moves problems more up\", so I did nothing.",
+   "stages": {
+    "total": 728.9,
+    "stages": {
+     "door": "1x 392.2",
+     "understands": "6x 101.7",
+     "candidates.choose": "1x 68.9",
+     "formalize": "2x 46.5",
+     "rules": "2x 37.5",
+     "intent": "1x 33.7",
+     "dialogue": "4x 29.1",
+     "intent.reread": "1x 14.8",
+     "candidates.gather": "1x 7.3",
+     "interpret": "3x 5.4",
+     "knowledge": "6x 0.7",
+     "person": "2x 0.4",
+     "discourse": "4x 0.2",
+     "correct": "3x 0",
+     "typed": "2x 0",
+     "understands.memo": "2x 0"
+    },
+    "ticks": {
+     "translate.frame": 36750,
+     "matcher.backtrack": 18265,
+     "rules.pattern": 5564,
+     "emit.substituteEmit": 3648,
+     "matcher.attempt": 3069,
+     "index.readString": 1198
+    }
+   },
+   "door": "honest: unread: moves",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 18,
+   "class": null,
+   "text": "muta summary mai jos",
+   "tab": "diagram",
+   "ms": 159,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat hexagonul la jos.",
+   "english": "I moved the hexagon to the down.",
+   "stages": {
+    "total": 158.5,
+    "stages": {
+     "door": "1x 158",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 4361,
+     "translate.tokenize": 175,
+     "translate.np": 38,
+     "door.state": 26,
+     "followup.touched": 26,
+     "translate.parse": 22
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 19,
+   "class": null,
+   "text": "muta problems mai sus",
+   "tab": "diagram",
+   "ms": 134,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat hexagonul la sus.",
+   "english": "I moved the hexagon to the up.",
+   "stages": {
+    "total": 133.8,
+    "stages": {
+     "door": "1x 133.3",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 4361,
+     "translate.tokenize": 177,
+     "translate.np": 38,
+     "door.state": 26,
+     "followup.touched": 26,
+     "translate.parse": 22
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 20,
+   "class": null,
+   "text": "fa un desen random",
+   "tab": "diagram",
+   "ms": 324,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „drawing” aici.",
+   "english": "I did not understand \"drawing\" here.",
+   "stages": {
+    "total": 323.5,
+    "stages": {
+     "door": "1x 186.9",
+     "formalize": "1x 26",
+     "intent": "1x 17",
+     "understands": "1x 16.8",
+     "rules": "1x 12.9",
+     "candidates.gather": "1x 6.5",
+     "candidates.choose": "1x 3.4",
+     "dialogue": "2x 0.6",
+     "knowledge": "3x 0.4",
+     "person": "1x 0.2",
+     "discourse": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "interpret": "2x 0"
+    },
+    "ticks": {
+     "translate.frame": 10539,
+     "diagram.route": 6777,
+     "matcher.backtrack": 4230,
+     "candidates.repair": 3115,
+     "rules.pattern": 594,
+     "matcher.attempt": 500
+    }
+   },
+   "door": "honest: unread: drawing",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 21,
+   "class": null,
+   "text": "deseneaza ceva random",
+   "tab": "diagram",
+   "ms": 150,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o diagramă. Am adăugat 3 dreptunghiuri. Am adăugat 3 elipse. Am adăugat 2 cercuri. Am adăugat 7 legături. Am presupus alb pentru culoarea. Am presupus „default” pentru mărimea.",
+   "english": "I added a diagram. I added 3 rectangles. I added 3 ellipses. I added 2 circles. I added 7 links. I assumed white for the colour. I assumed default for the size.",
+   "stages": {
+    "total": 149.7,
+    "stages": {
+     "door": "1x 149.1",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "diagram.layout": 116409,
+     "translate.frame": 5208,
+     "translate.tokenize": 335,
+     "translate.np": 44,
+     "followup.touched": 42,
+     "translate.parse": 27
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 22,
+   "class": null,
+   "text": "unde este paris",
+   "tab": "editor",
+   "ms": 289,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Paris este capitala de Franța, în Europa( 48.87 N, 2.33 E), cu despre 9.9 million oameni.",
+   "english": "Paris is the capital of France, in Europe (48.87 N, 2.33 E), with about 9.9 million people.",
+   "stages": {
+    "total": 289.3,
+    "stages": {
+     "door": "1x 168.3",
+     "knowledge": "3x 60.8",
+     "formalize": "1x 32.7",
+     "interpret": "1x 16.2",
+     "rules": "1x 10.7",
+     "candidates.gather": "1x 6.4",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "candidates.choose": "1x 0",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "facts.index": 12486,
+     "facts.wires": 5522,
+     "translate.frame": 5258,
+     "geo.merge": 2473,
+     "candidates.repair": 2378,
+     "matcher.backtrack": 1076
+    }
+   },
+   "door": "question; answered by geo.map (no declarations)",
+   "legacy": true
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 23,
+   "class": null,
+   "text": "arata-mi paris pe harta",
+   "tab": "map",
+   "ms": 30,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": false,
+   "content": false,
+   "reply": "Harta este centred pe Paris la zoom 8( offline țară hartă). Nu sunt marcaje, evidențieri sau linii.",
+   "english": "The map is centred on Paris at zoom 8 (offline country map). There are no markers, highlights or lines.",
+   "stages": {
+    "total": 29.5,
+    "stages": {
+     "formalize": "1x 14.5",
+     "rules": "1x 11.9",
+     "candidates.gather": "1x 10.9",
+     "interpret": "1x 0.5",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "discourse": "2x 0.2",
+     "knowledge": "3x 0.2",
+     "candidates.choose": "1x 0",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "candidates.repair": 6991,
+     "translate.frame": 3561,
+     "matcher.backtrack": 3492,
+     "rules.pattern": 427,
+     "matcher.attempt": 341,
+     "translate.tokenize": 237
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 24,
+   "class": null,
+   "text": "deseneaza ceva frumos",
+   "tab": "draw",
+   "ms": 221,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o baltă. Am adăugat un lac. Am adăugat o floare. Am adăugat 2 păsări. Am adăugat 3 pești. Am presupus iaz pentru ce fac. Am presupus 7 pentru numărul.",
+   "english": "I added a pond. I added a lake. I added a flower. I added 2 birds. I added 3 fish. I assumed pond for the target. I assumed 7 for the count.",
+   "stages": {
+    "total": 220.6,
+    "stages": {
+     "door": "1x 219.7",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5208,
+     "interpreter.visit": 516,
+     "translate.tokenize": 171,
+     "art.place": 50,
+     "translate.np": 44,
+     "ops.call": 42
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 25,
+   "class": null,
+   "text": "deseneaza o casa",
+   "tab": "draw",
+   "ms": 218,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o casă.",
+   "english": "I added a house.",
+   "stages": {
+    "total": 218,
+    "stages": {
+     "door": "1x 217.2",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5226,
+     "art.place": 176,
+     "interpreter.visit": 156,
+     "facts.wires": 134,
+     "translate.tokenize": 79,
+     "translate.np": 62
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 26,
+   "class": null,
+   "text": "deseneaza orice vrei tu",
+   "tab": "draw",
+   "ms": 228,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o casă. Am presupus casă pentru ce fac.",
+   "english": "I added a house. I assumed house for the target.",
+   "stages": {
+    "total": 227.7,
+    "stages": {
+     "door": "1x 226.9",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 6950,
+     "art.place": 243,
+     "translate.tokenize": 189,
+     "interpreter.visit": 156,
+     "facts.wires": 113,
+     "translate.np": 60
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 27,
+   "class": null,
+   "text": "sterge desenul",
+   "tab": "draw",
+   "ms": 219,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am șters lacul. Am șters floarea. Am șters 2 păsări. Am șters 3 pești. Am șters 2 case. Am șters balta.",
+   "english": "I removed the lake. I removed the flower. I removed 2 birds. I removed 3 fish. I removed 2 houses. I removed the pond.",
+   "stages": {
+    "total": 219.3,
+    "stages": {
+     "door": "1x 218.5",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 3500,
+     "interpreter.visit": 606,
+     "translate.tokenize": 74,
+     "ops.call": 49,
+     "translate.np": 48,
+     "index.descendants": 43
+    }
+   },
+   "door": "bound remove",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 28,
+   "class": null,
+   "text": "deseneaza un tablou cu un lac",
+   "tab": "draw",
+   "ms": 331,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o baltă. Am adăugat 2 lacuri. Am adăugat 2 flori. Am adăugat 2 păsări. Am adăugat un pește. Am presupus 6 pentru numărul.",
+   "english": "I added a pond. I added 2 lakes. I added 2 flowers. I added 2 birds. I added a fish. I assumed 6 for the count.",
+   "stages": {
+    "total": 331,
+    "stages": {
+     "door": "1x 330.2",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 10456,
+     "interpreter.visit": 606,
+     "translate.tokenize": 145,
+     "translate.np": 128,
+     "ops.call": 49,
+     "art.place": 49
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 29,
+   "class": null,
+   "text": "deseneaza un pond",
+   "tab": "draw",
+   "ms": 224,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o baltă. Am adăugat un lac. Am adăugat 2 flori. Am adăugat 2 păsări. Am adăugat un pește. Am presupus 6 pentru numărul. Am presupus apă, „reed”, rață, „goldfish” pentru forma.",
+   "english": "I added a pond. I added a lake. I added 2 flowers. I added 2 birds. I added a fish. I assumed 6 for the count. I assumed water, reed, duck, goldfish for the kinds.",
+   "stages": {
+    "total": 224.2,
+    "stages": {
+     "door": "1x 223.3",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5220,
+     "interpreter.visit": 516,
+     "art.place": 315,
+     "knowledge.memo": 274,
+     "translate.tokenize": 85,
+     "translate.np": 48
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 30,
+   "class": null,
+   "text": "ai exagerat",
+   "tab": "draw",
+   "ms": 730,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:art.draw:objects.length<$+0 (13)"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „exagerat” aici.",
+   "english": "I did not understand \"exagerat\" here.",
+   "stages": {
+    "total": 729.7,
+    "stages": {
+     "door": "1x 400.2",
+     "formalize": "2x 54",
+     "intent": "1x 44.4",
+     "understands": "2x 43.7",
+     "rules": "2x 39.7",
+     "intent.reread": "1x 39",
+     "interpret": "3x 12.5",
+     "candidates.gather": "1x 7.3",
+     "lenient": "1x 3.8",
+     "candidates.choose": "1x 3.6",
+     "discourse": "4x 0.8",
+     "person": "2x 0.4",
+     "bestEffort": "1x 0.4",
+     "knowledge": "6x 0.4",
+     "dialogue": "4x 0.3",
+     "names": "1x 0.3",
+     "correct": "3x 0",
+     "typed": "2x 0",
+     "understands.memo": "2x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 13190,
+     "candidates.repair": 9236,
+     "spell.edit": 5620,
+     "translate.frame": 5226,
+     "rules.pattern": 4742,
+     "matcher.attempt": 2200
+    }
+   },
+   "door": "honest: nothing read",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 31,
+   "class": null,
+   "text": "sterge elementele in plus, exgarat de mukte elemente, unde este apa?",
+   "tab": "draw",
+   "ms": 1481,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:art.draw:objects.length<$+0 (13)",
+    "reply_any:ap[aă]|iaz|lac"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Am înțeles „where is the water”, dar nu „Delete the items in plus” și „exgarat of mukte items”, așa că nu am făcut nimic.",
+   "english": "I understood \"where is the water\", but not \"Delete the items in plus\", \"exgarat of mukte items\", so I did nothing.",
+   "stages": {
+    "total": 1481.4,
+    "stages": {
+     "door": "1x 891.1",
+     "knowledge": "3x 100.7",
+     "intent": "1x 63.7",
+     "understands": "6x 63.4",
+     "formalize": "1x 58.3",
+     "candidates.gather": "1x 44.5",
+     "rules": "1x 39.7",
+     "candidates.choose": "1x 4.9",
+     "lenient": "1x 3.7",
+     "interpret": "2x 3",
+     "names": "1x 0.6",
+     "discourse": "2x 0.4",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "understands.memo": "6x 0"
+    },
+    "ticks": {
+     "translate.frame": 105238,
+     "matcher.backtrack": 18454,
+     "candidates.repair": 12554,
+     "spell.edit": 7238,
+     "rules.pattern": 5152,
+     "matcher.attempt": 2919
+    }
+   },
+   "door": "honest: question",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 32,
+   "class": null,
+   "text": "pune pestii in ala",
+   "tab": "draw",
+   "ms": 554,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed",
+    "reply_not:Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins|nu am f[aă]cut|Ce ai vrut|doar o parte|unde s[aă]-l"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „ala” aici.",
+   "english": "I did not understand \"ala\" here.",
+   "stages": {
+    "total": 553.6,
+    "stages": {
+     "door": "1x 306.1",
+     "formalize": "1x 66",
+     "knowledge": "3x 23.3",
+     "candidates.gather": "1x 20.7",
+     "intent": "1x 12.9",
+     "understands": "1x 12.8",
+     "rules": "1x 10.7",
+     "interpret": "2x 1.3",
+     "discourse": "2x 0.4",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "candidates.choose": "1x 0",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 21066,
+     "matcher.backtrack": 13746,
+     "rules.pattern": 2724,
+     "matcher.attempt": 2118,
+     "interpreter.visit": 1386,
+     "emit.substituteEmit": 1008
+    }
+   },
+   "door": "honest: unread: ala",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 33,
+   "class": null,
+   "text": "lasa plantele de apa ij apa, pune iarba deasupra apei, lasa cerul albastru azuriu",
+   "tab": "draw",
+   "ms": 978,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Am înțeles „leave the blue sky blue”, dar nu „Leave the plants of the water ij the water” și „put the grass above the water”, așa că nu am făcut nimic.",
+   "english": "I understood \"leave the blue sky blue\", but not \"Leave the plants of the water ij the water\", \"put the grass above the water\", so I did nothing.",
+   "stages": {
+    "total": 977.6,
+    "stages": {
+     "door": "1x 570.9",
+     "understands": "7x 114.8",
+     "intent": "1x 82.5",
+     "formalize": "1x 41.7",
+     "candidates.choose": "1x 33.3",
+     "rules": "1x 29.4",
+     "candidates.gather": "1x 16.7",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "knowledge": "3x 0",
+     "interpret": "2x 0",
+     "understands.memo": "6x 0"
+    },
+    "ticks": {
+     "translate.frame": 63060,
+     "matcher.backtrack": 28793,
+     "rules.pattern": 5627,
+     "matcher.attempt": 4370,
+     "candidates.repair": 3829,
+     "interpreter.visit": 3036
+    }
+   },
+   "door": "honest: unread: plants put",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 34,
+   "class": null,
+   "text": "plantele de apa am zis",
+   "tab": "draw",
+   "ms": 448,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:Nu g[aă]sesc|Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins|nu am f[aă]cut|Ce ai vrut|doar o parte"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „plants” și „said” aici.",
+   "english": "I did not understand \"plants\", \"said\" here.",
+   "stages": {
+    "total": 448.3,
+    "stages": {
+     "door": "1x 294.2",
+     "formalize": "1x 12.4",
+     "intent": "1x 9.2",
+     "understands": "1x 9.1",
+     "rules": "1x 7.5",
+     "dialogue": "2x 6.2",
+     "candidates.gather": "1x 3.3",
+     "person": "1x 3",
+     "discourse": "2x 0.4",
+     "knowledge": "3x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "interpret": "2x 0"
+    },
+    "ticks": {
+     "translate.frame": 13116,
+     "matcher.backtrack": 5055,
+     "rules.pattern": 903,
+     "interpreter.visit": 726,
+     "matcher.attempt": 648,
+     "meta.worlds.near": 563
+    }
+   },
+   "door": "honest: unread: plants said",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 35,
+   "class": null,
+   "text": "ada pestii jos pe primul nivel",
+   "tab": "draw",
+   "ms": 661,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „ada” aici.",
+   "english": "I did not understand \"ada\" here.",
+   "stages": {
+    "total": 661.3,
+    "stages": {
+     "door": "1x 486.3",
+     "formalize": "1x 28.7",
+     "lenient": "1x 21",
+     "candidates.gather": "1x 7.8",
+     "rules": "1x 7.6",
+     "intent": "1x 6.6",
+     "understands": "1x 6.4",
+     "interpret": "2x 4.4",
+     "discourse": "2x 0.4",
+     "names": "1x 0.4",
+     "person": "1x 0.2",
+     "candidates.choose": "1x 0.1",
+     "dialogue": "2x 0.1",
+     "knowledge": "3x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 31362,
+     "matcher.backtrack": 3585,
+     "spell.edit": 1244,
+     "translate.tokenize": 791,
+     "rules.pattern": 712,
+     "matcher.attempt": 502
+    }
+   },
+   "door": "honest: unread: ada",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 36,
+   "class": null,
+   "text": "muta pestii pe primul nivel",
+   "tab": "draw",
+   "ms": 422,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu s-a schimbat nimic. Unde ar trebui să meargă? Poți spune, de exemplu, „mută copacul la stânga”, „pune pisica lângă casă” sau „mută-l în colțul din dreapta sus”. Eu could nu do pe nivelul prim: lumea does nu lua despre pentru loc.",
+   "english": "Nothing changed. Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\". I could not do on the first level: this world does not take about for place.",
+   "stages": {
+    "total": 422,
+    "stages": {
+     "door": "1x 421.2",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 8732,
+     "translate.tokenize": 808,
+     "translate.np": 102,
+     "translate.parse": 68,
+     "candidates.residue": 54,
+     "normalize.isEnd": 46
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 37,
+   "class": null,
+   "text": "imparte diagrama pe 3 nivele: apa, iarba/peisaj/cer",
+   "tab": "draw",
+   "ms": 1163,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Am înțeles „Share the diagram on 3 levels the water”, dar nu „the grass peisaj a sky”, așa că nu am făcut nimic.",
+   "english": "I understood \"Share the diagram on 3 levels the water\", but not \"the grass peisaj a sky\", so I did nothing.",
+   "stages": {
+    "total": 1163.2,
+    "stages": {
+     "door": "1x 716.7",
+     "formalize": "1x 43.2",
+     "rules": "1x 37.2",
+     "intent": "1x 35",
+     "understands": "3x 34.5",
+     "candidates.gather": "1x 14.2",
+     "candidates.choose": "1x 7.4",
+     "interpret": "2x 1",
+     "discourse": "2x 0.4",
+     "knowledge": "3x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "understands.memo": "4x 0"
+    },
+    "ticks": {
+     "translate.frame": 76753,
+     "candidates.repair": 12773,
+     "matcher.backtrack": 11068,
+     "rules.pattern": 2132,
+     "matcher.attempt": 1494,
+     "translate.tokenize": 1272
+    }
+   },
+   "door": "honest: unread: peisaj",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 38,
+   "class": null,
+   "text": "muta elementele logic pe cele trei nivele",
+   "tab": "draw",
+   "ms": 976,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed",
+    "reply_not:Unde ar trebui|Where should|Nu am [îi]n[tţț]eles"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „logic” și „3” aici.",
+   "english": "I did not understand \"logic\", \"3\" here.",
+   "stages": {
+    "total": 976.3,
+    "stages": {
+     "door": "1x 518.3",
+     "bestEffort": "1x 45.3",
+     "candidates.gather": "1x 31.3",
+     "formalize": "1x 29.2",
+     "candidates.choose": "1x 28",
+     "understands": "2x 21.8",
+     "rules": "1x 11.2",
+     "interpret": "2x 9.4",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "knowledge": "3x 0.1",
+     "intent": "1x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "understands.memo": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 36621,
+     "candidates.repair": 12277,
+     "matcher.backtrack": 7007,
+     "best-effort.tokenize": 6240,
+     "meta.worlds.near": 3591,
+     "scene.edit": 2130
+    }
+   },
+   "door": "honest: unread: logic 3",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 39,
+   "class": null,
+   "text": "nu prea intelegi ce-ti zic, esti stupid?",
+   "tab": "draw",
+   "ms": 668,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins|nu am f[aă]cut|Ce ai vrut|doar o parte|documentul"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles asta ca pe ceva de făcut aici.",
+   "english": "I did not understand that as something to do in the drawing.",
+   "stages": {
+    "total": 667.5,
+    "stages": {
+     "lenient": "3x 509.4",
+     "formalize": "1x 492.8",
+     "door": "1x 54.9",
+     "rules": "1x 53.5",
+     "intent": "1x 24.2",
+     "understands": "4x 23.9",
+     "interpret": "2x 12.2",
+     "candidates.gather": "1x 10.2",
+     "translate": "2x 6",
+     "bestEffort": "1x 5.9",
+     "names": "3x 2.1",
+     "discourse": "2x 0.4",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "understands.memo": "3x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 143810,
+     "translate.frame": 78923,
+     "spell.edit": 65739,
+     "rules.pattern": 38472,
+     "matcher.attempt": 22488,
+     "candidates.repair": 5496
+    }
+   },
+   "door": "honest: not translated",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 40,
+   "class": null,
+   "text": "fa-mi o piveste despre un lac  unde un povestitor scrie o poveste despre broaste",
+   "tab": "editor",
+   "ms": 434,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o poveste. Am adăugat 5 capitole. Povestea este despre broaște. Am presupus 150 pentru lungimea.",
+   "english": "I added a story. I added 5 chapters. The story is about frogs. I assumed 150 for the length.",
+   "stages": {
+    "total": 434.2,
+    "stages": {
+     "door": "1x 433.3",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 36631,
+     "translate.tokenize": 815,
+     "translate.np": 457,
+     "translate.parse": 97,
+     "translate.render": 76,
+     "candidates.residue": 58
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 41,
+   "class": null,
+   "text": "conoune o poveste cu 3 capitole despre un lac",
+   "tab": "editor",
+   "ms": 238,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:docs.editor:stats.words>=$+30 (83)",
+    "state:docs.editor:blocks.length>=$+3 (6)"
+   ],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": true,
+   "content": true,
+   "reply": "Am șters 2 capitole. Povestea este despre lac acum. Povestea este despre lac. Am presupus 150 pentru lungimea.",
+   "english": "I removed 2 chapters. The story is about lake now. The story is about lake. I assumed 150 for the length.",
+   "stages": {
+    "total": 238.3,
+    "stages": {
+     "door": "1x 237.3",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 13546,
+     "translate.tokenize": 436,
+     "translate.np": 167,
+     "translate.parse": 58,
+     "candidates.residue": 48,
+     "translate.render": 36
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 42,
+   "class": null,
+   "text": "arat-mi parisul",
+   "tab": "map",
+   "ms": 25,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": false,
+   "content": false,
+   "reply": "Iată Paris: capitala Franței · 9.9 milioane de locuitori.",
+   "english": "Here is Paris: capital of France · 9.9 million people.",
+   "stages": {
+    "total": 24.8,
+    "stages": {
+     "formalize": "1x 12.6",
+     "rules": "1x 9.9",
+     "candidates.gather": "1x 5.1",
+     "interpret": "1x 0.4",
+     "knowledge": "3x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "correct": "1x 0.1",
+     "discourse": "2x 0.1",
+     "candidates.choose": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "candidates.repair": 9828,
+     "matcher.backtrack": 1773,
+     "translate.frame": 1739,
+     "rules.pattern": 245,
+     "matcher.attempt": 221,
+     "scene.walk": 151
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  },
+  {
+   "set": "session",
+   "context": false,
+   "id": 43,
+   "class": null,
+   "text": "tenerife",
+   "tab": "map",
+   "ms": 32,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:geo.map:focus~Tenerife ({\"name\":\"Paris\",\"kind\":\"city\",\"lat\":48.87,\"lon\":2.33,\"cc\":\"FR\",\"label\":\"capital of France · 9.9 million people\"})"
+   ],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": false,
+   "content": false,
+   "reply": "Nu știu un loc chema tenerife.",
+   "english": "I do not know a place called tenerife.",
+   "stages": {
+    "total": 32.4,
+    "stages": {
+     "candidates.choose": "1x 7.9",
+     "formalize": "1x 4.6",
+     "candidates.gather": "1x 4",
+     "intent": "1x 3.8",
+     "understands": "1x 2.9",
+     "rules": "1x 2.5",
+     "knowledge": "3x 0.5",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.2",
+     "interpret": "1x 0.2",
+     "discourse": "2x 0.1",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "candidates.repair": 9231,
+     "matcher.backtrack": 1228,
+     "scene.edit": 900,
+     "translate.frame": 868,
+     "meta.worlds.near": 577,
+     "scene.walk": 302
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează trei cercuri",
+   "tab": "diagram",
+   "ms": 115,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat 3 cercuri. Am presupus rând pentru aranjarea.",
+   "english": "I added 3 circles. I assumed row for the layout.",
+   "stages": {
+    "total": 115.2,
+    "stages": {
+     "door": "1x 115",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2613,
+     "translate.tokenize": 61,
+     "translate.np": 31,
+     "candidates.residue": 10,
+     "translate.render": 7,
+     "translate.parse": 6
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "A1",
+   "class": "A",
+   "text": "ordonează cercurile pe un rând",
+   "tab": "diagram",
+   "ms": 388,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „ordonează” aici.",
+   "english": "I did not understand \"ordonează\" here.",
+   "stages": {
+    "total": 388,
+    "stages": {
+     "door": "1x 215",
+     "formalize": "1x 16.7",
+     "rules": "1x 16.2",
+     "bestEffort": "1x 9.5",
+     "intent": "1x 9.2",
+     "understands": "1x 8.6",
+     "candidates.gather": "1x 5.4",
+     "interpret": "2x 5.3",
+     "candidates.choose": "1x 5.1",
+     "dialogue": "2x 0.5",
+     "person": "1x 0.4",
+     "lenient": "1x 0.4",
+     "discourse": "2x 0.3",
+     "names": "1x 0.1",
+     "knowledge": "3x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 13077,
+     "candidates.repair": 7485,
+     "matcher.backtrack": 3150,
+     "best-effort.tokenize": 1635,
+     "rules.pattern": 740,
+     "matcher.attempt": 510
+    }
+   },
+   "door": "honest: unread: ordonează",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează doi copaci și o casă",
+   "tab": "draw",
+   "ms": 209,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat 2 copaci. Am adăugat o casă.",
+   "english": "I added 2 trees. I added a house.",
+   "stages": {
+    "total": 209,
+    "stages": {
+     "door": "1x 208.9",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 6980,
+     "interpreter.visit": 246,
+     "translate.tokenize": 77,
+     "translate.np": 70,
+     "candidates.residue": 22,
+     "ops.call": 21
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "A2",
+   "class": "A",
+   "text": "rearanjează desenul",
+   "tab": "draw",
+   "ms": 712,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „rearanjează” aici.",
+   "english": "I did not understand \"rearanjează\" here.",
+   "stages": {
+    "total": 712.2,
+    "stages": {
+     "door": "1x 406.2",
+     "intent.reread": "1x 41.5",
+     "knowledge": "6x 26.9",
+     "formalize": "2x 17.8",
+     "interpret": "3x 14",
+     "intent": "1x 12.7",
+     "understands": "2x 12.5",
+     "rules": "2x 10.8",
+     "bestEffort": "1x 8.4",
+     "candidates.gather": "1x 4.7",
+     "candidates.choose": "1x 2.4",
+     "lenient": "1x 1.6",
+     "discourse": "4x 0.5",
+     "person": "2x 0.4",
+     "dialogue": "4x 0.3",
+     "correct": "3x 0",
+     "names": "1x 0",
+     "typed": "2x 0",
+     "understands.memo": "2x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 6448,
+     "translate.frame": 5217,
+     "candidates.repair": 3462,
+     "rules.pattern": 1465,
+     "interpreter.visit": 1320,
+     "matcher.attempt": 1150
+    }
+   },
+   "door": "honest: unread: rearanjează",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "A3",
+   "class": "A",
+   "text": "du-mă la madrid",
+   "tab": "map",
+   "ms": 19,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Iată Madrid: capitala Spaniei · 5.6 milioane de locuitori.",
+   "english": "Here is Madrid: capital of Spain · 5.6 million people.",
+   "stages": {
+    "total": 19,
+    "stages": {
+     "formalize": "1x 9.6",
+     "rules": "1x 8.1",
+     "candidates.gather": "1x 3.9",
+     "knowledge": "3x 2.9",
+     "interpret": "1x 0.9",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "candidates.repair": 5478,
+     "matcher.backtrack": 1435,
+     "translate.frame": 561,
+     "rules.pattern": 312,
+     "matcher.attempt": 228,
+     "translate.tokenize": 144
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "A4",
+   "class": "A",
+   "text": "scrie un paragraf despre munți",
+   "tab": "editor",
+   "ms": 315,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:docs.editor:stats.words>=$+5 (0)"
+   ],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „un”, „paragraf”, „despre” și „munți” aici.",
+   "english": "I did not understand \"un\", \"paragraf\", \"despre\", \"munți\" here.",
+   "stages": {
+    "total": 314.5,
+    "stages": {
+     "door": "1x 208",
+     "formalize": "1x 11.5",
+     "candidates.gather": "1x 8.9",
+     "rules": "1x 8",
+     "interpret": "2x 0.5",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "candidates.choose": "1x 0.1",
+     "dialogue": "2x 0.1",
+     "knowledge": "3x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2457,
+     "matcher.backtrack": 860,
+     "translate.tokenize": 258,
+     "emit.substituteEmit": 150,
+     "rules.pattern": 138,
+     "matcher.attempt": 131
+    }
+   },
+   "door": "honest: unread: un paragraf despre munți",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "A5",
+   "class": "A",
+   "text": "desenează o pisică portocalie",
+   "tab": "draw",
+   "ms": 212,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o pisică.",
+   "english": "I added a cat.",
+   "stages": {
+    "total": 211.7,
+    "stages": {
+     "door": "1x 211.6",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 3483,
+     "interpreter.visit": 156,
+     "translate.tokenize": 81,
+     "translate.np": 44,
+     "candidates.residue": 16,
+     "ops.call": 14
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "B1",
+   "class": "B",
+   "text": "unde e roma",
+   "tab": "map",
+   "ms": 175,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Roma este capitala de Italia, în Europa( 41.90 N, 12.48 E), cu despre 3.3 million oameni.",
+   "english": "Rome is the capital of Italy, in Europe (41.90 N, 12.48 E), with about 3.3 million people.",
+   "stages": {
+    "total": 174.6,
+    "stages": {
+     "knowledge": "3x 148.8",
+     "candidates.gather": "1x 10.1",
+     "candidates.choose": "1x 7.8",
+     "understands": "1x 7.7",
+     "formalize": "1x 5.1",
+     "rules": "1x 3.9",
+     "interpret": "1x 0.9",
+     "person": "1x 0.2",
+     "discourse": "2x 0.2",
+     "dialogue": "2x 0.1",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5258,
+     "matcher.backtrack": 2148,
+     "candidates.repair": 1409,
+     "rules.pattern": 494,
+     "matcher.attempt": 386,
+     "emit.substituteEmit": 280
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează cinci cercuri",
+   "tab": "diagram",
+   "ms": 121,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat 5 cercuri. Am presupus rând pentru aranjarea.",
+   "english": "I added 5 circles. I assumed row for the layout.",
+   "stages": {
+    "total": 120.5,
+    "stages": {
+     "door": "1x 120.4",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2613,
+     "translate.tokenize": 60,
+     "translate.np": 31,
+     "candidates.residue": 10,
+     "translate.render": 7,
+     "translate.parse": 6
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "B2",
+   "class": "B",
+   "text": "pune cercurile ca un pentagon",
+   "tab": "diagram",
+   "ms": 341,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „pentagon” aici.",
+   "english": "I did not understand \"pentagon\" here.",
+   "stages": {
+    "total": 340.8,
+    "stages": {
+     "door": "1x 173.2",
+     "formalize": "1x 54",
+     "lenient": "1x 28.7",
+     "rules": "1x 25.2",
+     "intent": "1x 24",
+     "understands": "1x 23.9",
+     "candidates.gather": "1x 8.6",
+     "interpret": "2x 4.4",
+     "bestEffort": "1x 3.3",
+     "dialogue": "2x 0.3",
+     "person": "1x 0.2",
+     "discourse": "2x 0.1",
+     "names": "1x 0.1",
+     "knowledge": "3x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 13134,
+     "matcher.backtrack": 12615,
+     "spell.edit": 9956,
+     "rules.pattern": 2324,
+     "matcher.attempt": 1770,
+     "translate.tokenize": 411
+    }
+   },
+   "door": "honest: unread: pentagon",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "B3",
+   "class": "B",
+   "text": "câte cuvinte are documentul?",
+   "tab": "editor",
+   "ms": 227,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_any:\\d|niciun|gol"
+   ],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „words” aici.",
+   "english": "I did not understand \"words\" here.",
+   "stages": {
+    "total": 227.1,
+    "stages": {
+     "door": "1x 145.3",
+     "formalize": "1x 12.2",
+     "rules": "1x 10.6",
+     "candidates.gather": "1x 6.8",
+     "knowledge": "3x 0.4",
+     "interpret": "2x 0.4",
+     "person": "1x 0.3",
+     "discourse": "2x 0.3",
+     "dialogue": "2x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 2109,
+     "translate.frame": 1203,
+     "rules.pattern": 515,
+     "matcher.attempt": 373,
+     "translate.tokenize": 275,
+     "emit.substituteEmit": 148
+    }
+   },
+   "door": "honest: question",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "B4",
+   "class": "B",
+   "text": "fă un grafic cu vânzările pe luni",
+   "tab": "charts",
+   "ms": 58,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "data.charts"
+   ],
+   "tabAfter": "charts",
+   "changed": true,
+   "content": true,
+   "reply": "OK, o bară nouă goală grafic a chemat„ grafic 1”. Adaugă data, pentru:„ exemplu adaugă mere 5”.",
+   "english": "OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\".",
+   "stages": {
+    "total": 57.7,
+    "stages": {
+     "formalize": "1x 24",
+     "rules": "1x 20.9",
+     "candidates.gather": "1x 15.6",
+     "knowledge": "3x 14",
+     "interpret": "1x 1",
+     "candidates.choose": "1x 0.7",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 6128,
+     "candidates.repair": 4937,
+     "matcher.backtrack": 3198,
+     "rules.pattern": 405,
+     "matcher.attempt": 285,
+     "translate.tokenize": 226
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "B5",
+   "class": "B",
+   "text": "cât de mare e franța",
+   "tab": "map",
+   "ms": 38,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Franța acoperă 551.695 pătrate kilometres.",
+   "english": "France covers 551,695 square kilometres.",
+   "stages": {
+    "total": 37.7,
+    "stages": {
+     "formalize": "1x 21",
+     "knowledge": "3x 10.1",
+     "rules": "1x 9.2",
+     "candidates.gather": "1x 3.8",
+     "interpret": "1x 1.1",
+     "person": "1x 0.2",
+     "discourse": "2x 0.2",
+     "dialogue": "2x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 4394,
+     "candidates.repair": 3108,
+     "matcher.backtrack": 1497,
+     "rules.pattern": 387,
+     "matcher.attempt": 312,
+     "emit.substituteEmit": 174
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează un pătrat numit start",
+   "tab": "diagram",
+   "ms": 257,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „call” aici.",
+   "english": "I did not understand \"call\" here.",
+   "stages": {
+    "total": 257,
+    "stages": {
+     "door": "1x 161.8",
+     "formalize": "1x 18.8",
+     "rules": "1x 15.5",
+     "candidates.gather": "1x 6.1",
+     "interpret": "2x 1.2",
+     "candidates.choose": "1x 0.2",
+     "person": "1x 0.2",
+     "discourse": "2x 0.2",
+     "knowledge": "3x 0.2",
+     "dialogue": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 13047,
+     "matcher.backtrack": 1866,
+     "rules.pattern": 378,
+     "candidates.repair": 301,
+     "translate.tokenize": 293,
+     "matcher.attempt": 286
+    }
+   },
+   "door": "honest: unread: call",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "C1",
+   "class": "C",
+   "text": "mută start la stânga",
+   "tab": "diagram",
+   "ms": 118,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=start].x<$+0 (undefined)",
+    "reply_any:start"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu s-a schimbat nimic. Este Nu porni aici. Eu could nu do la pleca: lumea does nu lua loc pentru loc.",
+   "english": "Nothing changed. There is no start here. I could not do to the left: this world does not take place for place.",
+   "stages": {
+    "total": 117.7,
+    "stages": {
+     "door": "1x 117.5",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 3489,
+     "translate.tokenize": 694,
+     "translate.parse": 72,
+     "normalize.isEnd": 50,
+     "en-ro.mergePlaces": 46,
+     "en-ro.mergeNumberWords": 42
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează un cerc numit alfa și un pătrat numit beta",
+   "tab": "diagram",
+   "ms": 601,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „call”, „alfa”, „called” și „beta” aici.",
+   "english": "I did not understand \"call\", \"alfa\", \"called\", \"beta\" here.",
+   "stages": {
+    "total": 600.4,
+    "stages": {
+     "door": "1x 363.8",
+     "formalize": "1x 47.9",
+     "rules": "1x 44.1",
+     "candidates.gather": "1x 15.2",
+     "interpret": "2x 4.3",
+     "candidates.choose": "1x 2.7",
+     "person": "1x 0.2",
+     "discourse": "2x 0.2",
+     "knowledge": "3x 0.2",
+     "dialogue": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 52275,
+     "matcher.backtrack": 5541,
+     "candidates.repair": 3352,
+     "rules.pattern": 1426,
+     "matcher.attempt": 739,
+     "translate.tokenize": 735
+    }
+   },
+   "door": "honest: unread: call alfa called beta",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "C2",
+   "class": "C",
+   "text": "mută alfa și beta în jos",
+   "tab": "diagram",
+   "ms": 839,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=alfa].y>$+0 (undefined)",
+    "state:diagram.sketch:shapes[name=beta].y>$+0 (undefined)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „alfa” și „beta” aici.",
+   "english": "I did not understand \"alfa\", \"beta\" here.",
+   "stages": {
+    "total": 838.6,
+    "stages": {
+     "door": "1x 471.5",
+     "intent": "1x 72.8",
+     "understands": "3x 72.6",
+     "formalize": "1x 59.1",
+     "rules": "1x 53.2",
+     "dialogue": "2x 46.6",
+     "candidates.gather": "1x 18.6",
+     "interpret": "2x 1.8",
+     "discourse": "2x 0.5",
+     "candidates.choose": "1x 0.4",
+     "person": "1x 0.2",
+     "knowledge": "3x 0.2",
+     "correct": "2x 0",
+     "typed": "1x 0",
+     "understands.memo": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 35080,
+     "matcher.backtrack": 19556,
+     "rules.pattern": 5523,
+     "emit.substituteEmit": 4412,
+     "candidates.repair": 3409,
+     "spell.edit": 3245
+    }
+   },
+   "door": "honest: unread: alfa beta",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează un cerc numit gamma",
+   "tab": "diagram",
+   "ms": 326,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „call” și „gamma” aici.",
+   "english": "I did not understand \"call\", \"gamma\" here.",
+   "stages": {
+    "total": 326,
+    "stages": {
+     "door": "1x 195.3",
+     "formalize": "1x 17.6",
+     "candidates.gather": "1x 16.3",
+     "rules": "1x 14.5",
+     "interpret": "2x 1.2",
+     "discourse": "2x 0.3",
+     "candidates.choose": "1x 0.2",
+     "person": "1x 0.2",
+     "knowledge": "3x 0.2",
+     "dialogue": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 17399,
+     "candidates.repair": 2550,
+     "matcher.backtrack": 2372,
+     "rules.pattern": 509,
+     "matcher.attempt": 379,
+     "translate.tokenize": 347
+    }
+   },
+   "door": "honest: unread: call gamma",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "C3",
+   "class": "C",
+   "text": "mută delta în sus",
+   "tab": "diagram",
+   "ms": 325,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „delta” aici.",
+   "english": "I did not understand \"delta\" here.",
+   "stages": {
+    "total": 325.2,
+    "stages": {
+     "door": "1x 197.1",
+     "formalize": "1x 13",
+     "intent": "1x 11.8",
+     "understands": "1x 11.7",
+     "rules": "1x 10.2",
+     "candidates.gather": "1x 9.8",
+     "candidates.choose": "1x 2.7",
+     "interpret": "2x 1",
+     "person": "1x 0.2",
+     "discourse": "2x 0.2",
+     "knowledge": "3x 0.2",
+     "dialogue": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 10503,
+     "candidates.repair": 4756,
+     "matcher.backtrack": 2740,
+     "rules.pattern": 552,
+     "matcher.attempt": 428,
+     "emit.substituteEmit": 304
+    }
+   },
+   "door": "honest: unread: delta",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează o casă",
+   "tab": "draw",
+   "ms": 205,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o casă.",
+   "english": "I added a house.",
+   "stages": {
+    "total": 205,
+    "stages": {
+     "door": "1x 204.9",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2613,
+     "interpreter.visit": 156,
+     "translate.tokenize": 44,
+     "translate.np": 31,
+     "ops.call": 14,
+     "index.descendants": 13
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "C4",
+   "class": "C",
+   "text": "fă casa roșie",
+   "tab": "draw",
+   "ms": 211,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Casa este acum roșie.",
+   "english": "The house is red now.",
+   "stages": {
+    "total": 211,
+    "stages": {
+     "door": "1x 207.4",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2640,
+     "interpreter.visit": 156,
+     "translate.np": 40,
+     "translate.tokenize": 35,
+     "candidates.residue": 14,
+     "ops.call": 14
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează un cerc numit ana",
+   "tab": "diagram",
+   "ms": 257,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „call” și „ana” aici.",
+   "english": "I did not understand \"call\", \"ana\" here.",
+   "stages": {
+    "total": 256.5,
+    "stages": {
+     "door": "1x 164.2",
+     "formalize": "1x 16.4",
+     "rules": "1x 11.3",
+     "candidates.gather": "1x 6.4",
+     "interpret": "2x 1.2",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "knowledge": "3x 0.2",
+     "dialogue": "2x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 13071,
+     "matcher.backtrack": 1835,
+     "rules.pattern": 366,
+     "matcher.attempt": 278,
+     "translate.tokenize": 253,
+     "translate.np": 147
+    }
+   },
+   "door": "honest: unread: call ana",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "mută ana sus de tot",
+   "tab": "diagram",
+   "ms": 328,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „ana” aici.",
+   "english": "I did not understand \"ana\" here.",
+   "stages": {
+    "total": 328.3,
+    "stages": {
+     "door": "1x 168.8",
+     "formalize": "1x 66.1",
+     "intent": "1x 12.3",
+     "understands": "1x 12.2",
+     "rules": "1x 11.1",
+     "candidates.gather": "1x 7.3",
+     "lenient": "1x 4.7",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "knowledge": "3x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "2x 0",
+     "names": "1x 0",
+     "typed": "1x 0",
+     "interpret": "2x 0"
+    },
+    "ticks": {
+     "translate.frame": 13140,
+     "matcher.backtrack": 3808,
+     "meta.worlds.near": 1268,
+     "scene.edit": 686,
+     "rules.pattern": 667,
+     "emit.substituteEmit": 548
+    }
+   },
+   "door": "honest: unread: ana",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "C5",
+   "class": "C",
+   "text": "mută ana mai sus",
+   "tab": "diagram",
+   "ms": 285,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes[name=ana].y<$+0 (undefined)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „ana” aici.",
+   "english": "I did not understand \"ana\" here.",
+   "stages": {
+    "total": 285.2,
+    "stages": {
+     "door": "1x 162.7",
+     "formalize": "1x 15.1",
+     "intent": "1x 14.6",
+     "understands": "1x 14.4",
+     "knowledge": "3x 11.9",
+     "rules": "1x 11.8",
+     "candidates.gather": "1x 9.6",
+     "interpret": "2x 1.8",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5250,
+     "matcher.backtrack": 2984,
+     "rules.pattern": 604,
+     "matcher.attempt": 490,
+     "spell.edit": 477,
+     "emit.substituteEmit": 304
+    }
+   },
+   "door": "honest: unread: ana",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "D1",
+   "class": "D",
+   "text": "cântă ceva vesel",
+   "tab": "music",
+   "ms": 24,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:Nu [sș]tiu"
+   ],
+   "worlds": [
+    "media.music"
+   ],
+   "tabAfter": "music",
+   "changed": false,
+   "content": true,
+   "reply": "Nu știu un cântec chema„ ceva vesel”. Te știu Twinkle, Twinkle, stea, fericit Birthday la, Ode la bucurie, Frère Jacques și Mary a avut un Little Lamb și 5 mai. Tu can also spune„ juca C D E F G”.",
+   "english": "I do not know a song called \"something cheerful\". I know Twinkle, Twinkle, Little Star, Happy Birthday to You, Ode to Joy, Frère Jacques and Mary Had a Little Lamb and 5 more. You can also say \"play C D E F G\".",
+   "stages": {
+    "total": 24,
+    "stages": {
+     "intent": "1x 7.6",
+     "understands": "1x 7",
+     "formalize": "1x 6.9",
+     "candidates.gather": "1x 6.5",
+     "rules": "1x 3.1",
+     "interpret": "1x 0.6",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "knowledge": "3x 0.2",
+     "dialogue": "2x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2605,
+     "matcher.backtrack": 1532,
+     "translate.tokenize": 408,
+     "emit.substituteEmit": 296,
+     "rules.pattern": 280,
+     "matcher.attempt": 268
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "D2",
+   "class": "D",
+   "text": "desenează ceva",
+   "tab": "charts",
+   "ms": 20,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "data.charts"
+   ],
+   "tabAfter": "charts",
+   "changed": true,
+   "content": true,
+   "reply": "OK, o bară nouă goală grafic a chemat„ grafic 1”. Adaugă data, pentru:„ exemplu adaugă mere 5”.",
+   "english": "OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\".",
+   "stages": {
+    "total": 20.3,
+    "stages": {
+     "formalize": "1x 13.4",
+     "rules": "1x 8.2",
+     "candidates.gather": "1x 4.1",
+     "interpret": "1x 0.5",
+     "person": "1x 0.2",
+     "discourse": "2x 0.2",
+     "dialogue": "2x 0.1",
+     "knowledge": "3x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 1736,
+     "matcher.backtrack": 1157,
+     "emit.substituteEmit": 268,
+     "rules.pattern": 220,
+     "matcher.attempt": 196,
+     "translate.tokenize": 179
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "D3",
+   "class": "D",
+   "text": "desenează ceva frumos",
+   "tab": "diagram",
+   "ms": 123,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o diagramă. Am adăugat 3 romburi. Am adăugat 3 cercuri. Am adăugat 5 legături. Am presupus diagramă pentru ce fac. Am presupus „radial” pentru aranjarea.",
+   "english": "I added a diagram. I added 3 diamonds. I added 3 circles. I added 5 links. I assumed diagram for the target. I assumed radial for the layout.",
+   "stages": {
+    "total": 123.1,
+    "stages": {
+     "door": "1x 123",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "diagram.layout": 4490,
+     "translate.frame": 2604,
+     "translate.tokenize": 277,
+     "translate.np": 22,
+     "translate.parse": 18,
+     "normalize.isEnd": 14
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "D4",
+   "class": "D",
+   "text": "arată ceva interesant",
+   "tab": "map",
+   "ms": 50,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "world:geo.map got -"
+   ],
+   "worlds": [],
+   "tabAfter": "map",
+   "changed": false,
+   "content": true,
+   "reply": "Nu am înțeles „arată ceva interesant”. De exemplu: „Add a pin.” sau „What is the colour of the pin?”",
+   "english": "I did not understand \"arată ceva interesant\". For example: \"Add a pin.\" or \"What is the colour of the pin?\"",
+   "stages": {
+    "total": 49.8,
+    "stages": {
+     "bestEffort": "1x 11.4",
+     "interpret": "1x 10.8",
+     "formalize": "1x 9.8",
+     "intent": "1x 8.7",
+     "understands": "1x 8.6",
+     "candidates.gather": "1x 6.7",
+     "rules": "1x 5.3",
+     "lenient": "1x 4.3",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "knowledge": "3x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "1x 0",
+     "names": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 4550,
+     "spell.edit": 3738,
+     "translate.frame": 2680,
+     "rules.pattern": 1020,
+     "matcher.attempt": 638,
+     "open-words.place": 338
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează doi copaci",
+   "tab": "draw",
+   "ms": 211,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat 2 copaci.",
+   "english": "I added 2 trees.",
+   "stages": {
+    "total": 211,
+    "stages": {
+     "door": "1x 210.8",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2613,
+     "interpreter.visit": 156,
+     "translate.tokenize": 53,
+     "translate.np": 31,
+     "ops.call": 14,
+     "index.descendants": 13
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "D5",
+   "class": "D",
+   "text": "mută copacii mai sus",
+   "tab": "draw",
+   "ms": 215,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am mutat copacul la stânga. Am mutat copacul la dreapta.",
+   "english": "I moved the tree to the left. I moved the tree to the right.",
+   "stages": {
+    "total": 214.5,
+    "stages": {
+     "door": "1x 214.3",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 1745,
+     "interpreter.visit": 156,
+     "facts.wires": 57,
+     "translate.tokenize": 36,
+     "translate.np": 20,
+     "candidates.residue": 16
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează patru pătrate",
+   "tab": "diagram",
+   "ms": 114,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat 4 pătrate. Am presupus rând pentru aranjarea.",
+   "english": "I added 4 squares. I assumed row for the layout.",
+   "stages": {
+    "total": 114.2,
+    "stages": {
+     "door": "1x 114.1",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2613,
+     "translate.tokenize": 60,
+     "translate.np": 31,
+     "candidates.residue": 10,
+     "translate.render": 7,
+     "translate.parse": 6
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "E1",
+   "class": "E",
+   "text": "fă-l mai ordonat",
+   "tab": "diagram",
+   "ms": 437,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „still” și „ordonat” aici.",
+   "english": "I did not understand \"still\", \"ordonat\" here.",
+   "stages": {
+    "total": 436.9,
+    "stages": {
+     "door": "1x 239.8",
+     "formalize": "1x 15.8",
+     "intent": "1x 13.2",
+     "understands": "1x 13.1",
+     "rules": "1x 12.7",
+     "candidates.gather": "1x 11.3",
+     "candidates.choose": "1x 5.1",
+     "interpret": "2x 4.1",
+     "dialogue": "2x 0.5",
+     "person": "1x 0.2",
+     "discourse": "2x 0.2",
+     "knowledge": "3x 0.2",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "candidates.repair": 11241,
+     "translate.frame": 7842,
+     "matcher.backtrack": 5382,
+     "meta.worlds.near": 1090,
+     "rules.pattern": 849,
+     "matcher.attempt": 741
+    }
+   },
+   "door": "honest: unread: still ordonat",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează cinci flori",
+   "tab": "draw",
+   "ms": 215,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat 5 flori.",
+   "english": "I added 5 flowers.",
+   "stages": {
+    "total": 215.3,
+    "stages": {
+     "door": "1x 215.2",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2613,
+     "interpreter.visit": 156,
+     "translate.tokenize": 54,
+     "translate.np": 31,
+     "ops.call": 14,
+     "index.descendants": 13
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "E2",
+   "class": "E",
+   "text": "sunt prea multe",
+   "tab": "draw",
+   "ms": 415,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:art.draw:objects.length<$+0 (5)"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Aici nu este încă nimic făcut de mine care să se poată schimba așa.",
+   "english": "There is nothing in the drawing that I made and could change that way yet.",
+   "stages": {
+    "total": 414.6,
+    "stages": {
+     "door": "1x 207.1",
+     "formalize": "2x 49.1",
+     "intent": "1x 41.3",
+     "understands": "2x 41",
+     "intent.reread": "1x 35",
+     "rules": "2x 34.4",
+     "lenient": "1x 12.5",
+     "candidates.gather": "1x 5.4",
+     "interpret": "3x 0.7",
+     "discourse": "4x 0.6",
+     "person": "2x 0.4",
+     "dialogue": "4x 0.3",
+     "bestEffort": "1x 0.2",
+     "knowledge": "6x 0.2",
+     "candidates.choose": "1x 0",
+     "correct": "3x 0",
+     "names": "1x 0",
+     "typed": "2x 0",
+     "understands.memo": "2x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 15961,
+     "translate.frame": 7833,
+     "rules.pattern": 5411,
+     "matcher.attempt": 2779,
+     "emit.substituteEmit": 1844,
+     "interpreter.visit": 1188
+    }
+   },
+   "door": "honest: reaction reduce not a revision",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "E3",
+   "class": "E",
+   "text": "lisabona",
+   "tab": "map",
+   "ms": 15,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Iată Lisabona: capitala Portugaliei · 2.8 milioane de locuitori.",
+   "english": "Here is Lisbon: capital of Portugal · 2.8 million people.",
+   "stages": {
+    "total": 15.3,
+    "stages": {
+     "formalize": "1x 6.7",
+     "candidates.gather": "1x 4",
+     "rules": "1x 2.5",
+     "knowledge": "3x 1.7",
+     "interpret": "1x 0.7",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "candidates.repair": 4616,
+     "translate.frame": 871,
+     "matcher.backtrack": 614,
+     "meta.worlds.near": 563,
+     "scene.edit": 276,
+     "translate.tokenize": 141
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "E4",
+   "class": "E",
+   "text": "ești prost?",
+   "tab": "draw",
+   "ms": 818,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "reply_not:Nu am [îi]n[tţț]eles|Nu am putut citi|Nu am prins"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles „prost” aici.",
+   "english": "I did not understand \"prost\" here.",
+   "stages": {
+    "total": 818,
+    "stages": {
+     "door": "1x 584",
+     "interpret": "3x 11.6",
+     "candidates.choose": "1x 5.1",
+     "candidates.gather": "1x 5",
+     "formalize": "1x 4.3",
+     "rules": "1x 3.6",
+     "intent.reread": "1x 1.2",
+     "lenient": "1x 0.5",
+     "names": "1x 0.4",
+     "intent": "1x 0.4",
+     "person": "1x 0.3",
+     "discourse": "2x 0.3",
+     "dialogue": "2x 0.2",
+     "knowledge": "3x 0.1",
+     "correct": "3x 0",
+     "bestEffort": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5208,
+     "candidates.repair": 4750,
+     "matcher.backtrack": 942,
+     "translate.tokenize": 549,
+     "rules.pattern": 235,
+     "matcher.attempt": 170
+    }
+   },
+   "door": "honest: question",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "E5",
+   "class": "E",
+   "text": "scrie-mi o poveste despre un urs",
+   "tab": "editor",
+   "ms": 151,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o poveste. Am adăugat 5 capitole. Povestea este despre urs. Am presupus 150 pentru lungimea.",
+   "english": "I added a story. I added 5 chapters. The story is about bear. I assumed 150 for the length.",
+   "stages": {
+    "total": 151,
+    "stages": {
+     "door": "1x 150.9",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 5226,
+     "translate.tokenize": 233,
+     "translate.np": 64,
+     "candidates.residue": 26,
+     "translate.parse": 25,
+     "normalize.isEnd": 17
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "F1",
+   "class": "F",
+   "text": "desenează o casă, pune un copac lângă ea și fă cerul albastru",
+   "tab": "draw",
+   "ms": 973,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:art.draw:objects.length>=$+2 (1)"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat o casă. Nu s-a schimbat nimic. Nu este niciun copac aici. Eu could nu do albastru: lumea does nu lua attribute pentru loc.",
+   "english": "Nothing changed. There is no tree here. I could not do blue: this world does not take attribute for place.",
+   "stages": {
+    "total": 973.1,
+    "stages": {
+     "door": "1x 973",
+     "correct": "2x 0.1",
+     "interpret": "2x 0"
+    },
+    "ticks": {
+     "translate.frame": 14075,
+     "translate.tokenize": 434,
+     "translate.np": 167,
+     "interpreter.visit": 156,
+     "translate.parse": 73,
+     "candidates.residue": 52
+    }
+   },
+   "door": "clauses bound make | bound place",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "F2",
+   "class": "F",
+   "text": "desenează trei cercuri, leagă-le între ele și pune primul mai sus",
+   "tab": "diagram",
+   "ms": 835,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:diagram.sketch:shapes.length>=$+3 (0)",
+    "state:diagram.sketch:edges.length>=$+2 (0)"
+   ],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": false,
+   "content": false,
+   "reply": "Am înțeles „Draw 3 circles”, dar nu „leagă between them” și „put the first more up”, așa că nu am făcut nimic.",
+   "english": "I understood \"Draw 3 circles\", but not \"leagă between them\", \"put the first more up\", so I did nothing.",
+   "stages": {
+    "total": 834.6,
+    "stages": {
+     "door": "1x 645.9",
+     "formalize": "1x 70",
+     "rules": "1x 60.4",
+     "candidates.gather": "1x 20.8",
+     "interpret": "2x 2.6",
+     "discourse": "2x 0.3",
+     "knowledge": "3x 0.3",
+     "person": "1x 0.2",
+     "candidates.choose": "1x 0.1",
+     "dialogue": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 39378,
+     "matcher.backtrack": 7243,
+     "candidates.repair": 4648,
+     "rules.pattern": 1779,
+     "matcher.attempt": 1101,
+     "meta.worlds.near": 1090
+    }
+   },
+   "door": "honest: unread: leagă put",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "F3",
+   "class": "F",
+   "text": "arată-mi roma și apoi du-te la paris",
+   "tab": "map",
+   "ms": 234,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:geo.map:focus~Paris ({\"name\":\"Rome\",\"kind\":\"city\",\"lat\":41.9,\"lon\":12.48,\"cc\":\"IT\",\"label\":\"capital of Italy · 3.3 million people\"})"
+   ],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Iată Roma: capitala Italiei · 3.3 milioane de locuitori. Nu am înțeles „arată-mi roma și apoi du-te la paris”. De exemplu: „Add a pin.” sau „What is the colour of the pin?”",
+   "english": "Here is Rome: capital of Italy · 3.3 million people. I did not understand \"arată-mi roma și apoi du-te la paris\". For example: \"Add a pin.\" or \"What is the colour of the pin?\"",
+   "stages": {
+    "total": 234.4,
+    "stages": {
+     "understands": "5x 136.2",
+     "candidates.choose": "1x 128.9",
+     "formalize": "1x 44.6",
+     "rules": "1x 43.7",
+     "candidates.gather": "1x 33.9",
+     "intent": "1x 14.1",
+     "interpret": "1x 10.4",
+     "person": "1x 0.3",
+     "discourse": "2x 0.2",
+     "lenient": "1x 0.2",
+     "knowledge": "3x 0.2",
+     "dialogue": "2x 0.1",
+     "correct": "1x 0",
+     "names": "1x 0",
+     "typed": "1x 0",
+     "understands.memo": "2x 0"
+    },
+    "ticks": {
+     "matcher.backtrack": 41750,
+     "translate.frame": 16140,
+     "candidates.repair": 15516,
+     "rules.pattern": 9203,
+     "matcher.attempt": 5190,
+     "open-words.place": 1350
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  },
+  {
+   "set": "variant",
+   "context": true,
+   "class": null,
+   "text": "desenează un lac",
+   "tab": "draw",
+   "ms": 213,
+   "right": null,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat un lac.",
+   "english": "I added a lake.",
+   "stages": {
+    "total": 212.5,
+    "stages": {
+     "door": "1x 212.4",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2613,
+     "interpreter.visit": 156,
+     "translate.tokenize": 44,
+     "translate.np": 31,
+     "ops.call": 14,
+     "index.descendants": 13
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "F4",
+   "class": "F",
+   "text": "pune peștii în apă, adaugă trei rațe și șterge soarele",
+   "tab": "draw",
+   "ms": 218,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": false,
+   "content": false,
+   "reply": "Nu s-a schimbat nimic. Nu este niciun pește aici. Eu could nu do 3 rațe: lumea does nu lua număra pentru loc. Eu could nu do 3 rațe: lumea does nu lua cu pentru loc. Eu could nu do șterge: lumea does nu lua cu pentru loc.",
+   "english": "Nothing changed. There is no fish here. I could not do 3 ducks: this world does not take count for place. I could not do 3 ducks: this world does not take with for place. I could not do delete: this world does not take with for place.",
+   "stages": {
+    "total": 217.5,
+    "stages": {
+     "door": "1x 217.3",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 12432,
+     "translate.tokenize": 1132,
+     "translate.np": 189,
+     "translate.parse": 112,
+     "normalize.isEnd": 80,
+     "en-ro.mergePlaces": 69
+    }
+   },
+   "door": "bound place",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "F5",
+   "class": "F",
+   "text": "scrie un titlu despre mare, apoi un paragraf despre valuri",
+   "tab": "editor",
+   "ms": 514,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "state:docs.editor:blocks.length>=$+2 (0)"
+   ],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": false,
+   "content": false,
+   "reply": "Am înțeles „then a paragraph about valuri”, dar nu „Write a title about the sea”, așa că nu am făcut nimic.",
+   "english": "I understood \"then a paragraph about valuri\", but not \"Write a title about the sea\", so I did nothing.",
+   "stages": {
+    "total": 513.6,
+    "stages": {
+     "door": "1x 269.3",
+     "knowledge": "3x 53.9",
+     "formalize": "1x 26.1",
+     "candidates.choose": "1x 24.4",
+     "understands": "1x 23.6",
+     "rules": "1x 23.5",
+     "candidates.gather": "1x 13",
+     "person": "1x 2.7",
+     "interpret": "2x 1.5",
+     "discourse": "2x 0.3",
+     "dialogue": "2x 0.1",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 28091,
+     "matcher.backtrack": 9348,
+     "candidates.repair": 4498,
+     "rules.pattern": 2018,
+     "matcher.attempt": 1398,
+     "emit.substituteEmit": 1056
+    }
+   },
+   "door": "honest: unread: title",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "G1",
+   "class": "G",
+   "text": "desenează un câine",
+   "tab": "draw",
+   "ms": 222,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "art.draw"
+   ],
+   "tabAfter": "draw",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat un câine.",
+   "english": "I added a dog.",
+   "stages": {
+    "total": 221.9,
+    "stages": {
+     "door": "1x 221.8",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2613,
+     "interpreter.visit": 156,
+     "translate.tokenize": 50,
+     "translate.np": 31,
+     "ops.call": 14,
+     "index.descendants": 13
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "G2",
+   "class": "G",
+   "text": "adaugă un pătrat",
+   "tab": "diagram",
+   "ms": 113,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "tabAfter": "diagram",
+   "changed": true,
+   "content": true,
+   "reply": "Am adăugat un pătrat.",
+   "english": "I added a square.",
+   "stages": {
+    "total": 112.6,
+    "stages": {
+     "door": "1x 112.4",
+     "correct": "1x 0",
+     "interpret": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2659,
+     "translate.tokenize": 44,
+     "translate.np": 43,
+     "facts.wires": 40,
+     "candidates.residue": 12,
+     "translate.render": 10
+    }
+   },
+   "door": "bound make",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "G3",
+   "class": "G",
+   "text": "arată-mi berlinul",
+   "tab": "map",
+   "ms": 38,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "geo.map"
+   ],
+   "tabAfter": "map",
+   "changed": true,
+   "content": true,
+   "reply": "Iată Berlin: capitala Germaniei · 3.4 milioane de locuitori.",
+   "english": "Here is Berlin: capital of Germany · 3.4 million people.",
+   "stages": {
+    "total": 37.8,
+    "stages": {
+     "knowledge": "3x 19.9",
+     "formalize": "1x 10.4",
+     "rules": "1x 9",
+     "candidates.gather": "1x 5",
+     "interpret": "1x 0.8",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "candidates.repair": 9232,
+     "translate.frame": 1817,
+     "matcher.backtrack": 1771,
+     "rules.pattern": 245,
+     "matcher.attempt": 221,
+     "translate.tokenize": 158
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "G4",
+   "class": "G",
+   "text": "adaugă un paragraf despre ploaie",
+   "tab": "editor",
+   "ms": 204,
+   "judged": true,
+   "right": false,
+   "invariant": [],
+   "failing": [
+    "changed"
+   ],
+   "worlds": [
+    "docs.editor"
+   ],
+   "tabAfter": "editor",
+   "changed": false,
+   "content": false,
+   "reply": "Nu am înțeles asta ca pe ceva de făcut aici.",
+   "english": "I did not understand that as something to do in the documents.",
+   "stages": {
+    "total": 204,
+    "stages": {
+     "door": "1x 113",
+     "formalize": "1x 12.3",
+     "rules": "1x 10.6",
+     "candidates.gather": "1x 10.5",
+     "interpret": "2x 0.5",
+     "discourse": "2x 0.3",
+     "person": "1x 0.2",
+     "dialogue": "2x 0.1",
+     "knowledge": "3x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "2x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 6459,
+     "matcher.backtrack": 1664,
+     "rules.pattern": 372,
+     "translate.tokenize": 336,
+     "matcher.attempt": 274,
+     "emit.substituteEmit": 176
+    }
+   },
+   "door": "honest: no thing named",
+   "legacy": false
+  },
+  {
+   "set": "variant",
+   "context": false,
+   "id": "G5",
+   "class": "G",
+   "text": "cântă o melodie",
+   "tab": "music",
+   "ms": 18,
+   "judged": true,
+   "right": true,
+   "invariant": [],
+   "failing": [],
+   "worlds": [
+    "media.music"
+   ],
+   "tabAfter": "music",
+   "changed": false,
+   "content": true,
+   "reply": "Nu ai scris o melodie yet. Îi spune melodii„ scrie: C D E F G”.",
+   "english": "You have not written a melody yet. Say \"write a melody: C D E F G\".",
+   "stages": {
+    "total": 17.7,
+    "stages": {
+     "formalize": "1x 8.1",
+     "rules": "1x 6.7",
+     "intent": "1x 3.9",
+     "understands": "1x 3.8",
+     "candidates.gather": "1x 3.1",
+     "knowledge": "3x 0.3",
+     "interpret": "1x 0.3",
+     "person": "1x 0.2",
+     "discourse": "2x 0.2",
+     "dialogue": "2x 0.1",
+     "candidates.choose": "1x 0",
+     "correct": "1x 0",
+     "typed": "1x 0"
+    },
+    "ticks": {
+     "translate.frame": 2614,
+     "matcher.backtrack": 1742,
+     "rules.pattern": 410,
+     "matcher.attempt": 308,
+     "emit.substituteEmit": 296,
+     "translate.tokenize": 154
+    }
+   },
+   "door": "no request declarations",
+   "legacy": true
+  }
+ ]
+}

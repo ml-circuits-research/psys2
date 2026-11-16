@@ -22,8 +22,26 @@
 @e.story k.expect.make thing=story made_in=document unit=chapter min=3 max=5 typical=5 length_unit=word length=150 about="what this world writes from the knowledge it has: about 150 words in its parts"
 @e.essay k.expect.make thing=essay made_in=document unit=chapter min=3 max=5 typical=3 length_unit=word length=300
 @e.report k.expect.make thing=report made_in=document unit=chapter min=4 max=6 typical=5 length_unit=word length=300
+@p.story k.expect.part of=story part=chapter group=node min=3 max=5 typical=5
+@p.essay k.expect.part of=essay part=chapter group=node min=3 max=5 typical=3
+@p.report k.expect.part of=report part=chapter group=node min=4 max=6 typical=5
+@v.length k.expect.value of=text on=length value=150 min=150 max=300 typical=150
+@v.length.essay k.expect.value of=essay on=length value=300 min=150 max=300 typical=300
+@v.length.report k.expect.value of=report on=length value=300 min=150 max=300 typical=300
 # The door (reviewer 2026-11-15 16:40): the wholes whose requests this world plans through the library. Read by src/dialog/request.mjs doorWholes.
 @door psys2.door world=documents whole=story whole=essay whole=report whole=poem
 # The session timeline (reviewer 2026-11-15 19:05): the world's own undo and redo, the operations the door calls for the acts undo / redo of k.actions (src/dialog/request.mjs actOperation).
-@op.undo psys2.op world=documents act=undo op=docUndo
-@op.redo psys2.op world=documents act=redo op=docRedo
+@op.undo psys2.op world=documents act=undo op=undoStep
+@op.redo psys2.op world=documents act=redo op=redoStep
+# TOOL BINDING (spec 28 section 14; reviewer 2026-11-16 01:25: Documents on the binding; sopworld std.tool): the document's primitives with their typed parameters, the act of a
+# plan step bound to one primitive with its arguments' sources. The library plans a text as its whole (kind, topic, length) and its chapters (k.expect.part above); the composer
+# writes the whole in one call and the chapters' step keeps the text to their count. The defaults are the k.expect rows above (length by kind; short / long by k.expect.scale).
+@tool core.use world=std.tool
+@op.write std.tool.op name=writeText world=documents param=kind param=about param=words param=chapters effect=makes doc="a text of a kind about a topic, written by the composer (never padded)"
+@pa.write.kind std.tool.param op=writeText name=kind type=text required=true accepts=story accepts=essay accepts=report accepts=poem
+@pa.write.words std.tool.param op=writeText name=words kind=integer min=20 max=3000
+@pa.write.chapters std.tool.param op=writeText name=chapters kind=integer min=1 max=12
+@b.write std.tool.bind world=documents act=make of=text op=writeText arg=kind<-step.kind arg=about<-step.about arg=words<-step.length arg=chapters<-plan.count makes=thing
+@op.chapters std.tool.op name=keepChapters world=documents param=n effect=changes doc="the text keeps at most n chapters (fewer: what the knowledge holds)"
+@pa.chapters.n std.tool.param op=keepChapters name=n kind=integer min=1 max=12
+@b.chapters std.tool.bind world=documents act=make of=chapter op=keepChapters arg=n<-step.count

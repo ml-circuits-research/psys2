@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "dfc94c11",
-  "tree": "03adf1c1158fe708",
+  "build": "f4de8a6c",
+  "tree": "58d50f1a4274d64c",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -1160,8 +1160,8 @@
   },
   {
    "cause": "translation residue / wrong sense / source typo",
-   "count": 33,
-   "both_reasoners": 33,
+   "count": 34,
+   "both_reasoners": 34,
    "examples": [
     {
      "text": "an old woman",
@@ -1179,9 +1179,9 @@
      "happened": "I understood \"a sun\", but not \"Make a cel with 5 clouds\", so I did nothing. [outcome: refused; open]"
     },
     {
-     "text": "muta copilul deseneat anterior in stinga",
+     "text": "fa cerul alabastru",
      "tab": "draw",
-     "happened": "I did not understand \"deseneat\", \"previous\" here. [outcome: refused; open]"
+     "happened": "Nothing changed. [outcome: refused; open]"
     }
    ]
   },
@@ -1429,33 +1429,6 @@
    ]
   },
   {
-   "cause": "fragment / list split",
-   "count": 7,
-   "both_reasoners": 7,
-   "examples": [
-    {
-     "text": "un cer cu 5 nori",
-     "tab": "draw",
-     "happened": "Nothing changed. I could not do A sky with 5 clouds: 2 made, the request said 1. [outcome: refused; open]"
-    },
-    {
-     "text": "deseneaza si un magar, dar sa nu zboare, pe iarba",
-     "tab": "draw",
-     "happened": "I understood \"on the grass\", but not \"Draw a donkey\", \"too to not fly\", so I did nothing. [outcome: refused; open]"
-    },
-    {
-     "text": "eyeglasses",
-     "tab": "robot",
-     "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; open]"
-    },
-    {
-     "text": "a women",
-     "tab": "robot",
-     "happened": "I am not sure how “a women” fits what we were doing. Please say the whole request. [outcome: not_understood]"
-    }
-   ]
-  },
-  {
    "cause": "unknown word (a word of the request is not known)",
    "count": 6,
    "both_reasoners": 6,
@@ -1479,6 +1452,33 @@
      "text": "desene asta o",
      "tab": "map",
      "happened": "I did not understand \"desene asta o\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not"
+    }
+   ]
+  },
+  {
+   "cause": "fragment / list split",
+   "count": 6,
+   "both_reasoners": 6,
+   "examples": [
+    {
+     "text": "deseneaza si un magar, dar sa nu zboare, pe iarba",
+     "tab": "draw",
+     "happened": "I understood \"on the grass\", but not \"Draw a donkey\", \"too to not fly\", so I did nothing. [outcome: refused; open]"
+    },
+    {
+     "text": "eyeglasses",
+     "tab": "robot",
+     "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; open]"
+    },
+    {
+     "text": "a women",
+     "tab": "robot",
+     "happened": "I am not sure how “a women” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+    },
+    {
+     "text": "yes",
+     "tab": "guess",
+     "happened": "I am not sure how “eyes” fits what we were doing. Please say the whole request. [outcome: not_understood]"
     }
    ]
   },

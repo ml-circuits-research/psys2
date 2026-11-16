@@ -9,7 +9,7 @@
 // Browser-safe: imports the shared space module, the English of the catalog (src/lang/en.mjs: the words a request skips, the negations) and the comparatives of k.values.
 import * as space from '../space/space.mjs?v=bc58946003';
 import { en } from '../../lib/lang/en.mjs?v=185de688b8';
-import { comparativeWords } from '../../lib/knowledge/values.mjs?v=5e82673c11';
+import { comparativeWords } from '../../lib/knowledge/values.mjs?v=c3d5c59521';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 export const NONE = 'none';

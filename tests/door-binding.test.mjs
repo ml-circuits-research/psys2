@@ -37,7 +37,7 @@ test('praise runs no plan; "fewer" revises the last result through the binding; 
   const fewer = await s.send('fewer dogs');
   assert.equal(kinds(s).dog, 1, fewer.text);
   assert.equal(kinds(s).tree, 1, fewer.text);
-  assert.match(fewer.text, /^I removed the dog\./);   // sopworld 0.157 (Q93 (1)): done.revise is said only after a remake ("again"), not after a step reaction ("fewer"); the diff names what was removed
+  assert.doesNotMatch(fewer.text, /made it again/);   // a step reaction is said by its net result, no remake (sopworld 0.157, Q93 (1))
 });
 
 let roEngine = null;
@@ -74,6 +74,22 @@ test('a place said by a thing of the view goes to that thing with the relation s
   const fish = objs.filter((o) => o.kind === 'fish');
   assert.equal(fish.length, 3, r.text);
   for (const f of fish) assert.ok(Math.abs(f.x - lake.x) < 1 && Math.abs(f.y - lake.y) < 1, `every fish is in the lake: ${r.text}`);
+});
+
+test('a new page never draws content: "start a new drawing", "new page", "o pagina noua" (the world\'s own whole with nothing said of it is its page op; Q93 (6))', async () => {
+  const roE = (roEngine ??= await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() }));
+  for (const [lang, said] of [['en', 'start a new drawing'], ['en', 'new page'], ['en', 'start a new page'], ['ro', 'o pagină nouă'], ['ro', 'începe un desen nou']]) {
+    const s = (lang === 'ro' ? roE : engine).createSession({ language: lang }); s.setWorldState('ui.shell', { activeTab: 'draw' });
+    await s.send(lang === 'ro' ? 'desenează o casă' : 'draw a house');
+    const r = await s.send(said);
+    const objs = s.state()['art.draw'].objects ?? [];
+    assert.ok(objs.every((o) => o.kind === 'house'), `${lang} ${said}: no content drawn: ${r.text} ${JSON.stringify(objs.map((o) => o.kind))}`);
+  }
+  const s = drawing();
+  await s.send('draw a house');
+  const r = await s.send('start a new drawing');
+  assert.equal((s.state()['art.draw'].objects ?? []).length, 0, r.text);
+  assert.match(r.text, /fresh sheet/);
 });
 
 test('questions about the state and about what the world can do are facts of the live world (askWorld), no step', async () => {
@@ -145,3 +161,17 @@ test('diagram: acts on the shapes there go through the binding (change, remove);
   assert.equal(dg(s).shapes.length, 0, d.text);
   assert.equal(d.trace.door, 'bound remove', d.text);
 });
+
+test('every attribute value said in a make is in the view after it, on the thing of its kind (EN + RO; coordinated attributes)', async () => {
+  const ro = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });
+  for (const [lang, said] of [['en', 'draw a red boat and a blue house'], ['ro', 'desenează o barcă roșie și o casă albastră']]) {
+    const s = (lang === 'ro' ? ro : engine).createSession({ language: lang });
+    s.setWorldState('ui.shell', { activeTab: 'draw' });
+    const r = await s.send(said);
+    const colour = (k) => (s.state()['art.draw']?.objects ?? []).filter((o) => o.kind === k).map((o) => o.colour ?? o.color);
+    assert.deepEqual(colour('boat'), ['red'], `${lang}: ${r.text}`);
+    assert.deepEqual(colour('house'), ['blue'], `${lang}: ${r.text}`);
+  }
+});
+// [LIB] the said colours are in the view but not in the words: "draw a red boat and a blue house" is said "I added a boat. I added a house." and "what is in the picture?" "There is one boat. There is one house.".
+// sayRequest's make branch takes `outcome.roles.colour` (one value for the whole turn) for done.make.value, not the per-kind `attribute of=<kind>` constraints; askWorld's state facts carry no attributes.
