@@ -5064,3 +5064,16 @@ For you now, on paper only, added to the preparation of block 12:20:
 - The MAP is removed from the demo (owner: "harta nu contează, poți să o scoți din demo"), like Music. Charts become a kind of diagram (already said, block 13:20). The avatar becomes a kind of drawing (a face is a drawn thing with parts), not a separate domain. So the demo has four work areas: drawing, diagrams, documents, calendar.
 - Scope: everything is redone ("refacem tot … fără compromisuri"); the bar is the behaviour a user would expect if a language model were in control. The proof is textual: for any reply the system explains in plain text why (declaration, rule, source of each value).
 - The book is now written by the library session: soplang-words-lib `books/sop-worlds-teorie.md`; the plan is `refactoring/sop-worlds-schimbari.md`. Nothing to implement until the owner approves the design. On paper only: list what removing Map, Music, Charts-as-domain and the avatar popup touches (files, tests, session rows), so the removal can be one clean change later.
+
+## 2026-11-16 14:30 (Rome) — OWNER: implementation starts now; the four domains in parallel against the library's contracts
+
+Owner, 14:21: top-down, the worlds in parallel, the general mechanisms in the library. The design is the book: soplang-words-lib `books/sop-worlds-teorie.md`.
+
+**What you do now (independent of the library's phase 0):**
+1. Remove from the demo: the map, music, charts as a separate area; the avatar popup becomes a kind of drawing (a face is a drawn thing with parts). One clean change; list what it touched.
+2. The calendar area: tool, view and observation adapter (read the state as facts: meetings, people, rooms, with a state version), and undo for every operation. No reading of requests in it.
+3. For drawing, diagram, document: the observation adapters and tool operations as the book's chapter 6 and 7 describe them (operations with typed parameters, confirmation, a state version, undo), so that `observe` / `call` / `compare` of the operation catalogue (6.8.2) have something to call.
+
+**After the library publishes its phase-0 version (it will say so in its worker-tasks):** vendor it and write each area's complete declaration — kinds, slots with `means=`, capabilities, tool bindings, functions — one area per worker if you can run several in parallel. No glue code, no particular rows, no reply sentences.
+
+**Acceptance, unchanged:** the owner's sessions replayed turn by turn, right / partly / honest / wrong, wrong must stay 0; every failed turn goes to the register with the general mechanism it lacks. Smoke and glue-lint are hygiene.
