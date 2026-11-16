@@ -37,15 +37,15 @@
 # TOOL BINDING: the face's primitives with their typed parameters, each act of a plan step bound to one primitive with its arguments' sources.
 @op.preset std.tool.op name=wearPreset world=avatar param=preset param=expression effect=changes doc="the face becomes a preset of k.faces"
 @b.preset std.tool.bind world=avatar act=make of=k.faces.preset op=wearPreset arg=preset<-step.kind arg=expression<-step.expression
-@op.put std.tool.op name=putPart world=avatar param=part param=variant param=worn param=colour param=size effect=changes doc="a part of the face is worn in a variant (the one it has stays), in a colour and a size"
-@c.presetVariant std.tool.custom name=presetVariant world=avatar kind=search in=part out=variant doc="the variant of a part in the preset the face is (k.faces.preset), else the slot's first"
+@op.put std.tool.op name=putPart world=avatar param=part param=variant param=colour param=size effect=changes doc="a part of the face is worn in a variant (the one said, else the one it has, else the preset's), in a colour and a size"
+@c.presetVariant std.tool.custom name=presetVariant world=avatar kind=search in=part out=variant doc="the variant a part has when it is worn, else its variant in the preset the face is (k.faces.preset), else the slot's first"
 @pa.put.size std.tool.param op=putPart name=size type=k.expect.scale by=step accepts=tiny accepts=small accepts=default accepts=big accepts=huge
 @pa.put.part std.tool.param op=putPart name=part required=true
 @v.put.eye std.tool.value op=putPart param=part value=eye as=eyes
 @v.put.hair std.tool.value op=putPart param=part value=hair as=hair_front
 @v.put.ear std.tool.value op=putPart param=part value=ear as=ears
 @v.put.eyebrow std.tool.value op=putPart param=part value=eyebrow as=eyebrows
-@b.put std.tool.bind world=avatar act=make op=putPart arg=part<-step.kind arg=variant<-step.variant arg=worn<-custom.presetVariant arg=colour<-step.colour arg=size<-step.size
+@b.put std.tool.bind world=avatar act=make op=putPart arg=part<-step.kind arg=variant<-step.variant|custom.presetVariant arg=colour<-step.colour arg=size<-step.size
 @op.off std.tool.op name=takeOff world=avatar param=ids effect=removes doc="parts of the face are taken off (a part every face has is refused)"
 @b.off std.tool.bind world=avatar act=remove op=takeOff arg=ids<-step.things needs=exists(ids) removes=ids
 @op.set std.tool.op name=setParts world=avatar param=ids param=colour param=size param=variant param=expression effect=changes doc="parts of the face take a colour or a size grade"

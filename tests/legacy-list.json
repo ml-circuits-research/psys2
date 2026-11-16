@@ -945,18 +945,6 @@
    "file": "voice-repair.test.mjs",
    "name": "rp3-03..06 avatar expressions as loose words, on every character",
    "reason": "avatar on the binding (slice A1): \"make a big smile\", \"small smile\", \"make a frown\", \"the next mouth\" on the avatar tab: needs a variant of a part as a value the reader reads (k.faces.variant by slot) and next / another as a step over the variants (Q96 LIB 3)"
-  },
-  {
-   "file": "pilot-avatar.test.mjs",
-   "name": "ops: focus: \"make it red\" after \"put on a hat\" means the hat",
-   "reason": "sopworld 0.163 single=true (approved by the coordinator): \"put on a hat\" with a hat on says refused.already (was a silent no-op) and the thing it names is not the referent of \"it\" in the next turn; needs <a thing named by refused.already / nothing.same.value is the referent of it> (questions.md Q100 [LIB])",
-   "returns_with": "0.164 it after refused.already"
-  },
-  {
-   "file": "pilot-avatar.test.mjs",
-   "name": "matrix: focus: \"make it red\" after \"put on a hat\" means the hat",
-   "reason": "sopworld 0.163 single=true (approved by the coordinator): \"put on a hat\" with a hat on says refused.already (was a silent no-op) and the thing it names is not the referent of \"it\" in the next turn; needs <a thing named by refused.already / nothing.same.value is the referent of it> (questions.md Q100 [LIB])",
-   "returns_with": "0.164 it after refused.already"
   }
  ]
 }

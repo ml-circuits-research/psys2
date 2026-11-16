@@ -19,7 +19,7 @@
 @k.chapter std.schema.kind of=chapter world=documents acts=make
 @h.make std.schema.honours world=documents act=make on=kind on=about on=length on=size on=count of=story of=essay of=report of=poem of=chapter
 # What the tool can write is the knowledge's list of genres (k.genres.genre: essay, report, story, presentation, scientific article), taken by join, with the world's own kinds above (slice 13.3)
-@kinds.genres std.schema.kinds world=documents from=k.genres.genre key=name acts=make
+@kinds.genres std.schema.kinds world=documents from=k.genres.genre key=name as=text acts=make
 @h.make.genres std.schema.honours world=documents act=make on=kind on=about on=length on=size on=count of=k.genres.genre
 @wa.make core.word text=write text=compose text=type means=make
 @e.story k.expect.make thing=story made_in=document unit=chapter min=3 max=5 typical=5 length_unit=word length=150 about="what this world writes from the knowledge it has: about 150 words in its parts"
