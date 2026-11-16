@@ -21,25 +21,23 @@ import {
 } from './scene.mjs?v=ed7e433935';
 
 import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/values.mjs?v=0d60c4bf76';   // the one colour reader (k.values)
-import { habitat, adviceFor } from '../../lib/knowledge/commonsense.mjs?v=a83dfa4db3';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
+import { adviceFor } from '../../lib/knowledge/commonsense.mjs?v=a83dfa4db3';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
 import { readNounPhrase, foldRelative } from '../../lib/lang/np-resolve.mjs?v=65f364cbd8';   // the one host resolver of noun phrases   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
 import * as space from '../space/space.mjs?v=da302c7b07';
 import * as rel from '../space/pieces.mjs?v=3db4bc559b';
-import * as solver from '../space/solver.mjs?v=32fa919033';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
+import * as solver from '../space/solver.mjs?v=32fa919033';
+import {
+  B, initialState, GROUND_COLOR, ensure as boardEnsure, anchorOf, onGround, byId, effectiveColor, open, rnd, idNum, colorFrom, sizeWord, snapshot, restore, remember, oneStep as boardOneStep,
+  crowd, overlapRatio, clampIn, defaultSpot, placeRegion, defaultSpotOn, placeRelative, makeObject, Z_LAYER, addThing as boardAddThing,
+} from './board.mjs?v=eee5d3eff9';   // the board itself: state, history, placement, tool primitives (this module builds the word operations on it)
+export { initialState } from './board.mjs?v=eee5d3eff9';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
 
 export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=ed7e433935';
 
 // The turn's step budget (a no-op outside a turn): placement and name resolution are searches whose cost grows with the picture.
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
-const MAX_HISTORY = 50;
 const TAB = 'draw';
 
-export function initialState() {
-  return {
-    canvas: { w: W, h: H }, objects: [], background: 'white', sky: null, ground: null, groundColor: null, mood: null, sunStash: [], sunPose: null,
-    selected: null, last: [], history: [], future: [], nextId: 1, seq: 0, seed: 20240611, rels: { facts: [], seq: 0 }, scenes: [], sceneSeq: 0,
-  };
-}
 
 // ---- vocabulary -----------------------------------------------------------------------------------------------------
 /** Spoken singular word -> kind. The lexicon lex.art.draw.things lists exactly these words (a test keeps them in step). */
@@ -59,7 +57,6 @@ export const UNDRAWABLE = new Set(['monkey', 'lion', 'tiger', 'elephant', 'horse
 const IRREGULAR = { people: 'person', men: 'person', women: 'person', children: 'person', kids: 'person', mice: null, leaves: null, fishes: 'fish' };
 /** Ground cover words -> ground kind. */
 export const GROUND_WORDS = { grass: 'grass', lawn: 'grass', meadow: 'grass', sand: 'sand', beach: 'sand', snow: 'snow', water: 'sea', sea: 'sea', ocean: 'sea', sandy: 'sand', snowy: 'snow', grassy: 'grass', watery: 'sea', icy: 'snow', wet: 'sea', beachy: 'sand' };
-const GROUND_COLOR = { grass: 'green', sand: 'yellow', snow: 'white', sea: 'blue' };
 const GROUND_NAME = { grass: 'grass', sand: 'sand', snow: 'snow', sea: 'water' };
 
 export const SIZE_WORDS = {
@@ -120,7 +117,7 @@ export function kindOfWord(word) {
   if (w.endsWith('s') && (k = tryOne(w.slice(0, -1)))) return hit(k, true);
   if (w === 'fish') return hit('fish', false);
   // a piece taken apart or a group built in this picture: its spoken name
-  for (const o of curScene?.objects ?? []) {
+  for (const o of B.scene?.objects ?? []) {
     if (!o.shape) continue;
     const nm = kindName(kindKey(o));
     if (w === nm) return hit(kindKey(o), false);
@@ -137,45 +134,17 @@ const isColorWord = (w) => !!canonColor([w]);
 const isShade = (w) => Object.hasOwn(SHADES, w);
 
 /** Color named by a list of words, ["dark", "blue"] -> "dark blue"; a lone shade darkens/lightens `fallback`. */
-function colorFrom(words, fallback = null) {
-  let shade = null, color = null;
-  for (const w of words) { if (isShade(w)) shade = w; else if (isColorWord(w)) color = w; }
-  if (!color && shade && fallback) color = fallback.split(' ').at(-1);
-  return color ? canonColor([shade, color].filter(Boolean)) : null;
-}
 
 // ---- state access -----------------------------------------------------------------------------------------------------
 function ensure(ctx) {
-  const s = ctx.state, d = initialState();
-  for (const o of s.objects ?? []) ensureCustom(o);   // pieces and groups come back from a saved state with their shape
-  for (const k of Object.keys(d)) if (s[k] === undefined) s[k] = d[k];
-  loadUsualPlaces(ctx);
-  curKnow = ctx.knowledge ?? null;
-  saidPlace = null;
-  placeNote = null;
-  curScene = s;
+  const s = boardEnsure(ctx);
+  loadRules(ctx);
   return s;
 }
 
 // ---- where things usually are: the facts of common.sense (worlds/common.sense/kb.sop), read from the session through the world's imports; no table of kinds here
-let USUAL = new Map();
-let RULED = new Set();     // kinds whose rule (common.sense.rule) says the advice itself in the matrix reasoner; for any other kind the knowledge tier is asked (T3 rule transfer)
-let saidPlace = null;      // the place word the user said when it is read as the ground band ("in the water": the water of the picture)
-let curKnow = null;        // the knowledge of the session (the catalog with what the user taught), for the kinds this world has no row for
-const NEEDS = new Set();   // kinds that cannot be anywhere else than their place (a fish): the place is made when the picture has none   // kind -> 'sky' | 'ground' | 'water' | 'horizon' (the far edge of the ground); a kind with no row is placed anywhere ('any')
-let curScene = null;        // the picture the running operation works on (for the words that depend on whether there is water)
-let placeNote = null;    // what the last placing did that the user did not ask for ("I put the fish in the pond."), said once after the drawing
-function loadUsualPlaces(ctx) {
-  let rows = [];
-  try { rows = ctx.find('common.sense.livesin'); } catch { rows = []; }
-  const m = new Map();
-  for (const w of rows) {
-    if (ctx.val(w, 'usual') !== 'yes') continue;
-    m.set(ctx.val(w, 'kind'), ctx.val(w, 'where') === 'horizon' ? 'horizon' : ctx.val(w, 'place'));
-    if (ctx.val(w, 'must') === 'yes') NEEDS.add(ctx.val(w, 'kind'));
-  }
-  if (m.size) USUAL = m;
-  try { RULED = new Set(ctx.find('common.sense.rule').map((w) => ctx.val(w, 'kind'))); } catch { RULED = new Set(); }   // the facts of common.sense say the advice of these kinds, in both reasoners (`commonNotes`); any other kind is asked of the knowledge tier
+/** The common.sense rules the advice is said from (commonNotes), read from the session through the world's imports. */
+function loadRules(ctx) {
   try {
     RULES = { say: new Map(ctx.find('common.sense.rule').map((w) => [ctx.val(w, 'kind'), ctx.val(w, 'say')])), lives: new Map(), place: new Map(ctx.find('common.sense.place').map((w) => [ctx.val(w, 'name'), ctx.val(w, 'phrase')])),
       single: new Map(ctx.find('common.sense.single').map((w) => [ctx.val(w, 'kind'), ctx.val(w, 'say')])), absent: ctx.find('common.sense.absent').map((w) => ({ kind: ctx.val(w, 'kind'), phase: ctx.val(w, 'phase'), say: ctx.val(w, 'say') })) };
@@ -183,6 +152,13 @@ function loadUsualPlaces(ctx) {
   } catch { RULES = null; }
 }
 let RULES = null;
+/** What the board did that nobody asked for (B.note, a fact), said in the words of the drawing: "I put the fish in the pond.", the knowledge's advice. */
+function noteText(n) {
+  if (!n) return '';
+  if (n.advice) { const adv = adviceFor(B.know, kindName(n.advice.kind), n.advice.place); return adv ? `(${adv})` : ''; }
+  const k = kindName(n.kind);
+  return { into_pond: `I put the ${k} in the pond.`, into_sea: `I put the ${k} in the water.`, made_sea: `I added some water for the ${k}.`, made_pond: `I made a pond for the ${k}.` }[n.did] ?? '';
+}
 /**
  * Common-sense advice (spec 15 "Advice"), one function for both reasoners: what the soft rules of common.sense find odd in the picture, said once while it stands, never a refusal.
  * It reads the world's own facts (rule, livesin, place, single, absent) the way the matrix rules do: a thing of a kind that has a usual place stands in another place, a second thing of a
@@ -192,7 +168,7 @@ function commonNotes(s) {
   if (!RULES) return [];
   const now = new Map(), objs = (s.objects ?? []).filter((o) => !o.tag);
   const placeOf = (o) => {
-    const usual = USUAL.get(kindKey(o));
+    const usual = B.usual.get(kindKey(o));
     if (!usual) return null;
     const b = bbox(o), feet = usual === 'ground' || usual === 'horizon' || usual === 'water', low = (feet ? b.y1 : o.y) > HORIZON;
     const zoneOk = (o.zone === 'sky' && !low) || (o.zone === 'ground' && low);
@@ -214,34 +190,8 @@ function commonNotes(s) {
   for (const [key, text] of now) if (!said.includes(key)) { said.push(key); out.push(text); }
   return out;
 }
-const knownAnchor = (kind) => { const z = habitat(curKnow, String(kind).replace(/_/g, ' '))?.zones?.[0]; return z ?? null; };   // delegation: a kind this world has no row for is asked of the knowledge tier (catalog and taught)
-const anchorOf = (kind) => USUAL.get(kind) ?? knownAnchor(kind) ?? (KINDS[kind]?.region ? 'ground' : 'any');   // a place (lake, road, field) lies on the ground
-const onGround = (kind) => ['ground', 'horizon'].includes(anchorOf(kind));
-const byId = (s, id) => s.objects.find((o) => o.id === id);
-const effectiveColor = (o) => o.color ?? defaultColor(kindKey(o));
 const sameKind = (s, kind) => s.objects.filter((o) => kindKey(o) === kind);
 
-/** Compact copy of the picture for undo. */
-function snapshot(s, label) {
-  return {
-    label, objects: s.objects.map((o) => ({ ...o, parts: { ...(o.parts ?? {}) } })), background: s.background, sky: s.sky, ground: s.ground,
-    groundColor: s.groundColor, mood: s.mood, sunStash: structuredClone(s.sunStash ?? []), selected: s.selected, last: [...s.last], rels: structuredClone(s.rels ?? { facts: [], seq: 0 }), scenes: structuredClone(s.scenes ?? []),
-  };
-}
-function restore(s, snap) {
-  s.objects = snap.objects.map((o) => ({ ...o, parts: { ...(o.parts ?? {}) } }));
-  s.rels = structuredClone(snap.rels ?? { facts: [], seq: 0 });
-  s.scenes = structuredClone(snap.scenes ?? []);
-  Object.assign(s, { background: snap.background, sky: snap.sky, ground: snap.ground, groundColor: snap.groundColor, mood: snap.mood, sunStash: snap.sunStash, selected: snap.selected && byId(s, snap.selected) ? snap.selected : null, last: snap.last.filter((id) => byId(s, id)) });
-}
-/** Call before changing the picture. */
-function remember(s, label) {
-  s.history.push(snapshot(s, label));
-  s.prev = s.history.at(-1);   // the picture before the newest step: what follow-ups ("but keep the lake", "not over the water") compare with, in both reasoners
-  if (s.history.length > MAX_HISTORY) s.history.splice(0, s.history.length - MAX_HISTORY);
-  s.future = [];
-}
-const open = (ctx) => { try { ctx.request('ui.openTab', { tab: TAB }); } catch { /* the shell may not know the tab */ } };
 const activeTabText = (ctx) => { try { return String(ctx.request('ui.whichTab', {})?.value ?? ''); } catch { return ''; } };
 /** True when the document editor is the tab in front (undo, clear, size, delete and select are shared words). */
 const editorActive = (ctx) => /\bEditor\b/.test(activeTabText(ctx));
@@ -275,7 +225,6 @@ function shared(ctx, what) {
   return r && !/no operation for action/.test(r.note ?? '') ? r : null;
 }
 /** Seeded pseudo-random number in [0, 1), advancing the seed kept in the state (pictures are reproducible). */
-const rnd = (s) => { s.seed = (Math.imul(s.seed, 1664525) + 1013904223) >>> 0; return s.seed / 4294967296; };
 
 /** Run an operation body; any exception restores the picture and becomes a friendly error. */
 const guard = (fn) => (ctx, args = {}) => {
@@ -293,21 +242,11 @@ const guard = (fn) => (ctx, args = {}) => {
  * result the picture is restored as it was and no step is left (all or nothing); otherwise the steps collapse into the first one, labelled `label`, so one "undo" takes the request back.
  */
 export function oneStep(ctx, label, fn) {
-  const s = ensure(ctx), base = s.history.length, snap = snapshot(s, label);
-  let r;
-  try { r = fn(s); } catch (e) { r = no(`Oops, I could not do that (${e?.message ?? e}).`, 'error'); }
-  if (r?.status !== 'supported') { restore(s, snap); s.history.length = Math.min(s.history.length, base); s.prev = s.history.at(-1) ?? null; return r; }
-  if (s.history.length > base + 1) s.history.splice(base + 1);
-  if (s.history[base]) s.history[base].label = label;
-  s.prev = s.history.at(-1) ?? null;
-  return r;
+  const r = boardOneStep(ctx, label, fn);
+  return r?.code === 'tool_error' ? no(`Oops, I could not do that (${r.detail}).`, 'error') : r;
 }
 
 // ---- describing things ------------------------------------------------------------------------------------------------
-const sizeWord = (o) => {
-  const f = o.size / (KINDS[kindKey(o)]?.size ?? o.size);
-  return f >= 2 ? 'huge' : f >= 1.35 ? 'big' : f <= 0.45 ? 'tiny' : f <= 0.78 ? 'small' : '';
-};
 /** "a big red house" (or "the red house" with article 'the'). */
 export function describeObject(o, { article = 'a', size = true, color = true } = {}) {
   const words = [];
@@ -330,7 +269,7 @@ const placePhrase = (o) => {
     return `on the ground ${col}`;
   }
   if (anchor === 'water') {
-    const wet = curScene?.ground === 'sea' || (curScene?.objects ?? []).some((p) => p.tag === 'pond' && Math.abs(p.x - o.x) < p.size / 2 && Math.abs(p.y - o.y) < p.size * 0.3);
+    const wet = B.scene?.ground === 'sea' || (B.scene?.objects ?? []).some((p) => p.tag === 'pond' && Math.abs(p.x - o.x) < p.size / 2 && Math.abs(p.y - o.y) < p.size * 0.3);
     const col = o.x < W / 3 ? 'on the left' : o.x > (2 * W) / 3 ? 'on the right' : 'in the middle';
     if (wet) return `${kindKey(o) === 'boat' ? 'on' : 'in'} the water ${col}`;
     if (bbox(o).y1 > HORIZON) return `on the ground ${col}`;
@@ -421,7 +360,7 @@ export function parseNP(text) {
     if (w === 'sky') { np.special = 'sky'; continue; }
     if (w === 'background' || w === 'paper' || w === 'page' || w === 'canvas') { np.special = 'background'; continue; }
     // a word that names the ground and things of the picture ("grass"): with an ordinal, a count or a side it is those things ("the fourth grass"), never the ground
-    if (Object.hasOwn(GROUND_WORDS, w) && (np.ordinal || np.count || np.pos) && !np.kind) { const own = (curScene?.objects ?? []).find((o) => kindName(kindKey(o)) === w); if (own) { np.kind = kindKey(own); continue; } }
+    if (Object.hasOwn(GROUND_WORDS, w) && (np.ordinal || np.count || np.pos) && !np.kind) { const own = (B.scene?.objects ?? []).find((o) => kindName(kindKey(o)) === w); if (own) { np.kind = kindKey(own); continue; } }
     if (Object.hasOwn(GROUND_WORDS, w) || w === 'ground' || w === 'floor') { np.special = 'ground'; np.groundWord = GROUND_WORDS[w] ?? null; continue; }
     if (w === 'picture' || w === 'drawing' || w === 'painting' || w === 'everything') { np.special = 'everything'; continue; }
     const owner = np.partOf?.kind && np.partOf.kind !== '*' ? np.partOf.kind : null;   // "a door of the house": a word that is a part of the owner is that part, not the kind of the same name
@@ -441,13 +380,13 @@ export function parseNP(text) {
   return np;
 }
 /** The kind of the first body of water (lake, river) the picture has, or null: "the water" means it. */
-const waterBody = () => (curScene?.objects ?? []).map(kindKey).find((k) => k === 'lake' || k === 'river') ?? null;
+const waterBody = () => (B.scene?.objects ?? []).map(kindKey).find((k) => k === 'lake' || k === 'river') ?? null;
 /** Is `word` the name of a place (lake, field ...) the picture has no object of? Then "in the lake" keeps its older reading: the water or ground of the picture. */
-const absentPlace = (word) => { const k = kindOfWord(word)?.kind; return !!k && !!KINDS[k]?.region && !(curScene?.objects ?? []).some((o) => kindKey(o) === k); };
+const absentPlace = (word) => { const k = kindOfWord(word)?.kind; return !!k && !!KINDS[k]?.region && !(B.scene?.objects ?? []).some((o) => kindKey(o) === k); };
 /** A spoken part word without a kind ("roof"): { word, kinds } over every kind that has such a part. */
 function findPartWord(w) {
   const base = w.replace(/s$/, '');
-  const here = [...new Set((curScene?.objects ?? []).map(kindKey).filter((k) => k.startsWith(COMPOSITE)))];   // the parts of the catalog things that are in the picture
+  const here = [...new Set((B.scene?.objects ?? []).map(kindKey).filter((k) => k.startsWith(COMPOSITE)))];   // the parts of the catalog things that are in the picture
   const kinds = [...Object.keys(KINDS), ...here].filter((k) => KINDS[k]?.names && (partOfWord(k, w) || partOfWord(k, base)));
   return kinds.length ? { word: w, kinds } : null;
 }
@@ -599,7 +538,6 @@ function specOf(np, list, many) {
   if (!spec.ord && !spec.pos && !spec.size && !spec.other && !spec.count && !spec.next && !spec.between && !spec.restrict) return null;
   return spec;
 }
-const idNum = (o) => Number(String(o.id).replace(/\D/g, '')) || 0;
 const sameKindOrder = (s, o) => {
   const list = sameKind(s, kindKey(o)).sort((a, b) => idNum(a) - idNum(b));
   const i = list.findIndex((x) => x.id === o.id);
@@ -662,169 +600,6 @@ export function parseRelation(words) {
   return null;
 }
 
-/** Pick a center for a new object so it does not sit on top of its neighbours. */
-function overlapRatio(a, b) {
-  const x = Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)), y = Math.max(0, Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0));
-  return (x * y) / Math.max(1, Math.min(a.w * a.h, b.w * b.h));
-}
-const sameLayer = (a, b) => {
-  const la = anchorOf(kindKey(a)), lb = anchorOf(kindKey(b));
-  if (la === 'any' || lb === 'any') return true;
-  const g = (x) => (x === 'horizon' || x === 'water' ? 'ground' : x);
-  return g(la) === g(lb);
-};
-const crowd = (s, o, ignore) => (budget.tick('art.place', s.objects.length + 1), s.objects).filter((x) => x !== o && x.id !== ignore && sameLayer(x, o)).reduce((m, x) => Math.max(m, overlapRatio(bbox(o), bbox(x))), 0);
-
-function clampIn(o, margin = 4) {
-  const b = bbox(o);
-  if (b.w <= W - 2 * margin) o.x = Math.min(W - margin - b.w / 2, Math.max(margin + b.w / 2, o.x));
-  if (b.h <= H - 2 * margin) o.y = Math.min(H - margin - b.h / 2, Math.max(margin + b.h / 2, o.y));
-  o.x = Math.round(o.x); o.y = Math.round(o.y);
-}
-
-const GROUND_X = [500, 250, 750, 130, 870, 375, 625, 60, 940];
-const SKY_X = [850, 150, 500, 330, 690, 60, 940, 230, 780];
-/**
- * Where a thing of the water goes when nobody said where: into a pond that is in the picture, else into the sea when the ground is the sea (the ground band), else
- * the water is made: the sea when there is no ground yet, a pond on the ground otherwise. Returns the spot in a pond, or null for the ground band.
- */
-function waterSpot(s, o) {
-  const pond = s.objects.find((x) => x.tag === 'pond' || kindKey(x) === 'lake');
-  if (!pond && s.ground !== 'sea' && !NEEDS.has(kindKey(o))) return null;   // no water and the thing can do without: it stands where things of the ground stand
-  if (pond) { placeNote = `I put the ${kindName(kindKey(o))} in the pond.`; return { x: pond.x, y: pond.y }; }
-  if (s.ground === 'sea') { placeNote = `I put the ${kindName(kindKey(o))} in the water.`; return null; }
-  if (!s.ground && !s.objects.some((x) => onGround(kindKey(x)))) { s.ground = 'sea'; s.groundColor = 'blue'; placeNote = `I added some water for the ${kindName(kindKey(o))}.`; return null; }
-  const p = makeObject(s, 'lake', { color: 'blue', tag: 'pond' });
-  p.size = 260; p.z = o.z - 1;
-  defaultSpotOn(s, p, 'ground');
-  s.objects.push(p);
-  placeNote = `I made a pond for the ${kindName(kindKey(o))}.`;
-  return { x: p.x, y: p.y };
-}
-
-/** Free spot for a new object by the default rules of its kind. */
-function defaultSpot(s, o) {
-  const b0 = bbox(o);
-  let anchor = anchorOf(kindKey(o));
-  if (anchor === 'water') {   // a thing of the water goes into the water that is in the picture, else the water is made first (common.sense: fish live in water)
-    const spot = waterSpot(s, o);
-    if (spot) { o.x = spot.x; o.y = spot.y; clampIn(o); return; }
-    anchor = 'ground';
-  }
-  const cand = [];
-  if (anchor === 'ground') {
-    for (const x of GROUND_X) for (const dy of [0, 36, -20]) cand.push([x, GROUND_BASE + dy - b0.h / 2]);
-  } else if (anchor === 'horizon') {
-    for (const x of [680, 300, 500, 130, 880]) cand.push([x, HORIZON + 28 - b0.h / 2]);
-  } else if (anchor === 'sky') {
-    const pref = kindKey(o) === 'sun' || kindKey(o) === 'moon' ? [[850, 120], [150, 120], [500, 100]] : kindKey(o) === 'rainbow' ? [[500, 240], [380, 250], [620, 250]] : [];
-    cand.push(...pref);
-    for (const y of [120, 230, 330, 70, 400]) for (const x of SKY_X) cand.push([x, y]);
-    for (const c of cand) c[1] = Math.min(c[1], HORIZON - 30 - b0.h / 2 + (kindKey(o) === 'rainbow' ? 120 : 0));
-  } else {
-    for (const [x, y] of [[500, 330], [250, 250], [750, 250], [250, 450], [750, 450], [500, 150], [500, 520], [120, 330], [880, 330]]) cand.push([x, y]);
-  }
-  let best = null, bestScore = Infinity;
-  for (const [x, y] of cand) {
-    o.x = x; o.y = y; clampIn(o);
-    const c = crowd(s, o);
-    if (c < 0.1) return;
-    if (c < bestScore) { bestScore = c; best = [o.x, o.y]; }
-  }
-  [o.x, o.y] = best;
-}
-
-/** Place `o` by a named region. */
-function placeRegion(s, o, region) {
-  const b = bbox(o);
-  const spot = placeInRegion(region, b.w, b.h, anchorOf(kindKey(o)));
-  o.x = spot.x; o.y = spot.y;
-  if (region === 'sky' || region === 'ground') o.zone = region;   // the user named the sky or the ground: common.sense may say it when that is not where such a thing usually is
-  if ((region === 'sky' || region === 'ground') && !RULED.has(kindKey(o)) && !placeNote) { const adv = adviceFor(curKnow, kindName(kindKey(o)), saidPlace ?? region); if (adv) placeNote = `(${adv})`; }
-  saidPlace = null;   // the kinds without a rule of this world's own: the knowledge tier says it, in both reasoners
-  if (region === 'ground') { // a free spot on the ground band
-    const keep = o.y; defaultSpotOn(s, o, 'ground'); if (!Number.isFinite(o.y)) o.y = keep;
-  }
-  clampIn(o);
-  // make room: slide towards the middle while something big sits there
-  for (let i = 0; i < 6 && crowd(s, o) > 0.45; i++) { o.x += (o.x < W / 2 ? 1 : -1) * Math.max(40, b.w * 0.8); clampIn(o); }
-}
-function defaultSpotOn(s, o, anchor) {
-  const saved = anchorOf(kindKey(o));
-  const b0 = bbox(o);
-  let best = null, bestScore = Infinity;
-  for (const x of GROUND_X) {
-    o.x = x; o.y = GROUND_BASE + 10 - b0.h / 2; clampIn(o);
-    const c = crowd(s, o);
-    if (c < bestScore) { bestScore = c; best = [o.x, o.y]; }
-    if (c < 0.1) break;
-  }
-  [o.x, o.y] = best;
-  void saved; void anchor;
-}
-
-/** Place `o` relative to other objects (already resolved). `side` is used only by next/leftof/rightof. */
-function placeRelative(s, o, rel0, refs) {
-  const rel = rel0 === 'on' && KINDS[kindKey(refs[0])]?.region ? 'in' : rel0;   // on the lake is in it; on top of the house is above it
-  const gap = 24, b = bbox(o), k = KINDS[kindKey(o)];
-  const R0 = bbox(refs[0]);
-  const ground = onGround(kindKey(o)) || anchorOf(kindKey(o)) === 'water';
-  const alignY = (r) => (ground && (anchorOf(kindKey(refs[0])) === 'ground') ? r.y1 - b.h / 2 : r.cy);
-  const place = { x: o.x, y: o.y };
-  const sideX = (dir, r) => (dir > 0 ? r.x1 + gap + b.w / 2 : r.x0 - gap - b.w / 2);
-  switch (rel) {
-    case 'rightof': place.x = sideX(1, R0); place.y = alignY(R0); break;
-    case 'leftof': place.x = sideX(-1, R0); place.y = alignY(R0); break;
-    case 'next': {
-      const dir = R0.x1 + gap + b.w > W - 6 ? -1 : (R0.x0 - gap - b.w < 6 ? 1 : (R0.cx < W / 2 ? 1 : -1));
-      place.x = sideX(dir, R0); place.y = alignY(R0);
-      // a neighbour already stands there: try the other side
-      o.x = place.x; o.y = place.y;
-      if (crowd(s, o) > 0.3) { place.x = sideX(-dir, R0); o.x = place.x; if (crowd(s, o) > 0.3) { place.x = sideX(dir, R0) + dir * (b.w + gap); } }
-      break;
-    }
-    case 'above': place.x = R0.cx; place.y = R0.y0 - gap - b.h / 2; break;
-    case 'on': place.x = R0.cx; place.y = R0.y0 - b.h / 2 + Math.min(10, b.h * 0.1); break;
-    case 'below': {
-      place.x = R0.cx; place.y = R0.y1 + gap + b.h / 2;
-      if (place.y + b.h / 2 > H - 4) { // no room underneath: stand in front, at the foot of it
-        place.y = Math.min(H - 6 - b.h / 2, R0.y1 + 26 - b.h / 2 + b.h * 0.15);
-      }
-      break;
-    }
-    case 'front': place.x = R0.cx + R0.w * 0.12; place.y = Math.min(H - 6 - b.h / 2, R0.y1 + 22 - b.h / 2); break;
-    case 'behind': place.x = R0.cx + R0.w * 0.28; place.y = R0.y1 - b.h / 2 - 6; break;
-    case 'in': place.x = R0.cx; place.y = R0.cy; break;
-    case 'around': {   // a place goes round the thing (as big as needed), a thing stands next to it
-      if (KINDS[kindKey(o)]?.region) { place.x = R0.cx; place.y = R0.cy; o.size = Math.round(Math.min(W * 0.9, Math.max(o.size, R0.w * 1.8, (R0.h * 1.4) / (KINDS[kindKey(o)].aspect || 1)))); }
-      else { place.x = sideX(R0.cx < W / 2 ? 1 : -1, R0); place.y = alignY(R0); }
-      break;
-    }
-    case 'between': {
-      const R1 = bbox(refs[1] ?? refs[0]);
-      place.x = (R0.cx + R1.cx) / 2; place.y = ground ? Math.max(R0.y1, R1.y1) - b.h / 2 : (R0.cy + R1.cy) / 2; break;
-    }
-    default: break;
-  }
-  o.x = place.x; o.y = place.y;
-  clampIn(o);
-  const z = s.objects.reduce((m, x) => Math.max(m, x.z), -Infinity);
-  if (rel === 'behind' || (rel === 'around' && KINDS[kindKey(o)]?.region)) o.z = refs[0].z - 1;
-  else if (!KINDS[kindKey(o)]?.region && ['below', 'front', 'on', 'in', 'above', 'next', 'leftof', 'rightof', 'between', 'around'].includes(rel)) o.z = Math.max(o.z, refs[0].z + 1, Number.isFinite(z) ? o.z : 0);
-}
-
-// ---- making objects -------------------------------------------------------------------------------------------------------
-const Z_LAYER = { mountain: -3000, rainbow: -2000, sun: -1000, moon: -1000, cloud: -900 };
-function makeObject(s, kind, { color = null, factor = 1, fill = null, tag = null } = {}) {
-  const k = KINDS[kind];
-  const o = {
-    id: `o${s.nextId++}`, kind: kind.startsWith(COMPOSITE) ? 'composite' : kind, ...(kind.startsWith(COMPOSITE) ? { thing: thingOfKey(kind) } : {}), x: W / 2, y: H / 2, size: Math.round(k.size * factor), color: color ? canonColor(color) : null,
-    fill: fill ?? k.fill ?? 'crayon', rotation: 0, flip: false, z: (Z_LAYER[kind] ?? (k.region ? -2500 : 0)) + s.nextId, parts: {},
-  };
-  if (tag) o.tag = tag;
-  if (k.custom) o.shape = k.shape;   // a piece or a group drawn again keeps its parts with it
-  return o;
-}
 
 // ---- operations -------------------------------------------------------------------------------------------------------------
 /** Splits "a house and a tree" style tails: returns { first, more } texts. */
@@ -898,81 +673,16 @@ function resolveRefs(s, refTexts) {
   return { refs, drawn };
 }
 
-function addThing(s, spec, ctxInfo) {
-  // spec: { kind, count, color, factor, parts, place, plural }
-  const made = [];
-  const kind = spec.kind;
-  const count = spec.count;
-  const group = [];
-  for (let i = 0; i < count; i++) {
-    const factor = i === 0 ? spec.factor : spec.factor * (0.88 + rnd(s) * 0.28);
-    const o = makeObject(s, kind, { color: spec.color, factor: spec.who && !spec.sized ? factor * WHO_PRESET[spec.who].factor : factor });
-    if (spec.who && kind === 'person') {
-      const pr = WHO_PRESET[spec.who];
-      o.who = spec.who;
-      Object.assign(o.parts, { hair: pr.hair, shirt: spec.dress ?? pr.shirt, pants: spec.dress ?? pr.pants });
-    }
-    if (spec.mood && kind === 'person') o.mood = spec.mood;
-    Object.assign(o.parts, spec.parts);
-    group.push(o);
-  }
-  if (spec.vary && group.length > 1) {   // each one differs: its own colour (not for things that have one colour by nature, nor one the user named) and its own size
-    const shuffle = (xs) => { const a = xs.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd(s) * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-    const sizes = shuffle(VARY_SIZES), colors = shuffle(VARY_COLORS().filter((c) => !spec.colorGiven || c !== spec.color));
-    const colourable = !spec.colorGiven && !spec.who && !FIXED_COLOR.has(kind);
-    group.forEach((o, i) => {
-      o.size = Math.round(KINDS[kind].size * spec.factor * sizes[i % sizes.length]);
-      if (colourable) o.color = canonColor(colors[i % colors.length]);
-    });
-  }
-  // several things at once: even spread, drawn left to right
-  const place = spec.place ?? {};
-  if (place.rel && spec.refs?.length) {
-    group.forEach((o, i) => {
-      placeRelative(s, o, place.rel, spec.refs);
-      if (i > 0) { const prev = group[i - 1], pb = bbox(prev), ob = bbox(o); o.x = prev.x + pb.w / 2 + ob.w / 2 + 14; o.y = prev.y + (ob.h - pb.h) / 2 * 0; clampIn(o); }
-      s.objects.push(o);
-    });
-    keepRelation(s, group, { rightof: 'rightof', leftof: 'leftof', next: 'next', above: 'above', below: 'below', on: 'on', in: 'in', front: 'front', behind: 'behind' }[place.rel] ?? place.rel, spec.refs);
-  } else if (place.region) {
-    group.forEach((o, i) => {
-      placeRegion(s, o, place.region);
-      if (i > 0) { const prev = group[i - 1], pb = bbox(prev), ob = bbox(o); o.x = prev.x + (pb.w + ob.w) / 2 + 16; clampIn(o); if (o.x - ob.w / 2 < prev.x + pb.w / 2) o.y += ob.h * 0.35; clampIn(o); }
-      s.objects.push(o);
-    });
-  } else if (group.length > 1 && anchorOf(kind) !== 'any') {
-    const anchor = anchorOf(kind) === 'water' ? 'ground' : anchorOf(kind);
-    const n = group.length, lo = 90, hi = W - 90;
-    const rows = anchor === 'sky' && n > 5 ? 2 : 1;
-    group.forEach((o, i) => {
-      const row = rows === 2 ? i % 2 : 0, col = rows === 2 ? Math.floor(i / 2) : i;
-      const perRow = rows === 2 ? Math.ceil(n / 2) : n;
-      const b = bbox(o);
-      o.x = lo + ((col + 0.5 + (row ? 0.25 : 0)) / (perRow + (rows === 2 ? 0.25 : 0))) * (hi - lo);
-      if (anchor === 'ground') o.y = GROUND_BASE + (i % 2 ? 26 : 0) + Math.round(rnd(s) * 24) - b.h / 2;
-      else if (anchor === 'horizon') o.y = HORIZON + 28 - b.h / 2;
-      else o.y = 90 + row * 120 + Math.round(rnd(s) * 70) + (n > 5 ? 0 : 20) + b.h / 2 * 0.2;
-      clampIn(o); s.objects.push(o);
-    });
-  } else if (group.length > 1) {
-    const n = group.length;
-    group.forEach((o, i) => {
-      o.x = 120 + ((i + 0.5) / n) * (W - 240); o.y = 150 + (i % 3) * 140 + Math.round(rnd(s) * 60);
-      clampIn(o); s.objects.push(o);
-    });
-  } else {
-    for (const o of group) { defaultSpot(s, o); s.objects.push(o); }
-  }
-  // drawing order: left to right gets the older ids, so "the first tree" is the left one
-  if (group.length > 1) {
-    const ids = group.map((o) => o.id), zs = group.map((o) => o.z);
-    const sorted = group.slice().sort((a, b) => a.x - b.x);
-    sorted.forEach((o, i) => { o.id = ids[i]; o.z = zs[i]; });
-    s.objects.sort((a, b) => idNum(a) - idNum(b));
-  }
-  made.push(...group);
-  void ctxInfo;
-  return made;
+/** `count` things of a kind (board.mjs addThing) with the word operations' own touches: a person's preset (who, dress, mood), each one different (vary), the relation said kept as a fact. */
+function addThing(s, spec) {
+  const pr = spec.who && spec.kind === 'person' ? WHO_PRESET[spec.who] : null;
+  return boardAddThing(s, {
+    ...spec,
+    factorOf: spec.who && !spec.sized ? WHO_PRESET[spec.who].factor : 1,
+    decorate: (o) => { if (pr) { o.who = spec.who; Object.assign(o.parts, { hair: pr.hair, shirt: spec.dress ?? pr.shirt, pants: spec.dress ?? pr.pants }); } if (spec.mood && spec.kind === 'person') o.mood = spec.mood; },
+    vary: spec.vary ? { colors: VARY_COLORS().filter((c) => !spec.colorGiven || c !== spec.color), fixed: !!(spec.colorGiven || spec.who || FIXED_COLOR.has(spec.kind)) } : null,
+    placed: (group, r, refs) => keepRelation(s, group, { rightof: 'rightof', leftof: 'leftof', next: 'next', above: 'above', below: 'below', on: 'on', in: 'in', front: 'front', behind: 'behind' }[r] ?? r, refs),
+  });
 }
 
 /** Everything about a kind that a command can say: kind, count, color, size factor. */
@@ -1151,8 +861,8 @@ const addInner = guard((ctx, args, s) => {
   const where = made.length && extras.length === 0 ? describePlacing(made[0], place, refs) : '';
   const capNote = (capped ? ` (${cap} is plenty!)` : '') + fracNote + compNote;
   const partNote = '';
-  const placed = placeNote ? ` ${placeNote}` : '';
-  placeNote = null;
+  const note = noteText(B.note), placed = note ? ` ${note}` : '';
+  B.note = null;
   return ok(`I drew ${phrase}${partNote}${where}${capNote}.${placed}`, { data: { made: s.last.slice() } });
 });
 /** "Draw a villa": a thing with no drawing of its own is drawn by the object of its kind (k.objects.stand_in, or the kind of its word sense); the reply says so once per thing. */
@@ -1436,7 +1146,7 @@ export function parseDest(text) {
   if (/\b(to the front|forward|to the top of everything|in front of everything)\b/.test(j)) return { kind: 'z', dir: 'front' };
   if (/\b(to the back|backward|backwards|to the bottom of everything|behind everything)\b/.test(j)) return { kind: 'z', dir: 'back' };
   // "in the water", "into the sea": the ground band (the water, sand, grass or snow the picture has)
-  if (/^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(?:water|sea|ocean|lake|pond|sand|beach|snow)$/.test(j) && (absentPlace(w.at(-1)) || !(kindOfWord(w.at(-1)) || (w.at(-1) === 'water' && waterBody())))) { saidPlace = w.at(-1); return { kind: 'region', region: 'ground' }; }   // a lake of the picture is a thing: the relation below
+  if (/^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(?:water|sea|ocean|lake|pond|sand|beach|snow)$/.test(j) && (absentPlace(w.at(-1)) || !(kindOfWord(w.at(-1)) || (w.at(-1) === 'water' && waterBody())))) { B.said = w.at(-1); return { kind: 'region', region: 'ground' }; }   // a lake of the picture is a thing: the relation below
   const rel = parseRelation(w);
   if (rel) return { kind: 'rel', rel: rel.rel, refs: rel.refs, closer: /\bcloser\b/.test(j) };
   if (/\b(edge|far)\b/.test(j) || edgeAmt) {
@@ -2374,136 +2084,5 @@ export function summary(ctx) {
 // What the matrix reasoner's functions (fns.mjs) share with the operations: the words, so that a refusal or a count says the same in both modes.
 export { describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, placePhrase, effectiveColor, sameColorName, drawingNP };
 
-/**
- * TOOL PRIMITIVES OF THE BOARD (spec 28 section 12; reviewer 2026-11-15 20:45): typed operations on its state, bound by the std.tool wires of request.sop and run by the library's
- * runPlan. Named arguments only; no request, no words, no defaults, no reply. Values come in as the tool takes them (the library translated them by knowledge before the call):
- *   kind    a kind of the board (scene.mjs KINDS)              n       how many            size   small | default | big (a grade the param accepts)
- *   colour  a colour of the catalog                             place   a region id of the canvas (scene.mjs REGIONS, `_` for a space; corner), a band of request.sop's
- *                                                                        std.schema.region (water, land, sky), or a direction (up, down)
- *   anchor  the id of a thing to go next to (moveThings: the step's region, a thing of the view)   ids   the ids of the things acted on (a scene's id stands for its things)
- *   relation  moveThings: how to stand to the anchor (next, in, on, above, below, front, behind, leftof, rightof, around; default next)
- *   whole   the id of a scene made by startScene: the things made in it stand together (next to its first thing, else in its region)
- * A call is all or nothing; the calls of one session step are one entry of the board's history (`step`, `label`: given by the host). Result: { status, changed } or { status: 'missing', code } (the host passes a refusal to the library as { ok: false, code }).
- * `toolView` is the board's state as facts for the library's view (id, kind, colour, size grade, region); `thingAt` is the declared custom search (std.tool.custom) that finds
- * the newest thing of the kind a place names.
- */
-const STEP = 70;
-const plainId = (id) => String(id).replace(/^\$/, '');
-const sceneOf = (s, id) => (id == null ? null : (s.scenes ?? []).find((sc) => sc.id === plainId(id)) ?? null);
-/** The things of ids: a thing by its id, a scene by the things in it. */
-const objsOf = (s, ids) => [...new Set([].concat(ids ?? []).flatMap((id) => { const sc = sceneOf(s, id); return sc ? sc.members : [plainId(id)]; }))].map((id) => byId(s, id)).filter(Boolean);
-/** The board's kind of a kind name: a built-in kind, else a thing of the catalog the board draws. */
-const boardKind = (kind) => (kind == null ? null : Object.hasOwn(KINDS, kind) && KINDS[kind] ? String(kind) : isThing(String(kind)) ? COMPOSITE + kind : null);
-/** A scene with none of its things left is gone (kept as gone, so that taking it away again, as an undo does after its things, is no refusal). */
-const dropEmptyScenes = (s) => { for (const sc of s.scenes ?? []) { sc.members = sc.members.filter((id) => byId(s, id)); if (!sc.members.length && !sc.fresh) sc.gone = true; } };
-const liveScenes = (s) => (s.scenes ?? []).filter((sc) => !sc.gone && (sc.fresh || sc.members.some((id) => byId(s, id))));
-const toolDone = (extra = {}) => ({ status: 'supported', value: '', ...extra });
-const toolNo = (code) => ({ status: 'missing', value: '', code });
-/**
- * One call of a primitive: all or nothing, and a step of the board's own history; the calls of one step of the session (`step`: its id, given by the host) are one history entry,
- * labelled with `label` (the person's words), so that one plan of several calls is one undo.
- */
-function toolStep(ctx, { step = null, label = null } = {}, fn) {
-  const s = ensure(ctx);
-  const base = step && s.stepGroup?.id === step && s.stepGroup.base <= s.history.length ? s.stepGroup.base : s.history.length;
-  if (step) s.stepGroup = { id: step, base };
-  const r = oneStep(ctx, label ?? '', () => { remember(s, label ?? ''); return fn(s); });
-  if (r?.status === 'supported' && s.history.length > base + 1) { s.history.splice(base + 1); s.history[base].label = label ?? ''; s.prev = s.history.at(-1) ?? null; }
-  return r;
-}
-const DIRECTION = { up: [0, -1], down: [0, 1] };
-const regionId = (place) => (place == null ? null : place === 'corner' ? 'bottom left' : Object.hasOwn(REGIONS, String(place).replace(/_/g, ' ')) ? String(place).replace(/_/g, ' ') : null);
-const bandOf = (place) => (place != null && Object.hasOwn(GROUND_WORDS, place) ? GROUND_WORDS[place] : place === 'land' ? 'ground' : null);
-const gradeFactor = (size) => (size ? SIZE_WORDS[size === 'default' ? 'normal' : size] ?? null : 1);
-/** A scene: a whole the things made in it belong to (they stand together; an act on the scene is an act on its things). */
-export function startScene(ctx, { kind, place = null, step = null, label = null } = {}) {
-  const s = ensure(ctx);
-  if (kind == null) return toolNo('no_kind');
-  return toolStep(ctx, { step, label }, () => {
-    s.sceneSeq = (s.sceneSeq ?? 0) + 1;
-    s.scenes = [...(s.scenes ?? []).filter((sc) => !sc.gone).map((sc) => ({ ...sc, fresh: false })), { id: `scene${s.sceneSeq}`, kind: String(kind), region: regionId(place), members: [], fresh: true }];
-    open(ctx);
-    return toolDone({ changed: [`scene${s.sceneSeq}`] });
-  });
-}
-export function addThings(ctx, { kind, n = 1, size = null, colour = null, place = null, anchor = null, whole = null, step = null, label = null } = {}) {
-  const s = ensure(ctx), key = boardKind(kind), scene = sceneOf(s, whole);
-  if (!key) return toolNo('no_kind');
-  const factor = gradeFactor(size), color = colour ? colorFrom([String(colour).toLowerCase()]) : null;
-  if (!factor || (colour && !color)) return toolNo('no_value');
-  const to = objsOf(s, anchor)[0] ?? (scene ? objsOf(s, scene.members)[0] : null) ?? null, region = to ? null : regionId(place) ?? scene?.region ?? (bandOf(place) === 'ground' ? 'ground' : null);
-  return toolStep(ctx, { step, label }, () => {
-    const made = addThing(s, { kind: key, count: Math.max(1, Math.min(MAX_COUNT, Number(n) || 1)), color, factor, parts: {}, place: to ? { rel: 'next' } : region ? { region } : {}, refs: to ? [to] : [] });
-    s.last = made.map((o) => o.id);
-    if (scene) { scene.members.push(...s.last); scene.fresh = false; }
-    open(ctx);
-    return toolDone({ changed: s.last });
-  });
-}
-export function removeThings(ctx, { ids, step = null, label = null } = {}) {
-  const s = ensure(ctx), objs = objsOf(s, ids), scenes = [].concat(ids ?? []).map((id) => sceneOf(s, id)).filter(Boolean);
-  if (!objs.length && !scenes.length) return toolNo('no_things');
-  return toolStep(ctx, { step, label }, () => {
-    const gone = new Set(objs.map((o) => o.id));
-    s.objects = s.objects.filter((o) => !gone.has(o.id));
-    s.last = []; if (s.selected && gone.has(s.selected)) s.selected = null;
-    for (const sc of scenes) sc.gone = true;
-    dropEmptyScenes(s);
-    open(ctx);
-    return toolDone({ changed: [...gone] });
-  });
-}
-export function moveThings(ctx, { ids, place = null, anchor = null, relation = null, step = null, label = null } = {}) {
-  const s = ensure(ctx), objs = objsOf(s, ids);
-  if (!objs.length) return toolNo('no_things');
-  const to = objsOf(s, anchor).find((o) => !objs.includes(o)) ?? null;
-  const dir = to ? null : DIRECTION[place] ?? null;
-  const band = to || dir ? null : bandOf(place);
-  const area = to || dir || band ? null : regionId(place);
-  if (!dir && !to && !band && !area) return toolNo('no_place');
-  return toolStep(ctx, { step, label }, () => {
-    if (band && band !== 'ground' && s.ground !== band) { s.ground = band; s.groundColor = GROUND_COLOR[band]; }   // a band of the ground (water: the sea band), made when there is none
-    for (const o of objs) {
-      budget.tick('draw.tool');
-      if (dir) { o.x += dir[0] * STEP; o.y += dir[1] * STEP; clampIn(o); }
-      else if (to) placeRelative(s, o, relation ?? 'next', [to]);   // the relations placeRelative draws; request.sop std.tool.value gives the tool's names
-      else placeRegion(s, o, band ? 'ground' : area);
-    }
-    s.last = objs.map((o) => o.id);
-    open(ctx);
-    return toolDone({ changed: s.last });
-  });
-}
-export function setThings(ctx, { ids, colour = null, size = null, step = null, label = null } = {}) {
-  const s = ensure(ctx), objs = objsOf(s, ids);
-  if (!objs.length) return toolNo('no_things');
-  const color = colour ? colorFrom([String(colour).toLowerCase()]) : null, factor = size ? gradeFactor(size) : null;
-  if ((colour && !color) || (size && !factor) || (!color && !factor)) return toolNo('no_value');
-  return toolStep(ctx, { step, label }, () => {
-    for (const o of objs) {
-      budget.tick('draw.tool');
-      if (color) o.color = color;
-      if (factor) { o.size = Math.round((KINDS[kindKey(o)]?.size ?? o.size) * factor); if (onGround(kindKey(o))) clampIn(o); }
-    }
-    s.last = objs.map((o) => o.id);
-    open(ctx);
-    return toolDone({ changed: s.last });
-  });
-}
-/** The sky of the board, a band behind everything (the view has it as the thing `sky` when it is there). */
-export function paintSky(ctx, { colour, step = null, label = null } = {}) {
-  const s = ensure(ctx), c = colorFrom([String(colour ?? '').toLowerCase()]);
-  if (!c) return toolNo('no_value');
-  return toolStep(ctx, { step, label }, () => { s.sky = c; s.mood = null; open(ctx); return toolDone({ changed: ['sky'] }); });
-}
-/** The board's state as facts (the library's view): one record per thing a person can point at, and the sky when there is one. */
-export function toolView(ctx) {
-  const s = ensure(ctx);
-  const inScene = new Map((s.scenes ?? []).flatMap((sc) => sc.members.map((m) => [m, sc.id])));
-  return [...(s.sky ? [{ id: 'sky', kind: 'sky', colour: s.sky }] : []), ...s.objects.filter((o) => !o.tag).map((o) => ({ id: o.id, kind: kindName(kindKey(o)), ...(inScene.has(o.id) ? { in: inScene.get(o.id) } : {}), colour: effectiveColor(o) ?? null, ...(sizeWord(o) ? { size: sizeWord(o) } : {}), place: regionOf(o.x, o.y).replace(/^(?:top|bottom) (?:left|right)$/, 'corner') })), ...liveScenes(s).map((sc) => ({ id: sc.id, kind: sc.kind }))];   // a scene after its things: taken back, its things go first
-}
-/** Declared custom search (request.sop std.tool.custom thingAt): the newest thing of the view whose kind is the place named, else nothing. */
-export function thingAt({ place } = {}, view = []) {
-  const hit = (view ?? []).filter((t) => t && place != null && t.kind === place);
-  return hit.length ? hit.at(-1).id : null;
-}
+/** The tool primitives, the view and the declared search of the request door are the board's (board.mjs); re-exported for the callers of this module. */
+export { startScene, addThings, removeThings, moveThings, setThings, paintSky, toolView, thingAt, newPage, undoStep, redoStep } from './board.mjs?v=eee5d3eff9';

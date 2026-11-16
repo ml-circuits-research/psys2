@@ -8,7 +8,8 @@
  *   wordLiterals  string literals equal to a word the world declares in request.sop (a kind, a value of a slot enum: sizes, places, layouts) — words that belong in the declarations
  *   replies       reply sentences written in code ("I drew ...", "There is no ...", "Where should ...")
  *   textRegex     regular expressions run on text (.test / .exec / .match / .replace with a regex literal, new RegExp)
- * The numbers go down as worlds become tool primitives + views + declarations (std.tool.op / param / bind). Never a gate.
+ * The numbers go down as worlds become tool primitives + views + declarations (std.tool.op / param / bind). Never a gate. A tool engine vendored from its own repository (a
+ * converted file naming its source, "Do not edit by hand") is the tool itself: listed apart (`engine`), not counted as glue (reviewer 00:50: a tool's code may know its own vocabulary).
  *
  *   node scripts/glue-lint.mjs [--json] [--ops]     --ops: from ops.mjs for every world (the measure before the door had its own surface)
  */
@@ -49,7 +50,7 @@ export function glueLint() {
     if (!existsSync(req) || !existsSync(ops)) continue;
     const words = declaredWords(readFileSync(req, 'utf8'));
     const files = reachable(ops);
-    const c = { files: files.length, requestReads: 0, wordLiterals: 0, replies: 0, textRegex: 0, byFile: {} };
+    const c = { files: files.length, requestReads: 0, wordLiterals: 0, replies: 0, textRegex: 0, byFile: {}, engine: {} };
     for (const f of files) {
       const src = readFileSync(f, 'utf8');
       const code = src.replace(/^\s*\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');   // comments are not glue
@@ -59,6 +60,9 @@ export function glueLint() {
         replies: (code.match(/['"`](?:I |I'|The |There |What |Where |Which |It |Say |Try |OK|Here )[^'"`\n]{6,}/g) ?? []).length,
         textRegex: (code.match(/\/(?![*/])(?:\\.|[^/\n\\])+\/[gimsuy]*\.(?:test|exec)\(|\.(?:match|matchAll|replace|replaceAll|split|search)\(\s*\/(?![*/])|new RegExp\(/g) ?? []).length,
       };
+      // a TOOL ENGINE vendored from its own repository (a converted file that names its source and says "Do not edit by hand": the diagram engine of diagram-vss-demo) is the tool
+      // itself, run by the primitives with structured commands; its own messages never reach a reply on the door's path. Counted apart (`engine`), not as glue.
+      if (/^\/\/ Source: https?:\/\//m.test(src.slice(0, 600)) && /Do not edit by hand/.test(src.slice(0, 600))) { c.engine[relative(REPO, f)] = n; continue; }
       for (const k of Object.keys(n)) c[k] += n[k];
       if (Object.values(n).some((x) => x)) c.byFile[relative(REPO, f)] = n;
     }
@@ -71,7 +75,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const r = glueLint();
   if (process.argv.includes('--json')) console.log(JSON.stringify(r, null, 1));
   else {
-    console.log('world            files  requestReads  wordLiterals  replies  textRegex');
-    for (const [id, c] of Object.entries(r)) console.log(`${id.padEnd(16)} ${String(c.files).padStart(5)}  ${String(c.requestReads).padStart(12)}  ${String(c.wordLiterals).padStart(12)}  ${String(c.replies).padStart(7)}  ${String(c.textRegex).padStart(9)}`);
+    console.log('world            files  requestReads  wordLiterals  replies  textRegex  (vendored tool engine, not glue: files / replies / textRegex)');
+    for (const [id, c] of Object.entries(r)) { const e = Object.values(c.engine); console.log(`${id.padEnd(16)} ${String(c.files).padStart(5)}  ${String(c.requestReads).padStart(12)}  ${String(c.wordLiterals).padStart(12)}  ${String(c.replies).padStart(7)}  ${String(c.textRegex).padStart(9)}${e.length ? `  (${e.length} / ${e.reduce((a, x) => a + x.replies, 0)} / ${e.reduce((a, x) => a + x.textRegex, 0)})` : ''}`); }
   }
 }

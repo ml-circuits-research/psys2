@@ -44,6 +44,10 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.no_things w.lang.ro.reply name=cannot.no_things count=one role=thing text="aici nu există {art@thing} {thing}"
 @w.lang.ro.fill.local.no_things_art w.lang.ro.fill template=cannot.no_things role=art lemma=un
 @w.lang.ro.reply.local.which w.lang.ro.reply name=ask.which count=one role=thing role=list text="la care {thing} te referi: {list}?"
+@w.lang.ro.reply.local.undo_did w.lang.ro.reply name=done.undo.did count=one role=did text="am anulat ultima schimbare"
+@w.lang.ro.reply.local.redo_did w.lang.ro.reply name=done.redo.did count=one role=did text="am refăcut ultima schimbare"
+@w.lang.ro.reply.local.page w.lang.ro.reply name=done.page count=one text="iată o foaie nouă. Ce desenăm?"
+@w.lang.ro.reply.local.page_kept w.lang.ro.reply name=done.page.kept count=one text="iată o foaie nouă! Desenul vechi este încă acolo dacă spui „anulează”."
 @w.lang.ro.reply.local.change_place_1 w.lang.ro.reply name=done.change.place count=one role=thing role=value text="am mutat {thing:def=yes} la {value:def=yes}"
 @w.lang.ro.reply.local.change_place_n w.lang.ro.reply name=done.change.place count=other role=thing role=number role=value text="am mutat {number} {thing:num=pl} la {value:def=yes}"
 @w.lang.ro.reply.local.change_size_1 w.lang.ro.reply name=done.change.size count=one role=thing role=value text="{thing:def=yes} este acum {value@thing}"

@@ -13,11 +13,11 @@ import { K, loadEngine, ensure, systemFor, writeBack, open, budget } from './cor
 const done = (changed = []) => ({ status: 'supported', value: '', changed });
 const refuse = (code) => ({ status: 'missing', value: '', code });
 const notReady = () => { loadEngine(); return refuse('not_ready'); };
-/** The engine's sizes for the grades the params accept (request.sop: type=k.expect.scale), and back. */
-const ENGINE_SIZE = { tiny: 'tiny', small: 'small', default: 'medium', big: 'large', huge: 'huge' };
-const GRADE = Object.fromEntries(Object.entries(ENGINE_SIZE).map(([g, e]) => [e, g]));
-/** The canvas regions of a place value in the engine's names. */
-const REGION = { center: 'center', centre: 'center', top: 'top', bottom: 'bottom', left: 'left', right: 'right', corner: 'bottomLeft', top_left: 'topLeft', top_right: 'topRight', bottom_left: 'bottomLeft', bottom_right: 'bottomRight' };
+/** The engine's sizes (a size comes in in the engine's own name: request.sop std.tool.value default -> medium, big -> large), and the grade the view says for each. */
+const ENGINE_SIZES = new Set(['tiny', 'small', 'medium', 'large', 'huge']);
+const GRADE = { tiny: 'tiny', small: 'small', medium: 'default', large: 'big', huge: 'huge' };
+/** The engine's canvas regions (a place comes in in the engine's own name: request.sop std.tool.value corner -> bottomLeft). */
+const REGIONS = new Set(['center', 'top', 'bottom', 'left', 'right', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight']);
 const DIRECTION = new Set(['up', 'down']);
 
 /** Run engine wire nodes on the state; the calls of one session step are one entry of the engine's undo stack. Returns the engine result, or null when it threw. */
@@ -56,9 +56,9 @@ export function startDiagram(ctx, { kind, layout = null, links = 0, step = null 
 export function addShapes(ctx, { kind, n = 1, whole = null, size = null, colour = null, layout = null, step = null } = {}) {
   if (!K) return notReady();
   const s = ensure(ctx), w = wholeOf(s, whole);
-  if (size && !ENGINE_SIZE[size]) return refuse('no_value');
+  if (size && !ENGINE_SIZES.has(size)) return refuse('no_value');
   const count = Math.max(1, Number(n) || 1);
-  const r = run(ctx, s, [{ id: 'add', type: 'command', args: { action: 'create', shape: kind, count, ...(colour ? { color: String(colour).toLowerCase() } : {}), ...(size ? { size: ENGINE_SIZE[size] } : {}), ...(!w && layout && count > 1 ? { layout } : {}) } }], step);
+  const r = run(ctx, s, [{ id: 'add', type: 'command', args: { action: 'create', shape: kind, count, ...(colour ? { color: String(colour).toLowerCase() } : {}), ...(size ? { size } : {}), ...(!w && layout && count > 1 ? { layout } : {}) } }], step);
   if (!r?.ok) return refuse('refused');
   const made = madeBy(r);
   if (w) { w.members.push(...made); relay(ctx, s, w, step); }
@@ -106,7 +106,7 @@ export function moveShapes(ctx, { ids, place = null, anchor = null, step = null 
   const s = ensure(ctx), names = shapesOf(s, ids);
   if (!names.length) return refuse('no_things');
   const to = shapesOf(s, anchor).find((n) => !names.includes(n)) ?? null;
-  const args = to ? { position: 'rightOf', anchor: to } : DIRECTION.has(place) ? { direction: place } : REGION[place] ? { region: REGION[place] } : null;
+  const args = to ? { position: 'rightOf', anchor: to } : DIRECTION.has(place) ? { direction: place } : REGIONS.has(place) ? { region: place } : null;
   if (!args) return refuse('no_place');
   const r = run(ctx, s, [{ id: 'move', type: 'command', args: { action: 'move', target: names, ...args } }], step);
   if (!r?.ok) return refuse('refused');
@@ -128,8 +128,8 @@ export function setShapes(ctx, { ids, colour = null, size = null, step = null } 
   if (!K) return notReady();
   const s = ensure(ctx), names = shapesOf(s, ids);
   if (!names.length) return refuse('no_things');
-  if ((size && !ENGINE_SIZE[size]) || (!colour && !size)) return refuse('no_value');
-  const r = run(ctx, s, [{ id: 'set', type: 'command', args: { action: 'set', target: names, ...(colour ? { color: String(colour).toLowerCase() } : {}), ...(size ? { size: ENGINE_SIZE[size] } : {}) } }], step);
+  if ((size && !ENGINE_SIZES.has(size)) || (!colour && !size)) return refuse('no_value');
+  const r = run(ctx, s, [{ id: 'set', type: 'command', args: { action: 'set', target: names, ...(colour ? { color: String(colour).toLowerCase() } : {}), ...(size ? { size } : {}) } }], step);
   if (!r?.ok) return refuse('refused');
   s.last = names;
   return done(names);
