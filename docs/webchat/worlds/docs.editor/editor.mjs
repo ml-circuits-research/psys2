@@ -13,10 +13,12 @@
 import {
   DEFAULT_TITLE, highlightHex, colorName, TITLE_SIZE_MIN, TITLE_SIZE_MAX, titleBlock, containers, getText, blockText, addMark, cutMark, covered, anyMark,
   sliceMarks, spliceText, remapMarks, hiddenTitle, normalizeMarks, sentencesOf, findAll, toDoc, toText, toHtml, stats as computeStats, documentWords, setText, wordsIn,
-} from './model.mjs?v=2f37cc47a6';
-import { ask as askAnimals } from '../../lib/knowledge/animals.mjs?v=652ea6b1f5';   // the animals of the catalog (k.animals), read by lookup from a bundle generated from it
-import { basicColourNames } from '../../lib/knowledge/values.mjs?v=0d60c4bf76';   // the one colour reader (k.values)
-import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs?v=ea2697a62c';
+} from './model.mjs?v=50dd410b17';
+import { ask as askAnimals } from '../../lib/knowledge/animals.mjs?v=93a0e70796';   // the animals of the catalog (k.animals), read by lookup from a bundle generated from it
+import { basicColourNames } from '../../lib/knowledge/values.mjs?v=59791a2827';   // the one colour reader (k.values)
+import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs?v=16c54c0a04';
+import { sync, snap, commit, restore, newId, addBlock, show, createDoc } from './document.mjs?v=c52da76964';   // the document itself (state hygiene, history, a new document): the tool these word operations build on
+export { createDoc } from './document.mjs?v=c52da76964';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const MAX_HISTORY = 50;
@@ -36,31 +38,9 @@ const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', '
 const plural = (n, word) => (n === 1 ? word : /[^aeiou]y$/.test(word) ? `${word.slice(0, -1)}ies` : /(s|x|ch|sh)$/.test(word) ? `${word}es` : `${word}s`);
 const an = (w) => `${/^[aeiou]/i.test(w) ? 'an' : 'a'} ${String(w).replace(/_/g, ' ')}`;
 const words = (s) => String(s).trim().split(/\s+/).filter(Boolean);
-const show = (ctx) => ctx.request('ui.openTab', { tab: 'editor' });
 const sentencesCount = (t) => sentencesOf(t).length;
 
 // ---- state hygiene ---------------------------------------------------------------------------------
-function sync(s) {
-  s.titleMarks ??= []; s.titleAlign ??= 'left'; s.titleSize ??= 0; s.selection ??= null; s.focus ??= null;
-  for (const b of s.blocks) {
-    if (b.kind === 'list') { b.style ??= 'bullet'; if (b.style === 'task') { b.checked ??= []; while (b.checked.length < b.items.length) { budget.tick('ops.sync'); b.checked.push(false); } b.checked.length = b.items.length; } else delete b.checked; }
-    if (b.kind === 'heading') b.level ??= 2;
-    if (b.kind !== 'rule') normalizeMarks(b);
-  }
-  normalizeMarks(titleBlock(s));
-  const sel = s.selection;
-  if (sel?.type === 'blocks') {
-    const ids = sel.blocks.filter((id) => id === 'title' || s.blocks.some((b) => b.id === id));
-    s.selection = ids.length ? { type: 'blocks', blocks: ids } : null;
-  } else if (sel?.type === 'range') {
-    const b = blockById(s, sel.block);
-    const len = b ? getText(b, sel.at)?.length : undefined;
-    if (len === undefined) s.selection = b && b.kind !== 'rule' ? { type: 'blocks', blocks: [b.id] } : null;
-    else { const from = Math.max(0, Math.min(sel.from, len)), to = Math.max(0, Math.min(sel.to, len)); s.selection = to > from || sel.item ? { ...sel, from, to } : null; }
-  } else if (sel) s.selection = null;
-  s.doc = toDoc(s);
-  s.stats = computeStats(s);
-}
 /** The derived parts (TipTap JSON, statistics) and the clamped selection of a state: what the matrix's `toState` calls (fns.mjs). */
 export const finish = sync;
 /** Chat abbreviations of block kinds ("read para 1"). */
@@ -106,16 +86,6 @@ function trimTail(text, polite = true) {
 }
 
 // ---- history ---------------------------------------------------------------------------------------
-const snap = (s) => structuredClone({ title: s.title, titleMarks: s.titleMarks, titleAlign: s.titleAlign, titleSize: s.titleSize, blocks: s.blocks, cursor: s.cursor, nextId: s.nextId, selection: s.selection });
-function commit(s) {
-  s.history.push(snap(s));
-  while (s.history.length > MAX_HISTORY) { budget.tick('ops.commit'); s.history.shift(); }
-  s.future = [];
-}
-function restore(s, sn) {
-  s.title = sn.title; s.titleMarks = sn.titleMarks ?? []; s.titleAlign = sn.titleAlign ?? 'left'; s.titleSize = sn.titleSize ?? 0;
-  s.blocks = sn.blocks; s.cursor = sn.cursor; s.nextId = sn.nextId; s.selection = sn.selection ?? null; s.dictBlock = null;
-}
 /**
  * What one history step did, in the world's words, from the two documents it lay between (by block id): "put back the paragraph you deleted", "took out the heading you added". `undoing` says which way
  * the user is going; `from` is the document now, `to` the one it becomes. null when the difference is not one block (a mark, a title): the caller says the plain sentence.
@@ -150,13 +120,6 @@ function _redo(ctx) {
 }
 
 // ---- helpers ---------------------------------------------------------------------------------------
-const newId = (s) => `b${s.nextId++}`;
-function addBlock(s, block, index = s._ins ?? s.blocks.length) {
-  const b = { id: newId(s), ...block };
-  s.blocks.splice(index, 0, b);
-  s.cursor = index;
-  return b;
-}
 const wordCount = (s) => documentWords(s);
 
 /** Text for reading aloud. */
@@ -1124,15 +1087,6 @@ function _interceptInput(ctx, text) {
   return { handled: true, reply: added ? 'Added.' : '' };
 }
 
-export function createDoc(ctx, title, blocks) {
-  const s = ctx.state;
-  commit(s);
-  s.title = title; s.titleMarks = []; s.titleAlign = 'left'; s.titleSize = 0; s.blocks = []; s.dictBlock = null; s.selection = null;
-  for (const b of blocks) addBlock(s, b);
-  s.cursor = 0;
-  show(ctx);
-  ctx.effect('speech.say', { text: title });
-}
 
 const listKey = (raw) => {
   const n = String(raw).toLowerCase().replace(/[^a-z0-9' -]+/g, ' ').replace(/\s+/g, ' ').trim().replace(/^(my|the|a|an|our)\s+/, '').replace(/\s+list$/, '');

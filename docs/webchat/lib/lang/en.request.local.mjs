@@ -52,6 +52,9 @@ export const REQUEST_LOCAL = `
 # done.change with its key (sopworld 0.153.0: a reply fact with a key is said by <name>.<key>); the library's proposal in examples/tool-app.mjs PROPOSED_EN, local until published (questions.md Q47 [KNOW])
 @w.lang.en.reply.local.undo_did w.lang.en.reply name=done.undo.did count=one role=did text="OK, I undid it ({did})."
 @w.lang.en.reply.local.redo_did w.lang.en.reply name=done.redo.did count=one role=did text="OK, I did it again ({did})."
+@w.lang.en.reply.local.nothing_known w.lang.en.reply name=refused.nothing_known count=one role=about text="I know nothing about {about} in my knowledge yet."
+@w.lang.en.reply.local.no_composer w.lang.en.reply name=refused.no_composer count=one text="I cannot write compositions yet: the library has no composer (std.compose) in this build."
+@w.lang.en.reply.local.change_about_1 w.lang.en.reply name=done.change.about count=one role=thing role=value text="The {thing} is about {value} now."
 @w.lang.en.reply.local.page w.lang.en.reply name=done.page count=one text="Here is a fresh sheet of paper. What shall we draw?"
 @w.lang.en.reply.local.page_kept w.lang.en.reply name=done.page.kept count=one text="Here is a fresh sheet of paper! Your old picture is still there if you say “undo”."
 @w.lang.en.reply.local.change_place_1 w.lang.en.reply name=done.change.place count=one role=thing role=value text="I moved the {thing} to the {value}."

@@ -16,11 +16,11 @@
  */
 import { BUNDLED_PERSON } from '../knowledge/bundled-person.mjs?v=6291ed8960';
 import { en } from '../lang/en.mjs?v=37bb133489';
-import { numberWords, numberValue } from '../knowledge/values.mjs?v=0d60c4bf76';
+import { numberWords, numberValue } from '../knowledge/values.mjs?v=59791a2827';
 import { ACT_VERBS } from '../../worlds/acts/verbs.generated.mjs?v=8fbdca66b6';
 import { personView } from './person-view.mjs?v=ceeabdb255';
 import { guard } from '../formalizer/guard.mjs?v=82a55329d9';
-import { within, TIMED_OUT } from './knowledge-lookup.mjs?v=a6bab7ea96';
+import { within, TIMED_OUT } from './knowledge-lookup.mjs?v=7c9872d269';
 
 export { personView };
 

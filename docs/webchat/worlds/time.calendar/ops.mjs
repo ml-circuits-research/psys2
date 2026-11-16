@@ -7,7 +7,7 @@
 // declined (`accepts`). No day, month or season is listed in this file. Browser-safe.
 import { World, cycleAdd, cycleDiff, statedDay, readClock, writeClock } from '../../lib/vendor/sopworld/sopworld.mjs?v=2363f3936d';
 import { BUNDLED_TIME } from '../../lib/knowledge/bundled-time.mjs?v=47d3b8489a';
-import { parseLine } from '../../lib/knowledge/catalog.mjs?v=0372695257';
+import { parseLine } from '../../lib/knowledge/catalog.mjs?v=339ac7a09d';
 import { en } from '../../lib/lang/en.mjs?v=37bb133489';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)

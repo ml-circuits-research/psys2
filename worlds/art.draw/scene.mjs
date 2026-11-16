@@ -49,7 +49,7 @@ export function shadeHex(hex, dl = 0, ds = 0) {
 }
 /** Canonical color name from spoken words: ["dark", "blue"] -> "dark blue"; null when it is not a color. A name the catalog has whole ("light blue", "dark red") is that colour; otherwise a shade word before a colour. */
 export function canonColor(words) {
-  const ws = (Array.isArray(words) ? words : String(words ?? '').toLowerCase().split(/[\s_-]+/)).map((w) => String(w).toLowerCase()).filter(Boolean);
+  const ws = (Array.isArray(words) ? words : String(words ?? '').toLowerCase().split(/[\s_-]+/)).map((w) => String(w).toLowerCase()).filter(Boolean);   // glue-lint: tool-data (colour name)
   if (!ws.length) return null;
   const whole = colourName(ws);
   if (whole) return whole;
@@ -61,7 +61,7 @@ export function canonColor(words) {
 }
 /** Hex of a canonical color name ("dark blue", "red"); a hex string passes through; unknown names give grey. */
 export function colorHex(name) {
-  if (typeof name === 'string' && /^#[0-9a-f]{6}$/i.test(name)) return name;
+  if (typeof name === 'string' && /^#[0-9a-f]{6}$/i.test(name)) return name;   // glue-lint: tool-data (colour hex)
   const canon = canonColor(name);
   if (!canon) return colourHex('grey');
   const own = colourHex(canon);
@@ -424,11 +424,11 @@ export function partGuessed(key, partKey) {
 /** The key of an object's kind: its kind, or `composite:<thing>`. */
 export const kindKey = (o) => (o?.kind === 'composite' && o.thing ? COMPOSITE + o.thing : o?.kind);
 /** The spoken name of a kind key ("composite:castle" -> "castle"). */
-export const kindName = (key) => (String(key).startsWith(COMPOSITE) ? String(key).slice(COMPOSITE.length).replace(/~\w+$/, '') : key);
+export const kindName = (key) => (String(key).startsWith(COMPOSITE) ? String(key).slice(COMPOSITE.length).replace(/~\w+$/, '') : key);   // glue-lint: tool-data (kind key)
 /** The registry key of a composite kind key ("composite:roof~x1y2" -> "roof~x1y2"): the thing an object names, which kindName shortens to the spoken word. */
 export const thingOfKey = (key) => String(key).slice(COMPOSITE.length);
 
-const plural1 = (n) => (/(s|x|ch|sh)$/.test(n) ? `${n}es` : /[^aeiou]y$/.test(n) ? `${n.slice(0, -1)}ies` : `${n}s`);
+const plural1 = (n) => (/(s|x|ch|sh)$/.test(n) ? `${n}es` : /[^aeiou]y$/.test(n) ? `${n.slice(0, -1)}ies` : `${n}s`);   // glue-lint: tool-data (kind name)
 const hexOfPart = (p) => p.rgb ?? (BASE_NAMES.has(p.colour[0]) ? p.colour[0] : 'grey');
 const trianglePts = ({ x, y, w, h, pointing = 'up' }) => ({
   up: [[x + w / 2, y], [x + w, y + h], [x, y + h]], down: [[x, y], [x + w, y], [x + w / 2, y + h]],
@@ -439,14 +439,14 @@ const trianglePts = ({ x, y, w, h, pointing = 'up' }) => ({
 export function thingGroups(name, src = THINGS) {
   const groups = new Map();
   for (const p of src[name] ?? []) {
-    const base = p.kind ?? p.name.replace(/^(?:left|right|front|back|top|bottom|middle|upper|lower|inner|outer)_/, '');   // left_tower and right_tower are two towers
+    const base = p.kind ?? p.name.replace(/^(?:left|right|front|back|top|bottom|middle|upper|lower|inner|outer)_/, '');   // left_tower and right_tower are two towers   // glue-lint: tool-data (catalog part name)
     if (!groups.has(base)) groups.set(base, []);
     groups.get(base).push(p);
   }
   const out = [];
   for (const [base, members] of groups) {
     const key = members.length > 1 ? plural1(base) : base;
-    const words = new Set([key, base, plural1(base), ...members.map((m) => m.name.replace(/_/g, ' '))]);
+    const words = new Set([key, base, plural1(base), ...members.map((m) => m.name.replace(/_/g, ' '))]);   // glue-lint: tool-data (catalog part name)
     out.push({ key, base, members, words: [...words] });
   }
   return out;
@@ -493,7 +493,7 @@ export function thingDef(name) {
   if (!isThing(name)) return undefined;
   if (thingDefs.has(name)) return thingDefs.get(name);
   if (CUSTOM.has(name)) {   // a piece taken apart or a group the user built: its parts are stored, not catalog facts
-    const c = CUSTOM.get(name), words = (n) => [...new Set([n, n.replace(/s$/, ''), plural1(n)])];
+    const c = CUSTOM.get(name), words = (n) => [...new Set([n, n.replace(/s$/, ''), plural1(n)])];   // glue-lint: tool-data (kind name)
     const names = Object.fromEntries([...new Set(c.parts.map((p) => p.n))].map((n) => [n, words(n)]));
     const def = { size: c.size, aspect: c.aspect, color: null, names, thing: name, composite: true, custom: true, shape: c, build: () => c.parts };
     thingDefs.set(name, def);
@@ -701,7 +701,7 @@ export function registerShape(name, shape) {
   const json = JSON.stringify(shape);
   let h = 2166136261;
   for (let i = 0; i < json.length; i++) h = Math.imul(h ^ json.charCodeAt(i), 16777619) >>> 0;
-  const key = `${String(name).replace(/[~\s]+/g, ' ').trim()}~${h.toString(36)}`;
+  const key = `${String(name).replace(/[~\s]+/g, ' ').trim()}~${h.toString(36)}`;   // glue-lint: tool-data (shape key)
   if (!CUSTOM.has(key)) { CUSTOM.set(key, shape); thingDefs.delete(key); partCache.delete(COMPOSITE + key); thingCache.delete(key); }
   return COMPOSITE + key;
 }

@@ -9,7 +9,7 @@
 // The title is a pseudo block (id 'title') kept in state.title, titleMarks, titleAlign, titleSize.
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
-import { colourName, colourHex } from '../../lib/knowledge/values.mjs?v=0d60c4bf76';   // the one colour reader (k.values)
+import { colourName, colourHex } from '../../lib/knowledge/values.mjs?v=59791a2827';   // the one colour reader (k.values)
 export const DEFAULT_TITLE = 'Untitled document';
 export const MARK_TYPES = ['link', 'bold', 'italic', 'underline', 'strike', 'code', 'highlight'];
 // A highlight colour is any colour of the catalog (the one reader, k.values) drawn as a highlighter does: the colour mixed towards white. No colour table lives in this world.
@@ -159,23 +159,23 @@ export function sentenceRanges(text) {
   const re = /[^.!?]*[.!?]+|[^.!?]+$/g;
   for (const m of String(text).matchAll(re)) {
     let from = m.index, to = m.index + m[0].length;
-    while (from < to && /\s/.test(text[from])) { budget.tick('model.sentenceRanges'); from++; }
-    while (to > from && /\s/.test(text[to - 1])) { budget.tick('model.sentenceRanges2'); to--; }
+    while (from < to && /\s/.test(text[from])) { budget.tick('model.sentenceRanges'); from++; }   // glue-lint: tool-data (document text)
+    while (to > from && /\s/.test(text[to - 1])) { budget.tick('model.sentenceRanges2'); to--; }   // glue-lint: tool-data (document text)
     if (to > from) out.push([from, to]);
   }
   return out;
 }
 export const sentencesOf = (t) => sentenceRanges(t).map(([a, b]) => String(t).slice(a, b));
 export function wordRanges(text) {
-  return [...String(text).matchAll(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu)].map((m) => [m.index, m.index + m[0].length]);
+  return [...String(text).matchAll(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu)].map((m) => [m.index, m.index + m[0].length]);   // glue-lint: tool-data (document text)
 }
-export const wordsIn = (s) => (String(s ?? '').match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu) ?? []).length;
-const escRe = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+export const wordsIn = (s) => (String(s ?? '').match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu) ?? []).length;   // glue-lint: tool-data (document text)
+const escRe = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');   // glue-lint: tool-data (document text)
 /** All occurrences of `needle` (case-insensitive) in a text: [[from, to]]. `whole` requires word boundaries. */
 export function findAll(text, needle, whole = true) {
   const n = String(needle).trim();
   if (!n) return [];
-  const re = whole ? new RegExp(`(?<![\\p{L}\\p{N}])${escRe(n)}(?![\\p{L}\\p{N}])`, 'giu') : new RegExp(escRe(n), 'giu');
+  const re = whole ? new RegExp(`(?<![\\p{L}\\p{N}])${escRe(n)}(?![\\p{L}\\p{N}])`, 'giu') : new RegExp(escRe(n), 'giu');   // glue-lint: tool-data (document text)
   return [...String(text).matchAll(re)].map((m) => [m.index, m.index + m[0].length]);
 }
 /** Every text of the document, title first: [{ b, at, text }]. */
@@ -274,7 +274,7 @@ function md(b, at, text) {
   for (let i = 0; i + 1 < cuts.length; i++) {
     let seg = text.slice(cuts[i], cuts[i + 1]);
     const act = ms.filter((m) => m.from <= cuts[i] && m.to >= cuts[i + 1]);
-    const lead = seg.match(/^\s*/)[0], trail = seg.match(/\s*$/)[0];
+    const lead = seg.match(/^\s*/)[0], trail = seg.match(/\s*$/)[0];   // glue-lint: tool-data (document text)
     const core = seg.trim();
     if (!core) { out += seg; continue; }
     let r = core;
@@ -291,7 +291,7 @@ function md(b, at, text) {
   }
   return out;
 }
-const mdCell = (t) => String(t).replace(/\|/g, '\\|');
+const mdCell = (t) => String(t).replace(/\|/g, '\\|');   // glue-lint: tool-data (document text)
 /** Plain text or Markdown of the document. */
 export function toText(s, markdown) {
   const out = [];
@@ -317,7 +317,7 @@ export function toText(s, markdown) {
   }
   return out.join('\n\n') + '\n';
 }
-const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');   // glue-lint: tool-data (document text)
 function html(b, at, text) {
   const n = inline(text, (b.marks ?? []).filter((m) => m.at === at));
   if (!n) return '';

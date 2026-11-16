@@ -14,7 +14,7 @@ export const PLAN_WORLDS = [
 ];
 /** What "is a kind of" is for the planner: the kind chain of the people (a man is a person, a doctor is a person). */
 const KIND_KEYS = ['is_a', 'kind_of', 'is', 'age'];
-import { parseLine } from '../knowledge/catalog.mjs?v=0372695257';
+import { parseLine } from '../knowledge/catalog.mjs?v=339ac7a09d';
 export const PLAN_CHAIN = [{ type: 'k.people.kind', keys: [...KIND_KEYS, 'drawing'] }, { type: 'k.people.role', keys: [...KIND_KEYS, 'drawing'] }];
 
 const hosts = new WeakMap();

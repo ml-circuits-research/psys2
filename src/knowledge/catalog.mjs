@@ -17,10 +17,10 @@
 const unq = (t) => (t.startsWith('"') ? JSON.parse(t) : t);
 /** `@id type key=value key=value "quoted"` -> { id, type, attrs: { key: [values] } }, or null. */
 export function parseLine(line) {
-  const m = /^@(\S+)\s+(\S+)\s*(.*)$/.exec(line);
+  const m = /^@(\S+)\s+(\S+)\s*(.*)$/.exec(line);   // glue-lint: tool-data (catalog row)
   if (!m) return null;
   const attrs = {};
-  for (const t of m[3].matchAll(/([A-Za-z_][A-Za-z0-9_.]*)=("(?:[^"\\]|\\.)*"|\S+)/g)) (attrs[t[1]] ??= []).push(unq(t[2]));
+  for (const t of m[3].matchAll(/([A-Za-z_][A-Za-z0-9_.]*)=("(?:[^"\\]|\\.)*"|\S+)/g)) (attrs[t[1]] ??= []).push(unq(t[2]));   // glue-lint: tool-data (catalog row)
   return { id: m[1], type: m[2], attrs };
 }
 const num = (a, k) => Number(a[k][0]);
@@ -42,7 +42,7 @@ export function parseShard(text) {
       if (a.named) p.named = a.named[0];   // named=model: the part's name was guessed by a model (about a fifth of the imported parts)
       p.id = w.id; p.of = a.of[0]; order.push(p);
     } else if (w.type === 'k.objects.point') {
-      const key = w.attrs.part[0].replace(/^\$/, '');
+      const key = w.attrs.part[0].replace(/^\$/, '');   // glue-lint: tool-data (catalog id)
       if (!points.has(key)) points.set(key, []);
       points.get(key).push({ n: num(w.attrs, 'n'), x: num(w.attrs, 'x'), y: num(w.attrs, 'y') });
     } else if (w.type === 'core.word' && w.attrs.of?.[0] === 'k.objects.object.name') {
@@ -61,7 +61,7 @@ export function parseShard(text) {
 
 /** A loader that reads `<base>/<shard path>.sop` with fetch (browser, or Node 20+). */
 export const createFetchLoader = (base) => async (path) => {
-  const r = await fetch(`${String(base).replace(/\/$/, '')}/${path}.sop`);
+  const r = await fetch(`${String(base).replace(/\/$/, '')}/${path}.sop`);   // glue-lint: tool-data (catalog URL)
   if (!r.ok) throw new Error(`catalog shard ${path}: HTTP ${r.status}`);
   return r.text();
 };

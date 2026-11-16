@@ -1964,7 +1964,10 @@ export class DialogSession {
     if (!plan) return null;
     if (req.act === 'make' && (plan.target ?? req.target) && !boundMake(plan.target ?? req.target)) return null;
     if (!plan.ok && (plan.notHonoured ?? []).some((x) => x.code === 'no_target')) return null;   // nothing named: the door's other paths say it
-    if (req.act === 'make' && !req.target && !(req.constraints ?? []).length && (plan.assumed ?? []).some((a) => a.key === 'target')) return null;   // a bare "draw" (nothing said but the act): never a whole guessed from the world (the door asks, as on every path); "something random", "5 nodes" are the planner's
+    if (req.act === 'make' && !req.target && !(req.constraints ?? []).length && (plan.assumed ?? []).some((a) => a.key === 'target')) return null;
+    // a whole guessed while the turn names a thing of its own that is not a target ("add a paragraph about rain": a part, not a story to write over the open document) is not the
+    // binding's, unless a count names that unit ("draw 6 nodes"); with no thing named at all ("draw whatever you want") the planner's guess stands
+    if (req.act === 'make' && !req.target && (plan.assumed ?? []).some((a) => a.key === 'target') && (q.request.mentions ?? []).some((m) => m.kind) && !(req.constraints ?? []).some((c) => c.on === 'count' && c.of && unitOfWhole(live, language, c.of))) return null;   // a bare "draw" (nothing said but the act): never a whole guessed from the world (the door asks, as on every path); "something random", "5 nodes" are the planner's
     if (replace && (plan.notHonoured ?? []).length) return null;   // a reaction with words the world does not take ("I like horses") is not a revision of its result
     // P9: a plan that breaks a count said of one kind ("6 boxes" planned as 3 boxes and 3 circles) is never carried out; the honest reply names it
     if (plan.ok) {
@@ -2011,14 +2014,14 @@ export class DialogSession {
   /**
    * The primitives table of a bound world for the library's runPlan: each op and custom function its std.tool wires declare, from the world's operations (an op runs as an act of
    * this turn: `{ status: 'supported' }`, else a refusal `{ ok: false, code }`; a custom search is called with its arguments and the view), the view (the world's `toolView`
-   * operation: its state as facts). No snapshot / restore: the library's timeline takes a plan back by the inverse of its diff through the bindings, so an id is never given twice. No code here is per world.
+   * operation: its state as facts; a refusal may carry the tool's reply fact name and roles). No snapshot / restore: the library's timeline takes a plan back by the inverse of its diff through the bindings, so an id is never given twice. No code here is per world.
    */
   _toolPrimitives(tabWorld, tools, labelBox = null) {
     const labelOf = () => (labelBox && typeof labelBox === 'object' ? labelBox.text : labelBox);
     const world = this.engine.set.get(tabWorld);
     const ops = world?.ops ?? {};
     const out = {};
-    for (const name of tools.ops.keys()) if (typeof ops[name] === 'function') out[name] = (args) => { const r = this._runWorldAct(tabWorld, name, { ...args, step: `turn${this._msg}`, label: labelOf() }); return r?.status === 'supported' ? r : { ok: false, code: r?.code ?? 'refused', reply: 'why.nothing', roles: {} }; };
+    for (const name of tools.ops.keys()) if (typeof ops[name] === 'function') out[name] = (args) => { const r = this._runWorldAct(tabWorld, name, { ...args, step: `turn${this._msg}`, label: labelOf() }); return r?.status === 'supported' ? r : { ok: false, code: r?.code ?? 'refused', reply: r?.reply ?? 'why.nothing', roles: r?.roles ?? {} }; };   // a tool's refusal may name its reply fact (refused.nothing_known)
     for (const name of tools.customs.keys()) if (typeof ops[name] === 'function') out[name] = (args, view) => ops[name](args, view);
     const state = () => { if (!this.isession.state[tabWorld]) this.isession.state[tabWorld] = typeof ops.initialState === 'function' ? ops.initialState() : {}; return this.isession.state[tabWorld]; };
     out.view = () => (typeof ops.toolView === 'function' ? ops.toolView({ state: state() }) : []);
