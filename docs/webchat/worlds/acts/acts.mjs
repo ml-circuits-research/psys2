@@ -27,10 +27,10 @@ import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
 import { createEffects, EFFECT_ACTS } from './effects.mjs?v=e3eede06a8';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
-import { colourName } from '../../lib/knowledge/values.mjs?v=c3d5c59521';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=185de688b8';
-import { resolvePhrase } from './np-lib.mjs?v=871d1b26e3';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
-import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=04b6952682';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { colourName } from '../../lib/knowledge/values.mjs?v=24c3ed2609';   // the one colour reader (k.values)
+import { en } from '../../lib/lang/en.mjs?v=6675328a78';
+import { resolvePhrase } from './np-lib.mjs?v=aa08812734';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
+import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=6e58a18779';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------

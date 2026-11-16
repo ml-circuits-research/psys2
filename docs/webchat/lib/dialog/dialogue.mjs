@@ -24,14 +24,14 @@
  * through `ctx.sessionFacts()` and the operation things.show of session.things (spec 23); this module only offers the facts.
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { RequestDialogue } from './request.mjs?v=56776437a4';
-import { en } from '../lang/en.mjs?v=185de688b8';
-import { GRAMMAR } from './continuation.mjs?v=7afe519f0b';
+import { RequestDialogue } from './request.mjs?v=54a6b42177';
+import { en } from '../lang/en.mjs?v=6675328a78';
+import { GRAMMAR } from './continuation.mjs?v=f35e93733e';
 import { touched } from './followup.mjs?v=88af56c068';
-import { relativeTurn } from './relative.mjs?v=83c1090d84';
-import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=1c7c025d63';
+import { relativeTurn } from './relative.mjs?v=013cae2386';
+import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=f4503fb657';
 import { classify, describeReferent, plain } from './meta.mjs?v=aa6dfcad14';
-import { compareTimes, loadTime } from '../knowledge/time.mjs?v=1bcae52cee';
+import { compareTimes, loadTime } from '../knowledge/time.mjs?v=e2cc39514a';
 
 const LOG_LIMIT = 60;
 const FOCUS_WINDOW = 30;

@@ -1,0 +1,17 @@
+# k.genres/shards/list: the genre "list": 2 parts in order with how many times each occurs, and 2 steps (the moves of each part in order, with alternatives and sentence counts).
+# sources: hand-core 1 (hand-written in this repository: tools/genres-core.mjs; the works cited are in WORLD.md)
+# license: CC0-1.0
+# script: tools/genres-core.mjs
+
+@k.genres.genre.list k.genres.genre name=list about="A list: a heading that names what is listed, then three to eight items, each one sentence." register=report unit=paragraph own="The heading and the counts are this repository's choice; the items are examples of the topic, in the plain report register." core.source="hand-core 1"
+
+# heading
+@k.genres.part.list.heading k.genres.part genre=list name=heading n=1 min=1 max=1 about="Name what is listed." own="This repository's choice." core.source="hand-core 1"
+@k.genres.step.list.heading.1.introduce_topic k.genres.step genre=list part=heading n=1 move="introduce topic" min=1 max=1 core.source="hand-core 1"
+
+# items
+@k.genres.part.list.items k.genres.part genre=list name=items n=2 min=1 max=1 about="The things listed, one sentence each." own="This repository's choice." core.source="hand-core 1"
+@k.genres.step.list.items.1.give_example k.genres.step genre=list part=items n=1 move="give example" min=3 max=8 core.source="hand-core 1"
+
+# Other names of the genre.
+@k.genres.word.genre.list core.word text=lists text=checklist text="bullet list" text="list of things" means=list of=k.genres.genre.name core.source="hand-core 1"

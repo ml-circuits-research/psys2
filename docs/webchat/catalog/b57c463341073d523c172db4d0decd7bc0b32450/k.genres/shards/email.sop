@@ -1,0 +1,31 @@
+# k.genres/shards/email: the genre "email": 5 parts in order with how many times each occurs, and 7 steps (the moves of each part in order, with alternatives and sentence counts).
+# sources: hand-core 1 (hand-written in this repository: tools/genres-core.mjs; the works cited are in WORLD.md)
+# license: CC0-1.0
+# script: tools/genres-core.mjs
+
+@k.genres.genre.email k.genres.genre name=email about="An email: a greeting, an opening that says what it is about, one or two paragraphs, a closing that asks for an answer, and a signature." register=personal unit=paragraph also_move="give example" also_move="raise a question" own="The parts and the counts are the conventional form of an email; no published work is cited for them." core.source="hand-core 1"
+
+# greeting
+@k.genres.part.email.greeting k.genres.part genre=email name=greeting n=1 min=1 max=1 about="Greet the reader." own="The convention of an email." core.source="hand-core 1"
+@k.genres.step.email.greeting.1.greet k.genres.step genre=email part=greeting n=1 move=greet min=1 max=1 core.source="hand-core 1"
+
+# opening
+@k.genres.part.email.opening k.genres.part genre=email name=opening n=2 min=1 max=1 about="Say what the email is about." own="The convention of an email." core.source="hand-core 1"
+@k.genres.step.email.opening.1.state_purpose k.genres.step genre=email part=opening n=1 move="state purpose" min=1 max=1 core.source="hand-core 1"
+
+# body
+@k.genres.part.email.body k.genres.part genre=email name=body n=3 min=1 max=2 about="The details." own="The counts are this repository's choice." core.source="hand-core 1"
+@k.genres.step.email.body.1.generalise k.genres.step genre=email part=body n=1 move=generalise min=1 max=2 core.source="hand-core 1"
+@k.genres.step.email.body.1.give_example k.genres.step genre=email part=body n=1 move="give example" min=1 max=2 core.source="hand-core 1"
+@k.genres.step.email.body.2.raise_a_question k.genres.step genre=email part=body n=2 move="raise a question" min=0 max=1 core.source="hand-core 1"
+
+# closing
+@k.genres.part.email.closing k.genres.part genre=email name=closing n=4 min=1 max=1 about="Ask for an answer." own="The convention of an email." core.source="hand-core 1"
+@k.genres.step.email.closing.1.invite_reply k.genres.step genre=email part=closing n=1 move="invite reply" min=1 max=1 core.source="hand-core 1"
+
+# signature
+@k.genres.part.email.signature k.genres.part genre=email name=signature n=5 min=1 max=1 about="A good wish and your name." own="The convention of an email." core.source="hand-core 1"
+@k.genres.step.email.signature.1.sign_off k.genres.step genre=email part=signature n=1 move="sign off" min=1 max=1 core.source="hand-core 1"
+
+# Other names of the genre.
+@k.genres.word.genre.email core.word text=emails text="e-mail" text="e-mails" text=mail means=email of=k.genres.genre.name core.source="hand-core 1"

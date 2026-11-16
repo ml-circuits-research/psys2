@@ -9,7 +9,7 @@
  */
 export const CATALOG_PIN = Object.freeze({
   repo: 'https://github.com/ml-circuits-research/sop-knowledge-worlds',
-  commit: '7042ea706c046abad2f5513d8dcb7aceb4eaae55',   // 2026-11-16 psys2 Q51 [KNOW] rows (Romanian lemmas/forms/senses, hand-cues-more, reply rows, dialogue continue/inherit, layers, water plant, document words); before 0966924e, the catalog head: w.request, w.dialogue, k.expect, w.lang.en cues (spec 28); before 085bc0da (w.lang.ro.fn, frames and dictionary as data, plural categories, words shards, k.kinds arrangement; before: w.person, k.layouts outlines + shape frames, w.lang.ro reply/request templates, w.lang.en.fn, k.colours the one home of colour names, K3-K7, K10, w.list v4, sensitivity key): every generated file names it
+  commit: 'b57c463341073d523c172db4d0decd7bc0b32450',   // 2026-11-16 psys2 Q96-Q99 [KNOW] rows (letter/note/email/poem/list genres, Romanian face and mood words, k.expect part slot key, variant step cues, text reply rows); before 7042ea70, psys2 Q51 [KNOW] rows (Romanian lemmas/forms/senses, hand-cues-more, reply rows, dialogue continue/inherit, layers, water plant, document words); before 0966924e, the catalog head: w.request, w.dialogue, k.expect, w.lang.en cues (spec 28); before 085bc0da (w.lang.ro.fn, frames and dictionary as data, plural categories, words shards, k.kinds arrangement; before: w.person, k.layouts outlines + shape frames, w.lang.ro reply/request templates, w.lang.en.fn, k.colours the one home of colour names, K3-K7, K10, w.list v4, sensitivity key): every generated file names it
   path: 'docs/worlds',
 });
 

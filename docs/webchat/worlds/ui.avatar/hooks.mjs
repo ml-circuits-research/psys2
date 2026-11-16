@@ -2,9 +2,9 @@
 // ui.avatar (spec 21): the hooks of the schema world. The acts (make, remove, change, place, ask, undo, redo, save, load) are read by the generated grammar; what an act
 // DOES on a face is the face logic over the catalog k.faces (worlds/ui.avatar/facelogic.mjs, state.face), reached through `domain`. The roles are joined back into the words
 // the face logic reads (it finds slot, variant, colour, feature, preset and mood by itself over the catalog data). Nothing here names a slot, a variant or an accessory.
-import * as F from './facelogic.mjs?v=b7313b18f4';
-import { DEFAULT_FACE } from './default-face.mjs?v=fb3ad43d95';
-import { animate, dataOf, ensure, setName, askName } from './own.mjs?v=59f7a18302';
+import * as F from './facelogic.mjs?v=9ccaa7c6eb';
+import { DEFAULT_FACE } from './default-face.mjs?v=23e7ca573f';
+import { animate, dataOf, ensure, setName, askName } from './own.mjs?v=19360d956c';
 
 const MOMENTS = new Set(['wink', 'nod', 'dance', 'wave', 'spin', 'jump', 'bounce', 'wiggle', 'blink']);
 const SIZE = /^(bigger|larger|longer|wider|smaller|tinier|shorter|narrower)$/;

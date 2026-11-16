@@ -1,0 +1,19 @@
+# w.lang.ro/shards/irregular-nouns: the plural of nouns of the face domain that no class gives (sprânceană, ochi, obraz, cercel, umăr, păr, mustață); the class gives the singular cells (psys2 Q96, Q99: the avatar's parts in Romanian).
+# sources: hand-core 1 (written by hand in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.ro.irregular.local.spranceana.pl w.lang.ro.irregular lemma=sprânceană form=sprâncene num=pl case=nomacc def=no core.source="hand-core 1"
+@w.lang.ro.irregular.local.spranceana.pl_def w.lang.ro.irregular lemma=sprânceană form=sprâncenele num=pl case=nomacc def=yes core.source="hand-core 1"
+@w.lang.ro.irregular.local.ochi.pl w.lang.ro.irregular lemma=ochi form=ochi num=pl case=nomacc def=no core.source="hand-core 1"
+@w.lang.ro.irregular.local.ochi.pl_def w.lang.ro.irregular lemma=ochi form=ochii num=pl case=nomacc def=yes core.source="hand-core 1"
+@w.lang.ro.irregular.local.mustata.pl w.lang.ro.irregular lemma=mustață form=mustăți num=pl case=nomacc def=no core.source="hand-core 1"
+@w.lang.ro.irregular.local.mustata.pl_def w.lang.ro.irregular lemma=mustață form=mustățile num=pl case=nomacc def=yes core.source="hand-core 1"
+@w.lang.ro.irregular.local.obraz.pl w.lang.ro.irregular lemma=obraz form=obraji num=pl case=nomacc def=no core.source="hand-core 1"
+@w.lang.ro.irregular.local.obraz.pl_def w.lang.ro.irregular lemma=obraz form=obrajii num=pl case=nomacc def=yes core.source="hand-core 1"
+@w.lang.ro.irregular.local.cercel.pl w.lang.ro.irregular lemma=cercel form=cercei num=pl case=nomacc def=no core.source="hand-core 1"
+@w.lang.ro.irregular.local.cercel.pl_def w.lang.ro.irregular lemma=cercel form=cerceii num=pl case=nomacc def=yes core.source="hand-core 1"
+@w.lang.ro.irregular.local.umar.pl w.lang.ro.irregular lemma=umăr form=umeri num=pl case=nomacc def=no core.source="hand-core 1"
+@w.lang.ro.irregular.local.umar.pl_def w.lang.ro.irregular lemma=umăr form=umerii num=pl case=nomacc def=yes core.source="hand-core 1"
+@w.lang.ro.irregular.local.par.pl w.lang.ro.irregular lemma=păr form=peri num=pl case=nomacc def=no core.source="hand-core 1"
+@w.lang.ro.irregular.local.par.pl_def w.lang.ro.irregular lemma=păr form=perii num=pl case=nomacc def=yes core.source="hand-core 1"
