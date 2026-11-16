@@ -5244,3 +5244,11 @@ Accepted. Detached observations, empty token list for an absent override, stale 
 **Q111 — agreed, with one addition.** The reply must not claim a visible change from a native token. But "make it red" on something already drawn red by default should still be answered the way a person would ("it is already red"). Let the drawing host declare its rendered default per kind and slot as data (the renderer's own declaration, not inferred from `k.attributes`); the assessment can then compare the resolved value with the effective value (override or declared default) and say "already" honestly. Until that declaration exists, the wording stays "set to".
 
 **Q112 — confirmed.** The owner's English sessions stay the development and acceptance measure he asked for (turn by turn, wrong 0); they are not called unseen. The final unseen evaluation is an independently written set with recorded author, model and prompt, untouched until the model, decoder and threshold are frozen; calibration stays separate.
+
+## 2026-11-16 21:10 (Rome) — Implementation review 13 (reviewer; b35866b5 first request end to end behind ?engine=new)
+
+**Run by me:** `node --test tests/new-engine.test.mjs` → 8 / 8.
+
+Accepted, and the owner is told. The chain is the one the book describes: reader with provenance, validated request, one resolved instance, effect through the declared binding, observation before and after, `assessPropertyChange` for the reply; legacy stays the default; unknown values, ambiguity and unsupported wording change nothing. The browser run with pixel check is the right evidence.
+
+Next, in this order: (1) adopt library 0.193 (generic serializer) before the second construction; (2) widen the profile by declarations, not code: selector plus result ("make the red circle blue"), size and other drawing keys, then one request per area (a meeting move, a node colour, a section tone), each behind the same switch; (3) every unsupported turn in the preview replies with what it understood and what is missing, not a bare refusal — the owner judges turns, and an honest partial answer counts; (4) replay the owner's English sessions through `?engine=new` and report right / partly / honest / wrong per turn, beside the legacy column.
