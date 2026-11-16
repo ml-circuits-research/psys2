@@ -41,3 +41,12 @@ test('value anchors require identity or a unique source-backed declared normaliz
  const unicode=raw({...sample(),span:'set widget 🟦',constraints:[condition('🟦')]});assert.equal(bridge(unicode).decoded.candidates.length,1);
  const empty=raw({...sample(),constraints:[{...condition('cerulean'),value_span:''}]});assert.ok(bridge(empty).diagnostics.some(d=>d.reason==='unresolved-source-value-normalization'));
 });
+
+test('explicit value copies preserve wider evidence and require exact contained scalar ranges',()=>{
+ const p=raw({...sample(),span:'set widget to 🟦',constraints:[{...condition('🟦'),value_span:'to 🟦'}]});
+ p.ranges=[{path:['requests','0','constraints','0','value_span'],range:[11,15]},{path:['requests','0','constraints','0','value'],range:[14,15]}];
+ const r=bridge(p);assert.deepEqual(r.diagnostics,[]);assert.equal(r.decoded.candidates.length,1);
+ const request=r.packet.hypotheses[0].requests[0];assert.deepEqual(request.constraints[0].source,[11,15]);assert.deepEqual(request.evidence.find(e=>e.path.at(-1)==='value').ranges,[[14,15]]);
+ for(const edit of [q=>{q.requests[0].constraints[0].value='red';},q=>{q.ranges[1].range=[4,10];q.requests[0].constraints[0].value='widget';},q=>{q.ranges[0].range=[11,13];}]){const q=structuredClone(p);edit(q);const rejected=bridge(q);assert.equal(rejected.decoded.candidates.length,0);assert.ok(rejected.diagnostics.some(d=>d.reason==='invalid-source-copy-range'));}
+ const repeated=raw({...sample(),span:'set widget blue',constraints:[{...condition('blue'),value_span:'blue'}]},'blue; set widget blue');repeated.ranges=[{path:['requests','0','span'],range:[6,21]},{path:['requests','0','constraints','0','value'],range:[0,4]}];assert.equal(bridge(repeated).decoded.candidates.length,0);
+});

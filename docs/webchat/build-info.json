@@ -1,5 +1,5 @@
 {
-  "version": "3c4d74ad28",
+  "version": "af8f3f701d",
   "worlds": [
     "acts",
     "art.draw",
@@ -77,7 +77,7 @@
     "lib/dialog/person.mjs": "7dc827a56d69fb6a",
     "lib/dialog/property-selection.mjs": "b7471591d802336f",
     "lib/dialog/proposer.mjs": "864bbc94a77a065c",
-    "lib/dialog/raw-structural-bridge.mjs": "90cd58d16572c100",
+    "lib/dialog/raw-structural-bridge.mjs": "3239d974a5be681f",
     "lib/dialog/reader-routing.mjs": "dbf43b28c24a0305",
     "lib/dialog/relative.mjs": "86bdcccc600b28c5",
     "lib/dialog/request-check.mjs": "beb39b2c622f553d",
@@ -651,8 +651,8 @@
     "worlds/words/zo.json": "98c807997b12214c",
     "worlds/words.bloom.json": "1aee5298e6fe2c42"
   },
-  "builtAt": "2026-11-16T23:11:31.554Z",
-  "commit": "f18225f4-dirty",
+  "builtAt": "2026-11-16T23:34:10.974Z",
+  "commit": "b91c83ae-dirty",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "assets": {
     "app.mjs": "acad83ead9",
@@ -700,7 +700,7 @@
     "lib/dialog/person.mjs": "3400f16258",
     "lib/dialog/property-selection.mjs": "4ba30f3009",
     "lib/dialog/proposer.mjs": "b3c21ed7d7",
-    "lib/dialog/raw-structural-bridge.mjs": "8c7b251931",
+    "lib/dialog/raw-structural-bridge.mjs": "5762b43789",
     "lib/dialog/reader-routing.mjs": "e3f249bd5d",
     "lib/dialog/relative.mjs": "f081fe2052",
     "lib/dialog/request-check.mjs": "43279bde2b",

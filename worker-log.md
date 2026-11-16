@@ -4601,3 +4601,9 @@ Explicitly authorized compatibility-only weight cleanup evidence (all accompanyi
 | `training/sop-bert/runs/owner-20261116/structural-smoke-v2/latest.pt` | 288721216 | `68aa80d31ee569e21884a21179b207e4d30595fcd6c48098edd7765c73618616` |
 
 Integrated the frozen v1 trainer/verifier/calibration report (upstream 2defd637) and added its two fixture tests to the active gate. Final combined gate: 191 total, 190 passed, zero failed, one optional artifact skip. All 16 raw-exact calibration predictions are no-request; zero of 1,681 nonempty requests are exact. Present target count is zero of 39; high absence aggregates do not establish request competence. Prior actual source-only 1,853-row development replay remains unchanged. Frozen source hashes checked; no training restarted.
+
+### Explicit source-copy value ranges
+
+The raw bridge now accepts an explicit value range narrower than its original evidence span only when its exact Unicode-scalar substring equals the emitted value and lies within the value-span/request bounds. Wider condition provenance is retained; the value receives its actual narrower source evidence. Wrong substring, outside-parent pointers and invalid wider spans refuse; existing v1 direct identity and declared-normalization behavior is unchanged. Internal model heads remain outside RAW and require a separately versioned normalizer.
+
+Six bridge tests pass. Browser artifact rebuilt. Final active gate: 192 total, 191 passed, zero failed, one optional artifact skip. Actual functional replay remains 301 eligible honest/zero wrong and 1,347 setup exclusions; owner205 honest/zero wrong. This is an evidence contract improvement, not model activation or measured understanding. Frozen v1 artifacts unchanged.

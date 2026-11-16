@@ -74,10 +74,19 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,budget=200
     if(has(condition,'value')){
      if(['literal','string'].includes(prop?.valueKind)&&typeof condition.value==='string'){
       const supplied=has(condition,'value_span'),literal=supplied?condition.value_span:condition.value;
-      const identity=typeof literal==='string'&&literal.length>0&&literal===condition.value;
-      const normalization=identity?null:lookup('valueNormalizations',{area:raw.area,key:condition.key,canonical:prop.canonical,source:literal,value:condition.value,valueKind:prop.valueKind});
-      if(identity||normalization){c.value={kind:prop.valueKind,value:condition.value};anchor([...path,'value'],literal,normalization?.sourceWire??null,false,['constraints',String(ci),supplied?'value_span':'value']);}
-      else unresolved('unresolved-source-value-normalization',[...path,'value']);
+      const valuePath=[...rawPath,'constraints',String(ci),'value'],hasCopy=ranges.has(JSON.stringify(valuePath));
+      if(hasCopy){
+       // Explicit model copy pointers may be narrower than the original evidence span.
+       const outer=span?(supplied?locate(original.span,literal,span[0],[...rawPath,'constraints',String(ci),'value_span'],span):span):null;
+       const copy=outer?locate(original.span,condition.value,span[0],valuePath,outer):null;
+       if(copy){c.value={kind:prop.valueKind,value:condition.value};evidence.push({path:[...path,'value'],ranges:[copy],origin:'text'});}
+       else unresolved('invalid-source-copy-range',[...path,'value']);
+      }else{
+       const identity=typeof literal==='string'&&literal.length>0&&literal===condition.value;
+       const normalization=identity?null:lookup('valueNormalizations',{area:raw.area,key:condition.key,canonical:prop.canonical,source:literal,value:condition.value,valueKind:prop.valueKind});
+       if(identity||normalization){c.value={kind:prop.valueKind,value:condition.value};anchor([...path,'value'],literal,normalization?.sourceWire??null,false,['constraints',String(ci),supplied?'value_span':'value']);}
+       else unresolved('unresolved-source-value-normalization',[...path,'value']);
+      }
      }else unresolved('unresolved-value-representation',[...path,'value']);
     }
     if(!['eq','less.equal','greater.equal','degree','region'].includes(condition.operator))unresolved('requires-operator-reference-projection',path);
