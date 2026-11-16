@@ -19,6 +19,7 @@ export async function seedFunctionalContext({context={},host,kindMappings=[],inv
  if(input.previous)fail(null,'previous-context-not-replayed');
  const existing=input.existing??[];counters.requested=existing.length;
  if(!existing.length)return result();
+ for(const mapping of mappings)if(mapping.singleton===true&&existing.filter(item=>item?.kind===mapping.kind).length>1){fail(null,'multiple-singleton-context-objects',{kind:mapping.kind});counters.failed=existing.length;return result();}
  if(!host||typeof host.bindings!=='function'||typeof host.invoke!=='function'||typeof host.observe!=='function'){for(let i=0;i<existing.length;i++)fail(i,'missing-native-create-host');counters.failed=existing.length;return result();}
  try{operations=copyHostData(await host.bindings());observation=copyHostData(await host.observe());}catch{fail(null,'native-setup-observation-failed');counters.failed=existing.length;return result();}
  const validObservation=value=>plain(value)&&value.complete===true&&text(value.version)&&Array.isArray(value.objects)&&value.objects.every(o=>plain(o)&&text(o.id)&&text(o.source)&&text(o.sourceType));
@@ -40,6 +41,10 @@ export async function seedFunctionalContext({context={},host,kindMappings=[],inv
     if(descriptor.from==='name'){field='name';value=item.name;}
     else if(descriptor.from==='field'&&text(descriptor.key)){field=descriptor.key;value=item[field];}
     else if(descriptor.from==='kind'){field='kind';value=mapping.nativeKind??item.kind;}
+    else if(descriptor.from==='contextObject'&&text(descriptor.key)&&text(descriptor.sourceType)){
+     field=descriptor.key;const matches=items.filter(previous=>previous.name===item[field]&&previous.native.sourceType===descriptor.sourceType&&observation.objects.some(o=>o.source===previous.native.source));
+     if(matches.length!==1){fail(index,'unresolved-context-object',{field,sourceType:descriptor.sourceType});continue;}value=matches[0].native.id;
+    }
     else if(own(descriptor,'literal')&&text(mapping.nativeKind)&&descriptor.literal===mapping.nativeKind){field='kind';value=descriptor.literal;}
     else if(!isMake&&['createdIds','createdId'].includes(descriptor.from)){deferred.push([parameter,descriptor.from]);continue;}
     else{fail(index,'unsupported-setup-argument-source',{operation:op.id,parameter});continue;}
