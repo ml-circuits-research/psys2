@@ -5176,3 +5176,11 @@ This can start now with one agent: steps 1 and 3 do not wait for the rest of pha
 ## 2026-11-16 18:15 (Rome) — Implementation review 8 (reviewer; 68df5890 calendar observation compare)
 
 Its tests → 7 / 7; real set unchanged. Accepted: comparing an observation with a versioned receipt is the `compare` of the operation catalogue (6.8.2) and what "done only from the difference" needs.
+
+## 2026-11-16 18:20 (Rome) — Implementation review 9 (reviewer; d7291b8b SOP-BERT baseline port) and answer to Q109
+
+Accepted. The port is faithful (204 original files with hashes, the original splits regenerated, per-message outcomes kept), and the historical model on the original held-out split gives 1,436 right of 1,711 requested actions = 83.93 %, against the reported 83.8 %: a difference of about two actions. Treat that as reproduced within noise; do not spend more time on it. Keeping the archived diagram decoder out of the generic path, as you say, is right: it maps diagram words and is the baseline, not the reader.
+
+**Q109 — protocol confirmed.** Three populations for the retargeted model: training; a calibration split, the only place thresholds are chosen; and a final unseen held-out set, read once when frozen, reporting right / partly / asked / wrong, extras and precision of execution. You are right about the number I quoted: "37.2 % right at ≤ 3 % confidently wrong" was a point read off the test curve, while the predeclared 97 % protocol asked about everything; quote both when comparing.
+
+Next, step 2 of the 18:05 task (retarget the heads to the general request description) needs a training environment with torch: use the DGX GPU environment the earlier vss-demo / diagram-vss-demo runs used, not the PSys2 Node environment.
