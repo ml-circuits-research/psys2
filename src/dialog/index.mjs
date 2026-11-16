@@ -2074,10 +2074,10 @@ export class DialogSession {
       if (!op || typeof world?.ops?.[op] !== 'function') { const f = sayFact(lib, language, 'cannot.act.any', { act, world: name }); return { reply: f?.text ?? `I cannot ${act} here yet.`, ...(f ? { parts: f.parts } : {}), status: 'unsupported', info: { kind: 'intent' } }; }
       const r = this._runWorldAct(tabWorld, op, {});
       const did = r?.status === 'supported';
-      const said = String(r?.value ?? r?.note ?? '').trim() || (r?.reply ? replyOf(lib, language, r.reply, {})?.text : '') || sayFact(lib, language, `nothing.${act}`)?.text || '';   // a tool says what it did by a reply fact's name (done.undo, nothing.undo)
+      const said = String(r?.value ?? r?.note ?? '').trim() || (r?.reply ? replyOf(lib, language, r.reply, r.roles ?? {})?.text : '') || sayFact(lib, language, `nothing.${act}`)?.text || '';   // a tool says what it did by a reply fact's name (done.undo, nothing.undo)
       // the reply fact of the step (done.undo / done.redo, nothing.undo / nothing.redo): the world's English words stay what it said; every other language says the fact
       const fact = r?.reply ?? (did ? `done.${act}` : `nothing.${act}`);
-      return { reply: said, parts: [{ text: said, translate: true, say: { act: fact, roles: {} } }], status: r?.status ?? 'missing', info: { kind: 'door' }, frame: did ? { world: tabWorld, text: en, act } : null };
+      return { reply: said, parts: [{ text: said, translate: true, say: { act: fact, roles: r?.roles ?? {} } }], status: r?.status ?? 'missing', info: { kind: 'door' }, frame: did ? { world: tabWorld, text: en, act } : null };
     };
     const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, run });
     r.trace.request = flat;
@@ -2091,9 +2091,11 @@ export class DialogSession {
       const r = this._runWorldAct(tabWorld, op, args);
       done = r;
       after?.(r);
-      const said0 = String(r?.value ?? r?.note ?? '').trim() || 'I could not do that.';
+      const lib = this.engine.sopworld, language = requestLanguage(lib);
+      const fact = !String(r?.value ?? r?.note ?? '').trim() && r?.reply ? replyOf(lib, language, r.reply, r.roles ?? {}) : null;   // a tool says what it did by a reply fact's name (done.page, done.undo)
+      const said0 = String(r?.value ?? r?.note ?? '').trim() || fact?.text || 'I could not do that.';
       const said = corrections.length ? `I read ${corrections.map((c) => `"${c.said}" as "${c.as}"`).join(', ')}. ${said0}` : said0;   // what the reader repaired is said, as the plans say it
-      const parts = namedParts(said, [...(r?.names ?? []), ...(args?.ids ?? []).filter((x) => /_/.test(String(x)) || said.includes(String(x)))]);   // the names of the things in the reply are names
+      const parts = fact && !corrections.length ? [{ text: said, translate: true, say: { act: r.reply, roles: r.roles ?? {} } }] : namedParts(said, [...(r?.names ?? []), ...(args?.ids ?? []).filter((x) => /_/.test(String(x)) || said.includes(String(x)))]);   // the names of the things in the reply are names
       return { reply: said, ...(parts ? { parts } : {}), status: r?.status ?? 'missing', info: { kind: 'door' }, frame: r?.status === 'supported' ? { world: tabWorld, text: english, act } : null };
     };
     const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, run });

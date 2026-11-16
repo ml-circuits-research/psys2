@@ -65,6 +65,8 @@
 @pa.add.kind std.tool.param op=addShapes name=kind type=node required=true accepts=circle accepts=square accepts=rectangle accepts=diamond accepts=ellipse accepts=triangle accepts=hexagon accepts=star
 @pa.add.n std.tool.param op=addShapes name=n kind=integer min=1 max=12 default=1
 @pa.add.size std.tool.param op=addShapes name=size type=k.expect.scale by=step accepts=tiny accepts=small accepts=default accepts=big accepts=huge
+@v.add.size.default std.tool.value op=addShapes param=size value=default as=medium
+@v.add.size.big std.tool.value op=addShapes param=size value=big as=large
 @pa.add.layout std.tool.param op=addShapes name=layout accepts=row accepts=grid accepts=column accepts=circle
 @b.add std.tool.bind world=diagram act=make of=node op=addShapes makes=thing
 @a.add.kind std.tool.arg bind=$b.add param=kind from=step.kind
@@ -84,6 +86,13 @@
 @op.drop std.tool.op name=dropDiagram world=diagram param=ids effect=removes
 @b.drop std.tool.bind world=diagram act=remove of=diagram op=dropDiagram arg=ids<-step.things needs=exists(ids) removes=ids
 @op.move std.tool.op name=moveShapes world=diagram param=ids param=place param=anchor effect=changes
+@pa.move.place std.tool.param op=moveShapes name=place kind=atom
+@v.move.corner std.tool.value op=moveShapes param=place value=corner as=bottomLeft
+@v.move.centre std.tool.value op=moveShapes param=place value=centre as=center
+@v.move.top_left std.tool.value op=moveShapes param=place value=top_left as=topLeft
+@v.move.top_right std.tool.value op=moveShapes param=place value=top_right as=topRight
+@v.move.bottom_left std.tool.value op=moveShapes param=place value=bottom_left as=bottomLeft
+@v.move.bottom_right std.tool.value op=moveShapes param=place value=bottom_right as=bottomRight
 @c.thingAt std.tool.custom name=thingAt world=diagram kind=search in=place out=anchor doc="the newest shape of the kind a place names (next to it)"
 @b.move std.tool.bind world=diagram act=place of=node op=moveShapes arg=ids<-step.things arg=place<-step.place arg=anchor<-custom.thingAt needs=exists(ids)
 @op.arrange std.tool.op name=arrangeShapes world=diagram param=ids param=layout effect=changes doc="the shapes laid out again in a layout"
@@ -92,6 +101,8 @@
 @h.arrange.kind std.schema.honours world=diagram act=arrange on=kind on=layout of=node
 @op.set std.tool.op name=setShapes world=diagram param=ids param=colour param=size effect=changes
 @pa.set.size std.tool.param op=setShapes name=size type=k.expect.scale by=step accepts=tiny accepts=small accepts=default accepts=big accepts=huge
+@v.set.size.default std.tool.value op=setShapes param=size value=default as=medium
+@v.set.size.big std.tool.value op=setShapes param=size value=big as=large
 @b.set std.tool.bind world=diagram act=change of=node op=setShapes arg=ids<-step.things arg=colour<-step.colour arg=size<-step.size needs=exists(ids)
 # What the acts on the shapes that are there honour (the library's reference step resolves them by kind, the values said before the kind, "it" / "them")
 @h.remove.kind std.schema.honours world=diagram act=remove on=kind on=count on=attribute of=node

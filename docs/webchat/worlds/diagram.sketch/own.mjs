@@ -22,4 +22,4 @@ export function diagramGoal(ctx, { args = {} } = {}) {
   return req ? { words: req.topic ? [...new Set(topicCandidates(req.topic).flatMap((c) => c.split(' ')))] : [] } : null;
 }
 /** Spec 28 section 14: the tool primitives, the view and the declared search the request door calls (bound by request.sop's std.tool wires; tool.mjs). */
-export * from './tool.mjs?v=e5fb825186';
+export * from './tool.mjs?v=d4273453b6';

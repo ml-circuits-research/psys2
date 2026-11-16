@@ -46,6 +46,10 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.place_none_name w.lang.en.reply name=done.none role=name text="{name} is already there."
 @w.lang.en.reply.local.added_band w.lang.en.reply name=done.added.band role=band text="There was no {band}, so I added it to the ground."
 # done.change with its key (sopworld 0.153.0: a reply fact with a key is said by <name>.<key>); the library's proposal in examples/tool-app.mjs PROPOSED_EN, local until published (questions.md Q47 [KNOW])
+@w.lang.en.reply.local.undo_did w.lang.en.reply name=done.undo.did count=one role=did text="OK, I undid it ({did})."
+@w.lang.en.reply.local.redo_did w.lang.en.reply name=done.redo.did count=one role=did text="OK, I did it again ({did})."
+@w.lang.en.reply.local.page w.lang.en.reply name=done.page count=one text="Here is a fresh sheet of paper. What shall we draw?"
+@w.lang.en.reply.local.page_kept w.lang.en.reply name=done.page.kept count=one text="Here is a fresh sheet of paper! Your old picture is still there if you say “undo”."
 @w.lang.en.reply.local.change_place_1 w.lang.en.reply name=done.change.place count=one role=thing role=value text="I moved the {thing} to the {value}."
 @w.lang.en.reply.local.change_place_n w.lang.en.reply name=done.change.place count=other role=thing role=number role=value text="I moved {number} {thing:num=pl} to the {value}."
 @w.lang.en.reply.local.change_size_1 w.lang.en.reply name=done.change.size count=one role=thing role=value text="The {thing} is {value} now."

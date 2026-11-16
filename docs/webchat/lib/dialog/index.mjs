@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=37db1cc975';
+import { composeReply, sayOf } from './composed-reply.mjs?v=82531f6ed4';
 import { reviewForeign } from './foreign-reading.mjs?v=79d8decc9c';
 import { installTextGen } from './textgen.mjs?v=a8831e42a2';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=ff05a8582c';
@@ -28,7 +28,7 @@ import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voi
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=2d04b92a2e';
 import { machineReads } from '../translate/reading-policy.mjs?v=96bd6cc0e4';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=46ad500c88';
+import { langRoNow } from '../translate/frames-ro.mjs?v=d6d06e65b4';
 import { repairInContext } from '../translate/source-repair.mjs?v=e721161854';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=ff05a8582c';
 import { lexIndex } from '../worlds/lexicon.mjs?v=f0499f971c';
@@ -42,7 +42,7 @@ import { attachValues } from '../knowledge/values.mjs?v=0d60c4bf76';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3ebe6cdc98';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f39042bd20';
 import { Discourse } from './discourse.mjs?v=422ad5cc94';
-import { Dialogue } from './dialogue.mjs?v=0d441e5fbb';
+import { Dialogue } from './dialogue.mjs?v=730671fda9';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=1e9911155e';
 import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=57ca1ee374';
@@ -364,7 +364,7 @@ import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=
 import { intentStep, weakReading, cutWorld } from './intent.mjs?v=5e4cf030ab';
 import { knownEnglishWord } from '../translate/en-ro.mjs?v=cbd133aecd';
 import { proposeReading, negationWords } from './proposer.mjs?v=b3c21ed7d7';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=7fdf6caf4a';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=0fe8d92a1f';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -2074,10 +2074,10 @@ export class DialogSession {
       if (!op || typeof world?.ops?.[op] !== 'function') { const f = sayFact(lib, language, 'cannot.act.any', { act, world: name }); return { reply: f?.text ?? `I cannot ${act} here yet.`, ...(f ? { parts: f.parts } : {}), status: 'unsupported', info: { kind: 'intent' } }; }
       const r = this._runWorldAct(tabWorld, op, {});
       const did = r?.status === 'supported';
-      const said = String(r?.value ?? r?.note ?? '').trim() || (r?.reply ? replyOf(lib, language, r.reply, {})?.text : '') || sayFact(lib, language, `nothing.${act}`)?.text || '';   // a tool says what it did by a reply fact's name (done.undo, nothing.undo)
+      const said = String(r?.value ?? r?.note ?? '').trim() || (r?.reply ? replyOf(lib, language, r.reply, r.roles ?? {})?.text : '') || sayFact(lib, language, `nothing.${act}`)?.text || '';   // a tool says what it did by a reply fact's name (done.undo, nothing.undo)
       // the reply fact of the step (done.undo / done.redo, nothing.undo / nothing.redo): the world's English words stay what it said; every other language says the fact
       const fact = r?.reply ?? (did ? `done.${act}` : `nothing.${act}`);
-      return { reply: said, parts: [{ text: said, translate: true, say: { act: fact, roles: {} } }], status: r?.status ?? 'missing', info: { kind: 'door' }, frame: did ? { world: tabWorld, text: en, act } : null };
+      return { reply: said, parts: [{ text: said, translate: true, say: { act: fact, roles: r?.roles ?? {} } }], status: r?.status ?? 'missing', info: { kind: 'door' }, frame: did ? { world: tabWorld, text: en, act } : null };
     };
     const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, run });
     r.trace.request = flat;
@@ -2091,9 +2091,11 @@ export class DialogSession {
       const r = this._runWorldAct(tabWorld, op, args);
       done = r;
       after?.(r);
-      const said0 = String(r?.value ?? r?.note ?? '').trim() || 'I could not do that.';
+      const lib = this.engine.sopworld, language = requestLanguage(lib);
+      const fact = !String(r?.value ?? r?.note ?? '').trim() && r?.reply ? replyOf(lib, language, r.reply, r.roles ?? {}) : null;   // a tool says what it did by a reply fact's name (done.page, done.undo)
+      const said0 = String(r?.value ?? r?.note ?? '').trim() || fact?.text || 'I could not do that.';
       const said = corrections.length ? `I read ${corrections.map((c) => `"${c.said}" as "${c.as}"`).join(', ')}. ${said0}` : said0;   // what the reader repaired is said, as the plans say it
-      const parts = namedParts(said, [...(r?.names ?? []), ...(args?.ids ?? []).filter((x) => /_/.test(String(x)) || said.includes(String(x)))]);   // the names of the things in the reply are names
+      const parts = fact && !corrections.length ? [{ text: said, translate: true, say: { act: r.reply, roles: r.roles ?? {} } }] : namedParts(said, [...(r?.names ?? []), ...(args?.ids ?? []).filter((x) => /_/.test(String(x)) || said.includes(String(x)))]);   // the names of the things in the reply are names
       return { reply: said, ...(parts ? { parts } : {}), status: r?.status ?? 'missing', info: { kind: 'door' }, frame: r?.status === 'supported' ? { world: tabWorld, text: english, act } : null };
     };
     const r = await this._sendCore(text, { ...opts, language: lang }, { english, translation, run });
