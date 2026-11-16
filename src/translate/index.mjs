@@ -159,7 +159,7 @@ export function translate(text, opts = {}) {
     // a move the catalog's w.lang.ro frames read whole (the library's readFrames) is realised from its frame; everything else is the rules translator's (frames-ro.mjs)
     const viaFrames = (f) => {
       let fr = null;
-      const o = { senses: opts.senses ?? null, prefer: opts.prefer ?? null };   // the sense chosen per form and the open world's words (lexicon-ro.mjs)
+      const o = { senses: opts.senses ?? null, prefer: opts.prefer ?? null, verbatim: opts.verbatim !== false };   // the sense chosen per form and the open world's words (lexicon-ro.mjs)
       if (opts.frames !== false) { try { fr = frameMoveRoEn(source, (t) => f(t, o)); } catch { fr = null; } }
       return fr ? { text: fr.text, alignment: [{ src: [0, source.length], tgt: [0, fr.text.length] }], unknown: [], notes: fr.notes, confidence: 0.9, frame: fr.frame } : f(source, o);
     };

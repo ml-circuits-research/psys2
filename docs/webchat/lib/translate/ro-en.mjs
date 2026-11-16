@@ -61,7 +61,7 @@ const pspan = (en, s, e, extra = {}) => ({ en, src: [s, e], ...extra });
 // the options of one call of translateRoEn: `senses` { folded form: English sense } chosen by the caller (a sense candidate), `prefer` the open world's English words; `seen` the forms
 // with several senses met in the call (reported as `senses` on the result, so that the caller can make the other senses' candidates)
 // `dict`: the forms the first pass left unknown, which the second pass reads by the dictionary (a word the translator handles by itself never gets a dictionary reading)
-const CALL = { senses: null, prefer: null, seen: [], dict: null };
+const CALL = { senses: null, prefer: null, seen: [], dict: null, verbatim: true, usedVerbatim: false };   // verbatim: the frames that keep the person's words as typed (a `raw` slot: dictation) apply; usedVerbatim: one did
 
 function analysesOf(tok) {
   if (!tok.an) {
@@ -264,8 +264,10 @@ function applyFramePass(toks, info, tokenPass) {
       for (const f of COMPILED) {
         const early = !!f.token && f.token.fpos === 'noun';
         if ((tokenPass === 'nounTokens') !== early) continue;
+        if (!CALL.verbatim && f.els.some((e) => e.mod === 'raw')) continue;   // the reading without dictation frames (a candidate of its own)
         const m = matchFrame(f, out, p, info);
         if (!m) continue;
+        if (f.els.some((e) => e.mod === 'raw')) CALL.usedVerbatim = true;
         const first = out[p];
         const last = out[m.end - 1];
         const repl = f.token ? makeTokenFrame(f, out.slice(p, m.end)) : makeFixed(f, m, first, last, info);
@@ -1716,9 +1718,9 @@ function splitHyphens(text) {
     .replace(new RegExp(`${L}(\\p{L}{3,})-(ul|a|le|lui)${R}`, 'giu'), (m, a, b) => `${a}${' '.repeat(b.length + 1)}`);
 }
 
-export function translateRoEn(original, { senses = null, prefer = null } = {}) {
+export function translateRoEn(original, { senses = null, prefer = null, verbatim = true } = {}) {
   const saved = { ...CALL, seen: CALL.seen };
-  CALL.senses = senses; CALL.prefer = prefer; CALL.seen = []; CALL.dict = null;
+  CALL.senses = senses; CALL.prefer = prefer; CALL.seen = []; CALL.dict = null; CALL.verbatim = verbatim !== false; CALL.usedVerbatim = false;
   try {
     let res = translateRoEnCall(original);
     // the words the translator left as they were typed are read by the dictionary (the one lookup's third source): a candidate, never a leftover
@@ -1731,6 +1733,7 @@ export function translateRoEn(original, { senses = null, prefer = null } = {}) {
       else CALL.seen = seen;
     }
     if (CALL.seen.length) res.senses = CALL.seen;
+    if (CALL.usedVerbatim) res.verbatim = true;   // a frame kept words as typed: the caller may ask for the translation without it (candidates.mjs)
     return res;
   } finally { Object.assign(CALL, saved); }
 }
