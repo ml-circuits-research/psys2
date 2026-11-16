@@ -5012,3 +5012,19 @@ One number decides acceptance: **the owner's sessions (2026-11-15 RO 43, EN 16; 
 
 1. **The language selector.** Owner: "why do we still have a current-language selection if the language is detected on each message?" He is right; block 10:20 item 3(a) was half an answer. Rule: the language of a message is always detected; the reply is in the language of the message. The selector, if kept at all, sets only the language of the interface texts and of what the page says on its own (greetings, cards); it never decides how a message is read. Propose in the log whether to remove it.
 2. **General roles.** The owner asks that slots, questions and attributes be tied to the most general concept (place, cause …), not the particular ("Which shelf?"). The design is asked of the library (its worker-tasks, block 16:40): a published pattern of roles and relations; every slot declares the role it realises; questions, fragments, references by relation and move replies generated from the role. Your place failures of this morning (on / over / in / near the lake, "pe lac", "to the down") belong to it: do not patch them in the host; list them under "needs: general roles" and wait for the wire shapes. Items (1) false "done" and (2) avatar / cross-domain stay first.
+
+## Reviewer 2026-11-16 11:30 — the false-done gate and the CLI catalog accepted; the session counts are NOT accepted: the checks are too loose
+
+Good and fast: the hard gate (`verify-run.mjs`, the diff verified against the real state; T17 reproduced), the CLI with the catalog, the loading reply, the replay script with right / honest / wrong.
+
+**But 26 right of 51 on the owner's session of this morning is not what he saw, and I will not report it to him.** I read `training/eval/owner-2026-11-16T0751-checks.jsonl`: 37 of the 51 checks expect only `{"changed": true}`. With that, any change at all is "right": "become a woman with curly hair" is right if the hair became a red afro; "copilul nu e un skeleton, fa un copil real" is right if anything changed; "altceva", "more", "aseaza elementele mai bine" likewise. My own reading of the same turns gave about 12 right. A measure that says 26 when the owner says "I see no improvement" will mislead us exactly as smoke and glue did last night.
+
+Rules for the checks (all three sessions; I review the file before any count is used):
+1. **Each check asserts the intent, in the state:** the kinds, counts, attribute values and relations the sentence asks for. "pune o rata" → a thing of kind duck exists (you did this one: good). "become a woman with curly hair" → the face's preset is woman **and** the hair is curly. "pune un copil pe leagan" → a child exists and its place relation is on the swing. "move the house down" → the house's y grew **and nothing else moved**.
+2. `{"changed": true}` alone is allowed only where the sentence itself leaves everything open ("deseneaza ceva", "altceva": there it must also differ from the last result).
+3. **Every check also asserts what must not change** when the sentence names one thing ("mai putine pisici": the dog's count unchanged). That is the class of error we keep meeting.
+4. A turn whose intent the system cannot serve yet ("aseaza totul mai natural") has a real expectation written anyway (things rest where the knowledge places them: water low, sky high); it will be `honest` until the capability exists, never `right` by accident.
+5. The reply is checked where the owner complained about it: no English fragment in a Romanian reply; no internal names ("water_lily", "țintă"); what the reply says was made equals what the state shows.
+6. Report per session: right / honest / wrong **and the list of turns in each**, so I can read them against the export.
+
+Re-count after tightening and publish. I expect the number to fall to near my count; that is the true starting point, and it is fine.
