@@ -4439,3 +4439,19 @@ Added `training/sop-bert/calibrate-bootstrap-onnx.mjs` and fixture tests. It run
 The threshold remains logit ≥ 0, with all negative examples and the always-negative accuracy baseline retained. Reports aggregate TP/FP/FN/TN and span support/correctness per key, concept, declared head and source area. They include the actual checkpoint, tokenizer/config, ONNX/config, calibration data, run, baseline, deployment manifest, evaluator, runtime and reference bridge hashes/versions. Partial step-limited runs stay `complete: false`; a full run checks pair/positive/span-request support against the frozen baseline in every group before claiming completion. Graph proposal, executable reading and deployment confidence remain false.
 
 Checks: `node --test tests/bootstrap-onnx-calibration.test.mjs` → 5/5; Node syntax and `git diff --check` pass. Bounded actual-runtime smoke at `.session-control/bootstrap-q8-calibration-smoke-final.json`: 12/99,566 pairs, one requested/aligned/correct span, 12 token-ID/mask matches, zero mismatches, explicitly incomplete. Full evaluation is authorized only after the integration lane's published `094d0676`; it will run outside Git and report independently of the bfloat16 baseline.
+
+## 2026-11-16 — Full independent q8 calibration completed
+
+After integration `094d0676` was published, ran `node training/sop-bert/calibrate-bootstrap-onnx.mjs --model /home/salboaie/work/sopworlds/.session-control/bootstrap-browser-frozen --runtime /home/salboaie/work/sopworlds/.session-control/diagram-vss-demo/training/laptop/node_modules/@huggingface/transformers/dist/transformers.node.mjs --data /home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/runs/owner-20261116/data-v3-clean/calibration.jsonl.gz --baseline /home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/runs/owner-20261116/full-v3-clean/per-key-calibration.json --run-manifest /home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/runs/owner-20261116/full-v3-clean/run-manifest.json --checkpoint /home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/runs/owner-20261116/full-v3-clean/latest.pt --python /home/salboaie/work/sopworlds/psys2/.venv/bin/python --out /home/salboaie/work/sopworlds/.session-control/bootstrap-q8-calibration-full.json --batch 16 --threads 2`.
+
+Completed all 99,566 auxiliary calibration pairs in 421.9 s with all pre/post input hashes and per-key/concept/head/area population counts verified. JavaScript/Python tokenizer IDs and masks matched on 99,566/99,566 rows; zero tokenization mismatches. Independent Python recomputation checked every confusion/span group sum against totals. Report stays outside Git, SHA256 `50ed50de94b7a50451cf6366543fc0984724a67527561f0754e94f3a840d0422`. It contains 134 key entries, 72 concepts, 14 declared-head categories and four areas. Only `drawing.drawn.kind` has zero calibration support.
+
+| Fixed-threshold auxiliary metric | CPU q8 / CUDA bfloat16 reference |
+|---|---|
+| TP / FP / FN / TN | 33,462 / 2,677 / 2,085 / 61,342 versus 33,442 / 2,614 / 2,105 / 61,405 |
+| Pair accuracy | 95.2172% versus 95.2604% (43 fewer correct q8 pairs) |
+| Positive precision / recall | 92.5925% / 94.1345% versus 92.7502% / 94.0783% |
+| Source-span exact | 5,451/5,805 = 93.9018% versus 5,459/5,805 = 94.0396% |
+| Always-negative baseline | 64,019/99,566 = 64.2981%, identical population |
+
+The threshold was not fitted or changed. These are gold-field-conditioned candidate/span decisions, not request graphs, complete readings or execution confidence. The report retains `executable: false`, `graphProposal: false` and `deploymentConfidenceGate: false`. No application reader, model deployment manifest or confidence switch changed.
