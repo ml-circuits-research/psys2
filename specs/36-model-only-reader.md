@@ -1,0 +1,9 @@
+# SOP-BERT-only application reader
+
+The owner decision at 22:55 supersedes the earlier fallback policy. The application calls only its configured SOP-BERT graph proposal provider. A missing provider, auxiliary scorer without graph outputs, incomplete or ambiguous proposal, or closed calibration gate produces an explicit no-effect answer. There is no grammar fallback, toggle or retry. The declared grammar comparator and its compatibility declarations live under `scripts/lib` for development comparison; the browser does not bundle those modules. Native graph execution loads knowledge independently of any grammar compilation.
+
+The provider receives utterance text, never evaluation annotations, expected field instances or a grammar graph. The current exported inventory bootstrap can score caller-supplied fields but cannot infer a complete graph. Its export and auxiliary inference tests are not a graph-reader deployment. The application has no approved production graph provider at this landing, and says so in its greeting and replies.
+
+An eventual complete proposal must pass a separate trusted host gate bound to the exact model hash, decoder version and comparison report hash, with positive comparison support, an explicit better-result decision, zero wrong outcomes, and a scope predicate that accepts the proposal in the current area. The provider cannot supply this gate. Passing it does not bypass request validation, target/value resolution or effect assessment. An approved but malformed graph still refuses without effect. Historical invocation receipts remain historical.
+
+Runtime and development reports retain provider provenance and readiness. Auxiliary calibration, offline grammar coverage and complete request execution are distinct measurements. Existing native-effect regression tests may use an explicitly identified controlled graph-provider fixture; that fixture is never installed in production or counted as trained-model accuracy.

@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { resolvePropertyValue, selectPropertyObject } from '../src/dialog/property-selection.mjs';
-import { executeRequestCandidate, runNewEngine } from '../src/dialog/new-engine.mjs';
+import { executeRequestCandidate } from '../src/dialog/new-engine.mjs';
+import { runGrammarEngine as runNewEngine } from '../scripts/lib/grammar-reader.mjs';
 import { initialState } from '../worlds/art.draw/board.mjs';
 const binding = { id: 'toy.surface', key: 'finish', concept: 'texture', sourceType: 'toy.object', valueType: 'toy.texture', nameKey: 'label', valueKey: 'native' };
 const normalize = value => typeof value === 'string' && value.startsWith('native:') ? value : null;

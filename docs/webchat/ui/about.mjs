@@ -22,18 +22,16 @@ export const CREDITS = [
 /** The one-line description used in the header, the page title and the greeting (DOC). */
 export const TAGLINE = 'neurosymbolic · runs in your browser';
 export const PAGE_TITLE = 'PSys2: a neurosymbolic assistant that runs in your browser, with no server and no large language model';
-export const GREETING = 'Hi, I am PSys2. I run in your browser. I will tell you what I understood and what I can change. Commands I cannot handle leave your work unchanged. Type a request or work directly in an area.';
+export const GREETING = 'Hi, I am PSys2. The SOP-BERT request reader is not ready yet. Typed commands leave your work unchanged; you can still use the area controls.';
 
-/** Settings > About: what PSys2 is and why it is safe, in short paragraphs ([heading, text]). Never claims more than we have. */
+/** Current application behavior, separate from historical experiments. */
 export const ABOUT_SECTIONS = [
-  ['What PSys2 is', 'PSys2 is a neurosymbolic assistant that runs entirely in your browser. There is no server and no large language model: two small neural models (about 160 MB together, cached in your browser) work with formal rules and small knowledge worlds.'],
-  ['What neurosymbolic means here', 'The neural part reads: a DistilBERT dispatcher cuts your message into parts and proposes which world each part belongs to, and a small FLAN-T5 normalizer may propose a simpler wording when nothing else reads a sentence. The symbolic part decides: rules turn a part into formal wires (SOP Lang), the interpreter runs them on a world, and the answer is written from templates.'],
-  ['Which world takes a message', 'Rules decide which world (drawing, map, shop ...) takes your message, and each choice has a reason you can read in the trace: what is open, what you named, what was said before, the words of the worlds. The small neural model is only a hint that counts when the rules have little to go on. This is the default; Settings > Developer can switch back to the older way, where the model proposes and the rules check.'],
-  ['Why the symbolic layer makes it safe', 'The neural models only propose. A proposal is used only if the rules read it, a value checker confirms that its numbers, names and negations are the ones you said, and a world accepts it. Nothing runs unless a world validates it, so I do what I understood and tell you what I did not.'],
+  ['What PSys2 is', 'PSys2 is a browser application with native drawing, diagram, document and calendar tools. Typed requests must pass through SOP-BERT and validated request graphs before changing a world.'],
+  ['Reader readiness', 'SOP-BERT is the only application reader. A complete graph-producing model has not yet been deployed. There is no grammar fallback: unavailable, incomplete or unapproved proposals receive an explicit no-effect answer.'],
+  ['How effects are checked', 'A complete proposal must resolve its targets and declared values, pass the native tool checks, and retain observations of the result. A native receipt alone is not proof that the requested outcome was achieved.'],
 ];
-/** Measured accuracy (training/RESULTS.md, authored operational set of 1240 messages; Romanian set of 2480 cases). */
 export const ACCURACY = [
-  'English, 1240 authored messages: 98.6% answered correctly and 0.4% wrongly with the dispatcher and the normalizer (95.4% and 0.5% with the rules alone).',
-  'Romanian, 2480 cases: 84.7% correct and 2.7% wrong.',
-  'These sets were written by us and the rules were widened by reading them, so real users will see lower numbers; the phrase log is how we collect real phrasings.',
+  'No end-to-end SOP-BERT request accuracy is claimed yet.',
+  'Auxiliary field and span calibration measures are reported separately from complete request understanding and execution.',
+  'Development evaluation keeps setup failures and unreviewed outcomes visible rather than counting them as correct.',
 ];

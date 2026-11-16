@@ -1,10 +1,10 @@
 # Lossless labels for supported request graphs
 
-`request-label-codec.mjs` is a training preparation component, not a learned reader. It encodes an already supplied graph; it does not interpret text or create annotations. The independently pinned 0.188.0 validator exposes the published `std.request@0.183.0` contract. This first profile accepts one command request with mood `do` or `propose` and canonical `std.request.*` record types. Question-content and compound-request sequencing remain unsupported; the codec refuses those profiles rather than inventing a constraint to represent them.
+`request-label-codec.mjs` is a training preparation component, not a learned reader. It encodes an already supplied graph; it does not interpret text or create annotations. It shares the application's pinned library and validates against `std.request@0.198.0`. The single-request profile accepts all published moods (`do`, `propose`, `check`, `ask`), including explicit query projections for values, count, existence and members. It preserves selector/result closures, logical scope and source intervals; `inspectRequest` decides graph validity. An underspecified ask can remain structurally valid without becoming answerable. Several requests remain separate graphs; their dependency envelope is not inferred by this codec.
 
 Input is `{request, wires, unresolved}`, where `request` identifies the sole root and each wire has `{id, type, attrs}`. Each attribute is an ordered array of original SOP tokens, as returned by the library parser. `requestGraphFromSop(text, requestId)` provides that projection and rejects pattern wires. `unresolved` is an explicitly diagnostic sidecar, described below. All references must identify nodes in this self-contained graph; external/dangling references are refused.
 
-`encodeRequestGraph` produces an envelope with format `psys2.request-labels/1`, profile, contract version, state, root pointer, identity and token tables, nodes and unresolved diagnostics. A node retains its structural type and ordered fields. Each field occurrence is tagged either `{ref: nodeIndex}` or `{token: tokenIndex}`. Symbols are open strings: there is no per-domain action, kind, concept or value vocabulary in the codec.
+`encodeRequestGraph` produces an envelope with format `psys2.request-labels/2`, profile, contract version, state, root pointer, identity and token tables, nodes and unresolved diagnostics. A node retains its structural type and ordered fields. Each field occurrence is tagged either `{ref: nodeIndex}` or `{token: tokenIndex}`. Symbols are open strings: there is no per-domain action, kind, concept or value vocabulary in the codec.
 
 | Original distinction | Label representation and roundtrip |
 | --- | --- |
@@ -38,3 +38,8 @@ The codec caps 256 nodes, 8,192 counted values/table entries, 262,144 string cod
 `LabelCodecError.code` distinguishes codec shape failures, unsupported profiles, incomplete diagnostics and public graph validation failures. The SOP projection helper can also report native parser syntax errors. No decode path chooses a nearby symbol or supplies an omitted operator/value. The neural head architecture in Q110 remains a proposal; this codec does not select it, train a model or establish a preview path.
 
 Run `node --test tests/request-label-codec.test.mjs` for portable conformance checks. They use structural fixtures, including unknown open symbols and deliberately malformed graphs; they are not provisional real-session labels.
+
+
+## Label format revision
+
+Version 2 uses profile `single-request` and contract `std.request@0.198.0`. Version 1 labels are rejected explicitly rather than silently reinterpreted. Existing version 1 graphs can be regenerated from their preserved source annotations; this change does not migrate or alter active bootstrap checkpoints, which use a different candidate/span representation. The codec remains a lossless representation for supervised targets, not a source of graph gold or a neural decoder.

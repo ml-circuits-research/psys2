@@ -6,208 +6,208 @@
 
 | Row | Classes | Tab | Retired | Verdict | Message | Reply |
 |---|---|---|---|---|---|---|
-| owner-en-2026-11-15:001 | unclassified | diagram | false | honest | creare a random diagram | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-en-2026-11-15:002 | unclassified | diagram | false | honest | this is stupid, my expectatiom was to get a nice eiagram5-10 ndes, arraws, nice layout, not a circle | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-en-2026-11-15:003 | unclassified | diagram | false | honest | you are saying that I am stupid? | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-en-2026-11-15:004 | unclassified | diagram | false | honest | you are stupid | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-en-2026-11-15:005 | unclassified | diagram | false | honest | Change the colour of the circle to purple. | I read a do request with act change about existing circle and 1 result constraint(s). This area does not yet support the new request path. Nothing changed. |
-| owner-en-2026-11-15:006 | unclassified | diagram | false | honest | add 5 random nodes | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-en-2026-11-15:007 | unclassified | diagram | false | honest | not all circles, better layout | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-en-2026-11-15:008 | unclassified | editor | false | honest | write a story about ancient hobbits with 5 chapters | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-en-2026-11-15:009 | unclassified | draw | false | honest | create a random picture | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-en-2026-11-15:010 | unclassified | draw | false | honest | break in 3 layers: eater, land and sky | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-en-2026-11-15:011 | unclassified | draw | false | honest | Change the colour of the sun to black. | I understood a request to set colour to black on an existing sun. I could not identify exactly one existing object. Nothing changed. |
-| owner-en-2026-11-15:012 | unclassified | draw | false | honest | Change the colour of the sun to black. | I understood a request to set colour to black on an existing sun. I could not identify exactly one existing object. Nothing changed. |
-| owner-en-2026-11-15:013 | unclassified | draw | false | honest | Change the size of the sun to big. | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-en-2026-11-15:014 | unclassified | draw | false | honest | Change the fill of the sun to solid. | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-en-2026-11-15:015 | unclassified | draw | false | honest | make sunt green | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-en-2026-11-15:016 | unclassified | draw | false | honest | add a small pond | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:014 | unclassified | draw | false | honest | add a green duck | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:015 | unclassified | draw | false | honest | move the green duck in water | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:016 | unclassified | draw | false | honest | Change the colour of the green bird to yellow. | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:017 | unclassified | draw | false | honest | move it to the lake | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:018 | unclassified | draw | false | honest | move the house over water | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:019 | unclassified | draw | false | honest | move the birds near lake | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:020 | unclassified | draw | false | honest | the lake is not there | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:021 | unclassified | draw | false | honest | move the house down | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:022 | unclassified | draw | false | honest | down | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:023 | unclassified | draw | false | honest | down | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:024 | unclassified | draw | false | honest | move the flowers down | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:025 | unclassified | draw | false | honest | down | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:026 | unclassified | draw | false | honest | the pond up | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:027 | unclassified | draw | false | honest | move th epond upper | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:028 | unclassified | draw | false | honest | move the lake upper | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:029 | unclassified | draw | false | honest | move the watter upper | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:030 | unclassified | draw | false | honest | put more patches for green | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:031 | unclassified | draw | false | honest | put  green grass | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:032 | unclassified | draw | false | honest | more | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:043 | unclassified | draw | false | honest | make the avatar a man | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:044 | unclassified | draw | false | honest | become a boy | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:045 | unclassified | draw | false | honest | become a boy | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:046 | unclassified | draw | false | honest | become a man | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:047 | unclassified | draw | false | honest | look surprised | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:048 | unclassified | draw | false | honest | look sad | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:049 | unclassified | draw | false | honest | become a woman with curly hair | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:050 | unclassified | draw | false | honest | become a bearded man | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-mixed-2026-11-16:051 | unclassified | draw | false | honest | become a bearded man | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:001 | unclassified | robot | false | honest | draw a white house and a green one | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:002 | unclassified | draw | false | honest | draw a house | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:003 | unclassified | robot | false | honest | draw a green house | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:006 | unclassified | null | false | honest | draw a red circle | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:007 | unclassified | null | false | honest | draw four squares | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:008 | unclassified | null | false | honest | make a nicer layout | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:009 | unclassified | null | false | honest | connect all the shapes | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:011 | unclassified | draw | false | honest | draw a house and three clouds | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:012 | unclassified | null | false | honest | how can I change the shape of a diagram | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:021 | unclassified | robot | false | honest | draw a ball | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:022 | unclassified | draw | false | honest | draw a crocodile | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:023 | unclassified | draw | false | honest | another crocodile | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:024 | unclassified | draw | false | honest | draw a blue crocodile | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:025 | unclassified | draw | false | honest | rotate the blue crocodile by 30 degrees | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:026 | unclassified | draw | false | honest | make the crocodile's legs black | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:028 | unclassified | draw | false | honest | make the blue crocodile's leg black | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:029 | unclassified | draw | false | honest | draw 3 different houses | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:033 | unclassified | draw | false | honest | move the crocodiles into the lake | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:035 | unclassified | draw | false | honest | move the crocodiles into the lake | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:036 | unclassified | draw | false | honest | move the houses above the lake | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:037 | unclassified | draw | false | honest | move the houses above the water | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:039 | unclassified | draw | false | honest | move the houses higher | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:040 | unclassified | draw | false | honest | and even higher | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:041 | unclassified | draw | false | honest | move the crocodiles lower | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:043 | unclassified | draw | false | honest | put grass under the houses | This request needs a capability that is not yet supported. Nothing changed. |
-| owner-hand-gloss:real:044 | unclassified | draw | false | honest | put a blue sky and a sun | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:046 | unclassified | draw | false | honest | put sky and sun | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:047 | unclassified | draw | false | honest | put grass under the houses | This request needs a capability that is not yet supported. Nothing changed. |
-| owner-hand-gloss:real:048 | unclassified | draw | false | honest | put some grass | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:050 | unclassified | draw | false | honest | put a lake too | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:051 | unclassified | draw | false | honest | move the first house further left and lower | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:052 | unclassified | draw | false | honest | move even more to the left | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:053 | unclassified | draw | false | honest | move the middle house more to the right | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:055 | unclassified | draw | false | honest | move the house on the right more to the right | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:056 | unclassified | draw | false | honest | make a drawing with a lake, a duck, a villa, clouds, sun, grass | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:057 | unclassified | draw | false | honest | draw a lake | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:058 | unclassified | draw | false | honest | draw a duck | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:060 | unclassified | draw | false | honest | move the duck onto the lake | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:061 | unclassified | draw | false | honest | draw a villa | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:062 | unclassified | draw | false | honest | a house and 2 fish | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:063 | unclassified | draw | false | honest | move the house onto the ground | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:064 | unclassified | draw | false | honest | make some grass above the lake | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:068 | unclassified | draw | false | honest | make a sky with 5 clouds and a sun | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:069 | unclassified | draw | false | honest | a sky with 5 clouds | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:070 | unclassified | draw | false | honest | give me 5 clouds | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:071 | unclassified | draw | false | honest | a sun | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:072 | unclassified | draw | false | honest | draw a sun | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:073 | unclassified | draw | false | honest | move the sun higher | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:074 | unclassified | draw | false | honest | make the sky blue | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:075 | unclassified | draw | false | honest | make a small lake on the left too | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:076 | unclassified | draw | false | honest | draw a small lake, a pond | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:077 | unclassified | draw | false | honest | draw a swing | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:078 | unclassified | draw | false | honest | draw a child on the swing | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:080 | unclassified | draw | false | honest | move the child next to the swing, on the left | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:082 | unclassified | draw | false | honest | move the child to the left | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:083 | unclassified | draw | false | honest | move the child onto the grass | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:084 | unclassified | draw | false | honest | make a little girl too | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:085 | unclassified | draw | false | honest | move the girl next to the boy | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:086 | unclassified | draw | false | honest | move the girl in front of the house | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:091 | unclassified | draw | false | honest | make a grandfather next to the duck | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:092 | unclassified | draw | false | honest | draw a grandfather | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:093 | unclassified | draw | false | honest | draw a goat | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:094 | unclassified | draw | false | honest | draw a goat | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:096 | unclassified | draw | false | honest | move the goat next to the duck | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:097 | unclassified | draw | false | honest | move the goat lower | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:098 | unclassified | draw | false | honest | more to the right | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:099 | unclassified | draw | false | honest | move the goat more to the right | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:100 | unclassified | draw | false | honest | move the goat lower, and more to the left | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:101 | unclassified | draw | false | honest | draw a donkey too, but not flying, on the grass | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:102 | unclassified | draw | false | honest | draw a donkey | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:103 | unclassified | draw | false | honest | draw a cow | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:104 | unclassified | draw | false | honest | move the cow lower, so it does not fly any more | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:106 | unclassified | draw | false | honest | move the cow lower | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:107 | unclassified | draw | false | honest | and even lower | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:108 | unclassified | draw | false | honest | move the cow even lower and more to the right | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:109 | unclassified | draw | false | honest | move the house higher | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:110 | unclassified | draw | false | honest | move the fish into different corners at the top | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:111 | unclassified | draw | false | honest | move a fish to the top left | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:112 | unclassified | draw | false | honest | more to the left | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:113 | unclassified | draw | false | honest | move a fish into the right corner | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:140 | unclassified | null | false | honest | add 10 and 4 for me | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:142 | unclassified | null | false | honest | Zoe has 14 marbles. Zoe eats 8. How many marbles does Zoe have left? | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:143 | unclassified | null | false | honest | Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have in total? | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:144 | unclassified | null | false | honest | Zoe has 4 pears. Zoe buys 1 more. How many pears does Zoe have? | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:147 | unclassified | null | false | honest | remove the thing from the chest | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:149 | unclassified | null | false | honest | wear a hat | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:151 | unclassified | null | false | honest | a quick one: what is the capital of Japan | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:155 | unclassified | null | false | honest | how many days are in a week. what do red and yellow make, what day comes after Monday | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:157 | unclassified | null | false | honest | how many days are in a week. what sound does a cow make and then how many legs does a spider have | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:158 | unclassified | null | false | honest | draw 2 trees, then what sound does a cow make | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:161 | unclassified | null | false | honest | what sound does a cow make | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:170 | unclassified | null | false | honest | I have 12 lei. A pencil costs 2 lei. How much money do I have left after buying 2 pencils? | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:171 | unclassified | null | false | honest | if it is 5 o'clock what time was it 2 hours ago | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:172 | unclassified | null | false | honest | how many sides does a square have | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:173 | unclassified | null | false | honest | can a duck fly | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:174 | unclassified | null | false | honest | what is a calf | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:178 | unclassified | null | false | honest | can you delete the house for me | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:179 | unclassified | null | false | honest | blue house and red tree | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:180 | unclassified | null | false | honest | draw a house and a tree | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:181 | unclassified | null | false | honest | put the house at 200, 300 | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:182 | unclassified | null | false | honest | what is the capital of France | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:183 | unclassified | null | false | honest | highlighted Italy and Portugal | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:184 | unclassified | null | false | honest | zoom out | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:185 | unclassified | null | false | honest | new chart: cats 2, dogs 7 | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:186 | unclassified | null | false | honest | make it a line chart | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:187 | unclassified | null | false | honest | sort it | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:189 | unclassified | null | false | honest | add bananas to 4 and make it a pie chart | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:191 | unclassified | null | false | honest | what notes are in a major chord | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:192 | unclassified | null | false | honest | what chord is C E G | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:193 | unclassified | null | false | honest | play G major scale | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:194 | unclassified | null | false | honest | switch to flute | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:195 | unclassified | null | false | honest | the tempo is too slow | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:196 | unclassified | null | false | honest | set the tempo to 120 and play the D major scale | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:197 | unclassified | null | false | honest | I think you would look better with square eyes | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:198 | unclassified | null | false | honest | get rid of the antenna | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:200 | unclassified | null | false | honest | tell me the notes of a G major chord | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:202 | unclassified | null | false | honest | what is the day after tomorrow if today is Monday | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:204 | unclassified | null | false | honest | scratch the last thing I added | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:205 | unclassified | null | false | honest | make the paragraph italic | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:207 | unclassified | null | false | honest | show the first result | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:209 | unclassified | null | false | honest | start a new chapter called The Cave | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:211 | unclassified | null | false | honest | write once upon a time there was a fox | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:213 | unclassified | null | false | honest | move the first paragraph down | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:220 | unclassified | null | false | honest | what is the weather today | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:221 | unclassified | robot | false | honest | the colour of the body should be red | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:222 | unclassified | robot | false | honest | make a person | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:223 | unclassified | robot | false | honest | wear a hat and glasses | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:225 | unclassified | robot | false | honest | what colour is your body | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:226 | unclassified | robot | false | honest | make your body green, no, yellow | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:229 | unclassified | chess | false | honest | what is the best move | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:230 | unclassified | null | false | honest | a quick one: what day is 3 days after Friday | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:232 | unclassified | robot | false | honest | put your eyes back the way they were | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:233 | unclassified | robot | false | honest | show my phrase log | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:236 | unclassified | null | false | honest | connect c1 with End | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:237 | unclassified | null | false | honest | delete the dragon | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:240 | unclassified | draw | false | honest | draw 3 circles | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:241 | unclassified | draw | false | honest | I do not want a house | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:242 | unclassified | draw | false | honest | my name is Andrei | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:247 | unclassified | robot | false | honest | be a boy | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:248 | unclassified | robot | false | honest | be happy | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:249 | unclassified | robot | false | honest | be nervous | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:253 | unclassified | robot | false | honest | which character is on the screen | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:256 | unclassified | robot | false | honest | be a child | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:257 | unclassified | tictactoe | false | honest | start x and zero | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:266 | unclassified | draw | false | honest | draw a house | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:267 | unclassified | draw | false | honest | draw a green house | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:268 | unclassified | draw | false | honest | draw three clouds | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:269 | unclassified | draw | false | honest | draw a sun | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:272 | unclassified | draw | false | honest | draw a monkey | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:275 | unclassified | draw | false | honest | draw a small blue fish | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:278 | unclassified | draw | false | honest | draw water | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:281 | unclassified | draw | false | honest | draw fish | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:283 | unclassified | draw | false | honest | draw three fish in the water | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:285 | unclassified | draw | false | honest | move the fish from the air into the water | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:287 | unclassified | draw | false | honest | move the fish | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:293 | unclassified | null | false | honest | draw three circles | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:294 | unclassified | null | false | honest | draw three circles in the diagram | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:300 | unclassified | draw | false | honest | delete all the red circles | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:302 | unclassified | draw | false | honest | delete the fish | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:303 | unclassified | robot | false | honest | make a big mouth | I could not obtain one complete, unambiguous reading. Nothing changed. |
-| owner-hand-gloss:real:304 | unclassified | robot | false | honest | make a fish robot | I could not obtain one complete, unambiguous reading. Nothing changed. |
+| owner-en-2026-11-15:001 | unclassified | diagram | false | honest | creare a random diagram | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:002 | unclassified | diagram | false | honest | this is stupid, my expectatiom was to get a nice eiagram5-10 ndes, arraws, nice layout, not a circle | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:003 | unclassified | diagram | false | honest | you are saying that I am stupid? | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:004 | unclassified | diagram | false | honest | you are stupid | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:005 | unclassified | diagram | false | honest | Change the colour of the circle to purple. | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:006 | unclassified | diagram | false | honest | add 5 random nodes | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:007 | unclassified | diagram | false | honest | not all circles, better layout | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:008 | unclassified | editor | false | honest | write a story about ancient hobbits with 5 chapters | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:009 | unclassified | draw | false | honest | create a random picture | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:010 | unclassified | draw | false | honest | break in 3 layers: eater, land and sky | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:011 | unclassified | draw | false | honest | Change the colour of the sun to black. | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:012 | unclassified | draw | false | honest | Change the colour of the sun to black. | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:013 | unclassified | draw | false | honest | Change the size of the sun to big. | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:014 | unclassified | draw | false | honest | Change the fill of the sun to solid. | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:015 | unclassified | draw | false | honest | make sunt green | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-en-2026-11-15:016 | unclassified | draw | false | honest | add a small pond | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:014 | unclassified | draw | false | honest | add a green duck | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:015 | unclassified | draw | false | honest | move the green duck in water | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:016 | unclassified | draw | false | honest | Change the colour of the green bird to yellow. | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:017 | unclassified | draw | false | honest | move it to the lake | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:018 | unclassified | draw | false | honest | move the house over water | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:019 | unclassified | draw | false | honest | move the birds near lake | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:020 | unclassified | draw | false | honest | the lake is not there | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:021 | unclassified | draw | false | honest | move the house down | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:022 | unclassified | draw | false | honest | down | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:023 | unclassified | draw | false | honest | down | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:024 | unclassified | draw | false | honest | move the flowers down | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:025 | unclassified | draw | false | honest | down | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:026 | unclassified | draw | false | honest | the pond up | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:027 | unclassified | draw | false | honest | move th epond upper | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:028 | unclassified | draw | false | honest | move the lake upper | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:029 | unclassified | draw | false | honest | move the watter upper | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:030 | unclassified | draw | false | honest | put more patches for green | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:031 | unclassified | draw | false | honest | put  green grass | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:032 | unclassified | draw | false | honest | more | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:043 | unclassified | draw | false | honest | make the avatar a man | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:044 | unclassified | draw | false | honest | become a boy | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:045 | unclassified | draw | false | honest | become a boy | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:046 | unclassified | draw | false | honest | become a man | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:047 | unclassified | draw | false | honest | look surprised | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:048 | unclassified | draw | false | honest | look sad | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:049 | unclassified | draw | false | honest | become a woman with curly hair | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:050 | unclassified | draw | false | honest | become a bearded man | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-mixed-2026-11-16:051 | unclassified | draw | false | honest | become a bearded man | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:001 | unclassified | robot | false | honest | draw a white house and a green one | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:002 | unclassified | draw | false | honest | draw a house | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:003 | unclassified | robot | false | honest | draw a green house | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:006 | unclassified | null | false | honest | draw a red circle | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:007 | unclassified | null | false | honest | draw four squares | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:008 | unclassified | null | false | honest | make a nicer layout | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:009 | unclassified | null | false | honest | connect all the shapes | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:011 | unclassified | draw | false | honest | draw a house and three clouds | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:012 | unclassified | null | false | honest | how can I change the shape of a diagram | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:021 | unclassified | robot | false | honest | draw a ball | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:022 | unclassified | draw | false | honest | draw a crocodile | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:023 | unclassified | draw | false | honest | another crocodile | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:024 | unclassified | draw | false | honest | draw a blue crocodile | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:025 | unclassified | draw | false | honest | rotate the blue crocodile by 30 degrees | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:026 | unclassified | draw | false | honest | make the crocodile's legs black | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:028 | unclassified | draw | false | honest | make the blue crocodile's leg black | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:029 | unclassified | draw | false | honest | draw 3 different houses | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:033 | unclassified | draw | false | honest | move the crocodiles into the lake | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:035 | unclassified | draw | false | honest | move the crocodiles into the lake | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:036 | unclassified | draw | false | honest | move the houses above the lake | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:037 | unclassified | draw | false | honest | move the houses above the water | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:039 | unclassified | draw | false | honest | move the houses higher | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:040 | unclassified | draw | false | honest | and even higher | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:041 | unclassified | draw | false | honest | move the crocodiles lower | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:043 | unclassified | draw | false | honest | put grass under the houses | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:044 | unclassified | draw | false | honest | put a blue sky and a sun | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:046 | unclassified | draw | false | honest | put sky and sun | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:047 | unclassified | draw | false | honest | put grass under the houses | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:048 | unclassified | draw | false | honest | put some grass | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:050 | unclassified | draw | false | honest | put a lake too | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:051 | unclassified | draw | false | honest | move the first house further left and lower | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:052 | unclassified | draw | false | honest | move even more to the left | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:053 | unclassified | draw | false | honest | move the middle house more to the right | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:055 | unclassified | draw | false | honest | move the house on the right more to the right | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:056 | unclassified | draw | false | honest | make a drawing with a lake, a duck, a villa, clouds, sun, grass | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:057 | unclassified | draw | false | honest | draw a lake | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:058 | unclassified | draw | false | honest | draw a duck | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:060 | unclassified | draw | false | honest | move the duck onto the lake | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:061 | unclassified | draw | false | honest | draw a villa | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:062 | unclassified | draw | false | honest | a house and 2 fish | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:063 | unclassified | draw | false | honest | move the house onto the ground | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:064 | unclassified | draw | false | honest | make some grass above the lake | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:068 | unclassified | draw | false | honest | make a sky with 5 clouds and a sun | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:069 | unclassified | draw | false | honest | a sky with 5 clouds | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:070 | unclassified | draw | false | honest | give me 5 clouds | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:071 | unclassified | draw | false | honest | a sun | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:072 | unclassified | draw | false | honest | draw a sun | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:073 | unclassified | draw | false | honest | move the sun higher | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:074 | unclassified | draw | false | honest | make the sky blue | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:075 | unclassified | draw | false | honest | make a small lake on the left too | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:076 | unclassified | draw | false | honest | draw a small lake, a pond | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:077 | unclassified | draw | false | honest | draw a swing | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:078 | unclassified | draw | false | honest | draw a child on the swing | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:080 | unclassified | draw | false | honest | move the child next to the swing, on the left | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:082 | unclassified | draw | false | honest | move the child to the left | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:083 | unclassified | draw | false | honest | move the child onto the grass | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:084 | unclassified | draw | false | honest | make a little girl too | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:085 | unclassified | draw | false | honest | move the girl next to the boy | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:086 | unclassified | draw | false | honest | move the girl in front of the house | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:091 | unclassified | draw | false | honest | make a grandfather next to the duck | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:092 | unclassified | draw | false | honest | draw a grandfather | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:093 | unclassified | draw | false | honest | draw a goat | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:094 | unclassified | draw | false | honest | draw a goat | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:096 | unclassified | draw | false | honest | move the goat next to the duck | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:097 | unclassified | draw | false | honest | move the goat lower | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:098 | unclassified | draw | false | honest | more to the right | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:099 | unclassified | draw | false | honest | move the goat more to the right | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:100 | unclassified | draw | false | honest | move the goat lower, and more to the left | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:101 | unclassified | draw | false | honest | draw a donkey too, but not flying, on the grass | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:102 | unclassified | draw | false | honest | draw a donkey | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:103 | unclassified | draw | false | honest | draw a cow | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:104 | unclassified | draw | false | honest | move the cow lower, so it does not fly any more | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:106 | unclassified | draw | false | honest | move the cow lower | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:107 | unclassified | draw | false | honest | and even lower | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:108 | unclassified | draw | false | honest | move the cow even lower and more to the right | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:109 | unclassified | draw | false | honest | move the house higher | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:110 | unclassified | draw | false | honest | move the fish into different corners at the top | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:111 | unclassified | draw | false | honest | move a fish to the top left | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:112 | unclassified | draw | false | honest | more to the left | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:113 | unclassified | draw | false | honest | move a fish into the right corner | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:140 | unclassified | null | false | honest | add 10 and 4 for me | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:142 | unclassified | null | false | honest | Zoe has 14 marbles. Zoe eats 8. How many marbles does Zoe have left? | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:143 | unclassified | null | false | honest | Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have in total? | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:144 | unclassified | null | false | honest | Zoe has 4 pears. Zoe buys 1 more. How many pears does Zoe have? | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:147 | unclassified | null | false | honest | remove the thing from the chest | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:149 | unclassified | null | false | honest | wear a hat | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:151 | unclassified | null | false | honest | a quick one: what is the capital of Japan | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:155 | unclassified | null | false | honest | how many days are in a week. what do red and yellow make, what day comes after Monday | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:157 | unclassified | null | false | honest | how many days are in a week. what sound does a cow make and then how many legs does a spider have | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:158 | unclassified | null | false | honest | draw 2 trees, then what sound does a cow make | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:161 | unclassified | null | false | honest | what sound does a cow make | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:170 | unclassified | null | false | honest | I have 12 lei. A pencil costs 2 lei. How much money do I have left after buying 2 pencils? | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:171 | unclassified | null | false | honest | if it is 5 o'clock what time was it 2 hours ago | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:172 | unclassified | null | false | honest | how many sides does a square have | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:173 | unclassified | null | false | honest | can a duck fly | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:174 | unclassified | null | false | honest | what is a calf | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:178 | unclassified | null | false | honest | can you delete the house for me | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:179 | unclassified | null | false | honest | blue house and red tree | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:180 | unclassified | null | false | honest | draw a house and a tree | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:181 | unclassified | null | false | honest | put the house at 200, 300 | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:182 | unclassified | null | false | honest | what is the capital of France | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:183 | unclassified | null | false | honest | highlighted Italy and Portugal | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:184 | unclassified | null | false | honest | zoom out | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:185 | unclassified | null | false | honest | new chart: cats 2, dogs 7 | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:186 | unclassified | null | false | honest | make it a line chart | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:187 | unclassified | null | false | honest | sort it | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:189 | unclassified | null | false | honest | add bananas to 4 and make it a pie chart | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:191 | unclassified | null | false | honest | what notes are in a major chord | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:192 | unclassified | null | false | honest | what chord is C E G | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:193 | unclassified | null | false | honest | play G major scale | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:194 | unclassified | null | false | honest | switch to flute | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:195 | unclassified | null | false | honest | the tempo is too slow | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:196 | unclassified | null | false | honest | set the tempo to 120 and play the D major scale | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:197 | unclassified | null | false | honest | I think you would look better with square eyes | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:198 | unclassified | null | false | honest | get rid of the antenna | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:200 | unclassified | null | false | honest | tell me the notes of a G major chord | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:202 | unclassified | null | false | honest | what is the day after tomorrow if today is Monday | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:204 | unclassified | null | false | honest | scratch the last thing I added | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:205 | unclassified | null | false | honest | make the paragraph italic | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:207 | unclassified | null | false | honest | show the first result | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:209 | unclassified | null | false | honest | start a new chapter called The Cave | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:211 | unclassified | null | false | honest | write once upon a time there was a fox | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:213 | unclassified | null | false | honest | move the first paragraph down | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:220 | unclassified | null | false | honest | what is the weather today | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:221 | unclassified | robot | false | honest | the colour of the body should be red | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:222 | unclassified | robot | false | honest | make a person | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:223 | unclassified | robot | false | honest | wear a hat and glasses | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:225 | unclassified | robot | false | honest | what colour is your body | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:226 | unclassified | robot | false | honest | make your body green, no, yellow | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:229 | unclassified | chess | false | honest | what is the best move | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:230 | unclassified | null | false | honest | a quick one: what day is 3 days after Friday | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:232 | unclassified | robot | false | honest | put your eyes back the way they were | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:233 | unclassified | robot | false | honest | show my phrase log | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:236 | unclassified | null | false | honest | connect c1 with End | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:237 | unclassified | null | false | honest | delete the dragon | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:240 | unclassified | draw | false | honest | draw 3 circles | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:241 | unclassified | draw | false | honest | I do not want a house | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:242 | unclassified | draw | false | honest | my name is Andrei | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:247 | unclassified | robot | false | honest | be a boy | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:248 | unclassified | robot | false | honest | be happy | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:249 | unclassified | robot | false | honest | be nervous | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:253 | unclassified | robot | false | honest | which character is on the screen | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:256 | unclassified | robot | false | honest | be a child | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:257 | unclassified | tictactoe | false | honest | start x and zero | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:266 | unclassified | draw | false | honest | draw a house | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:267 | unclassified | draw | false | honest | draw a green house | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:268 | unclassified | draw | false | honest | draw three clouds | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:269 | unclassified | draw | false | honest | draw a sun | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:272 | unclassified | draw | false | honest | draw a monkey | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:275 | unclassified | draw | false | honest | draw a small blue fish | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:278 | unclassified | draw | false | honest | draw water | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:281 | unclassified | draw | false | honest | draw fish | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:283 | unclassified | draw | false | honest | draw three fish in the water | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:285 | unclassified | draw | false | honest | move the fish from the air into the water | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:287 | unclassified | draw | false | honest | move the fish | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:293 | unclassified | null | false | honest | draw three circles | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:294 | unclassified | null | false | honest | draw three circles in the diagram | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:300 | unclassified | draw | false | honest | delete all the red circles | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:302 | unclassified | draw | false | honest | delete the fish | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:303 | unclassified | robot | false | honest | make a big mouth | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |
+| owner-hand-gloss:real:304 | unclassified | robot | false | honest | make a fish robot | I could not understand this request with SOP-BERT. A complete, approved request graph is not available. Nothing changed. |

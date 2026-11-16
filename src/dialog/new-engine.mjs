@@ -1,33 +1,17 @@
-// Sole request route with declared providers; bounded property execution remains assessed. Vocabulary and readings are declarations.
-import { World, compileGrammarOverlay, readGrammarRequests, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs';
+// Validated graph execution; no natural-language reader or grammar application path.
+import { World, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs';
 import SOURCE from './new-engine-source.mjs';
-import * as api from '../vendor/sopworld/sopworld.mjs';
-import { createGeneralEnglishReader, englishRequestMappings } from './reader-compat/general.mjs';
 import { resolvePropertyValue, selectPropertyObject } from './property-selection.mjs';
 import { NEW_ENGINE_AREAS } from './new-engine-areas.mjs';
 import { flatRequestProjection } from './request-projection.mjs';
 const hosts = new WeakMap();
-let grammar;
+let knowledge;
+const sourceWorld = () => knowledge ??= World.fromJSON(SOURCE.snapshot);
 const first = (wire, key) => wire?.attrs[key]?.[0];
 const line = (id, type, attrs) => `@${id} ${type} ` + Object.entries(attrs).flatMap(([key, values]) => values.map(value => `${key}=${value}`)).join(' ');
 const input = (id, value) => line(id, 'std.trace.input', { source: [quote(value.source)], version: [quote(value.version)], 'source.type': [value.sourceType], key: [value.key], values: [quote(JSON.stringify(value.values))] });
 const JOURNAL_IDS = new Set(['request.module', 'trace.module', 'reply.module', 'trace.request', 'before.input', 'expected.input', 'semantic.input', 'step', 'after.input', 'before.observation', 'after.observation', 'claim', 'reply']);
 const uuid = () => globalThis.crypto.randomUUID();
-function reader() {
-  if (!grammar) {
-    const world = World.fromJSON(SOURCE.snapshot);
-    const compiled = compileGrammarOverlay(world, { types: SOURCE.types });
-    if (!compiled.ok) throw new Error('Declared reader could not compile');
-    const phraseWorld = World.fromJSON(SOURCE.phraseSnapshot), frameWorld = World.fromJSON(SOURCE.frameSnapshot);
-    const mappings = englishRequestMappings(api, frameWorld);
-    if (!mappings.ok) throw new Error('Declared request mappings could not compile');
-    const general = createGeneralEnglishReader(api);
-    const generalCompiled = general.compile({ phraseWorld, frameWorld, mappings: mappings.mappings });
-    if (!generalCompiled.ok) throw new Error('Declared general reader could not compile');
-    grammar = { world, compiled, general, generalCompiled };
-  }
-  return grammar;
-}
 const messages = {
   area: 'This area does not yet support the new request path.', language: 'The new request path currently requires English input.',
   reading: 'I could not obtain one complete, unambiguous reading.', structure: 'This request needs a capability that is not yet supported.',
@@ -41,32 +25,6 @@ function reply(text, supported, trace = {}) {
     state: {}, effects: [], newEngine: true, trace: { legacy: false, engine: 'new', ...trace } };
 }
 const refusal = (reason, trace) => reply(`${trace?.understood ? trace.understood + ' ' : ''}${messages[reason]} Nothing changed.`, false, { reason, ...trace });
-
-/** The caller owns UI selection and boundary translation; this runner never invokes a legacy reader. */
-export function runNewEngine(session, text, options = {}) {
-  if (typeof text !== 'string' || !text.trim() || text.length > 65536) return refusal('reading', { unsupported: 'A bounded nonempty English message is required.' });
-  const tab = options.view ?? session.isession.state['ui.shell']?.activeTab;
-  const area = NEW_ENGINE_AREAS[tab];
-  if (options.language && options.language !== 'en') return refusal('language');
-  const prior = options.invocation && (session.newEngineJournal || []).find(record => record.invocation === options.invocation);
-  if (prior) {
-    if (prior.text !== text || prior.area !== tab) return refusal('identity');
-    return reply('This invocation was already recorded. No new operation was performed.', false,
-      { replayed: true, historicalReceipt: { ...structuredClone(prior.receipt), replayed: true }, journal: structuredClone(prior) });
-  }
-  const { world: source, compiled, general, generalCompiled } = reader();
-  // Parallel declared proposal sources, never an old-route fallback. Distinct
-  // graphs remain alternatives until an explicit semantic equivalence proof.
-  const providers = [
-    { id: 'property-profile', result: readGrammarRequests(source, text, { compiled, ...SOURCE.options, max: 32 }) },
-    { id: 'general-frames', result: general.read(generalCompiled, text) },
-  ];
-  const candidates = providers.flatMap(provider => provider.result.coverage?.complete
-    ? provider.result.candidates.map(candidate => ({ ...candidate, provider: provider.id })) : []);
-  const reading = { candidates, coverage: { complete: candidates.length > 0 }, providers };
-  if (!reading.coverage?.complete || reading.candidates.length !== 1) return refusal('reading', { reading });
-  return executeRequestCandidate(session, reading.candidates[0], text, options);
-}
 
 /** Execute a detached, validated graph. This is not a claim of reader coverage. */
 export function executeRequestCandidate(session, candidate, text, options = {}) {
@@ -87,7 +45,7 @@ export function executeRequestCandidate(session, candidate, text, options = {}) 
       || wires.some(wire => JOURNAL_IDS.has(wire.id) || !['std.request', 'std.request.source', 'std.request.target', 'std.request.constraint'].includes(wire.type))
       || wires.filter(wire => wire.type === 'std.request').length !== 1) return refusal('structure', { reading: candidate });
   } catch { return refusal('structure'); }
-  const { world: source } = reader();
+  const source = sourceWorld();
   const evidence = new World();
   evidence.load('@request.module core.use world=std.request\n@trace.module core.use world=std.trace\n@reply.module core.use world=std.reply');
   if (!evidence.tell(candidate.wires).ok || !inspectRequest(evidence, candidate.request).ok) return refusal('structure');

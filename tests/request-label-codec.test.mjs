@@ -19,7 +19,7 @@ const rejects = (fn, code) => assert.throws(fn, (e) => e instanceof LabelCodecEr
 
 test('training validator shares the exact application library pin', () => {
   const root = new URL('../src/vendor/sopworld/', import.meta.url), manifest = JSON.parse(readFileSync(new URL('provenance.json', root)));
-  assert.equal(manifest.release, '0.197.0');
+  assert.equal(manifest.release, '0.198.0');
   assert.equal(createHash('sha256').update(readFileSync(new URL('sopworld.mjs', root))).digest('hex'), manifest.sha256);
 });
 
@@ -73,7 +73,7 @@ test('published validator rejects invalid scope, selector reuse and out-of-range
   rejects(() => encode(graph(base + '\n' + target + '\n' + leaf('c', 't', 'v', 'source=$s source.start=0 source.end=99'), 'r')), 'invalid_request_graph');
   const escape = base + '\n' + target + '\n@bound std.request.target request=$r mode=bound\n' + leaf('c', 'bound', 'v');
   rejects(() => encode(graph(escape, 'r')), 'invalid_request_graph');
-  rejects(() => encode(graph(base.replace('mood=do', 'mood=ask'), 'r')), 'unsupported_request_profile');
+  rejects(() => encode(graph(base.replace('mood=do', 'mood=unknown'), 'r')), 'invalid_request_graph');
   rejects(() => encode(graph(base + '\n@second std.request act=other mood=do source=$s', 'r')), 'expected_single_request');
 });
 
@@ -132,4 +132,18 @@ test('source intervals count Unicode scalars and cannot use a UTF-16 end offset'
   const short = base.replace('select 😀 item and change it', '😀x');
   roundtrip(short + '\n' + target + '\n' + leaf('c', 't', 'false', 'source=$s source.start=1 source.end=2'));
   rejects(() => encode(graph(short + '\n' + target + '\n' + leaf('c', 't', 'false', 'source=$s source.start=1 source.end=3'), 'r')), 'invalid_request_graph');
+});
+
+
+test('all published moods and explicit question projections roundtrip independently of language', () => {
+  for (const mood of ['do', 'propose', 'check', 'ask']) roundtrip(base.replace('mood=do', 'mood=' + mood));
+  for (const operation of ['values', 'count', 'exists', 'members']) {
+    const {labels} = roundtrip(base.replace('mood=do', 'mood=ask').replace('source=$s', 'source=$s query=$query') + '\n' + target + '\n@query std.request.query request=$r target=$t operation=' + operation + (operation === 'values' ? ' concept=declared.property' : '') + ' source=$s source.start=7 source.end=8');
+    assert.equal(labels.format, 'psys2.request-labels/2');
+    assert.equal(labels.profile, 'single-request');
+    assert.equal(labels.contract, 'std.request@0.198.0');
+    const forged = structuredClone(labels); forged.format = 'psys2.request-labels/1';
+    rejects(() => decode(forged), 'unsupported_label_format');
+  }
+  rejects(() => encode(graph(base.replace('source=$s', 'source=$s query=$q') + '\n' + target + '\n@q std.request.query request=$r target=$t operation=count', 'r')), 'invalid_request_graph');
 });

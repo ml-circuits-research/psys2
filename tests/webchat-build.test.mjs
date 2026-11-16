@@ -10,6 +10,9 @@ test('webchat build produces a bundle the browser loader can run', async () => {
   const out = await mkdtemp(path.join(tmpdir(), 'psys2-webchat-'));
   try {
     const info = await buildWebchat({ outDir: out });
+    await assert.rejects(stat(path.join(out, 'lib/dialog/reader-compat')), error => error.code === 'ENOENT');
+    const readerRoute = await readFile(path.join(out, 'lib/dialog/reader-routing.mjs'), 'utf8');
+    assert.doesNotMatch(readerRoute, /grammar-reader|readGrammarRequests|compileGrammarOverlay|runGrammarEngine/);
     assert.ok(!info.worlds.includes('geo.map') && !info.worlds.includes('media.music'));
     assert.ok(!info.tabs.includes('map.mjs') && !info.tabs.includes('music.mjs'));
     await assert.rejects(stat(path.join(out, 'worlds/geo.map/bundle.json')), { code: 'ENOENT' });

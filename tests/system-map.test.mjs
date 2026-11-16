@@ -26,7 +26,10 @@ test('an unread new-engine turn reports its actual reading failure without old p
   const before = structuredClone(s.isession.state);
   const r = await s.send('Draw a red house');
   assert.equal(r.trace.engine, 'new'); assert.equal(r.trace.legacy, false);
-  assert.equal(r.trace.reason, 'reading'); assert.ok(r.trace.reading);
+  assert.equal(r.trace.reason, 'reading');
+  assert.equal(r.trace.readerRouting.reason, 'model-provider-unavailable');
+  assert.equal(r.trace.readerRouting.selected, null);
+  assert.equal(r.trace.readerRouting.model.coverage.complete, false);
   assert.equal(r.trace.steps, undefined, 'retired route steps are not invented');
   assert.deepEqual(s.isession.state, before);
 });

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import {createCalendar} from './calendar-tool.mjs?v=7be76f9245';
-import {World} from '../../lib/vendor/sopworld/sopworld.mjs?v=9d959b0a06';
+import {World} from '../../lib/vendor/sopworld/sopworld.mjs?v=f5c647b48b';
 /** SOP policy supplied by loader; this projection assigns no timezone/default values. */
 export function createCalendarPolicy({source,budget=10000}={}){
  if(!Number.isSafeInteger(budget)||budget<1)throw new TypeError('calendar-policy-budget-required');

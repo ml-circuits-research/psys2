@@ -1,7 +1,7 @@
 // Development-only functional matrix through the sole application reader/coordinator.
 import {readFileSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {runNewEngine} from '../src/dialog/new-engine.mjs';
+import {routeNewEngine as runNewEngine} from '../src/dialog/reader-routing.mjs';
 import {initialState as drawing} from '../worlds/art.draw/board.mjs';
 import {initialDiagramState as diagram} from '../worlds/diagram.sketch/declared-host.mjs';
 import {initialDocumentState as document} from '../worlds/docs.editor/declared-host.mjs';
@@ -19,7 +19,7 @@ for(const row of input){
  const setupComplete=!row.context?.existing?.length&&!row.context?.previous;
  const honest=!error&&refused&&unchanged&&reply.effects?.length===0&&reply.text?.trim()&&reply.trace?.legacy===false;
  const verdict=honest?'honest':error||reply?.trace?.legacy!==false?'wrong':'needs-review';
- rows.push({id:row.id,area:row.world,classes:row.classes,text:row.text,verdict,setupComplete,contextInstantiated:false,unchanged,reason:reply?.trace?.reason??null,reply:reply?.text??null,error,annotation:row.requests});
+ rows.push({readerRouting:reply?.trace?.readerRouting??null,id:row.id,area:row.world,classes:row.classes,text:row.text,verdict,setupComplete,contextInstantiated:false,unchanged,reason:reply?.trace?.reason??null,reply:reply?.text??null,error,annotation:row.requests});
 }
 const verdicts=['right','partly','honest','wrong','needs-review'],summary=Object.fromEntries(verdicts.map(v=>[v,rows.filter(r=>r.verdict===v).length]));
 const declared=JSON.parse(readFileSync('training/eval/functional-matrix/matrix.json','utf8')),areas=Object.keys(tabs),cells={};

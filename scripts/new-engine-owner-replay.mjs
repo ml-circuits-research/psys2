@@ -2,7 +2,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { runNewEngine } from '../src/dialog/new-engine.mjs';
+import { routeNewEngine as runNewEngine } from '../src/dialog/reader-routing.mjs';
 import { initialState } from '../worlds/art.draw/board.mjs';
 const pin = '2ba0259603ed5155b57324fca7c27fc249ba2a0a';
 const path = 'compat/psys2/reader/development/rows.jsonl';
@@ -21,7 +21,7 @@ for (const row of input) {
   const refused = reply.statuses.every(status => status === 'unsupported');
   // Without an independently reviewed state-intent check, success is never promoted to right.
   const verdict = refused && unchanged && reply.effects.length === 0 && reply.text.trim() ? 'honest' : 'needs-review';
-  rows.push({ classes: Array.isArray(row.classes) && row.classes.length ? row.classes : ['unclassified'], classificationStatus: Array.isArray(row.classes) && row.classes.length ? 'source-declared' : 'pending-reviewed-intent-tags', id: row.id, text: row.text, session: key, tab, area: row.area, retired: retired.has(tab), verdict,
+  rows.push({ readerRouting: reply.trace.readerRouting, classes: Array.isArray(row.classes) && row.classes.length ? row.classes : ['unclassified'], classificationStatus: Array.isArray(row.classes) && row.classes.length ? 'source-declared' : 'pending-reviewed-intent-tags', id: row.id, text: row.text, session: key, tab, area: row.area, retired: retired.has(tab), verdict,
     reason: reply.trace.reason ?? null, reply: reply.text, unchanged, legacy: reply.trace.legacy,
     source: { ...row.source, originalText: undefined }, contextualSetupReplayed: false });
 }

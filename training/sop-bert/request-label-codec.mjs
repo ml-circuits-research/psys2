@@ -1,9 +1,9 @@
-// Training-only lossless labels for a published single-command std.request graph.
+// Training-only lossless labels for a published single-request std.request graph.
 // No language interpretation, model heads, instance resolution or execution.
 import { World, parse, str, inspectRequest } from '../../src/vendor/sopworld/sopworld.mjs';
-export const LABEL_FORMAT = 'psys2.request-labels/1';
+export const LABEL_FORMAT = 'psys2.request-labels/2';
 export const LABEL_LIMITS = Object.freeze({ nodes: 256, values: 8192, characters: 262144, unresolved: 256, candidates: 64 });
-const TYPES = new Set(['std.request', ...['source', 'target', 'constraint', 'not', 'group', 'quant', 'value'].map((x) => 'std.request.' + x)]);
+const TYPES = new Set(['std.request', ...['source', 'target', 'constraint', 'not', 'group', 'quant', 'value', 'query'].map((x) => 'std.request.' + x)]);
 const schemaWorld = new World(); schemaWorld.load('@use core.use world=std.request');
 const schemas = new Map([...TYPES].map((type) => [type, schemaWorld.schema(type)]));
 const plain = (v) => v !== null && typeof v === 'object' && !Array.isArray(v) && [Object.prototype, null].includes(Object.getPrototypeOf(v));
@@ -53,8 +53,6 @@ function checkGraph(graph) {
     byId.set(wire.id, wire);
   }
   if (roots !== 1 || byId.get(graph.request)?.type !== 'std.request') fail('expected_single_request');
-  const root = byId.get(graph.request), mood = root.attrs.mood?.[0];
-  if (mood !== undefined && !['do', 'propose'].includes(mood)) fail('unsupported_request_profile', mood);
   for (const wire of graph.wires) for (const values of Object.values(wire.attrs)) for (const token of values)
     if (token.startsWith('$') && !byId.has(token.slice(1))) fail('external_or_dangling_reference', token);
   const text = serialize(graph.wires);
@@ -106,13 +104,13 @@ export function encodeRequestGraph(graph) {
     fields: Object.entries(wire.attrs).map(([key, values]) => ({ key, values: values.map((value) => value.startsWith('$') ? { ref: pointers.get(value.slice(1)) } : { token: token(value) }) })) }));
   const diagnostics = unresolved.map((u) => ({ node: pointers.get(u.wire), field: u.field, source: pointers.get(u.source), start: u.start, end: u.end,
     reason: token(u.reason), candidates: u.candidates.map(token) }));
-  return { format: LABEL_FORMAT, profile: 'single-command', contract: 'std.request@0.183.0', state: diagnostics.length ? 'unresolved' : 'complete',
+  return { format: LABEL_FORMAT, profile: 'single-request', contract: 'std.request@0.198.0', state: diagnostics.length ? 'unresolved' : 'complete',
     request: pointers.get(graph.request), ids, tokens, nodes, unresolved: diagnostics };
 }
 
 export function decodeRequestLabels(labels) {
   record(labels, ['format', 'profile', 'contract', 'state', 'request', 'ids', 'tokens', 'nodes', 'unresolved']);
-  if (labels.format !== LABEL_FORMAT || labels.profile !== 'single-command' || labels.contract !== 'std.request@0.183.0') fail('unsupported_label_format');
+  if (labels.format !== LABEL_FORMAT || labels.profile !== 'single-request' || labels.contract !== 'std.request@0.198.0') fail('unsupported_label_format');
   array(labels.ids, LABEL_LIMITS.nodes); array(labels.nodes, LABEL_LIMITS.nodes); array(labels.tokens, LABEL_LIMITS.values); array(labels.unresolved, LABEL_LIMITS.unresolved);
   if (labels.ids.length !== labels.nodes.length || new Set(labels.ids).size !== labels.ids.length || new Set(labels.tokens).size !== labels.tokens.length) fail('invalid_identity_or_token_table');
   const count = budget(); labels.ids.forEach(count); labels.tokens.forEach(count);

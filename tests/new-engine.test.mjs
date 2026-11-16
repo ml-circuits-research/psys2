@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { runNewEngine } from '../src/dialog/new-engine.mjs';
+import { runGrammarEngine as runNewEngine } from '../scripts/lib/grammar-reader.mjs';
 import { initialState } from '../worlds/art.draw/board.mjs';
 import { World, str } from '../src/vendor/sopworld/sopworld.mjs';
 import { fixtureEngine } from './helpers.mjs';
@@ -12,7 +12,7 @@ const setup = (objects = [{ id: 17, kind: 'circle', color: 'red' }]) => {
   return { isession: { state: { 'ui.shell': { activeTab: 'draw' }, 'art.draw': state } }, newEngineJournal: [] };
 };
 const field = (world, id, key) => str(world.get(id).attrs[key][0]);
-test('published reader, real host, observations and retained typed claim execute end to end', () => {
+test('offline declared comparator, real host, observations and retained typed claim execute end to end', () => {
   const session = setup(), result = runNewEngine(session, sentence, { invocation: 'turn-one' });
   assert.equal(result.trace.assessment, 'changed', JSON.stringify(result));
   assert.equal(session.isession.state['art.draw'].objects[0].color, '#800080');
@@ -77,6 +77,10 @@ test('other declared colours and kinds use the same published reader/resolver/ho
 test('the sole route ignores retired options and preserves undo and journal persistence', async () => {
   const engine = await fixtureEngine(), session = engine.createSession({ language: 'en' });
   Object.assign(session.isession.state, setup().isession.state);
+  // Controlled graph-provider fixture, not a trained-model performance claim.
+  const wires = `@source std.request.source text=${JSON.stringify(sentence)}\n@r std.request act=change mood=do source=$source root=$condition\n@target std.request.target request=$r mode=existing kind=circle\n@condition std.request.constraint request=$r target=$target concept=colour operator=eq value=purple character=requirement polarity=positive`;
+  engine.requestReader = { provenance: () => ({modelSha256:'a'.repeat(64),decoderVersion:1}), propose: async () => ({candidates:[{request:'r',wires}],coverage:{complete:true,executable:true,graphProposal:true}}) };
+  engine.requestReaderGate = {status:'approved',modelSha256:'a'.repeat(64),decoderVersion:1,reportSha256:'b'.repeat(64),wrong:0,better:true,compared:1,accepts:()=>true};
   let legacyCalls = 0;
   session._sendRead = async () => { legacyCalls++; return { text: 'legacy', trace: {}, statuses: [] }; };
   const before = session.snapshot();
@@ -173,7 +177,7 @@ test('saved non-English session settings are refused without invoking old transl
   assert.deepEqual(session.isession.state, before);
 });
 
-test('general frame provider reaches the existing assessed property path without a synthetic root', () => {
+test('offline general frame comparator reaches the existing assessed property path without a synthetic root', () => {
   const session = setup();
   const result = runNewEngine(session, 'make the circle purple');
   assert.equal(result.trace.assessment, 'changed');

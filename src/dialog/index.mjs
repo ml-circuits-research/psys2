@@ -1624,7 +1624,7 @@ export class DialogSession {
 
   /** Sole public turn route. Retired options cannot select another reader. */
   async _send(text, opts = {}) {
-    return (await import('./new-engine.mjs')).runNewEngine(this, text, { ...opts, language: opts.language ?? (this.language === 'auto' ? 'en' : this.language) });
+    return (await import('./reader-routing.mjs')).routeNewEngine(this, text, { ...opts, language: opts.language ?? (this.language === 'auto' ? 'en' : this.language) });
   }
 
   /**
