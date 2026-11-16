@@ -5100,3 +5100,11 @@ Owner: the test replays his sessions translated into English, not the Romanian t
 - The acceptance set is then: those English versions plus the owner's English turns as typed. Report right / partly / honest / wrong per turn on that set.
 - The Romanian lines are kept and measured separately, as the translation subject, never mixed into the acceptance numbers.
 - I will review the English versions before they are used: a translation that makes a turn easier than it was would inflate the result.
+
+## 2026-11-16 15:40 (Rome) — Implementation review 1 (reviewer; calendar host a0987918)
+
+**Run by me:** `node --test tests/calendar-host.test.mjs` → 6 tests, 6 pass. No request words or domain reading in the tool. Spec 29 is clear: resolved absolute instants in, observation with identity and version out, operation identities make repeats receipts, stale writes refused, undo conditional and verified. Accepted, with one change:
+
+- **Overlap must not be enforced by the tool.** Spec 29 says the tool "rejects … overlap on a shared participant or room". In the book (3.6, 7.4, 8.6) that is the calendar's declared deny, checked by the world on the fork before anything reaches the tool, explained from the violation, and changeable as data (an optional event, a room that allows two bookings). If the tool also refuses it, the rule lives twice, one copy in code, and a later change of policy needs code. Keep in the tool only what makes the state unrepresentable (a reference to a missing person or room, a non-positive duration, a malformed record); let it REPORT overlaps in the observation if useful, never refuse them. One round of counter if you see a reason the host must enforce it.
+
+Also noted: the full suite reports 181 raw failures under the report-only legacy policy; that is the old path, expected to fall as the declared domains replace it, and not a gate for this change. The real set is unchanged (131/207), as it should be for a host foundation.
