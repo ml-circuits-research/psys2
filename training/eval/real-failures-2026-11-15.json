@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "f4de8a6c",
-  "tree": "58d50f1a4274d64c",
+  "build": "59f785be",
+  "tree": "d9276c009ab901ae",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -20,8 +20,8 @@
    "changed": 17,
    "unjudged": 332,
    "outcome": {
-    "executed": 159,
-    "refused": 238,
+    "executed": 157,
+    "refused": 240,
     "asked": 4,
     "not_understood": 109,
     "other_world": 95
@@ -95,8 +95,8 @@
    "changed": 17,
    "unjudged": 332,
    "outcome": {
-    "executed": 159,
-    "refused": 238,
+    "executed": 157,
+    "refused": 240,
     "asked": 4,
     "not_understood": 109,
     "other_world": 95
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 385,
- "failing_ops": 385,
+ "failing_matrix": 387,
+ "failing_ops": 387,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -794,7 +794,7 @@
      "verdict": "wrong",
      "text": "add two chapters",
      "tab": "editor",
-     "reply": "I did not understand that as something to do in the documents.",
+     "reply": "Nothing changed. I could not do add two chapters: 3 made, the request said 2.",
      "failing": [
       "state:blocks.length=6"
      ]
@@ -1268,13 +1268,18 @@
   },
   {
    "cause": "bare word or two-word fragment not read",
-   "count": 23,
-   "both_reasoners": 23,
+   "count": 24,
+   "both_reasoners": 24,
    "examples": [
     {
      "text": "mcdavatara human",
      "tab": "robot",
      "happened": "I did not understand \"mcdavatara human\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood]"
+    },
+    {
+     "text": "yes",
+     "tab": "guess",
+     "happened": "I did not understand \"yes\". Did you mean \"Eyes.\"? [outcome: not_understood]"
     },
     {
      "text": "no",
@@ -1285,11 +1290,33 @@
      "text": "yes",
      "tab": "guess",
      "happened": "Yes to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
+    }
+   ]
+  },
+  {
+   "cause": "refused: the request names something the world does not support",
+   "count": 18,
+   "both_reasoners": 18,
+   "examples": [
+    {
+     "text": "add a header, two chapters and a paragraph",
+     "tab": "editor",
+     "happened": "I understood \"two chapters\", \"a paragraph\", but not \"add a header\", so I did nothing. [outcome: refused]"
     },
     {
-     "text": "no",
-     "tab": "guess",
-     "happened": "No to what? You can ask me a question, give me a command, or say \"help\" to see what I can do. [outcome: not_understood]"
+     "text": "add 2 new chapters",
+     "tab": "editor",
+     "happened": "Nothing changed. [outcome: refused]"
+    },
+    {
+     "text": "add text",
+     "tab": "editor",
+     "happened": "I did not understand \"text\" here. [outcome: refused]"
+    },
+    {
+     "text": "add a new paragraph",
+     "tab": "editor",
+     "happened": "I did not understand that as something to do in the documents. [outcome: refused]"
     }
    ]
   },
@@ -1317,33 +1344,6 @@
      "text": "nu inlocui lacul, deasupra, ai loc",
      "tab": "draw",
      "happened": "I did not understand that as something to do in the drawing. [outcome: refused; open]"
-    }
-   ]
-  },
-  {
-   "cause": "refused: the request names something the world does not support",
-   "count": 16,
-   "both_reasoners": 16,
-   "examples": [
-    {
-     "text": "add a header, two chapters and a paragraph",
-     "tab": "editor",
-     "happened": "I understood \"two chapters\", \"a paragraph\", but not \"add a header\", so I did nothing. [outcome: refused]"
-    },
-    {
-     "text": "add text",
-     "tab": "editor",
-     "happened": "I did not understand \"text\" here. [outcome: refused]"
-    },
-    {
-     "text": "add a new paragraph",
-     "tab": "editor",
-     "happened": "I did not understand that as something to do in the documents. [outcome: refused]"
-    },
-    {
-     "text": "are the new paragraph",
-     "tab": "editor",
-     "happened": "I cannot answer questions about the documents yet. [outcome: refused]"
     }
    ]
   },
@@ -1397,7 +1397,7 @@
     {
      "text": "add two chapters",
      "tab": "editor",
-     "happened": "I did not understand that as something to do in the documents. [outcome: refused; wrong; state:blocks.length=6]"
+     "happened": "Nothing changed. I could not do add two chapters: 3 made, the request said 2. [outcome: refused; wrong; state:blocks.length=6]"
     }
    ]
   },
@@ -1456,33 +1456,6 @@
    ]
   },
   {
-   "cause": "fragment / list split",
-   "count": 6,
-   "both_reasoners": 6,
-   "examples": [
-    {
-     "text": "deseneaza si un magar, dar sa nu zboare, pe iarba",
-     "tab": "draw",
-     "happened": "I understood \"on the grass\", but not \"Draw a donkey\", \"too to not fly\", so I did nothing. [outcome: refused; open]"
-    },
-    {
-     "text": "eyeglasses",
-     "tab": "robot",
-     "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; open]"
-    },
-    {
-     "text": "a women",
-     "tab": "robot",
-     "happened": "I am not sure how “a women” fits what we were doing. Please say the whole request. [outcome: not_understood]"
-    },
-    {
-     "text": "yes",
-     "tab": "guess",
-     "happened": "I am not sure how “eyes” fits what we were doing. Please say the whole request. [outcome: not_understood]"
-    }
-   ]
-  },
-  {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.ellipsis1",
    "count": 6,
    "both_reasoners": 6,
@@ -1506,6 +1479,33 @@
      "text": "draw two cats and a big one",
      "tab": "draw",
      "happened": "I added 2 cats. [outcome: executed; wrong; state:art.draw:objects.length=3 answer:big]"
+    }
+   ]
+  },
+  {
+   "cause": "fragment / list split",
+   "count": 5,
+   "both_reasoners": 5,
+   "examples": [
+    {
+     "text": "deseneaza si un magar, dar sa nu zboare, pe iarba",
+     "tab": "draw",
+     "happened": "I understood \"on the grass\", but not \"Draw a donkey\", \"too to not fly\", so I did nothing. [outcome: refused; open]"
+    },
+    {
+     "text": "eyeglasses",
+     "tab": "robot",
+     "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; open]"
+    },
+    {
+     "text": "a women",
+     "tab": "robot",
+     "happened": "I am not sure how “a women” fits what we were doing. Please say the whole request. [outcome: not_understood]"
+    },
+    {
+     "text": "new game",
+     "tab": "guess",
+     "happened": "I am not sure how “new name” fits what we were doing. Please say the whole request. [outcome: not_understood]"
     }
    ]
   },
