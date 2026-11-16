@@ -4455,3 +4455,9 @@ Completed all 99,566 auxiliary calibration pairs in 421.9 s with all pre/post in
 | Always-negative baseline | 64,019/99,566 = 64.2981%, identical population |
 
 The threshold was not fitted or changed. These are gold-field-conditioned candidate/span decisions, not request graphs, complete readings or execution confidence. The report retains `executable: false`, `graphProposal: false` and `deploymentConfidenceGate: false`. No application reader, model deployment manifest or confidence switch changed.
+
+## 2026-11-16 — Per-concept q8 comparison published
+
+`training/sop-bert/results/onnx-calibration-clean-summary.json` is a small derived summary of the full outside-Git report. A Python pass joined all 72 concept rows to the frozen CUDA bfloat16 report by concept name, checked identical pair/positive/span support, computed q8-minus-reference confusion/correct/span deltas and independently checked their sums against the global deltas. It retains every concept, sorted by lost pair correctness first, all provenance hashes, complete population/token-parity checks and the full report hash.
+
+Q8 adds 63 false positives and removes 20 false negatives: 43 fewer correct pairs and eight fewer exact spans overall. Seventeen concepts lose pair correctness, 16 improve and 39 tie. Largest loss is `target.fill` (9,393 pairs; 35 fewer correct, 22 more FP and 13 more FN); `phase` loses nine correct and `mood` seven. The small global difference is not an acceptance gate for these individual concepts. Runtime and precision both differ (CPU q8 versus CUDA bfloat16), so this comparison does not isolate quantization causally. The integration lane owns the questions.md proposal: accept reproducible non-executable auxiliary evidence now, require explicit per-concept support/risk criteria before any execution gate. No such gate or reader capability is invented here.
