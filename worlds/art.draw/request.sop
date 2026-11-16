@@ -121,10 +121,25 @@
 @op.remove std.tool.op name=removeThings world=drawing param=ids effect=removes
 @b.remove std.tool.bind world=drawing act=remove of=thing op=removeThings arg=ids<-step.things needs=exists(ids) removes=ids
 @b.remove.scene std.tool.bind world=drawing act=remove of=pond of=forest of=garden op=removeThings arg=ids<-step.things
-@op.move std.tool.op name=moveThings world=drawing param=ids param=place param=anchor effect=changes
+@op.move std.tool.op name=moveThings world=drawing param=ids param=place param=anchor param=relation effect=changes
 @c.thingAt std.tool.custom name=thingAt world=drawing kind=search in=place out=anchor doc="the newest thing of the kind a place names (next to it)"
-@b.move std.tool.bind world=drawing act=place of=thing op=moveThings arg=ids<-step.things arg=place<-step.place arg=anchor<-custom.thingAt needs=exists(ids)
-@b.move.scene std.tool.bind world=drawing act=place of=pond of=forest of=garden op=moveThings arg=ids<-step.things arg=place<-step.place arg=anchor<-custom.thingAt needs=exists(ids)
+@pa.move.relation std.tool.param op=moveThings name=relation kind=atom
+@v.move.next std.tool.value op=moveThings param=relation value="next to" as=next
+@v.move.beside std.tool.value op=moveThings param=relation value=beside as=next
+@v.move.near std.tool.value op=moveThings param=relation value=near as=next
+@v.move.by std.tool.value op=moveThings param=relation value=by as=next
+@v.move.front std.tool.value op=moveThings param=relation value="in front of" as=front
+@v.move.under std.tool.value op=moveThings param=relation value=under as=below
+@v.move.underneath std.tool.value op=moveThings param=relation value=underneath as=below
+@v.move.beneath std.tool.value op=moveThings param=relation value=beneath as=below
+@v.move.over std.tool.value op=moveThings param=relation value=over as=above
+@v.move.inside std.tool.value op=moveThings param=relation value=inside as=in
+@v.move.into std.tool.value op=moveThings param=relation value=into as=in
+@v.move.onto std.tool.value op=moveThings param=relation value=onto as=on
+@v.move.left std.tool.value op=moveThings param=relation value="left of" as=leftof
+@v.move.right std.tool.value op=moveThings param=relation value="right of" as=rightof
+@b.move std.tool.bind world=drawing act=place of=thing op=moveThings arg=ids<-step.things arg=place<-step.place arg=anchor<-step.region arg=relation<-step.relation needs=exists(ids)
+@b.move.scene std.tool.bind world=drawing act=place of=pond of=forest of=garden op=moveThings arg=ids<-step.things arg=place<-step.place arg=anchor<-step.region arg=relation<-step.relation needs=exists(ids)
 @op.set std.tool.op name=setThings world=drawing param=ids param=colour param=size effect=changes
 @pa.set.size std.tool.param op=setThings name=size type=k.expect.scale by=step accepts=small accepts=default accepts=big
 @b.set std.tool.bind world=drawing act=change of=thing op=setThings arg=ids<-step.things arg=colour<-step.colour arg=size<-step.size needs=exists(ids)

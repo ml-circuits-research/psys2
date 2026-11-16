@@ -96,3 +96,9 @@ The door (spec 28 section 10) takes the English of a foreign-language turn from 
 - The repairs are recorded (`trace.request.sourceRepairs`) and not said in the reply yet (the reply phrase "I read X as Y" has no Romanian form; needs it in the language world).
 - The door's candidates also include the glossed ones (spec 05 "Glossed candidates": "aseaza" is "arrange") through the reader's vocabulary test and the kept names.
 - Measure: `scripts/typos-measure.mjs` (training/eval/README.md): 100 real rows, wrong 2 -> 2, right 41 -> 49, Romanian typo rows right 0 -> 8, wrong 0; controls (37 + 11 correct words outside the live world) 0 wrong.
+
+## Reading fallback: who reads the person's words (reviewer 2026-11-16 02:30, questions.md Q50)
+- A language with a rules translator (today: Romanian) is read by the rules chain only: the voices, the rules translator, the source repair, the contextual repair and the glosses. The machine translators (the browser's Translator, the on-device model) are **not** candidates of the request reading for it: on the real set's 293 Romanian turns the model added wrong executions (8 -> 11) and no right answer (36 in every arm).
+- A language with no rules translator keeps the machine reading as before.
+- It is data, reversible: `MACHINE_READING_OFF` in `src/translate/reading-policy.mjs`; a host sets `engine.machineReading = { ro: true }` (Node: `PSYS2_RO_MODEL=1`) to put the model back. `gatherCandidates(..., { machine })` is the one switch; nothing is per sentence.
+- Replies are unchanged: reply facts of the language world first, then the translators for free text.

@@ -26,6 +26,7 @@ import { splitSentences } from '../formalizer/rules/normalize.mjs';
 import { nameCandidates, nameIndex } from '../formalizer/names.mjs';
 import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs';
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs';
+import { machineReads } from '../translate/reading-policy.mjs';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs';
 import { langRoNow } from '../translate/frames-ro.mjs';
 import { repairInContext } from '../translate/source-repair.mjs';
@@ -1676,7 +1677,7 @@ export class DialogSession {
     // fewest words unread in the open world (ties: the earlier candidate). The translators are the system boundary; the reading is the door's.
     let cands = [];
     const contextRepair = this._contextRepairOf(lang, tr);
-    try { cands = await gatherCandidates(text, { from: lang, to: 'en', translator: tr.rules ? tr : { rules: tr }, abortable: (p, stage) => guard.abortable(p, stage), contextRepair, isEnglish: this._doorIsEnglish(tr), kept: this._doorKept() }); } catch (e) { if (e instanceof TurnAborted) throw e; cands = []; }
+    try { cands = await gatherCandidates(text, { from: lang, to: 'en', machine: machineReads(lang, this.engine.machineReading), translator: tr.rules ? tr : { rules: tr }, abortable: (p, stage) => guard.abortable(p, stage), contextRepair, isEnglish: this._doorIsEnglish(tr), kept: this._doorKept() }); } catch (e) { if (e instanceof TurnAborted) throw e; cands = []; }
     // THE ARMS OF THE TRANSLATION MEASURE (Q48 proposal 2 item 3; a measuring hook, off by default): 'model' keeps only the machine translator's candidates (after the source repair
     // too); 'both' keeps every candidate and puts the rules' first, so that a tie of the reading goes to the rules. Unset: today's chain.
     const arm = this.engine.translationArm ?? null;
@@ -1945,7 +1946,8 @@ export class DialogSession {
     } else if (rev?.reaction === 'continue' && rev.request && !q.act && !(q.request.constraints ?? []).some((c) => c.on === 'place')) req = rev.request;   // a fragment of kinds continues the dialogue's act with a new request ("a sun" after "draw a fish": sopworld 0.154); one read with a place ("I like cats": "like" as a relation) is no fragment of a request (questions.md [LIB])
     if (!req.act || !tools.binds.some((b) => b.act === req.act)) return null;
     // a thing the world makes with no binding for its kind (a page: request.sop psys2.op) is not the binding's
-    if (req.act === 'make' && req.target && !tools.binds.some((b) => b.act === 'make' && (!b.of.length || lib.kindLineage(req.target, { live, catalog: [language] }).some((k) => b.of.includes(k))))) return null;
+    // (checked on the plan's target: a general whole with no expectation of its own, "a random picture", is planned as one of its subkind wholes the bindings make: sopworld 0.156)
+    const boundMake = (kind) => tools.binds.some((b) => b.act === 'make' && (!b.of.length || lib.kindLineage(kind, { live, catalog: [language] }).some((k) => b.of.includes(k))));
     const timeline = rd.timeline(tabWorld);
     if (replace && !(timeline.done.at(-1)?.diff?.added ?? []).every((t) => prims.view().some((x) => x.id === t.id))) replace = false;   // the last entry was taken back (the session's undo): there is nothing to replace
     this._requestSeed = ((this._requestSeed ?? Math.floor(Math.random() * 2 ** 31)) * 1103515245 + 12345) >>> 0;
@@ -1958,6 +1960,7 @@ export class DialogSession {
     let plan = null;
     try { plan = lib.planRequest(mirror, req, planOpts); } catch (e) { if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door] bound plan', e); plan = null; }
     if (!plan) return null;
+    if (req.act === 'make' && (plan.target ?? req.target) && !boundMake(plan.target ?? req.target)) return null;
     if (!plan.ok && (plan.notHonoured ?? []).some((x) => x.code === 'no_target')) return null;   // nothing named: the door's other paths say it
     if (req.act === 'make' && !req.target && !(req.constraints ?? []).length && (plan.assumed ?? []).some((a) => a.key === 'target')) return null;   // a bare "draw" (nothing said but the act): never a whole guessed from the world (the door asks, as on every path); "something random", "5 nodes" are the planner's
     if (replace && (plan.notHonoured ?? []).length) return null;   // a reaction with words the world does not take ("I like horses") is not a revision of its result
@@ -1965,7 +1968,7 @@ export class DialogSession {
     if (plan.ok) {
       const planned = {};
       for (const st of plan.steps ?? []) if (st.item && st.args?.kind) for (const k of lib.kindLineage(st.args.kind, { live, catalog: [language] })) planned[k] = (planned[k] ?? 0) + 1;
-      const broken = (req.constraints ?? []).filter((c) => c.on === 'count' && c.of && c.number !== undefined && (planned[c.of] ?? 0) !== c.number && !(plan.target === c.of));
+      const broken = (req.constraints ?? []).filter((c) => c.on === 'count' && c.of && c.number !== undefined && (planned[c.of] ?? 0) !== c.number && !(plan.target && lib.kindLineage(plan.target, { live, catalog: [language] }).includes(c.of)));   // a count of a kind the plan's target is one of ("a random picture" planned as a forest: sopworld 0.156) is the target's
       if (broken.length) return { why: `plan breaks ${broken.map((c) => c.words ?? c.of).join(', ')}`, q: flat };
     }
     // a plan whose steps the bindings do not all cover (a scene of parts whose whole the world binds no primitive to: a pond) is the world's executor's; one the bindings cover
@@ -1981,7 +1984,7 @@ export class DialogSession {
       try { const adds = (plan.steps ?? []).filter((st) => st.action === 'make' && st.args?.kind).map((st, i) => ({ id: `planned${i}`, kind: st.args.kind, attrs: {} })); const pre = adds.length ? lib.sayRequest(req, { ...plan, assumed: [], run: { ok: true, diff: { added: adds, removed: [], changed: [] } } }, sayOpts)?.text ?? '' : ''; const did = pre.split(/(?<=\.)\s+/).filter((x) => /^I /.test(x) && !/^I assumed /.test(x)).map((x) => x.replace(/^I /, '').replace(/\.$/, '')).join(', '); if (did) label.text = did; } catch { /* the person's words stand */ }
       try { run = lib.runPlan(plan, tools, prims, { view: prims.view, timeline, replace, request: req, live, catalog: [language] }); } catch (e) { run = { ok: false, diff: { added: [], removed: [], changed: [] }, failed: { code: 'tool_error', reply: 'why.nothing', roles: {}, detail: String(e?.message ?? e) } }; }
       let said = null;
-      try { said = lib.sayRequest(req, { ...plan, run, revised: replace && run.ok && !run.same, reply: rev?.reply }, sayOpts); } catch { said = null; }
+      try { said = lib.sayRequest(req, { ...plan, run, revised: rev?.sort === 'reaction' && replace && run.ok && !run.same && !plan.reference, reply: rev?.reply }, sayOpts); } catch { said = null; }
       const done = run.ok && !run.same;
       const read = (q.corrections ?? []).length ? `I read ${q.corrections.map((c) => `"${c.said}" as "${c.as}"`).join(', ')}. ` : '';   // what the reader repaired is said, as every door reply says it
       const facts = factParts(lib, language, said?.facts, said?.text ?? '');
@@ -2284,7 +2287,7 @@ export class DialogSession {
     // a word no dictionary of the language has, with no word of the language near it ("tenerife"; "desenaza" is a typo of desenează, not a name), is a name: a candidate that keeps it is not rejected for it
     const srcVocab = tr.rules?.sourceVocabulary?.(lang);
     const isName = tr.rules?.glossWord ? (w) => !nearAny(w, srcVocab) && !(tr.rules.glossWord(w, lang) ?? []).length && !(tr.rules.knownEnglish?.(fold(w))) : null;
-    const cands = await perf.time('candidates.gather', () => gatherCandidates(text, { from: lang, to: 'en', translator: tr, abortable: (p, stage) => guard.abortable(p, stage), isEnglish, kept }));
+    const cands = await perf.time('candidates.gather', () => gatherCandidates(text, { from: lang, to: 'en', machine: machineReads(lang, this.engine.machineReading), translator: tr, abortable: (p, stage) => guard.abortable(p, stage), isEnglish, kept }));
     if (!cands.length) { this._preDry = null; return this._sendCore(text, opts); }   // nothing translated it: the core says so (MT-SERIOUS)
     const pick = await perf.time('candidates.choose', () => chooseCandidate(cands, text, { understand: (e) => this._understands(e), isEnglish, soft: () => guard.soft(), kept, isName }));
     this._preDry = null;   // the turn now runs: the state is no longer the pre-turn one
@@ -2713,6 +2716,8 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
   const engine = {
     knowledge: options.knowledge ?? null,
+    /** Who reads the person's words (src/translate/reading-policy.mjs): { <lang>: true } puts the machine translator back as a reading candidate (Node: PSYS2_RO_MODEL=1). */
+    machineReading: options.machineReading ?? (globalThis.process?.env?.PSYS2_RO_MODEL === '1' ? { ro: true } : null),
     /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
     setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; attachValues(cat); attachOpenWords(cat); attachArrangement(cat); },   // the colour and number readers (k.values) take the catalog's words in place of the bundled subset
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,
