@@ -32,11 +32,11 @@ const posOf = (cls) => (cls?.startsWith('v.') ? 'verb' : cls?.startsWith('a.') ?
 
 export async function openLangRo({ facts = null, unimorph = false, gloss: glossFor = null, local: withLocal = true } = {}) {
   facts ??= (await import('./ro.facts.generated.mjs?v=39d29aee07')).LANG_RO_FACTS;
-  const local = withLocal ? (await import('./ro.local.mjs?v=dc7559d33f')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
+  const local = withLocal ? (await import('./ro.local.mjs?v=a1a98424aa')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
   // the large dictionary (3,466 lemmas derived from UniMorph, CC BY-SA 3.0, no senses) is a module of its own, loaded only when asked for; for a letter the hand file comes first, then the derived rows
   const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=fd204dbae6')).LANG_RO_UNIMORPH : {};
   const text = (letter) => [facts.dictionary[letter], local.dictionary[letter], extra[letter]].filter(Boolean).join('\n');
-  const lib = await import('../vendor/sopworld/sopworld.mjs?v=edec92187f');
+  const lib = await import('../vendor/sopworld/sopworld.mjs?v=d1f326a339');
   const world = new lib.World();
   world.load(facts.wires);
   if (local.wires.trim()) world.load(local.wires);
@@ -62,9 +62,10 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
   const lemmaOf = (en, pos) => {
     if (!byEnglish) {
       byEnglish = new Map();
+      const senseNo = new Map();
       for (const rows of [local.dictionary, facts.dictionary]) for (const t of Object.values(rows ?? {})) for (const line of String(t).split('\n')) {   // the application's own rows first: a local row corrects the catalog's sense (scrisoare, not literă, for the letter one writes)
-        const [lemma, , , sense] = line.split('\t'), g = /^k\.words\.(.+)\.(noun|adjective)\.\d+$/.exec(sense ?? '');
-        if (g && !byEnglish.has(`${g[2]}|${g[1]}`)) byEnglish.set(`${g[2]}|${g[1]}`, lemma);
+        const [lemma, , , sense] = line.split('\t'), g = /^k\.words\.(.+)\.(noun|adjective)\.(\d+)$/.exec(sense ?? '');
+        if (g && !(senseNo.get(`${g[2]}|${g[1]}`) <= Number(g[3]))) { byEnglish.set(`${g[2]}|${g[1]}`, lemma); senseNo.set(`${g[2]}|${g[1]}`, Number(g[3])); }   // the lowest sense number of a word wins (letter.noun.1 scrisoare, not noun.2 literă); the first row at a number wins
       }
     }
     const key = String(en).toLowerCase().replace(/ /g, '_');

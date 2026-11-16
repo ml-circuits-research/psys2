@@ -61,7 +61,7 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.person_know_none w.lang.ro.reply name=person.know.none count=other text="încă nu știu nimic despre tine"
 # sopworld 0.163 (the names of src/lang/en.request.local.mjs): a value already there, a part already there, no default, and one thing named by a plural noun ("ochelari", "ochii") ([KNOW] Q101)
 `,
-  // corrections of the catalog's rows, read before them (src/lang/ro.mjs): `ochi` is masculine (doi ochi albaștri), the catalog has it neuter ([KNOW] Q101)
+
   dictionary: {
     n: 'nod\tn.uri\tn\tk.words.node.noun.1\nnumăr\tn.e.ă\tn\tk.words.count.noun.1',
     // the keys the door's `assumed` reply names (count, layout, kinds: the library's keys), said in Romanian by their lemmas (questions.md [KNOW])
@@ -69,13 +69,19 @@ export const LANG_RO_LOCAL = {
     l: 'lungime\tf.e\tf\tk.words.length.noun.1',
     // the translation gloss (reviewer 2026-11-15 10:10 item 2): verbs the machine model turned into non-words ("așează" -> "Assate"), with their senses; a second row of a lemma is a
     // second sense (așeza: sit, and arrange as in "așează elementele"). [KNOW] ask in questions.md: the catalog's w.lang.ro gets these rows and așeza its 3rd-person forms
-    a: 'așeza\tv.a.ez\t\tk.actions.verb.group.arrange\naranjare\tf.e.alt\tf\tk.words.layout.noun.1',
-    r: 'reașeza\tv.a.ez\t\tk.actions.verb.group.rearrange\nrearanja\tv.a.ez\t\tk.actions.verb.group.rearrange\nraport\tn.e.oa\tn\tk.words.report.noun.1',
+    a: 'așeza\tv.a.ez\t\tk.actions.verb.group.arrange\naranjare\tf.e.alt\tf\tk.words.layout.noun.1\nargument\tn.e\tn\tk.words.argument.noun.1',
+    r: 'reașeza\tv.a.ez\t\tk.actions.verb.group.rearrange\nrearanja\tv.a.ez\t\tk.actions.verb.group.rearrange\nraport\tn.e.oa\tn\tk.words.report.noun.1\nrezumat\tn.e\tn\tk.words.abstract.noun.1\nrezultat\tn.e\tn\tk.words.result.noun.1',
     e: 'exagera\tv.a.ez\t\tk.words.exaggerate.verb.1\neseu\tn.u\tn\tk.words.essay.noun.1',
     c: 'compune\tv.e.s.n\t\tk.actions.verb.make.compose\ncuvânt\tn.e\tn\tk.words.word.noun.1\ncoadă\tf.ă\tf\tk.words.ponytail.noun.1',   // coadă: the hair at the back (w.lang.ro words-k.faces hair_back), a lemma the catalog's dictionary lacks ([KNOW] Q101)
     // the kinds of text the Documents tool writes and the unit of a text's length (sopworld 0.159 short_of), so that its replies compose in Romanian (questions.md Q96 [KNOW])
     p: 'poveste\tf.e\tf\tk.words.story.noun.1\npoem\tn.e\tn\tk.words.poem.noun.1',
     // the key of a part's variant (k.faces.variant) in the door's `assumed` reply; k.words has no sense of `variant` yet ([KNOW] Q101)
+    s: 'salut\tn.uri\tn\tk.words.greeting.noun.1\nsemnătură\tf.ă\tf\tk.words.signature.noun.1',
+    c: 'corp\tn.uri\tn\tk.words.body.noun.1\nconcluzie\tf.ie\tf\tk.words.conclusion.noun.1\ncontraargument\tn.e\tn\tk.words.counterargument.noun.1',
+    m: 'mesaj\tn.e\tn\tk.words.message.noun.1\nmetodă\tf.ă\tf\tk.words.method.noun.1',
+    i: 'început\tn.uri\tn\tk.words.opening.noun.1\nîncheiere\tf.e.alt\tf\tk.words.closing.noun.1\nintroducere\tf.e.alt\tf\tk.words.introduction.noun.1',
+    d: 'discuție\tf.ie\tf\tk.words.discussion.noun.1',
+    // (the genre parts above, per first letter: salut, început, corp, încheiere, semnătură, mesaj, introducere, concluzie, rezumat, argument, rezultat, metodă, discuție: the words k.genres.part of w.lang.ro words-k.genres as lemmas with a class, so that done.parts says them in their number; [KNOW] the catalog has the words, not the dictionary rows)
     v: 'variantă\tf.ă\tf\tk.words.variant.noun.1',
   },
 };

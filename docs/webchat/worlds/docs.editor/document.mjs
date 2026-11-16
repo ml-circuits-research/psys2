@@ -95,7 +95,9 @@ export function writeText(ctx, { kind, about = null, words = null, chapters = nu
   const r = g.compose({ type: kind ?? undefined, topic: about ?? undefined, chapters: count(chapters), words: count(words), genre: kind ?? undefined, seed: composeSeed(s, kind, about) });
   if (!r?.composition) return { ...refuse('nothing_known'), ...(about ? { reply: 'refused.nothing_known', roles: { about: String(about) } } : {}) };   // said by the reply fact: what the knowledge has nothing of
   const c = r.composition, blocks = [];
+  const wrote = {};   // what was written, per part name: the library says short_of for a part that came out shorter than the plan named (sopworld 0.166)
   for (const ch of partsOf(c.chapters, parts)) {
+    if (parts && ch.part) { const k = String(ch.part).toLowerCase(); wrote[k] = (wrote[k] ?? 0) + 1; }
     budget.tick('docs.tool');
     if (ch.title) blocks.push({ kind: 'heading', level: 2, text: ch.title, ...(parts && ch.part ? { part: ch.part } : {}) });
     for (const sc of ch.subchapters) {
@@ -107,7 +109,7 @@ export function writeText(ctx, { kind, about = null, words = null, chapters = nu
   createDoc(ctx, c.title, blocks, { keep: true });
   s.kind = kind ?? c.type ?? 'text'; s.about = about ?? null; s.textSeq = (s.textSeq ?? 0) + 1; s.textId = `text${s.textSeq}`;   // a new text is a new thing of the view (the old one is gone with its chapters)
   sync(s);
-  return done([s.textId, ...chapterHeads(s).map((b) => b.id)]);
+  return { ...done([s.textId, ...chapterHeads(s).map((b) => b.id)]), ...(Array.isArray(parts) && parts.length ? { parts: Object.fromEntries((parts).map((p) => [p.name, wrote[String(p.name).toLowerCase()] ?? 0])) } : {}) };
 }
 /** The text has at most n chapters: the later ones go (their sections with them). Fewer chapters than n are what the knowledge holds: nothing is padded. */
 export function keepChapters(ctx, { n, step = null } = {}) {
