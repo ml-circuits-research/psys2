@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "e68b9212",
-  "tree": "6ef68ce50958de4f",
+  "build": "ed67227d",
+  "tree": "e2255dab26f494d6",
   "catalog": "b57c463341073d523c172db4d0decd7bc0b32450",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,16 +13,16 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 130,
+   "right": 131,
    "partly": 7,
-   "wrong": 70,
+   "wrong": 69,
    "open": 40,
    "changed": 26,
    "unjudged": 332,
    "outcome": {
     "executed": 179,
-    "refused": 288,
-    "asked": 14,
+    "refused": 290,
+    "asked": 12,
     "not_understood": 54,
     "other_world": 70
    },
@@ -75,7 +75,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 77
+     "right": 78
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -88,16 +88,16 @@
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 130,
+   "right": 131,
    "partly": 7,
-   "wrong": 70,
+   "wrong": 69,
    "open": 40,
    "changed": 26,
    "unjudged": 332,
    "outcome": {
     "executed": 179,
-    "refused": 288,
-    "asked": 14,
+    "refused": 290,
+    "asked": 12,
     "not_understood": 54,
     "other_world": 70
    },
@@ -150,7 +150,7 @@
     "real dialogues": {
      "turns": 131,
      "judged": 131,
-     "right": 77
+     "right": 78
     },
     "owner-exports/phrase-log-2026-11-14T2243": {
      "turns": 2,
@@ -589,8 +589,8 @@
   },
   {
    "cause": "ui.avatar: acted; the reply does not say what the check asks",
-   "count": 16,
-   "wrong": 11,
+   "count": 15,
+   "wrong": 10,
    "partly": 5,
    "rows": [
     {
@@ -663,16 +663,6 @@
      "reply": "Nothing changed. The mouth is already big. I assumed change for the act.",
      "failing": [
       "answer:big smile"
-     ]
-    },
-    {
-     "id": "r0518",
-     "verdict": "wrong",
-     "text": "the the next mouth",
-     "tab": "robot",
-     "reply": "Nothing changed. To what value?",
-     "failing": [
-      "answer:mouth"
      ]
     },
     {
@@ -756,7 +746,7 @@
      ]
     }
    ],
-   "both_reasoners": 16
+   "both_reasoners": 15
   },
   {
    "cause": "art.draw: acted; the state is not the expected one",
@@ -1116,8 +1106,8 @@
   },
   {
    "cause": "refused: the request names something the world does not support",
-   "count": 70,
-   "both_reasoners": 70,
+   "count": 71,
+   "both_reasoners": 71,
    "examples": [
     {
      "text": "mcdavatara human",
@@ -1197,8 +1187,8 @@
   },
   {
    "cause": "judged wrong (state / answer expected is not there): dialogues:dlg.rp3",
-   "count": 18,
-   "both_reasoners": 18,
+   "count": 17,
+   "both_reasoners": 17,
    "examples": [
     {
      "text": "make the avatar an emoji",
