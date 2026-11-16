@@ -5,7 +5,7 @@
 // operations (or the host: a click on a tab, a toggle) changed, `guard` asks the rules whether the tab, the game, the language or the Settings tab a request
 // names exists, `undoWords` says what an undo took back in the world's words. What the app has (tabs, words, games, languages) is the knowledge base kb.sop,
 // generated from the manifests by scripts/gen-ui-kb.mjs. Browser-safe; it imports its sibling ops.mjs only for the initial state and the word normalizer.
-import { initialState, norm } from './ops.mjs?v=92d12b869b';
+import { initialState, norm } from './ops.mjs?v=6c434a5e1f';
 
 const dec = (t) => (typeof t === 'string' && t.startsWith('"') ? JSON.parse(t) : t);
 const str = (v) => JSON.stringify(String(v));

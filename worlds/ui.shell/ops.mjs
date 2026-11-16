@@ -8,13 +8,15 @@
 // Cross-world request used by the other tool worlds to bring their tab forward:
 //   ctx.request('ui.openTab', { tab: 'editor' })
 
-export const TABS = {
+const BUILTIN_TABS = {
   talk: { title: 'Talk', world: 'talk' },
   editor: { title: 'Documents', world: 'docs.editor' },
 };
-export const TAB_OF_WORD = {
+const BUILTIN_TAB_OF_WORD = {
   editor: 'editor', document: 'editor', doc: 'editor', documents: 'editor', docs: 'editor',
 };
+export const TABS = { ...BUILTIN_TABS };
+export const TAB_OF_WORD = { ...BUILTIN_TAB_OF_WORD };
 /** Views that are not tabs: the avatar is an icon beside the input with a popup (the host shows it on the effect `ui.openView`); the state's activeTab never names it. */
 export const VIEWS = { avatar: { title: 'Avatar', world: 'ui.avatar', words: ['robot', 'face', 'avatar'] } };
 export const GAME_ACTIONS = {
@@ -24,10 +26,16 @@ export const GAME_ACTIONS = {
 };
 /**
  * Tabs declared by other worlds in their manifests (spec 07 §6: tab, tabTitle, tabAlias, tabNew, tabHint, tabGiveUp)
- * are merged into the tables above, so a new tool world gets voice navigation without editing this world.
+ * replace the dynamic entries on each refresh. The exported objects keep their identity for
+ * generators, but never retain declarations from a different engine composition.
  */
 export const norm = (w) => String(w ?? '').toLowerCase().trim().replace(/^(the|a|an|my|your)\s+/, '').replace(/[\s-]+/g, '_');
 export function refresh(ctx) {
+  for (const table of [TABS, TAB_OF_WORD, ...Object.values(GAME_ACTIONS)]) {
+    for (const key of Object.keys(table)) delete table[key];
+  }
+  Object.assign(TABS, BUILTIN_TABS);
+  Object.assign(TAB_OF_WORD, BUILTIN_TAB_OF_WORD);
   for (const w of ctx.worlds?.() ?? []) {
     const t = w.tab;
     if (!t?.id) continue;

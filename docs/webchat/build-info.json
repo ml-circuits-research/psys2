@@ -1,5 +1,5 @@
 {
-  "version": "b4cc234963",
+  "version": "0058f3b946",
   "worlds": [
     "acts",
     "art.draw",
@@ -347,8 +347,8 @@
     "worlds/ui.shell/bundle.json": "a6e7418e4acff3bb",
     "worlds/ui.shell/coverage.md": "b8223f2f26b0580f",
     "worlds/ui.shell/datagen.mjs": "9ec428d8039eef86",
-    "worlds/ui.shell/fns.mjs": "04e1a502f19c935f",
-    "worlds/ui.shell/ops.mjs": "cda60e350e740969",
+    "worlds/ui.shell/fns.mjs": "93db8312d4608f07",
+    "worlds/ui.shell/ops.mjs": "d4312a1d460c9b73",
     "worlds/words/0_.json": "ea14cb1f2fd64896",
     "worlds/words/05.json": "04c0807bddfe725b",
     "worlds/words/1_.json": "ec78016b2802cca2",
@@ -699,8 +699,8 @@
     "worlds/words/zo.json": "001841dabf5d9de7",
     "worlds/words.bloom.json": "60cdedf58ecfa4eb"
   },
-  "builtAt": "2026-11-16T14:47:55.826Z",
-  "commit": "ff7dcb2a-dirty",
+  "builtAt": "2026-11-16T15:05:32.031Z",
+  "commit": "55bcddd7-dirty",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "assets": {
     "app.mjs": "4f64878992",
@@ -1104,8 +1104,8 @@
     "worlds/ui.shell/bundle.json": "a6e7418e4a",
     "worlds/ui.shell/coverage.md": "b8223f2f26",
     "worlds/ui.shell/datagen.mjs": "87c81bf043",
-    "worlds/ui.shell/fns.mjs": "ee3395fa6f",
-    "worlds/ui.shell/ops.mjs": "92d12b869b",
+    "worlds/ui.shell/fns.mjs": "480269b733",
+    "worlds/ui.shell/ops.mjs": "6c434a5e1f",
     "worlds/words/0_.json": "ea14cb1f2f",
     "worlds/words/05.json": "04c0807bdd",
     "worlds/words/1_.json": "ec78016b28",
