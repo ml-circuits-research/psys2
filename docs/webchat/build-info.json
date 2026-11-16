@@ -1,5 +1,5 @@
 {
-  "version": "af8f3f701d",
+  "version": "097039d842",
   "worlds": [
     "acts",
     "art.draw",
@@ -45,6 +45,7 @@
     "lib/astra/session.mjs": "ae641720f754a9dc",
     "lib/astra/where.mjs": "df7e71a782e57a0d",
     "lib/dialog/application-areas.mjs": "1787d43260ddea8d",
+    "lib/dialog/bert-source-offsets.mjs": "b7c9237579d7cce9",
     "lib/dialog/budget-limits.mjs": "361b73ef578f74d5",
     "lib/dialog/budget.mjs": "a7b9cf83512b05c1",
     "lib/dialog/compose-plan.mjs": "f242e1d38a459d0d",
@@ -88,6 +89,7 @@
     "lib/dialog/sampler.mjs": "5878c122862e04ac",
     "lib/dialog/scene-referents.mjs": "6dd1ddb0443020d6",
     "lib/dialog/steps.mjs": "7a32b06b02a7f8e8",
+    "lib/dialog/structural-inference.mjs": "2d170b3d371ed1e1",
     "lib/dialog/symbolic-router.mjs": "46019fc881ef83ac",
     "lib/dialog/test-runner.mjs": "f95238b734d04941",
     "lib/dialog/textgen.mjs": "762541614a26444d",
@@ -651,8 +653,8 @@
     "worlds/words/zo.json": "98c807997b12214c",
     "worlds/words.bloom.json": "1aee5298e6fe2c42"
   },
-  "builtAt": "2026-11-16T23:34:10.974Z",
-  "commit": "b91c83ae-dirty",
+  "builtAt": "2026-11-16T23:44:52.843Z",
+  "commit": "6f55689d-dirty",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "assets": {
     "app.mjs": "acad83ead9",
@@ -668,6 +670,7 @@
     "lib/astra/session.mjs": "e029c21c92",
     "lib/astra/where.mjs": "09b4059350",
     "lib/dialog/application-areas.mjs": "5930d8fe63",
+    "lib/dialog/bert-source-offsets.mjs": "1fcb73408e",
     "lib/dialog/budget-limits.mjs": "fb1adadf05",
     "lib/dialog/budget.mjs": "00bce6e369",
     "lib/dialog/compose-plan.mjs": "b890bea99a",
@@ -711,6 +714,7 @@
     "lib/dialog/sampler.mjs": "3d054a6d95",
     "lib/dialog/scene-referents.mjs": "d67f2babcd",
     "lib/dialog/steps.mjs": "1bf5f81c99",
+    "lib/dialog/structural-inference.mjs": "a4d741075d",
     "lib/dialog/symbolic-router.mjs": "c2d428a125",
     "lib/dialog/test-runner.mjs": "635e001b3e",
     "lib/dialog/textgen.mjs": "04e7eda0ab",
