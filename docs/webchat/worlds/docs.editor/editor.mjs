@@ -13,12 +13,12 @@
 import {
   DEFAULT_TITLE, highlightHex, colorName, TITLE_SIZE_MIN, TITLE_SIZE_MAX, titleBlock, containers, getText, blockText, addMark, cutMark, covered, anyMark,
   sliceMarks, spliceText, remapMarks, hiddenTitle, normalizeMarks, sentencesOf, findAll, toDoc, toText, toHtml, stats as computeStats, documentWords, setText, wordsIn,
-} from './model.mjs?v=a77defa019';
-import { ask as askAnimals } from '../../lib/knowledge/animals.mjs?v=31f54ffe11';   // the animals of the catalog (k.animals), read by lookup from a bundle generated from it
-import { basicColourNames } from '../../lib/knowledge/values.mjs?v=c3d5c59521';   // the one colour reader (k.values)
-import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs?v=86720c6aa1';
-import { sync, snap, commit, restore, newId, addBlock, show, createDoc } from './document.mjs?v=18b3137a45';   // the document itself (state hygiene, history, a new document): the tool these word operations build on
-export { createDoc } from './document.mjs?v=18b3137a45';
+} from './model.mjs?v=33a5ea9d1c';
+import { ask as askAnimals } from '../../lib/knowledge/animals.mjs?v=7df2e5b5a1';   // the animals of the catalog (k.animals), read by lookup from a bundle generated from it
+import { basicColourNames } from '../../lib/knowledge/values.mjs?v=24c3ed2609';   // the one colour reader (k.values)
+import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs?v=e082151494';
+import { sync, snap, commit, restore, newId, addBlock, show, createDoc } from './document.mjs?v=83c94e197e';   // the document itself (state hygiene, history, a new document): the tool these word operations build on
+export { createDoc } from './document.mjs?v=83c94e197e';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const MAX_HISTORY = 50;

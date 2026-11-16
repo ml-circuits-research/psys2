@@ -1,0 +1,33 @@
+# k.genres/shards/letter: the genre "letter": 5 parts in order with how many times each occurs, and 9 steps (the moves of each part in order, with alternatives and sentence counts).
+# sources: hand-core 1 (hand-written in this repository: tools/genres-core.mjs; the works cited are in WORLD.md)
+# license: CC0-1.0
+# script: tools/genres-core.mjs
+
+@k.genres.genre.letter k.genres.genre name=letter about="A personal letter: a greeting, an opening that says why you write, one to three paragraphs of what you want to say, a closing with a wish and an invitation to answer, and a signature." register=personal unit=paragraph also_move="give example" also_move="raise a question" own="The parts and the counts are the conventional form of a personal letter; no published work is cited for them (the register cites plain-English advice)." core.source="hand-core 1"
+
+# greeting
+@k.genres.part.letter.greeting k.genres.part genre=letter name=greeting n=1 min=1 max=1 about="Greet the reader." own="The convention of a letter." core.source="hand-core 1"
+@k.genres.step.letter.greeting.1.greet k.genres.step genre=letter part=greeting n=1 move=greet min=1 max=1 core.source="hand-core 1"
+
+# opening
+@k.genres.part.letter.opening k.genres.part genre=letter name=opening n=2 min=1 max=1 about="Say why you write." own="The convention of a letter." core.source="hand-core 1"
+@k.genres.step.letter.opening.1.state_purpose k.genres.step genre=letter part=opening n=1 move="state purpose" min=1 max=1 core.source="hand-core 1"
+@k.genres.step.letter.opening.2.introduce_topic k.genres.step genre=letter part=opening n=2 move="introduce topic" min=0 max=1 core.source="hand-core 1"
+
+# body
+@k.genres.part.letter.body k.genres.part genre=letter name=body n=3 min=1 max=3 about="What you want to say: a general point or an example, and perhaps a question." own="The counts are this repository's choice." core.source="hand-core 1"
+@k.genres.step.letter.body.1.generalise k.genres.step genre=letter part=body n=1 move=generalise min=1 max=2 core.source="hand-core 1"
+@k.genres.step.letter.body.1.give_example k.genres.step genre=letter part=body n=1 move="give example" min=1 max=2 core.source="hand-core 1"
+@k.genres.step.letter.body.2.raise_a_question k.genres.step genre=letter part=body n=2 move="raise a question" min=0 max=1 core.source="hand-core 1"
+
+# closing
+@k.genres.part.letter.closing k.genres.part genre=letter name=closing n=4 min=1 max=1 about="End on the point and ask for an answer." own="The convention of a letter." core.source="hand-core 1"
+@k.genres.step.letter.closing.1.conclude k.genres.step genre=letter part=closing n=1 move=conclude min=1 max=1 core.source="hand-core 1"
+@k.genres.step.letter.closing.2.invite_reply k.genres.step genre=letter part=closing n=2 move="invite reply" min=0 max=1 core.source="hand-core 1"
+
+# signature
+@k.genres.part.letter.signature k.genres.part genre=letter name=signature n=5 min=1 max=1 about="A good wish and your name." own="The convention of a letter." core.source="hand-core 1"
+@k.genres.step.letter.signature.1.sign_off k.genres.step genre=letter part=signature n=1 move="sign off" min=1 max=1 core.source="hand-core 1"
+
+# Other names of the genre.
+@k.genres.word.genre.letter core.word text=letters text=epistle text="message to a friend" means=letter of=k.genres.genre.name core.source="hand-core 1"

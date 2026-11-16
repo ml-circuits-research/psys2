@@ -9,7 +9,7 @@
 //   grammarRoEn(text)  -> { text, ok, frame, notes }                a message of one or more sentences; text '' when any sentence is outside the covered shapes
 //                                                                   (the caller then falls back to another path: the grammar ABSTAINS rather than guesses)
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
-import { LANG_RO_FACTS } from '../lang/ro.facts.generated.mjs?v=02be2dcbd3';
+import { LANG_RO_FACTS } from '../lang/ro.facts.generated.mjs?v=1d57ebe6ef';
 import { tokenize } from './normalize.mjs?v=6d473eb091';
 import { analyze, analyzeRaw, parseNumberAt, placeOf, pluralEn, isKnownName } from './morphology.ro.mjs?v=8bcf5dc68f';
 

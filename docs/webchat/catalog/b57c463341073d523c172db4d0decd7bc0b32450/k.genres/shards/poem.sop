@@ -1,0 +1,23 @@
+# k.genres/shards/poem: the genre "poem": 3 parts in order with how many times each occurs, and 5 steps (the moves of each part in order, with alternatives and sentence counts).
+# sources: hand-core 1 (hand-written in this repository: tools/genres-core.mjs; the works cited are in WORLD.md)
+# license: CC0-1.0
+# script: tools/genres-core.mjs
+
+@k.genres.genre.poem k.genres.genre name=poem about="A short poem in stanzas (a section each, a line a sentence): an opening stanza that names the subject, one to three stanzas of images, and a last stanza that closes. Rhyme and metre are not modelled." register=narrative unit=section also_move="surprising fact" own="The stanzas and the counts are this repository's choice; the lines are written in the narrative register (told, short, concrete); rhyme and metre are not modelled." core.source="hand-core 1"
+
+# opening stanza
+@k.genres.part.poem.opening_stanza k.genres.part genre=poem name="opening stanza" n=1 min=1 max=1 about="Name the subject." own="This repository's choice." core.source="hand-core 1"
+@k.genres.step.poem.opening_stanza.1.introduce_topic k.genres.step genre=poem part="opening stanza" n=1 move="introduce topic" min=1 max=2 core.source="hand-core 1"
+
+# image stanza
+@k.genres.part.poem.image_stanza k.genres.part genre=poem name="image stanza" n=2 min=1 max=3 about="An image or a surprise about the subject." own="This repository's choice." core.source="hand-core 1"
+@k.genres.step.poem.image_stanza.1.give_example k.genres.step genre=poem part="image stanza" n=1 move="give example" min=1 max=3 core.source="hand-core 1"
+@k.genres.step.poem.image_stanza.1.surprising_fact k.genres.step genre=poem part="image stanza" n=1 move="surprising fact" min=1 max=3 core.source="hand-core 1"
+@k.genres.step.poem.image_stanza.2.raise_a_question k.genres.step genre=poem part="image stanza" n=2 move="raise a question" min=0 max=1 core.source="hand-core 1"
+
+# last stanza
+@k.genres.part.poem.last_stanza k.genres.part genre=poem name="last stanza" n=3 min=1 max=1 about="Close the poem." own="This repository's choice." core.source="hand-core 1"
+@k.genres.step.poem.last_stanza.1.conclude k.genres.step genre=poem part="last stanza" n=1 move=conclude min=1 max=2 core.source="hand-core 1"
+
+# Other names of the genre.
+@k.genres.word.genre.poem core.word text=poems text=verse text=rhyme text=poetry means=poem of=k.genres.genre.name core.source="hand-core 1"

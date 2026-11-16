@@ -1,0 +1,23 @@
+# k.genres/shards/note: the genre "note": 3 parts in order with how many times each occurs, and 5 steps (the moves of each part in order, with alternatives and sentence counts).
+# sources: hand-core 1 (hand-written in this repository: tools/genres-core.mjs; the works cited are in WORLD.md)
+# license: CC0-1.0
+# script: tools/genres-core.mjs
+
+@k.genres.genre.note k.genres.genre name=note about="A short note: an optional greeting, one message paragraph that says what you want and perhaps asks for an answer, and an optional good wish." register=personal unit=paragraph also_move="give example" own="The parts and the counts are the conventional form of a short note; no published work is cited for them." core.source="hand-core 1"
+
+# greeting
+@k.genres.part.note.greeting k.genres.part genre=note name=greeting n=1 min=0 max=1 about="Greet the reader." own="The convention of a note." core.source="hand-core 1"
+@k.genres.step.note.greeting.1.greet k.genres.step genre=note part=greeting n=1 move=greet min=1 max=1 core.source="hand-core 1"
+
+# message
+@k.genres.part.note.message k.genres.part genre=note name=message n=2 min=1 max=1 about="What you want to say, short." own="The convention of a note." core.source="hand-core 1"
+@k.genres.step.note.message.1.state_purpose k.genres.step genre=note part=message n=1 move="state purpose" min=1 max=1 core.source="hand-core 1"
+@k.genres.step.note.message.2.give_example k.genres.step genre=note part=message n=2 move="give example" min=0 max=1 core.source="hand-core 1"
+@k.genres.step.note.message.3.invite_reply k.genres.step genre=note part=message n=3 move="invite reply" min=0 max=1 core.source="hand-core 1"
+
+# signature
+@k.genres.part.note.signature k.genres.part genre=note name=signature n=3 min=0 max=1 about="A good wish and your name." own="The convention of a note." core.source="hand-core 1"
+@k.genres.step.note.signature.1.sign_off k.genres.step genre=note part=signature n=1 move="sign off" min=1 max=1 core.source="hand-core 1"
+
+# Other names of the genre.
+@k.genres.word.genre.note core.word text=notes text="short note" text=memo text=message means=note of=k.genres.genre.name core.source="hand-core 1"

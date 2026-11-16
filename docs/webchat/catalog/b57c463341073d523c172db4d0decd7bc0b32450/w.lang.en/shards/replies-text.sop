@@ -1,0 +1,19 @@
+# w.lang.en/shards/replies-text: reply rows for what the door says about texts, values said per kind, named things and honest refusals (psys2 Q96, Q98, Q99); first person, informal singular.
+# sources: hand-core 1 (written by a language model from real failing turns of psys2, questions.md Q96 to Q99; general facts, no sentence's own row)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.en.reply.done.about.one w.lang.en.reply name=done.about count=one role=whole role=topic text="The {whole} is about {topic}." example="The story is about frogs." core.source="hand-core 1"
+@w.lang.en.reply.done.title.one w.lang.en.reply name=done.title count=one role=whole role=title text="The {whole} is called {title}." example="The story is called \"The Pond\"." core.source="hand-core 1"
+@w.lang.en.reply.done.change.about.one w.lang.en.reply name=done.change.about count=one role=thing role=value text="The {thing} is about {value} now." example="The story is about frogs now." core.source="hand-core 1"
+@w.lang.en.reply.done.change.length.one w.lang.en.reply name=done.change.length count=one role=thing role=value text="The {thing} has {value} words now." example="The story has 48 words now." core.source="hand-core 1"
+@w.lang.en.reply.done.change.title.one w.lang.en.reply name=done.change.title count=one role=thing role=value text="The {thing} is called “{value}” now." example="The story is called “The Pond” now." core.source="hand-core 1"
+@w.lang.en.reply.done.add.value.one w.lang.en.reply name=done.add.value count=one act=make role=kind role=value text="I added a {value} {kind}." example="I added a red hat." core.source="hand-core 1"
+@w.lang.en.reply.done.add.value.other w.lang.en.reply name=done.add.value count=other act=make role=kind role=number role=value text="I added {number} {value} {kind:num=pl}." example="I added 3 red hats." core.source="hand-core 1"
+@w.lang.en.reply.state.count.value.one w.lang.en.reply name=state.count.value count=one role=kind role=number role=value text="There is a {value} {kind}." example="There is a red hat." core.source="hand-core 1"
+@w.lang.en.reply.state.count.value.other w.lang.en.reply name=state.count.value count=other role=kind role=number role=value text="There are {number} {value} {kind:num=pl}." example="There are 2 green eyes." core.source="hand-core 1"
+@w.lang.en.reply.state.count.named.one w.lang.en.reply name=state.count.named count=one role=kind role=number role=name text="There is one {kind}, “{name}”." example="There is one story, “The Pond”." core.source="hand-core 1"
+@w.lang.en.reply.short_of.one w.lang.en.reply name=short_of count=one role=made role=asked role=unit text="I could only make {made} {unit:num=pl} of the {asked} you asked for." example="I could only make 60 words of the 90 you asked for." core.source="hand-core 1"
+@w.lang.en.reply.refused.needed.one w.lang.en.reply name=refused.needed count=one role=thing text="I cannot take off the {thing}: a face needs one." example="I cannot take off the mouth: a face needs one." core.source="hand-core 1"
+@w.lang.en.reply.refused.no_colour.one w.lang.en.reply name=refused.no_colour count=one role=thing role=value text="The {thing} cannot be {value}." example="The mouth cannot be green." core.source="hand-core 1"
+@w.lang.en.reply.refused.no_drawing.one w.lang.en.reply name=refused.no_drawing count=one role=kind text="I have no drawing of a {kind} yet." example="I have no drawing of a villa yet." core.source="hand-core 1"

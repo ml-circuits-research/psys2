@@ -6,7 +6,7 @@
 //   city { kind, name, cc, pop, lat, lon, isCapital }      region { kind, rkind, name, bb, members [cc] }
 // Browser-safe: no imports beyond the sibling data module.
 import { REGIONS } from './regions.mjs?v=b9782a3da0';
-import { BUNDLED_GEO } from '../../lib/knowledge/bundled-geo.mjs?v=964e6992d5';
+import { BUNDLED_GEO } from '../../lib/knowledge/bundled-geo.mjs?v=948bab1847';
 import { parseLine } from '../../lib/knowledge/catalog.mjs?v=339ac7a09d';
 
 const fold = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();

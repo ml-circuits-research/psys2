@@ -1,0 +1,31 @@
+# w.lang.ro/shards/words-k.faces: the Romanian words for the face domain of k.faces: the slots (a part of a face) and the expressions. A smile is a variant of the mouth named by its style ("micah frown"), so zâmbet is a dictionary lemma with the sense smile, not a word of one variant. These words are bound to the face domain: "ochelari" is the eyeglasses slot here, never the drinking glasses ("pahar" has its own lemma and sense in the dictionary), "pălărie" the hat slot. The dictionary lemmas (forms and k.words senses) are in w.lang.ro/dictionary.
+# sources: hand-core 1 (written by a language model from real failing turns of psys2, questions.md Q96, Q99; general words, not one sentence's row)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# Slots (the part of a face).
+@w.lang.ro.word.k.faces.slot.eyes core.word text=ochi text=ochii means=eyes of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.ears core.word text=ureche text=urechi text=urechea text=urechile means=ears of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.eyebrows core.word text=sprânceană text=sprâncene text=sprânceana text=sprâncenele means=eyebrows of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.hair_front core.word text=păr text=părul text=breton text=șuviță means=hair_front of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.hair_back core.word text=coadă text="păr lung la spate" means=hair_back of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.cheeks core.word text=obraz text=obraji text=obrazul text=obrajii means=cheeks of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.glasses core.word text=ochelari text=ochelarii text="ochelari de vedere" means=glasses of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.hat core.word text=pălărie text=pălării text=pălăria text=șapcă text=căciulă means=hat of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.earrings core.word text=cercel text=cercei text=cerceii means=earrings of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.mouth core.word text=gură text=gura text=buze text=buzele means=mouth of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.nose core.word text=nas text=nasul means=nose of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.beard core.word text=barbă text=barba means=beard of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.moustache core.word text=mustață text=mustăți text=mustața means=moustache of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.shoulders core.word text=umăr text=umeri text=umerii means=shoulders of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.neck core.word text=gât text=gâtul means=neck of=k.faces.slot.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.slot.head core.word text=cap text=capul text=față means=head of=k.faces.slot.name core.source="hand-core 1"
+
+# Expressions.
+@w.lang.ro.word.k.faces.expression.happy core.word text=fericit text=vesel text=bucuros text=mulțumit means=happy of=k.faces.expression.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.expression.sad core.word text=trist text=întristat text=necăjit means=sad of=k.faces.expression.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.expression.angry core.word text=furios text=supărat text=mânios text=nervos means=angry of=k.faces.expression.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.expression.surprised core.word text=mirat text=surprins text=uimit means=surprised of=k.faces.expression.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.expression.sleepy core.word text=somnoros text=adormit text=obosit means=sleepy of=k.faces.expression.name core.source="hand-core 1"
+@w.lang.ro.word.k.faces.expression.wink core.word text=clipește text="a clipit" means=wink of=k.faces.expression.name core.source="hand-core 1"
+

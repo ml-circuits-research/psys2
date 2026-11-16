@@ -1,0 +1,83 @@
+# k.expect: what a reasonable person expects when they ask for a thing to be made and do not say everything (owner's
+# GO, reviewer block 2026-11-15 14:00, item 3). For each thing that can be made (a diagram, a pond, a house, a story):
+# the typical number of its parts and how many kinds of parts, the parts with their ranges, its usual layout and
+# extent; the named amounts ("a few", "many") as ranges; and the scale steps (tiny, small, default, big, huge) as
+# factors on count, size and extent. A planner fills from it what a w.request request did not say, and the reply names
+# those assumptions. "random" means varied within the typical range (between `min` and `max`, never the minimum).
+# Derived where the catalog has the knowledge (k.scenes has: the parts of a scene and their counts; k.diagrams: the
+# kinds of diagram, their roles and shapes, their layouts) and hand-written where it is own.
+# sources: hand-core 1 (the schema, the amounts, the scale and the hand-written makes, in tools/expect-core.mjs; the
+#   derived facts carry the source of the fact they come from)
+# license: CC0-1.0
+# script: none (hand-written); the shards are written by tools/expect-core.mjs, except shards/words.sop
+
+@k.expect core.module name=k.expect version=1 exports=amount exports=scale exports=make exports=part core.source="hand-core 1"
+
+# A named amount: what "a few", "several", "many" mean as a count. `name` its id (few); `min`, `max` and `typical` the
+# count. A relative amount ("about 7", "7 or so") has `min_factor` and `max_factor` instead: the range is the number
+# said times the factors, rounded (about: 0.8 to 1.25). `about` says it in words.
+@k.expect.amount core.type of=k.expect.amount shared=true closed=true core.source="hand-core 1"
+@k.expect.amount.name core.slot of=k.expect.amount key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.expect.amount.min core.slot of=k.expect.amount key=min kind=integer min=0 core.source="hand-core 1"
+@k.expect.amount.max core.slot of=k.expect.amount key=max kind=integer min=0 core.source="hand-core 1"
+@k.expect.amount.typical core.slot of=k.expect.amount key=typical kind=integer min=0 core.source="hand-core 1"
+@k.expect.amount.min_factor core.slot of=k.expect.amount key=min_factor kind=number min=0 core.source="hand-core 1"
+@k.expect.amount.max_factor core.slot of=k.expect.amount key=max_factor kind=number min=0 core.source="hand-core 1"
+@k.expect.amount.about core.slot of=k.expect.amount key=about required=true kind=string core.source="hand-core 1"
+
+# A step of the scale of size and extent: `step` (tiny, small, default, big, huge), `order` (1 to 5, default 3),
+# `count_factor` (the typical count of parts times this: a small pond has fewer plants), `size_factor` (the size of
+# each thing times this), `extent` (the share of the canvas or page the whole result takes, from 0 to 1). A reaction
+# "too much" or "bigger" moves one step down or up; "in a corner" is extent small at the corner.
+@k.expect.scale core.type of=k.expect.scale shared=true closed=true core.source="hand-core 1"
+@k.expect.scale.step core.slot of=k.expect.scale key=step id=true required=true enum=tiny enum=small enum=default enum=big enum=huge core.source="hand-core 1"
+@k.expect.scale.order core.slot of=k.expect.scale key=order required=true kind=integer min=1 max=5 core.source="hand-core 1"
+@k.expect.scale.count_factor core.slot of=k.expect.scale key=count_factor required=true kind=number min=0 core.source="hand-core 1"
+@k.expect.scale.size_factor core.slot of=k.expect.scale key=size_factor required=true kind=number min=0 core.source="hand-core 1"
+@k.expect.scale.extent core.slot of=k.expect.scale key=extent required=true kind=number min=0 max=1 core.source="hand-core 1"
+@k.expect.scale.about core.slot of=k.expect.scale key=about required=true kind=string core.source="hand-core 1"
+
+# A thing that can be made, and what making it gives by default. `thing` its name (diagram, flowchart, pond, pond
+# scene, house, story); `made_in` the kind of world that makes it (diagram, drawing, document, chart, list, map, face,
+# music); `unit` what its count counts (node, part, word, chapter, item, bar, note); `min`, `max`, `typical` that
+# count; `kinds_min`, `kinds_max` how many different kinds: for a diagram the node shapes (2 or 3), for anything else
+# the part groups (a pond: water, plant, animal: 3, so at least one animal); `layout` the usual arrangement (a k.layouts layout or a k.diagrams layout); `extent` the usual scale step
+# of the whole; `scene` the k.scenes scene it is or draws from; `diagram` the k.diagrams kind it is; `length_unit` and
+# `length` for a text (words of a short story); `varies` (many) what "random" varies (count, kinds, layout, colour,
+# place, topic); `about` in words.
+@k.expect.make core.type of=k.expect.make shared=true closed=true core.source="hand-core 1"
+@k.expect.make.thing core.slot of=k.expect.make key=thing id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.expect.make.made_in core.slot of=k.expect.make key=made_in required=true enum=diagram enum=drawing enum=document enum=chart enum=list enum=map enum=face enum=music core.source="hand-core 1"
+@k.expect.make.unit core.slot of=k.expect.make key=unit required=true kind=atom core.source="hand-core 1"
+@k.expect.make.min core.slot of=k.expect.make key=min required=true kind=integer min=0 core.source="hand-core 1"
+@k.expect.make.max core.slot of=k.expect.make key=max required=true kind=integer min=0 core.source="hand-core 1"
+@k.expect.make.typical core.slot of=k.expect.make key=typical required=true kind=integer min=0 core.source="hand-core 1"
+@k.expect.make.kinds_min core.slot of=k.expect.make key=kinds_min kind=integer min=0 core.source="hand-core 1"
+@k.expect.make.kinds_max core.slot of=k.expect.make key=kinds_max kind=integer min=0 core.source="hand-core 1"
+@k.expect.make.layout core.slot of=k.expect.make key=layout kind=atom kind=string core.source="hand-core 1"
+@k.expect.make.extent core.slot of=k.expect.make key=extent enum=tiny enum=small enum=default enum=big enum=huge core.source="hand-core 1"
+@k.expect.make.scene core.slot of=k.expect.make key=scene kind=atom kind=string type=k.scenes.scene by=name core.source="hand-core 1"
+@k.expect.make.diagram core.slot of=k.expect.make key=diagram kind=atom kind=string type=k.diagrams.kind by=name core.source="hand-core 1"
+@k.expect.make.length_unit core.slot of=k.expect.make key=length_unit kind=atom core.source="hand-core 1"
+@k.expect.make.length core.slot of=k.expect.make key=length kind=integer min=0 core.source="hand-core 1"
+@k.expect.make.varies core.slot of=k.expect.make key=varies many=true enum=count enum=kinds enum=layout enum=colour enum=place enum=topic enum=size core.source="hand-core 1"
+@k.expect.make.about core.slot of=k.expect.make key=about required=true kind=string core.source="hand-core 1"
+
+# A part of a thing made: `of` the thing (a k.expect make), `part` the part (a kind name: water, water plant, duck,
+# node, link, roof, chapter), `group` the group it counts in for kinds_min/kinds_max (water, plant, animal, building,
+# sky, node, link, text ...), `min`, `max`, `typical` how many, `needed=yes` when the thing is not that thing without
+# it (a pond without water), `where` the region of a scene it goes in (sky, background, ground, water, foreground,
+# ceiling, wall), `shape` (many) the shapes it is drawn with (a diagram's node: a k.diagrams shape), `role` the
+# k.diagrams role it has (start, process, decision), `slot` (many) the name of the k.faces slot (or slots) the part is drawn as: the part keeps its singular kind name (eye, hair) and the slot keeps the style data name (eyes, hair_front, hair_back); the other name is a word of the part.
+@k.expect.part core.type of=k.expect.part shared=true closed=true core.source="hand-core 1"
+@k.expect.part.of core.slot of=k.expect.part key=of id=true required=true kind=atom kind=string type=k.expect.make by=thing core.source="hand-core 1"
+@k.expect.part.part core.slot of=k.expect.part key=part id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.expect.part.group core.slot of=k.expect.part key=group required=true kind=atom core.source="hand-core 1"
+@k.expect.part.min core.slot of=k.expect.part key=min required=true kind=integer min=0 core.source="hand-core 1"
+@k.expect.part.max core.slot of=k.expect.part key=max required=true kind=integer min=0 core.source="hand-core 1"
+@k.expect.part.typical core.slot of=k.expect.part key=typical required=true kind=integer min=0 core.source="hand-core 1"
+@k.expect.part.needed core.slot of=k.expect.part key=needed enum=yes core.source="hand-core 1"
+@k.expect.part.where core.slot of=k.expect.part key=where enum=sky enum=ceiling enum=background enum=wall enum=ground enum=water enum=foreground core.source="hand-core 1"
+@k.expect.part.shape core.slot of=k.expect.part key=shape many=true kind=atom core.source="hand-core 1"
+@k.expect.part.slot core.slot of=k.expect.part key=slot many=true kind=atom core.source="hand-core 1"
+@k.expect.part.role core.slot of=k.expect.part key=role kind=atom core.source="hand-core 1"

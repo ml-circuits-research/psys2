@@ -4,7 +4,7 @@
 // (a slot, a preset and a colour of the catalog k.faces, a size grade, a direction; the library planned and translated them) and a call answers with a status, the ids it changed,
 // or a refusal code with the name of its reply fact. The slots, variants, presets and colours are the catalog's (src/knowledge/faces.mjs, else the bundled default face); the face
 // logic of the old readers (facelogic.mjs) builds on this module; this module never imports it. Browser-safe.
-import { DEFAULT_FACE } from './default-face.mjs?v=fb3ad43d95';
+import { DEFAULT_FACE } from './default-face.mjs?v=23e7ca573f';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 export const NONE = 'none';

@@ -1,0 +1,25 @@
+# w.lang.ro/shards/replies-text: the same reply names in Romanian (the one / few / other forms, the fill row for the article), psys2 Q96, Q98, Q99.
+# sources: hand-core 1 (written by a language model from real failing turns of psys2, questions.md Q96 to Q99; general facts, no sentence's own row)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.ro.reply.done.about.one w.lang.ro.reply name=done.about count=one role=whole role=topic text="{whole:def=yes} este despre {topic}." example="Povestea este despre broaște." core.source="hand-core 1"
+@w.lang.ro.reply.done.title.one w.lang.ro.reply name=done.title count=one role=whole role=title text="{whole:def=yes} se numește {title}." example="Povestea se numește Iazul." core.source="hand-core 1"
+@w.lang.ro.reply.done.change.about.one w.lang.ro.reply name=done.change.about count=one role=thing role=value text="{thing:def=yes} este acum despre {value}." example="Povestea este acum despre broaște." core.source="hand-core 1"
+@w.lang.ro.reply.done.change.length.one w.lang.ro.reply name=done.change.length count=one role=thing role=value text="{thing:def=yes} are acum {value} de cuvinte." example="Povestea are acum 48 de cuvinte." core.source="hand-core 1"
+@w.lang.ro.reply.done.change.title.one w.lang.ro.reply name=done.change.title count=one role=thing role=value text="{thing:def=yes} se numește acum „{value}”." example="Povestea se numește acum „Iazul”." core.source="hand-core 1"
+@w.lang.ro.reply.done.add.value.one w.lang.ro.reply name=done.add.value count=one act=make role=kind role=value text="am adăugat {art@kind} {kind} {value@kind}." example="Am adăugat o pălărie roșie." core.source="hand-core 1"
+@w.lang.ro.reply.done.add.value.few w.lang.ro.reply name=done.add.value count=few act=make role=kind role=number role=value text="am adăugat {number} {kind:num=pl} {value:num=pl@kind}." example="Am adăugat 3 pălării roșii." core.source="hand-core 1"
+@w.lang.ro.reply.done.add.value.other w.lang.ro.reply name=done.add.value count=other act=make role=kind role=number role=value text="am adăugat {number} de {kind:num=pl} {value:num=pl@kind}." example="Am adăugat 20 de pălării roșii." core.source="hand-core 1"
+@w.lang.ro.reply.state.count.value.one w.lang.ro.reply name=state.count.value count=one role=kind role=number role=value text="este {art@kind} {kind} {value@kind}." example="Este o pălărie roșie." core.source="hand-core 1"
+@w.lang.ro.reply.state.count.value.few w.lang.ro.reply name=state.count.value count=few role=kind role=number role=value text="sunt {number} {kind:num=pl} {value:num=pl@kind}." example="Sunt 2 pălării roșii." core.source="hand-core 1"
+@w.lang.ro.reply.state.count.value.other w.lang.ro.reply name=state.count.value count=other role=kind role=number role=value text="sunt {number} de {kind:num=pl} {value:num=pl@kind}." example="Sunt 20 de pălării roșii." core.source="hand-core 1"
+@w.lang.ro.reply.state.count.named.one w.lang.ro.reply name=state.count.named count=one role=kind role=number role=name text="este {art@kind} {kind}, {name}." example="Este o poveste, Iazul." core.source="hand-core 1"
+@w.lang.ro.reply.short_of.one w.lang.ro.reply name=short_of count=one role=made role=asked text="am putut face doar {made} din cele {asked} cerute." example="Am putut face doar 60 din cele 90 cerute." core.source="hand-core 1"
+@w.lang.ro.reply.refused.needed.one w.lang.ro.reply name=refused.needed count=one role=thing text="nu pot scoate {thing:def=yes}: o față are nevoie de așa ceva." example="Nu pot scoate gura: o față are nevoie de așa ceva." core.source="hand-core 1"
+@w.lang.ro.reply.refused.no_colour.one w.lang.ro.reply name=refused.no_colour count=one role=thing role=value text="{thing:def=yes} nu poate fi {value@thing}." example="Gura nu poate fi verde." core.source="hand-core 1"
+@w.lang.ro.reply.refused.no_drawing.one w.lang.ro.reply name=refused.no_drawing count=one role=kind text="încă nu am un desen pentru {art@kind} {kind}." example="Încă nu am un desen pentru o vilă." core.source="hand-core 1"
+@w.lang.ro.fill.done_add_value.art w.lang.ro.fill template=done.add.value role=art lemma=un core.source="hand-core 1"
+@w.lang.ro.fill.state_count_value.art w.lang.ro.fill template=state.count.value role=art lemma=un core.source="hand-core 1"
+@w.lang.ro.fill.state_count_named.art w.lang.ro.fill template=state.count.named role=art lemma=un core.source="hand-core 1"
+@w.lang.ro.fill.refused_no_drawing.art w.lang.ro.fill template=refused.no_drawing role=art lemma=un core.source="hand-core 1"

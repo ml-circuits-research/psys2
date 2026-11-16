@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// What the catalog's request words (w.lang.en.cue, catalog pin 7042ea70) lack yet, in the catalog's own shape, told after the bundled facts (src/dialog/request.mjs requestLanguage).
+// What the catalog's request words (w.lang.en.cue, catalog pin b57c4633) lack yet, in the catalog's own shape, told after the bundled facts (src/dialog/request.mjs requestLanguage).
 // The reply rows (w.lang.en.reply) say the door's acts on things and its honest answers (Q43 [KNOW]).
 // Each row goes when the catalog publishes a cue of that meaning (questions.md Q41 [KNOW]). Data only: no code reads these rows by name.
 export const REQUEST_LOCAL = `
@@ -58,11 +58,6 @@ export const REQUEST_LOCAL = `
 @w.lang.en.irregular.local.earrings w.lang.en.irregular singular=earrings plural=earrings
 @w.lang.en.irregular.local.shoulders w.lang.en.irregular singular=shoulders plural=shoulders
 @w.lang.en.irregular.local.accessories w.lang.en.irregular singular=accessories plural=accessories
-@w.lang.en.reply.local.needed w.lang.en.reply name=refused.needed count=one role=thing text="I cannot take off the {thing}: a face needs one."
-@w.lang.en.reply.local.no_colour w.lang.en.reply name=refused.no_colour count=one role=thing role=value text="The {thing} cannot be {value}."
-@w.lang.en.reply.local.change_about_1 w.lang.en.reply name=done.change.about count=one role=thing role=value text="The {thing} is about {value} now."
-@w.lang.en.reply.local.change_length_1 w.lang.en.reply name=done.change.length count=one role=thing role=value text="The {thing} has {value} words now."
-@w.lang.en.reply.local.change_title_1 w.lang.en.reply name=done.change.title count=one role=thing role=value text="The {thing} is called “{value}” now."
 @w.lang.en.reply.local.page w.lang.en.reply name=done.page count=one text="Here is a fresh sheet of paper. What shall we draw?"
 @w.lang.en.reply.local.page_kept w.lang.en.reply name=done.page.kept count=one text="Here is a fresh sheet of paper! Your old picture is still there if you say “undo”."
 @w.lang.en.reply.local.change_name w.lang.en.reply name=done.change act=change role=name role=value text="{name} is {value} now."
@@ -94,14 +89,4 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.nothing_like w.lang.en.reply name=nothing.like count=one role=words text="I found nothing like {words} among what was done, so I took nothing back."
 @w.lang.en.reply.local.missing_place w.lang.en.reply name=refused.missing_value.place count=one role=key text="Where should it go? You can say, for example, \\"move the tree to the left\\", \\"put the cat next to the house\\" or \\"move it to the top right corner\\"."
 @w.lang.en.reply.local.cannot_do w.lang.en.reply name=cannot.do count=one role=words role=world text="I cannot do {words} in the {world} yet."
-@w.lang.en.reply.local.done_about w.lang.en.reply name=done.about count=one role=whole role=topic text="The {whole} is about {topic}."
-@w.lang.en.reply.local.done_title w.lang.en.reply name=done.title count=one role=whole role=title text="The {whole} is called {title}."
-# sopworld 0.160: the values said per kind in a make through a tool binding (done.add.value) and in a state answer of few things (state.count.value); short_of in the catalog's shape ([KNOW], Q96)
-@w.lang.en.reply.local.done_add_value_1 w.lang.en.reply name=done.add.value count=one act=make role=kind role=value text="I added a {value} {kind}."
-@w.lang.en.reply.local.done_add_value_n w.lang.en.reply name=done.add.value count=other act=make role=kind role=number role=value text="I added {number} {value} {kind:num=pl}."
-@w.lang.en.reply.local.state_count_value_1 w.lang.en.reply name=state.count.value count=one role=kind role=number role=value text="There is a {value} {kind}."
-@w.lang.en.reply.local.state_count_value_n w.lang.en.reply name=state.count.value count=other role=kind role=number role=value text="There are {number} {value} {kind:num=pl}."
-@w.lang.en.reply.local.short_of_unit w.lang.en.reply name=short_of count=one role=made role=asked role=unit text="I could only make {made} {unit:num=pl} of the {asked} you asked for."
-@w.lang.en.reply.local.no_drawing w.lang.en.reply name=refused.no_drawing count=one role=kind text="I have no drawing of a {kind} yet."
-@w.lang.en.reply.local.state_count_named w.lang.en.reply name=state.count.named count=one role=kind role=number role=name text="There is one {kind}, “{name}”."
 `;

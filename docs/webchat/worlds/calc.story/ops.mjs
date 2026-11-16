@@ -3,8 +3,8 @@
 // carried across sentences and turns as `prior`); this file only gathers the words the library needs from the language world and lang.common, and says the
 // library's result in English. No name, item or number is listed here. Browser-safe.
 import { storyState } from '../../lib/vendor/sopworld/sopworld.mjs?v=493f56982f';
-import { en } from '../../lib/lang/en.mjs?v=185de688b8';
-import { pluralize } from '../../lib/formalizer/rules/lemma.mjs?v=f9ae5362f0';
+import { en } from '../../lib/lang/en.mjs?v=6675328a78';
+import { pluralize } from '../../lib/formalizer/rules/lemma.mjs?v=d3f044c9ff';
 import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=f8689c864a';
 import { CALC_WORDS } from '../../lib/knowledge/calc-words.generated.mjs?v=3038efb1d8';   // the catalog's words of arithmetic (K4: w.lang.en shard arithmetic)   // the catalog's money words (k.units through w.lang.en)
 
