@@ -1,0 +1,944 @@
+{
+  "config": {
+    "format": "psys2.raw-structural-model/1",
+    "maxRequests": 1,
+    "maxConstraints": 1,
+    "banks": {
+      "r:act": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        },
+        {
+          "kind": "value",
+          "value": "change"
+        }
+      ],
+      "r:mood": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        },
+        {
+          "kind": "value",
+          "value": "do"
+        }
+      ],
+      "r:target.type": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        },
+        {
+          "kind": "value",
+          "value": "item"
+        }
+      ],
+      "r:target.mode": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        },
+        {
+          "kind": "value",
+          "value": "existing"
+        }
+      ],
+      "r:target.fill": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "r:target.determiner": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "r:target.kind": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        },
+        {
+          "kind": "value",
+          "value": "widget"
+        }
+      ],
+      "r:target.count": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "r:target.ordinal": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "r:target.quantifier": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "r:question.ask": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "r:question.asked_key": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "r:turn.fragment": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "r:turn.objection": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "r:turn.repeat_count": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "r:turn.area": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "c:key": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        },
+        {
+          "kind": "value",
+          "value": "item.tint"
+        }
+      ],
+      "c:value": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        },
+        {
+          "kind": "value",
+          "value": "blue"
+        }
+      ],
+      "c:operator": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        },
+        {
+          "kind": "value",
+          "value": "eq"
+        }
+      ],
+      "c:phase": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        },
+        {
+          "kind": "value",
+          "value": "result"
+        }
+      ],
+      "c:polarity": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        },
+        {
+          "kind": "value",
+          "value": "positive"
+        }
+      ],
+      "c:character": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        },
+        {
+          "kind": "value",
+          "value": "requirement"
+        }
+      ],
+      "c:scope": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "c:group": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "c:step": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "c:measure": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "c:unit": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "c:variety": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ],
+      "c:anchor_fill": [
+        {
+          "kind": "absent"
+        },
+        {
+          "kind": "unknown"
+        }
+      ]
+    },
+    "requestFields": [
+      "act",
+      "mood",
+      "target.type",
+      "target.mode",
+      "target.fill",
+      "target.determiner",
+      "target.kind",
+      "target.count",
+      "target.ordinal",
+      "target.quantifier",
+      "question.ask",
+      "question.asked_key",
+      "turn.fragment",
+      "turn.objection",
+      "turn.repeat_count",
+      "turn.area"
+    ],
+    "constraintFields": [
+      "key",
+      "value",
+      "operator",
+      "phase",
+      "polarity",
+      "character",
+      "scope",
+      "group",
+      "step",
+      "measure",
+      "unit",
+      "variety",
+      "anchor_fill"
+    ],
+    "requestSpans": [
+      "span",
+      "trigger",
+      "target.kind_span",
+      "target.name_span",
+      "target.description_span",
+      "target.count_span"
+    ],
+    "constraintSpans": [
+      "value_span",
+      "measure_span",
+      "anchor_span"
+    ],
+    "spanStates": [
+      "absent",
+      "present",
+      "unresolved"
+    ]
+  },
+  "logits": {
+    "count": [
+      0,
+      10,
+      0
+    ],
+    "presence": [
+      0,
+      10
+    ],
+    "conditionCount": [
+      [
+        0,
+        10,
+        0
+      ]
+    ],
+    "r:act": [
+      [
+        0,
+        0,
+        10
+      ]
+    ],
+    "r:mood": [
+      [
+        0,
+        0,
+        10
+      ]
+    ],
+    "r:target.type": [
+      [
+        0,
+        0,
+        10
+      ]
+    ],
+    "r:target.mode": [
+      [
+        0,
+        0,
+        10
+      ]
+    ],
+    "r:target.fill": [
+      [
+        10,
+        0
+      ]
+    ],
+    "r:target.determiner": [
+      [
+        10,
+        0
+      ]
+    ],
+    "r:target.kind": [
+      [
+        0,
+        0,
+        10
+      ]
+    ],
+    "r:target.count": [
+      [
+        10,
+        0
+      ]
+    ],
+    "r:target.ordinal": [
+      [
+        10,
+        0
+      ]
+    ],
+    "r:target.quantifier": [
+      [
+        10,
+        0
+      ]
+    ],
+    "r:question.ask": [
+      [
+        10,
+        0
+      ]
+    ],
+    "r:question.asked_key": [
+      [
+        10,
+        0
+      ]
+    ],
+    "r:turn.fragment": [
+      [
+        10,
+        0
+      ]
+    ],
+    "r:turn.objection": [
+      [
+        10,
+        0
+      ]
+    ],
+    "r:turn.repeat_count": [
+      [
+        10,
+        0
+      ]
+    ],
+    "r:turn.area": [
+      [
+        10,
+        0
+      ]
+    ],
+    "c:key": [
+      [
+        [
+          0,
+          0,
+          10
+        ]
+      ]
+    ],
+    "c:value": [
+      [
+        [
+          0,
+          0,
+          10
+        ]
+      ]
+    ],
+    "c:operator": [
+      [
+        [
+          0,
+          0,
+          10
+        ]
+      ]
+    ],
+    "c:phase": [
+      [
+        [
+          0,
+          0,
+          10
+        ]
+      ]
+    ],
+    "c:polarity": [
+      [
+        [
+          0,
+          0,
+          10
+        ]
+      ]
+    ],
+    "c:character": [
+      [
+        [
+          0,
+          0,
+          10
+        ]
+      ]
+    ],
+    "c:scope": [
+      [
+        [
+          10,
+          0
+        ]
+      ]
+    ],
+    "c:group": [
+      [
+        [
+          10,
+          0
+        ]
+      ]
+    ],
+    "c:step": [
+      [
+        [
+          10,
+          0
+        ]
+      ]
+    ],
+    "c:measure": [
+      [
+        [
+          10,
+          0
+        ]
+      ]
+    ],
+    "c:unit": [
+      [
+        [
+          10,
+          0
+        ]
+      ]
+    ],
+    "c:variety": [
+      [
+        [
+          10,
+          0
+        ]
+      ]
+    ],
+    "c:anchor_fill": [
+      [
+        [
+          10,
+          0
+        ]
+      ]
+    ],
+    "r:span:state": [
+      [
+        0,
+        10,
+        0
+      ]
+    ],
+    "r:span:start": [
+      [
+        0,
+        10,
+        0,
+        0,
+        0
+      ]
+    ],
+    "r:span:end": [
+      [
+        0,
+        0,
+        0,
+        10,
+        0
+      ]
+    ],
+    "r:trigger:state": [
+      [
+        0,
+        10,
+        0
+      ]
+    ],
+    "r:trigger:start": [
+      [
+        0,
+        10,
+        0,
+        0,
+        0
+      ]
+    ],
+    "r:trigger:end": [
+      [
+        0,
+        10,
+        0,
+        0,
+        0
+      ]
+    ],
+    "r:target.kind_span:state": [
+      [
+        0,
+        10,
+        0
+      ]
+    ],
+    "r:target.kind_span:start": [
+      [
+        0,
+        0,
+        10,
+        0,
+        0
+      ]
+    ],
+    "r:target.kind_span:end": [
+      [
+        0,
+        0,
+        10,
+        0,
+        0
+      ]
+    ],
+    "r:target.name_span:state": [
+      [
+        10,
+        0,
+        0
+      ]
+    ],
+    "r:target.name_span:start": [
+      [
+        10,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "r:target.name_span:end": [
+      [
+        10,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "r:target.description_span:state": [
+      [
+        10,
+        0,
+        0
+      ]
+    ],
+    "r:target.description_span:start": [
+      [
+        10,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "r:target.description_span:end": [
+      [
+        10,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "r:target.count_span:state": [
+      [
+        10,
+        0,
+        0
+      ]
+    ],
+    "r:target.count_span:start": [
+      [
+        10,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "r:target.count_span:end": [
+      [
+        10,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "c:value_span:state": [
+      [
+        [
+          0,
+          10,
+          0
+        ]
+      ]
+    ],
+    "c:value_span:start": [
+      [
+        [
+          0,
+          0,
+          0,
+          10,
+          0
+        ]
+      ]
+    ],
+    "c:value_span:end": [
+      [
+        [
+          0,
+          0,
+          0,
+          10,
+          0
+        ]
+      ]
+    ],
+    "c:measure_span:state": [
+      [
+        [
+          10,
+          0,
+          0
+        ]
+      ]
+    ],
+    "c:measure_span:start": [
+      [
+        [
+          10,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    ],
+    "c:measure_span:end": [
+      [
+        [
+          10,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    ],
+    "c:anchor_span:state": [
+      [
+        [
+          10,
+          0,
+          0
+        ]
+      ]
+    ],
+    "c:anchor_span:start": [
+      [
+        [
+          10,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    ],
+    "c:anchor_span:end": [
+      [
+        [
+          10,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    ]
+  },
+  "text": "set widget blue",
+  "area": "toy",
+  "model": {
+    "kind": "structural-graph",
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "decoderVersion": 1
+  },
+  "offsets": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      4,
+      10
+    ],
+    [
+      11,
+      15
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "sequences": [
+    null,
+    0,
+    0,
+    0,
+    null
+  ],
+  "attention": [
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "expected": {
+    "format": "psys2.raw-structural-predictions/1",
+    "source": {
+      "text": "set widget blue",
+      "unit": "unicode-scalar"
+    },
+    "area": "toy",
+    "model": {
+      "kind": "structural-graph",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "decoderVersion": 1
+    },
+    "requestCount": 1,
+    "requests": [
+      {
+        "act": "change",
+        "mood": "do",
+        "target": {
+          "type": "item",
+          "mode": "existing",
+          "kind": "widget",
+          "kind_span": "widget"
+        },
+        "span": "set widget blue",
+        "trigger": "set",
+        "constraints": [
+          {
+            "key": "item.tint",
+            "value": "blue",
+            "operator": "eq",
+            "phase": "result",
+            "polarity": "positive",
+            "character": "requirement",
+            "value_span": "blue"
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "complete": true,
+      "truncated": false
+    },
+    "unresolved": [],
+    "ranges": [
+      {
+        "path": [
+          "requests",
+          "0",
+          "span"
+        ],
+        "range": [
+          0,
+          15
+        ]
+      },
+      {
+        "path": [
+          "requests",
+          "0",
+          "trigger"
+        ],
+        "range": [
+          0,
+          3
+        ]
+      },
+      {
+        "path": [
+          "requests",
+          "0",
+          "target",
+          "kind_span"
+        ],
+        "range": [
+          4,
+          10
+        ]
+      },
+      {
+        "path": [
+          "requests",
+          "0",
+          "constraints",
+          "0",
+          "value_span"
+        ],
+        "range": [
+          11,
+          15
+        ]
+      }
+    ]
+  }
+}
