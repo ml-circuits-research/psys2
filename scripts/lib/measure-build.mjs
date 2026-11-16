@@ -11,7 +11,7 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 /** What the real set measures: the runtime, the worlds, the catalog, the browser translation switch it uses, the judge and the set. */
-export const REAL_SET_INPUTS = ['src', 'worlds', 'knowledge', 'docs/webchat/ui/translation.mjs', 'docs/webchat/ui/settings.mjs', 'docs/webchat/models/dispatcher/meta.json', 'scripts/real-set.mjs', 'scripts/lib', 'training/eval/real-2026-11-15.jsonl', 'training/eval/owner-log-knowledge'];
+export const REAL_SET_INPUTS = ['src', 'worlds', 'knowledge', 'docs/webchat/ui/translation.mjs', 'docs/webchat/ui/settings.mjs', 'docs/webchat/models/dispatcher/meta.json', 'scripts/real-set.mjs', 'scripts/gen-ui-kb.mjs', 'scripts/build-world-cards.mjs', 'scripts/lib', 'training/eval/real-2026-11-15.jsonl', 'training/eval/owner-log-knowledge'];
 
 const git = (repo, args) => spawnSync('git', args, { cwd: repo, encoding: 'utf8', maxBuffer: 64 << 20 });
 

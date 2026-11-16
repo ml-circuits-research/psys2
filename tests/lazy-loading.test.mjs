@@ -94,7 +94,7 @@ test('a start loads the always-loaded worlds and the open tab\'s world, and no o
   const c = await setup();
   const wl = createWorldLoader({ indexHash: null, fetchJson: c.fetchJson, bag: c.bag });
   await wl.init();
-  for (const tab of ['ui.avatar', 'geo.map', 'media.music']) {
+  for (const tab of ['ui.avatar', 'art.draw', 'diagram.sketch']) {
     const ids = [...wl.startIds({ tabWorld: tab })];
     for (const id of ids) assert.ok(c.index.always.includes(id) || wl.closure([tab]).has(id), `${id} is not part of the start with ${tab} open`);
     const withVendor = ids.filter((id) => (VENDOR_OF[id] ?? []).length);
@@ -109,13 +109,14 @@ test('the words of a message name the worlds it needs; the name of a tab loads i
   const wl = createWorldLoader({ indexHash: null, fetchJson: c.fetchJson, bag: c.bag });
   await wl.init();
   const need = async (t) => [...(await wl.plan(t)).ids];
-  assert.ok((await need('open the map')).includes('geo.map'));
-  assert.ok((await need('play a song on the piano')).includes('media.music'));
+  assert.ok((await need('open the diagram')).includes('diagram.sketch'));
+  assert.equal((await need('open the map')).includes('geo.map'), false);
+  assert.equal((await need('play a song on the piano')).includes('media.music'), false);
   assert.ok((await need('open the drawing board')).includes('art.draw'));
   const hello = await need('hello');
   assert.ok(hello.length <= 2 && !hello.includes('media.music'), `hello needs ${hello.join(',')}`);
   const before = c.fetched.length;
-  await wl.plan('open the map');
+  await wl.plan('open the diagram');
   assert.equal(c.fetched.length, before, 'a bucket is fetched once');
 });
 
@@ -125,7 +126,7 @@ test('the lazy engine reads like the full engine: complete readings directly, in
   const fs_ = full.createSession({ language: 'en' });
   const lazy = await lazyEngine(c, 'ui.avatar');
   const startSize = lazy.loaded.size;
-  for (const text of ['hello', 'What is 7 plus 5?', 'open the map', 'what is the weather today', 'How many legs does a spider have?', 'put a hat on the avatar', 'what is the capital of Japan then how many days are in a week', 'I want to play hangman', 'what can you do', 'hi im Ben']) {
+  for (const text of ['hello', 'What is 7 plus 5?', 'open the diagram', 'what is the weather today', 'How many legs does a spider have?', 'put a hat on the avatar', 'what is the capital of Japan then how many days are in a week', 'I want to play hangman', 'what can you do', 'hi im Ben']) {
     const want = await fs_.send(text), got = await lazy.send(text);
     assert.equal(got.text, want.text, `"${text}"`);
   }
@@ -155,7 +156,7 @@ test('UNDO AFTER A RELOAD: the snapshots of earlier turns survive a world load (
   const drawId = lz.nextId;
   assert.equal(scene(), 'house');
   const before = lz.loaded.size;
-  await lz.send('open the map');           // loads geo.map: the engine is reloaded and the session made again
+  await lz.send('open the diagram');       // loads diagram.sketch: the engine is reloaded and the session made again
   assert.ok(lz.loaded.size > before, 'a world was loaded');
   assert.equal(scene(), 'house', 'the drawing stays');
   const snap = lz.snaps.get(drawId);

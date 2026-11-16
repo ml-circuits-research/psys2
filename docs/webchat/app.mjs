@@ -38,7 +38,7 @@ import { snapshotState, describeChanges, turnBaseline, turnAfter } from './ui/st
 const HERE = new URL('.', import.meta.url);
 
 /** The order of the pages (owner, 2026-11-15; tab cuts ADR-010 and ADR-012): Drawing and Diagram first, the rest as listed; Documents is the editor (the phone menu lists Chat, then these). The avatar is not a tab: it is the icon in the input bar; Talk is not a page: its summary is a panel of the chat. */
-export const TAB_ORDER = ['draw', 'diagram', 'map', 'charts', 'editor', 'music'];
+export const TAB_ORDER = ['draw', 'diagram', 'charts', 'editor'];
 export const TABS = [
   { id: 'editor', label: 'Documents', world: 'docs.editor', make: createEditor },
 ];
@@ -279,7 +279,7 @@ export async function mountPsys2(element, options = {}) {
   on(root, 'click', logTap, true); on(modalHost, 'click', logTap, true); on(modalHost, 'change', logSetting, true);
 
   const tabBtns = {};
-  const VIEW_TABS = new Set(['map', 'diagram', 'charts']);   // pan / zoom / scroll stay usable while the host is busy
+  const VIEW_TABS = new Set(['diagram', 'charts']);   // pan / zoom / scroll stay usable while the host is busy
   for (const t of tabDefs) {
     const btn = h('button', { class: 'p2-tab', role: 'tab', type: 'button', id: `p2-tab-${t.id}`, 'aria-controls': `p2-panel-${t.id}`, onclick: () => userTab(t.id) }, t.label);
     const panel = h('div', { class: 'p2-panel', role: 'tabpanel', id: `p2-panel-${t.id}`, 'aria-labelledby': `p2-tab-${t.id}`, tabindex: '0' });

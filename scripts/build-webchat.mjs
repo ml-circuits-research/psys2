@@ -24,6 +24,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
+import { createDemoLoader } from './lib/demo-composition.mjs';
 import { slotDeclarations } from '../src/worlds/describe.mjs';
 
 const REPO = fileURLToPath(new URL('..', import.meta.url));
@@ -267,9 +268,9 @@ export const VENDOR_OF = { 'geo.map': ['map'], 'docs.editor': ['editor'], 'data.
  * where the word index is. The word index is written in BOTH designs (A: `worlds/words.bloom.json`, a Bloom filter per world; B: `worlds/words/<xx>.json`, exact buckets by the first two letters, with
  * `worlds/words/index.json`); the runtime uses the one `words.design` says. Built from the engine's own view of the worlds (src/worlds/word-index.mjs, scripts/lib/world-index-build.mjs).
  */
-async function writeWorldIndex({ root, outDir, worldsRoot, bundle, ids, log }) {
-  const [{ createFsLoader }, { createEngine }, { buildWorldIndex, ALWAYS }] = await Promise.all([import('../src/loaders/fs-loader.mjs'), import('../src/dialog/index.mjs'), import('./lib/world-index-build.mjs')]);
-  const engine = await createEngine({ loader: createFsLoader({ roots: [worldsRoot] }) });
+async function writeWorldIndex({ root, outDir, loader, bundle, ids, log }) {
+  const [{ createEngine }, { buildWorldIndex, ALWAYS }] = await Promise.all([import('../src/dialog/index.mjs'), import('./lib/world-index-build.mjs')]);
+  const engine = await createEngine({ loader });
   const ix = buildWorldIndex(engine.set, { mode: 'vocab' });
   const worlds = {};
   for (const id of ids) {
@@ -294,6 +295,8 @@ async function writeWorldIndex({ root, outDir, worldsRoot, bundle, ids, log }) {
 export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs/webchat'), models = null, metaOnly = false, log = () => {} } = {}) {
   const src = path.join(root, 'src');
   const worldsRoot = path.join(root, 'worlds');
+  const loader = await createDemoLoader({ root: worldsRoot });
+  const selected = new Set(await loader.listWorlds());
   await mkdir(outDir, { recursive: true });
   for (const p of ['lib', 'worlds', 'build-info.json']) await rm(path.join(outDir, p), { recursive: true, force: true });
 
@@ -310,7 +313,7 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   const bundle = { worlds: {} };
   const ids = [];
   for (const e of (await readdir(worldsRoot, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {
-    if (!e.isDirectory() || !(await exists(path.join(worldsRoot, e.name, 'world.sop')))) continue;
+    if (!e.isDirectory() || !selected.has(e.name)) continue;
     const id = e.name;
     const dir = path.join(worldsRoot, id);
     const entry = { files: {} };
@@ -326,7 +329,7 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
         continue;
       }
       if (BROWSER_SKIP.has(f)) continue;
-      if (WORLD_TEXT.test(f)) entry.files[f] = await readFile(path.join(dir, f), 'utf8');
+      if (WORLD_TEXT.test(f)) entry.files[f] = await loader.readFile(id, f);
       else if (f.endsWith('.mjs')) {
         await mkdir(path.dirname(path.join(outDir, 'worlds', id, f)), { recursive: true });
         // a world module reaches the knowledge tier with `../../src/knowledge/x.mjs`; in the built tree the same modules are in `lib/` (same layout, one level up from `worlds/`)
@@ -342,11 +345,15 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
     await writeFile(path.join(outDir, 'worlds', id, 'bundle.json'), JSON.stringify(entry) + '\n');   // the world's files, loaded when the world is needed (LAZY LOADING)
   }
   await mkdir(path.join(outDir, 'worlds'), { recursive: true });
-  await writeWorldIndex({ root, outDir, worldsRoot, bundle, ids, log });
+  await writeWorldIndex({ root, outDir, loader, bundle, ids, log });
 
   // 3. tab plugins: docs/webchat/ui/tabs/*.mjs -> ui/tabs/index.json (loaded by app.mjs, spec 07 §6)
   const tabsSrc = path.join(root, 'docs/webchat/ui/tabs');
-  const tabFiles = (await exists(tabsSrc)) ? (await readdir(tabsSrc)).filter((f) => f.endsWith('.mjs')).sort() : [];
+  const tabFiles = [];
+  for (const file of (await exists(tabsSrc)) ? (await readdir(tabsSrc)).filter((f) => f.endsWith('.mjs')).sort() : []) {
+    const plugin = (await import(pathToFileURL(path.join(tabsSrc, file)).href)).default;
+    if (selected.has(plugin?.world)) tabFiles.push(file);
+  }
   await mkdir(path.join(outDir, 'ui/tabs'), { recursive: true });
   await writeFile(path.join(outDir, 'ui/tabs/index.json'), JSON.stringify(tabFiles) + '\n');
 

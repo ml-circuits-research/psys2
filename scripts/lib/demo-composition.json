@@ -1,0 +1,29 @@
+{
+  "worlds": [
+    "acts",
+    "art.draw",
+    "calc.arith",
+    "calc.story",
+    "common.sense",
+    "core",
+    "data.charts",
+    "diagram.sketch",
+    "docs.editor",
+    "kids.arith",
+    "kids.common",
+    "kids.shop",
+    "kids.tasks",
+    "lang.common",
+    "meta.worlds",
+    "plan.list",
+    "session.conversation",
+    "session.dialogue",
+    "session.things",
+    "space",
+    "talk",
+    "time.calendar",
+    "ui.avatar",
+    "ui.help",
+    "ui.shell"
+  ]
+}

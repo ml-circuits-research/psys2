@@ -10,6 +10,10 @@ test('webchat build produces a bundle the browser loader can run', async () => {
   const out = await mkdtemp(path.join(tmpdir(), 'psys2-webchat-'));
   try {
     const info = await buildWebchat({ outDir: out });
+    assert.ok(!info.worlds.includes('geo.map') && !info.worlds.includes('media.music'));
+    assert.ok(!info.tabs.includes('map.mjs') && !info.tabs.includes('music.mjs'));
+    await assert.rejects(stat(path.join(out, 'worlds/geo.map/bundle.json')), { code: 'ENOENT' });
+    await assert.rejects(stat(path.join(out, 'worlds/media.music/ops.mjs')), { code: 'ENOENT' });
     assert.ok(info.worlds.includes('core') && info.worlds.includes('kids.common'));
     assert.ok(info.files['lib/dialog/index.mjs'] && info.files['lib/loaders/bundle-loader.mjs']);
     const again = await buildWebchat({ outDir: out });
@@ -29,6 +33,9 @@ test('webchat build produces a bundle the browser loader can run', async () => {
       if (w.opsUrl) w.opsUrl = url(path.posix.join('worlds', w.opsUrl.split('/')[1], 'ops.mjs'));
       if (w.fnsUrl) w.fnsUrl = url(path.posix.join('worlds', w.fnsUrl.split('/')[1], 'fns.mjs'));   // matrix is the default reasoner: the functions of the matrix worlds load
     }
+    for (const id of ['ui.shell', 'ui.help', 'meta.worlds']) assert.doesNotMatch(bundle.worlds[id].files['kb.sop'], /\b(?:geo\.map|media\.music)\b/);
+    assert.equal(Object.values(index.actions).some((id) => ['geo.map', 'media.music'].includes(id)), false);
+    assert.equal(index.words.ids.some((id) => ['geo.map', 'media.music'].includes(id)), false);
     const engine = await createEngine({ loader: createBundleLoader(bundle) });
     const reply = await engine.createSession().send('hello');
     assert.match(reply.text, /^Hello/);

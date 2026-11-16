@@ -62,8 +62,8 @@ test('map tab helpers: topoFeatures decodes the vendored atlas, greatCircle ends
   assert.match(fmtKm(1107), /1,?107/);
 });
 
-test('map tab: registered, vendored files carry headers and licences', () => {
-  assert.ok(JSON.parse(fs.readFileSync(path.join(root, 'docs/webchat/ui/tabs/index.json'), 'utf8')).includes('map.mjs'));
+test('retired map fixture: not registered in demo; vendored files keep headers and licences', () => {
+  assert.equal(JSON.parse(fs.readFileSync(path.join(root, 'docs/webchat/ui/tabs/index.json'), 'utf8')).includes('map.mjs'), false);
   const lf = fs.readFileSync(path.join(root, 'docs/webchat/vendor/map/leaflet.mjs'), 'utf8');
   assert.match(lf.slice(0, 600), /Leaflet/);
   assert.match(lf.slice(0, 600), /BSD/);

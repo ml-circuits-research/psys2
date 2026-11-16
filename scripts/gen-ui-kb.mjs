@@ -23,9 +23,9 @@ const idPart = (x) => String(x).replace(/[^\w-]/g, '_');   // a part of a wire i
 const str = (x) => JSON.stringify(String(x));
 const source = (text, id) => text.split('\n').map((l) => (l.startsWith('@') ? `${l} core.source="generated:scripts/gen-ui-kb.mjs:${id}"` : l)).join('\n');   // a kb wire says where it comes from
 
-export async function buildAll({ root = DEFAULT_ROOT } = {}) {
+export async function buildAll({ root = DEFAULT_ROOT, set = null } = {}) {
   const loader = createFsLoader({ roots: [root] });
-  const set = await loadWorlds(loader, { reasoner: 'matrix' });   // the product reasoner (spec 15)
+  set ??= await loadWorlds(loader, { reasoner: 'matrix' });   // the product reasoner (spec 15)
   const worlds = set.list();
   return {
     'ui.shell': source(await shellKb(set, worlds), 'ui.shell'),

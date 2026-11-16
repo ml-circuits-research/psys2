@@ -118,14 +118,14 @@ function forbidThieves(r) {
 }
 
 // ---------------------------------------------------------------- removed tabs and worlds (ADR-010)
-/** The tabs and worlds ADR-010 and ADR-012 removed, and the names a user or a reply gives them. */
+/** The tabs and worlds ADR-010, ADR-012 and ADR-013 retired, and the names a user or a reply gives them. */
 export const REMOVED = {
-  tabs: new Set(['chess', 'tictactoe', 'hangman', 'guess', 'profile', 'reader', 'seating', 'timeline']),   // seating, timeline: ADR-012
-  worlds: /\b(?:games\.[\w.]+|user\.profile|docs\.reader|plan\.seating|plan\.timeline)\b/,
+  tabs: new Set(['chess', 'tictactoe', 'hangman', 'guess', 'profile', 'reader', 'seating', 'timeline', 'map', 'music']),   // seating/timeline: ADR-012; map/music: ADR-013
+  worlds: /\b(?:games\.[\w.]+|user\.profile|docs\.reader|plan\.seating|plan\.timeline|geo\.map|media\.music)\b/,
   names: /\b(?:hangman|tic[- ]?tac[- ]?toe|noughts and crosses|chess|guess the animal|profile)\b/i,
 };
 /** The surviving worlds with a tab (a forbid-only owner check must not be met by another tab's world). */
-const THIEVES = ['art.draw', 'media.music', 'diagram.sketch', 'geo.map', 'data.charts', 'docs.editor'];
+const THIEVES = ['art.draw', 'diagram.sketch', 'data.charts', 'docs.editor'];
 /** The world of a row's tab. */
 const TAB_WORLD = { draw: 'art.draw', drawing: 'art.draw', music: 'media.music', diagram: 'diagram.sketch', map: 'geo.map', charts: 'data.charts', editor: 'docs.editor', documents: 'docs.editor' };
 const tabWorldOfRow = (r) => TAB_WORLD[r.tab] ?? null;
@@ -151,7 +151,7 @@ const resultFile = (reasoner, mode, tag) => RES(reasoner, tag || (mode === 'ship
  */
 export async function openShipped({ reasoner = 'matrix', mode = 'shipped', ortPath = null, bergamot = null, voice = false } = {}) {
   process.env.PSYS2_REASONER = reasoner;
-  const { createFsLoader, DEFAULT_ROOT } = await import('../src/loaders/fs-loader.mjs');
+  const { createDemoLoader } = await import('./lib/demo-composition.mjs');
   const { createEngine } = await import('../src/dialog/index.mjs');
   const { sessionOptions, runtimeSettings } = await import('../src/dialog/runtime-config.mjs');
   const { createTranslator } = await import('../src/translate/index.mjs');
@@ -181,7 +181,7 @@ export async function openShipped({ reasoner = 'matrix', mode = 'shipped', ortPa
   const translator = createSwitchTranslator({ rules, getStrategy: () => 'auto', voices: () => (roVoice ? [roVoice] : []), backend: mt ? mtBackend : { translatorKind: () => null, detectorKind: () => null, translate: async () => { throw new Error('none'); }, detect: async () => { throw new Error('none'); }, prepare: async () => {}, state: () => 'none' } });
   // the page's settings (a first visit: no saved profile), with the reasoner of this run; the rules diagnostic switches the helper model off as Settings › Reading does
   const settings = applyReading({ ...DEFAULT_SETTINGS, reasoner, ...(mode === 'rules' ? { helperModel: false } : {}) });
-  engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });
+  engine = await createEngine({ loader: await createDemoLoader(), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });
   try { await engine.prepareMeta?.(); } catch { /* the policy router answers alone (spec 20), as on the page */ }
   if (process.env.PSYS2_TRANSLATION_ARM) engine.translationArm = process.env.PSYS2_TRANSLATION_ARM;   // the arms of the Romanian translation measure (Q48 proposal 2): model | both
   if (process.env.PSYS2_PROPOSER === '1') await (await import('./lib/proposer-node.mjs')).installProposer(engine, { ortPath });   // the request proposer (Q48), behind its flag

@@ -49,9 +49,12 @@ test('the judge: a forbid-only check is not met by "I did not understand"; anoth
 
 test('ledger rows of removed worlds are recognised; a row that only forbids a removed world, or names one in a note, is not', () => {
   assert.match(removedWorldOf({ text: 'hint', tab: 'tictactoe' }), /removed tictactoe tab/);
+  for (const tab of ['map', 'music']) assert.match(removedWorldOf({ text: 'more', tab }), new RegExp(`removed ${tab} tab`));
+  assert.equal(removedWorldOf({ text: 'draw a map', tab: 'draw' }), null);
+  assert.equal(removedWorldOf({ text: 'write about music', tab: 'editor' }), null);
   assert.match(removedWorldOf({ text: 'hint pls', tab: 'robot', happened: 'We are not playing hangman. Say "play hangman" to start.' }), /reply came from a removed world/);
   assert.equal(removedWorldOf({ text: 'crocodilii', tab: 'draw', happened: 'I am not sure how it fits', expected: 'redo the move; never hangman' }), null);
-  assert.equal(removedWorldOf({ text: 'o', tab: 'map', happened: 'A has no common second name. [before the cut games.hangman took the letter]', expected: 'not-understood' }), null);
+  assert.equal(removedWorldOf({ text: 'o', tab: 'diagram', happened: 'A has no common second name. [before the cut games.hangman took the letter]', expected: 'not-understood' }), null);
   assert.equal(removedWorldOf({ text: 'Drawing a house', tab: 'draw', happened: 'I did not understand "Drawing a house". Did you mean "Draw a house." or "Start a new chess game."?' }), null);
 });
 
