@@ -1981,8 +1981,9 @@ export class DialogSession {
     if (act === 'make' && !req.target && (plan.assumed ?? []).some((a) => a.key === 'target') && (q.request.mentions ?? []).some((m) => m.kind) && !(req.constraints ?? []).some((c) => c.on === 'count' && c.of && unitOfWhole(live, language, c.of))) return null;   // a bare "draw" (nothing said but the act): never a whole guessed from the world (the door asks, as on every path); "something random", "5 nodes" are the planner's
     if (replace && (plan.notHonoured ?? []).length) return null;   // a reaction with words the world does not take ("I like horses") is not a revision of its result
     // P9 (spec 28 section 10): a move with no place said whose other words the act does not take ("put a heart on the chest": "on the chest" is no place of the act, "heart" no key
-    // of a move) is not carried out and not asked about: the honest reply names what was not taken, in every language (the door's cannot.do)
-    if (act === 'place' && !(req.constraints ?? []).some((c) => c.on === 'place') && (plan.notHonoured ?? []).some((n) => n.code === 'not_declared')) return { why: `not declared: ${plan.notHonoured.filter((n) => n.code === 'not_declared').map((n) => n.words).join(', ')}`, q: flat };
+    // of a move) is not carried out and not asked about: the honest reply names what was not taken, in every language (the door's cannot.do). The same when the planner turned the
+    // move read into another act (sopworld 0.163: "a heart" as a value of the thing that has the key: the head's variant) while words of the turn stay untaken
+    if ((act === 'place' || req.act === 'place') && !(req.constraints ?? []).some((c) => c.on === 'place') && (plan.notHonoured ?? []).some((n) => n.code === 'not_declared')) return { why: `not declared: ${plan.notHonoured.filter((n) => n.code === 'not_declared').map((n) => n.words).join(', ')}`, q: flat };
     // P9: a plan that breaks a count said of one kind ("6 boxes" planned as 3 boxes and 3 circles) is never carried out; the honest reply names it
     if (plan.ok) {
       const planned = {};
@@ -2069,7 +2070,7 @@ export class DialogSession {
     else if (why === 'question') fact = ['cannot.ask', { world: name }];
     else if (/^act (\S+)(?: (.+))? not declared$/.test(why)) { const [, act, thing] = why.match(/^act (\S+)(?: (.+))? not declared$/); fact = thing ? ['cannot.act.kind', { act, kind: thing.replace(/_/g, ' '), world: name }] : ['cannot.act.any', { act, world: name }]; }
     else if (/^refers to the (.+) of the open world$/.test(why)) fact = ['cannot.act', { act: 'change', thing: why.match(/^refers to the (.+) of the open world$/)[1], world: name }];
-    else if (/^(?:plan drops|not declared:) (.+)$/.test(why)) fact = ['cannot.do', { words: why.replace(/^(?:plan drops|not declared:) /, ''), world: name }];
+    else if (/^(?:plan drops|not declared:) (.+)$/.test(why)) fact = ['cannot.do', { words: list(why.replace(/^(?:plan drops|not declared:) /, '').split(', ')), world: name }];
     else if (/^executor/.test(why) || /^no plan/.test(why) || why === 'no executor') fact = ['cannot.make', { world: name }];
     else if (/^plan breaks (.+)$/.test(why)) fact = ['cannot.plan', { words: why.replace(/^plan breaks /, '') }];
     else if (/^reaction \S+ with no result$/.test(why) || /not a revision$/.test(why)) fact = ['cannot.revise', { world: name }];

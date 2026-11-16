@@ -15,7 +15,7 @@
 @s.part.colour core.slot of=part key=colour kind=string
 @s.part.size core.slot of=part key=size type=k.expect.scale by=step
 @s.part.variant core.slot of=part key=variant type=k.faces.variant by=name match=kind:slot
-@j.part std.schema.kinds world=avatar from=k.faces.slot key=name as=part acts=make acts=remove acts=change acts=place
+@j.part std.schema.kinds world=avatar from=k.faces.slot key=name as=part acts=make acts=remove acts=change acts=place single=true
 # What each act honours (for every kind of the world: the parts, the presets and the face; a key an act does not take is refused by name)
 @h.make std.schema.honours world=avatar act=make on=kind on=attribute on=size
 @h.change std.schema.honours world=avatar act=change on=kind on=attribute on=size
