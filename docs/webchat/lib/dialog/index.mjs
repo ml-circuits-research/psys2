@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=82531f6ed4';
+import { composeReply, sayOf } from './composed-reply.mjs?v=1d3eb6e330';
 import { reviewForeign } from './foreign-reading.mjs?v=79d8decc9c';
 import { installTextGen } from './textgen.mjs?v=a8831e42a2';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=ff05a8582c';
@@ -18,7 +18,7 @@ import { validateWorldSet } from '../worlds/validate.mjs?v=f0bbfe4db3';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=ff05a8582c';
 import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=e8a1f00976';
 import { createInterpreter } from '../interpreter/index.mjs?v=d604aa1cfc';
-import { createReasoner } from '../reasoner/index.mjs?v=3ed0784697';
+import { createReasoner } from '../reasoner/index.mjs?v=3e3802602a';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=ef142ac40e';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=2c08312adb';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
@@ -28,7 +28,7 @@ import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voi
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=2d04b92a2e';
 import { machineReads } from '../translate/reading-policy.mjs?v=96bd6cc0e4';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=d6d06e65b4';
+import { langRoNow } from '../translate/frames-ro.mjs?v=5ccf612a4a';
 import { repairInContext } from '../translate/source-repair.mjs?v=e721161854';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=ff05a8582c';
 import { lexIndex } from '../worlds/lexicon.mjs?v=f0499f971c';
@@ -42,19 +42,19 @@ import { attachValues } from '../knowledge/values.mjs?v=0d60c4bf76';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3ebe6cdc98';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f39042bd20';
 import { Discourse } from './discourse.mjs?v=422ad5cc94';
-import { Dialogue } from './dialogue.mjs?v=730671fda9';
+import { Dialogue } from './dialogue.mjs?v=0c0fa17afb';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=1e9911155e';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=57ca1ee374';
-import { personTurn } from './person.mjs?v=4dce35ec52';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext } from './knowledge-lookup.mjs?v=a6bab7ea96';
+import { personTurn } from './person.mjs?v=ce7283503e';
 import { proposeByTypes } from './typed-reader.mjs?v=ecd7342ebe';
-import { withVariants, anyVoiceOn } from './variants.mjs?v=f7cd5ca280';
+import { withVariants, anyVoiceOn } from './variants.mjs?v=2c2f521009';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=ff05a8582c';
 import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=ff05a8582c';
 import { repairFromScene } from './scene-referents.mjs?v=71b2b4cd5b';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=fb71980d4a';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=51f067498d';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=83ffc07f68';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=536f2c2248';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=854e190dce';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=9edcb8862f';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -364,7 +364,7 @@ import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=
 import { intentStep, weakReading, cutWorld } from './intent.mjs?v=5e4cf030ab';
 import { knownEnglishWord } from '../translate/en-ro.mjs?v=cbd133aecd';
 import { proposeReading, negationWords } from './proposer.mjs?v=b3c21ed7d7';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=0fe8d92a1f';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs?v=0da7330ab7';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1639,7 +1639,7 @@ export class DialogSession {
    */
   async _send(text, opts = {}) {
     const tabWorld = this.context().tabWorld;
-    if (tabWorld && this.engine.set.get(tabWorld)?.requestText && this.engine.sopworld === undefined) this.engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=c75044ce3c').catch(() => null);
+    if (tabWorld && this.engine.set.get(tabWorld)?.requestText && this.engine.sopworld === undefined) this.engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=2363f3936d').catch(() => null);
     const decl = tabWorld && declaredWorld(this.engine.set.get(tabWorld), this.engine.sopworld);   // the world declares what it can do (request.sop) and carries a plan out (its planRequest operation, or its bound tool primitives)
     const off = opts.request === false || globalThis.process?.env?.PSYS2_REQUEST === 'off' || guard.soft();   // PSYS2_REQUEST=off: the A/B of the request step
     if (!decl || off) return markLegacy(await this._sendRead(text, opts), off ? 'off' : 'no request declarations');
@@ -1839,6 +1839,8 @@ export class DialogSession {
     // THE DECLARED BINDING (sopworld 0.152.1 std.tool; reviewer 2026-11-15 20:45): a world whose request.sop binds its acts to tool primitives is planned, run and said by the
     // library: a question about the state or about what the world can do (askWorld), the acts on the things there and things of kinds (planRequest over the mirrored view, runPlan
     // through the bindings, sayRequest from the view's diff). What the binding does not take goes on (scenes: the world's executor; undo; the honest reply).
+    const pageOp = worldWholeOperation(live, q.request);   // "start a new drawing": the world's own whole with nothing said of it is its new page, not a scene (Q93 (6))
+    if (pageOp && typeof this.engine.set.get(tabWorld)?.ops?.[pageOp] === 'function' && !q.unread.length) return this._doorOp({ text, opts, lang, english, translation, tabWorld, act: 'make', op: pageOp, args: {}, flat });
     if (tools) { const b = await this._doorBound({ text, opts, lang, english, translation, tabWorld, live, language, q, flat, lastRec, dlg, tools }); if (b) return b; }
     if (isQuestion(english, language)) return why('question');
     // UNDO / REDO are acts of the session's timeline (k.actions undo, redo), not of the tab world's request: the timeline answers ("redo", "undo the whole message", "undo the
@@ -2304,7 +2306,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=c75044ce3c').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=2363f3936d').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.editor (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
@@ -2712,7 +2714,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   // `set`, `reasoner` and `interp` are replaced by `engine.reload(loader)` (LAZY LOADING: the worlds a message needs are added to a running engine); everything below reads them through these bindings.
   let set = await loadWorlds(loader, { reasoner: mode });
   let reasoner = mode === 'matrix' ? await createReasoner(set) : null;
-  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=c75044ce3c')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
+  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=2363f3936d')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
   let interp = createInterpreter(set, { ...options, reasoner });
   attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`

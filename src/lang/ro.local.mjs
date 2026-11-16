@@ -10,6 +10,8 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.diagram_shaped_placed w.lang.ro.reply name=diagram.shaped.placed count=other role=thing role=shapes text="am așezat cele {shapes} pe un contur în formă de {thing:num=sg,case=nomacc,def=no}, în sensul acelor de ceasornic, de sus"
 @w.lang.ro.reply.local.draw_scene w.lang.ro.reply name=draw.scene count=other role=things role=example role=colour text="am desenat o scenă însorită pentru tine: {things}. Poți schimba orice, de exemplu „fă {example:num=sg,case=nomacc,def=yes} {colour@example}”"
 # The door's reply facts the catalog's w.lang.ro does not have yet (the names of src/lang/en.request.local.mjs, Q43 / Q47 [KNOW]): its acts on things, the questions about the state and the capabilities, and the honest answers.
+@w.lang.ro.reply.local.place_in_1 w.lang.ro.reply name=done.place.in count=one role=thing role=value text="am mutat {thing:def=yes} în {value:def=no}"
+@w.lang.ro.reply.local.place_in_n w.lang.ro.reply name=done.place.in count=other role=thing role=number role=value text="am mutat {number} {thing:num=pl} în {value:def=no}"
 @w.lang.ro.reply.local.place_next_1 w.lang.ro.reply name=done.place.next count=one act=place role=thing role=target text="am mutat {thing:def=yes} lângă {target:def=yes}"
 @w.lang.ro.reply.local.place_next_n w.lang.ro.reply name=done.place.next count=other act=place role=thing role=number role=target text="am mutat cele {number} {thing:num=pl} lângă {target:def=yes}"
 @w.lang.ro.reply.local.none_1 w.lang.ro.reply name=done.none count=one role=thing text="{thing:def=yes} este deja acolo"

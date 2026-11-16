@@ -37,7 +37,7 @@ test('praise runs no plan; "fewer" revises the last result through the binding; 
   const fewer = await s.send('fewer dogs');
   assert.equal(kinds(s).dog, 1, fewer.text);
   assert.equal(kinds(s).tree, 1, fewer.text);
-  assert.match(fewer.text, /^I made it again, the way you said\./);   // the diff of a re-laid result names every thing moved or redone (questions.md Q45 (8))
+  assert.doesNotMatch(fewer.text, /made it again/);   // a step reaction is said by its net result, no remake (sopworld 0.157, Q93 (1))
 });
 
 let roEngine = null;
@@ -74,6 +74,22 @@ test('a place said by a thing of the view goes to that thing with the relation s
   const fish = objs.filter((o) => o.kind === 'fish');
   assert.equal(fish.length, 3, r.text);
   for (const f of fish) assert.ok(Math.abs(f.x - lake.x) < 1 && Math.abs(f.y - lake.y) < 1, `every fish is in the lake: ${r.text}`);
+});
+
+test('a new page never draws content: "start a new drawing", "new page", "o pagina noua" (the world\'s own whole with nothing said of it is its page op; Q93 (6))', async () => {
+  const roE = (roEngine ??= await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() }));
+  for (const [lang, said] of [['en', 'start a new drawing'], ['en', 'new page'], ['en', 'start a new page'], ['ro', 'o pagină nouă'], ['ro', 'începe un desen nou']]) {
+    const s = (lang === 'ro' ? roE : engine).createSession({ language: lang }); s.setWorldState('ui.shell', { activeTab: 'draw' });
+    await s.send(lang === 'ro' ? 'desenează o casă' : 'draw a house');
+    const r = await s.send(said);
+    const objs = s.state()['art.draw'].objects ?? [];
+    assert.ok(objs.every((o) => o.kind === 'house'), `${lang} ${said}: no content drawn: ${r.text} ${JSON.stringify(objs.map((o) => o.kind))}`);
+  }
+  const s = drawing();
+  await s.send('draw a house');
+  const r = await s.send('start a new drawing');
+  assert.equal((s.state()['art.draw'].objects ?? []).length, 0, r.text);
+  assert.match(r.text, /fresh sheet/);
 });
 
 test('questions about the state and about what the world can do are facts of the live world (askWorld), no step', async () => {

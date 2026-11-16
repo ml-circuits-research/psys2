@@ -12,7 +12,7 @@
  */
 import { budget } from './budget.mjs?v=00bce6e369';
 import { BUNDLED_REQUEST } from '../knowledge/bundled-request.mjs?v=32be4c412e';
-import { REQUEST_LOCAL } from '../lang/en.request.local.mjs?v=511b6fabc7';
+import { REQUEST_LOCAL } from '../lang/en.request.local.mjs?v=df53fb02b8';
 
 const STOP = new Set('a an the of to in on at for with and or but is are was were be been being it its this that these those there here i you he she we they me my your our his her their them us do does did please just also so then very some any can could would should will shall may might must have has had am get got let lets want like one'.split(' '));
 
@@ -177,6 +177,18 @@ export function boundTools(lib, live, language) {
 /** The world operation a live world declares for an act (`psys2.op world= act= op=` of request.sop): the one executor path of the door's acts that are not plans (undo, redo). */
 export function actOperation(live, act, of = null) {
   const r = ofType(live, 'psys2.op').find((x) => one(x, 'act') === act && (of ? one(x, 'of') === of : !one(x, 'of')));
+  return r ? one(r, 'op') : null;
+}
+
+/**
+ * A make of the world's own whole and nothing else ("start a new drawing": the reading marks a kind that names the world itself `world: true`, and nothing is said of it: no count,
+ * manner, part, topic or value) is the world's own make operation when it declares one (request.sop `psys2.op act=make of=<page>`): a fresh page, never a whole sampled among
+ * its subkinds (questions.md Q93 (6)). Returns the operation's name or null.
+ */
+export function worldWholeOperation(live, request) {
+  const cs = request?.constraints ?? [];
+  if (request?.act !== 'make' || !cs.length || !cs.every((c) => c.on === 'kind' && c.want === 'yes' && c.world)) return null;
+  const r = ofType(live, 'psys2.op').find((x) => one(x, 'act') === 'make' && one(x, 'of'));
   return r ? one(r, 'op') : null;
 }
 
