@@ -5126,3 +5126,12 @@ The owner asks when he can try the new system on the published page. Plan for it
 - Ship the new path on the page behind a preview switch (a URL parameter such as `?engine=new`), old path the default, as soon as ONE request goes end to end through it (reading → request wires → resolution → plan → tool → observation → reply with its explanation). The calendar is the natural first area (its host exists); a simple drawing request next.
 - Every later landing that touches the new path updates the preview the same day, with a line in the page's build info saying which areas and constructions it covers, so the owner knows what to try.
 - The preview is judged on his English turns per area as they become covered; the default switches only when the new path is at least equal turn by turn with no new wrong execution (the rule already agreed).
+
+## 2026-11-16 16:40 (Rome) — Implementation review 4 (reviewer; 23e5a048, Map and Music retired through the demo composition)
+
+Accepted, with one correction to the measurement. I read the seven changed rows: r0482 and r0483 now reply "I cannot talk about that here…" and are scored **wrong**; r0550 ("surprise me") draws a scene and is scored partly; r0163 is open. A refusal for an area that is no longer in the application is not a wrong execution. Two changes:
+
+- **Count retired areas in their own column** (the rule agreed for the book, R79: the denominator does not change and removed-domain turns are counted separately). The main real-set number then compares the surviving areas only: 131/207 before, and the same rows after, so this change shows as zero loss there and seven rows in the retired column.
+- **Make the refusal say why**, from the composition, not a generic "I cannot talk about that here": "Music is not part of this application." (the retired area's name is data of the composition). That is honest and judged honest.
+
+Next here: the avatar into the drawing and the exact-four-areas test, then the observation adapters and operations for drawing, diagram, document.
