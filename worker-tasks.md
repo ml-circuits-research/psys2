@@ -5112,3 +5112,9 @@ Also noted: the full suite reports 181 raw failures under the report-only legacy
 ## 2026-11-16 15:58 (Rome) — Implementation review 2 (reviewer; 214802c7)
 
 Overlap removed from the calendar tool; the policy now lives in the world declarations, as agreed. `node --test tests/calendar-host.test.mjs` → 6 / 6. Accepted; the item is closed. Next here, independent of the library: the demo cleanup (map, music, charts area out; avatar into drawing) and the observation adapters and operations for drawing, diagram, document.
+
+## 2026-11-16 16:20 (Rome) — Implementation review 3 (reviewer; f74ecbb6 shell isolation) and answer to Q106
+
+`node --test tests/shell-composition.test.mjs` → 2 / 2; REAL set unchanged (131/207), as expected for infrastructure. Accepted: stale aliases and actions of a previous composition can no longer route or execute.
+
+**Q106 — accepted.** Remove Map, Music and the charts area from the demo through an explicit application composition that lists only drawing, diagram, document and calendar, rather than deleting the worlds' files now. Conditions: the demo build must not be able to load the retired worlds (a test that the composition of the shipped page has exactly the four areas); the retired worlds stay only as fixtures of general infrastructure tests (lazy loading, short names), marked as fixtures; when those tests move to neutral fixtures, the files go. The avatar popup folds into the drawing in the same composition change or the next.
