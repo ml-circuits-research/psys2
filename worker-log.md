@@ -4518,3 +4518,13 @@ Actual readiness: train 28,959 rows / 33,149 requests; calibration 3,308 / 3,760
 ### Structural teacher projector integration and review 21 setup evidence
 
 Integrated knowledge lane 8d0eaf13, preserving all prior log entries. Added its two decoder-facing fixtures to the active gate. All 32,267 clean rows and raw annotation structures remain retained; only the small fully canonically bound subset currently validates end to end. This is not a five-example training subset. Final active gate: 169 total, 168 passed, zero failed, one optional-model skip; diff check passed. Functional/owner replays remain 67/205 honest, zero wrong, with 1,581 excluded setups. Read review 21 and recorded exact per-area exclusions plus concrete Calendar/Document/Diagram/previous-turn counterexamples in questions.md; no placeholder context was manufactured.
+
+### Versioned evaluation baseline policy and safe native identity
+
+Added fixture policy functional-native-baseline v1 with a reproducible hash. Missing Calendar start=0/duration=1ms/participants=[]/room=null and Document blocks=[] are explicitly defaulted baseline data, not inferred world truth. Generic Diagram node uses a declared rectangle representation, preserving original semantic kind/provenance. Calendar IDs are stable hashes independent of human labels. Unreplayed previous turns remain a separate semantic limitation rather than preventing an otherwise valid baseline trial. Defaulted and context-limited rows cannot earn semantic correctness from assumptions. A final setup population check prevents overwritten document incarnations from being reported as jointly present.
+
+Actual Calendar requires at least one participant, so its proposed empty-participant baseline still refuses; recorded the concrete invariant and draft/preparation alternative in questions.md without manufacturing people or weakening the host. Genuine constructor/kind gaps remain explicit.
+
+Matrix: 186 baseline-eligible honest no-effect replies / zero wrong, 1,462 setup exclusions; 2,236 native calls, 1,166 seeded items, 611 partially seeded rows. Defaults affect 666 rows and 967 are semantically limited (categories overlap). Area eligible/excluded: Drawing 74/341, Diagram 72/366, Document 26/372, Calendar 14/383. Full per-area/default/limitation and class-cell evidence is retained. Owner replay unchanged 205 honest/zero wrong. This is baseline setup coverage, not model understanding.
+
+Validation: final active npm 171 total, 170 passed, zero failed, one optional-model skip. New tests cover stable safe identities with labels, native empty-participant rejection, representation/content provenance and overwritten populations. Diff check passed. No model/provider/training/native-host behavior changed.

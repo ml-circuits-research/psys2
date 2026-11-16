@@ -61,3 +61,17 @@ test('matrix Drawing setup preserves actual native names and kinds without a rea
  const result=await seedFunctionalContext({host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS.drawing,context:{existing:[{name:'Named circle',kind:'circle'},{name:'Named tree',kind:'tree'}]}});
  assert.equal(result.ok,true);assert.equal(result.counters.calls,2);assert.deepEqual(state.objects.map(o=>o.name),['Named circle','Named tree']);assert.deepEqual(state.objects.map(o=>o.kind),['circle','tree']);
 });
+
+import {prepareFunctionalFixture,FUNCTIONAL_FIXTURE_POLICY_HASH} from '../scripts/lib/functional-fixture-policy.mjs';
+test('versioned fixture defaults preserve safe Calendar IDs and human labels without world-truth claims',async()=>{
+ const context={existing:[{kind:'person',name:'Alex Smith'},{kind:'room',name:'Main Room'},{kind:'meeting',name:'Planning meeting'}],previous:'Earlier unsupported turn'};
+ const fixture=prepareFunctionalFixture('calendar',context),host=createCalendarHost({instanceId:'fixture.calendar'});
+ assert.equal(fixture.semanticallyLimited,true);assert.equal(fixture.defaulted.length,4);assert.equal(fixture.policy.sha256,FUNCTIONAL_FIXTURE_POLICY_HASH);assert.equal(fixture.limitations[0].reason,'previous-context-not-replayed');assert.equal(context.existing[2].start,undefined);
+ const result=await seedFunctionalContext({context:fixture.context,host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS.calendar});assert.equal(result.ok,false);assert.ok(result.failures.some(f=>f.nativeReason==='invalid_meeting'));assert.equal(result.counters.calls,3);assert.ok(result.items.every(i=>/^[a-z0-9-]+$/.test(i.native.id)));assert.deepEqual(result.items.map(i=>i.name),context.existing.slice(0,2).map(i=>i.name));
+ assert.deepEqual(prepareFunctionalFixture('calendar',context).context,fixture.context);
+});
+test('fixture representation and empty-content defaults are explicit and overwritten setup objects refuse',async()=>{
+ const diagram=prepareFunctionalFixture('diagram',{existing:[{kind:'node',name:'Lead'}]});assert.equal(diagram.context.existing[0].kind,'rectangle');assert.equal(diagram.defaulted[0].sourceKind,'node');assert.equal(diagram.original.existing[0].kind,'node');
+ const fixture=prepareFunctionalFixture('document',{existing:[{kind:'document',name:'First'},{kind:'document',name:'Second'}]}),host=createDocumentHost({instanceId:'fixture.docs'});
+ assert.equal(fixture.defaulted.length,2);const result=await seedFunctionalContext({context:fixture.context,host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS.document});assert.equal(result.ok,false);assert.ok(result.failures.some(f=>f.reason==='seeded-object-no-longer-present'));
+});

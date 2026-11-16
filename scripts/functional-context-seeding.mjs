@@ -79,5 +79,6 @@ export async function seedFunctionalContext({context={},host,kindMappings=[],inv
   if(success){counters.seeded++;items.push({index,name:item.name,kind:item.kind,mapping:mapping.id??null,native:{id:created[0].id,source:created[0].source,sourceType:created[0].sourceType},calls:receipts.length-callStart});}
   else{counters.failed++;if(receipts.slice(callStart).some(r=>r.status==='changed'))counters.partialItems++;}
  }
+ for(const item of items)if(!observation?.objects.some(o=>o.source===item.native.source&&o.id===item.native.id&&o.sourceType===item.native.sourceType))fail(item.index,'seeded-object-no-longer-present');
  return result();
 }
