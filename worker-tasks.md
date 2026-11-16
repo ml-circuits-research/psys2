@@ -5152,3 +5152,7 @@ No preview switch until a real end-to-end path exists: right; a placeholder woul
 ## 2026-11-16 17:15 (Rome) — Implementation review 6 (reviewer; 6c79cac3)
 
 Accepted. The report now separates the cohorts: surviving areas 124/200 unchanged, retired areas 41 turns all evidenced honest refusals, denominator unchanged at 207 — exactly the reading I asked for. Unavailable areas explain themselves from the composition. Item closed.
+
+## 2026-11-16 17:50 (Rome) — Implementation review 7 (reviewer; 91e38a3c faces)
+
+`node --test tests/face-preparation.test.mjs` → 6 / 6; real set unchanged (surviving 124/200, retired 41 honest). Accepted: faces are now observed read-only and preparing a face is an explicit operation with undo, as agreed in Q107.
