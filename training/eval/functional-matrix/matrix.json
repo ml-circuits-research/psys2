@@ -1,0 +1,326 @@
+{
+ "arrange / layout": {
+  "calendar": {
+   "available": 6,
+   "chosen": 6
+  },
+  "diagram": {
+   "available": 568,
+   "chosen": 25
+  },
+  "document": {
+   "available": 6,
+   "chosen": 6
+  },
+  "drawing": {
+   "available": 10,
+   "chosen": 10
+  }
+ },
+ "check": {
+  "calendar": {
+   "available": 210,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 63,
+   "chosen": 25
+  },
+  "document": {
+   "available": 68,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 33,
+   "chosen": 25
+  }
+ },
+ "connect / group": {
+  "calendar": {
+   "available": 6,
+   "chosen": 6
+  },
+  "diagram": {
+   "available": 597,
+   "chosen": 25
+  },
+  "document": {
+   "available": 12,
+   "chosen": 12
+  },
+  "drawing": {
+   "available": 17,
+   "chosen": 17
+  }
+ },
+ "create": {
+  "calendar": {
+   "available": 1176,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 996,
+   "chosen": 25
+  },
+  "document": {
+   "available": 927,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 1259,
+   "chosen": 25
+  }
+ },
+ "cross-area": {
+  "calendar": {
+   "available": 143,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 247,
+   "chosen": 25
+  },
+  "document": {
+   "available": 45,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 37,
+   "chosen": 25
+  }
+ },
+ "follow-up, undo": {
+  "calendar": {
+   "available": 131,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 145,
+   "chosen": 25
+  },
+  "document": {
+   "available": 196,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 184,
+   "chosen": 25
+  }
+ },
+ "move / place": {
+  "calendar": {
+   "available": 547,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 322,
+   "chosen": 25
+  },
+  "document": {
+   "available": 278,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 568,
+   "chosen": 25
+  }
+ },
+ "no request": {
+  "calendar": {
+   "available": 62,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 66,
+   "chosen": 25
+  },
+  "document": {
+   "available": 52,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 82,
+   "chosen": 25
+  }
+ },
+ "objection": {
+  "calendar": {
+   "available": 297,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 198,
+   "chosen": 25
+  },
+  "document": {
+   "available": 182,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 124,
+   "chosen": 25
+  }
+ },
+ "propose": {
+  "calendar": {
+   "available": 148,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 64,
+   "chosen": 25
+  },
+  "document": {
+   "available": 49,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 93,
+   "chosen": 25
+  }
+ },
+ "question": {
+  "calendar": {
+   "available": 492,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 652,
+   "chosen": 25
+  },
+  "document": {
+   "available": 341,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 309,
+   "chosen": 25
+  }
+ },
+ "relative change": {
+  "calendar": {
+   "available": 207,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 131,
+   "chosen": 25
+  },
+  "document": {
+   "available": 209,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 242,
+   "chosen": 25
+  }
+ },
+ "remove": {
+  "calendar": {
+   "available": 166,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 76,
+   "chosen": 25
+  },
+  "document": {
+   "available": 87,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 88,
+   "chosen": 25
+  }
+ },
+ "select by description": {
+  "calendar": {
+   "available": 1454,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 1164,
+   "chosen": 25
+  },
+  "document": {
+   "available": 570,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 929,
+   "chosen": 25
+  }
+ },
+ "set property": {
+  "calendar": {
+   "available": 971,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 2048,
+   "chosen": 25
+  },
+  "document": {
+   "available": 1804,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 2806,
+   "chosen": 25
+  }
+ },
+ "sets, or, not": {
+  "calendar": {
+   "available": 461,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 456,
+   "chosen": 25
+  },
+  "document": {
+   "available": 345,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 372,
+   "chosen": 25
+  }
+ },
+ "several requests": {
+  "calendar": {
+   "available": 570,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 1201,
+   "chosen": 25
+  },
+  "document": {
+   "available": 735,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 892,
+   "chosen": 25
+  }
+ },
+ "soft wishes": {
+  "calendar": {
+   "available": 195,
+   "chosen": 25
+  },
+  "diagram": {
+   "available": 151,
+   "chosen": 25
+  },
+  "document": {
+   "available": 168,
+   "chosen": 25
+  },
+  "drawing": {
+   "available": 165,
+   "chosen": 25
+  }
+ }
+}
