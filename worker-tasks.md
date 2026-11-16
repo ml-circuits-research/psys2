@@ -4963,3 +4963,11 @@ Run by me on 30b0339a: smoke 89/89; glue lint 0 reads / 0 replies / 0 regex in a
 
 - **Avatar gates for Q96:** your log gives the owner's 13 turns at 6 right / 0 wrong / 7 honest without the borderline, and the Romanian replies slice is in. Both gates I named are met by your count. The decision is still the owner's (he has it in my morning summary); do not route the popup before he answers. Prepare the switch so it is one flag, with the old path removable in the same change.
 - **Still open from 07:55:** "write a short letter about a villa" → `I read "villa" as "via"` (re-probed now, unchanged) and the letter gets 5 chapters. First item for the next slice: the structural rule (no repair of a token any source reads) with the controls.
+
+## Reviewer 2026-11-16 08:55 — spell guard, 0.164 vendored and the Q96 switch accepted
+
+Run by me on e68b9212: smoke 89/89; glue lint 0 / 0 / 0 in all four domains; no additions to the legacy list. Library 0.165.0 passes on my run (645 tests): vendor it (genre parts by name, topic and title for every text, short / long).
+
+- **Spell guard:** "write a short letter about a villa" → no repair now ("I know nothing about villa in my knowledge yet": honest; the topic knowledge is a [KNOW] matter). "draw a lettre" → `I read "lettre" as "letter"`: a real typo repaired and said. Accepted.
+- **Q96 switch** behind one flag, default off: as asked. It waits for the owner.
+- **Two things from the probe, both the library's rule on a request that is only partly possible (its block 10:00, not answered yet):** "draw a villa and a swing" → "Nothing changed. I have no drawing of a swing yet." — the villa could be made and the swing named as missing; today the whole request is dropped. And "I baked a cake, draw it" → `I did not understand "baked", "draw" here.` — naming "draw" as not understood is wrong to a user (the word is known; what is not understood is the clause before it). The reply should name the clause it could not read, as it does for "… and zorp it gently". I pass both to the library.
