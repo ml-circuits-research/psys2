@@ -1,6 +1,6 @@
 // Application admission view, after public standard-request validation.
 // Unsupported semantics remain explicit; this is not another request validator.
-import { parse, str } from '../vendor/sopworld/sopworld.mjs?v=d97cc2c645';
+import { parse, str } from '../vendor/sopworld/sopworld.mjs?v=d58613c0ad';
 const fields={
  'std.request':['act','mood','source','root'],
  'std.request.source':['text'],
