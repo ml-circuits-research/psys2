@@ -11,3 +11,5 @@ The exact local package versions are pinned in `training/sop-bert/requirements-b
 ## Owner-designated functional development split
 
 The exact IDs in `training/eval/functional-matrix/exclude-from-training.json` must be excluded before field emission and candidate-bank construction. Preparation records the exclusion file hash, requested/found/missing IDs and source counts. Training refuses a prepared manifest without an exclusion hash. Published evaluation IDs are distinct from fresh final unseen evaluation. A changed exclusion set requires regenerated data and a restart from the clean pretrained encoder; previously exposed weights stay preserved but explicitly ineligible. Compressed deterministic JSONL output can be loaded into host memory for training to preserve disk space without dropping rows.
+
+Frozen calibration additionally groups the same predictions by inventory concept, declared head metadata and source area. Each grouping reports support/confusion and span counts; these are alternate aggregations of the same candidate pairs, not independently trained output heads or functional-class success. Zero-support keys remain explicit null-accuracy entries.
