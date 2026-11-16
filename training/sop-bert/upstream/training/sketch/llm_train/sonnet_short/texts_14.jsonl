@@ -1,0 +1,100 @@
+{"id": "ts-1301", "names": ["Foyer", "Annex"], "text": "for the museum floor plan, put a white box called Gallery to the left of the Foyer"}
+{"id": "ts-1302", "names": ["Build", "Deploy"], "text": "could this pipeline ever feed back into itself"}
+{"id": "ts-1303", "names": ["Trigger"], "text": "everything Trigger can reach"}
+{"id": "ts-1304", "names": ["Arc"], "text": "what is set as a default at the moment"}
+{"id": "ts-1305", "names": ["Left1", "Right1"], "text": "flip Left1 and Right1"}
+{"id": "ts-1306", "names": ["Alpha", "Beta"], "text": "break the connection between Alpha and Beta"}
+{"id": "ts-1307", "names": ["Zeta"], "text": "show me the gold shapes"}
+{"id": "ts-1308", "names": ["Eta"], "text": "what is linked to Eta"}
+{"id": "ts-1309", "names": ["Theta", "Iota"], "text": "is Theta joined directly with Iota"}
+{"id": "ts-1310", "names": ["Kappa", "Mu"], "text": "is Mu reachable from Kappa, is there a path"}
+{"id": "ts-1311", "names": ["Nu"], "text": "Nu's degree?"}
+{"id": "ts-1312", "names": ["Xi"], "text": "undo"}
+{"id": "ts-1313", "names": ["Pi"], "text": "step back, undo it"}
+{"id": "ts-1314", "names": ["Rho"], "text": "undo what you just did"}
+{"id": "ts-1315", "names": ["Tau"], "text": "redo"}
+{"id": "ts-1316", "names": ["Phi"], "text": "put back what I undid, redo"}
+{"id": "ts-1317", "names": ["Chi"], "text": "redo the previous change"}
+{"id": "ts-1318", "names": ["Psi"], "text": "Psi in front"}
+{"id": "ts-1319", "names": ["Omega"], "text": "I want Omega drawn over the rest"}
+{"id": "ts-1320", "names": ["Title2"], "text": "raise all the circles to the front"}
+{"id": "ts-1321", "names": ["Shadow"], "text": "Shadow should be behind the others"}
+{"id": "ts-1322", "names": ["Backing"], "text": "lower Backing to the back"}
+{"id": "ts-1323", "names": ["Ground"], "text": "stick the oldest rectangle at the back"}
+{"id": "ts-1324", "names": ["Ham", "Jam"], "text": "swap the places of Ham and Jam"}
+{"id": "ts-1325", "names": ["Salt1", "Pepper1"], "text": "interchange Salt1 and Pepper1"}
+{"id": "ts-1326", "names": ["Rice", "Beans"], "text": "swap Rice and Beans"}
+{"id": "ts-1327", "names": ["Corn", "Wheat"], "text": "detach Corn from Wheat"}
+{"id": "ts-1328", "names": ["Oats", "Barley"], "text": "remove the arrow between Oats and Barley"}
+{"id": "ts-1329", "names": ["Millet", "Sorghum"], "text": "disconnect Millet and Sorghum"}
+{"id": "ts-1330", "names": ["T1", "T2", "T3"], "text": "align T1, T2, T3 horizontally"}
+{"id": "ts-1331", "names": ["U1", "U2"], "text": "make U1 and U2 line up vertically"}
+{"id": "ts-1332", "names": ["Weft"], "text": "align every hexagon vertically"}
+{"id": "ts-1333", "names": ["X1", "X2", "X3"], "text": "distribute X1, X2, X3 horizontally"}
+{"id": "ts-1334", "names": ["Warp"], "text": "evenly space all the red shapes vertically"}
+{"id": "ts-1335", "names": ["Yarn"], "text": "drop all the rules"}
+{"id": "ts-1336", "names": ["Thread"], "text": "please forget the default rules"}
+{"id": "ts-1337", "names": [], "text": "from now on every ellipse is purple"}
+{"id": "ts-1338", "names": [], "text": "new squares should be huge"}
+{"id": "ts-1339", "names": ["Needle"], "text": "Needle is a star"}
+{"id": "ts-1340", "names": ["Spool"], "text": "is there a loop"}
+{"id": "ts-1341", "names": ["Bobbin"], "text": "circular links in here?"}
+{"id": "ts-1342", "names": ["Button"], "text": "what can Button reach"}
+{"id": "ts-1343", "names": ["Zipper"], "text": "list nodes reachable from Zipper"}
+{"id": "ts-1344", "names": ["Hem"], "text": "which reachable shapes follow Hem"}
+{"id": "ts-1345", "names": ["Seam"], "text": "what rules have been defined"}
+{"id": "ts-1346", "names": ["Cuff"], "text": "do I have any rules set up"}
+{"id": "ts-1347", "names": ["Collar"], "text": "list all the blue shapes"}
+{"id": "ts-1348", "names": ["Lapel"], "text": "list the diamonds"}
+{"id": "ts-1349", "names": ["Pocket"], "text": "give me all the shapes that are not gold"}
+{"id": "ts-1350", "names": ["Sleeve"], "text": "neighbors of Sleeve please"}
+{"id": "ts-1351", "names": ["Hood", "Visor"], "text": "are Hood and Visor connected"}
+{"id": "ts-1352", "names": ["Scarf", "Glove"], "text": "is there a connection path from Scarf to Glove"}
+{"id": "ts-1353", "names": ["Boot"], "text": "what's the degree of Boot"}
+{"id": "ts-1354", "names": ["Shoe"], "text": "how many connections does Shoe have"}
+{"id": "ts-1355", "names": ["Sock"], "text": "how many squares"}
+{"id": "ts-1356", "names": ["Heel"], "text": "is there any ellipse"}
+{"id": "ts-1357", "names": ["Sole"], "text": "describe everything on the canvas"}
+{"id": "ts-1358", "names": ["Lace", "Tongue"], "text": "nearest shape to Lace?"}
+{"id": "ts-1359", "names": ["Clog", "Sandal"], "text": "is Clog bigger than Sandal"}
+{"id": "ts-1360", "names": ["Pump2"], "text": "which shape is the biggest"}
+{"id": "ts-1361", "names": ["Mule2"], "text": "what shape is Mule2"}
+{"id": "ts-1362", "names": ["Flat"], "text": "is Flat purple"}
+{"id": "ts-1363", "names": ["Bay2", "Port2"], "text": "insert a cyan hexagon right of Bay2"}
+{"id": "ts-1364", "names": ["Nave"], "text": "add a tiny gray circle named Pew"}
+{"id": "ts-1365", "names": ["Altar"], "text": "put a gold star above the Altar"}
+{"id": "ts-1366", "names": ["Choir"], "text": "make 3 purple squares"}
+{"id": "ts-1367", "names": ["Nave2", "Apse"], "text": "slide a pink diamond between Nave2 and Apse"}
+{"id": "ts-1368", "names": ["Spire2"], "text": "a large red triangle at the top, call it Peak"}
+{"id": "ts-1369", "names": ["Crypt"], "text": "add a black box in the bottom right corner"}
+{"id": "ts-1370", "names": ["Cloister"], "text": "add an indigo oval with the label Garden"}
+{"id": "ts-1371", "names": ["Belfry"], "text": "throw a navy circle onto the board near the Belfry"}
+{"id": "ts-1372", "names": ["Vault2"], "text": "add a medium lime star"}
+{"id": "ts-1373", "names": ["Nook2"], "text": "add a magenta hexagon to the left"}
+{"id": "ts-1374", "names": ["Pier2"], "text": "a brown circle called Post, please"}
+{"id": "ts-1375", "names": ["Hatch2"], "text": "make Hatch2 orange"}
+{"id": "ts-1376", "names": ["Plank"], "text": "change the Plank to a triangle"}
+{"id": "ts-1377", "names": ["Beam2"], "text": "Beam2 is to be tiny"}
+{"id": "ts-1378", "names": ["Joist"], "text": "make all the boxes yellow"}
+{"id": "ts-1379", "names": ["Rafter"], "text": "make the first triangle teal"}
+{"id": "ts-1380", "names": ["Stud2"], "text": "set Stud2 to white and make it huge"}
+{"id": "ts-1381", "names": ["Pipe2", "Valve2"], "text": "connect Pipe2 to Valve2"}
+{"id": "ts-1382", "names": ["Tap2", "Basin"], "text": "draw a dashed line from Tap2 to Basin"}
+{"id": "ts-1383", "names": ["Drain2", "Sewer"], "text": "link Drain2 with Sewer using a dotted red arrow"}
+{"id": "ts-1384", "names": ["A1", "A2", "A3", "A4"], "text": "chain A1, A2, A3 and A4 together"}
+{"id": "ts-1385", "names": ["Sun2", "Moon2"], "text": "connect Sun2 and Moon2 with a two-way line"}
+{"id": "ts-1386", "names": ["Dam", "Lake"], "text": "label the line from Dam to Lake \"holds\""}
+{"id": "ts-1387", "names": ["Source2"], "text": "connect Source2 to all the triangles"}
+{"id": "ts-1388", "names": ["Motor"], "text": "move the Motor 120 to the left"}
+{"id": "ts-1389", "names": ["Belt", "Pulley2"], "text": "put Belt above the Pulley2"}
+{"id": "ts-1390", "names": ["Gear3"], "text": "move Gear3 to the top left"}
+{"id": "ts-1391", "names": ["Rod2", "Piston"], "text": "bring Rod2 next to the Piston"}
+{"id": "ts-1392", "names": ["Cam"], "text": "nudge the Cam down"}
+{"id": "ts-1393", "names": ["Crank"], "text": "remove Crank"}
+{"id": "ts-1394", "names": ["Bolt2"], "text": "get rid of all the white circles"}
+{"id": "ts-1395", "names": ["Nut2"], "text": "delete everything"}
+{"id": "ts-1396", "names": ["Cog2"], "text": "make Cog2 bigger"}
+{"id": "ts-1397", "names": ["Spring2"], "text": "shrink all the squares"}
+{"id": "ts-1398", "names": ["Lever2"], "text": "rename Lever2 to Handle"}
+{"id": "ts-1399", "names": ["Pawl"], "text": "name the last square Latch"}
+{"id": "ts-1400", "names": ["Ratchet"], "text": "put the label Locked on Ratchet"}

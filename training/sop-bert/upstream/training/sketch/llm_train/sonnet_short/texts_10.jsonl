@@ -1,0 +1,100 @@
+{"id": "ts-0901", "names": ["Truck", "Depot"], "text": "yo slap a brown box named Crate onto the left of Truck"}
+{"id": "ts-0902", "names": ["Mailer", "Queue"], "text": "does this flow ever end up back where it began"}
+{"id": "ts-0903", "names": ["Entry"], "text": "reachable set from Entry"}
+{"id": "ts-0904", "names": ["Arch"], "text": "rules"}
+{"id": "ts-0905", "names": ["Wedge", "Slice"], "text": "exchange Wedge and Slice"}
+{"id": "ts-0906", "names": ["Chip", "Board"], "text": "remove the connection between Chip and Board"}
+{"id": "ts-0907", "names": ["Ridge"], "text": "which shapes are neighbours of Ridge"}
+{"id": "ts-0908", "names": ["Penn", "Dell"], "text": "is Penn directly joined to Dell"}
+{"id": "ts-0909", "names": ["Lima", "Quito"], "text": "can you get from Lima to Quito"}
+{"id": "ts-0910", "names": ["Stud"], "text": "how many edges touch Stud"}
+{"id": "ts-0911", "names": ["Reeve"], "text": "list the lime shapes"}
+{"id": "ts-0912", "names": ["Manor"], "text": "how many diamonds"}
+{"id": "ts-0913", "names": ["Keep"], "text": "is there a white square"}
+{"id": "ts-0914", "names": ["Hollow"], "text": "summarize what's drawn"}
+{"id": "ts-0915", "names": ["Cord", "Plug"], "text": "nearest shape to Cord"}
+{"id": "ts-0916", "names": ["Elder", "Youth"], "text": "is Elder bigger than Youth"}
+{"id": "ts-0917", "names": ["Junior", "Senior"], "text": "is Junior smaller than Senior"}
+{"id": "ts-0918", "names": ["Foam"], "text": "the biggest shape, which one"}
+{"id": "ts-0919", "names": ["Ruff"], "text": "what color does Ruff have"}
+{"id": "ts-0920", "names": ["Wisp"], "text": "is Wisp tiny"}
+{"id": "ts-0921", "names": ["Shale"], "text": "Shale is not green, is it?"}
+{"id": "ts-0922", "names": ["Pylon", "Mast"], "text": "set a magenta circle under the Pylon"}
+{"id": "ts-0923", "names": ["Tavern"], "text": "for my fantasy map, add an indigo hexagon named Keep"}
+{"id": "ts-0924", "names": ["Dune"], "text": "add four tiny yellow stars"}
+{"id": "ts-0925", "names": ["Chapel", "Abbey"], "text": "put a white ellipse between Chapel and Abbey"}
+{"id": "ts-0926", "names": ["Harbor"], "text": "insert a black square in the top left corner"}
+{"id": "ts-0927", "names": ["Garden"], "text": "make a big teal triangle above Garden"}
+{"id": "ts-0928", "names": ["Plot"], "text": "new green circle labelled Seed"}
+{"id": "ts-0929", "names": ["Mortar"], "text": "turn Mortar gray"}
+{"id": "ts-0930", "names": ["Pestle"], "text": "Pestle should be a diamond"}
+{"id": "ts-0931", "names": ["Cairn"], "text": "set Cairn to huge"}
+{"id": "ts-0932", "names": ["Spade"], "text": "color all the stars pink"}
+{"id": "ts-0933", "names": ["Hoe"], "text": "make the first square orange"}
+{"id": "ts-0934", "names": ["Fork", "Knife"], "text": "connect Fork with Knife"}
+{"id": "ts-0935", "names": ["Lane", "Road", "Path"], "text": "join Lane, Road and Path in a chain"}
+{"id": "ts-0936", "names": ["Sink", "Drain"], "text": "I want a dotted line from Sink to Drain"}
+{"id": "ts-0937", "names": ["Hub", "Spoke"], "text": "connect Hub and Spoke with a two-way red arrow"}
+{"id": "ts-0938", "names": ["Gate"], "text": "connect Gate to all the diamonds"}
+{"id": "ts-0939", "names": ["Cat", "Mouse"], "text": "wire Cat to Mouse, label chases"}
+{"id": "ts-0940", "names": ["Sofa"], "text": "slide the Sofa 250 to the left"}
+{"id": "ts-0941", "names": ["Lamp", "Desk"], "text": "put the Lamp on the Desk, above it"}
+{"id": "ts-0942", "names": ["Shelf"], "text": "move Shelf into the center"}
+{"id": "ts-0943", "names": ["Bush", "Fence"], "text": "Bush goes between the Fence and Gate"}
+{"id": "ts-0944", "names": ["Rust"], "text": "bin the Rust"}
+{"id": "ts-0945", "names": ["Mold"], "text": "clear out all the green diamonds"}
+{"id": "ts-0946", "names": ["Dust"], "text": "delete the latest star"}
+{"id": "ts-0947", "names": ["Grit"], "text": "make Grit bigger please"}
+{"id": "ts-0948", "names": ["Boulder"], "text": "Boulder is too large, make it smaller"}
+{"id": "ts-0949", "names": ["Bard"], "text": "call Bard Poet"}
+{"id": "ts-0950", "names": ["Pawn2"], "text": "rename Pawn2 to Knight2"}
+{"id": "ts-0951", "names": ["Plaque"], "text": "engrave Founders on the Plaque"}
+{"id": "ts-0952", "names": ["Door"], "text": "relabel the Door \"Back exit\""}
+{"id": "ts-0953", "names": ["Seed"], "text": "clone Seed 8 times"}
+{"id": "ts-0954", "names": ["Leaf"], "text": "give me another Leaf"}
+{"id": "ts-0955", "names": ["Bough"], "text": "put all the squares in a grid"}
+{"id": "ts-0956", "names": ["Twig"], "text": "arrange everything into a row"}
+{"id": "ts-0957", "names": ["Align1", "Align2", "Align3"], "text": "align Align1, Align2 and Align3 on the horizontal"}
+{"id": "ts-0958", "names": ["V1", "V2", "V3"], "text": "make V1, V2 and V3 line up vertically"}
+{"id": "ts-0959", "names": ["D1", "D2", "D3", "D4"], "text": "distribute D1, D2, D3, D4 horizontally"}
+{"id": "ts-0960", "names": ["Even"], "text": "distribute the stars vertically"}
+{"id": "ts-0961", "names": ["Hat", "Cap"], "text": "disconnect Hat and Cap"}
+{"id": "ts-0962", "names": ["Glove", "Mitt"], "text": "swap Glove and Mitt"}
+{"id": "ts-0963", "names": ["Toad"], "text": "undo the last change"}
+{"id": "ts-0964", "names": ["Newt"], "text": "oh no, undo that"}
+{"id": "ts-0965", "names": ["Frog"], "text": "redo what was undone"}
+{"id": "ts-0966", "names": ["Gecko"], "text": "redo"}
+{"id": "ts-0967", "names": ["Skink"], "text": "bring Skink up front"}
+{"id": "ts-0968", "names": ["Adder"], "text": "put the white circles in front"}
+{"id": "ts-0969", "names": ["Boa"], "text": "Boa goes behind everything"}
+{"id": "ts-0970", "names": ["Asp"], "text": "send the newest box to the back"}
+{"id": "ts-0971", "names": ["Mamba"], "text": "forget the rules I gave"}
+{"id": "ts-0972", "names": ["Viper"], "text": "stop applying the defaults"}
+{"id": "ts-0973", "names": ["Rattler"], "text": "Rattler is brown"}
+{"id": "ts-0974", "names": [], "text": "from now on squares are small"}
+{"id": "ts-0975", "names": [], "text": "new things should come out cyan"}
+{"id": "ts-0976", "names": ["Pit"], "text": "is the graph cyclic"}
+{"id": "ts-0977", "names": ["Gorge"], "text": "cycle check please"}
+{"id": "ts-0978", "names": ["Canyon"], "text": "what's downstream of Canyon"}
+{"id": "ts-0979", "names": ["Ravine"], "text": "nodes reachable from Ravine?"}
+{"id": "ts-0980", "names": ["Chasm"], "text": "what rules are active"}
+{"id": "ts-0981", "names": ["Abyss"], "text": "are any rules set"}
+{"id": "ts-0982", "names": ["Mesa"], "text": "what's attached to Mesa"}
+{"id": "ts-0983", "names": ["Butte", "Knoll"], "text": "are Butte and Knoll linked directly"}
+{"id": "ts-0984", "names": ["Tor", "Fell"], "text": "is there a way from Tor to Fell"}
+{"id": "ts-0985", "names": ["Crag"], "text": "how many connections does the Crag have"}
+{"id": "ts-0986", "names": ["Scar"], "text": "all the black ones, list them"}
+{"id": "ts-0987", "names": ["Cleft"], "text": "how many ellipses"}
+{"id": "ts-0988", "names": ["Gully"], "text": "any pink circles around"}
+{"id": "ts-0989", "names": ["Brae"], "text": "give me the full picture"}
+{"id": "ts-0990", "names": ["Glade", "Copse"], "text": "which is nearest to Glade"}
+{"id": "ts-0991", "names": ["Heath", "Moor"], "text": "is Heath larger than Moor"}
+{"id": "ts-0992", "names": ["Fen", "Bog"], "text": "is Fen smaller than Bog"}
+{"id": "ts-0993", "names": ["Weald"], "text": "which shape is the most connected"}
+{"id": "ts-0994", "names": ["Steppe"], "text": "where is the Steppe"}
+{"id": "ts-0995", "names": ["Tundra"], "text": "how big is Tundra"}
+{"id": "ts-0996", "names": ["Taiga"], "text": "is Taiga a triangle"}
+{"id": "ts-0997", "names": ["Veldt", "Savanna"], "text": "is Veldt below Savanna"}
+{"id": "ts-0998", "names": ["Pampas"], "text": "describe Pampas"}
+{"id": "ts-0999", "names": ["Llano", "Playa"], "text": "what is farthest from Llano"}
+{"id": "ts-1000", "names": ["Erg"], "text": "what's the leftmost thing on the canvas"}

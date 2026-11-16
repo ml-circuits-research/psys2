@@ -1,0 +1,100 @@
+{"id": "th-1201", "names": ["Stage"], "text": "stick a gold star just below Stage"}
+{"id": "th-1202", "names": [], "text": "a huge navy circle called Moon at the top"}
+{"id": "th-1203", "names": ["Piano"], "text": "5 small white diamonds near the Piano"}
+{"id": "th-1204", "names": [], "text": "throw in a red rectangle labeled 'Exit' on the far right"}
+{"id": "th-1205", "names": ["Drum", "Band"], "text": "a lime triangle named Cymbal between Drum and Band"}
+{"id": "th-1206", "names": [], "text": "make a large black box at the bottom named Riser"}
+{"id": "th-1207", "names": ["Mic"], "text": "stick a cyan hexagon left of Mic"}
+{"id": "th-1208", "names": [], "text": "a tiny orange oval near the top left named Lamp"}
+{"id": "th-1209", "names": ["Curtain"], "text": "a purple star labeled 'Act 1' right above the Curtain"}
+{"id": "th-1210", "names": ["Spot"], "text": "put two blue squares near Spot"}
+{"id": "th-1211", "names": ["Stage"], "text": "Stage should be black"}
+{"id": "th-1212", "names": ["Piano"], "text": "turn Piano into a rectangle"}
+{"id": "th-1213", "names": ["Mic"], "text": "Mic goes large"}
+{"id": "th-1214", "names": ["Band"], "text": "band gets green"}
+{"id": "th-1215", "names": ["Spot"], "text": "make Spot a triangle"}
+{"id": "th-1216", "names": ["Lamp"], "text": "make Lamp small"}
+{"id": "th-1217", "names": ["Riser"], "text": "paint Riser brown"}
+{"id": "th-1218", "names": [], "text": "make all the diamonds that aren't white gold"}
+{"id": "th-1219", "names": ["Mic", "Drum", "Band"], "text": "run a line from Mic and Drum to Band, both of them"}
+{"id": "th-1220", "names": ["Drum", "Cymbal"], "text": "connect Drum to Cymbal with a dotted line"}
+{"id": "th-1221", "names": ["Piano", "Stage"], "text": "two-way arrow between Piano and Stage"}
+{"id": "th-1222", "names": ["Spot", "Mic", "Lamp"], "text": "chain Spot, Mic and Lamp"}
+{"id": "th-1223", "names": ["Curtain", "Stage"], "text": "a navy link from Curtain to Stage labelled 'Act 2'"}
+{"id": "th-1224", "names": ["Moon"], "text": "move Moon 35 pixels down"}
+{"id": "th-1225", "names": ["Exit"], "text": "shift Exit left 20 px"}
+{"id": "th-1226", "names": ["Cymbal", "Drum"], "text": "put Cymbal right of Drum"}
+{"id": "th-1227", "names": ["Riser"], "text": "Riser goes to the bottom left"}
+{"id": "th-1228", "names": ["Lamp"], "text": "drag Lamp up"}
+{"id": "th-1229", "names": ["Mic", "Piano", "Band"], "text": "move Mic between Piano and Band"}
+{"id": "th-1230", "names": ["Spot"], "text": "nudge Spot 12 pixels right"}
+{"id": "th-1231", "names": ["Exit"], "text": "get rid of Exit"}
+{"id": "th-1232", "names": [], "text": "delete every oval that isn't orange"}
+{"id": "th-1233", "names": ["Lamp"], "text": "remove Lamp"}
+{"id": "th-1234", "names": ["Stage"], "text": "make Stage bigger"}
+{"id": "th-1235", "names": ["Band"], "text": "enlarge Band"}
+{"id": "th-1236", "names": ["Mic"], "text": "rename Mic to Vocal"}
+{"id": "th-1237", "names": ["Piano"], "text": "call Piano Keys"}
+{"id": "th-1238", "names": ["Curtain"], "text": "label Curtain 'Velvet'"}
+{"id": "th-1239", "names": ["Spot"], "text": "write 'Front' on Spot"}
+{"id": "th-1240", "names": ["Spot"], "text": "copy Spot"}
+{"id": "th-1241", "names": ["Drum"], "text": "make 2 copies of Drum"}
+{"id": "th-1242", "names": ["Piano", "Drum"], "text": "swap Piano and Drum"}
+{"id": "th-1243", "names": ["Mic", "Curtain"], "text": "switch Mic with Curtain"}
+{"id": "th-1244", "names": ["Mic", "Band"], "text": "unlink Mic from Band"}
+{"id": "th-1245", "names": ["Drum", "Cymbal"], "text": "remove the link between Drum and Cymbal"}
+{"id": "th-1246", "names": ["Stage", "Piano", "Band"], "text": "align Stage, Piano and Band horizontally"}
+{"id": "th-1247", "names": [], "text": "line up all the cyan shapes vertically"}
+{"id": "th-1248", "names": ["Spot", "Mic"], "text": "arrange Spot and Mic in a row"}
+{"id": "th-1249", "names": [], "text": "arrange everything in columns"}
+{"id": "th-1250", "names": ["Piano", "Band", "Drum"], "text": "distribute Piano, Band and Drum horizontally"}
+{"id": "th-1251", "names": [], "text": "spread the stars out vertically"}
+{"id": "th-1252", "names": ["Spot"], "text": "bring Spot to the front"}
+{"id": "th-1253", "names": [], "text": "put the oldest star on top"}
+{"id": "th-1254", "names": ["Curtain"], "text": "send Curtain to the back"}
+{"id": "th-1255", "names": [], "text": "the newest hexagon goes to the back"}
+{"id": "th-1256", "names": [], "text": "undo that move"}
+{"id": "th-1257", "names": [], "text": "go one step back"}
+{"id": "th-1258", "names": [], "text": "redo, please"}
+{"id": "th-1259", "names": [], "text": "put back what I just undid"}
+{"id": "th-1260", "names": [], "text": "forget the rules you learned"}
+{"id": "th-1261", "names": [], "text": "clear the defaults"}
+{"id": "th-1262", "names": [], "text": "how many gold things are there"}
+{"id": "th-1263", "names": [], "text": "how many shapes aren't white"}
+{"id": "th-1264", "names": ["Stage"], "text": "how many shapes are beneath Stage"}
+{"id": "th-1265", "names": [], "text": "is there a teal circle"}
+{"id": "th-1266", "names": [], "text": "any cyan stars anywhere?"}
+{"id": "th-1267", "names": [], "text": "list the hexagons on stage"}
+{"id": "th-1268", "names": [], "text": "which things aren't purple"}
+{"id": "th-1269", "names": ["Band"], "text": "what shape is Band"}
+{"id": "th-1270", "names": ["Curtain"], "text": "what color is Curtain"}
+{"id": "th-1271", "names": [], "text": "what's the label on the newest rectangle"}
+{"id": "th-1272", "names": ["Piano"], "text": "describe Piano"}
+{"id": "th-1273", "names": [], "text": "describe the stage layout"}
+{"id": "th-1274", "names": ["Mic"], "text": "who's touching Mic"}
+{"id": "th-1275", "names": ["Drum"], "text": "what's attached to Drum"}
+{"id": "th-1276", "names": ["Mic", "Band"], "text": "is Mic linked to Band"}
+{"id": "th-1277", "names": ["Drum", "Cymbal"], "text": "are Drum and Cymbal joined"}
+{"id": "th-1278", "names": ["Stage"], "text": "how many connections does Stage have"}
+{"id": "th-1279", "names": ["Spot"], "text": "how many wires go into Spot"}
+{"id": "th-1280", "names": ["Lamp", "Stage"], "text": "is there a route from Lamp to Stage"}
+{"id": "th-1281", "names": ["Riser", "Curtain"], "text": "how do I get from Riser to Curtain"}
+{"id": "th-1282", "names": ["Stage"], "text": "what can you reach from Stage"}
+{"id": "th-1283", "names": ["Mic"], "text": "reachable from Mic?"}
+{"id": "th-1284", "names": [], "text": "any loops in the stage plan"}
+{"id": "th-1285", "names": [], "text": "does the plan ever circle back"}
+{"id": "th-1286", "names": [], "text": "what rules are on right now"}
+{"id": "th-1287", "names": [], "text": "list the defaults in effect"}
+{"id": "th-1288", "names": ["Mic"], "text": "is Mic cyan"}
+{"id": "th-1289", "names": ["Lamp"], "text": "is Lamp not orange"}
+{"id": "th-1290", "names": ["Spot", "Stage"], "text": "is Spot left of Stage"}
+{"id": "th-1291", "names": [], "text": "what's the leftmost thing on stage"}
+{"id": "th-1292", "names": [], "text": "which one is biggest"}
+{"id": "th-1293", "names": ["Piano"], "text": "what's closest to Piano"}
+{"id": "th-1294", "names": ["Band"], "text": "which green shape is farthest from Band"}
+{"id": "th-1295", "names": ["Spot"], "text": "Spot is a triangle"}
+{"id": "th-1296", "names": ["Moon", "Stage"], "text": "Moon sits above Stage"}
+{"id": "th-1297", "names": ["Riser"], "text": "Riser is brown"}
+{"id": "th-1298", "names": [], "text": "new triangles should be red from now on"}
+{"id": "th-1299", "names": [], "text": "every new oval should be small"}
+{"id": "th-1300", "names": [], "text": "new things should be navy from here on"}

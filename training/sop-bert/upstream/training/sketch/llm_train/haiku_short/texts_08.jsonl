@@ -1,0 +1,100 @@
+{"id": "th-0701", "names": ["Central"], "text": "toss a cyan circle called Junction right next to Central"}
+{"id": "th-0702", "names": [], "text": "hey, put a huge black rectangle in the bottom right named Depot"}
+{"id": "th-0703", "names": ["Harbor"], "text": "two green ellipses left of Harbor"}
+{"id": "th-0704", "names": [], "text": "a yellow star labeled 'Stop 4' at the center"}
+{"id": "th-0705", "names": ["Museum", "Park"], "text": "make an orange triangle named Stop between Museum and Park"}
+{"id": "th-0706", "names": ["Airport"], "text": "small magenta square labeled 'Gate' above Airport"}
+{"id": "th-0707", "names": [], "text": "one more hexagon, medium size, in the top left"}
+{"id": "th-0708", "names": ["Market"], "text": "pop a red diamond in right below Market named Kiosk"}
+{"id": "th-0709", "names": [], "text": "could u place a tiny blue oval at the top"}
+{"id": "th-0710", "names": ["Stadium"], "text": "slap a navy box named Turnstile to the right of Stadium"}
+{"id": "th-0711", "names": [], "text": "a white circle called Loop in the middle"}
+{"id": "th-0712", "names": ["Park"], "text": "5 gray diamonds beside Park"}
+{"id": "th-0713", "names": ["Central"], "text": "Central should be navy"}
+{"id": "th-0714", "names": ["Harbor"], "text": "make Harbor a hexagon"}
+{"id": "th-0715", "names": ["Museum"], "text": "make Museum huge"}
+{"id": "th-0716", "names": ["Airport"], "text": "airport goes tiny"}
+{"id": "th-0717", "names": ["Market"], "text": "color Market teal"}
+{"id": "th-0718", "names": ["Stadium"], "text": "turn Stadium into a star"}
+{"id": "th-0719", "names": ["Park"], "text": "park should be lime"}
+{"id": "th-0720", "names": ["Stop"], "text": "make it red"}
+{"id": "th-0721", "names": [], "text": "make the ellipses that aren't green purple"}
+{"id": "th-0722", "names": ["Central", "Harbor", "Park"], "text": "run lines from each of Central, Harbor and Park to the next one"}
+{"id": "th-0723", "names": ["Museum", "Park"], "text": "connect Museum and Park with a dashed line"}
+{"id": "th-0724", "names": ["Airport", "Market"], "text": "link Airport and Market with a plain line, no arrowheads"}
+{"id": "th-0725", "names": ["Central", "Stadium"], "text": "a blue connection from Central to Stadium"}
+{"id": "th-0726", "names": ["Harbor", "Stop", "Museum"], "text": "string Harbor, Stop, Museum in a chain"}
+{"id": "th-0727", "names": ["Park", "Market"], "text": "tie Park to Market both directions"}
+{"id": "th-0728", "names": ["Junction"], "text": "move Junction 15 pixels up"}
+{"id": "th-0729", "names": ["Depot"], "text": "shove Depot 90 px to the left"}
+{"id": "th-0730", "names": ["Kiosk", "Market"], "text": "move Kiosk to the right of Market"}
+{"id": "th-0731", "names": ["Stop"], "text": "stop goes to the very top"}
+{"id": "th-0732", "names": ["Loop"], "text": "nudge Loop right"}
+{"id": "th-0733", "names": ["Turnstile", "Stadium"], "text": "relocate Turnstile below Stadium"}
+{"id": "th-0734", "names": ["Museum", "Park", "Stop"], "text": "drag Museum between Park and Stop"}
+{"id": "th-0735", "names": ["Loop"], "text": "delete Loop"}
+{"id": "th-0736", "names": [], "text": "remove the diamonds that aren't red"}
+{"id": "th-0737", "names": ["Junction"], "text": "cut out Junction"}
+{"id": "th-0738", "names": ["Harbor"], "text": "make Harbor bigger a little"}
+{"id": "th-0739", "names": ["Central"], "text": "enlarge Central"}
+{"id": "th-0740", "names": ["Market"], "text": "rename Market to Bazaar"}
+{"id": "th-0741", "names": ["Airport"], "text": "call Airport Terminal instead"}
+{"id": "th-0742", "names": ["Museum"], "text": "put 'Art wing' on Museum"}
+{"id": "th-0743", "names": ["Stadium"], "text": "stick 'Arena' onto the Stadium"}
+{"id": "th-0744", "names": ["Kiosk"], "text": "copy Kiosk four times"}
+{"id": "th-0745", "names": ["Stop"], "text": "clone Stop"}
+{"id": "th-0746", "names": ["Central", "Harbor"], "text": "exchange Central and Harbor"}
+{"id": "th-0747", "names": ["Park", "Museum"], "text": "switch Park with Museum"}
+{"id": "th-0748", "names": ["Central", "Harbor"], "text": "remove the line between Central and Harbor"}
+{"id": "th-0749", "names": ["Park", "Market"], "text": "cut Park from Market"}
+{"id": "th-0750", "names": ["Museum", "Park", "Stadium"], "text": "align Museum, Park and Stadium vertically"}
+{"id": "th-0751", "names": [], "text": "line up the yellow shapes horizontally"}
+{"id": "th-0752", "names": ["Airport", "Market"], "text": "put Airport and Market in a row"}
+{"id": "th-0753", "names": [], "text": "arrange the diagram in a circle"}
+{"id": "th-0754", "names": ["Central", "Museum", "Harbor"], "text": "even out Central, Museum and Harbor horizontally"}
+{"id": "th-0755", "names": [], "text": "distribute the diamonds that aren't gray vertically"}
+{"id": "th-0756", "names": ["Stop"], "text": "put Stop in front"}
+{"id": "th-0757", "names": [], "text": "bring the newest circle to front"}
+{"id": "th-0758", "names": ["Depot"], "text": "send Depot to the back"}
+{"id": "th-0759", "names": [], "text": "push that old green triangle to the back"}
+{"id": "th-0760", "names": [], "text": "undo that move"}
+{"id": "th-0761", "names": [], "text": "reverse that"}
+{"id": "th-0762", "names": [], "text": "redo that move"}
+{"id": "th-0763", "names": [], "text": "put the undone one back"}
+{"id": "th-0764", "names": [], "text": "forget every default"}
+{"id": "th-0765", "names": [], "text": "reset the defaults and forget them"}
+{"id": "th-0766", "names": [], "text": "how many stations are there"}
+{"id": "th-0767", "names": [], "text": "how many purple things are there"}
+{"id": "th-0768", "names": [], "text": "how many shapes are not orange"}
+{"id": "th-0769", "names": [], "text": "is there any teal square"}
+{"id": "th-0770", "names": [], "text": "any ovals that aren't blue?"}
+{"id": "th-0771", "names": [], "text": "list the hexagons"}
+{"id": "th-0772", "names": [], "text": "which ones are not navy"}
+{"id": "th-0773", "names": ["Central"], "text": "what color is Central"}
+{"id": "th-0774", "names": ["Stop"], "text": "what's the label on Stop"}
+{"id": "th-0775", "names": [], "text": "what shape is the newest circle"}
+{"id": "th-0776", "names": ["Market"], "text": "explain what Market is"}
+{"id": "th-0777", "names": [], "text": "describe the whole map"}
+{"id": "th-0778", "names": ["Central"], "text": "which stops are next to Central"}
+{"id": "th-0779", "names": ["Stadium"], "text": "what links to Stadium"}
+{"id": "th-0780", "names": ["Central", "Stadium"], "text": "is Central directly connected to Stadium"}
+{"id": "th-0781", "names": ["Park", "Museum"], "text": "are Park and Museum linked"}
+{"id": "th-0782", "names": ["Central"], "text": "how many lines run into Central"}
+{"id": "th-0783", "names": ["Harbor"], "text": "how many connections has Harbor"}
+{"id": "th-0784", "names": ["Airport", "Harbor"], "text": "how do I get from Airport to Harbor"}
+{"id": "th-0785", "names": ["Market", "Park"], "text": "is there a way to go from Market to Park"}
+{"id": "th-0786", "names": ["Central"], "text": "what can I get to from Central"}
+{"id": "th-0787", "names": ["Airport"], "text": "reachable stops from Airport?"}
+{"id": "th-0788", "names": [], "text": "is there a loop in the transit map"}
+{"id": "th-0789", "names": [], "text": "does any line loop back to where it started"}
+{"id": "th-0790", "names": [], "text": "which rules are on right now"}
+{"id": "th-0791", "names": [], "text": "what defaults did I set earlier"}
+{"id": "th-0792", "names": ["Depot"], "text": "is Depot black"}
+{"id": "th-0793", "names": ["Harbor"], "text": "is Harbor a hexagon"}
+{"id": "th-0794", "names": ["Museum", "Park"], "text": "is Museum bigger than Park"}
+{"id": "th-0795", "names": [], "text": "which is the rightmost one"}
+{"id": "th-0796", "names": [], "text": "what's the bottommost thing"}
+{"id": "th-0797", "names": ["Central"], "text": "which green shape is closest to Central"}
+{"id": "th-0798", "names": ["Market"], "text": "what's the farthest circle from Market"}
+{"id": "th-0799", "names": ["Stop", "Museum", "Park"], "text": "Stop is between Museum and Park"}
+{"id": "th-0800", "names": [], "text": "new hexagons should be navy from now on"}

@@ -1,0 +1,100 @@
+{"id": "ts-1001", "names": ["Pantry"], "text": "I'm planning a kitchen, so add a lime rectangle called Fridge to the right of the Pantry"}
+{"id": "ts-1002", "names": ["Producer", "Consumer"], "text": "do we have a deadlock loop between these"}
+{"id": "ts-1003", "names": ["Ping"], "text": "which nodes lie downstream of Ping"}
+{"id": "ts-1004", "names": ["Cargo"], "text": "what are the defaults I set earlier"}
+{"id": "ts-1005", "names": ["Tray", "Plate"], "text": "swap places of Tray and Plate"}
+{"id": "ts-1006", "names": ["Fuse", "Bulb"], "text": "take away the line from Fuse to Bulb"}
+{"id": "ts-1007", "names": ["Gadget"], "text": "list every white shape"}
+{"id": "ts-1008", "names": ["Pith"], "text": "which shapes are directly attached to Pith"}
+{"id": "ts-1009", "names": ["Vera", "Wes"], "text": "are Vera and Wes linked"}
+{"id": "ts-1010", "names": ["Ur", "Ys"], "text": "is there a path leading from Ur to Ys"}
+{"id": "ts-1011", "names": ["Pillar"], "text": "degree count for Pillar"}
+{"id": "ts-1012", "names": ["Ficus"], "text": "is there a gold circle"}
+{"id": "ts-1013", "names": ["Wattle"], "text": "how many stars do I have"}
+{"id": "ts-1014", "names": ["Cress"], "text": "undo"}
+{"id": "ts-1015", "names": ["Sedge"], "text": "never mind, put it back with redo"}
+{"id": "ts-1016", "names": ["Hedge"], "text": "Hedge up to the front"}
+{"id": "ts-1017", "names": ["Verge"], "text": "Verge should go all the way back"}
+{"id": "ts-1018", "names": ["Rush"], "text": "wipe all the rules"}
+{"id": "ts-1019", "names": ["Reed1", "Reed2", "Reed3"], "text": "line Reed1, Reed2 and Reed3 up on the vertical"}
+{"id": "ts-1020", "names": ["Bay1", "Bay2", "Bay3"], "text": "evenly distribute Bay1, Bay2, Bay3 horizontally"}
+{"id": "ts-1021", "names": [], "text": "from now on rectangles are gray"}
+{"id": "ts-1022", "names": ["Rail"], "text": "explain what the diagram contains"}
+{"id": "ts-1023", "names": ["Nook", "Cranny"], "text": "what is the closest shape to Cranny"}
+{"id": "ts-1024", "names": ["Fawn", "Doe"], "text": "is Fawn bigger than Doe"}
+{"id": "ts-1025", "names": ["Calf", "Cow"], "text": "is Calf smaller than Cow"}
+{"id": "ts-1026", "names": ["Pearl"], "text": "is Pearl a circle?"}
+{"id": "ts-1027", "names": ["Amber"], "text": "is Amber not yellow"}
+{"id": "ts-1028", "names": ["Pylon"], "text": "which shape is the highest"}
+{"id": "ts-1029", "names": ["Sable"], "text": "what shape is Sable"}
+{"id": "ts-1030", "names": ["Skiff", "Dinghy"], "text": "add a navy square above Skiff"}
+{"id": "ts-1031", "names": ["Shrine"], "text": "for the temple layout, make a gold hexagon at the center"}
+{"id": "ts-1032", "names": ["Loop"], "text": "create 3 pink diamonds"}
+{"id": "ts-1033", "names": ["Coil"], "text": "put a medium white circle called Spring next to Coil"}
+{"id": "ts-1034", "names": ["Tarn"], "text": "add one orange triangle labelled Peak on the right"}
+{"id": "ts-1035", "names": ["Kelp", "Reef"], "text": "slip a cyan ellipse between Kelp and Reef"}
+{"id": "ts-1036", "names": ["Pond"], "text": "make a huge green star below the Pond"}
+{"id": "ts-1037", "names": ["Wharf"], "text": "I'd like a tiny purple box at the bottom right"}
+{"id": "ts-1038", "names": ["Cinder"], "text": "change Cinder to black"}
+{"id": "ts-1039", "names": ["Ember"], "text": "give Ember a hexagon shape"}
+{"id": "ts-1040", "names": ["Flare"], "text": "make Flare small"}
+{"id": "ts-1041", "names": ["Ash"], "text": "every hexagon should be teal"}
+{"id": "ts-1042", "names": ["Soot"], "text": "turn the biggest... turn the newest box navy"}
+{"id": "ts-1043", "names": ["Gauge", "Dial"], "text": "connect Gauge to Dial"}
+{"id": "ts-1044", "names": ["Seed", "Sprout", "Plant"], "text": "connect Seed to Sprout, then Sprout to Plant, as a chain"}
+{"id": "ts-1045", "names": ["Fan", "Grille"], "text": "join Fan and Grille with a dashed orange line"}
+{"id": "ts-1046", "names": ["Wi", "Fi"], "text": "link Wi to Fi with a two-way arrow"}
+{"id": "ts-1047", "names": ["Sun", "Dawn"], "text": "link Sun to Dawn, labelled \"rises\""}
+{"id": "ts-1048", "names": ["Server"], "text": "point Server at all the hexagons"}
+{"id": "ts-1049", "names": ["Pen", "Ink"], "text": "hook Pen to Ink, plain line without arrowheads"}
+{"id": "ts-1050", "names": ["Easel"], "text": "scoot Easel 30 up"}
+{"id": "ts-1051", "names": ["Brush", "Paint"], "text": "put Brush to the left of Paint"}
+{"id": "ts-1052", "names": ["Frame"], "text": "Frame to the top right please"}
+{"id": "ts-1053", "names": ["Oil"], "text": "slide Oil to the left"}
+{"id": "ts-1054", "names": ["Mime"], "text": "shift the Mime 15 pixels down"}
+{"id": "ts-1055", "names": ["Clown"], "text": "get rid of the Clown"}
+{"id": "ts-1056", "names": ["Juggler"], "text": "delete every gray circle"}
+{"id": "ts-1057", "names": ["Acrobat"], "text": "remove the first diamond"}
+{"id": "ts-1058", "names": ["Tent"], "text": "enlarge the newest star"}
+{"id": "ts-1059", "names": ["Ring"], "text": "make Ring a little smaller"}
+{"id": "ts-1060", "names": ["Aerial"], "text": "rename Aerial to Dish"}
+{"id": "ts-1061", "names": ["Clerk"], "text": "call the latest hexagon Hexa"}
+{"id": "ts-1062", "names": ["Booth"], "text": "label Booth Info"}
+{"id": "ts-1063", "names": ["Kiosk"], "text": "write Tickets on the Kiosk"}
+{"id": "ts-1064", "names": ["Usher"], "text": "duplicate Usher 4 times"}
+{"id": "ts-1065", "names": ["Seat"], "text": "copy the gold star"}
+{"id": "ts-1066", "names": ["Aisle"], "text": "arrange all the stars in a grid"}
+{"id": "ts-1067", "names": ["Pit"], "text": "organize everything in a circle"}
+{"id": "ts-1068", "names": ["Opera"], "text": "Opera is a diamond"}
+{"id": "ts-1069", "names": ["Chorus"], "text": "is there a cycle?"}
+{"id": "ts-1070", "names": ["Solo"], "text": "what is reachable from Solo"}
+{"id": "ts-1071", "names": ["Duet"], "text": "reachability from Duet"}
+{"id": "ts-1072", "names": ["Trio"], "text": "list all rules in effect"}
+{"id": "ts-1073", "names": ["Quartet"], "text": "all the green circles, list them"}
+{"id": "ts-1074", "names": ["Quintet"], "text": "neighbours of Quintet?"}
+{"id": "ts-1075", "names": ["Alto", "Bass"], "text": "do Alto and Bass have a direct connection"}
+{"id": "ts-1076", "names": ["Tenor", "Soprano"], "text": "is there a path between Tenor and Soprano"}
+{"id": "ts-1077", "names": ["Cello"], "text": "degree of Cello?"}
+{"id": "ts-1078", "names": ["Oboe"], "text": "is there a pink anything"}
+{"id": "ts-1079", "names": ["Flute"], "text": "count the number of orange shapes"}
+{"id": "ts-1080", "names": ["Horn"], "text": "who is the least connected shape"}
+{"id": "ts-1081", "names": ["Harp"], "text": "what does Harp look like"}
+{"id": "ts-1082", "names": ["Lute", "Viol"], "text": "what's farthest away from Lute"}
+{"id": "ts-1083", "names": ["Bugle", "Fife"], "text": "is Bugle bigger than Fife"}
+{"id": "ts-1084", "names": ["Gong", "Bell"], "text": "is Gong smaller than the Bell"}
+{"id": "ts-1085", "names": ["Drum", "Cymbal"], "text": "is Drum right of Cymbal"}
+{"id": "ts-1086", "names": ["Reed"], "text": "is Reed medium sized"}
+{"id": "ts-1087", "names": ["Lyre"], "text": "swap Lyre and Zither"}
+{"id": "ts-1088", "names": ["Kora", "Oud"], "text": "disconnect Kora from Oud"}
+{"id": "ts-1089", "names": ["Bell1", "Bell2"], "text": "align all the diamonds on the horizontal axis"}
+{"id": "ts-1090", "names": ["Tri"], "text": "distribute the hexagons horizontally"}
+{"id": "ts-1091", "names": ["Omen"], "text": "undo my previous edit"}
+{"id": "ts-1092", "names": ["Rune"], "text": "redo my last edit"}
+{"id": "ts-1093", "names": ["Glyph"], "text": "pull Glyph to the front"}
+{"id": "ts-1094", "names": ["Sigil"], "text": "slide the Sigil behind"}
+{"id": "ts-1095", "names": ["Charm"], "text": "forget my defaults"}
+{"id": "ts-1096", "names": ["Hex"], "text": "from this moment diamonds are huge"}
+{"id": "ts-1097", "names": ["Spell"], "text": "Spell is above Wand"}
+{"id": "ts-1098", "names": ["Potion"], "text": "what color is the Potion"}
+{"id": "ts-1099", "names": ["Cauldron"], "text": "which shape is rightmost"}
+{"id": "ts-1100", "names": ["Broom"], "text": "what is next to Broom, which shape is nearest"}

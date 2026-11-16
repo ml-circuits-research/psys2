@@ -1,0 +1,100 @@
+{"id": "ts-0601", "names": ["Scheduler", "Worker"], "text": "Quick one: will a message ever come back round to where it started, any cycle?"}
+{"id": "ts-0602", "names": ["Mailer"], "text": "what nodes does Mailer lead to, directly or indirectly"}
+{"id": "ts-0603", "names": [], "text": "what defaults are set for new shapes"}
+{"id": "ts-0604", "names": ["Proxy"], "text": "list the things directly attached to Proxy"}
+{"id": "ts-0605", "names": ["Foo", "Baz"], "text": "Foo and Baz, are they directly connected"}
+{"id": "ts-0606", "names": ["Alpha", "Omega"], "text": "is there any way to get from Alpha to Omega"}
+{"id": "ts-0607", "names": ["Router"], "text": "degree for Router please"}
+{"id": "ts-0608", "names": ["Dahlia"], "text": "list all the ellipses"}
+{"id": "ts-0609", "names": ["Kestrel"], "text": "how many purple circles"}
+{"id": "ts-0610", "names": ["Birch"], "text": "are there any squares left of Birch"}
+{"id": "ts-0611", "names": ["Mango"], "text": "describe Mango for me"}
+{"id": "ts-0612", "names": ["Beacon", "Tower"], "text": "what's the closest shape to Tower"}
+{"id": "ts-0613", "names": ["Whale", "Seal"], "text": "is Whale bigger than Seal"}
+{"id": "ts-0614", "names": ["Pebble", "Boulder"], "text": "Pebble is smaller than Boulder, yes?"}
+{"id": "ts-0615", "names": ["Garnet"], "text": "which shape is leftmost"}
+{"id": "ts-0616", "names": ["Jade"], "text": "what's the size of Jade"}
+{"id": "ts-0617", "names": ["Quince"], "text": "is Quince huge?"}
+{"id": "ts-0618", "names": ["Opal", "Onyx"], "text": "is Opal under Onyx"}
+{"id": "ts-0619", "names": ["Cargo", "Port"], "text": "swap Cargo with Port"}
+{"id": "ts-0620", "names": ["Pilot", "Copilot"], "text": "can you flip the positions of Pilot and Copilot"}
+{"id": "ts-0621", "names": ["Ham", "Egg"], "text": "unhook Ham from Egg"}
+{"id": "ts-0622", "names": ["Sun", "Star"], "text": "remove the link from Sun to Star"}
+{"id": "ts-0623", "names": ["Beta1", "Beta2", "Beta3"], "text": "put Beta1, Beta2 and Beta3 on one horizontal line"}
+{"id": "ts-0624", "names": ["Wall"], "text": "align the pink shapes vertically"}
+{"id": "ts-0625", "names": ["Peak1", "Peak2", "Peak3"], "text": "spread Peak1, Peak2 and Peak3 out evenly on the vertical"}
+{"id": "ts-0626", "names": ["Dot"], "text": "distribute all the diamonds horizontally"}
+{"id": "ts-0627", "names": ["Spot"], "text": "Spot over everything else"}
+{"id": "ts-0628", "names": ["Glow"], "text": "bring the newest square to the front"}
+{"id": "ts-0629", "names": ["Bg"], "text": "put the Bg underneath all the rest"}
+{"id": "ts-0630", "names": ["Slate"], "text": "send every gray shape to the back"}
+{"id": "ts-0631", "names": ["Hog"], "text": "undo that last bit"}
+{"id": "ts-0632", "names": ["Hen"], "text": "hold on, undo"}
+{"id": "ts-0633", "names": ["Rye"], "text": "redo it"}
+{"id": "ts-0634", "names": ["Oat"], "text": "yeah redo the thing I undid"}
+{"id": "ts-0635", "names": ["Ale"], "text": "forget the rules"}
+{"id": "ts-0636", "names": ["Mead"], "text": "unset all defaults"}
+{"id": "ts-0637", "names": ["Lodge"], "text": "arrange all the rectangles in a column"}
+{"id": "ts-0638", "names": ["Pad"], "text": "set everything out in a grid"}
+{"id": "ts-0639", "names": ["Lark"], "text": "call the Lark Skylark"}
+{"id": "ts-0640", "names": ["Wren"], "text": "rename the newest circle to Dot"}
+{"id": "ts-0641", "names": ["Mug"], "text": "set Mug's text to Coffee"}
+{"id": "ts-0642", "names": ["Sign"], "text": "write \"Stop\" on the red octagon... I mean on Sign"}
+{"id": "ts-0643", "names": ["Pawn"], "text": "copy Pawn 7 times"}
+{"id": "ts-0644", "names": ["Rook"], "text": "duplicate Rook"}
+{"id": "ts-0645", "names": ["Dime"], "text": "make Dime a bit bigger"}
+{"id": "ts-0646", "names": ["Fly"], "text": "Fly is too big, shrink it"}
+{"id": "ts-0647", "names": ["Sparrow"], "text": "get rid of the red hexagons"}
+{"id": "ts-0648", "names": ["Tarp"], "text": "delete everything that isn't gray"}
+{"id": "ts-0649", "names": ["Cairo"], "text": "scrap Cairo"}
+{"id": "ts-0650", "names": ["Spruce", "Pine"], "text": "add a lime hexagon to the right of Spruce"}
+{"id": "ts-0651", "names": ["Boss"], "text": "put a big orange circle called Intern below Boss"}
+{"id": "ts-0652", "names": ["Ivy"], "text": "insert a small gold diamond"}
+{"id": "ts-0653", "names": ["Hearth"], "text": "make me a red box labelled Fire"}
+{"id": "ts-0654", "names": ["Moss", "Fern"], "text": "plop a white star between Moss and Fern"}
+{"id": "ts-0655", "names": ["Raft"], "text": "drop 3 cyan triangles near the Raft"}
+{"id": "ts-0656", "names": ["Pan"], "text": "add an indigo ellipse in the bottom right"}
+{"id": "ts-0657", "names": ["Loft"], "text": "create a medium teal square called Attic"}
+{"id": "ts-0658", "names": ["Lava"], "text": "make Lava red"}
+{"id": "ts-0659", "names": ["Cub"], "text": "the Cub is a square now"}
+{"id": "ts-0660", "names": ["Rail"], "text": "enlarge the Rail to large"}
+{"id": "ts-0661", "names": ["Dusk"], "text": "turn the black squares white"}
+{"id": "ts-0662", "names": ["Sled"], "text": "recolour Sled gold and make it a star"}
+{"id": "ts-0663", "names": ["Dev", "Test", "Prod"], "text": "wire Dev to Test to Prod in sequence"}
+{"id": "ts-0664", "names": ["Fan", "Roof"], "text": "connect Fan to Roof with a navy dotted line"}
+{"id": "ts-0665", "names": ["Cart", "Horse"], "text": "couple Cart to Horse"}
+{"id": "ts-0666", "names": ["Beam", "Post"], "text": "I'd like a two-headed arrow between Beam and Post"}
+{"id": "ts-0667", "names": ["Hub"], "text": "connect Hub to all the circles"}
+{"id": "ts-0668", "names": ["Sam", "Tess"], "text": "draw a line labelled \"mentor\" from Sam to Tess"}
+{"id": "ts-0669", "names": ["Easel"], "text": "scoot the Easel to the left of the Canvas"}
+{"id": "ts-0670", "names": ["Mole"], "text": "nudge Mole 20 down"}
+{"id": "ts-0671", "names": ["Bird"], "text": "fly Bird up to the top"}
+{"id": "ts-0672", "names": ["Panda"], "text": "put the Panda between Bamboo and Zoo"}
+{"id": "ts-0673", "names": ["Drill"], "text": "Drill is brown"}
+{"id": "ts-0674", "names": ["Kiwi", "Lime"], "text": "Kiwi is right of Lime"}
+{"id": "ts-0675", "names": [], "text": "from now on, new hexagons are pink"}
+{"id": "ts-0676", "names": [], "text": "make all future shapes tiny"}
+{"id": "ts-0677", "names": ["Cycle1", "Cycle2"], "text": "does this thing contain a cycle"}
+{"id": "ts-0678", "names": ["Hub2"], "text": "i wanna know what is reachable from Hub2"}
+{"id": "ts-0679", "names": ["Fred"], "text": "are there rules active"}
+{"id": "ts-0680", "names": ["Marsh"], "text": "who is linked to Marsh"}
+{"id": "ts-0681", "names": ["Nile", "Delta"], "text": "Nile to Delta, directly linked?"}
+{"id": "ts-0682", "names": ["Seoul", "Busan"], "text": "path from Seoul to Busan?"}
+{"id": "ts-0683", "names": ["Cove"], "text": "how many links does Cove have?"}
+{"id": "ts-0684", "names": ["Isle"], "text": "show the white shapes"}
+{"id": "ts-0685", "names": ["Fawn"], "text": "count all the boxes"}
+{"id": "ts-0686", "names": ["Lore"], "text": "is there a star?"}
+{"id": "ts-0687", "names": ["Mesh"], "text": "give me a rundown of the diagram"}
+{"id": "ts-0688", "names": ["Fjord", "Glen"], "text": "which one is farthest from Glen"}
+{"id": "ts-0689", "names": ["Noble", "Serf"], "text": "is Noble bigger than Serf?"}
+{"id": "ts-0690", "names": ["Elf", "Orc"], "text": "is Elf smaller than Orc"}
+{"id": "ts-0691", "names": ["Duke"], "text": "who's got the most links"}
+{"id": "ts-0692", "names": ["Ruby"], "text": "Ruby's color?"}
+{"id": "ts-0693", "names": ["Iron"], "text": "is Iron a circle?"}
+{"id": "ts-0694", "names": ["Zinc"], "text": "Zinc isn't gold, is it"}
+{"id": "ts-0695", "names": ["Lead", "Tin"], "text": "is Lead to the right of Tin"}
+{"id": "ts-0696", "names": ["Cow"], "text": "loops? any?"}
+{"id": "ts-0697", "names": ["Ewe"], "text": "nothing but the reachable set from Ewe, thanks"}
+{"id": "ts-0698", "names": ["Ram"], "text": "what rules have I set"}
+{"id": "ts-0699", "names": ["Doe"], "text": "which shapes are next to Doe"}
+{"id": "ts-0700", "names": ["Buck"], "text": "is Buck connected to Doe"}

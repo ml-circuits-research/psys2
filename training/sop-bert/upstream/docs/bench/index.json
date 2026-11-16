@@ -1,0 +1,42 @@
+{
+ "sets": [
+  {
+   "id": "hand",
+   "title": "Hand-labelled paraphrases (the rules were tuned with these in view)",
+   "n": 40,
+   "source": "training/sketch/hand_labelled.json"
+  },
+  {
+   "id": "blind",
+   "title": "Paraphrases written blind (no formalizer was tuned on them)",
+   "n": 60,
+   "source": "training/sketch/hand_blind.json"
+  },
+  {
+   "id": "broad",
+   "title": "Broad English set: commands, questions, typos, casual and multi-clause messages (written blind)",
+   "n": 128,
+   "source": "training/sketch/hand_broad.json"
+  },
+  {
+   "id": "seen",
+   "title": "Generated, seen formulations",
+   "n": 300,
+   "source": "training/sketch/generate.py (eval/seen.jsonl)"
+  },
+  {
+   "id": "new_identities",
+   "title": "Generated, names and labels never seen in training",
+   "n": 300,
+   "source": "training/sketch/generate.py (eval/new_identities.jsonl)"
+  },
+  {
+   "id": "heldout_formulations",
+   "title": "Generated, held-out formulations (template × prefix never trained)",
+   "n": 300,
+   "source": "training/sketch/generate.py (eval/heldout_formulations.jsonl)"
+  }
+ ],
+ "legend": 1,
+ "generated": "2026-10-30"
+}

@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "ac33631635314bf00e14e222809e8aa4ab934f38",
+  "seed": 0,
+  "counts": {
+    "train": {
+      "messages": 5269,
+      "requests": 15683
+    },
+    "heldout": {
+      "messages": 585,
+      "requests": 1711
+    },
+    "sample": {
+      "messages": 1000,
+      "requests": 4858
+    }
+  },
+  "heldoutSHA256": "6f3943bb3f10e846c9f38062faf6d3a4225bf377f784fb42fde2e480c3194eb9",
+  "purpose": "historical reproduction only; not a new unseen acceptance set"
+}

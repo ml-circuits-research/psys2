@@ -1,0 +1,100 @@
+{"id": "th-0001", "names": ["Router"], "text": "drop a gray hexagon called Switch right under Router"}
+{"id": "th-0002", "names": [], "text": "a huge red circle named Edge in the top left corner"}
+{"id": "th-0003", "names": ["Firewall"], "text": "throw in three tiny gray squares near Firewall"}
+{"id": "th-0004", "names": ["Firewall"], "text": "sketch a blue diamond labelled 'DMZ' above the Firewall"}
+{"id": "th-0005", "names": ["Server"], "text": "I need a navy oval called Backup somewhere at the bottom"}
+{"id": "th-0006", "names": [], "text": "pop a new box in at the bottom right"}
+{"id": "th-0007", "names": ["Laptop"], "text": "add a pink star named Vpn left of Laptop"}
+{"id": "th-0008", "names": ["Server"], "text": "uh add 2 gray triangles near Server"}
+{"id": "th-0009", "names": ["Switch"], "text": "a yellow ellipse named Ups, just below the Switch"}
+{"id": "th-0010", "names": ["Router"], "text": "Add a black box called Modem right of Router"}
+{"id": "th-0011", "names": [], "text": "can u draw a green circle in the center of the canvas"}
+{"id": "th-0012", "names": ["Router", "Server"], "text": "make me a large teal diamond named Proxy between Router and Server"}
+{"id": "th-0013", "names": ["Laptop"], "text": "make Laptop purple"}
+{"id": "th-0014", "names": ["Printer"], "text": "turn the Printer into a hexagon"}
+{"id": "th-0015", "names": ["Server"], "text": "Server should be magenta, thanks"}
+{"id": "th-0016", "names": ["Switch"], "text": "recolour Switch orange"}
+{"id": "th-0017", "names": ["Firewall"], "text": "ok make Firewall huge"}
+{"id": "th-0018", "names": ["Modem"], "text": "change the shape of Modem to a diamond"}
+{"id": "th-0019", "names": ["Proxy"], "text": "Proxy needs to go tiny"}
+{"id": "th-0020", "names": ["Backup"], "text": "make it white"}
+{"id": "th-0021", "names": ["Router", "Firewall", "Switch"], "text": "tie Router, Firewall and Switch into a chain"}
+{"id": "th-0022", "names": ["Switch", "Server"], "text": "hook up Switch and Server with a dashed line"}
+{"id": "th-0023", "names": ["Laptop", "Router"], "text": "link Laptop to Router with a two-way arrow"}
+{"id": "th-0024", "names": ["Printer", "Switch", "Server"], "text": "connect Printer, Switch and Server in a chain"}
+{"id": "th-0025", "names": ["Modem", "Proxy"], "text": "draw a red link from Modem to Proxy labelled 'uplink'"}
+{"id": "th-0026", "names": ["Printer"], "text": "move Printer 40 pixels to the left"}
+{"id": "th-0027", "names": ["Backup"], "text": "shift Backup up by 25 pixels"}
+{"id": "th-0028", "names": ["Laptop", "Switch"], "text": "slide Laptop to the right of Switch"}
+{"id": "th-0029", "names": ["Server"], "text": "nudge Server down a bit"}
+{"id": "th-0030", "names": ["Proxy", "Router", "Firewall"], "text": "move Proxy between Router and Firewall"}
+{"id": "th-0031", "names": ["Modem"], "text": "scoot the Modem over to the top"}
+{"id": "th-0032", "names": ["Firewall"], "text": "drag Firewall left 80 px"}
+{"id": "th-0033", "names": ["Printer"], "text": "delete the Printer"}
+{"id": "th-0034", "names": ["Backup"], "text": "get rid of Backup"}
+{"id": "th-0035", "names": ["Modem"], "text": "kill the Modem"}
+{"id": "th-0036", "names": ["Switch"], "text": "make Switch bigger"}
+{"id": "th-0037", "names": ["Router"], "text": "shrink Router a little"}
+{"id": "th-0038", "names": ["Laptop"], "text": "rename Laptop to Notebook"}
+{"id": "th-0039", "names": ["Proxy"], "text": "can you rename the Proxy to Gateway"}
+{"id": "th-0040", "names": ["Firewall"], "text": "label Firewall 'Perimeter'"}
+{"id": "th-0041", "names": ["Modem"], "text": "put the words 'Edge zone' on Modem"}
+{"id": "th-0042", "names": ["Switch"], "text": "duplicate Switch"}
+{"id": "th-0043", "names": ["Laptop"], "text": "make 4 copies of Laptop"}
+{"id": "th-0044", "names": ["Router", "Firewall"], "text": "swap Router and Firewall"}
+{"id": "th-0045", "names": ["Server", "Printer"], "text": "trade places of Server and Printer"}
+{"id": "th-0046", "names": ["Switch", "Server"], "text": "unlink Switch from Server"}
+{"id": "th-0047", "names": ["Modem", "Proxy"], "text": "cut the connection between Modem and Proxy"}
+{"id": "th-0048", "names": ["Switch", "Modem", "Proxy"], "text": "line up Switch, Modem and Proxy horizontally"}
+{"id": "th-0049", "names": [], "text": "align all the squares vertically"}
+{"id": "th-0050", "names": ["Laptop", "Printer"], "text": "arrange Laptop and Printer in a row"}
+{"id": "th-0051", "names": [], "text": "arrange everything in a grid"}
+{"id": "th-0052", "names": ["Router", "Switch", "Server"], "text": "spread Router, Switch and Server out evenly horizontally"}
+{"id": "th-0053", "names": [], "text": "space the circles out vertically"}
+{"id": "th-0054", "names": ["Firewall"], "text": "bring Firewall to the front"}
+{"id": "th-0055", "names": ["Proxy"], "text": "put Proxy on top of everything else"}
+{"id": "th-0056", "names": ["Modem"], "text": "send the Modem to the back"}
+{"id": "th-0057", "names": ["Backup"], "text": "push Backup behind everything"}
+{"id": "th-0058", "names": [], "text": "undo that"}
+{"id": "th-0059", "names": [], "text": "oops, go back one step"}
+{"id": "th-0060", "names": [], "text": "redo"}
+{"id": "th-0061", "names": [], "text": "bring back what you just undid"}
+{"id": "th-0062", "names": [], "text": "forget the default rules"}
+{"id": "th-0063", "names": [], "text": "clear all the default rules you set"}
+{"id": "th-0064", "names": [], "text": "how many red circles are on the board"}
+{"id": "th-0065", "names": [], "text": "how many connections are there"}
+{"id": "th-0066", "names": [], "text": "how many boxes are not black"}
+{"id": "th-0067", "names": [], "text": "is there a green star?"}
+{"id": "th-0068", "names": [], "text": "any gray hexagons around?"}
+{"id": "th-0069", "names": [], "text": "list the blue things"}
+{"id": "th-0070", "names": [], "text": "which shapes are white"}
+{"id": "th-0071", "names": ["Firewall"], "text": "what color is Firewall"}
+{"id": "th-0072", "names": ["Server"], "text": "how big is Server"}
+{"id": "th-0073", "names": ["Proxy"], "text": "what shape is the Proxy"}
+{"id": "th-0074", "names": ["Router"], "text": "describe Router for me"}
+{"id": "th-0075", "names": [], "text": "give me an overview of the whole diagram"}
+{"id": "th-0076", "names": ["Switch"], "text": "what's directly attached to Switch"}
+{"id": "th-0077", "names": ["Firewall"], "text": "who's next to Firewall"}
+{"id": "th-0078", "names": ["Router", "Firewall"], "text": "are Router and Firewall directly linked"}
+{"id": "th-0079", "names": ["Laptop", "Printer"], "text": "is Laptop wired straight to Printer?"}
+{"id": "th-0080", "names": ["Server"], "text": "how many links does Server have"}
+{"id": "th-0081", "names": ["Router"], "text": "how many wires come out of Router"}
+{"id": "th-0082", "names": ["Laptop", "Backup"], "text": "is there a way from Laptop to Backup"}
+{"id": "th-0083", "names": ["Modem", "Printer"], "text": "find a route from Modem to Printer"}
+{"id": "th-0084", "names": ["Router"], "text": "what can you reach starting from Router"}
+{"id": "th-0085", "names": ["Proxy"], "text": "which shapes are reachable from Proxy"}
+{"id": "th-0086", "names": [], "text": "is there a loop anywhere in the diagram"}
+{"id": "th-0087", "names": [], "text": "does the network have any cycles"}
+{"id": "th-0088", "names": [], "text": "what rules are set right now"}
+{"id": "th-0089", "names": [], "text": "which defaults do you remember"}
+{"id": "th-0090", "names": ["Switch"], "text": "is Switch green?"}
+{"id": "th-0091", "names": ["Router"], "text": "is the Router a hexagon"}
+{"id": "th-0092", "names": ["Backup", "Modem"], "text": "is Backup bigger than Modem"}
+{"id": "th-0093", "names": ["Printer", "Server"], "text": "is Printer left of Server"}
+{"id": "th-0094", "names": [], "text": "which shape is the biggest"}
+{"id": "th-0095", "names": [], "text": "what's the rightmost thing"}
+{"id": "th-0096", "names": ["Router"], "text": "which red shape is closest to Router"}
+{"id": "th-0097", "names": ["Server"], "text": "what's the farthest circle from Server"}
+{"id": "th-0098", "names": ["Firewall"], "text": "Firewall is red"}
+{"id": "th-0099", "names": ["Proxy", "Laptop"], "text": "Proxy sits left of Laptop"}
+{"id": "th-0100", "names": [], "text": "any new hexagon should come out teal from here on"}

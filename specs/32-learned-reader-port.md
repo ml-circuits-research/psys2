@@ -1,0 +1,9 @@
+# Learned reader port and evidence boundary
+
+Owner task 2026-11-16 18:05 authorizes SOP-BERT port, general-description retarget, data preparation, precision gating and eventual new-path integration. The first landing isolates an unchanged historical diagram reader under `training/sop-bert/upstream`; it does not add an application reader, execute operations or enable a preview.
+
+Reproduction must bind source, model, data split and evaluation protocol. The historical 83.8% refers to ac33631's model and the original 585-message held-out split. The current upstream all-data model has seen that split and cannot stand in for it. Source/model hashes, original split generation, per-message outcomes and exact runtime/platform metadata accompany the result. A mismatch is reported as a mismatch, without modifying cases or thresholds to make the headline agree.
+
+The harness uses the original browser decoder, original native head layout and context rule, and original value-based matching/canonicalization of requested actions. An unexpected Rules fallback or model/source mismatch fails the run. Right, wrong, not-done and extra actions remain separate; precision of execution includes extras in its denominator. This execute-all historical measurement is not the later calibrated execution gate and is not new-path acceptance.
+
+General retargeting is separate work. Its labels consume reviewed published request contracts, not provisional gold. Annotation conversion must preserve immutable source messages and report unrepresentable structures rather than silently dropping them. A roundtrip check is needed before training. Calibration data selects the execution threshold; the final unseen holdout measures it and cannot supply labels, rule corrections or threshold tuning. The model proposes a reading which resolution must verify in the instance; it cannot bypass the symbolic/evidence gates or claim an effect from inference alone.

@@ -1,0 +1,100 @@
+{"id": "ts-0801", "names": ["Reception"], "text": "could you please add a small blue circle called Desk right of Reception"}
+{"id": "ts-0802", "names": ["Parser", "Lexer"], "text": "is there a circular reference anywhere"}
+{"id": "ts-0803", "names": ["Oracle"], "text": "what all can be reached from the Oracle"}
+{"id": "ts-0804", "names": ["Mage"], "text": "remind me of the rules currently set"}
+{"id": "ts-0805", "names": ["Stable", "Barn"], "text": "swap Stable and Barn"}
+{"id": "ts-0806", "names": ["Pylon"], "text": "unlink Pylon from Grid"}
+{"id": "ts-0807", "names": ["Axle", "Wheel"], "text": "connect Axle to Wheel with a dashed line"}
+{"id": "ts-0808", "names": ["Tunic"], "text": "line up the circles on the vertical axis"}
+{"id": "ts-0809", "names": ["P1", "P2", "P3"], "text": "distribute P1, P2 and P3 vertically"}
+{"id": "ts-0810", "names": ["Kern"], "text": "undo my last move"}
+{"id": "ts-0811", "names": ["Hasp"], "text": "I take it back, redo"}
+{"id": "ts-0812", "names": ["Flap"], "text": "Flap to the front"}
+{"id": "ts-0813", "names": ["Pad2"], "text": "Pad2 to the back"}
+{"id": "ts-0814", "names": ["Hasp2"], "text": "drop the default rules"}
+{"id": "ts-0815", "names": ["Spire"], "text": "who touches Spire"}
+{"id": "ts-0816", "names": ["Ann", "Joe"], "text": "Ann and Joe directly connected?"}
+{"id": "ts-0817", "names": ["Mars", "Pluto"], "text": "is there a path from Mars to Pluto"}
+{"id": "ts-0818", "names": ["Wharf"], "text": "what is the degree of the Wharf"}
+{"id": "ts-0819", "names": ["Orb"], "text": "list every triangle"}
+{"id": "ts-0820", "names": ["Dune"], "text": "count the gray things"}
+{"id": "ts-0821", "names": ["Thorn"], "text": "does any lime shape exist"}
+{"id": "ts-0822", "names": ["Lagoon"], "text": "describe the whole diagram please"}
+{"id": "ts-0823", "names": ["Hub", "Edge"], "text": "closest shape to Hub?"}
+{"id": "ts-0824", "names": ["Tank", "Jeep"], "text": "is Tank bigger than Jeep"}
+{"id": "ts-0825", "names": ["Thumb", "Palm"], "text": "is Thumb smaller than Palm"}
+{"id": "ts-0826", "names": ["Pike"], "text": "what's the bottom-most shape"}
+{"id": "ts-0827", "names": ["Wasp", "Hornet"], "text": "what size is the Wasp"}
+{"id": "ts-0828", "names": ["Cress"], "text": "is Cress green"}
+{"id": "ts-0829", "names": ["Nail"], "text": "Nail is a square, isn't it"}
+{"id": "ts-0830", "names": ["Zone1", "Zone2"], "text": "stick a pink triangle above Zone1"}
+{"id": "ts-0831", "names": ["Gym"], "text": "for the school plan add a gold star at the top"}
+{"id": "ts-0832", "names": ["Barn"], "text": "throw in two lime hexagons"}
+{"id": "ts-0833", "names": ["Bunker"], "text": "new gray rectangle named Vault, huge"}
+{"id": "ts-0834", "names": ["Aunt", "Uncle"], "text": "put a purple circle between Aunt and Uncle"}
+{"id": "ts-0835", "names": ["Pen"], "text": "build a small navy ellipse under the Pen"}
+{"id": "ts-0836", "names": ["Loch"], "text": "get a cyan diamond going on the left side"}
+{"id": "ts-0837", "names": ["Cabin"], "text": "add a red box called Stove near the Cabin"}
+{"id": "ts-0838", "names": ["Cobalt"], "text": "set Cobalt to blue"}
+{"id": "ts-0839", "names": ["Mint"], "text": "I want the Mint to be tiny"}
+{"id": "ts-0840", "names": ["Slug"], "text": "let Slug become an ellipse"}
+{"id": "ts-0841", "names": ["Bean"], "text": "make the last circle yellow"}
+{"id": "ts-0842", "names": ["Car", "Garage"], "text": "hook Car up to Garage"}
+{"id": "ts-0843", "names": ["Task1", "Task2", "Task3"], "text": "make a chain out of Task1, Task2, Task3"}
+{"id": "ts-0844", "names": ["Mic", "Amp"], "text": "line, no arrow heads, Mic to Amp"}
+{"id": "ts-0845", "names": ["Dad", "Son"], "text": "connect Dad to Son, label it \"father\""}
+{"id": "ts-0846", "names": ["Boss"], "text": "link Boss to all the circles"}
+{"id": "ts-0847", "names": ["A", "B", "C", "D"], "text": "connect A to B and C to D, pairwise"}
+{"id": "ts-0848", "names": ["Pot", "Lid"], "text": "tie Pot to Lid with a green dashed arrow"}
+{"id": "ts-0849", "names": ["Crate"], "text": "move Crate 100 to the right"}
+{"id": "ts-0850", "names": ["Eagle", "Nest"], "text": "stick the Eagle on top of the Nest"}
+{"id": "ts-0851", "names": ["Raft"], "text": "drag Raft to the bottom"}
+{"id": "ts-0852", "names": ["Stool"], "text": "put the red box next to Stool"}
+{"id": "ts-0853", "names": ["Tuft"], "text": "nudge Tuft up"}
+{"id": "ts-0854", "names": ["Weed"], "text": "pull out Weed"}
+{"id": "ts-0855", "names": ["Ash"], "text": "delete all the circles that are not red"}
+{"id": "ts-0856", "names": ["Squid"], "text": "drop the first circle"}
+{"id": "ts-0857", "names": ["Minnow"], "text": "make Minnow smaller"}
+{"id": "ts-0858", "names": ["Shark"], "text": "scale up Shark"}
+{"id": "ts-0859", "names": ["Mule"], "text": "rename Mule to Donkey"}
+{"id": "ts-0860", "names": ["Foal"], "text": "rename the newest triangle Arrow"}
+{"id": "ts-0861", "names": ["Cab"], "text": "label Cab with Taxi"}
+{"id": "ts-0862", "names": ["Tray"], "text": "put \"Tray 2\" on the shape Tray"}
+{"id": "ts-0863", "names": ["Vest"], "text": "duplicate Vest"}
+{"id": "ts-0864", "names": ["Coin"], "text": "make three copies of the Coin"}
+{"id": "ts-0865", "names": ["Pod"], "text": "arrange the circles in a row"}
+{"id": "ts-0866", "names": ["Slab"], "text": "form a column from everything"}
+{"id": "ts-0867", "names": ["Beta"], "text": "Beta is a gold box"}
+{"id": "ts-0868", "names": [], "text": "from here on out all circles are tiny"}
+{"id": "ts-0869", "names": [], "text": "every new triangle gets to be orange"}
+{"id": "ts-0870", "names": ["Gull"], "text": "any loops?"}
+{"id": "ts-0871", "names": ["Mast"], "text": "all nodes reachable from Mast?"}
+{"id": "ts-0872", "names": ["Sage"], "text": "which rules are there"}
+{"id": "ts-0873", "names": ["Larch"], "text": "which shapes does Larch link to"}
+{"id": "ts-0874", "names": ["Tia", "Raj"], "text": "does Tia connect straight to Raj"}
+{"id": "ts-0875", "names": ["Arc", "Bow"], "text": "path from Arc to Bow, is there one"}
+{"id": "ts-0876", "names": ["Jolt"], "text": "how many connections does Jolt have"}
+{"id": "ts-0877", "names": ["Vale"], "text": "what are the non-gray shapes"}
+{"id": "ts-0878", "names": ["Rain"], "text": "how many squares"}
+{"id": "ts-0879", "names": ["Cloud"], "text": "is there an orange circle"}
+{"id": "ts-0880", "names": ["Hail"], "text": "describe it all"}
+{"id": "ts-0881", "names": ["Snow", "Ice"], "text": "which shape is farthest from Snow"}
+{"id": "ts-0882", "names": ["Rhea", "Zeus"], "text": "is Rhea bigger than Zeus"}
+{"id": "ts-0883", "names": ["Ares", "Eros"], "text": "is Ares smaller than Eros"}
+{"id": "ts-0884", "names": ["Dido"], "text": "which shape is the least connected"}
+{"id": "ts-0885", "names": ["Hera"], "text": "tell me Hera's shape"}
+{"id": "ts-0886", "names": ["Ceres"], "text": "what label does Ceres have"}
+{"id": "ts-0887", "names": ["Iris"], "text": "is Iris large"}
+{"id": "ts-0888", "names": ["Vesta"], "text": "Vesta is not red, right"}
+{"id": "ts-0889", "names": ["Moon", "Mars"], "text": "flip Moon and Mars"}
+{"id": "ts-0890", "names": ["Tin", "Can"], "text": "detach Tin from Can"}
+{"id": "ts-0891", "names": ["B1", "B2", "B3"], "text": "get B1, B2 and B3 on the same horizontal level"}
+{"id": "ts-0892", "names": ["C1", "C2", "C3"], "text": "space C1, C2, C3 evenly horizontally"}
+{"id": "ts-0893", "names": ["Ode"], "text": "reverse the previous action"}
+{"id": "ts-0894", "names": ["Epic"], "text": "redo the last undo please"}
+{"id": "ts-0895", "names": ["Saga"], "text": "Saga on top of the rest"}
+{"id": "ts-0896", "names": ["Myth"], "text": "drop the Myth to the back"}
+{"id": "ts-0897", "names": ["Tale"], "text": "forget all the rules"}
+{"id": "ts-0898", "names": ["Poem"], "text": "describe Poem"}
+{"id": "ts-0899", "names": ["Verse"], "text": "anything to the right of Verse?"}
+{"id": "ts-0900", "names": ["Lyric"], "text": "which shape is nearest the Lyric"}

@@ -1,0 +1,26 @@
+{
+  "sourceCommit": "ac33631635314bf00e14e222809e8aa4ab934f38",
+  "modelSHA256": "57c77850a7011ed247c63f2b39ccdad163206603d07803b457e13a08ab7a8b59",
+  "heldoutSHA256": "6f3943bb3f10e846c9f38062faf6d3a4225bf377f784fb42fde2e480c3194eb9",
+  "node": "v22.23.2",
+  "architecture": "arm64",
+  "runtimeEntrySHA256": "ee3b84624fee88b9db4b85be1fbfde1e2637957ee92eaaaaa720edbca5448e6c",
+  "seconds": 3.9506943280000004,
+  "counts": {
+    "messages": 585,
+    "requested": 1711,
+    "right": 1436,
+    "wrong": 237,
+    "notDone": 38,
+    "extra": 83
+  },
+  "rightPercent": 83.92752776154295,
+  "wrongPercent": 13.851548801870251,
+  "notDonePercent": 2.2209234365867916,
+  "extraPer100": 4.8509643483343075,
+  "executionPrecision": 81.77676537585421,
+  "historicalReportedRightPercent": 83.8,
+  "reproducedToReportedPrecision": false,
+  "threshold": null,
+  "scope": "historical execute-all reproduction; no threshold fitting, no new-path acceptance"
+}

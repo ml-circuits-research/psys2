@@ -1,0 +1,100 @@
+{"id": "ts-1101", "names": ["Studio"], "text": "hey, could you sketch a pink square named Booth just under the Studio"}
+{"id": "ts-1102", "names": ["Scribe", "Clerk"], "text": "is there any cyclic dependency left"}
+{"id": "ts-1103", "names": ["Intake"], "text": "from Intake, where can the flow go"}
+{"id": "ts-1104", "names": ["Lathe"], "text": "tell me which rules are on"}
+{"id": "ts-1105", "names": ["Press", "Die"], "text": "please swap Press and Die"}
+{"id": "ts-1106", "names": ["Bolt", "Plate"], "text": "drop the link Bolt to Plate"}
+{"id": "ts-1107", "names": ["Weld"], "text": "list the navy shapes"}
+{"id": "ts-1108", "names": ["Rivet"], "text": "which shapes hang off Rivet"}
+{"id": "ts-1109", "names": ["Jig", "Vise"], "text": "are Jig and Vise connected directly"}
+{"id": "ts-1110", "names": ["Drill", "Saw"], "text": "does a path run from Drill to Saw"}
+{"id": "ts-1111", "names": ["File"], "text": "how many lines connect to File"}
+{"id": "ts-1112", "names": ["Rasp"], "text": "are there any magenta shapes"}
+{"id": "ts-1113", "names": ["Awl"], "text": "how many triangles are there"}
+{"id": "ts-1114", "names": ["Chisel"], "text": "undo please"}
+{"id": "ts-1115", "names": ["Plane"], "text": "redo please"}
+{"id": "ts-1116", "names": ["Level"], "text": "Level should be on top"}
+{"id": "ts-1117", "names": ["Square"], "text": "Square goes to the bottom of the stack"}
+{"id": "ts-1118", "names": ["Vice"], "text": "forget those default rules"}
+{"id": "ts-1119", "names": ["Clamp1", "Clamp2", "Clamp3"], "text": "put Clamp1, Clamp2, Clamp3 in a horizontal line"}
+{"id": "ts-1120", "names": ["Pin1", "Pin2", "Pin3"], "text": "distribute Pin1, Pin2 and Pin3 on the vertical axis"}
+{"id": "ts-1121", "names": [], "text": "hereafter, stars come out gold"}
+{"id": "ts-1122", "names": ["Vessel"], "text": "describe what's in the diagram"}
+{"id": "ts-1123", "names": ["Cask", "Keg"], "text": "which shape is closest to the Keg"}
+{"id": "ts-1124", "names": ["Bear", "Cub"], "text": "is Bear larger than Cub"}
+{"id": "ts-1125", "names": ["Pup", "Dog"], "text": "is Pup smaller than Dog"}
+{"id": "ts-1126", "names": ["Hare"], "text": "is the Hare cyan"}
+{"id": "ts-1127", "names": ["Stoat"], "text": "Stoat is not white, correct"}
+{"id": "ts-1128", "names": ["Vole"], "text": "which shape is at the bottom"}
+{"id": "ts-1129", "names": ["Shrew"], "text": "what size is Shrew"}
+{"id": "ts-1130", "names": ["Arena"], "text": "put a red circle labelled \"Ring\" in the middle"}
+{"id": "ts-1131", "names": ["Forum", "Senate"], "text": "add a small gold diamond between Forum and Senate"}
+{"id": "ts-1132", "names": ["Villa"], "text": "stick a large teal box called Pool to the left of Villa"}
+{"id": "ts-1133", "names": ["Aqueduct"], "text": "2 white triangles please"}
+{"id": "ts-1134", "names": ["Colosseum"], "text": "toss in a purple star at the bottom left"}
+{"id": "ts-1135", "names": ["Temple"], "text": "new orange oval, name it Altar"}
+{"id": "ts-1136", "names": ["Bath"], "text": "add a huge brown hexagon"}
+{"id": "ts-1137", "names": ["Road"], "text": "add a lime circle near Road"}
+{"id": "ts-1138", "names": ["Wall"], "text": "change Wall to indigo"}
+{"id": "ts-1139", "names": ["Gate"], "text": "make Gate a box"}
+{"id": "ts-1140", "names": ["Tower"], "text": "Tower is to be huge"}
+{"id": "ts-1141", "names": ["Bridge"], "text": "colour the triangles red"}
+{"id": "ts-1142", "names": ["Moat"], "text": "set the last diamond to black"}
+{"id": "ts-1143", "names": ["Rome", "Capua"], "text": "connect Rome to Capua"}
+{"id": "ts-1144", "names": ["Ostia", "Rome", "Veii"], "text": "chain Ostia, Rome and Veii"}
+{"id": "ts-1145", "names": ["Pisa", "Siena"], "text": "connect Pisa to Siena with a dotted gray line"}
+{"id": "ts-1146", "names": ["Genoa", "Turin"], "text": "draw a bidirectional arrow between Genoa and Turin"}
+{"id": "ts-1147", "names": ["Milan", "Bari"], "text": "connect Milan to Bari and call the line \"rail\""}
+{"id": "ts-1148", "names": ["Hub"], "text": "hook Hub up to all the stars"}
+{"id": "ts-1149", "names": ["P", "Q", "R", "S"], "text": "connect P to Q and R to S"}
+{"id": "ts-1150", "names": ["Napoli", "Parma"], "text": "make a plain undirected link from Napoli to Parma"}
+{"id": "ts-1151", "names": ["Lido"], "text": "push Lido 60 to the right"}
+{"id": "ts-1152", "names": ["Piazza", "Duomo"], "text": "set the Piazza right of the Duomo"}
+{"id": "ts-1153", "names": ["Canal"], "text": "drag Canal to the bottom left"}
+{"id": "ts-1154", "names": ["Gondola"], "text": "move the Gondola up a bit"}
+{"id": "ts-1155", "names": ["Vespa", "Lane"], "text": "park Vespa below the Lane"}
+{"id": "ts-1156", "names": ["Tuk"], "text": "delete Tuk"}
+{"id": "ts-1157", "names": ["Rickshaw"], "text": "throw away all pink squares"}
+{"id": "ts-1158", "names": ["Sled"], "text": "kill the stars that aren't gold"}
+{"id": "ts-1159", "names": ["Sleigh"], "text": "make Sleigh larger"}
+{"id": "ts-1160", "names": ["Pram"], "text": "make the Pram tinier"}
+{"id": "ts-1161", "names": ["Cart"], "text": "rename the Cart to Wagon"}
+{"id": "ts-1162", "names": ["Dray"], "text": "the first box should be called Origin"}
+{"id": "ts-1163", "names": ["Barrow"], "text": "label Barrow Dirt"}
+{"id": "ts-1164", "names": ["Trolley"], "text": "write \"Line 7\" on Trolley"}
+{"id": "ts-1165", "names": ["Tram"], "text": "copy Tram twice"}
+{"id": "ts-1166", "names": ["Bus"], "text": "duplicate the Bus"}
+{"id": "ts-1167", "names": ["Metro"], "text": "arrange the squares in a column"}
+{"id": "ts-1168", "names": ["Subway"], "text": "lay out everything in a grid"}
+{"id": "ts-1169", "names": ["Ferry"], "text": "Ferry is red"}
+{"id": "ts-1170", "names": ["Taxi"], "text": "is there a cycle in here"}
+{"id": "ts-1171", "names": ["Coach"], "text": "what is reachable from Coach"}
+{"id": "ts-1172", "names": ["Shuttle"], "text": "which things can the Shuttle reach"}
+{"id": "ts-1173", "names": ["Jeep"], "text": "are there defaults active"}
+{"id": "ts-1174", "names": ["Van"], "text": "which hexagons exist, list them"}
+{"id": "ts-1175", "names": ["Lorry"], "text": "who is adjacent to Lorry"}
+{"id": "ts-1176", "names": ["Cab", "Limo"], "text": "is Cab connected to Limo"}
+{"id": "ts-1177", "names": ["Moped", "Scooter"], "text": "is there a path from Moped to Scooter"}
+{"id": "ts-1178", "names": ["Bike"], "text": "what degree does Bike have"}
+{"id": "ts-1179", "names": ["Trike"], "text": "is there a diamond that is not red"}
+{"id": "ts-1180", "names": ["Quad"], "text": "count the yellow shapes"}
+{"id": "ts-1181", "names": ["Unicycle"], "text": "give a description of Unicycle"}
+{"id": "ts-1182", "names": ["Hovercraft", "Skiff"], "text": "which shape is closest to Skiff"}
+{"id": "ts-1183", "names": ["Rig", "Platform"], "text": "is Rig bigger than Platform"}
+{"id": "ts-1184", "names": ["Buoy", "Float"], "text": "is Buoy smaller than Float"}
+{"id": "ts-1185", "names": ["Mast"], "text": "which is the smallest shape"}
+{"id": "ts-1186", "names": ["Sail"], "text": "is Sail white?"}
+{"id": "ts-1187", "names": ["Keel", "Hull"], "text": "is Keel below Hull"}
+{"id": "ts-1188", "names": ["Deck"], "text": "what shape does Deck have"}
+{"id": "ts-1189", "names": ["Bow", "Stern"], "text": "swap the Bow and the Stern"}
+{"id": "ts-1190", "names": ["Helm", "Wheel"], "text": "unlink Helm and Wheel"}
+{"id": "ts-1191", "names": ["Galley"], "text": "align the circles horizontally"}
+{"id": "ts-1192", "names": ["Brig"], "text": "distribute the circles vertically"}
+{"id": "ts-1193", "names": ["Cutter"], "text": "undo the last thing I did"}
+{"id": "ts-1194", "names": ["Sloop"], "text": "redo the thing"}
+{"id": "ts-1195", "names": ["Yacht"], "text": "bring Yacht to the front of the others"}
+{"id": "ts-1196", "names": ["Junk"], "text": "put Junk at the back"}
+{"id": "ts-1197", "names": ["Dhow"], "text": "forget about the default rules"}
+{"id": "ts-1198", "names": [], "text": "let all new hexagons be indigo"}
+{"id": "ts-1199", "names": ["Punt"], "text": "where is Punt"}
+{"id": "ts-1200", "names": ["Barque"], "text": "how many links are there in total"}

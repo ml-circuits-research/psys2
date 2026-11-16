@@ -1,0 +1,100 @@
+{"id": "th-0501", "names": ["Oven"], "text": "take a small red circle named Timer and put it above the Oven"}
+{"id": "th-0502", "names": [], "text": "I wonder if you could add a huge yellow square labeled 'Preheat' at the top"}
+{"id": "th-0503", "names": ["Dough"], "text": "would you mind adding four gray stars around the Dough"}
+{"id": "th-0504", "names": [], "text": "plop a navy box in the middle called Pan"}
+{"id": "th-0505", "names": ["Sauce"], "text": "a tiny orange diamond named Garlic right beside Sauce"}
+{"id": "th-0506", "names": [], "text": "new white hexagon at the bottomLeft"}
+{"id": "th-0507", "names": ["Cool", "Serve"], "text": "shove a green oval between Cool and Serve"}
+{"id": "th-0508", "names": [], "text": "add a box with the words 'Done!' in the top right"}
+{"id": "th-0509", "names": ["Mix"], "text": "dash off 2 blue triangles below Mix"}
+{"id": "th-0510", "names": [], "text": "a large magenta star called Fork somewhere on the left"}
+{"id": "th-0511", "names": ["Oven"], "text": "put a medium teal rectangle named Rack above Oven"}
+{"id": "th-0512", "names": [], "text": "make a black circle at the bottom"}
+{"id": "th-0513", "names": ["Dough"], "text": "make Dough brown"}
+{"id": "th-0514", "names": ["Oven"], "text": "Oven should be a square"}
+{"id": "th-0515", "names": ["Sauce"], "text": "turn Sauce green"}
+{"id": "th-0516", "names": ["Serve"], "text": "serve goes huge"}
+{"id": "th-0517", "names": ["Mix"], "text": "Mix can be a hexagon"}
+{"id": "th-0518", "names": ["Cool"], "text": "cool is tiny now"}
+{"id": "th-0519", "names": ["Timer"], "text": "color the Timer white"}
+{"id": "th-0520", "names": ["Rack"], "text": "make it gray"}
+{"id": "th-0521", "names": [], "text": "make the circles that aren't black red"}
+{"id": "th-0522", "names": ["Dough", "Oven", "Mix"], "text": "wire Dough, Oven and Mix together in a chain"}
+{"id": "th-0523", "names": ["Oven", "Rack"], "text": "a dashed link from Oven to Rack"}
+{"id": "th-0524", "names": ["Mix", "Dough"], "text": "connect Mix and Dough both ways"}
+{"id": "th-0525", "names": ["Sauce", "Dough", "Oven"], "text": "string Sauce, Dough and Oven together in a chain"}
+{"id": "th-0526", "names": ["Cool", "Serve", "Timer"], "text": "tie each of Cool, Serve and Timer to the next one"}
+{"id": "th-0527", "names": ["Timer"], "text": "move Timer 35 pixels right"}
+{"id": "th-0528", "names": ["Pan", "Oven"], "text": "Pan goes left of Oven"}
+{"id": "th-0529", "names": ["Garlic"], "text": "drag Garlic down a bit"}
+{"id": "th-0530", "names": ["Rack"], "text": "move Rack to the top"}
+{"id": "th-0531", "names": ["Serve", "Cool"], "text": "put Serve right of Cool"}
+{"id": "th-0532", "names": ["Mix"], "text": "lift Mix 12 px up"}
+{"id": "th-0533", "names": ["Sauce", "Dough", "Oven"], "text": "slot Sauce in between Dough and Oven"}
+{"id": "th-0534", "names": ["Timer"], "text": "take out Timer"}
+{"id": "th-0535", "names": [], "text": "delete the diamonds that aren't green"}
+{"id": "th-0536", "names": ["Pan"], "text": "erase Pan"}
+{"id": "th-0537", "names": ["Dough"], "text": "can you make the Dough larger"}
+{"id": "th-0538", "names": ["Cool"], "text": "shrink Cool down"}
+{"id": "th-0539", "names": ["Mix"], "text": "rename Mix to Whisk"}
+{"id": "th-0540", "names": ["Oven"], "text": "call Oven Stove instead"}
+{"id": "th-0541", "names": ["Sauce"], "text": "put the label 'Tomato base' on Sauce"}
+{"id": "th-0542", "names": ["Serve"], "text": "write 'Plate' on Serve"}
+{"id": "th-0543", "names": ["Garlic"], "text": "copy Garlic"}
+{"id": "th-0544", "names": ["Rack"], "text": "give me five copies of Rack"}
+{"id": "th-0545", "names": ["Timer", "Pan"], "text": "swap Timer and Pan"}
+{"id": "th-0546", "names": ["Dough", "Mix"], "text": "switch the spots of Dough and Mix"}
+{"id": "th-0547", "names": ["Oven", "Rack"], "text": "disconnect Oven from Rack"}
+{"id": "th-0548", "names": ["Dough", "Oven"], "text": "unplug Dough from Oven"}
+{"id": "th-0549", "names": ["Cool", "Serve"], "text": "align Cool and Serve vertically"}
+{"id": "th-0550", "names": [], "text": "align the teal shapes horizontally"}
+{"id": "th-0551", "names": ["Timer", "Oven", "Pan"], "text": "arrange Timer, Oven and Pan in a circle"}
+{"id": "th-0552", "names": [], "text": "rearrange everything in a grid"}
+{"id": "th-0553", "names": ["Sauce", "Mix", "Dough"], "text": "distribute Sauce, Mix and Dough horizontally"}
+{"id": "th-0554", "names": [], "text": "spread the triangles out vertically"}
+{"id": "th-0555", "names": ["Garlic"], "text": "bring Garlic forward to the top"}
+{"id": "th-0556", "names": [], "text": "bring the newest hexagon to the front"}
+{"id": "th-0557", "names": ["Pan"], "text": "send Pan to the back"}
+{"id": "th-0558", "names": [], "text": "tuck the first circle behind everything"}
+{"id": "th-0559", "names": [], "text": "undo the last thing"}
+{"id": "th-0560", "names": [], "text": "rewind one step"}
+{"id": "th-0561", "names": [], "text": "redo!"}
+{"id": "th-0562", "names": [], "text": "re-do that"}
+{"id": "th-0563", "names": [], "text": "forget the defaults you picked up"}
+{"id": "th-0564", "names": [], "text": "discard all your stored rules"}
+{"id": "th-0565", "names": [], "text": "how many white things are there"}
+{"id": "th-0566", "names": [], "text": "how many things aren't orange"}
+{"id": "th-0567", "names": ["Oven"], "text": "how many shapes are above Oven"}
+{"id": "th-0568", "names": [], "text": "is there a purple star"}
+{"id": "th-0569", "names": [], "text": "do we have a circle that isn't black"}
+{"id": "th-0570", "names": [], "text": "list the stars"}
+{"id": "th-0571", "names": [], "text": "show me what's green"}
+{"id": "th-0572", "names": ["Oven"], "text": "what shape is Oven"}
+{"id": "th-0573", "names": ["Sauce"], "text": "what's the color of Sauce"}
+{"id": "th-0574", "names": [], "text": "how big is the newest square"}
+{"id": "th-0575", "names": ["Dough"], "text": "tell me what Dough is"}
+{"id": "th-0576", "names": [], "text": "give me the big picture of the diagram"}
+{"id": "th-0577", "names": ["Oven"], "text": "what's touching Oven"}
+{"id": "th-0578", "names": ["Serve"], "text": "who's connected to Serve"}
+{"id": "th-0579", "names": ["Dough", "Mix"], "text": "are Dough and Mix directly connected"}
+{"id": "th-0580", "names": ["Oven", "Pan"], "text": "is Oven joined to Pan"}
+{"id": "th-0581", "names": ["Oven"], "text": "how many links does Oven have"}
+{"id": "th-0582", "names": ["Dough"], "text": "how many arrows point at Dough"}
+{"id": "th-0583", "names": ["Timer", "Serve"], "text": "any path from Timer to Serve"}
+{"id": "th-0584", "names": ["Mix", "Cool"], "text": "how would you get from Mix to Cool"}
+{"id": "th-0585", "names": ["Dough"], "text": "what's downstream of Dough"}
+{"id": "th-0586", "names": ["Sauce"], "text": "everything Sauce can reach"}
+{"id": "th-0587", "names": [], "text": "is any of this circular"}
+{"id": "th-0588", "names": [], "text": "does the flow ever loop back"}
+{"id": "th-0589", "names": [], "text": "which defaults are set"}
+{"id": "th-0590", "names": [], "text": "what did you set as the default"}
+{"id": "th-0591", "names": ["Timer"], "text": "is Timer red"}
+{"id": "th-0592", "names": ["Pan"], "text": "is the Pan a box"}
+{"id": "th-0593", "names": ["Serve", "Cool"], "text": "is Serve bigger than Cool"}
+{"id": "th-0594", "names": [], "text": "which one is the biggest"}
+{"id": "th-0595", "names": [], "text": "what's the bottommost shape"}
+{"id": "th-0596", "names": ["Oven"], "text": "closest shape to Oven?"}
+{"id": "th-0597", "names": ["Pan"], "text": "what's the farthest green thing from Pan"}
+{"id": "th-0598", "names": ["Garlic"], "text": "Garlic is a diamond"}
+{"id": "th-0599", "names": ["Serve", "Cool"], "text": "Serve is right of Cool"}
+{"id": "th-0600", "names": [], "text": "from here on, new squares are teal"}

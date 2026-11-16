@@ -1,0 +1,9 @@
+{
+  "name": "vss-laptop-neural-score",
+  "private": true,
+  "type": "module",
+  "description": "Scores the Rules, VSS and Neural (transformers.js) readers on the same gold messages; see neural_score.mjs",
+  "dependencies": {
+    "@huggingface/transformers": "3.8.1"
+  }
+}

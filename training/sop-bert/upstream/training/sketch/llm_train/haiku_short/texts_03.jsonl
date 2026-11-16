@@ -1,0 +1,100 @@
+{"id": "th-0201", "names": ["Start"], "text": "add a green box labelled 'Read input' right after Start"}
+{"id": "th-0202", "names": [], "text": "put a yellow diamond named Check in the center"}
+{"id": "th-0203", "names": ["Check"], "text": "spawn two gray ovals below Check"}
+{"id": "th-0204", "names": ["Done"], "text": "could u sketch a small purple rectangle near Done"}
+{"id": "th-0205", "names": [], "text": "new red star called Fix at the top right"}
+{"id": "th-0206", "names": ["Check", "Fix"], "text": "a navy square called Retry between Check and Fix"}
+{"id": "th-0207", "names": [], "text": "make a large white circle labeled 'Hello' at the bottom"}
+{"id": "th-0208", "names": ["Review"], "text": "I want a blue box that says 'Approved' above Review"}
+{"id": "th-0209", "names": [], "text": "medium black triangle at the left edge"}
+{"id": "th-0210", "names": ["Ship"], "text": "toss in 4 lime hexagons right of Ship"}
+{"id": "th-0211", "names": ["Log"], "text": "make a cyan oval named Alert next to Log"}
+{"id": "th-0212", "names": [], "text": "add a huge pink rectangle at the top"}
+{"id": "th-0213", "names": ["Check"], "text": "make Check teal"}
+{"id": "th-0214", "names": ["Start"], "text": "Start should be a circle"}
+{"id": "th-0215", "names": ["Done"], "text": "paint Done gold"}
+{"id": "th-0216", "names": ["Review"], "text": "make Review large"}
+{"id": "th-0217", "names": ["Fix"], "text": "turn Fix into a diamond"}
+{"id": "th-0218", "names": ["Ship"], "text": "make it lime"}
+{"id": "th-0219", "names": ["Log"], "text": "could Log be brown"}
+{"id": "th-0220", "names": ["Retry"], "text": "please make the Retry box huge"}
+{"id": "th-0221", "names": [], "text": "make the red circle navy"}
+{"id": "th-0222", "names": ["Start", "Check"], "text": "link Start and Check, each one to the next"}
+{"id": "th-0223", "names": ["Check", "Fix"], "text": "draw a dashed arrow from Check to Fix"}
+{"id": "th-0224", "names": ["Review", "Ship"], "text": "link Review and Ship with a plain line, no arrowhead"}
+{"id": "th-0225", "names": ["Start", "Check", "Review", "Done"], "text": "chain Start, Check, Review and Done"}
+{"id": "th-0226", "names": ["Start", "Check", "Done"], "text": "connect each of Start, Check and Done to the next one"}
+{"id": "th-0227", "names": ["Check"], "text": "move Check 30 px up"}
+{"id": "th-0228", "names": ["Fix", "Retry"], "text": "relocate Fix to the right of Retry"}
+{"id": "th-0229", "names": ["Start"], "text": "shove Start to the left by 100 pixels"}
+{"id": "th-0230", "names": ["Done"], "text": "Done goes to the bottomRight corner"}
+{"id": "th-0231", "names": ["Ship", "Review", "Done"], "text": "put Ship between Review and Done"}
+{"id": "th-0232", "names": ["Log"], "text": "move Log up"}
+{"id": "th-0233", "names": ["Alert", "Log"], "text": "park Alert near Log"}
+{"id": "th-0234", "names": ["Review"], "text": "delete Review"}
+{"id": "th-0235", "names": [], "text": "delete all the diamonds that aren't blue"}
+{"id": "th-0236", "names": ["Retry", "Fix"], "text": "get rid of the newest diamond"}
+{"id": "th-0237", "names": ["Start"], "text": "grow Start a bit"}
+{"id": "th-0238", "names": ["Done"], "text": "could you shrink the Done shape"}
+{"id": "th-0239", "names": ["Ship"], "text": "rename Ship to Deploy"}
+{"id": "th-0240", "names": ["Check"], "text": "change the name of Check to Gate"}
+{"id": "th-0241", "names": ["Fix"], "text": "write 'Retry later' on Fix"}
+{"id": "th-0242", "names": ["Start"], "text": "give Start the label 'Begin'"}
+{"id": "th-0243", "names": ["Log"], "text": "duplicate Log twice"}
+{"id": "th-0244", "names": [], "text": "clone the newest diamond"}
+{"id": "th-0245", "names": ["Check", "Review"], "text": "flip Check and Review"}
+{"id": "th-0246", "names": ["Done", "Ship"], "text": "swap the spots of Done and Ship"}
+{"id": "th-0247", "names": ["Start", "Check"], "text": "disconnect Start from Check"}
+{"id": "th-0248", "names": ["Fix", "Retry"], "text": "remove the link between Fix and Retry"}
+{"id": "th-0249", "names": ["Start", "Check", "Review"], "text": "align Start, Check and Review horizontally"}
+{"id": "th-0250", "names": [], "text": "align the boxes that aren't green vertically"}
+{"id": "th-0251", "names": ["Fix", "Retry"], "text": "arrange Fix and Retry in a column"}
+{"id": "th-0252", "names": [], "text": "lay out everything in a row"}
+{"id": "th-0253", "names": ["Start", "Check", "Done"], "text": "even out the spacing of Start, Check and Done horizontally"}
+{"id": "th-0254", "names": [], "text": "spread out all the shapes that aren't blue vertically"}
+{"id": "th-0255", "names": ["Ship"], "text": "make Ship the top-most layer"}
+{"id": "th-0256", "names": [], "text": "bring the first star to the front"}
+{"id": "th-0257", "names": ["Log"], "text": "send Log to the back"}
+{"id": "th-0258", "names": [], "text": "push the oldest circle to the back"}
+{"id": "th-0259", "names": [], "text": "take that last move back"}
+{"id": "th-0260", "names": [], "text": "undo, please"}
+{"id": "th-0261", "names": [], "text": "put back what I undid"}
+{"id": "th-0262", "names": [], "text": "redo that"}
+{"id": "th-0263", "names": [], "text": "drop the default rules you have"}
+{"id": "th-0264", "names": [], "text": "forget the defaults"}
+{"id": "th-0265", "names": [], "text": "how many green boxes are there"}
+{"id": "th-0266", "names": [], "text": "how many shapes are not yellow"}
+{"id": "th-0267", "names": ["Check"], "text": "how many shapes are right of Check"}
+{"id": "th-0268", "names": [], "text": "do we have any red stars"}
+{"id": "th-0269", "names": [], "text": "is there a navy circle"}
+{"id": "th-0270", "names": [], "text": "list the squares"}
+{"id": "th-0271", "names": [], "text": "which shapes are not gray"}
+{"id": "th-0272", "names": ["Done"], "text": "what color is Done"}
+{"id": "th-0273", "names": ["Log"], "text": "what's the label on Log"}
+{"id": "th-0274", "names": [], "text": "what shape is the newest diamond"}
+{"id": "th-0275", "names": ["Check"], "text": "give me a summary of Check"}
+{"id": "th-0276", "names": [], "text": "describe everything on the canvas"}
+{"id": "th-0277", "names": ["Check"], "text": "what connects to Check"}
+{"id": "th-0278", "names": ["Ship"], "text": "which shapes touch Ship"}
+{"id": "th-0279", "names": ["Start", "Check"], "text": "is Start joined to Check?"}
+{"id": "th-0280", "names": ["Review", "Done"], "text": "does Review link directly to Done"}
+{"id": "th-0281", "names": ["Check"], "text": "how many links come into Check"}
+{"id": "th-0282", "names": ["Done"], "text": "how connected is Done"}
+{"id": "th-0283", "names": ["Start", "Done"], "text": "can I get from Start to Done"}
+{"id": "th-0284", "names": ["Fix", "Ship"], "text": "is Fix linked to Ship through anything"}
+{"id": "th-0285", "names": ["Start"], "text": "what's reachable from Start"}
+{"id": "th-0286", "names": ["Check"], "text": "starting at Check, where can you go"}
+{"id": "th-0287", "names": [], "text": "are there any loops in this flowchart"}
+{"id": "th-0288", "names": [], "text": "does the chart loop back on itself"}
+{"id": "th-0289", "names": [], "text": "list the rules you're using"}
+{"id": "th-0290", "names": [], "text": "what defaults are in effect"}
+{"id": "th-0291", "names": ["Start"], "text": "is Start green"}
+{"id": "th-0292", "names": [], "text": "is the newest diamond not blue"}
+{"id": "th-0293", "names": ["Check", "Done"], "text": "is Check to the left of Done"}
+{"id": "th-0294", "names": [], "text": "which shape is the leftmost"}
+{"id": "th-0295", "names": [], "text": "what is the bottommost thing"}
+{"id": "th-0296", "names": ["Start"], "text": "what's the closest shape to Start"}
+{"id": "th-0297", "names": ["Done"], "text": "which green thing is farthest from Done"}
+{"id": "th-0298", "names": ["Log"], "text": "Log is a hexagon"}
+{"id": "th-0299", "names": ["Ship", "Done"], "text": "Ship sits above Done"}
+{"id": "th-0300", "names": [], "text": "new stars should be huge from now on"}

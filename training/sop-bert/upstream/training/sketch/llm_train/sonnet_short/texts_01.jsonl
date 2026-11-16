@@ -1,0 +1,100 @@
+{"id": "ts-0001", "names": ["Router", "Lan"], "text": "could you slap a gray hexagon named Switch right under the Router"}
+{"id": "ts-0002", "names": ["Db"], "text": "make Db green"}
+{"id": "ts-0003", "names": ["Api", "Cache"], "text": "hook up Api to Cache with a dashed line"}
+{"id": "ts-0004", "names": ["Gateway"], "text": "scoot the Gateway 80 pixels to the right"}
+{"id": "ts-0005", "names": ["Alpha", "Beta"], "text": "how many red circles are there?"}
+{"id": "ts-0006", "names": ["Sensor"], "text": "get rid of Sensor"}
+{"id": "ts-0007", "names": [], "text": "throw in a big purple star"}
+{"id": "ts-0008", "names": ["Queue"], "text": "please rename Queue to Inbox"}
+{"id": "ts-0009", "names": ["Server", "Client"], "text": "is Server connected to Client?"}
+{"id": "ts-0010", "names": ["Hub"], "text": "undo that"}
+{"id": "ts-0011", "names": ["Mixer"], "text": "write \"Audio In\" on the Mixer"}
+{"id": "ts-0012", "names": ["Pump", "Valve"], "text": "swap Pump and Valve"}
+{"id": "ts-0013", "names": ["Core"], "text": "which shapes touch Core?"}
+{"id": "ts-0014", "names": ["Lamp"], "text": "enlarge the Lamp a bit"}
+{"id": "ts-0015", "names": ["Docs", "Wiki", "Blog"], "text": "line up Docs, Wiki and Blog horizontally"}
+{"id": "ts-0016", "names": ["Moon"], "text": "what color is Moon"}
+{"id": "ts-0017", "names": [], "text": "from now on every circle should be orange"}
+{"id": "ts-0018", "names": ["Auth"], "text": "Auth is a diamond"}
+{"id": "ts-0019", "names": ["Fan", "Heater"], "text": "pop a small teal ellipse to the left of Fan"}
+{"id": "ts-0020", "names": ["Mail"], "text": "duplicate Mail three times"}
+{"id": "ts-0021", "names": ["Start", "Step", "Done"], "text": "is there a path from Start to Done"}
+{"id": "ts-0022", "names": ["Alpha"], "text": "bring the Alpha box to the front"}
+{"id": "ts-0023", "names": ["Frontend", "Backend"], "text": "tie Frontend and Backend together with a two-way arrow"}
+{"id": "ts-0024", "names": [], "text": "arrange everything in a grid"}
+{"id": "ts-0025", "names": ["Sun"], "text": "change Sun to a yellow star"}
+{"id": "ts-0026", "names": ["Orbit"], "text": "nudge Orbit up by 25"}
+{"id": "ts-0027", "names": ["Nodea", "Nodeb"], "text": "does the diagram have a loop anywhere?"}
+{"id": "ts-0028", "names": ["Vault"], "text": "Vault is huge"}
+{"id": "ts-0029", "names": ["Tree"], "text": "is Tree bigger than Leaf"}
+{"id": "ts-0030", "names": ["Bus"], "text": "send Bus to the back"}
+{"id": "ts-0031", "names": ["Hub", "Spoke"], "text": "cut the link between Hub and Spoke"}
+{"id": "ts-0032", "names": [], "text": "redo"}
+{"id": "ts-0033", "names": ["Pixel"], "text": "I'd like a tiny white square called Pixel at the top left"}
+{"id": "ts-0034", "names": ["Chef", "Waiter", "Host"], "text": "spread Chef, Waiter and Host out evenly along the horizontal"}
+{"id": "ts-0035", "names": ["Rack"], "text": "which one is the biggest?"}
+{"id": "ts-0036", "names": ["Door"], "text": "move Door to the center"}
+{"id": "ts-0037", "names": ["Pipe"], "text": "forget the defaults"}
+{"id": "ts-0038", "names": [], "text": "what rules are in effect right now"}
+{"id": "ts-0039", "names": ["Ant", "Bee", "Cat"], "text": "whats the degree of Bee"}
+{"id": "ts-0040", "names": ["Mall"], "text": "kill the blue triangles"}
+{"id": "ts-0041", "names": ["Entry"], "text": "give me a fresh lime circle next to Entry"}
+{"id": "ts-0042", "names": ["Plan", "Work"], "text": "can you connect Plan to Work and label it \"approved\""}
+{"id": "ts-0043", "names": ["Eve"], "text": "does a magenta hexagon exist"}
+{"id": "ts-0044", "names": ["Oak"], "text": "turn the Oak into a navy rectangle"}
+{"id": "ts-0045", "names": ["Gate", "Wall"], "text": "is Gate above Wall?"}
+{"id": "ts-0046", "names": ["Node"], "text": "shrink Node"}
+{"id": "ts-0047", "names": ["Pawn"], "text": "list the gray things"}
+{"id": "ts-0048", "names": ["Idea"], "text": "put the text Brainstorm on Idea"}
+{"id": "ts-0049", "names": ["Zed"], "text": "rename the last square to Zed"}
+{"id": "ts-0050", "names": ["Foo", "Bar"], "text": "from now on make new boxes large"}
+{"id": "ts-0051", "names": ["Cell"], "text": "what shape is Cell?"}
+{"id": "ts-0052", "names": ["Lab", "Office"], "text": "stick a pink diamond between Lab and Office"}
+{"id": "ts-0053", "names": ["A", "B"], "text": "put everything in a circle layout"}
+{"id": "ts-0054", "names": ["Base", "Peak"], "text": "is Base smaller than Peak?"}
+{"id": "ts-0055", "names": ["Wolf"], "text": "describe the diagram"}
+{"id": "ts-0056", "names": ["Lift"], "text": "drop Lift to the bottom right corner"}
+{"id": "ts-0057", "names": ["Dock", "Ship"], "text": "Dock is left of Ship"}
+{"id": "ts-0058", "names": ["Hall"], "text": "make three more copies of Hall"}
+{"id": "ts-0059", "names": ["Spa"], "text": "add 4 yellow circles"}
+{"id": "ts-0060", "names": ["Tap"], "text": "which shape is nearest to Tap"}
+{"id": "ts-0061", "names": ["Kiln"], "text": "is the Kiln red?"}
+{"id": "ts-0062", "names": ["Rome", "Paris"], "text": "unlink Rome from Paris"}
+{"id": "ts-0063", "names": ["Peg"], "text": "reachable from Peg, what's there?"}
+{"id": "ts-0064", "names": ["Ivy"], "text": "paint Ivy brown"}
+{"id": "ts-0065", "names": ["Jar", "Lid"], "text": "wire Jar to Lid, no arrowhead"}
+{"id": "ts-0066", "names": ["Silo"], "text": "move Silo above the Barn"}
+{"id": "ts-0067", "names": ["Net"], "text": "what's the leftmost shape"}
+{"id": "ts-0068", "names": ["Fox"], "text": "uh yeah so can we delete Fox please"}
+{"id": "ts-0069", "names": ["Fuse", "Coil", "Core"], "text": "align Fuse, Coil and Core vertically"}
+{"id": "ts-0070", "names": ["Link"], "text": "redo that last thing"}
+{"id": "ts-0071", "names": ["Ring"], "text": "how many connections are there"}
+{"id": "ts-0072", "names": ["Moss"], "text": "Moss should be teal"}
+{"id": "ts-0073", "names": ["Shelf", "Box"], "text": "bring Shelf to front"}
+{"id": "ts-0074", "names": ["Dune"], "text": "hey sketch a medium indigo triangle named Dune on the right"}
+{"id": "ts-0075", "names": ["Kite"], "text": "place the Kite far left of the canvas"}
+{"id": "ts-0076", "names": ["P", "Q"], "text": "any gold squares?"}
+{"id": "ts-0077", "names": ["Reed"], "text": "hide Reed behind everything"}
+{"id": "ts-0078", "names": ["West", "East"], "text": "rename the first circle to Origin"}
+{"id": "ts-0079", "names": ["Sky", "Sea"], "text": "swap Sky with Sea"}
+{"id": "ts-0080", "names": [], "text": "from now on everything is gray"}
+{"id": "ts-0081", "names": ["Lens"], "text": "give the Lens a dotted connection to Film"}
+{"id": "ts-0082", "names": ["Tent"], "text": "list everything that isn't blue"}
+{"id": "ts-0083", "names": ["Bolt", "Nut", "Screw"], "text": "distribute Bolt, Nut and Screw vertically"}
+{"id": "ts-0084", "names": ["Sage"], "text": "what is the most connected shape?"}
+{"id": "ts-0085", "names": ["Wheel"], "text": "make the wheel a huge circle"}
+{"id": "ts-0086", "names": ["Cog"], "text": "undo"}
+{"id": "ts-0087", "names": ["Mint", "Lime"], "text": "is Mint the same shape as a star?"}
+{"id": "ts-0088", "names": ["Crate"], "text": "label Crate with Fragile"}
+{"id": "ts-0089", "names": ["Owl"], "text": "is Owl not red"}
+{"id": "ts-0090", "names": ["Gem"], "text": "Gem is below Ring"}
+{"id": "ts-0091", "names": ["Dot"], "text": "arrange the circles in a row"}
+{"id": "ts-0092", "names": ["Hive"], "text": "how big is Hive"}
+{"id": "ts-0093", "names": ["Rig"], "text": "what does Rig connect to"}
+{"id": "ts-0094", "names": ["Stove", "Sink"], "text": "which is furthest from Stove"}
+{"id": "ts-0095", "names": ["Anvil"], "text": "toss a black box called Anvil at the bottom"}
+{"id": "ts-0096", "names": ["Rail"], "text": "clone Rail"}
+{"id": "ts-0097", "names": ["Atlas"], "text": "forget the rules please"}
+{"id": "ts-0098", "names": ["Yard", "Pond"], "text": "is Yard linked to Pond directly?"}
+{"id": "ts-0099", "names": ["Zoo"], "text": "describe Zoo"}
+{"id": "ts-0100", "names": ["Cap"], "text": "delete the newest hexagon"}

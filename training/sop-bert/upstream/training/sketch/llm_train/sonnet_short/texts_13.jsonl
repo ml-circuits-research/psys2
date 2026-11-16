@@ -1,0 +1,100 @@
+{"id": "ts-1201", "names": ["Orchard", "Cider"], "text": "toss a red circle called Apple above the Orchard"}
+{"id": "ts-1202", "names": ["Order", "Ship"], "text": "does the workflow have a cycle in it?"}
+{"id": "ts-1203", "names": ["Alpha"], "text": "what's reachable from Alpha following the arrows"}
+{"id": "ts-1204", "names": ["Pharmacy"], "text": "any standing rules?"}
+{"id": "ts-1205", "names": ["Clinic", "Ward"], "text": "swap the Clinic and the Ward"}
+{"id": "ts-1206", "names": ["Lab", "Pharmacy"], "text": "cut Lab off from Pharmacy"}
+{"id": "ts-1207", "names": ["Triage"], "text": "give me every red thing"}
+{"id": "ts-1208", "names": ["Surgeon"], "text": "which shapes does Surgeon connect to"}
+{"id": "ts-1209", "names": ["Nurse", "Doctor"], "text": "are Nurse and Doctor connected"}
+{"id": "ts-1210", "names": ["Intake", "Discharge"], "text": "is there a way through from Intake to Discharge"}
+{"id": "ts-1211", "names": ["Bed"], "text": "how many connections has Bed got"}
+{"id": "ts-1212", "names": ["Scan"], "text": "undo this"}
+{"id": "ts-1213", "names": ["Xray"], "text": "undo what I just did"}
+{"id": "ts-1214", "names": ["Cast"], "text": "undo that last one, thanks"}
+{"id": "ts-1215", "names": ["Splint"], "text": "redo that"}
+{"id": "ts-1216", "names": ["Sling"], "text": "redo the last step I undid"}
+{"id": "ts-1217", "names": ["Gauze"], "text": "actually redo"}
+{"id": "ts-1218", "names": ["Chart"], "text": "Chart to the front please"}
+{"id": "ts-1219", "names": ["Sign"], "text": "pull the pink star in front of everything"}
+{"id": "ts-1220", "names": ["Memo"], "text": "bring the Memo forward"}
+{"id": "ts-1221", "names": ["Wall1"], "text": "Wall1 goes to the back"}
+{"id": "ts-1222", "names": ["Mural"], "text": "push the Mural to the back"}
+{"id": "ts-1223", "names": ["Sheet"], "text": "send the last square behind everything"}
+{"id": "ts-1224", "names": ["Dial1", "Dial2", "Dial3"], "text": "align Dial1, Dial2 and Dial3 along the vertical"}
+{"id": "ts-1225", "names": ["Knob"], "text": "make the triangles sit on one horizontal line"}
+{"id": "ts-1226", "names": ["S1", "S2", "S3"], "text": "spread S1, S2 and S3 evenly across horizontally"}
+{"id": "ts-1227", "names": ["Lever"], "text": "stop using my rules"}
+{"id": "ts-1228", "names": ["Switch"], "text": "reset the defaults, forget them"}
+{"id": "ts-1229", "names": [], "text": "when I create circles later, make them brown"}
+{"id": "ts-1230", "names": [], "text": "all new shapes will be huge from now on"}
+{"id": "ts-1231", "names": ["Sonar"], "text": "describe the picture"}
+{"id": "ts-1232", "names": ["Probe", "Rover"], "text": "what shape is nearest to Rover"}
+{"id": "ts-1233", "names": ["Moon", "Comet"], "text": "is Moon bigger than Comet"}
+{"id": "ts-1234", "names": ["Atom", "Quark"], "text": "is Quark smaller than Atom"}
+{"id": "ts-1235", "names": ["Photon"], "text": "is Photon orange"}
+{"id": "ts-1236", "names": ["Muon"], "text": "which is the topmost one"}
+{"id": "ts-1237", "names": ["Gluon"], "text": "tell me the color of Gluon"}
+{"id": "ts-1238", "names": ["Lepton"], "text": "anything black out there"}
+{"id": "ts-1239", "names": ["Boson"], "text": "how many hexagons"}
+{"id": "ts-1240", "names": ["Pole", "Equator"], "text": "add a white diamond above the Pole"}
+{"id": "ts-1241", "names": ["Tropic"], "text": "I need a navy hexagon named Reef, tiny"}
+{"id": "ts-1242", "names": ["Isle"], "text": "put three green stars on the canvas"}
+{"id": "ts-1243", "names": ["Cay", "Atoll"], "text": "put a yellow circle in between Cay and Atoll"}
+{"id": "ts-1244", "names": ["Lagoon"], "text": "toss a medium orange square to the right of the Lagoon"}
+{"id": "ts-1245", "names": ["Strait"], "text": "add a gray ellipse at the top right"}
+{"id": "ts-1246", "names": ["Sound"], "text": "make a teal box labelled Echo"}
+{"id": "ts-1247", "names": ["Gulf"], "text": "create a purple triangle near Gulf"}
+{"id": "ts-1248", "names": ["Delta"], "text": "add a lime star called Spark to the left"}
+{"id": "ts-1249", "names": ["Inlet"], "text": "add a large pink diamond"}
+{"id": "ts-1250", "names": ["Firth"], "text": "set Firth to red"}
+{"id": "ts-1251", "names": ["Bight"], "text": "I want Bight to be an ellipse"}
+{"id": "ts-1252", "names": ["Cove"], "text": "Cove: large"}
+{"id": "ts-1253", "names": ["Creek"], "text": "make the newest circle cyan and small"}
+{"id": "ts-1254", "names": ["Brook"], "text": "recolor the non-blue squares green"}
+{"id": "ts-1255", "names": ["Spring", "Well"], "text": "connect Spring to Well"}
+{"id": "ts-1256", "names": ["Rain", "Cloud"], "text": "put a dashed arrow from Rain to Cloud"}
+{"id": "ts-1257", "names": ["Hail", "Sleet"], "text": "link Hail and Sleet both ways"}
+{"id": "ts-1258", "names": ["Mist", "Fog", "Haze"], "text": "chain Mist to Fog to Haze"}
+{"id": "ts-1259", "names": ["Storm", "Calm"], "text": "connect Storm to Calm in purple"}
+{"id": "ts-1260", "names": ["Wind", "Gale"], "text": "connect Wind to Gale with label stronger"}
+{"id": "ts-1261", "names": ["Core"], "text": "connect Core to all the squares"}
+{"id": "ts-1262", "names": ["Breeze"], "text": "shift Breeze 75 down"}
+{"id": "ts-1263", "names": ["Gust", "Squall"], "text": "place Gust left of Squall"}
+{"id": "ts-1264", "names": ["Zephyr"], "text": "zip the Zephyr over to the center"}
+{"id": "ts-1265", "names": ["Draft"], "text": "slide the Draft right"}
+{"id": "ts-1266", "names": ["Eddy", "Swirl"], "text": "slip Eddy between Swirl and Whirl"}
+{"id": "ts-1267", "names": ["Gale1"], "text": "drop Gale1"}
+{"id": "ts-1268", "names": ["Typhoon"], "text": "delete the blue squares"}
+{"id": "ts-1269", "names": ["Cyclone"], "text": "scrap every shape that isn't orange"}
+{"id": "ts-1270", "names": ["Twister"], "text": "make the Twister bigger"}
+{"id": "ts-1271", "names": ["Monsoon"], "text": "shrink Monsoon"}
+{"id": "ts-1272", "names": ["Drizzle"], "text": "change Drizzle's name to Shower"}
+{"id": "ts-1273", "names": ["Dew2"], "text": "name the oldest circle Origin"}
+{"id": "ts-1274", "names": ["Frost"], "text": "label Frost Winter"}
+{"id": "ts-1275", "names": ["Thaw"], "text": "add the label Spring to Thaw"}
+{"id": "ts-1276", "names": ["Snowman"], "text": "duplicate Snowman three times"}
+{"id": "ts-1277", "names": ["Igloo"], "text": "clone the blue hexagon"}
+{"id": "ts-1278", "names": ["Floe"], "text": "arrange all the hexagons in a circle"}
+{"id": "ts-1279", "names": ["Berg"], "text": "line everything up in a row"}
+{"id": "ts-1280", "names": ["Glacier"], "text": "Glacier is white"}
+{"id": "ts-1281", "names": ["Pack", "Ice"], "text": "Pack is below Ice"}
+{"id": "ts-1282", "names": ["Tundra"], "text": "cycles anywhere?"}
+{"id": "ts-1283", "names": ["Taiga"], "text": "any circular paths?"}
+{"id": "ts-1284", "names": ["Fjord"], "text": "where does one end up if starting from Fjord"}
+{"id": "ts-1285", "names": ["Loess"], "text": "what rules do I have"}
+{"id": "ts-1286", "names": ["Silt"], "text": "list the cyan shapes"}
+{"id": "ts-1287", "names": ["Clay"], "text": "neighbors for Clay?"}
+{"id": "ts-1288", "names": ["Sand", "Gravel"], "text": "can I go from Sand to Gravel"}
+{"id": "ts-1289", "names": ["Peat"], "text": "degree of Peat"}
+{"id": "ts-1290", "names": ["Loam", "Marl"], "text": "is Loam linked to Marl"}
+{"id": "ts-1291", "names": ["Chalk"], "text": "tell me about Chalk"}
+{"id": "ts-1292", "names": ["Flint", "Shale"], "text": "which shape is farthest from Flint"}
+{"id": "ts-1293", "names": ["Slate", "Mica"], "text": "is Slate bigger than Mica"}
+{"id": "ts-1294", "names": ["Talc"], "text": "Talc isn't blue, right?"}
+{"id": "ts-1295", "names": ["Gypsum"], "text": "which shape is leftmost?"}
+{"id": "ts-1296", "names": ["Quartz", "Jasper"], "text": "is Quartz left of Jasper"}
+{"id": "ts-1297", "names": ["Agate"], "text": "what's Agate's size"}
+{"id": "ts-1298", "names": ["Onyx"], "text": "is there a hexagon"}
+{"id": "ts-1299", "names": ["Beryl"], "text": "how many gold shapes"}
+{"id": "ts-1300", "names": ["Topaz"], "text": "swap Topaz and Beryl"}
