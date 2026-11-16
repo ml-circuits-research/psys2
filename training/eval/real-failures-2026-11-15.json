@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "e660d9a5",
-  "tree": "cc7c7800274f38dc",
+  "build": "d829fbba",
+  "tree": "ea8b894168a28658",
   "catalog": "7042ea706c046abad2f5513d8dcb7aceb4eaae55",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -13,29 +13,29 @@
   "matrix": {
    "turns": 605,
    "judged": 207,
-   "right": 117,
+   "right": 122,
    "partly": 6,
-   "wrong": 84,
-   "open": 53,
-   "changed": 13,
+   "wrong": 79,
+   "open": 44,
+   "changed": 22,
    "unjudged": 332,
    "outcome": {
-    "executed": 130,
-    "refused": 336,
+    "executed": 160,
+    "refused": 308,
     "asked": 11,
-    "not_understood": 53,
-    "other_world": 75
+    "not_understood": 54,
+    "other_world": 72
    },
    "by_source": {
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 37
+     "right": 39
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
      "judged": 11,
-     "right": 1
+     "right": 4
     },
     "owner-log-2026-11-13c": {
      "turns": 24,
@@ -88,29 +88,29 @@
   "ops": {
    "turns": 605,
    "judged": 207,
-   "right": 117,
+   "right": 122,
    "partly": 6,
-   "wrong": 84,
-   "open": 53,
-   "changed": 13,
+   "wrong": 79,
+   "open": 44,
+   "changed": 22,
    "unjudged": 332,
    "outcome": {
-    "executed": 130,
-    "refused": 336,
+    "executed": 160,
+    "refused": 308,
     "asked": 11,
-    "not_understood": 53,
-    "other_world": 75
+    "not_understood": 54,
+    "other_world": 72
    },
    "by_source": {
     "owner-log-2026-11-13": {
      "turns": 69,
      "judged": 55,
-     "right": 37
+     "right": 39
     },
     "owner-log-2026-11-13b": {
      "turns": 63,
      "judged": 11,
-     "right": 1
+     "right": 4
     },
     "owner-log-2026-11-13c": {
      "turns": 24,
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 413,
- "failing_ops": 413,
+ "failing_matrix": 386,
+ "failing_ops": 386,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -423,205 +423,6 @@
    "both_reasoners": 22
   },
   {
-   "cause": "Romanian: art.draw: acted; the reply does not say what the check asks",
-   "count": 21,
-   "wrong": 21,
-   "partly": 0,
-   "rows": [
-    {
-     "id": "r0038",
-     "verdict": "wrong",
-     "text": "roteste crocodilul albastru la 30 de grade",
-     "tab": "draw",
-     "reply": "Nothing changed. There is no crocodile here. I could not do 30 degrees: this world does not take attribute for change. I could not do blue: this world does not ",
-     "failing": [
-      "reply_any:turned the crocodile"
-     ]
-    },
-    {
-     "id": "r0039",
-     "verdict": "wrong",
-     "text": "fa picioarele corocilului negre",
-     "tab": "draw",
-     "reply": "I did not understand \"legs\", \"corocilului\" here.",
-     "failing": [
-      "reply_any:legs of the crocodile are black|has no leg|has these parts"
-     ]
-    },
-    {
-     "id": "r0040",
-     "verdict": "wrong",
-     "text": "piicorul corocilului albastru",
-     "tab": "draw",
-     "reply": "I did not understand \"piicorul\", \"corocilului\" here.",
-     "failing": [
-      "reply_not:did not understand|composite"
-     ]
-    },
-    {
-     "id": "r0041",
-     "verdict": "wrong",
-     "text": "fa piciorul corcodilului albastru de culoare neagra",
-     "tab": "draw",
-     "reply": "I did not understand \"leg\" here.",
-     "failing": [
-      "reply_not:did not understand|composite"
-     ]
-    },
-    {
-     "id": "r0045",
-     "verdict": "wrong",
-     "text": "move corcodiles in lake",
-     "tab": "draw",
-     "reply": "I did not understand \"corcodiles\" here.",
-     "failing": [
-      "reply_not:do not know what|did not understand"
-     ]
-    },
-    {
-     "id": "r0052",
-     "verdict": "wrong",
-     "text": "muta casele mai sus",
-     "tab": "draw",
-     "reply": "Nothing changed. There is no house here.",
-     "failing": [
-      "reply_any:moved the houses"
-     ]
-    },
-    {
-     "id": "r0053",
-     "verdict": "wrong",
-     "text": "si mai sus",
-     "tab": "draw",
-     "reply": "I did not understand that as something to do in the drawing.",
-     "failing": [
-      "reply_not:do not know what|did not understand"
-     ]
-    },
-    {
-     "id": "r0054",
-     "verdict": "wrong",
-     "text": "muta casele mai sus",
-     "tab": "draw",
-     "reply": "Nothing changed. There is no house here.",
-     "failing": [
-      "reply_any:moved the houses"
-     ]
-    },
-    {
-     "id": "r0055",
-     "verdict": "wrong",
-     "text": "muta crocodilii mai jos",
-     "tab": "draw",
-     "reply": "Nothing changed. There is no crocodile here. I could not do lower: this world does not take place for place.",
-     "failing": [
-      "reply_any:moved the crocodiles"
-     ]
-    },
-    {
-     "id": "r0059",
-     "verdict": "wrong",
-     "text": "nu si peste apa",
-     "tab": "draw",
-     "reply": "I did not understand that as something to do in the drawing.",
-     "failing": [
-      "reply_not:did not understand|is blue now"
-     ]
-    },
-    {
-     "id": "r0064",
-     "verdict": "wrong",
-     "text": "pune si un lac",
-     "tab": "draw",
-     "reply": "Nothing changed. Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\"",
-     "failing": [
-      "reply_not:Where should it go|did not understand"
-     ]
-    },
-    {
-     "id": "r0074",
-     "verdict": "wrong",
-     "text": "muta rata pe lac",
-     "tab": "draw",
-     "reply": "Nothing changed. There is no duck here.",
-     "failing": []
-    },
-    {
-     "id": "r0078",
-     "verdict": "wrong",
-     "text": "pai muta casa pe pamint",
-     "tab": "draw",
-     "reply": "I did not understand \"pai\", \"moves\" here.",
-     "failing": []
-    },
-    {
-     "id": "r0085",
-     "verdict": "wrong",
-     "text": "da 5 nori",
-     "tab": "draw",
-     "reply": "I cannot send cloud in the drawing yet.",
-     "failing": []
-    },
-    {
-     "id": "r0092",
-     "verdict": "wrong",
-     "text": "desenaza un leagan",
-     "tab": "draw",
-     "reply": "I cannot make swing in the drawing yet.",
-     "failing": []
-    },
-    {
-     "id": "r0098",
-     "verdict": "wrong",
-     "text": "muta copilul pe iarba",
-     "tab": "draw",
-     "reply": "Nothing changed. There is no child here. I could not do on the grass: this world does not take place for place.",
-     "failing": []
-    },
-    {
-     "id": "r0099",
-     "verdict": "wrong",
-     "text": "fa si o fetita",
-     "tab": "draw",
-     "reply": "I did not understand \"girl\" here.",
-     "failing": []
-    },
-    {
-     "id": "r0113",
-     "verdict": "wrong",
-     "text": "muta capra mai jos",
-     "tab": "draw",
-     "reply": "Nothing changed. There is no goat here. I could not do lower: this world does not take place for place.",
-     "failing": []
-    },
-    {
-     "id": "r0115",
-     "verdict": "wrong",
-     "text": "muta capra mai in dreapta",
-     "tab": "draw",
-     "reply": "Nothing changed. There is no goat here. I could not do to the right: this world does not take place for place. I could not do further: this world does not take ",
-     "failing": []
-    },
-    {
-     "id": "r0122",
-     "verdict": "wrong",
-     "text": "muta vaca mai jos",
-     "tab": "draw",
-     "reply": "Nothing changed. There is no cow here. I could not do lower: this world does not take place for place.",
-     "failing": []
-    },
-    {
-     "id": "r0125",
-     "verdict": "wrong",
-     "text": "muta casa mai sus",
-     "tab": "draw",
-     "reply": "Which house? There are 2.",
-     "failing": []
-    }
-   ],
-   "both_reasoners": 21
-  },
-  {
    "cause": "ui.avatar: acted; the reply does not say what the check asks",
    "count": 20,
    "wrong": 16,
@@ -834,6 +635,161 @@
     }
    ],
    "both_reasoners": 20
+  },
+  {
+   "cause": "Romanian: art.draw: acted; the reply does not say what the check asks",
+   "count": 16,
+   "wrong": 16,
+   "partly": 0,
+   "rows": [
+    {
+     "id": "r0038",
+     "verdict": "wrong",
+     "text": "roteste crocodilul albastru la 30 de grade",
+     "tab": "draw",
+     "reply": "Nothing changed. There is no crocodile here.",
+     "failing": [
+      "reply_any:turned the crocodile"
+     ]
+    },
+    {
+     "id": "r0039",
+     "verdict": "wrong",
+     "text": "fa picioarele corocilului negre",
+     "tab": "draw",
+     "reply": "I did not understand \"legs\", \"corocilului\" here.",
+     "failing": [
+      "reply_any:legs of the crocodile are black|has no leg|has these parts"
+     ]
+    },
+    {
+     "id": "r0040",
+     "verdict": "wrong",
+     "text": "piicorul corocilului albastru",
+     "tab": "draw",
+     "reply": "I did not understand \"piicorul\", \"corocilului\" here.",
+     "failing": [
+      "reply_not:did not understand|composite"
+     ]
+    },
+    {
+     "id": "r0041",
+     "verdict": "wrong",
+     "text": "fa piciorul corcodilului albastru de culoare neagra",
+     "tab": "draw",
+     "reply": "I did not understand \"leg\" here.",
+     "failing": [
+      "reply_not:did not understand|composite"
+     ]
+    },
+    {
+     "id": "r0045",
+     "verdict": "wrong",
+     "text": "move corcodiles in lake",
+     "tab": "draw",
+     "reply": "I did not understand \"corcodiles\" here.",
+     "failing": [
+      "reply_not:do not know what|did not understand"
+     ]
+    },
+    {
+     "id": "r0052",
+     "verdict": "wrong",
+     "text": "muta casele mai sus",
+     "tab": "draw",
+     "reply": "Nothing changed. There is no house here.",
+     "failing": [
+      "reply_any:moved the houses"
+     ]
+    },
+    {
+     "id": "r0054",
+     "verdict": "wrong",
+     "text": "muta casele mai sus",
+     "tab": "draw",
+     "reply": "Nothing changed. There is no house here.",
+     "failing": [
+      "reply_any:moved the houses"
+     ]
+    },
+    {
+     "id": "r0055",
+     "verdict": "wrong",
+     "text": "muta crocodilii mai jos",
+     "tab": "draw",
+     "reply": "I moved 2 crocodiles to the bottom.",
+     "failing": [
+      "reply_any:moved the crocodiles"
+     ]
+    },
+    {
+     "id": "r0064",
+     "verdict": "wrong",
+     "text": "pune si un lac",
+     "tab": "draw",
+     "reply": "Nothing changed. Where should it go? You can say, for example, \"move the tree to the left\", \"put the cat next to the house\" or \"move it to the top right corner\"",
+     "failing": [
+      "reply_not:Where should it go|did not understand"
+     ]
+    },
+    {
+     "id": "r0074",
+     "verdict": "wrong",
+     "text": "muta rata pe lac",
+     "tab": "draw",
+     "reply": "Nothing changed. There is no duck here.",
+     "failing": []
+    },
+    {
+     "id": "r0078",
+     "verdict": "wrong",
+     "text": "pai muta casa pe pamint",
+     "tab": "draw",
+     "reply": "I did not understand \"pai\", \"moves\" here.",
+     "failing": []
+    },
+    {
+     "id": "r0085",
+     "verdict": "wrong",
+     "text": "da 5 nori",
+     "tab": "draw",
+     "reply": "I cannot send cloud in the drawing yet.",
+     "failing": []
+    },
+    {
+     "id": "r0099",
+     "verdict": "wrong",
+     "text": "fa si o fetita",
+     "tab": "draw",
+     "reply": "Nothing changed. I have no drawing of a girl yet.",
+     "failing": []
+    },
+    {
+     "id": "r0113",
+     "verdict": "wrong",
+     "text": "muta capra mai jos",
+     "tab": "draw",
+     "reply": "Which goat? There are 2.",
+     "failing": []
+    },
+    {
+     "id": "r0115",
+     "verdict": "wrong",
+     "text": "muta capra mai in dreapta",
+     "tab": "draw",
+     "reply": "Which goat? There are 2.",
+     "failing": []
+    },
+    {
+     "id": "r0125",
+     "verdict": "wrong",
+     "text": "muta casa mai sus",
+     "tab": "draw",
+     "reply": "Which house? There are 2.",
+     "failing": []
+    }
+   ],
+   "both_reasoners": 16
   },
   {
    "cause": "art.draw: acted; the state is not the expected one",
@@ -1069,7 +1025,7 @@
      "verdict": "wrong",
      "text": "inca un crocodil",
      "tab": "draw",
-     "reply": "There is nothing in the drawing that I made and could change that way yet.",
+     "reply": "Nothing changed. That is what is there already.",
      "failing": [
       "state:objects.length=$+1"
      ]
@@ -1221,8 +1177,8 @@
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 155,
-   "both_reasoners": 155,
+   "count": 140,
+   "both_reasoners": 140,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -1275,8 +1231,8 @@
   },
   {
    "cause": "translation residue / wrong sense / source typo",
-   "count": 30,
-   "both_reasoners": 30,
+   "count": 28,
+   "both_reasoners": 28,
    "examples": [
     {
      "text": "desneaza o vila",
@@ -1383,14 +1339,9 @@
   },
   {
    "cause": "continuation / correction / why-question",
-   "count": 16,
-   "both_reasoners": 16,
+   "count": 14,
+   "both_reasoners": 14,
    "examples": [
-    {
-     "text": "nu si peste apa",
-     "tab": "draw",
-     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; wrong; reply_not:did not understand|is blue now]"
-    },
     {
      "text": "pe lac",
      "tab": "draw",
@@ -1405,6 +1356,11 @@
      "text": "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum",
      "tab": "draw",
      "happened": "I did not understand \"voila\", \"ta\", \"da\", \"makes\", \"oricum\" here. [outcome: refused; open]"
+    },
+    {
+     "text": "cum ai ajuns a deschisi joculd e sah? e ridicol",
+     "tab": "chess",
+     "happened": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"A"
     }
    ]
   },
@@ -1437,8 +1393,8 @@
   },
   {
    "cause": "acted on a partly understood sentence",
-   "count": 9,
-   "both_reasoners": 9,
+   "count": 7,
+   "both_reasoners": 7,
    "examples": [
     {
      "text": "conectează toate formele",
@@ -1464,8 +1420,8 @@
   },
   {
    "cause": "amount / relation / set distribution",
-   "count": 9,
-   "both_reasoners": 9,
+   "count": 7,
+   "both_reasoners": 7,
    "examples": [
     {
      "text": "fa niste iarba deauspa lacului",
@@ -1473,19 +1429,19 @@
      "happened": "I did not understand \"deauspa\" here. [outcome: refused; open]"
     },
     {
-     "text": "deseneaza un copil pe leagan",
-     "tab": "draw",
-     "happened": "I cannot make child in the drawing yet. [outcome: refused; open]"
-    },
-    {
      "text": "muta capra mai jos , si mai in stinga",
      "tab": "draw",
-     "happened": "Nothing changed. There is no goat here. I could not do to the left: this world does not take place for place. I could not do lower: this world does not take pla"
+     "happened": "Which goat? There are 2. [outcome: refused; open]"
     },
     {
-     "text": "muta vaca si mai jos si mai in dreapta",
+     "text": "muta pestii in colturi diferite sus",
      "tab": "draw",
-     "happened": "Nothing changed. There is no cow here. I could not do to the right: this world does not take place for place. I could not do lower: this world does not take pla"
+     "happened": "Nothing changed. [outcome: refused; open]"
+    },
+    {
+     "text": "move the fishes in different coreners",
+     "tab": "draw",
+     "happened": "I did not understand \"fishes\", \"different\", \"coreners\" here. [outcome: refused; open]"
     }
    ]
   },
@@ -1517,33 +1473,6 @@
    ]
   },
   {
-   "cause": "unknown word (a word of the request is not known)",
-   "count": 5,
-   "both_reasoners": 5,
-   "examples": [
-    {
-     "text": "move corcodiles in lake",
-     "tab": "draw",
-     "happened": "I did not understand \"corcodiles\" here. [outcome: refused; wrong; reply_not:do not know what|did not understand]"
-    },
-    {
-     "text": "si mai sus",
-     "tab": "draw",
-     "happened": "I did not understand that as something to do in the drawing. [outcome: refused; wrong; reply_not:do not know what|did not understand]"
-    },
-    {
-     "text": "desene asta",
-     "tab": "map",
-     "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
-    },
-    {
-     "text": "desene asta o",
-     "tab": "map",
-     "happened": "I did not understand \"desene asta o\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not"
-    }
-   ]
-  },
-  {
    "cause": "foreign-world reading",
    "count": 4,
    "both_reasoners": 4,
@@ -1571,6 +1500,33 @@
    ]
   },
   {
+   "cause": "unknown word (a word of the request is not known)",
+   "count": 4,
+   "both_reasoners": 4,
+   "examples": [
+    {
+     "text": "move corcodiles in lake",
+     "tab": "draw",
+     "happened": "I did not understand \"corcodiles\" here. [outcome: refused; wrong; reply_not:do not know what|did not understand]"
+    },
+    {
+     "text": "desene asta",
+     "tab": "map",
+     "happened": "I did not understand \"desene asta\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not_u"
+    },
+    {
+     "text": "desene asta o",
+     "tab": "map",
+     "happened": "I did not understand \"desene asta o\". Did you mean \"save my Drawings as asta\" or \"download the Drawings as a asta\"? I did not know the word: asta. [outcome: not"
+    },
+    {
+     "text": "un mami",
+     "tab": "charts",
+     "happened": "I did not understand \"un mami\". For example: \"Add a chart.\" or \"What is the colour of chart 2?\" I did not know the word: mami. [outcome: not_understood]"
+    }
+   ]
+  },
+  {
    "cause": "unknown kind (no drawing / stand-in)",
    "count": 4,
    "both_reasoners": 4,
@@ -1588,12 +1544,12 @@
     {
      "text": "fa un bunic linga rata",
      "tab": "draw",
-     "happened": "I did not understand \"grandfather\", \"linga\" here. [outcome: refused; open]"
+     "happened": "I did not understand \"linga\" here. [outcome: refused; open]"
     },
     {
      "text": "deseneaza un bunic",
      "tab": "draw",
-     "happened": "I did not understand \"grandfather\" here. [outcome: refused; open]"
+     "happened": "Nothing changed. I have no drawing of a grandfather yet. [outcome: refused; open]"
     }
    ]
   },
@@ -1621,28 +1577,6 @@
      "text": "what is on you",
      "tab": "robot",
      "happened": "There is one face. There is one hair back. There is one shoulders. There is one neck. There is one ears. There is one head. There is one cheeks. There is one mo"
-    }
-   ]
-  },
-  {
-   "cause": "fragment / list split",
-   "count": 3,
-   "both_reasoners": 3,
-   "examples": [
-    {
-     "text": "deseneaza si un magar, dar sa nu zboare, pe iarba",
-     "tab": "draw",
-     "happened": "I understood \"on the grass\", but not \"Draw a donkey\", \"too to not fly\", so I did nothing. [outcome: refused; open]"
-    },
-    {
-     "text": "eyeglasses",
-     "tab": "robot",
-     "happened": "I did not understand that as something to do in the avatar. [outcome: refused; open]"
-    },
-    {
-     "text": "new game",
-     "tab": "guess",
-     "happened": "I am not sure how “new name” fits what we were doing. Please say the whole request. [outcome: not_understood]"
     }
    ]
   },
@@ -1691,19 +1625,19 @@
    ]
   },
   {
-   "cause": "default place",
+   "cause": "fragment / list split",
    "count": 2,
    "both_reasoners": 2,
    "examples": [
     {
-     "text": "deseneaza o capra",
-     "tab": "draw",
-     "happened": "I cannot make goat in the drawing yet. [outcome: refused; open]"
+     "text": "eyeglasses",
+     "tab": "robot",
+     "happened": "I did not understand that as something to do in the avatar. [outcome: refused; open]"
     },
     {
-     "text": "desenaza o vaca",
-     "tab": "draw",
-     "happened": "I cannot make cow in the drawing yet. [outcome: refused; open]"
+     "text": "new game",
+     "tab": "guess",
+     "happened": "I am not sure how “new name” fits what we were doing. Please say the whole request. [outcome: not_understood]"
     }
    ]
   },
