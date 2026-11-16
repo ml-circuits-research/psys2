@@ -35,25 +35,10 @@ export function liveWorld(lib, world) {
   world._requestLive = load(world.requestText);
   let extra = '';
   if (world._requestLive) try { extra = catalogWholes(world._requestLive, requestLanguage(lib), world.requestText); } catch { extra = ''; }
-  if (world._requestLive) try { extra = [extra, joinedHonours(lib, world._requestLive, requestLanguage(lib))].filter(Boolean).join('\n'); } catch { /* the joins stay the library's */ }
   if (extra) world._requestLive = load(`${world.requestText}\n${extra}`) ?? world._requestLive;   // one load: the schema is compiled with the catalog's wholes
   return world._requestLive;
 }
 
-/**
- * The kinds a world takes by join (std.schema.kinds from=<catalog type>), honoured with their kind for the acts of the join (std.schema.honours act= on=kind of=<kind>), so that the
- * reader's lexicon has them before the catalog's other words (a part "eye" of a face of k.expect.part does not take "eyes") and the world's own words of them (core.word) reach them:
- * sopworld 0.160's readRequest reads no joined kind. Host stand-in until the reader takes them (questions.md Q96 (1) [LIB]). No code here is per world.
- */
-const JOINED_HONOURED_MAX = 200;   // the joins honoured whole (a policy: the reader builds its lexicon on every read)
-function joinedHonours(lib, live, language) {
-  if (typeof lib?.joinedKinds !== 'function' || !language || !ofType(live, 'std.schema.kinds').length) return '';
-  const joined = lib.joinedKinds(live, [language]);
-  if (joined.size > JOINED_HONOURED_MAX) return '';   // a large base (the Drawing's 2,500 objects and people) would be built into the reader's lexicon on every read: its kinds are read by the names a turn says (joinedWords)
-  const byActs = new Map();
-  for (const [k, j] of joined) for (const a of j.acts) (byActs.get(`${j.world}|${a}`) ?? byActs.set(`${j.world}|${a}`, []).get(`${j.world}|${a}`)).push(/^[a-z][\w-]*$/i.test(k) ? k : JSON.stringify(k));
-  return [...byActs].map(([wa, ks], i) => { const [w, a] = wa.split('|'); return `@jh${i} std.schema.honours world=${w} act=${a} on=kind ${ks.map((k) => `of=${k}`).join(' ')}`; }).join('\n');
-}
 
 /**
  * The wholes the catalog expects made in a live world (k.expect.make made_in = its std.schema.world name: "lake scene", "flowchart") are kinds of that world: each is told as a kind
@@ -107,33 +92,15 @@ const regionNames = (live) => new Set(ofType(live, 'std.schema.region').map((r) 
  * Read one turn with the library (readRequest) into the host's shape: { act, target, facts (flat: key, value, neg, all, n, min, max, unit, step, of), reaction, unread, used,
  * corrections, request (the library's own) }.
  */
-/**
- * The names of the kinds a live world declares by join (std.schema.kinds: every row of the joined types) that the turn says (a word or two of its English, singular or plural):
- * passed to the reader as its `kinds`. The full list (2,500 names) would be built into the reader's lexicon on every read; only the ones said are.
- */
-const joinedNames = new WeakMap();
-export function joinedWords(lib, live, language, english = '') {
-  if (!live) return [];
-  if (!joinedNames.has(live)) { let names = new Set(); try { names = new Set([...(lib.capabilitiesOf(live, { catalog: [language] }).joined?.keys?.() ?? [])].map(String)); } catch { names = new Set(); } joinedNames.set(live, names); }
-  const names = joinedNames.get(live);
-  if (!names.size) return [];
-  const ws = String(english ?? '').toLowerCase().split(/[^\p{L}\p{N}'-]+/u).filter(Boolean);
-  const forms = (w) => [w, w.replace(/ies$/, 'y'), w.replace(/es$/, ''), w.replace(/s$/, '')];   // glue-lint: tool-data (a plural form of a name, for a lookup only)
-  const out = new Set();
-  for (let i = 0; i < ws.length; i++) {
-    for (const f of forms(ws[i])) if (names.has(f)) out.add(f);
-    if (i + 1 < ws.length) for (const f of forms(ws[i + 1])) { const two = `${ws[i]} ${f}`; if (names.has(two)) out.add(two); }
-  }
-  return [...out];
-}
-
 export function readTurn(lib, live, language, english, { dialogue = null, known = null, worlds = [], state = null } = {}) {
   // the slips are one candidate source of the reader (sopworld 0.151 readRequest `spell`: the open world's words, the other live worlds, the dialogue, the language); a word the
   // language has (`known`, the host's dictionary of English) is never a slip, so a reading that would repair one is read again without repair
-  const joined = joinedWords(lib, live, language, english);   // the kinds the world takes by join are words of its reader (host stand-in: sopworld 0.160's lexicon does not list them, questions.md Q97 [LIB])
-  const ctx = { language, catalog: [language], dialogue: dialogue ?? {}, ...(state ? { state } : {}), ...(joined.length ? { kinds: joined } : {}) };   // `state`: the tool's view told into the declarations (mirrorState): names of things are read from it (sopworld 0.154)
+  const ctx = { language, catalog: [language], dialogue: dialogue ?? {}, ...(state ? { state } : {}) };   // `state`: the tool's view told into the declarations (mirrorState): names of things are read from it (sopworld 0.154)
   let request = lib.readRequest(live, english, { ...ctx, spell: { worlds } });
   if ((request.spell?.repairs ?? []).some((r) => typeof known === 'function' && known(String(r.from ?? r.said ?? '').toLowerCase()))) request = lib.readRequest(live, english, ctx);
+  // a value said with one kind and no other ("draw a red house": the reader gives a value with a whole of the catalog no `of`) is that kind's, so the reply says it with the thing
+  // made (sopworld 0.162 says a value of no kind only on the acts path, not from a tool's diff; host stand-in, questions.md Q99 [LIB])
+  { const kinds = (request.constraints ?? []).filter((c) => c.on === 'kind' && (c.want ?? 'yes') === 'yes' && c.value); if (kinds.length === 1) for (const c of request.constraints) if (c.on === 'attribute' && !c.of && (c.want ?? 'yes') === 'yes') c.of = kinds[0].value; }
   const corrections = (request.spell?.repairs ?? []).map((r) => ({ said: r.from ?? r.said, as: r.to ?? r.as }));
   return {
     request, act: request.act ?? null, target: request.target ?? null, facts: request.facts ?? [], reaction: request.reactions?.[0]?.value ?? null,
@@ -385,7 +352,7 @@ export function madeAgainstSaid(lib, live, language, request, plan, run, view) {
   const ofKind = (k) => made.filter((t) => lineage(t.kind).includes(k)).length;
   const short = [];
   for (const c of request?.constraints ?? []) {
-    if ((c.origin ?? 'said') !== 'said' || (c.want ?? 'yes') !== 'yes' || !Number.isFinite(Number(c.number))) continue;
+    if ((c.origin ?? 'said') !== 'said' || (c.want ?? 'yes') !== 'yes' || c.det || !Number.isFinite(Number(c.number))) continue;   // the number of a determiner ("a girl") is no count asked
     const asked = Number(c.number);
     if (c.on === 'count' && c.of) { const n = ofKind(c.of); if (n < asked) short.push({ made: n, asked, kind: c.of }); }
     else if (c.on === 'length' && c.unit) {

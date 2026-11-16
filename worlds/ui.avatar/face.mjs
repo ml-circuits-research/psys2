@@ -111,21 +111,25 @@ function toolStep(ctx, { step = null, label = null } = {}, fn) {
   f.options = null;
   return r;
 }
-/** The face becomes a preset of the catalog (its saved faces, history and name kept). */
-export function wearPreset(ctx, { preset, step = null, label = null } = {}) {
+/** The face takes an expression of the catalog (k.faces.expression): its parts the expression draws, the chosen parts kept. */
+const wearExpression = (data, f, expression) => { const e = String(expression).replace(/_/g, ' '); if (!data.expressions?.[e]) return false; f.expression = e; return true; };   // glue-lint: tool-data (a catalog name)
+/** The face becomes a preset of the catalog (its saved faces, history and name kept), with an expression when one is given ("an angry boy"). */
+export function wearPreset(ctx, { preset, expression = null, step = null, label = null } = {}) {
   return toolStep(ctx, { step, label }, (f, data) => {
     const name = data.presets[preset] ? preset : data.presets[plainName(preset)] ? plainName(preset) : null;
     if (!name) return refuse('no_preset');
     Object.assign(f, newFace(data, name), { saved: f.saved, history: f.history, future: f.future, n: f.n, name: f.name, stepGroup: f.stepGroup, options: null });
+    if (expression != null && !wearExpression(data, f, expression)) return refuse('no_value');
     return ok(['face']);
   });
 }
-/** A part is worn in a variant (the one it has stays), in a colour and a size when given. */
-export function putPart(ctx, { part, variant = null, colour = null, size = null, step = null, label = null } = {}) {
+/** A part is worn in a variant: the one said (`variant`), else the one it has stays, else the preset's (`worn`, the custom search); in a colour and a size when given. */
+export function putPart(ctx, { part, variant = null, worn = null, colour = null, size = null, step = null, label = null } = {}) {
   return toolStep(ctx, { step, label }, (f, data) => {
     const s = slotOf(data, plainName(part).replace(/ /g, '_')) ?? slotOf(data, part);   // glue-lint: tool-data (a slot id)
     if (!s) return refuse('no_part');
-    if (f.slots[s.name] === NONE) { if (!s.variants.some((v) => v.name === variant)) return refuse('no_variant'); put(data, f, s.name, variant); }
+    const v = variant ?? worn;   // the variant said ("a big smile"), else the one the preset wears (a part put on)
+    if (f.slots[s.name] === NONE || (variant != null && variant !== f.slots[s.name])) { if (!s.variants.some((x) => x.name === v)) return refuse('no_variant'); put(data, f, s.name, v); }
     if (colour != null && !paint(data, f, s.name, plainName(colour))) return refuse('no_colour', 'refused.no_colour', { thing: plainName(s.name), value: plainName(colour) });
     if (size != null) { if (!GRADE[size]) return refuse('no_value'); resize(data, f, s.name, GRADE[size]); (f.grade ??= {})[s.name] = size; }
     return ok([s.name]);
@@ -149,12 +153,15 @@ export function takeOff(ctx, { ids, step = null, label = null } = {}) {
     return ok(slots);
   });
 }
-/** Parts take a colour or a size grade. */
-export function setParts(ctx, { ids, colour = null, size = null, step = null, label = null } = {}) {
+/** Parts take a colour, a size grade or a variant of their slot; the face takes an expression ("make it happy"). */
+export function setParts(ctx, { ids, colour = null, size = null, variant = null, expression = null, step = null, label = null } = {}) {
   return toolStep(ctx, { step, label }, (f, data) => {
+    const face = [].concat(ids ?? []).some((id) => String(id).replace(/^\$/, '') === 'face');   // glue-lint: tool-data (a view id)
+    if (face && expression != null && !wearExpression(data, f, expression)) return refuse('no_value');
     const slots = slotsOf(data, ids);
-    if (!slots.length) return refuse('no_part');
-    if (colour == null && size == null) return refuse('no_value');
+    if (!slots.length) return face && expression != null ? ok(['face']) : refuse('no_part');
+    if (colour == null && size == null && variant == null) return face && expression != null ? ok(['face']) : refuse('no_value');
+    for (const n of slots) if (variant != null) { const s = slotOf(data, n); if (!s.variants.some((v) => v.name === variant)) return refuse('no_variant'); put(data, f, n, variant); }
     if (size != null && !GRADE[size]) return refuse('no_value');
     for (const n of slots) {
       budget.tick('avatar.tool');

@@ -431,7 +431,7 @@ function catalogKind(ctx, kind) {
 export function addJoined(ctx, args = {}) { return addThings(ctx, { ...args, joined: true }); }
 export function addThings(ctx, { kind, n = 1, size = null, colour = null, place = null, anchor = null, whole = null, step = null, label = null, joined = false } = {}) {
   const s = ensure(ctx), key = boardKind(kind) ?? (joined ? catalogKind(ctx, kind) : null), scene = sceneOf(s, whole);
-  if (!key) return joined ? { ...toolNo('no_drawing'), reply: 'refused.no_drawing', roles: { kind: String(kind).replace(/_/g, ' ') } } : toolNo('no_kind');   // a joined kind the catalog has no drawing of (or no catalog): said by its reply fact
+  if (!key) return joined ? { ...toolNo('no_drawing'), reply: 'refused.no_drawing', roles: { kind: String(kind).replace(/_/g, ' ') } } : toolNo('no_kind');   // a joined kind the catalog has no drawing of (or no catalog): said by its reply fact   // glue-lint: tool-data (a catalog name with its spaces)
   const factor = gradeFactor(size), color = colour ? colorFrom([String(colour).toLowerCase()]) : null;
   if (!factor || (colour && !color)) return toolNo('no_value');
   const to = objsOf(s, anchor)[0] ?? (scene ? objsOf(s, scene.members)[0] : null) ?? null, region = to ? null : regionId(place) ?? scene?.region ?? (bandOf(place) === 'ground' ? 'ground' : null);
