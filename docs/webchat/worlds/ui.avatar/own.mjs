@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // ui.avatar (spec 21): the operations that are not acts: the name, a moment of the stage (wave, nod, dance ...), and what other worlds call
 // (avatar.nameOf, avatar.setPartUnknown). The face itself is changed by the acts of the schema (hooks.mjs). Browser-safe.
-import * as F from './facelogic.mjs?v=fb2b6def86';
-import { DEFAULT_FACE } from './default-face.mjs?v=23e7ca573f';
+import * as F from './facelogic.mjs?v=7501ca5cb7';
+import { DEFAULT_FACE } from './default-face.mjs?v=9a9dc8d5bf';
 
 export const ok = (value) => ({ status: 'supported', value });
 export const no = (note) => ({ status: 'unsupported', note });
@@ -35,6 +35,6 @@ export const animate = (ctx, { anim } = {}) => {
   return ok({ wave: 'I wave at you!', nod: 'I nod.', dance: 'I dance!', shake: 'I shake my head.', spin: 'Wheee!', jump: 'I jump!', bounce: 'I bounce!', wiggle: 'I wiggle.' }[name] ?? `OK, ${name}!`);
 };
 /** Spec 28 section 14: the tool primitives the request door runs (request.sop std.tool wires), the face's view and its own undo / redo (face.mjs). */
-export { wearPreset, putPart, takeOff, setParts, moveParts, toolView, presetVariant, undoStep, redoStep } from './face.mjs?v=bae7462058';
+export { wearPreset, putPart, takeOff, setParts, moveParts, toolView, presetVariant, undoStep, redoStep } from './face.mjs?v=3d41fb2ea6';
 /** The drawing world hands "make your nose bigger" over when "your ..." names no object: { part, words: the size word }. */
 export const setPartUnknown = (ctx, a = {}) => { ensure(ctx); return a.part ? F.faceResize(ctx, { words: a.part, dir: /small|tini|little|short|narrow|half/.test(String(a.words ?? '')) ? 'smaller' : 'bigger' }, dataOf(ctx)) : no('Which part?'); };

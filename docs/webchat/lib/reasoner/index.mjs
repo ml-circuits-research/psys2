@@ -16,7 +16,7 @@
 import { serialize, parse as parseOurs, ref as refValue, atom as atomValue, str as strValue } from '../soplang/index.mjs?v=c57881f705';
 import { budget as turnBudget } from '../dialog/budget.mjs?v=00bce6e369';
 import { nsWorld, nsContext, strip } from './ns.mjs?v=655a807958';
-import { entityName } from '../interpreter/render.mjs?v=dd3bf31c66';
+import { entityName } from '../interpreter/render.mjs?v=434ec3041c';
 
 /** Types the dialogue produces that the library must never be told (they are asked, not stated). */
 const NOT_FACTS = new Set(['core.question', 'core.request', 'core.answer', 'core.observation']);

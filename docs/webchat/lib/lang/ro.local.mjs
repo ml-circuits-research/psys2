@@ -44,8 +44,6 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.undo_did w.lang.ro.reply name=done.undo.did count=one role=did text="am anulat ultima schimbare"
 @w.lang.ro.reply.local.redo_did w.lang.ro.reply name=done.redo.did count=one role=did text="am refăcut ultima schimbare"
 # The parts of a genre the knowledge names (sopworld 0.165 done.parts; Q102 [KNOW]: the catalog's w.lang.ro has no row, and the part names are said as the knowledge gives them until it has their Romanian words)
-@w.lang.ro.reply.local.done_parts w.lang.ro.reply name=done.parts count=one role=whole role=parts text="{whole:def=yes} are părțile: {parts}"
-@w.lang.ro.reply.local.no_other w.lang.ro.reply name=refused.no_other count=one role=thing role=key text="{thing:def=yes} nu are altă {key:num=sg,case=nomacc,def=no}"
 @w.lang.ro.reply.local.nothing_known w.lang.ro.reply name=refused.nothing_known count=one role=about text="încă nu știu nimic despre {about}"
 @w.lang.ro.reply.local.no_composer w.lang.ro.reply name=refused.no_composer count=one text="încă nu pot scrie compuneri: biblioteca nu are un compozitor (std.compose) în această versiune"
 @w.lang.ro.reply.local.page w.lang.ro.reply name=done.page count=one text="iată o foaie nouă. Ce desenăm?"
@@ -62,30 +60,8 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.done_place_right w.lang.ro.reply name=done.place.right count=other role=things text="am mutat {things} la dreapta"
 @w.lang.ro.reply.local.person_know_none w.lang.ro.reply name=person.know.none count=other text="încă nu știu nimic despre tine"
 # sopworld 0.163 (the names of src/lang/en.request.local.mjs): a value already there, a part already there, no default, and one thing named by a plural noun ("ochelari", "ochii") ([KNOW] Q101)
-@w.lang.ro.reply.local.same_value w.lang.ro.reply name=nothing.same.value count=one role=thing role=value text="{thing:def=yes} este deja {value@thing}"
-@w.lang.ro.reply.local.already w.lang.ro.reply name=refused.already count=one role=thing text="{thing:def=yes} este deja acolo"
-@w.lang.ro.reply.local.no_default w.lang.ro.reply name=refused.no_default count=one role=thing text="{thing:def=yes} nu are o valoare implicită la care să revină"
-@w.lang.ro.reply.local.change_pl w.lang.ro.reply name=done.change.plural count=one role=thing role=value text="{thing:num=pl,def=yes} sunt acum {value:num=pl@thing}"
-@w.lang.ro.reply.local.change_size_pl w.lang.ro.reply name=done.change.size.plural count=one role=thing role=value text="{thing:num=pl,def=yes} sunt acum {value:num=pl@thing}"
-@w.lang.ro.reply.local.add_pl w.lang.ro.reply name=done.add.plural count=one act=make role=kind text="am adăugat {kind:num=pl}"
-@w.lang.ro.reply.local.add_value_pl w.lang.ro.reply name=done.add.value.plural count=one act=make role=kind role=value text="am adăugat {kind:num=pl} {value:num=pl@kind}"
-@w.lang.ro.reply.local.remove_pl w.lang.ro.reply name=done.remove.plural count=one act=remove role=thing text="am șters {thing:num=pl,def=yes}"
-@w.lang.ro.reply.local.no_such_pl w.lang.ro.reply name=refused.no_such.plural count=one role=thing text="aici nu sunt {thing:num=pl}"
-@w.lang.ro.reply.local.same_value_pl w.lang.ro.reply name=nothing.same.value.plural count=one role=thing role=value text="{thing:num=pl,def=yes} sunt deja {value:num=pl@thing}"
-@w.lang.ro.reply.local.already_pl w.lang.ro.reply name=refused.already.plural count=one role=thing text="{thing:num=pl,def=yes} sunt deja acolo"
-@w.lang.ro.reply.local.no_default_pl w.lang.ro.reply name=refused.no_default.plural count=one role=thing text="{thing:num=pl,def=yes} nu au o valoare implicită la care să revină"
-@w.lang.ro.reply.local.state_count_pl w.lang.ro.reply name=state.count.plural count=one role=kind text="sunt {kind:num=pl}"
-@w.lang.ro.reply.local.state_count_value_pl w.lang.ro.reply name=state.count.value.plural count=one role=kind role=value text="sunt {kind:num=pl} {value:num=pl@kind}"
-@w.lang.ro.reply.local.not_declared w.lang.ro.reply name=not_honoured.not_declared count=one role=words role=why text="nu am putut ține cont de {words}: aici nu se poate așa ceva"
-@w.lang.ro.reply.local.no_kind w.lang.ro.reply name=not_honoured.no_kind count=one role=words role=why text="nu am putut face {words}: aici nu există așa ceva"
-@w.lang.ro.reply.local.change_kind w.lang.ro.reply name=done.change.kind count=one role=thing role=value text="{thing:def=yes} este acum {art@value} {value}"
-@w.lang.ro.fill.local.change_kind_art w.lang.ro.fill template=done.change.kind role=art lemma=un
-@w.lang.ro.reply.local.assumed_act w.lang.ro.reply name=assumed.act count=one role=key role=value text="am presupus acțiunea din ce ai spus înainte"
 `,
   // corrections of the catalog's rows, read before them (src/lang/ro.mjs): `ochi` is masculine (doi ochi albaștri), the catalog has it neuter ([KNOW] Q101)
-  overrides: {
-    o: 'ochi\tm.cons\tm\tk.words.eye.noun.1',
-  },
   dictionary: {
     n: 'nod\tn.uri\tn\tk.words.node.noun.1\nnumăr\tn.e.ă\tn\tk.words.count.noun.1',
     // the keys the door's `assumed` reply names (count, layout, kinds: the library's keys), said in Romanian by their lemmas (questions.md [KNOW])
@@ -99,7 +75,6 @@ export const LANG_RO_LOCAL = {
     c: 'compune\tv.e.s.n\t\tk.actions.verb.make.compose\ncuvânt\tn.e\tn\tk.words.word.noun.1\ncoadă\tf.ă\tf\tk.words.ponytail.noun.1',   // coadă: the hair at the back (w.lang.ro words-k.faces hair_back), a lemma the catalog's dictionary lacks ([KNOW] Q101)
     // the kinds of text the Documents tool writes and the unit of a text's length (sopworld 0.159 short_of), so that its replies compose in Romanian (questions.md Q96 [KNOW])
     p: 'poveste\tf.e\tf\tk.words.story.noun.1\npoem\tn.e\tn\tk.words.poem.noun.1',
-    s: 'scrisoare\tf.e.alt\tf\tk.words.letter.noun.1',
     // the key of a part's variant (k.faces.variant) in the door's `assumed` reply; k.words has no sense of `variant` yet ([KNOW] Q101)
     v: 'variantă\tf.ă\tf\tk.words.variant.noun.1',
   },

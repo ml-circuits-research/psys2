@@ -4,7 +4,7 @@
 // infix word of its function ("7 plus 5 is 12."). No operator word is listed in this file. Browser-safe.
 import { builtins } from '../../lib/vendor/sopworld/sopworld.mjs?v=edec92187f';
 import { CALC_WORDS } from '../../lib/knowledge/calc-words.generated.mjs?v=3038efb1d8';
-import { parseNumberRun } from '../../lib/formalizer/rules/numbers.mjs?v=3302b74e00';
+import { parseNumberRun } from '../../lib/formalizer/rules/numbers.mjs?v=c91a8ef573';
 
 export function initialState() { return {}; }
 
