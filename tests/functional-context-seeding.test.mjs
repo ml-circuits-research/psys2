@@ -39,3 +39,18 @@ test('failed declared setter reports partial setup and never correlates an unnam
  const state={objects:[]},operations=[{id:'toy.make',act:'make',on:'toy.object',params:{kind:{type:'string',required:true},n:{type:'integer',default:1}}},{id:'toy.change',act:'change',on:'toy.object',params:{ids:{type:'array',required:true},label:{type:'string',required:true}}}],host=createNativeToolHost({state,instanceId:'seed.partial',scope:'toy',operations,handlers:{'toy.make':(ctx,a)=>{assert.equal(a.n,1);ctx.state.objects.push({id:'native',kind:a.kind});return {status:'supported',changed:['native']};},'toy.change':()=>({status:'missing',code:'setter-denied'})},view:s=>s.objects.map(o=>({...o,sourceType:'toy.object'}))});
  const mapping={kind:'toy',operation:'toy.make',arguments:{kind:{from:'kind'}},setters:[{operation:'toy.change',arguments:{ids:{from:'createdIds'},label:name}}]},result=await seedFunctionalContext({context:{existing:[{name:'Named',kind:'toy'}]},host,kindMappings:[mapping]});assert.equal(result.ok,false);assert.equal(result.partial,true);assert.equal(result.counters.partialItems,1);assert.equal(result.counters.seeded,0);assert.equal(result.counters.calls,2);assert.equal(result.items.length,0);assert.equal(state.objects.length,1);assert.equal(result.failures[0].nativeReason,'setter-denied');
 });
+
+import {FUNCTIONAL_NATIVE_BINDINGS} from '../scripts/lib/functional-native-bindings.mjs';
+test('matrix setup declarations use the native shape family and preserve labels',async()=>{
+ const state=initialDiagramState(),host=await createDiagramHost({state,instanceId:'matrix.mapping'});
+ const kinds=host.bindings().find(op=>op.id==='diagram.node.make').params.kind.enum;
+ assert.deepEqual(FUNCTIONAL_NATIVE_BINDINGS.diagram.map(m=>m.kind),kinds);
+ const result=await seedFunctionalContext({host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS.diagram,context:{existing:[{name:'Arbitrary title',kind:kinds.at(-1)}]}});
+ assert.equal(result.ok,true);assert.equal(result.counters.calls,2);assert.equal(state.shapes[0].label,'Arbitrary title');
+});
+test('matrix setup mappings retain missing content and times as failures',async()=>{
+ for(const [area,host,kind]of [['document',createDocumentHost({instanceId:'matrix.doc'}),'document'],['calendar',createCalendarHost({instanceId:'matrix.calendar'}),'meeting']]){
+ const result=await seedFunctionalContext({host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS[area],context:{existing:[{name:'Example',kind}]}});
+ assert.equal(result.ok,false);assert.equal(result.counters.calls,0);assert.ok(result.failures.some(f=>f.reason==='missing-native-argument'));}
+ assert.deepEqual(FUNCTIONAL_NATIVE_BINDINGS.drawing,[]);
+});
