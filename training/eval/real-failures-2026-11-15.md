@@ -1,6 +1,6 @@
 # REAL failures by cause (2026-11-15)
 
-Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit 0966924e0a5b; seed 20261115; build fa466e5b, tree caa70c2a73f4812a), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
+Work list from real user turns only (owner logs a/b/c, voice and mobile phrase logs, real dialogues). Set: 651 turns (training/eval/real-2026-11-15.jsonl). Replayed in the SHIPPED configuration (mode shipped: formalizer encoder, the webchat's settings and send options; catalog at the pinned commit 0966924e0a5b; seed 20261115; build f4de8a6c, tree 58d50f1a4274d64c), matrix reasoner (default); "both" = also failing on ops. Synthetic sets are secondary diagnostics, not targets. Built by `node scripts/real-set.mjs report`.
 
 Headline (in scope, judged): 127/207 right (partly 3, wrong 77); 46 turns of retired records skipped. Diagnostic, rules formalizer only: 160/207.
 
@@ -11,7 +11,7 @@ Failing turns: matrix 385, ops 385 (0 fail on ops only). Ledger rows flagged rea
 | # | cause | turns | both | examples |
 | --- | --- | ---: | ---: | --- |
 | 1 | Romanian turn not read (translation or reader) | 145 | 145 | "desenează o casă albă și una verde" (robot); "deseneaza o casa verde" (robot); "deseneaza o casa verde" (robot) |
-| 2 | translation residue / wrong sense / source typo | 33 | 33 | "an old woman" (robot); "desneaza o vila" (draw); "fa un cel cu 5 nori si un soare" (draw) |
+| 2 | translation residue / wrong sense / source typo | 34 | 34 | "an old woman" (robot); "desneaza o vila" (draw); "fa un cel cu 5 nori si un soare" (draw) |
 | 3 | a world other than the open tab took the turn | 31 | 31 | "let’s play guess the animal" (guess); "draw a sun and a house" (tictactoe); "yes, it eats meat" (draw) |
 | 4 | sentence not read by any world (no cause key) | 28 | 28 | "now be a human" (robot); "become a women" (robot); "start x and 0" (tictactoe) |
 | 5 | judged wrong (state / answer expected is not there): dialogues:dlg.real | 25 | 25 | "draw a red circle" (diagram); "create a diagram" (diagram); "add a box" (diagram) |
@@ -21,8 +21,8 @@ Failing turns: matrix 385, ops 385 (0 fail on ops only). Ledger rows flagged rea
 | 9 | amount / relation / set distribution | 10 | 10 | "muta si mai la stinga" (draw); "fa niste iarba deauspa lacului" (draw); "deseneaza un copil pe leagan" (draw) |
 | 10 | judged wrong (state / answer expected is not there): dialogues:dlg.rp3 | 10 | 10 | "mcdavatara human" (robot); "tongue out" (robot); "add a header, two chapters and a paragraph" (editor) |
 | 11 | acted on a partly understood sentence | 9 | 9 | "conectează toate formele" (diagram); "make a better layout" (diagram); "paint Street New nodes" (diagram) |
-| 12 | fragment / list split | 7 | 7 | "un cer cu 5 nori" (draw); "deseneaza si un magar, dar sa nu zboare, pe iarba" (draw); "eyeglasses" (robot) |
-| 13 | unknown word (a word of the request is not known) | 6 | 6 | "move corcodiles in lake" (draw); "si mai sus" (draw); "desene asta" (map) |
+| 12 | unknown word (a word of the request is not known) | 6 | 6 | "move corcodiles in lake" (draw); "si mai sus" (draw); "desene asta" (map) |
+| 13 | fragment / list split | 6 | 6 | "deseneaza si un magar, dar sa nu zboare, pe iarba" (draw); "eyeglasses" (robot); "a women" (robot) |
 | 14 | judged wrong (state / answer expected is not there): dialogues:dlg.ellipsis1 | 6 | 6 | "draw a green house and a yellow one" (draw); "add a red circle and a blue one" (draw); "draw a tree" (draw) |
 | 15 | unknown kind (no drawing / stand-in) | 4 | 4 | "deseneaa un mic lac, o balta" (draw); "muta copilul linga leagan, in stinga" (draw); "fa un bunic linga rata" (draw) |
 
