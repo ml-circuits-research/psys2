@@ -2006,7 +2006,7 @@ export class DialogSession {
     if (!replace && dlg?.last?.target && req.target && dlg.last.target !== req.target) dlg = { ...dlg, last: null, result: null };   // a new thing does not take the values of the last one: the dialogue's values hold within one thing
     // the dialogue follows the timeline: the last plan run through the binding (of the same thing, when the turn names no new kind), so that a count revision keeps its structure (the library's cutToCount / fillToCount)
     if (lastRec?.via === 'tool' && timeline.done.at(-1)?.plan && (!req.target || timeline.done.at(-1).plan.target === req.target) && !(q.request.constraints ?? []).some((c) => c.on === 'kind' && c.want === 'yes' && c.value && !(timeline.done.at(-1).plan.roles?.kinds ?? []).includes(c.value))) dlg = { ...dlg, lastPlan: timeline.done.at(-1).plan, lastRun: { made: timeline.done.at(-1).result?.things ?? [] } };
-    // a reply of the last turn that changed nothing and named a thing ("The hat is already there.", "The eyes are already green."): that thing is what "it" means now (the library's toolApp convention, sopworld 0.163 `plan.referent`; `_msg` is counted in `_sendCore`, after the door has read the turn)
+    // a reply of the last turn that changed nothing and named a thing ("The hat is already there.", "The eyes are already green."): that thing is what "it" means now (the library's toolApp convention, sopworld 0.164 `plan.referent`; `_msg` is counted in `_sendCore`, after the door has read the turn)
     if (this._doorNamed?.world === tabWorld && this._doorNamed.msg === this._msg) dlg = { ...dlg, lastRun: { made: this._doorNamed.ids } };
     const planOpts = { catalog: [language], dialogue: dlg, seed, vary: !!rev?.vary, replace: replace ? (timeline.done.at(-1)?.diff?.added ?? []).map((t) => t.id) : [] };
     const mirror = lib.mirrorState(live, prims.view, { catalog: [language] }).world;
@@ -2023,9 +2023,9 @@ export class DialogSession {
     if (act === 'make' && !req.target && (plan.assumed ?? []).some((a) => a.key === 'target') && (q.request.mentions ?? []).some((m) => m.kind) && !(req.constraints ?? []).some((c) => c.on === 'count' && c.of && unitOfWhole(live, language, c.of))) return null;   // a bare "draw" (nothing said but the act): never a whole guessed from the world (the door asks, as on every path); "something random", "5 nodes" are the planner's
     if (replace && (plan.notHonoured ?? []).length) return null;   // a reaction with words the world does not take ("I like horses") is not a revision of its result
     // P9 (spec 28 section 10): a move with no place said whose other words the act does not take ("put a heart on the chest": "on the chest" is no place of the act, "heart" no key
-    // of a move) is not carried out and not asked about: the honest reply names what was not taken, in every language (the door's cannot.do). The same when the planner turned the
-    // move read into another act (sopworld 0.163: "a heart" as a value of the thing that has the key: the head's variant) while words of the turn stay untaken
-    if ((act === 'place' || req.act === 'place') && !(req.constraints ?? []).some((c) => c.on === 'place') && (plan.notHonoured ?? []).some((n) => n.code === 'not_declared')) return { why: `not declared: ${plan.notHonoured.filter((n) => n.code === 'not_declared').map((n) => n.words).join(', ')}`, q: flat };
+    // of a move) is not carried out and not asked about: the honest reply names what was not taken, in every language (the door's cannot.do). A move the planner turned into another
+    // act with words left untaken runs nothing in the library (sopworld 0.164 `plan.turned`)
+    if (act === 'place' && !(req.constraints ?? []).some((c) => c.on === 'place') && (plan.notHonoured ?? []).some((n) => n.code === 'not_declared')) return { why: `not declared: ${plan.notHonoured.filter((n) => n.code === 'not_declared').map((n) => n.words).join(', ')}`, q: flat };
     // P9: a plan that breaks a count said of one kind ("6 boxes" planned as 3 boxes and 3 circles) is never carried out; the honest reply names it
     if (plan.ok) {
       const planned = {};
@@ -2064,7 +2064,7 @@ export class DialogSession {
     } });
     if (replaces && run?.ok) this.discourse.actions = this.discourse.actions.filter((x) => x !== replaces);
     this._doorNamed = null;
-    if (run && !run.ok) { const named = plan.referent ?? (run.failed?.code === 'same' ? (plan.steps ?? []).flatMap((x) => [].concat(x.args?.ids ?? x.args?.thing ?? [])) : null) ?? ((plan.replies ?? []).some((x) => x.reply === 'refused.already') ? prims.view().filter((t) => (plan.replies ?? []).some((x) => x.reply === 'refused.already' && String(x.roles?.thing ?? '').replace(/ /g, '_') === String(t.kind))).map((t) => t.id) : null);   /* the things of the kind refused.already names: stand-in until 0.164 gives plan.referent (Q100 (1)) */ const ids = (named ?? []).map((id) => String(id).replace(/^\$/, '')).filter((id) => prims.view().some((t) => String(t.id) === id)); if (ids.length) this._doorNamed = { world: tabWorld, ids, msg: this._msg }; }
+    if (run && !run.ok) { const named = plan.referent ?? (run.failed?.code === 'same' ? (plan.steps ?? []).flatMap((x) => [].concat(x.args?.ids ?? x.args?.thing ?? [])) : null); const ids = (named ?? []).map((id) => String(id).replace(/^\$/, '')).filter((id) => prims.view().some((t) => String(t.id) === id)); if (ids.length) this._doorNamed = { world: tabWorld, ids, msg: this._msg }; }
     if (run?.ok) {
       if (run.entry) { run.entry.turn = this._msg; run.entry.result = run.result; }   // the session turn of the plan: an undo of that turn is the timeline's
       rd.trimTimeline(tabWorld);

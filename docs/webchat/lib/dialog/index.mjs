@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { composeReply, sayOf } from './composed-reply.mjs?v=3579520287';
+import { composeReply, sayOf } from './composed-reply.mjs?v=fe297125c7';
 import { reviewForeign } from './foreign-reading.mjs?v=f34cd513e4';
 import { installTextGen } from './textgen.mjs?v=0eb44cd703';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=8ed1b3d1ae';
@@ -18,7 +18,7 @@ import { validateWorldSet } from '../worlds/validate.mjs?v=2af8297b8d';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=8ed1b3d1ae';
 import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=3302b74e00';
 import { createInterpreter } from '../interpreter/index.mjs?v=73cc8597b0';
-import { createReasoner } from '../reasoner/index.mjs?v=dd2d4c098e';
+import { createReasoner } from '../reasoner/index.mjs?v=2134e0901c';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=b509058826';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=7661b7c9d2';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
@@ -28,7 +28,7 @@ import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voi
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=a7f7eb0703';
 import { machineReads } from '../translate/reading-policy.mjs?v=96bd6cc0e4';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=0668fe25ee';
+import { langRoNow } from '../translate/frames-ro.mjs?v=71ade4e48e';
 import { repairInContext } from '../translate/source-repair.mjs?v=db5b883c67';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=8ed1b3d1ae';
 import { lexIndex } from '../worlds/lexicon.mjs?v=372ab17a7b';
@@ -45,16 +45,16 @@ import { Discourse } from './discourse.mjs?v=e0ac43d3c5';
 import { Dialogue } from './dialogue.mjs?v=45da39b1a5';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=d25569bd8a';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext, knowledgeOf, within } from './knowledge-lookup.mjs?v=f16f935042';
-import { personTurn } from './person.mjs?v=8ebe6c995a';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext, knowledgeOf, within } from './knowledge-lookup.mjs?v=595df58799';
+import { personTurn } from './person.mjs?v=a3bd0b8c48';
 import { proposeByTypes } from './typed-reader.mjs?v=e4a912a264';
-import { withVariants, anyVoiceOn } from './variants.mjs?v=920b8fda32';
+import { withVariants, anyVoiceOn } from './variants.mjs?v=52a71391b8';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=8ed1b3d1ae';
 import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=8ed1b3d1ae';
 import { repairFromScene } from './scene-referents.mjs?v=3530d4cd64';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=8aaa123b50';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=275cf0942c';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=35248fc3e0';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=a9f3e160ed';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=8ce3b40c0c';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=0fc3b452be';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -1674,7 +1674,7 @@ export class DialogSession {
    */
   async _send(text, opts = {}) {
     const tabWorld = this.context().tabWorld;
-    if (tabWorld && this.engine.set.get(tabWorld)?.requestText && this.engine.sopworld === undefined) this.engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=2b4076b521').catch(() => null);
+    if (tabWorld && this.engine.set.get(tabWorld)?.requestText && this.engine.sopworld === undefined) this.engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=48bccd2c01').catch(() => null);
     const decl = tabWorld && declaredWorld(this.engine.set.get(tabWorld), this.engine.sopworld);   // the world declares what it can do (request.sop) and carries a plan out (its planRequest operation, or its bound tool primitives)
     const off = opts.request === false || globalThis.process?.env?.PSYS2_REQUEST === 'off' || guard.soft();   // PSYS2_REQUEST=off: the A/B of the request step
     if (!decl || off) return markLegacy(await this._sendRead(text, opts), off ? 'off' : 'no request declarations');
@@ -2006,7 +2006,7 @@ export class DialogSession {
     if (!replace && dlg?.last?.target && req.target && dlg.last.target !== req.target) dlg = { ...dlg, last: null, result: null };   // a new thing does not take the values of the last one: the dialogue's values hold within one thing
     // the dialogue follows the timeline: the last plan run through the binding (of the same thing, when the turn names no new kind), so that a count revision keeps its structure (the library's cutToCount / fillToCount)
     if (lastRec?.via === 'tool' && timeline.done.at(-1)?.plan && (!req.target || timeline.done.at(-1).plan.target === req.target) && !(q.request.constraints ?? []).some((c) => c.on === 'kind' && c.want === 'yes' && c.value && !(timeline.done.at(-1).plan.roles?.kinds ?? []).includes(c.value))) dlg = { ...dlg, lastPlan: timeline.done.at(-1).plan, lastRun: { made: timeline.done.at(-1).result?.things ?? [] } };
-    // a reply of the last turn that changed nothing and named a thing ("The hat is already there.", "The eyes are already green."): that thing is what "it" means now (the library's toolApp convention, sopworld 0.163 `plan.referent`; `_msg` is counted in `_sendCore`, after the door has read the turn)
+    // a reply of the last turn that changed nothing and named a thing ("The hat is already there.", "The eyes are already green."): that thing is what "it" means now (the library's toolApp convention, sopworld 0.164 `plan.referent`; `_msg` is counted in `_sendCore`, after the door has read the turn)
     if (this._doorNamed?.world === tabWorld && this._doorNamed.msg === this._msg) dlg = { ...dlg, lastRun: { made: this._doorNamed.ids } };
     const planOpts = { catalog: [language], dialogue: dlg, seed, vary: !!rev?.vary, replace: replace ? (timeline.done.at(-1)?.diff?.added ?? []).map((t) => t.id) : [] };
     const mirror = lib.mirrorState(live, prims.view, { catalog: [language] }).world;
@@ -2023,9 +2023,9 @@ export class DialogSession {
     if (act === 'make' && !req.target && (plan.assumed ?? []).some((a) => a.key === 'target') && (q.request.mentions ?? []).some((m) => m.kind) && !(req.constraints ?? []).some((c) => c.on === 'count' && c.of && unitOfWhole(live, language, c.of))) return null;   // a bare "draw" (nothing said but the act): never a whole guessed from the world (the door asks, as on every path); "something random", "5 nodes" are the planner's
     if (replace && (plan.notHonoured ?? []).length) return null;   // a reaction with words the world does not take ("I like horses") is not a revision of its result
     // P9 (spec 28 section 10): a move with no place said whose other words the act does not take ("put a heart on the chest": "on the chest" is no place of the act, "heart" no key
-    // of a move) is not carried out and not asked about: the honest reply names what was not taken, in every language (the door's cannot.do). The same when the planner turned the
-    // move read into another act (sopworld 0.163: "a heart" as a value of the thing that has the key: the head's variant) while words of the turn stay untaken
-    if ((act === 'place' || req.act === 'place') && !(req.constraints ?? []).some((c) => c.on === 'place') && (plan.notHonoured ?? []).some((n) => n.code === 'not_declared')) return { why: `not declared: ${plan.notHonoured.filter((n) => n.code === 'not_declared').map((n) => n.words).join(', ')}`, q: flat };
+    // of a move) is not carried out and not asked about: the honest reply names what was not taken, in every language (the door's cannot.do). A move the planner turned into another
+    // act with words left untaken runs nothing in the library (sopworld 0.164 `plan.turned`)
+    if (act === 'place' && !(req.constraints ?? []).some((c) => c.on === 'place') && (plan.notHonoured ?? []).some((n) => n.code === 'not_declared')) return { why: `not declared: ${plan.notHonoured.filter((n) => n.code === 'not_declared').map((n) => n.words).join(', ')}`, q: flat };
     // P9: a plan that breaks a count said of one kind ("6 boxes" planned as 3 boxes and 3 circles) is never carried out; the honest reply names it
     if (plan.ok) {
       const planned = {};
@@ -2064,7 +2064,7 @@ export class DialogSession {
     } });
     if (replaces && run?.ok) this.discourse.actions = this.discourse.actions.filter((x) => x !== replaces);
     this._doorNamed = null;
-    if (run && !run.ok) { const named = plan.referent ?? (run.failed?.code === 'same' ? (plan.steps ?? []).flatMap((x) => [].concat(x.args?.ids ?? x.args?.thing ?? [])) : null) ?? ((plan.replies ?? []).some((x) => x.reply === 'refused.already') ? prims.view().filter((t) => (plan.replies ?? []).some((x) => x.reply === 'refused.already' && String(x.roles?.thing ?? '').replace(/ /g, '_') === String(t.kind))).map((t) => t.id) : null);   /* the things of the kind refused.already names: stand-in until 0.164 gives plan.referent (Q100 (1)) */ const ids = (named ?? []).map((id) => String(id).replace(/^\$/, '')).filter((id) => prims.view().some((t) => String(t.id) === id)); if (ids.length) this._doorNamed = { world: tabWorld, ids, msg: this._msg }; }
+    if (run && !run.ok) { const named = plan.referent ?? (run.failed?.code === 'same' ? (plan.steps ?? []).flatMap((x) => [].concat(x.args?.ids ?? x.args?.thing ?? [])) : null); const ids = (named ?? []).map((id) => String(id).replace(/^\$/, '')).filter((id) => prims.view().some((t) => String(t.id) === id)); if (ids.length) this._doorNamed = { world: tabWorld, ids, msg: this._msg }; }
     if (run?.ok) {
       if (run.entry) { run.entry.turn = this._msg; run.entry.result = run.result; }   // the session turn of the plan: an undo of that turn is the timeline's
       rd.trimTimeline(tabWorld);
@@ -2377,7 +2377,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=2b4076b521').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=48bccd2c01').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.editor (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
@@ -2785,7 +2785,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   // `set`, `reasoner` and `interp` are replaced by `engine.reload(loader)` (LAZY LOADING: the worlds a message needs are added to a running engine); everything below reads them through these bindings.
   let set = await loadWorlds(loader, { reasoner: mode });
   let reasoner = mode === 'matrix' ? await createReasoner(set) : null;
-  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=2b4076b521')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
+  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=48bccd2c01')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
   let interp = createInterpreter(set, { ...options, reasoner });
   attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
