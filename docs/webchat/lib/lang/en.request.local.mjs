@@ -50,6 +50,8 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.nothing_known w.lang.en.reply name=refused.nothing_known count=one role=about text="I know nothing about {about} in my knowledge yet."
 @w.lang.en.reply.local.no_composer w.lang.en.reply name=refused.no_composer count=one text="I cannot write compositions yet: the library has no composer (std.compose) in this build."
 @w.lang.en.reply.local.change_about_1 w.lang.en.reply name=done.change.about count=one role=thing role=value text="The {thing} is about {value} now."
+@w.lang.en.reply.local.change_length_1 w.lang.en.reply name=done.change.length count=one role=thing role=value text="The {thing} has {value} words now."
+@w.lang.en.reply.local.change_title_1 w.lang.en.reply name=done.change.title count=one role=thing role=value text="The {thing} is called “{value}” now."
 @w.lang.en.reply.local.page w.lang.en.reply name=done.page count=one text="Here is a fresh sheet of paper. What shall we draw?"
 @w.lang.en.reply.local.page_kept w.lang.en.reply name=done.page.kept count=one text="Here is a fresh sheet of paper! Your old picture is still there if you say “undo”."
 @w.lang.en.reply.local.change_name w.lang.en.reply name=done.change act=change role=name role=value text="{name} is {value} now."
@@ -83,4 +85,10 @@ export const REQUEST_LOCAL = `
 @w.lang.en.reply.local.cannot_do w.lang.en.reply name=cannot.do count=one role=words role=world text="I cannot do {words} in the {world} yet."
 @w.lang.en.reply.local.done_about w.lang.en.reply name=done.about count=one role=whole role=topic text="The {whole} is about {topic}."
 @w.lang.en.reply.local.done_title w.lang.en.reply name=done.title count=one role=whole role=title text="The {whole} is called {title}."
+# sopworld 0.160: the values said per kind in a make through a tool binding (done.add.value) and in a state answer of few things (state.count.value); short_of in the catalog's shape ([KNOW], Q96)
+@w.lang.en.reply.local.done_add_value_1 w.lang.en.reply name=done.add.value count=one act=make role=kind role=value text="I added a {value} {kind}."
+@w.lang.en.reply.local.done_add_value_n w.lang.en.reply name=done.add.value count=other act=make role=kind role=number role=value text="I added {number} {value} {kind:num=pl}."
+@w.lang.en.reply.local.state_count_value_1 w.lang.en.reply name=state.count.value count=one role=kind role=number role=value text="There is a {value} {kind}."
+@w.lang.en.reply.local.state_count_value_n w.lang.en.reply name=state.count.value count=other role=kind role=number role=value text="There are {number} {value} {kind:num=pl}."
+@w.lang.en.reply.local.short_of_unit w.lang.en.reply name=short_of count=one role=made role=asked role=unit text="I could only make {made} {unit:num=pl} of the {asked} you asked for."
 `;

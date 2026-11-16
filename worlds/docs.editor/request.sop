@@ -45,3 +45,5 @@
 @op.chapters std.tool.op name=keepChapters world=documents param=n effect=changes doc="the text keeps at most n chapters (fewer: what the knowledge holds)"
 @pa.chapters.n std.tool.param op=keepChapters name=n kind=integer min=1 max=12
 @b.chapters std.tool.bind world=documents act=make of=chapter op=keepChapters arg=n<-step.count
+@op.remove std.tool.op name=removeText world=documents param=ids effect=removes doc="the text and the chapters named go (a revision takes the last text back before it writes the new one)"
+@b.remove std.tool.bind world=documents act=remove of=text of=chapter op=removeText arg=ids<-step.things

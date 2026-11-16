@@ -72,8 +72,8 @@ test('gloss (w.lang.ro): every sense of the lemma, inflected as the form; a typo
   assert.equal(punr[0]?.en, 'put');
   assert.equal(punr[0]?.repaired, 'pune');
   assert.deepEqual(tr.glossWord('mukte', 'ro'), [], 'munte and multe are both near: no guess');
-  assert.deepEqual(tr.glossWord('azuriu', 'ro'), [], 'a dictionary repair is a slip only: azuriu is not auriu (golden)');
-  assert.deepEqual(tr.glossWord('leagă', 'ro'), [], 'leagă is not leagăn (swing)');
+  assert.deepEqual(tr.glossWord('azuriu', 'ro').map((g) => g.en), ['blue'], 'azuriu is a word of the catalog since 7042ea70 (blue), never repaired into auriu (golden)');
+  assert.ok(!tr.glossWord('leagă', 'ro').some((g) => g.lemma === 'leagăn'), 'leagă is not leagăn (swing): it is a form of a lega (link) since the catalog 7042ea70');
   assert.deepEqual(tr.glossWord('tenerife', 'ro'), []);
   assert.deepEqual(tr.glossWord('aseaza', 'xx'), [], 'a language with no dictionary has no gloss');
 });

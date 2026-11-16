@@ -8,4 +8,4 @@ export {
 } from './editor.mjs';
 export { digest, compose } from './textgen.mjs';   // the summary and the composition (spec 26), from the library's std.summarize / std.compose
 /** Spec 28: the tool primitives the request door runs (request.sop std.tool wires), the document's view and its own undo / redo (document.mjs). */
-export { writeText, keepChapters, toolView, undoStep, redoStep } from './document.mjs';
+export { writeText, keepChapters, removeText, toolView, undoStep, redoStep } from './document.mjs';

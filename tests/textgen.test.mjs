@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import * as lib from '../src/vendor/sopworld/sopworld.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
+import { createTranslator } from '../src/translate/index.mjs';
 import { knowledgeWorld, topicsOf } from '../src/dialog/compose-world.mjs';
 import { createSummarizer, createComposer, composeRequest, docTypeOf, DOC_TYPES, checkComposition, compositionToDocument, installTextGen, TEXTGEN_GLOBAL } from '../src/dialog/textgen.mjs';
 import { readLongTopic, relatedTopics } from '../src/dialog/compose-plan.mjs';
@@ -117,6 +118,30 @@ test('arbitration: "write a report about ..." on the Documents tab is the compos
   assert.match((await docs().send('Write a report about sea animals')).text, /cannot write compositions yet/);
   installTextGen(lib, null);
   try { assert.match((await docs().send('Write a report about owl')).text, /^I added a report\./); } finally { delete globalThis[TEXTGEN_GLOBAL]; }   // Documents on the binding (spec 28 section 14): the reply is the view's diff said by reply facts
+});
+
+test('Documents replies name what was made (topic, title), say a shortfall against what was said, and "shorter" steps the length; a revision is one undo step (sopworld 0.159 / 0.160)', async () => {
+  installTextGen(lib, null);
+  try {
+    const s = docs();
+    const r = await s.send('write a story about a fox');
+    assert.match(r.text, /The story is about fox\./, r.text);
+    assert.match(r.text, /The story is called “All about the fox”\./, r.text);
+    const heads = (st) => st.blocks.filter((b) => b.kind === 'heading' && (b.level ?? 2) <= 2).length;
+    const n0 = heads(s.state()['docs.editor']);
+    const shorter = await s.send('shorter');
+    assert.doesNotMatch(shorter.text, /the request said|Nothing changed|cannot be done/, shorter.text);
+    assert.ok(heads(s.state()['docs.editor']) < n0, shorter.text);
+    await s.send('undo');
+    assert.equal(heads(s.state()['docs.editor']), n0, 'one undo takes the whole revision back');
+    const long = await docs().send('write a story of 500 words about frogs');
+    assert.match(long.text, /I could only make \d+ words of the 500 you asked for\./, long.text);
+    const ro = (await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), translator: createTranslator() })).createSession({ language: 'auto' }); ro.setWorldState('ui.shell', { activeTab: 'editor' });
+    const rr = await ro.send('scrie o poveste de 500 de cuvinte despre broaste');
+    assert.match(rr.text, /^Am adăugat o poveste\./, rr.text);
+    assert.match(rr.text, /Am putut face doar \d+ din cele 500 cerute\./, rr.text);
+    assert.doesNotMatch(rr.text, /\b(I|The|story)\b/, 'no English in a Romanian reply');
+  } finally { delete globalThis[TEXTGEN_GLOBAL]; }
 });
 
 // ---- the measurement (reviewer 14:45 item 3, summaries): owner-log b and c replayed; the paragraph names every world used and every taught fact in at most 3 sentences

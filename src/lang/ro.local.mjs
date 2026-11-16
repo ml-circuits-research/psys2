@@ -35,6 +35,19 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.missing_place w.lang.ro.reply name=refused.missing_value.place count=one role=key text="unde ar trebui să meargă? Poți spune, de exemplu, „mută copacul la stânga”, „pune pisica lângă casă” sau „mută-l în colțul din dreapta sus”"
 @w.lang.ro.reply.local.done_about w.lang.ro.reply name=done.about count=one role=whole role=topic text="{whole:def=yes} este despre {topic}"
 @w.lang.ro.reply.local.done_title w.lang.ro.reply name=done.title count=one role=whole role=title text="{whole:def=yes} se numește {title}"
+@w.lang.ro.reply.local.done_add_value_1 w.lang.ro.reply name=done.add.value count=one act=make role=kind role=value text="am adăugat {art@kind} {kind} {value@kind}"
+@w.lang.ro.reply.local.done_add_value_few w.lang.ro.reply name=done.add.value count=few act=make role=kind role=number role=value text="am adăugat {number} {kind:num=pl} {value:num=pl@kind}"
+@w.lang.ro.reply.local.done_add_value_n w.lang.ro.reply name=done.add.value count=other act=make role=kind role=number role=value text="am adăugat {number} de {kind:num=pl} {value:num=pl@kind}"
+@w.lang.ro.reply.local.state_count_value_1 w.lang.ro.reply name=state.count.value count=one role=kind role=number role=value text="este {art@kind} {kind} {value@kind}"
+@w.lang.ro.reply.local.state_count_value_few w.lang.ro.reply name=state.count.value count=few role=kind role=number role=value text="sunt {number} {kind:num=pl} {value:num=pl@kind}"
+@w.lang.ro.reply.local.state_count_value_n w.lang.ro.reply name=state.count.value count=other role=kind role=number role=value text="sunt {number} de {kind:num=pl} {value:num=pl@kind}"
+@w.lang.ro.reply.local.short_of w.lang.ro.reply name=short_of count=one role=made role=asked text="am putut face doar {made} din cele {asked} cerute"
+@w.lang.ro.irregular.local.poveste.pl w.lang.ro.irregular lemma=poveste form=povești num=pl case=nomacc def=no
+@w.lang.ro.irregular.local.poveste.pl_def w.lang.ro.irregular lemma=poveste form=poveștile num=pl case=nomacc def=yes
+@w.lang.ro.irregular.local.cuvant.pl w.lang.ro.irregular lemma=cuvânt form=cuvinte num=pl case=nomacc def=no
+@w.lang.ro.irregular.local.cuvant.pl_def w.lang.ro.irregular lemma=cuvânt form=cuvintele num=pl case=nomacc def=yes
+@w.lang.ro.fill.local.done_add_value_art w.lang.ro.fill template=done.add.value role=art lemma=un
+@w.lang.ro.fill.local.state_count_value_art w.lang.ro.fill template=state.count.value role=art lemma=un
 @w.lang.ro.reply.local.cannot_key w.lang.ro.reply name=cannot.key count=one role=words text="încă nu pot face {words} aici"
 @w.lang.ro.reply.local.no_things w.lang.ro.reply name=cannot.no_things count=one role=thing text="aici nu există {art@thing} {thing}"
 @w.lang.ro.fill.local.no_things_art w.lang.ro.fill template=cannot.no_things role=art lemma=un
@@ -44,6 +57,8 @@ export const LANG_RO_LOCAL = {
 @w.lang.ro.reply.local.nothing_known w.lang.ro.reply name=refused.nothing_known count=one role=about text="încă nu știu nimic despre {about}"
 @w.lang.ro.reply.local.no_composer w.lang.ro.reply name=refused.no_composer count=one text="încă nu pot scrie compuneri: biblioteca nu are un compozitor (std.compose) în această versiune"
 @w.lang.ro.reply.local.change_about_1 w.lang.ro.reply name=done.change.about count=one role=thing role=value text="{thing:def=yes} este acum despre {value}"
+@w.lang.ro.reply.local.change_length_1 w.lang.ro.reply name=done.change.length count=one role=thing role=value text="{thing:def=yes} are acum {value} de cuvinte"
+@w.lang.ro.reply.local.change_title_1 w.lang.ro.reply name=done.change.title count=one role=thing role=value text="{thing:def=yes} se numește acum „{value}”"
 @w.lang.ro.reply.local.page w.lang.ro.reply name=done.page count=one text="iată o foaie nouă. Ce desenăm?"
 @w.lang.ro.reply.local.page_kept w.lang.ro.reply name=done.page.kept count=one text="iată o foaie nouă! Desenul vechi este încă acolo dacă spui „anulează”."
 @w.lang.ro.irregular.local.aseza.pres_3_sg_a w.lang.ro.irregular lemma=așeza form=așază tense=pres person=3 num=sg
@@ -66,8 +81,11 @@ export const LANG_RO_LOCAL = {
     // the translation gloss (reviewer 2026-11-15 10:10 item 2): verbs the machine model turned into non-words ("așează" -> "Assate"), with their senses; a second row of a lemma is a
     // second sense (așeza: sit, and arrange as in "așează elementele"). [KNOW] ask in questions.md: the catalog's w.lang.ro gets these rows and așeza its 3rd-person forms
     a: 'așeza\tv.a.ez\t\tk.actions.verb.group.arrange\naranjare\tf.e.alt\tf\tk.words.layout.noun.1',
-    r: 'reașeza\tv.a.ez\t\tk.actions.verb.group.rearrange\nrearanja\tv.a.ez\t\tk.actions.verb.group.rearrange',
-    e: 'exagera\tv.a.ez\t\tk.words.exaggerate.verb.1',
-    c: 'compune\tv.e.s.n\t\tk.actions.verb.make.compose',
+    r: 'reașeza\tv.a.ez\t\tk.actions.verb.group.rearrange\nrearanja\tv.a.ez\t\tk.actions.verb.group.rearrange\nraport\tn.e.oa\tn\tk.words.report.noun.1',
+    e: 'exagera\tv.a.ez\t\tk.words.exaggerate.verb.1\neseu\tn.u\tn\tk.words.essay.noun.1',
+    c: 'compune\tv.e.s.n\t\tk.actions.verb.make.compose\ncuvânt\tn.e\tn\tk.words.word.noun.1',
+    // the kinds of text the Documents tool writes and the unit of a text's length (sopworld 0.159 short_of), so that its replies compose in Romanian (questions.md Q96 [KNOW])
+    p: 'poveste\tf.e\tf\tk.words.story.noun.1\npoem\tn.e\tn\tk.words.poem.noun.1',
+    s: 'scrisoare\tf.e.alt\tf\tk.words.letter.noun.1',
   },
 };
