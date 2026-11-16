@@ -1,7 +1,7 @@
 {
   "format": "sop.inventory-bootstrap.execution",
   "version": 1,
-  "status": "clean-restart-running",
+  "status": "completed-verified-clean-auxiliary",
   "executable": false,
   "sourceData": {
     "format": "sop.inventory-bootstrap",
@@ -3089,10 +3089,9 @@
   ],
   "preservation": "raw Haiku inputs unchanged; first derived split losslessly gzipped and decompressed hashes verified; corrected full split retained",
   "pending": [
-    "full clean epoch completion",
-    "frozen clean checkpoint SHA256",
-    "per-key clean calibration",
-    "general graph decoder",
+    "browser ONNX export and independent browser/quantized calibration",
+    "utterance presence/count supervision preparation",
+    "general graph decoder and graph supervision",
     "exact graph roundtrip",
     "fresh final unseen evaluation",
     "runtime integration"
@@ -3135,5 +3134,43 @@
       }
     },
     "candidateBankBuiltAfterExclusion": true
+  },
+  "finalVerification": {
+    "status": "verified-full-clean-auxiliary-epoch",
+    "executable": false,
+    "graphProposal": false,
+    "checkpointSha256": "68ca1038ccca8932282aede8f430cf261655a8543ba21230ee531794676b4d08",
+    "checkpointSteps": 27253,
+    "checkpointEpoch": 1,
+    "trainExamples": 872071,
+    "calibrationPairs": 99566,
+    "exclusionManifestSha256": "66b1ab7f205bedf08c15e3e83f98e3de217922d179e89ae8b99c29a938e29e77",
+    "sourceFilesVerified": 308,
+    "exclusionRowsAudited": {
+      "train": 872071,
+      "calibration": 99566
+    },
+    "excludedIdOverlap": 0,
+    "scriptSha256": "622712ebb926e93f43b3eba2023402c318b6c72e559069c6d053bcf87f092a51",
+    "verifierSha256": "0b76b6d7969dafe3971b50268fcbc3123ab9b4375225da7bf7f60991d4d89e29",
+    "summary": {
+      "epoch": 1,
+      "steps": 27253,
+      "trainExamples": 872071,
+      "trainLoss": 0.5581656270832255,
+      "calibrationPairAccuracy": 0.9526043026736034,
+      "calibrationSpanExact": 0.940396210163652,
+      "calibrationPairs": 99566,
+      "calibrationSpans": 5805,
+      "seconds": 1702.6428191661835,
+      "executable": false,
+      "alignmentCounters": {
+        "encodedExamples": 971637,
+        "truncatedExamples": 0,
+        "spanRequested": 56485,
+        "spanAligned": 56483,
+        "spanUnaligned": 2
+      }
+    }
   }
 }

@@ -4306,3 +4306,90 @@ Successful creates must correlate exactly one new native object/source with the 
 
 Check: `node --test tests/functional-context-seeding.test.mjs` → 7/7 (empty contexts across areas; exact reviewed Diagram alias and name setter; missing Calendar/Document required inputs; Drawing missing create; explicit Document content; Calendar policy refusal; unmapped attributes and forbidden literal defaults; partial setter failure). `git diff --check` passes. Replay integration, reviewed area mappings and final application gate remain owned by the integration lane; no corpus replay was run here.
 Frozen calibration reporting increment: the same fixed-threshold predictions now aggregate by inventory key, concept, declared-head metadata and source area. A preserved256-pair smoke confirms each grouping totals exactly256; zero-support keys remain explicit. This does not create independent concept heads or measure functional graph accuracy. Reporting-only source Python compile and active npm98/98 passed; no training-source/data mutation. Full clean calibration remains queued after verified final checkpoint.
+
+### 2026-11-16 — First full clean auxiliary model and frozen calibration
+
+Completed one full clean epoch: 872,071 training candidate pairs, 27,253 optimizer steps, 99,566 calibration pairs. Verified final checkpoint epoch/step, all 308 raw-source hashes, training-script/prepared-data hashes, and zero excluded-ID overlap across both complete prepared splits. Exact exclusion manifest SHA-256: `66b1ab7f205bedf08c15e3e83f98e3de217922d179e89ae8b99c29a938e29e77`. Final checkpoint SHA-256: `68ca1038ccca8932282aede8f430cf261655a8543ba21230ee531794676b4d08`. Original pretrained initialization; contaminated historical weights never resumed. All prior failed/exposed runs and meaningful data/model artifacts remain preserved.
+
+Oracle-conditioned candidate accuracy: **95.2604%**; positive precision **92.7502%**, recall **94.0783%**. Confusion counts: TP 33,442 / FP 2,614 / FN 2,105 / TN 61,405. Source-span exact: **94.0396%** over 5,805 aligned calibration spans. Full train-plus-calibration alignment: 56,485 requested, 56,483 aligned, 2 unaligned, zero truncated pairs. Runtime was 1,702.64 seconds including training and trainer calibration. These are shared candidate/span outputs conditioned on gold field instance/key/phase/candidate, **not graph accuracy, independent per-concept classifier heads, calibrated request confidence or an executable reader**. CUDA BF16 at fixed logit zero; browser/q8 calibration is separate.
+
+All 134 key entries and 72 concept groups are retained in [the complete report](training/sop-bert/runs/owner-20261116/summary.json). 133 keys have calibration support; `drawing.drawn.kind` has zero support and null accuracy. Per-concept support/accuracy below is the same auxiliary prediction population, not functional-class success.
+
+| Concept | Pairs | Accuracy | Positive precision | Positive recall |
+|---|---:|---:|---:|---:|
+| `act` | 11280 | 95.71% | 93.36% | 93.80% |
+| `align` | 78 | 87.18% | 73.53% | 96.15% |
+| `animation` | 96 | 89.58% | 84.38% | 84.38% |
+| `area` | 72 | 88.89% | 83.33% | 83.33% |
+| `arrow` | 78 | 93.59% | 100.00% | 80.77% |
+| `ask` | 1809 | 92.81% | 91.71% | 86.24% |
+| `character` | 7647 | 98.77% | 97.52% | 98.82% |
+| `colour` | 738 | 98.10% | 96.03% | 98.37% |
+| `concept` | 1017 | 88.79% | 84.19% | 81.71% |
+| `count` | 705 | 97.02% | 93.85% | 97.45% |
+| `data_source` | 150 | 98.67% | 100.00% | 96.00% |
+| `day` | 1458 | 96.98% | 92.66% | 98.77% |
+| `delta` | 126 | 86.51% | 75.51% | 88.10% |
+| `description` | 756 | 99.60% | 98.82% | 100.00% |
+| `determiner` | 3542 | 93.22% | 92.36% | 94.24% |
+| `diagram_kind` | 123 | 98.37% | 97.56% | 97.56% |
+| `direction` | 120 | 92.50% | 96.97% | 80.00% |
+| `duration` | 525 | 96.95% | 96.49% | 94.29% |
+| `expression` | 177 | 100.00% | 100.00% | 100.00% |
+| `fill` | 87 | 97.70% | 93.55% | 100.00% |
+| `flip` | 58 | 91.38% | 100.00% | 82.76% |
+| `format` | 192 | 95.31% | 88.73% | 98.44% |
+| `fragment` | 333 | 85.89% | 73.88% | 89.19% |
+| `free_search` | 102 | 90.20% | 100.00% | 70.59% |
+| `group.operator` | 134 | 85.07% | 82.19% | 89.55% |
+| `heading_level` | 108 | 86.11% | 71.43% | 97.22% |
+| `kind` | 7359 | 98.83% | 98.17% | 98.33% |
+| `layer` | 96 | 98.96% | 100.00% | 96.88% |
+| `layout` | 237 | 94.94% | 93.51% | 91.14% |
+| `length` | 183 | 91.80% | 84.85% | 91.80% |
+| `line_style` | 252 | 97.62% | 93.33% | 100.00% |
+| `list_kind` | 162 | 95.06% | 91.07% | 94.44% |
+| `literal_text` | 204 | 98.04% | 95.71% | 98.53% |
+| `measure` | 531 | 97.55% | 97.67% | 94.92% |
+| `mood` | 11280 | 97.72% | 96.40% | 96.78% |
+| `mood_region` | 96 | 96.88% | 93.94% | 96.88% |
+| `name` | 4743 | 99.73% | 99.25% | 99.94% |
+| `not` | 87 | 73.56% | 62.50% | 51.72% |
+| `objection` | 177 | 71.19% | 61.11% | 37.29% |
+| `operator` | 7647 | 95.02% | 89.68% | 96.12% |
+| `order_relation` | 213 | 95.77% | 94.29% | 92.96% |
+| `ordinal` | 294 | 97.96% | 95.10% | 98.98% |
+| `part_kind` | 933 | 97.96% | 96.20% | 97.75% |
+| `parts_list` | 81 | 98.77% | 100.00% | 96.30% |
+| `person` | 576 | 99.48% | 98.96% | 99.48% |
+| `phase` | 5098 | 93.37% | 93.17% | 93.61% |
+| `polarity` | 5098 | 96.94% | 96.57% | 97.33% |
+| `quant.kind` | 588 | 95.07% | 93.26% | 91.84% |
+| `quantity` | 87 | 97.70% | 93.55% | 100.00% |
+| `recurrence` | 132 | 96.97% | 100.00% | 90.91% |
+| `reference` | 1218 | 98.85% | 97.34% | 99.26% |
+| `region` | 348 | 93.39% | 87.80% | 93.10% |
+| `role` | 66 | 96.97% | 91.67% | 100.00% |
+| `room_quality` | 120 | 97.50% | 97.44% | 95.00% |
+| `rotation` | 93 | 89.25% | 86.21% | 80.65% |
+| `scope` | 170 | 82.94% | 82.56% | 83.53% |
+| `shape` | 324 | 99.69% | 99.08% | 100.00% |
+| `size` | 279 | 93.91% | 88.00% | 94.62% |
+| `sort` | 114 | 71.05% | 72.73% | 21.05% |
+| `spatial_relation` | 495 | 94.14% | 93.59% | 88.48% |
+| `step` | 495 | 95.96% | 93.41% | 94.55% |
+| `style` | 90 | 100.00% | 100.00% | 100.00% |
+| `target.fill` | 9393 | 86.59% | 79.97% | 79.72% |
+| `target.mode` | 6000 | 93.53% | 87.14% | 94.55% |
+| `time` | 879 | 95.79% | 90.51% | 97.61% |
+| `time_relation` | 114 | 96.49% | 94.74% | 94.74% |
+| `toggle` | 272 | 81.62% | 80.25% | 65.66% |
+| `tone` | 396 | 94.95% | 92.42% | 92.42% |
+| `topic` | 402 | 100.00% | 100.00% | 100.00% |
+| `unit` | 297 | 98.65% | 96.12% | 100.00% |
+| `variant` | 219 | 98.63% | 98.61% | 97.26% |
+| `variety` | 117 | 99.15% | 100.00% | 97.44% |
+
+Reader/export lane received frozen model/run/calibration paths and was authorized to prepare utterance presence/count supervision using the same exclusion hash, source hashes and split; empty request arrays must remain supervised. Structural graph decoding/roundtrip and actual functional-class matrix remain explicit separate gates. No grammar graph is relabeled as neural output.
+
+Checks: reproducible `verify-bootstrap.py` passes on the actual frozen artifact and audits all 971,637 prepared rows; standalone calibration totals and span exactness match trainer metrics exactly across every grouping. Preparation exclusion/instance fixture 1/1, Python compile checks and current local active npm 98/98 passed; diff check passed. Integrator owns current shared-app gate and class/owner replay. Removed only inactive regenerable `.cache` (123 MiB, git-object cache and pinned catalog snapshot) under explicit root/owner export-space authorization after active-use check; no model/data/HF/source removal.
