@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "d226c110",
-  "tree": "2e7310a7e42836b5",
+  "build": "dfc94c11",
+  "tree": "03adf1c1158fe708",
   "catalog": "0966924e0a5bb7ad69d18590bb64b7a0204c151e",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -16,12 +16,12 @@
    "right": 127,
    "partly": 3,
    "wrong": 77,
-   "open": 50,
-   "changed": 16,
+   "open": 49,
+   "changed": 17,
    "unjudged": 332,
    "outcome": {
-    "executed": 157,
-    "refused": 240,
+    "executed": 159,
+    "refused": 238,
     "asked": 4,
     "not_understood": 109,
     "other_world": 95
@@ -91,12 +91,12 @@
    "right": 127,
    "partly": 3,
    "wrong": 77,
-   "open": 50,
-   "changed": 16,
+   "open": 49,
+   "changed": 17,
    "unjudged": 332,
    "outcome": {
-    "executed": 157,
-    "refused": 240,
+    "executed": 159,
+    "refused": 238,
     "asked": 4,
     "not_understood": 109,
     "other_world": 95
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 387,
- "failing_ops": 387,
+ "failing_matrix": 385,
+ "failing_ops": 385,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -1133,8 +1133,8 @@
  "causes": [
   {
    "cause": "Romanian turn not read (translation or reader)",
-   "count": 146,
-   "both_reasoners": 146,
+   "count": 145,
+   "both_reasoners": 145,
    "examples": [
     {
      "text": "desenează o casă albă și una verde",
@@ -1430,14 +1430,9 @@
   },
   {
    "cause": "fragment / list split",
-   "count": 8,
-   "both_reasoners": 8,
+   "count": 7,
+   "both_reasoners": 7,
    "examples": [
-    {
-     "text": "fa-mu un desen cu un lac, o rata, o vila, nori, soare ,iarba",
-     "tab": "draw",
-     "happened": "I could not make that in the drawing. [outcome: refused; open]"
-    },
     {
      "text": "un cer cu 5 nori",
      "tab": "draw",
@@ -1452,6 +1447,11 @@
      "text": "eyeglasses",
      "tab": "robot",
      "happened": "I did not understand \"eyeglasses\". For example: \"Add a hat.\" or \"What is the colour of the hat?\" [outcome: not_understood; open]"
+    },
+    {
+     "text": "a women",
+     "tab": "robot",
+     "happened": "I am not sure how “a women” fits what we were doing. Please say the whole request. [outcome: not_understood]"
     }
    ]
   },
