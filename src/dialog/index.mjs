@@ -497,26 +497,7 @@ export class DialogSession {
    * While a real turn runs it declines (`busy`). Returns { complete, segments, reason }; `reason` is one of
    * ok, incomplete, refused, missing, ambiguous, empty, busy, cancelled, deadline, too-long, no-vocabulary, error.
    */
-  async dryRead(text, { language, deadlineMs = 400, detail = false, signal = null } = {}) {
-    const prev = this._dry;
-    if (prev) { prev.ctl.abort(); try { await prev.done; } catch { /* the older run reports for itself */ } }
-    if (signal?.aborted) return { complete: false, segments: 0, reason: 'cancelled' };
-    const ctl = new AbortController();
-    const onAbort = () => ctl.abort();
-    signal?.addEventListener?.('abort', onAbort, { once: true });
-    // SOAK-BUSY: the end-of-turn check and the NOISE classifier read the same text a moment apart: a settled answer for the same text, language and session state is reused for DRY_CACHE_MS
-    const key = `${language ?? this.language}|${this._msg}|${this._rev ?? 0}|${this.isession.state?.['ui.shell']?.activeTab ?? ''}|${String(text ?? '').trim()}`;
-    const hit = this._dryCache;
-    if (hit && hit.key === key && Date.now() - hit.at < DRY_CACHE_MS) { await Promise.resolve(); if (signal?.aborted) return { complete: false, segments: 0, reason: 'cancelled' }; return detail ? hit.res : stripDetail(hit.res); }
-    const run = { ctl, done: null };
-    run.done = this._dryRun(text, { language, deadlineMs, detail: true, signal: ctl.signal }).then((res) => {
-      if (!['cancelled', 'deadline', 'busy', 'error'].includes(res.reason)) this._dryCache = { key, at: Date.now(), res };
-      return detail ? res : stripDetail(res);
-    });
-    this._dry = run;
-    try { return await run.done; } finally { signal?.removeEventListener?.('abort', onAbort); if (this._dry === run) this._dry = null; }
-  }
-
+  async dryRead() { return { complete: false, segments: 0, reason: 'unsupported', missing: ['declared dry reading'] }; }
 
   async _dryRun(text, { language, deadlineMs, detail, signal }) {
     const { set, formalizers, interp, translator } = this.engine;
@@ -585,18 +566,7 @@ export class DialogSession {
    * way every reply is (rules and templates first, the on-device Translator as the fallback, a Romanian line when nothing can say it; never English in a Romanian
    * session). `textEnglish` keeps the English, `via` the routes used (RO-TRANSLATE-FALLBACK).
    */
-  async observeIn(obs, { language } = {}) {
-    const out = this.observe(obs);
-    const lang = language ?? this.language ?? 'en', tr = this.engine.translator;
-    if (out.text && lang !== 'en' && tr) {
-      try {
-        const parts = await translateParts([{ text: out.text, translate: true }], tr, lang);
-        out.textEnglish = out.text; out.text = parts.map((p) => p.text).join('');
-        if (parts.routes?.length) { out.via = [...parts.routes]; for (const v of parts.routes) tr.note?.(v, { direction: 'en->ro', strategy: v === 'translator-out' ? 'browser-api' : 'rules' }); }
-      } catch { /* the English text is shown: a host string must reach the user */ }
-    }
-    return out;
-  }
+  async observeIn() { return { text: null, state: {}, effects: [], unsupported: 'No declared observation reaction is bound.' }; }
 
   /**
    * Record the outcome of a host-executed effect as a core.observation wire (spec 07 §1, vision §8), then, when the
@@ -604,24 +574,7 @@ export class DialogSession {
    * queue further effects, answer). Returns `{ id, text, state, effects }`; `text` is null when the world says nothing.
    * The host renders a non-empty `text` as a new assistant message and applies `state` and `effects` like a reply.
    */
-  observe({ effect, ok = true, detail = '', data = null, world = null } = {}) {
-    this._rev = (this._rev ?? 0) + 1;
-    const id = this.isession.form.freshId('o');
-    const pairs = [['core.observation.effect', atom(String(effect))], ['core.observation.ok', atom(ok ? 'true' : 'false')]];
-    if (detail !== '' && detail != null) pairs.push(['core.observation.detail', str(String(detail))]);
-    pairs.push(['core.seq', atom(this.isession.form.nextSeq())]);
-    this.isession.add([makeWire(id, 'core.observation', pairs)]);
-    const out = { id, text: null, state: {}, effects: [] };
-    if (!world) return out;
-    const stateBefore = Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
-    this.isession.effects = [];
-    const res = this.engine.interp.observe(this.isession, world, { effect, ok, detail, data, id });
-    for (const [k, v] of Object.entries(this.isession.state)) if (JSON.stringify(v) !== stateBefore[k]) out.state[k] = structuredClone(v);
-    out.effects = this.isession.effects;
-    this.isession.effects = [];
-    out.text = res?.reply ?? null;
-    return out;
-  }
+  observe() { return { text: null, state: {}, effects: [], unsupported: 'No declared observation reaction is bound.' }; }
 
   /**
    * Headless host (RD8): in the CLI and in scripts no browser executes the effects of a reply, so a world that waits for an observation
@@ -1533,10 +1486,6 @@ export class DialogSession {
     const tb = opts.budget ?? createBudget();
     const bt = installBudget(tb, { force: !!opts.budget });
     const snap = g || bt ? (opts.undo ?? this.snapshot()) : null;   // a host that passes `undo` (its own snapshot) restores the session itself
-    if (opts.engine !== 'new' && this.engine.knowledge) await guard.untimed(() => openWordsReady(text));   // open classes (lexicons with open=knowledge) are read by lookup: the vocabulary is loaded before the sentence is read
-    // the open tab's world reads with its own engine (ops `prepare()`, lazy in a browser, spec 04): ready BEFORE the sentence is read, so its reader (hook readsWhole) can answer
-    // whether it reads the clause; a reader that cannot tell yet reads nothing (owner export 2026-11-15T11:43, the first turn on the Diagram tab)
-    if (opts.engine !== 'new') { const tab = this.isession.state?.['ui.shell']?.activeTab, tw = tab ? this.engine.set.list().find((w) => w.tab?.id === tab) : null, prep = tw ? this.engine.set.get(tw.id)?.ops?.prepare : null; if (typeof prep === 'function') { try { await guard.untimed(() => prep()); } catch { /* its reader then says it cannot tell */ } } }
     const outerView = this._view; this._view = outerView ?? (typeof opts.view === 'string' && opts.view ? opts.view : null);   // the view the host tells for this turn (spec 28 section 21): read in it, the shell's tab untouched
     try {
       const reply = await this._send(text, opts);
@@ -1673,38 +1622,9 @@ export class DialogSession {
     return r;
   }
 
-  /**
-   * THE DOOR (spec 28 section 4; reviewer 2026-11-15 16:40, owner-backed): every message is read as a w.request FIRST (the library's readRequest over the open tab's live world);
-   * nothing executes before it. The dialogue world (reviseRequest against the OPEN TAB's last result) says new request or revision; planRequest fills and checks; the tab world's
-   * executor carries out the plan; sayRequest says what was assumed and not honoured. Only a turn the door does not take (no act, target or reaction read; an act or a constraint
-   * the world does not declare; words no fact explains; a question) goes to the old readers (`_sendRead`), marked `trace.legacy = true` with the reason in `trace.door`: the
-   * legacy share is what the request path cannot read yet. On a declared tab nothing falls back to the old readers of a declared world (owner 17:55): see below.
-   */
+  /** Sole public turn route. Retired options cannot select another reader. */
   async _send(text, opts = {}) {
-    if (opts.engine === 'new') return (await import('./new-engine.mjs')).runNewEngine(this, text, opts);
-    const unavailable = retiredArea(this.engine.applicationAreas, opts.view);
-    if (unavailable) return unavailableAreaReply(unavailable, text);
-    const tabWorld = this.context().tabWorld;
-    if (tabWorld && this.engine.set.get(tabWorld)?.requestText && this.engine.sopworld === undefined) this.engine.sopworld = await import('../vendor/sopworld/sopworld.mjs').catch(() => null);
-    const decl = tabWorld && declaredWorld(this.engine.set.get(tabWorld), this.engine.sopworld);   // the world declares what it can do (request.sop) and carries a plan out (its planRequest operation, or its bound tool primitives)
-    const off = opts.request === false || globalThis.process?.env?.PSYS2_REQUEST === 'off' || guard.soft();   // PSYS2_REQUEST=off: the A/B of the request step
-    if (!decl || off) return markLegacy(await this._sendRead(text, opts), off ? 'off' : 'no request declarations');
-    if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(this.engine.sopworld, null);   // the executors of the door (docs.editor composes) run before the core
-    let door = null;
-    try { door = await perf.time('door', () => this._door(text, opts, tabWorld)); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door]', e); door = { why: 'door error' }; }
-    if (door?.reply) { stampDoor(door.reply, tabWorld, text, door.reply.trace?.request ?? door.q); door.reply.trace.legacy = false; door.reply.trace.door = door.route ?? 'plan'; return door.reply; }
-    if (door?.q?.unread?.length) { const el = await this._doorElsewhere(text, opts, tabWorld, door.q.english); if (el) return el; }   // a request the open tab cannot read, read by the domain that can (spec 28 section 29)
-    if (globalThis.process?.env?.PSYS2_REQUEST_DEBUG) console.error('[door] legacy:', door?.why, JSON.stringify(door?.q ?? null)?.slice(0, 300));
-    // NO FALLBACK ON A DECLARED TAB (owner 2026-11-15 17:55): the old patterns of the declared worlds never run. The worlds that declare nothing yet (the shell's tabs, help,
-    // the conversation) may still answer, marked legacy; a reading by a declared world is taken back and the turn is said honestly.
-    const snap0 = this.snapshot();
-    const first = await this._sendRead(text, opts);
-    const hit = [...new Set((first?.trace?.segments ?? first?.segments ?? []).map((sg) => sg.match?.worldId ?? sg.world).filter(Boolean))];
-    if (hit.length && !hit.some((w) => declaredWorld(this.engine.set.get(w), this.engine.sopworld))) return markLegacy(first, `${door?.why ?? 'not read'}; answered by ${hit.join(', ')} (no declarations)`);
-    this.restore(snap0);
-    const honest = await this._doorHonest(text, opts, tabWorld, door);
-    stampDoor(honest, tabWorld, text, door?.q); honest.trace.legacy = false; honest.trace.door = `honest: ${door?.why ?? 'not read'}`;
-    return honest;
+    return (await import('./new-engine.mjs')).runNewEngine(this, text, { ...opts, language: opts.language ?? (this.language === 'auto' ? 'en' : this.language) });
   }
 
   /**

@@ -55,26 +55,6 @@ let knowledgeFacts = null;           // the catalog reader (createFacts), once a
 let warming = null;                  // the warm-up turn that runs: a user turn waits for it (the turn guard is shared), at most one warm-up turn long
 const one = async (s, text, opts) => { const p = s.send(text, opts).catch(() => {}); warming = p; try { await p; } finally { if (warming === p) warming = null; } };
 
-// ---------- test-only fault injection (inert unless the page started with ?psys2test=1) ----------
-function spin() { for (;;) { /* test hook: an infinite synchronous loop */ } }   // loop-guard-allow: deliberate fault injection (the page watchdog must end it)
-function installFaults() {
-  for (const w of engine.set.list()) {
-    if (!w.ops || typeof w.ops !== 'object') continue;
-    const wrapped = {};
-    for (const [k, fn] of Object.entries(w.ops)) wrapped[k] = typeof fn === 'function' ? function (...a) { if (faultNow === 'op') spin(); return fn.apply(this, a); } : fn;
-    try { w.ops = wrapped; } catch { /* a frozen world: no op fault */ }
-  }
-  const rules = engine.formalizers?.rules;
-  if (rules?.formalize) { const f = rules.formalize.bind(rules); rules.formalize = (...a) => { if (faultNow === 'matcher') spin(); return f(...a); }; }
-  const tr = engine.translator;
-  // M4: the engine reads and writes through the candidates (`candidatesViaMT`, `rules.translate`): all carry the fault hook
-  for (const owner of [tr, tr?.rules]) for (const k of ['translate', 'candidatesViaMT', 'detectLanguage', 'evidence']) {
-    if (typeof owner?.[k] !== 'function') continue;
-    const f = owner[k].bind(owner);
-    owner[k] = (...a) => { if (faultNow === 'translator') spin(); return f(...a); };
-  }
-}
-
 // ---------- serialization helpers ----------
 const errOf = (e) => ({ name: e?.name ?? 'Error', message: String(e?.message ?? e), reason: e?.reason ?? null, stage: e?.stage ?? null, site: e?.site ?? null, ticks: e?.ticks ?? null, bySite: e?.bySite ?? null });
 
@@ -106,7 +86,7 @@ function applySettings(s, extra) {
   session.fastPath = settings.fastPath === true;
   if (session.settings && typeof session.settings === 'object') session.settings.formalizer = settings.formalizer;
   session.setOption?.('formalizer', settings.formalizer);
-  if (extra?.prepare && settings.formalizer === 'encoder' && dispatcherEnc) dispatcherEnc.prepare().catch(() => {});
+
 }
 
 const KNOWLEDGE_FETCH_MS = 8000;   // the catalog URL is the pinned one (lib/knowledge/catalog-pin.mjs, P4), read in init
@@ -116,15 +96,14 @@ async function init(m) {
   testHooks = m.testHooks === true;
   settings = { ...(m.settings ?? {}) };
   const imp = (rel) => import(vurl(rel));
-  globalThis.__psys2LazyRoEn = true;   // the Romanian -> English rules (140 KB) load with the Romanian path only (lib/translate/index.mjs: loadRoEn), not at boot of an English session
-  const [dialog, loadersMod, translate, soplang, rc, g, tl, hosts, lang, rulesM, wordIdx, wlMod] = await Promise.all([imp('lib/dialog/index.mjs'), imp('lib/loaders/bundle-loader.mjs'), imp('lib/translate/index.mjs'), imp('lib/soplang/index.mjs'),
-    imp('lib/dialog/runtime-config.mjs'), imp('lib/formalizer/guard.mjs'), imp('lib/dialog/time-limits.mjs'), Promise.all([imp('ui/dispatcher-host.mjs'), imp('ui/normalizer-host.mjs'), imp('ui/translation.mjs')]), imp('ui/language.mjs'), imp('lib/formalizer/rules/index.mjs'), imp('lib/worlds/word-index.mjs'), imp('ui/world-loader.mjs')]);
-  loaders = loadersMod; rulesMod = rulesM; wordMod = wordIdx;
+  globalThis.__psys2LazyRoEn = true; // prevent eager loading of retired language tables
+  const [dialog, loadersMod, soplang, rc, g, tl, lang, wlMod] = await Promise.all([
+    imp('lib/dialog/index.mjs'), imp('lib/loaders/bundle-loader.mjs'), imp('lib/soplang/index.mjs'),
+    imp('lib/dialog/runtime-config.mjs'), imp('lib/formalizer/guard.mjs'), imp('lib/dialog/time-limits.mjs'), imp('ui/language.mjs'), imp('ui/world-loader.mjs')]);
+  loaders = loadersMod;
   tabWorlds = m.tabWorlds ?? {}; universe = m.onlyWorlds ? new Set(m.onlyWorlds) : null;
-  const [dh, nh, tr] = hosts;
   try { const b = await imp('lib/dialog/budget.mjs'); budgetMod.createBudget = b.createBudget ?? null; } catch { budgetMod.createBudget = null; }   // agent B's step budget, when this build has it
-  mods = { tl, dialog, rc, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang, translate };
-  if (lang.normalize(settings.language) !== 'en') translate.loadRoEn?.().catch(() => {});   // a saved Romanian session: the rules start loading at once
+  mods = { tl, dialog, rc, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang };
   // the guard reports its stage to the page at once (postMessage from synchronous code is delivered while the loop runs): a killed turn says where it was
   { let last = ''; const report = (stage) => { if (stage && stage !== last) { last = stage; evt('stage', stage); } };   // a few dozen changes per turn
     const gc = g.guard.check.bind(g.guard), gs = g.guard.setStage.bind(g.guard), ga = g.guard.abortable.bind(g.guard);
@@ -137,30 +116,22 @@ async function init(m) {
   // LAZY LOADING: the small routing index (worlds/index.json) now; a world's files when the world is needed. A start loads the always-loaded worlds (the shell and what reading needs), the open
   // tab's world, and the worlds a restored session has state or memory in. Everything else loads when a tab opens, when the words of a message say so, or when the user names it.
   const fetchJson = async (rel, hash) => { const r = await fetch(abs(rel) + (hash ? `?v=${hash}` : ''), { cache: 'default' }); if (!r.ok) throw new Error(`${rel}: HTTP ${r.status}`); return r.json(); };
-  worldLoader = wlMod.createWorldLoader({ indexHash: ver['worlds/index.json'], fetchJson, bag: (text) => new Set([...rulesM.messageBag(text), ...wordIdx.queryWords(text)]) });
+  worldLoader = wlMod.createWorldLoader({ indexHash: ver['worlds/index.json'], fetchJson, bag: () => new Set() });
   await worldLoader.init();
   // `?psys2lazy=0` (tests, a comparison with the full set) and a saved language other than English: every world is loaded at start (a Romanian message is read through English candidates that a
   // partial world set can mistake for understood: a session that starts in Romanian must read like the full set, from its first message)
   // BOOT COST (owner export 2026-11-14 22:43: "Starting the reasoner" took 6.3 s on a phone in a Romanian session): a saved language other than English no longer builds the engine on every world at
   // start. It starts on the lazy set like English and the rest loads in the background once the reasoner is up; a Romanian message still waits for every world before it is read (send).
-  const otherLanguage = !!(m.settings?.language && lang.normalize(m.settings.language) !== 'en');
-  const startIds = (m.lazyWorlds === false || m.settings?.lazyWorlds === false ? worldLoader.ids() : [...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] })]).filter((id) => allowed(id));
+  const startIds = [...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] })].filter((id) => allowed(id));
   await worldLoader.bundles(startIds);
   for (const id of startIds) loadedIds.add(id);
   const bundle = worldLoader.bundleOf(startIds, absModule);
   const bundleBytes = startIds.reduce((s, id) => s + (worldLoader.info(id)?.bytes ?? 0), 0);
-  // The browser Translation API and language detector exist on the page only: the worker asks the page for them, with a deadline (then the rules answer)
-  const backend = tr.createRemoteBackend({ kinds: m.browser ?? {}, call: (op, payload) => new Promise((resolve, reject) => { const id = ++btSeq; btPending.set(id, { resolve, reject }); post({ type: 'bt', id, op, ...payload }); }).finally(() => {}) });
-  // MT keep-list (spec 05): the app's own words (currency, names, titles, tab names, the names of the things in the open tab) are placeholders around the model; the engine and session exist by the first call
-  { const kl = await imp('lib/translate/keep-list.mjs'); const raw = backend.translate; let isNamer = null; backend.translate = kl.protectedTranslate(raw, () => (engine ? { keep: kl.keepListOf(engine.set), extra: kl.sessionNames(session), things: kl.worldThingNames(session), isNamer: (isNamer ??= kl.namerTest(engine.translator?.rules)) } : null)); }
-  // Q13: the Romanian grammar voice (setting `roGrammar`, off by default): loaded on its first Romanian message, the language world and the library only then
-  let roVoice = null;
-  const roGrammarVoice = { name: 'grammar', async propose(t, o) { roVoice ??= (await imp('lib/translate/voice-ro.mjs')).createRoGrammarVoice(); return roVoice.propose(t, o); } };
-  const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend, languages: lang.LANGS, voices: () => (settings.roGrammar ? [roGrammarVoice] : []) });
+  // Host transport only: no legacy translator, dispatcher, normalizer or warm-up reader.
+  const translator = { usage: [], detectUsage: [], resetUsage() {} };
   evt('boot-step', { id: 'worlds', op: 'end', bytes: bundleBytes, count: startIds.length });
   evt('boot-step', { id: 'reasoner', op: 'start' });
   engine = await dialog.createEngine({ loader: loadersMod.createBundleLoader(bundle), translator, options: { reasoner: 'matrix', applicationAreas: worldLoader.index.retiredAreas ?? [] } });   // the product reasoner (spec 15): the page never selects ops, the test oracle
-  try { await engine.prepareMeta?.(); } catch { /* the policy router answers alone (spec 20) */ }   // meta.worlds: the default router (C)
   evt('boot-step', { id: 'reasoner', op: 'end' });
   // The knowledge catalog (spec 17): the sop-knowledge-worlds copy on GitHub Pages, read lazily (nothing is fetched until a message needs a thing the board or the
   // lexicons do not have), each file bounded by KNOWLEDGE_FETCH_MS (a slow or offline read counts as unreachable and is asked again after a backoff, see facts.mjs).
@@ -177,37 +148,11 @@ async function init(m) {
     engine.setKnowledge(knowledgeFacts);
     engine.onNotice = (text) => evt('notice', text);   // "Looking up how a pineapple looks..." while a shard loads
   } catch (e) { console.warn('knowledge catalog not attached', e); }
-  if (testHooks) installFaults();
-  const rules =(engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); while (turnRunning()) await sleep(20); } }) ?? Promise.resolve()).catch(() => {}).then(() => evt('rules-compiled'));
-  rules.catch(() => {});
-  // the ORT workers belong to the page: this worker asks for one through a MessagePort per lane
-  globalThis.__psys2OrtSpawn = (lane) => {
-    const { port1, port2 } = new MessageChannel();
-    postMessage({ type: 'spawn-ort', lane, port: port2 }, [port2]);
-    const w = { onmessage: null, onerror: null, postMessage: (msg, t) => port1.postMessage(msg, t ?? []), terminate: () => { try { port1.postMessage({ __terminate: true }); port1.close(); } catch { /* gone */ } } };
-    port1.onmessage = (ev) => w.onmessage?.(ev);
-    return w;
-  };
-  globalThis.addEventListener('psys2-ort-paused', (e) => { evt('ort-paused', e.detail ?? null); sendOrt(); });
-  try {
-    const [meta, nzMeta] = [m.dispatcherMeta ?? null, m.normalizerMeta ?? null];
-    if (meta) {
-      if (nzMeta) {
-        const nzrt = await imp('lib/dialog/normalizer-runtime.mjs');
-        normalizerHost = nh.createNormalizerHost({ base: ROOT, meta: nzMeta, lib: nzrt, onStatus: (s) => evt('normalizer-status', s) });
-      }
-      const wp = await imp('lib/formalizer/wordpiece.mjs');
-      dispatcherEnc = rc.createRuntime({ engine, settings,
-        load: dh.dispatcherLoader({ base: ROOT, meta, lib: wp, onSource: (src) => evt('model-source', src), onProgress: (msg) => evt('progress', msg) }),
-        normalizer: normalizerHost?.provider ?? null, waitForModel: false, isPaused: () => !!globalThis.__psys2Ort?.paused });
-      dispatcherEnc.onStatus((st) => evt('dispatcher-status', st));
-    }
-  } catch (e) { console.warn('Encoder formalizer unavailable', e); }
+
+  evt('rules-compiled'); // compatibility progress event; no retired rule compilation
   session = engine.createSession({ language: lang.normalize(settings.language) });   // LANG-FIXED: always an explicit 'en' | 'ro', never 'auto'
   applySettings(null);
   if (m.restoreState) restoreStates(m.restoreState, m.restoreMeta);
-  if (m.prepareModels && dispatcherEnc && settings.formalizer === 'encoder') dispatcherEnc.prepare().catch(() => {});
-  if (otherLanguage) rules.then(() => sleep(0)).then(turnIdle).then(() => ensureWorlds(worldLoader.ids(), 'language (background)')).catch(() => {});   // after the first paint and the rule compilation, never inside a turn's wait
   return { retiredAreas: worldLoader.index.retiredAreas ?? [], worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget };
 }
 
@@ -258,8 +203,7 @@ async function ensureRun(ids, why) {
     restoreStates(st, meta);
     snaps.clear();
     for (const [k, rec] of portable) { try { snaps.set(k, session.adoptSnapshot(rec)); } catch { /* that turn's undo goes through the page's state record */ } }
-    if (testHooks) installFaults();
-    Promise.resolve(engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); while (turnRunning()) await sleep(20); } })).catch(() => {});
+
     const bytes = missing.reduce((s, id) => s + (worldLoader.info(id)?.bytes ?? 0), 0);
     loadedLog.push({ ids: missing, why, ms: Math.round(performance.now() - t0), bytes });
     evt('world-load', { id: stepId, op: 'end', label, bytes, ids: missing });
@@ -269,7 +213,7 @@ async function ensureRun(ids, why) {
 }
 const allLoaded = () => worldLoader.ids().filter(allowed).every((id) => loadedIds.has(id));
 /** A reading is complete when something was understood and nothing was left out or guessed: otherwise a world that is not loaded might have read it (the worker then reads it again with every world). */
-const incomplete = (reply) => wordMod.readingIncomplete(reply);
+
 
 // ---------- requests ----------
 const handlers = {
@@ -281,9 +225,8 @@ const handlers = {
     faultNow = testHooks ? (m.fault ?? null) : null;
     if (m.settings) applySettings(m.settings);
     const had = new Set(Array.isArray(m.known) ? m.known : loadedIds);   // the page's snapshot has these worlds; a world loaded since (by this turn, or by a background load the page has not seen) is in `before`
-    // LAZY LOADING: the open tab's world and the worlds the words of the message say it needs, before the turn is read
-    // a message in another language is read through its English candidates, which a partial world set can mistake for understood: every world is loaded for it (the word index is English)
-    try { const lang = mods.lang.normalize(m.opts?.language ?? m.settings?.language ?? settings.language); if (lang !== 'en') { await mods.translate.loadRoEn?.(); await ensureWorlds(worldLoader.ids(), 'language'); } else { const plan = await worldLoader.plan(m.text, loadedIds); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'message'); } } catch (e) { console.warn('world plan failed', e); }
+    // Load only the selected host; words never dispatch to other worlds.
+    await ensureWorlds([activeWorld()].filter(Boolean), 'active host');
     let snap = session.snapshot();
     // TURN BASELINE (reviewer 2026-11-15 03:15 item 5): the state the turn starts from, taken AFTER the lazy loads: a world loaded for this turn is in it with its initial state, so the
     // page's what-happened diff does not list it as changed "(was none)". Taken again whenever the turn loads more worlds and is read again.
@@ -302,58 +245,15 @@ const handlers = {
         catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded' || ctl.signal.aborted) { try { session.restore(snap); } catch { /* keep */ } } if (budget && e && typeof e === 'object') e.bySite = { ...budget.bySite }; throw e; }
       };
       reply = await read();
-      // a turn that asked for an action of a world that is not loaded (a world asks another world's action): load that world and read the turn again
-      const lacking = worldLoader.ofActions(session.takeMissed?.()).filter((id) => !loadedIds.has(id) && allowed(id));
-      if (m.opts?.engine !== 'new' && lacking.length) {
-        try { session.restore(snap); } catch { /* keep */ }
-        const added = await ensureWorlds(lacking, 'action');
-        if (added.length) { snap = session.snapshot(); before = stateOf(); if (m.undoId != null) snaps.set(m.undoId, snap); budget = newBudget(); translator.resetUsage?.(); reply = await read(); } else reply = await read();
-      }
-      if (m.opts?.engine !== 'new' && !reply.unavailableArea && incomplete(reply) && !allLoaded()) {   // not understood, or understood with words guessed or left out: read it again with every world (the reading is then the one a full start gives)
-        try { session.restore(snap); } catch { /* keep */ }
-        const added = await ensureWorlds(worldLoader.ids(), 'second reading');
-        if (added.length) {
-          snap = session.snapshot();
-          before = stateOf();
-          if (m.undoId != null) snaps.set(m.undoId, snap);
-          budget = newBudget();
-          translator.resetUsage?.();
-          reply = await read();
-        } else reply = await read();   // the other worlds could not be fetched: the first reading is read again as it was (nothing changed)
-      }
       annotateWires(reply);
       noteWorlds(reply);
       return { reply, before: loadedBefore(before, had), state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
         budget: budget ? { ticks: budget.ticks, bySite: { ...budget.bySite } } : null, ort: true };
     } finally { active.delete(m.id); lastTurnEnd = performance.now(); faultNow = null; sendOrt(); }
   },
-  async dry(m) {
-    const ctl = new AbortController(); ctl.dry = true;
-    active.set(m.id, ctl);
-    faultNow = testHooks ? (m.fault ?? null) : null;
-    try {
-      const budget = budgetMod.createBudget ? (() => { try { return budgetMod.createBudget(m.limits ?? undefined); } catch { return null; } })() : null;
-      if (mods.lang.normalize(m.opts?.language ?? settings.language) !== 'en') await mods.translate.loadRoEn?.();
-      const language = mods.lang.normalize(m.opts?.language ?? settings.language);
-      const read = () => session.dryRead(m.text, { ...m.opts, language, signal: ctl.signal, ...(budget ? { budget } : {}) });
-      // LAZY LOADING: a dry run reads like a turn does: the worlds the words need (every world for another language) are loaded first, and an incomplete reading is read again with every world;
-      // loading a world changes no reading and no state (it is skipped while a real turn runs: that turn loads what it needs itself)
-      if (!turnRunning()) { try { if (language !== 'en') await ensureWorlds(worldLoader.ids(), 'dry language'); else { const plan = await worldLoader.plan(m.text, loadedIds); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'dry message'); } } catch { /* the loaded worlds read */ } }
-      let res = await read();
-      if (!res.complete && res.reason === 'incomplete' && !allLoaded() && !turnRunning()) { try { if ((await ensureWorlds(worldLoader.ids(), 'dry second reading')).length) res = await read(); } catch { /* the first reading stands */ } }
-      return annotateWires(res);
-    } finally { active.delete(m.id); faultNow = null; }
-  },
-  /** LANG-FIXED: the one use of the language detectors: is this typed message clearly the other language? (the page shows a one-line hint with a button, after the turn) */
-  async hint(m) {
-    const t = engine.translator;
-    return mods.lang.suggestSwitch(m.text, mods.lang.normalize(m.selected), { detect: (x) => t.detectLanguage(x), evidence: (x) => t.evidence(x) });
-  },
-  async observe(m) {
-    const out = await session.observeIn(m.obs, { language: mods.lang.normalize(settings.language) });   // the reaction (a world's own reaction) is shown in the selected language
-    annotateWires(out);
-    return { follow: out, state: stateOf() };
-  },
+  async dry() { return { complete: false, segments: 0, reason: 'unsupported', understood: [], missing: ['declared dry reading'] }; },
+  async hint() { return null; },
+  async observe() { return { follow: [], state: stateOf(), unsupported: 'No declared observation reaction is bound.' }; },
   async setWorldState(m) { session.setWorldState(m.worldId, m.patch); return null; },
   async setStates(m) { restoreStates(m.state, m.meta); return { state: stateOf() }; },
   async restore(m) {
@@ -363,71 +263,9 @@ const handlers = {
   },
   async settings(m) { applySettings(m.settings, { prepare: m.prepare }); return null; },
   async option(m) { session[m.key] = m.value; if (m.key === 'formalizer') session.setOption?.('formalizer', m.value); return null; },
-  async prepare(m) {
-    if (m.which === 'normalizer') { if (!normalizerHost) throw new Error('no normalizer'); await normalizerHost.prepare(); }
-    else { if (!dispatcherEnc) throw new Error('no dispatcher'); await dispatcherEnc.prepare(); }
-    sendOrt();
-    return null;
-  },
-  /**
-   * RANDOM as a world (specs/25): the dice, the examples and the action buttons come from sopworld `sample` (std.sample) over the worlds that are loaded and the things of
-   * the session. mode 'one' (the dice): one command for the open tab's world, else a world used lately, else any loaded schema world; 'few': 3-4 commands from the
-   * session's worlds; 'actions': the acts that fit the selected (or newest) thing of the open tab's world. Returns { items: [{ text, world, tab, act, thing }] }.
-   */
-  async sample(m) {
-    const [lib, sm] = await Promise.all([import(vurl('lib/vendor/sopworld/sopworld.mjs')), import(vurl('lib/dialog/sampler.mjs'))]);
-    sampler ??= sm.engineSampler(lib, engine, () => session);
-    if (!sampler.available) return { items: [], available: false };
-    // CHIPS IN THE SELECTED LANGUAGE (reviewer 2026-11-15 03:15 item 3): src/dialog/sampler.mjs `chipsInLanguage`, the rules translator (Romanian tables loaded first)
-    const chipsIn = async (mod, items, language) => { const lang = language ? mods.lang.normalize(language) : 'en'; if (lang !== 'en') { try { await mods.translate.loadRoEn?.(); } catch { /* the rules have what they have */ } } return mod.chipsInLanguage(items, lang, engine.translator); };
-    const tabWorld = (m.tab && (tabWorlds[m.tab] ?? worldLoader.ids().find((id) => worldLoader.info(id).tab?.id === m.tab))) || null;
-    const tabOfWorld = (id) => worldLoader.info(id)?.tab?.id ?? Object.keys(tabWorlds).find((t) => tabWorlds[t] === id) ?? null;   // the page's tab plugins name the world of each tab (the built-in Documents tab too)
-    if (tabWorld && !loadedIds.has(tabWorld)) { await turnIdle(); await ensureWorlds([tabWorld], 'dice'); }
-    const loaded = () => sampler.worlds();
-    // `onlyTab` (the example bar of a page, reviewer 2026-11-15 03:15 item 3): only the open page's world, never the examples of other pages
-    const orderOf = () => (m.onlyTab ? (tabWorld && loaded().includes(tabWorld) ? [tabWorld] : []) : [...new Set([tabWorld, ...recentWorlds, ...loaded()].filter((id) => id && loaded().includes(id)))]);
-    let order = orderOf();
-    if (!order.length && m.mode !== 'actions' && !m.onlyTab && worldLoader.info(DEFAULT_DICE_WORLD)) { await turnIdle(); await ensureWorlds([DEFAULT_DICE_WORLD], 'dice'); order = orderOf(); }   // nothing sampleable is loaded yet (lazy loading): the drawing board is the smallest general world
-    const item = (r) => ({ text: r.text, world: r.world, tab: tabOfWorld(r.world), act: r.frame?.action ?? null, thing: r.frame?.args?.thing ?? null });
-    const count = Math.min(Math.max(Number(m.count) || 4, 1), 6);
-    if (m.mode === 'actions') {
-      if (!tabWorld || !loaded().includes(tabWorld)) return { items: [], available: true };
-      const things = sampler.thingsOf?.(tabWorld) ?? [];
-      const target = m.thing ?? (things.find((t) => t.salient) ?? things.at(-1))?.id;
-      return { items: await chipsIn(sm, target ? sampler.actions({ worldId: tabWorld, thing: target, seed: m.seed, count }).map(item) : [], m.language), available: true, thing: target ?? null };
-    }
-    if (m.mode === 'few') {
-      const out = [], texts = new Set();
-      for (const round of [0, 1]) for (const id of order) {
-        if (out.length >= count) break;
-        for (const r of sampler.sample('one', { worldId: id, seed: m.seed != null ? m.seed + out.length + round * 31 : undefined })) if (!texts.has(r.text)) { texts.add(r.text); out.push(item(r)); }
-        if (out.length >= count) break;
-      }
-      return { items: await chipsIn(sm, out.slice(0, count), m.language), available: true };
-    }
-    for (const id of order) { const r = sampler.dice({ worldId: id, seed: m.seed }); if (r) return { items: [item(r)], available: true }; }
-    return { items: [], available: true };
-  },
-  async warm(m) {
-    const opts = { language: 'en', formalizer: 'rules', spell: true, partial: true, fastPath: false };
-    const idle = async () => { while (turnRunning() || reloading || performance.now() - lastTurnEnd < 500) await sleep(50); };
-    const s = engine.createSession({ language: 'en' });
-    if (m.phase === 'model') { await idle(); await one(s, 'what is 3 plus 4', { ...opts, formalizer: 'encoder' }); evt('warm', 'dispatcher'); return null; }
-    for (const x of ['hello', 'zzq flarb wug', 'spider legs and 3 plus 4']) { await idle(); await one(s, x, opts); await sleep(0); }
-    evt('warm', 'rules');
-    try {   // the Romanian rules translator (lexicons, phrase tables) and the English-to-Romanian reply tables: a cold first Romanian message took 5-9 s at 4x CPU
-      await idle();
-      const tr = engine.translator?.rules;
-      if (tr) {
-        tr.detectLanguage?.('repede: câte zile are iunie?');
-        if (mods.lang.normalize(settings.language) !== 'en') await tr.translate('repede: câte zile are iunie?', { from: 'ro', to: 'en' });   // the Romanian rules are not loaded for an English session
-        await sleep(0); await idle();
-        tr.translate('There are 30 days in June.', { from: 'en', to: 'ro' });
-      }
-    } catch { /* best effort */ }
-    evt('warm', 'translator');
-    return null;
-  },
+  async prepare() { return { available: false, reason: 'retired-model-runtime' }; },
+  async sample() { return { items: [], available: false, reason: 'no-declared-request-sampler' }; },
+  async warm() { return null; },
   /** The page needs a world now (its tab opens, the user names it): loads it and answers which worlds are loaded. */
   async ensure(m) { while (turnRunning()) await sleep(20); const added = await ensureWorlds(m.worlds ?? [], m.why ?? 'tab'); return { added, loaded: [...loadedIds], state: stateOf(), log: loadedLog.slice(-20) }; },
   async loaded() { return { loaded: [...loadedIds], log: loadedLog.slice(), loader: worldLoader.stats }; },

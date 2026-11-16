@@ -74,7 +74,7 @@ test('other declared colours and kinds use the same published reader/resolver/ho
   assert.equal(result.trace.assessment, 'changed', JSON.stringify(result));
   assert.equal(session.isession.state['art.draw'].objects[0].color, '#0000ff');
 });
-test('session opt-in bypasses legacy, default remains legacy, undo and persistence carry the journal', async () => {
+test('the sole route ignores retired options and preserves undo and journal persistence', async () => {
   const engine = await fixtureEngine(), session = engine.createSession({ language: 'en' });
   Object.assign(session.isession.state, setup().isession.state);
   let legacyCalls = 0;
@@ -90,15 +90,19 @@ test('session opt-in bypasses legacy, default remains legacy, undo and persisten
   assert.equal(session.isession.state['art.draw'].objects[0].color, 'red');
   assert.equal(session.restoreMemory(memory), true);
   assert.equal(session.newEngineJournal.length, 1);
-  await session.send('legacy control', { request: false });
-  assert.equal(legacyCalls, 1);
+  for (const options of [{}, { engine: 'legacy', request: false }, { engine: 'new' }, { formalizer: 'encoder', routing: 'symbolic+encoder' }]) {
+    const before = structuredClone(session.isession.state);
+    const refused = await session.send('legacy control', options);
+    assert.equal(refused.trace.legacy, false); assert.equal(refused.trace.engine, 'new');
+    assert.deepEqual(session.isession.state, before);
+  }
+  assert.equal(legacyCalls, 0);
 });
-test('webchat forwards explicit query opt-in and worker suppresses both legacy fallback retry routes', () => {
+test('webchat has no engine toggle and worker has no old reader/model preparation route', () => {
   const app = readFileSync(new URL('../docs/webchat/app.mjs', import.meta.url), 'utf8');
   const worker = readFileSync(new URL('../docs/webchat/ui/engine-worker.mjs', import.meta.url), 'utf8');
-  assert.match(app, /engine: new URLSearchParams\(location.search\).get\('engine'\) === 'new'/);
-  assert.match(worker, /m\.opts\?\.engine !== 'new' && lacking.length/);
-  assert.match(worker, /m\.opts\?\.engine !== 'new' && !reply.unavailableArea && incomplete\(reply\)/);
+  assert.doesNotMatch(app, /get\('engine'\)/);
+  assert.doesNotMatch(worker, /worldLoader\.plan|dispatcherEnc\.prepare|createRuntime\(|createSwitchTranslator|loadRoEn|engine\.precompile|engine\.prepareMeta|session\.dryRead|session\.observeIn/);
 });
 
 test('evicted journal entries cannot turn native receipt replay into fresh evidence', () => {
@@ -139,4 +143,32 @@ test('every declared colour name retains exact-value execution or honest unresol
       assert.equal(session.isession.state['art.draw'].history.length, 0, name);
     }
   }
+});
+test('malformed input, retired auxiliary APIs and turn errors never enter an old reader', async () => {
+  const engine = await fixtureEngine(), session = engine.createSession({ language: 'en' });
+  Object.assign(session.isession.state, setup().isession.state);
+  let oldCalls = 0;
+  session._sendRead = session._dryRun = () => { oldCalls++; throw new Error('retired reader invoked'); };
+  engine.interp.observe = () => { oldCalls++; throw new Error('retired reaction invoked'); };
+  for (const text of [null, {}, '', '   ', 'x'.repeat(65537), 'not a supported command']) {
+    const before = structuredClone(session.isession.state);
+    const result = await session.send(text, { engine: 'legacy', request: false });
+    assert.deepEqual(result.statuses, ['unsupported']); assert.equal(result.trace.engine, 'new');
+    assert.deepEqual(session.isession.state, before);
+  }
+  assert.equal((await session.dryRead('legacy words')).reason, 'unsupported');
+  assert.ok((await session.observeIn({ world: 'art.draw' })).unsupported);
+  assert.ok(session.observe({ world: 'art.draw' }).unsupported);
+  session._send = () => { throw new Error('simulated worker turn failure'); };
+  await assert.rejects(session.send('anything'), /simulated worker turn failure/);
+  assert.equal(oldCalls, 0);
+});
+test('saved non-English session settings are refused without invoking old translation', async () => {
+  const engine = await fixtureEngine(), session = engine.createSession({ language: 'ro' });
+  Object.assign(session.isession.state, setup().isession.state);
+  engine.translator = { translate() { throw new Error('retired translation called'); } };
+  const before = structuredClone(session.isession.state);
+  const result = await session.send(sentence);
+  assert.equal(result.trace.reason, 'language'); assert.equal(result.trace.legacy, false);
+  assert.deepEqual(session.isession.state, before);
 });

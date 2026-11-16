@@ -61,7 +61,7 @@ test('minLen: a regex is non-empty only when every top-level alternative consume
 
 test('loop guard: no unguarded loop or recursion in src, every world module, docs/webchat/ui', () => {
   const bad = [];
-  const allowed = { 'docs/webchat/ui/engine-worker.mjs': 1 };   // the deliberate infinite loop of the fault-injection test hook (marked `loop-guard-allow`)
+  const allowed = {}; // retired reader fault hook removed; no allowed infinite loops
   for (const f of targets()) {
     const rel = path.relative(ROOT, f).split(path.sep).join('/');
     let vs = scan(readFileSync(f, 'utf8'));

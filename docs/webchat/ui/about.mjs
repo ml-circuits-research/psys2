@@ -22,7 +22,7 @@ export const CREDITS = [
 /** The one-line description used in the header, the page title and the greeting (DOC). */
 export const TAGLINE = 'neurosymbolic · runs in your browser';
 export const PAGE_TITLE = 'PSys2: a neurosymbolic assistant that runs in your browser, with no server and no large language model';
-export const GREETING = 'Hi, I am PSys2, a neurosymbolic assistant that runs entirely in your browser. Small neural models split what you say and propose meanings; symbolic worlds check every meaning against formal rules before anything happens, so I do what I understood and tell you what I did not. Talk to me or type. Try one of these:';
+export const GREETING = 'Hi, I am PSys2. I run in your browser. I will tell you what I understood and what I can change. Commands I cannot handle leave your work unchanged. Type a request or work directly in an area.';
 
 /** Settings > About: what PSys2 is and why it is safe, in short paragraphs ([heading, text]). Never claims more than we have. */
 export const ABOUT_SECTIONS = [

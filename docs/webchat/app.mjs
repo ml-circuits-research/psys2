@@ -12,7 +12,6 @@ import { createAvatar } from './ui/avatar.mjs';
 import { createEditor } from './ui/editor.mjs';
 import { createSpeech, createMicLock, measureSpeed, speechSupport } from './ui/speech.mjs';
 import { createLanguage, hintText, LANG_TAGS, langName, langTag, tagOf, normalize as normLang } from './ui/language.mjs';
-import { createTranslationLayer, QUALITY_GATE } from './ui/translation-ui.mjs';
 import { classifyVoice } from './ui/voice-noise.mjs';
 import { setLexicon, buildLexicon, addressWordsText } from './ui/voice-words.mjs';
 import { GROUPS, OPTIONS, EXPERIMENTS, optionById, optionsOf } from './ui/settings-catalog.mjs';
@@ -212,7 +211,7 @@ export async function mountPsys2(element, options = {}) {
   const dictBar = h('div', { class: 'p2-dictbar', role: 'status', hidden: true }, h('i', { class: 'p2-rec', 'aria-hidden': 'true' }), dictText, dictStop);
   const langSel = h('select', { class: 'p2-select', 'aria-label': 'Language' }, h('option', { value: 'en' }, 'English'));   // the other languages are filled in by renderLangSelect from the translation layer
   // MT-SERIOUS: the translation layer (browser Translator, else the on-device model downloaded lazily when a language is selected); the selector lists what it supports
-  const tl = createTranslationLayer({ base, h, note: (t) => note(t), progress, onChange: () => { renderLangSelect(); renderSettings(); } });
+  const tl = { listed: () => [{ code: 'en', name: 'English' }], init: async () => {}, prepare: async () => ({ supported: false }), needsModel: () => false, describe: () => ({ state: 'unavailable', size: 0 }), whenReady: async () => ({ supported: false }), host: null, mtProxy: null, registry: null, quality: null }; // retired model layer: no loads
   globalThis.__psys2Tl = tl;   // diagnostics and the phone tests
   function renderLangSelect() {
     const cur = language.get(), list = tl.listed();
@@ -842,7 +841,7 @@ export async function mountPsys2(element, options = {}) {
     let reply;
     const sentLang = language.get();   // LANG-FIXED: the language this turn was read in
     try {
-      reply = await withDeadline(session.send(text, { engine: new URLSearchParams(location.search).get('engine') === 'new' ? 'new' : undefined, view: avatarOpen ? 'avatar' : undefined, mode: mode === 'voice' ? 'voice' : undefined, language: sentLang, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, worldAware: settings.worldAware ?? 'veto', fastPath: settings.fastPath === true, nx: settings.nxStrategy,
+      reply = await withDeadline(session.send(text, { view: avatarOpen ? 'avatar' : undefined, mode: mode === 'voice' ? 'voice' : undefined, language: sentLang, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, worldAware: settings.worldAware ?? 'veto', fastPath: settings.fastPath === true, nx: settings.nxStrategy,
         correction: tn.correction ?? undefined, signal: tn.ctl.signal, hardMs: remaining, softMs: remaining * TURN_LIMITS.softFraction, undo: tn.undo }), remaining + LOAD_WAIT_CAP_MS + 300, { signal: tn.ctl.signal, label: 'turn' });
     } catch (e) {
       if (e instanceof TurnAborted && engineClient?.stage) e.stage = engineClient.stage;   // the stage the engine worker reported last (the page-side deadline only knows 'turn')
@@ -1329,7 +1328,7 @@ export async function mountPsys2(element, options = {}) {
     settings.language = lang; langSel.value = lang;
     speech?.refreshLang(); save(); renderSettings();
     session?.setWorldState?.(SHELL, { language: lang });   // the shell world's state follows the selector, so that "speak Romanian" is a change and not a no-op
-    renderLangSelect(); checkBrowserTranslator(lang); tl.prepare(lang).then(() => { renderSettings(); loadVoiceWords(lang); }, () => {}); loadVoiceWords(lang); voiceNotice(lang);   // MT-SERIOUS: the model of the language downloads now (lazily: only when it is selected)
+    renderLangSelect(); voiceNotice(lang);   // MT-SERIOUS: the model of the language downloads now (lazily: only when it is selected)
     hintEl?.remove(); hintEl = null;
     refreshSuggestions();   // the example bar is in the selected language
     if (reason === 'hint') { const said = `Switched to ${langName(lang, { own: false })}.`; localized(said, lang).then((t) => note(t)); }   // a switch command confirms in its own reply, in the new language
@@ -1930,17 +1929,11 @@ export async function mountPsys2(element, options = {}) {
     const soplang = await import(new URL('lib/soplang/index.mjs', base).href);
     lib = { serialize: soplang.serialize };
     let meta = null, nzMeta = null;
-    try { [meta, nzMeta] = await Promise.all([findDispatcherModel(base), findNormalizerModel(base)]); } catch (e) { console.warn('Encoder formalizer unavailable', e); }
+
     encoderChecked = true;
     // Facades of the models that live in the engine worker (the page only needs their labels, status and a way to start loading them)
     browserBackend = createBrowserBackend({ mt: tl.mtProxy });
     engineClient = createEngineClient({ base, versions: globalThis.__psys2Mod ?? {}, getLanguage: () => language.get(), browserCall: (op, m) => (op === 'translate' ? browserBackend.translate(m.text, m.from, m.to, m.only ?? null) : browserBackend.detect(m.text)), getSettings: engineSettings, getTab: () => view, onEvent: onEngineEvent, testHooks: testHooksOn, limits: LIMITS, log: (...a) => { if (testHooksOn) console.debug('ENGINE', ...a); } });
-    if (meta) {
-      dispatcherEnc = { prepare: () => engineClient.call('prepare', { which: 'dispatcher' }) };
-      dispatcherVersion = meta.version ?? null;
-      dispatcherLabel = versionLabel(meta);
-    }
-    if (meta && nzMeta) normalizerHost = { meta: nzMeta, label: versionLabel(nzMeta), status: { state: 'idle', message: '' }, timings: [], prepare: () => engineClient.call('prepare', { which: 'normalizer' }) };
     // The browser Translation API lives on the window, not in a worker: the page answers the worker's requests for it (deadline, then the rules).
     translator = { get usage() { return engineClient.usage; }, get detectUsage() { return engineClient.detection; }, resetUsage() { engineClient.resetUsage(); },
       translatorState: (f, t) => browserBackend.state(f, t), prepareTranslator: (f, t) => browserBackend.prepare(f, t), rules: null };
@@ -1994,19 +1987,8 @@ export async function mountPsys2(element, options = {}) {
   applyEngineSettings();
   setStatus();
 
-  // MT-SERIOUS: the model registry loads after the first paint; a saved non-English language starts its model now
-  setTimeout(() => {
-    const l0 = language.get();
-    if (l0 === 'en') {
-      // English: no translation registry, no probe of the browser's Translator for dozens of language pairs, no model, nothing about any other language at start-up.
-      // The language list is loaded the first time it is needed (the selector or Settings is opened, a language is picked).
-      progress.end('translator', { ms: 0, label: 'Translator: not needed for English' });
-      tl.init({ probe: false }).then(renderLangSelect, () => {});   // the registry only (a small local file): the list of languages. No question to the browser's Translator, no model.
-      return;
-    }
-    progress.start('translator', `Loading the ${langName(l0)} translator`);
-    tl.init().then(() => { renderLangSelect(); return tl.prepare(language.get()); }).catch((e) => console.warn('translation layer', e)).finally(() => { if (progress.state('translator') === 'active') progress.end('translator'); });
-  }, 0);
+  progress.end('translator', { ms: 0, label: 'English request path' });
+  renderLangSelect();
 
   // optional capabilities, checked once
   {   // PROGRESS: the voices the browser offers (they arrive late in some browsers); bounded
@@ -2044,58 +2026,10 @@ export async function mountPsys2(element, options = {}) {
   if (settings.devMode === true) { syncDebugButton(); loadDebug(); }   // DBG: developer mode is remembered
   element.dataset.ready = 'true'; mark('hint');
   { const t = hashTab(location.hash); if (t !== null) { try { history.replaceState(null, '', location.pathname + location.search); } catch { /* no history */ } openSettings(t || undefined); } }   // deep link #settings/<tab>
-  // Warm-up after first paint (PERF): the first message used to pay for compiling every pattern and building the vocabularies, and the
-  // first model run for the ORT start-up. A scratch session reads two sentences now, while the user is still looking at the page.
-  /**
-   * The ~95 MB normalizer is never fetched at page load (reviewer decision f). It loads (1) the first time a message fails validation and would use it
-   * (the provider starts the load itself), (2) after 30 s of idle time on a fast link, or (3) when the person asks (Settings > Models, or switching it on).
-   * Not on a metered or slow link (Save-Data, effectiveType below 4g): there it only loads when needed.
-   */
-  const slowLink = () => { const c = globalThis.navigator?.connection; return !!c && (c.saveData === true || (typeof c.effectiveType === 'string' && c.effectiveType !== '4g')); };
-  const scheduleNormalizerIdle = () => {
-    if (!normalizerHost || settings.normalizer !== true || slowLink()) return;
-    setTimeout(async () => {
-      if (destroyed || slowLink() || settings.normalizer !== true || normalizerHost.status.state !== 'idle') return;
-      await userFirst();
-      if (!destroyed) normalizerHost.prepare().catch(() => {});
-    }, NORMALIZER_IDLE_MS);
-  };
-  /** Resolves when the main thread has been quiet: the browser says it is idle, no long task in the last second, no turn. Gives up after `maxMs` (a busy page must not hold the models back for ever). */
-  const idleCpu = async (maxMs = 20000) => {
-    const t0 = performance.now();
-    for (;;) {
-      await new Promise((res) => (typeof requestIdleCallback === 'function' ? requestIdleCallback(res, { timeout: 2000 }) : setTimeout(res, 300)));
-      const last = longTasks.at(-1);
-      if ((!turn && !(last && performance.now() - ((last.startTime ?? 0) + (last.duration ?? 0)) < 1000)) || performance.now() - t0 > maxMs || destroyed) return;
-      await sleep(250);
-    }
-  };
-  /** Starts the reading model (once): on an idle CPU, then its warm-up, then the normalizer's idle timer. */
-  startModels = () => {
-    if (modelsStarted) return modelsStarted;
-    if (destroyed || !dispatcherEnc || settings.formalizer !== 'encoder') return null;
-    return modelsStarted = (async () => {
-      try {
-        await idleCpu(); if (destroyed) return;
-        modelsAllowed = true;   // the dispatcher first, then the normalizer (about 95 MB, cached by sha256)
-        await dispatcherEnc.prepare(); mark('dispatcher-ready');
-        if (!destroyed) await engineClient.warm({ phase: 'model' });
-        scheduleNormalizerIdle();
-      } catch { modelsStarted = null; /* best effort: the next trigger tries again */ }
-    })();
-  };
-  const scheduleModelIdle = () => { setTimeout(() => { if (!destroyed) startModels(); }, MODEL_IDLE_MS); };
+  const slowLink = () => false; // compatibility for retired settings while the UI is cleaned
+  startModels = () => null;
   const warm = async () => {
-    mark('warm-start');
-    try {
-      await engineClient.warm({ phase: 'rules' });   // in the worker: the rules and the translator tables; a user turn goes first
-      if (destroyed) return;
-      // LAZY-LOAD-3: the reading model (65 MB) and onnxruntime (14.5 MB) are NOT fetched at start. The rules read the first message (the model only adds
-      // a hint to the world choice and rescues garbled sentences); they load (1) the first time a message is not read cleanly, (2) after MODEL_IDLE_MS
-      // of idle time, (3) when the person switches the helper model on or asks in Settings > Models. The input is enabled long before.
-      if (dispatcherEnc && settings.formalizer === 'encoder') { progress.end('model', { ms: 0, label: 'Reading model: loads when a message needs it' }); scheduleModelIdle(); }
-      else { modelsAllowed = true; progress.end('model', { ms: 0, label: 'Reading model: not used (the rules read)' }); }
-    } catch { /* warm-up is best effort */ }
+    progress.end('model', { ms: 0, label: 'Declared request reader' });
     if (destroyed) return;
     // PROGRESS: the knowledge catalog's index (cached by version; the vocabulary is read by buckets, per message): the last start-up step, and the place where an unreachable catalog is said once
     // an unreachable catalog is asked again (4 s, 12 s, 30 s, then every minute) until it answers; the notice is said once and goes away when it does

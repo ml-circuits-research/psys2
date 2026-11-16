@@ -35,6 +35,7 @@ const refusal = (reason, trace) => reply(`${trace?.understood ? trace.understood
 
 /** The caller owns UI selection and boundary translation; this runner never invokes a legacy reader. */
 export function runNewEngine(session, text, options = {}) {
+  if (typeof text !== 'string' || !text.trim() || text.length > 65536) return refusal('reading', { unsupported: 'A bounded nonempty English message is required.' });
   const tab = options.view ?? session.isession.state['ui.shell']?.activeTab;
   const area = NEW_ENGINE_AREAS[tab];
   if (!area) return refusal('area');

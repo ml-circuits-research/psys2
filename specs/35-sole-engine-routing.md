@@ -1,0 +1,13 @@
+# 35 — One request engine, no legacy fallback
+
+Owner decision 2026-11-16 21:45 replaces the legacy-default policy. Every public dialogue `send` uses the declared reader → validated `std.request` → instance resolution → native effect → retained assessment path. No URL query or caller option selects a different reader. `engine: legacy`, `request: false`, old formalizer/routing settings and old environment switches cannot restore the retired path.
+
+The browser worker loads the selected host rather than routing message words to worlds. It has no second reading, world-action retry, old model creation, meta-router preparation, pattern precompilation, translator table loading or model warm-up. Dry reading, suggestions and observation reactions have no published new-path binding yet; those APIs explicitly report unavailable or return no reaction and never invoke old mechanisms. English remains the supported command language. The retired on-device translation/normalizer/model layer does not download or prepare models; interface language storage is preserved.
+
+Unsupported or malformed input changes no state. Supported structural readings can describe the action and target that were understood while reporting missing resolution. An unread message is not described as partially understood. Worker errors propagate through the existing bounded client/error recovery; they do not select another interpreter. The native hosts and session snapshot/journal persistence retain their previous rollback and undo behavior.
+
+This routing landing precedes physical dependency cleanup, which runs in parallel with area development. Host initialization, UI/renderer state transport, snapshots and the existing loader shell remain temporarily imported. Their presence is not a claim that the old conversation mechanisms remain supported. World-local declared-host imports identify the native modules that cleanup must retain; newly trained readers and typed assessments enter only through published contracts.
+
+## Acceptance gate
+
+`npm test` and its full/fast/smoke aliases run `scripts/test-new-engine.mjs`: the new coordinator, native hosts, calendar/face preparation, codec, generated browser assets, system map and loop checks, plus every `*-declared-host.test.mjs` supplied by parallel area lanes. The old conversational expectations and legacy REAL replay are retired by the owner decision; they are neither silently marked passing nor used as future coverage gates. Their physical deletion is tracked by the removal lane. Browser smoke must verify the normal URL, a retired query value, actual canvas effect, honest refusal, no old model preparation and retained state/undo. New-path owner-session measurement is separate from the retired legacy column.

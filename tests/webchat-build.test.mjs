@@ -38,11 +38,14 @@ test('webchat build produces a bundle the browser loader can run', async () => {
     assert.equal(index.words.ids.some((id) => ['geo.map', 'media.music'].includes(id)), false);
     const engine = await createEngine({ loader: createBundleLoader(bundle), options: { applicationAreas: index.retiredAreas } });
     const unavailable = await engine.createSession().send('surprise me', { view: 'music' });
-    assert.equal(unavailable.text, 'Music is not part of this application.');
+    assert.equal(unavailable.trace.reason, 'area');
+    assert.equal(unavailable.trace.legacy, false);
     assert.deepEqual(unavailable.effects, []);
-    assert.equal(unavailable.unavailableArea.world, 'media.music');
+
     const reply = await engine.createSession().send('hello');
-    assert.match(reply.text, /^Hello/);
+    assert.equal(reply.trace.engine, 'new');
+    assert.deepEqual(reply.statuses, ['unsupported']);
+    assert.deepEqual(reply.effects, []);
   } finally {
     await rm(out, { recursive: true, force: true });
   }

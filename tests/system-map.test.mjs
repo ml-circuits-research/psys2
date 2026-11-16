@@ -19,15 +19,16 @@ test('the system map is generated, not stale (node scripts/build-system-map.mjs 
   assert.ok(/<svg viewBox/.test(html) && /prefers-color-scheme: ?dark/.test(html) && /name="viewport"/.test(html));
 }, { timeout: 180000 });
 
-test('the trace of a turn lists the steps in the vocabulary of the page', async () => {
+test('an unread new-engine turn reports its actual reading failure without old pipeline steps', async () => {
   const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
   const s = engine.createSession({ language: 'en' });
   s.setWorldState('ui.shell', { activeTab: 'draw' });
+  const before = structuredClone(s.isession.state);
   const r = await s.send('Draw a red house');
-  assert.deepEqual(r.trace.steps.map((x) => x.id), STEP_IDS);
-  const world = r.trace.steps.find((x) => x.id === 'world');
-  assert.ok(world.pick.includes('art.draw') && world.alternatives[0] >= 1);
-  assert.ok(r.trace.steps.find((x) => x.id === 'apply').alternatives[0] >= 1);
+  assert.equal(r.trace.engine, 'new'); assert.equal(r.trace.legacy, false);
+  assert.equal(r.trace.reason, 'reading'); assert.ok(r.trace.reading);
+  assert.equal(r.trace.steps, undefined, 'retired route steps are not invented');
+  assert.deepEqual(s.isession.state, before);
 });
 
 test('the About section of the webchat links to the system map', () => {
