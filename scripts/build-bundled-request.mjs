@@ -14,6 +14,8 @@ const TYPES = {
   'w.dialogue': ['w.dialogue.revision'],
   'k.colours': ['k.colours.basic', 'k.colours.colour'],
   'k.faces': ['k.faces.slot', 'k.faces.preset', 'k.faces.expression'],   // the avatar's kinds by join (worlds/ui.avatar/request.sop std.schema.kinds): the parts of a face, the presets, the expressions
+  'k.objects': ['k.objects.object', 'k.objects.stand_in'],   // the kinds a world takes by join (std.schema.kinds from=k.objects.object stand_in=k.objects.stand_in; sopworld 0.160): names only, the parts stay lazy
+  'k.people': ['k.people.kind'],
 };
 const { dir, commit } = await catalogFolder();
 const QUOTED = '"(?:[^"\\\\]|\\\\.)*"';

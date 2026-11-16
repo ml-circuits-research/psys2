@@ -5,7 +5,7 @@
 // call) and a call answers with a status, the ids it changed, or a refusal code / a reply fact's name. The word operations of the old readers (engine.mjs) build on this module; this
 // module never imports them. Browser-safe.
 import {
-  W, H, HORIZON, GROUND_BASE, KINDS, REGIONS, SHADES, canonColor, defaultColor, bbox, placeInRegion, regionOf, kindKey, kindName, COMPOSITE, isThing, ensureCustom, thingOfKey,
+  W, H, HORIZON, GROUND_BASE, KINDS, REGIONS, SHADES, canonColor, defaultColor, bbox, placeInRegion, regionOf, kindKey, kindName, COMPOSITE, isThing, ensureCustom, thingOfKey, registerThings,
 } from './scene.mjs';
 import { habitat } from '../../src/knowledge/habitat.mjs';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
 
@@ -412,9 +412,26 @@ export function startScene(ctx, { kind, place = null, step = null, label = null 
     return toolDone({ changed: [`scene${s.sceneSeq}`] });
   });
 }
-export function addThings(ctx, { kind, n = 1, size = null, colour = null, place = null, anchor = null, whole = null, step = null, label = null } = {}) {
-  const s = ensure(ctx), key = boardKind(kind), scene = sceneOf(s, whole);
-  if (!key) return toolNo('no_kind');
+/**
+ * A kind the board takes from the catalog (request.sop std.schema.kinds: every k.objects object, its stand-ins, the kinds of people): drawn by the catalog object of that name,
+ * else of what it stands in for (a villa by the house), as the host loaded it before the call (`ctx.knowledge.peek`, the lazy catalog loader). Registered once as a thing of the board.
+ */
+function catalogKind(ctx, kind) {
+  if (kind == null) return null;
+  const name = String(kind).replace(/_/g, ' ');   // glue-lint: tool-data (catalog object name)
+  try {
+    const th = ctx.knowledge?.peek?.(name);
+    const parts = th?.objects?.[0]?.parts;
+    if (!parts?.length) return null;
+    if (!isThing(name)) registerThings(new Map([[name, parts]]));
+    return boardKind(name);
+  } catch { return null; }
+}
+/** addJoined (request.sop std.tool.bind of=k.objects.object of=k.people.kind): addThings for a kind the board takes from the catalog. */
+export function addJoined(ctx, args = {}) { return addThings(ctx, { ...args, joined: true }); }
+export function addThings(ctx, { kind, n = 1, size = null, colour = null, place = null, anchor = null, whole = null, step = null, label = null, joined = false } = {}) {
+  const s = ensure(ctx), key = boardKind(kind) ?? (joined ? catalogKind(ctx, kind) : null), scene = sceneOf(s, whole);
+  if (!key) return joined ? { ...toolNo('no_drawing'), reply: 'refused.no_drawing', roles: { kind: String(kind).replace(/_/g, ' ') } } : toolNo('no_kind');   // a joined kind the catalog has no drawing of (or no catalog): said by its reply fact
   const factor = gradeFactor(size), color = colour ? colorFrom([String(colour).toLowerCase()]) : null;
   if (!factor || (colour && !color)) return toolNo('no_value');
   const to = objsOf(s, anchor)[0] ?? (scene ? objsOf(s, scene.members)[0] : null) ?? null, region = to ? null : regionId(place) ?? scene?.region ?? (bandOf(place) === 'ground' ? 'ground' : null);
