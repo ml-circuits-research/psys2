@@ -2,8 +2,8 @@
  "date": "2026-11-15",
  "measured": {
   "mode": "shipped",
-  "build": "771edee9",
-  "tree": "f8d1f627aee64060",
+  "build": "7138078f",
+  "tree": "b9eb374eb4cb366a",
   "catalog": "b57c463341073d523c172db4d0decd7bc0b32450",
   "seed": 20261115,
   "formalizer": "encoder"
@@ -20,9 +20,9 @@
    "changed": 26,
    "unjudged": 332,
    "outcome": {
-    "executed": 180,
-    "refused": 289,
-    "asked": 12,
+    "executed": 179,
+    "refused": 288,
+    "asked": 14,
     "not_understood": 54,
     "other_world": 70
    },
@@ -95,9 +95,9 @@
    "changed": 26,
    "unjudged": 332,
    "outcome": {
-    "executed": 180,
-    "refused": 289,
-    "asked": 12,
+    "executed": 179,
+    "refused": 288,
+    "asked": 14,
     "not_understood": 54,
     "other_world": 70
    },
@@ -169,8 +169,8 @@
   "build": "25492edc",
   "tree": "1a2f18da4cbac97e"
  },
- "failing_matrix": 367,
- "failing_ops": 367,
+ "failing_matrix": 366,
+ "failing_ops": 366,
  "ops_only": 0,
  "judged_causes": [
   {
@@ -254,7 +254,7 @@
      "verdict": "wrong",
      "text": "label the previous link as label1",
      "tab": "diagram",
-     "reply": "I did not understand \"previous\", \"label\", \"1\" here.",
+     "reply": "I did not understand \"label\", \"1\" here.",
      "failing": [
       "state:edges[id=a1].label=label1"
      ]
@@ -670,10 +670,9 @@
      "verdict": "wrong",
      "text": "the the next mouth",
      "tab": "robot",
-     "reply": "I did not understand that as something to do in the avatar.",
+     "reply": "Nothing changed. To what value?",
      "failing": [
-      "answer:mouth",
-      "forbid:answer without \"did not understand\""
+      "answer:mouth"
      ]
     },
     {
@@ -1040,7 +1039,7 @@
      "verdict": "wrong",
      "text": "inca un crocodil",
      "tab": "draw",
-     "reply": "Nothing changed. That is what is there already.",
+     "reply": "There is nothing in the drawing that I made and could change that way yet.",
      "failing": [
       "state:objects.length=$+1"
      ]
@@ -1117,8 +1116,8 @@
   },
   {
    "cause": "refused: the request names something the world does not support",
-   "count": 71,
-   "both_reasoners": 71,
+   "count": 70,
+   "both_reasoners": 70,
    "examples": [
     {
      "text": "mcdavatara human",
