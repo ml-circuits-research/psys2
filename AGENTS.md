@@ -3,6 +3,7 @@
 ## Language
 - **Everything in this repository is in English**: code, identifiers, comments, commit messages, specs, docs, legends, worlds, tests, knowledge-base contents.
 - Input in other languages (for example Romanian) is translated to English by `src/translate/` **at the system boundary**. Nothing stored in a world, knowledge base, episode or journal is in another language; the original text is kept only as a source record referenced by `core.source`.
+- **Principle (owner, 2026-11-16): English only, everywhere; other languages exist only in the interface.** Code, tests, worlds, knowledge, test data and dialogue suites contain nothing in Romanian or any other language. Another language appears only when the user selects it in the interface; then the text is translated at the boundary with the browser's translation APIs, and everything behind the boundary stays English. When the owner gives examples in Romanian (or any other language), translate them to English and use the English version in tests, dialogue suites and everything else; never keep the original wording in the repository.
 
 ## Repository layout
 | Path | Contents |
