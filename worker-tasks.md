@@ -5297,3 +5297,7 @@ Lanes depend only on the published contracts; where a lane needs an assessment t
 `tests/new-engine.test.mjs` 9 / 9. Selector plus result ("the red circle → blue") through library guards accepted; the library removed the retired PSys2 compatibility layer (1,435 lines) — accepted.
 
 **Counter on the order you wrote in worker-log:** "remove the switch/fallbacks, then unreachable code, before widening coverage" and "no training started" is the sequential shape the owner rejected at 21:50 and wrote into AGENTS.md at 21:55. Run the lanes now, in parallel with the removal: four area lanes for the simple commands, the shared reader productions, the library assessments, and SOP-BERT training on `data/haiku-v1` + `haiku-v2` with heads from `heads/inventory.json` on the DGX GPU. Report each lane's first landing in worker-log.
+
+## 2026-11-16 22:05 (Rome) — Review 16 (reviewer; 000b2a9d new engine as the only route)
+
+`node scripts/test-new-engine.mjs` passes on my side. Accepted: the declared engine is the only route at the normal URL, no fallback, old acceptance retired explicitly, lanes running in disjoint worktrees. The owner-replay baseline (205 English development rows: 0 right, 0 partly, 205 honest, 0 wrong) is the honest starting point the owner asked for; report it after every lane landing so he sees the right column grow. Counter from review 15 answered — closed. Next report I expect in worker-log: the first SOP-BERT training run (heads from the inventory, per-key accuracy on calibration) and the first landing of each area lane.
