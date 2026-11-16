@@ -117,7 +117,7 @@ async function main() {
     if (process.env.OWNER_STATE && String(r.turn ?? r.id) === process.env.OWNER_STATE) console.error(JSON.stringify(after[TAB_WORLD[r.tab]] ?? null).slice(0, 6000));
     const changed = JSON.stringify(visibleState(before)) !== JSON.stringify(visibleState(after));
     const content = contentChanged(Object.fromEntries(Object.entries(before).map(([k, v]) => [k, JSON.stringify(v)])), after);
-    return { r, error, out: { before, after, changed, content, ms, shown: reply?.text ?? '', english: reply?.trace?.replyEnglish ?? '', worlds: [...new Set((reply?.segments ?? []).map((x) => x.world ?? x.match?.worldId).filter(Boolean))], tabAfter: after['ui.shell']?.activeTab ?? null, perf: reply?.perf ?? null, door: reply?.trace?.door ?? null, legacy: !!reply?.trace?.legacy } };
+    return { r, error, out: { before, after, changed, content, ms, shown: reply?.text ?? '', english: reply?.trace?.replyEnglish ?? '', read: reply?.trace?.english ?? '', worlds: [...new Set((reply?.segments ?? []).map((x) => x.world ?? x.match?.worldId).filter(Boolean))], tabAfter: after['ui.shell']?.activeTab ?? null, perf: reply?.perf ?? null, door: reply?.trace?.door ?? null, legacy: !!reply?.trace?.legacy } };
   };
   for (const [key, turns] of sessions) {
     // `redraw`: a regex over the visible state after that line; the lines up to it are replayed with seeds 1, 2, ... in fresh sessions until the state matches (the owner's own
@@ -142,7 +142,7 @@ async function main() {
       const { after, before, ms } = out;
       const judged = r.expect && Object.keys(r.expect).length > 0;
       const bad = error ? [`error:${error}`] : judge(r, out);
-      const row = { set: r.set, context: !!r.context, id: r.turn ?? r.id, class: r.class ?? null, text: r.text, tab: r.tab, ms, judged, right: judged ? bad.length === 0 : null, invariant: invariantFailures(out), failing: bad, worlds: out.worlds, tabAfter: out.tabAfter, changed: out.changed, content: out.content, reply: out.shown.slice(0, 240), english: out.english.slice(0, 240), stages: stagesOf(out.perf), door: out.door, legacy: out.legacy };
+      const row = { set: r.set, context: !!r.context, id: r.turn ?? r.id, class: r.class ?? null, text: r.text, tab: r.tab, ms, judged, right: judged ? bad.length === 0 : null, invariant: invariantFailures(out), failing: bad, worlds: out.worlds, tabAfter: out.tabAfter, changed: out.changed, content: out.content, reply: out.shown.slice(0, 240), english: out.english.slice(0, 240), ...(r.lang && r.lang !== 'en' && out.read ? { read: String(out.read).slice(0, 240) } : {}), stages: stagesOf(out.perf), door: out.door, legacy: out.legacy };
       rows.push(row);
       if (dump) {
         const ch = Object.keys(after).filter((w) => JSON.stringify(visibleState({ [w]: before[w] })) !== JSON.stringify(visibleState({ [w]: after[w] })));

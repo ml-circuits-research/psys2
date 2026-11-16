@@ -16,7 +16,7 @@ const WORD = /"[^"]*"|„[^”]*”|«[^»]*»|\d+(?:[.,]\d+)?|[\p{L}][\p{L}'_-]
 const fold = (s) => String(s).normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
 /** The edit cost a dictionary-only repair may have (the library's costs: a neighbouring key 0.4, a swap 0.6, an accent 0.1, any other edit 1). */
-const DICTIONARY_MAX_COST = 0.6;
+export const DICTIONARY_MAX_COST = 0.6;
 const dictionaries = new WeakMap();
 /** Every surface form of the language pack, folded and as written (a word typed without its diacritics is the language's too). Built once per vocabulary. */
 function dictionaryOf(vocab) {

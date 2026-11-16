@@ -260,7 +260,7 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false, mode = 
       const stateChanged = strip(before) !== strip(after);
       const acted = stateChanged || effects.length > 0 || reply.statuses.some((x) => x === 'supported');
       const outcome = outcomeOf({ unparsedAll, acted, statuses: reply.statuses, worlds, tabWorld, meta: META });
-      const rec = { id: r.id, outcome, ms, reply: english.slice(0, 220), worlds, statuses: reply.statuses, pos, tk, ...(reply.tooComplex ? { budget: reply.budgetExceeded?.site ?? true } : {}) };   // budget: the step budget ran out (deterministic ticks), where
+      const rec = { id: r.id, outcome, ms, reply: english.slice(0, 220), ...(r.lang && r.lang !== 'en' && reply.trace?.english ? { read: String(reply.trace.english).slice(0, 220) } : {}), worlds, statuses: reply.statuses, pos, tk, ...(reply.tooComplex ? { budget: reply.budgetExceeded?.site ?? true } : {}) };   // budget: the step budget ran out (deterministic ticks), where
       if (r.judge === 'state' && r.check?.regress) {
         // an owner `ok` turn must still be done by the tab's world: another tab's world taking it (other_world) or nothing understood is never right (P1 b)
         rec.verdict = outcome !== 'not_understood' && outcome !== 'other_world' && (outcome === 'executed' || outcome === r.check.was) ? 'right' : 'wrong';
