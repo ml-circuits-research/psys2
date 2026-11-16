@@ -48,6 +48,17 @@ export function invariantFailures({ shown, content: changed }) {
   return bad;
 }
 
+/** A reply that says something was done (en / ro). With no content change it is a false "done" (reviewer 2026-11-16 10:20 item 1). */
+export const CLAIMS_CHANGE = /\b(?:I (?:added|moved|made|changed|put|removed|drew|took|swapped|wrote|arranged|coloured|colored)|(?:is|are|look|looks) [^.]*\bnow\b|now (?:I|the)\b|(?<!\bnu )Am (?:ad[aă]ugat|mutat|pus|f[aă]cut|schimbat|desenat|scos|[sș]ters|aranjat|colorat|scris))|\bAcum\b|\bacum\.?$/i;
+/** right | partly | honest | wrong of a judged turn: right = the expectation holds; partly = the row's weaker `partly` expectation holds; honest = nothing changed and the reply
+ *  claims nothing (a refusal, a question, an explanation); wrong = everything else (a wrong change, or a false "done"). */
+export function verdictOf(row, out, bad) {
+  if (!bad.length) return 'right';
+  if (out.content && row.partly && !judge({ expect: row.partly }, out).length) return 'partly';
+  if (!out.content && !CLAIMS_CHANGE.test(out.shown) && !CLAIMS_CHANGE.test(out.english ?? '')) return 'honest';
+  return 'wrong';
+}
+
 export function judge(row, out) {
   const ex = row.expect ?? {};
   const bad = invariantFailures(out);
@@ -106,7 +117,8 @@ async function main() {
     const before = s.state(), t0 = performance.now();
     const setupSnap = r.setup ? s.snapshot() : null;
     let reply = null, error = null;
-    try { reply = await s.send(r.text, sendOptions(settings, { lang: r.lang ?? 'ro' }, createBudget())); } catch (e) { error = e.message; }
+    // `view`: the view the page tells while a popup is open (the avatar popup: `view: 'avatar'`, docs/webchat/app.mjs)
+    try { reply = await s.send(r.text, { ...sendOptions(settings, { lang: r.lang ?? 'ro' }, createBudget()), ...(r.view ? { view: r.view } : {}) }); } catch (e) { error = e.message; }
     const ms = Math.round(performance.now() - t0);
     if (process.env.OWNER_TRACE && process.env.OWNER_TRACE.split(",").includes(String(r.turn ?? r.id))) console.error(JSON.stringify({ text: reply?.text, statuses: reply?.statuses, parts: reply?.parts, trace: { ...reply?.trace, budget: undefined } }, null, 1).slice(0, Number(process.env.OWNER_TRACE_MAX ?? 12000)));
     const after = s.state();
@@ -142,11 +154,11 @@ async function main() {
       const { after, before, ms } = out;
       const judged = r.expect && Object.keys(r.expect).length > 0;
       const bad = error ? [`error:${error}`] : judge(r, out);
-      const row = { set: r.set, context: !!r.context, id: r.turn ?? r.id, class: r.class ?? null, text: r.text, tab: r.tab, ms, judged, right: judged ? bad.length === 0 : null, invariant: invariantFailures(out), failing: bad, worlds: out.worlds, tabAfter: out.tabAfter, changed: out.changed, content: out.content, reply: out.shown.slice(0, 240), english: out.english.slice(0, 240), ...(r.lang && r.lang !== 'en' && out.read ? { read: String(out.read).slice(0, 240) } : {}), stages: stagesOf(out.perf), door: out.door, legacy: out.legacy };
+      const row = { set: r.set, context: !!r.context, id: r.turn ?? r.id, class: r.class ?? null, text: r.text, tab: r.tab, ms, judged, right: judged ? bad.length === 0 : null, verdict: judged ? (error ? 'wrong' : verdictOf(r, out, bad)) : null, invariant: invariantFailures(out), failing: bad, worlds: out.worlds, tabAfter: out.tabAfter, changed: out.changed, content: out.content, reply: out.shown.slice(0, 240), english: out.english.slice(0, 240), ...(r.lang && r.lang !== 'en' && out.read ? { read: String(out.read).slice(0, 240) } : {}), stages: stagesOf(out.perf), door: out.door, legacy: out.legacy };
       rows.push(row);
       if (dump) {
         const ch = Object.keys(after).filter((w) => JSON.stringify(visibleState({ [w]: before[w] })) !== JSON.stringify(visibleState({ [w]: after[w] })));
-        console.log(`${row.set === 'session' ? 'T' : 'V'}${row.id} [${r.tab}] ${r.text}\n   -> ${row.right === null ? '·' : row.right ? 'RIGHT' : 'WRONG'} ${ms}ms worlds=${out.worlds.join(',')} tab=${out.tabAfter} changed=${ch.join(',')}\n   ro: ${row.reply.slice(0, 200)}\n   en: ${row.english.slice(0, 200)}${bad.length ? `\n   failing: ${bad.join(' ; ')}` : ''}`);
+        console.log(`${row.set === 'session' ? 'T' : 'V'}${row.id} [${r.tab}] ${r.text}\n   -> ${row.verdict === null ? '·' : row.verdict.toUpperCase()} ${ms}ms worlds=${out.worlds.join(',')} tab=${out.tabAfter} changed=${ch.join(',')}\n   ro: ${row.reply.slice(0, 200)}\n   en: ${row.english.slice(0, 200)}${bad.length ? `\n   failing: ${bad.join(' ; ')}` : ''}`);
       }
     }
   }
@@ -157,7 +169,7 @@ async function main() {
   for (const v of vars) { const c = (byClass[v.class ?? '?'] ??= { right: 0, total: 0 }); c.total++; if (v.right) c.right++; }
   for (const [k, c] of Object.entries(byClass)) c.ms = timing(rows.filter((x) => x.set === 'variant' && !x.context && (x.class ?? '?') === k));
   const summary = {
-    session: { right: sess.filter((x) => x.right).length, total: sess.length, medianMs: median(rows.filter((x) => x.set === 'session' && !x.context).map((x) => x.ms)), withheld: rows.filter((x) => x.set === 'session' && x.invariant.includes('withheld')).length, falseDone: rows.filter((x) => x.set === 'session' && x.invariant.includes('false-done')).length, ms: timing(rows.filter((x) => x.set === 'session' && !x.context)) },
+    session: { right: sess.filter((x) => x.right).length, total: sess.length, verdicts: Object.fromEntries(['right', 'partly', 'honest', 'wrong'].map((v) => [v, sess.filter((x) => x.verdict === v).length])), medianMs: median(rows.filter((x) => x.set === 'session' && !x.context).map((x) => x.ms)), withheld: rows.filter((x) => x.set === 'session' && x.invariant.includes('withheld')).length, falseDone: rows.filter((x) => x.set === 'session' && x.invariant.includes('false-done')).length, ms: timing(rows.filter((x) => x.set === 'session' && !x.context)) },
     variants: { right: vars.filter((x) => x.right).length, total: vars.length, byClass, medianMs: median(rows.filter((x) => x.set === 'variant' && !x.context).map((x) => x.ms)), ms: timing(rows.filter((x) => x.set === 'variant' && !x.context)) },
   };
   const file = join(REPO, `training/results/${name}${tag ? `-${tag}` : ''}.json`);
