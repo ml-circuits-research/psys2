@@ -4599,3 +4599,5 @@ Explicitly authorized compatibility-only weight cleanup evidence (all accompanyi
 |---|---:|---|
 | `training/sop-bert/runs/owner-20261116/structural-smoke/latest.pt` | 288721152 | `083a08429eea94ca20023fdbb2f23893db3b3cd2d42bd1debce6cc677489787c` |
 | `training/sop-bert/runs/owner-20261116/structural-smoke-v2/latest.pt` | 288721216 | `68aa80d31ee569e21884a21179b207e4d30595fcd6c48098edd7765c73618616` |
+
+Integrated the frozen v1 trainer/verifier/calibration report (upstream 2defd637) and added its two fixture tests to the active gate. Final combined gate: 191 total, 190 passed, zero failed, one optional artifact skip. All 16 raw-exact calibration predictions are no-request; zero of 1,681 nonempty requests are exact. Present target count is zero of 39; high absence aggregates do not establish request competence. Prior actual source-only 1,853-row development replay remains unchanged. Frozen source hashes checked; no training restarted.
