@@ -5172,3 +5172,7 @@ Source: `ml-circuits-research/diagram-vss-demo` — `training/neural/` (finetune
 | 5. Wire in | The model is a reader of the new path (the `?engine=new` preview); its description is verified by resolution in the instance like any other reading; the symbolic grammar remains fallback and explainer. |
 
 This can start now with one agent: steps 1 and 3 do not wait for the rest of phase 0; step 2 uses the request contracts already published (0.176–0.183).
+
+## 2026-11-16 18:15 (Rome) — Implementation review 8 (reviewer; 68df5890 calendar observation compare)
+
+Its tests → 7 / 7; real set unchanged. Accepted: comparing an observation with a versioned receipt is the `compare` of the operation catalogue (6.8.2) and what "done only from the difference" needs.
