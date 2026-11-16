@@ -25,7 +25,7 @@ export function createInventoryBootstrapInference({tokenizer,model,manifest,maxC
   try{
    const queries=rows.map(r=>`concept=${r.concept} key=${r.key} phase=${r.phase} instance=${r.instance} candidate=${r.candidate}`);
    // Refuse oversized encoded input rather than silently truncating source/query.
-   const encoded=await tokenizer(rows.map(()=>source),queries,{padding:true,truncation:false});
+   const encoded=await tokenizer(rows.map(()=>source),{text_pair:queries,padding:true,truncation:false});
    const dims=encoded?.input_ids?.dims;
    if(!Array.isArray(dims)||dims.length!==2||dims[0]!==rows.length||!Number.isSafeInteger(dims[1])||dims[1]<1||dims[1]>maxLength)return refuse('encoded-input-over-budget');
    if(!encoded.attention_mask||JSON.stringify(encoded.attention_mask.dims)!==JSON.stringify(dims))return refuse('invalid-tokenizer-output');

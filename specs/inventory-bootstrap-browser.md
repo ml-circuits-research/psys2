@@ -28,3 +28,15 @@ A general learned graph/instance proposer is still required for a primary SOP
 reader. Neither gold field instances nor the symbolic grammar may be used to
 hide that gap. Router configuration, side by side execution evaluation and
 verified replies are separate from this auxiliary inference adapter.
+
+The optional real-artifact test runs with `SOP_BOOTSTRAP_MODEL_DIR` pointing to
+the exported directory and `SOP_TRANSFORMERS_RUNTIME` pointing to the installed
+Transformers.js module. Run
+`node --test tests/inventory-bootstrap-inference.test.mjs` with both variables.
+It verifies exported model/tokenizer hashes, loads only local files, and exercises
+the actual pair-tokenizer and q8 model. Transformers.js pairs use the `text_pair`
+option; Python's positional pair API must not be copied into JavaScript.
+Absent those variables, the artifact test is explicitly skipped. This is a
+Node CPU runtime check of the browser library, not a browser deployment test.
+The frozen training calibration used CUDA autocast bfloat16; it certifies neither
+CPU FP32 nor browser q8 decisions.
