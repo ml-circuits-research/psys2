@@ -22,6 +22,16 @@ test('webchat build produces a bundle the browser loader can run', async () => {
 
     // load the COPIED library, as the browser does
     const url = (p) => pathToFileURL(path.join(out, p)).href;
+    for (const [world, factory, initialize] of [
+      ['diagram.sketch', 'createDiagramHost', 'initialDiagramState'],
+      ['docs.editor', 'createDocumentHost', 'initialDocumentState'],
+      ['data.charts', 'createChartHost', 'initialChartState'],
+    ]) {
+      const adapter = await import(url(`worlds/${world}/declared-host.mjs`));
+      const host = await adapter[factory]({ state: adapter[initialize](), instanceId: 'built:' + world });
+      assert.equal(host.observe().complete, true);
+      assert.ok(host.bindings().length > 0, 'built native capabilities load with shared dependencies');
+    }
     const { createBundleLoader } = await import(url('lib/loaders/bundle-loader.mjs'));
     const { createEngine } = await import(url('lib/dialog/index.mjs'));
     // worlds/index.json is the small routing index (LAZY LOADING); every world's files are in its own bundle.json

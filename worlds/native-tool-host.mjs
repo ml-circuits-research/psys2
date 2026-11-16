@@ -19,11 +19,31 @@ export function copyHostData(value,{maxNodes=100000,maxBytes=4000000}={}) {
 const text=v=>typeof v==='string'&&v.length>0&&v.length<=4096;
 export const nativeToken=value=>typeof value==='string'?JSON.stringify(value):String(value);
 
-export function createNativeToolHost({state,instanceId,scope,operations,handlers,view,maxObjects=10000,maxBytes=4000000}={}) {
+const TYPES=new Set(['string','boolean','number','integer','array','object']);
+const matchesType=(p,value)=>value===null?p.nullable===true:p.type==='array'?Array.isArray(value):p.type==='object'?!!value&&Object.getPrototypeOf(value)===Object.prototype:p.type==='integer'?Number.isSafeInteger(value):p.type==='number'?typeof value==='number'&&Number.isFinite(value):typeof value===p.type;
+const matchesBounds=(p,value)=>value===null&&p.nullable===true||(!p.enum||p.enum.includes(value))&&(p.min===undefined||value>=p.min)&&(p.max===undefined||value<=p.max);
+function checkOperation(op){
+ if(!op||typeof op!=='object'||Array.isArray(op)||!text(op.id)||!op.params||Object.getPrototypeOf(op.params)!==Object.prototype)throw new TypeError('invalid-tool-declaration');
+ for(const key of ['act','on'])if(Object.hasOwn(op,key)&&!text(op[key]))throw new TypeError('invalid-tool-declaration');
+ if(Object.hasOwn(op,'requires')&&(!Array.isArray(op.requires)||op.requires.some(value=>!text(value))))throw new TypeError('invalid-tool-declaration');
+ for(const [name,p] of Object.entries(op.params)){
+  if(!text(name)||!p||Object.getPrototypeOf(p)!==Object.prototype||!TYPES.has(p.type)||Object.keys(p).some(key=>!['type','required','nullable','enum','min','max','default'].includes(key)))throw new TypeError('invalid-parameter-declaration');
+  for(const key of ['required','nullable'])if(Object.hasOwn(p,key)&&typeof p[key]!=='boolean')throw new TypeError('invalid-parameter-flag');
+  if(Object.hasOwn(p,'enum')&&(!Array.isArray(p.enum)||['array','object'].includes(p.type)||p.enum.some(value=>!matchesType(p,value))))throw new TypeError('invalid-parameter-enum');
+  for(const key of ['min','max'])if(Object.hasOwn(p,key)&&(!['number','integer'].includes(p.type)||!Number.isFinite(p[key])||(p.type==='integer'&&!Number.isSafeInteger(p[key]))))throw new TypeError('invalid-parameter-bound');
+  if(p.min!==undefined&&p.max!==undefined&&p.min>p.max)throw new TypeError('invalid-parameter-bound');
+  if(p.enum&&p.enum.some(value=>!matchesBounds({...p,enum:undefined},value)))throw new TypeError('invalid-parameter-enum');
+  if(Object.hasOwn(p,'default')&&(!matchesType(p,p.default)||!matchesBounds(p,p.default)))throw new TypeError('invalid-parameter-default');
+ }
+}
+
+export function createNativeToolHost({state,instanceId,scope,operations,handlers,view,validate=null,maxObjects=10000,maxBytes=4000000}={}) {
+ if(validate!==null&&typeof validate!=='function')throw new TypeError('invalid-policy-validator');
  if(!Number.isSafeInteger(maxObjects)||maxObjects<1||!Number.isSafeInteger(maxBytes)||maxBytes<1)throw new TypeError('invalid-host-budget');
  if(!text(instanceId)||!text(scope)||!state||Object.getPrototypeOf(state)!==Object.prototype)throw new TypeError('host-identity-required');
  const copy=value=>copyHostData(value,{maxBytes});const declared=copy(operations),byId=new Map();
- for(const op of declared){if(!text(op.id)||byId.has(op.id)||!handlers[op.id]||typeof handlers[op.id]!=='function')throw new TypeError('invalid-tool-declaration');byId.set(op.id,op);}
+ if(!Array.isArray(declared)||!handlers||typeof handlers!=='object'||typeof view!=='function')throw new TypeError('invalid-tool-declaration');
+ for(const op of declared){checkOperation(op);if(!text(op.id)||byId.has(op.id)||!handlers[op.id]||typeof handlers[op.id]!=='function')throw new TypeError('invalid-tool-declaration');byId.set(op.id,op);}
  let fingerprint,revision=0,sequence=0;const live=new Map(),receipts=new Map();
  const snapshot=()=>{
   const data=copy(state),mark=JSON.stringify(data);if(mark.length>maxBytes)throw new RangeError('host-data-budget');
@@ -44,11 +64,11 @@ export function createNativeToolHost({state,instanceId,scope,operations,handlers
   for(const key of Object.keys(args))if(!Object.hasOwn(op.params,key))return refuse('unknown-argument');
   for(const [key,p] of Object.entries(op.params)){
    if(!Object.hasOwn(args,key)){if(Object.hasOwn(p,'default'))args[key]=copy(p.default);else if(p.required)return refuse('missing-argument');else continue;}
-   const value=args[key];if(p.type==='array'?!Array.isArray(value):p.type==='object'?(!value||Array.isArray(value)||typeof value!=='object'):p.type==='integer'?!Number.isSafeInteger(value):typeof value!==p.type)return refuse('invalid-argument-type');
-   if(p.enum&&!p.enum.includes(value)||p.min!==undefined&&value<p.min||p.max!==undefined&&value>p.max)return refuse('invalid-argument-value');
+   const value=args[key];if(!matchesType(p,value))return refuse('invalid-argument-type');
+   if(!matchesBounds(p,value))return refuse('invalid-argument-value');
   }
-  let before,staged,result,effects=[];
-  try{before=snapshot();if(before.version!==call.expectedVersion)return refuse('stale-observation');staged=copy(state);result=handlers[call.operation]({state:staged,request:(name,args)=>effects.push({name,args}),effect:(name,args)=>effects.push({name,args})},args,call.invocation);if(!result||result.status!=='supported')return refuse(result?.code||result?.reason||'native-refusal');copy(staged);if(JSON.stringify(staged).length>maxBytes)return refuse('host-data-budget');const projected=view(copy(staged));if(!Array.isArray(projected)||projected.length>maxObjects)return refuse('host-population-budget');const ids=new Set();for(const row of projected){if(!text(row.id)||!text(row.kind)||!text(row.sourceType)||ids.has(row.id)||(row.inputs!==undefined&&!Array.isArray(row.inputs)))return refuse('invalid-host-identity');ids.add(row.id);}copy(projected);copy(effects);copy(result.changed||[]);copy(result.data??null);}
+  let before,staged,result,validation=null,effects=[];
+  try{before=snapshot();if(before.version!==call.expectedVersion)return refuse('stale-observation');staged=copy(state);result=handlers[call.operation]({state:staged,request:(name,args)=>effects.push({name,args}),effect:(name,args)=>effects.push({name,args})},args,call.invocation);if(!result||result.status!=='supported')return refuse(result?.code||result?.reason||'native-refusal');copy(staged);if(validate){validation=copy(validate(copy(staged)));if(typeof validation?.ok!=='boolean')return refuse('invalid-policy-result');if(!validation.ok)return {...refuse(validation.code||'policy-denied'),validation};}if(JSON.stringify(staged).length>maxBytes)return refuse('host-data-budget');const projected=view(copy(staged));if(!Array.isArray(projected)||projected.length>maxObjects)return refuse('host-population-budget');const ids=new Set();for(const row of projected){if(!text(row.id)||!text(row.kind)||!text(row.sourceType)||ids.has(row.id)||(row.inputs!==undefined&&!Array.isArray(row.inputs)))return refuse('invalid-host-identity');ids.add(row.id);}copy(projected);copy(effects);copy(result.changed||[]);copy(result.data??null);}
   catch{return refuse('native-error');}
   const changed=JSON.stringify(staged)!==fingerprint;
   if(changed){
@@ -57,7 +77,7 @@ export function createNativeToolHost({state,instanceId,scope,operations,handlers
    for(const key of Object.keys(state))if(!Object.hasOwn(staged,key))delete state[key];
    for(const [key,value] of Object.entries(staged)){const d=Object.getOwnPropertyDescriptor(state,key);Object.defineProperty(state,key,{value,enumerable:true,writable:true,configurable:d?d.configurable:true});}
   }
-  const after=snapshot(),receipt={status:changed?'changed':'unchanged',verification:'unverified',invocation:call.invocation,operation:call.operation,instanceId,beforeVersion:before.version,afterVersion:after.version,before,after,changed:copy(result.changed||[]),effects:copy(effects),data:copy(result.data??null)};
+  const after=snapshot(),receipt={status:changed?'changed':'unchanged',verification:'unverified',invocation:call.invocation,operation:call.operation,instanceId,beforeVersion:before.version,afterVersion:after.version,before,after,validation,changed:copy(result.changed||[]),effects:copy(effects),data:copy(result.data??null)};
   receipts.set(call.invocation,{payload,receipt});return copy(receipt);
  };
  snapshot();return Object.freeze({observe:()=>copy(snapshot()),invoke,bindings:()=>copy(declared)});

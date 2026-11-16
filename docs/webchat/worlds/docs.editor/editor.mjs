@@ -17,8 +17,8 @@ import {
 import { ask as askAnimals } from '../../lib/knowledge/animals.mjs?v=5ccc37d193';   // the animals of the catalog (k.animals), read by lookup from a bundle generated from it
 import { basicColourNames } from '../../lib/knowledge/values.mjs?v=db60f56a52';   // the one colour reader (k.values)
 import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs?v=b022281f84';
-import { sync, snap, commit, restore, newId, addBlock, show, createDoc } from './document.mjs?v=419da05d8d';   // the document itself (state hygiene, history, a new document): the tool these word operations build on
-export { createDoc } from './document.mjs?v=419da05d8d';
+import { sync, snap, commit, restore, newId, addBlock, show, createDoc } from './document.mjs?v=d1f3113f66';   // the document itself (state hygiene, history, a new document): the tool these word operations build on
+export { createDoc } from './document.mjs?v=d1f3113f66';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const MAX_HISTORY = 50;

@@ -313,6 +313,13 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   const bundle = { worlds: {} };
   const ids = [];
   for (const e of (await readdir(worldsRoot, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {
+    if (e.isFile() && e.name.endsWith('.mjs')) {
+      // Shared native host modules live beside the world directories.
+      await mkdir(path.join(outDir, 'worlds'), { recursive: true });
+      const text = (await readFile(path.join(worldsRoot, e.name), 'utf8')).replace(/((?:\.\.\/)+)src\//g, '$1lib/');
+      await writeFile(path.join(outDir, 'worlds', e.name), text);
+      continue;
+    }
     if (!e.isDirectory() || !selected.has(e.name)) continue;
     const id = e.name;
     const dir = path.join(worldsRoot, id);

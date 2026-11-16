@@ -90,7 +90,7 @@ const partsOf = (chapters, parts) => (Array.isArray(parts) && parts.length
   : chapters);
 /** A text of a kind about a topic, written by the composer into a new document: its chapters as level-2 headings, its sections as level-3 headings, each paragraph with its sources. */
 export function writeText(ctx, { kind, about = null, words = null, chapters = null, parts = null, step = null } = {}) {
-  const g = textGen()?.composer, s = ctx.state;
+  const g = ctx.composer ?? textGen()?.composer, s = ctx.state;
   if (!g?.available) return { ...refuse('no_composer'), reply: 'refused.no_composer' };   // said by the reply fact: this build has no composer
   const r = g.compose({ type: kind ?? undefined, topic: about ?? undefined, chapters: count(chapters), words: count(words), genre: kind ?? undefined, seed: composeSeed(s, kind, about) });
   if (!r?.composition && ctx.knowledge?.loadState?.() === 'loading') return { ...refuse('nothing_known'), reply: 'refused.knowledge_loading' };   // the catalog is not (fully) read yet: one generic reply fact
