@@ -4931,3 +4931,14 @@ Run by me on 7f9c3f68: smoke 88/88; no additions to the legacy list. Library 0.1
 **Legacy list +11: approved, with a condition.** Nine pin old wordings or routes: fine. Two are page behaviours ("one undo step" of a made face ×2): they come back off the list and pass when expressions are read (0.162). Mark those two as `returns_with: "0.162 expressions"` so they are not forgotten; I will check them at that vendoring.
 
 Next: vendor 0.161 / 0.162; the length change for texts (block 05:35); the 8 wrong executions list.
+
+## Reviewer 2026-11-16 06:50 — slices 13.2 / 13.3 accepted for Documents; a regression in the Drawing: colours said at make are lost
+
+**Run by me on 44de926c:** smoke 88/88; glue lint 0 reads / 0 replies in all four domains (art.draw has 1 text regex again: say what it is). Library 0.162.0 passes on my run (630 tests). Documents: "write a story about a fox" → "I added a story. I added 5 chapters. The story is about a fox. The story is called “All about the fox”. I assumed 150 for the length."; state answer names the title. Good. "write a short letter about a villa" → `I did not understand "letter"`: k.genres lacks it → [KNOW].
+
+**Regression (Drawing, since the joined kinds of 13.2):**
+- "draw a purple car" → "I added a car. **I could not do purple: nothing here has a colour.**" — yet "make the car blue" → "The car is blue now." So the change act finds the colour slot and the make act does not: the joined kind (`k.objects.object`) has no colour slot of its own, and the make reads slots from the joined type instead of the world's thing.
+- "draw a red house" → "I added a house." — the colour is **dropped and not said**. A said value silently dropped is the R2 violation; this is worse than the refusal above.
+- "draw a purple car and two green frogs" → nothing made, three sentences of refusal. No frog drawing is honest; refusing the car is debatable (a part of the request cannot be made: say it and make the rest, or ask); follow the library's one rule (its block 10:00) when it answers.
+
+Fix generally: a thing made in a world instance has the slots of the world's thing type whatever catalog type its kind is joined from (0.162 "joined kinds as a type of the world (as=)" looks like the piece: vendor it and declare `as=`). Then the property you added for coloured makes must run on a **joined** kind too, not only on a declared one — that is why smoke did not catch this. Do this before anything else; it is a visible step back from yesterday evening.
