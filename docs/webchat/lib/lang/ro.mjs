@@ -32,11 +32,11 @@ const posOf = (cls) => (cls?.startsWith('v.') ? 'verb' : cls?.startsWith('a.') ?
 
 export async function openLangRo({ facts = null, unimorph = false, gloss: glossFor = null, local: withLocal = true } = {}) {
   facts ??= (await import('./ro.facts.generated.mjs?v=70639dca60')).LANG_RO_FACTS;
-  const local = withLocal ? (await import('./ro.local.mjs?v=9f97904765')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
+  const local = withLocal ? (await import('./ro.local.mjs?v=a4b41a5310')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
   // the large dictionary (3,466 lemmas derived from UniMorph, CC BY-SA 3.0, no senses) is a module of its own, loaded only when asked for; for a letter the hand file comes first, then the derived rows
   const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=723f88d67c')).LANG_RO_UNIMORPH : {};
   const text = (letter) => [facts.dictionary[letter], local.dictionary[letter], extra[letter]].filter(Boolean).join('\n');
-  const lib = await import('../vendor/sopworld/sopworld.mjs?v=c75044ce3c');
+  const lib = await import('../vendor/sopworld/sopworld.mjs?v=2363f3936d');
   const world = new lib.World();
   world.load(facts.wires);
   if (local.wires.trim()) world.load(local.wires);

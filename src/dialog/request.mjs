@@ -180,6 +180,18 @@ export function actOperation(live, act, of = null) {
   return r ? one(r, 'op') : null;
 }
 
+/**
+ * A make of the world's own whole and nothing else ("start a new drawing": the reading marks a kind that names the world itself `world: true`, and nothing is said of it: no count,
+ * manner, part, topic or value) is the world's own make operation when it declares one (request.sop `psys2.op act=make of=<page>`): a fresh page, never a whole sampled among
+ * its subkinds (questions.md Q93 (6)). Returns the operation's name or null.
+ */
+export function worldWholeOperation(live, request) {
+  const cs = request?.constraints ?? [];
+  if (request?.act !== 'make' || !cs.length || !cs.every((c) => c.on === 'kind' && c.want === 'yes' && c.world)) return null;
+  const r = ofType(live, 'psys2.op').find((x) => one(x, 'act') === 'make' && one(x, 'of'));
+  return r ? one(r, 'op') : null;
+}
+
 /** The parent of each declared type of a live world (core.type extends=), read from the world's facts. */
 export function typeParents(live) {
   const m = new Map();

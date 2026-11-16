@@ -364,7 +364,7 @@ import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs';
 import { intentStep, weakReading, cutWorld } from './intent.mjs';
 import { knownEnglishWord } from '../translate/en-ro.mjs';
 import { proposeReading, negationWords } from './proposer.mjs';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint } from './request.mjs';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1839,6 +1839,8 @@ export class DialogSession {
     // THE DECLARED BINDING (sopworld 0.152.1 std.tool; reviewer 2026-11-15 20:45): a world whose request.sop binds its acts to tool primitives is planned, run and said by the
     // library: a question about the state or about what the world can do (askWorld), the acts on the things there and things of kinds (planRequest over the mirrored view, runPlan
     // through the bindings, sayRequest from the view's diff). What the binding does not take goes on (scenes: the world's executor; undo; the honest reply).
+    const pageOp = worldWholeOperation(live, q.request);   // "start a new drawing": the world's own whole with nothing said of it is its new page, not a scene (Q93 (6))
+    if (pageOp && typeof this.engine.set.get(tabWorld)?.ops?.[pageOp] === 'function' && !q.unread.length) return this._doorOp({ text, opts, lang, english, translation, tabWorld, act: 'make', op: pageOp, args: {}, flat });
     if (tools) { const b = await this._doorBound({ text, opts, lang, english, translation, tabWorld, live, language, q, flat, lastRec, dlg, tools }); if (b) return b; }
     if (isQuestion(english, language)) return why('question');
     // UNDO / REDO are acts of the session's timeline (k.actions undo, redo), not of the tab world's request: the timeline answers ("redo", "undo the whole message", "undo the
