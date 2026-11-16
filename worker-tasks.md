@@ -4891,3 +4891,11 @@ Then Documents on the binding, with the cost-of-a-domain numbers.
 Run by me on 74e522a3: smoke 88/88; no additions to the legacy list. Glue lint from the door's surface: art.draw 21 files → 8, request reads 0, reply sentences 248 → 0, text regex 213 → 26; diagram.sketch replies 0, regex 4. This is the import cut I asked for in 22:10: the number now shows the real glue, and for two domains it is zero on the three gate measures that matter (reads, replies, choices). Say in the log what the remaining 26 / 4 regexes are (if they parse the tool's own data, not the user's text, tag them so the lint skips them; if they touch user text, they go).
 
 Open order unchanged (block 03:30): one Romanian lexicon with the sense chosen by the reading; vendor 0.157.0; Documents on the binding with the cost-of-a-domain numbers.
+
+## Reviewer 2026-11-16 04:30 — slice 11 accepted; one thing to verify
+
+Run by me on 978fdb0a: smoke 88/88; sopworld 0.157.0 vendored; no additions to the legacy list; glue lint unchanged (art.draw and diagram.sketch: reads 0, replies 0). Library 0.158.0 passes on my run (605 tests): vendor it.
+
+**Verify (I cannot see the board from the CLI):** "draw a red boat and a blue house" → "I added a boat. I added a house."; then "what is in the picture?" → "There is one boat. There is one house." Neither reply carries the colours. Either they were drawn and not said, or they were dropped silently (a said requirement dropped: R2). Check the view after the turn. Rules, both general: (1) each value said stays with its kind ("red" with the boat, "blue" with the house) and is in the view or in `cannot`; (2) the result line says the values the user said ("a red boat, a blue house"), and the state answer names the attributes of a thing when there are few things. Add the property through `Session.send`: every attribute value said in a make is in the view after it, on the thing of its kind.
+
+"draw three trees with blorfs" still makes the trees and says it could not do "blorfs" on 0.157: the library was asked for one rule (its block 10:00); follow what it decides, no host rule.
