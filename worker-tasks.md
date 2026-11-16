@@ -5260,3 +5260,18 @@ Next, in this order: (1) adopt library 0.193 (generic serializer) before the sec
 **98b28515 accepted** (`tests/new-engine.test.mjs` 9 / 9): the app now uses the 0.193 serializer with the supported profile as declared data. Next steps stay as in review 13 (selector plus result, size, one request per area, honest partial replies, owner sessions replayed through `?engine=new` turn by turn).
 
 **Reader data:** `training/sop-bert/data/haiku-v2/` now holds 17,995 rows in the general request form (0d664086); with v1, all 134 keys have at least 100 examples and 64 of 72 concept heads pass the gate (`heads/GATE-v1-v2.txt`). Training can start on the heads that pass.
+
+## 2026-11-16 21:45 (Rome) — OWNER DECISION: remove the old system; the new infrastructure is the only one
+
+The owner, verbatim in substance: nothing of the old system remains; everything is redone on the new infrastructure; no `?engine=new` switch or other toggles; the old path brought no value, almost nothing worked there, and it only confuses things. This replaces the earlier rule "the old path stays the default until the new one is at least equal".
+
+| Point | What to do |
+|---|---|
+| Default and only path | The app runs only the new engine: reader → `std.request` → resolution → effect → assessed reply. Remove the `?engine=new` switch, the legacy default, and every fallback or retry route into old readers. |
+| What goes | Old readers, dispatchers and routers (symbolic router, encoder dispatch, typed reader, proposer, normalizer, followup/continuation heuristics, translation/Romanian frames, old VSS/DistilBERT dispatch), old per-world operation code that the new tools do not call, and their tests and REAL replay harness tied to the old path. Record the last legacy number (124/207, 41 retired honest) once in the log for history, then drop the legacy column. |
+| What stays | Only what the new path uses: the shell and UI, the area views and renderers serving as hosts for the declared tools (drawing board, diagram, document editor, calendar host), the library bundle, the knowledge snapshot, the SOP-BERT training tree. Keep a host module only if a declared tool calls it; otherwise remove it. |
+| Unsupported turns | With the old path gone, most turns are not yet covered. Each must get an honest reply composed from what was read: what was understood, what is missing or not yet supported, and no state change. Never a silent failure, never an old-path answer. |
+| Measurement | Replay the owner's English sessions through the only engine and report right / partly / honest / wrong per turn; wrong must be 0. Retired areas stay in their own column. |
+| Order | One commit series, tested at each step: (1) make the new engine the only route and delete the switch; (2) delete the unreachable old code and its tests; (3) widen coverage by declarations (selector plus result, size, then one request per area). Publish to Pages after step 1 so the owner sees only the new system. |
+
+Small decisions inside this (which helper is still called, file layout) are yours; ask me only if a deletion would remove something a declared tool needs.
