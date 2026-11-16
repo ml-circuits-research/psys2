@@ -4281,3 +4281,11 @@ Final active `npm test`: 117/117 passed, zero failures/skips/TODO; canonical map
 | sets, or, not | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (24 incomplete) | 0/0/25/0/0 (25 incomplete) |
 | several requests | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) |
 | soft wishes | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (25 incomplete) | 0/0/25/0/0 (18 incomplete) | 0/0/25/0/0 (25 incomplete) |
+
+## 2026-11-16 — Auxiliary inventory encoder browser boundary (reader lane)
+
+Added `training/sop-bert/export-bootstrap.py`, `src/dialog/inventory-bootstrap-inference.mjs`, its tests and `specs/inventory-bootstrap-browser.md`. The exporter requires an immutable checkpoint hash plus matching frozen calibration, compares FP32 ONNX and PyTorch outputs, reports q8 numerical differences, preserves model/tokenizer/run/calibration hashes, refuses replacing an existing output, and reserves shared storage before importing the model. No model was downloaded or exported: the clean checkpoint/calibration is still pending and storage is reserved for training.
+
+The browser adapter reproduces the paired source/query conditioning, refuses encoded overflow, and exposes only candidate and token span logits. `propose` explicitly returns no request candidates with incomplete, non-executable coverage and unresolved topology. This is an auxiliary gold-field-conditioned model, not a graph reader; PyTorch calibration does not certify quantized inference. No router or vendor configuration changed.
+
+Checks: `node --test tests/inventory-bootstrap-inference.test.mjs` → 3/3; `python3 -m py_compile training/sop-bert/export-bootstrap.py` and `python3 training/sop-bert/export-bootstrap.py --help` pass. An inline Python fixture imported the exporter and checked checkpoint-hash mismatch and calibration-checkpoint mismatch: 2/2 refusal guards, no output created. After rebasing onto `237a96f8`, `node scripts/build-system-map.mjs --write` then `npm test` → 105/105. The active gate does not yet include the new test; it was run separately. Actual ONNX/Transformers.js parity awaits the frozen checkpoint and sufficient storage; no neural graph or class-matrix improvement is claimed.
