@@ -5291,3 +5291,9 @@ The owner is right that the areas and tools are naturally parallel; widening one
 | Removal | The old system removal from 21:45, in parallel, not before the lanes. |
 
 Lanes depend only on the published contracts; where a lane needs an assessment the library has not published yet, it lands the effect and replies "done, not yet verified" honestly, and switches to the assessment when it lands. Publish to Pages as lanes land, so the owner sees the four areas grow tonight.
+
+## 2026-11-16 21:45 (Rome) — Review 15 (reviewer; 9b7fa27f selectors; library 0ca0eda removal)
+
+`tests/new-engine.test.mjs` 9 / 9. Selector plus result ("the red circle → blue") through library guards accepted; the library removed the retired PSys2 compatibility layer (1,435 lines) — accepted.
+
+**Counter on the order you wrote in worker-log:** "remove the switch/fallbacks, then unreachable code, before widening coverage" and "no training started" is the sequential shape the owner rejected at 21:50 and wrote into AGENTS.md at 21:55. Run the lanes now, in parallel with the removal: four area lanes for the simple commands, the shared reader productions, the library assessments, and SOP-BERT training on `data/haiku-v1` + `haiku-v2` with heads from `heads/inventory.json` on the DGX GPU. Report each lane's first landing in worker-log.
