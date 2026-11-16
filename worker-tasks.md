@@ -5091,3 +5091,12 @@ Correction to my 14:30 blocks: the owner says ONE session (the one on the DGX) w
 | Acceptance | Unchanged: the owner's sessions replayed turn by turn, wrong stays 0; failed turns go to the register with the missing general mechanism. |
 
 I review every landing in the three repositories against its book section and run the examples.
+
+## 2026-11-16 14:40 (Rome) — OWNER: acceptance uses his sessions in ENGLISH; Romanian translation is a separate subject
+
+Owner: the test replays his sessions translated into English, not the Romanian turns; translation from Romanian is another subject (and not the core's).
+
+- Write once a fixed English version of the owner's Romanian turns (2026-11-15 session, 43 turns; the Romanian turns of 2026-11-16), one line per turn, beside the original: what a person typing English would write for the same intent, keeping the same level of looseness (fragments stay fragments, "more" stays "more", an objection stays an objection), with English typos only where the original had a typo. Do not "improve" a turn into an easier request. Same checks as now (intent and what must not change), carried over to the English line.
+- The acceptance set is then: those English versions plus the owner's English turns as typed. Report right / partly / honest / wrong per turn on that set.
+- The Romanian lines are kept and measured separately, as the translation subject, never mixed into the acceptance numbers.
+- I will review the English versions before they are used: a translation that makes a turn easier than it was would inflate the result.
