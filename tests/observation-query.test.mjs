@@ -28,3 +28,8 @@ test('property queries retain dimensional metadata and reject declared frame mis
  const result=evaluateQueryJobs([job],{observations:[observation],bindings:[b]});assert.equal(result.status,'answered');assert.equal(result.answers[0].rows[0].input.frame,'unix');
  assert.equal(evaluateQueryJobs([job],{observations:[observation],bindings:[{...b,frame:'local-clock'}]}).reason,'incompatible-property-dimension');
 });
+test('native numeric and string IDs retain their types and cannot alias by coercion',()=>{
+ const observation=fixture();observation.objects[0].id=17;observation.objects[1].id='17';
+ const result=run('members',selection(['incarnation-a','incarnation-b']),observation);assert.equal(result.status,'answered');assert.deepEqual(result.answers[0].value.map(o=>o.id),[17,'17']);
+ observation.objects[1].id=17;assert.equal(run('count',selection(),observation).status,'unsupported');
+});

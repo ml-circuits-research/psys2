@@ -2,6 +2,7 @@
 // Read-only aggregation over historical selected observations. No English or effects.
 import {copyHostData} from '../../worlds/native-tool-host.mjs';
 const text=v=>typeof v==='string'&&v.length>0;
+const nativeId=v=>text(v)||Number.isSafeInteger(v);
 const operations=new Set(['values','count','exists','members']);
 const identity=o=>({id:o.id,kind:o.kind,source:o.source,sourceType:o.sourceType,version:o.version});
 /** Internal jobs are compiled from validated std.request.query declarations. */
@@ -20,7 +21,7 @@ export function evaluateQueryJobs(jobs,{observations,bindings=[],maxSteps=100000
    if(!text(observation.instanceId)||!text(observation.scope)||!text(observation.version)||typeof observation.complete!=='boolean'||!Array.isArray(observation.objects))return refuse('invalid-observation');
    const bySource=new Map(),ids=new Set();
    for(const object of observation.objects){
-    tick();if(!text(object.source)||!text(object.id)||!text(object.kind)||!text(object.sourceType)||object.version!==observation.version||bySource.has(object.source)||ids.has(object.id)||!Array.isArray(object.inputs))return refuse('invalid-object-identity');
+    tick();if(!text(object.source)||!nativeId(object.id)||!text(object.kind)||!text(object.sourceType)||object.version!==observation.version||bySource.has(object.source)||ids.has(object.id)||!Array.isArray(object.inputs))return refuse('invalid-object-identity');
     bySource.set(object.source,object);ids.add(object.id);
    }
    const selected=[];
