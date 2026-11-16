@@ -4645,3 +4645,23 @@ Added the architecture-neutral two-model pipeline after both trainer owners conf
 Five injected-toy provider tests pass, including adjacent Unicode cuts, context-only arguments, invalid/overlapping cuts, unknown keys, incomplete outputs, misleading/unowned ranges, missing models and no-request distinction. No actual model output is simulated as a production result. The scaffold always remains non-executable with null graph confidence; no app provider is installed. Budgets are explicitly separate orchestration/bridge/decoder caps, with bounded local calls and copied payload sizes.
 
 Final active npm: 210 total, 208 passed, zero failed, two optional artifact skips. Browser/maps rebuilt; actual matrix301 eligible honest/zero wrong with1,347 setup exclusions, owner205 honest/zero wrong unchanged. Included root's repeated-key train/cal audit clarification in questions.md. No model/data/training modifications.
+## 2026-11-17 — Source-only BIO request cutter
+
+Added train-request-cutter.py, pure fixture tests and request-cutter specification.
+The full source audit verifies all 308 Haiku file hashes, original annotation
+lists/text, exact split/exclusion identities and complete row coverage before BIO
+labels. Retains all 28,959 TRAIN / 3,308 CAL rows, including 611 / 81 negatives.
+Three TRAIN rows have nine ambiguous spans and receive masked supervision; CAL
+has no ambiguous spans. Overlap/boundary/truncation diagnostics never invent cuts.
+Illegal I-after-O globally refuses decoding; no boundary repair or language rules.
+Train-only balanced BIO loss, >=3 epochs, calibration early stopping and frozen
+best-checkpoint proof include separate positive/empty span-exact metrics.
+
+Checks: 14 pure Python fixture tests pass; full raw corpus audit passes. Actual
+CPU smoke (8 rows/split, 2 optimizer steps, 1 explicitly marked smoke epoch)
+passes with clean auxiliary encoder warm start SHA68ca1038...; no model artifact
+saved, no inference activation/confidence claimed. OutsideGit evidence:
+.session-control/request-cutter-audit-verified.json and
+.session-control/request-cutter-smoke-v1/{final-verification.json,preparation.json}.
+The small smoke model produces invalid BIO transitions, correctly reported
+unresolved. Full GPU training follows this immutable source commit.
