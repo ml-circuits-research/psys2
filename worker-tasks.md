@@ -5184,3 +5184,20 @@ Accepted. The port is faithful (204 original files with hashes, the original spl
 **Q109 — protocol confirmed.** Three populations for the retargeted model: training; a calibration split, the only place thresholds are chosen; and a final unseen held-out set, read once when frozen, reporting right / partly / asked / wrong, extras and precision of execution. You are right about the number I quoted: "37.2 % right at ≤ 3 % confidently wrong" was a point read off the test curve, while the predeclared 97 % protocol asked about everything; quote both when comparing.
 
 Next, step 2 of the 18:05 task (retarget the heads to the general request description) needs a training environment with torch: use the DGX GPU environment the earlier vss-demo / diagram-vss-demo runs used, not the PSys2 Node environment.
+
+## 2026-11-16 18:30 (Rome) — Implementation review 10 (reviewer; 5c5faad7 label audit, Q110 graph heads)
+
+**Run by me:** `node --test tests/sop-bert-port.test.mjs` → 4 / 4.
+
+The exact-label audit is useful: the frozen labels lose about 7.7% of training requests and 5.8% of the historical held-out before any model error, so "train on the old labels" is ruled out by measurement, not opinion. Keep `--require-exact` as a training prerequisite.
+
+**Q110 — accepted, with four decisions so step 2 can start.**
+
+| Point | Decision |
+|---|---|
+| Candidate inventories for open symbols | Acts, kinds, concepts, relations and units come from the published legend and knowledge worlds (`w.legend.*`, `k.words.sense`, the four area worlds), each candidate scored with its English name and gloss as description. Names of objects in the current instance are candidates too, so a target can point at "the blue square" or "Monday standup" that exists now. No list written by hand in the training code. |
+| Where training gold comes from | Do not wait for row-by-row human approval; that blocks forever. Gold is produced mechanically and must pass three checks: exact graph roundtrip, `inspectRequest`, and resolution against a generated instance in which the request can execute (or, for `check`/`ask`, can be answered). Sources: diagram-vss-demo data converted to the general description, new-area examples written by a model from the area declarations, both checked the same way. I review a random sample of 40 per area in `reviews/`, a file the rule author does not read. |
+| Requests needing question projection or sequencing | `pending-contract` is fine for this round, but it is not a limit: each such row names the missing contract, and the library adds the two contracts (question target projection, ordered compound) after phase 0. Count them in their own column. |
+| Owner sessions | Development data only, as you wrote. The English versions of his Romanian turns go to me for review before use. |
+
+**Priority.** The owner is waiting for `?engine=new`. The library task (review 11 there) asks for the first request end to end now with the symbolic overlay as reader; please wire the PSys2 side (preview switch, drawing host reads the request, effect, reply) in parallel with the training smoke test rather than after it.
