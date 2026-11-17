@@ -4720,3 +4720,10 @@ new-row survival, no output storage aliases, exact encoder chain, malformed
 plans/configs, missing/mismatched/nonfinite/non-CPU tensors and budget refusal.
 Existing candidate13/13 fixtures pass. No file/checkpoint weights read, no GPU
 or model construction, actual migration/training or saved model binaries.
+
+Migration preflight follow-up: added metadata-only estimate_migration_work with
+explicit old+2fresh+3copied element accounting. Default10M remains unchanged;
+no implicit admission of a67M-parameter model. Work estimate is not peak memory
+or semantic validation. Tiny fixture proves estimated==actual work, exact
+allowance succeeds, one-less refuses atomically.10/10 CPU fixtures green; no
+actual model/checkpoint reads or migration. Existing13candidate fixtures unchanged.

@@ -68,3 +68,26 @@ new rows and independent storage; exact encoder provenance, duplicate identities
 missing/foreign/mismatched/nonfinite tensors, malformed plans, work exhaustion,
 and exact-versus-lossy dtype conversion. A meta-device tensor exercises refusal
 without allocating GPU memory. No actual checkpoint weights are migrated.
+
+## Explicit preflight allowance
+
+estimate_migration_work(old_state,fresh_state,plan) inspects CPU tensor metadata
+only, with its own tensor/row limits. For a valid plan it returns exactly:
+
+old elements + 2 × fresh elements
++ 3 × (copied encoder elements + copied head-row elements).
+
+This matches the applier's scans/clones/copies/dtype-roundtrip accounting.
+The estimate is not semantic validation and does not scan values; the applier
+still verifies all configs, plan mappings and finite values independently.
+A caller can inspect the breakdown and explicitly provide max_elements equal
+to or above the estimate. The default remains10M and is never raised silently.
+A roughly67M-parameter model needs roughly six model-sized element passes,
+so its real allowance would be hundreds of millions, not10M.
+
+Work allowance is distinct from memory capacity or allocation bytes.
+peakMemoryBytes is explicitly unknown; callers must establish a separate memory
+reserve before actual large migration. This candidate task does not authorize
+that operation. The extra tiny fixture proves estimate==actual successful work,
+exact allowance success and one-less atomic refusal, without large tensors or
+model/checkpoint reads. Total fixture count is now10.

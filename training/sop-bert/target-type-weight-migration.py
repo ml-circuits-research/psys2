@@ -145,6 +145,63 @@ def validate_plan(plan,old,new,old_keys,new_keys,old_bio,new_bio):
         raise Refusal('initialized-row-plan-mismatch')
     return expected
 
+def estimate_migration_work(old_state,fresh_state,plan,*,max_tensors=10000,max_rows=100000):
+    """Metadata-only element estimate; no value scans/clones/copies.
+
+    This is not semantic validation or a peak-memory/byte allowance. The caller
+    explicitly chooses max_elements; apply_weight_migration still validates
+    every config/plan/value independently and keeps its small default.
+    """
+    try:
+        import torch
+        if any(type(v)is not int or v<1 for v in (max_tensors,max_rows)):
+            raise Refusal('invalid-estimate-budget')
+        if type(old_state)is not dict or type(fresh_state)is not dict:
+            raise Refusal('invalid-estimate-state')
+        if len(old_state)+len(fresh_state)>max_tensors:
+            raise Refusal('estimate-tensor-budget')
+        def sizes(state):
+            total=0
+            for key,value in state.items():
+                if type(key)is not str or type(value)is not torch.Tensor or value.device.type!='cpu' or value.layout!=torch.strided:
+                    raise Refusal('estimate-cpu-tensors-required')
+                total+=value.numel()
+            return total
+        old_elements,fresh_elements=sizes(old_state),sizes(fresh_state)
+        if type(plan)is not dict or type(plan.get('rowPlans'))is not list:
+            raise Refusal('invalid-estimate-plan')
+        copied_encoder=0
+        for key,value in old_state.items():
+            if key.startswith('encoder.'):
+                if key not in fresh_state or value.shape!=fresh_state[key].shape:
+                    raise Refusal('estimate-encoder-shape')
+                copied_encoder+=value.numel()
+        copied_heads=0;rows=0
+        for entry in plan['rowPlans']:
+            if type(entry)is not dict or type(entry.get('rows'))is not list:
+                raise Refusal('invalid-estimate-row-plan')
+            source,target=old_state[entry['source']],fresh_state[entry['target']]
+            if source.ndim<1 or target.ndim<1 or source.shape[1:]!=target.shape[1:]:
+                raise Refusal('estimate-head-shape')
+            elements=math.prod(source.shape[1:])
+            for pair in entry['rows']:
+                rows+=1
+                if rows>max_rows:
+                    raise Refusal('estimate-row-budget')
+                if type(pair)is not list or len(pair)!=2 or any(type(i)is not int for i in pair) or not 0<=pair[0]<source.shape[0] or not 0<=pair[1]<target.shape[0]:
+                    raise Refusal('invalid-estimate-row')
+                copied_heads+=elements
+        total=old_elements+2*fresh_elements+3*(copied_encoder+copied_heads)
+        return {'ok':True,'estimatedElements':total,
+                'breakdown':{'oldElements':old_elements,'freshElements':fresh_elements,
+                             'copiedEncoderElements':copied_encoder,'copiedHeadElements':copied_heads},
+                'tensorVisits':len(old_state)+len(fresh_state),'copiedRows':rows,
+                'validityEstablished':False,'peakMemoryBytes':None,
+                'boundary':'metadata work estimate only; caller must separately authorize work and memory'}
+    except (Refusal,TypeError,KeyError,IndexError,RuntimeError,OverflowError)as error:
+        return {'ok':False,'estimatedElements':None,
+                'issues':[{'reason':str(error)if isinstance(error,Refusal)else'invalid-estimate-data'}]}
+
 def apply_weight_migration(old_config,new_config,plan,old_state,fresh_state,
                            *,max_elements=10000000,max_tensors=10000,max_rows=100000):
     """Return an independent CPU state, or {ok:false,state:None} atomically.

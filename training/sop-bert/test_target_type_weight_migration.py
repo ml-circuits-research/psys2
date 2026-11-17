@@ -154,6 +154,21 @@ class MigrationTests(unittest.TestCase):
             result=self.apply(**options)
             self.assertFalse(result['ok'],options);self.assertIsNone(result['state']);self.assert_unchanged()
 
+    def test_preflight_work_estimate_matches_exact_charges(self):
+        estimate=migration.estimate_migration_work(self.before,self.fresh,self.plan)
+        self.assertTrue(estimate['ok'],estimate)
+        b=estimate['breakdown']
+        expected=b['oldElements']+2*b['freshElements']+3*(b['copiedEncoderElements']+b['copiedHeadElements'])
+        self.assertEqual(estimate['estimatedElements'],expected)
+        result=self.apply(max_elements=expected)
+        self.assertTrue(result['ok'],result)
+        self.assertEqual(result['stats']['elements'],expected)
+        self.assertEqual(result['stats']['copiedElements'],b['copiedEncoderElements']+b['copiedHeadElements'])
+        self.assertFalse(self.apply(max_elements=expected-1)['ok'])
+        self.assertIsNone(estimate['peakMemoryBytes'])
+        self.assertFalse(estimate['validityEstablished'])
+        self.assert_unchanged()
+
     def test_exact_dtype_promotion_and_lossy_conversion(self):
         old,new=configs();before=state(old,10,dtype=torch.bfloat16);fresh=state(new,100)
         result=migration.apply_weight_migration(old,new,trainer.weight_migration_plan(old,new),before,fresh)
