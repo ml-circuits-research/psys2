@@ -1,0 +1,342 @@
+{
+  "allRawAnnotationsRetained": true,
+  "bindingSha256": "68cea94caade750df6ca4e3b3a665ba5f1b794e6873bfc1eb627f14644a339db",
+  "candidatePrep": false,
+  "canonicalCompleteCountsForScopeOnly": {
+    "calibration:completeNonemptyRows": 0,
+    "calibration:completeRows": 82,
+    "train:completeNonemptyRows": 5,
+    "train:completeRows": 633
+  },
+  "canonicalUnresolvedNeverFiltered": true,
+  "checkpointReads": false,
+  "corpusManifestSha256": "a05fe9e6e2ab324be217e88c07e327164d48e534118597ad99fb1e662bf8b850",
+  "excludedIds": 1648,
+  "exclusionSha256": "66b1ab7f205bedf08c15e3e83f98e3de217922d179e89ae8b99c29a938e29e77",
+  "executable": false,
+  "expectedConditionalKeySamples": {
+    "calibration": 4076,
+    "train": 36133
+  },
+  "format": "sop.review23-complete-corpus-verification/1",
+  "freeBytesAfterVerification": 580497408,
+  "futureCandidatePrepStorage": {
+    "attempted": false,
+    "freeBytesAfterCorpusVerification": 580497408,
+    "priorMaxOutputBytes": 67108864,
+    "priorReserveBytes": 575067982,
+    "requiredFreeBytes": 642176846,
+    "shortfallBytes": 61679438
+  },
+  "gpu": false,
+  "newTargetedUniqueRows": 1999,
+  "originalRetainedRowsBitwiseSemanticEqual": 32267,
+  "originalSourcesUnchanged": 308,
+  "outputs": {
+    "calibration": {
+      "bytes": 7701527,
+      "path": "/home/salboaie/work/sopworlds/.session-control/structural-gold-review23-full/calibration.jsonl",
+      "sha256": "4911bcb18188940abc7a13719dc1d379e85393fb5b6a716086cae2766b46b71e"
+    },
+    "train": {
+      "bytes": 68341460,
+      "path": "/home/salboaie/work/sopworlds/.session-control/structural-gold-review23-full/train.jsonl",
+      "sha256": "8b4d4ceb610aceb9f917bdda0bde828432393fe1f665e48a79ea6b348da51ec8"
+    }
+  },
+  "projectorSha256": "2e7644e68f16b63f086667ca80c8f623933b2dcad9cc4137e721298c112cf160",
+  "regenerationCommand": [
+    "python3",
+    "/home/salboaie/work/sopworlds/.session-control/review23-source-snapshot/training/sop-bert/project-structural-gold.py",
+    "--root",
+    "/home/salboaie/work/sopworlds/.session-control/review23-source-snapshot/training/sop-bert",
+    "--exclude-ids",
+    "/home/salboaie/work/sopworlds/.session-control/review23-source-snapshot/exclusion-source.json",
+    "--bindings",
+    "/home/salboaie/work/sopworlds/.session-control/review23-source-snapshot/structural-bindings.json",
+    "--out",
+    "/home/salboaie/work/sopworlds/.session-control/structural-gold-review23-full"
+  ],
+  "reservedOverlap": 0,
+  "scriptSha256": "a956c0f854c12896c37fea365f313b0a9f9b46989bb71b4b7c31cd0b5422b026",
+  "snapshotManifestSha256": "676445298a6737bf80166e4052173e6e4665a79f1a13df2956cf7c061c2cb891",
+  "sourceCommit": "bf499e2a4a7f796c11bcc3d1d94d73cb180e653e",
+  "sourceCounts": {
+    "haiku-v1:sourceRows": 15919,
+    "haiku-v2:sourceRows": 19995
+  },
+  "sources": 328,
+  "targetedCountDiscrepancy": {
+    "actualUniqueRows": 1999,
+    "file": "data/haiku-v2/calendar/v2b20a.jsonl",
+    "fileRows": 99,
+    "reviewerStated": 2000
+  },
+  "targetedFiles": [
+    {
+      "bytes": 96548,
+      "idsAndSplitsSha256": "560149eefed0a616ccf11d209bc71fbc926a7456ec66bbcd6ae2e59a5ca2678e",
+      "path": "data/haiku-v2/calendar/v2b20a.jsonl",
+      "rows": 99,
+      "sha256": "d070f2b1feed2e49bc3cbd1bedf09681aa24261de886835b8170ce682b4361ad",
+      "splitCounts": {
+        "calibration": 10,
+        "train": 89
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 113591,
+      "idsAndSplitsSha256": "be167ffc8b03e5a6ff69c0969065012541738755694b2fffb4030649236dabd4",
+      "path": "data/haiku-v2/calendar/v2b20b.jsonl",
+      "rows": 100,
+      "sha256": "f05591dad7ca4d0793ba738f5893f01641ad3ba8d9a4dad3cb9d9d239c9ff7af",
+      "splitCounts": {
+        "calibration": 7,
+        "train": 93
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 95176,
+      "idsAndSplitsSha256": "aa774a0301fa29be5f006470a5444231d154b909e854b32cca73053de76c392c",
+      "path": "data/haiku-v2/calendar/v2b21a.jsonl",
+      "rows": 100,
+      "sha256": "69ddce84439869b405d150a5f6e38d6321c379d739dbda0adabffa6864409f23",
+      "splitCounts": {
+        "calibration": 9,
+        "train": 91
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 105853,
+      "idsAndSplitsSha256": "20479f49ed8851dbc9d361d5d51251e6857313e474c782b5a8e6d1e37069dea0",
+      "path": "data/haiku-v2/calendar/v2b21b.jsonl",
+      "rows": 100,
+      "sha256": "4eae3e97ec8a33ab9592e353290c5f503c2b23aec08c0e7927c37ca848f13e68",
+      "splitCounts": {
+        "calibration": 10,
+        "train": 90
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 64349,
+      "idsAndSplitsSha256": "435b122230cced8d74faf3fd59c9740e8d73d52199350575e192b525ba5e3a54",
+      "path": "data/haiku-v2/calendar/v2b22a.jsonl",
+      "rows": 100,
+      "sha256": "f0ba79a61ab4a4f85fe4a2a747585901052e9bf09285bdbe98d3838216afef9d",
+      "splitCounts": {
+        "calibration": 4,
+        "train": 96
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 72533,
+      "idsAndSplitsSha256": "1464d90277319ed8b33d0dec443b32270e511a659e96317a69d5b50ca17748c7",
+      "path": "data/haiku-v2/calendar/v2b22b.jsonl",
+      "rows": 100,
+      "sha256": "d2250fa0d114a6165e65135b315b450e9d738f17ca2510e79c41a60b1366ff01",
+      "splitCounts": {
+        "calibration": 14,
+        "train": 86
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 102064,
+      "idsAndSplitsSha256": "b06bd0634f0bf67de3a5268f04651a0fbab5ea0d843517b0013dcfec74f48208",
+      "path": "data/haiku-v2/diagram/v2b27a.jsonl",
+      "rows": 100,
+      "sha256": "6af3546f4a1f603d33d27301da6ef4f0a6286d65df51276bcaecd5760ad8f861",
+      "splitCounts": {
+        "calibration": 14,
+        "train": 86
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 73895,
+      "idsAndSplitsSha256": "b998209a3c1b6b4365ed09f8c9f049c6286c1a401aa52dd491aca2d059b712fb",
+      "path": "data/haiku-v2/diagram/v2b27b.jsonl",
+      "rows": 100,
+      "sha256": "cb2ca478089d28503ff24c3bb5521d61af56aa5ae197751e5bc50276364d3905",
+      "splitCounts": {
+        "calibration": 11,
+        "train": 89
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 126642,
+      "idsAndSplitsSha256": "acbb6234731fe2cc836e28ef2822a65d1111569238c3f165b66a7fdbb9d22168",
+      "path": "data/haiku-v2/diagram/v2b28a.jsonl",
+      "rows": 100,
+      "sha256": "232db13ea6c60f9c6709ae22b8c4b2946c28fcbf3b2c05d6240609bf88d1d4a7",
+      "splitCounts": {
+        "calibration": 6,
+        "train": 94
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 133999,
+      "idsAndSplitsSha256": "d150a046569058664d37fa1d248fcfa2fc0487cc28d3d806b154f4bbacb89262",
+      "path": "data/haiku-v2/diagram/v2b28b.jsonl",
+      "rows": 100,
+      "sha256": "a6c59e35212cc55c910478ba4ab3837e710e13bee9ac78e4a59448d777e2b13c",
+      "splitCounts": {
+        "calibration": 16,
+        "train": 84
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 85923,
+      "idsAndSplitsSha256": "532811abb376f5617330ada5d2b0a74c957c028a873ee3070dbbafef3f01844f",
+      "path": "data/haiku-v2/document/v2b20a.jsonl",
+      "rows": 100,
+      "sha256": "44548127335892d7caf6f944765cf6c2c5e4744b7e2094bfebe0ba8450eac4f0",
+      "splitCounts": {
+        "calibration": 8,
+        "train": 92
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 78643,
+      "idsAndSplitsSha256": "18595c5db885419b20e3d300fbb833ba5623d75516880e5c9dfd5d4634ac247c",
+      "path": "data/haiku-v2/document/v2b20b.jsonl",
+      "rows": 100,
+      "sha256": "729066f39183bf08c20959ee4c772c6f4bf6803ee3c3584e805c07aaf6a3c4a8",
+      "splitCounts": {
+        "calibration": 6,
+        "train": 94
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 97730,
+      "idsAndSplitsSha256": "7460206836d5e3c4a3839f8ee5ec674ee0ceae66f8c9d65173f707a04812c485",
+      "path": "data/haiku-v2/document/v2b21a.jsonl",
+      "rows": 100,
+      "sha256": "7ef3f9e45d1f088dbbed38ff71ee152b8fa9c813945377d228b219c6b60cccfd",
+      "splitCounts": {
+        "calibration": 7,
+        "train": 93
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 92063,
+      "idsAndSplitsSha256": "ec7a96d786613c7ad0289465c2577335ca2f681cc44639889edd9ceec6f6bd40",
+      "path": "data/haiku-v2/document/v2b21b.jsonl",
+      "rows": 100,
+      "sha256": "093c0e3969257ee3cf8d5a9cab82dc47b2fa0d8e9209c8a6d7d6185e46e71c28",
+      "splitCounts": {
+        "calibration": 6,
+        "train": 94
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 90548,
+      "idsAndSplitsSha256": "e92e6bb40a0857dc026ae53197423aac578d64cf6c213fe296a191bd2af57b1b",
+      "path": "data/haiku-v2/drawing/v2b27a.jsonl",
+      "rows": 100,
+      "sha256": "8a619d2c211ee5f22ca40048453514aa8034880c922fb3d314af2dae1484dd41",
+      "splitCounts": {
+        "calibration": 5,
+        "train": 95
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 94035,
+      "idsAndSplitsSha256": "4fed451f7c17bc0b095852a39fe4212bfce0ef2348b2e69d0abd70c90556917c",
+      "path": "data/haiku-v2/drawing/v2b27b.jsonl",
+      "rows": 100,
+      "sha256": "9191c8effb671bfc93d61f7b39f29c732b51f62ebc3eabb2c45112ae5a4f3e70",
+      "splitCounts": {
+        "calibration": 7,
+        "train": 93
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 66680,
+      "idsAndSplitsSha256": "fff6b5b9d4613d738cf9025c30699d21ead25144a34b11e8ee01ba9e747b31cf",
+      "path": "data/haiku-v2/drawing/v2b28a.jsonl",
+      "rows": 100,
+      "sha256": "04bbd8c8da744fc5a82893f60322e45b0b897f16c1614d3c283494f671398ce7",
+      "splitCounts": {
+        "calibration": 9,
+        "train": 91
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 73851,
+      "idsAndSplitsSha256": "8f234e5663ce983124f80576ba84f84cdec492f64755cf8c0e008e32fa169e53",
+      "path": "data/haiku-v2/drawing/v2b28b.jsonl",
+      "rows": 100,
+      "sha256": "f15bcfcc2282aabbff33de98205f82a08b2f091f105eeb46a42611dcfba9a3e7",
+      "splitCounts": {
+        "calibration": 7,
+        "train": 93
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 69309,
+      "idsAndSplitsSha256": "ff31c60a132a8dd66a79d924fd2ebc14b9f6bc9b964f8a8175a4a6efd65a1d06",
+      "path": "data/haiku-v2/drawing/v2b29a.jsonl",
+      "rows": 100,
+      "sha256": "4fbd6fea23c5ba0a796162731c19fbaec2a370efa80d6cea9103bcee187e2e7f",
+      "splitCounts": {
+        "calibration": 11,
+        "train": 89
+      },
+      "targeted": true
+    },
+    {
+      "bytes": 68540,
+      "idsAndSplitsSha256": "b6f33b1a5bd34662eb45ab8fae6cbe29fe0c1e19bc9f57f42b223c27202d5ef2",
+      "path": "data/haiku-v2/drawing/v2b29b.jsonl",
+      "rows": 100,
+      "sha256": "925d827eb3863643dcb08296ad462d78eff0c5912d9025640151242d6bb874f9",
+      "splitCounts": {
+        "calibration": 10,
+        "train": 90
+      },
+      "targeted": true
+    }
+  ],
+  "targetedIdLocation": "review23-source-snapshot/manifest.json targetedSources[].ids (exactIDs retained; eachpublishedsourcefile alsocontainsIDs)",
+  "targetedSplitCounts": {
+    "calibration:emptyRows": 1,
+    "calibration:requests": 234,
+    "calibration:rows": 177,
+    "train:emptyRows": 17,
+    "train:requests": 2356,
+    "train:rows": 1822
+  },
+  "totalCorpusBytes": 76094125,
+  "totalRetainedCounts": {
+    "calibration:emptyRows": 82,
+    "calibration:requests": 3994,
+    "calibration:rows": 3485,
+    "train:emptyRows": 628,
+    "train:requests": 35505,
+    "train:rows": 30781
+  },
+  "training": false,
+  "validator": {
+    "command": "python3 -I [snapshot]/training/sop-bert/data/haiku-v2/validate_v2.py --check [20 exact targeted paths]",
+    "logSha256": "14081dfc7882552dc1ba842544043639543c127b5992c987b35162c68d7067ce",
+    "result": "1999 rows, 0 with problems",
+    "sha256": "8aaf257ab7f7af057fdab636b7d5f9922e7e3ca0dbf2d129e644295fb66c5f61"
+  }
+}
