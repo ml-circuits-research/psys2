@@ -1213,3 +1213,9 @@ downstream calibrated exact-request risk before admission; no activation or
 confidence follows from BIO legality or summed logits.
 Blocking: no. The app gate and frozen strict codec remain unchanged; the
 comparison is offline evidence only.
+
+### Production lifecycle declarations before planner/dispatcher activation
+
+The read-only planner can admit generated declarations against real hosts, but there is no authenticated production capability registry connecting it to the application's narrow property coordinator. C1 exports explicitly mark native family bindings as eligibility only and defer actual kind/value conversion. Proposed next step: a versioned declaration snapshot joining canonical kind/property families to current native modules and explicit value/reference resolvers, then whole-batch semantic preflight plus fresh per-entry version checks in the existing dispatcher. Diagram names need an actual make→label-setter plan; Document children need explicit live parents/content; Calendar needs real resource/time-frame resolution. Evaluation defaults cannot supply missing execution semantics. Unsupported quantifier/relation/relative/question/context fields must remain consumed by declared mechanisms or refuse, never disappear.
+
+The frozen Viterbi comparison adds72 true spans but73 false-positive spans. Of90 newly resolved messages,30 have exact boundaries and60 remain incorrect; two global-path ties remain unresolved. This is useful measured decoder behavior, not a reason to activate from F1 alone or inherit the strict codec's calibration. Keep strict-greedy published baseline and require separately identified complete-pipeline risk measurement before any execution admission.

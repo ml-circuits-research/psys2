@@ -4756,3 +4756,11 @@ metrics/provenance and tradeoffs in specs/cutter-decoder-comparison-v1-evidence.
 Large immutable emissions and decoder labels remain outside Git at
 .session-control/request-cutter-decoder-comparison-v1. Original trainer,
 checkpoint and strict evidence remain untouched.
+
+### Frozen decoder comparison and production-planning audit
+
+Integrated reader comparison5f20f379/420b42c7 as74777aa2/606a2bc1 without changing the strict cutter codec or frozen emissions. The four comparison fixtures now run in the active gate against the actual published BIO helper. The single3,308-row CUDA BF16 comparison reproduces every original strict packet and metric: legal Viterbi adds72 true spans and73 false-positive spans, raising span F1 from81.7258% to82.0559%. Of90 newly resolved messages,30 are exact and60 remain incorrect; two tied paths remain unresolved. Questions/spec preserve this exposure tradeoff and explicitly reject F1-only activation or inherited confidence.
+
+Audited the missing planner→dispatcher production boundary in spec48: actual session host registry/epochs, complete semantic preflight and fresh version checks, source-backed canonical kind/value/reference declarations across Drawing/Diagram/Document/Calendar, created-identity dependencies, and typed effect/receipt correlation. Existing16-property frozen C1 lookup only establishes partial source/native chains; family eligibility and evaluation defaults are not production execution mappings. No sentence rule, model gate bypass, native effect or synthetic owner success was introduced.
+
+Final active npm:228 total,226 passed,zero failed,two optional artifact skips. No runtime/browser source changed, so no rebuild or expensive model evaluation was repeated. Previous actual app no-effect replay remains unchanged. Diff check passed; active per-key training worktree remains independently owned and untouched.
