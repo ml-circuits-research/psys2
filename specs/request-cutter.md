@@ -112,3 +112,45 @@ checkpoint is trained but executionEligible remains false. These are CUDA
 BF16 cutter metrics, not calibrated confidence, browser accuracy, downstream
 field accuracy or complete-command correctness. Empty exactness is below
 epoch one (76/81), a retained tradeoff rather than a hidden global gain.
+
+## Browser cutter computation source
+
+src/dialog/cutter-inference.mjs now provides
+createCutterInference({manifest,tokenizer,model,offsetAuthority,recordDiagnostics}).
+It accepts the exact real export bundle profile sop.key-reader-runtime/1:
+cutterConfigJSON/cutterConfigSha256,cutterSha256,cutterCheckpointSha256,
+cutterTrainerSha256,cutterCodecSha256,tokenizerSha256,fp32 output dtype and
+explicit fp32 or q8-dynamic weight representation. Configuration must match the
+frozen source-only codec, maxLength192, source/tokenizer hashes and graph role.
+The canonical codec hash is64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213.
+Component hashes/representation are included in compound cutter identity.
+Loading/validating actual graph bytes remains the caller's separate authority.
+
+The computation invokes the injected tokenizer on source alone twice: full and
+fixed right-padded/truncated length192. No text_pair or empty context is supplied.
+For untruncated input, full and padded active token IDs must agree. A verified
+single-template offset authority must independently bind actual IDs/masks,
+tokenizer/profile identity, CLS/SEP, source sequence0 and scalar ranges.
+Context sequence1, special/pad source evidence, invalid Unicode, mismatched
+IDs, padding, ranges or incomplete token coverage refuse before model use.
+Truncation is reported explicitly and never repaired.
+
+The injected model receives actual input_ids and attention_mask and must return
+bio_logits[1,L,3] with finite values. Strict greedy BIO matches the frozen Python
+decoder; exact ties become unknown, I after O globally refuses without repair.
+Viterbi is intentionally not selected because that changes the frozen codec.
+A fixture artifact always has incomplete coverage and an untrained diagnostic.
+
+infer(text) retains all finite source-token logit triples (including O decisions)
+in auxiliary diagnostics, without interpreting them as probabilities or fitting
+a threshold. cut(text) returns only the pipeline's closed source/spans/coverage/
+unresolved/model envelope after recording diagnostics. Internal identity and the
+delivered packet are independent of diagnostic callback mutation.
+Provenance has calibration:null and executionEligible:false; no activation,
+weights loader, export, backend parity or empirical acceptance is supplied.
+
+Checks:12source-only node fixtures pass. Synthetic tokenizer/session callbacks
+exercise actual invocation/shape flow, scalar cuts, empty/all-O input, strict
+Python-codec parity, refusal cases, identity changes and work limits. They load
+no trained model files, ONNX weights, GPU or external artifacts; real-session
+parity and deployment admission remain separate work.

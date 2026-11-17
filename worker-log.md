@@ -4811,3 +4811,19 @@ replace/fsync failure, rollback/current preservation, immutable proof receipt,
 one-additional-allocation accounting and no final-run forgery. No real model
 binaries, actual snapshot, data prep, checkpoint reads, training or GPU run.
 Final source review/freeze still precedes any launch.
+
+## 2026-11-17 — Source-only injected browser cutter computation
+
+Added only NEWsrc/dialog/cutter-inference.mjs and tests; shared key-reader,
+packet/pipeline/router/exporter untouched. Frozen strict source-only codec,
+single-template actual token IDs/masks, verified scalar authority and padded/
+full alignment precede injected bio_logits model invocation. Truncation, ties,
+illegalI and invalid evidence refuse; no Viterbi switch or parser fallback.
+Closed .cut envelope fits existing pipeline. Diagnostic source logit triples
+include negative O decisions, without probability/calibration/effect claims.
+
+Checks:12targeted node source fixtures pass, including frozen pure Python BIO
+parity and emoji scalar ranges. Synthetic callbacks are explicitly fixture
+artifacts and remain incomplete. No actual ONNX weights/session, model files,
+GPU, source training/data mutation or provider activation. Knowledge/PSys
+confirmed exact bundle fields and frozen codec/config identities.
