@@ -1,8 +1,8 @@
 {
   "format": "psys2.browser-reader-deployment/1",
-  "manifestPath": "models/sop-bert/aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c/manifest.json",
-  "manifestSha256": "aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c",
-  "artifactBase": "models/sop-bert/aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c/",
+  "manifestPath": "models/sop-bert/6846e72b21172c487df4908e1fd9d8c14f57087a3bf70008ae34f73b564a63e3/manifest.json",
+  "manifestSha256": "6846e72b21172c487df4908e1fd9d8c14f57087a3bf70008ae34f73b564a63e3",
+  "artifactBase": "models/sop-bert/6846e72b21172c487df4908e1fd9d8c14f57087a3bf70008ae34f73b564a63e3/",
   "tokenizerArtifact": {
     "path": "tokenizer.json",
     "sha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
@@ -10,8 +10,8 @@
   },
   "bindingsArtifact": {
     "path": "bindings.json",
-    "sha256": "07b8094f4c1ababffff579dfd0d249b597afcafcfb26c47bc776887ce03e0798",
-    "bytes": 3737397
+    "sha256": "d50317165fd00a09e4ea90ecea200d0695e519cae8b70077b0f94c2adda2491b",
+    "bytes": 3221909
   },
   "tokenizerConfigArtifact": {
     "path": "tokenizer_config.json",
@@ -22,13 +22,13 @@
   "runtimeIdentity": {
     "appBuildSha256": "048e5ba81a0f9fab80fa83fac15d7e101b7cfb468b521d311a29a6a3dd151091",
     "readerSha256": "cc7cb6fce3d018496c015a4b69cee1aeeb56444402edaa6658b63b38da66929b",
-    "pipelineSha256": "a0625bd911ab8fbc86e95d9822596d307d034133ea43031135314140adcab3a4",
+    "pipelineSha256": "511d7d035b4e3e9fee4519bc285fb2e25a993e9eb5ad361e4ea6169ffaf88e55",
     "packetAdapterSha256": "6707586fe4775db70c8a038d32ba0fb1cc83d9cd6cf8058cf512b56aba9a2400",
-    "graphDecoderSha256": "ff3b6c9c4e1adae4e4916d8e906305ecc9ee5c02e2e90c5222b4957dd9c8b155",
+    "graphDecoderSha256": "c42b16b27439590c70c4d8445a6b17bab795fe2cd58e625741aa22f421128cff",
     "executorSha256": "049c0432f86b59a0634a8f10f9f343c100b69c7dd9d62b159e1f254fe0efebde",
     "contextSerializationSha256": "b63a503983c316b4ef55da4ec82fc31ad5ece4e2b25027ef825abe8333ebcb68",
     "backendSha256": "b22eaac167cf46782e78f47aaa0f472b0b4f95893079068e8294112759d239fa",
-    "bindingsSha256": "07b8094f4c1ababffff579dfd0d249b597afcafcfb26c47bc776887ce03e0798"
+    "bindingsSha256": "d50317165fd00a09e4ea90ecea200d0695e519cae8b70077b0f94c2adda2491b"
   },
   "implementation": {
     "format": "psys2.browser-reader-implementation/1",
@@ -60,15 +60,15 @@
       "pipelineSha256": [
         {
           "path": "lib/dialog/key-reader-pipeline.mjs",
-          "sha256": "d61e224f0b86a97e4ba9c09c56fafac21b36b86395d04d79c36252b6689222ce"
+          "sha256": "bbc488c55b8d6a895a1046f3960d49dbecda70928c2730c911d3a0e105b4aca5"
         },
         {
           "path": "lib/dialog/verified-reader-provider.mjs",
-          "sha256": "ae98e7d9c49710bc726eaa558368953066d88aebb4fc1613faa3c2b055a98db7"
+          "sha256": "32f4575fd44c09e92b08e39832c4af4502bdf43bd3fd8ba8ab6467bce51b6cb4"
         },
         {
           "path": "lib/dialog/browser-reader-host.mjs",
-          "sha256": "4192617a0353422dea8afa540cab69bfa1594293cc36add9bfaf5b4ca021fc6b"
+          "sha256": "37911a53717706e0a1a8f5c1ffcba3cfcc0d6123cca14b31a84bb06ec0326d5b"
         }
       ],
       "packetAdapterSha256": [
@@ -80,7 +80,7 @@
       "graphDecoderSha256": [
         {
           "path": "lib/dialog/raw-structural-bridge.mjs",
-          "sha256": "f00f62c7ec9327bcd04fd1dd6dd4085329cfc00fed26a85b3ba669ad221fe43c"
+          "sha256": "312630e81159d05876196d96024ae39c03c0577e2838559f8e31abe0ceb512e0"
         },
         {
           "path": "lib/dialog/model-graph-decoder.mjs",

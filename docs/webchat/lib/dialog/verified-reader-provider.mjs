@@ -3,7 +3,7 @@ import {copyHostData} from '../../worlds/native-tool-host.mjs?v=463e762442';
 import {createCutterInference} from './cutter-inference.mjs?v=332bf4839f';
 import {createKeyReaderInference} from './key-reader-inference.mjs?v=3704547157';
 import {createBertSourceOffsetAuthority} from './bert-source-offsets.mjs?v=9b7b99f458';
-import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=f5c7bf7501';
+import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=61cebe157f';
 
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);

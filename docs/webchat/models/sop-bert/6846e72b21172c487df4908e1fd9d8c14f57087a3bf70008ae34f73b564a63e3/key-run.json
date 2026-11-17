@@ -1,0 +1,120 @@
+{
+  "format": "sop.key-reader-run/4-target-type-plateau-candidate",
+  "complete": true,
+  "candidate": true,
+  "executionEligible": false,
+  "tensorArchitectureVersion": 2,
+  "preparationFormat": "sop.per-key-supervision/3-target-type-migration-candidate",
+  "modelConfigFormat": "sop.key-reader/2-target-type-candidate",
+  "rawCodecFormat": "sop.key-reader-raw-codec/2-target-type-candidate",
+  "configSha256": "b7b03ad5c06ebaeec6ff2014e2ac01d26a935e58de62bdbb7589eaf02f28efdb",
+  "trainerSha256": "f9e5794fd939ce5a202be2c4cdfdacc7e8e48e68ded4d50d97453108bcc6a69c",
+  "dataManifestSha256": "4b9ddfa1ee8033d23005b336f542d26f0c9d0066b138887acb95eb58ec9c3b2d",
+  "preparerSha256": "5cab868172f89f29f51d35894aebfbae0c71011cc97bd3ad4b3b1c29a96fa477",
+  "encodedDataSha256": {
+    "calibration": "797fc93c2e226e70b193c017f22aad71ca249f7f93946a69c01fd99868cbeefc",
+    "train": "ed41f97c8b002fbfb622e815b9983e4bb71b1dae39bd3330b3eaa36c2afcce0c"
+  },
+  "epochsCompleted": 10,
+  "steps": 45170,
+  "trainingPolicy": {
+    "format": "sop.key-reader-plateau-policy/1",
+    "minEpochs": 3,
+    "patience": 3,
+    "maxEpochs": 30,
+    "primary": "positiveSupervisedBioGlobalExactRate",
+    "improvement": "strict-rational",
+    "ties": "non-improvement"
+  },
+  "checkpointWriter": {
+    "format": "sop.key-reader-checkpoint-writer/1",
+    "temporary": "exclusive-new",
+    "publication": "fsync-and-os.replace",
+    "writes": "never-in-place",
+    "preflight": "one-checkpoint-upper-bytes+134217728",
+    "firstEpochPin": "content-addressed-hardlink",
+    "pinRetention": "permanent",
+    "maxEpochPins": 1
+  },
+  "runId": "10c13e0e5b3f43178e3b22664a9ddfdc",
+  "firstEpochProofSha256": "a7c89a58a1d77a29a8cd275c5d6b9bdb521b7baaf75ee54e51896748f2405bf9",
+  "stopping": {
+    "format": "sop.key-reader-plateau-state/1",
+    "epoch": 10,
+    "support": 3994,
+    "bestPrimaryCorrect": 1547,
+    "bestPrimarySupport": 3994,
+    "badEpochs": 3,
+    "primaryImproved": false,
+    "stopReason": "primary-plateau",
+    "minimumSatisfied": true,
+    "maxReached": false,
+    "policy": {
+      "format": "sop.key-reader-plateau-policy/1",
+      "minEpochs": 3,
+      "patience": 3,
+      "maxEpochs": 30,
+      "primary": "positiveSupervisedBioGlobalExactRate",
+      "improvement": "strict-rational",
+      "ties": "non-improvement"
+    }
+  },
+  "bestCheckpointEpoch": 7,
+  "dataRecordCounts": {
+    "train": 36133,
+    "calibration": 4076
+  },
+  "checkpointSha256": "20198a4169cefbde1d8f848cb8a4c14f13460ffcacb38a577fca8adbc243aee9",
+  "bestDecodedMentionF1": 0.8193594306049822,
+  "selectionCriterion": {
+    "format": "sop.key-reader-selection/1",
+    "order": [
+      "positiveSupervisedBioGlobalExactRate",
+      "targetTypePresentClassAccuracy",
+      "decodedMentionF1"
+    ],
+    "scope": "gold-cut supervised BIO+global subset, not complete graph"
+  },
+  "checkpointEvaluation": {
+    "format": "sop.key-reader-checkpoint-evaluation/1",
+    "trainingParameterDtype": "float32",
+    "checkpointFloatingStorage": "bfloat16",
+    "evaluationRoundtrip": "float32->bfloat16->float32",
+    "forwardAutocast": "disabled",
+    "device": "training-device",
+    "state": "detached-eval-clone",
+    "optimizer": "unchanged"
+  },
+  "bestSelectionRank": [
+    0.3873309964947421,
+    0.9180841539838854,
+    0.8193594306049822
+  ],
+  "warmstart": {
+    "format": "sop.key-reader-warmstart-provenance/1",
+    "kind": "semantic-migration",
+    "specSha256": "2e7ac0f8a703951f9c9fde8a3d3c928be95f2f6f6a6b37902e7a0b033aa5a39b",
+    "frozenInputs": {
+      "checkpoint": "689960663e40bbf4c4d24d63e87b72b333c23b2efd5869f14c8d788c68334b90",
+      "config": "f23f5a14c7f1f5d3f0a5eb96f0768c1e2142c13127e8edaac853f6004f65b451",
+      "dataManifest": "e30a4eeb9eb24322cc49b299ebb4eb9df727086171ed3265a76ca3d18622668c",
+      "helper": "9b7a41049680bf044b02618f976e2ae9231ff7b3359730bc5b00d87445adee37",
+      "preparer": "3565277de7f349ce5a63b578c6b74eb4b4364c0a30f7e8ce45f1819062b50ced",
+      "run": "4c950745fa0a9f519c46a88cad3d8044e7e6881a8e50c362578a235fee07f0a5",
+      "trainer": "eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f"
+    },
+    "sourceModelFormat": "sop.key-reader/1",
+    "targetModelFormat": "sop.key-reader/2-target-type-candidate",
+    "elementWorkAllowance": 403719426,
+    "estimatedElements": 403719426,
+    "stats": {
+      "elements": 403719426,
+      "copiedElements": 67281701,
+      "tensors": 460,
+      "rows": 2256
+    },
+    "optimizer": "fresh-AdamW",
+    "migrationHelperSha256": "9b7a41049680bf044b02618f976e2ae9231ff7b3359730bc5b00d87445adee37"
+  },
+  "scope": "complete retained corpus; conditional gold-cut, not full pipeline or calibrated confidence"
+}
