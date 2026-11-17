@@ -39,6 +39,10 @@ class BuilderTests(unittest.TestCase):
             manifest=root/'cutter.json';manifest.write_text(json.dumps({'format':'sop.request-cutter-prediction-run/1','complete':True,'executionEligible':False,'frozenInputs':{'input':m.digest(paths['sources'])},'outputSha256':m.digest(paths['predictions']),'rows':1,'model':MODEL}))
             args=SimpleNamespace(**paths,manifest=manifest,manifest_sha256=m.digest(manifest),contexts_sha256=m.digest(paths['contexts']),out=root/'out')
             m.run(args);proof=json.loads((args.out/'manifest.json').read_text());self.assertTrue(proof['complete']);self.assertEqual(proof['counts']['requests'],2)
+            for name,count in [('inputs',2),('origins',2),('messages',1)]:
+                data=(args.out/(name+'.jsonl')).read_text();self.assertTrue(data.endswith(chr(10)))
+                parsed=[json.loads(line)for line in data.splitlines()];self.assertEqual(len(parsed),count)
+                self.assertEqual(m.digest(args.out/(name+'.jsonl')),proof['outputs'][name])
             paths['predictions'].write_text('')
             with self.assertRaisesRegex(ValueError,'chain-mismatch'):m.run(args)
 if __name__=='__main__':unittest.main()
