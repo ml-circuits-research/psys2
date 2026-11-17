@@ -17,13 +17,13 @@ import { guard, TurnAborted } from '../formalizer/guard.mjs?v=82a55329d9';
 import { budget, isBudgetExceeded } from '../dialog/budget.mjs?v=00bce6e369';
 import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=c57881f705';
 import { Memory, WireStore } from './memory.mjs?v=723ca93429';
-import { Renderer, fallbackText, listText } from './render.mjs?v=47530dc21f';
-import { FormSession } from '../formalizer/rules/session.mjs?v=352d6703c5';
+import { Renderer, fallbackText, listText } from './render.mjs?v=87b3dff3c0';
+import { FormSession } from '../formalizer/rules/session.mjs?v=9285c11214';
 import { makeLang } from './lang.mjs?v=8ac27bf6ac';
-import { withLearned } from '../knowledge/learned.mjs?v=44ce90c3bb';
+import { withLearned } from '../knowledge/learned.mjs?v=95e6038365';
 
 export { Memory, WireStore } from './memory.mjs?v=723ca93429';
-export { Renderer } from './render.mjs?v=47530dc21f';
+export { Renderer } from './render.mjs?v=87b3dff3c0';
 
 const STATUSES = new Set(['supported', 'missing', 'conflicting', 'ambiguous', 'unsupported', 'budget', 'error']);
 /**

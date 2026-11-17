@@ -1,0 +1,33 @@
+# Explicit frame-to-request graph interpretations.
+# sources: hand-core 1 (joins to published frame roles and spatial attribute/preposition declarations)
+# license: CC0-1.0
+# script: none (hand-written)
+
+
+@w.reader.en.requests core.module name=w.reader.en.requests version=1 exports=mapping exports=component exports=metadata exports=relation core.source="hand-core 1"
+@w.reader.en.requests.mapping core.type of=w.reader.en.requests.mapping shared=true closed=true core.source="hand-core 1"
+@w.reader.en.requests.mapping.name core.slot of=w.reader.en.requests.mapping key=name kind=atom id=true required=true core.source="hand-core 1"
+@w.reader.en.requests.mapping.licence core.slot of=w.reader.en.requests.mapping key=licence kind=atom required=true core.source="hand-core 1"
+@w.reader.en.requests.mapping.grounded_by core.slot of=w.reader.en.requests.mapping key=grounded_by kind=atom many=true required=true core.source="hand-core 1"
+@w.reader.en.requests.component core.type of=w.reader.en.requests.component shared=true closed=true core.source="hand-core 1"
+@w.reader.en.requests.component.name core.slot of=w.reader.en.requests.component key=name kind=atom id=true required=true core.source="hand-core 1"
+@w.reader.en.requests.component.mapping core.slot of=w.reader.en.requests.component key=mapping kind=atom required=true core.source="hand-core 1"
+@w.reader.en.requests.component.kind core.slot of=w.reader.en.requests.component key=kind kind=atom required=true enum=target enum=predicate enum=relation core.source="hand-core 1"
+@w.reader.en.requests.component.id core.slot of=w.reader.en.requests.component key=id kind=atom required=true core.source="hand-core 1"
+@w.reader.en.requests.component.role core.slot of=w.reader.en.requests.component key=role kind=atom required=true core.source="hand-core 1"
+@w.reader.en.requests.component.target core.slot of=w.reader.en.requests.component key=target kind=atom  core.source="hand-core 1"
+@w.reader.en.requests.component.goal core.slot of=w.reader.en.requests.component key=goal kind=atom  core.source="hand-core 1"
+@w.reader.en.requests.component.concept core.slot of=w.reader.en.requests.component key=concept kind=atom  core.source="hand-core 1"
+@w.reader.en.requests.component.character core.slot of=w.reader.en.requests.component key=character kind=atom enum=requirement enum=assumption enum=preference core.source="hand-core 1"
+@w.reader.en.requests.component.polarity core.slot of=w.reader.en.requests.component key=polarity kind=atom enum=positive enum=negative core.source="hand-core 1"
+@w.reader.en.requests.component.grounded_by core.slot of=w.reader.en.requests.component key=grounded_by kind=atom many=true required=true core.source="hand-core 1"
+@w.reader.en.requests.metadata core.type of=w.reader.en.requests.metadata shared=true closed=true core.source="hand-core 1"
+@w.reader.en.requests.metadata.name core.slot of=w.reader.en.requests.metadata key=name kind=atom id=true required=true core.source="hand-core 1"
+@w.reader.en.requests.metadata.mapping core.slot of=w.reader.en.requests.metadata key=mapping kind=atom required=true core.source="hand-core 1"
+@w.reader.en.requests.metadata.segment core.slot of=w.reader.en.requests.metadata key=segment kind=atom many=true required=true core.source="hand-core 1"
+@w.reader.en.requests.relation core.type of=w.reader.en.requests.relation shared=true closed=true core.source="hand-core 1"
+@w.reader.en.requests.relation.name core.slot of=w.reader.en.requests.relation key=name kind=atom id=true required=true core.source="hand-core 1"
+@w.reader.en.requests.relation.mapping core.slot of=w.reader.en.requests.relation key=mapping kind=atom required=true core.source="hand-core 1"
+@w.reader.en.requests.relation.value core.slot of=w.reader.en.requests.relation key=value kind=atom required=true core.source="hand-core 1"
+@w.reader.en.requests.relation.source_id core.slot of=w.reader.en.requests.relation key=source_id kind=atom required=true core.source="hand-core 1"
+@w.reader.en.requests.relation.basis_id core.slot of=w.reader.en.requests.relation key=basis_id kind=atom required=true core.source="hand-core 1"

@@ -60,3 +60,13 @@ test('knowledge drawings use worker-loaded actual constituents, keep meaning and
  assert.equal(call(h,'drawing.catalog.make',{name:'chair'}).status,'changed');const o=state.objects[0];assert.equal(o.semanticKind,'chair');assert.ok(o.shape.parts.length);assert.equal(o.origin.representation,'knowledge-vector-parts');assert.ok(drawingPartsOf(o).some(p=>p.role));
  const observed=h.observe().objects;assert.ok(observed.some(p=>p.sourceType==='art.draw.part'&&p.in===o.id&&p.origin.kind==='chair'));
 });
+
+test('Drawing explicit placement and native multiple selection remain atomic and typed',()=>{
+ const state=initialDrawingState(),h=createDrawingHost({state,instanceId:'marquee'});call(h,'drawing.object.make',{kind:'circle',x:100,y:160});call(h,'drawing.object.make',{kind:'square',x:350,y:250});const ids=state.objects.map(o=>o.id);assert.equal(state.objects[0].x,100);assert.equal(state.objects[1].y,250);assert.deepEqual(state.selectedIds,[ids[1]]);
+ assert.equal(call(h,'drawing.objects.select',{ids}).status,'changed');assert.deepEqual(state.selectedIds,ids);const before=JSON.stringify(state);assert.equal(call(h,'drawing.objects.select',{ids:[...ids,'missing']}).status,'refused');assert.equal(JSON.stringify(state),before);
+ call(h,'drawing.objects.select',{ids:[]});assert.deepEqual(state.selectedIds,[]);assert.equal(state.selected,null);
+});
+
+test('multi-delete and clear drawing preserve selection and editable compound state through native undo',()=>{
+ const state=initialDrawingState(),h=createDrawingHost({state,instanceId:'delete-clear'});call(h,'drawing.object.make',{kind:'house'});call(h,'drawing.object.make',{kind:'circle'});const ids=state.objects.map(o=>o.id);call(h,'drawing.objects.select',{ids});assert.equal(call(h,'drawing.object.remove',{ids}).status,'changed');assert.equal(state.objects.length,0);assert.deepEqual(state.selectedIds,[]);call(h,'drawing.undo',{});assert.equal(state.objects.length,2);assert.deepEqual(state.selectedIds,ids);call(h,'drawing.page.clear',{});assert.equal(state.objects.length,0);assert.equal(state.selected,null);assert.deepEqual(state.selectedIds,[]);call(h,'drawing.undo',{});assert.equal(state.objects.length,2);assert.deepEqual(state.selectedIds,ids);assert.ok(drawingPartsOf(state.objects[0]).some(p=>p.role==='roof'));
+});

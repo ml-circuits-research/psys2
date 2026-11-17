@@ -19,7 +19,7 @@ def token_interval(offsets,span):
 
 def configuration(manifest):
     registry=manifest['registry'];keys=list(registry)
-    return {'format':'sop.key-reader/1','keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global']],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':192,'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
+    return {'format':'sop.key-reader/1','keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global']and(not manifest.get('annotationContract')or v['role']=='domain'or not v.get('values')or k=='request.request.act')],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':manifest.get('maxLength',192),'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
 
 def encode(row,tokenizer,config):
     import torch
@@ -61,32 +61,34 @@ def build_model(config,encoder_path):
     return Reader()
 
 def objective(model,rows,config,device,bio_weights):
-    import torch
-    ids=torch.stack([r['input_ids']for r in rows]).to(device);mask=torch.stack([r['attention_mask']for r in rows]).to(device);hidden,bio,presence=model(ids,mask);gold=torch.stack([r['bio']for r in rows]).to(device);pgold=torch.stack([r['presence']for r in rows]).to(device);losses=[]
-    # Normalize each inventory key independently so common absent streams cannot dominate rare keys.
-    for ki in range(len(config['bioKeys'])):
-        valid=gold[:,ki]!=-100
-        if valid.any():losses.append(torch.nn.functional.cross_entropy(bio[:,ki][valid].float(),gold[:,ki][valid],weight=bio_weights[ki]))
-    presence_losses=[]
-    for ki in range(len(config['keys'])):
-        strata=[]
-        for target in [0,1]:
-            mask=pgold[:,ki]==target
-            if mask.any():strata.append(torch.nn.functional.binary_cross_entropy_with_logits(presence[:,ki][mask].float(),pgold[:,ki][mask]))
-        if strata:presence_losses.append(torch.stack(strata).mean())
-    if presence_losses:losses.append(torch.stack(presence_losses).mean())
-    classloss=collections.defaultdict(list)
-    for ri,row in enumerate(rows):
-        for key,target in row['classes'].items():
-            ki=config['keys'].index(key);classloss[(key,'absent'if target==0 else'unknown'if target==1 else'present')].append(torch.nn.functional.cross_entropy(model.classes[str(ki)](hidden[ri,0]).float()[None],torch.tensor([target],device=device)))
-        for ki,a,b,targets in row['mentions']:
-            feature=hidden[ri,a:b].mean(0)+model.key.weight[ki]
-            for key,target in targets.items():classloss[(key,'absent'if target==0 else'unknown'if target==1 else'present')].append(torch.nn.functional.cross_entropy(model.classes[str(config['keys'].index(key))](feature).float()[None],torch.tensor([target],device=device)))
-    if classloss:
-        byhead=collections.defaultdict(list)
-        for(key,stratum),values in classloss.items():byhead[key].append(torch.stack(values).mean())
-        losses.append(torch.stack([torch.stack(values).mean()for values in byhead.values()]).mean())
-    return torch.stack(losses).mean(),bio,gold
+ import torch
+ F=torch.nn.functional
+ ids=torch.stack([r['input_ids']for r in rows]).to(device);mask=torch.stack([r['attention_mask']for r in rows]).to(device)
+ hidden,bio,presence=model(ids,mask);gold=torch.stack([r['bio']for r in rows]).to(device);pgold=torch.stack([r['presence']for r in rows]).to(device)
+ valid=gold>=0;safe=gold.clamp_min(0);weights=torch.stack(bio_weights)
+ token_weights=weights[torch.arange(gold.shape[1],device=device)[None,:,None],safe]*valid
+ token_loss=-bio.float().log_softmax(-1).gather(-1,safe[...,None]).squeeze(-1)
+ denominators=token_weights.sum((0,2));active=denominators>0
+ loss_sum=((token_loss*token_weights).sum((0,2))/denominators.clamp_min(1)).sum();loss_count=active.sum()
+ bce=F.binary_cross_entropy_with_logits(presence.float(),pgold.clamp(0,1),reduction='none')
+ strata=torch.stack([pgold==0,pgold==1]);counts=strata.sum(1);strata_active=counts>0
+ perhead=((bce[None]*strata).sum(1)/counts.clamp_min(1)).sum(0)/strata_active.sum(0).clamp_min(1)
+ head_active=strata_active.any(0);presence_active=head_active.any()
+ loss_sum+=perhead.sum()/head_active.sum().clamp_min(1);loss_count+=presence_active
+ index={key:i for i,key in enumerate(config['keys'])};groups=collections.defaultdict(list)
+ for ri,row in enumerate(rows):
+  for key,target in row['classes'].items():groups[(key,0 if target==0 else 1 if target==1 else 2)].append((hidden[ri,0],target))
+  for ki,a,b,targets in row['mentions']:
+   feature=hidden[ri,a:b].mean(0)+model.key.weight[ki]
+   for key,target in targets.items():groups[(key,0 if target==0 else 1 if target==1 else 2)].append((feature,target))
+ byhead=collections.defaultdict(list)
+ for(key,stratum),items in groups.items():
+  features=torch.stack([f for f,t in items]);targets=torch.tensor([t for f,t in items],device=device)
+  byhead[key].append(F.cross_entropy(model.classes[str(index[key])](features).float(),targets))
+ if byhead:
+  loss_sum+=torch.stack([torch.stack(values).mean()for values in byhead.values()]).mean();loss_count+=1
+ return loss_sum/loss_count,bio,gold
+
 
 def bio_mentions(tags):
     spans=[];start=None
@@ -124,30 +126,43 @@ def evaluate(model,rows,config,device,batch):
     tp=sum(v['mentionTP']for v in report.values());fp=sum(v['mentionFP']for v in report.values());fn=sum(v['mentionFN']for v in report.values())
     return {'perKey':{k:dict(v)for k,v in report.items()},'decodedMentionF1':2*tp/max(1,2*tp+fp+fn),'conditionalBioAndGlobalExact':exact,'conditionalBioAndGlobalSupport':total,'positiveBioAndGlobalExact':positive_exact,'positiveBioAndGlobalSupport':positive_total,'scope':'Gold request-cut conditional; mention metadata metrics explicitly gold-mention conditioned; not canonical/full-pipeline graph exact.'}
 
+def bio_class_weights(rows,key_count,device):
+    # Count all keys together: the prior per-key/per-row loop launched millions
+    # of tiny CPU operations before the first training batch.
+    import numpy as np
+    import torch
+    counts=np.zeros((key_count,3),dtype=np.int64)
+    for row in rows:
+        labels=row['bio'].numpy()
+        for tag in range(3):counts[:,tag]+=(labels==tag).sum(axis=1)
+    result=[]
+    for values in counts:
+        counts_tensor=torch.tensor(values,dtype=torch.float32)
+        weight=(counts_tensor.sum()/counts_tensor.clamp_min(1)).sqrt()
+        result.append((weight/weight.mean()).to(device))
+    return result
+
 def main():
     import torch
     from transformers import AutoTokenizer
-    p=argparse.ArgumentParser();p.add_argument('--data',type=Path,required=True);p.add_argument('--encoder',required=True);p.add_argument('--init-checkpoint',type=Path);p.add_argument('--out',type=Path,required=True);p.add_argument('--epochs',type=int,default=5);p.add_argument('--batch',type=int,default=8);p.add_argument('--limit',type=int);p.add_argument('--no-save',action='store_true');args=p.parse_args();random.seed(17);torch.manual_seed(17);args.out.mkdir(parents=True,exist_ok=False)
+    p=argparse.ArgumentParser();p.add_argument('--data',type=Path,required=True);p.add_argument('--encoder',required=True);p.add_argument('--init-checkpoint',type=Path);p.add_argument('--out',type=Path,required=True);p.add_argument('--epochs',type=int,default=5);p.add_argument('--cpu-threads',type=int,default=2);p.add_argument('--batch',type=int,default=8);p.add_argument('--limit',type=int);p.add_argument('--no-save',action='store_true');args=p.parse_args();random.seed(17);torch.manual_seed(17);torch.set_num_threads(args.cpu_threads);args.out.mkdir(parents=True,exist_ok=False)
     manifest=json.loads((args.data/'manifest.json').read_text());config=configuration(manifest);tokenizer=AutoTokenizer.from_pretrained(args.encoder);config['encoder']=args.encoder;config['encoderFiles']={str(p.name):sha(p)for p in Path(args.encoder).iterdir()if p.is_file()};config['initCheckpointSha256']=sha(args.init_checkpoint)if args.init_checkpoint else None;config['dataManifestSha256']=sha(args.data/'manifest.json');config['trainerSha256']=sha(Path(__file__));(args.out/'model-config.json').write_text(json.dumps(config,indent=2)+'\n');datasets={}
     for split in ['train','calibration']:
         path=args.data/(split+'.jsonl');assert sha(path)==manifest['outputs'][split];rows=[json.loads(line)for line in path.open()];rows=rows[:args.limit]if args.limit else rows;datasets[split]=[encode(r,tokenizer,config)for r in rows]
     device='cuda'if torch.cuda.is_available()else'cpu';model=build_model(config,args.encoder)
     if args.init_checkpoint:
         state=torch.load(args.init_checkpoint,map_location='cpu',weights_only=False);state=state.get('model',state);enc={k[len('encoder.'):]:v for k,v in state.items()if k.startswith('encoder.')};assert enc;model.encoder.load_state_dict(enc,strict=True)
-    model.to(device);optimizer=torch.optim.AdamW(model.parameters(),lr=3e-5);weights=[]
-    for ki in range(len(config['bioKeys'])):
-        counts=torch.zeros(3)
-        for row in datasets['train']:
-            values=row['bio'][ki];counts+=torch.bincount(values[values>=0],minlength=3)
-        w=(counts.sum()/counts.clamp_min(1)).sqrt();weights.append((w/w.mean()).to(device))
-    steps=0;history=[];best=-1
+    model.to(device);optimizer=torch.optim.AdamW(model.parameters(),lr=3e-5)
+    weights=bio_class_weights(datasets['train'],len(config['bioKeys']),device)
+    print(json.dumps({'phase':'training-ready','trainRows':len(datasets['train']),'calibrationRows':len(datasets['calibration']),'device':device}),flush=True)
+    steps=0;history=[];best=-1;training_started=time.monotonic()
     for epoch in range(args.epochs):
         model.train();random.shuffle(datasets['train']);total=0
         for start in range(0,len(datasets['train']),args.batch):
             rows=datasets['train'][start:start+args.batch];optimizer.zero_grad(set_to_none=True)
             with torch.autocast(device_type=device,dtype=torch.bfloat16,enabled=device=='cuda'):loss,_,_=objective(model,rows,config,device,weights)
             assert torch.isfinite(loss);loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),1);optimizer.step();steps+=1;total+=loss.item()
-            if steps%100==0:print(json.dumps({'epoch':epoch+1,'steps':steps,'lastLoss':loss.item()}),flush=True)
+            if steps==10 or steps%100==0:print(json.dumps({'epoch':epoch+1,'steps':steps,'lastLoss':loss.item(),'trainingSeconds':time.monotonic()-training_started,'secondsPerStep':(time.monotonic()-training_started)/steps}),flush=True)
         model.eval();correct=present_correct=present_count=count=0
         with torch.no_grad():
             for start in range(0,len(datasets['calibration']),args.batch):

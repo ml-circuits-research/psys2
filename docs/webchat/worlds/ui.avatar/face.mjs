@@ -4,7 +4,8 @@
 // (a slot, a preset and a colour of the catalog k.faces, a size grade, a direction; the library planned and translated them) and a call answers with a status, the ids it changed,
 // or a refusal code with the name of its reply fact. The slots, variants, presets and colours are the catalog's (src/knowledge/faces.mjs, else the bundled default face); the face
 // logic of the old readers (facelogic.mjs) builds on this module; this module never imports it. Browser-safe.
-import { DEFAULT_FACE } from './default-face.mjs?v=9a9dc8d5bf';
+import {expressionParts} from './composition.mjs?v=b3e12b14a5';
+import { DEFAULT_FACE } from './default-face.mjs?v=ff75a38298';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 export const NONE = 'none';
@@ -15,7 +16,7 @@ const HISTORY = 40;
 export const slotOf = (data, name) => data.slots.find((s) => s.name === name);
 export function newFace(data, preset = DEFAULT_PRESET) {
   const p = data.presets[preset] ?? data.presets[DEFAULT_PRESET] ?? Object.values(data.presets)[0];
-  const f = { v: 2, slots: {}, colours: { ...p.colours }, paint: {}, adj: {}, grade: {}, expression: '', base: p.name, name: '', saved: {}, options: null, n: 0, history: [], future: [], refs: [] };
+  const f = { v: 2, slots: {}, colours: { ...p.colours }, paint: {}, adj: {}, grade: {}, expression:'',expressionParts:{},explicit:{slots:[],roles:[],paint:[]},base:p.name, name: '', saved: {}, options: null, n: 0, history: [], future: [], refs: [] };
   for (const s of data.slots) f.slots[s.name] = p.slots[s.name] ?? NONE;
   return f;
 }
@@ -38,7 +39,7 @@ export function faceOf(ctx, data) {
   f.colours = { ...d.colours, ...f.colours }; f.paint ??= {}; f.adj ??= {}; f.saved ??= {}; f.history ??= []; f.future ??= []; f.expression ??= '';
   return f;
 }
-export const snap = (f) => ({ slots: { ...f.slots }, colours: { ...f.colours }, paint: { ...f.paint }, adj: structuredClone(f.adj), grade: { ...(f.grade ?? {}) }, expression: f.expression, base: f.base });
+export const snap = (f) => ({ slots: { ...f.slots }, colours: { ...f.colours }, paint: { ...f.paint }, adj: structuredClone(f.adj), grade: { ...(f.grade ?? {}) }, expression: f.expression, expressionParts:{...(f.expressionParts??{})}, explicit:structuredClone(f.explicit??{slots:[],roles:[],paint:[]}), base: f.base });
 /** Takes a snapshot for undo before a change (one step per request); the redo list is dropped. */
 export function mark(f) { f.history.push(snap(f)); if (f.history.length > HISTORY) f.history.shift(); f.future = []; f.options = null; }
 export const apply = (f, s) => Object.assign(f, structuredClone(s));
@@ -46,8 +47,8 @@ export const apply = (f, s) => Object.assign(f, structuredClone(s));
 export const roleOf = (data, slot) => slotOf(data, slot)?.variants.flatMap((v) => v.parts).map((p) => p.tint?.replace(/_shade$/, '')).find(Boolean) ?? null;   // glue-lint: tool-data (a catalog tint)
 /** Sets a slot to a variant; a variant the expression overrides is the user's choice now (the rest of the expression is kept as chosen parts). */
 export function put(data, face, slot, name) {
-  const e = data.expressions[face.expression];
-  if (e && slot in e.over) { for (const [k, v] of Object.entries(e.over)) if (k !== slot) face.slots[k] = v; face.expression = ''; }
+  const e = face.expressionParts?{over:face.expressionParts}:data.expressions[face.expression];
+  if (e && slot in e.over) { for (const [k, v] of Object.entries(e.over)) if (k !== slot) face.slots[k] = v; face.expression = '';face.expressionParts={}; }
   face.slots[slot] = name;
 }
 /** A colour of the catalog on a slot: the face colour of its tint when the catalog has that colour for it ('role'), else a part of its variant offered in that colour ('paint'), else null. */
@@ -114,13 +115,14 @@ function toolStep(ctx, { step = null, label = null } = {}, fn) {
   return r;
 }
 /** The face takes an expression of the catalog (k.faces.expression): its parts the expression draws, the chosen parts kept. */
-const wearExpression = (data, f, expression) => { const e = String(expression).replace(/_/g, ' '); if (!data.expressions?.[e]) return false; f.expression = e; return true; };   // glue-lint: tool-data (a catalog name)
+const wearExpression = (data,f,expression)=>{const name=String(expression).replace(/_/g,' ');if(!name){f.expression='';f.expressionParts={};return true;}const parts=expressionParts(data,f,name);if(!parts)return false;f.expression=name;f.expressionParts=parts;return true;};   // glue-lint: tool-data (a catalog name)
 /** The face becomes a preset of the catalog (its saved faces, history and name kept), with an expression when one is given ("an angry boy"). */
 export function wearPreset(ctx, { preset, expression = null, step = null, label = null } = {}) {
   return toolStep(ctx, { step, label }, (f, data) => {
     const name = data.presets[preset] ? preset : data.presets[plainName(preset)] ? plainName(preset) : null;
     if (!name) return refuse('no_preset');
     Object.assign(f, newFace(data, name), { saved: f.saved, history: f.history, future: f.future, n: f.n, name: f.name, stepGroup: f.stepGroup, options: null, expression: f.expression });   // the mood stays through a change of look unless one is said
+    if(expression==null&&f.expression&&!wearExpression(data,f,f.expression))return refuse('no_value');
     if (expression != null && !wearExpression(data, f, expression)) return refuse('no_value');
     return ok(['face']);
   });
@@ -212,7 +214,7 @@ export function toolView(ctx) {
   const placeOf = (n) => { const a = f.adj?.[n] ?? {}, v = Math.sign(Math.round(a.dy ?? 0)), h = Math.sign(Math.round(a.dx ?? 0)); return [v < 0 ? 'up' : v > 0 ? 'down' : '', h < 0 ? 'left' : h > 0 ? 'right' : ''].filter(Boolean).join(' ') || null; };   // where a part is moved to from its place, in the tool's directions
   const colourOf = (n) => f.paint?.[n] ?? (roleOf(data, n) ? f.colours?.[roleOf(data, n)] : null) ?? null;
   return [
-    { id: 'face', kind: 'face', ...(f.base ? { preset: f.base } : {}), ...(f.expression ? { expression: f.expression } : {}) },
-    ...data.slots.filter((s) => f.slots?.[s.name] && f.slots[s.name] !== NONE).map((s) => ({ id: s.name, kind: s.name, variant: f.slots[s.name], colour: colourOf(s.name), size: f.grade?.[s.name] ?? 'default', ...(placeOf(s.name) ? { place: placeOf(s.name) } : {}) })),
+    { id: 'face', kind: 'face', ...(f.base ? { preset: f.base } : {}), expression:f.expression??'' },
+    ...data.slots.filter((s) => (f.expressionParts?.[s.name]??f.slots?.[s.name])&&(f.expressionParts?.[s.name]??f.slots[s.name])!==NONE).map((s) => ({ id: s.name, kind: s.name, variant:f.expressionParts?.[s.name]??f.slots[s.name], colour: colourOf(s.name), size: f.grade?.[s.name] ?? 'default', ...(placeOf(s.name) ? { place: placeOf(s.name) } : {}) })),
   ];
 }

@@ -17,9 +17,10 @@ const NONE = 'none';
 export function variantFor(data, face, slotName, side = 'left', over = null) {
   const slot = data.slots.find((s) => s.name === slotName);
   if (!slot) return null;
-  const e = data.expressions[face.expression ?? ''];
+  const original=data.expressions[face.expression??''],e=face.expressionParts&&face.expression?{...original,over:face.expressionParts}:original;
   const named = (o) => (o && !face.noExpression ? o[slotName] : undefined);
-  let name = named(over) ?? named(e?.over) ?? face.slots?.[slotName];
+  const actual=named(e?.over)??face.slots?.[slotName];if(!actual||actual===NONE)return null;
+  let name=named(over)??actual;
   if (side === 'right' && slotName === 'eyes' && e?.oneEye && !over) name = e.oneEye;   // a wink: the eye on the viewer's right only
   if (!name || name === NONE) return null;
   return slot.variants.find((v) => v.name === name) ?? null;

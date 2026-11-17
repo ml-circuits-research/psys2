@@ -41,8 +41,10 @@ test('copy and work limits refuse without exposing a partial runtime packet',asy
  const a=await adapter({budget:1}),result=a.adapt(generated.packet);assert.equal(result.ok,false);assert.equal(result.packet,null);assert.equal(result.diagnostics.issues[0].reason,'adapter-budget');
 });
 
-test('coherently trimmed inventory cannot masquerade as the frozen135-key profile',async()=>{
+test('coherent varied inventory requires its own frozen hash and matching support layout',async()=>{
  const config=clone(generated.config),key=config.keys.find(k=>k!=='request.target.type'&&config.bioKeys.includes(k));
  config.keys=config.keys.filter(k=>k!==key);config.bioKeys=config.bioKeys.filter(k=>k!==key);delete config.registry[key];delete config.banks[key];
- const configJSON=JSON.stringify(config);await assert.rejects(adapter({configJSON,configSha256:hash(configJSON)}),/profile/);
+ const configJSON=JSON.stringify(config);await assert.rejects(adapter({configJSON}),/hash/);
+ const a=await adapter({configJSON,configSha256:hash(configJSON)});assert.equal(a.adapt(generated.packet).ok,false);
+ const packet=clone(generated.packet);packet.coverage.support=packet.coverage.support.filter(r=>r.key!==key);assert.equal(a.adapt(packet).ok,true);
 });

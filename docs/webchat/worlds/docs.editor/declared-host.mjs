@@ -1,19 +1,19 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import {createNativeToolHost,copyHostData,nativeToken} from '../native-tool-host.mjs?v=463e762442';
-import {createDoc,writeText,commit,sync,undoStep,redoStep,addBlock} from './document.mjs?v=d1f3113f66';
-import {DOCUMENT_EDITING_BINDINGS,DOCUMENT_BLOCK_CHANGE_PARAMETERS,documentEditingHandlers,changeDocumentBlock,documentTextId} from './native-editing.mjs?v=a38c6a383d';
-import {blockText,containers} from './model.mjs?v=37add444c1';
+import {createDoc,writeText,commit,sync,undoStep,redoStep,addBlock} from './document.mjs?v=e04d587f05';
+import {DOCUMENT_EDITING_BINDINGS,DOCUMENT_BLOCK_CHANGE_PARAMETERS,documentEditingHandlers,changeDocumentBlock,documentTextId} from './native-editing.mjs?v=a66cb5143e';
+import {blockText,containers} from './model.mjs?v=2f19aea106';
 const text={type:'string',required:true},array={type:'array',required:true};
 export const DOCUMENT_TOOL_BINDINGS=[
  ...DOCUMENT_EDITING_BINDINGS,
- {id:'document.write',act:'make',on:'docs.editor.document',params:{title:text,blocks:array,genre:{type:'string'},topic:{type:'string'}}},
+ {id:'document.write',sample:[{when:{missing:'docs.editor.document'},args:{title:{unique:{prefix:'Notes'}},blocks:{value:[]}}}],act:'make',on:'docs.editor.document',params:{title:text,blocks:array,genre:{type:'string'},topic:{type:'string'}}},
  {id:'document.compose',act:'make',on:'docs.editor.document',requires:['knowledge-composer'],params:{genre:text,topic:text,words:{type:'integer',min:1,max:100000},chapters:{type:'integer',min:1,max:100}}},
  {id:'document.rewrite',act:'change',on:'docs.editor.document',requires:['knowledge-rewriter'],params:{property:{type:'string',required:true,enum:['tone','length']},value:{type:'string',required:true}}},
- {id:'document.block.make',act:'make',on:'docs.editor.block',params:{parent:text,kind:{type:'string',required:true,enum:['paragraph','heading','quote']},text:{type:'string',default:''},level:{type:'integer',min:3,max:6},name:{type:'string'}}},
- {id:'document.section.make',act:'make',on:'docs.editor.section',params:{parent:text,text:{type:'string',default:''},level:{type:'integer',default:2,min:1,max:2},name:{type:'string'}}},
- {id:'document.block.change',act:'change',on:'docs.editor.block',params:DOCUMENT_BLOCK_CHANGE_PARAMETERS},
+ {id:'document.block.make',sample:[{args:{parent:{ref:{on:'docs.editor.document'}},kind:{enum:true},text:{value:'A new idea for this document.'},name:{unique:{prefix:'Note'}}}}],act:'make',on:'docs.editor.block',params:{parent:text,kind:{type:'string',required:true,enum:['paragraph','heading','quote']},text:{type:'string',default:''},level:{type:'integer',min:3,max:6},name:{type:'string'}}},
+ {id:'document.section.make',act:'make',on:'docs.editor.section',params:{parent:text,after:{type:'string'},text:{type:'string',default:''},level:{type:'integer',default:2,min:1,max:2},name:{type:'string'}}},
+ {id:'document.block.change',sample:[{args:{id:{ref:{on:'docs.editor.block'}},name:{unique:{prefix:'Note'}}}}],act:'change',on:'docs.editor.block',params:DOCUMENT_BLOCK_CHANGE_PARAMETERS},
  {id:'document.block.remove',act:'remove',on:'docs.editor.block',params:{ids:array}},
- {id:'document.section.remove',act:'remove',on:'docs.editor.section',params:{ids:array}},
+ {id:'document.section.remove',descendantPolicy:'until-next-heading-at-same-or-shallower-level',act:'remove',on:'docs.editor.section',params:{ids:array}},
  {id:'document.section.reorder',act:'place',on:'docs.editor.section',params:{ids:array}},
  {id:'document.remove',act:'remove',on:'docs.editor.document',params:{}},
  {id:'document.observe',act:'ask',on:'docs.editor.document',params:{}},
@@ -38,10 +38,11 @@ export function createDocumentHost({state=initialDocumentState(),instanceId,comp
   const s=ctx.state;if(!s.textId||a.parent!==s.textId)return fail('missing-parent-document');
   if(!Number.isSafeInteger(s.nextId)||s.nextId<1||!Number.isSafeInteger(s.nextId+1)||s.blocks.some(b=>b.id===`b${s.nextId}`))return fail('native-id-collision');
   if(!section&&a.kind!=='heading'&&Object.hasOwn(a,'level'))return fail('unexpected-heading-level');
+  if(a.after!==undefined&&!s.blocks.some(b=>b.id===a.after))return fail('missing-insertion-reference');
   const block={kind:section?'heading':a.kind,text:a.text};
   if(block.kind==='heading')block.level=section?a.level:(a.level??3);
   if(Object.hasOwn(a,'name'))block.name=a.name;
-  commit(s);const made=addBlock(s,block,s.blocks.length);sync(s);return done([made.id]);
+  commit(s);const made=addBlock(s,block,a.after===undefined?s.blocks.length:s.blocks.findIndex(b=>b.id===a.after)+1);sync(s);return done([made.id]);
  };
  const handlers={
   ...documentEditingHandlers(),
@@ -51,8 +52,8 @@ export function createDocumentHost({state=initialDocumentState(),instanceId,comp
   'document.compose':(ctx,a,step)=>{if(!composer?.available||typeof composer.compose!=='function')return fail('missing-knowledge-composer');const bounded={available:true,compose:args=>{const result=copyHostData(composer.compose(args));const chapters=result?.composition?.chapters;if(!Array.isArray(chapters)||chapters.length>100||chapters.some(ch=>!Array.isArray(ch.subchapters)||ch.subchapters.length>100||ch.subchapters.some(sc=>!Array.isArray(sc.sentences)||sc.sentences.length>100)))return null;return result;}};return writeText({...ctx,composer:bounded},{kind:a.genre,about:a.topic,words:a.words,chapters:a.chapters,step});},
   'document.rewrite':(ctx,a)=>{if(!rewriter||typeof rewriter.rewrite!=='function')return fail('missing-knowledge-rewriter');const blocks=copyHostData(rewriter.rewrite({blocks:copyHostData(ctx.state.blocks),property:a.property,value:a.value}));if(!validBlocks(blocks))return fail('invalid-rewrite');const genre=ctx.state.kind,topic=ctx.state.about;createDoc(ctx,ctx.state.title,blocks);stamp(ctx.state,genre,topic);return done(ctx.state.blocks.map(b=>b.id));},
   'document.block.change':changeDocumentBlock,
-  'document.block.remove':(ctx,a)=>{if(!a.ids.length||new Set(a.ids).size!==a.ids.length||a.ids.some(id=>!ctx.state.blocks.some(b=>b.id===id)))return fail('missing-target');commit(ctx.state);ctx.state.blocks=ctx.state.blocks.filter(b=>!a.ids.includes(b.id));sync(ctx.state);return done(a.ids);},
-  'document.section.remove':(ctx,a)=>{const groups=sections(ctx.state);if(!a.ids.length||new Set(a.ids).size!==a.ids.length||a.ids.some(id=>!groups.some(g=>g.id===id)))return fail('missing-target');const cut=new Set(groups.filter(g=>a.ids.includes(g.id)).flatMap(g=>ctx.state.blocks.slice(g.start,g.end).map(b=>b.id)));commit(ctx.state);ctx.state.blocks=ctx.state.blocks.filter(b=>!cut.has(b.id));sync(ctx.state);return done([...cut]);},
+  'document.block.remove':(ctx,a)=>{if(!a.ids.length)return done([]);if(new Set(a.ids).size!==a.ids.length||a.ids.some(id=>!ctx.state.blocks.some(b=>b.id===id)))return fail('missing-target');commit(ctx.state);ctx.state.blocks=ctx.state.blocks.filter(b=>!a.ids.includes(b.id));sync(ctx.state);return done(a.ids);},
+  'document.section.remove':(ctx,a)=>{const groups=sections(ctx.state);if(!a.ids.length||new Set(a.ids).size!==a.ids.length||a.ids.some(id=>!groups.some(g=>g.id===id)))return fail('missing-target');const cut=new Set();for(const group of groups.filter(g=>a.ids.includes(g.id))){const level=ctx.state.blocks[group.start].level;for(let i=group.start;i<ctx.state.blocks.length;i++){const b=ctx.state.blocks[i];if(i>group.start&&b.kind==='heading'&&(b.level??3)<=level)break;cut.add(b.id);}}commit(ctx.state);ctx.state.blocks=ctx.state.blocks.filter(b=>!cut.has(b.id));sync(ctx.state);return done([...cut]);},
   'document.section.reorder':(ctx,a)=>{const groups=sections(ctx.state);if(!groups.length||a.ids.length!==groups.length||new Set(a.ids).size!==a.ids.length||a.ids.some(id=>!groups.some(g=>g.id===id)))return fail('incomplete-section-order');if(a.ids.every((id,i)=>groups[i].id===id))return done([]);const prefix=ctx.state.blocks.slice(0,groups[0].start),ordered=a.ids.flatMap(id=>{const g=groups.find(g=>g.id===id);return ctx.state.blocks.slice(g.start,g.end);});commit(ctx.state);ctx.state.blocks=[...prefix,...ordered];sync(ctx.state);return done(a.ids);},
   'document.remove':ctx=>{if(!ctx.state.blocks.length&&!ctx.state.textId)return done([]);const ids=view(ctx.state).map(x=>x.id);commit(ctx.state);ctx.state.blocks=[];ctx.state.title='';ctx.state.kind=null;ctx.state.about=null;ctx.state.textId=null;sync(ctx.state);return done(ids);},
   'document.observe':ctx=>({status:'supported',data:view(ctx.state)}),

@@ -1,10 +1,10 @@
 // Actual application state only. No request annotations or invented semantic types.
-import {observedReaderContext} from './native-reader-context.mjs?v=c51a7d6eb4';
-import {createDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=d54287b258';
-import {createDiagramHost} from '../../worlds/diagram.sketch/declared-host.mjs?v=49308d375e';
-import {createDocumentHost} from '../../worlds/docs.editor/declared-host.mjs?v=f73c80d093';
-import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs?v=f4b4b7ff5f';
-import {createCalendarHost} from '../../worlds/time.calendar/declared-host.mjs?v=7a169b6985';
+import {observedReaderContext} from './native-reader-context.mjs?v=a762c82e14';
+import {createDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=a72ffe4c95';
+import {createDiagramHost} from '../../worlds/diagram.sketch/declared-host.mjs?v=530de2a039';
+import {createDocumentHost} from '../../worlds/docs.editor/declared-host.mjs?v=1b73d3a9a2';
+import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs?v=2b2fb6ef99';
+import {createCalendarHost} from '../../worlds/time.calendar/declared-host.mjs?v=ce55a865b0';
 export const NATIVE_AREAS={avatar:{area:'drawing',world:'ui.avatar',create:createAvatarHost,loadKnowledge:'faces'},draw:{area:'drawing',world:'art.draw',create:createDrawingHost},diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramHost},editor:{area:'document',world:'docs.editor',create:createDocumentHost},calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost,policyFile:'scheduling-policy.sop'}};
 /** Application composition: the same declared policy guards controls and spoken requests. */
 export async function createAreaHost(area,{loader,knowledge,...options}={}){
@@ -14,13 +14,13 @@ export async function createAreaHost(area,{loader,knowledge,...options}={}){
  if(area.policyFile&&!policySource)throw Error('native-policy-unavailable');
  return area.create({...options,knowledge,...(policySource?{policySource}:{})});
 }
-export function createAppReaderContext({getState,getPrevious=()=>null,onObservation=()=>{}}={}){
+export function createAppReaderContext({getState,getPrevious=()=>null,getInstanceId=()=>globalThis.crypto.randomUUID(),onObservation=()=>{}}={}){
  if(typeof getState!=='function'||typeof getPrevious!=='function'||typeof onObservation!=='function')throw Error('invalid-app-reader-context');
  const hosts=new WeakMap();
  return async()=>{
   const state=getState(),tab=state?.['ui.shell']?.activeTab,area=NATIVE_AREAS[tab],native=area&&state[area.world];
   if(!area||!native||typeof native!=='object')throw Error('active-native-context-unavailable');
-  let host=hosts.get(native);if(!host){host=await area.create({state:native,instanceId:'app-reader-'+globalThis.crypto.randomUUID()});hosts.set(native,host);}
+  let host=hosts.get(native);if(!host){host=await area.create({state:native,instanceId:getInstanceId(area.world)});hosts.set(native,host);}
   const observation=host.observe(),result=observedReaderContext(area.area,observation,getPrevious());onObservation({area:area.area,observation});return result;
  };
 }

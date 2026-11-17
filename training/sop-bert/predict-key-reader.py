@@ -17,6 +17,28 @@ def choose(values):
     best=max(values);ids=[i for i,x in enumerate(values) if x==best]
     return ids[0] if len(ids)==1 else None
 
+def classifier_alternative(bank,logits):
+    index=choose(logits)
+    if not isinstance(bank,list)or not isinstance(logits,list)or len(bank)!=len(logits):return {'index':None,'state':'invalid','probability':None}
+    if index is None:return {'index':None,'state':'ambiguous'if logits and all(isinstance(v,(int,float))and not isinstance(v,bool)and math.isfinite(v)for v in logits)else'invalid','probability':None}
+    entry=bank[index];maximum=max(logits);probability=math.exp(logits[index]-maximum)/sum(math.exp(v-maximum)for v in logits)
+    return {'index':index,'state':entry['state'],**({'value':entry['value']}if'value'in entry else{}),'probability':probability}
+
+def canonical_literal_proof(bank,literal,logits):
+    if not isinstance(bank,list)or not isinstance(literal,str):return None
+    matches=[i for i,entry in enumerate(bank)if entry.get('state')=='value'and isinstance(entry.get('value'),str)and entry['value']==literal]
+    if len(matches)!=1:return None
+    alternative=classifier_alternative(bank,logits)
+    return {'kind':'declared-canonical-string','value':literal,'bankIndex':matches[0],'classifier':alternative,'disagrees':alternative['state']!='value'or alternative.get('value')!=literal}
+
+def positive_integer_literal_proof(literal):
+    if not isinstance(literal,str)or not literal or any(c not in '0123456789'for c in literal):return None
+    # Bound before parsing so arbitrary-length integers cannot consume resources.
+    digits=literal.lstrip('0')
+    if len(digits)>16:return None
+    value=int(digits or'0')
+    return {'kind':'positive-safe-integer','value':value,'literal':literal}if 0<value<=9007199254740991 else None
+
 def key_spans(logits,offsets,sequences,attention,text_length):
     if not(len(logits)==len(offsets)==len(sequences)==len(attention)):return [],'invalid-token-shape'
     spans=[];active=None;previous=0
@@ -88,7 +110,10 @@ def normalize(config,text,area,bio,presence,global_logits,mention_logits,offsets
                         # Literal target identity remains source text, not an inferred canonical kind.
                         anchor=path if path.endswith('_span') else path+'_span'
                         if path in ['target.count','turn.repeat_count']:
-                            parent,leaf=path.split('.');request[parent].pop(leaf,None);issue('unresolved-numeric-normalization',key)
+                            parent,leaf=path.split('.');proof=positive_integer_literal_proof(text[a:b])
+                            if proof:
+                                request[parent][leaf]=proof['value'];mentions.append({'key':key,'tokens':spans[0]['tokens'],'range':[a,b],'valueProof':proof})
+                            else:request[parent].pop(leaf,None);issue('unresolved-numeric-normalization',key)
                         if path=='target.kind':anchor='target.kind_span'
                         elif path=='target.count':anchor='target.count_span'
                         elif path=='question.asked_key':issue('unsupported-question-key-copy',key);continue
@@ -107,10 +132,14 @@ def normalize(config,text,area,bio,presence,global_logits,mention_logits,offsets
                     a,b=span['range'];start,end=span['tokens'];identity=(key,start,end)
                     values=mention_logits.get(identity,{})
                     condition={'key':spec['type']+'.'+spec['key'],'value_span':text[a:b]};ci=str(len(request['constraints']));base=['constraints',ci]
+                    proof=None
                     if key in config['banks']:
-                        value,exists=field(key,values.get(key,[]))
-                        if exists:condition['value']=value
-                        else:issue('unresolved-domain-value',key)
+                        proof=canonical_literal_proof(config['banks'][key],text[a:b],values.get(key,[]))
+                        if proof:condition['value']=proof['value']
+                        else:
+                            value,exists=field(key,values.get(key,[]))
+                            if exists:condition['value']=value
+                            else:issue('unresolved-domain-value',key)
                     else:condition['value']=text[a:b]
                     for meta in config['metadataKeys']:
                         value,exists=field(meta,values.get(meta,[]))
@@ -118,14 +147,15 @@ def normalize(config,text,area,bio,presence,global_logits,mention_logits,offsets
                             route=metadata_paths.get(meta)
                             if route:condition[route]=value;emitted.add(meta)
                             else:issue('unmapped-metadata-route',meta)
-                    request['constraints'].append(condition);ranges.append({'path':base+['value_span'],'range':[a,b]});mentions.append({'key':key,'tokens':[start,end],'range':[a,b]})
+                    request['constraints'].append(condition);ranges.append({'path':base+['value_span'],'range':[a,b]});mentions.append({'key':key,'tokens':[start,end],'range':[a,b],**({'valueProof':proof}if proof else{})})
                     if isinstance(condition.get('value'),str) and condition['value']==text[a:b]:ranges.append({'path':base+['value'],'range':[a,b]})
                     elif 'value' in condition:issue('normalization-requires-declared-proof',key)
             elif role=='metadata' and key not in config['metadataKeys'] and present[key]:issue('unsupported-metadata-head',key)
         for key in config['metadataKeys']:
             if present[key] is not None and present[key]!=(key in emitted):issue('metadata-presence-inconsistent',key)
-    # No target.type head or proved routing exists in this frozen architecture.
-    issue('target-type-requires-declared-kind-route')
+    # Historical layouts did not supervise target.type; authored layouts carry an explicit head.
+    if 'request.target.type'not in config.get('banks',{}):issue('target-type-requires-declared-kind-route')
+    elif request.get('act')and not request.get('target',{}).get('type'):issue('missing-target-type')
     if truncated:issue('source-or-context-truncated')
     return {'source':{'text':text,'unit':'unicode-scalar'},'request':request,'ranges':ranges,'coverage':{'complete':not issues,'truncated':bool(truncated),'support':support(config)},'unresolved':issues,'model':model},mentions
 
@@ -147,8 +177,8 @@ def run(args):
     if any(before[k]!=v for k,v in expected.items()):raise ValueError('changed-before-load')
     trainer=load(args.trainer,'frozen_key_trainer');codec=load(args.codec_source,'frozen_key_codec')
     verify_codec_chain(config,json.loads(args.data_manifest.read_text()),before['dataManifest'],args.codec_source_sha256,trainer.configuration)
-    codec_identity={'format':'sop.key-reader-raw-codec/1','configSha256':args.config_sha256,'sourceSha256':args.codec_source_sha256,'predictorSha256':before['predictor'],'global':codec.GLOBAL,'metadata':codec.META,'BIO':'strict-greedy-ties-unresolved','presence':'sign-uncalibrated','targetType':'unresolved'}
-    model_identity={'sha256':args.checkpoint_sha256,'tokenizerSha256':config['encoderFiles']['tokenizer.json'],'codecSha256':hashlib.sha256(json.dumps(codec_identity,sort_keys=True).encode()).hexdigest(),'decoderVersion':1}
+    codec_identity={'format':'sop.key-reader-raw-codec/1','configSha256':args.config_sha256,'sourceSha256':args.codec_source_sha256,'predictorSha256':before['predictor'],'global':codec.GLOBAL,'metadata':codec.META,'BIO':'strict-greedy-ties-unresolved','presence':'sign-uncalibrated','targetType':'declared-if-trained','literalProof':'sop.key-literal-proof/1','typedCopy':'positive-safe-integer'}
+    model_identity={'sha256':args.checkpoint_sha256,'tokenizerSha256':config['encoderFiles']['tokenizer.json'],'codecSha256':hashlib.sha256(json.dumps(codec_identity,sort_keys=True).encode()).hexdigest(),'decoderVersion':3}
     records=[]
     for line in args.input.read_text().splitlines():
         row=json.loads(line)

@@ -1,0 +1,6 @@
+# General English phrase composition: neutral NPs and frame-independent arguments.
+# sources: hand-core 1 (constructions and mappings grounded in published source families)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.reader.en.phrases core.module name=w.reader.en.phrases version=1 imports=w.reader.en.frames exports=w.reader.en.binding exports=w.reader.en.feature exports=w.reader.en.filter exports=w.reader.en.rule exports=w.reader.en.map exports=w.reader.en.node exports=w.reader.en.step exports=w.reader.en.agreement core.source="hand-core 1"

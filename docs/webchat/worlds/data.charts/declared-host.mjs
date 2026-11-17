@@ -14,7 +14,7 @@ export const CHART_PROPERTY_ALIGNMENTS=[
 ].map(row=>({...row,area:'diagram',host:'diagram',valueKind:'string'}));
 export const CHART_TYPES=['bar','line','pie','doughnut','radar','polarArea','scatter'];
 export const CHART_TOOL_BINDINGS=[
- {id:'chart.make',act:'make',on:'data.charts.chart',defaultsFrom:[{parameter:'labels',lengthOf:'values',method:'ordinal-labels'}],params:{type:{type:'string',required:true,enum:CHART_TYPES},title:text,labels:{...array,default:[]},values:{...array,default:[]},series:{type:'string',default:'Value'},datasets:{type:'array'},source:{...array,default:[]}}},
+ {id:'chart.make',sample:[{args:{type:{enum:true},title:{unique:{prefix:'Chart'}},labels:{value:['A','B','C']},values:{value:[3,7,5]}}}],act:'make',on:'data.charts.chart',defaultsFrom:[{parameter:'labels',lengthOf:'values',method:'ordinal-labels'}],params:{type:{type:'string',required:true,enum:CHART_TYPES},title:text,labels:{...array,default:[]},values:{...array,default:[]},series:{type:'string',default:'Value'},datasets:{type:'array'},source:{...array,default:[]}}},
  {id:'chart.change',act:'change',on:'data.charts.chart',params:{id:text,title:{type:'string'},type:{type:'string',enum:CHART_TYPES},horizontal:{type:'boolean'},stacked:{type:'boolean'},showLegend:{type:'boolean'},showValues:{type:'boolean'},sort:{type:'string',enum:['asc','desc','alpha','none']},colour:{type:'string'},palette:{type:'string',enum:['default',...Object.keys(PALETTES)]}}},
  {id:'chart.data.change',act:'change',on:'data.charts.chart',params:{id:text,labels:array,values:array,series:seriesIndex}},
  {id:'chart.datasets.change',act:'change',on:'data.charts.chart',params:{id:text,labels:array,datasets:array}},
@@ -40,7 +40,7 @@ export const chartNativeObjects=s=>{
  if(!Array.isArray(s.charts))throw new TypeError('invalid-chart-state');const rows=[];
  for(const chart of s.charts){
   if(!validData(chart.labels,chart.datasets,chart.type))throw new TypeError('unsupported-chart-data');
-  rows.push({id:chart.id,kind:'chart',sourceType:'data.charts.chart',inputs:[{binding:'chart.title',key:'title',values:[nativeToken(chart.title)]},{binding:'chart.type',key:'type',values:[nativeToken(chart.type)]},...Object.entries(chart.options??{}).filter(([,v])=>v!==null&&typeof v!=='object').map(([key,v])=>({binding:'chart.'+key,key,values:[nativeToken(v)]}))]});
+  rows.push({id:chart.id,kind:'chart',sourceType:'data.charts.chart',...(chart.projection?.status==='linked'?{relations:{sourceGroup:[chart.projection.sourceGroup],sourceMembers:[...chart.projection.members]}}:{}),inputs:[{binding:'chart.title',key:'title',values:[nativeToken(chart.title)]},{binding:'chart.type',key:'type',values:[nativeToken(chart.type)]},...Object.entries(chart.options??{}).filter(([,v])=>v!==null&&typeof v!=='object').map(([key,v])=>({binding:'chart.'+key,key,values:[nativeToken(v)]}))]});
   for(const [si,ds]of chart.datasets.entries()){
    if(chart.datasets.length>1)rows.push({id:JSON.stringify([chart.id,'series',si]),kind:'series',sourceType:'data.charts.series',in:chart.id,index:si,inputs:[{binding:'chart.series.label',key:'label',values:[nativeToken(ds.label)]}]});
    for(let index=0;index<chart.labels.length;index++)rows.push({id:JSON.stringify(si?[chart.id,si,index]:[chart.id,index]),kind:'point',sourceType:'data.charts.point',in:chart.id,index,series:si,inputs:[{binding:'chart.point.label',key:'label',values:[nativeToken(chart.labels[index])]},{binding:'chart.point.value',key:'value',values:[nativeToken(ds.data[index])],dimension:'number',unit:'unitless',frame:'chart.data'}]});

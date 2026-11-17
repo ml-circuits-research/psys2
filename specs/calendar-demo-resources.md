@@ -2,6 +2,12 @@
 
 Owner decision, 2026-11-17: Calendar becomes a visible application area with personal calendars, managed rooms and time-bounded events. The same declared tools serve UI actions and future neural request execution. This extends the native contract in `29-calendar-host.md`; no sentence patterns or alternative reader are introduced.
 
+## Current demo UI
+
+Latest owner steering simplifies the visible tab to one calendar with event creation, editing and deletion, a week view, a daily agenda and a right inspector. Room management, calendar management and resource filters are absent from the UI. Existing room/multiple-calendar records remain valid native data; ordinary event edits do not reassign their references.
+
+`calendar.event.add` accepts an explicit event identity, title, start, duration and optional notes. It atomically creates one real default calendar when the store has none, and adds the event to that resource. An existing calendar is reused without changing earlier events. Default identity selection avoids every existing identity and the requested event identity. Native validation and the same SOP scheduling policy apply to the complete candidate store; a refusal rolls back initialization and event creation together. Dice metadata proposes only event creation or event title edits, never resource management.
+
 ## State and operations
 
 `initialCalendarState()` returns `{calendars:[], people:[], rooms:[], meetings:[]}`. Older states without `calendars` load as an empty calendar list. Identities are unique across all four collections, and event references use identities, never display names.

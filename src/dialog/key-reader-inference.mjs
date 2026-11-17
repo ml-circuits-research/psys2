@@ -1,5 +1,7 @@
 // Actual two-stage neural computation. Artifact loading and empirical admission are separate.
+import {validateKeyReaderLayout} from './key-reader-layout.mjs';
 import {copyHostData} from '../../worlds/native-tool-host.mjs';
+import {canonicalLiteralProof,positiveIntegerLiteralProof} from './key-reader-value-proof.mjs';
 import {selectedProbability,binaryDecisionProbability} from './model-selection-score.mjs';
 import {createKeyReaderPacketAdapter} from './key-reader-packet.mjs';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
@@ -46,11 +48,18 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
  const m=copyHostData(manifest),configJSON=m?.configJSON;
  if(m?.format!=='sop.key-reader-runtime/1'||!['trained-unverified','fixture'].includes(m.artifactRole)||m.dtype!=='fp32'||!['fp32','q8-dynamic'].includes(m.weightRepresentation)||m.executionEligible!==false||m.graphConfidence!==null||typeof configJSON!=='string'||!['configSha256','checkpointSha256','encoderSha256','headsSha256','tokenizerSha256','preparerSha256','trainerSha256','codecSha256'].every(k=>hash(m[k]))||typeof tokenizer!=='function'||typeof encoder!=='function'||typeof heads!=='function'||typeof makeTensor!=='function'||typeof offsetAuthority!=='function'||typeof recordDiagnostics!=='function'||![maxText,maxContextBytes,maxQueries,budget].every(n=>Number.isSafeInteger(n)&&n>0)||maxQueries>4096)throw Error('invalid-key-runtime-profile');
  if(await digest(configJSON)!==m.configSha256)throw Error('config-hash-mismatch');const config=copyHostData(JSON.parse(configJSON));
- if(config.maxLength!==192||!Number.isSafeInteger(m.hiddenWidth)||m.hiddenWidth<1||m.hiddenWidth>4096||!object(m.rawRoutes)||!object(m.rawRoutes.globals)||!object(m.rawRoutes.metadata)||config.trainerSha256!==m.trainerSha256||config.preparerSha256!==m.preparerSha256||config.encoderFiles?.['tokenizer.json']!==m.tokenizerSha256)throw Error('incompatible-key-runtime-layout');
+ const layout=validateKeyReaderLayout(config);
+ let preparerValid=config.preparerSha256===m.preparerSha256;
+ if(!config.preparerSha256&&typeof m.dataManifestJSON==='string'&&new TextEncoder().encode(m.dataManifestJSON).length<=4000000&&hash(config.dataManifestSha256)&&await digest(m.dataManifestJSON)===config.dataManifestSha256)preparerValid=JSON.parse(m.dataManifestJSON).scriptSha256===m.preparerSha256;
+ if(!Number.isSafeInteger(m.hiddenWidth)||m.hiddenWidth<1||m.hiddenWidth>4096||!object(m.rawRoutes)||!object(m.rawRoutes.globals)||!object(m.rawRoutes.metadata)||config.trainerSha256!==m.trainerSha256||!preparerValid||config.encoderFiles?.['tokenizer.json']!==m.tokenizerSha256)throw Error('incompatible-key-runtime-layout');
  const globals=config.keys.filter(k=>config.registry[k].role==='global'),metadata=config.keys.filter(k=>config.registry[k].role==='metadata');
- for(const [map,keys]of [[m.rawRoutes.globals,globals],[m.rawRoutes.metadata,metadata]])if(Object.keys(map).length!==keys.length||keys.some(k=>!Object.hasOwn(map,k)||!safePath(map[k])))throw Error('incomplete-raw-route-map');
- const composite=await digest(JSON.stringify({config:m.configSha256,checkpoint:m.checkpointSha256,encoder:m.encoderSha256,heads:m.headsSha256,tokenizer:m.tokenizerSha256,preparer:m.preparerSha256,trainer:m.trainerSha256,codec:m.codecSha256,dtype:m.dtype,weightRepresentation:m.weightRepresentation,rawRoutes:m.rawRoutes}));
- const model={sha256:composite,tokenizerSha256:m.tokenizerSha256,codecSha256:m.codecSha256,decoderVersion:2};
+ for(const [map,keys]of [[m.rawRoutes.globals,globals],[m.rawRoutes.metadata,metadata]]){
+  if(Object.keys(map).length!==keys.length||keys.some(k=>!Object.hasOwn(map,k)||!safePath(map[k])))throw Error('incomplete-raw-route-map');
+  const paths=Object.values(map);if(new Set(paths).size!==paths.length||paths.some(p=>paths.some(q=>p!==q&&p.startsWith(q+'.'))))throw Error('conflicting-raw-route-map');
+ }
+ const decoderVersion=3,literalProofContract='sop.key-literal-proof/1';
+ const composite=await digest(JSON.stringify({decoderVersion,literalProofContract,config:m.configSha256,checkpoint:m.checkpointSha256,encoder:m.encoderSha256,heads:m.headsSha256,tokenizer:m.tokenizerSha256,preparer:m.preparerSha256,trainer:m.trainerSha256,codec:m.codecSha256,dtype:m.dtype,weightRepresentation:m.weightRepresentation,rawRoutes:m.rawRoutes}));
+ const model={sha256:composite,tokenizerSha256:m.tokenizerSha256,codecSha256:m.codecSha256,decoderVersion};
  const adapter=await createKeyReaderPacketAdapter({configJSON,configSha256:m.configSha256,model});
  const banks=[],bankMap=new Map();let width=0;
  for(const key of config.keys)if(Object.hasOwn(config.banks,key)){const row={key,start:width,end:width+config.banks[key].length};banks.push(row);bankMap.set(key,row);width=row.end;}
@@ -59,7 +68,7 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
  async function infer(text,{area,context=null}={}){
   let steps=0;const tick=(n=1)=>{steps+=n;if(steps>budget)throw Error('key-runtime-budget');};
   const raw={source:{text:typeof text==='string'?text:'',unit:'unicode-scalar'},request:{span:typeof text==='string'?text:'',target:{},constraints:[]},ranges:[],coverage:{complete:false,truncated:false,support:support(config)},unresolved:[],model};
-  const auxiliary={queryCount:0,selectedLogits:[],minimumProbability:null};
+  const auxiliary={queryCount:0,selectedLogits:[],minimumProbability:null,valueProofs:[]};
   const probability=value=>{auxiliary.minimumProbability=Math.min(auxiliary.minimumProbability??1,value);};let offsetProvenance=null;
   const issue=(reason,key=null)=>raw.unresolved.push({reason,...(key?{key}:{})});
   try{
@@ -87,24 +96,28 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
      if(bankMap.has(key)){const f=field(key,0);if(present!==null&&present!==f.exists)issue('presence-class-inconsistent',key);if(f.exists){setPath(raw.request,path,f.value);emitted.add(key);}}
      else{
       if(present!==null&&present!==Boolean(spans.length))issue('presence-span-inconsistent',key);if(spans.length>1)issue('ambiguous-global-mention',key);
-      if(spans.length===1){const range=spans[0].range,value=chars.slice(...range).join('');setPath(raw.request,path,value);emitted.add(key);let anchor=path.endsWith('_span')?path:path+'_span';if(['target.count','turn.repeat_count'].includes(path)){const [a,b]=path.split('.');delete raw.request[a][b];issue('unresolved-numeric-normalization',key);}if(path==='question.asked_key'){issue('unsupported-question-key-copy',key);}else{setPath(raw.request,anchor,value);raw.ranges.push({path:anchor.split('.'),range:[...range]});}}
+      if(spans.length===1){const range=spans[0].range,value=chars.slice(...range).join('');setPath(raw.request,path,value);emitted.add(key);let anchor=path.endsWith('_span')?path:path+'_span';if(['target.count','turn.repeat_count'].includes(path)){const [a,b]=path.split('.');const proof=positiveIntegerLiteralProof(value);if(proof){raw.request[a][b]=proof.value;auxiliary.valueProofs.push({key,range:[...range],...proof});}else{delete raw.request[a][b];issue('unresolved-numeric-normalization',key);}}if(path==='question.asked_key'){issue('unsupported-question-key-copy',key);}else{setPath(raw.request,anchor,value);raw.ranges.push({path:anchor.split('.'),range:[...range]});}}
      }
      if(path==='act'){if(spans.length===1){const range=spans[0].range;raw.request.trigger=chars.slice(...range).join('');raw.ranges.push({path:['trigger'],range:[...range]});}else issue('missing-or-ambiguous-act-anchor',key);}
     }else if(spec.role==='domain'){
      if(present!==null&&present!==Boolean(spans.length))issue('presence-span-inconsistent',key);if(spec.area!==area){if(present||spans.length)issue('cross-area-key-unresolved',key);continue;}
      for(const span of spans){tick();const query=queryMap.get(key+':'+span.tokens.join(':')),value=chars.slice(...span.range).join(''),condition={key:spec.type+'.'+spec.key,value_span:value},index=String(raw.request.constraints.length);
-      if(bankMap.has(key)){const f=field(key,query);if(f.exists)condition.value=f.value;else issue('unresolved-domain-value',key);}else condition.value=value;
+      if(bankMap.has(key)){
+       const layout=bankMap.get(key),values=logits.slice(query*width+layout.start,query*width+layout.end),proof=canonicalLiteralProof(config.banks[key],value,values,tick);
+       if(proof){condition.value=proof.value;auxiliary.valueProofs.push({key,query,range:[...span.range],literal:value,...proof});const c=proof.classifier;if(c.index!==null)auxiliary.selectedLogits.push({key,query,index:c.index,logit:values[c.index],probability:c.probability,role:'source-proof-alternative'});}
+       else{const f=field(key,query);if(f.exists)condition.value=f.value;else issue('unresolved-domain-value',key);}
+      }else condition.value=value;
       for(const meta of config.metadataKeys){tick();const f=field(meta,query);if(f.exists){setPath(condition,m.rawRoutes.metadata[meta],f.value);emitted.add(meta);}}
       raw.request.constraints.push(condition);raw.ranges.push({path:['constraints',index,'value_span'],range:[...span.range]});if(typeof condition.value==='string'&&condition.value===value)raw.ranges.push({path:['constraints',index,'value'],range:[...span.range]});else if(Object.hasOwn(condition,'value'))issue('normalization-requires-declared-proof',key);
      }
     }else if(spec.role==='metadata'&&!config.metadataKeys.includes(key)&&present)issue('unsupported-metadata-head',key);
    }
    for(const key of config.metadataKeys){tick();const p=presence[config.keys.indexOf(key)];if(p!==0&&(p>0)!==emitted.has(key))issue('metadata-presence-inconsistent',key);}
-   if(typeof raw.request.target.type!=='string'||!config.targetFamilies?.[area]?.includes(raw.request.target.type)){delete raw.request.target.type;issue('missing-unknown-or-cross-area-target-type');}
+   if(typeof raw.request.target.type!=='string'||!layout.targetFamilies[area]?.includes(raw.request.target.type)){delete raw.request.target.type;issue('missing-unknown-or-cross-area-target-type');}
    if(m.artifactRole==='fixture')issue('fixture-model-untrained');
    raw.coverage.complete=raw.unresolved.length===0;
   }catch(error){issue(String(error?.message??'key-inference-failed'));raw.coverage.complete=false;}
-  const adapted=adapter.adapt(raw);return {raw,packet:adapted.packet,diagnostics:adapted.diagnostics,provenance:copyHostData(provenance),auxiliary,offsetProvenance,graphConfidence:null,steps};
+  const adapted=adapter.adapt(raw);return {raw,packet:adapted.packet,diagnostics:{...adapted.diagnostics,valueProofs:copyHostData(auxiliary.valueProofs)},provenance:copyHostData(provenance),auxiliary,offsetProvenance,graphConfidence:null,steps};
  }
  return {provenance:()=>copyHostData(provenance),infer,async read(text,context){const result=await infer(text,context);await recordDiagnostics(result);if(!result.packet)throw Error('invalid-key-model-packet');return result.packet;}};
 }

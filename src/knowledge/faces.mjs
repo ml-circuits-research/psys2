@@ -30,6 +30,7 @@ export async function buildFaces(facts) {
     const same = (sh) => sh.sources?.length === home.sources?.length && sh.sources.every((x) => home.sources.includes(x));
     const read = (type) => facts.wires(type, { shard: same });
     const [slotW, variantW, partW, pointW, colourW, expressionW] = await Promise.all(['k.faces.slot', 'k.faces.variant', 'k.faces.part', 'k.faces.point', 'k.faces.colour', 'k.faces.expression'].map(read));
+    const goalW=await read('k.faces.expression.goal').catch(()=>[]);
     const style = one(presetWires[0], 'style');
     const points = new Map();
     for (const p of pointW) { const id = one(p, 'part').replace(/^\$/, ''); (points.get(id) ?? points.set(id, []).get(id)).push([num(p, 'n'), num(p, 'x'), num(p, 'y')]); }
@@ -52,7 +53,7 @@ export async function buildFaces(facts) {
     if (!slots.length || slots.some((s) => !s.variants.length)) return null;
     const presets = {};
     for (const w of presetWires.filter((x) => one(x, 'style') === style)) {
-      const p = { name: one(w, 'name'), slots: {}, colours: { skin: one(w, 'skin'), hair: one(w, 'hair_colour'), eyes: one(w, 'eye_colour'), clothes: one(w, 'clothes') } };
+      const p = { name: one(w, 'name'), ...(one(w,'kind')?{kind:one(w,'kind')}:{}), slots: {}, colours: { skin: one(w, 'skin'), hair: one(w, 'hair_colour'), eyes: one(w, 'eye_colour'), clothes: one(w, 'clothes') } };
       for (const s of slots) if (w.f[s.name]) p.slots[s.name] = one(w, s.name);
       presets[p.name] = p;
     }
@@ -60,6 +61,7 @@ export async function buildFaces(facts) {
     for (const w of expressionW.filter((x) => one(x, 'style') === style)) {
       const e = { name: one(w, 'name'), over: {}, oneEye: one(w, 'one_eye') ?? null, mouthAlt: one(w, 'mouth_alt') ?? null };
       for (const k of ['mouth', 'eyebrows', 'eyes']) if (w.f[k]) e.over[k] = one(w, k);
+      e.goals=goalW.filter(goal=>one(goal,'expression')===e.name).map(goal=>({slot:one(goal,'slot'),property:one(goal,'property'),value:one(goal,'value')}));
       expressions[e.name] = e;
     }
     const colours = {};

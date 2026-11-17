@@ -59,3 +59,20 @@ test('literal table cell edit has exact observed identity and verifiable native 
  assert.equal(verification.status,'verified');assert.equal(state.blocks.find(b=>b.id===table).rows[0][1],'User value');
  assert.deepEqual(intent.expected.providedArgs,args);
 });
+
+test('chapters and subchapters use real heading levels and exact insertion references',()=>{
+ const {state,host}=setup();const first=call(host,'document.section.make',{parent:state.textId,text:'Chapter one',level:1}).changed[0],second=call(host,'document.section.make',{parent:state.textId,text:'Chapter two',level:1}).changed[0];
+ const sub=call(host,'document.section.make',{parent:state.textId,text:'A subchapter',level:2,after:first}).changed[0];
+ assert.deepEqual(state.blocks.filter(b=>b.kind==='heading').map(b=>[b.id,b.level]),[[first,1],[sub,2],[second,1]]);
+ const before=structuredClone(state);assert.equal(call(host,'document.section.make',{parent:state.textId,text:'Lost',level:2,after:'missing'}).status,'refused');assert.deepEqual(state,before);
+});
+
+test('subchapters insert at an exact observed block before a later chapter without moving content',()=>{
+ const {state,host}=setup(),parent=state.textId;
+ const first=call(host,'document.section.make',{parent,text:'Chapter one',level:1}).changed[0];
+ const body=call(host,'document.block.make',{parent,kind:'paragraph',text:'Keep first chapter body'}).changed[0];
+ const second=call(host,'document.section.make',{parent,text:'Chapter two',level:1}).changed[0];
+ const sub=call(host,'document.section.make',{parent,text:'Subchapter',level:2,after:body}).changed[0];
+ assert.deepEqual(state.blocks.slice(1).map(b=>b.id),[first,body,sub,second]);
+ const before=structuredClone(state);assert.equal(call(host,'document.section.make',{parent,text:'Bad',level:2,after:'missing'}).status,'refused');assert.deepEqual(state,before);
+});

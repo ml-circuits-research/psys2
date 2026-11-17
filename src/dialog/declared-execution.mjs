@@ -1,3 +1,4 @@
+import{instanceIdFor}from'./instance-identity.mjs';
 import {nativeKindCandidates} from './native-binding-candidates.mjs';
 // Application composition of declared semantic identities and native capabilities; no text parsing.
 import {World,str} from '../vendor/sopworld/sopworld.mjs';
@@ -31,7 +32,7 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
  const mappings=nativeKindCandidates(bindings).filter(r=>r.area===area.area&&r.canonical===target.kind&&r.nativeFamilyBinding);
  if(!mappings.length)return null;
  const nativeState=session.isession.state[area.world];if(!nativeState)return null;
- const host=await createAreaHost(area,{state:nativeState,instanceId:'execution-'+globalThis.crypto.randomUUID(),loader:session.engine?.loader}),before=host.observe(),operations=host.bindings();
+ const host=await createAreaHost(area,{state:nativeState,instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge}),before=host.observe(),operations=host.bindings();
  const familyOps=operations.filter(op=>mappings.some(m=>m.nativeFamilyBinding.operation===op.id));
  const kinds=[...new Set(mappings.map(m=>m.lemma).filter(name=>familyOps.some(op=>op.params.kind?.enum?.includes(name))))];
  const sourceTypes=new Set(familyOps.map(op=>op.on)),notes=[],unapplied=[];

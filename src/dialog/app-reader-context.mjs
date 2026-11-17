@@ -14,13 +14,13 @@ export async function createAreaHost(area,{loader,knowledge,...options}={}){
  if(area.policyFile&&!policySource)throw Error('native-policy-unavailable');
  return area.create({...options,knowledge,...(policySource?{policySource}:{})});
 }
-export function createAppReaderContext({getState,getPrevious=()=>null,onObservation=()=>{}}={}){
+export function createAppReaderContext({getState,getPrevious=()=>null,getInstanceId=()=>globalThis.crypto.randomUUID(),onObservation=()=>{}}={}){
  if(typeof getState!=='function'||typeof getPrevious!=='function'||typeof onObservation!=='function')throw Error('invalid-app-reader-context');
  const hosts=new WeakMap();
  return async()=>{
   const state=getState(),tab=state?.['ui.shell']?.activeTab,area=NATIVE_AREAS[tab],native=area&&state[area.world];
   if(!area||!native||typeof native!=='object')throw Error('active-native-context-unavailable');
-  let host=hosts.get(native);if(!host){host=await area.create({state:native,instanceId:'app-reader-'+globalThis.crypto.randomUUID()});hosts.set(native,host);}
+  let host=hosts.get(native);if(!host){host=await area.create({state:native,instanceId:getInstanceId(area.world)});hosts.set(native,host);}
   const observation=host.observe(),result=observedReaderContext(area.area,observation,getPrevious());onObservation({area:area.area,observation});return result;
  };
 }

@@ -1,0 +1,19 @@
+# w.room: rooms with explicitly stated names and seating capacities
+# sources: hand-core 1 (own project declarations; sources/hand-core/SOURCE.md)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: pinned sopworld std.schema/std.acts; no new runtime capability
+
+@w.room core.module name=w.room version=1 exports=room core.source="hand-core 1"
+@w.room.world std.schema.world name=w.room doc="rooms with explicitly stated names and seating capacities" core.source="hand-core 1"
+
+@w.room.room core.type of=w.room.room extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.room.room.name core.slot of=w.room.room key=name required=true kind=atom kind=string core.source="hand-core 1"
+@w.room.room.seats core.slot of=w.room.room key=seats kind=integer min=0 step=1 core.source="hand-core 1"
+@w.room.kind.room std.schema.kind of=w.room.room world=w.room acts=make acts=remove acts=change acts=ask acts=copy core.source="hand-core 1"
+
+@w.room.word.world core.word text="room" means=w.room of=std.schema.world.name core.source="hand-core 1"
+@w.room.word.0 core.word text="room" means=w.room.room core.source="hand-core 1"
+@w.room.word.1 core.word text="rooms" means=w.room.room core.source="hand-core 1"
+@w.room.word.2 core.word text="name" means=w.room.room.name core.source="hand-core 1"
+@w.room.word.3 core.word text="seating capacity" means=w.room.room.seats core.source="hand-core 1"

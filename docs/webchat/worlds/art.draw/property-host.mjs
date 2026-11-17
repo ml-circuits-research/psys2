@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Native Drawing property observation and mutation. No language or ontology lookup.
-import { remember } from './board.mjs?v=58af133d2e';
-import { kindKey, kindName } from './scene.mjs?v=cd2ed9328d';
+import { remember } from './board.mjs?v=7ee7069df4';
+import { kindKey, kindName } from './scene.mjs?v=5bdf3e5957';
 
 export const DRAWING_PROPERTY_BINDINGS = Object.freeze([
   Object.freeze({ id: 'art.draw.object.colour', concept: 'colour', key: 'color', sourceType: 'art.draw.object', format: 'rgb' }),

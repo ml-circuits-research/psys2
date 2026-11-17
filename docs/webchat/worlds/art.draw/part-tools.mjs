@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Geometry primitives for actual instance constituents. No words, parser or kind-specific branch.
-import {partsOf,piecesOf,groupOf,registerShape,thingBuild,COMPOSITE,thingOfKey,kindKey,kindName,KINDS} from './scene.mjs?v=cd2ed9328d';
-import {makeObject,remember} from './board.mjs?v=58af133d2e';
+import {partsOf,piecesOf,groupOf,registerShape,thingBuild,COMPOSITE,thingOfKey,kindKey,kindName,KINDS} from './scene.mjs?v=5bdf3e5957';
+import {makeObject,remember} from './board.mjs?v=7ee7069df4';
 const text={type:'string',required:true},index={type:'integer',required:true,min:0},number={type:'number',required:true};
 export const DRAWING_PART_TOOL_BINDINGS=[
  {id:'drawing.object.parts',act:'ask',on:'art.draw.object',params:{id:text}},
@@ -25,7 +25,7 @@ function storeParts(o,parts){
  const key=registerShape(sourceKind,shape);Object.assign(o,{kind:'composite',thing:thingOfKey(key),shape,semanticKind:sourceKind,parts:{}});delete o.hide;delete o.extra;
 }
 const getPart=(s,a)=>{const o=object(s,a.id);if(!o)return null;const parts=baked(o);return parts[a.index]?{o,parts,p:parts[a.index]}:null;};
-const focus=(s,o,index=null)=>{s.selected=o.id;s.selectedPart=index===null?null:{id:o.id,index};s.last=[o.id];};
+const focus=(s,o,index=null)=>{s.selected=o.id;s.selectedIds=[o.id];s.selectedPart=index===null?null:{id:o.id,index};s.last=[o.id];};
 function restoreMembers(group){
  const ref=group.shape.ref,k=group.size/(ref.size||group.size),a=(group.rotation??0)*Math.PI/180,mirror=!!group.flip;
  return group.shape.members.map(original=>{const o=structuredClone(original);let dx=(o.x-ref.x)*k;const dy=(o.y-ref.y)*k;if(mirror)dx=-dx;o.x=group.x+dx*Math.cos(a)-dy*Math.sin(a);o.y=group.y+dx*Math.sin(a)+dy*Math.cos(a);o.size=Math.max(.01,o.size*k);o.rotation=(mirror?-(o.rotation??0):(o.rotation??0))+(group.rotation??0);if(mirror)o.flip=!o.flip;if(group.color)o.color=group.color;return o;});
@@ -61,7 +61,7 @@ export const drawingPartHandlers={
  'drawing.object.ungroup':(ctx,a)=>{
   const o=object(ctx.state,a.id);if(!o)return fail('missing-target');const restored=o.shape?.members?.length&&o.shape.ref?restoreMembers(o):null,pieces=restored?null:piecesOf(o);if(!restored&&pieces.length<2)return fail('not-a-compound');remember(ctx.state,null);
   ctx.state.objects=ctx.state.objects.filter(item=>item.id!==o.id);const made=restored??pieces.map(p=>makePiece(ctx.state,p,o));
-  for(const member of made){if(ctx.state.objects.some(x=>x.id===member.id))member.id='o'+ctx.state.nextId++;ctx.state.objects.push(member);}ctx.state.last=made.map(m=>m.id);ctx.state.selected=made[0]?.id??null;ctx.state.selectedPart=null;return done(made.map(m=>m.id));
+  for(const member of made){if(ctx.state.objects.some(x=>x.id===member.id))member.id='o'+ctx.state.nextId++;ctx.state.objects.push(member);}ctx.state.last=made.map(m=>m.id);ctx.state.selectedIds=[...ctx.state.last];ctx.state.selected=made[0]?.id??null;ctx.state.selectedIds=made.map(m=>m.id);ctx.state.selectedPart=null;return done(made.map(m=>m.id));
  },
 };
 

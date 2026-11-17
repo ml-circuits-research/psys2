@@ -1,3 +1,5 @@
+import {createInstanceStore} from './ui/instance-store.mjs';
+import {mountPaneSplitter} from './ui/pane-splitter.mjs';
 import {createIntentRecords} from './ui/intent-records.mjs';
 import { createTranslationLayer } from './ui/translation-ui.mjs';
 // SPDX-License-Identifier: AGPL-3.0-only
@@ -135,7 +137,6 @@ export async function mountPsys2(element, options = {}) {
       if (destroyed) return null;
       const holder = h('div', { class: 'p2-tabbody' });
       tabBtns[t.id].panel.append(holder);
-      { const die = h('button', { class: 'p2-btn p2-tabdice', type: 'button', 'aria-label': 'Random command for this tab', title: 'Random command for this tab' }, icon('die')); die.addEventListener('click', () => rollDice(t.id)); tabBtns[t.id].panel.append(die); }   // a tab that fills the screen has its own small dice
       panelUI[t.id] = { ui: t.make(holder, hostApi) };
       panelUI[t.id].ui.update?.(states[t.world]);
       if (view === t.id) panelUI[t.id].ui.show?.();
@@ -206,7 +207,7 @@ export async function mountPsys2(element, options = {}) {
   const micCount = h('span', { class: 'p2-mic-count', 'aria-hidden': 'true', hidden: true });
   micBtn.append(ringEl, micCount);
   const speakerBtn = h('button', { class: 'p2-btn p2-speaker', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Read answers aloud: off', title: 'Read answers aloud: off' }, icon('speaker'));
-  const dieBtn = h('button', { class: 'p2-btn p2-die', type: 'button', 'aria-label': 'Try an example', title: 'Try an example' }, icon('die'));
+  const dieBtn = h('button', { class: 'p2-btn p2-die', type: 'button', 'aria-label': 'Random action in current tab', title: 'Random action in current tab' }, icon('die'));
   const sendBtn = h('button', { class: 'p2-btn p2-send', type: 'submit', 'aria-label': 'Send', title: 'Send' }, icon('send'));
   const queueEl = h('div', { class: 'p2-queue', role: 'list', 'aria-label': 'Waiting messages', hidden: true });   // MIC2: messages that wait for the running turn
   const dictText = h('span', { class: 'p2-dict-text' }, 'Dictating into: Untitled document');
@@ -265,7 +266,7 @@ export async function mountPsys2(element, options = {}) {
   const dbgBtn = h('button', { class: 'p2-btn-text p2-dbg-open', type: 'button', id: 'p2-dbg-open', 'aria-haspopup': 'dialog' }, h('span', { class: 'p2-dbg-ico', 'aria-hidden': 'true' }, '🐞'), ' Debug');
   const dbgRow = h('div', { class: 'p2-dbgrow', hidden: true }, dbgBtn);
   const paneEl = tabDefs.length ? h('section', { class: 'p2-pane', 'aria-label': 'Tools' }, tabsEl, dbgRow, panelsEl) : null;
-  if (paneEl) root.append(paneEl); else root.classList.add('p2-chat-only');
+  if (paneEl) {root.append(paneEl);cleanups.push(mountPaneSplitter(root,chat,{persist:options.persist!==false}));} else root.classList.add('p2-chat-only');
   const modalHost = h('div', { class: 'p2 p2-modal-host' }, settingsEl);
   // USER-ACTIONS: taps are recorded by one delegated listener (no per-tab code): the name, the area, what kind of thing it was; tabs, the mic and Send have their own events
   const logTap = (e) => {
@@ -526,7 +527,29 @@ export async function mountPsys2(element, options = {}) {
   // ---------- state -> UI ----------
   const DEMO_STATE_KEY='psys2.demo.worlds.v1';
   const DEMO_WORLDS=['art.draw','diagram.sketch','docs.editor','time.calendar','ui.avatar'];
-  let demoRestored=false;
+  const instanceStore=createInstanceStore({persistent:options.persist!==false});
+  let demoRestored=false,instancesDirty=false,instancesSaving=null,instanceFailure=null;
+  function failInstances(error){
+    if(!instanceFailure)note('Saved work could not be loaded or saved. Existing saved work is preserved; further saving is paused.');
+    instanceFailure=error;console.warn('SOP instance persistence failed',error);
+  }
+  function queueInstances() {
+    if(!demoRestored||instanceFailure)return;
+    instancesDirty=true;
+    if(!instancesSaving){
+      instancesSaving=Promise.resolve().then(async()=>{
+        while(instancesDirty&&!instanceFailure){
+          instancesDirty=false;
+          const {records}=await engineClient.call('snapshotInstances',{worlds:DEMO_WORLDS.filter(id=>loadedWorlds.has(id))});
+          await instanceStore.saveMany(records);
+        }
+      }).catch(failInstances).finally(()=>{instancesSaving=null;});
+    }
+  }
+  async function flushInstances() {
+    while(instancesSaving)await instancesSaving;
+    if(instanceFailure)throw instanceFailure;
+  }
   function applyState(snapshot) {
     if (!snapshot || typeof snapshot !== 'object') return;
     const changed = [];
@@ -535,7 +558,7 @@ export async function mountPsys2(element, options = {}) {
     if (changed.includes('ui.avatar')) avatarUI?.update(states['ui.avatar']);
     if (changed.includes(SHELL)) applyShell(states[SHELL]);
     if (changed.includes('docs.editor')) syncDictation();
-    if(demoRestored&&options.persist!==false&&changed.some(id=>DEMO_WORLDS.includes(id)))try{localStorage.setItem(DEMO_STATE_KEY,JSON.stringify(Object.fromEntries(DEMO_WORLDS.filter(id=>states[id]).map(id=>[id,states[id]]))));}catch{}
+    if(changed.some(id=>DEMO_WORLDS.includes(id)))queueInstances();
     options.onState?.(states, changed);
   }
   function applyShell(sh) {
@@ -618,7 +641,7 @@ export async function mountPsys2(element, options = {}) {
     tool: async (operation,args={},options={}) => {
       if(isBusy())return {ok:false,message:'Please wait for the current action.'};
       effectsPending++;updateBusy();
-      try{const r=await session.tool(operation,args,options);applyState(r.state);if(r.intentRecord){await trainingPairs.record(r.intentRecord);const row=addMessage('user',r.intentRecord.text),detail=h('details',{open:true,class:'p2-intent'},h('summary',{},'SOP Lang intent'),h('pre',{class:'p2-code'},r.intentRecord.wires));row.bubble.append(detail);addMessage('bot',r.message+' · '+(r.intentRecord.verification?.status??'unverified'));}if(r.ok&&r.changed)events.add('control',operation);return r;}
+      try{const r=await session.tool(operation,args,options);applyState(r.state);if(r.intentRecord){await trainingPairs.record(r.intentRecord);const row=addMessage('user',r.intentRecord.text),detail=h('details',{open:true,class:'p2-intent'},h('summary',{},'SOP Lang intent'),h('pre',{class:'p2-code'},r.intentRecord.wires));row.bubble.append(detail);addMessage('bot',r.message+' · '+(r.intentRecord.verification?.status??'unverified'));}if(r.ok&&r.changed)events.add('control',operation);await flushInstances();return r;}
       finally{effectsPending=Math.max(0,effectsPending-1);updateBusy();}
     },
     send: (text) => send(String(text), 'form'),   // a tab's form or control (logged as mode 'form'); ignored (with a hint) while a turn runs
@@ -945,6 +968,7 @@ export async function mountPsys2(element, options = {}) {
     const rec = { text, ...reply.perf, formalizer: settings.formalizer };
     (globalThis.__psys2Perf ??= []).push(rec);
     showPerfOverlay(rec);
+    await flushInstances();
     options.onReply?.(reply);
     return reply;
   }
@@ -1203,17 +1227,18 @@ export async function mountPsys2(element, options = {}) {
   const sample = (mode, extra = {}) => (engineClient ? engineClient.call('sample', { mode, tab: view, ...extra }).catch(() => ({ items: [] })) : Promise.resolve({ items: [] }));
   const sampleItems = (mode, extra) => sample(mode, extra).then((r) => r?.items ?? []);
   async function rollDice(tab = view) {
-    if (turn) { flashHint(BUSY_HINT); return; }
+    if (isBusy()) { flashHint(BUSY_HINT); return; }
     dieBtn.disabled = true;
-    let r;
-    try { r = await sample('one', { tab, language: language.get() }); } finally { dieBtn.disabled = false; }
-    const ex = r?.items?.[0];
-    if (!ex) { flashHint(r?.reason === 'busy' ? 'Finish the current request before trying an example.' : 'I could not find a changing example for the current state and reader.'); return; }
-    // a command of another world is shown on that world's tab: a short one ("Add a table.") means something else on the drawing tab, which would read it itself
-    if (ex.tab && ex.tab !== 'robot' && tabBtns[ex.tab] && view !== ex.tab) userTab(ex.tab, 'example');
-    send(ex.text, 'chip', { example: true });
+    try {
+      const result=await engineClient.call('sampleControl',{view:tab});
+      if(view!==tab)return;
+      const candidate=result?.candidate;
+      if(!candidate){flashHint(result?.reason==='busy'?'Finish the current action first.':'No changing action is available for the current state.');return;}
+      await hostApi.tool(candidate.operation,candidate.args,{view:tab});
+    } catch(error) { flashHint(error.message); }
+    finally { dieBtn.disabled = false; }
   }
-  on(dieBtn, 'click', () => { rollDice(phone && page === 'chat' ? 'talk' : view); });
+  on(dieBtn, 'click', () => { rollDice(view); });
   let sugSeq = 0;
   /** Talk: 3-4 example commands from the context; another tab: the acts that fit its selected (or newest) thing. Refreshed after every turn and on every tab change. */
   async function refreshSuggestions() {
@@ -1976,7 +2001,31 @@ export async function mountPsys2(element, options = {}) {
     if (info.problems?.length) console.warn('PSys2 world problems:', info.problems);
     if (!settingsEl.hidden) renderSettings();
     session = engineClient.session; mark('session');
-    if(options.persist!==false)try{const saved=JSON.parse(localStorage.getItem(DEMO_STATE_KEY)??'null');if(saved&&typeof saved==='object'&&!Array.isArray(saved)){const worlds=Object.keys(saved).filter(id=>DEMO_WORLDS.includes(id));if(worlds.length){await engineClient.call('ensure',{worlds,why:'saved work'});const r=await engineClient.call('setStates',{state:Object.fromEntries(worlds.map(id=>[id,saved[id]]))});engineClient.session.acceptState(r);}}}catch(e){console.warn('Saved work could not be restored',e);}
+    try {
+      const records=await instanceStore.all();
+      if(records.length){
+        await engineClient.call('ensure',{worlds:records.map(row=>row.world),why:'saved SOP work'});
+        const restored=await engineClient.call('restoreInstances',{records});
+        session.acceptState(restored);applyState(restored.state);
+      }else if(options.persist!==false){
+        const saved=JSON.parse(localStorage.getItem(DEMO_STATE_KEY)??'null');
+        if(saved&&typeof saved==='object'&&!Array.isArray(saved)){
+          const worlds=Object.keys(saved).filter(id=>DEMO_WORLDS.includes(id));
+          if(worlds.length){
+            await engineClient.call('ensure',{worlds,why:'migrating saved work'});
+            const migrated=await engineClient.call('setStates',{state:Object.fromEntries(worlds.map(id=>[id,saved[id]]))});
+            session.acceptState(migrated);applyState(migrated.state);
+            const snapshot=await engineClient.call('snapshotInstances',{worlds});
+            await instanceStore.saveMany(snapshot.records);
+            const readback=await instanceStore.all();
+            if(snapshot.records.some(row=>!readback.some(saved=>saved.world===row.world&&saved.instanceId===row.instanceId&&saved.revision===row.revision&&saved.wires===row.wires)))throw Error('instance-migration-readback-mismatch');
+            const restored=await engineClient.call('restoreInstances',{records:readback});
+            session.acceptState(restored);applyState(restored.state);
+            localStorage.removeItem(DEMO_STATE_KEY);
+          }
+        }
+      }
+    }catch(error){failInstances(error);}
     demoRestored=true;
     session.setWorldState?.(SHELL, { language: language.get(), ...(savedTab ? { activeTab: savedTab } : {}) });   // the shell world's language state starts as the selector (LANG-FIXED)
   } catch (e) {
@@ -2041,15 +2090,26 @@ export async function mountPsys2(element, options = {}) {
   }
   const exportIntents=h('button',{class:'p2-btn p2-intent-export',type:'button',title:'Export UI training data','aria-label':'Export UI training data',onclick:()=>trainingPairs.download()},'⇩');
   root.querySelector('.p2-tools')?.append(exportIntents);
+  const exportWorld=h('button',{class:'p2-btn-text',type:'button','aria-label':'Export current world as SOP',title:'Export current world as SOP',onclick:async()=>{
+    try{
+      const world=tabDefs.find(tab=>tab.id===view)?.world;
+      if(!world){note('Open a world to export its SOP.');return;}
+      queueInstances();await flushInstances();
+      const wires=await instanceStore.exportWorld(world);
+      if(!wires){note('This world has no saved SOP instance.');return;}
+      await saveFile(`${world}.sop`,wires);
+    }catch(error){failInstances(error);}
+  }},'Export world SOP');
+  root.querySelector('.p2-tools')?.append(exportWorld);
   const handle = {
-    engine, session, settings, trainingPairs, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },
+    engine, session, settings, trainingPairs, instanceStore, flushInstances, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },
     /** The queue of waiting messages (MIC2) and the turn state flags, in one place for other features (BUSY veil): `turnState()` says what is running and what waits. */
     queue: { list: () => queue.map((q) => ({ id: q.id, text: q.text, mode: q.mode })), drop: dropQueued, clear: clearQueue, get length() { return queue.length; } },
     turnState: () => ({ running: !!turn, queued: queue.length, speaking: !!mic.speaking, mic: micBtn.dataset.mic }),
     get micLog() { return micLog; }, micClick,
     /** USER-ACTIONS hook for other features: `actions.record(kind, target, extra)`; `actions.recall(text)` is called by the arrow-key message history (INPUT-HISTORY). */
     actions: { record: (kind, target, extra) => events.add(kind, target, extra), recall: (text) => events.add('recall', text), events: () => events.all() }, progress,
-    destroy() { destroyed = true; engineClient?.destroy(); cleanups.forEach((f) => f()); modalHost.remove(); dbg?.destroy?.(); avatarUI?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
+    destroy() { destroyed = true; void flushInstances().catch(()=>{}).finally(async()=>{engineClient?.destroy();await instanceStore.close();}).catch(()=>{}); cleanups.forEach((f) => f()); modalHost.remove(); dbg?.destroy?.(); avatarUI?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
   };
   // FREEZE: the listening state is never restored; the microphone starts only with a click
   if (settings.devMode === true) { syncDebugButton(); loadDebug(); }   // DBG: developer mode is remembered

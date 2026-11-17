@@ -1,13 +1,14 @@
+import{instanceIdFor}from'./instance-identity.mjs';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=965157001c';
 // Application composition of declared semantic identities and native capabilities; no text parsing.
-import {World,str} from '../vendor/sopworld/sopworld.mjs?v=ca48804f00';
+import {World,str} from '../vendor/sopworld/sopworld.mjs?v=0a9b998e29';
 import SOURCE from './new-engine-source.mjs?v=e31b4adb7f';
-import {flatRequestProjection} from './request-projection.mjs?v=091aaf724b';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=b04bf374fc';
-import {observedReaderContext} from './native-reader-context.mjs?v=c51a7d6eb4';
+import {flatRequestProjection} from './request-projection.mjs?v=cd2eefe301';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=e9885f1c0a';
+import {observedReaderContext} from './native-reader-context.mjs?v=a762c82e14';
 import {validateNativeArguments} from '../../worlds/native-tool-host.mjs?v=463e762442';
-import {resolvePropertyValue} from './property-selection.mjs?v=e569f0bfcb';
-import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=70c302d3e0';
+import {resolvePropertyValue} from './property-selection.mjs?v=2ac97a325c';
+import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=6f8a2e7bd7';
 let knowledge;
 const source=()=>knowledge??=World.fromJSON(SOURCE.snapshot);
 // Explicit application value and creation defaults. These are assumptions, not knowledge facts.
@@ -31,7 +32,7 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
  const mappings=nativeKindCandidates(bindings).filter(r=>r.area===area.area&&r.canonical===target.kind&&r.nativeFamilyBinding);
  if(!mappings.length)return null;
  const nativeState=session.isession.state[area.world];if(!nativeState)return null;
- const host=await createAreaHost(area,{state:nativeState,instanceId:'execution-'+globalThis.crypto.randomUUID(),loader:session.engine?.loader}),before=host.observe(),operations=host.bindings();
+ const host=await createAreaHost(area,{state:nativeState,instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge}),before=host.observe(),operations=host.bindings();
  const familyOps=operations.filter(op=>mappings.some(m=>m.nativeFamilyBinding.operation===op.id));
  const kinds=[...new Set(mappings.map(m=>m.lemma).filter(name=>familyOps.some(op=>op.params.kind?.enum?.includes(name))))];
  const sourceTypes=new Set(familyOps.map(op=>op.on)),notes=[],unapplied=[];

@@ -44,15 +44,15 @@ const fakeCaches = (names) => { const set = new Set(names); return { keys: async
 const fakeStorage = (init = {}) => { const m = new Map(Object.entries(init)); return { getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)), removeItem: (k) => m.delete(k), map: m }; };
 const fakeIdb = (names) => { const live = new Set(names); return { databases: async () => [...live].map((name) => ({ name })), deleteDatabase: (n) => { live.delete(n); const q = {}; setTimeout(() => q.onsuccess?.(), 0); return q; }, live }; };
 
-test('resetForRelease: clears caches, service workers, IndexedDB and asset keys once per generation, keeps user data', async () => {
+test('resetForRelease: clears asset caches once per generation and preserves every durable database', async () => {
   const storage = fakeStorage({ 'psys2.webchat.settings': '{"rate":1.5}', 'psys2.webchat.phrases': '[1]', 'psys2.webchat.progress': '{}', 'psys2.ortlog': 'x' });
-  const cacheStorage = fakeCaches(['psys2-dispatcher-model', 'psys2-assets-g0', 'other']), idb = fakeIdb(['a', 'b']);
+  const cacheStorage = fakeCaches(['psys2-dispatcher-model', 'psys2-assets-g0', 'other']), idb = fakeIdb(['psys2-instance-worlds','psys2-ui-intents','a']);
   let unregistered = 0;
   const serviceWorker = { getRegistrations: async () => [{ unregister: async () => { unregistered++; return true; } }] };
   const r = await resetForRelease({ storage, cacheStorage, idb, serviceWorker, generation: 7 });
   assert.equal(r.reset, true);
-  assert.deepEqual(r.cleared, { caches: 3, databases: 2, workers: 1, keys: 2 });
-  assert.equal(idb.live.size, 0);
+  assert.deepEqual(r.cleared, { caches: 3, databases: 0, workers: 1, keys: 2 });
+  assert.deepEqual([...idb.live],['psys2-instance-worlds','psys2-ui-intents','a'],'durable databases survive a release reset');
   assert.equal(unregistered, 1);
   assert.equal(storage.getItem('psys2.webchat.settings'), '{"rate":1.5}', 'settings kept');
   assert.equal(storage.getItem('psys2.webchat.phrases'), '[1]', 'history kept');

@@ -24,11 +24,11 @@
  * A refused reading becomes an unparsed clause (the honest not-understood path); `seg.foreign = { world, why }` records it.
  * `PSYS2_FOREIGN=off` turns the review off (A/B runs).
  */
-import { FUNCTION_WORDS, spellVocabulary, isKnownWord, spellBudget, sameStem } from '../formalizer/spell.mjs?v=da53a6f0d3';
-import { targetsOf } from '../formalizer/typed-world.mjs?v=da53a6f0d3';
-import { slipDistance, stemsOf } from './scene-referents.mjs?v=d67f2babcd';
-import { lexIndex } from '../worlds/lexicon.mjs?v=54cc00df9b';
-import { tabOfWorld } from '../worlds/index.mjs?v=b7cbb37752';
+import { FUNCTION_WORDS, spellVocabulary, isKnownWord, spellBudget, sameStem } from '../formalizer/spell.mjs?v=c9c59a1f4a';
+import { targetsOf } from '../formalizer/typed-world.mjs?v=c9c59a1f4a';
+import { slipDistance, stemsOf } from './scene-referents.mjs?v=85cbd4ddb6';
+import { lexIndex } from '../worlds/lexicon.mjs?v=590cd85fa9';
+import { tabOfWorld } from '../worlds/index.mjs?v=709ca9dd4e';
 
 export const foreignOn = () => globalThis.process?.env?.PSYS2_FOREIGN !== 'off';
 

@@ -2,9 +2,9 @@
 // Operations of calc.story (kids plan, ADR-011, Q18 L1): word problems read by the library's storyState. The story is the world state (the library's result,
 // carried across sentences and turns as `prior`); this file only gathers the words the library needs from the language world and lang.common, and says the
 // library's result in English. No name, item or number is listed here. Browser-safe.
-import { storyState } from '../../lib/vendor/sopworld/sopworld.mjs?v=ca48804f00';
-import { en } from '../../lib/lang/en.mjs?v=edece7402d';
-import { pluralize } from '../../lib/formalizer/rules/lemma.mjs?v=2aad69e017';
+import { storyState } from '../../lib/vendor/sopworld/sopworld.mjs?v=0a9b998e29';
+import { en } from '../../lib/lang/en.mjs?v=1c3d1d175f';
+import { pluralize } from '../../lib/formalizer/rules/lemma.mjs?v=37a3cd2a70';
 import { MONEY_WORDS } from '../../lib/knowledge/money-words.generated.mjs?v=f8689c864a';
 import { CALC_WORDS } from '../../lib/knowledge/calc-words.generated.mjs?v=3038efb1d8';   // the catalog's words of arithmetic (K4: w.lang.en shard arithmetic)   // the catalog's money words (k.units through w.lang.en)
 

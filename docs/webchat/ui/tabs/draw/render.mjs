@@ -6,7 +6,7 @@
 const hash = (s) => { let h = 2166136261; for (const c of String(s)) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; };
 const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
 const OUTLINE = '#3a3040';
-export const PAPER = '#fffaf0';
+export const PAPER = '#ffffff';
 
 export function createRenderer(rough, scene) {
   const gen = rough.generator();
@@ -172,17 +172,17 @@ export function createRenderer(rough, scene) {
   function drawSelection(ctx, rc, obj, pose = {}, label = '') {
     const b = scene.bbox({ ...obj, x: pose.x ?? obj.x, y: pose.y ?? obj.y, size: pose.size ?? obj.size });
     const pad = 14;
-    const d = gen.rectangle(b.x0 - pad, b.y0 - pad, b.w + pad * 2, b.h + pad * 2, { stroke: '#ff3d9a', strokeWidth: 3, roughness: 1.1, seed: 5, strokeLineDash: [10, 8], fill: undefined });
+    const d = gen.rectangle(b.x0 - pad, b.y0 - pad, b.w + pad * 2, b.h + pad * 2, { stroke: '#356ac3', strokeWidth: 3, roughness: 1.1, seed: 5, strokeLineDash: [10, 8], fill: undefined });
     ctx.save();
     ctx.globalAlpha = 0.95;
     rc.draw(d);
     for (const [x, y] of [[b.x0 - pad, b.y0 - pad], [b.x1 + pad, b.y0 - pad], [b.x0 - pad, b.y1 + pad], [b.x1 + pad, b.y1 + pad]]) {
-      rc.draw(gen.circle(x, y, 9, { stroke: '#ff3d9a', strokeWidth: 2, fill: '#fff', fillStyle: 'solid', roughness: 0.6, seed: 8 }));
+      rc.draw(gen.circle(x, y, 9, { stroke: '#356ac3', strokeWidth: 2, fill: '#fff', fillStyle: 'solid', roughness: 0.6, seed: 8 }));
     }
     if (label) {
       ctx.font = '600 22px "Comic Sans MS", "Chalkboard SE", "Bradley Hand", "Segoe Print", cursive';
       const w = ctx.measureText(label).width + 22, x = clamp(b.x0 - pad, 6, scene.W - w - 6), y = Math.max(4, b.y0 - pad - 34);
-      ctx.fillStyle = '#ff3d9a';
+      ctx.fillStyle = '#356ac3';
       ctx.beginPath(); ctx.roundRect?.(x, y, w, 30, 10); if (!ctx.roundRect) ctx.rect(x, y, w, 30); ctx.fill();
       ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.fillText(label, x + 11, y + 16);
     }

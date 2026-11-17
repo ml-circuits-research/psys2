@@ -1,0 +1,36 @@
+{
+  "format": "psys2.demo-source-review/1",
+  "scope": "Semantic review of a seeded 32-message inspection of the draft retained partition; decisions do not relabel or repair gold. This is not a complete semantic audit of retained data.",
+  "decisions": [
+    {
+      "id": "data/haiku-v1/document/b07b.jsonl:document-b07-0249",
+      "status": "deferred",
+      "reason": "The question asks whether the letter is under one page; gold only asks exists and carries topic, omitting the requested length comparison. The omitted clause is task-relevant."
+    },
+    {
+      "id": "data/haiku-v1/diagram/b11b.jsonl:diagram-b11-0161",
+      "status": "deferred",
+      "reason": "Team, Press and Jobs are node labels under About, but legacy values_span is mapped to chart.values by the reviewed legacy converter. This source needs correct ownership, not removal of natural names."
+    },
+    {
+      "id": "data/haiku-v1/calendar/b03b.jsonl:calendar-b03-0248",
+      "status": "excluded",
+      "reason": "The second clause asks to notify the panel; gold mislabels notification as changing the room of all panel objects. Calendar tools do not send notifications. Preserve the first scheduling intent in raw source; do not silently remove the second requested action."
+    },
+    {
+      "id": "data/haiku-v2/document/v2b15b.jsonl:document-v2b15-0150",
+      "status": "deferred",
+      "reason": "Target kind is annotated article with kind_span timeline, without an owning semantic declaration that identifies a timeline as an article. Gold also omits the explicit topic."
+    },
+    {
+      "id": "data/haiku-v2/calendar/v2b16a.jsonl:calendar-v2b16-0074",
+      "status": "deferred",
+      "reason": "Putting the existing meeting in ROOM 4 is represented as a result room.name on a meeting target. This may rename a room instead of assigning meeting.room; target/constraint ownership requires review."
+    },
+    {
+      "id": "data/haiku-v2/document/v2b02b.jsonl:document-v2b02-0193",
+      "status": "deferred",
+      "reason": "The source explicitly asks to keep the list, while the annotated deletion has no preservation constraint. This matters because native section removal can remove the heading's entire member range."
+    }
+  ]
+}

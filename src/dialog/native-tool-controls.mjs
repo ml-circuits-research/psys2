@@ -1,3 +1,4 @@
+import{instanceIdFor}from'./instance-identity.mjs';
 // Typed UI gestures use the same declared native tools and undo history as model requests.
 import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs';
@@ -18,10 +19,10 @@ export async function invokeNativeControl(session,{view,operation,args={}}={},de
  }
  const state=session.isession.state[area.world];
  if(!state)throw Error('native-state-unavailable');
- const before=structuredClone(state);let host=await createAreaHost(area,{state,instanceId:'control-'+globalThis.crypto.randomUUID(),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
+ const before=structuredClone(state);let host=await createAreaHost(area,{state,instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
  const needs=host.bindings().find(op=>op.id===operation)?.knowledgeInputs??[];
  for(const input of needs){if(typeof session.engine?.knowledge?.[input.load]!=='function')throw Error('knowledge-service-unavailable');await session.engine.knowledge[input.load](args[input.argument]);}
- if(needs.length)host=await createAreaHost(area,{state,instanceId:'control-'+globalThis.crypto.randomUUID(),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
+ if(needs.length)host=await createAreaHost(area,{state,instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
  const observation=host.observe();
  const declaration=host.bindings().find(op=>op.id===operation);if(!declaration)throw Error('undeclared-native-control');
  if(['undo','redo'].includes(declaration.act))return invokeNativeControl(session,{view,operation:declaration.act,args:{}},depth+1);

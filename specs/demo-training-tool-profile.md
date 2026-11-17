@@ -1,0 +1,15 @@
+# Supported natural reader examples
+
+Scope: this records the initial training contract. The later single-calendar and Avatar-composition editor changes require the combined UI v2 inventory and corpus; initial scores do not measure their coverage.
+
+The owner requests an active dataset of coherent natural utterances and complete SOP reader labels for the exposed Drawing, Diagram/chart, Calendar, Documents and Avatar tools. Unsupported original utterances are inspiration for deliberately reauthored supported commands; they are not retained under an unsupported label and are not claimed to be unchanged in meaning. True incidental-only chatter remains a legitimate no-request input. Relevant clauses in retained authored utterances must all be represented.
+
+The active `training/sop-bert/data/demo-tool-profile/active.jsonl.gz` carries every original source identity plus new geometry-backed Avatar and Drawing part/group examples. Source provenance stays outside model inputs. Tool declarations and published knowledge supply domains, capabilities, enums, slot/variant geometry, colours and resource roles. The authoring pipeline does not alter raw Haiku sources or deployed weights.
+
+The first training phase uses only direct clear commands with exact target identities, explicit values and a deterministic `expectedTools` contract. Numeric units remain in BIO copy spans. A distinct second phase retains supported compound, relational, query, relative-time and knowledge-composition intents. It does not block the first direct reader experiment or falsely claim its world-inference mechanisms work.
+
+The active inventory includes shared request fields and only domain keys that make sense for visible tools. It explicitly adds target family supervision, personal Calendar resources, room location, meeting calendar identity, literal document content, chart title, Drawing part geometry/grouping and Avatar face/part controls. Independent measure/unit metadata with no implemented decoder is replaced by complete copied typed-value spans. The same source span supplies number and unit; this is not a guessed value.
+
+Default preparation consumes the active authored corpus. Historical raw preparation requires an explicit flag. Source membership, explicit revised-source TRAIN supplements, class/slot ownership, in-source spans and all existing V2 validation run before training. Native expected operations are separately executed against actual hosts. Neither check proves natural-language semantic correctness or model accuracy.
+
+The owner's initial reader target is complete intended meaning near 100% on TRAIN: act, target, all requested fields, no extra intent, correct metadata and exact normalized native operation/arguments. `evaluate-demo-reader.py` uses actual predicted BIO spans and predicted-mention metadata; head-average accuracy or teacher-mention-conditioned metrics do not substitute for this result. The report distinguishes conditional gold request cuts from actual full utterances through predicted cutter spans, source normalization and any remaining context limits. Full application/browser success remains separate.

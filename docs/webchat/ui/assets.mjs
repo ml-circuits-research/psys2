@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // ASSETS (spec 06 "Assets, caches and versions"): the page side of the asset policy. Browser-safe, no node:*; every browser object is passed in, so tests can fake them.
 //
-//   1. resetForRelease(): once per CACHE_GENERATION, clears the service workers, Cache Storage, IndexedDB and the asset keys of localStorage. User data (settings, history,
-//      saved faces, the user-action log) is never touched. A release that must start every browser clean bumps CACHE_GENERATION (and GENERATION in sw.js).
+//   1. resetForRelease(): once per CACHE_GENERATION, clears the service workers, Cache Storage and the asset keys of localStorage. User data (settings, history,
+//      saved faces, instance worlds, training pairs and the user-action log) is never touched. A release that must start every browser clean bumps CACHE_GENERATION (and GENERATION in sw.js).
 //   2. loadManifest(): build-info.json, fetched ONCE per start with no cache, the first request of the page. It carries the build `version` and every asset's hash.
 //   3. a page whose own build (window.__psys2Build.version, stamped into index.html) differs from the manifest is a stale index.html: it reloads cleanly ONCE and says so.
 //   4. registerWorker(): sw.js caches every asset forever under its hash; the page posts it the manifest, which deletes everything that is not in it.
@@ -34,9 +34,7 @@ export async function resetForRelease({ storage = globalThis.localStorage, cache
   const cleared = { caches: 0, databases: 0, workers: 0, keys: 0 };
   try { for (const n of (await cacheStorage?.keys?.()) ?? []) { if (await cacheStorage.delete(n)) cleared.caches++; } } catch { /* ignore */ }
   try { for (const r of (await serviceWorker?.getRegistrations?.()) ?? []) { if (await r.unregister()) cleared.workers++; } } catch { /* ignore */ }
-  try {
-    for (const d of (await idb?.databases?.()) ?? []) if (d?.name) { await new Promise((res) => { const q = idb.deleteDatabase(d.name); q.onsuccess = q.onerror = q.onblocked = () => res(); }); cleared.databases++; }
-  } catch { /* ignore */ }
+  // IndexedDB contains durable instance worlds and training pairs; a cache reset never deletes databases.
   for (const k of ASSET_STORAGE_KEYS) { try { if (storage?.getItem(k) != null) { storage.removeItem(k); cleared.keys++; } } catch { /* ignore */ } }
   try { storage?.setItem(GENERATION_KEY, String(generation)); } catch { /* storage unavailable: it resets again next start */ }
   return { reset: true, cleared };

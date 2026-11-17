@@ -1,0 +1,21 @@
+# Frame licences and role paths: additive, versioned reader data, no preview mutation.
+# sources: hand-core 1 (mapping judgments grounded in the existing frame/verb/role identities)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.reader.en.frames core.module name=w.reader.en.frames version=2 imports=w.reader.en exports=licence exports=role core.source="hand-core 1"
+@w.reader.en.frames.licence core.type of=w.reader.en.frames.licence shared=true closed=true core.source="hand-core 1"
+@w.reader.en.frames.licence.name core.slot of=w.reader.en.frames.licence key=name id=true required=true kind=atom core.source="hand-core 1"
+@w.reader.en.frames.licence.verb_id core.slot of=w.reader.en.frames.licence key=verb_id required=true kind=atom core.source="hand-core 1"
+@w.reader.en.frames.licence.frame_name core.slot of=w.reader.en.frames.licence key=frame_name required=true kind=atom core.source="hand-core 1"
+@w.reader.en.frames.licence.verb_part core.slot of=w.reader.en.frames.licence key=verb_part required=true kind=atom core.source="hand-core 1"
+@w.reader.en.frames.licence.valency core.slot of=w.reader.en.frames.licence key=valency required=true kind=atom enum=transitive enum=resultative enum=oblique core.source="hand-core 1"
+@w.reader.en.frames.role core.type of=w.reader.en.frames.role shared=true closed=true core.source="hand-core 1"
+@w.reader.en.frames.role.name core.slot of=w.reader.en.frames.role key=name id=true required=true kind=atom core.source="hand-core 1"
+@w.reader.en.frames.role.licence core.slot of=w.reader.en.frames.role key=licence required=true kind=atom type=w.reader.en.frames.licence by=name core.source="hand-core 1"
+@w.reader.en.frames.role.frame_role core.slot of=w.reader.en.frames.role key=frame_role required=true kind=atom core.source="hand-core 1"
+@w.reader.en.frames.role.act_role core.slot of=w.reader.en.frames.role key=act_role required=true kind=atom core.source="hand-core 1"
+@w.reader.en.frames.role.part core.slot of=w.reader.en.frames.role key=part required=true kind=atom core.source="hand-core 1"
+@w.reader.en.frames.role.role_map core.slot of=w.reader.en.frames.role key=role_map kind=atom core.source="hand-core 1"
+@w.reader.en.frames.role.path_root core.slot of=w.reader.en.frames.role key=path_root required=true kind=atom type=w.reader.en.node by=name core.source="hand-core 1"
+@w.reader.en.frames.role.target_mode core.slot of=w.reader.en.frames.role key=target_mode kind=atom enum=new enum=existing core.source="hand-core 1"

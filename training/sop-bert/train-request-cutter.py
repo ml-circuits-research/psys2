@@ -208,6 +208,22 @@ def load_corpus(data, source_root, exclusion_path):
             if key in original:
                 raise ValueError("duplicate-raw-source-id")
             original[key] = raw
+    supplement = set()
+    if "authoredTrainSupplement" in manifest:
+        if manifest.get("format") != "psys2.authored-cutter-data/1":
+            raise ValueError("train-supplement-requires-authored-source")
+        declaration = manifest["authoredTrainSupplement"]
+        if declaration.get("path") != "supplement-train-ids.json":
+            raise ValueError("invalid-train-supplement-path")
+        supplement_path = data / declaration["path"]
+        if digest(supplement_path) != declaration["sha256"]:
+            raise ValueError("train-supplement-hash-mismatch")
+        items = json.loads(supplement_path.read_text())
+        if not isinstance(items, list) or any(not isinstance(item, str) for item in items):
+            raise ValueError("invalid-train-supplement-ids")
+        supplement = set(items)
+        if len(supplement) != len(items) or not supplement <= {row["id"] for row in original.values()} or supplement & exclusions:
+            raise ValueError("invalid-train-supplement-coverage")
     splits = {}
     seen = set()
     for split in ("train", "calibration"):
@@ -218,7 +234,7 @@ def load_corpus(data, source_root, exclusion_path):
         for line in path.read_text().splitlines():
             row = json.loads(line)
             identity = row["source_path"] + ":" + row["source_id"]
-            expected_split = "calibration" if int(hashlib.sha256(identity.encode()).hexdigest()[:8], 16) % 10 == 0 else "train"
+            expected_split = "calibration" if row["source_id"] not in supplement and int(hashlib.sha256(identity.encode()).hexdigest()[:8], 16) % 10 == 0 else "train"
             if row["source_id"] in exclusions or row["split"] != split or split != expected_split:
                 raise ValueError("reserved-id-or-split-mismatch")
             if identity in seen or row["id"] != identity:
@@ -241,7 +257,7 @@ def load_corpus(data, source_root, exclusion_path):
         raise ValueError("raw-corpus-coverage-mismatch")
     return splits, {"manifestSha256": digest(manifest_path), "outputs": manifest["outputs"],
                     "sourceHashes": source_hashes, "exclusionSha256": digest(exclusion_path),
-                    "exclusionCount": len(exclusions), "sourceCount": len(original),
+                    "exclusionCount": len(exclusions), "authoredTrainSupplementCount": len(supplement), "sourceCount": len(original),
                     "supervision": "original-request-span-only"}
 
 def tokenize_rows(rows, tokenizer, max_length):

@@ -1,0 +1,6785 @@
+{
+  "format": "psys2.demo-tool-profile/1",
+  "tabs": {
+    "drawing": "Drawing",
+    "diagram": "Diagram (including charts)",
+    "calendar": "Calendar",
+    "document": "Documents",
+    "avatar": "Avatar"
+  },
+  "drawingParts": [
+    {
+      "index": 0,
+      "role": "chimney",
+      "width": 23.999999999999993,
+      "height": 62.400000000000006
+    },
+    {
+      "index": 1,
+      "role": "walls",
+      "width": 192,
+      "height": 108.00000000000001
+    },
+    {
+      "index": 2,
+      "role": "roof",
+      "width": 240,
+      "height": 98.39999999999999
+    },
+    {
+      "index": 3,
+      "role": "door",
+      "width": 38.4,
+      "height": 64.80000000000001
+    },
+    {
+      "index": 4,
+      "role": "knob",
+      "width": 5.759999999999998,
+      "height": 5.760000000000005
+    },
+    {
+      "index": 5,
+      "role": "windows",
+      "width": 38.400000000000006,
+      "height": 38.400000000000006
+    },
+    {
+      "index": 6,
+      "role": "windows",
+      "width": 38.400000000000006,
+      "height": 38.400000000000006
+    },
+    {
+      "index": 7,
+      "role": "frames",
+      "width": 0,
+      "height": 38.4
+    },
+    {
+      "index": 8,
+      "role": "frames",
+      "width": 38.400000000000006,
+      "height": 0
+    },
+    {
+      "index": 9,
+      "role": "frames",
+      "width": 0,
+      "height": 38.4
+    },
+    {
+      "index": 10,
+      "role": "frames",
+      "width": 38.400000000000006,
+      "height": 0
+    }
+  ],
+  "avatar": {
+    "capabilities": {
+      "presets": [
+        "baby",
+        "child",
+        "girl",
+        "boy",
+        "woman",
+        "man",
+        "old woman",
+        "old man",
+        "bearded man",
+        "woman with curly hair",
+        "robot",
+        "alien",
+        "clown",
+        "queen"
+      ],
+      "expressions": [
+        "happy",
+        "sad",
+        "angry",
+        "surprised",
+        "sleepy",
+        "wink",
+        "talking"
+      ],
+      "sizes": [
+        "tiny",
+        "small",
+        "default",
+        "big",
+        "huge"
+      ],
+      "directions": [
+        "up",
+        "down",
+        "left",
+        "right"
+      ],
+      "slots": [
+        {
+          "id": "hair_back",
+          "label": "hair back",
+          "optional": true,
+          "colourRole": "hair",
+          "variants": [
+            "long straight",
+            "long wavy",
+            "long curly",
+            "bob",
+            "ponytail",
+            "pigtails",
+            "bun",
+            "afro"
+          ],
+          "colours": [
+            "black",
+            "dark brown",
+            "brown",
+            "auburn",
+            "red",
+            "blond",
+            "grey",
+            "white",
+            "blue",
+            "pink",
+            "green",
+            "purple",
+            "orange"
+          ]
+        },
+        {
+          "id": "shoulders",
+          "label": "shoulders",
+          "optional": false,
+          "colourRole": "clothes",
+          "variants": [
+            "t-shirt",
+            "v-neck",
+            "shirt",
+            "suit",
+            "hoodie",
+            "tank top",
+            "small",
+            "metal plate",
+            "lab coat",
+            "scrubs",
+            "chef jacket",
+            "apron",
+            "overalls",
+            "safety vest",
+            "uniform",
+            "fire jacket",
+            "sailor collar",
+            "space suit",
+            "robe",
+            "cloak",
+            "cape",
+            "fur coat",
+            "football shirt",
+            "bow tie",
+            "boiler suit"
+          ],
+          "colours": [
+            "red",
+            "blue",
+            "green",
+            "yellow",
+            "orange",
+            "purple",
+            "pink",
+            "black",
+            "white",
+            "grey",
+            "brown"
+          ]
+        },
+        {
+          "id": "neck",
+          "label": "neck",
+          "optional": false,
+          "colourRole": "skin",
+          "variants": [
+            "medium",
+            "thin",
+            "thick",
+            "tapered",
+            "necklace",
+            "pipe"
+          ],
+          "colours": [
+            "pale",
+            "light",
+            "tan",
+            "olive",
+            "brown",
+            "dark brown",
+            "metal grey",
+            "green",
+            "blue",
+            "yellow",
+            "white",
+            "grey",
+            "black"
+          ]
+        },
+        {
+          "id": "ears",
+          "label": "ears",
+          "optional": false,
+          "colourRole": "skin",
+          "variants": [
+            "round",
+            "small",
+            "large",
+            "pointed",
+            "long",
+            "square"
+          ],
+          "colours": [
+            "pale",
+            "light",
+            "tan",
+            "olive",
+            "brown",
+            "dark brown",
+            "metal grey",
+            "green",
+            "blue",
+            "yellow",
+            "white",
+            "grey"
+          ]
+        },
+        {
+          "id": "head",
+          "label": "head",
+          "optional": false,
+          "colourRole": "skin",
+          "variants": [
+            "round",
+            "oval",
+            "long",
+            "square",
+            "heart",
+            "wide",
+            "box"
+          ],
+          "colours": [
+            "pale",
+            "light",
+            "tan",
+            "olive",
+            "brown",
+            "dark brown",
+            "metal grey",
+            "green",
+            "blue",
+            "yellow",
+            "white"
+          ]
+        },
+        {
+          "id": "cheeks",
+          "label": "cheeks",
+          "optional": true,
+          "colourRole": "skin",
+          "variants": [
+            "blush",
+            "round blush",
+            "freckles",
+            "dimple",
+            "wrinkles",
+            "scar",
+            "mole",
+            "tear"
+          ],
+          "colours": [
+            "pale",
+            "light",
+            "tan",
+            "olive",
+            "brown",
+            "dark brown",
+            "metal grey",
+            "green",
+            "blue",
+            "yellow",
+            "white",
+            "pink"
+          ]
+        },
+        {
+          "id": "beard",
+          "label": "beard",
+          "optional": true,
+          "colourRole": "hair",
+          "variants": [
+            "full",
+            "short",
+            "chinstrap",
+            "goatee",
+            "long",
+            "soul patch",
+            "sideburns",
+            "stubble"
+          ],
+          "colours": [
+            "black",
+            "dark brown",
+            "brown",
+            "auburn",
+            "red",
+            "blond",
+            "grey",
+            "white",
+            "blue",
+            "pink",
+            "green",
+            "purple",
+            "orange"
+          ]
+        },
+        {
+          "id": "mouth",
+          "label": "mouth",
+          "optional": false,
+          "colourRole": null,
+          "variants": [
+            "smile",
+            "big smile",
+            "neutral",
+            "sad",
+            "open",
+            "talking",
+            "small",
+            "wide",
+            "smirk",
+            "full lips",
+            "grin",
+            "tongue out",
+            "frown",
+            "grille",
+            "gritted",
+            "half open",
+            "pressed",
+            "lip bite",
+            "tongue tip"
+          ],
+          "colours": [
+            "red",
+            "white",
+            "pink",
+            "grey",
+            "black"
+          ]
+        },
+        {
+          "id": "moustache",
+          "label": "moustache",
+          "optional": true,
+          "colourRole": "hair",
+          "variants": [
+            "thin",
+            "thick",
+            "handlebar",
+            "walrus",
+            "pencil",
+            "chevron"
+          ],
+          "colours": [
+            "black",
+            "dark brown",
+            "brown",
+            "auburn",
+            "red",
+            "blond",
+            "grey",
+            "white",
+            "blue",
+            "pink",
+            "green",
+            "purple",
+            "orange"
+          ]
+        },
+        {
+          "id": "nose",
+          "label": "nose",
+          "optional": false,
+          "colourRole": "skin",
+          "variants": [
+            "small",
+            "medium",
+            "long",
+            "wide",
+            "button",
+            "pointed",
+            "round",
+            "bolt"
+          ],
+          "colours": [
+            "pale",
+            "light",
+            "tan",
+            "olive",
+            "brown",
+            "dark brown",
+            "metal grey",
+            "green",
+            "blue",
+            "yellow",
+            "white",
+            "grey"
+          ]
+        },
+        {
+          "id": "eyes",
+          "label": "eyes",
+          "optional": false,
+          "colourRole": "eyes",
+          "variants": [
+            "round",
+            "dot",
+            "large",
+            "oval",
+            "narrow",
+            "closed",
+            "happy",
+            "surprised",
+            "sleepy",
+            "lashes",
+            "square",
+            "downcast",
+            "looking up",
+            "looking out",
+            "looking in"
+          ],
+          "colours": [
+            "dark brown",
+            "brown",
+            "hazel",
+            "amber",
+            "green",
+            "blue",
+            "grey",
+            "red",
+            "yellow",
+            "black",
+            "white"
+          ]
+        },
+        {
+          "id": "eyebrows",
+          "label": "eyebrows",
+          "optional": false,
+          "colourRole": "hair",
+          "variants": [
+            "straight",
+            "thick",
+            "arched",
+            "thick arched",
+            "angry",
+            "sad",
+            "bushy",
+            "raised",
+            "short"
+          ],
+          "colours": [
+            "black",
+            "dark brown",
+            "brown",
+            "auburn",
+            "red",
+            "blond",
+            "grey",
+            "white",
+            "blue",
+            "pink",
+            "green",
+            "purple",
+            "orange"
+          ]
+        },
+        {
+          "id": "glasses",
+          "label": "glasses",
+          "optional": true,
+          "colourRole": null,
+          "variants": [
+            "round",
+            "square",
+            "small round",
+            "large",
+            "sunglasses",
+            "cat-eye",
+            "monocle",
+            "visor"
+          ],
+          "colours": [
+            "black",
+            "yellow",
+            "red",
+            "purple",
+            "blue",
+            "white"
+          ]
+        },
+        {
+          "id": "hair_front",
+          "label": "hair front",
+          "optional": true,
+          "colourRole": "hair",
+          "variants": [
+            "short",
+            "fringe",
+            "side parting",
+            "curly",
+            "spikes",
+            "bald on top",
+            "receding",
+            "centre parting",
+            "long sides",
+            "wavy",
+            "mohawk",
+            "tuft"
+          ],
+          "colours": [
+            "black",
+            "dark brown",
+            "brown",
+            "auburn",
+            "red",
+            "blond",
+            "grey",
+            "white",
+            "blue",
+            "pink",
+            "green",
+            "purple",
+            "orange"
+          ]
+        },
+        {
+          "id": "earrings",
+          "label": "earrings",
+          "optional": true,
+          "colourRole": null,
+          "variants": [
+            "stud",
+            "hoop",
+            "drop",
+            "pearl",
+            "large hoop",
+            "star",
+            "bolt"
+          ],
+          "colours": [
+            "yellow",
+            "blue",
+            "white",
+            "grey"
+          ]
+        },
+        {
+          "id": "hat",
+          "label": "hat",
+          "optional": true,
+          "colourRole": null,
+          "variants": [
+            "cap",
+            "beanie",
+            "top hat",
+            "crown",
+            "cowboy hat",
+            "party hat",
+            "bow",
+            "antenna",
+            "sun hat",
+            "chef hat",
+            "hard hat",
+            "fire helmet",
+            "police cap",
+            "pilot cap",
+            "nurse cap",
+            "sailor cap",
+            "military helmet",
+            "space helmet",
+            "knight helmet",
+            "pirate hat",
+            "witch hat",
+            "wizard hat",
+            "Santa hat",
+            "beret",
+            "fedora",
+            "swimming cap",
+            "judge wig",
+            "headscarf",
+            "flower wreath"
+          ],
+          "colours": [
+            "blue",
+            "red",
+            "green",
+            "white",
+            "black",
+            "yellow",
+            "brown",
+            "purple",
+            "pink",
+            "grey"
+          ]
+        }
+      ]
+    },
+    "initialSlots": {
+      "hair_back": "pigtails",
+      "shoulders": "small",
+      "neck": "thin",
+      "ears": "small",
+      "head": "round",
+      "cheeks": "freckles",
+      "beard": "none",
+      "mouth": "big smile",
+      "moustache": "none",
+      "nose": "small",
+      "eyes": "lashes",
+      "eyebrows": "arched",
+      "glasses": "none",
+      "hair_front": "fringe",
+      "earrings": "none",
+      "hat": "bow"
+    },
+    "tintColours": {
+      "skin": [
+        "pale",
+        "light",
+        "tan",
+        "olive",
+        "brown",
+        "dark brown",
+        "metal grey",
+        "green",
+        "blue",
+        "yellow",
+        "white"
+      ],
+      "hair": [
+        "black",
+        "dark brown",
+        "brown",
+        "auburn",
+        "red",
+        "blond",
+        "grey",
+        "white",
+        "blue",
+        "pink",
+        "green",
+        "purple",
+        "orange"
+      ],
+      "eyes": [
+        "dark brown",
+        "brown",
+        "hazel",
+        "amber",
+        "green",
+        "blue",
+        "grey",
+        "red",
+        "yellow",
+        "black"
+      ],
+      "clothes": [
+        "red",
+        "blue",
+        "green",
+        "yellow",
+        "orange",
+        "purple",
+        "pink",
+        "black",
+        "white",
+        "grey",
+        "brown"
+      ]
+    },
+    "fixedColours": {
+      "hair_back": [
+        "red"
+      ],
+      "shoulders": [],
+      "neck": [],
+      "ears": [],
+      "head": [],
+      "cheeks": [],
+      "beard": [],
+      "mouth": [
+        "red",
+        "white"
+      ],
+      "moustache": [],
+      "nose": [],
+      "eyes": [
+        "white",
+        "black"
+      ],
+      "eyebrows": [],
+      "glasses": [],
+      "hair_front": [],
+      "earrings": [],
+      "hat": [
+        "red",
+        "pink"
+      ]
+    },
+    "objects": [
+      {
+        "id": "face",
+        "kind": "face",
+        "sourceType": "ui.avatar.face"
+      },
+      {
+        "id": "hair_back",
+        "kind": "hair_back",
+        "sourceType": "ui.avatar.part"
+      },
+      {
+        "id": "shoulders",
+        "kind": "shoulders",
+        "sourceType": "ui.avatar.part"
+      },
+      {
+        "id": "neck",
+        "kind": "neck",
+        "sourceType": "ui.avatar.part"
+      },
+      {
+        "id": "ears",
+        "kind": "ears",
+        "sourceType": "ui.avatar.part"
+      },
+      {
+        "id": "head",
+        "kind": "head",
+        "sourceType": "ui.avatar.part"
+      },
+      {
+        "id": "cheeks",
+        "kind": "cheeks",
+        "sourceType": "ui.avatar.part"
+      },
+      {
+        "id": "mouth",
+        "kind": "mouth",
+        "sourceType": "ui.avatar.part"
+      },
+      {
+        "id": "nose",
+        "kind": "nose",
+        "sourceType": "ui.avatar.part"
+      },
+      {
+        "id": "eyes",
+        "kind": "eyes",
+        "sourceType": "ui.avatar.part"
+      },
+      {
+        "id": "eyebrows",
+        "kind": "eyebrows",
+        "sourceType": "ui.avatar.part"
+      },
+      {
+        "id": "hair_front",
+        "kind": "hair_front",
+        "sourceType": "ui.avatar.part"
+      },
+      {
+        "id": "hat",
+        "kind": "hat",
+        "sourceType": "ui.avatar.part"
+      }
+    ]
+  },
+  "declarations": {
+    "drawing": [
+      {
+        "id": "drawing.object.make",
+        "act": "make",
+        "on": "art.draw.object",
+        "params": {
+          "kind": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "circle",
+              "oval",
+              "square",
+              "rectangle",
+              "triangle",
+              "star",
+              "heart",
+              "line",
+              "arrow",
+              "lake",
+              "river",
+              "road",
+              "field",
+              "patch",
+              "hill",
+              "house",
+              "tree",
+              "sun",
+              "cloud",
+              "car",
+              "flower",
+              "cat",
+              "dog",
+              "fish",
+              "bird",
+              "boat",
+              "mountain",
+              "rainbow",
+              "person",
+              "balloon",
+              "rocket",
+              "moon"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "size": {
+            "type": "number",
+            "min": 0.001
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      {
+        "id": "drawing.catalog.make",
+        "act": "make",
+        "on": "art.draw.object",
+        "knowledgeInputs": [
+          {
+            "argument": "name",
+            "load": "thing"
+          }
+        ],
+        "params": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "size": {
+            "type": "number",
+            "min": 0.001
+          }
+        }
+      },
+      {
+        "id": "drawing.object.change",
+        "act": "change",
+        "on": "art.draw.object",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "size": {
+            "type": "number",
+            "min": 0.001
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      {
+        "id": "drawing.object.select",
+        "act": "ask",
+        "on": "art.draw.object",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true,
+            "nullable": true
+          }
+        }
+      },
+      {
+        "id": "drawing.object.place",
+        "act": "place",
+        "on": "art.draw.object",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          }
+        },
+        "coordinates": {
+          "dimension": "length",
+          "unit": "canvas.pixel",
+          "frame": "drawing.canvas"
+        }
+      },
+      {
+        "id": "drawing.page.clear",
+        "act": "remove",
+        "on": "art.draw.page",
+        "params": {}
+      },
+      {
+        "id": "drawing.object.remove",
+        "act": "remove",
+        "on": "art.draw.object",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "drawing.observe",
+        "act": "ask",
+        "on": "art.draw.object",
+        "params": {}
+      },
+      {
+        "id": "drawing.undo",
+        "act": "undo",
+        "on": "art.draw.object",
+        "params": {}
+      },
+      {
+        "id": "drawing.redo",
+        "act": "redo",
+        "on": "art.draw.object",
+        "params": {}
+      },
+      {
+        "id": "drawing.object.parts",
+        "act": "ask",
+        "on": "art.draw.object",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "drawing.part.select",
+        "act": "ask",
+        "on": "art.draw.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          }
+        }
+      },
+      {
+        "id": "drawing.part.change",
+        "act": "change",
+        "on": "art.draw.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "color": {
+            "type": "string"
+          },
+          "width": {
+            "type": "number",
+            "min": 0.01
+          },
+          "height": {
+            "type": "number",
+            "min": 0.01
+          }
+        }
+      },
+      {
+        "id": "drawing.part.place",
+        "act": "place",
+        "on": "art.draw.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          }
+        },
+        "coordinates": {
+          "dimension": "length",
+          "unit": "canvas.pixel",
+          "frame": "drawing.canvas"
+        }
+      },
+      {
+        "id": "drawing.part.remove",
+        "act": "remove",
+        "on": "art.draw.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          }
+        }
+      },
+      {
+        "id": "drawing.part.extract",
+        "act": "ungroup",
+        "on": "art.draw.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          }
+        }
+      },
+      {
+        "id": "drawing.object.group",
+        "act": "group",
+        "on": "art.draw.object",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "name": {
+            "type": "string",
+            "default": "Group"
+          }
+        }
+      },
+      {
+        "id": "drawing.object.ungroup",
+        "act": "ungroup",
+        "on": "art.draw.object",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        }
+      }
+    ],
+    "diagram": [
+      {
+        "id": "diagram.node.make",
+        "act": "make",
+        "on": "diagram.sketch.node",
+        "params": {
+          "kind": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "circle",
+              "rectangle",
+              "square",
+              "diamond",
+              "ellipse",
+              "triangle",
+              "hexagon",
+              "star"
+            ]
+          },
+          "n": {
+            "type": "integer",
+            "default": 1,
+            "min": 1,
+            "max": 12
+          },
+          "colour": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "tiny",
+              "small",
+              "medium",
+              "large",
+              "huge"
+            ]
+          },
+          "layout": {
+            "type": "string",
+            "enum": [
+              "tree",
+              "grid",
+              "row",
+              "column",
+              "circle",
+              "radial",
+              "layers"
+            ]
+          }
+        }
+      },
+      {
+        "id": "diagram.node.change",
+        "act": "change",
+        "on": "diagram.sketch.node",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "colour": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "tiny",
+              "small",
+              "medium",
+              "large",
+              "huge"
+            ]
+          },
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          }
+        }
+      },
+      {
+        "id": "diagram.node.select",
+        "act": "pick",
+        "on": "diagram.sketch.node",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "diagram.node.remove",
+        "act": "remove",
+        "on": "diagram.sketch.node",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "diagram.node.place",
+        "act": "place",
+        "on": "diagram.sketch.node",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          }
+        },
+        "coordinates": {
+          "dimension": "length",
+          "unit": "canvas.pixel",
+          "frame": "diagram.canvas"
+        }
+      },
+      {
+        "id": "diagram.node.layout",
+        "act": "change",
+        "on": "diagram.sketch.node",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "layout": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "tree",
+              "grid",
+              "row",
+              "column",
+              "circle",
+              "radial",
+              "layers"
+            ]
+          }
+        }
+      },
+      {
+        "id": "diagram.link.make",
+        "act": "make",
+        "on": "diagram.sketch.link",
+        "params": {
+          "from": {
+            "type": "string",
+            "required": true
+          },
+          "to": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "diagram.link.remove",
+        "act": "remove",
+        "on": "diagram.sketch.link",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "diagram.observe",
+        "act": "ask",
+        "on": "diagram.sketch",
+        "params": {}
+      },
+      {
+        "id": "diagram.undo",
+        "act": "undo",
+        "on": "diagram.sketch",
+        "params": {}
+      },
+      {
+        "id": "diagram.redo",
+        "act": "redo",
+        "on": "diagram.sketch",
+        "params": {}
+      },
+      {
+        "id": "diagram.group.make",
+        "act": "make",
+        "on": "diagram.sketch.group",
+        "params": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "diagram.group.change",
+        "act": "change",
+        "on": "diagram.sketch.group",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string"
+          },
+          "colour": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "tiny",
+              "small",
+              "medium",
+              "large",
+              "huge"
+            ]
+          }
+        }
+      },
+      {
+        "id": "diagram.group.layout",
+        "act": "place",
+        "on": "diagram.sketch.group",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "layout": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "tree",
+              "grid",
+              "row",
+              "column",
+              "circle",
+              "radial",
+              "layers"
+            ]
+          }
+        }
+      },
+      {
+        "id": "diagram.group.place",
+        "act": "place",
+        "on": "diagram.sketch.group",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          }
+        },
+        "coordinates": {
+          "dimension": "length",
+          "unit": "canvas.pixel",
+          "frame": "diagram.canvas"
+        }
+      },
+      {
+        "id": "diagram.group.ungroup",
+        "act": "remove",
+        "on": "diagram.sketch.group",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "diagram.group.chart",
+        "act": "make",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "type": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "bar",
+              "line",
+              "pie",
+              "doughnut",
+              "radar",
+              "polarArea",
+              "scatter"
+            ]
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "id": "chart.make",
+        "act": "make",
+        "on": "data.charts.chart",
+        "defaultsFrom": [
+          {
+            "parameter": "labels",
+            "lengthOf": "values",
+            "method": "ordinal-labels"
+          }
+        ],
+        "params": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "bar",
+              "line",
+              "pie",
+              "doughnut",
+              "radar",
+              "polarArea",
+              "scatter"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "labels": {
+            "type": "array",
+            "required": true,
+            "default": []
+          },
+          "values": {
+            "type": "array",
+            "required": true,
+            "default": []
+          },
+          "series": {
+            "type": "string",
+            "default": "Value"
+          },
+          "datasets": {
+            "type": "array"
+          },
+          "source": {
+            "type": "array",
+            "required": true,
+            "default": []
+          }
+        }
+      },
+      {
+        "id": "chart.change",
+        "act": "change",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "bar",
+              "line",
+              "pie",
+              "doughnut",
+              "radar",
+              "polarArea",
+              "scatter"
+            ]
+          },
+          "horizontal": {
+            "type": "boolean"
+          },
+          "stacked": {
+            "type": "boolean"
+          },
+          "showLegend": {
+            "type": "boolean"
+          },
+          "showValues": {
+            "type": "boolean"
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc",
+              "alpha",
+              "none"
+            ]
+          },
+          "colour": {
+            "type": "string"
+          },
+          "palette": {
+            "type": "string",
+            "enum": [
+              "default",
+              "classic",
+              "rainbow",
+              "pastel",
+              "ocean",
+              "forest",
+              "sunset",
+              "warm",
+              "cool",
+              "neon",
+              "earth"
+            ]
+          }
+        }
+      },
+      {
+        "id": "chart.data.change",
+        "act": "change",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "labels": {
+            "type": "array",
+            "required": true
+          },
+          "values": {
+            "type": "array",
+            "required": true
+          },
+          "series": {
+            "type": "integer",
+            "min": 0,
+            "default": 0
+          }
+        }
+      },
+      {
+        "id": "chart.datasets.change",
+        "act": "change",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "labels": {
+            "type": "array",
+            "required": true
+          },
+          "datasets": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "chart.series.add",
+        "act": "make",
+        "on": "data.charts.series",
+        "params": {
+          "chart": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "values": {
+            "type": "array",
+            "required": true
+          },
+          "colour": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "id": "chart.series.change",
+        "act": "change",
+        "on": "data.charts.series",
+        "params": {
+          "chart": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "label": {
+            "type": "string"
+          },
+          "values": {
+            "type": "array"
+          },
+          "colour": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "id": "chart.series.remove",
+        "act": "remove",
+        "on": "data.charts.series",
+        "params": {
+          "chart": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          }
+        }
+      },
+      {
+        "id": "chart.point.change",
+        "act": "change",
+        "on": "data.charts.point",
+        "params": {
+          "chart": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "series": {
+            "type": "integer",
+            "min": 0,
+            "default": 0
+          },
+          "value": {
+            "type": "number",
+            "required": true
+          }
+        },
+        "measurement": {
+          "dimension": "number",
+          "unit": "unitless",
+          "frame": "chart.data"
+        }
+      },
+      {
+        "id": "chart.select",
+        "act": "pick",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "chart.place",
+        "act": "place",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          },
+          "width": {
+            "type": "number",
+            "min": 240,
+            "max": 1600
+          },
+          "height": {
+            "type": "number",
+            "min": 180,
+            "max": 1200
+          }
+        },
+        "coordinates": {
+          "dimension": "length",
+          "unit": "canvas.pixel",
+          "frame": "diagram.canvas"
+        }
+      },
+      {
+        "id": "chart.remove",
+        "act": "remove",
+        "on": "data.charts.chart",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "chart.observe",
+        "act": "ask",
+        "on": "data.charts.chart",
+        "params": {}
+      },
+      {
+        "id": "chart.make",
+        "act": "make",
+        "on": "data.charts.chart",
+        "defaultsFrom": [
+          {
+            "parameter": "labels",
+            "lengthOf": "values",
+            "method": "ordinal-labels"
+          }
+        ],
+        "params": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "bar",
+              "line",
+              "pie",
+              "doughnut",
+              "radar",
+              "polarArea",
+              "scatter"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "labels": {
+            "type": "array",
+            "required": true,
+            "default": []
+          },
+          "values": {
+            "type": "array",
+            "required": true,
+            "default": []
+          },
+          "series": {
+            "type": "string",
+            "default": "Value"
+          },
+          "datasets": {
+            "type": "array"
+          },
+          "source": {
+            "type": "array",
+            "required": true,
+            "default": []
+          }
+        }
+      },
+      {
+        "id": "chart.change",
+        "act": "change",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "bar",
+              "line",
+              "pie",
+              "doughnut",
+              "radar",
+              "polarArea",
+              "scatter"
+            ]
+          },
+          "horizontal": {
+            "type": "boolean"
+          },
+          "stacked": {
+            "type": "boolean"
+          },
+          "showLegend": {
+            "type": "boolean"
+          },
+          "showValues": {
+            "type": "boolean"
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc",
+              "alpha",
+              "none"
+            ]
+          },
+          "colour": {
+            "type": "string"
+          },
+          "palette": {
+            "type": "string",
+            "enum": [
+              "default",
+              "classic",
+              "rainbow",
+              "pastel",
+              "ocean",
+              "forest",
+              "sunset",
+              "warm",
+              "cool",
+              "neon",
+              "earth"
+            ]
+          }
+        }
+      },
+      {
+        "id": "chart.data.change",
+        "act": "change",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "labels": {
+            "type": "array",
+            "required": true
+          },
+          "values": {
+            "type": "array",
+            "required": true
+          },
+          "series": {
+            "type": "integer",
+            "min": 0,
+            "default": 0
+          }
+        }
+      },
+      {
+        "id": "chart.datasets.change",
+        "act": "change",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "labels": {
+            "type": "array",
+            "required": true
+          },
+          "datasets": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "chart.series.add",
+        "act": "make",
+        "on": "data.charts.series",
+        "params": {
+          "chart": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "values": {
+            "type": "array",
+            "required": true
+          },
+          "colour": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "id": "chart.series.change",
+        "act": "change",
+        "on": "data.charts.series",
+        "params": {
+          "chart": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "label": {
+            "type": "string"
+          },
+          "values": {
+            "type": "array"
+          },
+          "colour": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "id": "chart.series.remove",
+        "act": "remove",
+        "on": "data.charts.series",
+        "params": {
+          "chart": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          }
+        }
+      },
+      {
+        "id": "chart.point.change",
+        "act": "change",
+        "on": "data.charts.point",
+        "params": {
+          "chart": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "series": {
+            "type": "integer",
+            "min": 0,
+            "default": 0
+          },
+          "value": {
+            "type": "number",
+            "required": true
+          }
+        },
+        "measurement": {
+          "dimension": "number",
+          "unit": "unitless",
+          "frame": "chart.data"
+        }
+      },
+      {
+        "id": "chart.select",
+        "act": "pick",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "chart.place",
+        "act": "place",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          },
+          "width": {
+            "type": "number",
+            "min": 240,
+            "max": 1600
+          },
+          "height": {
+            "type": "number",
+            "min": 180,
+            "max": 1200
+          }
+        },
+        "coordinates": {
+          "dimension": "length",
+          "unit": "canvas.pixel",
+          "frame": "diagram.canvas"
+        }
+      },
+      {
+        "id": "chart.remove",
+        "act": "remove",
+        "on": "data.charts.chart",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "chart.observe",
+        "act": "ask",
+        "on": "data.charts.chart",
+        "params": {}
+      },
+      {
+        "id": "chart.undo",
+        "act": "undo",
+        "on": "data.charts.chart",
+        "params": {}
+      },
+      {
+        "id": "chart.redo",
+        "act": "redo",
+        "on": "data.charts.chart",
+        "params": {}
+      }
+    ],
+    "document": [
+      {
+        "id": "document.title.change",
+        "act": "change",
+        "on": "docs.editor.document",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "document.block.select",
+        "act": "pick",
+        "on": "docs.editor.block",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "at": {
+            "type": "string",
+            "default": "0"
+          },
+          "from": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "to": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          }
+        }
+      },
+      {
+        "id": "document.section.select",
+        "act": "pick",
+        "on": "docs.editor.section",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "at": {
+            "type": "string",
+            "default": "0"
+          },
+          "from": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "to": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          }
+        }
+      },
+      {
+        "id": "document.section.change",
+        "act": "change",
+        "on": "docs.editor.section",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "text": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "heading"
+            ]
+          },
+          "level": {
+            "type": "integer",
+            "min": 1,
+            "max": 2
+          },
+          "align": {
+            "type": "string",
+            "enum": [
+              "left",
+              "center",
+              "right",
+              "justify"
+            ]
+          }
+        }
+      },
+      {
+        "id": "document.block.mark",
+        "act": "change",
+        "on": "docs.editor.block",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "at": {
+            "type": "string",
+            "default": "0"
+          },
+          "from": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "to": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "mark": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "link",
+              "bold",
+              "italic",
+              "underline",
+              "strike",
+              "code",
+              "highlight"
+            ]
+          },
+          "enabled": {
+            "type": "boolean",
+            "required": true
+          },
+          "attrs": {
+            "type": "object"
+          }
+        }
+      },
+      {
+        "id": "document.section.mark",
+        "act": "change",
+        "on": "docs.editor.section",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "at": {
+            "type": "string",
+            "default": "0"
+          },
+          "from": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "to": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "mark": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "link",
+              "bold",
+              "italic",
+              "underline",
+              "strike",
+              "code",
+              "highlight"
+            ]
+          },
+          "enabled": {
+            "type": "boolean",
+            "required": true
+          },
+          "attrs": {
+            "type": "object"
+          }
+        }
+      },
+      {
+        "id": "document.block.align",
+        "act": "change",
+        "on": "docs.editor.block",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "align": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "left",
+              "center",
+              "right",
+              "justify"
+            ]
+          }
+        }
+      },
+      {
+        "id": "document.section.align",
+        "act": "change",
+        "on": "docs.editor.section",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "align": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "left",
+              "center",
+              "right",
+              "justify"
+            ]
+          }
+        }
+      },
+      {
+        "id": "document.block.reorder",
+        "act": "place",
+        "on": "docs.editor.block",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "document.list.make",
+        "act": "make",
+        "on": "docs.editor.block",
+        "params": {
+          "parent": {
+            "type": "string",
+            "required": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "required": true
+          },
+          "style": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "bullet",
+              "numbered",
+              "task"
+            ]
+          }
+        }
+      },
+      {
+        "id": "document.list.change",
+        "act": "change",
+        "on": "docs.editor.block",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "items": {
+            "type": "array"
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "bullet",
+              "numbered",
+              "task"
+            ]
+          },
+          "checked": {
+            "type": "array"
+          }
+        }
+      },
+      {
+        "id": "document.table.make",
+        "act": "make",
+        "on": "docs.editor.block",
+        "params": {
+          "parent": {
+            "type": "string",
+            "required": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "rows": {
+            "type": "array",
+            "required": true
+          },
+          "header": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      {
+        "id": "document.table.change",
+        "act": "change",
+        "on": "docs.editor.block",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "rows": {
+            "type": "array"
+          },
+          "header": {
+            "type": "boolean"
+          }
+        }
+      },
+      {
+        "id": "document.container.change",
+        "act": "change",
+        "on": "docs.editor.text",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "text": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "document.write",
+        "act": "make",
+        "on": "docs.editor.document",
+        "params": {
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "blocks": {
+            "type": "array",
+            "required": true
+          },
+          "genre": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "id": "document.compose",
+        "act": "make",
+        "on": "docs.editor.document",
+        "requires": [
+          "knowledge-composer"
+        ],
+        "params": {
+          "genre": {
+            "type": "string",
+            "required": true
+          },
+          "topic": {
+            "type": "string",
+            "required": true
+          },
+          "words": {
+            "type": "integer",
+            "min": 1,
+            "max": 100000
+          },
+          "chapters": {
+            "type": "integer",
+            "min": 1,
+            "max": 100
+          }
+        }
+      },
+      {
+        "id": "document.rewrite",
+        "act": "change",
+        "on": "docs.editor.document",
+        "requires": [
+          "knowledge-rewriter"
+        ],
+        "params": {
+          "property": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "tone",
+              "length"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "document.block.make",
+        "act": "make",
+        "on": "docs.editor.block",
+        "params": {
+          "parent": {
+            "type": "string",
+            "required": true
+          },
+          "kind": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "paragraph",
+              "heading",
+              "quote"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "default": ""
+          },
+          "level": {
+            "type": "integer",
+            "min": 3,
+            "max": 6
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "id": "document.section.make",
+        "act": "make",
+        "on": "docs.editor.section",
+        "params": {
+          "parent": {
+            "type": "string",
+            "required": true
+          },
+          "text": {
+            "type": "string",
+            "default": ""
+          },
+          "level": {
+            "type": "integer",
+            "default": 2,
+            "min": 1,
+            "max": 2
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "id": "document.block.change",
+        "act": "change",
+        "on": "docs.editor.block",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "text": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "paragraph",
+              "heading",
+              "quote"
+            ]
+          },
+          "level": {
+            "type": "integer",
+            "min": 3,
+            "max": 6
+          },
+          "align": {
+            "type": "string",
+            "enum": [
+              "left",
+              "center",
+              "right",
+              "justify"
+            ]
+          }
+        }
+      },
+      {
+        "id": "document.block.remove",
+        "act": "remove",
+        "on": "docs.editor.block",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "document.section.remove",
+        "act": "remove",
+        "on": "docs.editor.section",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "document.section.reorder",
+        "act": "place",
+        "on": "docs.editor.section",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "document.remove",
+        "act": "remove",
+        "on": "docs.editor.document",
+        "params": {}
+      },
+      {
+        "id": "document.observe",
+        "act": "ask",
+        "on": "docs.editor.document",
+        "params": {}
+      },
+      {
+        "id": "document.undo",
+        "act": "undo",
+        "on": "docs.editor.document",
+        "params": {}
+      },
+      {
+        "id": "document.redo",
+        "act": "redo",
+        "on": "docs.editor.document",
+        "params": {}
+      }
+    ],
+    "calendar": [
+      {
+        "id": "calendar.calendar.add",
+        "act": "make",
+        "on": "time.calendar.calendar",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "colour": {
+            "type": "string"
+          }
+        },
+        "intent": {
+          "subject": "personal calendar",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      },
+      {
+        "id": "calendar.calendar.change",
+        "act": "change",
+        "on": "time.calendar.calendar",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false
+          },
+          "colour": {
+            "type": "string",
+            "required": false
+          }
+        },
+        "intent": {
+          "subject": "personal calendar",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      },
+      {
+        "id": "calendar.calendar.remove",
+        "act": "remove",
+        "on": "time.calendar.calendar",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "intent": {
+          "subject": "personal calendar",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      },
+      {
+        "id": "calendar.person.add",
+        "act": "make",
+        "on": "time.calendar.person",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "intent": {
+          "subject": "person",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      },
+      {
+        "id": "calendar.person.change",
+        "act": "change",
+        "on": "time.calendar.person",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false
+          }
+        },
+        "intent": {
+          "subject": "person",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      },
+      {
+        "id": "calendar.person.remove",
+        "act": "remove",
+        "on": "time.calendar.person",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "intent": {
+          "subject": "person",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      },
+      {
+        "id": "calendar.room.add",
+        "act": "make",
+        "on": "time.calendar.room",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "capacity": {
+            "type": "integer",
+            "min": 1
+          },
+          "location": {
+            "type": "string"
+          }
+        },
+        "intent": {
+          "subject": "room",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      },
+      {
+        "id": "calendar.room.change",
+        "act": "change",
+        "on": "time.calendar.room",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false
+          },
+          "capacity": {
+            "type": "integer",
+            "min": 1,
+            "required": false,
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "required": false,
+            "nullable": true
+          }
+        },
+        "intent": {
+          "subject": "room",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      },
+      {
+        "id": "calendar.room.remove",
+        "act": "remove",
+        "on": "time.calendar.room",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "intent": {
+          "subject": "room",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      },
+      {
+        "id": "calendar.meeting.add",
+        "act": "make",
+        "on": "time.calendar.meeting",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "start": {
+            "type": "integer",
+            "required": true
+          },
+          "duration": {
+            "type": "integer",
+            "required": true,
+            "min": 1
+          },
+          "participants": {
+            "type": "array",
+            "required": true
+          },
+          "room": {
+            "type": "string",
+            "required": true,
+            "nullable": true
+          },
+          "calendar": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "intent": {
+          "subject": "event",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      },
+      {
+        "id": "calendar.meeting.change",
+        "act": "change",
+        "on": "time.calendar.meeting",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": false
+          },
+          "start": {
+            "type": "integer",
+            "required": false
+          },
+          "duration": {
+            "type": "integer",
+            "required": false,
+            "min": 1
+          },
+          "participants": {
+            "type": "array",
+            "required": false
+          },
+          "room": {
+            "type": "string",
+            "required": false,
+            "nullable": true
+          },
+          "calendar": {
+            "type": "string",
+            "nullable": true,
+            "required": false
+          },
+          "notes": {
+            "type": "string",
+            "required": false
+          }
+        },
+        "intent": {
+          "subject": "event",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      },
+      {
+        "id": "calendar.meeting.move",
+        "act": "place",
+        "on": "time.calendar.meeting",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "start": {
+            "type": "integer",
+            "required": true
+          }
+        },
+        "coordinates": {
+          "dimension": "time",
+          "unit": "millisecond",
+          "frame": "unix"
+        },
+        "intent": {
+          "subject": "event",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      },
+      {
+        "id": "calendar.meeting.remove",
+        "act": "remove",
+        "on": "time.calendar.meeting",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "intent": {
+          "subject": "event",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      },
+      {
+        "id": "calendar.observe",
+        "act": "ask",
+        "on": "time.calendar",
+        "params": {},
+        "intent": {
+          "subject": "personal calendar",
+          "parameters": {
+            "calendar": {
+              "reference": true,
+              "label": "in calendar"
+            },
+            "room": {
+              "reference": true,
+              "label": "in room"
+            },
+            "start": {
+              "format": "unix-ms",
+              "label": "starting at"
+            },
+            "duration": {
+              "format": "duration-ms",
+              "label": "lasting"
+            },
+            "participants": {
+              "reference": true,
+              "label": "with participants",
+              "hiddenIfEmpty": true
+            },
+            "notes": {
+              "label": "with notes",
+              "hiddenIfEmpty": true
+            }
+          }
+        }
+      }
+    ],
+    "avatar": [
+      {
+        "id": "avatar.face.preset",
+        "act": "change",
+        "on": "ui.avatar.face",
+        "intent": {
+          "subject": "face",
+          "parameters": {
+            "preset": {
+              "label": "using preset"
+            }
+          }
+        },
+        "params": {
+          "id": {
+            "type": "string",
+            "default": "face",
+            "enum": [
+              "face"
+            ]
+          },
+          "preset": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "baby",
+              "child",
+              "girl",
+              "boy",
+              "woman",
+              "man",
+              "old woman",
+              "old man",
+              "bearded man",
+              "woman with curly hair",
+              "robot",
+              "alien",
+              "clown",
+              "queen"
+            ]
+          }
+        }
+      },
+      {
+        "id": "avatar.face.expression",
+        "act": "change",
+        "on": "ui.avatar.face",
+        "intent": {
+          "subject": "face",
+          "parameters": {
+            "expression": {
+              "label": "with expression"
+            }
+          }
+        },
+        "params": {
+          "id": {
+            "type": "string",
+            "default": "face",
+            "enum": [
+              "face"
+            ]
+          },
+          "expression": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "happy",
+              "sad",
+              "angry",
+              "surprised",
+              "sleepy",
+              "wink",
+              "talking"
+            ]
+          }
+        }
+      },
+      {
+        "id": "avatar.face.name",
+        "act": "change",
+        "on": "ui.avatar.face",
+        "params": {
+          "id": {
+            "type": "string",
+            "default": "face",
+            "enum": [
+              "face"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "avatar.part.add",
+        "act": "make",
+        "on": "ui.avatar.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "hair_back",
+              "cheeks",
+              "beard",
+              "moustache",
+              "glasses",
+              "hair_front",
+              "earrings",
+              "hat"
+            ]
+          },
+          "variant": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "long straight",
+              "long wavy",
+              "long curly",
+              "bob",
+              "ponytail",
+              "pigtails",
+              "bun",
+              "afro",
+              "t-shirt",
+              "v-neck",
+              "shirt",
+              "suit",
+              "hoodie",
+              "tank top",
+              "small",
+              "metal plate",
+              "lab coat",
+              "scrubs",
+              "chef jacket",
+              "apron",
+              "overalls",
+              "safety vest",
+              "uniform",
+              "fire jacket",
+              "sailor collar",
+              "space suit",
+              "robe",
+              "cloak",
+              "cape",
+              "fur coat",
+              "football shirt",
+              "bow tie",
+              "boiler suit",
+              "medium",
+              "thin",
+              "thick",
+              "tapered",
+              "necklace",
+              "pipe",
+              "round",
+              "large",
+              "pointed",
+              "long",
+              "square",
+              "oval",
+              "heart",
+              "wide",
+              "box",
+              "blush",
+              "round blush",
+              "freckles",
+              "dimple",
+              "wrinkles",
+              "scar",
+              "mole",
+              "tear",
+              "full",
+              "short",
+              "chinstrap",
+              "goatee",
+              "soul patch",
+              "sideburns",
+              "stubble",
+              "smile",
+              "big smile",
+              "neutral",
+              "sad",
+              "open",
+              "talking",
+              "smirk",
+              "full lips",
+              "grin",
+              "tongue out",
+              "frown",
+              "grille",
+              "gritted",
+              "half open",
+              "pressed",
+              "lip bite",
+              "tongue tip",
+              "handlebar",
+              "walrus",
+              "pencil",
+              "chevron",
+              "button",
+              "bolt",
+              "dot",
+              "narrow",
+              "closed",
+              "happy",
+              "surprised",
+              "sleepy",
+              "lashes",
+              "downcast",
+              "looking up",
+              "looking out",
+              "looking in",
+              "straight",
+              "arched",
+              "thick arched",
+              "angry",
+              "bushy",
+              "raised",
+              "small round",
+              "sunglasses",
+              "cat-eye",
+              "monocle",
+              "visor",
+              "fringe",
+              "side parting",
+              "curly",
+              "spikes",
+              "bald on top",
+              "receding",
+              "centre parting",
+              "long sides",
+              "wavy",
+              "mohawk",
+              "tuft",
+              "stud",
+              "hoop",
+              "drop",
+              "pearl",
+              "large hoop",
+              "star",
+              "cap",
+              "beanie",
+              "top hat",
+              "crown",
+              "cowboy hat",
+              "party hat",
+              "bow",
+              "antenna",
+              "sun hat",
+              "chef hat",
+              "hard hat",
+              "fire helmet",
+              "police cap",
+              "pilot cap",
+              "nurse cap",
+              "sailor cap",
+              "military helmet",
+              "space helmet",
+              "knight helmet",
+              "pirate hat",
+              "witch hat",
+              "wizard hat",
+              "Santa hat",
+              "beret",
+              "fedora",
+              "swimming cap",
+              "judge wig",
+              "headscarf",
+              "flower wreath"
+            ]
+          }
+        }
+      },
+      {
+        "id": "avatar.part.change",
+        "act": "change",
+        "on": "ui.avatar.part",
+        "effectScope": {
+          "related": [
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "neck",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "ears",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "head",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "cheeks",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "beard",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "mouth",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "moustache",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "nose",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "eyes",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "eyebrows",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "glasses",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "hair_front",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "earrings",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_back",
+                "provided": "size"
+              },
+              "id": "hat",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "shoulders",
+                "provided": "size"
+              },
+              "id": "beard",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "neck",
+                "provided": "size"
+              },
+              "id": "head",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "neck",
+                "provided": "size"
+              },
+              "id": "beard",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "neck",
+                "provided": "size"
+              },
+              "id": "mouth",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "ears",
+                "provided": "size"
+              },
+              "id": "head",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "ears",
+                "provided": "size"
+              },
+              "id": "glasses",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "ears",
+                "provided": "size"
+              },
+              "id": "hair_front",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "head",
+                "provided": "size"
+              },
+              "id": "neck",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "head",
+                "provided": "size"
+              },
+              "id": "cheeks",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "head",
+                "provided": "size"
+              },
+              "id": "mouth",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "head",
+                "provided": "size"
+              },
+              "id": "moustache",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "head",
+                "provided": "size"
+              },
+              "id": "nose",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "head",
+                "provided": "size"
+              },
+              "id": "eyes",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "head",
+                "provided": "size"
+              },
+              "id": "eyebrows",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "head",
+                "provided": "size"
+              },
+              "id": "hair_front",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "head",
+                "provided": "size"
+              },
+              "id": "hat",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "cheeks",
+                "provided": "size"
+              },
+              "id": "glasses",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "cheeks",
+                "provided": "size"
+              },
+              "id": "hair_front",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "beard",
+                "provided": "size"
+              },
+              "id": "neck",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "beard",
+                "provided": "size"
+              },
+              "id": "cheeks",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "beard",
+                "provided": "size"
+              },
+              "id": "mouth",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "beard",
+                "provided": "size"
+              },
+              "id": "moustache",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "beard",
+                "provided": "size"
+              },
+              "id": "nose",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "beard",
+                "provided": "size"
+              },
+              "id": "glasses",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "beard",
+                "provided": "size"
+              },
+              "id": "hair_front",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "mouth",
+                "provided": "size"
+              },
+              "id": "moustache",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "moustache",
+                "provided": "size"
+              },
+              "id": "glasses",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "nose",
+                "provided": "size"
+              },
+              "id": "eyes",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "nose",
+                "provided": "size"
+              },
+              "id": "glasses",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "nose",
+                "provided": "size"
+              },
+              "id": "hair_front",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "eyes",
+                "provided": "size"
+              },
+              "id": "eyebrows",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "eyes",
+                "provided": "size"
+              },
+              "id": "glasses",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "eyes",
+                "provided": "size"
+              },
+              "id": "hair_front",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "eyes",
+                "provided": "size"
+              },
+              "id": "hat",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "eyebrows",
+                "provided": "size"
+              },
+              "id": "hair_front",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "eyebrows",
+                "provided": "size"
+              },
+              "id": "hat",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "glasses",
+                "provided": "size"
+              },
+              "id": "nose",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "glasses",
+                "provided": "size"
+              },
+              "id": "eyes",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "glasses",
+                "provided": "size"
+              },
+              "id": "hair_front",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "glasses",
+                "provided": "size"
+              },
+              "id": "hat",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_front",
+                "provided": "size"
+              },
+              "id": "ears",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_front",
+                "provided": "size"
+              },
+              "id": "head",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_front",
+                "provided": "size"
+              },
+              "id": "nose",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_front",
+                "provided": "size"
+              },
+              "id": "eyes",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_front",
+                "provided": "size"
+              },
+              "id": "eyebrows",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_front",
+                "provided": "size"
+              },
+              "id": "glasses",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hair_front",
+                "provided": "size"
+              },
+              "id": "hat",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "rests-on"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hat",
+                "provided": "size"
+              },
+              "id": "eyebrows",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            },
+            {
+              "when": {
+                "parameter": "ids",
+                "includes": "hat",
+                "provided": "size"
+              },
+              "id": "hair_front",
+              "keys": [
+                "dx",
+                "dy",
+                "scale"
+              ],
+              "relationship": "inside"
+            }
+          ]
+        },
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "long straight",
+              "long wavy",
+              "long curly",
+              "bob",
+              "ponytail",
+              "pigtails",
+              "bun",
+              "afro",
+              "t-shirt",
+              "v-neck",
+              "shirt",
+              "suit",
+              "hoodie",
+              "tank top",
+              "small",
+              "metal plate",
+              "lab coat",
+              "scrubs",
+              "chef jacket",
+              "apron",
+              "overalls",
+              "safety vest",
+              "uniform",
+              "fire jacket",
+              "sailor collar",
+              "space suit",
+              "robe",
+              "cloak",
+              "cape",
+              "fur coat",
+              "football shirt",
+              "bow tie",
+              "boiler suit",
+              "medium",
+              "thin",
+              "thick",
+              "tapered",
+              "necklace",
+              "pipe",
+              "round",
+              "large",
+              "pointed",
+              "long",
+              "square",
+              "oval",
+              "heart",
+              "wide",
+              "box",
+              "blush",
+              "round blush",
+              "freckles",
+              "dimple",
+              "wrinkles",
+              "scar",
+              "mole",
+              "tear",
+              "full",
+              "short",
+              "chinstrap",
+              "goatee",
+              "soul patch",
+              "sideburns",
+              "stubble",
+              "smile",
+              "big smile",
+              "neutral",
+              "sad",
+              "open",
+              "talking",
+              "smirk",
+              "full lips",
+              "grin",
+              "tongue out",
+              "frown",
+              "grille",
+              "gritted",
+              "half open",
+              "pressed",
+              "lip bite",
+              "tongue tip",
+              "handlebar",
+              "walrus",
+              "pencil",
+              "chevron",
+              "button",
+              "bolt",
+              "dot",
+              "narrow",
+              "closed",
+              "happy",
+              "surprised",
+              "sleepy",
+              "lashes",
+              "downcast",
+              "looking up",
+              "looking out",
+              "looking in",
+              "straight",
+              "arched",
+              "thick arched",
+              "angry",
+              "bushy",
+              "raised",
+              "small round",
+              "sunglasses",
+              "cat-eye",
+              "monocle",
+              "visor",
+              "fringe",
+              "side parting",
+              "curly",
+              "spikes",
+              "bald on top",
+              "receding",
+              "centre parting",
+              "long sides",
+              "wavy",
+              "mohawk",
+              "tuft",
+              "stud",
+              "hoop",
+              "drop",
+              "pearl",
+              "large hoop",
+              "star",
+              "cap",
+              "beanie",
+              "top hat",
+              "crown",
+              "cowboy hat",
+              "party hat",
+              "bow",
+              "antenna",
+              "sun hat",
+              "chef hat",
+              "hard hat",
+              "fire helmet",
+              "police cap",
+              "pilot cap",
+              "nurse cap",
+              "sailor cap",
+              "military helmet",
+              "space helmet",
+              "knight helmet",
+              "pirate hat",
+              "witch hat",
+              "wizard hat",
+              "Santa hat",
+              "beret",
+              "fedora",
+              "swimming cap",
+              "judge wig",
+              "headscarf",
+              "flower wreath"
+            ]
+          },
+          "colour": {
+            "type": "string",
+            "enum": [
+              "black",
+              "dark brown",
+              "brown",
+              "auburn",
+              "red",
+              "blond",
+              "grey",
+              "white",
+              "blue",
+              "pink",
+              "green",
+              "purple",
+              "orange",
+              "yellow",
+              "pale",
+              "light",
+              "tan",
+              "olive",
+              "metal grey",
+              "hazel",
+              "amber"
+            ]
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "tiny",
+              "small",
+              "default",
+              "big",
+              "huge"
+            ]
+          }
+        }
+      },
+      {
+        "id": "avatar.part.move",
+        "act": "place",
+        "on": "ui.avatar.part",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "place": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "up",
+              "down",
+              "left",
+              "right"
+            ]
+          }
+        }
+      },
+      {
+        "id": "avatar.part.remove",
+        "act": "remove",
+        "on": "ui.avatar.part",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        }
+      },
+      {
+        "id": "avatar.observe",
+        "act": "ask",
+        "on": "ui.avatar.face",
+        "params": {}
+      },
+      {
+        "id": "avatar.undo",
+        "act": "undo",
+        "on": "ui.avatar.face",
+        "params": {}
+      },
+      {
+        "id": "avatar.redo",
+        "act": "redo",
+        "on": "ui.avatar.face",
+        "params": {}
+      }
+    ]
+  },
+  "actRealizations": {
+    "drawing": {
+      "place": [
+        "drawing.object.change"
+      ],
+      "arrange": [
+        "drawing.object.change"
+      ]
+    },
+    "diagram": {
+      "connect": [
+        "diagram.link.make"
+      ],
+      "disconnect": [
+        "diagram.link.remove"
+      ],
+      "arrange": [
+        "diagram.node.layout"
+      ]
+    },
+    "calendar": {
+      "arrange": [
+        "calendar.meeting.move"
+      ],
+      "connect": [
+        "calendar.meeting.change"
+      ]
+    },
+    "document": {
+      "place": [
+        "document.section.reorder"
+      ]
+    }
+  },
+  "fields": {
+    "drawing.drawn.colour": {
+      "status": "relevant",
+      "operation": "drawing.object.change",
+      "parameter": "color",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "nullable": true
+      },
+      "requires": []
+    },
+    "drawing.drawn.size": {
+      "status": "relevant",
+      "operation": "drawing.object.change",
+      "parameter": "size",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "number",
+        "min": 0.001
+      },
+      "requires": []
+    },
+    "drawing.drawn.kind": {
+      "status": "relevant",
+      "operation": "drawing.object.make",
+      "parameter": "kind",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true,
+        "enum": [
+          "circle",
+          "oval",
+          "square",
+          "rectangle",
+          "triangle",
+          "star",
+          "heart",
+          "line",
+          "arrow",
+          "lake",
+          "river",
+          "road",
+          "field",
+          "patch",
+          "hill",
+          "house",
+          "tree",
+          "sun",
+          "cloud",
+          "car",
+          "flower",
+          "cat",
+          "dog",
+          "fish",
+          "bird",
+          "boat",
+          "mountain",
+          "rainbow",
+          "person",
+          "balloon",
+          "rocket",
+          "moon"
+        ]
+      },
+      "requires": []
+    },
+    "drawing.drawn.name": {
+      "status": "relevant",
+      "operation": "drawing.object.change",
+      "parameter": "name",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string"
+      },
+      "requires": []
+    },
+    "drawing.drawn.at": {
+      "status": "relevant",
+      "operation": "drawing.object.change",
+      "parameter": "x",
+      "interpretation": "spatial-reference-or-measured-placement; preserve relation and anchor, resolve through shared spaces",
+      "parameterDeclaration": {
+        "type": "number"
+      },
+      "requires": []
+    },
+    "drawing.drawn.relation": {
+      "status": "relevant",
+      "operation": "drawing.object.change",
+      "parameter": "x",
+      "interpretation": "spatial-reference-or-measured-placement; preserve relation and anchor, resolve through shared spaces",
+      "parameterDeclaration": {
+        "type": "number"
+      },
+      "requires": []
+    },
+    "drawing.drawn.anchor": {
+      "status": "relevant",
+      "operation": "drawing.object.change",
+      "parameter": "x",
+      "interpretation": "spatial-reference-or-measured-placement; preserve relation and anchor, resolve through shared spaces",
+      "parameterDeclaration": {
+        "type": "number"
+      },
+      "requires": []
+    },
+    "drawing.drawn.direction": {
+      "status": "relevant",
+      "operation": "drawing.object.change",
+      "parameter": "x",
+      "interpretation": "spatial-reference-or-measured-placement; preserve relation and anchor, resolve through shared spaces",
+      "parameterDeclaration": {
+        "type": "number"
+      },
+      "requires": []
+    },
+    "drawing.drawn.distance": {
+      "status": "relevant",
+      "operation": "drawing.object.change",
+      "parameter": "x",
+      "interpretation": "spatial-reference-or-measured-placement; preserve relation and anchor, resolve through shared spaces",
+      "parameterDeclaration": {
+        "type": "number"
+      },
+      "requires": []
+    },
+    "drawing.drawn.count": {
+      "status": "relevant",
+      "operation": "drawing.object.make",
+      "parameter": "kind",
+      "interpretation": "group quantity composes repeated creation/removal; never replaces count with 1",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true,
+        "enum": [
+          "circle",
+          "oval",
+          "square",
+          "rectangle",
+          "triangle",
+          "star",
+          "heart",
+          "line",
+          "arrow",
+          "lake",
+          "river",
+          "road",
+          "field",
+          "patch",
+          "hill",
+          "house",
+          "tree",
+          "sun",
+          "cloud",
+          "car",
+          "flower",
+          "cat",
+          "dog",
+          "fish",
+          "bird",
+          "boat",
+          "mountain",
+          "rainbow",
+          "person",
+          "balloon",
+          "rocket",
+          "moon"
+        ]
+      },
+      "requires": []
+    },
+    "diagram.node.label": {
+      "status": "relevant",
+      "operation": "diagram.node.change",
+      "parameter": "label",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string"
+      },
+      "requires": []
+    },
+    "diagram.node.colour": {
+      "status": "relevant",
+      "operation": "diagram.node.change",
+      "parameter": "colour",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string"
+      },
+      "requires": []
+    },
+    "diagram.node.size": {
+      "status": "relevant",
+      "operation": "diagram.node.change",
+      "parameter": "size",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "enum": [
+          "tiny",
+          "small",
+          "medium",
+          "large",
+          "huge"
+        ]
+      },
+      "requires": []
+    },
+    "diagram.node.shape": {
+      "status": "relevant",
+      "operation": "diagram.node.make",
+      "parameter": "kind",
+      "interpretation": "native node kind; existing node shape change requires a separate exposed mutation",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true,
+        "enum": [
+          "circle",
+          "rectangle",
+          "square",
+          "diamond",
+          "ellipse",
+          "triangle",
+          "hexagon",
+          "star"
+        ]
+      },
+      "requires": []
+    },
+    "diagram.node.at": {
+      "status": "relevant",
+      "operation": "diagram.node.place",
+      "parameter": "x",
+      "interpretation": "spatial reference resolves to native coordinates",
+      "parameterDeclaration": {
+        "type": "number",
+        "required": true
+      },
+      "requires": []
+    },
+    "diagram.node.position": {
+      "status": "relevant",
+      "operation": "diagram.node.place",
+      "parameter": "x",
+      "interpretation": "spatial reference resolves to native coordinates",
+      "parameterDeclaration": {
+        "type": "number",
+        "required": true
+      },
+      "requires": []
+    },
+    "diagram.node.anchor": {
+      "status": "relevant",
+      "operation": "diagram.node.place",
+      "parameter": "x",
+      "interpretation": "spatial reference resolves to native coordinates",
+      "parameterDeclaration": {
+        "type": "number",
+        "required": true
+      },
+      "requires": []
+    },
+    "diagram.link.from": {
+      "status": "relevant",
+      "operation": "diagram.link.make",
+      "parameter": "from",
+      "interpretation": "resolve endpoint description to observed node identity",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": []
+    },
+    "diagram.link.to": {
+      "status": "relevant",
+      "operation": "diagram.link.make",
+      "parameter": "to",
+      "interpretation": "resolve endpoint description to observed node identity",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": []
+    },
+    "diagram.diagram.layout": {
+      "status": "relevant",
+      "operation": "diagram.node.layout",
+      "parameter": "layout",
+      "interpretation": "layout applies to observed node collection",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true,
+        "enum": [
+          "tree",
+          "grid",
+          "row",
+          "column",
+          "circle",
+          "radial",
+          "layers"
+        ]
+      },
+      "requires": []
+    },
+    "diagram.chart.datasets": {
+      "status": "relevant",
+      "operation": "chart.make",
+      "parameter": "datasets",
+      "interpretation": "literal dataset array",
+      "parameterDeclaration": {
+        "type": "array"
+      },
+      "requires": []
+    },
+    "diagram.diagram.kind": {
+      "status": "relevant",
+      "operation": "diagram.node.make",
+      "parameter": "kind",
+      "interpretation": "diagram structure requires explicit composition, not node-kind equivalence",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true,
+        "enum": [
+          "circle",
+          "rectangle",
+          "square",
+          "diamond",
+          "ellipse",
+          "triangle",
+          "hexagon",
+          "star"
+        ]
+      },
+      "requires": []
+    },
+    "diagram.chart.title": {
+      "status": "relevant",
+      "operation": "chart.make",
+      "parameter": "title",
+      "interpretation": "literal-or-source-reference",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": []
+    },
+    "diagram.chart.values": {
+      "status": "relevant",
+      "operation": "chart.make",
+      "parameter": "values",
+      "interpretation": "copy explicit data span, then typed labels/numbers conversion",
+      "parameterDeclaration": {
+        "type": "array",
+        "required": true,
+        "default": []
+      },
+      "requires": []
+    },
+    "diagram.chart.source": {
+      "status": "relevant",
+      "operation": "chart.make",
+      "parameter": "source",
+      "interpretation": "literal-or-source-reference",
+      "parameterDeclaration": {
+        "type": "array",
+        "required": true,
+        "default": []
+      },
+      "requires": []
+    },
+    "diagram.chart.series": {
+      "status": "relevant",
+      "operation": "chart.make",
+      "parameter": "series",
+      "interpretation": "literal-or-source-reference",
+      "parameterDeclaration": {
+        "type": "string",
+        "default": "Value"
+      },
+      "requires": []
+    },
+    "diagram.chart.labels": {
+      "status": "relevant",
+      "operation": "chart.make",
+      "parameter": "labels",
+      "interpretation": "literal-or-source-reference",
+      "parameterDeclaration": {
+        "type": "array",
+        "required": true,
+        "default": []
+      },
+      "requires": []
+    },
+    "diagram.chart.legend": {
+      "status": "relevant",
+      "operation": "chart.change",
+      "parameter": "showLegend",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "boolean"
+      },
+      "requires": []
+    },
+    "diagram.chart.show_values": {
+      "status": "relevant",
+      "operation": "chart.change",
+      "parameter": "showValues",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "boolean"
+      },
+      "requires": []
+    },
+    "diagram.chart.stacked": {
+      "status": "relevant",
+      "operation": "chart.change",
+      "parameter": "stacked",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "boolean"
+      },
+      "requires": []
+    },
+    "diagram.chart.horizontal": {
+      "status": "relevant",
+      "operation": "chart.change",
+      "parameter": "horizontal",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "boolean"
+      },
+      "requires": []
+    },
+    "diagram.chart.sort": {
+      "status": "relevant",
+      "operation": "chart.change",
+      "parameter": "sort",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "enum": [
+          "asc",
+          "desc",
+          "alpha",
+          "none"
+        ]
+      },
+      "requires": []
+    },
+    "diagram.chart.palette": {
+      "status": "relevant",
+      "operation": "chart.change",
+      "parameter": "palette",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "enum": [
+          "default",
+          "classic",
+          "rainbow",
+          "pastel",
+          "ocean",
+          "forest",
+          "sunset",
+          "warm",
+          "cool",
+          "neon",
+          "earth"
+        ]
+      },
+      "requires": []
+    },
+    "diagram.chart.colour": {
+      "status": "relevant",
+      "operation": "chart.change",
+      "parameter": "colour",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string"
+      },
+      "requires": []
+    },
+    "document.text.genre": {
+      "status": "relevant",
+      "operation": "document.write",
+      "parameter": "genre",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string"
+      },
+      "requires": []
+    },
+    "document.text.about": {
+      "status": "relevant",
+      "operation": "document.write",
+      "parameter": "topic",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string"
+      },
+      "requires": []
+    },
+    "document.text.title": {
+      "status": "relevant",
+      "operation": "document.write",
+      "parameter": "title",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": []
+    },
+    "document.text.words": {
+      "status": "relevant",
+      "operation": "document.compose",
+      "parameter": "words",
+      "interpretation": "knowledge composition; bounded requested quantity retained",
+      "parameterDeclaration": {
+        "type": "integer",
+        "min": 1,
+        "max": 100000
+      },
+      "requires": [
+        "knowledge-composer"
+      ]
+    },
+    "document.text.chapters": {
+      "status": "relevant",
+      "operation": "document.compose",
+      "parameter": "chapters",
+      "interpretation": "knowledge composition; bounded requested quantity retained",
+      "parameterDeclaration": {
+        "type": "integer",
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "knowledge-composer"
+      ]
+    },
+    "document.inline.format": {
+      "status": "relevant",
+      "operation": "document.block.mark",
+      "parameter": "mark",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true,
+        "enum": [
+          "link",
+          "bold",
+          "italic",
+          "underline",
+          "strike",
+          "code",
+          "highlight"
+        ]
+      },
+      "requires": []
+    },
+    "document.inline.enabled": {
+      "status": "relevant",
+      "operation": "document.block.mark",
+      "parameter": "enabled",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "boolean",
+        "required": true
+      },
+      "requires": []
+    },
+    "document.inline.from": {
+      "status": "relevant",
+      "operation": "document.block.mark",
+      "parameter": "from",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "integer",
+        "required": true,
+        "min": 0
+      },
+      "requires": []
+    },
+    "document.inline.to": {
+      "status": "relevant",
+      "operation": "document.block.mark",
+      "parameter": "to",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "integer",
+        "required": true,
+        "min": 0
+      },
+      "requires": []
+    },
+    "document.inline.link_target": {
+      "status": "relevant",
+      "operation": "document.block.mark",
+      "parameter": "attrs",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "object"
+      },
+      "requires": []
+    },
+    "document.inline.highlight_colour": {
+      "status": "relevant",
+      "operation": "document.block.mark",
+      "parameter": "attrs",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "object"
+      },
+      "requires": []
+    },
+    "document.inline.align": {
+      "status": "relevant",
+      "operation": "document.block.align",
+      "parameter": "align",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true,
+        "enum": [
+          "left",
+          "center",
+          "right",
+          "justify"
+        ]
+      },
+      "requires": []
+    },
+    "document.inline.list_kind": {
+      "status": "relevant",
+      "operation": "document.list.make",
+      "parameter": "style",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true,
+        "enum": [
+          "bullet",
+          "numbered",
+          "task"
+        ]
+      },
+      "requires": []
+    },
+    "document.inline.items": {
+      "status": "relevant",
+      "operation": "document.list.make",
+      "parameter": "items",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "array",
+        "required": true
+      },
+      "requires": []
+    },
+    "document.inline.rows": {
+      "status": "relevant",
+      "operation": "document.table.make",
+      "parameter": "rows",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "array",
+        "required": true
+      },
+      "requires": []
+    },
+    "document.text.content": {
+      "status": "relevant",
+      "operation": "document.write",
+      "parameter": "blocks",
+      "interpretation": "literal paragraph body serialized as native block array",
+      "parameterDeclaration": {
+        "type": "array",
+        "required": true
+      },
+      "requires": []
+    },
+    "document.text.tone": {
+      "status": "relevant",
+      "operation": "document.rewrite",
+      "parameter": "value",
+      "interpretation": "requires installed knowledge rewriter",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": [
+        "knowledge-rewriter"
+      ]
+    },
+    "document.text.length": {
+      "status": "relevant",
+      "operation": "document.rewrite",
+      "parameter": "value",
+      "interpretation": "requires installed knowledge rewriter; contextual degree preserved",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": [
+        "knowledge-rewriter"
+      ]
+    },
+    "document.section.content": {
+      "status": "relevant",
+      "operation": "document.block.change",
+      "parameter": "text",
+      "interpretation": "literal block/section text",
+      "parameterDeclaration": {
+        "type": "string"
+      },
+      "requires": []
+    },
+    "document.section.role": {
+      "status": "relevant",
+      "operation": "document.section.make",
+      "parameter": "name",
+      "interpretation": "named section as a visible heading",
+      "parameterDeclaration": {
+        "type": "string"
+      },
+      "requires": []
+    },
+    "document.section.order": {
+      "status": "relevant",
+      "operation": "document.section.reorder",
+      "parameter": "ids",
+      "interpretation": "resolve ordered sections and preserve relative reference",
+      "parameterDeclaration": {
+        "type": "array",
+        "required": true
+      },
+      "requires": []
+    },
+    "document.section.order_anchor": {
+      "status": "relevant",
+      "operation": "document.section.reorder",
+      "parameter": "ids",
+      "interpretation": "resolve ordered sections and preserve relative reference",
+      "parameterDeclaration": {
+        "type": "array",
+        "required": true
+      },
+      "requires": []
+    },
+    "document.section.level": {
+      "status": "relevant",
+      "operation": "document.section.make",
+      "parameter": "level",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "integer",
+        "default": 2,
+        "min": 1,
+        "max": 2
+      },
+      "requires": []
+    },
+    "document.section.count": {
+      "status": "relevant",
+      "operation": "document.section.make",
+      "parameter": "parent",
+      "interpretation": "quantity composes visible sections under one document",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": []
+    },
+    "document.section.length": {
+      "status": "relevant",
+      "operation": "document.rewrite",
+      "parameter": "value",
+      "interpretation": "rewriter must implement section-local scope, never rewrite whole document implicitly",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": [
+        "knowledge-rewriter"
+      ]
+    },
+    "document.section.words": {
+      "status": "relevant",
+      "operation": "document.compose",
+      "parameter": "words",
+      "interpretation": "composer must implement section-local scope",
+      "parameterDeclaration": {
+        "type": "integer",
+        "min": 1,
+        "max": 100000
+      },
+      "requires": [
+        "knowledge-composer"
+      ]
+    },
+    "calendar.person.name": {
+      "status": "relevant",
+      "operation": "calendar.person.add",
+      "parameter": "label",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": []
+    },
+    "calendar.room.seats": {
+      "status": "relevant",
+      "operation": "calendar.room.add",
+      "parameter": "capacity",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "integer",
+        "min": 1
+      },
+      "requires": []
+    },
+    "calendar.room.name": {
+      "status": "relevant",
+      "operation": "calendar.room.add",
+      "parameter": "label",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": []
+    },
+    "calendar.room.label": {
+      "status": "relevant",
+      "operation": "calendar.room.add",
+      "parameter": "label",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": []
+    },
+    "calendar.room.location": {
+      "status": "relevant",
+      "operation": "calendar.room.add",
+      "parameter": "location",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string"
+      },
+      "requires": []
+    },
+    "calendar.room.capacity": {
+      "status": "relevant",
+      "operation": "calendar.room.add",
+      "parameter": "capacity",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "integer",
+        "min": 1
+      },
+      "requires": []
+    },
+    "calendar.calendar.name": {
+      "status": "relevant",
+      "operation": "calendar.calendar.add",
+      "parameter": "label",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": []
+    },
+    "calendar.calendar.label": {
+      "status": "relevant",
+      "operation": "calendar.calendar.add",
+      "parameter": "label",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": []
+    },
+    "calendar.calendar.colour": {
+      "status": "relevant",
+      "operation": "calendar.calendar.add",
+      "parameter": "colour",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string"
+      },
+      "requires": []
+    },
+    "calendar.meeting.title": {
+      "status": "relevant",
+      "operation": "calendar.meeting.add",
+      "parameter": "title",
+      "interpretation": "literal text",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": []
+    },
+    "calendar.meeting.people": {
+      "status": "relevant",
+      "operation": "calendar.meeting.add",
+      "parameter": "participants",
+      "interpretation": "resolve declared resource identity",
+      "parameterDeclaration": {
+        "type": "array",
+        "required": true
+      },
+      "requires": []
+    },
+    "calendar.meeting.room": {
+      "status": "relevant",
+      "operation": "calendar.meeting.add",
+      "parameter": "room",
+      "interpretation": "resolve declared resource identity",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true,
+        "nullable": true
+      },
+      "requires": []
+    },
+    "calendar.meeting.calendar": {
+      "status": "relevant",
+      "operation": "calendar.meeting.add",
+      "parameter": "calendar",
+      "interpretation": "resolve declared resource identity",
+      "parameterDeclaration": {
+        "type": "string",
+        "nullable": true
+      },
+      "requires": []
+    },
+    "calendar.meeting.agenda": {
+      "status": "relevant",
+      "operation": "calendar.meeting.add",
+      "parameter": "notes",
+      "interpretation": "literal text",
+      "parameterDeclaration": {
+        "type": "string"
+      },
+      "requires": []
+    },
+    "calendar.meeting.day": {
+      "status": "relevant",
+      "operation": "calendar.meeting.add",
+      "parameter": "start",
+      "interpretation": "typed temporal constraint over observed intervals; shared temporal resolution/completion required",
+      "parameterDeclaration": {
+        "type": "integer",
+        "required": true
+      },
+      "requires": []
+    },
+    "calendar.meeting.time": {
+      "status": "relevant",
+      "operation": "calendar.meeting.add",
+      "parameter": "start",
+      "interpretation": "typed temporal constraint over observed intervals; shared temporal resolution/completion required",
+      "parameterDeclaration": {
+        "type": "integer",
+        "required": true
+      },
+      "requires": []
+    },
+    "calendar.meeting.end": {
+      "status": "relevant",
+      "operation": "calendar.meeting.add",
+      "parameter": "start",
+      "interpretation": "typed temporal constraint over observed intervals; shared temporal resolution/completion required",
+      "parameterDeclaration": {
+        "type": "integer",
+        "required": true
+      },
+      "requires": []
+    },
+    "calendar.meeting.length": {
+      "status": "relevant",
+      "operation": "calendar.meeting.add",
+      "parameter": "duration",
+      "interpretation": "typed temporal constraint over observed intervals; shared temporal resolution/completion required",
+      "parameterDeclaration": {
+        "type": "integer",
+        "required": true,
+        "min": 1
+      },
+      "requires": []
+    },
+    "calendar.meeting.shift": {
+      "status": "relevant",
+      "operation": "calendar.meeting.add",
+      "parameter": "start",
+      "interpretation": "typed temporal constraint over observed intervals; shared temporal resolution/completion required",
+      "parameterDeclaration": {
+        "type": "integer",
+        "required": true
+      },
+      "requires": []
+    },
+    "calendar.meeting.relation": {
+      "status": "relevant",
+      "operation": "calendar.meeting.add",
+      "parameter": "start",
+      "interpretation": "typed temporal constraint over observed intervals; shared temporal resolution/completion required",
+      "parameterDeclaration": {
+        "type": "integer",
+        "required": true
+      },
+      "requires": []
+    },
+    "calendar.meeting.relation_anchor": {
+      "status": "relevant",
+      "operation": "calendar.meeting.add",
+      "parameter": "start",
+      "interpretation": "typed temporal constraint over observed intervals; shared temporal resolution/completion required",
+      "parameterDeclaration": {
+        "type": "integer",
+        "required": true
+      },
+      "requires": []
+    },
+    "calendar.meeting.free": {
+      "status": "relevant",
+      "operation": "calendar.meeting.add",
+      "parameter": "start",
+      "interpretation": "typed temporal constraint over observed intervals; shared temporal resolution/completion required",
+      "parameterDeclaration": {
+        "type": "integer",
+        "required": true
+      },
+      "requires": []
+    },
+    "avatar.face.preset": {
+      "status": "relevant",
+      "operation": "avatar.face.preset",
+      "parameter": "preset",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true,
+        "enum": [
+          "baby",
+          "child",
+          "girl",
+          "boy",
+          "woman",
+          "man",
+          "old woman",
+          "old man",
+          "bearded man",
+          "woman with curly hair",
+          "robot",
+          "alien",
+          "clown",
+          "queen"
+        ]
+      },
+      "requires": []
+    },
+    "avatar.face.expression": {
+      "status": "relevant",
+      "operation": "avatar.face.expression",
+      "parameter": "expression",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true,
+        "enum": [
+          "happy",
+          "sad",
+          "angry",
+          "surprised",
+          "sleepy",
+          "wink",
+          "talking"
+        ]
+      },
+      "requires": []
+    },
+    "avatar.face.name": {
+      "status": "relevant",
+      "operation": "avatar.face.name",
+      "parameter": "name",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": []
+    },
+    "avatar.part.variant": {
+      "status": "relevant",
+      "operation": "avatar.part.change",
+      "parameter": "variant",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "enum": [
+          "long straight",
+          "long wavy",
+          "long curly",
+          "bob",
+          "ponytail",
+          "pigtails",
+          "bun",
+          "afro",
+          "t-shirt",
+          "v-neck",
+          "shirt",
+          "suit",
+          "hoodie",
+          "tank top",
+          "small",
+          "metal plate",
+          "lab coat",
+          "scrubs",
+          "chef jacket",
+          "apron",
+          "overalls",
+          "safety vest",
+          "uniform",
+          "fire jacket",
+          "sailor collar",
+          "space suit",
+          "robe",
+          "cloak",
+          "cape",
+          "fur coat",
+          "football shirt",
+          "bow tie",
+          "boiler suit",
+          "medium",
+          "thin",
+          "thick",
+          "tapered",
+          "necklace",
+          "pipe",
+          "round",
+          "large",
+          "pointed",
+          "long",
+          "square",
+          "oval",
+          "heart",
+          "wide",
+          "box",
+          "blush",
+          "round blush",
+          "freckles",
+          "dimple",
+          "wrinkles",
+          "scar",
+          "mole",
+          "tear",
+          "full",
+          "short",
+          "chinstrap",
+          "goatee",
+          "soul patch",
+          "sideburns",
+          "stubble",
+          "smile",
+          "big smile",
+          "neutral",
+          "sad",
+          "open",
+          "talking",
+          "smirk",
+          "full lips",
+          "grin",
+          "tongue out",
+          "frown",
+          "grille",
+          "gritted",
+          "half open",
+          "pressed",
+          "lip bite",
+          "tongue tip",
+          "handlebar",
+          "walrus",
+          "pencil",
+          "chevron",
+          "button",
+          "bolt",
+          "dot",
+          "narrow",
+          "closed",
+          "happy",
+          "surprised",
+          "sleepy",
+          "lashes",
+          "downcast",
+          "looking up",
+          "looking out",
+          "looking in",
+          "straight",
+          "arched",
+          "thick arched",
+          "angry",
+          "bushy",
+          "raised",
+          "small round",
+          "sunglasses",
+          "cat-eye",
+          "monocle",
+          "visor",
+          "fringe",
+          "side parting",
+          "curly",
+          "spikes",
+          "bald on top",
+          "receding",
+          "centre parting",
+          "long sides",
+          "wavy",
+          "mohawk",
+          "tuft",
+          "stud",
+          "hoop",
+          "drop",
+          "pearl",
+          "large hoop",
+          "star",
+          "cap",
+          "beanie",
+          "top hat",
+          "crown",
+          "cowboy hat",
+          "party hat",
+          "bow",
+          "antenna",
+          "sun hat",
+          "chef hat",
+          "hard hat",
+          "fire helmet",
+          "police cap",
+          "pilot cap",
+          "nurse cap",
+          "sailor cap",
+          "military helmet",
+          "space helmet",
+          "knight helmet",
+          "pirate hat",
+          "witch hat",
+          "wizard hat",
+          "Santa hat",
+          "beret",
+          "fedora",
+          "swimming cap",
+          "judge wig",
+          "headscarf",
+          "flower wreath"
+        ]
+      },
+      "requires": []
+    },
+    "avatar.part.colour": {
+      "status": "relevant",
+      "operation": "avatar.part.change",
+      "parameter": "colour",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "enum": [
+          "black",
+          "dark brown",
+          "brown",
+          "auburn",
+          "red",
+          "blond",
+          "grey",
+          "white",
+          "blue",
+          "pink",
+          "green",
+          "purple",
+          "orange",
+          "yellow",
+          "pale",
+          "light",
+          "tan",
+          "olive",
+          "metal grey",
+          "hazel",
+          "amber"
+        ]
+      },
+      "requires": []
+    },
+    "avatar.part.size": {
+      "status": "relevant",
+      "operation": "avatar.part.change",
+      "parameter": "size",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "enum": [
+          "tiny",
+          "small",
+          "default",
+          "big",
+          "huge"
+        ]
+      },
+      "requires": []
+    },
+    "avatar.part.ids": {
+      "status": "relevant",
+      "operation": "avatar.part.change",
+      "parameter": "ids",
+      "interpretation": "exact observed slot labels to declared native slot ids",
+      "parameterDeclaration": {
+        "type": "array",
+        "required": true
+      },
+      "requires": []
+    },
+    "avatar.part.place": {
+      "status": "relevant",
+      "operation": "avatar.part.move",
+      "parameter": "place",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true,
+        "enum": [
+          "up",
+          "down",
+          "left",
+          "right"
+        ]
+      },
+      "requires": []
+    },
+    "drawing.part.owner": {
+      "status": "relevant",
+      "operation": "drawing.part.change",
+      "parameter": "id",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "required": true
+      },
+      "requires": []
+    },
+    "drawing.part.index": {
+      "status": "relevant",
+      "operation": "drawing.part.change",
+      "parameter": "index",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "integer",
+        "required": true,
+        "min": 0
+      },
+      "requires": []
+    },
+    "drawing.part.colour": {
+      "status": "relevant",
+      "operation": "drawing.part.change",
+      "parameter": "color",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string"
+      },
+      "requires": []
+    },
+    "drawing.part.width": {
+      "status": "relevant",
+      "operation": "drawing.part.change",
+      "parameter": "width",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "number",
+        "min": 0.01
+      },
+      "requires": []
+    },
+    "drawing.part.height": {
+      "status": "relevant",
+      "operation": "drawing.part.change",
+      "parameter": "height",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "number",
+        "min": 0.01
+      },
+      "requires": []
+    },
+    "drawing.part.x": {
+      "status": "relevant",
+      "operation": "drawing.part.place",
+      "parameter": "x",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "number",
+        "required": true
+      },
+      "requires": []
+    },
+    "drawing.part.y": {
+      "status": "relevant",
+      "operation": "drawing.part.place",
+      "parameter": "y",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "number",
+        "required": true
+      },
+      "requires": []
+    },
+    "drawing.group.members": {
+      "status": "relevant",
+      "operation": "drawing.object.group",
+      "parameter": "ids",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "array",
+        "required": true
+      },
+      "requires": []
+    },
+    "drawing.group.name": {
+      "status": "relevant",
+      "operation": "drawing.object.group",
+      "parameter": "name",
+      "interpretation": "literal-or-typed-value",
+      "parameterDeclaration": {
+        "type": "string",
+        "default": "Group"
+      },
+      "requires": []
+    }
+  },
+  "families": {
+    "drawing.drawn": {
+      "status": "relevant",
+      "operations": [
+        "drawing.object.make",
+        "drawing.catalog.make",
+        "drawing.object.change",
+        "drawing.object.select",
+        "drawing.object.place",
+        "drawing.page.clear",
+        "drawing.object.remove",
+        "drawing.observe",
+        "drawing.undo",
+        "drawing.redo",
+        "drawing.object.parts",
+        "drawing.part.select",
+        "drawing.part.change",
+        "drawing.part.place",
+        "drawing.part.remove",
+        "drawing.part.extract",
+        "drawing.object.group",
+        "drawing.object.ungroup"
+      ],
+      "acts": [
+        "make",
+        "change",
+        "ask",
+        "place",
+        "remove",
+        "undo",
+        "redo",
+        "ungroup",
+        "group"
+      ],
+      "sourceTypes": [
+        "art.draw.object",
+        "art.draw.page",
+        "art.draw.part"
+      ],
+      "interpretation": "direct-native-family",
+      "kindParameter": "kind",
+      "kindOperation": "drawing.object.make",
+      "kindValues": [
+        "circle",
+        "oval",
+        "square",
+        "rectangle",
+        "triangle",
+        "star",
+        "heart",
+        "line",
+        "arrow",
+        "lake",
+        "river",
+        "road",
+        "field",
+        "patch",
+        "hill",
+        "house",
+        "tree",
+        "sun",
+        "cloud",
+        "car",
+        "flower",
+        "cat",
+        "dog",
+        "fish",
+        "bird",
+        "boat",
+        "mountain",
+        "rainbow",
+        "person",
+        "balloon",
+        "rocket",
+        "moon"
+      ]
+    },
+    "diagram.node": {
+      "status": "relevant",
+      "operations": [
+        "diagram.node.make",
+        "diagram.node.change",
+        "diagram.node.select",
+        "diagram.node.remove",
+        "diagram.node.place",
+        "diagram.node.layout"
+      ],
+      "acts": [
+        "make",
+        "change",
+        "pick",
+        "remove",
+        "place"
+      ],
+      "sourceTypes": [
+        "diagram.sketch.node"
+      ],
+      "interpretation": "direct-native-family",
+      "kindParameter": "kind",
+      "kindOperation": "diagram.node.make",
+      "kindValues": [
+        "circle",
+        "rectangle",
+        "square",
+        "diamond",
+        "ellipse",
+        "triangle",
+        "hexagon",
+        "star"
+      ]
+    },
+    "diagram.link": {
+      "status": "relevant",
+      "operations": [
+        "diagram.link.make",
+        "diagram.link.remove"
+      ],
+      "acts": [
+        "make",
+        "remove"
+      ],
+      "sourceTypes": [
+        "diagram.sketch.link"
+      ],
+      "interpretation": "direct-native-family"
+    },
+    "diagram.diagram": {
+      "status": "relevant",
+      "operations": [
+        "diagram.node.make",
+        "diagram.node.change",
+        "diagram.node.select",
+        "diagram.node.remove",
+        "diagram.node.place",
+        "diagram.node.layout",
+        "diagram.link.make",
+        "diagram.link.remove",
+        "diagram.observe",
+        "diagram.undo",
+        "diagram.redo",
+        "diagram.group.make",
+        "diagram.group.change",
+        "diagram.group.layout",
+        "diagram.group.place",
+        "diagram.group.ungroup",
+        "diagram.group.chart",
+        "chart.make",
+        "chart.change",
+        "chart.data.change",
+        "chart.datasets.change",
+        "chart.series.add",
+        "chart.series.change",
+        "chart.series.remove",
+        "chart.point.change",
+        "chart.select",
+        "chart.place",
+        "chart.remove",
+        "chart.observe"
+      ],
+      "acts": [
+        "make",
+        "change",
+        "pick",
+        "remove",
+        "place",
+        "ask",
+        "undo",
+        "redo"
+      ],
+      "sourceTypes": [
+        "diagram.sketch.node",
+        "diagram.sketch.link",
+        "diagram.sketch",
+        "diagram.sketch.group",
+        "data.charts.chart",
+        "data.charts.series",
+        "data.charts.point"
+      ],
+      "interpretation": "whole observed diagram; acts compose over native nodes and links"
+    },
+    "diagram.chart": {
+      "status": "relevant",
+      "operations": [
+        "chart.make",
+        "chart.change",
+        "chart.data.change",
+        "chart.datasets.change",
+        "chart.series.add",
+        "chart.series.change",
+        "chart.series.remove",
+        "chart.point.change",
+        "chart.select",
+        "chart.place",
+        "chart.remove",
+        "chart.observe",
+        "chart.undo",
+        "chart.redo"
+      ],
+      "acts": [
+        "make",
+        "change",
+        "remove",
+        "pick",
+        "place",
+        "ask",
+        "undo",
+        "redo"
+      ],
+      "sourceTypes": [
+        "data.charts.chart",
+        "data.charts.series",
+        "data.charts.point"
+      ],
+      "interpretation": "direct-native-family",
+      "kindParameter": "type",
+      "kindOperation": "chart.make",
+      "kindValues": [
+        "bar",
+        "line",
+        "pie",
+        "doughnut",
+        "radar",
+        "polarArea",
+        "scatter"
+      ]
+    },
+    "document.text": {
+      "status": "relevant",
+      "operations": [
+        "document.title.change",
+        "document.write",
+        "document.compose",
+        "document.rewrite",
+        "document.remove",
+        "document.observe",
+        "document.undo",
+        "document.redo"
+      ],
+      "acts": [
+        "change",
+        "make",
+        "remove",
+        "ask",
+        "undo",
+        "redo"
+      ],
+      "sourceTypes": [
+        "docs.editor.document"
+      ],
+      "interpretation": "visible document; compose requires installed knowledge composer"
+    },
+    "document.section": {
+      "status": "relevant",
+      "operations": [
+        "document.block.select",
+        "document.section.select",
+        "document.section.change",
+        "document.block.mark",
+        "document.section.mark",
+        "document.block.align",
+        "document.section.align",
+        "document.block.reorder",
+        "document.list.make",
+        "document.list.change",
+        "document.table.make",
+        "document.table.change",
+        "document.block.make",
+        "document.section.make",
+        "document.block.change",
+        "document.block.remove",
+        "document.section.remove",
+        "document.section.reorder"
+      ],
+      "acts": [
+        "pick",
+        "change",
+        "place",
+        "make",
+        "remove"
+      ],
+      "sourceTypes": [
+        "docs.editor.block",
+        "docs.editor.section"
+      ],
+      "interpretation": "visible section/paragraph/heading/quote, preserves literal content"
+    },
+    "document.inline": {
+      "status": "relevant",
+      "operations": [
+        "document.block.select",
+        "document.block.mark",
+        "document.block.align",
+        "document.block.reorder",
+        "document.list.make",
+        "document.list.change",
+        "document.table.make",
+        "document.table.change",
+        "document.block.make",
+        "document.block.change",
+        "document.block.remove"
+      ],
+      "acts": [
+        "pick",
+        "change",
+        "place",
+        "make",
+        "remove"
+      ],
+      "sourceTypes": [
+        "docs.editor.block"
+      ],
+      "interpretation": "literal block and inline editing"
+    },
+    "calendar.person": {
+      "status": "relevant",
+      "operations": [
+        "calendar.person.add",
+        "calendar.person.change",
+        "calendar.person.remove"
+      ],
+      "acts": [
+        "make",
+        "change",
+        "remove"
+      ],
+      "sourceTypes": [
+        "time.calendar.person"
+      ],
+      "interpretation": "direct-native-family"
+    },
+    "calendar.room": {
+      "status": "relevant",
+      "operations": [
+        "calendar.room.add",
+        "calendar.room.change",
+        "calendar.room.remove"
+      ],
+      "acts": [
+        "make",
+        "change",
+        "remove"
+      ],
+      "sourceTypes": [
+        "time.calendar.room"
+      ],
+      "interpretation": "direct-native-family"
+    },
+    "calendar.calendar": {
+      "status": "relevant",
+      "operations": [
+        "calendar.calendar.add",
+        "calendar.calendar.change",
+        "calendar.calendar.remove"
+      ],
+      "acts": [
+        "make",
+        "change",
+        "remove"
+      ],
+      "sourceTypes": [
+        "time.calendar.calendar"
+      ],
+      "interpretation": "direct-native-family"
+    },
+    "calendar.meeting": {
+      "status": "relevant",
+      "operations": [
+        "calendar.meeting.add",
+        "calendar.meeting.change",
+        "calendar.meeting.move",
+        "calendar.meeting.remove"
+      ],
+      "acts": [
+        "make",
+        "change",
+        "place",
+        "remove"
+      ],
+      "sourceTypes": [
+        "time.calendar.meeting"
+      ],
+      "interpretation": "direct-native-family"
+    },
+    "avatar.face": {
+      "status": "relevant",
+      "operations": [
+        "avatar.face.preset",
+        "avatar.face.expression",
+        "avatar.face.name",
+        "avatar.observe",
+        "avatar.undo",
+        "avatar.redo"
+      ],
+      "acts": [
+        "change",
+        "ask",
+        "undo",
+        "redo"
+      ],
+      "sourceTypes": [
+        "ui.avatar.face"
+      ],
+      "interpretation": "direct-native-family"
+    },
+    "avatar.part": {
+      "status": "relevant",
+      "operations": [
+        "avatar.part.add",
+        "avatar.part.change",
+        "avatar.part.move",
+        "avatar.part.remove"
+      ],
+      "acts": [
+        "make",
+        "change",
+        "place",
+        "remove"
+      ],
+      "sourceTypes": [
+        "ui.avatar.part"
+      ],
+      "interpretation": "direct-native-family"
+    },
+    "drawing.part": {
+      "status": "relevant",
+      "operations": [
+        "drawing.part.select",
+        "drawing.part.change",
+        "drawing.part.place",
+        "drawing.part.remove",
+        "drawing.part.extract"
+      ],
+      "acts": [
+        "ask",
+        "change",
+        "place",
+        "remove",
+        "ungroup"
+      ],
+      "sourceTypes": [
+        "art.draw.part"
+      ],
+      "interpretation": "direct-native-family"
+    },
+    "drawing.group": {
+      "status": "relevant",
+      "operations": [
+        "drawing.object.group",
+        "drawing.object.ungroup"
+      ],
+      "acts": [
+        "group",
+        "ungroup"
+      ],
+      "sourceTypes": [
+        "art.draw.object"
+      ],
+      "interpretation": "direct-native-family"
+    }
+  },
+  "nativeIdentity": {
+    "diagramNodePrefixes": {
+      "circle": "c",
+      "rectangle": "r",
+      "square": "s",
+      "diamond": "d",
+      "ellipse": "e",
+      "triangle": "t",
+      "hexagon": "h",
+      "star": "k",
+      "text": "x"
+    },
+    "diagramChartPrefix": "chart:"
+  },
+  "normalizations": {
+    "colour": {
+      "red": "#FF0000",
+      "blue": "#0000FF",
+      "green": "#008000",
+      "yellow": "#FFFF00",
+      "purple": "#800080",
+      "orange": "#FFA500"
+    }
+  },
+  "knowledgeReferences": [
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/w.chart/schema.sop",
+      "purpose": "chart, series, category and numeric point schemas; schema breadth does not imply renderer breadth"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.charts/shards/charts.sop",
+      "purpose": "declared chart kinds/forms; no spelling substitution for unavailable forms"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/w.calendar/schema.sop",
+      "purpose": "calendar resources and interval event identities"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/w.room/schema.sop",
+      "purpose": "room name and seating capacity"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/w.person/schema.sop",
+      "purpose": "person occupation belongs here, not to calendar management"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/w.document/schema.sop",
+      "purpose": "document, chapter, section and paragraph structure; genre/register joins to k.genres"
+    }
+  ],
+  "boundary": "Annotation-to-tool relevance only. No row is certified executable or semantically correct by this profile. Composition/solver/knowledge-dependent roles remain visible; unsupported roles are never silently stripped."
+}

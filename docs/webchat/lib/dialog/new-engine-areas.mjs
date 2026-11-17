@@ -1,5 +1,5 @@
 // Application composition: native bindings are separate from the generic request runner.
-import { createDrawingPropertyHost, DRAWING_PROPERTY_BINDINGS } from '../../worlds/art.draw/property-host.mjs?v=70c302d3e0';
+import { createDrawingPropertyHost, DRAWING_PROPERTY_BINDINGS } from '../../worlds/art.draw/property-host.mjs?v=6f8a2e7bd7';
 export const NEW_ENGINE_AREAS = Object.freeze({
   draw: Object.freeze({
     world: 'art.draw', createHost: createDrawingPropertyHost,

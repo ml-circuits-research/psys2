@@ -24,14 +24,14 @@
  * through `ctx.sessionFacts()` and the operation things.show of session.things (spec 23); this module only offers the facts.
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { RequestDialogue } from './request.mjs?v=f778d7b84d';
-import { en } from '../lang/en.mjs?v=edece7402d';
-import { GRAMMAR } from './continuation.mjs?v=21e7d26213';
+import { RequestDialogue } from './request.mjs?v=3fff2d444d';
+import { en } from '../lang/en.mjs?v=1c3d1d175f';
+import { GRAMMAR } from './continuation.mjs?v=a67b22455a';
 import { touched } from './followup.mjs?v=88af56c068';
-import { relativeTurn } from './relative.mjs?v=f081fe2052';
-import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=da53a6f0d3';
+import { relativeTurn } from './relative.mjs?v=09636a7197';
+import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=c9c59a1f4a';
 import { classify, describeReferent, plain } from './meta.mjs?v=aa6dfcad14';
-import { compareTimes, loadTime } from '../knowledge/time.mjs?v=dcbfd55c05';
+import { compareTimes, loadTime } from '../knowledge/time.mjs?v=e22180cd3f';
 
 const LOG_LIMIT = 60;
 const FOCUS_WINDOW = 30;

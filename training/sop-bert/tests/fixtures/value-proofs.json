@@ -1,0 +1,321 @@
+{
+  "categorical": [
+    {
+      "name": "wrong classifier correct canonical",
+      "bank": [
+        {
+          "state": "absent"
+        },
+        {
+          "state": "unknown"
+        },
+        {
+          "state": "value",
+          "value": "square"
+        },
+        {
+          "state": "value",
+          "value": "talking"
+        }
+      ],
+      "literal": "talking",
+      "logits": [
+        0,
+        0,
+        8,
+        0
+      ],
+      "expected": "talking"
+    },
+    {
+      "name": "unfamiliar Unicode value",
+      "bank": [
+        {
+          "state": "absent"
+        },
+        {
+          "state": "unknown"
+        },
+        {
+          "state": "value",
+          "value": "wrong"
+        },
+        {
+          "state": "value",
+          "value": "😀"
+        }
+      ],
+      "literal": "😀",
+      "logits": [
+        0,
+        0,
+        8,
+        0
+      ],
+      "expected": "😀"
+    },
+    {
+      "name": "duplicate canonical entries",
+      "bank": [
+        {
+          "state": "absent"
+        },
+        {
+          "state": "unknown"
+        },
+        {
+          "state": "value",
+          "value": "same"
+        },
+        {
+          "state": "value",
+          "value": "same"
+        }
+      ],
+      "literal": "same",
+      "logits": [
+        0,
+        0,
+        8,
+        0
+      ],
+      "expected": null
+    },
+    {
+      "name": "no membership",
+      "bank": [
+        {
+          "state": "absent"
+        },
+        {
+          "state": "unknown"
+        },
+        {
+          "state": "value",
+          "value": "square"
+        }
+      ],
+      "literal": "round",
+      "logits": [
+        0,
+        0,
+        8
+      ],
+      "expected": null
+    },
+    {
+      "name": "case is exact",
+      "bank": [
+        {
+          "state": "absent"
+        },
+        {
+          "state": "unknown"
+        },
+        {
+          "state": "value",
+          "value": "round"
+        }
+      ],
+      "literal": "Round",
+      "logits": [
+        0,
+        0,
+        8
+      ],
+      "expected": null
+    },
+    {
+      "name": "whitespace preserved",
+      "bank": [
+        {
+          "state": "absent"
+        },
+        {
+          "state": "unknown"
+        },
+        {
+          "state": "value",
+          "value": "round"
+        }
+      ],
+      "literal": " round",
+      "logits": [
+        0,
+        0,
+        8
+      ],
+      "expected": null
+    },
+    {
+      "name": "substring is not identity",
+      "bank": [
+        {
+          "state": "absent"
+        },
+        {
+          "state": "unknown"
+        },
+        {
+          "state": "value",
+          "value": "round"
+        }
+      ],
+      "literal": "rounder",
+      "logits": [
+        0,
+        0,
+        8
+      ],
+      "expected": null
+    },
+    {
+      "name": "boolean cannot equal source string",
+      "bank": [
+        {
+          "state": "absent"
+        },
+        {
+          "state": "unknown"
+        },
+        {
+          "state": "value",
+          "value": true
+        }
+      ],
+      "literal": "true",
+      "logits": [
+        0,
+        0,
+        8
+      ],
+      "expected": null
+    },
+    {
+      "name": "number cannot equal source string",
+      "bank": [
+        {
+          "state": "absent"
+        },
+        {
+          "state": "unknown"
+        },
+        {
+          "state": "value",
+          "value": 1
+        }
+      ],
+      "literal": "1",
+      "logits": [
+        0,
+        0,
+        8
+      ],
+      "expected": null
+    },
+    {
+      "name": "typed string remains distinct",
+      "bank": [
+        {
+          "state": "absent"
+        },
+        {
+          "state": "unknown"
+        },
+        {
+          "state": "value",
+          "value": 1
+        },
+        {
+          "state": "value",
+          "value": "1"
+        }
+      ],
+      "literal": "1",
+      "logits": [
+        0,
+        0,
+        8,
+        0
+      ],
+      "expected": "1"
+    },
+    {
+      "name": "ambiguous classifier resolved independently",
+      "bank": [
+        {
+          "state": "absent"
+        },
+        {
+          "state": "unknown"
+        },
+        {
+          "state": "value",
+          "value": "square"
+        },
+        {
+          "state": "value",
+          "value": "talking"
+        }
+      ],
+      "literal": "talking",
+      "logits": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "expected": "talking"
+    }
+  ],
+  "numeric": [
+    {
+      "literal": "3",
+      "expected": 3
+    },
+    {
+      "literal": "03",
+      "expected": 3
+    },
+    {
+      "literal": "9007199254740991",
+      "expected": 9007199254740991
+    },
+    {
+      "literal": "9007199254740992",
+      "expected": null
+    },
+    {
+      "literal": "0",
+      "expected": null
+    },
+    {
+      "literal": "-3",
+      "expected": null
+    },
+    {
+      "literal": "+3",
+      "expected": null
+    },
+    {
+      "literal": "3.0",
+      "expected": null
+    },
+    {
+      "literal": "3e0",
+      "expected": null
+    },
+    {
+      "literal": "3 minutes",
+      "expected": null
+    },
+    {
+      "literal": " 3",
+      "expected": null
+    },
+    {
+      "literal": "true",
+      "expected": null
+    }
+  ]
+}

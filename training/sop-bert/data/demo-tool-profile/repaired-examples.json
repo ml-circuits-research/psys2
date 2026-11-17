@@ -1,0 +1,302 @@
+{
+  "format": "psys2.demo-authored-repairs/1",
+  "scope": "Manually repaired natural examples with full labels; unsupported source semantics deliberately rewritten and documented, not silently dropped. Calendar repairs are separate.",
+  "repairs": [
+    {
+      "source": {
+        "path": "data/haiku-v1/document/b07b.jsonl",
+        "id": "document-b07-0249",
+        "text": "Is the cover letter for the Hollis job still under one page?"
+      },
+      "row": {
+        "id": "document-b07-0249",
+        "world": "document",
+        "text": "Is Cover letter - Hollis at most 250 words?",
+        "context": {
+          "existing": [
+            {
+              "kind": "document",
+              "name": "Cover letter - Hollis"
+            }
+          ],
+          "previous": null
+        },
+        "requests": [
+          {
+            "span": "Is Cover letter - Hollis at most 250 words?",
+            "trigger": "Is",
+            "act": "answer",
+            "mood": "check",
+            "target": {
+              "type": "text",
+              "mode": "existing",
+              "determiner": "definite",
+              "fill": "written",
+              "name_span": "Cover letter - Hollis"
+            },
+            "constraints": [
+              {
+                "key": "text.words",
+                "value": "250",
+                "value_span": "at most 250 words",
+                "operator": "less.equal",
+                "phase": "result",
+                "polarity": "positive",
+                "character": "requirement",
+                "measure": "250",
+                "measure_span": "250",
+                "unit": "word"
+              }
+            ],
+            "question": {
+              "ask": "exists",
+              "asked_key": "text.words"
+            }
+          }
+        ]
+      },
+      "changes": [
+        "Reauthor unsupported page-count question as exact supported word-count check; include previously omitted comparison and unit."
+      ]
+    },
+    {
+      "source": {
+        "path": "data/haiku-v1/diagram/b11b.jsonl",
+        "id": "diagram-b11-0161",
+        "text": "add Team, Press and Jobs under About, and tidy it afterwards"
+      },
+      "row": {
+        "id": "diagram-b11-0161",
+        "world": "diagram",
+        "text": "add a rectangle labelled Team below About; then add a rectangle labelled Press below About; then add a rectangle labelled Jobs below About.",
+        "context": {
+          "existing": [
+            {
+              "kind": "node",
+              "name": "About"
+            }
+          ],
+          "previous": null
+        },
+        "requests": [
+          {
+            "span": "add a rectangle labelled Team below About",
+            "trigger": "add",
+            "act": "make",
+            "mood": "do",
+            "target": {
+              "type": "node",
+              "mode": "new",
+              "determiner": "indefinite",
+              "kind": "rectangle",
+              "kind_span": "rectangle"
+            },
+            "constraints": [
+              {
+                "key": "node.label",
+                "value": "Team",
+                "value_span": "Team",
+                "operator": "eq",
+                "phase": "result",
+                "polarity": "positive",
+                "character": "requirement"
+              },
+              {
+                "key": "node.position",
+                "value": "below",
+                "value_span": "below",
+                "operator": "relation",
+                "phase": "result",
+                "polarity": "positive",
+                "character": "requirement",
+                "anchor_span": "About",
+                "anchor_fill": "written"
+              }
+            ]
+          },
+          {
+            "span": "add a rectangle labelled Press below About",
+            "trigger": "add",
+            "act": "make",
+            "mood": "do",
+            "target": {
+              "type": "node",
+              "mode": "new",
+              "determiner": "indefinite",
+              "kind": "rectangle",
+              "kind_span": "rectangle"
+            },
+            "constraints": [
+              {
+                "key": "node.label",
+                "value": "Press",
+                "value_span": "Press",
+                "operator": "eq",
+                "phase": "result",
+                "polarity": "positive",
+                "character": "requirement"
+              },
+              {
+                "key": "node.position",
+                "value": "below",
+                "value_span": "below",
+                "operator": "relation",
+                "phase": "result",
+                "polarity": "positive",
+                "character": "requirement",
+                "anchor_span": "About",
+                "anchor_fill": "written"
+              }
+            ]
+          },
+          {
+            "span": "add a rectangle labelled Jobs below About",
+            "trigger": "add",
+            "act": "make",
+            "mood": "do",
+            "target": {
+              "type": "node",
+              "mode": "new",
+              "determiner": "indefinite",
+              "kind": "rectangle",
+              "kind_span": "rectangle"
+            },
+            "constraints": [
+              {
+                "key": "node.label",
+                "value": "Jobs",
+                "value_span": "Jobs",
+                "operator": "eq",
+                "phase": "result",
+                "polarity": "positive",
+                "character": "requirement"
+              },
+              {
+                "key": "node.position",
+                "value": "below",
+                "value_span": "below",
+                "operator": "relation",
+                "phase": "result",
+                "polarity": "positive",
+                "character": "requirement",
+                "anchor_span": "About",
+                "anchor_fill": "written"
+              }
+            ]
+          }
+        ]
+      },
+      "changes": [
+        "Node names are node.label, never chart.values. Deliberately reauthor tidy suffix as explicit below placement for each rectangle."
+      ]
+    },
+    {
+      "source": {
+        "path": "data/haiku-v2/document/v2b15b.jsonl",
+        "id": "document-v2b15-0150",
+        "text": "make a 5 chapter timeline of the city's tram history"
+      },
+      "row": {
+        "id": "document-v2b15-0150",
+        "world": "document",
+        "text": "compose a 5 chapter article about the city tram history",
+        "context": {
+          "existing": [],
+          "previous": null
+        },
+        "requests": [
+          {
+            "span": "compose a 5 chapter article about the city tram history",
+            "trigger": "compose",
+            "act": "make",
+            "mood": "do",
+            "target": {
+              "type": "text",
+              "mode": "new",
+              "determiner": "indefinite",
+              "kind": "article",
+              "kind_span": "article"
+            },
+            "constraints": [
+              {
+                "key": "text.chapters",
+                "value": "5",
+                "value_span": "5 chapter",
+                "operator": "eq",
+                "phase": "result",
+                "polarity": "positive",
+                "character": "requirement"
+              },
+              {
+                "key": "text.about",
+                "value": "the city tram history",
+                "value_span": "the city tram history",
+                "operator": "eq",
+                "phase": "result",
+                "polarity": "positive",
+                "character": "requirement"
+              }
+            ]
+          }
+        ]
+      },
+      "changes": [
+        "Deliberately request article rather than mislabeling timeline as article; include explicit topic and chapter quantity."
+      ]
+    },
+    {
+      "source": {
+        "path": "data/haiku-v2/document/v2b02b.jsonl",
+        "id": "document-v2b02-0193",
+        "text": "delete the references heading, keep the list"
+      },
+      "row": {
+        "id": "document-v2b02-0193",
+        "world": "document",
+        "text": "replace the References heading with \"Sources\"",
+        "context": {
+          "existing": [
+            {
+              "kind": "heading",
+              "name": "References"
+            },
+            {
+              "kind": "paragraph",
+              "name": "Reading list"
+            }
+          ],
+          "previous": null
+        },
+        "requests": [
+          {
+            "span": "replace the References heading with \"Sources\"",
+            "trigger": "replace",
+            "act": "change",
+            "mood": "do",
+            "target": {
+              "type": "section",
+              "mode": "existing",
+              "determiner": "definite",
+              "fill": "written",
+              "name_span": "References"
+            },
+            "constraints": [
+              {
+                "key": "section.content",
+                "value": "Sources",
+                "value_span": "Sources",
+                "operator": "eq",
+                "phase": "result",
+                "polarity": "positive",
+                "character": "requirement"
+              }
+            ]
+          }
+        ]
+      },
+      "changes": [
+        "Reauthor unsupported heading-only removal with keep-list preservation as supported literal heading edit; do not pretend original keep-list clause was incidental."
+      ]
+    }
+  ]
+}

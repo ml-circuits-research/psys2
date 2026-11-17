@@ -173,7 +173,7 @@ async function installSopReader(imp){
     const response=await fetch(vurl('models/sop-bert/deployment.json'));if(!response.ok)throw Error('SOP-BERT deployment HTTP '+response.status);
     const deployment=await response.json();if(deployment.format!=='psys2.browser-reader-deployment/1')throw Error('unsupported-reader-deployment');
     const [{createBrowserReaderHost},{createAppReaderContext}]=await Promise.all([imp('lib/dialog/browser-reader-host.mjs'),imp('lib/dialog/app-reader-context.mjs')]);
-    const getContext=createAppReaderContext({getState:()=>session.isession.state,getPrevious:()=>readerPrevious,onObservation:value=>{readerObservation=value;}});
+    const getContext=createAppReaderContext({getState:()=>session.isession.state,getPrevious:()=>readerPrevious,getInstanceId:world=>{session.nativeInstanceIds??={};return session.nativeInstanceIds[world]??=crypto.randomUUID();},onObservation:value=>{readerObservation=value;}});
     const host=await createBrowserReaderHost({manifestURL:abs(deployment.manifestPath),manifestSha256:deployment.manifestSha256,tokenizerArtifact:deployment.tokenizerArtifact,bindingsArtifact:deployment.bindingsArtifact,tokenizerConfigArtifact:deployment.tokenizerConfigArtifact,runtimeIdentity:deployment.runtimeIdentity,getContext,resolveURL:rel=>abs(rel),recordDiagnostics:async diagnostic=>{readerDiagnostics.push(diagnostic);if(readerDiagnostics.length>64)readerDiagnostics.shift();}});
     engine.requestReader=host.provider;readerStatus={state:'ready',verified:host.verified};
   }catch(error){
@@ -287,8 +287,44 @@ const handlers = {
     const {NATIVE_AREAS,createAreaHost}=await import(vurl('lib/dialog/app-reader-context.mjs'));
     const area=NATIVE_AREAS[m.view];if(!area)throw Error('Unknown area.');
     await ensureWorlds([area.world],'area tools');
-    const host=await createAreaHost(area,{state:session.isession.state[area.world],instanceId:'tools-'+crypto.randomUUID(),loader:engine.loader,knowledge:engine.knowledge});
+    const host=await createAreaHost(area,{state:session.isession.state[area.world],instanceId:(session.nativeInstanceIds??={})[area.world]??=(crypto.randomUUID()),loader:engine.loader,knowledge:engine.knowledge});
     return {operations:host.bindings(),observation:host.observe(),capabilities:host.capabilities?.()??null};
+  },
+  async snapshotInstances(m) {
+    while(turnRunning())await sleep(20);
+    const {snapshotNativeInstances}=await import(vurl('lib/dialog/instance-persistence.mjs'));
+    return {records:await snapshotNativeInstances(session,{worlds:m.worlds})};
+  },
+  async restoreInstances(m) {
+    while(turnRunning())await sleep(20);
+    const {NATIVE_AREAS}=await import(vurl('lib/dialog/app-reader-context.mjs'));
+    const known=new Set(Object.values(NATIVE_AREAS).map(area=>area.world));
+    if(!Array.isArray(m.records)||m.records.some(record=>!known.has(record?.world)))throw Error('Unknown persisted instance world.');
+    await ensureWorlds(m.records.map(record=>record.world),'saved SOP instances');
+    const {restoreNativeInstances}=await import(vurl('lib/dialog/instance-persistence.mjs'));
+    const restored=await restoreNativeInstances(session,m.records);
+    return {...restored,state:stateOf(),meta:metaOf()};
+  },
+  async instanceFacts(m) {
+    while(turnRunning())await sleep(20);
+    const {snapshotNativeInstances}=await import(vurl('lib/dialog/instance-persistence.mjs'));
+    const records=await snapshotNativeInstances(session,{worlds:[m.world]});
+    return records[0]??null;
+  },
+  async sampleControl(m) {
+    if(samplerRun)await samplerRun.catch(()=>undefined);
+    if(turnRunning())return {candidate:null,reason:'busy'};
+    const ctl=new AbortController();active.set(m.id,ctl);
+    try {
+      const [{NATIVE_AREAS,createAreaHost},{sampleNativeControl}]=await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/native-control-sampler.mjs'))]);
+      const area=NATIVE_AREAS[m.view];
+      if(!area||session.isession.state['ui.shell']?.activeTab!==m.view)return {candidate:null,reason:'active-tab-changed'};
+      await ensureWorlds([area.world],'random area action');
+      const state=session.isession.state[area.world];
+      const createHost=({state})=>createAreaHost(area,{state,instanceId:'random-'+crypto.randomUUID(),loader:engine.loader,knowledge:engine.knowledge});
+      const host=await createHost({state});
+      return {candidate:await sampleNativeControl({host,createHost,state})};
+    }finally{active.delete(m.id);}
   },
   async nativeTool(m) {
     // Background example generation must finish before a user edit, never discard it.

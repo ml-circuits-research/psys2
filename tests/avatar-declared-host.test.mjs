@@ -56,3 +56,16 @@ test('avatar controls produce expected typed intent and observed expression effe
  assert.equal(verifyNativeControlEffect({intent,before,after,receipt}).status,'verified');
  assert.equal(state.face.expression,'sad');
 });
+
+test('resizing a part keeps its exact primary target and declares derived attached placement as unverified',()=>{
+ const state=initialAvatarState(),host=createAvatarHost({state,instanceId:'resize'}),before=host.observe(),operation=host.bindings().find(o=>o.id==='avatar.part.change'),args={ids:['hair_front'],size:'big'};
+ const intent=describeNativeControl({operation,args,before}),receipt=invoke(host,operation.id,args),after=host.observe(),verification=verifyNativeControlEffect({intent,before,after,receipt});
+ assert.equal(receipt.status,'changed');assert.equal(state.face.grade.hair_front,'big');assert.deepEqual(intent.expected.providedArgs.ids,['hair_front']);
+ assert.equal(verification.status,'unverified');assert.ok(verification.checks.some(c=>c.parameter==='size'&&c.status==='met'));assert.ok(verification.checks.some(c=>c.parameter==='$scope'&&c.status==='unknown'&&c.changedKeys.includes('place')));assert.ok(!verification.checks.some(c=>c.status==='failed'));
+});
+
+test('selecting the current preset is an actual unchanged result without undefined host data',()=>{
+ const state=initialAvatarState(),host=createAvatarHost({state,instanceId:'same-preset'}),before=structuredClone(state);
+ const result=invoke(host,'avatar.face.preset',{preset:'girl'});
+ assert.equal(result.status,'unchanged');assert.deepEqual(state,before);assert.equal(Object.hasOwn(state.face,'stepGroup'),false);
+});

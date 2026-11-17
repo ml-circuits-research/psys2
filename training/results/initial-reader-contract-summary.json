@@ -1,0 +1,554 @@
+{
+  "format": "sop.reader-initial-contract-measurement/1",
+  "scope": "Concrete direct authored TRAIN under initial native contract. Actual full utterance to predicted cutter, predicted reader and exact typed native arguments. Current single-calendar/Avatar-composition UI v2 and supported world-inference corpus are not covered.",
+  "inputSha256": "ac8ab06c8ef1b8f80c26aed697da9c8ecc9488430d7554f642b00d9f11b49f48",
+  "activeCorpusSha256": "ad5777dc5c8d6fb61714f4ccb6798ebba570f12ea7452c9a0bce3cde92b7a0fd",
+  "configSha256": "dbd6607e63fc060eb3bcfb2dffe97e614ed60fc8e5f0bf19c0a7e431c7bd822f",
+  "trainerSha256": "baf2326c19aae430cf677cccf29e7a3ed9079ba64215086283363d7ced49b322",
+  "maxLength": 384,
+  "trainRows": 20668,
+  "calibrationRows": 2214,
+  "epoch1": {
+    "checkpointSha256": "a13ece7622a8c523db4eabd5bfd7158e337bfaab8fe84d33b47ef1cc70d663fb",
+    "counts": {
+      "segmentationExact": 20667,
+      "rows": 20668,
+      "intentExact": 19148,
+      "toolParameterExact": 19365,
+      "completeMeaningExact": 13259,
+      "inconsistent": 7164,
+      "fullUtteranceMeaningExact": 13259,
+      "fullUtteranceBoundaryAndMeaningExact": 13259
+    },
+    "perArea": {
+      "calendar": {
+        "rows": 5064,
+        "intentExact": 4815,
+        "toolParameterExact": 4815,
+        "completeMeaningExact": 1233
+      },
+      "diagram": {
+        "rows": 5180,
+        "intentExact": 4915,
+        "toolParameterExact": 5132,
+        "completeMeaningExact": 4394
+      },
+      "document": {
+        "rows": 4019,
+        "intentExact": 3666,
+        "toolParameterExact": 3666,
+        "completeMeaningExact": 2583
+      },
+      "drawing": {
+        "rows": 5822,
+        "intentExact": 5708,
+        "toolParameterExact": 5708,
+        "completeMeaningExact": 5047
+      },
+      "avatar": {
+        "rows": 583,
+        "intentExact": 44,
+        "toolParameterExact": 44,
+        "completeMeaningExact": 2
+      }
+    },
+    "seconds": 662.1456600530073
+  },
+  "epoch5Decoder3": {
+    "checkpointSha256": "bc5217cb48bec1b9c36c4b2adf2ff4349d6cd74da5f0094a8b724dd03359ece1",
+    "decoderSourceSha256": "fd79c018ab4d2cb4d64c9d47adbb5124c17f069662c93452720cc09441dc97ee",
+    "cutterEpoch": 4,
+    "cutterCheckpointSha256": "e55840752341e00ce77d815009fb6e5121f425895673b0646eb68f263ece3dae",
+    "counts": {
+      "rows": 20668,
+      "segmentationExact": 20667,
+      "intentExact": 20649,
+      "nativeArgumentsExact": 20649,
+      "strictComplete": 20237,
+      "readerMeaningErrors": 19,
+      "nativeArgumentErrors": 19,
+      "correctMeaningButConsistencyBlocked": 412,
+      "correctReaderButNativeError": 0,
+      "wrongReaderButNativeCorrect": 0,
+      "readerConsistencyRows": 428,
+      "cutterIssueRows": 1,
+      "pipelineInconsistencyRows": 429
+    },
+    "perArea": {
+      "calendar": {
+        "rows": 5064,
+        "segmentationExact": 5063,
+        "intentExact": 5058,
+        "nativeArgumentsExact": 5058,
+        "strictComplete": 5058,
+        "readerMeaningErrors": 6,
+        "nativeArgumentErrors": 6,
+        "correctMeaningButConsistencyBlocked": 0,
+        "correctReaderButNativeError": 0,
+        "wrongReaderButNativeCorrect": 0,
+        "readerConsistencyRows": 5,
+        "cutterIssueRows": 1,
+        "pipelineInconsistencyRows": 6
+      },
+      "diagram": {
+        "rows": 5180,
+        "segmentationExact": 5180,
+        "intentExact": 5173,
+        "nativeArgumentsExact": 5173,
+        "strictComplete": 5098,
+        "readerMeaningErrors": 7,
+        "nativeArgumentErrors": 7,
+        "correctMeaningButConsistencyBlocked": 75,
+        "correctReaderButNativeError": 0,
+        "wrongReaderButNativeCorrect": 0,
+        "readerConsistencyRows": 80,
+        "cutterIssueRows": 0,
+        "pipelineInconsistencyRows": 80
+      },
+      "document": {
+        "rows": 4019,
+        "segmentationExact": 4019,
+        "intentExact": 4019,
+        "nativeArgumentsExact": 4019,
+        "strictComplete": 3980,
+        "readerMeaningErrors": 0,
+        "nativeArgumentErrors": 0,
+        "correctMeaningButConsistencyBlocked": 39,
+        "correctReaderButNativeError": 0,
+        "wrongReaderButNativeCorrect": 0,
+        "readerConsistencyRows": 39,
+        "cutterIssueRows": 0,
+        "pipelineInconsistencyRows": 39
+      },
+      "drawing": {
+        "rows": 5822,
+        "segmentationExact": 5822,
+        "intentExact": 5819,
+        "nativeArgumentsExact": 5819,
+        "strictComplete": 5665,
+        "readerMeaningErrors": 3,
+        "nativeArgumentErrors": 3,
+        "correctMeaningButConsistencyBlocked": 154,
+        "correctReaderButNativeError": 0,
+        "wrongReaderButNativeCorrect": 0,
+        "readerConsistencyRows": 157,
+        "cutterIssueRows": 0,
+        "pipelineInconsistencyRows": 157
+      },
+      "avatar": {
+        "rows": 583,
+        "segmentationExact": 583,
+        "intentExact": 580,
+        "nativeArgumentsExact": 580,
+        "strictComplete": 436,
+        "readerMeaningErrors": 3,
+        "nativeArgumentErrors": 3,
+        "correctMeaningButConsistencyBlocked": 144,
+        "correctReaderButNativeError": 0,
+        "wrongReaderButNativeCorrect": 0,
+        "readerConsistencyRows": 147,
+        "cutterIssueRows": 0,
+        "pipelineInconsistencyRows": 147
+      }
+    },
+    "percentages": {
+      "segmentationExact": 99.99516160247725,
+      "intentExact": 99.90807044706793,
+      "nativeArgumentsExact": 99.90807044706793,
+      "strictComplete": 97.91465066769887
+    },
+    "seconds": 252.06172168802004
+  },
+  "sample1000Seed1": {
+    "counts": {
+      "rows": 1000,
+      "segmentationExact": 1000,
+      "intentExact": 1000,
+      "nativeArgumentsExact": 1000,
+      "strictComplete": 978,
+      "readerMeaningErrors": 0,
+      "nativeArgumentErrors": 0,
+      "correctMeaningButConsistencyBlocked": 22,
+      "correctReaderButNativeError": 0,
+      "wrongReaderButNativeCorrect": 0,
+      "readerConsistencyRows": 22,
+      "cutterIssueRows": 0,
+      "pipelineInconsistencyRows": 22
+    },
+    "perArea": {
+      "calendar": {
+        "rows": 243,
+        "segmentationExact": 243,
+        "intentExact": 243,
+        "nativeArgumentsExact": 243,
+        "strictComplete": 243,
+        "readerMeaningErrors": 0,
+        "nativeArgumentErrors": 0,
+        "correctMeaningButConsistencyBlocked": 0,
+        "correctReaderButNativeError": 0,
+        "wrongReaderButNativeCorrect": 0,
+        "readerConsistencyRows": 0,
+        "cutterIssueRows": 0,
+        "pipelineInconsistencyRows": 0
+      },
+      "diagram": {
+        "rows": 245,
+        "segmentationExact": 245,
+        "intentExact": 245,
+        "nativeArgumentsExact": 245,
+        "strictComplete": 241,
+        "readerMeaningErrors": 0,
+        "nativeArgumentErrors": 0,
+        "correctMeaningButConsistencyBlocked": 4,
+        "correctReaderButNativeError": 0,
+        "wrongReaderButNativeCorrect": 0,
+        "readerConsistencyRows": 4,
+        "cutterIssueRows": 0,
+        "pipelineInconsistencyRows": 4
+      },
+      "document": {
+        "rows": 188,
+        "segmentationExact": 188,
+        "intentExact": 188,
+        "nativeArgumentsExact": 188,
+        "strictComplete": 188,
+        "readerMeaningErrors": 0,
+        "nativeArgumentErrors": 0,
+        "correctMeaningButConsistencyBlocked": 0,
+        "correctReaderButNativeError": 0,
+        "wrongReaderButNativeCorrect": 0,
+        "readerConsistencyRows": 0,
+        "cutterIssueRows": 0,
+        "pipelineInconsistencyRows": 0
+      },
+      "drawing": {
+        "rows": 298,
+        "segmentationExact": 298,
+        "intentExact": 298,
+        "nativeArgumentsExact": 298,
+        "strictComplete": 290,
+        "readerMeaningErrors": 0,
+        "nativeArgumentErrors": 0,
+        "correctMeaningButConsistencyBlocked": 8,
+        "correctReaderButNativeError": 0,
+        "wrongReaderButNativeCorrect": 0,
+        "readerConsistencyRows": 8,
+        "cutterIssueRows": 0,
+        "pipelineInconsistencyRows": 8
+      },
+      "avatar": {
+        "rows": 26,
+        "segmentationExact": 26,
+        "intentExact": 26,
+        "nativeArgumentsExact": 26,
+        "strictComplete": 16,
+        "readerMeaningErrors": 0,
+        "nativeArgumentErrors": 0,
+        "correctMeaningButConsistencyBlocked": 10,
+        "correctReaderButNativeError": 0,
+        "wrongReaderButNativeCorrect": 0,
+        "readerConsistencyRows": 10,
+        "cutterIssueRows": 0,
+        "pipelineInconsistencyRows": 10
+      }
+    },
+    "percentages": {
+      "segmentationExact": 100.0,
+      "intentExact": 100.0,
+      "nativeArgumentsExact": 100.0,
+      "strictComplete": 97.8
+    }
+  },
+  "sampleSelection": {
+    "seed": 1,
+    "selectionFile": "demo-full-train-epoch5-decoder3-sample1000-ids.json",
+    "selection": "1000 IDs chosen from sorted source IDs before inspecting outcomes"
+  },
+  "sameWeights100Probe": {
+    "before": {
+      "segmentationExact": 100,
+      "rows": 100,
+      "intentExact": 98,
+      "toolParameterExact": 98,
+      "completeMeaningExact": 96,
+      "inconsistent": 2,
+      "fullUtteranceMeaningExact": 96,
+      "fullUtteranceBoundaryAndMeaningExact": 96
+    },
+    "after": {
+      "segmentationExact": 100,
+      "rows": 100,
+      "intentExact": 100,
+      "toolParameterExact": 100,
+      "completeMeaningExact": 100,
+      "inconsistent": 0,
+      "fullUtteranceMeaningExact": 100,
+      "fullUtteranceBoundaryAndMeaningExact": 100
+    },
+    "method": "Unique exact declared canonical string proof plus explicit positive safe integer typed copy; classifier alternatives/confidence retained."
+  },
+  "errorAttribution": "Native-argument errors coincide with the19 reader meaning errors;0 rows have correct reader meaning but wrong native arguments.412 further rows have correct complete meaning and arguments but are blocked by consistency checks.428 reader-consistency rows plus1 cutter-issue row produce429 pipeline inconsistency rows.",
+  "artifacts": {
+    "epoch1": ".session-control/demo-full-train-epoch1.summary.json",
+    "epoch5": ".session-control/demo-full-train-epoch5-decoder3.summary.json",
+    "analysis": ".session-control/demo-full-train-epoch5-decoder3-analysis.json",
+    "sampleIds": ".session-control/demo-full-train-epoch5-decoder3-sample1000-ids.json"
+  },
+  "readerFailures": [
+    {
+      "id": "data/haiku-v1/diagram/b04b.jsonl:diagram-b04-0166:0",
+      "area": "diagram",
+      "source": "make a scatter chart called VP Sales with values 18, 1 for Head of Ops and Sample",
+      "fields": [
+        "constraint.chart.labels"
+      ]
+    },
+    {
+      "id": "data/haiku-v2/calendar/v2b01a.jsonl:calendar-v2b01-0062:0",
+      "area": "calendar",
+      "source": "for Interview, notes should say resume walk-through, system design, then 10 min for questions",
+      "fields": [
+        "constraint.meeting.agenda"
+      ]
+    },
+    {
+      "id": "data/haiku-v2/calendar/v2b05b.jsonl:calendar-v2b05-0130:0",
+      "area": "calendar",
+      "source": "add a room called Cedar with 12 seats on Floor 3",
+      "fields": [
+        "constraint.meeting.room",
+        "constraint.room.seats"
+      ]
+    },
+    {
+      "id": "data/haiku-v2/calendar/v2b10b.jsonl:calendar-v2b10-0152:0",
+      "area": "calendar",
+      "source": "put the new onboarding flow and the two open bugs in the notes for design review",
+      "fields": [
+        "constraint.meeting.agenda"
+      ]
+    },
+    {
+      "id": "data/haiku-v2/calendar/v2b16a.jsonl:calendar-v2b16-0074:0",
+      "area": "calendar",
+      "source": "put Standup in ROOM 4",
+      "fields": [
+        "act",
+        "constraint.meeting.room",
+        "mood",
+        "request",
+        "target.determiner",
+        "target.fill",
+        "target.mode",
+        "target.name_span",
+        "target.type"
+      ]
+    },
+    {
+      "id": "data/haiku-v2/calendar/v2b21a.jsonl:calendar-v2b21-0010:0",
+      "area": "calendar",
+      "source": "make the planning meeting 45 mins",
+      "fields": [
+        "act",
+        "constraint.meeting.length",
+        "target.determiner",
+        "target.fill",
+        "target.mode"
+      ]
+    },
+    {
+      "id": "data/haiku-v2/calendar/v2b22a.jsonl:calendar-v2b22-0025:0",
+      "area": "calendar",
+      "source": "rename team review to sprint planning",
+      "fields": [
+        "act",
+        "constraint.meeting.title"
+      ]
+    },
+    {
+      "id": "data/demo-tool-profile/avatar-authored.jsonl:avatar-demo-d3191f579dc0fc0671:0",
+      "area": "avatar",
+      "source": "remove the cheeks",
+      "fields": [
+        "act"
+      ]
+    },
+    {
+      "id": "data/demo-tool-profile/avatar-authored.jsonl:avatar-demo-1688c748360b3287b9:0",
+      "area": "avatar",
+      "source": "remove the hair front",
+      "fields": [
+        "act"
+      ]
+    },
+    {
+      "id": "data/demo-tool-profile/avatar-authored.jsonl:avatar-demo-e794814e1b463c0a8d:0",
+      "area": "avatar",
+      "source": "remove the hat",
+      "fields": [
+        "act"
+      ]
+    },
+    {
+      "id": "data/demo-tool-profile/drawing-authored.jsonl:drawing-tools-4161dbdcfbfab540ba:0",
+      "area": "drawing",
+      "source": "remove part 3 of House A",
+      "fields": [
+        "act"
+      ]
+    },
+    {
+      "id": "data/demo-tool-profile/drawing-authored.jsonl:drawing-tools-5e2f046f42a111bbbe:0",
+      "area": "drawing",
+      "source": "remove part 9 of House A",
+      "fields": [
+        "act"
+      ]
+    },
+    {
+      "id": "data/demo-tool-profile/drawing-authored.jsonl:drawing-tools-9346eaf8541668f64f:0",
+      "area": "drawing",
+      "source": "remove part 10 of House A",
+      "fields": [
+        "act"
+      ]
+    },
+    {
+      "id": "data/demo-tool-profile/charts-authored.jsonl:chart-tools-61d97882ce6e88cb98:0",
+      "area": "diagram",
+      "source": "turn stacked on for Sales",
+      "fields": [
+        "constraint.chart.horizontal",
+        "constraint.chart.legend"
+      ]
+    },
+    {
+      "id": "data/demo-tool-profile/charts-authored.jsonl:chart-tools-b38bd6fa1d28008350:0",
+      "area": "diagram",
+      "source": "turn stacked off for Sales",
+      "fields": [
+        "constraint.chart.horizontal",
+        "constraint.chart.legend"
+      ]
+    },
+    {
+      "id": "data/demo-tool-profile/charts-authored.jsonl:chart-tools-5f2e9f17c597458290:0",
+      "area": "diagram",
+      "source": "turn horizontal on for Sales",
+      "fields": [
+        "constraint.chart.horizontal"
+      ]
+    },
+    {
+      "id": "data/demo-tool-profile/charts-authored.jsonl:chart-tools-033b039a339d11591c:0",
+      "area": "diagram",
+      "source": "turn legend on for Sales",
+      "fields": [
+        "constraint.chart.horizontal",
+        "constraint.chart.legend",
+        "constraint.chart.stacked"
+      ]
+    },
+    {
+      "id": "data/demo-tool-profile/charts-authored.jsonl:chart-tools-e296b038930f91c712:0",
+      "area": "diagram",
+      "source": "turn legend off for Sales",
+      "fields": [
+        "constraint.chart.horizontal",
+        "constraint.chart.stacked"
+      ]
+    },
+    {
+      "id": "data/demo-tool-profile/charts-authored.jsonl:chart-tools-6f6f8047101795217a:0",
+      "area": "diagram",
+      "source": "turn show values off for Sales",
+      "fields": [
+        "constraint.chart.show_values"
+      ]
+    }
+  ],
+  "rawCodecProofScope": {
+    "full": {
+      "rows": 20668,
+      "rawCodecCompleteMeaning": 19975,
+      "rawNormalizationProofRows": 268,
+      "normalizedCompleteButRawProofPending": 262
+    },
+    "sample1000": {
+      "rows": 1000,
+      "rawCodecCompleteMeaning": 966,
+      "rawNormalizationProofRows": 12,
+      "normalizedCompleteButRawProofPending": 12
+    },
+    "perArea": {
+      "calendar": {
+        "rows": 5064,
+        "rawCodecCompleteMeaning": 5058,
+        "rawNormalizationProofRows": 0,
+        "normalizedCompleteButRawProofPending": 0
+      },
+      "diagram": {
+        "rows": 5180,
+        "rawCodecCompleteMeaning": 4836,
+        "rawNormalizationProofRows": 268,
+        "normalizedCompleteButRawProofPending": 262
+      },
+      "document": {
+        "rows": 4019,
+        "rawCodecCompleteMeaning": 3980,
+        "rawNormalizationProofRows": 0,
+        "normalizedCompleteButRawProofPending": 0
+      },
+      "drawing": {
+        "rows": 5822,
+        "rawCodecCompleteMeaning": 5665,
+        "rawNormalizationProofRows": 0,
+        "normalizedCompleteButRawProofPending": 0
+      },
+      "avatar": {
+        "rows": 583,
+        "rawCodecCompleteMeaning": 436,
+        "rawNormalizationProofRows": 0,
+        "normalizedCompleteButRawProofPending": 0
+      }
+    },
+    "samplePerArea": {
+      "calendar": {
+        "rows": 243,
+        "rawCodecCompleteMeaning": 243,
+        "rawNormalizationProofRows": 0,
+        "normalizedCompleteButRawProofPending": 0
+      },
+      "diagram": {
+        "rows": 245,
+        "rawCodecCompleteMeaning": 229,
+        "rawNormalizationProofRows": 12,
+        "normalizedCompleteButRawProofPending": 12
+      },
+      "document": {
+        "rows": 188,
+        "rawCodecCompleteMeaning": 188,
+        "rawNormalizationProofRows": 0,
+        "normalizedCompleteButRawProofPending": 0
+      },
+      "drawing": {
+        "rows": 298,
+        "rawCodecCompleteMeaning": 290,
+        "rawNormalizationProofRows": 0,
+        "normalizedCompleteButRawProofPending": 0
+      },
+      "avatar": {
+        "rows": 26,
+        "rawCodecCompleteMeaning": 16,
+        "rawNormalizationProofRows": 0,
+        "normalizedCompleteButRawProofPending": 0
+      }
+    },
+    "note": "Existing C1 complete metric discharges legacy normalization-proof markers during typed argument measurement; raw codec flags are retained. Non-exact enum aliases remain unproven in the raw packet."
+  },
+  "metricDefinitions": {
+    "completeMeaningExact": "Existing normalized C1 metric: matching intent/native arguments and filtered consistency; legacy normalization-requires-declared-proof markers do not block it. These markers remain in rawConsistency.",
+    "rawCodecCompleteMeaning": "Matching intent/native arguments with no raw decoder consistency flags and no cutter issues.",
+    "notExecution": "Both are reader/typed-argument measurements, not empirical execution admission or current UI effects."
+  }
+}

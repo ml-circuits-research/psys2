@@ -23,6 +23,22 @@ class PredictorTests(unittest.TestCase):
         self.assertEqual(packet['request']['target'],{'kind':'shape','kind_span':'shape'})
         self.assertEqual([x['reason']for x in packet['unresolved']],['target-type-requires-declared-kind-route'])
         self.assertFalse(packet['coverage']['complete'])
+    def test_canonical_source_proof_survives_unfamiliar_domain_and_wrong_classifier(self):
+        c,t,b,mentions,offsets,seq,att=self.fixture();old=c['keys'][1];key='quasar.surface.finish'
+        c['keys'][1]=key;c['bioKeys'][1]=key;c['registry'][key]={**c['registry'].pop(old),'area':'quasar','type':'surface','key':'finish'}
+        c['banks'][key]=[{'state':'absent'},{'state':'unknown'}]+[{'state':'value','value':v}for v in ['amber','red','blue']]
+        queries={(key,a,z):{**v,key:[0,0,8,0,0]}for(_,a,z),v in mentions.items()}
+        packet,proofs=m.normalize(c,t,'quasar',b,[1,1,1],{},queries,offsets,seq,att,{}, {c['keys'][0]:'target.kind'},{c['keys'][2]:'phase'})
+        self.assertEqual([c['value']for c in packet['request']['constraints']],['red','blue'])
+        self.assertTrue(all(p['valueProof']['classifier']['value']=='amber'and p['valueProof']['disagrees']for p in proofs))
+        self.assertTrue(all(p['valueProof']['classifier']['probability']>.9 for p in proofs))
+    def test_typed_count_accepts_only_complete_safe_positive_integer(self):
+        c={'format':'sop.key-reader/1','keys':['count'],'bioKeys':['count'],'metadataKeys':[],'banks':{},'registry':{'count':{'role':'global'}}}
+        packet,proofs=m.normalize(c,'23','quasar',[[[0,3,0]]],[1],{}, {},[[0,2]],[0],[1],{}, {'count':'target.count'},{})
+        self.assertEqual(packet['request']['target'],{'count':23,'count_span':'23'})
+        self.assertNotIn('unresolved-numeric-normalization',[r['reason']for r in packet['unresolved']])
+        self.assertEqual(proofs[0]['valueProof']['kind'],'positive-safe-integer')
+        self.assertEqual(packet['ranges'],[{'path':['target','count_span'],'range':[0,2]}])
     def test_unknown_metadata_and_invalid_bio_remain_unresolved(self):
         def change(c,b,mentions):
             mentions[('drawing.drawn.colour',2,3)]['request.constraint.phase']=[0,3,0,0]

@@ -1,18 +1,19 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=463e762442';
-import {initialState,makeObject,remember,removeThings,undoStep,redoStep,newPage} from './board.mjs?v=58af133d2e';
-import {DRAWING_PART_TOOL_BINDINGS,drawingPartHandlers,drawingPartsOf,makeKnowledgeDrawing} from './part-tools.mjs?v=cc16fa554a';
-import {KINDS,W,H} from './scene.mjs?v=cd2ed9328d';
+import {initialState,makeObject,remember,removeThings,undoStep,redoStep,newPage} from './board.mjs?v=7ee7069df4';
+import {DRAWING_PART_TOOL_BINDINGS,drawingPartHandlers,drawingPartsOf,makeKnowledgeDrawing} from './part-tools.mjs?v=2c6545074d';
+import {KINDS,W,H} from './scene.mjs?v=5bdf3e5957';
 export {initialState as initialDrawingState};
 const kinds=Object.keys(KINDS),array={type:'array',required:true};
 const properties={name:{type:'string'},x:{type:'number'},y:{type:'number'},size:{type:'number',min:0.001},color:{type:'string',nullable:true}};
 export const DRAWING_TOOL_BINDINGS=[
- {id:'drawing.object.make',act:'make',on:'art.draw.object',params:{kind:{type:'string',required:true,enum:kinds},...properties}},
+ {id:'drawing.object.make',sample:[{args:{kind:{enum:true},name:{unique:{prefix:'Shape'}},x:{number:{min:80,max:650}},y:{number:{min:80,max:450}},size:{number:{min:40,max:100}}}}],act:'make',on:'art.draw.object',params:{kind:{type:'string',required:true,enum:kinds},...properties}},
  {id:'drawing.catalog.make',act:'make',on:'art.draw.object',knowledgeInputs:[{argument:'name',load:'thing'}],params:{name:{type:'string',required:true},x:{type:'number'},y:{type:'number'},size:{type:'number',min:.001}}},
- {id:'drawing.object.change',act:'change',on:'art.draw.object',params:{ids:array,...properties}},
+ {id:'drawing.object.change',sample:[{args:{ids:{ref:{on:'art.draw.object',many:true}},name:{unique:{prefix:'Shape'}}}}],act:'change',on:'art.draw.object',params:{ids:array,...properties}},
  {id:'drawing.object.select',act:'ask',on:'art.draw.object',params:{id:{type:'string',required:true,nullable:true}}},
+ {id:'drawing.objects.select',act:'ask',on:'art.draw.object',params:{ids:array}},
  {id:'drawing.object.place',act:'place',on:'art.draw.object',params:{ids:array,x:{type:'number',required:true},y:{type:'number',required:true}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'drawing.canvas'}},
- {id:'drawing.page.clear',act:'remove',on:'art.draw.page',params:{}},
+ {id:'drawing.page.clear',act:'remove',on:'art.draw.page',intent:{subject:'contents of the drawing',determiner:'the'},params:{}},
  {id:'drawing.object.remove',act:'remove',on:'art.draw.object',params:{ids:array}},
  {id:'drawing.observe',act:'ask',on:'art.draw.object',params:{}},
  {id:'drawing.undo',act:'undo',on:'art.draw.object',params:{}},
@@ -35,7 +36,7 @@ export function createDrawingHost({state=initialState(),instanceId,knowledge=nul
    if(ctx.state.objects.some(o=>o.id===`o${ctx.state.nextId}`)||!Number.isSafeInteger(ctx.state.nextId+1))return fail('native-id-collision');
    remember(ctx.state,null);const object=makeObject(ctx.state,a.kind);
    for(const key of keys)if(Object.hasOwn(a,key))object[key]=a[key];
-   ctx.state.objects.push(object);ctx.state.last=[object.id];ctx.state.selected=object.id;ctx.state.selectedPart=null;return done([object.id]);
+   ctx.state.objects.push(object);ctx.state.last=[object.id];ctx.state.selected=object.id;ctx.state.selectedIds=[object.id];ctx.state.selectedPart=null;return done([object.id]);
   },
   'drawing.catalog.make':(ctx,a)=>makeKnowledgeDrawing(ctx.state,a.name,knowledge?.peek?.(a.name),a),
   'drawing.object.change':(ctx,a)=>{
@@ -44,10 +45,11 @@ export function createDrawingHost({state=initialState(),instanceId,knowledge=nul
    const objects=ctx.state.objects.filter(o=>a.ids.includes(o.id)),changed=objects.filter(o=>patch.some(key=>o[key]!==a[key]));
    if(!changed.length)return done([]);remember(ctx.state,null);for(const o of changed)for(const key of patch)o[key]=a[key];return done(changed.map(o=>o.id));
   },
-  'drawing.object.select':(ctx,a)=>{if(a.id!==null&&!ctx.state.objects.some(o=>o.id===a.id))return fail('missing-target');ctx.state.selected=a.id;ctx.state.selectedPart=null;return done(a.id?[a.id]:[]);},
-  'drawing.object.place':(ctx,a)=>{if(!select(ctx.state,a.ids))return fail('missing-target');const objects=ctx.state.objects.filter(o=>a.ids.includes(o.id));if(objects.every(o=>o.x===a.x&&o.y===a.y))return done([]);remember(ctx.state,null);for(const o of objects){o.x=a.x;o.y=a.y;}ctx.state.selected=objects[0].id;ctx.state.selectedPart=null;ctx.state.last=a.ids;return done(a.ids);},
-  'drawing.page.clear':newPage,
-  'drawing.object.remove':(ctx,a)=>select(ctx.state,a.ids)?removeThings(ctx,a):fail('missing-target'),
+  'drawing.object.select':(ctx,a)=>{if(a.id!==null&&!ctx.state.objects.some(o=>o.id===a.id))return fail('missing-target');ctx.state.selected=a.id;ctx.state.selectedIds=a.id?[a.id]:[];ctx.state.selectedPart=null;return done(a.id?[a.id]:[]);},
+  'drawing.objects.select':(ctx,a)=>{if(a.ids.length&&!select(ctx.state,a.ids))return fail('missing-target');ctx.state.selectedIds=[...a.ids];ctx.state.selected=a.ids[0]??null;ctx.state.selectedPart=null;return done(a.ids);},
+  'drawing.object.place':(ctx,a)=>{if(!select(ctx.state,a.ids))return fail('missing-target');const objects=ctx.state.objects.filter(o=>a.ids.includes(o.id));if(objects.every(o=>o.x===a.x&&o.y===a.y))return done([]);remember(ctx.state,null);for(const o of objects){o.x=a.x;o.y=a.y;}ctx.state.selected=objects[0].id;ctx.state.selectedIds=[...a.ids];ctx.state.selectedPart=null;ctx.state.last=a.ids;return done(a.ids);},
+  'drawing.page.clear':ctx=>{const result=newPage(ctx);ctx.state.selectedIds=[];ctx.state.selectedPart=null;return result;},
+  'drawing.object.remove':(ctx,a)=>{if(!select(ctx.state,a.ids))return fail('missing-target');const result=removeThings(ctx,a);if(result.status==='supported'){ctx.state.selectedIds=(ctx.state.selectedIds??[]).filter(id=>ctx.state.objects.some(o=>o.id===id));if(ctx.state.selectedPart&&!ctx.state.objects.some(o=>o.id===ctx.state.selectedPart.id))ctx.state.selectedPart=null;}return result;},
   'drawing.observe':ctx=>({status:'supported',data:view(ctx.state)}),
   'drawing.undo':undoStep,'drawing.redo':redoStep,
   ...drawingPartHandlers,

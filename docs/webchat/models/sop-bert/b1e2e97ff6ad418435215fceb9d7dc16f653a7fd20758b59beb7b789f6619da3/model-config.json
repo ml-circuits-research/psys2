@@ -1,0 +1,4539 @@
+{
+  "format": "sop.key-reader/2-target-type-candidate",
+  "rawCodecFormat": "sop.key-reader-raw-codec/2-target-type-candidate",
+  "candidate": true,
+  "executionEligible": false,
+  "tensorArchitectureVersion": 2,
+  "trainingSourceFormat": "sop.key-reader-source/4-target-type-plateau-candidate",
+  "trainingPolicyContract": {
+    "format": "sop.key-reader-plateau-policy/1",
+    "primary": "positiveSupervisedBioGlobalExactRate",
+    "improvement": "strict-rational",
+    "ties": "non-improvement",
+    "minEpochsLowerBound": 3,
+    "maxEpochsUpperBound": 1000,
+    "defaults": {
+      "minEpochs": 3,
+      "patience": 3,
+      "maxEpochs": 30
+    }
+  },
+  "selectionCriterion": {
+    "format": "sop.key-reader-selection/1",
+    "order": [
+      "positiveSupervisedBioGlobalExactRate",
+      "targetTypePresentClassAccuracy",
+      "decodedMentionF1"
+    ],
+    "scope": "gold-cut supervised BIO+global subset, not complete graph"
+  },
+  "checkpointEvaluation": {
+    "format": "sop.key-reader-checkpoint-evaluation/1",
+    "trainingParameterDtype": "float32",
+    "checkpointFloatingStorage": "bfloat16",
+    "evaluationRoundtrip": "float32->bfloat16->float32",
+    "forwardAutocast": "disabled",
+    "device": "training-device",
+    "state": "detached-eval-clone",
+    "optimizer": "unchanged"
+  },
+  "baselineTrainerSha256": "eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f",
+  "inventorySha256": "5e5c4404d392774b6e4754a31988fc2ba943d90289e9a083a6e23ba6cba21832",
+  "exclusionSha256": "66b1ab7f205bedf08c15e3e83f98e3de217922d179e89ae8b99c29a938e29e77",
+  "targetFamilies": {
+    "calendar": [
+      "meeting",
+      "person",
+      "room"
+    ],
+    "diagram": [
+      "chart",
+      "diagram",
+      "group",
+      "link",
+      "node"
+    ],
+    "document": [
+      "inline",
+      "section",
+      "text"
+    ],
+    "drawing": [
+      "drawn",
+      "face",
+      "page",
+      "part"
+    ]
+  },
+  "keys": [
+    "calendar.meeting.agenda",
+    "calendar.meeting.day",
+    "calendar.meeting.end",
+    "calendar.meeting.free",
+    "calendar.meeting.length",
+    "calendar.meeting.people",
+    "calendar.meeting.recurrence",
+    "calendar.meeting.relation",
+    "calendar.meeting.relation_anchor",
+    "calendar.meeting.room",
+    "calendar.meeting.shift",
+    "calendar.meeting.time",
+    "calendar.meeting.title",
+    "calendar.person.name",
+    "calendar.person.role",
+    "calendar.room.name",
+    "calendar.room.quality",
+    "calendar.room.seats",
+    "conversation.turn.area",
+    "conversation.turn.fragment",
+    "conversation.turn.objection",
+    "conversation.turn.repeat_count",
+    "diagram.chart.axis",
+    "diagram.chart.horizontal",
+    "diagram.chart.labels",
+    "diagram.chart.legend",
+    "diagram.chart.palette",
+    "diagram.chart.series",
+    "diagram.chart.show_values",
+    "diagram.chart.sort",
+    "diagram.chart.source",
+    "diagram.chart.stacked",
+    "diagram.chart.values",
+    "diagram.diagram.kind",
+    "diagram.diagram.layout",
+    "diagram.diagram.links",
+    "diagram.diagram.size",
+    "diagram.diagram.title",
+    "diagram.group.colour",
+    "diagram.group.label",
+    "diagram.group.members",
+    "diagram.link.arrow",
+    "diagram.link.colour",
+    "diagram.link.from",
+    "diagram.link.label",
+    "diagram.link.style",
+    "diagram.link.to",
+    "diagram.node.anchor",
+    "diagram.node.at",
+    "diagram.node.colour",
+    "diagram.node.group",
+    "diagram.node.label",
+    "diagram.node.position",
+    "diagram.node.shape",
+    "diagram.node.size",
+    "diagram.node.value",
+    "document.inline.align",
+    "document.inline.checked",
+    "document.inline.format",
+    "document.inline.link_target",
+    "document.inline.list_kind",
+    "document.inline.table_size",
+    "document.inline.task",
+    "document.section.content",
+    "document.section.count",
+    "document.section.length",
+    "document.section.level",
+    "document.section.order",
+    "document.section.order_anchor",
+    "document.section.role",
+    "document.section.words",
+    "document.text.about",
+    "document.text.chapters",
+    "document.text.genre",
+    "document.text.length",
+    "document.text.recipient",
+    "document.text.title",
+    "document.text.tone",
+    "document.text.words",
+    "drawing.drawn.anchor",
+    "drawing.drawn.at",
+    "drawing.drawn.colour",
+    "drawing.drawn.count",
+    "drawing.drawn.direction",
+    "drawing.drawn.distance",
+    "drawing.drawn.fill",
+    "drawing.drawn.flip",
+    "drawing.drawn.kind",
+    "drawing.drawn.layer",
+    "drawing.drawn.name",
+    "drawing.drawn.relation",
+    "drawing.drawn.rotation",
+    "drawing.drawn.size",
+    "drawing.face.animation",
+    "drawing.face.colour",
+    "drawing.face.expression",
+    "drawing.face.feature",
+    "drawing.face.hair_style",
+    "drawing.face.name",
+    "drawing.face.preset",
+    "drawing.page.background",
+    "drawing.page.mood",
+    "drawing.page.parts_named",
+    "drawing.page.scene",
+    "drawing.part.colour",
+    "drawing.part.count",
+    "drawing.part.part",
+    "drawing.part.size",
+    "drawing.part.variant",
+    "request.constraint.character",
+    "request.constraint.concept",
+    "request.constraint.measure",
+    "request.constraint.operator",
+    "request.constraint.phase",
+    "request.constraint.polarity",
+    "request.constraint.scope",
+    "request.constraint.step",
+    "request.constraint.unit",
+    "request.constraint.variety",
+    "request.logic.group",
+    "request.logic.negated",
+    "request.logic.quantifier",
+    "request.question.ask",
+    "request.question.asked_key",
+    "request.request.act",
+    "request.request.mood",
+    "request.target.count",
+    "request.target.description",
+    "request.target.determiner",
+    "request.target.fill",
+    "request.target.kind",
+    "request.target.mode",
+    "request.target.name",
+    "request.target.ordinal",
+    "request.target.type"
+  ],
+  "registry": {
+    "calendar.meeting.agenda": {
+      "area": "calendar",
+      "concept": "literal_text",
+      "head": "span",
+      "key": "agenda",
+      "role": "domain",
+      "src": "notes / agenda",
+      "type": "meeting"
+    },
+    "calendar.meeting.day": {
+      "area": "calendar",
+      "concept": "day",
+      "head": "candidate+span",
+      "key": "day",
+      "role": "domain",
+      "src": "s.meet.start part=start (day): today, tomorrow, weekday, date, next week",
+      "type": "meeting"
+    },
+    "calendar.meeting.end": {
+      "area": "calendar",
+      "concept": "time",
+      "head": "span",
+      "key": "end",
+      "role": "domain",
+      "src": "until 5",
+      "type": "meeting"
+    },
+    "calendar.meeting.free": {
+      "area": "calendar",
+      "concept": "free_search",
+      "head": "class",
+      "key": "free",
+      "role": "domain",
+      "src": "book 6.8 / 7.4: nearest free time",
+      "type": "meeting",
+      "values": [
+        "nearest_free",
+        "first_free",
+        "common_free"
+      ]
+    },
+    "calendar.meeting.length": {
+      "area": "calendar",
+      "concept": "duration",
+      "head": "number+class+step",
+      "key": "length",
+      "role": "domain",
+      "src": "s.meet.length part=duration",
+      "type": "meeting",
+      "values": [
+        "short",
+        "long"
+      ]
+    },
+    "calendar.meeting.people": {
+      "area": "calendar",
+      "concept": "person",
+      "head": "fill+span",
+      "key": "people",
+      "many": true,
+      "role": "domain",
+      "src": "s.meet.people role=participant many=true",
+      "type": "meeting"
+    },
+    "calendar.meeting.recurrence": {
+      "area": "calendar",
+      "concept": "recurrence",
+      "head": "class",
+      "key": "recurrence",
+      "role": "domain",
+      "src": "repetition",
+      "type": "meeting",
+      "values": [
+        "daily",
+        "weekly",
+        "every_weekday",
+        "biweekly",
+        "monthly",
+        "yearly"
+      ]
+    },
+    "calendar.meeting.relation": {
+      "area": "calendar",
+      "concept": "time_relation",
+      "head": "class",
+      "key": "relation",
+      "role": "domain",
+      "src": "relative to another meeting",
+      "type": "meeting",
+      "values": [
+        "before",
+        "after",
+        "same_time",
+        "during",
+        "between",
+        "not_overlapping"
+      ]
+    },
+    "calendar.meeting.relation_anchor": {
+      "area": "calendar",
+      "concept": "reference",
+      "head": "fill+span",
+      "key": "relation_anchor",
+      "role": "domain",
+      "src": "the other meeting",
+      "type": "meeting"
+    },
+    "calendar.meeting.room": {
+      "area": "calendar",
+      "concept": "reference",
+      "head": "fill+span",
+      "key": "room",
+      "role": "domain",
+      "src": "s.meet.room relation=in",
+      "type": "meeting"
+    },
+    "calendar.meeting.shift": {
+      "area": "calendar",
+      "concept": "delta",
+      "head": "number+class",
+      "key": "shift",
+      "role": "domain",
+      "src": "move by an amount",
+      "type": "meeting",
+      "values": [
+        "earlier",
+        "later"
+      ]
+    },
+    "calendar.meeting.time": {
+      "area": "calendar",
+      "concept": "time",
+      "head": "candidate+span+step",
+      "key": "time",
+      "role": "domain",
+      "src": "s.meet.start (clock or region morning/afternoon; step earlier/later)",
+      "type": "meeting"
+    },
+    "calendar.meeting.title": {
+      "area": "calendar",
+      "concept": "name",
+      "head": "span",
+      "key": "title",
+      "role": "domain",
+      "src": "s.meet.title",
+      "type": "meeting"
+    },
+    "calendar.person.name": {
+      "area": "calendar",
+      "concept": "person",
+      "head": "span",
+      "key": "name",
+      "role": "domain",
+      "src": "person name",
+      "type": "person"
+    },
+    "calendar.person.role": {
+      "area": "calendar",
+      "concept": "role",
+      "head": "candidate",
+      "key": "role",
+      "role": "domain",
+      "src": "the hiring lead, my manager",
+      "type": "person"
+    },
+    "calendar.room.name": {
+      "area": "calendar",
+      "concept": "name",
+      "head": "span",
+      "key": "name",
+      "role": "domain",
+      "src": "room name",
+      "type": "room"
+    },
+    "calendar.room.quality": {
+      "area": "calendar",
+      "concept": "room_quality",
+      "head": "class",
+      "key": "quality",
+      "role": "domain",
+      "src": "'big room' judged against the rooms",
+      "type": "room",
+      "values": [
+        "big",
+        "small",
+        "quiet",
+        "free",
+        "any"
+      ]
+    },
+    "calendar.room.seats": {
+      "area": "calendar",
+      "concept": "quantity",
+      "head": "number",
+      "key": "seats",
+      "role": "domain",
+      "src": "s.room.seats counts=w.person",
+      "type": "room"
+    },
+    "conversation.turn.area": {
+      "area": "conversation",
+      "concept": "area",
+      "head": "class",
+      "key": "area",
+      "role": "global",
+      "src": "which area a cross-area request points to (send a chart to the document)",
+      "type": "turn",
+      "values": [
+        "drawing",
+        "diagram",
+        "document",
+        "calendar"
+      ]
+    },
+    "conversation.turn.fragment": {
+      "area": "conversation",
+      "concept": "fragment",
+      "head": "class",
+      "key": "fragment",
+      "role": "global",
+      "src": "book 6.4: fragments complete the previous request",
+      "type": "turn",
+      "values": [
+        "adds",
+        "replaces",
+        "repeats",
+        "more",
+        "less",
+        "confirms",
+        "rejects"
+      ]
+    },
+    "conversation.turn.objection": {
+      "area": "conversation",
+      "concept": "objection",
+      "head": "class",
+      "key": "objection",
+      "role": "global",
+      "src": "book 6.11.1 objections about the previous reply",
+      "type": "turn",
+      "values": [
+        "wrong_target",
+        "wrong_value",
+        "too_much",
+        "too_little",
+        "missing_part",
+        "unexpected",
+        "general"
+      ]
+    },
+    "conversation.turn.repeat_count": {
+      "area": "conversation",
+      "concept": "count",
+      "head": "number",
+      "key": "repeat_count",
+      "role": "global",
+      "src": "undo twice, again 3 times",
+      "type": "turn"
+    },
+    "diagram.chart.axis": {
+      "area": "diagram",
+      "concept": "name",
+      "head": "span",
+      "key": "axis",
+      "role": "domain",
+      "src": "axis title / range",
+      "type": "chart"
+    },
+    "diagram.chart.horizontal": {
+      "area": "diagram",
+      "concept": "toggle",
+      "head": "class",
+      "key": "horizontal",
+      "role": "domain",
+      "src": "horizontal",
+      "type": "chart",
+      "values": [
+        "on",
+        "off"
+      ]
+    },
+    "diagram.chart.labels": {
+      "area": "diagram",
+      "concept": "name",
+      "head": "span",
+      "key": "labels",
+      "many": true,
+      "role": "domain",
+      "src": "bar/slice/point labels",
+      "type": "chart"
+    },
+    "diagram.chart.legend": {
+      "area": "diagram",
+      "concept": "toggle",
+      "head": "class",
+      "key": "legend",
+      "role": "domain",
+      "src": "chart options legend",
+      "type": "chart",
+      "values": [
+        "show",
+        "hide"
+      ]
+    },
+    "diagram.chart.palette": {
+      "area": "diagram",
+      "concept": "colour",
+      "head": "candidate",
+      "key": "palette",
+      "role": "domain",
+      "src": "palette",
+      "type": "chart"
+    },
+    "diagram.chart.series": {
+      "area": "diagram",
+      "concept": "name",
+      "head": "span",
+      "key": "series",
+      "many": true,
+      "role": "domain",
+      "src": "series names",
+      "type": "chart"
+    },
+    "diagram.chart.show_values": {
+      "area": "diagram",
+      "concept": "toggle",
+      "head": "class",
+      "key": "show_values",
+      "role": "domain",
+      "src": "showValues",
+      "type": "chart",
+      "values": [
+        "show",
+        "hide"
+      ]
+    },
+    "diagram.chart.sort": {
+      "area": "diagram",
+      "concept": "sort",
+      "head": "class",
+      "key": "sort",
+      "role": "domain",
+      "src": "sort",
+      "type": "chart",
+      "values": [
+        "desc",
+        "asc",
+        "alpha",
+        "given"
+      ]
+    },
+    "diagram.chart.source": {
+      "area": "diagram",
+      "concept": "data_source",
+      "head": "class+span",
+      "key": "source",
+      "role": "domain",
+      "src": "chart.fromList/fromHoldings/...; book: meetings per person from the calendar",
+      "type": "chart",
+      "values": [
+        "calendar",
+        "document",
+        "list",
+        "prices",
+        "holdings",
+        "typed"
+      ]
+    },
+    "diagram.chart.stacked": {
+      "area": "diagram",
+      "concept": "toggle",
+      "head": "class",
+      "key": "stacked",
+      "role": "domain",
+      "src": "stacked",
+      "type": "chart",
+      "values": [
+        "on",
+        "off"
+      ]
+    },
+    "diagram.chart.values": {
+      "area": "diagram",
+      "concept": "quantity",
+      "head": "span",
+      "key": "values",
+      "many": true,
+      "role": "domain",
+      "src": "chart.setValues",
+      "type": "chart"
+    },
+    "diagram.diagram.kind": {
+      "area": "diagram",
+      "concept": "diagram_kind",
+      "head": "candidate",
+      "key": "kind",
+      "role": "domain",
+      "src": "startDiagram kind; charts are a kind of diagram",
+      "type": "diagram",
+      "values": [
+        "flowchart",
+        "tree",
+        "org_chart",
+        "mind_map",
+        "network",
+        "sequence",
+        "timeline",
+        "venn",
+        "state_machine",
+        "bar_chart",
+        "line_chart",
+        "pie_chart",
+        "doughnut_chart",
+        "scatter_chart",
+        "radar_chart",
+        "area_chart",
+        "table"
+      ]
+    },
+    "diagram.diagram.layout": {
+      "area": "diagram",
+      "concept": "layout",
+      "head": "class",
+      "key": "layout",
+      "role": "domain",
+      "src": "arrangeShapes / startDiagram layout",
+      "type": "diagram",
+      "values": [
+        "tidy",
+        "left_to_right",
+        "top_to_bottom",
+        "radial",
+        "grid",
+        "row",
+        "column",
+        "circle",
+        "layers",
+        "compact",
+        "spread",
+        "fewer_crossings",
+        "align"
+      ]
+    },
+    "diagram.diagram.links": {
+      "area": "diagram",
+      "concept": "count",
+      "head": "number",
+      "key": "links",
+      "role": "domain",
+      "src": "startDiagram links",
+      "type": "diagram"
+    },
+    "diagram.diagram.size": {
+      "area": "diagram",
+      "concept": "count",
+      "head": "number",
+      "key": "size",
+      "role": "domain",
+      "src": "six steps",
+      "type": "diagram"
+    },
+    "diagram.diagram.title": {
+      "area": "diagram",
+      "concept": "name",
+      "head": "span",
+      "key": "title",
+      "role": "domain",
+      "src": "diagram title",
+      "type": "diagram"
+    },
+    "diagram.group.colour": {
+      "area": "diagram",
+      "concept": "colour",
+      "head": "candidate",
+      "key": "colour",
+      "role": "domain",
+      "src": "group colour",
+      "type": "group"
+    },
+    "diagram.group.label": {
+      "area": "diagram",
+      "concept": "name",
+      "head": "span",
+      "key": "label",
+      "role": "domain",
+      "src": "group name",
+      "type": "group"
+    },
+    "diagram.group.members": {
+      "area": "diagram",
+      "concept": "reference",
+      "head": "fill+span",
+      "key": "members",
+      "many": true,
+      "role": "domain",
+      "src": "diagram.sketch.group",
+      "type": "group"
+    },
+    "diagram.link.arrow": {
+      "area": "diagram",
+      "concept": "arrow",
+      "head": "class",
+      "key": "arrow",
+      "role": "domain",
+      "src": "link arrow",
+      "type": "link",
+      "values": [
+        "none",
+        "forward",
+        "backward",
+        "both"
+      ]
+    },
+    "diagram.link.colour": {
+      "area": "diagram",
+      "concept": "colour",
+      "head": "candidate",
+      "key": "colour",
+      "role": "domain",
+      "src": "link colour",
+      "type": "link"
+    },
+    "diagram.link.from": {
+      "area": "diagram",
+      "concept": "reference",
+      "head": "fill+span",
+      "key": "from",
+      "role": "domain",
+      "src": "s.link.from role=source",
+      "type": "link"
+    },
+    "diagram.link.label": {
+      "area": "diagram",
+      "concept": "name",
+      "head": "span",
+      "key": "label",
+      "role": "domain",
+      "src": "label on the arrow",
+      "type": "link"
+    },
+    "diagram.link.style": {
+      "area": "diagram",
+      "concept": "line_style",
+      "head": "class",
+      "key": "style",
+      "role": "domain",
+      "src": "link style",
+      "type": "link",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted",
+        "thick",
+        "thin",
+        "curved",
+        "straight"
+      ]
+    },
+    "diagram.link.to": {
+      "area": "diagram",
+      "concept": "reference",
+      "head": "fill+span",
+      "key": "to",
+      "role": "domain",
+      "src": "s.link.to role=goal",
+      "type": "link"
+    },
+    "diagram.node.anchor": {
+      "area": "diagram",
+      "concept": "reference",
+      "head": "fill+span",
+      "key": "anchor",
+      "role": "domain",
+      "src": "the anchor node",
+      "type": "node"
+    },
+    "diagram.node.at": {
+      "area": "diagram",
+      "concept": "region",
+      "head": "class",
+      "key": "at",
+      "role": "domain",
+      "src": "s.node.at",
+      "type": "node",
+      "values": [
+        "corner",
+        "top",
+        "bottom",
+        "left",
+        "right",
+        "center",
+        "top_left",
+        "top_right",
+        "bottom_left",
+        "bottom_right",
+        "middle",
+        "background",
+        "foreground"
+      ]
+    },
+    "diagram.node.colour": {
+      "area": "diagram",
+      "concept": "colour",
+      "head": "candidate+step",
+      "key": "colour",
+      "role": "domain",
+      "src": "s.node.colour",
+      "type": "node"
+    },
+    "diagram.node.group": {
+      "area": "diagram",
+      "concept": "reference",
+      "head": "fill+span",
+      "key": "group",
+      "role": "domain",
+      "src": "member of a group",
+      "type": "node"
+    },
+    "diagram.node.label": {
+      "area": "diagram",
+      "concept": "name",
+      "head": "span",
+      "key": "label",
+      "role": "domain",
+      "src": "s.node.label",
+      "type": "node"
+    },
+    "diagram.node.position": {
+      "area": "diagram",
+      "concept": "spatial_relation",
+      "head": "class",
+      "key": "position",
+      "role": "domain",
+      "src": "moveShapes place/anchor",
+      "type": "node",
+      "values": [
+        "in",
+        "on",
+        "under",
+        "above",
+        "below",
+        "next_to",
+        "left_of",
+        "right_of",
+        "between",
+        "behind",
+        "in_front_of",
+        "near",
+        "around",
+        "inside",
+        "outside",
+        "along"
+      ]
+    },
+    "diagram.node.shape": {
+      "area": "diagram",
+      "concept": "shape",
+      "head": "class+step",
+      "key": "shape",
+      "role": "domain",
+      "src": "s.node.shape space=shape (step rounder)",
+      "type": "node",
+      "values": [
+        "box",
+        "rounded_box",
+        "circle",
+        "ellipse",
+        "diamond",
+        "hexagon",
+        "triangle",
+        "star",
+        "cylinder",
+        "parallelogram",
+        "cloud",
+        "note",
+        "square",
+        "rectangle"
+      ]
+    },
+    "diagram.node.size": {
+      "area": "diagram",
+      "concept": "size",
+      "head": "class+step",
+      "key": "size",
+      "role": "domain",
+      "src": "setShapes size",
+      "type": "node",
+      "values": [
+        "tiny",
+        "small",
+        "default",
+        "big",
+        "huge"
+      ]
+    },
+    "diagram.node.value": {
+      "area": "diagram",
+      "concept": "quantity",
+      "head": "number+step",
+      "key": "value",
+      "role": "domain",
+      "src": "s.node.value (bars, points, slices)",
+      "type": "node"
+    },
+    "document.inline.align": {
+      "area": "document",
+      "concept": "align",
+      "head": "class",
+      "key": "align",
+      "role": "domain",
+      "src": "old align",
+      "type": "inline",
+      "values": [
+        "left",
+        "center",
+        "right",
+        "justify"
+      ]
+    },
+    "document.inline.checked": {
+      "area": "document",
+      "concept": "toggle",
+      "head": "class",
+      "key": "checked",
+      "role": "domain",
+      "src": "old checked",
+      "type": "inline",
+      "values": [
+        "on",
+        "off"
+      ]
+    },
+    "document.inline.format": {
+      "area": "document",
+      "concept": "format",
+      "head": "class",
+      "key": "format",
+      "role": "domain",
+      "src": "old style/highlight/link",
+      "type": "inline",
+      "values": [
+        "bold",
+        "italic",
+        "underline",
+        "highlight",
+        "strike",
+        "link",
+        "code"
+      ]
+    },
+    "document.inline.link_target": {
+      "area": "document",
+      "concept": "literal_text",
+      "head": "span",
+      "key": "link_target",
+      "role": "domain",
+      "src": "old link",
+      "type": "inline"
+    },
+    "document.inline.list_kind": {
+      "area": "document",
+      "concept": "list_kind",
+      "head": "class",
+      "key": "list_kind",
+      "role": "domain",
+      "src": "doc.addList",
+      "type": "inline",
+      "values": [
+        "bullets",
+        "numbered",
+        "checklist"
+      ]
+    },
+    "document.inline.table_size": {
+      "area": "document",
+      "concept": "measure",
+      "head": "span",
+      "key": "table_size",
+      "role": "domain",
+      "src": "doc.fillTable rows x cols",
+      "type": "inline"
+    },
+    "document.inline.task": {
+      "area": "document",
+      "concept": "literal_text",
+      "head": "span",
+      "key": "task",
+      "role": "domain",
+      "src": "doc.checkTask / listTasks item",
+      "type": "inline"
+    },
+    "document.section.content": {
+      "area": "document",
+      "concept": "literal_text",
+      "head": "span",
+      "key": "content",
+      "role": "domain",
+      "src": "text the user dictates to insert/replace (doc.addParagraph, doc.dictate)",
+      "type": "section"
+    },
+    "document.section.count": {
+      "area": "document",
+      "concept": "count",
+      "head": "number",
+      "key": "count",
+      "role": "domain",
+      "src": "three paragraphs",
+      "type": "section"
+    },
+    "document.section.length": {
+      "area": "document",
+      "concept": "length",
+      "head": "class+step",
+      "key": "length",
+      "role": "domain",
+      "src": "s.sec.length",
+      "type": "section",
+      "values": [
+        "very_short",
+        "short",
+        "medium",
+        "long",
+        "very_long"
+      ]
+    },
+    "document.section.level": {
+      "area": "document",
+      "concept": "heading_level",
+      "head": "class",
+      "key": "level",
+      "role": "domain",
+      "src": "old heading level",
+      "type": "section",
+      "values": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    "document.section.order": {
+      "area": "document",
+      "concept": "order_relation",
+      "head": "class",
+      "key": "order",
+      "role": "domain",
+      "src": "s.sec.order",
+      "type": "section",
+      "values": [
+        "before",
+        "after",
+        "first",
+        "last",
+        "top",
+        "bottom",
+        "swap"
+      ]
+    },
+    "document.section.order_anchor": {
+      "area": "document",
+      "concept": "reference",
+      "head": "fill+span",
+      "key": "order_anchor",
+      "role": "domain",
+      "src": "the other section",
+      "type": "section"
+    },
+    "document.section.role": {
+      "area": "document",
+      "concept": "part_kind",
+      "head": "candidate",
+      "key": "role",
+      "role": "domain",
+      "src": "s.sec.role",
+      "type": "section",
+      "values": [
+        "greeting",
+        "introduction",
+        "body",
+        "conclusion",
+        "signature",
+        "chapter",
+        "paragraph",
+        "heading",
+        "list",
+        "table",
+        "apology",
+        "explanation",
+        "summary",
+        "closing",
+        "subject",
+        "abstract",
+        "methods",
+        "results",
+        "references",
+        "item"
+      ]
+    },
+    "document.section.words": {
+      "area": "document",
+      "concept": "measure",
+      "head": "number",
+      "key": "words",
+      "role": "domain",
+      "src": "s.sec.length unit=word",
+      "type": "section"
+    },
+    "document.text.about": {
+      "area": "document",
+      "concept": "topic",
+      "head": "span",
+      "key": "about",
+      "role": "domain",
+      "src": "s.text.about",
+      "type": "text"
+    },
+    "document.text.chapters": {
+      "area": "document",
+      "concept": "count",
+      "head": "number",
+      "key": "chapters",
+      "role": "domain",
+      "src": "writeText chapters / keepChapters",
+      "type": "text"
+    },
+    "document.text.genre": {
+      "area": "document",
+      "concept": "kind",
+      "head": "candidate",
+      "key": "genre",
+      "role": "domain",
+      "src": "s.text.genre (k.genres)",
+      "type": "text",
+      "values": [
+        "letter",
+        "email",
+        "report",
+        "story",
+        "note",
+        "memo",
+        "essay",
+        "summary",
+        "article",
+        "invitation",
+        "announcement",
+        "speech",
+        "cover_letter",
+        "complaint",
+        "review",
+        "recipe",
+        "list",
+        "minutes",
+        "proposal",
+        "poem",
+        "press_release",
+        "newsletter",
+        "itinerary",
+        "lab_report",
+        "cv"
+      ]
+    },
+    "document.text.length": {
+      "area": "document",
+      "concept": "length",
+      "head": "class+step",
+      "key": "length",
+      "role": "domain",
+      "src": "writeText words (region)",
+      "type": "text",
+      "values": [
+        "very_short",
+        "short",
+        "medium",
+        "long",
+        "very_long"
+      ]
+    },
+    "document.text.recipient": {
+      "area": "document",
+      "concept": "person",
+      "head": "span",
+      "key": "recipient",
+      "role": "domain",
+      "src": "who it is for",
+      "type": "text"
+    },
+    "document.text.title": {
+      "area": "document",
+      "concept": "name",
+      "head": "span",
+      "key": "title",
+      "role": "domain",
+      "src": "s.text.title",
+      "type": "text"
+    },
+    "document.text.tone": {
+      "area": "document",
+      "concept": "tone",
+      "head": "class+step",
+      "key": "tone",
+      "role": "domain",
+      "src": "s.text.tone space=tone",
+      "type": "text",
+      "values": [
+        "formal",
+        "informal",
+        "friendly",
+        "warm",
+        "cold",
+        "polite",
+        "firm",
+        "neutral",
+        "enthusiastic",
+        "apologetic",
+        "humorous",
+        "serious",
+        "persuasive",
+        "simple"
+      ]
+    },
+    "document.text.words": {
+      "area": "document",
+      "concept": "measure",
+      "head": "number",
+      "key": "words",
+      "role": "domain",
+      "src": "writeText words",
+      "type": "text"
+    },
+    "drawing.drawn.anchor": {
+      "area": "drawing",
+      "concept": "reference",
+      "head": "fill+span",
+      "key": "anchor",
+      "role": "domain",
+      "src": "the other thing of the relation",
+      "type": "drawn"
+    },
+    "drawing.drawn.at": {
+      "area": "drawing",
+      "concept": "region",
+      "head": "class",
+      "key": "at",
+      "role": "domain",
+      "src": "s.drawn.at means=place space=page (regions)",
+      "type": "drawn",
+      "values": [
+        "corner",
+        "top",
+        "bottom",
+        "left",
+        "right",
+        "center",
+        "top_left",
+        "top_right",
+        "bottom_left",
+        "bottom_right",
+        "middle",
+        "background",
+        "foreground"
+      ]
+    },
+    "drawing.drawn.colour": {
+      "area": "drawing",
+      "concept": "colour",
+      "head": "candidate+step",
+      "key": "colour",
+      "role": "domain",
+      "src": "s.drawn.colour space=colour (k.colours; step darker/lighter)",
+      "type": "drawn"
+    },
+    "drawing.drawn.count": {
+      "area": "drawing",
+      "concept": "count",
+      "head": "number",
+      "key": "count",
+      "role": "domain",
+      "src": "addThings n",
+      "type": "drawn"
+    },
+    "drawing.drawn.direction": {
+      "area": "drawing",
+      "concept": "direction",
+      "head": "class",
+      "key": "direction",
+      "role": "domain",
+      "src": "a move step",
+      "type": "drawn",
+      "values": [
+        "up",
+        "down",
+        "left",
+        "right",
+        "closer",
+        "apart",
+        "forward",
+        "backward"
+      ]
+    },
+    "drawing.drawn.distance": {
+      "area": "drawing",
+      "concept": "measure",
+      "head": "number",
+      "key": "distance",
+      "role": "domain",
+      "src": "move by N",
+      "type": "drawn"
+    },
+    "drawing.drawn.fill": {
+      "area": "drawing",
+      "concept": "fill",
+      "head": "class",
+      "key": "fill",
+      "role": "domain",
+      "src": "old typed fill",
+      "type": "drawn",
+      "values": [
+        "solid",
+        "none",
+        "striped",
+        "dotted",
+        "gradient"
+      ]
+    },
+    "drawing.drawn.flip": {
+      "area": "drawing",
+      "concept": "flip",
+      "head": "class",
+      "key": "flip",
+      "role": "domain",
+      "src": "old object flip",
+      "type": "drawn",
+      "values": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "drawing.drawn.kind": {
+      "area": "drawing",
+      "concept": "kind",
+      "head": "candidate",
+      "key": "kind",
+      "role": "domain",
+      "src": "s.drawn.kind (knowledge kind tree with images)",
+      "type": "drawn"
+    },
+    "drawing.drawn.layer": {
+      "area": "drawing",
+      "concept": "layer",
+      "head": "class",
+      "key": "layer",
+      "role": "domain",
+      "src": "old z order",
+      "type": "drawn",
+      "values": [
+        "front",
+        "back",
+        "forward",
+        "backward"
+      ]
+    },
+    "drawing.drawn.name": {
+      "area": "drawing",
+      "concept": "name",
+      "head": "span",
+      "key": "name",
+      "role": "domain",
+      "src": "label given by the user",
+      "type": "drawn"
+    },
+    "drawing.drawn.relation": {
+      "area": "drawing",
+      "concept": "spatial_relation",
+      "head": "class",
+      "key": "relation",
+      "role": "domain",
+      "src": "s.drawn.in/on + moveThings relation",
+      "type": "drawn",
+      "values": [
+        "in",
+        "on",
+        "under",
+        "above",
+        "below",
+        "next_to",
+        "left_of",
+        "right_of",
+        "between",
+        "behind",
+        "in_front_of",
+        "near",
+        "around",
+        "inside",
+        "outside",
+        "along"
+      ]
+    },
+    "drawing.drawn.rotation": {
+      "area": "drawing",
+      "concept": "rotation",
+      "head": "class",
+      "key": "rotation",
+      "role": "domain",
+      "src": "old object rotation",
+      "type": "drawn",
+      "values": [
+        "rotate_left",
+        "rotate_right",
+        "upside_down",
+        "tilt"
+      ]
+    },
+    "drawing.drawn.size": {
+      "area": "drawing",
+      "concept": "size",
+      "head": "class+step",
+      "key": "size",
+      "role": "domain",
+      "src": "s.drawn.size space=size",
+      "type": "drawn",
+      "values": [
+        "tiny",
+        "small",
+        "default",
+        "big",
+        "huge"
+      ]
+    },
+    "drawing.face.animation": {
+      "area": "drawing",
+      "concept": "animation",
+      "head": "class",
+      "key": "animation",
+      "role": "domain",
+      "src": "avatar.animate",
+      "type": "face",
+      "values": [
+        "wave",
+        "nod",
+        "blink",
+        "smile",
+        "dance",
+        "none"
+      ]
+    },
+    "drawing.face.colour": {
+      "area": "drawing",
+      "concept": "colour",
+      "head": "candidate+step",
+      "key": "colour",
+      "role": "domain",
+      "src": "hair/eye/skin colour",
+      "type": "face"
+    },
+    "drawing.face.expression": {
+      "area": "drawing",
+      "concept": "expression",
+      "head": "class+step",
+      "key": "expression",
+      "role": "domain",
+      "src": "wearPreset expression",
+      "type": "face",
+      "values": [
+        "happy",
+        "sad",
+        "angry",
+        "surprised",
+        "neutral",
+        "sleepy",
+        "laughing",
+        "winking",
+        "thinking",
+        "scared"
+      ]
+    },
+    "drawing.face.feature": {
+      "area": "drawing",
+      "concept": "part_kind",
+      "head": "candidate",
+      "key": "feature",
+      "role": "domain",
+      "src": "hair, eyes, mouth, nose, ears, beard, glasses, hat, skin",
+      "type": "face"
+    },
+    "drawing.face.hair_style": {
+      "area": "drawing",
+      "concept": "variant",
+      "head": "candidate",
+      "key": "hair_style",
+      "role": "domain",
+      "src": "curly, straight, short, long, bun, bald",
+      "type": "face"
+    },
+    "drawing.face.name": {
+      "area": "drawing",
+      "concept": "name",
+      "head": "span",
+      "key": "name",
+      "role": "domain",
+      "src": "avatar setName",
+      "type": "face"
+    },
+    "drawing.face.preset": {
+      "area": "drawing",
+      "concept": "style",
+      "head": "candidate",
+      "key": "preset",
+      "role": "domain",
+      "src": "wearPreset preset",
+      "type": "face"
+    },
+    "drawing.page.background": {
+      "area": "drawing",
+      "concept": "colour",
+      "head": "class",
+      "key": "background",
+      "role": "domain",
+      "src": "paintSky / background colour",
+      "type": "page"
+    },
+    "drawing.page.mood": {
+      "area": "drawing",
+      "concept": "mood_region",
+      "head": "class",
+      "key": "mood",
+      "role": "domain",
+      "src": "old art.draw state mood",
+      "type": "page",
+      "values": [
+        "happy",
+        "calm",
+        "gloomy",
+        "festive",
+        "spooky",
+        "natural"
+      ]
+    },
+    "drawing.page.parts_named": {
+      "area": "drawing",
+      "concept": "parts_list",
+      "head": "span",
+      "key": "parts_named",
+      "many": true,
+      "role": "domain",
+      "src": "parts the user names for a whole (book 6.7)",
+      "type": "page"
+    },
+    "drawing.page.scene": {
+      "area": "drawing",
+      "concept": "kind",
+      "head": "candidate",
+      "key": "scene",
+      "role": "domain",
+      "src": "whole scene asked: landscape, farm, beach (k.expect parts)",
+      "type": "page"
+    },
+    "drawing.part.colour": {
+      "area": "drawing",
+      "concept": "colour",
+      "head": "candidate+step",
+      "key": "colour",
+      "role": "domain",
+      "src": "part colour",
+      "type": "part"
+    },
+    "drawing.part.count": {
+      "area": "drawing",
+      "concept": "count",
+      "head": "number",
+      "key": "count",
+      "role": "domain",
+      "src": "three windows",
+      "type": "part"
+    },
+    "drawing.part.part": {
+      "area": "drawing",
+      "concept": "part_kind",
+      "head": "candidate",
+      "key": "part",
+      "role": "domain",
+      "src": "k.expect.part / putPart part",
+      "type": "part"
+    },
+    "drawing.part.size": {
+      "area": "drawing",
+      "concept": "size",
+      "head": "class+step",
+      "key": "size",
+      "role": "domain",
+      "src": "part size",
+      "type": "part",
+      "values": [
+        "tiny",
+        "small",
+        "default",
+        "big",
+        "huge"
+      ]
+    },
+    "drawing.part.variant": {
+      "area": "drawing",
+      "concept": "variant",
+      "head": "candidate",
+      "key": "variant",
+      "role": "domain",
+      "src": "putPart variant (curly, round, open)",
+      "type": "part"
+    },
+    "request.constraint.character": {
+      "area": "request",
+      "concept": "character",
+      "head": "class",
+      "key": "character",
+      "role": "metadata",
+      "src": "std.request.constraint.character",
+      "type": "constraint",
+      "values": [
+        "requirement",
+        "preference",
+        "assumption"
+      ]
+    },
+    "request.constraint.concept": {
+      "area": "request",
+      "concept": "concept",
+      "head": "candidate",
+      "key": "concept",
+      "role": "derived",
+      "src": "std.request.constraint.concept: which (type,key) of the area",
+      "type": "constraint"
+    },
+    "request.constraint.measure": {
+      "area": "request",
+      "concept": "measure",
+      "head": "number",
+      "key": "measure",
+      "role": "metadata",
+      "src": "std.request.constraint.measure (a number with unit)",
+      "type": "constraint"
+    },
+    "request.constraint.operator": {
+      "area": "request",
+      "concept": "operator",
+      "head": "class",
+      "key": "operator",
+      "role": "metadata",
+      "src": "std.request.constraint.operator",
+      "type": "constraint",
+      "values": [
+        "eq",
+        "less.equal",
+        "greater.equal",
+        "degree",
+        "region",
+        "relation",
+        "same",
+        "occurred",
+        "delta",
+        "factor"
+      ]
+    },
+    "request.constraint.phase": {
+      "area": "request",
+      "concept": "phase",
+      "head": "class",
+      "key": "phase",
+      "role": "metadata",
+      "src": "std.request.constraint.phase / selector vs result",
+      "type": "constraint",
+      "values": [
+        "selector",
+        "result"
+      ]
+    },
+    "request.constraint.polarity": {
+      "area": "request",
+      "concept": "polarity",
+      "head": "class",
+      "key": "polarity",
+      "role": "metadata",
+      "src": "std.request.constraint.polarity",
+      "type": "constraint",
+      "values": [
+        "positive",
+        "negative"
+      ]
+    },
+    "request.constraint.scope": {
+      "area": "request",
+      "concept": "scope",
+      "head": "class",
+      "key": "scope",
+      "role": "metadata",
+      "src": "std.request.constraint.scope",
+      "type": "constraint",
+      "values": [
+        "each",
+        "group"
+      ]
+    },
+    "request.constraint.step": {
+      "area": "request",
+      "concept": "step",
+      "head": "step",
+      "key": "step",
+      "role": "metadata",
+      "src": "degree words: bigger, a bit warmer, much later",
+      "type": "constraint",
+      "values": [
+        "more",
+        "much_more",
+        "less",
+        "much_less"
+      ]
+    },
+    "request.constraint.unit": {
+      "area": "request",
+      "concept": "unit",
+      "head": "candidate",
+      "key": "unit",
+      "role": "metadata",
+      "src": "std.request.constraint.unit (candidates from k.units)",
+      "type": "constraint"
+    },
+    "request.constraint.variety": {
+      "area": "request",
+      "concept": "variety",
+      "head": "class",
+      "key": "variety",
+      "role": "metadata",
+      "src": "constraint across members (two different houses, random colours)",
+      "type": "constraint",
+      "values": [
+        "same",
+        "different",
+        "random",
+        "matching",
+        "alternating"
+      ]
+    },
+    "request.logic.group": {
+      "area": "request",
+      "concept": "group.operator",
+      "head": "class",
+      "key": "group",
+      "role": "metadata",
+      "src": "std.request.group.operator",
+      "type": "logic",
+      "values": [
+        "and",
+        "or"
+      ]
+    },
+    "request.logic.negated": {
+      "area": "request",
+      "concept": "not",
+      "head": "span",
+      "key": "negated",
+      "role": "derived",
+      "src": "std.request.not: words of the negated condition",
+      "type": "logic"
+    },
+    "request.logic.quantifier": {
+      "area": "request",
+      "concept": "quant.kind",
+      "head": "class",
+      "key": "quantifier",
+      "role": "global",
+      "src": "std.request.quant.kind",
+      "type": "logic",
+      "values": [
+        "all",
+        "any",
+        "each",
+        "none",
+        "both",
+        "some",
+        "other",
+        "every_except"
+      ]
+    },
+    "request.question.ask": {
+      "area": "request",
+      "concept": "ask",
+      "head": "class",
+      "key": "ask",
+      "role": "global",
+      "src": "answer projection; chart computations included",
+      "type": "question",
+      "values": [
+        "what",
+        "which",
+        "count",
+        "exists",
+        "where",
+        "when",
+        "who",
+        "list",
+        "describe",
+        "why",
+        "how",
+        "how_much",
+        "compare",
+        "total",
+        "average",
+        "max",
+        "min",
+        "difference",
+        "percent"
+      ]
+    },
+    "request.question.asked_key": {
+      "area": "request",
+      "concept": "concept",
+      "head": "candidate",
+      "key": "asked_key",
+      "role": "global",
+      "src": "which key is asked: 'what colour is it' -> colour",
+      "type": "question"
+    },
+    "request.request.act": {
+      "area": "request",
+      "concept": "act",
+      "head": "candidate",
+      "key": "act",
+      "role": "global",
+      "src": "std.request.act (open atom; candidates from w.legend.act)",
+      "type": "request",
+      "values": [
+        "make",
+        "place",
+        "change",
+        "remove",
+        "connect",
+        "disconnect",
+        "group",
+        "ungroup",
+        "copy",
+        "select",
+        "send",
+        "save",
+        "show",
+        "arrange",
+        "undo",
+        "redo",
+        "repeat",
+        "answer",
+        "object",
+        "compute"
+      ]
+    },
+    "request.request.mood": {
+      "area": "request",
+      "concept": "mood",
+      "head": "class",
+      "key": "mood",
+      "role": "global",
+      "src": "std.request.mood",
+      "type": "request",
+      "values": [
+        "do",
+        "propose",
+        "check",
+        "ask"
+      ]
+    },
+    "request.target.count": {
+      "area": "request",
+      "concept": "count",
+      "head": "number",
+      "key": "count",
+      "role": "global",
+      "src": "how many new things / how many selected",
+      "type": "target"
+    },
+    "request.target.description": {
+      "area": "request",
+      "concept": "description",
+      "head": "span",
+      "key": "description",
+      "role": "global",
+      "src": "selector words, e.g. 'the red one'",
+      "type": "target"
+    },
+    "request.target.determiner": {
+      "area": "request",
+      "concept": "determiner",
+      "head": "class",
+      "key": "determiner",
+      "role": "global",
+      "src": "std.request.target.determiner",
+      "type": "target",
+      "values": [
+        "definite",
+        "indefinite"
+      ]
+    },
+    "request.target.fill": {
+      "area": "request",
+      "concept": "target.fill",
+      "head": "class",
+      "key": "fill",
+      "role": "global",
+      "src": "how an existing target is given",
+      "type": "target",
+      "values": [
+        "written",
+        "context",
+        "description",
+        "all",
+        "previous_reply",
+        "journal_step"
+      ]
+    },
+    "request.target.kind": {
+      "area": "request",
+      "concept": "kind",
+      "head": "candidate",
+      "key": "kind",
+      "role": "global",
+      "src": "std.request.target.kind (candidates: kinds of the area + knowledge kind tree)",
+      "type": "target"
+    },
+    "request.target.mode": {
+      "area": "request",
+      "concept": "target.mode",
+      "head": "class",
+      "key": "mode",
+      "role": "global",
+      "src": "std.request.target.mode",
+      "type": "target",
+      "values": [
+        "new",
+        "existing",
+        "bound"
+      ]
+    },
+    "request.target.name": {
+      "area": "request",
+      "concept": "name",
+      "head": "span",
+      "key": "name",
+      "role": "global",
+      "src": "std.request.target.name",
+      "type": "target"
+    },
+    "request.target.ordinal": {
+      "area": "request",
+      "concept": "ordinal",
+      "head": "class",
+      "key": "ordinal",
+      "role": "global",
+      "src": "selector by order or extreme",
+      "type": "target",
+      "values": [
+        "first",
+        "second",
+        "third",
+        "fourth",
+        "fifth",
+        "last",
+        "second_last",
+        "next",
+        "previous",
+        "newest",
+        "oldest",
+        "biggest",
+        "smallest",
+        "top",
+        "bottom",
+        "leftmost",
+        "rightmost"
+      ]
+    },
+    "request.target.type": {
+      "area": "request",
+      "bio": false,
+      "concept": "target.type",
+      "familiesByArea": {
+        "calendar": [
+          "meeting",
+          "person",
+          "room"
+        ],
+        "diagram": [
+          "chart",
+          "diagram",
+          "group",
+          "link",
+          "node"
+        ],
+        "document": [
+          "inline",
+          "section",
+          "text"
+        ],
+        "drawing": [
+          "drawn",
+          "face",
+          "page",
+          "part"
+        ]
+      },
+      "head": "class",
+      "key": "type",
+      "role": "global",
+      "src": "authoritative inventory domain-family declarations",
+      "type": "target",
+      "values": [
+        "chart",
+        "diagram",
+        "drawn",
+        "face",
+        "group",
+        "inline",
+        "link",
+        "meeting",
+        "node",
+        "page",
+        "part",
+        "person",
+        "room",
+        "section",
+        "text"
+      ]
+    }
+  },
+  "banks": {
+    "calendar.meeting.free": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "nearest_free"
+      },
+      {
+        "state": "value",
+        "value": "first_free"
+      },
+      {
+        "state": "value",
+        "value": "common_free"
+      }
+    ],
+    "calendar.meeting.length": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "short"
+      },
+      {
+        "state": "value",
+        "value": "long"
+      }
+    ],
+    "calendar.meeting.recurrence": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "daily"
+      },
+      {
+        "state": "value",
+        "value": "weekly"
+      },
+      {
+        "state": "value",
+        "value": "every_weekday"
+      },
+      {
+        "state": "value",
+        "value": "biweekly"
+      },
+      {
+        "state": "value",
+        "value": "monthly"
+      },
+      {
+        "state": "value",
+        "value": "yearly"
+      }
+    ],
+    "calendar.meeting.relation": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "before"
+      },
+      {
+        "state": "value",
+        "value": "after"
+      },
+      {
+        "state": "value",
+        "value": "same_time"
+      },
+      {
+        "state": "value",
+        "value": "during"
+      },
+      {
+        "state": "value",
+        "value": "between"
+      },
+      {
+        "state": "value",
+        "value": "not_overlapping"
+      }
+    ],
+    "calendar.meeting.shift": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "earlier"
+      },
+      {
+        "state": "value",
+        "value": "later"
+      }
+    ],
+    "calendar.room.quality": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "big"
+      },
+      {
+        "state": "value",
+        "value": "small"
+      },
+      {
+        "state": "value",
+        "value": "quiet"
+      },
+      {
+        "state": "value",
+        "value": "free"
+      },
+      {
+        "state": "value",
+        "value": "any"
+      }
+    ],
+    "conversation.turn.area": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "drawing"
+      },
+      {
+        "state": "value",
+        "value": "diagram"
+      },
+      {
+        "state": "value",
+        "value": "document"
+      },
+      {
+        "state": "value",
+        "value": "calendar"
+      }
+    ],
+    "conversation.turn.fragment": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "adds"
+      },
+      {
+        "state": "value",
+        "value": "replaces"
+      },
+      {
+        "state": "value",
+        "value": "repeats"
+      },
+      {
+        "state": "value",
+        "value": "more"
+      },
+      {
+        "state": "value",
+        "value": "less"
+      },
+      {
+        "state": "value",
+        "value": "confirms"
+      },
+      {
+        "state": "value",
+        "value": "rejects"
+      }
+    ],
+    "conversation.turn.objection": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "wrong_target"
+      },
+      {
+        "state": "value",
+        "value": "wrong_value"
+      },
+      {
+        "state": "value",
+        "value": "too_much"
+      },
+      {
+        "state": "value",
+        "value": "too_little"
+      },
+      {
+        "state": "value",
+        "value": "missing_part"
+      },
+      {
+        "state": "value",
+        "value": "unexpected"
+      },
+      {
+        "state": "value",
+        "value": "general"
+      }
+    ],
+    "diagram.chart.horizontal": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "on"
+      },
+      {
+        "state": "value",
+        "value": "off"
+      }
+    ],
+    "diagram.chart.legend": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "show"
+      },
+      {
+        "state": "value",
+        "value": "hide"
+      }
+    ],
+    "diagram.chart.show_values": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "show"
+      },
+      {
+        "state": "value",
+        "value": "hide"
+      }
+    ],
+    "diagram.chart.sort": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "desc"
+      },
+      {
+        "state": "value",
+        "value": "asc"
+      },
+      {
+        "state": "value",
+        "value": "alpha"
+      },
+      {
+        "state": "value",
+        "value": "given"
+      }
+    ],
+    "diagram.chart.source": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "calendar"
+      },
+      {
+        "state": "value",
+        "value": "document"
+      },
+      {
+        "state": "value",
+        "value": "list"
+      },
+      {
+        "state": "value",
+        "value": "prices"
+      },
+      {
+        "state": "value",
+        "value": "holdings"
+      },
+      {
+        "state": "value",
+        "value": "typed"
+      }
+    ],
+    "diagram.chart.stacked": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "on"
+      },
+      {
+        "state": "value",
+        "value": "off"
+      }
+    ],
+    "diagram.diagram.kind": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "flowchart"
+      },
+      {
+        "state": "value",
+        "value": "tree"
+      },
+      {
+        "state": "value",
+        "value": "org_chart"
+      },
+      {
+        "state": "value",
+        "value": "mind_map"
+      },
+      {
+        "state": "value",
+        "value": "network"
+      },
+      {
+        "state": "value",
+        "value": "sequence"
+      },
+      {
+        "state": "value",
+        "value": "timeline"
+      },
+      {
+        "state": "value",
+        "value": "venn"
+      },
+      {
+        "state": "value",
+        "value": "state_machine"
+      },
+      {
+        "state": "value",
+        "value": "bar_chart"
+      },
+      {
+        "state": "value",
+        "value": "line_chart"
+      },
+      {
+        "state": "value",
+        "value": "pie_chart"
+      },
+      {
+        "state": "value",
+        "value": "doughnut_chart"
+      },
+      {
+        "state": "value",
+        "value": "scatter_chart"
+      },
+      {
+        "state": "value",
+        "value": "radar_chart"
+      },
+      {
+        "state": "value",
+        "value": "area_chart"
+      },
+      {
+        "state": "value",
+        "value": "table"
+      }
+    ],
+    "diagram.diagram.layout": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "tidy"
+      },
+      {
+        "state": "value",
+        "value": "left_to_right"
+      },
+      {
+        "state": "value",
+        "value": "top_to_bottom"
+      },
+      {
+        "state": "value",
+        "value": "radial"
+      },
+      {
+        "state": "value",
+        "value": "grid"
+      },
+      {
+        "state": "value",
+        "value": "row"
+      },
+      {
+        "state": "value",
+        "value": "column"
+      },
+      {
+        "state": "value",
+        "value": "circle"
+      },
+      {
+        "state": "value",
+        "value": "layers"
+      },
+      {
+        "state": "value",
+        "value": "compact"
+      },
+      {
+        "state": "value",
+        "value": "spread"
+      },
+      {
+        "state": "value",
+        "value": "fewer_crossings"
+      },
+      {
+        "state": "value",
+        "value": "align"
+      }
+    ],
+    "diagram.link.arrow": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "none"
+      },
+      {
+        "state": "value",
+        "value": "forward"
+      },
+      {
+        "state": "value",
+        "value": "backward"
+      },
+      {
+        "state": "value",
+        "value": "both"
+      }
+    ],
+    "diagram.link.style": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "solid"
+      },
+      {
+        "state": "value",
+        "value": "dashed"
+      },
+      {
+        "state": "value",
+        "value": "dotted"
+      },
+      {
+        "state": "value",
+        "value": "thick"
+      },
+      {
+        "state": "value",
+        "value": "thin"
+      },
+      {
+        "state": "value",
+        "value": "curved"
+      },
+      {
+        "state": "value",
+        "value": "straight"
+      }
+    ],
+    "diagram.node.at": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "corner"
+      },
+      {
+        "state": "value",
+        "value": "top"
+      },
+      {
+        "state": "value",
+        "value": "bottom"
+      },
+      {
+        "state": "value",
+        "value": "left"
+      },
+      {
+        "state": "value",
+        "value": "right"
+      },
+      {
+        "state": "value",
+        "value": "center"
+      },
+      {
+        "state": "value",
+        "value": "top_left"
+      },
+      {
+        "state": "value",
+        "value": "top_right"
+      },
+      {
+        "state": "value",
+        "value": "bottom_left"
+      },
+      {
+        "state": "value",
+        "value": "bottom_right"
+      },
+      {
+        "state": "value",
+        "value": "middle"
+      },
+      {
+        "state": "value",
+        "value": "background"
+      },
+      {
+        "state": "value",
+        "value": "foreground"
+      }
+    ],
+    "diagram.node.position": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "in"
+      },
+      {
+        "state": "value",
+        "value": "on"
+      },
+      {
+        "state": "value",
+        "value": "under"
+      },
+      {
+        "state": "value",
+        "value": "above"
+      },
+      {
+        "state": "value",
+        "value": "below"
+      },
+      {
+        "state": "value",
+        "value": "next_to"
+      },
+      {
+        "state": "value",
+        "value": "left_of"
+      },
+      {
+        "state": "value",
+        "value": "right_of"
+      },
+      {
+        "state": "value",
+        "value": "between"
+      },
+      {
+        "state": "value",
+        "value": "behind"
+      },
+      {
+        "state": "value",
+        "value": "in_front_of"
+      },
+      {
+        "state": "value",
+        "value": "near"
+      },
+      {
+        "state": "value",
+        "value": "around"
+      },
+      {
+        "state": "value",
+        "value": "inside"
+      },
+      {
+        "state": "value",
+        "value": "outside"
+      },
+      {
+        "state": "value",
+        "value": "along"
+      }
+    ],
+    "diagram.node.shape": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "box"
+      },
+      {
+        "state": "value",
+        "value": "rounded_box"
+      },
+      {
+        "state": "value",
+        "value": "circle"
+      },
+      {
+        "state": "value",
+        "value": "ellipse"
+      },
+      {
+        "state": "value",
+        "value": "diamond"
+      },
+      {
+        "state": "value",
+        "value": "hexagon"
+      },
+      {
+        "state": "value",
+        "value": "triangle"
+      },
+      {
+        "state": "value",
+        "value": "star"
+      },
+      {
+        "state": "value",
+        "value": "cylinder"
+      },
+      {
+        "state": "value",
+        "value": "parallelogram"
+      },
+      {
+        "state": "value",
+        "value": "cloud"
+      },
+      {
+        "state": "value",
+        "value": "note"
+      },
+      {
+        "state": "value",
+        "value": "square"
+      },
+      {
+        "state": "value",
+        "value": "rectangle"
+      }
+    ],
+    "diagram.node.size": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "tiny"
+      },
+      {
+        "state": "value",
+        "value": "small"
+      },
+      {
+        "state": "value",
+        "value": "default"
+      },
+      {
+        "state": "value",
+        "value": "big"
+      },
+      {
+        "state": "value",
+        "value": "huge"
+      }
+    ],
+    "document.inline.align": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "left"
+      },
+      {
+        "state": "value",
+        "value": "center"
+      },
+      {
+        "state": "value",
+        "value": "right"
+      },
+      {
+        "state": "value",
+        "value": "justify"
+      }
+    ],
+    "document.inline.checked": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "on"
+      },
+      {
+        "state": "value",
+        "value": "off"
+      }
+    ],
+    "document.inline.format": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "bold"
+      },
+      {
+        "state": "value",
+        "value": "italic"
+      },
+      {
+        "state": "value",
+        "value": "underline"
+      },
+      {
+        "state": "value",
+        "value": "highlight"
+      },
+      {
+        "state": "value",
+        "value": "strike"
+      },
+      {
+        "state": "value",
+        "value": "link"
+      },
+      {
+        "state": "value",
+        "value": "code"
+      }
+    ],
+    "document.inline.list_kind": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "bullets"
+      },
+      {
+        "state": "value",
+        "value": "numbered"
+      },
+      {
+        "state": "value",
+        "value": "checklist"
+      }
+    ],
+    "document.section.length": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "very_short"
+      },
+      {
+        "state": "value",
+        "value": "short"
+      },
+      {
+        "state": "value",
+        "value": "medium"
+      },
+      {
+        "state": "value",
+        "value": "long"
+      },
+      {
+        "state": "value",
+        "value": "very_long"
+      }
+    ],
+    "document.section.level": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "1"
+      },
+      {
+        "state": "value",
+        "value": "2"
+      },
+      {
+        "state": "value",
+        "value": "3"
+      }
+    ],
+    "document.section.order": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "before"
+      },
+      {
+        "state": "value",
+        "value": "after"
+      },
+      {
+        "state": "value",
+        "value": "first"
+      },
+      {
+        "state": "value",
+        "value": "last"
+      },
+      {
+        "state": "value",
+        "value": "top"
+      },
+      {
+        "state": "value",
+        "value": "bottom"
+      },
+      {
+        "state": "value",
+        "value": "swap"
+      }
+    ],
+    "document.section.role": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "greeting"
+      },
+      {
+        "state": "value",
+        "value": "introduction"
+      },
+      {
+        "state": "value",
+        "value": "body"
+      },
+      {
+        "state": "value",
+        "value": "conclusion"
+      },
+      {
+        "state": "value",
+        "value": "signature"
+      },
+      {
+        "state": "value",
+        "value": "chapter"
+      },
+      {
+        "state": "value",
+        "value": "paragraph"
+      },
+      {
+        "state": "value",
+        "value": "heading"
+      },
+      {
+        "state": "value",
+        "value": "list"
+      },
+      {
+        "state": "value",
+        "value": "table"
+      },
+      {
+        "state": "value",
+        "value": "apology"
+      },
+      {
+        "state": "value",
+        "value": "explanation"
+      },
+      {
+        "state": "value",
+        "value": "summary"
+      },
+      {
+        "state": "value",
+        "value": "closing"
+      },
+      {
+        "state": "value",
+        "value": "subject"
+      },
+      {
+        "state": "value",
+        "value": "abstract"
+      },
+      {
+        "state": "value",
+        "value": "methods"
+      },
+      {
+        "state": "value",
+        "value": "results"
+      },
+      {
+        "state": "value",
+        "value": "references"
+      },
+      {
+        "state": "value",
+        "value": "item"
+      }
+    ],
+    "document.text.genre": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "letter"
+      },
+      {
+        "state": "value",
+        "value": "email"
+      },
+      {
+        "state": "value",
+        "value": "report"
+      },
+      {
+        "state": "value",
+        "value": "story"
+      },
+      {
+        "state": "value",
+        "value": "note"
+      },
+      {
+        "state": "value",
+        "value": "memo"
+      },
+      {
+        "state": "value",
+        "value": "essay"
+      },
+      {
+        "state": "value",
+        "value": "summary"
+      },
+      {
+        "state": "value",
+        "value": "article"
+      },
+      {
+        "state": "value",
+        "value": "invitation"
+      },
+      {
+        "state": "value",
+        "value": "announcement"
+      },
+      {
+        "state": "value",
+        "value": "speech"
+      },
+      {
+        "state": "value",
+        "value": "cover_letter"
+      },
+      {
+        "state": "value",
+        "value": "complaint"
+      },
+      {
+        "state": "value",
+        "value": "review"
+      },
+      {
+        "state": "value",
+        "value": "recipe"
+      },
+      {
+        "state": "value",
+        "value": "list"
+      },
+      {
+        "state": "value",
+        "value": "minutes"
+      },
+      {
+        "state": "value",
+        "value": "proposal"
+      },
+      {
+        "state": "value",
+        "value": "poem"
+      },
+      {
+        "state": "value",
+        "value": "press_release"
+      },
+      {
+        "state": "value",
+        "value": "newsletter"
+      },
+      {
+        "state": "value",
+        "value": "itinerary"
+      },
+      {
+        "state": "value",
+        "value": "lab_report"
+      },
+      {
+        "state": "value",
+        "value": "cv"
+      }
+    ],
+    "document.text.length": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "very_short"
+      },
+      {
+        "state": "value",
+        "value": "short"
+      },
+      {
+        "state": "value",
+        "value": "medium"
+      },
+      {
+        "state": "value",
+        "value": "long"
+      },
+      {
+        "state": "value",
+        "value": "very_long"
+      }
+    ],
+    "document.text.tone": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "formal"
+      },
+      {
+        "state": "value",
+        "value": "informal"
+      },
+      {
+        "state": "value",
+        "value": "friendly"
+      },
+      {
+        "state": "value",
+        "value": "warm"
+      },
+      {
+        "state": "value",
+        "value": "cold"
+      },
+      {
+        "state": "value",
+        "value": "polite"
+      },
+      {
+        "state": "value",
+        "value": "firm"
+      },
+      {
+        "state": "value",
+        "value": "neutral"
+      },
+      {
+        "state": "value",
+        "value": "enthusiastic"
+      },
+      {
+        "state": "value",
+        "value": "apologetic"
+      },
+      {
+        "state": "value",
+        "value": "humorous"
+      },
+      {
+        "state": "value",
+        "value": "serious"
+      },
+      {
+        "state": "value",
+        "value": "persuasive"
+      },
+      {
+        "state": "value",
+        "value": "simple"
+      }
+    ],
+    "drawing.drawn.at": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "corner"
+      },
+      {
+        "state": "value",
+        "value": "top"
+      },
+      {
+        "state": "value",
+        "value": "bottom"
+      },
+      {
+        "state": "value",
+        "value": "left"
+      },
+      {
+        "state": "value",
+        "value": "right"
+      },
+      {
+        "state": "value",
+        "value": "center"
+      },
+      {
+        "state": "value",
+        "value": "top_left"
+      },
+      {
+        "state": "value",
+        "value": "top_right"
+      },
+      {
+        "state": "value",
+        "value": "bottom_left"
+      },
+      {
+        "state": "value",
+        "value": "bottom_right"
+      },
+      {
+        "state": "value",
+        "value": "middle"
+      },
+      {
+        "state": "value",
+        "value": "background"
+      },
+      {
+        "state": "value",
+        "value": "foreground"
+      }
+    ],
+    "drawing.drawn.direction": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "up"
+      },
+      {
+        "state": "value",
+        "value": "down"
+      },
+      {
+        "state": "value",
+        "value": "left"
+      },
+      {
+        "state": "value",
+        "value": "right"
+      },
+      {
+        "state": "value",
+        "value": "closer"
+      },
+      {
+        "state": "value",
+        "value": "apart"
+      },
+      {
+        "state": "value",
+        "value": "forward"
+      },
+      {
+        "state": "value",
+        "value": "backward"
+      }
+    ],
+    "drawing.drawn.fill": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "solid"
+      },
+      {
+        "state": "value",
+        "value": "none"
+      },
+      {
+        "state": "value",
+        "value": "striped"
+      },
+      {
+        "state": "value",
+        "value": "dotted"
+      },
+      {
+        "state": "value",
+        "value": "gradient"
+      }
+    ],
+    "drawing.drawn.flip": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "horizontal"
+      },
+      {
+        "state": "value",
+        "value": "vertical"
+      }
+    ],
+    "drawing.drawn.layer": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "front"
+      },
+      {
+        "state": "value",
+        "value": "back"
+      },
+      {
+        "state": "value",
+        "value": "forward"
+      },
+      {
+        "state": "value",
+        "value": "backward"
+      }
+    ],
+    "drawing.drawn.relation": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "in"
+      },
+      {
+        "state": "value",
+        "value": "on"
+      },
+      {
+        "state": "value",
+        "value": "under"
+      },
+      {
+        "state": "value",
+        "value": "above"
+      },
+      {
+        "state": "value",
+        "value": "below"
+      },
+      {
+        "state": "value",
+        "value": "next_to"
+      },
+      {
+        "state": "value",
+        "value": "left_of"
+      },
+      {
+        "state": "value",
+        "value": "right_of"
+      },
+      {
+        "state": "value",
+        "value": "between"
+      },
+      {
+        "state": "value",
+        "value": "behind"
+      },
+      {
+        "state": "value",
+        "value": "in_front_of"
+      },
+      {
+        "state": "value",
+        "value": "near"
+      },
+      {
+        "state": "value",
+        "value": "around"
+      },
+      {
+        "state": "value",
+        "value": "inside"
+      },
+      {
+        "state": "value",
+        "value": "outside"
+      },
+      {
+        "state": "value",
+        "value": "along"
+      }
+    ],
+    "drawing.drawn.rotation": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "rotate_left"
+      },
+      {
+        "state": "value",
+        "value": "rotate_right"
+      },
+      {
+        "state": "value",
+        "value": "upside_down"
+      },
+      {
+        "state": "value",
+        "value": "tilt"
+      }
+    ],
+    "drawing.drawn.size": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "tiny"
+      },
+      {
+        "state": "value",
+        "value": "small"
+      },
+      {
+        "state": "value",
+        "value": "default"
+      },
+      {
+        "state": "value",
+        "value": "big"
+      },
+      {
+        "state": "value",
+        "value": "huge"
+      }
+    ],
+    "drawing.face.animation": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "wave"
+      },
+      {
+        "state": "value",
+        "value": "nod"
+      },
+      {
+        "state": "value",
+        "value": "blink"
+      },
+      {
+        "state": "value",
+        "value": "smile"
+      },
+      {
+        "state": "value",
+        "value": "dance"
+      },
+      {
+        "state": "value",
+        "value": "none"
+      }
+    ],
+    "drawing.face.expression": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "happy"
+      },
+      {
+        "state": "value",
+        "value": "sad"
+      },
+      {
+        "state": "value",
+        "value": "angry"
+      },
+      {
+        "state": "value",
+        "value": "surprised"
+      },
+      {
+        "state": "value",
+        "value": "neutral"
+      },
+      {
+        "state": "value",
+        "value": "sleepy"
+      },
+      {
+        "state": "value",
+        "value": "laughing"
+      },
+      {
+        "state": "value",
+        "value": "winking"
+      },
+      {
+        "state": "value",
+        "value": "thinking"
+      },
+      {
+        "state": "value",
+        "value": "scared"
+      }
+    ],
+    "drawing.page.mood": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "happy"
+      },
+      {
+        "state": "value",
+        "value": "calm"
+      },
+      {
+        "state": "value",
+        "value": "gloomy"
+      },
+      {
+        "state": "value",
+        "value": "festive"
+      },
+      {
+        "state": "value",
+        "value": "spooky"
+      },
+      {
+        "state": "value",
+        "value": "natural"
+      }
+    ],
+    "drawing.part.size": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "tiny"
+      },
+      {
+        "state": "value",
+        "value": "small"
+      },
+      {
+        "state": "value",
+        "value": "default"
+      },
+      {
+        "state": "value",
+        "value": "big"
+      },
+      {
+        "state": "value",
+        "value": "huge"
+      }
+    ],
+    "request.constraint.character": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "requirement"
+      },
+      {
+        "state": "value",
+        "value": "preference"
+      },
+      {
+        "state": "value",
+        "value": "assumption"
+      }
+    ],
+    "request.constraint.operator": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "eq"
+      },
+      {
+        "state": "value",
+        "value": "less.equal"
+      },
+      {
+        "state": "value",
+        "value": "greater.equal"
+      },
+      {
+        "state": "value",
+        "value": "degree"
+      },
+      {
+        "state": "value",
+        "value": "region"
+      },
+      {
+        "state": "value",
+        "value": "relation"
+      },
+      {
+        "state": "value",
+        "value": "same"
+      },
+      {
+        "state": "value",
+        "value": "occurred"
+      },
+      {
+        "state": "value",
+        "value": "delta"
+      },
+      {
+        "state": "value",
+        "value": "factor"
+      }
+    ],
+    "request.constraint.phase": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "selector"
+      },
+      {
+        "state": "value",
+        "value": "result"
+      }
+    ],
+    "request.constraint.polarity": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "positive"
+      },
+      {
+        "state": "value",
+        "value": "negative"
+      }
+    ],
+    "request.constraint.scope": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "each"
+      },
+      {
+        "state": "value",
+        "value": "group"
+      }
+    ],
+    "request.constraint.step": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "more"
+      },
+      {
+        "state": "value",
+        "value": "much_more"
+      },
+      {
+        "state": "value",
+        "value": "less"
+      },
+      {
+        "state": "value",
+        "value": "much_less"
+      }
+    ],
+    "request.constraint.variety": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "same"
+      },
+      {
+        "state": "value",
+        "value": "different"
+      },
+      {
+        "state": "value",
+        "value": "random"
+      },
+      {
+        "state": "value",
+        "value": "matching"
+      },
+      {
+        "state": "value",
+        "value": "alternating"
+      }
+    ],
+    "request.logic.group": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "and"
+      },
+      {
+        "state": "value",
+        "value": "or"
+      }
+    ],
+    "request.logic.quantifier": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "all"
+      },
+      {
+        "state": "value",
+        "value": "any"
+      },
+      {
+        "state": "value",
+        "value": "each"
+      },
+      {
+        "state": "value",
+        "value": "none"
+      },
+      {
+        "state": "value",
+        "value": "both"
+      },
+      {
+        "state": "value",
+        "value": "some"
+      },
+      {
+        "state": "value",
+        "value": "other"
+      },
+      {
+        "state": "value",
+        "value": "every_except"
+      }
+    ],
+    "request.question.ask": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "what"
+      },
+      {
+        "state": "value",
+        "value": "which"
+      },
+      {
+        "state": "value",
+        "value": "count"
+      },
+      {
+        "state": "value",
+        "value": "exists"
+      },
+      {
+        "state": "value",
+        "value": "where"
+      },
+      {
+        "state": "value",
+        "value": "when"
+      },
+      {
+        "state": "value",
+        "value": "who"
+      },
+      {
+        "state": "value",
+        "value": "list"
+      },
+      {
+        "state": "value",
+        "value": "describe"
+      },
+      {
+        "state": "value",
+        "value": "why"
+      },
+      {
+        "state": "value",
+        "value": "how"
+      },
+      {
+        "state": "value",
+        "value": "how_much"
+      },
+      {
+        "state": "value",
+        "value": "compare"
+      },
+      {
+        "state": "value",
+        "value": "total"
+      },
+      {
+        "state": "value",
+        "value": "average"
+      },
+      {
+        "state": "value",
+        "value": "max"
+      },
+      {
+        "state": "value",
+        "value": "min"
+      },
+      {
+        "state": "value",
+        "value": "difference"
+      },
+      {
+        "state": "value",
+        "value": "percent"
+      }
+    ],
+    "request.request.act": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "make"
+      },
+      {
+        "state": "value",
+        "value": "place"
+      },
+      {
+        "state": "value",
+        "value": "change"
+      },
+      {
+        "state": "value",
+        "value": "remove"
+      },
+      {
+        "state": "value",
+        "value": "connect"
+      },
+      {
+        "state": "value",
+        "value": "disconnect"
+      },
+      {
+        "state": "value",
+        "value": "group"
+      },
+      {
+        "state": "value",
+        "value": "ungroup"
+      },
+      {
+        "state": "value",
+        "value": "copy"
+      },
+      {
+        "state": "value",
+        "value": "select"
+      },
+      {
+        "state": "value",
+        "value": "send"
+      },
+      {
+        "state": "value",
+        "value": "save"
+      },
+      {
+        "state": "value",
+        "value": "show"
+      },
+      {
+        "state": "value",
+        "value": "arrange"
+      },
+      {
+        "state": "value",
+        "value": "undo"
+      },
+      {
+        "state": "value",
+        "value": "redo"
+      },
+      {
+        "state": "value",
+        "value": "repeat"
+      },
+      {
+        "state": "value",
+        "value": "answer"
+      },
+      {
+        "state": "value",
+        "value": "object"
+      },
+      {
+        "state": "value",
+        "value": "compute"
+      }
+    ],
+    "request.request.mood": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "do"
+      },
+      {
+        "state": "value",
+        "value": "propose"
+      },
+      {
+        "state": "value",
+        "value": "check"
+      },
+      {
+        "state": "value",
+        "value": "ask"
+      }
+    ],
+    "request.target.determiner": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "definite"
+      },
+      {
+        "state": "value",
+        "value": "indefinite"
+      }
+    ],
+    "request.target.fill": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "written"
+      },
+      {
+        "state": "value",
+        "value": "context"
+      },
+      {
+        "state": "value",
+        "value": "description"
+      },
+      {
+        "state": "value",
+        "value": "all"
+      },
+      {
+        "state": "value",
+        "value": "previous_reply"
+      },
+      {
+        "state": "value",
+        "value": "journal_step"
+      }
+    ],
+    "request.target.mode": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "new"
+      },
+      {
+        "state": "value",
+        "value": "existing"
+      },
+      {
+        "state": "value",
+        "value": "bound"
+      }
+    ],
+    "request.target.ordinal": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "first"
+      },
+      {
+        "state": "value",
+        "value": "second"
+      },
+      {
+        "state": "value",
+        "value": "third"
+      },
+      {
+        "state": "value",
+        "value": "fourth"
+      },
+      {
+        "state": "value",
+        "value": "fifth"
+      },
+      {
+        "state": "value",
+        "value": "last"
+      },
+      {
+        "state": "value",
+        "value": "second_last"
+      },
+      {
+        "state": "value",
+        "value": "next"
+      },
+      {
+        "state": "value",
+        "value": "previous"
+      },
+      {
+        "state": "value",
+        "value": "newest"
+      },
+      {
+        "state": "value",
+        "value": "oldest"
+      },
+      {
+        "state": "value",
+        "value": "biggest"
+      },
+      {
+        "state": "value",
+        "value": "smallest"
+      },
+      {
+        "state": "value",
+        "value": "top"
+      },
+      {
+        "state": "value",
+        "value": "bottom"
+      },
+      {
+        "state": "value",
+        "value": "leftmost"
+      },
+      {
+        "state": "value",
+        "value": "rightmost"
+      }
+    ],
+    "request.target.type": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "chart"
+      },
+      {
+        "state": "value",
+        "value": "diagram"
+      },
+      {
+        "state": "value",
+        "value": "drawn"
+      },
+      {
+        "state": "value",
+        "value": "face"
+      },
+      {
+        "state": "value",
+        "value": "group"
+      },
+      {
+        "state": "value",
+        "value": "inline"
+      },
+      {
+        "state": "value",
+        "value": "link"
+      },
+      {
+        "state": "value",
+        "value": "meeting"
+      },
+      {
+        "state": "value",
+        "value": "node"
+      },
+      {
+        "state": "value",
+        "value": "page"
+      },
+      {
+        "state": "value",
+        "value": "part"
+      },
+      {
+        "state": "value",
+        "value": "person"
+      },
+      {
+        "state": "value",
+        "value": "room"
+      },
+      {
+        "state": "value",
+        "value": "section"
+      },
+      {
+        "state": "value",
+        "value": "text"
+      }
+    ]
+  },
+  "bioKeys": [
+    "calendar.meeting.agenda",
+    "calendar.meeting.day",
+    "calendar.meeting.end",
+    "calendar.meeting.free",
+    "calendar.meeting.length",
+    "calendar.meeting.people",
+    "calendar.meeting.recurrence",
+    "calendar.meeting.relation",
+    "calendar.meeting.relation_anchor",
+    "calendar.meeting.room",
+    "calendar.meeting.shift",
+    "calendar.meeting.time",
+    "calendar.meeting.title",
+    "calendar.person.name",
+    "calendar.person.role",
+    "calendar.room.name",
+    "calendar.room.quality",
+    "calendar.room.seats",
+    "conversation.turn.area",
+    "conversation.turn.fragment",
+    "conversation.turn.objection",
+    "conversation.turn.repeat_count",
+    "diagram.chart.axis",
+    "diagram.chart.horizontal",
+    "diagram.chart.labels",
+    "diagram.chart.legend",
+    "diagram.chart.palette",
+    "diagram.chart.series",
+    "diagram.chart.show_values",
+    "diagram.chart.sort",
+    "diagram.chart.source",
+    "diagram.chart.stacked",
+    "diagram.chart.values",
+    "diagram.diagram.kind",
+    "diagram.diagram.layout",
+    "diagram.diagram.links",
+    "diagram.diagram.size",
+    "diagram.diagram.title",
+    "diagram.group.colour",
+    "diagram.group.label",
+    "diagram.group.members",
+    "diagram.link.arrow",
+    "diagram.link.colour",
+    "diagram.link.from",
+    "diagram.link.label",
+    "diagram.link.style",
+    "diagram.link.to",
+    "diagram.node.anchor",
+    "diagram.node.at",
+    "diagram.node.colour",
+    "diagram.node.group",
+    "diagram.node.label",
+    "diagram.node.position",
+    "diagram.node.shape",
+    "diagram.node.size",
+    "diagram.node.value",
+    "document.inline.align",
+    "document.inline.checked",
+    "document.inline.format",
+    "document.inline.link_target",
+    "document.inline.list_kind",
+    "document.inline.table_size",
+    "document.inline.task",
+    "document.section.content",
+    "document.section.count",
+    "document.section.length",
+    "document.section.level",
+    "document.section.order",
+    "document.section.order_anchor",
+    "document.section.role",
+    "document.section.words",
+    "document.text.about",
+    "document.text.chapters",
+    "document.text.genre",
+    "document.text.length",
+    "document.text.recipient",
+    "document.text.title",
+    "document.text.tone",
+    "document.text.words",
+    "drawing.drawn.anchor",
+    "drawing.drawn.at",
+    "drawing.drawn.colour",
+    "drawing.drawn.count",
+    "drawing.drawn.direction",
+    "drawing.drawn.distance",
+    "drawing.drawn.fill",
+    "drawing.drawn.flip",
+    "drawing.drawn.kind",
+    "drawing.drawn.layer",
+    "drawing.drawn.name",
+    "drawing.drawn.relation",
+    "drawing.drawn.rotation",
+    "drawing.drawn.size",
+    "drawing.face.animation",
+    "drawing.face.colour",
+    "drawing.face.expression",
+    "drawing.face.feature",
+    "drawing.face.hair_style",
+    "drawing.face.name",
+    "drawing.face.preset",
+    "drawing.page.background",
+    "drawing.page.mood",
+    "drawing.page.parts_named",
+    "drawing.page.scene",
+    "drawing.part.colour",
+    "drawing.part.count",
+    "drawing.part.part",
+    "drawing.part.size",
+    "drawing.part.variant",
+    "request.logic.quantifier",
+    "request.question.ask",
+    "request.question.asked_key",
+    "request.request.act",
+    "request.request.mood",
+    "request.target.count",
+    "request.target.description",
+    "request.target.determiner",
+    "request.target.fill",
+    "request.target.kind",
+    "request.target.mode",
+    "request.target.name",
+    "request.target.ordinal"
+  ],
+  "metadataKeys": [
+    "request.constraint.character",
+    "request.constraint.operator",
+    "request.constraint.phase",
+    "request.constraint.polarity",
+    "request.constraint.scope",
+    "request.constraint.step",
+    "request.constraint.variety",
+    "request.logic.group"
+  ],
+  "maxLength": 192,
+  "boundary": "Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.",
+  "trainingPolicy": {
+    "format": "sop.key-reader-plateau-policy/1",
+    "minEpochs": 3,
+    "patience": 3,
+    "maxEpochs": 30,
+    "primary": "positiveSupervisedBioGlobalExactRate",
+    "improvement": "strict-rational",
+    "ties": "non-improvement"
+  },
+  "checkpointWriter": {
+    "format": "sop.key-reader-checkpoint-writer/1",
+    "temporary": "exclusive-new",
+    "publication": "fsync-and-os.replace",
+    "writes": "never-in-place",
+    "preflight": "one-checkpoint-upper-bytes+134217728",
+    "firstEpochPin": "content-addressed-hardlink",
+    "pinRetention": "permanent",
+    "maxEpochPins": 1
+  },
+  "runId": "10c13e0e5b3f43178e3b22664a9ddfdc",
+  "encoder": "/home/salboaie/work/sopworlds/.session-control/hf-cache/models--distilbert--distilbert-base-uncased/snapshots/12040accade4e8a0f71eabdb258fecc2e7e948be",
+  "encoderFiles": {
+    "model.safetensors": "5e3f1108e3cb34ee048634875d8482665b65ac713291a7e32396fb18f6ff0063",
+    "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3",
+    "tokenizer.json": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+    "config.json": "69c94b0222d5d1f4b0ad027ca7416cdafb98378cbbb8305d0bf47c9365c60c83",
+    "tokenizer_config.json": "a025160ef0431f1a392f6f050c1310f4c5d9fb6f275932dbccba73c4d214bf10"
+  },
+  "dataManifestSha256": "4b9ddfa1ee8033d23005b336f542d26f0c9d0066b138887acb95eb58ec9c3b2d",
+  "trainerSha256": "f9e5794fd939ce5a202be2c4cdfdacc7e8e48e68ded4d50d97453108bcc6a69c",
+  "preparerSha256": "5cab868172f89f29f51d35894aebfbae0c71011cc97bd3ad4b3b1c29a96fa477",
+  "warmstart": {
+    "format": "sop.key-reader-warmstart-provenance/1",
+    "kind": "semantic-migration",
+    "specSha256": "2e7ac0f8a703951f9c9fde8a3d3c928be95f2f6f6a6b37902e7a0b033aa5a39b",
+    "frozenInputs": {
+      "checkpoint": "689960663e40bbf4c4d24d63e87b72b333c23b2efd5869f14c8d788c68334b90",
+      "config": "f23f5a14c7f1f5d3f0a5eb96f0768c1e2142c13127e8edaac853f6004f65b451",
+      "dataManifest": "e30a4eeb9eb24322cc49b299ebb4eb9df727086171ed3265a76ca3d18622668c",
+      "helper": "9b7a41049680bf044b02618f976e2ae9231ff7b3359730bc5b00d87445adee37",
+      "preparer": "3565277de7f349ce5a63b578c6b74eb4b4364c0a30f7e8ce45f1819062b50ced",
+      "run": "4c950745fa0a9f519c46a88cad3d8044e7e6881a8e50c362578a235fee07f0a5",
+      "trainer": "eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f"
+    },
+    "sourceModelFormat": "sop.key-reader/1",
+    "targetModelFormat": "sop.key-reader/2-target-type-candidate",
+    "elementWorkAllowance": 403719426,
+    "estimatedElements": 403719426,
+    "stats": {
+      "elements": 403719426,
+      "copiedElements": 67281701,
+      "tensors": 460,
+      "rows": 2256
+    },
+    "optimizer": "fresh-AdamW",
+    "migrationHelperSha256": "9b7a41049680bf044b02618f976e2ae9231ff7b3359730bc5b00d87445adee37"
+  }
+}

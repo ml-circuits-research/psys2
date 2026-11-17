@@ -84,13 +84,14 @@ export const sizeWord = (o) => {
 export function snapshot(s, label) {
   return {
     label, objects: s.objects.map((o) => ({ ...o, parts: { ...(o.parts ?? {}) } })), background: s.background, sky: s.sky, ground: s.ground,
-    groundColor: s.groundColor, mood: s.mood, sunStash: structuredClone(s.sunStash ?? []), selected: s.selected, last: [...s.last], rels: structuredClone(s.rels ?? { facts: [], seq: 0 }), scenes: structuredClone(s.scenes ?? []),
+    groundColor: s.groundColor, mood: s.mood, sunStash: structuredClone(s.sunStash ?? []), selected: s.selected, selectedIds:[...(s.selectedIds??(s.selected?[s.selected]:[]))], selectedPart:structuredClone(s.selectedPart??null), last: [...s.last], rels: structuredClone(s.rels ?? { facts: [], seq: 0 }), scenes: structuredClone(s.scenes ?? []),
   };
 }
 export function restore(s, snap) {
   s.objects = snap.objects.map((o) => ({ ...o, parts: { ...(o.parts ?? {}) } }));
   s.rels = structuredClone(snap.rels ?? { facts: [], seq: 0 });
   s.scenes = structuredClone(snap.scenes ?? []);
+  s.selectedIds=(snap.selectedIds??(snap.selected?[snap.selected]:[])).filter(id=>byId(s,id));s.selectedPart=snap.selectedPart&&byId(s,snap.selectedPart.id)?structuredClone(snap.selectedPart):null;
   Object.assign(s, { background: snap.background, sky: snap.sky, ground: snap.ground, groundColor: snap.groundColor, mood: snap.mood, sunStash: snap.sunStash, selected: snap.selected && byId(s, snap.selected) ? snap.selected : null, last: snap.last.filter((id) => byId(s, id)) });
 }
 /** Call before changing the picture. */

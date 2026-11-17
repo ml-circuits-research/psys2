@@ -1,6 +1,6 @@
 // Literal document editing tools. Uses the real block/mark model, never a language reader.
-import {commit,sync,addBlock} from './document.mjs?v=d1f3113f66';
-import {MARK_TYPES,ALIGNS,getText,addMark,cutMark,spliceText,containers} from './model.mjs?v=37add444c1';
+import {commit,sync,addBlock} from './document.mjs?v=e04d587f05';
+import {MARK_TYPES,ALIGNS,getText,addMark,cutMark,spliceText,containers} from './model.mjs?v=2f19aea106';
 export const documentTextId=(id,at='0')=>JSON.stringify([id,at]);
 const text={type:'string',required:true},array={type:'array',required:true},integer={type:'integer',required:true,min:0};
 const blockFields={id:text,text:{type:'string'},name:{type:'string'},kind:{type:'string',enum:['paragraph','heading','quote']},level:{type:'integer',min:3,max:6},align:{type:'string',enum:ALIGNS}};

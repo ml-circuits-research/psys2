@@ -18,8 +18,8 @@
 //   is probed by "put the chart in the document".
 // The pure helpers at the bottom (chartView, csv) are also imported by the tab, so the tab draws exactly what the state says.
 
-import { ask as askAnimals, animalNames } from '../../lib/knowledge/animals.mjs?v=5ccc37d193';   // the animals of the catalog (k.animals), read by lookup from a bundle generated from it
-import { colourName, colourHex } from '../../lib/knowledge/values.mjs?v=db60f56a52';   // the one colour reader (k.values)
+import { ask as askAnimals, animalNames } from '../../lib/knowledge/animals.mjs?v=3df05d44f4';   // the animals of the catalog (k.animals), read by lookup from a bundle generated from it
+import { colourName, colourHex } from '../../lib/knowledge/values.mjs?v=8601038efd';   // the one colour reader (k.values)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const TAB = 'diagram';
 const TYPES = ['bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'scatter'];

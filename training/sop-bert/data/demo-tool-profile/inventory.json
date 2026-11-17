@@ -1,0 +1,1431 @@
+{
+  "request": {
+    "request": {
+      "doc": "one request",
+      "keys": {
+        "mood": {
+          "head": "class",
+          "concept": "mood",
+          "values": [
+            "do",
+            "propose",
+            "check",
+            "ask"
+          ],
+          "src": "std.request.mood"
+        },
+        "act": {
+          "head": "candidate",
+          "concept": "act",
+          "values": [
+            "make",
+            "place",
+            "change",
+            "remove",
+            "connect",
+            "disconnect",
+            "group",
+            "ungroup",
+            "copy",
+            "select",
+            "send",
+            "save",
+            "show",
+            "arrange",
+            "undo",
+            "redo",
+            "repeat",
+            "answer",
+            "object",
+            "compute"
+          ],
+          "src": "std.request.act (open atom; candidates from w.legend.act)"
+        }
+      }
+    },
+    "target": {
+      "doc": "the thing acted on or asked about",
+      "keys": {
+        "mode": {
+          "head": "class",
+          "concept": "target.mode",
+          "values": [
+            "new",
+            "existing",
+            "bound"
+          ],
+          "src": "std.request.target.mode"
+        },
+        "fill": {
+          "head": "class",
+          "concept": "target.fill",
+          "values": [
+            "written",
+            "context",
+            "description",
+            "all",
+            "previous_reply",
+            "journal_step"
+          ],
+          "src": "how an existing target is given"
+        },
+        "determiner": {
+          "head": "class",
+          "concept": "determiner",
+          "values": [
+            "definite",
+            "indefinite"
+          ],
+          "src": "std.request.target.determiner"
+        },
+        "kind": {
+          "head": "candidate",
+          "concept": "kind",
+          "src": "std.request.target.kind (candidates: kinds of the area + knowledge kind tree)"
+        },
+        "name": {
+          "head": "span",
+          "concept": "name",
+          "src": "std.request.target.name"
+        },
+        "description": {
+          "head": "span",
+          "concept": "description",
+          "src": "selector words, e.g. 'the red one'"
+        },
+        "ordinal": {
+          "head": "class",
+          "concept": "ordinal",
+          "values": [
+            "first",
+            "second",
+            "third",
+            "fourth",
+            "fifth",
+            "last",
+            "second_last",
+            "next",
+            "previous",
+            "newest",
+            "oldest",
+            "biggest",
+            "smallest",
+            "top",
+            "bottom",
+            "leftmost",
+            "rightmost"
+          ],
+          "src": "selector by order or extreme"
+        },
+        "count": {
+          "head": "number",
+          "concept": "count",
+          "src": "how many new things / how many selected"
+        },
+        "type": {
+          "head": "class",
+          "concept": "target.type",
+          "values": [
+            "calendar",
+            "chart",
+            "diagram",
+            "drawn",
+            "face",
+            "group",
+            "inline",
+            "link",
+            "meeting",
+            "node",
+            "part",
+            "person",
+            "room",
+            "section",
+            "text"
+          ],
+          "src": "explicit tool-owned request family"
+        }
+      }
+    },
+    "constraint": {
+      "doc": "one condition on a target (selector or desired result)",
+      "keys": {
+        "concept": {
+          "head": "candidate",
+          "concept": "concept",
+          "src": "std.request.constraint.concept: which (type,key) of the area"
+        },
+        "operator": {
+          "head": "class",
+          "concept": "operator",
+          "values": [
+            "eq",
+            "less.equal",
+            "greater.equal",
+            "degree",
+            "region",
+            "relation",
+            "same",
+            "occurred",
+            "delta",
+            "factor"
+          ],
+          "src": "std.request.constraint.operator"
+        },
+        "phase": {
+          "head": "class",
+          "concept": "phase",
+          "values": [
+            "selector",
+            "result"
+          ],
+          "src": "std.request.constraint.phase / selector vs result"
+        },
+        "polarity": {
+          "head": "class",
+          "concept": "polarity",
+          "values": [
+            "positive",
+            "negative"
+          ],
+          "src": "std.request.constraint.polarity"
+        },
+        "character": {
+          "head": "class",
+          "concept": "character",
+          "values": [
+            "requirement",
+            "preference",
+            "assumption"
+          ],
+          "src": "std.request.constraint.character"
+        },
+        "scope": {
+          "head": "class",
+          "concept": "scope",
+          "values": [
+            "each",
+            "group"
+          ],
+          "src": "std.request.constraint.scope"
+        },
+        "step": {
+          "head": "step",
+          "concept": "step",
+          "values": [
+            "more",
+            "much_more",
+            "less",
+            "much_less"
+          ],
+          "src": "degree words: bigger, a bit warmer, much later"
+        },
+        "variety": {
+          "head": "class",
+          "concept": "variety",
+          "values": [
+            "same",
+            "different",
+            "random",
+            "matching",
+            "alternating"
+          ],
+          "src": "constraint across members (two different houses, random colours)"
+        }
+      }
+    },
+    "logic": {
+      "doc": "logical structure",
+      "keys": {
+        "quantifier": {
+          "head": "class",
+          "concept": "quant.kind",
+          "values": [
+            "all",
+            "any",
+            "each",
+            "none",
+            "both",
+            "some",
+            "other",
+            "every_except"
+          ],
+          "src": "std.request.quant.kind"
+        },
+        "group": {
+          "head": "class",
+          "concept": "group.operator",
+          "values": [
+            "and",
+            "or"
+          ],
+          "src": "std.request.group.operator"
+        },
+        "negated": {
+          "head": "span",
+          "concept": "not",
+          "src": "std.request.not: words of the negated condition"
+        }
+      }
+    },
+    "question": {
+      "doc": "what is asked (pending contract: question projection)",
+      "keys": {
+        "ask": {
+          "head": "class",
+          "concept": "ask",
+          "values": [
+            "what",
+            "which",
+            "count",
+            "exists",
+            "where",
+            "when",
+            "who",
+            "list",
+            "describe",
+            "why",
+            "how",
+            "how_much",
+            "compare",
+            "total",
+            "average",
+            "max",
+            "min",
+            "difference",
+            "percent"
+          ],
+          "src": "answer projection; chart computations included"
+        },
+        "asked_key": {
+          "head": "candidate",
+          "concept": "concept",
+          "src": "which key is asked: 'what colour is it' -> colour"
+        }
+      }
+    }
+  },
+  "conversation": {
+    "turn": {
+      "doc": "relation to the conversation",
+      "keys": {
+        "fragment": {
+          "head": "class",
+          "concept": "fragment",
+          "values": [
+            "adds",
+            "replaces",
+            "repeats",
+            "more",
+            "less",
+            "confirms",
+            "rejects"
+          ],
+          "src": "book 6.4: fragments complete the previous request"
+        },
+        "repeat_count": {
+          "head": "number",
+          "concept": "count",
+          "src": "undo twice, again 3 times"
+        },
+        "objection": {
+          "head": "class",
+          "concept": "objection",
+          "values": [
+            "wrong_target",
+            "wrong_value",
+            "too_much",
+            "too_little",
+            "missing_part",
+            "unexpected",
+            "general"
+          ],
+          "src": "book 6.11.1 objections about the previous reply"
+        },
+        "area": {
+          "head": "class",
+          "concept": "area",
+          "values": [
+            "drawing",
+            "diagram",
+            "document",
+            "calendar"
+          ],
+          "src": "which area a cross-area request points to (send a chart to the document)"
+        }
+      }
+    }
+  },
+  "drawing": {
+    "drawn": {
+      "doc": "a drawn thing (book 7.1 t.drawn)",
+      "keys": {
+        "kind": {
+          "head": "candidate",
+          "concept": "kind",
+          "src": "s.drawn.kind (knowledge kind tree with images)"
+        },
+        "at": {
+          "head": "class",
+          "concept": "region",
+          "values": [
+            "corner",
+            "top",
+            "bottom",
+            "left",
+            "right",
+            "center",
+            "top_left",
+            "top_right",
+            "bottom_left",
+            "bottom_right",
+            "middle",
+            "background",
+            "foreground"
+          ],
+          "src": "s.drawn.at means=place space=page (regions)"
+        },
+        "relation": {
+          "head": "class",
+          "concept": "spatial_relation",
+          "values": [
+            "in",
+            "on",
+            "under",
+            "above",
+            "below",
+            "next_to",
+            "left_of",
+            "right_of",
+            "between",
+            "behind",
+            "in_front_of",
+            "near",
+            "around",
+            "inside",
+            "outside",
+            "along"
+          ],
+          "src": "s.drawn.in/on + moveThings relation"
+        },
+        "anchor": {
+          "head": "fill+span",
+          "concept": "reference",
+          "src": "the other thing of the relation"
+        },
+        "direction": {
+          "head": "class",
+          "concept": "direction",
+          "values": [
+            "up",
+            "down",
+            "left",
+            "right",
+            "closer",
+            "apart",
+            "forward",
+            "backward"
+          ],
+          "src": "a move step"
+        },
+        "distance": {
+          "head": "number",
+          "concept": "measure",
+          "src": "move by N"
+        },
+        "size": {
+          "head": "number+class+step",
+          "concept": "size",
+          "src": "s.drawn.size space=size"
+        },
+        "colour": {
+          "head": "candidate+step",
+          "concept": "colour",
+          "src": "s.drawn.colour space=colour (k.colours; step darker/lighter)"
+        },
+        "count": {
+          "head": "number",
+          "concept": "count",
+          "src": "addThings n"
+        },
+        "name": {
+          "head": "span",
+          "concept": "name",
+          "src": "label given by the user"
+        }
+      }
+    },
+    "part": {
+      "doc": "a part of a drawn thing (petal, roof, window, wheel)",
+      "keys": {
+        "colour": {
+          "head": "candidate",
+          "concept": "colour",
+          "src": "native drawing part parameter"
+        },
+        "owner": {
+          "head": "span",
+          "concept": "reference",
+          "src": "native drawing part parameter"
+        },
+        "index": {
+          "head": "number",
+          "concept": "ordinal",
+          "src": "native drawing part parameter"
+        },
+        "width": {
+          "head": "number",
+          "concept": "width",
+          "src": "native drawing part parameter"
+        },
+        "height": {
+          "head": "number",
+          "concept": "height",
+          "src": "native drawing part parameter"
+        },
+        "x": {
+          "head": "number",
+          "concept": "x",
+          "src": "native drawing part parameter"
+        },
+        "y": {
+          "head": "number",
+          "concept": "y",
+          "src": "native drawing part parameter"
+        }
+      }
+    },
+    "group": {
+      "doc": "exposed native group",
+      "keys": {
+        "members": {
+          "head": "span",
+          "concept": "reference",
+          "src": "drawing.object.group ids"
+        },
+        "name": {
+          "head": "span",
+          "concept": "name",
+          "src": "drawing.object.group name"
+        }
+      }
+    }
+  },
+  "diagram": {
+    "diagram": {
+      "doc": "a diagram as a whole",
+      "keys": {
+        "kind": {
+          "head": "candidate",
+          "concept": "diagram_kind",
+          "values": [
+            "flowchart",
+            "tree",
+            "org_chart",
+            "mind_map",
+            "network",
+            "sequence",
+            "timeline",
+            "venn",
+            "state_machine",
+            "bar_chart",
+            "line_chart",
+            "pie_chart",
+            "doughnut_chart",
+            "scatter_chart",
+            "radar_chart",
+            "area_chart",
+            "table"
+          ],
+          "src": "startDiagram kind; charts are a kind of diagram"
+        },
+        "layout": {
+          "head": "class",
+          "concept": "layout",
+          "values": [
+            "tree",
+            "grid",
+            "row",
+            "column",
+            "circle",
+            "radial",
+            "layers"
+          ],
+          "src": "arrangeShapes / startDiagram layout"
+        }
+      }
+    },
+    "node": {
+      "doc": "a node / box / bar / slice (book 7.2 t.node)",
+      "keys": {
+        "label": {
+          "head": "span",
+          "concept": "name",
+          "src": "s.node.label"
+        },
+        "shape": {
+          "head": "class+step",
+          "concept": "shape",
+          "values": [
+            "box",
+            "rounded_box",
+            "circle",
+            "ellipse",
+            "diamond",
+            "hexagon",
+            "triangle",
+            "star",
+            "cylinder",
+            "parallelogram",
+            "cloud",
+            "note",
+            "square",
+            "rectangle"
+          ],
+          "src": "s.node.shape space=shape (step rounder)"
+        },
+        "colour": {
+          "head": "candidate+step",
+          "concept": "colour",
+          "src": "s.node.colour"
+        },
+        "size": {
+          "head": "class+step",
+          "concept": "size",
+          "values": [
+            "tiny",
+            "small",
+            "default",
+            "big",
+            "huge"
+          ],
+          "src": "setShapes size"
+        },
+        "position": {
+          "head": "class",
+          "concept": "spatial_relation",
+          "values": [
+            "in",
+            "on",
+            "under",
+            "above",
+            "below",
+            "next_to",
+            "left_of",
+            "right_of",
+            "between",
+            "behind",
+            "in_front_of",
+            "near",
+            "around",
+            "inside",
+            "outside",
+            "along"
+          ],
+          "src": "moveShapes place/anchor"
+        },
+        "anchor": {
+          "head": "fill+span",
+          "concept": "reference",
+          "src": "the anchor node"
+        },
+        "at": {
+          "head": "class",
+          "concept": "region",
+          "values": [
+            "corner",
+            "top",
+            "bottom",
+            "left",
+            "right",
+            "center",
+            "top_left",
+            "top_right",
+            "bottom_left",
+            "bottom_right",
+            "middle",
+            "background",
+            "foreground"
+          ],
+          "src": "s.node.at"
+        }
+      }
+    },
+    "link": {
+      "doc": "an arrow between nodes (book 7.2 t.link)",
+      "keys": {
+        "from": {
+          "head": "fill+span",
+          "concept": "reference",
+          "src": "s.link.from role=source"
+        },
+        "to": {
+          "head": "fill+span",
+          "concept": "reference",
+          "src": "s.link.to role=goal"
+        }
+      }
+    },
+    "chart": {
+      "doc": "chart data and display (old data.charts)",
+      "keys": {
+        "series": {
+          "head": "span",
+          "concept": "name",
+          "many": true,
+          "src": "series names"
+        },
+        "labels": {
+          "head": "span",
+          "concept": "name",
+          "many": true,
+          "src": "bar/slice/point labels"
+        },
+        "values": {
+          "head": "span",
+          "concept": "quantity",
+          "many": true,
+          "src": "chart.setValues"
+        },
+        "legend": {
+          "head": "class",
+          "concept": "toggle",
+          "values": [
+            "show",
+            "hide"
+          ],
+          "src": "chart options legend"
+        },
+        "show_values": {
+          "head": "class",
+          "concept": "toggle",
+          "values": [
+            "show",
+            "hide"
+          ],
+          "src": "showValues"
+        },
+        "stacked": {
+          "head": "class",
+          "concept": "toggle",
+          "values": [
+            "on",
+            "off"
+          ],
+          "src": "stacked"
+        },
+        "horizontal": {
+          "head": "class",
+          "concept": "toggle",
+          "values": [
+            "on",
+            "off"
+          ],
+          "src": "horizontal"
+        },
+        "sort": {
+          "head": "class",
+          "concept": "sort",
+          "values": [
+            "desc",
+            "asc",
+            "alpha",
+            "given"
+          ],
+          "src": "sort"
+        },
+        "palette": {
+          "head": "candidate",
+          "concept": "colour",
+          "src": "palette"
+        },
+        "source": {
+          "head": "class+span",
+          "concept": "data_source",
+          "values": [
+            "calendar",
+            "document",
+            "list",
+            "prices",
+            "holdings",
+            "typed"
+          ],
+          "src": "chart.fromList/fromHoldings/...; book: meetings per person from the calendar"
+        },
+        "datasets": {
+          "head": "span",
+          "concept": "literal_data",
+          "src": "chart.make datasets"
+        },
+        "title": {
+          "head": "span",
+          "concept": "name",
+          "src": "chart.make/change title"
+        }
+      }
+    }
+  },
+  "document": {
+    "text": {
+      "doc": "a document as a whole (book 7.3 t.text)",
+      "keys": {
+        "genre": {
+          "head": "candidate",
+          "concept": "kind",
+          "values": [
+            "letter",
+            "email",
+            "report",
+            "story",
+            "note",
+            "memo",
+            "essay",
+            "summary",
+            "article",
+            "invitation",
+            "announcement",
+            "speech",
+            "cover_letter",
+            "complaint",
+            "review",
+            "recipe",
+            "list",
+            "minutes",
+            "proposal",
+            "poem",
+            "press_release",
+            "newsletter",
+            "itinerary",
+            "lab_report",
+            "cv"
+          ],
+          "src": "s.text.genre (k.genres)"
+        },
+        "about": {
+          "head": "span",
+          "concept": "topic",
+          "src": "s.text.about"
+        },
+        "title": {
+          "head": "span",
+          "concept": "name",
+          "src": "s.text.title"
+        },
+        "tone": {
+          "head": "class+step",
+          "concept": "tone",
+          "values": [
+            "formal",
+            "informal",
+            "friendly",
+            "warm",
+            "cold",
+            "polite",
+            "firm",
+            "neutral",
+            "enthusiastic",
+            "apologetic",
+            "humorous",
+            "serious",
+            "persuasive",
+            "simple"
+          ],
+          "src": "s.text.tone space=tone"
+        },
+        "length": {
+          "head": "class+step",
+          "concept": "length",
+          "values": [
+            "very_short",
+            "short",
+            "medium",
+            "long",
+            "very_long"
+          ],
+          "src": "writeText words (region)"
+        },
+        "words": {
+          "head": "number",
+          "concept": "measure",
+          "src": "writeText words"
+        },
+        "chapters": {
+          "head": "number",
+          "concept": "count",
+          "src": "writeText chapters / keepChapters"
+        },
+        "content": {
+          "head": "span",
+          "concept": "literal_text",
+          "src": "document.write blocks: literal paragraph body"
+        }
+      }
+    },
+    "section": {
+      "doc": "a part of a document (book 7.3 t.section)",
+      "keys": {
+        "role": {
+          "head": "candidate",
+          "concept": "part_kind",
+          "values": [
+            "greeting",
+            "introduction",
+            "body",
+            "conclusion",
+            "signature",
+            "chapter",
+            "paragraph",
+            "heading",
+            "list",
+            "table",
+            "apology",
+            "explanation",
+            "summary",
+            "closing",
+            "subject",
+            "abstract",
+            "methods",
+            "results",
+            "references",
+            "item"
+          ],
+          "src": "s.sec.role"
+        },
+        "order": {
+          "head": "class",
+          "concept": "order_relation",
+          "values": [
+            "before",
+            "after",
+            "first",
+            "last",
+            "top",
+            "bottom",
+            "swap"
+          ],
+          "src": "s.sec.order"
+        },
+        "order_anchor": {
+          "head": "fill+span",
+          "concept": "reference",
+          "src": "the other section"
+        },
+        "length": {
+          "head": "class+step",
+          "concept": "length",
+          "values": [
+            "very_short",
+            "short",
+            "medium",
+            "long",
+            "very_long"
+          ],
+          "src": "s.sec.length"
+        },
+        "words": {
+          "head": "number",
+          "concept": "measure",
+          "src": "s.sec.length unit=word"
+        },
+        "content": {
+          "head": "span",
+          "concept": "literal_text",
+          "src": "text the user dictates to insert/replace (doc.addParagraph, doc.dictate)"
+        },
+        "level": {
+          "head": "class",
+          "concept": "heading_level",
+          "values": [
+            "1",
+            "2",
+            "3"
+          ],
+          "src": "old heading level"
+        },
+        "count": {
+          "head": "number",
+          "concept": "count",
+          "src": "three paragraphs"
+        }
+      }
+    },
+    "inline": {
+      "doc": "formatting, lists, tasks, tables (old docs.editor)",
+      "keys": {
+        "format": {
+          "head": "class",
+          "concept": "format",
+          "values": [
+            "link",
+            "bold",
+            "italic",
+            "underline",
+            "strike",
+            "code",
+            "highlight"
+          ],
+          "src": "old style/highlight/link"
+        },
+        "list_kind": {
+          "head": "class",
+          "concept": "list_kind",
+          "values": [
+            "bullet",
+            "numbered",
+            "task"
+          ],
+          "src": "doc.addList"
+        },
+        "align": {
+          "head": "class",
+          "concept": "align",
+          "values": [
+            "left",
+            "center",
+            "right",
+            "justify"
+          ],
+          "src": "old align"
+        },
+        "link_target": {
+          "head": "span",
+          "concept": "literal_text",
+          "src": "old link"
+        },
+        "enabled": {
+          "head": "class",
+          "concept": "toggle",
+          "src": "actual literal editing parameter",
+          "values": [
+            "on",
+            "off"
+          ]
+        },
+        "from": {
+          "head": "number",
+          "concept": "index",
+          "src": "actual literal editing parameter"
+        },
+        "to": {
+          "head": "number",
+          "concept": "index",
+          "src": "actual literal editing parameter"
+        },
+        "items": {
+          "head": "span",
+          "concept": "literal_list",
+          "src": "actual literal editing parameter"
+        },
+        "rows": {
+          "head": "span",
+          "concept": "literal_table",
+          "src": "actual literal editing parameter"
+        },
+        "highlight_colour": {
+          "head": "candidate",
+          "concept": "colour",
+          "src": "actual literal editing parameter"
+        }
+      }
+    }
+  },
+  "calendar": {
+    "meeting": {
+      "doc": "a meeting (book 7.4 t.meeting)",
+      "keys": {
+        "title": {
+          "head": "span",
+          "concept": "name",
+          "src": "s.meet.title"
+        },
+        "day": {
+          "head": "candidate+span",
+          "concept": "day",
+          "src": "s.meet.start part=start (day): today, tomorrow, weekday, date, next week"
+        },
+        "time": {
+          "head": "candidate+span+step",
+          "concept": "time",
+          "src": "s.meet.start (clock or region morning/afternoon; step earlier/later)"
+        },
+        "length": {
+          "head": "number+class+step",
+          "concept": "duration",
+          "src": "s.meet.length part=duration"
+        },
+        "end": {
+          "head": "span",
+          "concept": "time",
+          "src": "until 5"
+        },
+        "room": {
+          "head": "fill+span",
+          "concept": "reference",
+          "src": "s.meet.room relation=in"
+        },
+        "people": {
+          "head": "fill+span",
+          "concept": "person",
+          "many": true,
+          "src": "s.meet.people role=participant many=true"
+        },
+        "shift": {
+          "head": "number+class",
+          "concept": "delta",
+          "src": "move by an amount"
+        },
+        "relation": {
+          "head": "class",
+          "concept": "time_relation",
+          "values": [
+            "before",
+            "after",
+            "same_time",
+            "during",
+            "between",
+            "not_overlapping"
+          ],
+          "src": "relative to another meeting"
+        },
+        "relation_anchor": {
+          "head": "fill+span",
+          "concept": "reference",
+          "src": "the other meeting"
+        },
+        "free": {
+          "head": "class",
+          "concept": "free_search",
+          "values": [
+            "nearest_free",
+            "first_free",
+            "common_free"
+          ],
+          "src": "book 6.8 / 7.4: nearest free time"
+        },
+        "agenda": {
+          "head": "span",
+          "concept": "literal_text",
+          "src": "notes / agenda"
+        },
+        "calendar": {
+          "head": "span",
+          "concept": "reference",
+          "src": "calendar.meeting.add/change calendar identity"
+        }
+      }
+    },
+    "room": {
+      "doc": "a room (book 7.4 t.room)",
+      "keys": {
+        "name": {
+          "head": "span",
+          "concept": "name",
+          "src": "room name"
+        },
+        "seats": {
+          "head": "number",
+          "concept": "quantity",
+          "src": "s.room.seats counts=w.person"
+        },
+        "location": {
+          "head": "span",
+          "concept": "place",
+          "src": "calendar.room.add/change location"
+        }
+      }
+    },
+    "person": {
+      "doc": "a participant (w.person)",
+      "keys": {
+        "name": {
+          "head": "span",
+          "concept": "person",
+          "src": "person name"
+        }
+      }
+    },
+    "calendar": {
+      "doc": "exposed native calendar",
+      "keys": {
+        "name": {
+          "head": "span",
+          "concept": "name",
+          "src": "calendar.calendar.add/change label"
+        },
+        "colour": {
+          "head": "candidate",
+          "concept": "colour",
+          "src": "calendar.calendar.add/change colour"
+        }
+      }
+    }
+  },
+  "avatar": {
+    "face": {
+      "doc": "exposed native face",
+      "keys": {
+        "preset": {
+          "head": "class",
+          "concept": "preset",
+          "src": "actual avatar native capability parameters",
+          "values": [
+            "baby",
+            "child",
+            "girl",
+            "boy",
+            "woman",
+            "man",
+            "old woman",
+            "old man",
+            "bearded man",
+            "woman with curly hair",
+            "robot",
+            "alien",
+            "clown",
+            "queen"
+          ]
+        },
+        "expression": {
+          "head": "class",
+          "concept": "expression",
+          "src": "actual avatar native capability parameters",
+          "values": [
+            "happy",
+            "sad",
+            "angry",
+            "surprised",
+            "sleepy",
+            "wink",
+            "talking"
+          ]
+        },
+        "name": {
+          "head": "span",
+          "concept": "name",
+          "src": "actual avatar native capability parameters"
+        }
+      }
+    },
+    "part": {
+      "doc": "exposed native part",
+      "keys": {
+        "ids": {
+          "head": "span",
+          "concept": "reference",
+          "src": "actual avatar native capability parameters"
+        },
+        "variant": {
+          "head": "class",
+          "concept": "variant",
+          "src": "actual avatar native capability parameters",
+          "values": [
+            "Santa hat",
+            "afro",
+            "angry",
+            "antenna",
+            "apron",
+            "arched",
+            "bald on top",
+            "beanie",
+            "beret",
+            "big smile",
+            "blush",
+            "bob",
+            "boiler suit",
+            "bolt",
+            "bow",
+            "bow tie",
+            "box",
+            "bun",
+            "bushy",
+            "button",
+            "cap",
+            "cape",
+            "cat-eye",
+            "centre parting",
+            "chef hat",
+            "chef jacket",
+            "chevron",
+            "chinstrap",
+            "cloak",
+            "closed",
+            "cowboy hat",
+            "crown",
+            "curly",
+            "dimple",
+            "dot",
+            "downcast",
+            "drop",
+            "fedora",
+            "fire helmet",
+            "fire jacket",
+            "flower wreath",
+            "football shirt",
+            "freckles",
+            "fringe",
+            "frown",
+            "full",
+            "full lips",
+            "fur coat",
+            "goatee",
+            "grille",
+            "grin",
+            "gritted",
+            "half open",
+            "handlebar",
+            "happy",
+            "hard hat",
+            "headscarf",
+            "heart",
+            "hoodie",
+            "hoop",
+            "judge wig",
+            "knight helmet",
+            "lab coat",
+            "large",
+            "large hoop",
+            "lashes",
+            "lip bite",
+            "long",
+            "long curly",
+            "long sides",
+            "long straight",
+            "long wavy",
+            "looking in",
+            "looking out",
+            "looking up",
+            "medium",
+            "metal plate",
+            "military helmet",
+            "mohawk",
+            "mole",
+            "monocle",
+            "narrow",
+            "necklace",
+            "neutral",
+            "nurse cap",
+            "open",
+            "oval",
+            "overalls",
+            "party hat",
+            "pearl",
+            "pencil",
+            "pigtails",
+            "pilot cap",
+            "pipe",
+            "pirate hat",
+            "pointed",
+            "police cap",
+            "ponytail",
+            "pressed",
+            "raised",
+            "receding",
+            "robe",
+            "round",
+            "round blush",
+            "sad",
+            "safety vest",
+            "sailor cap",
+            "sailor collar",
+            "scar",
+            "scrubs",
+            "shirt",
+            "short",
+            "side parting",
+            "sideburns",
+            "sleepy",
+            "small",
+            "small round",
+            "smile",
+            "smirk",
+            "soul patch",
+            "space helmet",
+            "space suit",
+            "spikes",
+            "square",
+            "star",
+            "straight",
+            "stubble",
+            "stud",
+            "suit",
+            "sun hat",
+            "sunglasses",
+            "surprised",
+            "swimming cap",
+            "t-shirt",
+            "talking",
+            "tank top",
+            "tapered",
+            "tear",
+            "thick",
+            "thick arched",
+            "thin",
+            "tongue out",
+            "tongue tip",
+            "top hat",
+            "tuft",
+            "uniform",
+            "v-neck",
+            "visor",
+            "walrus",
+            "wavy",
+            "wide",
+            "witch hat",
+            "wizard hat",
+            "wrinkles"
+          ]
+        },
+        "colour": {
+          "head": "class",
+          "concept": "colour",
+          "src": "actual avatar native capability parameters",
+          "values": [
+            "amber",
+            "auburn",
+            "black",
+            "blond",
+            "blue",
+            "brown",
+            "dark brown",
+            "green",
+            "grey",
+            "hazel",
+            "light",
+            "metal grey",
+            "olive",
+            "orange",
+            "pale",
+            "pink",
+            "purple",
+            "red",
+            "tan",
+            "white",
+            "yellow"
+          ]
+        },
+        "size": {
+          "head": "class",
+          "concept": "size",
+          "src": "actual avatar native capability parameters",
+          "values": [
+            "tiny",
+            "small",
+            "default",
+            "big",
+            "huge"
+          ]
+        },
+        "place": {
+          "head": "class",
+          "concept": "place",
+          "src": "actual avatar native capability parameters",
+          "values": [
+            "up",
+            "down",
+            "left",
+            "right"
+          ]
+        }
+      }
+    }
+  }
+}
