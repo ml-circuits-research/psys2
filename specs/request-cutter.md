@@ -93,3 +93,22 @@ The pure suite covers scalar offsets, empty sources, ambiguous/missing spans,
 overlap/order, boundary mismatch, special/pad exclusion, truncation, invalid
 transitions, unknown logits, TRAIN-only weights and empty/positive metrics.
 A complete audit independently verifies all frozen raw files and split IDs.
+
+## Frozen first run
+
+request-cutter-v1-evidence.json records the exact command, immutable hashes and
+all metrics for five completed epochs / 9,050 optimizer steps. Epoch five is
+selected by the predeclared calibration span F1 metric. CAL TP3097 / FP722 /
+FN663 gives exact span P81.09 / R82.37 / F181.73 percent. Nonempty utterance
+exact is 2534/3227 (78.52%); empty is 74/81 (91.36%); overall 2608/3308
+(78.84%). Positive-token F1 is 96.70% over 29,270 positive tokens, B/I macro
+F1 94.12%. Ninety-two predictions are unresolved (87 invalid transitions,
+5 tied logits). All 3,308 original calibration rows are represented.
+
+An independent source-annotation/prediction pass reproduced TP/FP/FN and the
+empty/nonempty exact counts. Training rechecked all 308 raw source hashes,
+input corpus/exclusion/trainer/checkpoint hashes after completion. The
+checkpoint is trained but executionEligible remains false. These are CUDA
+BF16 cutter metrics, not calibrated confidence, browser accuracy, downstream
+field accuracy or complete-command correctness. Empty exactness is below
+epoch one (76/81), a retained tradeoff rather than a hidden global gain.
