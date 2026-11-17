@@ -1,6 +1,5 @@
 """Real three-graph export, with no intermediate FP32 disk model.
 Factories accept verified in-memory CPU modules; this file never loads checkpoints.
-Trained invocation requires separately approved proof/storage and frozen identities.
 """
 import copy,hashlib,importlib.util,io,json,shutil,threading
 from pathlib import Path
@@ -70,7 +69,7 @@ def parity(model,proto,q8,cases,output_names):
    results.append({'output':name,'shape':list(ref.shape),'fp32MaxAbsError':float(np.max(np.abs(ref-full))),'q8MaxAbsError':float(np.max(np.abs(ref-reduced))),'fp32ArgmaxChanges':int(np.count_nonzero(ref.argmax(-1)!=full.argmax(-1))),'q8ArgmaxChanges':int(np.count_nonzero(ref.argmax(-1)!=reduced.argmax(-1))),'elements':int(ref.size),'outputDtype':str(reduced.dtype)})
  return results
 
-def export_bundle(key_model,key_config,cutter_model,cutter_config,identity,raw_routes,out,examples,*,max_output_bytes,reserve_bytes,key_config_bytes,cutter_config_bytes):
+def export_bundle(key_model,key_config,cutter_model,cutter_config,identity,raw_routes,out,examples,*,max_output_bytes,reserve_bytes,key_config_bytes,cutter_config_bytes,data_manifest_bytes=None):
  """Write final q8 graphs only. identity is caller's separately verified authority.
  No calibration/quality is inferred: parity must be attached by the calling proof.
  """
@@ -82,6 +81,9 @@ def export_bundle(key_model,key_config,cutter_model,cutter_config,identity,raw_r
  if any(not isinstance(v,bytes)or len(v)>4*1024**2 for v in [key_config_bytes,cutter_config_bytes]):raise ValueError('config-byte-bound')
  canonical=lambda v:json.dumps(v,sort_keys=True,separators=(',',':'),allow_nan=False)
  if canonical(json.loads(key_config_bytes))!=canonical(key_config)or canonical(json.loads(cutter_config_bytes))!=canonical(cutter_config):raise ValueError('config-bytes-mismatch')
+ if data_manifest_bytes is not None:
+  if not isinstance(data_manifest_bytes,bytes)or len(data_manifest_bytes)>4000000 or digest(data_manifest_bytes)!=key_config.get('dataManifestSha256')or json.loads(data_manifest_bytes).get('scriptSha256')!=identity['preparerSha256']:raise ValueError('preparer-manifest-chain-mismatch')
+ elif identity.get('artifactRole')!='fixture'and not key_config.get('preparerSha256'):raise ValueError('missing-preparer-manifest')
  if cutter_config.get('format')!='sop.request-cutter-model/1':raise ValueError('unsupported-cutter-config')
  for field in ['trainerSha256','preparerSha256']:
   if field in key_config and key_config[field]!=identity[field]:raise ValueError('key-source-identity-mismatch')
@@ -102,6 +104,7 @@ def export_bundle(key_model,key_config,cutter_model,cutter_config,identity,raw_r
    if used>max_output_bytes or shutil.disk_usage(out).free<len(body)+reserve_bytes:raise ValueError('export-output-budget')
    path=out/(name+'.q8.onnx');path.write_bytes(body);files[name]={'path':path.name,'sha256':digest(body),'bytes':len(body)}
   config_bytes=key_config_bytes;cutter_bytes=cutter_config_bytes;manifest={'format':'sop.key-reader-runtime/1','artifactRole':identity['artifactRole'],'dtype':'fp32','weightRepresentation':'q8-dynamic','executionEligible':False,'graphConfidence':None,'configJSON':config_bytes.decode('utf-8'),'configSha256':digest(config_bytes),'cutterConfigJSON':cutter_bytes.decode('utf-8'),'cutterConfigSha256':digest(cutter_bytes),'encoderSha256':files['encoder']['sha256'],'headsSha256':files['heads']['sha256'],'cutterSha256':files['cutter']['sha256'],'hiddenWidth':key_model.key.embedding_dim,'rawRoutes':raw_routes,'bankLayout':prototype().layout(layout_view(key_config))['banks'],'files':files,'identity':identity,**{k:identity[k]for k in required},'exporterSha256':digest(Path(__file__).read_bytes()),'layoutSourceSha256':digest(Path(__file__).with_name('export-key-reader.py').read_bytes()),'torchVersion':torch.__version__,'onnxVersion':onnx.__version__,'onnxruntimeVersion':ort.__version__,'quantization':'dynamic signed-int8 weights, unsigned-int8 dynamic activations; dequantized float32 outputs','parity':'pending actual frozen model/runtime/packet measurement; no calibration inherited'}
+  if data_manifest_bytes is not None:manifest['dataManifestJSON']=data_manifest_bytes.decode('utf-8')
   manifest['bundleSha256']=digest(json.dumps(manifest,sort_keys=True,separators=(',',':')).encode());body=(json.dumps(manifest,indent=2)+'\n').encode();used+=len(body)
   if used>max_output_bytes or shutil.disk_usage(out).free<len(body)+reserve_bytes:raise ValueError('manifest-output-budget')
   (out/'manifest.json').write_bytes(body);return manifest

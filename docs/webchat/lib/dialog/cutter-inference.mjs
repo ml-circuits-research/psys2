@@ -58,7 +58,9 @@ export async function createCutterInference({manifest,tokenizer,model,offsetAuth
  if(m?.format!=='sop.key-reader-runtime/1'||!['trained-unverified','fixture'].includes(m.artifactRole)||m.dtype!=='fp32'||!['fp32','q8-dynamic'].includes(m.weightRepresentation)||m.executionEligible!==false||m.graphConfidence!==null||typeof m.cutterConfigJSON!=='string'||new TextEncoder().encode(m.cutterConfigJSON).length>4000000||!['cutterConfigSha256','cutterSha256','cutterCheckpointSha256','cutterTrainerSha256','cutterCodecSha256','tokenizerSha256'].every(k=>hash(m[k]))||![tokenizer,model,offsetAuthority,recordDiagnostics].every(f=>typeof f==='function')||!Number.isSafeInteger(maxText)||maxText<1||maxText>16384||!Number.isSafeInteger(budget)||budget<1)throw Error('invalid-cutter-runtime-profile');
  if(await digest(m.cutterConfigJSON)!==m.cutterConfigSha256)throw Error('cutter-config-hash-mismatch');
  const config=copyHostData(JSON.parse(m.cutterConfigJSON));
- if(config.format!=='sop.request-cutter-model/1'||m.artifactRole==='trained-unverified'&&config.artifactRole!=='trained'||config.maxLength!==192||config.executionEligible!==false||config.graphConfidence!==null||config.trainerSha256!==m.cutterTrainerSha256||config.codecSha256!==m.cutterCodecSha256||config.encoderFiles?.['tokenizer.json']!==m.tokenizerSha256||!object(config.codec)||canonicalCodec(config.codec)!==canonicalCodec(CUTTER_CODEC)||await digest(canonicalCodec(config.codec))!==m.cutterCodecSha256)throw Error('incompatible-frozen-cutter-config');
+ const inputPadding=config.inputPadding??'max_length';
+ if(!['max_length','dynamic'].includes(inputPadding)||!Number.isSafeInteger(config.maxLength)||config.maxLength<2||config.maxLength>4096)throw Error('invalid-cutter-input-layout');
+ if(config.format!=='sop.request-cutter-model/1'||m.artifactRole==='trained-unverified'&&config.artifactRole!=='trained'||config.executionEligible!==false||config.graphConfidence!==null||config.trainerSha256!==m.cutterTrainerSha256||config.codecSha256!==m.cutterCodecSha256||config.encoderFiles?.['tokenizer.json']!==m.tokenizerSha256||!object(config.codec)||canonicalCodec(config.codec)!==canonicalCodec(CUTTER_CODEC)||await digest(canonicalCodec(config.codec))!==m.cutterCodecSha256)throw Error('incompatible-frozen-cutter-config');
  const composite=await digest(JSON.stringify({
   format:'sop.request-cutter-computation/1',config:m.cutterConfigSha256,checkpoint:m.cutterCheckpointSha256,
   graph:m.cutterSha256,tokenizer:m.tokenizerSha256,trainer:m.cutterTrainerSha256,codec:m.cutterCodecSha256,
@@ -79,10 +81,10 @@ export async function createCutterInference({manifest,tokenizer,model,offsetAuth
    if(chars.length>maxText)throw Error('source-size');
    // Omitting text_pair is essential: paired empty context adds another SEP.
    const full=await tokenizer([text],{padding:false,truncation:false});
-   const encoded=await tokenizer([text],{padding:'max_length',truncation:true,max_length:config.maxLength});
+   const encoded=await tokenizer([text],{padding:inputPadding==='dynamic'?false:'max_length',truncation:true,max_length:config.maxLength});
    const ids=row(encoded.input_ids,config.maxLength,tick),mask=row(encoded.attention_mask,config.maxLength,tick),
     fullIds=row(full.input_ids,maxText*2+8,tick),fullMask=row(full.attention_mask,maxText*2+8,tick);
-   if(ids.length!==config.maxLength||mask.length!==ids.length||fullIds.length!==fullMask.length||fullMask.some(n=>n!==1))throw Error('invalid-cutter-tokenizer-shape');
+   if((inputPadding==='max_length'&&ids.length!==config.maxLength)||mask.length!==ids.length||fullIds.length!==fullMask.length||fullMask.some(n=>n!==1))throw Error('invalid-cutter-tokenizer-shape');
    const active=padding(mask);
    packet.coverage.truncated=fullIds.length>active;
    if(packet.coverage.truncated)throw Error('source-truncated');

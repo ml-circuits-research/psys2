@@ -230,6 +230,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       lastUsage = { usage: res.usage ?? [], detection: res.detection ?? [] };
       if (res.budget && !res.reply.budget) res.reply.budget = res.budget;
       if (res.reply.budgetExceeded) rememberBad({ key, text, tab, kind: 'send' }, 'budget', { site: res.reply.budgetExceeded.site, stage: res.reply.budgetExceeded.stage });   // a reply that says "too complex" is never recomputed
+      res.reply.trace={...res.reply.trace,worldActivity:res.worldActivity??[],activityRequestId:res.activityRequestId??null};
       return res.reply;
     },
     acceptState(result) {applyStateInfo(result);},

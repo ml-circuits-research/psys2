@@ -50,7 +50,7 @@ function tensorValues(value,dims,tick){
  if(!value||!same(value.dims,dims)||!value.data||value.data.length!==dims.reduce((a,b)=>a*b,1))throw Error('invalid-neural-output-shape');
  const out=[];for(const item of value.data){tick();if(typeof item!=='number'||!Number.isFinite(item))throw Error('nonfinite-neural-output');out.push(item);}return out;
 }
-function tokenRow(value){if(!value||value.dims?.length!==2||value.dims[0]!==1||value.data?.length!==value.dims[1])throw Error('invalid-tokenizer-tensor');const result=Array.from(value.data,Number);if(result.some(n=>!Number.isSafeInteger(n)||n<0))throw Error('invalid-tokenizer-value');return result;}
+function tokenRow(value){if(!value||value.dims?.length!==2||value.dims[0]!==1||!Number.isSafeInteger(value.dims[1])||value.dims[1]<1||value.data?.length!==value.dims[1])throw Error('invalid-tokenizer-tensor');const result=Array.from(value.data,Number);if(result.some(n=>!Number.isSafeInteger(n)||n<0))throw Error('invalid-tokenizer-value');return result;}
 function checkOffsets(authority,text,tokenIds,mask,manifest,tick){
  const a=copyHostData(authority),n=tokenIds.length,chars=Array.from(text);
  if(!object(a)||a.unit!=='unicode-scalar'||!same(a.tokenIds,tokenIds)||!same(a.attentionMask,mask)||!a.provenance||a.provenance.tokenizerSha256!==manifest.tokenizerSha256||!hash(a.provenance.profileSha256)||typeof a.provenance.id!=='string'||!Number.isSafeInteger(a.provenance.version)||a.provenance.version<1||!['offsets','sequenceIds','specialTokensMask'].every(k=>Array.isArray(a[k])&&a[k].length===n))throw Error('exact-source-offsets-unavailable');
@@ -70,6 +70,8 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
  if(m?.format!=='sop.key-reader-runtime/1'||!['trained-unverified','fixture'].includes(m.artifactRole)||m.dtype!=='fp32'||!['fp32','q8-dynamic'].includes(m.weightRepresentation)||m.executionEligible!==false||m.graphConfidence!==null||typeof configJSON!=='string'||!['configSha256','checkpointSha256','encoderSha256','headsSha256','tokenizerSha256','preparerSha256','trainerSha256','codecSha256'].every(k=>hash(m[k]))||typeof tokenizer!=='function'||typeof encoder!=='function'||typeof heads!=='function'||typeof makeTensor!=='function'||typeof offsetAuthority!=='function'||typeof recordDiagnostics!=='function'||![maxText,maxContextBytes,maxQueries,budget].every(n=>Number.isSafeInteger(n)&&n>0)||maxQueries>4096)throw Error('invalid-key-runtime-profile');
  if(await digest(configJSON)!==m.configSha256)throw Error('config-hash-mismatch');const config=copyHostData(JSON.parse(configJSON));
  const layout=validateKeyReaderLayout(config);
+ const inputPadding=config.inputPadding??'max_length';
+ if(!['max_length','dynamic'].includes(inputPadding))throw Error('invalid-input-padding');
  let preparerValid=config.preparerSha256===m.preparerSha256;
  if(!config.preparerSha256&&typeof m.dataManifestJSON==='string'&&new TextEncoder().encode(m.dataManifestJSON).length<=4000000&&hash(config.dataManifestSha256)&&await digest(m.dataManifestJSON)===config.dataManifestSha256)preparerValid=JSON.parse(m.dataManifestJSON).scriptSha256===m.preparerSha256;
  if(!Number.isSafeInteger(m.hiddenWidth)||m.hiddenWidth<1||m.hiddenWidth>4096||!object(m.rawRoutes)||!object(m.rawRoutes.globals)||!object(m.rawRoutes.metadata)||config.trainerSha256!==m.trainerSha256||!preparerValid||config.encoderFiles?.['tokenizer.json']!==m.tokenizerSha256)throw Error('incompatible-key-runtime-layout');
@@ -95,9 +97,9 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
   try{
    if(!scalarString(text)||!text||Array.from(text).length>maxText||typeof area!=='string'||!area)throw Error('invalid-source-input');
    const chars=Array.from(text),fitted=await fitKeyReaderContext(tokenizer,text,area,copyHostData(context,{maxBytes:maxContextBytes}),config.maxLength),contextJSON=fitted.json,pair={text_pair:[contextJSON]};auxiliary.contextSelection=fitted.summary;
-   const full=fitted.full,encoded=await tokenizer([text],{...pair,padding:'max_length',truncation:true,max_length:config.maxLength});
+   const full=fitted.full,encoded=await tokenizer([text],{...pair,padding:inputPadding==='dynamic'?false:'max_length',truncation:true,max_length:config.maxLength});
    const ids=tokenRow(encoded.input_ids),mask=tokenRow(encoded.attention_mask),fullIds=tokenRow(full.input_ids),fullMask=tokenRow(full.attention_mask),length=ids.length;
-   if(length!==config.maxLength||mask.length!==length||fullMask.length!==fullIds.length||[...mask,...fullMask].some(n=>n!==0&&n!==1))throw Error('invalid-tokenizer-shape');
+   if(length>config.maxLength||(inputPadding==='max_length'&&length!==config.maxLength)||mask.length!==length||fullMask.length!==fullIds.length||[...mask,...fullMask].some(n=>n!==0&&n!==1))throw Error('invalid-tokenizer-shape');
    raw.coverage.truncated=fullMask.reduce((a,b)=>a+b,0)>mask.reduce((a,b)=>a+b,0);if(raw.coverage.truncated)throw Error('source-or-context-truncated');
    const authority=checkOffsets(await offsetAuthority({text,contextJson:contextJSON,tokenIds:ids,attentionMask:mask,fullTokenIds:fullIds,fullAttentionMask:fullMask,maxLength:config.maxLength}),text,ids,mask,m,tick);offsetProvenance=authority.provenance;
    const output=await encoder({input_ids:encoded.input_ids,attention_mask:encoded.attention_mask});

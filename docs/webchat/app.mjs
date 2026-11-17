@@ -174,7 +174,7 @@ export async function mountPsys2(element, options = {}) {
       return {...data,areas:tabDefs.filter(t=>t.world).map(t=>({...data.areas?.find(area=>area.world===t.world),view:t.id,world:t.world,label:t.label})),centralNodeId:'project:application',nodes:[...data.nodes,...structures],edges:[...data.edges,{from:'runtime:activity-bus',to:'browser:worlds-view',label:'streams observed activity'},...data.nodes.filter(n=>n.id.startsWith('instance:')).flatMap(n=>[{from:n.id,to:'browser:instance-store',label:'explicit export buffer'},{from:'browser:intent-records',to:n.id,label:'records changes to'}])]};
       })().then(async result=>{const latest=tabLoads.get(t.id)??timing;latest.worker=timing.worker;latest.timeline.stage('Draw architecture graph');if(latest!==timing)timing.timeline.finish();await tabPaint();void finishTabLoad(latest,'Draw architecture graph');return result;},error=>{timing.timeline.finish(error);tabLoads.get(t.id)?.timeline.finish(error);throw error;}).finally(()=>{worldsLoadInFlight=null;});return worldsLoadInFlight;
     },subscribe:fn=>{worldActivityListeners.add(fn);return()=>worldActivityListeners.delete(fn);},copy:text=>ALLOW['clipboard.copy']({text})});
-    worldsExplorer=explorer;tabBtns[t.id].panel.append(explorer.element);panelUI[t.id]={ui:{show:()=>explorer.refresh(),update:()=>{},destroy:explorer.destroy}};cleanups.push(()=>{clearTimeout(worldsRefreshTimer);explorer.destroy();});return panelUI[t.id].ui;
+    worldsExplorer=explorer;tabBtns[t.id].panel.append(explorer.element);panelUI[t.id]={ui:{show:()=>{explorer.setVisible?.(true);return explorer.refresh();},hide:()=>explorer.setVisible?.(false),update:()=>{},destroy:explorer.destroy}};cleanups.push(()=>{clearTimeout(worldsRefreshTimer);explorer.destroy();});return panelUI[t.id].ui;
   }
   function attachWorldViews(t,panel){
     const shell=h('div',{class:'p2-world-views'}),holder=h('div',{class:'p2-tabbody p2-active-world',role:'tabpanel',id:`p2-${t.id}-active`});
@@ -501,11 +501,19 @@ export async function mountPsys2(element, options = {}) {
     if(expandedWires&&expandedWires!==wires){const trace=h('details',{class:'p2-execution-details'},h('summary',{},'Execution details'));trace.append(copyButton('Copy execution details',()=>expandedWires),h('pre',{class:'p2-code'},expandedWires));detail.append(trace);}
     bubble.append(detail);return detail;
   }
+  function attachResponseReplay(message,activity=[]) {
+    // Keep each response's actual request records even when the live bus ring advances.
+    const recorded=structuredClone(activity);
+    message.meta.querySelector('.p2-response-replay')?.remove();
+    const replay=h('button',{type:'button',class:'p2-response-replay',title:recorded.length?'Replay the recorded world activity for this response. No command is executed again.':'No world activity was recorded for this response.',disabled:!recorded.length,'data-event-count':recorded.length,onclick:async()=>{showTab('worlds','response-replay');await makeTab(tabDefs.find(t=>t.id==='worlds')); worldsExplorer?.setVisible?.(true);worldsExplorer?.replayEvents(recorded);}},'Replay');
+    message.meta.append(replay);return replay;
+  }
   function addMessage(who, text, { children, className } = {}) {
     const bubble = h('div', { class: 'p2-bubble' }, text, children);
     const meta = h('div', { class: 'p2-meta' }, h('time', {}, time()));
     if(!/is-typing/.test(className??''))meta.append(copyButton('Copy text',()=>typeof text==='string'?text:(text?.textContent??'')));
     const msg = h('div', { class: `p2-msg is-${who}${className ? ` ${className}` : ''}` }, bubble, meta);
+    if(who==='bot'&&!/is-typing/.test(className??''))attachResponseReplay({meta});
     log.append(msg); scrollDown();
     if (turn && who === 'bot' && !/is-typing/.test(className ?? '')) turn.shown?.push({ bubble, cls: className ?? '' });   // LOG WHAT HAPPENED: every reply shown during the turn
     return { msg, bubble, meta };
@@ -714,7 +722,7 @@ export async function mountPsys2(element, options = {}) {
     tool: async (operation,args={},options={}) => {
       if(isBusy())return {ok:false,message:'Please wait for the current action.'};
       const focusBeforeTool=document.activeElement;effectsPending++;updateBusy();
-      try{const r=await session.tool(operation,quantizeGeometryArguments(args),options);applyState(r.state);if(r.intentRecord){await trainingPairs.record(r.intentRecord);const row=addMessage('user',r.intentRecord.text);appendIntent(row.bubble,r.intentRecord.wires,'SOP Lang intent',r.intentRecord.intent?.expandedWires);addMessage('bot',r.message+' · '+(r.intentRecord.verification?.status??'unverified'));}if(r.ok&&r.changed)events.add('control',operation);return r;}
+      try{const r=await session.tool(operation,quantizeGeometryArguments(args),options);applyState(r.state);if(r.intentRecord){await trainingPairs.record(r.intentRecord);const row=addMessage('user',r.intentRecord.text);appendIntent(row.bubble,r.intentRecord.wires,'SOP Lang intent',r.intentRecord.intent?.expandedWires);attachResponseReplay(addMessage('bot',r.message+' · '+(r.intentRecord.verification?.status??'unverified')),r.worldActivity);}if(r.ok&&r.changed)events.add('control',operation);return r;}
       finally{effectsPending=Math.max(0,effectsPending-1);updateBusy();if(focusBeforeTool?.isConnected&&document.activeElement===document.body)focusBeforeTool.focus({preventScroll:true});}
     },
     send: (text) => send(String(text), 'form'),   // a tab's form or control (logged as mode 'form'); ignored (with a hint) while a turn runs
@@ -975,6 +983,7 @@ export async function mountPsys2(element, options = {}) {
     const notUnderstood = mode === 'voice' && (reply.statuses ?? []).length > 0 && !(reply.statuses ?? []).includes('supported') && (reply.segments ?? []).some((sg) => sg.unparsed);
     if (!modelsStarted && ((reply.statuses ?? []).length === 0 || !(reply.statuses ?? []).includes('supported') || (reply.segments ?? []).some((sg) => sg.unparsed))) startModels();   // LAZY-LOAD-3: the rules did not read it cleanly: the reading model is wanted now
     const botMsg = addMessage('bot', answer);
+    attachResponseReplay(botMsg,reply.trace?.worldActivity);
     const readerRouting=reply.trace?.readerRouting,readingCandidates=[reply.trace?.reading,...(readerRouting?.proposalCandidates??[]),...(readerRouting?.admission?.alternatives??[])],shownReadings=new Set();
     for(const candidate of readingCandidates){const wires=candidate?.wires;if(typeof wires!=='string'||!wires.trim()||shownReadings.has(wires))continue;shownReadings.add(wires);appendIntent(botMsg.bubble,wires,reply.statuses?.includes('supported')?'SOP Lang reading':'Reader proposal · not executed');}
     if(readerRouting){

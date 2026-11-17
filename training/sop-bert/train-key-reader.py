@@ -1,7 +1,7 @@
 """Inventory-key BIO reader with shared per-mention metadata; no slot assignment.
 Gold request cuts are conditional supervision, never an inference argument.
 """
-import argparse,collections,hashlib,json,random,time
+import argparse,collections,hashlib,json,random,time,importlib.util
 from pathlib import Path
 
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -18,19 +18,42 @@ def token_interval(offsets,span):
     return (ids[0],ids[-1]+1)if ids and offsets[ids[0]][0]==span[0]and offsets[ids[-1]][1]==span[1]else None
 
 def configuration(manifest):
-    registry=manifest['registry'];keys=list(registry)
-    return {'format':'sop.key-reader/1','keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global']and(not manifest.get('annotationContract')or v['role']=='domain'or not v.get('values')or k=='request.request.act')],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':manifest.get('maxLength',192),'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
+    registry={k:dict(v)for k,v in manifest['registry'].items()};keys=list(registry)
+    families=manifest.get('targetFamilies')
+    if families is not None:
+        if not isinstance(families,dict)or not families or any(not isinstance(area,str)or not area or not isinstance(types,list)or not types or any(not isinstance(t,str)or not t for t in types)or len(set(types))!=len(types)for area,types in families.items()):raise ValueError('invalid-target-families')
+        declared={t for types in families.values()for t in types}
+        if set(registry.get('request.target.type',{}).get('values',[]))!=declared or any(v.get('role')=='domain'and v.get('type')not in families.get(v.get('area'),[])for v in registry.values()):raise ValueError('target-family-registry-mismatch')
+        registry['request.target.type']['familiesByArea']=families
+    return {'format':'sop.key-reader/1',**({'targetFamilies':families}if families is not None else{}),'keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global']and(not manifest.get('annotationContract')or v['role']=='domain'or not v.get('values')or k=='request.request.act')],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':manifest.get('maxLength',192),'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
+
+def fit_context(text,context,area,tokenizer,maximum):
+    import copy
+    original=copy.deepcopy(context);current=copy.deepcopy(context)
+    measure=lambda ctx:tokenizer(text,json.dumps({'area':area,'context':ctx},ensure_ascii=False,sort_keys=True),truncation=False)
+    encoded=measure(current)
+    if len(encoded['input_ids'])>maximum and isinstance(current,dict):
+        if 'previous'in current:current['previous']=None
+        if isinstance(current.get('existing'),list):
+            values=current['existing'];low,high=0,len(values)
+            while low<high:
+                middle=(low+high+1)//2;trial={**current,'existing':values[:middle]}
+                if len(measure(trial)['input_ids'])<=maximum:low=middle
+                else:high=middle-1
+            current['existing']=values[:low]
+        encoded=measure(current)
+    return current,encoded,current!=original
 
 def encode(row,tokenizer,config):
     import torch
-    context=json.dumps({'area':row['area'],'context':row['context']},ensure_ascii=False,sort_keys=True)
-    full=tokenizer(row['text'],context,truncation=False);enc=tokenizer(row['text'],context,truncation='longest_first',max_length=config['maxLength'],padding='max_length',return_offsets_mapping=True)
-    seq=enc.sequence_ids();offsets=[tuple(o)if seq[i]==0 else(0,0)for i,o in enumerate(enc.pop('offset_mapping'))];truncated=len(full['input_ids'])>config['maxLength'];n=len(offsets);bio=torch.full((len(config['bioKeys']),n),-100,dtype=torch.long);presence=torch.full((len(config['keys']),),-100.,dtype=torch.float32);index={k:i for i,k in enumerate(config['keys'])};bindex={k:i for i,k in enumerate(config['bioKeys'])};covered=set(row['coveredKeys']);unknown=set(row['unknownBIOKeys']);classes={};mentions=[]
+    context_value,full,context_fitted=fit_context(row['text'],row['context'],row['area'],tokenizer,config['maxLength']);context=json.dumps({'area':row['area'],'context':context_value},ensure_ascii=False,sort_keys=True)
+    enc=tokenizer(row['text'],context,truncation='longest_first',max_length=config['maxLength'],padding='max_length',return_offsets_mapping=True)
+    seq=enc.sequence_ids();offsets=[tuple(o)if seq[i]==0 else(0,0)for i,o in enumerate(enc.pop('offset_mapping'))];truncated=len(full['input_ids'])>config['maxLength'];n=len(offsets);bio=torch.full((len(config['bioKeys']),n),-100,dtype=torch.int8);presence=torch.full((len(config['keys']),),-100.,dtype=torch.float32);index={k:i for i,k in enumerate(config['keys'])};bindex={k:i for i,k in enumerate(config['bioKeys'])};covered=set(row['coveredKeys']);unknown=set(row['unknownBIOKeys']);classes={};mentions=[]
+    active=[bindex[key]for key in covered if key in bindex and key not in unknown and not truncated]
+    source_indices=torch.tensor([i for i,(a,b)in enumerate(offsets)if b>a],dtype=torch.long)
+    if active and len(source_indices):bio[torch.tensor(active,dtype=torch.long)[:,None],source_indices[None,:]]=0
     for key in covered:
         if config['registry'][key]['role']!='derived':presence[index[key]]=float(key in row['globals']or any(m['key']==key or key in m['metadata']for m in row['mentions']))
-        if key in bindex and key not in unknown and not truncated:
-            for ti,(a,b)in enumerate(offsets):
-                if b>a:bio[bindex[key],ti]=0
         if key in config['banks']and config['registry'][key]['role']=='global':classes[key]=label(row['globals'][key]['value'],config['banks'][key])if key in row['globals']else 0
     records=[{'key':k,'span':v['span'],'value':v['value'],'metadata':{},'trainable':True}for k,v in row['globals'].items()]+row['mentions']
     for m in records:
@@ -47,7 +70,7 @@ def encode(row,tokenizer,config):
             if key in m['metadata']:targets[key]=label(m['metadata'][key],config['banks'][key])
             elif row['version']=='v2':targets[key]=0
         mentions.append((index[m['key']],a,b,targets))
-    return {'input_ids':torch.tensor(enc['input_ids']),'attention_mask':torch.tensor(enc['attention_mask']),'bio':bio,'presence':presence,'classes':classes,'mentions':mentions,'truncated':truncated,'id':row['id']}
+    return {'input_ids':torch.tensor(enc['input_ids']),'attention_mask':torch.tensor(enc['attention_mask']),'bio':bio,'presence':presence,'classes':classes,'mentions':mentions,'truncated':truncated,'id':row['id'],'source_mask':torch.tensor([seq[i]==0 and b>a for i,(a,b) in enumerate(offsets)],dtype=torch.bool),'context_fitted':context_fitted}
 
 def build_model(config,encoder_path):
     import torch
@@ -60,11 +83,18 @@ def build_model(config,encoder_path):
             return hidden,self.bio(hidden).reshape(hidden.shape[0],hidden.shape[1],len(config['bioKeys']),3).permute(0,2,1,3),self.presence(hidden[:,0])
     return Reader()
 
+_consistency=None
+def consistency_loss(*args):
+ global _consistency
+ if _consistency is None:
+  path=Path(__file__).parent/'candidates/target-type/train-key-reader.py';spec=importlib.util.spec_from_file_location('shared_reader_consistency',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);_consistency=module.presence_bio_consistency
+ return _consistency(*args)
+
 def objective(model,rows,config,device,bio_weights):
  import torch
  F=torch.nn.functional
  ids=torch.stack([r['input_ids']for r in rows]).to(device);mask=torch.stack([r['attention_mask']for r in rows]).to(device)
- hidden,bio,presence=model(ids,mask);gold=torch.stack([r['bio']for r in rows]).to(device);pgold=torch.stack([r['presence']for r in rows]).to(device)
+ hidden,bio,presence=model(ids,mask);gold=torch.stack([r['bio']for r in rows]).to(device,dtype=torch.long);pgold=torch.stack([r['presence']for r in rows]).to(device)
  valid=gold>=0;safe=gold.clamp_min(0);weights=torch.stack(bio_weights)
  token_weights=weights[torch.arange(gold.shape[1],device=device)[None,:,None],safe]*valid
  token_loss=-bio.float().log_softmax(-1).gather(-1,safe[...,None]).squeeze(-1)
@@ -87,7 +117,12 @@ def objective(model,rows,config,device,bio_weights):
   byhead[key].append(F.cross_entropy(model.classes[str(index[key])](features).float(),targets))
  if byhead:
   loss_sum+=torch.stack([torch.stack(values).mean()for values in byhead.values()]).mean();loss_count+=1
- return loss_sum/loss_count,bio,gold
+ loss=loss_sum/loss_count
+ coefficient=config.get('consistencyCoefficient',0)
+ if coefficient:
+  source=torch.stack([row['source_mask']for row in rows]).to(device);truncated=torch.tensor([row['truncated']for row in rows],dtype=torch.bool,device=device)
+  loss=loss+coefficient*consistency_loss(bio,presence,gold,pgold,source,mask,truncated,config)
+ return loss,bio,gold
 
 
 def bio_mentions(tags):
@@ -145,17 +180,24 @@ def bio_class_weights(rows,key_count,device):
 def main():
     import torch
     from transformers import AutoTokenizer
-    p=argparse.ArgumentParser();p.add_argument('--data',type=Path,required=True);p.add_argument('--encoder',required=True);p.add_argument('--init-checkpoint',type=Path);p.add_argument('--out',type=Path,required=True);p.add_argument('--epochs',type=int,default=5);p.add_argument('--cpu-threads',type=int,default=2);p.add_argument('--batch',type=int,default=8);p.add_argument('--limit',type=int);p.add_argument('--no-save',action='store_true');args=p.parse_args();random.seed(17);torch.manual_seed(17);torch.set_num_threads(args.cpu_threads);args.out.mkdir(parents=True,exist_ok=False)
-    manifest=json.loads((args.data/'manifest.json').read_text());config=configuration(manifest);tokenizer=AutoTokenizer.from_pretrained(args.encoder);config['encoder']=args.encoder;config['encoderFiles']={str(p.name):sha(p)for p in Path(args.encoder).iterdir()if p.is_file()};config['initCheckpointSha256']=sha(args.init_checkpoint)if args.init_checkpoint else None;config['dataManifestSha256']=sha(args.data/'manifest.json');config['trainerSha256']=sha(Path(__file__));(args.out/'model-config.json').write_text(json.dumps(config,indent=2)+'\n');datasets={}
+    p=argparse.ArgumentParser();p.add_argument('--data',type=Path,required=True);p.add_argument('--encoder',required=True);p.add_argument('--init-checkpoint',type=Path);p.add_argument('--out',type=Path,required=True);p.add_argument('--epochs',type=int,default=5);p.add_argument('--cpu-threads',type=int,default=2);p.add_argument('--batch',type=int,default=8);p.add_argument('--limit',type=int);p.add_argument('--no-save',action='store_true');p.add_argument('--patience',type=int,default=0);p.add_argument('--min-epochs',type=int,default=3);p.add_argument('--consistency',type=float,default=0.1);p.add_argument('--lr',type=float,default=3e-5);p.add_argument('--input-padding',choices=['max_length','dynamic'],default='dynamic');args=p.parse_args();random.seed(17);torch.manual_seed(17);torch.set_num_threads(args.cpu_threads);args.out.mkdir(parents=True,exist_ok=False)
+    device='cuda'if torch.cuda.is_available()else'cpu'
+    if device=='cuda':torch.cuda.init()
+    manifest=json.loads((args.data/'manifest.json').read_text());config=configuration(manifest);config['labelStorage']='int8 CPU; int64 per optimizer batch';tokenizer=AutoTokenizer.from_pretrained(args.encoder);config['inputPadding']=args.input_padding;config['consistencyCoefficient']=args.consistency;config['encoder']=args.encoder;config['encoderFiles']={str(p.name):sha(p)for p in Path(args.encoder).iterdir()if p.is_file()};config['initCheckpointSha256']=sha(args.init_checkpoint)if args.init_checkpoint else None;config['dataManifestSha256']=sha(args.data/'manifest.json');config['trainerSha256']=sha(Path(__file__));datasets={}
     for split in ['train','calibration']:
-        path=args.data/(split+'.jsonl');assert sha(path)==manifest['outputs'][split];rows=[json.loads(line)for line in path.open()];rows=rows[:args.limit]if args.limit else rows;datasets[split]=[encode(r,tokenizer,config)for r in rows]
+        path=args.data/(split+'.jsonl');assert sha(path)==manifest['outputs'][split];datasets[split]=[]
+        with path.open()as stream:
+            for ri,line in enumerate(stream):
+                if args.limit and ri>=args.limit:break
+                datasets[split].append(encode(json.loads(line),tokenizer,config))
+                if (ri+1)%5000==0:print(json.dumps({'phase':'encoding','split':split,'rows':ri+1}),flush=True)
     device='cuda'if torch.cuda.is_available()else'cpu';model=build_model(config,args.encoder)
     if args.init_checkpoint:
-        state=torch.load(args.init_checkpoint,map_location='cpu',weights_only=False);state=state.get('model',state);enc={k[len('encoder.'):]:v for k,v in state.items()if k.startswith('encoder.')};assert enc;model.encoder.load_state_dict(enc,strict=True)
-    model.to(device);optimizer=torch.optim.AdamW(model.parameters(),lr=3e-5)
+        state=torch.load(args.init_checkpoint,map_location='cpu',weights_only=False);spec=importlib.util.spec_from_file_location('semantic_reader_warmstart',Path(__file__).with_name('warmstart-key-reader.py'));module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);config['warmstart']=module.transfer(model,state,config);del state
+    (args.out/'model-config.json').write_text(json.dumps(config,indent=2)+'\n');model.to(device);optimizer=torch.optim.AdamW(model.parameters(),lr=args.lr)
     weights=bio_class_weights(datasets['train'],len(config['bioKeys']),device)
     print(json.dumps({'phase':'training-ready','trainRows':len(datasets['train']),'calibrationRows':len(datasets['calibration']),'device':device}),flush=True)
-    steps=0;history=[];best=-1;training_started=time.monotonic()
+    steps=0;history=[];best=(-1.,-1.);bad_epochs=0;training_started=time.monotonic()
     for epoch in range(args.epochs):
         model.train();random.shuffle(datasets['train']);total=0
         for start in range(0,len(datasets['train']),args.batch):
@@ -169,12 +211,16 @@ def main():
                 with torch.autocast(device_type=device,dtype=torch.bfloat16,enabled=device=='cuda'):_,pred,gold=objective(model,datasets['calibration'][start:start+args.batch],config,device,weights)
                 pred=pred.argmax(-1);valid=gold>=0;positive=gold>0;correct+=int(((pred==gold)&valid).sum());count+=int(valid.sum());present_correct+=int(((pred==gold)&positive).sum());present_count+=int(positive.sum())
         evaluation=evaluate(model,datasets['calibration'],config,device,args.batch)
-        metric={'evaluation':evaluation,'epoch':epoch+1,'steps':steps,'trainLossSum':total,'conditionalBioCorrect':correct,'conditionalBioSupport':count,'positiveTokenCorrect':present_correct,'positiveTokenSupport':present_count,'truncatedTrain':sum(r['truncated']for r in datasets['train']),'truncatedCalibration':sum(r['truncated']for r in datasets['calibration']),'executable':False};history.append(metric);print(json.dumps(metric),flush=True);(args.out/'metrics.json').write_text(json.dumps(history,indent=2)+'\n')
-        if not args.no_save and evaluation['decodedMentionF1']>best:
-            best=evaluation['decodedMentionF1']
+        metric={'evaluation':evaluation,'epoch':epoch+1,'steps':steps,'trainLossSum':total,'conditionalBioCorrect':correct,'conditionalBioSupport':count,'positiveTokenCorrect':present_correct,'positiveTokenSupport':present_count,'contextFittedTrain':sum(r['context_fitted']for r in datasets['train']),'contextFittedCalibration':sum(r['context_fitted']for r in datasets['calibration']),'truncatedTrain':sum(r['truncated']for r in datasets['train']),'truncatedCalibration':sum(r['truncated']for r in datasets['calibration']),'executable':False};history.append(metric);print(json.dumps(metric),flush=True);(args.out/'metrics.json').write_text(json.dumps(history,indent=2)+'\n')
+        rank=(evaluation['positiveBioAndGlobalExact']/max(1,evaluation['positiveBioAndGlobalSupport']),evaluation['decodedMentionF1'])
+        improved=rank>best
+        bad_epochs=0 if improved else bad_epochs+1
+        if not args.no_save and improved:
+            best=rank
             import os,shutil
             required=sum(v.numel()*2 for v in model.state_dict().values())*2+128*1024**2
             assert shutil.disk_usage(args.out).free>required,'Insufficient atomic checkpoint reserve'
             temp=args.out/'checkpoint.tmp';torch.save({'model':{k:v.detach().cpu().to(torch.bfloat16)if v.is_floating_point()else v.cpu()for k,v in model.state_dict().items()},'config':config,'epoch':epoch+1},temp);os.replace(temp,args.out/'checkpoint.pt')
-    (args.out/'run.json').write_text(json.dumps({'format':'sop.key-reader-run/1','configSha256':sha(args.out/'model-config.json'),'trainerSha256':sha(Path(__file__)),'steps':steps,'checkpointSha256':sha(args.out/'checkpoint.pt')if(args.out/'checkpoint.pt').exists()else None,'bestDecodedMentionF1':best,'scope':'conditional gold-cut; not full pipeline or calibrated graph confidence'},indent=2)+'\n')
+        if args.patience and epoch+1>=args.min_epochs and bad_epochs>=args.patience:break
+    (args.out/'run.json').write_text(json.dumps({'format':'sop.key-reader-run/1','configSha256':sha(args.out/'model-config.json'),'trainerSha256':sha(Path(__file__)),'steps':steps,'checkpointSha256':sha(args.out/'checkpoint.pt')if(args.out/'checkpoint.pt').exists()else None,'bestDecodedMentionF1':best[1],'bestPositiveBioGlobalExact':best[0],'epochsCompleted':len(history),'trainingPolicy':{'maxEpochs':args.epochs,'minEpochs':args.min_epochs,'patience':args.patience,'learningRate':args.lr,'selection':'positive supervised BIO/global exact, then mention F1'},'scope':'conditional gold-cut; not full pipeline or calibrated graph confidence'},indent=2)+'\n')
 if __name__=='__main__':main()

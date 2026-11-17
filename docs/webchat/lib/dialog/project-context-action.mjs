@@ -1,11 +1,11 @@
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=e14d1b73b4';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=2e7e2fecaa';
 // Bind model-declared context references to actual native objects; never inspect source words.
 import {serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
 import {NATIVE_AREAS} from './app-reader-context.mjs?v=a83ed42db4';
 import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=ad4de9eb20';
 import {flatRequestProjection} from './request-projection.mjs?v=f03efb554d';
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
- const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view];
+ const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area;
  if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||r?.mood!=='do'||r.act!=='change'||r.target?.kind||r.target?.name)return null;
  const other=r.target.quantifier==='other'&&r.turn?.fragment==='replaces';
  if(!other&&(r.target.fill!=='context'||r.target.mode!=='existing'))return null;
@@ -19,7 +19,7 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
  const native=session.isession.state[area.world];if(!native)return null;
  const host=await area.create({state:native,instanceId:'context-'+globalThis.crypto.randomUUID()}),observation=host.observe();
  const declared=nativeKindCandidates(bindings);
- const options=observation.objects.map(object=>({object,mappings:declared.filter(k=>k.area===area.area&&k.type===r.target.type&&k.lemma===object.kind&&k.nativeFamilyBinding?.sourceType===object.sourceType)})).filter(o=>o.mappings.length);
+ const options=observation.objects.map(object=>({object,mappings:declared.filter(k=>k.area===readerArea&&k.type===r.target.type&&(k.familyIdentity||k.lemma===object.kind)&&k.nativeFamilyBinding?.sourceType===object.sourceType)})).filter(o=>o.mappings.length);
  const focus=session.newEngineFocus?.[view];
  const selected=other?options.filter(o=>o.object.id!==focus).at(-1):options.find(o=>o.object.id===focus)??options.at(-1);
  if(!selected)return null;
@@ -29,8 +29,8 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
   if(c.phase!=='result'||c.operator!=='eq'||c.polarity!=='positive'||c.character!=='requirement'||typeof c.value!=='string'||c.value!==c.value_span||Object.keys(c).some(k=>!['key','value','value_span','phase','operator','polarity','character'].includes(k)))return null;
   const evidence=raw.ranges?.filter(a=>JSON.stringify(a.path)===JSON.stringify(['requests','0','constraints',String(index),'value_span']))??[];
   if(evidence.length!==1||Array.from(raw.source.text).slice(...evidence[0].range).join('')!==c.value)return null;
-  let concept=bindings.properties.find(p=>p.area===area.area&&p.key===c.key)?.canonical;
-  if(!concept){const spec=registry[area.area+'.'+c.key];concept=DRAWING_PROPERTY_BINDINGS.find(p=>p.sourceType===selected.object.sourceType&&p.concept===spec?.concept)?.concept;}
+  let concept=bindings.properties.find(p=>p.area===readerArea&&p.key===c.key)?.canonical;
+  if(!concept){const spec=registry[readerArea+'.'+c.key];concept=DRAWING_PROPERTY_BINDINGS.find(p=>p.sourceType===selected.object.sourceType&&p.concept===spec?.concept)?.concept;}
   if(!concept)return null;values.push({concept,value:c.value});
  }
  const literal=value=>({kind:'literal',value}),ref=value=>({kind:'ref',value}),string=value=>({kind:'string',value});

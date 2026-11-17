@@ -188,3 +188,23 @@ test('untruncated full and padded actual IDs must agree before authority or mode
  assert.equal(r.packet.unresolved[0].reason,'full-vs-padded-token-mismatch');
  assert.equal(calls.authority.length,0);assert.equal(calls.model.length,0);
 });
+
+
+test('opt-in dynamic cutter uses actual length with exact legacy Unicode spans',async()=>{
+ const manifest=profile(),config=JSON.parse(manifest.cutterConfigJSON);config.inputPadding='dynamic';config.maxLength=384;
+ manifest.cutterConfigJSON=JSON.stringify(config);manifest.cutterConfigSha256=hash(manifest.cutterConfigJSON);
+ for(const text of ['', '😀x', 'abc de']){
+  const options={logits:[[0,4,1],[0,1,4],[4,0,1]]};
+  const legacy=await setup(options),dynamic=await setup({...options,manifest});
+  const expected=await legacy.component.infer(text),actual=await dynamic.component.infer(text);
+  assert.deepEqual(dynamic.calls.model[0].input_ids.dims,[1,tokens(text).ids.length]);
+  assert.equal(dynamic.calls.tokenizer[1].settings.padding,false);
+  assert.equal(dynamic.calls.tokenizer[1].settings.max_length,384);
+  assert.deepEqual(actual.packet.spans,expected.packet.spans);assert.deepEqual(actual.packet.coverage,expected.packet.coverage);
+  assert.deepEqual(actual.auxiliary.sourceDecisions,expected.auxiliary.sourceDecisions);
+ }
+ const overflow=await setup({manifest}),result=await overflow.component.infer('x'.repeat(400));
+ assert.equal(overflow.calls.model.length,0);assert.equal(result.packet.coverage.complete,false);
+ const bad=JSON.parse(manifest.cutterConfigJSON);bad.inputPadding='typo';manifest.cutterConfigJSON=JSON.stringify(bad);manifest.cutterConfigSha256=hash(manifest.cutterConfigJSON);
+ await assert.rejects(setup({manifest}),/input-layout/);
+});

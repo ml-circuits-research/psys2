@@ -33,11 +33,11 @@ const hash=x=>createHash('sha256').update(x).digest('hex');
 const tensor=(data,dims)=>({data,dims});
 async function setup(change={},data=fixture){
  const configJSON=JSON.stringify(data.config),manifest={format:'sop.key-reader-runtime/1',artifactRole:'trained-unverified',dtype:'fp32',weightRepresentation:'fp32',executionEligible:false,graphConfidence:null,configJSON,configSha256:hash(configJSON),checkpointSha256:'d'.repeat(64),encoderSha256:'e'.repeat(64),headsSha256:'f'.repeat(64),tokenizerSha256:'c'.repeat(64),preparerSha256:'b'.repeat(64),trainerSha256:'a'.repeat(64),codecSha256:'1'.repeat(64),hiddenWidth:2,rawRoutes:data.routes,...(data.dataManifestJSON?{dataManifestJSON:data.dataManifestJSON}:{})};
- const length=data.config.maxLength,ids=[101,10,11,102,12,102,...Array(length-6).fill(0)],calls={encoder:0,heads:0,diagnostics:[],pairs:[]};
- const tokenizer=async(text,opts)=>{calls.pairs.push(opts.text_pair);const full=opts.padding===false;return {input_ids:tensor(BigInt64Array.from((full?ids.slice(0,6):ids),BigInt),[1,full?6:length]),attention_mask:tensor(BigInt64Array.from(full?data.mask.slice(0,6):data.mask,BigInt),[1,full?6:length])};};
- const encoder=async()=>{calls.encoder++;return {hidden:tensor(new Float32Array(length*2),[1,length,2]),bio_logits:tensor(Float32Array.from(data.bio.flat(2)),[1,data.config.bioKeys.length,length,3]),presence_logits:tensor(Float32Array.from(data.presence),[1,data.config.keys.length])};};
+ const length=data.config.maxLength,ids=[101,10,11,102,12,102,...Array(length-6).fill(0)],calls={encoder:0,heads:0,diagnostics:[],pairs:[],settings:[],shapes:[]};
+ const tokenizer=async(text,opts)=>{calls.pairs.push(opts.text_pair);calls.settings.push(opts);const full=opts.padding===false;return {input_ids:tensor(BigInt64Array.from((full?ids.slice(0,6):ids),BigInt),[1,full?6:length]),attention_mask:tensor(BigInt64Array.from(full?data.mask.slice(0,6):data.mask,BigInt),[1,full?6:length])};};
+ const encoder=async input=>{calls.encoder++;const n=input.input_ids.dims[1];calls.shapes.push(n);return {hidden:tensor(new Float32Array(n*2),[1,n,2]),bio_logits:tensor(Float32Array.from(data.bio.flatMap(row=>row.slice(0,n)).flat()),[1,data.config.bioKeys.length,n,3]),presence_logits:tensor(Float32Array.from(data.presence),[1,data.config.keys.length])};};
  const heads=async input=>{calls.heads++;assert.deepEqual(Array.from(input.spans.data,Number),[0,1,1,2,2,3]);assert.deepEqual(Array.from(input.key_indices.data,Number),[-1,data.config.keys.indexOf(data.domain),data.config.keys.indexOf(data.domain)]);const rows=[data.global,...data.mentions],values=rows.flatMap(row=>data.config.keys.flatMap(k=>data.config.banks[k]?(row[k]??[3,...Array(data.config.banks[k].length-1).fill(0)]):[]));return {class_logits:tensor(Float32Array.from(values),[3,values.length/3])};};
- const offsetAuthority=async()=>({unit:'unicode-scalar',tokenIds:ids,attentionMask:data.mask,sequenceIds:data.seq,specialTokensMask:ids.map((_,i)=>data.seq[i]===null?1:0),offsets:data.offsets.map((r,i)=>data.seq[i]===0?r:null),provenance:{id:'synthetic-authority',version:1,profileSha256:'2'.repeat(64),tokenizerSha256:'c'.repeat(64)}});
+ const offsetAuthority=async input=>({unit:'unicode-scalar',tokenIds:input.tokenIds,attentionMask:input.attentionMask,sequenceIds:data.seq.slice(0,input.tokenIds.length),specialTokensMask:input.tokenIds.map((_,i)=>data.seq[i]===null?1:0),offsets:data.offsets.slice(0,input.tokenIds.length).map((r,i)=>data.seq[i]===0?r:null),provenance:{id:'synthetic-authority',version:1,profileSha256:'2'.repeat(64),tokenizerSha256:'c'.repeat(64)}});
  const reader=await createKeyReaderInference({manifest,tokenizer,encoder,heads,offsetAuthority,makeTensor:(type,data,dims)=>({type,data,dims}),recordDiagnostics:r=>calls.diagnostics.push(r),...change});return {reader,calls,manifest};
 }
 test('actual two-stage computation matches Python normalizer for repeated-key per-mention metadata and scalar ranges',async()=>{
@@ -109,4 +109,29 @@ test('dynamic artifact rejects unknown roles, invalid BIO ownership, banks and r
  for(const mutate of [d=>d.config.registry[d.domain].role='alien',d=>d.config.bioKeys.push('missing'),d=>d.config.banks[d.domain][0].state='value',d=>d.routes.globals['unknown']='target.name',d=>d.routes.globals['request.target.type']='target.__proto__.type',d=>d.config.banks[d.domain][2].value='undeclared']){
   const data=minimalCoreFixture();mutate(data);await assert.rejects(setup({},data));
  }
+});
+
+
+test('opt-in dynamic padding preserves source spans and head queries at actual sequence length',async()=>{
+ for(const initial of [fixture,minimalCoreFixture()]){
+  const legacy=await setup({},initial),expected=await legacy.reader.infer('😀x',{area:initial===fixture?'drawing':'quasar'});
+  const data=structuredClone(initial);data.config.inputPadding='dynamic';
+  const {reader,calls}=await setup({},data),result=await reader.infer('😀x',{area:initial===fixture?'drawing':'quasar'});
+  assert.deepEqual(calls.shapes,[6]);assert.equal(calls.settings.at(-1).padding,false);
+  assert.equal(calls.settings.at(-1).max_length,data.config.maxLength);
+  assert.deepEqual(result.raw.request,expected.raw.request);assert.deepEqual(result.raw.ranges,expected.raw.ranges);
+  assert.deepEqual(result.raw.coverage,expected.raw.coverage);assert.equal(calls.heads,1);
+  assert.deepEqual(legacy.calls.shapes,[data.config.maxLength]);assert.equal(legacy.calls.settings.at(-1).padding,'max_length');
+ }
+});
+test('dynamic reader rejects oversized/empty encoded tensors and incompatible model output',async()=>{
+ const data=structuredClone(fixture);data.config.inputPadding='dynamic';
+ for(const n of [0,193]){
+  const tokenizer=async(_,opts)=>{const size=opts.truncation?n:6;return {input_ids:tensor(new BigInt64Array(size).fill(1n),[1,size]),attention_mask:tensor(new BigInt64Array(size).fill(1n),[1,size])};};
+  const {reader,calls}=await setup({tokenizer},data),result=await reader.infer('😀x',{area:'drawing'});
+  assert.equal(calls.encoder,0);assert.match(result.raw.unresolved[0].reason,/invalid-tokenizer-(shape|tensor)/);
+ }
+ const {reader}=await setup({encoder:async()=>({hidden:tensor(new Float32Array(384),[1,192,2])})},data);
+ assert.equal((await reader.infer('😀x',{area:'drawing'})).raw.unresolved[0].reason,'invalid-neural-output-shape');
+ data.config.inputPadding='typo';await assert.rejects(setup({},data),/input-padding/);
 });

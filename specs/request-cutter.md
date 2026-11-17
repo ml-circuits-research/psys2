@@ -127,7 +127,9 @@ Component hashes/representation are included in compound cutter identity.
 Loading/validating actual graph bytes remains the caller's separate authority.
 
 The computation invokes the injected tokenizer on source alone twice: full and
-fixed right-padded/truncated length192. No text_pair or empty context is supplied.
+bounded truncation and right padding to the configured maximum (legacy default
+length192). The explicit dynamic padding opt-in below removes only padding. No
+text_pair or empty context is supplied.
 For untruncated input, full and padded active token IDs must agree. A verified
 single-template offset authority must independently bind actual IDs/masks,
 tokenizer/profile identity, CLS/SEP, source sequence0 and scalar ranges.
@@ -154,3 +156,18 @@ exercise actual invocation/shape flow, scalar cuts, empty/all-O input, strict
 Python-codec parity, refusal cases, identity changes and work limits. They load
 no trained model files, ONNX weights, GPU or external artifacts; real-session
 parity and deployment admission remain separate work.
+
+
+### Opt-in dynamic inference padding
+
+Reader and cutter configs may declare `inputPadding: "dynamic"`. Inference then
+requests `padding: false` with truncation and the declared `maxLength` bound.
+Tensor dimensions and all BIO/span queries use the actual encoded length, which
+must be positive and at most `maxLength`. Full untruncated token coverage and exact
+offset authority remain mandatory; no source is silently clipped. Configs without
+this field retain `max_length` padding. Unknown padding modes are rejected. The
+config hash includes this opt-in, so changing the mode changes artifact identity;
+an existing deployed manifest must not be edited to impersonate a new export.
+Dynamic ONNX sequence axes are required. Quantized dynamic matmul can change logits
+slightly with sequence shape; numerical or semantic equivalence must be measured
+on actual exported weights, rather than assumed from structural test fixtures.

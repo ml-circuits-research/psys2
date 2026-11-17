@@ -10,16 +10,24 @@ def get(obj,path):
         if not isinstance(obj,dict)or key not in obj:return MISSING
         obj=obj[key]
     return obj
-def unique(text,value,base=0):
+def unique(text,value,base=0,word_boundaries=False):
     if not isinstance(value,str)or not value:return None
-    at=text.find(value)
-    return None if at<0 or text.find(value,at+1)>=0 else [base+at,base+at+len(value)]
+    matches=[];start=0
+    word=lambda ch:ch.isalnum()or ch=='_'
+    while True:
+        at=text.find(value,start)
+        if at<0:break
+        end=at+len(value);start=at+1
+        if word_boundaries and ((word(value[0])and at>0 and word(text[at-1]))or(word(value[-1])and end<len(text)and word(text[end]))):continue
+        matches.append(at)
+        if len(matches)>1:return None
+    return [base+matches[0],base+matches[0]+len(value)]if matches else None
 def span_for(text,value,literal):
     outer=unique(text,literal)
     if outer and isinstance(value,str):
-        inner=unique(literal,value,outer[0])
+        inner=unique(literal,value,outer[0],word_boundaries=True)
         if inner:return inner
-    return outer or unique(text,value)
+    return outer or unique(text,value,word_boundaries=True)
 def aliases(path):
     result={}
     for node in ast.parse(path.read_text()).body:
@@ -27,6 +35,8 @@ def aliases(path):
             for target in node.targets:
                 if isinstance(target,ast.Name)and target.id in ['M','W','CO']:result[target.id]=ast.literal_eval(node.value)
     return result
+def target_families(inventory):
+    return {area:list(types)for area,types in inventory.items()if area not in ['request','conversation']}
 def registry(inventory):
     return {f'{area}.{typ}.{key}':{**spec,'area':area,'type':typ,'key':key,'role':'global'if f'{area}.{typ}.{key}'in GLOBAL else'metadata'if f'{area}.{typ}.{key}'in META else'derived'if area in ['request','conversation']else'domain'}for area,types in inventory.items()for typ,row in types.items()for key,spec in row['keys'].items()}
 def sample(row,request,reg,v1_aliases):
@@ -95,7 +105,7 @@ def prepare(corpus,inventory_path,aliases_path,out,demo_profile=None):
                 for ri,request in enumerate(row['annotations']or[None]):
                     record=sample(row,request,reg,a);record.update({'id':row['id']+':'+str(ri),'source_id':row['source_id'],'source_path':row['source_path'],'split':split,'requestIndex':ri});target.write(json.dumps(record,ensure_ascii=False)+'\n');counts[split+':samples']+=1;counts[split+':mentions']+=len(record['mentions']);counts[split+':noRequest']+=not record['hasRequest'];reasons.update(d['reason']for d in record['diagnostics'])
         outputs[split]=sha(out/(split+'.jsonl'))
-    manifest={'format':'sop.per-key-supervision/1','executable':False,'registry':reg,'inventorySha256':sha(inventory_path),'v1AliasesSha256':sha(aliases_path),'sourceManifestSha256':sha(corpus/'manifest.json'),'sourceManifest':source_manifest,'demoSelection':str(demo_profile) if demo_profile else None,'scriptSha256':sha(Path(__file__)),'counts':dict(counts),'diagnostics':dict(reasons),'outputs':outputs,'boundary':'Gold request cuts for conditional training only; runtime/full calibration uses independently predicted cutter spans. All raw requests retained; unknown version metadata/overlaps masked, never false absence.'};(out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');return manifest
+    manifest={'format':'sop.per-key-supervision/1','executable':False,'registry':reg,'targetFamilies':target_families(inv),'inventorySha256':sha(inventory_path),'v1AliasesSha256':sha(aliases_path),'sourceManifestSha256':sha(corpus/'manifest.json'),'sourceManifest':source_manifest,'demoSelection':str(demo_profile) if demo_profile else None,'scriptSha256':sha(Path(__file__)),'counts':dict(counts),'diagnostics':dict(reasons),'outputs':outputs,'boundary':'Gold request cuts for conditional training only; runtime/full calibration uses independently predicted cutter spans. All raw requests retained; unknown version metadata/overlaps masked, never false absence.'};(out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');return manifest
 def prepare_authored(source,inventory_path,out,exclude_ids=None,phase="direct",supplement_train_ids=None):
     inventory=json.loads(inventory_path.read_text());reg=registry(inventory);excluded=set(json.loads(exclude_ids.read_text()))if exclude_ids else set();supplement=set(json.loads(supplement_train_ids.read_text()))if supplement_train_ids else set()
     stream=gzip.open(source,'rt')if source.suffix=='.gz'else source.open()
@@ -115,7 +125,7 @@ def prepare_authored(source,inventory_path,out,exclude_ids=None,phase="direct",s
     finally:
         stream.close()
         for handle in handles.values():handle.close()
-    manifest={'format':'sop.per-key-supervision/1','annotationContract':'authored complete V2 tool-owned requests','maxLength':384,'source':str(source),'sourceSha256':sha(source),'phase':phase,'supplementTrainIdsSha256':sha(supplement_train_ids)if supplement_train_ids else None,'exclusionSha256':sha(exclude_ids)if exclude_ids else None,'scriptSha256':sha(Path(__file__)),'inventorySha256':sha(inventory_path),'registry':reg,'counts':dict(counts),'diagnostics':dict(diagnostics),'outputs':{split:sha(out/(split+'.jsonl'))for split in handles},'boundary':'Prepared labels only; no model training, inference or intent accuracy claim. Original provenance is outside model inputs.'}
+    manifest={'format':'sop.per-key-supervision/1','annotationContract':'authored complete V2 tool-owned requests','maxLength':384,'source':str(source),'sourceSha256':sha(source),'phase':phase,'supplementTrainIdsSha256':sha(supplement_train_ids)if supplement_train_ids else None,'exclusionSha256':sha(exclude_ids)if exclude_ids else None,'scriptSha256':sha(Path(__file__)),'inventorySha256':sha(inventory_path),'registry':reg,'targetFamilies':target_families(inventory),'counts':dict(counts),'diagnostics':dict(diagnostics),'outputs':{split:sha(out/(split+'.jsonl'))for split in handles},'boundary':'Prepared labels only; no model training, inference or intent accuracy claim. Original provenance is outside model inputs.'}
     (out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');return manifest
 
 if __name__=='__main__':

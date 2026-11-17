@@ -1,16 +1,16 @@
 {
   "format": "psys2.ui-natural-coverage/1",
-  "rows": 592,
-  "checkedRecipes": 390,
-  "uiActionRecipes": 390,
-  "uiActionCalls": 396,
-  "nativeCalls": 1384,
+  "rows": 1474,
+  "checkedRecipes": 1175,
+  "uiActionRecipes": 1175,
+  "uiActionCalls": 1181,
+  "nativeCalls": 5183,
   "areas": {
-    "drawing": 135,
-    "diagram": 103,
-    "document": 59,
-    "calendar": 21,
-    "avatar": 274
+    "drawing": 472,
+    "diagram": 401,
+    "document": 200,
+    "calendar": 59,
+    "avatar": 342
   },
   "catalog": {
     "repository": "https://github.com/ml-circuits-research/sop-knowledge-worlds",
@@ -33,14 +33,22 @@
     "direction-choice": 3,
     "size-choice": 5,
     "compound": 6,
-    "world-informed-completion": 18
+    "world-informed-completion": 18,
+    "curated-synonym": 198,
+    "elliptical-direct": 99,
+    "optional-detail-omission": 559,
+    "optional-detail-complete": 26
   },
   "operations": {
     "drawing.object.make": {
-      "rows": 67,
+      "rows": 197,
       "styles": [
         "natural-direct",
-        "short-alias"
+        "short-alias",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "kind",
@@ -48,23 +56,36 @@
         "y",
         "size",
         "color",
-        "label"
+        "label",
+        "width",
+        "height"
       ]
     },
     "drawing.catalog.make": {
-      "rows": 6,
+      "rows": 16,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
-        "name"
+        "name",
+        "x",
+        "y",
+        "size"
       ]
     },
     "drawing.object.change": {
-      "rows": 4,
+      "rows": 134,
       "styles": [
         "natural-direct",
-        "precise"
+        "precise",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "ids",
@@ -78,27 +99,33 @@
       ]
     },
     "drawing.object.select": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id"
       ]
     },
     "drawing.objects.select": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids"
       ]
     },
     "drawing.object.place": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids",
@@ -107,9 +134,11 @@
       ]
     },
     "drawing.objects.transform": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids",
@@ -120,25 +149,33 @@
       ]
     },
     "drawing.page.clear": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "drawing.object.remove": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids"
       ]
     },
     "drawing.ids.show": {
-      "rows": 6,
+      "rows": 11,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "mode",
@@ -146,39 +183,49 @@
       ]
     },
     "drawing.observe": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "drawing.undo": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "drawing.redo": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "drawing.object.parts": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id"
       ]
     },
     "drawing.part.select": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -186,9 +233,13 @@
       ]
     },
     "drawing.part.change": {
-      "rows": 2,
+      "rows": 12,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "id",
@@ -199,9 +250,11 @@
       ]
     },
     "drawing.part.place": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -211,9 +264,11 @@
       ]
     },
     "drawing.part.remove": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -221,9 +276,11 @@
       ]
     },
     "drawing.part.extract": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -231,9 +288,13 @@
       ]
     },
     "drawing.object.group": {
-      "rows": 2,
+      "rows": 9,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "ids",
@@ -242,29 +303,45 @@
       ]
     },
     "drawing.object.ungroup": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id"
       ]
     },
     "diagram.node.make": {
-      "rows": 21,
+      "rows": 152,
       "styles": [
         "natural-direct",
-        "shape-choice"
+        "shape-choice",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "kind",
-        "label"
+        "label",
+        "n",
+        "colour",
+        "size",
+        "layout",
+        "x",
+        "y"
       ]
     },
     "diagram.node.change": {
-      "rows": 2,
+      "rows": 20,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "ids",
@@ -275,9 +352,11 @@
       ]
     },
     "diagram.node.select": {
-      "rows": 5,
+      "rows": 8,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids",
@@ -285,18 +364,22 @@
       ]
     },
     "diagram.node.remove": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids"
       ]
     },
     "diagram.node.place": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids",
@@ -305,9 +388,11 @@
       ]
     },
     "diagram.node.resize": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids",
@@ -316,9 +401,11 @@
       ]
     },
     "diagram.node.layout": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids",
@@ -326,9 +413,11 @@
       ]
     },
     "diagram.link.make": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "from",
@@ -336,9 +425,11 @@
       ]
     },
     "diagram.link.select": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids",
@@ -346,9 +437,13 @@
       ]
     },
     "diagram.link.change": {
-      "rows": 4,
+      "rows": 70,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "ids",
@@ -362,18 +457,22 @@
       ]
     },
     "diagram.link.remove": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids"
       ]
     },
     "diagram.selection.remove": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "nodes",
@@ -381,16 +480,22 @@
       ]
     },
     "diagram.page.clear": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "diagram.ids.show": {
-      "rows": 3,
+      "rows": 8,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "mode",
@@ -398,30 +503,40 @@
       ]
     },
     "diagram.observe": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "diagram.undo": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "diagram.redo": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "diagram.group.make": {
-      "rows": 2,
+      "rows": 7,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "name",
@@ -430,18 +545,24 @@
       ]
     },
     "diagram.group.select": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id"
       ]
     },
     "diagram.group.change": {
-      "rows": 2,
+      "rows": 12,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "id",
@@ -451,10 +572,12 @@
       ]
     },
     "diagram.group.layout": {
-      "rows": 14,
+      "rows": 17,
       "styles": [
         "natural-direct",
-        "layout-choice"
+        "layout-choice",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -462,9 +585,11 @@
       ]
     },
     "diagram.group.resize": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -472,9 +597,11 @@
       ]
     },
     "diagram.group.place": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -483,28 +610,34 @@
       ]
     },
     "diagram.group.remove": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id"
       ]
     },
     "diagram.group.ungroup": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id"
       ]
     },
     "diagram.group.chart.make": {
-      "rows": 6,
+      "rows": 9,
       "styles": [
         "natural-direct",
-        "chart-choice"
+        "chart-choice",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "label",
@@ -514,27 +647,35 @@
       ]
     },
     "diagram.group.chart.adopt": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id"
       ]
     },
     "calendar.event.select": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id"
       ]
     },
     "calendar.event.add": {
-      "rows": 2,
+      "rows": 7,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "id",
@@ -545,9 +686,13 @@
       ]
     },
     "calendar.meeting.change": {
-      "rows": 3,
+      "rows": 21,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "id",
@@ -558,9 +703,11 @@
       ]
     },
     "calendar.meeting.move": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -568,34 +715,42 @@
       ]
     },
     "calendar.events.remove": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids"
       ]
     },
     "calendar.meeting.remove": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id"
       ]
     },
     "calendar.observe": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "document.write": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "title",
@@ -603,9 +758,11 @@
       ]
     },
     "document.title.change": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -613,9 +770,11 @@
       ]
     },
     "document.block.select": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -624,9 +783,11 @@
       ]
     },
     "document.section.select": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -635,20 +796,28 @@
       ]
     },
     "document.section.change": {
-      "rows": 2,
+      "rows": 20,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "id",
         "text",
-        "level"
+        "level",
+        "name",
+        "align"
       ]
     },
     "document.block.mark": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -659,9 +828,11 @@
       ]
     },
     "document.section.mark": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -672,9 +843,11 @@
       ]
     },
     "document.block.align": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -682,9 +855,11 @@
       ]
     },
     "document.section.align": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -692,18 +867,24 @@
       ]
     },
     "document.block.reorder": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids"
       ]
     },
     "document.list.make": {
-      "rows": 2,
+      "rows": 7,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "parent",
@@ -713,9 +894,13 @@
       ]
     },
     "document.list.change": {
-      "rows": 2,
+      "rows": 12,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "id",
@@ -725,9 +910,13 @@
       ]
     },
     "document.table.make": {
-      "rows": 2,
+      "rows": 9,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "parent",
@@ -737,9 +926,13 @@
       ]
     },
     "document.table.change": {
-      "rows": 2,
+      "rows": 8,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "id",
@@ -748,9 +941,11 @@
       ]
     },
     "document.container.change": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -758,21 +953,30 @@
       ]
     },
     "document.block.make": {
-      "rows": 4,
+      "rows": 11,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "parent",
         "kind",
         "text",
-        "name"
+        "name",
+        "level"
       ]
     },
     "document.section.make": {
-      "rows": 2,
+      "rows": 21,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "parent",
@@ -783,123 +987,160 @@
       ]
     },
     "document.block.change": {
-      "rows": 4,
+      "rows": 22,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "id",
         "text",
         "name",
-        "align"
+        "align",
+        "kind",
+        "level"
       ]
     },
     "document.block.remove": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids"
       ]
     },
     "document.section.remove": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids"
       ]
     },
     "document.section.reorder": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids"
       ]
     },
     "document.remove": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "document.observe": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "document.undo": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "document.redo": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "avatar.face.compose": {
-      "rows": 33,
+      "rows": 39,
       "styles": [
         "natural-direct",
         "appearance-choice",
-        "character-kind"
+        "character-kind",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "base",
-        "characterKind"
+        "characterKind",
+        "id"
       ]
     },
     "avatar.face.preset": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "preset"
       ]
     },
     "avatar.face.expression": {
-      "rows": 10,
+      "rows": 13,
       "styles": [
         "natural-direct",
-        "expression-choice"
+        "expression-choice",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "expression"
       ]
     },
     "avatar.face.name": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "name"
       ]
     },
     "avatar.face.select": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "avatar.ids.show": {
-      "rows": 3,
+      "rows": 8,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "mode",
@@ -907,27 +1148,33 @@
       ]
     },
     "avatar.part.select": {
-      "rows": 3,
+      "rows": 6,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id"
       ]
     },
     "avatar.face.resize": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "scale"
       ]
     },
     "avatar.part.resize": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids",
@@ -935,10 +1182,12 @@
       ]
     },
     "avatar.part.add": {
-      "rows": 182,
+      "rows": 185,
       "styles": [
         "natural-direct",
-        "part-variant-choice"
+        "part-variant-choice",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -946,21 +1195,28 @@
       ]
     },
     "avatar.part.change": {
-      "rows": 9,
+      "rows": 18,
       "styles": [
         "natural-direct",
-        "size-choice"
+        "size-choice",
+        "curated-synonym",
+        "elliptical-direct",
+        "optional-detail-omission",
+        "optional-detail-complete"
       ],
       "parameters": [
         "ids",
         "variant",
-        "size"
+        "size",
+        "colour"
       ]
     },
     "avatar.part.feature": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "id",
@@ -969,10 +1225,12 @@
       ]
     },
     "avatar.part.move": {
-      "rows": 5,
+      "rows": 8,
       "styles": [
         "natural-direct",
-        "direction-choice"
+        "direction-choice",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids",
@@ -980,50 +1238,62 @@
       ]
     },
     "avatar.part.remove": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids"
       ]
     },
     "avatar.parts.remove": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids"
       ]
     },
     "avatar.clear": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": [
         "ids"
       ]
     },
     "avatar.observe": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "avatar.undo": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     },
     "avatar.redo": {
-      "rows": 2,
+      "rows": 5,
       "styles": [
-        "natural-direct"
+        "natural-direct",
+        "curated-synonym",
+        "elliptical-direct"
       ],
       "parameters": []
     }
@@ -1103,7 +1373,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 67,
+        "trainingRows": 197,
         "scope": "current editor tool"
       },
       {
@@ -1127,7 +1397,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 6,
+        "trainingRows": 16,
         "scope": "current editor tool"
       },
       {
@@ -1169,7 +1439,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 4,
+        "trainingRows": 134,
         "scope": "current editor tool"
       },
       {
@@ -1184,7 +1454,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -1198,7 +1468,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -1220,7 +1490,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -1252,7 +1522,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -1261,7 +1531,7 @@
         "on": "art.draw.page",
         "params": {},
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -1275,7 +1545,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -1300,7 +1570,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 6,
+        "trainingRows": 11,
         "scope": "current editor tool"
       },
       {
@@ -1309,7 +1579,7 @@
         "on": "art.draw.object",
         "params": {},
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -1318,7 +1588,7 @@
         "on": "art.draw.object",
         "params": {},
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -1327,7 +1597,7 @@
         "on": "art.draw.object",
         "params": {},
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -1341,7 +1611,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -1360,7 +1630,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -1390,7 +1660,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 12,
         "scope": "current editor tool"
       },
       {
@@ -1417,7 +1687,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -1436,7 +1706,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -1455,7 +1725,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -1476,7 +1746,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 9,
         "scope": "current editor tool"
       },
       {
@@ -1490,7 +1760,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       }
     ],
@@ -1577,7 +1847,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 21,
+        "trainingRows": 152,
         "scope": "current editor tool"
       },
       {
@@ -1630,7 +1900,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 20,
         "scope": "current editor tool"
       },
       {
@@ -1647,7 +1917,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 5,
+        "trainingRows": 8,
         "scope": "current editor tool"
       },
       {
@@ -1661,7 +1931,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -1683,7 +1953,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -1709,7 +1979,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -1736,7 +2006,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -1754,7 +2024,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -1771,7 +2041,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -1838,7 +2108,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 4,
+        "trainingRows": 70,
         "scope": "current editor tool"
       },
       {
@@ -1852,7 +2122,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -1870,7 +2140,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -1879,7 +2149,7 @@
         "on": "diagram.sketch",
         "params": {},
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -1904,7 +2174,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 8,
         "scope": "current editor tool"
       },
       {
@@ -1913,7 +2183,7 @@
         "on": "diagram.sketch",
         "params": {},
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -1922,7 +2192,7 @@
         "on": "diagram.sketch",
         "params": {},
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -1931,7 +2201,7 @@
         "on": "diagram.sketch",
         "params": {},
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -1952,7 +2222,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 7,
         "scope": "current editor tool"
       },
       {
@@ -1966,7 +2236,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2016,7 +2286,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 12,
         "scope": "current editor tool"
       },
       {
@@ -2048,7 +2318,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 14,
+        "trainingRows": 17,
         "scope": "current editor tool"
       },
       {
@@ -2068,7 +2338,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2090,7 +2360,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2104,7 +2374,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2118,7 +2388,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2150,7 +2420,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 6,
+        "trainingRows": 9,
         "scope": "current editor tool"
       },
       {
@@ -2164,7 +2434,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2550,7 +2820,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2578,7 +2848,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2606,7 +2876,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2646,7 +2916,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 20,
         "scope": "current editor tool"
       },
       {
@@ -2694,7 +2964,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2742,7 +3012,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2766,7 +3036,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2790,7 +3060,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2804,7 +3074,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2834,7 +3104,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 7,
         "scope": "current editor tool"
       },
       {
@@ -2862,7 +3132,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 12,
         "scope": "current editor tool"
       },
       {
@@ -2887,7 +3157,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 9,
         "scope": "current editor tool"
       },
       {
@@ -2907,7 +3177,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 8,
         "scope": "current editor tool"
       },
       {
@@ -2925,7 +3195,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -2949,7 +3219,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -3038,7 +3308,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 4,
+        "trainingRows": 11,
         "scope": "current editor tool"
       },
       {
@@ -3068,7 +3338,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 21,
         "scope": "current editor tool"
       },
       {
@@ -3110,7 +3380,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 4,
+        "trainingRows": 22,
         "scope": "current editor tool"
       },
       {
@@ -3124,7 +3394,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -3138,7 +3408,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -3152,7 +3422,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -3161,7 +3431,7 @@
         "on": "docs.editor.document",
         "params": {},
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -3170,7 +3440,7 @@
         "on": "docs.editor.document",
         "params": {},
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -3179,7 +3449,7 @@
         "on": "docs.editor.document",
         "params": {},
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -3188,7 +3458,7 @@
         "on": "docs.editor.document",
         "params": {},
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       }
     ],
@@ -3423,7 +3693,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -3453,7 +3723,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 7,
         "scope": "current editor tool"
       },
       {
@@ -3498,7 +3768,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 21,
         "scope": "current editor tool"
       },
       {
@@ -3516,7 +3786,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -3530,7 +3800,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -3544,7 +3814,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -3553,7 +3823,7 @@
         "on": "time.calendar",
         "params": {},
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       }
     ],
@@ -3599,7 +3869,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 33,
+        "trainingRows": 39,
         "scope": "current editor tool"
       },
       {
@@ -3636,7 +3906,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -3667,7 +3937,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 10,
+        "trainingRows": 13,
         "scope": "current editor tool"
       },
       {
@@ -3688,7 +3958,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -3705,7 +3975,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -3730,7 +4000,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 8,
         "scope": "current editor tool"
       },
       {
@@ -3764,7 +4034,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 3,
+        "trainingRows": 6,
         "scope": "current editor tool"
       },
       {
@@ -3787,7 +4057,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -3807,7 +4077,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -3999,7 +4269,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 182,
+        "trainingRows": 185,
         "scope": "current editor tool"
       },
       {
@@ -4208,7 +4478,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 9,
+        "trainingRows": 18,
         "scope": "current editor tool"
       },
       {
@@ -4381,7 +4651,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -4405,7 +4675,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 5,
+        "trainingRows": 8,
         "scope": "current editor tool"
       },
       {
@@ -4419,7 +4689,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -4433,7 +4703,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -4447,7 +4717,7 @@
           }
         },
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -4456,7 +4726,7 @@
         "on": "ui.avatar.face",
         "params": {},
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -4465,7 +4735,7 @@
         "on": "ui.avatar.face",
         "params": {},
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       },
       {
@@ -4474,12 +4744,1615 @@
         "on": "ui.avatar.face",
         "params": {},
         "requires": [],
-        "trainingRows": 2,
+        "trainingRows": 5,
         "scope": "current editor tool"
       }
     ]
   },
   "modelInference": false,
   "trainingRun": false,
+  "variantCoverage": {
+    "drawing.object.make": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 126,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 128,
+      "omittedParameters": [
+        "x",
+        "y",
+        "width",
+        "height",
+        "size",
+        "color",
+        "label"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "drawing.catalog.make": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 6,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 8,
+      "omittedParameters": [
+        "x",
+        "y",
+        "size"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "drawing.object.change": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 126,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 127,
+      "omittedParameters": [
+        "y",
+        "width",
+        "height",
+        "size",
+        "color",
+        "label",
+        "x"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "drawing.object.select": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.objects.select": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.object.place": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.objects.transform": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.page.clear": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.object.remove": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.ids.show": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 1,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 2,
+      "omittedParameters": [
+        "duration"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "drawing.observe": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.undo": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.redo": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.object.parts": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.part.select": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.part.change": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 6,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 7,
+      "omittedParameters": [
+        "width",
+        "height",
+        "color"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "drawing.part.place": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.part.remove": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.part.extract": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "drawing.object.group": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 3,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 4,
+      "omittedParameters": [
+        "name",
+        "label"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "drawing.object.ungroup": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.node.make": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 127,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 128,
+      "omittedParameters": [
+        "label",
+        "n",
+        "colour",
+        "size",
+        "layout",
+        "x",
+        "y"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "diagram.node.change": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 14,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 15,
+      "omittedParameters": [
+        "colour",
+        "size",
+        "value",
+        "label"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "diagram.node.select": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.node.remove": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.node.place": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.node.resize": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.node.layout": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.link.make": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.link.select": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.link.change": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 62,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 63,
+      "omittedParameters": [
+        "label",
+        "colour",
+        "style",
+        "arrow",
+        "width",
+        "from",
+        "to"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "diagram.link.remove": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.selection.remove": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.page.clear": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.ids.show": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 1,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 2,
+      "omittedParameters": [
+        "duration"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "diagram.observe": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.undo": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.redo": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.group.make": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 1,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 2,
+      "omittedParameters": [
+        "label"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "diagram.group.select": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.group.change": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 6,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 7,
+      "omittedParameters": [
+        "colour",
+        "size",
+        "label"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "diagram.group.layout": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.group.resize": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.group.place": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.group.remove": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.group.ungroup": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.group.chart.make": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "diagram.group.chart.adopt": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "calendar.event.select": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "calendar.event.add": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 1,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 2,
+      "omittedParameters": [
+        "notes"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "calendar.meeting.change": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 14,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 15,
+      "omittedParameters": [
+        "start",
+        "duration",
+        "notes",
+        "title"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "calendar.meeting.move": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "calendar.events.remove": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "calendar.meeting.remove": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "calendar.observe": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.write": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.title.change": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.block.select": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.section.select": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.section.change": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 14,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 15,
+      "omittedParameters": [
+        "name",
+        "level",
+        "align",
+        "text"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "document.block.mark": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.section.mark": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.block.align": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.section.align": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.block.reorder": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.list.make": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 1,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 2,
+      "omittedParameters": [
+        "name"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "document.list.change": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 6,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 7,
+      "omittedParameters": [
+        "style",
+        "checked",
+        "items"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "document.table.make": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 3,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 4,
+      "omittedParameters": [
+        "name",
+        "header"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "document.table.change": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 2,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 3,
+      "omittedParameters": [
+        "header",
+        "rows"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "document.container.change": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.block.make": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 3,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 4,
+      "omittedParameters": [
+        "text",
+        "name"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "document.section.make": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 15,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 16,
+      "omittedParameters": [
+        "after",
+        "text",
+        "level",
+        "name"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "document.block.change": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 14,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 15,
+      "omittedParameters": [
+        "name",
+        "kind",
+        "level",
+        "align",
+        "text"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "document.block.remove": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.section.remove": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.section.reorder": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.remove": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.observe": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.undo": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "document.redo": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.face.compose": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 2,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 3,
+      "omittedParameters": [
+        "characterKind",
+        "base"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "avatar.face.preset": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.face.expression": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.face.name": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.face.select": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.ids.show": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 1,
+      "completeCounterpartRows": 1,
+      "finiteOptionalCasesExecuted": 2,
+      "omittedParameters": [
+        "duration"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "avatar.part.select": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.face.resize": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.part.resize": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.part.add": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.part.change": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 4,
+      "completeCounterpartRows": 2,
+      "finiteOptionalCasesExecuted": 6,
+      "omittedParameters": [
+        "size",
+        "variant",
+        "colour"
+      ],
+      "omissionStatus": "all curated meaningful subsets executed"
+    },
+    "avatar.part.feature": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.part.move": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.part.remove": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.parts.remove": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.clear": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.observe": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.undo": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    },
+    "avatar.redo": {
+      "synonymRows": 2,
+      "ellipticalRows": 1,
+      "omissionRows": 0,
+      "completeCounterpartRows": 0,
+      "finiteOptionalCasesExecuted": 0,
+      "omittedParameters": [],
+      "omissionStatus": "no material optional UI unit beyond the documented exclusions"
+    }
+  },
+  "variantPolicy": {
+    "synonymOperations": [
+      "drawing.object.make",
+      "drawing.catalog.make",
+      "drawing.object.change",
+      "drawing.object.select",
+      "drawing.objects.select",
+      "drawing.object.place",
+      "drawing.objects.transform",
+      "drawing.page.clear",
+      "drawing.object.remove",
+      "drawing.ids.show",
+      "drawing.observe",
+      "drawing.undo",
+      "drawing.redo",
+      "drawing.object.parts",
+      "drawing.part.select",
+      "drawing.part.change",
+      "drawing.part.place",
+      "drawing.part.remove",
+      "drawing.part.extract",
+      "drawing.object.group",
+      "drawing.object.ungroup",
+      "diagram.node.make",
+      "diagram.node.change",
+      "diagram.node.select",
+      "diagram.node.remove",
+      "diagram.node.place",
+      "diagram.node.resize",
+      "diagram.node.layout",
+      "diagram.link.make",
+      "diagram.link.select",
+      "diagram.link.change",
+      "diagram.link.remove",
+      "diagram.selection.remove",
+      "diagram.page.clear",
+      "diagram.ids.show",
+      "diagram.observe",
+      "diagram.undo",
+      "diagram.redo",
+      "diagram.group.make",
+      "diagram.group.select",
+      "diagram.group.change",
+      "diagram.group.layout",
+      "diagram.group.resize",
+      "diagram.group.place",
+      "diagram.group.remove",
+      "diagram.group.ungroup",
+      "diagram.group.chart.make",
+      "diagram.group.chart.adopt",
+      "document.title.change",
+      "document.block.select",
+      "document.section.select",
+      "document.section.change",
+      "document.block.mark",
+      "document.section.mark",
+      "document.block.align",
+      "document.section.align",
+      "document.block.reorder",
+      "document.list.make",
+      "document.list.change",
+      "document.table.make",
+      "document.table.change",
+      "document.container.change",
+      "document.write",
+      "document.block.make",
+      "document.section.make",
+      "document.block.change",
+      "document.block.remove",
+      "document.section.remove",
+      "document.section.reorder",
+      "document.remove",
+      "document.observe",
+      "document.undo",
+      "document.redo",
+      "calendar.event.select",
+      "calendar.event.add",
+      "calendar.meeting.change",
+      "calendar.meeting.move",
+      "calendar.events.remove",
+      "calendar.meeting.remove",
+      "calendar.observe",
+      "avatar.face.compose",
+      "avatar.face.preset",
+      "avatar.face.expression",
+      "avatar.face.name",
+      "avatar.face.select",
+      "avatar.ids.show",
+      "avatar.part.select",
+      "avatar.face.resize",
+      "avatar.part.resize",
+      "avatar.part.add",
+      "avatar.part.change",
+      "avatar.part.feature",
+      "avatar.part.move",
+      "avatar.part.remove",
+      "avatar.parts.remove",
+      "avatar.clear",
+      "avatar.observe",
+      "avatar.undo",
+      "avatar.redo"
+    ],
+    "omission": {
+      "format": "psys2.ui-omission-policy/1",
+      "combination": "Every subset of the curated material optional-detail units, including full and minimal forms. Change requests retain at least one effect; identities and required intent cores remain.",
+      "units": [
+        {
+          "operation": "drawing.object.make",
+          "required": [
+            "kind"
+          ],
+          "units": [
+            [
+              "x"
+            ],
+            [
+              "y"
+            ],
+            [
+              "width"
+            ],
+            [
+              "height"
+            ],
+            [
+              "size"
+            ],
+            [
+              "color"
+            ],
+            [
+              "label"
+            ]
+          ],
+          "minimumUnits": 0
+        },
+        {
+          "operation": "drawing.catalog.make",
+          "required": [
+            "name"
+          ],
+          "units": [
+            [
+              "x"
+            ],
+            [
+              "y"
+            ],
+            [
+              "size"
+            ]
+          ],
+          "minimumUnits": 0
+        },
+        {
+          "operation": "drawing.object.change",
+          "required": [
+            "ids"
+          ],
+          "units": [
+            [
+              "x"
+            ],
+            [
+              "y"
+            ],
+            [
+              "width"
+            ],
+            [
+              "height"
+            ],
+            [
+              "size"
+            ],
+            [
+              "color"
+            ],
+            [
+              "label"
+            ]
+          ],
+          "minimumUnits": 1
+        },
+        {
+          "operation": "drawing.part.change",
+          "required": [
+            "id",
+            "index"
+          ],
+          "units": [
+            [
+              "color"
+            ],
+            [
+              "width"
+            ],
+            [
+              "height"
+            ]
+          ],
+          "minimumUnits": 1
+        },
+        {
+          "operation": "drawing.object.group",
+          "required": [
+            "ids"
+          ],
+          "units": [
+            [
+              "name"
+            ],
+            [
+              "label"
+            ]
+          ],
+          "minimumUnits": 0
+        },
+        {
+          "operation": "drawing.ids.show",
+          "required": [
+            "mode"
+          ],
+          "units": [
+            [
+              "duration"
+            ]
+          ],
+          "minimumUnits": 0
+        },
+        {
+          "operation": "diagram.node.make",
+          "required": [
+            "kind"
+          ],
+          "units": [
+            [
+              "label"
+            ],
+            [
+              "n"
+            ],
+            [
+              "colour"
+            ],
+            [
+              "size"
+            ],
+            [
+              "layout"
+            ],
+            [
+              "x"
+            ],
+            [
+              "y"
+            ]
+          ],
+          "minimumUnits": 0
+        },
+        {
+          "operation": "diagram.node.change",
+          "required": [
+            "ids"
+          ],
+          "units": [
+            [
+              "label"
+            ],
+            [
+              "colour"
+            ],
+            [
+              "size"
+            ],
+            [
+              "value"
+            ]
+          ],
+          "minimumUnits": 1
+        },
+        {
+          "operation": "diagram.link.change",
+          "required": [
+            "ids"
+          ],
+          "units": [
+            [
+              "from",
+              "to"
+            ],
+            [
+              "label"
+            ],
+            [
+              "colour"
+            ],
+            [
+              "style"
+            ],
+            [
+              "arrow"
+            ],
+            [
+              "width"
+            ]
+          ],
+          "minimumUnits": 1
+        },
+        {
+          "operation": "diagram.group.make",
+          "required": [
+            "name",
+            "ids"
+          ],
+          "units": [
+            [
+              "label"
+            ]
+          ],
+          "minimumUnits": 0
+        },
+        {
+          "operation": "diagram.group.change",
+          "required": [
+            "id"
+          ],
+          "units": [
+            [
+              "label"
+            ],
+            [
+              "colour"
+            ],
+            [
+              "size"
+            ]
+          ],
+          "minimumUnits": 1
+        },
+        {
+          "operation": "diagram.ids.show",
+          "required": [
+            "mode"
+          ],
+          "units": [
+            [
+              "duration"
+            ]
+          ],
+          "minimumUnits": 0
+        },
+        {
+          "operation": "document.section.change",
+          "required": [
+            "id"
+          ],
+          "units": [
+            [
+              "text"
+            ],
+            [
+              "name"
+            ],
+            [
+              "level"
+            ],
+            [
+              "align"
+            ]
+          ],
+          "minimumUnits": 1
+        },
+        {
+          "operation": "document.list.make",
+          "required": [
+            "parent",
+            "items",
+            "style"
+          ],
+          "units": [
+            [
+              "name"
+            ]
+          ],
+          "minimumUnits": 0
+        },
+        {
+          "operation": "document.list.change",
+          "required": [
+            "id"
+          ],
+          "units": [
+            [
+              "items"
+            ],
+            [
+              "style"
+            ],
+            [
+              "checked"
+            ]
+          ],
+          "minimumUnits": 1
+        },
+        {
+          "operation": "document.table.make",
+          "required": [
+            "parent",
+            "rows"
+          ],
+          "units": [
+            [
+              "name"
+            ],
+            [
+              "header"
+            ]
+          ],
+          "minimumUnits": 0
+        },
+        {
+          "operation": "document.table.change",
+          "required": [
+            "id"
+          ],
+          "units": [
+            [
+              "rows"
+            ],
+            [
+              "header"
+            ]
+          ],
+          "minimumUnits": 1
+        },
+        {
+          "operation": "document.block.make",
+          "required": [
+            "parent",
+            "kind",
+            "level"
+          ],
+          "units": [
+            [
+              "text"
+            ],
+            [
+              "name"
+            ]
+          ],
+          "minimumUnits": 0
+        },
+        {
+          "operation": "document.section.make",
+          "required": [
+            "parent"
+          ],
+          "units": [
+            [
+              "after"
+            ],
+            [
+              "text"
+            ],
+            [
+              "level"
+            ],
+            [
+              "name"
+            ]
+          ],
+          "minimumUnits": 0
+        },
+        {
+          "operation": "document.block.change",
+          "required": [
+            "id"
+          ],
+          "units": [
+            [
+              "text"
+            ],
+            [
+              "name"
+            ],
+            [
+              "kind",
+              "level"
+            ],
+            [
+              "align"
+            ]
+          ],
+          "minimumUnits": 1
+        },
+        {
+          "operation": "calendar.event.add",
+          "required": [
+            "id",
+            "title",
+            "start",
+            "duration"
+          ],
+          "units": [
+            [
+              "notes"
+            ]
+          ],
+          "minimumUnits": 0
+        },
+        {
+          "operation": "calendar.meeting.change",
+          "required": [
+            "id"
+          ],
+          "units": [
+            [
+              "title"
+            ],
+            [
+              "start"
+            ],
+            [
+              "duration"
+            ],
+            [
+              "notes"
+            ]
+          ],
+          "minimumUnits": 1
+        },
+        {
+          "operation": "avatar.face.compose",
+          "required": [
+            "id"
+          ],
+          "units": [
+            [
+              "base"
+            ],
+            [
+              "characterKind"
+            ]
+          ],
+          "minimumUnits": 1
+        },
+        {
+          "operation": "avatar.part.change",
+          "required": [
+            "ids"
+          ],
+          "units": [
+            [
+              "variant"
+            ],
+            [
+              "size"
+            ]
+          ],
+          "minimumUnits": 1
+        },
+        {
+          "operation": "avatar.part.change",
+          "required": [
+            "ids"
+          ],
+          "units": [
+            [
+              "colour"
+            ],
+            [
+              "size"
+            ]
+          ],
+          "minimumUnits": 1
+        },
+        {
+          "operation": "avatar.ids.show",
+          "required": [
+            "mode"
+          ],
+          "units": [
+            [
+              "duration"
+            ]
+          ],
+          "minimumUnits": 0
+        }
+      ],
+      "excludedOptional": {
+        "reason": "No false omission coverage for structural, locator or non-UI arguments.",
+        "fields": [
+          "Drawing legacy name alias (Label/ObjectID examples use current UI meanings)",
+          "Empty secondary selection arrays (nodes/edges)",
+          "Document locator at=0, mark attrs metadata and compose-only genre/topic",
+          "Redundant heading kind=heading in section-only operations",
+          "Avatar constant face id",
+          "Document genre/topic not exposed in the current editor",
+          "Calendar participants/room/calendar advanced resource fields"
+        ]
+      },
+      "relationalUnits": "Diagram from/to and document kind/level are coupled to keep a coherent endpoint pair or heading type/level. Required numeric bounds, event time/duration, mark ranges and numeric chart data remain explicit; their vague interpretation belongs to separate completion cases."
+    }
+  },
   "scope": "Actual native tool execution validates recipes, not reader accuracy or human interpretation quality."
 }

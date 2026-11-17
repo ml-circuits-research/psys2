@@ -9,3 +9,9 @@ test('a reader completion event before the init response is retained rather than
  const worker=fakeWorker({readyBeforeResponse:true}),client=createEngineClient({base:'https://example.test/app/',getSettings:()=>({}),spawn:()=>worker});
  try{assert.equal((await client.boot({})).reader.state,'ready');assert.equal(client.info.reader.cache.stats.hits,7);}finally{client.destroy();}
 });
+test('completed replies retain only their exact worker request activity, independently of later live events',async()=>{
+ const worker=fakeWorker(),post=worker.postMessage.bind(worker),first=[{id:40,requestId:2,phase:'start',nodeIds:['component:reasoner']},{id:41,requestId:2,phase:'end',nodeIds:['component:reasoner']}];
+ worker.postMessage=function(message){if(message.op!=='send')return post(message);queueMicrotask(()=>this.onmessage({data:{type:'res',id:message.id,ok:true,value:{reply:{text:'Completed',trace:{reading:{wires:'actual request'}}},state:{},worldActivity:first,activityRequestId:message.id}}}));};
+ const client=createEngineClient({base:'https://example.test/app/',getSettings:()=>({}),spawn:()=>worker});
+ try{await client.boot({});const reply=await client.session.send('actual request');assert.deepEqual(reply.trace.worldActivity,first);assert.equal(reply.trace.activityRequestId,2);assert.equal(reply.trace.reading.wires,'actual request');worker.emit('world-activity',{id:42,requestId:999,phase:'end'});assert.deepEqual(reply.trace.worldActivity,first);assert.equal(client.stats.sends,1);}finally{client.destroy();}
+});

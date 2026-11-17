@@ -113,6 +113,78 @@ class CutterTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "reserved-id"):
                 m.load_corpus(data, source, exclusions)
 
+    def test_dynamic_padding_crops_only_right_padding(self):
+        rows = [{"input_ids": [1, 2, 3, 0, 0], "attention_mask": [1, 1, 1, 0, 0]},
+                {"input_ids": [1, 2, 0, 0, 0], "attention_mask": [1, 1, 0, 0, 0]}]
+        self.assertEqual(m.batch_width(rows), 5)
+        self.assertEqual(m.batch_width(rows, "dynamic"), 3)
+        rows[1]["attention_mask"] = [1, 0, 1, 0, 0]
+        with self.assertRaisesRegex(ValueError, "right-padded"):
+            m.batch_width(rows, "dynamic")
+
+    def test_cutter_warmstart_requires_actual_selected_complete_component(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            checkpoint = root / "best.pt"
+            checkpoint.write_bytes(b"test checkpoint")
+            config = {"format": "sop.request-cutter-model/1", "codec": m.CODEC}
+            (root / "model-config.json").write_text(json.dumps(config))
+            proof = {"format": "sop.request-cutter-run/1", "complete": True,
+                     "role": "trained-cutter-only", "checkpointSha256": m.digest(checkpoint),
+                     "configSha256": m.digest(root / "model-config.json")}
+            proof_path = root / "proof.json"
+            proof_path.write_text(json.dumps(proof))
+            deployment = {"cutterCheckpointSha256": proof["checkpointSha256"], "cutterConfigSha256": proof["configSha256"]}
+            deployment_path = root / "deployment.json"
+            deployment_path.write_text(json.dumps(deployment))
+            self.assertEqual(m.verify_cutter_warmstart(checkpoint, m.digest(checkpoint), proof_path, deployment_path), config)
+            deployment["cutterCheckpointSha256"] = "different"
+            deployment_path.write_text(json.dumps(deployment))
+            with self.assertRaisesRegex(ValueError, "not-selected"):
+                m.verify_cutter_warmstart(checkpoint, m.digest(checkpoint), proof_path, deployment_path)
+
+    def test_source_group_contract_preserves_raw_and_grouped_splits(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary); source = root / "raw"; source.mkdir(); data = root / "data"; data.mkdir()
+            raw = {"id": "item", "text": "go", "requests": [{"span": "go"}], "split_group": "shared-family"}
+            path = source / "items.jsonl"; path.write_text(json.dumps(raw) + "\n")
+            excluded = root / "excluded.json"; excluded.write_text("[]")
+            split = "calibration" if int(hashlib.sha256(raw["split_group"].encode()).hexdigest()[:8], 16) % 10 == 0 else "train"
+            row = {"id": "items.jsonl:item", "source_id": "item", "source_path": "items.jsonl", "source_sha256": m.digest(path), "source": {"text": "go"}, "annotations": raw["requests"], "split_group": raw["split_group"], "split": split}
+            for name in ["train", "calibration"]:
+                (data / (name + ".jsonl")).write_text(json.dumps(row) + "\n" if name == split else "")
+            manifest = {"sources": [{"path": "items.jsonl", "sha256": m.digest(path)}], "exclusion": {"sha256": m.digest(excluded)}, "outputs": {name: m.digest(data / (name + ".jsonl")) for name in ["train", "calibration"]}, "sourceGrouping": {"format": "psys2.source-cohort-split/1", "field": "split_group", "hash": "sha256-first8-mod10"}}
+            (data / "manifest.json").write_text(json.dumps(manifest))
+            loaded, _ = m.load_corpus(data, source, excluded)
+            self.assertEqual(loaded[split][0]["text"], "go")
+            row["split_group"] = "invented"
+            (data / (split + ".jsonl")).write_text(json.dumps(row) + "\n")
+            manifest["outputs"][split] = m.digest(data / (split + ".jsonl"))
+            (data / "manifest.json").write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError, "cohort-group-mismatch"):
+                m.load_corpus(data, source, excluded)
+
+    def test_complete_union_cutter_preparation_keeps_context_outside_model_inputs(self):
+        path = Path(__file__).with_name("prepare-ui-cutter-union.py")
+        spec = importlib.util.spec_from_file_location("cutter_union", path)
+        preparation = importlib.util.module_from_spec(spec); spec.loader.exec_module(preparation)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            old = {"source_path": "old.jsonl", "source_id": "old", "world": "drawing", "text": "please draw a house", "requests": [{"span": "draw a house"}], "context": {"hidden": "never input"}}
+            new = {"source_path": "ui-natural-v1", "source_id": "new", "world": "drawing", "text": "a house", "requests": [{"span": "a house"}], "context": {"hidden": "never input"}, "cohort": {"recipeFamily": "house"}}
+            old_path = root / "old.jsonl"; old_path.write_text(json.dumps(old) + "\n")
+            new_path = root / "new.jsonl"; new_path.write_text(json.dumps(new) + "\n")
+            out = root / "prepared"; manifest = preparation.prepare(old_path, new_path, out)
+            splits, provenance = m.load_corpus(out, out / "raw", out / "exclusions.json")
+            self.assertEqual(sum(map(len, splits.values())), 2)
+            self.assertEqual(provenance["exclusionCount"], 0)
+            for rows in splits.values():
+                for row in rows:
+                    self.assertNotIn("context", row)
+                    self.assertIn(row["text"], [old["text"], new["text"]])
+            for line in (out / "benchmark-source.jsonl").read_text().splitlines():
+                self.assertEqual(set(json.loads(line)), {"id", "text"})
+
     def test_weights_only_supplied_train_rows(self):
         weights, counts = m.class_weights([{"labels": [-100, 0, 0, 1, 2]}])
         self.assertEqual(counts, [2, 1, 1])

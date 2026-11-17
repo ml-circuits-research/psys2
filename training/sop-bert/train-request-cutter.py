@@ -195,6 +195,9 @@ def load_corpus(data, source_root, exclusion_path):
     if digest(exclusion_path) != manifest["exclusion"]["sha256"]:
         raise ValueError("exclusion-hash-mismatch")
     exclusions = set(json.loads(Path(exclusion_path).read_text()))
+    group_policy = manifest.get("sourceGrouping")
+    if group_policy is not None and group_policy != {"format": "psys2.source-cohort-split/1", "field": "split_group", "hash": "sha256-first8-mod10"}:
+        raise ValueError("invalid-source-grouping-contract")
     original = {}
     source_hashes = {}
     for source in manifest["sources"]:
@@ -234,7 +237,13 @@ def load_corpus(data, source_root, exclusion_path):
         for line in path.read_text().splitlines():
             row = json.loads(line)
             identity = row["source_path"] + ":" + row["source_id"]
-            expected_split = "calibration" if row["source_id"] not in supplement and int(hashlib.sha256(identity.encode()).hexdigest()[:8], 16) % 10 == 0 else "train"
+            raw = original[identity]
+            split_identity = identity
+            if group_policy is not None:
+                split_identity = raw.get("split_group")
+                if not isinstance(split_identity, str) or not split_identity or row.get("split_group") != split_identity:
+                    raise ValueError("source-cohort-group-mismatch")
+            expected_split = "calibration" if row["source_id"] not in supplement and int(hashlib.sha256(split_identity.encode()).hexdigest()[:8], 16) % 10 == 0 else "train"
             if row["source_id"] in exclusions or row["split"] != split or split != expected_split:
                 raise ValueError("reserved-id-or-split-mismatch")
             if identity in seen or row["id"] != identity:
@@ -250,7 +259,7 @@ def load_corpus(data, source_root, exclusion_path):
             text, requests = row["source"]["text"], row["annotations"]
             spans, issues = gold_spans(text, requests)
             rows.append({"id": identity, "text": text, "requests": requests,
-                         "request_count": len(requests), "spans": spans, "gold_issues": issues})
+                         "request_count": len(requests), "spans": spans, "gold_issues": issues, "origin": raw.get("origin"), "split_group": split_identity})
         splits[split] = rows
     expected = {key for key, raw in original.items() if raw["id"] not in exclusions}
     if seen != expected:
@@ -275,6 +284,35 @@ def tokenize_rows(rows, tokenizer, max_length):
                        "offsets": offsets, "sequence_ids": sequences, "truncated": truncated,
                        "labels": labels, "issues": issues})
     return result
+
+def batch_width(rows, padding="max_length"):
+    if padding not in ("max_length", "dynamic") or not rows:
+        raise ValueError("invalid-cutter-batch-padding")
+    width = len(rows[0]["input_ids"])
+    for row in rows:
+        mask = row["attention_mask"]
+        if len(row["input_ids"]) != width or len(mask) != width or mask != [1] * sum(mask) + [0] * (width-sum(mask)):
+            raise ValueError("right-padded-cutter-batch-required")
+    return max(sum(row["attention_mask"]) for row in rows) if padding == "dynamic" else width
+
+
+def verify_cutter_warmstart(checkpoint, expected_sha, proof_path, deployment_path):
+    if not expected_sha or digest(checkpoint) != expected_sha:
+        raise ValueError("warm-checkpoint-hash-mismatch")
+    proof = json.loads(Path(proof_path).read_text())
+    config_path = Path(checkpoint).parent / "model-config.json"
+    config = json.loads(config_path.read_text())
+    deployment = json.loads(Path(deployment_path).read_text())
+    if proof.get("format") != "sop.request-cutter-run/1" or proof.get("complete") is not True or proof.get("role") != "trained-cutter-only":
+        raise ValueError("completed-cutter-warmstart-required")
+    if proof.get("checkpointSha256") != expected_sha or proof.get("configSha256") != digest(config_path):
+        raise ValueError("warm-cutter-proof-mismatch")
+    if deployment.get("cutterCheckpointSha256") != expected_sha or deployment.get("cutterConfigSha256") != digest(config_path):
+        raise ValueError("warm-cutter-not-selected-deployment")
+    if config.get("codec") != CODEC or config.get("format") != "sop.request-cutter-model/1":
+        raise ValueError("warm-cutter-codec-mismatch")
+    return config
+
 
 def build_model(encoder_path):
     import torch
@@ -310,7 +348,11 @@ def audit(splits):
 def train(args, splits, provenance):
     import torch
     from transformers import AutoTokenizer
-    if args.epochs < 3 and not args.smoke:
+    minimum_epochs = getattr(args, "min_epochs", 3)
+    padding = getattr(args, "input_padding", "max_length")
+    if not args.smoke and not 3 <= minimum_epochs <= args.epochs:
+        raise ValueError("invalid-minimum-epoch-policy")
+    if (args.epochs < 3 or minimum_epochs < 3 or minimum_epochs > args.epochs) and not args.smoke:
         raise ValueError("at-least-three-epochs-required")
     random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -324,24 +366,35 @@ def train(args, splits, provenance):
         if not args.init_sha256 or digest(args.init_checkpoint) != args.init_sha256:
             raise ValueError("warm-checkpoint-hash-mismatch")
         init_manifest = json.loads(Path(args.init_manifest).read_text())
-        if init_manifest["format"] != "sop.inventory-bootstrap.run":
-            raise ValueError("only-clean-auxiliary-warmstart-supported")
+        full_cutter_warmstart = init_manifest.get("format") == "sop.request-cutter-run/1"
+        if full_cutter_warmstart:
+            if not getattr(args, "init_deployment_manifest", None):
+                raise ValueError("selected-cutter-deployment-required")
+            warm_config = verify_cutter_warmstart(args.init_checkpoint, args.init_sha256, args.init_manifest, args.init_deployment_manifest)
+            if {p.name: digest(p) for p in Path(args.encoder).iterdir() if p.is_file()} != warm_config.get("encoderFiles"):
+                raise ValueError("warm-cutter-encoder-source-mismatch")
+        elif init_manifest["format"] != "sop.inventory-bootstrap.run":
+            raise ValueError("only-verified-cutter-or-clean-auxiliary-warmstart-supported")
     tokenizer = AutoTokenizer.from_pretrained(args.encoder, local_files_only=True, use_fast=True)
     if not tokenizer.is_fast:
         raise ValueError("exact-fast-tokenizer-offsets-required")
-    encoded = {}
-    for split, rows in splits.items():
-        encoded[split] = tokenize_rows(rows[:args.limit] if args.limit else rows, tokenizer, args.max_length)
     model = build_model(args.encoder)
     if args.init_checkpoint:
         state = torch.load(args.init_checkpoint, map_location="cpu", weights_only=True)
         state = state.get("model", state)
-        if any(not k.startswith(("encoder.", "score.", "span.")) for k in state):
-            raise ValueError("unexpected-warm-checkpoint-role")
-        model.encoder.load_state_dict({k[len("encoder."):]: v for k, v in state.items()
-                                       if k.startswith("encoder.")}, strict=True)
+        if full_cutter_warmstart:
+            model.load_state_dict(state, strict=True)
+        else:
+            if any(not k.startswith(("encoder.", "score.", "span.")) for k in state):
+                raise ValueError("unexpected-warm-checkpoint-role")
+            model.encoder.load_state_dict({k[len("encoder."):]: v for k, v in state.items()
+                                           if k.startswith("encoder.")}, strict=True)
     device = torch.device(args.device)
     model.to(device)
+    # Create the CUDA context before CPU token/label buffers on unified-memory hosts.
+    encoded = {}
+    for split, rows in splits.items():
+        encoded[split] = tokenize_rows(rows[:args.limit] if args.limit else rows, tokenizer, args.max_length)
     model_bytes = sum(p.numel() * p.element_size() for p in model.parameters())
     if shutil.disk_usage(out).free < 2 * model_bytes + 128 * 1024**2:
         raise ValueError("insufficient-atomic-checkpoint-reserve")
@@ -353,13 +406,15 @@ def train(args, splits, provenance):
               "codecSha256": hashlib.sha256(canonical(CODEC).encode()).hexdigest(),
               "maxLength": args.max_length, "encoder": str(args.encoder),
               "encoderFiles": {p.name: digest(p) for p in Path(args.encoder).iterdir() if p.is_file()},
-              "warmCheckpointSha256": args.init_sha256, "warmRole": "clean-auxiliary-encoder-only" if args.init_checkpoint else "pretrained",
+              "warmCheckpointSha256": args.init_sha256, "warmRole": ("deployed-cutter-full-weights" if full_cutter_warmstart else "clean-auxiliary-encoder-only") if args.init_checkpoint else "pretrained",
               "warmManifestSha256": digest(args.init_manifest) if args.init_checkpoint else None,
+              "warmDeploymentManifestSha256": digest(args.init_deployment_manifest) if getattr(args,"init_deployment_manifest",None) else None,
+              "inputPadding": padding, "optimizerInitialization": "fresh-AdamW",
               "classCountsTrainOnly": counts, "classWeightsTrainOnly": weights,
               "trainerSha256": source_sha, "seed": args.seed, "provenance": provenance,
               "torch": str(torch.__version__), "transformers": __import__("transformers").__version__,
               "autocast": "bfloat16" if device.type == "cuda" else "none",
-              "epochs": args.epochs, "minEpochs": 3, "patience": args.patience,
+              "epochs": args.epochs, "minEpochs": minimum_epochs, "patience": args.patience,
               "selectionMetric": "calibration.span.f1", "batchSize": args.batch_size, "lr": args.lr}
     write_json(out / "model-config.json", config)
     write_json(out / "span-audit.json", audit(splits))
@@ -370,7 +425,8 @@ def train(args, splits, provenance):
                        "truncatedRows": sum(r["truncated"] for r in rows), "diagnostics": dict(issues)}
     write_json(out / "preparation.json", prep)
     def batch(rows):
-        return {key: torch.tensor([r[key] for r in rows], dtype=torch.long, device=device)
+        width = batch_width(rows, padding)
+        return {key: torch.tensor([r[key][:width] for r in rows], dtype=torch.long, device=device)
                 for key in ("input_ids", "attention_mask")}
     def infer(rows):
         predictions = []
@@ -384,7 +440,7 @@ def train(args, splits, provenance):
                 maxima = logits.max(-1, keepdim=True).values
                 pred = logits.argmax(-1)
                 pred[(logits == maxima).sum(-1) != 1] = -1
-                predictions.extend(pred.cpu().tolist())
+                predictions.extend(values + [-1] * (len(row["labels"])-len(values)) for row, values in zip(sample, pred.cpu().tolist()))
         return predictions
     history, best, best_epoch, stale, step = [], -1., None, 0, 0
     for epoch in range(1, args.epochs + 1):
@@ -396,7 +452,8 @@ def train(args, splits, provenance):
             if digest(source_path) != source_sha:
                 raise ValueError("trainer-source-mutated")
             sample = [encoded["train"][i] for i in order[offset:offset + args.batch_size]]
-            labels = torch.tensor([r["labels"] for r in sample], dtype=torch.long, device=device)
+            width = batch_width(sample, padding)
+            labels = torch.tensor([r["labels"][:width] for r in sample], dtype=torch.long, device=device)
             if not (labels != -100).any():
                 masked_batches += 1
                 continue
@@ -434,7 +491,7 @@ def train(args, splits, provenance):
             os.replace(temp, out / "best.pt")
         else:
             stale += 1
-        if epoch >= 3 and stale >= args.patience:
+        if epoch >= minimum_epochs and stale >= args.patience:
             break
     # Evaluate the immutable selected checkpoint, not the final optimizer state.
     checkpoint_sha = None
@@ -488,6 +545,9 @@ def main():
     p.add_argument("--init-checkpoint")
     p.add_argument("--init-sha256")
     p.add_argument("--init-manifest")
+    p.add_argument("--init-deployment-manifest")
+    p.add_argument("--input-padding", choices=["max_length", "dynamic"], default="max_length")
+    p.add_argument("--min-epochs", type=int, default=3)
     p.add_argument("--max-length", type=int, default=192)
     p.add_argument("--epochs", type=int, default=5)
     p.add_argument("--patience", type=int, default=2)

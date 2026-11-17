@@ -1,9 +1,9 @@
-import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=37593bbe80';
+import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=ced328a27e';
 import{instanceIdFor}from'./instance-identity.mjs?v=37c0536b83';
 import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=c5981d312b';
 import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=644ec5af08';
 import{describeNativeControl,verifyNativeControlEffect}from'./native-control-intent.mjs?v=15a2913b39';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=e14d1b73b4';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=2e7e2fecaa';
 // Application composition of declared semantic identities and native capabilities; no text parsing.
 import {World,str} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
 import SOURCE from './new-engine-source.mjs?v=e31b4adb7f';
@@ -30,12 +30,12 @@ const creationDefaults={
 };
 const reply=(text,supported,trace={})=>({text,parts:[{text,translate:false}],statuses:[supported?'supported':'unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',...trace}});
 export async function executeDeclaredRequest(session,candidate,text,{bindings,view,unapplied:externalUnapplied=[]}={}) {
- const area=NATIVE_AREAS[view],projection=flatRequestProjection(candidate);
+ const area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area,projection=flatRequestProjection(candidate);
  if(!area||!bindings||!projection.ok||projection.targets.length!==1||projection.request.mood!=='do')return null;
  const act=projection.request.act,target=projection.targets[0];
  if(target.selector.length)return null;
  if(!['make','change','place','remove'].includes(act)||act==='make'&&target.mode!=='new'||act!=='make'&&target.mode!=='existing')return null;
- const mappings=nativeKindCandidates(bindings).filter(r=>r.area===area.area&&r.canonical===target.kind&&r.nativeFamilyBinding);
+ const mappings=nativeKindCandidates(bindings).filter(r=>r.area===readerArea&&r.canonical===target.kind&&r.nativeFamilyBinding);
  if(!mappings.length)return act==='make'?reply('I understood the requested action and object, but could not find their declared tool binding. Nothing changed.',false,{reason:'native-binding-gap',reading:candidate,binding:{act,kind:target.kind,alternatives:[]}}):null;
  const nativeState=session.isession.state[area.world];if(!nativeState)return null;
  const host=await createAreaHost(area,{state:nativeState,instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge}),before=host.observe(),operations=host.bindings();
@@ -48,7 +48,7 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
   if(target.name){const names=observedReaderContext(area.area,before).context.existing;objects=objects.filter(o=>names[before.objects.indexOf(o)]?.name===target.name);}
   for(const selector of target.selector) {
    if(selector.operator!=='eq'||selector.polarity!=='positive')return null;
-   const property=bindings.properties.find(p=>p.area===area.area&&p.canonical===selector.concept&&p.hostBinding);
+   const property=bindings.properties.find(p=>p.area===readerArea&&p.canonical===selector.concept&&p.hostBinding);
    if(!property)return null;
    objects=objects.filter(o=>o.inputs.some(i=>i.binding===property.hostBinding.id&&i.values.some(v=>str(v)===selector.value)));
   }
@@ -70,7 +70,7 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
   const orderedResults=[...projection.results].sort((a,b)=>{const av=a.wire.attrs['source.start']?.[0],bv=b.wire.attrs['source.start']?.[0];return av!==undefined&&bv!==undefined?Number(str(av))-Number(str(bv)):0;});
   for(const condition of orderedResults) {
    if(condition.operator!=='eq'||condition.polarity!=='positive'){skipped.push(condition);continue;}
-   const mapping=bindings.properties.find(p=>p.area===area.area&&p.canonical===condition.concept&&p.hostBinding&&p.hostBinding.sourceType===operation.on&&Object.hasOwn(operation.params,p.hostBinding.parameter))??DRAWING_PROPERTY_BINDINGS.filter(b=>b.concept===condition.concept&&b.sourceType===operation.on&&Object.hasOwn(operation.params,b.key)).map(b=>({hostBinding:{parameter:b.key,sourceType:b.sourceType}}))[0];
+   const mapping=bindings.properties.find(p=>p.area===readerArea&&p.canonical===condition.concept&&p.hostBinding&&p.hostBinding.sourceType===operation.on&&Object.hasOwn(operation.params,p.hostBinding.parameter))??DRAWING_PROPERTY_BINDINGS.filter(b=>b.concept===condition.concept&&b.sourceType===operation.on&&Object.hasOwn(operation.params,b.key)).map(b=>({hostBinding:{parameter:b.key,sourceType:b.sourceType}}))[0];
    if(!mapping){skipped.push(condition);continue;}
    const parameter=mapping.hostBinding.parameter,descriptor=operation.params[parameter];let value=condition.value;
    if(descriptor.type==='array'&&mapping.hostBinding.codec){

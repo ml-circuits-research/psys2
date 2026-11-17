@@ -24,14 +24,15 @@ globalThis.__psys2Url = vurl;   // for ui/ort-host.mjs and the hosts (they resol
 
 const post = (m, t) => postMessage(m, t ?? []);
 const evt = (name, data) => post({ type: 'evt', name, data });
-const activityLog=[];let activitySequence=0;
-function worldActivity(nodeIds,phase,label,extra={}){const event={id:++activitySequence,nodeIds,phase,label,time:Date.now(),...extra};activityLog.push(event);if(activityLog.length>200)activityLog.shift();evt('world-activity',event);}
+const activityLog=[];let activitySequence=0,executionRequestId=null;
+const requestActivities=new Map();
+function worldActivity(nodeIds,phase,label,extra={}){const event={id:++activitySequence,nodeIds,phase,label,time:Date.now(),...(executionRequestId==null?{}:{requestId:executionRequestId}),...extra};requestActivities.get(event.requestId)?.push(event);activityLog.push(event);if(activityLog.length>200)activityLog.shift();evt('world-activity',event);}
 // Only instrumented RPC boundaries are timed; these events do not infer inner reasoning.
 function loadProgress(message,operation){
  const timings=[];let current=null,started=0;
  const correlationId='rpc:'+message.id;
- const close=error=>{if(!current)return;const ms=performance.now()-started;timings.push({stage:current.stage,ms});worldActivity(current.nodeIds,error?'error':'end',current.stage,{operation,correlationId,stage:current.stage,durationMs:ms,status:error?'failed':'completed',...(error?{error:String(error?.message??error)}:{})});current=null;};
- return {stage(stage,nodeIds=['runtime:registry']){close();current={stage,nodeIds};started=performance.now();evt('tab-load-progress',{tab:message.tab??(operation==='worldsInspection'?'worlds':null),requestId:message.id,operation,correlationId,stage});worldActivity(nodeIds,'start',stage,{operation,correlationId,stage,status:'running'});},finish(error=null){close(error);return timings;}};
+ const close=error=>{if(!current)return;const ms=performance.now()-started;timings.push({stage:current.stage,ms});worldActivity(current.nodeIds,error?'error':'end',current.stage,{operation,requestId:message.id,correlationId,stage:current.stage,durationMs:ms,status:error?'failed':'completed',...(error?{error:String(error?.message??error)}:{})});current=null;};
+ return {stage(stage,nodeIds=['runtime:registry']){close();current={stage,nodeIds};started=performance.now();evt('tab-load-progress',{tab:message.tab??(operation==='worldsInspection'?'worlds':null),requestId:message.id,operation,correlationId,stage});worldActivity(nodeIds,'start',stage,{operation,requestId:message.id,correlationId,stage,status:'running'});},finish(error=null){close(error);return timings;}};
 }
 const knowledgeReadFiles=new Map();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -298,6 +299,7 @@ const handlers = {
   async send(m) {
     if (samplerRun) await samplerRun;
     const ctl = new AbortController();
+    executionRequestId=m.id;
     active.set(m.id, ctl);
     if (warming) await warming;
     faultNow = testHooks ? (m.fault ?? null) : null;
@@ -416,6 +418,7 @@ const handlers = {
     // Background example generation must finish before a user edit, never discard it.
     if(samplerRun)await samplerRun.catch(()=>undefined);
     if(turnRunning())throw Error('An action is already running.');
+    executionRequestId=m.id;
     const ctl=new AbortController();active.set(m.id,ctl);
     try{const {NATIVE_AREAS}=await import(vurl('lib/dialog/app-reader-context.mjs'));
       const view=m.view,area=NATIVE_AREAS[view];
@@ -492,6 +495,9 @@ onmessage = async (ev) => {
   if (m.op === 'abort') { for (const [id, ctl] of active) if (m.id == null || id === m.id) ctl.abort(new DOMException(m.reason === 'timeout' ? 'turn time limit' : 'stopped', m.reason === 'timeout' ? 'TimeoutError' : 'AbortError')); return; }
   const h = handlers[m.op];
   if (!h) { post({ type: 'res', id: m.id, ok: false, error: { name: 'Error', message: `unknown op ${m.op}` } }); return; }
-  try { post({ type: 'res', id: m.id, ok: true, value: await h(m) }); }
+  const recordsActivity=['send','nativeTool'].includes(m.op);
+  if(recordsActivity)requestActivities.set(m.id,[]);
+  try { const value=await h(m);post({type:'res',id:m.id,ok:true,value:recordsActivity?{...value,worldActivity:requestActivities.get(m.id).slice(),activityRequestId:m.id}:value}); }
   catch (e) { post({ type: 'res', id: m.id, ok: false, error: errOf(e) }); }
+  finally {if(executionRequestId===m.id)executionRequestId=null;requestActivities.delete(m.id);}
 };
