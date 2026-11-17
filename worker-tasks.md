@@ -5459,3 +5459,16 @@ What changes:
 3. "Wrong" for the gate means the effect differs from the intended one. A clarifying question is not wrong. A refusal counts as not covered, not as wrong.
 4. Report both numbers per class × area: coverage (how often it acts) and error rate among acted rows. The owner's English sessions are still judged turn by turn (right / partly / honest / wrong); a rare wrong is now tolerated, a pattern of wrong in one class is not.
 5. Same honesty rule as review 28: calibrate on CAL rows only, no tuning on the 301 matrix rows or the owner's sessions.
+
+
+### Owner decision — 2026-11-17 08:50 Rome: act, say what was uncertain, do not ask
+
+Owner, in substance: avoid clarifying questions. When the reader has mostly understood but is unsure, do the most likely thing and say in one short line what was interpreted with uncertainty ("I took \"it\" as the red house"). The user corrects in the next turn if needed; undo exists. Questions are annoying, especially wrong ones. Goal: a good demo, not perfect; small occasional mistakes are fine; being annoying, fussy or over-cautious is much worse.
+
+Consequences:
+- This replaces review 26 point "an unmatched lemma becomes one precise question": pick the closest declared identity, act, and name the guess in the reply.
+- Questions only when there is no plausible reading at all (nothing to act on), or the action is destructive and the target is genuinely ambiguous between several existing objects. Even then prefer acting on the most recent/focused object with undo.
+- The reply carries the uncertainty note; the trace keeps the alternatives so "no, the other one" can be resolved in the next turn.
+- A follow-up correction ("no, blue", "the other one", "undo") must work as a simple command in every area.
+- Gate (review 29): an acted-on guess the user corrects counts as partly, not wrong; a needless question counts against the turn.
+
