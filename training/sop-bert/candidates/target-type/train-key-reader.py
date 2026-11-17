@@ -1,7 +1,7 @@
 """Inventory-key BIO reader with shared per-mention metadata; no slot assignment.
 Gold request cuts are conditional supervision, never an inference argument.
 """
-import argparse,collections,copy,gzip,hashlib,importlib.util,json,os,random,shutil,tempfile,time,uuid
+import argparse,collections,copy,math,gzip,hashlib,importlib.util,json,os,random,shutil,tempfile,time,uuid
 from pathlib import Path
 
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -21,6 +21,15 @@ CHECKPOINT_EVALUATION={'format':'sop.key-reader-checkpoint-evaluation/1',
     'trainingParameterDtype':'float32','checkpointFloatingStorage':'bfloat16',
     'evaluationRoundtrip':'float32->bfloat16->float32','forwardAutocast':'disabled',
     'device':'training-device','state':'detached-eval-clone','optimizer':'unchanged'}
+
+TRAINING_OBJECTIVE={'format':'sop.key-reader-presence-bio-consistency/1',
+    'baselineTrainerSha256':'f9e5794fd939ce5a202be2c4cdfdacc7e8e48e68ded4d50d97453108bcc6a69c',
+    'coefficient':0.1,'pool':'max-source-B','divergence':'Bernoulli-Jensen-Shannon-natural-log',
+    'eligibility':'known-presence; nontruncated; complete legal source BIO supervision; gold B-support agrees',
+    'tokens':'sequence0; positive scalar offsets; attention1; no special/context/padding',
+    'normalization':'mean eligible rows per gold-presence stratum, then strata per key, then supported keys',
+    'zeroSupport':'differentiable-zero','baseLoss':'unchanged per-key weighted BIO/presence/class mean',
+    'interpretation':'training regularizer only; no graph confidence or calibration'}
 
 SELECTION_CRITERION={'format':'sop.key-reader-selection/1','order':['positiveSupervisedBioGlobalExactRate','targetTypePresentClassAccuracy','decodedMentionF1'],'scope':'gold-cut supervised BIO+global subset, not complete graph'}
 
@@ -76,7 +85,7 @@ def configuration(manifest):
     if manifest.get('format')!='sop.per-key-supervision/3-target-type-migration-candidate':raise ValueError('candidate-supervision-required')
     registry=manifest['registry'];keys=list(registry)
     if registry.get('request.target.type',{}).get('bio') is not False:raise ValueError('target-type-must-be-class-only')
-    return {'format':'sop.key-reader/2-target-type-candidate','rawCodecFormat':'sop.key-reader-raw-codec/2-target-type-candidate','candidate':True,'executionEligible':False,'tensorArchitectureVersion':2,'trainingSourceFormat':'sop.key-reader-source/4-target-type-plateau-candidate','trainingPolicyContract':TRAINING_POLICY_CONTRACT,'selectionCriterion':SELECTION_CRITERION,'checkpointEvaluation':CHECKPOINT_EVALUATION,'baselineTrainerSha256':'eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f','inventorySha256':manifest['inventorySha256'],'exclusionSha256':manifest['exclusionSha256'],'targetFamilies':manifest['targetFamilies'],'keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global'] and v.get('bio',True)],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':192,'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
+    return {'format':'sop.key-reader/2-target-type-candidate','rawCodecFormat':'sop.key-reader-raw-codec/2-target-type-candidate','candidate':True,'executionEligible':False,'tensorArchitectureVersion':2,'trainingSourceFormat':'sop.key-reader-source/5-presence-bio-consistency-candidate','trainingObjective':copy.deepcopy(TRAINING_OBJECTIVE),'trainingPolicyContract':TRAINING_POLICY_CONTRACT,'selectionCriterion':SELECTION_CRITERION,'checkpointEvaluation':CHECKPOINT_EVALUATION,'baselineTrainerSha256':'eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f','inventorySha256':manifest['inventorySha256'],'exclusionSha256':manifest['exclusionSha256'],'targetFamilies':manifest['targetFamilies'],'keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global'] and v.get('bio',True)],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':192,'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
 
 def encode(row,tokenizer,config):
     import torch
@@ -104,7 +113,7 @@ def encode(row,tokenizer,config):
             if key in m['metadata']:targets[key]=label(m['metadata'][key],config['banks'][key])
             elif row['version']=='v2':targets[key]=0
         mentions.append((index[m['key']],a,b,targets))
-    return {'input_ids':torch.tensor(enc['input_ids']),'attention_mask':torch.tensor(enc['attention_mask']),'bio':bio,'presence':presence,'classes':classes,'mentions':mentions,'truncated':truncated,'id':row['id']}
+    return {'input_ids':torch.tensor(enc['input_ids']),'attention_mask':torch.tensor(enc['attention_mask']),'source_mask':torch.tensor([seq[i]==0 and b>a and enc['attention_mask'][i]==1 for i,(a,b)in enumerate(offsets)],dtype=torch.bool),'bio':bio,'presence':presence,'classes':classes,'mentions':mentions,'truncated':truncated,'id':row['id']}
 
 def build_model(config,encoder_path):
     import torch
@@ -116,6 +125,53 @@ def build_model(config,encoder_path):
             hidden=self.encoder(input_ids=input_ids,attention_mask=attention_mask).last_hidden_state
             return hidden,self.bio(hidden).reshape(hidden.shape[0],hidden.shape[1],len(config['bioKeys']),3).permute(0,2,1,3),self.presence(hidden[:,0])
     return Reader()
+
+def presence_bio_consistency(bio,presence,gold,pgold,source_mask,attention_mask,truncated,config):
+    """Symmetric source-only agreement. Masks are supervision, never new labels."""
+    import torch
+    F=torch.nn.functional
+    if bio.ndim!=4 or bio.shape[-1]!=3 or presence.ndim!=2 or tuple(gold.shape)!=tuple(bio.shape[:-1]) or tuple(pgold.shape)!=tuple(presence.shape):
+        raise ValueError('consistency-logit-label-shapes')
+    batch,keys,length,_=bio.shape
+    if keys!=len(config['bioKeys']) or tuple(presence.shape)!=(batch,len(config['keys'])) or tuple(source_mask.shape)!=(batch,length) or source_mask.dtype!=torch.bool or tuple(attention_mask.shape)!=(batch,length) or tuple(truncated.shape)!=(batch,) or truncated.dtype!=torch.bool:
+        raise ValueError('consistency-mask-shapes')
+    # Empty reductions keep a differentiable zero even when ignored logits are NaN.
+    zero=bio.reshape(-1)[:0].sum()+presence.reshape(-1)[:0].sum()
+    source=source_mask & (attention_mask==1)
+    positions=torch.arange(length,device=bio.device).expand(batch,length)
+    last_source=torch.where(source,positions,-1).cummax(dim=1).values
+    previous_index=torch.cat((last_source.new_full((batch,1),-1),last_source[:,:-1]),dim=1)
+    index={key:i for i,key in enumerate(config['keys'])};per_key=[]
+    for ki,key in enumerate(config['bioKeys']):
+        if config['registry'][key]['role']not in ['domain','global'] or config['registry'][key].get('bio',True)is False:
+            continue
+        pi=index[key];labels=gold[:,ki];target=pgold[:,pi]
+        previous=labels.gather(1,previous_index.clamp_min(0)).masked_fill(previous_index<0,0)
+        eligible=(~truncated)&source.any(dim=1)&((target==0)|(target==1))
+        eligible &= ((~source)|((labels==0)|(labels==1)|(labels==2))).all(dim=1)
+        eligible &= ~(source&(labels==2)&(previous==0)).any(dim=1)
+        eligible &= (source&(labels==1)).any(dim=1)==(target==1)
+        rows=eligible.nonzero(as_tuple=True)[0]
+        if not rows.numel():continue
+        active_source=source[rows]
+        # Mask before softmax: ignored/context/padding logits never affect loss
+        # or backward, even when an ignored token is nonfinite.
+        logits=bio[rows,ki].float().masked_fill(~active_source[:,:,None],0)
+        z=presence[rows,pi].float()
+        if not bool(torch.isfinite(logits).all()) or not bool(torch.isfinite(z).all()):
+            raise ValueError('nonfinite-consistency-logits')
+        log_tokens=F.log_softmax(logits,dim=-1)
+        winner=log_tokens[:,:,1].masked_fill(~active_source,-torch.inf).argmax(dim=1)
+        chosen=logits[torch.arange(len(rows),device=bio.device),winner]
+        # Deterministic first maximum; no BIO boundary repair or token target.
+        log_q=F.log_softmax(torch.stack((torch.logsumexp(chosen[:,[0,2]],dim=1),chosen[:,1]),dim=1),dim=1)
+        log_p=torch.stack((F.logsigmoid(-z),F.logsigmoid(z)),dim=1)
+        log_m=torch.logaddexp(log_p,log_q)-math.log(2)
+        jsd=0.5*((log_p.exp()*(log_p-log_m)).sum(dim=1)+(log_q.exp()*(log_q-log_m)).sum(dim=1))
+        if not bool(torch.isfinite(jsd).all()):raise ValueError('nonfinite-consistency-divergence')
+        strata=[jsd[target[rows]==value].mean()for value in [0,1]if bool((target[rows]==value).any())]
+        per_key.append(torch.stack(strata).mean())
+    return torch.stack(per_key).mean()if per_key else zero
 
 def objective(model,rows,config,device,bio_weights):
     import torch
@@ -143,7 +199,14 @@ def objective(model,rows,config,device,bio_weights):
         byhead=collections.defaultdict(list)
         for(key,stratum),values in classloss.items():byhead[key].append(torch.stack(values).mean())
         losses.append(torch.stack([torch.stack(values).mean()for values in byhead.values()]).mean())
-    return torch.stack(losses).mean(),bio,gold
+    base=torch.stack(losses).mean()
+    policy=config.get('trainingObjective')
+    if policy!=TRAINING_OBJECTIVE:raise ValueError('unrecognized-training-objective')
+    consistency=presence_bio_consistency(bio,presence,gold,pgold,
+        torch.stack([r['source_mask']for r in rows]).to(device),
+        torch.stack([r['attention_mask']for r in rows]).to(device),
+        torch.tensor([r['truncated']for r in rows],dtype=torch.bool,device=device),config)
+    return base+policy['coefficient']*consistency,bio,gold
 
 def bio_mentions(tags):
     spans=[];start=None
@@ -458,7 +521,7 @@ def completed_epoch_proof(config,manifest,metrics,stopping,checkpoint,*,run_id,s
             'preparerSha256':manifest['scriptSha256'],'dataManifestSha256':data_manifest_sha,
             'encodedDataSha256':manifest['outputs'],'dataRecordCounts':data_counts,
             'modelConfigFormat':config['format'],'rawCodecFormat':config['rawCodecFormat'],
-            'preparationFormat':manifest['format'],'trainingSourceFormat':config['trainingSourceFormat'],
+            'preparationFormat':manifest['format'],'trainingSourceFormat':config['trainingSourceFormat'],'trainingObjective':copy.deepcopy(config['trainingObjective']),
             'checkpoint':{'sha256':checkpoint['sha256'],'bytes':checkpoint['bytes'],'path':checkpoint['firstEpochPin']},
             'checkpointMetrics':metrics,'checkpointMetricsSha256':hashlib.sha256(canonical).hexdigest(),
             'checkpointSelectionRank':list(selection_rank(metrics)),'selectionCriterion':SELECTION_CRITERION,
@@ -599,13 +662,13 @@ def main():
         raise ValueError('warmstart-input-mutated')
     if first_proof_receipt is None:raise ValueError('missing-first-epoch-proof')
     verify_first_epoch_receipt(args.out,first_proof_receipt,first_proof_record)
-    record={'format':'sop.key-reader-run/4-target-type-plateau-candidate','complete':True,'candidate':True,
+    record={'format':'sop.key-reader-run/5-presence-bio-consistency-candidate','complete':True,'candidate':True,
             'executionEligible':False,'tensorArchitectureVersion':2,'preparationFormat':manifest['format'],
             'modelConfigFormat':config['format'],'rawCodecFormat':config['rawCodecFormat'],
             'configSha256':sha(args.out/'model-config.json'),'trainerSha256':trainer_sha,
             'dataManifestSha256':data_sha,'preparerSha256':manifest['scriptSha256'],
             'encodedDataSha256':manifest['outputs'],'epochsCompleted':len(history),'steps':steps,
-            'trainingPolicy':policy,'checkpointWriter':CHECKPOINT_WRITER,'runId':config['runId'],
+            'trainingPolicy':policy,'trainingSourceFormat':config['trainingSourceFormat'],'trainingObjective':copy.deepcopy(config['trainingObjective']),'checkpointWriter':CHECKPOINT_WRITER,'runId':config['runId'],
             'firstEpochProofSha256':first_proof_receipt['sha256'],'stopping':plateau,'bestCheckpointEpoch':best_epoch,
             'dataRecordCounts':{split:len(rows)for split,rows in datasets.items()},
             'checkpointSha256':sha(args.out/'checkpoint.pt'),'bestDecodedMentionF1':best_evaluation['decodedMentionF1'],
