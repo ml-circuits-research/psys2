@@ -7,6 +7,10 @@ m=load('reader','train-key-reader.py');p=load('prep','prepare-key-reader.py')
 class Tests(unittest.TestCase):
  def test_typed_banks(self):
   b=m.bank({'values':[None,'<ABSENT>','<UNKNOWN>',False]});self.assertEqual(m.label(None,b),2);self.assertEqual(m.label('<ABSENT>',b),3);self.assertEqual(m.label(False,b),5);self.assertEqual(m.label('unseen',b),1)
+ def test_bio_decoder(self):
+  self.assertEqual(m.bio_mentions([0,1,2,0,1]),[(1,3),(4,5)]);self.assertIsNone(m.bio_mentions([0,2,0]))
+ def test_missing_value_not_null(self):
+  reg={'drawing.drawn.colour':{'role':'domain'}};r={'world':'drawing','source_path':'haiku-v2','source':{'text':'red'}};q={'span':'red','constraints':[{'key':'drawn.colour','value_span':'red'}]};self.assertFalse(p.sample(r,q,reg,{})['mentions'][0]['valuePresent']);q['constraints'][0]['value']=None;self.assertTrue(p.sample(r,q,reg,{})['mentions'][0]['valuePresent'])
  def test_exact_offsets(self):
   self.assertEqual(m.token_interval([(0,0),(0,3),(4,8)],[4,8]),(2,3));self.assertIsNone(m.token_interval([(0,3)],[0,2]))
  def test_repeat_metadata(self):

@@ -36,7 +36,7 @@ def sample(row,request,reg,v1_aliases):
         global_values[key]={'value':value,'span':span_for(text,value,literal)};covered.add(key)
     def mention(key,value,literal,metadata):
         if key not in reg:diagnostics.append({'reason':'unmapped-raw-key','key':key});return
-        bounds=span_for(text,value,literal);item={'key':key,'value':value,'span':bounds,'metadata':metadata,'trainable':bounds is not None};mentions.append(item);covered.add(key)
+        present=value is not MISSING;bounds=span_for(text,value,literal);value=None if value is MISSING else value;item={'key':key,'value':value,'valuePresent':present,'span':bounds,'metadata':metadata,'trainable':bounds is not None};mentions.append(item);covered.add(key)
         if bounds is None:unknown_keys.add(key);diagnostics.append({'reason':'missing-or-ambiguous-mention-span','key':key})
     if request is not None and version=='v2':
         for key,path in GLOBAL.items():
@@ -45,7 +45,7 @@ def sample(row,request,reg,v1_aliases):
             literal=get(request,'target.'+path.rsplit('.',1)[1]+'_span')if path.startswith('target.')else request.get('trigger')if path=='act'else None
             global_value(key,value,None if literal is MISSING else literal)
         for condition in request.get('constraints')or []:
-            key=row['world']+'.'+condition['key'];metadata={head:condition[field]for head,field in META.items()if field in condition};mention(key,condition.get('value'),condition.get('value_span'),metadata)
+            key=row['world']+'.'+condition['key'];metadata={head:condition[field]for head,field in META.items()if field in condition};mention(key,condition.get('value',MISSING),condition.get('value_span'),metadata)
     elif request is not None:
         answers=request['answers'];a=v1_aliases
         covered.update(a['M'].values());covered.difference_update(META);covered.discard('request.logic.negated')
