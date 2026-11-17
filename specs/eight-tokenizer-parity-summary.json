@@ -1,0 +1,37 @@
+{
+  "format": "sop.actual-eight-tokenizer-summary/1",
+  "caseCount": 8,
+  "tokenizationEntries": 18,
+  "allTokenizerInputsEqual": true,
+  "allModelFeedsEqual": true,
+  "modelCalls": 0,
+  "cutDifference": {
+    "id": "data/haiku-v1/calendar/b01a.jsonl:calendar-b01-0022",
+    "node": [
+      [
+        0,
+        3
+      ],
+      [
+        4,
+        20
+      ]
+    ],
+    "python": [
+      [
+        0,
+        20
+      ]
+    ]
+  },
+  "evidence": {
+    "report.json": "4ceab5be6ec47ea9e061a35221bfef24ab867917198272f348a099f4a2cd2830",
+    "plan.json": "6e9aaa35d7588d00fe6e6376056b906fae22834969fd658860b3ad16499647ad",
+    "node.json": "a5946a77c4dcf3f8a94ffb5065e9a3167f8eb6f2db9a145286955e0ec9547bc6",
+    "python.json": "5d4dbb6f4aef1886050b5292f3b37a1f98cb168fcf8e63ae8e25cbd15abdf32b"
+  },
+  "externalEvidenceDirectory": ".session-control/review23-eight-tokenizer-parity-v1",
+  "semanticAccuracy": null,
+  "calibration": null,
+  "executionEligible": false
+}

@@ -4854,3 +4854,15 @@ match trusted path/SHA/bytes exactly; no silent extra entries. Regression
 covers valid5, both mismatches and unrelated extras. Fixed test candidate
 fixture path for main integration.9/9 source fixtures pass; no artifact/model
 or persisted manifest changes. PSys owns actual8probe after cherry-pick.
+
+## 2026-11-17 — Actual eight-case tokenizer input parity
+
+Added bounded diagnostic scripts and three pure fixtures. Actual local run
+compared Node Transformers3.8.1 with Python AutoTokenizer5.22.2 using the actual
+host role adapter, key context serializer and verified offset authority.
+All18 entries matched context UTF8, full/padded IDs+masks, roles and scalar
+offsets. Eight cutter messages plus10 key union-cut/control entries; no model
+calls/GPU. Calendar-b01-0022 cutsets differ despite identical cutter feeds;
+handed identical arrays to PSys for backend numeric investigation. No tokenizer
+fix, semantic accuracy, calibration or admission claim. Full evidence outside
+Git; small SHA summary committed. Pure checks3/3 pass; actual bounded run exit0.
