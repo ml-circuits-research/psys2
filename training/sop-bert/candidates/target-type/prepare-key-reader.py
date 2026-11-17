@@ -1,9 +1,9 @@
 """C1 per-request/per-key mention supervision, no slot assignment or literal vocabulary."""
-import argparse,ast,collections,hashlib,json
+import argparse,ast,collections,gzip,hashlib,json,shutil
 from pathlib import Path
 MISSING=object()
 TARGET_TYPE='request.target.type'
-CANDIDATE_FORMAT='sop.per-key-supervision/2-target-type-candidate'
+CANDIDATE_FORMAT='sop.per-key-supervision/3-target-type-migration-candidate'
 GLOBAL={'request.target.type':'target.type','request.request.mood':'mood','request.request.act':'act','request.target.mode':'target.mode','request.target.fill':'target.fill','request.target.determiner':'target.determiner','request.target.kind':'target.kind','request.target.name':'target.name_span','request.target.description':'target.description_span','request.target.ordinal':'target.ordinal','request.target.count':'target.count','request.logic.quantifier':'target.quantifier','request.question.ask':'question.ask','request.question.asked_key':'question.asked_key','conversation.turn.fragment':'turn.fragment','conversation.turn.objection':'turn.objection','conversation.turn.repeat_count':'turn.repeat_count','conversation.turn.area':'turn.area'}
 META={'request.constraint.operator':'operator','request.constraint.phase':'phase','request.constraint.polarity':'polarity','request.constraint.character':'character','request.constraint.scope':'scope','request.constraint.step':'step','request.constraint.measure':'measure','request.constraint.unit':'unit','request.constraint.variety':'variety','request.logic.group':'group'}
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -110,16 +110,97 @@ def sample(row,request,reg,v1_aliases):
             if item['key']==other['key']and item['span']and other['span']and max(item['span'][0],other['span'][0])<min(item['span'][1],other['span'][1]):
                 item['trainable']=other['trainable']=False;unknown_keys.add(item['key']);diagnostics.append({'reason':'same-key-overlap-or-identical-range','key':item['key'],'ranges':[item['span'],other['span']]})
     return {'text':text,'area':row['world'],'context':row.get('context'),'version':version,'globals':global_values,'mentions':mentions,'coveredKeys':sorted(k for k in covered if k in reg),'unknownBIOKeys':sorted(unknown_keys),'diagnostics':diagnostics,'rawRequest':request,'hasRequest':request is not None}
-def prepare(corpus,inventory_path,aliases_path,out):
-    inv=json.loads(inventory_path.read_text());reg=registry(inv);a=aliases(aliases_path);source_manifest=json.loads((corpus/'manifest.json').read_text());out.mkdir(parents=True,exist_ok=False);counts=collections.Counter();reasons=collections.Counter();outputs={}
-    for split in ['train','calibration']:
-        source=corpus/(split+'.jsonl');assert sha(source)==source_manifest['outputs'][split]
-        with(out/(split+'.jsonl')).open('w')as target:
-            for line in source.open():
-                row=json.loads(line)
-                for ri,request in enumerate(row['annotations']or[None]):
-                    record=sample(row,request,reg,a);record.update({'id':row['id']+':'+str(ri),'source_id':row['source_id'],'source_path':row['source_path'],'split':split,'requestIndex':ri});target.write(json.dumps(record,ensure_ascii=False)+'\n');counts[split+':samples']+=1;counts[split+':mentions']+=len(record['mentions']);counts[split+':noRequest']+=not record['hasRequest'];reasons.update(d['reason']for d in record['diagnostics'])
-        outputs[split]=sha(out/(split+'.jsonl'))
-    manifest={'format':CANDIDATE_FORMAT,'candidate':True,'targetFamilies':target_families(inv),'baselinePreparerSha256':'3565277de7f349ce5a63b578c6b74eb4b4364c0a30f7e8ce45f1819062b50ced','executable':False,'registry':reg,'inventorySha256':sha(inventory_path),'v1AliasesSha256':sha(aliases_path),'sourceManifestSha256':sha(corpus/'manifest.json'),'sourceManifest':source_manifest,'scriptSha256':sha(Path(__file__)),'counts':dict(counts),'diagnostics':dict(reasons),'outputs':outputs,'boundary':'Gold request cuts for conditional training only; runtime/full calibration uses independently predicted cutter spans. All raw requests retained; unknown version metadata/overlaps masked, never false absence.'};(out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');return manifest
+def prepare(corpus,inventory_path,aliases_path,out,exclusions_path,*,max_output_bytes=134217728,
+            reserve_bytes=67108864,max_record_bytes=2097152,max_decoded_bytes=1073741824):
+    """Deterministic streaming gzip. Own partial outputs are removed on refusal."""
+    if any(type(v)is not int or v<1 for v in (max_output_bytes,reserve_bytes,max_record_bytes,max_decoded_bytes)):
+        raise ValueError('invalid-output-bounds')
+    corpus,inventory_path,aliases_path,out,exclusions_path=map(Path,(corpus,inventory_path,aliases_path,out,exclusions_path))
+    inputs={'inventory':inventory_path,'aliases':aliases_path,'manifest':corpus/'manifest.json',
+            'exclusions':exclusions_path,'preparer':Path(__file__)}
+    before={key:sha(path)for key,path in inputs.items()}
+    inv=json.loads(inventory_path.read_text(encoding='utf-8'));reg=registry(inv);a=aliases(aliases_path)
+    source_manifest=json.loads(inputs['manifest'].read_text(encoding='utf-8'))
+    if before['exclusions']!=source_manifest.get('exclusion',{}).get('sha256'):
+        raise ValueError('exclusion-hash-mismatch')
+    excluded=json.loads(exclusions_path.read_text(encoding='utf-8'))
+    if type(excluded)is not list or any(type(v)is not str or not v for v in excluded)or len(excluded)!=len(set(excluded)):
+        raise ValueError('invalid-exclusions')
+    excluded=set(excluded)
+    if out.exists():raise ValueError('output-already-exists')
+    out.parent.mkdir(parents=True,exist_ok=True)
+    if shutil.disk_usage(out.parent).free<max_output_bytes+reserve_bytes:
+        raise ValueError('insufficient-compressed-output-reserve')
+    for split in ('train','calibration'):
+        path=corpus/(split+'.jsonl')
+        if sha(path)!=source_manifest['outputs'][split]:raise ValueError('source-output-hash-mismatch')
+        inputs[split]=path;before[split]=source_manifest['outputs'][split]
+    out.mkdir()
+    counts=collections.Counter();reasons=collections.Counter();outputs={};data_files={};seen=set()
+    try:
+        encoded_total=0
+        for split in ('train','calibration'):
+            filename=split+'.jsonl.gz';target_path=out/filename;decoded_hash=hashlib.sha256()
+            decoded_bytes=records=0
+            with target_path.open('xb')as raw:
+                with gzip.GzipFile(filename='',mode='wb',fileobj=raw,mtime=0,compresslevel=6)as target:
+                    with inputs[split].open(encoding='utf-8')as source:
+                        for line in iter(lambda:source.readline(max_record_bytes+1),''):
+                            if len(line.encode('utf-8'))>max_record_bytes:raise ValueError('source-record-byte-bound')
+                            row=json.loads(line)
+                            identity=row['source_path']+':'+row['source_id']
+                            expected='calibration'if int(hashlib.sha256(identity.encode()).hexdigest()[:8],16)%10==0 else'train'
+                            if row['source_id']in excluded:raise ValueError('reserved-source-id')
+                            if row['id']!=identity or row['split']!=split or expected!=split or identity in seen:
+                                raise ValueError('source-identity-or-split-mismatch')
+                            seen.add(identity)
+                            if type(row['annotations'])is not list:raise ValueError('malformed-request-list')
+                            counts[split+':sourceRows']+=1
+                            for ri,request in enumerate(row['annotations']or[None]):
+                                record=sample(row,request,reg,a)
+                                record.update({'id':row['id']+':'+str(ri),'source_id':row['source_id'],
+                                               'source_path':row['source_path'],'split':split,'requestIndex':ri})
+                                encoded=(json.dumps(record,ensure_ascii=False,sort_keys=True,separators=(',',':'))+'\n').encode('utf-8')
+                                if len(encoded)>max_record_bytes:raise ValueError('prepared-record-byte-bound')
+                                decoded_bytes+=len(encoded)
+                                if decoded_bytes>max_decoded_bytes:raise ValueError('decoded-output-byte-bound')
+                                decoded_hash.update(encoded);target.write(encoded);records+=1
+                                if encoded_total+raw.tell()>max_output_bytes:raise ValueError('encoded-output-byte-bound')
+                                if shutil.disk_usage(out).free<reserve_bytes:raise ValueError('output-reserve-exhausted')
+                                counts[split+':samples']+=1;counts[split+':mentions']+=len(record['mentions'])
+                                counts[split+':noRequest']+=not record['hasRequest']
+                                reasons.update(d['reason']for d in record['diagnostics'])
+            size=target_path.stat().st_size;encoded_total+=size
+            if encoded_total>max_output_bytes:raise ValueError('encoded-output-byte-bound')
+            outputs[split]=sha(target_path)
+            data_files[split]={'path':filename,'encoding':'utf-8','compression':'gzip','sha256':outputs[split],
+                               'decodedSha256':decoded_hash.hexdigest(),'encodedBytes':size,
+                               'decodedBytes':decoded_bytes,'records':records}
+        if before!={key:sha(path)for key,path in inputs.items()}:raise ValueError('preparation-input-mutated')
+        manifest={'format':CANDIDATE_FORMAT,'executable':False,'candidate':True,'tensorArchitectureVersion':2,
+                  'registry':reg,'targetFamilies':target_families(inv),'inventorySha256':before['inventory'],
+                  'v1AliasesSha256':before['aliases'],'sourceManifestSha256':before['manifest'],
+                  'sourceManifest':source_manifest,'exclusionSha256':before['exclusions'],'exclusionCount':len(excluded),
+                  'scriptSha256':before['preparer'],'frozenInputs':before,'counts':dict(counts),'diagnostics':dict(reasons),
+                  'outputs':outputs,'dataFiles':data_files,'gzip':{'mtime':0,'filename':'','compresslevel':6},
+                  'outputBounds':{'maxEncodedBytes':max_output_bytes,'reserveBytes':reserve_bytes,
+                                  'maxRecordBytes':max_record_bytes,'maxDecodedBytesPerSplit':max_decoded_bytes},
+                  'boundary':'All retained source rows/request annotations; gold cuts are training-only; no subset or activation.'}
+        body=(json.dumps(manifest,indent=2,sort_keys=True)+'\n').encode('utf-8')
+        if encoded_total+len(body)>max_output_bytes:raise ValueError('encoded-output-byte-bound')
+        if shutil.disk_usage(out).free<len(body)+reserve_bytes:raise ValueError('output-reserve-exhausted')
+        (out/'manifest.json').write_bytes(body)
+        return manifest
+    except Exception:
+        # out was created exclusively above; only this preparation owns it.
+        shutil.rmtree(out)
+        raise
+
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--corpus',type=Path,required=True);p.add_argument('--inventory',type=Path,required=True);p.add_argument('--aliases',type=Path,required=True);p.add_argument('--out',type=Path,required=True);args=p.parse_args();print(json.dumps(prepare(args.corpus,args.inventory,args.aliases,args.out),indent=2))
+    p=argparse.ArgumentParser()
+    for key in ('corpus','inventory','aliases','out','exclusions'):p.add_argument('--'+key,type=Path,required=True)
+    p.add_argument('--max-output-bytes',type=int,default=134217728)
+    p.add_argument('--reserve-bytes',type=int,default=67108864)
+    args=p.parse_args()
+    print(json.dumps(prepare(args.corpus,args.inventory,args.aliases,args.out,args.exclusions,
+                            max_output_bytes=args.max_output_bytes,reserve_bytes=args.reserve_bytes),indent=2))

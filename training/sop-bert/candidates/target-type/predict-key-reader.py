@@ -143,12 +143,12 @@ def normalize(config,text,area,bio,presence,global_logits,mention_logits,offsets
 def run(args):
     import torch
     from transformers import AutoTokenizer
-    root=args.model;files={'checkpoint':root/'checkpoint.pt','config':root/'model-config.json','run':root/'run.json','trainer':args.trainer,'codecSource':args.codec_source,'dataManifest':args.data_manifest,'input':args.input,'predictor':Path(__file__)}
+    root=args.model;files={'checkpoint':root/'checkpoint.pt','config':root/'model-config.json','run':root/'run.json','trainer':args.trainer,'codecSource':args.codec_source,'dataManifest':args.data_manifest,'input':args.input,'predictor':Path(__file__),'runValidator':Path(__file__).with_name('run-provenance.py')}
     expected={k:getattr(args,k.replace('codecSource','codec_source')+'_sha256') for k in ['checkpoint','config','run','trainer','codecSource']}
     for key,value in expected.items():
         if sha(files[key])!=value:raise ValueError('frozen-hash-mismatch:'+key)
     config=json.loads(files['config'].read_text());run_record=json.loads(files['run'].read_text())
-    if run_record.get('format')!=RUN_FORMAT or config.get('format')!=MODEL_FORMAT or run_record.get('checkpointSha256')!=args.checkpoint_sha256 or run_record.get('configSha256')!=args.config_sha256 or run_record.get('trainerSha256')!=args.trainer_sha256:raise ValueError('incomplete-frozen-run')
+    if run_record.get('format') not in [RUN_FORMAT,'sop.key-reader-run/3-target-type-migration-candidate'] or config.get('format')!=MODEL_FORMAT or run_record.get('checkpointSha256')!=args.checkpoint_sha256 or run_record.get('configSha256')!=args.config_sha256 or run_record.get('trainerSha256')!=args.trainer_sha256:raise ValueError('incomplete-frozen-run')
     if config.get('candidate') is not True or config.get('executionEligible') is not False or config.get('rawCodecFormat')!=CODEC_FORMAT or run_record.get('candidate') is not True or run_record.get('executionEligible') is not False:raise ValueError('invalid-candidate-provenance')
     if not isinstance(run_record.get('steps'),int) or run_record['steps']<=0 or config.get('trainerSha256')!=args.trainer_sha256:raise ValueError('incomplete-training-provenance')
     if Path(config['encoder']).resolve()!=args.encoder.resolve():raise ValueError('encoder-mismatch')
@@ -159,7 +159,11 @@ def run(args):
     if any(before[k]!=v for k,v in expected.items()):raise ValueError('changed-before-load')
     trainer=load(args.trainer,'frozen_key_trainer');codec=load(args.codec_source,'frozen_key_codec')
     verify_codec_chain(config,json.loads(args.data_manifest.read_text()),before['dataManifest'],args.codec_source_sha256,trainer.configuration)
-    codec_identity={'format':CODEC_FORMAT,'configSha256':args.config_sha256,'sourceSha256':args.codec_source_sha256,'predictorSha256':before['predictor'],'global':codec.GLOBAL,'metadata':codec.META,'BIO':'strict-greedy-ties-unresolved','presence':'sign-uncalibrated','targetType':'learned-class-with-declared-area-validation'}
+    if run_record['format']=='sop.key-reader-run/3-target-type-migration-candidate':
+        validator=load(files['runValidator'],'candidate_run_validator')
+        validator.validate_run_v3(config,run_record,json.loads(args.data_manifest.read_text()),{'checkpoint':args.checkpoint_sha256,'config':args.config_sha256,'trainer':args.trainer_sha256,'dataManifest':before['dataManifest'],'preparer':args.codec_source_sha256})
+    elif config.get('trainingSourceFormat') is not None:raise ValueError('new-training-source-needs-v3-run')
+    codec_identity={'format':CODEC_FORMAT,'configSha256':args.config_sha256,'sourceSha256':args.codec_source_sha256,'predictorSha256':before['predictor'],'runValidatorSha256':before['runValidator'],'global':codec.GLOBAL,'metadata':codec.META,'BIO':'strict-greedy-ties-unresolved','presence':'sign-uncalibrated','targetType':'learned-class-with-declared-area-validation'}
     model_identity={'sha256':args.checkpoint_sha256,'tokenizerSha256':config['encoderFiles']['tokenizer.json'],'codecSha256':hashlib.sha256(json.dumps(codec_identity,sort_keys=True).encode()).hexdigest(),'decoderVersion':2}
     records=[]
     for line in args.input.read_text().splitlines():

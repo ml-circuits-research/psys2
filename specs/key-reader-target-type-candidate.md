@@ -83,3 +83,7 @@ byte-identical. The following SHA256 values identify the published candidate:
 - `train-key-reader.py`: `95686469d7a1185b389bd71f9951120ab092e8b138dbf5b1b1b57f9e8375084b`
 - `test_target_type_candidate.py`: `0db3a49293355ad6edd6c76152d00ecbee35c1017653d22a53709297bc6aeea4`
 - `tests/fixtures/target-type-inventory.json`: `5e5c4404d392774b6e4754a31988fc2ba943d90289e9a083a6e23ba6cba21832`
+
+## Training-source revision
+
+The original source hashes above remain the reviewed preparation snapshot at `ae0a30fd`. Current candidate training sources incorporate `41e1a653` and `3581441c`: preparer `5cab868172f89f29f51d35894aebfbae0c71011cc97bd3ad4b3b1c29a96fa477`, trainer `a011d8c60e4504c8eb842492cffcda048a7d7b07f4a8f0c443baf356be425ccd`. Their tensor model and raw codec stay `/2`; compressed supervision and completed-run provenance are explicitly `/3`. See [training-source contract](target-type-training-source-v3.md). The independently frozen baseline root tools remain unchanged. Current CLI semantic migration is explicit and hash-bound; the original encoder-only CLI limitation describes the historical preparation snapshot, not the new training source.

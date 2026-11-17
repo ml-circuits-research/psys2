@@ -8,7 +8,7 @@ p=load('candidate_predictor',ROOT/'predict-key-reader.py');prep=load('candidate_
 INV=json.loads((ROOT/'tests/fixtures/target-type-inventory.json').read_text())
 class CandidatePredictorTests(unittest.TestCase):
  def fixture(self):
-  c=trainer.configuration({'format':prep.CANDIDATE_FORMAT,'registry':prep.registry(INV),'inventorySha256':'fixture','targetFamilies':prep.target_families(INV)})
+  c=trainer.configuration({'format':prep.CANDIDATE_FORMAT,'registry':prep.registry(INV),'inventorySha256':'fixture','exclusionSha256':'fixture','targetFamilies':prep.target_families(INV)})
   # All optional predictions absent; target.type is the sole class under test.
   bio=[[[3,0,0]]for _ in c['bioKeys']];presence=[-1]*len(c['keys']);global_logits={k:[3]+[0]*(len(v)-1)for k,v in c['banks'].items()if c['registry'][k]['role']=='global'}
   return c,bio,presence,global_logits
