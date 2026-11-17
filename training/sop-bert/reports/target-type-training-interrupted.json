@@ -1,0 +1,38 @@
+{
+  "format": "sop.target-type-training-interruption/1",
+  "reason": "new training data landed during active run; repository protocol requires cancellation",
+  "reviewCommits": [
+    "319fc18c",
+    "33b70d4e"
+  ],
+  "newRowsReportedByRoot": 2000,
+  "weakKeysReportedByRoot": 35,
+  "process": 2342896,
+  "processStatus": "exited via SIGINT/KeyboardInterrupt",
+  "exit": {
+    "returncode": -2,
+    "endedAtUTC": "2026-11-17T01:44:42.817906+00:00",
+    "logSha256": "36db6dbaace264e347bf0a53e9f277bf9d82b11b9d0d538f39be047b70df4f3b"
+  },
+  "lastLoggedOptimizerProgress": {
+    "epoch": 1,
+    "steps": 1700,
+    "lastLoss": 0.008516943082213402
+  },
+  "exactStopStep": "not separately recorded; last logged step is a lower bound",
+  "trainingComplete": false,
+  "calibrationComplete": false,
+  "checkpointPresent": false,
+  "provisionalFiles": {
+    "model-config.json": {
+      "bytes": 92456,
+      "sha256": "31a006d1f50fd20749f2c4c7632b987a7ea06cdb10b2912ce706d12cd513f18f"
+    }
+  },
+  "launchSha256": "d4f358c6f4937300ae4daf2b881490e1a0d74276363c7cf3edbdc92b808be406",
+  "logSha256": "36db6dbaace264e347bf0a53e9f277bf9d82b11b9d0d538f39be047b70df4f3b",
+  "sourceDataState": "preserved old frozen data; no restart until new complete source snapshot/exclusions/preparation",
+  "baseline134State": "preserved unchanged",
+  "gpuReleased": true,
+  "executable": false
+}
