@@ -237,7 +237,7 @@ function make(holder, host) {
       const pad = 12, x = b.x1 - pad, y = b.y1 - pad - 14, w = b.w + 2 * pad, h = b.h + 2 * pad + 14, at = spots.get(gr.name) || { x: x + 10, y: y - 6 };
       const grp = el('g', { class: 'grp', 'data-group': gr.name,tabindex:0,role:'button','aria-label':(gr.label?gr.label+' · ':'')+gr.name }, g);
       el('rect', { x, y, width: w, height: h, rx: 12, style: 'fill: var(--dg-accent); fill-opacity: .045; stroke: var(--dg-faint); stroke-width: 1.25; stroke-dasharray: 6 5; pointer-events: stroke; cursor: pointer' }, grp);
-      el('text', { x: at.x, y: at.y, style: 'font: 600 12px system-ui, sans-serif; fill: var(--dg-faint); pointer-events: all; cursor: pointer' }, grp).textContent = gr.label&&gr.label!==gr.name?gr.label+' · '+gr.name:gr.name;
+      el('text', { x: at.x, y: at.y, style: 'font: 600 12px system-ui, sans-serif; fill: var(--dg-faint); pointer-events: all; cursor: pointer' }, grp).textContent = showIds?(gr.label&&gr.label!==gr.name?gr.label+' · '+gr.name:gr.name):(gr.label??'');
     }
   }
   const boxOf = (s) => { const d = K.dims(s); return { x1: s.x - d.w / 2, x2: s.x + d.w / 2, y1: s.y - d.h / 2, y2: s.y + d.h / 2 }; };

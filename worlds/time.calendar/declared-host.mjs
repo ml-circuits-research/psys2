@@ -14,7 +14,7 @@ export const CALENDAR_TOOL_BINDINGS=[
   {id:`calendar.${kind}.remove`,act:'remove',on:`time.calendar.${kind}`,params:{id:identity}},
  ]),
  {id:'calendar.meeting.add',act:'make',on:'time.calendar.meeting',params:fields},
- {id:'calendar.event.select',act:'pick',on:'time.calendar.meeting',params:{id:{...identity,nullable:true}}},
+ {id:'calendar.event.select',act:'pick',on:'time.calendar.meeting',effectScope:{selection:{key:'selected'}},params:{id:{...identity,nullable:true}}},
  {id:'calendar.event.add',act:'make',on:'time.calendar.meeting',sample:[{args:{id:{unique:{prefix:'event',separator:'-'}},title:{unique:{prefix:'Event'}},start:{now:{round:86400000,offset:43200000}},duration:{value:3600000}}}],params:{id:identity,title:fields.title,start:fields.start,duration:fields.duration,notes:fields.notes}},
  {id:'calendar.meeting.change',sample:[{args:{id:{ref:{on:'time.calendar.meeting'}},title:{unique:{prefix:'Event'}}}}],act:'change',on:'time.calendar.meeting',params:Object.fromEntries(Object.entries(fields).map(([k,v])=>[k,k==='id'?v:{...v,required:false}]))},
  {id:'calendar.meeting.move',act:'place',on:'time.calendar.meeting',params:{id:identity,start:required('integer')},coordinates:time},

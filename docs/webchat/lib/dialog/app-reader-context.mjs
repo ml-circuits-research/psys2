@@ -1,10 +1,10 @@
 // Actual application state only. No request annotations or invented semantic types.
-import {observedReaderContext} from './native-reader-context.mjs?v=a762c82e14';
+import {observedReaderContext} from './native-reader-context.mjs?v=4fa819674d';
 import {createDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=79b6983664';
 import {createDiagramHost} from '../../worlds/diagram.sketch/declared-host.mjs?v=e93cdeeb0a';
 import {createDocumentHost} from '../../worlds/docs.editor/declared-host.mjs?v=1b73d3a9a2';
-import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs?v=cf93ea114b';
-import {createCalendarHost} from '../../worlds/time.calendar/declared-host.mjs?v=91e6211938';
+import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs?v=a865c0031b';
+import {createCalendarHost} from '../../worlds/time.calendar/declared-host.mjs?v=9ef53cedd0';
 export const NATIVE_AREAS={avatar:{area:'drawing',world:'ui.avatar',create:createAvatarHost,loadKnowledge:'faces',historySelection:[['selectedSlot']],historyView:[['idDisplay']]},draw:{area:'drawing',world:'art.draw',create:createDrawingHost,historySelection:[['selected'],['selectedIds'],['selectedPart']],historyView:[['idDisplay']]},diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramHost,historySelection:[['selected'],['chartTools','active']],historyView:[['idDisplay']]},editor:{area:'document',world:'docs.editor',create:createDocumentHost,historySelection:[['selection']]},calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost,policyFile:'scheduling-policy.sop',historySelection:[['selectedEvent']]}};
 /** Application composition: the same declared policy guards controls and spoken requests. */
 export async function createAreaHost(area,{loader,knowledge,...options}={}){

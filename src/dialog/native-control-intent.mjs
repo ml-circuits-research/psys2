@@ -127,6 +127,7 @@ export function verifyNativeControlEffect({intent,before,after,receipt}={}){
  if(!expected.validArguments)return finish('mismatch','invalid-arguments-were-applied');
  if(expected.declaration.effectScope?.projection==='composite'){add('$scope','unknown',{reason:'declared-composite-effect-needs-independent-projection'});return finish('unverified','composite-effect-needs-independent-projection');}
  const op=expected.declaration,args=expected.args,ids=selectedIds(op,args),old=new Map(before.objects.map(o=>[o.id,o])),next=new Map(after.objects.map(o=>[o.id,o]));
+ const selectionPolicy=op.act==='pick'?op.effectScope?.selection:null;
  let targets=[];
  if(op.act==='make'){
   targets=after.objects.filter(o=>o.sourceType===op.on&&!old.has(o.id)&&(resultIdentity(op,args)===undefined||o.id===resultIdentity(op,args)));
@@ -154,6 +155,12 @@ export function verifyNativeControlEffect({intent,before,after,receipt}={}){
    add(parameter,same?'met':'failed',{target:target.id,binding:inputs[0].binding,key:inputs[0].key,expected:wanted,actual});
   }
  }
+ if(typeof selectionPolicy?.key==='string')for(const object of after.objects.filter(o=>o.sourceType===op.on)){
+  const fields=(object.inputs??[]).filter(input=>input.key===selectionPolicy.key);
+  if(fields.length!==1||fields[0].values.length!==1){add('$selection','unknown',{target:object.id,reason:'selection-not-observable'});continue;}
+  const actual=observationValue(fields[0].values[0]),wanted=ids.includes(object.id);
+  add('$selection',actual.ok&&typeof actual.value==='boolean'&&actual.value===wanted?'met':'failed',{target:object.id,expected:wanted,actual:actual.value});
+ }
  const ancestorPolicy=op.effectScope?.ancestors,ancestors=new Set();
  if(Array.isArray(ancestorPolicy?.via)&&Array.isArray(ancestorPolicy?.keys)){
   const queue=[...ids],seen=new Set(ids);
@@ -170,6 +177,7 @@ export function verifyNativeControlEffect({intent,before,after,receipt}={}){
   const allowed=new Set([...policies.flatMap(r=>r.keys??[]),...(ancestors.has(object.id)?ancestorPolicy.keys:[])]),prior=stateObject(old.get(object.id)),current=stateObject(object);
   const oldInputs=new Map(prior.inputs.map(i=>[i.key,i])),nextInputs=new Map(current.inputs.map(i=>[i.key,i]));
   const changedKeys=[...new Set([...oldInputs.keys(),...nextInputs.keys()])].filter(k=>!equal(oldInputs.get(k)??null,nextInputs.get(k)??null));
+  if(selectionPolicy&&prior.kind===current.kind&&changedKeys.length>0&&changedKeys.every(key=>key===selectionPolicy.key)){add('$scope','met',{target:object.id,reason:'declared-selection-state',changedKeys});continue;}
   const declared=prior.kind===current.kind&&changedKeys.length>0&&changedKeys.every(k=>allowed.has(k));
   add('$scope',declared?'unknown':'failed',{target:object.id,reason:declared?'declared-dependent-layout-needs-independent-verification':'unselected-peer-object-changed',changedKeys});
  }

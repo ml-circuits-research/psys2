@@ -1,9 +1,10 @@
 import{instanceIdFor}from'./instance-identity.mjs';
 // Typed UI gestures use the same declared native tools and undo history as model requests.
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=f956e7d0ed';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=77187dd8c2';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=9c205a1358';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=8054ed381f';
 import {readNativeIntent} from './native-intent-reader.mjs?v=7a8cefd1f1';
 import {copyHostData} from '../../worlds/native-tool-host.mjs?v=463e762442';
+function activity(session,area,operation,phase,extra={}){try{session.engine?.onWorldActivity?.({nodeIds:['interpreter:'+area.world,'instance:'+area.world,'native:'+area.world],phase,label:operation,world:area.world,operation,...extra});}catch{/* Inspection must never change execution. */}}
 // Focus navigation is declared by each host; it does not invalidate content undo.
 function journalContent(world,state){
  const copy=structuredClone(state),area=Object.values(NATIVE_AREAS).find(area=>area.world===world),paths=[...(area?.historySelection??[]),...(area?.historyView??[])];
@@ -37,7 +38,8 @@ export async function invokeNativeControl(session,{view,operation,args={}}={},de
  const intent=describeNativeControl({operation:declaration,args,before:observation});
  const interpreted=readNativeIntent(intent.wires,{operation:declaration});
  if(interpreted.operation!==operation||JSON.stringify(interpreted.args)!==JSON.stringify(intent.expected.args))throw Error('native-intent-roundtrip');
- const receipt=await host.invoke({invocation:globalThis.crypto.randomUUID(),expectedVersion:observation.version,operation:interpreted.operation,args:copyHostData(interpreted.args)});
+ activity(session,area,operation,'start');
+ let receipt;try{receipt=await host.invoke({invocation:globalThis.crypto.randomUUID(),expectedVersion:observation.version,operation:interpreted.operation,args:copyHostData(interpreted.args)});activity(session,area,operation,'end',{status:receipt.status});}catch(error){activity(session,area,operation,'error',{error:String(error?.message??error)});throw error;}
  const changed=JSON.stringify(before)!==JSON.stringify(state),ok=['changed','unchanged','supported'].includes(receipt.status);
  if(!ok&&changed){session.isession.state[area.world]=before;throw Error('native-refusal-mutated-state');}
  if(changed&&!['ask','pick'].includes(declaration.act)){

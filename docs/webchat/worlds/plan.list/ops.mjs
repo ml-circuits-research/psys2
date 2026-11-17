@@ -3,7 +3,7 @@
 // (listSums: total of quantity x price, change, short, left, affordable; listMeant: the list a request means). The lists are the world state; a library World with
 // w.list's two types is built from them for each sum, so nothing computed is stored. Prices: an entry's own, else the sample price list (prices.sample.mjs, H1).
 // No item, price or phrase is listed here: the readings are the catalog's frames (patterns.sop, generated), the number words and determiners w.lang.en's. Browser-safe.
-import { World, listSums, listMeant } from '../../lib/vendor/sopworld/sopworld.mjs?v=0a9b998e29';
+import { World, listSums, listMeant } from '../../lib/vendor/sopworld/sopworld.mjs?v=5c806a534f';
 import { en } from '../../lib/lang/en.mjs?v=1c3d1d175f';
 import { pluralize, singularLemma } from '../../lib/formalizer/rules/lemma.mjs?v=37a3cd2a70';
 import { SAMPLE_PRICES, SAMPLE_CURRENCY } from './prices.sample.mjs?v=1e37605e83';

@@ -34,7 +34,7 @@ export function createAvatarHost({state=null,instanceId,knowledge=null,data=null
   {id:'avatar.face.name',act:'change',on:'ui.avatar.face',params:{id:faceId,name:text}},
   {id:'avatar.face.select',act:'pick',on:'ui.avatar.face',params:{id:faceId}},
   {id:'avatar.ids.show',act:'ask',on:'ui.avatar.face',intent:{subject:'object IDs',determiner:'the'},params:{mode:{type:'string',required:true,enum:['temporary','always','off']},duration:{type:'integer',default:4000,min:1,max:60000}}},
-  {id:'avatar.part.select',act:'pick',on:'ui.avatar.part',params:{id:{...text,nullable:true,enum:[null,...capabilities.slots.filter(slot=>slot.variants.length).map(slot=>slot.id)]}}},
+  {id:'avatar.part.select',act:'pick',on:'ui.avatar.part',effectScope:{selection:{key:'selected'}},params:{id:{...text,nullable:true,enum:[null,...capabilities.slots.filter(slot=>slot.variants.length).map(slot=>slot.id)]}}},
   {id:'avatar.face.resize',act:'change',on:'ui.avatar.face',params:{id:faceId,scale:{type:'number',required:true,min:SCALE_MIN,max:SCALE_MAX}}},
   {id:'avatar.part.resize',act:'change',on:'ui.avatar.part',effectScope:{related:resizeRelated.map(row=>({...row,when:{...row.when,provided:'scale'}}))},params:{ids,scale:{type:'number',required:true,min:SCALE_MIN,max:SCALE_MAX}}},
   {id:'avatar.part.add',act:'make',on:'ui.avatar.part',params:{id:{...text,enum:capabilities.slots.filter(s=>s.variants.length).map(s=>s.id)},variant:{...text,enum:variants}}},

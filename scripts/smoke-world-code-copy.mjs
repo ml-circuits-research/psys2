@@ -15,12 +15,13 @@ try{
  await b.evaluate(`(()=>{const row=[...document.querySelectorAll('.p2-msg.is-user')].at(-1);row.querySelector('.p2-intent summary').click();row.querySelector('.p2-intent>[aria-label="Copy SOP Lang"]').click();return true;})()`);await wait(`window.__copied===${JSON.stringify(capture.wires)}`);
  const selected=await b.evaluate(`(async()=>{const data=await window.psys2.engineClient.call('instanceInspection',{world:'art.draw'}),id=window.psys2.session.state('art.draw').selected,object=data.objects.find(o=>o.id===id);return {id,wires:object.wires,shown:document.querySelector('.dr-inspector .p2-object-code pre').textContent};})()`);assert.equal(selected.shown,selected.wires);checks.push({compactOneWire:true,chatStartsCollapsed:true,copiedTextExact:true,copiedCommandExact:true,selectedObjectSopExact:selected.id});
  for(const[area,world]of Object.entries({draw:'art.draw',diagram:'diagram.sketch',calendar:'time.calendar',editor:'docs.editor',avatar:'ui.avatar'})){
-  await b.evaluate(`window.psys2.showTab(${JSON.stringify(area)});true`);await wait(`document.querySelector('#p2-panel-${area} .p2-world-subtabs')&&!window.psys2.isBusy()`);
-  await b.evaluate(`[...document.querySelectorAll('#p2-panel-${area} .p2-world-subtabs button')].find(b=>b.textContent==='Code').click();true`);
-  await wait(`document.querySelector('#p2-panel-${area} .p2-world-code[aria-busy="false"] .p2-world-code-wires')?.textContent.includes('@instance.snapshot')`);
-  const data=await b.evaluate(`(async()=>{const panel=document.querySelector('#p2-panel-${area}'),record=await window.psys2.engineClient.call('instanceInspection',{world:${JSON.stringify(world)}});return {actual:record.wires,shown:panel.querySelector('.p2-world-code-wires').textContent,width:document.documentElement.scrollWidth,instance:record.instanceId,revision:record.revision};})()`);assert.equal(data.shown,data.actual);assert.ok(data.width<=1440);
-  await b.evaluate(`[...document.querySelectorAll('#p2-panel-${area} .p2-world-code-actions button')].find(b=>b.textContent==='Copy SOP').click();true`);await wait(`window.__copied===${JSON.stringify(data.actual)}`);
-  await b.evaluate(`[...document.querySelectorAll('#p2-panel-${area} .p2-world-subtabs button')].find(b=>b.textContent==='Active').click();true`);checks.push({area,archiveExact:true,copyExact:true,instance:data.instance,revision:data.revision});
+  await b.evaluate(`window.psys2.showTab(${JSON.stringify(area)});true`);await wait(`!window.psys2.isBusy()&&document.querySelector('#p2-panel-${area} .p2-active-world')`);
+  await b.evaluate(`window.psys2.showTab('worlds');true`);
+  await wait(`document.querySelector('[data-world-node="instance:${world}"]')&&!document.querySelector('.p2-worlds-status[role="alert"]')`);
+  await b.evaluate(`document.querySelector('[data-world-node="instance:${world}"]').dispatchEvent(new MouseEvent('click',{bubbles:true}));true`);
+  const data=await b.evaluate(`(async()=>{const record=await window.psys2.engineClient.call('instanceInspection',{world:${JSON.stringify(world)}});return {actual:record.wires,shown:document.querySelector('.p2-worlds-wires').textContent,width:document.documentElement.scrollWidth,instance:record.instanceId,revision:record.revision};})()`);assert.equal(data.shown,data.actual);assert.ok(data.width<=1440);
+  await b.evaluate(`[...document.querySelectorAll('.p2-worlds-inspector button')].find(b=>b.textContent==='Copy SOP Lang').click();true`);await wait(`window.__copied===${JSON.stringify(data.actual)}`);
+  checks.push({area,archiveExact:true,copyExact:true,instance:data.instance,revision:data.revision});
  }
  assert.deepEqual(b.logs.console.filter(x=>x.type==='exception'),[]);console.log(JSON.stringify({complete:true,checks}));
 }finally{await b.close();}

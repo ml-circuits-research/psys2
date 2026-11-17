@@ -1,9 +1,9 @@
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=965157001c';
 // Bind model-declared context references to actual native objects; never inspect source words.
-import {serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=0a9b998e29';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=f956e7d0ed';
+import {serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=5c806a534f';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=9c205a1358';
 import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=ad4de9eb20';
-import {flatRequestProjection} from './request-projection.mjs?v=cd2eefe301';
+import {flatRequestProjection} from './request-projection.mjs?v=1ff8cffb73';
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view];
  if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||r?.mood!=='do'||r.act!=='change'||r.target?.kind||r.target?.name)return null;

@@ -213,3 +213,12 @@ test('declared containment ancestor changes remain unverified while unrelated si
  assert.equal(verifyNativeControlEffect({intent,before,after,receipt:{status:'changed',operation:operation.id}}).status,'unverified');
  after.objects[3].inputs[0].values=['9'];assert.equal(verifyNativeControlEffect({intent,before,after,receipt:{status:'changed',operation:operation.id}}).status,'mismatch');
 });
+
+test('declared selection flags may change across peers without hiding real peer mutations',()=>{
+ const state={items:['a','b']},operation={id:'novel.pick',act:'pick',on:'novel.item',effectScope:{selection:{key:'selected'}},params:{id:{type:'string',required:true}}};
+ const host=createNativeToolHost({state,instanceId:'selection-check',scope:'novel',operations:[operation],handlers:{'novel.pick':(ctx,a)=>{ctx.state.focus=a.id;return {status:'supported',changed:[a.id]};}},view:s=>s.items.map(id=>({id,kind:'item',sourceType:'novel.item',inputs:[{key:'label',binding:'novel.label',values:[JSON.stringify(id)]},...(Object.hasOwn(s,'focus')?[{key:'selected',binding:'novel.selected',values:[String(s.focus===id)]}]:[])]}))});
+ assert.equal(capture(host,operation.id,{id:'a'}).verification.status,'verified');
+ const r=capture(host,operation.id,{id:'b'});assert.equal(r.verification.status,'verified');
+ const badFlag=structuredClone(r.after);badFlag.objects.find(o=>o.id==='a').inputs.find(i=>i.key==='selected').values=['true'];assert.equal(verifyNativeControlEffect({...r,after:badFlag}).status,'mismatch');
+ const badPeer=structuredClone(r.after);badPeer.objects.find(o=>o.id==='a').inputs.find(i=>i.key==='label').values=['"changed without request"'];assert.equal(verifyNativeControlEffect({...r,after:badPeer}).status,'mismatch');
+});

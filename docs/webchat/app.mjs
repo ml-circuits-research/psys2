@@ -1,4 +1,5 @@
-import {createWorldCodePanel,createObjectCodePanel} from './ui/world-code.mjs';
+import {createObjectCodePanel} from './ui/world-code.mjs';
+import {createWorldsExplorer} from './ui/worlds-explorer.mjs';
 import {createInstanceStore} from './ui/instance-store.mjs';
 import {mountPaneSplitter} from './ui/pane-splitter.mjs';
 import {createIntentRecords} from './ui/intent-records.mjs';
@@ -43,7 +44,7 @@ import { snapshotState, describeChanges, turnBaseline, turnAfter } from './ui/st
 const HERE = new URL('.', import.meta.url);
 
 /** The order of the pages (owner, 2026-11-15; tab cuts ADR-010 and ADR-012): Drawing and Diagram first, the rest as listed; Documents is the editor (the phone menu lists Chat, then these). The avatar is not a tab: it is the icon in the input bar; Talk is not a page: its summary is a panel of the chat. */
-export const TAB_ORDER = ['draw', 'diagram', 'calendar', 'editor', 'avatar'];
+export const TAB_ORDER = ['draw', 'diagram', 'calendar', 'editor', 'worlds', 'avatar'];
 export const TABS = [
   { id: 'editor', label: 'Documents', world: 'docs.editor', make: createEditor },
 ];
@@ -112,7 +113,7 @@ export async function mountPsys2(element, options = {}) {
   language.onChange(({ lang, previous, reason }) => { try { events.add('language', lang, { from: previous, reason }); } catch { /* logging never breaks the app */ } });
   const save = () => { if (options.persist !== false) try { localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...settings, handsFree: false })); } catch { /* storage unavailable */ } };
   const plugins = await loadTabPlugins(base);
-  const builtin = TABS.map((t, i) => ({ order: (i + 1) * 10, ...t }));
+  const builtin = [...TABS,{id:'worlds',label:'Worlds',architecture:true}].map((t, i) => ({ order: (i + 1) * 10, ...t }));
   const byOrder = [...builtin.filter((t) => !plugins.some((p) => p.id === t.id)), ...plugins].sort((a, b) => (a.order ?? 100) - (b.order ?? 100));
   // the owner's order (2026-11-14); a tab not listed goes to the end in its current order
   const rank = (t) => { const i = TAB_ORDER.indexOf(t.id); return i < 0 ? TAB_ORDER.length : i; };
@@ -128,28 +129,40 @@ export async function mountPsys2(element, options = {}) {
    * The tab's UI, made on first use: the tab opens, a message makes its world act, or an effect of the tab arrives. Making it loads the tab's world (the engine adds it) and its vendor assets
    * (map shapes, the editor, the chart library): none of them is fetched at boot except the open tab's.
    */
-  const worldViews=new Map();
+  const worldViews=new Map(),worldActivityListeners=new Set(),worldActivity=[];
+  let worldsExplorer=null,worldsRefreshTimer=null;
+  const scheduleWorldsRefresh=()=>{clearTimeout(worldsRefreshTimer);worldsRefreshTimer=setTimeout(()=>{if(view==='worlds')void worldsExplorer?.refresh();},350);};
+  const emitWorldActivity=event=>{worldActivity.push(event);if(worldActivity.length>300)worldActivity.shift();for(const fn of worldActivityListeners)fn(event);if(['end','error'].includes(event.phase)&&event.nodeIds?.some(id=>/^(interpreter:|world:|component:)/.test(id))&&view==='worlds')scheduleWorldsRefresh();};
+  function makeWorldsTab(t){
+    const explorer=createWorldsExplorer({load:async()=>{
+      const data=await engineClient.call('worldsInspection');
+      const storage=await instanceStore.inspect(),pairs=await trainingPairs.all();
+      const structures=[
+        {id:'browser:instance-store',label:'Instance persistence',kind:'storage',implementation:'javascript',description:'Browser storage adapter. Stores complete SOP instance archive records; it is not a reasoning world.',details:{...storage,source:'ui/instance-store.mjs'}},
+        {id:'browser:intent-records',label:'UI training pairs',kind:'runtime',implementation:'javascript',description:'Records human text, emitted SOP intent, native before/after state and verification for actual UI actions.',details:{source:'ui/intent-records.mjs',persistent:options.persist!==false,records:pairs}},
+        {id:'browser:chat-history',label:'Chat and event history',kind:'runtime',implementation:'javascript',description:'Browser message history and UI action log. Clearing message history does not clear editor worlds or undo.',details:{source:'app.mjs; ui/phrase-log.mjs; ui/action-log.mjs',phrases:phrases.all?.()??null,events:events.all?.()??null}},
+        {id:'browser:worlds-view',label:'Worlds inspector',kind:'adapter',implementation:'javascript',description:'Read-only runtime inspection and activity visualization. This graph is an inspection of the current implementation; it is not yet an authoritative SOP project registry.',details:{source:'ui/worlds-explorer.mjs; dialog/worlds-inspection.mjs'}}
+      ];
+      return {...data,nodes:[...data.nodes,...structures],edges:[...data.edges,{from:'runtime:activity-bus',to:'browser:worlds-view',label:'streams observed activity'},...data.nodes.filter(n=>n.id.startsWith('instance:')).flatMap(n=>[{from:n.id,to:'browser:instance-store',label:'saved by'},{from:'browser:intent-records',to:n.id,label:'records changes to'}])]};
+    },subscribe:fn=>{worldActivityListeners.add(fn);for(const event of worldActivity)fn(event);return()=>worldActivityListeners.delete(fn);},copy:text=>ALLOW['clipboard.copy']({text})});
+    worldsExplorer=explorer;tabBtns[t.id].panel.append(explorer.element);panelUI[t.id]={ui:{show:()=>void explorer.refresh(),update:()=>{},destroy:explorer.destroy}};cleanups.push(()=>{clearTimeout(worldsRefreshTimer);explorer.destroy();});return panelUI[t.id].ui;
+  }
   function attachWorldViews(t,panel){
     const shell=h('div',{class:'p2-world-views'}),holder=h('div',{class:'p2-tabbody p2-active-world',role:'tabpanel',id:`p2-${t.id}-active`});
-    let mode='active',pending=null,pendingEpoch=-1,epoch=0,pane=null,paneObserver=null,discovery=null;
+    let pending=null,pendingEpoch=-1,epoch=0,pane=null,paneObserver=null,discovery=null;
     const load=()=>{if(!pending||pendingEpoch!==epoch){const request=engineClient.call('instanceInspection',{world:t.world}).finally(()=>{if(pending===request)pending=null;});pending=request;pendingEpoch=epoch;}return pending;};
     const copy=text=>ALLOW['clipboard.copy']({text});
-    const code=createWorldCodePanel({world:t.world,load,copy}),object=createObjectCodePanel({load,copy});
-    const codeHost=h('div',{class:'p2-world-code-host',role:'tabpanel',id:`p2-${t.id}-code`,hidden:true},code.element);
-    const activeButton=h('button',{type:'button',role:'tab','aria-controls':holder.id,'aria-selected':'true'},'Active');
-    const codeButton=h('button',{type:'button',role:'tab','aria-controls':codeHost.id,'aria-selected':'false',tabindex:'-1'},'Code');
-    const buttons=[activeButton,codeButton],toolbar=h('div',{class:'p2-world-subtabs',role:'tablist','aria-label':`${t.label} view`},...buttons);
+    const object=createObjectCodePanel({load,copy});
     const selection=()=>{try{return JSON.parse(pane?.dataset.selectedNativeIds??'[]');}catch{return [];}};
-    const refreshObject=()=>{if(pane&&mode==='active'&&view===t.id){if(object.element.parentNode!==pane)pane.append(object.element);void object.refresh(selection());}};
+    const refreshObject=()=>{if(pane&&view===t.id){if(object.element.parentNode!==pane)pane.append(object.element);void object.refresh(selection());}};
     const connect=()=>{if(pane)return;pane=holder.querySelector('[data-selected-native-ids]');if(!pane)return;discovery?.disconnect();refreshObject();paneObserver=new MutationObserver(records=>{if(records.some(r=>r.type==='attributes'||[...r.addedNodes,...r.removedNodes].some(n=>n!==object.element)))refreshObject();});paneObserver.observe(pane,{childList:true,attributes:true,attributeFilter:['data-selected-native-ids']});};
-    const choose=next=>{mode=next;holder.hidden=mode!=='active';codeHost.hidden=mode!=='code';buttons.forEach((button,i)=>{const chosen=(i===0)===(mode==='active');button.setAttribute('aria-selected',String(chosen));button.tabIndex=chosen?0:-1;});if(mode==='code')void code.refresh();else{panelUI[t.id]?.ui.show?.();refreshObject();}};
-    buttons.forEach((button,i)=>{button.addEventListener('click',()=>choose(i?'code':'active'));button.addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const next=event.key==='Home'?0:event.key==='End'?1:1-i;choose(next?'code':'active');buttons[next].focus();}});});
-    shell.append(toolbar,holder,codeHost);panel.append(shell);discovery=new MutationObserver(connect);discovery.observe(holder,{childList:true,subtree:true});
-    const controls={holder,refresh(changed=true){if(changed)epoch++;connect();if(view===t.id){if(mode==='code')void code.refresh();else refreshObject();}},destroy(){discovery?.disconnect();paneObserver?.disconnect();code.destroy();object.destroy();}};
+    shell.append(holder);panel.append(shell);discovery=new MutationObserver(connect);discovery.observe(holder,{childList:true,subtree:true});
+    const controls={holder,refresh(changed=true){if(changed)epoch++;connect();if(view===t.id)refreshObject();},destroy(){discovery?.disconnect();paneObserver?.disconnect();object.destroy();}};
     worldViews.set(t.world,controls);cleanups.push(()=>controls.destroy());return controls;
   }
   function makeTab(t) {
     if (!tabKnown.has(t.id)) return Promise.resolve(null);
+    if(t.architecture)return Promise.resolve(panelUI[t.id]?.ui??makeWorldsTab(t));
     if (!tabMade.has(t.id)) tabMade.set(t.id, (async () => {
       effectsPending++; updateBusy();   // the tab's UI is part of the turn that opened it: the host is busy (and a test or a voice turn waits) until it is there
       try {
@@ -303,7 +316,7 @@ export async function mountPsys2(element, options = {}) {
   on(root, 'click', logTap, true); on(modalHost, 'click', logTap, true); on(modalHost, 'change', logSetting, true);
 
   const tabBtns = {};
-  const VIEW_TABS = new Set(['diagram', 'charts']);   // pan / zoom / scroll stay usable while the host is busy
+  const VIEW_TABS = new Set(['diagram', 'worlds']);   // pan / zoom / scroll stay usable while the host is busy
   for (const t of tabDefs) {
     const btn = h('button', { class: 'p2-tab', role: 'tab', type: 'button', id: `p2-tab-${t.id}`, 'aria-controls': `p2-panel-${t.id}`, onclick: () => userTab(t.id) }, t.label);
     const panel = h('div', { class: 'p2-panel', role: 'tabpanel', id: `p2-panel-${t.id}`, 'aria-labelledby': `p2-tab-${t.id}`, tabindex: '0' });
@@ -1966,6 +1979,7 @@ export async function mountPsys2(element, options = {}) {
   // the engine worker's events: model status, ORT counters, stage
   const ortMirror = { restarts: 0, stats: {}, paused: null, speed: 1, limits: null, lanes: {}, resume() { this.paused = null; engineClient?.call('ort-resume').catch(() => {}); }, restart: (lane, why) => engineClient.call('ort-restart', { lane, why }) };   // the real ORT client lives in the engine worker; this mirror is refreshed by its events
   function onEngineEvent(name, data) {
+    if(name==='world-activity'){emitWorldActivity(data);return;}
     if (name === 'sop-reader-status') {
       if (data.state === 'loading') progress.start('model', 'Loading SOP-BERT');
       else if (data.state === 'ready') progress.end('model', { label: 'SOP-BERT is ready' });
@@ -2024,7 +2038,7 @@ export async function mountPsys2(element, options = {}) {
       translatorState: (f, t) => browserBackend.state(f, t), prepareTranslator: (f, t) => browserBackend.prepare(f, t), rules: null };
     progress.start('worlds', 'Loading the worlds');
     // LAZY LOADING: the worker reads the small routing index and loads the always-loaded worlds and the open tab's world; every other world loads when a tab opens, when the words of a message say so, or when the user names it
-    const info = await engineClient.boot({ browser: { translator: browserBackend.translatorKind(), detector: browserDetectorKind(), mt: true }, tabWorld: tabDefs.find((t) => t.id === view)?.world ?? null, tabWorlds: Object.fromEntries(tabDefs.map((t) => [t.id, t.world])), onlyWorlds: options.worlds ?? null, lazyWorlds: !/[?&]psys2lazy=0/.test(globalThis.location?.search ?? ''), dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
+    const info = await engineClient.boot({ browser: { translator: browserBackend.translatorKind(), detector: browserDetectorKind(), mt: true }, tabWorld: tabDefs.find((t) => t.id === view)?.world ?? null, tabWorlds: Object.fromEntries(tabDefs.filter(t=>t.world).map((t) => [t.id, t.world])), onlyWorlds: options.worlds ?? null, lazyWorlds: !/[?&]psys2lazy=0/.test(globalThis.location?.search ?? ''), dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
     for (const id of info.worlds) loadedWorlds.add(id);
     try {
       const oldArea = options.persist === false ? null : decodeURIComponent(String(location.hash).slice(1)) || localStorage.getItem('psys2.webchat.tab');
@@ -2076,7 +2090,7 @@ export async function mountPsys2(element, options = {}) {
   const known = new Set(engine.worlds().map((w) => w.id));
   for (const t of tabDefs) {
     const { panel } = tabBtns[t.id];
-    if (known.has(t.world) || options.renderAllTabs) { // renderAllTabs: development aid to test the renderers without the worlds
+    if (t.architecture || known.has(t.world) || options.renderAllTabs) { // renderAllTabs: development aid to test the renderers without the worlds
       tabKnown.add(t.id);   // its UI (and its vendor assets) are made when the tab opens or its world is used (makeTab), never at boot
     } else {
       panel.append(h('div', { class: 'p2-placeholder' }, h('h3', {}, `${t.label} is not in this build`),
@@ -2137,7 +2151,7 @@ export async function mountPsys2(element, options = {}) {
   }},'Export world SOP');
   root.querySelector('.p2-tools')?.append(exportWorld);
   const handle = {
-    engine, session, settings, trainingPairs, instanceStore, flushInstances, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },
+    engine, session, settings, trainingPairs, instanceStore, flushInstances, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, worldActivity:{list:()=>worldActivity.slice(),subscribe:fn=>{worldActivityListeners.add(fn);return()=>worldActivityListeners.delete(fn);}}, isBusy, get veiled() { return veiled; },
     /** The queue of waiting messages (MIC2) and the turn state flags, in one place for other features (BUSY veil): `turnState()` says what is running and what waits. */
     queue: { list: () => queue.map((q) => ({ id: q.id, text: q.text, mode: q.mode })), drop: dropQueued, clear: clearQueue, get length() { return queue.length; } },
     turnState: () => ({ running: !!turn, queued: queue.length, speaking: !!mic.speaking, mic: micBtn.dataset.mic }),

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=463e762442';
 import {createCalendar} from './calendar-tool.mjs?v=7878bd2af4';
-import {createCalendarPolicy} from './scheduling.mjs?v=058e1b65f7';
+import {createCalendarPolicy} from './scheduling.mjs?v=d41ae30f15';
 const required=type=>({type,required:true});
 const identity=required('string');
 const fields={id:identity,title:required('string'),start:required('integer'),duration:{...required('integer'),min:1},participants:required('array'),room:{...required('string'),nullable:true},calendar:{type:'string',nullable:true},notes:{type:'string'}};
@@ -14,7 +14,7 @@ export const CALENDAR_TOOL_BINDINGS=[
   {id:`calendar.${kind}.remove`,act:'remove',on:`time.calendar.${kind}`,params:{id:identity}},
  ]),
  {id:'calendar.meeting.add',act:'make',on:'time.calendar.meeting',params:fields},
- {id:'calendar.event.select',act:'pick',on:'time.calendar.meeting',params:{id:{...identity,nullable:true}}},
+ {id:'calendar.event.select',act:'pick',on:'time.calendar.meeting',effectScope:{selection:{key:'selected'}},params:{id:{...identity,nullable:true}}},
  {id:'calendar.event.add',act:'make',on:'time.calendar.meeting',sample:[{args:{id:{unique:{prefix:'event',separator:'-'}},title:{unique:{prefix:'Event'}},start:{now:{round:86400000,offset:43200000}},duration:{value:3600000}}}],params:{id:identity,title:fields.title,start:fields.start,duration:fields.duration,notes:fields.notes}},
  {id:'calendar.meeting.change',sample:[{args:{id:{ref:{on:'time.calendar.meeting'}},title:{unique:{prefix:'Event'}}}}],act:'change',on:'time.calendar.meeting',params:Object.fromEntries(Object.entries(fields).map(([k,v])=>[k,k==='id'?v:{...v,required:false}]))},
  {id:'calendar.meeting.move',act:'place',on:'time.calendar.meeting',params:{id:identity,start:required('integer')},coordinates:time},

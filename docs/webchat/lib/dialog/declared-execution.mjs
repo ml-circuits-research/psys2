@@ -1,13 +1,13 @@
 import{instanceIdFor}from'./instance-identity.mjs';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=965157001c';
 // Application composition of declared semantic identities and native capabilities; no text parsing.
-import {World,str} from '../vendor/sopworld/sopworld.mjs?v=0a9b998e29';
+import {World,str} from '../vendor/sopworld/sopworld.mjs?v=5c806a534f';
 import SOURCE from './new-engine-source.mjs?v=e31b4adb7f';
-import {flatRequestProjection} from './request-projection.mjs?v=cd2eefe301';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=f956e7d0ed';
-import {observedReaderContext} from './native-reader-context.mjs?v=a762c82e14';
+import {flatRequestProjection} from './request-projection.mjs?v=1ff8cffb73';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=9c205a1358';
+import {observedReaderContext} from './native-reader-context.mjs?v=4fa819674d';
 import {validateNativeArguments} from '../../worlds/native-tool-host.mjs?v=463e762442';
-import {resolvePropertyValue} from './property-selection.mjs?v=2ac97a325c';
+import {resolvePropertyValue} from './property-selection.mjs?v=98dd5767d1';
 import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=ad4de9eb20';
 let knowledge;
 const source=()=>knowledge??=World.fromJSON(SOURCE.snapshot);
