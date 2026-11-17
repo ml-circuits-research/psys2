@@ -1,5 +1,5 @@
 {
-  "version": "f829d76769",
+  "version": "c342d5df70",
   "worlds": [
     "core",
     "ui.shell",
@@ -56,7 +56,7 @@
     "lib/dialog/instance-facts.mjs": "37241fbbc0e8d27b",
     "lib/dialog/instance-identity.mjs": "6ef0eca1002e23cd",
     "lib/dialog/instance-inspection.mjs": "94d8792ecc460e14",
-    "lib/dialog/instance-persistence.mjs": "a3a351793a418d98",
+    "lib/dialog/instance-persistence.mjs": "82d5522ff8c77835",
     "lib/dialog/intent.mjs": "5899bf1f5e100fd4",
     "lib/dialog/inventory-bootstrap-inference.mjs": "4080a73d4c2bb8cf",
     "lib/dialog/key-reader-inference.mjs": "b230274e02e83943",
@@ -296,8 +296,8 @@
     "worlds/words/ed.json": "6b969840b04e8c56",
     "worlds/words.bloom.json": "0710f3899a6043f6"
   },
-  "builtAt": "2026-11-17T19:37:48.893Z",
-  "commit": "0ca7efc3-dirty",
+  "builtAt": "2026-11-17T19:44:46.010Z",
+  "commit": "2b12e3c7-dirty",
   "catalog": "d506e222691d41cd6dc68d8e4e147f5705b0bb71",
   "assets": {
     "app.mjs": "e828cb3b7f",
@@ -341,7 +341,7 @@
     "lib/dialog/instance-facts.mjs": "44097f62ae",
     "lib/dialog/instance-identity.mjs": "37c0536b83",
     "lib/dialog/instance-inspection.mjs": "aaffadcc53",
-    "lib/dialog/instance-persistence.mjs": "4928e6d949",
+    "lib/dialog/instance-persistence.mjs": "dc0a8bc01c",
     "lib/dialog/intent.mjs": "c7c98fbf68",
     "lib/dialog/inventory-bootstrap-inference.mjs": "6d74b8d5fa",
     "lib/dialog/key-reader-inference.mjs": "98e08cd14f",
@@ -626,7 +626,7 @@
     "models/sop-bert/b1e2e97ff6ad418435215fceb9d7dc16f653a7fd20758b59beb7b789f6619da3/tokenizer_config.json": "a025160ef0",
     "models/sop-bert/b1e2e97ff6ad418435215fceb9d7dc16f653a7fd20758b59beb7b789f6619da3/tokenizer.json": "ce64fce797",
     "models/sop-bert/b1e2e97ff6ad418435215fceb9d7dc16f653a7fd20758b59beb7b789f6619da3/vocab.txt": "07eced375c",
-    "models/sop-bert/deployment.json": "d36b1a5c8e",
+    "models/sop-bert/deployment.json": "17ce8e6807",
     "models-mt/ro/fromEn/lex.50.50.enro.s2t.bin.gz": "a64099f219",
     "models-mt/ro/fromEn/model.enro.intgemm.alphas.bin.gz": "3596ee3bc1",
     "models-mt/ro/fromEn/vocab.enro.spm.gz": "61a75f040f",
@@ -642,7 +642,7 @@
     "ui/dispatcher-host.mjs": "b7c79577fd",
     "ui/editor.mjs": "4e4dbd381f",
     "ui/engine-client.mjs": "fa046e4e0a",
-    "ui/engine-worker.mjs": "0ae655faa8",
+    "ui/engine-worker.mjs": "8658470587",
     "ui/failures.mjs": "c3bee734c9",
     "ui/feedback.mjs": "ddd1432c05",
     "ui/geometry-values.mjs": "e7f7481586",

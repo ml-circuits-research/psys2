@@ -360,12 +360,12 @@ const handlers = {
     const progress=loadProgress(m,'worldsInspection');try{progress.stage('Wait for active action');
     while(turnRunning())await sleep(20);
     progress.stage('Load inspection modules');canonicalizeSessionStates();
-    const [{NATIVE_AREAS,createAreaHost},{observeNativeInstanceWorlds},{inspectWorldsRuntime}]=await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/instance-persistence.mjs')),import(vurl('lib/dialog/worlds-inspection.mjs'))]);
+    const [{NATIVE_AREAS},{observeNativeInstanceWorlds},{inspectWorldsRuntime}]=await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/instance-persistence.mjs')),import(vurl('lib/dialog/worlds-inspection.mjs'))]);
     const available=Object.entries(NATIVE_AREAS).filter(([,area])=>loadedIds.has(area.world)&&session.isession.state[area.world]);
     progress.stage('Observe live instance facts');
-    const instances=await observeNativeInstanceWorlds(session,{worlds:available.map(([,area])=>area.world)}),hosts=[];
-    progress.stage('Read native adapter capabilities');
-    for(const [view,area]of available){const host=await createAreaHost(area,{state:session.isession.state[area.world],instanceId:session.nativeInstanceIds[area.world],loader:engine.loader,knowledge:engine.knowledge});hosts.push({view,world:area.world,operations:host.bindings(),observation:host.observe(),capabilities:host.capabilities?.()??null});}
+    const instances=await observeNativeInstanceWorlds(session,{worlds:available.map(([,area])=>area.world),includeHostInterface:true});
+    progress.stage('Describe observed adapter interfaces');
+    const viewByWorld=new Map(available.map(([view,area])=>[area.world,view])),hosts=instances.map(record=>({view:viewByWorld.get(record.world),world:record.world,observation:record.observation,...record.nativeInterface}));
     const {serialize,version,build,SCHEMA_TYPES,STAGES,TURN_STAGES}=await import(vurl('lib/vendor/sopworld/sopworld.mjs'));
     const instanceCaches=Object.entries(session.instanceWorlds??{}).map(([world,cache])=>({world,wireCount:cache.wires?.size??0,wires:serialize([...(cache.wires?.values?.()??[])])}));
     progress.stage('Describe runtime packages');

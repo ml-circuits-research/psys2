@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {snapshotNativeInstances,restoreNativeInstances} from '../src/dialog/instance-persistence.mjs';
+import {snapshotNativeInstances,restoreNativeInstances,observeNativeInstanceWorlds} from '../src/dialog/instance-persistence.mjs';
 import {readInstanceState,serializeInstanceState,str} from '../src/vendor/sopworld/sopworld.mjs';
 import {NATIVE_AREAS,createAreaHost} from '../src/dialog/app-reader-context.mjs';
 import {nativeObservationObjects} from '../src/dialog/instance-facts.mjs';
@@ -60,4 +60,15 @@ test('invalid canonical Calendar references refuse a mixed batch before any adop
  const prior={state:structuredClone(target.isession.state),ids:structuredClone(target.nativeInstanceIds),revisions:structuredClone(target.nativeInstanceRevisions),snapshots:structuredClone(target.nativeInstanceSnapshots)};
  await assert.rejects(restoreNativeInstances(target,[...records.filter(record=>record!==calendar),{...calendar,wires:broken}]));
  assert.deepEqual(target.isession.state,prior.state);assert.deepEqual(target.nativeInstanceIds,prior.ids);assert.deepEqual(target.nativeInstanceRevisions,prior.revisions);assert.deepEqual(target.nativeInstanceSnapshots,prior.snapshots);assert.deepEqual(Object.keys(target.instanceWorlds),['sentinel']);assert.equal(target.instanceWorlds.sentinel,sentinel);
+});
+
+test('inspection shares one host observation with its interface without adding native metadata to SOP facts',async()=>{
+ const {s}=await populated(),before=structuredClone(s.isession.state);
+ const records=await observeNativeInstanceWorlds(s,{includeHostInterface:true});assert.equal(records.length,5);
+ for(const record of records){
+  const area=Object.values(NATIVE_AREAS).find(area=>area.world===record.world),host=await createAreaHost(area,{state:s.isession.state[record.world],instanceId:record.instanceId,loader:s.engine.loader});
+  assert.deepEqual(record.nativeInterface.operations,host.bindings());assert.deepEqual(record.nativeInterface.capabilities,host.capabilities?.()??null);assert.deepEqual(record.observation,host.observe());
+  assert.ok(!record.wires.includes('nativeInterface'));assert.ok(record.nativeInterface.operations.length>0);
+ }
+ assert.deepEqual(s.isession.state,before);
 });

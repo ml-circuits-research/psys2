@@ -1,0 +1,4485 @@
+{
+  "format": "psys2.ui-natural-coverage/1",
+  "rows": 592,
+  "checkedRecipes": 390,
+  "uiActionRecipes": 390,
+  "uiActionCalls": 396,
+  "nativeCalls": 1384,
+  "areas": {
+    "drawing": 135,
+    "diagram": 103,
+    "document": 59,
+    "calendar": 21,
+    "avatar": 274
+  },
+  "catalog": {
+    "repository": "https://github.com/ml-circuits-research/sop-knowledge-worlds",
+    "commit": "d506e222691d41cd6dc68d8e4e147f5705b0bb71",
+    "facePresets": 14,
+    "faceSlots": 16,
+    "faceVariants": 181
+  },
+  "styles": {
+    "natural-direct": 246,
+    "precise": 1,
+    "short-alias": 62,
+    "shape-choice": 18,
+    "layout-choice": 12,
+    "chart-choice": 4,
+    "appearance-choice": 27,
+    "expression-choice": 7,
+    "part-variant-choice": 180,
+    "character-kind": 3,
+    "direction-choice": 3,
+    "size-choice": 5,
+    "compound": 6,
+    "world-informed-completion": 18
+  },
+  "operations": {
+    "drawing.object.make": {
+      "rows": 67,
+      "styles": [
+        "natural-direct",
+        "short-alias"
+      ],
+      "parameters": [
+        "kind",
+        "x",
+        "y",
+        "size",
+        "color",
+        "label"
+      ]
+    },
+    "drawing.catalog.make": {
+      "rows": 6,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "name"
+      ]
+    },
+    "drawing.object.change": {
+      "rows": 4,
+      "styles": [
+        "natural-direct",
+        "precise"
+      ],
+      "parameters": [
+        "ids",
+        "color",
+        "label",
+        "size",
+        "width",
+        "height",
+        "x",
+        "y"
+      ]
+    },
+    "drawing.object.select": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id"
+      ]
+    },
+    "drawing.objects.select": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids"
+      ]
+    },
+    "drawing.object.place": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids",
+        "x",
+        "y"
+      ]
+    },
+    "drawing.objects.transform": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids",
+        "x",
+        "y",
+        "width",
+        "height"
+      ]
+    },
+    "drawing.page.clear": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "drawing.object.remove": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids"
+      ]
+    },
+    "drawing.ids.show": {
+      "rows": 6,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "mode",
+        "duration"
+      ]
+    },
+    "drawing.observe": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "drawing.undo": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "drawing.redo": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "drawing.object.parts": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id"
+      ]
+    },
+    "drawing.part.select": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "index"
+      ]
+    },
+    "drawing.part.change": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "index",
+        "color",
+        "width",
+        "height"
+      ]
+    },
+    "drawing.part.place": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "index",
+        "x",
+        "y"
+      ]
+    },
+    "drawing.part.remove": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "index"
+      ]
+    },
+    "drawing.part.extract": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "index"
+      ]
+    },
+    "drawing.object.group": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids",
+        "name",
+        "label"
+      ]
+    },
+    "drawing.object.ungroup": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id"
+      ]
+    },
+    "diagram.node.make": {
+      "rows": 21,
+      "styles": [
+        "natural-direct",
+        "shape-choice"
+      ],
+      "parameters": [
+        "kind",
+        "label"
+      ]
+    },
+    "diagram.node.change": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids",
+        "label",
+        "colour",
+        "size",
+        "value"
+      ]
+    },
+    "diagram.node.select": {
+      "rows": 5,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids",
+        "edges"
+      ]
+    },
+    "diagram.node.remove": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids"
+      ]
+    },
+    "diagram.node.place": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids",
+        "x",
+        "y"
+      ]
+    },
+    "diagram.node.resize": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids",
+        "width",
+        "height"
+      ]
+    },
+    "diagram.node.layout": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids",
+        "layout"
+      ]
+    },
+    "diagram.link.make": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "from",
+        "to"
+      ]
+    },
+    "diagram.link.select": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids",
+        "nodes"
+      ]
+    },
+    "diagram.link.change": {
+      "rows": 4,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids",
+        "label",
+        "colour",
+        "style",
+        "arrow",
+        "width",
+        "from",
+        "to"
+      ]
+    },
+    "diagram.link.remove": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids"
+      ]
+    },
+    "diagram.selection.remove": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "nodes",
+        "links"
+      ]
+    },
+    "diagram.page.clear": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "diagram.ids.show": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "mode",
+        "duration"
+      ]
+    },
+    "diagram.observe": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "diagram.undo": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "diagram.redo": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "diagram.group.make": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "name",
+        "label",
+        "ids"
+      ]
+    },
+    "diagram.group.select": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id"
+      ]
+    },
+    "diagram.group.change": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "label",
+        "colour",
+        "size"
+      ]
+    },
+    "diagram.group.layout": {
+      "rows": 14,
+      "styles": [
+        "natural-direct",
+        "layout-choice"
+      ],
+      "parameters": [
+        "id",
+        "layout"
+      ]
+    },
+    "diagram.group.resize": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "scale"
+      ]
+    },
+    "diagram.group.place": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "x",
+        "y"
+      ]
+    },
+    "diagram.group.remove": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id"
+      ]
+    },
+    "diagram.group.ungroup": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id"
+      ]
+    },
+    "diagram.group.chart.make": {
+      "rows": 6,
+      "styles": [
+        "natural-direct",
+        "chart-choice"
+      ],
+      "parameters": [
+        "label",
+        "labels",
+        "values",
+        "layout"
+      ]
+    },
+    "diagram.group.chart.adopt": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id"
+      ]
+    },
+    "calendar.event.select": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id"
+      ]
+    },
+    "calendar.event.add": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "title",
+        "start",
+        "duration",
+        "notes"
+      ]
+    },
+    "calendar.meeting.change": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "title",
+        "start",
+        "duration",
+        "notes"
+      ]
+    },
+    "calendar.meeting.move": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "start"
+      ]
+    },
+    "calendar.events.remove": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids"
+      ]
+    },
+    "calendar.meeting.remove": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id"
+      ]
+    },
+    "calendar.observe": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "document.write": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "title",
+        "blocks"
+      ]
+    },
+    "document.title.change": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "title"
+      ]
+    },
+    "document.block.select": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "from",
+        "to"
+      ]
+    },
+    "document.section.select": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "from",
+        "to"
+      ]
+    },
+    "document.section.change": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "text",
+        "level"
+      ]
+    },
+    "document.block.mark": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "from",
+        "to",
+        "mark",
+        "enabled"
+      ]
+    },
+    "document.section.mark": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "from",
+        "to",
+        "mark",
+        "enabled"
+      ]
+    },
+    "document.block.align": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "align"
+      ]
+    },
+    "document.section.align": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "align"
+      ]
+    },
+    "document.block.reorder": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids"
+      ]
+    },
+    "document.list.make": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "parent",
+        "name",
+        "items",
+        "style"
+      ]
+    },
+    "document.list.change": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "items",
+        "style",
+        "checked"
+      ]
+    },
+    "document.table.make": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "parent",
+        "name",
+        "rows",
+        "header"
+      ]
+    },
+    "document.table.change": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "rows",
+        "header"
+      ]
+    },
+    "document.container.change": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "text"
+      ]
+    },
+    "document.block.make": {
+      "rows": 4,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "parent",
+        "kind",
+        "text",
+        "name"
+      ]
+    },
+    "document.section.make": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "parent",
+        "after",
+        "text",
+        "level",
+        "name"
+      ]
+    },
+    "document.block.change": {
+      "rows": 4,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "text",
+        "name",
+        "align"
+      ]
+    },
+    "document.block.remove": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids"
+      ]
+    },
+    "document.section.remove": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids"
+      ]
+    },
+    "document.section.reorder": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids"
+      ]
+    },
+    "document.remove": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "document.observe": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "document.undo": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "document.redo": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "avatar.face.compose": {
+      "rows": 33,
+      "styles": [
+        "natural-direct",
+        "appearance-choice",
+        "character-kind"
+      ],
+      "parameters": [
+        "base",
+        "characterKind"
+      ]
+    },
+    "avatar.face.preset": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "preset"
+      ]
+    },
+    "avatar.face.expression": {
+      "rows": 10,
+      "styles": [
+        "natural-direct",
+        "expression-choice"
+      ],
+      "parameters": [
+        "expression"
+      ]
+    },
+    "avatar.face.name": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "name"
+      ]
+    },
+    "avatar.face.select": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "avatar.ids.show": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "mode",
+        "duration"
+      ]
+    },
+    "avatar.part.select": {
+      "rows": 3,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id"
+      ]
+    },
+    "avatar.face.resize": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "scale"
+      ]
+    },
+    "avatar.part.resize": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids",
+        "scale"
+      ]
+    },
+    "avatar.part.add": {
+      "rows": 182,
+      "styles": [
+        "natural-direct",
+        "part-variant-choice"
+      ],
+      "parameters": [
+        "id",
+        "variant"
+      ]
+    },
+    "avatar.part.change": {
+      "rows": 9,
+      "styles": [
+        "natural-direct",
+        "size-choice"
+      ],
+      "parameters": [
+        "ids",
+        "variant",
+        "size"
+      ]
+    },
+    "avatar.part.feature": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "id",
+        "property",
+        "value"
+      ]
+    },
+    "avatar.part.move": {
+      "rows": 5,
+      "styles": [
+        "natural-direct",
+        "direction-choice"
+      ],
+      "parameters": [
+        "ids",
+        "place"
+      ]
+    },
+    "avatar.part.remove": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids"
+      ]
+    },
+    "avatar.parts.remove": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids"
+      ]
+    },
+    "avatar.clear": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": [
+        "ids"
+      ]
+    },
+    "avatar.observe": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "avatar.undo": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    },
+    "avatar.redo": {
+      "rows": 2,
+      "styles": [
+        "natural-direct"
+      ],
+      "parameters": []
+    }
+  },
+  "nativeInventory": {
+    "drawing": [
+      {
+        "id": "drawing.object.make",
+        "act": "make",
+        "on": "art.draw.object",
+        "params": {
+          "kind": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "circle",
+              "oval",
+              "square",
+              "rectangle",
+              "triangle",
+              "star",
+              "heart",
+              "line",
+              "arrow",
+              "lake",
+              "river",
+              "road",
+              "field",
+              "patch",
+              "hill",
+              "house",
+              "tree",
+              "sun",
+              "cloud",
+              "car",
+              "flower",
+              "cat",
+              "dog",
+              "fish",
+              "bird",
+              "boat",
+              "mountain",
+              "rainbow",
+              "person",
+              "balloon",
+              "rocket",
+              "moon"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "width": {
+            "type": "number",
+            "min": 0.001
+          },
+          "height": {
+            "type": "number",
+            "min": 0.001
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "size": {
+            "type": "number",
+            "min": 0.001
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 67,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.catalog.make",
+        "act": "make",
+        "on": "art.draw.object",
+        "params": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "size": {
+            "type": "number",
+            "min": 0.001
+          }
+        },
+        "requires": [],
+        "trainingRows": 6,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.object.change",
+        "act": "change",
+        "on": "art.draw.object",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "width": {
+            "type": "number",
+            "min": 0.001
+          },
+          "height": {
+            "type": "number",
+            "min": 0.001
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "size": {
+            "type": "number",
+            "min": 0.001
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 4,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.object.select",
+        "act": "pick",
+        "on": "art.draw.object",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true,
+            "nullable": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.objects.select",
+        "act": "pick",
+        "on": "art.draw.object",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.object.place",
+        "act": "place",
+        "on": "art.draw.object",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.objects.transform",
+        "act": "change",
+        "on": "art.draw.object",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          },
+          "width": {
+            "type": "number",
+            "required": true,
+            "min": 0.001
+          },
+          "height": {
+            "type": "number",
+            "required": true,
+            "min": 0.001
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.page.clear",
+        "act": "remove",
+        "on": "art.draw.page",
+        "params": {},
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.object.remove",
+        "act": "remove",
+        "on": "art.draw.object",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.ids.show",
+        "act": "ask",
+        "on": "art.draw.page",
+        "params": {
+          "mode": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "temporary",
+              "always",
+              "off"
+            ]
+          },
+          "duration": {
+            "type": "integer",
+            "default": 4000,
+            "min": 1,
+            "max": 60000
+          }
+        },
+        "requires": [],
+        "trainingRows": 6,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.observe",
+        "act": "ask",
+        "on": "art.draw.object",
+        "params": {},
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.undo",
+        "act": "undo",
+        "on": "art.draw.object",
+        "params": {},
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.redo",
+        "act": "redo",
+        "on": "art.draw.object",
+        "params": {},
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.object.parts",
+        "act": "ask",
+        "on": "art.draw.object",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.part.select",
+        "act": "ask",
+        "on": "art.draw.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.part.change",
+        "act": "change",
+        "on": "art.draw.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "color": {
+            "type": "string"
+          },
+          "width": {
+            "type": "number",
+            "min": 0.01
+          },
+          "height": {
+            "type": "number",
+            "min": 0.01
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.part.place",
+        "act": "place",
+        "on": "art.draw.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.part.remove",
+        "act": "remove",
+        "on": "art.draw.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.part.extract",
+        "act": "ungroup",
+        "on": "art.draw.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.object.group",
+        "act": "group",
+        "on": "art.draw.object",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "name": {
+            "type": "string",
+            "default": "Group"
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "drawing.object.ungroup",
+        "act": "ungroup",
+        "on": "art.draw.object",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      }
+    ],
+    "diagram": [
+      {
+        "id": "diagram.node.make",
+        "act": "make",
+        "on": "diagram.sketch.node",
+        "params": {
+          "kind": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "circle",
+              "rectangle",
+              "square",
+              "diamond",
+              "ellipse",
+              "triangle",
+              "hexagon",
+              "star",
+              "text"
+            ]
+          },
+          "label": {
+            "type": "string"
+          },
+          "n": {
+            "type": "integer",
+            "default": 1,
+            "min": 1,
+            "max": 12
+          },
+          "colour": {
+            "type": "string",
+            "enum": [
+              "red",
+              "orange",
+              "yellow",
+              "gold",
+              "lime",
+              "green",
+              "teal",
+              "cyan",
+              "blue",
+              "navy",
+              "indigo",
+              "purple",
+              "magenta",
+              "pink",
+              "brown",
+              "gray",
+              "black",
+              "white"
+            ]
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "tiny",
+              "small",
+              "medium",
+              "large",
+              "huge"
+            ]
+          },
+          "layout": {
+            "type": "string",
+            "enum": [
+              "tree",
+              "grid",
+              "row",
+              "column",
+              "circle",
+              "radial",
+              "layers"
+            ]
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          }
+        },
+        "requires": [],
+        "trainingRows": 21,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.node.change",
+        "act": "change",
+        "on": "diagram.sketch.node",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "colour": {
+            "type": "string",
+            "enum": [
+              "red",
+              "orange",
+              "yellow",
+              "gold",
+              "lime",
+              "green",
+              "teal",
+              "cyan",
+              "blue",
+              "navy",
+              "indigo",
+              "purple",
+              "magenta",
+              "pink",
+              "brown",
+              "gray",
+              "black",
+              "white"
+            ]
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "tiny",
+              "small",
+              "medium",
+              "large",
+              "huge"
+            ]
+          },
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.node.select",
+        "act": "pick",
+        "on": "diagram.sketch.node",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "edges": {
+            "type": "array"
+          }
+        },
+        "requires": [],
+        "trainingRows": 5,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.node.remove",
+        "act": "remove",
+        "on": "diagram.sketch.node",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.node.place",
+        "act": "place",
+        "on": "diagram.sketch.node",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.node.resize",
+        "act": "change",
+        "on": "diagram.sketch.node",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "width": {
+            "type": "number",
+            "required": true,
+            "min": 8,
+            "max": 4096
+          },
+          "height": {
+            "type": "number",
+            "required": true,
+            "min": 8,
+            "max": 4096
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.node.layout",
+        "act": "change",
+        "on": "diagram.sketch.node",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "layout": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "tree",
+              "grid",
+              "row",
+              "column",
+              "circle",
+              "radial",
+              "layers"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.link.make",
+        "act": "make",
+        "on": "diagram.sketch.link",
+        "params": {
+          "from": {
+            "type": "string",
+            "required": true
+          },
+          "to": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.link.select",
+        "act": "pick",
+        "on": "diagram.sketch.link",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "nodes": {
+            "type": "array"
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.link.change",
+        "act": "change",
+        "on": "diagram.sketch.link",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "colour": {
+            "type": "string",
+            "enum": [
+              "red",
+              "orange",
+              "yellow",
+              "gold",
+              "lime",
+              "green",
+              "teal",
+              "cyan",
+              "blue",
+              "navy",
+              "indigo",
+              "purple",
+              "magenta",
+              "pink",
+              "brown",
+              "gray",
+              "black",
+              "white"
+            ]
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "solid",
+              "dashed",
+              "dotted"
+            ]
+          },
+          "arrow": {
+            "type": "string",
+            "enum": [
+              "forward",
+              "both",
+              "none"
+            ]
+          },
+          "width": {
+            "type": "number",
+            "min": 0.5,
+            "max": 12
+          }
+        },
+        "requires": [],
+        "trainingRows": 4,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.link.remove",
+        "act": "remove",
+        "on": "diagram.sketch.link",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.selection.remove",
+        "act": "remove",
+        "on": "diagram.sketch",
+        "params": {
+          "nodes": {
+            "type": "array",
+            "required": true
+          },
+          "links": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.page.clear",
+        "act": "remove",
+        "on": "diagram.sketch",
+        "params": {},
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.ids.show",
+        "act": "ask",
+        "on": "diagram.sketch.page",
+        "params": {
+          "mode": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "temporary",
+              "always",
+              "off"
+            ]
+          },
+          "duration": {
+            "type": "integer",
+            "default": 4000,
+            "min": 1,
+            "max": 60000
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.observe",
+        "act": "ask",
+        "on": "diagram.sketch",
+        "params": {},
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.undo",
+        "act": "undo",
+        "on": "diagram.sketch",
+        "params": {},
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.redo",
+        "act": "redo",
+        "on": "diagram.sketch",
+        "params": {},
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.group.make",
+        "act": "make",
+        "on": "diagram.sketch.group",
+        "params": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string"
+          },
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.group.select",
+        "act": "ask",
+        "on": "diagram.sketch.group",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.group.change",
+        "act": "change",
+        "on": "diagram.sketch.group",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string"
+          },
+          "colour": {
+            "type": "string",
+            "enum": [
+              "red",
+              "orange",
+              "yellow",
+              "gold",
+              "lime",
+              "green",
+              "teal",
+              "cyan",
+              "blue",
+              "navy",
+              "indigo",
+              "purple",
+              "magenta",
+              "pink",
+              "brown",
+              "gray",
+              "black",
+              "white"
+            ]
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "tiny",
+              "small",
+              "medium",
+              "large",
+              "huge"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.group.layout",
+        "act": "place",
+        "on": "diagram.sketch.group",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "layout": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "free",
+              "tree",
+              "grid",
+              "row",
+              "column",
+              "circle",
+              "radial",
+              "layers",
+              "bar",
+              "line",
+              "pie",
+              "doughnut"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 14,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.group.resize",
+        "act": "change",
+        "on": "diagram.sketch.group",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "scale": {
+            "type": "number",
+            "required": true,
+            "min": 0.05,
+            "max": 20
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.group.place",
+        "act": "place",
+        "on": "diagram.sketch.group",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.group.remove",
+        "act": "remove",
+        "on": "diagram.sketch.group",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.group.ungroup",
+        "act": "remove",
+        "on": "diagram.sketch.group",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.group.chart.make",
+        "act": "make",
+        "on": "diagram.sketch.group",
+        "params": {
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "labels": {
+            "type": "array",
+            "required": true
+          },
+          "values": {
+            "type": "array",
+            "required": true
+          },
+          "layout": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "bar",
+              "line",
+              "pie",
+              "doughnut"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 6,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.group.chart.adopt",
+        "act": "make",
+        "on": "diagram.sketch.group",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "diagram.group.chart",
+        "act": "make",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "type": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "bar",
+              "line",
+              "pie",
+              "doughnut",
+              "radar",
+              "polarArea",
+              "scatter"
+            ]
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "chart.make",
+        "act": "make",
+        "on": "data.charts.chart",
+        "params": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "bar",
+              "line",
+              "pie",
+              "doughnut",
+              "radar",
+              "polarArea",
+              "scatter"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "labels": {
+            "type": "array",
+            "required": true,
+            "default": []
+          },
+          "values": {
+            "type": "array",
+            "required": true,
+            "default": []
+          },
+          "series": {
+            "type": "string",
+            "default": "Value"
+          },
+          "datasets": {
+            "type": "array"
+          },
+          "source": {
+            "type": "array",
+            "required": true,
+            "default": []
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "chart.change",
+        "act": "change",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "bar",
+              "line",
+              "pie",
+              "doughnut",
+              "radar",
+              "polarArea",
+              "scatter"
+            ]
+          },
+          "horizontal": {
+            "type": "boolean"
+          },
+          "stacked": {
+            "type": "boolean"
+          },
+          "showLegend": {
+            "type": "boolean"
+          },
+          "showValues": {
+            "type": "boolean"
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc",
+              "alpha",
+              "none"
+            ]
+          },
+          "colour": {
+            "type": "string"
+          },
+          "palette": {
+            "type": "string",
+            "enum": [
+              "default",
+              "classic",
+              "rainbow",
+              "pastel",
+              "ocean",
+              "forest",
+              "sunset",
+              "warm",
+              "cool",
+              "neon",
+              "earth"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "chart.data.change",
+        "act": "change",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "labels": {
+            "type": "array",
+            "required": true
+          },
+          "values": {
+            "type": "array",
+            "required": true
+          },
+          "series": {
+            "type": "integer",
+            "min": 0,
+            "default": 0
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "chart.datasets.change",
+        "act": "change",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "labels": {
+            "type": "array",
+            "required": true
+          },
+          "datasets": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "chart.series.add",
+        "act": "make",
+        "on": "data.charts.series",
+        "params": {
+          "chart": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "values": {
+            "type": "array",
+            "required": true
+          },
+          "colour": {
+            "type": "string"
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "chart.series.change",
+        "act": "change",
+        "on": "data.charts.series",
+        "params": {
+          "chart": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "label": {
+            "type": "string"
+          },
+          "values": {
+            "type": "array"
+          },
+          "colour": {
+            "type": "string"
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "chart.series.remove",
+        "act": "remove",
+        "on": "data.charts.series",
+        "params": {
+          "chart": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "chart.point.change",
+        "act": "change",
+        "on": "data.charts.point",
+        "params": {
+          "chart": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "series": {
+            "type": "integer",
+            "min": 0,
+            "default": 0
+          },
+          "value": {
+            "type": "number",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "chart.select",
+        "act": "pick",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "chart.place",
+        "act": "place",
+        "on": "data.charts.chart",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          },
+          "width": {
+            "type": "number",
+            "min": 240,
+            "max": 1600
+          },
+          "height": {
+            "type": "number",
+            "min": 180,
+            "max": 1200
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "chart.remove",
+        "act": "remove",
+        "on": "data.charts.chart",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "chart.observe",
+        "act": "ask",
+        "on": "data.charts.chart",
+        "params": {},
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      }
+    ],
+    "document": [
+      {
+        "id": "document.title.change",
+        "act": "change",
+        "on": "docs.editor.document",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.block.select",
+        "act": "pick",
+        "on": "docs.editor.block",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "at": {
+            "type": "string",
+            "default": "0"
+          },
+          "from": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "to": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.section.select",
+        "act": "pick",
+        "on": "docs.editor.section",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "at": {
+            "type": "string",
+            "default": "0"
+          },
+          "from": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "to": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.section.change",
+        "act": "change",
+        "on": "docs.editor.section",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "text": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "heading"
+            ]
+          },
+          "level": {
+            "type": "integer",
+            "min": 1,
+            "max": 2
+          },
+          "align": {
+            "type": "string",
+            "enum": [
+              "left",
+              "center",
+              "right",
+              "justify"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.block.mark",
+        "act": "change",
+        "on": "docs.editor.block",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "at": {
+            "type": "string",
+            "default": "0"
+          },
+          "from": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "to": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "mark": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "link",
+              "bold",
+              "italic",
+              "underline",
+              "strike",
+              "code",
+              "highlight"
+            ]
+          },
+          "enabled": {
+            "type": "boolean",
+            "required": true
+          },
+          "attrs": {
+            "type": "object"
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.section.mark",
+        "act": "change",
+        "on": "docs.editor.section",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "at": {
+            "type": "string",
+            "default": "0"
+          },
+          "from": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "to": {
+            "type": "integer",
+            "required": true,
+            "min": 0
+          },
+          "mark": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "link",
+              "bold",
+              "italic",
+              "underline",
+              "strike",
+              "code",
+              "highlight"
+            ]
+          },
+          "enabled": {
+            "type": "boolean",
+            "required": true
+          },
+          "attrs": {
+            "type": "object"
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.block.align",
+        "act": "change",
+        "on": "docs.editor.block",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "align": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "left",
+              "center",
+              "right",
+              "justify"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.section.align",
+        "act": "change",
+        "on": "docs.editor.section",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "align": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "left",
+              "center",
+              "right",
+              "justify"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.block.reorder",
+        "act": "place",
+        "on": "docs.editor.block",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.list.make",
+        "act": "make",
+        "on": "docs.editor.block",
+        "params": {
+          "parent": {
+            "type": "string",
+            "required": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "required": true
+          },
+          "style": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "bullet",
+              "numbered",
+              "task"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.list.change",
+        "act": "change",
+        "on": "docs.editor.block",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "items": {
+            "type": "array"
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "bullet",
+              "numbered",
+              "task"
+            ]
+          },
+          "checked": {
+            "type": "array"
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.table.make",
+        "act": "make",
+        "on": "docs.editor.block",
+        "params": {
+          "parent": {
+            "type": "string",
+            "required": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "rows": {
+            "type": "array",
+            "required": true
+          },
+          "header": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.table.change",
+        "act": "change",
+        "on": "docs.editor.block",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "rows": {
+            "type": "array"
+          },
+          "header": {
+            "type": "boolean"
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.container.change",
+        "act": "change",
+        "on": "docs.editor.text",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "text": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.write",
+        "act": "make",
+        "on": "docs.editor.document",
+        "params": {
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "blocks": {
+            "type": "array",
+            "required": true
+          },
+          "genre": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.compose",
+        "act": "make",
+        "on": "docs.editor.document",
+        "params": {
+          "genre": {
+            "type": "string",
+            "required": true
+          },
+          "topic": {
+            "type": "string",
+            "required": true
+          },
+          "words": {
+            "type": "integer",
+            "min": 1,
+            "max": 100000
+          },
+          "chapters": {
+            "type": "integer",
+            "min": 1,
+            "max": 100
+          }
+        },
+        "requires": [
+          "knowledge-composer"
+        ],
+        "trainingRows": 0,
+        "scope": "service declaration; concrete text editing examples replace it"
+      },
+      {
+        "id": "document.rewrite",
+        "act": "change",
+        "on": "docs.editor.document",
+        "params": {
+          "property": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "tone",
+              "length"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [
+          "knowledge-rewriter"
+        ],
+        "trainingRows": 0,
+        "scope": "service declaration; concrete text editing examples replace it"
+      },
+      {
+        "id": "document.block.make",
+        "act": "make",
+        "on": "docs.editor.block",
+        "params": {
+          "parent": {
+            "type": "string",
+            "required": true
+          },
+          "kind": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "paragraph",
+              "heading",
+              "quote"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "default": ""
+          },
+          "level": {
+            "type": "integer",
+            "min": 3,
+            "max": 6
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "requires": [],
+        "trainingRows": 4,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.section.make",
+        "act": "make",
+        "on": "docs.editor.section",
+        "params": {
+          "parent": {
+            "type": "string",
+            "required": true
+          },
+          "after": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string",
+            "default": ""
+          },
+          "level": {
+            "type": "integer",
+            "default": 2,
+            "min": 1,
+            "max": 2
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.block.change",
+        "act": "change",
+        "on": "docs.editor.block",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "text": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "paragraph",
+              "heading",
+              "quote"
+            ]
+          },
+          "level": {
+            "type": "integer",
+            "min": 3,
+            "max": 6
+          },
+          "align": {
+            "type": "string",
+            "enum": [
+              "left",
+              "center",
+              "right",
+              "justify"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 4,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.block.remove",
+        "act": "remove",
+        "on": "docs.editor.block",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.section.remove",
+        "act": "remove",
+        "on": "docs.editor.section",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.section.reorder",
+        "act": "place",
+        "on": "docs.editor.section",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.remove",
+        "act": "remove",
+        "on": "docs.editor.document",
+        "params": {},
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.observe",
+        "act": "ask",
+        "on": "docs.editor.document",
+        "params": {},
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.undo",
+        "act": "undo",
+        "on": "docs.editor.document",
+        "params": {},
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "document.redo",
+        "act": "redo",
+        "on": "docs.editor.document",
+        "params": {},
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      }
+    ],
+    "calendar": [
+      {
+        "id": "calendar.calendar.add",
+        "act": "make",
+        "on": "time.calendar.calendar",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "colour": {
+            "type": "string"
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "calendar.calendar.change",
+        "act": "change",
+        "on": "time.calendar.calendar",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false
+          },
+          "colour": {
+            "type": "string",
+            "required": false
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "calendar.calendar.remove",
+        "act": "remove",
+        "on": "time.calendar.calendar",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "calendar.person.add",
+        "act": "make",
+        "on": "time.calendar.person",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "calendar.person.change",
+        "act": "change",
+        "on": "time.calendar.person",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "calendar.person.remove",
+        "act": "remove",
+        "on": "time.calendar.person",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "calendar.room.add",
+        "act": "make",
+        "on": "time.calendar.room",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "capacity": {
+            "type": "integer",
+            "min": 1
+          },
+          "location": {
+            "type": "string"
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "calendar.room.change",
+        "act": "change",
+        "on": "time.calendar.room",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false
+          },
+          "capacity": {
+            "type": "integer",
+            "min": 1,
+            "required": false,
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "required": false,
+            "nullable": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "calendar.room.remove",
+        "act": "remove",
+        "on": "time.calendar.room",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "calendar.meeting.add",
+        "act": "make",
+        "on": "time.calendar.meeting",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "start": {
+            "type": "integer",
+            "required": true
+          },
+          "duration": {
+            "type": "integer",
+            "required": true,
+            "min": 1
+          },
+          "participants": {
+            "type": "array",
+            "required": true
+          },
+          "room": {
+            "type": "string",
+            "required": true,
+            "nullable": true
+          },
+          "calendar": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "requires": [],
+        "trainingRows": 0,
+        "scope": "advanced or legacy native declaration; current UI examples rewritten to editable groups/events"
+      },
+      {
+        "id": "calendar.event.select",
+        "act": "pick",
+        "on": "time.calendar.meeting",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true,
+            "nullable": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "calendar.event.add",
+        "act": "make",
+        "on": "time.calendar.meeting",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "start": {
+            "type": "integer",
+            "required": true
+          },
+          "duration": {
+            "type": "integer",
+            "required": true,
+            "min": 1
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "calendar.meeting.change",
+        "act": "change",
+        "on": "time.calendar.meeting",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": false
+          },
+          "start": {
+            "type": "integer",
+            "required": false
+          },
+          "duration": {
+            "type": "integer",
+            "required": false,
+            "min": 1
+          },
+          "participants": {
+            "type": "array",
+            "required": false
+          },
+          "room": {
+            "type": "string",
+            "required": false,
+            "nullable": true
+          },
+          "calendar": {
+            "type": "string",
+            "nullable": true,
+            "required": false
+          },
+          "notes": {
+            "type": "string",
+            "required": false
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "calendar.meeting.move",
+        "act": "place",
+        "on": "time.calendar.meeting",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "start": {
+            "type": "integer",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "calendar.events.remove",
+        "act": "remove",
+        "on": "time.calendar.meeting",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "calendar.meeting.remove",
+        "act": "remove",
+        "on": "time.calendar.meeting",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "calendar.observe",
+        "act": "ask",
+        "on": "time.calendar",
+        "params": {},
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      }
+    ],
+    "avatar": [
+      {
+        "id": "avatar.face.compose",
+        "act": "change",
+        "on": "ui.avatar.face",
+        "params": {
+          "id": {
+            "type": "string",
+            "default": "face",
+            "enum": [
+              "face"
+            ]
+          },
+          "characterKind": {
+            "type": "string",
+            "enum": [
+              "human",
+              "robot",
+              "alien"
+            ]
+          },
+          "base": {
+            "type": "string",
+            "enum": [
+              "baby",
+              "child",
+              "girl",
+              "boy",
+              "woman",
+              "man",
+              "old woman",
+              "old man",
+              "bearded man",
+              "woman with curly hair",
+              "robot",
+              "alien",
+              "clown",
+              "queen"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 33,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.face.preset",
+        "act": "change",
+        "on": "ui.avatar.face",
+        "params": {
+          "id": {
+            "type": "string",
+            "default": "face",
+            "enum": [
+              "face"
+            ]
+          },
+          "preset": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "baby",
+              "child",
+              "girl",
+              "boy",
+              "woman",
+              "man",
+              "old woman",
+              "old man",
+              "bearded man",
+              "woman with curly hair",
+              "robot",
+              "alien",
+              "clown",
+              "queen"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.face.expression",
+        "act": "change",
+        "on": "ui.avatar.face",
+        "params": {
+          "id": {
+            "type": "string",
+            "default": "face",
+            "enum": [
+              "face"
+            ]
+          },
+          "expression": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "",
+              "happy",
+              "sad",
+              "angry",
+              "surprised",
+              "sleepy",
+              "wink",
+              "talking"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 10,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.face.name",
+        "act": "change",
+        "on": "ui.avatar.face",
+        "params": {
+          "id": {
+            "type": "string",
+            "default": "face",
+            "enum": [
+              "face"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.face.select",
+        "act": "pick",
+        "on": "ui.avatar.face",
+        "params": {
+          "id": {
+            "type": "string",
+            "default": "face",
+            "enum": [
+              "face"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.ids.show",
+        "act": "ask",
+        "on": "ui.avatar.face",
+        "params": {
+          "mode": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "temporary",
+              "always",
+              "off"
+            ]
+          },
+          "duration": {
+            "type": "integer",
+            "default": 4000,
+            "min": 1,
+            "max": 60000
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.part.select",
+        "act": "pick",
+        "on": "ui.avatar.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true,
+            "nullable": true,
+            "enum": [
+              null,
+              "hair_back",
+              "shoulders",
+              "neck",
+              "ears",
+              "head",
+              "cheeks",
+              "beard",
+              "mouth",
+              "moustache",
+              "nose",
+              "eyes",
+              "eyebrows",
+              "glasses",
+              "hair_front",
+              "earrings",
+              "hat"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 3,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.face.resize",
+        "act": "change",
+        "on": "ui.avatar.face",
+        "params": {
+          "id": {
+            "type": "string",
+            "default": "face",
+            "enum": [
+              "face"
+            ]
+          },
+          "scale": {
+            "type": "number",
+            "required": true,
+            "min": 0.6,
+            "max": 1.5
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.part.resize",
+        "act": "change",
+        "on": "ui.avatar.part",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "scale": {
+            "type": "number",
+            "required": true,
+            "min": 0.6,
+            "max": 1.5
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.part.add",
+        "act": "make",
+        "on": "ui.avatar.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "hair_back",
+              "shoulders",
+              "neck",
+              "ears",
+              "head",
+              "cheeks",
+              "beard",
+              "mouth",
+              "moustache",
+              "nose",
+              "eyes",
+              "eyebrows",
+              "glasses",
+              "hair_front",
+              "earrings",
+              "hat"
+            ]
+          },
+          "variant": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "long straight",
+              "long wavy",
+              "long curly",
+              "bob",
+              "ponytail",
+              "pigtails",
+              "bun",
+              "afro",
+              "t-shirt",
+              "v-neck",
+              "shirt",
+              "suit",
+              "hoodie",
+              "tank top",
+              "small",
+              "metal plate",
+              "lab coat",
+              "scrubs",
+              "chef jacket",
+              "apron",
+              "overalls",
+              "safety vest",
+              "uniform",
+              "fire jacket",
+              "sailor collar",
+              "space suit",
+              "robe",
+              "cloak",
+              "cape",
+              "fur coat",
+              "football shirt",
+              "bow tie",
+              "boiler suit",
+              "medium",
+              "thin",
+              "thick",
+              "tapered",
+              "necklace",
+              "pipe",
+              "round",
+              "large",
+              "pointed",
+              "long",
+              "square",
+              "oval",
+              "heart",
+              "wide",
+              "box",
+              "blush",
+              "round blush",
+              "freckles",
+              "dimple",
+              "wrinkles",
+              "scar",
+              "mole",
+              "tear",
+              "full",
+              "short",
+              "chinstrap",
+              "goatee",
+              "soul patch",
+              "sideburns",
+              "stubble",
+              "smile",
+              "big smile",
+              "neutral",
+              "sad",
+              "open",
+              "talking",
+              "smirk",
+              "full lips",
+              "grin",
+              "tongue out",
+              "frown",
+              "grille",
+              "gritted",
+              "half open",
+              "pressed",
+              "lip bite",
+              "tongue tip",
+              "handlebar",
+              "walrus",
+              "pencil",
+              "chevron",
+              "button",
+              "bolt",
+              "dot",
+              "narrow",
+              "closed",
+              "happy",
+              "surprised",
+              "sleepy",
+              "lashes",
+              "downcast",
+              "looking up",
+              "looking out",
+              "looking in",
+              "straight",
+              "arched",
+              "thick arched",
+              "angry",
+              "bushy",
+              "raised",
+              "small round",
+              "sunglasses",
+              "cat-eye",
+              "monocle",
+              "visor",
+              "fringe",
+              "side parting",
+              "curly",
+              "spikes",
+              "bald on top",
+              "receding",
+              "centre parting",
+              "long sides",
+              "wavy",
+              "mohawk",
+              "tuft",
+              "stud",
+              "hoop",
+              "drop",
+              "pearl",
+              "large hoop",
+              "star",
+              "cap",
+              "beanie",
+              "top hat",
+              "crown",
+              "cowboy hat",
+              "party hat",
+              "bow",
+              "antenna",
+              "sun hat",
+              "chef hat",
+              "hard hat",
+              "fire helmet",
+              "police cap",
+              "pilot cap",
+              "nurse cap",
+              "sailor cap",
+              "military helmet",
+              "space helmet",
+              "knight helmet",
+              "pirate hat",
+              "witch hat",
+              "wizard hat",
+              "Santa hat",
+              "beret",
+              "fedora",
+              "swimming cap",
+              "judge wig",
+              "headscarf",
+              "flower wreath"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 182,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.part.change",
+        "act": "change",
+        "on": "ui.avatar.part",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "long straight",
+              "long wavy",
+              "long curly",
+              "bob",
+              "ponytail",
+              "pigtails",
+              "bun",
+              "afro",
+              "t-shirt",
+              "v-neck",
+              "shirt",
+              "suit",
+              "hoodie",
+              "tank top",
+              "small",
+              "metal plate",
+              "lab coat",
+              "scrubs",
+              "chef jacket",
+              "apron",
+              "overalls",
+              "safety vest",
+              "uniform",
+              "fire jacket",
+              "sailor collar",
+              "space suit",
+              "robe",
+              "cloak",
+              "cape",
+              "fur coat",
+              "football shirt",
+              "bow tie",
+              "boiler suit",
+              "medium",
+              "thin",
+              "thick",
+              "tapered",
+              "necklace",
+              "pipe",
+              "round",
+              "large",
+              "pointed",
+              "long",
+              "square",
+              "oval",
+              "heart",
+              "wide",
+              "box",
+              "blush",
+              "round blush",
+              "freckles",
+              "dimple",
+              "wrinkles",
+              "scar",
+              "mole",
+              "tear",
+              "full",
+              "short",
+              "chinstrap",
+              "goatee",
+              "soul patch",
+              "sideburns",
+              "stubble",
+              "smile",
+              "big smile",
+              "neutral",
+              "sad",
+              "open",
+              "talking",
+              "smirk",
+              "full lips",
+              "grin",
+              "tongue out",
+              "frown",
+              "grille",
+              "gritted",
+              "half open",
+              "pressed",
+              "lip bite",
+              "tongue tip",
+              "handlebar",
+              "walrus",
+              "pencil",
+              "chevron",
+              "button",
+              "bolt",
+              "dot",
+              "narrow",
+              "closed",
+              "happy",
+              "surprised",
+              "sleepy",
+              "lashes",
+              "downcast",
+              "looking up",
+              "looking out",
+              "looking in",
+              "straight",
+              "arched",
+              "thick arched",
+              "angry",
+              "bushy",
+              "raised",
+              "small round",
+              "sunglasses",
+              "cat-eye",
+              "monocle",
+              "visor",
+              "fringe",
+              "side parting",
+              "curly",
+              "spikes",
+              "bald on top",
+              "receding",
+              "centre parting",
+              "long sides",
+              "wavy",
+              "mohawk",
+              "tuft",
+              "stud",
+              "hoop",
+              "drop",
+              "pearl",
+              "large hoop",
+              "star",
+              "cap",
+              "beanie",
+              "top hat",
+              "crown",
+              "cowboy hat",
+              "party hat",
+              "bow",
+              "antenna",
+              "sun hat",
+              "chef hat",
+              "hard hat",
+              "fire helmet",
+              "police cap",
+              "pilot cap",
+              "nurse cap",
+              "sailor cap",
+              "military helmet",
+              "space helmet",
+              "knight helmet",
+              "pirate hat",
+              "witch hat",
+              "wizard hat",
+              "Santa hat",
+              "beret",
+              "fedora",
+              "swimming cap",
+              "judge wig",
+              "headscarf",
+              "flower wreath"
+            ]
+          },
+          "colour": {
+            "type": "string",
+            "enum": [
+              "black",
+              "dark brown",
+              "brown",
+              "auburn",
+              "red",
+              "blond",
+              "grey",
+              "white",
+              "blue",
+              "pink",
+              "green",
+              "purple",
+              "orange",
+              "yellow",
+              "pale",
+              "light",
+              "tan",
+              "olive",
+              "metal grey",
+              "hazel",
+              "amber"
+            ]
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "tiny",
+              "small",
+              "default",
+              "big",
+              "huge"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 9,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.part.feature",
+        "act": "change",
+        "on": "ui.avatar.part",
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "property": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "length",
+              "feel",
+              "kind",
+              "age",
+              "size",
+              "shape"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "long",
+              "medium",
+              "straight",
+              "wavy",
+              "curly",
+              "bob",
+              "ponytail",
+              "pigtails",
+              "bun",
+              "afro",
+              "child",
+              "large",
+              "t-shirt",
+              "v-neck",
+              "shirt",
+              "suit",
+              "hoodie",
+              "tank top",
+              "robot",
+              "lab coat",
+              "scrubs",
+              "chef jacket",
+              "apron",
+              "overalls",
+              "safety vest",
+              "uniform",
+              "fire jacket",
+              "sailor collar",
+              "space suit",
+              "robe",
+              "cloak",
+              "cape",
+              "fur-trimmed coat",
+              "football shirt",
+              "waistcoat and bow tie",
+              "boiler suit",
+              "adult",
+              "small",
+              "square",
+              "thin",
+              "narrow",
+              "thick",
+              "wide",
+              "tapered",
+              "necklace",
+              "round",
+              "pointed",
+              "oval",
+              "heart",
+              "box",
+              "blush",
+              "freckles",
+              "dimple",
+              "wrinkles",
+              "scar",
+              "mole",
+              "tear",
+              "old",
+              "short",
+              "bushy",
+              "full beard",
+              "chinstrap",
+              "goatee",
+              "long beard",
+              "soul patch",
+              "sideburns",
+              "stubble",
+              "smiling",
+              "closed",
+              "open",
+              "flat",
+              "sad",
+              "surprised",
+              "smirk",
+              "full lips",
+              "grin",
+              "tongue out",
+              "gritted teeth",
+              "half open",
+              "pressed lips",
+              "teeth on lip",
+              "tongue tip",
+              "handlebar",
+              "walrus",
+              "pencil",
+              "chevron",
+              "button",
+              "dot",
+              "half closed",
+              "lashes",
+              "looking down",
+              "looking up",
+              "looking aside",
+              "arched",
+              "angry",
+              "sunglasses",
+              "cat-eye",
+              "monocle",
+              "visor",
+              "fringe",
+              "side parting",
+              "spikes",
+              "bald on top",
+              "receding",
+              "centre parting",
+              "mohawk",
+              "tuft",
+              "stud",
+              "hoop",
+              "drop",
+              "pearl",
+              "star",
+              "cap",
+              "beanie",
+              "top hat",
+              "crown",
+              "cowboy hat",
+              "party hat",
+              "bow",
+              "antenna",
+              "sun hat",
+              "chef hat",
+              "hard hat",
+              "fire helmet",
+              "police cap",
+              "pilot cap",
+              "nurse cap",
+              "sailor cap",
+              "military helmet",
+              "space helmet",
+              "knight helmet",
+              "pirate hat",
+              "witch hat",
+              "wizard hat",
+              "santa hat",
+              "beret",
+              "fedora",
+              "swimming cap",
+              "wig",
+              "headscarf",
+              "flower wreath"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.part.move",
+        "act": "place",
+        "on": "ui.avatar.part",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          },
+          "place": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "up",
+              "down",
+              "left",
+              "right"
+            ]
+          }
+        },
+        "requires": [],
+        "trainingRows": 5,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.part.remove",
+        "act": "remove",
+        "on": "ui.avatar.part",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.parts.remove",
+        "act": "remove",
+        "on": "ui.avatar.part",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.clear",
+        "act": "remove",
+        "on": "ui.avatar.part",
+        "params": {
+          "ids": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.observe",
+        "act": "ask",
+        "on": "ui.avatar.face",
+        "params": {},
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.undo",
+        "act": "undo",
+        "on": "ui.avatar.face",
+        "params": {},
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      },
+      {
+        "id": "avatar.redo",
+        "act": "redo",
+        "on": "ui.avatar.face",
+        "params": {},
+        "requires": [],
+        "trainingRows": 2,
+        "scope": "current editor tool"
+      }
+    ]
+  },
+  "modelInference": false,
+  "trainingRun": false,
+  "scope": "Actual native tool execution validates recipes, not reader accuracy or human interpretation quality."
+}

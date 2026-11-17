@@ -8,8 +8,9 @@ import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=dc47595de0';
 export const NATIVE_INSTANCE_SCHEMA='psys2.native-instance/1';
 const byWorld=new Map(Object.values(NATIVE_AREAS).map(a=>[a.world,a]));
 const create=(session,area,state,instanceId)=>createAreaHost(area,{state,instanceId,loader:session.engine?.loader,knowledge:session.engine?.knowledge});
-/** Observe a compact semantic World without serializing native render caches or undo history. */
-export async function observeNativeInstanceWorlds(session,{worlds=[...byWorld.keys()]}={}){
+/** Observe a compact semantic World without serializing native render caches or undo history.
+ * Optional native interface metadata reuses this same host and observation for inspection. */
+export async function observeNativeInstanceWorlds(session,{worlds=[...byWorld.keys()],includeHostInterface=false}={}){
  session.nativeInstanceRevisions??={};session.nativeInstanceSnapshots??={};session.instanceWorlds??={};const records=[];
  for(const world of [...new Set(worlds)]){
   const area=byWorld.get(world),state=session.isession.state[world];if(!area||!state)continue;
@@ -17,7 +18,7 @@ export async function observeNativeInstanceWorlds(session,{worlds=[...byWorld.ke
   if(prior!==undefined&&prior!==canonical)session.nativeInstanceRevisions[world]=(session.nativeInstanceRevisions[world]??0)+1;
   const revision=session.nativeInstanceRevisions[world]??0,carrier=serializeInstanceState({instanceId,world,schemaVersion:NATIVE_INSTANCE_SCHEMA,revision,objects,projection:null});
   const semantic=area.stateWorld?area.stateWorld(state):instanceStateWorld(carrier);session.instanceWorlds[world]=semantic;session.nativeInstanceSnapshots[world]=canonical;
-  records.push({world,instanceId,revision,wires:serialize([...semantic.wires.values()]),carrier,observation,authoritative:!!area.stateWorld,schema:area.stateSchema??null});
+  records.push({world,instanceId,revision,wires:serialize([...semantic.wires.values()]),carrier,observation,authoritative:!!area.stateWorld,schema:area.stateSchema??null,...(includeHostInterface?{nativeInterface:{operations:host.bindings(),capabilities:host.capabilities?.()??null}}:{})});
  }
  return records;
 }
