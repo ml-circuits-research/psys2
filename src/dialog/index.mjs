@@ -472,6 +472,9 @@ export class DialogSession {
     this.astra = createSessionAstra(this);
     this.sources = new Map();
     this.newEngineJournal = [];
+    this.newEngineUndo = [];
+    this.newEngineFocus = {};
+    this.newEngineLastAction = {};
     this._msg = 0;
     this.isession.add(this.isession.form.initDefaults());
   }
@@ -1522,13 +1525,16 @@ export class DialogSession {
     try { astra = this.astra ? astraSnapshot(this.astra) : null; } catch { astra = null; }
     let rs = null;
     try { rs = this.isession.rs?.timelineJSON() ?? null; } catch { rs = null; }   // the library instances and the undo timeline (spec 15); absent on the ops reasoner
-    return { v: 1, ...(this.newEngineJournal.length ? { newEngineJournal: structuredClone(this.newEngineJournal) } : {}), discourse: this.discourse.toJSON(), dialogue: this.dialogue.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], ...(rs ? { rs } : {}) };
+    return { v: 1, newEngineUndo: structuredClone(this.newEngineUndo), newEngineFocus: structuredClone(this.newEngineFocus), newEngineLastAction: structuredClone(this.newEngineLastAction), ...(this.newEngineJournal.length ? { newEngineJournal: structuredClone(this.newEngineJournal) } : {}), discourse: this.discourse.toJSON(), dialogue: this.dialogue.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], ...(rs ? { rs } : {}) };
   }
 
   /** Puts a `memoryJSON()` record back (a bad record changes nothing it cannot read). Runs no effect. */
   restoreMemory(mem) {
     if (!mem || typeof mem !== 'object' || mem.v !== 1) return false;
     if (Array.isArray(mem.newEngineJournal)) this.newEngineJournal = structuredClone(mem.newEngineJournal.slice(-128));
+    this.newEngineUndo = Array.isArray(mem.newEngineUndo) ? structuredClone(mem.newEngineUndo.slice(-32)) : [];
+    this.newEngineFocus = structuredClone(mem.newEngineFocus ?? {});
+    this.newEngineLastAction = structuredClone(mem.newEngineLastAction ?? {});
     this.discourse.load(mem.discourse);
     if (mem.dialogue) this.dialogue.load(mem.dialogue);
     if (mem.astra && this.astra) { try { astraRestore(this.astra, mem.astra); } catch { /* the discussions start empty */ } }
@@ -1553,6 +1559,7 @@ export class DialogSession {
       isession: this.isession.clone(), msg: this._msg, recent: [...(this._recentWorlds ?? [])], lang: [this._sessionLang, this._weakRo],
       discourse: { ...dis, frames: [...dis.frames], actions: [...dis.actions], topics: [...dis.topics], lastByWorld: { ...dis.lastByWorld } },
       newEngineJournal: structuredClone(this.newEngineJournal),
+      newEngineUndo: structuredClone(this.newEngineUndo), newEngineFocus: structuredClone(this.newEngineFocus), newEngineLastAction: structuredClone(this.newEngineLastAction),
       sources: new Set(this.sources.keys()), astra: this.astra?.capture(), dialogue: this.dialogue.toJSON(),
     };
   }
@@ -1588,6 +1595,9 @@ export class DialogSession {
     if (!snap) return;
     this.isession = snap.isession; this._msg = snap.msg; this._recentWorlds = snap.recent; [this._sessionLang, this._weakRo] = snap.lang;
     this.newEngineJournal = structuredClone(snap.newEngineJournal ?? []);
+    this.newEngineUndo = structuredClone(snap.newEngineUndo ?? []);
+    this.newEngineFocus = structuredClone(snap.newEngineFocus ?? {});
+    this.newEngineLastAction = structuredClone(snap.newEngineLastAction ?? {});
     Object.assign(this.discourse, snap.discourse);
     this.astra?.rollback(snap.astra);
     if (snap.dialogue) this.dialogue.load(snap.dialogue);

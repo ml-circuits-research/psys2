@@ -1,7 +1,9 @@
+import {projectJournalAction} from './project-journal-action.mjs?v=919c8c7bee';
+import {combineModelScores} from './model-selection-score.mjs?v=ac3ac10191';
 // Verify artifact bytes, then assemble actual injected neural sessions. No admission.
 import {copyHostData} from '../../worlds/native-tool-host.mjs?v=463e762442';
-import {createCutterInference} from './cutter-inference.mjs?v=332bf4839f';
-import {createKeyReaderInference} from './key-reader-inference.mjs?v=3704547157';
+import {createCutterInference} from './cutter-inference.mjs?v=35ea9a36f4';
+import {createKeyReaderInference} from './key-reader-inference.mjs?v=e31e103289';
 import {createBertSourceOffsetAuthority} from './bert-source-offsets.mjs?v=9b7b99f458';
 import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=61cebe157f';
 
@@ -115,7 +117,8 @@ export async function createVerifiedReaderProvider({
   }
   return session.run(converted);
  };
- const diagnostics=component=>async result=>recordDiagnostics(copyHostData({component,result}));
+ let decisionScores=[];
+ const diagnostics=component=>async result=>{decisionScores.push(result.auxiliary?.minimumProbability);return recordDiagnostics(copyHostData({component,result}));};
  // Constructors verify their profiles without calling these deferred sessions.
  const cutter=await createCutterInference({manifest:m,tokenizer,model:call('cutter'),offsetAuthority:authority,recordDiagnostics:diagnostics('cutter')});
  const reader=await createKeyReaderInference({manifest:m,tokenizer,encoder:call('encoder'),heads:call('heads'),
@@ -144,5 +147,6 @@ export async function createVerifiedReaderProvider({
   calibration:null,executionEligible:false
  };
  verified.assemblySha256=await digest(utf8(JSON.stringify(stable(verified))));
- return {provider,verified:copyHostData(verified),provenance:()=>copyHostData(verified)};
+ const scoredProvider={...provider,registry:()=>copyHostData(JSON.parse(m.configJSON).registry),bindings:()=>copyHostData(JSON.parse(bindingsJSON)),async propose(text){decisionScores=[];const proposal=await provider.propose(text);return {...projectJournalAction(proposal),selectionScore:combineModelScores(decisionScores)};}};
+ return {provider:scoredProvider,verified:copyHostData(verified),provenance:()=>copyHostData(verified)};
 }

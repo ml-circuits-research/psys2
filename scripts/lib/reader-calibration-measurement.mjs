@@ -2,7 +2,7 @@
 import {parse,readValue,World,retainSelectiveCalibration} from '../../src/vendor/sopworld/sopworld.mjs';
 import {scoreReaderProposal,readerCalibrationScope} from '../../src/dialog/reader-admission.mjs';
 function graph(entry) {
-  return {request:entry.request,nodes:parse(entry.wires).map(w=>({id:w.id,type:w.type,attrs:Object.fromEntries(Object.entries(w.attrs).map(([key,values])=>[key,values.map(t=>{const v=readValue(t);return {kind:v.kind,value:v.v};})]))}))};
+  return {request:entry.request,nodes:parse(entry.wires).map(w=>({id:w.id,type:w.type,attrs:Object.fromEntries(Object.entries(w.attrs).map(([key,values])=>[key,values.map(t=>{const v=readValue(t);return {kind:v.kind==='atom'?'literal':v.kind,value:v.v};})]))}))};
 }
 export function calibrationObservation(proposal,text,expectation,{compareRequestGraphs}={}) {
   const scored=scoreReaderProposal(proposal,text);

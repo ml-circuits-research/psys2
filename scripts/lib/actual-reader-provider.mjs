@@ -67,7 +67,8 @@ export async function loadActualReplayReader(spec,{factory}={}){
   engine.requestReader={...assembled.provider,async propose(source){proposal=await assembled.provider.propose(source);return proposal;}};
   try{try{observation=host?.observe()??null;current=observedReaderContext(area,observation,previous);}catch(e){error=String(e.message);current=null;}
    const reply=await routeNewEngine(session,text,{language:'en'});
-   return {reply,measurement:{proposal,diagnostics:[...diagnostics],context:current,observation,contextError:error,semanticCorrectness:null,admissionInstalled:false}};
+   const routing=reply.trace?.readerRouting,operational=routing?.admission?.proposalEligible?{...proposal,candidates:routing.admission.alternatives,coverage:routing.model.coverage,failures:[],interpretation:routing.interpretation??proposal.interpretation}:proposal;
+   return {reply,measurement:{proposal:operational,modelProposal:proposal,diagnostics:[...diagnostics],context:current,observation,contextError:error,semanticCorrectness:null,admissionInstalled:false}};
   }finally{if(old===undefined)delete engine.requestReader;else engine.requestReader=old;if(oldAdmission!==undefined)engine.requestReaderAdmission=oldAdmission;current=null;observation=null;busy=false;}
  }};
 }

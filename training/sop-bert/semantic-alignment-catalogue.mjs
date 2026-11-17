@@ -31,6 +31,6 @@ export async function planCatalogueEnrichment(catalogue,{readSource,world,parse,
   const module=sources.get(schemaPath).records.find(w=>w.type==='core.module'&&str(w.attrs.name?.[0])===e.sourceWorld);if(!module||str(module.attrs.version?.[0])!==e.moduleVersion)throw Error('catalogue-module-version');
  }
  const needed=new Set(evidence.map(e=>e.sourceWire));
- for(const {records}of sources.values())for(const w of records){tick();if(!needed.has(w.id)&&!['core.module','core.type','core.slot'].includes(w.type))continue;const old=world.get(w.id)||world.matrix?.get(w.id),prior=planned.get(w.id);if(old&&format(old)!==format(w)||prior&&format(prior)!==format(w))throw Error('catalogue-existing-source-conflict:'+w.id);if(!old)planned.set(w.id,w);}
+ for(const {records}of sources.values())for(const w of records){tick();if(!needed.has(w.id)&&!['core.module','core.type','core.slot','core.word'].includes(w.type))continue;const old=world.get(w.id)||world.matrix?.get(w.id),prior=planned.get(w.id);if(old&&format(old)!==format(w)||prior&&format(prior)!==format(w))throw Error('catalogue-existing-source-conflict:'+w.id);if(!old)planned.set(w.id,w);}
  return {records:[...planned.values()],sources:[...sources].map(([path,s])=>({knowledgePin:catalogue.knowledgePin,path,sha256:s.sha256})),boundary:'Explicit pinned declaration enrichment; conflicting existing identities refuse, never overwrite.'};
 }

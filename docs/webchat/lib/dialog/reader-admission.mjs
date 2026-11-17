@@ -2,7 +2,9 @@
 // The score selects the entire complete/unique cohort; it is not confidence.
 import {prepareRequestBatch,parse,str,assessSelectiveCalibration} from '../vendor/sopworld/sopworld.mjs?v=ca48804f00';
 import {copyHostData} from '../../worlds/native-tool-host.mjs?v=463e762442';
-export const READER_SCORE_DEFINITION='psys2.complete-unique/1';
+import {MODEL_SELECTION_SCORE} from './model-selection-score.mjs?v=ac3ac10191';
+import {READER_POLICY,destructiveRequest} from './reader-policy.mjs?v=8e0e20b854';
+export const READER_SCORE_DEFINITION=MODEL_SELECTION_SCORE;
 export const READER_RUNTIME_IDENTITY_FIELDS=Object.freeze(['appBuildSha256','readerSha256','pipelineSha256','packetAdapterSha256','graphDecoderSha256','bindingsSha256','executorSha256','backendSha256','contextSerializationSha256']);
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 export function scoreReaderProposal(proposal,text){
@@ -10,7 +12,7 @@ export function scoreReaderProposal(proposal,text){
  try{
   const p=copyHostData(proposal,{maxBytes:4000000});
   if(p?.coverage?.complete!==true||p?.coverage?.graphProposal!==true)return refused(p?.failures?.[0]?.reason??'incomplete-model-proposal');
-  if(!Array.isArray(p.candidates)||p.candidates.length!==1)return refused('ambiguous-model-proposal');
+  if(!Array.isArray(p.candidates)||!p.candidates.length||p.candidates.length>32)return refused('invalid-model-candidates');
   if(!Array.isArray(p.failures)||p.failures.length||p.coverage.truncated===true||(p.unresolved!==undefined&&(!Array.isArray(p.unresolved)||p.unresolved.length)))return refused('model-proposal-diagnostics');
   const candidate=p.candidates[0];
   if(typeof text!=='string'||typeof candidate?.wires!=='string'||candidate.wires.length>65536)return refused('invalid-model-graph');
@@ -18,7 +20,8 @@ export function scoreReaderProposal(proposal,text){
   if(!checked.ok)return refused('invalid-model-graph');
   const sources=parse(candidate.wires).filter(w=>w.type==='std.request.source');
   if(sources.length!==1||sources[0].attrs.text?.length!==1||str(sources[0].attrs.text[0])!==text)return refused('model-source-mismatch');
-  return {eligible:true,score:1,candidate,reason:'complete-unique-proposal',scoreDefinition:READER_SCORE_DEFINITION};
+  const score=p.selectionScore?.definition===READER_SCORE_DEFINITION&&Number.isFinite(p.selectionScore.value)&&p.selectionScore.value>=0&&p.selectionScore.value<=1?p.selectionScore.value:null;
+  return {eligible:true,score:score??0,scoreAvailable:score!==null,candidate,alternatives:p.candidates,uncertain:p.candidates.length>1,destructive:destructiveRequest(candidate,parse,str),reason:'complete-unique-proposal',scoreDefinition:READER_SCORE_DEFINITION};
  }catch{return refused('invalid-model-proposal');}
 }
 /** runtimeIdentity is loader-verified host configuration, never model authority.
@@ -33,11 +36,18 @@ export function readerCalibrationScope(area){if(typeof area!=='string'||!area)th
 export function assessReaderProposal({proposal,text,provenance,admission,area}){
  const scored=scoreReaderProposal(proposal,text);
  if(!scored.eligible)return {...scored,admitted:false,assessment:null};
+ const limit=scored.destructive?READER_POLICY.destructiveMaxErrorRate:READER_POLICY.maxErrorRate;
+ let assessment=null;
  try{
   if(!admission||typeof area!=='string'||!area||typeof admission.reference?.owner!=='string'||typeof admission.reference?.revision!=='string')throw Error('missing-calibration');
   const identity=readerCalibrationIdentity(provenance,admission.runtimeIdentity);
-  const assessment=assessSelectiveCalibration(admission.world,admission.reference,{identity,scope:readerCalibrationScope(area),score:scored.score,eligible:scored.eligible});
-  const admitted=assessment.admitted===true&&assessment.policy?.maxErrorRate===0&&assessment.fit?.wrong===0&&assessment.evaluation?.wrong===0;
-  return {...scored,admitted,assessment,reason:admitted?'approved-model-proposal':'model-calibration-gate-closed'};
- }catch(error){return {...scored,admitted:false,assessment:{admitted:false,reason:String(error?.message??'invalid-calibration')},reason:'model-calibration-gate-closed'};}
+  assessment=assessSelectiveCalibration(admission.world,admission.reference,{identity,scope:readerCalibrationScope(area),score:scored.score,eligible:scored.eligible});
+  const admitted=assessment.admitted===true&&assessment.policy?.maxErrorRate<=limit;
+  if(admitted)return {...scored,admitted:true,assessment,uncertain:scored.uncertain,mode:'calibrated',reason:'approved-model-proposal'};
+ }catch(error){assessment={admitted:false,reason:String(error?.message??'invalid-calibration')};}
+ // The owner explicitly accepts reversible best-effort actions before a cohort is calibrated.
+ // This is not an empirical error-rate claim. Destructive actions retain their stricter admission.
+ const bestEffort=READER_POLICY.uncalibratedAction==='reversible-best-effort'&&!admission&&!scored.destructive&&scored.scoreAvailable&&hash(provenance?.modelSha256);
+ return {...scored,admitted:bestEffort,assessment,uncertain:bestEffort,mode:bestEffort?'uncalibrated-best-effort':'closed',
+  reason:bestEffort?'best-effort-model-proposal':'model-calibration-gate-closed'};
 }

@@ -23,7 +23,7 @@ export function summarizeReaderStages(measurement,config){
   requests.push({index,heads,constraints:constraints?.length??null,constraintKeys:keys,requiredMetadataPresent:constraints?required:null,rawComplete:raw?.coverage?.complete??null,truncated:raw?.coverage?.truncated??null});
  }
  const p=measurement?.proposal;
- for(const issue of p?.failures??[])add('pipeline',issue);
+ for(const issue of (measurement?.modelProposal??p)?.failures??[])add('pipeline',issue);
  return {cutter:cutter?{available:true,complete:cutter.coverage?.complete??null,truncated:cutter.coverage?.truncated??null,spanCount:Array.isArray(cutter.spans)?cutter.spans.length:null,spans:cutter.spans??null}:{available:false,spanCount:null},requests,
   raw:{available:!!p?.raw,requestCount:p?.raw?.requestCount??null,complete:p?.raw?.coverage?.complete??null},
   bridgeReached:!!p?.raw,decoder:{reached:p?.coverage?.graphProposal===true?true:null,reason:'not-retained-separately'},pipeline:{outputObserved:!!p?.coverage,complete:p?.coverage?.complete??null,nonemptyGraph:p?.coverage?.graphProposal??null,candidateCount:Array.isArray(p?.candidates)?p.candidates.length:null,emptyReading:p?.coverage?.complete===true&&p.coverage.graphProposal===false},

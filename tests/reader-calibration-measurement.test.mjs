@@ -10,7 +10,7 @@ test('incomplete proposals retain their original ineligibility and unknown corre
  assert.equal(r.eligible,false);assert.equal(r.correct,null);assert.equal(r.reason,'missing-span');assert.equal(calls,0);
 });
 test('full graph agreement alone cannot produce a positive correctness label',()=>{
- const r=calibrationObservation(proposal(),text,expectation,{compareRequestGraphs:(a,b)=>{assert.equal(a.request,'r');assert.equal(b.nodes.length,4);return {ok:true,equal:true};}});
+ const r=calibrationObservation(proposal(),text,expectation,{compareRequestGraphs:(a,b)=>{assert.equal(a.request,'r');assert.equal(a.nodes.find(n=>n.id==='r').attrs.act[0].kind,'literal');assert.equal(b.nodes.length,4);return {ok:true,equal:true};}});
  assert.equal(r.eligible,true);assert.equal(r.graphAgreement,true);assert.equal(r.correct,null);assert.equal(r.reason,'intent-and-effect-checker-unavailable');
 });
 test('graph differences and missing comparison both retain unknown semantic correctness',()=>{

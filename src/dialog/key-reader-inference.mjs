@@ -1,5 +1,6 @@
 // Actual two-stage neural computation. Artifact loading and empirical admission are separate.
 import {copyHostData} from '../../worlds/native-tool-host.mjs';
+import {selectedProbability,binaryDecisionProbability} from './model-selection-score.mjs';
 import {createKeyReaderPacketAdapter} from './key-reader-packet.mjs';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -58,7 +59,8 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
  async function infer(text,{area,context=null}={}){
   let steps=0;const tick=(n=1)=>{steps+=n;if(steps>budget)throw Error('key-runtime-budget');};
   const raw={source:{text:typeof text==='string'?text:'',unit:'unicode-scalar'},request:{span:typeof text==='string'?text:'',target:{},constraints:[]},ranges:[],coverage:{complete:false,truncated:false,support:support(config)},unresolved:[],model};
-  const auxiliary={queryCount:0,selectedLogits:[]};let offsetProvenance=null;
+  const auxiliary={queryCount:0,selectedLogits:[],minimumProbability:null};
+  const probability=value=>{auxiliary.minimumProbability=Math.min(auxiliary.minimumProbability??1,value);};let offsetProvenance=null;
   const issue=(reason,key=null)=>raw.unresolved.push({reason,...(key?{key}:{})});
   try{
    if(!scalarString(text)||!text||Array.from(text).length>maxText||typeof area!=='string'||!area)throw Error('invalid-source-input');
@@ -70,13 +72,14 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
    const authority=checkOffsets(await offsetAuthority({text,contextJson:contextJSON,tokenIds:ids,attentionMask:mask,fullTokenIds:fullIds,fullAttentionMask:fullMask,maxLength:config.maxLength}),text,ids,mask,m,tick);offsetProvenance=authority.provenance;
    const output=await encoder({input_ids:encoded.input_ids,attention_mask:encoded.attention_mask});
    const hidden=tensorValues(output.hidden,[1,length,m.hiddenWidth],tick),bio=tensorValues(output.bio_logits,[1,config.bioKeys.length,length,3],tick),presence=tensorValues(output.presence_logits,[1,config.keys.length],tick);
+   for(let i=0;i<presence.length;i++)if(config.registry[config.keys[i]].role!=='derived')probability(binaryDecisionProbability(presence[i]));
    const byKey=new Map();for(let i=0;i<config.bioKeys.length;i++){tick();const value=spansFor(bio,i,length,authority,mask,tick);byKey.set(config.bioKeys[i],value.spans);if(value.reason)issue(value.reason,config.bioKeys[i]);}
    const queries=[{kind:'global',span:[0,1],index:-1}],queryMap=new Map();
    for(const key of config.keys){tick();if(config.registry[key].role!=='domain')continue;for(const span of byKey.get(key)??[]){tick();if(queries.length>=maxQueries)throw Error('mention-query-overflow');queryMap.set(key+':'+span.tokens.join(':'),queries.length);queries.push({kind:'domain',key,span:span.tokens,index:config.keys.indexOf(key)});}}
    if(queries.length*width>4194304)throw Error('class-output-budget');auxiliary.queryCount=queries.length;
    const result=await heads({hidden:makeTensor('float32',Float32Array.from(hidden),[length,m.hiddenWidth]),spans:makeTensor('int64',BigInt64Array.from(queries.flatMap(q=>q.span),BigInt),[queries.length,2]),key_indices:makeTensor('int64',BigInt64Array.from(queries.map(q=>q.index),BigInt),[queries.length])});
    const logits=tensorValues(result.class_logits,[queries.length,width],tick),emitted=new Set();
-   const field=(key,row)=>{const layout=bankMap.get(key);if(!layout)throw Error('missing-class-layout');const values=logits.slice(row*width+layout.start,row*width+layout.end),index=choice(values);tick(values.length);if(index===null){issue('invalid-or-ambiguous-class',key);return {exists:false};}const entry=config.banks[key][index];auxiliary.selectedLogits.push({key,query:row,index,logit:values[index]});if(entry.state==='absent')return {exists:false};if(entry.state!=='value'){issue('unknown-class',key);return {exists:false};}return {exists:true,value:copyHostData(entry.value)};};
+   const field=(key,row)=>{const layout=bankMap.get(key);if(!layout)throw Error('missing-class-layout');const values=logits.slice(row*width+layout.start,row*width+layout.end),index=choice(values);tick(values.length);if(index===null){issue('invalid-or-ambiguous-class',key);return {exists:false};}probability(selectedProbability(values,index));const entry=config.banks[key][index];auxiliary.selectedLogits.push({key,query:row,index,logit:values[index]});if(entry.state==='absent')return {exists:false};if(entry.state!=='value'){issue('unknown-class',key);return {exists:false};}return {exists:true,value:copyHostData(entry.value)};};
    for(let ki=0;ki<config.keys.length;ki++){
     tick();const key=config.keys[ki],spec=config.registry[key],spans=byKey.get(key)??[],present=presence[ki]===0?null:presence[ki]>0;if(present===null)issue('unknown-presence',key);if(spec.role==='derived')continue;
     if(spec.role==='global'){

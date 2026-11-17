@@ -6,11 +6,11 @@ export async function refreshBrowserReaderDeployment(outDir){
  const deployment=JSON.parse(await readFile(file,'utf8'));if(deployment.format!=='psys2.browser-reader-deployment/1')throw Error('unsupported-reader-deployment');
  const groups={
   appBuildSha256:['ui/engine-worker.mjs','lib/dialog/index.mjs'],
-  readerSha256:['lib/dialog/cutter-inference.mjs','lib/dialog/key-reader-inference.mjs','lib/dialog/bert-source-offsets.mjs'],
-  pipelineSha256:['lib/dialog/key-reader-pipeline.mjs','lib/dialog/verified-reader-provider.mjs','lib/dialog/browser-reader-host.mjs'],
+  readerSha256:['lib/dialog/cutter-inference.mjs','lib/dialog/key-reader-inference.mjs','lib/dialog/bert-source-offsets.mjs','lib/dialog/model-selection-score.mjs'],
+  pipelineSha256:['lib/dialog/key-reader-pipeline.mjs','lib/dialog/verified-reader-provider.mjs','lib/dialog/browser-reader-host.mjs','lib/dialog/project-journal-action.mjs','lib/dialog/project-context-action.mjs','lib/dialog/project-create-action.mjs'],
   packetAdapterSha256:['lib/dialog/key-reader-packet.mjs'],
   graphDecoderSha256:['lib/dialog/raw-structural-bridge.mjs','lib/dialog/model-graph-decoder.mjs','lib/vendor/sopworld/sopworld.mjs'],
-  executorSha256:['lib/dialog/new-engine.mjs','lib/dialog/reader-routing.mjs','lib/dialog/reader-admission.mjs'],
+  executorSha256:['lib/dialog/new-engine.mjs','lib/dialog/reader-routing.mjs','lib/dialog/reader-admission.mjs','lib/dialog/reader-policy.mjs','lib/dialog/declared-execution.mjs','lib/dialog/native-binding-candidates.mjs'],
   contextSerializationSha256:['lib/dialog/native-reader-context.mjs','lib/dialog/app-reader-context.mjs','lib/dialog/key-reader-inference.mjs'],
   backendSha256:['vendor/onnxruntime/ort.wasm.bundle.min.mjs','vendor/onnxruntime/ort-wasm-simd-threaded.mjs','vendor/onnxruntime/ort-wasm-simd-threaded.wasm','vendor/sop-tokenizer/bert-tokenizer.mjs']
  };

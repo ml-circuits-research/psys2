@@ -16,6 +16,7 @@ import {compileTeacherRow} from '../training/sop-bert/compile-teacher-expectatio
 import {calibrationObservation,retainCalibrationCohorts} from './lib/reader-calibration-measurement.mjs';
 import {summarizeReaderStages,rankLeafReasons} from './lib/reader-stage-counts.mjs';
 import {readerCalibrationIdentity} from '../src/dialog/reader-admission.mjs';
+import {READER_POLICY} from '../src/dialog/reader-policy.mjs';
 const [specPath,corpusPath,output,comparisonLibrary='../soplang-words-lib/docs/sopworld.mjs']=process.argv.slice(2);
 const {compareRequestGraphs}=await import(pathToFileURL(resolve(comparisonLibrary)));
 if(typeof compareRequestGraphs!=='function') throw Error('published-graph-comparator-required');
@@ -48,17 +49,17 @@ try {for(const row of input) {
     const expectation=compileTeacherRow(row,compilerOptions);
     Object.assign(record,calibrationObservation(measured.measurement.proposal,text,expectation,{compareRequestGraphs}),{readerInvoked:true,teacherStatus:expectation.status,
       stages:summarizeReaderStages(measured.measurement,config),unchanged:JSON.stringify(session.isession.state)===before});
-    if(!record.unchanged) throw Error('unexpected-calibration-effect');
+    record.executed=measured.reply.statuses?.includes('supported')===true;record.stateChanged=!record.unchanged;
   }
   writeSync(fd,JSON.stringify(record)+'\n');rows.push(record);
   if(rows.length%100===0) console.log(JSON.stringify({completed:rows.length,total:input.length,invoked:rows.filter(r=>r.readerInvoked).length,seconds:Math.round((Date.now()-started)/1000)}));
 }} finally {closeSync(fd);}
 if(sha(readFileSync(corpusPath))!==sha(corpus)) throw Error('calibration-input-mutated');
-const policy={minFitAccepted:2,minEvaluationAccepted:2,maxErrorRate:0};
+const policy={minFitAccepted:2,minEvaluationAccepted:2,maxErrorRate:READER_POLICY.maxErrorRate};
 const identity=provenance?readerCalibrationIdentity(provenance,spec.runtimeIdentity):null;
 const reports=identity?retainCalibrationCohorts(rows,{identity,policy}):{};
 const counts={messages:rows.length,readerInvoked:rows.filter(r=>r.readerInvoked).length,setupExcluded:rows.filter(r=>!r.setupComplete).length,
-  eligible:rows.filter(r=>r.eligible).length,unknownEligible:rows.filter(r=>r.eligible&&r.correct===null).length,graphAgreements:rows.filter(r=>r.graphAgreement===true).length,
+  executed:rows.filter(r=>r.executed).length,eligible:rows.filter(r=>r.eligible).length,unknownEligible:rows.filter(r=>r.eligible&&r.correct===null).length,graphAgreements:rows.filter(r=>r.graphAgreement===true).length,
   graphDisagreements:rows.filter(r=>r.graphAgreement===false).length,cutterComplete:rows.filter(r=>r.stages?.cutter.complete).length,rawComplete:rows.filter(r=>r.stages?.raw.complete).length,
   nonemptyGraphs:rows.filter(r=>r.stages?.pipeline.nonemptyGraph).length};
 const result={format:'psys2.reader-calibration-measurement/1',complete:true,model:deployment.manifestSha256,selectedEpoch:manifest.componentProofs?.key?.selectedEpoch??null,corpus:{path:corpusPath,sha256:sha(corpus)},

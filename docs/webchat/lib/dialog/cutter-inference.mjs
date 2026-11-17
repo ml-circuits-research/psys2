@@ -1,5 +1,6 @@
 // Source-only neural cutter computation. Loading, calibration and admission are separate.
 import {copyHostData} from '../../worlds/native-tool-host.mjs?v=463e762442';
+import {selectedProbability} from './model-selection-score.mjs?v=ac3ac10191';
 
 export const CUTTER_CODEC=Object.freeze({
  format:'sop.request-cutter-codec/1',labels:Object.freeze(['O','B','I']),input:'source-only',
@@ -72,7 +73,7 @@ export async function createCutterInference({manifest,tokenizer,model,offsetAuth
   let steps=0;const tick=(n=1)=>{steps+=n;if(steps>budget)throw Error('cutter-runtime-budget');};
   const packet={source:{text:typeof text==='string'?text:'',unit:'unicode-scalar'},spans:[],
    coverage:{complete:false,truncated:false},unresolved:[],model:copyHostData(identity)};
-  const auxiliary={sourceDecisions:[]};let offsetProvenance=null;
+  const auxiliary={sourceDecisions:[],minimumProbability:null};let offsetProvenance=null;
   try{
    if(!scalar(text))throw Error('invalid-source-scalar');const chars=Array.from(text);tick(chars.length);
    if(chars.length>maxText)throw Error('source-size');
@@ -96,6 +97,7 @@ export async function createCutterInference({manifest,tokenizer,model,offsetAuth
     tick();const values=logits.slice(i*3,i*3+3),label=choose(values),range=authority.offsets[i];
     auxiliary.sourceDecisions.push({token:i,range:[...range],label,logits:values});
     if(label===null)throw Error('unknown-BIO-label');
+    const probability=selectedProbability(values,label);auxiliary.minimumProbability=Math.min(auxiliary.minimumProbability??1,probability);
     if(label===2&&current===null)throw Error('illegal-I-after-O');
     if(label!==2&&current!==null){packet.spans.push(current);current=null;}
     if(label===1)current=[...range];else if(label===2)current[1]=range[1];

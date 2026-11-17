@@ -80,9 +80,9 @@ test('the sole route ignores retired options and preserves undo and journal pers
   Object.assign(session.isession.state, setup().isession.state);
   // Controlled graph-provider fixture, not a trained-model performance claim.
   const wires = `@source std.request.source text=${JSON.stringify(sentence)}\n@r std.request act=change mood=do source=$source root=$condition\n@target std.request.target request=$r mode=existing kind=circle\n@condition std.request.constraint request=$r target=$target concept=colour operator=eq value=purple character=requirement polarity=positive`;
-  engine.requestReader = { provenance: () => ({modelSha256:'a'.repeat(64),decoderVersion:1}), propose: async () => ({candidates:[{request:'r',wires}],coverage:{complete:true,executable:false,graphProposal:true},failures:[]}) };
+  engine.requestReader = { provenance: () => ({modelSha256:'a'.repeat(64),decoderVersion:1}), propose: async () => ({candidates:[{request:'r',wires}],coverage:{complete:true,executable:false,graphProposal:true},selectionScore:{definition:'psys2.model-minimum/1',value:0.95},failures:[]}) };
   const runtimeIdentity=Object.fromEntries(READER_RUNTIME_IDENTITY_FIELDS.map(key=>[key,'b'.repeat(64)])),calibrationWorld=new World(),reference={owner:'fixture.sole-route',revision:'1'};
-  const row=id=>({id,source:id,score:1,eligible:true,correct:true});
+  const row=id=>({id,source:id,score:0.95,eligible:true,correct:true});
   assert.equal(retainSelectiveCalibration(calibrationWorld,{...reference,identity:readerCalibrationIdentity(engine.requestReader.provenance(),runtimeIdentity),scope:readerCalibrationScope('draw'),policy:{minFitAccepted:2,minEvaluationAccepted:2,maxErrorRate:0},fitRows:[row('fit1'),row('fit2')],evaluationRows:[row('eval1'),row('eval2')]}).ok,true);
   engine.requestReaderAdmission={world:calibrationWorld,reference,runtimeIdentity};
   let legacyCalls = 0;
