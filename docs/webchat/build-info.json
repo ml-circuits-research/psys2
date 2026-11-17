@@ -1,5 +1,5 @@
 {
-  "version": "04d2c67a0d",
+  "version": "ccf8b6da06",
   "worlds": [
     "acts",
     "art.draw",
@@ -66,6 +66,7 @@
     "lib/dialog/index.mjs": "43264f4b0825c838",
     "lib/dialog/intent.mjs": "55ae67d59a70c2e0",
     "lib/dialog/inventory-bootstrap-inference.mjs": "4080a73d4c2bb8cf",
+    "lib/dialog/key-reader-packet.mjs": "5c68b5a09e161fa1",
     "lib/dialog/key-reader-pipeline.mjs": "6200f8000ac4934f",
     "lib/dialog/knowledge-lookup.mjs": "a72d2145b70bd207",
     "lib/dialog/meta-worlds.mjs": "c2613bd79e67bf0b",
@@ -656,8 +657,8 @@
     "worlds/words/zo.json": "98c807997b12214c",
     "worlds/words.bloom.json": "1aee5298e6fe2c42"
   },
-  "builtAt": "2026-11-17T00:17:52.950Z",
-  "commit": "d749f8ee-dirty",
+  "builtAt": "2026-11-17T01:46:47.018Z",
+  "commit": "f3ce866c-dirty",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "assets": {
     "app.mjs": "acad83ead9",
@@ -694,6 +695,7 @@
     "lib/dialog/index.mjs": "2ef6caa3d3",
     "lib/dialog/intent.mjs": "dbcbe40391",
     "lib/dialog/inventory-bootstrap-inference.mjs": "6d74b8d5fa",
+    "lib/dialog/key-reader-packet.mjs": "80285ea03d",
     "lib/dialog/key-reader-pipeline.mjs": "a5a2a6581b",
     "lib/dialog/knowledge-lookup.mjs": "6b077b2de7",
     "lib/dialog/meta-worlds.mjs": "a07ab2281b",
