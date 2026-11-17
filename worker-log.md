@@ -5064,3 +5064,12 @@ and source input hashes included. Network tokenizer loading/tensor operations
 explicitly refuse. Four targeted tests pass including actual full/minimal runtime
 arrays+tensors parity. No model calls/GPU/artifact copies/gate or engine edits;
 PSys owns app/worker integration and full gate.
+
+## 2026-11-17 — Actual Chromium route transport
+
+Added C1-only CDP/localhost browser harness plus smoke CLI; no dependencies or
+production hooks. Reuses normal page engineClient+worker and actual browser
+provider, restores declared host state and measures actual before/after snapshots.
+Fresh bounded profile/cache stays under workspace and is removed on close.
+Two pure tests pass; actual smoke awaiting PSys built deployment/assets. No
+model/engine/deployment edits; PSys owns integration and full app gate.
