@@ -4953,3 +4953,31 @@ Added candidate artifact-provenance.py, load-artifact.py and eight pure/tiny CPU
 Eight targeted fixture groups passed; final active npm253 total/251 passed/0 failed/2 optional skips. After this gate and explicit root authorization, actual immutable epoch1 checkpoint177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d loaded successfully:67,296,311 parameters, allCPU/allFP32 evaluation mode, no gradients. Proof SHAa7c89a58a1d77a29a8cd275c5d6b9bdb521b7baaf75ee54e51896748f2405bf9 and configb7b03ad5... passed exact source/data/encoder hash checks before and after. No forward inference, quality measurement, GPU or model-file write occurred. Small verification report is retained; loader SHA10638c9fbb87a1af38eddc2642568ec9bceb8a6911ef15e14efb973a1457c2a1 and validator2a09586cfd768bd9447262ea2afd6a6f938fcc15b6e506da429ecc749394b912 identify the actual code used. Knowledge received the exact reusable loader input for separately authorized RAM-only export/parity; persistent graphs still require measured resource approval.
 
 Root independently reclaimed50,610,176 bytes from only the same-pin catalog Git cache and47,673,344 bytes from two audited clean generated KB shard prefixes in an inactive worktree. Extracted published catalog, authored changes, model/corpus artifacts and all active source remained intact. Maintenance manifests are .session-control/catalog-cache-maintenance.json and request-mappings-clean-shards-maintenance.json; this worker made no cache mutation. No extra acceptance run was needed solely for that independent cache maintenance.
+Checks:11tiny ordinary-byte publication fixtures pass; prior42candidate CPU
+fixtures pass (53total). Tests cover permanent inode, stale temp, writer/bound/
+replace/fsync failure, rollback/current preservation, immutable proof receipt,
+one-additional-allocation accounting and no final-run forgery. No real model
+binaries, actual snapshot, data prep, checkpoint reads, training or GPU run.
+Final source review/freeze still precedes any launch.
+
+## 2026-11-17 — Source-only injected browser cutter computation
+
+Added only NEWsrc/dialog/cutter-inference.mjs and tests; shared key-reader,
+packet/pipeline/router/exporter untouched. Frozen strict source-only codec,
+single-template actual token IDs/masks, verified scalar authority and padded/
+full alignment precede injected bio_logits model invocation. Truncation, ties,
+illegalI and invalid evidence refuse; no Viterbi switch or parser fallback.
+Closed .cut envelope fits existing pipeline. Diagnostic source logit triples
+include negative O decisions, without probability/calibration/effect claims.
+
+Checks:12targeted node source fixtures pass, including frozen pure Python BIO
+parity and emoji scalar ranges. Synthetic callbacks are explicitly fixture
+artifacts and remain incomplete. No actual ONNX weights/session, model files,
+GPU, source training/data mutation or provider activation. Knowledge/PSys
+confirmed exact bundle fields and frozen codec/config identities.
+
+### Strict source-only cutter computation integrated
+
+Integrated bd7c8f60 with independent review of the exact single-template tokenizer/offset contract and predicted BIO loop. The actual injected cutter call returns source-only logits; global ambiguity, illegal I transitions, truncation, mismatched full/padded IDs or scalar authority refuse without repaired/partial cuts. Strict frozen codec remains unchanged; no offline Viterbi substitution. Selected source logits and model/component identities are retained as auxiliary diagnostics, never confidence. Fixture artifacts cannot claim complete trained output.
+
+All12 targeted fixtures passed, including frozen pure-Python codec parity, supplementary Unicode and single-template evidence. Browser/system-map build and final active gate265 total/263 passed/0 failed/2 optional skips passed. Application replay remains301 eligible honest/0 wrong/1,347 setup exclusions and205 owner honest/0 wrong; this module does not install a model. No trained artifact, GPU or active training source/data read/mutation in this integration. Actual artifact-backed browser assembly is a separate parallel factory task.

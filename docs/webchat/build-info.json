@@ -1,5 +1,5 @@
 {
-  "version": "b336c6be2e",
+  "version": "f365cbb8f6",
   "worlds": [
     "acts",
     "art.draw",
@@ -54,6 +54,7 @@
     "lib/dialog/composed-reply.mjs": "2d300d389d65ffe8",
     "lib/dialog/continuation.mjs": "223b6e2c95ec3f35",
     "lib/dialog/conversation.mjs": "a7741c4dce988d3b",
+    "lib/dialog/cutter-inference.mjs": "9527a9c3e541c37e",
     "lib/dialog/declared-candidate-plan.mjs": "72c5669482ec7ec6",
     "lib/dialog/declared-dispatch.mjs": "caedf5ab74a96482",
     "lib/dialog/dialogue.mjs": "503fa00423e1975d",
@@ -659,8 +660,8 @@
     "worlds/words/zo.json": "98c807997b12214c",
     "worlds/words.bloom.json": "1aee5298e6fe2c42"
   },
-  "builtAt": "2026-11-17T02:33:57.374Z",
-  "commit": "dd5bb608-dirty",
+  "builtAt": "2026-11-17T02:49:03.461Z",
+  "commit": "dbb8ef5b-dirty",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "assets": {
     "app.mjs": "acad83ead9",
@@ -685,6 +686,7 @@
     "lib/dialog/composed-reply.mjs": "3cda52657a",
     "lib/dialog/continuation.mjs": "21e7d26213",
     "lib/dialog/conversation.mjs": "b611ee66d5",
+    "lib/dialog/cutter-inference.mjs": "332bf4839f",
     "lib/dialog/declared-candidate-plan.mjs": "bff244d854",
     "lib/dialog/declared-dispatch.mjs": "8f1f7c203b",
     "lib/dialog/dialogue.mjs": "43bda395f6",
