@@ -5045,3 +5045,22 @@ Validation: three selection/comparison fixtures passed; active npm gate282 total
 Python reference SHA1e4e10b49e448db7675ba4bd923f6b84b713f9363224be24d7762af22de9320f verifies the same eight source-only inputs and immutable bundle. Generic comparison finds 3/8 exact semantic RAW pipelines, with every differing field/range/coverage/unknown path retained and provider identities kept separately. Both produce eight cutter spans; Node has one complete RAW packet versus Python zero, and Node still has zero canonical candidates. The difference in completeness is not an improvement claim: no semantic correctness label was used. `reports/review23-v2-node-python-comparison.json` records the fixed group, both backend identities, all rows and source hashes. Actual v2 input/feed parity and numerical isolation remain pending, distinct from the initial v1 diagnostic. No model/source/data mutation, calibration or effect authorization occurred.
 
 Validation: active gate282 total/280passed/0failed/2optional skips and diff check clean. This follow-up changes only evidence/questions/logs; no app or training runtime changed after the source tooling gate.
+Added bounded diagnostic scripts and three pure fixtures. Actual local run
+compared Node Transformers3.8.1 with Python AutoTokenizer5.22.2 using the actual
+host role adapter, key context serializer and verified offset authority.
+All18 entries matched context UTF8, full/padded IDs+masks, roles and scalar
+offsets. Eight cutter messages plus10 key union-cut/control entries; no model
+calls/GPU. Calendar-b01-0022 cutsets differ despite identical cutter feeds;
+handed identical arrays to PSys for backend numeric investigation. No tokenizer
+fix, semantic accuracy, calibration or admission claim. Full evidence outside
+Git; small SHA summary committed. Pure checks3/3 pass; actual bounded run exit0.
+
+## 2026-11-17 — Browser reader host and small tokenizer bundle
+
+New browser host reuses verified provider, exact legacy role adapter and existing
+ORTWeb1.31.1 WASM (one thread/no proxy). Added111KB Transformers3.8.1 constructor
+bundle, no model/runtime duplicates or dependencies installed. Apache/MIT notices
+and source input hashes included. Network tokenizer loading/tensor operations
+explicitly refuse. Four targeted tests pass including actual full/minimal runtime
+arrays+tensors parity. No model calls/GPU/artifact copies/gate or engine edits;
+PSys owns app/worker integration and full gate.
