@@ -103,8 +103,10 @@ immutable metadata, but after release the old binary may become unavailable;
 later replay must say unavailable. This trades concurrent progress for disk.
 A mutable path without pin/lease is not an immutable snapshot policy.
 
-Root selects/approves a policy before any writer or epoch-loader implementation.
-This design neither bypasses that decision nor silently retains extra binaries.
+Root subsequently approved exactly one permanent first-epoch content-addressed
+hard-link pin with replace-only publication. See target-type-first-epoch-pin.md
+for the implemented producer, explicit allocation accounting and proof contract.
+No additional epoch pin or export is authorized by that decision.
 
 ## Focused validation
 

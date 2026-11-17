@@ -4786,3 +4786,28 @@ Checks:9new pure plateau fixtures pass; prior13candidate+10migration+7IO+3compac
 CPU fixtures pass (42total). No dataset prep, checkpoint/model reads, GPU run,
 training or saved binaries. New reviewer rows are owned by knowledge's separate
 source snapshot; this trainer has no subset flag.
+
+## 2026-11-17 — Root-approved one first-epoch pin and atomic writer
+
+Implemented exactly one permanent first-completed-epoch content-addressed hard
+link from the verified compact checkpoint inode. New exclusive temporary,
+flush/fsync, upper-size/SHA verification and os.replace never write old inodes.
+A temporary rollback alias preserves old current on post-replace fsync failure;
+it allocates no second tensor copy. First pin/proof remain immutable forever.
+
+Corrected reserve formula: free>=one compact checkpoint upper-size+128MiB;
+existing current/pin bytes are already reflected in free space. Actual size
+and remaining reserve verified; proof metadata has its own bounded check.
+No arbitrary waiver/double counting. No later epoch pins or exports.
+
+Emits completed-epoch/1 proof with runComplete:false, exact epoch/config/source/
+data/metrics/weight hashes, storage/selection/compaction/warmstart provenance and
+no calibration/effect claim. Final run verifies original proof hash and pin.
+Source/model/raw/data/run profiles remain explicit2/3/4 as previously agreed.
+
+Checks:11tiny ordinary-byte publication fixtures pass; prior42candidate CPU
+fixtures pass (53total). Tests cover permanent inode, stale temp, writer/bound/
+replace/fsync failure, rollback/current preservation, immutable proof receipt,
+one-additional-allocation accounting and no final-run forgery. No real model
+binaries, actual snapshot, data prep, checkpoint reads, training or GPU run.
+Final source review/freeze still precedes any launch.
