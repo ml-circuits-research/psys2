@@ -1,7 +1,7 @@
 """Inventory-key BIO reader with shared per-mention metadata; no slot assignment.
 Gold request cuts are conditional supervision, never an inference argument.
 """
-import argparse,collections,copy,gzip,hashlib,importlib.util,json,random,time
+import argparse,collections,copy,gzip,hashlib,importlib.util,json,os,random,shutil,tempfile,time,uuid
 from pathlib import Path
 
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -30,11 +30,53 @@ def selection_rank(report):
     kind=report['targetTypePresentClass'];count=kind['support']
     return (report['positiveBioAndGlobalExact']/support,kind['correct']/count if count else 0.,report['decodedMentionF1'])
 
+TRAINING_POLICY_CONTRACT={'format':'sop.key-reader-plateau-policy/1',
+    'primary':'positiveSupervisedBioGlobalExactRate','improvement':'strict-rational',
+    'ties':'non-improvement','minEpochsLowerBound':3,'maxEpochsUpperBound':1000,
+    'defaults':{'minEpochs':3,'patience':3,'maxEpochs':30}}
+
+def training_policy(min_epochs=3,patience=3,max_epochs=30):
+    if any(type(v)is not int for v in (min_epochs,patience,max_epochs)) or not 3<=min_epochs<=max_epochs<=1000 or patience<1:
+        raise ValueError('invalid-plateau-policy')
+    return {'format':'sop.key-reader-plateau-policy/1','minEpochs':min_epochs,'patience':patience,
+            'maxEpochs':max_epochs,'primary':'positiveSupervisedBioGlobalExactRate',
+            'improvement':'strict-rational','ties':'non-improvement'}
+
+def advance_plateau(previous,epoch,report,policy):
+    """Immutable state transition; secondary metrics never reset primary patience."""
+    expected=training_policy(policy.get('minEpochs'),policy.get('patience'),policy.get('maxEpochs'))
+    if policy!=expected or type(epoch)is not int or not 1<=epoch<=policy['maxEpochs']:
+        raise ValueError('invalid-plateau-transition')
+    correct,support=report.get('positiveBioAndGlobalExact'),report.get('positiveBioAndGlobalSupport')
+    if type(correct)is not int or type(support)is not int or support<1 or not 0<=correct<=support:
+        raise ValueError('plateau-needs-positive-supervision')
+    if previous is None:
+        if epoch!=1:raise ValueError('plateau-epoch-gap')
+        improved=True;bad=0;best_correct,best_support=correct,support
+    else:
+        if type(previous)is not dict or previous.get('format')!='sop.key-reader-plateau-state/1' or previous.get('policy')!=policy or previous.get('stopReason')is not None or type(previous.get('epoch'))is not int or epoch!=previous['epoch']+1:
+            raise ValueError('plateau-epoch-gap-or-finished')
+        if support!=previous.get('support'):
+            raise ValueError('plateau-supervision-support-changed')
+        best_correct,best_support=previous['bestPrimaryCorrect'],previous['bestPrimarySupport']
+        if type(best_correct)is not int or type(best_support)is not int or best_support<1 or not 0<=best_correct<=best_support or type(previous.get('badEpochs'))is not int or previous['badEpochs']<0:
+            raise ValueError('invalid-plateau-state')
+        improved=correct*best_support>best_correct*support
+        bad=0 if improved else previous['badEpochs']+1
+        if improved:best_correct,best_support=correct,support
+    plateau=epoch>=policy['minEpochs'] and bad>=policy['patience']
+    cap=epoch==policy['maxEpochs']
+    reason='primary-plateau'if plateau else'max-epochs'if cap else None
+    return {'format':'sop.key-reader-plateau-state/1','epoch':epoch,'support':support,
+            'bestPrimaryCorrect':best_correct,'bestPrimarySupport':best_support,
+            'badEpochs':bad,'primaryImproved':improved,'stopReason':reason,
+            'minimumSatisfied':epoch>=policy['minEpochs'],'maxReached':cap,'policy':dict(policy)}
+
 def configuration(manifest):
     if manifest.get('format')!='sop.per-key-supervision/3-target-type-migration-candidate':raise ValueError('candidate-supervision-required')
     registry=manifest['registry'];keys=list(registry)
     if registry.get('request.target.type',{}).get('bio') is not False:raise ValueError('target-type-must-be-class-only')
-    return {'format':'sop.key-reader/2-target-type-candidate','rawCodecFormat':'sop.key-reader-raw-codec/2-target-type-candidate','candidate':True,'executionEligible':False,'tensorArchitectureVersion':2,'trainingSourceFormat':'sop.key-reader-source/3-target-type-migration-candidate','selectionCriterion':SELECTION_CRITERION,'checkpointEvaluation':CHECKPOINT_EVALUATION,'baselineTrainerSha256':'eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f','inventorySha256':manifest['inventorySha256'],'exclusionSha256':manifest['exclusionSha256'],'targetFamilies':manifest['targetFamilies'],'keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global'] and v.get('bio',True)],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':192,'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
+    return {'format':'sop.key-reader/2-target-type-candidate','rawCodecFormat':'sop.key-reader-raw-codec/2-target-type-candidate','candidate':True,'executionEligible':False,'tensorArchitectureVersion':2,'trainingSourceFormat':'sop.key-reader-source/4-target-type-plateau-candidate','trainingPolicyContract':TRAINING_POLICY_CONTRACT,'selectionCriterion':SELECTION_CRITERION,'checkpointEvaluation':CHECKPOINT_EVALUATION,'baselineTrainerSha256':'eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f','inventorySha256':manifest['inventorySha256'],'exclusionSha256':manifest['exclusionSha256'],'targetFamilies':manifest['targetFamilies'],'keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global'] and v.get('bio',True)],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':192,'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
 
 def encode(row,tokenizer,config):
     import torch
@@ -314,6 +356,153 @@ def frozen_warmstart_metadata(path,expected_sha,config):
     verify_warmstart_chain(config,old_config,old_run,old_manifest,spec,hashes,old_trainer.configuration)
     return spec,paths,hashes,old_config,old_run,old_manifest,old_trainer,helper
 
+CHECKPOINT_WRITER={'format':'sop.key-reader-checkpoint-writer/1',
+    'temporary':'exclusive-new','publication':'fsync-and-os.replace','writes':'never-in-place',
+    'preflight':'one-checkpoint-upper-bytes+134217728','firstEpochPin':'content-addressed-hardlink',
+    'pinRetention':'permanent','maxEpochPins':1}
+
+def checkpoint_upper_bytes(compact_state,config):
+    """Conservative one-file bound; verified against actual bytes before replace."""
+    tensor_bytes=sum(value.numel()*value.element_size()for value in compact_state.values())
+    names=sum(len(key.encode('utf-8'))for key in compact_state)
+    config_bytes=len(json.dumps(config,ensure_ascii=False,sort_keys=True).encode('utf-8'))
+    # Zip/pickle/alignment metadata is bounded separately from tensor payload.
+    overhead=max(1048576,4096*len(compact_state)+2*names+2*config_bytes+65536)
+    return tensor_bytes+overhead
+
+def sync_directory(path):
+    descriptor=os.open(path,os.O_RDONLY)
+    try:os.fsync(descriptor)
+    finally:os.close(descriptor)
+
+def publish_compact_checkpoint(directory,write_payload,upper_bytes,epoch,*,reserve_bytes=134217728):
+    """One exclusive temporary + atomic replace. No prior inode is written."""
+    directory=Path(directory)
+    if type(epoch)is not int or epoch<1 or type(upper_bytes)is not int or upper_bytes<1 or type(reserve_bytes)is not int or reserve_bytes<1:
+        raise ValueError('invalid-checkpoint-publication')
+    target=directory/'checkpoint.pt';pins=directory/'epoch-pins'
+    if epoch==1 and (directory/'first-epoch-proof.json').exists():
+        raise ValueError('first-epoch-pin-already-published')
+    if epoch==1 and pins.exists()and any(pins.iterdir()):
+        raise ValueError('first-epoch-pin-already-exists')
+    if epoch>1:
+        proof=directory/'first-epoch-proof.json'
+        if not proof.exists():raise ValueError('first-epoch-proof-required')
+        saved=json.loads(proof.read_text(encoding='utf-8'))
+        record=saved['checkpoint']
+        digest=record.get('sha256','')
+        if type(digest)is not str or len(digest)!=64 or any(c not in '0123456789abcdef'for c in digest)or record.get('path')!='epoch-pins/'+digest+'.pt':raise ValueError('invalid-first-epoch-pin-path')
+        pinned=directory/record['path']
+        if saved.get('completedEpoch')!=1 or saved.get('checkpointEpoch')!=1 or sha(pinned)!=record['sha256']:
+            raise ValueError('first-epoch-pin-changed')
+    # Existing target and permanent pin already consume free space: do not add
+    # their sizes again. Only the new temporary file is an additional allocation.
+    required=upper_bytes+reserve_bytes
+    if shutil.disk_usage(directory).free<required:
+        raise ValueError('insufficient-one-checkpoint-reserve')
+    descriptor,name=tempfile.mkstemp(prefix='.checkpoint-',suffix='.tmp',dir=directory)
+    temporary=Path(name);created_pin=None;replaced=False;previous=None;rollback_dir=None;keep_rollback=False
+    try:
+        with os.fdopen(descriptor,'wb')as stream:
+            write_payload(stream)
+            stream.flush();os.fsync(stream.fileno())
+        actual=temporary.stat().st_size
+        if actual>upper_bytes:raise ValueError('checkpoint-upper-bound-exceeded')
+        if shutil.disk_usage(directory).free<reserve_bytes:
+            raise ValueError('checkpoint-reserve-exhausted')
+        digest=sha(temporary)
+        if epoch==1:
+            pins.mkdir(exist_ok=True)
+            created_pin=pins/(digest+'.pt')
+            os.link(temporary,created_pin) # exclusive; same verified inode, no copy
+            sync_directory(pins)
+        if target.exists():
+            if target.is_symlink()or not target.is_file():raise ValueError('checkpoint-target-must-be-regular')
+            rollback_dir=Path(tempfile.mkdtemp(prefix='.checkpoint-rollback-',dir=directory))
+            previous=rollback_dir/'previous.pt';os.link(target,previous)
+        if shutil.disk_usage(directory).free<reserve_bytes:raise ValueError('checkpoint-reserve-exhausted')
+        os.replace(temporary,target);replaced=True;sync_directory(directory)
+        if created_pin is not None:
+            a,b=target.stat(),created_pin.stat()
+            if (a.st_dev,a.st_ino)!=(b.st_dev,b.st_ino)or sha(created_pin)!=digest:
+                raise ValueError('first-epoch-pin-inode-mismatch')
+        return {'sha256':digest,'bytes':actual,'path':'checkpoint.pt',
+                'firstEpochPin':created_pin.relative_to(directory).as_posix()if created_pin else None,
+                'additionalAllocationUpperBytes':upper_bytes,'reserveBytes':reserve_bytes}
+    except Exception:
+        if replaced:
+            try:
+                if previous is not None:os.replace(previous,target)
+                else:target.unlink(missing_ok=True)
+            except OSError:
+                keep_rollback=True
+                raise ValueError('checkpoint-publication-rollback-failed')
+        if created_pin is not None:created_pin.unlink(missing_ok=True)
+        raise
+    finally:
+        temporary.unlink(missing_ok=True)
+        if rollback_dir is not None and not keep_rollback:
+            if previous is not None:previous.unlink(missing_ok=True)
+            rollback_dir.rmdir()
+
+def completed_epoch_proof(config,manifest,metrics,stopping,checkpoint,*,run_id,steps,
+                          config_sha,trainer_sha,data_manifest_sha,data_counts):
+    """First epoch proof only; separate from completion/calibration claims."""
+    if stopping.get('epoch')!=1 or checkpoint.get('firstEpochPin')is None or type(steps)is not int or steps<1:
+        raise ValueError('first-completed-epoch-required')
+    canonical=json.dumps(metrics,sort_keys=True,ensure_ascii=False,separators=(',',':'),allow_nan=False).encode('utf-8')
+    if len(canonical)>2097152:raise ValueError('epoch-metrics-size')
+    return {'format':'sop.key-reader-completed-epoch/1','artifactRole':'completed-epoch',
+            'epochComplete':True,'runComplete':False,'runId':run_id,'completedEpoch':1,
+            'checkpointEpoch':1,'optimizerSteps':steps,'configSha256':config_sha,'trainerSha256':trainer_sha,
+            'preparerSha256':manifest['scriptSha256'],'dataManifestSha256':data_manifest_sha,
+            'encodedDataSha256':manifest['outputs'],'dataRecordCounts':data_counts,
+            'modelConfigFormat':config['format'],'rawCodecFormat':config['rawCodecFormat'],
+            'preparationFormat':manifest['format'],'trainingSourceFormat':config['trainingSourceFormat'],
+            'checkpoint':{'sha256':checkpoint['sha256'],'bytes':checkpoint['bytes'],'path':checkpoint['firstEpochPin']},
+            'checkpointMetrics':metrics,'checkpointMetricsSha256':hashlib.sha256(canonical).hexdigest(),
+            'checkpointSelectionRank':list(selection_rank(metrics)),'selectionCriterion':SELECTION_CRITERION,
+            'checkpointEvaluation':CHECKPOINT_EVALUATION,'trainingPolicy':config['trainingPolicy'],
+            'stoppingAtEpoch':stopping,'warmstart':config['warmstart'],
+            'storage':{'policy':'first-completed-epoch-hardlink/1','pinCount':1,'retention':'permanent',
+                       'writer':CHECKPOINT_WRITER,'additionalAllocationUpperBytes':checkpoint['additionalAllocationUpperBytes'],
+                       'reserveBytes':checkpoint['reserveBytes']},
+            'confidenceCalibrated':False,'graphConfidence':None,'executionEligible':False}
+
+def publish_first_epoch_proof(directory,proof,*,reserve_bytes=134217728):
+    """Immutable metadata publication; never overwrites an existing identity."""
+    directory=Path(directory);target=directory/'first-epoch-proof.json'
+    if proof.get('format')!='sop.key-reader-completed-epoch/1' or proof.get('artifactRole')!='completed-epoch' or proof.get('epochComplete')is not True or proof.get('runComplete')is not False or proof.get('completedEpoch')!=1 or proof.get('checkpointEpoch')!=1 or proof.get('executionEligible')is not False or proof.get('confidenceCalibrated')is not False:
+        raise ValueError('invalid-first-epoch-proof-role')
+    if target.exists():raise ValueError('first-epoch-proof-already-exists')
+    record=proof['checkpoint']
+    digest=record.get('sha256','')
+    if type(digest)is not str or len(digest)!=64 or any(c not in '0123456789abcdef'for c in digest)or record.get('path')!='epoch-pins/'+digest+'.pt':raise ValueError('invalid-epoch-pin-path')
+    pin=directory/record['path']
+    if sha(pin)!=proof['checkpoint']['sha256']or pin.stat().st_size!=proof['checkpoint']['bytes']:
+        raise ValueError('epoch-proof-weight-mismatch')
+    body=(json.dumps(proof,sort_keys=True,ensure_ascii=False,indent=2,allow_nan=False)+'\n').encode('utf-8')
+    if len(body)>4194304:raise ValueError('epoch-proof-size')
+    if shutil.disk_usage(directory).free<len(body)+reserve_bytes:
+        raise ValueError('epoch-proof-reserve-exhausted')
+    descriptor,name=tempfile.mkstemp(prefix='.epoch-proof-',suffix='.tmp',dir=directory)
+    temporary=Path(name)
+    try:
+        with os.fdopen(descriptor,'wb')as stream:
+            stream.write(body);stream.flush();os.fsync(stream.fileno())
+        os.link(temporary,target) # no overwrite, unlike mutable current weights
+        sync_directory(directory)
+    finally:temporary.unlink(missing_ok=True)
+    return {'path':target.name,'sha256':hashlib.sha256(body).hexdigest()}
+
+def verify_first_epoch_receipt(directory,receipt,proof):
+    directory=Path(directory)
+    if receipt.get('path')!='first-epoch-proof.json' or sha(directory/receipt['path'])!=receipt.get('sha256'):
+        raise ValueError('immutable-first-epoch-proof-changed')
+    record=proof['checkpoint']
+    if record.get('path')!='epoch-pins/'+record.get('sha256','')+'.pt' or sha(directory/record['path'])!=record['sha256']or(directory/record['path']).stat().st_size!=record['bytes']:
+        raise ValueError('immutable-first-epoch-pin-changed')
+
 def main():
     import torch
     from transformers import AutoTokenizer
@@ -321,14 +510,18 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument('--data',type=Path,required=True);p.add_argument('--encoder',required=True)
     p.add_argument('--warmstart-spec',type=Path);p.add_argument('--warmstart-spec-sha256')
-    p.add_argument('--out',type=Path,required=True);p.add_argument('--epochs',type=int,default=5)
+    p.add_argument('--out',type=Path,required=True);p.add_argument('--min-epochs',type=int,default=3)
+    p.add_argument('--patience',type=int,default=3);p.add_argument('--max-epochs',type=int,default=30)
     p.add_argument('--batch',type=int,default=8);args=p.parse_args()
-    if args.epochs<3 or args.batch<1 or bool(args.warmstart_spec)!=bool(args.warmstart_spec_sha256):
-        p.error('at least3epochs, positive batch and paired frozen warmstart arguments required')
+    try:policy=training_policy(args.min_epochs,args.patience,args.max_epochs)
+    except ValueError:p.error('minEpochs>=3, positive patience and finite maxEpochs>=minEpochs<=1000 required')
+    if args.batch<1 or bool(args.warmstart_spec)!=bool(args.warmstart_spec_sha256):
+        p.error('positive batch and paired frozen warmstart arguments required')
     # There is deliberately no subset/limit flag in this source version.
     random.seed(17);torch.manual_seed(17)
     data_manifest_path=args.data/'manifest.json';data_sha=sha(data_manifest_path);trainer_sha=sha(Path(__file__))
     manifest=json.loads(data_manifest_path.read_text(encoding='utf-8'));config=configuration(manifest)
+    config['trainingPolicy']=policy;config['checkpointWriter']=CHECKPOINT_WRITER;config['runId']=uuid.uuid4().hex
     tokenizer=AutoTokenizer.from_pretrained(args.encoder,local_files_only=True)
     if not tokenizer.is_fast:raise ValueError('exact-fast-tokenizer-required')
     config['encoder']=args.encoder
@@ -363,8 +556,9 @@ def main():
         for row in datasets['train']:
             values=row['bio'][ki];counts+=torch.bincount(values[values>=0],minlength=3)
         w=(counts.sum()/counts.clamp_min(1)).sqrt();weights.append((w/w.mean()).to(device))
-    steps=0;history=[];best=None;best_evaluation=None
-    for epoch in range(args.epochs):
+    steps=0;history=[];best=None;best_evaluation=None;plateau=None;best_epoch=None
+    first_proof_receipt=first_proof_record=None
+    for epoch in range(policy['maxEpochs']):
         model.train();random.shuffle(datasets['train']);total=0
         for start in range(0,len(datasets['train']),args.batch):
             if sha(Path(__file__))!=trainer_sha:raise ValueError('trainer-source-mutated')
@@ -375,20 +569,26 @@ def main():
             loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),1);optimizer.step();steps+=1;total+=loss.item()
             if steps%100==0:print(json.dumps({'epoch':epoch+1,'steps':steps,'lastLoss':loss.item()}),flush=True)
         evaluation,checkpoint_state=evaluate_compacted_checkpoint(model,evaluate,datasets['calibration'],config,device,args.batch)
-        metric={'evaluation':evaluation,'epoch':epoch+1,'steps':steps,'trainLossSum':total,
+        plateau=advance_plateau(plateau,epoch+1,evaluation,policy)
+        metric={'evaluation':evaluation,'plateau':plateau,'epoch':epoch+1,'steps':steps,'trainLossSum':total,
                 'truncatedTrain':sum(r['truncated']for r in datasets['train']),
                 'truncatedCalibration':sum(r['truncated']for r in datasets['calibration']),'executable':False}
         history.append(metric);print(json.dumps(metric),flush=True)
         (args.out/'metrics.json').write_text(json.dumps(history,indent=2)+'\n',encoding='utf-8')
         rank=selection_rank(evaluation)
         if best is None or rank>best:
-            best=rank;best_evaluation=evaluation
-            required=sum(v.numel()*v.element_size()for v in checkpoint_state.values())*2+128*1024**2
-            if shutil.disk_usage(args.out).free<=required:raise ValueError('insufficient-atomic-checkpoint-reserve')
-            temp=args.out/'checkpoint.tmp'
-            torch.save({'model':checkpoint_state,'config':config,'epoch':epoch+1},temp)
-            os.replace(temp,args.out/'checkpoint.pt')
+            best=rank;best_evaluation=evaluation;best_epoch=epoch+1
+            publication=publish_compact_checkpoint(args.out,
+                lambda stream:torch.save({'model':checkpoint_state,'config':config,'epoch':epoch+1},stream),
+                checkpoint_upper_bytes(checkpoint_state,config),epoch+1)
+            if epoch==0:
+                proof=completed_epoch_proof(config,manifest,evaluation,plateau,publication,
+                    run_id=config['runId'],steps=steps,config_sha=sha(args.out/'model-config.json'),
+                    trainer_sha=trainer_sha,data_manifest_sha=data_sha,
+                    data_counts={split:len(rows)for split,rows in datasets.items()})
+                first_proof_receipt=publish_first_epoch_proof(args.out,proof);first_proof_record=proof
         del checkpoint_state
+        if plateau['stopReason']is not None:break
     if sha(Path(__file__))!=trainer_sha or sha(data_manifest_path)!=data_sha:
         raise ValueError('training-source-mutated')
     for split,item in manifest['dataFiles'].items():
@@ -397,12 +597,17 @@ def main():
         if sha(Path(args.encoder)/name)!=value:raise ValueError('encoder-source-mutated')
     if warm_meta and hashes!={**{key:sha(path)for key,path in paths.items()},'spec':sha(args.warmstart_spec)}:
         raise ValueError('warmstart-input-mutated')
-    record={'format':'sop.key-reader-run/3-target-type-migration-candidate','complete':True,'candidate':True,
+    if first_proof_receipt is None:raise ValueError('missing-first-epoch-proof')
+    verify_first_epoch_receipt(args.out,first_proof_receipt,first_proof_record)
+    record={'format':'sop.key-reader-run/4-target-type-plateau-candidate','complete':True,'candidate':True,
             'executionEligible':False,'tensorArchitectureVersion':2,'preparationFormat':manifest['format'],
             'modelConfigFormat':config['format'],'rawCodecFormat':config['rawCodecFormat'],
             'configSha256':sha(args.out/'model-config.json'),'trainerSha256':trainer_sha,
             'dataManifestSha256':data_sha,'preparerSha256':manifest['scriptSha256'],
-            'encodedDataSha256':manifest['outputs'],'epochsCompleted':args.epochs,'steps':steps,
+            'encodedDataSha256':manifest['outputs'],'epochsCompleted':len(history),'steps':steps,
+            'trainingPolicy':policy,'checkpointWriter':CHECKPOINT_WRITER,'runId':config['runId'],
+            'firstEpochProofSha256':first_proof_receipt['sha256'],'stopping':plateau,'bestCheckpointEpoch':best_epoch,
+            'dataRecordCounts':{split:len(rows)for split,rows in datasets.items()},
             'checkpointSha256':sha(args.out/'checkpoint.pt'),'bestDecodedMentionF1':best_evaluation['decodedMentionF1'],
             'selectionCriterion':SELECTION_CRITERION,'checkpointEvaluation':CHECKPOINT_EVALUATION,'bestSelectionRank':list(best),'warmstart':warm,
             'scope':'complete retained corpus; conditional gold-cut, not full pipeline or calibrated confidence'}
