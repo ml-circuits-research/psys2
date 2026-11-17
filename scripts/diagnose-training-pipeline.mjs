@@ -9,12 +9,14 @@ import {FUNCTIONAL_NATIVE_BINDINGS} from './lib/functional-native-bindings.mjs';
 import {prepareFunctionalFixture} from './lib/functional-fixture-policy.mjs';
 import {summarizeReaderStages} from './lib/reader-stage-counts.mjs';
 import {NATIVE_AREAS} from '../src/dialog/app-reader-context.mjs';
-const [specPath,corpusPath,encodedPath,output]=process.argv.slice(2);
-if(!output)throw Error('usage: diagnose-training-pipeline.mjs READER_SPEC SOURCE_TRAIN ENCODED_TRAIN_GZ OUTPUT_PREFIX');
+const [specPath,corpusPath,encodedPath,output,seed]=process.argv.slice(2);
+if(!output||seed!==undefined&&!/^\d+$/.test(seed))throw Error('usage: diagnose-training-pipeline.mjs READER_SPEC SOURCE_TRAIN ENCODED_TRAIN_GZ OUTPUT_PREFIX [SEED]');
 const sha=x=>createHash('sha256').update(x).digest('hex'),tabs={drawing:'draw',diagram:'diagram',document:'editor',calendar:'calendar'};
 const input=readFileSync(corpusPath),all=input.toString().trim().split('\n').map(JSON.parse),selected=[];
 // Round-robin over annotation versions and request multiplicity; hash order is independent of model output.
-for(const area of Object.keys(tabs)){
+if(seed!==undefined){
+ selected.push(...[...all].sort((a,b)=>sha(seed+'\n'+a.id).localeCompare(sha(seed+'\n'+b.id))).slice(0,100));
+}else for(const area of Object.keys(tabs)){
  const buckets=new Map();
  for(const row of all.filter(r=>r.world===area)){
   const key=(row.source_path.includes('haiku-v1')?'v1':'v2')+':'+Math.min(2,row.annotations.length);
@@ -29,7 +31,7 @@ for await(const line of createInterface({input:createReadStream(encodedPath).pip
  const r=JSON.parse(line),id=r.source_path+':'+r.source_id;if(ids.has(id))labels.get(id).push(r);
 }
 if([...labels.values()].some(rows=>!rows.length))throw Error('training-source-not-in-actual-encoded-training');
-writeFileSync(output+'.selection.json',JSON.stringify({source:corpusPath,sourceSha256:sha(input),encoded:encodedPath,selection:'25 per area, round-robin annotation version and 0/1/multiple requests, source-id hash order; no outcome selection',ids:[...ids]},null,2)+'\n');
+writeFileSync(output+'.selection.json',JSON.stringify({source:corpusPath,sourceSha256:sha(input),encoded:encodedPath,population:all.length,seed:seed??null,selection:seed!==undefined?'100 smallest SHA256(seed + newline + source id), without replacement across the entire training population; no label or outcome filtering':'25 per area, round-robin annotation version and 0/1/multiple requests, source-id hash order; no outcome selection',ids:[...ids]},null,2)+'\n');
 const spec=JSON.parse(readFileSync(specPath)),deploy=JSON.parse(readFileSync('docs/webchat/models/sop-bert/deployment.json'));
 spec.runtimeIdentity={...deploy.runtimeIdentity,backendSha256:spec.runtimeIdentity.backendSha256};
 const actual=await loadActualReplayReader(spec),manifest=JSON.parse(readFileSync(spec.artifactRoot+'/manifest.json')),config=JSON.parse(manifest.configJSON),rows=[],groups=new Map(),started=performance.now();
@@ -79,7 +81,7 @@ try{for(const [index,row]of selected.entries()){
  if(reply?.trace?.partial)add('execution: only part of the request applied',reply.trace.uncertainty);
  const route=reply?.trace?.readerRouting;
  if(route?.model?.eligible===false)add('admission / routing: proposal not executable',{reason:route.reason,score:route.admission?.score});
- const record={id:row.id,area:row.world,text:row.source.text,sourcePath:row.source_path,trainingSamples:gold.length,expectedRequests:expectedCount,readerInvoked:!!measurement,setupComplete:setup.ok,setupFailures:setup.failures,defaulted:fixture.defaulted,headCompared,headMismatches,stages,expectedActs,effectActs,changed,createdKinds:created.map(o=>o.kind),reply:reply?.text,causes:[...reasons].map(([cause,detail])=>({cause,detail})),seconds:(performance.now()-t)/1000,semanticVerdict:changed?'effect-observed-not-full-intent-verified':wantsEffect?'no-requested-effect':'no-action-requested'};
+ const record={id:row.id,area:row.world,text:row.source.text,sourcePath:row.source_path,trainingSamples:gold.length,expectedRequests:expectedCount,expectedAnnotations:row.annotations,trainingContext:row.context,readerRequests:reads.map(r=>r.result.raw),proposedGraphs:measurement?.proposal?.candidates??[],beforeObjects,afterObjects:after.objects,trainingDiagnostics:gold.flatMap(r=>r.diagnostics??[]),wantsEffect,readerInvoked:!!measurement,setupComplete:setup.ok,setupFailures:setup.failures,defaulted:fixture.defaulted,headCompared,headMismatches,stages,expectedActs,effectActs,changed,createdKinds:created.map(o=>o.kind),reply:reply?.text,causes:[...reasons].map(([cause,detail])=>({cause,detail})),seconds:(performance.now()-t)/1000,semanticVerdict:changed?'effect-observed-not-full-intent-verified':wantsEffect?'no-requested-effect':'no-action-requested'};
  rows.push(record);sink.write(JSON.stringify(record)+'\n');for(const [reason,detail]of reasons)group(reason,row,detail);
  if((index+1)%10===0)console.log(JSON.stringify({completed:index+1,total:selected.length,seconds:Math.round((performance.now()-started)/1000),changed:rows.filter(r=>r.changed).length}));
 }}finally{await new Promise(resolve=>sink.end(resolve));}

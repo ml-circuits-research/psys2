@@ -1,0 +1,2152 @@
+{
+  "format": "psys2.training-pipeline-diagnosis/1",
+  "complete": true,
+  "model": "2edc5b434cd59224cd44c4a138ab7b8e0770a17934056c211d36bbfca5eeca13",
+  "epoch": 7,
+  "messages": 100,
+  "trainingSamples": 123,
+  "seconds": 31.077219966999998,
+  "meanSeconds": 0.31077219966999997,
+  "readerInvoked": 100,
+  "changed": 4,
+  "setupComplete": 17,
+  "categoricalHeadMismatchRows": 35,
+  "groups": [
+    {
+      "cause": "binding / graph conversion: incomplete-structural-coverage",
+      "rows": 99,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "path": [
+                "coverage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b02a.jsonl:calendar-b02-0010",
+          "text": "maybe we could move grandmas visit to next week",
+          "detail": [
+            {
+              "path": [
+                "coverage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            {
+              "path": [
+                "coverage"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "admission / routing: proposal not executable",
+      "rows": 92,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "reason": "incomplete-provider-coverage",
+              "score": 0
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b02a.jsonl:calendar-b02-0010",
+          "text": "maybe we could move grandmas visit to next week",
+          "detail": [
+            {
+              "reason": "unresolved-canonical-property-binding",
+              "score": 0
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            {
+              "reason": "incomplete-provider-coverage",
+              "score": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "context: training objects cannot all be instantiated",
+      "rows": 83,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            [
+              {
+                "index": 0,
+                "reason": "missing-kind-mapping",
+                "kind": "pie_chart"
+              },
+              {
+                "index": 1,
+                "reason": "missing-kind-mapping",
+                "kind": "bar_chart"
+              }
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b02a.jsonl:calendar-b02-0010",
+          "text": "maybe we could move grandmas visit to next week",
+          "detail": [
+            [
+              {
+                "index": 0,
+                "reason": "missing-kind-mapping",
+                "kind": "visit"
+              }
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            [
+              {
+                "index": 0,
+                "reason": "missing-kind-mapping",
+                "kind": "duck"
+              },
+              {
+                "index": 1,
+                "reason": "missing-kind-mapping",
+                "kind": "duck"
+              },
+              {
+                "index": 2,
+                "reason": "missing-kind-mapping",
+                "kind": "pond"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: incomplete-model-coverage",
+      "rows": 82,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "path": [
+                "coverage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            {
+              "path": [
+                "coverage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b17b.jsonl:diagram-v2b17-0186",
+          "text": "payroll should be called Compensation",
+          "detail": [
+            {
+              "path": [
+                "coverage"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unresolved-model-output",
+      "rows": 82,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "path": [
+                "unresolved"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            {
+              "path": [
+                "unresolved"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b17b.jsonl:diagram-v2b17-0186",
+          "text": "payroll should be called Compensation",
+          "detail": [
+            {
+              "path": [
+                "unresolved"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "execution: action requested but no state change",
+      "rows": 77,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "reply": "I could not identify an action to apply. Nothing changed.",
+              "reason": "reading",
+              "routing": "incomplete-provider-coverage"
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            {
+              "reply": "I could not identify an action to apply. Nothing changed.",
+              "reason": "reading",
+              "routing": "incomplete-provider-coverage"
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b17b.jsonl:diagram-v2b17-0186",
+          "text": "payroll should be called Compensation",
+          "detail": [
+            {
+              "reply": "I could not identify an action to apply. Nothing changed.",
+              "reason": "reading",
+              "routing": "incomplete-provider-coverage"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unconsumed-predicted-range",
+      "rows": 72,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                "2",
+                "constraints",
+                "1",
+                "value"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b02a.jsonl:calendar-b02-0010",
+          "text": "maybe we could move grandmas visit to next week",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                "0",
+                "constraints",
+                "0",
+                "value"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                "0",
+                "constraints",
+                "0",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                "0",
+                "constraints",
+                "1",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                "0",
+                "target",
+                "kind_span"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unresolved-canonical-property-binding",
+      "rows": 70,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                2,
+                "constraints",
+                "c2_1",
+                "concept"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b02a.jsonl:calendar-b02-0010",
+          "text": "maybe we could move grandmas visit to next week",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "concept"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "concept"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_1",
+                "concept"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unresolved-value-representation",
+      "rows": 68,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                2,
+                "constraints",
+                "c2_1",
+                "value"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b02a.jsonl:calendar-b02-0010",
+          "text": "maybe we could move grandmas visit to next week",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "value"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_1",
+                "value"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: presence-span-inconsistent",
+      "rows": 63,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "key": "request.target.name",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.target.name",
+              "path": [
+                "requests",
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b17b.jsonl:diagram-v2b17-0186",
+          "text": "payroll should be called Compensation",
+          "detail": [
+            {
+              "key": "diagram.group.label",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/calendar/v2b16a.jsonl:calendar-v2b16-0072",
+          "text": "move the next one an hour earlier",
+          "detail": [
+            {
+              "key": "calendar.meeting.shift",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unresolved-canonical-kind-binding",
+      "rows": 50,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "targets",
+                "t1",
+                "kind"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0",
+                "kind"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b02b.jsonl:drawing-b02-0206",
+          "text": "could you draw a little dog on the bridge, looking at the river",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0",
+                "kind"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "training: target family was masked as unknown",
+      "rows": 47,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "request": 0
+            },
+            {
+              "request": 1
+            },
+            {
+              "request": 2
+            },
+            {
+              "request": 3
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b02a.jsonl:calendar-b02-0010",
+          "text": "maybe we could move grandmas visit to next week",
+          "detail": [
+            {
+              "request": 0
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b02b.jsonl:drawing-b02-0206",
+          "text": "could you draw a little dog on the bridge, looking at the river",
+          "detail": [
+            {
+              "request": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "model: supervised categorical heads differ from training",
+      "rows": 35,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            [
+              {
+                "request": 1,
+                "key": "request.target.fill",
+                "expected": "context",
+                "actual": {
+                  "state": "value",
+                  "value": "journal_step"
+                }
+              }
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            [
+              {
+                "request": 0,
+                "key": "request.request.act",
+                "expected": "place",
+                "actual": {
+                  "state": "value",
+                  "value": "make"
+                }
+              },
+              {
+                "request": 0,
+                "key": "request.target.determiner",
+                "expected": "<absent>",
+                "actual": {
+                  "state": "value",
+                  "value": "indefinite"
+                }
+              },
+              {
+                "request": 0,
+                "key": "request.target.mode",
+                "expected": "bound",
+                "actual": {
+                  "state": "value",
+                  "value": "new"
+                }
+              }
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v2/document/v2b06b.jsonl:document-v2b06-0151",
+          "text": "make every heading title case except the references heading",
+          "detail": [
+            [
+              {
+                "request": 0,
+                "key": "request.logic.quantifier",
+                "expected": "every_except",
+                "actual": {
+                  "state": "value",
+                  "value": "each"
+                }
+              },
+              {
+                "request": 0,
+                "key": "request.request.act",
+                "expected": "change",
+                "actual": {
+                  "state": "value",
+                  "value": "make"
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: context-reference-not-bound",
+      "rows": 22,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "targets",
+                "t1"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                3,
+                "targets",
+                "t3"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b23a.jsonl:diagram-v2b23-0094",
+          "text": "how many students got an A, and then compare A with B",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b01b.jsonl:drawing-v2b01-0177",
+          "text": "rename the avatar to Kit Kat",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: request-dependencies-not-annotated",
+      "rows": 21,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "after"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "after"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                2,
+                "after"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                3,
+                "after"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b23a.jsonl:diagram-v2b23-0094",
+          "text": "how many students got an A, and then compare A with B",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "after"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "after"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b27b.jsonl:drawing-v2b27-0188",
+          "text": "make the flowers pink or yellow, and make the leaves green",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "after"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "after"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: requires-declared-query-projection",
+      "rows": 18,
+      "examples": [
+        {
+          "id": "data/haiku-v2/diagram/v2b23a.jsonl:diagram-v2b23-0094",
+          "text": "how many students got an A, and then compare A with B",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "queries"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "queries"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/document/v2b14a.jsonl:document-v2b14-0062",
+          "text": "how long is section 2 in words",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "queries"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b09b.jsonl:diagram-b09-0147",
+          "text": "which boxes have no outgoing arrow?",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "queries"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: illegal-I-after-O",
+      "rows": 17,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "key": "request.target.description",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.target.name",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "document.section.content",
+              "path": [
+                "requests",
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/document/v2b05a.jsonl:document-v2b05-0039",
+          "text": "rewrite the bullet points as a numbered list",
+          "detail": [
+            {
+              "key": "request.target.description",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b03a.jsonl:drawing-b03-0067",
+          "text": "lengthen the hedge along the front, and shorten the gate a little bit so it fits",
+          "detail": [
+            {
+              "key": "calendar.meeting.length",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: presence-class-inconsistent",
+      "rows": 14,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "key": "request.target.fill",
+              "path": [
+                "requests",
+                "1"
+              ]
+            },
+            {
+              "key": "request.target.determiner",
+              "path": [
+                "requests",
+                "3"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b16a.jsonl:calendar-b16-0058",
+          "text": "hack night is a bit crowded, can we spread it over two evenings",
+          "detail": [
+            {
+              "key": "request.target.determiner",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b02a.jsonl:diagram-b02-0053",
+          "text": "maybe a note for the policy limit beside Over 500?",
+          "detail": [
+            {
+              "key": "request.target.fill",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: requires-operator-reference-projection",
+      "rows": 14,
+      "examples": [
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/calendar/v2b16a.jsonl:calendar-v2b16-0072",
+          "text": "move the next one an hour earlier",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b02b.jsonl:drawing-b02-0206",
+          "text": "could you draw a little dog on the bridge, looking at the river",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_1"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: normalization-requires-declared-proof",
+      "rows": 11,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b02b.jsonl:drawing-b02-0206",
+          "text": "could you draw a little dog on the bridge, looking at the river",
+          "detail": [
+            {
+              "key": "drawing.drawn.size",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b13a.jsonl:diagram-v2b13-0072",
+          "text": "make a stacked bar chart of the scores i typed",
+          "detail": [
+            {
+              "key": "diagram.chart.stacked",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/document/b08b.jsonl:document-b08-0191",
+          "text": "make it kinder",
+          "detail": [
+            {
+              "key": "document.text.tone",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "context: previous turn is text only, not an executed history",
+      "rows": 11,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b06b.jsonl:diagram-b06-0212",
+          "text": "lol undo that wrong one",
+          "detail": [
+            [
+              {
+                "reason": "previous-context-not-replayed",
+                "value": "connect the packing list to the food branch"
+              }
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b12b.jsonl:diagram-b12-0188",
+          "text": "triangles look odd, do a star",
+          "detail": [
+            [
+              {
+                "reason": "previous-context-not-replayed",
+                "value": "make Delivered a triangle"
+              }
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v2/calendar/v2b22a.jsonl:calendar-v2b22-0011",
+          "text": "you forgot to put a room on it",
+          "detail": [
+            [
+              {
+                "reason": "previous-context-not-replayed",
+                "value": "book a room for the 3pm planning call"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: metadata-presence-inconsistent",
+      "rows": 10,
+      "examples": [
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            {
+              "key": "request.constraint.scope",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b16a.jsonl:calendar-b16-0058",
+          "text": "hack night is a bit crowded, can we spread it over two evenings",
+          "detail": [
+            {
+              "key": "request.constraint.character",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.operator",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.phase",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.polarity",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b03a.jsonl:drawing-b03-0067",
+          "text": "lengthen the hedge along the front, and shorten the gate a little bit so it fits",
+          "detail": [
+            {
+              "key": "request.constraint.character",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.operator",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.phase",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.polarity",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.character",
+              "path": [
+                "requests",
+                "1"
+              ]
+            },
+            {
+              "key": "request.constraint.operator",
+              "path": [
+                "requests",
+                "1"
+              ]
+            },
+            {
+              "key": "request.constraint.phase",
+              "path": [
+                "requests",
+                "1"
+              ]
+            },
+            {
+              "key": "request.constraint.polarity",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: quantifier-binder-not-projected",
+      "rows": 9,
+      "examples": [
+        {
+          "id": "data/haiku-v2/drawing/v2b06a.jsonl:drawing-v2b06-0016",
+          "text": "both ducks should be on the pond",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/document/v2b06b.jsonl:document-v2b06-0151",
+          "text": "make every heading title case except the references heading",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/document/b07b.jsonl:document-b07-0142",
+          "text": "make sure the cover letter mentions none of my old employers",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: unsupported-metadata-head",
+      "rows": 9,
+      "examples": [
+        {
+          "id": "data/haiku-v2/calendar/v2b16a.jsonl:calendar-v2b16-0072",
+          "text": "move the next one an hour earlier",
+          "detail": [
+            {
+              "key": "request.constraint.measure",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.unit",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b08b.jsonl:drawing-b08-0229",
+          "text": "the umbrella should go up a bit, and move the lounger down",
+          "detail": [
+            {
+              "key": "request.constraint.measure",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b03b.jsonl:calendar-b03-0237",
+          "text": "natan's panel has to be before lunch, not after, and also add the head of hr to it, please",
+          "detail": [
+            {
+              "key": "request.constraint.unit",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unprojected-population-reference",
+      "rows": 9,
+      "examples": [
+        {
+          "id": "data/haiku-v1/calendar/b16a.jsonl:calendar-b16-0058",
+          "text": "hack night is a bit crowded, can we spread it over two evenings",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b23a.jsonl:diagram-v2b23-0062",
+          "text": "could u put the average glasses per day in the drawing app, with a little glass icon",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b01b.jsonl:drawing-v2b01-0113",
+          "text": "delete everything and start over",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: missing-or-ambiguous-act-anchor",
+      "rows": 8,
+      "examples": [
+        {
+          "id": "data/haiku-v2/diagram/v2b17b.jsonl:diagram-v2b17-0186",
+          "text": "payroll should be called Compensation",
+          "detail": [
+            {
+              "key": "request.request.act",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0216",
+          "text": "octopus should go to the right of the fish, and then draw a little whale behind the octopus",
+          "detail": [
+            {
+              "key": "request.request.act",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b02a.jsonl:diagram-b02-0053",
+          "text": "maybe a note for the policy limit beside Over 500?",
+          "detail": [
+            {
+              "key": "request.request.act",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: missing-or-ambiguous-field-anchor",
+      "rows": 8,
+      "examples": [
+        {
+          "id": "data/haiku-v2/diagram/v2b17b.jsonl:diagram-v2b17-0186",
+          "text": "payroll should be called Compensation",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "act"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0216",
+          "text": "octopus should go to the right of the fish, and then draw a little whale behind the octopus",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "act"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b02a.jsonl:diagram-b02-0053",
+          "text": "maybe a note for the policy limit beside Over 500?",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "act"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: description-reference-without-predicate",
+      "rows": 7,
+      "examples": [
+        {
+          "id": "data/haiku-v2/calendar/v2b16a.jsonl:calendar-v2b16-0072",
+          "text": "move the next one an hour earlier",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b03a.jsonl:drawing-b03-0067",
+          "text": "lengthen the hedge along the front, and shorten the gate a little bit so it fits",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "targets",
+                "t1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b11b.jsonl:drawing-v2b11-0156",
+          "text": "move the sheep 50 right",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: turn-contract-not-projected",
+      "rows": 7,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b12b.jsonl:diagram-b12-0188",
+          "text": "triangles look odd, do a star",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "turn"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/calendar/v2b22a.jsonl:calendar-v2b22-0011",
+          "text": "you forgot to put a room on it",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "turn"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b23a.jsonl:diagram-v2b23-0062",
+          "text": "could u put the average glasses per day in the drawing app, with a little glass icon",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "turn"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: unknown-class",
+      "rows": 6,
+      "examples": [
+        {
+          "id": "data/haiku-v2/document/v2b06b.jsonl:document-v2b06-0151",
+          "text": "make every heading title case except the references heading",
+          "detail": [
+            {
+              "key": "document.section.role",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/document/b13a.jsonl:document-b13-0045",
+          "text": "add a quote from the head of product, sounds excited",
+          "detail": [
+            {
+              "key": "document.section.role",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/document/v2b02b.jsonl:document-v2b02-0105",
+          "text": "rename the Methods section to Approach",
+          "detail": [
+            {
+              "key": "document.section.role",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: missing-unknown-or-cross-area-target-type",
+      "rows": 5,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0175",
+          "text": "delete the budget split pie, undo, then rename team sizes to Staff size and make it purple too",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b06b.jsonl:diagram-b06-0212",
+          "text": "lol undo that wrong one",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b16a.jsonl:calendar-b16-0058",
+          "text": "hack night is a bit crowded, can we spread it over two evenings",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: requires-declared-step-projection",
+      "rows": 5,
+      "examples": [
+        {
+          "id": "data/haiku-v2/calendar/v2b16a.jsonl:calendar-v2b16-0072",
+          "text": "move the next one an hour earlier",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "step"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/document/v2b05a.jsonl:document-v2b05-0076",
+          "text": "ok the letter reads too cold, can you warm it up a bit",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "step"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/document/b08b.jsonl:document-b08-0191",
+          "text": "make it kinder",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "step"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: unresolved-domain-value",
+      "rows": 5,
+      "examples": [
+        {
+          "id": "data/haiku-v2/document/v2b06b.jsonl:document-v2b06-0151",
+          "text": "make every heading title case except the references heading",
+          "detail": [
+            {
+              "key": "document.section.role",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/document/b13a.jsonl:document-b13-0045",
+          "text": "add a quote from the head of product, sounds excited",
+          "detail": [
+            {
+              "key": "document.section.role",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/document/v2b02b.jsonl:document-v2b02-0105",
+          "text": "rename the Methods section to Approach",
+          "detail": [
+            {
+              "key": "document.section.role",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: cross-area-key-unresolved",
+      "rows": 5,
+      "examples": [
+        {
+          "id": "data/haiku-v1/calendar/b16a.jsonl:calendar-b16-0058",
+          "text": "hack night is a bit crowded, can we spread it over two evenings",
+          "detail": [
+            {
+              "key": "diagram.diagram.layout",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0216",
+          "text": "octopus should go to the right of the fish, and then draw a little whale behind the octopus",
+          "detail": [
+            {
+              "key": "diagram.node.anchor",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "diagram.node.anchor",
+              "path": [
+                "requests",
+                "1"
+              ]
+            },
+            {
+              "key": "diagram.node.position",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b02b.jsonl:diagram-b02-0235",
+          "text": "could you add an end point below Send quote",
+          "detail": [
+            {
+              "key": "document.section.role",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: ambiguous-global-mention",
+      "rows": 4,
+      "examples": [
+        {
+          "id": "data/haiku-v2/document/v2b06b.jsonl:document-v2b06-0151",
+          "text": "make every heading title case except the references heading",
+          "detail": [
+            {
+              "key": "request.target.kind",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/document/b07a.jsonl:document-b07-0120",
+          "text": "How many jobs do I list, and how many are before 2015?",
+          "detail": [
+            {
+              "key": "request.target.kind",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/document/v2b21b.jsonl:document-v2b21-0198",
+          "text": "new doc: itinerary for the Scottish road trip, keep it simple",
+          "detail": [
+            {
+              "key": "request.target.kind",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: requires-declared-ordinal-projection",
+      "rows": 3,
+      "examples": [
+        {
+          "id": "data/haiku-v2/calendar/v2b16a.jsonl:calendar-v2b16-0072",
+          "text": "move the next one an hour earlier",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0",
+                "ordinal"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b23a.jsonl:diagram-v2b23-0077",
+          "text": "make the energy line dashed and put the lowest month on the calendar for the review",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "targets",
+                "t1",
+                "ordinal"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b07a.jsonl:drawing-b07-0017",
+          "text": "move the second heart up a bit",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0",
+                "ordinal"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: requires-declared-group-projection",
+      "rows": 3,
+      "examples": [
+        {
+          "id": "data/haiku-v2/drawing/v2b27b.jsonl:drawing-v2b27-0188",
+          "text": "make the flowers pink or yellow, and make the leaves green",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "group"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_1",
+                "group"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_2",
+                "group"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b27a.jsonl:drawing-v2b27-0096",
+          "text": "make the nose big, and make the eyes round or almond",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_0",
+                "group"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_1",
+                "group"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_2",
+                "group"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b27a.jsonl:drawing-v2b27-0090",
+          "text": "whiskers should be long or short, cat has long ones already",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "group"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_1",
+                "group"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_3",
+                "group"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_4",
+                "group"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "execution: only part of the request applied",
+      "rows": 3,
+      "examples": [
+        {
+          "id": "data/haiku-v1/document/b01a.jsonl:document-b01-0084",
+          "text": "tell the team the offsite is cancelled, no hard feelings",
+          "detail": [
+            [
+              "I used \"document\" as the title.",
+              "I could not apply person the team."
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v2/document/v2b21b.jsonl:document-v2b21-0198",
+          "text": "new doc: itinerary for the Scottish road trip, keep it simple",
+          "detail": [
+            [
+              "I used \"document\" as the title.",
+              "I could not apply tone simple."
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v2/calendar/v2b02a.jsonl:calendar-v2b02-0049",
+          "text": "add Omar as the new recruiter",
+          "detail": [
+            [
+              "I could not apply role recruiter."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unresolved-source-value-normalization",
+      "rows": 2,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b02b.jsonl:drawing-b02-0206",
+          "text": "could you draw a little dog on the bridge, looking at the river",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_2",
+                "value"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b05a.jsonl:drawing-v2b05-0082",
+          "text": "the tree is nice but make it greater than the house, if you can",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "value"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "effect: observed action differs from annotated action",
+      "rows": 1,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b12b.jsonl:diagram-b12-0188",
+          "text": "triangles look odd, do a star",
+          "detail": [
+            {
+              "expectedActs": [
+                "change"
+              ],
+              "effectActs": [
+                "make"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "model: request segmentation differs from training",
+      "rows": 1,
+      "examples": [
+        {
+          "id": "data/haiku-v2/calendar/v2b14b.jsonl:calendar-v2b14-0123",
+          "text": "could you find a slot for the strategy session that's the same as Tuan's",
+          "detail": [
+            {
+              "expected": 1,
+              "actual": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: missing-annotated-field",
+      "rows": 1,
+      "examples": [
+        {
+          "id": "data/haiku-v2/calendar/v2b14b.jsonl:calendar-v2b14-0123",
+          "text": "could you find a slot for the strategy session that's the same as Tuan's",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "mood"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "100 preselected actual training messages through installed q8 model, real native observed context and normal routing/execution. Setup failures are retained and still inferred, never excluded. Model-vs-training differences under altered context are diagnostics, not a pure training accuracy estimate. Effects are observed, not automatically semantic successes. No fixes applied during the run."
+}
