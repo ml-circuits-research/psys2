@@ -1,0 +1,195 @@
+{
+  "artifactRole": "trained-cutter-only",
+  "calibration": {
+    "counts": {
+      "empty:exact": 74,
+      "empty:rows": 81,
+      "fn": 663,
+      "fp": 722,
+      "maskedSupervisionRows": 0,
+      "positive:exact": 2534,
+      "positive:rows": 3227,
+      "predictionUnresolvedRows": 92,
+      "rows": 3308,
+      "spanScorableRows": 3308,
+      "tp": 3097,
+      "utteranceExact": 2608
+    },
+    "diagnostics": {
+      "illegal-I-after-O": 87,
+      "unknown-BIO-label": 5
+    },
+    "empty": {
+      "exact": 74,
+      "rows": 81,
+      "utteranceExact": 0.9135802469135802
+    },
+    "positive": {
+      "exact": 2534,
+      "rows": 3227,
+      "utteranceExact": 0.7852494577006508
+    },
+    "span": {
+      "f1": 0.8172582134846286,
+      "fn": 663,
+      "fp": 722,
+      "precision": 0.8109452736318408,
+      "recall": 0.8236702127659574,
+      "tp": 3097
+    },
+    "tokenBIMacroF1": 0.94117120777319,
+    "tokenClasses": {
+      "B": {
+        "f1": 0.9197972182503574,
+        "fn": 222,
+        "fp": 395,
+        "precision": 0.8995677599796593,
+        "recall": 0.9409574468085107,
+        "support": 3760,
+        "tp": 3538
+      },
+      "I": {
+        "f1": 0.9625451972960226,
+        "fn": 1019,
+        "fp": 887,
+        "precision": 0.9650484671762944,
+        "recall": 0.9600548804390435,
+        "support": 25510,
+        "tp": 24491
+      },
+      "O": {
+        "f1": 0.8078188889997008,
+        "fn": 987,
+        "fp": 940,
+        "precision": 0.811623246492986,
+        "recall": 0.8040500297796307,
+        "support": 5037,
+        "tp": 4050
+      }
+    },
+    "tokenConfusion": [
+      [
+        4050,
+        209,
+        776,
+        2
+      ],
+      [
+        110,
+        3538,
+        111,
+        1
+      ],
+      [
+        830,
+        186,
+        24491,
+        3
+      ]
+    ],
+    "tokenPositive": {
+      "f1": 0.9670382192786303,
+      "fn": 944,
+      "fp": 987,
+      "precision": 0.9663289325555214,
+      "recall": 0.9677485480013666,
+      "support": 29270,
+      "tp": 28326
+    },
+    "utteranceExactLowerBound": 0.788391777509069
+  },
+  "command": "/home/salboaie/work/sopworlds/psys2/.venv/bin/python /home/salboaie/work/sopworlds/.session-control/request-cutter/training/sop-bert/train-request-cutter.py train --data /home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/runs/owner-20261116/structural-gold-v3 --source-root /home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert --exclusions /home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/runs/owner-20261116/exclusion-source.json --out /home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/runs/owner-20261116/request-cutter-full-v1 --encoder /home/salboaie/work/sopworlds/.session-control/hf-cache/models--distilbert--distilbert-base-uncased/snapshots/12040accade4e8a0f71eabdb258fecc2e7e948be --init-checkpoint /home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/runs/owner-20261116/full-v3-clean/latest.pt --init-sha256 68ca1038ccca8932282aede8f430cf261655a8543ba21230ee531794676b4d08 --init-manifest /home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/runs/owner-20261116/full-v3-clean/run-manifest.json --epochs 5 --batch-size 16 --device cuda",
+  "commandPath": ".session-control/request-cutter-full-v1.command",
+  "confidenceCalibrated": false,
+  "epochs": [
+    {
+      "emptyExact": 0.9382716049382716,
+      "epoch": 1,
+      "positiveExact": 0.7257514719553765,
+      "spanF1": 0.7595570788294226
+    },
+    {
+      "emptyExact": 0.9382716049382716,
+      "epoch": 2,
+      "positiveExact": 0.7511620700340874,
+      "spanF1": 0.785513078470825
+    },
+    {
+      "emptyExact": 0.9135802469135802,
+      "epoch": 3,
+      "positiveExact": 0.7511620700340874,
+      "spanF1": 0.7815279958137101
+    },
+    {
+      "emptyExact": 0.9012345679012346,
+      "epoch": 4,
+      "positiveExact": 0.7744034707158352,
+      "spanF1": 0.8070631004933784
+    },
+    {
+      "emptyExact": 0.9135802469135802,
+      "epoch": 5,
+      "positiveExact": 0.7852494577006508,
+      "spanF1": 0.8172582134846286
+    }
+  ],
+  "executionEligible": false,
+  "format": "sop.request-cutter-evidence/1",
+  "hashes": {
+    "checkpointSha256": "85d1d2ee1e03ee22c355077cf6248fba30cb14c2195151deb36f68cffbe758e0",
+    "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+    "configSha256": "64f3e284f6c901329956351e1077a479102683ffd043b6dabda755a739863ad9",
+    "corpusManifestSha256": "865909c66c19d6181d1d340cccd68704129e104171a04626309bc0b1866dead4",
+    "exclusionSha256": "66b1ab7f205bedf08c15e3e83f98e3de217922d179e89ae8b99c29a938e29e77",
+    "finalVerificationSha256": "cd2b02a026f5096fd24a2bf4e197b5478ba765f1a7898b00e0b61fef6e1a73dc",
+    "predictionsSha256": "970e2ff144a5c16cd05c6e1ca99123b3635a4bfe19cc4e88257c09096f6b0ae5",
+    "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+    "trainerSha256": "d9422af7ad75e9053f5dfc86c36b0a49ac8f6b52099aa49ac02d95925db1a445"
+  },
+  "independentPredictionAudit": {
+    "emptyExact": 74,
+    "emptyRows": 81,
+    "fn": 663,
+    "fp": 722,
+    "positiveExact": 2534,
+    "positiveRows": 3227,
+    "tp": 3097,
+    "unresolvedRows": 92
+  },
+  "limitations": [
+    "Strict greedy BIO; illegal I and tied logits unresolved.",
+    "No request fields or full command correctness measured.",
+    "Calibration selects epoch; no confidence threshold calibrated.",
+    "CUDA BF16 metrics do not transfer automatically to CPU/browser/ONNX.",
+    "Exact spans on empty messages regress vs epoch1; counts retained.",
+    "No model activation; actual predicted cuts required for downstream full-pipeline evaluation."
+  ],
+  "logPath": ".session-control/request-cutter-full-v1.log",
+  "precision": "CUDA BF16 autocast",
+  "preparation": {
+    "calibration": {
+      "diagnostics": {},
+      "maskedRows": 0,
+      "rows": 3308,
+      "truncatedRows": 0
+    },
+    "train": {
+      "diagnostics": {
+        "ambiguous-span:0": 3,
+        "ambiguous-span:1": 2,
+        "ambiguous-span:2": 3,
+        "ambiguous-span:3": 1,
+        "unresolved-gold-spans": 3
+      },
+      "maskedRows": 3,
+      "rows": 28959,
+      "truncatedRows": 0
+    }
+  },
+  "runPath": ".session-control/calendar-training/training/sop-bert/runs/owner-20261116/request-cutter-full-v1",
+  "training": {
+    "bestEpoch": 5,
+    "epochsCompleted": 5,
+    "steps": 9050
+  }
+}

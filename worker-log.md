@@ -4634,3 +4634,28 @@ saved, no inference activation/confidence claimed. OutsideGit evidence:
 .session-control/request-cutter-smoke-v1/{final-verification.json,preparation.json}.
 The small smoke model produces invalid BIO transitions, correctly reported
 unresolved. Full GPU training follows this immutable source commit.
+
+## 2026-11-17 — Frozen BIO cutter first full run
+
+Completed 5 epochs / 9,050 optimizer steps; epoch5 selected. Best checkpoint
+SHA256 85d1d2ee1e03ee22c355077cf6248fba30cb14c2195151deb36f68cffbe758e0.
+Config SHA256 64f3e284f6c901329956351e1077a479102683ffd043b6dabda755a739863ad9.
+Final verification SHA256 cd2b02a026f5096fd24a2bf4e197b5478ba765f1a7898b00e0b61fef6e1a73dc.
+Exact command, all artifact/data/codec/tokenizer hashes and full small metrics
+are in specs/request-cutter-v1-evidence.json. The large checkpoint and per-row
+predictions remain outside Git in request-cutter-full-v1 under owner-20261116.
+
+CAL exact spans TP3097 FP722 FN663, P81.09/R82.37/F181.73%; positive utterance
+exact2534/3227=78.52%, empty74/81=91.36%, total2608/3308=78.84%.
+Positive token F1=96.70% (support29270), B/I macro F1=94.12%.
+92 unresolved outputs:87 illegal-I transitions and5 exact-logit ties.
+No truncation; TRAIN3 ambiguous rows masked, CAL0 masked.
+All source/corpus/exclusion/trainer/checkpoint hashes reverified after training.
+Independent original-annotation versus frozen-prediction audit reproduced
+TP/FP/FN and empty/nonempty counts for all3308 rows. Pure14tests remain green.
+
+GPU released to per-key training. No app activation, graph probability,
+browser calibration or complete-command claim. Empty exactness regresses from
+epoch1's76/81, explicitly retained. Any Viterbi comparison is a separately
+versioned offline experiment using the same frozen emissions, not a change to
+this active codec/run.
