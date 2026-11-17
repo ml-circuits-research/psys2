@@ -30,11 +30,53 @@ def selection_rank(report):
     kind=report['targetTypePresentClass'];count=kind['support']
     return (report['positiveBioAndGlobalExact']/support,kind['correct']/count if count else 0.,report['decodedMentionF1'])
 
+TRAINING_POLICY_CONTRACT={'format':'sop.key-reader-plateau-policy/1',
+    'primary':'positiveSupervisedBioGlobalExactRate','improvement':'strict-rational',
+    'ties':'non-improvement','minEpochsLowerBound':3,'maxEpochsUpperBound':1000,
+    'defaults':{'minEpochs':3,'patience':3,'maxEpochs':30}}
+
+def training_policy(min_epochs=3,patience=3,max_epochs=30):
+    if any(type(v)is not int for v in (min_epochs,patience,max_epochs)) or not 3<=min_epochs<=max_epochs<=1000 or patience<1:
+        raise ValueError('invalid-plateau-policy')
+    return {'format':'sop.key-reader-plateau-policy/1','minEpochs':min_epochs,'patience':patience,
+            'maxEpochs':max_epochs,'primary':'positiveSupervisedBioGlobalExactRate',
+            'improvement':'strict-rational','ties':'non-improvement'}
+
+def advance_plateau(previous,epoch,report,policy):
+    """Immutable state transition; secondary metrics never reset primary patience."""
+    expected=training_policy(policy.get('minEpochs'),policy.get('patience'),policy.get('maxEpochs'))
+    if policy!=expected or type(epoch)is not int or not 1<=epoch<=policy['maxEpochs']:
+        raise ValueError('invalid-plateau-transition')
+    correct,support=report.get('positiveBioAndGlobalExact'),report.get('positiveBioAndGlobalSupport')
+    if type(correct)is not int or type(support)is not int or support<1 or not 0<=correct<=support:
+        raise ValueError('plateau-needs-positive-supervision')
+    if previous is None:
+        if epoch!=1:raise ValueError('plateau-epoch-gap')
+        improved=True;bad=0;best_correct,best_support=correct,support
+    else:
+        if type(previous)is not dict or previous.get('format')!='sop.key-reader-plateau-state/1' or previous.get('policy')!=policy or previous.get('stopReason')is not None or type(previous.get('epoch'))is not int or epoch!=previous['epoch']+1:
+            raise ValueError('plateau-epoch-gap-or-finished')
+        if support!=previous.get('support'):
+            raise ValueError('plateau-supervision-support-changed')
+        best_correct,best_support=previous['bestPrimaryCorrect'],previous['bestPrimarySupport']
+        if type(best_correct)is not int or type(best_support)is not int or best_support<1 or not 0<=best_correct<=best_support or type(previous.get('badEpochs'))is not int or previous['badEpochs']<0:
+            raise ValueError('invalid-plateau-state')
+        improved=correct*best_support>best_correct*support
+        bad=0 if improved else previous['badEpochs']+1
+        if improved:best_correct,best_support=correct,support
+    plateau=epoch>=policy['minEpochs'] and bad>=policy['patience']
+    cap=epoch==policy['maxEpochs']
+    reason='primary-plateau'if plateau else'max-epochs'if cap else None
+    return {'format':'sop.key-reader-plateau-state/1','epoch':epoch,'support':support,
+            'bestPrimaryCorrect':best_correct,'bestPrimarySupport':best_support,
+            'badEpochs':bad,'primaryImproved':improved,'stopReason':reason,
+            'minimumSatisfied':epoch>=policy['minEpochs'],'maxReached':cap,'policy':dict(policy)}
+
 def configuration(manifest):
     if manifest.get('format')!='sop.per-key-supervision/3-target-type-migration-candidate':raise ValueError('candidate-supervision-required')
     registry=manifest['registry'];keys=list(registry)
     if registry.get('request.target.type',{}).get('bio') is not False:raise ValueError('target-type-must-be-class-only')
-    return {'format':'sop.key-reader/2-target-type-candidate','rawCodecFormat':'sop.key-reader-raw-codec/2-target-type-candidate','candidate':True,'executionEligible':False,'tensorArchitectureVersion':2,'trainingSourceFormat':'sop.key-reader-source/3-target-type-migration-candidate','selectionCriterion':SELECTION_CRITERION,'checkpointEvaluation':CHECKPOINT_EVALUATION,'baselineTrainerSha256':'eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f','inventorySha256':manifest['inventorySha256'],'exclusionSha256':manifest['exclusionSha256'],'targetFamilies':manifest['targetFamilies'],'keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global'] and v.get('bio',True)],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':192,'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
+    return {'format':'sop.key-reader/2-target-type-candidate','rawCodecFormat':'sop.key-reader-raw-codec/2-target-type-candidate','candidate':True,'executionEligible':False,'tensorArchitectureVersion':2,'trainingSourceFormat':'sop.key-reader-source/4-target-type-plateau-candidate','trainingPolicyContract':TRAINING_POLICY_CONTRACT,'selectionCriterion':SELECTION_CRITERION,'checkpointEvaluation':CHECKPOINT_EVALUATION,'baselineTrainerSha256':'eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f','inventorySha256':manifest['inventorySha256'],'exclusionSha256':manifest['exclusionSha256'],'targetFamilies':manifest['targetFamilies'],'keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global'] and v.get('bio',True)],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':192,'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
 
 def encode(row,tokenizer,config):
     import torch
@@ -321,14 +363,18 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument('--data',type=Path,required=True);p.add_argument('--encoder',required=True)
     p.add_argument('--warmstart-spec',type=Path);p.add_argument('--warmstart-spec-sha256')
-    p.add_argument('--out',type=Path,required=True);p.add_argument('--epochs',type=int,default=5)
+    p.add_argument('--out',type=Path,required=True);p.add_argument('--min-epochs',type=int,default=3)
+    p.add_argument('--patience',type=int,default=3);p.add_argument('--max-epochs',type=int,default=30)
     p.add_argument('--batch',type=int,default=8);args=p.parse_args()
-    if args.epochs<3 or args.batch<1 or bool(args.warmstart_spec)!=bool(args.warmstart_spec_sha256):
-        p.error('at least3epochs, positive batch and paired frozen warmstart arguments required')
+    try:policy=training_policy(args.min_epochs,args.patience,args.max_epochs)
+    except ValueError:p.error('minEpochs>=3, positive patience and finite maxEpochs>=minEpochs<=1000 required')
+    if args.batch<1 or bool(args.warmstart_spec)!=bool(args.warmstart_spec_sha256):
+        p.error('positive batch and paired frozen warmstart arguments required')
     # There is deliberately no subset/limit flag in this source version.
     random.seed(17);torch.manual_seed(17)
     data_manifest_path=args.data/'manifest.json';data_sha=sha(data_manifest_path);trainer_sha=sha(Path(__file__))
     manifest=json.loads(data_manifest_path.read_text(encoding='utf-8'));config=configuration(manifest)
+    config['trainingPolicy']=policy
     tokenizer=AutoTokenizer.from_pretrained(args.encoder,local_files_only=True)
     if not tokenizer.is_fast:raise ValueError('exact-fast-tokenizer-required')
     config['encoder']=args.encoder
@@ -363,8 +409,8 @@ def main():
         for row in datasets['train']:
             values=row['bio'][ki];counts+=torch.bincount(values[values>=0],minlength=3)
         w=(counts.sum()/counts.clamp_min(1)).sqrt();weights.append((w/w.mean()).to(device))
-    steps=0;history=[];best=None;best_evaluation=None
-    for epoch in range(args.epochs):
+    steps=0;history=[];best=None;best_evaluation=None;plateau=None;best_epoch=None
+    for epoch in range(policy['maxEpochs']):
         model.train();random.shuffle(datasets['train']);total=0
         for start in range(0,len(datasets['train']),args.batch):
             if sha(Path(__file__))!=trainer_sha:raise ValueError('trainer-source-mutated')
@@ -375,20 +421,22 @@ def main():
             loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),1);optimizer.step();steps+=1;total+=loss.item()
             if steps%100==0:print(json.dumps({'epoch':epoch+1,'steps':steps,'lastLoss':loss.item()}),flush=True)
         evaluation,checkpoint_state=evaluate_compacted_checkpoint(model,evaluate,datasets['calibration'],config,device,args.batch)
-        metric={'evaluation':evaluation,'epoch':epoch+1,'steps':steps,'trainLossSum':total,
+        plateau=advance_plateau(plateau,epoch+1,evaluation,policy)
+        metric={'evaluation':evaluation,'plateau':plateau,'epoch':epoch+1,'steps':steps,'trainLossSum':total,
                 'truncatedTrain':sum(r['truncated']for r in datasets['train']),
                 'truncatedCalibration':sum(r['truncated']for r in datasets['calibration']),'executable':False}
         history.append(metric);print(json.dumps(metric),flush=True)
         (args.out/'metrics.json').write_text(json.dumps(history,indent=2)+'\n',encoding='utf-8')
         rank=selection_rank(evaluation)
         if best is None or rank>best:
-            best=rank;best_evaluation=evaluation
+            best=rank;best_evaluation=evaluation;best_epoch=epoch+1
             required=sum(v.numel()*v.element_size()for v in checkpoint_state.values())*2+128*1024**2
             if shutil.disk_usage(args.out).free<=required:raise ValueError('insufficient-atomic-checkpoint-reserve')
             temp=args.out/'checkpoint.tmp'
             torch.save({'model':checkpoint_state,'config':config,'epoch':epoch+1},temp)
             os.replace(temp,args.out/'checkpoint.pt')
         del checkpoint_state
+        if plateau['stopReason']is not None:break
     if sha(Path(__file__))!=trainer_sha or sha(data_manifest_path)!=data_sha:
         raise ValueError('training-source-mutated')
     for split,item in manifest['dataFiles'].items():
@@ -397,12 +445,14 @@ def main():
         if sha(Path(args.encoder)/name)!=value:raise ValueError('encoder-source-mutated')
     if warm_meta and hashes!={**{key:sha(path)for key,path in paths.items()},'spec':sha(args.warmstart_spec)}:
         raise ValueError('warmstart-input-mutated')
-    record={'format':'sop.key-reader-run/3-target-type-migration-candidate','complete':True,'candidate':True,
+    record={'format':'sop.key-reader-run/4-target-type-plateau-candidate','complete':True,'candidate':True,
             'executionEligible':False,'tensorArchitectureVersion':2,'preparationFormat':manifest['format'],
             'modelConfigFormat':config['format'],'rawCodecFormat':config['rawCodecFormat'],
             'configSha256':sha(args.out/'model-config.json'),'trainerSha256':trainer_sha,
             'dataManifestSha256':data_sha,'preparerSha256':manifest['scriptSha256'],
-            'encodedDataSha256':manifest['outputs'],'epochsCompleted':args.epochs,'steps':steps,
+            'encodedDataSha256':manifest['outputs'],'epochsCompleted':len(history),'steps':steps,
+            'trainingPolicy':policy,'stopping':plateau,'bestCheckpointEpoch':best_epoch,
+            'dataRecordCounts':{split:len(rows)for split,rows in datasets.items()},
             'checkpointSha256':sha(args.out/'checkpoint.pt'),'bestDecodedMentionF1':best_evaluation['decodedMentionF1'],
             'selectionCriterion':SELECTION_CRITERION,'checkpointEvaluation':CHECKPOINT_EVALUATION,'bestSelectionRank':list(best),'warmstart':warm,
             'scope':'complete retained corpus; conditional gold-cut, not full pipeline or calibrated confidence'}

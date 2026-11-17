@@ -4765,3 +4765,24 @@ Checks:3new tiny CPU compaction fixtures pass (near-boundary class flip,
 selection/reload parity, unchanged live/optimizer state and refusal cases).
 Prior13candidate+10migration+7IO/warmstart fixtures also pass:33total.
 No pretrained model/corpus/checkpoint/GPU run or saved model binaries.
+
+## 2026-11-17 — New plateau source and completed-epoch proof design
+
+New trainer source v4 replaces fixed5epochs with explicit minEpochs>=3,
+patience default3 and finite maxEpochs default30. Strict rational primary
+positive-supervised BIO+global exact improvements reset patience; secondary-only
+lexicographic gains do not. Full best selection and compacted-state evaluation
+remain unchanged. Run4 records actual epochs/stop reason, best-checkpoint epoch
+and complete loaded sample counts; model/rawcodec2 and gzipdata3 unchanged.
+No old3581441c source/artifact or active/main/knowledge file was edited.
+
+Designed separate completed-epoch/1 proof (runComplete:false) with completed vs
+saved-checkpoint epoch, exact state/config/source/data/metric hashes and explicit
+pin/lease authority. Proposed content-addressed single-write pinned objects
+or a paused lease; root approval is required before storage/writer/export.
+No binary copy or snapshot artifact is produced by this source-only task.
+
+Checks:9new pure plateau fixtures pass; prior13candidate+10migration+7IO+3compaction
+CPU fixtures pass (42total). No dataset prep, checkpoint/model reads, GPU run,
+training or saved binaries. New reviewer rows are owned by knowledge's separate
+source snapshot; this trainer has no subset flag.
