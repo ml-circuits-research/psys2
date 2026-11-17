@@ -1,0 +1,495 @@
+{
+  "format": "psys2.review26-semantic-bindings-evidence/1",
+  "scope": "C1 source-backed binding artifact regeneration and generated structural validation; not neural quality, calibration, app deployment or native execution.",
+  "generation": {
+    "format": "psys2.semantic-bindings-generation-receipt/1",
+    "complete": true,
+    "sourceOnly": true,
+    "modelRuns": 0,
+    "inputs": [
+      {
+        "path": "/home/salboaie/work/sopworlds/psys2/src/dialog/new-engine-source.mjs",
+        "sha256": "28989e78c6052d174ece231bab6adf1b2b0e7afc6a1791b0454e92e8f4226b16"
+      },
+      {
+        "path": "/home/salboaie/work/sopworlds/psys2/src/vendor/sopworld/sopworld.mjs",
+        "sha256": "fb54e3d0856a296f2a33a2bc0baa42f0442866a8e50f69827d4dae3ddb812f95"
+      },
+      {
+        "path": "/home/salboaie/work/sopworlds/psys2/training/sop-bert/bindings/semantic-alignments-v1.json",
+        "sha256": "6082eb142767b68dd1ebc4066f85895d913e39ac919c63a9f900d3e60b55e2ca"
+      },
+      {
+        "path": "/home/salboaie/work/sopworlds/psys2/training/sop-bert/export-structural-bindings.mjs",
+        "sha256": "c3386b46306b9c59daeb2f6650db60f4e1a749a018c9ee98787fbe9a4159c8ca"
+      },
+      {
+        "path": "/home/salboaie/work/sopworlds/psys2/training/sop-bert/semantic-alignment-catalogue.mjs",
+        "sha256": "298be6130e7f0ceacc8608d89a67dc12e6991887af5e680ccd18684abd9d0744"
+      },
+      {
+        "path": "/home/salboaie/work/sopworlds/psys2/training/sop-bert/heads/inventory.json",
+        "sha256": "5e5c4404d392774b6e4754a31988fc2ba943d90289e9a083a6e23ba6cba21832"
+      },
+      {
+        "path": "/home/salboaie/work/sopworlds/psys2/training/sop-bert/data/haiku-v2/INSTRUCTIONS-v2.md",
+        "sha256": "9b6632f011da5ccc1088aad1377fa63a0ac4a532cdf307006d2cfc2d609212e1"
+      },
+      {
+        "path": "/home/salboaie/work/sopworlds/.session-control/review26-bindings/structural-bindings-source.snapshot.json",
+        "sha256": "2e74fa8290dd0ccd4cafdf49b6ab69e09e2ac1a78756fd328f3a1b1ae0c8a674"
+      },
+      {
+        "path": "/home/salboaie/work/sopworlds/psys2/worlds/art.draw/declared-host.mjs",
+        "sha256": "ae8b38f3d8153771d41ce08abc9f16241d46d841430bdc202589dde330c7724d"
+      },
+      {
+        "path": "/home/salboaie/work/sopworlds/psys2/worlds/diagram.sketch/declared-host.mjs",
+        "sha256": "25d98d8d1dd3a21f967b1c605c1f24be2fbea27d05e575296ee92a94c3294112"
+      },
+      {
+        "path": "/home/salboaie/work/sopworlds/psys2/worlds/docs.editor/declared-host.mjs",
+        "sha256": "9aea28111a3d13c83df078754842fea71043c365c04a7cb74f1451186cf8e093"
+      },
+      {
+        "path": "/home/salboaie/work/sopworlds/psys2/worlds/time.calendar/declared-host.mjs",
+        "sha256": "316f0c302db78c5ba19c552cad61d270cf7bfaa2305a8372c7391c287e98fd7e"
+      }
+    ],
+    "command": [
+      "/home/salboaie/.nvm/versions/node/v22.23.2/bin/node",
+      "/home/salboaie/work/sopworlds/psys2/training/sop-bert/export-structural-bindings.mjs",
+      "/home/salboaie/work/sopworlds/psys2/src/dialog/new-engine-source.mjs",
+      "/home/salboaie/work/sopworlds/psys2/src/vendor/sopworld/sopworld.mjs",
+      "/home/salboaie/work/sopworlds/psys2/worlds/art.draw/declared-host.mjs",
+      "/home/salboaie/work/sopworlds/psys2/worlds/diagram.sketch/declared-host.mjs",
+      "/home/salboaie/work/sopworlds/.session-control/review26-bindings.compact/bindings.json",
+      "--native-root",
+      "/home/salboaie/work/sopworlds/psys2",
+      "--knowledge",
+      "/home/salboaie/work/sopworlds/sop-knowledge-worlds",
+      "--alignments",
+      "/home/salboaie/work/sopworlds/psys2/training/sop-bert/bindings/semantic-alignments-v1.json",
+      "--max-output-bytes",
+      "8388608",
+      "--compact",
+      "true",
+      "--reuse-source-snapshot",
+      "/home/salboaie/work/sopworlds/.session-control/review26-bindings/structural-bindings-source.snapshot.json",
+      "--reserve-bytes",
+      "251658240"
+    ],
+    "freeBefore": 266981376,
+    "freeAfter": 263753728,
+    "reserveBytes": 251658240,
+    "receiptReserveBytes": 65536,
+    "reuseSourceSnapshot": "/home/salboaie/work/sopworlds/.session-control/review26-bindings/structural-bindings-source.snapshot.json",
+    "maxOutputBytes": 8388608,
+    "outputBytes": 4699826,
+    "outputs": [
+      {
+        "name": "bindings.json",
+        "bytes": 3221909,
+        "sha256": "d50317165fd00a09e4ea90ecea200d0695e519cae8b70077b0f94c2adda2491b"
+      },
+      {
+        "name": "structural-bindings-source.snapshot.json",
+        "bytes": 1477917,
+        "sha256": "2e74fa8290dd0ccd4cafdf49b6ab69e09e2ac1a78756fd328f3a1b1ae0c8a674"
+      }
+    ],
+    "inputsUnchanged": true,
+    "exitCode": 0,
+    "stdout": "{\"kinds\":2767,\"properties\":15,\"units\":168,\"unresolved\":361,\"sourceSnapshotSHA\":\"2e74fa8290dd0ccd4cafdf49b6ab69e09e2ac1a78756fd328f3a1b1ae0c8a674\"}\n",
+    "stderr": "",
+    "error": null
+  },
+  "verification": {
+    "format": "psys2.semantic-bindings-verification/1",
+    "complete": true,
+    "artifact": {
+      "bindingPath": "/home/salboaie/work/sopworlds/.session-control/review26-bindings.compact/bindings.json",
+      "bindingSha256": "d50317165fd00a09e4ea90ecea200d0695e519cae8b70077b0f94c2adda2491b",
+      "bytes": 3221909,
+      "snapshotPath": "/home/salboaie/work/sopworlds/.session-control/review26-bindings.compact/structural-bindings-source.snapshot.json",
+      "snapshotSha256": "2e74fa8290dd0ccd4cafdf49b6ab69e09e2ac1a78756fd328f3a1b1ae0c8a674"
+    },
+    "baseKnowledgePin": "7fbcf774e21c168e1c1b5f9dbd4e95b51a186825",
+    "catalogueKnowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+    "catalogueSha256": "6082eb142767b68dd1ebc4066f85895d913e39ac919c63a9f900d3e60b55e2ca",
+    "sourceFiles": [
+      {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.picture/schema.sop",
+        "sha256": "65ca81b3a69606462a73944bcc48b1e74f67ddb31573ec3fb3974a08b7311859"
+      },
+      {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.face/schema.sop",
+        "sha256": "48d07e2a7c1140a824604bf7af71f58e0298b3355114b2dda8e50fda8f5bed2f"
+      },
+      {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "83b216f493b2a5589cbfac021dac6737fc5fe4b1640bea2a3f57587e2eca28fb"
+      },
+      {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.chart/schema.sop",
+        "sha256": "047fb1fb5256e56247dbd37e959792d37ff5a8b5828d7f6bf33d8c0d0b67e66c"
+      },
+      {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.document/schema.sop",
+        "sha256": "4b8e3bfab57dd0757be6a0da0d4b050a94d2245cd4660202461fbef2c4b368f6"
+      },
+      {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.calendar/schema.sop",
+        "sha256": "f104791cf830c5bc12063357211c78273062ab1c90d433eb990661dab05bcbba"
+      },
+      {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.room/schema.sop",
+        "sha256": "9ec49a23f8d778ff487b74380e62bb8c2beb65d78e58c2b741a3cb79337a38c7"
+      },
+      {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.person/schema.sop",
+        "sha256": "c3c2b90a455f919d10bc7e43d62541c31c1e7d303436a704b05bf3c76b94ac0b"
+      },
+      {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/k.attributes/shards/attributes.sop",
+        "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5"
+      },
+      {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/k.attributes/schema.sop",
+        "sha256": "9a8bacaab0afd710f90ba8958a88e10927848f3509b4a83515b58a64e6a983c4"
+      }
+    ],
+    "coverage": {
+      "families": 15,
+      "properties": 105,
+      "alignedFamilies": 9,
+      "alignedProperties": 15,
+      "unresolvedFamilies": 6,
+      "unresolvedProperties": 90
+    },
+    "probes": [
+      {
+        "kind": "abstract-family",
+        "area": "calendar",
+        "type": "meeting",
+        "canonical": "w.calendar.event",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "abstract-family",
+        "area": "calendar",
+        "type": "person",
+        "canonical": "w.person.person",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "abstract-family",
+        "area": "calendar",
+        "type": "room",
+        "canonical": "w.room.room",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "abstract-family",
+        "area": "diagram",
+        "type": "chart",
+        "canonical": "w.chart.chart",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "abstract-family",
+        "area": "diagram",
+        "type": "group",
+        "canonical": "w.diagram.group",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "abstract-family",
+        "area": "diagram",
+        "type": "link",
+        "canonical": "w.diagram.edge",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "abstract-family",
+        "area": "document",
+        "type": "text",
+        "canonical": "w.document.document",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "abstract-family",
+        "area": "drawing",
+        "type": "face",
+        "canonical": "w.face.face",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "abstract-family",
+        "area": "drawing",
+        "type": "page",
+        "canonical": "w.picture.picture",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "calendar",
+        "key": "meeting.title",
+        "canonical": "w.calendar.event.title",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "calendar",
+        "key": "person.name",
+        "canonical": "w.person.person.name",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "calendar",
+        "key": "room.name",
+        "canonical": "w.room.room.name",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "diagram",
+        "key": "group.label",
+        "canonical": "w.diagram.group.label",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "diagram",
+        "key": "link.label",
+        "canonical": "w.diagram.edge.label",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "diagram",
+        "key": "node.colour",
+        "canonical": "colour",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "diagram",
+        "key": "node.size",
+        "canonical": "size",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "document",
+        "key": "text.about",
+        "canonical": "w.document.document.topic",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "document",
+        "key": "text.genre",
+        "canonical": "w.document.document.genre",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "document",
+        "key": "text.title",
+        "canonical": "w.document.document.title",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "document",
+        "key": "text.words",
+        "canonical": "w.document.document.words",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "drawing",
+        "key": "drawn.colour",
+        "canonical": "colour",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "drawing",
+        "key": "drawn.size",
+        "canonical": "size",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "drawing",
+        "key": "face.name",
+        "canonical": "w.face.face.name",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "property",
+        "area": "drawing",
+        "key": "page.background",
+        "canonical": "w.picture.picture.background",
+        "candidates": 1,
+        "executable": false
+      },
+      {
+        "kind": "unresolved-family",
+        "area": "drawing",
+        "type": "drawn",
+        "candidates": 0,
+        "executable": false
+      },
+      {
+        "kind": "unresolved-family",
+        "area": "drawing",
+        "type": "part",
+        "candidates": 0,
+        "executable": false
+      },
+      {
+        "kind": "unresolved-family",
+        "area": "diagram",
+        "type": "diagram",
+        "candidates": 0,
+        "executable": false
+      },
+      {
+        "kind": "unresolved-family",
+        "area": "diagram",
+        "type": "node",
+        "candidates": 0,
+        "executable": false
+      },
+      {
+        "kind": "unresolved-family",
+        "area": "document",
+        "type": "section",
+        "candidates": 0,
+        "executable": false
+      },
+      {
+        "kind": "unresolved-family",
+        "area": "document",
+        "type": "inline",
+        "candidates": 0,
+        "executable": false
+      }
+    ],
+    "scope": "Generated structural validation only; no neural inference, intent accuracy, native effect or admission calibration.",
+    "modelRuns": 0,
+    "executionEligible": false
+  },
+  "representation": {
+    "format": "psys2.binding-representation-comparison/1",
+    "sameSemanticData": true,
+    "differenceCount": 2793,
+    "allowedDifferences": [
+      "*.alignment.authoritySourceSha256",
+      "provenance.exporterSha256",
+      "provenance.sourceSnapshotPath"
+    ],
+    "sourceSnapshotSameInode": true,
+    "sourceSnapshotMode": "0444",
+    "bindingMode": "0444",
+    "oldBindingSha256": "6a546131cc0a83983fac0dc9d958e1ecf7b5bfb21b782f1a1f7216766d24712b",
+    "newBindingSha256": "d50317165fd00a09e4ea90ecea200d0695e519cae8b70077b0f94c2adda2491b"
+  },
+  "retainedEvidence": [
+    {
+      "path": "../.session-control/review26-bindings.compact/generation-receipt.json",
+      "sha256": "9a6ff551aae569c7cf34ce80da716c649d710081932f79362f10ee2bff681f88"
+    },
+    {
+      "path": "../.session-control/review26-bindings.compact/verification.json",
+      "sha256": "64c507f6cb1c57b161a5b7f2551a6b966c27d1673b89ad7dc07e59a4e45eb8dd"
+    },
+    {
+      "path": "../.session-control/review26-bindings.compact/representation-comparison.json",
+      "sha256": "541e2cdc18ccf0e209c369ef4aa2dc7e74cdedc78ce9c5e2a3511af5e1deb127"
+    }
+  ],
+  "producerSources": [
+    {
+      "path": "training/sop-bert/regenerate-semantic-bindings.mjs",
+      "sha256": "464bcd0bb7d87ddceaad33d244232d19a0bf05f12f380e43ace2d2a6cbe30785"
+    },
+    {
+      "path": "training/sop-bert/verify-semantic-bindings.mjs",
+      "sha256": "6c8893ac6dcc2eea3859782bdda288cf1cb35cff8b471457c6182d4d9a3ff282"
+    },
+    {
+      "path": "training/sop-bert/export-structural-bindings.mjs",
+      "sha256": "c3386b46306b9c59daeb2f6650db60f4e1a749a018c9ee98787fbe9a4159c8ca"
+    },
+    {
+      "path": "training/sop-bert/semantic-alignment-catalogue.mjs",
+      "sha256": "298be6130e7f0ceacc8608d89a67dc12e6991887af5e680ccd18684abd9d0744"
+    },
+    {
+      "path": "src/dialog/raw-structural-bridge.mjs",
+      "sha256": "332b6c37054f285e5223ab2a1388bd1cd762b5f86c4ebac513469297be5a855e"
+    },
+    {
+      "path": "src/dialog/model-graph-decoder.mjs",
+      "sha256": "444e8bf035ba8ef81b81e824467b4b2dfd9eb7e9976e3524809b1000d97d62c0"
+    }
+  ],
+  "identityChecks": 26,
+  "firstAttempt": {
+    "directory": "../.session-control/review26-bindings",
+    "generatedSuccessfully": true,
+    "runtimeDeployable": false,
+    "reason": "pretty JSON4097065bytes exceeds existing4MB factory cap; retained intact",
+    "bindingSha256": "6a546131cc0a83983fac0dc9d958e1ecf7b5bfb21b782f1a1f7216766d24712b"
+  },
+  "checks": {
+    "activeGate": {
+      "total": 331,
+      "passed": 328,
+      "failed": 0,
+      "skipped": 3
+    },
+    "targetedSerializerAndCatalogue": 13
+  },
+  "deploymentChanged": false,
+  "neuralRuns": 0,
+  "admissionReportCreated": false
+}
