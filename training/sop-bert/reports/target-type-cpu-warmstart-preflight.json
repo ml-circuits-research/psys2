@@ -1,0 +1,69 @@
+{
+  "actualFreeBytes": 693059584,
+  "baselineConfigBytes": 87500,
+  "candidateConfigBytes": 92456,
+  "candidateConfigSha256": "31a006d1f50fd20749f2c4c7632b987a7ea06cdb10b2912ce706d12cd513f18f",
+  "candidateDataManifestSha256": "a2a91762ce6844b0a5217d7c6097d1a1d914dad755e76c0ae2f6c14e4ca2f8aa",
+  "checkpointWrites": false,
+  "configGrowthAllowanceBytes": 1048576,
+  "configGrowthBytes": 4956,
+  "copiedEncoderTensorsVerified": 100,
+  "executable": false,
+  "exports": false,
+  "format": "sop.target-type-cpu-warmstart-preflight/1",
+  "freshStateUnchanged": true,
+  "freshTypeRowsUnchanged": true,
+  "gpu": false,
+  "modelBinaryWrites": false,
+  "optimizerConstructed": false,
+  "optimizerRestored": false,
+  "scriptSha256": "757d01ac0354554e2fa5e57e6a8de1e0e1ccd42c8ea59df4b2b68348e43541eb",
+  "sharedSemanticRowsVerified": 2256,
+  "sourceCommit": "3581441cf9526f8462c292a056c77f6c66a0fb40",
+  "sourceStateUnchanged": true,
+  "strictModelLoad": true,
+  "syntheticForwardProbe": "not run; exact shared tensor/semantic-row identity verified instead",
+  "training": false,
+  "warmstart": {
+    "elementWorkAllowance": 403719426,
+    "estimatedElements": 403719426,
+    "format": "sop.key-reader-warmstart-provenance/1",
+    "frozenInputs": {
+      "checkpoint": "689960663e40bbf4c4d24d63e87b72b333c23b2efd5869f14c8d788c68334b90",
+      "config": "f23f5a14c7f1f5d3f0a5eb96f0768c1e2142c13127e8edaac853f6004f65b451",
+      "dataManifest": "e30a4eeb9eb24322cc49b299ebb4eb9df727086171ed3265a76ca3d18622668c",
+      "helper": "9b7a41049680bf044b02618f976e2ae9231ff7b3359730bc5b00d87445adee37",
+      "preparer": "3565277de7f349ce5a63b578c6b74eb4b4364c0a30f7e8ce45f1819062b50ced",
+      "run": "4c950745fa0a9f519c46a88cad3d8044e7e6881a8e50c362578a235fee07f0a5",
+      "trainer": "eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f"
+    },
+    "kind": "semantic-migration",
+    "migrationHelperSha256": "9b7a41049680bf044b02618f976e2ae9231ff7b3359730bc5b00d87445adee37",
+    "optimizer": "fresh-AdamW",
+    "sourceModelFormat": "sop.key-reader/1",
+    "specSha256": "2e7ac0f8a703951f9c9fde8a3d3c928be95f2f6f6a6b37902e7a0b033aa5a39b",
+    "stats": {
+      "copiedElements": 67281701,
+      "elements": 403719426,
+      "rows": 2256,
+      "tensors": 460
+    },
+    "targetModelFormat": "sop.key-reader/2-target-type-candidate"
+  },
+  "warmstartSpecSha256": "2e7ac0f8a703951f9c9fde8a3d3c928be95f2f6f6a6b37902e7a0b033aa5a39b",
+  "workEstimate": {
+    "boundary": "metadata work estimate only; caller must separately authorize work and memory",
+    "breakdown": {
+      "copiedEncoderElements": 66362880,
+      "copiedHeadElements": 918821,
+      "freshElements": 67296311,
+      "oldElements": 67281701
+    },
+    "copiedRows": 2256,
+    "estimatedElements": 403719426,
+    "ok": true,
+    "peakMemoryBytes": null,
+    "tensorVisits": 460,
+    "validityEstablished": false
+  }
+}

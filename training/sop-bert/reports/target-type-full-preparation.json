@@ -1,0 +1,129 @@
+{
+  "actualFreeBytesAfterVerification": 694079488,
+  "actualFreeBytesBeforeLaunch": 699109376,
+  "allRawRequestsRetained": true,
+  "bankCount": 63,
+  "bioCount": 122,
+  "checkpointReads": false,
+  "declaredFamilies": {
+    "calendar": [
+      "meeting",
+      "person",
+      "room"
+    ],
+    "diagram": [
+      "chart",
+      "diagram",
+      "group",
+      "link",
+      "node"
+    ],
+    "document": [
+      "inline",
+      "section",
+      "text"
+    ],
+    "drawing": [
+      "drawn",
+      "face",
+      "page",
+      "part"
+    ]
+  },
+  "deterministicGzipVerified": true,
+  "excludedIds": 1648,
+  "exclusionSha256": "66b1ab7f205bedf08c15e3e83f98e3de217922d179e89ae8b99c29a938e29e77",
+  "executable": false,
+  "format": "sop.target-type-full-preparation-verification/1",
+  "gpu": false,
+  "keyCount": 135,
+  "logSha256": "91c744585d86a4c130ba1d7d22fed5f1a3fb7990daa38f510e329af7082ed876",
+  "manifestSha256": "a2a91762ce6844b0a5217d7c6097d1a1d914dad755e76c0ae2f6c14e4ca2f8aa",
+  "maxOutputBytes": 67108864,
+  "onlyNewHead": {
+    "bio": false,
+    "key": "request.target.type",
+    "states": 17
+  },
+  "preflightRationaleSha256": "d78b782af786f4d17a8a30bc3f0d35d525c532e1080e11111ae2b34eb4986375",
+  "requiredFreeBytes": 642176846,
+  "reserveBytes": 575067982,
+  "reservedOverlap": 0,
+  "sourceCommit": "3581441cf9526f8462c292a056c77f6c66a0fb40",
+  "sourceHashes": {
+    "prepare-key-reader.py": "5cab868172f89f29f51d35894aebfbae0c71011cc97bd3ad4b3b1c29a96fa477",
+    "target-type-weight-migration.py": "9b7a41049680bf044b02618f976e2ae9231ff7b3359730bc5b00d87445adee37",
+    "train-key-reader.py": "a011d8c60e4504c8eb842492cffcda048a7d7b07f4a8f0c443baf356be425ccd"
+  },
+  "splits": {
+    "calibration": {
+      "decodedBytes": 13195383,
+      "decodedSha256": "3314a3d458763b1d21348ed844ad930e5db77882946cae682e8a346ff03c4566",
+      "encodedBytes": 499422,
+      "encodedSha256": "c3f637d472dea2c993b27944aea05e3237a2691ac6c841ac321f6011db156887",
+      "gzipRecompressionExact": true,
+      "samples": 3841,
+      "sourceRows": 3308
+    },
+    "train": {
+      "decodedBytes": 114876343,
+      "decodedSha256": "efe44cb5d570e6de2cf0b9300912e48cdb1b00899e4c8a7741e8cba3042d1642",
+      "encodedBytes": 4173189,
+      "encodedSha256": "695fa03e04d6fad6d5dff7e1c18efe6fde111565d5058e0c87804f4d7ad8d124",
+      "gzipRecompressionExact": true,
+      "samples": 33760,
+      "sourceRows": 28959
+    }
+  },
+  "totalEncodedDirectoryBytes": 4768367,
+  "training": false,
+  "typeFamilyCoverage": {
+    "calibration": {
+      "calendar.meeting": 336,
+      "calendar.person": 19,
+      "calendar.room": 17,
+      "diagram.chart": 181,
+      "diagram.diagram": 133,
+      "diagram.group": 47,
+      "diagram.link": 91,
+      "diagram.node": 177,
+      "document.inline": 175,
+      "document.section": 147,
+      "document.text": 113,
+      "drawing.drawn": 268,
+      "drawing.face": 152,
+      "drawing.page": 90,
+      "drawing.part": 54
+    },
+    "train": {
+      "calendar.meeting": 3142,
+      "calendar.person": 153,
+      "calendar.room": 166,
+      "diagram.chart": 1618,
+      "diagram.diagram": 1138,
+      "diagram.group": 312,
+      "diagram.link": 760,
+      "diagram.node": 1462,
+      "document.inline": 1429,
+      "document.section": 1297,
+      "document.text": 884,
+      "drawing.drawn": 2464,
+      "drawing.face": 1199,
+      "drawing.page": 752,
+      "drawing.part": 561
+    }
+  },
+  "typeMasks": {
+    "calibration": {
+      "noRequestAbsent": 81,
+      "v1UnknownMasked": 1760,
+      "v2DeclaredPresent": 2000
+    },
+    "train": {
+      "noRequestAbsent": 611,
+      "v1UnknownMasked": 15812,
+      "v2DeclaredPresent": 17337
+    }
+  },
+  "verificationScriptSha256": "d6692322678590c9d9ed2b43c21795b17d33a17f570d682b0c94eb02ca2f1f25"
+}
