@@ -4893,3 +4893,11 @@ and added actual authority construction regression (no verifier weakening).
 Six targeted fixtures now pass including actual full/minimal/authority check.
 Harness also routes crash diagnostics/config/cache under its own fresh profile.
 Actual rerun follows PSys rebuild; original no-effect failure remains recorded.
+
+Actual Chromium rerun GREEN after name-preserving vendor rebuild: actual normal
+app worker ready, two neural diagnostic records, one complete graph candidate;
+missing-calibration gate keeps selectednull/effects[]/actual state unchanged.
+All3q8graph and ORTWeb WASM200; zero console/worker errors captured. Both actual
+reports preserved outsideGit, SHA/provenance summary committed. Browser closed
+and fresh profile removed before PSys sequential matrix/owner replay. This is
+actual computation/no-effect proof only, never semantic success/calibration.

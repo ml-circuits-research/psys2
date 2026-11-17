@@ -1,0 +1,99 @@
+{
+  "format": "psys2.browser-reader-smoke-evidence/1",
+  "scope": "normal Chromium page/engineClient/worker, fresh local profile, actual q8 and ORT Web WASM",
+  "checks": {
+    "readerReady": true,
+    "neuralDiagnostics": true,
+    "admissionClosed": true,
+    "noEffects": true,
+    "stateUnchanged": true
+  },
+  "readerHost": {
+    "state": "ready",
+    "reason": null,
+    "diagnosticCount": 2,
+    "area": "drawing"
+  },
+  "readerRouting": {
+    "primary": "sop-bert",
+    "selected": null,
+    "reason": "model-calibration-gate-closed",
+    "admission": {
+      "scoreDefinition": "psys2.complete-unique/1",
+      "score": 1,
+      "proposalEligible": true,
+      "assessment": {
+        "admitted": false,
+        "reason": "missing-calibration"
+      }
+    },
+    "model": {
+      "provenance": {
+        "modelSha256": "ff26e88415f28d8a85b2f33db011e458b504a6752236b83b54de0bfda98ef5cb",
+        "decoderVersion": 1,
+        "models": {
+          "cutter": {
+            "sha256": "5c2c545cea87b2618c4209c338bd3e30d1671a0da32139819fe5a6110d61ac6b",
+            "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+            "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+            "decoderVersion": 1
+          },
+          "reader": {
+            "sha256": "db66d42b1daf1e0b19e31751f9c140c124124f587983923cdd9fc16eeebefa2c",
+            "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+            "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+            "decoderVersion": 2
+          }
+        },
+        "bindingsSha256": "07b8094f4c1ababffff579dfd0d249b597afcafcfb26c47bc776887ce03e0798",
+        "architecture": "source-cutter/request-key-heads",
+        "calibration": null
+      },
+      "coverage": {
+        "complete": true,
+        "graphProposal": true,
+        "executable": false
+      },
+      "candidates": 1,
+      "eligible": false
+    }
+  },
+  "effects": [],
+  "unchanged": true,
+  "consoleEntries": 0,
+  "modelAndWasmFetches": [
+    {
+      "path": "/models/sop-bert/aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c/heads.q8.onnx",
+      "status": 200,
+      "bytes": 623715,
+      "ms": 7
+    },
+    {
+      "path": "/models/sop-bert/aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c/cutter.q8.onnx",
+      "status": 200,
+      "bytes": 66756266,
+      "ms": 154
+    },
+    {
+      "path": "/models/sop-bert/aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c/encoder.q8.onnx",
+      "status": 200,
+      "bytes": 67160769,
+      "ms": 154
+    },
+    {
+      "path": "/vendor/onnxruntime/ort-wasm-simd-threaded.wasm",
+      "status": 200,
+      "bytes": 14848852,
+      "ms": 47
+    }
+  ],
+  "externalEvidence": {
+    "browser-reader-first-smoke.json": "2ac3976f3a0eec5234e5058dd7565d7aabc7b8efb24a538cb8c56ad1b672b5d3",
+    "browser-reader-second-smoke.json": "493520cfadb7fadf3d78ed226a1678b1ce703e61b1e5587f87d2afbcf52e3d11"
+  },
+  "firstFailure": "minified constructor names refused by offset authority; fixed keepNames, verifier unchanged",
+  "profilesClosed": true,
+  "semanticCorrectness": null,
+  "calibration": null,
+  "admissionInstalled": false
+}

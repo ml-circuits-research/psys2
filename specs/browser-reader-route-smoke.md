@@ -21,3 +21,15 @@ report.json>`. A closed-route smoke requires ready reader, actual neural
 diagnostics, selected=null/eligible=false, no effects and unchanged state.
 Two pure fixtures cover evidence checks and CDP identities/errors. Actual browser
 run requires PSys's completed app build/deployment assets and is recorded separately.
+
+Actual first smoke fetched all three q8 graphs but offset authority refused the
+minified tokenizer constructor names. The preserved report shows no effects.
+After keepNames fix (authority unchanged), actual rerun passed all five checks:
+reader ready, two actual neural diagnostic records, missing-calibration gate
+closed, effects empty, and actual worker state unchanged. All three q8 graphs
+and14,848,852B ORT Web WASM returned200; console/worker error records were empty.
+The model produced one complete graph candidate, which was NOT selected for
+execution because no calibration report was installed. This is browser route
+computation/no-effect evidence, not semantic correctness or cohort calibration.
+`browser-reader-smoke-evidence.json` retains compact provenance and full report
+hashes. Both profiles closed and were removed before matrix/owner replay handoff.
