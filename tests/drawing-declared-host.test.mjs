@@ -6,7 +6,7 @@ test('Drawing lifecycle creates actual renderable board objects across native ki
  const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'drawing.native'});
  assert.deepEqual(DRAWING_TOOL_BINDINGS[0].params.kind.enum,Object.keys(KINDS));
  for(const kind of ['circle','rectangle','tree']){const r=call(host,'drawing.object.make',{kind,name:`Named ${kind}`,x:120,y:180,color:'#8040FF'});assert.equal(r.status,'changed');assert.equal(r.verification,'unverified');const object=state.objects.at(-1);assert.equal(object.kind,kind);assert.equal(object.name,`Named ${kind}`);assert.ok(partsOf(object).length>0);assert.equal(object.x,120);}
- const o=host.observe();assert.equal(o.complete,true);assert.equal(new Set(o.objects.map(x=>x.source)).size,3);assert.ok(o.objects.every(x=>x.inputs.every(i=>i.source===x.source&&i.version===o.version)));
+ const o=host.observe();assert.equal(o.complete,true);assert.equal(o.objects.filter(x=>x.sourceType==='art.draw.object').length,3);assert.equal(new Set(o.objects.map(x=>x.source)).size,o.objects.length);assert.ok(o.objects.some(x=>x.sourceType==='art.draw.part'&&x.in));assert.ok(o.objects.every(x=>x.inputs.every(i=>i.source===x.source&&i.version===o.version)));
 });
 test('Drawing transactions preserve no-op, stale refusal, replay and real board undo',()=>{
  const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'drawing.history'}),before=host.observe();

@@ -224,8 +224,9 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       return res.reply;
     },
     acceptState(result) {applyStateInfo(result);},
-    async tool(operation,args={}) {
-      const r=await guarded('nativeTool','nativeTool',{view:getTab(),operation,args},{hardMs:15000,text:operation,key:null,tab:getTab()});
+    async tools({view=getTab()}={}) {return guarded('nativeTools','nativeTools',{view},{hardMs:30000,text:'Tools',key:null,tab:view});},
+    async tool(operation,args={},options={}) {
+      const r=await guarded('nativeTool','nativeTool',{view:options.view??getTab(),operation,args},{hardMs:15000,text:operation,key:null,tab:getTab()});
       applyStateInfo(r);return r;
     },
     async dryRead(text, opts = {}) {

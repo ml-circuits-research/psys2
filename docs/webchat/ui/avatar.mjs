@@ -42,6 +42,9 @@ const CSS = `
 .p2-avatar-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; width: 100%; max-width: 460px; }
 .p2-avatar-chips[hidden] { display: none; }
 .p2-avatar-note { margin: 0; font-size: 11px; opacity: .65; text-align: center; max-width: 460px; }
+.p2-avatar-tools{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;width:min(100%,460px)}.p2-avatar-tools label{display:flex;align-items:center;gap:5px;font-size:12px}.p2-avatar-tools select{font:inherit;max-width:155px;background:var(--surface,#fff);color:inherit;border:1px solid #9aa4ba77;border-radius:6px;padding:5px}.p2-avatar-tools button{font:inherit;border:1px solid #9aa4ba77;border-radius:6px;background:transparent;color:inherit;padding:5px 8px;cursor:pointer}.p2-avatar-tools button:disabled{opacity:.4;cursor:default}.p2-avatar-stage:focus-visible{outline:3px solid #4478d8;outline-offset:3px}.p2-avatar-status{font-size:12px;min-height:18px;margin:0;text-align:center;max-width:460px}
+.p2-avatar-editor{display:grid;grid-template-columns:minmax(0,1fr) 280px;align-items:stretch;gap:0;height:100%;min-height:0;overflow:hidden}.p2-avatar-editor .p2-avatar-canvas{min-width:0;min-height:0;display:flex;position:relative}.p2-avatar-editor .p2-avatar-stage{width:100%;height:100%;aspect-ratio:auto;max-height:none;border-radius:0;box-shadow:none;background:var(--surface-2,#edf1f8)}.p2-avatar-editor .p2-avatar-inspector{min-width:0;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:12px;border-left:1px solid var(--line,#b4bfd255);padding:12px;box-sizing:border-box}.p2-avatar-editor .p2-avatar-caption,.p2-avatar-editor .p2-avatar-tools,.p2-avatar-editor .p2-avatar-chips,.p2-avatar-editor .p2-avatar-note,.p2-avatar-editor .p2-avatar-row,.p2-avatar-editor .p2-avatar-status{width:100%;max-width:none}.p2-avatar-editor .p2-avatar-row{display:flex;flex-wrap:wrap;overflow:visible;box-sizing:border-box}.p2-avatar-editor .p2-avatar-caption{text-align:left}.p2-avatar-editor .p2-avatar-name{font-size:18px}.p2-avatar-editor .p2-avatar-parts{font-size:12px}.p2-avatar-editor .p2-avatar-tools{justify-content:flex-start}.p2-avatar-editor .p2-avatar-tools label{flex:1 1 100%;justify-content:space-between}.p2-avatar-editor .p2-avatar-tools select{min-width:0;max-width:170px}.p2-avatar-editor .p2-avatar-chips{justify-content:flex-start}.p2-avatar-wordlist{font-size:12px;line-height:1.5;overflow-wrap:anywhere}.p2-avatar-wordlist summary{cursor:pointer;font-weight:600}.p2-avatar-scope{flex:1 1 100%;font-size:11px;line-height:1.5;opacity:.75}.p2-avatar-editor .p2-avatar-card{width:60px;min-width:0}.p2-avatar-editor .p2-avatar-note{text-align:left}@media(max-width:780px){.p2-avatar-editor{grid-template-columns:minmax(0,1fr) 235px}.p2-avatar-editor .p2-avatar-inspector{padding:8px;gap:8px}}@media(max-width:560px){.p2-avatar-editor{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(220px,50%) minmax(0,1fr)}.p2-avatar-editor .p2-avatar-inspector{border-left:0;border-top:1px solid var(--line,#b4bfd255)}}
+
 @keyframes p2-av-dance { 0%, 100% { transform: rotate(0) translateY(0); } 25% { transform: rotate(-5deg) translateY(-8px); } 75% { transform: rotate(5deg) translateY(-8px); } }
 @keyframes p2-av-nod { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(12px); } }
 @keyframes p2-av-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-14px); } 75% { transform: translateX(14px); } }
@@ -70,27 +73,36 @@ export const variantSay = (slot, name) => (name === 'none' ? `remove the ${nounO
  * `host.asset(path)` locates the modules of the page (the renderer, the motion rules, the catalog reader). `mirror(el, px)` keeps a small copy of the face in `el` (the icon).
  * `host.motionSeed` fixes the blink generator (tests); `host.now()` is the clock.
  */
-export function createAvatar(container, host = null) {
+export function createAvatar(container, host = null,{editor=false}={}) {
   ensureCss();
   container.classList.add('p2-avatar-wrap');
   const el = (tag, cls, attrs = {}) => { const n = document.createElement(tag); if (cls) n.className = cls; for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v); return n; };
-  const stage = el('div', 'p2-avatar-stage', { role: 'img' });
+  const stage = el('div', 'p2-avatar-stage', { role: 'img', tabindex:'0' });
   const caption = el('div', 'p2-avatar-caption'), nameEl = el('p', 'p2-avatar-name'), partsEl = el('p', 'p2-avatar-parts');
   caption.append(nameEl, partsEl);
   const chipsEl = el('div', 'p2-avatar-chips', { role: 'group', 'aria-label': 'Expressions' });
   const optsEl = el('div', 'p2-avatar-row', { role: 'group', 'aria-label': 'Choices' });
   const facesEl = el('div', 'p2-avatar-row', { role: 'group', 'aria-label': 'Faces' });
   const noteEl = el('p', 'p2-avatar-note');
-  container.append(stage, caption, chipsEl, optsEl, facesEl, noteEl);
+  const toolsEl=el('div','p2-avatar-tools',{'aria-label':'Edit avatar parts'}),statusEl=el('p','p2-avatar-status',{role:'status','aria-live':'polite'});
+  if(editor){container.classList.add('p2-avatar-editor');const canvas=el('div','p2-avatar-canvas'),inspector=el('aside','p2-avatar-inspector',{'aria-label':'Avatar inspector'});canvas.append(stage);inspector.append(caption,toolsEl,optsEl,chipsEl,facesEl,noteEl,statusEl);container.append(canvas,inspector);}else container.append(stage, caption, chipsEl, toolsEl, optsEl, facesEl, noteEl,statusEl);
   optsEl.hidden = true; facesEl.hidden = true;
 
   let full = false, state = null, data = null, mods = null, loading = null, retry = 0, destroyed = false, lastSvg = '', shown = '';
-  let catalogFacts = null, defaultMotion = '', motionAsked = false;
+  let catalogFacts = null, defaultMotion = '', motionAsked = false,selectedSlot=null,controlBusy=false;
   let fxTimer = 0, visible = false, motion = null, motionRules = null, motionTimer = 0, frame = { over: null, talking: false }, frameKey = '';
   const mirrors = [];   // { el, px, svg }: the small copies of the face (the icon)
   const now = () => (host?.now ? host.now() : performance.now());
   const reducedQuery = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
   const say = (text) => { try { host?.send?.(text); } catch (e) { console.warn('avatar: could not send', e); } };
+  async function control(operation,args){
+    if(controlBusy||host?.isBusy?.())return;
+    if(!host?.tool){statusEl.textContent='Face controls are unavailable.';return;}
+    controlBusy=true;toolsEl.setAttribute('aria-busy','true');
+    try{const result=await host.tool(operation,args,{view:'avatar'});statusEl.textContent=result.message??(result.ok?'Updated the face.':'Could not update the face.');}
+    catch(error){statusEl.textContent=error.message;}
+    finally{controlBusy=false;toolsEl.removeAttribute('aria-busy');}
+  }
   const asset = (p) => (host?.asset ? host.asset(p) : new URL(`../${p}`, import.meta.url).href);
 
   /** The renderer, the motion rules and the faces of the catalog, loaded once; a catalog that cannot be reached is asked again later (the avatar then says so). */
@@ -98,11 +110,11 @@ export function createAvatar(container, host = null) {
     if (loading || destroyed || full) return;
     loading = (async () => {
       try {
-        const [draw, logic, { DEFAULT_FACE }, motionMod, { DEFAULT_MOTION }, { createFacts }, { createKnowledgeSource }, { createCachedSource }, lib] = await Promise.all(['worlds/ui.avatar/facedraw.mjs', 'worlds/ui.avatar/facelogic.mjs', 'worlds/ui.avatar/default-face.mjs', 'worlds/ui.avatar/motion.mjs', 'worlds/ui.avatar/default-motion.mjs', 'lib/knowledge/facts.mjs', 'lib/loaders/knowledge-source.mjs', 'lib/loaders/knowledge-cache.mjs', 'lib/vendor/sopworld/sopworld.mjs'].map((p) => import(asset(p))));
+        const [draw, logic, { DEFAULT_FACE }, motionMod, { DEFAULT_MOTION }, { createFacts }, { createKnowledgeSource }, { createCachedSource }, lib,native] = await Promise.all(['worlds/ui.avatar/facedraw.mjs', 'worlds/ui.avatar/facelogic.mjs', 'worlds/ui.avatar/default-face.mjs', 'worlds/ui.avatar/motion.mjs', 'worlds/ui.avatar/default-motion.mjs', 'lib/knowledge/facts.mjs', 'lib/loaders/knowledge-source.mjs', 'lib/loaders/knowledge-cache.mjs', 'lib/vendor/sopworld/sopworld.mjs','worlds/ui.avatar/declared-host.mjs'].map((p) => import(asset(p))));
         const { KNOWLEDGE_URLS } = await import(asset('lib/knowledge/catalog-pin.mjs'));   // the catalog at the pinned commit (P4), its mirrors when one fails
         const src = createCachedSource({ source: createKnowledgeSource(host?.knowledgeUrl?.() || KNOWLEDGE_URLS), caches: globalThis.caches });
         const facts = createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((r) => setTimeout(() => r(null), 6000))]) } });
-        mods = { draw, logic, motionMod, lib }; data = DEFAULT_FACE; shown = ''; motionRules = mods.motionMod.parseMotion(lib, DEFAULT_MOTION); startMotion(); draw_();   // the bundled fallback face first: the avatar never waits for the network
+        mods = { draw, logic, motionMod, lib,native }; data = DEFAULT_FACE; shown = ''; motionRules = mods.motionMod.parseMotion(lib, DEFAULT_MOTION); startMotion(); draw_();   // the bundled fallback face first: the avatar never waits for the network
         host?.progress?.start?.('faces', 'Loading the face set', { quiet: true });   // PROGRESS: recorded, never shown while it loads (the fallback face is already drawn: this is an upgrade); said only when it cannot be had
         catalogFacts = facts; defaultMotion = DEFAULT_MOTION;   // the catalog's k.motion is read when the face is first looked at or first replies (adoptCatalogMotion): the bundled copy is the same text and has moved the face since the first paint
         const d = await facts.faces();
@@ -167,27 +179,45 @@ export function createAvatar(container, host = null) {
     requestAnimationFrame(() => requestAnimationFrame(() => { layer.classList.add('is-in'); old.forEach((o) => o.classList.remove('is-in')); }));
     setTimeout(() => old.forEach((o) => o.remove()), FADE_MS + 60);
   }
-  const card = (label, text, svg, on) => {
-    const b = el('button', `p2-avatar-card${on ? ' is-on' : ''}`, { type: 'button', title: `Say: ${text}` });
+  const card = (label, action, svg, on) => {
+    const b = el('button', `p2-avatar-card${on ? ' is-on' : ''}`, { type: 'button', title: label,'aria-pressed':String(!!on) });
     const pic = el('span', 'p2-avatar-pic'); if (svg) pic.innerHTML = svg;
     const lbl = el('span', 'p2-avatar-lbl'); lbl.textContent = label;
-    b.append(pic, lbl); b.addEventListener('click', () => say(text));
+    b.append(pic, lbl); b.addEventListener('click', action);
     return b;
   };
   function rows(face) {
-    const sig = JSON.stringify([face.options, face.base, face.name, Object.keys(face.saved ?? {}), full]);
+    const caps=mods.native.avatarCapabilities(data);
+    selectedSlot=caps.slots.some(s=>s.id===selectedSlot)?selectedSlot:caps.slots.find(s=>s.variants.length)?.id;
+    const sig = JSON.stringify([face.base,face.expression,face.slots,face.colours,face.paint,face.grade,face.adj,selectedSlot,full]);
     if (sig === shown) return;
     shown = sig;
     const thumb = (f, label) => mods.draw.renderFace(data, f, { label, bg: '#e8edf5' });
     // the fallback draws only the default preset: the catalog's other faces are cards once it has arrived
-    const names = Object.keys(data.presets).filter((n) => full || n === 'girl');
-    const cards = names.map((n) => card(plain(n)[0].toUpperCase() + plain(n).slice(1), presetSay(n), thumb(mods.logic.newFace(data, n), n), face.base === n && !face.name));
-    for (const v of Object.values(face.saved ?? {})) cards.push(card(v.name, `be ${v.name}`, thumb({ ...mods.logic.newFace(data, v.base), slots: v.slots, colours: v.colours, paint: v.paint, adj: v.adj }, v.name), face.name === v.name));
+    const names=caps.presets;
+    const cards = names.map((n) => card(plain(n)[0].toUpperCase() + plain(n).slice(1),()=>control('avatar.face.preset',{preset:n}), thumb(mods.logic.newFace(data, n), n), face.base === n && !face.name));
     facesEl.replaceChildren(...cards); facesEl.hidden = !cards.length;
-    chipsEl.replaceChildren(...Object.keys(data.expressions).filter((e) => e !== 'talking').map((e) => { const b = el('button', 'p2-avatar-chip', { type: 'button', title: `Say: ${expressionSay(e)}` }); b.textContent = e[0].toUpperCase() + e.slice(1); b.addEventListener('click', () => say(expressionSay(e))); return b; }));
-    const o = face.options;
-    if (o) { optsEl.replaceChildren(...o.variants.map((n) => card(n === 'none' ? 'None' : plain(n), variantSay(o.slot, n), n === 'none' ? '' : mods.draw.variantSvg(data, face, o.slot, n, { size: 52 }), face.slots[o.slot] === n))); optsEl.hidden = false; } else { optsEl.replaceChildren(); optsEl.hidden = true; }
+    chipsEl.replaceChildren(...caps.expressions.filter((e) => e !== 'talking').map((e) => { const b = el('button', 'p2-avatar-chip', { type: 'button', title: expressionSay(e),'aria-pressed':String(face.expression===e) }); b.textContent = e[0].toUpperCase() + e.slice(1); b.addEventListener('click', () => control('avatar.face.expression',{expression:e})); return b; }));
+    toolsEl.replaceChildren();
+    const select=(label,values,value,change)=>{const wrap=el('label',''),input=el('select','',{'aria-label':label});wrap.append(document.createTextNode(label+' '),input);for(const [id,name]of values){const option=el('option','',{value:id});option.textContent=name;input.append(option);}input.value=value;input.addEventListener('change',()=>change(input.value));toolsEl.append(wrap);return input;};
+    select('Part',caps.slots.filter(s=>s.variants.length).map(s=>[s.id,s.label]),selectedSlot,id=>{selectedSlot=id;shown='';draw_();});
+    const slot=caps.slots.find(s=>s.id===selectedSlot),present=face.slots[selectedSlot]&&face.slots[selectedSlot]!=='none';
+    if(!slot)return;
+    const colours=mods.native.avatarColoursFor(data,face,selectedSlot);
+    const colour=select(slot.colourRole?plain(slot.colourRole)+' colour':'Part colour',[['','Choose'],...colours.map(c=>[c,plain(c)])],face.paint?.[selectedSlot]??face.colours?.[slot.colourRole]??'',c=>{if(c)control('avatar.part.change',{ids:mods.native.avatarColourScope(data,faceOf(),selectedSlot,c),colour:c});});colour.disabled=!present||!colours.length;
+    const colourValue=face.paint?.[selectedSlot]??face.colours?.[slot.colourRole],scope=colourValue?mods.native.avatarColourScope(data,face,selectedSlot,colourValue):[selectedSlot];
+    const scopeEl=el('div','p2-avatar-scope');scopeEl.textContent='Colour affects: '+scope.map(plain).join(', ');toolsEl.append(scopeEl);
+    const size=select('Size',caps.sizes.map(s=>[s,plain(s)]),face.grade?.[selectedSlot]??'default',size=>control('avatar.part.change',{ids:[selectedSlot],size}));size.disabled=!present;
+    const linkedParts=mods.native.avatarResizeScope(data,selectedSlot);
+    if(linkedParts.length){const linked=el('div','p2-avatar-scope');linked.textContent='Resizing also adjusts the attached parts: '+linkedParts.map(plain).join(', ');toolsEl.append(linked);}
+    for(const [label,direction]of [['←','left'],['↑','up'],['↓','down'],['→','right']]){const b=el('button','',{type:'button',title:'Move '+slot.label+' '+direction,'aria-label':'Move '+slot.label+' '+direction});b.textContent=label;b.disabled=!present;b.addEventListener('click',()=>control('avatar.part.move',{ids:[selectedSlot],place:direction}));toolsEl.append(b);}
+    const undo=el('button','',{type:'button'});undo.textContent='Undo';undo.addEventListener('click',()=>control('avatar.undo',{}));toolsEl.append(undo);
+    const wordlist=el('details','p2-avatar-wordlist'),wordTitle=el('summary','');wordTitle.textContent='Words for '+slot.label;const wordBody=el('div','');wordBody.textContent=[slot.label,...(data.aliases?.[selectedSlot]??[])].filter((w,i,a)=>a.indexOf(w)===i).join(' · ');wordlist.append(wordTitle,wordBody);toolsEl.append(wordlist);
+    const choices=slot.optional?['none',...slot.variants]:slot.variants;
+    optsEl.replaceChildren(...choices.map(variant=>card(variant==='none'?'Remove':plain(variant),()=>variant==='none'?control('avatar.part.remove',{ids:[selectedSlot]}):present?control('avatar.part.change',{ids:[selectedSlot],variant}):control('avatar.part.add',{id:selectedSlot,variant}),variant==='none'?'':mods.draw.variantSvg(data,face,selectedSlot,variant,{size:52}),face.slots[selectedSlot]===variant)));optsEl.hidden=false;
   }
+  stage.addEventListener('click',event=>{const id=event.target.closest?.('[data-avatar-slot]')?.getAttribute('data-avatar-slot');if(id){selectedSlot=id;shown='';rows(faceOf());stage.focus();}});
+  stage.addEventListener('keydown',event=>{if(!data||!selectedSlot)return;const directions={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'};if(directions[event.key]){event.preventDefault();control('avatar.part.move',{ids:[selectedSlot],place:directions[event.key]});}else if(event.key==='Delete'||event.key==='Backspace'){event.preventDefault();control('avatar.part.remove',{ids:[selectedSlot]});}});
 
   function draw_() {
     if (destroyed) return;
@@ -201,7 +231,7 @@ export function createAvatar(container, host = null) {
     for (const m of mirrors) { const svg = svgOf(face, m.px).replace(/ width="[\d.]+" height="[\d.]+"/, ''); if (svg !== m.svg) { m.svg = svg; m.el.innerHTML = svg; } }
     if (!visible) return;   // the big face and its rows are drawn while the popup is open
     partsEl.textContent = mods.logic.describeFace(data, face);
-    noteEl.textContent = full ? 'Faces: parts of the k.faces knowledge world (hand-written, CC0 1.0).' : 'Showing the small built-in face; the full set of faces is loading.';
+    noteEl.textContent = (full?'Parts and looks from the face knowledge catalog. ':'Showing the built-in face while the catalog loads. ')+'Choose a part or click it in the preview. Arrow keys move it; Delete removes an optional part.';
     stage.setAttribute('aria-label', `${nameEl.textContent}, a drawn face with ${partsEl.textContent}`);
     rows(face);
     paint(svgOf(face), !frame.talking);

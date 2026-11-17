@@ -3,14 +3,16 @@ import {observedReaderContext} from './native-reader-context.mjs';
 import {createDrawingHost} from '../../worlds/art.draw/declared-host.mjs';
 import {createDiagramHost} from '../../worlds/diagram.sketch/declared-host.mjs';
 import {createDocumentHost} from '../../worlds/docs.editor/declared-host.mjs';
+import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs';
 import {createCalendarHost} from '../../worlds/time.calendar/declared-host.mjs';
-export const NATIVE_AREAS={draw:{area:'drawing',world:'art.draw',create:createDrawingHost},diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramHost},editor:{area:'document',world:'docs.editor',create:createDocumentHost},calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost,policyFile:'scheduling-policy.sop'}};
+export const NATIVE_AREAS={avatar:{area:'drawing',world:'ui.avatar',create:createAvatarHost,loadKnowledge:'faces'},draw:{area:'drawing',world:'art.draw',create:createDrawingHost},diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramHost},editor:{area:'document',world:'docs.editor',create:createDocumentHost},calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost,policyFile:'scheduling-policy.sop'}};
 /** Application composition: the same declared policy guards controls and spoken requests. */
-export async function createAreaHost(area,{loader,...options}={}){
+export async function createAreaHost(area,{loader,knowledge,...options}={}){
  if(!area)throw Error('unknown-native-area');
+ if(area.loadKnowledge)await knowledge?.[area.loadKnowledge]?.();
  const policySource=area.policyFile?await loader?.readFile?.(area.world,area.policyFile):undefined;
  if(area.policyFile&&!policySource)throw Error('native-policy-unavailable');
- return area.create({...options,...(policySource?{policySource}:{})});
+ return area.create({...options,knowledge,...(policySource?{policySource}:{})});
 }
 export function createAppReaderContext({getState,getPrevious=()=>null,onObservation=()=>{}}={}){
  if(typeof getState!=='function'||typeof getPrevious!=='function'||typeof onObservation!=='function')throw Error('invalid-app-reader-context');

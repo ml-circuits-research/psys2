@@ -5,6 +5,7 @@
 // imports/diagram-vss-demo/PROVENANCE.md); the geometry helpers (dims, group boxes, arrow routes, palette) come from the engine module of the world.
 // The engine (470 KB) is loaded lazily: when this tab is first shown, or when the first state with shapes arrives (PERF).
 // Pan (drag), zoom (buttons, ctrl + wheel, pinch, + - 0 keys), fit, SVG and PNG export (effect diagram.download).
+import {makeGroupTools} from './diagram/groups.mjs';
 const ENGINE_ASSET = 'worlds/diagram.sketch/engine/logic.mjs';
 const CHART_ASSET = 'worlds/data.charts/vector-svg.mjs';
 const ARROWS_ASSET = 'worlds/diagram.sketch/arrows.mjs';   // arrow geometry (DIAG3): sides, entry angles, spread, detours
@@ -41,6 +42,17 @@ const CSS = `
 .dg-btn.hint { box-shadow: inset 0 0 0 2px #e8a317; }
 .dg-zoom { display: inline-flex; align-items: center; gap: 4px; }
 .dg-pct { min-width: 44px; text-align: center; font: 600 12px system-ui, sans-serif; color: var(--dg-faint); }
+.dg-root { height:100%;min-height:480px;container-type:inline-size;gap:6px; }
+.dg-workspace { display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,300px);gap:8px;flex:1;min-height:350px; }
+.dg-inspector { min-width:0;overflow:auto;max-height:100%; }
+.dg-board { aspect-ratio:auto;max-height:none;min-height:350px;height:100%;border-radius:8px; }
+.dg-chart-tools { box-sizing:border-box;max-width:100%; }.dg-chart-form { min-width:0; }
+.dg-chart-form input,.dg-chart-form select,.dg-chart-form textarea { min-width:0;box-sizing:border-box;max-width:100%; }
+.dg-inspector .dg-chart-form { flex-direction:column;align-items:stretch;gap:8px; }.dg-inspector label { min-width:0; }
+.dg-inspector input,.dg-inspector select,.dg-inspector textarea { max-width:100%;width:100%; }
+.dg-inspector input[type=checkbox] { width:auto; }.dg-inspector .dg-position { width:100%; }
+.dg-chart-data { display:block;overflow:auto; }
+@container (max-width:700px) { .dg-workspace { grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(350px,55vh) auto; }.dg-inspector { max-height:none;overflow:visible; }.dg-inspector .dg-chart-form { flex-direction:row;flex-wrap:wrap; } }
 .dg-chart { cursor: pointer; }
 .dg-chart-tools { border: 1px solid var(--dg-line); border-radius: 10px; padding: 10px 12px; background: var(--dg-card); }
 .dg-chart-tools summary { cursor: pointer; font-weight: 650; }
@@ -83,7 +95,7 @@ function paletteCss(K, scope = ':root') {
 
 function make(holder, host) {
   let api;
-  holder.style.maxWidth = '1000px';
+  holder.style.maxWidth='none';holder.style.height='100%';
   holder.classList.add('dg-root');
   const html = (tag, cls, inner) => { const e = document.createElement(tag); if (cls) e.className = cls; if (inner != null) e.innerHTML = inner; return e; };
   const board = html('div', 'dg-board'), hint = html('div', 'dg-hint');
@@ -180,6 +192,7 @@ function make(holder, host) {
     if (s.layer === 'background' || s.layer === 'zone' || !tagShown(s)) el('title', {}, grp).textContent = s.name;
     if (tagShown(s)) el('text', { class: 'tag', x: 0, y: -h / 2 - 7, 'text-anchor': 'middle' }, grp).textContent = s.name;
     if (idShown(s)) el('text', { class: 'idtag', x: -w / 2, y: -h / 2 - 3, 'text-anchor': 'start' }, grp).textContent = s.id;
+    if(typeof s.value==='number')el('text',{x:0,y:h/2+17,'text-anchor':'middle','font-size':12,fill:'var(--dg-ink)'},grp).textContent=String(s.value);
     if (s.label) {
       const room = ['rectangle', 'square', 'ellipse', 'circle'].includes(s.shape) ? w * 0.84 : w * 0.56;
       let fs = s.w ? Math.max(10, Math.min(15, s.h / 2.8)) : Math.max(9, Math.min(14, s.size / 4.4)), txt = s.label;
@@ -217,7 +230,7 @@ function make(holder, host) {
       const pad = 12, x = b.x1 - pad, y = b.y1 - pad - 14, w = b.w + 2 * pad, h = b.h + 2 * pad + 14, at = spots.get(gr.name) || { x: x + 10, y: y - 6 };
       const grp = el('g', { class: 'grp', 'data-group': gr.name }, g);
       el('rect', { x, y, width: w, height: h, rx: 12, style: 'fill: var(--dg-accent); fill-opacity: .045; stroke: var(--dg-faint); stroke-width: 1.25; stroke-dasharray: 6 5; pointer-events: none' }, grp);
-      el('text', { x: at.x, y: at.y, style: 'font: 600 12px system-ui, sans-serif; fill: var(--dg-faint); pointer-events: none' }, grp).textContent = gr.name;
+      el('text', { x: at.x, y: at.y, style: 'font: 600 12px system-ui, sans-serif; fill: var(--dg-faint); pointer-events: none' }, grp).textContent = gr.label??gr.name;
     }
   }
   const boxOf = (s) => { const d = K.dims(s); return { x1: s.x - d.w / 2, x2: s.x + d.w / 2, y1: s.y - d.h / 2, y2: s.y + d.h / 2 }; };
@@ -324,6 +337,7 @@ function make(holder, host) {
     left.value=chart.placement?.x??60;top.value=chart.placement?.y??60;stacked.checked=chart.options?.stacked===true;palette.value=chart.options?.palette??'default';horizontal.checked=chart.options?.horizontal===true;legend.checked=chart.options?.showLegend!==false;values.checked=chart.options?.showValues===true;order.value=chart.options?.sort??'none';
     table.textContent='';const head=html('tr');head.append(html('th','','Label'));for(const dataset of chart.datasets){const cell=html('th');cell.textContent=dataset.label;head.append(cell);}table.append(head);for(const [i,label]of chart.labels.entries()){const row=html('tr');const cell=html('td');cell.textContent=label;row.append(cell);for(const dataset of chart.datasets)row.append(html('td','',String(dataset.data[i])));table.append(row);}
   }
+  const workspace=html('div','dg-workspace'),inspector=html('aside','dg-inspector');chartPanel.open=true;workspace.append(board,inspector);inspector.append(chartPanel);holder.replaceChildren(tools,workspace,caption);const groupTools=makeGroupTools(inspector,{tool:toolCall,asset:host.asset,getState:()=>state,tools:host.tools?()=>host.tools({view:'diagram'}):null});
   let suppressObjectClick=false;
   svg.addEventListener('click',ev=>{if(suppressObjectClick){suppressObjectClick=false;return;}const shape=ev.target.closest?.('.shp[data-name]');if(shape){toolCall('diagram.node.select',{ids:[shape.getAttribute('data-name')]});return;}const chart=ev.target.closest?.('[data-chart-id]');if(chart)toolCall('chart.select',{id:chart.getAttribute('data-chart-id')});});
   svg.addEventListener('keydown',ev=>{if(!['Enter',' '].includes(ev.key))return;const chart=ev.target.closest?.('[data-chart-id]');if(chart){ev.preventDefault();toolCall('chart.select',{id:chart.getAttribute('data-chart-id')});}});
@@ -376,9 +390,9 @@ function make(holder, host) {
     if(drag.object&&drag.moved){suppressObjectClick=true;const o=drag.object;if(ev.type==='pointercancel'){suppressObjectClick=false;redraw();return;}const x=o.x+(ev.clientX-drag.x0)*drag.upp,y=o.y+(ev.clientY-drag.y0)*drag.upp;toolCall(o.kind==='chart'?'chart.place':'diagram.node.place',o.kind==='chart'?{id:o.id,x,y}:{ids:[o.id],x,y});}
   } };
   svg.addEventListener('pointerup', endPan); svg.addEventListener('pointercancel', endPan);
-  const editBox=html('form','dg-chart-form');editBox.hidden=true;const editLabel=html('input'),saveLabel=btn('Save label','Save node label',()=>{}),cancelLabel=btn('Cancel','Cancel label edit',()=>{editBox.hidden=true;});saveLabel.type='submit';editLabel.setAttribute('aria-label','Node label');editBox.append(editLabel,saveLabel,cancelLabel);holder.append(editBox);let editingNode=null;
-  svg.addEventListener('dblclick',ev=>{const node=ev.target.closest?.('.shp[data-name]');if(!node)return;const shape=state.shapes.find(s=>s.name===node.getAttribute('data-name'));if(!shape)return;editingNode=shape.name;editLabel.value=shape.label??'';editBox.hidden=false;editLabel.focus();editLabel.select();});
-  editBox.addEventListener('submit',async ev=>{ev.preventDefault();if(editingNode){await toolCall('diagram.node.change',{ids:[editingNode],label:editLabel.value});editBox.hidden=true;editingNode=null;}});
+  const editBox=html('form','dg-chart-form');editBox.hidden=true;const editLabel=html('input'),editValue=html('input'),saveLabel=btn('Save label','Save node label',()=>{}),cancelLabel=btn('Cancel','Cancel label edit',()=>{editBox.hidden=true;});saveLabel.type='submit';editLabel.setAttribute('aria-label','Node label');editValue.type='number';editValue.step='any';editValue.placeholder='Numeric value';editValue.setAttribute('aria-label','Node value');editBox.append(editLabel,editValue,saveLabel,cancelLabel);inspector.append(editBox);let editingNode=null;
+  svg.addEventListener('dblclick',ev=>{const node=ev.target.closest?.('.shp[data-name]');if(!node)return;const shape=state.shapes.find(s=>s.name===node.getAttribute('data-name'));if(!shape)return;editingNode=shape.name;editLabel.value=shape.label??'';editValue.value=shape.value??'';editBox.hidden=false;editLabel.focus();editLabel.select();});
+  editBox.addEventListener('submit',async ev=>{ev.preventDefault();if(editingNode){await toolCall('diagram.node.change',{ids:[editingNode],label:editLabel.value,...(editValue.value.trim()&&Number.isFinite(Number(editValue.value))?{value:Number(editValue.value)}:{})});editBox.hidden=true;editingNode=null;}});
   svg.addEventListener('wheel', (ev) => { if (!ev.ctrlKey && !ev.metaKey) return; ev.preventDefault(); zoomBy(Math.exp(-ev.deltaY * 0.0025), svgPt(ev)); }, { passive: false });
   svg.addEventListener('keydown', (ev) => {
     const step = 0.1, d = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[ev.key];
@@ -432,7 +446,7 @@ function make(holder, host) {
       state.shapes ??= []; state.edges ??= []; state.groups ??= [];
       if ((state.shapes.length || state.chartTools?.charts?.length) && !K) load();
       syncChartTools();
-      redraw();
+      redraw();groupTools.update();
     },
     hide() { ptrs.clear(); pan = null; pinch = null; },
     /** Download the diagram as SVG or PNG; returns { ok, detail }. */
@@ -455,7 +469,7 @@ function make(holder, host) {
         return { ok: true, detail: `${base}.png` };
       } catch (e) { return { ok: false, detail: String(e?.message ?? e) }; } finally { URL.revokeObjectURL(url); }
     },
-    destroy() { destroyed = true; clearInterval(hintTimer); },
+    destroy() { destroyed = true;groupTools.destroy(); clearInterval(hintTimer); },
   };
 }
 

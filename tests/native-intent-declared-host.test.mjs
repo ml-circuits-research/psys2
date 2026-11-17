@@ -18,7 +18,7 @@ test('Calendar typed intent preserves every argument, Unicode provenance and exa
  invoke(host,'calendar.calendar.add',{id:'work',label:'Work'});
  const args={id:'event',title:'Plan 🐟\nSecond line',start:1000,duration:100,participants:[],room:null,calendar:'work',notes:'Use "quotes"'};
  const frozen=JSON.stringify(args),r=capture(host,'calendar.meeting.add',args);
- assert.match(r.intent.text,/^Create a meeting/);
+ assert.match(r.intent.text,/^Create an event/);
  assert.equal(r.intent.schema,'app.control.intent');assert.match(r.intent.semantics,/not an executable/);
  assert.deepEqual(r.intent.expected.providedArgs,args);assert.equal(JSON.stringify(args),frozen);
  assert.equal(r.verification.status,'verified');
@@ -110,4 +110,22 @@ test('human commands omit generated ids, preserve literal names and use declared
  assert.equal(intent.expected.args.id,'new-uuid');
  assert.equal(intent.sourceRanges.some(r=>r.parameter==='id'),false);
  for(const range of intent.sourceRanges)assert.equal(Array.from(intent.text).slice(range.start,range.end).join(''),range.rendered);
+});
+
+test('typed SOP intent is interpreted back into exact native arguments before execution',async()=>{
+ const {readNativeIntent}=await import('../src/dialog/native-intent-reader.mjs');
+ const operation={id:'example.collection.make',act:'make',on:'example.collection',params:{name:{type:'string',required:true},values:{type:'array',required:true},options:{type:'object',required:true}}};
+ const args={name:'A "quoted" name',values:[1,2.5,null,false,'x'],options:{nested:['one',{two:2}],empty:[]}};
+ const intent=describeNativeControl({operation,args,before:null}),decoded=readNativeIntent(intent.wires);
+ assert.equal(decoded.operation,operation.id);assert.deepEqual(decoded.args,args);assert.equal(decoded.text,intent.text);
+ assert.throws(()=>readNativeIntent(intent.wires+'\n@other app.control.intent'),/one-control/);
+});
+
+test('a declared source identity is retained in text without restricting the new result identity',()=>{
+ const operation={id:'toy.derive',act:'make',on:'toy.result',result:{identityParameter:null},params:{id:{type:'string',required:true},label:{type:'string',required:true}},intent:{parameters:{id:{role:'source',reference:true,label:'from source'}}}};
+ const source={id:'source-1',kind:'source',sourceType:'toy.source',source:'source-evidence',version:'0',inputs:[{key:'label',values:['"Original"']}]};
+ const before={instanceId:'derive',version:'0',complete:true,objects:[source]},created={id:'result-2',kind:'result',sourceType:'toy.result',source:'result-evidence',version:'1',inputs:[{key:'label',values:['"Derived"']}]},after={...before,version:'1',objects:[source,created]};
+ const intent=describeNativeControl({operation,args:{id:source.id,label:'Derived'},before});
+ assert.match(intent.text,/from source "Original"/);assert.equal(intent.expected.targets[0].id,undefined);
+ assert.equal(verifyNativeControlEffect({intent,before,after,receipt:{status:'changed',operation:operation.id}}).status,'verified');
 });

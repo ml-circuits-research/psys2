@@ -1,10 +1,13 @@
 // Drawing tab (world art.draw, spec 07 sections 6-7): a children's drawing board. The world holds the scene graph
 // (objects, sky, ground, selection); this module only draws it with rough.js (vendored in ../../vendor/draw/) so it
-// looks hand-drawn, pops new things in, and turns clicks into typed commands ("select the tree") through host.send.
+// looks hand-drawn, pops new things in, and sends explicit editing gestures through declared native tools.
 // Effects: draw.download { format: 'png' | 'svg', filename }.
 import { createRenderer, PAPER } from './draw/render.mjs';
 
 const VENDOR = new URL('../../vendor/draw/rough.mjs', import.meta.url);
+const TOOLS_ASSET = 'worlds/art.draw/declared-host.mjs';
+const PARTS_ASSET = 'worlds/art.draw/part-tools.mjs';
+const VALUES_ASSET = 'lib/knowledge/values.mjs';
 const SCENE_ASSET = 'worlds/art.draw/scene.mjs';
 const W = 1000, H = 700;
 
@@ -19,7 +22,7 @@ const CSS = `
 .dr-root { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
 .dr-board { position: relative; width: min(100%, calc((100vh - 300px) * 1.4286 + 28px)); min-width: 260px; padding: 12px; border-radius: 22px;
   background: linear-gradient(135deg, #d9a766, #b9803f 55%, #cf9a58); box-shadow: 0 14px 34px rgba(60, 35, 10, .28), inset 0 2px 0 rgba(255, 255, 255, .35), inset 0 -3px 0 rgba(70, 40, 10, .25); }
-.dr-paper { position: relative; width: 100%; aspect-ratio: 1000 / 700; border-radius: 10px; overflow: hidden; background: ${PAPER}; box-shadow: inset 0 0 22px rgba(120, 90, 40, .35), inset 0 0 0 2px rgba(90, 60, 20, .25); touch-action: manipulation; }
+.dr-paper { position: relative; width: 100%; aspect-ratio: 1000 / 700; border-radius: 10px; overflow: hidden; background: ${PAPER}; box-shadow: inset 0 0 22px rgba(120, 90, 40, .35), inset 0 0 0 2px rgba(90, 60, 20, .25); touch-action: none; }
 .dr-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: default; }
 .dr-canvas.is-hover { cursor: pointer; }
 .dr-grain { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .55; background-size: 220px 220px; }
@@ -41,8 +44,30 @@ const CSS = `
 .dr-act { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 999px; background: #fff; color: #3d3350; font-weight: 700; font-size: 14px; box-shadow: 0 2px 0 rgba(0, 0, 0, .18), inset 0 0 0 2px #e6dcc8; transition: transform .12s; }
 .dr-act:hover, .dr-act:focus-visible { transform: translateY(-2px); background: #fff4c9; }
 .dr-act svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.dr-editor { display:flex;flex-wrap:wrap;align-items:end;gap:8px 12px;width:100%;padding:12px;box-sizing:border-box;border:1px solid #dfd5c3;border-radius:12px;background:#fff8e7; }
+.dr-editor label { display:grid;gap:4px;font-size:12px;color:#5e4c3a; }
+.dr-editor input,.dr-editor select { font:14px system-ui;padding:7px;border:1px solid #c5baa5;border-radius:6px;background:#fff;color:#263646;max-width:200px; }
+.dr-editor input[type=number] { width:85px; }
+.dr-act:disabled { opacity:.45;cursor:default; }
+.dr-canvas:focus-visible { outline:3px solid #356ac3;outline-offset:-4px; }
+.dr-root { align-items:stretch;height:100%;min-height:480px;gap:6px;container-type:inline-size; }
+.dr-workspace { display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,280px);gap:8px;flex:1;min-height:0; }
+.dr-inspector { overflow:auto;min-width:0;display:flex;flex-direction:column;gap:8px;max-height:100%; }
+.dr-board { width:100%;height:100%;min-width:0;box-sizing:border-box;padding:4px;border-radius:10px;box-shadow:none; }
+.dr-paper { height:100%;min-height:350px;aspect-ratio:auto;border-radius:6px; }
+.dr-editor { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));padding:8px;gap:8px; }
+.dr-editor label { min-width:0; }.dr-editor label:has(select[multiple]),.dr-editor label:has(input[type=search]) { grid-column:1/-1; }
+.dr-editor input,.dr-editor select { width:100%;max-width:100%;min-width:0;box-sizing:border-box; }.dr-editor input[type=number] { width:100%; }
+.dr-tools { min-width:0;width:100%;gap:8px; }.dr-crayons { gap:3px;padding:6px;flex-wrap:wrap; }.dr-crayon { width:16px;height:30px; }
+@container (max-width:640px) { .dr-workspace { grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(350px,55vh) auto; }.dr-inspector { overflow:visible;max-height:none; }.dr-editor { grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); } }
 .dr-caption { margin: 0; min-height: 22px; font-size: 14px; opacity: .8; text-align: center; max-width: 720px; }
-@media (prefers-color-scheme: dark) { .dr-caption { opacity: .9; } .dr-act { background: #2a3640; color: #f1ead8; box-shadow: 0 2px 0 rgba(0, 0, 0, .5), inset 0 0 0 2px #3b4954; } .dr-act:hover { background: #3a4a56; } }
+@media (prefers-color-scheme: dark) { .dr-editor { display:flex;flex-wrap:wrap;align-items:end;gap:8px 12px;width:100%;padding:12px;box-sizing:border-box;border:1px solid #dfd5c3;border-radius:12px;background:#fff8e7; }
+.dr-editor label { display:grid;gap:4px;font-size:12px;color:#5e4c3a; }
+.dr-editor input,.dr-editor select { font:14px system-ui;padding:7px;border:1px solid #c5baa5;border-radius:6px;background:#fff;color:#263646;max-width:200px; }
+.dr-editor input[type=number] { width:85px; }
+.dr-act:disabled { opacity:.45;cursor:default; }
+.dr-canvas:focus-visible { outline:3px solid #356ac3;outline-offset:-4px; }
+.dr-caption { opacity: .9; } .dr-act { background: #2a3640; color: #f1ead8; box-shadow: 0 2px 0 rgba(0, 0, 0, .5), inset 0 0 0 2px #3b4954; } .dr-act:hover { background: #3a4a56; } }
 @media (prefers-reduced-motion: reduce) { .dr-pencil { animation: none; } .dr-crayon { transition: none; } }
 `;
 function ensureCss() {
@@ -85,7 +110,7 @@ export function captionOf(state) {
   const objs = state?.objects ?? [];
   if (!objs.length && !state?.sky && !state?.ground) return 'An empty page. Say what to draw!';
   const counts = new Map();
-  for (const o of objs) counts.set(o.thing ?? o.kind, (counts.get(o.thing ?? o.kind) ?? 0) + 1);
+  for (const o of objs) counts.set(o.name??o.semanticKind??o.thing??o.kind,(counts.get(o.name??o.semanticKind??o.thing??o.kind)??0)+1);
   const bits = [...counts].map(([k, n]) => (n === 1 ? `a ${k}` : `${n} ${plural(k, n)}`));
   if (state?.sky) bits.push(`${state.sky} sky`);
   if (state?.ground) bits.push(state.ground);
@@ -93,13 +118,14 @@ export function captionOf(state) {
 }
 
 function make(holder, host) {
+  let api;
   ensureCss();
-  holder.style.maxWidth = '1000px';
+  holder.style.maxWidth='none';holder.style.height='100%';
   holder.classList.add('dr-root');
   const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
   const board = el('div', 'dr-board'), paper = el('div', 'dr-paper'), canvas = el('canvas', 'dr-canvas');
   canvas.width = W * 2; canvas.height = H * 2;
-  canvas.setAttribute('role', 'img');
+  canvas.setAttribute('role', 'img');canvas.tabIndex=0;canvas.title='Drag to move. Arrow keys nudge; Shift moves farther. Enter edits the name; Delete removes.';
   const grain = el('div', 'dr-grain'), vignette = el('div', 'dr-vignette'), hint = el('div', 'dr-hint');
   paper.append(canvas, grain, vignette, hint);
   board.append(paper);
@@ -109,27 +135,60 @@ function make(holder, host) {
   tools.append(crayons, actions);
 
   let scene = null, renderer = null, rough = null, rc = null, ctx = null;
+  let drag=null,toolBindings=[],colourKnowledge=null,partTools=null;
   let state = EMPTY, loadError = null, destroyed = false, raf = 0, hintTimer = 0, hintIndex = 0, last = 0, hover = null;
   const shown = new Map();   // id -> { obj, cur: pose, born, dying }
 
-  // ---- toolbar -------------------------------------------------------------------------------------------------
-  const send = (text) => host.send(text);
-  const crayonButtons = [];   // painted with the colour reader of the board (the catalog's k.values through scene.colorHex) once the scene module is loaded
-  const paintCrayons = () => { for (const [c, b] of crayonButtons) if (scene) b.style.background = scene.colorHex(c); };
-  for (const c of CRAYONS) {
-    const b = el('button', 'dr-crayon');
-    b.type = 'button'; b.title = `Color it ${c}`; b.setAttribute('aria-label', `Color it ${c}`);
-    crayonButtons.push([c, b]);
-    if (c === 'white') b.style.boxShadow = 'inset 0 0 0 2px #d8d2c4, 0 1px 0 rgba(0,0,0,.25)';
-    b.addEventListener('click', () => send(`color it ${c}`));
-    crayons.append(b);
+  // Native operation arguments are shared by pointer/keyboard gestures and future voice commands.
+  const tool=async(operation,args={})=>{try{if(typeof host.tool!=='function')throw Error('The drawing tools are not available.');const result=await host.tool(operation,args);if(result?.text)caption.textContent=result.text;return result;}catch(e){caption.textContent=String(e.message??e);return null;}};
+  const selected=()=>state.objects?.find(o=>o.id===state.selected)??null;
+  const readable=o=>o.name||scene?.kindName?.(scene.kindKey(o))||o.thing||o.kind;
+  const editor=el('div','dr-editor');holder.insertBefore(editor,board);
+  const control=(label,type='text')=>{const box=el('label');box.append(document.createTextNode(label));const input=el(type==='select'?'select':'input');if(type!=='select')input.type=type;input.setAttribute('aria-label',label);box.append(input);editor.append(box);return input;};
+  const kinds=control('Add shape or object','select');kinds.disabled=true;
+  const addButton=el('button','dr-act','Add');addButton.type='button';addButton.disabled=true;addButton.addEventListener('click',()=>tool('drawing.object.make',{kind:kinds.value}));editor.append(addButton);
+  const objectChoice=control('Selected object','select');objectChoice.addEventListener('change',()=>tool('drawing.object.select',{id:objectChoice.value||null}));
+  const nameInput=control('Object name'),sizeInput=control('Size','number'),colourInput=control('Colour','color'),colourChoice=control('Named colour','select');
+  sizeInput.min='1';sizeInput.step='1';
+  const applyName=()=>{const o=selected();if(o)tool('drawing.object.change',{ids:[o.id],name:nameInput.value});};
+  nameInput.addEventListener('change',applyName);nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();nameInput.blur();canvas.focus();}});
+  sizeInput.addEventListener('change',()=>{const o=selected(),size=Number(sizeInput.value);if(o&&Number.isFinite(size)&&size>0)tool('drawing.object.change',{ids:[o.id],size});});
+  colourInput.addEventListener('change',()=>{const o=selected();if(o)tool('drawing.object.change',{ids:[o.id],color:colourInput.value});});
+  colourChoice.addEventListener('change',()=>{const o=selected(),color=colourKnowledge?.colourHex(colourChoice.value);if(o&&color)tool('drawing.object.change',{ids:[o.id],color});});
+  const act=(label,icon,callback)=>{const b=el('button','dr-act',`${ICON[icon]??''}<span>${label}</span>`);b.type='button';b.addEventListener('click',callback);actions.append(b);return b;};
+  const removeButton=act('Delete selected','',()=>{const o=selected();if(o)tool('drawing.object.remove',{ids:[o.id]});});
+  act('Undo','undo',()=>tool('undo'));
+  const redoButton=act('Redo','redo',()=>tool('drawing.redo'));redoButton.disabled=true;
+  act('New','fresh',()=>tool('drawing.page.clear'));
+  act('Save PNG','save',()=>api.download({format:'png'}));act('Save SVG','save',()=>api.download({format:'svg'}));
+  const crayonButtons=[];
+  const paintCrayons=()=>{for(const [c,b]of crayonButtons){const hex=colourKnowledge?.colourHex(c);if(hex)b.style.background=hex;b.disabled=!selected()||!hex;}};
+  for(const c of CRAYONS){const b=el('button','dr-crayon');b.type='button';b.title=`Colour selected ${c}`;b.setAttribute('aria-label',`Colour selected ${c}`);b.disabled=true;crayonButtons.push([c,b]);if(c==='white')b.style.boxShadow='inset 0 0 0 2px #d8d2c4, 0 1px 0 rgba(0,0,0,.25)';b.addEventListener('click',()=>{const o=selected(),color=colourKnowledge?.colourHex(c);if(o&&color)tool('drawing.object.change',{ids:[o.id],color});});crayons.append(b);}
+  const knowledgeInput=control('Find a word in knowledge','search'),dictionary=el('datalist');dictionary.id='drawing-words-'+crypto.randomUUID();knowledgeInput.setAttribute('list',dictionary.id);editor.append(dictionary);let dictionaryWords=null,dictionaryPromise=null;
+  const loadDictionary=()=>dictionaryPromise??=Promise.all([import(host.asset('lib/loaders/knowledge-source.mjs')),import(host.asset('lib/knowledge/catalog-pin.mjs'))]).then(async([k,pin])=>{const source=k.createKnowledgeSource(pin.KNOWLEDGE_URLS),raw=await source.text('vocab.json');if(!raw)throw Error('Knowledge dictionary is unavailable.');const vocab=JSON.parse(raw);dictionaryWords=Object.entries(vocab).filter(([,shards])=>Array.isArray(shards)&&shards.some(id=>/^(k.objects|k.people|k.scenes)\//.test(id))).map(([word])=>word).sort();return dictionaryWords;}).catch(e=>{dictionaryPromise=null;caption.textContent=e.message;return [];});
+  const suggestWords=async()=>{await loadDictionary();dictionary.textContent='';const query=knowledgeInput.value.trim().toLowerCase();for(const word of (dictionaryWords??[]).filter(w=>w.startsWith(query)).slice(0,80)){const option=el('option');option.value=word;dictionary.append(option);}};
+  knowledgeInput.addEventListener('focus',suggestWords);knowledgeInput.addEventListener('input',suggestWords);
+  const addKnowledge=el('button','dr-act','Add from knowledge');addKnowledge.type='button';addKnowledge.addEventListener('click',()=>{const name=knowledgeInput.value.trim();if(name)tool('drawing.catalog.make',{name});});editor.append(addKnowledge);
+  const partChoice=control('Object part','select'),partX=control('Part X','number'),partY=control('Part Y','number'),partWidth=control('Part width','number'),partHeight=control('Part height','number'),partColour=control('Part colour','color');
+  const currentPart=()=>{const o=selected(),index=o&&state.selectedPart?.id===o.id?state.selectedPart.index:null;return o&&index!==null?partTools?.drawingPartsOf(o)[index]??null:null;};
+  partChoice.addEventListener('change',()=>{const o=selected();if(o)tool(partChoice.value===''?'drawing.object.select':'drawing.part.select',partChoice.value===''?{id:o.id}:{id:o.id,index:Number(partChoice.value)});});
+  const movePart=()=>{const p=currentPart(),x=Number(partX.value),y=Number(partY.value);if(p&&Number.isFinite(x)&&Number.isFinite(y))tool('drawing.part.place',{id:p.object,index:p.index,x,y});};partX.addEventListener('change',movePart);partY.addEventListener('change',movePart);
+  for(const [input,key]of [[partWidth,'width'],[partHeight,'height']]){input.min='.01';input.step='1';input.addEventListener('change',()=>{const p=currentPart(),value=Number(input.value);if(p&&Number.isFinite(value)&&value>0)tool('drawing.part.change',{id:p.object,index:p.index,[key]:value});});}
+  partColour.addEventListener('change',()=>{const p=currentPart();if(p)tool('drawing.part.change',{id:p.object,index:p.index,color:partColour.value});});
+  const partAction=(label,operation)=>{const b=el('button','dr-act',label);b.type='button';b.addEventListener('click',()=>{const p=currentPart();if(p)tool(operation,{id:p.object,index:p.index});});editor.append(b);return b;};
+  const extractPart=partAction('Extract part','drawing.part.extract'),deletePart=partAction('Delete part','drawing.part.remove');
+  const groupChoice=control('Objects to group','select');groupChoice.multiple=true;groupChoice.size=4;
+  const groupName=control('Group name');groupName.value='Group';const groupButton=el('button','dr-act','Group objects');groupButton.type='button';groupButton.addEventListener('click',()=>tool('drawing.object.group',{ids:[...groupChoice.selectedOptions].map(o=>o.value),name:groupName.value.trim()||'Group'}));editor.append(groupButton);
+  const ungroup=el('button','dr-act','Ungroup / separate parts');ungroup.type='button';ungroup.addEventListener('click',()=>{const o=selected();if(o)tool('drawing.object.ungroup',{id:o.id});});editor.append(ungroup);
+  const workspace=el('div','dr-workspace'),inspector=el('aside','dr-inspector');workspace.append(board,inspector);inspector.append(editor,tools);holder.replaceChildren(workspace,caption);
+  function syncControls(){
+    objectChoice.textContent='';const none=el('option');none.value='';none.textContent='None';objectChoice.append(none);
+    for(const o of state.objects??[]){const option=el('option');option.value=o.id;option.textContent=readable(o)+' · '+o.id;objectChoice.append(option);}objectChoice.value=state.selected??'';
+    groupChoice.textContent='';for(const item of state.objects??[]){const option=el('option');option.value=item.id;option.textContent=readable(item);groupChoice.append(option);}
+    const o=selected();partChoice.textContent='';const whole=el('option');whole.value='';whole.textContent='Whole object';partChoice.append(whole);for(const part of o&&partTools?partTools.drawingPartsOf(o):[]){const option=el('option');option.value=String(part.index);option.textContent=(part.index+1)+'. '+part.role+' · '+part.primitive;partChoice.append(option);}partChoice.value=o&&state.selectedPart?.id===o.id?String(state.selectedPart.index):'';partChoice.disabled=!o;ungroup.disabled=!o;const part=currentPart();for(const input of [partX,partY,partWidth,partHeight,partColour,extractPart,deletePart])input.disabled=!part;if(part){partX.value=part.x.toFixed(1);partY.value=part.y.toFixed(1);partWidth.value=part.width.toFixed(1);partHeight.value=part.height.toFixed(1);partColour.value=part.color;}
+    for(const control of [nameInput,sizeInput,colourInput,colourChoice,removeButton])control.disabled=!o;
+    nameInput.value=o?.name??'';sizeInput.value=o?.size??'';const color=o?(o.color??scene?.defaultColor?.(scene.kindKey(o))):null;colourInput.value=color&&/^#[0-9a-f]{6}$/i.test(color)?color:scene?.colorHex?.(color)??'#356ac3';paintCrayons();
   }
-  const act = (label, icon, text) => { const b = el('button', 'dr-act', `${ICON[icon]}<span>${label}</span>`); b.type = 'button'; b.addEventListener('click', () => send(text)); actions.append(b); return b; };
-  act('Undo', 'undo', 'undo');
-  act('Redo', 'redo', 'redo');
-  act('New', 'fresh', 'start a new drawing');
-  act('Save PNG', 'save', 'save my drawing as a PNG');
-  act('Save SVG', 'save', 'save my drawing as an SVG');
 
   // ---- hint for the empty page ---------------------------------------------------------------------------------
   function showHint() {
@@ -142,7 +201,7 @@ function make(holder, host) {
 
   // ---- animation -----------------------------------------------------------------------------------------------
   // Things of the knowledge catalog (spec 17) that the page does not have yet are fetched here (the engine worker has its own copy): they appear once their parts are there.
-  const known = (o) => !scene || o.kind !== 'composite' || scene.isThing(o.thing), asking = new Set();
+  const known=o=>{if(scene&&o.shape)scene.ensureCustom(o);return !scene||o.kind!=='composite'||scene.isThing(o.thing);},asking=new Set();
   let facts = null;
   function ensureThings(objs) {
     for (const o of objs) {
@@ -178,17 +237,17 @@ function make(holder, host) {
   }
   // The backing store follows the displayed size (x device pixel ratio, at most 2000 px wide): a 2000x1400 canvas redrawn and committed every animation frame
   // cost ~20 ms of main-thread time per frame on a phone. A hidden tab paints nothing; it paints again when it is shown (the resize observer fires).
-  let shownW = 0;   // displayed width, from the resize observer (no layout read per frame)
+  let shownW=0,shownH=0;   // displayed width, from the resize observer (no layout read per frame)
   function fit() {
     const w = shownW;
     if (!w) return false;
-    const pw = Math.min(W * 2, Math.max(320, Math.round(w * Math.min(2, globalThis.devicePixelRatio || 1)))), ph = Math.round((pw * H) / W);
+    const height=shownH||w*H/W,ratio=Math.min(2,globalThis.devicePixelRatio||1,2000/w,1400/height),pw=Math.max(1,Math.round(w*ratio)),ph=Math.max(1,Math.round(height*ratio));
     if (canvas.width === pw && canvas.height === ph) return true;
     canvas.width = pw; canvas.height = ph;
     return true;
   }
   const visible = () => canvas.isConnected && shownW > 0;
-  if (typeof ResizeObserver === 'function') new ResizeObserver((es) => { shownW = Math.round(es.at(-1)?.contentRect?.width ?? 0); if (!destroyed && visible()) { fit(); schedule(); } }).observe(canvas);
+  if (typeof ResizeObserver === 'function') new ResizeObserver((es) => { shownW=Math.round(es.at(-1)?.contentRect?.width??0);shownH=Math.round(es.at(-1)?.contentRect?.height??0); if (!destroyed && visible()) { fit(); schedule(); } }).observe(canvas);
   else shownW = 400;
   function frame(t) {
     raf = 0;
@@ -216,20 +275,21 @@ function make(holder, host) {
       }
       poses.set(id, { x: c.x, y: c.y, size: c.size, rotation: c.rotation, flipX: c.flipX, scale, alpha });
     }
+    if(drag?.moved&&drag.kind!=='part'&&poses.has(drag.id)){const p=poses.get(drag.id);p.x=drag.x;p.y=drag.y;}
     paintFrame(poses);
     if (busy) raf = requestAnimationFrame(frame);
   }
   const clamp01 = (x) => Math.min(1, Math.max(0, x));
   function paintFrame(poses) {
-    ctx.setTransform(canvas.width / W, 0, 0, canvas.height / H, 0, 0);
-    ctx.clearRect(0, 0, W, H);
+    ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);const scale=Math.min(canvas.width/W,canvas.height/H);ctx.setTransform(scale,0,0,scale,(canvas.width-W*scale)/2,(canvas.height-H*scale)/2);
     // dying objects are no longer in the state: draw them from their last known data
     const objs = [...shown.values()].map((s) => s.obj);
     const scn = { ...state, objects: objs };
-    renderer.drawScene(ctx, rc, scn, { selected: state.selected ?? null, poses, labelOf });
+    renderer.drawScene(ctx, rc, scn, { selected: drag?.id??state.selected??null, poses, labelOf });
+    const part=currentPart();if(part){const b=part.bounds,dx=drag?.kind==='part'&&drag.moved?drag.x-part.x:0,dy=drag?.kind==='part'&&drag.moved?drag.y-part.y:0;ctx.save();ctx.strokeStyle='#356ac3';ctx.lineWidth=2;ctx.setLineDash([5,3]);ctx.strokeRect(b.x0+dx-3,b.y0+dy-3,b.x1-b.x0+6,b.y1-b.y0+6);ctx.restore();}
   }
   const labelOf = (o) => {
-    const name = o.thing ?? o.kind, same = (state.objects ?? []).filter((x) => (x.thing ?? x.kind) === name);
+    const name = scene?.kindName?.(scene.kindKey(o))??o.thing??o.kind, same = (state.objects ?? []).filter((x) => (x.thing ?? x.kind) === name);
     return same.length > 1 ? `${ordinal(same.findIndex((x) => x.id === o.id) + 1)} ${name}` : `the ${name}`;
   };
   const ordinal = (n) => ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'][n] ?? `${n}th`;
@@ -241,27 +301,28 @@ function make(holder, host) {
     const objs = [...(state.objects ?? [])].filter(known).sort((a, b) => (b.z ?? 0) - (a.z ?? 0));
     for (const o of objs) {
       const b = scene.bbox(o), pad = 6;
-      if (x >= b.x0 - pad && x <= b.x1 + pad && y >= b.y0 - pad && y <= b.y1 + pad) return o;
+      if(x>=b.x0-pad&&x<=b.x1+pad&&y>=b.y0-pad&&y<=b.y1+pad||(partTools?.drawingPartsOf(o)??[]).some(p=>x>=p.bounds.x0-pad&&x<=p.bounds.x1+pad&&y>=p.bounds.y0-pad&&y<=p.bounds.y1+pad))return o;
     }
     return null;
   }
-  const toLogical = (e) => { const r = canvas.getBoundingClientRect(); return [((e.clientX - r.left) / r.width) * W, ((e.clientY - r.top) / r.height) * H]; };
-  canvas.addEventListener('pointermove', (e) => {
-    const o = objectAt(...toLogical(e));
-    if ((o?.id ?? null) !== hover) { hover = o?.id ?? null; canvas.classList.toggle('is-hover', !!o); }
-  });
-  canvas.addEventListener('click', (e) => {
-    const o = objectAt(...toLogical(e));
-    if (o) {
-      const name = o.thing ?? o.kind, same = (state.objects ?? []).filter((x) => (x.thing ?? x.kind) === name);
-      send(same.length > 1 ? `select the ${ordinal(same.findIndex((x) => x.id === o.id) + 1)} ${name}` : `select the ${name}`);
-    } else if (state.selected) send('deselect everything');
+  const toLogical = (e) => { const r = canvas.getBoundingClientRect(); const scale=Math.min(r.width/W,r.height/H);return [(e.clientX-r.left-(r.width-W*scale)/2)/scale,(e.clientY-r.top-(r.height-H*scale)/2)/scale]; };
+  canvas.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;canvas.focus();const [x,y]=toLogical(e),o=objectAt(x,y),part=currentPart(),p=part&&part.object===o?.id&&x>=part.bounds.x0&&x<=part.bounds.x1&&y>=part.bounds.y0&&y<=part.bounds.y1?part:null;drag=o?{pointer:e.pointerId,id:o.id,kind:p?'part':'object',index:p?.index,x0:x,y0:y,ox:p?.x??o.x,oy:p?.y??o.y,x:p?.x??o.x,y:p?.y??o.y,moved:false}:null;try{canvas.setPointerCapture(e.pointerId);}catch{}});
+  canvas.addEventListener('pointermove',e=>{const [x,y]=toLogical(e);if(drag&&drag.pointer===e.pointerId){if(Math.hypot(x-drag.x0,y-drag.y0)>3)drag.moved=true;drag.x=drag.ox+x-drag.x0;drag.y=drag.oy+y-drag.y0;schedule();return;}const o=objectAt(x,y);if((o?.id??null)!==hover){hover=o?.id??null;canvas.classList.toggle('is-hover',!!o);}});
+  canvas.addEventListener('pointerup',e=>{const current=drag;drag=null;if(current&&current.pointer===e.pointerId){if(current.moved)tool(current.kind==='part'?'drawing.part.place':'drawing.object.place',current.kind==='part'?{id:current.id,index:current.index,x:current.x,y:current.y}:{ids:[current.id],x:current.x,y:current.y});else tool(current.kind==='part'?'drawing.part.select':'drawing.object.select',current.kind==='part'?{id:current.id,index:current.index}:{id:current.id});}else if(!current)tool('drawing.object.select',{id:null});schedule();});
+  canvas.addEventListener('pointercancel',()=>{drag=null;schedule();});
+  canvas.addEventListener('dblclick',e=>{const o=objectAt(...toLogical(e));if(o)tool('drawing.object.select',{id:o.id}).then(()=>{nameInput.focus();nameInput.select();});});
+  canvas.addEventListener('keydown',e=>{const o=selected(),part=currentPart(),moves={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]},move=moves[e.key];
+    if(move&&o){e.preventDefault();const step=e.shiftKey?20:2;tool(part?'drawing.part.place':'drawing.object.place',part?{id:o.id,index:part.index,x:part.x+move[0]*step,y:part.y+move[1]*step}:{ids:[o.id],x:o.x+move[0]*step,y:o.y+move[1]*step});}
+    else if(e.key==='Delete'&&o){e.preventDefault();tool(part?'drawing.part.remove':'drawing.object.remove',part?{id:o.id,index:part.index}:{ids:[o.id]});}
+    else if(e.key==='Enter'&&o){e.preventDefault();nameInput.focus();nameInput.select();}
+    else if(e.key==='Escape'){e.preventDefault();tool('drawing.object.select',{id:null});}
+    else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();tool(e.shiftKey?'drawing.redo':'undo');}
   });
 
   // ---- library loading ------------------------------------------------------------------------------------------
-  Promise.all([import(VENDOR.href), import(host.asset(SCENE_ASSET))]).then(([r, s]) => {
+  Promise.all([import(VENDOR.href), import(host.asset(SCENE_ASSET)),import(host.asset(TOOLS_ASSET)),import(host.asset(VALUES_ASSET)),import(host.asset(PARTS_ASSET))]).then(([r,s,t,v,p]) => {
     if (destroyed) return;
-    rough = r.default ?? r.rough; scene = s; paintCrayons();
+    rough=r.default??r.rough;scene=s;toolBindings=t.DRAWING_TOOL_BINDINGS;colourKnowledge=v;partTools=p;kinds.textContent='';for(const kind of toolBindings.find(op=>op.id==='drawing.object.make').params.kind.enum){const option=el('option');option.value=kind;option.textContent=scene.kindName(kind);kinds.append(option);}kinds.disabled=addButton.disabled=false;redoButton.disabled=!toolBindings.some(op=>op.id==='drawing.redo');for(const name of v.colourNames().sort()){const option=el('option');option.value=name;option.textContent=name;colourChoice.append(option);}syncControls();
     renderer = createRenderer(rough, scene);
     ctx = canvas.getContext('2d');
     rc = rough.canvas(canvas);
@@ -273,12 +334,12 @@ function make(holder, host) {
     caption.textContent = 'The drawing libraries could not be loaded. The commands still work.';
   });
 
-  return {
+  return api = {
     update(next) {
       state = { ...EMPTY, ...(next && typeof next === 'object' ? next : {}) };
       caption.textContent = loadError ? caption.textContent : captionOf(state);
       canvas.setAttribute('aria-label', `Drawing: ${captionOf(state)}`);
-      showHint();
+      showHint();syncControls();
       if (renderer) { sync(state); schedule(); }
     },
     /** Download the picture as PNG (2x) or SVG; returns { ok, detail }. */

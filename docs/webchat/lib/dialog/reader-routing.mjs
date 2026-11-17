@@ -1,9 +1,10 @@
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {executeRequestCandidate} from './new-engine.mjs?v=21fadf9db4';
-import {executeDeclaredRequest} from './declared-execution.mjs?v=8c21544c99';
-import {projectContextAction} from './project-context-action.mjs?v=e7e967bfcf';
-import {projectCreateAction} from './project-create-action.mjs?v=1e3c2776c0';
+import {invokeNativeControl} from './native-tool-controls.mjs?v=5f13307b5f';
+import {executeDeclaredRequest} from './declared-execution.mjs?v=5b9b9bec73';
+import {projectContextAction} from './project-context-action.mjs?v=4fc441b238';
+import {projectCreateAction} from './project-create-action.mjs?v=fff4959c6d';
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=ca48804f00';
 import {assessReaderProposal} from './reader-admission.mjs?v=1f4bce9083';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
@@ -28,10 +29,9 @@ export async function routeNewEngine(session,text,options={}){
  let result;
  if(eligible){
   const act=str(parse(candidate.wires).find(w=>w.id===candidate.request)?.attrs.act?.[0]),area=context.area;
-  if(act==='undo'){
-   const history=session.newEngineUndo??[],index=history.findLastIndex(r=>r.area===area),entry=history[index];
-   if(entry&&Object.keys(entry.after).every(key=>JSON.stringify(session.isession.state[key])===JSON.stringify(entry.after[key]))){Object.assign(session.isession.state,structuredClone(entry.before));session.newEngineUndo=history.filter((_,i)=>i!==index);result={text:'Undid the last action.',parts:[{text:'Undid the last action.',translate:false}],statuses:['supported'],answers:[],segments:[],state:structuredClone(session.isession.state),effects:[{operation:'undo'}],trace:{legacy:false,engine:'new',assessment:'undone'}};}
-   else{const said=entry?'The state changed after that action. I left it unchanged.':'There is no earlier action to undo here. Nothing changed.';result={text:said,parts:[{text:said,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],trace:{legacy:false,engine:'new',reason:entry?'stale-undo':'empty-undo-history'}};}
+  if(act==='undo'||act==='redo'){
+   const history=await invokeNativeControl(session,{view:area,operation:act});
+   result={text:history.message,parts:[{text:history.message,translate:false}],statuses:[history.ok?'supported':'unsupported'],answers:[],segments:[],state:history.ok?structuredClone(session.isession.state):{},effects:history.ok?[{operation:act}]:[],trace:{legacy:false,engine:'new',assessment:history.ok?act:'history-refused'}};
   }else{
    const before=structuredClone(session.isession.state);
    if(contextProjection){if(contextProjection.rewind)Object.assign(session.isession.state,structuredClone(contextProjection.rewind));session.newEngineFocus={...session.newEngineFocus,[area]:contextProjection.focus};}

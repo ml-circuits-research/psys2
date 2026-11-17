@@ -3,7 +3,7 @@ import {createDocumentHost,initialDocumentState} from '../worlds/docs.editor/dec
 const call=(h,operation,args,invocation)=>h.invoke({operation,args,invocation,expectedVersion:h.observe().version});
 const blocks=[{kind:'heading',text:'First',level:2},{kind:'paragraph',text:'First body.'},{kind:'heading',text:'Second',level:2},{kind:'paragraph',text:'Second body.'}];
 test('Document writes supplied content, edits blocks, reorders/removes complete sections and restores history',()=>{
- const state=initialDocumentState(),h=createDocumentHost({state,instanceId:'document.one'});const made=call(h,'document.write',{title:'Test',blocks,genre:'report',topic:'fixture'},'write');assert.equal(made.status,'changed',JSON.stringify(made));assert.equal(made.verification,'unverified');assert.equal(state.history.length,1);assert.ok(state.doc);assert.equal(made.after.objects.length,5);
+ const state=initialDocumentState(),h=createDocumentHost({state,instanceId:'document.one'});const made=call(h,'document.write',{title:'Test',blocks,genre:'report',topic:'fixture'},'write');assert.equal(made.status,'changed',JSON.stringify(made));assert.equal(made.verification,'unverified');assert.equal(state.history.length,1);assert.ok(state.doc);assert.equal(made.after.objects.length,9);
  const sections=made.after.objects.filter(x=>x.kind==='section');assert.equal(sections[0].members.length,2);const ids=sections.map(x=>x.id);
  assert.equal(call(h,'document.section.reorder',{ids:ids.toReversed()},'reorder').status,'changed');assert.equal(state.blocks[0].text,'Second');
  assert.equal(call(h,'document.block.change',{id:state.blocks[1].id,text:'Updated body.'},'change').status,'changed');assert.equal(state.blocks[1].text,'Updated body.');

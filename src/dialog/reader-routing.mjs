@@ -1,6 +1,7 @@
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {executeRequestCandidate} from './new-engine.mjs';
+import {invokeNativeControl} from './native-tool-controls.mjs';
 import {executeDeclaredRequest} from './declared-execution.mjs';
 import {projectContextAction} from './project-context-action.mjs';
 import {projectCreateAction} from './project-create-action.mjs';
@@ -28,10 +29,9 @@ export async function routeNewEngine(session,text,options={}){
  let result;
  if(eligible){
   const act=str(parse(candidate.wires).find(w=>w.id===candidate.request)?.attrs.act?.[0]),area=context.area;
-  if(act==='undo'){
-   const history=session.newEngineUndo??[],index=history.findLastIndex(r=>r.area===area),entry=history[index];
-   if(entry&&Object.keys(entry.after).every(key=>JSON.stringify(session.isession.state[key])===JSON.stringify(entry.after[key]))){Object.assign(session.isession.state,structuredClone(entry.before));session.newEngineUndo=history.filter((_,i)=>i!==index);result={text:'Undid the last action.',parts:[{text:'Undid the last action.',translate:false}],statuses:['supported'],answers:[],segments:[],state:structuredClone(session.isession.state),effects:[{operation:'undo'}],trace:{legacy:false,engine:'new',assessment:'undone'}};}
-   else{const said=entry?'The state changed after that action. I left it unchanged.':'There is no earlier action to undo here. Nothing changed.';result={text:said,parts:[{text:said,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],trace:{legacy:false,engine:'new',reason:entry?'stale-undo':'empty-undo-history'}};}
+  if(act==='undo'||act==='redo'){
+   const history=await invokeNativeControl(session,{view:area,operation:act});
+   result={text:history.message,parts:[{text:history.message,translate:false}],statuses:[history.ok?'supported':'unsupported'],answers:[],segments:[],state:history.ok?structuredClone(session.isession.state):{},effects:history.ok?[{operation:act}]:[],trace:{legacy:false,engine:'new',assessment:history.ok?act:'history-refused'}};
   }else{
    const before=structuredClone(session.isession.state);
    if(contextProjection){if(contextProjection.rewind)Object.assign(session.isession.state,structuredClone(contextProjection.rewind));session.newEngineFocus={...session.newEngineFocus,[area]:contextProjection.focus};}

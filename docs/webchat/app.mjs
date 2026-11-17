@@ -1,3 +1,4 @@
+import {createIntentRecords} from './ui/intent-records.mjs';
 import { createTranslationLayer } from './ui/translation-ui.mjs';
 // SPDX-License-Identifier: AGPL-3.0-only
 // PSys2 browser demo (spec 06 "Webchat", spec 07 §4). Runs C2 entirely in the browser: no server, no large language model.
@@ -39,7 +40,7 @@ import { snapshotState, describeChanges, turnBaseline, turnAfter } from './ui/st
 const HERE = new URL('.', import.meta.url);
 
 /** The order of the pages (owner, 2026-11-15; tab cuts ADR-010 and ADR-012): Drawing and Diagram first, the rest as listed; Documents is the editor (the phone menu lists Chat, then these). The avatar is not a tab: it is the icon in the input bar; Talk is not a page: its summary is a panel of the chat. */
-export const TAB_ORDER = ['draw', 'diagram', 'charts', 'editor'];
+export const TAB_ORDER = ['draw', 'diagram', 'calendar', 'editor', 'avatar'];
 export const TABS = [
   { id: 'editor', label: 'Documents', world: 'docs.editor', make: createEditor },
 ];
@@ -114,6 +115,7 @@ export async function mountPsys2(element, options = {}) {
   const rank = (t) => { const i = TAB_ORDER.indexOf(t.id); return i < 0 ? TAB_ORDER.length : i; };
   const allTabs = byOrder.map((t, i) => ({ t, i })).sort((a, b) => rank(a.t) - rank(b.t) || a.i - b.i).map((x) => x.t);
   const tabDefs = allTabs.filter((t) => !options.tabs || options.tabs.includes(t.id));
+  const trainingPairs=createIntentRecords({persistent:options.persist!==false});
   const states = {};           // world id -> latest state snapshot
   const panelUI = {};          // tab id -> { ui, present }
   let tabsLive = false;   // set once the boot state was shown: after that, a turn that changes a tab's world makes the tab (the changed worlds only; a world that merely loaded does not)
@@ -376,8 +378,11 @@ export async function mountPsys2(element, options = {}) {
   window.addEventListener('resize', () => { if (avatarOpen) placeAvatarPopup(); });
   /** The avatar popup: opens or closes; closing keeps the state (the avatar world and its face are untouched). */
   function openAvatar(on = !avatarOpen) {
+    if(on)userTab('avatar','card');return;
+
     if (!avatarUI) return;
     avatarOpen = !!on;
+    session?.setWorldState?.(SHELL,{activePopup:avatarOpen?'avatar':null});
     avPop.hidden = !avatarOpen; avBtn.setAttribute('aria-expanded', String(avatarOpen)); root.classList.toggle('p2-avpop-open', avatarOpen);
     if (avatarOpen) placeAvatarPopup();
     avatarUI.setVisible(avatarOpen);
@@ -520,7 +525,7 @@ export async function mountPsys2(element, options = {}) {
 
   // ---------- state -> UI ----------
   const DEMO_STATE_KEY='psys2.demo.worlds.v1';
-  const DEMO_WORLDS=['art.draw','diagram.sketch','docs.editor','time.calendar'];
+  const DEMO_WORLDS=['art.draw','diagram.sketch','docs.editor','time.calendar','ui.avatar'];
   let demoRestored=false;
   function applyState(snapshot) {
     if (!snapshot || typeof snapshot !== 'object') return;
@@ -609,10 +614,11 @@ export async function mountPsys2(element, options = {}) {
   const hostApi = {
     /** RANDOM (spec 25): texts the sampler gives for the tab (mode 'few' | 'actions' | 'one'); a tab shows them in its empty state instead of a list of its own. */
     sample: (mode, extra) => sampleItems(mode, extra).then((items) => items.map((i) => i.text)),
-    tool: async (operation,args={}) => {
+    tools: (options={}) => session.tools(options),
+    tool: async (operation,args={},options={}) => {
       if(isBusy())return {ok:false,message:'Please wait for the current action.'};
       effectsPending++;updateBusy();
-      try{const r=await session.tool(operation,args);applyState(r.state);if(r.ok&&r.changed)events.add('control',operation);return r;}
+      try{const r=await session.tool(operation,args,options);applyState(r.state);if(r.intentRecord){await trainingPairs.record(r.intentRecord);const row=addMessage('user',r.intentRecord.text),detail=h('details',{open:true,class:'p2-intent'},h('summary',{},'SOP Lang intent'),h('pre',{class:'p2-code'},r.intentRecord.wires));row.bubble.append(detail);addMessage('bot',r.message+' · '+(r.intentRecord.verification?.status??'unverified'));}if(r.ok&&r.changed)events.add('control',operation);return r;}
       finally{effectsPending=Math.max(0,effectsPending-1);updateBusy();}
     },
     send: (text) => send(String(text), 'form'),   // a tab's form or control (logged as mode 'form'); ignored (with a hint) while a turn runs
@@ -873,6 +879,8 @@ export async function mountPsys2(element, options = {}) {
     const notUnderstood = mode === 'voice' && (reply.statuses ?? []).length > 0 && !(reply.statuses ?? []).includes('supported') && (reply.segments ?? []).some((sg) => sg.unparsed);
     if (!modelsStarted && ((reply.statuses ?? []).length === 0 || !(reply.statuses ?? []).includes('supported') || (reply.segments ?? []).some((sg) => sg.unparsed))) startModels();   // LAZY-LOAD-3: the rules did not read it cleanly: the reading model is wanted now
     const botMsg = addMessage('bot', answer);
+    const requestWires=reply.trace?.reading?.wires??reply.trace?.readerRouting?.admission?.alternatives?.[0]?.wires;
+    if(typeof requestWires==='string'&&requestWires.trim())botMsg.bubble.append(h('details',{open:true,class:'p2-intent'},h('summary',{},'SOP Lang reading'),h('pre',{class:'p2-code'},requestWires)));
     if (notUnderstood) {   // MOBILE-VOICE: repeated not-understood voice replies within 20 s are collapsed into one (the first gets a count)
       const nowT = performance.now();
       if (lastNU && nowT - lastNU.at < 20000 && lastNU.el.isConnected) { lastNU.n++; lastNU.at = nowT; lastNU.badge.textContent = ` ×${lastNU.n}`; botMsg.msg.hidden = true; botMsg.msg.classList.add('is-collapsed'); }
@@ -1993,8 +2001,7 @@ export async function mountPsys2(element, options = {}) {
     }
   }
   // the avatar loads with its icon (a small bundled face first, the catalog's set when it arrives)
-  if (known.has('ui.avatar') || options.renderAllTabs) { avatarUI = createAvatar(avBody, hostApi); avatarUI.mirror(avFace, 34); }
-  else avBtn.hidden = true;
+  avBtn.hidden=true;avPop.hidden=true;
   on(avBtn, 'click', () => openAvatar());
   on(avClose, 'click', () => { openAvatar(false); avBtn.focus(); });
   on(avPop, 'keydown', (e) => { if (e.key === 'Escape') { e.stopPropagation(); openAvatar(false); avBtn.focus(); } });
@@ -2032,8 +2039,10 @@ export async function mountPsys2(element, options = {}) {
     addMessage('bot', GREETING, { children: chips, className: 'is-hint' });
     sampleItems('few', { tab: 'talk', count: 4, language: language.get() }).then((items) => { for (const it of items) chips.append(h('button', { class: 'p2-example', type: 'button', onclick: () => { if (it.tab && tabBtns[it.tab] && view !== it.tab) userTab(it.tab, 'example'); send(it.text, 'chip', { example: true }); input.focus(); } }, it.text)); }).catch(() => {});
   }
+  const exportIntents=h('button',{class:'p2-btn p2-intent-export',type:'button',title:'Export UI training data','aria-label':'Export UI training data',onclick:()=>trainingPairs.download()},'⇩');
+  root.querySelector('.p2-tools')?.append(exportIntents);
   const handle = {
-    engine, session, settings, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },
+    engine, session, settings, trainingPairs, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },
     /** The queue of waiting messages (MIC2) and the turn state flags, in one place for other features (BUSY veil): `turnState()` says what is running and what waits. */
     queue: { list: () => queue.map((q) => ({ id: q.id, text: q.text, mode: q.mode })), drop: dropQueued, clear: clearQueue, get length() { return queue.length; } },
     turnState: () => ({ running: !!turn, queued: queue.length, speaking: !!mic.speaking, mic: micBtn.dataset.mic }),

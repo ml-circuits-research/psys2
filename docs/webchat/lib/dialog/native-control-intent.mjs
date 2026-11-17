@@ -46,8 +46,9 @@ function canonical(value,depth=0){
 const equal=(a,b)=>JSON.stringify(canonical(a))===JSON.stringify(canonical(b));
 const readable=value=>typeof value==='string'?quote(value):JSON.stringify(value);
 const words=value=>String(value).replace(/([a-z0-9])([A-Z])/g,'$1 $2').replace(/[._-]+/g,' ').toLowerCase();
-const verbs={make:'Create',change:'Update',place:'Move',remove:'Delete',pick:'Select',ask:'Show',undo:'Undo',redo:'Redo'};
+const verbs={group:'Group',ungroup:'Ungroup',make:'Create',change:'Update',place:'Move',remove:'Delete',pick:'Select',ask:'Show',undo:'Undo',redo:'Redo'};
 const validObservation=o=>!!o&&o.complete===true&&typeof o.instanceId==='string'&&typeof o.version==='string'&&Array.isArray(o.objects);
+const resultIdentity=(op,args)=>{const key=Object.hasOwn(op.result??{},'identityParameter')?op.result.identityParameter:'id';return key===null?undefined:args[key];};
 const selectedIds=(op,args)=>op.act==='make'?[]:typeof args.id==='string'?[args.id]:Array.isArray(args.ids)&&args.ids.every(x=>typeof x==='string')?[...args.ids]:[];
 const observationValue=token=>{try{return {ok:true,value:JSON.parse(token)};}catch{return {ok:false};}};
 
@@ -61,20 +62,21 @@ export function describeNativeControl({operation,args={},before,parameterBinding
   const found=objects.find(o=>o.id===id&&o.sourceType===op.on);
   return {mode:'existing',id,on:op.on,...(found?{source:found.source,version:found.version}:{})};
  });
- if(op.act==='make')targets.push({mode:'new',on:op.on,...(typeof values.id==='string'?{id:values.id}:{})});
+ if(op.act==='make')targets.push({mode:'new',on:op.on,...(typeof resultIdentity(op,values)==='string'?{id:resultIdentity(op,values)}:{})});
  const displayName=id=>{
-  const object=objects.find(o=>o.id===id),label=object?.inputs?.find(i=>['label','name','title'].includes(i.key)&&i.values?.length===1),decoded=label?observationValue(label.values[0]):null;
+  const object=objects.find(o=>o.id===id),label=object?.inputs?.find(i=>['label','name','title'].includes(i.key)&&i.values?.length===1&&typeof observationValue(i.values[0]).value==='string'&&observationValue(i.values[0]).value.trim()!==''),decoded=label?observationValue(label.values[0]):null;
   return decoded?.ok?decoded.value:null;
  };
- const type=op.intent?.subject??words(op.on.split('.').at(-1)),targetText=ids.length?ids.map(id=>readable(displayName(id)??id)).join(', '):`a ${type}`;
+ const type=op.intent?.subject??words(op.on.split('.').at(-1)),targetText=ids.length?ids.map(id=>readable(displayName(id)??id)).join(', '):`${op.intent?.determiner??(/^[aeiou]/i.test(type)?'an':'a')} ${type}`;
  let text=`${verbs[op.act]??'Apply'} ${targetText}`,ranges=[];
- const fields=Object.entries(values).filter(([key])=>!['id','ids'].includes(key)&&op.intent?.parameters?.[key]?.hidden!==true);
+ const fields=Object.entries(values).filter(([key,value])=>(!['id','ids'].includes(key)||op.intent?.parameters?.[key]?.role==='source')&&op.intent?.parameters?.[key]?.hidden!==true&&!(op.intent?.parameters?.[key]?.hiddenIfEmpty&&(value===''||Array.isArray(value)&&value.length===0)));
  const modifiers={name:'named',label:'named',title:'titled',colour:'coloured',color:'coloured',kind:'of kind',type:'of type'};
  for(const [index,[parameter,value]]of fields.entries()){
   text+=index?', ':' ';
   const metadata=op.intent?.parameters?.[parameter],modifier=metadata?.label??modifiers[parameter]??'with '+words(parameter);
   text+=modifier+' ';let rendered=readable(value),origin='text';
   if(metadata?.reference===true&&typeof value==='string'&&displayName(value)!==null){rendered=readable(displayName(value));origin='observed-identity-label';}
+  else if(metadata?.reference===true&&Array.isArray(value)){rendered=value.map(v=>readable(displayName(v)??v)).join(', ');origin='observed-identity-labels';}
   else if(metadata?.format==='unix-ms'&&Number.isSafeInteger(value)){rendered=quote(new Date(value).toISOString());origin='declared-time-format';}
   else if(metadata?.format==='duration-ms'&&typeof value==='number'){rendered=`${value/60000} minutes`;origin='declared-duration-format';}
   const start=Array.from(text).length;text+=rendered;ranges.push({parameter,start,end:Array.from(text).length,rendered,origin});
@@ -120,10 +122,11 @@ export function verifyNativeControlEffect({intent,before,after,receipt}={}){
  }
  if(!['changed','unchanged','executed','supported'].includes(receipt?.status))return finish('unverified','missing-successful-receipt');
  if(!expected.validArguments)return finish('mismatch','invalid-arguments-were-applied');
+ if(expected.declaration.effectScope?.projection==='composite'){add('$scope','unknown',{reason:'declared-composite-effect-needs-independent-projection'});return finish('unverified','composite-effect-needs-independent-projection');}
  const op=expected.declaration,args=expected.args,ids=selectedIds(op,args),old=new Map(before.objects.map(o=>[o.id,o])),next=new Map(after.objects.map(o=>[o.id,o]));
  let targets=[];
  if(op.act==='make'){
-  targets=after.objects.filter(o=>o.sourceType===op.on&&!old.has(o.id)&&(args.id===undefined||o.id===args.id));
+  targets=after.objects.filter(o=>o.sourceType===op.on&&!old.has(o.id)&&(resultIdentity(op,args)===undefined||o.id===resultIdentity(op,args)));
   add('$target',targets.length===1?'met':targets.length===0?'failed':'unknown',{reason:'created-source-type-and-identity',ids:targets.map(o=>o.id)});
  }else if(ids.length){
   for(const id of ids){const a=old.get(id),b=next.get(id);if(!a||a.sourceType!==op.on){add('$target','unknown',{id,reason:'target-not-observed-before'});continue;}
@@ -149,7 +152,14 @@ export function verifyNativeControlEffect({intent,before,after,receipt}={}){
   }
  }
  const stateObject=o=>({id:o.id,kind:o.kind,sourceType:o.sourceType,inputs:(o.inputs??[]).map(({source,version,sourceType,...i})=>i)});
- if(ids.length&&op.act!=='remove')for(const object of after.objects)if(object.sourceType===op.on&&!ids.includes(object.id)&&old.has(object.id)&&!equal(stateObject(old.get(object.id)),stateObject(object)))add('$scope','failed',{target:object.id,reason:'unselected-peer-object-changed'});
+ if(ids.length&&op.act!=='remove')for(const object of after.objects)if(object.sourceType===op.on&&!ids.includes(object.id)&&old.has(object.id)&&!equal(stateObject(old.get(object.id)),stateObject(object))){
+  const policies=(op.effectScope?.related??[]).filter(r=>r.id===object.id&&(!r.when||Array.isArray(args[r.when.parameter])&&args[r.when.parameter].includes(r.when.includes)&&Object.hasOwn(args,r.when.provided)));
+  const allowed=new Set(policies.flatMap(r=>r.keys??[])),prior=stateObject(old.get(object.id)),current=stateObject(object);
+  const oldInputs=new Map(prior.inputs.map(i=>[i.key,i])),nextInputs=new Map(current.inputs.map(i=>[i.key,i]));
+  const changedKeys=[...new Set([...oldInputs.keys(),...nextInputs.keys()])].filter(k=>!equal(oldInputs.get(k)??null,nextInputs.get(k)??null));
+  const declared=prior.kind===current.kind&&changedKeys.length>0&&changedKeys.every(k=>allowed.has(k));
+  add('$scope',declared?'unknown':'failed',{target:object.id,reason:declared?'declared-dependent-layout-needs-independent-verification':'unselected-peer-object-changed',changedKeys});
+ }
  if(checks.some(c=>c.status==='failed'))return finish('mismatch','observed-effect-differs-from-intent');
  if(checks.some(c=>c.status==='unknown'))return finish('unverified','some-intended-values-are-not-observable');
  return finish('verified','all-expressed-observable-effects-match');

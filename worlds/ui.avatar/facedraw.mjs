@@ -101,7 +101,7 @@ export function renderFace(data, face, opts = {}) {
       const move = `translate(${f1(cx + (a.dx ?? 0))} ${f1(cy + (a.dy ?? 0))}) scale(${f1(k)}) translate(${f1(-cx)} ${f1(-cy)})`;
       const flip = side === 'right' ? `matrix(-1 0 0 1 ${fr.w} 0) ` : '';
       const parts = v.parts.map((p) => partSvg(p, partColour(data, face, slot.name, p), side === 'right')).join('');
-      out.push(`<g transform="${flip}${move}">${parts}</g>`);
+      out.push(`<g transform="${flip}${move}" data-avatar-slot="${esc(slot.name)}">${parts}</g>`);
     }
   }
   const size = opts.size ? ` width="${opts.size}" height="${f1((opts.size * fr.h) / fr.w)}"` : '';

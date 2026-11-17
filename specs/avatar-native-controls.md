@@ -1,6 +1,6 @@
 # Avatar popup native controls
 
-The avatar is a live tool instance outside the four main tabs. Its native state remains `ui.avatar`'s existing `state.face`; the popup and the input-bar icon render the same state. The controls invoke declared native tools directly, and the application captures each mutation's readable command, exact typed SOP intent, receipt and independently observed effect. No legacy face-language parser is used by these controls.
+Avatar is the fifth permanent application tab, after Drawing, Diagram, Calendar and Documents. Its native state remains `ui.avatar`'s existing `state.face`; its canvas and sidebar inspector render that one state. The controls invoke declared native tools directly, and the application captures each mutation's readable command, exact typed SOP intent, receipt and independently observed effect. No legacy face-language parser is used by these controls.
 
 ## Knowledge and capabilities
 
@@ -26,3 +26,5 @@ Face observations have identity `face`, source type `ui.avatar.face`, and preset
 ## Popup interaction
 
 Preset and expression cards act through the same declared controls as part variants. A part selector and picture choices expose the catalog directly; colour, size, removal and directional moves act on the selected observed part. Mouse selection and keyboard arrow keys use the selected part identity. No UI action sends a manufactured sentence to a fallback reader. The generated human command appears in chat and its expected typed intent is retained for training/effect comparison by the application.
+
+Shared role colours explicitly address every visible part in that role; the UI lists the scope and passes every affected id. Incomplete scopes refuse as `shared-colour-scope-required`. Raw part observations include `dx`, `dy`, `scale` and `tintRole`. Resize-related geometry scope is derived from the existing `neighbours` attachment calculation and declared as `effectScope.related` rows with conditional target membership, required `size` parameter, related id and `dx/dy/scale` keys. Secondary attachment movements remain unverified secondary conditions until their complete expected geometry is projected; they must not become false verified matches or unrelated-change mismatches.

@@ -2,8 +2,8 @@
 import * as lib from '../vendor/sopworld/sopworld.mjs?v=ca48804f00';
 import {createSampler} from './sampler.mjs?v=ea692a39bf';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=965157001c';
-import {declaredPropertyValues} from './declared-execution.mjs?v=8c21544c99';
-import {routeNewEngine} from './reader-routing.mjs?v=6a967f4db6';
+import {declaredPropertyValues} from './declared-execution.mjs?v=5b9b9bec73';
+import {routeNewEngine} from './reader-routing.mjs?v=5edc790a71';
 const word = x => typeof x==='string' && /^[a-z]+$/.test(x);
 
 export function samplingSchema({area,operations,observation,bindings}) {

@@ -1,196 +1,69 @@
-// Editor tab plugin (world docs.editor, spec 07 sections 3 and 6): a TipTap (ProseMirror) document editor.
-// It replaces the built-in Editor tab (app.mjs: a plugin with id 'editor' wins). The world owns the document and keeps a
-// TipTap-compatible JSON in `state.doc`; this module renders it as a page, mirrors the formatting state in a toolbar and
-// turns every click into a typed command through host.send, so mouse and voice share the language layer.
-// Decision (spec 07 section 3): the page is read-only. Edits come only through the world (commands, dictation); the mouse
-// can select text (the selection is reported to the world as state, not as an edit) and tick task boxes (sent as commands).
-import { h } from '../util.mjs';
-import { createEditor as createFallback } from '../editor.mjs';
-import { createToolbar } from './editor/toolbar.mjs';
-import { createView, loadTipTap } from './editor/view.mjs';
-
-const ORDINALS = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
-const DOC_ICON = '<svg viewBox="0 0 24 32" class="pe-doc-icon" aria-hidden="true"><path fill="#4285f4" d="M2 0h14l8 8v22a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2Z"/><path fill="#a1c2fa" d="M16 0l8 8h-6a2 2 0 0 1-2-2V0Z"/><path fill="#fff" d="M5 15h14v2H5v-2Zm0 4h14v2H5v-2Zm0 4h9v2H5v-2Z"/></svg>';
-const plural = (n, w) => `${n} ${n === 1 ? w : `${w}s`}`;
-
-export default {
-  id: 'editor', label: 'Documents', world: 'docs.editor', order: 20,
-  make(holder, host) {
-    const cssHref = host.asset('ui/tabs/editor/editor.css');
-    if (!document.querySelector('link[data-pe-css]')) document.head.append(h('link', { rel: 'stylesheet', href: cssHref, 'data-pe-css': '' }));
-
-    const root = h('div', { class: 'pe', 'aria-label': 'Document editor' });
-    holder.append(root);
-    let state = host.state?.('docs.editor') ?? null;
-    let view = null, model = null, fallback = null, lastDoc = '', lastCursor = null, lastFocus = 0, lastKey = '';
-
-    // ---- chrome ----
-    const nameEl = h('h3', { class: 'pe-doc-name' }, 'Untitled document');
-    const hint = h('span', { class: 'pe-doc-hint' }, 'Edit by talking: every change comes through the assistant');
-    const live = h('span', { class: 'pe-live' });
-    const pill = h('span', { class: 'pe-pill', role: 'status', hidden: true }, h('i', { class: 'pe-rec' }), 'Dictating', live);
-    const bar = createToolbar({ send: (t) => host.send(t) });
-    const top = h('div', { class: 'pe-top' });
-    top.innerHTML = DOC_ICON;
-    top.append(nameEl, hint, pill, bar.actions);
-    const outlineList = h('ul', {});
-    const outline = h('nav', { class: 'pe-outline', 'aria-label': 'Outline' }, h('h4', {}, 'Outline'), outlineList);
-    const editorEl = h('div', { class: 'pe-editor' });
-    const chips = [];   // filled from the sampler (spec 25)
-    const chipBox = h('div', { class: 'pe-chips' }, chips);
-    Promise.resolve(host.sample?.('few', { tab: 'editor', count: 4 })).then((list) => { for (const t of list ?? []) { const b = h('button', { class: 'pe-chip', type: 'button' }, t); b.addEventListener('click', () => host.send(t)); chipBox.append(b); } }).catch(() => {});
-    const empty = h('div', { class: 'pe-empty', hidden: true }, h('p', {}, 'The page is empty. Tell the assistant what to write, or try one of these:'), chipBox);
-    const paper = h('article', { class: 'pe-paper', 'aria-label': 'Document page (read-only; edit by talking to the assistant)' }, editorEl, empty);
-    const scroll = h('div', { class: 'pe-scroll' }, paper);
-    const stats = h('span', {}); const sel = h('span', { class: 'pe-sel-info' }); const prog = h('span', { class: 'pe-progress', hidden: true }); const undo = h('span', {});
-    const status = h('div', { class: 'pe-status', role: 'status' }, stats, prog, sel, h('span', { class: 'pe-grow' }), undo);
-    // std.summarize / std.compose (spec 26): the buttons and the form exist only when the library has them; no fallback. Everything goes through the normal command path (the same commands can be typed).
-    const form = h('form', { class: 'pe-compose', hidden: true });
-    const field = (label, name, type, value, extra = {}) => { const i = h('input', { name, type, value, ...extra }); form.append(h('label', { class: 'pe-field' }, h('span', {}, label), i)); return i; };
-    const fType = h('select', { name: 'type' }, ...[['essay', 'Essay'], ['scientific article', 'Scientific article'], ['presentation', 'Presentation'], ['story', 'Story'], ['report', 'Report']].map(([v, l]) => h('option', { value: v }, l)));
-    form.append(h('label', { class: 'pe-field' }, h('span', {}, 'Type'), fType));
-    // the topic is a text area (owner request 2026-11-15): a name, or several lines saying what the document should be about; it grows with what is typed
-    const fTopic = h('textarea', { name: 'topic', rows: 2, class: 'pe-topic', placeholder: 'volcanoes — or a few lines: what it should be about, the things to cover' });
-    const grow = () => { fTopic.style.height = 'auto'; fTopic.style.height = `${Math.min(fTopic.scrollHeight + 2, 320)}px`; };
-    fTopic.addEventListener('input', grow);
-    form.append(h('label', { class: 'pe-field pe-field-wide' }, h('span', {}, 'Topic (empty = random)'), fTopic));
-    const fCh = field('Chapters', 'chapters', 'number', '3', { min: 1, max: 12 }), fSub = field('Subchapters each', 'subchapters', 'number', '2', { min: 0, max: 6 }), fWords = field('About words', 'words', 'number', '600', { min: 50, max: 5000, step: 50 });
-    form.append(h('button', { class: 'pe-gen', type: 'submit' }, 'Write it'));
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const raw = fTopic.value.replace(/\s+/g, ' ').trim();
-      const ty = fType.value, unit = ty === 'presentation' ? 'sections' : 'chapters', an = /^[aeiou]/.test(ty) ? 'an' : 'a';
-      const words = Math.min(5000, Math.max(50, Number(fWords.value) || 600));
-      // a long topic (several words or sentences) goes whole, in quotes, after "about the following:" so that no sentence of it is read as a request of its own;
-      // the size is always sent (it was dropped when there were no subchapters)
-      const long = raw.split(' ').length > 4 || /[.!?;]\s/.test(raw);
-      const topic = raw.replace(/[.,;:!?]+$/, '');
-      const subs = Number(fSub.value) > 0 && ty !== 'presentation' && ty !== 'story' ? ` of ${fSub.value} subchapters` : '';
-      host.send(!topic ? `write ${an} ${ty} about anything`
-        : long ? `write ${an} ${ty} of ${words} words about the following: "${raw.replace(/"/g, "'")}"`
-          : `write ${an} ${ty} about ${topic} with ${fCh.value} ${unit}${subs}, about ${words} words`);
-      form.hidden = true;
-    });
-    let destroyed = false;
-    host.textGen?.().then((tg) => {
-      if (destroyed) return;
-      if (tg?.summarizer?.available) bar.actions.append(h('button', { class: 'pe-btn pe-gen-btn', type: 'button', title: 'Say: condense the document', onclick: () => host.send('condense the document') }, 'Summarise'));
-      if (tg?.composer?.available) bar.actions.append(h('button', { class: 'pe-btn pe-gen-btn', type: 'button', title: 'Write a document from what I know', onclick: () => { form.hidden = !form.hidden; } }, 'Compose'));
-    }, () => { /* no adapters: nothing is shown */ });
-    root.append(top, form, bar.el, bar.menus, h('div', { class: 'pe-body' }, outline, scroll), status);
-    editorEl.append(h('p', {}, 'Loading the editor…'));
-
-    // ---- mirrored state ----
-    const blockById = (id) => (id === 'title' ? { id: 'title', kind: 'title', align: state?.titleAlign, marks: state?.titleMarks, text: state?.title } : state?.blocks?.find((b) => b.id === id));
-    /** What the toolbar edits: the selection, or else the block the assistant last worked on. */
-    function targetInfo() {
-      const s = state ?? {};
-      const refs = [];     // { b, at, from, to }
-      const sel0 = s.selection;
-      if (sel0?.type === 'range') { const b = blockById(sel0.block); if (b) refs.push({ b, at: sel0.at, from: sel0.from, to: sel0.to }); }
-      else if (sel0?.type === 'blocks') for (const id of sel0.blocks) { const b = blockById(id); if (b) for (const c of model.containers(b)) refs.push({ b, at: c.at, from: 0, to: c.text.length }); }
-      else { const b = s.blocks?.[s.cursor]; if (b) for (const c of model.containers(b)) refs.push({ b, at: c.at, from: 0, to: c.text.length }); }
-      const first = refs[0]?.b;
-      const marks = {};
-      for (const m of ['bold', 'italic', 'underline', 'strike', 'code', 'highlight', 'link']) marks[m] = refs.length > 0 && refs.every((r) => r.to > r.from && model.covered(r.b, r.at, r.from, r.to, m));
-      let sizePhrase = null;
-      if (first?.kind === 'title') sizePhrase = 'the title';
-      else if (first?.kind === 'heading') { const n = (s.blocks ?? []).filter((b) => b.kind === 'heading').findIndex((b) => b.id === first.id); if (n >= 0 && n < ORDINALS.length) sizePhrase = `the ${ORDINALS[n]} heading`; }
-      return {
-        sizePhrase, marks, kind: first?.kind, level: first?.level, align: first?.align ?? 'left', listStyle: first?.kind === 'list' ? first.style ?? 'bullet' : null,
-        inTable: refs.some((r) => r.b.kind === 'table'), hasSelection: !!s.selection, dictating: s.inputMode === 'dictation',
-        canUndo: !!s.history?.length, canRedo: !!s.future?.length,
-      };
-    }
-    function render() {
-      if (!state || !view) return;
-      const s = state;
-      nameEl.textContent = s.title ?? 'Untitled document';
-      const dict = s.inputMode === 'dictation';
-      root.classList.toggle('is-dictating', dict);
-      pill.hidden = !dict;
-      if (dict) { const b = s.blocks?.find((x) => x.id === s.dictBlock); live.textContent = b?.text ? `“${b.text.slice(-70)}”` : 'listening for the first words…'; }
-      const docKey = JSON.stringify(s.doc ?? null);
-      const changed = docKey !== lastDoc;
-      lastDoc = docKey;
-      view.setState(s, changed);
-      bar.update(targetInfo());
-      // status bar
-      const st = s.stats ?? {};
-      stats.innerHTML = `<b>${st.words ?? 0}</b> ${st.words === 1 ? 'word' : 'words'} · ${plural(st.characters ?? 0, 'character')}${st.words ? ` · ${st.readingMinutes ?? 1} min read` : ''}`;
-      prog.hidden = !st.tasks;
-      if (st.tasks) { prog.style.setProperty('--p', `${Math.round(100 * st.tasksDone / st.tasks)}%`); prog.replaceChildren(h('i', {}), `${st.tasksDone}/${st.tasks} tasks`); }
-      const sl = s.selection;
-      sel.textContent = !sl ? '' : sl.type === 'blocks' ? `${plural(sl.blocks.length, 'block')} selected` : (() => { const b = blockById(sl.block); const t = b ? model.containers(b).find((c) => c.at === sl.at)?.text.slice(sl.from, sl.to) : ''; return `“${t.length > 28 ? `${t.slice(0, 26)}…` : t}” selected`; })();
-      undo.textContent = s.history?.length ? plural(s.history.length, 'undo step') : '';
-      // outline
-      const heads = [{ id: 'title', level: 0, text: s.title }, ...(s.blocks ?? []).filter((b) => b.kind === 'heading').map((b) => ({ id: b.id, level: b.level ?? 2, text: b.text }))];
-      const cur = s.blocks?.[s.cursor]?.id;
-      let curHead = heads[0].id, hi = 0;
-      for (const hd of heads.slice(1)) { if ((s.blocks ?? []).findIndex((b) => b.id === hd.id) <= (s.cursor ?? -1)) curHead = hd.id; }
-      void cur; void hi;
-      outlineList.replaceChildren(...heads.map((hd, i) => {
-        const b = h('button', { type: 'button', title: hd.text }, hd.text || '(empty heading)');
-        b.addEventListener('click', () => {
-          if (i === 0) host.send('go to the top');
-          else if (i - 1 < ORDINALS.length) host.send(`go to the ${ORDINALS[i - 1]} heading`);
-          else view.blockEl(hd.id)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
-        });
-        return h('li', { 'data-level': hd.level, class: hd.id === curHead && heads.length > 1 ? 'is-current' : '' }, b);
-      }));
-      if (heads.length === 1) outlineList.append(h('li', { class: 'pe-none' }, 'Headings you add appear here.'));
-      empty.hidden = !!(s.blocks?.length) || (s.title && s.title !== 'Untitled document');
-      // scroll to what changed
-      const cb = s.blocks?.[s.cursor];
-      const key = `${cb?.id}:${s.cursor}:${s.blocks?.length}:${cb?.text ?? cb?.items?.length ?? cb?.rows?.length ?? ''}`;
-      const wantFocus = s.focus && s.focus.n !== lastFocus ? s.focus.id : null;
-      lastFocus = s.focus?.n ?? 0;
-      const target = wantFocus ?? (key !== lastKey && cb ? cb.id : null);
-      lastKey = key;
-      if (target) requestAnimationFrame(() => {
-        const el = view.blockEl(target);
-        if (!el) return;
-        el.scrollIntoView?.({ block: target === 'title' ? 'start' : 'nearest', behavior: 'smooth' });
-        if (changed && !wantFocus) { el.classList.remove('pe-flash'); void el.offsetWidth; el.classList.add('pe-flash'); }
-      });
-    }
-
-    // ---- start TipTap ----
-    (async () => {
-      try {
-        const [T, M] = await Promise.all([loadTipTap(host.asset('vendor/editor/tiptap.mjs')), import(host.asset('worlds/docs.editor/model.mjs'))]);
-        model = M; bar.paintSwatches(M.highlightHex);
-        editorEl.replaceChildren();
-        const api = {
-          getState: () => state,
-          onSelect: ({ selection, cursorId }) => {
-            if (!state) return;
-            const idx = cursorId && cursorId !== 'title' ? state.blocks.findIndex((b) => b.id === cursorId) : state.cursor;
-            state = { ...state, selection, cursor: idx };
-            host.setWorldState('docs.editor', { selection, cursor: idx });
-            render();
-          },
-          onTask: (n, checked) => host.send(`${checked ? 'check' : 'uncheck'} task ${n}`),
-        };
-        view = createView(T, editorEl, api);
-        render();
-      } catch (e) {
-        console.warn('TipTap failed to load; using the plain renderer', e);
-        root.replaceChildren(h('p', { class: 'pe-fallback-note' }, 'The rich editor could not be loaded; showing the plain view.'));
-        const box = h('div', {}); root.append(box);
-        fallback = createFallback(box);
-        if (state) fallback.update(state);
-      }
-    })();
-    root.addEventListener('keydown', (e) => { if (e.key === 'Escape' && state?.selection) { state = { ...state, selection: null }; host.setWorldState('docs.editor', { selection: null }); render(); } });
-    root.tabIndex = -1;
-
-    return {
-      update(s) {
-        state = s;
-        if (fallback) { fallback.update(s); return; }
-        if (view && model) render();
-      },
-    };
-  },
-};
+// Native document editor: every edit, selection and reorder uses a typed declared tool.
+const WORLD='docs.editor';
+const el=(tag,attrs={},text)=>{const e=document.createElement(tag);for(const [k,v]of Object.entries(attrs)){if(k==='class')e.className=v;else if(k in e)e[k]=v;else e.setAttribute(k,v);}if(text!==undefined)e.textContent=text;return e;};
+const CSS=`.nd-editor{display:flex;flex-direction:column;height:100%;min-height:0;color:var(--ink,#243047);background:var(--surface-2,#eef1f6);font:14px system-ui}.nd-toolbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px;border-bottom:1px solid var(--line,#ccd2dd);background:var(--surface,#fff)}.nd-toolbar button,.nd-inspector button{font:inherit;border:1px solid #94a0b655;border-radius:5px;padding:5px 8px;background:var(--surface,#fff);color:inherit;cursor:pointer}.nd-toolbar select,.nd-inspector select,.nd-inspector input{font:inherit;border:1px solid #94a0b655;border-radius:5px;padding:6px;background:var(--surface,#fff);color:inherit;max-width:100%;box-sizing:border-box}.nd-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 245px}.nd-page{min-width:0;overflow:auto;background:var(--surface,#fff);padding:12px 18px;box-sizing:border-box}.nd-inspector{min-width:0;overflow:auto;padding:12px;border-left:1px solid var(--line,#ccd2dd);display:flex;flex-direction:column;gap:12px}.nd-inspector label{display:flex;flex-direction:column;gap:5px;font-size:12px}.nd-title{border:0;border-bottom:1px solid #97a4bb44;background:none;color:inherit;font:600 26px system-ui;width:100%;box-sizing:border-box;padding:6px 0 12px;margin-bottom:10px}.nd-block{position:relative;border:1px solid transparent;border-radius:5px;padding:6px 8px;margin:3px 0;min-height:28px;outline:none}.nd-block.selected{border-color:#7294dd;background:#7294dd08}.nd-block:focus-visible{outline:2px solid #7294dd}.nd-block.drop{border-top:3px solid #527bce}.nd-block-header{display:flex;gap:8px;align-items:center;justify-content:space-between;font:11px system-ui;color:var(--muted,#687489);margin-bottom:5px}.nd-handle{cursor:grab;border:0;background:none;color:inherit;font:inherit}.nd-preview{font:16px/1.6 Georgia,serif;white-space:pre-wrap;overflow-wrap:anywhere;min-height:24px}.nd-preview blockquote{margin:0;padding-left:12px;border-left:3px solid #94a0b677}.nd-preview table{border-collapse:collapse;width:100%;table-layout:fixed}.nd-preview td,.nd-preview th{border:1px solid #94a0b666;padding:5px;overflow-wrap:anywhere;white-space:pre-wrap}.nd-preview ul,.nd-preview ol{margin:0;padding-left:24px}.nd-preview code{background:#7a8bab22;padding:1px 4px}.nd-edit{width:100%;box-sizing:border-box;min-height:80px;resize:vertical;font:16px/1.6 Georgia,serif;border:1px solid #8ba1c777;border-radius:5px;padding:6px;background:var(--surface,#fff);color:inherit}.nd-note,.nd-status{font-size:12px;color:var(--muted,#687489);line-height:1.5}.nd-status{padding:5px 10px;min-height:20px;border-top:1px solid var(--line,#ccd2dd)}.nd-inspector h3{font-size:14px;margin:0}.nd-inspector .nd-actions{display:flex;gap:6px;flex-wrap:wrap}.nd-empty{padding:24px 0;color:var(--muted,#687489)}.nd-selection{font-size:12px;min-width:0;overflow-wrap:anywhere}.nd-content-form form{display:flex;flex-direction:column;gap:10px}.nd-content-form textarea{min-height:180px;font:13px/1.5 monospace}@media(max-width:650px){.nd-body{grid-template-columns:minmax(0,1fr) 190px}.nd-page{padding:8px}.nd-inspector{padding:8px}}@media(max-width:480px){.nd-body{grid-template-columns:1fr;grid-template-rows:minmax(200px,1fr) auto}.nd-inspector{max-height:220px;border-left:0;border-top:1px solid var(--line,#ccd2dd)}}`;
+function inline(parent,text,marks=[],at='0'){
+ const relevant=marks.filter(m=>m.at===at),cuts=[...new Set([0,text.length,...relevant.flatMap(m=>[m.from,m.to])])].filter(n=>n>=0&&n<=text.length).sort((a,b)=>a-b);
+ for(let i=1;i<cuts.length;i++){const from=cuts[i-1],to=cuts[i];let node=document.createTextNode(text.slice(from,to));for(const mark of relevant.filter(m=>m.from<=from&&m.to>=to)){const tag={bold:'strong',italic:'em',underline:'u',strike:'s',code:'code',highlight:'mark',link:'a'}[mark.type];if(!tag)continue;const wrap=el(tag);if(tag==='mark'&&/^#[a-f0-9]{6}$/i.test(mark.attrs?.color??''))wrap.style.background=mark.attrs.color;if(tag==='a'&&/^(https?:|mailto:|#)/i.test(mark.attrs?.href??'')){wrap.href=mark.attrs.href;wrap.rel='noopener';}wrap.append(node);node=wrap;}parent.append(node);}
+}
+function make(holder,host){
+ if(!document.getElementById('native-document-css'))document.head.append(el('style',{id:'native-document-css'},CSS));
+ Object.assign(holder.style,{padding:'0',height:'100%',minHeight:'0',maxWidth:'none',overflow:'hidden',boxSizing:'border-box'});
+ const root=el('section',{class:'nd-editor','aria-label':'Document editor'}),bar=el('div',{class:'nd-toolbar',role:'toolbar','aria-label':'Document tools'}),body=el('div',{class:'nd-body'}),page=el('div',{class:'nd-page'}),inspector=el('aside',{class:'nd-inspector','aria-label':'Block inspector'}),status=el('div',{class:'nd-status',role:'status','aria-live':'polite'}),dock=el('section',{class:'nd-content-form'});holder.append(root);root.append(bar,body,status);body.append(page,inspector);
+ let state=host.state?.(WORLD)??{blocks:[]},selected=null,editing=null,range=null,dragged=null,pending=false,saving=null,destroyed=false;
+ const button=(text,action,attrs={})=>{const b=el('button',{type:'button',...attrs},text);b.addEventListener('mousedown',e=>e.preventDefault());b.addEventListener('click',action);return b;};
+ const block=()=>state.blocks?.find(b=>b.id===selected);
+ const section=b=>b?.kind==='heading'&&(b.level??2)<=2;
+ const prefix=b=>section(b)?'document.section':'document.block';
+ async function tool(operation,args){if(pending||host.isBusy?.())return {ok:false,message:'Please wait for the current action.'};pending=true;root.setAttribute('aria-busy','true');try{const r=await host.tool(operation,args,{view:'editor'});status.textContent=r.message??(r.ok?'Saved.':'Could not save.');return r;}catch(error){status.textContent=error.message;return {ok:false,message:error.message};}finally{pending=false;root.removeAttribute('aria-busy');}}
+ async function ensureDocument(){if(state.textId)return true;return (await tool('document.write',{title:'Untitled document',blocks:[]})).ok;}
+ async function saveEditing(){if(saving)return saving;if(!editing)return true;const current=editing,id=current.id,at=current.at,text=current.input.value;editing=null;const b=state.blocks?.find(b=>b.id===id);const original=b?.kind==='list'?b.items[Number(at)]:b?.kind==='table'?b.rows[Number(at.split(':')[0])]?.[Number(at.split(':')[1])]:b?.text;if(text===original)return true;saving=tool('document.container.change',{id:JSON.stringify([id,at]),text}).then(r=>r.ok);try{return await saving;}finally{saving=null;}}
+ async function add(kind){if(!await saveEditing()||!await ensureDocument())return;if(kind==='list'){showContentDialog('Add list','One item per line',text=>tool('document.list.make',{parent:state.textId,style:'bullet',items:text.split('\n')}));return;}if(kind==='table'){showContentDialog('Add table','Separate cells with tabs; one row per line',text=>tool('document.table.make',{parent:state.textId,rows:text.split('\n').map(row=>row.split('\t')),header:true}));return;}const r=await tool('document.block.make',{parent:state.textId,kind,text:'',...(kind==='heading'?{level:3}:{})});if(r.ok){selected=r.receipt?.changed?.[0]??state.blocks?.at(-1)?.id;render();beginEdit(selected,'0');}}
+ function showContentDialog(title,label,save,value=''){
+  dock.replaceChildren();const form=el('form'),field=el('label',{},label),input=el('textarea',{'aria-label':label,value,class:'nd-edit'}),message=el('p',{class:'nd-note'});field.append(input);form.append(el('h3',{},title),field,button('Cancel',()=>{dock.remove();paintInspector();}),el('button',{type:'submit'},'Save'),message);form.addEventListener('submit',async event=>{event.preventDefault();const r=await save(input.value);if(r.ok){dock.remove();paintInspector();}else message.textContent=r.message;});dock.append(form);inspector.replaceChildren(dock);input.focus();
+ }
+ async function reorder(id,offset=null,beforeId=null,after=false){if(!await saveEditing())return;const ids=state.blocks.map(b=>b.id),from=ids.indexOf(id);if(from<0)return;const value=ids.splice(from,1)[0],to=beforeId!==null?ids.indexOf(beforeId)+(after?1:0):Math.max(0,Math.min(ids.length,from+offset));if(to<0)return;ids.splice(to,0,value);await tool('document.block.reorder',{ids});}
+ async function choose(id){if(selected===id)return;await saveEditing();selected=id;range=null;render();const b=block();if(b)await tool(prefix(b)+'.select',{id,at:'0',from:0,to:0});}
+ function beginEdit(id,at='0'){
+  const b=state.blocks?.find(b=>b.id===id),box=page.querySelector(`[data-block="${globalThis.CSS.escape(id)}"] [data-at="${globalThis.CSS.escape(at)}"]`);if(!b||!box)return;
+  const value=b.kind==='list'?b.items[Number(at)]:b.kind==='table'?b.rows[Number(at.split(':')[0])]?.[Number(at.split(':')[1])]:b.text;if(typeof value!=='string')return;
+  selected=id;const input=el('textarea',{class:'nd-edit',value,'aria-label':'Edit '+(b.name||b.kind)+' text'});box.replaceChildren(input);editing={id,at,input};input.style.height=Math.min(400,Math.max(80,input.scrollHeight))+'px';input.focus();
+  const select=()=>{range={id,at,from:input.selectionStart,to:input.selectionEnd};paintInspector();};input.addEventListener('select',select);input.addEventListener('keyup',select);input.addEventListener('mouseup',select);input.addEventListener('blur',()=>{saveEditing().then(()=>render());});input.addEventListener('keydown',event=>{if(event.key==='Escape'){editing=null;render();}else if((event.ctrlKey||event.metaKey)&&event.key==='Enter'){event.preventDefault();saveEditing().then(()=>render());}});
+ }
+ async function format(mark,enabled=true){const selection=range&&{...range};if(!selection||selection.to<=selection.from){status.textContent='Select some words in the text editor first.';return;}if(!await saveEditing())return;selected=selection.id;const b=block();await tool(prefix(b)+'.mark',{...selection,mark,enabled,...(mark==='highlight'?{attrs:{color:'#fff2a8'}}:{})});}
+ function paintInspector(){
+  if(dock.isConnected)return;inspector.replaceChildren();const b=block();inspector.append(el('h3',{},b?'Selected block':'Document'));
+  if(!b){inspector.append(el('p',{class:'nd-note'},'Click a block to select it. Double-click text to edit. Drag the handle to reorder, or use Alt + ↑ / ↓.'));return;}
+  const label=el('label',{},'Label'),name=el('input',{value:b.name??'','aria-label':'Block label'});label.append(name);name.addEventListener('change',async()=>{const value=name.value;if(await saveEditing())await tool(prefix(b)+'.change',{id:b.id,name:value});});inspector.append(label);
+  if(['paragraph','heading','quote'].includes(b.kind)){const kindLabel=el('label',{},'Block type'),kind=el('select',{'aria-label':'Block type'});for(const value of section(b)?['heading']:['paragraph','heading','quote'])kind.append(el('option',{value},value));kind.value=b.kind;kindLabel.append(kind);kind.addEventListener('change',()=>tool(prefix(b)+'.change',{id:b.id,kind:kind.value,...(kind.value==='heading'?{level:section(b)?b.level:3}:{})}));inspector.append(kindLabel);
+   if(b.kind==='heading'){const levelLabel=el('label',{},'Heading level'),level=el('select',{'aria-label':'Heading level'});for(const n of section(b)?[1,2]:[3,4,5,6])level.append(el('option',{value:String(n)},String(n)));level.value=String(b.level??3);levelLabel.append(level);level.addEventListener('change',()=>tool(prefix(b)+'.change',{id:b.id,level:Number(level.value)}));inspector.append(levelLabel);}
+  }
+  const alignLabel=el('label',{},'Alignment'),align=el('select',{'aria-label':'Alignment'});for(const value of ['left','center','right','justify'])align.append(el('option',{value},value));align.value=b.align??'left';align.addEventListener('change',()=>tool(prefix(b)+'.align',{id:b.id,align:align.value}));alignLabel.append(align);inspector.append(alignLabel);
+  const actions=el('div',{class:'nd-actions'});actions.append(button('↑ Move up',()=>reorder(b.id,-1)),button('↓ Move down',()=>reorder(b.id,1)),button('Delete block',async()=>{if(await saveEditing())await tool('document.block.remove',{ids:[b.id]});}));inspector.append(actions);
+  if(['paragraph','heading','quote'].includes(b.kind))inspector.append(button('Edit text',()=>beginEdit(b.id)));
+  if(b.kind==='list'){const style=el('select',{'aria-label':'List style'});for(const value of ['bullet','numbered','task'])style.append(el('option',{value},value));style.value=b.style??'bullet';style.addEventListener('change',()=>tool('document.list.change',{id:b.id,style:style.value}));inspector.append(style,button('Edit list items',()=>showContentDialog('List items','One item per line',text=>tool('document.list.change',{id:b.id,items:text.split('\n')}),b.items.join('\n'))));}
+  if(b.kind==='table')inspector.append(button('Edit table cells',()=>showContentDialog('Table cells','Separate cells with tabs; one row per line',text=>tool('document.table.change',{id:b.id,rows:text.split('\n').map(row=>row.split('\t'))}),b.rows.map(row=>row.join('\t')).join('\n'))));
+  inspector.append(el('div',{class:'nd-selection'},range&&range.id===b.id?`Selected characters ${range.from}–${range.to}`:'Select words while editing to format a range.'));
+ }
+ function render(){
+  if(destroyed)return;bar.replaceChildren();page.replaceChildren();
+  bar.append(button('+ Paragraph',()=>add('paragraph')),button('+ Heading',()=>add('heading')),button('+ Quote',()=>add('quote')),button('+ List',()=>add('list')),button('+ Table',()=>add('table')));
+  for(const [label,mark]of [['B','bold'],['I','italic'],['U','underline'],['S','strike'],['Code','code'],['Highlight','highlight']])bar.append(button(label,()=>format(mark),{title:'Apply '+mark,'aria-label':'Apply '+mark}));bar.append(button('Clear format',async()=>{for(const mark of ['bold','italic','underline','strike','code','highlight'])await format(mark,false);}));
+  bar.append(button('Undo',()=>tool('document.undo',{})),button('Redo',()=>tool('document.redo',{})));
+  const title=el('input',{class:'nd-title',value:state.title??'',placeholder:'Untitled document','aria-label':'Document title'});title.addEventListener('change',async()=>{if(state.textId)await tool('document.title.change',{id:state.textId,title:title.value});else await tool('document.write',{title:title.value,blocks:[]});});page.append(title);
+  if(!state.blocks?.length)page.append(el('p',{class:'nd-empty'},'Start with a paragraph, heading, list or table. Type your own content; every saved edit is recorded as a command.'));
+  for(const b of state.blocks??[]){
+   const row=el('section',{class:'nd-block'+(b.id===selected?' selected':''),tabIndex:0,'data-block':b.id,'aria-label':(b.name||b.kind)+' block'}),head=el('div',{class:'nd-block-header'}),handle=button('⋮⋮ '+(b.name||b.kind),()=>choose(b.id),{class:'nd-handle',draggable:true,title:'Drag to reorder'});head.append(handle,el('span',{},b.name?b.kind:''));row.append(head);
+   handle.addEventListener('dragstart',event=>{dragged=b.id;event.dataTransfer.setData('text/plain',b.id);event.dataTransfer.effectAllowed='move';});row.addEventListener('dragover',event=>{event.preventDefault();row.classList.add('drop');});row.addEventListener('dragleave',()=>row.classList.remove('drop'));row.addEventListener('drop',event=>{event.preventDefault();row.classList.remove('drop');const id=dragged??event.dataTransfer.getData('text/plain');dragged=null;if(id!==b.id)reorder(id,null,b.id,event.clientY>row.getBoundingClientRect().top+row.getBoundingClientRect().height/2);});
+   row.addEventListener('click',event=>{if(!event.target.closest('textarea,input,button,a'))choose(b.id);});row.addEventListener('keydown',event=>{if(event.altKey&&['ArrowUp','ArrowDown'].includes(event.key)){event.preventDefault();reorder(b.id,event.key==='ArrowUp'?-1:1);}});
+   const textBox=(at,text,parent)=>{const box=el('div',{class:'nd-preview','data-at':at});box.style.textAlign=b.align??'left';if(b.kind==='heading'){box.style.fontSize=(28-(b.level??2)*2)+'px';box.style.fontWeight='600';}inline(box,text,b.marks??[],at);box.addEventListener('dblclick',event=>{event.stopPropagation();beginEdit(b.id,at);});parent.append(box);};
+   if(b.kind==='list'){const list=el(b.style==='numbered'?'ol':'ul',{class:'nd-preview'});for(const [i,text]of b.items.entries()){const item=el('li');if(b.style==='task'){const check=el('input',{type:'checkbox',checked:!!b.checked?.[i],'aria-label':'Complete '+text});check.addEventListener('change',()=>{const checked=b.items.map((_,j)=>j===i?check.checked:!!b.checked?.[j]);tool('document.list.change',{id:b.id,checked});});item.append(check);}textBox(String(i),text,item);list.append(item);}row.append(list);}
+   else if(b.kind==='table'){const table=el('table',{class:'nd-preview'});for(const [ri,values]of b.rows.entries()){const tr=el('tr');for(const [ci,text]of values.entries()){const cell=el(ri===0&&b.header!==false?'th':'td');textBox(`${ri}:${ci}`,text,cell);tr.append(cell);}table.append(tr);}row.append(table);}
+   else textBox('0',b.text??'',row);
+   page.append(row);
+  }
+  if(selected&&!state.blocks?.some(b=>b.id===selected))selected=null;paintInspector();
+ }
+ render();return {update(next){state=next??state;if(!editing)render();},destroy(){destroyed=true;root.remove();}};
+}
+export default {id:'editor',label:'Documents',world:WORLD,order:20,make};

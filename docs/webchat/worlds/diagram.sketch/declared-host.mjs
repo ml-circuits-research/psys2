@@ -2,12 +2,13 @@
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=463e762442';
 import {initialState,loadEngine,systemFor,writeBack,PREFIX} from './core.mjs?v=143c9a7464';
 import * as tool from './tool.mjs?v=110e7f7a00';
+import{GROUP_TOOL_BINDINGS,groupNativeObjects,groupNativeHandlers}from'./group-tools.mjs';
 import {CHART_TOOL_BINDINGS,initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs?v=f9e3064f7b';
 export const DIAGRAM_COMPONENTS=[{world:'data.charts',stateKey:'chartTools',operations:CHART_TOOL_BINDINGS.filter(op=>!['chart.undo','chart.redo'].includes(op.id))}];
 const array={type:'array',required:true},id={type:'string',required:true};
 export const DIAGRAM_TOOL_BINDINGS=[
  {id:'diagram.node.make',act:'make',on:'diagram.sketch.node',params:{kind:{type:'string',required:true,enum:Object.keys(PREFIX).filter(k=>k!=='text')},n:{type:'integer',default:1,min:1,max:12},colour:{type:'string'},size:{type:'string',enum:['tiny','small','medium','large','huge']},layout:{type:'string',enum:['tree','grid','row','column','circle','radial','layers']}}},
- {id:'diagram.node.change',act:'change',on:'diagram.sketch.node',params:{ids:array,colour:{type:'string'},size:{type:'string',enum:['tiny','small','medium','large','huge']},label:{type:'string'}}},
+ {id:'diagram.node.change',act:'change',on:'diagram.sketch.node',params:{ids:array,colour:{type:'string'},size:{type:'string',enum:['tiny','small','medium','large','huge']},label:{type:'string'},value:{type:'number'}}},
  {id:'diagram.node.select',act:'pick',on:'diagram.sketch.node',params:{ids:array}},
  {id:'diagram.node.remove',act:'remove',on:'diagram.sketch.node',params:{ids:array}},
  {id:'diagram.node.place',act:'place',on:'diagram.sketch.node',params:{ids:array,x:{type:'number',required:true},y:{type:'number',required:true}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'diagram.canvas'}},
@@ -17,13 +18,15 @@ export const DIAGRAM_TOOL_BINDINGS=[
  {id:'diagram.observe',act:'ask',on:'diagram.sketch',params:{}},
  {id:'diagram.undo',act:'undo',on:'diagram.sketch',params:{}},
  {id:'diagram.redo',act:'redo',on:'diagram.sketch',params:{}},
+ ...GROUP_TOOL_BINDINGS,
  ...DIAGRAM_COMPONENTS.flatMap(component=>component.operations),
 ];
 export const initialDiagramState=initialState;
 const fail=code=>({status:'missing',code});
 const ids=(s,list,kind='shapes')=>Array.isArray(list)&&list.length>0&&new Set(list).size===list.length&&list.every(id=>typeof id==='string'&&s[kind].some(item=>(kind==='shapes'?item.name:item.id)===id));
 const view=s=>[
- ...s.shapes.map(n=>({id:n.name,kind:n.shape,sourceType:'diagram.sketch.node',inputs:Object.entries({colour:n.color,size:n.size,label:n.label,x:n.x,y:n.y}).map(([key,value])=>({binding:`diagram.node.${key}`,key,values:value===null||value===undefined?[]:[nativeToken(value)],...(['x','y','size'].includes(key)?{dimension:'length',unit:'canvas.pixel',frame:'diagram.canvas'}:{})}))})),
+ ...s.shapes.map(n=>({id:n.name,kind:n.shape,sourceType:'diagram.sketch.node',inputs:Object.entries({colour:n.color,size:n.size,label:n.label,value:n.value,x:n.x,y:n.y}).map(([key,value])=>({binding:`diagram.node.${key}`,key,values:value===null||value===undefined?[]:[nativeToken(value)],...(['x','y','size'].includes(key)?{dimension:'length',unit:'canvas.pixel',frame:'diagram.canvas'}:{})}))})),
+ ...groupNativeObjects(s),
  ...chartNativeObjects(s.chartTools??initialChartState()),
  ...s.edges.map(e=>({id:e.id,kind:'link',sourceType:'diagram.sketch.link',from:e.from,to:e.to,predicate:'connected',inputs:['from','to'].map(key=>({binding:`diagram.link.${key}`,key,values:[nativeToken(e[key])]}))})),
 ];
@@ -52,7 +55,7 @@ export async function createDiagramHost({state=initialState(),instanceId,...limi
  const run=(ctx,args)=>{try{const r=systemFor(ctx.state).engine.run([{id:'native',type:'command',args}]);writeBack(ctx.state);return r.ok?{status:'supported',changed:args.target||[]}:fail('native-refusal');}catch{return fail('native-refusal');}};
  const handlers={
   'diagram.node.make':(ctx,a,step)=>tool.addShapes(ctx,{...a,step}),
-  'diagram.node.change':(ctx,a)=>{if(!ids(ctx.state,a.ids))return fail('missing-target');if(!['colour','size','label'].some(k=>Object.hasOwn(a,k)))return fail('missing-property');return run(ctx,{action:'set',target:a.ids,...(Object.hasOwn(a,'colour')?{color:a.colour}:{}),...(Object.hasOwn(a,'size')?{size:a.size}:{}),...(Object.hasOwn(a,'label')?{label:a.label}:{})});},
+  'diagram.node.change':(ctx,a)=>{if(!ids(ctx.state,a.ids))return fail('missing-target');if(!['colour','size','label','value'].some(k=>Object.hasOwn(a,k)))return fail('missing-property');const r=['colour','size','label'].some(k=>Object.hasOwn(a,k))?run(ctx,{action:'set',target:a.ids,...(Object.hasOwn(a,'colour')?{color:a.colour}:{}),...(Object.hasOwn(a,'size')?{size:a.size}:{}),...(Object.hasOwn(a,'label')?{label:a.label}:{})}):{status:'supported',changed:a.ids};if(r.status==='supported'&&Object.hasOwn(a,'value')){for(const n of ctx.state.shapes.filter(n=>a.ids.includes(n.name)))n.value=a.value;ctx.state.rev++;}return r;},
   'diagram.node.select':(ctx,a)=>{if(!ids(ctx.state,a.ids))return fail('missing-target');ctx.state.selected={shapes:a.ids,edges:[]};ctx.state.chartTools.active=null;return {status:'supported',changed:a.ids};},
   'diagram.node.remove':(ctx,a,step)=>ids(ctx.state,a.ids)?tool.removeShapes(ctx,{...a,step}):fail('missing-target'),
   'diagram.node.place':(ctx,a)=>{if(!ids(ctx.state,a.ids))return fail('missing-target');const result=run(ctx,{action:'move',target:a.ids,at:[a.x,a.y]});if(result.status==='supported'){ctx.state.selected={shapes:a.ids,edges:[]};ctx.state.chartTools.active=null;}return result;},
@@ -62,6 +65,7 @@ export async function createDiagramHost({state=initialState(),instanceId,...limi
   'diagram.observe':ctx=>({status:'supported',data:view(ctx.state)}),
   'diagram.undo':tool.undoStep,'diagram.redo':tool.redoStep,
  };
+ Object.assign(handlers,groupNativeHandlers({run}));
  const chartHandlers=chartNativeHandlers();
  for(const operation of CHART_TOOL_BINDINGS.filter(op=>!['chart.undo','chart.redo'].includes(op.id)))handlers[operation.id]=(ctx,args,step)=>{const result=chartHandlers[operation.id]({...ctx,state:ctx.state.chartTools},args,step);if(result?.status==='supported'&&['chart.select','chart.make','chart.place'].includes(operation.id))ctx.state.selected={shapes:[],edges:[]};return result;};
  handlers['diagram.undo']=ctx=>{const s=ctx.state;if(!s.compositionHistory?.length)return fail('nothing-to-undo');s.compositionFuture??=[];s.compositionFuture.push(compositionSnapshot(s));restoreComposition(s,s.compositionHistory.pop());return {status:'supported',changed:[]};};

@@ -1,0 +1,7 @@
+// Browser-local training evidence from concrete UI gestures. Nothing is uploaded.
+export function createIntentRecords({persistent=true}={}){
+ const memory=new Map();let pending=Promise.resolve();
+ const database=persistent&&globalThis.indexedDB?new Promise(resolve=>{const r=indexedDB.open('psys2-ui-intents',1);r.onupgradeneeded=()=>r.result.createObjectStore('pairs',{keyPath:'id'});r.onsuccess=()=>resolve(r.result);r.onerror=()=>resolve(null);}):Promise.resolve(null);
+ async function put(record){memory.set(record.id,structuredClone(record));const db=await database;if(!db)return;await new Promise(resolve=>{const t=db.transaction('pairs','readwrite');t.objectStore('pairs').put(record);t.oncomplete=resolve;t.onerror=resolve;t.onabort=resolve;});}
+ return {record(record){pending=pending.then(()=>put(record));return pending;},async all(){await pending;const db=await database;const rows=db?await new Promise(resolve=>{const r=db.transaction('pairs').objectStore('pairs').getAll();r.onsuccess=()=>resolve(r.result);r.onerror=()=>resolve([]);}):[];return [...new Map([...rows,...memory.values()].map(r=>[r.id,r])).values()].sort((a,b)=>a.at.localeCompare(b.at));},async download(){const rows=await this.all(),blob=new Blob([rows.map(r=>JSON.stringify(r)).join('\n')+'\n'],{type:'application/x-ndjson'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='psys2-ui-training-'+new Date().toISOString().slice(0,10)+'.jsonl';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);return rows.length;}};
+}

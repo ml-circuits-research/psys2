@@ -32,3 +32,7 @@ Native bindings regenerated and packaged with unchanged epoch7 weights; direct n
 
 2026-11-17 done: synchronized generated asset manifest after removing one superseded task-created bundle, plus completed avatar native declarations for the next UI batch. Final first-interface gate: 382 tests, 379 passed, 0 failed, 3 optional skips; real browser controls smoke passed.
 Commands: node scripts/build-system-map.mjs --write; npm run build:webchat; npm test; node scripts/smoke-demo-areas.mjs. Initial publication 34db393c; generated-manifest correction follows immediately.
+
+2026-11-17 done: five permanent fullpane native editors with docked inspectors; Drawing editable knowledge parts, Diagram groups/layout/numeric charts, Calendar resources/bookings, Documents formatting/list/table/order and Avatar per-part tools. Typed SOP intent is displayed, interpreted, executed and exported with actual effects.
+Checks: npm test — 401 tests,398 pass,0 fail,3 skips (includes pending data-lane invariant); smoke-demo-areas, smoke-native-editors, smoke-drawing-diagram-editors actual Chromium flows pass, persistence and desktop no-horizontal-overflow verified. Native editors13 captures:10 verified,3 unverified aggregate/dependent effects,0 mismatches.
+Retired CLI test-world fixtures still lack a configured reader (draw3/577,diagram0/773,calendar0/204,docs8/212,avatar1/18); not claimed passing. Active gate fixture now checks Document→block→text-container hierarchy. Deployed neural weights remain epoch7; repaired-data training/evaluation continues separately.

@@ -18,7 +18,7 @@ export const CALENDAR_TOOL_BINDINGS=[
  {id:'calendar.meeting.move',act:'place',on:'time.calendar.meeting',params:{id:identity,start:required('integer')},coordinates:time},
  {id:'calendar.meeting.remove',act:'remove',on:'time.calendar.meeting',params:{id:identity}},
  {id:'calendar.observe',act:'ask',on:'time.calendar',params:{}},
-];
+].map(op=>({...op,intent:{subject:op.on.endsWith('.calendar')?'personal calendar':op.on.endsWith('.meeting')?'event':op.on.split('.').at(-1),parameters:{calendar:{reference:true,label:'in calendar'},room:{reference:true,label:'in room'},start:{format:'unix-ms',label:'starting at'},duration:{format:'duration-ms',label:'lasting'},participants:{reference:true,label:'with participants',hiddenIfEmpty:true},notes:{label:'with notes',hiddenIfEmpty:true}}}}));
 const groups={calendar:'calendars',person:'people',room:'rooms',meeting:'meetings'};
 export const initialCalendarState=()=>({calendars:[],people:[],rooms:[],meetings:[]});
 const view=state=>Object.entries(groups).flatMap(([kind,key])=>(state[key]??[]).map(row=>({id:row.id,kind,sourceType:`time.calendar.${kind}`,inputs:Object.entries(row).filter(([k])=>k!=='id').map(([key,value])=>({binding:`calendar.${kind}.${key}`,key,values:value===null?[]:(Array.isArray(value)?[...value].sort():[value]).map(nativeToken),...(key==='start'?time:key==='duration'?{dimension:'time',unit:'millisecond',frame:'duration'}:{})}))})));
@@ -31,6 +31,7 @@ export function createCalendarHost({state=initialCalendarState(),instanceId,vali
   if(binding.id==='calendar.observe')return {status:'supported',data:view(ctx.state)};
   const native=createCalendar({instanceId,...ctx.state});
   const result=native.call({operationId:'native',expectedVersion:0,operation:binding.id.slice('calendar.'.length),args});
+  if(!result.ok&&result.issue.code==='no_change')return {status:'supported',changed:[]};
   if(!result.ok)return {status:'missing',code:result.issue.code};
   const snapshot=result.observation;
   for(const [kind,key] of Object.entries(groups))ctx.state[key]=snapshot.facts.filter(f=>f.kind===kind).map(({kind,...record})=>record);

@@ -283,12 +283,21 @@ const handlers = {
         budget: budget ? { ticks: budget.ticks, bySite: { ...budget.bySite } } : null, ort: true };
     } finally { active.delete(m.id); lastTurnEnd = performance.now(); faultNow = null; sendOrt(); }
   },
+  async nativeTools(m) {
+    const {NATIVE_AREAS,createAreaHost}=await import(vurl('lib/dialog/app-reader-context.mjs'));
+    const area=NATIVE_AREAS[m.view];if(!area)throw Error('Unknown area.');
+    await ensureWorlds([area.world],'area tools');
+    const host=await createAreaHost(area,{state:session.isession.state[area.world],instanceId:'tools-'+crypto.randomUUID(),loader:engine.loader,knowledge:engine.knowledge});
+    return {operations:host.bindings(),observation:host.observe(),capabilities:host.capabilities?.()??null};
+  },
   async nativeTool(m) {
-    if(turnRunning()||samplerRun)throw Error('An action is already running.');
+    // Background example generation must finish before a user edit, never discard it.
+    if(samplerRun)await samplerRun.catch(()=>undefined);
+    if(turnRunning())throw Error('An action is already running.');
     const ctl=new AbortController();active.set(m.id,ctl);
     try{const {NATIVE_AREAS}=await import(vurl('lib/dialog/app-reader-context.mjs'));
-      const view=session.isession.state['ui.shell']?.activeTab,area=NATIVE_AREAS[view];
-      if(!area||m.view!==view)throw Error('The active tab changed. Please try again.');
+      const view=m.view,area=NATIVE_AREAS[view];
+      if(!area||(session.isession.state['ui.shell']?.activeTab!==view))throw Error('The active tab changed. Please try again.');
       await ensureWorlds([area.world],'area control');
       const {invokeNativeControl}=await import(vurl('lib/dialog/native-tool-controls.mjs'));
       const result=await invokeNativeControl(session,{view,operation:m.operation,args:m.args});
