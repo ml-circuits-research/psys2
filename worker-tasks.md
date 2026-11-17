@@ -5399,3 +5399,14 @@ Accepted as honest measurement: the real browser route runs, 0 wrong. The findin
 | Stage counts | For the 301 eligible matrix rows (Node route is fine for this), count per stage: cutter spans found, request heads present (mood, act, target type/mode), constraint keys fired, decoder accepted / refused with reason. Publish the refusal reasons ranked. |
 | Fix the top reason | If the decoder needs fields the key reader does not predict (request-level structure, target type/mode/fill, operator/phase/polarity per key), train those heads in the same model now — they are annotated in every v2 row. If it is canonical binding of values, bind from the inventory value lists and knowledge, not by enum. |
 | Then | Calibrate the gate on calibration rows (not the matrix), rerun matrix and owner replay, report class × area. |
+
+## 2026-11-17 06:00 (Rome) — Review 26 (reviewer; plateau training 8cf682d1, stage results 75f83897)
+
+Accepted: 10 epochs, plateau at epoch 7; 28 of the 35 weak keys now above 0.6. The stage report locates the loss precisely:
+
+| Stage | Matrix (301) | What to do |
+|---|---|---|
+| Cutter | 292 complete | fine for now |
+| Raw complete | 48 of 292 | presence fires but the span is missing or mismatched in 196 rows (393 occurrences): decode a present key without a span as "present, value from class head" where the key has a class head, and train presence and span jointly so they agree; report the top keys. |
+| Canonical binding | 0 of 27 non-empty | kind (21 rows), property/value (16) and description/context: bind lemmas to declared identities by lookup in the knowledge worlds (kinds tree, colours, shapes, units, people/rooms of the live instance) and the inventory value lists; a lemma that matches nothing becomes one precise question, not a refusal of the whole request. Context/description go to instance resolution (library 72ec8f1 / 6cce066) instead of blocking the graph. |
+| Deploy | — | the deployed bundle is still the epoch-1 checkpoint; deploy epoch 7 with the fixes, calibrate the gate on calibration rows, rerun matrix and owner replay. |
