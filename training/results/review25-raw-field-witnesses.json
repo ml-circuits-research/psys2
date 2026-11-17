@@ -1,0 +1,1966 @@
+{
+  "format": "psys2.review25-bounded-field-witnesses/1",
+  "selection": {
+    "rule": "First two source-ordered raw-complete nonempty failed rows per represented area, selected before probe; no favorable outcome filtering",
+    "selected": [
+      "diagram-v2b03-0118",
+      "diagram-v2b03-0192",
+      "document-v2b02-0149",
+      "document-v2b03-0094",
+      "drawing-v2b04-0007",
+      "drawing-v2b04-0190"
+    ],
+    "counts": {
+      "diagram": 2,
+      "document": 2,
+      "drawing": 2
+    },
+    "absentArea": "calendar: no raw-complete nonempty rows in301run"
+  },
+  "scope": "Six deterministic raw-complete nonempty failure probes, first two source-ordered rows per represented area; no Calendar rows met that predeclared subset. Actual source/context only, same model/spec/backend; not semantic accuracy or representativeness beyond this diagnostic stratum.",
+  "evidence": {
+    "rawRowsSha256": "a7733872f8763cb533b8867945bd8adf0ad5d843e0f9ccc21ef181352f75994f",
+    "selectionSha256": "2dee2ed2d670fde65e4630383ee7982eeccda3ab87938f945c1c104969bd167e",
+    "harnessSha256": "90b474773970f2f162c7bc657f1e73348a634265051bb8453aa94daf527fa989",
+    "manifestSha256": "aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c",
+    "bindingsSha256": "07b8094f4c1ababffff579dfd0d249b597afcafcfb26c47bc776887ce03e0798"
+  },
+  "rows": [
+    {
+      "id": "diagram-v2b03-0118",
+      "area": "diagram",
+      "sourceSha256": "c26c29c4e5a6ca3b76d73e98f1d6291951d4673e0dc246b1c5205a1df15e7e08",
+      "rawRequests": [
+        {
+          "span": "remove the arrow between print and scan",
+          "target": {
+            "description_span": "the arrow between print and scan",
+            "determiner": "definite",
+            "fill": "description",
+            "mode": "existing",
+            "type": "link"
+          },
+          "constraints": [
+            {
+              "key": "link.from",
+              "value_span": "print",
+              "value": "print",
+              "character": "requirement",
+              "operator": "eq",
+              "phase": "selector",
+              "polarity": "positive"
+            },
+            {
+              "key": "link.to",
+              "value_span": "scan",
+              "value": "scan",
+              "character": "requirement",
+              "operator": "eq",
+              "phase": "selector",
+              "polarity": "positive"
+            }
+          ],
+          "act": "disconnect",
+          "trigger": "remove",
+          "mood": "do"
+        }
+      ],
+      "ranges": [
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value_span"
+          ],
+          "range": [
+            25,
+            30
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value"
+          ],
+          "range": [
+            25,
+            30
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "1",
+            "value_span"
+          ],
+          "range": [
+            35,
+            39
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "1",
+            "value"
+          ],
+          "range": [
+            35,
+            39
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "trigger"
+          ],
+          "range": [
+            0,
+            6
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "target",
+            "description_span"
+          ],
+          "range": [
+            7,
+            39
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "span"
+          ],
+          "range": [
+            0,
+            39
+          ]
+        }
+      ],
+      "failures": [
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-kind-binding",
+          "path": [
+            "requests",
+            0,
+            "targets",
+            "t0",
+            "kind"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-property-binding",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_0",
+            "concept"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-value-representation",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_0",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-property-binding",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_1",
+            "concept"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-value-representation",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_1",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unconsumed-predicted-range",
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unconsumed-predicted-range",
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "1",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "incomplete-structural-coverage",
+          "path": [
+            "coverage"
+          ]
+        }
+      ],
+      "unchanged": true,
+      "kindLookup": [
+        {
+          "type": "link",
+          "lemma": null,
+          "matches": [],
+          "unresolved": []
+        }
+      ],
+      "propertyLookup": [
+        {
+          "key": "link.from",
+          "matches": [],
+          "unresolved": [
+            {
+              "family": "properties",
+              "area": "diagram",
+              "key": "link.from",
+              "rawDescriptor": {
+                "area": "diagram",
+                "type": "link",
+                "key": "from",
+                "head": "fill+span",
+                "concept": "reference",
+                "src": "s.link.from role=source"
+              },
+              "reason": "no-explicit-source-native-alignment"
+            }
+          ]
+        },
+        {
+          "key": "link.to",
+          "matches": [],
+          "unresolved": [
+            {
+              "family": "properties",
+              "area": "diagram",
+              "key": "link.to",
+              "rawDescriptor": {
+                "area": "diagram",
+                "type": "link",
+                "key": "to",
+                "head": "fill+span",
+                "concept": "reference",
+                "src": "s.link.to role=goal"
+              },
+              "reason": "no-explicit-source-native-alignment"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "diagram-v2b03-0192",
+      "area": "diagram",
+      "sourceSha256": "152048f8329bd73c072e145d0a5bd41b80bf2ed3be094c8de4066c028c54d1be",
+      "rawRequests": [
+        {
+          "span": "make the arrow from web to db curved",
+          "target": {
+            "description_span": "the arrow from web to db",
+            "determiner": "definite",
+            "fill": "description",
+            "mode": "existing",
+            "type": "link"
+          },
+          "constraints": [
+            {
+              "key": "link.from",
+              "value_span": "web",
+              "value": "web",
+              "character": "requirement",
+              "operator": "eq",
+              "phase": "selector",
+              "polarity": "positive"
+            },
+            {
+              "key": "link.style",
+              "value_span": "curved",
+              "value": "curved",
+              "character": "requirement",
+              "operator": "eq",
+              "phase": "result",
+              "polarity": "positive"
+            },
+            {
+              "key": "link.to",
+              "value_span": "db",
+              "value": "db",
+              "character": "requirement",
+              "operator": "eq",
+              "phase": "selector",
+              "polarity": "positive"
+            }
+          ],
+          "act": "change",
+          "trigger": "make",
+          "mood": "do"
+        }
+      ],
+      "ranges": [
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value_span"
+          ],
+          "range": [
+            40,
+            43
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value"
+          ],
+          "range": [
+            40,
+            43
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "1",
+            "value_span"
+          ],
+          "range": [
+            50,
+            56
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "1",
+            "value"
+          ],
+          "range": [
+            50,
+            56
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "2",
+            "value_span"
+          ],
+          "range": [
+            47,
+            49
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "2",
+            "value"
+          ],
+          "range": [
+            47,
+            49
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "trigger"
+          ],
+          "range": [
+            20,
+            24
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "target",
+            "description_span"
+          ],
+          "range": [
+            25,
+            49
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "span"
+          ],
+          "range": [
+            20,
+            56
+          ]
+        }
+      ],
+      "failures": [
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-kind-binding",
+          "path": [
+            "requests",
+            0,
+            "targets",
+            "t0",
+            "kind"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-property-binding",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_0",
+            "concept"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-value-representation",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_0",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-property-binding",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_1",
+            "concept"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-value-representation",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_1",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-property-binding",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_2",
+            "concept"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-value-representation",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_2",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unconsumed-predicted-range",
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unconsumed-predicted-range",
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "1",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unconsumed-predicted-range",
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "2",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "incomplete-structural-coverage",
+          "path": [
+            "coverage"
+          ]
+        }
+      ],
+      "unchanged": true,
+      "kindLookup": [
+        {
+          "type": "link",
+          "lemma": null,
+          "matches": [],
+          "unresolved": []
+        }
+      ],
+      "propertyLookup": [
+        {
+          "key": "link.from",
+          "matches": [],
+          "unresolved": [
+            {
+              "family": "properties",
+              "area": "diagram",
+              "key": "link.from",
+              "rawDescriptor": {
+                "area": "diagram",
+                "type": "link",
+                "key": "from",
+                "head": "fill+span",
+                "concept": "reference",
+                "src": "s.link.from role=source"
+              },
+              "reason": "no-explicit-source-native-alignment"
+            }
+          ]
+        },
+        {
+          "key": "link.style",
+          "matches": [],
+          "unresolved": [
+            {
+              "family": "properties",
+              "area": "diagram",
+              "key": "link.style",
+              "rawDescriptor": {
+                "area": "diagram",
+                "type": "link",
+                "key": "style",
+                "head": "class",
+                "concept": "line_style",
+                "values": [
+                  "solid",
+                  "dashed",
+                  "dotted",
+                  "thick",
+                  "thin",
+                  "curved",
+                  "straight"
+                ],
+                "src": "link style"
+              },
+              "reason": "no-explicit-source-native-alignment"
+            }
+          ]
+        },
+        {
+          "key": "link.to",
+          "matches": [],
+          "unresolved": [
+            {
+              "family": "properties",
+              "area": "diagram",
+              "key": "link.to",
+              "rawDescriptor": {
+                "area": "diagram",
+                "type": "link",
+                "key": "to",
+                "head": "fill+span",
+                "concept": "reference",
+                "src": "s.link.to role=goal"
+              },
+              "reason": "no-explicit-source-native-alignment"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "document-v2b02-0149",
+      "area": "document",
+      "sourceSha256": "18f2973c9704a0b721d99e740d59e49e6bc09ef39b80da863bec6bbb5f9d2461",
+      "rawRequests": [
+        {
+          "span": "delete the second paragraph",
+          "target": {
+            "determiner": "definite",
+            "fill": "written",
+            "kind": "paragraph",
+            "kind_span": "paragraph",
+            "mode": "existing",
+            "ordinal": "second",
+            "type": "section"
+          },
+          "constraints": [],
+          "act": "remove",
+          "trigger": "delete",
+          "mood": "do"
+        },
+        {
+          "span": "undo that",
+          "target": {
+            "fill": "journal_step",
+            "mode": "existing",
+            "type": "text"
+          },
+          "constraints": [],
+          "act": "undo",
+          "trigger": "undo",
+          "mood": "do"
+        },
+        {
+          "span": "do it again",
+          "target": {
+            "fill": "context",
+            "mode": "existing",
+            "type": "inline"
+          },
+          "constraints": [],
+          "act": "repeat",
+          "trigger": "do it again",
+          "mood": "do"
+        }
+      ],
+      "ranges": [
+        {
+          "path": [
+            "requests",
+            "0",
+            "trigger"
+          ],
+          "range": [
+            0,
+            6
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "target",
+            "kind_span"
+          ],
+          "range": [
+            18,
+            27
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "span"
+          ],
+          "range": [
+            0,
+            27
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "1",
+            "trigger"
+          ],
+          "range": [
+            29,
+            33
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "1",
+            "span"
+          ],
+          "range": [
+            29,
+            38
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "2",
+            "trigger"
+          ],
+          "range": [
+            45,
+            56
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "2",
+            "span"
+          ],
+          "range": [
+            45,
+            56
+          ]
+        }
+      ],
+      "failures": [
+        {
+          "stage": "pipeline",
+          "reason": "request-dependencies-not-annotated",
+          "path": [
+            "requests",
+            0,
+            "after"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "requires-declared-ordinal-projection",
+          "path": [
+            "requests",
+            0,
+            "targets",
+            "t0",
+            "ordinal"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "request-dependencies-not-annotated",
+          "path": [
+            "requests",
+            1,
+            "after"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-kind-binding",
+          "path": [
+            "requests",
+            1,
+            "targets",
+            "t1",
+            "kind"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "context-reference-not-bound",
+          "path": [
+            "requests",
+            1,
+            "targets",
+            "t1"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "request-dependencies-not-annotated",
+          "path": [
+            "requests",
+            2,
+            "after"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-kind-binding",
+          "path": [
+            "requests",
+            2,
+            "targets",
+            "t2",
+            "kind"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "context-reference-not-bound",
+          "path": [
+            "requests",
+            2,
+            "targets",
+            "t2"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "incomplete-structural-coverage",
+          "path": [
+            "coverage"
+          ]
+        }
+      ],
+      "unchanged": true,
+      "kindLookup": [
+        {
+          "type": "section",
+          "lemma": "paragraph",
+          "matches": [
+            {
+              "area": "document",
+              "type": "section",
+              "lemma": "paragraph",
+              "canonical": "w.document.paragraph",
+              "sourceWire": "w.document.word.paragraph",
+              "sourceSnapshotSHA": "0de5fde34f15c86c4351cf14bb99f1df93c8b07564d9fe92c7d3593ec69e4eb4",
+              "sourceWorld": "w.document",
+              "moduleVersion": "2",
+              "rawDescriptor": {
+                "area": "document",
+                "type": "section",
+                "kind": "paragraph"
+              },
+              "meaningWire": "w.document.paragraph",
+              "alignment": {
+                "kind": "owning-core.word",
+                "word": "w.document.word.paragraph",
+                "authoritySourcePath": "training/sop-bert/export-structural-bindings.mjs",
+                "authoritySourceSha256": "c9b06ffdc71c51802f4f1035e993bc9a9c8c45d19d8258a2f340bd38758af85f"
+              },
+              "supportingSourceWires": [
+                "w.document.word.paragraph"
+              ]
+            }
+          ],
+          "unresolved": []
+        },
+        {
+          "type": "text",
+          "lemma": null,
+          "matches": [],
+          "unresolved": []
+        },
+        {
+          "type": "inline",
+          "lemma": null,
+          "matches": [],
+          "unresolved": []
+        }
+      ],
+      "propertyLookup": []
+    },
+    {
+      "id": "document-v2b03-0094",
+      "area": "document",
+      "sourceSha256": "932da8b1d2210d6888376ce5102af298b40ad0e2f0a7ec287c37d2e7d1e16787",
+      "rawRequests": [
+        {
+          "span": "draft a serious letter to the school about the bullying incident, medium length, and title it Our Concern",
+          "target": {
+            "determiner": "indefinite",
+            "kind": "letter",
+            "kind_span": "letter",
+            "mode": "new",
+            "type": "text"
+          },
+          "constraints": [
+            {
+              "key": "text.about",
+              "value_span": "the bullying incident",
+              "value": "the bullying incident",
+              "character": "requirement",
+              "operator": "eq",
+              "phase": "result",
+              "polarity": "positive"
+            },
+            {
+              "key": "text.length",
+              "value_span": "medium",
+              "value": "medium",
+              "character": "requirement",
+              "operator": "degree",
+              "phase": "result",
+              "polarity": "positive"
+            },
+            {
+              "key": "text.recipient",
+              "value_span": "the school",
+              "value": "the school",
+              "character": "requirement",
+              "operator": "eq",
+              "phase": "result",
+              "polarity": "positive"
+            },
+            {
+              "key": "text.title",
+              "value_span": "Our Concern",
+              "value": "Our Concern",
+              "character": "requirement",
+              "operator": "eq",
+              "phase": "result",
+              "polarity": "positive"
+            },
+            {
+              "key": "text.tone",
+              "value_span": "serious",
+              "value": "serious",
+              "character": "requirement",
+              "operator": "eq",
+              "phase": "result",
+              "polarity": "positive"
+            }
+          ],
+          "act": "make",
+          "trigger": "draft",
+          "mood": "do"
+        }
+      ],
+      "ranges": [
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value_span"
+          ],
+          "range": [
+            53,
+            74
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value"
+          ],
+          "range": [
+            53,
+            74
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "1",
+            "value_span"
+          ],
+          "range": [
+            76,
+            82
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "1",
+            "value"
+          ],
+          "range": [
+            76,
+            82
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "2",
+            "value_span"
+          ],
+          "range": [
+            36,
+            46
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "2",
+            "value"
+          ],
+          "range": [
+            36,
+            46
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "3",
+            "value_span"
+          ],
+          "range": [
+            104,
+            115
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "3",
+            "value"
+          ],
+          "range": [
+            104,
+            115
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "4",
+            "value_span"
+          ],
+          "range": [
+            18,
+            25
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "4",
+            "value"
+          ],
+          "range": [
+            18,
+            25
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "trigger"
+          ],
+          "range": [
+            10,
+            15
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "target",
+            "kind_span"
+          ],
+          "range": [
+            26,
+            32
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "span"
+          ],
+          "range": [
+            10,
+            115
+          ]
+        }
+      ],
+      "failures": [
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-property-binding",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_1",
+            "concept"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-value-representation",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_1",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-property-binding",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_2",
+            "concept"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-value-representation",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_2",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-property-binding",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_4",
+            "concept"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-value-representation",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_4",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unconsumed-predicted-range",
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "1",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unconsumed-predicted-range",
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "2",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unconsumed-predicted-range",
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "4",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "incomplete-structural-coverage",
+          "path": [
+            "coverage"
+          ]
+        }
+      ],
+      "unchanged": true,
+      "kindLookup": [
+        {
+          "type": "text",
+          "lemma": "letter",
+          "matches": [
+            {
+              "area": "document",
+              "type": "text",
+              "lemma": "letter",
+              "canonical": "k.genres.genre.letter",
+              "sourceWire": "k.genres.genre.letter",
+              "sourceSnapshotSHA": "0de5fde34f15c86c4351cf14bb99f1df93c8b07564d9fe92c7d3593ec69e4eb4",
+              "sourceWorld": "k.genres",
+              "moduleVersion": "1",
+              "rawDescriptor": {
+                "area": "document",
+                "type": "text",
+                "kind": "letter"
+              },
+              "alignment": {
+                "kind": "whole-source-family",
+                "provider": "k.genres.genre",
+                "authoritySourcePath": "training/sop-bert/export-structural-bindings.mjs",
+                "authoritySourceSha256": "c9b06ffdc71c51802f4f1035e993bc9a9c8c45d19d8258a2f340bd38758af85f"
+              },
+              "supportingSourceWires": [
+                "k.genres.genre.letter"
+              ],
+              "nativeFamilyBinding": {
+                "operation": "document.write",
+                "sourceType": "docs.editor.document",
+                "exportName": "DOCUMENT_TOOL_BINDINGS",
+                "sourcePath": "/home/salboaie/work/sopworlds/psys2/worlds/docs.editor/declared-host.mjs",
+                "sourceSha256": "ac0d828d698adf1de93d3905153bcf704f06ea819d03729e4fd792a448e5129d",
+                "boundary": "Family eligibility only; canonical-to-native kind/value conversion is not asserted."
+              }
+            }
+          ],
+          "unresolved": []
+        }
+      ],
+      "propertyLookup": [
+        {
+          "key": "text.about",
+          "matches": [
+            {
+              "area": "document",
+              "key": "text.about",
+              "canonical": "w.document.document.topic",
+              "valueKind": "string",
+              "sourceWire": "w.document.document.topic",
+              "sourceSnapshotSHA": "0de5fde34f15c86c4351cf14bb99f1df93c8b07564d9fe92c7d3593ec69e4eb4",
+              "sourceWorld": "w.document",
+              "moduleVersion": "2",
+              "rawDescriptor": {
+                "area": "document",
+                "type": "text",
+                "key": "about",
+                "head": "span",
+                "concept": "topic",
+                "src": "s.text.about"
+              },
+              "hostBinding": {
+                "id": "document.write",
+                "sourceType": "docs.editor.document",
+                "key": "topic",
+                "operation": "document.write",
+                "parameter": "topic",
+                "exportName": "DOCUMENT_TOOL_BINDINGS",
+                "sourcePath": "/home/salboaie/work/sopworlds/psys2/worlds/docs.editor/declared-host.mjs",
+                "sourceSha256": "ac0d828d698adf1de93d3905153bcf704f06ea819d03729e4fd792a448e5129d"
+              },
+              "alignment": {
+                "kind": "explicit-C1-declaration-native-chain",
+                "authority": "Owner-authorized inventory/owning-declaration/native operation alignment; no descriptor-prefix inference.",
+                "valueBoundary": "Raw annotation token only. Native values, units, date/time composition, regions and defaults require separate declared resolution.",
+                "authoritySourcePath": "training/sop-bert/export-structural-bindings.mjs",
+                "authoritySourceSha256": "c9b06ffdc71c51802f4f1035e993bc9a9c8c45d19d8258a2f340bd38758af85f"
+              }
+            }
+          ],
+          "unresolved": []
+        },
+        {
+          "key": "text.length",
+          "matches": [],
+          "unresolved": [
+            {
+              "family": "properties",
+              "area": "document",
+              "key": "text.length",
+              "rawDescriptor": {
+                "area": "document",
+                "type": "text",
+                "key": "length",
+                "head": "class+step",
+                "concept": "length",
+                "values": [
+                  "very_short",
+                  "short",
+                  "medium",
+                  "long",
+                  "very_long"
+                ],
+                "src": "writeText words (region)"
+              },
+              "reason": "no-explicit-source-native-alignment"
+            }
+          ]
+        },
+        {
+          "key": "text.recipient",
+          "matches": [],
+          "unresolved": [
+            {
+              "family": "properties",
+              "area": "document",
+              "key": "text.recipient",
+              "rawDescriptor": {
+                "area": "document",
+                "type": "text",
+                "key": "recipient",
+                "head": "span",
+                "concept": "person",
+                "src": "who it is for"
+              },
+              "reason": "no-explicit-source-native-alignment"
+            }
+          ]
+        },
+        {
+          "key": "text.title",
+          "matches": [
+            {
+              "area": "document",
+              "key": "text.title",
+              "canonical": "w.document.document.title",
+              "valueKind": "string",
+              "sourceWire": "w.document.document.title",
+              "sourceSnapshotSHA": "0de5fde34f15c86c4351cf14bb99f1df93c8b07564d9fe92c7d3593ec69e4eb4",
+              "sourceWorld": "w.document",
+              "moduleVersion": "2",
+              "rawDescriptor": {
+                "area": "document",
+                "type": "text",
+                "key": "title",
+                "head": "span",
+                "concept": "name",
+                "src": "s.text.title"
+              },
+              "hostBinding": {
+                "id": "document.write",
+                "sourceType": "docs.editor.document",
+                "key": "title",
+                "operation": "document.write",
+                "parameter": "title",
+                "exportName": "DOCUMENT_TOOL_BINDINGS",
+                "sourcePath": "/home/salboaie/work/sopworlds/psys2/worlds/docs.editor/declared-host.mjs",
+                "sourceSha256": "ac0d828d698adf1de93d3905153bcf704f06ea819d03729e4fd792a448e5129d"
+              },
+              "alignment": {
+                "kind": "explicit-C1-declaration-native-chain",
+                "authority": "Owner-authorized inventory/owning-declaration/native operation alignment; no descriptor-prefix inference.",
+                "valueBoundary": "Raw annotation token only. Native values, units, date/time composition, regions and defaults require separate declared resolution.",
+                "authoritySourcePath": "training/sop-bert/export-structural-bindings.mjs",
+                "authoritySourceSha256": "c9b06ffdc71c51802f4f1035e993bc9a9c8c45d19d8258a2f340bd38758af85f"
+              }
+            }
+          ],
+          "unresolved": []
+        },
+        {
+          "key": "text.tone",
+          "matches": [],
+          "unresolved": [
+            {
+              "family": "properties",
+              "area": "document",
+              "key": "text.tone",
+              "rawDescriptor": {
+                "area": "document",
+                "type": "text",
+                "key": "tone",
+                "head": "class+step",
+                "concept": "tone",
+                "values": [
+                  "formal",
+                  "informal",
+                  "friendly",
+                  "warm",
+                  "cold",
+                  "polite",
+                  "firm",
+                  "neutral",
+                  "enthusiastic",
+                  "apologetic",
+                  "humorous",
+                  "serious",
+                  "persuasive",
+                  "simple"
+                ],
+                "src": "s.text.tone space=tone"
+              },
+              "reason": "no-explicit-source-native-alignment"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "drawing-v2b04-0007",
+      "area": "drawing",
+      "sourceSha256": "2a5f05545ccbe7d4bb8a97a7954c3b726d379ae0db32e38995e56c502367f5cf",
+      "rawRequests": [
+        {
+          "span": "give the star a dotted fill",
+          "target": {
+            "description_span": "the star",
+            "determiner": "definite",
+            "fill": "description",
+            "kind": "star",
+            "kind_span": "star",
+            "mode": "existing",
+            "type": "drawn"
+          },
+          "constraints": [
+            {
+              "key": "drawn.fill",
+              "value_span": "dotted",
+              "value": "dotted",
+              "character": "requirement",
+              "operator": "eq",
+              "phase": "result",
+              "polarity": "positive"
+            }
+          ],
+          "act": "change",
+          "trigger": "give",
+          "mood": "do"
+        }
+      ],
+      "ranges": [
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value_span"
+          ],
+          "range": [
+            16,
+            22
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value"
+          ],
+          "range": [
+            16,
+            22
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "trigger"
+          ],
+          "range": [
+            0,
+            4
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "target",
+            "description_span"
+          ],
+          "range": [
+            5,
+            13
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "target",
+            "kind_span"
+          ],
+          "range": [
+            9,
+            13
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "span"
+          ],
+          "range": [
+            0,
+            27
+          ]
+        }
+      ],
+      "failures": [
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-kind-binding",
+          "path": [
+            "requests",
+            0,
+            "targets",
+            "t0",
+            "kind"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-property-binding",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_0",
+            "concept"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-value-representation",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_0",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "description-reference-without-predicate",
+          "path": [
+            "requests",
+            0,
+            "targets",
+            "t0"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unconsumed-predicted-range",
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unconsumed-predicted-range",
+          "path": [
+            "requests",
+            "0",
+            "target",
+            "description_span"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unconsumed-predicted-range",
+          "path": [
+            "requests",
+            "0",
+            "target",
+            "kind_span"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "incomplete-structural-coverage",
+          "path": [
+            "coverage"
+          ]
+        }
+      ],
+      "unchanged": true,
+      "kindLookup": [
+        {
+          "type": "drawn",
+          "lemma": "star",
+          "matches": [],
+          "unresolved": [
+            {
+              "family": "kinds",
+              "rawDescriptor": {
+                "area": "drawing",
+                "type": "drawn",
+                "kind": "star"
+              },
+              "reason": "ambiguous-canonical-kind",
+              "candidates": [
+                {
+                  "canonical": "k.shapes.shape.star",
+                  "sourceWire": "k.shapes.shape.star",
+                  "sourceWorld": "k.shapes",
+                  "moduleVersion": "2",
+                  "sourceSnapshotSHA": "0de5fde34f15c86c4351cf14bb99f1df93c8b07564d9fe92c7d3593ec69e4eb4"
+                },
+                {
+                  "canonical": "k.objects.star",
+                  "sourceWire": "k.objects.star",
+                  "sourceWorld": "k.objects",
+                  "moduleVersion": "8",
+                  "sourceSnapshotSHA": "0de5fde34f15c86c4351cf14bb99f1df93c8b07564d9fe92c7d3593ec69e4eb4"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "propertyLookup": [
+        {
+          "key": "drawn.fill",
+          "matches": [],
+          "unresolved": [
+            {
+              "family": "properties",
+              "area": "drawing",
+              "key": "drawn.fill",
+              "rawDescriptor": {
+                "area": "drawing",
+                "type": "drawn",
+                "key": "fill",
+                "head": "class",
+                "concept": "fill",
+                "values": [
+                  "solid",
+                  "none",
+                  "striped",
+                  "dotted",
+                  "gradient"
+                ],
+                "src": "old typed fill"
+              },
+              "reason": "no-explicit-source-native-alignment"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "drawing-v2b04-0190",
+      "area": "drawing",
+      "sourceSha256": "f30a6708e5134fe7f0bb67b7da3d5f61ab551c37fc1ecd2f4ae13bc09ec26cdc",
+      "rawRequests": [
+        {
+          "span": "name the car Zoom",
+          "target": {
+            "description_span": "the car",
+            "determiner": "definite",
+            "fill": "description",
+            "kind": "car",
+            "kind_span": "car",
+            "mode": "existing",
+            "type": "drawn"
+          },
+          "constraints": [
+            {
+              "key": "drawn.name",
+              "value_span": "Zoom",
+              "value": "Zoom",
+              "character": "requirement",
+              "operator": "eq",
+              "phase": "result",
+              "polarity": "positive"
+            }
+          ],
+          "act": "change",
+          "trigger": "name",
+          "mood": "do"
+        }
+      ],
+      "ranges": [
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value_span"
+          ],
+          "range": [
+            13,
+            17
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value"
+          ],
+          "range": [
+            13,
+            17
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "trigger"
+          ],
+          "range": [
+            0,
+            4
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "target",
+            "description_span"
+          ],
+          "range": [
+            5,
+            12
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "target",
+            "kind_span"
+          ],
+          "range": [
+            9,
+            12
+          ]
+        },
+        {
+          "path": [
+            "requests",
+            "0",
+            "span"
+          ],
+          "range": [
+            0,
+            17
+          ]
+        }
+      ],
+      "failures": [
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-canonical-property-binding",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_0",
+            "concept"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unresolved-value-representation",
+          "path": [
+            "requests",
+            0,
+            "constraints",
+            "c0_0",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "description-reference-without-predicate",
+          "path": [
+            "requests",
+            0,
+            "targets",
+            "t0"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unconsumed-predicted-range",
+          "path": [
+            "requests",
+            "0",
+            "constraints",
+            "0",
+            "value"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "unconsumed-predicted-range",
+          "path": [
+            "requests",
+            "0",
+            "target",
+            "description_span"
+          ]
+        },
+        {
+          "stage": "pipeline",
+          "reason": "incomplete-structural-coverage",
+          "path": [
+            "coverage"
+          ]
+        }
+      ],
+      "unchanged": true,
+      "kindLookup": [
+        {
+          "type": "drawn",
+          "lemma": "car",
+          "matches": [
+            {
+              "area": "drawing",
+              "type": "drawn",
+              "lemma": "car",
+              "canonical": "k.objects.car",
+              "sourceWire": "k.objects.car",
+              "sourceSnapshotSHA": "0de5fde34f15c86c4351cf14bb99f1df93c8b07564d9fe92c7d3593ec69e4eb4",
+              "sourceWorld": "k.objects",
+              "moduleVersion": "8",
+              "rawDescriptor": {
+                "area": "drawing",
+                "type": "drawn",
+                "kind": "car"
+              },
+              "alignment": {
+                "kind": "whole-source-family",
+                "provider": "k.objects.object",
+                "authoritySourcePath": "training/sop-bert/export-structural-bindings.mjs",
+                "authoritySourceSha256": "c9b06ffdc71c51802f4f1035e993bc9a9c8c45d19d8258a2f340bd38758af85f"
+              },
+              "supportingSourceWires": [
+                "k.objects.car"
+              ],
+              "nativeFamilyBinding": {
+                "operation": "drawing.object.make",
+                "sourceType": "art.draw.object",
+                "exportName": "DRAWING_TOOL_BINDINGS",
+                "sourcePath": "/home/salboaie/work/sopworlds/psys2/worlds/art.draw/declared-host.mjs",
+                "sourceSha256": "ae8b38f3d8153771d41ce08abc9f16241d46d841430bdc202589dde330c7724d",
+                "boundary": "Family eligibility only; canonical-to-native kind/value conversion is not asserted."
+              }
+            }
+          ],
+          "unresolved": []
+        }
+      ],
+      "propertyLookup": [
+        {
+          "key": "drawn.name",
+          "matches": [],
+          "unresolved": [
+            {
+              "family": "properties",
+              "area": "drawing",
+              "key": "drawn.name",
+              "rawDescriptor": {
+                "area": "drawing",
+                "type": "drawn",
+                "key": "name",
+                "head": "span",
+                "concept": "name",
+                "src": "label given by the user"
+              },
+              "reason": "no-explicit-source-native-alignment"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "interpretation": {
+    "missingLexicalKind": "Both diagram link targets have predicted family type but no kind; do not fabricate a lemma. A separately declared family-identity projection is needed.",
+    "realAmbiguity": "drawing/drawn/star is deliberately omitted from resolved kinds and has two canonical candidates; do not prefer one merely to increase coverage.",
+    "propertyGaps": "link.from/to/style, drawn.fill/name, text.length/recipient/tone have no resolved property rows in the exact deployed table. Reference endpoints, qualitative lengths and literal names are distinct value contracts.",
+    "otherSemantics": "Description-only spans, ordinal selection, context/journal references and request dependencies remain unresolved independently of bindings.",
+    "correctness": null,
+    "executionEligible": false
+  }
+}
