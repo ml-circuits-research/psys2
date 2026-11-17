@@ -1,6 +1,7 @@
 {
   "format": "psys2.browser-tokenizer-build/1",
   "transformersVersion": "3.8.1",
+  "keepNames": true,
   "bundlerVersion": "0.28.2",
   "inputs": [
     {
