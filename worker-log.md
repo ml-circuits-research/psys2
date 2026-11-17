@@ -4994,3 +4994,22 @@ Root subsequently authorized conditionalunpublishedpersistence. Exactfullbundle1
 Added an opt-in verified-provider evaluation host and separate output prefixes for functional/owner replay. Neural inputs come only from actual native observations and the preceding sent message; native IDs/versions remain in sidecars rather than consuming the 192-token encoder window. Backend dependency bytes, Node/options, exact tokenizer configuration and artifact descriptors are checked explicitly. No empirical admission report is installed and no packet is credited as semantic success. Source fixtures use injected synthetic components; actual factory/artifact smoke remains separately pending. Four source fixtures pass; default replays remain matrix 301 honest / 0 wrong / 1,347 setup exclusions of 1,648, owner 205 honest / 0 wrong. The q8 measured report is retained separately and cannot establish Node calibration.
 
 Validation: active `npm test` 269 total / 267 passed / 0 failed / 2 optional skips; system map regenerated unchanged, both default replays unchanged, `git diff --check` clean. This host measures proposals/eligibility and honest closed-gate routing, not execution precision. Future C1 effect-risk labels require an isolated fresh-state execution/intent assessor; no public route bypass is introduced.
+## 2026-11-17 — Verified neural provider byte assembly
+
+Added only NEWverified-reader-provider.mjs+tests/spec. Locally verifies exact
+manifest/config strings,3graph bytes, external tokenizer JSON and bindings hash
+before constructing tokenizer/sessions. Builds actual injected sessions and
+published cutter/key/offset/pipeline computation; no fake graph/model fallback.
+External host implementation attestation is explicit, never derived merely
+from caller hashes. No router/admission/report/score installation.
+
+Root review fixes included: per-descriptor+remaining-total copy bounds before
+allocation, and release the just-created invalid session with prior sessions.
+Captured backend functions cannot change during attestation; diagnostic copies
+cannot mutate delivered results. Artifact byte bounds are not peak runtime RAM.
+
+Checks:8synthetic byte/session Node fixtures pass, exercising all3graph stages
+and refusals/cleanup/provenance. Trained-role branch is protocol testing only,
+not actual model evidence. No trained files/weights, network, GPU or data/source
+training mutation. Node actual-backend harness remains PSys ownership and will
+perform real CPU smoke after integration; empirical admission remains separate.
