@@ -1,0 +1,735 @@
+{
+  "actualCalSource": {
+    "path": "/home/salboaie/work/sopworlds/.session-control/structural-gold-review23-full/calibration.jsonl",
+    "selection": "first2source rows perarea; text/area/actualcontext ONLY; annotations/labels/counts notinput",
+    "sha256": "4911bcb18188940abc7a13719dc1d379e85393fb5b6a716086cae2766b46b71e"
+  },
+  "allDeclaredHeadDecisionComparisons": {
+    "calendar.meeting.free": {
+      "argmaxChanges": 2,
+      "maxAbs": 0.45206689834594727,
+      "queries": 23
+    },
+    "calendar.meeting.length": {
+      "argmaxChanges": 3,
+      "maxAbs": 0.4473186731338501,
+      "queries": 23
+    },
+    "calendar.meeting.recurrence": {
+      "argmaxChanges": 1,
+      "maxAbs": 0.32623380422592163,
+      "queries": 23
+    },
+    "calendar.meeting.relation": {
+      "argmaxChanges": 5,
+      "maxAbs": 0.3420715928077698,
+      "queries": 23
+    },
+    "calendar.meeting.shift": {
+      "argmaxChanges": 2,
+      "maxAbs": 0.3966849446296692,
+      "queries": 23
+    },
+    "calendar.room.quality": {
+      "argmaxChanges": 4,
+      "maxAbs": 0.4069860875606537,
+      "queries": 23
+    },
+    "conversation.turn.area": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.7317624092102051,
+      "queries": 23
+    },
+    "conversation.turn.fragment": {
+      "argmaxChanges": 1,
+      "maxAbs": 0.7646342515945435,
+      "queries": 23
+    },
+    "conversation.turn.objection": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.7108035087585449,
+      "queries": 23
+    },
+    "diagram.chart.horizontal": {
+      "argmaxChanges": 3,
+      "maxAbs": 0.2744103670120239,
+      "queries": 23
+    },
+    "diagram.chart.legend": {
+      "argmaxChanges": 1,
+      "maxAbs": 0.352489173412323,
+      "queries": 23
+    },
+    "diagram.chart.show_values": {
+      "argmaxChanges": 5,
+      "maxAbs": 0.30488669872283936,
+      "queries": 23
+    },
+    "diagram.chart.sort": {
+      "argmaxChanges": 5,
+      "maxAbs": 0.34187793731689453,
+      "queries": 23
+    },
+    "diagram.chart.source": {
+      "argmaxChanges": 7,
+      "maxAbs": 0.5849173069000244,
+      "queries": 23
+    },
+    "diagram.chart.stacked": {
+      "argmaxChanges": 2,
+      "maxAbs": 0.31290942430496216,
+      "queries": 23
+    },
+    "diagram.diagram.kind": {
+      "argmaxChanges": 6,
+      "maxAbs": 0.40411266684532166,
+      "queries": 23
+    },
+    "diagram.diagram.layout": {
+      "argmaxChanges": 5,
+      "maxAbs": 0.5519212484359741,
+      "queries": 23
+    },
+    "diagram.link.arrow": {
+      "argmaxChanges": 3,
+      "maxAbs": 0.4420204162597656,
+      "queries": 23
+    },
+    "diagram.link.style": {
+      "argmaxChanges": 3,
+      "maxAbs": 0.6495201587677002,
+      "queries": 23
+    },
+    "diagram.node.at": {
+      "argmaxChanges": 5,
+      "maxAbs": 0.4203326106071472,
+      "queries": 23
+    },
+    "diagram.node.position": {
+      "argmaxChanges": 5,
+      "maxAbs": 0.4926724135875702,
+      "queries": 23
+    },
+    "diagram.node.shape": {
+      "argmaxChanges": 3,
+      "maxAbs": 0.5230619311332703,
+      "queries": 23
+    },
+    "diagram.node.size": {
+      "argmaxChanges": 3,
+      "maxAbs": 0.4167649447917938,
+      "queries": 23
+    },
+    "document.inline.align": {
+      "argmaxChanges": 5,
+      "maxAbs": 0.3910531997680664,
+      "queries": 23
+    },
+    "document.inline.checked": {
+      "argmaxChanges": 2,
+      "maxAbs": 0.3545211851596832,
+      "queries": 23
+    },
+    "document.inline.format": {
+      "argmaxChanges": 5,
+      "maxAbs": 0.45153072476387024,
+      "queries": 23
+    },
+    "document.inline.list_kind": {
+      "argmaxChanges": 2,
+      "maxAbs": 0.3178746700286865,
+      "queries": 23
+    },
+    "document.section.length": {
+      "argmaxChanges": 5,
+      "maxAbs": 0.34800848364830017,
+      "queries": 23
+    },
+    "document.section.level": {
+      "argmaxChanges": 4,
+      "maxAbs": 0.41085565090179443,
+      "queries": 23
+    },
+    "document.section.order": {
+      "argmaxChanges": 3,
+      "maxAbs": 0.3742102384567261,
+      "queries": 23
+    },
+    "document.section.role": {
+      "argmaxChanges": 3,
+      "maxAbs": 0.5497485399246216,
+      "queries": 23
+    },
+    "document.text.genre": {
+      "argmaxChanges": 6,
+      "maxAbs": 0.5020568370819092,
+      "queries": 23
+    },
+    "document.text.length": {
+      "argmaxChanges": 4,
+      "maxAbs": 0.3215521574020386,
+      "queries": 23
+    },
+    "document.text.tone": {
+      "argmaxChanges": 5,
+      "maxAbs": 0.4467049837112427,
+      "queries": 23
+    },
+    "drawing.drawn.at": {
+      "argmaxChanges": 4,
+      "maxAbs": 0.4884548783302307,
+      "queries": 23
+    },
+    "drawing.drawn.direction": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.4704658091068268,
+      "queries": 23
+    },
+    "drawing.drawn.fill": {
+      "argmaxChanges": 1,
+      "maxAbs": 0.3058619499206543,
+      "queries": 23
+    },
+    "drawing.drawn.flip": {
+      "argmaxChanges": 1,
+      "maxAbs": 0.4239436686038971,
+      "queries": 23
+    },
+    "drawing.drawn.layer": {
+      "argmaxChanges": 4,
+      "maxAbs": 0.44907987117767334,
+      "queries": 23
+    },
+    "drawing.drawn.relation": {
+      "argmaxChanges": 4,
+      "maxAbs": 0.6138783693313599,
+      "queries": 23
+    },
+    "drawing.drawn.rotation": {
+      "argmaxChanges": 5,
+      "maxAbs": 0.4287748634815216,
+      "queries": 23
+    },
+    "drawing.drawn.size": {
+      "argmaxChanges": 2,
+      "maxAbs": 0.38230380415916443,
+      "queries": 23
+    },
+    "drawing.face.animation": {
+      "argmaxChanges": 6,
+      "maxAbs": 0.44699394702911377,
+      "queries": 23
+    },
+    "drawing.face.expression": {
+      "argmaxChanges": 7,
+      "maxAbs": 0.44688287377357483,
+      "queries": 23
+    },
+    "drawing.page.mood": {
+      "argmaxChanges": 3,
+      "maxAbs": 0.4018114507198334,
+      "queries": 23
+    },
+    "drawing.part.size": {
+      "argmaxChanges": 4,
+      "maxAbs": 0.4281465411186218,
+      "queries": 23
+    },
+    "request.constraint.character": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.845344066619873,
+      "queries": 23
+    },
+    "request.constraint.operator": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.5965542793273926,
+      "queries": 23
+    },
+    "request.constraint.phase": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.5877313613891602,
+      "queries": 23
+    },
+    "request.constraint.polarity": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.6251869201660156,
+      "queries": 23
+    },
+    "request.constraint.scope": {
+      "argmaxChanges": 1,
+      "maxAbs": 0.63397216796875,
+      "queries": 23
+    },
+    "request.constraint.step": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.6062498092651367,
+      "queries": 23
+    },
+    "request.constraint.variety": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.54178786277771,
+      "queries": 23
+    },
+    "request.logic.group": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.5530004501342773,
+      "queries": 23
+    },
+    "request.logic.quantifier": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.6325916647911072,
+      "queries": 23
+    },
+    "request.question.ask": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.0360233783721924,
+      "queries": 23
+    },
+    "request.request.act": {
+      "argmaxChanges": 1,
+      "maxAbs": 1.1352126598358154,
+      "queries": 23
+    },
+    "request.request.mood": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.8670570850372314,
+      "queries": 23
+    },
+    "request.target.determiner": {
+      "argmaxChanges": 1,
+      "maxAbs": 0.6928176879882812,
+      "queries": 23
+    },
+    "request.target.fill": {
+      "argmaxChanges": 2,
+      "maxAbs": 1.0260567665100098,
+      "queries": 23
+    },
+    "request.target.mode": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.9239906072616577,
+      "queries": 23
+    },
+    "request.target.ordinal": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.013029932975769,
+      "queries": 23
+    },
+    "request.target.type": {
+      "argmaxChanges": 3,
+      "maxAbs": 0.7533413171768188,
+      "queries": 23
+    }
+  },
+  "boundary": "Actual frozen CPU FP32 versus q8 ORT bounded numerical/decision smoke on8actualCAL texts. Not calibrationaccuracy, canonicalgraphparity or empiricaladmission. Q8graphs+metadata persisted onlyunderrootconditionalexactbudgetauthorization; noFP32intermediates/appassetcommit/activation.",
+  "caseCount": 8,
+  "cases": [
+    {
+      "allRawDifferencePaths": [
+        [
+          "readings",
+          "0",
+          "packet",
+          "coverage",
+          "complete"
+        ],
+        [
+          "readings",
+          "0",
+          "packet",
+          "unresolved"
+        ]
+      ],
+      "area": "calendar",
+      "completeRawPipelineEqual": false,
+      "empty": {
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/calendar/b01a.jsonl:calendar-b01-0018",
+      "q8Cuts": 1,
+      "q8CutterIssues": [],
+      "q8RawComplete": 0,
+      "q8RawSha256": "00ffd1e7901d69b9588e914538ff4b15fca5e0625c15871d28c570e71352643b",
+      "sourceTextSha256": "7ca626a2423e4e3adb082e67ed850db40ce49a2af37625c66defae87c4792af5",
+      "torchCuts": 1,
+      "torchCutterIssues": [],
+      "torchRawComplete": 1,
+      "torchRawSha256": "221859b2c95aabb206c133250c0978bd30a6b3efed599bd53f80ee2190c86b6d",
+      "truncated": {
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allRawDifferencePaths": [
+        [
+          "cutter",
+          "spans"
+        ],
+        [
+          "readings"
+        ]
+      ],
+      "area": "calendar",
+      "completeRawPipelineEqual": false,
+      "empty": {
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/calendar/b01a.jsonl:calendar-b01-0022",
+      "q8Cuts": 1,
+      "q8CutterIssues": [],
+      "q8RawComplete": 0,
+      "q8RawSha256": "fa4c381c0d614dc6445b345e23013e284fa067df64bc0f1863ae931f2776ec75",
+      "sourceTextSha256": "0a15013a5857f740061ca00af2b87b75c7c73faeeac3499b4afbc05afb0f183b",
+      "torchCuts": 2,
+      "torchCutterIssues": [],
+      "torchRawComplete": 1,
+      "torchRawSha256": "97413d1a7acd0154cfea31c06137a8a14b3b019608e0928bd737317fe95c0cbb",
+      "truncated": {
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allRawDifferencePaths": [],
+      "area": "diagram",
+      "completeRawPipelineEqual": true,
+      "empty": {
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/diagram/b01a.jsonl:diagram-b01-0016",
+      "q8Cuts": 1,
+      "q8CutterIssues": [],
+      "q8RawComplete": 0,
+      "q8RawSha256": "3c738a45e7cd760d1d7403844e944e132262f1cd3a23043703b0dc8874c52821",
+      "sourceTextSha256": "b883ee762a3dd3c40f11c4f8ae1b149be53e36c889cab7ab10cbd5950930c38b",
+      "torchCuts": 1,
+      "torchCutterIssues": [],
+      "torchRawComplete": 0,
+      "torchRawSha256": "3c738a45e7cd760d1d7403844e944e132262f1cd3a23043703b0dc8874c52821",
+      "truncated": {
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allRawDifferencePaths": [],
+      "area": "diagram",
+      "completeRawPipelineEqual": true,
+      "empty": {
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/diagram/b01a.jsonl:diagram-b01-0038",
+      "q8Cuts": 1,
+      "q8CutterIssues": [],
+      "q8RawComplete": 0,
+      "q8RawSha256": "13835b25d9076aaae626fd80386e47cdcb39c81eda0eec568d4e8f9dcb60e599",
+      "sourceTextSha256": "cb0a668db5e8537bf6e3beb897a435d6888fcc5403eb249fd0dabcd67407f456",
+      "torchCuts": 1,
+      "torchCutterIssues": [],
+      "torchRawComplete": 0,
+      "torchRawSha256": "13835b25d9076aaae626fd80386e47cdcb39c81eda0eec568d4e8f9dcb60e599",
+      "truncated": {
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allRawDifferencePaths": [],
+      "area": "document",
+      "completeRawPipelineEqual": true,
+      "empty": {
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/document/b01a.jsonl:document-b01-0012",
+      "q8Cuts": 1,
+      "q8CutterIssues": [],
+      "q8RawComplete": 0,
+      "q8RawSha256": "8b974f94f96e32c05e043c7872e1c98b3f6638dc54cb15d1cd31170d0390a651",
+      "sourceTextSha256": "45475fa270f5b29ce0b0f77a85145702bd672130d2f9c07f5a2edfa6e958055e",
+      "torchCuts": 1,
+      "torchCutterIssues": [],
+      "torchRawComplete": 0,
+      "torchRawSha256": "8b974f94f96e32c05e043c7872e1c98b3f6638dc54cb15d1cd31170d0390a651",
+      "truncated": {
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allRawDifferencePaths": [],
+      "area": "document",
+      "completeRawPipelineEqual": true,
+      "empty": {
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/document/b01a.jsonl:document-b01-0035",
+      "q8Cuts": 1,
+      "q8CutterIssues": [],
+      "q8RawComplete": 0,
+      "q8RawSha256": "95df8d50379a9afb776f5d49eb39b7ec6524625d84775ecc2c4a5e7ada8e957c",
+      "sourceTextSha256": "9d021fb590fb17e3cf7a8fc59e7b0f0dbb5c3aea5194b5d78b86af9c78c14257",
+      "torchCuts": 1,
+      "torchCutterIssues": [],
+      "torchRawComplete": 0,
+      "torchRawSha256": "95df8d50379a9afb776f5d49eb39b7ec6524625d84775ecc2c4a5e7ada8e957c",
+      "truncated": {
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allRawDifferencePaths": [
+        [
+          "readings",
+          "0",
+          "packet",
+          "request",
+          "constraints",
+          "0",
+          "scope"
+        ],
+        [
+          "readings",
+          "0",
+          "packet",
+          "request",
+          "target",
+          "type"
+        ],
+        [
+          "readings",
+          "0",
+          "packet",
+          "unresolved"
+        ]
+      ],
+      "area": "drawing",
+      "completeRawPipelineEqual": false,
+      "empty": {
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/drawing/b01a.jsonl:drawing-b01-0046",
+      "q8Cuts": 1,
+      "q8CutterIssues": [],
+      "q8RawComplete": 0,
+      "q8RawSha256": "980f6c0678f8edf18af561df7fe6e89347149e839077e536b1cf265032fc38e5",
+      "sourceTextSha256": "63ed74c6b97cc95a88a485b7b0676c3560c559b7cad0bc231b1b4f82b3050f4d",
+      "torchCuts": 1,
+      "torchCutterIssues": [],
+      "torchRawComplete": 0,
+      "torchRawSha256": "26256cf8b617c9fe650eec083902844d7e31749b4cbeedcf6ce257188300802d",
+      "truncated": {
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allRawDifferencePaths": [],
+      "area": "drawing",
+      "completeRawPipelineEqual": true,
+      "empty": {
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/drawing/b01a.jsonl:drawing-b01-0053",
+      "q8Cuts": 1,
+      "q8CutterIssues": [],
+      "q8RawComplete": 1,
+      "q8RawSha256": "b8a572b481cf3b658d88110f713f3fadbd4e8de5b8f55fd127727c21a3f22b7d",
+      "sourceTextSha256": "c4b800d845e5cd2ae4f42e3161508ebd1c226fdb06ed38986bb5c5efd138e1fb",
+      "torchCuts": 1,
+      "torchCutterIssues": [],
+      "torchRawComplete": 1,
+      "torchRawSha256": "b8a572b481cf3b658d88110f713f3fadbd4e8de5b8f55fd127727c21a3f22b7d",
+      "truncated": {
+        "q8": false,
+        "torch": false
+      }
+    }
+  ],
+  "conditionalPersistence": {
+    "additionalMarginBytes": 1048576,
+    "conditionPassed": true,
+    "exactBundleBytes": 139369112,
+    "files": {
+      "bindings.json": {
+        "bytes": 3737397,
+        "sha256": "07b8094f4c1ababffff579dfd0d249b597afcafcfb26c47bc776887ce03e0798"
+      },
+      "cutter-config.json": {
+        "bytes": 36832,
+        "sha256": "64f3e284f6c901329956351e1077a479102683ffd043b6dabda755a739863ad9"
+      },
+      "cutter.q8.onnx": {
+        "bytes": 66756266,
+        "sha256": "f21fb2dc82c52ab85c9436d53be83e0e69e0e9cb746f6ecd8b607b964d476a77"
+      },
+      "encoder.q8.onnx": {
+        "bytes": 67160769,
+        "sha256": "040c8bc3f0a0c3db619f4fb2a08587eb4fd8fbb1809a7e27977c7ac08897c8b5"
+      },
+      "first-epoch-proof.json": {
+        "bytes": 62186,
+        "sha256": "a7c89a58a1d77a29a8cd275c5d6b9bdb521b7baaf75ee54e51896748f2405bf9"
+      },
+      "heads.q8.onnx": {
+        "bytes": 623715,
+        "sha256": "2c741fe0190066a476ce6c42c3dcfd2637a6c25aa716cd3904530eacb1b21edb"
+      },
+      "manifest.json": {
+        "bytes": 200856,
+        "sha256": "aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c"
+      },
+      "model-config.json": {
+        "bytes": 93473,
+        "sha256": "b7b03ad5c06ebaeec6ff2014e2ac01d26a935e58de62bdbb7589eaf02f28efdb"
+      },
+      "tokenizer.json": {
+        "bytes": 466062,
+        "sha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98"
+      },
+      "tokenizer_config.json": {
+        "bytes": 48,
+        "sha256": "a025160ef0431f1a392f6f050c1310f4c5d9fb6f275932dbccba73c4d214bf10"
+      },
+      "vocab.txt": {
+        "bytes": 231508,
+        "sha256": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+      }
+    },
+    "freeAfter": 413220864,
+    "freeBefore": 552615936,
+    "manifestSha256": "aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c",
+    "path": "/home/salboaie/work/sopworlds/.session-control/review23-epoch1-q8-unpublished",
+    "requestedByRoot": true,
+    "requiredRemainingReserveBytes": 303537434
+  },
+  "cutter": {
+    "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+    "proofSha256": "cd2b02a026f5096fd24a2bf4e197b5478ba765f1a7898b00e0b61fef6e1a73dc",
+    "verified": {
+      "checkpoint": "85d1d2ee1e03ee22c355077cf6248fba30cb14c2195151deb36f68cffbe758e0",
+      "config": "64f3e284f6c901329956351e1077a479102683ffd043b6dabda755a739863ad9",
+      "source": "d9422af7ad75e9053f5dfc86c36b0a49ac8f6b52099aa49ac02d95925db1a445"
+    }
+  },
+  "decisionMetricBoundaries": {
+    "BIO": "Currentargmax totals include active,padding,special; focusedFP32/active-only diagnosticpending",
+    "completeRAW": "Bothbackendsindependentlypredictedcuttercuts/keyBIOqueries;5same3different,no goldcomparison oraccuracy",
+    "hidden": "Argmax/sign countsarenonsemantic numericaldiagnostics",
+    "presence": "Only signChanges measuresindividualpresence decisions; vectorargmaxisnotper-headaccuracy"
+  },
+  "executionEligible": false,
+  "failedAttempt": {
+    "log": "review23-reader-actual-ram-parity-failed-1.log",
+    "reason": "harnesspassedtoken_type_ids beyondexportedinterface; no model/source defect; no completedparityclaim",
+    "sha256": "67420d9cc8af4bbc8ed429f74d4142e67d048ece0732d033163fea3bd2834948"
+  },
+  "format": "sop.actual-reader-ram-parity/1",
+  "gpu": false,
+  "graphConfidence": null,
+  "graphFilesWritten": true,
+  "headComparisonBoundary": "Per-bank same-query diagnostics include allbanks on eachreferencequery, includingirrelevantbanks; notper-fieldaccuracy. IndependentlypredictedfullRAWpaths below capture actualconsumed global/metadata/domain decisions.",
+  "keyCheckpointSha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+  "keyLoaderProvenance": {
+    "checkpointFloatingStorage": "bfloat16",
+    "device": "cpu",
+    "encoderFiles": {
+      "config.json": "69c94b0222d5d1f4b0ad027ca7416cdafb98378cbbb8305d0bf47c9365c60c83",
+      "model.safetensors": "5e3f1108e3cb34ee048634875d8482665b65ac713291a7e32396fb18f6ff0063",
+      "tokenizer.json": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+      "tokenizer_config.json": "a025160ef0431f1a392f6f050c1310f4c5d9fb6f275932dbccba73c4d214bf10",
+      "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+    },
+    "executionEligible": false,
+    "format": "sop.key-reader-cpu-load/1",
+    "forwardAutocast": "disabled",
+    "graphConfidence": null,
+    "hashes": {
+      "artifact": "a7c89a58a1d77a29a8cd275c5d6b9bdb521b7baaf75ee54e51896748f2405bf9",
+      "checkpoint": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+      "config": "b7b03ad5c06ebaeec6ff2014e2ac01d26a935e58de62bdbb7589eaf02f28efdb",
+      "dataManifest": "4b9ddfa1ee8033d23005b336f542d26f0c9d0066b138887acb95eb58ec9c3b2d",
+      "preparer": "5cab868172f89f29f51d35894aebfbae0c71011cc97bd3ad4b3b1c29a96fa477",
+      "trainer": "f9e5794fd939ce5a202be2c4cdfdacc7e8e48e68ded4d50d97453108bcc6a69c"
+    },
+    "historicalContractSha256": "e4f5bea5e35ed7712d7eee0a435c3b8993784c4949e5ee5c8d17f208ebda8db7",
+    "loadedFloatingDtype": "float32",
+    "loaderSha256": "10638c9fbb87a1af38eddc2642568ec9bceb8a6911ef15e14efb973a1457c2a1",
+    "validatorSha256": "2a09586cfd768bd9447262ea2afd6a6f938fcc15b6e506da429ecc749394b912"
+  },
+  "keyProofSha256": "a7c89a58a1d77a29a8cd275c5d6b9bdb521b7baaf75ee54e51896748f2405bf9",
+  "levels": {
+    "fullCalibrationOrAdmission": "notrun/notclaimed",
+    "realCalTextPredictedQueries": "8boundedcases; bothfullRAWpipelines independentlypredictedcuts/queries; samequerynumeric probe separate",
+    "realWeightsSyntheticInputs": "not run in this actualweight probe"
+  },
+  "measurementScriptSha256": "ad383a01c529c3bae9283d2519928d31d84f5ca8a519cfa2c9df1146d93c2662",
+  "models": {
+    "cutter": {
+      "fp32OnnxBytes": 265574045,
+      "q8Bytes": 66756266,
+      "q8Sha256": "f21fb2dc82c52ab85c9436d53be83e0e69e0e9cb746f6ecd8b607b964d476a77"
+    },
+    "encoder": {
+      "fp32OnnxBytes": 267118432,
+      "q8Bytes": 67160769,
+      "q8Sha256": "040c8bc3f0a0c3db619f4fb2a08587eb4fd8fbb1809a7e27977c7ac08897c8b5"
+    },
+    "heads": {
+      "fp32OnnxBytes": 2210366,
+      "q8Bytes": 623715,
+      "q8Sha256": "2c741fe0190066a476ce6c42c3dcfd2637a6c25aa716cd3904530eacb1b21edb"
+    }
+  },
+  "numericComparisons": {
+    "cutter.bio": {
+      "argmaxChanges": 192,
+      "calls": 8,
+      "maxAbs": 6.372014999389648,
+      "signChanges": 325
+    },
+    "key.bio": {
+      "argmaxChanges": 180,
+      "calls": 10,
+      "maxAbs": 3.8305745124816895,
+      "signChanges": 496
+    },
+    "key.hidden": {
+      "argmaxChanges": 988,
+      "calls": 10,
+      "maxAbs": 2.309476137161255,
+      "signChanges": 145417
+    },
+    "key.presence": {
+      "argmaxChanges": 3,
+      "calls": 10,
+      "maxAbs": 1.3693585395812988,
+      "signChanges": 9
+    }
+  },
+  "onnxruntimeVersion": "1.31.1",
+  "peakRssBytes": 3634921472,
+  "rawEqualCases": 5,
+  "reproductionBoundary": "Exactexecutedharness archived in reports/scripts. To rerun preserveexistingartifact/report: chooseNEWexclusiveartifact/report destinations or disable itsconditionalwriter. Do notdelete existingartifacts. Frozeninput/sourcehashes mustmatch report before replay.",
+  "reproductionCommand": "CUDA_VISIBLE_DEVICES='' OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 /home/salboaie/work/sopworlds/psys2/.venv/bin/python .session-control/measure-review23-reader-ram.py",
+  "seconds": 10.766817569732666,
+  "sources": {
+    "/home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/export-key-reader.py": "8295a8e40a5c73e4bc3bccc204ba60bf69244ec7b676b2f68f62813c390d1670",
+    "/home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/export-reader-onnx.py": "fa2d3740ba087c3125a6e53dba237350934074c7fb9ff0a30e75504a678d7ab1",
+    "/home/salboaie/work/sopworlds/.session-control/request-cutter/training/sop-bert/train-request-cutter.py": "d9422af7ad75e9053f5dfc86c36b0a49ac8f6b52099aa49ac02d95925db1a445",
+    "/home/salboaie/work/sopworlds/psys2/training/sop-bert/candidates/target-type/load-artifact.py": "10638c9fbb87a1af38eddc2642568ec9bceb8a6911ef15e14efb973a1457c2a1",
+    "/home/salboaie/work/sopworlds/psys2/training/sop-bert/candidates/target-type/predict-key-reader.py": "845f29364890415d8de2d85345ce06e7dc6fbe28529ec8a763cf6af14b116212",
+    "/home/salboaie/work/sopworlds/psys2/training/sop-bert/candidates/target-type/prepare-key-reader.py": "5cab868172f89f29f51d35894aebfbae0c71011cc97bd3ad4b3b1c29a96fa477"
+  },
+  "totalQ8Bytes": 134540750,
+  "trainedWeightCopiesWritten": false
+}
