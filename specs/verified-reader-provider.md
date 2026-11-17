@@ -83,3 +83,13 @@ only as a protocol fixture; no artifact or empirical acceptance is claimed.
 Other tests cover corrupt manifest/config/tokenizer/binding/graph data, unsafe
 paths, bounds, host refusal/function mutation, invalid second-session cleanup,
 and fixture/no-effect diagnostics. No trained model files, network or GPU run.
+
+## Persisted bundle compatibility
+
+The real persisted manifest may declare exactly the three graph files or exactly
+those graphs plus tokenizer and bindings. The five-file form requires exact
+descriptor equality (path,SHA,bytes) with the independently trusted external
+tokenizer/bindings descriptors; it does not turn manifest entries into their
+own authority. Any unrelated extra entry or external mismatch refuses before
+reads/construction. The source tests use the published candidates/target-type
+fixture paths. Nine factory tests pass; no persisted artifact is rewritten.

@@ -5018,3 +5018,10 @@ perform real CPU smoke after integration; empirical admission remains separate.
 Separate bounded8actualCAL-text diagnostic, immutableepoch1/cutter and sameexacttokenizer/predictedcuts/queries. FP32ONNXsessions are inRAM only; reusedexistingq8graphs, no newmodel/files/GPU. FP32ONNX versusTorch RAW8/8same, activeBIO0flips, presence0/1350signflips; activecuttermax1.0014e-5/key1.9073e-5. Noexportfidelitybug detected inthissmoke, notgeneralvalidation. Q8 remainsRAW5/8same; sourcecutter2/51flips versus190/1469paddingflips, special0/16; activecuttermax1.4012 versuspad6.3720. KeysourceBIO0/6954flips despite2.0842max; presence9/1350signflips. Same-reference-query applicableclassflips: fragment1/10,fill1/10,type1/10,scope1/13. Hiddenonlynumericaldiagnostic, noargmaxsemanticclaim. AllindependentRAWdiffpaths/token-groupcounts retained, noaccuracy/C1gate/fullCAL/activation claim.
 
 Report reports/review23-fp32-q8-focused-diagnostic.json and reproducibleRAM-onlyharness scripts/diagnose-review23-reader-ram.py. Process11.9s/peakRSS4287066112B. Executedharness numericalprobe succeeded; escapedtrailingreportnewline was correctedpostrun, publishedreproharness fixesonlythatformatting and recordsbothhashes. No frozen source/model mutation ornew persistentgraphs. Assertions verified8/8FP32vs5/8q8 and0FP32presenceflips. RootrequestedNodeactualsame-profilepacketcomparison next; per-channelexperiments deferred to avoiddelayingintegration. Sharedgate/publication delegatedPSys.
+
+Actual preflight follow-up: factory now admits exact3graph or exact5
+graph+tokenizer+bindings manifest forms. In5form, external descriptors must
+match trusted path/SHA/bytes exactly; no silent extra entries. Regression
+covers valid5, both mismatches and unrelated extras. Fixed test candidate
+fixture path for main integration.9/9 source fixtures pass; no artifact/model
+or persisted manifest changes. PSys owns actual8probe after cherry-pick.
