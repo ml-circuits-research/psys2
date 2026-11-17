@@ -5371,3 +5371,7 @@ Thank you for the honest numbers: 0 / 1,681 complete commands, constraint key 33
 | Data and epochs | One epoch over 28,959 messages is far too little for 134 keys; train several epochs (until calibration stops improving) on all v1 + v2 rows, per-head losses balanced by key frequency. |
 | Values | Open values copied from the source span and normalised by declared knowledge afterwards (as you started in 56881061), never a 4,067-value enum. |
 | Report | Per concept head and per class × area: present / absent accuracy on calibration, and complete-request exact rate; then wire it and run the matrix. |
+
+## 2026-11-17 02:45 (Rome) — Targeted data for the 35 weak keys (reviewer)
+
+From `reports/key-reader-epoch4.json` I took the 35 keys under 0.6 on mention F1, presence F1 or class accuracy and generated 10 targeted batches (2,000 rows) for them: or/and groups, parts (part, colour, variant), drawn size, face features, objections and fragments with all their values, chart toggles and values, node values and group members, link arrows, document literal content / counts / lengths / chapters / title / recipient / topic / section roles, calendar titles / seats / anchors / end times / lengths / counts / steps / selectors. They are in `training/sop-bert/data/haiku-v2/` (now 19,995 rows); the functional-matrix ids are unchanged and stay excluded. Please include them in the next training round of the per-key reader and report the same 35 keys again.

@@ -1,9 +1,9 @@
 concept heads 72, pass 64, keys with >=100 examples 134/134
   ('expression', 496, ['scared', 'thinking'], [])
   ('flip', 286, [], [])
-  ('ordinal', 1232, ['bottom', 'leftmost', 'rightmost', 'top'], [])
+  ('ordinal', 1253, ['bottom', 'leftmost', 'rightmost'], [])
   ('parts_list', 263, [], [])
-  ('region', 1219, ['foreground'], [])
+  ('region', 1228, ['foreground'], [])
   ('role', 275, [], [])
-  ('spatial_relation', 1818, ['along', 'inside', 'outside'], [])
+  ('spatial_relation', 1838, ['along', 'inside', 'outside'], [])
   ('style', 258, [], [])
